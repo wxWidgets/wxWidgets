@@ -96,7 +96,7 @@ static void DrawButtons(wxDC& dc,
         dc.SetPen(wxPen(bkcolour.ChangeLightness(75)));
 
         // draw the background behind the button
-        dc.DrawRectangle(rect.x, rect.y, 16-offset.x, 16-offset.y);
+        dc.DrawRectangle(rect.x, rect.y, bmp.GetWidth()-offset.x, bmp.GetHeight()-offset.y);
     }
 
     // draw the button itself
@@ -221,7 +221,7 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 {
     m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
+    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
         tot_width -= m_activeCloseBmp.GetScaledWidth();
@@ -528,16 +528,10 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 
 
     int text_offset;
-    int close_button_width = 0;
-    if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
-    {
-        close_button_width = m_activeCloseBmp.GetScaledWidth();
-    }
-
     int bitmap_offset = 0;
     if (page.bitmap.IsOk())
     {
-        bitmap_offset = tab_x + 8;
+        bitmap_offset = tab_x + wnd->FromDIP(8);
 
         // draw bitmap
         dc.DrawBitmap(page.bitmap,
@@ -546,14 +540,49 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                       true);
 
         text_offset = bitmap_offset + page.bitmap.GetScaledWidth();
-        text_offset += 3; // bitmap padding
-
+        text_offset += wnd->FromDIP(3); // bitmap padding
     }
     else
     {
-        text_offset = tab_x + 8;
+        text_offset = tab_x + wnd->FromDIP(8);
     }
 
+    // draw close button if necessary
+    int close_button_width = 0;
+    if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
+    {
+        wxBitmap bmp = m_disabledCloseBmp;
+
+        if (close_button_state == wxAUI_BUTTON_STATE_HOVER ||
+            close_button_state == wxAUI_BUTTON_STATE_PRESSED)
+        {
+            bmp = m_activeCloseBmp;
+        }
+
+#if wxUSE_IMAGE
+        if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
+        {
+            wxImage img = bmp.ConvertToImage();
+            img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
+            bmp = img;
+        }
+#endif // wxUSE_IMAGE
+
+        int offsetY = tab_y-1;
+        if (m_flags & wxAUI_NB_BOTTOM)
+            offsetY = 1;
+
+        wxRect rect(tab_x + tab_width - bmp.GetWidth() - wnd->FromDIP(1),
+                    offsetY + (tab_height/2) - (bmp.GetHeight()/2),
+                    bmp.GetWidth(),
+                    tab_height);
+
+        IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, close_button_state);
+        dc.DrawBitmap(bmp, rect.x, rect.y, true);
+
+        *out_button_rect = rect;
+        close_button_width = bmp.GetScaledWidth();
+    }
 
     wxString draw_text = wxAuiChopText(dc,
                           caption,
@@ -597,32 +626,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         focusRect.Inflate(2, 2);
 
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
-    }
-
-    // draw close button if necessary
-    if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
-    {
-        wxBitmap bmp = m_disabledCloseBmp;
-
-        if (close_button_state == wxAUI_BUTTON_STATE_HOVER ||
-            close_button_state == wxAUI_BUTTON_STATE_PRESSED)
-        {
-            bmp = m_activeCloseBmp;
-        }
-
-        int offsetY = tab_y-1;
-        if (m_flags & wxAUI_NB_BOTTOM)
-            offsetY = 1;
-
-        wxRect rect(tab_x + tab_width - close_button_width - 1,
-                    offsetY + (tab_height/2) - (bmp.GetScaledHeight()/2),
-                    close_button_width,
-                    tab_height);
-
-        IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, close_button_state);
-        dc.DrawBitmap(bmp, rect.x, rect.y, true);
-
-        *out_button_rect = rect;
     }
 
     *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
@@ -673,14 +676,15 @@ wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
 
     // if the close button is showing, add space for it
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
-        tab_width += m_activeCloseBmp.GetScaledWidth() + 3;
+        // increase by button size plus the padding
+        tab_width += wnd->FromDIP(16) + wnd->FromDIP(3);
 
     // if there's a bitmap, add space for it
     if (bitmap.IsOk())
     {
-        tab_width += bitmap.GetScaledWidth();
-        tab_width += 3; // right side bitmap padding
-        tab_height = wxMax(tab_height, bitmap.GetScaledHeight());
+        // increase by bitmap plus right side bitmap padding
+        tab_width += bitmap.GetWidth() + wnd->FromDIP(3);
+        tab_height = wxMax(tab_height, bitmap.GetHeight());
     }
 
     // add padding
@@ -742,20 +746,29 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
+#if wxUSE_IMAGE
+    if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
+    {
+        wxImage img = bmp.ConvertToImage();
+        img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
+        bmp = img;
+    }
+#endif // wxUSE_IMAGE
+
     rect = in_rect;
 
     if (orientation == wxLEFT)
     {
         rect.SetX(in_rect.x);
-        rect.SetY(((in_rect.y + in_rect.height)/2) - (bmp.GetScaledHeight()/2));
-        rect.SetWidth(bmp.GetScaledWidth());
-        rect.SetHeight(bmp.GetScaledHeight());
+        rect.SetY(((in_rect.y + in_rect.height)/2) - (bmp.GetHeight()/2));
+        rect.SetWidth(bmp.GetWidth());
+        rect.SetHeight(bmp.GetHeight());
     }
     else
     {
-        rect = wxRect(in_rect.x + in_rect.width - bmp.GetScaledWidth(),
-                      ((in_rect.y + in_rect.height)/2) - (bmp.GetScaledHeight()/2),
-                      bmp.GetScaledWidth(), bmp.GetScaledHeight());
+        rect = wxRect(in_rect.x + in_rect.width - bmp.GetWidth(),
+                      ((in_rect.y + in_rect.height)/2) - (bmp.GetHeight()/2),
+                      bmp.GetWidth(), bmp.GetHeight());
     }
 
     IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, button_state);
@@ -937,7 +950,7 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 {
     m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
+    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
         tot_width -= m_activeCloseBmp.GetScaledWidth();
@@ -1093,19 +1106,37 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     //dc.DrawLines(active ? WXSIZEOF(points) - 1 : WXSIZEOF(points), points);
     dc.DrawLines(WXSIZEOF(points), points);
 
-
     int text_offset;
-
     int close_button_width = 0;
+    // draw close button if necessary
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
-        close_button_width = m_activeCloseBmp.GetScaledWidth();
-        text_offset = tab_x + (tab_height/2) + ((tab_width-close_button_width)/2) - (textx/2);
+        wxBitmap bmp;
+        if (page.active)
+            bmp = m_activeCloseBmp;
+        else
+            bmp = m_disabledCloseBmp;
+
+#if wxUSE_IMAGE
+        if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
+        {
+            wxImage img = bmp.ConvertToImage();
+            img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
+            bmp = img;
+        }
+#endif // wxUSE_IMAGE
+
+        wxRect rect(tab_x + tab_width - bmp.GetWidth() - 1,
+                    tab_y + (tab_height/2) - (bmp.GetHeight()/2) + 1,
+                    bmp.GetWidth(),
+                    tab_height - 1);
+        DrawButtons(dc, wnd->FromDIP(wxSize(1, 1)), rect, bmp, *wxWHITE, close_button_state);
+
+        *out_button_rect = rect;
+        close_button_width = bmp.GetWidth();
     }
-    else
-    {
-        text_offset = tab_x + (tab_height/3) + (tab_width/2) - (textx/2);
-    }
+
+    text_offset = tab_x + (tab_height/2) + ((tab_width-close_button_width)/2) - (textx/2);
 
     // set minimum text offset
     if (text_offset < tab_x + tab_height)
@@ -1132,25 +1163,6 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
     }
-
-    // draw close button if necessary
-    if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
-    {
-        wxBitmap bmp;
-        if (page.active)
-            bmp = m_activeCloseBmp;
-        else
-            bmp = m_disabledCloseBmp;
-
-        wxRect rect(tab_x + tab_width - close_button_width - 1,
-                    tab_y + (tab_height/2) - (bmp.GetScaledHeight()/2) + 1,
-                    close_button_width,
-                    tab_height - 1);
-        DrawButtons(dc, wnd->FromDIP(wxSize(1, 1)), rect, bmp, *wxWHITE, close_button_state);
-
-        *out_button_rect = rect;
-    }
-
 
     *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
 
@@ -1180,7 +1192,7 @@ int wxAuiSimpleTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
 }
 
 wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,
-                                     wxWindow* WXUNUSED(wnd),
+                                     wxWindow* wnd,
                                      const wxString& caption,
                                      const wxBitmap& WXUNUSED(bitmap),
                                      bool WXUNUSED(active),
@@ -1192,11 +1204,12 @@ wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,
     dc.SetFont(m_measuringFont);
     dc.GetTextExtent(caption, &measured_textx, &measured_texty);
 
-    wxCoord tab_height = measured_texty + 4;
-    wxCoord tab_width = measured_textx + tab_height + 5;
+    wxCoord tab_height = measured_texty + wnd->FromDIP(4);
+    wxCoord tab_width = measured_textx + tab_height + wnd->FromDIP(5);
 
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
-        tab_width += m_activeCloseBmp.GetScaledWidth();
+        // increase by button size plus the padding
+        tab_width += wnd->FromDIP(16) + wnd->FromDIP(3);
 
     if (m_flags & wxAUI_NB_TAB_FIXED_WIDTH)
     {
@@ -1250,6 +1263,15 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
 
     if (!bmp.IsOk())
         return;
+
+#if wxUSE_IMAGE
+    if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
+    {
+        wxImage img = bmp.ConvertToImage();
+        img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
+        bmp = img;
+    }
+#endif // wxUSE_IMAGE
 
     rect = in_rect;
 
