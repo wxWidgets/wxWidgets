@@ -162,7 +162,6 @@ void GridTestCase::CellEdit()
 
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
-    m_grid->ShowCellEditControl();
 
     sim.Text("abab");
     sim.Char(WXK_RETURN);
@@ -756,7 +755,6 @@ void GridTestCase::Editable()
 
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
-    m_grid->ShowCellEditControl();
 
     sim.Text("abab");
     wxYield();
@@ -786,8 +784,6 @@ void GridTestCase::ReadOnly()
     m_grid->SetGridCursor(1, 1);
 
     CPPUNIT_ASSERT(m_grid->IsCurrentCellReadOnly());
-
-    m_grid->ShowCellEditControl();
 
     sim.Text("abab");
     wxYield();
