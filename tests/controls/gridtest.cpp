@@ -23,20 +23,6 @@
 #include "asserthelper.h"
 #include "wx/uiaction.h"
 
-// FIXME: A lot of mouse-related tests sporadically fail in wxGTK. This happens
-//        almost all the time but sometimes the tests do pass and the failure
-//        doesn't happen when debugging so this looks like some kind of event
-//        dispatching/simulating problem rather than a real problem in wxGrid.
-//
-//        Just disable these tests for now but it would be really great to
-//        really fix the problem.
-#ifdef __WXGTK__
-    #define NONGTK_TEST(test)
-#else
-    #define NONGTK_TEST(test) WXUISIM_TEST(test)
-#endif
-
-
 class GridTestCase : public CppUnit::TestCase
 {
 public:
@@ -48,13 +34,13 @@ public:
 private:
     CPPUNIT_TEST_SUITE( GridTestCase );
         WXUISIM_TEST( CellEdit );
-        NONGTK_TEST( CellClick );
-        NONGTK_TEST( ReorderedColumnsCellClick );
-        NONGTK_TEST( CellSelect );
-        NONGTK_TEST( LabelClick );
-        NONGTK_TEST( SortClick );
+        WXUISIM_TEST( CellClick );
+        WXUISIM_TEST( ReorderedColumnsCellClick );
+        WXUISIM_TEST( CellSelect );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         WXUISIM_TEST( Size );
-        NONGTK_TEST( RangeSelect );
+        WXUISIM_TEST( RangeSelect );
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( AddRowCol );
@@ -71,15 +57,15 @@ private:
         WXUISIM_TEST( ResizeScrolledHeader );
         WXUISIM_TEST( ColumnMinWidth );
         CPPUNIT_TEST( PseudoTest_NativeHeader );
-        NONGTK_TEST( LabelClick );
-        NONGTK_TEST( SortClick );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
         WXUISIM_TEST( ResizeScrolledHeader );
         WXUISIM_TEST( ColumnMinWidth );
         CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( PseudoTest_NativeLabels );
-        NONGTK_TEST( LabelClick );
-        NONGTK_TEST( SortClick );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
         WXUISIM_TEST( WindowAsEditorControl );
     CPPUNIT_TEST_SUITE_END();
