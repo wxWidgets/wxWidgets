@@ -1191,8 +1191,10 @@ wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,
     wxCoord tab_width = measured_textx + tab_height + wnd->FromDIP(5);
 
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
+    {
         // increase by button size plus the padding
         tab_width += wnd->FromDIP(16) + wnd->FromDIP(3);
+    }
 
     if (m_flags & wxAUI_NB_TAB_FIXED_WIDTH)
     {
