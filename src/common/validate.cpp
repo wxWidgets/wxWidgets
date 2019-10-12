@@ -25,6 +25,8 @@
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler);
 
+const wxValidator wxDefaultValidator;
+
 // VZ: personally, I think true would be more appropriate - these bells are
 //     _annoying_
 bool wxValidator::ms_isSilent = false;
@@ -37,10 +39,5 @@ wxValidator::wxValidator()
 wxValidator::~wxValidator()
 {
 }
-#else
-
-class WXDLLIMPEXP_CORE wxValidator { };
 
 #endif // wxUSE_VALIDATORS
-
-const wxValidator wxDefaultValidator;
