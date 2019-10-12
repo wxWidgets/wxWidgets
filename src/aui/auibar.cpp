@@ -634,7 +634,7 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     // and add some extra space in front of the drop down button
     if (item.HasDropDown())
     {
-        int dropdownWidth = wnd->FromDIP(GetElementSize(wxAUI_TBART_DROPDOWN_SIZE));
+        int dropdownWidth = GetElementSize(wxAUI_TBART_DROPDOWN_SIZE);
         width += dropdownWidth + wnd->FromDIP(4);
     }
 
