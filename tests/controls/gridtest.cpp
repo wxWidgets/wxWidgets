@@ -23,6 +23,10 @@
 #include "asserthelper.h"
 #include "wx/uiaction.h"
 
+#ifdef __WXGTK__
+    #include "wx/stopwatch.h"
+#endif // __WXGTK__
+
 class GridTestCase : public CppUnit::TestCase
 {
 public:
@@ -163,10 +167,41 @@ void GridTestCase::CellEdit()
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
 
+    wxYield();
+
     sim.Text("abab");
+
+    // We need to wait until the editor is really shown under GTK, consider
+    // that it happens once it gets focus.
+#ifdef __WXGTK__
+    for ( wxStopWatch sw; wxWindow::FindFocus() == m_grid; )
+    {
+        if ( sw.Time() > 250 )
+        {
+            WARN("Editor control not shown until timeout expiration");
+            break;
+        }
+
+        wxYield();
+    }
+#endif // __WXGTK__
+
     sim.Char(WXK_RETURN);
 
     wxYield();
+
+#ifdef __WXGTK__
+    for ( wxStopWatch sw; wxWindow::FindFocus() != m_grid; )
+    {
+        if ( sw.Time() > 250 )
+        {
+            WARN("Editor control not hidden until timeout expiration");
+            break;
+        }
+
+        wxYield();
+    }
+#endif // __WXGTK__
 
     CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
