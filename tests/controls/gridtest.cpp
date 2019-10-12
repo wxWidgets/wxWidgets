@@ -203,6 +203,8 @@ void GridTestCase::CellEdit()
     }
 #endif // __WXGTK__
 
+    CHECK(m_grid->GetCellValue(1, 1) == "abab");
+
     CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
