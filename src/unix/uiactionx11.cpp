@@ -341,7 +341,12 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
     if ( xkeycode == NoSymbol )
         return false;
 
-    return DoX11Key(xkeycode, modifiers, isDown);
+    if ( !DoX11Key(xkeycode, modifiers, isDown) )
+        return false;
+
+    XFlush(m_display);
+
+    return true;
 }
 
 wxUIActionSimulator::wxUIActionSimulator()
