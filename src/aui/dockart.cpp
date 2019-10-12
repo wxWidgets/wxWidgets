@@ -92,7 +92,7 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
 // wxAuiScaleBitmap is a utility function that scales a TabArt bitmap
 wxBitmap wxAuiScaleBitmap(const wxBitmap& bmp, double scale)
 {
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && !defined(__WXGTK3__) && !defined(__WXMAC__)
     // scale to a close round number to improve quality
     scale = floor(scale + 0.25);
     if (scale > 1.0 && !(bmp.GetScaleFactor() > 1.0))
