@@ -2335,6 +2335,7 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
                         ::IsMenu(GetHmenuOf(wxCurrentPopupMenu)) )
                     ::SetCursor(GetHcursorOf(*wxSTANDARD_CURSOR));
             }
+            break;
 #endif // wxUSE_MENUS
 
         case WM_PASTE:

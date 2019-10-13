@@ -4201,7 +4201,7 @@ void wxGrid::GetDragGridWindows(int pos,
         if ( pos < lineEnd )
         {
             firstGridWindow = m_frozenCornerGridWin;
-            secondGridWindow = oper.GetFrozenGrid(this);;
+            secondGridWindow = oper.GetFrozenGrid(this);
         }
         else
         {
