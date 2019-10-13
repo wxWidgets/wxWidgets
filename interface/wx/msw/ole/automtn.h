@@ -255,60 +255,43 @@ public:
     If you want to pass it to a wxAutomationObject as a parameter:
         -# Assign a @c SAFEARRAY pointer to it and store it in a wxVariant.
         -# Call the wxAutomationObject method (CallMethod(), SetProperty() or Invoke())
-        -# wxAutomationObject will destroy the array after the approapriate automation call.
-
-    An example of creating a 2-dimensional @c SAFEARRAY containing VARIANTs
-    and storing it in a wxVariant
+        -# wxAutomationObject will destroy the array after the automation call.
+    
     @code
-    SAFEARRAYBOUND bounds[2]; // 2 dimensions
-    wxSafeArray<VT_VARIANT> safeArray;
-    unsigned rowCount = 1000;
-    unsigned colCount = 20;
+    SAFEARRAY* safeArray = NULL;
 
-    bounds[0].lLbound = 0; // elements start at 0
-    bounds[0].cElements = rowCount;
-    bounds[1].lLbound = 0; // elements start at 0
-    bounds[1].cElements = colCount;
-
-    if ( !safeArray.Create(bounds, 2) )
-        return false;
-
-    long indices[2];
-
-    for ( unsigned row = 0; row < rowCount; row++ )
-    {
-        indices[0] = row;
-        for ( unsigned col = 0; col < colCount; col++ )
-        {
-            indices[1] = col;
-            if ( !safeArray.SetElement(indices, wxString::Format("R%u C%u", row+1, col+1)) )
-               return false;
-        }
-    }
-    range.PutProperty("Value", wxVariant(new wxVariantDataSafeArray(safeArray.Detach())));
+    Create and fill the SAFEARRAY here
+    
+    range.PutProperty("Value", wxVariant(new wxVariantDataSafeArray(safeArray)));
     @endcode
 
-    If you you received wxVariantDataSafeArray as a result of wxAutomationObject method call:
-    (1) Get the data out of the array.
-    (2) Destroy the array.
+    If you want to receive a @c SAFEARRAY in a wxVariant as a result of an @c wxAutomationObject
+    call, you need to call wxAutomationObject::SetConvertVariantFlags(wxOleConvertVariant_ReturnSafeArrays)
+    beforehand, otherwise the data would be sent as a flattened one-dimensional list.
+    If you you received wxVariantDataSafeArray as a result of wxAutomationObject method call, you need to
+    destroy the array once you are done with it.
+
     @code
-    wxVariant result;
+    wxVariant values;
+
+    range.SetConvertVariantFlags(wxOleConvertVariant_ReturnSafeArrays);
     result = range.GetProperty("Value");
-    if ( result.GetType() == "safearray" )
+    if ( values.GetType() == "safearray" )
     {
-        wxSafeArray<VT_VARIANT> safeArray;
         wxVariantDataSafeArray* const
-            sa = wxStaticCastVariantData(variant.GetData(), wxVariantDataSafeArray);
+            vdsa = wxStaticCastVariantData(values.GetData(), wxVariantDataSafeArray);
+        SAFEARRAY* safeArray = NULL;
 
-        if ( !safeArray.Attach(sa.GetValue() )
+        if ( vdsa )
+           safeArray = vdsa->GetValue();
+
+        if ( safeArray )
         {
-            if ( !safeArray.HasArray() )
-                SafeArrayDestroy(sa.GetValue()); // we have to dispose the SAFEARRAY ourselves
-            return false;
-        }
+            Work with the SAFEARRAY here
 
-        // get the data from the SAFEARRAY using wxSafeArray::GetElement()
-        // SAFEARRAY will be disposed by safeArray's dtor
+           // destroy the no longer needed SAFEARRAY
+           ::SafeArrayDestroy(safeArray);
+        }
     }
     @endcode
 
