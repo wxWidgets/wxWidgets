@@ -363,8 +363,8 @@ public:
     // Override SetDoubleBuffered() to do nothing, its implementation in the
     // base class is incompatible with the double buffering done by this native
     // control.
-    virtual bool IsDoubleBuffered() const;
-    virtual void SetDoubleBuffered(bool on);
+    virtual bool IsDoubleBuffered() const wxOVERRIDE;
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
 
     virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 

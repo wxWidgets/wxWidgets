@@ -2522,7 +2522,7 @@ wxPGProperty* wxPGProperty::GetPropertyByNameWH( const wxString& name, unsigned 
         i++;
         if ( i == GetChildCount() )
             i = 0;
-    };
+    }
 
     return NULL;
 }
