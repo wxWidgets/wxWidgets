@@ -629,7 +629,6 @@ public:
         { m_x *= ((wxDouble)num)/((wxDouble)denum); m_y *= ((wxDouble)num)/((wxDouble)denum);
                 m_width *= ((wxDouble)num)/((wxDouble)denum); m_height *= ((wxDouble)num)/((wxDouble)denum);}
 
-    wxRect2DDouble& operator = (const wxRect2DDouble& rect);
     inline bool operator == (const wxRect2DDouble& rect) const
         { return wxIsSameDouble(m_x, rect.m_x) && wxIsSameDouble(m_y, rect.m_y) && HaveEqualSize(rect); }
     inline bool operator != (const wxRect2DDouble& rect) const

@@ -42,12 +42,6 @@ public:
           m_icon(icon)
     { }
 
-    wxDataViewIconText( const wxDataViewIconText &other )
-        : wxObject(),
-          m_text(other.m_text),
-          m_icon(other.m_icon)
-    { }
-
     void SetText( const wxString &text ) { m_text = text; }
     wxString GetText() const             { return m_text; }
     void SetIcon( const wxIcon &icon )   { m_icon = icon; }

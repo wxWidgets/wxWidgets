@@ -62,7 +62,6 @@ public:
                                                   const wxString& second);
 
     wxArrayString() { }
-    wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
     wxArrayString(size_t sz, const char** a);
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
@@ -104,9 +103,6 @@ class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
 {
 public:
     wxSortedArrayString() : wxSortedArrayStringBase(wxStringSortAscending)
-        { }
-    wxSortedArrayString(const wxSortedArrayString& array)
-        : wxSortedArrayStringBase(array)
         { }
     wxSortedArrayString(const wxArrayString& src)
         : wxSortedArrayStringBase(wxStringSortAscending)

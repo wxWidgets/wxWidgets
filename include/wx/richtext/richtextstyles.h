@@ -132,9 +132,6 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextCharacterStyleDefinition: public wxRichText
     wxDECLARE_DYNAMIC_CLASS(wxRichTextCharacterStyleDefinition);
 public:
 
-    /// Copy constructor
-    wxRichTextCharacterStyleDefinition(const wxRichTextCharacterStyleDefinition& def): wxRichTextStyleDefinition(def) {}
-
     /// Default constructor
     wxRichTextCharacterStyleDefinition(const wxString& name = wxEmptyString):
         wxRichTextStyleDefinition(name) {}
