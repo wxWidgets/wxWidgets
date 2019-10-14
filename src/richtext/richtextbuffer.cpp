@@ -5099,6 +5099,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     // continue.
 
     wxRect availableRect;
+    long nextBreakPos = GetFirstLineBreakPosition(lastEndPos+1);
 
     node = m_children.GetFirst();
     while (node)
@@ -5127,7 +5128,8 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         // and found a suitable point some way into the child. So get the size for the fragment
         // if necessary.
 
-        long nextBreakPos = GetFirstLineBreakPosition(lastEndPos+1);
+        if (nextBreakPos > -1 && nextBreakPos < lastEndPos+1)
+            nextBreakPos = GetFirstLineBreakPosition(lastEndPos+1);
         long lastPosToUse = child->GetRange().GetEnd();
         bool lineBreakInThisObject = (nextBreakPos > -1 && nextBreakPos <= child->GetRange().GetEnd());
 

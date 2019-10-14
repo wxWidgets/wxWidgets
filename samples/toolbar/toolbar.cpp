@@ -98,7 +98,7 @@ public:
             const wxString& title = "wxToolBar Sample",
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
+            long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN);
     virtual ~MyFrame();
 
     void PopulateToolbar(wxToolBarBase* toolBar);

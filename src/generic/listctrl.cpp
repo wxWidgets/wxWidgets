@@ -1359,6 +1359,15 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                                 event.GetPosition());
             }
         }
+        else if ( event.LeftDClick() && hit_border )
+        {
+            // Autosize the column when the divider is clicked: if there are
+            // any items, fit the columns to its contents, otherwise just fit
+            // it to its label width.
+            parent->SetColumnWidth(m_column,
+                                   parent->IsEmpty() ? wxLIST_AUTOSIZE_USEHEADER
+                                                     : wxLIST_AUTOSIZE);
+        }
         else if (event.Moving())
         {
             bool setCursor;

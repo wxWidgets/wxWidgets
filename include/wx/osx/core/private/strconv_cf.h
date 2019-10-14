@@ -13,6 +13,7 @@
 
 #include <CoreFoundation/CFString.h>
 #include <CoreFoundation/CFStringEncodingExt.h>
+#include "wx/fontmap.h"
 
 // ============================================================================
 // CoreFoundation conversion classes
@@ -335,3 +336,20 @@ private:
     CFStringEncoding m_encoding ;
 };
 
+// corresponding class for holding UniChars (native unicode characters)
+
+class WXDLLIMPEXP_BASE wxMacUniCharBuffer
+{
+    public :
+    wxMacUniCharBuffer( const wxString &str ) ;
+
+    ~wxMacUniCharBuffer() ;
+
+    UniCharPtr GetBuffer() ;
+
+    UniCharCount GetChars() ;
+
+    private :
+    UniCharPtr m_ubuf ;
+    UniCharCount m_chars ;
+};

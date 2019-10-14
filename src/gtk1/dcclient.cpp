@@ -318,8 +318,8 @@ wxWindowDCImpl::wxWindowDCImpl(wxDC *owner, wxWindow *window)
 
     SetUpDC();
 
-    /* this must be done after SetUpDC, bacause SetUpDC calls the
-       repective SetBrush, SetPen, SetBackground etc functions
+    /* this must be done after SetUpDC, because SetUpDC calls the
+       respective SetBrush, SetPen, SetBackground etc functions
        to set up the DC. SetBackground call m_owner->SetBackground
        and this might not be desired as the standard dc background
        is white whereas a window might assume gray to be the

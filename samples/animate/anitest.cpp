@@ -115,8 +115,7 @@ MyFrame::MyFrame(wxWindow *parent,
                  const wxPoint& pos,
                  const wxSize& size,
                  const long style)
-       : wxFrame(parent, id, title, pos, size,
-                          style | wxNO_FULL_REPAINT_ON_RESIZE)
+       : wxFrame(parent, id, title, pos, size, style)
 {
     SetIcon(wxICON(sample));
 

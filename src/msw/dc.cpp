@@ -729,8 +729,23 @@ void wxMSWDCImpl::Clear()
             return;
     }
 
+    HBRUSH hbr;
     if ( !m_backgroundBrush.IsOk() )
+    {
+        // By default, use the stock white brush for compatibility with the
+        // previous wx versions.
+        hbr = WHITE_BRUSH;
+    }
+    else if ( !m_backgroundBrush.IsTransparent() )
+    {
+        hbr = GetHbrushOf(m_backgroundBrush);
+    }
+    else // Using transparent background brush.
+    {
+        // Clearing with transparent brush doesn't do anything, just as drawing
+        // with transparent pen doesn't.
         return;
+    }
 
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
@@ -738,7 +753,7 @@ void wxMSWDCImpl::Clear()
     // to compensate rounding errors if DC is the subject
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
-    ::FillRect(GetHdc(), &rect, GetHbrushOf(m_backgroundBrush));
+    ::FillRect(GetHdc(), &rect, hbr);
 
     RealizeScaleAndOrigin();
 }
@@ -788,16 +803,18 @@ bool wxMSWDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
 void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
-    wxCoord x1 = x-VIEWPORT_EXTENT;
-    wxCoord y1 = y-VIEWPORT_EXTENT;
-    wxCoord x2 = x+VIEWPORT_EXTENT;
-    wxCoord y2 = y+VIEWPORT_EXTENT;
+    RECT rect;
+    ::GetClipBox(GetHdc(), &rect);
+    // Inflate the box by 1 unit in each direction
+    // to compensate rounding errors if DC is the subject
+    // of complex transformation (is e.g. rotated).
+    ::InflateRect(&rect, 1, 1);
 
-    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y));
-    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(y1), XLOG2DEV(x), YLOG2DEV(y2));
+    wxDrawLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y));
+    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(rect.left, rect.top);
+    CalcBoundingBox(rect.right, rect.bottom);
 }
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)

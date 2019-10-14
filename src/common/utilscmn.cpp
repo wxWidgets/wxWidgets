@@ -86,6 +86,7 @@
 #include <errno.h>
 
 #if wxUSE_GUI
+    #include "wx/filename.h"
     #include "wx/filesys.h"
     #include "wx/notebook.h"
     #include "wx/statusbr.h"

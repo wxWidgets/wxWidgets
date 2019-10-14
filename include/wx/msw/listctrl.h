@@ -199,7 +199,7 @@ public:
     bool SetItemPosition(long item, const wxPoint& pos);
 
     // Gets the number of items in the list control
-    int GetItemCount() const;
+    int GetItemCount() const wxOVERRIDE;
 
     // Gets the number of columns in the list control
     int GetColumnCount() const wxOVERRIDE { return m_colCount; }
@@ -360,6 +360,11 @@ public:
     // Necessary for drawing hrules and vrules, if specified
     void OnPaint(wxPaintEvent& event);
 
+    // Override SetDoubleBuffered() to do nothing, its implementation in the
+    // base class is incompatible with the double buffering done by this native
+    // control.
+    virtual bool IsDoubleBuffered() const wxOVERRIDE;
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
 
     virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 

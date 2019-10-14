@@ -127,7 +127,7 @@ public:
     bool SetItemPosition(long item, const wxPoint& pos);
 
     // Gets the number of items in the list control
-    int GetItemCount() const;
+    int GetItemCount() const wxOVERRIDE;
 
     // Gets the number of columns in the list control
     int GetColumnCount() const wxOVERRIDE;

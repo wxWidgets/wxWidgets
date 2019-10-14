@@ -349,7 +349,7 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     // multiple canvases: If we updated the viewport in the wxSizeEvent
     // handler, changing the size of one canvas causes a viewport setting that
     // is wrong when next another canvas is repainted.
-    const wxSize ClientSize = GetClientSize();
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     TestGLContext& canvas = wxGetApp().GetContext(this, m_useStereo);
     glViewport(0, 0, ClientSize.x, ClientSize.y);

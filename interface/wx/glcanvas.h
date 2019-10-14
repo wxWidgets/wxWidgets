@@ -748,6 +748,15 @@ enum
     context to the canvas, and then finally call SwapBuffers() to swap the
     buffers of the OpenGL canvas and thus show your current output.
 
+    Please note that wxGLContext always uses physical pixels, even on the
+    platforms where wxWindow uses logical pixels, affected by the coordinate
+    scaling, on high DPI displays. Thus, if you want to set the OpenGL view
+    port to the size of entire window, you must multiply the result returned by
+    wxWindow::GetClientSize() by wxWindow::GetContentScaleFactor() before
+    passing it to @c glViewport(). Same considerations apply to other OpenGL
+    functions and other coordinates, notably those retrieved from wxMouseEvent
+    in the event handlers.
+
     Notice that versions of wxWidgets previous to 2.9 used to implicitly create a
     wxGLContext inside wxGLCanvas itself. This is still supported in the
     current version but is deprecated now and will be removed in the future,

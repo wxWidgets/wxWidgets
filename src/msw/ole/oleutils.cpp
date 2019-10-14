@@ -490,10 +490,12 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
 #endif // wxUSE_LONGLONG
 
             case VT_I4:
+            case VT_UI4:
                 variant = (long) oleVariant.lVal;
                 break;
 
             case VT_I2:
+            case VT_UI2:
                 variant = (long) oleVariant.iVal;
                 break;
 

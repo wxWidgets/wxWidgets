@@ -541,7 +541,7 @@ wxPrinterBase(data)
 {
 }
 
-wxMacPrinter::~wxMacPrinter(void)
+wxMacPrinter::~wxMacPrinter()
 {
 }
 
@@ -735,7 +735,7 @@ wxPrintPreviewBase(printout, printoutForPrinting, data)
     DetermineScaling();
 }
 
-wxMacPrintPreview::~wxMacPrintPreview(void)
+wxMacPrintPreview::~wxMacPrintPreview()
 {
 }
 
@@ -748,7 +748,7 @@ bool wxMacPrintPreview::Print(bool interactive)
     return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
 
-void wxMacPrintPreview::DetermineScaling(void)
+void wxMacPrintPreview::DetermineScaling()
 {
     int screenWidth , screenHeight ;
     wxDisplaySize( &screenWidth , &screenHeight ) ;

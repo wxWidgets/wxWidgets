@@ -995,6 +995,16 @@ void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 
 void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
+    if ( ms_logKey )
+        LogKeyEvent( "Key down", event);
+
+    event.Skip();
+
+    // Only handle bare function keys below, notably let Alt-Fn perform their
+    // usual default functions as intercepting them is annoying.
+    if ( event.GetModifiers() != 0 )
+        return;
+
     switch ( event.GetKeyCode() )
     {
         case WXK_F1:
@@ -1088,11 +1098,6 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             wxLogMessage("Control marked as non modified");
             break;
     }
-
-    if ( ms_logKey )
-        LogKeyEvent( "Key down", event);
-
-    event.Skip();
 }
 
 //----------------------------------------------------------------------

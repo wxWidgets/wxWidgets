@@ -951,6 +951,16 @@ public:
                     int imageIndex);
 
     /**
+        Returns true if the control doesn't currently contain any items.
+
+        Note that the control with some columns is still considered to be empty
+        if it has no rows.
+
+        @since 3.1.3
+     */
+    bool IsEmpty() const;
+
+    /**
         Returns true if the control is currently in virtual report view.
      */
     bool IsVirtual() const;

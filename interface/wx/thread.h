@@ -1782,7 +1782,7 @@ bool wxIsMainThread();
     Typically, these functions are used like this:
 
     @code
-    void MyThread::Foo(void)
+    void MyThread::Foo()
     {
         // before doing any GUI calls we must ensure that
         // this thread is the only one doing it!

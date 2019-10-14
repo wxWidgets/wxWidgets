@@ -1294,7 +1294,12 @@ void wxBitmap::SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg, c
         cairo_set_source_surface(cr, bmpData->m_surface, x, y);
         return;
     }
-    wxCHECK_RET(bmpData->m_pixbufNoMask, "no bitmap data");
+
+    // Silently ignore attempts to draw uninitialized bitmap,
+    // because other platforms don't complain about it
+    if (bmpData->m_pixbufNoMask == NULL)
+        return;
+
     if (bmpData->m_bpp == 1)
         SetSourceSurface1(bmpData, cr, x, y, fg, bg);
     else

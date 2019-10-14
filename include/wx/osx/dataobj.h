@@ -11,28 +11,24 @@
 #ifndef _WX_MAC_DATAOBJ_H_
 #define _WX_MAC_DATAOBJ_H_
 
-// ----------------------------------------------------------------------------
-// wxDataObject is the same as wxDataObjectBase under wxGTK
-// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxOSXDataSink;
+class WXDLLIMPEXP_CORE wxOSXDataSource;
 
 class WXDLLIMPEXP_CORE wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
-#ifdef __DARWIN__
     virtual ~wxDataObject() { }
-#endif
 
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
-    void AddToPasteboard( void * pasteboardRef , wxIntPtr itemID );
-    // returns true if the passed in format is present in the pasteboard
-    static bool IsFormatInPasteboard( void * pasteboardRef, const wxDataFormat &dataFormat );
-    // returns true if any of the accepted formats of this dataobj is in the pasteboard
-    bool HasDataInPasteboard( void * pasteboardRef );
-    bool GetFromPasteboard( void * pasteboardRef );
+
+    void WriteToSink(wxOSXDataSink *sink) const;
+    bool ReadFromSource(wxOSXDataSource *source);
+    bool CanReadFromSource(wxOSXDataSource *source) const;
 
 #if wxOSX_USE_COCOA
-    virtual void AddSupportedTypes( void* cfarray);
+    // adds all the native formats (in descending order of preference) this data object supports
+    virtual void AddSupportedTypes( CFMutableArrayRef cfarray) const;
 #endif
 };
 

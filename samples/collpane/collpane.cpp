@@ -172,8 +172,7 @@ wxEND_EVENT_TABLE()
 // My frame constructor
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxCollapsiblePane sample",
-                 wxDefaultPosition, wxSize(420, 300),
-                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+                 wxDefaultPosition, wxSize(420, 300))
 {
     SetIcon(wxICON(sample));
 
