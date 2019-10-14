@@ -481,12 +481,10 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     if ( col.GetAlignment() != wxALIGN_NOT )
     {
         hdi.mask |= HDI_FORMAT;
+
+        // wxALIGN_LEFT is the same as wxALIGN_NOT
         switch ( col.GetAlignment() )
         {
-            case wxALIGN_LEFT:
-                hdi.fmt |= HDF_LEFT;
-                break;
-
             case wxALIGN_CENTER:
             case wxALIGN_CENTER_HORIZONTAL:
                 hdi.fmt |= HDF_CENTER;
