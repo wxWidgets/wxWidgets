@@ -480,7 +480,7 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 
     if ( col.GetAlignment() != wxALIGN_NOT )
     {
-        hdi.mask |= HDI_FORMAT | HDF_LEFT;
+        hdi.mask |= HDI_FORMAT;
         switch ( col.GetAlignment() )
         {
             case wxALIGN_LEFT:
