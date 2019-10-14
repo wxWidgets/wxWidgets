@@ -288,7 +288,7 @@ private:
 
     public:
         // the initial state is direct
-        DecoderState() { mode = Direct; accum = bit = msb = 0; }
+        DecoderState() { mode = Direct; accum = bit = msb = 0; isLSB = false; }
 
         // switch to/from shifted mode
         void ToDirect() { mode = Direct; }
