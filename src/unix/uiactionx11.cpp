@@ -108,7 +108,12 @@ bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
     // all pending events, notably mouse moves.
     XSync(m_display, False /* don't discard */);
 
-    return DoX11Button(xbutton, isDown);
+    if ( !DoX11Button(xbutton, isDown) )
+        return false;
+
+    XFlush(m_display);
+
+    return true;
 }
 
 #if wxUSE_PLAINX_IMPL
