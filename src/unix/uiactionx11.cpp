@@ -243,7 +243,7 @@ private:
 
 bool wxUIActionSimulatorXTestImpl::DoX11Button(int xbutton, bool isDown)
 {
-    return XTestFakeButtonEvent(m_display, xbutton, isDown, 0) != 0;
+    return XTestFakeButtonEvent(m_display, xbutton, isDown, CurrentTime) != 0;
 }
 
 bool wxUIActionSimulatorXTestImpl::DoX11MouseMove(long x, long y)
@@ -266,7 +266,7 @@ bool wxUIActionSimulatorXTestImpl::DoX11MouseMove(long x, long y)
 #endif // GTK+ 3.10+
 #endif // __WXGTK3__
 
-    return XTestFakeMotionEvent(m_display, -1, x, y, 0) != 0;
+    return XTestFakeMotionEvent(m_display, -1, x, y, CurrentTime) != 0;
 }
 
 bool
@@ -274,7 +274,7 @@ wxUIActionSimulatorXTestImpl::DoX11Key(KeyCode xkeycode,
                                        int WXUNUSED(modifiers),
                                        bool isDown)
 {
-    return XTestFakeKeyEvent(m_display, xkeycode, isDown, 0) != 0;
+    return XTestFakeKeyEvent(m_display, xkeycode, isDown, CurrentTime) != 0;
 }
 
 #endif // wxUSE_XTEST
