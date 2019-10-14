@@ -577,11 +577,11 @@ bool TestApp::ProcessEvent(wxEvent& event)
 int TestApp::RunTests()
 {
 #if wxUSE_LOG
-    // Switch off logging unless --verbose
-    bool verbose = wxLog::GetVerbose();
-    wxLog::EnableLogging(verbose);
-#else
-    bool verbose = false;
+    // Switch off logging to avoid interfering with the tests output unless
+    // WXTRACE is set, as otherwise setting it would have no effect while
+    // running the tests.
+    if ( !wxGetEnv("WXTRACE", NULL) )
+        wxLog::EnableLogging(false);
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking
