@@ -730,6 +730,7 @@ public:
     wxAny()
     {
         m_type = wxAnyNullValueType;
+        m_buffer = { 0 };
     }
 
     /**
