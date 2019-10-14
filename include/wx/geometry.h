@@ -155,7 +155,8 @@ inline wxDouble wxPoint2DInt::GetDistance( const wxPoint2DInt &pt ) const
 
 inline wxDouble wxPoint2DInt::GetDistanceSquare( const wxPoint2DInt &pt ) const
 {
-    return ( (wxDouble)(pt.m_x-m_x)*(pt.m_x-m_x) + (wxDouble)(pt.m_y-m_y)*(pt.m_y-m_y) );
+    return ( ((wxDouble)pt.m_x-m_x)*((wxDouble)pt.m_x-m_x) +
+             ((wxDouble)pt.m_y-m_y)*((wxDouble)pt.m_y-m_y) );
 }
 
 inline wxInt32 wxPoint2DInt::GetDotProduct( const wxPoint2DInt &vec ) const
