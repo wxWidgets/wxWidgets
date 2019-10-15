@@ -3374,7 +3374,7 @@ private:
   {
       // notice that there is no need to initialize m_len here as it's unused
       // as long as m_str is NULL
-      ConvertedBuffer() : m_str(NULL) {}
+      ConvertedBuffer() : m_str(NULL), m_len(0) {}
       ~ConvertedBuffer()
           { free(m_str); }
 

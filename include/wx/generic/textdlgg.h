@@ -39,6 +39,7 @@ public:
     wxTextEntryDialog()
     {
         m_textctrl = NULL;
+        m_dialogStyle = 0;
     }
 
     wxTextEntryDialog(wxWindow *parent,

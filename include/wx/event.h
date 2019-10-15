@@ -244,7 +244,7 @@ private:
     wxEventFunction m_method;
 
     // Provide a dummy default ctor for type info purposes
-    wxObjectEventFunctor() { }
+    wxObjectEventFunctor() : m_handler(NULL), m_method(NULL) { }
 
     WX_DECLARE_TYPEINFO_INLINE(wxObjectEventFunctor)
 };
