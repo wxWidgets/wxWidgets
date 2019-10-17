@@ -47,25 +47,6 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
 };
 
-// This function should be used to show the window and wait until we can get
-// its real geometry.
-void ShowAndWaitForPaint(wxWindow* w)
-{
-    // Unfortunately showing the window is asynchronous, at least when using
-    // X11, so we have to wait for some time before retrieving its true
-    // geometry. And it's not clear how long should we wait, so we do it until
-    // we get the first paint event -- by then the window really should have
-    // its final size.
-    WaitForPaint waitForPaint(w);
-
-    w->Show();
-
-    if ( !waitForPaint.YieldUntilPainted() )
-    {
-        WARN("Didn't get a paint event until timeout expiration");
-    }
-}
-
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -111,7 +92,19 @@ TEST_CASE("wxWindow::MovePreservesSize", "[window][size][move]")
     wxScopedPtr<wxWindow>
         w(new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "Test child frame"));
 
-    ShowAndWaitForPaint(w.get());
+    // Unfortunately showing the window is asynchronous, at least when using
+    // X11, so we have to wait for some time before retrieving its true
+    // geometry. And it's not clear how long should we wait, so we do it until
+    // we get the first paint event -- by then the window really should have
+    // its final size.
+    WaitForPaint waitForPaint(w.get());
+
+    w->Show();
+
+    if ( !waitForPaint.YieldUntilPainted() )
+    {
+        WARN("Didn't get a paint event until timeout expiration");
+    }
 
     const wxRect rectOrig = w->GetRect();
 
