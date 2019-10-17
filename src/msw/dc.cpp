@@ -819,7 +819,31 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
+    // We have optimized function to draw physical vertical or horizontal lines
+    // with solid color and square ends.
+    // Because checking wheteher the line would be horizontal/vertical
+    // in the device coordinate system is complex so we only check whether
+    // the line is horizontal/vertical in the logical coordinates and use
+    // optimized function only for DC which coordinate system is for sure
+    // not rotated (graphics mode of the DC != GM_ADVANCED).
+    // Moreover, optimized function can be used only for regular lines with pen
+    // width > 0 because it doesn't support drawing non-scaled 1-pixel wide
+    // lines when pen width is 0.
+    if ( (x1 == x2 || y1 == y2) &&
+         ::GetGraphicsMode(GetHdc()) != GM_ADVANCED && // ensure DC is not rotated
+         m_pen.IsNonTransparent() && // this calls IsOk() too
+         m_pen.GetStyle() == wxPENSTYLE_SOLID &&
+         m_pen.GetWidth() > 0 &&
+         (m_pen.GetWidth() == 1 || m_pen.GetCap() == wxCAP_BUTT)
+       )
+    {
+        wxDrawHVLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2),
+                     wxColourToRGB(m_pen.GetColour()), m_pen.GetWidth());
+    }
+    else
+    {
+        wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
+    }
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
