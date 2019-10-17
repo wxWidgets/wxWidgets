@@ -946,7 +946,7 @@ struct WXDLLIMPEXP_CORE wxGridSizesInfo
 // wxGrid
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGrid : public wxScrolledWindow
+class WXDLLIMPEXP_CORE wxGrid : public wxScrolledCanvas
 {
 public:
     // possible selection modes
@@ -2287,7 +2287,7 @@ protected:
 
 private:
 
-    // implement wxScrolledWindow method to return m_gridWin size
+    // implement wxScrolledCanvas method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
 
     // depending on the values of m_numFrozenRows and m_numFrozenCols, it will

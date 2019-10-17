@@ -2257,7 +2257,7 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 
 /////////////////////////////////////////////////////////////////////
 
-wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
+wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_PAINT( wxGrid::OnPaint )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
@@ -2271,7 +2271,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
                           const wxPoint& pos, const wxSize& size,
                           long style, const wxString& name)
 {
-    if (!wxScrolledWindow::Create(parent, id, pos, size,
+    if (!wxScrolledCanvas::Create(parent, id, pos, size,
                                   style | wxWANTS_CHARS, name))
         return false;
 
@@ -3390,7 +3390,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg,
 
 void wxGrid::PrepareDCFor(wxDC &dc, wxGridWindow *gridWindow)
 {
-    wxScrolledWindow::PrepareDC( dc );
+    wxScrolledCanvas::PrepareDC( dc );
 
     wxPoint dcOrigin = dc.GetDeviceOrigin() - GetGridWindowOffset(gridWindow);
 
@@ -5186,7 +5186,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
     if ( m_created && !GetBatchCount() )
     {
         // Refresh to get correct scrolled position:
-        wxScrolledWindow::Refresh(eraseb, rect);
+        wxScrolledCanvas::Refresh(eraseb, rect);
 
         if (rect)
         {
@@ -6824,7 +6824,7 @@ void wxGrid::ForceRefresh()
 
 void wxGrid::DoEnable(bool enable)
 {
-    wxScrolledWindow::DoEnable(enable);
+    wxScrolledCanvas::DoEnable(enable);
 
     Refresh(false /* don't erase background */);
 }
@@ -7908,7 +7908,7 @@ void wxGrid::SetRowLabelSize( int width )
         m_rowLabelWidth = width;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledWindow::Refresh( true );
+        wxScrolledCanvas::Refresh( true );
     }
 }
 
@@ -7938,7 +7938,7 @@ void wxGrid::SetColLabelSize( int height )
         m_colLabelHeight = height;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledWindow::Refresh( true );
+        wxScrolledCanvas::Refresh( true );
     }
 }
 
