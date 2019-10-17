@@ -810,8 +810,32 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
 
-    wxDrawLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y));
-    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
+    // We have optimized function to draw physical vertical or horizontal lines
+    // with solid color and square ends so it can be used to draw a cross hair
+    // for:
+    // - Solid lines with pen width > 0 because it doesn't support drawing
+    //   non-scaled 1-pixel wide lines when pen width is 0. Shape of the lines
+    //   ends doesn't matter because non-square line ends are drawn outside
+    //   the view and visible line ends are always square.
+    // - DC which coordinate system is not rotated (graphics mode
+    //   of the DC != GM_ADVANCED).
+    if ( ::GetGraphicsMode(GetHdc()) != GM_ADVANCED && // ensure DC is not rotated
+         m_pen.IsNonTransparent() && // this calls IsOk() too
+         m_pen.GetStyle() == wxPENSTYLE_SOLID &&
+         m_pen.GetWidth() > 0
+       )
+    {
+        COLORREF color = wxColourToRGB(m_pen.GetColour());
+        wxDrawHVLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y),
+                     color, m_pen.GetWidth());
+        wxDrawHVLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom),
+                     color, m_pen.GetWidth());
+    }
+    else
+    {
+        wxDrawLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y));
+        wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
+    }
 
     CalcBoundingBox(rect.left, rect.top);
     CalcBoundingBox(rect.right, rect.bottom);
