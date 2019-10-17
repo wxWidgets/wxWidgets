@@ -23,9 +23,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/scopedptr.h"
-#include "wx/stopwatch.h"
 
 #include "asserthelper.h"
+#include "waitforpaint.h"
 
 // ----------------------------------------------------------------------------
 // tests helpers
@@ -47,54 +47,6 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
 };
 
-// Class used to check if we received the (first) paint event.
-class WaitForPaint
-{
-public:
-    explicit WaitForPaint(wxWindow* win)
-        : m_win(*win),
-          m_painted(false),
-          m_handler(&m_painted)
-    {
-        m_win.Bind(wxEVT_PAINT, m_handler);
-    }
-
-    bool GotPaintEvent() const
-    {
-        return m_painted;
-    }
-
-    ~WaitForPaint()
-    {
-        m_win.Unbind(wxEVT_PAINT, m_handler);
-    }
-
-private:
-    wxWindow& m_win;
-    bool m_painted;
-
-    class PaintHandler
-    {
-    public:
-        // Note that we have to use a pointer here, i.e. we can't just store
-        // the flag inside the class itself because it's going to be cloned
-        // inside wx and querying the flag of the original copy wouldtn' work.
-        explicit PaintHandler(bool* painted)
-            : m_painted(*painted)
-        {
-        }
-
-        void operator()(wxPaintEvent& event)
-        {
-            event.Skip();
-            m_painted = true;
-        }
-
-    private:
-        bool& m_painted;
-    } m_handler;
-};
-
 // This function should be used to show the window and wait until we can get
 // its real geometry.
 void ShowAndWaitForPaint(wxWindow* w)
@@ -108,16 +60,9 @@ void ShowAndWaitForPaint(wxWindow* w)
 
     w->Show();
 
-    wxStopWatch sw;
-    while ( !waitForPaint.GotPaintEvent() )
+    if ( !waitForPaint.YieldUntilPainted() )
     {
-        wxYield();
-
-        if ( sw.Time() > 250 )
-        {
-            WARN("Didn't get a paint event until timeout expiration");
-            break;
-        }
+        WARN("Didn't get a paint event until timeout expiration");
     }
 }
 
