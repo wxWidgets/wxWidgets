@@ -27,6 +27,8 @@
     #include "wx/stopwatch.h"
 #endif // __WXGTK__
 
+#include "waitforpaint.h"
+
 class GridTestCase : public CppUnit::TestCase
 {
 public:
@@ -132,8 +134,15 @@ void GridTestCase::setUp()
     if( ms_nativelabels )
         m_grid->SetUseNativeColLabels();
 
+    WaitForPaint waitForPaint(m_grid->GetGridWindow());
+
     m_grid->Refresh();
     m_grid->Update();
+
+    if ( !waitForPaint.YieldUntilPainted() )
+    {
+        WARN("Grid not repainted until timeout expiration");
+    }
 }
 
 void GridTestCase::tearDown()
