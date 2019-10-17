@@ -28,6 +28,8 @@
 #include "wx/unix/utilsx11.h"
 
 #ifdef __WXGTK3__
+#include "wx/utils.h"
+
 #include "wx/gtk/private/wrapgtk.h"
 GtkWidget* wxGetTopLevelGTK();
 #endif
@@ -333,6 +335,13 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
 
 bool wxUIActionSimulatorX11Impl::MouseUp(int button)
 {
+#ifdef __WXGTK3__
+    // This is a horrible hack, but some mouse click events are just lost
+    // without any apparent reason when using GTK 3 without this, i.e. they
+    // simply never reach GTK in some runs of the tests.
+    wxMilliSleep(10);
+#endif
+
     return SendButtonEvent(button, false);
 }
 
