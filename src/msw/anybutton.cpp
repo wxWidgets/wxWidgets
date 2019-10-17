@@ -1012,12 +1012,12 @@ void DrawButtonText(HDC hdc,
     }
 }
 
-void DrawRect(HDC hdc, const RECT& r)
+void DrawRect(HDC hdc, const RECT& r, COLORREF color)
 {
-    wxDrawLine(hdc, r.left, r.top, r.right, r.top);
-    wxDrawLine(hdc, r.right, r.top, r.right, r.bottom);
-    wxDrawLine(hdc, r.right, r.bottom, r.left, r.bottom);
-    wxDrawLine(hdc, r.left, r.bottom, r.left, r.top);
+    wxDrawHVLine(hdc, r.left, r.top, r.right, r.top, color, 1);
+    wxDrawHVLine(hdc, r.right, r.top, r.right, r.bottom, color, 1);
+    wxDrawHVLine(hdc, r.right, r.bottom, r.left, r.bottom, color, 1);
+    wxDrawHVLine(hdc, r.left, r.bottom, r.left, r.top, color, 1);
 }
 
 /*
@@ -1059,50 +1059,44 @@ void DrawButtonFrame(HDC hdc, RECT& rectBtn,
                      bool selected, bool pushed)
 {
     RECT r;
-    CopyRect(&r, &rectBtn);
+    ::CopyRect(&r, &rectBtn);
 
-    AutoHPEN hpenBlack(GetSysColor(COLOR_3DDKSHADOW)),
-             hpenGrey(GetSysColor(COLOR_3DSHADOW)),
-             hpenLightGr(GetSysColor(COLOR_3DLIGHT)),
-             hpenWhite(GetSysColor(COLOR_3DHILIGHT));
-
-    SelectInHDC selectPen(hdc, hpenBlack);
+    COLORREF clrBlack = ::GetSysColor(COLOR_3DDKSHADOW),
+             clrGrey = ::GetSysColor(COLOR_3DSHADOW),
+             clrLightGr = ::GetSysColor(COLOR_3DLIGHT),
+             clrWhite = ::GetSysColor(COLOR_3DHILIGHT);
 
     r.right--;
     r.bottom--;
 
     if ( pushed )
     {
-        DrawRect(hdc, r);
+        DrawRect(hdc, r, clrBlack);
 
-        (void)SelectObject(hdc, hpenGrey);
         ::InflateRect(&r, -1, -1);
 
-        DrawRect(hdc, r);
+        DrawRect(hdc, r, clrGrey);
     }
     else // !pushed
     {
         if ( selected )
         {
-            DrawRect(hdc, r);
+            DrawRect(hdc, r, clrBlack);
 
             ::InflateRect(&r, -1, -1);
         }
 
-        wxDrawLine(hdc, r.left, r.bottom, r.right, r.bottom);
-        wxDrawLine(hdc, r.right, r.bottom, r.right, r.top - 1);
+        wxDrawHVLine(hdc, r.left, r.bottom, r.right, r.bottom, clrBlack, 1);
+        wxDrawHVLine(hdc, r.right, r.bottom, r.right, r.top - 1, clrBlack, 1);
 
-        (void)SelectObject(hdc, hpenWhite);
-        wxDrawLine(hdc, r.left, r.bottom - 1, r.left, r.top);
-        wxDrawLine(hdc, r.left, r.top, r.right, r.top);
+        wxDrawHVLine(hdc, r.left, r.bottom - 1, r.left, r.top, clrWhite, 1);
+        wxDrawHVLine(hdc, r.left, r.top, r.right, r.top, clrWhite, 1);
 
-        (void)SelectObject(hdc, hpenLightGr);
-        wxDrawLine(hdc, r.left + 1, r.bottom - 2, r.left + 1, r.top + 1);
-        wxDrawLine(hdc, r.left + 1, r.top + 1, r.right - 1, r.top + 1);
+        wxDrawHVLine(hdc, r.left + 1, r.bottom - 2, r.left + 1, r.top + 1, clrLightGr, 1);
+        wxDrawHVLine(hdc, r.left + 1, r.top + 1, r.right - 1, r.top + 1, clrLightGr, 1);
 
-        (void)SelectObject(hdc, hpenGrey);
-        wxDrawLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1);
-        wxDrawLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top);
+        wxDrawHVLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1, clrGrey, 1);
+        wxDrawHVLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top, clrGrey, 1);
     }
 
     InflateRect(&rectBtn, -OD_BUTTON_MARGIN, -OD_BUTTON_MARGIN);
@@ -1225,10 +1219,29 @@ bool wxAnyButton::MSWIsPushed() const
     return (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
 }
 
+#ifdef __WXDEBUG__
+static inline bool IsNonTransformedDC(HDC hdc)
+{
+    if ( ::GetGraphicsMode(hdc) == GM_ADVANCED )
+        return false;
+
+    SIZE devExt;
+    ::GetViewportExtEx(hdc, &devExt);
+    SIZE logExt;
+    ::GetWindowExtEx(hdc, &logExt);
+    return (devExt.cx == logExt.cx && devExt.cy == logExt.cy);
+}
+#endif // __WXDEBUG__
+
 bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 {
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
     HDC hdc = lpDIS->hDC;
+    // We expect here a DC with default settings (in GM_COMPATIBLE mode
+    // with non-scaled coordinates system) but will check this because
+    // our line drawing function wxDrawHVLine() works effectively only
+    // on a non-transformed DC.
+    wxASSERT(IsNonTransformedDC(hdc));
 
     UINT state = lpDIS->itemState;
     switch ( GetButtonState(this, state) )
