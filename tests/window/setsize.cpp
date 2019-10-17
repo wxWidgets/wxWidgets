@@ -51,23 +51,48 @@ protected:
 class WaitForPaint
 {
 public:
-    // Note that we have to use a pointer here, i.e. we can't just store the
-    // flag inside the class itself because it's going to be cloned inside wx
-    // and querying the flag of the original copy is not going to work.
-    explicit WaitForPaint(bool* painted)
-        : m_painted(*painted)
+    explicit WaitForPaint(wxWindow* win)
+        : m_win(*win),
+          m_painted(false),
+          m_handler(&m_painted)
     {
-        m_painted = false;
+        m_win.Bind(wxEVT_PAINT, m_handler);
     }
 
-    void operator()(wxPaintEvent& event)
+    bool GotPaintEvent() const
     {
-        event.Skip();
-        m_painted = true;
+        return m_painted;
+    }
+
+    ~WaitForPaint()
+    {
+        m_win.Unbind(wxEVT_PAINT, m_handler);
     }
 
 private:
-    bool& m_painted;
+    wxWindow& m_win;
+    bool m_painted;
+
+    class PaintHandler
+    {
+    public:
+        // Note that we have to use a pointer here, i.e. we can't just store
+        // the flag inside the class itself because it's going to be cloned
+        // inside wx and querying the flag of the original copy wouldtn' work.
+        explicit PaintHandler(bool* painted)
+            : m_painted(*painted)
+        {
+        }
+
+        void operator()(wxPaintEvent& event)
+        {
+            event.Skip();
+            m_painted = true;
+        }
+
+    private:
+        bool& m_painted;
+    } m_handler;
 };
 
 // This function should be used to show the window and wait until we can get
@@ -79,14 +104,12 @@ void ShowAndWaitForPaint(wxWindow* w)
     // geometry. And it's not clear how long should we wait, so we do it until
     // we get the first paint event -- by then the window really should have
     // its final size.
-    bool painted;
-    WaitForPaint waitForPaint(&painted);
-    w->Bind(wxEVT_PAINT, waitForPaint);
+    WaitForPaint waitForPaint(w);
 
     w->Show();
 
     wxStopWatch sw;
-    while ( !painted )
+    while ( !waitForPaint.GotPaintEvent() )
     {
         wxYield();
 
