@@ -262,4 +262,16 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( rectRoot == wxRect() );
 }
 
+TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
+                 "wxDVC::DeleteAllItems",
+                 "[wxDataViewCtrl][delete]")
+{
+    const wxDataViewItem top = m_dvc->GetTopItem();
+    CHECK( m_dvc->GetChildCount(top) == 1 );
+
+    m_dvc->DeleteAllItems();
+
+    CHECK( m_dvc->GetChildCount(top) == 0 );
+}
+
 #endif //wxUSE_DATAVIEWCTRL
