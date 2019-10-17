@@ -12,7 +12,11 @@
 #include "wx/stopwatch.h"
 #include "wx/window.h"
 
-// Class used to check if we received the (first) paint event.
+// Class used to check if we received the (first) paint event: this is
+// currently used under GTK only, as MSW doesn't seem to need to wait for the
+// things to work, while under Mac nothing works anyhow.
+#ifdef __WXGTK__
+
 class WaitForPaint
 {
 public:
@@ -71,5 +75,22 @@ private:
         bool& m_painted;
     } m_handler;
 };
+
+#else // !__WXGTK__
+
+class WaitForPaint
+{
+public:
+    explicit WaitForPaint(wxWindow* WXUNUSED(win))
+    {
+    }
+
+    bool YieldUntilPainted(int WXUNUSED(timeoutInMS) = 250) const
+    {
+        return true;
+    }
+};
+
+#endif // __WXGTK__/!__WXGTK__
 
 #endif // _WX_TESTS_WAITFORPAINT_H_
