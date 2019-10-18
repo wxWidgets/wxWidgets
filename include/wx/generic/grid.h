@@ -1947,8 +1947,6 @@ public:
 
 
     // override some base class functions
-    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
-        { return (wxWindow*)m_gridWin; }
     virtual void Fit() wxOVERRIDE;
 
     // implementation only
