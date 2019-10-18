@@ -1948,6 +1948,7 @@ public:
 
     // override some base class functions
     virtual void Fit() wxOVERRIDE;
+    virtual void SetFocus() wxOVERRIDE;
 
     // implementation only
     void CancelMouseCapture();

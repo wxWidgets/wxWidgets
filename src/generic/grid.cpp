@@ -9659,6 +9659,11 @@ void wxGrid::Fit()
     AutoSize();
 }
 
+void wxGrid::SetFocus()
+{
+    m_gridWin->SetFocus();
+}
+
 #if WXWIN_COMPATIBILITY_2_8
 wxPen& wxGrid::GetDividerPen() const
 {
