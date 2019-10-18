@@ -7,8 +7,8 @@ Supported Compilers
 -------------------
 We provide pre-built binary files for the following compilers:
 
-* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0 and 14.1
-  (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015 and 2017 respectively).
+* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2
+  (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively).
 * TDM-GCC version 5.1 and MinGW-w64 version 7.2 (with the default SJLJ
   exceptions propagation method, using C++11). Please note that you need to use
   the very latest MinGW-w64 7.2 compiler release with this version of the
@@ -27,15 +27,15 @@ First, you need to get the correct files. You will always need the
 `wxWidgets-3.1.1-headers.7z` one but the rest depends on your compiler version
 and architecture: as different versions of MSVC compiler are not binary
 compatible, you should select the files with the correct
-`vc80`, `vc90`, `vc100`, `vc110`, `vc120`, `vc140` or `vc141`
+`vc80`, `vc90`, `vc100`, `vc110`, `vc120`, or `vc14x`
 suffix depending on whether you use
-Visual Studio 2005, 2008, 2010, 2012, 2013, 2015 or 2017 respectively.
+Visual Studio 2005, 2008, 2010, 2012, 2013, or 2015/2017/2019 respectively (the Visual Studio 2015/2017/2019 compilers are binary compatible).
 You also need to decide whether you use the `x64` files for 64-bit development
 or the ones without this suffix for the still more common 32-bit builds. After
 determining the combination of suffixes you need, you should download the
 "Dev" and the "ReleaseDLL" files in addition to the "Headers" one above,
 e.g. for 32-bit MSVS 2017 development you need
-`wxMSW-3.1.1_vc141_Dev.7z` and `wxMSW-3.1.1_vc141_ReleaseDLL.7z`.
+`wxMSW-3.1.1_vc14x_Dev.7z` and `wxMSW-3.1.1_vc14x_ReleaseDLL.7z`.
 
 All binaries are available at:
 
@@ -59,7 +59,7 @@ following:
         Directories". Notice that the order is important here, putting the
         MSVC-specific directory first ensures that you use `wx/setup.h`
         automatically linking in wxWidgets libraries.
-    *   Add `WXUSINGDLL` and `wxMSVC_VERSION_AUTO` to the list of defined
+    *   Add `WXUSINGDLL` and `wxMSVC_VERSION_ABI_COMPAT` to the list of defined
         symbols in "Preprocessor Definitions". The first should be
         self-explanatory (we only provide DLLs, not static libraries) while the
         second one is necessary to use the libraries from e.g. `lib\vc100_dll`
