@@ -35,7 +35,7 @@ or the ones without this suffix for the still more common 32-bit builds. After
 determining the combination of suffixes you need, you should download the
 "Dev" and the "ReleaseDLL" files in addition to the "Headers" one above,
 e.g. for 32-bit MSVS 2017 development you need
-`wxMSW-3.1.1_vc14x_Dev.7z` and `wxMSW-3.1.1_vc1x1_ReleaseDLL.7z`.
+`wxMSW-3.1.1_vc14x_Dev.7z` and `wxMSW-3.1.1_vc14x_ReleaseDLL.7z`.
 
 All binaries are available at:
 
