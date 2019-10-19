@@ -74,8 +74,22 @@ copy utils\wxrc\%VCver%_mswudll_x64\wxrc.exe lib\%VCver%_x64_dll
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z lib\%VCver%_x64_dll\wxMSW%wxDllVers%u_*.dll lib\%VCver%_x64_dll\wxbase%wxDllVers%u_*.dll
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleasePDB.7z lib\%VCver%_x64_dll\wxMSW%wxDllVers%u_*.pdb lib\%VCver%_x64_dll\wxbase%wxDllVers%u_*.pdb
 
-del %packagePath%\%VCver%\sha1.txt
-fciv %packagePath%\%VCver% -type *.7z -sha1 -wp >> %packagePath%\%VCver%\sha1.txt
+rem Create a modified copy of wxwidgets.props suitable for use with our
+rem binaries: we need to enable automatic ABI-compatible MSVC version detection
+rem for this, so we define it in the same place where WXUSINGDLL is defined (as
+rem we only provide DLLs, this is sufficient).
+powershell -noprofile -command "& { (Get-Content wxwidgets.props).Replace('WXUSINGDLL','WXUSINGDLL;wxMSVC_VERSION_ABI_COMPAT') | Set-Content %packagePath%\%VCver%\wxwidgets.props }"
+
+rem Change to the directory containing wxwidgets.props in order to include it
+rem into the archive without any path.
+cd %packagePath%\%VCver%
+7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z wxwidgets.props
+7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z wxwidgets.props
+
+del wxwidgets.props
+
+del sha1.txt
+fciv . -type *.7z -sha1 -wp >> sha1.txt
 
 
 goto End
