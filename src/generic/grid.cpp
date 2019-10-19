@@ -9401,7 +9401,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     dc.SetFont( GetLabelFont() );
 
     // We add some margin around text for better readability.
-    const int margin = column ? 10 : 6;
+    const int margin = FromDIP(column ? 10 : 6);
 
     if ( column )
     {

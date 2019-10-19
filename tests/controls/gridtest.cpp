@@ -1019,7 +1019,7 @@ void GridTestCase::CheckFirstColAutoSize(int expected)
 void GridTestCase::AutoSizeColumn()
 {
     // Hardcoded extra margin for the columns used in grid.cpp.
-    const int margin = 10;
+    const int margin = m_grid->FromDIP(10);
 
     wxGridCellAttr *attr = m_grid->GetOrCreateCellAttr(0, 0);
     wxGridCellRenderer *renderer = attr->GetRenderer(m_grid, 0, 0);
