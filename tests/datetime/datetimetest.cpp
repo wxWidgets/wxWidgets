@@ -1711,8 +1711,12 @@ TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
     {
         now = wxDateTime::Now();
         unow = wxDateTime::UNow();
-        if ( now.GetSecond() == unow.GetSecond() )
+        if ( now.GetSecond() != unow.GetSecond() )
+        {
+            INFO("wxDateTime::Now() and UNow() returned different "
+                 "second values, retrying.");
             break;
+        }
     }
 
     CHECK( now.GetYear() == unow.GetYear() );
