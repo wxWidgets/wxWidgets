@@ -5090,16 +5090,16 @@ void wxDataViewMainWindow::UpdateColumnSizes()
         return;
     }
 
-    int colswidth = 0;
+    int lastColX = 0;
     for ( int colIndex = 0; colIndex < lastColIndex; ++colIndex )
     {
         const wxDataViewColumn *c = owner->GetColumnAt(colIndex);
 
         if ( !c->IsHidden() )
-            colswidth += c->GetWidth();
+            lastColX += c->GetWidth();
     }
 
-    int lastColX = colswidth - lastCol->GetWidth();
+    int colswidth = lastColX + lastCol->GetWidth();
     if ( lastColX < fullWinWidth )
     {
         const int availableWidth = fullWinWidth - lastColX;
