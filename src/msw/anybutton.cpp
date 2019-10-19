@@ -399,7 +399,6 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     else
     {
         sizeBtn.x += 3*win->GetCharWidth();
-        sizeBtn.y += win->GetCharHeight()/2;
     }
 
     // account for the shield UAC icon if we have it
