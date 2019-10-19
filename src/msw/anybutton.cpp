@@ -425,20 +425,16 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
     // By default all buttons have at least the standard size.
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        // The 50x14 button size is documented in the "Recommended sizing and
-        // spacing" section of MSDN layout article.
+        // The "Recommended sizing and spacing" section of MSDN layout article
+        // documents the default button size as being 50*14 dialog units or
+        // 75*23 relative pixels (what we call DIPs). As dialog units don't
+        // scale well in high DPI because of rounding errors, just DIPs here.
         //
-        // Note that we intentionally don't use GetDefaultSize() here, because
-        // it's inexact -- dialog units depend on this dialog's font.
-        wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
-        if ( btn->GetContentScaleFactor() > 1.0 )
-        {
-            // At higher DPI, the returned height is too big compared to
-            // standard Windows buttons (like Save, Open, OK). FromDIP(25)
-            // matches the size of the buttons in standard Windows dialogs, see
-            // https://trac.wxwidgets.org/ticket/18528 for the discussion.
-            sizeDef.y = btn->FromDIP(25);
-        }
+        // Moreover, it looks like the extra 2px borders around the visible
+        // part of the button are not scaled correctly in higher than normal
+        // DPI, so add them without scaling.
+        const wxSize sizeDef = btn->FromDIP(wxSize(73, 21)) + wxSize(2, 2);
+
         sizeBtn.IncTo(sizeDef);
     }
     else // wxBU_EXACTFIT case
