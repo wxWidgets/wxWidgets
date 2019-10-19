@@ -16,9 +16,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcclient.h"
 #endif // WX_PRECOMP
 
 #include "wx/grid.h"
+#include "wx/headerctrl.h"
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
@@ -62,18 +64,21 @@ private:
         WXUISIM_TEST( ReadOnly );
         WXUISIM_TEST( ResizeScrolledHeader );
         WXUISIM_TEST( ColumnMinWidth );
+        WXUISIM_TEST( AutoSizeColumn );
         CPPUNIT_TEST( PseudoTest_NativeHeader );
         WXUISIM_TEST( LabelClick );
         WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
         WXUISIM_TEST( ResizeScrolledHeader );
         WXUISIM_TEST( ColumnMinWidth );
+        WXUISIM_TEST( AutoSizeColumn );
         CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( PseudoTest_NativeLabels );
         WXUISIM_TEST( LabelClick );
         WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
         WXUISIM_TEST( WindowAsEditorControl );
+        WXUISIM_TEST( AutoSizeColumn );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -100,9 +105,24 @@ private:
     void WindowAsEditorControl();
     void ResizeScrolledHeader();
     void ColumnMinWidth();
+    void AutoSizeColumn();
     void PseudoTest_NativeHeader() { ms_nativeheader = true; }
     void PseudoTest_NativeLabels() { ms_nativeheader = false;
                                      ms_nativelabels = true; }
+
+    // The helper function to determine the width of the column label depending
+    // on whether the native column is used.
+    int GetColumnLabelWidth(wxClientDC& dc, int col, int margin) const
+    {
+        if (ms_nativeheader)
+            return m_grid->GetGridColHeader()->GetColumnTitleWidth(col);
+
+        int w, h;
+        dc.GetMultiLineTextExtent(m_grid->GetColLabelValue(col), &w, &h);
+        return w + margin;
+    }
+
+    void CheckFirstColAutoSize(int expected);
 
     static bool ms_nativeheader;
     static bool ms_nativelabels;
@@ -986,6 +1006,96 @@ void GridTestCase::ColumnMinWidth()
     else
         CPPUNIT_ASSERT_EQUAL(newminwidth, m_grid->GetColSize(0));
 #endif
+}
+
+void GridTestCase::CheckFirstColAutoSize(int expected)
+{
+    m_grid->AutoSizeColumn(0);
+
+    wxYield();
+    CHECK(m_grid->GetColSize(0) == expected);
+}
+
+void GridTestCase::AutoSizeColumn()
+{
+    // Hardcoded extra margin for the columns used in grid.cpp.
+    const int margin = 10;
+
+    wxGridCellAttr *attr = m_grid->GetOrCreateCellAttr(0, 0);
+    wxGridCellRenderer *renderer = attr->GetRenderer(m_grid, 0, 0);
+    REQUIRE(renderer != NULL);
+
+    wxClientDC dcCell(m_grid->GetGridWindow());
+
+    wxClientDC dcLabel(m_grid->GetGridWindow());
+    dcLabel.SetFont(m_grid->GetLabelFont());
+
+    const wxString shortStr     = "W";
+    const wxString mediumStr    = "WWWW";
+    const wxString longStr      = "WWWWWWWW";
+    const wxString multilineStr = mediumStr + "\n" + longStr;
+
+    SECTION("Empty column and label")
+    {
+        m_grid->SetColLabelValue(0, wxString());
+        CheckFirstColAutoSize( m_grid->GetDefaultColSize() );
+    }
+
+    SECTION("Empty column with label")
+    {
+        m_grid->SetColLabelValue(0, mediumStr);
+        CheckFirstColAutoSize( GetColumnLabelWidth(dcLabel, 0, margin) );
+    }
+
+    SECTION("Column with empty label")
+    {
+        m_grid->SetColLabelValue(0, wxString());
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, shortStr);
+        m_grid->SetCellValue(3, 0, longStr);
+
+        CheckFirstColAutoSize(
+            renderer->GetBestWidth(*m_grid, *attr, dcCell, 3, 0,
+                                   m_grid->GetRowHeight(3)) + margin );
+    }
+
+    SECTION("Column with label longer than contents")
+    {
+        m_grid->SetColLabelValue(0, multilineStr);
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, shortStr);
+        CheckFirstColAutoSize( GetColumnLabelWidth(dcLabel, 0, margin) );
+    }
+
+    SECTION("Column with contents longer than label")
+    {
+        m_grid->SetColLabelValue(0, mediumStr);
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, shortStr);
+        m_grid->SetCellValue(3, 0, multilineStr);
+        CheckFirstColAutoSize(
+            renderer->GetBestWidth(*m_grid, *attr, dcCell, 3, 0,
+                                   m_grid->GetRowHeight(3)) + margin );
+    }
+
+    SECTION("Column with equally sized contents and label")
+    {
+        m_grid->SetColLabelValue(0, mediumStr);
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, mediumStr);
+        m_grid->SetCellValue(3, 0, mediumStr);
+
+        const int labelWidth = GetColumnLabelWidth(dcLabel, 0, margin);
+
+        const int cellWidth =
+            renderer->GetBestWidth(*m_grid, *attr, dcCell, 3, 0,
+                                   m_grid->GetRowHeight(3))
+            + margin;
+
+        // We can't be sure which size will be greater because of different fonts
+        // so just calculate the maximum width.
+        CheckFirstColAutoSize( wxMax(labelWidth, cellWidth) );
+    }
 }
 
 #endif //wxUSE_GRID
