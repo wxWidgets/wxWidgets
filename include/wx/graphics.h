@@ -727,7 +727,7 @@ public:
     }
 
     // returns the resolution of the graphics context in device points per inch
-    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY) const;
 
 #if 0
     // sets the current alpha on this context
@@ -1038,6 +1038,9 @@ public:
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) = 0;
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col = *wxBLACK) = 0;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;

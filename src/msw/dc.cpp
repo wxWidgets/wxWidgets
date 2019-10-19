@@ -1503,7 +1503,18 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // NB: don't take DEFAULT_GUI_FONT (a.k.a. wxSYS_DEFAULT_GUI_FONT)
     //     because it's not TrueType and so can't have non zero
     //     orientation/escapement
-    wxFont font = m_font.IsOk() ? m_font : *wxSWISS_FONT;
+    wxFont font;
+    if ( m_font.IsOk() )
+    {
+        font = m_font;
+    }
+    else // Use default font appropriate for rotated text.
+    {
+        font = *wxSWISS_FONT;
+        if ( m_window )
+            font.WXAdjustToPPI(m_window->GetDPI());
+    }
+
     LOGFONT lf;
     if ( ::GetObject(GetHfontOf(font), sizeof(lf), &lf) == 0 )
     {
@@ -1630,7 +1641,11 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
 
     if ( font.IsOk() )
     {
-        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(font));
+        wxFont f(font);
+        if ( m_window )
+            f.WXAdjustToPPI(m_window->GetDPI());
+
+        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(f));
         if ( hfont == HGDI_ERROR )
         {
             wxLogLastError(wxT("SelectObject(font)"));
@@ -1640,7 +1655,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
             if ( !m_oldFont )
                 m_oldFont = (WXHFONT)hfont;
 
-            m_font = font;
+            m_font = f;
         }
     }
     else // invalid font, reset the current font
@@ -2502,10 +2517,24 @@ void wxMSWDCImpl::DoGetSizeMM(int *w, int *h) const
 
 wxSize wxMSWDCImpl::GetPPI() const
 {
-    int x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
-    int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+    // As documented by MSDN, GetDeviceCaps() returns the same value for all
+    // HDCs on the system, and so can't be used to retrieve the correct value
+    // for the HDCs associated with the windows on monitors other than the
+    // primary one if they use different DPI. Hence prefer to get this
+    // information from the associated window, if possible.
+    wxSize ppi;
+    if ( m_window )
+    {
+        ppi = m_window->GetDPI();
+    }
 
-    return wxSize(x, y);
+    if ( !ppi.x || !ppi.y )
+    {
+        ppi.x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
+        ppi.y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+    }
+
+    return ppi;
 }
 
 double wxMSWDCImpl::GetContentScaleFactor() const

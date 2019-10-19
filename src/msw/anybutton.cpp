@@ -431,8 +431,15 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
         //
         // Note that we intentionally don't use GetDefaultSize() here, because
         // it's inexact -- dialog units depend on this dialog's font.
-        const wxSize sizeDef = btn->ConvertDialogToPixels(btn->FromDIP(wxSize(50, 14)));
-
+        wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
+        if ( btn->GetContentScaleFactor() > 1.0 )
+        {
+            // At higher DPI, the returned height is too big compared to
+            // standard Windows buttons (like Save, Open, OK). FromDIP(25)
+            // matches the size of the buttons in standard Windows dialogs, see
+            // https://trac.wxwidgets.org/ticket/18528 for the discussion.
+            sizeDef.y = btn->FromDIP(25);
+        }
         sizeBtn.IncTo(sizeDef);
     }
     else // wxBU_EXACTFIT case
