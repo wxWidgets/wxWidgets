@@ -114,6 +114,7 @@ void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
     wxASSERT_MSG(m_overlayWindow != NULL, _("Couldn't create the overlay window"));
     m_overlayContext = (CGContextRef) [[m_overlayWindow graphicsContext] graphicsPort];
     wxASSERT_MSG(  m_overlayContext != NULL , _("Couldn't init the context on the overlay window") );
+    [(id)m_overlayContext retain];
 }
 
 void wxOverlayImpl::BeginDrawing( wxDC* dc)
@@ -167,6 +168,7 @@ void wxOverlayImpl::Reset()
 {
     if ( m_overlayContext )
     {
+        [(id)m_overlayContext release];
         m_overlayContext = NULL ;
     }
 
