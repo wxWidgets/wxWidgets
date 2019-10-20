@@ -42,7 +42,7 @@
     platform-specific function: under MSW, this is @c \::DestroyWindow(), under
     GTK @c g_object_unref() and under Cocoa -- @c -release:.
 
-    See the "native" page of the widgets sample for the examples of using
+    See the "native" page of the @ref page_samples_widgets for the examples of using
     this class under all major platforms.
 
     @since 3.1.0

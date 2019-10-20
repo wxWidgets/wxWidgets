@@ -3657,7 +3657,7 @@ public:
     event does not happen).
 
     In short, the EVT_SCROLL_CHANGED event is triggered when scrolling/ moving has finished
-    independently of the way it had started. Please see the widgets sample ("Slider" page)
+    independently of the way it had started. Please see the @ref page_samples_widgets ("Slider" page)
     to see the difference between EVT_SCROLL_THUMBRELEASE and EVT_SCROLL_CHANGED in action.
 
     @remarks
