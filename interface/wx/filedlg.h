@@ -108,11 +108,12 @@ const char wxFileSelectorDefaultWildcardStr[];
     descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
     are errors.
-    On Mac OS X in the open file dialog the filter choice box is not shown by default.
-    Instead all given wildcards are appplied at the same time: So in the above
-    example all bmp, gif and png files are displayed. To enforce the
-    display of the filter choice set the corresponding wxSystemOptions before calling
-    the file open dialog:
+
+    On macOS versions earlier than 10.14, the filter choice box is not shown by
+    default in the option file dialog. Instead all given wildcards are applied
+    at the same time: So in the above example all bmp, gif and png files are
+    displayed. To enforce the display of the filter choice set the
+    corresponding wxSystemOptions before calling the file open dialog:
     @code
          wxSystemOptions::SetOption(wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1)
     @endcode

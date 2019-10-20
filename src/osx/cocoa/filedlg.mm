@@ -39,6 +39,8 @@
 #include "wx/sysopt.h"
 #include "wx/modalhook.h"
 
+#include "wx/osx/private/available.h"
+
 #include <mach-o/dyld.h>
 
 // ============================================================================
@@ -513,7 +515,17 @@ int wxFileDialog::ShowModal()
 
     m_useFileTypeFilter = m_filterExtensions.GetCount() > 1;
 
-    if( HasFlag(wxFD_OPEN) )
+    // Showing filter looks non-native in macOS versions until 10.14, but too
+    // bad starting in it, so disable it under the older versions to respect
+    // the Apple HIG (but still provide a system option to force showing it if
+    // it's really needed), but show it under 10.14+ to avoid surprises in
+    // cross-platform applications.
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        // Do nothing here, we just need to use positive test for availability
+        // to avoid clang -Wunsupported-availability-guard.
+    }
+    else if ( HasFlag(wxFD_OPEN) )
     {
         if ( !(wxSystemOptions::HasOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES ) && (wxSystemOptions::GetOptionInt( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES ) == 1)) )
             m_useFileTypeFilter = false;            
