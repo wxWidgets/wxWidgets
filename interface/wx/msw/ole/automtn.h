@@ -253,8 +253,8 @@ public:
     wxVariantDataSafeArray does NOT manage the @c SAFEARRAY it points to.
     If you want to pass it to a wxAutomationObject as a parameter:
         -# Create and fill a @c SAFEARRAY.
-        -# Assign a @c SAFEARRAY pointer to it and store it in a wxVariant.
-        -# Call a wxAutomationObject method (CallMethod(), SetProperty() or Invoke()).
+        -# Assign the @c SAFEARRAY pointer to it and store it in a wxVariant.
+        -# Call a wxAutomationObject method (such as CallMethod() or PutProperty()) with the wxVariant as a parameter.
         -# wxAutomationObject will destroy the array after the automation call.
 
     An example of creating a two-dimensional @c SAFEARRAY containing <tt>VARIANT</tt>s
@@ -296,7 +296,8 @@ public:
     call: 
         -# Call wxAutomationObject::SetConvertVariantFlags() with parameter ::wxOleConvertVariant_ReturnSafeArrays,
            (otherwise the data would be sent as a flattened one-dimensional list).
-        -# Retrieve the @c SAFEARRAY data from wxVariant.
+        -# Call a wxAutomationObject method (such as CallMethod() or GetProperty()).
+        -# Retrieve the @c SAFEARRAY from the returned wxVariant.
         -# Process the data in the @c SAFEARRAY.
         -# Destroy the @c SAFEARRAY when you no longer need it.
 
