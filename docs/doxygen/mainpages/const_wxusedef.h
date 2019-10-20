@@ -348,7 +348,7 @@ compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_WINRT, Enable WinRT support.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}
 @itemdef{wxUSE_WINSOCK2, Include @c <winsock2.h> instead of @c <winsock.h>.
-Turned on automatically if ::wxUSE_IPV6 is on (this option is new since
+Turned on automatically if wxUSE_IPV6 is on (this option is new since
 wxWidgets 3.1.3).}
 @endDefList
 

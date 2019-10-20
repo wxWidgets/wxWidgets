@@ -383,7 +383,7 @@ public:
     /**
         Sets the tick mark frequency and position.
 
-        @param n
+        @param freq
             Frequency. For example, if the frequency is set to two, a tick mark is
             displayed for every other increment in the slider's range.
 

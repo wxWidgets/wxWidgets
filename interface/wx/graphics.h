@@ -334,7 +334,7 @@ public:
     /**
         Default constructor creates an invalid bitmap.
      */
-    wxGraphicsBitmap() {}
+    wxGraphicsBitmap();
 
     /**
         Return the contents of this bitmap as wxImage.

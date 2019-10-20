@@ -494,11 +494,11 @@ public:
     virtual void OnDelete();
 
     /**
-        Callback called by Kill() before actually killing the thread.
+        Callback called by wxThread::Kill() before actually killing the thread.
 
         This function can be overridden by the derived class to perform some
         specific task when the thread is terminated. Notice that it will be
-        executed in the context of the thread that called Kill() and <b>not</b>
+        executed in the context of the thread that called wxThread::Kill() and <b>not</b>
         in this thread's context.
 
         @since 2.9.2
@@ -508,8 +508,8 @@ public:
     virtual void OnKill();
 
     /**
-        Callback called by Exit() before actually exiting the thread.
-        This function will not be called if the thread was @ref Kill() killed.
+        Callback called by wxThread::Exit() before actually exiting the thread.
+        This function will not be called if the thread was killed with wxThread::Kill.
 
         This function can be overridden by the derived class to perform some
         specific task when the thread is exited. The base class version does

@@ -832,6 +832,10 @@ public:
         If @a attribList is not specified, wxGLAttributes::PlatformDefaults()
         is used, plus some other attributes (see below).
 
+        @param parent
+            Pointer to a parent window.
+        @param id
+            Window identifier. If -1, will automatically create an identifier.
         @param attribList
             Array of integers. With this parameter you can set the device
             context attributes associated to this window. This array is
@@ -850,6 +854,22 @@ public:
             WX_GL_DOUBLEBUFFER are used. But notice that if you do specify some
             attributes you also need to explicitly include these two default
             attributes in the list if you need them.
+        @param pos
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
+            wxWidgets should generate a default position for the window.
+        @param size
+            Window size. wxDefaultSize is (-1, -1) which indicates that
+            wxWidgets should generate a default size for the window. If no
+            suitable size can be found, the window will be sized to 20x20
+            pixels so that the window is visible but obviously not correctly
+            sized.
+        @param style
+            Window style.
+        @param name
+            Window name.
+        @param palette
+            Palette for indexed colour (i.e. non WX_GL_RGBA) mode. Ignored
+            under most platforms.
     */
     wxGLCanvas(wxWindow* parent, wxWindowID id = wxID_ANY,
                const int* attribList = NULL,

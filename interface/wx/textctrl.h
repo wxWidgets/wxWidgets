@@ -436,7 +436,7 @@ public:
     bool GetFontUnderlined() const;
 
     /**
-        Returns the underline type, which is one of the @wxTextAttrUnderlineType values.
+        Returns the underline type, which is one of the wxTextAttrUnderlineType values.
 
         @since 3.1.3
     */

@@ -2220,7 +2220,7 @@ public:
 class wxDataViewCheckIconTextRenderer : public wxDataViewRenderer
 {
 public:
-    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+    static wxString GetDefaultType();
 
     /**
         Create a new renderer.

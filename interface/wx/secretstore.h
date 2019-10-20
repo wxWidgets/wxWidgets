@@ -118,7 +118,7 @@ public:
         UTF-8-encoded string, so by default ::wxConvWhateverWorks, which tries
         to interpret it in any way not avoiding loss of data, is used. However
         if the secrets are only saved by the program itself and are known to be
-        always encoded in UTF-8, it may be better to pass ::wxConvUTF8 as the
+        always encoded in UTF-8, it may be better to pass ::wxMBConvUTF8 as the
         converter to use.
      */
     wxString GetAsString(const wxMBConv& conv = wxConvWhateverWorks) const;

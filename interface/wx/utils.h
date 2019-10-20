@@ -691,7 +691,7 @@ enum
     wxStrip_Mnemonics = 1,
 
     /**
-        Strip everything after '\t'.
+        Strip everything after '\\t'.
 
         This flags removes everything following the last TAB character in the
         string, if any.

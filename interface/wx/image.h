@@ -327,7 +327,7 @@ public:
     /**
        Sets the bitmap type for the handler.
 
-       @param mimetype
+       @param type
            The bitmap type.
     */
     void SetType(wxBitmapType type);

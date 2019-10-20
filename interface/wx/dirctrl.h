@@ -277,7 +277,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0);
 
-    virtual ~wxDirFilterListCtrl() {}
+    virtual ~wxDirFilterListCtrl();
 
     void Init();
 

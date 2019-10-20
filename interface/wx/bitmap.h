@@ -469,7 +469,7 @@ public:
 
         @since 3.1.0
     */
-    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
+    bool CreateScaled(int width, int height, int depth, double logicalScale);
 
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.

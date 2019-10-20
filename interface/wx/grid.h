@@ -4365,7 +4365,7 @@ public:
     wxGridWindow* CellToGridWindow( int row, int col ) const;
 
     /// @overload
-    wxGridWindow* CellToGridWindow( const wxGridCellCoords& coords ) const
+    wxGridWindow* CellToGridWindow( const wxGridCellCoords& coords ) const;
 
     /**
         Returns the grid window that includes the input coordinates.

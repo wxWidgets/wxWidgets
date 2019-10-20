@@ -39,7 +39,7 @@
     delete the native window when the wxNativeWindow itself is destroyed, you
     need to explicitly call Disown(). Otherwise you need to perform the
     necessary cleanup in your own code by calling the appropriate
-    platform-specific function: under MSW, this is @c ::DestroyWindow(), under
+    platform-specific function: under MSW, this is @c \::DestroyWindow(), under
     GTK @c g_object_unref() and under Cocoa -- @c -release:.
 
     See the "native" page of the widgets sample for the examples of using
