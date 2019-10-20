@@ -74,6 +74,11 @@ copy utils\wxrc\%VCver%_mswudll_x64\wxrc.exe lib\%VCver%_x64_dll
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z lib\%VCver%_x64_dll\wxMSW%wxDllVers%u_*.dll lib\%VCver%_x64_dll\wxbase%wxDllVers%u_*.dll
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleasePDB.7z lib\%VCver%_x64_dll\wxMSW%wxDllVers%u_*.pdb lib\%VCver%_x64_dll\wxbase%wxDllVers%u_*.pdb
 
+rem Include the props files: we need wxwidgets.props itself and wx_setup.props
+rem included from it.
+7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z build\msw\wx_setup.props
+7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z build\msw\wx_setup.props
+
 rem Create a modified copy of wxwidgets.props suitable for use with our
 rem binaries: we need to enable automatic ABI-compatible MSVC version detection
 rem for this, so we define it in the same place where WXUSINGDLL is defined (as
