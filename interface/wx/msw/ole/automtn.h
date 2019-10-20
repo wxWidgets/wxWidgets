@@ -245,71 +245,115 @@ public:
 /**
     @class wxVariantDataSafeArray
 
-    This class represents a thin wrapper for Microsoft Windows @c SAFEARRAY type.
+    This class stores @c SAFEARRAY in a wxVariant. It can be used
+    to pass arrays having more than one dimension with wxAutomationObject methods.
 
-    It is used for converting between wxVariant and OLE @c VARIANT
-    with type set to @c VT_ARRAY, which has more than one dimension.
     When wxVariant stores wxVariantDataSafeArray, it returns "safearray" as its type.
 
     wxVariantDataSafeArray does NOT manage the @c SAFEARRAY it points to.
     If you want to pass it to a wxAutomationObject as a parameter:
-        -# Assign a @c SAFEARRAY pointer to it and store it in a wxVariant.
-        -# Call the wxAutomationObject method (CallMethod(), SetProperty() or Invoke())
-        -# wxAutomationObject will destroy the array after the approapriate automation call.
+        -# Create and fill a @c SAFEARRAY.
+        -# Assign the @c SAFEARRAY pointer to it and store it in a wxVariant.
+        -# Call a wxAutomationObject method (such as CallMethod() or PutProperty()) with the wxVariant as a parameter.
+        -# wxAutomationObject will destroy the array after the automation call.
 
-    An example of creating a 2-dimensional @c SAFEARRAY containing VARIANTs
-    and storing it in a wxVariant
+    An example of creating a two-dimensional @c SAFEARRAY containing <tt>VARIANT</tt>s
+    and storing it in a wxVariant, using a utility class wxSafeArray<varType>.
     @code
-    SAFEARRAYBOUND bounds[2]; // 2 dimensions
+    const size_t dimensions = 2;
+    const long rowCount = 1000;
+    const long columnCount = 20;
+
+    SAFEARRAYBOUND bounds[dimensions];
     wxSafeArray<VT_VARIANT> safeArray;
-    unsigned rowCount = 1000;
-    unsigned colCount = 20;
 
     bounds[0].lLbound = 0; // elements start at 0
     bounds[0].cElements = rowCount;
     bounds[1].lLbound = 0; // elements start at 0
-    bounds[1].cElements = colCount;
+    bounds[1].cElements = columnCount;
 
-    if ( !safeArray.Create(bounds, 2) )
+    if ( !safeArray.Create(bounds, dimensions) )
         return false;
 
-    long indices[2];
+    long indices[dimensions];
 
-    for ( unsigned row = 0; row < rowCount; row++ )
+    for ( long row = 0; row < rowCount; ++row )
     {
         indices[0] = row;
-        for ( unsigned col = 0; col < colCount; col++ )
+
+        for ( long column = 0; column < columnCount; ++column )
         {
-            indices[1] = col;
-            if ( !safeArray.SetElement(indices, wxString::Format("R%u C%u", row+1, col+1)) )
+            indices[1] = column;
+            if ( !safeArray.SetElement(indices, wxString::Format("R%u C%u", row, column)) )
                return false;
         }
     }
+
     range.PutProperty("Value", wxVariant(new wxVariantDataSafeArray(safeArray.Detach())));
     @endcode
 
-    If you you received wxVariantDataSafeArray as a result of wxAutomationObject method call:
-    (1) Get the data out of the array.
-    (2) Destroy the array.
+    If you want to receive a @c SAFEARRAY in a wxVariant as a result of an wxAutomationObject
+    call:
+        -# Call wxAutomationObject::SetConvertVariantFlags() with parameter
+           ::wxOleConvertVariant_ReturnSafeArrays (otherwise the data would be
+           sent as a flattened one-dimensional list).
+        -# Call a wxAutomationObject method (such as CallMethod() or GetProperty()).
+        -# Retrieve the @c SAFEARRAY from the returned wxVariant.
+        -# Process the data in the @c SAFEARRAY.
+        -# Destroy the @c SAFEARRAY when you no longer need it.
+
+    The following example shows how to process a two-dimensional @c SAFEARRAY
+    with @c VT_VARIANT type received from a wxAutomationObject call,
+    using a utility class wxSafeArray<varType>.
     @code
+    const size_t dimensions = 2;
+
     wxVariant result;
+
+    range.SetConvertVariantFlags(wxOleConvertVariant_ReturnSafeArrays);
     result = range.GetProperty("Value");
-    if ( result.GetType() == "safearray" )
+
+    if ( !result.IsType("safearray") )
+       return false;
+
+    wxSafeArray<VT_VARIANT> safeArray;
+    wxVariantDataSafeArray* const
+        sa = wxStaticCastVariantData(result.GetData(), wxVariantDataSafeArray);
+
+    if ( !safeArray.Attach(sa->GetValue()) )
     {
-        wxSafeArray<VT_VARIANT> safeArray;
-        wxVariantDataSafeArray* const
-            sa = wxStaticCastVariantData(variant.GetData(), wxVariantDataSafeArray);
-
-        if ( !safeArray.Attach(sa.GetValue() )
-        {
-            if ( !safeArray.HasArray() )
-                SafeArrayDestroy(sa.GetValue()); // we have to dispose the SAFEARRAY ourselves
-            return false;
-        }
-
-        // get the data from the SAFEARRAY using wxSafeArray::GetElement()
-        // SAFEARRAY will be disposed by safeArray's dtor
+        if ( !safeArray.HasArray() )
+            ::SafeArrayDestroy(sa->GetValue()); // we have to dispose the SAFEARRAY ourselves
+        return false;
     }
+
+    if ( safeArray.GetDim() != dimensions ) // we are expecting 2 dimensions
+        return false; // SAFEARRAY will be disposed by safeArray's dtor
+
+    long rowStart, columnStart;
+    long rowCount, columnCount;
+    long indices[dimensions];
+    wxVariant value;
+
+    // get start indices and item counts for rows and columns
+    safeArray.GetLBound(1, rowStart);
+    safeArray.GetLBound(2, columnStart);
+    safeArray.GetUBound(1, rowCount);
+    safeArray.GetUBound(2, columnCount);
+
+    for ( long row = rowStart; row <= rowCount; ++row )
+    {
+        indices[0] = row;
+
+        for ( long column = columnStart; column <= columnCount; ++column )
+        {
+            indices[1] = column;
+            if ( !safeArray.GetElement(indices, value) )
+                return false;
+            // do something with value
+        }
+    }
+    // SAFEARRAY will be disposed by safeArray's dtor
     @endcode
 
     @onlyfor{wxmsw}
@@ -318,7 +362,7 @@ public:
     @library{wxcore}
     @category{data}
 
-    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataErrorCode
+    @see wxAutomationObject, wxSafeArray<varType>, wxVariant, wxVariantData
 
     @header{wx/msw/ole/oleutils.h}
 */
