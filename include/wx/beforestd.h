@@ -19,6 +19,19 @@
     it can be included several times.
  */
 
+#if defined(__VISUALC__) && __VISUALC__ >= 1910
+    #pragma warning(push, 1)
+
+    // This warning, given when a malloc.h from 10.0.240.0 version of UCRT,
+    // which is used when building projects targeting 8.1 SDK, compiled by MSVS
+    // 2017 or later, is still given even at warning level 1, in spite of it
+    // being level 4, so we have to explicitly disable it here (as we do it
+    // after the warning push pragma, it will be restored after pop).
+    //
+    // expression before comma has no effect; expected expression with side-effect
+    #pragma warning(disable:4548)
+#endif // VC++ >= 14.1
+
 /**
     GCC's visibility support is broken for libstdc++ in some older versions
     (namely Debian/Ubuntu's GCC 4.1, see

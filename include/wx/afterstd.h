@@ -16,6 +16,11 @@
     #include "wx/msw/winundef.h"
 #endif
 
+// undo what we did in wx/beforestd.h
+#if defined(__VISUALC__) && __VISUALC__ >= 1910
+    #pragma warning(pop)
+#endif // VC++ >= 14.1
+
 // see beforestd.h for explanation
 #if defined(HAVE_VISIBILITY) && defined(HAVE_BROKEN_LIBSTDCXX_VISIBILITY)
     #pragma GCC visibility pop
