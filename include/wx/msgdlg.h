@@ -45,10 +45,12 @@ public:
         {
         }
 
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
         ButtonLabel(const char *label)
             : m_label(label), m_stockId(wxID_NONE)
         {
         }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
         ButtonLabel(const wchar_t *label)
             : m_label(label), m_stockId(wxID_NONE)
