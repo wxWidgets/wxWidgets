@@ -160,6 +160,9 @@ wxString wxGetOsDescription()
             case 14:
                 osName = "Mojave";
                 break;
+            case 15:
+                osName = "Catalina";
+                break;
         };
     }
 #else
