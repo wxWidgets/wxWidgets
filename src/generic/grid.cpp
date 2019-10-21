@@ -2257,7 +2257,7 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 
 /////////////////////////////////////////////////////////////////////
 
-wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
+wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_PAINT( wxGrid::OnPaint )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
@@ -2271,7 +2271,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
                           const wxPoint& pos, const wxSize& size,
                           long style, const wxString& name)
 {
-    if (!wxScrolledWindow::Create(parent, id, pos, size,
+    if (!wxScrolledCanvas::Create(parent, id, pos, size,
                                   style | wxWANTS_CHARS, name))
         return false;
 
@@ -3390,7 +3390,7 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg,
 
 void wxGrid::PrepareDCFor(wxDC &dc, wxGridWindow *gridWindow)
 {
-    wxScrolledWindow::PrepareDC( dc );
+    wxScrolledCanvas::PrepareDC( dc );
 
     wxPoint dcOrigin = dc.GetDeviceOrigin() - GetGridWindowOffset(gridWindow);
 
@@ -5186,7 +5186,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
     if ( m_created && !GetBatchCount() )
     {
         // Refresh to get correct scrolled position:
-        wxScrolledWindow::Refresh(eraseb, rect);
+        wxScrolledCanvas::Refresh(eraseb, rect);
 
         if (rect)
         {
@@ -6824,7 +6824,7 @@ void wxGrid::ForceRefresh()
 
 void wxGrid::DoEnable(bool enable)
 {
-    wxScrolledWindow::DoEnable(enable);
+    wxScrolledCanvas::DoEnable(enable);
 
     Refresh(false /* don't erase background */);
 }
@@ -7908,7 +7908,7 @@ void wxGrid::SetRowLabelSize( int width )
         m_rowLabelWidth = width;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledWindow::Refresh( true );
+        wxScrolledCanvas::Refresh( true );
     }
 }
 
@@ -7938,7 +7938,7 @@ void wxGrid::SetColLabelSize( int height )
         m_colLabelHeight = height;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledWindow::Refresh( true );
+        wxScrolledCanvas::Refresh( true );
     }
 }
 
@@ -9397,51 +9397,66 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     }
 
     // now also compare with the column label extent
-    wxCoord w, h;
+    wxCoord extentLabel;
     dc.SetFont( GetLabelFont() );
 
-    bool addMargin = true;
+    // We add some margin around text for better readability.
+    const int margin = FromDIP(column ? 10 : 6);
 
     if ( column )
     {
         if ( m_useNativeHeader )
         {
-            w = GetGridColHeader()->GetColumnTitleWidth(colOrRow);
+            extentLabel = GetGridColHeader()->GetColumnTitleWidth(colOrRow);
 
-            // GetColumnTitleWidth already adds margins internally.
-            addMargin = false;
-            h = 0;
+            // Note that GetColumnTitleWidth already adds margins internally,
+            // so we don't need to add them here.
         }
         else
         {
-            dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
-            if ( GetColLabelTextOrientation() == wxVERTICAL )
-                w = h;
+            const wxSize
+                size = dc.GetMultiLineTextExtent(GetColLabelValue(colOrRow));
+            extentLabel = GetColLabelTextOrientation() == wxVERTICAL
+                            ? size.y
+                            : size.x;
+
+            // Add some margins around text for better readability.
+            extentLabel += margin;
         }
     }
     else
     {
-        dc.GetMultiLineTextExtent( GetRowLabelValue(colOrRow), &w, &h );
+        extentLabel = dc.GetMultiLineTextExtent(GetRowLabelValue(colOrRow)).y;
+
+        // As above, add some margins for readability, although a smaller one
+        // in vertical direction.
+        extentLabel += margin;
     }
 
-    extent = column ? w : h;
-    if ( extent > extentMax )
-        extentMax = extent;
 
+    // Finally determine the suitable extent fitting both the cells contents
+    // and the label.
     if ( !extentMax )
     {
-        // empty column - give default extent (notice that if extentMax is less
-        // than default extent but != 0, it's OK)
-        extentMax = column ? m_defaultColWidth : m_defaultRowHeight;
+        // Special case: all the cells are empty, use the label extent.
+        extentMax = extentLabel;
+        if ( !extentMax )
+        {
+            // But if the label is empty too, use the default width/height.
+            extentMax = column ? m_defaultColWidth : m_defaultRowHeight;
+        }
     }
-    else if ( addMargin )
+    else // We have some data in the column cells.
     {
-        // leave some space around text
-        if ( column )
-            extentMax += 10;
-        else
-            extentMax += 6;
+        // Ensure we have the same margin around the cells text as we use
+        // around the label.
+        extentMax += margin;
+
+        // And increase it to fit the label if necessary.
+        if ( extentLabel > extentMax )
+            extentMax = extentLabel;
     }
+
 
     if ( column )
     {
@@ -9657,6 +9672,11 @@ wxSize wxGrid::DoGetBestSize() const
 void wxGrid::Fit()
 {
     AutoSize();
+}
+
+void wxGrid::SetFocus()
+{
+    m_gridWin->SetFocus();
 }
 
 #if WXWIN_COMPATIBILITY_2_8

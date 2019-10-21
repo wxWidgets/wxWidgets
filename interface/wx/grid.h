@@ -2866,8 +2866,14 @@ public:
     /**
         Enables or disables in-place editing of grid cell data.
 
-        The grid will issue either a @c wxEVT_GRID_EDITOR_SHOWN or
-        @c wxEVT_GRID_EDITOR_HIDDEN event.
+        Enabling in-place editing generates @c wxEVT_GRID_EDITOR_SHOWN and, if
+        it isn't vetoed by the application, shows the in-place editor which
+        allows the user to change the cell value.
+
+        Disabling in-place editing does nothing if the in-place editor isn't
+        currently show, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
+        generated but, unlike the "shown" event, it can't be vetoed and the
+        in-place editor is dismissed unconditionally.
     */
     void EnableCellEditControl(bool enable = true);
 
@@ -3249,7 +3255,11 @@ public:
     void SetReadOnly(int row, int col, bool isReadOnly = true);
 
     /**
-        Displays the in-place cell edit control for the current cell.
+        Displays the active in-place cell edit control for the current cell
+        after it was hidden.
+
+        Note that this method does @em not start editing the cell, this is only
+        done by EnableCellEditControl().
     */
     void ShowCellEditControl();
 

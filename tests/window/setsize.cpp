@@ -23,9 +23,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/scopedptr.h"
-#include "wx/stopwatch.h"
 
 #include "asserthelper.h"
+#include "waitforpaint.h"
 
 // ----------------------------------------------------------------------------
 // tests helpers
@@ -46,57 +46,6 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
 };
-
-// Class used to check if we received the (first) paint event.
-class WaitForPaint
-{
-public:
-    // Note that we have to use a pointer here, i.e. we can't just store the
-    // flag inside the class itself because it's going to be cloned inside wx
-    // and querying the flag of the original copy is not going to work.
-    explicit WaitForPaint(bool* painted)
-        : m_painted(*painted)
-    {
-        m_painted = false;
-    }
-
-    void operator()(wxPaintEvent& event)
-    {
-        event.Skip();
-        m_painted = true;
-    }
-
-private:
-    bool& m_painted;
-};
-
-// This function should be used to show the window and wait until we can get
-// its real geometry.
-void ShowAndWaitForPaint(wxWindow* w)
-{
-    // Unfortunately showing the window is asynchronous, at least when using
-    // X11, so we have to wait for some time before retrieving its true
-    // geometry. And it's not clear how long should we wait, so we do it until
-    // we get the first paint event -- by then the window really should have
-    // its final size.
-    bool painted;
-    WaitForPaint waitForPaint(&painted);
-    w->Bind(wxEVT_PAINT, waitForPaint);
-
-    w->Show();
-
-    wxStopWatch sw;
-    while ( !painted )
-    {
-        wxYield();
-
-        if ( sw.Time() > 250 )
-        {
-            WARN("Didn't get a paint event until timeout expiration");
-            break;
-        }
-    }
-}
 
 } // anonymous namespace
 
@@ -143,7 +92,19 @@ TEST_CASE("wxWindow::MovePreservesSize", "[window][size][move]")
     wxScopedPtr<wxWindow>
         w(new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "Test child frame"));
 
-    ShowAndWaitForPaint(w.get());
+    // Unfortunately showing the window is asynchronous, at least when using
+    // X11, so we have to wait for some time before retrieving its true
+    // geometry. And it's not clear how long should we wait, so we do it until
+    // we get the first paint event -- by then the window really should have
+    // its final size.
+    WaitForPaint waitForPaint(w.get());
+
+    w->Show();
+
+    if ( !waitForPaint.YieldUntilPainted() )
+    {
+        WARN("Didn't get a paint event until timeout expiration");
+    }
 
     const wxRect rectOrig = w->GetRect();
 
