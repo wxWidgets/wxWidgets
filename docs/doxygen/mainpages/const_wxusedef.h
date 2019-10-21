@@ -146,7 +146,6 @@ library:
 @itemdef{wxUSE_IMAGE, Use wxImage and related classes.}
 @itemdef{wxUSE_IMAGLIST, Use wxImageList class.}
 @itemdef{wxUSE_INTL, Use wxLocale and related classes.}
-@itemdef{wxUSE_IOSTREAMH, Use header "iostream.h" instead of "iostream".}
 @itemdef{wxUSE_IPC, Use interprocess communication classes.}
 @itemdef{wxUSE_IPV6, Use experimental wxIPV6address and related classes.}
 @itemdef{wxUSE_JOYSTICK, Use wxJoystick class.}

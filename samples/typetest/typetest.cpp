@@ -34,11 +34,7 @@
 
 #include "wx/ioswrap.h"
 
-#if wxUSE_IOSTREAMH
-    #include <fstream.h>
-#else
-    #include <fstream>
-#endif
+#include <fstream>
 
 #include "wx/wfstream.h"
 #include "wx/datstrm.h"
