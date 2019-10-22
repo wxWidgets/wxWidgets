@@ -14,6 +14,8 @@
     and set by wxAutomationObject::SetConvertVariantFlags().
 
     @since 3.0
+
+    @see wxVariantDataSafeArray
 */
 enum wxOleConvertVariantFlags
 {
