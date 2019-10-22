@@ -32,8 +32,7 @@
 #undef new
 #endif
 
-#include "wx/ioswrap.h"
-
+#include <iostream>
 #include <fstream>
 
 #include "wx/wfstream.h"

@@ -40,7 +40,6 @@
 #endif
 
 #include "wx/sizer.h"
-#include "wx/ioswrap.h"
 
 #include "widgets.h"
 
