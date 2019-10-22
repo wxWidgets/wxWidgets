@@ -126,10 +126,9 @@ void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
                 break;
             else
             {
-                CFStringRef name;
-                name = PMPrinterGetName(printer);
-                CFRetain(name);
-                if (data.GetPrinterName() == wxCFStringRef(name).AsString())
+                CFStringRef printerId = PMPrinterGetID(printer);
+                CFRetain(printerId);
+                if (data.GetPrinterName() == wxCFStringRef(printerId).AsString())
                     break;
             }
         }
@@ -301,16 +300,15 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
 
 void wxOSXPrintData::TransferPrinterNameTo( wxPrintData &data )
 {
-    CFStringRef name;
     PMPrinter printer ;
     PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
     if (PMPrinterIsDefault(printer))
         data.SetPrinterName(wxEmptyString);
     else
     {
-        name = PMPrinterGetName(printer);
-        CFRetain(name);
-        data.SetPrinterName(wxCFStringRef(name).AsString());
+        CFStringRef printerId = PMPrinterGetID(printer);
+        CFRetain(printerId);
+        data.SetPrinterName(wxCFStringRef(printerId).AsString());
     }
 }
 
