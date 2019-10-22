@@ -87,7 +87,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxListCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxListCtrlNameStr))
     {
         Init();
 
@@ -102,7 +102,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxListCtrlNameStr));
 
 
     // Attributes

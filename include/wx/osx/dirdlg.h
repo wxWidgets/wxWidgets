@@ -21,12 +21,12 @@ public:
     wxDirDialog() { Init(); }
 
     wxDirDialog(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxT(""),
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr)
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr))
     {
         Init();
 
@@ -34,12 +34,12 @@ public:
     }
 
     void Create(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxT(""),
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr));
 
 #if wxOSX_USE_COCOA
     ~wxDirDialog();

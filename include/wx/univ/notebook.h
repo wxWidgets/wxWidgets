@@ -41,7 +41,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxNotebookNameStr)
+               const wxString& name = wxASCII_STR(wxNotebookNameStr))
     {
         Init();
 
@@ -54,7 +54,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxNotebookNameStr);
+                const wxString& name = wxASCII_STR(wxNotebookNameStr));
 
     // dtor
     virtual ~wxNotebook();

@@ -808,7 +808,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
     // order should be the same as in the switch below!
-    static const char* const icons[] =
+    static wxString const icons[] =
     {
         wxART_ERROR,
         wxART_WARNING,

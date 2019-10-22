@@ -73,7 +73,7 @@ struct StringMaker<wchar_t>
         if ( wc < 0x7f )
             return std::string(static_cast<char>(wc), 1);
 
-        return wxString::Format("U+%06X", wc).ToStdString();
+        return wxString::Format(wxASCII_STR("U+%06X"), wc).ToStdString(wxConvLibc);
     }
 };
 

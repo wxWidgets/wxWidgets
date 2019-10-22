@@ -311,7 +311,7 @@ class WXDLLIMPEXP_ADV wxGridSubwindow : public wxWindow
 public:
     wxGridSubwindow(wxGrid *owner,
                     int additionalStyle = 0,
-                    const wxString& name = wxPanelNameStr)
+                    const wxString& name = wxASCII_STR(wxPanelNameStr))
         : wxWindow(owner, wxID_ANY,
                    wxDefaultPosition, wxDefaultSize,
                    wxBORDER_NONE | additionalStyle,

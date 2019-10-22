@@ -26,7 +26,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticBoxNameStr )
+                 const wxString &name = wxASCII_STR(wxStaticBoxNameStr) )
     {
         Create( parent, id, label, pos, size, style, name );
     }
@@ -37,7 +37,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticBoxNameStr )
+                 const wxString &name = wxASCII_STR(wxStaticBoxNameStr) )
     {
         Create( parent, id, label, pos, size, style, name );
     }
@@ -48,7 +48,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticBoxNameStr )
+                 const wxString &name = wxASCII_STR(wxStaticBoxNameStr) )
     {
         return DoCreate( parent, id, &label, NULL, pos, size, style, name );
     }
@@ -59,7 +59,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticBoxNameStr )
+                 const wxString &name = wxASCII_STR(wxStaticBoxNameStr) )
     {
         return DoCreate( parent, id, NULL, label, pos, size, style, name );
     }

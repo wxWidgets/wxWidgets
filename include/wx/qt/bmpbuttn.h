@@ -20,7 +20,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxButtonNameStr);
+                   const wxString& name = wxASCII_STR(wxButtonNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -29,7 +29,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxASCII_STR(wxButtonNameStr));
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapButton);
 

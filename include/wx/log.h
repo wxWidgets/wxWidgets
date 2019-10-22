@@ -86,8 +86,8 @@ class WXDLLIMPEXP_FWD_BASE wxObject;
 #endif // wxUSE_LOG_TRACE
 
 // wxLOG_COMPONENT identifies the component which generated the log record and
-// can be #define'd to a user-defined value when compiling the user code to use
-// component-based filtering (see wxLog::SetComponentLevel())
+// can be #define'd to a user-defined value (ASCII only) when compiling the
+// user code to use component-based filtering (see wxLog::SetComponentLevel())
 #ifndef wxLOG_COMPONENT
     // this is a variable and not a macro in order to allow the user code to
     // just #define wxLOG_COMPONENT without #undef'ining it first
@@ -205,7 +205,7 @@ public:
     const char *func;
 
     // the name of the component which generated this message, may be NULL if
-    // not set (i.e. wxLOG_COMPONENT not defined)
+    // not set (i.e. wxLOG_COMPONENT not defined). It must be in ASCII.
     const char *component;
 
     // time of record generation
@@ -288,7 +288,7 @@ private:
     ExtraData *m_data;
 };
 
-#define wxLOG_KEY_TRACE_MASK "wx.trace_mask"
+#define wxLOG_KEY_TRACE_MASK wxASCII_STR("wx.trace_mask")
 
 // ----------------------------------------------------------------------------
 // log record: a unit of log output
@@ -804,7 +804,7 @@ public:
     // change the new log target
     void SetLog(wxLog *logger);
 
-    // this can be used to temporarily disable (and then re-enable) passing
+    // this can be used to temporarily disable (and then reenable) passing
     // messages to the old logger (by default we do pass them)
     void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
 
@@ -925,7 +925,7 @@ public:
     {
         // remember that fatal errors can't be disabled
         if ( m_level == wxLOG_FatalError ||
-                wxLog::IsLevelEnabled(m_level, m_info.component) )
+                wxLog::IsLevelEnabled(m_level, wxASCII_STR(m_info.component)) )
             DoCallOnLog(format, argptr);
     }
 
@@ -1054,7 +1054,7 @@ private:
 
     void DoLogAtLevel(wxLogLevel level, const wxChar *format, ...)
     {
-        if ( !wxLog::IsLevelEnabled(level, m_info.component) )
+        if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
             return;
 
         va_list argptr;
@@ -1123,7 +1123,7 @@ private:
 
     void DoLogAtLevelUtf8(wxLogLevel level, const char *format, ...)
     {
-        if ( !wxLog::IsLevelEnabled(level, m_info.component) )
+        if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
             return;
 
         va_list argptr;
@@ -1253,7 +1253,7 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 
 // Macro evaluating to true if logging at the given level is enabled.
 #define wxLOG_IS_ENABLED(level) \
-    wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT)
+    wxLog::IsLevelEnabled(wxLOG_##level, wxASCII_STR(wxLOG_COMPONENT))
 
 // Macro used to define most of the actual wxLogXXX() macros: just calls
 // wxLogger::Log(), if logging at the specified level is enabled.

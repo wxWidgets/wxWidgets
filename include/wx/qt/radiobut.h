@@ -21,7 +21,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxRadioButtonNameStr );
+                   const wxString& name = wxASCII_STR(wxRadioButtonNameStr) );
 
     bool Create( wxWindow *parent,
                  wxWindowID id,
@@ -30,7 +30,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxRadioButtonNameStr );
+                 const wxString& name = wxASCII_STR(wxRadioButtonNameStr) );
 
     virtual void SetValue(bool value);
     virtual bool GetValue() const;

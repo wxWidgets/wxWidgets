@@ -40,7 +40,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxNotebookNameStr)
+             const wxString& name = wxASCII_STR(wxNotebookNameStr))
     { Create( parent, id, pos, size, style, name ); }
     // Create() function
   bool Create(wxWindow *parent,
@@ -48,7 +48,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxNotebookNameStr);
+              const wxString& name = wxASCII_STR(wxNotebookNameStr));
     // dtor
   virtual ~wxNotebook();
 

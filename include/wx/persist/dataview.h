@@ -58,8 +58,8 @@ public:
             const wxString columnPrefix = MakeColumnPrefix(column);
 
             // Save the column attributes.
-            SaveValue(columnPrefix + wxPERSIST_DVC_HIDDEN, column->IsHidden());
-            SaveValue(columnPrefix + wxPERSIST_DVC_POS,
+            SaveValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_HIDDEN), column->IsHidden());
+            SaveValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_POS),
                       control->GetColumnPosition(column));
 
             // We take special care to save only the specified width instead of
@@ -69,7 +69,7 @@ public:
             // entire control width.
             const int width = column->WXGetSpecifiedWidth();
             if ( width > 0 )
-                SaveValue(columnPrefix + wxPERSIST_DVC_WIDTH, width);
+                SaveValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), width);
 
             // Check if this column is the current sort key.
             if ( column->IsSortKey() )
@@ -84,8 +84,8 @@ public:
         // Save the sort key and direction if there is a valid sort.
         if ( sortColumn )
         {
-            SaveValue(wxPERSIST_DVC_SORT_KEY, sortColumn->GetTitle());
-            SaveValue(wxPERSIST_DVC_SORT_ASC,
+            SaveValue(wxASCII_STR(wxPERSIST_DVC_SORT_KEY), sortColumn->GetTitle());
+            SaveValue(wxASCII_STR(wxPERSIST_DVC_SORT_ASC),
                       sortColumn->IsSortOrderAscending());
         }
     }
@@ -105,12 +105,12 @@ public:
 
             // Restore column hidden status.
             bool hidden;
-            if ( RestoreValue(columnPrefix + wxPERSIST_DVC_HIDDEN, &hidden) )
+            if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_HIDDEN), &hidden) )
                 column->SetHidden(hidden);
 
             // Restore the column width.
             int width;
-            if ( RestoreValue(columnPrefix + wxPERSIST_DVC_WIDTH, &width) )
+            if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), &width) )
                 column->SetWidth(width);
 
             // TODO: Set the column's view position.
@@ -120,13 +120,13 @@ public:
         // criteria.
         wxString sortColumn;
         if ( control->GetModel() &&
-             RestoreValue(wxPERSIST_DVC_SORT_KEY, &sortColumn) &&
+             RestoreValue(wxASCII_STR(wxPERSIST_DVC_SORT_KEY), &sortColumn) &&
              !sortColumn.empty() )
         {
             bool sortAsc = true;
             if ( wxDataViewColumn* column = GetColumnByTitle(control, sortColumn) )
             {
-                RestoreValue(wxPERSIST_DVC_SORT_ASC, &sortAsc);
+                RestoreValue(wxASCII_STR(wxPERSIST_DVC_SORT_ASC), &sortAsc);
                 column->SetSortOrder(sortAsc);
 
                 // Resort the control based on the new sort criteria.
@@ -139,14 +139,14 @@ public:
 
     virtual wxString GetKind() const wxOVERRIDE
     {
-        return wxPERSIST_DVC_KIND;
+        return wxASCII_STR(wxPERSIST_DVC_KIND);
     }
 
 private:
     // Return a (slash-terminated) prefix for the column-specific entries.
     static wxString MakeColumnPrefix(const wxDataViewColumn* column)
     {
-        return wxString::Format("/Columns/%s/", column->GetTitle());
+        return wxString::Format(wxASCII_STR("/Columns/%s/"), column->GetTitle());
     }
 
     // Return the column with the given title or NULL.

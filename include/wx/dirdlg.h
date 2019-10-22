@@ -56,12 +56,12 @@ class WXDLLIMPEXP_CORE wxDirDialogBase : public wxDialog
 public:
     wxDirDialogBase() {}
     wxDirDialogBase(wxWindow *parent,
-                    const wxString& title = wxDirSelectorPromptStr,
+                    const wxString& title = wxASCII_STR(wxDirSelectorPromptStr),
                     const wxString& defaultPath = wxEmptyString,
                     long style = wxDD_DEFAULT_STYLE,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& sz = wxDefaultSize,
-                    const wxString& name = wxDirDialogNameStr)
+                    const wxString& name = wxASCII_STR(wxDirDialogNameStr))
     {
         Create(parent, title, defaultPath, style, pos, sz, name);
     }
@@ -70,12 +70,12 @@ public:
 
 
     bool Create(wxWindow *parent,
-                const wxString& title = wxDirSelectorPromptStr,
+                const wxString& title = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxEmptyString,
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& sz = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr)
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr))
     {
         if (!wxDialog::Create(parent, wxID_ANY, title, pos, sz, style, name))
             return false;
@@ -136,7 +136,7 @@ protected:
 // ----------------------------------------------------------------------------
 
 WXDLLIMPEXP_CORE wxString
-wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
+wxDirSelector(const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
               const wxString& defaultPath = wxEmptyString,
               long style = wxDD_DEFAULT_STYLE,
               const wxPoint& pos = wxDefaultPosition,

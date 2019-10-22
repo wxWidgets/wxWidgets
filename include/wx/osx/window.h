@@ -40,7 +40,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr );
+                const wxString& name = wxASCII_STR(wxPanelNameStr) );
 
     virtual ~wxWindowMac();
 
@@ -49,7 +49,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr );
+                const wxString& name = wxASCII_STR(wxPanelNameStr) );
 
     virtual void SendSizeEvent(int flags = 0) wxOVERRIDE;
 

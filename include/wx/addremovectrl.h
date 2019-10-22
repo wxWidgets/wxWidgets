@@ -66,7 +66,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
-                    const wxString& name = wxAddRemoveCtrlNameStr)
+                    const wxString& name = wxASCII_STR(wxAddRemoveCtrlNameStr))
     {
         Init();
 
@@ -78,7 +78,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxAddRemoveCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxAddRemoveCtrlNameStr));
 
     virtual ~wxAddRemoveCtrl();
 

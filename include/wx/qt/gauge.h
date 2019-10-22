@@ -22,7 +22,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxGaugeNameStr);
+            const wxString& name = wxASCII_STR(wxGaugeNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -31,7 +31,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxGA_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxGaugeNameStr);
+                const wxString& name = wxASCII_STR(wxGaugeNameStr));
 
     virtual QWidget *GetHandle() const wxOVERRIDE;
 

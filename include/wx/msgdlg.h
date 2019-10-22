@@ -242,7 +242,7 @@ protected:
     {
         wxString msg = m_message;
         if ( !m_extendedMessage.empty() )
-            msg << "\n\n" << m_extendedMessage;
+            msg << wxASCII_STR("\n\n") << m_extendedMessage;
 
         return msg;
     }
@@ -316,7 +316,7 @@ private:
 // ----------------------------------------------------------------------------
 
 int WXDLLIMPEXP_CORE wxMessageBox(const wxString& message,
-                             const wxString& caption = wxMessageBoxCaptionStr,
+                             const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                              long style = wxOK | wxCENTRE,
                              wxWindow *parent = NULL,
                              int x = wxDefaultCoord, int y = wxDefaultCoord);
