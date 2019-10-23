@@ -2110,4 +2110,16 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTranslationsModule, wxModule);
 
+// Encoding for strings to be translated, passed as const char *.
+static const wxMBConv *inlineEncoding = &wxConvLibc;
+
+WXDLLIMPEXP_BASE const wxMBConv &wxGetInlineEncoding() {
+    return *inlineEncoding;
+}
+
+WXDLLIMPEXP_BASE void wxSetInlineEncoding(const wxMBConv &conv) {
+    inlineEncoding = &conv;
+}
+
+
 #endif // wxUSE_INTL
