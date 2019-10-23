@@ -20,6 +20,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/time.h"    // wxGetTimeZone()
+    #include "wx/utils.h"   // wxMilliSleep()
 #endif // WX_PRECOMP
 
 #include "wx/wxcrt.h"       // for wxStrstr()
@@ -1715,7 +1716,11 @@ TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
             break;
 
         WARN("wxDateTime::Now() and UNow() returned different "
-             "second values, retrying.");
+             "second values ("
+             << now.GetSecond() << " and " << unow.GetSecond() <<
+             "), retrying.");
+
+        wxMilliSleep(123);
     }
 
     CHECK( now.GetYear() == unow.GetYear() );
