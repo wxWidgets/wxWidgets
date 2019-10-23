@@ -2319,18 +2319,19 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
     for (;;)
     {
+        if ( p->GetChildCount() == 0 )
+            break;
+
+        unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
+        p = p->Item(n);
+
         if ( !p->IsCategory() )
         {
-            m_pPropGridManager->DeleteProperty( p );
+            wxString label = p->GetLabel();
+            m_pPropGridManager->DeleteProperty(p);
+            wxLogMessage("Property deleted: %s", label);
             break;
         }
-
-        if ( !p->GetChildCount() )
-            break;
-
-        int n = rand() % ((int)p->GetChildCount());
-
-        p = p->Item(n);
     }
 }
 
