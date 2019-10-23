@@ -1839,11 +1839,11 @@ bool wxPropertyGridPageState::IsChildCategory(wxPGProperty* p,
 
 void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 {
+    wxCHECK_RET(item != &m_regularArray && item != m_abcArray,
+        wxS("wxPropertyGrid: Do not attempt to remove the root item."));
+
     wxCHECK_RET( item->GetParent(),
         wxS("wxPropertyGrid: This property was already deleted.") );
-
-    wxCHECK_RET( item != &m_regularArray && item != m_abcArray,
-        wxS("wxPropertyGrid: Do not attempt to remove the root item.") );
 
     wxPGProperty* parent = item->GetParent();
 
