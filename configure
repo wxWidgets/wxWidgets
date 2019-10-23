@@ -20210,44 +20210,6 @@ $as_echo "#define HAVE_TYPE_TRAITS 1" >>confdefs.h
 
 
 else
-
-
-    ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-    for ac_header in iostream
-do :
-  ac_fn_cxx_check_header_compile "$LINENO" "iostream" "ac_cv_header_iostream" "
-"
-if test "x$ac_cv_header_iostream" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_IOSTREAM 1
-_ACEOF
-
-fi
-
-done
-
-
-    if test "$ac_cv_header_iostream" = "yes" ; then
-      :
-    else
-      $as_echo "#define wxUSE_IOSTREAMH 1" >>confdefs.h
-
-    fi
-
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'

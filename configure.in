@@ -1848,9 +1848,6 @@ AC_DEFINE(HAVE_TYPE_TRAITS)
 
 else dnl Not using C++11, so we do need to run the checks.
 
-dnl check for iostream (as opposed to iostream.h) standard header
-WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
-
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
 AC_LANG_PUSH(C++)

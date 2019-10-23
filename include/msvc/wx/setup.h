@@ -54,9 +54,7 @@
 #ifdef wxMSVC_VERSION
     #define wxCOMPILER_PREFIX wxCONCAT(vc, wxMSVC_VERSION)
 #elif defined(wxMSVC_VERSION_AUTO) || defined(wxMSVC_VERSION_ABI_COMPAT)
-    #if _MSC_VER == 1200
-        #define wxCOMPILER_PREFIX vc60
-    #elif _MSC_VER == 1300
+    #if _MSC_VER == 1300
         #define wxCOMPILER_PREFIX vc70
     #elif _MSC_VER == 1310
         #define wxCOMPILER_PREFIX vc71
