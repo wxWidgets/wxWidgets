@@ -1096,8 +1096,11 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     //dc.DrawLines(active ? WXSIZEOF(points) - 1 : WXSIZEOF(points), points);
     dc.DrawLines(WXSIZEOF(points), points);
 
+
     int text_offset;
+
     int close_button_width = 0;
+
     // draw close button if necessary
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
