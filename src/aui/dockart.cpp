@@ -89,21 +89,24 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
     return wxBitmap(img);
 }
 
-// wxAuiScaleBitmap is a utility function that scales a TabArt bitmap
-wxBitmap wxAuiScaleBitmap(const wxBitmap& bmp, double scale)
+// A utility function to scales a bitmap in place for use at the given scale
+// factor.
+void wxAuiScaleBitmap(wxBitmap& bmp, double scale)
 {
+#if wxUSE_IMAGE && !defined(__WXGTK3__) && !defined(__WXMAC__)
     // scale to a close round number to improve quality
     scale = floor(scale + 0.25);
-#if wxUSE_IMAGE && !defined(__WXGTK3__) && !defined(__WXMAC__)
     if (scale > 1.0 && !(bmp.GetScaleFactor() > 1.0))
     {
         wxImage img = bmp.ConvertToImage();
         img.Rescale(bmp.GetWidth()*scale, bmp.GetHeight()*scale,
             wxIMAGE_QUALITY_BOX_AVERAGE);
-        return wxBitmap(img);
+        bmp = wxBitmap(img);
     }
+#else
+    wxUnusedVar(bmp);
+    wxUnusedVar(scale);
 #endif // wxUSE_IMAGE
-    return bmp;
 }
 
 static void DrawGradientRectangle(wxDC& dc,
@@ -765,7 +768,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             break;
     }
 
-    bmp = wxAuiScaleBitmap(bmp, window->GetContentScaleFactor());
+    wxAuiScaleBitmap(bmp, window->GetContentScaleFactor());
 
     wxRect rect = _rect;
 

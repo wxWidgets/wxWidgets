@@ -72,7 +72,8 @@ private:
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
-wxBitmap wxAuiScaleBitmap(const wxBitmap& bmp, double scale);
+// This function is defined in dockart.cpp.
+void wxAuiScaleBitmap(wxBitmap& bmp, double scale);
 
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
@@ -561,7 +562,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
             bmp = m_activeCloseBmp;
         }
 
-        bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+        wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
         int offsetY = tab_y-1;
         if (m_flags & wxAUI_NB_BOTTOM)
@@ -743,7 +744,7 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
-    bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+    wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
     rect = in_rect;
 
@@ -1110,7 +1111,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
         else
             bmp = m_disabledCloseBmp;
 
-        bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+        wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
         wxRect rect(tab_x + tab_width - bmp.GetScaledWidth() - 1,
                     tab_y + (tab_height/2) - (bmp.GetScaledHeight()/2) + 1,
@@ -1252,7 +1253,7 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
-    bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+    wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
     rect = in_rect;
 
