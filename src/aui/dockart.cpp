@@ -765,6 +765,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             break;
     }
 
+    bmp = wxAuiScaleBitmap(bmp, window->GetContentScaleFactor());
 
     wxRect rect = _rect;
 
@@ -791,9 +792,10 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
         }
 
         // draw the background behind the button
-        dc.DrawRectangle(rect.x, rect.y, 16-window->FromDIP(1), 16-window->FromDIP(1));
+        dc.DrawRectangle(rect.x, rect.y,
+            bmp.GetScaledWidth() - window->FromDIP(1),
+            bmp.GetScaledHeight() - window->FromDIP(1));
     }
-
 
     // draw the button itself
     dc.DrawBitmap(bmp, rect.x, rect.y, true);
