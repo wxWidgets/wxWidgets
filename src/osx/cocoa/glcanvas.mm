@@ -150,6 +150,13 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
+- (NSOpenGLContext *) openGLContext
+{
+    // Prevent the NSOpenGLView from making it's own context
+    // We want to force using wxGLContexts
+    return NULL;
+}
+
 @end
 
 bool wxGLCanvas::DoCreate(wxWindow *parent,
@@ -201,24 +208,6 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 
     [m_glContext makeCurrentContext];
 
-    // the missing redraw upon resize problem only happens when linked against 10.14
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    // At least under macOS 10.14.5 we need to do this in order to update the
-    // context with the new size information after the window is resized.
-    if ( WX_IS_MACOS_AVAILABLE_FULL(10, 14, 5) )
-    {
-        if ( WX_IS_MACOS_AVAILABLE(10, 15) )
-        {
-            // no workaround needed under 10.15 anymore
-        }
-        else
-        {
-            NSOpenGLView *v = (NSOpenGLView *)win.GetHandle();
-            [v setOpenGLContext: m_glContext];
-        }
-    }
-#endif
-        
     return true;
 }
 
