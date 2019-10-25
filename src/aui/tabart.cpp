@@ -778,7 +778,10 @@ int wxAuiGenericTabArt::ShowDropDown(wxWindow* wnd,
     for (i = 0; i < count; ++i)
     {
         const wxAuiNotebookPage& page = pages.Item(i);
-        wxString caption = page.caption;
+
+        // Preserve ampersands possibly present in the caption string by
+        // escaping them before passing the caption to wxMenuItem.
+        wxString caption = wxControl::EscapeMnemonics(page.caption);
 
         // if there is no caption, make it a space.  This will prevent
         // an assert in the menu code.
