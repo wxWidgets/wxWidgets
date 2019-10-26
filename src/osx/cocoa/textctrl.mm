@@ -368,12 +368,6 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         [super flagsChanged:event];
 }
 
-- (BOOL) performKeyEquivalent:(NSEvent*) event
-{
-    BOOL retval = [super performKeyEquivalent:event];
-    return retval;
-}
-
 - (void) insertText:(id) str
 {
     // We should never generate char events for the text being inserted

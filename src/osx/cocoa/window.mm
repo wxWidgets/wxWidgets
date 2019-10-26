@@ -1197,15 +1197,6 @@ void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 }
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
-BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
-{
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if (impl == NULL)
-        return NO;
-
-    return impl->performKeyEquivalent(event, self, _cmd);
-}
-
 BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -2212,45 +2203,6 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
     }
 }
 
-bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, void *_cmd)
-{
-    wxLogTrace(TRACE_KEYS, "Got %s for %s",
-               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
-
-    bool handled = false;
-    
-    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-    SetupKeyEvent( wxevent, event );
-   
-    // because performKeyEquivalent is going up the entire view hierarchy, we don't have to
-    // walk up the ancestors ourselves but let cocoa do it
-#if wxUSE_ACCEL
-    int command = m_wxPeer->GetAcceleratorTable()->GetCommand( wxevent );
-    if (command != -1)
-    {
-        wxEvtHandler * const handler = m_wxPeer->GetEventHandler();
-        
-        wxCommandEvent command_event( wxEVT_MENU, command );
-        command_event.SetEventObject( wxevent.GetEventObject() );
-        handled = handler->ProcessEvent( command_event );
-        
-        if ( !handled )
-        {
-            // accelerators can also be used with buttons, try them too
-            command_event.SetEventType(wxEVT_BUTTON);
-            handled = handler->ProcessEvent( command_event );
-        }
-    }
-#endif // wxUSE_ACCEL
-
-    if ( !handled )
-    {
-        wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        return superimpl(slf, (SEL)_cmd, event);
-    }
-    return YES;
-}
-
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 {
     if ( HasUserKeyHandling() )
@@ -2530,8 +2482,6 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
     wxOSX_CLASS_ADD_METHOD(c, @selector(flagsChanged:), (IMP) wxOSX_keyEvent, "v@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(insertText:), (IMP) wxOSX_insertText, "v@:@" )
-
-    wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "c@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
