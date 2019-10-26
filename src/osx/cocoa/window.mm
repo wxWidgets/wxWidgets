@@ -3090,6 +3090,16 @@ bool wxWidgetCocoaImpl::GetNeedsDisplay() const
 
 bool wxWidgetCocoaImpl::CanFocus() const
 {
+    if ( !IsVisible() )
+    {
+        // It's useless to call canBecomeKeyView in this case, it will always
+        // return false. Try to return something reasonable ourselves, knowing
+        // that most controls are not focusable when full keyboard access if
+        // off and wxNSTextViewControl overrides CanFocus() to always return
+        // true anyhow.
+        return [NSApp isFullKeyboardAccessEnabled];
+    }
+
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
