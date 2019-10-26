@@ -3093,7 +3093,10 @@ bool wxWidgetCocoaImpl::CanFocus() const
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
-    return [targetView canBecomeKeyView] == YES;
+    const bool canFocus = [targetView canBecomeKeyView] == YES;
+    wxLogTrace(TRACE_FOCUS, "CanFocus(%s) -> %s",
+               wxDumpNSView(m_osxView), canFocus ? "YES" : "NO");
+    return canFocus;
 }
 
 bool wxWidgetCocoaImpl::HasFocus() const
@@ -3107,11 +3110,16 @@ bool wxWidgetCocoaImpl::HasFocus() const
 bool wxWidgetCocoaImpl::SetFocus()
 {
     if ( !CanFocus() )
+    {
+        wxLogTrace(TRACE_FOCUS, "Not setting focus to %s", wxDumpNSView(m_osxView));
         return false;
+    }
 
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
+
+    wxLogTrace(TRACE_FOCUS, "Setting focus to %s", wxDumpNSView(m_osxView));
 
     [[m_osxView window] makeFirstResponder: targetView] ;
     return true;
