@@ -41,11 +41,15 @@
 
 #include <objc/objc-runtime.h>
 
+#define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
 
 // ----------------------------------------------------------------------------
 // debugging helpers
 // ----------------------------------------------------------------------------
+
+// This one is defined in window_osx.cpp.
+extern wxString wxDumpWindow(wxWindowMac* win);
 
 // These functions are called from the code but are also useful in the debugger
 // (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
@@ -62,8 +66,6 @@ static wxString wxDumpNSView(NSView* view)
     wxWidgetImpl* const impl = wxWidgetImpl::FindFromWXWidget(view);
     if ( !impl )
         return wxStringWithNSString([view description]);
-
-    extern wxString wxDumpWindow(wxWindowMac* win);
 
     return wxString::Format("%s belonging to %s",
                             wxStringWithNSString([view className]),
@@ -3759,7 +3761,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
 
     if ( receivedFocus )
     {
-        wxLogTrace(wxT("Focus"), wxT("focus set(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(TRACE_FOCUS, "Set focus for %s", wxDumpWindow(thisWindow));
         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
         thisWindow->HandleWindowEvent(eventFocus);
 
@@ -3781,7 +3783,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-        wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(TRACE_FOCUS, "Lost focus in %s", wxDumpWindow(thisWindow));
 
         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);
