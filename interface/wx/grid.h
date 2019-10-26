@@ -2201,7 +2201,7 @@ enum wxGridRenderStyle
 
     @see @ref overview_grid, wxGridUpdateLocker
 */
-class wxGrid : public wxScrolledWindow
+class wxGrid : public wxScrolledCanvas
 {
 public:
 
