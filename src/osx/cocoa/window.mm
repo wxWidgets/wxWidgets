@@ -41,6 +41,37 @@
 
 #include <objc/objc-runtime.h>
 
+#define TRACE_KEYS  "keyevent"
+
+// ----------------------------------------------------------------------------
+// debugging helpers
+// ----------------------------------------------------------------------------
+
+// These functions are called from the code but are also useful in the debugger
+// (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
+// so make them just static instead of putting them in an anonymous namespace
+// to make it easier to call them.
+
+static wxString wxDumpSelector(SEL cmd)
+{
+    return wxStringWithNSString(NSStringFromSelector(cmd));
+}
+
+static wxString wxDumpNSView(NSView* view)
+{
+    wxWidgetImpl* const impl = wxWidgetImpl::FindFromWXWidget(view);
+    if ( !impl )
+        return wxStringWithNSString([view description]);
+
+    extern wxString wxDumpWindow(wxWindowMac* win);
+
+    return wxString::Format("%s belonging to %s",
+                            wxStringWithNSString([view className]),
+                            wxDumpWindow(impl->GetWXPeer())
+                            );
+}
+
+
 // Get the window with the focus
 
 NSView* wxOSXGetViewFromResponder( NSResponder* responder )
@@ -1076,7 +1107,11 @@ void wxOSX_keyEvent(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
+    {
+        wxLogTrace(TRACE_KEYS, "Dropping %s for %s",
+                   wxDumpSelector(_cmd), wxDumpNSView(self));
         return;
+    }
 
     impl->keyEvent(event, self, _cmd);
 }
@@ -1520,6 +1555,9 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Got %s for %s",
+               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+
     if ( !m_wxPeer->IsEnabled() )
         return;
 
@@ -1528,8 +1566,12 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         // there are key equivalents that are not command-combos and therefore not handled by cocoa automatically, 
         // therefore we call the menubar directly here, exit if the menu is handling the shortcut
         if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+        {
+            wxLogTrace(TRACE_KEYS, "%s processed as key equivalent by the menu",
+                       wxDumpSelector((SEL)_cmd));
             return;
-    
+        }
+
         m_lastKeyDownEvent = event;
     }
     
@@ -2108,6 +2150,9 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Insert text \"%s\" for %s",
+               wxStringWithNSString(text), wxDumpNSView(slf));
+
     bool result = false;
     if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
@@ -2140,6 +2185,9 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Selector %s for %s",
+               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+
     if ( m_lastKeyDownEvent!=NULL )
     {
         // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
@@ -2158,10 +2206,17 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
             GetWXPeer()->OSXHandleKeyEvent(wxevent2);
         }
     }
+    else
+    {
+        wxLogTrace(TRACE_KEYS, "Doing nothing in doCommandBySelector:");
+    }
 }
 
 bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Got %s for %s",
+               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+
     bool handled = false;
     
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
@@ -3632,6 +3687,9 @@ bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(eve
 
 bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
 {
+    wxLogTrace(TRACE_KEYS, "Handling key navigation event for %s",
+               wxDumpNSView(m_osxView));
+
     bool handled = false;
     wxWindow *focus = GetWXPeer();
     if (focus && event.GetKeyCode() == WXK_TAB)
@@ -3661,6 +3719,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
 
 bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
+    wxLogTrace(TRACE_KEYS, "Handling key event for %s",
+               wxDumpNSView(m_osxView));
+
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
 
@@ -3672,10 +3733,16 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
         wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
         if ( GetWXPeer()->OSXHandleKeyEvent(eventHook)
                 && !eventHook.IsNextEventAllowed() )
+        {
+            wxLogTrace(TRACE_KEYS, "Key down event handled");
             return true;
+        }
 
         if (DoHandleKeyNavigation(wxevent))
+        {
+            wxLogTrace(TRACE_KEYS, "Key down event handled as navigation event");
             return true;
+        }
     }
 
     if ( HasUserKeyHandling() && [event type] == NSKeyDown)
