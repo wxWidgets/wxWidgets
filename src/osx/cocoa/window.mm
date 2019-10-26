@@ -3109,19 +3109,45 @@ bool wxWidgetCocoaImpl::HasFocus() const
 
 bool wxWidgetCocoaImpl::SetFocus()
 {
-    if ( !CanFocus() )
-    {
-        wxLogTrace(TRACE_FOCUS, "Not setting focus to %s", wxDumpNSView(m_osxView));
-        return false;
-    }
-
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
 
-    wxLogTrace(TRACE_FOCUS, "Setting focus to %s", wxDumpNSView(m_osxView));
+    if ( [targetView canBecomeKeyView] )
+    {
+        wxLogTrace(TRACE_FOCUS, "Setting focus to %s", wxDumpNSView(m_osxView));
 
-    [[m_osxView window] makeFirstResponder: targetView] ;
+        [[m_osxView window] makeFirstResponder: targetView] ;
+    }
+    else // can't become key view
+    {
+        // This most commonly happens because the window is still hidden, as
+        // canBecomeKeyView: always returns NO in this case, so schedule this
+        // window to become focused when it's shown later in this case.
+        //
+        // Note that this may still fail to work: if full keyboard access is
+        // off and this window is not a text control or similar, setting
+        // initial first responder won't do anything. But this is not really a
+        // problem and at least it will do the right thing if the window turns
+        // out to be focusable (i.e. it's a text control or full keyboard
+        // access is on).
+        if ( !IsVisible() )
+        {
+            wxLogTrace(TRACE_FOCUS, "Setting initial focus to %s",
+                       wxDumpNSView(m_osxView));
+
+            [[m_osxView window] setInitialFirstResponder: targetView] ;
+        }
+        else // window is shown but doesn't accept focus
+        {
+            // Not sure when exactly can this happen, for now just don't do
+            // anything in this case.
+            wxLogTrace(TRACE_FOCUS, "Not setting focus to %s",
+                       wxDumpNSView(m_osxView));
+            return false;
+        }
+    }
+
     return true;
 }
 
