@@ -578,9 +578,6 @@ static bool wxIsWindowOrParentDisabled(wxWindow* w)
 
 void wxWindowMac::SetFocus()
 {
-    if ( !AcceptsFocus() )
-            return ;
-
     if (wxIsWindowOrParentDisabled((wxWindow*) this))
         return;
 
