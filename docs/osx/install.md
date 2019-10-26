@@ -3,7 +3,7 @@ wxWidgets for OS X installation        {#plat_osx_install}
 
 [TOC]
 
-wxWidgets can be compiled using Apple's Cocoa library.
+wxWidgets can be compiled using Apple's Cocoa toolkit.
 
 Most OS X developers should start by downloading and installing Xcode
 from the App Store.  It is a free IDE from Apple that provides
@@ -45,6 +45,11 @@ Advanced topics                        {#osx_advanced}
 Installing library                     {#osx_install}
 ------------------
 
+It is rarely desirable to install non-Apple software into system directories,
+so the recommended way of using wxWidgets under macOS is to skip the `make
+install` step and simply use the full path to `wx-config` under the build
+directory when building application using the library.
+
 If you want to install the library into the system directories you'll need
 to do this as root.  The accepted way of running commands as root is to
 use the built-in sudo mechanism.  First of all, you must be using an
@@ -53,18 +58,15 @@ account marked as a "Computer Administrator".  Then
     sudo make install
     type \<YOUR OWN PASSWORD\>
 
-Note that while using this method is okay for development, it is not
-recommended that you require endusers to install wxWidgets into their
-system directories in order to use your program.  One way to avoid this
-is to configure wxWidgets with --disable-shared.  Another way to avoid
-it is to make a framework for wxWidgets.  Making frameworks is beyond
-the scope of this document.
+Distributing applications using wxWidgets
+-----------------------------------------
 
-**Note:**
-It is rarely desirable to install non-Apple software into system directories.
-By configuring the library with --disable-shared and using the full path
-to wx-config with the --in-place option you can avoid installing the library.
-
+If you build wxWidgets as static libraries, i.e. pass `--disable-shared` option
+to configure, you don't need to do anything special to distribute them, as all
+the required code is linked into your application itself. When using shared
+libraries (which is the default), you need to copy the libraries into your
+application bundle and change their paths using `install_name_tool` so that
+they are loaded from their new locations.
 
 Apple Developer Tools: Xcode           {#osx_xcode}
 ----------------------------
