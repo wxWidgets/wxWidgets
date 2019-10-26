@@ -686,6 +686,13 @@ void wxRibbonButtonBar::SetArtProvider(wxRibbonArtProvider* art)
 
     wxRibbonControl::SetArtProvider(art);
 
+    // There is no need to do anything else when the art provider is reset to
+    // null during our destruction and this actually results in problems during
+    // program shutdown due to trying to get DPI of the already destroyed TLW
+    // parent.
+    if (!art)
+        return;
+
     wxClientDC temp_dc(this);
     size_t btn_count = m_buttons.Count();
     size_t btn_i;
