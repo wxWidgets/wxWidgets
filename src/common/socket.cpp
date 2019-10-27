@@ -529,14 +529,14 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     WX_SOCKLEN_T fromlen = sizeof(from);
     const wxSOCKET_T fd = accept(m_fd, &from.addr, &fromlen);
 
-    wxScopeGuard closeSocket = wxMakeGuard(wxCloseSocket, fd);
-
     // accepting is similar to reading in the sense that it resets "ready for
     // read" flag on the socket
     ReenableEvents(wxSOCKET_INPUT_FLAG);
 
     if ( fd == INVALID_SOCKET )
         return NULL;
+
+    wxScopeGuard closeSocket = wxMakeGuard(wxCloseSocket, fd);
 
     wxSocketManager * const manager = wxSocketManager::Get();
     if ( !manager )
