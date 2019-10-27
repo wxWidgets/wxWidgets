@@ -618,12 +618,6 @@ protected:
     wxSize GetLabelSize(const wxString& label);
     wxAuiToolBarItem* FindToolByPositionWithPacking(wxCoord x, wxCoord y) const;
 
-    void DoSetSize(int x,
-                   int y,
-                   int width,
-                   int height,
-                   int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
-
 protected: // handlers
 
     void OnSize(wxSizeEvent& evt);

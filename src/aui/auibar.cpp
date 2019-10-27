@@ -2326,22 +2326,6 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 
 
 
-void wxAuiToolBar::DoSetSize(int x,
-                             int y,
-                             int width,
-                             int height,
-                             int sizeFlags)
-{
-    wxSize parent_size = GetParent()->GetClientSize();
-    if (x + width > parent_size.x)
-        width = wxMax(0, parent_size.x - x);
-    if (y + height > parent_size.y)
-        height = wxMax(0, parent_size.y - y);
-
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-}
-
-
 void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
 {
     // if orientation doesn't match dock, fix it
