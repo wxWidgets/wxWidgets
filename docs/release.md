@@ -39,6 +39,12 @@ For developing applications with wxWidgets you need to download the compiler-ind
 
 Unpack both files into the same directory so that `include` and `lib` directories are at the same level after unpacking. You should be able to compile and link applications using wxWidgets in both debug and release modes but the debug symbols are provided only for debug libraries in this archive, see below for the release build debug symbols.
 
+Note that if you're setting up a new project using these binaries, the simplest
+way to do it is to use the provided `wxwidgets.props` file: for this, open the
+`View|Property Manager` menu item in the IDE, select "Add Existing Property
+Sheet..." from the project context menu and browse to this file in the file
+open dialog.
+
 ### For End Users
 
 End users may download one of `wxMSW-3.1.3_vcXXX_ReleaseDLL.7z` or `wxMSW-3.1.3_gccXXX_ReleaseDLL.7z` files to get just the DLLs required for running the applications using wxWidgets.
