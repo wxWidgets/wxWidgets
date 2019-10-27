@@ -139,7 +139,8 @@ Changes in behaviour which may result in build errors
 - wxIntProperty::DoValidation() and wxFloatProperty::DoValidation() are
   no longer public since they are helpers intended for internal use only.
 
-3.1.3: (released 2019-??-??)
+
+3.1.3: (released 2019-10-28)
 ----------------------------
 
 INCOMPATIBLE CHANGES SINCE 3.1.2:
@@ -150,8 +151,18 @@ INCOMPATIBLE CHANGES SINCE 3.1.2:
   this and providing fixes for it.
 
 
+All:
+
+- Add C++20-style wxString::starts_with()/ends_with() functions (Lauri Nurmi).
+- Add Croation translations (Milo Ivir).
+- Add wxRegEx::QuoteMeta() (Tomay).
+- Fix MIME type for wxFSFile obtained from wxHTTP.
+- Support nullptr in wxPrintf() etc.
+- Allow specifying optional libs in WX_CONFIG_CHECK (Juha Sointusalo).
+
 All (GUI):
 
+- Add support for freezing columns and/or rows in wxGrid (Lucian Rotariu)
 - Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
 - Make disabling the window before creating it actually work.
 - Implement wxAuiNotebook::GetBestSize() (Sebastian Walderich).
@@ -162,16 +173,77 @@ All (GUI):
 - Add wxPG_DIALOG_TITLE wxPGProperty attribute.
 - Add support for creating a wxGraphicsPen with a gradient.
 - Add support for applying a transformation matrix to a gradient.
-
+- Fix and unify drawing wxBitmap with both alpha channel and mask under all platforms.
+- Improve AUI notebook appearance in high DPI (Paul Kulchenko).
+- Add XRC handler for wxDataViewCtrl (Anton Triest).
+- Add XRC handler for wxInfoBar (Илья Синицын).
+- Add support for checkboxes to virtual wxListCtrl too (Maarten Bent).
+- Add wxBusyInfo::Update{Text,Label}() (Kvaz1r).
+- Add wxDCTextBgColourChanger and wxDCTextBgModeChanger (Vsevolod V Gromov).
+- Add wxFD_SHOW_HIDDEN flag to wxFileDialog (Igor Korot).
+- Add wxRendererNative::DrawCheckMark() (Maarten Bent).
+- Add wxSystemAppearance, notably useful for macOS dark mode checks.
+- Allow expanding environment variables in XRC file paths (ousnius).
+- Enhance support for underlining in wxTextCtrl.
+- Fix spurious asserts in wxBoxSizer when wxSHAPED is used.
+- Fix wxWrapSizer minimum size calculations (Илья Синицын).
+- Improve popups appearance and behaviour in wxSTC (New Pagodi).
+- Improve wxHtmlWindow selection appearance and behaviour (Павел Калугин).
 
 wxGTK:
 
 - Invalidate selection after deleting wxListBox item with GTK+ 3 too.
+- Add support for ticks to wxSlider (Iwbnwif Yiw).
+- Fix two-finger scrolling under Wayland (Scott Talbert).
+- Fix wxEVT_KEY_DOWN for non-ASCII characters (Scott Talbert).
+- Fix crash in wxDataViewTreeCtrl::DeleteAllItems().
+- Make wxDataViewModel::Cleared() behave consistently with the other ports.
+- Fix best size computation for multiline wxTextCtrl.
+- Fix best size computation for wxGauge (Iwbnwif Yiw).
 
 wxMSW:
 
+- Add support for per-monitor DPI under new enough OS versions (Maarten Bent).
+- Add MSVS 2019 support.
 - Fix passing Unicode strings via wxIPC when using DDE.
 - Improve wxDataViewCtrl performance with variable line heights (Jens Goepfert).
+- Add EVT_COLOURPICKER_CURRENT_CHANGED (Trylz).
+- Fix linking of monolithic library with MinGW (Jannick).
+- Support fill mode in GDI+ and D2D graphics contexts (Maarten Bent).
+- Add wxFileDialog::GetCurrentlySelectedFilterIndex() (QuentinC).
+- Add wxPU_CONTAINS_CONTROLS style for popups (New Pagodi).
+- Add wxWebViewIE::MSWSetEmulationLevel() (Chilau He).
+- Allow showing ToC/search in wxCHMHelpController (Andreas Falkenhahn)
+- Fix RegisterHotKey() work with WXK_XXX.
+- Fix changing wxSpinCtrl colours (Kvaz1r).
+- Fix compilation in deprecated ANSI build mode.
+- Fix drawing cross hair on wxDC.
+- Fix input handling bugs in text controls with autocompleters.
+- Fix pasting very long strings into wxTextCtrl.
+- Fix resetting columns images in wxListCtrl (followait).
+- Optimize drawing solid vertical and horizontal lines on wxDC
+- Recognize UTF-8 system encoding supported in latest MSW 10 versions.
+- Work around nVidia bug with OpenGL and coloured buttons.
+- Handle Ctrl+A in focused wxTextCtrl instead of always as an accelerator.
+
+wxOSX:
+
+- Support for macOS Mojave and later dark mode.
+- Fix crash in wxGauge with wxGA_PROGRESS (Konstantin Matveyev).
+- Fix crash when pasting from clipboard (Tim Kosse).
+- Fix dragging files (Dan Gudmundsson).
+- Fix fetching sub-bitmap from wxBitmap with maskAll
+- Fix wxPOPUP_WINDOW style (Dan Korn).
+- Make it possible to play wxSound again (frustum).
+- Allow setting focus before showing the window.
+- Fix order of accelerators handling, giving priority to focused window.
+- Don't stop TAB navigation on wxRadioBox when full keyboard access is off.
+
+wxQt:
+
+- Too many changes to list. Thanks to Graham Dawes, Jay Nabonne, Matthew
+  Griffin, Liam Treacy, Chris Lemin, Cătălin Răceanu, Richard Smith, Mick
+  Waites and others.
 
 
 3.1.2: (released 2018-12-10)
