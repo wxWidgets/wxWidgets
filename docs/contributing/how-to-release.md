@@ -50,6 +50,15 @@ and then run it using the new DLLs.
    the straightforward changes like updating the date and version number
    automatically, but please also review and update the contents of the README
    and announcement text.
+
+   Note that the best order depends on the release being prepared: for a
+   development release, `docs/publicity/announce.txt` contains the list of the
+   major changes since the last stable release and should be updated first, as
+   this part of it can then be copied verbatim to the corresponding section of
+   the README file. For the stable releases, it's probably more convenient to
+   update the README with the details of the changes first.
+
+   Here is the list of the files, for reference:
     * Update `docs/readme.txt`: version needs to be changed, content updated.
     * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
     * Put a date on the release line in `docs/changes.txt`.
