@@ -26,6 +26,7 @@
     #include "wx/math.h"
 #endif
 
+#include "wx/display.h"
 #include "wx/dnd.h"
 #include "wx/tooltip.h"
 #include "wx/caret.h"
@@ -5678,6 +5679,12 @@ void wxWindowGTK::GTKFindWindow(GtkWidget* widget, wxArrayGdkWindows& windows)
 
 #if wxUSE_MENUS_NATIVE
 
+struct wxPopupMenuPositionCallbackData
+{
+    wxPoint pos;
+    wxMenu *menu;
+};
+
 extern "C" {
 static
 void wxPopupMenuPositionCallback( GtkMenu *menu,
@@ -5685,7 +5692,7 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
                                   gboolean * WXUNUSED(whatever),
                                   gpointer user_data )
 {
-    // ensure that the menu appears entirely on screen
+    // ensure that the menu appears entirely on the same display as the window
     GtkRequisition req;
 #ifdef __WXGTK3__
     gtk_widget_get_preferred_size(GTK_WIDGET(menu), &req, NULL);
@@ -5693,14 +5700,24 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
     gtk_widget_get_child_requisition(GTK_WIDGET(menu), &req);
 #endif
 
-    wxSize sizeScreen = wxGetDisplaySize();
-    wxPoint *pos = (wxPoint*)user_data;
+    const wxPopupMenuPositionCallbackData&
+        data = *static_cast<wxPopupMenuPositionCallbackData*>(user_data);
 
-    gint xmax = sizeScreen.x - req.width,
-         ymax = sizeScreen.y - req.height;
+    const wxRect
+        rect = wxDisplay(data.menu->GetInvokingWindow()).GetClientArea();
 
-    *x = pos->x < xmax ? pos->x : xmax;
-    *y = pos->y < ymax ? pos->y : ymax;
+    wxPoint pos = data.pos;
+    if ( pos.x < rect.x )
+        pos.x = rect.x;
+    if ( pos.y < rect.y )
+        pos.y = rect.y;
+    if ( pos.x + req.width > rect.GetRight() )
+        pos.x = rect.GetRight() - req.width;
+    if ( pos.y + req.height > rect.GetBottom() )
+        pos.y = rect.GetBottom() - req.height;
+
+    *x = pos.x;
+    *y = pos.y;
 }
 }
 
@@ -5708,7 +5725,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
 
-    wxPoint pos;
+    wxPopupMenuPositionCallbackData data;
     gpointer userdata;
     GtkMenuPositionFunc posfunc;
     if ( x == -1 && y == -1 )
@@ -5719,8 +5736,9 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     }
     else
     {
-        pos = ClientToScreen(wxPoint(x, y));
-        userdata = &pos;
+        data.pos = ClientToScreen(wxPoint(x, y));
+        data.menu = menu;
+        userdata = &data;
         posfunc = wxPopupMenuPositionCallback;
     }
 
