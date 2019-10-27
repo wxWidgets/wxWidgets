@@ -41,6 +41,39 @@
 
 #include <objc/objc-runtime.h>
 
+#define TRACE_FOCUS "focus"
+#define TRACE_KEYS  "keyevent"
+
+// ----------------------------------------------------------------------------
+// debugging helpers
+// ----------------------------------------------------------------------------
+
+// This one is defined in window_osx.cpp.
+extern wxString wxDumpWindow(wxWindowMac* win);
+
+// These functions are called from the code but are also useful in the debugger
+// (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
+// so make them just static instead of putting them in an anonymous namespace
+// to make it easier to call them.
+
+static wxString wxDumpSelector(SEL cmd)
+{
+    return wxStringWithNSString(NSStringFromSelector(cmd));
+}
+
+static wxString wxDumpNSView(NSView* view)
+{
+    wxWidgetImpl* const impl = wxWidgetImpl::FindFromWXWidget(view);
+    if ( !impl )
+        return wxStringWithNSString([view description]);
+
+    return wxString::Format("%s belonging to %s",
+                            wxStringWithNSString([view className]),
+                            wxDumpWindow(impl->GetWXPeer())
+                            );
+}
+
+
 // Get the window with the focus
 
 NSView* wxOSXGetViewFromResponder( NSResponder* responder )
@@ -1076,7 +1109,11 @@ void wxOSX_keyEvent(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
+    {
+        wxLogTrace(TRACE_KEYS, "Dropping %s for %s",
+                   wxDumpSelector(_cmd), wxDumpNSView(self));
         return;
+    }
 
     impl->keyEvent(event, self, _cmd);
 }
@@ -1161,15 +1198,6 @@ void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesEnded(event);
 }
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-
-BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
-{
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if (impl == NULL)
-        return NO;
-
-    return impl->performKeyEquivalent(event, self, _cmd);
-}
 
 BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
 {
@@ -1520,6 +1548,9 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Got %s for %s",
+               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+
     if ( !m_wxPeer->IsEnabled() )
         return;
 
@@ -1528,8 +1559,12 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         // there are key equivalents that are not command-combos and therefore not handled by cocoa automatically, 
         // therefore we call the menubar directly here, exit if the menu is handling the shortcut
         if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+        {
+            wxLogTrace(TRACE_KEYS, "%s processed as key equivalent by the menu",
+                       wxDumpSelector((SEL)_cmd));
             return;
-    
+        }
+
         m_lastKeyDownEvent = event;
     }
     
@@ -2108,6 +2143,9 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Insert text \"%s\" for %s",
+               wxStringWithNSString(text), wxDumpNSView(slf));
+
     bool result = false;
     if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
@@ -2140,6 +2178,9 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
 {
+    wxLogTrace(TRACE_KEYS, "Selector %s for %s",
+               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+
     if ( m_lastKeyDownEvent!=NULL )
     {
         // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
@@ -2158,42 +2199,10 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
             GetWXPeer()->OSXHandleKeyEvent(wxevent2);
         }
     }
-}
-
-bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, void *_cmd)
-{
-    bool handled = false;
-    
-    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-    SetupKeyEvent( wxevent, event );
-   
-    // because performKeyEquivalent is going up the entire view hierarchy, we don't have to
-    // walk up the ancestors ourselves but let cocoa do it
-#if wxUSE_ACCEL
-    int command = m_wxPeer->GetAcceleratorTable()->GetCommand( wxevent );
-    if (command != -1)
+    else
     {
-        wxEvtHandler * const handler = m_wxPeer->GetEventHandler();
-        
-        wxCommandEvent command_event( wxEVT_MENU, command );
-        command_event.SetEventObject( wxevent.GetEventObject() );
-        handled = handler->ProcessEvent( command_event );
-        
-        if ( !handled )
-        {
-            // accelerators can also be used with buttons, try them too
-            command_event.SetEventType(wxEVT_BUTTON);
-            handled = handler->ProcessEvent( command_event );
-        }
+        wxLogTrace(TRACE_KEYS, "Doing nothing in doCommandBySelector:");
     }
-#endif // wxUSE_ACCEL
-
-    if ( !handled )
-    {
-        wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        return superimpl(slf, (SEL)_cmd, event);
-    }
-    return YES;
 }
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
@@ -2475,8 +2484,6 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
     wxOSX_CLASS_ADD_METHOD(c, @selector(flagsChanged:), (IMP) wxOSX_keyEvent, "v@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(insertText:), (IMP) wxOSX_insertText, "v@:@" )
-
-    wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "c@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
@@ -3083,10 +3090,23 @@ bool wxWidgetCocoaImpl::GetNeedsDisplay() const
 
 bool wxWidgetCocoaImpl::CanFocus() const
 {
+    if ( !IsVisible() )
+    {
+        // It's useless to call canBecomeKeyView in this case, it will always
+        // return false. Try to return something reasonable ourselves, knowing
+        // that most controls are not focusable when full keyboard access if
+        // off and wxNSTextViewControl overrides CanFocus() to always return
+        // true anyhow.
+        return [NSApp isFullKeyboardAccessEnabled];
+    }
+
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
-    return [targetView canBecomeKeyView] == YES;
+    const bool canFocus = [targetView canBecomeKeyView] == YES;
+    wxLogTrace(TRACE_FOCUS, "CanFocus(%s) -> %s",
+               wxDumpNSView(m_osxView), canFocus ? "YES" : "NO");
+    return canFocus;
 }
 
 bool wxWidgetCocoaImpl::HasFocus() const
@@ -3099,14 +3119,45 @@ bool wxWidgetCocoaImpl::HasFocus() const
 
 bool wxWidgetCocoaImpl::SetFocus()
 {
-    if ( !CanFocus() )
-        return false;
-
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
 
-    [[m_osxView window] makeFirstResponder: targetView] ;
+    if ( [targetView canBecomeKeyView] )
+    {
+        wxLogTrace(TRACE_FOCUS, "Setting focus to %s", wxDumpNSView(m_osxView));
+
+        [[m_osxView window] makeFirstResponder: targetView] ;
+    }
+    else // can't become key view
+    {
+        // This most commonly happens because the window is still hidden, as
+        // canBecomeKeyView: always returns NO in this case, so schedule this
+        // window to become focused when it's shown later in this case.
+        //
+        // Note that this may still fail to work: if full keyboard access is
+        // off and this window is not a text control or similar, setting
+        // initial first responder won't do anything. But this is not really a
+        // problem and at least it will do the right thing if the window turns
+        // out to be focusable (i.e. it's a text control or full keyboard
+        // access is on).
+        if ( !IsVisible() )
+        {
+            wxLogTrace(TRACE_FOCUS, "Setting initial focus to %s",
+                       wxDumpNSView(m_osxView));
+
+            [[m_osxView window] setInitialFirstResponder: targetView] ;
+        }
+        else // window is shown but doesn't accept focus
+        {
+            // Not sure when exactly can this happen, for now just don't do
+            // anything in this case.
+            wxLogTrace(TRACE_FOCUS, "Not setting focus to %s",
+                       wxDumpNSView(m_osxView));
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -3632,6 +3683,9 @@ bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(eve
 
 bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
 {
+    wxLogTrace(TRACE_KEYS, "Handling key navigation event for %s",
+               wxDumpNSView(m_osxView));
+
     bool handled = false;
     wxWindow *focus = GetWXPeer();
     if (focus && event.GetKeyCode() == WXK_TAB)
@@ -3661,6 +3715,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
 
 bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
+    wxLogTrace(TRACE_KEYS, "Handling key event for %s",
+               wxDumpNSView(m_osxView));
+
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
 
@@ -3672,10 +3729,16 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
         wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
         if ( GetWXPeer()->OSXHandleKeyEvent(eventHook)
                 && !eventHook.IsNextEventAllowed() )
+        {
+            wxLogTrace(TRACE_KEYS, "Key down event handled");
             return true;
+        }
 
         if (DoHandleKeyNavigation(wxevent))
+        {
+            wxLogTrace(TRACE_KEYS, "Key down event handled as navigation event");
             return true;
+        }
     }
 
     if ( HasUserKeyHandling() && [event type] == NSKeyDown)
@@ -3742,7 +3805,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
 
     if ( receivedFocus )
     {
-        wxLogTrace(wxT("Focus"), wxT("focus set(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(TRACE_FOCUS, "Set focus for %s", wxDumpWindow(thisWindow));
         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
         thisWindow->HandleWindowEvent(eventFocus);
 
@@ -3764,7 +3827,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-        wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(TRACE_FOCUS, "Lost focus in %s", wxDumpWindow(thisWindow));
 
         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);

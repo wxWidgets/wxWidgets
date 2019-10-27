@@ -59,6 +59,11 @@ Translating your application involves several steps:
     given language: see wxLocale.
 
 
+@note Under macOS you also need to list all the supported languages under
+      @c CFBundleLocalizations key in your application @c Info.plist file
+      in order to allow the application to support the corresponding locale.
+
+
 @section overview_i18n_mofiles Installing translation catalogs
 
 The .mo files with compiled catalogs must be included with the application.

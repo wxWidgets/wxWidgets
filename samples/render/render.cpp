@@ -315,7 +315,12 @@ private:
         renderer.DrawItemText(this, dc, "DrawItemText()",
             wxRect(x2, y, widthListItem, heightListItem).Inflate(-2, -2), m_align, m_flags | wxCONTROL_SELECTED);
 
-        y += lineHeight + heightListItem;
+        y += heightListItem;
+
+        dc.DrawText("DrawChoice()", x1, y + 20);
+        renderer.DrawChoice(this, dc, wxRect(x2, y, 80, 50), m_flags);
+        y += 50;
+
     }
 
     int m_flags;

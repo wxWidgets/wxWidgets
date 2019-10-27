@@ -228,15 +228,12 @@ void wxAuiGenericToolBarArt::DrawBackground(
 
 void wxAuiGenericToolBarArt::DrawPlainBackground(wxDC& dc,
                                                    wxWindow* WXUNUSED(wnd),
-                                                   const wxRect& _rect)
+                                                   const wxRect& rect)
 {
-    wxRect rect = _rect;
-    rect.height++;
-
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    dc.DrawRectangle(rect.GetX() - 1, rect.GetY() - 1,
-                     rect.GetWidth() + 2, rect.GetHeight() + 1);
+    dc.DrawRectangle(rect);
 }
 
 void wxAuiGenericToolBarArt::DrawLabel(

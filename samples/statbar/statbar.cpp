@@ -668,13 +668,28 @@ void MyFrame::OnShowFieldsRect(wxCommandEvent& WXUNUSED(event))
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
+    // Not all systems support drawing using wxClientDC, so also show the
+    // coordinates in a message box.
+    wxString msg;
+    const wxSize size = pStat->GetClientSize();
+    msg.Printf("Status bar client size is (%d,%d)\n\n", size.x, size.y);
+
     const int n = pStat->GetFieldsCount();
     for ( int i = 0; i < n; i++ )
     {
         wxRect r;
         if ( pStat->GetFieldRect(i, r) )
+        {
+            msg += wxString::Format("Field %d rectangle is (%d,%d)-(%d,%d)\n",
+                                    i,
+                                    r.x, r.y,
+                                    r.x + r.width,
+                                    r.y + r.height);
             dc.DrawRectangle(r);
+        }
     }
+
+    wxLogMessage("%s", msg);
 }
 
 void MyFrame::OnUpdateStatusBarToggle(wxUpdateUIEvent& event)

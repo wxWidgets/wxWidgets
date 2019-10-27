@@ -364,6 +364,28 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Enable", "[window]")
     m_window->Enable(false);
 
     CHECK(!m_window->IsEnabled());
+    m_window->Enable();
+
+
+    wxWindow* const child = new wxWindow(m_window, wxID_ANY);
+    CHECK(child->IsEnabled());
+    CHECK(child->IsThisEnabled());
+
+    m_window->Disable();
+    CHECK(!child->IsEnabled());
+    CHECK(child->IsThisEnabled());
+
+    child->Disable();
+    CHECK(!child->IsEnabled());
+    CHECK(!child->IsThisEnabled());
+
+    m_window->Enable();
+    CHECK(!child->IsEnabled());
+    CHECK(!child->IsThisEnabled());
+
+    child->Enable();
+    CHECK(child->IsEnabled());
+    CHECK(child->IsThisEnabled());
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::FindWindowBy", "[window]")
