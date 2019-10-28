@@ -408,6 +408,8 @@ if test "$wxUSE_ALL_FEATURES" = "no"; then
     DEFAULT_wxUSE_MEDIACTRL=no
 fi
 
+AC_ARG_WITH(dpi, [  --with-dpi=none|system|per-monitor   set dpi-awareness (Win32 only), default is per-monitor], [wxWITH_DPI_MANIFEST="$withval"])
+
 dnl ---------------------------------------------------------------------------
 dnl port selection
 dnl ---------------------------------------------------------------------------
@@ -1123,6 +1125,18 @@ if test -n "$wxWITH_CXX"; then
         OBJCXXFLAGS="$OBJCXXFLAGS $switch"
     fi
 fi
+
+case "$wxWITH_DPI_MANIFEST" in
+    none)
+        USE_DPI_AWARE_MANIFEST=0 ;;
+    system)
+        USE_DPI_AWARE_MANIFEST=1 ;;
+    per-monitor)
+        USE_DPI_AWARE_MANIFEST=2 ;;
+    *)
+        USE_DPI_AWARE_MANIFEST=0
+        AC_MSG_WARN([Unsupported DPI awareness value "$wxWITH_DPI_MANIFEST" ignored.])
+esac
 
 dnl ar command
 dnl   defines AR with the appropriate command
@@ -8095,6 +8109,7 @@ AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_CXXFLAGS)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
+AC_SUBST(USE_DPI_AWARE_MANIFEST)
 
 case "$TOOLKIT" in
     GTK)
