@@ -9,9 +9,7 @@ We provide pre-built binary files for the following compilers:
 
 * Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2
   (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
-* TDM-GCC version 5.1 and MinGW-w64 version 7.2 (with the default SJLJ
-  exceptions propagation method, using C++11). Please note that you need to use
-  the very latest MinGW-w64 7.2 compiler release with this version of the
+* MinGW-w64 version 7.2 and 8.3 (with the default SJLJ exceptions propagation method for 32-bit builds, using C++11). Please note that you need to use the very latest MinGW-w64 7.2 compiler release with this version of the
   compiler which can be downloaded from
   [here for 32 bits](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.2.0/threads-win32/sjlj/i686-7.2.0-release-win32-sjlj-rt_v5-rev1.7z/download)
   and
