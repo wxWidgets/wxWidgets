@@ -397,6 +397,9 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
             : m_conv(conv.Clone())
 {
+    m_isDirty = false;
+    m_autosave = true;
+
     // always local_file when this constructor is called (?)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
