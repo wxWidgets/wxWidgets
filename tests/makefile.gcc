@@ -818,7 +818,7 @@ $(OBJS)\test_drawingplugin_pluginsample.o: ./drawing/pluginsample.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_sample_rc.o: ./../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_6) $(__DEBUG_DEFINE_p_6) $(__NDEBUG_DEFINE_p_6) $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6) $(__UNICODE_DEFINE_p_6) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p_2) --include-dir . $(__DLLFLAG_p_6) --include-dir ./../samples --define NOPCH --include-dir ./../3rdparty/catch/include
+	$(WINDRES) -i$< -o$@    --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --define __WXMSW__ $(__WXUNIV_DEFINE_p_6) $(__DEBUG_DEFINE_p_6) $(__NDEBUG_DEFINE_p_6) $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6) $(__UNICODE_DEFINE_p_6) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p_2) --include-dir . $(__DLLFLAG_p_6) --include-dir ./../samples --define NOPCH --include-dir ./../3rdparty/catch/include
 
 $(OBJS)\test_gui_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<

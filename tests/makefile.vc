@@ -1024,7 +1024,7 @@ $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_52_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_7)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) /i . $(__DLLFLAG_p_7) /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\include /d _CONSOLE .\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_52_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_7)   /d __WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) /i . $(__DLLFLAG_p_7) /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\include /d _CONSOLE .\..\samples\sample.rc
 
 $(OBJS)\test_gui_asserthelper.obj: .\asserthelper.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\asserthelper.cpp

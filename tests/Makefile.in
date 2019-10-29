@@ -27,6 +27,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
+USE_DPI_AWARE_MANIFEST = @USE_DPI_AWARE_MANIFEST@
 WX_LIB_FLAVOUR = @WX_LIB_FLAVOUR@
 TOOLKIT = @TOOLKIT@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
@@ -300,6 +301,9 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_SHARED_1_USE_GUI_1@	= \
 @COND_SHARED_1_USE_GUI_1@	$(DLLPREFIX_MODULE)test_drawingplugin.$(SO_SUFFIX_MODULE)
 @COND_USE_GUI_1@__test_gui___depname = test_gui$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__WIN32_DPI_MANIFEST_p_2 = \
+@COND_PLATFORM_WIN32_1@	--define \
+@COND_PLATFORM_WIN32_1@	wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_6 = --define __WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_6 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_6 = --define wxNO_EXCEPTIONS
@@ -777,7 +781,7 @@ test_drawingplugin_pluginsample.o: $(srcdir)/drawing/pluginsample.cpp
 	$(CXXC) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(srcdir)/drawing/pluginsample.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6) $(__DEBUG_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)  --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include
+	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p_2) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6) $(__DEBUG_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)  --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include
 
 test_gui_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/asserthelper.cpp

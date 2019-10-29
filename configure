@@ -2314,7 +2314,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --without-subdirs       don't generate makefiles for samples/demos/...
   --with-flavour=NAME     specify a name to identify this build
-  --with-dpi=none|system|per-monitor   use dpi-awareness (Win32 only)
+  --with-dpi=none|system|per-monitor   set dpi-awareness (Win32 only), default is per-monitor
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
   --with-gtk[=VERSION]    use GTK+, VERSION can be 4 (EXPERIMENTAL), 3, 2 (default), 1 or "any"
   --with-motif            use Motif/Lesstif
@@ -18412,13 +18412,18 @@ $as_echo "#define HAVE_CXX17 1" >>confdefs.h
     fi
 fi
 
-USE_DPI_AWARE_MANIFEST=0
-if test "$wxWITH_DPI_MANIFEST" = "system" ; then
-    USE_DPI_AWARE_MANIFEST=1
-fi
-if test "$wxWITH_DPI_MANIFEST" = "per-monitor" ; then
-    USE_DPI_AWARE_MANIFEST=2
-fi
+case "$wxWITH_DPI_MANIFEST" in
+    none)
+        USE_DPI_AWARE_MANIFEST=0 ;;
+    system)
+        USE_DPI_AWARE_MANIFEST=1 ;;
+    per-monitor)
+        USE_DPI_AWARE_MANIFEST=2 ;;
+    *)
+        USE_DPI_AWARE_MANIFEST=0
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported DPI awareness value \"$wxWITH_DPI_MANIFEST\" ignored." >&5
+$as_echo "$as_me: WARNING: Unsupported DPI awareness value \"$wxWITH_DPI_MANIFEST\" ignored." >&2;}
+esac
 
 if test "x$SUNCXX" != xyes; then
     if test -n "$ac_tool_prefix"; then

@@ -29,6 +29,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
+USE_DPI_AWARE_MANIFEST = @USE_DPI_AWARE_MANIFEST@
 WX_LIB_FLAVOUR = @WX_LIB_FLAVOUR@
 TOOLKIT = @TOOLKIT@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
@@ -87,6 +88,9 @@ SDK_EXE_OBJECTS =  \
 @COND_WINDOWS_IMPLIB_1@__my_dll___importlib = \
 @COND_WINDOWS_IMPLIB_1@	-Wl,--out-implib=$(LIBPREFIX)my_dll.$(DLLIMP_SUFFIX)
 @COND_PLATFORM_WIN32_1_SHARED_0@__wx_exe___depname = wx_exe$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__WIN32_DPI_MANIFEST_p_1 = \
+@COND_PLATFORM_WIN32_1@	--define \
+@COND_PLATFORM_WIN32_1@	wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_3 = --define __WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_3 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_3 = --define wxNO_EXCEPTIONS
@@ -212,7 +216,7 @@ my_dll_my_dll.o: $(srcdir)/my_dll.cpp
 	$(CXXC) -c -o $@ $(MY_DLL_CXXFLAGS) $(srcdir)/my_dll.cpp
 
 wx_exe_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3)  $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3)  --include-dir $(srcdir) $(__DLLFLAG_p_3) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p_1) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3)  $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3)  --include-dir $(srcdir) $(__DLLFLAG_p_3) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 wx_exe_wx_exe.o: $(srcdir)/wx_exe.cpp
 	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/wx_exe.cpp

@@ -232,7 +232,7 @@ $(OBJS)\pyramid.exe: $(PYRAMID_OBJECTS) $(OBJS)\pyramid_sample_rc.o
 endif
 
 $(OBJS)\pyramid_sample_rc.o: ./../../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
 
 $(OBJS)\pyramid_pyramid.o: ./pyramid.cpp
 	$(CXX) -c -o $@ $(PYRAMID_CXXFLAGS) $(CPPDEPS) $<

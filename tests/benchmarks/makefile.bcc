@@ -336,7 +336,7 @@ $(OBJS)\bench_printfbench.obj: .\printfbench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\printfbench.cpp
 
 $(OBJS)\bench_gui_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\bench_gui_bench.obj: .\bench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_GUI_CXXFLAGS) .\bench.cpp
@@ -348,7 +348,7 @@ $(OBJS)\bench_gui_image.obj: .\image.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_GUI_CXXFLAGS) .\image.cpp
 
 $(OBJS)\bench_graphics_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\bench_graphics_graphics.obj: .\graphics.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_GRAPHICS_CXXFLAGS) .\graphics.cpp
