@@ -251,13 +251,11 @@ wxZipHeader::wxZipHeader(const char* data, size_t size)
 
 inline wxUint8 wxZipHeader::Read8()
 {
-    wxASSERT(m_pos < m_size);
     return m_data[m_pos++];
 }
 
 inline wxUint16 wxZipHeader::Read16()
 {
-    wxASSERT(m_pos + 2 <= m_size);
     wxUint16 n = CrackUint16(m_data + m_pos);
     m_pos += 2;
     return n;
@@ -265,7 +263,6 @@ inline wxUint16 wxZipHeader::Read16()
 
 inline wxUint32 wxZipHeader::Read32()
 {
-    wxASSERT(m_pos + 4 <= m_size);
     wxUint32 n = CrackUint32(m_data + m_pos);
     m_pos += 4;
     return n;
@@ -273,7 +270,6 @@ inline wxUint32 wxZipHeader::Read32()
 
 inline wxUint64 wxZipHeader::Read64()
 {
-    wxASSERT(m_pos + 8 <= m_size);
     wxUint64 n = CrackUint64(m_data + m_pos);
     m_pos += 8;
     return n;
