@@ -1542,6 +1542,8 @@ bool wxZipEndRec::Read(wxInputStream& stream, wxMBConv& conv)
         if (stream.SeekI(z64EndOffset) == wxInvalidOffset)
             return false;
         wxZipHeader dsEnd(stream, Z64_END_SIZE);
+        if ( !dsEnd )
+            return false;
         if ( dsEnd.Read32() != Z64_END_MAGIC ||
             dsEnd.Read64() < Z64_END_SIZE - 12 ) // Check record size
             return false;
