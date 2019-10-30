@@ -1982,6 +1982,7 @@ wxVariantData* wxVariantDataList::VariantDataFactory(const wxAny& any)
 {
     wxAnyList src = any.As<wxAnyList>();
     wxVariantList dst;
+    dst.DeleteContents(true);
     wxAnyList::compatibility_iterator node = src.GetFirst();
     while (node)
     {
