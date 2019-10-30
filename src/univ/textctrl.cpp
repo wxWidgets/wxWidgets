@@ -1684,7 +1684,7 @@ int wxTextCtrl::GetLineLength(wxTextCoord line) const
     }
     else // multiline
     {
-        if ( line < 0 || line >= GetLineCount() )
+        if ( line < 0 || (size_t)line >= GetLineCount() )
             return -1;
 
         return GetLines()[line].length();
