@@ -218,8 +218,6 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#define wxUSE_WCHAR_T 1
-
 
 #define wxUSE_EXCEPTIONS 1
 

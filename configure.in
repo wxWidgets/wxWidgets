@@ -1561,7 +1561,6 @@ AC_CHECK_SIZEOF(wchar_t, 0,
 if test "$ac_cv_sizeof_wchar_t" = 0; then
     AC_MSG_ERROR([wxWidgets requires wchar_t support.])
 fi
-AC_DEFINE(wxUSE_WCHAR_T)
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],

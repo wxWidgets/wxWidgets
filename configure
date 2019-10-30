@@ -19573,8 +19573,6 @@ _ACEOF
 if test "$ac_cv_sizeof_wchar_t" = 0; then
     as_fn_error $? "wxWidgets requires wchar_t support." "$LINENO" 5
 fi
-$as_echo "#define wxUSE_WCHAR_T 1" >>confdefs.h
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for va_copy" >&5
 $as_echo_n "checking for va_copy... " >&6; }

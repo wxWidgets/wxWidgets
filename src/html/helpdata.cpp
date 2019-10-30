@@ -502,16 +502,12 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
 {
-#if wxUSE_WCHAR_T
-        #if wxUSE_UNICODE
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).mb_str(wxConvISO8859_1), conv)
-        #else
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).wc_str(conv), wxConvLocal)
-        #endif
+#if wxUSE_UNICODE
+    #define CORRECT_STR(str, conv) \
+        str = wxString((str).mb_str(wxConvISO8859_1), conv)
 #else
-    #define CORRECT_STR(str, conv)
+    #define CORRECT_STR(str, conv) \
+        str = wxString((str).wc_str(conv), wxConvLocal)
 #endif
 
     wxFileSystem fsys;

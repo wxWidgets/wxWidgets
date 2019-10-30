@@ -182,8 +182,6 @@
     #define wxUSE_UNICODE 0
 #endif
 
-#define wxUSE_WCHAR_T 0
-
 
 #define wxUSE_EXCEPTIONS    0
 
