@@ -1653,7 +1653,14 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
 
 bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {
-    wxWindowBase::SetBackgroundColour(col);
+    if ( !wxWindowBase::SetBackgroundColour(col) )
+        return false;
+
+    if ( !m_backgroundColour.IsOk() )
+    {
+        // Reset to the default colour as we must have a valid background.
+        m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    }
 
     Display *xdisplay = (Display*) wxGlobalDisplay();
     int xscreen = DefaultScreen( xdisplay );
