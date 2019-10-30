@@ -33,8 +33,6 @@ public:
 
     wxDataFormat& operator=(NativeFormat format)
         { m_format = format; return *this; }
-    wxDataFormat& operator=(const wxDataFormat& format)
-        { m_format = format.m_format; return *this; }
 
     // default copy ctor/assignment operators ok
 

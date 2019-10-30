@@ -23,6 +23,10 @@ wx_option(wxBUILD_COMPATIBILITY
 set(wxBUILD_CUSTOM_SETUP_HEADER_PATH "" CACHE PATH "Include path containing custom wx/setup.h")
 mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 
+if(WIN32)
+    wx_option(wxUSE_DPI_AWARE_MANIFEST "DPI Awareness" "per-monitor" STRINGS "none" "system" "per-monitor")
+endif()
+
 wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
 mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 

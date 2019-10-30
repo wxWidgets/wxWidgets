@@ -327,6 +327,14 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_DPI_AWARE_MANIFEST">
+        <values>0,1,2</values>
+        <default-value>2</default-value>
+        <description>
+            Set DPI Awareness (win32) to none, system or per-monitor.
+        </description>
+    </option>
+
     <option name="USE_THREADS">
         <values>0,1</values>
         <default-value>1</default-value>
