@@ -514,8 +514,6 @@ wxTestGLogHandler(const gchar* domain,
             wxGetCurrentTestName().c_str());
 
     g_log_default_handler(domain, level, message, data);
-
-    fprintf(stderr, "\n");
 }
 
 #endif // __WXGTK__
