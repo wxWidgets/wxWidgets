@@ -505,6 +505,12 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
 wxImage wxImage::ResampleNearest(int width, int height) const
 {
     wxImage image;
+
+    const unsigned long old_width  = M_IMGDATA->m_width;
+    const unsigned long old_height = M_IMGDATA->m_height;
+    wxCHECK_MSG(old_width  <= (ULONG_MAX >> 16) &&
+                old_height <= (ULONG_MAX >> 16), image, "image dimension too large");
+
     image.Create( width, height, false );
 
     unsigned char *data = image.GetData();
@@ -526,8 +532,6 @@ wxImage wxImage::ResampleNearest(int width, int height) const
         }
     }
 
-    const unsigned long old_height = M_IMGDATA->m_height;
-    const unsigned long old_width  = M_IMGDATA->m_width;
     const unsigned long x_delta = (old_width  << 16) / width;
     const unsigned long y_delta = (old_height << 16) / height;
 
