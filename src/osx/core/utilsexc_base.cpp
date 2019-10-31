@@ -41,15 +41,6 @@
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/private.h"
 
-#if wxUSE_SOCKETS
-// global pointer which lives in the base library, set from the net one (see
-// sockosx.cpp) and used from the GUI code (see utilsexc_cf.cpp) -- ugly but
-// needed hack, see the above-mentioned files for more information
-class wxSocketManager;
-extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
-wxSocketManager *wxOSXSocketManagerCF = NULL;
-#endif // wxUSE_SOCKETS
-
 #if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 //===========================================================================
