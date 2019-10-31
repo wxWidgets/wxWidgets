@@ -441,38 +441,17 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
 
     // Make the edit control large enough to allow for internal margins
     //
-    // TODO: remove this if the text ctrl sizing is improved esp. for unix
+    // TODO: remove this if the text ctrl sizing is improved
     //
-#if defined(__WXGTK__)
-    if (rect.x != 0)
-    {
-        rect.x += 1;
-        rect.y += 1;
-        rect.width -= 1;
-        rect.height -= 1;
-    }
-#elif defined(__WXMSW__)
-    if ( rect.x == 0 )
-        rect.x += 2;
-    else
-        rect.x += 3;
-
-    if ( rect.y == 0 )
-        rect.y += 2;
-    else
-        rect.y += 3;
+#if defined(__WXMSW__)
+    rect.x += 2;
+    rect.y += 2;
 
     rect.width -= 2;
     rect.height -= 2;
-#elif defined(__WXOSX__)
-    rect.x += 1;
-    rect.y += 1;
-    
-    rect.width -= 1;
-    rect.height -= 1;
-#else
-    int extra_x = ( rect.x > 2 ) ? 2 : 1;
-    int extra_y = ( rect.y > 2 ) ? 2 : 1;
+#elif !defined(__WXGTK__)
+    int extra_x = 2;
+    int extra_y = 2;
 
     #if defined(__WXMOTIF__)
         extra_x *= 2;
@@ -1266,14 +1245,26 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
 
     // position it in the centre of the rectangle (TODO: support alignment?)
 
+    wxRect cellRect = r;
+
 #if defined(__WXGTK__) || defined (__WXMOTIF__)
+#if defined(__WXGTK3__)
+    cellRect.x += 6;
+    cellRect.width -= 12;
+#else
     // the checkbox without label still has some space to the right in wxGTK,
     // so shift it to the right
+    // TODO: check offsets
+    cellRect.x += 2;
+    cellRect.width -= 2;
     size.x -= 8;
+#endif
 #elif defined(__WXMSW__)
-    // here too, but in other way
-    size.x += 1;
-    size.y -= 2;
+    cellRect.x += 2;
+    cellRect.width -= 2;
+#elif defined(__WXOSX__)
+    cellRect.x += 3;
+    cellRect.width -= 6;
 #endif
 
     int hAlign = wxALIGN_CENTRE;
@@ -1284,23 +1275,18 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     int x = 0, y = 0;
     if (hAlign == wxALIGN_LEFT)
     {
-        x = r.x + 2;
-
-#ifdef __WXMSW__
-        x += 2;
-#endif
-
-        y = r.y + r.height / 2 - size.y / 2;
+        x = cellRect.x;
+        y = cellRect.y + cellRect.height / 2 - size.y / 2;
     }
     else if (hAlign == wxALIGN_RIGHT)
     {
-        x = r.x + r.width - size.x - 2;
-        y = r.y + r.height / 2 - size.y / 2;
+        x = cellRect.x + cellRect.width - size.x;
+        y = cellRect.y + cellRect.height / 2 - size.y / 2;
     }
     else if (hAlign == wxALIGN_CENTRE)
     {
-        x = r.x + r.width / 2 - size.x / 2;
-        y = r.y + r.height / 2 - size.y / 2;
+        x = cellRect.x + cellRect.width / 2 - size.x / 2;
+        y = cellRect.y + cellRect.height / 2 - size.y / 2;
     }
 
     m_control->Move(x, y);
