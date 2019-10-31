@@ -772,6 +772,9 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     if ( HasRange() )
     {
         Spin()->SetValue((int)m_value);
+        // Select all the text for convenience of editing and for compatibility
+        // with the plain text editor.
+        Spin()->SetSelection(-1, -1);
         Spin()->SetFocus();
     }
     else
