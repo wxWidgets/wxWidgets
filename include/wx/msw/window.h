@@ -168,6 +168,12 @@ public:
     void AssociateHandle(WXWidget handle) wxOVERRIDE;
     void DissociateHandle() wxOVERRIDE;
 
+    // returns the handle of the native window to focus when this wxWindow gets
+    // focus  (i.e. in composite windows: by default, this is just the HWND for
+    // this window itself, but it can be overridden to return something
+    // different for composite controls
+    virtual WXHWND MSWGetFocusHWND() const { return GetHWND(); }
+
     // does this window have deferred position and/or size?
     bool IsSizeDeferred() const;
 

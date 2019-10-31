@@ -522,6 +522,13 @@ void wxSpinCtrl::SetLayoutDirection(wxLayoutDirection dir)
     SetSize(-1, -1, -1, -1, wxSIZE_AUTO | wxSIZE_FORCE);
 }
 
+WXHWND wxSpinCtrl::MSWGetFocusHWND() const
+{
+    // Return the buddy hwnd because it shuld be focused instead of the
+    // wxSpinCtrl itself.
+    return m_hwndBuddy;
+}
+
 // ----------------------------------------------------------------------------
 // wxSpinButton methods
 // ----------------------------------------------------------------------------
@@ -651,11 +658,6 @@ bool wxSpinCtrl::Enable(bool enable)
     MSWEnableHWND(GetBuddyHwnd(), enable);
 
     return true;
-}
-
-void wxSpinCtrl::SetFocus()
-{
-    ::SetFocus(GetBuddyHwnd());
 }
 
 #if wxUSE_TOOLTIPS
