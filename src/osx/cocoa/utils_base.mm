@@ -204,19 +204,19 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
         wxLogDebug(wxT("wxCocoaLaunch No file to launch!"));
         return false ;
     }
-    
+
     // Path to bundle
     wxString path = *argv++;
     NSError *error = nil;
     NSURL *url = [NSURL fileURLWithPath:wxCFStringRef(path).AsNSString() isDirectory:YES];
-    
+
     // Check the URL validity
     if( url == nil )
     {
         wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path.c_str());
         return false ;
     }
-    
+
     // Loop through command line arguments to the bundle,
     // turn them into CFURLs and then put them in cfaFiles
     // For use to launch services call
@@ -253,7 +253,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
                        *argv);
             continue;
         }
-        
+
         // Add the valid CFURL to the argument array and then
         // release it as the CFArray adds a ref count to it
         [params addObject:cfurlCurrentFile];
@@ -263,7 +263,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
                                              configuration:[NSDictionary dictionaryWithObject:params forKey:NSWorkspaceLaunchConfigurationArguments]
                                              error:&error];
     [params release];
-    
+
     if( app != nil )
         pid = [app processIdentifier];
     else
