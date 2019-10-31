@@ -217,6 +217,14 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
         return false ;
     }
 
+    // Don't try running non-bundled applications here, we don't support output
+    // redirection, which is important for them, unlike for the bundled apps,
+    // so let the generic Unix code handle them.
+    if ( [NSBundle bundleWithURL:url] == nil )
+    {
+        return false;
+    }
+
     // Loop through command line arguments to the bundle,
     // turn them into CFURLs and then put them in cfaFiles
     // For use to launch services call
