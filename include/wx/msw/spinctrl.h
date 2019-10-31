@@ -77,7 +77,6 @@ public:
     virtual int  GetValue() const wxOVERRIDE;
     virtual void SetRange(int minVal, int maxVal) wxOVERRIDE;
     virtual bool SetFont(const wxFont &font) wxOVERRIDE;
-    virtual void SetFocus() wxOVERRIDE;
 
     virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual bool Show(bool show = true) wxOVERRIDE;
@@ -114,6 +113,8 @@ public:
     virtual bool ContainsHWND(WXHWND hWnd) const wxOVERRIDE { return hWnd == m_hwndBuddy; }
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+
+    virtual WXHWND MSWGetFocusHWND() const wxOVERRIDE;
 
 protected:
     virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
