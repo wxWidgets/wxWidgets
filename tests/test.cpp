@@ -490,14 +490,43 @@ wxTestGLogHandler(const gchar* domain,
                   const gchar* message,
                   gpointer data)
 {
-    static int s_ignoreDebug = -1;
-    if ( s_ignoreDebug == -1 )
+    static enum Debug { Unknown = -1, None, Some, All } s_debugLog = Unknown;
+    static wxString s_enabledDebugDomains;
+
+    if ( s_debugLog == Unknown )
     {
-        s_ignoreDebug = !wxGetEnv("G_MESSAGES_DEBUG", NULL);
+        if ( !wxGetEnv("G_MESSAGES_DEBUG", &s_enabledDebugDomains) )
+            s_debugLog = None;
+        else if ( s_enabledDebugDomains == "all" )
+            s_debugLog = All;
+        else
+            s_debugLog = Some;
     }
 
-    if ( s_ignoreDebug && level == G_LOG_LEVEL_DEBUG )
-        return;
+    // Check if debug messages in this domain will be logged.
+    if ( level == G_LOG_LEVEL_DEBUG )
+    {
+        switch ( s_debugLog )
+        {
+            case All:
+                break;
+
+            case Some:
+                // Note that this check can result in false positives, e.g.
+                // domain "foo" would pass it even if G_MESSAGES_DEBUG only
+                // contains "foobar", but such cases don't seem to be important
+                // enough to bother accounting for them.
+                if ( s_enabledDebugDomains.find(domain) != wxString::npos )
+                    break;
+                wxFALLTHROUGH;
+
+            case Unknown:
+            case None:
+                // This message won't be logged by the default log handler, so
+                // there is no need to show the context for it neither.
+                return;
+        }
+    }
 
     fprintf(stderr, "\n*** GTK log message while running %s(): ",
             wxGetCurrentTestName().c_str());
