@@ -490,6 +490,15 @@ wxTestGLogHandler(const gchar* domain,
                   const gchar* message,
                   gpointer data)
 {
+    static int s_ignoreDebug = -1;
+    if ( s_ignoreDebug == -1 )
+    {
+        s_ignoreDebug = !wxGetEnv("G_MESSAGES_DEBUG", NULL);
+    }
+
+    if ( s_ignoreDebug && level == G_LOG_LEVEL_DEBUG )
+        return;
+
     fprintf(stderr, "\n*** GTK log message while running %s(): ",
             wxGetCurrentTestName().c_str());
 
