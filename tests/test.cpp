@@ -493,7 +493,7 @@ wxTestGLogHandler(const gchar* domain,
     // Check if debug messages in this domain will be logged.
     if ( level == G_LOG_LEVEL_DEBUG )
     {
-        static consr char* const allowed = getenv("G_MESSAGES_DEBUG");
+        static const char* const allowed = getenv("G_MESSAGES_DEBUG");
 
         // By default debug messages are dropped, but if G_MESSAGES_DEBUG is
         // defined, they're logged for the domains specified in it and if it
