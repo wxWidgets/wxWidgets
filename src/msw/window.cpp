@@ -577,7 +577,7 @@ void wxWindowMSW::SetId(wxWindowID winid)
 
 void wxWindowMSW::SetFocus()
 {
-    HWND hWnd = MSWGetFocusHwnd();
+    HWND hWnd = (HWND)MSWGetFocusHWND();
     wxCHECK_RET( hWnd, wxT("can't set focus to invalid window") );
 
     ::SetLastError(0);
@@ -599,7 +599,7 @@ void wxWindowMSW::SetFocus()
 
 void wxWindowMSW::SetFocusFromKbd()
 {
-    HWND hWnd = MSWGetFocusHwnd();
+    HWND hWnd = (HWND)MSWGetFocusHWND();
 
     // when the focus is given to the control with DLGC_HASSETSEL style from
     // keyboard its contents should be entirely selected: this is what
