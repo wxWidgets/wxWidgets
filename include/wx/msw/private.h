@@ -838,6 +838,7 @@ private:
 // ---------------------------------------------------------------------------
 
 #define GetHwnd()               ((HWND)GetHWND())
+#define MSWGetFocusHwnd()       ((HWND)MSWGetFocusHWND())
 #define GetHwndOf(win)          ((HWND)((win)->GetHWND()))
 // old name
 #define GetWinHwnd              GetHwndOf
