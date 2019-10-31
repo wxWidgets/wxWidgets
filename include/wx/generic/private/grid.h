@@ -1007,5 +1007,12 @@ private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
 
+// Returns the rect of the check box in a cell with the given alignmens
+// and the size.
+// The function is used by wxGridCellBoolEditor and wxGridCellBoolRenderer.
+wxRect wxGetGridCheckBoxRect(const wxSize& checkBoxSize,
+                             const wxRect& cellRect,
+                             int hAlign, int vAlign);
+
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_PRIVATE_H_
