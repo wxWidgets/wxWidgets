@@ -2286,7 +2286,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
 	src/common/fdiodispatcher.cpp \
@@ -2312,7 +2311,6 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
 	src/common/fdiodispatcher.cpp \
@@ -2353,7 +2351,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
@@ -2377,7 +2374,6 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
@@ -2401,7 +2397,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
@@ -2425,7 +2420,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_MOTIF@BASE_OSX_SRC = $(COND_TOOLKIT_MOTIF_BASE_OSX_SRC)
@@ -2449,7 +2443,6 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
@@ -4185,7 +4178,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_cfstring.o \
 	monodll_evtloop_cf.o \
 	monodll_strconv_cf.o \
-	monodll_utilsexc_base.o \
 	monodll_utils_base.o \
 	monodll_core_secretstore.o \
 	monodll_fdiodispatcher.o \
@@ -6172,7 +6164,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_cfstring.o \
 	monolib_evtloop_cf.o \
 	monolib_strconv_cf.o \
-	monolib_utilsexc_base.o \
 	monolib_utils_base.o \
 	monolib_core_secretstore.o \
 	monolib_fdiodispatcher.o \
@@ -8211,7 +8202,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_cfstring.o \
 	basedll_evtloop_cf.o \
 	basedll_strconv_cf.o \
-	basedll_utilsexc_base.o \
 	basedll_utils_base.o \
 	basedll_core_secretstore.o \
 	basedll_fdiodispatcher.o \
@@ -8295,7 +8285,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_cfstring.o \
 	baselib_evtloop_cf.o \
 	baselib_strconv_cf.o \
-	baselib_utilsexc_base.o \
 	baselib_utils_base.o \
 	baselib_core_secretstore.o \
 	baselib_fdiodispatcher.o \
@@ -15895,9 +15884,6 @@ monodll_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(MONODLL_ODEP)
 monodll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
 
-monodll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
-
 monodll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
 
@@ -21165,9 +21151,6 @@ monolib_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(MONOLIB_ODEP)
 
 monolib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
-
-monolib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
 monolib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
@@ -26437,9 +26420,6 @@ basedll_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(BASEDLL_ODEP)
 basedll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
 
-basedll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
-
 basedll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
 
@@ -26913,9 +26893,6 @@ baselib_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(BASELIB_ODEP)
 
 baselib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
-
-baselib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
 baselib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
