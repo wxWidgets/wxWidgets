@@ -440,38 +440,17 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
 
     // Make the edit control large enough to allow for internal margins
     //
-    // TODO: remove this if the text ctrl sizing is improved esp. for unix
+    // TODO: remove this if the text ctrl sizing is improved
     //
-#if defined(__WXGTK__)
-    if (rect.x != 0)
-    {
-        rect.x += 1;
-        rect.y += 1;
-        rect.width -= 1;
-        rect.height -= 1;
-    }
-#elif defined(__WXMSW__)
-    if ( rect.x == 0 )
-        rect.x += 2;
-    else
-        rect.x += 3;
-
-    if ( rect.y == 0 )
-        rect.y += 2;
-    else
-        rect.y += 3;
+#if defined(__WXMSW__)
+    rect.x += 2;
+    rect.y += 2;
 
     rect.width -= 2;
     rect.height -= 2;
-#elif defined(__WXOSX__)
-    rect.x += 1;
-    rect.y += 1;
-    
-    rect.width -= 1;
-    rect.height -= 1;
-#else
-    int extra_x = ( rect.x > 2 ) ? 2 : 1;
-    int extra_y = ( rect.y > 2 ) ? 2 : 1;
+#elif !defined(__WXGTK__)
+    int extra_x = 2;
+    int extra_y = 2;
 
     #if defined(__WXMOTIF__)
         extra_x *= 2;
@@ -1239,73 +1218,28 @@ void wxGridCellBoolEditor::Create(wxWindow* parent,
 
 void wxGridCellBoolEditor::SetSize(const wxRect& r)
 {
-    bool resize = false;
-    wxSize size = m_control->GetSize();
-    wxCoord minSize = wxMin(r.width, r.height);
-
-    // check if the checkbox is not too big/small for this cell
-    wxSize sizeBest = m_control->GetBestSize();
-    if ( !(size == sizeBest) )
-    {
-        // reset to default size if it had been made smaller
-        size = sizeBest;
-
-        resize = true;
-    }
-
-    if ( size.x >= minSize || size.y >= minSize )
-    {
-        // leave 1 pixel margin
-        size.x = size.y = minSize - 2;
-
-        resize = true;
-    }
-
-    if ( resize )
-    {
-        m_control->SetSize(size);
-    }
-
-    // position it in the centre of the rectangle (TODO: support alignment?)
-
-#if defined(__WXGTK__) || defined (__WXMOTIF__)
-    // the checkbox without label still has some space to the right in wxGTK,
-    // so shift it to the right
-    size.x -= 8;
-#elif defined(__WXMSW__)
-    // here too, but in other way
-    size.x += 1;
-    size.y -= 2;
-#endif
-
     int hAlign = wxALIGN_CENTRE;
     int vAlign = wxALIGN_CENTRE;
     if (GetCellAttr())
         GetCellAttr()->GetAlignment(& hAlign, & vAlign);
 
-    int x = 0, y = 0;
-    if (hAlign == wxALIGN_LEFT)
-    {
-        x = r.x + 2;
+    const wxRect
+        checkBoxRect = wxGetGridCheckBoxRect
+                       (
+                            wxRendererNative::Get().
+                                GetCheckBoxSize(GetWindow(), wxCONTROL_CELL),
+                            r,
+                            hAlign, vAlign
+                       );
 
-#ifdef __WXMSW__
-        x += 2;
-#endif
-
-        y = r.y + r.height / 2 - size.y / 2;
-    }
-    else if (hAlign == wxALIGN_RIGHT)
+    // resize the control if required
+    if ( m_control->GetSize() != checkBoxRect.GetSize() )
     {
-        x = r.x + r.width - size.x - 2;
-        y = r.y + r.height / 2 - size.y / 2;
-    }
-    else if (hAlign == wxALIGN_CENTRE)
-    {
-        x = r.x + r.width / 2 - size.x / 2;
-        y = r.y + r.height / 2 - size.y / 2;
+        m_control->SetSize(checkBoxRect.GetSize());
     }
 
-    m_control->Move(x, y);
+    // and move it
+    m_control->Move(checkBoxRect.GetPosition());
 }
 
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
