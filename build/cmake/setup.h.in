@@ -182,8 +182,6 @@
     #cmakedefine01 wxUSE_UNICODE
 #endif
 
-#cmakedefine01 wxUSE_WCHAR_T
-
 
 #cmakedefine01 wxUSE_EXCEPTIONS
 
