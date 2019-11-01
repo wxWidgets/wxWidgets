@@ -5074,6 +5074,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 
     m_paintContext = cr;
     m_updateRegion = wxRegion(int(x1), int(y1), int(x2 - x1), int(y2 - y1));
+    m_nativeUpdateRegion = m_updateRegion;
 #else // !__WXGTK3__
     m_updateRegion = wxRegion(region);
 #if wxGTK_HAS_COMPOSITING_SUPPORT
