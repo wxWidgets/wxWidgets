@@ -28,6 +28,15 @@
     #define wxHAS_NSPROCESSINFO 1
 #endif
 
+#if wxUSE_SOCKETS
+// global pointer which lives in the base library, set from the net one (see
+// sockosx.cpp) and used from the GUI code (see utilsexc_cf.cpp) -- ugly but
+// needed hack, see the above-mentioned files for more information
+class wxSocketManager;
+extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
+wxSocketManager *wxOSXSocketManagerCF = NULL;
+#endif // wxUSE_SOCKETS
+
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {

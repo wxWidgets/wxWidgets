@@ -274,7 +274,6 @@
 		4D0BA8B9F72C3C31BC170CE2 /* progdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA102FF0FFC33DEAEF2FE14 /* progdlgg.cpp */; };
 		4DA209AEF4AD32AAB97F9718 /* htmlcell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68E5188DB6003C35A8C7754D /* htmlcell.cpp */; };
 		4DD98A9436C83CF3B9425A78 /* sysopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F32F6B47EBB23068B1FCDC0D /* sysopt.cpp */; };
-		4E140367282F38C8A904A004 /* utilsexc_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81390F96937631078EFCD891 /* utilsexc_base.cpp */; };
 		4E2737AC738431EB9898B8B6 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E3EB1CCA53E0EA322A1AF /* gzwrite.c */; };
 		4E396D8D2E9138D797F320C6 /* tif_aux.c in Sources */ = {isa = PBXBuildFile; fileRef = D0CDADAF2D893E32A38351E4 /* tif_aux.c */; };
 		502D7B786EAE383B9546F31F /* LexRust.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 24BD2EF635673E819B8406CB /* LexRust.cxx */; };
@@ -1277,7 +1276,6 @@
 		7FCA75FE592C3469AE351FBF /* winpars.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winpars.cpp; path = ../../src/html/winpars.cpp; sourceTree = "<group>"; };
 		7FE0455EBDC63D82B2D88587 /* jcprepct.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jcprepct.c; path = ../../src/jpeg/jcprepct.c; sourceTree = "<group>"; };
 		810EB7316DF3344197C78EC0 /* jcmainct.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jcmainct.c; path = ../../src/jpeg/jcmainct.c; sourceTree = "<group>"; };
-		81390F96937631078EFCD891 /* utilsexc_base.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_base.cpp; path = ../../src/osx/core/utilsexc_base.cpp; sourceTree = "<group>"; };
 		81708CFA21A03013ACB8DDD7 /* checkbox.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = checkbox.mm; path = ../../src/osx/iphone/checkbox.mm; sourceTree = "<group>"; };
 		81821049E39B32C6ABCF6820 /* helpdlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpdlg.cpp; path = ../../src/html/helpdlg.cpp; sourceTree = "<group>"; };
 		81A30C745CA73E30B788B408 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = image.cpp; path = ../../src/common/image.cpp; sourceTree = "<group>"; };
@@ -2653,7 +2651,6 @@
 				5168ADF7BE39351F8F24E1E6 /* cfstring.cpp */,
 				5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */,
 				D5F9383D1CE931499F339D85 /* strconv_cf.cpp */,
-				81390F96937631078EFCD891 /* utilsexc_base.cpp */,
 				2ED0C0702D2734D9B08FC31D /* utils_base.mm */,
 				5BE1FB352696346BB642C045 /* secretstore.cpp */,
 				47F784C2BB5A3B5DAD276583 /* fdiodispatcher.cpp */,
@@ -2968,7 +2965,6 @@
 				1DBDF75500D73A3098015E7F /* cfstring.cpp in Sources */,
 				9FBC642677C63D01AA2511BC /* evtloop_cf.cpp in Sources */,
 				AAAB5DF8E60736D88273DCFE /* strconv_cf.cpp in Sources */,
-				4E140367282F38C8A904A004 /* utilsexc_base.cpp in Sources */,
 				68C300D096BF39239876D043 /* utils_base.mm in Sources */,
 				B0FD1B96EAE635AFBFCF2C92 /* secretstore.cpp in Sources */,
 				D36E76A4CAF5352D9397E1FF /* fdiodispatcher.cpp in Sources */,
