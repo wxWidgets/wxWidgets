@@ -4887,11 +4887,12 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     // update sizers
     if ( GetSizer() )
     {
-        wxSizerItemList::compatibility_iterator current =
-            GetSizer()->GetChildren().GetFirst();
-        while ( current )
+        for ( wxSizerItemList::compatibility_iterator
+              node = GetSizer()->GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
         {
-            wxSizerItem* sizerItem = current->GetData();
+            wxSizerItem* sizerItem = node->GetData();
 
             int border = sizerItem->GetBorder();
             ScaleCoordIfSet(border, scaleFactor);
@@ -4910,16 +4911,15 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
                 ScaleCoordIfSet(size.y, scaleFactor);
                 sizerItem->SetDimension(wxDefaultPosition, size);
             }
-
-            current = current->GetNext();
         }
     }
 
     // update children
-    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
-    while ( current )
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxWindow *childWin = current->GetData();
+        wxWindow *childWin = node->GetData();
         // Update all children, except other top-level windows.
         // These could be on a different monitor and will get their own
         // dpi-changed event.
@@ -4927,8 +4927,6 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
         {
             childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
         }
-
-        current = current->GetNext();
     }
 
     wxDPIChangedEvent event(oldDPI, newDPI);
