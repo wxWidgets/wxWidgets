@@ -18417,7 +18417,7 @@ case "$wxWITH_DPI_MANIFEST" in
         USE_DPI_AWARE_MANIFEST=0 ;;
     system)
         USE_DPI_AWARE_MANIFEST=1 ;;
-    per-monitor)
+    ''|per-monitor)
         USE_DPI_AWARE_MANIFEST=2 ;;
     *)
         USE_DPI_AWARE_MANIFEST=0
