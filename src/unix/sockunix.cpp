@@ -129,6 +129,9 @@ int wxSocketImplUnix::CheckForInput()
 
 void wxSocketImplUnix::OnStateChange(wxSocketNotify event)
 {
+    if ( GetSocketFlags() & wxSOCKET_BLOCK )
+        return;
+    
     NotifyOnStateChange(event);
 
     if ( event == wxSOCKET_LOST )
