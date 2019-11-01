@@ -4884,6 +4884,37 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     // update font if necessary
     MSWUpdateFontOnDPIChange(newDPI);
 
+    // update sizers
+    if ( GetSizer() )
+    {
+        wxSizerItemList::compatibility_iterator current =
+            GetSizer()->GetChildren().GetFirst();
+        while ( current )
+        {
+            wxSizerItem* sizerItem = current->GetData();
+
+            int border = sizerItem->GetBorder();
+            ScaleCoordIfSet(border, scaleFactor);
+            sizerItem->SetBorder(border);
+
+            // only scale sizers and spacers, not windows
+            if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
+            {
+                wxSize min = sizerItem->GetMinSize();
+                ScaleCoordIfSet(min.x, scaleFactor);
+                ScaleCoordIfSet(min.y, scaleFactor);
+                sizerItem->SetMinSize(min);
+
+                wxSize size = sizerItem->GetSize();
+                ScaleCoordIfSet(size.x, scaleFactor);
+                ScaleCoordIfSet(size.y, scaleFactor);
+                sizerItem->SetDimension(wxDefaultPosition, size);
+            }
+
+            current = current->GetNext();
+        }
+    }
+
     // update children
     wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
     while ( current )

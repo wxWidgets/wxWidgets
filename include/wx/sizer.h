@@ -107,6 +107,11 @@ public:
     // default border size used by Border() below
     static int GetDefaultBorder()
     {
+        return wxRound(GetDefaultBorderFractional());
+    }
+
+    static float GetDefaultBorderFractional()
+    {
 #if wxUSE_BORDER_BY_DEFAULT
     #ifdef __WXGTK20__
         // GNOME HIG says to use 6px as the base unit:
@@ -145,7 +150,7 @@ public:
     wxSizerFlags& Border(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, GetDefaultBorder());
+        return Border(direction, wxRound(GetDefaultBorderFractional()));
 #else
         // no borders by default on limited size screen
         wxUnusedVar(direction);
@@ -157,7 +162,7 @@ public:
     wxSizerFlags& DoubleBorder(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, 2*GetDefaultBorder());
+        return Border(direction, wxRound(2 * GetDefaultBorderFractional()));
 #else
         wxUnusedVar(direction);
 
@@ -168,7 +173,7 @@ public:
     wxSizerFlags& TripleBorder(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, 3*GetDefaultBorder());
+        return Border(direction, wxRound(3 * GetDefaultBorderFractional()));
 #else
         wxUnusedVar(direction);
 
@@ -179,7 +184,7 @@ public:
     wxSizerFlags& HorzBorder()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(wxLEFT | wxRIGHT, GetDefaultBorder());
+        return Border(wxLEFT | wxRIGHT, wxRound(GetDefaultBorderFractional()));
 #else
         return *this;
 #endif
@@ -188,7 +193,7 @@ public:
     wxSizerFlags& DoubleHorzBorder()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(wxLEFT | wxRIGHT, 2*GetDefaultBorder());
+        return Border(wxLEFT | wxRIGHT, wxRound(2 * GetDefaultBorderFractional()));
 #else
         return *this;
 #endif
@@ -223,7 +228,7 @@ public:
 
 private:
 #ifdef wxNEEDS_BORDER_IN_PX
-    static int DoGetDefaultBorderInPx();
+    static float DoGetDefaultBorderInPx();
 #endif // wxNEEDS_BORDER_IN_PX
 
     int m_proportion;
