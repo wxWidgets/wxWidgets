@@ -2994,6 +2994,12 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_RETURN:
         case WXK_EXECUTE:
+            if ( event.HasModifiers() )
+            {
+                event.Skip();
+                break;
+            }
+
             SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
             break;
 
