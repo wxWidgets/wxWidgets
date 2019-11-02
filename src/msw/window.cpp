@@ -4886,11 +4886,42 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     // update font if necessary
     MSWUpdateFontOnDPIChange(newDPI);
 
-    // update children
-    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
-    while ( current )
+    // update sizers
+    if ( GetSizer() )
     {
-        wxWindow *childWin = current->GetData();
+        for ( wxSizerItemList::compatibility_iterator
+              node = GetSizer()->GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxSizerItem* sizerItem = node->GetData();
+
+            int border = sizerItem->GetBorder();
+            ScaleCoordIfSet(border, scaleFactor);
+            sizerItem->SetBorder(border);
+
+            // only scale sizers and spacers, not windows
+            if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
+            {
+                wxSize min = sizerItem->GetMinSize();
+                ScaleCoordIfSet(min.x, scaleFactor);
+                ScaleCoordIfSet(min.y, scaleFactor);
+                sizerItem->SetMinSize(min);
+
+                wxSize size = sizerItem->GetSize();
+                ScaleCoordIfSet(size.x, scaleFactor);
+                ScaleCoordIfSet(size.y, scaleFactor);
+                sizerItem->SetDimension(wxDefaultPosition, size);
+            }
+        }
+    }
+
+    // update children
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *childWin = node->GetData();
         // Update all children, except other top-level windows.
         // These could be on a different monitor and will get their own
         // dpi-changed event.
@@ -4898,8 +4929,6 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
         {
             childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
         }
-
-        current = current->GetNext();
     }
 
     wxDPIChangedEvent event(oldDPI, newDPI);
