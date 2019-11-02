@@ -174,6 +174,29 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // set the size now if no initial size specified
     SetInitialSize(size);
 
+    if ( size.IsFullySpecified() )
+    {
+        // Usually all windows get WM_NCCALCSIZE when their size is set,
+        // however if the initial size is fixed, it's not going to change and
+        // this message won't be sent at all, meaning that we won't get a
+        // chance to tell Windows that we need extra space for our custom
+        // themed borders, when using them. So force sending this message by
+        // using SWP_FRAMECHANGED (and use SWP_NOXXX to avoid doing anything
+        // else) to fix themed borders when they're used (if they're not, this
+        // is harmless, and it's simpler and more fool proof to always do it
+        // rather than try to determine whether we need to do it or not).
+        ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+                       SWP_FRAMECHANGED |
+                       SWP_NOSIZE |
+                       SWP_NOMOVE |
+                       SWP_NOZORDER |
+                       SWP_NOREDRAW |
+                       SWP_NOACTIVATE |
+                       SWP_NOCOPYBITS |
+                       SWP_NOOWNERZORDER |
+                       SWP_NOSENDCHANGING);
+    }
+
     return true;
 }
 
