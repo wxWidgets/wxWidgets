@@ -9,7 +9,7 @@
 
 #ifndef _WX_CHESSBOARD_H_
 
-#include <wx/wx.h>
+#include "wx/wx.h"
 
 // A chessboard is organized in columns (called files)
 // and rows (called ranks). In a 2D view,

@@ -41,7 +41,7 @@ ChessBoard::ChessBoard(wxWindow* parent)
 
     file = FileLetters[colIdx],
     // convert rowIdx (top to down 0 to 7) to rank (top to down 8 to 1)
-    rank = static_cast<wxUint8>((rowIdx - SquaresPerSide) * -1);
+    rank = static_cast<wxUint8>(SquaresPerSide - rowIdx);
 
     return true;
 }
