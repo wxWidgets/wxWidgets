@@ -242,6 +242,28 @@ and for the return value of c_str().
 For this conversion, the @a wxConvLibc class instance is used.
 See wxCSConv and wxMBConv.
 
+It is also possible to disable any automatic conversions from C
+strings to Unicode. This can be useful when the @a wxConvLibc encoding
+is not appropriate for the current software and platform. The macro @c
+wxNO_IMPLICIT_WXSTRING_ENCODING disables all implicit conversions, and
+forces the code to explicitly indicate the encoding of all C strings.
+
+@code
+wxString s;
+// s = "world"; does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+s = wxString::FromAscii("world"); // Always compiles
+s = wxASCII_STR("world"); // shorthand for the above
+s = wxString::FromUTF8("world"); // Always compiles
+s = wxString("world", wxConvLibc); // Always compiles, explicit encoding
+
+const char *c;
+// c = s.c_str();  does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+// c = s.mb_str(); does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+c = s.ToAscii(); // Always compiles
+c = s.ToUTF8(); // Always compiles
+c = s.utf8_str(); // Alias for the above
+c = s.mb_str(wxConvLibc); // Always compiles, explicit encoding
+@endcode
 
 @subsection overview_string_iterating Iterating wxString Characters
 

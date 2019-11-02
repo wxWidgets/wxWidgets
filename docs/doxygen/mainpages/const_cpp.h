@@ -375,6 +375,11 @@ more details.
         set to 1 for compatibility reasons as @c -DwxNO_UNSAFE_WXSTRING_CONV
         can be used only compiling the application code, without rebuilding the
         library. Support for this option appeared in wxWidgets 3.1.1.}
+@itemdef{wxNO_IMPLICIT_WXSTRING_ENCODING,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to disable implicit
+        conversions from and to <tt>const char*</tt> in wxString class.
+        Support for this option appeared in wxWidgets 3.1.4.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
         library @c XXX as a DLL; when a monolithic wxWidgets build is used only a
