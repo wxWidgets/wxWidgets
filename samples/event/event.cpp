@@ -36,6 +36,7 @@
 #include <wx/statline.h>
 #include <wx/log.h>
 #include "gestures.h"
+#include "chessboard.h"
 
 // ----------------------------------------------------------------------------
 // event constants
@@ -147,6 +148,9 @@ public:
     // Gesture
     void OnGesture(wxCommandEvent& event);
 
+    // Demonstrates using a new event class
+    void OnNewEventClass(wxCommandEvent& event);
+
 private:
     // symbolic names for the status bar fields
     enum
@@ -226,7 +230,8 @@ enum
     Event_Pop,
     Event_Custom,
     Event_Test,
-    Event_Gesture
+    Event_Gesture,
+    Event_NewEventClass
 };
 
 // ----------------------------------------------------------------------------
@@ -259,6 +264,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Push, MyFrame::OnPushEventHandler)
     EVT_MENU(Event_Pop, MyFrame::OnPopEventHandler)
     EVT_MENU(Event_Gesture, MyFrame::OnGesture)
+    EVT_MENU(Event_NewEventClass, MyFrame::OnNewEventClass)
 
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
 
@@ -390,6 +396,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                       "Generate a custom event");
     menuEvent->Append(Event_Gesture, "&Gesture events\tCtrl-G",
                     "Gesture event");
+    menuEvent->Append(Event_NewEventClass, "&New wxEvent class demo\tCtrl-N",
+                    "Demonstrates a new wxEvent-derived class");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -589,6 +597,13 @@ void MyFrame::OnGesture(wxCommandEvent& WXUNUSED(event))
         m_gestureFrame = new MyGestureFrame();
         m_gestureFrame->Show(true);
     }
+}
+
+void MyFrame::OnNewEventClass(wxCommandEvent& WXUNUSED(event))
+{
+    MyChessBoardDialog dlg(this);
+
+    dlg.ShowModal();
 }
 
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))

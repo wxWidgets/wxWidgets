@@ -44,7 +44,7 @@ wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DEPENDS wxUSE_DRAGIMAGE)
 wx_add_sample(drawing DATA pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp)
 wx_add_sample(erase)
-wx_add_sample(event event.cpp gestures.cpp gestures.h)
+wx_add_sample(event event.cpp gestures.cpp gestures.h chessboard.cpp chessboard.h)
 wx_add_sample(except DEPENDS wxUSE_EXCEPTIONS)
 wx_add_sample(exec)
 wx_add_sample(font DATA wxprivate.ttf)
