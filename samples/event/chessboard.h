@@ -11,33 +11,11 @@
 
 #include "wx/wx.h"
 
-// A chessboard is organized in columns (called files)
-// and rows (called ranks). In a 2D view,
-// files are labeled from left to right 'a' to 'h'
-// while ranks are numbered from bottom to top 1 to 8.
-class ChessBoard : public wxPanel
-{
-public:
-    ChessBoard(wxWindow* parent);
-
-private:
-    static const wxUint8 SquaresPerSide = 8;
-    static const int SquareSizeInDIPs   = 40;
-
-    // square on which mouse left button was pressed
-    char m_fileLeftMDown;
-    wxUint8 m_rankLeftMDown;
-
-    bool ConvertMousePosToFileAndRank(const wxPoint& pos,
-                                      char& file, wxUint8& rank) const;
-
-    void OnPaint(wxPaintEvent& event);
-    void OnMouseLeftDown(wxMouseEvent& event);
-    void OnMouseLeftUp(wxMouseEvent& event);
-
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-};
-
+// A chessboard consists of 8x8 squares organized
+// in columns (called files) and rows (called ranks).
+// In a 2D view, files are labeled from left to right
+// 'a' to 'h' while ranks are numbered from bottom to
+// top 1 to 8.
 // ChessBoardEvent tells us something happened on
 // the chessboard. Either a square was clicked
 // (EVT_CHESSBOARD_CLICKED) or the mouse cursor was dragged
@@ -75,9 +53,12 @@ private:
     wxUint8 m_rankTo;
 };
 
-// Define new event types associated with ChessBoardEvent
-wxDEFINE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
-wxDEFINE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
+
+// Declare new events,
+// the matching definitions are in chessboard.cpp.
+wxDECLARE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
+wxDECLARE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
+
 
 // @TODO: what to write here, the info in the docs seem to be incorrect?
 typedef void (wxEvtHandler::* ChessBoardEventFunction)(ChessBoardEvent&);
@@ -89,11 +70,6 @@ typedef void (wxEvtHandler::* ChessBoardEventFunction)(ChessBoardEvent&);
     wx__DECLARE_EVT1(EVT_CHESSBOARD_CLICKED, id, ChessBoardEventHandler(func))
 #define etEVT_CHESSBOARD_DRAGGED(id, func) \
     wx__DECLARE_EVT1(EVT_CHESSBOARD_DRAGGED, id, ChessBoardEventHandler(func))
-
-// wxDECLARE_EVENT is needed only when ChessBoardEvent
-// is going to be exported from the DLL.
-wxDECLARE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
-wxDECLARE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
 
 
 // Dialog displaying the chessboard

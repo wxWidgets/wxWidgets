@@ -9,9 +9,42 @@
 
 #include "chessboard.h"
 
+
 //
-// ChessBoard implementation
+// ChessBoardEvent
 //
+
+// Define new event types associated with ChessBoardEvent
+wxDEFINE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
+wxDEFINE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
+
+
+//
+// ChessBoard
+//
+class ChessBoard : public wxPanel
+{
+public:
+    ChessBoard(wxWindow* parent);
+
+private:
+    static const wxUint8 SquaresPerSide = 8;
+    static const int SquareSizeInDIPs   = 40;
+
+    // square on which mouse left button was pressed
+    char m_fileLeftMDown;
+    wxUint8 m_rankLeftMDown;
+
+    bool ConvertMousePosToFileAndRank(const wxPoint& pos,
+                                      char& file, wxUint8& rank) const;
+
+    void OnPaint(wxPaintEvent& event);
+    void OnMouseLeftDown(wxMouseEvent& event);
+    void OnMouseLeftUp(wxMouseEvent& event);
+
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+};
+
 ChessBoard::ChessBoard(wxWindow* parent)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_RAISED),
       m_fileLeftMDown('a'), m_rankLeftMDown(1)
@@ -141,6 +174,8 @@ wxSize ChessBoard::DoGetBestClientSize() const
 // MyChessBoardDialog implementation
 //
 
+// For demonstration, event table is used for EVT_CHESSBOARD_CLICKED
+// while Bind() is used for EVT_CHESSBOARD_DRAGGED.
 wxBEGIN_EVENT_TABLE(MyChessBoardDialog, wxDialog)
     etEVT_CHESSBOARD_CLICKED(wxID_ANY, MyChessBoardDialog::OnChessBoardClicked)
 wxEND_EVENT_TABLE()
