@@ -132,7 +132,8 @@ protected:
         // can't use wxBORDER_NONE to calculate a good height, in which case we just have to
         // assume a border in the code above and then subtract the space that would be taken up
         // by a themed border (the thin blue border and the white internal border).
-        size.y -= FromDIP(4);
+        // Don't use FromDIP(4), this seems not needed.
+        size.y -= 4;
 
         self->SetWindowStyleFlag(flags);
 
@@ -533,7 +534,7 @@ void wxSearchCtrl::LayoutControls()
     // of the white border that's part of the theme border. We can also remove a pixel from
     // the height to fit the text control in, because the padding in EDIT_HEIGHT_FROM_CHAR_HEIGHT
     // is already generous.
-    int textY = FromDIP(2);
+    int textY = FromDIP(1);
 #else
     int textY = 0;
 #endif

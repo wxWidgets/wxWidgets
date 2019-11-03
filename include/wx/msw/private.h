@@ -91,12 +91,13 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // Return the height of a native text control corresponding to the given
 // character height (as returned by GetCharHeight() or wxGetCharSize()).
 //
-// The wxWindow parameter must be valid and used for getting the DPI.
-inline int wxGetEditHeightFromCharHeight(int cy, const wxWindow* w)
+// The wxWindow parameter is currently not used but should still be valid.
+inline int wxGetEditHeightFromCharHeight(int cy, const wxWindow* WXUNUSED(w))
 {
     // The value 8 here is empiric, i.e. it's not necessarily correct, but
     // seems to work relatively well.
-    return cy + w->FromDIP(8);
+    // Don't use FromDIP(8), this seems not needed.
+    return cy + 8;
 }
 
 // Compatibility macro used in the existing code. It assumes that it's called
