@@ -579,6 +579,11 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 
 void wxGridCellAttr::GetNonDefaultAlignment(int *hAlign, int *vAlign) const
 {
+    // Default attribute can only have default alignment, so don't return it
+    // from this function.
+    if ( this == m_defGridAttr )
+        return;
+
     if ( hAlign && m_hAlign != wxALIGN_INVALID )
         *hAlign = m_hAlign;
 

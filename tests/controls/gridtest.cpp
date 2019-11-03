@@ -31,6 +31,28 @@
 
 #include "waitforpaint.h"
 
+namespace
+{
+
+// Derive a new class inheriting from wxGrid just to get access to its
+// protected GetCellAttr(). This is not pretty, but we don't have any other way
+// of testing this function.
+class TestableGrid : public wxGrid
+{
+public:
+    explicit TestableGrid(wxWindow* parent)
+        : wxGrid(parent, wxID_ANY)
+    {
+    }
+
+    wxGridCellAttr* CallGetCellAttr(int row, int col) const
+    {
+        return GetCellAttr(row, col);
+    }
+};
+
+} // anonymous namespace
+
 class GridTestCase : public CppUnit::TestCase
 {
 public:
@@ -60,6 +82,7 @@ private:
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( SelectionMode );
         CPPUNIT_TEST( CellFormatting );
+        CPPUNIT_TEST( GetNonDefaultAlignment );
         WXUISIM_TEST( Editable );
         WXUISIM_TEST( ReadOnly );
         WXUISIM_TEST( ResizeScrolledHeader );
@@ -100,6 +123,7 @@ private:
     void Labels();
     void SelectionMode();
     void CellFormatting();
+    void GetNonDefaultAlignment();
     void Editable();
     void ReadOnly();
     void WindowAsEditorControl();
@@ -127,7 +151,7 @@ private:
     static bool ms_nativeheader;
     static bool ms_nativelabels;
 
-    wxGrid *m_grid;
+    TestableGrid *m_grid;
 
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
 };
@@ -144,7 +168,7 @@ bool GridTestCase::ms_nativelabels = false;
 
 void GridTestCase::setUp()
 {
-    m_grid = new wxGrid(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_grid = new TestableGrid(wxTheApp->GetTopWindow());
     m_grid->CreateGrid(10, 2);
     m_grid->SetSize(400, 200);
 
@@ -803,6 +827,21 @@ void GridTestCase::CellFormatting()
 
     m_grid->SetCellTextColour(0, 0, *wxGREEN);
     CPPUNIT_ASSERT_EQUAL(*wxGREEN, m_grid->GetCellTextColour(0, 0));
+}
+
+void GridTestCase::GetNonDefaultAlignment()
+{
+    // GetNonDefaultAlignment() is used by several renderers having their own
+    // preferred alignment, so check that if we don't reset the alignment
+    // explicitly, it doesn't override the alignment used by default.
+    wxGridCellAttr* attr = NULL;
+    int align = wxALIGN_RIGHT;
+
+    attr = m_grid->CallGetCellAttr(0, 0);
+    REQUIRE( attr );
+
+    attr->GetNonDefaultAlignment(&align, NULL);
+    CHECK( align == wxALIGN_RIGHT );
 }
 
 void GridTestCase::Editable()
