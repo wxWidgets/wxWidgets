@@ -452,28 +452,21 @@ wxString wxSearchCtrl::GetDescriptiveText() const
 
 wxSize wxSearchCtrl::DoGetBestClientSize() const
 {
-    wxSize sizeText = m_text->GetBestSize();
-    wxSize sizeSearch(0,0);
-    wxSize sizeCancel(0,0);
-    int searchMargin = 0;
-    int cancelMargin = 0;
+    wxSize size = m_text->GetBestSize();
+
     if ( IsSearchButtonVisible() )
     {
-        sizeSearch = m_searchButton->GetBestSize();
-        searchMargin = FromDIP(MARGIN);
+        size.x += m_searchButton->GetBestSize().x + FromDIP(MARGIN);
     }
     if ( IsCancelButtonVisible() )
     {
-        sizeCancel = m_cancelButton->GetBestSize();
-        cancelMargin = FromDIP(MARGIN);
+        size.x += m_cancelButton->GetBestSize().x + FromDIP(MARGIN);
     }
 
-    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    int horizontalBorder = FromDIP(1) + (size.y - size.y * 14 / 21 ) / 2;
+    size.x += 2 * horizontalBorder;
 
-    // buttons are square and equal to the height of the text control
-    int height = sizeText.y;
-    return wxSize(sizeSearch.x + searchMargin + sizeText.x + cancelMargin + sizeCancel.x + 2*horizontalBorder,
-                  height);
+    return size;
 }
 
 void wxSearchCtrl::LayoutControls()
