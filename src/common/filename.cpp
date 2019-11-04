@@ -93,6 +93,7 @@
 #include "wx/dynlib.h"
 #include "wx/dir.h"
 #include "wx/longlong.h"
+#include "wx/uri.h"
 
 #if defined(__WIN32__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
@@ -1710,10 +1711,12 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
 
-    // Normalize the paths but avoid changing the case or turning a shortcut
-    // into a file that it points to.
-    const int normFlags = wxPATH_NORM_ALL &
-                            ~(wxPATH_NORM_CASE | wxPATH_NORM_SHORTCUT);
+    // Normalize both paths to be absolute but avoid expanding environment
+    // variables in them, this could be unexpected.
+    const int normFlags = wxPATH_NORM_DOTS |
+                          wxPATH_NORM_TILDE |
+                          wxPATH_NORM_ABSOLUTE |
+                          wxPATH_NORM_LONG;
     Normalize(normFlags, cwd, format);
     fnBase.Normalize(normFlags, cwd, format);
 
@@ -2497,6 +2500,92 @@ bool wxFileName::SetPermissions(int permissions)
 #endif // __WINDOWS__
 
     return wxChmod(GetFullPath(), permissions) == 0;
+}
+
+// Returns the native path for a file URL
+wxFileName wxFileName::URLToFileName(const wxString& url)
+{
+    wxString path;
+    if ( !url.StartsWith(wxS("file://"), &path) &&
+            !url.StartsWith(wxS("file:"), &path) )
+    {
+        // Consider it's just the path without any schema.
+        path = url;
+    }
+
+    path = wxURI::Unescape(path);
+
+#ifdef __WINDOWS__
+    // file urls either start with a forward slash (local harddisk),
+    // otherwise they have a servername/sharename notation,
+    // which only exists on msw and corresponds to a unc
+    if ( path.length() > 1 && (path[0u] == wxT('/') && path [1u] != wxT('/')) )
+    {
+        path = path.Mid(1);
+    }
+    else if ( url.StartsWith(wxS("file://")) &&
+              (path.Find(wxT('/')) != wxNOT_FOUND) &&
+              (path.length() > 1) && (path[1u] != wxT(':')) )
+    {
+        path = wxT("//") + path;
+    }
+#endif
+
+    path.Replace(wxS('/'), wxFILE_SEP_PATH);
+
+    return wxFileName(path, wxPATH_NATIVE);
+}
+
+// Escapes non-ASCII and others characters in file: URL to be valid URLs
+static wxString EscapeFileNameCharsInURL(const char *in)
+{
+    wxString s;
+
+    for ( const unsigned char *p = (const unsigned char*)in; *p; ++p )
+    {
+        const unsigned char c = *p;
+
+        // https://tools.ietf.org/html/rfc1738#section-5
+        if ( (c >= '0' && c <= '9') ||
+             (c >= 'a' && c <= 'z') ||
+             (c >= 'A' && c <= 'Z') ||
+             strchr("/:$-_.+!*'(),", c) ) // Plus '/' and ':'
+        {
+            s << c;
+        }
+        else
+        {
+            s << wxString::Format("%%%02x", c);
+        }
+    }
+
+    return s;
+}
+
+// Returns the file URL for a native path
+wxString wxFileName::FileNameToURL(const wxFileName& filename)
+{
+    wxFileName fn = filename;
+    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
+    wxString url = fn.GetFullPath(wxPATH_NATIVE);
+
+#ifndef __UNIX__
+    // unc notation, wxMSW
+    if ( url.Find(wxT("\\\\")) == 0 )
+    {
+        url = url.Mid(2);
+    }
+    else
+    {
+        url = wxT("/") + url;
+    }
+#endif
+
+    url.Replace(wxFILE_SEP_PATH, wxS('/'));
+
+    // Do wxURI- and common practice-compatible escaping: encode the string
+    // into UTF-8, then escape anything non-ASCII:
+    return wxT("file://") + EscapeFileNameCharsInURL(url.utf8_str());
 }
 
 // ----------------------------------------------------------------------------

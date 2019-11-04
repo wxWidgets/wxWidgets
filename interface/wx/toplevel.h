@@ -228,6 +228,12 @@ public:
     /**
         Iconizes or restores the window.
 
+        Note that in wxGTK the change to the window state is not immediate,
+        i.e. IsIconized() will typically return @false right after a call to
+        Iconize() and its return value will only change after the control flow
+        returns to the event loop and the notification about the window being
+        really iconized is received.
+
         @param iconize
             If @true, iconizes the window; if @false, shows and restores it.
 
@@ -277,13 +283,28 @@ public:
     bool IsUsingNativeDecorations() const;
 
     /**
-        See wxWindow::SetAutoLayout(): when auto layout is on, this function gets
-        called automatically when the window is resized.
+        Lays out the children using the window sizer or resizes the only child
+        of the window to cover its entire area.
+
+        This class overrides the base class Layout() method to check if this
+        window contains exactly one child -- which is commonly the case, with
+        wxPanel being often created as the only child of wxTopLevelWindow --
+        and, if this is the case, resizes this child window to cover the entire
+        client area.
+
+        Note that if you associate a sizer with this window, the sizer takes
+        precedence and the only-child-resizing is only used as fallback.
+
+        @returns @false if nothing was done because the window doesn't have
+                 neither a sizer nor a single child, @true otherwise.
     */
     virtual bool Layout();
 
     /**
         Maximizes or restores the window.
+
+        Note that, just as with Iconize(), the change to the window state is
+        not immediate in at least wxGTK port.
 
         @param maximize
             If @true, maximizes the window, otherwise it restores it.

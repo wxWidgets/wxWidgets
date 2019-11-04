@@ -337,7 +337,7 @@ public:
         This method writes the serialized data into the passed pane. Pointers to
         UI elements are not modified.
 
-        @notice This operation also changes the name in the pane information!
+        @note This operation also changes the name in the pane information!
 
         @sa LoadPerspective
         @sa SavePaneInfo().
@@ -889,6 +889,7 @@ public:
 
     /**
         Right() sets the pane dock position to the right side of the frame.
+        This is the same thing as calling Direction(wxAUI_DOCK_RIGHT).
     */
     wxAuiPaneInfo& Right();
 
@@ -932,6 +933,7 @@ public:
 
     /**
         Top() sets the pane dock position to the top of the frame.
+        This is the same thing as calling Direction(wxAUI_DOCK_TOP).
     */
     wxAuiPaneInfo& Top();
 

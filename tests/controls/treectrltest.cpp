@@ -70,6 +70,7 @@ private:
         CPPUNIT_TEST( SelectItemMulti );
         CPPUNIT_TEST( PseudoTest_SetHiddenRoot );
         CPPUNIT_TEST( HasChildren );
+        CPPUNIT_TEST( GetCount );
     CPPUNIT_TEST_SUITE_END();
 
     void ItemClick();
@@ -94,6 +95,7 @@ private:
     void Sort();
     void KeyNavigation();
     void HasChildren();
+    void GetCount();
     void SelectItemSingle();
     void SelectItemMulti();
     void PseudoTest_MultiSelect() { ms_multiSelect = true; }
@@ -175,6 +177,11 @@ void TreeCtrlTestCase::HasChildren()
     CPPUNIT_ASSERT( !m_tree->HasChildren(m_grandchild) );
 }
 
+void TreeCtrlTestCase::GetCount()
+{
+    CPPUNIT_ASSERT_EQUAL(3, m_tree->GetCount());
+}
+
 void TreeCtrlTestCase::SelectItemSingle()
 {
     // this test should be only ran in single-selection control
@@ -237,6 +244,15 @@ void TreeCtrlTestCase::SelectItemMulti()
     m_tree->UnselectItem(m_child1);
     CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
     CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+
+    // collapsing a branch with selected items should still leave them selected
+    m_tree->Expand(m_child1);
+    m_tree->SelectItem(m_grandchild);
+    CHECK( m_tree->IsSelected(m_grandchild) );
+    m_tree->Collapse(m_child1);
+    CHECK( m_tree->IsSelected(m_grandchild) );
+    m_tree->Expand(m_child1);
+    CHECK( m_tree->IsSelected(m_grandchild) );
 }
 
 void TreeCtrlTestCase::ItemClick()
@@ -272,9 +288,10 @@ void TreeCtrlTestCase::DeleteItem()
     EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
+    m_tree->AppendItem(todelete, "deleteme2");
     m_tree->Delete(todelete);
 
-    CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
 }
 
 void TreeCtrlTestCase::DeleteChildren()

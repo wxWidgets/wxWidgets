@@ -47,6 +47,7 @@
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+#include "wx/msw/private/dpiaware.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -375,6 +376,12 @@ void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
 // err is filled with the CDERR_XXX constant
 static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
+    // Extra controls do not handle per-monitor DPI, fall back to system DPI
+    // so entire file-dialog is resized.
+    wxScopedPtr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
+    if ( of->Flags & OFN_ENABLEHOOK )
+        dpiAwareness.reset(new wxMSWImpl::AutoSystemDpiAware());
+
     if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
         return true;
 
@@ -443,6 +450,9 @@ int wxFileDialog::ShowModal()
 
     if ( HasFdFlag(wxFD_FILE_MUST_EXIST) )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    if ( HasFlag(wxFD_SHOW_HIDDEN) )
+        msw_flags |= OFN_FORCESHOWHIDDEN;
     /*
         If the window has been moved the programmer is probably
         trying to center or position it.  Thus we set the callback

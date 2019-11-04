@@ -1570,7 +1570,7 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin, const wxSt
         MenuIterator it(hmenu);
         while ( it.GetNext(buf) )
         {
-            const wxString label = wxStripMenuCodes(buf);
+            const wxString label = wxStripMenuCodes(buf, wxStrip_Menu);
             if ( label == wxGetStockLabel(wxID_HELP, wxSTOCK_NOFLAGS) )
             {
                 inserted = true;

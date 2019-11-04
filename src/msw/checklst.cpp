@@ -255,7 +255,20 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     }
 
     return false;
-  }
+}
+
+void wxCheckListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxCheckListBoxBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    wxSize size = wxRendererNative::Get().GetCheckBoxSize(this);
+    size.x += 2 * CHECKMARK_EXTRA_SPACE + CHECKMARK_LABEL_SPACE;
+
+    for ( unsigned int i = 0; i < GetCount(); ++i )
+    {
+        GetItem(i)->SetMarginWidth(size.GetWidth());
+    }
+}
 
 // check items
 // -----------

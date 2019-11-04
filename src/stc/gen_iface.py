@@ -78,7 +78,8 @@ notMappedSciValues = set([
     'INDIC0_MASK',
     'INDIC1_MASK',
     'INDIC2_MASK',
-    'INDICS_MASK'
+    'INDICS_MASK',
+    'SCFIND_CXX11REGEX'
 ])
 
 # Map some generic typenames to wx types, using return value syntax

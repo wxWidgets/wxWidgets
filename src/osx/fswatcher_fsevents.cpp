@@ -19,6 +19,8 @@
 
 #include "wx/fswatcher.h"
 #include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/private/strconv_cf.h"
+
 #include <CoreFoundation/CoreFoundation.h>
 
 // A small class that we will give the FSEvents

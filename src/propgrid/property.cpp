@@ -18,24 +18,9 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/math.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
     #include "wx/dc.h"
-    #include "wx/dcmemory.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/settings.h"
-    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/image.h"
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
@@ -43,6 +28,7 @@
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/props.h"
+#include "wx/propgrid/editors.h"
 
 #if wxPG_USE_RENDERER_NATIVE
 #include "wx/renderer.h"
@@ -1448,7 +1434,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             // GetPropertyByNameWH(). This optimizes for full list parsing.
             for ( node = list.begin(); node != list.end(); ++node )
             {
-                wxVariant& childValue = *((wxVariant*)*node);
+                wxVariant& childValue = *const_cast<wxVariant*>(*node);
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {
@@ -1592,9 +1578,9 @@ wxVariant wxPGProperty::GetDefaultValue() const
             return wxVariant(wxArrayString());
 #if wxUSE_LONGLONG
         if ( valueType == wxPG_VARIANT_TYPE_LONGLONG )
-            return WXVARIANT(wxLongLong(0));
+            return wxVariant(wxLongLong(0));
         if ( valueType == wxPG_VARIANT_TYPE_ULONGLONG )
-            return WXVARIANT(wxULongLong(0));
+            return wxVariant(wxULongLong(0));
 #endif
         if ( valueType == wxS("wxColour") )
             return WXVARIANT(*wxBLACK);
@@ -2248,8 +2234,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
 wxPGProperty* wxPGProperty::GetMainParent() const
 {
-    const wxPGProperty* curChild = this;
-    const wxPGProperty* curParent = m_parent;
+    wxPGProperty* curChild = const_cast<wxPGProperty*>(this);
+    wxPGProperty* curParent = m_parent;
 
     while ( !curParent->IsRoot() && !curParent->IsCategory() )
     {
@@ -2257,7 +2243,7 @@ wxPGProperty* wxPGProperty::GetMainParent() const
         curParent = curParent->m_parent;
     }
 
-    return (wxPGProperty*) curChild;
+    return curChild;
 }
 
 
@@ -2448,7 +2434,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     else
         allChildrenSpecified = true;
 
-    unsigned int n = 0;
+    size_t n = 0;
     wxVariant childValue = list[n];
 
     //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName());
@@ -2474,7 +2460,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
             }
 
             n++;
-            if ( n == (unsigned int)list.GetCount() )
+            if ( n == list.GetCount() )
                 break;
             childValue = list[n];
         }
@@ -2536,7 +2522,7 @@ wxPGProperty* wxPGProperty::GetPropertyByNameWH( const wxString& name, unsigned 
         i++;
         if ( i == GetChildCount() )
             i = 0;
-    };
+    }
 
     return NULL;
 }
@@ -2729,7 +2715,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
 
             for ( ; node != pList->end(); ++node )
             {
-                const wxVariant& item = *((const wxVariant*)*node);
+                const wxVariant& item = **node;
                 if ( item.GetName() == childName )
                 {
                     listValue = &item;
@@ -2753,7 +2739,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
             if ( listValue && listValue->IsType(wxPG_VARIANT_TYPE_LIST) )
                 childList = listValue;
 
-            if ( !child->AreAllChildrenSpecified((wxVariant*)childList) )
+            if ( !child->AreAllChildrenSpecified(const_cast<wxVariant*>(childList)) )
                 return false;
         }
     }

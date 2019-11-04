@@ -79,7 +79,7 @@ enum wxPortId
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // obsolete
-    wxPORT_QT       = 1 << 10       // wxQT, using QT4
+    wxPORT_QT       = 1 << 10       // wxQT, using Qt 5+
 };
 
 // architecture of the operating system

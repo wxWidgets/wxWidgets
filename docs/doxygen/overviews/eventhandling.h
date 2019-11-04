@@ -225,7 +225,7 @@ global scope as with the event tables), call its Bind<>() method like this:
 @code
 MyFrame::MyFrame(...)
 {
-      Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnExit, this, wxID_EXIT);
+      Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
 }
 @endcode
 
@@ -324,7 +324,7 @@ MyFrameHandler myFrameHandler;
 
 MyFrame::MyFrame()
 {
-      Bind( wxEVT_COMMAND_MENU_SELECTED, &MyFrameHandler::OnFrameExit,
+      Bind( wxEVT_MENU, &MyFrameHandler::OnFrameExit,
               &myFrameHandler, wxID_EXIT );
 }
 @endcode
@@ -346,7 +346,7 @@ void HandleExit( wxCommandEvent & )
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &HandleExit, wxID_EXIT );
+    Bind( wxEVT_MENU, &HandleExit, wxID_EXIT );
 }
 @endcode
 
@@ -367,7 +367,7 @@ MyFunctor myFunctor;
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_COMMAND_MENU_SELECTED, myFunctor, wxID_EXIT );
+    Bind( wxEVT_MENU, myFunctor, wxID_EXIT );
 }
 @endcode
 
@@ -377,7 +377,7 @@ separate functor class:
 @code
 MyFrame::MyFrame()
 {
-    Bind(wxEVT_COMMAND_MENU_SELECTED,
+    Bind(wxEVT_MENU,
          [](wxCommandEvent&) {
             // Do something useful
          },
@@ -407,7 +407,7 @@ MyFrame::MyFrame()
 {
     function< void ( wxCommandEvent & ) > exitHandler( bind( &MyHandler::OnExit, &myHandler, _1 ));
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, exitHandler, wxID_EXIT );
+    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
 }
 @endcode
 
@@ -428,7 +428,7 @@ MyFrame::MyFrame()
     function< void ( wxCommandEvent & ) > exitHandler(
             bind( &MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye" ));
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, exitHandler, wxID_EXIT );
+    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
 }
 @endcode
 
@@ -863,6 +863,32 @@ define your own identifiers. Or, you can use identifiers below wxID_LOWEST.
 Finally, you can allocate identifiers dynamically using wxNewId() function too.
 If you use wxNewId() consistently in your application, you can be sure that
 your identifiers don't conflict accidentally.
+
+
+@subsection overview_events_with_mouse_capture Event Handlers and Mouse Capture
+
+Some events are generated in response to a user action performed using the
+mouse and, often, the mouse will be captured (see wxWindow::CaptureMouse()) by
+the window generating the event in this case. This happens when the user is
+dragging the mouse, i.e. for all events involving resizing something (e.g. @c
+EVT_SPLITTER_SASH_POS_CHANGING), but also, perhaps less obviously, when
+selecting items (e.g. @c EVT_LIST_ITEM_SELECTED).
+
+When the mouse is captured, the control sending events will continue receiving
+all mouse events, meaning that the event handler can't do anything relying on
+getting them in any other window. Most notably, simply showing a modal dialog
+won't work as expected, as the dialog won't receive any mouse input and appear
+unresponsive to the user.
+
+The best solution is to avoid showing modal dialogs from such event handlers
+entirely, as it can be jarring for the user to be interrupted in their workflow
+by a dialog suddenly popping up. However if it's really indispensable to show a
+dialog, you need to forcefully break the existing mouse capture by capturing
+(and then releasing, because you don't really need the capture) it yourself:
+@code
+    dialog.CaptureMouse();
+    dialog.ReleaseMouse();
+@endcode
 
 
 @subsection overview_events_custom_generic Generic Event Table Macros

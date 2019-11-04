@@ -266,33 +266,19 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
 }
 
 // ----------------------------------------------------------------------------
-// wxFont <-> LOGFONT conversion
+// Deprecated wxFont <-> LOGFONT conversion functions
 // ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_3_0
 
 void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 {
-    wxNativeFontInfo fi;
-
-    // maybe we already have LOGFONT for this font?
-    const wxNativeFontInfo *pFI = font->GetNativeFontInfo();
-    if ( !pFI )
-    {
-        // use wxNativeFontInfo methods to build a LOGFONT for this font
-        fi.InitFromFont(*font);
-
-        pFI = &fi;
-    }
-
-    // transfer all the data to LOGFONT
-    *logFont = pFI->lf;
+    *logFont = font->GetNativeFontInfo()->lf;
 }
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 {
-    wxNativeFontInfo info;
-
-    info.lf = *logFont;
-
-    return wxFont(info);
+    return wxFont(wxNativeFontInfo(*logFont, NULL));
 }
 
+#endif // WXWIN_COMPATIBILITY_3_0

@@ -63,21 +63,27 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // style. Shouldn't be called if we don't have any.
     wxString Ellipsize(const wxString& label) const;
 
-    // to be called when updating the size of the static text:
-    // updates the label redoing ellipsization calculations
+
+    // Note that even though ports with native support for ellipsization
+    // (currently only wxGTK) don't need this stuff, we still need to define it
+    // as it's used by wxGenericStaticText.
+
+    // Must be called when the size or font changes to redo the ellipsization
+    // for the new size. Calls WXSetVisibleLabel() to actually update the
+    // display.
     void UpdateLabel();
 
-    // These functions are platform-specific and must be overridden in ports
-    // which do not natively support ellipsization and they must be implemented
-    // in a way so that the m_labelOrig member of wxControl is not touched:
+    // These functions are platform-specific and must be implemented in the
+    // platform-specific code. They must not use or update m_labelOrig.
 
-    // returns the real label currently displayed inside the control.
-    virtual wxString DoGetLabel() const { return wxEmptyString; }
+    // Returns the label currently displayed inside the control, with mnemonics
+    // if any.
+    virtual wxString WXGetVisibleLabel() const = 0;
 
-    // sets the real label currently displayed inside the control,
-    // _without_ invalidating the size. The text passed is always markup-free
-    // but may contain the mnemonic characters.
-    virtual void DoSetLabel(const wxString& WXUNUSED(str)) { }
+    // Sets the real label currently displayed inside the control, _without_
+    // invalidating the size. The text passed is always markup-free but may
+    // contain the mnemonic characters.
+    virtual void WXSetVisibleLabel(const wxString& str) = 0;
 
     // Update the current size to match the best size unless wxST_NO_AUTORESIZE
     // style is explicitly used.

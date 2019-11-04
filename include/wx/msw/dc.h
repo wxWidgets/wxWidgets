@@ -77,6 +77,7 @@ public:
     virtual bool CanGetTextExtent() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual double GetContentScaleFactor() const wxOVERRIDE;
 
 
     virtual void SetMapMode(wxMappingMode mode) wxOVERRIDE;
@@ -202,8 +203,6 @@ public:
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc) wxOVERRIDE;
-    virtual void DoDrawCheckMark(wxCoord x, wxCoord y,
-                                 wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea) wxOVERRIDE;
 

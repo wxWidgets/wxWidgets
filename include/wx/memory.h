@@ -264,7 +264,7 @@ public:
     static wxMemStruct * GetHead () { return m_head; }
     static wxMemStruct * GetTail () { return m_tail; }
 
-    // Set the list sentinals.
+    // Set the list sentinels.
     static wxMemStruct * SetHead (wxMemStruct * st) { return (m_head = st); }
     static wxMemStruct * SetTail (wxMemStruct * st) { return (m_tail = st); }
 

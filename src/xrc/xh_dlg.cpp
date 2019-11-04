@@ -50,7 +50,7 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxDialogXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(dlg, wxDialog);
+    XRC_MAKE_INSTANCE(dlg, wxDialog)
 
     dlg->Create(m_parentAsWindow,
                 GetID(),

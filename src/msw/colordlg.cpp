@@ -40,6 +40,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -166,7 +167,7 @@ void wxColourDialog::Init()
     gs_rectDialog.y = 0;
 }
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     m_parent = parent;
     if (data)
@@ -215,6 +216,8 @@ int wxColourDialog::ShowModal()
     // Set the global pointer for the duration of the modal dialog life-time.
     gs_activeDialog = this;
     wxON_BLOCK_EXIT_NULL(gs_activeDialog);
+
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
 
     // do show the modal dialog
     if ( !::ChooseColor(&chooseColorStruct) )

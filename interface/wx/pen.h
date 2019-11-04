@@ -137,6 +137,17 @@ public:
     wxPenInfo& Join(wxPenJoin join);
 
     wxPenInfo& Cap(wxPenCap cap);
+
+    wxColour GetColour() const;
+    wxBitmap GetStipple() const;
+    wxPenStyle GetStyle() const;
+    wxPenJoin GetJoin() const;
+    wxPenCap GetCap() const;
+    int GetDashes(wxDash **ptr);
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    bool IsTransparent() const;    
+    int GetWidth() const;
 };
 
 

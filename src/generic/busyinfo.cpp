@@ -79,24 +79,21 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     // Vertically center the text in the window.
     sizer->AddStretchSpacer();
 
-    wxControl* text;
 #if wxUSE_MARKUP
+    m_text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
+                                               wxDefaultPosition,
+                                               wxDefaultSize,
+                                               wxALIGN_CENTRE);
     if ( !flags.m_text.empty() )
-    {
-        text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                                 wxDefaultPosition,
-                                                 wxDefaultSize,
-                                                 wxALIGN_CENTRE);
-        text->SetLabelMarkup(flags.m_text);
-    }
+        m_text->SetLabelMarkup(flags.m_text);
     else
+        m_text->SetLabelText(flags.m_label);
+#else
+    m_text = new wxStaticText(panel, wxID_ANY, wxString());
+    m_text->SetLabelText(flags.m_label);
 #endif // wxUSE_MARKUP
-    {
-        text = new wxStaticText(panel, wxID_ANY, wxString());
-        text->SetLabelText(flags.m_label);
-    }
 
-    sizer->Add(text, wxSizerFlags().DoubleBorder().Centre());
+    sizer->Add(m_text, wxSizerFlags().DoubleBorder().Centre());
 
     sizer->AddStretchSpacer();
 
@@ -106,7 +103,7 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     {
         if ( title )
             title->SetForegroundColour(flags.m_foreground);
-        text->SetForegroundColour(flags.m_foreground);
+        m_text->SetForegroundColour(flags.m_foreground);
     }
 
     if ( flags.m_background.IsOk() )
@@ -129,6 +126,16 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     m_InfoFrame->Show(true);
     m_InfoFrame->Refresh();
     m_InfoFrame->Update();
+}
+
+void wxBusyInfo::UpdateText(const wxString& str)
+{
+    m_text->SetLabelMarkup(str);
+}
+
+void wxBusyInfo::UpdateLabel(const wxString& str)
+{
+    m_text->SetLabelText(str);
 }
 
 wxBusyInfo::~wxBusyInfo()

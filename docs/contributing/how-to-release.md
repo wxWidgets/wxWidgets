@@ -50,11 +50,22 @@ and then run it using the new DLLs.
    the straightforward changes like updating the date and version number
    automatically, but please also review and update the contents of the README
    and announcement text.
+
+   Note that the best order depends on the release being prepared: for a
+   development release, `docs/publicity/announce.txt` contains the list of the
+   major changes since the last stable release and should be updated first, as
+   this part of it can then be copied verbatim to the corresponding section of
+   the README file. For the stable releases, it's probably more convenient to
+   update the README with the details of the changes first.
+
+   Here is the list of the files, for reference:
     * Update `docs/readme.txt`: version needs to be changed, content updated.
     * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
     * Put a date on the release line in `docs/changes.txt`.
     * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
     * Update the release announcement post in `docs/publicity/announce.txt`.
+    * Update `docs/msw/binaries.md`: at least the version, but possibly also
+      the list of supported compilers.
 
 2. Commit the changes and tag the release using your GPG key:
 
@@ -154,10 +165,11 @@ in the generated files too.
 ## MSW Visual Studio Official Builds
 
 To build official x86 and x64 shared binaries the following are prerequisites:
- - Visual Studio 2012, 2013, 2015
- - Windows SDK 6.1, 7.1 (required for x64 builds for Visual Studio 2008, 2010)
- - 7z (required for packaging the files)
- - fciv (required for generating the checksums)
+
+     - Visual Studio 2008, 2010, 2012, 2013 and 2015
+     - Windows SDK 6.1, 7.1 (required for x64 builds for Visual Studio 2008, 2010)
+     - 7z (required for packaging the files)
+     - fciv (required for generating the checksums)
 
 The VSxxxCOMNTOOLS environment variables are used to locate the tools required
 for Visual Studio 2012, 2013 and 2015. There are no Microsoft defined variables
@@ -171,18 +183,22 @@ If either of these are blank they are set to the default install location.
 
 To build binaries for a single compiler, open a command prompt (for Visual
 Studio 2008 only an SDK 6.1 developer's command prompt must be used),
-cd to the build\msw\tools\msvs folder and run the batch file 'buildofficial'
+cd to the build\tools\msvs folder and run the batch file 'officialbuild'
 with the vcXXX version number:
 
-Visual Studio 2008  vc90
-Visual Studio 2010  vc100
-Visual Studio 2012  vc110
-Visual Studio 2014  vc120
-Visual Studio 2015  vc140
+    Visual Studio 2008  vc90
+    Visual Studio 2010  vc100
+    Visual Studio 2012  vc110
+    Visual Studio 2014  vc120
+    Visual Studio 2015  vc14x
+
+The Visual Studio 2015, 2017 and 2019 are binary compatible, allowing the
+vc14x binary to be used with any of them.
 
 This will build all of the x86 and x64 binaries for the selected compiler version,
 package them in 7z files and calculate the checksums. The 7z files and the
 checksums are output to the build\msw\packages folder.
 
 All of the compiler packages can be built at the same time by executing the
-build\msw\tools\buildall.bat file (including Visual Studio 2000).
+build\tools\msvs\buildall.bat file from a command prompt. Each build will be
+launched in its own shell.

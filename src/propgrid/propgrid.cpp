@@ -87,28 +87,12 @@
 #endif
 
 
-//#define wxPG_TEXT_INDENT                4 // For the wxComboControl
-//#define wxPG_ALLOW_CLIPPING             1 // If 1, GetUpdateRegion() in OnPaint event handler is not ignored
 #define wxPG_GUTTER_DIV                 3 // gutter is max(iconwidth/gutter_div,gutter_min)
 #define wxPG_GUTTER_MIN                 3 // gutter before and after image of [+] or [-]
 #define wxPG_YSPACING_MIN               1
 #define wxPG_DEFAULT_VSPACING           2 // This matches .NET propertygrid's value,
                                           // but causes normal combobox to spill out under MSW
-
-//#define wxPG_OPTIMAL_WIDTH              200 // Arbitrary
-
-//#define wxPG_MIN_SCROLLBAR_WIDTH        10 // Smallest scrollbar width on any platform
-                                           // Must be larger than largest control border
-                                           // width * 2.
-
-
 #define wxPG_DEFAULT_CURSOR             wxNullCursor
-
-
-//#define wxPG_NAT_CHOICE_BORDER_ANY   0
-
-//#define wxPG_HIDER_BUTTON_HEIGHT        25
-
 #define wxPG_PIXELS_PER_UNIT            m_lineHeight
 
 #ifdef wxPG_ICON_WIDTH
@@ -276,6 +260,7 @@ wxBEGIN_EVENT_TABLE(wxPropertyGrid, wxControl)
   EVT_SET_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_KILL_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_SYS_COLOUR_CHANGED(wxPropertyGrid::OnSysColourChanged)
+  EVT_DPI_CHANGED(wxPropertyGrid::OnDPIChanged)
   EVT_MOTION(wxPropertyGrid::OnMouseMove)
   EVT_LEFT_DOWN(wxPropertyGrid::OnMouseClick)
   EVT_LEFT_UP(wxPropertyGrid::OnMouseUp)
@@ -400,8 +385,6 @@ void wxPropertyGrid::Init1()
     m_iconWidth = wxPG_ICON_WIDTH;
 #endif
 
-    m_prevVY = -1;
-
     m_gutterWidth = wxPG_GUTTER_MIN;
     m_subgroup_extramargin = 10;
 
@@ -471,9 +454,9 @@ void wxPropertyGrid::Init2()
     m_cursorSizeWE = new wxCursor( wxCURSOR_SIZEWE );
 
     // adjust bitmap icon y position so they are centered
-    m_vspacing = wxPG_DEFAULT_VSPACING;
+    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
 
-    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    CalculateFontAndBitmapStuff( m_vspacing );
 
     // Allocate cell data
     m_propertyDefaultCell.SetEmptyData();
@@ -667,26 +650,22 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             else
                 m_pState->m_itemsAdded = true;
         }
-    #if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         if ( !(old_style & wxPG_TOOLTIPS) && (style & wxPG_TOOLTIPS) )
         {
             //
             // Tooltips enabled
             //
-            /*
-            wxToolTip* tooltip = new wxToolTip ( wxEmptyString );
-            SetToolTip ( tooltip );
-            tooltip->SetDelay ( wxPG_TOOLTIP_DELAY );
-            */
+            //wxToolTip::SetDelay(wxPG_TOOLTIP_DELAY);
         }
         else if ( (old_style & wxPG_TOOLTIPS) && !(style & wxPG_TOOLTIPS) )
         {
             //
             // Tooltips disabled
             //
-            SetToolTip( NULL );
+            UnsetToolTip();
         }
-    #endif
+#endif // wxUSE_TOOLTIPS
     }
 
     wxControl::SetWindowStyleFlag ( style );
@@ -1189,7 +1168,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 // returns the best acceptable minimal size
 wxSize wxPropertyGrid::DoGetBestSize() const
 {
-    int lineHeight = wxMax(15, m_lineHeight);
+    int lineHeight = wxMax(FromDIP(15), m_lineHeight);
 
     // don't make the grid too tall (limit height to 10 items) but don't
     // make it too small neither
@@ -1323,7 +1302,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
-    m_iconWidth = wxPG_ICON_WIDTH;
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
 #elif wxPG_ICON_WIDTH
     // scale icon
     m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
@@ -1376,6 +1355,13 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
         RegainColours();
         Refresh();
     }
+}
+
+void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+{
+    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
+    CalculateFontAndBitmapStuff(m_vspacing);
+    Refresh();
 }
 
 // -----------------------------------------------------------------------
@@ -1733,8 +1719,8 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
     ImprovedClientToScreen( &x, &y );
 
-    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X );
-    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y );
+    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X, this );
+    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y, this );
 
     int new_x;
     int new_y;
@@ -2150,7 +2136,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         if ( !p->HasFlag(wxPG_PROP_HIDDEN) )
         {
-            visPropArray.push_back((wxPGProperty*)p);
+            visPropArray.push_back(const_cast<wxPGProperty*>(p));
 
             if ( y > endScanBottomY )
                 break;
@@ -2225,17 +2211,17 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         bool suppressMarginEdge = (GetWindowStyle() & wxPG_HIDE_MARGIN) &&
             (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME) ||
             (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_NONE) && ((GetParent()->GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME)));
-#else
-        bool suppressMarginEdge = false;
-#endif
-        if (!suppressMarginEdge)
-            dc.DrawLine( greyDepth, y, greyDepth, y2 );
-        else
+        if (suppressMarginEdge)
         {
             // Blank out the margin edge
             dc.SetPen(wxPen(GetBackgroundColour()));
             dc.DrawLine( greyDepth, y, greyDepth, y2 );
             dc.SetPen( linepen );
+        }
+        else
+#endif // __WXMSW__
+        {
+            dc.DrawLine(greyDepth, y, greyDepth, y2);
         }
 
         // Splitters
@@ -2657,8 +2643,6 @@ void wxPropertyGrid::Clear()
     m_pState->DoClear();
 
     m_propHover = NULL;
-
-    m_prevVY = 0;
 
     RecalculateVirtualSize();
 
@@ -3610,7 +3594,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     //
     // Try common button handling
-    if ( m_wndEditor2 && event.GetEventType() == wxEVT_BUTTON )
+    if ( IsMainButtonEvent(event) )
     {
         wxPGEditorDialogAdapter* adapter = selected->GetEditorDialog();
 
@@ -4337,7 +4321,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     }
     else
     {
-#if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         //
         // Show help as a tool tip on the editor control.
         //
@@ -5011,7 +4995,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         int ih = m_lineHeight;
         int sy = y;
 
-    #if wxPG_SUPPORT_TOOLTIPS
+    #if wxUSE_TOOLTIPS
         wxPGProperty* prevHover = m_propHover;
         unsigned char prevSide = m_mouseSide;
     #endif
@@ -5032,7 +5016,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
             SendEvent( wxEVT_PG_HIGHLIGHTED, m_propHover );
         }
 
-    #if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         // Store which side we are on
         m_mouseSide = 0;
         if ( columnHit == 1 )
@@ -5100,7 +5084,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                 }
             }
         }
-    #endif
+#endif // wxUSE_TOOLTIPS
 
         if ( splitterHit == -1 ||
              !m_propHover ||

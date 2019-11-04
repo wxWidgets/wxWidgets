@@ -707,10 +707,6 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     {
         windowstyle |= NSUtilityWindowMask;
     }
-    else if ( ( style & wxPOPUP_WINDOW ) )
-    {
-        level = NSPopUpMenuWindowLevel;
-    }
     else if ( ( style & wxFRAME_DRAWER ) )
     {
         /*
@@ -743,6 +739,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     if ( ( style & wxSTAY_ON_TOP ) )
         level = NSModalPanelWindowLevel;
+
+    if ( ( style & wxPOPUP_WINDOW ) )
+        level = NSPopUpMenuWindowLevel;
 
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
 

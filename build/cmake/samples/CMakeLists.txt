@@ -276,8 +276,5 @@ if(WIN32)
         #TODO: reenable when sample is fixed
         #wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
         wx_add_sample(taskbarbutton DEPENDS wxUSE_TASKBARBUTTON)
-        if(MSVC)
-            wx_add_sample(flash DEPENDS wxUSE_ACTIVEX)
-        endif()
     endif()
 endif()

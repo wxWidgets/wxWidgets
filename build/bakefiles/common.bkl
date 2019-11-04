@@ -303,6 +303,10 @@
         <if cond="FORMAT=='dmars' or FORMAT=='dmars_smake'">_WIN32_WINNT=0x0400</if>
     </set>
 
+    <set var="WIN32_DPI_MANIFEST">
+        <if cond="PLATFORM_WIN32=='1' and IS_MSVC=='0'">wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)</if>
+    </set>
+
     <set var="CAIRO_LIB">
         <if cond="USE_CAIRO=='1'">cairo</if>
     </set>
@@ -343,6 +347,7 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
+        <res-define>$(WIN32_DPI_MANIFEST)</res-define>
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
         </if>

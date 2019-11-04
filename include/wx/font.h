@@ -501,6 +501,13 @@ public:
     // account as well.
     static int GetNumericWeightOf(wxFontWeight weight);
 
+    // Some ports need to modify the font object when the DPI of the window it
+    // is used with changes, this function can be used to do it.
+    //
+    // Currently it is only used in wxMSW and is not considered to be part of
+    // wxWidgets public API.
+    virtual void WXAdjustToPPI(const wxSize& WXUNUSED(ppi)) { }
+
     // this doesn't do anything and is kept for compatibility only
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no);)

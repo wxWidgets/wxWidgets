@@ -65,6 +65,8 @@ public:
     virtual int GetBase() const;
     virtual bool SetBase(int base);
 
+    virtual void Refresh( bool eraseBackground = true,
+                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
 
     // implementation only from now on
     // -------------------------------
@@ -75,7 +77,6 @@ public:
     virtual int  GetValue() const wxOVERRIDE;
     virtual void SetRange(int minVal, int maxVal) wxOVERRIDE;
     virtual bool SetFont(const wxFont &font) wxOVERRIDE;
-    virtual void SetFocus() wxOVERRIDE;
 
     virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual bool Show(bool show = true) wxOVERRIDE;
@@ -113,6 +114,8 @@ public:
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
 
+    virtual WXHWND MSWGetFocusHWND() const wxOVERRIDE;
+
 protected:
     virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
     virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
@@ -120,6 +123,8 @@ protected:
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
     virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
     virtual void DoGetClientSize(int *x, int *y) const wxOVERRIDE;
+    virtual void DoClientToScreen(int *x, int *y) const wxOVERRIDE;
+    virtual void DoScreenToClient(int *x, int *y) const wxOVERRIDE;
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
@@ -127,6 +132,7 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // handle processing of special keys
     void OnChar(wxKeyEvent& event);
@@ -162,6 +168,9 @@ private:
     // Determine the (horizontal) pixel overlap between the spin button
     // (up-down control) and the text control (buddy window).
     int GetOverlap() const;
+
+    // Calculate the best size for the number with the given number of digits.
+    wxSize GetBestSizeFromDigitsCount(int digitsCount) const;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
     wxDECLARE_EVENT_TABLE();

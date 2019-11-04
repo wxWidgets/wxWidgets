@@ -20,6 +20,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+
+    #ifdef __WXGTK__
+        #include "wx/stopwatch.h"
+    #endif // __WXGTK__
 #endif // WX_PRECOMP
 
 #include "wx/persist/toplevel.h"
@@ -88,6 +92,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     }
 
     // Now try recreating the frame using the restored values.
+    bool checkIconized = true;
     {
         wxFrame* const frame = CreatePersistenceTestFrame();
 
@@ -106,6 +111,30 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         frame->Iconize();
         frame->Show();
 
+#ifdef __WXGTK__
+        // When using Xvfb, the frame will never get iconized, presumably
+        // because there is no WM, so don't even bother waiting or warning.
+        if ( IsRunningUnderXVFB() )
+        {
+            checkIconized = false;
+        }
+        else
+        {
+            wxStopWatch sw;
+            while ( !frame->IsIconized() )
+            {
+                wxYield();
+                if ( sw.Time() > 500 )
+                {
+                    // 500ms should be enough for the window to end up iconized.
+                    WARN("Frame wasn't iconized as expected");
+                    checkIconized = false;
+                    break;
+                }
+            }
+        }
+#endif // __WXGTK__
+
         delete frame;
     }
 
@@ -115,8 +144,27 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 
         CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
 
+        // As above, we need to show the frame for it to be actually iconized.
+        frame->Show();
+
         CHECK(!frame->IsMaximized());
-        CHECK(frame->IsIconized());
+        if ( checkIconized )
+        {
+#ifdef __WXGTK__
+            wxStopWatch sw;
+            while ( !frame->IsIconized() )
+            {
+                wxYield();
+                if ( sw.Time() > 500 )
+                {
+                    INFO("Abandoning wait after " << sw.Time() << "ms");
+                    break;
+                }
+            }
+#endif // __WXGTK__
+
+            CHECK(frame->IsIconized());
+        }
 
         frame->Restore();
 

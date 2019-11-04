@@ -63,7 +63,7 @@ public:
     // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual Window GetXWindow() const wxOVERRIDE;
+    virtual unsigned long GetXWindow() const wxOVERRIDE;
 
 
     // deprecated methods
@@ -112,6 +112,9 @@ public:
     // implementation from now on
     virtual void GTKHandleRealized() wxOVERRIDE;
 
+#ifdef __WXGTK3__
+    wxSize m_size;
+#endif
 #if WXWIN_COMPATIBILITY_2_8
     wxGLContext      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;

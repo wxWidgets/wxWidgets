@@ -408,7 +408,7 @@ void Server::OnSocketEvent(wxSocketEvent& pEvent)
                 else
                 {
                     wxLogError("Server: cannot create next thread (current threads: %d", m_threadWorkers.size());
-                };
+                }
             }
             else
             {

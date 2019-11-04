@@ -807,10 +807,9 @@ See wxPGMultiButton class reference.
 
 @subsection propgrid_customeventhandling Handling Events Passed from Properties
 
-<b>wxEVT_COMMAND_BUTTON_CLICKED </b>(corresponds to event table macro EVT_BUTTON):
-Occurs when editor button click is not handled by the property itself
-(as is the case, for example, if you set property's editor to TextCtrlAndButton
-from the original TextCtrl).
+@c wxEVT_BUTTON: Occurs when editor button click is not handled by the property
+itself (as is the case, for example, if you set property's editor
+to TextCtrlAndButton from the original TextCtrl).
 
 @subsection propgrid_attributes Property Attributes
 

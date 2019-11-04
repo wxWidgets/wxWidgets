@@ -170,7 +170,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
   m_DataViewCtrlPtr->SetDeleting(true);
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,item);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
 
@@ -179,7 +179,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
   return noFailureFlag;
 }
 
-bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items)
+bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(items))
 {
   bool noFailureFlag;
 
@@ -190,7 +190,7 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
  // has been started and that variables can currently not be updated even when requested by the system:
   m_DataViewCtrlPtr->SetDeleting(true);
  // delete all specified items:
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,items);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
 

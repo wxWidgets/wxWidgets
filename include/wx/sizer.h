@@ -107,6 +107,11 @@ public:
     // default border size used by Border() below
     static int GetDefaultBorder()
     {
+        return wxRound(GetDefaultBorderFractional());
+    }
+
+    static float GetDefaultBorderFractional()
+    {
 #if wxUSE_BORDER_BY_DEFAULT
     #ifdef __WXGTK20__
         // GNOME HIG says to use 6px as the base unit:
@@ -120,13 +125,7 @@ public:
         // current DPI, do it once (and cache the result) in another function.
         #define wxNEEDS_BORDER_IN_PX
 
-        // We don't react to dynamic DPI changes, so we can cache the values of
-        // the border in on-screen pixels after computing it once. This
-        // could/should change in the future.
-        if ( !ms_defaultBorderInPx )
-            ms_defaultBorderInPx = DoGetDefaultBorderInPx();
-
-        return ms_defaultBorderInPx;
+        return DoGetDefaultBorderInPx();
     #endif
 #else
         return 0;
@@ -151,7 +150,7 @@ public:
     wxSizerFlags& Border(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, GetDefaultBorder());
+        return Border(direction, wxRound(GetDefaultBorderFractional()));
 #else
         // no borders by default on limited size screen
         wxUnusedVar(direction);
@@ -163,7 +162,7 @@ public:
     wxSizerFlags& DoubleBorder(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, 2*GetDefaultBorder());
+        return Border(direction, wxRound(2 * GetDefaultBorderFractional()));
 #else
         wxUnusedVar(direction);
 
@@ -174,7 +173,7 @@ public:
     wxSizerFlags& TripleBorder(int direction = wxALL)
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(direction, 3*GetDefaultBorder());
+        return Border(direction, wxRound(3 * GetDefaultBorderFractional()));
 #else
         wxUnusedVar(direction);
 
@@ -185,7 +184,7 @@ public:
     wxSizerFlags& HorzBorder()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(wxLEFT | wxRIGHT, GetDefaultBorder());
+        return Border(wxLEFT | wxRIGHT, wxRound(GetDefaultBorderFractional()));
 #else
         return *this;
 #endif
@@ -194,7 +193,7 @@ public:
     wxSizerFlags& DoubleHorzBorder()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-        return Border(wxLEFT | wxRIGHT, 2*GetDefaultBorder());
+        return Border(wxLEFT | wxRIGHT, wxRound(2 * GetDefaultBorderFractional()));
 #else
         return *this;
 #endif
@@ -229,9 +228,7 @@ public:
 
 private:
 #ifdef wxNEEDS_BORDER_IN_PX
-    static int DoGetDefaultBorderInPx();
-
-    static int ms_defaultBorderInPx;
+    static float DoGetDefaultBorderInPx();
 #endif // wxNEEDS_BORDER_IN_PX
 
     int m_proportion;

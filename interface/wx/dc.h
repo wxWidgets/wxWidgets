@@ -257,6 +257,13 @@ public:
 
     /**
         Clears the device context using the current background brush.
+
+        Note that SetBackground() method must be used to set the brush used by
+        Clear(), the brush used for filling the shapes set by SetBrush() is
+        ignored by it.
+
+        If no background brush was set, solid white brush is used to clear the
+        device context.
     */
     void Clear();
 

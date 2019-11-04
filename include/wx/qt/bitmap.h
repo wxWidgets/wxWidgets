@@ -67,9 +67,9 @@ public:
 
     // implementation:
 #if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED(virtual void SetHeight(int height));
-    wxDEPRECATED(virtual void SetWidth(int width));
-    wxDEPRECATED(virtual void SetDepth(int depth));
+    wxDEPRECATED(virtual void SetHeight(int height) wxOVERRIDE);
+    wxDEPRECATED(virtual void SetWidth(int width) wxOVERRIDE);
+    wxDEPRECATED(virtual void SetDepth(int depth) wxOVERRIDE);
 #endif
 
     void *GetRawData(wxPixelDataBase& data, int bpp);
@@ -109,6 +109,8 @@ public:
     wxMask(const wxBitmap& bitmap);
     virtual ~wxMask();
 
+    wxBitmap GetBitmap() const;
+
     // Implementation
     QBitmap *GetHandle() const;
 
@@ -118,8 +120,6 @@ protected:
     // by the public wrappers
     bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour) wxOVERRIDE;
     bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
-
-    wxBitmap GetBitmap() const;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxMask);

@@ -1070,10 +1070,11 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     if ( win == m_targetWindow )
         return; // nothing to do
 
-#if defined( __WXOSX__ ) && wxUSE_SCROLLBAR
-    if (wxDynamicCast(win, wxScrollBar))
+    if ( !ShouldScrollToChildOnFocus(win) )
+    {
+        // the window does not require to be scrolled into view
         return;
-#endif
+    }
 
     // Fixing ticket: https://trac.wxwidgets.org/ticket/9563
     // When a child inside a wxControlContainer receives a focus, the
@@ -1554,10 +1555,10 @@ wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
         wxSize minSize = win->GetMinSize();
 
         if ( ppuX > 0 )
-            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win);
 
         if ( ppuY > 0 )
-            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win);
     }
 
     return best;

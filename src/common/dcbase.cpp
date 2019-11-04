@@ -1452,7 +1452,7 @@ double wxDCImpl::GetMMToPXx() const
 
 double wxDCImpl::GetMMToPXy() const
 {
-    if ( wxIsNullDouble(m_mm_to_pix_x) )
+    if ( wxIsNullDouble(m_mm_to_pix_y) )
     {
         m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                         (double)wxGetDisplaySizeMM().GetHeight();

@@ -29,11 +29,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/dcscreen.h"
-    #include "wx/toplevel.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/private/window.h"
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 
@@ -238,31 +238,32 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 wxSize wxRadioButton::DoGetBestSize() const
 {
-    static int s_radioSize = 0;
+    static wxPrivate::DpiDependentValue<wxCoord> s_radioSize;
 
-    if ( !s_radioSize )
+    if ( s_radioSize.HasChanged(this) )
     {
-        wxScreenDC dc;
+        wxClientDC dc(const_cast<wxRadioButton*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-        s_radioSize = dc.GetCharHeight();
+        s_radioSize.SetAtNewDPI(dc.GetCharHeight());
     }
 
+    wxCoord& radioSize = s_radioSize.Get();
     wxString str = GetLabel();
 
     int wRadio, hRadio;
     if ( !str.empty() )
     {
         GetTextExtent(GetLabelText(str), &wRadio, &hRadio);
-        wRadio += s_radioSize + GetCharWidth();
+        wRadio += radioSize + GetCharWidth();
 
-        if ( hRadio < s_radioSize )
-            hRadio = s_radioSize;
+        if ( hRadio < radioSize )
+            hRadio = radioSize;
     }
     else
     {
-        wRadio = s_radioSize;
-        hRadio = s_radioSize;
+        wRadio = radioSize;
+        hRadio = radioSize;
     }
 
     return wxSize(wRadio, hRadio);

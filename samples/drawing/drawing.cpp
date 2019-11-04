@@ -123,11 +123,8 @@ public:
     {   if ( !m_renderer ) return false;
         return m_renderer == wxGraphicsRenderer::GetDefaultRenderer();
     }
-    bool IsRendererName(const wxString& name) const
-    {   if ( !m_renderer ) return name.empty();
-        return m_renderer->GetName() == name;
-    }
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
+    void EnableAntiAliasing(bool use) { m_useAntiAliasing = use; Refresh(); }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
     void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
@@ -143,6 +140,7 @@ protected:
     };
 
     void DrawTestLines( int x, int y, int width, wxDC &dc );
+    void DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc);
     void DrawTestPoly(wxDC& dc);
     void DrawTestBrushes(wxDC& dc);
     void DrawText(wxDC& dc);
@@ -176,6 +174,7 @@ private:
     wxPoint      m_currentpoint;
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsRenderer* m_renderer;
+    bool         m_useAntiAliasing;
 #endif
     bool         m_useBuffer;
     bool         m_showBBox;
@@ -206,7 +205,7 @@ public:
 
     void OnGraphicContextNoneUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName(wxEmptyString));
+        event.Check(m_canvas->GetRenderer() == NULL);
     }
 
     void OnGraphicContextDefault(wxCommandEvent& WXUNUSED(event))
@@ -227,7 +226,7 @@ public:
 
     void OnGraphicContextCairoUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("cairo"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetCairoRenderer());
     }
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
@@ -239,7 +238,7 @@ public:
 
     void OnGraphicContextGDIPlusUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("gdiplus"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer());
     }
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
@@ -250,10 +249,19 @@ public:
 
     void OnGraphicContextDirect2DUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("direct2d"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetDirect2DRenderer());
     }
 #endif
 #endif // __WXMSW__
+    void OnAntiAliasing(wxCommandEvent& event)
+    {
+        m_canvas->EnableAntiAliasing(event.IsChecked());
+    }
+
+    void OnAntiAliasingUpdateUI(wxUpdateUIEvent& event)
+    {
+        event.Enable(m_canvas->GetRenderer() != NULL);
+    }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     void OnBuffer(wxCommandEvent& event);
@@ -339,6 +347,9 @@ enum
     File_BBox,
     File_Clip,
     File_Buffer,
+#if wxUSE_GRAPHICS_CONTEXT
+    File_AntiAliasing,
+#endif
     File_Copy,
     File_Save,
 
@@ -513,7 +524,7 @@ wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(MyFrame *parent)
         : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                           wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
+                           wxHSCROLL | wxVSCROLL)
 {
     m_owner = parent;
     m_show = File_ShowDefault;
@@ -523,6 +534,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_rubberBand = false;
 #if wxUSE_GRAPHICS_CONTEXT
     m_renderer = NULL;
+    m_useAntiAliasing = true;
 #endif
     m_useBuffer = false;
     m_showBBox = false;
@@ -689,6 +701,15 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen(penWithCap);
     dc.DrawText("Projecting cap", x+270, y+100);
     dc.DrawLine( x+200, y+110, x+250, y+110);
+}
+
+void MyCanvas::DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc)
+{
+    dc.DrawText("Cross hair", x + 10, y + 10);
+    dc.SetClippingRegion(x, y, width, heigth);
+    dc.SetPen(wxPen(*wxBLUE, 2));
+    dc.CrossHair(x + width / 2, y + heigth / 2);
+    dc.DestroyClippingRegion();
 }
 
 void MyCanvas::DrawDefault(wxDC& dc)
@@ -1627,6 +1648,29 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
         dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText("Stroked path with a gradient pen", gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x + gfr.width/2, gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width, gfr.y + gfr.height/2);
+        pth.AddLineToPoint(gfr.x + gfr.width/2, gfr.y + gfr.height);
+        pth.AddLineToPoint(gfr.x, gfr.y + gfr.height/2);
+        pth.CloseSubpath();
+
+        stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
+        stops.Add(wxColour(255,255,0), 0.33f);
+        stops.Add(*wxGREEN, 0.67f);
+
+        wxGraphicsPen pen = gc->CreatePen(
+            wxGraphicsPenInfo(wxColour(0,0,0)).Width(6).Join(wxJOIN_BEVEL).LinearGradient(
+                gfr.x + gfr.width/2, gfr.y, 
+                gfr.x + gfr.width/2, gfr.y + gfr.height,
+                stops));
+        gc->SetPen(pen);
+        gc->StrokePath(pth);
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
@@ -1826,6 +1870,8 @@ void MyCanvas::Draw(wxDC& pdc)
             return;
         }
 
+        context->SetAntialiasMode(m_useAntiAliasing ? wxANTIALIAS_DEFAULT : wxANTIALIAS_NONE);
+
         gdc.SetBackground(GetBackgroundColour());
         gdc.SetGraphicsContext(context);
     }
@@ -1897,6 +1943,7 @@ void MyCanvas::Draw(wxDC& pdc)
             DrawTestLines( 0, 320, 1, dc );
             DrawTestLines( 0, 540, 2, dc );
             DrawTestLines( 0, 760, 6, dc );
+            DrawCrossHair( 0, 0, 400, 90, dc);
             break;
 
         case File_ShowBrushes:
@@ -2098,6 +2145,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2DUpdateUI)
 #endif
 #endif // __WXMSW__
+    EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
+    EVT_UPDATE_UI (File_AntiAliasing, MyFrame::OnAntiAliasingUpdateUI)
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
@@ -2113,8 +2162,7 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size,
-                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -2142,17 +2190,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
-    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\tCtrl-Y");
-    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\tShift-Ctrl-Y");
+    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\t1");
+    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\t0");
 #if wxUSE_CAIRO
-    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\tCtrl-O");
+    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\t2");
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\tCtrl-+");
+    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\t3");
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
-    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\tCtrl-2");
+    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\t4");
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
@@ -2161,6 +2209,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               "Show extents used in drawing operations");
     menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
     menuFile->AppendCheckItem(File_Buffer, "&Use wx&BufferedPaintDC\tCtrl-Z", "Buffer painting");
+#if wxUSE_GRAPHICS_CONTEXT
+    menuFile->AppendCheckItem(File_AntiAliasing,
+                              "&Anti-Aliasing in wxGraphicContext\tCtrl-Shift-A",
+                              "Enable Anti-Aliasing in wxGraphicContext")
+            ->Check();
+#endif
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");

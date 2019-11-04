@@ -161,9 +161,11 @@ int wxGetTimeZone()
     ftime(&tb);
     return tb.timezone*60;
 #elif defined(__VISUALC__)
-    // We must initialize the time zone information before using it (this will
-    // be done only once internally).
-    _tzset();
+    // We must initialize the time zone information before using it. It's not a
+    // problem if we do it twice due to a race condition, as it's idempotent
+    // anyhow, so don't bother with any locks here.
+    static bool s_tzSet = (_tzset(), true);
+    wxUnusedVar(s_tzSet);
 
     // Starting with VC++ 8 timezone variable is deprecated and is not even
     // available in some standard library version so use the new function for
@@ -177,7 +179,8 @@ int wxGetTimeZone()
     #endif
 #else // Use some kind of time zone variable.
     // In any case we must initialize the time zone before using it.
-    tzset();
+    static bool s_tzSet = (tzset(), true);
+    wxUnusedVar(s_tzSet);
 
     #if defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
         return WX_TIMEZONE;
@@ -327,7 +330,7 @@ wxLongLong wxGetLocalTimeMillis()
 
 #else // !wxUSE_LONGLONG
 
-double wxGetLocalTimeMillis(void)
+double wxGetLocalTimeMillis()
 {
     return (double(clock()) / double(CLOCKS_PER_SEC)) * 1000.0;
 }

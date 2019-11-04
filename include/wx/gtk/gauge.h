@@ -65,8 +65,6 @@ protected:
     // set the gauge value to the value of m_gaugePos
     void DoSetGauge();
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-
 private:
     void Init() { m_rangeMax = m_gaugePos = 0; }
 

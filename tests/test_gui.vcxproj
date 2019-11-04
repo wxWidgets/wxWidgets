@@ -143,7 +143,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -182,7 +181,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -225,7 +223,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -264,7 +261,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -307,7 +303,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -346,7 +341,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -389,7 +383,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -428,7 +421,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>

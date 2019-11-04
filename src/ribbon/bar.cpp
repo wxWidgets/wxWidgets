@@ -672,7 +672,7 @@ void wxRibbonBar::RecalculateTabSizes()
                         continue;
                     if(info->small_must_have_separator_width * (int)(numtabs - i) <= width)
                     {
-                        info->rect.width = info->small_must_have_separator_width;;
+                        info->rect.width = info->small_must_have_separator_width;
                     }
                     else
                     {

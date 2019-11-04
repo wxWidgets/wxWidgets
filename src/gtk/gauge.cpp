@@ -70,16 +70,6 @@ void wxGauge::DoSetGauge()
                                    m_rangeMax ? ((double)m_gaugePos)/m_rangeMax : 0.0);
 }
 
-wxSize wxGauge::DoGetBestSize() const
-{
-    wxSize best;
-    if (HasFlag(wxGA_VERTICAL))
-        best = wxSize(28, 100);
-    else
-        best = wxSize(100, 28);
-    return best;
-}
-
 void wxGauge::SetRange( int range )
 {
     m_rangeMax = range;

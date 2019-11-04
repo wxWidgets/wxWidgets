@@ -213,7 +213,9 @@ enum
            All items were deleted.
            Processes a @c wxEVT_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-           The item has been selected.
+           The item has been selected. Notice that the mouse is captured by the
+           control itself when this event is generated, see @ref
+           overview_events_with_mouse_capture "event handling overview".
            Processes a @c wxEVT_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
@@ -756,6 +758,11 @@ public:
         @a code can be one of @c wxLIST_RECT_BOUNDS, @c wxLIST_RECT_ICON or
         @c wxLIST_RECT_LABEL.
 
+        Note that using @c wxLIST_RECT_ICON with any sub-item but the first one
+        isn't very useful as only the first sub-item can have an icon in
+        wxListCtrl. In this case, i.e. for @c subItem > 0, this function simply
+        returns an empty rectangle in @a rect.
+
         @since 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
@@ -944,6 +951,16 @@ public:
                     int imageIndex);
 
     /**
+        Returns true if the control doesn't currently contain any items.
+
+        Note that the control with some columns is still considered to be empty
+        if it has no rows.
+
+        @since 3.1.3
+     */
+    bool IsEmpty() const;
+
+    /**
         Returns true if the control is currently in virtual report view.
      */
     bool IsVirtual() const;
@@ -1087,6 +1104,16 @@ public:
         @see AssignImageList()
     */
     void SetImageList(wxImageList* imageList, int which);
+
+    /**
+        Check if the item is visible.
+
+        An item is considered visible if at least one pixel of it is present
+        on the screen.
+
+        @since 3.1.3
+    */
+    bool IsVisible(long item) const;
 
     /**
         Sets the data of an item.
@@ -1411,7 +1438,9 @@ protected:
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
         Delete all items.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-        The item has been selected.
+        The item has been selected. Notice that the mouse is captured by the
+        control itself when this event is generated, see @ref
+        overview_events_with_mouse_capture "event handling overview".
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
         The item has been deselected.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
@@ -1630,7 +1659,7 @@ public:
 
         @param parent
             Parent window. Must not be @NULL.
-        @param id
+        @param winid
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.

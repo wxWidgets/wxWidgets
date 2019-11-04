@@ -228,15 +228,12 @@ void wxAuiGenericToolBarArt::DrawBackground(
 
 void wxAuiGenericToolBarArt::DrawPlainBackground(wxDC& dc,
                                                    wxWindow* WXUNUSED(wnd),
-                                                   const wxRect& _rect)
+                                                   const wxRect& rect)
 {
-    wxRect rect = _rect;
-    rect.height++;
-
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    dc.DrawRectangle(rect.GetX() - 1, rect.GetY() - 1,
-                     rect.GetWidth() + 2, rect.GetHeight() + 1);
+    dc.DrawRectangle(rect);
 }
 
 void wxAuiGenericToolBarArt::DrawLabel(
@@ -387,7 +384,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
                                     const wxAuiToolBarItem& item,
                                     const wxRect& rect)
 {
-    int dropdownWidth = wnd->FromDIP(GetElementSize(wxAUI_TBART_DROPDOWN_SIZE));
+    int dropdownWidth = GetElementSize(wxAUI_TBART_DROPDOWN_SIZE);
     int textWidth = 0, textHeight = 0, textX = 0, textY = 0;
     int bmpX = 0, bmpY = 0, dropBmpX = 0, dropBmpY = 0;
 
@@ -634,7 +631,7 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     // and add some extra space in front of the drop down button
     if (item.HasDropDown())
     {
-        int dropdownWidth = wnd->FromDIP(GetElementSize(wxAUI_TBART_DROPDOWN_SIZE));
+        int dropdownWidth = GetElementSize(wxAUI_TBART_DROPDOWN_SIZE);
         width += dropdownWidth + wnd->FromDIP(4);
     }
 
@@ -2329,22 +2326,6 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 
 
 
-void wxAuiToolBar::DoSetSize(int x,
-                             int y,
-                             int width,
-                             int height,
-                             int sizeFlags)
-{
-    wxSize parent_size = GetParent()->GetClientSize();
-    if (x + width > parent_size.x)
-        width = wxMax(0, parent_size.x - x);
-    if (y + height > parent_size.y)
-        height = wxMax(0, parent_size.y - y);
-
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-}
-
-
 void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
 {
     // if orientation doesn't match dock, fix it
@@ -2640,7 +2621,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
         int mouse_x = evt.GetX();
         wxRect rect = m_actionItem->m_sizerItem->GetRect();
-        int dropdownWidth = FromDIP(m_art->GetElementSize(wxAUI_TBART_DROPDOWN_SIZE));
+        int dropdownWidth = m_art->GetElementSize(wxAUI_TBART_DROPDOWN_SIZE);
         const bool dropDownHit = m_actionItem->m_dropDown &&
                                  mouse_x >= (rect.x+rect.width-dropdownWidth) &&
                                  mouse_x < (rect.x+rect.width);

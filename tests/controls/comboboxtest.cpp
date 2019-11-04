@@ -231,4 +231,23 @@ void ComboBoxTestCase::IsEmpty()
 #endif
 }
 
+TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")
+{
+    class ComboBoxCreator : public TextLikeControlCreator
+    {
+    public:
+        virtual wxControl* Create(wxWindow* parent, int style) const wxOVERRIDE
+        {
+            const wxString choices[] = { "foo", "bar", "baz" };
+
+            return new wxComboBox(parent, wxID_ANY, wxString(),
+                                  wxDefaultPosition, wxDefaultSize,
+                                  WXSIZEOF(choices), choices,
+                                  style);
+        }
+    };
+
+    TestProcessEnter(ComboBoxCreator());
+}
+
 #endif //wxUSE_COMBOBOX

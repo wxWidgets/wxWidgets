@@ -214,8 +214,7 @@ wxEND_EVENT_TABLE()
 // My frame constructor
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxSplitterWindow sample",
-                 wxDefaultPosition, wxSize(420, 300),
-                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+                 wxDefaultPosition, wxSize(420, 300))
 {
     SetIcon(wxICON(sample));
 
@@ -551,7 +550,7 @@ void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 
 MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
         : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                           wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
+                           wxHSCROLL | wxVSCROLL)
 {
     m_mirror = mirror;
     SetScrollbars(20, 20, 5, 5);

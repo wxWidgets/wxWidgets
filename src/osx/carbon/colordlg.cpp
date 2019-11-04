@@ -31,12 +31,12 @@ wxColourDialog::wxColourDialog()
     m_dialogParent = NULL;
 }
 
-wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
+wxColourDialog::wxColourDialog(wxWindow *parent, const wxColourData *data)
 {
     Create(parent, data);
 }
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     m_dialogParent = parent;
 

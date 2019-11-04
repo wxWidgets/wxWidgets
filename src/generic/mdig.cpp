@@ -382,7 +382,9 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
 wxIMPLEMENT_DYNAMIC_CLASS(wxGenericMDIChildFrame, wxFrame);
 
 wxBEGIN_EVENT_TABLE(wxGenericMDIChildFrame, wxFrame)
+#if wxUSE_MENUS
     EVT_MENU_HIGHLIGHT_ALL(wxGenericMDIChildFrame::OnMenuHighlight)
+#endif // wxUSE_MENUS
 
     EVT_CLOSE(wxGenericMDIChildFrame::OnClose)
 wxEND_EVENT_TABLE()
@@ -493,6 +495,7 @@ void wxGenericMDIChildFrame::Activate()
     parent->WXActivateChild(this);
 }
 
+#if wxUSE_MENUS
 void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
 {
     wxGenericMDIParentFrame * const parent = GetGenericMDIParent();
@@ -503,6 +506,7 @@ void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
         parent->OnMenuHighlight(event);
     }
 }
+#endif // wxUSE_MENUS
 
 void wxGenericMDIChildFrame::OnClose(wxCloseEvent& WXUNUSED(event))
 {

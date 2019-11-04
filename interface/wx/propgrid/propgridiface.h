@@ -187,9 +187,8 @@ public:
                fail if validation was enabled and active editor had invalid
                value.
 
-        @remarks In wxPropertyGrid 1.4, this member function used to send
-                 wxPG_EVT_SELECTED. In wxWidgets 2.9 and later, it no longer
-                 does that.
+        @remarks In wxWidgets 2.9 and later, this function no longer
+        sends @c wxPG_EVT_SELECTED.
 
         @see wxPropertyGrid::SelectProperty()
     */
@@ -226,7 +225,10 @@ public:
     /**
         Changes value of a property, as if by user. Use this instead of
         SetPropertyValue() if you need the value to run through validation
-        process, and also send the property change event.
+        process, and also send @c wxEVT_PG_CHANGED.
+
+        @remarks Since this function sends @c wxEVT_PG_CHANGED, it should not
+        be called from @c EVT_PG_CHANGED handler.
 
         @return Returns @true if value was successfully changed.
     */
@@ -1158,8 +1160,8 @@ public:
     /**
         Sets value (wxVariant) of a property.
 
-        @remarks Use wxPropertyGrid::ChangePropertyValue() instead if you need to
-                run through validation process and send property change event.
+        @remarks Use ChangePropertyValue() instead if you need to
+        run through validation process and send property change event.
     */
     void SetPropertyValue( wxPGPropArg id, wxVariant value );
 

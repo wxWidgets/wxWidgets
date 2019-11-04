@@ -16,6 +16,9 @@
 #if wxUSE_PROPGRID
 
 #include "wx/propgrid/propgriddefs.h"
+#include "wx/bitmap.h"
+#include "wx/font.h"
+#include "wx/validate.h"
 
 // -----------------------------------------------------------------------
 
@@ -448,6 +451,19 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
 // -----------------------------------------------------------------------
 
+// Helpers to mark macros as deprecated
+#if (defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)) && !defined(WXBUILDING)
+#define wxPG_STRINGIFY(X) #X
+#define wxPG_DEPRECATED_MACRO_VALUE(value, msg) \
+        _Pragma(wxPG_STRINGIFY(GCC warning msg)) value
+#else
+#define wxPG_DEPRECATED_MACRO_VALUE(value, msg) value
+#endif // clang || GCC
+
+#if wxCHECK_VISUALC_VERSION(10) && !defined(WXBUILDING)
+#define wxPG_MUST_DEPRECATE_MACRO_NAME
+#endif
+
 // wxPGProperty::SetAttribute() and
 // wxPropertyGridInterface::SetPropertyAttribute() accept one of these as
 // attribute name argument.
@@ -518,6 +534,10 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 // Only wxPG_PREFIX_NONE works with Decimal and Octal numbers.
 #define wxPG_UINT_PREFIX                    wxS("Prefix")
 
+// Specific to wxEditorDialogProperty and derivatives, wxString, default is empty.
+// Sets a specific title for the editor dialog.
+#define wxPG_DIALOG_TITLE                   wxS("DialogTitle")
+
 // wxFileProperty/wxImageFileProperty specific, wxChar*, default is
 // detected/varies.
 // Sets the wildcard used in the triggered wxFileDialog. Format is the same.
@@ -536,17 +556,29 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 // Sets the initial path of where to look for files.
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
+#if WXWIN_COMPATIBILITY_3_0
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_FILE_DIALOG_TITLE)
+#endif
 // Specific to wxFileProperty and derivatives, wxString, default is empty.
 // Sets a specific title for the dir dialog.
-#define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
+#define wxPG_FILE_DIALOG_TITLE wxPG_DEPRECATED_MACRO_VALUE(wxS("DialogTitle"),\
+    "wxPG_FILE_DIALOG_TITLE is deprecated. Use wxPG_DIALOG_TITLE instead.")
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // Specific to wxFileProperty and derivatives, long, default is 0.
 // Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
+#if WXWIN_COMPATIBILITY_3_0
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_DIR_DIALOG_MESSAGE)
+#endif
 // Specific to wxDirProperty, wxString, default is empty.
 // Sets a specific message for the dir dialog.
-#define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
+#define wxPG_DIR_DIALOG_MESSAGE wxPG_DEPRECATED_MACRO_VALUE(wxS("DialogMessage"),\
+    "wxPG_DIR_DIALOG_MESSAGE is deprecated. Use wxPG_DIALOG_TITLE instead.")
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // wxArrayStringProperty's string delimiter character. If this is
 // a quotation mark or hyphen, then strings will be quoted instead
@@ -978,14 +1010,6 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     wxDECLARE_ABSTRACT_CLASS(wxPGProperty);
 public:
     typedef wxUint32 FlagType;
-
-    // Default constructor.
-    wxPGProperty();
-
-    // Constructor.
-    // All non-abstract property classes should have a constructor with
-    // the same first two arguments as this one.
-    wxPGProperty( const wxString& label, const wxString& name );
 
     // Virtual destructor.
     // It is customary for derived properties to implement this.
@@ -1896,6 +1920,13 @@ public:
     void*                       m_clientData;
 
 protected:
+
+    // Ctors are ptotected because wxPGProperty is only a base class
+    // for all property classes and shouldn't be instantiated directly.
+    wxPGProperty();
+    // All non-abstract property classes should have a constructor with
+    // the same first two arguments as this one.
+    wxPGProperty(const wxString& label, const wxString& name);
 
     // Sets property cell in fashion that reduces number of exclusive
     // copies of cell data. Used when setting, for instance, same

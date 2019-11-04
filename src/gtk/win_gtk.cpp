@@ -364,6 +364,9 @@ GtkWidget* wxPizza::New(long windowStyle)
     gtk_widget_add_events(widget,
         GDK_EXPOSURE_MASK |
         GDK_SCROLL_MASK |
+#if GTK_CHECK_VERSION(3,4,0)
+        GDK_SMOOTH_SCROLL_MASK |
+#endif
         GDK_POINTER_MOTION_MASK |
         GDK_POINTER_MOTION_HINT_MASK |
         GDK_BUTTON_MOTION_MASK |

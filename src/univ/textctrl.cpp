@@ -1684,8 +1684,8 @@ int wxTextCtrl::GetLineLength(wxTextCoord line) const
     }
     else // multiline
     {
-        wxCHECK_MSG( (size_t)line < GetLineCount(), -1,
-                     wxT("line index out of range") );
+        if ( line < 0 || (size_t)line >= GetLineCount() )
+            return -1;
 
         return GetLines()[line].length();
     }

@@ -176,7 +176,7 @@ if(wxBUILD_PRECOMP)
     # standard c++ headers when using clang.
     # Do not disable precompiled headers entirely but use the main Scintilla
     # header as prefix header so there is at least a small speedup.
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         set(wxSCINTILLA_PREC_HEADER "${wxSOURCE_DIR}/src/stc/scintilla/include/Scintilla.h")
     endif()
     wx_target_enable_precomp(wxscintilla ${wxSCINTILLA_PREC_HEADER})

@@ -20,6 +20,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/time.h"    // wxGetTimeZone()
+    #include "wx/utils.h"   // wxMilliSleep()
 #endif // WX_PRECOMP
 
 #include "wx/wxcrt.h"       // for wxStrstr()
@@ -1699,6 +1700,52 @@ TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
         CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 11:10:10" );
         CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 10:10:10" );
     }
+}
+
+TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
+{
+    // It's unlikely, but possible, that the consecutive functions are called
+    // on different sides of some second boundary, but it really shouldn't
+    // happen more than once in a row.
+    wxDateTime now, unow;
+    for ( int i = 0; i < 3; ++i )
+    {
+        now = wxDateTime::Now();
+        unow = wxDateTime::UNow();
+        if ( now.GetSecond() == unow.GetSecond() )
+            break;
+
+        WARN("wxDateTime::Now() and UNow() returned different "
+             "second values ("
+             << now.GetSecond() << " and " << unow.GetSecond() <<
+             "), retrying.");
+
+        wxMilliSleep(123);
+    }
+
+    CHECK( now.GetYear() == unow.GetYear() );
+    CHECK( now.GetMonth() == unow.GetMonth() );
+    CHECK( now.GetDay() == unow.GetDay() );
+    CHECK( now.GetHour() == unow.GetHour() );
+    CHECK( now.GetMinute() == unow.GetMinute() );
+    CHECK( now.GetSecond() == unow.GetSecond() );
+
+    CHECK( now.GetMillisecond() == 0 );
+
+    // Just checking unow.GetMillisecond() == 0 would fail once per 1000 test
+    // runs on average, which is certainly not a lot, but still try to avoid
+    // such spurious failures.
+    bool gotMS = false;
+    for ( int i = 0; i < 3; ++i )
+    {
+        if ( wxDateTime::UNow().GetMillisecond() != 0 )
+        {
+            gotMS = true;
+            break;
+        }
+    }
+
+    CHECK( gotMS );
 }
 
 #endif // wxUSE_DATETIME

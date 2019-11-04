@@ -95,7 +95,7 @@ public:
         The preprocessor macro `wxHAS_PREF_EDITOR_APPLY_IMMEDIATELY` is defined
         in this case as well.
      */
-    static bool ShouldApplyChangesImmediately()
+    static bool ShouldApplyChangesImmediately();
 
     /**
         Returns whether the preferences dialog is shown modally.

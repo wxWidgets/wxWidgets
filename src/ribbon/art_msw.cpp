@@ -2053,7 +2053,7 @@ void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
     rect.y++;
     if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
     {
-        rect.width--;;
+        rect.width--;
         rect.height -= 2;
     }
     else
@@ -3179,7 +3179,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             }
             break;
         }
-    };
+    }
     return true;
 }
 

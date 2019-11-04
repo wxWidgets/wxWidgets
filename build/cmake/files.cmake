@@ -113,7 +113,6 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/evtloop_cf.cpp
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
-    src/osx/core/utilsexc_base.cpp
     src/osx/cocoa/utils_base.mm
 )
 
@@ -276,6 +275,7 @@ set(QT_HDR
     wx/qt/dataview.h
     wx/generic/activityindicator.h
     ${QT_PLATFORM_HDR}
+    wx/qt/treectrl.h
 )
 
 set(QT_SRC
@@ -374,6 +374,7 @@ set(QT_SRC
     src/qt/dataview.cpp
     src/qt/taskbar.cpp
     ${QT_PLATFORM_SRC}
+    src/qt/treectrl.cpp
 )
 
 set(MEDIA_QT_SRC
@@ -2909,6 +2910,7 @@ set(XRC_SRC
     src/xrc/xh_grid.cpp
     src/xrc/xh_html.cpp
     src/xrc/xh_hyperlink.cpp
+    src/xrc/xh_infobar.cpp
     src/xrc/xh_listb.cpp
     src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
@@ -2946,6 +2948,7 @@ set(XRC_SRC
     src/xrc/xmlres.cpp
     src/xrc/xmladv.cpp
     src/xrc/xmlrsall.cpp
+    src/xrc/xh_dataview.cpp
 )
 
 set(XRC_HDR
@@ -2981,6 +2984,7 @@ set(XRC_HDR
     wx/xrc/xh_grid.h
     wx/xrc/xh_html.h
     wx/xrc/xh_hyperlink.h
+    wx/xrc/xh_infobar.h
     wx/xrc/xh_listb.h
     wx/xrc/xh_listbk.h
     wx/xrc/xh_listc.h
@@ -3015,6 +3019,7 @@ set(XRC_HDR
     wx/xrc/xh_unkwn.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
+    wx/xrc/xh_dataview.h
 )
 
 set(XML_SRC

@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.3], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.1.4], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -40,7 +40,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=1
-wx_release_number=3
+wx_release_number=4
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -407,6 +407,8 @@ if test "$wxUSE_ALL_FEATURES" = "no"; then
     DEFAULT_wxUSE_ARTPROVIDER_TANGO=no
     DEFAULT_wxUSE_MEDIACTRL=no
 fi
+
+AC_ARG_WITH(dpi, [  --with-dpi=none|system|per-monitor   set dpi-awareness (Win32 only), default is per-monitor], [wxWITH_DPI_MANIFEST="$withval"])
 
 dnl ---------------------------------------------------------------------------
 dnl port selection
@@ -1124,6 +1126,18 @@ if test -n "$wxWITH_CXX"; then
     fi
 fi
 
+case "$wxWITH_DPI_MANIFEST" in
+    none)
+        USE_DPI_AWARE_MANIFEST=0 ;;
+    system)
+        USE_DPI_AWARE_MANIFEST=1 ;;
+    ''|per-monitor)
+        USE_DPI_AWARE_MANIFEST=2 ;;
+    *)
+        USE_DPI_AWARE_MANIFEST=0
+        AC_MSG_WARN([Unsupported DPI awareness value "$wxWITH_DPI_MANIFEST" ignored.])
+esac
+
 dnl ar command
 dnl   defines AR with the appropriate command
 dnl
@@ -1561,7 +1575,6 @@ AC_CHECK_SIZEOF(wchar_t, 0,
 if test "$ac_cv_sizeof_wchar_t" = 0; then
     AC_MSG_ERROR([wxWidgets requires wchar_t support.])
 fi
-AC_DEFINE(wxUSE_WCHAR_T)
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
@@ -1847,9 +1860,6 @@ AC_DEFINE(HAVE_STD_UNORDERED_SET)
 AC_DEFINE(HAVE_TYPE_TRAITS)
 
 else dnl Not using C++11, so we do need to run the checks.
-
-dnl check for iostream (as opposed to iostream.h) standard header
-WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
@@ -2569,15 +2579,19 @@ dnl Check for lzma library
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_LIBLZMA" != "no"; then
-    AC_CHECK_HEADER(lzma.h,,,[])
+    dnl We shouldn't depend on the external liblzma if system libraries are
+    dnl explicitly disabled.
+    if test "$wxUSE_SYS_LIBS" != "no"; then
+        AC_CHECK_HEADER(lzma.h,,,[])
 
-    if test "$ac_cv_header_lzma_h" = "yes"; then
-        AC_CHECK_LIB(lzma, lzma_code,
-            [
-                LZMA_LINK="-llzma"
-                LIBS="$LZMA_LINK $LIBS"
-                AC_DEFINE(wxUSE_LIBLZMA)
-            ])
+        if test "$ac_cv_header_lzma_h" = "yes"; then
+            AC_CHECK_LIB(lzma, lzma_code,
+                [
+                    LZMA_LINK="-llzma"
+                    LIBS="$LZMA_LINK $LIBS"
+                    AC_DEFINE(wxUSE_LIBLZMA)
+                ])
+        fi
     fi
 
     if test -z "$LZMA_LINK"; then
@@ -7133,22 +7147,8 @@ if test "$wxUSE_HTML" = "yes"; then
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
     if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-        old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-x objective-c++ $CPPFLAGS"
-        AC_CHECK_HEADER([WebKit/HIWebView.h],
-                        [
-                           AC_DEFINE(wxUSE_WEBKIT)
-                           WEBKIT_LINK="-framework WebKit"
-                        ],
-                        [
-                           AC_MSG_WARN([WebKit headers not found; disabling wxWebKit])
-                           wxUSE_WEBKIT=no
-                        ],
-                        [
-                           #include <Carbon/Carbon.h>
-                           #include <WebKit/WebKit.h>
-                        ])
-        CPPFLAGS="$old_CPPFLAGS"
+        AC_DEFINE(wxUSE_WEBKIT)
+        WEBKIT_LINK="-framework WebKit"
     else
         wxUSE_WEBKIT=no
     fi
@@ -7288,23 +7288,9 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                   ])
             fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-            dnl Under Mac we always have the libraries but check for the
-            dnl headers
-            old_CPPFLAGS="$CPPFLAGS"
-            CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            AC_CHECK_HEADER([WebKit/HIWebView.h],
-                            [
-                                USE_WEBVIEW_WEBKIT=1
-                                WEBKIT_LINK="-framework WebKit"
-                            ],
-                            [
-                                AC_MSG_WARN([WebKit headers not found])
-                            ],
-                            [
-                                #include <Carbon/Carbon.h>
-                                #include <WebKit/WebKit.h>
-                            ])
-            CPPFLAGS="$old_CPPFLAGS"
+            dnl Under Mac we always have the libraries
+            USE_WEBVIEW_WEBKIT=1
+            WEBKIT_LINK="-framework WebKit"
         fi
     fi
 
@@ -8122,6 +8108,7 @@ AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_CXXFLAGS)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
+AC_SUBST(USE_DPI_AWARE_MANIFEST)
 
 case "$TOOLKIT" in
     GTK)

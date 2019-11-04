@@ -54,11 +54,15 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_DEFAULT_VALUE           wxS("DefaultValue")
 
-/** Universal, @c int or @c double. Minimum value for numeric properties.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, @c int or @c double.
+    Minimum value for the property.
 */
 #define wxPG_ATTR_MIN                     wxS("Min")
 
-/** Universal, @c int or @c double. Maximum value for numeric properties.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, @c int or @c double.
+    Maximum value for the property.
 */
 #define wxPG_ATTR_MAX                     wxS("Max")
 
@@ -125,6 +129,13 @@ struct wxPGPaintData
 */
 #define wxPG_UINT_PREFIX                    wxS("Prefix")
 
+/** Built-in attribute specific to wxEditorDialogProperty and derivatives,
+    wxString, default is empty. Sets a specific title for the editor dialog.
+
+    @since 3.1.3
+*/
+#define wxPG_DIALOG_TITLE                   wxS("DialogTitle")
+
 /** wxFileProperty and wxImageFileProperty specific built-in attribute,
     @c wxChar*, default is detected/varies. Sets the wildcard used in
     the triggered wxFileDialog. Format is the same.
@@ -148,11 +159,6 @@ struct wxPGPaintData
 */
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
-/** Built-in attribute specific to wxFileProperty and derivatives, wxString,
-    default is empty. Sets a specific title for the dir dialog.
-*/
-#define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
-
 /** Built-in attribute specific to wxFileProperty and derivatives, @c long,
     default is 0. Sets a specific wxFileDialog style for the file dialog,
     e.g. ::wxFD_SAVE.
@@ -160,11 +166,6 @@ struct wxPGPaintData
     @since 2.9.4
 */
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
-
-/** Built-in attribute specific to wxDirProperty, wxString, default is empty.
-    Sets a specific message for the dir dialog.
-*/
-#define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
 
 /**
     Built-in attribute to set wxArrayStringProperty's string delimiter
@@ -186,17 +187,23 @@ struct wxPGPaintData
 */
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
-/** SpinCtrl editor, @c int or @c double. How much number changes when button
-    is pressed (or up/down on keyboard).
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c int or @c double type. How much number changes when button is pressed
+    (or up/down on keyboard).
 */
 #define wxPG_ATTR_SPINCTRL_STEP             wxS("Step")
 
-/** SpinCtrl editor, @c bool. If @true, value wraps at Min/Max.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c bool. If @true, value wraps at Min/Max.
 */
 #define wxPG_ATTR_SPINCTRL_WRAP             wxS("Wrap")
 
-/** SpinCtrl editor, @c bool. If @true, value can also by changed by moving
-    mouse when left mouse button is being pressed.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c bool. If @true, value can also by changed by moving mouse when left
+    mouse button is being pressed.
 */
 #define wxPG_ATTR_SPINCTRL_MOTION           wxS("MotionSpin")
 
@@ -401,8 +408,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 /**
     @class wxPGProperty
 
-    wxPGProperty is base class for all wxPropertyGrid properties. In
-    sections below we cover few related topics.
+    wxPGProperty is base class for all wxPropertyGrid properties and as such
+    it is not intended to be instantiated directly.
+    In sections below we cover few related topics.
 
     @li @ref pgproperty_properties
     @li @ref pgproperty_creating
@@ -460,7 +468,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxIntProperty
 
-    Like wxStringProperty, but converts text to a signed long integer.
+    It derives from wxNumericProperty and displays value as a signed long integer.
     wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
     To safely convert variant to integer, use code like this:
 
@@ -497,6 +505,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Supported special attributes:
     - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX to specify acceptable value range.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
+    @see @ref propgrid_property_attributes
 
     @subsection wxUIntProperty
 
@@ -516,6 +527,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
     ::wxPG_PREFIX_NONE, ::wxPG_PREFIX_0x and ::wxPG_PREFIX_DOLLAR_SIGN.
     Only ::wxPG_PREFIX_NONE works with decimal and octal numbers.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
     @see @ref propgrid_property_attributes
 
     @remarks
@@ -539,6 +552,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
     value is rendered as text. The default -1 means shortest floating-point
     6-digit representation.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
     @see @ref propgrid_property_attributes
 
     @subsection wxBoolProperty
@@ -597,12 +612,15 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
         m_flags |= wxPG_PROP_NO_ESCAPE;
     @endcode
 
+    Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the text editor dialog.
+
     @subsection wxDirProperty
 
     Like wxLongStringProperty, but the button triggers dir selector instead.
 
     Supported special attributes:
-    - ::wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
+    - ::wxPG_DIALOG_TITLE: Sets specific title for the dir selector.
     @see @ref propgrid_property_attributes
 
     @subsection wxFileProperty
@@ -612,6 +630,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     ::wxPG_FILE_WILDCARD attribute.
 
     Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
     - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
     files..." is default.
     - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
@@ -619,8 +639,6 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
     given path string.
     - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
-    - ::wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
-    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
     @see @ref propgrid_property_attributes
 
     @subsection wxEnumProperty
@@ -648,6 +666,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Supported special attributes:
     - ::wxPG_ARRAY_DELIMITER: Sets string delimiter character.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog.
     Default is comma (',').
     @see @ref propgrid_property_attributes
 
@@ -684,6 +703,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     enter strings that are not in the list of choices. If this value is 1,
     user strings are preferably placed in front of valid choices. If value
     is 2, then those strings will placed behind valid choices.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog.
     @see @ref propgrid_property_attributes
 
     @subsection wxImageFileProperty
@@ -691,6 +711,18 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     Property representing image file(name). Like wxFileProperty,
     but has thumbnail of the image in front of the filename
     and autogenerates wildcard from available image handlers.
+
+    Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
+    - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    files..." is default.
+    - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    (i.e. drive and directory are hidden).
+    - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+    given path string.
+    - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
+    @see @ref propgrid_property_attributes
 
     @subsection wxColourProperty
 
@@ -709,6 +741,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Represents wxFont. Various sub-properties are used to edit individual
     subvalues.
+
+    Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the font dialog.
 
     @subsection wxSystemColourProperty
 
@@ -847,37 +882,6 @@ class wxPGProperty : public wxObject
 {
 public:
     typedef wxUint32 FlagType;
-
-    /**
-        Default constructor.
-    */
-    wxPGProperty();
-
-    /**
-        Constructor.
-        Non-abstract property classes should have constructor of this style:
-
-        @code
-
-        MyProperty( const wxString& label, const wxString& name, const T& value )
-            : wxPGProperty(label, name)
-        {
-            // Generally recommended way to set the initial value
-            // (as it should work in pretty much 100% of cases).
-            wxVariant variant;
-            variant << value;
-            SetValue(variant);
-
-            // If has private child properties then create them here.
-            // For example:
-            //     AddPrivateChild( new wxStringProperty("Subprop 1",
-            //                                           wxPG_LABEL,
-            //                                           value.GetSubProp1()));
-        }
-
-        @endcode
-    */
-    wxPGProperty( const wxString& label, const wxString& name );
 
     /**
         Virtual destructor. It is customary for derived properties to implement this.
@@ -2080,6 +2084,40 @@ public:
     void*                       m_clientData;
 
 protected:
+
+    /**
+        Default constructor. It is protected because wxPGProperty is only
+        a base class for other property classes.
+    */
+    wxPGProperty();
+
+    /**
+        Constructor. It is protected because wxPGProperty is only a base
+        class for other property classes.
+        Non-abstract property classes should have constructor of this style:
+
+        @code
+
+        MyProperty( const wxString& label, const wxString& name, const T& value )
+            : wxPGProperty(label, name)
+        {
+            // Generally recommended way to set the initial value
+            // (as it should work in pretty much 100% of cases).
+            wxVariant variant;
+            variant << value;
+            SetValue(variant);
+
+            // If has private child properties then create them here.
+            // For example:
+            //     AddPrivateChild( new wxStringProperty("Subprop 1",
+            //                                           wxPG_LABEL,
+            //                                           value.GetSubProp1()));
+        }
+
+        @endcode
+    */
+    wxPGProperty( const wxString& label, const wxString& name );
+
     /**
         Sets property cell in fashion that reduces number of exclusive
         copies of cell data. Used when setting, for instance, same

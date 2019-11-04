@@ -1290,8 +1290,8 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     }
 
 
-    int drag_x_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_X);
-    int drag_y_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_Y);
+    int drag_x_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_X, this);
+    int drag_y_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_Y, this);
 
     if (abs(pos.x - m_clickPt.x) > drag_x_threshold ||
         abs(pos.y - m_clickPt.y) > drag_y_threshold)

@@ -95,9 +95,7 @@ wxMetafileRefData::wxMetafileRefData( const wxString& filename )
 
     if ( !filename.empty() )
     {
-        wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(filename)));
-        CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-        wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+        wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(filename));
         m_pdfDoc.reset(CGPDFDocumentCreateWithURL(url));
     }
 }

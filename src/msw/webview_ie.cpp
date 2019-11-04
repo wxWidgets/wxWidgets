@@ -1360,7 +1360,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             if(m_historyEnabled && !m_historyLoadingFromList &&
               (url == GetCurrentURL() ||
               (GetCurrentURL().substr(0, 4) == "file" &&
-               wxFileSystem::URLToFileName(GetCurrentURL()).GetFullPath() == url)))
+               wxFileName::URLToFileName(GetCurrentURL()).GetFullPath() == url)))
             {
                 //If we are not at the end of the list, then erase everything
                 //between us and the end before adding the new page

@@ -300,6 +300,11 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
+
+extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam,
+                                   PVOID pvParam, UINT fWinIni,
+                                   const wxWindow* win);
 
 #if wxUSE_OWNER_DRAWN
 
@@ -960,10 +965,21 @@ extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 // GetCursorPos can fail without populating the POINT. This falls back to GetMessagePos.
 WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
 
-WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
+#if WXWIN_COMPATIBILITY_3_0
+wxDEPRECATED_MSG("Use wxNativeFontInfo::lf directly instead of this private function")
 WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
+wxDEPRECATED_MSG("Use wxNativeFontInfo(LOGFONT) ctor instead of this private function")
 WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
+#endif // WXWIN_COMPATIBILITY_3_0
+
+WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
+
+inline void wxSetWindowFont(HWND hwnd, const wxFont& font)
+{
+    ::SendMessage(hwnd, WM_SETFONT,
+                  (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+}
 
 WXDLLIMPEXP_CORE void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLIMPEXP_CORE void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
@@ -1092,6 +1108,8 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 extern WXDLLIMPEXP_CORE wxSize wxGetHiconSize(HICON hicon);
 
 WXDLLIMPEXP_CORE void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
+
+WXDLLIMPEXP_CORE void wxDrawHVLine(HDC hdc, int x1, int y1, int x2, int y2, COLORREF color, int width);
 
 // fill the client rect of the given window on the provided dc using this brush
 inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)

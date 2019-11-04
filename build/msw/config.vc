@@ -115,6 +115,9 @@ USE_EXCEPTIONS = 1
 # Enable run-time type information (RTTI) in compiled code. [0,1]
 USE_RTTI = 1
 
+# Set DPI Awareness (win32) to none, system or per-monitor. [0,1,2]
+USE_DPI_AWARE_MANIFEST = 2
+
 # Enable threading in compiled code. [0,1]
 USE_THREADS = 1
 

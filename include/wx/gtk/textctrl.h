@@ -142,6 +142,8 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    void GTKOnTextChanged() wxOVERRIDE;
+
 protected:
     // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
@@ -182,7 +184,6 @@ private:
     // overridden wxTextEntry virtual methods
     virtual GtkEditable *GetEditable() const wxOVERRIDE;
     virtual GtkEntry *GetEntry() const wxOVERRIDE;
-    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
 
     // change the font for everything in this control
     void ChangeFontGlobally();
@@ -196,7 +197,7 @@ private:
     // returns either m_text or m_buffer depending on whether the control is
     // single- or multi-line; convenient for the GTK+ functions which work with
     // both
-    void *GetTextObject() const
+    void *GetTextObject() const wxOVERRIDE
     {
         return IsMultiLine() ? static_cast<void *>(m_buffer)
                              : static_cast<void *>(m_text);

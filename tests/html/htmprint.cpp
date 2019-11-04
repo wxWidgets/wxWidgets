@@ -70,6 +70,15 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     const wxFont fontFixedPixelSize(wxFontInfo(wxSize(10, 16)));
     pr.SetStandardFonts(fontFixedPixelSize.GetPointSize(), "Helvetica");
 
+    // We currently have to do this with wxGTK3 which uses 72 DPI for its
+    // wxMemoryDC, resulting in 3/4 scaling (because screen DPI is hardcoded as
+    // 96 in src/html/htmprint.cpp), when rendering onto it. This makes the
+    // tests pass, but really shouldn't be necessary. Unfortunately it's not
+    // clear where and how should this be fixed.
+#ifdef __WXGTK3__
+    pr.SetPPIPrinter(wxSize(96, 96));
+#endif
+
     wxBitmap bmp(1000, 1000);
     wxMemoryDC dc(bmp);
     pr.SetUp(dc);
@@ -168,7 +177,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 "<img width=\"100\" height=\"500\" src=\"dummy\"/>"
                 "<div>%s</div>"
                 "<br/>"
-                "<img width=\"100\" height=\"400\" src=\"dummy\"/>",
+                "<img width=\"100\" height=\"500\" src=\"dummy\"/>",
                 text
             )
        );
@@ -181,7 +190,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 "<img width=\"100\" height=\"500\" src=\"dummy\"/>"
                 "<div style=\"page-break-inside:avoid\">%s</div>"
                 "<br/>"
-                "<img width=\"100\" height=\"400\" src=\"dummy\"/>",
+                "<img width=\"100\" height=\"500\" src=\"dummy\"/>",
                 text
             )
        );

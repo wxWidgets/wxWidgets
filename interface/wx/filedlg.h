@@ -14,7 +14,8 @@ enum
     wxFD_FILE_MUST_EXIST   = 0x0010,
     wxFD_CHANGE_DIR        = 0x0080,
     wxFD_PREVIEW           = 0x0100,
-    wxFD_MULTIPLE          = 0x0200
+    wxFD_MULTIPLE          = 0x0200,
+    wxFD_SHOW_HIDDEN       = 0x0400
 };
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
@@ -107,6 +108,18 @@ const char wxFileSelectorDefaultWildcardStr[];
     descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
     are errors.
+    On Mac OS X in the open file dialog the filter choice box is not shown by default.
+    Instead all given wildcards are appplied at the same time: So in the above
+    example all bmp, gif and png files are displayed. To enforce the
+    display of the filter choice set the corresponding wxSystemOptions before calling
+    the file open dialog:
+    @code
+         wxSystemOptions::SetOption(wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1)
+    @endcode
+    But in contrast to Windows and Unix, where the file type choice filters only
+    the selected files, on Mac OS X even in this case the dialog shows all files
+    matching all file types. The files which does not match the currently selected
+    file type are greyed out and are not selectable.
 
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}
@@ -123,7 +136,8 @@ const char wxFileSelectorDefaultWildcardStr[];
     @style{wxFD_NO_FOLLOW}
            Directs the dialog to return the path and file name of the selected
            shortcut file, not its target as it does by default. Currently this
-           flag is only implemented in wxMSW and the non-dereferenced link path
+           flag is only implemented in wxMSW and wxOSX (where it prevents
+           aliases from being resolved). The non-dereferenced link path
            is always returned, even without this flag, under Unix and so using
            it there doesn't do anything. This flag was added in wxWidgets
            3.1.0.
@@ -141,6 +155,8 @@ const char wxFileSelectorDefaultWildcardStr[];
     @style{wxFD_PREVIEW}
            Show the preview of the selected files (currently only supported by
            wxGTK).
+    @style{wxFD_SHOW_HIDDEN}
+          Show hidden files. This flag was added in wxWidgets 3.1.3
     @endStyleTable
 
     @library{wxcore}

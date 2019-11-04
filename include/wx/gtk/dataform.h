@@ -28,15 +28,6 @@ public:
     wxDataFormat( const wchar_t *id ) { InitFromString(id); }
     wxDataFormat( const wxCStrData& id ) { InitFromString(id); }
 
-    wxDataFormat& operator=(const wxDataFormat& format)
-    {
-        if (&format != this)
-        {
-            m_type = format.m_type;
-            m_format = format.m_format;
-        }
-        return *this;
-    }
     wxDataFormat& operator=(NativeFormat format)
         { SetId(format); return *this; }
 

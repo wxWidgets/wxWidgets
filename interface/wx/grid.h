@@ -547,13 +547,38 @@ public:
     virtual wxString GetValue() const = 0;
 
     /**
-       Get the wxControl used by this editor.
+       Get the edit window used by this editor.
+
+       @since 3.1.3
     */
-    wxControl* GetControl() const;
+    wxWindow* GetWindow() const;
+
+    /**
+       Set the wxWindow that will be used by this cell editor for editing the
+       value.
+
+       @since 3.1.3
+    */
+    void SetWindow(wxWindow* window);
+
+    /**
+       Get the wxControl used by this editor.
+
+       This function is preserved for compatibility, but GetWindow() should be
+       preferred in the new code as the associated window doesn't need to be of
+       a wxControl-derived class.
+
+       Note that if SetWindow() had been called with an object not deriving
+       from wxControl, this method will return @NULL.
+    */
+    wxControl* GetControl();
 
     /**
        Set the wxControl that will be used by this cell editor for editing the
        value.
+
+       This function is preserved for compatibility, but SetWindow() should be
+       preferred in the new code, see GetControl().
     */
     void SetControl(wxControl* control);
 
@@ -2176,7 +2201,7 @@ enum wxGridRenderStyle
 
     @see @ref overview_grid, wxGridUpdateLocker
 */
-class wxGrid : public wxScrolledWindow
+class wxGrid : public wxScrolledCanvas
 {
 public:
 
@@ -2511,7 +2536,17 @@ public:
 
     /**
         Hides the column labels by calling SetColLabelSize() with a size of 0.
-        Show labels again by calling that method with a width greater than 0.
+
+        The labels can be shown again by calling SetColLabelSize() with a
+        height greater than 0.
+
+        Note that when the column labels are hidden, the grid won't have any
+        visible border on the top side, which may result in a less than ideal
+        appearance. Because of this, you may want to create the grid window
+        with a border style, such as @c wxBORDER_SIMPLE, when you don't plan to
+        show the column labels for it.
+
+        @see HideRowLabels()
     */
     void HideColLabels();
 
@@ -2520,6 +2555,9 @@ public:
 
         The labels can be shown again by calling SetRowLabelSize() with a width
         greater than 0.
+
+        See HideColLabels() for a note explaining why you may want to use a
+        border with a grid without the row labels.
     */
     void HideRowLabels();
 
@@ -2649,8 +2687,13 @@ public:
         Also note that currently @c wxEVT_GRID_LABEL_RIGHT_DCLICK event is not
         generated for the column labels if the native columns header is used
         (but this limitation could possibly be lifted in the future).
+
+        Finally, please note that using the native control is currently
+        incompatible with freezing columns in the grid (see FreezeTo()) and
+        this function will return @false, without doing anything, if it's
+        called on a grid in which any columns are frozen.
      */
-    void UseNativeColHeader(bool native = true);
+    bool UseNativeColHeader(bool native = true);
 
     //@}
 
@@ -2823,8 +2866,14 @@ public:
     /**
         Enables or disables in-place editing of grid cell data.
 
-        The grid will issue either a @c wxEVT_GRID_EDITOR_SHOWN or
-        @c wxEVT_GRID_EDITOR_HIDDEN event.
+        Enabling in-place editing generates @c wxEVT_GRID_EDITOR_SHOWN and, if
+        it isn't vetoed by the application, shows the in-place editor which
+        allows the user to change the cell value.
+
+        Disabling in-place editing does nothing if the in-place editor isn't
+        currently show, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
+        generated but, unlike the "shown" event, it can't be vetoed and the
+        in-place editor is dismissed unconditionally.
     */
     void EnableCellEditControl(bool enable = true);
 
@@ -3206,7 +3255,11 @@ public:
     void SetReadOnly(int row, int col, bool isReadOnly = true);
 
     /**
-        Displays the in-place cell edit control for the current cell.
+        Displays the active in-place cell edit control for the current cell
+        after it was hidden.
+
+        Note that this method does @em not start editing the cell, this is only
+        done by EnableCellEditControl().
     */
     void ShowCellEditControl();
 
@@ -3665,6 +3718,13 @@ public:
     bool CanDragRowSize(int row) const;
 
     /**
+        Returns @true if columns can be hidden from the popup menu of the native header.
+
+        @since 3.1.3
+    */
+    bool CanHideColumns() const;
+
+    /**
         Disable interactive resizing of the specified column.
 
         This method allows one to disable resizing of an individual column in a
@@ -3723,14 +3783,29 @@ public:
     void DisableDragRowSize();
 
     /**
+        Disables column hiding from the header popup menu.
+
+        Equivalent to passing @false to EnableHidingColumns().
+
+        @since 3.1.3
+    */
+    void DisableHidingColumns();
+
+    /**
         Enables or disables cell dragging with the mouse.
     */
     void EnableDragCell(bool enable = true);
 
     /**
         Enables or disables column moving by dragging with the mouse.
+
+        Note that reordering columns by dragging them is currently not
+        supported when the grid has any frozen columns (see FreezeTo()) and if
+        this method is called with @a enable equal to @true in this situation,
+        it returns @false without doing anything. Otherwise it returns @true to
+        indicate that it was successful.
     */
-    void EnableDragColMove(bool enable = true);
+    bool EnableDragColMove(bool enable = true);
 
     /**
         Enables or disables column sizing by dragging with the mouse.
@@ -3751,6 +3826,28 @@ public:
         @see DisableRowResize()
     */
     void EnableDragRowSize(bool enable = true);
+
+    /**
+        Enables or disables column hiding from the header popup menu.
+
+        Note that currently the popup menu can only be shown when using
+        wxHeaderCtrl, i.e. if UseNativeColHeader() had been called.
+
+        If the native header is not used, this method always simply returns
+        @false without doing anything, as hiding columns is not supported
+        anyhow. If @a enable value is the same as CanHideColumns(), it also
+        returns @false to indicate that nothing was done. Otherwise, it returns
+        @true to indicate that the value of this option was successfully
+        changed.
+
+        The main use case for this method is to disallow hiding the columns
+        interactively when using the native header.
+
+        @since 3.1.3
+
+        @see DisableHidingColumns()
+    */
+    bool EnableHidingColumns(bool enable = true);
 
     /**
         Returns the column ID of the specified column position.
@@ -3790,12 +3887,27 @@ public:
     //@{
 
     /**
+        Returns the current grid cursor position.
+
+        If grid cursor doesn't have any valid position (e.g. if the grid is
+        completely empty and doesn't have any rows or columns), returns
+        @c wxGridNoCellCoords which has both row and columns set to @c -1.
+
+        @since 3.1.3
+     */
+    const wxGridCellCoords& GetGridCursorCoords() const;
+
+    /**
         Returns the current grid cell column position.
+
+        @see GetGridCursorCoords()
     */
     int GetGridCursorCol() const;
 
     /**
         Returns the current grid cell row position.
+
+        @see GetGridCursorCoords()
     */
     int GetGridCursorRow() const;
 
@@ -4227,10 +4339,13 @@ public:
         limited by @a topLeft and @a bottomRight cell in device coords and
         clipped to the client size of the grid window.
 
+        @since 3.1.3 Parameter @a gridWindow has been added.
+
         @see CellToRect()
     */
     wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
-                             const wxGridCellCoords& bottomRight) const;
+                             const wxGridCellCoords& bottomRight,
+                             const wxGridWindow *gridWindow = NULL) const;
 
     /**
         Return the rectangle corresponding to the grid cell's size and position
@@ -4248,7 +4363,78 @@ public:
     wxRect CellToRect(const wxGridCellCoords& coords) const;
 
     /**
-        Returns the column at the given pixel position.
+        Returns the grid window that contains the cell.
+
+        In a grid without frozen rows or columns (see FreezeTo()), this will
+        always return the same window as GetGridWindow(), however if some parts
+        of the grid are frozen, this function returns the window containing the
+        given cell.
+
+        @since 3.1.3
+     */
+    wxGridWindow* CellToGridWindow( int row, int col ) const;
+
+    /// @overload
+    wxGridWindow* CellToGridWindow( const wxGridCellCoords& coords ) const;
+
+    /**
+        Returns the grid window that includes the input coordinates.
+
+        @since 3.1.3
+     */
+    wxGridWindow* DevicePosToGridWindow(wxPoint pos) const;
+
+    /// @overload
+    wxGridWindow* DevicePosToGridWindow(int x, int y) const;
+
+    /**
+        Returns the grid window's offset from the grid starting position taking
+        into account the frozen cells.
+
+        If there are no frozen cells, returns (0, 0).
+
+        @since 3.1.3
+
+        @see FreezeTo()
+     */
+    void GetGridWindowOffset(const wxGridWindow *gridWindow, int &x, int &y) const;
+
+    /// @overload
+    wxPoint GetGridWindowOffset(const wxGridWindow *gridWindow) const;
+
+    /**
+        Translates the device coordinates to the logical ones, taking into
+        account the grid window type.
+
+        @since 3.1.3
+
+        @see wxScrolled::CalcUnscrolledPosition()
+     */
+    void CalcGridWindowUnscrolledPosition(int x, int y,
+                                          int *xx, int *yy,
+                                          const wxGridWindow *gridWindow) const;
+    /// @overload
+    wxPoint CalcGridWindowUnscrolledPosition(const wxPoint& pt,
+                                             const wxGridWindow *gridWindow) const;
+
+    /**
+        Translates the logical coordinates to the device ones, taking into
+        account the grid window type.
+
+        @since 3.1.3
+
+        @see wxScrolled::CalcScrolledPosition()
+     */
+    void CalcGridWindowScrolledPosition(int x, int y,
+                                        int *xx, int *yy,
+                                        const wxGridWindow *gridWindow) const;
+
+    /// @overload
+    wxPoint CalcGridWindowScrolledPosition(const wxPoint& pt,
+                                           const wxGridWindow *gridWindow) const;
+
+    /**
+        Returns the column at the given pixel position depending on the window.
 
         @param x
             The x position to evaluate.
@@ -4256,10 +4442,15 @@ public:
             If @true, rather than returning @c wxNOT_FOUND, it returns either
             the first or last column depending on whether @a x is too far to
             the left or right respectively.
+        @param gridWindow
+            The associated grid window that limits the search (note that this
+            parameter is only available since wxWidgets 3.1.3).
+            If @a gridWindow is @NULL, it will consider all the cells, no matter
+            which grid they belong to.
         @return
             The column index or @c wxNOT_FOUND.
     */
-    int XToCol(int x, bool clipToMinMax = false) const;
+    int XToCol(int x, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL) const;
 
     /**
         Returns the column whose right hand edge is close to the given logical
@@ -4277,20 +4468,22 @@ public:
         the mouse position, which is expressed in device coordinates, to
         logical ones.
 
-        @see XToCol(), YToRow()
-     */
-    wxGridCellCoords XYToCell(int x, int y) const;
-    /**
-        Translates logical pixel coordinates to the grid cell coordinates.
+        The parameter @a gridWindow is new since wxWidgets 3.1.3. If it is
+        specified, i.e. non-@NULL, the coordinates must be in this window
+        coordinate system and only the cells of this window are considered,
+        i.e. the function returns @c wxNOT_FOUND if the coordinates are out of
+        bounds.
 
-        Notice that this function expects logical coordinates on input so if
-        you use this function in a mouse event handler you need to translate
-        the mouse position, which is expressed in device coordinates, to
-        logical ones.
+        If @a gridWindow is @NULL, coordinates are relative to the main grid
+        window and all cells are considered.
 
         @see XToCol(), YToRow()
      */
-    wxGridCellCoords XYToCell(const wxPoint& pos) const;
+    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = NULL) const;
+
+    /// @overload
+    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow = NULL) const;
+
     // XYToCell(int, int, wxGridCellCoords&) overload is intentionally
     // undocumented, using it is ugly and non-const reference parameters are
     // not used in wxWidgets API
@@ -4306,9 +4499,16 @@ public:
     /**
         Returns the grid row that corresponds to the logical @a y coordinate.
 
-        Returns @c wxNOT_FOUND if there is no row at the @a y position.
+
+        The parameter @a gridWindow is new since wxWidgets 3.1.3. If it is
+        specified, i.e. non-@NULL, only the cells of this window are
+        considered, i.e. the function returns @c wxNOT_FOUND if @a y is out of
+        bounds.
+
+        If @a gridWindow is @NULL, the function returns @c wxNOT_FOUND only if
+        there is no row at all at the @a y position.
     */
-    int YToRow(int y, bool clipToMinMax = false) const;
+    int YToRow(int y, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL) const;
 
     //@}
 
@@ -4437,6 +4637,31 @@ public:
     bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true);
 
     /**
+        Sets or resets the frozen columns and rows.
+
+        @param row
+            The number of rows to freeze, 0 means to unfreeze all rows.
+        @param col
+            The number of columns to freeze, 0 means to unfreeze all columns.
+        @return @true on success or @false if it failed.
+
+        Note that this method doesn't do anything, and returns @false, if any
+        of the following conditions are true:
+        - Either @a row or @a col are out of range
+        - Size of the frozen area would be bigger than the current viewing area
+        - There are any merged cells in the area to be frozen
+        - Grid uses a native header control (see UseNativeColHeader())
+
+        (some of these limitations could be lifted in the future).
+
+        @since 3.1.3
+     */
+    bool FreezeTo(unsigned row, unsigned col);
+
+    /// @overload
+    bool FreezeTo(const wxGridCellCoords& coords);
+
+    /**
         Decrements the grid's batch count.
 
         When the count is greater than zero repainting of the grid is
@@ -4481,6 +4706,28 @@ public:
         This is the same as the number of rows in the underlying grid table.
     */
     int GetNumberRows() const;
+
+    /**
+        Returns the number of frozen grid columns.
+
+        If there are no frozen columns, returns 0.
+
+        @since 3.1.3
+
+        @see FreezeTo()
+     */
+    int GetNumberFrozenCols() const;
+
+    /**
+        Returns the number of frozen grid rows.
+
+        If there are no frozen rows, returns 0.
+
+        @since 3.1.3
+
+        @see FreezeTo()
+     */
+    int GetNumberFrozenRows() const;
 
     /**
         Returns the attribute for the given cell creating one if necessary.
@@ -4640,9 +4887,12 @@ public:
     void SetRowAttr(int row, wxGridCellAttr* attr);
 
 
-    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
-    wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
-    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
+                                     wxGridWindow *gridWindow = NULL) const;
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
+                                     wxGridWindow *gridWindow = NULL) const;
+    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
+                                            wxGridWindow *gridWindow = NULL) const;
 
     //@}
 
@@ -4723,15 +4973,19 @@ public:
 
         Return the various child windows of wxGrid.
 
-        wxGrid is an empty parent window for 4 children representing the column
-        labels window (top), the row labels window (left), the corner window
-        (top left) and the main grid window. It may be necessary to use these
-        individual windows and not the wxGrid window itself if you need to
-        handle events for them (this can be done using wxEvtHandler::Connect()
-        or wxWindow::PushEventHandler()) or do something else requiring the use
-        of the correct window pointer. Notice that you should not, however,
-        change these windows (e.g. reposition them or draw over them) because
-        they are managed by wxGrid itself.
+        wxGrid is an empty parent window for at least 4 children representing
+        the column labels window (top), the row labels window (left), the
+        corner window (top left) and the main grid window. It may be necessary
+        to use these individual windows and not the wxGrid window itself if you
+        need to handle events for them (using wxEvtHandler::Bind()) or do
+        something else requiring the use of the correct window pointer. Notice
+        that you should not, however, change these windows (e.g. reposition
+        them or draw over them) because they are managed by wxGrid itself.
+
+        When parts of the grid are frozen using FreezeTo() function, the main
+        grid window contains only the unfrozen part and additional windows are
+        used for the parts containing frozen rows and/or columns and the corner
+        window if both some rows and some columns are frozen.
      */
     //@{
 
@@ -4741,6 +4995,33 @@ public:
         This window is always shown.
      */
     wxWindow *GetGridWindow() const;
+
+    /**
+        Return the corner grid window containing frozen cells.
+
+        This window is shown only when there are frozen rows and columns.
+
+        @since 3.1.3
+     */
+    wxWindow* GetFrozenCornerGridWindow() const;
+
+    /**
+        Return the rows grid window containing row frozen cells.
+
+        This window is shown only when there are frozen rows.
+
+        @since 3.1.3
+     */
+    wxWindow* GetFrozenRowGridWindow() const;
+
+    /**
+        Return the columns grid window containing column frozen cells.
+
+        This window is shown only when there are frozen columns.
+
+        @since 3.1.3
+     */
+    wxWindow* GetFrozenColGridWindow() const;
 
     /**
         Return the row labels window.
@@ -4811,6 +5092,8 @@ public:
     void SetCellHighlightColour( const wxColour& );
     void SetCellHighlightPenWidth(int width);
     void SetCellHighlightROPenWidth(int width);
+    void SetGridFrozenBorderColour( const wxColour& );
+    void SetGridFrozenBorderPenWidth( int width );
 
 
 protected:
@@ -5273,6 +5556,13 @@ public:
 
     /**
         Returns the edit control.
+
+        This function is preserved for compatibility, but GetWindow() should be
+        preferred in the new code as the associated window doesn't need to be of
+        a wxControl-derived class.
+
+        Note that if SetWindow() had been called with an object not deriving
+        from wxControl, this method will return @NULL.
     */
     wxControl* GetControl();
 
@@ -5282,12 +5572,22 @@ public:
     int GetRow();
 
     /**
+        Returns the edit window.
+
+        @since 3.1.3
+    */
+    wxWindow* GetWindow();
+
+    /**
         Sets the column at which the event occurred.
     */
     void SetCol(int col);
 
     /**
         Sets the edit control.
+
+        This function is preserved for compatibility, but SetWindow() should be
+        preferred in the new code, see GetControl().
     */
     void SetControl(wxControl* ctrl);
 
@@ -5295,6 +5595,13 @@ public:
         Sets the row at which the event occurred.
     */
     void SetRow(int row);
+
+    /**
+        Sets the edit window.
+
+        @since 3.1.3
+    */
+    void SetWindow(wxWindow* window);
 };
 
 

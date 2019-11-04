@@ -603,9 +603,12 @@ void wxLog::SetComponentLevel(const wxString& component, wxLogLevel level)
 }
 
 /* static */
-wxLogLevel wxLog::GetComponentLevel(wxString component)
+wxLogLevel wxLog::GetComponentLevel(const wxString& componentOrig)
 {
     wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
+
+    // Make a copy before modifying it in the loop.
+    wxString component = componentOrig;
 
     const wxStringToNumHashMap& componentLevels = GetComponentLevels();
     while ( !component.empty() )

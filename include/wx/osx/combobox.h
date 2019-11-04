@@ -130,11 +130,18 @@ protected:
 
     virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
 
+    // callbacks
+    void OnChar(wxKeyEvent& event); // Process 'enter' if required
+    void OnKeyDown(wxKeyEvent& event); // Process clipboard shortcuts
+
     // the subcontrols
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;
 
     wxComboBoxDataArray m_datas;
+
+private:
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_COMBOBOX_H_

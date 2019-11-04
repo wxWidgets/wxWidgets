@@ -98,11 +98,15 @@ function(wx_set_common_target_properties target_name)
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         )
-    if(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
-        # Enable higher warnings for most compilers/IDEs
-        if(MSVC)
-            target_compile_options(${target_name} PRIVATE /W4)
+
+    if(MSVC)
+        if(wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+            set(MSVC_WARNING_LEVEL "/W3")
+        else()
+            set(MSVC_WARNING_LEVEL "/W4")
         endif()
+        target_compile_options(${target_name} PRIVATE ${MSVC_WARNING_LEVEL})
+    else()
         # TODO: add warning flags for other compilers
     endif()
 
@@ -654,7 +658,27 @@ function(wx_add_sample name)
         else()
             set(exe_type WIN32 MACOSX_BUNDLE)
         endif()
+
+        if (WXMSW AND DEFINED wxUSE_DPI_AWARE_MANIFEST)
+            set(wxDPI_MANIFEST_PRFIX "wx")
+            if (wxARCH_SUFFIX)
+                set(wxDPI_MANIFEST_PRFIX "amd64")
+            endif()
+            set(wxUSE_DPI_AWARE_MANIFEST_VALUE 0)
+            if (${wxUSE_DPI_AWARE_MANIFEST} MATCHES "system")
+                set(wxUSE_DPI_AWARE_MANIFEST_VALUE 1)
+                list(APPEND src_files "${wxSOURCE_DIR}/include/wx/msw/${wxDPI_MANIFEST_PRFIX}-dpi-aware.manifest")
+            elseif(${wxUSE_DPI_AWARE_MANIFEST} MATCHES "per-monitor")
+                set(wxUSE_DPI_AWARE_MANIFEST_VALUE 2)
+                list(APPEND src_files "${wxSOURCE_DIR}/include/wx/msw/${wxDPI_MANIFEST_PRFIX}-dpi-aware-pmv2.manifest")
+            endif()
+        endif()
+
         add_executable(${target_name} ${exe_type} ${src_files})
+
+        if (DEFINED wxUSE_DPI_AWARE_MANIFEST_VALUE)
+            target_compile_definitions(${target_name} PRIVATE wxUSE_DPI_AWARE_MANIFEST=${wxUSE_DPI_AWARE_MANIFEST_VALUE})
+        endif()
     endif()
     # All samples use at least the base library other libraries
     # will have to be added with wx_link_sample_libraries()

@@ -988,16 +988,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
                                const wxValidator& validator,
                                const wxString& name )
 {
-#ifdef __WXMAC__
-    if (style & wxTR_HAS_BUTTONS)
-        style |= wxTR_NO_LINES;
-#endif // __WXMAC__
-
-#ifdef __WXGTK20__
-    if (style & wxTR_HAS_BUTTONS)
-        style |= wxTR_NO_LINES;
-#endif
-
     if ( !wxControl::Create( parent, id, pos, size,
                              style|wxHSCROLL|wxVSCROLL|wxWANTS_CHARS,
                              validator,
@@ -1752,7 +1742,10 @@ void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
 
     if ( item != m_current && IsDescendantOf(item, m_current) )
     {
-        m_current->SetHilight( false );
+        // Don't leave the only selected item invisible, but do leave selected
+        // items selected if we can have many of them.
+        if ( !HasFlag(wxTR_MULTIPLE) )
+            m_current->SetHilight( false );
         m_current = NULL;
         m_select_me = item;
     }
@@ -1886,8 +1879,16 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
         m_dirty = true;
     }
 
-    event.SetEventType(wxEVT_TREE_ITEM_EXPANDED);
-    GetEventHandler()->ProcessEvent( event );
+    // Don't send EXPANDED event unconditionally: if this is an item for which
+    // SetItemHasChildren(true) had been called before, but no children have
+    // been added from the EXPANDING handler, we shouldn't consider the item to
+    // be really expanded.
+    wxTreeItemIdValue cookie;
+    if ( GetFirstChild(item, cookie).IsOk() )
+    {
+        event.SetEventType(wxEVT_TREE_ITEM_EXPANDED);
+        GetEventHandler()->ProcessEvent( event );
+    }
 }
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)

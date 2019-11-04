@@ -249,6 +249,13 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
 
+    // Check if the window is created: we can't find its display before this is
+    // done anyhow, as we simply don't know on which display will it appear,
+    // and trying to do this below would just result in assert failures inside
+    // GetScreenRect() if the window doesn't yet exist, so return immediately.
+    if ( !window->GetHandle() )
+        return wxNOT_FOUND;
+
     // consider that the window belongs to the display containing its centre
     const wxRect r(window->GetScreenRect());
     return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));

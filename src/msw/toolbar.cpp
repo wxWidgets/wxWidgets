@@ -38,6 +38,8 @@
     #include "wx/region.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
+    #include "wx/choice.h"
+    #include "wx/combobox.h"
     #include "wx/app.h"         // for GetComCtl32Version
     #include "wx/image.h"
     #include "wx/stattext.h"
@@ -48,6 +50,7 @@
 #include "wx/dcclient.h"
 #include "wx/rawbmp.h"
 #include "wx/scopedarray.h"
+#include "wx/stack.h"
 
 #include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
 
@@ -126,15 +129,19 @@ wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
     EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
+    EVT_DPI_CHANGED(wxToolBar::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // module globals
 // ----------------------------------------------------------------------------
 
-// This is used to check if the toolbar itself doesn't get destroyed while
-// handling its event.
-static wxToolBar* gs_liveToolbar = NULL;
+namespace
+{
+    // Global stack used to track all active toolbars in the chain to check if
+    // the toolbar itself doesn't get destroyed while handling its event.
+    wxStack<wxToolBar*> gs_liveToolbars;
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -526,8 +533,8 @@ void wxToolBar::Recreate()
 wxToolBar::~wxToolBar()
 {
     // Indicate to the code in MSWCommand() that the toolbar is destroyed.
-    if ( gs_liveToolbar == this )
-        gs_liveToolbar = NULL;
+    if ( !gs_liveToolbars.empty() && gs_liveToolbars.top() == this )
+        gs_liveToolbars.pop();
 
     // we must refresh the frame size when the toolbar is deleted but the frame
     // is not - otherwise toolbar leaves a hole in the place it used to occupy
@@ -581,11 +588,11 @@ wxSize wxToolBar::DoGetBestSize() const
     wxSize sizeBest;
     if ( IsVertical() )
     {
-        sizeBest.x = sizeTool.x + 2 * ::GetSystemMetrics(SM_CXBORDER);
+        sizeBest.x = sizeTool.x + 2 * wxGetSystemMetrics(SM_CXBORDER, this);
     }
     else
     {
-        sizeBest.y = sizeTool.y + 2 * ::GetSystemMetrics(SM_CYBORDER);
+        sizeBest.y = sizeTool.y + 2 * wxGetSystemMetrics(SM_CYBORDER, this);
     }
 
     wxToolBarToolsList::compatibility_iterator node;
@@ -634,11 +641,11 @@ wxSize wxToolBar::DoGetBestSize() const
     {
         if ( IsVertical() )
         {
-            sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
+            sizeBest.x += 2 * wxGetSystemMetrics(SM_CXBORDER, this);
         }
         else
         {
-            sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
+            sizeBest.y += 2 * wxGetSystemMetrics(SM_CYBORDER, this);
         }
     }
 
@@ -997,7 +1004,7 @@ bool wxToolBar::Realize()
             // Strangely, toolbar expects bitmaps with transparency to not
             // be premultiplied, unlike most of the rest of win32. Without this
             // conversion, e.g. antialiased lines would be subtly, but
-            // noticeably misrendered. 
+            // noticeably misrendered.
             hBitmap = wxDIB(bitmap.ConvertToImage(),
                             wxDIB::PixelFormat_NotPreMultiplied).Detach();
         }
@@ -1247,7 +1254,7 @@ bool wxToolBar::Realize()
     {
         // We want just the usable height, so remove the space taken by the
         // border/divider.
-        height -= 2 * ::GetSystemMetrics(SM_CYBORDER);
+        height -= 2 * wxGetSystemMetrics(SM_CYBORDER, this);
     }
 
     // adjust the controls size to fit nicely in the toolbar and compute its
@@ -1503,18 +1510,18 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
     // global variable: if it gets reset from our dtor, we will know that the
     // toolbar was destroyed by this handler and that we can't use this object
     // any more.
-    gs_liveToolbar = this;
+    gs_liveToolbars.push(this);
 
     bool allowLeftClick = OnLeftClick(id, toggled);
 
-    if ( gs_liveToolbar != this )
+    if ( gs_liveToolbars.empty() || gs_liveToolbars.top() != this )
     {
         // Bail out, we can't touch any member fields in the already
         // destroyed object anyhow.
         return true;
     }
 
-    gs_liveToolbar = NULL;
+    gs_liveToolbars.pop();
 
     // Check if the tool hasn't been deleted in the event handler (notice that
     // it's also possible that this tool was deleted and a new tool with the
@@ -1889,6 +1896,57 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
     MSWDoEraseBackground(event.GetDC()->GetHDC());
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+}
+
+void wxToolBar::RealizeHelper()
+{
+    Realize();
+}
+
+void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Manually scale the size of the controls. Even though the font has been
+    // updated, the internal size of the controls does not.
+    const float scaleFactor = (float)event.GetNewDPI().y / event.GetOldDPI().y;
+
+    wxToolBarToolsList::compatibility_iterator node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        wxToolBarTool* const tool = static_cast<wxToolBarTool*>(node->GetData());
+        if ( !tool->IsControl() )
+            continue;
+
+        if ( wxControl* const control = tool->GetControl() )
+        {
+            const wxSize oldSize = control->GetSize();
+            wxSize newSize = oldSize * scaleFactor;
+
+            // Use the best height for choice-based controls.
+            // Scaling the current size does not work, because the control
+            // automatically increases size when the font-size increases.
+            if ( wxDynamicCast(control, wxComboBox) ||
+                 wxDynamicCast(control, wxChoice) )
+            {
+                const wxSize bestSize = control->GetBestSize();
+                newSize.y = bestSize.y;
+            }
+
+            control->SetSize(newSize);
+        }
+
+        if ( wxStaticText* const staticText = tool->GetStaticText() )
+        {
+            // Use the best size for the label
+            staticText->SetSize(staticText->GetBestSize());
+        }
+    }
+
+    // Use CallAfter because creating the toolbar directly sometimes doesn't
+    // work. E.g. when switching from 125% to 150%. All the sizes are set
+    // correctly, but after all dpi events are handled, 5px of the toolbar are
+    // gone and a dark-gray bar appears. After resizing the window, the gray
+    // bar disapears as well.
+    CallAfter(&wxToolBar::RealizeHelper);
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))

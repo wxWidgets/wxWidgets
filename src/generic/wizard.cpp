@@ -714,8 +714,8 @@ wxSize wxWizard::GetPageSize() const
     if ( wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA )
     {
         // Make the default page size small enough to fit on screen
-        DEFAULT_PAGE_WIDTH = wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 2;
-        DEFAULT_PAGE_HEIGHT = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 2;
+        DEFAULT_PAGE_WIDTH = wxSystemSettings::GetMetric(wxSYS_SCREEN_X, m_parent) / 2;
+        DEFAULT_PAGE_HEIGHT = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y, m_parent) / 2;
     }
     else // !PDA
     {
@@ -929,7 +929,7 @@ bool wxWizard::DoLayoutAdaptation()
     wxStandardDialogLayoutAdapter::DoFitWithScrolling(this, windows);
 
     // Size event doesn't get sent soon enough on wxGTK
-    DoLayout();
+    Layout();
 
     SetLayoutAdaptationDone(true);
 

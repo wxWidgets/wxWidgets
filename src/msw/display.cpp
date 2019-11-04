@@ -105,8 +105,6 @@ protected:
     #define MDT_EFFECTIVE_DPI 0
 #endif
 
-static const wxChar displayDllName[] = wxT("user32.dll");
-
 namespace
 {
 

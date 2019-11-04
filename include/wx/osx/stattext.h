@@ -41,8 +41,8 @@ public:
 
 protected :
 
-    virtual wxString DoGetLabel() const wxOVERRIDE;
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
 
   virtual wxSize DoGetBestSize() const wxOVERRIDE;
 

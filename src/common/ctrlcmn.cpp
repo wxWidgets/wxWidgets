@@ -194,20 +194,24 @@ int wxControlBase::FindAccelIndex(const wxString& label, wxString *labelOnly)
         labelOnly->Alloc(label.length());
     }
 
+    // When computing the offset below, we need to ignore the characters that
+    // are not actually displayed, i.e. the ampersands themselves.
+    int numSkipped = 0;
     int indexAccel = -1;
     for ( wxString::const_iterator pc = label.begin(); pc != label.end(); ++pc )
     {
         if ( *pc == MNEMONIC_PREFIX )
         {
             ++pc; // skip it
+            ++numSkipped;
+
             if ( pc == label.end() )
                 break;
             else if ( *pc != MNEMONIC_PREFIX )
             {
                 if ( indexAccel == -1 )
                 {
-                    // remember it (-1 is for MNEMONIC_PREFIX itself
-                    indexAccel = pc - label.begin() - 1;
+                    indexAccel = pc - label.begin() - numSkipped;
                 }
                 else
                 {
@@ -278,7 +282,8 @@ namespace
 struct EllipsizeCalculator
 {
     EllipsizeCalculator(const wxString& s, const wxDC& dc,
-                        int maxFinalWidthPx, int replacementWidthPx)
+                        int maxFinalWidthPx, int replacementWidthPx,
+                        int flags)
         :
           m_initialCharToRemove(0),
           m_nCharsToRemove(0),
@@ -290,6 +295,31 @@ struct EllipsizeCalculator
     {
         m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
         wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
+
+        if ( flags & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS )
+        {
+            // The ampersand itself shouldn't count for the width calculation
+            // as it won't be displayed: either it's an ampersand before some
+            // other character in which case it indicates a mnemonic, or it's
+            // an escaped ampersand, in which case only the second one of the
+            // pair of ampersands will be displayed. But we can't just remove
+            // the ampersand as we still need it in the final label, in order
+            // not to lose the mnemonics. Hence we use this hack, and pretend
+            // that ampersands simply have zero width. Of course, it could be
+            // not completely precise, but this is the best we can do without
+            // completely changing this code structure.
+            size_t n = 0;
+            int delta = 0;
+            for ( wxString::const_iterator it = s.begin();
+                  it != s.end();
+                  ++it, ++n )
+            {
+                if ( *it == '&' )
+                    delta += dc.GetTextExtent(wxS('&')).GetWidth();
+
+                m_charOffsetsPx[n] -= delta;
+            }
+        }
     }
 
     bool IsOk() const { return m_isOk; }
@@ -399,21 +429,15 @@ struct EllipsizeCalculator
     bool m_isOk;
 };
 
-} // anonymous namespace
-
-/* static and protected */
-wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
-                                              wxEllipsizeMode mode, int maxFinalWidthPx,
-                                              int replacementWidthPx)
+wxString DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
+                               wxEllipsizeMode mode, int maxFinalWidthPx,
+                               int replacementWidthPx, int flags)
 {
     wxASSERT_MSG(replacementWidthPx > 0, "Invalid parameters");
     wxASSERT_LEVEL_2_MSG(!curLine.Contains('\n'),
                          "Use Ellipsize() instead!");
 
     wxASSERT_MSG( mode != wxELLIPSIZE_NONE, "shouldn't be called at all then" );
-
-    // NOTE: this function assumes that any mnemonic/tab character has already
-    //       been handled if it was necessary to handle them (see Ellipsize())
 
     if (maxFinalWidthPx <= 0)
         return wxEmptyString;
@@ -422,7 +446,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     if (len <= 1 )
         return curLine;
 
-    EllipsizeCalculator calc(curLine, dc, maxFinalWidthPx, replacementWidthPx);
+    EllipsizeCalculator calc(curLine, dc, maxFinalWidthPx, replacementWidthPx, flags);
 
     if ( !calc.IsOk() )
         return curLine;
@@ -519,6 +543,9 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     return calc.GetEllipsizedText();
 }
 
+} // anonymous namespace
+
+
 /* static */
 wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
                                   wxEllipsizeMode mode, int maxFinalWidth,
@@ -541,7 +568,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
         if ( pc == label.end() || *pc == wxS('\n') )
         {
             curLine = DoEllipsizeSingleLine(curLine, dc, mode, maxFinalWidth,
-                                            replacementWidth);
+                                            replacementWidth, flags);
 
             // add this (ellipsized) row to the rest of the label
             ret << curLine;
@@ -550,15 +577,6 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
 
             ret << *pc;
             curLine.clear();
-        }
-        // we need to remove mnemonics from the label for correct calculations
-        else if ( *pc == wxS('&') && (flags & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS) )
-        {
-            // pc+1 is safe: at worst we'll be at end()
-            wxString::const_iterator next = pc + 1;
-            if ( next != label.end() && *next == wxS('&') )
-                curLine += wxS('&');          // && becomes &
-            //else: remove this ampersand
         }
         // we need also to expand tabs to properly calc their size
         else if ( *pc == wxS('\t') && (flags & wxELLIPSIZE_FLAGS_EXPAND_TABS) )

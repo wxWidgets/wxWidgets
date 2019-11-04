@@ -58,3 +58,8 @@ if(POLICY CMP0072)
     # FindOpenGL prefers GLVND by default when available.
     cmake_policy(SET CMP0072 NEW)
 endif()
+
+if(POLICY CMP0092)
+    # MSVC warning flags are not in CMAKE_<LANG>_FLAGS by default
+    cmake_policy(SET CMP0092 NEW)
+endif()

@@ -216,7 +216,7 @@ public:
     static wxFont GetFont(wxSystemFont index);
 
     // get a system-dependent metric
-    static int GetMetric(wxSystemMetric index, wxWindow * win = NULL);
+    static int GetMetric(wxSystemMetric index, const wxWindow* win = NULL);
 
     // get the object describing the current system appearance
     static wxSystemAppearance GetAppearance();
@@ -240,7 +240,7 @@ public:
 
     // some metrics are toolkit-dependent and provided by wxUniv, some are
     // lowlevel
-    static int GetMetric(wxSystemMetric index, wxWindow *win = NULL);
+    static int GetMetric(wxSystemMetric index, const wxWindow* win = NULL);
 #endif // __WXUNIVERSAL__
 
     // Get system screen design (desktop, pda, ..) used for

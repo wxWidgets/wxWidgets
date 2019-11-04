@@ -175,14 +175,6 @@
 #   undef  wxUSE_DEBUG_NEW_ALWAYS
 #   define wxUSE_DEBUG_NEW_ALWAYS          0
 
-/* some Cygwin versions don't have wcslen */
-#   if defined(__CYGWIN__) || defined(__CYGWIN32__)
-#   if ! ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
-#       undef wxUSE_WCHAR_T
-#       define wxUSE_WCHAR_T 0
-#   endif
-#endif
-
 #endif /* __GNUWIN32__ */
 
 /* MinGW32 doesn't provide wincred.h defining the API needed by this */
@@ -442,6 +434,14 @@
 #       else
 #           undef wxUSE_FSWATCHER
 #           define wxUSE_FSWATCHER 0
+#       endif
+#   endif
+#   if wxUSE_JOYSTICK
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxJoystick requires wxThread under MSW"
+#       else
+#           undef wxUSE_JOYSTICK
+#           define wxUSE_JOYSTICK 0
 #       endif
 #   endif
 #endif /* !wxUSE_THREADS */

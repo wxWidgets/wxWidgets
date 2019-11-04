@@ -201,9 +201,6 @@ public:
     void SetPaintAbandoned(){paintState = paintAbandoned;}
     void DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
     void DoRegisterImage(int type, const wxBitmap& bmp);
-    void SetListBoxColours(const wxColour&, const wxColour&,
-                           const wxColour&, const wxColour&);
-    void UseListCtrlStyleForLists(bool, const wxColour&, const wxColour&);
 
 private:
     bool                capturedMouse;

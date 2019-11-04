@@ -37,6 +37,65 @@
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/string.h"
 
+// ----------------------------------------------------------------------------
+// wxTextCoalesceData
+// ----------------------------------------------------------------------------
+
+class wxTextCoalesceData
+{
+public:
+    wxTextCoalesceData(GtkWidget* widget, gulong handlerAfterKeyPress)
+        : m_handlerAfterKeyPress(handlerAfterKeyPress)
+    {
+        m_inKeyPress = false;
+        m_pendingTextChanged = false;
+
+        // This signal handler is unblocked in StartHandlingKeyPress(), so
+        // we need to block it initially to compensate for this.
+        g_signal_handler_block(widget, m_handlerAfterKeyPress);
+    }
+
+    void StartHandlingKeyPress(GtkWidget* widget)
+    {
+        m_inKeyPress = true;
+        m_pendingTextChanged = false;
+
+        g_signal_handler_unblock(widget, m_handlerAfterKeyPress);
+    }
+
+    bool SetPendingIfInKeyPress()
+    {
+        if ( !m_inKeyPress )
+            return false;
+
+        m_pendingTextChanged = true;
+
+        return true;
+    }
+
+    bool EndHandlingKeyPressAndCheckIfPending(GtkWidget* widget)
+    {
+        g_signal_handler_block(widget, m_handlerAfterKeyPress);
+
+        wxASSERT( m_inKeyPress );
+        m_inKeyPress = false;
+
+        if ( !m_pendingTextChanged )
+            return false;
+
+        m_pendingTextChanged = false;
+
+        return true;
+    }
+
+private:
+    bool m_inKeyPress;
+    bool m_pendingTextChanged;
+    const gulong m_handlerAfterKeyPress;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextCoalesceData);
+};
+
 //-----------------------------------------------------------------------------
 //  helper function to get the length of the text
 //-----------------------------------------------------------------------------
@@ -57,8 +116,45 @@ static int GetEntryTextLength(GtkEntry* entry)
 // signal handlers implementation
 // ============================================================================
 
-// "insert_text" handler for GtkEntry
 extern "C" {
+
+// "event-after" handler is only connected when we get a "key-press-event", so
+// it's effectively called after the end of processing of this event and used
+// to send a single wxEVT_TEXT even if we received several (typically two, when
+// the selected text in the control is replaced by new text) "changed" signals.
+static gboolean
+wx_gtk_text_after_key_press(GtkWidget* widget,
+                            GdkEventKey* WXUNUSED(gdk_event),
+                            wxTextEntry* entry)
+{
+    wxTextCoalesceData* const data = entry->GTKGetCoalesceData();
+    wxCHECK_MSG( data, FALSE, "must be non-null if this handler is called" );
+
+    if ( data->EndHandlingKeyPressAndCheckIfPending(widget) )
+    {
+        entry->GTKOnTextChanged();
+    }
+
+    return FALSE;
+}
+
+// "changed" handler for GtkEntry
+static void
+wx_gtk_text_changed_callback(GtkWidget* WXUNUSED(widget), wxTextEntry* entry)
+{
+    if ( wxTextCoalesceData* const data = entry->GTKGetCoalesceData() )
+    {
+        if ( data->SetPendingIfInKeyPress() )
+        {
+            // Don't send the event right now as more might be coming.
+            return;
+        }
+    }
+
+    entry->GTKOnTextChanged();
+}
+
+// "insert_text" handler for GtkEntry
 static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
@@ -510,11 +606,13 @@ wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
 wxTextEntry::wxTextEntry()
 {
     m_autoCompleteData = NULL;
+    m_coalesceData = NULL;
     m_isUpperCase = false;
 }
 
 wxTextEntry::~wxTextEntry()
 {
+    delete m_coalesceData;
     delete m_autoCompleteData;
 }
 
@@ -854,8 +952,38 @@ void wxTextEntry::ForceUpper()
 // IM handling
 // ----------------------------------------------------------------------------
 
-int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
+void wxTextEntry::GTKEntryOnKeypress(GtkWidget* widget) const
 {
+    // We coalesce possibly multiple events resulting from a single key press
+    // (this always happens when there is a selection, as we always get a
+    // "changed" event when the selection is removed and another one when the
+    // new text is inserted) into a single wxEVT_TEXT and to do this we need
+    // this extra handler.
+    if ( !m_coalesceData )
+    {
+        // We can't use g_signal_connect_after("key-press-event") because the
+        // emission of this signal is stopped by GtkEntry own key-press-event
+        // handler, so we have to use the generic "event-after" instead to be
+        // notified about the end of handling of this key press and to send any
+        // pending events a.s.a.p.
+        const gulong handler =  g_signal_connect
+                                (
+                                    widget,
+                                    "event-after",
+                                    G_CALLBACK(wx_gtk_text_after_key_press),
+                                    const_cast<wxTextEntry*>(this)
+                                );
+
+        m_coalesceData = new wxTextCoalesceData(widget, handler);
+    }
+
+    m_coalesceData->StartHandlingKeyPress(widget);
+}
+
+int wxTextEntry::GTKEntryIMFilterKeypress(GdkEventKey* event) const
+{
+    GTKEntryOnKeypress(GTK_WIDGET(GetEntry()));
+
     int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
     if (wx_is_at_least_gtk2(22))
@@ -867,6 +995,31 @@ int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 #endif // GTK+ 2.22+
 
     return result;
+}
+
+// ----------------------------------------------------------------------------
+// signals and events
+// ----------------------------------------------------------------------------
+
+void wxTextEntry::EnableTextChangedEvents(bool enable)
+{
+    if ( enable )
+    {
+        g_signal_handlers_unblock_by_func(GetTextObject(),
+            (gpointer)wx_gtk_text_changed_callback, this);
+    }
+    else // disable events
+    {
+        g_signal_handlers_block_by_func(GetTextObject(),
+            (gpointer)wx_gtk_text_changed_callback, this);
+    }
+}
+
+void wxTextEntry::GTKConnectChangedSignal()
+{
+    g_signal_connect(GetTextObject(), "changed",
+                     G_CALLBACK(wx_gtk_text_changed_callback), this);
+
 }
 
 void wxTextEntry::GTKConnectInsertTextSignal(GtkEntry* entry)
@@ -985,5 +1138,36 @@ wxString wxTextEntry::GetHint() const
     return wxTextEntryBase::GetHint();
 }
 #endif // __WXGTK3__
+
+bool wxTextEntry::ClickDefaultButtonIfPossible()
+{
+    GtkWidget* const widget = GTK_WIDGET(GetEntry());
+
+    // This does the same thing as gtk_entry_real_activate() in GTK itself.
+    //
+    // Note: in GTK 4 we should probably just use gtk_widget_activate_default().
+    GtkWidget* const toplevel = gtk_widget_get_toplevel(widget);
+    if ( GTK_IS_WINDOW (toplevel) )
+    {
+        GtkWindow* const window = GTK_WINDOW(toplevel);
+
+        if ( window )
+        {
+            GtkWidget* const default_widget = gtk_window_get_default_widget(window);
+            GtkWidget* const focus_widget = gtk_window_get_focus(window);
+
+            if ( widget != default_widget &&
+                    !(widget == focus_widget &&
+                        (!default_widget ||
+                            !gtk_widget_get_sensitive(default_widget))) )
+            {
+                if ( gtk_window_activate_default(window) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

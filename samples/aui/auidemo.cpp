@@ -846,6 +846,7 @@ MyFrame::MyFrame(wxWindow* parent,
     wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
+    tb4->SetToolSticky(ID_SampleItem+23, true);
     tb4->AddTool(ID_SampleItem+24, "Item 3", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+25, "Item 4", tb4_bmp1);
     tb4->AddSeparator();

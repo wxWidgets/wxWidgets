@@ -18,6 +18,27 @@
 #include "wx/gtk/private/wrapgtk.h"
 #include <gdk/gdkx.h>
 
+#ifdef __WXGTK3__
+extern "C" {
+static gboolean draw(GtkWidget* widget, cairo_t* cr, wxGLCanvas* win)
+{
+    GtkAllocation a;
+    gtk_widget_get_allocation(widget, &a);
+    if (a.width > win->m_size.x || a.height > win->m_size.y)
+    {
+        // GLX buffers are apparently not reliably updated to the new size
+        // before the paint event occurs, resulting in newly exposed window
+        // areas sometimes not being painted at the end of a drag resize.
+        gdk_display_sync(gtk_widget_get_display(widget));
+    }
+    win->m_size.Set(a.width, a.height);
+
+    win->GTKSendPaintEvents(cr);
+    return false;
+}
+}
+#endif // __WXGTK3__
+
 //-----------------------------------------------------------------------------
 // emission hook for "parent-set"
 //-----------------------------------------------------------------------------
@@ -29,7 +50,7 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
     wxGLCanvas* win = (wxGLCanvas*)data;
     if (g_value_peek_pointer(&param_values[0]) == win->m_wxwindow)
     {
-        const XVisualInfo* xvi = win->GetXVisualInfo();
+        const XVisualInfo* xvi = static_cast<XVisualInfo*>(win->GetXVisualInfo());
         GdkVisual* visual = gtk_widget_get_visual(win->m_wxwindow);
         if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
         {
@@ -190,6 +211,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     m_nativeSizeEvent = true;
 #ifdef __WXGTK3__
+    m_noExpose = true;
     m_backgroundStyle = wxBG_STYLE_PAINT;
 #endif
 
@@ -203,6 +225,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
     g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
 
     wxWindow::Create( parent, id, pos, size, style, name );
+#ifdef __WXGTK3__
+    g_signal_connect(m_wxwindow, "draw", G_CALLBACK(draw), this);
+#endif
 
     gtk_widget_set_double_buffered(m_wxwindow, false);
 
@@ -214,7 +239,7 @@ bool wxGLCanvas::SetBackgroundStyle(wxBackgroundStyle /* style */)
     return false;
 }
 
-Window wxGLCanvas::GetXWindow() const
+unsigned long wxGLCanvas::GetXWindow() const
 {
     GdkWindow* window = GTKGetDrawingWindow();
     return window ? GDK_WINDOW_XID(window) : 0;

@@ -23,9 +23,9 @@ class WXDLLIMPEXP_CORE wxColourDialog: public wxDialog
     wxDECLARE_DYNAMIC_CLASS(wxColourDialog);
 public:
     wxColourDialog();
-    wxColourDialog(wxWindow *parent, wxColourData *data = NULL);
+    wxColourDialog(wxWindow *parent, const wxColourData *data = NULL);
 
-    bool Create(wxWindow *parent, wxColourData *data = NULL);
+    bool Create(wxWindow *parent, const wxColourData *data = NULL);
 
     int ShowModal() wxOVERRIDE;
     wxColourData& GetColourData() { return m_colourData; }

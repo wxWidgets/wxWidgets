@@ -318,6 +318,8 @@ public:
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
+    // Note that these functions work with the size in DIPs, not physical
+    // pixels.
     virtual int GetElementSize(int elementId) = 0;
     virtual void SetElementSize(int elementId, int size) = 0;
 
@@ -431,6 +433,7 @@ protected:
     wxPen m_gripperPen2;
     wxPen m_gripperPen3;
 
+    // These values are in DIPs and not physical pixels.
     int m_separatorSize;
     int m_gripperSize;
     int m_overflowSize;
@@ -614,12 +617,6 @@ protected:
     wxRect GetOverflowRect() const;
     wxSize GetLabelSize(const wxString& label);
     wxAuiToolBarItem* FindToolByPositionWithPacking(wxCoord x, wxCoord y) const;
-
-    void DoSetSize(int x,
-                   int y,
-                   int width,
-                   int height,
-                   int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
 protected: // handlers
 

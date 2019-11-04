@@ -29,7 +29,7 @@
 #endif
 
 #if wxUSE_STD_IOSTREAM
-    #include "wx/ioswrap.h"
+    #include <iostream>
 #else
     #include "wx/txtstrm.h"
 #endif

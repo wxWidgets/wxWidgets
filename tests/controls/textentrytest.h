@@ -75,4 +75,32 @@ private:
     wxDECLARE_NO_COPY_CLASS(TextEntryTestCase);
 };
 
+// Helper used for creating the control of the specific type (currently either
+// wxTextCtrl or wxComboBox) with the given flag.
+class TextLikeControlCreator
+{
+public:
+    TextLikeControlCreator() {}
+
+    // Create the control of the right type using the given parent and style.
+    virtual wxControl* Create(wxWindow* parent, int style) const = 0;
+
+    // Return another creator similar to this one, but creating multiline
+    // version of the control. If the returned pointer is non-null, it must be
+    // deleted by the caller.
+    virtual TextLikeControlCreator* CloneAsMultiLine() const { return NULL; }
+
+    // Give it a virtual dtor to avoid warnings even though this class is not
+    // supposed to be used polymorphically.
+    virtual ~TextLikeControlCreator() {}
+
+private:
+    wxDECLARE_NO_COPY_CLASS(TextLikeControlCreator);
+};
+
+// Use the given control creator to check that various combinations of
+// specifying and not specifying wxTE_PROCESS_ENTER and handling or not
+// handling the resulting event work as expected.
+void TestProcessEnter(const TextLikeControlCreator& controlCreator);
+
 #endif // _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_

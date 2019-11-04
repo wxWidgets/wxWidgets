@@ -43,6 +43,7 @@ private:
         CPPUNIT_TEST( StdFind );
         CPPUNIT_TEST( StdFindFirst );
         CPPUNIT_TEST( StdFindLast );
+        CPPUNIT_TEST( StdStartsEndsWith );
         CPPUNIT_TEST( StdInsert );
         CPPUNIT_TEST( StdReplace );
         CPPUNIT_TEST( StdRFind );
@@ -65,6 +66,7 @@ private:
     void StdFind();
     void StdFindFirst();
     void StdFindLast();
+    void StdStartsEndsWith();
     void StdInsert();
     void StdReplace();
     void StdRFind();
@@ -394,6 +396,28 @@ void StdStringTestCase::StdFindLast()
     CPPUNIT_ASSERT( s1.find_last_of(wxT("ijklm")) == 17u );
     CPPUNIT_ASSERT( s1.find_last_of(wxT("ijklma"), 35, 4) == 17u );
     CPPUNIT_ASSERT( s1.find_last_of(wxT("a"), 18) == 18u );
+}
+
+void StdStringTestCase::StdStartsEndsWith()
+{
+    const wxString s(wxT("Hello, world!"));
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello, ")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello, world!")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Hello, world!!!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Goodbye")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Hi")) );
+
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("Hello, world!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("world!")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Hello")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("very long string")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("?")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Hello, world")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Gello, world!")) );
 }
 
 void StdStringTestCase::StdInsert()

@@ -72,7 +72,9 @@ private:
         CPPUNIT_TEST( CompareLoadedImage );
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SavePNG );
+#if wxUSE_LIBTIFF
         CPPUNIT_TEST( SaveTIFF );
+#endif // wxUSE_LIBTIFF
         CPPUNIT_TEST( ReadCorruptedTGA );
 #if wxUSE_GIF
         CPPUNIT_TEST( SaveAnimatedGIF );
@@ -90,7 +92,9 @@ private:
     void CompareLoadedImage();
     void CompareSavedImage();
     void SavePNG();
+#if wxUSE_LIBTIFF
     void SaveTIFF();
+#endif // wxUSE_LIBTIFF
     void ReadCorruptedTGA();
 #if wxUSE_GIF
     void SaveAnimatedGIF();
@@ -124,7 +128,9 @@ ImageTestCase::ImageTestCase()
     wxImage::AddHandler(new wxPCXHandler);
     wxImage::AddHandler(new wxPNMHandler);
     wxImage::AddHandler(new wxTGAHandler);
+#if wxUSE_LIBTIFF
     wxImage::AddHandler(new wxTIFFHandler);
+#endif // wxUSE_LIBTIFF
 }
 
 ImageTestCase::~ImageTestCase()
@@ -1084,6 +1090,7 @@ void ImageTestCase::SavePNG()
 
 }
 
+#if wxUSE_LIBTIFF
 static void TestTIFFImage(const wxString& option, int value,
     const wxImage *compareImage = NULL)
 {
@@ -1139,6 +1146,7 @@ void ImageTestCase::SaveTIFF()
     alphaImage.SetOption(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
     TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
 }
+#endif // wxUSE_LIBTIFF
 
 void ImageTestCase::ReadCorruptedTGA()
 {

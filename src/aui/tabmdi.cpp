@@ -611,8 +611,8 @@ void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
-    const wxSize sizeIcon(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
-                          wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
+    const wxSize sizeIcon(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X, this),
+                          wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y, this));
     wxBitmap bmp;
     bmp.CopyFromIcon(icons.GetIcon(sizeIcon));
 

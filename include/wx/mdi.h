@@ -321,6 +321,11 @@ protected:
         wxWindow::DoMoveWindow(x, y, width, height);
     }
 
+    virtual void DoGetScreenPosition(int *x, int *y) const wxOVERRIDE
+    {
+        wxWindow::DoGetScreenPosition(x, y);
+    }
+
     // no size hints
     virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
                                 int WXUNUSED(maxW), int WXUNUSED(maxH),

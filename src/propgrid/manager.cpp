@@ -18,31 +18,17 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
     #include "wx/settings.h"
+    #include "wx/stattext.h"
     #include "wx/textctrl.h"
-    #include "wx/sizer.h"
-    #include "wx/statusbr.h"
-    #include "wx/intl.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
+#include "wx/headerctrl.h" // for wxPGHeaderCtrl
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
-
-#include "wx/propgrid/propgrid.h"
 
 #include "wx/propgrid/manager.h"
 
@@ -262,21 +248,15 @@ public:
     void OnPageChanged(const wxPropertyGridPage* page)
     {
         m_page = page;
-        // Get column info from the page
-        unsigned int colCount = m_page->GetColumnCount();
-        SetColumnCount(colCount);
+        SetColumnCount(m_page->GetColumnCount());
         DetermineAllColumnWidths();
+        UpdateAllColumns();
     }
 
     void OnColumWidthsChanged()
     {
-        unsigned int colCount = m_page->GetColumnCount();
-
         DetermineAllColumnWidths();
-        for ( unsigned int i=0; i<colCount; i++ )
-        {
-            UpdateColumn(i);
-        }
+        UpdateAllColumns();
     }
 
     virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
@@ -291,6 +271,15 @@ public:
     }
 
 private:
+    void UpdateAllColumns()
+    {
+        unsigned int colCount = GetColumnCount();
+        for ( unsigned int i = 0; i < colCount; i++ )
+        {
+            UpdateColumn(i);
+        }
+    }
+
     void EnsureColumnCount(unsigned int count)
     {
         while ( m_columns.size() < count )
@@ -516,7 +505,6 @@ void wxPropertyGridManager::Init1()
 
 // These flags are always used in wxPropertyGrid integrated in wxPropertyGridManager.
 #define wxPG_MAN_PROPGRID_FORCED_FLAGS (  wxBORDER_THEME | \
-                                          wxNO_FULL_REPAINT_ON_RESIZE| \
                                           wxCLIP_CHILDREN)
 
 // Which flags can be passed to underlying wxPropertyGrid.
@@ -644,7 +632,7 @@ void wxPropertyGridManager::SetId( wxWindowID winid )
 wxSize wxPropertyGridManager::DoGetBestSize() const
 {
     // Width: margin=15 + columns=2*40 + scroll bar
-    return wxSize(15+2*40+wxSystemSettings::GetMetric(wxSYS_VSCROLL_X), 150);
+    return wxSize(15+2*40+wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_pPropGrid), 150);
 }
 
 // -----------------------------------------------------------------------

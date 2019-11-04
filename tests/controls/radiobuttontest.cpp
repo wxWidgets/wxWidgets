@@ -25,6 +25,7 @@
 
 #include "wx/uiaction.h"
 #include "testableframe.h"
+#include "testwindow.h"
 
 class RadioButtonTestCase : public CppUnit::TestCase
 {
@@ -229,7 +230,7 @@ TEST_CASE("wxRadioButton::Focus", "[radiobutton][focus]")
     // Initially the first radio button should be checked.
     radio1->SetFocus();
     CHECK(radio1->GetValue());
-    CHECK(wxWindow::FindFocus() == radio1);
+    CHECK_FOCUS_IS(radio1);
 
     // Switching focus from it shouldn't change this.
     dummyButton->SetFocus();
@@ -242,12 +243,20 @@ TEST_CASE("wxRadioButton::Focus", "[radiobutton][focus]")
     CHECK(radio2->GetValue());
 
     // While not changing focus.
-    CHECK(wxWindow::FindFocus() == dummyButton);
+    CHECK_FOCUS_IS(dummyButton);
 
     // And giving the focus to the panel shouldn't change radio button
     // selection.
     radioPanel->SetFocus();
-    CHECK(wxWindow::FindFocus() == radio2);
+
+    // Under MSW, focus is always on the selected button, but in the other
+    // ports this is not necessarily the case, i.e. under wxGTK this check
+    // would fail because focus gets set to the first button -- even though the
+    // second one remains checked.
+#ifdef __WXMSW__
+    CHECK_FOCUS_IS(radio2);
+#endif
+
     CHECK(!radio1->GetValue());
     CHECK(radio2->GetValue());
 }

@@ -75,7 +75,7 @@ public:
     wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;
     wxPGProperty* GetPtr( const wxPropertyGridInterface* iface ) const
     {
-        return GetPtr((wxPropertyGridInterface*)iface);
+        return GetPtr(const_cast<wxPropertyGridInterface*>(iface));
     }
     wxPGProperty* GetPtr0() const { return m_ptr.property; }
     bool HasName() const { return (m_flags != IsProperty); }
@@ -187,9 +187,6 @@ public:
     // Returns true if successful or if there was no selection. May
     // fail if validation was enabled and active editor had invalid
     // value.
-    // In wxPropertyGrid 1.4, this member function used to send
-    // wxPG_EVT_SELECTED. In wxWidgets 2.9 and later, it no longer
-    // does that.
     bool ClearSelection( bool validation = false );
 
     // Resets modified status of all properties.
@@ -308,7 +305,7 @@ public:
 
     const wxPGProperty* GetFirst( int flags = wxPG_ITERATE_ALL ) const
     {
-        return ((wxPropertyGridInterface*)this)->GetFirst(flags);
+        return const_cast<wxPropertyGridInterface*>(this)->GetFirst(flags);
     }
 
     // Returns pointer to a property with given name (case-sensitive).
@@ -329,7 +326,7 @@ public:
         // If 'id' refers to invalid property, then we will return dummy
         // attributes (i.e. root property's attributes, which contents should
         // should always be empty and of no consequence).
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes());
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes())
         return p->GetAttributes();
     }
 
@@ -1013,28 +1010,28 @@ public:
     // Sets value (native 64-bit int) of a property.
     void SetPropertyValue(wxPGPropArg id, wxLongLong_t value)
     {
-        wxVariant v = WXVARIANT(wxLongLong(value));
+        wxVariant v = wxLongLong(value);
         SetPropVal(id, v);
     }
 #endif
     // Sets value (wxLongLong) of a property.
     void SetPropertyValue( wxPGPropArg id, wxLongLong value )
     {
-        wxVariant v = WXVARIANT(value);
+        wxVariant v(value);
         SetPropVal( id, v );
     }
 #ifdef wxULongLong_t
     // Sets value (native 64-bit unsigned int) of a property.
     void SetPropertyValue(wxPGPropArg id, wxULongLong_t value)
     {
-        wxVariant v = WXVARIANT(wxULongLong(value));
+        wxVariant v = wxULongLong(value);
         SetPropVal(id, v);
     }
 #endif
     // Sets value (wxULongLong) of a property.
     void SetPropertyValue( wxPGPropArg id, wxULongLong value )
     {
-        wxVariant v = WXVARIANT(value);
+        wxVariant v(value);
         SetPropVal( id, v );
     }
 #endif

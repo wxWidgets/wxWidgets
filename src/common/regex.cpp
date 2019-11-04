@@ -690,4 +690,29 @@ int wxRegEx::Replace(wxString *pattern,
     return m_impl->Replace(pattern, replacement, maxMatches);
 }
 
+wxString wxRegEx::QuoteMeta(const wxString& str)
+{
+    static const wxString s_strMetaChars = wxS("\\^$.|?*+()[]{}");
+
+    wxString strEscaped;
+
+    // This is the maximal possible length of the resulting string, if every
+    // character were escaped.
+    strEscaped.reserve(str.length() * 2);
+
+    for ( wxString::const_iterator it = str.begin(); it != str.end(); ++it )
+    {
+        if ( s_strMetaChars.find(*it) != wxString::npos )
+        {
+            strEscaped += wxS('\\');
+        }
+
+        strEscaped += *it;
+    }
+
+    strEscaped.shrink_to_fit();
+
+    return strEscaped;
+}
+
 #endif // wxUSE_REGEX

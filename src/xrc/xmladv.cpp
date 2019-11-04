@@ -42,7 +42,7 @@
 #if wxUSE_ANIMATIONCTRL
 wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
 {
-    const wxString name = GetParamValue(param);
+    wxString name = GetFilePath(GetParamNode(param));
     if ( name.empty() )
         return NULL;
 

@@ -162,8 +162,6 @@ protected:
 // implementation
 // ============================================================================
 
-wxStringToStringHashMap gs_FontFamilyToPSName;
-
 namespace
 {
     const int kCTWeightsCount = 12;
@@ -323,10 +321,14 @@ void wxFontRefData::Alloc()
 {
     wxCHECK_RET(m_info.GetPointSize() > 0, wxT("Point size should not be zero."));
 
+    // make sure the font descriptor has been processed properly
+    // otherwise the Post Script Name may not be valid yet
+    m_info.RealizeResource();
+    
     // use font caching, we cache a font with a certain size and a font with just any size for faster creation
-    wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetFamilyName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
+    wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
 
-    wxString lookupnameWithSize = wxString::Format("%s_%d_%d_%.2f", m_info.GetFamilyName(), (int)m_info.GetStyle(), m_info.GetNumericWeight(), m_info.GetFractionalPointSize());
+    wxString lookupnameWithSize = wxString::Format("%s_%d_%d_%.2f", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight(), m_info.GetFractionalPointSize());
 
     static std::map<wxString, CachedFontEntry> fontcache;
 
@@ -747,8 +749,8 @@ void wxNativeFontInfo::Init()
     m_ctSize = 0.0;
     m_family = wxFONTFAMILY_DEFAULT;
 
-    m_styleName.clear();
     m_familyName.clear();
+    m_postScriptName.clear();
 }
 
 void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
@@ -766,8 +768,8 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     m_ctSize = info.m_ctSize;
     m_family = info.m_family;
 
-    m_styleName = info.m_styleName;
     m_familyName = info.m_familyName;
+    m_postScriptName = info.m_postScriptName;
 }
 
 void wxNativeFontInfo::InitFromFont(CTFontRef font)
@@ -811,8 +813,8 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
             m_family = wxFONTFAMILY_ROMAN;
     }
 
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontStyleNameAttribute)).GetValue(m_styleName);
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(m_postScriptName);
 }
 
 void wxNativeFontInfo::Free()
@@ -828,6 +830,11 @@ CTFontDescriptorRef wxNativeFontInfo::GetCTFontDescriptor() const
     return m_descriptor;
 }
 
+void wxNativeFontInfo::RealizeResource() const
+{
+    (void) GetCTFontDescriptor();
+}
+
 void wxNativeFontInfo::CreateCTFontDescriptor()
 {
     CTFontDescriptorRef descriptor = NULL;
@@ -835,12 +842,19 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
 
     // build all attributes that define our font.
 
-    wxString fontfamilyname = m_familyName;
-    if ( fontfamilyname.empty() )
-        fontfamilyname = FamilyToFaceName(m_family);
 
+    if ( m_postScriptName.empty() )
+    {
+        wxString fontname = m_familyName;
+        if ( fontname.empty() )
+            fontname = FamilyToFaceName(m_family);
 
-    CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, wxCFStringRef(fontfamilyname));
+        CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, wxCFStringRef(fontname));
+    }
+    else
+    {
+        CFDictionaryAddValue(attributes, kCTFontNameAttribute, wxCFStringRef(m_postScriptName));
+    }
 
     wxCFMutableDictionaryRef traits;
     if ( m_style != wxFONTSTYLE_NORMAL )
@@ -856,6 +870,40 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     wxASSERT(descriptor != NULL);
 
     m_descriptor = descriptor;
+    
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(m_postScriptName);
+
+#if wxDEBUG_LEVEL >= 2
+    // for debugging: show all different font names
+    wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_descriptor, 12, NULL);
+    wxString familyname;
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familyname);
+    wxLogTrace(TRACE_CTFONT,"****** CreateCTFontDescriptor ******");
+    wxLogTrace(TRACE_CTFONT,"Descriptor FontFamilyName: %s",familyname.c_str());
+    
+    wxString name;
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(name);
+    wxLogTrace(TRACE_CTFONT,"Descriptor FontName: %s",name.c_str());
+    
+    wxString display;
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontDisplayNameAttribute)).GetValue(display);
+    wxLogTrace(TRACE_CTFONT,"Descriptor DisplayName: %s",display.c_str());
+    
+    wxString style;
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
+    wxLogTrace(TRACE_CTFONT,"Descriptor StyleName: %s",style.c_str());
+
+    wxString psname;
+    wxCFTypeRef(CTFontCopyPostScriptName(font)).GetValue(psname);
+    wxLogTrace(TRACE_CTFONT,"Created Font PostScriptName: %s",psname.c_str());
+    
+    wxString fullname;
+    wxCFTypeRef(CTFontCopyFullName(font)).GetValue(fullname);
+    wxLogTrace(TRACE_CTFONT,"Created Font FullName: %s",fullname.c_str());
+    
+    wxLogTrace(TRACE_CTFONT,"************************************");
+#endif
 }
 
 // Core Text Helpers
@@ -950,7 +998,10 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         m_strikethrough = l != 0;
     }
 
-    m_familyName = tokenizer.GetNextToken();
+    // this works correctly via fallback even if this is (backwards compatibility) a font family name
+    SetPostScriptName( tokenizer.GetNextToken() );
+    
+    RealizeResource();
 
 #ifndef __WXMAC__
     if( !m_familyName )
@@ -967,6 +1018,10 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 
 wxString wxNativeFontInfo::ToString() const
 {
+    // make sure the font descriptor has been processed properly
+    // otherwise the Post Script Name may not be valid yet
+    RealizeResource();
+    
     wxString s;
 
     s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
@@ -977,7 +1032,7 @@ wxString wxNativeFontInfo::ToString() const
         GetNumericWeight(),
         GetUnderlined(),
         GetStrikethrough(),
-        GetFaceName().GetData(),
+        GetPostScriptName().GetData(),
         (int)GetEncoding());
 
     return s;
@@ -1003,46 +1058,13 @@ bool wxNativeFontInfo::GetUnderlined() const
     return m_underlined;
 }
 
-wxString wxNativeFontInfo::GetFamilyName() const
+wxString wxNativeFontInfo::GetPostScriptName() const
 {
-    return m_familyName;
-}
-
-wxString wxNativeFontInfo::GetStyleName() const
-{
-    return m_styleName;
+    return m_postScriptName;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
-#if wxDEBUG_LEVEL >= 2
-    // for debugging: show all different font names
-    wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_descriptor, 12, NULL);
-    wxString familyname;
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familyname);
-    wxLogTrace(TRACE_CTFONT,"FontFamilyName: %s",familyname.c_str());
-
-    wxString name;
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(name);
-    wxLogTrace(TRACE_CTFONT,"FontName: %s",name.c_str());
-
-    wxString psname;
-    wxCFTypeRef(CTFontCopyPostScriptName(font)).GetValue(psname);
-    wxLogTrace(TRACE_CTFONT,"PostScriptName: %s",psname.c_str());
-
-    wxString fullname;
-    wxCFTypeRef(CTFontCopyFullName(font)).GetValue(fullname);
-    wxLogTrace(TRACE_CTFONT,"FullName: %s",fullname.c_str());
-
-    wxString display;
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontDisplayNameAttribute)).GetValue(display);
-    wxLogTrace(TRACE_CTFONT,"DisplayName: %s",display.c_str());
-
-    wxString style;
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
-    wxLogTrace(TRACE_CTFONT,"StyleName: %s",style.c_str());
-#endif
-
     return m_familyName;
 }
 
@@ -1117,6 +1139,17 @@ bool wxNativeFontInfo::SetFaceName(const wxString& facename)
     return true;
 }
 
+bool wxNativeFontInfo::SetPostScriptName(const wxString& postScriptName)
+{
+    if (m_postScriptName != postScriptName)
+    {
+        Free();
+        m_postScriptName = postScriptName;
+    }
+    
+    return true;
+}
+
 void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
     Free();
@@ -1133,23 +1166,3 @@ void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 {
     m_strikethrough = strikethrough;
 }
-
-void wxNativeFontInfo::UpdateNamesMap(const wxString& familyName, CTFontDescriptorRef descr)
-{
-    if (gs_FontFamilyToPSName.find(familyName) == gs_FontFamilyToPSName.end())
-    {
-        wxCFStringRef psName((CFStringRef)CTFontDescriptorCopyAttribute(descr, kCTFontNameAttribute));
-        gs_FontFamilyToPSName[familyName] = psName.AsString();
-    }
-}
-
-void wxNativeFontInfo::UpdateNamesMap(const wxString& familyName, CTFontRef font)
-{
-    if (gs_FontFamilyToPSName.find(familyName) == gs_FontFamilyToPSName.end())
-    {
-        wxCFRef<CTFontDescriptorRef> descr(CTFontCopyFontDescriptor(font));
-        UpdateNamesMap(familyName, descr);
-    }
-}
-
-

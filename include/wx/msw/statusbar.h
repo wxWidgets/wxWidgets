@@ -72,6 +72,8 @@ protected:
     // implementation of the public SetStatusWidths()
     void MSWUpdateFieldsWidths();
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     // used by DoUpdateStatusText()
     wxClientDC *m_pDC;
 

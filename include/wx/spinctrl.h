@@ -143,6 +143,11 @@ namespace wxPrivate
 // string containing hexadecimal representation of the given number.
 extern wxString wxSpinCtrlFormatAsHex(long val, long maxVal);
 
+// The helper function to determine the best size for the given control.
+// We can't implement this function in the wxSpinCtrlBase because MSW implementation
+// of wxSpinCtrl is derived from wxSpinButton but uses the same algorithm.
+extern wxSize wxSpinCtrlGetBestSize(const wxControl* spin, int minVal, int maxVal, int base);
+
 } // namespace wxPrivate
 
 // old wxEVT_COMMAND_* constants

@@ -544,7 +544,7 @@ const wxColour* wxStockGDI::GetColour(Item item)
             colour = new wxColour(0, 0, 255);
             break;
         case COLOUR_CYAN:
-            colour = new wxColour(wxT("CYAN"));
+            colour = new wxColour(0, 255, 255);
             break;
         case COLOUR_GREEN:
             colour = new wxColour(0, 255, 0);
@@ -553,7 +553,7 @@ const wxColour* wxStockGDI::GetColour(Item item)
             colour = new wxColour(255, 255, 0);
             break;
         case COLOUR_LIGHTGREY:
-            colour = new wxColour(wxT("LIGHT GREY"));
+            colour = new wxColour(192, 192, 192);
             break;
         case COLOUR_RED:
             colour = new wxColour(255, 0, 0);

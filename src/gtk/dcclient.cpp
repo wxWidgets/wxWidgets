@@ -320,8 +320,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 
     SetUpDC();
 
-    /* this must be done after SetUpDC, bacause SetUpDC calls the
-       repective SetBrush, SetPen, SetBackground etc functions
+    /* this must be done after SetUpDC, because SetUpDC calls the
+       respective SetBrush, SetPen, SetBackground etc functions
        to set up the DC. SetBackground call m_owner->SetBackground
        and this might not be desired as the standard dc background
        is white whereas a window might assume gray to be the
@@ -1155,7 +1155,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         }
     }
     else if (hasAlpha || pixmap == NULL)
-        pixbuf = bitmap.GetPixbuf();
+        pixbuf = useMask ? bitmap.GetPixbuf() : bitmap.GetPixbufNoMask();
 
     if (isScaled)
     {
@@ -1508,6 +1508,9 @@ void wxWindowDCImpl::Clear()
 
     if (!m_gdkwindow) return;
 
+    if (m_backgroundBrush.IsTransparent())
+        return;
+
     int width,height;
     DoGetSize( &width, &height );
     gdk_draw_rectangle( m_gdkwindow, m_bgGC, TRUE, 0, 0, width, height );
@@ -1735,7 +1738,8 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     m_backgroundBrush = brush;
 
-    if (!m_backgroundBrush.IsOk()) return;
+    if (!m_backgroundBrush.IsOk())
+        m_backgroundBrush = *wxWHITE_BRUSH;
 
     if (!m_gdkwindow) return;
 

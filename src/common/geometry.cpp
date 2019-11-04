@@ -138,15 +138,6 @@ void wxRect2DDouble::ConstrainTo( const wxRect2DDouble &rect )
         SetTop( rect.GetTop() );
 }
 
-wxRect2DDouble& wxRect2DDouble::operator=( const wxRect2DDouble &r )
-{
-    m_x = r.m_x;
-    m_y = r.m_y;
-    m_width = r.m_width;
-    m_height = r.m_height;
-    return *this;
-}
-
 // integer version
 
 // for the following calculations always remember

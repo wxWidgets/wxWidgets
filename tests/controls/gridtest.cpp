@@ -16,26 +16,20 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcclient.h"
 #endif // WX_PRECOMP
 
 #include "wx/grid.h"
+#include "wx/headerctrl.h"
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
 
-// FIXME: A lot of mouse-related tests sporadically fail in wxGTK. This happens
-//        almost all the time but sometimes the tests do pass and the failure
-//        doesn't happen when debugging so this looks like some kind of event
-//        dispatching/simulating problem rather than a real problem in wxGrid.
-//
-//        Just disable these tests for now but it would be really great to
-//        really fix the problem.
 #ifdef __WXGTK__
-    #define NONGTK_TEST(test)
-#else
-    #define NONGTK_TEST(test) WXUISIM_TEST(test)
-#endif
+    #include "wx/stopwatch.h"
+#endif // __WXGTK__
 
+#include "waitforpaint.h"
 
 class GridTestCase : public CppUnit::TestCase
 {
@@ -48,15 +42,17 @@ public:
 private:
     CPPUNIT_TEST_SUITE( GridTestCase );
         WXUISIM_TEST( CellEdit );
-        NONGTK_TEST( CellClick );
-        NONGTK_TEST( CellSelect );
-        NONGTK_TEST( LabelClick );
-        NONGTK_TEST( SortClick );
+        WXUISIM_TEST( CellClick );
+        WXUISIM_TEST( ReorderedColumnsCellClick );
+        WXUISIM_TEST( CellSelect );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         WXUISIM_TEST( Size );
-        NONGTK_TEST( RangeSelect );
+        WXUISIM_TEST( RangeSelect );
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( AddRowCol );
+        CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( ColumnOrder );
         CPPUNIT_TEST( ColumnVisibility );
         CPPUNIT_TEST( LineFormatting );
@@ -66,18 +62,28 @@ private:
         CPPUNIT_TEST( CellFormatting );
         WXUISIM_TEST( Editable );
         WXUISIM_TEST( ReadOnly );
+        WXUISIM_TEST( ResizeScrolledHeader );
+        WXUISIM_TEST( ColumnMinWidth );
+        WXUISIM_TEST( AutoSizeColumn );
         CPPUNIT_TEST( PseudoTest_NativeHeader );
-        NONGTK_TEST( LabelClick );
-        NONGTK_TEST( SortClick );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
+        WXUISIM_TEST( ResizeScrolledHeader );
+        WXUISIM_TEST( ColumnMinWidth );
+        WXUISIM_TEST( AutoSizeColumn );
+        CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( PseudoTest_NativeLabels );
-        NONGTK_TEST( LabelClick );
-        NONGTK_TEST( SortClick );
+        WXUISIM_TEST( LabelClick );
+        WXUISIM_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
+        WXUISIM_TEST( WindowAsEditorControl );
+        WXUISIM_TEST( AutoSizeColumn );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
     void CellClick();
+    void ReorderedColumnsCellClick();
     void CellSelect();
     void LabelClick();
     void SortClick();
@@ -86,6 +92,7 @@ private:
     void Cursor();
     void Selection();
     void AddRowCol();
+    void DeleteAndAddRowCol();
     void ColumnOrder();
     void ColumnVisibility();
     void LineFormatting();
@@ -95,9 +102,27 @@ private:
     void CellFormatting();
     void Editable();
     void ReadOnly();
+    void WindowAsEditorControl();
+    void ResizeScrolledHeader();
+    void ColumnMinWidth();
+    void AutoSizeColumn();
     void PseudoTest_NativeHeader() { ms_nativeheader = true; }
     void PseudoTest_NativeLabels() { ms_nativeheader = false;
                                      ms_nativelabels = true; }
+
+    // The helper function to determine the width of the column label depending
+    // on whether the native column is used.
+    int GetColumnLabelWidth(wxClientDC& dc, int col, int margin) const
+    {
+        if (ms_nativeheader)
+            return m_grid->GetGridColHeader()->GetColumnTitleWidth(col);
+
+        int w, h;
+        dc.GetMultiLineTextExtent(m_grid->GetColLabelValue(col), &w, &h);
+        return w + margin;
+    }
+
+    void CheckFirstColAutoSize(int expected);
 
     static bool ms_nativeheader;
     static bool ms_nativelabels;
@@ -129,8 +154,15 @@ void GridTestCase::setUp()
     if( ms_nativelabels )
         m_grid->SetUseNativeColLabels();
 
+    WaitForPaint waitForPaint(m_grid->GetGridWindow());
+
     m_grid->Refresh();
     m_grid->Update();
+
+    if ( !waitForPaint.YieldUntilPainted() )
+    {
+        WARN("Grid not repainted until timeout expiration");
+    }
 }
 
 void GridTestCase::tearDown()
@@ -163,16 +195,48 @@ void GridTestCase::CellEdit()
 
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
-    m_grid->ShowCellEditControl();
+
+    wxYield();
 
     sim.Text("abab");
+
+    // We need to wait until the editor is really shown under GTK, consider
+    // that it happens once it gets focus.
+#ifdef __WXGTK__
+    for ( wxStopWatch sw; wxWindow::FindFocus() == m_grid; )
+    {
+        if ( sw.Time() > 250 )
+        {
+            WARN("Editor control not shown until timeout expiration");
+            break;
+        }
+
+        wxYield();
+    }
+#endif // __WXGTK__
+
     sim.Char(WXK_RETURN);
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
+#ifdef __WXGTK__
+    for ( wxStopWatch sw; wxWindow::FindFocus() != m_grid; )
+    {
+        if ( sw.Time() > 250 )
+        {
+            WARN("Editor control not hidden until timeout expiration");
+            break;
+        }
+
+        wxYield();
+    }
+#endif // __WXGTK__
+
+    CHECK(m_grid->GetCellValue(1, 1) == "abab");
+
+    CHECK(created.GetCount() == 1);
+    CHECK(changing.GetCount() == 1);
+    CHECK(changed.GetCount() == 1);
 #endif
 }
 
@@ -221,6 +285,35 @@ void GridTestCase::CellClick()
 
     CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, rdclick.GetCount());
+#endif
+}
+
+void GridTestCase::ReorderedColumnsCellClick()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    EventCounter click(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
+
+    wxUIActionSimulator sim;
+
+    wxArrayInt neworder;
+    neworder.push_back(1);
+    neworder.push_back(0);
+
+    m_grid->SetColumnsOrder(neworder);
+
+    wxRect rect = m_grid->CellToRect(0, 1);
+    wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
+    point = m_grid->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
+        m_grid->GetColLabelSize())
+        + wxPoint(2, 2));
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, click.GetCount());
 #endif
 }
 
@@ -501,6 +594,35 @@ void GridTestCase::AddRowCol()
     CPPUNIT_ASSERT_EQUAL(7, m_grid->GetNumberCols());
 }
 
+void GridTestCase::DeleteAndAddRowCol()
+{
+    CPPUNIT_ASSERT_EQUAL(10, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(2, m_grid->GetNumberCols());
+
+    m_grid->DeleteRows(0, 10);
+    m_grid->DeleteCols(0, 2);
+
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberCols());
+
+    m_grid->AppendRows(5);
+    m_grid->AppendCols(3);
+
+    CPPUNIT_ASSERT_EQUAL(5, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(3, m_grid->GetNumberCols());
+
+    // The order of functions calls can be important
+    m_grid->DeleteCols(0, 3);
+    m_grid->DeleteRows(0, 5);
+
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberCols());
+
+    // Different functions calls order
+    m_grid->AppendCols(3);
+    m_grid->AppendRows(5);
+}
+
 void GridTestCase::ColumnOrder()
 {
     m_grid->AppendCols(2);
@@ -699,7 +821,6 @@ void GridTestCase::Editable()
 
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
-    m_grid->ShowCellEditControl();
 
     sim.Text("abab");
     wxYield();
@@ -726,11 +847,19 @@ void GridTestCase::ReadOnly()
     CPPUNIT_ASSERT(m_grid->IsReadOnly(1, 1));
 
     m_grid->SetFocus();
+
+#ifdef __WXGTK__
+    // This is a mystery, but we somehow get WXK_RETURN generated by the
+    // previous test (Editable) in this one. In spite of wxYield() in that
+    // test, the key doesn't get dispatched there and we have to consume it
+    // here before setting the current grid cell, as getting WXK_RETURN later
+    // would move the selection down, to a non read-only cell.
+    wxYield();
+#endif // __WXGTK__
+
     m_grid->SetGridCursor(1, 1);
 
     CPPUNIT_ASSERT(m_grid->IsCurrentCellReadOnly());
-
-    m_grid->ShowCellEditControl();
 
     sim.Text("abab");
     wxYield();
@@ -740,6 +869,233 @@ void GridTestCase::ReadOnly()
 
     CPPUNIT_ASSERT_EQUAL(0, created.GetCount());
 #endif
+}
+
+void GridTestCase::WindowAsEditorControl()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    // A very simple editor using a window not derived from wxControl as the
+    // editor.
+    class TestEditor : public wxGridCellEditor
+    {
+    public:
+        TestEditor() {}
+
+        void Create(wxWindow* parent,
+                    wxWindowID id,
+                    wxEvtHandler* evtHandler) wxOVERRIDE
+        {
+            SetWindow(new wxWindow(parent, id));
+            wxGridCellEditor::Create(parent, id, evtHandler);
+        }
+
+        void BeginEdit(int, int, wxGrid*) wxOVERRIDE {}
+
+        bool EndEdit(int, int, wxGrid const*, wxString const&,
+                     wxString* newval) wxOVERRIDE
+        {
+            *newval = GetValue();
+            return true;
+        }
+
+        void ApplyEdit(int row, int col, wxGrid* grid) wxOVERRIDE
+        {
+            grid->GetTable()->SetValue(row, col, GetValue());
+        }
+
+        void Reset() wxOVERRIDE {}
+
+        wxGridCellEditor* Clone() const wxOVERRIDE { return new TestEditor(); }
+
+        wxString GetValue() const wxOVERRIDE { return "value"; }
+    };
+
+    wxGridCellAttr* attr = new wxGridCellAttr();
+    attr->SetRenderer(new wxGridCellStringRenderer());
+    attr->SetEditor(new TestEditor());
+    m_grid->SetAttr(1, 1, attr);
+
+    EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
+
+    wxUIActionSimulator sim;
+
+    m_grid->SetFocus();
+    m_grid->SetGridCursor(1, 1);
+    m_grid->EnableCellEditControl();
+
+    sim.Char(WXK_RETURN);
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
+#endif
+}
+
+void GridTestCase::ResizeScrolledHeader()
+{
+    // TODO this test currently works only under Windows unfortunately
+#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
+    int const startwidth = m_grid->GetColSize(0);
+    int const draglength = 100;
+
+    m_grid->AppendCols(8);
+    m_grid->Scroll(5, 0);
+    m_grid->Refresh();
+    m_grid->Update();
+
+    wxRect rect = m_grid->CellToRect(0, 1);
+    wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
+    point = m_grid->ClientToScreen(point
+                                   + wxPoint(m_grid->GetRowLabelSize(),
+                                             m_grid->GetColLabelSize())
+                                   - wxPoint(0, 5));
+
+    wxUIActionSimulator sim;
+
+    wxYield();
+    sim.MouseMove(point);
+
+    wxYield();
+    sim.MouseDown();
+
+    wxYield();
+    sim.MouseMove(point + wxPoint(draglength, 0));
+
+    wxYield();
+    sim.MouseUp();
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(startwidth + draglength, m_grid->GetColSize(0));
+#endif
+}
+
+void GridTestCase::ColumnMinWidth()
+{
+    // TODO this test currently works only under Windows unfortunately
+#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
+    int const startminwidth = m_grid->GetColMinimalAcceptableWidth();
+    m_grid->SetColMinimalAcceptableWidth(startminwidth*2);
+    int const newminwidth = m_grid->GetColMinimalAcceptableWidth();
+    int const startwidth = m_grid->GetColSize(0);
+
+    CPPUNIT_ASSERT(m_grid->GetColMinimalAcceptableWidth() < startwidth);
+
+    wxRect rect = m_grid->CellToRect(0, 1);
+    wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
+    point = m_grid->ClientToScreen(point
+                                   + wxPoint(m_grid->GetRowLabelSize(),
+                                             m_grid->GetColLabelSize())
+                                   - wxPoint(0, 5));
+
+    wxUIActionSimulator sim;
+
+    // Drag to reach the minimal width.
+    wxYield();
+    sim.MouseMove(point);
+    wxYield();
+    sim.MouseDown();
+    wxYield();
+    sim.MouseMove(point - wxPoint(startwidth - startminwidth, 0));
+    wxYield();
+    sim.MouseUp();
+    wxYield();
+
+    if ( ms_nativeheader )
+        CPPUNIT_ASSERT_EQUAL(startwidth, m_grid->GetColSize(0));
+    else
+        CPPUNIT_ASSERT_EQUAL(newminwidth, m_grid->GetColSize(0));
+#endif
+}
+
+void GridTestCase::CheckFirstColAutoSize(int expected)
+{
+    m_grid->AutoSizeColumn(0);
+
+    wxYield();
+    CHECK(m_grid->GetColSize(0) == expected);
+}
+
+void GridTestCase::AutoSizeColumn()
+{
+    // Hardcoded extra margin for the columns used in grid.cpp.
+    const int margin = m_grid->FromDIP(10);
+
+    wxGridCellAttr *attr = m_grid->GetOrCreateCellAttr(0, 0);
+    wxGridCellRenderer *renderer = attr->GetRenderer(m_grid, 0, 0);
+    REQUIRE(renderer != NULL);
+
+    wxClientDC dcCell(m_grid->GetGridWindow());
+
+    wxClientDC dcLabel(m_grid->GetGridWindow());
+    dcLabel.SetFont(m_grid->GetLabelFont());
+
+    const wxString shortStr     = "W";
+    const wxString mediumStr    = "WWWW";
+    const wxString longStr      = "WWWWWWWW";
+    const wxString multilineStr = mediumStr + "\n" + longStr;
+
+    SECTION("Empty column and label")
+    {
+        m_grid->SetColLabelValue(0, wxString());
+        CheckFirstColAutoSize( m_grid->GetDefaultColSize() );
+    }
+
+    SECTION("Empty column with label")
+    {
+        m_grid->SetColLabelValue(0, mediumStr);
+        CheckFirstColAutoSize( GetColumnLabelWidth(dcLabel, 0, margin) );
+    }
+
+    SECTION("Column with empty label")
+    {
+        m_grid->SetColLabelValue(0, wxString());
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, shortStr);
+        m_grid->SetCellValue(3, 0, longStr);
+
+        CheckFirstColAutoSize(
+            renderer->GetBestWidth(*m_grid, *attr, dcCell, 3, 0,
+                                   m_grid->GetRowHeight(3)) + margin );
+    }
+
+    SECTION("Column with label longer than contents")
+    {
+        m_grid->SetColLabelValue(0, multilineStr);
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, shortStr);
+        CheckFirstColAutoSize( GetColumnLabelWidth(dcLabel, 0, margin) );
+    }
+
+    SECTION("Column with contents longer than label")
+    {
+        m_grid->SetColLabelValue(0, mediumStr);
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, shortStr);
+        m_grid->SetCellValue(3, 0, multilineStr);
+        CheckFirstColAutoSize(
+            renderer->GetBestWidth(*m_grid, *attr, dcCell, 3, 0,
+                                   m_grid->GetRowHeight(3)) + margin );
+    }
+
+    SECTION("Column with equally sized contents and label")
+    {
+        m_grid->SetColLabelValue(0, mediumStr);
+        m_grid->SetCellValue(0, 0, mediumStr);
+        m_grid->SetCellValue(1, 0, mediumStr);
+        m_grid->SetCellValue(3, 0, mediumStr);
+
+        const int labelWidth = GetColumnLabelWidth(dcLabel, 0, margin);
+
+        const int cellWidth =
+            renderer->GetBestWidth(*m_grid, *attr, dcCell, 3, 0,
+                                   m_grid->GetRowHeight(3))
+            + margin;
+
+        // We can't be sure which size will be greater because of different fonts
+        // so just calculate the maximum width.
+        CheckFirstColAutoSize( wxMax(labelWidth, cellWidth) );
+    }
 }
 
 #endif //wxUSE_GRID

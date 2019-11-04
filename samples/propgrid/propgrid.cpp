@@ -954,15 +954,10 @@ static const wxString _fs_windowstyle_labels[] = {
     "wxTRANSPARENT_WINDOW",
     "wxTAB_TRAVERSAL",
     "wxWANTS_CHARS",
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    "wxNO_FULL_REPAINT_ON_RESIZE",
-#endif
     "wxVSCROLL",
     "wxALWAYS_SHOW_SB",
     "wxCLIP_CHILDREN",
-#if wxFULL_REPAINT_ON_RESIZE
     "wxFULL_REPAINT_ON_RESIZE",
-#endif
     };
 
 static const long _fs_windowstyle_values[] = {
@@ -974,15 +969,10 @@ static const long _fs_windowstyle_values[] = {
     wxTRANSPARENT_WINDOW,
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    wxNO_FULL_REPAINT_ON_RESIZE,
-#endif
     wxVSCROLL,
     wxALWAYS_SHOW_SB,
     wxCLIP_CHILDREN,
-#if wxFULL_REPAINT_ON_RESIZE
     wxFULL_REPAINT_ON_RESIZE
-#endif
 };
 
 static const wxString _fs_framestyle_labels[] = {
@@ -1191,7 +1181,7 @@ void FormMain::PopulateWithExamples ()
     pg->Append( new wxIntProperty ( "SpinCtrl", wxPG_LABEL, 0L ) );
 
     pg->SetPropertyEditor( "SpinCtrl", wxPGEditor_SpinCtrl );
-    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MIN, -10L );  // Use constants instead of string
+    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MIN, -2L );  // Use constants instead of string
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MAX, 16384L );   // for reduced binary size.
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_STEP, 2L );
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_MOTION, true );
@@ -1243,7 +1233,7 @@ void FormMain::PopulateWithExamples ()
     pg->Append( prop );
 
     prop->SetAttribute(wxPG_FILE_WILDCARD,"Text Files (*.txt)|*.txt");
-    prop->SetAttribute(wxPG_FILE_DIALOG_TITLE,"Custom File Dialog Title");
+    prop->SetAttribute(wxPG_DIALOG_TITLE,"Custom File Dialog Title");
     prop->SetAttribute(wxPG_FILE_SHOW_FULL_PATH,false);
 
 #ifdef __WXMSW__
@@ -1359,8 +1349,8 @@ void FormMain::PopulateWithExamples ()
     // is allowed (naturally, in this case property cannot be accessed by name).
     pg->Append( new wxDirProperty( "DirProperty", wxPG_LABEL, ::wxGetUserHome()) );
     pg->SetPropertyAttribute( "DirProperty",
-                              wxPG_DIR_DIALOG_MESSAGE,
-                              "This is a custom dir dialog message" );
+                              wxPG_DIALOG_TITLE,
+                              "This is a custom dir dialog title" );
 
     // Add string property - first arg is label, second name, and third initial value
     pg->Append( new wxStringProperty ( "StringProperty", wxPG_LABEL ) );
@@ -1399,6 +1389,7 @@ void FormMain::PopulateWithExamples ()
     wxBitmap myTestBitmap(60, 15, 32);
     wxMemoryDC mdc;
     mdc.SelectObject(myTestBitmap);
+    mdc.SetBackground(*wxWHITE_BRUSH);
     mdc.Clear();
     mdc.SetPen(*wxBLACK);
     mdc.DrawLine(0, 0, 60, 15);
@@ -1981,7 +1972,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
 FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size) :
            wxFrame((wxFrame *)NULL, -1, title, pos, size,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
-                wxTAB_TRAVERSAL|wxCLOSE_BOX|wxNO_FULL_REPAINT_ON_RESIZE) )
+                wxTAB_TRAVERSAL|wxCLOSE_BOX) )
 {
     SetIcon(wxICON(sample));
 
@@ -2328,18 +2319,19 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
     for (;;)
     {
+        if ( p->GetChildCount() == 0 )
+            break;
+
+        unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
+        p = p->Item(n);
+
         if ( !p->IsCategory() )
         {
-            m_pPropGridManager->DeleteProperty( p );
+            wxString label = p->GetLabel();
+            m_pPropGridManager->DeleteProperty(p);
+            wxLogMessage("Property deleted: %s", label);
             break;
         }
-
-        if ( !p->GetChildCount() )
-            break;
-
-        int n = rand() % ((int)p->GetChildCount());
-
-        p = p->Item(n);
     }
 }
 
@@ -2994,21 +2986,23 @@ void FormMain::OnSetPropertyValue( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
-
     wxPGProperty* selected = pg->GetSelection();
-    const wxPGChoices& choices = selected->GetChoices();
 
-    // Insert new choice to the center of list
+    if (selected)
+    {
+        const wxPGChoices& choices = selected->GetChoices();
 
-    if ( choices.IsOk() )
-    {
-        int pos = choices.GetCount() / 2;
-        selected->InsertChoice("New Choice", pos);
+        if ( choices.IsOk() )
+        {
+            // Insert new choice to the center of list
+
+            int pos = choices.GetCount() / 2;
+            selected->InsertChoice("New Choice", pos);
+            return;
+        }
     }
-    else
-    {
-        ::wxMessageBox("First select a property with some choices.");
-    }
+
+    wxMessageBox("First select a property with some choices.");
 }
 
 // -----------------------------------------------------------------------
@@ -3016,21 +3010,23 @@ void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnDeleteChoice( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
-
     wxPGProperty* selected = pg->GetSelection();
-    const wxPGChoices& choices = selected->GetChoices();
 
-    // Deletes choice from the center of list
+    if (selected)
+    {
+        const wxPGChoices& choices = selected->GetChoices();
 
-    if ( choices.IsOk() )
-    {
-        int pos = choices.GetCount() / 2;
-        selected->DeleteChoice(pos);
+        if ( choices.IsOk() )
+        {
+            // Deletes choice from the center of list
+
+            int pos = choices.GetCount() / 2;
+            selected->DeleteChoice(pos);
+            return;
+        }
     }
-    else
-    {
-        ::wxMessageBox("First select a property with some choices.");
-    }
+
+    wxMessageBox("First select a property with some choices.");
 }
 
 // -----------------------------------------------------------------------

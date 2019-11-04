@@ -78,8 +78,7 @@ public:
     virtual bool IsItemChecked(long item) const wxOVERRIDE;
 
 private:
-    void ShowContextMenu(const wxPoint& pos);
-    wxLog *m_logOld;
+    void ShowContextMenu(const wxPoint& pos, long item);
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxString& eventName);
@@ -117,7 +116,7 @@ protected:
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
-
+    void OnCheckVisibility(wxCommandEvent& event);
     void OnSetItemsCount(wxCommandEvent& event);
 
 
@@ -247,6 +246,6 @@ enum
 #ifdef __WXOSX__
     LIST_MAC_USE_GENERIC,
 #endif
-
+    LIST_CHECKVISIBILITY,
     LIST_CTRL                   = 1000
 };
