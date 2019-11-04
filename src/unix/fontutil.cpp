@@ -217,17 +217,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 
 void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
-#ifdef __WXGTK__
-    // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling Factor" 
-    // in Gnome Tweaks, "Force font DPI" in KDE System Settings or GDK_DPI_SCALE
-    // environment variable). Scale the passed font pointsize accordingly.
-    GdkScreen* screen = gdk_screen_get_default();
-    double scale = screen ? gdk_screen_get_resolution(screen) / 96.0 : 1.0;   
-#else
-    double scale = 1.0;
-#endif // __WXGTK__
-
-    pango_font_description_set_size( description, wxRound(pointsize * scale * PANGO_SCALE) );
+    pango_font_description_set_size( description, wxRound(pointsize * PANGO_SCALE) );
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
