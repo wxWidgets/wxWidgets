@@ -526,6 +526,9 @@ protected:
     WindowHDC m_mswWindowHDC;
     int m_mswStateSavedDC;
 #endif
+#ifdef __WXGTK__
+    float m_fontScalingFactor;
+#endif
 
 private:
     cairo_t* m_context;
@@ -2360,6 +2363,14 @@ wxCairoContext::~wxCairoContext()
 
 void wxCairoContext::Init(cairo_t *context)
 {
+#ifdef __WXGTK__
+    // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling
+    // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
+    // GDK_DPI_SCALE environment variable).
+    GdkScreen* screen = gdk_screen_get_default();
+    m_fontScalingFactor = screen ? gdk_screen_get_resolution(screen) / 96.0 : 1.0;
+#endif
+
     m_context = context;
     if ( m_context )
     {
@@ -2660,9 +2671,12 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     fontData->Apply(this);
 
 #ifdef __WXGTK__
-    const wxFont& font = fontData->GetFont();
+    wxFont font = fontData->GetFont();
     if ( font.IsOk() )
     {
+        // Apply GDK font scaling factor.
+        font.Scale(m_fontScalingFactor);
+
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
@@ -2710,13 +2724,16 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
 
 #ifdef __WXGTK__
     // Use Pango instead of Cairo toy font API if we have the font.
-    const wxFont& font = fontData->GetFont();
+    wxFont font = fontData->GetFont();
     if ( font.IsOk() )
     {
         // Note that there is no need to call Apply() at all in this case, it
         // just sets the text colour, but we don't care about this when
         // measuring its extent.
         int w, h;
+
+        // Apply GDK font scaling factor.
+        font.Scale(m_fontScalingFactor);
 
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
@@ -2787,7 +2804,11 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     if (data.length())
     {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout(m_context));
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+        wxFont font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+
+        // Apply GDK font scaling factor.
+        font.Scale(m_fontScalingFactor);
+
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
         PangoLayoutIter* iter = pango_layout_get_iter(layout);
