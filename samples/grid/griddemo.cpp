@@ -565,15 +565,21 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
+    grid->SetCellValue(0, 13, "Localized date\ncolumn");
     grid->SetColFormatDate(13); // Localized by default.
+    grid->SetCellValue(1, 13, "Today");
+    grid->SetCellValue(0, 14, "ISO 8601 date\ncolumn");
     grid->SetColFormatDate(14, "%Y-%m-%d"); // ISO 8601 date format.
+    grid->SetCellValue(1, 14, "Tomorrow");
 
-    grid->SetCellValue(7, 0, "Today");
-    grid->SetCellRenderer(7, 0, new wxGridCellDateRenderer);
-    grid->SetCellEditor(7, 0, new wxGridCellDateEditor);
-    grid->SetCellValue(8, 0, "Tomorrow");
-    grid->SetCellRenderer(8, 0, new wxGridCellDateRenderer("%Y-%m-%d"));
-    grid->SetCellEditor(8, 0, new wxGridCellDateEditor);
+    grid->SetCellValue(13, 0, "Date cell:");
+    grid->SetCellValue(13, 1, "Today");
+    grid->SetCellRenderer(13, 1, new wxGridCellDateRenderer);
+    grid->SetCellEditor(13, 1, new wxGridCellDateEditor);
+    grid->SetCellValue(14, 0, "ISO date cell:");
+    grid->SetCellValue(14, 1, "Tomorrow");
+    grid->SetCellRenderer(14, 1, new wxGridCellDateRenderer("%Y-%m-%d"));
+    grid->SetCellEditor(14, 1, new wxGridCellDateEditor);
 
     const wxString choices[] =
     {
