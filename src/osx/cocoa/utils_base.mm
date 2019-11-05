@@ -287,14 +287,16 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     NSRunningApplication *app = nil;
     
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) && [params count] > 0 )
+    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
     {
-        app = [ws openURLs:params withApplicationAtURL:url
-               options:NSWorkspaceLaunchAsync
-         configuration:[NSDictionary dictionary]
-                 error:&error];
+        if ( [params count] > 0 )
+            app = [ws openURLs:params withApplicationAtURL:url
+                       options:NSWorkspaceLaunchAsync
+                 configuration:[NSDictionary dictionary]
+                         error:&error];
     }
-    else
+    
+    if ( app == nil )
 #endif
     {
         app = [ws launchApplicationAtURL:url
