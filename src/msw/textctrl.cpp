@@ -2538,8 +2538,10 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
+    int cy;
+    wxFont font = GetFont();
+    font.WXAdjustToPPI(GetDPI());
+    wxGetCharSize(GetHWND(), NULL, &cy, font);
 
     DWORD wText = FromDIP(1);
     ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
@@ -2890,7 +2892,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 {
     // Native text control sends EN_CHANGE when the font changes, producing
     // a wxEVT_TEXT event as if the user changed the value. This is not
-    // the case, so supress the event.
+    // the case, so suppress the event.
     wxEventBlocker block(this, wxEVT_TEXT);
 
     if ( !wxTextCtrlBase::SetFont(font) )
