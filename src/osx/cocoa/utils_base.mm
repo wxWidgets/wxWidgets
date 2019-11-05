@@ -245,14 +245,13 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
         for( ; *argv != NULL; ++argv )
         {
             NSURL *cfurlCurrentFile;
-            wxFileName argfn(*argv);     // Filename for path
             wxString dir( *argv );
-            if(argfn.DirExists() && argfn.IsDir())
+            if( wxFileName::DirExists(dir) )
             {
                 // First, try creating as a directory
                 cfurlCurrentFile = [NSURL fileURLWithPath:wxCFStringRef(dir).AsNSString() isDirectory:YES];
             }
-            else if(argfn.FileExists())
+            else if( wxFileName::FileExists(dir) )
             {
                 // And if it isn't a directory try creating it
                 // as a regular file
