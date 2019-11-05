@@ -226,6 +226,13 @@ WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref )
     [newImage autorelease];
     return( newImage );
 }
+
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCFURL( CFURLRef urlref )
+{
+    NSImage  *newImage = [[NSImage alloc] initWithContentsOfURL:(NSURL*)urlref];
+    [newImage autorelease];
+    return( newImage );
+}
 #endif
 
 CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg)
