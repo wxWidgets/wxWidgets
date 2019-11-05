@@ -379,7 +379,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
 
 void wxMenu::HandleMenuItemHighlighted( wxMenuItem* item )
 {
-    int menuid = item ? item->GetId() : 0;
+    int menuid = item ? item->GetId() : wxID_NONE;
     wxMenuEvent wxevent(wxEVT_MENU_HIGHLIGHT, menuid, this);
     ProcessMenuEvent(this, wxevent, GetWindow());
 }
