@@ -575,7 +575,7 @@ static void menuitem_deselect(GtkWidget*, wxMenuItem* item)
     if (!item->IsEnabled())
         return;
 
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, -1, item->GetMenu());
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, wxID_NONE, item->GetMenu());
     DoCommonMenuCallbackCode(item->GetMenu(), event);
 }
 }

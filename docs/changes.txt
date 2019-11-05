@@ -83,6 +83,10 @@ Changes in behaviour not resulting in compilation errors
   coordinates, e.g. returned by wxWindow::GetSize() by GetContentScaleFactor()
   before using them with OpenGL functions.
 
+- wxGTK now uses wxID_NONE item ID for wxEVT_MENU_HIGHLIGHT events sent when
+  there is no highlighted menu item, instead of wxID_ANY used before, for
+  consistency with wxMSW.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
