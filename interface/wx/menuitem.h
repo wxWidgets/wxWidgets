@@ -31,8 +31,9 @@
         A menu has been just closed.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT(id, func)}
-        The menu item with the specified id has been highlighted: used to show
-        help prompts in the status bar by wxFrame
+        The menu item with the specified id has been highlighted. If the id is wxID_NONE, a
+        menu item has ben unhighlighted. This is used by wxFrame to show help prompts in
+        the status bar
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT_ALL(func)}
         A menu item has been highlighted, i.e. the currently selected menu item has changed.
