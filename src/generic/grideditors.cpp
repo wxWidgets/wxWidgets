@@ -1245,48 +1245,32 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
 
     // position it in the centre of the rectangle (TODO: support alignment?)
 
-    wxRect cellRect = r;
-
-#if defined(__WXGTK__) || defined (__WXMOTIF__)
-#if defined(__WXGTK3__)
-    cellRect.x += 6;
-    cellRect.width -= 12;
-#else
-    // the checkbox without label still has some space to the right in wxGTK,
-    // so shift it to the right
-    // TODO: check offsets
-    cellRect.x += 2;
-    cellRect.width -= 2;
-    size.x -= 8;
-#endif
-#elif defined(__WXMSW__)
-    cellRect.x += 2;
-    cellRect.width -= 2;
-#elif defined(__WXOSX__)
-    cellRect.x += 3;
-    cellRect.width -= 6;
-#endif
-
     int hAlign = wxALIGN_CENTRE;
     int vAlign = wxALIGN_CENTRE;
     if (GetCellAttr())
         GetCellAttr()->GetAlignment(& hAlign, & vAlign);
 
+    // wxGridCellBoolRenderer and wxGridCellBoolEditor should draw checkboxes
+    // to the same place in a cell but the check mark is aligned right in wxCheckbox
+    // so we should use the width of the checkbox to align our control horizontally
+    // instead of the controls width
+    const wxSize checkBoxSize = wxRendererNative::Get().GetCheckBoxSize(GetWindow());
+
     int x = 0, y = 0;
     if (hAlign == wxALIGN_LEFT)
     {
-        x = cellRect.x;
-        y = cellRect.y + cellRect.height / 2 - size.y / 2;
+        x = r.x + 2;
+        y = r.y + r.height / 2 - size.y / 2;
     }
     else if (hAlign == wxALIGN_RIGHT)
     {
-        x = cellRect.x + cellRect.width - size.x;
-        y = cellRect.y + cellRect.height / 2 - size.y / 2;
+        x = r.x + r.width - checkBoxSize.x - 2;
+        y = r.y + r.height / 2 - size.y / 2;
     }
     else if (hAlign == wxALIGN_CENTRE)
     {
-        x = cellRect.x + cellRect.width / 2 - size.x / 2;
-        y = cellRect.y + cellRect.height / 2 - size.y / 2;
+        x = r.x + r.width / 2 - checkBoxSize.x / 2;
+        y = r.y + r.height / 2 - size.y / 2;
     }
 
     m_control->Move(x, y);

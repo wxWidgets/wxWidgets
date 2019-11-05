@@ -959,7 +959,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     if ( size.x >= minSize || size.y >= minSize )
     {
         // and even leave (at least) 1 pixel margin
-        size.x = size.y = minSize;
+        size.x = size.y = minSize - 2;
     }
 
     // draw a border around checkmark

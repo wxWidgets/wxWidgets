@@ -6978,6 +6978,7 @@ void wxGrid::ShowCellEditControl()
 #ifdef __WXQT__
             // Substract 1 pixel in every dimension to fit in the cell area.
             // If not, Qt will draw the control outside the cell.
+            // TODO: Check offsets under Qt.
             rect.Deflate(1, 1);
 #endif
 
