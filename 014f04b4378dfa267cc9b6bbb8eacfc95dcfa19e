@@ -1,0 +1,1 @@
+wxOSX: Fix not showing more than 13 combobox items under 10.13+ (Dan Korn).
