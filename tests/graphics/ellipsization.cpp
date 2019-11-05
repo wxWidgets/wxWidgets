@@ -33,6 +33,8 @@ public:
 TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::NormalCase", "[ellipsization]")
 {
     wxMemoryDC dc;
+    
+    dc.SetFont(wxFont(10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 
     static const char *stringsToTest[] =
     {
@@ -101,11 +103,12 @@ TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::NormalCase", "[ellipsiza
                     WX_ASSERT_MESSAGE
                     (
                      (
-                        "Test #(%u,%u.%u): %s\n\"%s\" -> \"%s\"; width=%dpx > %dpx",
+                        "Test #(%u,%u.%u): \n%s\n%s\n\"%s\" -> \n\"%s\"; width=%dpx > %dpx",
                         s, f, m,
+                        getenv("GDK_DPI_SCALE"),
                         dc.GetFont().GetNativeFontInfoUserDesc(),
                         str,
-                        ret,
+                        displayed,
                         width,
                         widthsToTest[w]
                      ),
