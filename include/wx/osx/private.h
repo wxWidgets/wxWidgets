@@ -2,7 +2,6 @@
 #define _WX_PRIVATE_OSX_H_
 
 #include "wx/osx/core/private.h"
-#include "wx/osx/private/datatransfer.h"
 
 #if wxOSX_USE_IPHONE
     #include "wx/osx/iphone/private.h"

@@ -30,6 +30,7 @@
 #include "wx/filename.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/datatransfer.h"
 
 static CFStringRef kUTTypeTraditionalMacText = CFSTR("com.apple.traditional-mac-plain-text");
 

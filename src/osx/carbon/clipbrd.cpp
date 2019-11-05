@@ -28,6 +28,7 @@
 #include "wx/scopedarray.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/datatransfer.h"
 
 #define wxUSE_DATAOBJ 1
 
