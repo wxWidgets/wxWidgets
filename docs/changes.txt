@@ -83,6 +83,9 @@ Changes in behaviour not resulting in compilation errors
   coordinates, e.g. returned by wxWindow::GetSize() by GetContentScaleFactor()
   before using them with OpenGL functions.
 
+- wxGTK now uses the wxID_NONE item ID inside EVT_MENU_HIGHLIGHT events sent when
+  the menu item is unhighlighted (it used to use wxID_ANY).
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -143,6 +146,9 @@ Changes in behaviour which may result in build errors
 3.1.4: (released ????-??-??)
 ----------------------------
 
+wxOSX:
+
+- Send EVT_MENU_HIGHLIGHT events when menu items are unhighlighted
 
 3.1.3: (released 2019-10-28)
 ----------------------------
