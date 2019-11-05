@@ -101,8 +101,9 @@ TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::NormalCase", "[ellipsiza
                     WX_ASSERT_MESSAGE
                     (
                      (
-                        "Test #(%u,%u.%u): \"%s\" -> \"%s\"; width=%dpx > %dpx",
+                        "Test #(%u,%u.%u): %s\n\"%s\" -> \"%s\"; width=%dpx > %dpx",
                         s, f, m,
+                        dc.GetFont().GetNativeFontInfoUserDesc(),
                         str,
                         ret,
                         width,
