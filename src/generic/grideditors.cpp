@@ -1216,64 +1216,24 @@ void wxGridCellBoolEditor::Create(wxWindow* parent,
 
 void wxGridCellBoolEditor::SetSize(const wxRect& r)
 {
-    bool resize = false;
-    wxSize size = m_control->GetSize();
-    wxCoord minSize = wxMin(r.width, r.height);
-
-    // check if the checkbox is not too big/small for this cell
-    wxSize sizeBest = m_control->GetBestSize();
-    if ( !(size == sizeBest) )
-    {
-        // reset to default size if it had been made smaller
-        size = sizeBest;
-
-        resize = true;
-    }
-
-    if ( size.x >= minSize || size.y >= minSize )
-    {
-        // leave 1 pixel margin
-        size.x = size.y = minSize - 2;
-
-        resize = true;
-    }
-
-    if ( resize )
-    {
-        m_control->SetSize(size);
-    }
-
-    // position it in the centre of the rectangle (TODO: support alignment?)
-
     int hAlign = wxALIGN_CENTRE;
     int vAlign = wxALIGN_CENTRE;
     if (GetCellAttr())
         GetCellAttr()->GetAlignment(& hAlign, & vAlign);
 
-    // wxGridCellBoolRenderer and wxGridCellBoolEditor should draw checkboxes
-    // to the same place in a cell but the check mark is aligned right in wxCheckbox
-    // so we should use the width of the checkbox to align our control horizontally
-    // instead of the controls width
-    const wxSize checkBoxSize = wxRendererNative::Get().GetCheckBoxSize(GetWindow());
+    wxRect checkBoxRect =
+        GetGridCheckBoxRect(wxRendererNative::Get().
+                                GetCheckBoxSize(GetWindow(), wxCONTROL_CELL),
+                            r, hAlign, vAlign);
 
-    int x = 0, y = 0;
-    if (hAlign == wxALIGN_LEFT)
+    // resize the control if required
+    if ( checkBoxRect.GetSize() != m_control->GetSize())
     {
-        x = r.x + 2;
-        y = r.y + r.height / 2 - size.y / 2;
-    }
-    else if (hAlign == wxALIGN_RIGHT)
-    {
-        x = r.x + r.width - checkBoxSize.x - 2;
-        y = r.y + r.height / 2 - size.y / 2;
-    }
-    else if (hAlign == wxALIGN_CENTRE)
-    {
-        x = r.x + r.width / 2 - checkBoxSize.x / 2;
-        y = r.y + r.height / 2 - size.y / 2;
+        m_control->SetSize(checkBoxRect.GetSize());
     }
 
-    m_control->Move(x, y);
+    // and move it
+    m_control->Move(checkBoxRect.GetPosition());
 }
 
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)

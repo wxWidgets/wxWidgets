@@ -111,6 +111,9 @@ const int GRID_HASH_SIZE = 100;
 // operation
 const int DRAG_SENSITIVITY = 3;
 
+// the space between the cell edge and the checkbox mark
+const int GRID_CELL_CHECKBOX_MARGIN_X = 2;
+
 } // anonymous namespace
 
 #include "wx/arrimpl.cpp"
@@ -10322,6 +10325,46 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
         editor->IncRef();
 
     return editor;
+}
+
+wxRect GetGridCheckBoxRect(const wxSize& checkBoxSize,
+                           const wxRect& cellRect,
+                           int hAlign, int WXUNUSED(vAlign))
+{
+    // TODO: support vAlign
+
+    wxRect checkBoxRect;
+    checkBoxRect.SetY(cellRect.y + cellRect.height / 2 - checkBoxSize.y / 2);
+
+     wxCoord minSize = wxMin(cellRect.width, cellRect.height);
+    if ( checkBoxRect.GetWidth() >= minSize || checkBoxRect.GetHeight() >= minSize )
+    {
+        // let the checkbox mark be even smaller then the min size
+        // to leave some space between cell edges and the checkbox
+        const int newSize = minSize - 2;
+        checkBoxRect.SetWidth(newSize);
+        checkBoxRect.SetHeight(newSize);
+    }
+    else
+    {
+        checkBoxRect.SetSize(checkBoxSize);
+    }
+
+    if ( hAlign & wxALIGN_CENTER_HORIZONTAL )
+    {
+        checkBoxRect.SetX(cellRect.x + cellRect.width / 2 - checkBoxSize.x / 2);
+    }
+    else if ( hAlign & wxALIGN_RIGHT )
+    {
+        checkBoxRect.SetX(cellRect.x + cellRect.width
+                          - checkBoxSize.x - GRID_CELL_CHECKBOX_MARGIN_X);
+    }
+    else // ( hAlign == wxALIGN_LEFT ) and invalid alignment value
+    {
+        checkBoxRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN_X);
+    }
+
+    return checkBoxRect;
 }
 
 #endif // wxUSE_GRID

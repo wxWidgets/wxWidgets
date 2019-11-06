@@ -16,8 +16,7 @@
 
 #if wxUSE_GRID
 
-#include "wx/generic/gridctrl.h"
-#include "wx/generic/grideditors.h"
+#include "wx/grid.h"
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -28,9 +27,11 @@
     #include "wx/checkbox.h"
 #endif // WX_PRECOMP
 
-#include "wx/tokenzr.h"
+#include "wx/headerctrl.h"
 #include "wx/renderer.h"
+#include "wx/tokenzr.h"
 
+#include "wx/generic/private/grid.h"
 
 // ----------------------------------------------------------------------------
 // wxGridCellRenderer
@@ -936,7 +937,8 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
     // compute it only once (no locks for MT safeness in GUI thread...)
     if ( !ms_sizeCheckMark.x )
     {
-        ms_sizeCheckMark = wxRendererNative::Get().GetCheckBoxSize(&grid);
+        ms_sizeCheckMark =
+            wxRendererNative::Get().GetCheckBoxSize(&grid, wxCONTROL_CELL);
     }
 
     return ms_sizeCheckMark;
@@ -951,43 +953,12 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 {
     wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
 
-    // draw a check mark in the centre (ignoring alignment - TODO)
-    wxSize size = GetBestSize(grid, attr, dc, row, col);
-
-    // don't draw outside the cell
-    wxCoord minSize = wxMin(rect.width, rect.height);
-    if ( size.x >= minSize || size.y >= minSize )
-    {
-        // and even leave (at least) 1 pixel margin
-        size.x = size.y = minSize - 2;
-    }
-
-    // draw a border around checkmark
     int vAlign, hAlign;
     attr.GetAlignment(&hAlign, &vAlign);
 
-    wxRect rectBorder;
-    if (hAlign == wxALIGN_CENTRE)
-    {
-        rectBorder.x = rect.x + rect.width / 2 - size.x / 2;
-        rectBorder.y = rect.y + rect.height / 2 - size.y / 2;
-        rectBorder.width = size.x;
-        rectBorder.height = size.y;
-    }
-    else if (hAlign == wxALIGN_LEFT)
-    {
-        rectBorder.x = rect.x + 2;
-        rectBorder.y = rect.y + rect.height / 2 - size.y / 2;
-        rectBorder.width = size.x;
-        rectBorder.height = size.y;
-    }
-    else if (hAlign == wxALIGN_RIGHT)
-    {
-        rectBorder.x = rect.x + rect.width - size.x - 2;
-        rectBorder.y = rect.y + rect.height / 2 - size.y / 2;
-        rectBorder.width = size.x;
-        rectBorder.height = size.y;
-    }
+    wxRect checkBoxRect =
+        GetGridCheckBoxRect(GetBestSize(grid, attr, dc, row, col),
+                            rect, hAlign, vAlign);
 
     bool value;
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
@@ -1004,7 +975,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     if (value)
         flags |= wxCONTROL_CHECKED;
 
-    wxRendererNative::Get().DrawCheckBox( &grid, dc, rectBorder, flags );
+    wxRendererNative::Get().DrawCheckBox( &grid, dc, checkBoxRect, flags );
 }
 
 #endif // wxUSE_GRID
