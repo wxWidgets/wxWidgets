@@ -98,6 +98,26 @@ wxEND_EVENT_TABLE()
 // helper functions
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+// Passing size with a 0 component to X11 functions results in a BadValue X
+// error, so ensure we never do it by using the smallest valid size instead.
+inline void EnsureValidXWindowSize(int& x, int& y)
+{
+    if ( x <= 0 )
+        x = 1;
+    if ( y <= 0 )
+        y = 1;
+}
+
+inline void EnsureValidXWindowSize(wxSize& size)
+{
+    EnsureValidXWindowSize(size.x, size.y);
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // constructors
 // ----------------------------------------------------------------------------
@@ -155,13 +175,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         xparent = (Window) parent->X11GetMainWindow();
     }
 
-    // Size (not including the border) must be nonzero (or a Value error results)!
-    // Note: The Xlib manual doesn't mention this restriction of XCreateWindow.
     wxSize size2(size);
-    if (size2.x <= 0)
-        size2.x = 20;
-    if (size2.y <= 0)
-        size2.y = 20;
+    EnsureValidXWindowSize(size2);
 
     wxPoint pos2(pos);
     if (pos2.x == wxDefaultCoord)
@@ -258,10 +273,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         }
 
         // Make again sure the size is nonzero.
-        if (size2.x <= 0)
-            size2.x = 1;
-        if (size2.y <= 0)
-            size2.y = 1;
+        EnsureValidXWindowSize(size2);
 
 #if wxUSE_NANOX
         backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
@@ -920,16 +932,13 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (width != wxDefaultCoord)
     {
         new_w = width;
-        if (new_w <= 0)
-            new_w = 20;
     }
     if (height != wxDefaultCoord)
     {
         new_h = height;
-        if (new_h <= 0)
-            new_h = 20;
     }
 
+    EnsureValidXWindowSize(new_w, new_h);
     DoMoveWindow( new_x, new_y, new_w, new_h );
 }
 
