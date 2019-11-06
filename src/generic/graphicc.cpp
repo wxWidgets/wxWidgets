@@ -527,7 +527,7 @@ protected:
     int m_mswStateSavedDC;
 #endif
 #ifdef __WXGTK__
-    double m_fontScalingFactor;
+    float m_fontScalingFactor;
 #endif
 
 private:
@@ -2693,7 +2693,7 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( font.IsOk() )
     {
         // Apply GDK font scaling factor.
-        font.SetFractionalPointSize(font.GetFractionalPointSize() * m_fontScalingFactor);
+        font.Scale(m_fontScalingFactor);
        
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
@@ -2751,7 +2751,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
         int w, h;
 
         // Apply GDK font scaling factor.
-        font.SetFractionalPointSize(font.GetFractionalPointSize() * m_fontScalingFactor);
+        font.Scale(m_fontScalingFactor);
 
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
@@ -2811,7 +2811,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             *externalLeading = wxMax(0, fe.height - (fe.ascent + fe.descent));
     }
 }
-
+#include <iostream>
 void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
     widths.Empty();
@@ -2823,9 +2823,9 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout(m_context));
         wxFont font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
-    
+
         // Apply GDK font scaling factor.
-        font.SetFractionalPointSize(font.GetFractionalPointSize() * m_fontScalingFactor);
+        font.Scale(m_fontScalingFactor);
        
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
