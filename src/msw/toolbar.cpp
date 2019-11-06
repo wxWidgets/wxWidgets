@@ -602,23 +602,9 @@ wxSize wxToolBar::DoGetBestSize() const
         wxToolBarTool * const
             tool = static_cast<wxToolBarTool *>(node->GetData());
 
-        // Note that we can't just reuse sizeTool here, even though all normal
-        // items do have this size, this is not true for the separators and it
-        // is both more robust and simpler to just always use TB_GETITEMRECT
-        // rather than handling the separators specially.
-        const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
-
-        if ( IsVertical() )
+        if ( tool->IsControl() )
         {
-            if ( !tool->IsControl() )
-            {
-                sizeBest.y += rcItem.bottom - rcItem.top;
-            }
-            //else: Controls are not shown in vertical toolbars at all.
-        }
-        else
-        {
-            if ( tool->IsControl() )
+            if ( !IsVertical() )
             {
                 const wxSize sizeControl = MSWGetFittingtSizeForControl(tool);
 
@@ -626,6 +612,20 @@ wxSize wxToolBar::DoGetBestSize() const
                 sizeBest.IncTo(wxSize(-1, sizeControl.y));
 
                 sizeBest.x += sizeControl.x;
+            }
+            //else: Controls are not shown in vertical toolbars at all.
+        }
+        else
+        {
+            // Note that we can't just reuse sizeTool here, even though all normal
+            // items do have this size, this is not true for the separators and it
+            // is both more robust and simpler to just always use TB_GETITEMRECT
+            // rather than handling the separators specially.
+            const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
+
+            if ( IsVertical() )
+            {
+                sizeBest.y += rcItem.bottom - rcItem.top;
             }
             else
             {
