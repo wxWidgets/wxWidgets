@@ -950,6 +950,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
+    EnsureValidXWindowSize(width, height);
     XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
 
     if (m_mainWindow != m_clientWindow)
@@ -965,6 +966,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
             height -= border.y + border.height;
         }
 
+        EnsureValidXWindowSize(width, height);
         XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
     }
 }
