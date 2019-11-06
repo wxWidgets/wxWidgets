@@ -686,7 +686,9 @@ wxFont& wxFont::MakeStrikethrough()
 
 wxFont& wxFont::Scale(float x)
 {
-    SetFractionalPointSize(x*GetFractionalPointSize());
+    if ( x != 1.0 )
+        SetFractionalPointSize(x*GetFractionalPointSize());
+    
     return *this;
 }
 
