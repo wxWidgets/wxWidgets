@@ -491,7 +491,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                        kind, kThemeAdornmentNone);
 }
 
-wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int UXUNUSED(flags))
+wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
 {
     // Even though we don't use the window in this implementation, still check
     // that it's valid to avoid surprises when running the same code under the

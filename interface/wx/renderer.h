@@ -574,9 +574,10 @@ public:
         @param win A valid, i.e. non-null, window pointer which is used to get
             the theme defining the checkbox size under some platforms.
 
-        @param flags The only acceptable flag is @c wxCONTROL_CELL which mean
-            that the size of the only checkbox mark will be returned without
-            any margins.
+        @param flags The only acceptable flag is @c wxCONTROL_CELL which means
+            that just the size of the checkbox mark itself will be returned,
+            without any margins. This parameter is only available in wxWidgets
+            3.1.4 or later.
     */
     virtual wxSize GetCheckBoxSize(wxWindow* win, int flags = 0) = 0;
 
