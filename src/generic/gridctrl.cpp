@@ -956,9 +956,9 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     int vAlign, hAlign;
     attr.GetAlignment(&hAlign, &vAlign);
 
-    wxRect checkBoxRect =
-        GetGridCheckBoxRect(GetBestSize(grid, attr, dc, row, col),
-                            rect, hAlign, vAlign);
+    const wxRect checkBoxRect =
+        wxGetGridCheckBoxRect(GetBestSize(grid, attr, dc, row, col),
+                              rect, hAlign, vAlign);
 
     bool value;
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )

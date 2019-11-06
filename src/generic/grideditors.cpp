@@ -1221,9 +1221,9 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     if (GetCellAttr())
         GetCellAttr()->GetAlignment(& hAlign, & vAlign);
 
-    wxRect checkBoxRect =
-        GetGridCheckBoxRect(wxRendererNative::Get().
-                                GetCheckBoxSize(GetWindow(), wxCONTROL_CELL),
+    const wxRect checkBoxRect =
+        wxGetGridCheckBoxRect(wxRendererNative::Get().
+                                  GetCheckBoxSize(GetWindow(), wxCONTROL_CELL),
                             r, hAlign, vAlign);
 
     // resize the control if required

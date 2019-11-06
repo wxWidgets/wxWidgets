@@ -10327,21 +10327,21 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
     return editor;
 }
 
-wxRect GetGridCheckBoxRect(const wxSize& checkBoxSize,
-                           const wxRect& cellRect,
-                           int hAlign, int WXUNUSED(vAlign))
+wxRect wxGetGridCheckBoxRect(const wxSize& checkBoxSize,
+                             const wxRect& cellRect,
+                             int hAlign, int WXUNUSED(vAlign))
 {
     // TODO: support vAlign
 
     wxRect checkBoxRect;
     checkBoxRect.SetY(cellRect.y + cellRect.height / 2 - checkBoxSize.y / 2);
 
-     wxCoord minSize = wxMin(cellRect.width, cellRect.height);
+    wxCoord minSize = wxMin(cellRect.width, cellRect.height);
     if ( checkBoxRect.GetWidth() >= minSize || checkBoxRect.GetHeight() >= minSize )
     {
-        // let the checkbox mark be even smaller then the min size
+        // let the checkbox mark be even smaller than the min size
         // to leave some space between cell edges and the checkbox
-        const int newSize = minSize - 2;
+        const int newSize = wxMax(1, minSize - 2);
         checkBoxRect.SetWidth(newSize);
         checkBoxRect.SetHeight(newSize);
     }
