@@ -90,7 +90,7 @@ public:
                               const wxRect& rect,
                               int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow* win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow* win, int flags = 0) wxOVERRIDE;
 
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
@@ -491,7 +491,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                        kind, kThemeAdornmentNone);
 }
 
-wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win)
+wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
 {
     // Even though we don't use the window in this implementation, still check
     // that it's valid to avoid surprises when running the same code under the

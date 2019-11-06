@@ -259,7 +259,7 @@ public:
                                int flags = 0) = 0;
 
     // Returns the default size of a check box.
-    virtual wxSize GetCheckBoxSize(wxWindow *win) = 0;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) = 0;
 
     // Returns the default size of a check mark.
     virtual wxSize GetCheckMarkSize(wxWindow *win) = 0;
@@ -496,8 +496,8 @@ public:
                               int flags = 0) wxOVERRIDE
         { m_rendererNative.DrawCheckMark( win, dc, rect, flags ); }
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE
-        { return m_rendererNative.GetCheckBoxSize(win); }
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE
+        { return m_rendererNative.GetCheckBoxSize(win, flags); }
 
     virtual wxSize GetCheckMarkSize(wxWindow *win) wxOVERRIDE
         { return m_rendererNative.GetCheckMarkSize(win); }

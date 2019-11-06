@@ -133,7 +133,7 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 };
@@ -552,12 +552,14 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 wxSize
-wxRendererGTK::GetCheckBoxSize(wxWindow* win)
+wxRendererGTK::GetCheckBoxSize(wxWindow* win, int flags)
 {
     // Even though we don't use the window in this implementation, still check
     // that it's valid to avoid surprises when running the same code under the
     // other platforms.
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    const bool addMargins = (flags & wxCONTROL_CELL) == 0;
 
 #ifdef __WXGTK3__
     int min_width, min_height;
@@ -568,10 +570,13 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win)
         sc.Add("check");
         gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
             "min-width", &min_width, "min-height", &min_height, NULL);
-        GtkBorder margin;
-        gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &margin);
-        min_width += margin.left + margin.right;
-        min_height += margin.top + margin.bottom;
+        if ( addMargins )
+        {
+            GtkBorder margin;
+            gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &margin);
+            min_width += margin.left + margin.right;
+            min_height += margin.top + margin.bottom;
+        }
     }
     else
     {
@@ -579,8 +584,11 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win)
         g_value_init(&value, G_TYPE_INT);
         gtk_style_context_get_style_property(sc, "indicator-size", &value);
         min_width = g_value_get_int(&value);
-        gtk_style_context_get_style_property(sc, "indicator-spacing", &value);
-        min_width += 2 * g_value_get_int(&value);
+        if ( addMargins )
+        {
+            gtk_style_context_get_style_property(sc, "indicator-spacing", &value);
+            min_width += 2 * g_value_get_int(&value);
+        }
         min_height = min_width;
         g_value_unset(&value);
     }
@@ -593,7 +601,10 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win)
                          "indicator_spacing", &indicator_spacing,
                          NULL);
 
-    int size = indicator_size + indicator_spacing * 2;
+    int size = indicator_size;
+    if ( addMargins )
+        size += indicator_spacing * 2;
+
     return wxSize(size, size);
 #endif // !__WXGTK3__
 }
