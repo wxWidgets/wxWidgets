@@ -293,6 +293,46 @@ struct EllipsizeCalculator
           m_maxFinalWidthPx(maxFinalWidthPx),
           m_replacementWidthPx(replacementWidthPx)
     {
+        // Where ampersands are used a mnemonic indicator they should not 
+        // affect the overall width of the string and must be removed from the 
+        // measurement. Nonetheless, we need to keep them in the string and 
+        // have a corresponding entry in m_charOffsetsPx.
+        if ( flags & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS )
+        {
+            // Create a copy of the string with the ampersands removed to get 
+            // the correct widths.
+            wxString cpy = wxControl::RemoveMnemonics(s);
+            
+            m_isOk = dc.GetPartialTextExtents(cpy, m_charOffsetsPx);
+
+            // Iterate through the original string inserting width values for
+            // the first ampersand locations that are the same as the 
+            // following width.
+            size_t n = 0;
+            bool mnemonic = false;
+            for ( wxString::const_iterator it = s.begin(); it != s.end(); 
+                                                                   ++it, ++n )
+            {
+                if ( *it == '&' && !mnemonic && (it + 1) != s.end())
+                {
+                    int w = m_charOffsetsPx[n];
+                    m_charOffsetsPx.Insert(w, n);
+                    mnemonic = true;
+                }
+                else
+                    mnemonic = false;
+            }
+        }
+        else
+        {
+            m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
+        }
+
+        /*
+        // Either way, we should end up with the same number of offsets as 
+        // the original string.
+        wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
+        
         m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
         wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
 
@@ -320,6 +360,7 @@ struct EllipsizeCalculator
                 m_charOffsetsPx[n] -= delta;
             }
         }
+        */
     }
 
     bool IsOk() const { return m_isOk; }
