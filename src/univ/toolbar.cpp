@@ -563,33 +563,6 @@ wxSize wxToolBar::DoGetBestClientSize() const
     return wxSize(m_maxWidth, m_maxHeight);
 }
 
-void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    int old_width, old_height;
-    GetSize(&old_width, &old_height);
-
-    wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
-
-    // Correct width and height if needed.
-    if ( width == wxDefaultCoord || height == wxDefaultCoord )
-    {
-        int tmp_width, tmp_height;
-        GetSize(&tmp_width, &tmp_height);
-
-        if ( width == wxDefaultCoord )
-            width = tmp_width;
-        if ( height == wxDefaultCoord )
-            height = tmp_height;
-    }
-
-    // We must refresh the frame size when the toolbar changes size
-    // otherwise the toolbar can be shown incorrectly
-    if ( old_width != width || old_height != height )
-    {
-        SendSizeEventToParent();
-    }
-}
-
 // ----------------------------------------------------------------------------
 // wxToolBar drawing
 // ----------------------------------------------------------------------------
