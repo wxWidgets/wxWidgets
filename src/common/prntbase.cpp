@@ -640,6 +640,8 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
 
 bool wxPrintout::SetUp(wxDC& dc)
 {
+    wxCHECK_MSG( dc.IsOk(), false, "should have a valid DC to set up" );
+
     SetPPIScreen(wxGetDisplayPPI());
 
     // We need to know printer PPI. In most ports, this can be retrieved from
@@ -659,7 +661,10 @@ bool wxPrintout::SetUp(wxDC& dc)
     SetDC(&dc);
 
     dc.GetSize(&m_pageWidthPixels, &m_pageHeightPixels);
-    m_paperRectPixels = wxRect(0, 0, m_pageWidthPixels, m_pageHeightPixels);
+    // This is ugly, but wxDCImpl itself has GetPaperRect() method while wxDC
+    // doesn't (only wxPrinterDC does), so use GetImpl() to avoid having to use
+    // a dynamic cast.
+    m_paperRectPixels = dc.GetImpl()->GetPaperRect();
     dc.GetSizeMM(&m_pageWidthMM, &m_pageHeightMM);
 
     return true;
