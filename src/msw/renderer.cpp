@@ -162,7 +162,7 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
 
     virtual int GetHeaderButtonHeight(wxWindow *win) wxOVERRIDE;
 
@@ -288,7 +288,7 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
 
     virtual wxSize GetCheckMarkSize(wxWindow* win) wxOVERRIDE;
 
@@ -548,7 +548,7 @@ wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
     DoDrawFrameControl(DFC_CAPTION, kind, win, dc, rect, flags);
 }
 
-wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win)
+wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
 {
     // We must have a valid window in order to return the size which is correct
     // for the display this window is on.
@@ -893,7 +893,7 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
 }
 
-wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
+wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
@@ -907,7 +907,7 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
                 return wxSize(checkSize.cx, checkSize.cy);
         }
     }
-    return m_rendererNative.GetCheckBoxSize(win);
+    return m_rendererNative.GetCheckBoxSize(win, flags);
 }
 
 wxSize wxRendererXP::GetCheckMarkSize(wxWindow* win)
