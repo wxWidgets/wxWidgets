@@ -304,6 +304,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     }
 
     m_context = window->GTKGetPangoDefaultContext();
+    g_object_ref(m_context);
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
@@ -344,6 +345,8 @@ wxWindowDCImpl::~wxWindowDCImpl()
 {
     Destroy();
 
+    if (m_context)
+        g_object_unref(m_context);
     if (m_layout)
         g_object_unref (m_layout);
     if (m_fontdesc)
@@ -1539,6 +1542,10 @@ void wxWindowDCImpl::SetFont( const wxFont &font )
             // at least, and it doesn't hurt to do it.
             if (oldContext != m_context)
             {
+                g_object_ref(m_context);
+                if (oldContext)
+                    g_object_unref(oldContext);
+
                 if (m_layout)
                     g_object_unref (m_layout);
 

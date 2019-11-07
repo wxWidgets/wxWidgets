@@ -2629,6 +2629,7 @@ public:
         m_window = window;
 
         m_context = window->GTKGetPangoDefaultContext();
+        g_object_ref(m_context);
         m_layout = pango_layout_new( m_context );
         m_fontdesc = pango_font_description_copy(gtk_widget_get_style(widget)->font_desc);
 
