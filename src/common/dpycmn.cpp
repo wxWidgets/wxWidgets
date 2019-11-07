@@ -77,6 +77,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule);
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
+wxDisplay::wxDisplay()
+{
+    m_impl = Factory().GetPrimaryDisplay();
+}
+
 wxDisplay::wxDisplay(unsigned n)
 {
     wxASSERT_MSG( n == 0 || n < GetCount(),
@@ -89,7 +94,8 @@ wxDisplay::wxDisplay(const wxWindow* window)
 {
     const int n = GetFromWindow(window);
 
-    m_impl = Factory().GetDisplay(n != wxNOT_FOUND ? n : 0);
+    m_impl = n != wxNOT_FOUND ? Factory().GetDisplay(n)
+                              : Factory().GetPrimaryDisplay();
 }
 
 // ----------------------------------------------------------------------------
@@ -243,6 +249,24 @@ void wxDisplayFactory::ClearImpls()
     }
 
     m_impls.clear();
+}
+
+wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
+{
+    // Just use dumb linear search -- there seems to be the most reliable way
+    // to do this in general. In particular, primary monitor is not guaranteed
+    // to be the first one and it's not obvious if it always contains (0, 0).
+    const unsigned count = GetCount();
+    for ( unsigned n = 0; n < count; ++n )
+    {
+        wxDisplayImpl* const d = GetDisplay(n);
+        if ( d && d->IsPrimary() )
+            return d;
+    }
+
+    // This is not supposed to happen, but what else can we do if it
+    // somehow does?
+    return NULL;
 }
 
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
