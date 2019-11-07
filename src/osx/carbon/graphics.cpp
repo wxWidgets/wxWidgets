@@ -2778,6 +2778,9 @@ public :
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) wxOVERRIDE;
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col) wxOVERRIDE;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE ;
@@ -3071,6 +3074,14 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
     wxGraphicsFont f;
     f.SetRefData(new wxMacCoreGraphicsFontData(this, font, col));
     return f;
+}
+
+wxGraphicsFont
+wxMacCoreGraphicsRenderer::CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& WXUNUSED(dpi),
+                                           const wxColour& col)
+{
+    return CreateFont(font, col);
 }
 
 //

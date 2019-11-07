@@ -333,7 +333,7 @@ class WXDLLIMPEXP_BASE wxListKey
 public:
     // implicit ctors
     wxListKey() : m_keyType(wxKEY_NONE)
-        { }
+        { m_key.integer = 0; }
     wxListKey(long i) : m_keyType(wxKEY_INTEGER)
         { m_key.integer = i; }
     wxListKey(const wxString& s) : m_keyType(wxKEY_STRING)

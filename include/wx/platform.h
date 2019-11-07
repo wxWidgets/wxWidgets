@@ -529,32 +529,9 @@
 #include "wx/chkconf.h"
 
 
-/*
-   some compilers don't support iostream.h any longer, while some of theme
-   are not updated with <iostream> yet, so override the users setting here
-   in such case.
- */
-#if defined(_MSC_VER) && (_MSC_VER >= 1310)
-#    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 0
-#elif defined(__MINGW32__)
-#    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 0
-#endif /* compilers with/without iostream.h */
-
-/*
-   old C++ headers (like <iostream.h>) declare classes in the global namespace
-   while the new, standard ones (like <iostream>) do it in std:: namespace,
-   unless it's an old gcc version.
-
-   using this macro allows constuctions like "wxSTD iostream" to work in
-   either case
- */
-#if !wxUSE_IOSTREAMH && (!defined(__GNUC__) || ( __GNUC__ > 2 ) || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
-#    define wxSTD std::
-#else
-#    define wxSTD
-#endif
+/* These macros exist only for compatibility, don't use them in the new code */
+#define wxUSE_IOSTREAMH 0
+#define wxSTD std::
 
 /* On OpenVMS with the most recent HP C++ compiler some function (i.e. wscanf)
  * are only available in the std-namespace. (BUG???)

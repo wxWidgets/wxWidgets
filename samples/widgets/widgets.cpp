@@ -1236,7 +1236,8 @@ void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
     // only log these events in our own logger.
     if ( wxGetApp().IsUsingLogWindow() )
     {
-        wxLogMessage("Widgets %s focus",
+        wxWindow* win = (wxWindow*)event.GetEventObject();
+        wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
                      event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
     }
 

@@ -133,7 +133,7 @@ inline void wxPoint2DInt::GetRounded( wxInt32 *x , wxInt32 *y ) const
 inline wxDouble wxPoint2DInt::GetVectorLength() const
 {
     // cast needed MIPSpro compiler under SGI
-    return sqrt( (double)(m_x)*(m_x) + (m_y)*(m_y) );
+    return sqrt( (wxDouble)(m_x)*(m_x) + (wxDouble)(m_y)*(m_y) );
 }
 
 inline void wxPoint2DInt::SetVectorLength( wxDouble length )
@@ -155,7 +155,8 @@ inline wxDouble wxPoint2DInt::GetDistance( const wxPoint2DInt &pt ) const
 
 inline wxDouble wxPoint2DInt::GetDistanceSquare( const wxPoint2DInt &pt ) const
 {
-    return ( (pt.m_x-m_x)*(pt.m_x-m_x) + (pt.m_y-m_y)*(pt.m_y-m_y) );
+    return ( ((wxDouble)pt.m_x-m_x)*((wxDouble)pt.m_x-m_x) +
+             ((wxDouble)pt.m_y-m_y)*((wxDouble)pt.m_y-m_y) );
 }
 
 inline wxInt32 wxPoint2DInt::GetDotProduct( const wxPoint2DInt &vec ) const
@@ -629,7 +630,6 @@ public:
         { m_x *= ((wxDouble)num)/((wxDouble)denum); m_y *= ((wxDouble)num)/((wxDouble)denum);
                 m_width *= ((wxDouble)num)/((wxDouble)denum); m_height *= ((wxDouble)num)/((wxDouble)denum);}
 
-    wxRect2DDouble& operator = (const wxRect2DDouble& rect);
     inline bool operator == (const wxRect2DDouble& rect) const
         { return wxIsSameDouble(m_x, rect.m_x) && wxIsSameDouble(m_y, rect.m_y) && HaveEqualSize(rect); }
     inline bool operator != (const wxRect2DDouble& rect) const

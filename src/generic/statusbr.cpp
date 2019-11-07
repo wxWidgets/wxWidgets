@@ -194,12 +194,17 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
 {
+    // Currently drawing size grip is implemented only in wxGTK.
+#ifdef __WXGTK20__
     if ( !HasFlag(wxSTB_SIZEGRIP) )
         return false;
 
     wxTopLevelWindow * const
         tlw = wxDynamicCast(wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
     return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
+#else // !__WXGTK20__
+    return false;
+#endif // __WXGTK20__/!__WXGTK20__
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)

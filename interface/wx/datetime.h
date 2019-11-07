@@ -274,7 +274,7 @@ public:
 
         This struct is analogous to standard C <code>struct tm</code> and uses
         the same, not always immediately obvious, conventions for its members:
-        notably its mon and mday fields count from 0 while yday counts from 1.
+        notably its mon and yday fields count from 0 while mday counts from 1.
      */
     struct Tm
     {

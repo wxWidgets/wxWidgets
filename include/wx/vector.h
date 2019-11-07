@@ -194,7 +194,6 @@ public:
 
         reverse_iterator() : m_ptr(NULL) { }
         explicit reverse_iterator(iterator it) : m_ptr(it) { }
-        reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
 
         reference operator*() const { return *m_ptr; }
         pointer operator->() const { return m_ptr; }

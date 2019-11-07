@@ -480,13 +480,11 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 
     if ( col.GetAlignment() != wxALIGN_NOT )
     {
-        hdi.mask |= HDI_FORMAT | HDF_LEFT;
+        hdi.mask |= HDI_FORMAT;
+
+        // wxALIGN_LEFT is the same as wxALIGN_NOT
         switch ( col.GetAlignment() )
         {
-            case wxALIGN_LEFT:
-                hdi.fmt |= HDF_LEFT;
-                break;
-
             case wxALIGN_CENTER:
             case wxALIGN_CENTER_HORIZONTAL:
                 hdi.fmt |= HDF_CENTER;
@@ -542,6 +540,13 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 
 void wxMSWHeaderCtrl::SetColumnsOrder(const wxArrayInt& order)
 {
+    // This can happen if we don't have any columns at all and "order" is empty
+    // anyhow in this case, so we don't have anything to do (note that we
+    // already know that the input array contains m_numColumns elements, as
+    // it's checked by the public SetColumnsOrder()).
+    if ( !m_numColumns )
+        return;
+
     wxArrayInt orderShown;
     orderShown.reserve(m_numColumns);
 

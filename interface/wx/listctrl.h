@@ -1659,7 +1659,7 @@ public:
 
         @param parent
             Parent window. Must not be @NULL.
-        @param id
+        @param winid
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.

@@ -1,10 +1,10 @@
-# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004-2006.
+# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004,2006,2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-21 14:25+0200\n"
-"PO-Revision-Date: 2019-10-08 13:07+0300\n"
+"PO-Revision-Date: 2019-11-03 13:41+0200\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: <wx-translators@wxwidgets.org>\n"
 "Language: sq\n"
@@ -1305,7 +1305,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:577
 #: ../src/richtext/richtextborderspage.cpp:579
 msgid "An optional corner radius for adding rounded corners."
-msgstr "Një rreze opsionale këndesh për shtim cepash të rrumbullakuar. "
+msgstr "Një rreze opsionale këndesh për shtim cepash të rrumbullakuar."
 
 #: ../src/common/debugrpt.cpp:576
 msgid "And includes the following files:\n"
@@ -2682,7 +2682,7 @@ msgstr "U fshi kartelë kyçjeje '%s' e ndenjur."
 #: ../src/common/secretstore.cpp:220
 #, c-format
 msgid "Deleting password for \"%s/%s\" failed: %s."
-msgstr ""
+msgstr "Fshirja e fjalëkalimit për \"%s/%s\" dështoi: %s."
 
 #: ../src/common/module.cpp:124
 #, c-format
@@ -2892,7 +2892,7 @@ msgstr "Aktivizon një hije."
 #: ../src/richtext/richtextbackgroundpage.cpp:300
 #: ../src/richtext/richtextbackgroundpage.cpp:302
 msgid "Enables the blur distance."
-msgstr ""
+msgstr "Aktivizon largësi turbullimi."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:260
 #: ../src/richtext/richtextbackgroundpage.cpp:262
@@ -2971,16 +2971,16 @@ msgstr "Gabim"
 
 #: ../src/unix/epolldispatcher.cpp:103
 msgid "Error closing epoll descriptor"
-msgstr ""
+msgstr "Gabim në mbylljen e përshkruesit epoll"
 
 #: ../src/unix/fswatcher_kqueue.cpp:114
 msgid "Error closing kqueue instance"
-msgstr ""
+msgstr "Gabim në mbylljen e instancës kqueue"
 
 #: ../src/common/filefn.cpp:1049
 #, c-format
 msgid "Error copying the file '%s' to '%s'."
-msgstr ""
+msgstr "Gabim në kopjimin e kartelës '%s' te '%s'."
 
 #: ../src/generic/dirdlgg.cpp:222
 msgid "Error creating directory"
@@ -3050,7 +3050,7 @@ msgstr "Ekzekutive, 7 1/4 x 10 1/2 inç"
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6009
 msgid "Expand"
-msgstr ""
+msgstr "Zgjeroje"
 
 #: ../src/msw/registry.cpp:1240
 #, c-format
@@ -3085,7 +3085,7 @@ msgstr "S’u arrit të përdorej kartelë kyçjeje."
 #: ../src/unix/epolldispatcher.cpp:116
 #, c-format
 msgid "Failed to add descriptor %d to epoll descriptor %d"
-msgstr ""
+msgstr "S’u arrit të shtohej përshkrues %d te përshkrues epoll %d"
 
 #: ../src/msw/dib.cpp:489
 #, c-format
@@ -3179,7 +3179,7 @@ msgstr "S’u arrit të krijohej emër kartele të përkohshme"
 
 #: ../src/msw/utilsexc.cpp:228
 msgid "Failed to create an anonymous pipe"
-msgstr "S’u arrit të krijohej tubacion i paemër"
+msgstr "S’u arrit të krijohej kanal i paemër"
 
 #: ../src/msw/ole/automtn.cpp:522
 #, c-format
@@ -3211,7 +3211,7 @@ msgstr ""
 
 #: ../src/unix/epolldispatcher.cpp:84
 msgid "Failed to create epoll descriptor"
-msgstr ""
+msgstr "S’u arrit të krijohej përshkrues epoll"
 
 #: ../src/msw/mimetype.cpp:238
 #, c-format
@@ -3225,7 +3225,7 @@ msgstr "S’u arrit të krijohej dialogu standard gjej/zëvendëso (kod gabimi %
 
 #: ../src/unix/wakeuppipe.cpp:52
 msgid "Failed to create wake up pipe used by event loop."
-msgstr ""
+msgstr "S’u arrit të krijohej kanal zgjimi nga qerthull akti."
 
 #: ../src/html/winpars.cpp:730
 #, c-format
@@ -3242,7 +3242,7 @@ msgstr "S’u arrit të numërtohen mënyra video"
 
 #: ../src/msw/dde.cpp:722
 msgid "Failed to establish an advise loop with DDE server"
-msgstr ""
+msgstr "S’u arrit të vendosej një qerthull këshillimi me shërbyesin DDE"
 
 #: ../src/msw/dialup.cpp:629 ../src/msw/dialup.cpp:863
 #, c-format
@@ -3276,7 +3276,7 @@ msgstr "S’u arrit të merreshin emra ISP-sh: %s"
 #: ../src/msw/ole/automtn.cpp:574
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr ""
+msgstr "S’u arrit të merrej ndërfaqe automatizimi OLE për \"%s\""
 
 #: ../src/msw/clipbrd.cpp:711
 msgid "Failed to get data from the clipboard"
@@ -3318,7 +3318,7 @@ msgstr "S’u arrit të inspektohej kartela e kyçjes '%s'"
 
 #: ../src/unix/appunix.cpp:182
 msgid "Failed to install signal handler"
-msgstr ""
+msgstr "S’u arrit të instalohej trajtues sinjali"
 
 #: ../src/unix/threadpsx.cpp:1167
 msgid ""
@@ -3346,7 +3346,7 @@ msgstr "S’u arrit të ngarkohej ikonë \"%s\" prej burimesh."
 #: ../src/common/iconbndl.cpp:225
 #, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr ""
+msgstr "S’u arrit të shtohen ikona prej burimi '%s'."
 
 #: ../src/common/iconbndl.cpp:200
 #, c-format
@@ -3400,7 +3400,7 @@ msgstr "S’u arrit të kyçej kartelë kyçjeje '%s'"
 #: ../src/unix/epolldispatcher.cpp:136
 #, c-format
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
-msgstr ""
+msgstr "S’u arrit të modifikohej përshkrues %d te përshkrues epoll %d"
 
 #: ../src/common/filename.cpp:2575
 #, c-format
@@ -3478,15 +3478,15 @@ msgstr "S’u arrit të lexohej dokument prej kartelës \"%s\"."
 
 #: ../src/dfb/evtloop.cpp:98
 msgid "Failed to read event from DirectFB pipe"
-msgstr "S’u arrit të lexohej akt prej tubacioni DirectFB"
+msgstr "S’u arrit të lexohej akt prej kanali DirectFB"
 
 #: ../src/unix/wakeuppipe.cpp:120
 msgid "Failed to read from wake-up pipe"
-msgstr ""
+msgstr "S’u arrit të lexohej prej kanali zgjimi"
 
 #: ../src/unix/utilsunx.cpp:679
 msgid "Failed to redirect child process input/output"
-msgstr "S’u arrit të ridrejtohej input/output-i procesi pjellë"
+msgstr "S’u arrit të ridrejtohej input/output procesi pjellë"
 
 #: ../src/msw/utilsexc.cpp:701
 msgid "Failed to redirect the child process IO"
@@ -3587,7 +3587,7 @@ msgstr "S’u arrit të caktohen leje kartele të përkohshme"
 
 #: ../src/gtk/textctrl.cpp:1072
 msgid "Failed to set text in the text control."
-msgstr ""
+msgstr "S’u arrit të caktohej tekst te kontrolli i tekstit."
 
 #: ../src/unix/threadpsx.cpp:1298
 #, c-format
@@ -3601,7 +3601,7 @@ msgstr "S’u arrit të caktohej përparësie rrjedhe %d."
 
 #: ../src/unix/utilsunx.cpp:783
 msgid "Failed to set up non-blocking pipe, the program might hang."
-msgstr ""
+msgstr "S’u arrit të ujdisej kanal jobllokues, programi mund të ngecë."
 
 #: ../src/common/fs_mem.cpp:261
 #, c-format
@@ -3610,11 +3610,11 @@ msgstr "S’u arrit të depozitohej figura '%s' te kujtesë VFS!"
 
 #: ../src/dfb/evtloop.cpp:170
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
-msgstr ""
+msgstr "S’u arrit të kalohej kanali DirectFB në mënyrën jobllokuese"
 
 #: ../src/unix/wakeuppipe.cpp:59
 msgid "Failed to switch wake up pipe to non-blocking mode"
-msgstr ""
+msgstr "S’u arrit të kalohej kanal zgjimi në mënyrën jobllokuese"
 
 #: ../src/unix/threadpsx.cpp:1605
 msgid "Failed to terminate a thread."
@@ -3622,7 +3622,7 @@ msgstr "S’u arrit të përfundohej një rrjedhë."
 
 #: ../src/msw/dde.cpp:741
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr ""
+msgstr "S’u arrit të përfundohej qerthull këshillimi me shërbyesin DDE"
 
 #: ../src/msw/dialup.cpp:938
 #, c-format
@@ -3647,7 +3647,7 @@ msgstr "S’u arrit të çregjistrohej shërbyesi DDE '%s'"
 #: ../src/unix/epolldispatcher.cpp:155
 #, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
-msgstr ""
+msgstr "S’u arrit të çregjistrohej përshkrues %d prej përshkruesi epoll %d"
 
 #: ../src/common/fileconf.cpp:1006
 msgid "Failed to update user configuration file."
@@ -3793,7 +3793,7 @@ msgstr "Shkronja:"
 #: ../src/dfb/fontmgr.cpp:198
 #, c-format
 msgid "Fonts index file %s disappeared while loading fonts."
-msgstr ""
+msgstr "Kartela tregues shkronjash %s u zhduk teksa ngarkoheshin shkronjat."
 
 #: ../src/unix/utilsunx.cpp:645
 msgid "Fork failed"
@@ -3818,7 +3818,7 @@ msgstr "Prej:"
 
 #: ../src/propgrid/advprops.cpp:1604
 msgid "Fuchsia"
-msgstr ""
+msgstr "Fuksia"
 
 #: ../src/common/imaggif.cpp:138
 msgid "GIF: data stream seems to be truncated."
@@ -3915,7 +3915,7 @@ msgstr "E gjelbër"
 
 #: ../src/generic/colrdlgg.cpp:342
 msgid "Green:"
-msgstr ""
+msgstr "E gjelbër:"
 
 #: ../src/richtext/richtextborderspage.cpp:615
 msgid "Groove"
@@ -4009,7 +4009,7 @@ msgstr "Fshihe këtë mesazh njoftimi."
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:884
 msgid "Highlight"
-msgstr ""
+msgstr "Theksim"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:885
@@ -4084,6 +4084,8 @@ msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
 msgstr ""
+"Nëse mundet, provoni të ndryshoni parametrat e skemës për ta bërë çka "
+"shtypet më të ngushtë."
 
 #: ../src/generic/dbgrptg.cpp:358
 msgid ""
@@ -4116,11 +4118,11 @@ msgstr "Klasë e Paligjshme Objektesh (Non-wxEvtHandler) si Burim Akti"
 
 #: ../src/common/xti.cpp:513
 msgid "Illegal Parameter Count for ConstructObject Method"
-msgstr ""
+msgstr "Numër i Paligjshëm Parametri për Metodë ConstructObject"
 
 #: ../src/common/xti.cpp:501
 msgid "Illegal Parameter Count for Create Method"
-msgstr ""
+msgstr "Numër i Paligjshëm Parametri për Metodë Create"
 
 #: ../src/generic/dirctrlg.cpp:570 ../src/generic/filectrlg.cpp:756
 msgid "Illegal directory name."
@@ -4128,7 +4130,7 @@ msgstr "Emër i paligjshëm drejtorie."
 
 #: ../src/generic/filectrlg.cpp:1367
 msgid "Illegal file specification."
-msgstr "Veçori të paligjshme kartele."
+msgstr "Specifikim i paligjshëm kartele."
 
 #: ../src/common/image.cpp:2269
 msgid "Image and mask have different sizes."
@@ -4261,7 +4263,7 @@ msgstr ""
 #: ../src/gtk/app.cpp:425
 #, c-format
 msgid "Invalid GTK+ command line option, use \"%s --help\""
-msgstr ""
+msgstr "Mundësi e paligjshme rreshti urdhrash GTK+, përdorni \"%s --help\""
 
 #: ../src/common/imagtiff.cpp:311
 msgid "Invalid TIFF image index."
@@ -4280,7 +4282,7 @@ msgstr "Specifikim i pavlefshëm gjeometrie '%s'"
 #: ../src/unix/fswatcher_inotify.cpp:323
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Akt i paligjshëm inotify për \"%s\""
 
 #: ../src/unix/snglinst.cpp:312
 #, c-format
@@ -4522,7 +4524,7 @@ msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
-msgstr ""
+msgstr "Hapës&irë rreshtash:"
 
 #: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
@@ -4540,8 +4542,8 @@ msgstr "Faqja e fundit"
 #, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mesazhi i fundit i përsëritur (\"%s\", %u herë) s’qe output"
+msgstr[1] "Mesazhi i fundit i përsëritur (\"%s\", %u herë) s’qe output"
 
 #: ../src/common/paper.cpp:103
 msgid "Ledger, 17 x 11 in"
@@ -4633,6 +4635,8 @@ msgstr "Qitro"
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr ""
+"Rreshti %lu i kartelës së hartës \"%s\" pat sintaksë të pavlefshme, u "
+"anashkalua."
 
 #: ../src/richtext/richtextliststylepage.cpp:444
 msgid "Line spacing:"
@@ -4653,12 +4657,12 @@ msgstr "Stile liste"
 #: ../src/richtext/richtextfontpage.cpp:197
 #: ../src/richtext/richtextfontpage.cpp:199
 msgid "Lists font sizes in points."
-msgstr ""
+msgstr "Madhësi shkronjash liste, në pikë."
 
 #: ../src/richtext/richtextfontpage.cpp:190
 #: ../src/richtext/richtextfontpage.cpp:192
 msgid "Lists the available fonts."
-msgstr ""
+msgstr "Lista shkronjash të gatshme."
 
 #: ../src/common/fldlgcmn.cpp:340
 #, c-format
@@ -4873,7 +4877,7 @@ msgstr "MacVietnamese"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1762
 msgid "Magnifier"
-msgstr ""
+msgstr "Zmadhues"
 
 #: ../src/propgrid/advprops.cpp:2143
 msgid "Make a selection:"
@@ -5010,19 +5014,19 @@ msgstr ""
 
 #: ../src/richtext/richtextstyledlg.cpp:243
 msgid "New &Box Style..."
-msgstr ""
+msgstr "Stil i Ri &Kuadrati…"
 
 #: ../src/richtext/richtextstyledlg.cpp:225
 msgid "New &Character Style..."
-msgstr ""
+msgstr "Stil i Ri &Shenje…"
 
 #: ../src/richtext/richtextstyledlg.cpp:237
 msgid "New &List Style..."
-msgstr ""
+msgstr "Stil i Ri &Liste…"
 
 #: ../src/richtext/richtextstyledlg.cpp:231
 msgid "New &Paragraph Style..."
-msgstr ""
+msgstr "Stil i Ri &Paragrafi…"
 
 #: ../src/richtext/richtextstyledlg.cpp:606
 #: ../src/richtext/richtextstyledlg.cpp:611
@@ -5063,16 +5067,16 @@ msgstr "Pa Zë"
 #: ../src/generic/animateg.cpp:150
 #, c-format
 msgid "No animation handler for type %ld defined."
-msgstr ""
+msgstr "S’ka trajtues animacioni të përcaktuar për llojin %ld."
 
 #: ../src/dfb/bitmap.cpp:642 ../src/dfb/bitmap.cpp:676
 #, c-format
 msgid "No bitmap handler for type %d defined."
-msgstr ""
+msgstr "S’ka trajtues bitmap të përcaktuar për llojin %d."
 
 #: ../src/common/utilscmn.cpp:1077
 msgid "No default application configured for HTML files."
-msgstr "Pa aplikacion parazgjedhje të formësuar për kartela HTML."
+msgstr "S’ka aplikacion parazgjedhje të formësuar për kartela HTML."
 
 #: ../src/generic/helpext.cpp:445
 msgid "No entries found."
@@ -5171,7 +5175,7 @@ msgstr "Jo %s"
 
 #: ../include/wx/filename.h:573 ../include/wx/filename.h:578
 msgid "Not available"
-msgstr ""
+msgstr "S’ka"
 
 #: ../src/richtext/richtextfontpage.cpp:358
 msgid "Not underlined"
@@ -5183,7 +5187,7 @@ msgstr "Shënim, 8 1/2 x 11 inç"
 
 #: ../src/generic/notifmsgg.cpp:132
 msgid "Notice"
-msgstr ""
+msgstr "Shënim"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
@@ -5314,7 +5318,7 @@ msgstr "OK"
 #: ../src/msw/ole/automtn.cpp:692
 #, c-format
 msgid "OLE Automation error in %s: %s"
-msgstr ""
+msgstr "Gabim Automatizimi OLE te %s: %s"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
@@ -5334,11 +5338,11 @@ msgstr "Ulli"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:325
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "Pa&tejdukshmëri:"
 
 #: ../src/generic/colrdlgg.cpp:354
 msgid "Opacity:"
-msgstr ""
+msgstr "Patejdukshmëri:"
 
 #: ../src/common/docview.cpp:1773 ../src/common/docview.cpp:1815
 msgid "Open File"
@@ -5359,7 +5363,7 @@ msgstr "Hapni…"
 
 #: ../src/unix/glx11.cpp:506 ../src/msw/glcanvas.cpp:592
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
-msgstr ""
+msgstr "OpenGL 3.0 ose i mëvonshëm nuk mbulohet nga përudhësi OpenGL."
 
 #: ../src/generic/dirctrlg.cpp:599 ../src/generic/dirdlgg.cpp:323
 #: ../src/generic/filectrlg.cpp:642 ../src/generic/filectrlg.cpp:786
@@ -5369,7 +5373,7 @@ msgstr "Veprim i palejuar."
 #: ../src/common/cmdline.cpp:900
 #, c-format
 msgid "Option '%s' can't be negated"
-msgstr ""
+msgstr "Mundësia '%s' s’mund të mohohet"
 
 #: ../src/common/cmdline.cpp:1064
 #, c-format
@@ -5614,7 +5618,7 @@ msgstr "Stile paragrafi"
 
 #: ../src/common/xtistrm.cpp:465
 msgid "Passing a already registered object to SetObject"
-msgstr "Po i kalohet SetObject-it një objekt tashmë të regjistruar"
+msgstr "SetObject-it po i kalohet një objekt tashmë të regjistruar"
 
 #: ../src/common/xtistrm.cpp:476
 msgid "Passing an unknown object to GetObject"
@@ -5664,7 +5668,7 @@ msgstr "Veti Fotoje"
 
 #: ../include/wx/unix/pipe.h:47
 msgid "Pipe creation failed"
-msgstr "Dështoi krijimi i tubacionit"
+msgstr "Dështoi krijimi i kanalit"
 
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Please choose a valid font."
@@ -5790,7 +5794,7 @@ msgstr "Shtyp këtë faqe"
 
 #: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
-msgstr "Shtyp në Kartelë"
+msgstr "Shtype në Kartelë"
 
 #: ../src/common/stockitem.cpp:183
 msgid "Print..."
@@ -5846,7 +5850,7 @@ msgstr "Po shtypet faqja %d nga %d"
 #: ../src/generic/printps.cpp:201
 #, c-format
 msgid "Printing page %d..."
-msgstr "Po shtyp faqen %d…"
+msgstr "Po shtypet faqja %d…"
 
 #: ../src/generic/printps.cpp:161
 msgid "Printing..."
@@ -5924,7 +5928,7 @@ msgstr "Gabim leximi në kartelën '%s'"
 #: ../src/common/secretstore.cpp:199
 #, c-format
 msgid "Reading password for \"%s/%s\" failed: %s."
-msgstr ""
+msgstr "S’u arrit të lexohej fjalëkalimi për \"%s/%s\": %s."
 
 #: ../src/common/prntbase.cpp:272
 msgid "Ready"
@@ -5936,7 +5940,7 @@ msgstr "E kuqe"
 
 #: ../src/generic/colrdlgg.cpp:339
 msgid "Red:"
-msgstr ""
+msgstr "E kuqe:"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
@@ -5974,17 +5978,17 @@ msgstr ""
 #: ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr ""
+msgstr "Vlera e regjistrit \"%s\" s’është dyore (por e llojit %s)"
 
 #: ../src/msw/registry.cpp:917
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr ""
+msgstr "Vlera e regjistrit \"%s\" s’është numerike (por e llojit %s)"
 
 #: ../src/msw/registry.cpp:1003
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr ""
+msgstr "Vlera e regjistrit \"%s\" s’është tekst (por e llojit %s)"
 
 #: ../src/msw/registry.cpp:521
 #, c-format
@@ -5998,7 +6002,7 @@ msgstr "Të rregullta"
 
 #: ../src/richtext/richtextsizepage.cpp:519
 msgid "Relative"
-msgstr ""
+msgstr "Relative"
 
 #: ../src/generic/helpext.cpp:458
 msgid "Relevant entries:"
@@ -6014,7 +6018,7 @@ msgstr "Hiqe"
 
 #: ../src/richtext/richtextctrl.cpp:1562
 msgid "Remove Bullet"
-msgstr ""
+msgstr "Hiqe Topthin"
 
 #: ../src/html/helpwnd.cpp:433
 msgid "Remove current page from bookmarks"
@@ -6066,7 +6070,7 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
-msgstr "Rikthehu tek i Ruajtur"
+msgstr "Riktheje tek i Ruajturi"
 
 #: ../src/richtext/richtextborderspage.cpp:616
 msgid "Ridge"
@@ -6074,7 +6078,7 @@ msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "Nga-e-djat&hta-në-të-majtë"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
 #. TRANSLATORS: Name of keyboard key
@@ -6104,25 +6108,25 @@ msgstr "Mënjanë djathtas (mm):"
 #: ../src/richtext/richtextliststylepage.cpp:337
 #: ../src/richtext/richtextliststylepage.cpp:339
 msgid "Right-align text."
-msgstr ""
+msgstr "Vendose tekstin djathtas"
 
 #: ../src/generic/fontdlgg.cpp:322
 msgid "Roman"
-msgstr ""
+msgstr "Roman"
 
 #: ../src/generic/datavgen.cpp:5916
 #, c-format
 msgid "Row %i"
-msgstr ""
+msgstr "Rreshti %i"
 
 #: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:239
 msgid "S&tandard bullet name:"
-msgstr ""
+msgstr "Emër topthi &standard:"
 
 #: ../src/common/accelcmn.cpp:268 ../src/common/accelcmn.cpp:350
 msgid "SPECIAL"
-msgstr ""
+msgstr "SPECIAL"
 
 #: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2797
 msgid "Save"
@@ -6160,7 +6164,7 @@ msgstr "Ruaj lëndë regjistrimi te kartelë"
 #: ../src/common/secretstore.cpp:179
 #, c-format
 msgid "Saving password for \"%s/%s\" failed: %s."
-msgstr ""
+msgstr "S\"u arrit të ruhej fjalëkalimi për \"%s/%s\": %s."
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Script"
@@ -6169,12 +6173,12 @@ msgstr "Programth"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Tasti Scroll Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Tasti Scroll_lock"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:890
@@ -6191,6 +6195,8 @@ msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
 msgstr ""
+"Kërko në lëndën e librit(ve) të ndihmës për krejt hasjet e tekstit që "
+"shtypët më sipër"
 
 #: ../src/generic/fdrepdlg.cpp:160
 msgid "Search direction"
@@ -6384,7 +6390,7 @@ msgstr "Temë e thjeshtë njëngjyrëshe"
 #: ../src/richtext/richtextindentspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:449
 msgid "Single"
-msgstr ""
+msgstr "Njëshe"
 
 #: ../src/generic/filectrlg.cpp:425 ../src/richtext/richtextformatdlg.cpp:369
 #: ../src/richtext/richtextsizepage.cpp:299
@@ -6430,12 +6436,12 @@ msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:289
 msgid "Small C&apitals"
-msgstr ""
+msgstr "K&apitale të Vogla"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:79
 msgid "Snapshot"
-msgstr ""
+msgstr "Fotografim"
 
 #: ../src/richtext/richtextborderspage.cpp:611
 msgid "Solid"
@@ -6473,7 +6479,7 @@ msgstr "Kartela zanore '%s' është e një formati të pambuluar."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
 msgid "Space"
-msgstr ""
+msgstr "Hapësirë"
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
@@ -6481,7 +6487,7 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:197
 msgid "Spell Check"
-msgstr "Kontroll drejtshkrimi"
+msgstr "Kontroll Drejtshkrimi"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1776
@@ -6526,7 +6532,7 @@ msgstr "Stil"
 
 #: ../include/wx/richtext/richtextstyledlg.h:46
 msgid "Style Organiser"
-msgstr ""
+msgstr "Organizues Stilesh"
 
 #: ../src/osx/carbon/fontdlg.cpp:348
 msgid "Style:"
@@ -6534,7 +6540,7 @@ msgstr "Stil:"
 
 #: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
-msgstr ""
+msgstr "P&oshtëshkrim"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
@@ -6543,7 +6549,7 @@ msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
-msgstr ""
+msgstr "S&ipërshkrim"
 
 #: ../src/common/paper.cpp:150
 msgid "SuperA/SuperA/A4 227 x 356 mm"
@@ -6555,7 +6561,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Ndale &ndarjen me vija"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6578,7 +6584,7 @@ msgstr "Simbole"
 #: ../src/common/imagtiff.cpp:369 ../src/common/imagtiff.cpp:382
 #: ../src/common/imagtiff.cpp:741
 msgid "TIFF: Couldn't allocate memory."
-msgstr "BMP: S’u sigurua dot kujtesë."
+msgstr "TIFF: S’u sigurua dot kujtesë."
 
 #: ../src/common/imagtiff.cpp:301
 msgid "TIFF: Error loading image."
@@ -6598,7 +6604,7 @@ msgstr "TIFF: Gabim në shkrim figure."
 
 #: ../src/common/imagtiff.cpp:355
 msgid "TIFF: Image size is abnormally big."
-msgstr ""
+msgstr "TIFF: Madhësia e figurës është anormalisht e madhe."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:68
@@ -6689,14 +6695,14 @@ msgstr "Madhësia e mënjanës së poshtme."
 #: ../src/richtext/richtextmarginspage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:383
 msgid "The bottom padding size."
-msgstr ""
+msgstr "Madhësia e mbushjes së poshthme."
 
 #: ../src/richtext/richtextsizepage.cpp:639
 #: ../src/richtext/richtextsizepage.cpp:641
 #: ../src/richtext/richtextsizepage.cpp:653
 #: ../src/richtext/richtextsizepage.cpp:655
 msgid "The bottom position."
-msgstr ""
+msgstr "Pozicioni poshtë."
 
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextliststylepage.cpp:256
@@ -6707,7 +6713,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:214
 #: ../src/richtext/richtextbulletspage.cpp:216
 msgid "The bullet character."
-msgstr ""
+msgstr "Shenja e topthit."
 
 #: ../src/richtext/richtextsymboldlg.cpp:443
 #: ../src/richtext/richtextsymboldlg.cpp:445
@@ -6771,7 +6777,7 @@ msgstr ""
 #: ../src/richtext/richtextliststylepage.cpp:394
 #: ../src/richtext/richtextliststylepage.cpp:396
 msgid "The first line indent."
-msgstr ""
+msgstr "Shmangia brendazi e rreshtit të parë."
 
 #: ../src/gtk/utilsgtk.cpp:481
 msgid "The following standard GTK+ options are also supported:\n"
@@ -6827,7 +6833,7 @@ msgstr "Shmangia horizontale."
 #: ../src/richtext/richtextliststylepage.cpp:385
 #: ../src/richtext/richtextliststylepage.cpp:387
 msgid "The left indent."
-msgstr ""
+msgstr "Shmangia brendazi majtas."
 
 #: ../src/richtext/richtextmarginspage.cpp:194
 #: ../src/richtext/richtextmarginspage.cpp:196
@@ -6837,7 +6843,7 @@ msgstr "Madhësia e mënjanës majtas."
 #: ../src/richtext/richtextmarginspage.cpp:308
 #: ../src/richtext/richtextmarginspage.cpp:310
 msgid "The left padding size."
-msgstr ""
+msgstr "Madhësia e mbushjes majtas."
 
 #: ../src/richtext/richtextsizepage.cpp:534
 #: ../src/richtext/richtextsizepage.cpp:536
@@ -6901,12 +6907,12 @@ msgstr ""
 #, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "Mesazhi i mëparshëm i përsëritur %u herë."
-msgstr[1] "Mesazhi i mëparshëm i përsëritur %u herë."
+msgstr[0] "Mesazhi i mëparshëm u përsërit %u herë."
+msgstr[1] "Mesazhi i mëparshëm u përsërit %u herë."
 
 #: ../src/common/log.cpp:270
 msgid "The previous message repeated once."
-msgstr "Mesazhi i mëparshëm i përsëritur një herë."
+msgstr "Mesazhi i mëparshëm u përsërit një herë."
 
 #: ../src/richtext/richtextsymboldlg.cpp:462
 #: ../src/richtext/richtextsymboldlg.cpp:464
@@ -6920,8 +6926,8 @@ msgid ""
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
 "Raporti përmban kartelat e radhitura më poshtë. Nëse ndonjë prej tyre "
-"përmban të dhëna private,\n"
-"ju lutemi, hiquani shenjën dhe do të hiqen prej raportit.\n"
+"përmban\n"
+"të dhëna private, ju lutemi, hiquani shenjën dhe do të hiqen prej raportit.\n"
 
 #: ../src/common/cmdline.cpp:1254
 #, c-format
@@ -6933,7 +6939,7 @@ msgstr "S’është përcaktuar parametri i domosdoshëm '%s'."
 #: ../src/richtext/richtextliststylepage.cpp:403
 #: ../src/richtext/richtextliststylepage.cpp:405
 msgid "The right indent."
-msgstr ""
+msgstr "Shmangia brendazi djathtas."
 
 #: ../src/richtext/richtextmarginspage.cpp:219
 #: ../src/richtext/richtextmarginspage.cpp:221
@@ -6943,7 +6949,7 @@ msgstr "Madhësia e mënjanës djathtas."
 #: ../src/richtext/richtextmarginspage.cpp:333
 #: ../src/richtext/richtextmarginspage.cpp:335
 msgid "The right padding size."
-msgstr ""
+msgstr "Madhësia e mbushjes djathtas."
 
 #: ../src/richtext/richtextsizepage.cpp:604
 #: ../src/richtext/richtextsizepage.cpp:606
@@ -6955,7 +6961,7 @@ msgstr "Pozicioni djathtas."
 #: ../src/richtext/richtextbackgroundpage.cpp:309
 #: ../src/richtext/richtextbackgroundpage.cpp:311
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "Largësia e turbullimit të hijes."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:266
 #: ../src/richtext/richtextbackgroundpage.cpp:268
@@ -6993,7 +6999,7 @@ msgstr "Emri i stilit."
 #: ../src/richtext/richtextstylepage.cpp:120
 #: ../src/richtext/richtextstylepage.cpp:122
 msgid "The style on which this style is based."
-msgstr ""
+msgstr "Stili në të cilin bazohet ky stil."
 
 #: ../src/richtext/richtextstyledlg.cpp:214
 #: ../src/richtext/richtextstyledlg.cpp:216
@@ -7025,14 +7031,14 @@ msgstr "Madhësia e mënjanës së sipërme."
 #: ../src/richtext/richtextmarginspage.cpp:356
 #: ../src/richtext/richtextmarginspage.cpp:358
 msgid "The top padding size."
-msgstr ""
+msgstr "Madhësia e mbushjes së sipërme."
 
 #: ../src/richtext/richtextsizepage.cpp:569
 #: ../src/richtext/richtextsizepage.cpp:571
 #: ../src/richtext/richtextsizepage.cpp:583
 #: ../src/richtext/richtextsizepage.cpp:585
 msgid "The top position."
-msgstr ""
+msgstr "Pozicioni i sipërm."
 
 #: ../src/common/cmdline.cpp:1232
 #, c-format
@@ -7042,7 +7048,7 @@ msgstr "Vlera për mundësinë '%s' duhet përcaktuar."
 #: ../src/richtext/richtextborderspage.cpp:585
 #: ../src/richtext/richtextborderspage.cpp:587
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Vlera e rrezes së këndit."
 
 #: ../src/msw/dialup.cpp:433
 #, c-format
@@ -7050,6 +7056,9 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is too "
 "old, please upgrade (the following required function is missing: %s)."
 msgstr ""
+"Versioni i shërbimit të hyrjes së largëti (RAS) të instaluar në këtë makinë "
+"është shumë i vjetër, ju lutemi, përmirësojeni (mungon funksioni vijues i "
+"domosdoshëm: %s)."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:242
 #: ../src/richtext/richtextbackgroundpage.cpp:244
@@ -7073,7 +7082,7 @@ msgstr ""
 #: ../src/common/image.cpp:2854
 #, c-format
 msgid "This is not a %s."
-msgstr ""
+msgstr "Kjo s’është %s."
 
 #: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
@@ -7154,7 +7163,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 msgid "Top"
-msgstr ""
+msgstr "Në krye"
 
 #: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
@@ -7200,7 +7209,7 @@ msgstr "Shtypni një madhësi në pikë."
 #: ../src/msw/ole/automtn.cpp:676
 #, c-format
 msgid "Type mismatch in argument %u."
-msgstr ""
+msgstr "Mospërputhje lloji te argument %u."
 
 #: ../src/common/xtixml.cpp:356 ../src/common/xtixml.cpp:509
 #: ../src/common/xtistrm.cpp:318
@@ -7213,6 +7222,8 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
+"Veprimi i shtypjes \"%s\" dështoi: Vetia e etiketuar \"%s\" është e llojit "
+"\"%s\", JO \"%s\"."
 
 #: ../src/common/paper.cpp:133
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -7224,11 +7235,11 @@ msgstr "US-ASCII"
 
 #: ../src/unix/fswatcher_inotify.cpp:109
 msgid "Unable to add inotify watch"
-msgstr ""
+msgstr "S’arrihet të shtohet mbikëqyrës inotify"
 
 #: ../src/unix/fswatcher_kqueue.cpp:136
 msgid "Unable to add kqueue watch"
-msgstr ""
+msgstr "S’arrihet të shtohet mbikëqyrës kqueue"
 
 #: ../include/wx/msw/private/fswatcher.h:142
 msgid "Unable to associate handle with I/O completion port"
@@ -7240,7 +7251,7 @@ msgstr ""
 
 #: ../src/unix/fswatcher_inotify.cpp:97
 msgid "Unable to close inotify instance"
-msgstr ""
+msgstr "S’arrihet të mbyllet instancë inotify"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:74
 #, c-format
@@ -7254,7 +7265,7 @@ msgstr "S’arrihet të mbyllet trajtuesi për '%s'"
 
 #: ../include/wx/msw/private/fswatcher.h:273
 msgid "Unable to create I/O completion port"
-msgstr ""
+msgstr "S’arrihet të krijohet portë plotësimi I/O"
 
 #: ../src/msw/fswatcher.cpp:84
 msgid "Unable to create IOCP worker thread"
@@ -7262,11 +7273,11 @@ msgstr ""
 
 #: ../src/unix/fswatcher_inotify.cpp:74
 msgid "Unable to create inotify instance"
-msgstr ""
+msgstr "S’arrihet të krijohet instancë inotify"
 
 #: ../src/unix/fswatcher_kqueue.cpp:97
 msgid "Unable to create kqueue instance"
-msgstr ""
+msgstr "S’arrihet të krijohet instancë kqueue"
 
 #: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
@@ -7278,7 +7289,7 @@ msgstr "S’arrihet të merret akte prej kqueue"
 
 #: ../src/gtk/app.cpp:435
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
-msgstr ""
+msgstr "S’arrihet të gatitet GTK+, a është caktuar saktë DISPLAY?"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
@@ -7296,25 +7307,25 @@ msgstr "S’arrihet të luhen tinguj në mënyrë jo të njëkohshme."
 
 #: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
-msgstr ""
+msgstr "S’arrihet të postohet gjendje plotësimi"
 
 #: ../src/unix/fswatcher_inotify.cpp:556
 msgid "Unable to read from inotify descriptor"
-msgstr ""
+msgstr "S’arrihet të lexohet nga përshkrues inotify"
 
 #: ../src/unix/fswatcher_inotify.cpp:141
 #, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr ""
+msgstr "S’arrihet të hiqet mbikëqyrës inotifyi %i"
 
 #: ../src/unix/fswatcher_kqueue.cpp:153
 msgid "Unable to remove kqueue watch"
-msgstr ""
+msgstr "S’arrihet të hiqet mbikëqyrës kqueue"
 
 #: ../src/msw/fswatcher.cpp:168
 #, c-format
 msgid "Unable to set up watch for '%s'"
-msgstr ""
+msgstr "S’arrihet të ujdiset mbikëqyrës për '%s'"
 
 #: ../src/msw/fswatcher.cpp:91
 msgid "Unable to start IOCP worker thread"
@@ -7326,13 +7337,13 @@ msgstr "Shfshije"
 
 #: ../src/common/stockitem.cpp:202
 msgid "Underline"
-msgstr ""
+msgstr "Nënvijë"
 
 #. TRANSLATORS: Label of underlined font
 #: ../src/richtext/richtextfontpage.cpp:359 ../src/osx/carbon/fontdlg.cpp:370
 #: ../src/propgrid/advprops.cpp:690
 msgid "Underlined"
-msgstr ""
+msgstr "Nënvijëzuar"
 
 #: ../src/common/stockitem.cpp:203 ../src/stc/stc_i18n.cpp:15
 msgid "Undo"
@@ -7350,7 +7361,7 @@ msgstr "Shenja të papritura në vijim të mundësisë '%s'."
 #: ../src/unix/fswatcher_inotify.cpp:274
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr ""
+msgstr "Akt i papritur për \"%s\": s’ka përshkrues mbikëqyrësi me përputhje."
 
 #: ../src/common/cmdline.cpp:1195
 #, c-format
@@ -7359,7 +7370,7 @@ msgstr "Parametër '%s' i papritur"
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
-msgstr ""
+msgstr "U krijua papritmas portë e re plotësimi I/O"
 
 #: ../src/msw/fswatcher.cpp:70
 msgid "Ungraceful worker thread termination"
@@ -7405,7 +7416,7 @@ msgstr "Unikod 8 bit (UTF-8)"
 
 #: ../src/common/stockitem.cpp:204
 msgid "Unindent"
-msgstr ""
+msgstr "Hiqi shmangien"
 
 #: ../src/richtext/richtextborderspage.cpp:360
 #: ../src/richtext/richtextborderspage.cpp:362
@@ -7425,17 +7436,17 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:391
 #: ../src/richtext/richtextmarginspage.cpp:393
 msgid "Units for the bottom padding."
-msgstr ""
+msgstr "Njësi për mbushjen poshtë."
 
 #: ../src/richtext/richtextsizepage.cpp:664
 #: ../src/richtext/richtextsizepage.cpp:666
 msgid "Units for the bottom position."
-msgstr ""
+msgstr "Njësi për pozicionin poshtë."
 
 #: ../src/richtext/richtextborderspage.cpp:596
 #: ../src/richtext/richtextborderspage.cpp:598
 msgid "Units for the corner radius."
-msgstr ""
+msgstr "Njësi për rreze këndi."
 
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:260
@@ -7455,12 +7466,12 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:318
 #: ../src/richtext/richtextmarginspage.cpp:320
 msgid "Units for the left padding."
-msgstr ""
+msgstr "Njësi për mbushje majtas."
 
 #: ../src/richtext/richtextsizepage.cpp:559
 #: ../src/richtext/richtextsizepage.cpp:561
 msgid "Units for the left position."
-msgstr ""
+msgstr "Njësi për pozicionin majtas."
 
 #: ../src/richtext/richtextsizepage.cpp:485
 #: ../src/richtext/richtextsizepage.cpp:487
@@ -7495,7 +7506,7 @@ msgstr "Njësi për gjerësinë e objektit."
 #: ../src/richtext/richtextborderspage.cpp:292
 #: ../src/richtext/richtextborderspage.cpp:294
 msgid "Units for the right border width."
-msgstr ""
+msgstr "Njësi për gjerësinë e cakut djathtas."
 
 #: ../src/richtext/richtextmarginspage.cpp:229
 #: ../src/richtext/richtextmarginspage.cpp:231
@@ -7569,17 +7580,17 @@ msgstr "Objekt i panjohur dhënë te GetObjectClassInfo"
 #: ../src/common/imagpng.cpp:366
 #, c-format
 msgid "Unknown PNG resolution unit %d"
-msgstr ""
+msgstr "Njësi e panjohur qartësie PNG %d"
 
 #: ../src/common/xtixml.cpp:327
 #, c-format
 msgid "Unknown Property %s"
-msgstr "Vetia %se panjohur"
+msgstr "Veti %s e Panjohur"
 
 #: ../src/common/imagtiff.cpp:529
 #, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
-msgstr ""
+msgstr "U shpërfill njësi e panjohur qartësie TIFF %d"
 
 #: ../src/unix/dlunix.cpp:160
 msgid "Unknown dynamic library error"
@@ -7610,7 +7621,7 @@ msgstr "Mundësi e gjatë '%s' e panjohur"
 
 #: ../src/msw/ole/automtn.cpp:631
 msgid "Unknown name or named argument."
-msgstr ""
+msgstr "Emër ose argument i emërtuar i panjohur."
 
 #: ../src/common/cmdline.cpp:929 ../src/common/cmdline.cpp:951
 #, c-format
@@ -7731,7 +7742,7 @@ msgstr ""
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
 msgid "Waiting for IO on epoll descriptor %d failed"
-msgstr ""
+msgstr "Dështoi pritja për IO në përshkrues epoll %d"
 
 #: ../src/common/log.cpp:223
 msgid "Warning: "
@@ -7903,7 +7914,7 @@ msgstr "XPM: përcaktim i keqformuar ngjyre '%s' në rreshtin %d!"
 
 #: ../src/common/xpmdecod.cpp:755
 msgid "XPM: no colors left to use for mask!"
-msgstr ""
+msgstr "XPM: s’ka më ngjyra për t’u përdorur për maskë!"
 
 #: ../src/common/xpmdecod.cpp:782
 #, c-format
@@ -7938,19 +7949,19 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:209
 msgid "Zoom &In"
-msgstr ""
+msgstr "Z&madhoje"
 
 #: ../src/common/stockitem.cpp:210
 msgid "Zoom &Out"
-msgstr ""
+msgstr "Z&vogëloje"
 
 #: ../src/common/stockitem.cpp:209 ../src/common/prntbase.cpp:1594
 msgid "Zoom In"
-msgstr ""
+msgstr "Zmadhoje"
 
 #: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1580
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zvogëloje"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Zoom to &Fit"
@@ -8032,7 +8043,7 @@ msgid ""
 "or an application initialized as APPCMD_CLIENTONLY has \n"
 "attempted to perform server transactions."
 msgstr ""
-"një zbatim i filluar si APPCLASS_MONITOR\n"
+"një aplikacion i filluar si APPCLASS_MONITOR\n"
 "u përpoq të kryejë një transaksion DDE,\n"
 "ose një aplikacion i filluar si APPCMD_CLIENTONLY \n"
 "u përpoq të kryejë transaksion shërbyesish."
@@ -8351,12 +8362,12 @@ msgstr ""
 #: ../src/common/fileconf.cpp:608
 #, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr ""
+msgstr "kartela '%s', rreshti %zu: pritej '='."
 
 #: ../src/common/fileconf.cpp:631
 #, c-format
 msgid "file '%s', line %zu: key '%s' was first found at line %d."
-msgstr ""
+msgstr "kartela '%s', rreshti %zu: kyçi '%s' u gjet së pari te rreshti %d."
 
 #: ../src/common/fileconf.cpp:621
 #, c-format
@@ -8366,7 +8377,7 @@ msgstr ""
 #: ../src/common/fileconf.cpp:543
 #, c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr ""
+msgstr "kartela '%s': shenjë e papritur %c te rreshti %zu."
 
 #: ../src/richtext/richtextbuffer.cpp:8738
 msgid "files"
@@ -8399,7 +8410,7 @@ msgstr "figurë"
 
 #: ../src/common/tarstrm.cpp:796
 msgid "incomplete header block in tar"
-msgstr ""
+msgstr "bllok i paplotë kryesh në tar"
 
 #: ../src/common/xtixml.cpp:489
 msgid "incorrect event handler string, missing dot"
@@ -8407,11 +8418,11 @@ msgstr "varg i pasaktë trajtuesi aktesh, mungon një pikë"
 
 #: ../src/common/tarstrm.cpp:1381
 msgid "incorrect size given for tar entry"
-msgstr ""
+msgstr "u dha madhësi i pasaktë për zë tar"
 
 #: ../src/common/tarstrm.cpp:993
 msgid "invalid data in extended tar header"
-msgstr ""
+msgstr "të dhëna të pavlefshme në krye të zgjeruara tar-i"
 
 #: ../src/generic/logg.cpp:1030
 msgid "invalid message box return value"
@@ -8457,7 +8468,7 @@ msgstr "pa gabim"
 #: ../src/dfb/fontmgr.cpp:174
 #, c-format
 msgid "no fonts found in %s, using builtin font"
-msgstr ""
+msgstr "s’u gjetën shkronja te %s, po përdoren shkronja të brendshme"
 
 #: ../src/html/helpdata.cpp:657
 msgid "noname"
@@ -8469,7 +8480,7 @@ msgstr "mesditë"
 
 #: ../src/richtext/richtextstyles.cpp:779
 msgid "normal"
-msgstr ""
+msgstr "normale"
 
 #: ../src/common/cmdline.cpp:1492
 msgid "num"
@@ -8666,7 +8677,7 @@ msgstr "caktoni temë për t’u përdorur"
 
 #: ../src/richtext/richtextbuffer.cpp:9340
 msgid "standard/circle"
-msgstr ""
+msgstr "standard/rreth"
 
 #: ../src/richtext/richtextbuffer.cpp:9341
 msgid "standard/circle-outline"
@@ -8674,15 +8685,15 @@ msgstr ""
 
 #: ../src/richtext/richtextbuffer.cpp:9343
 msgid "standard/diamond"
-msgstr ""
+msgstr "standard/romb"
 
 #: ../src/richtext/richtextbuffer.cpp:9342
 msgid "standard/square"
-msgstr ""
+msgstr "standard/katror"
 
 #: ../src/richtext/richtextbuffer.cpp:9344
 msgid "standard/triangle"
-msgstr ""
+msgstr "standard/trikëndësh"
 
 #: ../src/common/zipstrm.cpp:1985
 msgid "stored file length not in Zip header"
@@ -8699,7 +8710,7 @@ msgstr "hequrvije"
 #: ../src/common/tarstrm.cpp:1003 ../src/common/tarstrm.cpp:1025
 #: ../src/common/tarstrm.cpp:1507 ../src/common/tarstrm.cpp:1529
 msgid "tar entry not open"
-msgstr ""
+msgstr "zë tar i pahapur"
 
 #: ../src/common/datetimefmt.cpp:1961
 msgid "tenth"
@@ -8759,7 +8770,7 @@ msgstr "nënvijëzuar"
 #. TRANSLATORS: Checkbox state name
 #: ../src/generic/treelist.cpp:490
 msgid "undetermined"
-msgstr ""
+msgstr "e papërcaktuar"
 
 #: ../src/common/fileconf.cpp:1979
 #, c-format
@@ -8778,7 +8789,7 @@ msgstr "i/e panjohur"
 #: ../src/msw/registry.cpp:150
 #, c-format
 msgid "unknown (%lu)"
-msgstr ""
+msgstr "e panjohur (%lu)"
 
 #: ../src/common/xtixml.cpp:253
 #, c-format
@@ -8851,727 +8862,3 @@ msgstr "gabim zlib %d“"
 #: ../src/richtext/richtextbulletspage.cpp:288
 msgid "~"
 msgstr "~"
-
-#, fuzzy
-#~ msgid "Adding flavor TEXT failed"
-#~ msgstr "Shtimi i kategorisë dështoi"
-
-#, fuzzy
-#~ msgid "Adding flavor utxt failed"
-#~ msgstr "Shtimi i kategorisë dështoi"
-
-#~ msgid "Bitmap renderer cannot render value; value type: "
-#~ msgstr "Vizatuesi bitmap s’vizaton dot vlerën; lloj vlere: "
-
-#~ msgid "Column could not be added."
-#~ msgstr "S’shtohej dot shtyllë."
-
-#~ msgid "Column description could not be initialized."
-#~ msgstr "S’u gatit dot përshkrim shtylle."
-
-#~ msgid "Column index not found."
-#~ msgstr "S’u gjet tregues shtyllash."
-
-#~ msgid "Column width could not be determined"
-#~ msgstr "S’u përcaktua dot gjerësi shtylle"
-
-#~ msgid "Column width could not be set."
-#~ msgstr "S’u caktua dot gjerësi shtylle."
-
-#~ msgid "Confirm registry update"
-#~ msgstr "Ripohoni përditësim regjistri"
-
-#~ msgid "Could not determine column index."
-#~ msgstr "S’u përcaktua dot tregues shtyllash."
-
-#~ msgid "Could not determine column's position"
-#~ msgstr "S’u përcaktua dot pozicioni i shtyllës"
-
-#~ msgid "Could not determine number of columns."
-#~ msgstr "S’u përcaktua dot numër shtyllash."
-
-#~ msgid "Could not determine number of items"
-#~ msgstr "S’u përcaktua dot numër objektesh"
-
-#~ msgid "Could not get header description."
-#~ msgstr "S’u mor dot përshkrim kryesh."
-
-#~ msgid "Could not get items."
-#~ msgstr "S’u morën dot objekte."
-
-#, fuzzy
-#~ msgid "Could not get property flags."
-#~ msgstr "S’u morën dot objektet e përzgjedhur."
-
-#~ msgid "Could not get selected items."
-#~ msgstr "S’u morën dot objektet e përzgjedhur."
-
-#~ msgid "Could not remove column."
-#~ msgstr "S’u hoq dot shtyllë."
-
-#~ msgid "Could not retrieve number of items"
-#~ msgstr "S’u mor dot numër objektesh"
-
-#~ msgid "Could not set column width."
-#~ msgstr "S’u caktua dot gjerësi shtylle."
-
-#~ msgid "Could not set header description."
-#~ msgstr "S’u caktua dot përshkrim kryesh."
-
-#~ msgid "Could not set icon."
-#~ msgstr "S’u caktua dot ikonë."
-
-#~ msgid "Could not set maximum width."
-#~ msgstr "S’u caktua dot gjerësi maksimum."
-
-#~ msgid "Could not set minimum width."
-#~ msgstr "S’u caktua dot gjerësi minimum."
-
-#, fuzzy
-#~ msgid "Could not set property flags."
-#~ msgstr "Caktoni flamurka në ndarje të re."
-
-#~ msgid "Data object has invalid data format"
-#~ msgstr "Objekt të dhënash ka format të pavlefshëm të dhënash"
-
-#~ msgid "Date renderer cannot render value; value type: "
-#~ msgstr "Vizatuesi i datave s’vizaton dot vlerën; lloj vlere: "
-
-#~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension \"%s"
-#~ "\" ?\n"
-#~ "Current value is \n"
-#~ "%s, \n"
-#~ "New value is \n"
-#~ "%s %1"
-#~ msgstr ""
-#~ "Doni të mbishkruhet urdhri i përdorur mbi kartelat %s me zgjatim \"%s"
-#~ "\" ?\n"
-#~ "Vlera e çastit është \n"
-#~ "%s, \n"
-#~ "Vlera e re është \n"
-#~ "%s %1"
-
-#~ msgid "Failed to retrieve data from the clipboard."
-#~ msgstr "S’u arrit të merreshin të dhënash prej të papastrës."
-
-#~ msgid "GIF: Invalid gif index."
-#~ msgstr "GIF: tregues gif i pavlefshëm."
-
-#~ msgid "GIF: unknown error!!!"
-#~ msgstr "GIF: gabim i panjohur!!!"
-
-#~ msgid "Icon & text renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Vizatuesi i ikonave & teksteve s’mund të vizatojë vlerën; lloj vlere: "
-
-#, fuzzy
-#~ msgid "Invalid data view item"
-#~ msgstr "ID e pavlefshme objekti."
-
-#~ msgid "New directory"
-#~ msgstr "Drejtori e re"
-
-#~ msgid "Next"
-#~ msgstr "Pasuesja"
-
-#, fuzzy
-#~ msgid "No column existing."
-#~ msgstr "Shtyllë"
-
-#, fuzzy
-#~ msgid "No column for the specified column existing."
-#~ msgstr "Pa vizatues të specifikuar për shtyllë."
-
-#, fuzzy
-#~ msgid "No column for the specified column position existing."
-#~ msgstr "S’ka shtyllë ose vizatues për treguesin e specifikuar të shtyllave."
-
-#~ msgid "No renderer specified for column."
-#~ msgstr "Pa vizatues të specifikuar për shtyllë."
-
-#~ msgid "Number of columns could not be determined."
-#~ msgstr "S’u përcaktua dot numër shtyllash."
-
-#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
-#~ msgstr "Funksioni OpenGL \"%s\" dështoi: %s (gabim %d)."
-
-#~ msgid ""
-#~ "Please install a newer version of comctl32.dll\n"
-#~ "(at least version 4.70 is required but you have %d.%02d)\n"
-#~ "or this program won't operate correctly."
-#~ msgstr ""
-#~ "Ju lutemi, instaloni një version më të ri të comctl32.dll\n"
-#~ "(lypset e pakta versioni 4.70, ndërsa ju keni %d.%02d)\n"
-#~ "ose programi s’ka për të punuar si duhet."
-
-#, fuzzy
-#~ msgid "Pointer to model not set correctly."
-#~ msgstr "Si model tastiere cakto %1.<br/>"
-
-#~ msgid "Progress renderer cannot render value type; value type: "
-#~ msgstr "Vizatuesi i ecurisë s’vizaton dot vlerën; lloj vlere: "
-
-#~ msgid "Rendering failed."
-#~ msgstr "Vizatimi dështoi."
-
-#~ msgid "Show hidden directories"
-#~ msgstr "Shfaq drejtori të fshehura"
-
-#~ msgid "Text renderer cannot render value; value type: "
-#~ msgstr "Vizatuesi i teksteve s’mund të vizatojë vlerën; lloj vlere: "
-
-#~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr "S’ka shtyllë ose vizatues për treguesin e specifikuar të shtyllave."
-
-#~ msgid ""
-#~ "This system doesn't support date controls, please upgrade your version of "
-#~ "comctl32.dll"
-#~ msgstr ""
-#~ "Ky sistem s’mbulon kontrolle datash, ju lutemi, përmirësoni versionin "
-#~ "tuaj të comctl32.dll-së"
-
-#~ msgid "Too many colours in PNG, the image may be slightly blurred."
-#~ msgstr "Si shumë ngjyra në PNG, figura mund të jetë pakëz e turbullt."
-
-#~ msgid "Unable to initialize Hildon program"
-#~ msgstr "S’arrihet të gatitet programi Hildon"
-
-#~ msgid "Unknown data format"
-#~ msgstr "Format i panjohur të dhënash"
-
-#~ msgid "Win32s on Windows 3.1"
-#~ msgstr "Win32s për Windows 3.1"
-
-#~ msgid "Windows 10"
-#~ msgstr "Windows 10"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 7"
-#~ msgstr "Windows 7"
-
-#~ msgid "Windows 8"
-#~ msgstr "Windows 8"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows CE (%d.%d)"
-#~ msgstr "Windows CE (%d.%d)"
-
-#~ msgid "Windows ME"
-#~ msgstr "Windows ME"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#~ msgid "Windows Server 10"
-#~ msgstr "Windows Server 10"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows Vista"
-#~ msgstr "Windows Vista"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
-
-#~ msgid "can't execute '%s'"
-#~ msgstr "s’përmbushet dot '%s'"
-
-#~ msgid "error opening '%s'"
-#~ msgstr "gabim në hapjen e '%s'"
-
-#~ msgid "Cannot create mutex."
-#~ msgstr "S'krijoj dot mutex."
-
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "Cannot resume thread %lu"
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "S'pushoj dot rrjedhën %lu"
-
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "S'munda të lëshoj mutex"
-
-#, fuzzy
-#~ msgid "DIVIDE"
-#~ msgstr "<DRIVE>"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "Përmbushja e urdhrit '%s' dështoi me gabim: %ul"
-
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "Ka një kartelë %s tashmë.\n"
-#~ "Doni ta zëvendësoni?"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "shtytëza është shumë e vogël për drejtori Windows."
-
-#~ msgid "Print preview"
-#~ msgstr "Paraparje shtypjeje"
-
-#, fuzzy
-#~ msgid "&Preview..."
-#~ msgstr " Paraparje"
-
-#, fuzzy
-#~ msgid "Preview..."
-#~ msgstr " Paraparje"
-
-#~ msgid "&Save..."
-#~ msgstr "&Ruaj..."
-
-#, fuzzy
-#~ msgid "About "
-#~ msgstr "&Rreth..."
-
-#~ msgid "All files (*.*)|*"
-#~ msgstr "Tërë kartelat (*.*)|*"
-
-#~ msgid "Cannot initialize SciTech MGL!"
-#~ msgstr "S'gatis dot SciTech MGL!"
-
-#~ msgid "Cannot initialize display."
-#~ msgstr "S'gatis dot ekranin."
-
-#~ msgid "Cannot start thread: error writing TLS"
-#~ msgstr "S'nis dot rrjedhë: gabim në shkrim TLS-je"
-
-#~ msgid "Close\tAlt-F4"
-#~ msgstr "Mbyll\tAlt-F4"
-
-#~ msgid "Couldn't create cursor."
-#~ msgstr "S'krijova dot kursor"
-
-#~ msgid "Directory '%s' doesn't exist!"
-#~ msgstr "Drejtoria '%s' nuk ekziston!"
-
-#~ msgid "File %s does not exist."
-#~ msgstr "Kartela %s nuk ekziston."
-
-#~ msgid "Mode %ix%i-%i not available."
-#~ msgstr "Mënyrë %ix%i-%i jo e mundshme."
-
-#~ msgid "Paper Size"
-#~ msgstr "Madhësi Letre "
-
-#~ msgid "&Goto..."
-#~ msgstr "&Goto..."
-
-#~ msgid "<<"
-#~ msgstr "<<"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid ">>|"
-#~ msgstr ">>|"
-
-#~ msgid "Archive doesnt contain #SYSTEM file"
-#~ msgstr "Arkiva nuk përfshin kartelë #SYSTEM"
-
-#~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr ""
-#~ "S'kontrolloj dot format pamjeje të kartelës '%s': kartela nuk ekziston."
-
-#~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr "S'ngarkoj dot pamje prej kartelës '%s': kartela nuk ekziston."
-
-#~ msgid "Cannot convert dialog units: dialog unknown."
-#~ msgstr "S'shndërroj dot njësi dialogjesh: dialog i panjohur."
-
-#~ msgid "Cannot convert from the charset '%s'!"
-#~ msgstr "S'shndërroj dot prej kodimi '%s'!"
-
-#~ msgid "Cannot find container for unknown control '%s'."
-#~ msgstr "S'gjej dot përmbajtës për kontrollin e panjohur '%s'."
-
-#~ msgid "Cannot find font node '%s'."
-#~ msgstr "S'gjej dot nyje gërmash '%s'."
-
-#~ msgid "Cannot open file '%s'."
-#~ msgstr "S'hap dot kartelë '%s'."
-
-#~ msgid "Cannot parse coordinates from '%s'."
-#~ msgstr "S'përtyp dot koordinata prej '%s'."
-
-#~ msgid "Cannot parse dimension from '%s'."
-#~ msgstr "S'përtyp dot përmasa prej '%s'."
-
-#~ msgid "Cant create the thread event queue"
-#~ msgstr "S'mund të krijoj radhë ngjarjesh rrjedhe"
-
-#, fuzzy
-#~ msgid "Click to cancel this window."
-#~ msgstr "Mbyll këtë dritare"
-
-#, fuzzy
-#~ msgid "Click to confirm your selection."
-#~ msgstr "KLikoni për ripohim përzgjedhje gërmash."
-
-#~ msgid "Could not unlock mutex"
-#~ msgstr "S'çkyça dot \"mutex\"-in"
-
-#~ msgid "Error while waiting on semaphore"
-#~ msgstr "Gabim gjatë pritjes në semafor"
-
-#, fuzzy
-#~ msgid "Failed to connect to session manager: %s"
-#~ msgstr "Dështova në lidhjen dialup %s: %s"
-
-#~ msgid "Failed to create a status bar."
-#~ msgstr "Dështova në krijimin e një shtylle gjendjesh."
-
-#~ msgid "Failed to register OpenGL window class."
-#~ msgstr "Dështova në regjistrim klase dritareje OpenGL."
-
-#~ msgid "Fatal error"
-#~ msgstr "Gabim fatal"
-
-#~ msgid "Fatal error: "
-#~ msgstr "Gabim fatal:"
-
-#~ msgid "Goto Page"
-#~ msgstr "Shko te Faqe"
-
-#, fuzzy
-#~ msgid "Help : %s"
-#~ msgstr "Ndihmë: %s"
-
-#~ msgid "I64"
-#~ msgstr "I64"
-
-#~ msgid "Internal error, illegal wxCustomTypeInfo"
-#~ msgstr "Gabim i brendshëm, wxCustomTypeInfo i jashtëligjshëm"
-
-#~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-#~ msgstr "Burim XRC i pavlefshëm '%s': s'ka nyje rrënje 'resource'."
-
-#~ msgid "No handler found for XML node '%s', class '%s'!"
-#~ msgstr "S'u gjet trajtues për nyje XML '%s', klasa '%s'!"
-
-#, fuzzy
-#~ msgid "No image handler for type %ld defined."
-#~ msgstr "Nuk është përcaktuar trajtues pamjesh për tipin %d."
-
-#, fuzzy
-#~ msgid "Owner not initialized."
-#~ msgstr "S'gatis dot ekranin."
-
-#, fuzzy
-#~ msgid "Passed item is invalid."
-#~ msgstr "'%s' është e mangët"
-
-#~ msgid "Passing a already registered object to SetObjectName"
-#~ msgstr "Po i kaloj SetObjectName-it një objekt tashmë të regjistruar"
-
-#~ msgid "Program aborted."
-#~ msgstr "Programi u ndërpre."
-
-#~ msgid "Resource files must have same version number!"
-#~ msgstr "kartelat e burimit duhet të të kenë të njëjtij numër versioni!"
-
-#, fuzzy
-#~ msgid "Search!"
-#~ msgstr "Kërko"
-
-#~ msgid "Sorry, could not open this file for saving."
-#~ msgstr "Më ndjeni, s'munda ta hap dot këtë kartelë për ruajtje."
-
-#~ msgid "Sorry, could not save this file."
-#~ msgstr "Më ndjeni, s'munda ta ruaj dot këtë kartelë."
-
-#~ msgid "Sorry, print preview needs a printer to be installed."
-#~ msgstr ""
-#~ "Më ndjeni, paraparjet e shtypjes lypin të ketë një shtypës të instaluar."
-
-#~ msgid "Status: "
-#~ msgstr "Gjendje:"
-
-#~ msgid "TIFF library error."
-#~ msgstr "Gabim librarie TIFF"
-
-#~ msgid "TIFF library warning."
-#~ msgstr "Sinjalizim librarie TIFF."
-
-#~ msgid ""
-#~ "The file '%s' couldn't be opened.\n"
-#~ "It has been removed from the most recently used files list."
-#~ msgstr ""
-#~ "Kartela '%s' s'mund të hapej.\n"
-#~ "Është hequr nga lista e kartelave më të përdorura së fundmi."
-
-#~ msgid "The path '%s' contains too many \"..\"!"
-#~ msgstr "Shtegu '%s' përmban shumë \"..\"!"
-
-#~ msgid "Trying to solve a NULL hostname: giving up"
-#~ msgstr "Po përpiqem të shquaj një strehëemër NULL: po dorëzohem"
-
-#~ msgid "Unknown style flag "
-#~ msgstr "Shenjë e panjohur stili"
-
-#~ msgid "Warning"
-#~ msgstr "Sinjalizim"
-
-#~ msgid "Windows 2000 (build %lu"
-#~ msgstr "Windows 2000 (build %lu"
-
-#~ msgid "XRC resource '%s' (class '%s') not found!"
-#~ msgstr "Nuk u gjet burim XRC '%s' (klasa '%s')!"
-
-#, fuzzy
-#~ msgid "XRC resource: Cannot create animation from '%s'."
-#~ msgstr "Burim XRC: Nuk mund të krijoj bitmap prej '%s'."
-
-#~ msgid "XRC resource: Cannot create bitmap from '%s'."
-#~ msgstr "Burim XRC: Nuk mund të krijoj bitmap prej '%s'."
-
-#, fuzzy
-#~ msgid ""
-#~ "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
-#~ msgstr "Burim XRC: tregim i pasaktë ngjyre '%s' për vetinë '%s'."
-
-#~ msgid "[EMPTY]"
-#~ msgstr "[BOSH]"
-
-#~ msgid "catalog file for domain '%s' not found."
-#~ msgstr "nuk u gjet kartelë katalogu për përkatësinë '%s'."
-
-#~ msgid "delegate has no type info"
-#~ msgstr "i deleguari nuk ka të dhëna tipi"
-
-#, fuzzy
-#~ msgid "encoding %i"
-#~ msgstr "kodim %s"
-
-#~ msgid "looking for catalog '%s' in path '%s'."
-#~ msgstr "po shoh për katalog '%s' te shtegu '%s'."
-
-#~ msgid "wxSocket: invalid signature in ReadMsg."
-#~ msgstr "wxSocket: nënshkrim i pavlefshëm në ReadMsg."
-
-#~ msgid "wxSocket: unknown event!."
-#~ msgstr "wxSocket: ngjarje e panjohur!."
-
-#~ msgid "|<<"
-#~ msgstr "|<<"
-
-#~ msgid "\t%s: %s\n"
-#~ msgstr "\t%s: %s\n"
-
-#, fuzzy
-#~ msgid " Couldn't create the UnicodeConverter"
-#~ msgstr "S'krijova dot kursor"
-
-#~ msgid "#define %s must be an integer."
-#~ msgstr "#define %s duhet të jetë një numër i plotë."
-
-#~ msgid "%s not a bitmap resource specification."
-#~ msgstr "%s jo një përcaktim burimi bitmap."
-
-#~ msgid "%s not an icon resource specification."
-#~ msgstr "%s jo një përcaktim burimi ikone."
-
-#~ msgid "%s: ill-formed resource file syntax."
-#~ msgstr "%s: sintaksë e keqformuar kartele burimi."
-
-#~ msgid "&Open"
-#~ msgstr "&Hap"
-
-#~ msgid "&Print"
-#~ msgstr "&Shtyp"
-
-#~ msgid "*** A debug report has been generated\n"
-#~ msgstr "*** U krijua një raport diagnostikimi\n"
-
-#~ msgid "*** It can be found in \"%s\"\n"
-#~ msgstr "*** Mund të gjendet te \"%s\"\n"
-
-#~ msgid ""
-#~ ", expected static, #include or #define\n"
-#~ "while parsing resource."
-#~ msgstr ""
-#~ ", pritej statik, #include ose #define\n"
-#~ "ndërkohë që përtypej burimi."
-
-#~ msgid "Bitmap resource specification %s not found."
-#~ msgstr "Nuk u gjet përcaktim burimi bitmap %s."
-
-#~ msgid ""
-#~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
-#~ "instead\n"
-#~ " or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "S'arrita të pikas klasë kontrolli ose id '%s'. Përdorni më mirë numër të "
-#~ "plotë (jo-zero)\n"
-#~ " ose jepni #define (shihni doracakun për gracka të mundshme)"
-
-#~ msgid ""
-#~ "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
-#~ "or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "S'arrita të pikas id menuje '%s'. Përdorni më mirë numër të plotë (jo-"
-#~ "zero)\n"
-#~ " ose jepni #define (shihni doracakun për gracka të mundshme)"
-
-#~ msgid "Expected '*' while parsing resource."
-#~ msgstr "Pritej '*' ndërkohë që përtypej burimi."
-
-#~ msgid "Expected '=' while parsing resource."
-#~ msgstr "Pritej '=' ndërkohë që përtypej burimi."
-
-#~ msgid "Expected 'char' while parsing resource."
-#~ msgstr "Pritej 'char' ndërkohë që përtypej burimi."
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Dështova në gjetje burimi XBM resource %s.\n"
-#~ "Harruat të përdorni wxResourceLoadBitmapData?"
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadIconData?"
-#~ msgstr ""
-#~ "Dështova në gjetje burimi XBM %s.\n"
-#~ "Harruat të përdornit wxResourceLoadIconData?"
-
-#~ msgid ""
-#~ "Failed to find XPM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Dështova në gjetje burimi XPM resource %s.\n"
-#~ "Harruat të përdornit wxResourceLoadBitmapData?"
-
-#~ msgid "Failed to get clipboard data."
-#~ msgstr "Dështova në marrje të dhënash të papastre"
-
-#~ msgid "Failed to load shared library '%s' Error '%s'"
-#~ msgstr "Dështova në ngarkim librarie të përbashkët '%s' Gabim '%s'"
-
-#~ msgid "Found "
-#~ msgstr "U gjetën"
-
-#~ msgid "Icon resource specification %s not found."
-#~ msgstr "Nuk u gjet përcaktim %s burimi ikone."
-
-#~ msgid "Ill-formed resource file syntax."
-#~ msgstr "Sintaksë e keqformuar kartele burimi."
-
-#~ msgid "Long Conversions not supported"
-#~ msgstr "Shndërrime të Gjatë të pambuluar"
-
-#~ msgid "No XPM icon facility available!"
-#~ msgstr "Pa lehtësira ikone XPM të mundshme!"
-
-#~ msgid "Option '%s' requires a value, '=' expected."
-#~ msgstr "Mundësia '%s' lyp një vlerë, pritej '='."
-
-#, fuzzy
-#~ msgid "Select all"
-#~ msgstr "Përzgjidhni &Tërë"
-
-#~ msgid "String conversions not supported"
-#~ msgstr "Shndërrime vargu të pambuluar"
-
-#~ msgid "Unexpected end of file while parsing resource."
-#~ msgstr "Fund i papritur kartele ndërkohë që përtypja burime."
-
-#~ msgid "Unrecognized style %s while parsing resource."
-#~ msgstr "Stil %s i papranuar ndërkohë që përtypja burime."
-
-#~ msgid "Video Output"
-#~ msgstr "Dalje Video"
-
-#~ msgid "establish"
-#~ msgstr "vendos"
-
-#~ msgid "initiate"
-#~ msgstr "fillo"
-
-#~ msgid "invalid eof() return value."
-#~ msgstr "vlerë e pavlefshme përgjigjeje eof()"
-
-#~ msgid "unknown line terminator"
-#~ msgstr "përfundues i panjohur rreshti"
-
-#~ msgid "writing"
-#~ msgstr "po shkruaj"
-
-#~ msgid "."
-#~ msgstr "."
-
-#~ msgid "Cannot open URL '%s'"
-#~ msgstr "S'hap dot URL '%s'"
-
-#~ msgid "Error "
-#~ msgstr "Gabim"
-
-#~ msgid "Failed to create directory %s/.gnome."
-#~ msgstr "Dështova në krijimin e drejtorisë %s/.gnome."
-
-#~ msgid "Failed to create directory %s/mime-info."
-#~ msgstr "Dështova në krijimin e drejtorisë %s/mime-info."
-
-#~ msgid "MP Thread Support is not available on this System"
-#~ msgstr "Mbulimi për Rrjedha MP nuk është i passhëm në këtë Sistem"
-
-#~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
-#~ msgstr "Kartela mailcap %s, rreshti %d: u shpërfill zë jo i plotë."
-
-#~ msgid "Mime.types file %s, line %d: unterminated quoted string."
-#~ msgstr "Kartela mime.types %s, rreshti %d: varg në thojza i papërfunduar."
-
-#~ msgid "Unknown field in file %s, line %d: '%s'."
-#~ msgstr "Zonë e panjohur te kartela %s, rreshti %d: '%s'."
-
-#~ msgid "bold "
-#~ msgstr "të trasha"
-
-#~ msgid "can't query for GUI plugins name in console applications"
-#~ msgstr "s'pyes dot për emra shtojcash GUI në zbatime konsole"
-
-#, fuzzy
-#~ msgid "light "
-#~ msgstr "butë"
-
-#~ msgid "underlined "
-#~ msgstr "nënvijëzuar"
-
-#~ msgid "unsupported zip archive"
-#~ msgstr "arkivë zip e pambuluar"

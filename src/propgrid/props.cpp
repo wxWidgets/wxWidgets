@@ -1855,8 +1855,8 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxDirProperty, wxEditorDialogProperty, TextCtrlAndButton)
 
-wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
-    : wxEditorDialogProperty(name, label)
+wxDirProperty::wxDirProperty( const wxString& label, const wxString& name, const wxString& value )
+    : wxEditorDialogProperty(label, name)
 {
     m_flags &= ~wxPG_PROP_ACTIVE_BTN; // Property button enabled only in not read-only mode.
     SetValue(value);

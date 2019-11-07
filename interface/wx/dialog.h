@@ -299,6 +299,7 @@ public:
        broken either after a new line or wrapped, at word boundary, if their
        width would become bigger than the specified maximal width.
 
+       @param message The text to be displayed.
        @param widthMax Specifies the text's maximum width (this argument is
         available since version 3.1.1, previous versions always behaved as if
         the maximal width of -1 was specified).

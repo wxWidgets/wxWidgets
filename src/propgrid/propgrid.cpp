@@ -260,6 +260,7 @@ wxBEGIN_EVENT_TABLE(wxPropertyGrid, wxControl)
   EVT_SET_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_KILL_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_SYS_COLOUR_CHANGED(wxPropertyGrid::OnSysColourChanged)
+  EVT_DPI_CHANGED(wxPropertyGrid::OnDPIChanged)
   EVT_MOTION(wxPropertyGrid::OnMouseMove)
   EVT_LEFT_DOWN(wxPropertyGrid::OnMouseClick)
   EVT_LEFT_UP(wxPropertyGrid::OnMouseUp)
@@ -453,9 +454,9 @@ void wxPropertyGrid::Init2()
     m_cursorSizeWE = new wxCursor( wxCURSOR_SIZEWE );
 
     // adjust bitmap icon y position so they are centered
-    m_vspacing = wxPG_DEFAULT_VSPACING;
+    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
 
-    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    CalculateFontAndBitmapStuff( m_vspacing );
 
     // Allocate cell data
     m_propertyDefaultCell.SetEmptyData();
@@ -1167,7 +1168,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 // returns the best acceptable minimal size
 wxSize wxPropertyGrid::DoGetBestSize() const
 {
-    int lineHeight = wxMax(15, m_lineHeight);
+    int lineHeight = wxMax(FromDIP(15), m_lineHeight);
 
     // don't make the grid too tall (limit height to 10 items) but don't
     // make it too small neither
@@ -1301,7 +1302,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
-    m_iconWidth = wxPG_ICON_WIDTH;
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
 #elif wxPG_ICON_WIDTH
     // scale icon
     m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
@@ -1354,6 +1355,13 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
         RegainColours();
         Refresh();
     }
+}
+
+void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+{
+    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
+    CalculateFontAndBitmapStuff(m_vspacing);
+    Refresh();
 }
 
 // -----------------------------------------------------------------------

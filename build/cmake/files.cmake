@@ -113,7 +113,6 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/evtloop_cf.cpp
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
-    src/osx/core/utilsexc_base.cpp
     src/osx/cocoa/utils_base.mm
 )
 

@@ -30,6 +30,7 @@
 #include "wx/evtloop.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/datatransfer.h"
 
 wxOSXDataSinkItem::~wxOSXDataSinkItem()
 {

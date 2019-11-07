@@ -1924,24 +1924,27 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
         wxColour underlineColour = wxNullColour;
 #ifdef __WXGTK3__
-        GSList* tags = gtk_text_iter_get_tags(&positioni);
-        for ( GSList* tagp = tags; tagp != NULL; tagp = tagp->next )
+        if ( wx_is_at_least_gtk3(16) )
         {
-            GtkTextTag* tag = static_cast<GtkTextTag*>(tagp->data);
-            gboolean underlineSet = FALSE;
-            g_object_get(tag, "underline-rgba-set", &underlineSet, NULL);
-            if ( underlineSet )
+            GSList* tags = gtk_text_iter_get_tags(&positioni);
+            for ( GSList* tagp = tags; tagp != NULL; tagp = tagp->next )
             {
-                GdkRGBA* gdkColour = NULL;
-                g_object_get(tag, "underline-rgba", &gdkColour, NULL);
-                if ( gdkColour )
-                    underlineColour = wxColour(*gdkColour);
-                gdk_rgba_free(gdkColour);
-                break;
+                GtkTextTag* tag = static_cast<GtkTextTag*>(tagp->data);
+                gboolean underlineSet = FALSE;
+                g_object_get(tag, "underline-rgba-set", &underlineSet, NULL);
+                if ( underlineSet )
+                {
+                    GdkRGBA* gdkColour = NULL;
+                    g_object_get(tag, "underline-rgba", &gdkColour, NULL);
+                    if ( gdkColour )
+                        underlineColour = wxColour(*gdkColour);
+                    gdk_rgba_free(gdkColour);
+                    break;
+                }
             }
+            if ( tags )
+                g_slist_free(tags);
         }
-        if ( tags )
-            g_slist_free(tags);
 #endif
 
         if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )

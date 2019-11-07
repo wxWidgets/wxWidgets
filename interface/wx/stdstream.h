@@ -53,7 +53,7 @@ public:
     /**
         Destructor.
     */
-    virtual ~wxStdInputStreamBuffer() { }
+    virtual ~wxStdInputStreamBuffer();
 };
 
 /**
@@ -102,7 +102,7 @@ public:
     /**
         Destructor.
     */
-    virtual ~wxStdInputStream() { }
+    virtual ~wxStdInputStream();
 };
 
 /**
@@ -147,7 +147,7 @@ public:
     /**
         Destructor.
     */
-    virtual ~wxStdOutputStreamBuffer() { }
+    virtual ~wxStdOutputStreamBuffer();
 };
 
 /**
@@ -185,5 +185,5 @@ public:
     /**
         Destructor.
     */
-    virtual ~wxStdOutputStream() { }
+    virtual ~wxStdOutputStream();
 };

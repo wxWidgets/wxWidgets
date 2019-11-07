@@ -911,8 +911,6 @@ public:
 
   public:
       iterator() {}
-      iterator(const iterator& i) : m_cur(i.m_cur) {}
-
       reference operator*()
         { return wxUniCharRef::CreateForString(m_cur); }
 
@@ -946,7 +944,6 @@ public:
 
   public:
       const_iterator() {}
-      const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       const_reference operator*() const
@@ -1015,8 +1012,6 @@ public:
 
       reverse_iterator_impl() {}
       reverse_iterator_impl(iterator_type i) : m_cur(i) {}
-      reverse_iterator_impl(const reverse_iterator_impl& ri)
-          : m_cur(ri.m_cur) {}
 
       iterator_type base() const { return m_cur; }
 
@@ -3379,7 +3374,7 @@ private:
   {
       // notice that there is no need to initialize m_len here as it's unused
       // as long as m_str is NULL
-      ConvertedBuffer() : m_str(NULL) {}
+      ConvertedBuffer() : m_str(NULL), m_len(0) {}
       ~ConvertedBuffer()
           { free(m_str); }
 

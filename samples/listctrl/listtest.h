@@ -79,7 +79,6 @@ public:
 
 private:
     void ShowContextMenu(const wxPoint& pos, long item);
-    wxLog *m_logOld;
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxString& eventName);

@@ -326,23 +326,7 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
     wxUpdateUIEvent event(menuid);
     event.SetEventObject( this );
 
-    bool processed = false;
-
-    // Try the menu's event handler
-    {
-        wxEvtHandler *handler = GetEventHandler();
-        if ( handler )
-            processed = handler->ProcessEvent(event);
-    }
-
-    // Try the window the menu was popped up from
-    // (and up through the hierarchy)
-    if ( !processed )
-    {
-        wxWindow *win = GetWindow();
-        if ( win )
-            processed = win->HandleWindowEvent(event);
-    }
+    bool processed = DoProcessEvent(this, event, GetWindow());
 
     if ( !processed && senderWindow != NULL)
     {
@@ -395,7 +379,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
 
 void wxMenu::HandleMenuItemHighlighted( wxMenuItem* item )
 {
-    int menuid = item ? item->GetId() : 0;
+    int menuid = item ? item->GetId() : wxID_NONE;
     wxMenuEvent wxevent(wxEVT_MENU_HIGHLIGHT, menuid, this);
     ProcessMenuEvent(this, wxevent, GetWindow());
 }

@@ -460,21 +460,10 @@ typedef short int WXTYPE;
     /*
         Mingw <= 3.4 and all versions of Cygwin don't have std::wostream
      */
-    #if (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
-        defined(__CYGWIN__)
-        #define wxNO_WOSTREAM
-    #endif
-
-    /* VC++ doesn't have it in the old iostream library */
-    #if defined(__VISUALC__) && wxUSE_IOSTREAMH
-        #define wxNO_WOSTREAM
-    #endif
-
-    #ifndef wxNO_WOSTREAM
+    #if (!defined(__MINGW32__) || wxCHECK_GCC_VERSION(4, 0)) && \
+        !defined(__CYGWIN__)
         #define HAVE_WOSTREAM
     #endif
-
-    #undef wxNO_WOSTREAM
 #endif /* HAVE_WOSTREAM */
 
 /*  ---------------------------------------------------------------------------- */
@@ -849,7 +838,7 @@ typedef short int WXTYPE;
 
 /*  where should i put this? we need to make sure of this as it breaks */
 /*  the <iostream> code. */
-#if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
+#if defined(__WXDEBUG__)
 #    undef wxUSE_DEBUG_NEW_ALWAYS
 #    define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
@@ -2994,24 +2983,30 @@ typedef const void* WXWidget;
 /*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+    #define wxMEMBER_DELETE = delete
+#else
+    #define wxMEMBER_DELETE
+#endif
+
 #define wxDECLARE_NO_COPY_CLASS(classname)      \
     private:                                    \
-        classname(const classname&);            \
-        classname& operator=(const classname&)
+        classname(const classname&) wxMEMBER_DELETE; \
+        classname& operator=(const classname&) wxMEMBER_DELETE
 
 #define wxDECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)  \
     private:                                              \
-        classname(const classname<arg>&);                 \
-        classname& operator=(const classname<arg>&)
+        classname(const classname<arg>&) wxMEMBER_DELETE; \
+        classname& operator=(const classname<arg>&) wxMEMBER_DELETE
 
 #define wxDECLARE_NO_COPY_TEMPLATE_CLASS_2(classname, arg1, arg2) \
     private:                                                      \
-        classname(const classname<arg1, arg2>&);                  \
-        classname& operator=(const classname<arg1, arg2>&)
+        classname(const classname<arg1, arg2>&) wxMEMBER_DELETE; \
+        classname& operator=(const classname<arg1, arg2>&) wxMEMBER_DELETE
 
 #define wxDECLARE_NO_ASSIGN_CLASS(classname)    \
     private:                                    \
-        classname& operator=(const classname&)
+        classname& operator=(const classname&) wxMEMBER_DELETE
 
 /* deprecated variants _not_ requiring a semicolon after them */
 #define DECLARE_NO_COPY_CLASS(classname) \

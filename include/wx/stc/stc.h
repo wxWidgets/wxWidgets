@@ -5479,6 +5479,7 @@ protected:
     void OnKeyDown(wxKeyEvent& evt);
     void OnLoseFocus(wxFocusEvent& evt);
     void OnGainFocus(wxFocusEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMenu(wxCommandEvent& evt);

@@ -182,8 +182,6 @@
     #define wxUSE_UNICODE 0
 #endif
 
-#define wxUSE_WCHAR_T 0
-
 
 #define wxUSE_EXCEPTIONS    0
 
@@ -221,9 +219,6 @@
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#define wxUSE_IOSTREAMH     0
-
 
 
 #define wxUSE_LONGLONG      0

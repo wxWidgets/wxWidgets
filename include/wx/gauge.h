@@ -52,6 +52,9 @@ class WXDLLIMPEXP_CORE wxGaugeBase : public wxControl
 {
 public:
     wxGaugeBase() : m_rangeMax(0), m_gaugePos(0),
+#if wxGAUGE_EMULATE_INDETERMINATE_MODE
+        m_nDirection(wxRIGHT),
+#endif
         m_appProgressIndicator(NULL) { }
 
     virtual ~wxGaugeBase();

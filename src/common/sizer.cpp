@@ -93,7 +93,7 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 #ifdef wxNEEDS_BORDER_IN_PX
 
 /* static */
-int wxSizerFlags::DoGetDefaultBorderInPx()
+float wxSizerFlags::DoGetDefaultBorderInPx()
 {
     // Hard code 5px as it's the minimal border size between two controls, see
     // the table at the bottom of
@@ -107,9 +107,12 @@ int wxSizerFlags::DoGetDefaultBorderInPx()
     // as we don't have any associated window -- but, again, without changes
     // in the API, there is nothing we can do about this.
     const wxWindow* const win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-    static wxPrivate::DpiDependentValue<int> s_defaultBorderInPx;
+    static wxPrivate::DpiDependentValue<float> s_defaultBorderInPx;
     if ( s_defaultBorderInPx.HasChanged(win) )
-        s_defaultBorderInPx.SetAtNewDPI(wxWindow::FromDIP(5, win));
+    {
+        s_defaultBorderInPx.SetAtNewDPI(
+            (float)(5 * (win ? win->GetContentScaleFactor() : 1)));
+    }
     return s_defaultBorderInPx.Get();
 }
 

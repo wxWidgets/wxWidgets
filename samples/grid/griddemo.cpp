@@ -183,6 +183,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    EVT_MENU( ID_EDITCELL, GridFrame::EditCell )
     EVT_MENU( ID_SETCORNERLABEL, GridFrame::SetCornerLabelValue )
     EVT_MENU( ID_SHOWSEL,   GridFrame::ShowSelection )
     EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
@@ -372,6 +373,7 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETEROW, "Delete selected ro&ws" );
     editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
+    editMenu->Append( ID_EDITCELL, "&Edit current cell" );
     editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
 
     editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
@@ -563,15 +565,21 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
+    grid->SetCellValue(0, 13, "Localized date\ncolumn");
     grid->SetColFormatDate(13); // Localized by default.
+    grid->SetCellValue(1, 13, "Today");
+    grid->SetCellValue(0, 14, "ISO 8601 date\ncolumn");
     grid->SetColFormatDate(14, "%Y-%m-%d"); // ISO 8601 date format.
+    grid->SetCellValue(1, 14, "Tomorrow");
 
-    grid->SetCellValue(7, 0, "Today");
-    grid->SetCellRenderer(7, 0, new wxGridCellDateRenderer);
-    grid->SetCellEditor(7, 0, new wxGridCellDateEditor);
-    grid->SetCellValue(8, 0, "Tomorrow");
-    grid->SetCellRenderer(8, 0, new wxGridCellDateRenderer("%Y-%m-%d"));
-    grid->SetCellEditor(8, 0, new wxGridCellDateEditor);
+    grid->SetCellValue(13, 0, "Date cell:");
+    grid->SetCellValue(13, 1, "Today");
+    grid->SetCellRenderer(13, 1, new wxGridCellDateRenderer);
+    grid->SetCellEditor(13, 1, new wxGridCellDateEditor);
+    grid->SetCellValue(14, 0, "ISO date cell:");
+    grid->SetCellValue(14, 1, "Tomorrow");
+    grid->SetCellRenderer(14, 1, new wxGridCellDateRenderer("%Y-%m-%d"));
+    grid->SetCellEditor(14, 1, new wxGridCellDateEditor);
 
     const wxString choices[] =
     {
@@ -1159,6 +1167,11 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->ClearGrid();
+}
+
+void GridFrame::EditCell( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableCellEditControl();
 }
 
 void GridFrame::SetCornerLabelValue( wxCommandEvent& WXUNUSED(ev) )

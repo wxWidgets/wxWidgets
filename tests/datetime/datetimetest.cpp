@@ -20,6 +20,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/time.h"    // wxGetTimeZone()
+    #include "wx/utils.h"   // wxMilliSleep()
 #endif // WX_PRECOMP
 
 #include "wx/wxcrt.h"       // for wxStrstr()
@@ -1703,8 +1704,24 @@ TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
 
 TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
 {
-    const wxDateTime now = wxDateTime::Now();
-    const wxDateTime unow = wxDateTime::UNow();
+    // It's unlikely, but possible, that the consecutive functions are called
+    // on different sides of some second boundary, but it really shouldn't
+    // happen more than once in a row.
+    wxDateTime now, unow;
+    for ( int i = 0; i < 3; ++i )
+    {
+        now = wxDateTime::Now();
+        unow = wxDateTime::UNow();
+        if ( now.GetSecond() == unow.GetSecond() )
+            break;
+
+        WARN("wxDateTime::Now() and UNow() returned different "
+             "second values ("
+             << now.GetSecond() << " and " << unow.GetSecond() <<
+             "), retrying.");
+
+        wxMilliSleep(123);
+    }
 
     CHECK( now.GetYear() == unow.GetYear() );
     CHECK( now.GetMonth() == unow.GetMonth() );

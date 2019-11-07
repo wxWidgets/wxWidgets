@@ -998,6 +998,6 @@ public:
     /**
        Factory function to create a new separator toolbar tool.
     */
-    wxToolBarToolBase *CreateSeparator()
+    wxToolBarToolBase *CreateSeparator();
 };
 

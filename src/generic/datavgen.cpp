@@ -5070,9 +5070,36 @@ void wxDataViewMainWindow::UpdateColumnSizes()
 
     int fullWinWidth = GetSize().x;
 
-    wxDataViewColumn *lastCol = owner->GetColumn(colsCount - 1);
-    int colswidth = GetEndOfLastCol();
-    int lastColX = colswidth - lastCol->GetWidth();
+    // Find the last shown column: we shouldn't bother to resize the columns
+    // that are hidden anyhow.
+    int lastColIndex = -1;
+    wxDataViewColumn *lastCol wxDUMMY_INITIALIZE(NULL);
+    for ( int colIndex = colsCount - 1; colIndex >= 0; --colIndex )
+    {
+        lastCol = owner->GetColumnAt(colIndex);
+        if ( !lastCol->IsHidden() )
+        {
+            lastColIndex = colIndex;
+            break;
+        }
+    }
+
+    if ( lastColIndex == -1 )
+    {
+        // All columns are hidden.
+        return;
+    }
+
+    int lastColX = 0;
+    for ( int colIndex = 0; colIndex < lastColIndex; ++colIndex )
+    {
+        const wxDataViewColumn *c = owner->GetColumnAt(colIndex);
+
+        if ( !c->IsHidden() )
+            lastColX += c->GetWidth();
+    }
+
+    int colswidth = lastColX + lastCol->GetWidth();
     if ( lastColX < fullWinWidth )
     {
         const int availableWidth = fullWinWidth - lastColX;

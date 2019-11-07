@@ -337,7 +337,7 @@ public:
         This method writes the serialized data into the passed pane. Pointers to
         UI elements are not modified.
 
-        @notice This operation also changes the name in the pane information!
+        @note This operation also changes the name in the pane information!
 
         @sa LoadPerspective
         @sa SavePaneInfo().

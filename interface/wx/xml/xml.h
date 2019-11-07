@@ -501,9 +501,9 @@ public:
         @param pubid
             The public identifier.
     */
-    wxXmlDoctype(const wxString& rootName = wxString(),
-                 const wxString& systemId = wxString(),
-                 const wxString& publicId = wxString());
+    wxXmlDoctype(const wxString& name = wxString(),
+                 const wxString& sysid = wxString(),
+                 const wxString& pubid = wxString());
 
     /**
         Removes all the DOCTYPE values.

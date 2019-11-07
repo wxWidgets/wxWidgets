@@ -665,8 +665,8 @@ class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxDirProperty)
 public:
-    wxDirProperty( const wxString& name = wxPG_LABEL,
-                   const wxString& label = wxPG_LABEL,
+    wxDirProperty( const wxString& label = wxPG_LABEL,
+                   const wxString& name = wxPG_LABEL,
                    const wxString& value = wxEmptyString );
     virtual ~wxDirProperty();
 

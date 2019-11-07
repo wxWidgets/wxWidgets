@@ -50,25 +50,21 @@
 // wxControlContainerBase
 // ----------------------------------------------------------------------------
 
-void wxControlContainerBase::UpdateParentCanFocus()
+void wxControlContainerBase::UpdateParentCanFocus(bool acceptsFocusChildren)
 {
     // In the ports where it does something non trivial, the parent window
     // should only be focusable if it doesn't have any focusable children
     // (e.g. native focus handling in wxGTK totally breaks down otherwise).
-    m_winParent->SetCanFocus(m_acceptsFocusSelf && !m_acceptsFocusChildren);
+    m_winParent->SetCanFocus(m_acceptsFocusSelf && !acceptsFocusChildren);
 }
 
 bool wxControlContainerBase::UpdateCanFocusChildren()
 {
     const bool acceptsFocusChildren = HasAnyFocusableChildren();
-    if ( acceptsFocusChildren != m_acceptsFocusChildren )
-    {
-        m_acceptsFocusChildren = acceptsFocusChildren;
 
-        UpdateParentCanFocus();
-    }
+    UpdateParentCanFocus(acceptsFocusChildren);
 
-    return m_acceptsFocusChildren;
+    return acceptsFocusChildren;
 }
 
 bool wxControlContainerBase::HasAnyFocusableChildren() const

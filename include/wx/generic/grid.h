@@ -635,16 +635,6 @@ public:
     void SetCol( int n ) { m_col = n; }
     void Set( int row, int col ) { m_row = row; m_col = col; }
 
-    wxGridCellCoords& operator=( const wxGridCellCoords& other )
-    {
-        if ( &other != this )
-        {
-            m_row=other.m_row;
-            m_col=other.m_col;
-        }
-        return *this;
-    }
-
     bool operator==( const wxGridCellCoords& other ) const
     {
         return (m_row == other.m_row  &&  m_col == other.m_col);
@@ -946,7 +936,7 @@ struct WXDLLIMPEXP_CORE wxGridSizesInfo
 // wxGrid
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGrid : public wxScrolledWindow
+class WXDLLIMPEXP_CORE wxGrid : public wxScrolledCanvas
 {
 public:
     // possible selection modes
@@ -1947,9 +1937,8 @@ public:
 
 
     // override some base class functions
-    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
-        { return (wxWindow*)m_gridWin; }
     virtual void Fit() wxOVERRIDE;
+    virtual void SetFocus() wxOVERRIDE;
 
     // implementation only
     void CancelMouseCapture();
@@ -2287,7 +2276,7 @@ protected:
 
 private:
 
-    // implement wxScrolledWindow method to return m_gridWin size
+    // implement wxScrolledCanvas method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
 
     // depending on the values of m_numFrozenRows and m_numFrozenCols, it will

@@ -2319,18 +2319,19 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
     for (;;)
     {
+        if ( p->GetChildCount() == 0 )
+            break;
+
+        unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
+        p = p->Item(n);
+
         if ( !p->IsCategory() )
         {
-            m_pPropGridManager->DeleteProperty( p );
+            wxString label = p->GetLabel();
+            m_pPropGridManager->DeleteProperty(p);
+            wxLogMessage("Property deleted: %s", label);
             break;
         }
-
-        if ( !p->GetChildCount() )
-            break;
-
-        int n = rand() % ((int)p->GetChildCount());
-
-        p = p->Item(n);
     }
 }
 
@@ -2985,21 +2986,23 @@ void FormMain::OnSetPropertyValue( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
-
     wxPGProperty* selected = pg->GetSelection();
-    const wxPGChoices& choices = selected->GetChoices();
 
-    // Insert new choice to the center of list
+    if (selected)
+    {
+        const wxPGChoices& choices = selected->GetChoices();
 
-    if ( choices.IsOk() )
-    {
-        int pos = choices.GetCount() / 2;
-        selected->InsertChoice("New Choice", pos);
+        if ( choices.IsOk() )
+        {
+            // Insert new choice to the center of list
+
+            int pos = choices.GetCount() / 2;
+            selected->InsertChoice("New Choice", pos);
+            return;
+        }
     }
-    else
-    {
-        ::wxMessageBox("First select a property with some choices.");
-    }
+
+    wxMessageBox("First select a property with some choices.");
 }
 
 // -----------------------------------------------------------------------
@@ -3007,21 +3010,23 @@ void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnDeleteChoice( wxCommandEvent& WXUNUSED(event) )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
-
     wxPGProperty* selected = pg->GetSelection();
-    const wxPGChoices& choices = selected->GetChoices();
 
-    // Deletes choice from the center of list
+    if (selected)
+    {
+        const wxPGChoices& choices = selected->GetChoices();
 
-    if ( choices.IsOk() )
-    {
-        int pos = choices.GetCount() / 2;
-        selected->DeleteChoice(pos);
+        if ( choices.IsOk() )
+        {
+            // Deletes choice from the center of list
+
+            int pos = choices.GetCount() / 2;
+            selected->DeleteChoice(pos);
+            return;
+        }
     }
-    else
-    {
-        ::wxMessageBox("First select a property with some choices.");
-    }
+
+    wxMessageBox("First select a property with some choices.");
 }
 
 // -----------------------------------------------------------------------

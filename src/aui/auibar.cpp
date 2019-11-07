@@ -228,15 +228,12 @@ void wxAuiGenericToolBarArt::DrawBackground(
 
 void wxAuiGenericToolBarArt::DrawPlainBackground(wxDC& dc,
                                                    wxWindow* WXUNUSED(wnd),
-                                                   const wxRect& _rect)
+                                                   const wxRect& rect)
 {
-    wxRect rect = _rect;
-    rect.height++;
-
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    dc.DrawRectangle(rect.GetX() - 1, rect.GetY() - 1,
-                     rect.GetWidth() + 2, rect.GetHeight() + 1);
+    dc.DrawRectangle(rect);
 }
 
 void wxAuiGenericToolBarArt::DrawLabel(
@@ -634,7 +631,7 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     // and add some extra space in front of the drop down button
     if (item.HasDropDown())
     {
-        int dropdownWidth = wnd->FromDIP(GetElementSize(wxAUI_TBART_DROPDOWN_SIZE));
+        int dropdownWidth = GetElementSize(wxAUI_TBART_DROPDOWN_SIZE);
         width += dropdownWidth + wnd->FromDIP(4);
     }
 
@@ -2327,22 +2324,6 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     QueueEvent(new wxIdleEvent);
 }
 
-
-
-void wxAuiToolBar::DoSetSize(int x,
-                             int y,
-                             int width,
-                             int height,
-                             int sizeFlags)
-{
-    wxSize parent_size = GetParent()->GetClientSize();
-    if (x + width > parent_size.x)
-        width = wxMax(0, parent_size.x - x);
-    if (y + height > parent_size.y)
-        height = wxMax(0, parent_size.y - y);
-
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-}
 
 
 void wxAuiToolBar::OnIdle(wxIdleEvent& evt)

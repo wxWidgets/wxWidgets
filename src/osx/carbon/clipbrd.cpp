@@ -28,6 +28,7 @@
 #include "wx/scopedarray.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/datatransfer.h"
 
 #define wxUSE_DATAOBJ 1
 
@@ -60,7 +61,11 @@ void wxClipboard::Clear()
 
 bool wxClipboard::Flush()
 {
-    return false;
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
+
+    wxOSXPasteboard::GetGeneralClipboard()->Flush();
+
+    return true;
 }
 
 bool wxClipboard::Open()
@@ -104,6 +109,8 @@ bool wxClipboard::AddData( wxDataObject *data )
     Clear();
 
     data->WriteToSink(wxOSXPasteboard::GetGeneralClipboard());
+
+    Flush();
 
     m_data = data;
 

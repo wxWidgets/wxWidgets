@@ -100,7 +100,7 @@ public:
 #if wxOSX_USE_ICONREF
     // caller should increase ref count if needed longer
     // than the bitmap exists
-    IconRef       GetIconRef();
+    IconRef       GetIconRef() const;
 #endif
 
     CGContextRef  GetBitmapContext() const;
@@ -125,7 +125,7 @@ private :
     bool          m_isTemplate;
 
 #if wxOSX_USE_ICONREF
-    IconRef       m_iconRef;
+    mutable IconRef       m_iconRef;
 #endif
 
     wxCFRef<CGContextRef>  m_hBitmap;
@@ -431,7 +431,7 @@ bool wxBitmapRefData::HasNativeSize()
 }
 
 #if wxOSX_USE_ICONREF
-IconRef wxBitmapRefData::GetIconRef()
+IconRef wxBitmapRefData::GetIconRef() const
 {
     if ( m_iconRef == NULL )
     {
@@ -1811,16 +1811,30 @@ bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
         theId = kHelpFolderIcon;
     }
 
+    WXImage img = NULL;
+
     if ( theId != 0 )
     {
         IconRef iconRef = NULL ;
+        
         __Verify_noErr(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
-        if ( iconRef )
-        {
-            WXImage img = wxOSXGetNSImageFromIconRef(iconRef);
-            bitmap->Create(img);
-            return true;
-        }
+        img = wxOSXGetNSImageFromIconRef(iconRef);
+    }
+    else
+    {
+        wxCFRef<CFURLRef> iconURL;
+        wxCFStringRef resname(resourceName);
+        wxCFStringRef restype(GetExtension().Lower());
+
+        iconURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+        
+        img = wxOSXGetNSImageFromCFURL(iconURL);
+    }
+    
+    if ( img )
+    {
+        bitmap->Create(img);
+        return true;
     }
 
     return wxBundleResourceHandler::LoadFile( bitmap, resourceName, type, desiredWidth, desiredHeight);

@@ -1109,6 +1109,8 @@ extern WXDLLIMPEXP_CORE wxSize wxGetHiconSize(HICON hicon);
 
 WXDLLIMPEXP_CORE void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 
+WXDLLIMPEXP_CORE void wxDrawHVLine(HDC hdc, int x1, int y1, int x2, int y2, COLORREF color, int width);
+
 // fill the client rect of the given window on the provided dc using this brush
 inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)
 {

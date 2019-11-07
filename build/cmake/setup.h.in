@@ -182,8 +182,6 @@
     #cmakedefine01 wxUSE_UNICODE
 #endif
 
-#cmakedefine01 wxUSE_WCHAR_T
-
 
 #cmakedefine01 wxUSE_EXCEPTIONS
 
@@ -221,9 +219,6 @@
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#cmakedefine01 wxUSE_IOSTREAMH
-
 
 
 #cmakedefine01 wxUSE_LONGLONG

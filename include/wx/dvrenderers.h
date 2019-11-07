@@ -42,12 +42,6 @@ public:
           m_icon(icon)
     { }
 
-    wxDataViewIconText( const wxDataViewIconText &other )
-        : wxObject(),
-          m_text(other.m_text),
-          m_icon(other.m_icon)
-    { }
-
     void SetText( const wxString &text ) { m_text = text; }
     wxString GetText() const             { return m_text; }
     void SetIcon( const wxIcon &icon )   { m_icon = icon; }
@@ -545,6 +539,8 @@ typedef wxDataViewTextRenderer wxDataViewDateRenderer;
 // wxDataViewCheckIconTextRenderer: 3-state checkbox + text + optional icon
 // ----------------------------------------------------------------------------
 
+#ifndef __WXOSX__
+
 class WXDLLIMPEXP_CORE wxDataViewCheckIconTextRenderer
     : public wxDataViewCustomRenderer
 {
@@ -595,6 +591,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCheckIconTextRenderer);
 };
 
+#endif // !__WXOSX__
 
 // this class is obsolete, its functionality was merged in
 // wxDataViewTextRenderer itself now, don't use it any more

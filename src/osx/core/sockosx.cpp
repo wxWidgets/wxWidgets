@@ -63,6 +63,12 @@ public:
 private:
     virtual void DoClose() wxOVERRIDE
     {
+        // No need to do anything if we had never created the underlying
+        // socket: this avoids creating it from Uninstall_Callback() completely
+        // unnecessarily.
+        if ( !m_socket )
+            return;
+
         wxSocketManager * const manager = wxSocketManager::Get();
         if ( manager )
         {

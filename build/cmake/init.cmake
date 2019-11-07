@@ -194,9 +194,6 @@ endif()
 
 # Constants for setup.h creation
 set(wxUSE_STD_DEFAULT ON)
-if(wxUSE_UNICODE)
-    set(wxUSE_WCHAR_T ON)
-endif()
 if(NOT wxUSE_EXPAT)
     set(wxUSE_XRC OFF)
 endif()

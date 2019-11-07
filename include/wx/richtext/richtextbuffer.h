@@ -1313,11 +1313,6 @@ public:
     wxTextBoxAttr() { Init(); }
 
     /**
-        Copy constructor.
-    */
-    wxTextBoxAttr(const wxTextBoxAttr& attr) { Init(); (*this) = attr; }
-
-    /**
         Initialises this object.
     */
     void Init() { Reset(); }

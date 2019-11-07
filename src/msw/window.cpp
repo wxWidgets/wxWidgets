@@ -610,7 +610,7 @@ void wxWindowMSW::SetId(wxWindowID winid)
 
 void wxWindowMSW::SetFocus()
 {
-    HWND hWnd = GetHwnd();
+    HWND hWnd = (HWND)MSWGetFocusHWND();
     wxCHECK_RET( hWnd, wxT("can't set focus to invalid window") );
 
     ::SetLastError(0);
@@ -632,13 +632,15 @@ void wxWindowMSW::SetFocus()
 
 void wxWindowMSW::SetFocusFromKbd()
 {
+    HWND hWnd = (HWND)MSWGetFocusHWND();
+
     // when the focus is given to the control with DLGC_HASSETSEL style from
     // keyboard its contents should be entirely selected: this is what
     // ::IsDialogMessage() does and so we should do it as well to provide the
     // same LNF as the native programs
-    if ( ::SendMessage(GetHwnd(), WM_GETDLGCODE, 0, 0) & DLGC_HASSETSEL )
+    if ( ::SendMessage(hWnd, WM_GETDLGCODE, 0, 0) & DLGC_HASSETSEL )
     {
-        ::SendMessage(GetHwnd(), EM_SETSEL, 0, -1);
+        ::SendMessage(hWnd, EM_SETSEL, 0, -1);
     }
 
     // do this after (maybe) setting the selection as like this when
@@ -4939,11 +4941,42 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     // update font if necessary
     MSWUpdateFontOnDPIChange(newDPI);
 
-    // update children
-    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
-    while ( current )
+    // update sizers
+    if ( GetSizer() )
     {
-        wxWindow *childWin = current->GetData();
+        for ( wxSizerItemList::compatibility_iterator
+              node = GetSizer()->GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxSizerItem* sizerItem = node->GetData();
+
+            int border = sizerItem->GetBorder();
+            ScaleCoordIfSet(border, scaleFactor);
+            sizerItem->SetBorder(border);
+
+            // only scale sizers and spacers, not windows
+            if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
+            {
+                wxSize min = sizerItem->GetMinSize();
+                ScaleCoordIfSet(min.x, scaleFactor);
+                ScaleCoordIfSet(min.y, scaleFactor);
+                sizerItem->SetMinSize(min);
+
+                wxSize size = sizerItem->GetSize();
+                ScaleCoordIfSet(size.x, scaleFactor);
+                ScaleCoordIfSet(size.y, scaleFactor);
+                sizerItem->SetDimension(wxDefaultPosition, size);
+            }
+        }
+    }
+
+    // update children
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *childWin = node->GetData();
         // Update all children, except other top-level windows.
         // These could be on a different monitor and will get their own
         // dpi-changed event.
@@ -4951,8 +4984,6 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
         {
             childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
         }
-
-        current = current->GetNext();
     }
 
     wxDPIChangedEvent event(oldDPI, newDPI);

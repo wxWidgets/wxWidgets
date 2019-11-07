@@ -71,6 +71,8 @@
 
 #include <string.h>
 
+#define TRACE_KEYS  "keyevent"
+
 #ifdef __WXUNIVERSAL__
     wxIMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase);
 #endif
@@ -177,6 +179,27 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxBlindPlateWindow, wxWindow);
 wxBEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
 wxEND_EVENT_TABLE()
 
+// ----------------------------------------------------------------------------
+// debug helpers
+// ----------------------------------------------------------------------------
+
+// Function used to dump a brief description of a window.
+extern
+wxString wxDumpWindow(wxWindowMac* win)
+{
+    if ( !win )
+        return "(no window)";
+
+    wxString s = wxString::Format("%s(%p",
+                                  win->GetClassInfo()->GetClassName(), win);
+
+    wxString label = win->GetLabel();
+    if ( !label.empty() )
+        s += wxString::Format(", \"%s\"", label);
+    s += ")";
+
+    return s;
+}
 
 // ----------------------------------------------------------------------------
  // constructors and such
@@ -542,23 +565,9 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
     return true ;
 }
 
-static bool wxIsWindowOrParentDisabled(wxWindow* w)
-{
-    while (w && !w->IsTopLevel())
-    {
-        if (!w->IsEnabled())
-            return true;
-        w = w->GetParent();
-    }
-    return false;
-}
-
 void wxWindowMac::SetFocus()
 {
-    if ( !AcceptsFocus() )
-            return ;
-
-    if (wxIsWindowOrParentDisabled((wxWindow*) this))
+    if ( !IsEnabled() )
         return;
 
     wxWindow* former = FindFocus() ;
@@ -2570,6 +2579,18 @@ bool wxWindowMac::UnregisterHotKey(int hotkeyId)
 
 bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {
+    wxLogTrace(TRACE_KEYS, "Handling %s event in %s",
+               event.GetEventType() == wxEVT_KEY_DOWN
+                ? "key down"
+                : event.GetEventType() == wxEVT_CHAR
+                    ? "char"
+                    : event.GetEventType() == wxEVT_KEY_UP
+                        ? "key up"
+                        : event.GetEventType() == wxEVT_CHAR_HOOK
+                            ? "char hook"
+                            : "unknown",
+               wxDumpWindow(this));
+
     bool handled = false;
 
     // moved the ordinary key event sending AFTER the accel evaluation

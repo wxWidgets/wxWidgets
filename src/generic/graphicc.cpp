@@ -3009,6 +3009,9 @@ public :
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) wxOVERRIDE;
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col) wxOVERRIDE;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE;
@@ -3236,6 +3239,14 @@ wxCairoRenderer::CreateFont(double sizeInPixels,
     ENSURE_LOADED_OR_RETURN(font);
     font.SetRefData(new wxCairoFontData(this, sizeInPixels, facename, flags, col));
     return font;
+}
+
+wxGraphicsFont
+wxCairoRenderer::CreateFontAtDPI(const wxFont& font,
+                                 const wxRealPoint& WXUNUSED(dpi),
+                                 const wxColour& col)
+{
+    return CreateFont(font, col);
 }
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )

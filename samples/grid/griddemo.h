@@ -69,6 +69,7 @@ class GridFrame : public wxFrame
     void DeleteSelectedRows( wxCommandEvent& );
     void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
+    void EditCell( wxCommandEvent& );
     void SetCornerLabelValue( wxCommandEvent& );
     void ShowSelection( wxCommandEvent& );
     void SelectCells( wxCommandEvent& );
@@ -179,6 +180,7 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
+        ID_EDITCELL,
         ID_SETCORNERLABEL,
         ID_SHOWSEL,
         ID_CHANGESEL,

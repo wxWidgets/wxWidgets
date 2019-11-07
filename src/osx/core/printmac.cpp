@@ -37,6 +37,15 @@
 
 #include <stdlib.h>
 
+// Helper function to get the printer "name": actually we use its unique ID
+// instead of the human-readable name which is not guaranteed to be unique.
+static wxString MacGetPrinterName(PMPrinter printer)
+{
+    CFStringRef printerId = PMPrinterGetID(printer);
+    CFRetain(printerId);
+    return wxCFStringRef(printerId).AsString();
+}
+
 //
 // move to print_osx.cpp
 //
@@ -124,14 +133,9 @@ void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
             printer = (PMPrinter)CFArrayGetValueAtIndex(printerList, index);
             if ((data.GetPrinterName().empty()) && (PMPrinterIsDefault(printer)))
                 break;
-            else
-            {
-                CFStringRef name;
-                name = PMPrinterGetName(printer);
-                CFRetain(name);
-                if (data.GetPrinterName() == wxCFStringRef(name).AsString())
-                    break;
-            }
+
+            if (data.GetPrinterName() == MacGetPrinterName(printer))
+                break;
         }
         if (index < count)
             PMSessionSetCurrentPMPrinter(m_macPrintSession, printer);
@@ -301,17 +305,12 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
 
 void wxOSXPrintData::TransferPrinterNameTo( wxPrintData &data )
 {
-    CFStringRef name;
     PMPrinter printer ;
     PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
     if (PMPrinterIsDefault(printer))
         data.SetPrinterName(wxEmptyString);
     else
-    {
-        name = PMPrinterGetName(printer);
-        CFRetain(name);
-        data.SetPrinterName(wxCFStringRef(name).AsString());
-    }
+        data.SetPrinterName(MacGetPrinterName(printer));
 }
 
 void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )

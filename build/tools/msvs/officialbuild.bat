@@ -22,44 +22,10 @@ rem ========================================================
 
 set compvers="Unknown"
 
-if "%1" == "vc142" (
-  @echo Building for vc142 / vs2019
-  set comp=142
-  set compvers=vc142
-
-  if NOT "%VS160COMNTOOLS%" == "" (
-    call "%VS160COMNTOOLS%VsDevCmd.bat"
-  )
-  if "%VS160COMNTOOLS%" == "" (
-    call %curr_dir%\findvs 16.0 17.0
-
-    if errorlevel 1 (
-      @echo vswhere.exe must be in your path or a VS2019 developer command prompt must be used.
-      goto end
-    )
-  )
-)
-if "%1" == "vc141" (
-  @echo Building for vc141 / vs2017
-  set comp=141
-  set compvers=vc141
-
-  if NOT "%VS150COMNTOOLS%" == "" (
-    call "%VS150COMNTOOLS%VsDevCmd.bat"
-  )
-  if "%VS150COMNTOOLS%" == "" (
-    call %curr_dir%\findvs 15.0 16.0
-
-    if errorlevel 1 (
-      @echo vswhere.exe must be in your path or a VS2017 developer command prompt must be used.
-      goto end
-    )
-  )
-)
-if "%1" == "vc140" (
-  @echo Building for vc140 / vs2015
-  set comp=140
-  set compvers=vc140
+if "%1" == "vc14x" (
+  @echo Building for vc14x with vs2015
+  set comp=14x
+  set compvers=vc14x
   call "%VS140COMNTOOLS%VsDevCmd.bat"
 )
 if "%1" == "vc120" (
@@ -117,9 +83,7 @@ del %compvers%x86_Release.txt
 del %compvers%x64_Debug.txt
 del %compvers%x64_Release.txt
 
-if "%compvers%" == "vc142" call "%VS160COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
-if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
-if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
+if "%compvers%" == "vc14x" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X64 /Release
@@ -152,9 +116,7 @@ nmake -f makefile.vc BUILD=debug SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
-if "%compvers%" == "vc142" call "%VS160COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x86
-if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x86
-if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
+if "%compvers%" == "vc14x" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X86 /Release
@@ -214,12 +176,11 @@ goto End
 :VERSIONS
    @echo.
    @echo Compiler Version: One of -
-   @echo vc142
-   @echo vc141
-   @echo vc140
+   @echo vc14x (Requires VS2015)
    @echo vc120
    @echo vc110
    @echo vc100
+   @echo.
 
 :End
 
