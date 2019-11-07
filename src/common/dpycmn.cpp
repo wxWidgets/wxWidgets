@@ -159,7 +159,7 @@ wxString wxDisplay::GetName() const
 
 bool wxDisplay::IsPrimary() const
 {
-    return m_impl && m_impl->GetIndex() == 0;
+    return m_impl && m_impl->IsPrimary();
 }
 
 #if wxUSE_DISPLAY
