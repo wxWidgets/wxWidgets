@@ -2906,7 +2906,9 @@ typedef struct _GdkColor        GdkColor;
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkDragContext  GdkDragContext;
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK4__)
+    typedef const char *GdkAtom;
+#elif defined(__WXGTK20__)
     typedef struct _GdkAtom* GdkAtom;
 #else
     typedef unsigned long GdkAtom;
