@@ -482,8 +482,8 @@ protected:
     {
         return ( !m_text &&
                  !(flags & wxCONTROL_ISSUBMENU) &&
-                 !m_valueString.length() &&
-                 m_hintText.length() &&
+                 m_valueString.empty() &&
+                 !m_hintText.empty() &&
                  !ShouldDrawFocus() );
     }
 
