@@ -305,9 +305,10 @@ struct EllipsizeCalculator
             
             m_isOk = dc.GetPartialTextExtents(cpy, m_charOffsetsPx);
 
-            // Iterate through the original string inserting width values for
-            // the first ampersand locations that are the same as the 
-            // following width.
+            // Iterate through the original string inserting a cumulative width 
+            // value for each ampersand that is the same as the following 
+            // character's cumulative width value. Except this is only done
+            // for the first ampersand in a pair (see RemoveMnemonics).
             size_t n = 0;
             bool mnemonic = false;
             for ( wxString::const_iterator it = s.begin(); it != s.end(); 
@@ -327,40 +328,12 @@ struct EllipsizeCalculator
         {
             m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
         }
-
-        /*
-        // Either way, we should end up with the same number of offsets as 
-        // the original string.
-        wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
         
-        m_isOk = dc.GetPartialTextExtents(s, m_charOffsetsPx);
-        wxASSERT( m_charOffsetsPx.GetCount() == s.length() );
-
-        if ( flags & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS )
-        {
-            // The ampersand itself shouldn't count for the width calculation
-            // as it won't be displayed: either it's an ampersand before some
-            // other character in which case it indicates a mnemonic, or it's
-            // an escaped ampersand, in which case only the second one of the
-            // pair of ampersands will be displayed. But we can't just remove
-            // the ampersand as we still need it in the final label, in order
-            // not to lose the mnemonics. Hence we use this hack, and pretend
-            // that ampersands simply have zero width. Of course, it could be
-            // not completely precise, but this is the best we can do without
-            // completely changing this code structure.
-            size_t n = 0;
-            int delta = 0;
-            for ( wxString::const_iterator it = s.begin();
-                  it != s.end();
-                  ++it, ++n )
-            {
-                if ( *it == '&' )
-                    delta += dc.GetTextExtent(wxS('&')).GetWidth();
-
-                m_charOffsetsPx[n] -= delta;
-            }
-        }
-        */
+        // Either way, we should end up with the same number of offsets as 
+        // characters in the original string, except where there is a trailing
+        // ampersand which is ignored.
+        wxASSERT( m_charOffsetsPx.GetCount() == s.length() || 
+                  m_charOffsetsPx.GetCount() == s.length() - 1);
     }
 
     bool IsOk() const { return m_isOk; }
