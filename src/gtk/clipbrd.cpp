@@ -143,7 +143,11 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
     GdkAtom type = gtk_selection_data_get_data_type(selection_data);
     if ( type != GDK_SELECTION_TYPE_ATOM )
     {
+#ifdef __WXGTK4__
+        if ( type != g_intern_static_string("TARGETS") )
+#else
         if ( strcmp(wxGtkString(gdk_atom_name(type)), "TARGETS") != 0 )
+#endif
         {
             wxLogTrace( TRACE_CLIPBOARD,
                         wxT("got unsupported clipboard target") );
@@ -290,6 +294,15 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     wxDataFormat format(gtk_selection_data_get_target(selection_data));
 
+#ifdef __WXGTK4__
+    wxLogTrace(TRACE_CLIPBOARD,
+               wxT("clipboard data in format %s, GtkSelectionData is target=%s type=%s timestamp=%u"),
+               format.GetId().c_str(),
+               gtk_selection_data_get_target(selection_data),
+               gtk_selection_data_get_data_type(selection_data),
+               GPOINTER_TO_UINT( signal_data )
+               );
+#else
     wxLogTrace(TRACE_CLIPBOARD,
                wxT("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId().c_str(),
@@ -298,6 +311,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_selection(selection_data)))).c_str(),
                GPOINTER_TO_UINT( signal_data )
                );
+#endif
 
     if ( !data->IsSupportedFormat( format ) )
         return;
@@ -387,7 +401,11 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
     GdkAtom type = gtk_selection_data_get_data_type(selection_data);
     if ( type != GDK_SELECTION_TYPE_ATOM )
     {
+#ifdef __WXGTK4__
+        if ( type != g_intern_static_string("TARGETS") )
+#else
         if ( strcmp(wxGtkString(gdk_atom_name(type)), "TARGETS") != 0 )
+#endif
         {
             wxLogTrace( TRACE_CLIPBOARD,
                         wxT("got unsupported clipboard target") );

@@ -3716,8 +3716,12 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
 
 bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
 {
+#ifdef __WXGTK4__
+    m_dragSourceTargetEntryTarget = wxCharBuffer( format.GetFormatId() );
+#else
     wxGtkString atom_str( gdk_atom_name( format  ) );
     m_dragSourceTargetEntryTarget = wxCharBuffer( atom_str );
+#endif
 
     m_dragSourceTargetEntry.target =  m_dragSourceTargetEntryTarget.data();
     m_dragSourceTargetEntry.flags = 0;
@@ -3731,8 +3735,12 @@ bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
 
 bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormat &format )
 {
+#ifdef __WXGTK4__
+    m_dropTargetTargetEntryTarget = wxCharBuffer( format.GetFormatId() );
+#else
     wxGtkString atom_str( gdk_atom_name( format  ) );
     m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
+#endif
 
     m_dropTargetTargetEntry.target =  m_dropTargetTargetEntryTarget.data();
     m_dropTargetTargetEntry.flags = 0;

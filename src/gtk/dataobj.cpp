@@ -118,11 +118,15 @@ wxString wxDataFormat::GetId() const
 #endif
 }
 
-#ifdef __WXGTK4__
 void wxDataFormat::SetId( NativeFormat format )
 {
     PrepareFormats();
+#ifdef __WXGTK4__
+    // NativeFormat is const char *, so canonicalize first
     m_format = g_intern_string(format);
+#else
+    m_format = format;
+#endif
 
     if (m_format == g_textAtom)
 #if wxUSE_UNICODE
@@ -146,46 +150,18 @@ void wxDataFormat::SetId( NativeFormat format )
         m_type = wxDF_PRIVATE;
 }
 
+#ifdef __WXGTK4__
 void wxDataFormat::SetId( const wxString& id )
 {
     SetId((NativeFormat)id.ToAscii());
 }
-
 #else
-void wxDataFormat::SetId( NativeFormat format )
-{
-    PrepareFormats();
-    m_format = format;
-
-    if (m_format == g_textAtom)
-#if wxUSE_UNICODE
-        m_type = wxDF_UNICODETEXT;
-#else
-        m_type = wxDF_TEXT;
-#endif
-    else
-    if (m_format == g_altTextAtom)
-        m_type = wxDF_TEXT;
-    else
-    if (m_format == g_pngAtom)
-        m_type = wxDF_BITMAP;
-    else
-    if (m_format == g_fileAtom)
-        m_type = wxDF_FILENAME;
-    else
-    if (m_format == g_htmlAtom)
-        m_type = wxDF_HTML;
-    else
-        m_type = wxDF_PRIVATE;
-}
-
 void wxDataFormat::SetId( const wxString& id )
 {
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     m_format = gdk_atom_intern( id.ToAscii(), FALSE );
 }
-
 #endif
 
 void wxDataFormat::PrepareFormats()

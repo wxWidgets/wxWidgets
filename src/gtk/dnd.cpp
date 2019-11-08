@@ -24,6 +24,7 @@
 
 #include "wx/scopeguard.h"
 
+#include "wx/gtk/private/string.h"
 #include "wx/gtk/private/wrapgtk.h"
 
 //----------------------------------------------------------------------------
@@ -198,7 +199,7 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     GList *tmp_list;
     for (tmp_list = context->targets; tmp_list; tmp_list = tmp_list->next)
     {
-        wxString atom = wxString::FromAscii( gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data)) );
+        wxString atom = wxString::FromAscii(wxGtkString(gdk_atom_name(GDK_POINTER_TO_ATOM(tmp_list->data))));
         wxPrintf( "Atom: %s\n", atom );
     }
 #endif
@@ -842,9 +843,13 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     size_t count = m_data->GetFormatCount();
     for (size_t i = 0; i < count; i++)
     {
-        GdkAtom atom = array[i];
+        GdkAtom atom = array[i].GetFormatId();
+#ifdef __WXGTK4__
+        wxLogTrace(TRACE_DND, wxT("Drop source: Supported atom %s"), atom);
+#else
         wxLogTrace(TRACE_DND, wxT("Drop source: Supported atom %s"),
-                   gdk_atom_name( atom ));
+                   wxGtkString(gdk_atom_name( atom )).c_str());
+#endif
         gtk_target_list_add( target_list, atom, 0, 0 );
     }
     delete[] array;

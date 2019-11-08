@@ -103,7 +103,6 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
 
 // GdkAtom is char* in GTK4, so provide missing functions
 #ifdef __WXGTK4__
-    #define gdk_atom_name(x) (x)
     #define gdk_atom_intern(x, _) g_intern_string((x))
 #endif
 

@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------
 // Convenience class for g_freeing a gchar* on scope exit automatically
 // ----------------------------------------------------------------------------
+#include <glib.h>
 
 class wxGtkString
 {

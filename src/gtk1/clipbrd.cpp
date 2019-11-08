@@ -262,14 +262,20 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     wxDataFormat format( selection_data->target );
 
+    gchar *atom_target = gdk_atom_name(selection_data->target),
+          *atom_type = gdk_atom_name(selection_data->type),
+          *atom_selection = gdk_atom_name(selection_data->selection);
     wxLogTrace(TRACE_CLIPBOARD,
                wxT("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId().c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->target)).c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->type)).c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str(),
+               wxString::FromAscii(atom_target).c_str(),
+               wxString::FromAscii(atom_type).c_str(),
+               wxString::FromAscii(atom_selection).c_str(),
                GPOINTER_TO_UINT( signal_data )
                );
+    g_free(atom_target);
+    g_free(atom_type);
+    g_free(atom_selection);
 
     if (!data->IsSupportedFormat( format )) return;
 
