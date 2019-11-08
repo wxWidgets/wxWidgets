@@ -101,9 +101,6 @@ protected:
                                           const wxString& label) wxOVERRIDE;
 
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
     // get the bounding rect for the given tool
