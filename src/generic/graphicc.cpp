@@ -2811,7 +2811,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             *externalLeading = wxMax(0, fe.height - (fe.ascent + fe.descent));
     }
 }
-#include <iostream>
+
 void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
     widths.Empty();
