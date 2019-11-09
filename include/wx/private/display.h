@@ -37,6 +37,9 @@ public:
         return m_impls[n];
     }
 
+    // Return the primary display object, creating it if necessary.
+    wxDisplayImpl* GetPrimaryDisplay();
+
     // get the total number of displays
     virtual unsigned GetCount() = 0;
 
