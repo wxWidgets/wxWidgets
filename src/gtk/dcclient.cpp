@@ -314,6 +314,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
          // Don't report problems as per MSW.
          m_ok = true;
 
+         m_window = window;
+
          return;
     }
 
