@@ -596,6 +596,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
     {
         if ( pc == label.end() || *pc == wxS('\n') )
         {
+            curLine.Trim();
             curLine = DoEllipsizeSingleLine(curLine, dc, mode, maxFinalWidth,
                                             replacementWidth, flags);
 
