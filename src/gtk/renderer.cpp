@@ -559,9 +559,9 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win, int flags)
     // other platforms.
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
+#ifdef __WXGTK3__
     const bool addMargins = (flags & wxCONTROL_CELL) == 0;
 
-#ifdef __WXGTK3__
     int min_width, min_height;
     wxGtkStyleContext sc(win->GetContentScaleFactor());
     sc.AddCheckButton();
@@ -595,15 +595,25 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win, int flags)
 
     return wxSize(min_width, min_height);
 #else // !__WXGTK3__
-    gint indicator_size, indicator_spacing;
+    gint indicator_size, indicator_spacing, focus_width, focus_pad;
     gtk_widget_style_get(wxGTKPrivate::GetCheckButtonWidget(),
                          "indicator_size", &indicator_size,
                          "indicator_spacing", &indicator_spacing,
+                         "focus-line-width", &focus_width,
+                         "focus-padding", &focus_pad,
                          NULL);
 
-    int size = indicator_size;
-    if ( addMargins )
-        size += indicator_spacing * 2;
+    int size = indicator_size + indicator_spacing * 2;
+
+    // If wxCONTROL_CELL is set then we want to get the size of wxCheckBox
+    // control to draw the check mark centered and at the same position as
+    // wxCheckBox do. So we should add margins instead of removing.
+    // See gtk_real_check_button_draw_indicator:
+    // https://github.com/GNOME/gtk/blob/GTK_2_16_0/gtk/gtkcheckbutton.c#L374
+    if ( flags & wxCONTROL_CELL )
+    {
+        size += 2 * (focus_width + focus_pad);
+    }
 
     return wxSize(size, size);
 #endif // !__WXGTK3__
@@ -618,10 +628,12 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
 #ifndef __WXGTK3__
     GtkWidget *button = wxGTKPrivate::GetCheckButtonWidget();
 
-    gint indicator_size, indicator_spacing;
+    gint indicator_size, indicator_spacing, focus_width, focus_pad;
     gtk_widget_style_get(button,
                          "indicator_size", &indicator_size,
                          "indicator_spacing", &indicator_spacing,
+                         "focus-line-width", &focus_width,
+                         "focus-padding", &focus_pad,
                          NULL);
 
     GtkStateType state;
@@ -698,6 +710,16 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
     if (gdk_window == NULL)
         return;
 
+    gint offsetX = indicator_spacing;
+
+    // If wxCONTROL_CELL is set then we want to draw the check mark
+    // at the same position as wxCheckBox do.
+    // See wxRendererGTK::GetCheckBoxSize.
+    if ( flags & wxCONTROL_CELL )
+    {
+        offsetX += focus_width + focus_pad;
+    }
+
     gtk_paint_check
     (
         gtk_widget_get_style(button),
@@ -707,8 +729,8 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         NULL,
         button,
         "cellcheck",
-        dc.LogicalToDeviceX(rect.x) + indicator_spacing,
-        dc.LogicalToDeviceY(rect.y) + indicator_spacing,
+        dc.LogicalToDeviceX(rect.x) + offsetX,
+        dc.LogicalToDeviceY(rect.y) + (rect.height - indicator_size) / 2,
         indicator_size, indicator_size
     );
 #endif
