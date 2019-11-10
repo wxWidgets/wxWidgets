@@ -1491,10 +1491,15 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // different format and iterator than if it doesn't...
     const bool isSrcBpp32 = bmp.GetDepth() == 32;
 
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+    const bool hasAlpha = bmpSource.HasAlpha();
+#endif
+
     cairo_format_t bufferFormat =
     // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
 #if defined(__WXMSW__) || defined(__WXOSX__)
-        (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
+        (isSrcBpp32 && hasAlpha) || bmp.GetMask() != NULL
 #else
         isSrcBpp32 || bmp.GetMask() != NULL
 #endif
@@ -1507,13 +1512,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     if ( isSrcBpp32 )
     {
-#if defined(__WXMSW__) || defined(__WXOSX__)
-        // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
-        const bool hasAlpha = bmpSource.HasAlpha();
-#else
-        const bool hasAlpha = true;
-#endif
-
         {
             // use the bitmap's alpha
             wxAlphaPixelData pixData(bmpSource);
@@ -1530,11 +1528,13 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-                    unsigned char alpha = hasAlpha ? p.Alpha() : 255;
 #if defined (__WXMSW__) || defined(__WXOSX__)
+                    unsigned char alpha = hasAlpha ? p.Alpha() : 255;
                     // MSW and OSX bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
 #else // !__WXMSW__ , !__WXOSX__
+                    // We always have alpha, but we need to premultiply it.
+                    unsigned char alpha = p.Alpha();
                     if (alpha == 0)
                         *data = 0;
                     else
