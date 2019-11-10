@@ -975,7 +975,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
         value = wxGridCellBoolEditor::IsTrueValue(cellval);
     }
 
-    int flags = 0;
+    int flags = wxCONTROL_CELL;
     if (value)
         flags |= wxCONTROL_CHECKED;
 
