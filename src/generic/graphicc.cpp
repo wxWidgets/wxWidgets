@@ -1489,22 +1489,14 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    const bool isSrcBpp32 =
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-            bmp.GetDepth() == 32 || bmp.GetMask() != NULL;
-#else
-            bmp.GetDepth() == 32;
-#endif
+    const bool isSrcBpp32 = bmp.GetDepth() == 32;
 
     cairo_format_t bufferFormat =
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-        isSrcBpp32
-#elif defined(__WXGTK3__)
-        isSrcBpp32 || bmp.GetMask() != NULL
-#elif defined(__WXMSW__) || defined(__WXOSX__)
+    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__)
         (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
 #else
-        isSrcBpp32
+        isSrcBpp32 || bmp.GetMask() != NULL
 #endif
         ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24;
 
@@ -1515,12 +1507,12 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     if ( isSrcBpp32 )
     {
-        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
-        // "has alpha" flag but we want to leave it unchanged, so we need
-        // to save its current value now and restore it afterwards.
 #if defined(__WXMSW__) || defined(__WXOSX__)
+        // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
         const bool hasAlpha = bmpSource.HasAlpha();
-#endif // __WXMSW__ || __WXOSX__
+#else
+        const bool hasAlpha = true;
+#endif
 
         {
             // use the bitmap's alpha
@@ -1538,7 +1530,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-                    unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32) ? p.Alpha() : 255;
+                    unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32 && hasAlpha) ? p.Alpha() : 255;
 #ifdef __WXMSW__
                     // MSW bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
@@ -1562,7 +1554,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
 
 #if defined(__WXMSW__) || defined(__WXOSX__)
-        // Reset "has alpha" flag back.
+        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
+        // "has alpha" flag but we want to leave it unchanged, so we need
+        // to reset "has alpha" flag back.
         // (wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.)
         bmpSource.UseAlpha(hasAlpha);
 #endif // __WXMSW__ || __WXOSX__
@@ -1594,14 +1588,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
     // if there is a mask, set the alpha bytes in the target buffer to
-    // fully transparent or fully opaque
-#if defined(__WXMSW__)
-    if (bmp.GetMask() != NULL && !bmp.HasAlpha())
-#else // __WXGTK3__
+    // fully transparent or retain original value
     if (bmp.GetMask() != NULL)
-#endif // __WXMSW__ / __WXGTK3__
     {
         wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
         data = (wxUint32*)m_buffer;
@@ -1622,8 +1611,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 if (p.Red()+p.Green()+p.Blue() == 0)
 #endif
                     *data = 0;
-                else
-                    *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
+
                 ++data;
                 ++p;
             }
@@ -1633,7 +1621,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
-#endif // __WXMSW__ || __WXGTK3__
 
     InitSurface(bufferFormat, stride);
 #endif // wxHAS_RAW_BITMAP
