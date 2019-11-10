@@ -146,6 +146,13 @@ bool wxCheckBox::Create(wxWindow *parent,
     g_object_ref(m_widget);
     SetLabel( label );
 
+#if !defined(__WXGTK3__) && !defined(__WXGTK4__)
+    if ( style & wxNO_BORDER )
+    {
+        gtk_container_set_border_width(GTK_CONTAINER(m_widgetCheckbox), 0);
+    }
+#endif
+
     g_signal_connect (m_widgetCheckbox, "toggled",
                       G_CALLBACK (gtk_checkbox_toggled_callback), this);
 
