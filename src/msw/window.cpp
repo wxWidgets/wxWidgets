@@ -63,6 +63,7 @@
 #include "wx/popupwin.h"
 #include "wx/power.h"
 #include "wx/scopeguard.h"
+#include "wx/stack.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -5261,8 +5262,8 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
 // endless stream of WM_PAINT messages for this window resulting in a lot of
 // difficult to debug problems (e.g. impossibility to repaint other windows,
 // lack of timer and idle events and so on)
-extern bool wxDidCreatePaintDC;
-bool wxDidCreatePaintDC = false;
+extern wxStack<bool> wxDidCreatePaintDC;
+wxStack<bool> wxDidCreatePaintDC;
 
 bool wxWindowMSW::HandlePaint()
 {
@@ -5278,14 +5279,14 @@ bool wxWindowMSW::HandlePaint()
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
 
-    wxDidCreatePaintDC = false;
+    wxDidCreatePaintDC.push(false);
 
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
 
     bool processed = HandleWindowEvent(event);
 
-    if ( wxDidCreatePaintDC && !processed )
+    if ( wxDidCreatePaintDC.top() && !processed )
     {
         // Event handler did paint something as wxPaintDC object was created
         // but then it must have skipped the event to indicate that default
@@ -5316,7 +5317,9 @@ bool wxWindowMSW::HandlePaint()
     // was processed, we must still call MSWDefWindowProc() to ensure that the
     // window is validated, i.e. to avoid the problem described in the comment
     // before wxDidCreatePaintDC definition above.
-    return wxDidCreatePaintDC;
+    const bool ret = wxDidCreatePaintDC.top();
+    wxDidCreatePaintDC.pop();
+    return ret;
 }
 
 // Can be called from an application's OnPaint handler
