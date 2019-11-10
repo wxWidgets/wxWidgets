@@ -1,0 +1,1 @@
+GTK: Fix drawing bitmaps with masks using wxGraphicsContext under GTK2.
