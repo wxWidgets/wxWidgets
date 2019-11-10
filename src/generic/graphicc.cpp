@@ -1531,10 +1531,10 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
                     unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32 && hasAlpha) ? p.Alpha() : 255;
-#ifdef __WXMSW__
-                    // MSW bitmap pixel bits are already premultiplied.
+#if defined (__WXMSW__) || defined(__WXOSX__)
+                    // MSW and OSX bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__
+#else // !__WXMSW__ , !__WXOSX__
                     if (alpha == 0)
                         *data = 0;
                     else
@@ -1542,7 +1542,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                             | Premultiply(alpha, p.Red()) << 16
                             | Premultiply(alpha, p.Green()) << 8
                             | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__ / !__WXMSW__
+#endif // __WXMSW__, __WXOSX__ / !__WXMSW__, !__WXOSX__
                     ++data;
                     ++p;
                 }
@@ -1604,12 +1604,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
-                // contrary to the others OSX has natively its masked out pixels as white
-#ifdef __WXOSX__
-                if (p.Red() == 0xFF && p.Green() == 0xFF && p.Blue() == 0xFF )
-#else
                 if (p.Red()+p.Green()+p.Blue() == 0)
-#endif
                     *data = 0;
 
                 ++data;
