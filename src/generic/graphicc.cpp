@@ -1530,7 +1530,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-                    unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32 && hasAlpha) ? p.Alpha() : 255;
+                    unsigned char alpha = hasAlpha ? p.Alpha() : 255;
 #if defined (__WXMSW__) || defined(__WXOSX__)
                     // MSW and OSX bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
