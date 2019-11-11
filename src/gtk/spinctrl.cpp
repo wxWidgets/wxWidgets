@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"    // for wxEVT_TEXT
+    #include "wx/math.h"        // wxRound()
     #include "wx/utils.h"
     #include "wx/wxcrtvararg.h"
 #endif
@@ -375,26 +376,30 @@ wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
 
+    // This is a bit stupid as we typically compute xlen by measuring some
+    // string of digits in the first place, but there doesn't seem to be
+    // anything better to do (unless we add some GetSizeFromNumberOfDigits()).
+    const double widthDigit = GetTextExtent("0123456789").GetWidth() / 10.0;
+    const int numDigits = wxRound(xlen / widthDigit);
+
     const gint widthChars = gtk_entry_get_width_chars(GTK_ENTRY(m_widget));
-    gtk_entry_set_width_chars(GTK_ENTRY(m_widget), 0);
+    gtk_entry_set_width_chars(GTK_ENTRY(m_widget), numDigits);
 #if GTK_CHECK_VERSION(3,12,0)
     gint maxWidthChars = 0;
     if ( gtk_check_version(3,12,0) == NULL )
     {
         maxWidthChars = gtk_entry_get_max_width_chars(GTK_ENTRY(m_widget));
-        gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), 0);
+        gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), numDigits);
     }
 #endif // GTK+ 3.12+
 
-    wxSize totalS = GTKGetPreferredSize(m_widget);
+    wxSize tsize = GTKGetPreferredSize(m_widget);
 
 #if GTK_CHECK_VERSION(3,12,0)
     if ( gtk_check_version(3,12,0) == NULL )
         gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), maxWidthChars);
 #endif // GTK+ 3.12+
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), widthChars);
-
-    wxSize tsize(xlen + totalS.x, totalS.y);
 
     // Check if the user requested a non-standard height.
     if ( ylen > 0 )
