@@ -384,21 +384,9 @@ wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     const gint widthChars = gtk_entry_get_width_chars(GTK_ENTRY(m_widget));
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), numDigits);
-#if GTK_CHECK_VERSION(3,12,0)
-    gint maxWidthChars = 0;
-    if ( gtk_check_version(3,12,0) == NULL )
-    {
-        maxWidthChars = gtk_entry_get_max_width_chars(GTK_ENTRY(m_widget));
-        gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), numDigits);
-    }
-#endif // GTK+ 3.12+
 
     wxSize tsize = GTKGetPreferredSize(m_widget);
 
-#if GTK_CHECK_VERSION(3,12,0)
-    if ( gtk_check_version(3,12,0) == NULL )
-        gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), maxWidthChars);
-#endif // GTK+ 3.12+
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), widthChars);
 
     // Check if the user requested a non-standard height.
