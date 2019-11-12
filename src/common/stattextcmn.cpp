@@ -269,7 +269,6 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
     }
 
     wxClientDC dc(const_cast<wxStaticTextBase*>(this));
-    dc.SetFont(GetFont());
 
     wxEllipsizeMode mode;
     if ( HasFlag(wxST_ELLIPSIZE_START) )
