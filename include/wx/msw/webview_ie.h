@@ -35,6 +35,7 @@ class wxIEContainer;
 class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
+class wxWebViewIEImpl;
 
 // Note that the highest emulation level may be used even when the
 // corresponding browser version is not installed.
@@ -152,7 +153,7 @@ public:
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
-    virtual void* GetNativeBackend() const wxOVERRIDE { return m_webBrowser; }
+    virtual void* GetNativeBackend() const wxOVERRIDE;
 
     // ---- IE-specific methods
 
@@ -189,6 +190,21 @@ protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
 private:
+    wxWebViewIEImpl* m_impl;
+
+    wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
+};
+
+class wxWebViewIEImpl
+{
+public:
+    explicit wxWebViewIEImpl(wxWebViewIE* webview);
+    ~wxWebViewIEImpl();
+
+    bool Create();
+
+    wxWebViewIE* m_webview;
+
     wxIEContainer* m_container;
     wxAutomationObject m_ie;
     IWebBrowser2* m_webBrowser;
@@ -224,13 +240,14 @@ private:
     wxCOMPtr<IHTMLDocument2> GetDocument() const;
     bool IsElementVisible(wxCOMPtr<IHTMLElement> elm);
     //Find helper functions.
+    long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT);
     void FindInternal(const wxString& text, int flags, int internal_flag);
     long FindNext(int direction = 1);
     void FindClear();
     //Toggles control features see INTERNETFEATURELIST for values.
     bool EnableControlFeature(long flag, bool enable = true);
 
-    wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
+    wxDECLARE_NO_COPY_CLASS(wxWebViewIEImpl);
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryIE : public wxWebViewFactory

@@ -83,6 +83,25 @@ bool wxWebViewIE::Create(wxWindow* parent,
         return false;
     }
 
+    m_impl = new wxWebViewIEImpl(this);
+    if ( !m_impl->Create() )
+        return false;
+
+    // Make behaviour consistent with the other backends when loading localhost
+    // pages without any physical network connection.
+    SetOfflineMode(false);
+
+    LoadURL(url);
+    return true;
+}
+
+wxWebViewIEImpl::wxWebViewIEImpl(wxWebViewIE* webview)
+    : m_webview(webview)
+{
+}
+
+bool wxWebViewIEImpl::Create()
+{
     m_webBrowser = NULL;
     m_isBusy = false;
     m_historyLoadingFromList = false;
@@ -104,21 +123,21 @@ bool wxWebViewIE::Create(wxWindow* parent,
     m_webBrowser->put_RegisterAsBrowser(VARIANT_TRUE);
     m_webBrowser->put_RegisterAsDropTarget(VARIANT_TRUE);
 
-    m_uiHandler = new DocHostUIHandler(this);
+    m_uiHandler = new DocHostUIHandler(m_webview);
 
-    m_container = new wxIEContainer(this, IID_IWebBrowser2, m_webBrowser, m_uiHandler);
+    m_container = new wxIEContainer(m_webview, IID_IWebBrowser2, m_webBrowser, m_uiHandler);
 
     EnableControlFeature(21 /* FEATURE_DISABLE_NAVIGATION_SOUNDS */);
 
-    // Make behaviour consistent with the other backends when loading localhost
-    // pages without any physical network connection.
-    SetOfflineMode(false);
-
-    LoadURL(url);
     return true;
 }
 
 wxWebViewIE::~wxWebViewIE()
+{
+    delete m_impl;
+}
+
+wxWebViewIEImpl::~wxWebViewIEImpl()
 {
     wxDynamicLibrary urlMon(wxT("urlmon.dll"));
     if(urlMon.HasSymbol(wxT("CoInternetGetSession")))
@@ -147,7 +166,7 @@ wxWebViewIE::~wxWebViewIE()
 
 void wxWebViewIE::LoadURL(const wxString& url)
 {
-    m_ie.CallMethod("Navigate", wxConvertStringToOle(url));
+    m_impl->m_ie.CallMethod("Navigate", wxConvertStringToOle(url));
 }
 
 namespace
@@ -184,7 +203,7 @@ void wxWebViewIE::DoSetPage(const wxString& html, const wxString& baseUrl)
 
         wxON_BLOCK_EXIT1(SafeArrayDestroy, psaStrings);
 
-        wxCOMPtr<IHTMLDocument2> document(GetDocument());
+        wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
         if(!document)
             return;
@@ -201,7 +220,7 @@ void wxWebViewIE::DoSetPage(const wxString& html, const wxString& baseUrl)
 
         wxON_BLOCK_EXIT1(SafeArrayDestroy, psaStrings);
 
-        wxCOMPtr<IHTMLDocument2> document(GetDocument());
+        wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
         if(!document)
             return;
@@ -224,7 +243,7 @@ void wxWebViewIE::DoSetPage(const wxString& html, const wxString& baseUrl)
 
 wxString wxWebViewIE::GetPageSource() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -252,7 +271,7 @@ wxString wxWebViewIE::GetPageSource() const
 
 wxWebViewZoom wxWebViewIE::GetZoom() const
 {
-    switch( m_zoomType )
+    switch( m_impl->m_zoomType )
     {
         case wxWEBVIEW_ZOOM_TYPE_LAYOUT:
             return GetIEOpticalZoom();
@@ -269,7 +288,7 @@ wxWebViewZoom wxWebViewIE::GetZoom() const
 
 void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 {
-    switch( m_zoomType )
+    switch( m_impl->m_zoomType )
     {
         case wxWEBVIEW_ZOOM_TYPE_LAYOUT:
             SetIEOpticalZoom(zoom);
@@ -295,9 +314,9 @@ void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
 #if wxDEBUG_LEVEL
     HRESULT result =
 #endif
-            m_webBrowser->ExecWB(OLECMDID_ZOOM,
-                                 OLECMDEXECOPT_DONTPROMPTUSER,
-                                 &zoomVariant, NULL);
+            m_impl->m_webBrowser->ExecWB(OLECMDID_ZOOM,
+                                         OLECMDEXECOPT_DONTPROMPTUSER,
+                                         &zoomVariant, NULL);
     wxASSERT(result == S_OK);
 }
 
@@ -310,9 +329,9 @@ wxWebViewZoom wxWebViewIE::GetIETextZoom() const
 #if wxDEBUG_LEVEL
     HRESULT result =
 #endif
-            m_webBrowser->ExecWB(OLECMDID_ZOOM,
-                                 OLECMDEXECOPT_DONTPROMPTUSER,
-                                 NULL, &zoomVariant);
+            m_impl->m_webBrowser->ExecWB(OLECMDID_ZOOM,
+                                         OLECMDEXECOPT_DONTPROMPTUSER,
+                                         NULL, &zoomVariant);
     wxASSERT(result == S_OK);
 
     //We can safely cast here as we know that the range matches our enum
@@ -352,10 +371,10 @@ void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
 #if wxDEBUG_LEVEL
     HRESULT result =
 #endif
-            m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
-                                 OLECMDEXECOPT_DODEFAULT,
-                                 &zoomVariant,
-                                 NULL);
+            m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                         OLECMDEXECOPT_DODEFAULT,
+                                         &zoomVariant,
+                                         NULL);
     wxASSERT(result == S_OK);
 }
 
@@ -368,9 +387,9 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
 #if wxDEBUG_LEVEL
     HRESULT result =
 #endif
-            m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
-                                 OLECMDEXECOPT_DODEFAULT, NULL,
-                                 &zoomVariant);
+            m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                         OLECMDEXECOPT_DODEFAULT, NULL,
+                                         &zoomVariant);
     wxASSERT(result == S_OK);
 
     const int zoom = V_I4(&zoomVariant);
@@ -400,12 +419,12 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
 
 void wxWebViewIE::SetZoomType(wxWebViewZoomType type)
 {
-    m_zoomType = type;
+    m_impl->m_zoomType = type;
 }
 
 wxWebViewZoomType wxWebViewIE::GetZoomType() const
 {
-    return m_zoomType;
+    return m_impl->m_zoomType;
 }
 
 bool wxWebViewIE::CanSetZoomType(wxWebViewZoomType type) const
@@ -425,22 +444,23 @@ bool wxWebViewIE::CanSetZoomType(wxWebViewZoomType type) const
 
 void wxWebViewIE::Print()
 {
-    m_webBrowser->ExecWB(OLECMDID_PRINTPREVIEW,
-                         OLECMDEXECOPT_DODEFAULT, NULL, NULL);
+    m_impl->m_webBrowser->ExecWB(OLECMDID_PRINTPREVIEW,
+                                 OLECMDEXECOPT_DODEFAULT, NULL, NULL);
 }
 
 bool wxWebViewIE::CanGoBack() const
 {
-    if(m_historyEnabled)
-        return m_historyPosition > 0;
+    if(m_impl->m_historyEnabled)
+        return m_impl->m_historyPosition > 0;
     else
         return false;
 }
 
 bool wxWebViewIE::CanGoForward() const
 {
-    if(m_historyEnabled)
-        return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
+    if(m_impl->m_historyEnabled)
+        return m_impl->m_historyPosition !=
+               static_cast<int>(m_impl->m_historyList.size()) - 1;
     else
         return false;
 }
@@ -448,17 +468,17 @@ bool wxWebViewIE::CanGoForward() const
 void wxWebViewIE::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 {
     int pos = -1;
-    for(unsigned int i = 0; i < m_historyList.size(); i++)
+    for(unsigned int i = 0; i < m_impl->m_historyList.size(); i++)
     {
         //We compare the actual pointers to find the correct item
-        if(m_historyList[i].get() == item.get())
+        if(m_impl->m_historyList[i].get() == item.get())
             pos = i;
     }
-    wxASSERT_MSG(pos != static_cast<int>(m_historyList.size()),
+    wxASSERT_MSG(pos != static_cast<int>(m_impl->m_historyList.size()),
                  "invalid history item");
-    m_historyLoadingFromList = true;
+    m_impl->m_historyLoadingFromList = true;
     LoadURL(item->GetUrl());
-    m_historyPosition = pos;
+    m_impl->m_historyPosition = pos;
 }
 
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewIE::GetBackwardHistory()
@@ -466,9 +486,9 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewIE::GetBackwardHistory()
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
     //As we don't have std::copy or an iterator constructor in the wxwidgets
     //native vector we construct it by hand
-    for(int i = 0; i < m_historyPosition; i++)
+    for(int i = 0; i < m_impl->m_historyPosition; i++)
     {
-        backhist.push_back(m_historyList[i]);
+        backhist.push_back(m_impl->m_historyList[i]);
     }
     return backhist;
 }
@@ -478,39 +498,39 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewIE::GetForwardHistory()
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
     //As we don't have std::copy or an iterator constructor in the wxwidgets
     //native vector we construct it by hand
-    for(int i = m_historyPosition + 1; i < static_cast<int>(m_historyList.size()); i++)
+    for(int i = m_impl->m_historyPosition + 1; i < static_cast<int>(m_impl->m_historyList.size()); i++)
     {
-        forwardhist.push_back(m_historyList[i]);
+        forwardhist.push_back(m_impl->m_historyList[i]);
     }
     return forwardhist;
 }
 
 void wxWebViewIE::GoBack()
 {
-    LoadHistoryItem(m_historyList[m_historyPosition - 1]);
+    LoadHistoryItem(m_impl->m_historyList[m_impl->m_historyPosition - 1]);
 }
 
 void wxWebViewIE::GoForward()
 {
-    LoadHistoryItem(m_historyList[m_historyPosition + 1]);
+    LoadHistoryItem(m_impl->m_historyList[m_impl->m_historyPosition + 1]);
 }
 
 void wxWebViewIE::Stop()
 {
-    m_ie.CallMethod("Stop");
+    m_impl->m_ie.CallMethod("Stop");
 }
 
 void wxWebViewIE::ClearHistory()
 {
-    m_historyList.clear();
-    m_historyPosition = -1;
+    m_impl->m_historyList.clear();
+    m_impl->m_historyPosition = -1;
 }
 
 void wxWebViewIE::EnableHistory(bool enable)
 {
-    m_historyEnabled = enable;
-    m_historyList.clear();
-    m_historyPosition = -1;
+    m_impl->m_historyEnabled = enable;
+    m_impl->m_historyList.clear();
+    m_impl->m_historyPosition = -1;
 }
 
 void wxWebViewIE::Reload(wxWebViewReloadFlags flags)
@@ -531,12 +551,12 @@ void wxWebViewIE::Reload(wxWebViewReloadFlags flags)
             wxFAIL_MSG("Unexpected reload type");
     }
 
-    m_webBrowser->Refresh2(&level);
+    m_impl->m_webBrowser->Refresh2(&level);
 }
 
 bool wxWebViewIE::IsOfflineMode()
 {
-    wxVariant out = m_ie.GetProperty("Offline");
+    wxVariant out = m_impl->m_ie.GetProperty("Offline");
 
     wxASSERT(out.GetType() == "bool");
 
@@ -548,17 +568,17 @@ void wxWebViewIE::SetOfflineMode(bool offline)
 #if wxDEBUG_LEVEL
     const HRESULT success =
 #endif
-            m_ie.PutProperty("Offline", (offline ?
-                                         VARIANT_TRUE :
-                                         VARIANT_FALSE));
+            m_impl->m_ie.PutProperty("Offline", (offline ?
+                                                 VARIANT_TRUE :
+                                                 VARIANT_FALSE));
     wxASSERT(SUCCEEDED(success));
 }
 
 bool wxWebViewIE::IsBusy() const
 {
-    if (m_isBusy) return true;
+    if (m_impl->m_isBusy) return true;
 
-    wxVariant out = m_ie.GetProperty("Busy");
+    wxVariant out = m_impl->m_ie.GetProperty("Busy");
 
     wxASSERT(out.GetType() == "bool");
 
@@ -567,7 +587,7 @@ bool wxWebViewIE::IsBusy() const
 
 wxString wxWebViewIE::GetCurrentURL() const
 {
-    wxVariant out = m_ie.GetProperty("LocationURL");
+    wxVariant out = m_impl->m_ie.GetProperty("LocationURL");
 
     wxASSERT(out.GetType() == "string");
     return out.GetString();
@@ -575,7 +595,7 @@ wxString wxWebViewIE::GetCurrentURL() const
 
 wxString wxWebViewIE::GetCurrentTitle() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     wxString s;
     if(document)
@@ -590,60 +610,65 @@ wxString wxWebViewIE::GetCurrentTitle() const
 
 bool wxWebViewIE::CanCut() const
 {
-    return CanExecCommand("Cut");
+    return m_impl->CanExecCommand("Cut");
 }
 
 bool wxWebViewIE::CanCopy() const
 {
-    return CanExecCommand("Copy");
+    return m_impl->CanExecCommand("Copy");
 }
 
 bool wxWebViewIE::CanPaste() const
 {
-    return CanExecCommand("Paste");
+    return m_impl->CanExecCommand("Paste");
 }
 
 void wxWebViewIE::Cut()
 {
-    ExecCommand("Cut");
+    m_impl->ExecCommand("Cut");
 }
 
 void wxWebViewIE::Copy()
 {
-    ExecCommand("Copy");
+    m_impl->ExecCommand("Copy");
 }
 
 void wxWebViewIE::Paste()
 {
-    ExecCommand("Paste");
+    m_impl->ExecCommand("Paste");
 }
 
 bool wxWebViewIE::CanUndo() const
 {
-    return CanExecCommand("Undo");
+    return m_impl->CanExecCommand("Undo");
 }
 
 bool wxWebViewIE::CanRedo() const
 {
-    return CanExecCommand("Redo");
+    return m_impl->CanExecCommand("Redo");
 }
 
 void wxWebViewIE::Undo()
 {
-    ExecCommand("Undo");
+    m_impl->ExecCommand("Undo");
 }
 
 void wxWebViewIE::Redo()
 {
-    ExecCommand("Redo");
+    m_impl->ExecCommand("Redo");
 }
 
 long wxWebViewIE::Find(const wxString& text, int flags)
 {
+    return m_impl->Find(text, flags);
+}
+
+long wxWebViewIEImpl::Find(const wxString& text, int flags)
+{
     //If the text is empty then we clear.
     if(text.IsEmpty())
     {
-        ClearSelection();
+        m_webview->ClearSelection();
         if(m_findFlags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT)
         {
             FindInternal(m_findText, (m_findFlags &~ wxWEBVIEW_FIND_HIGHLIGHT_RESULT), wxWEBVIEW_FIND_REMOVE_HIGHLIGHT);
@@ -677,7 +702,7 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     }
     //Reset find variables.
     FindClear();
-    ClearSelection();
+    m_webview->ClearSelection();
     m_findText = text;
     m_findFlags = flags;
     //find the text and return wxNOT_FOUND if there are no matches.
@@ -691,7 +716,7 @@ long wxWebViewIE::Find(const wxString& text, int flags)
 
 void wxWebViewIE::SetEditable(bool enable)
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -705,7 +730,7 @@ void wxWebViewIE::SetEditable(bool enable)
 
 bool wxWebViewIE::IsEditable() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -721,12 +746,12 @@ bool wxWebViewIE::IsEditable() const
 
 void wxWebViewIE::SelectAll()
 {
-    ExecCommand("SelectAll");
+    m_impl->ExecCommand("SelectAll");
 }
 
 bool wxWebViewIE::HasSelection() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -749,12 +774,12 @@ bool wxWebViewIE::HasSelection() const
 
 void wxWebViewIE::DeleteSelection()
 {
-    ExecCommand("Delete");
+    m_impl->ExecCommand("Delete");
 }
 
 wxString wxWebViewIE::GetSelectedText() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -787,7 +812,7 @@ wxString wxWebViewIE::GetSelectedText() const
 
 wxString wxWebViewIE::GetSelectedSource() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -820,7 +845,7 @@ wxString wxWebViewIE::GetSelectedSource() const
 
 void wxWebViewIE::ClearSelection()
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -836,7 +861,7 @@ void wxWebViewIE::ClearSelection()
 
 wxString wxWebViewIE::GetPageText() const
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
 
     if(document)
     {
@@ -903,7 +928,7 @@ bool CallEval(const wxString& code,
 
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
     if ( !document )
     {
         wxLogWarning(_("Can't run JavaScript script without a valid HTML document"));
@@ -976,7 +1001,7 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         {
             wxFAIL_MSG("Could not register protocol");
         }
-        m_factories.push_back(cf);
+        m_impl->m_factories.push_back(cf);
     }
     else
     {
@@ -984,7 +1009,12 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     }
 }
 
-bool wxWebViewIE::CanExecCommand(wxString command) const
+void* wxWebViewIE::GetNativeBackend() const
+{
+    return m_impl->m_webBrowser;
+}
+
+bool wxWebViewIEImpl::CanExecCommand(wxString command) const
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
 
@@ -1003,7 +1033,7 @@ bool wxWebViewIE::CanExecCommand(wxString command) const
 
 }
 
-void wxWebViewIE::ExecCommand(wxString command)
+void wxWebViewIEImpl::ExecCommand(wxString command)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
 
@@ -1013,7 +1043,7 @@ void wxWebViewIE::ExecCommand(wxString command)
     }
 }
 
-wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
+wxCOMPtr<IHTMLDocument2> wxWebViewIEImpl::GetDocument() const
 {
     wxCOMPtr<IDispatch> dispatch;
     wxCOMPtr<IHTMLDocument2> document;
@@ -1026,7 +1056,7 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
     return document;
 }
 
-bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
+bool wxWebViewIEImpl::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
 {
     wxCOMPtr<IHTMLElement> elm1 = elm;
     bool is_visible = true;
@@ -1075,7 +1105,7 @@ bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
     return is_visible;
 }
 
-void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_flag)
+void wxWebViewIEImpl::FindInternal(const wxString& text, int flags, int internal_flag)
 {
     long find_flag = 0;
     wxCOMPtr<wxIMarkupServices> pIMS;
@@ -1150,7 +1180,7 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
     }
 }
 
-long wxWebViewIE::FindNext(int direction)
+long wxWebViewIEImpl::FindNext(int direction)
 {
     //Don't bother if we have no pointers set.
     if(m_findPointers.empty())
@@ -1221,7 +1251,7 @@ long wxWebViewIE::FindNext(int direction)
     return ret;
 }
 
-void wxWebViewIE::FindClear()
+void wxWebViewIEImpl::FindClear()
 {
     //Reset find variables.
     m_findText.Empty();
@@ -1242,7 +1272,7 @@ void wxWebViewIE::FindClear()
     m_findPointers.clear();
 }
 
-bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
+bool wxWebViewIEImpl::EnableControlFeature(long flag, bool enable)
 {
 #if wxUSE_DYNLIB_CLASS
 
@@ -1282,13 +1312,13 @@ bool wxWebViewIE::EnableControlFeature(long flag, bool enable)
 
 void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 {
-    if (m_webBrowser == NULL) return;
+    if (m_impl->m_webBrowser == NULL) return;
 
     switch (evt.GetDispatchId())
     {
         case DISPID_BEFORENAVIGATE2:
         {
-            m_isBusy = true;
+            m_impl->m_isBusy = true;
 
             wxString url = evt[1].GetString();
             wxString target = evt[3].GetString();
@@ -1318,7 +1348,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             // and we're not busy, either it was accepted and IWebBrowser2's
             // Busy property will be true; so we don't need our override
             // flag anymore.
-            m_isBusy = false;
+            m_impl->m_isBusy = false;
 
             break;
         }
@@ -1346,7 +1376,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             //Only send a complete even if we are actually finished, this brings
             //the event in to line with webkit
             READYSTATE rs;
-            m_webBrowser->get_ReadyState( &rs );
+            m_impl->m_webBrowser->get_ReadyState( &rs );
             if(rs != READYSTATE_COMPLETE)
                 break;
 
@@ -1357,26 +1387,26 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             //We also have to check if we are loading a file:// url, if so we
             //need to change the comparison as ie passes back a different style
             //of url
-            if(m_historyEnabled && !m_historyLoadingFromList &&
+            if(m_impl->m_historyEnabled && !m_impl->m_historyLoadingFromList &&
               (url == GetCurrentURL() ||
               (GetCurrentURL().substr(0, 4) == "file" &&
                wxFileName::URLToFileName(GetCurrentURL()).GetFullPath() == url)))
             {
                 //If we are not at the end of the list, then erase everything
                 //between us and the end before adding the new page
-                if(m_historyPosition != static_cast<int>(m_historyList.size()) - 1)
+                if(m_impl->m_historyPosition != static_cast<int>(m_impl->m_historyList.size()) - 1)
                 {
-                    m_historyList.erase(m_historyList.begin() + m_historyPosition + 1,
-                                        m_historyList.end());
+                    m_impl->m_historyList.erase(m_impl->m_historyList.begin() + m_impl->m_historyPosition + 1,
+                                                m_impl->m_historyList.end());
                 }
                 wxSharedPtr<wxWebViewHistoryItem> item(new wxWebViewHistoryItem(url, GetCurrentTitle()));
-                m_historyList.push_back(item);
-                m_historyPosition++;
+                m_impl->m_historyList.push_back(item);
+                m_impl->m_historyPosition++;
             }
             //Reset as we are done now
-            m_historyLoadingFromList = false;
+            m_impl->m_historyLoadingFromList = false;
             //Reset the find values.
-            FindClear();
+            m_impl->FindClear();
             // TODO: set target parameter if possible
             wxString target;
             wxWebViewEvent event(wxEVT_WEBVIEW_LOADED, GetId(),
