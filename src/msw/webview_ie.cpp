@@ -17,22 +17,20 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
 
-#include <olectl.h>
-#include <oleidl.h>
-#include <exdispid.h>
-#include <exdisp.h>
-#include <mshtml.h>
 #include "wx/msw/registry.h"
-#include "wx/msw/missing.h"
 #include "wx/msw/ole/safearray.h"
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
 
+#include "wx/msw/missing.h"
+#include "wx/msw/private.h"
+#include "wx/msw/private/webview_ie.h"
 #include "wx/private/jsscriptwrapper.h"
 
 #include <initguid.h>
-#include <wininet.h>
+#include <exdispid.h>
+#include <mshtml.h>
 
 /* These GUID definitions are our own implementation to support interfaces
  * normally in urlmon.h. See include/wx/msw/webview_ie.h
