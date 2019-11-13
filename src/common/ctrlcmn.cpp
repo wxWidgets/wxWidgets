@@ -293,6 +293,8 @@ struct EllipsizeCalculator
           m_maxFinalWidthPx(maxFinalWidthPx),
           m_replacementWidthPx(replacementWidthPx)
     {
+        size_t expectedOffsetsCount = s.length();
+
         // Where ampersands are used as mnemonic indicator they should not
         // affect the overall width of the string and must be removed from the
         // measurement. Nonetheless, we need to keep them in the string and
@@ -315,13 +317,25 @@ struct EllipsizeCalculator
                   it != s.end();
                   ++it, ++n )
             {
-                if ( *it == '&' && !lastWasMnemonic && (it + 1) != s.end() )
+                if ( *it == '&' && !lastWasMnemonic )
                 {
-                    int w = m_charOffsetsPx[n];
-                    m_charOffsetsPx.Insert(w, n);
-                    lastWasMnemonic = true;
+                    if ( (it + 1) != s.end() )
+                    {
+                        int w = m_charOffsetsPx[n];
+                        m_charOffsetsPx.Insert(w, n);
+                        lastWasMnemonic = true;
+                    }
+                    else // Last character is an ampersand.
+                    {
+                        // This ampersand is removed by RemoveMnemonics() and
+                        // won't be displayed when this string is drawn
+                        // neither, so we intentionally don't use it for our
+                        // calculations neither -- just account for this in the
+                        // assert below.
+                        expectedOffsetsCount--;
+                    }
                 }
-                else
+                else // Not an ampersand used to introduce a mnemonic.
                 {
                     lastWasMnemonic = false;
                 }
@@ -333,10 +347,8 @@ struct EllipsizeCalculator
         }
 
         // Either way, we should end up with the same number of offsets as
-        // characters in the original string, except where there is a trailing
-        // ampersand which is ignored.
-        wxASSERT( m_charOffsetsPx.GetCount() == s.length() ||
-                  m_charOffsetsPx.GetCount() == s.length() - 1);
+        // characters in the original string.
+        wxASSERT( m_charOffsetsPx.GetCount() == expectedOffsetsCount );
     }
 
     bool IsOk() const { return m_isOk; }
