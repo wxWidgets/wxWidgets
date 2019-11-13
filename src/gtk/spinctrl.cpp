@@ -137,6 +137,8 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
 
     gtk_entry_set_alignment(GTK_ENTRY(m_widget), align);
 
+    GtkSetEntryWidth();
+
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
 
@@ -271,6 +273,8 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
 
     InvalidateBestSize();
+
+    GtkSetEntryWidth();
 }
 
 void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
@@ -355,11 +359,16 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
     return NULL;
 }
 
-wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
+void wxSpinCtrlGTKBase::GtkSetEntryWidth()
 {
     const int minVal = static_cast<int>(DoGetMin());
     const int maxVal = static_cast<int>(DoGetMax());
-    return wxSpinCtrlImpl::GetBestSize(this, minVal, maxVal, GetBase());
+
+    gtk_entry_set_width_chars
+    (
+        GTK_ENTRY(m_widget),
+        wxSpinCtrlImpl::GetMaxValueLength(minVal, maxVal, GetBase())
+    );
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -475,6 +484,8 @@ bool wxSpinCtrl::SetBase(int base)
     }
 
     InvalidateBestSize();
+
+    GtkSetEntryWidth();
 
     // Update the displayed text after changing the base it uses.
     SetValue(GetValue());

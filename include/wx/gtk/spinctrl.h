@@ -71,7 +71,9 @@ protected:
     void GtkDisableEvents() const;
     void GtkEnableEvents() const;
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    // Update the number of digits used to match our range (and base).
+    void GtkSetEntryWidth();
+
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
