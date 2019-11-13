@@ -21,6 +21,8 @@
     #include "wx/crt.h"
 #endif
 
+#include "wx/private/spinctrl.h"
+
 #include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------

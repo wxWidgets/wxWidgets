@@ -20,6 +20,8 @@
     #include "wx/wxcrtvararg.h"
 #endif
 
+#include "wx/private/spinctrl.h"
+
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------

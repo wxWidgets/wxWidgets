@@ -136,19 +136,6 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #include "wx/generic/spinctlg.h"
 #endif
-namespace wxPrivate
-{
-
-// This is an internal helper function currently used by all ports: return the
-// string containing hexadecimal representation of the given number.
-extern wxString wxSpinCtrlFormatAsHex(long val, long maxVal);
-
-// The helper function to determine the best size for the given control.
-// We can't implement this function in the wxSpinCtrlBase because MSW implementation
-// of wxSpinCtrl is derived from wxSpinButton but uses the same algorithm.
-extern wxSize wxSpinCtrlGetBestSize(const wxControl* spin, int minVal, int maxVal, int base);
-
-} // namespace wxPrivate
 
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_SPINCTRL_UPDATED         wxEVT_SPINCTRL

@@ -25,6 +25,8 @@
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 
+#include "wx/private/spinctrl.h"
+
 #if wxUSE_SPINCTRL
 
 wxDEFINE_EVENT(wxEVT_SPINCTRL, wxSpinEvent);
