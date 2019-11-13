@@ -104,7 +104,9 @@ wxCONSTRUCTOR_6( wxSpinCtrl, wxWindow*, Parent, wxWindowID, Id, \
                 wxSize, Size, long, WindowStyle )
 
 
-wxString wxPrivate::wxSpinCtrlFormatAsHex(long val, long maxVal)
+using namespace wxSpinCtrlImpl;
+
+wxString wxSpinCtrlImpl::FormatAsHex(long val, long maxVal)
 {
     // We format the value like this is for compatibility with (native
     // behaviour of) wxMSW
@@ -117,14 +119,14 @@ wxString wxPrivate::wxSpinCtrlFormatAsHex(long val, long maxVal)
     return text;
 }
 
-wxSize wxPrivate::wxSpinCtrlGetBestSize(const wxControl* spin,
-                                        int minVal, int maxVal, int base)
+wxSize wxSpinCtrlImpl::GetBestSize(const wxControl* spin,
+                                   int minVal, int maxVal, int base)
 {
     const int lenMin = (base == 16 ?
-                       wxSpinCtrlFormatAsHex(minVal, maxVal) :
+                       FormatAsHex(minVal, maxVal) :
                        wxString::Format("%d", minVal)).length();
     const int lenMax = (base == 16 ?
-                       wxSpinCtrlFormatAsHex(maxVal, maxVal) :
+                       FormatAsHex(maxVal, maxVal) :
                        wxString::Format("%d", maxVal)).length();
     const wxString largestString('8', wxMax(lenMin, lenMax));
     return spin->GetSizeFromText(largestString);

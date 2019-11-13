@@ -359,7 +359,7 @@ wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
 {
     const int minVal = static_cast<int>(DoGetMin());
     const int maxVal = static_cast<int>(DoGetMax());
-    return wxPrivate::wxSpinCtrlGetBestSize(this, minVal, maxVal, GetBase());
+    return wxSpinCtrlImpl::GetBestSize(this, minVal, maxVal, GetBase());
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -433,7 +433,7 @@ wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
     gtk_entry_set_text
     (
         GTK_ENTRY(spin),
-        wxPrivate::wxSpinCtrlFormatAsHex(val, win->GetMax()).utf8_str()
+        wxSpinCtrlImpl::FormatAsHex(val, win->GetMax()).utf8_str()
     );
 
     return TRUE;

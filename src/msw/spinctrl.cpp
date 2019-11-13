@@ -476,7 +476,7 @@ void  wxSpinCtrl::SetValue(int val)
                 (text[1] != 'x' && text[1] != 'X')) )
     {
         ::SetWindowText(GetBuddyHwnd(),
-                        wxPrivate::wxSpinCtrlFormatAsHex(val, m_max).t_str());
+                        wxSpinCtrlImpl::FormatAsHex(val, m_max).t_str());
     }
 
     m_oldValue = GetValue();
@@ -743,7 +743,7 @@ int wxSpinCtrl::GetOverlap() const
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return wxPrivate::wxSpinCtrlGetBestSize(this, GetMin(), GetMax(), GetBase());
+    return wxSpinCtrlImpl::GetBestSize(this, GetMin(), GetMax(), GetBase());
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const

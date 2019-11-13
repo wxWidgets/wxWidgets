@@ -656,8 +656,7 @@ wxString wxSpinCtrl::DoValueToText(double val)
     switch ( GetBase() )
     {
         case 16:
-            return wxPrivate::wxSpinCtrlFormatAsHex(static_cast<long>(val),
-                                                    GetMax());
+            return wxSpinCtrlImpl::FormatAsHex(static_cast<long>(val), GetMax());
 
         default:
             wxFAIL_MSG( wxS("Unsupported spin control base") );

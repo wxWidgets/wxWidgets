@@ -71,7 +71,7 @@ wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
     gtk_entry_set_text
     (
         GTK_ENTRY(spin),
-        wxPrivate::wxSpinCtrlFormatAsHex(val, win->GetMax()).utf8_str()
+        wxSpinCtrlImpl::FormatAsHex(val, win->GetMax()).utf8_str()
     );
 
     return TRUE;
