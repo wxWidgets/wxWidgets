@@ -11,7 +11,7 @@
 
 #include "wx/msw/ole/automtn.h"
 #include "wx/msw/private/comptr.h"
-#include "wx/msw/webview_missing.h"
+#include "wx/msw/private/webview_missing.h"
 
 class ClassFactory;
 class wxIEContainer;
