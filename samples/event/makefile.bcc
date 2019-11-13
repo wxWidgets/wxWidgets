@@ -37,7 +37,8 @@ EVENT_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 EVENT_OBJECTS =  \
 	$(OBJS)\event_event.obj \
-	$(OBJS)\event_gestures.obj
+	$(OBJS)\event_gestures.obj \
+	$(OBJS)\event_chessboard.obj
 
 ### Conditionally set variables: ###
 
@@ -240,4 +241,7 @@ $(OBJS)\event_event.obj: .\event.cpp
 
 $(OBJS)\event_gestures.obj: .\gestures.cpp
 	$(CXX) -q -c -P -o$@ $(EVENT_CXXFLAGS) .\gestures.cpp
+
+$(OBJS)\event_chessboard.obj: .\chessboard.cpp
+	$(CXX) -q -c -P -o$@ $(EVENT_CXXFLAGS) .\chessboard.cpp
 

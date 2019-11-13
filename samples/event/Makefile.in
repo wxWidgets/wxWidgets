@@ -51,7 +51,8 @@ EVENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 EVENT_OBJECTS =  \
 	$(__event___win32rc) \
 	event_event.o \
-	event_gestures.o
+	event_gestures.o \
+	event_chessboard.o
 
 ### Conditionally set variables: ###
 
@@ -184,6 +185,9 @@ event_event.o: $(srcdir)/event.cpp
 
 event_gestures.o: $(srcdir)/gestures.cpp
 	$(CXXC) -c -o $@ $(EVENT_CXXFLAGS) $(srcdir)/gestures.cpp
+
+event_chessboard.o: $(srcdir)/chessboard.cpp
+	$(CXXC) -c -o $@ $(EVENT_CXXFLAGS) $(srcdir)/chessboard.cpp
 
 
 # Include dependency info, if present:
