@@ -23,14 +23,7 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class EllipsizationTestCase
-{
-public:
-    EllipsizationTestCase() { }
-};
-
-
-TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::NormalCase", "[ellipsization]")
+TEST_CASE("Ellipsization::NormalCase", "[ellipsization]")
 {
     wxMemoryDC dc;
 
@@ -118,7 +111,7 @@ TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::NormalCase", "[ellipsiza
 }
 
 
-TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::EnoughSpace", "[ellipsization]")
+TEST_CASE("Ellipsization::EnoughSpace", "[ellipsization]")
 {
     // No ellipsization should occur if there's plenty of space.
 
@@ -133,7 +126,7 @@ TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::EnoughSpace", "[ellipsiz
 }
 
 
-TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::VeryLittleSpace", "[ellipsization]")
+TEST_CASE("Ellipsization::VeryLittleSpace", "[ellipsization]")
 {
     // If there's not enough space, the shortened label should still contain "..." and one character
 
@@ -148,7 +141,7 @@ TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::VeryLittleSpace", "[elli
 }
 
 
-TEST_CASE_METHOD(EllipsizationTestCase, "Ellipsization::HasThreeDots", "[ellipsization]")
+TEST_CASE("Ellipsization::HasThreeDots", "[ellipsization]")
 {
     wxMemoryDC dc;
 
