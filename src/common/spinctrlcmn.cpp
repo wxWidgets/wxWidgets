@@ -119,8 +119,7 @@ wxString wxSpinCtrlImpl::FormatAsHex(long val, long maxVal)
     return text;
 }
 
-wxSize wxSpinCtrlImpl::GetBestSize(const wxControl* spin,
-                                   int minVal, int maxVal, int base)
+int wxSpinCtrlImpl::GetMaxValueLength(int minVal, int maxVal, int base)
 {
     const int lenMin = (base == 16 ?
                        FormatAsHex(minVal, maxVal) :
@@ -128,7 +127,13 @@ wxSize wxSpinCtrlImpl::GetBestSize(const wxControl* spin,
     const int lenMax = (base == 16 ?
                        FormatAsHex(maxVal, maxVal) :
                        wxString::Format("%d", maxVal)).length();
-    const wxString largestString('8', wxMax(lenMin, lenMax));
+    return wxMax(lenMin, lenMax);
+}
+
+wxSize wxSpinCtrlImpl::GetBestSize(const wxControl* spin,
+                                   int minVal, int maxVal, int base)
+{
+    const wxString largestString('8', GetMaxValueLength(minVal, maxVal, base));
     return spin->GetSizeFromText(largestString);
 }
 

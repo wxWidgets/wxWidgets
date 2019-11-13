@@ -17,6 +17,10 @@ namespace wxSpinCtrlImpl
 // string containing hexadecimal representation of the given number.
 extern wxString FormatAsHex(long val, long maxVal);
 
+// Another helper returning the maximum length of a string representing a value
+// valid in the given control.
+extern int GetMaxValueLength(int minVal, int maxVal, int base);
+
 // The helper function to determine the best size for the given control.
 // We can't implement this function in the wxSpinCtrlBase because MSW implementation
 // of wxSpinCtrl is derived from wxSpinButton but uses the same algorithm.
