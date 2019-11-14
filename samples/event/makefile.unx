@@ -54,7 +54,8 @@ EVENT_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
 	$(CXXFLAGS)
 EVENT_OBJECTS =  \
 	event_event.o \
-	event_gestures.o
+	event_gestures.o \
+	event_chessboard.o
 
 ### Conditionally set variables: ###
 
@@ -95,6 +96,9 @@ event_event.o: ./event.cpp
 	$(CXX) -c -o $@ $(EVENT_CXXFLAGS) $(CPPDEPS) $<
 
 event_gestures.o: ./gestures.cpp
+	$(CXX) -c -o $@ $(EVENT_CXXFLAGS) $(CPPDEPS) $<
+
+event_chessboard.o: ./chessboard.cpp
 	$(CXX) -c -o $@ $(EVENT_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
