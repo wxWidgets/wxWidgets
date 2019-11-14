@@ -34,6 +34,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );
+        CPPUNIT_TEST( IsModified );
         WXUISIM_TEST( CharacterEvent );
         WXUISIM_TEST( DeleteEvent );
         WXUISIM_TEST( ReturnEvent );
@@ -64,6 +65,7 @@ private:
         CPPUNIT_TEST( Table );
     CPPUNIT_TEST_SUITE_END();
 
+    void IsModified();
     void CharacterEvent();
     void DeleteEvent();
     void ReturnEvent();
@@ -113,6 +115,13 @@ void RichTextCtrlTestCase::setUp()
 void RichTextCtrlTestCase::tearDown()
 {
     wxDELETE(m_rich);
+}
+
+void RichTextCtrlTestCase::IsModified()
+{
+    CPPUNIT_ASSERT_EQUAL( false, m_rich->IsModified() );
+    m_rich->WriteText("abcdef");
+    CPPUNIT_ASSERT_EQUAL( true, m_rich->IsModified() );
 }
 
 void RichTextCtrlTestCase::CharacterEvent()
