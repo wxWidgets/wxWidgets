@@ -16,9 +16,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"    // for wxEVT_TEXT
+    #include "wx/math.h"        // wxRound()
     #include "wx/utils.h"
     #include "wx/wxcrtvararg.h"
 #endif
+
+#include "wx/private/spinctrl.h"
 
 #include "wx/gtk/private.h"
 
@@ -134,6 +137,8 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
         align = 0.0;
 
     gtk_entry_set_alignment(GTK_ENTRY(m_widget), align);
+
+    GtkSetEntryWidth();
 
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
@@ -269,6 +274,8 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
 
     InvalidateBestSize();
+
+    GtkSetEntryWidth();
 }
 
 void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
@@ -353,37 +360,34 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
     return NULL;
 }
 
-wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
+void wxSpinCtrlGTKBase::GtkSetEntryWidth()
 {
     const int minVal = static_cast<int>(DoGetMin());
     const int maxVal = static_cast<int>(DoGetMax());
-    return wxPrivate::wxSpinCtrlGetBestSize(this, minVal, maxVal, GetBase());
+
+    gtk_entry_set_width_chars
+    (
+        GTK_ENTRY(m_widget),
+        wxSpinCtrlImpl::GetMaxValueLength(minVal, maxVal, GetBase())
+    );
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
 
+    // This is a bit stupid as we typically compute xlen by measuring some
+    // string of digits in the first place, but there doesn't seem to be
+    // anything better to do (unless we add some GetSizeFromNumberOfDigits()).
+    const double widthDigit = GetTextExtent("0123456789").GetWidth() / 10.0;
+    const int numDigits = wxRound(xlen / widthDigit);
+
     const gint widthChars = gtk_entry_get_width_chars(GTK_ENTRY(m_widget));
-    gtk_entry_set_width_chars(GTK_ENTRY(m_widget), 0);
-#if GTK_CHECK_VERSION(3,12,0)
-    gint maxWidthChars = 0;
-    if ( gtk_check_version(3,12,0) == NULL )
-    {
-        maxWidthChars = gtk_entry_get_max_width_chars(GTK_ENTRY(m_widget));
-        gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), 0);
-    }
-#endif // GTK+ 3.12+
+    gtk_entry_set_width_chars(GTK_ENTRY(m_widget), numDigits);
 
-    wxSize totalS = GTKGetPreferredSize(m_widget);
+    wxSize tsize = GTKGetPreferredSize(m_widget);
 
-#if GTK_CHECK_VERSION(3,12,0)
-    if ( gtk_check_version(3,12,0) == NULL )
-        gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), maxWidthChars);
-#endif // GTK+ 3.12+
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), widthChars);
-
-    wxSize tsize(xlen + totalS.x, totalS.y);
 
     // Check if the user requested a non-standard height.
     if ( ylen > 0 )
@@ -431,7 +435,7 @@ wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
     gtk_entry_set_text
     (
         GTK_ENTRY(spin),
-        wxPrivate::wxSpinCtrlFormatAsHex(val, win->GetMax()).utf8_str()
+        wxSpinCtrlImpl::FormatAsHex(val, win->GetMax()).utf8_str()
     );
 
     return TRUE;
@@ -473,6 +477,8 @@ bool wxSpinCtrl::SetBase(int base)
     }
 
     InvalidateBestSize();
+
+    GtkSetEntryWidth();
 
     // Update the displayed text after changing the base it uses.
     SetValue(GetValue());
