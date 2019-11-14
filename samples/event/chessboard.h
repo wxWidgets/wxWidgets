@@ -59,13 +59,16 @@ private:
 wxDECLARE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
 wxDECLARE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
 
-
-// @TODO: what to write here, the info in the docs seem to be incorrect?
-typedef void (wxEvtHandler::* ChessBoardEventFunction)(ChessBoardEvent&);
+// The following typedef and macro are needed only when the new event
+// class is to be used with event table macros or the legacy Connect(),
+// to cast the type of a function handling it to the type expected by
+// the event table machinery, see its use in etEVT_CHESSBOARD_xxx below.
+// I.e., when only Bind() is going to be used you do not need them.
+typedef void (wxEvtHandler::*ChessBoardEventFunction)(ChessBoardEvent&);
 #define ChessBoardEventHandler(func) wxEVENT_HANDLER_CAST(ChessBoardEventFunction, func)
 
-// These defines are needed only if the event is to be used with event tables,
-// i.e., when only Bind() is going to be used you do not need them.
+// These defines are needed only if the new event is to be used with
+// event tables, i.e., when only Bind() is going to be used you do not need them.
 #define etEVT_CHESSBOARD_CLICKED(id, func) \
     wx__DECLARE_EVT1(EVT_CHESSBOARD_CLICKED, id, ChessBoardEventHandler(func))
 #define etEVT_CHESSBOARD_DRAGGED(id, func) \

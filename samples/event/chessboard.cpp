@@ -150,7 +150,7 @@ void ChessBoard::OnMouseLeftUp(wxMouseEvent& event)
     chessBoardEvent.SetRank(m_rankLeftMDown);
 
     if ( file == m_fileLeftMDown && rank == m_rankLeftMDown )
-    { // mouse left and down on the same square, consider it a click
+    {   // mouse left and down on the same square, consider it a click
         chessBoardEvent.SetEventType(EVT_CHESSBOARD_CLICKED);
     }
     else
@@ -202,15 +202,13 @@ MyChessBoardDialog::MyChessBoardDialog(wxWindow* parent)
 
 void MyChessBoardDialog::OnChessBoardClicked(ChessBoardEvent& event)
 {
-    wxMessageBox(wxString::Format("EVT_CHESSBOARD_CLICKED: %c%hhu",
-        event.GetFile(), event.GetRank()),
-        "ChessBoardEvent handled", wxOK | wxCENTRE, this);
+    wxLogMessage("EVT_CHESSBOARD_CLICKED: %c%hhu",
+        event.GetFile(), event.GetRank());
 }
 
 void MyChessBoardDialog::OnChessBoardDragged(ChessBoardEvent& event)
 {
-    wxMessageBox(wxString::Format("EVT_CHESSBOARD_DRAGGED: from %c%hhu to %c%hhu",
+    wxLogMessage("EVT_CHESSBOARD_DRAGGED: from %c%hhu to %c%hhu",
         event.GetFile(), event.GetRank(),
-        event.GetFileTo(), event.GetRankTo()),
-        "ChessBoardEvent handled", wxOK | wxCENTRE, this);
+        event.GetFileTo(), event.GetRankTo());
 }
