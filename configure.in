@@ -6518,6 +6518,8 @@ dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_OLE" = "yes" ; then
+    LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
+
     AC_DEFINE(wxUSE_OLE)
     AC_DEFINE(wxUSE_OLE_AUTOMATION)
     AC_DEFINE(wxUSE_ACTIVEX)

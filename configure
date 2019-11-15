@@ -35439,6 +35439,8 @@ fi
 
 
 if test "$wxUSE_OLE" = "yes" ; then
+    LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
+
     $as_echo "#define wxUSE_OLE 1" >>confdefs.h
 
     $as_echo "#define wxUSE_OLE_AUTOMATION 1" >>confdefs.h
