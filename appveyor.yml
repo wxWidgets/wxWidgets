@@ -13,8 +13,6 @@ skip_commits:
 
 environment:
   matrix:
-  - TOOLSET: mingw
-    wxUSE_STL: 0
   - TOOLSET: msys2
     MSYSTEM: MINGW32
   - TOOLSET: cygwin
