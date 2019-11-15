@@ -18,8 +18,8 @@
 // top 1 to 8.
 // ChessBoardEvent tells us something happened on
 // the chessboard. Either a square was clicked
-// (EVT_CHESSBOARD_CLICKED) or the mouse cursor was dragged
-// from one square to another (EVT_CHESSBOARD_DRAGGED).
+// (myEVT_CHESSBOARD_CLICKED) or the mouse cursor was dragged
+// from one square to another (myEVT_CHESSBOARD_DRAGGED).
 class ChessBoardEvent : public wxCommandEvent
 {
 public:
@@ -28,13 +28,13 @@ public:
           m_file('a'), m_rank(1), m_fileTo('a'), m_rankTo(1)
     {}
 
-    // EVT_CHESSBOARD_CLICKED: Returns File/Rank for the square clicked.
-    // EVT_CHESSBOARD_DRAGGED: Returns File/Rank for the square
-    //                         the mouse cursor was dragged from.
+    // myEVT_CHESSBOARD_CLICKED: Returns File/Rank for the square clicked.
+    // myEVT_CHESSBOARD_DRAGGED: Returns File/Rank for the square
+    //                           the mouse cursor was dragged from.
     char GetFile() const    { return m_file; }
     wxUint8 GetRank() const { return m_rank; }
 
-    // Valid only for EVT_CHESSBOARD_DRAGGED,
+    // Valid only for myEVT_CHESSBOARD_DRAGGED,
     // returns File/Rank for the square where the mouse cursor was dragged to.
     char GetFileTo() const    { return m_fileTo; }
     wxUint8 GetRankTo() const { return m_rankTo; }
@@ -54,25 +54,25 @@ private:
 };
 
 
-// Declare new events,
+// Declare new event types,
 // the matching definitions are in chessboard.cpp.
-wxDECLARE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
-wxDECLARE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
+wxDECLARE_EVENT(myEVT_CHESSBOARD_CLICKED, ChessBoardEvent);
+wxDECLARE_EVENT(myEVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
 
 // The following typedef and macro are needed only when the new event
 // class is to be used with event table macros or the legacy Connect(),
 // to cast the type of a function handling it to the type expected by
-// the event table machinery, see its use in etEVT_CHESSBOARD_xxx below.
+// the event table machinery, see its use in EVT_CHESSBOARD_xxx below.
 // I.e., when only Bind() is going to be used you do not need them.
 typedef void (wxEvtHandler::*ChessBoardEventFunction)(ChessBoardEvent&);
 #define ChessBoardEventHandler(func) wxEVENT_HANDLER_CAST(ChessBoardEventFunction, func)
 
 // These defines are needed only if the new event is to be used with
 // event tables, i.e., when only Bind() is going to be used you do not need them.
-#define etEVT_CHESSBOARD_CLICKED(id, func) \
-    wx__DECLARE_EVT1(EVT_CHESSBOARD_CLICKED, id, ChessBoardEventHandler(func))
-#define etEVT_CHESSBOARD_DRAGGED(id, func) \
-    wx__DECLARE_EVT1(EVT_CHESSBOARD_DRAGGED, id, ChessBoardEventHandler(func))
+#define EVT_CHESSBOARD_CLICKED(id, func) \
+    wx__DECLARE_EVT1(myEVT_CHESSBOARD_CLICKED, id, ChessBoardEventHandler(func))
+#define EVT_CHESSBOARD_DRAGGED(id, func) \
+    wx__DECLARE_EVT1(myEVT_CHESSBOARD_DRAGGED, id, ChessBoardEventHandler(func))
 
 
 // Dialog displaying the chessboard
@@ -86,7 +86,7 @@ private:
     void OnChessBoardDragged(ChessBoardEvent& event);
 
     // Just for demonstration, we will use an event table
-    // for EVT_CHESSBOARD_CLICKED.
+    // for myEVT_CHESSBOARD_CLICKED.
     wxDECLARE_EVENT_TABLE();
 };
 

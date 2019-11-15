@@ -15,8 +15,8 @@
 //
 
 // Define new event types associated with ChessBoardEvent
-wxDEFINE_EVENT(EVT_CHESSBOARD_CLICKED, ChessBoardEvent);
-wxDEFINE_EVENT(EVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
+wxDEFINE_EVENT(myEVT_CHESSBOARD_CLICKED, ChessBoardEvent);
+wxDEFINE_EVENT(myEVT_CHESSBOARD_DRAGGED, ChessBoardEvent);
 
 
 //
@@ -151,11 +151,11 @@ void ChessBoard::OnMouseLeftUp(wxMouseEvent& event)
 
     if ( file == m_fileLeftMDown && rank == m_rankLeftMDown )
     {   // mouse left and down on the same square, consider it a click
-        chessBoardEvent.SetEventType(EVT_CHESSBOARD_CLICKED);
+        chessBoardEvent.SetEventType(myEVT_CHESSBOARD_CLICKED);
     }
     else
     {   // mouse dragged from one square to another
-        chessBoardEvent.SetEventType(EVT_CHESSBOARD_DRAGGED);
+        chessBoardEvent.SetEventType(myEVT_CHESSBOARD_DRAGGED);
         chessBoardEvent.SetFileTo(file);
         chessBoardEvent.SetRankTo(rank);
     }
@@ -174,10 +174,10 @@ wxSize ChessBoard::DoGetBestClientSize() const
 // MyChessBoardDialog implementation
 //
 
-// For demonstration, event table is used for EVT_CHESSBOARD_CLICKED
-// while Bind() is used for EVT_CHESSBOARD_DRAGGED.
+// For demonstration, event table is used for myEVT_CHESSBOARD_CLICKED
+// while Bind() is used for myEVT_CHESSBOARD_DRAGGED.
 wxBEGIN_EVENT_TABLE(MyChessBoardDialog, wxDialog)
-    etEVT_CHESSBOARD_CLICKED(wxID_ANY, MyChessBoardDialog::OnChessBoardClicked)
+    EVT_CHESSBOARD_CLICKED(wxID_ANY, MyChessBoardDialog::OnChessBoardClicked)
 wxEND_EVENT_TABLE()
 
 MyChessBoardDialog::MyChessBoardDialog(wxWindow* parent)
@@ -190,25 +190,25 @@ MyChessBoardDialog::MyChessBoardDialog(wxWindow* parent)
         wxSizerFlags().Border().CenterHorizontal());
 
     mainSizer->Add(new ChessBoard(this),
-        wxSizerFlags().Proportion(3).TripleBorder().CenterHorizontal());
+        wxSizerFlags().TripleBorder().CenterHorizontal());
 
     mainSizer->Add(CreateStdDialogButtonSizer(wxCLOSE),
         wxSizerFlags().Expand().Border());
 
     SetSizerAndFit(mainSizer);
 
-    Bind(EVT_CHESSBOARD_DRAGGED, &MyChessBoardDialog::OnChessBoardDragged, this);
+    Bind(myEVT_CHESSBOARD_DRAGGED, &MyChessBoardDialog::OnChessBoardDragged, this);
 }	
 
 void MyChessBoardDialog::OnChessBoardClicked(ChessBoardEvent& event)
 {
-    wxLogMessage("EVT_CHESSBOARD_CLICKED: %c%hhu",
+    wxLogMessage("myEVT_CHESSBOARD_CLICKED: %c%hhu",
         event.GetFile(), event.GetRank());
 }
 
 void MyChessBoardDialog::OnChessBoardDragged(ChessBoardEvent& event)
 {
-    wxLogMessage("EVT_CHESSBOARD_DRAGGED: from %c%hhu to %c%hhu",
+    wxLogMessage("myEVT_CHESSBOARD_DRAGGED: from %c%hhu to %c%hhu",
         event.GetFile(), event.GetRank(),
         event.GetFileTo(), event.GetRankTo());
 }
