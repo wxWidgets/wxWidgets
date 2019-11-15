@@ -527,14 +527,12 @@ protected:
     int m_mswStateSavedDC;
 #endif
 #ifdef __WXGTK__
-    // This factor must be applied to the font before actually using it, for
-    // consistency with the text drawn by GTK itself.
-    float m_fontScalingFactor;
-
     // Tiny helper actually applying the font. It's convenient because it can
     // be called with a temporary wxFont, as we're going to make a copy of its
     // Pango font description inside this function before the font object is
     // destroyed.
+    //
+    // It's also all we need for GTK < 3.
     static void DoApplyFont(PangoLayout* layout, const wxFont& font)
     {
         pango_layout_set_font_description
@@ -543,6 +541,11 @@ protected:
             font.GetNativeFontInfo()->description
         );
     }
+
+#ifdef __WXGTK3__
+    // This factor must be applied to the font before actually using it, for
+    // consistency with the text drawn by GTK itself.
+    float m_fontScalingFactor;
 
     // Function applying the Pango font description for the given font scaled by
     // the font scaling factor if necessary to the specified layout.
@@ -553,7 +556,15 @@ protected:
                                 ? font
                                 : font.Scaled(m_fontScalingFactor));
     }
-#endif
+#else // GTK < 3
+    // Provide the same function even if it does nothing in this case to keep
+    // the same code for all GTK versions.
+    void ApplyFont(PangoLayout* layout, const wxFont& font) const
+    {
+        DoApplyFont(layout, font);
+    }
+#endif // __WXGTK3__
+#endif // __WXGTK__
 
 private:
     cairo_t* m_context;
@@ -2388,7 +2399,7 @@ wxCairoContext::~wxCairoContext()
 
 void wxCairoContext::Init(cairo_t *context)
 {
-#ifdef __WXGTK__
+#ifdef __WXGTK3__
     // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling
     // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
     // GDK_DPI_SCALE environment variable).
