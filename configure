@@ -35438,67 +35438,21 @@ if test "$wxUSE_METAFILE" = "yes"; then
 fi
 
 
-if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
-                          -o "$wxUSE_CLIPBOARD"     = "yes" \
-                          -o "$wxUSE_OLE"     = "yes" \
-                          -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
-    ac_fn_c_check_header_compile "$LINENO" "ole2.h" "ac_cv_header_ole2_h" "
-"
-if test "x$ac_cv_header_ole2_h" = xyes; then :
+if test "$USE_WIN32" = 1 ; then
+    if test "$wxUSE_OLE" = "yes" ; then
+        LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
 
-fi
+        $as_echo "#define wxUSE_OLE 1" >>confdefs.h
 
+        $as_echo "#define wxUSE_OLE_AUTOMATION 1" >>confdefs.h
 
+        $as_echo "#define wxUSE_ACTIVEX 1" >>confdefs.h
 
-    if test "$ac_cv_header_ole2_h" = "yes" ; then
-        if test "$GCC" = yes ; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if g++ requires -fvtable-thunks" >&5
-$as_echo_n "checking if g++ requires -fvtable-thunks... " >&6; }
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <windows.h>
-                            #include <ole2.h>
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-                            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-            LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
-            if test "$wxUSE_OLE" = "yes" ; then
-                $as_echo "#define wxUSE_OLE 1" >>confdefs.h
-
-                $as_echo "#define wxUSE_OLE_AUTOMATION 1" >>confdefs.h
-
-                $as_echo "#define wxUSE_ACTIVEX 1" >>confdefs.h
-
-                SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
-            fi
-        fi
-
-                if test "$wxUSE_DATAOBJ" = "yes" ; then
-            $as_echo "#define wxUSE_DATAOBJ 1" >>confdefs.h
-
-        fi
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
     else
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Some features disabled because OLE headers not found" >&5
-$as_echo "$as_me: WARNING: Some features disabled because OLE headers not found" >&2;}
-
         wxUSE_CLIPBOARD=no
         wxUSE_DRAG_AND_DROP=no
         wxUSE_DATAOBJ=no
-        wxUSE_OLE=no
     fi
 fi
 
