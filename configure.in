@@ -6517,6 +6517,17 @@ dnl ---------------------------------------------------------------------------
 dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
+if test "$wxUSE_OLE" = "yes" ; then
+    AC_DEFINE(wxUSE_OLE)
+    AC_DEFINE(wxUSE_OLE_AUTOMATION)
+    AC_DEFINE(wxUSE_ACTIVEX)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
+else
+    wxUSE_CLIPBOARD=no
+    wxUSE_DRAG_AND_DROP=no
+    wxUSE_DATAOBJ=no
+fi
+
 if test "$wxUSE_IPC" = "yes"; then
     if test "$wxUSE_SOCKETS" != "yes" -a "$USE_WIN32" != 1; then
         AC_MSG_WARN(wxWidgets IPC classes require sockets... disabled)
