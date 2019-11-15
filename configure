@@ -35450,9 +35450,21 @@ if test "$USE_WIN32" = 1 ; then
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
     else
-        wxUSE_CLIPBOARD=no
+                wxUSE_CLIPBOARD=no
         wxUSE_DRAG_AND_DROP=no
         wxUSE_DATAOBJ=no
+
+                if test "$wxUSE_MEDIACTRL" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxMediaCtrl requires wxUSE_OLE... disabled" >&5
+$as_echo "$as_me: WARNING: wxMediaCtrl requires wxUSE_OLE... disabled" >&2;}
+            wxUSE_MEDIACTRL=no
+        fi
+
+        if test "$wxUSE_WEBVIEW" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWebView requires wxUSE_OLE... disabled" >&5
+$as_echo "$as_me: WARNING: wxWebView requires wxUSE_OLE... disabled" >&2;}
+            wxUSE_WEBVIEW=no
+        fi
     fi
 fi
 
