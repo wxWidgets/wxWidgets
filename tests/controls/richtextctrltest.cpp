@@ -125,9 +125,7 @@ void RichTextCtrlTestCase::Modify()
     // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
     CPPUNIT_ASSERT_EQUAL( false, m_rich->IsModified() );
-    wxUIActionSimulator sim;
-    sim.Text("abcdef");
-    wxYield();
+    m_rich->WriteText("abcdef");
     CPPUNIT_ASSERT_EQUAL( true, m_rich->IsModified() );
 #endif
 #endif
