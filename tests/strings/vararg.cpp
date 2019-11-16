@@ -33,29 +33,29 @@ TEST_CASE("StringPrintf", "[wxString][Printf][vararg]")
 
     // test passing literals:
     s.Printf("%s %i", "foo", 42);
-    CPPUNIT_ASSERT( s == "foo 42" );
+    CHECK( s == "foo 42" );
     s.Printf("%s %s %i", wxT("bar"), "=", 11);
 
     // test passing c_str():
-    CPPUNIT_ASSERT( s == "bar = 11" );
+    CHECK( s == "bar = 11" );
     s2.Printf("(%s)", s.c_str());
-    CPPUNIT_ASSERT( s2 == "(bar = 11)" );
+    CHECK( s2 == "(bar = 11)" );
     s2.Printf(wxT("[%s](%s)"), s.c_str(), "str");
-    CPPUNIT_ASSERT( s2 == "[bar = 11](str)" );
+    CHECK( s2 == "[bar = 11](str)" );
 
     s2.Printf("%s mailbox", wxString("Opening").c_str());
-    CPPUNIT_ASSERT( s2 == "Opening mailbox" );
+    CHECK( s2 == "Opening mailbox" );
 
     // test passing wxString directly:
     s2.Printf(wxT("[%s](%s)"), s, "str");
-    CPPUNIT_ASSERT( s2 == "[bar = 11](str)" );
+    CHECK( s2 == "[bar = 11](str)" );
 
     // test passing wxCharBufferType<T>:
     s = "FooBar";
     s2.Printf(wxT("(%s)"), s.mb_str());
-    CPPUNIT_ASSERT( s2 == "(FooBar)" );
+    CHECK( s2 == "(FooBar)" );
     s2.Printf(wxT("value=%s;"), s.wc_str());
-    CPPUNIT_ASSERT( s2 == "value=FooBar;" );
+    CHECK( s2 == "value=FooBar;" );
 
     // this tests correct passing of wxCStrData constructed from string
     // literal (and we disable the warnings related to the use of a literal
@@ -77,16 +77,16 @@ TEST_CASE("CharPrintf", "[wxString][Printf][vararg]")
 
     // test using wchar_t:
     s.Printf("char=%c", L'c');
-    CPPUNIT_ASSERT_EQUAL( "char=c", s );
+    CHECK( s == "char=c" );
 
     // test wxUniCharRef:
     s.Printf("string[1] is %c", foo[1]);
-    CPPUNIT_ASSERT_EQUAL( "string[1] is o", s );
+    CHECK( s == "string[1] is o" );
 
     // test char
     char c = 'z';
     s.Printf("%c to %c", 'a', c);
-    CPPUNIT_ASSERT_EQUAL( "a to z", s );
+    CHECK( s == "a to z" );
 
     // test char used as integer:
     #ifdef _MSC_VER
@@ -100,12 +100,12 @@ TEST_CASE("CharPrintf", "[wxString][Printf][vararg]")
     #endif
     #ifndef __CHAR_UNSIGNED__
     s.Printf("value is %i (int)", c);
-    CPPUNIT_ASSERT_EQUAL( wxString("value is -16 (int)"), s );
+    CHECK( s == wxString("value is -16 (int)") );
     #endif
 
     unsigned char u = 240;
     s.Printf("value is %i (int)", u);
-    CPPUNIT_ASSERT_EQUAL( "value is 240 (int)", s );
+    CHECK( s == "value is 240 (int)" );
 }
 
 TEST_CASE("SizetPrintf", "[wxString][Printf][vararg]")
@@ -113,17 +113,11 @@ TEST_CASE("SizetPrintf", "[wxString][Printf][vararg]")
     size_t  i =  1;
     ssize_t j = -2;
 
-    CPPUNIT_ASSERT_EQUAL
-        (
-            "size_t=1 ssize_t=-2",
-            wxString::Format("size_t=%zu ssize_t=%zd", i, j)
-        );
+    CHECK( wxString::Format("size_t=%zu ssize_t=%zd", i, j)
+                == "size_t=1 ssize_t=-2" );
 
-    CPPUNIT_ASSERT_EQUAL
-        (
-            "size_t=0xA0",
-            wxString::Format("size_t=0x%zX", static_cast<size_t>(160))
-        );
+    CHECK( wxString::Format("size_t=0x%zX", static_cast<size_t>(160))
+                == "size_t=0xA0" );
 }
 
 #if wxUSE_STD_STRING
@@ -136,10 +130,10 @@ TEST_CASE("StdString", "[wxString][Printf][vararg]")
     std::string wc("widechar");
 
     s.Printf("string %s(%i).", mb, 1);
-    CPPUNIT_ASSERT_EQUAL( "string multi-byte(1).", s );
+    CHECK( s == "string multi-byte(1)." );
 
     s.Printf("string %s(%i).", wc, 2);
-    CPPUNIT_ASSERT_EQUAL( "string widechar(2).", s );
+    CHECK( s == "string widechar(2)." );
 }
 #endif // wxUSE_STD_STRING
 
@@ -148,10 +142,10 @@ TEST_CASE("LongLongPrintf", "[wxString][Printf][vararg]")
 {
     const char * const llfmt = "%" wxLongLongFmtSpec "d";
 
-    CPPUNIT_ASSERT_EQUAL( "17", wxString::Format(llfmt, wxLL(17)) );
+    CHECK( wxString::Format(llfmt, wxLL(17)) == "17" );
 
     wxLongLong ll = 1234567890;
-    CPPUNIT_ASSERT_EQUAL( "1234567890", wxString::Format(llfmt, ll) );
+    CHECK( wxString::Format(llfmt, ll) == "1234567890" );
 }
 #endif // wxUSE_LONGLONG
 
@@ -163,8 +157,8 @@ TEST_CASE("Sscanf", "[wxSscanf][vararg]")
     wxString input("42 test");
 
     wxSscanf(input, "%d %s", &i, &str);
-    CPPUNIT_ASSERT( i == 42 );
-    CPPUNIT_ASSERT( wxString(str) == "test" );
+    CHECK( i == 42 );
+    CHECK( wxString(str) == "test" );
 
 #if !(defined(__MINGW32__) && \
       defined(__USE_MINGW_ANSI_STDIO) && __USE_MINGW_ANSI_STDIO == 1)
@@ -175,8 +169,8 @@ TEST_CASE("Sscanf", "[wxSscanf][vararg]")
 
     i = 0;
     wxSscanf(input, L"%d %s", &i, &wstr);
-    CPPUNIT_ASSERT( i == 42 );
-    CPPUNIT_ASSERT( wxString(wstr) == "test" );
+    CHECK( i == 42 );
+    CHECK( wxString(wstr) == "test" );
 #endif
 }
 
@@ -190,10 +184,10 @@ TEST_CASE("RepeatedPrintf", "[wxString][Printf][vararg]")
 
     wxString s;
     s = wxString::Format("buffer %s, len %d", buffer, (int)wxStrlen(buffer));
-    CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
+    CHECK( s == "buffer hi, len 2" );
 
     s = wxString::Format("buffer %s, len %d", buffer, (int)wxStrlen(buffer));
-    CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
+    CHECK( s == "buffer hi, len 2" );
 }
 
 TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
@@ -235,7 +229,7 @@ TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
 
 #ifndef wxNO_PRINTF_PERCENT_N
     wxString::Format("foo%i%n", 42, &written);
-    CPPUNIT_ASSERT_EQUAL( 5, written );
+    CHECK( written == 5 );
 #endif
 
     // but these are not:
