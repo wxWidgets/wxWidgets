@@ -34,6 +34,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );
+        CPPUNIT_TEST( Modify );
         WXUISIM_TEST( CharacterEvent );
         WXUISIM_TEST( DeleteEvent );
         WXUISIM_TEST( ReturnEvent );
@@ -64,6 +65,7 @@ private:
         CPPUNIT_TEST( Table );
     CPPUNIT_TEST_SUITE_END();
 
+    void Modify();
     void CharacterEvent();
     void DeleteEvent();
     void ReturnEvent();
@@ -113,6 +115,22 @@ void RichTextCtrlTestCase::setUp()
 void RichTextCtrlTestCase::tearDown()
 {
     wxDELETE(m_rich);
+}
+
+void RichTextCtrlTestCase::Modify()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    
+    // There seems to be an event sequence problem on GTK+ that causes the events
+    // to be disconnected before they're processed, generating spurious errors.
+#if !defined(__WXGTK__)
+    CPPUNIT_ASSERT_EQUAL( false, m_rich->IsModified() );
+    wxUIActionSimulator sim;
+    sim.Text("abcdef");
+    wxYield();
+    CPPUNIT_ASSERT_EQUAL( true, m_rich->IsModified() );
+#endif
+#endif
 }
 
 void RichTextCtrlTestCase::CharacterEvent()
