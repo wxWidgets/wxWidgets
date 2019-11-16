@@ -264,3 +264,16 @@ TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
     wxString::Format("%zu", len);
 #endif
 }
+
+TEST_CASE("VeryLongArg", "[wxString][Format][vararg]")
+{
+    const size_t LENGTH = 70000;
+    wxString veryLongString('.', LENGTH);
+    REQUIRE( veryLongString.length() == LENGTH );
+
+    const wxString s = wxString::Format("%s", veryLongString);
+
+    // Check the length first to avoid very long output if this fails.
+    REQUIRE( s.length() == LENGTH );
+    CHECK( s == veryLongString );
+}
