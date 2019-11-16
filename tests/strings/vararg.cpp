@@ -24,53 +24,10 @@
 #include "wx/string.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// tests themselves
 // ----------------------------------------------------------------------------
 
-class VarArgTestCase : public CppUnit::TestCase
-{
-public:
-    VarArgTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( VarArgTestCase );
-        CPPUNIT_TEST( StringPrintf );
-        CPPUNIT_TEST( CharPrintf );
-        CPPUNIT_TEST( SizetPrintf );
-#if wxUSE_STD_STRING
-        CPPUNIT_TEST( StdString );
-#endif
-#if wxUSE_LONGLONG
-        CPPUNIT_TEST( LongLongPrintf );
-#endif
-        CPPUNIT_TEST( Sscanf );
-        CPPUNIT_TEST( RepeatedPrintf );
-        CPPUNIT_TEST( ArgsValidation );
-    CPPUNIT_TEST_SUITE_END();
-
-    void StringPrintf();
-    void CharPrintf();
-    void SizetPrintf();
-#if wxUSE_STD_STRING
-    void StdString();
-#endif
-#if wxUSE_LONGLONG
-    void LongLongPrintf();
-#endif
-    void Sscanf();
-    void RepeatedPrintf();
-    void ArgsValidation();
-
-    wxDECLARE_NO_COPY_CLASS(VarArgTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( VarArgTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VarArgTestCase, "VarArgTestCase" );
-
-void VarArgTestCase::StringPrintf()
+TEST_CASE("StringPrintf", "[wxString][Printf][vararg]")
 {
     wxString s, s2;
 
@@ -113,7 +70,7 @@ void VarArgTestCase::StringPrintf()
     wxCLANG_WARNING_RESTORE(c++11-compat-deprecated-writable-strings)
 }
 
-void VarArgTestCase::CharPrintf()
+TEST_CASE("CharPrintf", "[wxString][Printf][vararg]")
 {
     wxString foo("foo");
     wxString s;
@@ -151,7 +108,7 @@ void VarArgTestCase::CharPrintf()
     CPPUNIT_ASSERT_EQUAL( "value is 240 (int)", s );
 }
 
-void VarArgTestCase::SizetPrintf()
+TEST_CASE("SizetPrintf", "[wxString][Printf][vararg]")
 {
     size_t  i =  1;
     ssize_t j = -2;
@@ -170,7 +127,7 @@ void VarArgTestCase::SizetPrintf()
 }
 
 #if wxUSE_STD_STRING
-void VarArgTestCase::StdString()
+TEST_CASE("StdString", "[wxString][Printf][vararg]")
 {
     // test passing std::[w]string
     wxString s;
@@ -187,7 +144,7 @@ void VarArgTestCase::StdString()
 #endif // wxUSE_STD_STRING
 
 #if wxUSE_LONGLONG
-void VarArgTestCase::LongLongPrintf()
+TEST_CASE("LongLongPrintf", "[wxString][Printf][vararg]")
 {
     const char * const llfmt = "%" wxLongLongFmtSpec "d";
 
@@ -198,7 +155,7 @@ void VarArgTestCase::LongLongPrintf()
 }
 #endif // wxUSE_LONGLONG
 
-void VarArgTestCase::Sscanf()
+TEST_CASE("Sscanf", "[wxSscanf][vararg]")
 {
     int i = 0;
     char str[20];
@@ -223,7 +180,7 @@ void VarArgTestCase::Sscanf()
 #endif
 }
 
-void VarArgTestCase::RepeatedPrintf()
+TEST_CASE("RepeatedPrintf", "[wxString][Printf][vararg]")
 {
     wxCharBuffer buffer(2);
     char *p = buffer.data();
@@ -239,10 +196,10 @@ void VarArgTestCase::RepeatedPrintf()
     CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
 }
 
-void VarArgTestCase::ArgsValidation()
+TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
 {
-    void *ptr = this;
     int written;
+    void *ptr = &written;
     short int swritten;
 
     // these are valid:
@@ -283,7 +240,7 @@ void VarArgTestCase::ArgsValidation()
 
     // but these are not:
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i", "foo") );
-    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", (void*)this) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", (void*)&written) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d", ptr) );
 
     // we don't check wxNO_PRINTF_PERCENT_N here as these expressions should
@@ -306,7 +263,7 @@ void VarArgTestCase::ArgsValidation()
     wxString::Format("%c", wxChar(80) + wxChar(1));
 
     // check size_t handling
-    size_t len = sizeof(*this);
+    size_t len = sizeof(ptr);
 #ifdef __WINDOWS__
     wxString::Format("%Iu", len);
 #else
