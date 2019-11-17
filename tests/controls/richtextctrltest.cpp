@@ -119,16 +119,9 @@ void RichTextCtrlTestCase::tearDown()
 
 void RichTextCtrlTestCase::Modify()
 {
-#if wxUSE_UIACTIONSIMULATOR
-    
-    // There seems to be an event sequence problem on GTK+ that causes the events
-    // to be disconnected before they're processed, generating spurious errors.
-#if !defined(__WXGTK__)
     CPPUNIT_ASSERT_EQUAL( false, m_rich->IsModified() );
     m_rich->WriteText("abcdef");
     CPPUNIT_ASSERT_EQUAL( true, m_rich->IsModified() );
-#endif
-#endif
 }
 
 void RichTextCtrlTestCase::CharacterEvent()
