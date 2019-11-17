@@ -540,7 +540,7 @@ dnl libraries is explicitly disabled, we can't use it at all.
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
     wxUSE_LIBJBIG=no
 else
-    WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available)], wxUSE_LIBJBIG)
+    WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available], wxUSE_LIBJBIG)
 fi
 
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)

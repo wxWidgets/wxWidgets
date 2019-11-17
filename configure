@@ -2333,7 +2333,7 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
-  --without-libjbig       don't use libjbig in libtiff even if available)
+  --without-libjbig       don't use libjbig in libtiff even if available
   --with-libxpm           use libxpm (XPM file format)
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
