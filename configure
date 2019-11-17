@@ -1089,6 +1089,7 @@ with_gnomevfs
 with_libnotify
 with_opengl
 with_xtest
+with_cairo
 with_dmalloc
 with_sdl
 with_regex
@@ -2341,6 +2342,7 @@ Optional Packages:
   --with-libnotify        use libnotify for notifications
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
+  --with-cairo            use Cairo-based wxGraphicsContext implementation
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
   --with-regex            enable support for wxRegEx class
@@ -4061,6 +4063,7 @@ DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
+DEFAULT_wxUSE_CAIRO=no
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
@@ -5045,6 +5048,42 @@ fi
 
           eval "$wx_cv_use_xtest"
 
+
+if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
+    wx_needs_cairo_for_gc=1
+fi
+
+if test "$wx_needs_cairo_for_gc" != 1; then
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-cairo was given.
+if test "${with_cairo+set}" = set; then :
+  withval=$with_cairo;
+                        if test "$withval" = yes; then
+                          wx_cv_use_cairo='wxUSE_CAIRO=yes'
+                        else
+                          wx_cv_use_cairo='wxUSE_CAIRO=no'
+                        fi
+
+else
+
+                        wx_cv_use_cairo='wxUSE_CAIRO=${'DEFAULT_wxUSE_CAIRO":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_cairo"
+
+fi
 
 fi
 
@@ -36890,60 +36929,11 @@ if test "$wxUSE_MAC" = 1; then
     wxUSE_GRAPHICS_CONTEXT="yes"
 fi
 
-if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
-    wx_has_graphics=0
-    if test "$wxUSE_MSW" = 1; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GDI+ is available" >&5
-$as_echo_n "checking if GDI+ is available... " >&6; }
-if ${wx_cv_lib_gdiplus+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-                                                ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <windows.h>
-                     #include <gdiplus.h>
-int
-main ()
-{
-
-                        using namespace Gdiplus;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_lib_gdiplus=yes
-else
-  wx_cv_lib_gdiplus=no
-
+if test "$wx_needs_cairo_for_gc" = 1 -a "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
+    wx_needs_cairo=1
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_gdiplus" >&5
-$as_echo "$wx_cv_lib_gdiplus" >&6; }
-        if test "$wx_cv_lib_gdiplus" = "yes"; then
-            wx_has_graphics=1
-        fi
-    elif test "$WXGTK1" = "1"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
-$as_echo "$as_me: WARNING: wxGraphicsContext not supported with GTK +1" >&2;}
-    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MAC" = 1; then
+if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CAIRO" >&5
@@ -37003,24 +36993,24 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$CAIRO_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cairo library not found" >&5
-$as_echo "$as_me: WARNING: Cairo library not found" >&2;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 elif test $pkg_failed = untried; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cairo library not found" >&5
-$as_echo "$as_me: WARNING: Cairo library not found" >&2;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 else
 	CAIRO_CFLAGS=$pkg_cv_CAIRO_CFLAGS
 	CAIRO_LIBS=$pkg_cv_CAIRO_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	wx_has_graphics=1
+	wx_has_cairo=1
 fi
-        if test "$wx_has_graphics" = 1; then
-                                                save_LIBS="$LIBS"
-            LIBS="$LIBS $CAIRO_LIBS"
-            for ac_func in cairo_push_group
+    if test "$wx_has_cairo" = 1; then
+                                save_LIBS="$LIBS"
+        LIBS="$LIBS $CAIRO_LIBS"
+        for ac_func in cairo_push_group
 do :
   ac_fn_c_check_func "$LINENO" "cairo_push_group" "ac_cv_func_cairo_push_group"
 if test "x$ac_cv_func_cairo_push_group" = xyes; then :
@@ -37031,21 +37021,78 @@ _ACEOF
 fi
 done
 
-            LIBS="$save_LIBS"
-            if test "$ac_cv_func_cairo_push_group" = "no"; then
-                wx_has_graphics=0
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cairo library is too old and misses cairo_push_group()" >&5
+        LIBS="$save_LIBS"
+        if test "$ac_cv_func_cairo_push_group" = "no"; then
+            wx_has_cairo=0
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cairo library is too old and misses cairo_push_group()" >&5
 $as_echo "$as_me: WARNING: Cairo library is too old and misses cairo_push_group()" >&2;}
-            else
-                $as_echo "#define wxUSE_CAIRO 1" >>confdefs.h
+        else
+            $as_echo "#define wxUSE_CAIRO 1" >>confdefs.h
 
 
-                                                if test "$wxUSE_GTK" != 1; then
-                    CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
-                fi
+                                    if test "$wxUSE_GTK" != 1; then
+                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
             fi
         fi
+    fi
+fi
+
+if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
+    wx_has_graphics=0
+    if test "$wxUSE_MSW" = 1; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GDI+ is available" >&5
+$as_echo_n "checking if GDI+ is available... " >&6; }
+if ${wx_cv_lib_gdiplus+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                                                ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+                     #include <gdiplus.h>
+int
+main ()
+{
+
+                        using namespace Gdiplus;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_lib_gdiplus=yes
+else
+  wx_cv_lib_gdiplus=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_gdiplus" >&5
+$as_echo "$wx_cv_lib_gdiplus" >&6; }
+        if test "$wx_cv_lib_gdiplus" = "yes"; then
+            wx_has_graphics=1
+        fi
+    elif test "$WXGTK1" = "1"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
+$as_echo "$as_me: WARNING: wxGraphicsContext not supported with GTK +1" >&2;}
+    elif test "$wx_needs_cairo_for_gc" = 1; then
+        wx_has_graphics=$wx_has_cairo
     else
                 wx_has_graphics=1
     fi

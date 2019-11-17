@@ -335,6 +335,7 @@ DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
+DEFAULT_wxUSE_CAIRO=no
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -550,6 +551,16 @@ WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associat
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
+
+if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
+    wx_needs_cairo_for_gc=1
+fi
+
+dnl If we do _not_ need Cairo anyhow, provide an option to request enabling it
+dnl explicitly.
+if test "$wx_needs_cairo_for_gc" != 1; then
+WX_ARG_WITH(cairo,         [  --with-cairo            use Cairo-based wxGraphicsContext implementation], wxUSE_CAIRO)
+fi
 
 fi
 dnl for GUI only
@@ -7508,6 +7519,42 @@ if test "$wxUSE_MAC" = 1; then
     wxUSE_GRAPHICS_CONTEXT="yes"
 fi
 
+dnl We need to check for Cairo if explicitly requested under MSW or Mac or if
+dnl we're going to use as the default wxGraphicsContext implementation with the
+dnl target toolkit.
+if test "$wx_needs_cairo_for_gc" = 1 -a "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
+    wx_needs_cairo=1
+fi
+
+if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
+    PKG_CHECK_MODULES(CAIRO, cairo,
+        [wx_has_cairo=1],
+        [AC_MSG_RESULT(no)]
+    )
+    if test "$wx_has_cairo" = 1; then
+        dnl Check that Cairo library is new enough: wxGraphicsContext
+        dnl won't compile without cairo_push_group() and
+        dnl cairo_pop_group_to_source() which are new in 1.2.
+        save_LIBS="$LIBS"
+        LIBS="$LIBS $CAIRO_LIBS"
+        AC_CHECK_FUNCS([cairo_push_group])
+        LIBS="$save_LIBS"
+        if test "$ac_cv_func_cairo_push_group" = "no"; then
+            wx_has_cairo=0
+            AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
+        else
+            AC_DEFINE(wxUSE_CAIRO)
+
+            dnl We don't need to do this for wxGTK as we already get Cairo
+            dnl flags as part of GTK+ ones.
+            if test "$wxUSE_GTK" != 1; then
+                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+            fi
+        fi
+    fi
+fi
+
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
     wx_has_graphics=0
     if test "$wxUSE_MSW" = 1; then
@@ -7533,33 +7580,8 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         fi
     elif test "$WXGTK1" = "1"; then
         AC_MSG_WARN([wxGraphicsContext not supported with GTK +1])
-    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MAC" = 1; then
-        PKG_CHECK_MODULES(CAIRO, cairo,
-            [wx_has_graphics=1],
-            [AC_MSG_WARN([Cairo library not found])]
-        )
-        if test "$wx_has_graphics" = 1; then
-            dnl Check that Cairo library is new enough: wxGraphicsContext
-            dnl won't compile without cairo_push_group() and
-            dnl cairo_pop_group_to_source() which are new in 1.2.
-            save_LIBS="$LIBS"
-            LIBS="$LIBS $CAIRO_LIBS"
-            AC_CHECK_FUNCS([cairo_push_group])
-            LIBS="$save_LIBS"
-            if test "$ac_cv_func_cairo_push_group" = "no"; then
-                wx_has_graphics=0
-                AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
-            else
-                AC_DEFINE(wxUSE_CAIRO)
-
-                dnl We don't need to do this for wxGTK as we already get Cairo
-                dnl flags as part of GTK+ ones.
-                if test "$wxUSE_GTK" != 1; then
-                    CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
-                fi
-            fi
-        fi
+    elif test "$wx_needs_cairo_for_gc" = 1; then
+        wx_has_graphics=$wx_has_cairo
     else
         dnl assume it's ok, add more checks here if needed
         wx_has_graphics=1
