@@ -1493,7 +1493,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
 #if defined(__WXMSW__) || defined(__WXOSX__)
     // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
-    const bool hasAlpha = bmpSource.HasAlpha();
+    const bool hasAlpha = bmp.HasAlpha();
 #endif
 
     cairo_format_t bufferFormat =
