@@ -366,9 +366,9 @@ void wxSocketImpl::PostCreation()
     if ( m_initialSendBufferSize >= 0 )
         SetSocketOption(SO_SNDBUF, m_initialSendBufferSize);
 
-    // we always put our sockets in unblocked mode and handle blocking
+    // Call this to put our socket in unblocked mode: we'll handle blocking
     // ourselves in DoRead/Write() if wxSOCKET_WAITALL is specified
-    UnblockAndRegisterWithEventLoop();
+    UpdateBlockingState();
 }
 
 wxSocketError wxSocketImpl::UpdateLocalAddress()
@@ -551,7 +551,7 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     sock->m_fd = fd;
     sock->m_peer = wxSockAddressImpl(from.addr, fromlen);
 
-    sock->UnblockAndRegisterWithEventLoop();
+    sock->UpdateBlockingState();
 
     return sock;
 }

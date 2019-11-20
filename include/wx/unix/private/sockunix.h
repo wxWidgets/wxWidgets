@@ -73,12 +73,13 @@ private:
         wxCloseSocket(m_fd);
     }
 
-    virtual void UnblockAndRegisterWithEventLoop() wxOVERRIDE
+    virtual void UpdateBlockingState() wxOVERRIDE
     {
-        int trueArg = 1;
-        ioctl(m_fd, FIONBIO, &trueArg);
+        // Make this int and not bool to allow passing it to ioctl().
+        const int isBlocking = (GetSocketFlags() & wxSOCKET_BLOCK) != 0;
+        ioctl(m_fd, FIONBIO, &isBlocking);
 
-        EnableEvents();
+        DoEnableEvents(wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG, !isBlocking);
     }
 
     // enable or disable notifications for socket input/output events
