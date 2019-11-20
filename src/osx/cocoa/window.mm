@@ -3070,6 +3070,8 @@ void SetSubviewsNeedDisplay( NSView *view )
 
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
 {
+    wxMacAutoreleasePool autoreleasepool;
+
     if ( where )
         [m_osxView setNeedsDisplayInRect:wxToNSRect(m_osxView, *where )];
     else
