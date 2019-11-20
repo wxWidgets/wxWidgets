@@ -1672,7 +1672,20 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
                   "Using wxSOCKET_WAITALL or wxSOCKET_BLOCK with "
                   "wxSOCKET_NOWAIT doesn't make sense" );
 
+    // Blocking sockets are very different from non-blocking ones and we need
+    // to [un]register the socket with the event loop if wxSOCKET_BLOCK is
+    // being [un]set.
+    const bool
+        blockChanged = (m_flags & wxSOCKET_BLOCK) != (flags & wxSOCKET_BLOCK);
+
     m_flags = flags;
+
+    if ( blockChanged )
+    {
+        // Of course, we only do this if we already have the actual socket.
+        if ( m_impl )
+            m_impl->UpdateBlockingState();
+    }
 }
 
 

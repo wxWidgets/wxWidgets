@@ -57,9 +57,6 @@ public:
         // anything here
     }
 
-private:
-    virtual void DoClose() wxOVERRIDE;
-
     virtual void UpdateBlockingState() wxOVERRIDE
     {
         if ( GetSocketFlags() & wxSOCKET_BLOCK )
@@ -85,6 +82,9 @@ private:
             wxSocketManager::Get()->Install_Callback(this);
         }
     }
+
+private:
+    virtual void DoClose() wxOVERRIDE;
 
     int m_msgnumber;
 
