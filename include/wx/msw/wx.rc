@@ -111,6 +111,10 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
     #define wxMANIFEST_CPU "ia64"
 #elif defined(WX_CPU_X86)
     #define wxMANIFEST_CPU "wx"
+#elif defined(WX_CPU_ARM)
+    #define wxMANIFEST_CPU "arm"
+#elif defined(WX_CPU_ARM64)
+    #define wxMANIFEST_CPU "arm64"
 #else
 // Notice that if the manifest is included, WX_CPU_XXX constant corresponding
 // to the architecture we're compiling for must be defined. This can be done
