@@ -203,6 +203,31 @@ if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
 endif()
 
+if(wxUSE_ACTIVEX AND DEFINED wxUSE_OLE AND NOT wxUSE_OLE)
+    message(WARNING "wxActiveXContainer requires wxUSE_OLE... disabled")
+    wx_option_force_value(wxUSE_ACTIVEX OFF)
+endif()
+
+if(wxUSE_DRAG_AND_DROP AND DEFINED wxUSE_OLE AND NOT wxUSE_OLE)
+    message(WARNING "wxUSE_DRAG_AND_DROP requires wxUSE_OLE... disabled")
+    wx_option_force_value(wxUSE_DRAG_AND_DROP OFF)
+endif()
+
+if(wxUSE_ACCESSIBILITY AND DEFINED wxUSE_OLE AND NOT wxUSE_OLE)
+    message(WARNING "wxUSE_ACCESSIBILITY requires wxUSE_OLE... disabled")
+    wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+endif()
+
+if(wxUSE_MEDIACTRL AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
+    message(WARNING "wxMediaCtl requires wxActiveXContainer... disabled")
+    wx_option_force_value(wxUSE_MEDIACTRL OFF)
+endif()
+
+if(wxUSE_WEBVIEW AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
+    message(WARNING "wxWebView requires wxActiveXContainer... disabled")
+    wx_option_force_value(wxUSE_WEBVIEW OFF)
+endif()
+
 if(wxUSE_OPENGL)
     set(wxUSE_GLCANVAS ON)
 endif()
