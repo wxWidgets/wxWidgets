@@ -83,11 +83,11 @@ namespace
 typedef BOOL (WINAPI *GetProcessUserModeExceptionPolicy_t)(LPDWORD);
 typedef BOOL (WINAPI *SetProcessUserModeExceptionPolicy_t)(DWORD);
 
-GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy
-    = (GetProcessUserModeExceptionPolicy_t) -1;
+GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy =
+    (GetProcessUserModeExceptionPolicy_t) -1;
 
-SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy
-    = (SetProcessUserModeExceptionPolicy_t) -1;
+SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy =
+    (SetProcessUserModeExceptionPolicy_t) -1;
 
 DWORD gs_oldExceptionPolicyFlags = 0;
 

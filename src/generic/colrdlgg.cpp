@@ -332,8 +332,8 @@ void wxGenericColourDialog::CreateWidgets()
 
     const wxSizerFlags sliderLabelFlags = wxSizerFlags().Right().Border();
     const wxSizerFlags onesliderFlags = wxSizerFlags().CenterHorizontal();
-    const wxSizerFlags sliderFlags
-        = wxSizerFlags().CentreVertical().DoubleBorder();
+    const wxSizerFlags sliderFlags =
+        wxSizerFlags().CentreVertical().DoubleBorder();
 
     wxBoxSizer *redSliderSizer = new wxBoxSizer(wxVERTICAL);
     redSliderSizer->Add(new wxStaticText(this, wxID_ANY, _("Red:")), sliderLabelFlags);

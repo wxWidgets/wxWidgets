@@ -244,8 +244,8 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 
     const int borderFlags = wxALL;
 
-    wxSizerFlags sizerFlags
-        = wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
+    wxSizerFlags sizerFlags =
+        wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
 
     if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
