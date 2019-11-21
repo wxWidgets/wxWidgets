@@ -728,17 +728,9 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
 
 int wxSpinCtrl::GetOverlap() const
 {
-    if ( !GetHwnd() )
-    {
-        // We can be called from GetSizeFromTextSize() before the window is
-        // created and still need to return something reasonable in this case,
-        // so return the overlap equal to the default border size.
-        return FromDIP(2);
-    }
-
-    // The sign here is correct because the button is positioned inside its
-    // buddy window.
-    return wxGetWindowRect(m_hwndBuddy).right - wxGetWindowRect(GetHwnd()).left;
+    // Don't use FromDIP here. The gap between the control border and the
+    // button seems to be always 1px.
+    return 2;
 }
 
 wxSize wxSpinCtrl::DoGetBestSize() const
