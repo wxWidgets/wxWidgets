@@ -390,6 +390,14 @@ wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
           ::EnumDisplaySettings(deviceName, iModeNum, &dm);
           iModeNum++ )
     {
+        // Only care about the default display output, this prevents duplicate
+        // entries in the modes list.
+        if ( dm.dmFields & DM_DISPLAYFIXEDOUTPUT &&
+             dm.dmDisplayFixedOutput != DMDFO_DEFAULT )
+        {
+            continue;
+        }
+
         const wxVideoMode mode = ConvertToVideoMode(dm);
         if ( mode.Matches(modeMatch) )
         {
