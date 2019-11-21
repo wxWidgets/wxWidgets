@@ -96,6 +96,7 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+#if wxUSE_DISPLAY
 // Client data class for the choice control containing the video modes
 class MyVideoModeClientData : public wxClientData
 {
@@ -104,6 +105,7 @@ public:
 
     const wxVideoMode mode;
 };
+#endif // wxUSE_DISPLAY
 
 // ----------------------------------------------------------------------------
 // constants
