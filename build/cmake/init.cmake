@@ -272,6 +272,11 @@ if(wxUSE_TEXTFILE AND (NOT wxUSE_FILE OR NOT wxUSE_TEXTBUFFER))
     wx_option_force_value(wxUSE_TEXTFILE OFF)
 endif()
 
+if(wxUSE_MIMETYPE AND NOT wxUSE_TEXTFILE)
+    message(WARNING "wxUSE_MIMETYPE requires wxTextFile... disabled")
+    wx_option_force_value(wxUSE_MIMETYPE OFF)
+endif()
+
 if(wxUSE_CONFIG)
     if(NOT wxUSE_TEXTFILE)
         message(WARNING "wxConfig requires wxTextFile... disabled")
