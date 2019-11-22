@@ -953,8 +953,9 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 {
     wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
 
-    int vAlign, hAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
+    int hAlign = wxALIGN_LEFT;
+    int vAlign = wxALIGN_CENTRE_VERTICAL;
+    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
     const wxRect
         checkBoxRect = wxGetGridCheckBoxRect

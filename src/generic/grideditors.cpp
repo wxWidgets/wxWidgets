@@ -1218,10 +1218,10 @@ void wxGridCellBoolEditor::Create(wxWindow* parent,
 
 void wxGridCellBoolEditor::SetSize(const wxRect& r)
 {
-    int hAlign = wxALIGN_CENTRE;
-    int vAlign = wxALIGN_CENTRE;
+    int hAlign = wxALIGN_LEFT;
+    int vAlign = wxALIGN_CENTRE_VERTICAL;
     if (GetCellAttr())
-        GetCellAttr()->GetAlignment(& hAlign, & vAlign);
+        GetCellAttr()->GetNonDefaultAlignment(&hAlign, &vAlign);
 
     const wxRect
         checkBoxRect = wxGetGridCheckBoxRect
