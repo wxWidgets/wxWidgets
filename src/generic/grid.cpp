@@ -10335,7 +10335,7 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
 wxRect wxGetGridCheckBoxRect(wxWindow* win,
                              const wxRect& cellRect,
                              int hAlign,
-                             int WXUNUSED(vAlign))
+                             int vAlign)
 {
     wxSize checkBoxSize =
         wxRendererNative::Get().GetCheckBoxSize(win, wxCONTROL_CELL);
@@ -10368,8 +10368,19 @@ wxRect wxGetGridCheckBoxRect(wxWindow* win,
         checkBoxRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
     }
 
-    // TODO: support vAlign
-    checkBoxRect = checkBoxRect.CentreIn(cellRect, wxVERTICAL);
+    if ( vAlign & wxALIGN_CENTER_VERTICAL )
+    {
+        checkBoxRect = checkBoxRect.CentreIn(cellRect, wxVERTICAL);
+    }
+    else if ( vAlign & wxALIGN_BOTTOM )
+    {
+        checkBoxRect.SetY(cellRect.y + cellRect.height
+                          - checkBoxRect.y - GRID_CELL_CHECKBOX_MARGIN);
+    }
+    else // wxALIGN_TOP
+    {
+        checkBoxRect.SetY(cellRect.y + GRID_CELL_CHECKBOX_MARGIN);
+    }
 
     return checkBoxRect;
 }
