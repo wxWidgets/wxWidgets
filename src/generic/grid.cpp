@@ -10356,7 +10356,7 @@ wxRect wxGetGridCheckBoxRect(wxWindow* win,
 
     if ( hAlign & wxALIGN_CENTER_HORIZONTAL )
     {
-        checkBoxRect.SetX(cellRect.x + cellRect.width / 2 - checkBoxSize.x / 2);
+        checkBoxRect = checkBoxRect.CentreIn(cellRect, wxHORIZONTAL);
     }
     else if ( hAlign & wxALIGN_RIGHT )
     {
@@ -10369,7 +10369,7 @@ wxRect wxGetGridCheckBoxRect(wxWindow* win,
     }
 
     // TODO: support vAlign
-    checkBoxRect.SetY(cellRect.y + cellRect.height / 2 - checkBoxSize.y / 2);
+    checkBoxRect = checkBoxRect.CentreIn(cellRect, wxVERTICAL);
 
     return checkBoxRect;
 }
