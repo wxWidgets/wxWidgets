@@ -35,7 +35,7 @@ if(WXGTK2)
 endif()
 wx_add_sample(dialogs ${SAMPLE_DIALOGS_SRC} DATA tips.txt)
 wx_add_sample(dialup nettest.cpp LIBRARIES net DEPENDS wxUSE_DIALUP_MANAGER)
-wx_add_sample(display DEPENDS wxUSE_DISPLAY)
+wx_add_sample(display)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
     RES docview.rc LIBRARIES aui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
