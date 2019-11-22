@@ -937,8 +937,11 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
     // compute it only once (no locks for MT safeness in GUI thread...)
     if ( !ms_sizeCheckMark.x )
     {
+        // Use rectangle big enough for the check box to fit into it.
+        const wxRect r(0, 0, 1000, 1000);
+
         ms_sizeCheckMark =
-            wxRendererNative::Get().GetCheckBoxSize(&grid, wxCONTROL_CELL);
+            wxGetGridCheckBoxRect(&grid, r, wxALIGN_LEFT, wxALIGN_TOP).GetSize();
     }
 
     return ms_sizeCheckMark;
@@ -958,12 +961,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
     const wxRect
-        checkBoxRect = wxGetGridCheckBoxRect
-                       (
-                            GetBestSize(grid, attr, dc, row, col),
-                            rect,
-                            hAlign, vAlign
-                        );
+        checkBoxRect = wxGetGridCheckBoxRect(&grid, rect, hAlign, vAlign);
 
     bool value;
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )

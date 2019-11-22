@@ -10332,13 +10332,17 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
     return editor;
 }
 
-wxRect wxGetGridCheckBoxRect(const wxSize& checkBoxSize,
+wxRect wxGetGridCheckBoxRect(wxWindow* win,
                              const wxRect& cellRect,
-                             int hAlign, int WXUNUSED(vAlign))
+                             int hAlign,
+                             int WXUNUSED(vAlign))
 {
-    // TODO: support vAlign
+    const wxSize checkBoxSize =
+        wxRendererNative::Get().GetCheckBoxSize(win, wxCONTROL_CELL);
 
     wxRect checkBoxRect;
+
+    // TODO: support vAlign
     checkBoxRect.SetY(cellRect.y + cellRect.height / 2 - checkBoxSize.y / 2);
 
     wxCoord minSize = wxMin(cellRect.width, cellRect.height);
