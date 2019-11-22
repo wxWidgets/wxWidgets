@@ -112,7 +112,7 @@ const int GRID_HASH_SIZE = 100;
 const int DRAG_SENSITIVITY = 3;
 
 // the space between the cell edge and the checkbox mark
-const int GRID_CELL_CHECKBOX_MARGIN_X = 2;
+const int GRID_CELL_CHECKBOX_MARGIN = 2;
 
 } // anonymous namespace
 
@@ -10366,11 +10366,11 @@ wxRect wxGetGridCheckBoxRect(wxWindow* win,
     else if ( hAlign & wxALIGN_RIGHT )
     {
         checkBoxRect.SetX(cellRect.x + cellRect.width
-                          - checkBoxSize.x - GRID_CELL_CHECKBOX_MARGIN_X);
+                          - checkBoxSize.x - GRID_CELL_CHECKBOX_MARGIN);
     }
     else // ( hAlign == wxALIGN_LEFT ) and invalid alignment value
     {
-        checkBoxRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN_X);
+        checkBoxRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
     }
 
     return checkBoxRect;
