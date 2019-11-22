@@ -10337,27 +10337,22 @@ wxRect wxGetGridCheckBoxRect(wxWindow* win,
                              int hAlign,
                              int WXUNUSED(vAlign))
 {
-    const wxSize checkBoxSize =
+    wxSize checkBoxSize =
         wxRendererNative::Get().GetCheckBoxSize(win, wxCONTROL_CELL);
 
-    wxRect checkBoxRect;
-
-    // TODO: support vAlign
-    checkBoxRect.SetY(cellRect.y + cellRect.height / 2 - checkBoxSize.y / 2);
-
-    wxCoord minSize = wxMin(cellRect.width, cellRect.height);
-    if ( checkBoxRect.GetWidth() >= minSize || checkBoxRect.GetHeight() >= minSize )
+    // Keep square aspect ratio for the checkbox, but ensure that it fits into
+    // the available space, even if it's smaller than the standard size.
+    const wxCoord minSize = wxMin(cellRect.width, cellRect.height);
+    if ( checkBoxSize.x >= minSize || checkBoxSize.y >= minSize )
     {
-        // let the checkbox mark be even smaller than the min size
-        // to leave some space between cell edges and the checkbox
-        const int newSize = wxMax(1, minSize - 2);
-        checkBoxRect.SetWidth(newSize);
-        checkBoxRect.SetHeight(newSize);
+        // It must still have positive size, however.
+        const int fittingSize = wxMax(1, minSize - 2*GRID_CELL_CHECKBOX_MARGIN);
+
+        checkBoxSize.x =
+        checkBoxSize.y = fittingSize;
     }
-    else
-    {
-        checkBoxRect.SetSize(checkBoxSize);
-    }
+
+    wxRect checkBoxRect(checkBoxSize);
 
     if ( hAlign & wxALIGN_CENTER_HORIZONTAL )
     {
@@ -10372,6 +10367,9 @@ wxRect wxGetGridCheckBoxRect(wxWindow* win,
     {
         checkBoxRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
     }
+
+    // TODO: support vAlign
+    checkBoxRect.SetY(cellRect.y + cellRect.height / 2 - checkBoxSize.y / 2);
 
     return checkBoxRect;
 }
