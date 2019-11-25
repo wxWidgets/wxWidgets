@@ -551,41 +551,53 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     DrawDropArrow(win,dc,rect);
 }
 
+#ifdef __WXGTK3__
+static void CheckBoxSize(wxGtkStyleContext& sc, int& w, int& h, GtkBorder* extra = NULL)
+{
+    gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
+        "min-width", &w, "min-height", &h, NULL);
+    GtkBorder border, padding;
+    gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &padding);
+    border.left += padding.left;
+    border.right += padding.right;
+    border.top += padding.top;
+    border.bottom += padding.bottom;
+    w += border.left + border.right;
+    h += border.top + border.bottom;
+    if (extra)
+        *extra = border;
+}
+#endif // __WXGTK3__
+
 wxSize
 wxRendererGTK::GetCheckBoxSize(wxWindow* win)
 {
+    wxSize size;
     // Even though we don't use the window in this implementation, still check
     // that it's valid to avoid surprises when running the same code under the
     // other platforms.
-    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+    wxCHECK_MSG(win, size, "Must have a valid window");
 
 #ifdef __WXGTK3__
-    int min_width, min_height;
     wxGtkStyleContext sc(win->GetContentScaleFactor());
     sc.AddCheckButton();
     if (gtk_check_version(3,20,0) == NULL)
     {
         sc.Add("check");
-        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
-            "min-width", &min_width, "min-height", &min_height, NULL);
-        GtkBorder margin;
-        gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &margin);
-        min_width += margin.left + margin.right;
-        min_height += margin.top + margin.bottom;
+        CheckBoxSize(sc, size.x, size.y);
     }
     else
     {
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_INT);
         gtk_style_context_get_style_property(sc, "indicator-size", &value);
-        min_width = g_value_get_int(&value);
+        size.x = g_value_get_int(&value);
         gtk_style_context_get_style_property(sc, "indicator-spacing", &value);
-        min_width += 2 * g_value_get_int(&value);
-        min_height = min_width;
+        size.x += 2 * g_value_get_int(&value);
+        size.y = size.x;
         g_value_unset(&value);
     }
-
-    return wxSize(min_width, min_height);
 #else // !__WXGTK3__
     gint indicator_size, indicator_spacing;
     gtk_widget_style_get(wxGTKPrivate::GetCheckButtonWidget(),
@@ -593,9 +605,10 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win)
                          "indicator_spacing", &indicator_spacing,
                          NULL);
 
-    int size = indicator_size + indicator_spacing * 2;
-    return wxSize(size, size);
+    size.x = size.y = indicator_size + indicator_spacing * 2;
 #endif // !__WXGTK3__
+
+    return size;
 }
 
 void
@@ -653,35 +666,47 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
     if (flags & wxCONTROL_CURRENT)
         state |= GTK_STATE_FLAG_PRELIGHT;
 
-    int min_width, min_height;
+    int w, h;
     wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.AddCheckButton();
     if (gtk_check_version(3,20,0) == NULL)
     {
         sc.Add("check");
-        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
-            "min-width", &min_width, "min-height", &min_height, NULL);
+        GtkBorder extra;
+        CheckBoxSize(sc, w, h, &extra);
+
+        int x = rect.x + (rect.width - w) / 2;
+        int y = rect.y + (rect.height - h) / 2;
+        gtk_style_context_set_state(sc, GtkStateFlags(state));
+        gtk_render_background(sc, cr, x, y, w, h);
+        gtk_render_frame(sc, cr, x, y, w, h);
+
+        // check is rendered in content area
+        x += extra.left;
+        y += extra.top;
+        w -= extra.left + extra.right;
+        h -= extra.top + extra.bottom;
+        gtk_render_check(sc, cr, x, y, w, h);
     }
     else
     {
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_INT);
         gtk_style_context_get_style_property(sc, "indicator-size", &value);
-        min_width = g_value_get_int(&value);
-        min_height = min_width;
+        w = h = g_value_get_int(&value);
         g_value_unset(&value);
-    }
 
-    // need save/restore for GTK+ 3.6 & 3.8
-    gtk_style_context_save(sc);
-    gtk_style_context_set_state(sc, GtkStateFlags(state));
-    const int x = rect.x + (rect.width - min_width) / 2;
-    const int y = rect.y + (rect.height - min_height) / 2;
-    gtk_render_background(sc, cr, x, y, min_width, min_height);
-    gtk_render_frame(sc, cr, x, y, min_width, min_height);
-    gtk_style_context_add_class(sc, "check");
-    gtk_render_check(sc, cr, x, y, min_width, min_height);
-    gtk_style_context_restore(sc);
+        // need save/restore for GTK+ 3.6 & 3.8
+        gtk_style_context_save(sc);
+        gtk_style_context_set_state(sc, GtkStateFlags(state));
+        const int x = rect.x + (rect.width - w) / 2;
+        const int y = rect.y + (rect.height - h) / 2;
+        gtk_render_background(sc, cr, x, y, w, h);
+        gtk_render_frame(sc, cr, x, y, w, h);
+        gtk_style_context_add_class(sc, "check");
+        gtk_render_check(sc, cr, x, y, w, h);
+        gtk_style_context_restore(sc);
+    }
 #else
     GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
