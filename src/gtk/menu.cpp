@@ -1445,7 +1445,7 @@ const char *wxGetStockGtkID(wxWindowID id)
 
         default:
             break;
-    };
+    }
 
     #undef STOCKITEM
 
