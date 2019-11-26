@@ -5898,6 +5898,7 @@ void wxWindowGTK::DoCaptureMouse()
     gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_POINTER, false, NULL, NULL, NULL, 0);
 #else
     const GdkEventMask mask = GdkEventMask(
+        GDK_SCROLL_MASK |
         GDK_BUTTON_PRESS_MASK |
         GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_HINT_MASK |
