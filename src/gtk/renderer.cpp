@@ -240,7 +240,6 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     if (cr == NULL)
         return 0;
 
-#if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)
     {
         int pos = 1;
@@ -257,7 +256,6 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
     }
     else
-#endif
     {
         GtkStyleContext* sc = gtk_widget_get_style_context(button);
         gtk_style_context_save(sc);
@@ -1028,7 +1026,6 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow*, wxDC& dc, const wxRect& rect, int
     int min_width, min_height;
     wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.Add(GTK_TYPE_RADIO_BUTTON, "radiobutton", NULL);
-#if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)
     {
         sc.Add("radio");
@@ -1036,7 +1033,6 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow*, wxDC& dc, const wxRect& rect, int
             "min-width", &min_width, "min-height", &min_height, NULL);
     }
     else
-#endif
     {
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_INT);
