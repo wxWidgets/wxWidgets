@@ -381,9 +381,9 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     while (Pending())   // avoid false positives from our idle source
         gtk_main_iteration();
 
-    wxGCC_WARNING_SUPPRESS(cast-function-type)
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
     gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
-    wxGCC_WARNING_RESTORE()
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 
