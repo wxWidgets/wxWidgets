@@ -240,6 +240,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     if (cr == NULL)
         return 0;
 
+    // AddTreeviewHeaderButton() is only available in 3.20 or later.
+#if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)
     {
         int pos = 1;
@@ -256,6 +258,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
     }
     else
+#endif // GTK >= 3.20
     {
         GtkStyleContext* sc = gtk_widget_get_style_context(button);
         gtk_style_context_save(sc);
