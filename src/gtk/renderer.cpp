@@ -620,7 +620,7 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win, int flags)
     }
 
     size.y = size.x;
-#endif // !__WXGTK3__
+#endif // __WXGTK3__/!__WXGTK3__
 
     return size;
 }
@@ -631,38 +631,6 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
                             const wxRect& rect,
                             int flags )
 {
-#ifndef __WXGTK3__
-    GtkWidget *button = wxGTKPrivate::GetCheckButtonWidget();
-
-    gint indicator_size, indicator_spacing, focus_width, focus_pad;
-    gtk_widget_style_get(button,
-                         "indicator_size", &indicator_size,
-                         "indicator_spacing", &indicator_spacing,
-                         "focus-line-width", &focus_width,
-                         "focus-padding", &focus_pad,
-                         NULL);
-
-    GtkStateType state;
-
-    if ( flags & wxCONTROL_PRESSED )
-        state = GTK_STATE_ACTIVE;
-    else if ( flags & wxCONTROL_DISABLED )
-        state = GTK_STATE_INSENSITIVE;
-    else if ( flags & wxCONTROL_CURRENT )
-        state = GTK_STATE_PRELIGHT;
-    else
-        state = GTK_STATE_NORMAL;
-
-    GtkShadowType shadow_type;
-
-    if ( flags & wxCONTROL_UNDETERMINED )
-        shadow_type = GTK_SHADOW_ETCHED_IN;
-    else if ( flags & wxCONTROL_CHECKED )
-        shadow_type = GTK_SHADOW_IN;
-    else
-        shadow_type = GTK_SHADOW_OUT;
-#endif
-
 #ifdef __WXGTK3__
     cairo_t* cr = wxGetGTKDrawable(dc);
     if (cr == NULL)
@@ -723,7 +691,37 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         gtk_render_check(sc, cr, x, y, w, h);
         gtk_style_context_restore(sc);
     }
-#else
+#else // !__WXGTK3__
+    GtkWidget *button = wxGTKPrivate::GetCheckButtonWidget();
+
+    gint indicator_size, indicator_spacing, focus_width, focus_pad;
+    gtk_widget_style_get(button,
+                         "indicator_size", &indicator_size,
+                         "indicator_spacing", &indicator_spacing,
+                         "focus-line-width", &focus_width,
+                         "focus-padding", &focus_pad,
+                         NULL);
+
+    GtkStateType state;
+
+    if ( flags & wxCONTROL_PRESSED )
+        state = GTK_STATE_ACTIVE;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = GTK_STATE_INSENSITIVE;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else
+        state = GTK_STATE_NORMAL;
+
+    GtkShadowType shadow_type;
+
+    if ( flags & wxCONTROL_UNDETERMINED )
+        shadow_type = GTK_SHADOW_ETCHED_IN;
+    else if ( flags & wxCONTROL_CHECKED )
+        shadow_type = GTK_SHADOW_IN;
+    else
+        shadow_type = GTK_SHADOW_OUT;
+
     GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
@@ -751,7 +749,7 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         dc.LogicalToDeviceY(rect.y) + (rect.height - indicator_size) / 2,
         indicator_size, indicator_size
     );
-#endif
+#endif // __WXGTK3__/!__WXGTK3__
 }
 
 void
