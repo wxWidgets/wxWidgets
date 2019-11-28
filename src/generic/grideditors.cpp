@@ -1240,10 +1240,33 @@ void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
 {
     m_control->Show(show);
 
+    // Under MSW we need to set the checkbox background colour to the same
+    // colour as is used by the cell in order for it to blend in, but using
+    // just SetBackgroundColour() would be wrong as this would actually change
+    // the background of the checkbox with e.g. GTK 3, making it unusable in
+    // any theme where the check mark colour is the same, or close to, our
+    // background colour -- which happens to be the case for the default GTK 3
+    // theme, making this a rather serious problem.
+    //
+    // One possible workaround would be to set the foreground colour too, but
+    // wxRendererNative methods used in wxGridCellBoolRenderer don't currently
+    // take the colours into account, so this would mean that starting to edit
+    // a boolean field would change its colours, which would be jarring (and
+    // especially so as we currently set custom colours for all cells, not just
+    // those that really need them).
+    //
+    // A more portable solution could be to create a parent window using the
+    // background colour if it's different from the default and reparent the
+    // checkbox under it, so that the parent window colour showed through the
+    // transparent parts of the checkbox, but this would be more complicated
+    // for no real gain in practice.
+    //
+    // So, finally, just use the bespoke function that will change the
+    // background under MSW, but doesn't do anything elsewhere.
     if ( show )
     {
         wxColour colBg = attr ? attr->GetBackgroundColour() : *wxLIGHT_GREY;
-        CBox()->SetBackgroundColour(colBg);
+        CBox()->SetTransparentPartColour(colBg);
     }
 }
 

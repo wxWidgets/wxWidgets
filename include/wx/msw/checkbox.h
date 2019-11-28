@@ -45,6 +45,11 @@ public:
     // override some base class virtuals
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
+    virtual void SetTransparentPartColour(const wxColour& col) wxOVERRIDE
+    {
+        SetBackgroundColour(col);
+    }
+
     virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
     virtual void Command(wxCommandEvent& event) wxOVERRIDE;
 
