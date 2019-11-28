@@ -633,6 +633,35 @@ struct CheckBoxInfo
     }
 #endif // __WXGTK3__/!__WXGTK3__
 
+    // Make sure we fit into the provided rectangle, eliminating margins and
+    // even reducing the size if necessary.
+    void FitInto(const wxRect& rect)
+    {
+        if ( indicator_width > rect.width )
+        {
+            indicator_width = rect.width;
+            margin_left =
+            margin_right = 0;
+        }
+        else if ( indicator_width + margin_left + margin_right > rect.width )
+        {
+            margin_left =
+            margin_right = (rect.width - indicator_width) / 2;
+        }
+
+        if ( indicator_height > rect.height )
+        {
+            indicator_height = rect.height;
+            margin_top =
+            margin_bottom = 0;
+        }
+        else if ( indicator_height + margin_top + margin_bottom > rect.height )
+        {
+            margin_top =
+            margin_bottom = (rect.height - indicator_height) / 2;
+        }
+    }
+
     gint indicator_width,
          indicator_height;
     gint margin_left,
@@ -695,7 +724,8 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
 
     wxGtkStyleContext sc(dc.GetContentScaleFactor());
 
-    const CheckBoxInfo info(sc, flags);
+    CheckBoxInfo info(sc, flags);
+    info.FitInto(rect);
 
     const int w = info.indicator_width + info.margin_left + info.margin_right;
     const int h = info.indicator_height + info.margin_top + info.margin_bottom;
@@ -728,7 +758,8 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
 #else // !__WXGTK3__
     GtkWidget* button = wxGTKPrivate::GetCheckButtonWidget();
 
-    const CheckBoxInfo info(button, flags);
+    CheckBoxInfo info(button, flags);
+    info.FitInto(rect);
 
     GtkStateType state;
 
