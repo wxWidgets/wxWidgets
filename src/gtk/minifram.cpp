@@ -309,7 +309,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
 
     // Reset m_decorSize, wxMiniFrame manages its own decorations
-    memset(&m_decorSize, 0, sizeof(m_decorSize));
+    m_decorSize = DecorSize();
     m_deferShow = false;
 
     if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
