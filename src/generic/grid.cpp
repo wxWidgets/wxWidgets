@@ -10332,57 +10332,55 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
     return editor;
 }
 
-wxRect wxGetGridCheckBoxRect(wxWindow* win,
-                             const wxRect& cellRect,
-                             int hAlign,
-                             int vAlign)
+wxRect
+wxGetContentRect(wxSize contentSize,
+                 const wxRect& cellRect,
+                 int hAlign,
+                 int vAlign)
 {
-    wxSize checkBoxSize =
-        wxRendererNative::Get().GetCheckBoxSize(win, wxCONTROL_CELL);
-
     // Keep square aspect ratio for the checkbox, but ensure that it fits into
     // the available space, even if it's smaller than the standard size.
     const wxCoord minSize = wxMin(cellRect.width, cellRect.height);
-    if ( checkBoxSize.x >= minSize || checkBoxSize.y >= minSize )
+    if ( contentSize.x >= minSize || contentSize.y >= minSize )
     {
         // It must still have positive size, however.
         const int fittingSize = wxMax(1, minSize - 2*GRID_CELL_CHECKBOX_MARGIN);
 
-        checkBoxSize.x =
-        checkBoxSize.y = fittingSize;
+        contentSize.x =
+        contentSize.y = fittingSize;
     }
 
-    wxRect checkBoxRect(checkBoxSize);
+    wxRect contentRect(contentSize);
 
     if ( hAlign & wxALIGN_CENTER_HORIZONTAL )
     {
-        checkBoxRect = checkBoxRect.CentreIn(cellRect, wxHORIZONTAL);
+        contentRect = contentRect.CentreIn(cellRect, wxHORIZONTAL);
     }
     else if ( hAlign & wxALIGN_RIGHT )
     {
-        checkBoxRect.SetX(cellRect.x + cellRect.width
-                          - checkBoxSize.x - GRID_CELL_CHECKBOX_MARGIN);
+        contentRect.SetX(cellRect.x + cellRect.width
+                          - contentSize.x - GRID_CELL_CHECKBOX_MARGIN);
     }
     else // ( hAlign == wxALIGN_LEFT ) and invalid alignment value
     {
-        checkBoxRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
+        contentRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
     }
 
     if ( vAlign & wxALIGN_CENTER_VERTICAL )
     {
-        checkBoxRect = checkBoxRect.CentreIn(cellRect, wxVERTICAL);
+        contentRect = contentRect.CentreIn(cellRect, wxVERTICAL);
     }
     else if ( vAlign & wxALIGN_BOTTOM )
     {
-        checkBoxRect.SetY(cellRect.y + cellRect.height
-                          - checkBoxRect.y - GRID_CELL_CHECKBOX_MARGIN);
+        contentRect.SetY(cellRect.y + cellRect.height
+                          - contentRect.y - GRID_CELL_CHECKBOX_MARGIN);
     }
     else // wxALIGN_TOP
     {
-        checkBoxRect.SetY(cellRect.y + GRID_CELL_CHECKBOX_MARGIN);
+        contentRect.SetY(cellRect.y + GRID_CELL_CHECKBOX_MARGIN);
     }
 
-    return checkBoxRect;
+    return contentRect;
 }
 
 #endif // wxUSE_GRID

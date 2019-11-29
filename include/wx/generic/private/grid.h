@@ -1007,16 +1007,16 @@ private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
 
-// Returns the rectangle for showing a check box in a cell with the given
-// alignment.
+// Returns the rectangle for showing something of the given size in a cell with
+// the given alignment.
 //
 // The function is used by wxGridCellBoolEditor and wxGridCellBoolRenderer to
 // draw a check mark and position wxCheckBox respectively.
 wxRect
-wxGetGridCheckBoxRect(wxWindow* win,
-                      const wxRect& cellRect,
-                      int hAlign,
-                      int vAlign);
+wxGetContentRect(wxSize contentSize,
+                 const wxRect& cellRect,
+                 int hAlign,
+                 int vAlign);
 
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_PRIVATE_H_
