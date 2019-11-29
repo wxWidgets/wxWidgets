@@ -324,12 +324,7 @@ public:
     void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 
 private:
-    wxSVGFileDC()
-        : wxDC(new wxSVGFileDCImpl(this, wxString()))
-    {
-    }
-
-    wxDECLARE_DYNAMIC_CLASS(wxSVGFileDC);
+    wxDECLARE_ABSTRACT_CLASS(wxSVGFileDC);
 };
 
 #endif // wxUSE_SVG
