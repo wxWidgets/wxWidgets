@@ -237,7 +237,7 @@ public:
     virtual void DrawCheckMark(wxWindow *win, wxDC& dc,
                                const wxRect& rect, int flags = 0 );
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0);
 
     virtual wxSize GetCheckMarkSize(wxWindow *win);
 
@@ -573,8 +573,13 @@ public:
 
         @param win A valid, i.e. non-null, window pointer which is used to get
             the theme defining the checkbox size under some platforms.
+
+        @param flags The only acceptable flag is @c wxCONTROL_CELL which means
+            that just the size of the checkbox itself is returned, without any
+            margins that are included by default. This parameter is only
+            available in wxWidgets 3.1.4 or later.
     */
-    virtual wxSize GetCheckBoxSize(wxWindow* win) = 0;
+    virtual wxSize GetCheckBoxSize(wxWindow* win, int flags = 0) = 0;
 
     /**
         Returns the size of a check mark.

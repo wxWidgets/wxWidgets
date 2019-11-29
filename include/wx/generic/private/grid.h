@@ -15,6 +15,8 @@
 
 #if wxUSE_GRID
 
+#include "wx/headerctrl.h"
+
 // Internally used (and hence intentionally not exported) event telling wxGrid
 // to hide the currently shown editor.
 wxDECLARE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
@@ -1004,6 +1006,17 @@ public:
 private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
+
+// Returns the rectangle for showing something of the given size in a cell with
+// the given alignment.
+//
+// The function is used by wxGridCellBoolEditor and wxGridCellBoolRenderer to
+// draw a check mark and position wxCheckBox respectively.
+wxRect
+wxGetContentRect(wxSize contentSize,
+                 const wxRect& cellRect,
+                 int hAlign,
+                 int vAlign);
 
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_PRIVATE_H_

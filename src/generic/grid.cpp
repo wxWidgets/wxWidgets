@@ -111,6 +111,9 @@ const int GRID_HASH_SIZE = 100;
 // operation
 const int DRAG_SENSITIVITY = 3;
 
+// the space between the cell edge and the checkbox mark
+const int GRID_CELL_CHECKBOX_MARGIN = 2;
+
 } // anonymous namespace
 
 #include "wx/arrimpl.cpp"
@@ -6980,18 +6983,10 @@ void wxGrid::ShowCellEditControl()
             if (rect.x < 0)
                 nXMove = rect.x;
 
-#ifndef __WXQT__
-            // cell is shifted by one pixel
-            // However, don't allow x or y to become negative
-            // since the SetSize() method interprets that as
-            // "don't change."
-            if (rect.x > 0)
-                rect.x--;
-            if (rect.y > 0)
-                rect.y--;
-#else
+#ifdef __WXQT__
             // Substract 1 pixel in every dimension to fit in the cell area.
             // If not, Qt will draw the control outside the cell.
+            // TODO: Check offsets under Qt.
             rect.Deflate(1, 1);
 #endif
 
@@ -10335,6 +10330,57 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
         editor->IncRef();
 
     return editor;
+}
+
+wxRect
+wxGetContentRect(wxSize contentSize,
+                 const wxRect& cellRect,
+                 int hAlign,
+                 int vAlign)
+{
+    // Keep square aspect ratio for the checkbox, but ensure that it fits into
+    // the available space, even if it's smaller than the standard size.
+    const wxCoord minSize = wxMin(cellRect.width, cellRect.height);
+    if ( contentSize.x >= minSize || contentSize.y >= minSize )
+    {
+        // It must still have positive size, however.
+        const int fittingSize = wxMax(1, minSize - 2*GRID_CELL_CHECKBOX_MARGIN);
+
+        contentSize.x =
+        contentSize.y = fittingSize;
+    }
+
+    wxRect contentRect(contentSize);
+
+    if ( hAlign & wxALIGN_CENTER_HORIZONTAL )
+    {
+        contentRect = contentRect.CentreIn(cellRect, wxHORIZONTAL);
+    }
+    else if ( hAlign & wxALIGN_RIGHT )
+    {
+        contentRect.SetX(cellRect.x + cellRect.width
+                          - contentSize.x - GRID_CELL_CHECKBOX_MARGIN);
+    }
+    else // ( hAlign == wxALIGN_LEFT ) and invalid alignment value
+    {
+        contentRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
+    }
+
+    if ( vAlign & wxALIGN_CENTER_VERTICAL )
+    {
+        contentRect = contentRect.CentreIn(cellRect, wxVERTICAL);
+    }
+    else if ( vAlign & wxALIGN_BOTTOM )
+    {
+        contentRect.SetY(cellRect.y + cellRect.height
+                          - contentRect.y - GRID_CELL_CHECKBOX_MARGIN);
+    }
+    else // wxALIGN_TOP
+    {
+        contentRect.SetY(cellRect.y + GRID_CELL_CHECKBOX_MARGIN);
+    }
+
+    return contentRect;
 }
 
 #endif // wxUSE_GRID

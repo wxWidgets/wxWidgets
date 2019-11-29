@@ -133,7 +133,7 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 };
@@ -552,27 +552,131 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     DrawDropArrow(win,dc,rect);
 }
 
-#ifdef __WXGTK3__
-static void CheckBoxSize(wxGtkStyleContext& sc, int& w, int& h, GtkBorder* extra = NULL)
+// Helper used by GetCheckBoxSize() and DrawCheckBox().
+namespace
 {
-    gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
-        "min-width", &w, "min-height", &h, NULL);
-    GtkBorder border, padding;
-    gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
-    gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &padding);
-    border.left += padding.left;
-    border.right += padding.right;
-    border.top += padding.top;
-    border.bottom += padding.bottom;
-    w += border.left + border.right;
-    h += border.top + border.bottom;
-    if (extra)
-        *extra = border;
-}
-#endif // __WXGTK3__
+
+struct CheckBoxInfo
+{
+#ifdef __WXGTK3__
+    CheckBoxInfo(wxGtkStyleContext& sc, int flags)
+    {
+        wxUnusedVar(flags);
+
+        sc.AddCheckButton();
+        if (gtk_check_version(3,20,0) == NULL)
+        {
+            sc.Add("check");
+            gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
+                                  "min-width", &indicator_width,
+                                  "min-height", &indicator_height,
+                                  NULL);
+
+            GtkBorder border, padding;
+            gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
+            gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &padding);
+
+            margin_left = border.left + padding.left;
+            margin_top = border.top + padding.top;
+            margin_right = border.right + padding.right;
+            margin_bottom = border.bottom + padding.bottom;
+        }
+        else
+        {
+            GValue value = G_VALUE_INIT;
+            g_value_init(&value, G_TYPE_INT);
+
+            gtk_style_context_get_style_property(sc, "indicator-size", &value);
+            indicator_width =
+            indicator_height = g_value_get_int(&value);
+
+            gtk_style_context_get_style_property(sc, "indicator-spacing", &value);
+            margin_left =
+            margin_top =
+            margin_right =
+            margin_bottom = g_value_get_int(&value);
+
+            g_value_unset(&value);
+        }
+    }
+#else // !__WXGTK3__
+    CheckBoxInfo(GtkWidget* button, int flags)
+    {
+        gint indicator_size, indicator_margin;
+        gtk_widget_style_get(button,
+                             "indicator_size", &indicator_size,
+                             "indicator_spacing", &indicator_margin,
+                             NULL);
+
+        // If wxCONTROL_CELL is set then we want to get the size of wxCheckBox
+        // control to draw the check mark centered and at the same position as
+        // wxCheckBox does, so offset the check mark itself by the focus margin
+        // in the same way as gtk_real_check_button_draw_indicator() does it, see
+        // https://github.com/GNOME/gtk/blob/GTK_2_16_0/gtk/gtkcheckbutton.c#L374
+        if ( flags & wxCONTROL_CELL )
+        {
+            gint focus_width, focus_pad;
+            gtk_widget_style_get(button,
+                                 "focus-line-width", &focus_width,
+                                 "focus-padding", &focus_pad,
+                                 NULL);
+
+            indicator_margin += focus_width + focus_pad;
+        }
+
+        // In GTK 2 width and height are the same and so are left/right and
+        // top/bottom.
+        indicator_width =
+        indicator_height = indicator_size;
+
+        margin_left =
+        margin_top =
+        margin_right =
+        margin_bottom = indicator_margin;
+    }
+#endif // __WXGTK3__/!__WXGTK3__
+
+    // Make sure we fit into the provided rectangle, eliminating margins and
+    // even reducing the size if necessary.
+    void FitInto(const wxRect& rect)
+    {
+        if ( indicator_width > rect.width )
+        {
+            indicator_width = rect.width;
+            margin_left =
+            margin_right = 0;
+        }
+        else if ( indicator_width + margin_left + margin_right > rect.width )
+        {
+            margin_left =
+            margin_right = (rect.width - indicator_width) / 2;
+        }
+
+        if ( indicator_height > rect.height )
+        {
+            indicator_height = rect.height;
+            margin_top =
+            margin_bottom = 0;
+        }
+        else if ( indicator_height + margin_top + margin_bottom > rect.height )
+        {
+            margin_top =
+            margin_bottom = (rect.height - indicator_height) / 2;
+        }
+    }
+
+    gint indicator_width,
+         indicator_height;
+    gint margin_left,
+         margin_top,
+         margin_right,
+         margin_bottom;
+};
+
+} // anonymous namespace
 
 wxSize
-wxRendererGTK::GetCheckBoxSize(wxWindow* win)
+wxRendererGTK::GetCheckBoxSize(wxWindow* win, int flags)
 {
     wxSize size;
     // Even though we don't use the window in this implementation, still check
@@ -582,32 +686,16 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win)
 
 #ifdef __WXGTK3__
     wxGtkStyleContext sc(win->GetContentScaleFactor());
-    sc.AddCheckButton();
-    if (gtk_check_version(3,20,0) == NULL)
-    {
-        sc.Add("check");
-        CheckBoxSize(sc, size.x, size.y);
-    }
-    else
-    {
-        GValue value = G_VALUE_INIT;
-        g_value_init(&value, G_TYPE_INT);
-        gtk_style_context_get_style_property(sc, "indicator-size", &value);
-        size.x = g_value_get_int(&value);
-        gtk_style_context_get_style_property(sc, "indicator-spacing", &value);
-        size.x += 2 * g_value_get_int(&value);
-        size.y = size.x;
-        g_value_unset(&value);
-    }
-#else // !__WXGTK3__
-    gint indicator_size, indicator_spacing;
-    gtk_widget_style_get(wxGTKPrivate::GetCheckButtonWidget(),
-                         "indicator_size", &indicator_size,
-                         "indicator_spacing", &indicator_spacing,
-                         NULL);
 
-    size.x = size.y = indicator_size + indicator_spacing * 2;
-#endif // !__WXGTK3__
+    const CheckBoxInfo info(sc, flags);
+#else // !__WXGTK3__
+    GtkWidget* button = wxGTKPrivate::GetCheckButtonWidget();
+
+    const CheckBoxInfo info(button, flags);
+#endif // __WXGTK3__/!__WXGTK3__
+
+    size.x = info.indicator_width + info.margin_left + info.margin_right;
+    size.y = info.indicator_height + info.margin_top + info.margin_bottom;
 
     return size;
 }
@@ -618,14 +706,63 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
                             const wxRect& rect,
                             int flags )
 {
-#ifndef __WXGTK3__
-    GtkWidget *button = wxGTKPrivate::GetCheckButtonWidget();
+#ifdef __WXGTK3__
+    cairo_t* cr = wxGetGTKDrawable(dc);
+    if (cr == NULL)
+        return;
 
-    gint indicator_size, indicator_spacing;
-    gtk_widget_style_get(button,
-                         "indicator_size", &indicator_size,
-                         "indicator_spacing", &indicator_spacing,
-                         NULL);
+    int state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_CHECKED)
+    {
+        state = GTK_STATE_FLAG_ACTIVE;
+        if (gtk_check_version(3,14,0) == NULL)
+            state = GTK_STATE_FLAG_CHECKED;
+    }
+    if (flags & wxCONTROL_DISABLED)
+        state |= GTK_STATE_FLAG_INSENSITIVE;
+    if (flags & wxCONTROL_UNDETERMINED)
+        state |= GTK_STATE_FLAG_INCONSISTENT;
+    if (flags & wxCONTROL_CURRENT)
+        state |= GTK_STATE_FLAG_PRELIGHT;
+
+    wxGtkStyleContext sc(dc.GetContentScaleFactor());
+
+    CheckBoxInfo info(sc, flags);
+    info.FitInto(rect);
+
+    const int w = info.indicator_width + info.margin_left + info.margin_right;
+    const int h = info.indicator_height + info.margin_top + info.margin_bottom;
+
+    const int x = rect.x + (rect.width - w) / 2;
+    const int y = rect.y + (rect.height - h) / 2;
+
+    if (gtk_check_version(3,20,0) == NULL)
+    {
+        gtk_style_context_set_state(sc, GtkStateFlags(state));
+        gtk_render_background(sc, cr, x, y, w, h);
+        gtk_render_frame(sc, cr, x, y, w, h);
+
+        // check is rendered in content area
+        gtk_render_check(sc, cr,
+                         x + info.margin_left, y + info.margin_top,
+                         info.indicator_width, info.indicator_height);
+    }
+    else
+    {
+        // need save/restore for GTK+ 3.6 & 3.8
+        gtk_style_context_save(sc);
+        gtk_style_context_set_state(sc, GtkStateFlags(state));
+        gtk_render_background(sc, cr, x, y, w, h);
+        gtk_render_frame(sc, cr, x, y, w, h);
+        gtk_style_context_add_class(sc, "check");
+        gtk_render_check(sc, cr, x, y, w, h);
+        gtk_style_context_restore(sc);
+    }
+#else // !__WXGTK3__
+    GtkWidget* button = wxGTKPrivate::GetCheckButtonWidget();
+
+    CheckBoxInfo info(button, flags);
+    info.FitInto(rect);
 
     GtkStateType state;
 
@@ -646,69 +783,7 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         shadow_type = GTK_SHADOW_IN;
     else
         shadow_type = GTK_SHADOW_OUT;
-#endif
 
-#ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(dc);
-    if (cr == NULL)
-        return;
-
-    int state = GTK_STATE_FLAG_NORMAL;
-    if (flags & wxCONTROL_CHECKED)
-    {
-        state = GTK_STATE_FLAG_ACTIVE;
-        if (gtk_check_version(3,14,0) == NULL)
-            state = GTK_STATE_FLAG_CHECKED;
-    }
-    if (flags & wxCONTROL_DISABLED)
-        state |= GTK_STATE_FLAG_INSENSITIVE;
-    if (flags & wxCONTROL_UNDETERMINED)
-        state |= GTK_STATE_FLAG_INCONSISTENT;
-    if (flags & wxCONTROL_CURRENT)
-        state |= GTK_STATE_FLAG_PRELIGHT;
-
-    int w, h;
-    wxGtkStyleContext sc(dc.GetContentScaleFactor());
-    sc.AddCheckButton();
-    if (gtk_check_version(3,20,0) == NULL)
-    {
-        sc.Add("check");
-        GtkBorder extra;
-        CheckBoxSize(sc, w, h, &extra);
-
-        int x = rect.x + (rect.width - w) / 2;
-        int y = rect.y + (rect.height - h) / 2;
-        gtk_style_context_set_state(sc, GtkStateFlags(state));
-        gtk_render_background(sc, cr, x, y, w, h);
-        gtk_render_frame(sc, cr, x, y, w, h);
-
-        // check is rendered in content area
-        x += extra.left;
-        y += extra.top;
-        w -= extra.left + extra.right;
-        h -= extra.top + extra.bottom;
-        gtk_render_check(sc, cr, x, y, w, h);
-    }
-    else
-    {
-        GValue value = G_VALUE_INIT;
-        g_value_init(&value, G_TYPE_INT);
-        gtk_style_context_get_style_property(sc, "indicator-size", &value);
-        w = h = g_value_get_int(&value);
-        g_value_unset(&value);
-
-        // need save/restore for GTK+ 3.6 & 3.8
-        gtk_style_context_save(sc);
-        gtk_style_context_set_state(sc, GtkStateFlags(state));
-        const int x = rect.x + (rect.width - w) / 2;
-        const int y = rect.y + (rect.height - h) / 2;
-        gtk_render_background(sc, cr, x, y, w, h);
-        gtk_render_frame(sc, cr, x, y, w, h);
-        gtk_style_context_add_class(sc, "check");
-        gtk_render_check(sc, cr, x, y, w, h);
-        gtk_style_context_restore(sc);
-    }
-#else
     GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
@@ -722,11 +797,11 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         NULL,
         button,
         "cellcheck",
-        dc.LogicalToDeviceX(rect.x) + indicator_spacing,
-        dc.LogicalToDeviceY(rect.y) + indicator_spacing,
-        indicator_size, indicator_size
+        dc.LogicalToDeviceX(rect.x) + info.margin_left,
+        dc.LogicalToDeviceY(rect.y) + (rect.height - info.indicator_height) / 2,
+        info.indicator_width, info.indicator_height
     );
-#endif
+#endif // __WXGTK3__/!__WXGTK3__
 }
 
 void
