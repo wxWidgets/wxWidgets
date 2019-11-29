@@ -835,13 +835,31 @@ void GridTestCase::GetNonDefaultAlignment()
     // preferred alignment, so check that if we don't reset the alignment
     // explicitly, it doesn't override the alignment used by default.
     wxGridCellAttr* attr = NULL;
-    int align = wxALIGN_RIGHT;
+    int hAlign = wxALIGN_RIGHT,
+        vAlign = wxALIGN_INVALID;
 
     attr = m_grid->CallGetCellAttr(0, 0);
     REQUIRE( attr );
 
-    attr->GetNonDefaultAlignment(&align, NULL);
-    CHECK( align == wxALIGN_RIGHT );
+    // Check that the specified alignment is preserved, while the unspecified
+    // component is filled with the default value (which is "top" by default).
+    attr->GetNonDefaultAlignment(&hAlign, &vAlign);
+    CHECK( hAlign == wxALIGN_RIGHT );
+    CHECK( vAlign == wxALIGN_TOP );
+
+    // Now change the defaults and check that the unspecified alignment
+    // component is filled with the new default.
+    m_grid->SetDefaultCellAlignment(wxALIGN_CENTRE_HORIZONTAL,
+                                    wxALIGN_CENTRE_VERTICAL);
+
+    vAlign = wxALIGN_INVALID;
+
+    attr = m_grid->CallGetCellAttr(0, 0);
+    REQUIRE( attr );
+
+    attr->GetNonDefaultAlignment(&hAlign, &vAlign);
+    CHECK( hAlign == wxALIGN_RIGHT );
+    CHECK( vAlign == wxALIGN_CENTRE_VERTICAL );
 }
 
 void GridTestCase::Editable()
