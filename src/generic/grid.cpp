@@ -582,16 +582,40 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 
 void wxGridCellAttr::GetNonDefaultAlignment(int *hAlign, int *vAlign) const
 {
-    // Default attribute can only have default alignment, so don't return it
-    // from this function.
-    if ( this == m_defGridAttr )
-        return;
+    // The logic here is tricky but necessary to handle all the cases: if we
+    // have non-default alignment on input, we should only override it if this
+    // attribute specifies a non-default alignment. However if the input
+    // alignment is invalid, we need to always initialize it, using the default
+    // attribute if necessary.
 
-    if ( hAlign && m_hAlign != wxALIGN_INVALID )
-        *hAlign = m_hAlign;
+    // First of all, never dereference null pointer.
+    if ( hAlign )
+    {
+        if ( this != m_defGridAttr && m_hAlign != wxALIGN_INVALID )
+        {
+            // This attribute has its own alignment, which should always
+            // override the input alignment value.
+            *hAlign = m_hAlign;
+        }
+        else if ( *hAlign == wxALIGN_INVALID )
+        {
+            // No input alignment specified, fill it with the default alignment
+            // (note that we know that this attribute itself doesn't have any
+            // specific alignment or is the same as the default one anyhow in
+            // in this "else" branch, so we don't need to check m_hAlign here).
+            *hAlign = m_defGridAttr->m_hAlign;
+        }
+        //else: Input alignment is valid but ours one isn't, nothing to do.
+    }
 
-    if ( vAlign && m_vAlign != wxALIGN_INVALID )
-        *vAlign = m_vAlign;
+    // This is exactly the same logic as above.
+    if ( vAlign )
+    {
+        if ( this != m_defGridAttr && m_vAlign != wxALIGN_INVALID )
+            *vAlign = m_vAlign;
+        else if ( *vAlign == wxALIGN_INVALID )
+            *vAlign = m_defGridAttr->m_vAlign;
+    }
 }
 
 void wxGridCellAttr::GetSize( int *num_rows, int *num_cols ) const
