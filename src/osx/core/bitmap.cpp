@@ -419,6 +419,15 @@ void wxBitmapRefData::EndRawAccess()
     wxASSERT( m_rawAccessCount == 1 ) ;
 
     --m_rawAccessCount ;
+
+    // Update existing NSImage with new bitmap data
+    if ( m_nsImage )
+    {
+        wxCFRef<CGImageRef> image(CGBitmapContextCreateImage(m_hBitmap));
+        wxMacCocoaRelease(m_nsImage);
+        m_nsImage = wxOSXGetImageFromCGImage(image, GetScaleFactor(), IsTemplate());
+        wxMacCocoaRetain(m_nsImage);
+    }
 }
 
 bool wxBitmapRefData::HasNativeSize()
