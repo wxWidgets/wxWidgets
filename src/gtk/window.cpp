@@ -1706,12 +1706,21 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
         // (a) it's a command event and so is propagated to the parent
         // (b) under some ports it can be generated from kbd too
         // (c) it uses screen coords (because of (a))
+
+        // When the mouse click happens in a subwindow of a composite control,
+        // the user-visible event should seem to originate from the main window
+        // and, notably, use its ID and not the (usually auto-generated and so
+        // not very useful) ID of the subwindow.
+        wxWindow* const mainWin = win->GetMainWindowOfCompositeControl();
+
         wxContextMenuEvent evtCtx(
             wxEVT_CONTEXT_MENU,
-            win->GetId(),
+            mainWin->GetId(),
+            // However position is in the original window coordinates, so do
+            // _not_ use mainWin here.
             win->ClientToScreen(event.GetPosition()));
-        evtCtx.SetEventObject(win);
-        return win->GTKProcessEvent(evtCtx);
+        evtCtx.SetEventObject(mainWin);
+        return mainWin->GTKProcessEvent(evtCtx);
     }
 
     return FALSE;
