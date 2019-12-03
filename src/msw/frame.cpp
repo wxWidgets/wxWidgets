@@ -741,6 +741,8 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
     wxMenuBar *menuBar = GetMenuBar();
     if ( menuBar && menuBar->GetAcceleratorTable()->Translate(frame, pMsg) )
         return true;
+#else
+    wxUnusedVar(frame);
 #endif // wxUSE_MENUS && wxUSE_ACCEL
 
     return false;
