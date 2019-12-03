@@ -15,9 +15,10 @@ goto :eof
 
 :nmake
 if "%BUILD%"=="debug" set debug_suffix=d
-.\vc_mswu%debug_suffix%\test.exe
+if "%ARCH%"=="amd64" set arch_suffix=_x64
+.\vc_mswu%debug_suffix%%arch_suffix%\test.exe
 if %errorlevel% NEQ 0 goto :error
-.\vc_mswu%debug_suffix%\test_gui.exe
+.\vc_mswu%debug_suffix%%arch_suffix%\test_gui.exe
 goto :eof
 
 :mingw

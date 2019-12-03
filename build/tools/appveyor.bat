@@ -7,14 +7,20 @@ msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc12.
 cd ..\..\tests
 msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc12.sln %MSBUILD_LOGGER%
 msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc12.sln %MSBUILD_LOGGER%
+cd  ..\samples\minimal
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" minimal_vc12.sln %MSBUILD_LOGGER%
 goto :eof
 
 :nmake
 cd build\msw
 call "C:\Program Files (x86)\Microsoft Visual Studio %VS%\VC\vcvarsall.bat" %ARCH%
-nmake -f makefile.vc BUILD=%BUILD%
+if "%ARCH%"=="amd64" set CPUARG=CPU=%X64
+if "%VS%"=="9.0" set DPIARG=USE_DPI_AWARE_MANIFEST=0
+nmake -f makefile.vc BUILD=%BUILD% %CPUARG% %DPIARG%
 cd ..\..\tests
-nmake -f makefile.vc BUILD=%BUILD%
+nmake -f makefile.vc BUILD=%BUILD% %CPUARG% %DPIARG%
+cd  ..\samples\minimal
+nmake -f makefile.vc BUILD=%BUILD% %CPUARG% %DPIARG%
 goto :eof
 
 :mingw
