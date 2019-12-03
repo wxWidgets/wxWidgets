@@ -5759,13 +5759,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-    wxGridCellAttr *attr = GetCellAttr( coords );
 #if !defined(__WXMAC__)
-    wxClientDC dc( currentGridWindow );
-    PrepareDCFor(dc, currentGridWindow);
-    DrawCellHighlight( dc, attr );
+    if ( !GetBatchCount() )
+    {
+        wxGridCellAttr *attr = GetCellAttr( coords );
+        wxClientDC dc( currentGridWindow );
+        PrepareDCFor(dc, currentGridWindow);
+        DrawCellHighlight( dc, attr );
+        attr->DecRef();
+    }
 #endif
-    attr->DecRef();
 
     return true;
 }
