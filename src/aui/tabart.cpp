@@ -74,6 +74,7 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
 
 // This function is defined in dockart.cpp.
 void wxAuiScaleBitmap(wxBitmap& bmp, double scale);
+float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2);
 
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
@@ -267,14 +268,6 @@ void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
     // draw background
     int topLightness = 90;
     int bottomLightness = 170;
-    if ((m_baseColour.Red() < 75)
-        && (m_baseColour.Green() < 75)
-        && (m_baseColour.Blue() < 75))
-    {
-        //dark mode, we cannot go very light
-        topLightness = 90;
-        bottomLightness = 110;
-    }
 
     wxColor top_color    = m_baseColour.ChangeLightness(topLightness);
     wxColor bottom_color = m_baseColour.ChangeLightness(bottomLightness);
@@ -428,7 +421,10 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     int drawn_tab_yoff = border_points[1].y;
     int drawn_tab_height = border_points[0].y - border_points[1].y;
 
-
+    bool isdark = (m_baseColour.Red() < 75)
+        && (m_baseColour.Green() < 75)
+        && (m_baseColour.Blue() < 75);
+    wxColor back_color = m_baseColour;
     if (page.active)
     {
         // draw active tab
@@ -441,13 +437,12 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 
         // this white helps fill out the gradient at the top of the tab
         wxColor gradient = *wxWHITE;
-        if ((m_baseColour.Red() < 75)
-            && (m_baseColour.Green() < 75)
-            && (m_baseColour.Blue() < 75))
+        if (isdark)
         {
             //dark mode, we go darker
             gradient = m_activeColour.ChangeLightness(70);
         }
+        back_color = gradient;
 
         dc.SetPen(wxPen(gradient));
         dc.SetBrush(wxBrush(gradient));
@@ -488,9 +483,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         // -- draw top gradient fill for glossy look
         wxColor top_color = m_baseColour;
         wxColor bottom_color = top_color.ChangeLightness(160);
-        if ((m_baseColour.Red() < 75)
-            && (m_baseColour.Green() < 75)
-            && (m_baseColour.Blue() < 75))
+        if (isdark)
         {
             //dark mode, we go darker
             top_color = m_activeColour.ChangeLightness(70);
@@ -585,16 +578,9 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
-#if defined( __WXMAC__ )
-    if (page.active)
-    {
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    }
-    else
-    {
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
-    }
-#endif
+    wxColor font_color = wxAuiGetColourContrast(*wxWHITE, back_color)
+        > wxAuiGetColourContrast(*wxBLACK, back_color) ? *wxWHITE : *wxBLACK;
+    dc.SetTextForeground(font_color);
     dc.DrawText(draw_text,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
