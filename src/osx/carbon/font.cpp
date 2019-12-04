@@ -288,6 +288,8 @@ void wxFontRefData::SetFont(CTFontRef font)
     dict.SetValue(kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
 
     m_ctFontAttributes = dict;
+
+    m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
 }
 
 static const CGAffineTransform kSlantTransform = CGAffineTransformMake(1, 0, tan(wxDegToRad(11)), 1, 0, 0);
@@ -366,7 +368,7 @@ void wxFontRefData::Alloc()
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
 
-            SetFont(font);
+            SetFont(font); // Sets m_ctFont, m_ctFontAttributes, m_cgFont
             if ( difference != 0 )
             {
                 if ( difference > 0 )
@@ -382,7 +384,6 @@ void wxFontRefData::Alloc()
                 }
             }
 
-            m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
             entryWithSize.font = m_ctFont;
             entryWithSize.cgFont = m_cgFont;
             entryWithSize.fontAttributes = m_ctFontAttributes;
