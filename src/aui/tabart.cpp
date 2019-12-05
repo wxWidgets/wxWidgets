@@ -78,6 +78,21 @@ float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2);
 
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
+// Check if the color has sufficient contrast ratio (4.5 recommended)
+// (based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html)
+static bool wxAuiHasSufficientContrast(const wxColour& c1, const wxColour& c2)
+{
+    return wxAuiGetColourContrast(c1, c2) >= 4.5;
+}
+
+// Pick a color that provides better contrast against the background
+static wxColour wxAuiGetBetterContrastColour(const wxColour& back_color,
+    const wxColour& c1, const wxColour& c2)
+{
+    return wxAuiGetColourContrast(back_color, c1)
+          > wxAuiGetColourContrast(back_color, c2) ? c1 : c2;
+}
+
 static void DrawButtons(wxDC& dc,
                         const wxSize& offset,
                         const wxRect& _rect,
@@ -578,8 +593,10 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
-    wxColor font_color = wxAuiGetColourContrast(*wxWHITE, back_color)
-        > wxAuiGetColourContrast(*wxBLACK, back_color) ? *wxWHITE : *wxBLACK;
+    wxColor sys_color = wxSystemSettings::GetColour(
+        page.active ? wxSYS_COLOUR_CAPTIONTEXT : wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+    wxColor font_color = wxAuiHasSufficientContrast(back_color, sys_color) ? sys_color
+        : wxAuiGetBetterContrastColour(back_color, *wxWHITE, *wxBLACK);
     dc.SetTextForeground(font_color);
     dc.DrawText(draw_text,
                 text_offset,
@@ -1124,6 +1141,12 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
+    wxColor back_color = dc.GetBrush().GetColour();
+    wxColor sys_color = wxSystemSettings::GetColour(
+        page.active ? wxSYS_COLOUR_CAPTIONTEXT : wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+    wxColor font_color = wxAuiHasSufficientContrast(back_color, sys_color) ? sys_color
+        : wxAuiGetBetterContrastColour(back_color, *wxWHITE, *wxBLACK);
+    dc.SetTextForeground(font_color);
     dc.DrawText(draw_text,
                  text_offset,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
