@@ -21,6 +21,14 @@
 // Include AvailabilityMacros for DEPRECATED_ATTRIBUTE
 #include <AvailabilityMacros.h>
 
+#if __has_feature(objc_arc)
+#define WX_OSX_BRIDGE_RETAINED __bridge_retained
+#define WX_OSX_BRIDGE __bridge
+#else
+#define WX_OSX_BRIDGE_RETAINED
+#define WX_OSX_BRIDGE 
+#endif
+
 // #include <CoreFoundation/CFBase.h>
 /* Don't include CFBase.h such that this header can be included from public
  * headers with minimal namespace pollution.

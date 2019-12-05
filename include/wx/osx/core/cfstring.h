@@ -43,7 +43,7 @@ public:
 
 #ifdef __OBJC__
     wxCFStringRef(WX_NSString ref)
-        : wxCFRef< CFStringRef >((__bridge_retained CFStringRef) ref)
+        : wxCFRef< CFStringRef >((WX_OSX_BRIDGE_RETAINED CFStringRef) ref)
     {
     }
 #endif
@@ -71,7 +71,7 @@ public:
     static wxString AsStringWithNormalizationFormC( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
 #endif
 #ifdef __OBJC__
-    WX_NSString AsNSString() const { return (__bridge WX_NSString)(CFStringRef) *this; }
+    WX_NSString AsNSString() const { return (WX_OSX_BRIDGE WX_NSString)(CFStringRef) *this; }
 #endif
 private:
 } ;
