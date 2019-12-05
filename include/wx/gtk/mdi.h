@@ -122,6 +122,9 @@ public:
     wxMenuBar         *m_menuBar;
     bool               m_justInserted;
 
+protected:
+    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
+
 private:
     void Init();
 
