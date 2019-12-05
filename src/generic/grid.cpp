@@ -3640,13 +3640,21 @@ void wxGrid::UpdateCurrentCellOnRedim()
         }
         else
         {
-            int col = m_currentCellCoords.GetCol();
-            int row = m_currentCellCoords.GetRow();
-            if (col >= m_numCols)
-                col = m_numCols - 1;
-            if (row >= m_numRows)
-                row = m_numRows - 1;
-            SetCurrentCell(row, col);
+            // Check if the current cell coordinates are still valid.
+            wxGridCellCoords updatedCoords = m_currentCellCoords;
+            if ( updatedCoords.GetCol() >= m_numCols )
+                updatedCoords.SetCol(m_numCols - 1);
+            if ( updatedCoords.GetRow() >= m_numRows )
+                updatedCoords.SetRow(m_numRows - 1);
+
+            // And change them if they're not.
+            if ( updatedCoords != m_currentCellCoords )
+            {
+                // Prevent SetCurrentCell() from redrawing the previous current
+                // cell whose coordinates are invalid now.
+                m_currentCellCoords = wxGridNoCellCoords;
+                SetCurrentCell(updatedCoords);
+            }
         }
     }
 }
@@ -5751,13 +5759,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-    wxGridCellAttr *attr = GetCellAttr( coords );
 #if !defined(__WXMAC__)
-    wxClientDC dc( currentGridWindow );
-    PrepareDCFor(dc, currentGridWindow);
-    DrawCellHighlight( dc, attr );
+    if ( !GetBatchCount() )
+    {
+        wxGridCellAttr *attr = GetCellAttr( coords );
+        wxClientDC dc( currentGridWindow );
+        PrepareDCFor(dc, currentGridWindow);
+        DrawCellHighlight( dc, attr );
+        attr->DecRef();
+    }
 #endif
-    attr->DecRef();
 
     return true;
 }
