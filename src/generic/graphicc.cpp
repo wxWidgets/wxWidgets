@@ -911,7 +911,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         // handled in a special way.
         if ( !info.GetColour().IsSolid() )
         {
-#if wxOSX_USE_COCOA
+#if defined(__WXOSX_COCOA__)
             // Under wxOSX, non-solid NSColors are actually represented
             // by pattern images and therefore a wxPen with non-solid
             // colour and wxPENSTYLE_SOLID style can be converted
@@ -1053,7 +1053,7 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer,
             // handled in a special way.
             if ( !brush.GetColour().IsSolid() )
             {
-#if wxOSX_USE_COCOA
+#if defined(__WXOSX_COCOA__)
                 // Under wxOSX, non-solid NSColors are actually represented
                 // by pattern images and therefore a wxBrush with non-solid
                 // colour and wxBRUSHSTYLE_SOLID style can be converted
