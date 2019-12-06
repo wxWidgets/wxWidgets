@@ -222,6 +222,13 @@ WX_NSColor wxColour::OSXGetNSColor() const
 
     return M_COLDATA->GetNSColor();
 }
+
+WX_NSImage wxColour::OSXGetNSPatternImage() const
+{
+    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+
+    return M_COLDATA->GetNSPatternImage();
+}
 #endif
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)

@@ -35,6 +35,7 @@ public:
     virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
     
     virtual WX_NSColor GetNSColor() const wxOVERRIDE;
+    virtual WX_NSImage GetNSPatternImage() const wxOVERRIDE;
 private:
     WX_NSColor m_nsColour;
     
@@ -186,15 +187,33 @@ CGColorRef wxNSColorRefData::GetCGColor() const
     return cgcolor;
 }
 
+WX_NSImage wxNSColorRefData::GetNSPatternImage() const
+{
+    NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace];
+    if ( colPat )
+    {
+        NSImage* nsimage = [colPat patternImage];
+        if ( nsimage )
+        {
+            return nsimage;
+        }
+    }
+
+    return NULL;
+}
+
 WX_NSColor wxColourRefData::GetNSColor() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     return [NSColor colorWithCalibratedRed:Red() green:Green() blue:Blue() alpha:Alpha() ];
 }
 
+WX_NSImage wxColourRefData::GetNSPatternImage() const
+{
+    return NULL;
+}
+
 wxColour::wxColour(WX_NSColor col)
 {
     m_refData = new wxNSColorRefData(col);
 }
-
-
