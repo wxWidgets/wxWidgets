@@ -641,7 +641,7 @@ wxCairoPenBrushBaseData::wxCairoPenBrushBaseData(wxGraphicsRenderer* renderer,
     m_pattern = NULL;
     m_bmpdata = NULL;
 
-    if ( isTransparent )
+    if ( isTransparent || !col.IsOk() )
     {
         m_red =
         m_green =
