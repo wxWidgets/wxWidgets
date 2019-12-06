@@ -488,6 +488,7 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
         return false;
 }
 
+#if wxUSE_GENERIC_DRAGIMAGE
 // MyDragImage
 
 // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
@@ -503,4 +504,4 @@ bool MyDragImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC& 
     m_canvas->DrawShapes(destDC);
     return true;
 }
-
+#endif
