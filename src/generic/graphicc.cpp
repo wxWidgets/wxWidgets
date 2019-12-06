@@ -906,6 +906,25 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
     switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
+        // Non-RGB colours, which may e.g. appear under wxOSX for wxColours
+        // with NSColor backend, are not supported by Cairo and have to be
+        // handled in a special way.
+        if ( !info.GetColour().IsSolid() )
+        {
+#if wxOSX_USE_COCOA
+            // Under wxOSX, non-solid NSColors are actually represented
+            // by pattern images and therefore a wxPen with non-solid
+            // colour and wxPENSTYLE_SOLID style can be converted
+            // to a stiple (a surface pattern).
+
+            // Create a stiple bitmap from NSColor's pattern image
+            wxBitmap bmp(info.GetColour().OSXGetNSPatternImage());
+            InitStipple(&bmp);
+#else
+            wxFAIL_MSG( "Pen with non-solid colour is not supported." );
+#endif
+        }
+
         break;
 
     case wxPENSTYLE_DOT :
@@ -964,6 +983,8 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH
             && info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
+            wxASSERT_MSG( info.GetColour().IsSolid(),
+                          "Pen with non-solid colour is not supported." );
             InitHatch(static_cast<wxHatchStyle>(info.GetStyle()));
         }
         break;
