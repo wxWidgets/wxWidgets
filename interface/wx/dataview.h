@@ -713,10 +713,9 @@ public:
     /**
         Call this to set the background colour to use.
 
-        Currently this attribute is only supported in the generic version of
-        wxDataViewCtrl and ignored by the native GTK+ and OS X implementations.
-
-        @since 2.9.4
+        @since 2.9.4 - Generic
+        @since 3.1.1 - wxGTK
+        @since 3.1.4 - wxOSX
     */
     void SetBackgroundColour(const wxColour& colour);
 
