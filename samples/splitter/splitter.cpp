@@ -321,7 +321,8 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
-    if (m_replacewindow) {
+    if ( m_replacewindow )
+    {
         m_replacewindow->Destroy();
     }
 }
@@ -446,13 +447,17 @@ void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
 {
-    if (m_replacewindow == NULL) {
+    if ( !m_replacewindow )
+    {
         m_replacewindow = m_splitter->GetWindow2();
-        if (m_replacewindow != NULL) {
+        if ( m_replacewindow )
+        {
             m_splitter->ReplaceWindow(m_replacewindow, new wxPanel(m_splitter, wxID_ANY));
             m_replacewindow->Hide();
         }
-    } else {
+    }
+    else
+    {
         wxWindow *empty = m_splitter->GetWindow2();
         wxASSERT(empty != m_replacewindow);
         m_splitter->ReplaceWindow(empty, m_replacewindow);
