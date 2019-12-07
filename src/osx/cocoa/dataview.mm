@@ -2901,7 +2901,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         {
             // we can set font for any cell but only NSTextFieldCell provides
             // a method for setting text colour so check that this method is
-            // available before using it.
+            // available before using it
             if ( [cell respondsToSelector:@selector(setTextColor:)] &&
                     [cell respondsToSelector:@selector(textColor)] )
             {
@@ -2919,8 +2919,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         {
             // Use the same logic as the text colour check above
             if ( [cell respondsToSelector:@selector(setBackgroundColor:)] &&
-                    [cell respondsToSelector:@selector(backgroundColor)] &&
-                    [cell respondsToSelector:@selector(setDrawsBackground:)] )
+                    [cell respondsToSelector:@selector(backgroundColor)] )
             {
                 if ( !data->GetOriginalBackgroundColour() )
                     data->SaveOriginalTextColour([(id)cell backgroundColor]);
@@ -2944,15 +2943,18 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
     if ( colText )
         [(id)cell setTextColor:colText];
 
-    if ( colBack )
+    if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
     {
-        [(id)cell setDrawsBackground:true];
-        [(id)cell setBackgroundColor:colBack];
+        if ( colBack )
+        {
+            [(id)cell setDrawsBackground:true];
+            [(id)cell setBackgroundColor:colBack];
+        }
+        else
+        {
+            [(id)cell setDrawsBackground:false];
+        }
     }
-    // Use the same logic as the text colour check above
-    else if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
-        [(id)cell setDrawsBackground:false];
-
 }
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
