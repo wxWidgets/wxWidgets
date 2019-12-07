@@ -475,6 +475,15 @@ void wxApp::DoCleanUp()
     }
 }
 
+void wxApp::OSXEnableAutomaticTabbing(bool enable)
+{
+    // Automatic tabbing was first introduced in 10.12
+    if ( WX_IS_MACOS_AVAILABLE(10, 12) )
+    {
+        [NSWindow setAllowsAutomaticWindowTabbing:enable];
+    }
+}
+
 extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetMainDisplayClientArea()
 {

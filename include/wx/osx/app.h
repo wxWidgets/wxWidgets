@@ -139,6 +139,9 @@ public:
     // override this to return false from a non-bundled console app in order to stay in background ...
     virtual bool         OSXIsGUIApplication() { return true; }
 
+    // Allow the user to disable the tab bar support in the application
+    void                 OSXEnableAutomaticTabbing(bool enable);
+
 #if wxOSX_USE_COCOA_OR_IPHONE
     // immediately before the native event loop launches
     virtual void         OSXOnWillFinishLaunching();
