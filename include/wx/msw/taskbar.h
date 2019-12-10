@@ -65,6 +65,20 @@ protected:
     wxIcon               m_icon;
     wxString             m_strTooltip;
 
+private:
+    enum Operation
+    {
+        Operation_Add,
+        Operation_Modify,
+        Operation_TryBoth
+    };
+
+    // Implementation of the public SetIcon() which may also be used when we
+    // don't know if we should add a new icon or modify the existing one.
+    bool DoSetIcon(const wxIcon& icon,
+                   const wxString& tooltip,
+                   Operation operation);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon);
 };
 

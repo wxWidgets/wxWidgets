@@ -355,7 +355,9 @@ void wxPaintDCImpl::DestroyClippingRegion()
     int x, y, w, h;
     m_clip.GetBox(x, y, w, h);
     cairo_t* cr = static_cast<cairo_t*>(GetCairoContext());
-    cairo_rectangle(cr, x, y, w, h);
+    cairo_rectangle(cr,
+        DeviceToLogicalX(x), DeviceToLogicalY(y),
+        DeviceToLogicalXRel(w), DeviceToLogicalYRel(h));
     cairo_clip(cr);
 }
 //-----------------------------------------------------------------------------

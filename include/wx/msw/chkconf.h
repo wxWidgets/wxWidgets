@@ -381,6 +381,15 @@
 #           define wxUSE_DRAG_AND_DROP 0
 #       endif
 #   endif
+
+#   if wxUSE_ACCESSIBILITY
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_ACCESSIBILITY requires wxUSE_OLE"
+#       else
+#           undef wxUSE_ACCESSIBILITY
+#           define wxUSE_ACCESSIBILITY 0
+#       endif
+#   endif
 #endif /* !wxUSE_OLE */
 
 #if !wxUSE_ACTIVEX

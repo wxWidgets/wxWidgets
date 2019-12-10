@@ -177,10 +177,12 @@ public:
     {
     }
 
+#if wxUSE_GENERIC_DRAGIMAGE
     // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
     // a window, so we need to draw the background explicitly.
     virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC, const wxRect& sourceRect,
                     const wxRect& destRect) const wxOVERRIDE;
+#endif
 
 protected:
     MyCanvas*   m_canvas;

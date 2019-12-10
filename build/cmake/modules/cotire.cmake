@@ -1551,7 +1551,8 @@ function (cotire_add_makedep_flags _language _compilerID _compilerVersion _flags
 			endif()
 		endif()
 	elseif (_compilerID MATCHES "Clang")
-		if (UNIX)
+		get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
+		if (NOT WIN32 OR NOT _compilerName MATCHES "cl$")
 			# Clang options used
 			# -H print the name of each header file used
 			# -E invoke preprocessor
@@ -1564,7 +1565,7 @@ function (cotire_add_makedep_flags _language _compilerID _compilerVersion _flags
 				# return as a flag string
 				set (_flags "-H -E -fno-color-diagnostics -Xclang -Eonly")
 			endif()
-		elseif (WIN32)
+		else()
 			# Clang-cl.exe options used
 			# /TC treat all files named on the command line as C source files
 			# /TP treat all files named on the command line as C++ source files
@@ -1671,7 +1672,8 @@ function (cotire_add_pch_compilation_flags _language _compilerID _compilerVersio
 			set (_flags "-x ${_xLanguage_${_language}} -c \"${_prefixFile}\" -o \"${_pchFile}\"")
 		endif()
 	elseif (_compilerID MATCHES "Clang")
-		if (UNIX)
+		get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
+		if (NOT WIN32 OR NOT _compilerName MATCHES "cl$")
 			# Clang options used
 			# -x specify the source language
 			# -c compile but do not link
@@ -1692,7 +1694,7 @@ function (cotire_add_pch_compilation_flags _language _compilerID _compilerVersio
 					set (_flags "${_flags} -Xclang -fno-pch-timestamp")
 				endif()
 			endif()
-		elseif (WIN32)
+		else()
 			# Clang-cl.exe options used
 			# /Yc creates a precompiled header file
 			# /Fp specifies precompiled header binary file name
@@ -1830,7 +1832,8 @@ function (cotire_add_prefix_pch_inclusion_flags _language _compilerID _compilerV
 			set (_flags "-Winvalid-pch -include \"${_prefixFile}\"")
 		endif()
 	elseif (_compilerID MATCHES "Clang")
-		if (UNIX)
+		get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
+		if (NOT WIN32 OR NOT _compilerName MATCHES "cl$")
 			# Clang options used
 			# -include process include file as the first line of the primary source file
 			# note: ccache requires the -include flag to be used in order to process precompiled header correctly
@@ -1841,7 +1844,7 @@ function (cotire_add_prefix_pch_inclusion_flags _language _compilerID _compilerV
 				# return as a flag string
 				set (_flags "-include \"${_prefixFile}\"")
 			endif()
-		elseif (WIN32)
+		else()
 			# Clang-cl.exe options used
 			# /Yu uses a precompiled header file during build
 			# /Fp specifies precompiled header binary file name
@@ -2006,15 +2009,12 @@ function (cotire_check_precompiled_header_support _language _target _msgVar)
 			set (${_msgVar} "" PARENT_SCOPE)
 		endif()
 	elseif (CMAKE_${_language}_COMPILER_ID MATCHES "Clang")
-		if (UNIX)
+		get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
+		if (NOT WIN32 OR NOT _compilerName MATCHES "cl$")
 			# all Unix Clang versions have PCH support
 			set (${_msgVar} "" PARENT_SCOPE)
-		elseif (WIN32)
-			# only clang-cl is supported under Windows
-			get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
-			if (NOT _compilerName MATCHES "cl$")
-				set (${_msgVar} "${_unsupportedCompiler} version ${CMAKE_${_language}_COMPILER_VERSION}. Use clang-cl instead." PARENT_SCOPE)
-			endif()
+		else()
+			# clang-cl under Windows
 		endif()
 	elseif (CMAKE_${_language}_COMPILER_ID MATCHES "Intel")
 		# Intel PCH support requires version >= 8.0.0
@@ -2381,8 +2381,9 @@ endfunction()
 
 function (cotire_setup_pch_file_compilation _language _target _targetScript _prefixFile _pchFile _hostFile)
 	set (_sourceFiles ${ARGN})
+	get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
 	if (CMAKE_${_language}_COMPILER_ID MATCHES "MSVC|Intel" OR
-		(WIN32 AND CMAKE_${_language}_COMPILER_ID MATCHES "Clang"))
+		(WIN32 AND _compilerName MATCHES "cl$"))
 		# for MSVC, Intel and Clang-cl, we attach the precompiled header compilation to the host file
 		# the remaining files include the precompiled header, see cotire_setup_pch_file_inclusion
 		if (_sourceFiles)
@@ -2428,8 +2429,9 @@ function (cotire_setup_pch_file_compilation _language _target _targetScript _pre
 endfunction()
 
 function (cotire_setup_pch_file_inclusion _language _target _wholeTarget _prefixFile _pchFile _hostFile)
+	get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
 	if (CMAKE_${_language}_COMPILER_ID MATCHES "MSVC|Intel" OR
-		(WIN32 AND CMAKE_${_language}_COMPILER_ID MATCHES "Clang"))
+		(WIN32 AND _compilerName MATCHES "cl$"))
 		# for MSVC, Intel and clang-cl, we include the precompiled header in all but the host file
 		# the host file does the precompiled header compilation, see cotire_setup_pch_file_compilation
 		set (_sourceFiles ${ARGN})
@@ -2578,8 +2580,9 @@ function (cotire_setup_target_pch_usage _languages _target _wholeTarget)
 			set (_language "${_languages}")
 			# for MSVC, Intel and clang-cl, precompiled header inclusion is always done on the source file level
 			# see cotire_setup_pch_file_inclusion
+			get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
 			if (NOT CMAKE_${_language}_COMPILER_ID MATCHES "MSVC|Intel" AND NOT
-				(WIN32 AND CMAKE_${_language}_COMPILER_ID MATCHES "Clang"))
+				(WIN32 AND _compilerName MATCHES "cl$"))
 				get_property(_prefixFile TARGET ${_target} PROPERTY COTIRE_${_language}_PREFIX_HEADER)
 				if (_prefixFile)
 					get_property(_pchFile TARGET ${_target} PROPERTY COTIRE_${_language}_PRECOMPILED_HEADER)
@@ -3071,8 +3074,9 @@ function (cotire_setup_pch_target _languages _configurations _target)
 		set (_dependsFiles "")
 		foreach (_language ${_languages})
 			set (_props COTIRE_${_language}_PREFIX_HEADER COTIRE_${_language}_UNITY_SOURCE)
+			get_filename_component(_compilerName "${CMAKE_${_language}_COMPILER}" NAME_WE)
 			if (NOT CMAKE_${_language}_COMPILER_ID MATCHES "MSVC|Intel" AND NOT
-				(WIN32 AND CMAKE_${_language}_COMPILER_ID MATCHES "Clang"))
+				(WIN32 AND _compilerName MATCHES "cl$"))
 				# MSVC, Intel and clang-cl only create precompiled header as a side effect
 				list (INSERT _props 0 COTIRE_${_language}_PRECOMPILED_HEADER)
 			endif()

@@ -2009,6 +2009,8 @@ public:
         @remarks
         Unlike wxPropertyGridInterface::SetPropertyColoursToDefault(),
         this does not automatically update the display.
+
+        @since 3.1.0
     */
     void SetDefaultColours(int flags = wxPG_RECURSE);
 
@@ -2164,6 +2166,8 @@ protected:
 
         @param recursively
             If @true, apply this operation recursively in child properties.
+
+        @since 3.1.0
     */
     void ClearCells(FlagType ignoreWithFlags, bool recursively);
 

@@ -328,6 +328,9 @@ typedef short int WXTYPE;
 
     #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
 
+#elif defined(__clang__)
+    #define wx_truncate_cast(t, x) static_cast<t>(x)
+
 #elif defined(__VISUALC__) && __VISUALC__ >= 1310
     template <typename T, typename X>
     inline T wx_truncate_cast_impl(X x)

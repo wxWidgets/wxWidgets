@@ -339,6 +339,7 @@ void wxTextCtrl::Init()
 {
 #if wxUSE_RICHEDIT
     m_verRichEdit = 0;
+    m_richDPIscale = 1;
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT && wxUSE_RICHEDIT
@@ -608,6 +609,13 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 #endif
         if ( !contextMenuConnected )
             Bind(wxEVT_CONTEXT_MENU, &wxTextCtrl::OnContextMenu, this);
+
+        // Determine the system DPI and the DPI of the display the rich control
+        // is shown on, and calculate and apply the scaling factor.
+        // When this control is created in a (wxFrame) constructor the zoom is
+        // not correctly applied, use CallAfter to delay setting the zoom.
+        m_richDPIscale = GetDPI().y / (float)::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+        CallAfter(&wxTextCtrl::MSWSetRichZoom);
     }
     else
 #endif // wxUSE_RICHEDIT
@@ -2538,8 +2546,10 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
+    int cy;
+    wxFont font = GetFont();
+    font.WXAdjustToPPI(GetDPI());
+    wxGetCharSize(GetHWND(), NULL, &cy, font);
 
     DWORD wText = FromDIP(1);
     ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
@@ -2718,14 +2728,49 @@ wxMenu *wxTextCtrl::MSWCreateContextMenu()
     return m;
 }
 
+void wxTextCtrl::MSWSetRichZoom()
+{
+    // nothing to scale
+    if ( m_richDPIscale == 1 )
+        return;
+
+    // get the current zoom ratio
+    UINT num = 1;
+    UINT denom = 1;
+    ::SendMessage(GetHWND(), EM_GETZOOM, (WPARAM)&num, (LPARAM)&denom);
+
+    // combine the zoom ratio with the DPI scale factor
+    float ratio = m_richDPIscale;
+    if ( denom > 0 )
+        ratio = ratio * (num / (float)denom);
+
+    // apply the new zoom ratio, Windows uses a default denominator of 100, so
+    // do it here as well
+    num = 100 * ratio;
+    denom = 100;
+    ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
+}
+
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
-    // Don't do anything for the rich edit controls, they (somehow?) update
-    // their appearance on their own and changing their HFONT, as the base
-    // class version does, would reset all the styles used by them when the DPI
-    // changes, which is unwanted.
+    // Don't use MSWUpdateFontOnDPIChange for the rich edit controls, they
+    // (somehow?) update their appearance on their own and changing their
+    // HFONT, as the base class version does, would reset all the styles used
+    // by them when the DPI changes, which is unwanted.
     if ( !IsRich() )
+    {
         wxTextCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+    }
+    // If the rich control is created on a screen with non-system DPI, an
+    // initial zoom factor was applied. This needs to be reset after the first
+    // DPI change. First invert the scale, then set it to 1 so it is not
+    // applied again.
+    else if ( m_richDPIscale != 1 )
+    {
+        m_richDPIscale = 1 / m_richDPIscale;
+        MSWSetRichZoom();
+        m_richDPIscale = 1;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2890,7 +2935,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 {
     // Native text control sends EN_CHANGE when the font changes, producing
     // a wxEVT_TEXT event as if the user changed the value. This is not
-    // the case, so supress the event.
+    // the case, so suppress the event.
     wxEventBlocker block(this, wxEVT_TEXT);
 
     if ( !wxTextCtrlBase::SetFont(font) )
@@ -2980,7 +3025,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         wxFont font(style.GetFont());
 
         LOGFONT lf = font.GetNativeFontInfo()->lf;
-        cf.yHeight = 20*font.GetPointSize(); // 1 pt = 20 twips
+        cf.yHeight = 20 * font.GetFractionalPointSize(); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
         wxStrlcpy(cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName));
@@ -3303,12 +3348,6 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 
     LOGFONT lf;
-    // Convert the height from the units of 1/20th of the point in which
-    // CHARFORMAT stores it to pixel-based units used by LOGFONT.
-    // Note that RichEdit seems to always use standard DPI of 96, even when the
-    // window is a monitor using a higher DPI.
-    lf.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(cf.yHeight/20.0f,
-                                                          GetDPI().y);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;
@@ -3341,7 +3380,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else
         lf.lfWeight = FW_NORMAL;
 
+    // Determine the pointSize that was used in SetStyle. Don't worry about
+    // lfHeight or PPI, style.SetFont() will lose this information anyway.
     wxFont font(wxNativeFontInfo(lf, this));
+    font.SetFractionalPointSize(cf.yHeight / 20.0f); // 1 pt = 20 twips
     if (font.IsOk())
     {
         style.SetFont(font);

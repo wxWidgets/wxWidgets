@@ -500,6 +500,8 @@ void ListboxWidgetsPage::CreateLbox()
                                     flags);
             break;
 #endif // wxUSE_REARRANGECTRL
+        case LboxType_ListBox:
+            wxFALLTHROUGH;
         default:
             m_lbox = new wxListBox(this, ListboxPage_Listbox,
                                wxDefaultPosition, wxDefaultSize,

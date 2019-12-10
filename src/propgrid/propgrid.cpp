@@ -3557,8 +3557,24 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     m_iFlags &= ~wxPG_FL_VALUE_CHANGE_IN_EVENT;
 
     //
+    // Ignore focus changes within the composite editor control
+    if ( event.GetEventType() == wxEVT_SET_FOCUS || event.GetEventType() == wxEVT_KILL_FOCUS )
+    {
+        wxFocusEvent* fevt = wxDynamicCast(&event, wxFocusEvent);
+        wxWindow* win = fevt->GetWindow();
+        while ( win )
+        {
+            if ( win == wnd )
+            {
+                event.Skip();
+                return true;
+            }
+
+            win = win->GetParent();
+        }
+    }
     // Filter out excess wxTextCtrl modified events
-    if ( event.GetEventType() == wxEVT_TEXT && wnd )
+    else if ( event.GetEventType() == wxEVT_TEXT && wnd )
     {
         if ( wxDynamicCast(wnd, wxTextCtrl) )
         {

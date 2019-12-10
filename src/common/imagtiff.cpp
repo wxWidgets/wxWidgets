@@ -804,8 +804,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                     if (hasAlpha)
                     {
                         value = image->GetAlpha(column, row);
-                        buf[column*bytesPerPixel+1]
-                            = minIsWhite ? 255 - value : value;
+                        buf[column*bytesPerPixel+1] = minIsWhite ? 255 - value
+                                                                 : value;
                     }
                 }
             }

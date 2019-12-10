@@ -68,6 +68,7 @@ public:
     // This ctor does not take ownership of the color.
     explicit wxColour(WX_NSColor color);
     WX_NSColor OSXGetNSColor() const;
+    WX_NSImage OSXGetNSPatternImage() const;
 #endif
 
 protected :
@@ -102,6 +103,7 @@ public:
 
 #if wxOSX_USE_COCOA
     virtual WX_NSColor GetNSColor() const;
+    virtual WX_NSImage GetNSPatternImage() const;
 #endif
 };
 

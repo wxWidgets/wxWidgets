@@ -244,6 +244,9 @@ protected:
 #if wxUSE_RICHEDIT
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
+    // Apply m_richDPIscale zoom to rich control.
+    void MSWSetRichZoom();
+
     // Apply the character-related parts of wxTextAttr to the given selection
     // or the entire control if start == end == -1.
     //
@@ -265,6 +268,10 @@ protected:
     // (although not directly: 1 is for 1.0, 2 is for either 2.0 or 3.0 as we
     // can't nor really need to distinguish between them and 4 is for 4.1)
     int m_verRichEdit;
+
+    // Rich text controls need temporary scaling when they are created on a
+    // display with non-system DPI.
+    float m_richDPIscale;
 #endif // wxUSE_RICHEDIT
 
     // number of EN_UPDATE events sent by Windows when we change the controls

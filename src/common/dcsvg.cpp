@@ -465,7 +465,7 @@ wxSVGBitmapFileHandler::ProcessBitmap(const wxBitmap& bmp,
 // wxSVGFileDC (specialisations)
 // ----------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxSVGFileDC, wxDC);
+wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDC, wxDC);
 
 void wxSVGFileDC::SetBitmapHandler(wxSVGBitmapHandler* handler)
 {

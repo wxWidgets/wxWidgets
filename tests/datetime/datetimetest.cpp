@@ -1743,6 +1743,8 @@ TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
             gotMS = true;
             break;
         }
+
+        wxMilliSleep(123);
     }
 
     CHECK( gotMS );

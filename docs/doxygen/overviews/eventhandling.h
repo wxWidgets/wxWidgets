@@ -676,13 +676,15 @@ void MyWindow::SendEvent()
 
 Under certain circumstances, you must define your own event class e.g., for
 sending more complex data from one place to another. Apart from defining your
-event class, you also need to define your own event table macro if you want to
-use event tables for handling events of this type.
+event class, you also need to define your own event table macro if you still
+need to use event tables (now considered legacy) for handling events of this type.
+See ChessBoardEvent in the event sample for a full working implementation
+of a new wxEvent-derived class.
 
-Here is an example:
+Here is a simple example:
 
 @code
-// define a new event class
+// create a new event class derived from wxEvent
 class MyPlotEvent: public wxEvent
 {
 public:
@@ -702,40 +704,51 @@ private:
     const wxPoint m_pos;
 };
 
-// we define a single MY_PLOT_CLICKED event type associated with the class
-// above but typically you are going to have more than one event type, e.g. you
-// could also have MY_PLOT_ZOOMED or MY_PLOT_PANNED &c -- in which case you
-// would just add more similar lines here
-wxDEFINE_EVENT(MY_PLOT_CLICKED, MyPlotEvent);
+// We use a single myEVT_PLOT_CLICKED event type associated with the class
+// above but often you are going to have more than one event type, e.g. you
+// could also have myEVT_PLOT_ZOOMED or myEVT_PLOT_PANNED etc. -- in which case
+// you would just add more similar lines here.
+//
+// Note that this macro, as all declarations, should be in the header, and
+// there should be a matching definition macro in some source file (see
+// wxDEFINE_EVENT below).
+wxDECLARE_EVENT(myEVT_PLOT_CLICKED, MyPlotEvent);
 
 
-// if you want to support old compilers you need to use some ugly macros:
+// --- Skip this part if you're only going to use Bind() (as recommended) ---
+
+// The following typedef and macro are needed only when the new event class
+// still needs to be used with the legacy approach to handling events - event
+// table macros or Connect() - to cast the type of a function handling it to
+// the type expected by the legacy event handling machinery.
 typedef void (wxEvtHandler::*MyPlotEventFunction)(MyPlotEvent&);
 #define MyPlotEventHandler(func) wxEVENT_HANDLER_CAST(MyPlotEventFunction, func)
 
-// if your code is only built using reasonably modern compilers, you could just
-// do this instead:
-#define MyPlotEventHandler(func) (&func)
+// If the new event is to be used with event tables, a macro for creating
+// event table entries for the new event type must be defined.
+#define EVT_PLOT_CLICKED(id, func) \
+    wx__DECLARE_EVT1(myEVT_PLOT_CLICKED, id, MyPlotEventHandler(func))
 
-// finally define a macro for creating the event table entries for the new
-// event type
-//
-// remember that you don't need this at all if you only use Bind<>() and that
-// you can replace MyPlotEventHandler(func) with just &func unless you use a
-// really old compiler
-#define MY_EVT_PLOT_CLICK(id, func) \
-    wx__DECLARE_EVT1(MY_PLOT_CLICKED, id, MyPlotEventHandler(func))
+// --- End of the part which is only relevant when using event tables ---
 
 
-// example of code handling the event (you will use one of these methods, not
-// both, of course):
+// Up until now, we only had declarations that would typically appear in a
+// header file. Starting from now we have the definitions, which must occur
+// only once in the program and so need to be in a source file.
+
+// This defines the event type declared above. If you use multiple event types,
+// you need to do it for each of them.
+wxDEFINE_EVENT(myEVT_PLOT_CLICKED, MyPlotEvent);
+
+// example of code handling the event (you will use one of these methods,
+// not both, of course):
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_PLOT(ID_MY_WINDOW, MyFrame::OnPlot)
+    EVT_PLOT_CLICKED(ID_MY_WINDOW, MyFrame::OnPlot)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
 {
-    Bind(MY_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
+    Bind(myEVT_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
 }
 
 void MyFrame::OnPlot(MyPlotEvent& event)
@@ -747,7 +760,7 @@ void MyFrame::OnPlot(MyPlotEvent& event)
 // example of code generating the event:
 void MyWindow::SendEvent()
 {
-    MyPlotEvent event(MY_PLOT_CLICKED, GetId(), wxPoint(...));
+    MyPlotEvent event(myEVT_PLOT_CLICKED, GetId(), wxPoint(...));
     event.SetEventObject(this);
     ProcessWindowEvent(event);
 }

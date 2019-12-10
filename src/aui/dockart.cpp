@@ -57,14 +57,6 @@
 
 #include <math.h>
 
-// -- wxAuiDefaultDockArt class implementation --
-
-// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
-// wxAuiManager.  This allows the library caller to customize the dock art
-// (probably by deriving from this class), or to completely replace all drawing
-// with custom dock art (probably by writing a new stand-alone class derived
-// from the wxAuiDockArt base class). The active dock art class can be set via
-// wxAuiManager::SetDockArt()
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
     int amount = 120;
@@ -75,6 +67,26 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
         amount = 160;
 
     return c.ChangeLightness(amount);
+}
+
+inline float wxAuiGetSRGB(float r) {
+    return r <= 0.03928 ? r/12.92 : pow((r+0.055)/1.055, 2.4);
+}
+
+float wxAuiGetRelativeLuminance(const wxColour& c)
+{
+    // based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+    return 0.2126 * wxAuiGetSRGB(c.Red()/255.0)
+        + 0.7152 * wxAuiGetSRGB(c.Green()/255.0)
+        + 0.0722 * wxAuiGetSRGB(c.Blue()/255.0);
+}
+
+float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
+{
+    // based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html
+    float L1 = wxAuiGetRelativeLuminance(c1);
+    float L2 = wxAuiGetRelativeLuminance(c2);
+    return L1 > L2 ? (L1 + 0.05) / (L2 + 0.05) : (L2 + 0.05) / (L1 + 0.05);
 }
 
 // wxAuiBitmapFromBits() is a utility function that creates a
@@ -174,6 +186,14 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
     return ret;
 }
 
+// -- wxAuiDefaultDockArt class implementation --
+
+// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
+// wxAuiManager.  This allows the library caller to customize the dock art
+// (probably by deriving from this class), or to completely replace all drawing
+// with custom dock art (probably by writing a new stand-alone class derived
+// from the wxAuiDockArt base class). The active dock art class can be set via
+// wxAuiManager::SetDockArt()
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
     UpdateColoursFromSystem();

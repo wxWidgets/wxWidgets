@@ -24,7 +24,8 @@ case $(uname -s) in
             pgk_check="libgstreamermm-1.0-dev libgstreamermm-0.10-dev \
                 libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
                 libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev \
-                libwebkitgtk-dev libglu1-mesa-dev libsecret-1-dev libnotify-dev"
+                libwebkit2gtk-4.0-dev libwebkitgtk-3.0-dev libwebkitgtk-dev \
+                libglu1-mesa-dev libsecret-1-dev libnotify-dev"
 
             for pkg in $pgk_check; do
                 if $(apt-cache pkgnames | grep -q $pkg) ; then

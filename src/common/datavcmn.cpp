@@ -62,6 +62,8 @@ protected:
     void OnIdle( wxIdleEvent &event );
 
 private:
+    bool IsEditorSubControl(wxWindow* win) const;
+
     wxDataViewRenderer     *m_owner;
     wxWindow               *m_editorCtrl;
     bool                    m_finished;
@@ -1113,8 +1115,13 @@ void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
     if (m_focusOnIdle)
     {
         m_focusOnIdle = false;
-        if (wxWindow::FindFocus() != m_editorCtrl)
+
+        // Ignore focused items within the compound editor control
+        wxWindow* win = wxWindow::FindFocus();
+        if ( !IsEditorSubControl(win) )
+        {
             m_editorCtrl->SetFocus();
+        }
     }
 
     event.Skip();
@@ -1151,6 +1158,14 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
 
 void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 {
+    // Ignore focus changes within the compound editor control
+    wxWindow* win = event.GetWindow();
+    if ( IsEditorSubControl(win) )
+    {
+        event.Skip();
+        return;
+    }
+
     if (!m_finished)
     {
         m_finished = true;
@@ -1158,6 +1173,23 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
     }
 
     event.Skip();
+}
+
+bool wxDataViewEditorCtrlEvtHandler::IsEditorSubControl(wxWindow* win) const
+{
+    // Checks whether the given window belongs to the editor control
+    // (is either the editor itself or a child of the compound editor).
+    while ( win )
+    {
+        if ( win == m_editorCtrl )
+        {
+            return true;
+        }
+
+        win = win->GetParent();
+    }
+
+    return false;
 }
 
 // ---------------------------------------------------------

@@ -437,16 +437,16 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
 
         sizeBtn.IncTo(sizeDef);
     }
-    else // wxBU_EXACTFIT case
-    {
-        // Such buttons are typically used alongside a text control or similar,
-        // so make them as high as it.
-        int yText;
-        wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
-        yText = wxGetEditHeightFromCharHeight(yText, btn);
 
-        sizeBtn.IncTo(wxSize(-1, yText));
-    }
+    // wxBU_EXACTFIT is typically used alongside a text control or similar,
+    // so make them as high as it.
+    // The standard height is generally higher than this, but if not (e.g. when
+    // using a larger font) increase the button height as well.
+    int yText;
+    wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
+    yText = wxGetEditHeightFromCharHeight(yText, btn);
+
+    sizeBtn.IncTo(wxSize(-1, yText));
 
     btn->CacheBestSize(sizeBtn);
 

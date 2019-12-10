@@ -521,6 +521,10 @@ GridFrame::GridFrame()
     grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
     grid->SetCellBackgroundColour(3, 0, wxColour(255, 127, 127));
 
+    grid->SetCellRenderer(3, 1, new wxGridCellBoolRenderer);
+    grid->SetCellEditor(3, 1, new wxGridCellBoolEditor);
+    grid->SetCellValue(3, 1, "1");
+
     wxGridCellAttr *attr;
     attr = new wxGridCellAttr;
     attr->SetTextColour(*wxBLUE);

@@ -132,7 +132,8 @@ protected:
         // can't use wxBORDER_NONE to calculate a good height, in which case we just have to
         // assume a border in the code above and then subtract the space that would be taken up
         // by a themed border (the thin blue border and the white internal border).
-        size.y -= FromDIP(4);
+        // Don't use FromDIP(4), this seems not needed.
+        size.y -= 4;
 
         self->SetWindowStyleFlag(flags);
 
@@ -451,28 +452,21 @@ wxString wxSearchCtrl::GetDescriptiveText() const
 
 wxSize wxSearchCtrl::DoGetBestClientSize() const
 {
-    wxSize sizeText = m_text->GetBestSize();
-    wxSize sizeSearch(0,0);
-    wxSize sizeCancel(0,0);
-    int searchMargin = 0;
-    int cancelMargin = 0;
+    wxSize size = m_text->GetBestSize();
+
     if ( IsSearchButtonVisible() )
     {
-        sizeSearch = m_searchButton->GetBestSize();
-        searchMargin = FromDIP(MARGIN);
+        size.x += m_searchButton->GetBestSize().x + FromDIP(MARGIN);
     }
     if ( IsCancelButtonVisible() )
     {
-        sizeCancel = m_cancelButton->GetBestSize();
-        cancelMargin = FromDIP(MARGIN);
+        size.x += m_cancelButton->GetBestSize().x + FromDIP(MARGIN);
     }
 
-    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    int horizontalBorder = FromDIP(1) + (size.y - size.y * 14 / 21 ) / 2;
+    size.x += 2 * horizontalBorder;
 
-    // buttons are square and equal to the height of the text control
-    int height = sizeText.y;
-    return wxSize(sizeSearch.x + searchMargin + sizeText.x + cancelMargin + sizeCancel.x + 2*horizontalBorder,
-                  height);
+    return size;
 }
 
 void wxSearchCtrl::LayoutControls()
@@ -533,7 +527,7 @@ void wxSearchCtrl::LayoutControls()
     // of the white border that's part of the theme border. We can also remove a pixel from
     // the height to fit the text control in, because the padding in EDIT_HEIGHT_FROM_CHAR_HEIGHT
     // is already generous.
-    int textY = FromDIP(2);
+    int textY = FromDIP(1);
 #else
     int textY = 0;
 #endif

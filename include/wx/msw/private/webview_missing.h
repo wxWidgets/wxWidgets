@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/msw/webview_missing.h
+// Name:        include/wx/msw/private/webview_missing.h
 // Purpose:     Definitions / classes commonly missing used by wxWebViewIE
 // Author:      Steven Lamerton
 // Copyright:   (c) 2012 Steven Lamerton

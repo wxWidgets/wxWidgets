@@ -267,10 +267,8 @@ public:
     wxUniCharRef& operator=(const wxUniCharRef& c)
         { if (&c != this) *this = c.UniChar(); return *this; }
 
-#if wxUSE_UNICODE_UTF8
-    wxUniCharRef(const wxUniCharRef& that) : m_str(that.m_str), m_pos(that.m_pos) { }
-#else
-    wxUniCharRef(const wxUniCharRef& that) : m_pos(that.m_pos) { }
+#if __cplusplus >= 201103
+    wxUniCharRef(const wxUniCharRef&) = default;
 #endif
 
 #define wxUNICHAR_REF_DEFINE_OPERATOR_EQUAL(type) \

@@ -147,6 +147,14 @@ Changes in behaviour which may result in build errors
 3.1.4: (released ????-??-??)
 ----------------------------
 
+NOTE: This file is updated only before the release, please use
+
+    $ git log --notes=changelog --format='%N' v3.1.3..|grep .
+
+      to see all the change log entries since the last release and use
+
+    $ git notes --ref=changelog add -m 'wxPort: description.' to update it.
+
 
 3.1.3: (released 2019-10-28)
 ----------------------------

@@ -2720,6 +2720,7 @@ void wxDataViewRendererNativeData::Init()
 {
     m_origFont = NULL;
     m_origTextColour = NULL;
+    m_origBackgroundColour = NULL;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
     m_hasCustomFont = false;
 
@@ -2862,12 +2863,13 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
     wxDataViewRendererNativeData * const data = GetNativeData();
     NSCell * const cell = data->GetItemCell();
 
-    // set the font and text colour to use: we need to do it if we had ever
-    // changed them before, even if this item itself doesn't have any special
-    // attributes as otherwise it would reuse the attributes from the previous
-    // cell rendered using the same renderer
+    // set the font, background and text colour to use: we need to do it if we
+    // had ever changed them before, even if this item itself doesn't have any
+    // special attributes as otherwise it would reuse the attributes from the
+    // previous cell rendered using the same renderer
     NSFont *font = NULL;
     NSColor *colText = NULL;
+    NSColor *colBack = NULL;
 
     if ( attr.HasFont() )
     {
@@ -2892,34 +2894,67 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         //else: can't change font if the cell doesn't have any
     }
 
-    if ( attr.HasColour() && [cell backgroundStyle] == NSBackgroundStyleLight )
+    // We don't apply the text or background colours if the cell is selected.
+    if ( [cell backgroundStyle] == NSBackgroundStyleLight )
     {
-        // we can set font for any cell but only NSTextFieldCell provides
-        // a method for setting text colour so check that this method is
-        // available before using it
-        if ( [cell respondsToSelector:@selector(setTextColor:)] &&
-                [cell respondsToSelector:@selector(textColor)] )
+        if ( attr.HasColour() )
         {
-            if ( !data->GetOriginalTextColour() )
+            // we can set font for any cell but only NSTextFieldCell provides
+            // a method for setting text colour so check that this method is
+            // available before using it
+            if ( [cell respondsToSelector:@selector(setTextColor:)] &&
+                    [cell respondsToSelector:@selector(textColor)] )
             {
-                // the cast to (untyped) id is safe because of the check above
-                data->SaveOriginalTextColour([(id)cell textColor]);
-            }
+                if ( !data->GetOriginalTextColour() )
+                {
+                    // the cast to (untyped) id is safe because of the check above
+                    data->SaveOriginalTextColour([(id)cell textColor]);
+                }
 
-            colText = attr.GetColour().OSXGetNSColor();
+                colText = attr.GetColour().OSXGetNSColor();
+            }
+        }
+
+        if ( attr.HasBackgroundColour() )
+        {
+            // Use the same logic as the text colour check above
+            if ( [cell respondsToSelector:@selector(setBackgroundColor:)] &&
+                    [cell respondsToSelector:@selector(backgroundColor)] )
+            {
+                if ( !data->GetOriginalBackgroundColour() )
+                    data->SaveOriginalTextColour([(id)cell backgroundColor]);
+
+                colBack = attr.GetBackgroundColour().OSXGetNSColor();
+            }
         }
     }
+
 
     if ( !font )
         font = data->GetOriginalFont();
     if ( !colText )
         colText = data->GetOriginalTextColour();
+    if ( !colBack )
+        colBack = data->GetOriginalBackgroundColour();
 
     if ( font )
         [cell setFont:font];
 
     if ( colText )
         [(id)cell setTextColor:colText];
+
+    if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
+    {
+        if ( colBack )
+        {
+            [(id)cell setDrawsBackground:true];
+            [(id)cell setBackgroundColor:colBack];
+        }
+        else
+        {
+            [(id)cell setDrawsBackground:false];
+        }
+    }
 }
 
 void wxDataViewRenderer::SetEnabled(bool enabled)

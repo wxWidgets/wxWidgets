@@ -1233,7 +1233,7 @@ static inline bool WriteAsciiString(wxOutputStream& ostr, const wxString& s)
 
 bool wxRegKey::Export(const wxString& filename) const
 {
-#if wxUSE_FFILE && wxUSE_STREAMS
+#if wxUSE_FILE && wxUSE_FFILE && wxUSE_STREAMS
     if ( wxFile::Exists(filename) )
     {
         wxLogError(_("Exporting registry key: file \"%s\" already exists and won't be overwritten."),

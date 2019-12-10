@@ -324,14 +324,14 @@ int wxBitmapRefData::GetDepth() const
     else
         return 32; // a bitmap converted from an nsimage would have this depth
 }
+
 int wxBitmapRefData::GetBytesPerRow() const
 {
     wxCHECK_MSG( IsOk() , 0 , "Invalid Bitmap");
 
-    if ( m_hBitmap )
-        return (int) CGBitmapContextGetBytesPerRow(m_hBitmap);
-    else
-        return (int) GetBestBytesPerRow( GetWidth() * 4);
+    // Row stride length makes sense only for a bitmap representation
+    EnsureBitmapExists();
+    return (int) CGBitmapContextGetBytesPerRow(m_hBitmap);
 }
 
 bool wxBitmapRefData::HasAlpha() const
@@ -419,6 +419,15 @@ void wxBitmapRefData::EndRawAccess()
     wxASSERT( m_rawAccessCount == 1 ) ;
 
     --m_rawAccessCount ;
+
+    // Update existing NSImage with new bitmap data
+    if ( m_nsImage )
+    {
+        wxCFRef<CGImageRef> image(CGBitmapContextCreateImage(m_hBitmap));
+        wxMacCocoaRelease(m_nsImage);
+        m_nsImage = wxOSXGetImageFromCGImage(image, GetScaleFactor(), IsTemplate());
+        wxMacCocoaRetain(m_nsImage);
+    }
 }
 
 bool wxBitmapRefData::HasNativeSize()

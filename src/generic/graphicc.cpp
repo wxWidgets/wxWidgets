@@ -526,6 +526,45 @@ protected:
     WindowHDC m_mswWindowHDC;
     int m_mswStateSavedDC;
 #endif
+#ifdef __WXGTK__
+    // Tiny helper actually applying the font. It's convenient because it can
+    // be called with a temporary wxFont, as we're going to make a copy of its
+    // Pango font description inside this function before the font object is
+    // destroyed.
+    //
+    // It's also all we need for GTK < 3.
+    static void DoApplyFont(PangoLayout* layout, const wxFont& font)
+    {
+        pango_layout_set_font_description
+        (
+            layout,
+            font.GetNativeFontInfo()->description
+        );
+    }
+
+#ifdef __WXGTK3__
+    // This factor must be applied to the font before actually using it, for
+    // consistency with the text drawn by GTK itself.
+    float m_fontScalingFactor;
+
+    // Function applying the Pango font description for the given font scaled by
+    // the font scaling factor if necessary to the specified layout.
+    void ApplyFont(PangoLayout* layout, const wxFont& font) const
+    {
+        // Only scale the font if we really need to do it.
+        DoApplyFont(layout, m_fontScalingFactor == 1.0f
+                                ? font
+                                : font.Scaled(m_fontScalingFactor));
+    }
+#else // GTK < 3
+    // Provide the same function even if it does nothing in this case to keep
+    // the same code for all GTK versions.
+    void ApplyFont(PangoLayout* layout, const wxFont& font) const
+    {
+        DoApplyFont(layout, font);
+    }
+#endif // __WXGTK3__
+#endif // __WXGTK__
 
 private:
     cairo_t* m_context;
@@ -602,7 +641,7 @@ wxCairoPenBrushBaseData::wxCairoPenBrushBaseData(wxGraphicsRenderer* renderer,
     m_pattern = NULL;
     m_bmpdata = NULL;
 
-    if ( isTransparent )
+    if ( isTransparent || !col.IsOk() )
     {
         m_red =
         m_green =
@@ -867,6 +906,25 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
     switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
+        // Non-RGB colours, which may e.g. appear under wxOSX for wxColours
+        // with NSColor backend, are not supported by Cairo and have to be
+        // handled in a special way.
+        if ( !info.GetColour().IsSolid() )
+        {
+#if defined(__WXOSX_COCOA__)
+            // Under wxOSX, non-solid NSColors are actually represented
+            // by pattern images and therefore a wxPen with non-solid
+            // colour and wxPENSTYLE_SOLID style can be converted
+            // to a stiple (a surface pattern).
+
+            // Create a stiple bitmap from NSColor's pattern image
+            wxBitmap bmp(info.GetColour().OSXGetNSPatternImage());
+            InitStipple(&bmp);
+#else
+            wxFAIL_MSG( "Pen with non-solid colour is not supported." );
+#endif
+        }
+
         break;
 
     case wxPENSTYLE_DOT :
@@ -925,6 +983,8 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH
             && info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
+            wxASSERT_MSG( info.GetColour().IsSolid(),
+                          "Pen with non-solid colour is not supported." );
             InitHatch(static_cast<wxHatchStyle>(info.GetStyle()));
         }
         break;
@@ -987,9 +1047,34 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer,
             InitStipple(brush.GetStipple());
             break;
 
+        case wxBRUSHSTYLE_SOLID:
+            // Non-RGB colours, which may e.g. appear under wxOSX for wxColours
+            // with NSColor backend, are not supported by Cairo and have to be
+            // handled in a special way.
+            if ( !brush.GetColour().IsSolid() )
+            {
+#if defined(__WXOSX_COCOA__)
+                // Under wxOSX, non-solid NSColors are actually represented
+                // by pattern images and therefore a wxBrush with non-solid
+                // colour and wxBRUSHSTYLE_SOLID style can be converted
+                // to a stiple (a surface pattern).
+
+                // Create a stiple bitmap from NSColor's pattern image
+                wxBitmap bmp(brush.GetColour().OSXGetNSPatternImage());
+                InitStipple(&bmp);
+#else
+                wxFAIL_MSG( "Brush with non-solid colour is not supported." );
+#endif
+            }
+            break;
+
         default:
             if ( brush.IsHatch() )
+            {
+                wxASSERT_MSG( brush.GetColour().IsSolid(),
+                              "Brush with non-solid colour is not supported." );
                 InitHatch(static_cast<wxHatchStyle>(brush.GetStyle()));
+            }
             break;
     }
 }
@@ -1489,22 +1574,19 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    const bool isSrcBpp32 =
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-            bmp.GetDepth() == 32 || bmp.GetMask() != NULL;
-#else
-            bmp.GetDepth() == 32;
+    const bool isSrcBpp32 = bmp.GetDepth() == 32;
+
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+    const bool hasAlpha = bmp.HasAlpha();
 #endif
 
     cairo_format_t bufferFormat =
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-        isSrcBpp32
-#elif defined(__WXGTK3__)
-        isSrcBpp32 || bmp.GetMask() != NULL
-#elif defined(__WXMSW__) || defined(__WXOSX__)
-        (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
+    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        (isSrcBpp32 && hasAlpha) || bmp.GetMask() != NULL
 #else
-        isSrcBpp32
+        isSrcBpp32 || bmp.GetMask() != NULL
 #endif
         ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24;
 
@@ -1515,13 +1597,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     if ( isSrcBpp32 )
     {
-        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
-        // "has alpha" flag but we want to leave it unchanged, so we need
-        // to save its current value now and restore it afterwards.
-#if defined(__WXMSW__) || defined(__WXOSX__)
-        const bool hasAlpha = bmpSource.HasAlpha();
-#endif // __WXMSW__ || __WXOSX__
-
         {
             // use the bitmap's alpha
             wxAlphaPixelData pixData(bmpSource);
@@ -1538,19 +1613,21 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-                    unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32) ? p.Alpha() : 255;
-#ifdef __WXMSW__
-                    // MSW bitmap pixel bits are already premultiplied.
+#if defined (__WXMSW__) || defined(__WXOSX__)
+                    unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
+                    // MSW and OSX bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__
-                    if (alpha == 0)
+#else // !__WXMSW__ , !__WXOSX__
+                    // We always have alpha, but we need to premultiply it.
+                    unsigned char alpha = p.Alpha();
+                    if (alpha == wxALPHA_TRANSPARENT)
                         *data = 0;
                     else
                         *data = (alpha << 24
                             | Premultiply(alpha, p.Red()) << 16
                             | Premultiply(alpha, p.Green()) << 8
                             | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__ / !__WXMSW__
+#endif // __WXMSW__, __WXOSX__ / !__WXMSW__, !__WXOSX__
                     ++data;
                     ++p;
                 }
@@ -1562,7 +1639,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
 
 #if defined(__WXMSW__) || defined(__WXOSX__)
-        // Reset "has alpha" flag back.
+        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
+        // "has alpha" flag but we want to leave it unchanged, so we need
+        // to reset "has alpha" flag back.
         // (wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.)
         bmpSource.UseAlpha(hasAlpha);
 #endif // __WXMSW__ || __WXOSX__
@@ -1594,14 +1673,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
     // if there is a mask, set the alpha bytes in the target buffer to
-    // fully transparent or fully opaque
-#if defined(__WXMSW__)
-    if (bmp.GetMask() != NULL && !bmp.HasAlpha())
-#else // __WXGTK3__
+    // fully transparent or retain original value
     if (bmp.GetMask() != NULL)
-#endif // __WXMSW__ / __WXGTK3__
     {
         wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
         data = (wxUint32*)m_buffer;
@@ -1615,15 +1689,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
-                // contrary to the others OSX has natively its masked out pixels as white
-#ifdef __WXOSX__
-                if (p.Red() == 0xFF && p.Green() == 0xFF && p.Blue() == 0xFF )
-#else
                 if (p.Red()+p.Green()+p.Blue() == 0)
-#endif
                     *data = 0;
-                else
-                    *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
+
                 ++data;
                 ++p;
             }
@@ -1633,7 +1701,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
-#endif // __WXMSW__ || __WXGTK3__
 
     InitSurface(bufferFormat, stride);
 #endif // wxHAS_RAW_BITMAP
@@ -2378,6 +2445,14 @@ wxCairoContext::~wxCairoContext()
 
 void wxCairoContext::Init(cairo_t *context)
 {
+#ifdef __WXGTK3__
+    // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling
+    // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
+    // GDK_DPI_SCALE environment variable).
+    GdkScreen* screen = gdk_screen_get_default();
+    m_fontScalingFactor = screen ? gdk_screen_get_resolution(screen) / 96.0 : 1.0;
+#endif
+
     m_context = context;
     if ( m_context )
     {
@@ -2682,8 +2757,11 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( font.IsOk() )
     {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+        ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
+
+        // Note that Pango attributes don't depend on font size, so we don't
+        // need to use the scaled font here.
         font.GTKSetPangoAttrs(layout);
 
         cairo_move_to(m_context, x, y);
@@ -2737,7 +2815,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
         int w, h;
 
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+        ApplyFont(layout, font);
         const wxCharBuffer data = str.utf8_str();
         if ( !data )
         {
@@ -2806,7 +2884,8 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout(m_context));
         const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
-        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+
+        ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
         PangoLayoutIter* iter = pango_layout_get_iter(layout);
         PangoRectangle rect;

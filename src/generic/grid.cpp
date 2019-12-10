@@ -111,6 +111,9 @@ const int GRID_HASH_SIZE = 100;
 // operation
 const int DRAG_SENSITIVITY = 3;
 
+// the space between the cell edge and the checkbox mark
+const int GRID_CELL_CHECKBOX_MARGIN = 2;
+
 } // anonymous namespace
 
 #include "wx/arrimpl.cpp"
@@ -579,16 +582,40 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
 
 void wxGridCellAttr::GetNonDefaultAlignment(int *hAlign, int *vAlign) const
 {
-    // Default attribute can only have default alignment, so don't return it
-    // from this function.
-    if ( this == m_defGridAttr )
-        return;
+    // The logic here is tricky but necessary to handle all the cases: if we
+    // have non-default alignment on input, we should only override it if this
+    // attribute specifies a non-default alignment. However if the input
+    // alignment is invalid, we need to always initialize it, using the default
+    // attribute if necessary.
 
-    if ( hAlign && m_hAlign != wxALIGN_INVALID )
-        *hAlign = m_hAlign;
+    // First of all, never dereference null pointer.
+    if ( hAlign )
+    {
+        if ( this != m_defGridAttr && m_hAlign != wxALIGN_INVALID )
+        {
+            // This attribute has its own alignment, which should always
+            // override the input alignment value.
+            *hAlign = m_hAlign;
+        }
+        else if ( *hAlign == wxALIGN_INVALID )
+        {
+            // No input alignment specified, fill it with the default alignment
+            // (note that we know that this attribute itself doesn't have any
+            // specific alignment or is the same as the default one anyhow in
+            // in this "else" branch, so we don't need to check m_hAlign here).
+            *hAlign = m_defGridAttr->m_hAlign;
+        }
+        //else: Input alignment is valid but ours one isn't, nothing to do.
+    }
 
-    if ( vAlign && m_vAlign != wxALIGN_INVALID )
-        *vAlign = m_vAlign;
+    // This is exactly the same logic as above.
+    if ( vAlign )
+    {
+        if ( this != m_defGridAttr && m_vAlign != wxALIGN_INVALID )
+            *vAlign = m_vAlign;
+        else if ( *vAlign == wxALIGN_INVALID )
+            *vAlign = m_defGridAttr->m_vAlign;
+    }
 }
 
 void wxGridCellAttr::GetSize( int *num_rows, int *num_cols ) const
@@ -3613,13 +3640,21 @@ void wxGrid::UpdateCurrentCellOnRedim()
         }
         else
         {
-            int col = m_currentCellCoords.GetCol();
-            int row = m_currentCellCoords.GetRow();
-            if (col >= m_numCols)
-                col = m_numCols - 1;
-            if (row >= m_numRows)
-                row = m_numRows - 1;
-            SetCurrentCell(row, col);
+            // Check if the current cell coordinates are still valid.
+            wxGridCellCoords updatedCoords = m_currentCellCoords;
+            if ( updatedCoords.GetCol() >= m_numCols )
+                updatedCoords.SetCol(m_numCols - 1);
+            if ( updatedCoords.GetRow() >= m_numRows )
+                updatedCoords.SetRow(m_numRows - 1);
+
+            // And change them if they're not.
+            if ( updatedCoords != m_currentCellCoords )
+            {
+                // Prevent SetCurrentCell() from redrawing the previous current
+                // cell whose coordinates are invalid now.
+                m_currentCellCoords = wxGridNoCellCoords;
+                SetCurrentCell(updatedCoords);
+            }
         }
     }
 }
@@ -5724,13 +5759,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-    wxGridCellAttr *attr = GetCellAttr( coords );
 #if !defined(__WXMAC__)
-    wxClientDC dc( currentGridWindow );
-    PrepareDCFor(dc, currentGridWindow);
-    DrawCellHighlight( dc, attr );
+    if ( !GetBatchCount() )
+    {
+        wxGridCellAttr *attr = GetCellAttr( coords );
+        wxClientDC dc( currentGridWindow );
+        PrepareDCFor(dc, currentGridWindow);
+        DrawCellHighlight( dc, attr );
+        attr->DecRef();
+    }
 #endif
-    attr->DecRef();
 
     return true;
 }
@@ -6980,18 +7018,10 @@ void wxGrid::ShowCellEditControl()
             if (rect.x < 0)
                 nXMove = rect.x;
 
-#ifndef __WXQT__
-            // cell is shifted by one pixel
-            // However, don't allow x or y to become negative
-            // since the SetSize() method interprets that as
-            // "don't change."
-            if (rect.x > 0)
-                rect.x--;
-            if (rect.y > 0)
-                rect.y--;
-#else
+#ifdef __WXQT__
             // Substract 1 pixel in every dimension to fit in the cell area.
             // If not, Qt will draw the control outside the cell.
+            // TODO: Check offsets under Qt.
             rect.Deflate(1, 1);
 #endif
 
@@ -10335,6 +10365,57 @@ wxGridCellEditor* wxGridTypeRegistry::GetEditor(int index)
         editor->IncRef();
 
     return editor;
+}
+
+wxRect
+wxGetContentRect(wxSize contentSize,
+                 const wxRect& cellRect,
+                 int hAlign,
+                 int vAlign)
+{
+    // Keep square aspect ratio for the checkbox, but ensure that it fits into
+    // the available space, even if it's smaller than the standard size.
+    const wxCoord minSize = wxMin(cellRect.width, cellRect.height);
+    if ( contentSize.x >= minSize || contentSize.y >= minSize )
+    {
+        // It must still have positive size, however.
+        const int fittingSize = wxMax(1, minSize - 2*GRID_CELL_CHECKBOX_MARGIN);
+
+        contentSize.x =
+        contentSize.y = fittingSize;
+    }
+
+    wxRect contentRect(contentSize);
+
+    if ( hAlign & wxALIGN_CENTER_HORIZONTAL )
+    {
+        contentRect = contentRect.CentreIn(cellRect, wxHORIZONTAL);
+    }
+    else if ( hAlign & wxALIGN_RIGHT )
+    {
+        contentRect.SetX(cellRect.x + cellRect.width
+                          - contentSize.x - GRID_CELL_CHECKBOX_MARGIN);
+    }
+    else // ( hAlign == wxALIGN_LEFT ) and invalid alignment value
+    {
+        contentRect.SetX(cellRect.x + GRID_CELL_CHECKBOX_MARGIN);
+    }
+
+    if ( vAlign & wxALIGN_CENTER_VERTICAL )
+    {
+        contentRect = contentRect.CentreIn(cellRect, wxVERTICAL);
+    }
+    else if ( vAlign & wxALIGN_BOTTOM )
+    {
+        contentRect.SetY(cellRect.y + cellRect.height
+                          - contentRect.y - GRID_CELL_CHECKBOX_MARGIN);
+    }
+    else // wxALIGN_TOP
+    {
+        contentRect.SetY(cellRect.y + GRID_CELL_CHECKBOX_MARGIN);
+    }
+
+    return contentRect;
 }
 
 #endif // wxUSE_GRID

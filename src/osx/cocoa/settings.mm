@@ -48,8 +48,8 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
 
 wxString wxSystemAppearance::GetName() const
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-    if ( WX_IS_MACOS_AVAILABLE(10, 9) )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
         return wxStringWithNSString([[NSApp effectiveAppearance] name]);
     }

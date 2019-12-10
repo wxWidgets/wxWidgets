@@ -311,7 +311,7 @@ public:
 
     /**
         Returns @true if the directory contains any subdirectories (if a non
-        empty @a filespec is given, only check for directories matching it).
+        empty @a dirspec is given, only check for directories matching it).
         The hidden subdirectories are taken into account as well.
     */
     bool HasSubDirs(const wxString& dirspec = wxEmptyString) const;

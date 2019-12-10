@@ -17,6 +17,12 @@ class wxDisplay
 {
 public:
     /**
+        Default constructor creating wxDisplay object representing the primary
+        display.
+     */
+    wxDisplay();
+
+    /**
         Constructor, setting up a wxDisplay instance with the specified
         display.
 
@@ -24,7 +30,7 @@ public:
             The index of the display to use. This must be non-negative and
             lower than the value returned by GetCount().
     */
-    wxDisplay(unsigned int index = 0);
+    explicit wxDisplay(unsigned int index);
 
     /**
         Constructor creating the display object associated with the given

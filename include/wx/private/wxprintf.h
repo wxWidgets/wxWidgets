@@ -19,6 +19,7 @@
 #include "wx/log.h"
 #include "wx/utils.h"
 
+#include <limits.h>
 #include <string.h>
 
 // prefer snprintf over sprintf
@@ -189,7 +190,7 @@ template<typename CharType>
 void wxPrintfConvSpec<CharType>::Init()
 {
     m_nMinWidth = 0;
-    m_nMaxWidth = 0xFFFF;
+    m_nMaxWidth = INT_MAX;
     m_pos = 0;
     m_bAlignLeft = false;
     m_pArgPos = m_pArgEnd = NULL;

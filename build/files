@@ -2794,7 +2794,6 @@ WEBVIEW_CMN_SRC =
 WEBVIEW_MSW_HDR =
     wx/msw/webviewhistoryitem_ie.h
     wx/msw/webview_ie.h
-    wx/msw/webview_missing.h
 WEBVIEW_CMN_HDR =
     wx/webview.h
     wx/webviewarchivehandler.h
