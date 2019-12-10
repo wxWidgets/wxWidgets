@@ -985,6 +985,11 @@ void MyCanvas::DrawText(wxDC& dc)
 
     dc.SetTextForeground(*wxBLUE);
     dc.DrawRotatedText("Rotated text\ncan have\nmultiple lines\nas well", 110, y, 15);
+
+    y += 7*height;
+    dc.SetFont(wxFontInfo(12).Family(wxFONTFAMILY_TELETYPE));
+    dc.SetTextForeground(wxColour(150, 75, 0));
+    dc.DrawText("And some text with tab characters:\n123456789012345678901234567890\n\taa\tbbb\tcccc", 10, y);
 }
 
 static const struct
