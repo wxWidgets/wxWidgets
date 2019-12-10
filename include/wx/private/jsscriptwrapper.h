@@ -50,13 +50,20 @@ public:
     // execution of this code.
     wxString GetWrappedCode() const
     {
-        return wxString::Format
-               (
-                "try { var %s = eval(\"%s\"); true; } "
-                "catch (e) { e.name + \": \" + e.message; }",
-                m_outputVarName,
-                m_escapedCode
-               );
+        return wxString::Format(
+            "try {"
+                "var %s = eval(\"%s\");"
+                "true;"
+            "}"
+            "catch (e) {"
+                "let r = e.toString();"
+                "if (typeof(e.stack) !== 'undefined') r += ('\\n'+ e.stack);"
+                "r;"
+            "}"
+            ,
+            m_outputVarName,
+            m_escapedCode
+        );
     }
 
     // Get code returning the result of the last successful execution of the
