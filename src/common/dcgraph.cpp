@@ -1196,13 +1196,19 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( str.empty() )
         return;
 
-    if ( !m_logicalFunctionSupported )
-        return;
+    // Text drawing shouldn't be affected by the raster operation
+    // mode set by SetLogicalFunction() and should be always done
+    // in the default wxCOPY mode (which is wxCOMPOSITION_OVER
+    // composition mode).
+    wxCompositionMode curMode = m_graphicContext->GetCompositionMode();
+    m_graphicContext->SetCompositionMode(wxCOMPOSITION_OVER);
 
     if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
         m_graphicContext->DrawText( str, x ,y);
     else
         m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush(m_textBackgroundColour) );
+
+    m_graphicContext->SetCompositionMode(curMode);
 
     wxCoord w, h;
     GetOwner()->GetTextExtent(str, &w, &h);
