@@ -1813,6 +1813,11 @@ void wxGridColLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     //
     // m_owner->PrepareDC( dc );
 
+    // Column indices become invalid when the grid is empty, so avoid doing
+    // anything at all in this case.
+    if ( m_owner->GetNumberCols() == 0 )
+        return;
+
     int x, y;
     wxGridWindow *gridWindow = IsFrozen() ? m_owner->m_frozenColGridWin :
                                             m_owner->m_gridWin;
