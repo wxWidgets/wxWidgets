@@ -7345,6 +7345,9 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
     // Get the bottom or rightmost line that could match.
     int line = oper.PosToLine(this, pos, NULL, true);
 
+    if ( line == wxNOT_FOUND )
+        return -1;
+
     if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
     {
         // We know that we are in this line, test whether we are close enough
