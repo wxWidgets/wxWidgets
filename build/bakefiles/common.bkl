@@ -332,31 +332,31 @@
     <if cond="IS_MSVC_PRJ">
         <set var="WIN32_DPI_LINKFLAG">
             <!-- 32-bit system dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and MSVS_PLATFORM=='win32'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx-dpi-aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and MSVS_PLATFORM=='win32'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
             <!-- 64-bit system dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and MSVS_PLATFORM=='win64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and MSVS_PLATFORM=='win64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
             <!-- 32-bit per-monitor dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and MSVS_PLATFORM=='win32'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx-dpi-aware-pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and MSVS_PLATFORM=='win32'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
             <!-- 64-bit per-monitor dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and MSVS_PLATFORM=='win64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware-pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and MSVS_PLATFORM=='win64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
         </set>
     </if>
     <if cond="FORMAT=='msvc'">
         <set var="WIN32_DPI_LINKFLAG">
             <!-- 32-bit system dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx-dpi-aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
             <!-- 64-bit system dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware.manifest</if>
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware.manifest</if>
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware.manifest</if>
-            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
             <!-- 32-bit per-monitor dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx-dpi-aware-pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
             <!-- 64-bit per-monitor dpi -->
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware-pmv2.manifest</if>
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware-pmv2.manifest</if>
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware-pmv2.manifest</if>
-            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64-dpi-aware-pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
         </set>
     </if>
 

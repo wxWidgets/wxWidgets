@@ -128,9 +128,9 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 #if !defined(wxUSE_DPI_AWARE_MANIFEST) || wxUSE_DPI_AWARE_MANIFEST == 0
     #define wxMANIFEST_DPI ""
 #elif wxUSE_DPI_AWARE_MANIFEST == 1
-    #define wxMANIFEST_DPI "-dpi-aware"
+    #define wxMANIFEST_DPI "_dpi_aware"
 #elif wxUSE_DPI_AWARE_MANIFEST == 2
-    #define wxMANIFEST_DPI "-dpi-aware-pmv2"
+    #define wxMANIFEST_DPI "_dpi_aware_pmv2"
 #endif
 
 #define wxMANIFEST_FILE "wx/msw/" wxMANIFEST_CPU wxMANIFEST_DPI ".manifest"
