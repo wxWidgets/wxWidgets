@@ -904,6 +904,14 @@
 #define wxUSE_TREECTRL      1   // wxTreeCtrl
 #define wxUSE_TREELISTCTRL  1   // wxTreeListCtrl
 
+// Use generic version of wxDataViewCtrl even if a native one is available?
+//
+// Default is 0.
+//
+// Recommended setting: 0, but can be set to 1 if your program is affected by
+// the native control limitations.
+#define wxUSE_NATIVE_DATAVIEWCTRL 1
+
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.
 //

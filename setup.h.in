@@ -411,6 +411,8 @@
 #define wxUSE_TREECTRL      0
 #define wxUSE_TREELISTCTRL  0
 
+#define wxUSE_NATIVE_DATAVIEWCTRL 0
+
 #define wxUSE_STATUSBAR    0
 
 #define wxUSE_NATIVE_STATUSBAR        0

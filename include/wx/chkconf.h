@@ -649,6 +649,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATAVIEWCTRL) */
 
+#ifndef wxUSE_NATIVE_DATAVIEWCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_NATIVE_DATAVIEWCTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_NATIVE_DATAVIEWCTRL 1
+#   endif
+#endif /* !defined(wxUSE_NATIVE_DATAVIEWCTRL) */
+
 #ifndef wxUSE_DATEPICKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DATEPICKCTRL must be defined, please read comment near the top of this file."
