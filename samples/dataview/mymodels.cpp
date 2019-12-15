@@ -437,13 +437,6 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            if (row >= m_toggleColValues.size())
-                variant = false;
-            else
-                variant = m_toggleColValues[row];
-            break;
-
         case Col_EditableText:
             if (row >= m_textColValues.GetCount())
                 variant = wxString::Format( "virtual row %d", row );
@@ -451,15 +444,22 @@ void MyListModel::GetValueByRow( wxVariant &variant,
                 variant = m_textColValues[ row ];
             break;
 
-        case Col_IconText:
+        case Col_ToggleIconText:
             {
                 wxString text;
+                wxCheckBoxState state;
                 if ( row >= m_iconColValues.GetCount() )
+                {
                     text = "virtual icon";
+                    state = wxCHK_UNDETERMINED;
+                }
                 else
+                {
                     text = m_iconColValues[row];
+                    state = m_toggleColValues[row] ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+                }
 
-                variant << wxDataViewIconText(text, m_icon[row % 2]);
+                variant << wxDataViewCheckIconText(text, m_icon[row % 2], state);
             }
             break;
 
@@ -505,9 +505,6 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            return false;
-
         case Col_EditableText:
         case Col_Date:
             if (row < m_toggleColValues.size())
@@ -521,7 +518,7 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
             }
             return false;
 
-        case Col_IconText:
+        case Col_ToggleIconText:
             if ( !(row % 2) )
                 return false;
             attr.SetColour(*wxYELLOW);
@@ -578,15 +575,8 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            if (row >= m_toggleColValues.size())
-                return false;
-
-            m_toggleColValues[row] = variant.GetBool();
-            return true;
-
         case Col_EditableText:
-        case Col_IconText:
+        case Col_ToggleIconText:
             if (row >= m_textColValues.GetCount())
             {
                 // the item is not in the range of the items
@@ -600,11 +590,13 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
             {
                 m_textColValues[row] = variant.GetString();
             }
-            else // col == Col_IconText
+            else // col == Col_ToggleIconText
             {
-                wxDataViewIconText iconText;
-                iconText << variant;
-                m_iconColValues[row] = iconText.GetText();
+                wxDataViewCheckIconText checkIconText;
+                checkIconText << variant;
+                m_toggleColValues[row] =
+                    checkIconText.GetCheckedState() == wxCHK_CHECKED;
+                m_iconColValues[row] = checkIconText.GetText();
             }
             return true;
 
