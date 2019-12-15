@@ -3426,7 +3426,46 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
             break;
     }
     [cell setIntValue:nativecbvalue];
-    [cell setTitle:wxCFStringRef(checkIconText.GetText()).AsNSString()];
+
+    const wxCFStringRef textString(checkIconText.GetText());
+
+    const wxIcon& icon = checkIconText.GetIcon();
+    if ( icon.IsOk() )
+    {
+        NSTextAttachmentCell* const attachmentCell =
+            [[NSTextAttachmentCell alloc] initImageCell: icon.GetNSImage()];
+        NSTextAttachment* const attachment = [NSTextAttachment new];
+        [attachment setAttachmentCell: attachmentCell];
+
+        // Note: this string is released by the autorelease pool and must not
+        // be released manually below.
+        NSAttributedString* const iconString =
+            [NSAttributedString attributedStringWithAttachment: attachment];
+
+        NSAttributedString* const separatorString =
+            [[NSAttributedString alloc] initWithString: @" "];
+
+        NSAttributedString* const textAttrString =
+            [[NSAttributedString alloc] initWithString: textString.AsNSString()];
+
+        NSMutableAttributedString* const fullString =
+            [NSMutableAttributedString new];
+        [fullString appendAttributedString: iconString];
+        [fullString appendAttributedString: separatorString];
+        [fullString appendAttributedString: textAttrString];
+
+        [cell setAttributedTitle: fullString];
+
+        [fullString release];
+        [separatorString release];
+        [textAttrString release];
+        [attachment release];
+        [attachmentCell release];
+    }
+    else
+    {
+        [cell setTitle: textString.AsNSString()];
+    }
 
     return true;
 }
