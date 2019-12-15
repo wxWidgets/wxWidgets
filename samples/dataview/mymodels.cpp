@@ -591,7 +591,7 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
             {
                 // the item is not in the range of the items
                 // which we store... for simplicity, don't allow editing it
-                wxLogError( "Cannot edit rows with an index greater than %d",
+                wxLogError( "Cannot edit rows with an index greater than %zu",
                             m_textColValues.GetCount() );
                 return false;
             }
