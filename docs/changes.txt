@@ -605,6 +605,11 @@ wxGTK:
 
 - Fix position of popup menus shown in wxListCtrl.
 - Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
+- Potentially incompatible change: wxDataViewModel::Cleared() now works as
+  documented cross-platform.  Previously on wxGTK it just emptied the model
+  rather than triggering a reload of the model.  If you are working around the
+  broken behaviour with wxGTK-specific code in your application you should
+  check that your application works correctly with this change.
 
 
 3.0.4: (released 2018-03-08)
