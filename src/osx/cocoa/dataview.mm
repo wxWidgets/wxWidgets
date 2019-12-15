@@ -2932,19 +2932,22 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
     if ( !font )
         font = data->GetOriginalFont();
-    if ( !colText )
-        colText = data->GetOriginalTextColour();
-    if ( !colBack )
-        colBack = data->GetOriginalBackgroundColour();
 
     if ( font )
         [cell setFont:font];
 
-    if ( colText )
+    if ( [cell respondsToSelector:@selector(setTextColor:)] )
+    {
+        if ( !colText )
+            colText = data->GetOriginalTextColour();
         [(id)cell setTextColor:colText];
+    }
 
     if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
     {
+        if ( !colBack )
+            colBack = data->GetOriginalBackgroundColour();
+
         if ( colBack )
         {
             [(id)cell setDrawsBackground:true];
