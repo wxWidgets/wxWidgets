@@ -735,7 +735,7 @@ bool wxTreeListModel::IsContainer(const wxDataViewItem& item) const
     //        adding the item itself) and we can't know whether we're container
     //        or not by then. Luckily, always returning true doesn't have any
     //        serious drawbacks for us.
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && defined(wxHAS_NATIVE_DATAVIEWCTRL)
     wxUnusedVar(item);
 
     return true;
