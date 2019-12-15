@@ -80,7 +80,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswud\my_dll.lib user32.lib"
 				OutputFile="vc_mswud\sdk_exe.exe"
 				LinkIncremental="2"
@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswu\my_dll.lib user32.lib"
 				OutputFile="vc_mswu\sdk_exe.exe"
 				LinkIncremental="1"
@@ -264,7 +264,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswuddll\my_dll.lib user32.lib"
 				OutputFile="vc_mswuddll\sdk_exe.exe"
 				LinkIncremental="2"
@@ -354,7 +354,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswudll\my_dll.lib user32.lib"
 				OutputFile="vc_mswudll\sdk_exe.exe"
 				LinkIncremental="1"
@@ -448,7 +448,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswud_x64\my_dll.lib user32.lib"
 				OutputFile="vc_mswud_x64\sdk_exe.exe"
 				LinkIncremental="2"
@@ -538,7 +538,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswu_x64\my_dll.lib user32.lib"
 				OutputFile="vc_mswu_x64\sdk_exe.exe"
 				LinkIncremental="1"
@@ -632,7 +632,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswuddll_x64\my_dll.lib user32.lib"
 				OutputFile="vc_mswuddll_x64\sdk_exe.exe"
 				LinkIncremental="2"
@@ -722,7 +722,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64-dpi-aware-pmv2.manifest"
+				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
 				AdditionalDependencies="vc_mswudll_x64\my_dll.lib user32.lib"
 				OutputFile="vc_mswudll_x64\sdk_exe.exe"
 				LinkIncremental="1"
