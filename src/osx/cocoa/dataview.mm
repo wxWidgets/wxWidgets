@@ -3404,6 +3404,25 @@ void wxDataViewCheckIconTextRenderer::Allow3rdStateForUser(bool allow)
     m_allow3rdStateForUser = allow;
 }
 
+@interface wxNSTextAttachmentCellWithBaseline : NSTextAttachmentCell
+{
+NSPoint _offset;
+}
+@end
+
+@implementation wxNSTextAttachmentCellWithBaseline
+
+- (void) setCellBaselineOffset:(NSPoint) offset
+{
+    _offset=offset;
+}
+- (NSPoint)cellBaselineOffset
+{
+    return _offset;
+}
+
+@end
+
 bool wxDataViewCheckIconTextRenderer::MacRender()
 {
     wxDataViewCheckIconText checkIconText;
@@ -3432,8 +3451,8 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
     const wxIcon& icon = checkIconText.GetIcon();
     if ( icon.IsOk() )
     {
-        NSTextAttachmentCell* const attachmentCell =
-            [[NSTextAttachmentCell alloc] initImageCell: icon.GetNSImage()];
+        wxNSTextAttachmentCellWithBaseline* const attachmentCell =
+            [[wxNSTextAttachmentCellWithBaseline alloc] initImageCell: icon.GetNSImage()];
         NSTextAttachment* const attachment = [NSTextAttachment new];
         [attachment setAttachmentCell: attachmentCell];
 
@@ -3450,6 +3469,8 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
 
         NSMutableAttributedString* const fullString =
             [NSMutableAttributedString new];
+        [attachmentCell setCellBaselineOffset: NSMakePoint(0.0, -5.0)];
+
         [fullString appendAttributedString: iconString];
         [fullString appendAttributedString: separatorString];
         [fullString appendAttributedString: textAttrString];
