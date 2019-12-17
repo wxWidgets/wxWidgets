@@ -15,6 +15,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/windowid.h"
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
@@ -274,13 +275,13 @@ inline bool wxPlatformIs(int platform) { return wxPlatform::Is(platform); }
 // ----------------------------------------------------------------------------
 
 // Ensure subsequent IDs don't clash with this one
-WXDLLIMPEXP_BASE void wxRegisterId(int id);
+WXDLLIMPEXP_BASE void wxRegisterId(wxWindowID id);
 
 // Return the current ID
-WXDLLIMPEXP_BASE int wxGetCurrentId();
+WXDLLIMPEXP_BASE wxWindowID wxGetCurrentId();
 
 // Generate a unique ID
-WXDLLIMPEXP_BASE int wxNewId();
+WXDLLIMPEXP_BASE wxWindowID wxNewId();
 
 // ----------------------------------------------------------------------------
 // Various conversions
