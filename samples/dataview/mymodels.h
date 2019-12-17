@@ -208,9 +208,8 @@ class MyListModel: public wxDataViewVirtualListModel
 public:
     enum
     {
-        Col_Toggle,
+        Col_ToggleIconText,
         Col_EditableText,
-        Col_IconText,
         Col_Date,
         Col_TextWithAttr,
         Col_Custom,
@@ -236,11 +235,8 @@ public:
 
     virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE
     {
-        if (col == Col_Toggle)
-            return "bool";
-
-        if (col == Col_IconText)
-            return "wxDataViewIconText";
+        if (col == Col_ToggleIconText)
+            return wxDataViewCheckIconTextRenderer::GetDefaultType();
 
         return "string";
     }

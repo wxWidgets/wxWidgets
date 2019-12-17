@@ -833,24 +833,21 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_list_model = new MyListModel;
             m_ctrl[Page_List]->AssociateModel( m_list_model.get() );
 
-            m_ctrl[Page_List]->AppendToggleColumn(L"\u2714",
-                                          MyListModel::Col_Toggle,
-                                          wxDATAVIEW_CELL_ACTIVATABLE,
-                                          wxCOL_WIDTH_AUTOSIZE);
+            wxDataViewColumn* const colCheckIconText = new wxDataViewColumn
+                (
+                     L"\u2714 + icon + text",
+                     new wxDataViewCheckIconTextRenderer(),
+                     MyListModel::Col_ToggleIconText,
+                     wxCOL_WIDTH_AUTOSIZE
+                );
+            m_ctrl[Page_List]->AppendColumn(colCheckIconText);
 
-            // the various columns
             m_ctrl[Page_List]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,
                                         wxDATAVIEW_CELL_EDITABLE,
                                         wxCOL_WIDTH_AUTOSIZE,
                                         wxALIGN_NOT,
                                         wxDATAVIEW_COL_SORTABLE);
-            m_ctrl[Page_List]->AppendIconTextColumn("icon",
-                                            MyListModel::Col_IconText,
-                                            wxDATAVIEW_CELL_EDITABLE,
-                                            wxCOL_WIDTH_AUTOSIZE,
-                                            wxALIGN_NOT,
-                                            wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE);
 
             m_ctrl[Page_List]->AppendDateColumn("date",
                                         MyListModel::Col_Date);
