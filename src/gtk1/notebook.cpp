@@ -517,7 +517,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     GdkBitmap *mask = NULL;
     if ( bmp.GetMask() )
     {
-        mask = bmp.GetMask()->GetBitmap();
+        mask = bmp.GetMask()->m_bitmap;
     }
 
     if (pixmapwid == NULL)
@@ -684,7 +684,7 @@ bool wxNotebook::InsertPage( size_t position,
         GdkBitmap *mask = NULL;
         if ( bmp.GetMask() )
         {
-            mask = bmp.GetMask()->GetBitmap();
+            mask = bmp.GetMask()->m_bitmap;
         }
 
         GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, mask );
