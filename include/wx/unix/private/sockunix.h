@@ -62,7 +62,7 @@ public:
     virtual void UpdateBlockingState() wxOVERRIDE
     {
         // Make this int and not bool to allow passing it to ioctl().
-        const int isBlocking = (GetSocketFlags() & wxSOCKET_BLOCK) != 0;
+        int isBlocking = (GetSocketFlags() & wxSOCKET_BLOCK) != 0;
         ioctl(m_fd, FIONBIO, &isBlocking);
 
         DoEnableEvents(wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG, !isBlocking);
