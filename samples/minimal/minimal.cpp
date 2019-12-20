@@ -115,9 +115,66 @@ wxIMPLEMENT_APP(MyApp);
 // the application class
 // ----------------------------------------------------------------------------
 
+#include <cstdarg>
+
+static void blabla(int x, ...) {
+	va_list list;
+	va_start(list, x);
+
+	if (true)
+		wxVLogGeneric(Info, "vhello generic %d", list);
+	if (true)
+		wxVLogTrace(wxTRACE_Messages, "vhello trace %d", list);
+	if (true)
+		wxVLogError("vhello error %d", list);
+	if (true)
+		wxVLogMessage("vhello message %d", list);
+	if (true)
+		wxVLogVerbose("vhello verbose %d", list);
+	if (true)
+		wxVLogWarning("vhello warning %d", list);
+#if 0
+	if (true)
+		wxVLogFatalError("vhello fatal %d", list);
+#endif
+	if (true)
+		wxVLogSysError("vhello syserror %d", list);
+	if (true)
+		wxVLogStatus("vhello status %d", list);
+	if (true)
+		wxVLogDebug("vhello debug %d", list);
+
+	va_end(list);
+}
+
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+	wxLog::SetLogLevel(wxLOG_Max);
+	blabla(123, 456);
+	if (true)
+		wxLogGeneric(wxLOG_Info, "hello generic %d", 42);
+	if (true)
+		wxLogTrace(wxTRACE_Messages, "hello trace %d", 42);
+	if (true)
+		wxLogError("hello error %d", 42);
+	if (true)
+		wxLogMessage("hello message %d", 42);
+	if (true)
+		wxLogVerbose("hello verbose %d", 42);
+	if (true)
+		wxLogWarning("hello warning %d", 42);
+#if 0
+	if (true)
+		wxLogFatalError("hello fatal %d", 42);
+#endif
+	if (true)
+		wxLogSysError("hello syserror %d", 42);
+	if (true)
+		wxLogStatus("hello status %d", 42);
+	if (true)
+		wxLogDebug("hello debug %d", 42);
+
     // call the base class initialization method, currently it only parses a
     // few common command-line options but it could be do more in the future
     if ( !wxApp::OnInit() )
