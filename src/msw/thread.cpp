@@ -624,10 +624,12 @@ void wxThreadInternal::SetPriority(unsigned int priority)
         win_priority = THREAD_PRIORITY_NORMAL;
     }
 
-    if ( !::SetThreadPriority(m_hThread, win_priority) )
+    if ( m_hThread && !::SetThreadPriority(m_hThread, win_priority) )
     {
         wxLogSysError(_("Can't set thread priority"));
     }
+    // else: If m_hThread is NULL, the thread hasn't been created yet,
+    // but once it is created, the priority will be set by Create().
 }
 
 bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
