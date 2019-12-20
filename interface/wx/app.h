@@ -1081,7 +1081,7 @@ public:
 
         @since 3.1.4
     */
-    bool OSXEnableAutomaticTabbing(bool enable);
+    void OSXEnableAutomaticTabbing(bool enable);
 
     //@}
 

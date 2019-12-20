@@ -411,6 +411,8 @@
 #cmakedefine01 wxUSE_TREECTRL
 #cmakedefine01 wxUSE_TREELISTCTRL
 
+#cmakedefine01 wxUSE_NATIVE_DATAVIEWCTRL
+
 #cmakedefine01 wxUSE_STATUSBAR
 
 #cmakedefine01 wxUSE_NATIVE_STATUSBAR

@@ -73,7 +73,7 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
     {
         GdkBitmap *mask = NULL;
         if (m_bitmap.GetMask())
-            mask = m_bitmap.GetMask()->GetBitmap();
+            mask = m_bitmap.GetMask()->m_bitmap;
 
         gtk_pixmap_set(GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask);
 

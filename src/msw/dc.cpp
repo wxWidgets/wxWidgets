@@ -831,7 +831,9 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
     //   outside the view and visible line ends are always square.
     // - DC which coordinate system is not rotated (graphics mode
     //   of the DC != GM_ADVANCED) and not scaled.
+    // - wxCOPY raster operation mode becaue it is based on ExtTextOut() API.
     if ( IsNonTransformedDC(GetHdc()) &&
+         m_logicalFunction == wxCOPY &&
          m_pen.IsNonTransparent() && // this calls IsOk() too
          m_pen.GetStyle() == wxPENSTYLE_SOLID
        )
@@ -859,13 +861,15 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     // We have optimized function to draw physical vertical or horizontal lines
-    // with solid color and square ends.
+    // with solid color and square ends. It is based on ExtTextOut() API
+    // so it can be used only with wxCOPY raster operation mode.
     // Because checking wheteher the line would be horizontal/vertical
     // in the device coordinate system is complex so we only check whether
     // the line is horizontal/vertical in the logical coordinates and use
     // optimized function only for DC which coordinate system is for sure
     // not rotated (graphics mode of the DC != GM_ADVANCED) and not scaled.
     if ( (x1 == x2 || y1 == y2) &&
+         m_logicalFunction == wxCOPY &&
          IsNonTransformedDC(GetHdc()) &&
          m_pen.IsNonTransparent() && // this calls IsOk() too
          m_pen.GetStyle() == wxPENSTYLE_SOLID &&

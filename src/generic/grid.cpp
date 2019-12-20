@@ -1813,6 +1813,11 @@ void wxGridColLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     //
     // m_owner->PrepareDC( dc );
 
+    // Column indices become invalid when the grid is empty, so avoid doing
+    // anything at all in this case.
+    if ( m_owner->GetNumberCols() == 0 )
+        return;
+
     int x, y;
     wxGridWindow *gridWindow = IsFrozen() ? m_owner->m_frozenColGridWin :
                                             m_owner->m_gridWin;
@@ -7339,6 +7344,9 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
 {
     // Get the bottom or rightmost line that could match.
     int line = oper.PosToLine(this, pos, NULL, true);
+
+    if ( line == wxNOT_FOUND )
+        return -1;
 
     if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
     {

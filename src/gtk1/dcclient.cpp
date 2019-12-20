@@ -1042,7 +1042,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
 
     // apply mask if any
     GdkBitmap *mask = NULL;
-    if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
+    if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->m_bitmap;
 
     GdkBitmap *new_mask = NULL;
 
@@ -1265,7 +1265,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
 
         // apply mask if any
         GdkBitmap *mask = NULL;
-        if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
+        if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->m_bitmap;
 
         GdkBitmap *new_mask = NULL;
 
@@ -1823,7 +1823,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     if ((m_brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
     {
         gdk_gc_set_fill( m_textGC, GDK_OPAQUE_STIPPLED);
-        gdk_gc_set_stipple( m_textGC, m_brush.GetStipple()->GetMask()->GetBitmap() );
+        gdk_gc_set_stipple( m_textGC, m_brush.GetStipple()->GetMask()->m_bitmap );
     }
 
     if (m_brush.IsHatch())

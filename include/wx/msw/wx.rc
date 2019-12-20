@@ -106,15 +106,15 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 #endif
 
 #if defined(WX_CPU_AMD64)
-    #define wxMANIFEST_CPU "amd64"
+    #define wxMANIFEST_CPU amd64
 #elif defined(WX_CPU_IA64)
-    #define wxMANIFEST_CPU "ia64"
+    #define wxMANIFEST_CPU ia64
 #elif defined(WX_CPU_X86)
-    #define wxMANIFEST_CPU "wx"
+    #define wxMANIFEST_CPU wx
 #elif defined(WX_CPU_ARM)
-    #define wxMANIFEST_CPU "arm"
+    #define wxMANIFEST_CPU arm
 #elif defined(WX_CPU_ARM64)
-    #define wxMANIFEST_CPU "arm64"
+    #define wxMANIFEST_CPU arm64
 #else
 // Notice that if the manifest is included, WX_CPU_XXX constant corresponding
 // to the architecture we're compiling for must be defined. This can be done
@@ -126,14 +126,23 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 #endif
 
 #if !defined(wxUSE_DPI_AWARE_MANIFEST) || wxUSE_DPI_AWARE_MANIFEST == 0
-    #define wxMANIFEST_DPI ""
+    #define wxMANIFEST_DPI .manifest
 #elif wxUSE_DPI_AWARE_MANIFEST == 1
-    #define wxMANIFEST_DPI "-dpi-aware"
+    #define wxMANIFEST_DPI _dpi_aware.manifest
 #elif wxUSE_DPI_AWARE_MANIFEST == 2
-    #define wxMANIFEST_DPI "-dpi-aware-pmv2"
+    #define wxMANIFEST_DPI _dpi_aware_pmv2.manifest
 #endif
 
-#define wxMANIFEST_FILE "wx/msw/" wxMANIFEST_CPU wxMANIFEST_DPI ".manifest"
+#define wxRC_STR(text) wxRC_STR2(text)
+#define wxRC_STR2(text) #text
+#define wxRC_CONCAT(a, b, c) wxRC_CONCAT2(a, b, c)
+#define wxRC_CONCAT2(a, b, c) a ## b ## c
+
+#ifdef __GNUC__
+    #define wxMANIFEST_FILE "wx/msw/" wxRC_STR(wxMANIFEST_CPU) wxRC_STR(wxMANIFEST_DPI)
+#else
+    #define wxMANIFEST_FILE wxRC_CONCAT(wx/msw/, wxMANIFEST_CPU, wxMANIFEST_DPI)
+#endif
 wxMANIFEST_ID RT_MANIFEST wxMANIFEST_FILE
 
 #endif // wxUSE_RC_MANIFEST

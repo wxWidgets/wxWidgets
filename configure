@@ -1249,6 +1249,7 @@ enable_combobox
 enable_comboctrl
 enable_commandlinkbutton
 enable_dataviewctrl
+enable_nativedvc
 enable_datepick
 enable_detect_sm
 enable_dirpicker
@@ -2203,6 +2204,7 @@ Optional Features:
   --enable-comboctrl      use wxComboCtrl class
   --enable-commandlinkbutton      use wxCommmandLinkButton class
   --enable-dataviewctrl   use wxDataViewCtrl class
+  --disable-nativedvc     disable use of native wxDataViewCtrl even if available
   --enable-datepick       use wxDatePickerCtrl class
   --enable-detect_sm      use code to detect X11 session manager
   --enable-dirpicker      use wxDirPickerCtrl class
@@ -9717,6 +9719,35 @@ fi
 
 
           eval "$wx_cv_use_dataviewctrl"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-nativedvc was given.
+if test "${enable_nativedvc+set}" = set; then :
+  enableval=$enable_nativedvc;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_nativedvc='wxUSE_NATIVE_DATAVIEWCTRL=yes'
+                          else
+                            wx_cv_use_nativedvc='wxUSE_NATIVE_DATAVIEWCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_nativedvc='wxUSE_NATIVE_DATAVIEWCTRL=${'DEFAULT_wxUSE_NATIVE_DATAVIEWCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_nativedvc"
 
 
           enablestring=
@@ -35900,6 +35931,11 @@ if test "$wxUSE_DATAVIEWCTRL" = "yes"; then
 
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dataview"
+
+  if test "$wxUSE_NATIVE_DATAVIEWCTRL" = "yes"; then
+    $as_echo "#define wxUSE_NATIVE_DATAVIEWCTRL 1" >>confdefs.h
+
+  fi
 fi
 
 if test "$wxUSE_IMAGLIST" = "yes"; then
