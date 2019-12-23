@@ -530,7 +530,7 @@ int wxIFFDecoder::ReadIFF()
             pal[3*i + 1] = 0;
             pal[3*i + 2] = 0;
             }
-            delete m_image->pal;
+            delete[] m_image->pal;
             m_image->pal = pal;
             m_image->colors = colors;
         }
