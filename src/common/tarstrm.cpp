@@ -1474,7 +1474,7 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
             m_extendedHdr = new char[m_extendedSize];
             if (oldHdr) {
                 strcpy(m_extendedHdr, oldHdr);
-                delete oldHdr;
+                delete [] oldHdr;
             } else {
                 *m_extendedHdr = 0;
             }
