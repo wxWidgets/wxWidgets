@@ -114,13 +114,13 @@ static bool IsFunction(Accessor &styler, Sci_PositionU currentPos) {
 	//make sure that there are only spaces (or tabs) between the beginning
 	//of the line and the function declaration
 	position = currentPos - numberOfCharacters - 1; 		//-1 to move to char before 'function'
-	for (Sci_PositionU j = 0; j < 16; j++) {					//check up to 16 preceeding characters
+	for (Sci_PositionU j = 0; j < 16; j++) {					//check up to 16 preceding characters
 		char c = styler.SafeGetCharAt(position--, '\0');	//if can't read char, return NUL (past beginning of document)
 		if (c <= 0)	//reached beginning of document
 			return true;
-		if (c > 0 && IsLineEndChar(c))
+		if (IsLineEndChar(c))
 			return true;
-		else if (c > 0 && !IsASpaceOrTab(c))
+		else if (!IsASpaceOrTab(c))
 			return false;
 	}
 
