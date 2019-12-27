@@ -1399,6 +1399,7 @@ GTK_SRC =
     src/gtk/slider.cpp
     src/gtk/spinbutt.cpp
     src/gtk/spinctrl.cpp
+    src/gtk/srchctrl.cpp
     src/gtk/statbmp.cpp
     src/gtk/statbox.cpp
     src/gtk/statline.cpp
@@ -1469,6 +1470,7 @@ GTK_HDR =
     wx/gtk/slider.h
     wx/gtk/spinbutt.h
     wx/gtk/spinctrl.h
+    wx/gtk/srchctrl.h
     wx/gtk/statbmp.h
     wx/gtk/statbox.h
     wx/gtk/statline.h
