@@ -1156,6 +1156,14 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
         res.Init(dbuf[2]/100, dbuf[3]/100);
+
+        // We've read BITMAPINFOHEADER data but for BITMAPV4HEADER or BITMAPV5HEADER
+        // we have to forward stream position to after the actual bitmap header.
+        if ( hdrSize > sizeof(BITMAPINFOHEADER) )
+        {
+            if ( stream.SeekI(hdrSize - sizeof(BITMAPINFOHEADER), wxFromCurrent) == wxInvalidOffset )
+                return false;
+        }
     }
     if (ncolors == 0)
         ncolors = 1 << bpp;
