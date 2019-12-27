@@ -22,7 +22,7 @@
     #include "wx/menu.h"
 #endif //WX_PRECOMP
 
-#if wxUSE_NATIVE_SEARCH_CONTROL
+#ifdef wxUSE_NATIVE_SEARCH_CONTROL
 
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
