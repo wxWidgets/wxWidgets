@@ -1516,6 +1516,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/dataview.cpp
     src/gtk/bmpcbox.cpp
     src/gtk/animate.cpp
+    src/gtk/srchctrl.cpp
 </set>
 <set var="GTK2_SRC" hints="files">
     $(GTK_SRC)
@@ -1585,6 +1586,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/bmpcbox.h
     wx/gtk/dataview.h
     wx/gtk/dvrenderer.h
+    wx/gtk/srchctrl.h
 </set>
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)

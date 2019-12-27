@@ -2960,6 +2960,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
 	wx/gtk/dvrenderer.h \
+	wx/gtk/srchctrl.h \
 	wx/generic/fontdlgg.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
@@ -3022,7 +3023,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/gtk/calctrl.h \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
-	wx/gtk/dvrenderer.h
+	wx/gtk/dvrenderer.h \
+	wx/gtk/srchctrl.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR =  \
 	wx/generic/fdrepdlg.h \
@@ -3084,7 +3086,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR =  \
 	wx/gtk/calctrl.h \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
-	wx/gtk/dvrenderer.h
+	wx/gtk/dvrenderer.h \
+	wx/gtk/srchctrl.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -5303,6 +5306,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
 	monodll_animate.o \
+	monodll_gtk_srchctrl.o \
 	monodll_fontdlgg.o \
 	monodll_generic_activityindicator.o \
 	monodll_gtk_eggtrayicon.o
@@ -5368,7 +5372,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
-	monodll_animate.o
+	monodll_animate.o \
+	monodll_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5431,7 +5436,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS =  \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
-	monodll_animate.o
+	monodll_animate.o \
+	monodll_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_motif_accel.o \
@@ -5606,7 +5612,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_scrolbar.o \
 	monodll_cocoa_slider.o \
 	monodll_cocoa_spinbutt.o \
-	monodll_srchctrl.o \
+	monodll_cocoa_srchctrl.o \
 	monodll_cocoa_statbox.o \
 	monodll_cocoa_statline.o \
 	monodll_cocoa_stattext.o \
@@ -7289,6 +7295,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
 	monolib_animate.o \
+	monolib_gtk_srchctrl.o \
 	monolib_fontdlgg.o \
 	monolib_generic_activityindicator.o \
 	monolib_gtk_eggtrayicon.o
@@ -7354,7 +7361,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
-	monolib_animate.o
+	monolib_animate.o \
+	monolib_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -7417,7 +7425,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
-	monolib_animate.o
+	monolib_animate.o \
+	monolib_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_motif_accel.o \
@@ -7592,7 +7601,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_scrolbar.o \
 	monolib_cocoa_slider.o \
 	monolib_cocoa_spinbutt.o \
-	monolib_srchctrl.o \
+	monolib_cocoa_srchctrl.o \
 	monolib_cocoa_statbox.o \
 	monolib_cocoa_statline.o \
 	monolib_cocoa_stattext.o \
@@ -9420,6 +9429,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
 	coredll_animate.o \
+	coredll_gtk_srchctrl.o \
 	coredll_fontdlgg.o \
 	coredll_generic_activityindicator.o \
 	coredll_gtk_eggtrayicon.o
@@ -9485,7 +9495,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_taskbar.o \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
-	coredll_animate.o
+	coredll_animate.o \
+	coredll_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -9548,7 +9559,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_taskbar.o \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
-	coredll_animate.o
+	coredll_animate.o \
+	coredll_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_motif_accel.o \
@@ -9723,7 +9735,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_scrolbar.o \
 	coredll_cocoa_slider.o \
 	coredll_cocoa_spinbutt.o \
-	coredll_srchctrl.o \
+	coredll_cocoa_srchctrl.o \
 	coredll_cocoa_statbox.o \
 	coredll_cocoa_statline.o \
 	coredll_cocoa_stattext.o \
@@ -11142,6 +11154,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
 	corelib_animate.o \
+	corelib_gtk_srchctrl.o \
 	corelib_fontdlgg.o \
 	corelib_generic_activityindicator.o \
 	corelib_gtk_eggtrayicon.o
@@ -11207,7 +11220,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_taskbar.o \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
-	corelib_animate.o
+	corelib_animate.o \
+	corelib_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -11270,7 +11284,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_taskbar.o \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
-	corelib_animate.o
+	corelib_animate.o \
+	corelib_gtk_srchctrl.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_motif_accel.o \
@@ -11445,7 +11460,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_scrolbar.o \
 	corelib_cocoa_slider.o \
 	corelib_cocoa_spinbutt.o \
-	corelib_srchctrl.o \
+	corelib_cocoa_srchctrl.o \
 	corelib_cocoa_statbox.o \
 	corelib_cocoa_statline.o \
 	corelib_cocoa_stattext.o \
@@ -16493,7 +16508,7 @@ monodll_cocoa_slider.o: $(srcdir)/src/osx/cocoa/slider.mm $(MONODLL_ODEP)
 monodll_cocoa_spinbutt.o: $(srcdir)/src/osx/cocoa/spinbutt.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/spinbutt.mm
 
-monodll_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(MONODLL_ODEP)
+monodll_cocoa_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/srchctrl.mm
 
 monodll_cocoa_statbox.o: $(srcdir)/src/osx/cocoa/statbox.mm $(MONODLL_ODEP)
@@ -19691,6 +19706,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@monodll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -21761,7 +21785,7 @@ monolib_cocoa_slider.o: $(srcdir)/src/osx/cocoa/slider.mm $(MONOLIB_ODEP)
 monolib_cocoa_spinbutt.o: $(srcdir)/src/osx/cocoa/spinbutt.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/spinbutt.mm
 
-monolib_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(MONOLIB_ODEP)
+monolib_cocoa_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/srchctrl.mm
 
 monolib_cocoa_statbox.o: $(srcdir)/src/osx/cocoa/statbox.mm $(MONOLIB_ODEP)
@@ -24959,6 +24983,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@monolib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -27686,7 +27719,7 @@ coredll_cocoa_slider.o: $(srcdir)/src/osx/cocoa/slider.mm $(COREDLL_ODEP)
 coredll_cocoa_spinbutt.o: $(srcdir)/src/osx/cocoa/spinbutt.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/spinbutt.mm
 
-coredll_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(COREDLL_ODEP)
+coredll_cocoa_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/srchctrl.mm
 
 coredll_cocoa_statbox.o: $(srcdir)/src/osx/cocoa/statbox.mm $(COREDLL_ODEP)
@@ -30308,6 +30341,15 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_animate.o: $(srcdir)/src/gtk/animate.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@coredll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -31943,7 +31985,7 @@ corelib_cocoa_slider.o: $(srcdir)/src/osx/cocoa/slider.mm $(CORELIB_ODEP)
 corelib_cocoa_spinbutt.o: $(srcdir)/src/osx/cocoa/spinbutt.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/spinbutt.mm
 
-corelib_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(CORELIB_ODEP)
+corelib_cocoa_srchctrl.o: $(srcdir)/src/osx/cocoa/srchctrl.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/srchctrl.mm
 
 corelib_cocoa_statbox.o: $(srcdir)/src/osx/cocoa/statbox.mm $(CORELIB_ODEP)
@@ -34564,6 +34606,15 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_animate.o: $(srcdir)/src/gtk/animate.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@corelib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp

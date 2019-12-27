@@ -16,15 +16,23 @@
 
 #include "wx/textctrl.h"
 
-#if !defined(__WXUNIVERSAL__) && defined(__WXMAC__)
+#if defined(__WXUNIVERSAL__)
+    // nothing, use generic controls
+#elif defined(__WXMAC__)
     // search control was introduced in Mac OS X 10.3 Panther
-    #define wxUSE_NATIVE_SEARCH_CONTROL 1
+    #define wxUSE_NATIVE_SEARCH_CONTROL
 
     #define wxSearchCtrlBaseBaseClass wxTextCtrl
-#else
-    // no native version, use the generic one
-    #define wxUSE_NATIVE_SEARCH_CONTROL 0
+#elif defined(__WXGTK20__)
+    // Use GtkSearchEntry if available, construct a similar one using GtkEntry
+    // otherwise.
+    #define wxUSE_NATIVE_SEARCH_CONTROL
 
+    #define wxSearchCtrlBaseBaseClass wxTextCtrlBase
+#endif
+
+#ifndef wxUSE_NATIVE_SEARCH_CONTROL
+    // no native version, use the generic one
     #include "wx/compositewin.h"
     #include "wx/containr.h"
 
@@ -78,9 +86,11 @@ private:
 
 
 // include the platform-dependent class implementation
-#if wxUSE_NATIVE_SEARCH_CONTROL
+#ifdef wxUSE_NATIVE_SEARCH_CONTROL
     #if defined(__WXMAC__)
         #include "wx/osx/srchctrl.h"
+    #elif defined(__WXGTK__)
+        #include "wx/gtk/srchctrl.h"
     #endif
 #else
     #include "wx/generic/srchctlg.h"
