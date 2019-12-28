@@ -1060,7 +1060,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
         height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
     }
-    if ( !IsBmp)height = height  / 2; // for icons divide by 2
+    if ( !IsBmp) height /= 2; // for icons divide by 2
 
     if ( width > 32767 )
     {
