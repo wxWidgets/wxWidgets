@@ -1159,9 +1159,13 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         // We've read BITMAPINFOHEADER data but for BITMAPV4HEADER or BITMAPV5HEADER
         // we have to forward stream position to after the actual bitmap header.
-        if ( hdrSize > sizeof(BITMAPINFOHEADER) )
+        //
+        // Note: hardcode its size as struct BITMAPINFOHEADER is not defined on
+        // non-MSW platforms.
+        const size_t sizeBITMAPINFOHEADER = 40;
+        if ( hdrSize > sizeBITMAPINFOHEADER )
         {
-            if ( stream.SeekI(hdrSize - sizeof(BITMAPINFOHEADER), wxFromCurrent) == wxInvalidOffset )
+            if ( stream.SeekI(hdrSize - sizeBITMAPINFOHEADER, wxFromCurrent) == wxInvalidOffset )
                 return false;
         }
     }
