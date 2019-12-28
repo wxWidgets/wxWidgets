@@ -1623,6 +1623,7 @@ template <typename T> wxDELETEA(T*& array);
 
     @header{wx/defs.h}
  */
+#define wxDEPRECATED_MSG(msg)
 
 /**
     This macro can be used around a function declaration to generate warnings
