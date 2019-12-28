@@ -586,10 +586,12 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
     {
+#if wxUSE_PALETTE
         wxScopedArray<unsigned char>
              r(ncolors),
              g(ncolors),
              b(ncolors);
+#endif // wxUSE_PALETTE
         for (int j = 0; j < ncolors; j++)
         {
             if (hasPalette)
@@ -600,18 +602,19 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 cmap[j].b = bbuf[0];
                 cmap[j].g = bbuf[1];
                 cmap[j].r = bbuf[2];
-
-                r[j] = cmap[j].r;
-                g[j] = cmap[j].g;
-                b[j] = cmap[j].b;
             }
             else
             {
                 //used in reading .ico file mask
-                r[j] = cmap[j].r =
-                g[j] = cmap[j].g =
-                b[j] = cmap[j].b = ( j ? 255 : 0 );
+                cmap[j].r =
+                cmap[j].g =
+                cmap[j].b = ( j ? 255 : 0 );
             }
+#if wxUSE_PALETTE
+            r[j] = cmap[j].r;
+            g[j] = cmap[j].g;
+            b[j] = cmap[j].b;
+#endif // wxUSE_PALETTE
         }
 
 #if wxUSE_PALETTE
