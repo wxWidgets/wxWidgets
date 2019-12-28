@@ -25,7 +25,7 @@
     #include "wx/dcmemory.h"
 #endif //WX_PRECOMP
 
-#ifndef wxUSE_NATIVE_SEARCH_CONTROL
+#if !wxUSE_NATIVE_SEARCH_CONTROL
 
 #include "wx/image.h"
 #include "wx/utils.h"
