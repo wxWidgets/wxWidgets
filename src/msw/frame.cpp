@@ -850,6 +850,14 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us
             processed = !Close();
+            // Apparently under Win 10 messages are queued while minimized application
+            // is being closed but they don't seem to be processed while the application
+            // is in that state what prevents the application from being closed completely.
+            // To process the messages immediately we need to restore the app window.
+            if ( !processed && ::IsIconic(GetHwnd()) && wxGetWinVersion() >= wxWinVersion_10 )
+            {
+                ::ShowWindow(GetHwnd(), SW_RESTORE);
+            }
             break;
 
         case WM_SIZE:
