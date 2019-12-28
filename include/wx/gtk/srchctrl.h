@@ -89,9 +89,6 @@ public:
 
     virtual void Clear() wxOVERRIDE;
 
-    virtual GtkEntry *GetEntry() const wxOVERRIDE
-        { return m_entry; }
-
 #if wxUSE_MENUS
     void PopupSearchMenu();
 #endif // wxUSE_MENUS
@@ -121,6 +118,9 @@ private:
     }
 
 private:
+    virtual GtkEntry *GetEntry() const wxOVERRIDE
+        { return m_entry; }
+
     GtkEntry *m_entry;
 
 #if wxUSE_MENUS

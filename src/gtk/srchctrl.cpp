@@ -28,10 +28,36 @@
 
 #if GTK_CHECK_VERSION(3,6,0)
     // GtkSearchEntry is available only for GTK+ >= 3.6
-    #define wxHAS_GTK_SEARCH_ENTRY 1
-#else // GTK < 3.6
-    #define wxHAS_GTK_SEARCH_ENTRY 0
+    #define wxHAS_GTK_SEARCH_ENTRY
 #endif // GTK >= 3.6
+
+namespace // anonymous
+{
+
+// A more readable way to check for GtkSearchEntry availability.
+inline bool HasGtkSearchEntry()
+{
+#ifdef wxHAS_GTK_SEARCH_ENTRY
+    return wx_is_at_least_gtk3(6);
+#else
+    return false;
+#endif
+}
+
+inline GtkWidget* CreateGtkSearchEntryIfAvailable()
+{
+#ifdef wxHAS_GTK_SEARCH_ENTRY
+    if ( wx_is_at_least_gtk3(6) )
+    {
+        return gtk_search_entry_new();
+    }
+#endif // wxHAS_GTK_SEARCH_ENTRY
+
+    // No GtkSearchEntry! fallback to the plain GtkEntry.
+    return gtk_entry_new();
+}
+
+}
 
 // ============================================================================
 // signal handlers implementation
@@ -58,7 +84,7 @@ wx_gtk_icon_press(GtkEntry* WXUNUSED(entry),
     }
     else // position == GTK_ENTRY_ICON_SECONDARY
     {
-        if ( !wx_is_at_least_gtk3(6) )
+        if ( !HasGtkSearchEntry() )
         {
             // No need to call this for a GtkSearchEntry.
             ctrl->Clear();
@@ -91,12 +117,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase);
 // -----------
 wxSearchCtrl::~wxSearchCtrl()
 {
-    if ( m_entry )
-    {
-        GTKDisconnect(m_entry);
-        g_object_remove_weak_pointer(G_OBJECT(m_entry), (void**)&m_entry);
-    }
-
 #if wxUSE_MENUS
     delete m_menu;
 #endif // wxUSE_MENUS
@@ -125,7 +145,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxString& name)
 {
     if ( !PreCreation(parent, pos, size) ||
-         !CreateBase(parent, id, pos, size, (style | wxTE_PROCESS_ENTER),
+         !CreateBase(parent, id, pos, size, style | wxTE_PROCESS_ENTER,
                      validator, name) )
     {
         wxFAIL_MSG( "wxSearchCtrl creation failed" );
@@ -141,65 +161,52 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
     GtkEntry * const entry = GetEntry();
 
-    if ( entry )
-    {
-        // Set it up to trigger default item on enter key press
-        gtk_entry_set_activates_default(entry, !HasFlag(wxTE_PROCESS_ENTER));
+    // Theoretically m_entry cannot be null, and the test here
+    // is just for safety reasons.
+    if ( !entry )
+        return false;
 
-        gtk_editable_set_editable(GTK_EDITABLE(entry), true);
+    // Set it up to trigger default item on enter key press
+    gtk_entry_set_activates_default(entry, !HasFlag(wxTE_PROCESS_ENTER));
+
+    gtk_editable_set_editable(GTK_EDITABLE(entry), true);
 #ifdef __WXGTK3__
-        gtk_entry_set_width_chars(entry, 1);
+    gtk_entry_set_width_chars(entry, 1);
 #endif
-    }
 
     m_parent->DoAddChild(this);
 
-    if ( entry )
-        m_focusWidget = GTK_WIDGET(entry);
+    m_focusWidget = GTK_WIDGET(entry);
 
     PostCreation(size);
 
-    if ( entry )
-    {
-        gtk_entry_set_text(entry, wxGTK_CONV(value));
+    gtk_entry_set_text(entry, wxGTK_CONV(value));
 
-        SetHint(_("Search"));
+    SetHint(_("Search"));
 
-        GTKConnectChangedSignal();
-        GTKConnectInsertTextSignal(entry);
-        GTKConnectClipboardSignals(GTK_WIDGET(entry));
-    }
+    GTKConnectChangedSignal();
+    GTKConnectInsertTextSignal(entry);
+    GTKConnectClipboardSignals(GTK_WIDGET(entry));
 
     return true;
 }
 
 void wxSearchCtrl::GTKCreateSearchEntryWidget()
 {
-#if wxHAS_GTK_SEARCH_ENTRY
-    if ( wx_is_at_least_gtk3(6) )
-    {
-        m_widget = gtk_search_entry_new();
-    }
-#endif // wxHAS_GTK_SEARCH_ENTRY
-
-    if ( !m_widget )
-    {
-        // No GtkSearchEntry! fallback to the plain GtkEntry.
-        m_widget = gtk_entry_new();
-    }
+    m_widget = CreateGtkSearchEntryIfAvailable();
 
     g_object_ref(m_widget);
 
     m_entry = GTK_ENTRY(m_widget);
-    g_object_add_weak_pointer(G_OBJECT(m_entry), (void**)&m_entry);
 
-    if ( !wx_is_at_least_gtk3(6) )
+    if ( !HasGtkSearchEntry() )
     {
+        // Add the search icon and make it looks as native as one would expect
+        // (i.e. GtkSearchEntry).
         gtk_entry_set_icon_from_icon_name(m_entry, 
                                           GTK_ENTRY_ICON_PRIMARY,
                                           "edit-find-symbolic");
 
-        // Mimic the behaviour of the native GtkSearchEntry.
         gtk_entry_set_icon_sensitive(m_entry, GTK_ENTRY_ICON_PRIMARY, FALSE);
         gtk_entry_set_icon_activatable(m_entry, GTK_ENTRY_ICON_PRIMARY, FALSE);
     }
@@ -313,20 +320,20 @@ wxMenu* wxSearchCtrl::GetMenu()
 
 void wxSearchCtrl::ShowSearchButton(bool WXUNUSED(show))
 {
+    // Search button is always shown in the native control.
 }
 
 bool wxSearchCtrl::IsSearchButtonVisible() const
 {
-    return HasMenu();
+    // Search button is always shown in the native control.
+    return true;
 }
 
 void wxSearchCtrl::ShowCancelButton(bool show)
 {
-#if wxHAS_GTK_SEARCH_ENTRY
     // The cancel button is shown/hidden automatically by the GtkSearchEntry.
-    if ( wx_is_at_least_gtk3(6) )
+    if ( HasGtkSearchEntry() )
         return;
-#endif // wxHAS_GTK_SEARCH_ENTRY
 
     if ( show == IsCancelButtonVisible() )
     {
@@ -334,25 +341,19 @@ void wxSearchCtrl::ShowCancelButton(bool show)
         return;
     }
 
-    if ( show && !m_cancelButtonVisible )
-    {
-        gtk_entry_set_icon_from_icon_name(m_entry, 
-                                          GTK_ENTRY_ICON_SECONDARY,
-                                          "edit-clear-symbolic");
-    }
-    else // !show && m_cancelButtonVisible
-    {
-        gtk_entry_set_icon_from_icon_name(m_entry, GTK_ENTRY_ICON_SECONDARY, NULL);
-    }
+    gtk_entry_set_icon_from_icon_name(m_entry,
+                                      GTK_ENTRY_ICON_SECONDARY,
+                                      show ? "edit-clear-symbolic" : NULL);
 
     m_cancelButtonVisible = show;
 }
 
 bool wxSearchCtrl::IsCancelButtonVisible() const
 {
-#if wxHAS_GTK_SEARCH_ENTRY
-    return !IsEmpty();
-#endif // wxHAS_GTK_SEARCH_ENTRY
+    if ( HasGtkSearchEntry() )
+    {
+        return !IsEmpty();
+    }
 
     return m_cancelButtonVisible;
 }
