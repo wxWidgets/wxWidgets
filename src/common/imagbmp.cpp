@@ -1162,7 +1162,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         //
         // Note: hardcode its size as struct BITMAPINFOHEADER is not defined on
         // non-MSW platforms.
-        const size_t sizeBITMAPINFOHEADER = 40;
+        const wxInt32 sizeBITMAPINFOHEADER = 40;
         if ( hdrSize > sizeBITMAPINFOHEADER )
         {
             if ( stream.SeekI(hdrSize - sizeBITMAPINFOHEADER, wxFromCurrent) == wxInvalidOffset )
