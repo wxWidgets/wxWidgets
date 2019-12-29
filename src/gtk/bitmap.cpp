@@ -1372,6 +1372,32 @@ void wxBitmap::Draw(cairo_t* cr, int x, int y, bool useMask, const wxColour* fg,
     else
         cairo_paint(cr);
 }
+
+wxBitmap wxBitmap::CreateDisabled() const
+{
+    wxBitmap disabled;
+    if (m_refData == NULL)
+        return disabled;
+
+    const wxBitmapRefData* bmpData = M_BMPDATA;
+    wxBitmapRefData* newRef = new wxBitmapRefData(bmpData->m_width, bmpData->m_height, 32);
+    newRef->m_scaleFactor = bmpData->m_scaleFactor;
+    disabled.m_refData = newRef;
+
+    cairo_t* cr = disabled.CairoCreate();
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_rgba(cr, 0, 0, 0, 0);
+    // clear to transparent
+    cairo_paint(cr);
+    // draw in this bitmap
+    Draw(cr, 0, 0);
+    cairo_set_source_rgba(cr, 0, 0, 0, 0);
+    // create disabled appearance
+    cairo_paint_with_alpha(cr, 0.5);
+    cairo_destroy(cr);
+
+    return disabled;
+}
 #else
 GdkPixbuf* wxBitmap::GetPixbufNoMask() const
 {
