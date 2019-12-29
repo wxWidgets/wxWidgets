@@ -19,7 +19,7 @@
 extern "C" {
 static gboolean image_draw(GtkWidget* widget, cairo_t* cr, wxStaticBitmap* win)
 {
-    const wxBitmap bitmap(win->GetBitmap());
+    wxBitmap bitmap(win->GetBitmap());
     if (!bitmap.IsOk() || bitmap.GetScaleFactor() <= 1)
         return false;
 
@@ -30,6 +30,8 @@ static gboolean image_draw(GtkWidget* widget, cairo_t* cr, wxStaticBitmap* win)
     const wxSize size(bitmap.GetScaledSize());
     int x = (alloc.width  - size.x) / 2;
     int y = (alloc.height - size.y) / 2;
+    if (!win->IsEnabled())
+        bitmap = bitmap.CreateDisabled();
     bitmap.Draw(cr, x, y);
     return true;
 }
