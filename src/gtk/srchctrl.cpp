@@ -101,13 +101,13 @@ wx_gtk_icon_press(GtkEntry* WXUNUSED(entry),
 // ============================================================================
 // wxSearchCtrl implementation
 // ============================================================================
-wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
+wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxControl)
     EVT_CHAR(wxSearchCtrl::OnChar)
     EVT_TEXT(wxID_ANY, wxSearchCtrl::OnText)
     EVT_TEXT_ENTER(wxID_ANY, wxSearchCtrl::OnTextEnter)
 wxEND_EVENT_TABLE()
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxControl);
 
 // ----------------------------------------------------------------------------
 //  creation/destruction
@@ -223,71 +223,6 @@ void wxSearchCtrl::Clear()
 {
     wxTextEntry::Clear();
     ShowCancelButton(false);
-}
-
-bool wxSearchCtrl::IsModified() const
-{
-    return m_modified;
-}
-
-void wxSearchCtrl::MarkDirty()
-{
-    m_modified = true;
-}
-
-void wxSearchCtrl::DiscardEdits()
-{
-    m_modified = false;
-}
-
-bool wxSearchCtrl::PositionToXY(long pos, long *x, long *y ) const
-{
-    if (pos <= GTKGetEntryTextLength(GetEntry()))
-    {
-        if ( y )
-            *y = 0;
-        if ( x )
-            *x = pos;
-    }
-    else
-    {
-        // index out of bounds
-        return false;
-    }
-
-    return true;
-}
-
-long wxSearchCtrl::XYToPosition(long x, long y ) const
-{
-    if ( y != 0 || x > GTKGetEntryTextLength(GetEntry()) )
-        return -1;
-
-    return x;
-}
-
-int wxSearchCtrl::GetLineLength(long lineNo) const
-{
-    const wxString str = GetLineText(lineNo);
-    return (int) str.length();
-}
-
-int wxSearchCtrl::GetNumberOfLines() const 
-{
-    return 1;
-}
-
-wxString wxSearchCtrl::GetLineText( long lineNo ) const
-{
-    if ( lineNo == 0 )
-        return GetValue();
-
-    return wxString();
-}
-
-void wxSearchCtrl::ShowPosition( long pos )
-{
-    gtk_editable_set_position(GetEditable(), pos);
 }
 
 // search control specific interfaces

@@ -38,7 +38,12 @@
     // otherwise.
     #define wxUSE_NATIVE_SEARCH_CONTROL 1
 
-    #define wxSearchCtrlBaseBaseClass wxTextCtrlBase
+    class WXDLLIMPEXP_CORE wxGTKSearchCtrlBase
+        : public wxControl, public wxTextEntry
+    {
+    };
+
+    #define wxSearchCtrlBaseBaseClass wxGTKSearchCtrlBase
 #endif
 
 // ----------------------------------------------------------------------------

@@ -67,26 +67,6 @@ public:
     virtual void SetDescriptiveText(const wxString& text) wxOVERRIDE;
     virtual wxString GetDescriptiveText() const wxOVERRIDE;
 
-    // accessors
-    // ---------
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE;
-    virtual wxString GetLineText(long lineNo) const wxOVERRIDE;
-    virtual int GetNumberOfLines() const wxOVERRIDE;
-
-    virtual bool IsModified() const wxOVERRIDE;
-
-    // sets/clears the dirty flag
-    virtual void MarkDirty() wxOVERRIDE;
-    virtual void DiscardEdits() wxOVERRIDE;
-
-    // translate between the position (which is just an index in the text ctrl
-    // considering all its contents as a single strings) and (x, y) coordinates
-    // which represent column and line.
-    virtual long XYToPosition(long x, long y) const wxOVERRIDE;
-    virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
-
-    virtual void ShowPosition(long pos) wxOVERRIDE;
-
     virtual void Clear() wxOVERRIDE;
 
 #if wxUSE_MENUS
@@ -95,7 +75,6 @@ public:
 
 private:
     // From wxTextEntry:
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
     virtual GtkEditable *GetEditable() const wxOVERRIDE;
 
 
@@ -127,7 +106,6 @@ private:
     wxMenu *m_menu;
 #endif // wxUSE_MENUS
 
-    bool m_modified;
     bool m_cancelButtonVisible;
 
     wxDECLARE_DYNAMIC_CLASS(wxSearchCtrl);
