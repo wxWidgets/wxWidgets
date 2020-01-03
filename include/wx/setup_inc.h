@@ -906,9 +906,9 @@
 
 // Use generic version of wxDataViewCtrl even if a native one is available?
 //
-// Default is 0.
+// Default is 1.
 //
-// Recommended setting: 0, but can be set to 1 if your program is affected by
+// Recommended setting: 1, but can be set to 0 if your program is affected by
 // the native control limitations.
 #define wxUSE_NATIVE_DATAVIEWCTRL 1
 
