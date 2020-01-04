@@ -84,6 +84,7 @@ set(TEST_GUI_SRC
     # console and GUI applications.
     exec/exec.cpp
     font/fonttest.cpp
+    file/desktopenv.cpp
     image/image.cpp
     image/rawbmp.cpp
     html/htmlparser.cpp

@@ -368,6 +368,9 @@
 				RelativePath=".\controls\datepickerctrltest.cpp">
 			</File>
 			<File
+				RelativePath=".\file\desktopenv.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\dialogtest.cpp">
 			</File>
 			<File

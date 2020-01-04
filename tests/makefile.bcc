@@ -228,6 +228,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_keyboard.obj \
 	$(OBJS)\test_gui_exec.obj \
 	$(OBJS)\test_gui_fonttest.obj \
+	$(OBJS)\test_gui_desktopenv.obj \
 	$(OBJS)\test_gui_image.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlparser.obj \
@@ -1056,6 +1057,9 @@ $(OBJS)\test_gui_exec.obj: .\exec\exec.cpp
 
 $(OBJS)\test_gui_fonttest.obj: .\font\fonttest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\font\fonttest.cpp
+
+$(OBJS)\test_gui_desktopenv.obj: .\file\desktopenv.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\file\desktopenv.cpp
 
 $(OBJS)\test_gui_image.obj: .\image\image.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\image\image.cpp
