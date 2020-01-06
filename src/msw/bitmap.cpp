@@ -223,10 +223,6 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
 {
     Init();
 
-    // (deep) copy the mask if present
-    if (data.m_bitmapMask)
-        m_bitmapMask = new wxMask(*data.m_bitmapMask);
-
 #if wxUSE_WXDIB
     wxASSERT_MSG( !data.m_dib,
                     wxT("can't copy bitmap locked for raw access!") );
@@ -261,6 +257,11 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
         }
     }
 #endif // wxUSE_WXDIB
+
+    // Ensure this is done after the block above otherwise if the color depth didn't match we'll lose the mask
+    // (deep) copy the mask if present
+    if (data.m_bitmapMask)
+        m_bitmapMask = new wxMask(*data.m_bitmapMask);
 }
 
 void wxBitmapRefData::Free()
