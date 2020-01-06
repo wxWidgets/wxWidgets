@@ -51,13 +51,11 @@
     wxString keyName;
     long index = 0;
 
-    if ( key.GetFirstKey(keyName, index) )
+    for ( bool cont = key.GetFirstKey(keyName, index);
+          cont;
+          cont = key.GetNextKey(keyName, index) )
     {
-        do
-        {
-            wxLogMessage("Subkey name: %s", keyName);
-        }
-        while ( key.GetNextKey(keyName, index) );
+        wxLogMessage("Subkey name: %s", keyName);
     }
     @endcode
 
