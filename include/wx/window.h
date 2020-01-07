@@ -1513,6 +1513,9 @@ public:
     // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxIdleEvent& event);
 
+    // Send wxContextMenuEvent and return true if it was processed.
+    bool WXSendContextMenuEvent(const wxPoint& posInScreenCoords);
+
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
         // platform-specific APIs

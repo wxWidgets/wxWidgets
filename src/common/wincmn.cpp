@@ -3069,6 +3069,13 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 
 #endif // wxUSE_MENUS
 
+bool wxWindowBase::WXSendContextMenuEvent(const wxPoint& posInScreenCoords)
+{
+    wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), posInScreenCoords);
+    evtCtx.SetEventObject(this);
+    return HandleWindowEvent(evtCtx);
+}
+
 // methods for drawing the sizers in a visible way: this is currently only
 // enabled for "full debug" builds with wxDEBUG_LEVEL==2 as it doesn't work
 // that well and also because we don't want to leave it enabled in default
