@@ -47,6 +47,10 @@
     #endif // wxUSE_GUI
 #endif
 
+#if wxUSE_GUI
+    #include "wx/srchctrl.h"
+#endif // wxUSE_GUI
+
 #include "wx/thread.h"
 
 #if wxUSE_BASE
