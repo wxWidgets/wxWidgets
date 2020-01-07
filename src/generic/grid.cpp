@@ -3582,10 +3582,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     else if ( event.RightDown() )
     {
         row = YToRow(pos.y);
-        if ( row >=0 &&
+        if ( row < 0 ||
              !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
         {
             // no default action at the moment
+            event.Skip();
         }
     }
 
@@ -3594,10 +3595,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     else if ( event.RightDClick() )
     {
         row = YToRow(pos.y);
-        if ( row >= 0 &&
+        if ( row < 0 ||
              !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) )
         {
             // no default action at the moment
+            event.Skip();
         }
     }
 
@@ -3618,6 +3620,12 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
         {
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, rowLabelWin, false);
         }
+    }
+
+    // Don't consume the remaining events (e.g. right up).
+    else
+    {
+        event.Skip();
     }
 }
 
@@ -3992,10 +4000,11 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     //
     else if ( event.RightDown() )
     {
-        if ( col >= 0 &&
+        if ( col < 0 ||
              !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
         {
             // no default action at the moment
+            event.Skip();
         }
     }
 
@@ -4003,10 +4012,11 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     //
     else if ( event.RightDClick() )
     {
-        if ( col >= 0 &&
+        if ( col < 0 ||
              !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
         {
             // no default action at the moment
+            event.Skip();
         }
     }
 
@@ -4027,6 +4037,12 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         {
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, colLabelWin, false);
         }
+    }
+
+    // Don't consume the remaining events (e.g. right up).
+    else
+    {
+        event.Skip();
     }
 }
 
@@ -4051,6 +4067,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
         if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, -1, event ) )
         {
             // no default action at the moment
+            event.Skip();
         }
     }
     else if ( event.RightDClick() )
@@ -4058,7 +4075,12 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
         if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, event ) )
         {
             // no default action at the moment
+            event.Skip();
         }
+    }
+    else
+    {
+        event.Skip();
     }
 }
 
@@ -4624,6 +4646,8 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     // been in progress.
     EndDraggingIfNecessary();
 
+    bool handled = false;
+
     // deal with various button presses
     if ( event.IsButton() )
     {
@@ -4632,20 +4656,22 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             DisableCellEditControl();
 
             if ( event.LeftDown() )
-                DoGridCellLeftDown(event, coords, pos);
+                handled = (DoGridCellLeftDown(event, coords, pos), true);
             else if ( event.LeftDClick() )
-                DoGridCellLeftDClick(event, coords, pos);
+                handled = (DoGridCellLeftDClick(event, coords, pos), true);
             else if ( event.RightDown() )
-                SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event);
+                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event);
             else if ( event.RightDClick() )
-                SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event);
+                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event);
         }
     }
     else if ( event.Moving() )
     {
         DoGridMouseMoveEvent(event, coords, pos, gridWindow);
+        handled = true;
     }
-    else // unknown mouse event?
+
+    if ( !handled )
     {
         event.Skip();
     }
