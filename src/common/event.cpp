@@ -46,6 +46,10 @@
     #endif // wxUSE_GUI
 #endif
 
+#if wxUSE_GUI
+    #include "wx/srchctrl.h"
+#endif // wxUSE_GUI
+
 #include "wx/thread.h"
 
 #if wxUSE_BASE
@@ -459,6 +463,12 @@ wxString wxCommandEvent::GetString() const
         if ( combo )
             return combo->GetValue();
 #endif // wxUSE_COMBOBOX
+
+#if wxUSE_SEARCHCTRL
+        wxSearchCtrl* search = wxDynamicCast(m_eventObject, wxSearchCtrl);
+        if ( search )
+            return search->GetValue();
+#endif // wxUSE_SEARCHCTRL
     }
 
     return m_cmdString;
