@@ -3071,9 +3071,16 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 
 bool wxWindowBase::WXSendContextMenuEvent(const wxPoint& posInScreenCoords)
 {
-    wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), posInScreenCoords);
-    evtCtx.SetEventObject(this);
-    return HandleWindowEvent(evtCtx);
+    // When the mouse click happens in a subwindow of a composite control,
+    // the user-visible event should seem to originate from the main window
+    // and, notably, use its ID and not the (usually auto-generated and so
+    // not very useful) ID of the subwindow.
+    wxWindow* const mainWin = GetMainWindowOfCompositeControl();
+
+    wxContextMenuEvent
+        evtCtx(wxEVT_CONTEXT_MENU, mainWin->GetId(), posInScreenCoords);
+    evtCtx.SetEventObject(mainWin);
+    return mainWin->HandleWindowEvent(evtCtx);
 }
 
 // methods for drawing the sizers in a visible way: this is currently only

@@ -1514,6 +1514,9 @@ public:
     virtual bool SendIdleEvents(wxIdleEvent& event);
 
     // Send wxContextMenuEvent and return true if it was processed.
+    //
+    // Note that the event may end up being sent to a different window, if this
+    // window is part of a composite control.
     bool WXSendContextMenuEvent(const wxPoint& posInScreenCoords);
 
         // get the handle of the window for the underlying window system: this
