@@ -157,6 +157,8 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    virtual const wxTextEntry* WXGetTextEntry() const { return this; }
+
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
