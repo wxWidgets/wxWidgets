@@ -82,6 +82,10 @@ public:
     virtual void SetDescriptiveText(const wxString& text) = 0;
     virtual wxString GetDescriptiveText() const = 0;
 
+#if wxUSE_NATIVE_SEARCH_CONTROL
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+#endif // wxUSE_NATIVE_SEARCH_CONTROL
+
 private:
     // implement wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }

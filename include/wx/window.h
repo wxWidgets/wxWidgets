@@ -58,6 +58,7 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -1582,6 +1583,8 @@ public:
         return false;
     }
 
+    // This is an internal helper function implemented by text-like controls.
+    virtual const wxTextEntry* WXGetTextEntry() const { return NULL; }
 
 protected:
     // helper for the derived class Create() methods: the first overload, with

@@ -128,6 +128,8 @@ public:
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
 
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+
 protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;

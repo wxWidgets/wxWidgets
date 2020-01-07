@@ -37,19 +37,13 @@
 
     #if wxUSE_GUI
         #include "wx/window.h"
-        #include "wx/combobox.h"
         #include "wx/control.h"
         #include "wx/dc.h"
-        #include "wx/srchctrl.h"
         #include "wx/spinbutt.h"
-        #include "wx/textctrl.h"
+        #include "wx/textentry.h"
         #include "wx/validate.h"
     #endif // wxUSE_GUI
 #endif
-
-#if wxUSE_GUI
-    #include "wx/srchctrl.h"
-#endif // wxUSE_GUI
 
 #include "wx/thread.h"
 
@@ -448,28 +442,17 @@ wxString wxCommandEvent::GetString() const
 {
     // This is part of the hack retrieving the event string from the control
     // itself only when/if it's really needed to avoid copying potentially huge
-    // strings coming from multiline text controls. For consistency we also do
-    // it for combo boxes, even though there are no real performance advantages
-    // in doing this for them.
+    // strings coming from multiline text controls.
     if (m_eventType == wxEVT_TEXT && m_eventObject)
     {
-#if wxUSE_TEXTCTRL
-        wxTextCtrl *txt = wxDynamicCast(m_eventObject, wxTextCtrl);
-        if ( txt )
-            return txt->GetValue();
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-        wxComboBox* combo = wxDynamicCast(m_eventObject, wxComboBox);
-        if ( combo )
-            return combo->GetValue();
-#endif // wxUSE_COMBOBOX
-
-#if wxUSE_SEARCHCTRL
-        wxSearchCtrl* search = wxDynamicCast(m_eventObject, wxSearchCtrl);
-        if ( search )
-            return search->GetValue();
-#endif // wxUSE_SEARCHCTRL
+        // Only windows generate wxEVT_TEXT events, so this cast should really
+        // succeed, but err on the side of caution just in case somebody
+        // created a bogus event of this type.
+        if ( wxWindow* const w = wxDynamicCast(m_eventObject, wxWindow) )
+        {
+            if ( const wxTextEntry* const entry = w->WXGetTextEntry() )
+                return entry->GetValue();
+        }
     }
 
     return m_cmdString;
