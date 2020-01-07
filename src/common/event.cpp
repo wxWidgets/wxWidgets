@@ -40,6 +40,7 @@
         #include "wx/combobox.h"
         #include "wx/control.h"
         #include "wx/dc.h"
+        #include "wx/srchctrl.h"
         #include "wx/spinbutt.h"
         #include "wx/textctrl.h"
         #include "wx/validate.h"
@@ -459,6 +460,12 @@ wxString wxCommandEvent::GetString() const
         if ( combo )
             return combo->GetValue();
 #endif // wxUSE_COMBOBOX
+
+#if wxUSE_SEARCHCTRL
+        wxSearchCtrl* search = wxDynamicCast(m_eventObject, wxSearchCtrl);
+        if ( search )
+            return search->GetValue();
+#endif // wxUSE_SEARCHCTRL
     }
 
     return m_cmdString;

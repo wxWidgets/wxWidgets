@@ -1403,6 +1403,7 @@ set(GTK_SRC
     src/gtk/animate.cpp
     src/gtk/bmpcbox.cpp
     src/gtk/hyperlink.cpp
+    src/gtk/srchctrl.cpp
 )
 
 set(GTK2_SRC
@@ -1474,6 +1475,7 @@ set(GTK_HDR
     wx/gtk/taskbar.h
     wx/gtk/activityindicator.h
     wx/gtk/hyperlink.h
+    wx/gtk/srchctrl.h
 )
 
 set(GTK2_HDR
