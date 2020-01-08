@@ -434,6 +434,7 @@ public:
 #if wxUSE_DIRDLG
     void DirChoose(wxCommandEvent& event);
     void DirChooseNew(wxCommandEvent& event);
+    void DirChooseMultiple(wxCommandEvent& event);
 #endif // wxUSE_DIRDLG
 
 #if USE_DIRDLG_GENERIC
@@ -594,6 +595,7 @@ enum
     DIALOGS_FILE_SAVE_GENERIC,
     DIALOGS_DIR_CHOOSE,
     DIALOGS_DIRNEW_CHOOSE,
+    DIALOGS_DIRMULTIPLE_CHOOSE,
     DIALOGS_GENERIC_DIR_CHOOSE,
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,
