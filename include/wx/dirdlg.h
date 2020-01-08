@@ -25,8 +25,21 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogNameStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogDefaultFolderStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
 
+
+/*
+    The flags below must coexist with the following flags in m_windowStyle
+    #define wxCAPTION               0x20000000
+    #define wxMAXIMIZE              0x00002000
+    #define wxCLOSE_BOX             0x00001000
+    #define wxSYSTEM_MENU           0x00000800
+    wxBORDER_NONE   =               0x00200000
+    #define wxRESIZE_BORDER         0x00000040
+    #define wxDIALOG_NO_PARENT      0x00000020
+*/
+
 #define wxDD_CHANGE_DIR         0x0100
 #define wxDD_DIR_MUST_EXIST     0x0200
+#define wxDD_MULTIPLE           0x0400
 
 // deprecated, on by default now, use wxDD_DIR_MUST_EXIST to disable it
 #define wxDD_NEW_DIR_BUTTON     0
@@ -75,6 +88,7 @@ public:
 
     virtual wxString GetMessage() const { return m_message; }
     virtual wxString GetPath() const { return m_path; }
+    virtual void GetPaths(wxArrayString& paths) const { paths.Empty(); paths.Add(m_path); }
 
 protected:
     wxString m_message;

@@ -39,6 +39,7 @@ public:     // overrides from wxGenericDirDialog
 
     wxString GetPath() const wxOVERRIDE;
     void SetPath(const wxString& path) wxOVERRIDE;
+    void GetPaths(wxArrayString& paths) const wxOVERRIDE;
 
 
     // Implementation only.
@@ -55,7 +56,7 @@ protected:
 
 
 private:
-    wxString m_selectedDirectory;
+    wxArrayString m_paths;
 
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };
