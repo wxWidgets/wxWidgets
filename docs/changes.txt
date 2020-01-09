@@ -87,6 +87,9 @@ Changes in behaviour not resulting in compilation errors
   there is no highlighted menu item, instead of wxID_ANY used before, for
   consistency with wxMSW.
 
+- wxListCtrl::GetItemState() in wxMSW now checks the passed in item index for
+  validity, as the generic version under the other platforms already did.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
