@@ -279,6 +279,16 @@ public:
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
 
+    @par wxWEBVIEW_BACKEND_EDGE (MSW)
+
+    The Edge (Chromium) backend uses Microsoft's
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
+    It is available for Windows 7 and newer.
+    This backend has currently a few features missing but is still
+    a better choice than IE when just displaying web content. The unsupported
+    features are the following: virtual filesystems, custom urls,
+    text selection, find, source code.
+
     @par wxWEBVIEW_WEBKIT (GTK)
 
     Under GTK the WebKit backend uses

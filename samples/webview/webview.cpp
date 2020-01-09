@@ -21,7 +21,7 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE
+#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE && !wxUSE_WEBVIEW_EDGE
 #error "A wxWebView backend is required by this sample"
 #endif
 
@@ -365,7 +365,12 @@ WebFrame::WebFrame(const wxString& url) :
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create the webview
-    m_browser = wxWebView::New(this, wxID_ANY, url);
+    wxString backend = wxWebViewBackendDefault;
+#ifdef __WXMSW__
+    if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+        backend = wxWebViewBackendEdge;
+#endif
+    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize, backend);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the wxfs:// protocol for testing purposes
