@@ -614,6 +614,8 @@ GridFrame::GridFrame()
     grid->SetAttr(11, 11, new wxGridCellAttr);
     grid->SetAttr(11, 11, NULL);
 
+    grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,
@@ -797,6 +799,23 @@ void GridFrame::SetTabCustomHandler(wxCommandEvent&)
     grid->Bind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 }
 
+void GridFrame::OnGridContextMenu(wxContextMenuEvent& event)
+{
+    // This is not supposed to happen: even if the grid consists of different
+    // subwindows internally, all context menu events should be seen as coming
+    // from the grid itself.
+    if ( event.GetEventObject() != grid )
+    {
+        wxLogError("Context menu unexpectedly sent from non-grid window.");
+    }
+    else
+    {
+        wxLogMessage("wxEVT_CONTEXT_MENU in the grid at at (%d, %d)",
+                     event.GetPosition().x, event.GetPosition().y);
+    }
+
+    event.Skip();
+}
 
 void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 {

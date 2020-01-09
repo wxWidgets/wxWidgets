@@ -1706,12 +1706,8 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
         // (a) it's a command event and so is propagated to the parent
         // (b) under some ports it can be generated from kbd too
         // (c) it uses screen coords (because of (a))
-        wxContextMenuEvent evtCtx(
-            wxEVT_CONTEXT_MENU,
-            win->GetId(),
-            win->ClientToScreen(event.GetPosition()));
-        evtCtx.SetEventObject(win);
-        return win->GTKProcessEvent(evtCtx);
+        const wxPoint pos = win->ClientToScreen(event.GetPosition());
+        return win->WXSendContextMenuEvent(pos);
     }
 
     return FALSE;
