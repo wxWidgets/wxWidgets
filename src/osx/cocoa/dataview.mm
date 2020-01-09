@@ -2922,7 +2922,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
                     [cell respondsToSelector:@selector(backgroundColor)] )
             {
                 if ( !data->GetOriginalBackgroundColour() )
-                    data->SaveOriginalTextColour([(id)cell backgroundColor]);
+                    data->SaveOriginalBackgroundColour([(id)cell backgroundColor]);
 
                 colBack = attr.GetBackgroundColour().OSXGetNSColor();
             }
