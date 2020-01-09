@@ -43,8 +43,8 @@ public:
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
     // compatibility with old code)
-    const NativeFormat GetFormatId() const { return m_format; }
-    operator const NativeFormat() const { return m_format; }
+    NativeFormat GetFormatId() const { return m_format; }
+    operator NativeFormat() const { return m_format; }
 
     void SetId(NativeFormat format);
     
