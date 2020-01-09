@@ -1077,6 +1077,9 @@ bool wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId
 // Gets the item state
 int wxListCtrl::GetItemState(long item, long stateMask) const
 {
+    wxCHECK_MSG( item >= 0 && (size_t)item < GetItemCount(), 0,
+                 wxT("invalid list ctrl item index in GetItemState()") );
+
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_STATE;
