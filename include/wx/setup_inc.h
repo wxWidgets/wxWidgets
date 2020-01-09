@@ -756,6 +756,13 @@
 #define wxUSE_WEBVIEW_IE 0
 #endif
 
+// Use the Edge (Chromium) wxWebView backend (Requires WebView2 SDK)
+//
+// Default is 0
+//
+// Recommended setting: 1 when building for Windows with WebView2 SDK
+#define wxUSE_WEBVIEW_EDGE 0
+
 // Use the WebKit wxWebView backend
 //
 // Default is 1 on GTK and OSX
