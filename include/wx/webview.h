@@ -151,6 +151,7 @@ public:
 
     static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
+    static bool IsBackendAvailable(const wxString& backend);
 
     // General methods
     virtual void EnableContextMenu(bool enable = true)
