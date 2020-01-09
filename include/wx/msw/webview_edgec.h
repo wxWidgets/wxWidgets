@@ -15,6 +15,7 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE && defined(__WXMSW__)
 
 #include "wx/control.h"
+#include "wx/dynlib.h"
 #include "wx/webview.h"
 #include "wx/msw/private/comptr.h"
 
@@ -145,8 +146,9 @@ private:
     bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
 
     static int ms_isAvailable;
+    static wxDynamicLibrary ms_loaderDll;
 
-    static void Initialize();
+    static bool Initialize();
 
     static void Uninitalize();
 

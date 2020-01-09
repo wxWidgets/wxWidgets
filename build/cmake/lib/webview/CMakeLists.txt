@@ -44,7 +44,6 @@ elseif(WXMSW)
             set(WEBVIEW2_ARCH x64)
         endif()
 
-        wx_lib_link_libraries(webview PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/webview2/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll.lib")
         add_custom_command(TARGET webview POST_BUILD
             COMMAND  ${CMAKE_COMMAND} -E copy
             "${PROJECT_SOURCE_DIR}/3rdparty/webview2/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"

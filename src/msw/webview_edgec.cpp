@@ -36,29 +36,69 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
             break;
 
 int wxWebViewEdge::ms_isAvailable = -1;
+// WebView2Loader typedefs
+typedef HRESULT (__stdcall *PFNWXCreateWebView2EnvironmentWithDetails)(
+    PCWSTR browserExecutableFolder,
+    PCWSTR userDataFolder,
+    PCWSTR additionalBrowserArguments,
+    IWebView2CreateWebView2EnvironmentCompletedHandler* environment_created_handler);
+typedef HRESULT(__stdcall *PFNWXGetWebView2BrowserVersionInfo)(
+    PCWSTR browserExecutableFolder,
+    LPWSTR* versionInfo);
+
+PFNWXCreateWebView2EnvironmentWithDetails wxCreateWebView2EnvironmentWithDetails = NULL;
+PFNWXGetWebView2BrowserVersionInfo wxGetWebView2BrowserVersionInfo = NULL;
+
+int wxWebViewEdgeChromium::ms_isAvailable = -1;
+wxDynamicLibrary wxWebViewEdgeChromium::ms_loaderDll;
 
 bool wxWebViewEdge::IsAvailable()
 {
     if (ms_isAvailable == -1)
-        Initialize();
+    {
+        if (!Initialize())
+            ms_isAvailable = 0;
+        else
+            ms_isAvailable = 1;
+    }
 
     return (ms_isAvailable == 1);
 }
 
-void wxWebViewEdge::Initialize()
+bool wxWebViewEdge::Initialize()
 {
+#define RESOLVE_LOADER_FUNCTION(type, funcname)                        \
+    wx##funcname = (type)ms_loaderDll.GetSymbol(wxT(#funcname));       \
+    if ( !wx##funcname )                                               \
+        return false
+
+    // WebView2 is only available for Windows 7 or newer
+    if (!wxCheckOsVersion(6, 1))
+        return false;
+
+    if (!ms_loaderDll.Load("WebView2Loader.dll", wxDL_DEFAULT | wxDL_QUIET))
+        return false;
+
+    // Try to load functions from loader DLL
+    RESOLVE_LOADER_FUNCTION(PFNWXCreateWebView2EnvironmentWithDetails, CreateWebView2EnvironmentWithDetails);
+    RESOLVE_LOADER_FUNCTION(PFNWXGetWebView2BrowserVersionInfo, GetWebView2BrowserVersionInfo);
+
+    // Check if a Edge browser can be found by the loader DLL
     LPWSTR versionStr;
-    if (SUCCEEDED(GetWebView2BrowserVersionInfo(NULL, &versionStr)))
+    if (SUCCEEDED(wxGetWebView2BrowserVersionInfo(NULL, &versionStr)))
     {
         if (versionStr)
-            ms_isAvailable = 1;
+            return true;
     }
+
+    return false;
 }
 
 void wxWebViewEdge::Uninitalize()
 {
     if (ms_isAvailable == 1)
     {
+        ms_loaderDll.Unload();
         ms_isAvailable = -1;
     }
 }
@@ -106,7 +146,7 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     LPCWSTR subFolder = nullptr;
     LPCWSTR additionalBrowserSwitches = nullptr;
 
-    HRESULT hr = CreateWebView2EnvironmentWithDetails(
+    HRESULT hr = wxCreateWebView2EnvironmentWithDetails(
         subFolder, nullptr, additionalBrowserSwitches,
         Callback<IWebView2CreateWebView2EnvironmentCompletedHandler>(
             [this](HRESULT WXUNUSED(result), IWebView2Environment* environment) -> HRESULT
