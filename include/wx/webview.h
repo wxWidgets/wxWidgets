@@ -159,6 +159,7 @@ public:
     {
         m_showMenu = enable;
     }
+    virtual void EnableDevTools(bool WXUNUSED(enable) = true) { }
     virtual wxString GetCurrentTitle() const = 0;
     virtual wxString GetCurrentURL() const = 0;
     // TODO: handle choosing a frame when calling GetPageSource()?
@@ -166,6 +167,7 @@ public:
     virtual wxString GetPageText() const = 0;
     virtual bool IsBusy() const = 0;
     virtual bool IsContextMenuEnabled() const { return m_showMenu; }
+    virtual bool IsDevToolsEnabled() const { return false; }
     virtual bool IsEditable() const = 0;
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;

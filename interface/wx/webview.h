@@ -688,6 +688,27 @@ public:
     virtual bool IsContextMenuEnabled() const;
 
     /**
+        @name Dev Tools
+    */
+
+    /**
+        Enable or disable access to dev tools for the user.
+
+        This is currently only implemented for the Edge (Chromium) backend
+        where the dev tools are enabled by default.
+
+        @since 3.1.4
+    */
+    virtual void EnableDevTools(bool enable = true);
+
+    /**
+        Returns @true if dev tools are available to the user.
+
+        @since 3.1.4
+    */
+    virtual bool IsDevToolsEnabled() const;
+
+    /**
         @name History
     */
 

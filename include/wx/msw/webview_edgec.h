@@ -111,6 +111,9 @@ public:
     virtual void EnableContextMenu(bool enable = true) wxOVERRIDE;
     virtual bool IsContextMenuEnabled() const wxOVERRIDE;
 
+    virtual void EnableDevTools(bool enable = true) wxOVERRIDE;
+    virtual bool IsDevToolsEnabled() const wxOVERRIDE;
+
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
 
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;

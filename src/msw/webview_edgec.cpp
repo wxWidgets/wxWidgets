@@ -49,8 +49,7 @@ typedef HRESULT(__stdcall *PFNWXGetWebView2BrowserVersionInfo)(
 PFNWXCreateWebView2EnvironmentWithDetails wxCreateWebView2EnvironmentWithDetails = NULL;
 PFNWXGetWebView2BrowserVersionInfo wxGetWebView2BrowserVersionInfo = NULL;
 
-int wxWebViewEdgeChromium::ms_isAvailable = -1;
-wxDynamicLibrary wxWebViewEdgeChromium::ms_loaderDll;
+wxDynamicLibrary wxWebViewEdge::ms_loaderDll;
 
 bool wxWebViewEdge::IsAvailable()
 {
@@ -650,6 +649,30 @@ bool wxWebViewEdge::IsContextMenuEnabled() const
             if (!menusEnabled)
                 return false;
         }
+    }
+
+    return true;
+}
+
+void wxWebViewEdge::EnableDevTools(bool enable)
+{
+    wxCOMPtr<IWebView2Settings> settings;
+    if (SUCCEEDED(m_webView->get_Settings(&settings)))
+    {
+        settings->put_AreDevToolsEnabled(enable);
+    }
+}
+
+bool wxWebViewEdge::IsDevToolsEnabled() const
+{
+    wxCOMPtr<IWebView2Settings> settings;
+    if (SUCCEEDED(m_webView->get_Settings(&settings)))
+    {
+        BOOL devToolsEnabled = TRUE;
+        settings->get_AreDevToolsEnabled(&devToolsEnabled);
+
+        if (!devToolsEnabled)
+            return false;
     }
 
     return true;

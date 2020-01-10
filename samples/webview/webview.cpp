@@ -164,6 +164,7 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
+    void OnEnableDevTools(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -226,6 +227,7 @@ private:
     wxMenuItem* m_selection_delete;
     wxMenuItem* m_find;
     wxMenuItem* m_context_menu;
+    wxMenuItem* m_dev_tools;
 
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
@@ -468,6 +470,7 @@ WebFrame::WebFrame(const wxString& url) :
     wxMenuItem* usememoryfs =  m_tools_menu->Append(wxID_ANY, _("Memory File System Example"));
 
     m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
+    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
@@ -549,6 +552,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnUseMemoryFS, this, usememoryfs->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnFind, this, m_find->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableContextMenu, this, m_context_menu->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnEnableDevTools, this, m_dev_tools->GetId());
 
     //Connect the idle events
     Bind(wxEVT_IDLE, &WebFrame::OnIdle, this);
@@ -708,6 +712,11 @@ void WebFrame::OnUseMemoryFS(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
 {
     m_browser->EnableContextMenu(evt.IsChecked());
+}
+
+void WebFrame::OnEnableDevTools(wxCommandEvent& evt)
+{
+    m_browser->EnableDevTools(evt.IsChecked());
 }
 
 void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))
@@ -943,6 +952,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     m_selection_delete->Enable(m_browser->HasSelection());
 
     m_context_menu->Check(m_browser->IsContextMenuEnabled());
+    m_dev_tools->Check(m_browser->IsDevToolsEnabled());
 
     //Firstly we clear the existing menu items, then we add the current ones
     wxMenuHistoryMap::const_iterator it;
