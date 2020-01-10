@@ -2894,6 +2894,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\webview_edgec.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\webview_ie.h"
 				>
 			</File>

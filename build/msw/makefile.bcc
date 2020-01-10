@@ -1127,11 +1127,12 @@ WEBVIEWDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\expat\lib -DWXUSINGDLL \
-	-DWXMAKINGDLL_WEBVIEW -Hu -H=$(OBJS)\wxprec_webviewdll.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-DWXMAKINGDLL_WEBVIEW -I..\..\3rdparty\webview2\build\native\include -Hu \
+	-H=$(OBJS)\wxprec_webviewdll.csm $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_dummy.obj \
 	$(OBJS)\webviewdll_webview_ie.obj \
+	$(OBJS)\webviewdll_webview_edgec.obj \
 	$(OBJS)\webviewdll_webview.obj \
 	$(OBJS)\webviewdll_webviewarchivehandler.obj \
 	$(OBJS)\webviewdll_webviewfshandler.obj
@@ -1141,11 +1142,13 @@ WEBVIEWLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
-	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\expat\lib -Hu \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\expat\lib \
+	-I..\..\3rdparty\webview2\build\native\include -Hu \
 	-H=$(OBJS)\wxprec_webviewlib.csm $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.obj \
 	$(OBJS)\webviewlib_webview_ie.obj \
+	$(OBJS)\webviewlib_webview_edgec.obj \
 	$(OBJS)\webviewlib_webview.obj \
 	$(OBJS)\webviewlib_webviewarchivehandler.obj \
 	$(OBJS)\webviewlib_webviewfshandler.obj
@@ -1677,6 +1680,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_winpars.obj \
 	$(OBJS)\monodll_htmllbox.obj \
 	$(OBJS)\monodll_webview_ie.obj \
+	$(OBJS)\monodll_webview_edgec.obj \
 	$(OBJS)\monodll_webview.obj \
 	$(OBJS)\monodll_webviewarchivehandler.obj \
 	$(OBJS)\monodll_webviewfshandler.obj \
@@ -2510,6 +2514,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_winpars.obj \
 	$(OBJS)\monolib_htmllbox.obj \
 	$(OBJS)\monolib_webview_ie.obj \
+	$(OBJS)\monolib_webview_edgec.obj \
 	$(OBJS)\monolib_webview.obj \
 	$(OBJS)\monolib_webviewarchivehandler.obj \
 	$(OBJS)\monolib_webviewfshandler.obj \
@@ -5351,7 +5356,7 @@ wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\webviewdll_version.res $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__coredll___depname) $(__basedll___depname)  $(OBJS)\webviewdll_version.res
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
 	c0d32.obj $(WEBVIEWDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\webviewdll_version.res
 |
@@ -7234,6 +7239,9 @@ $(OBJS)\monodll_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 
 $(OBJS)\monodll_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
+
+$(OBJS)\monodll_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
 
 $(OBJS)\monodll_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webview.cpp
@@ -9786,6 +9794,9 @@ $(OBJS)\monolib_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 
 $(OBJS)\monolib_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
+
+$(OBJS)\monolib_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
 
 $(OBJS)\monolib_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webview.cpp
@@ -15976,11 +15987,11 @@ $(OBJS)\htmllib_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 $(OBJS)\webviewdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
-$(OBJS)\webviewdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG) -i$(BCCDIR)\include\windows\sdk  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_WEBVIEW  ..\..\src\msw\version.rc
-
 $(OBJS)\webviewdll_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
+
+$(OBJS)\webviewdll_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
+	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
 
 $(OBJS)\webviewdll_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\common\webview.cpp
@@ -15991,11 +16002,17 @@ $(OBJS)\webviewdll_webviewarchivehandler.obj: ..\..\src\common\webviewarchivehan
 $(OBJS)\webviewdll_webviewfshandler.obj: ..\..\src\common\webviewfshandler.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\common\webviewfshandler.cpp
 
+$(OBJS)\webviewdll_version.res: ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG) -i$(BCCDIR)\include\windows\sdk  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_WEBVIEW  -i..\..\3rdparty\webview2\build\native\include ..\..\src\msw\version.rc
+
 $(OBJS)\webviewlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWLIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\webviewlib_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
+
+$(OBJS)\webviewlib_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
+	$(CXX) -q -c -P -o$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
 
 $(OBJS)\webviewlib_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\common\webview.cpp
