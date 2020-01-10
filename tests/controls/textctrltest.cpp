@@ -88,7 +88,9 @@ private:
         CPPUNIT_TEST( Style );
         CPPUNIT_TEST( FontStyle );
         CPPUNIT_TEST( Lines );
+#if wxUSE_LOG
         CPPUNIT_TEST( LogTextCtrl );
+#endif // wxUSE_LOG
         CPPUNIT_TEST( LongText );
         CPPUNIT_TEST( PositionToCoords );
         CPPUNIT_TEST( PositionToCoordsRich );
@@ -119,7 +121,9 @@ private:
     void Style();
     void FontStyle();
     void Lines();
+#if wxUSE_LOG
     void LogTextCtrl();
+#endif // wxUSE_LOG
     void LongText();
     void PositionToCoords();
     void PositionToCoordsRich();
@@ -609,6 +613,7 @@ void TextCtrlTestCase::Lines()
 #endif
 }
 
+#if wxUSE_LOG
 void TextCtrlTestCase::LogTextCtrl()
 {
     CPPUNIT_ASSERT(m_text->IsEmpty());
@@ -623,6 +628,7 @@ void TextCtrlTestCase::LogTextCtrl()
 
     CPPUNIT_ASSERT(!m_text->IsEmpty());
 }
+#endif // wxUSE_LOG
 
 void TextCtrlTestCase::LongText()
 {

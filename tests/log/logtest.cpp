@@ -23,6 +23,8 @@
 
 #include "wx/scopeguard.h"
 
+#if wxUSE_LOG
+
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #else
@@ -391,3 +393,5 @@ void LogTestCase::NoWarnings()
 
     CPPUNIT_ASSERT_EQUAL( "If", m_log->GetLog(wxLOG_Error) );
 }
+
+#endif // wxUSE_LOG
