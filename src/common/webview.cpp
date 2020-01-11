@@ -23,7 +23,7 @@
 #include "wx/gtk/webview_webkit.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/webview_ie.h"
-#include "wx/msw/webview_edgec.h"
+#include "wx/msw/webview_edge.h"
 #endif
 
 // DLL options compatibility check:

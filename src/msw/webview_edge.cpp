@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        source/msw/webview_edgec.cpp
+// Name:        source/msw/webview_edge.cpp
 // Purpose:     wxMSW Edge Chromium wxWebView backend implementation
 // Author:      Markus Pingel
 // Created:     2019-12-15
@@ -14,7 +14,7 @@
 #pragma hdrstop
 #endif
 
-#include "wx/msw/webview_edgec.h"
+#include "wx/msw/webview_edge.h"
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE
 

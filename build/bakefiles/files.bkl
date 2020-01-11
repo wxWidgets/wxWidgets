@@ -3017,7 +3017,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="WEBVIEW_SRC_PLATFORM">
     <if cond="TOOLKIT=='MSW'">
         src/msw/webview_ie.cpp
-        src/msw/webview_edgec.cpp
+        src/msw/webview_edge.cpp
     </if>
     <if cond="TOOLKIT=='GTK'">
         src/gtk/webview_webkit.cpp
@@ -3039,7 +3039,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">
         wx/msw/webviewhistoryitem_ie.h
         wx/msw/webview_ie.h
-        wx/msw/webview_edgec.h
+        wx/msw/webview_edge.h
     </if>
     <if cond="TOOLKIT=='GTK'">
         wx/gtk/webviewhistoryitem_webkit.h

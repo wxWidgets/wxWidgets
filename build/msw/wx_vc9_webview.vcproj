@@ -843,7 +843,7 @@
 				/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\webview_edgec.cpp"
+				RelativePath="..\..\src\msw\webview_edge.cpp"
 				>
 			</File>
 			<File
@@ -1065,7 +1065,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\webview_edgec.h"
+				RelativePath="..\..\include\wx\msw\webview_edge.h"
 				>
 			</File>
 			<File

@@ -1238,7 +1238,7 @@ WEBVIEWDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_333)$(__DEBUGRUNTIME) /DWIN32 \
 WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_dummy.obj \
 	$(OBJS)\webviewdll_webview_ie.obj \
-	$(OBJS)\webviewdll_webview_edgec.obj \
+	$(OBJS)\webviewdll_webview_edge.obj \
 	$(OBJS)\webviewdll_webview.obj \
 	$(OBJS)\webviewdll_webviewarchivehandler.obj \
 	$(OBJS)\webviewdll_webviewfshandler.obj
@@ -1261,7 +1261,7 @@ WEBVIEWLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_348)$(__DEBUGRUNTIME) /DWIN32 \
 WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.obj \
 	$(OBJS)\webviewlib_webview_ie.obj \
-	$(OBJS)\webviewlib_webview_edgec.obj \
+	$(OBJS)\webviewlib_webview_edge.obj \
 	$(OBJS)\webviewlib_webview.obj \
 	$(OBJS)\webviewlib_webviewarchivehandler.obj \
 	$(OBJS)\webviewlib_webviewfshandler.obj
@@ -2039,7 +2039,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_winpars.obj \
 	$(OBJS)\monodll_htmllbox.obj \
 	$(OBJS)\monodll_webview_ie.obj \
-	$(OBJS)\monodll_webview_edgec.obj \
+	$(OBJS)\monodll_webview_edge.obj \
 	$(OBJS)\monodll_webview.obj \
 	$(OBJS)\monodll_webviewarchivehandler.obj \
 	$(OBJS)\monodll_webviewfshandler.obj \
@@ -2879,7 +2879,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_winpars.obj \
 	$(OBJS)\monolib_htmllbox.obj \
 	$(OBJS)\monolib_webview_ie.obj \
-	$(OBJS)\monolib_webview_edgec.obj \
+	$(OBJS)\monolib_webview_edge.obj \
 	$(OBJS)\monolib_webview.obj \
 	$(OBJS)\monolib_webviewarchivehandler.obj \
 	$(OBJS)\monolib_webviewfshandler.obj \
@@ -7991,8 +7991,8 @@ $(OBJS)\monodll_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 $(OBJS)\monodll_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
 
-$(OBJS)\monodll_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
+$(OBJS)\monodll_webview_edge.obj: ..\..\src\msw\webview_edge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\webview_edge.cpp
 
 $(OBJS)\monodll_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webview.cpp
@@ -10546,8 +10546,8 @@ $(OBJS)\monolib_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 $(OBJS)\monolib_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
 
-$(OBJS)\monolib_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
+$(OBJS)\monolib_webview_edge.obj: ..\..\src\msw\webview_edge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\webview_edge.cpp
 
 $(OBJS)\monolib_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webview.cpp
@@ -16741,8 +16741,8 @@ $(OBJS)\webviewdll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\webviewdll_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
 
-$(OBJS)\webviewdll_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
+$(OBJS)\webviewdll_webview_edge.obj: ..\..\src\msw\webview_edge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_edge.cpp
 
 $(OBJS)\webviewdll_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\common\webview.cpp
@@ -16762,8 +16762,8 @@ $(OBJS)\webviewlib_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\webviewlib_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
 
-$(OBJS)\webviewlib_webview_edgec.obj: ..\..\src\msw\webview_edgec.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\msw\webview_edgec.cpp
+$(OBJS)\webviewlib_webview_edge.obj: ..\..\src\msw\webview_edge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\msw\webview_edge.cpp
 
 $(OBJS)\webviewlib_webview.obj: ..\..\src\common\webview.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\common\webview.cpp

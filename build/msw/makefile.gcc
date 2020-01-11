@@ -1133,7 +1133,7 @@ WEBVIEWDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_dummy.o \
 	$(OBJS)\webviewdll_webview_ie.o \
-	$(OBJS)\webviewdll_webview_edgec.o \
+	$(OBJS)\webviewdll_webview_edge.o \
 	$(OBJS)\webviewdll_webview.o \
 	$(OBJS)\webviewdll_webviewarchivehandler.o \
 	$(OBJS)\webviewdll_webviewfshandler.o \
@@ -1150,7 +1150,7 @@ WEBVIEWLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.o \
 	$(OBJS)\webviewlib_webview_ie.o \
-	$(OBJS)\webviewlib_webview_edgec.o \
+	$(OBJS)\webviewlib_webview_edge.o \
 	$(OBJS)\webviewlib_webview.o \
 	$(OBJS)\webviewlib_webviewarchivehandler.o \
 	$(OBJS)\webviewlib_webviewfshandler.o
@@ -1705,7 +1705,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_winpars.o \
 	$(OBJS)\monodll_htmllbox.o \
 	$(OBJS)\monodll_webview_ie.o \
-	$(OBJS)\monodll_webview_edgec.o \
+	$(OBJS)\monodll_webview_edge.o \
 	$(OBJS)\monodll_webview.o \
 	$(OBJS)\monodll_webviewarchivehandler.o \
 	$(OBJS)\monodll_webviewfshandler.o \
@@ -2545,7 +2545,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_winpars.o \
 	$(OBJS)\monolib_htmllbox.o \
 	$(OBJS)\monolib_webview_ie.o \
-	$(OBJS)\monolib_webview_edgec.o \
+	$(OBJS)\monolib_webview_edge.o \
 	$(OBJS)\monolib_webview.o \
 	$(OBJS)\monolib_webviewarchivehandler.o \
 	$(OBJS)\monolib_webviewfshandler.o \
@@ -7422,7 +7422,7 @@ $(OBJS)\monodll_htmllbox.o: ../../src/generic/htmllbox.cpp
 $(OBJS)\monodll_webview_ie.o: ../../src/msw/webview_ie.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_webview_edgec.o: ../../src/msw/webview_edgec.cpp
+$(OBJS)\monodll_webview_edge.o: ../../src/msw/webview_edge.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_webview.o: ../../src/common/webview.cpp
@@ -9977,7 +9977,7 @@ $(OBJS)\monolib_htmllbox.o: ../../src/generic/htmllbox.cpp
 $(OBJS)\monolib_webview_ie.o: ../../src/msw/webview_ie.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_webview_edgec.o: ../../src/msw/webview_edgec.cpp
+$(OBJS)\monolib_webview_edge.o: ../../src/msw/webview_edge.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_webview.o: ../../src/common/webview.cpp
@@ -16172,7 +16172,7 @@ $(OBJS)\webviewdll_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\webviewdll_webview_ie.o: ../../src/msw/webview_ie.cpp
 	$(CXX) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\webviewdll_webview_edgec.o: ../../src/msw/webview_edgec.cpp
+$(OBJS)\webviewdll_webview_edge.o: ../../src/msw/webview_edge.cpp
 	$(CXX) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\webviewdll_webview.o: ../../src/common/webview.cpp
@@ -16193,7 +16193,7 @@ $(OBJS)\webviewlib_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\webviewlib_webview_ie.o: ../../src/msw/webview_ie.cpp
 	$(CXX) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\webviewlib_webview_edgec.o: ../../src/msw/webview_edgec.cpp
+$(OBJS)\webviewlib_webview_edge.o: ../../src/msw/webview_edge.cpp
 	$(CXX) -c -o $@ $(WEBVIEWLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\webviewlib_webview.o: ../../src/common/webview.cpp
