@@ -371,6 +371,45 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
             wxLogLastError(wxT("ScreenToClient"));
         }
 
+        // Initialize it to a safe value in case OnDrop() throws.
+        *pdwEffect = DROPEFFECT_NONE;
+
+        // Create a guard that will clean things up in case of exception: we
+        // must perform it in any case, as if we don't update the drag image it
+        // would remain on screen under Windows 10, see #18499.
+        class DropCleanup
+        {
+        public:
+            DropCleanup(wxCOMPtr<IDataObject>& pIDataObject,
+                        wxDropTarget* pTarget,
+                        POINTL pt,
+                        DWORD* pdwEffect)
+                : m_pIDataObject(pIDataObject),
+                  m_pTarget(pTarget),
+                  m_pt(pt),
+                  m_pdwEffect(pdwEffect)
+            {
+            }
+
+            ~DropCleanup()
+            {
+                // release the held object
+                m_pIDataObject.reset();
+
+                // update drag image
+                m_pTarget->MSWUpdateDragImageOnData
+                           (
+                                m_pt.x, m_pt.y,
+                                ConvertDragEffectToResult(*m_pdwEffect)
+                           );
+            }
+        private:
+            wxCOMPtr<IDataObject>& m_pIDataObject;
+            wxDropTarget* m_pTarget;
+            DWORD* m_pdwEffect;
+            POINTL m_pt;
+        } dropCleanup(m_pIDataObject, m_pTarget, pt, pdwEffect);
+
         // first ask the drop target if it wants data
         if ( m_pTarget->OnDrop(pt.x, pt.y) ) {
             // it does, so give it the data source
@@ -384,21 +423,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                 // operation succeeded
                 *pdwEffect = ConvertDragResultToEffect(rc);
             }
-            else {
-                *pdwEffect = DROPEFFECT_NONE;
-            }
         }
-        else {
-            // OnDrop() returned false, no need to copy data
-            *pdwEffect = DROPEFFECT_NONE;
-        }
-
-        // release the held object
-        m_pIDataObject.reset();
-
-        // update drag image
-        m_pTarget->MSWUpdateDragImageOnData(pt.x, pt.y,
-                                            ConvertDragEffectToResult(*pdwEffect));
 
         return S_OK;
     }
