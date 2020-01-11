@@ -20,6 +20,7 @@
 
 #include "wx/filename.h"
 #include "wx/module.h"
+#include "wx/stdpaths.h"
 #include "wx/thread.h"
 #include "wx/private/jsscriptwrapper.h"
 
@@ -142,11 +143,12 @@ bool wxWebViewEdge::Create(wxWindow* parent,
 
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
 
-    LPCWSTR subFolder = nullptr;
-    LPCWSTR additionalBrowserSwitches = nullptr;
+    wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 
     HRESULT hr = wxCreateWebView2EnvironmentWithDetails(
-        subFolder, nullptr, additionalBrowserSwitches,
+        nullptr,
+        userDataPath.wc_str(),
+        nullptr,
         Callback<IWebView2CreateWebView2EnvironmentCompletedHandler>(
             [this](HRESULT WXUNUSED(result), IWebView2Environment* environment) -> HRESULT
             {
