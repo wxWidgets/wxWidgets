@@ -501,6 +501,9 @@ GridFrame::GridFrame()
     grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
     grid->SetCellValue( 1, 0, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
 
+    grid->SetCellValue(2, 0, "This one always overflows");
+    grid->SetCellFitMode(2, 0, wxGridFitMode::Overflow());
+
     grid->SetCellTextColour(1, 2, *wxRED);
     grid->SetCellBackgroundColour(1, 2, *wxGREEN);
 

@@ -409,7 +409,6 @@ void wxGridCellAttr::Init(wxGridCellAttr *attrDefault)
     m_attrkind = wxGridCellAttr::Cell;
 
     m_sizeRows = m_sizeCols = 1;
-    m_overflow = UnsetOverflow;
 
     SetDefAttr(attrDefault);
 }
@@ -443,7 +442,7 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
     if ( IsReadOnly() )
         attr->SetReadOnly();
 
-    attr->SetOverflow( m_overflow == Overflow );
+    attr->m_fitMode = m_fitMode;
     attr->SetKind( m_attrkind );
 
     return attr;
@@ -624,6 +623,23 @@ void wxGridCellAttr::GetSize( int *num_rows, int *num_cols ) const
         *num_rows = m_sizeRows;
     if ( num_cols )
         *num_cols = m_sizeCols;
+}
+
+wxGridFitMode wxGridCellAttr::GetFitMode() const
+{
+    if ( m_fitMode.IsSpecified() )
+    {
+        return m_fitMode;
+    }
+    else if (m_defGridAttr && m_defGridAttr != this)
+    {
+        return m_defGridAttr->GetFitMode();
+    }
+    else
+    {
+        wxFAIL_MSG(wxT("Missing default cell attribute"));
+        return wxGridFitMode();
+    }
 }
 
 // GetRenderer and GetEditor use a slightly different decision path about
@@ -2383,6 +2399,7 @@ void wxGrid::Create()
     m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
     m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
     m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
+    m_defaultCellAttr->SetFitMode(wxGridFitMode::Overflow());
 
 #if _USE_VISATTR
     wxVisualAttributes gva = wxListBox::GetClassDefaultAttributes();
@@ -8441,9 +8458,9 @@ void wxGrid::SetDefaultCellAlignment( int horiz, int vert )
     m_defaultCellAttr->SetAlignment(horiz, vert);
 }
 
-void wxGrid::SetDefaultCellOverflow( bool allow )
+void wxGrid::SetDefaultCellFitMode(wxGridFitMode fitMode)
 {
-    m_defaultCellAttr->SetOverflow(allow);
+    m_defaultCellAttr->SetFitMode(fitMode);
 }
 
 void wxGrid::SetDefaultCellFont( const wxFont& font )
@@ -8494,9 +8511,9 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert ) const
     m_defaultCellAttr->GetAlignment(horiz, vert);
 }
 
-bool wxGrid::GetDefaultCellOverflow() const
+wxGridFitMode wxGrid::GetDefaultCellFitMode() const
 {
-    return m_defaultCellAttr->GetOverflow();
+    return m_defaultCellAttr->GetFitMode();
 }
 
 wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
@@ -8547,13 +8564,13 @@ void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert ) const
     attr->DecRef();
 }
 
-bool wxGrid::GetCellOverflow( int row, int col ) const
+wxGridFitMode wxGrid::GetCellFitMode( int row, int col ) const
 {
     wxGridCellAttr *attr = GetCellAttr(row, col);
-    bool allow = attr->GetOverflow();
+    wxGridFitMode fitMode = attr->GetFitMode();
     attr->DecRef();
 
-    return allow;
+    return fitMode;
 }
 
 wxGrid::CellSpan
@@ -8854,12 +8871,12 @@ void wxGrid::SetCellAlignment( int row, int col, int horiz, int vert )
     }
 }
 
-void wxGrid::SetCellOverflow( int row, int col, bool allow )
+void wxGrid::SetCellFitMode( int row, int col, wxGridFitMode fitMode )
 {
     if ( CanHaveAttributes() )
     {
         wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
-        attr->SetOverflow(allow);
+        attr->SetFitMode(fitMode);
         attr->DecRef();
     }
 }

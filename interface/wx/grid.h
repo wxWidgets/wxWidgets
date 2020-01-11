@@ -874,6 +874,81 @@ public:
 
 
 /**
+    @class wxGridFitMode
+
+    Allows to specify the behaviour when the cell contents doesn't fit into its
+    allotted space.
+
+    Objects of this class are used with wxGridCellAttr::SetFitMode() and
+    wxGrid::SetDefaultCellFitMode() and wxGrid::SetCellFitMode() functions and
+    allow to specify what should happen if the cell contents doesn't fit into
+    the available space. The possibilities are:
+
+    - Overflow into the cell to the right if it is empty, or possibly several
+    cells, if the cell contents still doesn't fit after overflowing into the
+    immediately neighbouring cell.
+    - Clip the cell contents, discarding the part which doesn't fit.
+
+    The default behaviour is to overflow, use wxGrid::SetDefaultCellFitMode()
+    to change this, for example:
+    @code
+        grid->SetDefaultCellFitMode(wxGridFitMode::Clip());
+    @endcode
+
+    Objects of this class are created using static functions instead of
+    constructors for better readability and can't be changed after creating
+    them except by using the assignment operator.
+
+    @library{wxcore}
+    @category{grid}
+
+    @since 3.1.4
+ */
+class wxGridFitMode
+{
+public:
+    /**
+        Default constructor creates an object not specifying any behaviour.
+
+        This constructor is not very useful, use static methods Clip() and
+        Overflow() below to create objects of this class instead.
+     */
+    wxGridFitMode();
+
+    /**
+        Pseudo-constructor for object specifying clipping behaviour.
+     */
+    static wxGridFitMode Clip();
+
+    /**
+        Pseudo-constructor for object specifying overflow behaviour.
+     */
+    static wxGridFitMode Overflow();
+
+    /**
+        Return true if the object specifies some particular behaviour.
+
+        This method returns @false for default-constructed objects of this
+        type only.
+     */
+    bool IsSpecified() const;
+
+    /**
+        Return true if the object specifies clipping behaviour.
+
+        This method returns @true only for the objects returned by Clip().
+     */
+    bool IsClip() const;
+
+    /**
+        Return true if the object specifies overflow behaviour.
+
+        This method returns @true only for the objects returned by Overflow().
+     */
+    bool IsOverflow() const;
+};
+
+/**
     @class wxGridCellAttr
 
     This class can be used to alter the cells' appearance in the grid by
@@ -1088,7 +1163,29 @@ public:
     void MergeWith(wxGridCellAttr *mergefrom);
 
     void SetSize(int num_rows, int num_cols);
+
+    /**
+        Specifies the behaviour of the cell contents if it doesn't fit into the
+        available space.
+
+        @see wxGridFitMode
+
+        @since 3.1.4
+     */
+    void SetFitMode(wxGridFitMode fitMode);
+
+    /**
+        Specifies if cells using this attribute should overflow or clip their
+        contents.
+
+        This is the same as calling SetFitMode() with either
+        wxGridFitMode::Overflow() or wxGridFitMode::Clip() argument depending
+        on whether @a allow is @true or @false.
+
+        Prefer using SetFitMode() directly instead in the new code.
+     */
     void SetOverflow(bool allow = true);
+
     void SetKind(wxAttrKind kind);
 
     bool HasReadWriteMode() const;
@@ -1096,7 +1193,26 @@ public:
     bool HasSize() const;
 
     void GetSize(int *num_rows, int *num_cols) const;
+
+    /**
+        Returns the fitting mode for the cells using this attribute.
+
+        The returned wxGridFitMode is always specified, i.e.
+        wxGridFitMode::IsSpecified() always returns @true. The default value,
+        if SetFitMode() hadn't been called before, is "overflow".
+
+        @since 3.1.4
+     */
+    wxGridFitMode GetFitMode() const;
+
+    /**
+        Returns true if the cells using this attribute overflow into the
+        neighbouring cells.
+
+        Prefer using GetFitMode() in the new code.
+     */
     bool GetOverflow() const;
+
     wxAttrKind GetKind();
 
 
@@ -3319,9 +3435,21 @@ public:
     void AutoSizeRows(bool setAsMin = true);
 
     /**
+        Returns the cell fitting mode.
+
+        @see wxGridFitMode
+
+        @since 3.1.4
+     */
+    wxGridFitMode GetCellFitMode(int row, int col) const;
+
+    /**
         Returns @true if the cell value can overflow.
 
-        A cell can overflow if the next cell in the row is empty.
+        This is identical to calling GetCellFitMode() and using
+        wxGridFitMode::IsOverflow() on the returned value.
+
+        Prefer using GetCellFitMode() directly in the new code.
     */
     bool GetCellOverflow(int row, int col) const;
 
@@ -3351,7 +3479,24 @@ public:
     bool IsColShown(int col) const;
 
     /**
+        Returns the default cell fitting mode.
+
+        The default mode is "overflow", but can be modified using
+        SetDefaultCellFitMode().
+
+        @see wxGridFitMode
+
+        @since 3.1.4
+     */
+    wxGridFitMode GetDefaultCellFitMode() const;
+
+    /**
         Returns @true if the cells can overflow by default.
+
+        This is identical to calling GetDefaultCellFitMode() and using
+        wxGridFitMode::IsOverflow() on the returned value.
+
+        Prefer using GetDefaultCellFitMode() directly in the new code.
     */
     bool GetDefaultCellOverflow() const;
 
@@ -3401,7 +3546,19 @@ public:
     bool IsRowShown(int row) const;
 
     /**
+        Specifies the behaviour of the cell contents if it doesn't fit into the
+        available space.
+
+        @see wxGridFitMode
+
+        @since 3.1.4
+     */
+    void SetCellFitMode(int row, int col, wxGridFitMode fitMode);
+
+    /**
         Sets the overflow permission of the cell.
+
+        Prefer using SetCellFitMode() in the new code.
     */
     void SetCellOverflow(int row, int col, bool allow);
 
@@ -3471,7 +3628,19 @@ public:
 
 
     /**
+        Specifies the default behaviour of the cell contents if it doesn't fit
+        into the available space.
+
+        @see wxGridFitMode
+
+        @since 3.1.4
+     */
+    void SetDefaultCellFitMode(wxGridFitMode fitMode);
+
+    /**
         Sets the default overflow permission of the cells.
+
+        Prefer using SetDefaultCellFitMode() in the new code.
     */
     void SetDefaultCellOverflow( bool allow );
 
