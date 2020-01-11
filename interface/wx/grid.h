@@ -888,6 +888,9 @@ public:
     cells, if the cell contents still doesn't fit after overflowing into the
     immediately neighbouring cell.
     - Clip the cell contents, discarding the part which doesn't fit.
+    - Ellipsize the cell contents, i.e. replace the non-fitting part with
+    ellipsis (@c ...), putting the ellipsis at the end by default, but possibly
+    at the beginning or in the middle.
 
     The default behaviour is to overflow, use wxGrid::SetDefaultCellFitMode()
     to change this, for example:
@@ -926,6 +929,11 @@ public:
     static wxGridFitMode Overflow();
 
     /**
+        Pseudo-constructor for object specifying ellipsize behaviour.
+     */
+    static wxGridFitMode Ellipsize(wxEllipsizeMode ellipsize = wxELLIPSIZE_END);
+
+    /**
         Return true if the object specifies some particular behaviour.
 
         This method returns @false for default-constructed objects of this
@@ -946,6 +954,15 @@ public:
         This method returns @true only for the objects returned by Overflow().
      */
     bool IsOverflow() const;
+
+    /**
+        Return ellipsize mode, possibly @c wxELLIPSIZE_NONE.
+
+        For the objects constructed using Ellipsize(), the same ellipsization
+        mode as was passed to it is returned. For all the other objects,
+        ::wxELLIPSIZE_NONE is.
+     */
+    wxEllipsizeMode GetEllipsizeMode() const;
 };
 
 /**

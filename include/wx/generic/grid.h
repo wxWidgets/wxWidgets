@@ -422,11 +422,34 @@ public:
     // Static methods allowing to create objects actually specifying behaviour.
     static wxGridFitMode Clip() { return wxGridFitMode(Mode_Clip); }
     static wxGridFitMode Overflow() { return wxGridFitMode(Mode_Overflow); }
+    static wxGridFitMode Ellipsize(wxEllipsizeMode ellipsize = wxELLIPSIZE_END)
+    {
+        // This cast works because the enum elements are the same, see below.
+        return wxGridFitMode(static_cast<Mode>(ellipsize));
+    }
 
     // Accessors.
     bool IsSpecified() const { return m_mode != Mode_Unset; }
     bool IsClip() const { return m_mode == Mode_Clip; }
     bool IsOverflow() const { return m_mode == Mode_Overflow; }
+
+    wxEllipsizeMode GetEllipsizeMode() const
+    {
+        switch ( m_mode )
+        {
+            case Mode_Unset:
+            case Mode_EllipsizeStart:
+            case Mode_EllipsizeMiddle:
+            case Mode_EllipsizeEnd:
+                return static_cast<wxEllipsizeMode>(m_mode);
+
+            case Mode_Overflow:
+            case Mode_Clip:
+                break;
+        }
+
+        return wxELLIPSIZE_NONE;
+    }
 
     // This one is used in the implementation only.
     static wxGridFitMode FromOverflowFlag(bool allow)
@@ -435,7 +458,12 @@ public:
 private:
     enum Mode
     {
-        Mode_Unset = -1,
+        // This is a hack to save space: the first 4 elements of this enum are
+        // the same as those of wxEllipsizeMode.
+        Mode_Unset = wxELLIPSIZE_NONE,
+        Mode_EllipsizeStart = wxELLIPSIZE_START,
+        Mode_EllipsizeMiddle = wxELLIPSIZE_MIDDLE,
+        Mode_EllipsizeEnd = wxELLIPSIZE_END,
         Mode_Overflow,
         Mode_Clip
     };

@@ -588,6 +588,12 @@ GridFrame::GridFrame()
     grid->SetCellRenderer(14, 1, new wxGridCellDateRenderer("%Y-%m-%d"));
     grid->SetCellEditor(14, 1, new wxGridCellDateEditor);
 
+    grid->SetCellValue(13, 3, "String using default ellipsization");
+    grid->SetCellFitMode(13, 3, wxGridFitMode::Ellipsize());
+
+    grid->SetCellValue(13, 4, "String ellipsized in the middle");
+    grid->SetCellFitMode(13, 4, wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE));
+
     const wxString choices[] =
     {
         "Please select a choice",
