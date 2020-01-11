@@ -482,7 +482,7 @@ bool wxWebViewEdge::CanSetZoomType(wxWebViewZoomType type) const
 
 void wxWebViewEdge::Print()
 {
-
+    RunScript("window.print();");
 }
 
 wxWebViewZoom wxWebViewEdge::GetZoom() const
