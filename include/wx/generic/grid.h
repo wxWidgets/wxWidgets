@@ -1160,6 +1160,13 @@ public:
                             int verticalAlignment = wxALIGN_TOP,
                             int textOrientation = wxHORIZONTAL ) const;
 
+    void DrawTextRectangle(wxDC& dc,
+                           const wxString& text,
+                           const wxRect& rect,
+                           const wxGridCellAttr& attr,
+                           int defaultHAlign = wxALIGN_INVALID,
+                           int defaultVAlign = wxALIGN_INVALID);
+
     // ------ grid render function for printing
     //
     void Render( wxDC& dc,

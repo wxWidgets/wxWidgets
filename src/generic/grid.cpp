@@ -6822,6 +6822,28 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
     }
 }
 
+void wxGrid::DrawTextRectangle(wxDC& dc,
+                               const wxString& text,
+                               const wxRect& rect,
+                               const wxGridCellAttr& attr,
+                               int hAlign,
+                               int vAlign)
+{
+    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
+
+    // This does nothing if there is no need to ellipsize.
+    const wxString& ellipsizedText = wxControl::Ellipsize
+                                     (
+                                         text,
+                                         dc,
+                                         attr.GetFitMode().GetEllipsizeMode(),
+                                         rect.GetWidth(),
+                                         wxELLIPSIZE_FLAGS_NONE
+                                     );
+
+    DrawTextRectangle(dc, ellipsizedText, rect, hAlign, vAlign);
+}
+
 // Split multi-line text up into an array of strings.
 // Any existing contents of the string array are preserved.
 //
