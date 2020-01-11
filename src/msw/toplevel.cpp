@@ -823,6 +823,22 @@ void wxTopLevelWindowMSW::Restore()
     DoShowWindow(SW_RESTORE);
 }
 
+bool wxTopLevelWindowMSW::Destroy()
+{
+    if ( !wxTopLevelWindowBase::Destroy() )
+        return false;
+
+    // Under Windows 10 iconized windows don't get any messages, so delayed
+    // destruction doesn't work for them if we don't force a message dispatch
+    // here (and it doesn't seem useful to test for MSWIsIconized() as doing
+    // this doesn't do any harm for non-iconized windows neither). For that
+    // matter, doing this shouldn't do any harm under previous OS versions
+    // neither, so checking for the OS version doesn't seem useful too.
+    wxWakeUpIdle();
+
+    return true;
+}
+
 void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 {
     if ( dir == wxLayout_Default )
