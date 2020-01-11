@@ -428,16 +428,15 @@ public:
         Merged
     };
 
-    // ctors
-    wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
+    // default ctor
+    explicit wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
     {
         Init(attrDefault);
 
         SetAlignment(wxALIGN_INVALID, wxALIGN_INVALID);
     }
 
-    // VZ: considering the number of members wxGridCellAttr has now, this ctor
-    //     seems to be pretty useless... may be we should just remove it?
+    // ctor setting the most common attributes
     wxGridCellAttr(const wxColour& colText,
                    const wxColour& colBack,
                    const wxFont& font,

@@ -146,6 +146,8 @@ Changes in behaviour which may result in build errors
 - wxIntProperty::DoValidation() and wxFloatProperty::DoValidation() are
   no longer public since they are helpers intended for internal use only.
 
+- wxGridCellAttr ctor taking wxGridCellAttr pointer is now explicit.
+
 
 3.1.4: (released ????-??-??)
 ----------------------------

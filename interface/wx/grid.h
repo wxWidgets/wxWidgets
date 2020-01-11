@@ -912,7 +912,8 @@ public:
     /**
         Default constructor.
     */
-    wxGridCellAttr(wxGridCellAttr* attrDefault = NULL);
+    explicit wxGridCellAttr(wxGridCellAttr* attrDefault = NULL);
+
     /**
         Constructor specifying some of the often used attributes.
     */
