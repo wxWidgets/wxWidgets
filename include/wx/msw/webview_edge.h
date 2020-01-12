@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef wxWebViewEdgeC_H
-#define wxWebViewEdgeC_H
+#ifndef wxWebViewEdge_H
+#define wxWebViewEdge_H
 
 #include "wx/setup.h"
 
@@ -183,4 +183,4 @@ public:
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE && defined(__WXMSW__)
 
-#endif // wxWebViewEdgeC_H
+#endif // wxWebViewEdge_H
