@@ -288,7 +288,7 @@ public:
     virtual filesystems, custom urls, text selection, find, source code.
 
     This backend is not enabled by default, to build it follow these steps:
-    - Requires Visual Studio 2015 or newer
+    - Visual Studio 2015, or newer, is required
     - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
       nuget package (Version 0.8.355 or newer)
     - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
@@ -296,7 +296,7 @@ public:
     - Build wxWidgets webview library
     - Copy @c WebView2Loader.dll from @c wxWidgets/3rdparty/webview2/build/
       to your applications executable
-    - At runtime your can use wxWebView::IsBackendAvailable() to check if the
+    - At runtime you can use wxWebView::IsBackendAvailable() to check if the
       backend can be used (it will be available if @c WebView2Loader.dll can be
       loaded and Edge (Chromium) is installed)
 
