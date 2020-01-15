@@ -631,7 +631,6 @@
 #cmakedefine01 wxUSE_THEME_MONO
 #cmakedefine01 wxUSE_THEME_WIN32
 
-
 /* --- end common options --- */
 
 /*
