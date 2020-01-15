@@ -32,17 +32,23 @@ public:
     bool m_isBusy;
     wxString m_pendingURL;
 
+    // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
-    EventRegistrationToken m_documentStateChangedToken = { };
+
+    // WebView Event handlers
+    HRESULT OnNavigationStarting(IWebView2WebView* sender, IWebView2NavigationStartingEventArgs* args);
+    HRESULT OnNavigationCompleted(IWebView2WebView* sender, IWebView2NavigationCompletedEventArgs* args);
+    HRESULT OnNewWindowRequested(IWebView2WebView* sender, IWebView2NewWindowRequestedEventArgs* args);
+
+    HRESULT OnEnvironmentCreated(HRESULT result, IWebView2Environment* environment);
+    HRESULT OnWebViewCreated(HRESULT result, IWebView2WebView* webview);
 
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
     bool m_historyLoadingFromList;
     bool m_historyEnabled;
-
-    void InitWebViewCtrl();
 
     void UpdateBounds();
 

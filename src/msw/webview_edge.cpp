@@ -65,7 +65,6 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
     {
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
-        m_webView->remove_DocumentStateChanged(m_documentStateChangedToken);
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
     }
 }
@@ -85,20 +84,8 @@ bool wxWebViewEdgeImpl::Create()
         nullptr,
         userDataPath.wc_str(),
         nullptr,
-        Callback<IWebView2CreateWebView2EnvironmentCompletedHandler>(
-            [this](HRESULT WXUNUSED(result), IWebView2Environment* environment) -> HRESULT
-        {
-            environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
-            m_webViewEnvironment->CreateWebView(
-                m_ctrl->GetHWND(), Callback<IWebView2CreateWebViewCompletedHandler>(
-                    [this](HRESULT WXUNUSED(result), IWebView2WebView* webview) -> HRESULT
-            {
-                webview->QueryInterface(IID_PPV_ARGS(&m_webView));
-                InitWebViewCtrl();
-                return S_OK;
-            }).Get());
-            return S_OK;
-        }).Get());
+        Callback<IWebView2CreateWebView2EnvironmentCompletedHandler>(this,
+            &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
     if (FAILED(hr))
     {
         wxLogApiError("CreateWebView2EnvironmentWithDetails", hr);
@@ -106,6 +93,17 @@ bool wxWebViewEdgeImpl::Create()
     }
     else
         return true;
+}
+
+HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
+    HRESULT WXUNUSED(result), IWebView2Environment* environment)
+{
+    environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
+    m_webViewEnvironment->CreateWebView(
+        m_ctrl->GetHWND(),
+        Callback<IWebView2CreateWebViewCompletedHandler>(
+            this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+    return S_OK;
 }
 
 bool wxWebViewEdgeImpl::Initialize()
@@ -150,135 +148,134 @@ void wxWebViewEdgeImpl::UpdateBounds()
         m_webView->put_Bounds(r);
 }
 
-void wxWebViewEdgeImpl::InitWebViewCtrl()
+HRESULT wxWebViewEdgeImpl::OnNavigationStarting(IWebView2WebView* WXUNUSED(sender), IWebView2NavigationStartingEventArgs* args)
 {
+    m_isBusy = true;
+    wxString evtURL;
+    PWSTR uri;
+    if (SUCCEEDED(args->get_Uri(&uri)))
+        evtURL = wxString(uri);
+    wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), evtURL, wxString());
+    event.SetEventObject(m_ctrl);
+    m_ctrl->HandleWindowEvent(event);
+
+    if (!event.IsAllowed())
+        args->put_Cancel(true);
+
+    return S_OK;
+}
+
+HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(sender), IWebView2NavigationCompletedEventArgs* args)
+{
+    BOOL isSuccess;
+    if (FAILED(args->get_IsSuccess(&isSuccess)))
+        isSuccess = false;
+    m_isBusy = false;
+    wxString uri = m_ctrl->GetCurrentURL();
+
+    if (!isSuccess)
+    {
+        WEBVIEW2_WEB_ERROR_STATUS status;
+
+        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), uri, wxString());
+        event.SetEventObject(m_ctrl);
+
+        if (SUCCEEDED(args->get_WebErrorStatus(&status)))
+        {
+            switch (status)
+            {
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_UNKNOWN, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_COMMON_NAME_IS_INCORRECT, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_EXPIRED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CLIENT_CERTIFICATE_CONTAINS_ERRORS, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_REVOKED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_IS_INVALID, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_SERVER_UNREACHABLE, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_ERROR_HTTP_INVALID_SERVER_RESPONSE, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_ABORTED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_RESET, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_DISCONNECTED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CANNOT_CONNECT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_HOST_NAME_NOT_RESOLVED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED, wxWEBVIEW_NAV_ERR_USER_CANCELLED)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_UNEXPECTED_ERROR, wxWEBVIEW_NAV_ERR_OTHER)
+            }
+        }
+        m_ctrl->HandleWindowEvent(event);
+    }
+    else
+    {
+        wxWebViewEvent evt(wxEVT_WEBVIEW_NAVIGATED, m_ctrl->GetId(), uri, wxString());
+        m_ctrl->HandleWindowEvent(evt);
+        if (m_historyEnabled && !m_historyLoadingFromList &&
+            (uri == m_ctrl->GetCurrentURL()) ||
+            (m_ctrl->GetCurrentURL().substr(0, 4) == "file" &&
+                wxFileName::URLToFileName(m_ctrl->GetCurrentURL()).GetFullPath() == uri))
+        {
+            // If we are not at the end of the list, then erase everything
+            // between us and the end before adding the new page
+            if (m_historyPosition != static_cast<int>(m_historyList.size()) - 1)
+            {
+                m_historyList.erase(m_historyList.begin() + m_historyPosition + 1,
+                    m_historyList.end());
+            }
+            wxSharedPtr<wxWebViewHistoryItem> item(new wxWebViewHistoryItem(uri, m_ctrl->GetCurrentTitle()));
+            m_historyList.push_back(item);
+            m_historyPosition++;
+        }
+        //Reset as we are done now
+        m_historyLoadingFromList = false;
+    }
+    return S_OK;
+}
+
+HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(IWebView2WebView* WXUNUSED(sender), IWebView2NewWindowRequestedEventArgs* args)
+{
+    PWSTR uri;
+    args->get_Uri(&uri);
+    wxString evtURL(uri);
+    wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString());
+    m_ctrl->HandleWindowEvent(evt);
+    args->put_Handled(true);
+    return S_OK;
+}
+
+HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, IWebView2WebView* webview)
+{
+    if (FAILED(result))
+    {
+        wxLogApiError("WebView2::WebViewCreated", result);
+        return result;
+    }
+
+    webview->QueryInterface(IID_PPV_ARGS(&m_webView));
+
     m_initialized = true;
     UpdateBounds();
 
     // Connect and handle the various WebView events
-
     m_webView->add_NavigationStarting(
         Callback<IWebView2NavigationStartingEventHandler>(
-            [this](IWebView2WebView* WXUNUSED(sender), IWebView2NavigationStartingEventArgs* args) -> HRESULT
-    {
-        m_isBusy = true;
-        wxString evtURL;
-        PWSTR uri;
-        if (SUCCEEDED(args->get_Uri(&uri)))
-            evtURL = wxString(uri);
-        wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), evtURL, wxString());
-        event.SetEventObject(m_ctrl);
-        m_ctrl->HandleWindowEvent(event);
-
-        if (!event.IsAllowed())
-            args->put_Cancel(true);
-
-        return S_OK;
-    })
-        .Get(), &m_navigationStartingToken);
-
-    m_webView->add_DocumentStateChanged(
-        Callback<IWebView2DocumentStateChangedEventHandler>(
-            [this](IWebView2WebView* sender, IWebView2DocumentStateChangedEventArgs* WXUNUSED(args)) -> HRESULT
-    {
-        PWSTR uri;
-        sender->get_Source(&uri);
-        wxString evtURL(uri);
-        if (evtURL.Cmp(L"about:blank") == 0)
-        {
-            evtURL = L"";
-        }
-
-        // AddPendingEvent(wxWebViewEvent(wxEVT_WEBVIEW_NAVIGATED, GetId(), uri, wxString()));
-        // SetWindowText(m_toolbar->addressBarWindow, uri.get());
-        return S_OK;
-    })
-        .Get(),
-        &m_documentStateChangedToken);
-
+            this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
+        &m_navigationStartingToken);
     m_webView->add_NavigationCompleted(
         Callback<IWebView2NavigationCompletedEventHandler>(
-            [this](IWebView2WebView* sender, IWebView2NavigationCompletedEventArgs* args) -> HRESULT
-    {
-        BOOL isSuccess;
-        if (FAILED(args->get_IsSuccess(&isSuccess)))
-            isSuccess = false;
-        m_isBusy = false;
-        PWSTR _uri;
-        sender->get_Source(&_uri);
-        wxString uri(_uri);
-
-        if (!isSuccess)
-        {
-            WEBVIEW2_WEB_ERROR_STATUS status;
-
-            wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), uri, wxString());
-            event.SetEventObject(m_ctrl);
-
-            if (SUCCEEDED(args->get_WebErrorStatus(&status)))
-            {
-                switch (status)
-                {
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_UNKNOWN, wxWEBVIEW_NAV_ERR_OTHER)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_COMMON_NAME_IS_INCORRECT, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_EXPIRED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CLIENT_CERTIFICATE_CONTAINS_ERRORS, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_REVOKED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_IS_INVALID, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_SERVER_UNREACHABLE, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_ERROR_HTTP_INVALID_SERVER_RESPONSE, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_ABORTED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_RESET, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_DISCONNECTED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CANNOT_CONNECT, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_HOST_NAME_NOT_RESOLVED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED, wxWEBVIEW_NAV_ERR_USER_CANCELLED)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
-                    WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_UNEXPECTED_ERROR, wxWEBVIEW_NAV_ERR_OTHER)
-                }
-            }
-            m_ctrl->HandleWindowEvent(event);
-        }
-        else
-        {
-            wxWebViewEvent evt(wxEVT_WEBVIEW_NAVIGATED, m_ctrl->GetId(), uri, wxString());
-            m_ctrl->HandleWindowEvent(evt);
-            if (m_historyEnabled && !m_historyLoadingFromList &&
-                (uri == m_ctrl->GetCurrentURL()) ||
-                (m_ctrl->GetCurrentURL().substr(0, 4) == "file" &&
-                    wxFileName::URLToFileName(m_ctrl->GetCurrentURL()).GetFullPath() == uri))
-            {
-                // If we are not at the end of the list, then erase everything
-                // between us and the end before adding the new page
-                if (m_historyPosition != static_cast<int>(m_historyList.size()) - 1)
-                {
-                    m_historyList.erase(m_historyList.begin() + m_historyPosition + 1,
-                        m_historyList.end());
-                }
-                wxSharedPtr<wxWebViewHistoryItem> item(new wxWebViewHistoryItem(uri, m_ctrl->GetCurrentTitle()));
-                m_historyList.push_back(item);
-                m_historyPosition++;
-            }
-            //Reset as we are done now
-            m_historyLoadingFromList = false;
-        }
-        return S_OK;
-    })
-        .Get(), &m_navigationCompletedToken);
+            this, &wxWebViewEdgeImpl::OnNavigationCompleted).Get(),
+        &m_navigationCompletedToken);
     m_webView->add_NewWindowRequested(
         Callback<IWebView2NewWindowRequestedEventHandler>(
-            [this](IWebView2WebView* WXUNUSED(sender), IWebView2NewWindowRequestedEventArgs* args) -> HRESULT
+            this, &wxWebViewEdgeImpl::OnNewWindowRequested).Get(),
+        &m_newWindowRequestedToken);
+
+    if (!m_pendingURL.empty())
     {
-        PWSTR uri;
-        args->get_Uri(&uri);
-        wxString evtURL(uri);
-        wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString());
-        m_ctrl->HandleWindowEvent(evt);
-        args->put_Handled(true);
-        return S_OK;
-    }).Get(), &m_newWindowRequestedToken);
-    m_ctrl->LoadURL(m_pendingURL);
+        m_ctrl->LoadURL(m_pendingURL);
+        m_pendingURL.clear();
+    }
+
+    return S_OK;
 }
 
 IWebView2Settings2* wxWebViewEdgeImpl::GetSettings()
