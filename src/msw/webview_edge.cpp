@@ -78,11 +78,14 @@ bool wxWebViewEdge::Initialize()
 
     // Check if a Edge browser can be found by the loader DLL
     LPWSTR versionStr;
-    if (SUCCEEDED(wxGetWebView2BrowserVersionInfo(NULL, &versionStr)))
+    HRESULT hr = wxGetWebView2BrowserVersionInfo(NULL, &versionStr);
+    if (SUCCEEDED(hr))
     {
         if (versionStr)
             return true;
     }
+    else
+        wxLogApiError("GetWebView2BrowserVersionInfo", hr);
 
     return false;
 }
@@ -157,7 +160,12 @@ bool wxWebViewEdge::Create(wxWindow* parent,
                     .Get());
                 return S_OK;
             }).Get());
-    return SUCCEEDED(hr);
+    if (FAILED(hr))
+    {
+        wxLogApiError("CreateWebView2EnvironmentWithDetails", hr);
+    }
+    else
+        return true;
 }
 
 void wxWebViewEdge::InitWebViewCtrl()
@@ -676,7 +684,13 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
     while (!scriptExecuted)
         wxYield();
 
-    return SUCCEEDED(hr);
+    if (FAILED(hr))
+    {
+        wxLogApiError("ExecuteScript", hr);
+        return false;
+    }
+    else
+        return true;
 }
 
 bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
