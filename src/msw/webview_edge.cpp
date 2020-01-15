@@ -386,21 +386,12 @@ void wxWebViewEdge::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewEdge::GetBackwardHistory()
 {
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
-    //As we don't have std::copy or an iterator constructor in the wxwidgets
-    //native vector we construct it by hand
-    for (int i = 0; i < m_impl->m_historyPosition; i++)
-    {
-        backhist.push_back(m_impl->m_historyList[i]);
-    }
-    return backhist;
+    return m_impl->m_historyList;
 }
 
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewEdge::GetForwardHistory()
 {
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
-    //As we don't have std::copy or an iterator constructor in the wxwidgets
-    //native vector we construct it by hand
     for (int i = m_impl->m_historyPosition + 1; i < static_cast<int>(m_impl->m_historyList.size()); i++)
     {
         forwardhist.push_back(m_impl->m_historyList[i]);
