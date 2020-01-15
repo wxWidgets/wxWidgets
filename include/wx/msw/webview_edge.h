@@ -128,8 +128,8 @@ protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
 private:
-    bool m_initialized = false;
-    bool m_isBusy = false;
+    bool m_initialized;
+    bool m_isBusy;
     wxString m_pendingURL;
 
     wxCOMPtr<IWebView2Environment3> m_webViewEnvironment;

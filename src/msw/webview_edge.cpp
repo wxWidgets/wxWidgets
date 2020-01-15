@@ -100,7 +100,6 @@ wxWebViewEdge::~wxWebViewEdge()
 {
     if (m_webView)
     {
-        // TOOD: Remove additional events
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
         m_webView->remove_DocumentStateChanged(m_documentStateChangedToken);
@@ -123,14 +122,14 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     m_historyEnabled = true;
     m_historyPosition = -1;
 
+    if (!IsAvailable())
+        return false;
+
     if (!wxControl::Create(parent, id, pos, size, style,
         wxDefaultValidator, name))
     {
         return false;
     }
-
-    if (!IsAvailable())
-        return false;
 
     m_pendingURL = url;
 
@@ -360,14 +359,6 @@ bool wxWebViewEdge::CanGoForward() const
         return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
     else
         return false;
-
-    /*
-        BOOL result = false;
-        if (m_webView && SUCCEEDED(m_webView->get_CanGoForward(&result)))
-            return result;
-        else
-            return false;
-    */
 }
 
 bool wxWebViewEdge::CanGoBack() const
@@ -376,28 +367,16 @@ bool wxWebViewEdge::CanGoBack() const
         return m_historyPosition > 0;
     else
         return false;
-    /*
-        BOOL result = false;
-
-        if (m_webView && SUCCEEDED(m_webView->get_CanGoBack(&result)))
-            return result;
-        else
-            return false;
-    */
 }
 
 void wxWebViewEdge::GoBack()
 {
     LoadHistoryItem(m_historyList[m_historyPosition - 1]);
-    /* if (m_webView)
-        m_webView->GoBack(); */
 }
 
 void wxWebViewEdge::GoForward()
 {
     LoadHistoryItem(m_historyList[m_historyPosition + 1]);
-    /* if (m_webView)
-        m_webView->GoForward(); */
 }
 
 void wxWebViewEdge::ClearHistory()
@@ -451,9 +430,9 @@ wxString wxWebViewEdge::GetCurrentURL() const
 
 wxString wxWebViewEdge::GetCurrentTitle() const
 {
-    PWSTR _title;
-    if (m_webView && SUCCEEDED(m_webView->get_DocumentTitle(&_title)))
-        return wxString(_title);
+    PWSTR title;
+    if (m_webView && SUCCEEDED(m_webView->get_DocumentTitle(&title)))
+        return wxString(title);
     else
         return wxString();
 }
