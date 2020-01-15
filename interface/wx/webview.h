@@ -300,7 +300,7 @@ public:
       backend can be used (it will be available if @c WebView2Loader.dll can be
       loaded and Edge (Chromium) is installed)
     - Make sure to add a note about using the WebView2 SDK to your application
-      documentation, as required by it's licence
+      documentation, as required by its licence
 
     @par wxWEBVIEW_WEBKIT (GTK)
 
