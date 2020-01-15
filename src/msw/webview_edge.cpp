@@ -38,17 +38,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
 
 int wxWebViewEdge::ms_isAvailable = -1;
 // WebView2Loader typedefs
-typedef HRESULT (__stdcall *PFNWXCreateWebView2EnvironmentWithDetails)(
+typedef HRESULT (__stdcall *CreateWebView2EnvironmentWithDetails_t)(
     PCWSTR browserExecutableFolder,
     PCWSTR userDataFolder,
     PCWSTR additionalBrowserArguments,
     IWebView2CreateWebView2EnvironmentCompletedHandler* environment_created_handler);
-typedef HRESULT(__stdcall *PFNWXGetWebView2BrowserVersionInfo)(
+typedef HRESULT(__stdcall *GetWebView2BrowserVersionInfo_t)(
     PCWSTR browserExecutableFolder,
     LPWSTR* versionInfo);
 
-PFNWXCreateWebView2EnvironmentWithDetails wxCreateWebView2EnvironmentWithDetails = NULL;
-PFNWXGetWebView2BrowserVersionInfo wxGetWebView2BrowserVersionInfo = NULL;
+CreateWebView2EnvironmentWithDetails_t wxCreateWebView2EnvironmentWithDetails = NULL;
+GetWebView2BrowserVersionInfo_t wxGetWebView2BrowserVersionInfo = NULL;
 
 wxDynamicLibrary wxWebViewEdge::ms_loaderDll;
 
@@ -67,11 +67,6 @@ bool wxWebViewEdge::IsAvailable()
 
 bool wxWebViewEdge::Initialize()
 {
-#define RESOLVE_LOADER_FUNCTION(type, funcname)                        \
-    wx##funcname = (type)ms_loaderDll.GetSymbol(wxT(#funcname));       \
-    if ( !wx##funcname )                                               \
-        return false
-
     // WebView2 is only available for Windows 7 or newer
     if (!wxCheckOsVersion(6, 1))
         return false;
@@ -80,8 +75,10 @@ bool wxWebViewEdge::Initialize()
         return false;
 
     // Try to load functions from loader DLL
-    RESOLVE_LOADER_FUNCTION(PFNWXCreateWebView2EnvironmentWithDetails, CreateWebView2EnvironmentWithDetails);
-    RESOLVE_LOADER_FUNCTION(PFNWXGetWebView2BrowserVersionInfo, GetWebView2BrowserVersionInfo);
+    wxDL_INIT_FUNC(wx, CreateWebView2EnvironmentWithDetails, ms_loaderDll);
+    wxDL_INIT_FUNC(wx, GetWebView2BrowserVersionInfo, ms_loaderDll);
+    if (!wxGetWebView2BrowserVersionInfo || !wxCreateWebView2EnvironmentWithDetails)
+        return false;
 
     // Check if a Edge browser can be found by the loader DLL
     LPWSTR versionStr;
