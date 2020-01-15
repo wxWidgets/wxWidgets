@@ -43,6 +43,8 @@
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 
+#include <float.h>       // for FLT_MAX
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -692,9 +694,10 @@ bool wxNativeFontInfo::FromString(const wxString& s)
                 // lfHeight, as with v0 strings.
                 if ( !wxIsNullDouble(d) )
                 {
-                    pointSize = static_cast<float>(d);
-                    if ( static_cast<double>(pointSize) != d )
+                    if ( d < 0 || d > FLT_MAX )
                         return false;
+
+                    pointSize = static_cast<float>(d);
 
                     setPointSizeFromHeight = false;
                 }

@@ -44,6 +44,8 @@
 
 #include "wx/tokenzr.h"
 
+#include <float.h>       // for FLT_MAX
+
 // debugger helper: this function can be called from a debugger to show what
 // the date really is
 extern const char *wxDumpFont(const wxFont *font)
@@ -758,9 +760,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToCDouble(&d) )
         return false;
-    pointSize = static_cast<float>(d);
-    if ( static_cast<double>(pointSize) != d )
+    if ( d < 0 || d > FLT_MAX )
         return false;
+    pointSize = static_cast<float>(d);
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )

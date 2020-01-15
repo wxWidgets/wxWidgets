@@ -449,4 +449,28 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
         CHECK( test.GetEncoding() == temp2.GetEncoding() );
 #endif
     }
+
+    // Test for a bug with handling fractional font sizes in description
+    // strings (see #18590).
+    wxFont font(*wxNORMAL_FONT);
+
+    static const float sizes[] = { 12.0f, 10.5f, 13.8f, 10.123f, 11.1f };
+    for ( unsigned n = 0; n < WXSIZEOF(sizes); n++ )
+    {
+        font.SetFractionalPointSize(sizes[n]);
+
+        // Just setting the font can slightly change it because of rounding
+        // errors, so don't expect the actual size to be exactly equal to what
+        // we used -- but close enough.
+        const float sizeUsed = font.GetFractionalPointSize();
+        CHECK( sizeUsed == Approx(sizes[n]).epsilon(0.001) );
+
+        const wxString& desc = font.GetNativeFontInfoDesc();
+        INFO("Font description: " << desc);
+        CHECK( font.SetNativeFontInfo(desc) );
+
+        // Notice that here we use the exact comparison, there is no reason for
+        // a differently rounded size to be used.
+        CHECK( font.GetFractionalPointSize() == sizeUsed );
+    }
 }
