@@ -693,7 +693,11 @@ public:
                            bool allowOthers = false);
 
     /**
-        Parameters string format is "item1[,item2[...,itemN]]"
+        Parameters string format is "item1[,item2[...,itemN]]".
+
+        This method can be called before the editor is used for the first time,
+        or later, in which case it replaces the previously specified strings
+        with the new ones.
     */
     virtual void SetParameters(const wxString& params);
 };
