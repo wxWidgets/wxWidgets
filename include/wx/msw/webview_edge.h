@@ -15,12 +15,9 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE && defined(__WXMSW__)
 
 #include "wx/control.h"
-#include "wx/dynlib.h"
 #include "wx/webview.h"
-#include "wx/msw/private/comptr.h"
 
-#include <Webview2.h>
-
+class wxWebViewEdgeImpl;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewEdge : public wxWebView
 {
@@ -118,7 +115,7 @@ public:
 
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
-    virtual void* GetNativeBackend() const wxOVERRIDE { return m_webView; }
+    virtual void* GetNativeBackend() const wxOVERRIDE;
 
     // ---- Edge-specific methods
 
@@ -128,39 +125,11 @@ protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
 private:
-    bool m_initialized;
-    bool m_isBusy;
-    wxString m_pendingURL;
-
-    wxCOMPtr<IWebView2Environment3> m_webViewEnvironment;
-    wxCOMPtr<IWebView2WebView5> m_webView;
-
-    EventRegistrationToken m_navigationStartingToken = { };
-    EventRegistrationToken m_navigationCompletedToken = { };
-    EventRegistrationToken m_newWindowRequestedToken = { };
-    EventRegistrationToken m_documentStateChangedToken = { };
+    wxWebViewEdgeImpl* m_impl;
 
     void OnSize(wxSizeEvent& event);
 
-    void UpdateBounds();
-
-    void InitWebViewCtrl();
-
     bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
-
-    static int ms_isAvailable;
-    static wxDynamicLibrary ms_loaderDll;
-
-    static bool Initialize();
-
-    static void Uninitalize();
-
-    friend class wxWebViewEdgeModule;
-
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
-    int m_historyPosition;
-    bool m_historyLoadingFromList;
-    bool m_historyEnabled;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewEdge);
 };
