@@ -31,6 +31,8 @@
 #include <map>
 #include <string>
 
+#include <float.h>       // for FLT_MAX
+
 #define TRACE_CTFONT "ctfont"
 
 class WXDLLEXPORT wxFontRefData : public wxGDIRefData
@@ -957,13 +959,13 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToCDouble(&d) )
         return false;
+    if ( d < 0 || d > FLT_MAX )
+        return false;
 #ifdef __LP64__
     // CGFloat is just double in this case.
     m_ctSize = d;
 #else // !__LP64__
     m_ctSize = static_cast<CGFloat>(d);
-    if ( static_cast<double>(m_ctSize) != d )
-        return false;
 #endif // __LP64__/!__LP64__
 
     token = tokenizer.GetNextToken();
