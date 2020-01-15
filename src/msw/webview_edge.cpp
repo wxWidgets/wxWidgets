@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        source/msw/webview_edge.cpp
+// Name:        src/msw/webview_edge.cpp
 // Purpose:     wxMSW Edge Chromium wxWebView backend implementation
 // Author:      Markus Pingel
 // Created:     2019-12-15
@@ -62,7 +62,7 @@ bool wxWebViewEdge::IsAvailable()
             ms_isAvailable = 1;
     }
 
-    return (ms_isAvailable == 1);
+    return ms_isAvailable == 1;
 }
 
 bool wxWebViewEdge::Initialize()

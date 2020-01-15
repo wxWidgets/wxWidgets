@@ -449,7 +449,7 @@ public:
                                 wxSharedPtr<wxWebViewFactory> factory);
 
     /**
-        Allows to check if a specific backend is currently available
+        Allows to check if a specific backend is currently available.
 
         @since 3.1.4
     */
