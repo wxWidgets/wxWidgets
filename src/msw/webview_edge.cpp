@@ -67,10 +67,6 @@ bool wxWebViewEdge::IsAvailable()
 
 bool wxWebViewEdge::Initialize()
 {
-    // WebView2 is only available for Windows 7 or newer
-    if (!wxCheckOsVersion(6, 1))
-        return false;
-
     if (!ms_loaderDll.Load("WebView2Loader.dll", wxDL_DEFAULT | wxDL_QUIET))
         return false;
 
