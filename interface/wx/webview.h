@@ -299,6 +299,8 @@ public:
     - At runtime you can use wxWebView::IsBackendAvailable() to check if the
       backend can be used (it will be available if @c WebView2Loader.dll can be
       loaded and Edge (Chromium) is installed)
+    - Make sure to add a note about using the WebView2 SDK to your application
+      documentation, as required by it's licence
 
     @par wxWEBVIEW_WEBKIT (GTK)
 
