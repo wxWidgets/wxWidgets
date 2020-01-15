@@ -26,6 +26,7 @@
 #include "wx/msw/private/webview_edge.h"
 
 #include <wrl/event.h>
+#include <Objbase.h>
 
 using namespace Microsoft::WRL;
 
@@ -123,7 +124,10 @@ bool wxWebViewEdgeImpl::Initialize()
     if (SUCCEEDED(hr))
     {
         if (versionStr)
+        {
+            CoTaskMemFree(versionStr);
             return true;
+        }
     }
     else
         wxLogApiError("GetWebView2BrowserVersionInfo", hr);
@@ -152,9 +156,12 @@ HRESULT wxWebViewEdgeImpl::OnNavigationStarting(IWebView2WebView* WXUNUSED(sende
 {
     m_isBusy = true;
     wxString evtURL;
-    PWSTR uri;
+    LPWSTR uri;
     if (SUCCEEDED(args->get_Uri(&uri)))
+    {
         evtURL = wxString(uri);
+        CoTaskMemFree(uri);
+    }
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), evtURL, wxString());
     event.SetEventObject(m_ctrl);
     m_ctrl->HandleWindowEvent(event);
@@ -233,9 +240,13 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(send
 
 HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(IWebView2WebView* WXUNUSED(sender), IWebView2NewWindowRequestedEventArgs* args)
 {
-    PWSTR uri;
-    args->get_Uri(&uri);
-    wxString evtURL(uri);
+    LPWSTR uri;
+    wxString evtURL;
+    if (SUCCEEDED(args->get_Uri(&uri)))
+    {
+        evtURL = wxString(uri);
+        CoTaskMemFree(uri);
+    }
     wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString());
     m_ctrl->HandleWindowEvent(evt);
     args->put_Handled(true);
@@ -467,16 +478,24 @@ wxString wxWebViewEdge::GetCurrentURL() const
 {
     LPWSTR uri;
     if (m_impl->m_webView && SUCCEEDED(m_impl->m_webView->get_Source(&uri)))
-        return wxString(uri);
+    {
+        wxString uriStr(uri);
+        CoTaskMemFree(uri);
+        return uriStr;
+    }
     else
         return wxString();
 }
 
 wxString wxWebViewEdge::GetCurrentTitle() const
 {
-    PWSTR title;
+    LPWSTR title;
     if (m_impl->m_webView && SUCCEEDED(m_impl->m_webView->get_DocumentTitle(&title)))
-        return wxString(title);
+    {
+        wxString titleStr(title);
+        CoTaskMemFree(title);
+        return titleStr;
+    }
     else
         return wxString();
 }
