@@ -658,7 +658,7 @@ void wxWebViewEdge::EnableDevTools(bool enable)
     }
 }
 
-bool wxWebViewEdge::IsDevToolsEnabled() const
+bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
 {
     wxCOMPtr<IWebView2Settings> settings;
     if (SUCCEEDED(m_webView->get_Settings(&settings)))

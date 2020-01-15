@@ -112,7 +112,7 @@ public:
     virtual bool IsContextMenuEnabled() const wxOVERRIDE;
 
     virtual void EnableDevTools(bool enable = true) wxOVERRIDE;
-    virtual bool IsDevToolsEnabled() const wxOVERRIDE;
+    virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
 
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
 

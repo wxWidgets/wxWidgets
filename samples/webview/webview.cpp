@@ -952,7 +952,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     m_selection_delete->Enable(m_browser->HasSelection());
 
     m_context_menu->Check(m_browser->IsContextMenuEnabled());
-    m_dev_tools->Check(m_browser->IsDevToolsEnabled());
+    m_dev_tools->Check(m_browser->IsAccessToDevToolsEnabled());
 
     //Firstly we clear the existing menu items, then we add the current ones
     wxMenuHistoryMap::const_iterator it;

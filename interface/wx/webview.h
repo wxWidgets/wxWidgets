@@ -717,7 +717,7 @@ public:
 
         @since 3.1.4
     */
-    virtual bool IsDevToolsEnabled() const;
+    virtual bool IsAccessToDevToolsEnabled() const;
 
     /**
         @name History

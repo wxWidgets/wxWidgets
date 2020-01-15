@@ -167,7 +167,7 @@ public:
     virtual wxString GetPageText() const = 0;
     virtual bool IsBusy() const = 0;
     virtual bool IsContextMenuEnabled() const { return m_showMenu; }
-    virtual bool IsDevToolsEnabled() const { return false; }
+    virtual bool IsAccessToDevToolsEnabled() const { return false; }
     virtual bool IsEditable() const = 0;
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;
