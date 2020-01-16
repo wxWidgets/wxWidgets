@@ -5,9 +5,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
 #define wxDD_CHANGE_DIR         0x0100
 #define wxDD_DIR_MUST_EXIST     0x0200
 #define wxDD_MULTIPLE           0x0400
+#define wxDD_SHOW_HIDDEN        0x0001
 
 #define wxDD_NEW_DIR_BUTTON     0 // deprecated, on by default now,
 
@@ -45,11 +47,13 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
     @style{wxDD_CHANGE_DIR}
            Change the current working directory to the directory chosen by the
            user.
-          @note This flag cannot be used with the @c wxDD_MULTIPLE style.
+           @note This flag cannot be used with the @c wxDD_MULTIPLE style.
     @style{wxDD_MULTIPLE}
            Allow the user to select multiple directories.
            This flag is only available since wxWidgets 3.1.4
-
+    @style{wxDD_SHOW_HIDDEN}
+           Show hidden and system folders.
+           This flag is only available since wxWidgets 3.1.4
     @endStyleTable
 
     Notice that @c wxRESIZE_BORDER has special side effect under Windows

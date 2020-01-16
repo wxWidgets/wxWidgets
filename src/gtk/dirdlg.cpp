@@ -121,6 +121,9 @@ bool wxDirDialog::Create(wxWindow* parent,
     gtk_file_chooser_set_select_multiple(
         GTK_FILE_CHOOSER(m_widget), HasFlag(wxDD_MULTIPLE) );
 
+    // Enable show hidden folders if desired
+    gtk_file_chooser_set_show_hidden(
+        GTK_FILE_CHOOSER(m_widget), HasFlag(wxDD_SHOW_HIDDEN) );
 
     // local-only property could be set to false to allow non-local files to be loaded.
     // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere

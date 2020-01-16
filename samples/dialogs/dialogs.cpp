@@ -489,7 +489,7 @@ bool MyApp::OnInit()
 
     dir_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
     dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  "Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D");
-    dir_menu->Append(DIALOGS_DIRMULTIPLE_CHOOSE,  "Choose multiple directories\tAlt-Ctrl-D");
+    dir_menu->Append(DIALOGS_DIRMULTIPLE_CHOOSE,  "Choose multiple and hidden directories\tAlt-Ctrl-D");
     menuDlg->Append(wxID_ANY,"&Directory operations",dir_menu);
 
     #if USE_DIRDLG_GENERIC
@@ -1809,7 +1809,7 @@ void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::DirChooseMultiple(wxCommandEvent& WXUNUSED(event))
 {
     // pass some initial dir and the style to wxDirDialog
-    int style = wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE;
+    int style = wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE | wxDD_SHOW_HIDDEN;
     wxString dirHome;
     wxGetHomeDir(&dirHome);
 
