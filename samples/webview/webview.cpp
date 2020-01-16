@@ -716,7 +716,7 @@ void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
 
 void WebFrame::OnEnableDevTools(wxCommandEvent& evt)
 {
-    m_browser->EnableDevTools(evt.IsChecked());
+    m_browser->EnableAccessToDevTools(evt.IsChecked());
 }
 
 void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))

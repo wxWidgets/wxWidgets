@@ -712,7 +712,7 @@ public:
 
         @since 3.1.4
     */
-    virtual void EnableDevTools(bool enable = true);
+    virtual void EnableAccessToDevTools(bool enable = true);
 
     /**
         Returns @true if dev tools are available to the user.

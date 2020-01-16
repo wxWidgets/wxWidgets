@@ -671,7 +671,7 @@ bool wxWebViewEdge::IsContextMenuEnabled() const
     return true;
 }
 
-void wxWebViewEdge::EnableDevTools(bool enable)
+void wxWebViewEdge::EnableAccessToDevTools(bool enable)
 {
     wxCOMPtr<IWebView2Settings2> settings(m_impl->GetSettings());
     if (settings)
