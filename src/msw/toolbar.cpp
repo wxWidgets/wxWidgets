@@ -597,7 +597,8 @@ wxSize wxToolBar::DoGetBestSize() const
 
     wxToolBarToolsList::compatibility_iterator node;
     int toolIndex = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext(),
+                                           toolIndex++ )
     {
         wxToolBarTool * const
             tool = static_cast<wxToolBarTool *>(node->GetData());
@@ -621,7 +622,7 @@ wxSize wxToolBar::DoGetBestSize() const
             // items do have this size, this is not true for the separators and it
             // is both more robust and simpler to just always use TB_GETITEMRECT
             // rather than handling the separators specially.
-            const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
+            const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex);
 
             if ( IsVertical() )
             {
