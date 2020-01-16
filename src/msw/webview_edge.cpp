@@ -795,7 +795,7 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
     if (RunScriptSync(wrapJS.GetWrappedCode(), &result)
         && result == wxS("true"))
     {
-        if (RunScriptSync(wrapJS.GetOutputCode(), &result))
+        if (RunScriptSync(wrapJS.GetUnwrappedOutputCode() + ";", &result))
         {
             if (output)
                 *output = result;
