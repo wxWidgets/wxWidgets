@@ -69,6 +69,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
+        m_webView->remove_DocumentTitleChanged(m_documentTitleChangedToken);
     }
 }
 
@@ -255,6 +256,16 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(IWebView2WebView* WXUNUSED(sende
     return S_OK;
 }
 
+HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(IWebView2WebView* WXUNUSED(sender), IUnknown* WXUNUSED(args))
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
+        m_ctrl->GetId(), m_ctrl->GetCurrentURL(), "");
+    event.SetString(m_ctrl->GetCurrentTitle());
+    event.SetEventObject(m_ctrl);
+    m_ctrl->HandleWindowEvent(event);
+    return S_OK;
+}
+
 HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, IWebView2WebView* webview)
 {
     if (FAILED(result))
@@ -281,6 +292,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, IWebView2WebView* we
         Callback<IWebView2NewWindowRequestedEventHandler>(
             this, &wxWebViewEdgeImpl::OnNewWindowRequested).Get(),
         &m_newWindowRequestedToken);
+    m_webView->add_DocumentTitleChanged(
+        Callback<IWebView2DocumentTitleChangedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnDocumentTitleChanged).Get(),
+        &m_documentTitleChangedToken);
 
     if (!m_pendingURL.empty())
     {
