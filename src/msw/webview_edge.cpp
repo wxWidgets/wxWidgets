@@ -598,57 +598,52 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
 
 bool wxWebViewEdge::CanCut() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return false;
+    return QueryCommandEnabled("cut");
 }
 
 bool wxWebViewEdge::CanCopy() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return false;
+    return QueryCommandEnabled("copy");
 }
 
 bool wxWebViewEdge::CanPaste() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return false;
+    return QueryCommandEnabled("paste");
 }
 
 void wxWebViewEdge::Cut()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    ExecCommand("cut");
 }
 
 void wxWebViewEdge::Copy()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    ExecCommand("copy");
 }
 
 void wxWebViewEdge::Paste()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    ExecCommand("paste");
 }
 
 bool wxWebViewEdge::CanUndo() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return false;
+    return QueryCommandEnabled("undo");
 }
 
 bool wxWebViewEdge::CanRedo() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return false;
+    return QueryCommandEnabled("redo");
 }
 
 void wxWebViewEdge::Undo()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    ExecCommand("undo");
 }
 
 void wxWebViewEdge::Redo()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    ExecCommand("redo");
 }
 
 long wxWebViewEdge::Find(const wxString& WXUNUSED(text), int WXUNUSED(flags))
@@ -670,24 +665,26 @@ bool wxWebViewEdge::IsEditable() const
 
 void wxWebViewEdge::SelectAll()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    RunScript("window.getSelection().selectAllChildren(document);");
 }
 
 bool wxWebViewEdge::HasSelection() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return false;
+    wxString rangeCountStr;
+    const_cast<wxWebViewEdge*>(this)->RunScript("window.getSelection().rangeCount;", &rangeCountStr);
+    return rangeCountStr != "0";
 }
 
 void wxWebViewEdge::DeleteSelection()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    ExecCommand("delete");
 }
 
 wxString wxWebViewEdge::GetSelectedText() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return wxString();
+    wxString selectedText;
+    const_cast<wxWebViewEdge*>(this)->RunScript("window.getSelection().toString();", &selectedText);
+    return selectedText;
 }
 
 wxString wxWebViewEdge::GetSelectedSource() const
@@ -698,7 +695,7 @@ wxString wxWebViewEdge::GetSelectedSource() const
 
 void wxWebViewEdge::ClearSelection()
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
+    RunScript("window.getSelection().empty();");
 }
 
 void wxWebViewEdge::EnableContextMenu(bool enable)
@@ -747,6 +744,19 @@ bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
 void* wxWebViewEdge::GetNativeBackend() const
 {
     return m_impl->m_webView;
+}
+
+bool wxWebViewEdge::QueryCommandEnabled(const wxString& command) const
+{
+    wxString resultStr;
+    const_cast<wxWebViewEdge*>(this)->RunScript(
+        wxString::Format("function f(){ return document.queryCommandEnabled('%s'); } f();", command), &resultStr);
+    return resultStr.IsSameAs("true", false);
+}
+
+void wxWebViewEdge::ExecCommand(const wxString& command)
+{
+    RunScript(wxString::Format("document.execCommand('%s');", command));
 }
 
 bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)

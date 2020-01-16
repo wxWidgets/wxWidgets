@@ -111,6 +111,9 @@ public:
     virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
     virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
 
+    bool QueryCommandEnabled(const wxString& command) const;
+    void ExecCommand(const wxString& command);
+
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
 
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;

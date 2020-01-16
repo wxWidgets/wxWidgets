@@ -285,7 +285,7 @@ public:
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
     It is available for Windows 7 and newer.
     The following features are currently unsupported with this backend:
-    virtual filesystems, custom urls, text selection, find, source code.
+    virtual filesystems, custom urls, find, source code.
 
     This backend is not enabled by default, to build it follow these steps:
     - Visual Studio 2015, or newer, is required
