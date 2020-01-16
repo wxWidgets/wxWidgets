@@ -702,29 +702,32 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
 {
     bool scriptExecuted = false;
 
-    HRESULT hr = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<IWebView2ExecuteScriptCompletedHandler>(
-        [&scriptExecuted, output](HRESULT error, PCWSTR result) -> HRESULT
+    // Start script execution
+    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<IWebView2ExecuteScriptCompletedHandler>(
+        [&scriptExecuted, &executionResult, output](HRESULT error, PCWSTR result) -> HRESULT
     {
+        // Handle script execution callback
         if (error == S_OK)
         {
             if (output)
                 output->assign(result);
         }
         else
-            wxLogError(_("RunScript failed: %.8x"), error);
+            executionResult = error;
 
         scriptExecuted = true;
 
         return S_OK;
     }).Get());
 
-
+    // Wait for script exection
     while (!scriptExecuted)
         wxYield();
 
-    if (FAILED(hr))
+    if (FAILED(executionResult))
     {
-        wxLogApiError("ExecuteScript", hr);
+        if (output)
+            output->Printf("%s (0x%08lx)", wxSysErrorMsgStr(executionResult), executionResult);
         return false;
     }
     else
