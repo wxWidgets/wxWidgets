@@ -794,7 +794,7 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
 void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     // TODO: could maybe be implemented via IWebView2WebView5::add_WebResourceRequested
-    wxLogError("Registering handlers is not supported");
+    wxLogDebug("Registering handlers is not supported");
 }
 
 void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(baseUrl))
