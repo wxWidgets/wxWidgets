@@ -218,8 +218,6 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(send
     }
     else
     {
-        wxWebViewEvent evt(wxEVT_WEBVIEW_NAVIGATED, m_ctrl->GetId(), uri, wxString());
-        m_ctrl->HandleWindowEvent(evt);
         if (m_historyEnabled && !m_historyLoadingFromList &&
             (uri == m_ctrl->GetCurrentURL()) ||
             (m_ctrl->GetCurrentURL().substr(0, 4) == "file" &&
@@ -238,6 +236,8 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(send
         }
         //Reset as we are done now
         m_historyLoadingFromList = false;
+        wxWebViewEvent evt(wxEVT_WEBVIEW_NAVIGATED, m_ctrl->GetId(), uri, wxString());
+        m_ctrl->HandleWindowEvent(evt);
     }
     return S_OK;
 }
