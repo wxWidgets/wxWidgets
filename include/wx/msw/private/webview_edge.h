@@ -37,12 +37,14 @@ public:
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
     EventRegistrationToken m_documentTitleChangedToken = { };
+    EventRegistrationToken m_documentStateChangedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(IWebView2WebView* sender, IWebView2NavigationStartingEventArgs* args);
     HRESULT OnNavigationCompleted(IWebView2WebView* sender, IWebView2NavigationCompletedEventArgs* args);
     HRESULT OnNewWindowRequested(IWebView2WebView* sender, IWebView2NewWindowRequestedEventArgs* args);
     HRESULT OnDocumentTitleChanged(IWebView2WebView* sender, IUnknown* args);
+    HRESULT OnDocumentStateChanged(IWebView2WebView* sender, IWebView2DocumentStateChangedEventArgs* args);
 
     HRESULT OnEnvironmentCreated(HRESULT result, IWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, IWebView2WebView* webview);
