@@ -451,9 +451,12 @@ WebFrame::WebFrame(const wxString& url) :
     m_script_null = script_menu->Append(wxID_ANY, "Return null");
     m_script_date = script_menu->Append(wxID_ANY, "Return Date");
 #if wxUSE_WEBVIEW_IE
-    m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
-    m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
-    m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+    if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
+        m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
+        m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+    }
 #endif
     m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
@@ -540,9 +543,12 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptNull, this, m_script_null->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptDate, this, m_script_date->GetId());
 #if wxUSE_WEBVIEW_IE
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
+    if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
+    }
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
