@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/msw/webview_edge.h
+// Name:        include/wx/msw/private/webview_edge.h
 // Purpose:     wxMSW Edge Chromium wxWebView backend private classes
 // Author:      Tobias Taschner
 // Created:     2020-01-15
