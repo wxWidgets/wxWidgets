@@ -543,6 +543,7 @@ public:
     /**
         Reload the currently displayed URL.
         @param flags A bit array that may optionally contain reload options.
+        @note The flags are ignored by the edge backend.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
@@ -620,7 +621,7 @@ public:
                     relative paths, for instance.
         @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend.
+              parameter is not used in this backend and the edge backend.
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
 
