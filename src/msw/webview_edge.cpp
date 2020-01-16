@@ -532,40 +532,40 @@ void wxWebViewEdge::Print()
 
 wxWebViewZoom wxWebViewEdge::GetZoom() const
 {
-    double old_zoom_factor = 0.0f;
+    double old_zoom_factor = 0.0;
     m_impl->m_webView->get_ZoomFactor(&old_zoom_factor);
-    if (old_zoom_factor > 1.7f)
+    if (old_zoom_factor > 1.7)
         return wxWEBVIEW_ZOOM_LARGEST;
-    if (old_zoom_factor > 1.3f)
+    if (old_zoom_factor > 1.3)
         return wxWEBVIEW_ZOOM_LARGE;
-    if (old_zoom_factor > 0.8f)
+    if (old_zoom_factor > 0.8)
         return wxWEBVIEW_ZOOM_MEDIUM;
-    if (old_zoom_factor > 0.6f)
+    if (old_zoom_factor > 0.6)
         return wxWEBVIEW_ZOOM_SMALL;
     return wxWEBVIEW_ZOOM_TINY;
 }
 
 void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
 {
-    double old_zoom_factor = 0.0f;
+    double old_zoom_factor = 0.0;
     m_impl->m_webView->get_ZoomFactor(&old_zoom_factor);
-    double zoom_factor = 1.0f;
+    double zoom_factor = 1.0;
     switch (zoom)
     {
     case wxWEBVIEW_ZOOM_LARGEST:
-        zoom_factor = 2.0f;
+        zoom_factor = 2.0;
         break;
     case wxWEBVIEW_ZOOM_LARGE:
-        zoom_factor = 1.5f;
+        zoom_factor = 1.5;
         break;
     case wxWEBVIEW_ZOOM_MEDIUM:
-        zoom_factor = 1.0f;
+        zoom_factor = 1.0;
         break;
     case wxWEBVIEW_ZOOM_SMALL:
-        zoom_factor = 0.75f;
+        zoom_factor = 0.75;
         break;
     case wxWEBVIEW_ZOOM_TINY:
-        zoom_factor = 0.5f;
+        zoom_factor = 0.5;
         break;
     default:
         break;
