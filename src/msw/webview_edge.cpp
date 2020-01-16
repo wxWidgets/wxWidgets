@@ -20,9 +20,11 @@
 
 #include "wx/filename.h"
 #include "wx/module.h"
+#include "wx/log.h"
 #include "wx/stdpaths.h"
 #include "wx/thread.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/msw/private.h"
 #include "wx/msw/private/webview_edge.h"
 
 #include <wrl/event.h>
@@ -452,11 +454,13 @@ void wxWebViewEdge::Reload(wxWebViewReloadFlags WXUNUSED(flags))
 
 wxString wxWebViewEdge::GetPageSource() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return wxString();
 }
 
 wxString wxWebViewEdge::GetPageText() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return wxString();
 }
 
@@ -493,7 +497,7 @@ wxString wxWebViewEdge::GetCurrentTitle() const
 
 void wxWebViewEdge::SetZoomType(wxWebViewZoomType)
 {
-
+    // only wxWEBVIEW_ZOOM_TYPE_LAYOUT is supported
 }
 
 wxWebViewZoomType wxWebViewEdge::GetZoomType() const
@@ -556,63 +560,69 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
 
 bool wxWebViewEdge::CanCut() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return false;
 }
 
 bool wxWebViewEdge::CanCopy() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return false;
 }
 
 bool wxWebViewEdge::CanPaste() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return false;
 }
 
 void wxWebViewEdge::Cut()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 void wxWebViewEdge::Copy()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 void wxWebViewEdge::Paste()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 bool wxWebViewEdge::CanUndo() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return false;
 }
 
 bool wxWebViewEdge::CanRedo() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return false;
 }
 
 void wxWebViewEdge::Undo()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 void wxWebViewEdge::Redo()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 long wxWebViewEdge::Find(const wxString& WXUNUSED(text), int WXUNUSED(flags))
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return -1;
 }
 
 //Editing functions
 void wxWebViewEdge::SetEditable(bool WXUNUSED(enable))
 {
-
+    wxLogError("Not available");
 }
 
 bool wxWebViewEdge::IsEditable() const
@@ -622,32 +632,35 @@ bool wxWebViewEdge::IsEditable() const
 
 void wxWebViewEdge::SelectAll()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 bool wxWebViewEdge::HasSelection() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return false;
 }
 
 void wxWebViewEdge::DeleteSelection()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 wxString wxWebViewEdge::GetSelectedText() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return wxString();
 }
 
 wxString wxWebViewEdge::GetSelectedSource() const
 {
+    // TODO: not implemented in SDK (could probably be implemented by script)
     return wxString();
 }
 
 void wxWebViewEdge::ClearSelection()
 {
-
+    // TODO: not implemented in SDK (could probably be implemented by script)
 }
 
 void wxWebViewEdge::EnableContextMenu(bool enable)
@@ -765,7 +778,8 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
 
 void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
-
+    // TODO: could maybe be implemented via IWebView2WebView5::add_WebResourceRequested
+    wxLogError("Registering handlers is not supported");
 }
 
 void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(baseUrl))
