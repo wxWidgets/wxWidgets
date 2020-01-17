@@ -72,10 +72,6 @@ private:
     // Events.
     void OnSize(wxSizeEvent& event);
 
-    // Style flag helper function.
-    long ApplyHeaderReorderFlagToStyle(long style);
-
-
     // The native header control.
     wxMSWHeaderCtrl* m_nativeControl;
     friend class wxMSWHeaderCtrl;
