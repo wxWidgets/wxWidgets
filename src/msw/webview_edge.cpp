@@ -492,14 +492,16 @@ void wxWebViewEdge::Reload(wxWebViewReloadFlags WXUNUSED(flags))
 
 wxString wxWebViewEdge::GetPageSource() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return wxString();
+    wxString text;
+    const_cast<wxWebViewEdge*>(this)->RunScript("document.documentElement.outerHTML;", &text);
+    return text;
 }
 
 wxString wxWebViewEdge::GetPageText() const
 {
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return wxString();
+    wxString text;
+    const_cast<wxWebViewEdge*>(this)->RunScript("document.body.innerText;", &text);
+    return text;
 }
 
 bool wxWebViewEdge::IsBusy() const
