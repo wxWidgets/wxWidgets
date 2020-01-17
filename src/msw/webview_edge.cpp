@@ -24,6 +24,7 @@
 #include "wx/stdpaths.h"
 #include "wx/thread.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/private/json.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/webview_edge.h"
 
@@ -810,7 +811,7 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
         if (RunScriptSync(wrapJS.GetUnwrappedOutputCode() + ";", &result))
         {
             if (output)
-                *output = result;
+                *output = wxJSON::DecodeString(result);
             result.clear();
         }
 
