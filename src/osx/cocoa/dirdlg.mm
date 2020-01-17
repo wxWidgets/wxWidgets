@@ -73,6 +73,9 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
     if ( !HasFlag(wxDD_DIR_MUST_EXIST) )
         [oPanel setCanCreateDirectories:YES];
 
+    if ( HasFlag(wxDD_SHOW_HIDDEN) )
+        [oPanel setShowsHiddenFiles:YES];
+
     // Set the directory to use
     if ( !m_path.IsEmpty() )
     {
