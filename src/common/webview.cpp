@@ -107,9 +107,11 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
 void wxWebView::InitFactoryMap()
 {
 #ifdef __WXMSW__
+#if wxUSE_WEBVIEW_IE
     if(m_factoryMap.find(wxWebViewBackendIE) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
                                                    (new wxWebViewFactoryIE));
+#endif
 
 #if wxUSE_WEBVIEW_EDGE
     if (wxWebViewEdge::IsAvailable() &&
