@@ -73,14 +73,16 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
     if ( !HasFlag(wxDD_DIR_MUST_EXIST) )
         [oPanel setCanCreateDirectories:YES];
 
+    // Set the directory to use
+    if ( !m_path.IsEmpty() )
+    {
+        wxCFStringRef dir(m_path);
+        NSURL* dirUrl = [NSURL fileURLWithPath: dir.AsNSString() isDirectory: YES];
+        [oPanel setDirectoryURL: dirUrl];
+    }
+
     return oPanel;
 }
-
-// We use several deprecated methods of NSOpenPanel in the code below, we
-// should replace them with newer equivalents now that we don't support OS X
-// versions which didn't have them (pre 10.6), but until then, get rid of
-// the warning.
-wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
 void wxDirDialog::ShowWindowModal()
 {
@@ -96,11 +98,11 @@ void wxDirDialog::ShowWindowModal()
     NSOpenPanel *oPanel = OSXCreatePanel();
 
     NSWindow* nativeParent = parentWindow->GetWXWindow();
-    wxCFStringRef dir( m_path );
-    [oPanel beginSheetForDirectory:dir.AsNSString() file:nil types: nil
-        modalForWindow: nativeParent modalDelegate: m_sheetDelegate
-        didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-        contextInfo: nil];
+
+    // Create the window and have it call the ModalFinishedCallback on completion
+    [oPanel beginSheetModalForWindow: nativeParent completionHandler: ^(NSModalResponse returnCode){
+        [(ModalDialogDelegate*)m_sheetDelegate sheetDidEnd: oPanel returnCode: returnCode contextInfo: nil];
+    }];
 }
 
 int wxDirDialog::ShowModal()
@@ -111,15 +113,12 @@ int wxDirDialog::ShowModal()
 
     NSOpenPanel *oPanel = OSXCreatePanel();
 
-    wxCFStringRef dir( m_path );
-
-    m_path.clear();
-
     int returnCode = -1;
     
     OSXBeginModalDialog();
 
-    returnCode = (NSInteger)[oPanel runModalForDirectory:dir.AsNSString() file:nil types:nil];
+    // Display the panel and process the result on completion
+    returnCode = (NSInteger)[oPanel runModal];
     ModalFinishedCallback(oPanel, returnCode);
     
     OSXEndModalDialog();
@@ -135,7 +134,15 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (returnCode == NSOKButton )
     {
         NSOpenPanel* oPanel = (NSOpenPanel*)panel;
-        SetPath( wxCFStringRef::AsStringWithNormalizationFormC([[oPanel filenames] objectAtIndex:0]));
+
+        NSArray<NSURL*>* selectedURL = [oPanel URLs];
+
+        for ( NSURL* url in selectedURL )
+        {
+            SetPath([url fileSystemRepresentation]);
+            break;
+        }
+
         result = wxID_OK;
     }
     SetReturnCode(result);
@@ -144,6 +151,5 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
 
-wxGCC_WARNING_RESTORE(deprecated-declarations)
 
 #endif // wxUSE_DIRDLG
