@@ -47,6 +47,10 @@ public:
 
     virtual int ShowModal() wxOVERRIDE;
 
+    // MacOS 10.11 has removed the titlebar from the dialog, so this is provided
+    // only for compatibility with older versions
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+
     virtual wxString GetPath() const wxOVERRIDE;
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
 
@@ -69,6 +73,7 @@ private:
     void Init();
 
     wxArrayString m_paths;
+    wxString m_title;
 
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };

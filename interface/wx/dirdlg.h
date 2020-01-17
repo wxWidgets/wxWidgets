@@ -71,6 +71,11 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
     @endcode
     instead of just using @c wxDD_DIR_MUST_EXIST style alone.
 
+    @remarks MacOS 10.11+ does not display a title bar on the dialog. Use SetMessage()
+             to change the string displayed to the user at the top of the dialog after creation.
+             The SetTitle() method is provided for compatibility with pre-10.11 MacOS versions
+             that do still support displaying the title bar.
+
     @library{wxcore}
     @category{cmndlg}
 

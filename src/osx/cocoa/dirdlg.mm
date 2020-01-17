@@ -73,6 +73,12 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
     wxCFStringRef cf( m_message );
     [oPanel setMessage:cf.AsNSString()];
 
+    if ( !m_title.empty() )
+    {
+        wxCFStringRef cfTitle(m_title);
+        [oPanel setTitle:cfTitle.AsNSString()];
+    }
+
     if ( !HasFlag(wxDD_DIR_MUST_EXIST) )
         [oPanel setCanCreateDirectories:YES];
 
@@ -157,6 +163,12 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
 
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
+}
+
+void wxDirDialog::SetTitle(const wxString &title)
+{
+    m_title = title;
+    wxDialog::SetTitle(title);
 }
 
 wxString wxDirDialog::GetPath() const
