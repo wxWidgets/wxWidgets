@@ -48,6 +48,9 @@ void wxDirDialog::Create(wxWindow *parent, const wxString& message,
 {
     m_parent = parent;
 
+    wxASSERT_MSG( !( (style & wxDD_MULTIPLE) && (style & wxDD_CHANGE_DIR) ),
+                  "wxDD_CHANGE_DIR can't be used together with wxDD_MULTIPLE" );
+
     SetMessage( message );
     SetWindowStyle(style);
     SetPath(defaultPath);
@@ -72,6 +75,9 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
 
     if ( !HasFlag(wxDD_DIR_MUST_EXIST) )
         [oPanel setCanCreateDirectories:YES];
+
+    if ( HasFlag(wxDD_MULTIPLE) )
+        [oPanel setAllowsMultipleSelection:YES];
 
     if ( HasFlag(wxDD_SHOW_HIDDEN) )
         [oPanel setShowsHiddenFiles:YES];
@@ -142,8 +148,7 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
 
         for ( NSURL* url in selectedURL )
         {
-            SetPath([url fileSystemRepresentation]);
-            break;
+            m_paths.Add([url fileSystemRepresentation]);
         }
 
         result = wxID_OK;
@@ -152,6 +157,17 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
 
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
+}
+
+wxString wxDirDialog::GetPath() const
+{
+    return m_paths.Last();
+}
+
+void wxDirDialog::GetPaths(wxArrayString& paths) const
+{
+    paths.Empty();
+    paths = m_paths;
 }
 
 
