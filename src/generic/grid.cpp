@@ -4677,9 +4677,9 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             else if ( event.LeftDClick() )
                 handled = (DoGridCellLeftDClick(event, coords, pos), true);
             else if ( event.RightDown() )
-                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event);
+                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event) != 0;
             else if ( event.RightDClick() )
-                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event);
+                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event) != 0;
         }
     }
     else if ( event.Moving() )
