@@ -811,7 +811,10 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
         if (RunScriptSync(wrapJS.GetUnwrappedOutputCode() + ";", &result))
         {
             if (output)
-                *output = wxJSON::DecodeString(result);
+                // Try to decode JSON string or return original
+                // result if it's not a valid JSON string
+                if (!wxJSON::DecodeString(result, output))
+                    *output = result;
             result.clear();
         }
 
