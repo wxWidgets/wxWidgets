@@ -130,7 +130,6 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
         return mime;
     }
-    else
 #endif
     {
         if ( ext.IsSameAs(wxT("htm"), false) || ext.IsSameAs(wxT("html"), false) )
