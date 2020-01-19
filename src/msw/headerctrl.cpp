@@ -1048,9 +1048,11 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
                                   wxID_ANY,
                                   wxDefaultPosition,
                                   wxDefaultSize,
-                                  ApplyHeaderReorderFlagToStyle(wxNO_BORDER),
+                                  wxNO_BORDER,
                                   wxMSWHeaderCtrlNameStr) )
         return false;
+
+    SetWindowStyle(newStyle);
 
     Bind(wxEVT_SIZE, &wxHeaderCtrl::OnSize, this);
 
@@ -1136,16 +1138,18 @@ void wxHeaderCtrl::SetWindowStyleFlag(long style)
 
     // Update the native control style.
     long flags = m_nativeControl->GetWindowStyleFlag();
-    flags = ApplyHeaderReorderFlagToStyle(flags);
-    m_nativeControl->SetWindowStyleFlag(flags);
-}
 
-long wxHeaderCtrl::ApplyHeaderReorderFlagToStyle(long style)
-{
     if ( HasFlag(wxHD_ALLOW_REORDER) )
-        return style | wxHD_ALLOW_REORDER;
+        flags |= wxHD_ALLOW_REORDER;
+    else
+        flags &= ~wxHD_ALLOW_REORDER;
 
-    return style & ~wxHD_ALLOW_REORDER;
+    if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
+        flags |= wxHD_BITMAP_ON_RIGHT;
+    else
+        flags &= ~wxHD_BITMAP_ON_RIGHT;
+
+    m_nativeControl->SetWindowStyleFlag(flags);
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL
