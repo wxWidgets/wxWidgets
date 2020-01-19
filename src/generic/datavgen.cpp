@@ -402,7 +402,6 @@ private:
 
         const unsigned col = event.GetColumn();
         owner->GetColumn(col)->SetWidth(event.GetWidth());
-        GetOwner()->OnColumnChange(col);
     }
 
     void OnEndReorder(wxHeaderCtrlEvent& event)
