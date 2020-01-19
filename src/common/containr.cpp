@@ -711,6 +711,9 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                 else
                     deepestVisibleWindow = NULL;
 
+                if ( (*childLastFocused)->IsTopLevel() )
+                    break;
+
                 *childLastFocused = (*childLastFocused)->GetParent();
             }
 
