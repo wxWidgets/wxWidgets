@@ -150,6 +150,10 @@ public:
         UpdateWidth();
     }
 
+    // This method is also internal and called when the column is resized by
+    // user interactively.
+    void WXOnResize(int width);
+
     int WXGetManuallySetWidth() const { return m_manuallySetWidth; }
 
 private:
@@ -331,7 +335,11 @@ public:     // utility functions not part of the API
     // update the display after a change to an individual column
     void OnColumnChange(unsigned int idx);
 
-    // update after the column width changes, also calls OnColumnChange()
+    // update after the column width changes due to interactive resizing
+    void OnColumnResized();
+
+    // update after the column width changes because of e.g. title or bitmap
+    // change, invalidates the column best width and calls OnColumnChange()
     void OnColumnWidthChange(unsigned int idx);
 
     // update after a change to the number of columns
