@@ -32,10 +32,15 @@ class WXDLLIMPEXP_BASE wxFile
 public:
   // more file constants
   // -------------------
+  // suppress Xcode 11 warning about shadowing global read() symbol
+  wxCLANG_WARNING_SUPPRESS(shadow)
+
     // opening mode
   enum OpenMode { read, write, read_write, write_append, write_excl };
     // standard values for file descriptor
   enum { fd_invalid = -1, fd_stdin, fd_stdout, fd_stderr };
+
+  wxCLANG_WARNING_RESTORE(shadow)
 
   // static functions
   // ----------------
