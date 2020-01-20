@@ -130,20 +130,21 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
         return mime;
     }
-#endif
-    {
-        if ( ext.IsSameAs(wxT("htm"), false) || ext.IsSameAs(wxT("html"), false) )
-            return wxT("text/html");
-        if ( ext.IsSameAs(wxT("jpg"), false) || ext.IsSameAs(wxT("jpeg"), false) )
-            return wxT("image/jpeg");
-        if ( ext.IsSameAs(wxT("gif"), false) )
-            return wxT("image/gif");
-        if ( ext.IsSameAs(wxT("png"), false) )
-            return wxT("image/png");
-        if ( ext.IsSameAs(wxT("bmp"), false) )
-            return wxT("image/bmp");
-        return wxEmptyString;
-    }
+#endif // wxUSE_MIMETYPE
+
+    // Without wxUSE_MIMETYPE, recognize just a few hardcoded special cases.
+    if ( ext.IsSameAs(wxT("htm"), false) || ext.IsSameAs(wxT("html"), false) )
+        return wxT("text/html");
+    if ( ext.IsSameAs(wxT("jpg"), false) || ext.IsSameAs(wxT("jpeg"), false) )
+        return wxT("image/jpeg");
+    if ( ext.IsSameAs(wxT("gif"), false) )
+        return wxT("image/gif");
+    if ( ext.IsSameAs(wxT("png"), false) )
+        return wxT("image/png");
+    if ( ext.IsSameAs(wxT("bmp"), false) )
+        return wxT("image/bmp");
+
+    return wxString();
 }
 
 
