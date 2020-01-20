@@ -2788,8 +2788,8 @@ void AddStdXRCID_Records()
     stdID(wxID_PREVIEW);
     stdID(wxID_ABOUT);
     stdID(wxID_HELP_CONTENTS);
-    stdID(wxID_HELP_INDEX),
-    stdID(wxID_HELP_SEARCH),
+    stdID(wxID_HELP_INDEX);
+    stdID(wxID_HELP_SEARCH);
     stdID(wxID_HELP_COMMANDS);
     stdID(wxID_HELP_PROCEDURES);
     stdID(wxID_HELP_CONTEXT);
