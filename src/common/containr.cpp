@@ -711,8 +711,15 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                 else
                     deepestVisibleWindow = NULL;
 
-                if ( (*childLastFocused)->IsTopLevel() )
+                // We shouldn't be looking for the child to focus beyond the
+                // TLW boundary. And we use IsTopNavigationDomain() here
+                // instead of IsTopLevel() because wxMDIChildFrame is also TLW
+                // from this point of view.
+                if ( (*childLastFocused)->
+                        IsTopNavigationDomain(wxWindow::Navigation_Tab) )
+                {
                     break;
+                }
 
                 *childLastFocused = (*childLastFocused)->GetParent();
             }
