@@ -606,6 +606,14 @@ void wxThreadInternal::SetPriority(unsigned int priority)
 {
     m_priority = priority;
 
+    if ( !m_hThread )
+    {
+        // The thread hasn't been created yet, so calling SetThreadPriority()
+        // right now would just result in an error -- just skip doing this, as
+        // the priority will be set when Create() is called later.
+        return;
+    }
+
     // translate wxWidgets priority to the Windows one
     int win_priority;
     if (m_priority <= 20)

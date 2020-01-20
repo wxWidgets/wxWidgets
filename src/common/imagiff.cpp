@@ -414,7 +414,7 @@ int wxIFFDecoder::ReadIFF()
         const byte *cmapptr = dataptr + 8;
         colors = chunkLen / 3;                  // calc no of colors
 
-        wxDELETE(m_image->pal);
+        wxDELETEA(m_image->pal);
         m_image->colors = colors;
         if (colors > 0) {
         m_image->pal = new byte[3*colors];
@@ -530,7 +530,7 @@ int wxIFFDecoder::ReadIFF()
             pal[3*i + 1] = 0;
             pal[3*i + 2] = 0;
             }
-            delete m_image->pal;
+            delete[] m_image->pal;
             m_image->pal = pal;
             m_image->colors = colors;
         }

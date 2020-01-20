@@ -122,6 +122,8 @@ class GridFrame : public wxFrame
 
     void OnGridCustomTab(wxGridEvent& event);
 
+    void OnGridContextMenu(wxContextMenuEvent& event);
+
 public:
     GridFrame();
     ~GridFrame();

@@ -55,6 +55,7 @@ public:
     virtual bool IsIconized() const wxOVERRIDE;
     virtual void SetIcons(const wxIconBundle& icons ) wxOVERRIDE;
     virtual void Restore() wxOVERRIDE;
+    virtual bool Destroy() wxOVERRIDE;
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
 

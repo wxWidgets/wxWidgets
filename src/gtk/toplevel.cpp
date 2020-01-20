@@ -1080,6 +1080,16 @@ bool wxTopLevelWindowGTK::Show( bool show )
 
     if (change && !show)
     {
+        // Generate wxEVT_KILL_FOCUS for the currently focused control
+        // immediately (i.e. without waiting until the window is destroyed and
+        // doing it from its dtor), as it could be too late to execute the
+        // handler for this event, or other events triggered by receiving it,
+        // by then because the wxTLW will have been half-destroyed by then.
+        if (GTK_IS_WINDOW(m_widget))
+        {
+            gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
+        }
+
         // make sure window has a non-default position, so when it is shown
         // again, it won't be repositioned by WM as if it were a new window
         // Note that this must be done _after_ the window is hidden.

@@ -351,7 +351,7 @@ void wxListBase::DoDeleteNode(wxNodeBase *node)
     // free node's data
     if ( m_keyType == wxKEY_STRING )
     {
-        free(node->m_key.string);
+        wxDELETE(node->m_key.string);
     }
 
     if ( m_destroy )

@@ -1574,6 +1574,12 @@ void wxGridCellChoiceEditor::SetParameters(const wxString& params)
     {
         m_choices.Add(tk.GetNextToken());
     }
+
+    if ( m_control )
+    {
+        Combo()->Set(m_choices);
+    }
+    //else: m_choices will be used when creating it
 }
 
 // return the value in the text control

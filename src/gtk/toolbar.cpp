@@ -189,20 +189,7 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
         if (!disabled.IsOk() && bitmap.IsOk() && bitmap.GetScaleFactor() > 1)
         {
             // make scaled disabled bitmap from normal one
-
-            disabled.CreateScaled(bitmap.GetScaledHeight(), bitmap.GetScaledWidth(),
-                32, bitmap.GetScaleFactor());
-            cairo_t* cr2 = disabled.CairoCreate();
-            // clear to transparent
-            cairo_set_operator(cr2, CAIRO_OPERATOR_SOURCE);
-            cairo_set_source_rgba(cr2, 0, 0, 0, 0);
-            cairo_paint(cr2);
-            // draw in normal bitmap
-            bitmap.Draw(cr2, 0, 0);
-            // create disabled appearance, this seems to be how GTK does it
-            cairo_set_source_rgba(cr2, 0, 0, 0, 0);
-            cairo_paint_with_alpha(cr2, 0.5);
-            cairo_destroy(cr2);
+            disabled = bitmap.CreateDisabled();
         }
         bitmap = disabled;
     }

@@ -992,8 +992,8 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    WidgetsPage::GetAttrs().m_cursor = *(event.IsChecked() ? wxHOURGLASS_CURSOR
-                                                          : wxSTANDARD_CURSOR);
+    WidgetsPage::GetAttrs().m_cursor = (event.IsChecked() ? *wxHOURGLASS_CURSOR
+                                                          : wxNullCursor);
 
     CurrentPage()->SetUpWidget();
 }
@@ -1359,10 +1359,7 @@ void WidgetsPage::SetUpWidget()
         (*it)->Enable(GetAttrs().m_enabled);
         (*it)->Show(GetAttrs().m_show);
 
-        if ( GetAttrs().m_cursor.IsOk() )
-        {
-            (*it)->SetCursor(GetAttrs().m_cursor);
-        }
+        (*it)->SetCursor(GetAttrs().m_cursor);
 
         (*it)->SetWindowVariant(GetAttrs().m_variant);
 

@@ -286,6 +286,13 @@ public:
     int         m_yLogicalOrigin;
     bool        m_xAxisReversed,
                 m_yAxisReversed;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxDouble    m_transform_dx;
+    wxDouble    m_transform_dy;
+    wxDouble    m_transform_scx;
+    wxDouble    m_transform_scy;
+    wxDouble    m_transform_rot;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     wxColour    m_colourForeground,    // these are _text_ colours
                 m_colourBackground;
     wxBrush     m_backgroundBrush;
@@ -376,6 +383,11 @@ enum
     LogicalOrigin_MoveRight,
     LogicalOrigin_Set,
     LogicalOrigin_Restore,
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+    TransformMatrix_Set,
+    TransformMatrix_Reset,
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
 #if wxUSE_COLOURDLG
     Colour_TextForeground,
@@ -2119,6 +2131,91 @@ void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
 }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+#include <wx/valnum.h>
+
+class TransformDataDialog : public wxDialog
+{
+public:
+    TransformDataDialog(wxWindow* parent, wxDouble dx, wxDouble dy, wxDouble scx, wxDouble scy, wxDouble rotAngle)
+        : wxDialog(parent, wxID_ANY, "Affine transformation parameters")
+        , m_dx(dx)
+        , m_dy(dy)
+        , m_scx(scx)
+        , m_scy(scy)
+        , m_rotAngle(rotAngle)
+    {
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+        const int border = wxSizerFlags::GetDefaultBorder();
+        wxFlexGridSizer* paramSizer = new wxFlexGridSizer(2, wxSize(border, border));
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Translation X:"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_dx(1, &m_dx, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_dx), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Translation Y:"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_dy(1, &m_dy, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_dy), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Scale X (0.2 - 5):"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_scx(2, &m_scx, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_scx), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Scale Y (0.2 - 5):"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_scy(2, &m_scy, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_scy), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Rotation angle (deg):"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_rot(1, &m_rotAngle, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_rot), wxSizerFlags().CentreVertical());
+        sizer->Add(paramSizer, wxSizerFlags().DoubleBorder());
+
+        wxSizer *btnSizer = CreateSeparatedButtonSizer(wxOK | wxCANCEL);
+        sizer->Add(btnSizer, wxSizerFlags().Expand().Border());
+
+        SetSizerAndFit(sizer);
+    }
+
+    virtual bool TransferDataFromWindow() wxOVERRIDE
+    {
+        if ( !wxDialog::TransferDataFromWindow() )
+            return false;
+
+        if ( m_scx < 0.2 || m_scx > 5.0 || m_scy < 0.2 || m_scy > 5.0 )
+        {
+            if ( !wxValidator::IsSilent() )
+                wxBell();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    void GetTransformationData(wxDouble* dx, wxDouble* dy, wxDouble* scx, wxDouble* scy, wxDouble* rotAngle) const
+    {
+        if ( dx )
+            *dx = m_dx;
+
+        if ( dy )
+            *dy = m_dy;
+
+        if ( scx )
+            *scx = m_scx;
+
+        if ( scy )
+            *scy = m_scy;
+
+        if ( rotAngle )
+            *rotAngle = m_rotAngle;
+    }
+
+private:
+    wxDouble m_dx;
+    wxDouble m_dy;
+    wxDouble m_scx;
+    wxDouble m_scy;
+    wxDouble m_rotAngle;
+};
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
 // ----------------------------------------------------------------------------
 // MyFrame
 // ----------------------------------------------------------------------------
@@ -2258,6 +2355,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuLogical->Append( LogicalOrigin_Set, "Set to (&100, 100)\tShift-Ctrl-1" );
     menuLogical->Append( LogicalOrigin_Restore, "&Restore to normal\tShift-Ctrl-0" );
 
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxMenu *menuTransformMatrix = new wxMenu;
+    menuTransformMatrix->Append(TransformMatrix_Set, "Set &transformation matrix");
+    menuTransformMatrix->AppendSeparator();
+    menuTransformMatrix->Append(TransformMatrix_Reset, "Restore to &normal");
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
     wxMenu *menuColour = new wxMenu;
 #if wxUSE_COLOURDLG
     menuColour->Append( Colour_TextForeground, "Text &foreground..." );
@@ -2275,6 +2379,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Append(menuUserScale, "&Scale");
     menuBar->Append(menuAxis, "&Axis");
     menuBar->Append(menuLogical, "&Origin");
+#if wxUSE_DC_TRANSFORM_MATRIX
+    menuBar->Append(menuTransformMatrix, "&Transformation");
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     menuBar->Append(menuColour, "&Colours");
 
     // ... and attach this menu bar to the frame
@@ -2292,6 +2399,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_yLogicalOrigin = 0;
     m_xAxisReversed =
     m_yAxisReversed = false;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    m_transform_dx = 0.0;
+    m_transform_dy = 0.0;
+    m_transform_scx = 1.0;
+    m_transform_scy = 1.0;
+    m_transform_rot = 0.0;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     m_backgroundMode = wxBRUSHSTYLE_SOLID;
     m_colourForeground = *wxBLACK;
     m_colourBackground = *wxLIGHT_GREY;
@@ -2539,6 +2653,27 @@ void MyFrame::OnOption(wxCommandEvent& event)
             m_xAxisReversed = !m_xAxisReversed;
             break;
 
+#if wxUSE_DC_TRANSFORM_MATRIX
+        case TransformMatrix_Set:
+            {
+                TransformDataDialog dlg(this, m_transform_dx, m_transform_dy,
+                    m_transform_scx, m_transform_scy, m_transform_rot);
+                if ( dlg.ShowModal() == wxID_OK )
+                {
+                    dlg.GetTransformationData(&m_transform_dx, &m_transform_dy,
+                        &m_transform_scx, &m_transform_scy, &m_transform_rot);
+                }
+            }
+            break;
+        case TransformMatrix_Reset:
+            m_transform_dx = 0.0;
+            m_transform_dy = 0.0;
+            m_transform_scx = 1.0;
+            m_transform_scy = 1.0;
+            m_transform_rot = 0.0;
+            break;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
 #if wxUSE_COLOURDLG
         case Colour_TextForeground:
             m_colourForeground = SelectColour();
@@ -2591,6 +2726,16 @@ void MyFrame::OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt)
 
 void MyFrame::PrepareDC(wxDC& dc)
 {
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( dc.CanUseTransformMatrix() )
+    {
+        wxAffineMatrix2D mtx;
+        mtx.Translate(m_transform_dx, m_transform_dy);
+        mtx.Rotate(wxDegToRad(m_transform_rot));
+        mtx.Scale(m_transform_scx, m_transform_scy);
+        dc.SetTransformMatrix(mtx);
+    }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
     dc.SetUserScale( m_xUserScale, m_yUserScale );

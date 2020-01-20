@@ -58,6 +58,7 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -1515,6 +1516,12 @@ public:
     // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxIdleEvent& event);
 
+    // Send wxContextMenuEvent and return true if it was processed.
+    //
+    // Note that the event may end up being sent to a different window, if this
+    // window is part of a composite control.
+    bool WXSendContextMenuEvent(const wxPoint& posInScreenCoords);
+
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
         // platform-specific APIs
@@ -1584,6 +1591,8 @@ public:
         return false;
     }
 
+    // This is an internal helper function implemented by text-like controls.
+    virtual const wxTextEntry* WXGetTextEntry() const { return NULL; }
 
 protected:
     // helper for the derived class Create() methods: the first overload, with

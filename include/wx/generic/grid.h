@@ -408,6 +408,70 @@ public:
                             wxRect& rect) const wxOVERRIDE;
 };
 
+// ----------------------------------------------------------------------------
+// Helper class used to define What should happen if the cell contents doesn't
+// fit into its allotted space.
+// ----------------------------------------------------------------------------
+
+class wxGridFitMode
+{
+public:
+    // Default ctor creates an object not specifying any particular behaviour.
+    wxGridFitMode() : m_mode(Mode_Unset) {}
+
+    // Static methods allowing to create objects actually specifying behaviour.
+    static wxGridFitMode Clip() { return wxGridFitMode(Mode_Clip); }
+    static wxGridFitMode Overflow() { return wxGridFitMode(Mode_Overflow); }
+    static wxGridFitMode Ellipsize(wxEllipsizeMode ellipsize = wxELLIPSIZE_END)
+    {
+        // This cast works because the enum elements are the same, see below.
+        return wxGridFitMode(static_cast<Mode>(ellipsize));
+    }
+
+    // Accessors.
+    bool IsSpecified() const { return m_mode != Mode_Unset; }
+    bool IsClip() const { return m_mode == Mode_Clip; }
+    bool IsOverflow() const { return m_mode == Mode_Overflow; }
+
+    wxEllipsizeMode GetEllipsizeMode() const
+    {
+        switch ( m_mode )
+        {
+            case Mode_Unset:
+            case Mode_EllipsizeStart:
+            case Mode_EllipsizeMiddle:
+            case Mode_EllipsizeEnd:
+                return static_cast<wxEllipsizeMode>(m_mode);
+
+            case Mode_Overflow:
+            case Mode_Clip:
+                break;
+        }
+
+        return wxELLIPSIZE_NONE;
+    }
+
+    // This one is used in the implementation only.
+    static wxGridFitMode FromOverflowFlag(bool allow)
+        { return allow ? Overflow() : Clip(); }
+
+private:
+    enum Mode
+    {
+        // This is a hack to save space: the first 4 elements of this enum are
+        // the same as those of wxEllipsizeMode.
+        Mode_Unset = wxELLIPSIZE_NONE,
+        Mode_EllipsizeStart = wxELLIPSIZE_START,
+        Mode_EllipsizeMiddle = wxELLIPSIZE_MIDDLE,
+        Mode_EllipsizeEnd = wxELLIPSIZE_END,
+        Mode_Overflow,
+        Mode_Clip
+    };
+
+    explicit wxGridFitMode(Mode mode) : m_mode(mode) {}
+
+    Mode m_mode;
+};
 
 // ----------------------------------------------------------------------------
 // wxGridCellAttr: this class can be used to alter the cells appearance in
@@ -428,16 +492,15 @@ public:
         Merged
     };
 
-    // ctors
-    wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
+    // default ctor
+    explicit wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
     {
         Init(attrDefault);
 
         SetAlignment(wxALIGN_INVALID, wxALIGN_INVALID);
     }
 
-    // VZ: considering the number of members wxGridCellAttr has now, this ctor
-    //     seems to be pretty useless... may be we should just remove it?
+    // ctor setting the most common attributes
     wxGridCellAttr(const wxColour& colText,
                    const wxColour& colBack,
                    const wxFont& font,
@@ -463,8 +526,9 @@ public:
         m_vAlign = vAlign;
     }
     void SetSize(int num_rows, int num_cols);
+    void SetFitMode(wxGridFitMode fitMode) { m_fitMode = fitMode; }
     void SetOverflow(bool allow = true)
-        { m_overflow = allow ? Overflow : SingleCell; }
+        { SetFitMode(wxGridFitMode::FromOverflowFlag(allow)); }
     void SetReadOnly(bool isReadOnly = true)
         { m_isReadOnly = isReadOnly ? ReadOnly : ReadWrite; }
 
@@ -487,7 +551,7 @@ public:
     bool HasRenderer() const { return m_renderer != NULL; }
     bool HasEditor() const { return m_editor != NULL; }
     bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
-    bool HasOverflowMode() const { return m_overflow != UnsetOverflow; }
+    bool HasOverflowMode() const { return m_fitMode.IsSpecified(); }
     bool HasSize() const { return m_sizeRows != 1 || m_sizeCols != 1; }
 
     const wxColour& GetTextColour() const;
@@ -504,8 +568,8 @@ public:
     void GetNonDefaultAlignment(int *hAlign, int *vAlign) const;
 
     void GetSize(int *num_rows, int *num_cols) const;
-    bool GetOverflow() const
-        { return m_overflow != SingleCell; }
+    wxGridFitMode GetFitMode() const;
+    bool GetOverflow() const { return GetFitMode().IsOverflow(); }
     wxGridCellRenderer *GetRenderer(const wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(const wxGrid* grid, int row, int col) const;
 
@@ -531,13 +595,6 @@ private:
         ReadOnly
     };
 
-    enum wxAttrOverflowMode
-    {
-        UnsetOverflow = -1,
-        Overflow,
-        SingleCell
-    };
-
     // the common part of all ctors
     void Init(wxGridCellAttr *attrDefault = NULL);
 
@@ -550,7 +607,7 @@ private:
     int      m_sizeRows,
              m_sizeCols;
 
-    wxAttrOverflowMode  m_overflow;
+    wxGridFitMode m_fitMode;
 
     wxGridCellRenderer* m_renderer;
     wxGridCellEditor*   m_editor;
@@ -1103,6 +1160,13 @@ public:
                             int verticalAlignment = wxALIGN_TOP,
                             int textOrientation = wxHORIZONTAL ) const;
 
+    void DrawTextRectangle(wxDC& dc,
+                           const wxString& text,
+                           const wxRect& rect,
+                           const wxGridCellAttr& attr,
+                           int defaultHAlign = wxALIGN_INVALID,
+                           int defaultVAlign = wxALIGN_INVALID);
+
     // ------ grid render function for printing
     //
     void Render( wxDC& dc,
@@ -1437,8 +1501,14 @@ public:
     wxFont   GetCellFont( int row, int col ) const;
     void     GetDefaultCellAlignment( int *horiz, int *vert ) const;
     void     GetCellAlignment( int row, int col, int *horiz, int *vert ) const;
-    bool     GetDefaultCellOverflow() const;
-    bool     GetCellOverflow( int row, int col ) const;
+
+    wxGridFitMode GetDefaultCellFitMode() const;
+    wxGridFitMode GetCellFitMode(int row, int col) const;
+
+    bool     GetDefaultCellOverflow() const
+        { return GetDefaultCellFitMode().IsOverflow(); }
+    bool     GetCellOverflow( int row, int col ) const
+        { return GetCellFitMode(row, col).IsOverflow(); }
 
     // this function returns 1 in num_rows and num_cols for normal cells,
     // positive numbers for a cell spanning multiple columns/rows (as set with
@@ -1590,8 +1660,14 @@ public:
     void     SetCellFont( int row, int col, const wxFont& );
     void     SetDefaultCellAlignment( int horiz, int vert );
     void     SetCellAlignment( int row, int col, int horiz, int vert );
-    void     SetDefaultCellOverflow( bool allow );
-    void     SetCellOverflow( int row, int col, bool allow );
+
+    void     SetDefaultCellFitMode(wxGridFitMode fitMode);
+    void     SetCellFitMode(int row, int col, wxGridFitMode fitMode);
+    void     SetDefaultCellOverflow( bool allow )
+        { SetDefaultCellFitMode(wxGridFitMode::FromOverflowFlag(allow)); }
+    void     SetCellOverflow( int row, int col, bool allow )
+        { SetCellFitMode(row, col, wxGridFitMode::FromOverflowFlag(allow)); }
+
     void     SetCellSize( int row, int col, int num_rows, int num_cols );
 
     // takes ownership of the pointer

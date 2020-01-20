@@ -157,6 +157,9 @@ milestone (ask Vadim or Robin to do it or to get admin password).
 Update the roadmap at https://trac.wxwidgets.org/wiki/Roadmap to at least
 mention the new release there.
 
+Increase the version for the next release at https://trac.wxwidgets.org/wiki/Queries
+in "Tickets to be fixed for the next release".
+
 Run `misc/scripts/inc_release` to increment micro version, i.e. replace x.y.z
 with x.y.z+1 (minor or major versions updates require manual intervention)
 and rerun both `bakefile_gen` and `autoconf` afterwards to update the version

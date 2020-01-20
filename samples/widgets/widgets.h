@@ -97,7 +97,7 @@ struct WidgetAttributes
         m_show = true;
         m_dir = wxLayout_LeftToRight;
         m_variant = wxWINDOW_VARIANT_NORMAL;
-        m_cursor = *wxSTANDARD_CURSOR;
+        m_cursor = wxNullCursor;
         m_defaultFlags = wxBORDER_DEFAULT;
     }
 

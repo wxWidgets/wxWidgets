@@ -501,6 +501,9 @@ GridFrame::GridFrame()
     grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
     grid->SetCellValue( 1, 0, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
 
+    grid->SetCellValue(2, 0, "This one always overflows");
+    grid->SetCellFitMode(2, 0, wxGridFitMode::Overflow());
+
     grid->SetCellTextColour(1, 2, *wxRED);
     grid->SetCellBackgroundColour(1, 2, *wxGREEN);
 
@@ -585,6 +588,12 @@ GridFrame::GridFrame()
     grid->SetCellRenderer(14, 1, new wxGridCellDateRenderer("%Y-%m-%d"));
     grid->SetCellEditor(14, 1, new wxGridCellDateEditor);
 
+    grid->SetCellValue(13, 3, "String using default ellipsization");
+    grid->SetCellFitMode(13, 3, wxGridFitMode::Ellipsize());
+
+    grid->SetCellValue(13, 4, "String ellipsized in the middle");
+    grid->SetCellFitMode(13, 4, wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE));
+
     const wxString choices[] =
     {
         "Please select a choice",
@@ -613,6 +622,8 @@ GridFrame::GridFrame()
     grid->SetAttr(11, 11, NULL);
     grid->SetAttr(11, 11, new wxGridCellAttr);
     grid->SetAttr(11, 11, NULL);
+
+    grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
@@ -797,6 +808,23 @@ void GridFrame::SetTabCustomHandler(wxCommandEvent&)
     grid->Bind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 }
 
+void GridFrame::OnGridContextMenu(wxContextMenuEvent& event)
+{
+    // This is not supposed to happen: even if the grid consists of different
+    // subwindows internally, all context menu events should be seen as coming
+    // from the grid itself.
+    if ( event.GetEventObject() != grid )
+    {
+        wxLogError("Context menu unexpectedly sent from non-grid window.");
+    }
+    else
+    {
+        wxLogMessage("wxEVT_CONTEXT_MENU in the grid at at (%d, %d)",
+                     event.GetPosition().x, event.GetPosition().y);
+    }
+
+    event.Skip();
+}
 
 void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 {

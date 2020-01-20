@@ -577,19 +577,6 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
     delete m_menuSystem;
 
     SendDestroyEvent();
-
-    // after destroying an owned window, Windows activates the next top level
-    // window in Z order but it may be different from our owner (to reproduce
-    // this simply Alt-TAB to another application and back before closing the
-    // owned frame) whereas we always want to yield activation to our parent
-    if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
-    {
-        wxWindow *parent = GetParent();
-        if ( parent )
-        {
-            ::BringWindowToTop(GetHwndOf(parent));
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -598,6 +585,26 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 
 void wxTopLevelWindowMSW::DoShowWindow(int nShowCmd)
 {
+    // After hiding or minimizing an owned window, Windows activates the next
+    // top level window in Z order but it may be different from our owner (to
+    // reproduce this simply Alt-TAB to another application and back before
+    // closing the owned frame) whereas we always want to yield activation to
+    // our parent, so do it explicitly _before_ yielding activation.
+    switch ( nShowCmd )
+    {
+        case SW_HIDE:
+        case SW_MINIMIZE:
+            if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
+            {
+                wxWindow *parent = GetParent();
+                if ( parent )
+                {
+                    ::BringWindowToTop(GetHwndOf(parent));
+                }
+            }
+            break;
+    }
+
     ::ShowWindow(GetHwnd(), nShowCmd);
 
 #if wxUSE_TOOLTIPS
@@ -814,6 +821,22 @@ void wxTopLevelWindowMSW::Restore()
     // unlike in Maximize() and Iconize(), we do it even if the window is
     // currently hidden, i.e. Restore() is supposed to show it in this case.
     DoShowWindow(SW_RESTORE);
+}
+
+bool wxTopLevelWindowMSW::Destroy()
+{
+    if ( !wxTopLevelWindowBase::Destroy() )
+        return false;
+
+    // Under Windows 10 iconized windows don't get any messages, so delayed
+    // destruction doesn't work for them if we don't force a message dispatch
+    // here (and it doesn't seem useful to test for MSWIsIconized() as doing
+    // this doesn't do any harm for non-iconized windows neither). For that
+    // matter, doing this shouldn't do any harm under previous OS versions
+    // neither, so checking for the OS version doesn't seem useful too.
+    wxWakeUpIdle();
+
+    return true;
 }
 
 void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)

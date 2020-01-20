@@ -148,15 +148,12 @@ void wxGridCellDateRenderer::Draw(wxGrid& grid,
 
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
-    // draw the text right aligned by default
-    int hAlign = wxALIGN_RIGHT,
-        vAlign = wxALIGN_INVALID;
-    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
-
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
-    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
+    // draw the text right aligned by default
+    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, attr,
+                           wxALIGN_RIGHT);
 }
 
 wxSize wxGridCellDateRenderer::GetBestSize(wxGrid& grid,
@@ -246,15 +243,12 @@ void wxGridCellEnumRenderer::Draw(wxGrid& grid,
 
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
-    // draw the text right aligned by default
-    int hAlign = wxALIGN_RIGHT,
-        vAlign = wxALIGN_INVALID;
-    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
-
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
-    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
+    // draw the text right aligned by default
+    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, attr,
+                           wxALIGN_RIGHT);
 }
 
 wxSize wxGridCellEnumRenderer::GetBestSize(wxGrid& grid,
@@ -308,6 +302,8 @@ wxGridCellAutoWrapStringRenderer::Draw(wxGrid& grid,
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
+    // Do not use here the overload taking the attribute, as this would
+    // ellipsize the text, which is never necessary with this renderer.
     grid.DrawTextRectangle(dc, GetTextLines(grid,dc,attr,rect,row,col),
                            rect, horizAlign, vertAlign);
 }
@@ -595,11 +591,11 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     // erase only this cells background, overflow cells should have been erased
     wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
 
-    int hAlign, vAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
-
     if (attr.GetOverflow())
     {
+        int hAlign, vAlign;
+        attr.GetAlignment(&hAlign, &vAlign);
+
         int overflowCols = 0;
         int cols = grid.GetNumberCols();
         int best_width = GetBestSize(grid,attr,dc,row,col).GetWidth();
@@ -675,7 +671,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
     grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
-                           rect, hAlign, vAlign);
+                           rect, attr);
 }
 
 // ----------------------------------------------------------------------------
@@ -709,15 +705,12 @@ void wxGridCellNumberRenderer::Draw(wxGrid& grid,
 
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
-    // draw the text right aligned by default
-    int hAlign = wxALIGN_RIGHT,
-        vAlign = wxALIGN_INVALID;
-    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
-
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
-    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
+    // draw the text right aligned by default
+    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, attr,
+                           wxALIGN_RIGHT);
 }
 
 wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
@@ -824,15 +817,12 @@ void wxGridCellFloatRenderer::Draw(wxGrid& grid,
 
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
-    // draw the text right aligned by default
-    int hAlign = wxALIGN_RIGHT,
-        vAlign = wxALIGN_INVALID;
-    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
-
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
-    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
+    // draw the text right aligned by default
+    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, attr,
+                           wxALIGN_RIGHT);
 }
 
 wxSize wxGridCellFloatRenderer::GetBestSize(wxGrid& grid,
