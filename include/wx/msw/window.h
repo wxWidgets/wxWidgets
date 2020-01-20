@@ -585,12 +585,11 @@ public:
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
     // This method is used for handling wxRadioButton-related complications,
-    // see wxRadioButton::SetValue(). It calls WXDoUpdatePendingFocus() for
-    // this window and all its parents up to the enclosing TLW, recursively.
-    void WXSetPendingFocus(wxWindow* win);
-
-    // Should be overridden by all classes storing the "last focused" window.
-    virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
+    // see wxRadioButton::SetValue().
+    //
+    // It should be overridden by all classes storing the "last focused"
+    // window to avoid focusing an unset radio button when regaining focus.
+    virtual void WXSetPendingFocus(wxWindow* WXUNUSED(win)) {}
 
     // Called from WM_DPICHANGED handler for all windows to let them update
     // any sizes and fonts used internally when the DPI changes and generate

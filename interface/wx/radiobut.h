@@ -109,6 +109,12 @@ public:
         value set to @true. To uncheck a radio button in a group you must check
         another button in the same group.
 
+        @note Under MSW, the focused radio button is always selected, i.e. its
+            value is @true. And, conversely, calling @c SetValue(true) will
+            also set focus to the radio button if the focus had previously been
+            on another radio button in the same group -- as otherwise setting
+            it on wouldn't work.
+
         @param value
             @true to check, @false to uncheck.
     */

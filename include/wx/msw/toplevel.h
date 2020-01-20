@@ -103,7 +103,7 @@ public:
 
     // called from wxWidgets code itself only when the pending focus, i.e. the
     // element which should get focus when this TLW is activated again, changes
-    virtual void WXDoUpdatePendingFocus(wxWindow* win) wxOVERRIDE
+    virtual void WXSetPendingFocus(wxWindow* win) wxOVERRIDE
     {
         m_winLastFocused = win;
     }
