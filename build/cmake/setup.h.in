@@ -336,6 +336,8 @@
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #endif
 
+#cmakedefine01 wxUSE_WEBVIEW_EDGE
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT
 #else
@@ -628,7 +630,6 @@
 #cmakedefine01 wxUSE_THEME_METAL
 #cmakedefine01 wxUSE_THEME_MONO
 #cmakedefine01 wxUSE_THEME_WIN32
-
 
 /* --- end common options --- */
 

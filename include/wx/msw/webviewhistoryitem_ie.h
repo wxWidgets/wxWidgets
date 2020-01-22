@@ -11,7 +11,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_IE || wxUSE_WEBVIEW_EDGE) && defined(__WXMSW__)
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {

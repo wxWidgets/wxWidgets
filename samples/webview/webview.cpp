@@ -21,7 +21,7 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE
+#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE && !wxUSE_WEBVIEW_EDGE
 #error "A wxWebView backend is required by this sample"
 #endif
 
@@ -164,6 +164,7 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
+    void OnEnableDevTools(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -226,6 +227,7 @@ private:
     wxMenuItem* m_selection_delete;
     wxMenuItem* m_find;
     wxMenuItem* m_context_menu;
+    wxMenuItem* m_dev_tools;
 
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
@@ -364,8 +366,23 @@ WebFrame::WebFrame(const wxString& url) :
     m_info = new wxInfoBar(this);
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
+    // Create a log window
+    new wxLogWindow(this, _("Logging"), true, false);
+
     // Create the webview
-    m_browser = wxWebView::New(this, wxID_ANY, url);
+    wxString backend = wxWebViewBackendDefault;
+#ifdef __WXMSW__
+    if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        wxLogMessage("Using Edge backend");
+        backend = wxWebViewBackendEdge;
+    }
+    else
+    {
+        wxLogMessage("Edge backend not available");
+    }
+#endif
+    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize, backend);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the wxfs:// protocol for testing purposes
@@ -377,9 +394,6 @@ WebFrame::WebFrame(const wxString& url) :
 
     //Set a more sensible size for web browsing
     SetSize(wxSize(800, 600));
-
-    // Create a log window
-    new wxLogWindow(this, _("Logging"), true, false);
 
     // Create the Tools menu
     m_tools_menu = new wxMenu();
@@ -444,9 +458,12 @@ WebFrame::WebFrame(const wxString& url) :
     m_script_null = script_menu->Append(wxID_ANY, "Return null");
     m_script_date = script_menu->Append(wxID_ANY, "Return Date");
 #if wxUSE_WEBVIEW_IE
-    m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
-    m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
-    m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+    if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
+        m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
+        m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+    }
 #endif
     m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
@@ -463,6 +480,7 @@ WebFrame::WebFrame(const wxString& url) :
     wxMenuItem* usememoryfs =  m_tools_menu->Append(wxID_ANY, _("Memory File System Example"));
 
     m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
+    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
@@ -532,9 +550,12 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptNull, this, m_script_null->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptDate, this, m_script_date->GetId());
 #if wxUSE_WEBVIEW_IE
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
+    if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
+    }
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
@@ -544,6 +565,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnUseMemoryFS, this, usememoryfs->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnFind, this, m_find->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableContextMenu, this, m_context_menu->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnEnableDevTools, this, m_dev_tools->GetId());
 
     //Connect the idle events
     Bind(wxEVT_IDLE, &WebFrame::OnIdle, this);
@@ -703,6 +725,11 @@ void WebFrame::OnUseMemoryFS(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
 {
     m_browser->EnableContextMenu(evt.IsChecked());
+}
+
+void WebFrame::OnEnableDevTools(wxCommandEvent& evt)
+{
+    m_browser->EnableAccessToDevTools(evt.IsChecked());
 }
 
 void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))
@@ -938,6 +965,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     m_selection_delete->Enable(m_browser->HasSelection());
 
     m_context_menu->Check(m_browser->IsContextMenuEnabled());
+    m_dev_tools->Check(m_browser->IsAccessToDevToolsEnabled());
 
     //Firstly we clear the existing menu items, then we add the current ones
     wxMenuHistoryMap::const_iterator it;

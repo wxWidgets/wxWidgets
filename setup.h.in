@@ -336,6 +336,8 @@
 #define wxUSE_WEBVIEW_IE 0
 #endif
 
+#define wxUSE_WEBVIEW_EDGE 0
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 0
 #else
@@ -628,7 +630,6 @@
 #define wxUSE_THEME_METAL   0
 #define wxUSE_THEME_MONO    0
 #define wxUSE_THEME_WIN32   0
-
 
 /* --- end common options --- */
 
