@@ -366,11 +366,21 @@ WebFrame::WebFrame(const wxString& url) :
     m_info = new wxInfoBar(this);
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
+    // Create a log window
+    new wxLogWindow(this, _("Logging"), true, false);
+
     // Create the webview
     wxString backend = wxWebViewBackendDefault;
 #ifdef __WXMSW__
     if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        wxLogMessage("Using Edge backend");
         backend = wxWebViewBackendEdge;
+    }
+    else
+    {
+        wxLogMessage("Edge backend not available");
+    }
 #endif
     m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize, backend);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
@@ -384,9 +394,6 @@ WebFrame::WebFrame(const wxString& url) :
 
     //Set a more sensible size for web browsing
     SetSize(wxSize(800, 600));
-
-    // Create a log window
-    new wxLogWindow(this, _("Logging"), true, false);
 
     // Create the Tools menu
     m_tools_menu = new wxMenu();
