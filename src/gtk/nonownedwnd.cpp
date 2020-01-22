@@ -27,6 +27,7 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/region.h"
+    #include "wx/scopedptr.h"
 #endif // WX_PRECOMP
 
 #include "wx/graphics.h"
