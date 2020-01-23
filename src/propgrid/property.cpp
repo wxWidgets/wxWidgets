@@ -509,8 +509,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         wxPGCell& cell = m_cells[i];
         if ( cell.IsInvalid() )
         {
-            cell = HasFlag(wxPG_PROP_CATEGORY) ? propgrid->GetCategoryDefaultCell()
-                                               : propgrid->GetPropertyDefaultCell();
+            cell = IsCategory() ? propgrid->GetCategoryDefaultCell()
+                                : propgrid->GetPropertyDefaultCell();
         }
     }
 
@@ -1599,8 +1599,8 @@ void wxPGProperty::EnsureCells( unsigned int column )
 
         if ( pg )
         {
-            defaultCell = HasFlag(wxPG_PROP_CATEGORY) ? pg->GetCategoryDefaultCell()
-                                                      : pg->GetPropertyDefaultCell();
+            defaultCell = IsCategory() ? pg->GetCategoryDefaultCell()
+                                       : pg->GetPropertyDefaultCell();
         }
 
         // Alloc new default cells.
