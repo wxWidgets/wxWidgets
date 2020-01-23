@@ -66,27 +66,10 @@ static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
     wxRendererNative::Get().DrawFocusRect(win, dc, rect);
 #else
     wxUnusedVar(win);
-#ifdef __WXMSW__
-    dc.SetLogicalFunction(wxINVERT);
-
-    wxPen pen(*wxBLACK,1,wxPENSTYLE_DOT);
-    pen.SetCap(wxCAP_BUTT);
-    dc.SetPen(pen);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#else
-    dc.SetLogicalFunction(wxINVERT);
 
     dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
     dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#endif // __WXMSW__/!__WXMSW__
 #endif // wxPG_USE_NATIVE_FOCUS_RECT_RENDERER/!wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
 }
 
