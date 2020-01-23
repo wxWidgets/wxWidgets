@@ -1211,35 +1211,9 @@ void wxListHeaderWindow::OnInternalIdle()
 
 void wxListHeaderWindow::DrawCurrent()
 {
-#if 1
-    // m_owner->SetColumnWidth( m_column, m_currentX - m_minX );
     m_sendSetColumnWidth = true;
     m_colToSend = m_column;
     m_widthToSend = m_currentX - m_minX;
-#else
-    int x1 = m_currentX;
-    int y1 = 0;
-    m_owner->ClientToScreen( &x1, &y1 );
-
-    int x2 = m_currentX;
-    int y2 = 0;
-    m_owner->GetClientSize( NULL, &y2 );
-    m_owner->ClientToScreen( &x2, &y2 );
-
-    wxScreenDC dc;
-    dc.SetLogicalFunction( wxINVERT );
-    dc.SetPen( wxPen(*wxBLACK, 2) );
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-
-    AdjustDC(dc);
-
-    dc.DrawLine( x1, y1, x2, y2 );
-
-    dc.SetLogicalFunction( wxCOPY );
-
-    dc.SetPen( wxNullPen );
-    dc.SetBrush( wxNullBrush );
-#endif
 }
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
