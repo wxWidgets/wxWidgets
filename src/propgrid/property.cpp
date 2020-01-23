@@ -48,20 +48,14 @@ const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 // -----------------------------------------------------------------------
 
-// In 3.0 comaptibilty mode we always need to use custom renderer because
-// native renderer for this port requires a reference to the valid window
-// to be drawn which is not passed to DrawCaptionSelectionRect function.
-#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
- #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 1
-#else
- #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 0
-#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
-
 static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
                               int x, int y, int w, int h)
 {
     wxRect rect(x, y+((h-dc.GetCharHeight())/2), w, h);
-#if wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+    // In 3.0 comaptibilty mode we always need to use custom renderer because
+    // native renderer for this port requires a reference to the valid window
+    // to be drawn which is not passed to DrawCaptionSelectionRect function.
+#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
     wxASSERT_MSG( win, wxS("Invalid window to be drawn") );
     wxRendererNative::Get().DrawFocusRect(win, dc, rect);
 #else
@@ -70,7 +64,7 @@ static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
     dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect);
-#endif // wxPG_USE_NATIVE_FOCUS_RECT_RENDERER/!wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
 }
 
 // -----------------------------------------------------------------------
