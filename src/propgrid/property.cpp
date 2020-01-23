@@ -509,10 +509,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         wxPGCell& cell = m_cells[i];
         if ( cell.IsInvalid() )
         {
-            if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                cell = propgrid->GetPropertyDefaultCell();
-            else
-                cell = propgrid->GetCategoryDefaultCell();
+            cell = HasFlag(wxPG_PROP_CATEGORY) ? propgrid->GetCategoryDefaultCell()
+                                               : propgrid->GetPropertyDefaultCell();
         }
     }
 
@@ -737,9 +735,7 @@ wxString wxPGProperty::GetName() const
 
 wxPropertyGrid* wxPGProperty::GetGrid() const
 {
-    if ( !m_parentState )
-        return NULL;
-    return m_parentState->GetGrid();
+    return m_parentState ? m_parentState->GetGrid() : NULL;
 }
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
@@ -1603,10 +1599,8 @@ void wxPGProperty::EnsureCells( unsigned int column )
 
         if ( pg )
         {
-            if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                defaultCell = pg->GetPropertyDefaultCell();
-            else
-                defaultCell = pg->GetCategoryDefaultCell();
+            defaultCell = HasFlag(wxPG_PROP_CATEGORY) ? pg->GetCategoryDefaultCell()
+                                                      : pg->GetPropertyDefaultCell();
         }
 
         // Alloc new default cells.
@@ -1699,10 +1693,8 @@ const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
         return invalidCell;
     }
 
-    if ( IsCategory() )
-        return pg->GetCategoryDefaultCell();
-
-    return pg->GetPropertyDefaultCell();
+    return IsCategory() ? pg->GetCategoryDefaultCell()
+                        : pg->GetPropertyDefaultCell();
 }
 
 wxPGCell& wxPGProperty::GetOrCreateCell( unsigned int column )
