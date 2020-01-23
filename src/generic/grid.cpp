@@ -6106,15 +6106,9 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     // Note: However, only if it is really _shown_, i.e. not hidden!
     if ( isCurrent && IsCellEditControlShown() )
     {
-        // NB: this "#if..." is temporary and fixes a problem where the
-        // edit control is erased by this code after being rendered.
-        // On wxMac (QD build only), the cell editor is a wxTextCntl and is rendered
-        // implicitly, causing this out-of order render.
-#if !defined(__WXMAC__)
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
         editor->PaintBackground(dc, rect, *attr);
         editor->DecRef();
-#endif
     }
     else
     {
