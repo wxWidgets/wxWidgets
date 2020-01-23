@@ -365,6 +365,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
+  // Remove wxVSCROLL and wxHSCROLL from the style, since the dataview panel has scrollbars
+  // by default, and wxControl::Create trys to make some but crashes in the process
+  style &= ~(wxVSCROLL | wxHSCROLL);
+
   DontCreatePeer();
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
