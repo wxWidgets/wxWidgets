@@ -1693,6 +1693,11 @@ const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
     wxPropertyGrid* pg = GetGrid();
     wxASSERT_MSG( pg,
                   wxS("Cannot get cell for detached property") );
+    if ( !pg )
+    {
+        static const wxPGCell invalidCell;
+        return invalidCell;
+    }
 
     if ( IsCategory() )
         return pg->GetCategoryDefaultCell();
