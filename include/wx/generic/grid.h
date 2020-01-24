@@ -2361,7 +2361,6 @@ protected:
                            int row, int col,
                            const wxMouseEvent& mouseEv);
 
-    void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );

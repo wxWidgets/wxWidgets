@@ -2321,7 +2321,6 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 /////////////////////////////////////////////////////////////////////
 
 wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
-    EVT_PAINT( wxGrid::OnPaint )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_KEY_UP( wxGrid::OnKeyUp )
@@ -5265,12 +5264,6 @@ wxGrid::SendEvent(wxEventType type, int row, int col, const wxString& s)
         return -1;
 
     return claimed ? 1 : 0;
-}
-
-void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
-{
-    // needed to prevent zillions of paint events on MSW
-    wxPaintDC dc(this);
 }
 
 void wxGrid::Refresh(bool eraseb, const wxRect* rect)
