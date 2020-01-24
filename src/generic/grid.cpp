@@ -2320,7 +2320,6 @@ wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
-    EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
     EVT_COMMAND(wxID_ANY, wxEVT_GRID_HIDE_EDITOR, wxGrid::OnHideEditor )
 wxEND_EVENT_TABLE()
 
@@ -5741,10 +5740,6 @@ void wxGrid::OnChar( wxKeyEvent& event )
     {
         event.Skip();
     }
-}
-
-void wxGrid::OnEraseBackground(wxEraseEvent&)
-{
 }
 
 void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)

@@ -2365,7 +2365,6 @@ protected:
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
-    void OnEraseBackground( wxEraseEvent& );
     void OnHideEditor( wxCommandEvent& );
 
 
