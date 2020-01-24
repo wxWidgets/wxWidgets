@@ -419,6 +419,7 @@ public:
                           "GridWindow"),
           m_type(type)
     {
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
     }
 
 
@@ -437,7 +438,6 @@ private:
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
-    void OnEraseBackground( wxEraseEvent& );
     void OnFocus( wxFocusEvent& );
 
     wxDECLARE_EVENT_TABLE();

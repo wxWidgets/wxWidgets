@@ -1907,7 +1907,6 @@ wxBEGIN_EVENT_TABLE( wxGridWindow, wxGridSubwindow )
     EVT_CHAR( wxGridWindow::OnChar )
     EVT_SET_FOCUS( wxGridWindow::OnFocus )
     EVT_KILL_FOCUS( wxGridWindow::OnFocus )
-    EVT_ERASE_BACKGROUND( wxGridWindow::OnEraseBackground )
 wxEND_EVENT_TABLE()
 
 void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -2279,10 +2278,6 @@ void wxGridWindow::OnChar( wxKeyEvent& event )
 {
     if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
         event.Skip();
-}
-
-void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
-{
 }
 
 void wxGridWindow::OnFocus(wxFocusEvent& event)
