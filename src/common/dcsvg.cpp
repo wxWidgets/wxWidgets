@@ -1276,9 +1276,9 @@ bool wxSVGFileDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
         wxASSERT_MSG(false, wxS("wxSVGFileDC::DoBlit Call requested nonCopy mode; this is not possible"));
         return false;
     }
-    if (useMask != false)
+    if (useMask)
     {
-        wxASSERT_MSG(false, wxS("wxSVGFileDC::DoBlit Call requested false mask; this is not possible"));
+        wxASSERT_MSG(false, "wxSVGFileDC::DoBlit Call requested mask; this is not possible");
         return false;
     }
     wxBitmap myBitmap(width, height);
