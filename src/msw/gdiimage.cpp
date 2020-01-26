@@ -41,8 +41,8 @@
 // By default, use PNG resource handler if we can, i.e. have support for
 // loading PNG images in the library. This symbol could be predefined as 0 to
 // avoid doing this if anybody ever needs to do it for some reason.
-#if !defined(wxUSE_PNG_RESOURCE_HANDLER) && wxUSE_LIBPNG && wxUSE_IMAGE
-    #define wxUSE_PNG_RESOURCE_HANDLER 1
+#if !defined(wxUSE_PNG_RESOURCE_HANDLER)
+    #define wxUSE_PNG_RESOURCE_HANDLER wxUSE_LIBPNG && wxUSE_IMAGE
 #endif
 
 #if wxUSE_PNG_RESOURCE_HANDLER
