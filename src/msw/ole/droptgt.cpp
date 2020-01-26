@@ -386,8 +386,8 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                         DWORD* pdwEffect)
                 : m_pIDataObject(pIDataObject),
                   m_pTarget(pTarget),
-                  m_pt(pt),
-                  m_pdwEffect(pdwEffect)
+                  m_pdwEffect(pdwEffect),
+                  m_pt(pt)
             {
             }
 
