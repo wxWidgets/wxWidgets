@@ -42,6 +42,7 @@
     #include "wx/listbox.h"
 #endif
 
+#include "wx/dcbuffer.h"
 #include "wx/textfile.h"
 #include "wx/spinctrl.h"
 #include "wx/tokenzr.h"
@@ -1911,7 +1912,7 @@ wxEND_EVENT_TABLE()
 
 void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-    wxPaintDC dc( this );
+    wxAutoBufferedPaintDC dc( this );
     m_owner->PrepareDCFor( dc, this );
     wxRegion reg = GetUpdateRegion();
 
