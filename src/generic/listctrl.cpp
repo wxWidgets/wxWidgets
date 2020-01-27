@@ -5462,7 +5462,7 @@ bool wxGenericListCtrl::SetForegroundColour( const wxColour &colour )
 
 bool wxGenericListCtrl::SetFont( const wxFont &font )
 {
-    if ( !wxWindow::SetFont( font ) )
+    if (!BaseType::SetFont(font))
         return false;
 
     if (m_mainWin)

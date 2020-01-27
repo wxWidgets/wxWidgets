@@ -32,8 +32,9 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxNavigationEnabled<wxListCtrlBase>,
                                           public wxScrollHelper
 {
-public:
+    typedef wxNavigationEnabled<wxListCtrlBase> BaseType;
 
+public:
     wxGenericListCtrl() : wxScrollHelper(this)
     {
         Init();
