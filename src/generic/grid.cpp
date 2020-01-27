@@ -5563,15 +5563,65 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                GoToCell(event.ControlDown() ? 0
-                                             : m_currentCellCoords.GetRow(),
-                         0);
+                {
+                    if ( m_currentCellCoords == wxGridNoCellCoords )
+                        break;
+
+                    int row = m_currentCellCoords.GetRow();
+                    if ( event.ControlDown() )
+                    {
+                        row = 0;
+
+                        // Find visible row.
+                        for ( ; row < m_numRows; ++row )
+                        {
+                            if ( IsRowShown(row) )
+                                break;
+                        }
+                    }
+
+                    int col = 0;
+                    // Find visible column.
+                    for ( ; col < m_numCols; ++col )
+                    {
+                        if ( IsColShown(GetColAt(col)) )
+                            break;
+                    }
+
+                    ClearSelection();
+                    GoToCell(row, GetColAt(col));
+                }
                 break;
 
             case WXK_END:
-                GoToCell(event.ControlDown() ? m_numRows - 1
-                                             : m_currentCellCoords.GetRow(),
-                         m_numCols - 1);
+                {
+                    if ( m_currentCellCoords == wxGridNoCellCoords )
+                        break;
+
+                    int row = m_currentCellCoords.GetRow();
+                    if ( event.ControlDown() )
+                    {
+                        row = m_numRows - 1;
+
+                        // Find visible row.
+                        for ( ; row >= 0; --row )
+                        {
+                            if ( IsRowShown(row) )
+                                break;
+                        }
+                    }
+
+                    int col = m_numCols - 1;
+                    // Find visible column.
+                    for ( ; col >= 0; --col )
+                    {
+                        if ( IsColShown(GetColAt(col)) )
+                            break;
+                    }
+
+                    ClearSelection();
+                    GoToCell(row, GetColAt(col));
+                }
                 break;
 
             case WXK_PAGEUP:
