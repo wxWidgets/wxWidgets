@@ -75,6 +75,7 @@ private:
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( ScrollWhenSelect );
         WXUISIM_TEST( MoveGridCursorUsingEndKey );
+        WXUISIM_TEST( SelectUsingEndKey );
         CPPUNIT_TEST( AddRowCol );
         CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( ColumnOrder );
@@ -118,6 +119,7 @@ private:
     void Selection();
     void ScrollWhenSelect();
     void MoveGridCursorUsingEndKey();
+    void SelectUsingEndKey();
     void AddRowCol();
     void DeleteAndAddRowCol();
     void ColumnOrder();
@@ -648,6 +650,38 @@ void GridTestCase::MoveGridCursorUsingEndKey()
 
     CHECK( m_grid->GetGridCursorRow() == 8 );
     CHECK( m_grid->GetGridCursorCol() == 9 );
+    CHECK( m_grid->IsVisible(8, 9) );
+#endif
+}
+
+void GridTestCase::SelectUsingEndKey()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxUIActionSimulator sim;
+
+    m_grid->AppendCols(10);
+
+    REQUIRE( m_grid->GetGridCursorCol() == 0 );
+    REQUIRE( m_grid->GetGridCursorRow() == 0 );
+    REQUIRE( m_grid->IsVisible(0, 0) );
+
+    m_grid->SetFocus();
+
+    sim.KeyDown(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
+    sim.KeyUp(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
+    wxYield();
+
+    wxGridCellCoordsArray topleft = m_grid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray bottomright = m_grid->GetSelectionBlockBottomRight();
+
+    CHECK( topleft.Count() == 1 );
+    CHECK( bottomright.Count() == 1 );
+
+    CHECK( topleft.Item(0).GetCol() == 0 );
+    CHECK( topleft.Item(0).GetRow() == 0 );
+    CHECK( bottomright.Item(0).GetCol() == 11 );
+    CHECK( bottomright.Item(0).GetRow() == 9 );
+
     CHECK( m_grid->IsVisible(8, 9) );
 #endif
 }
