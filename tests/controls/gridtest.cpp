@@ -74,6 +74,7 @@ private:
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( ScrollWhenSelect );
+        WXUISIM_TEST( MoveGridCursorUsingEndKey );
         CPPUNIT_TEST( AddRowCol );
         CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( ColumnOrder );
@@ -116,6 +117,7 @@ private:
     void Cursor();
     void Selection();
     void ScrollWhenSelect();
+    void MoveGridCursorUsingEndKey();
     void AddRowCol();
     void DeleteAndAddRowCol();
     void ColumnOrder();
@@ -618,6 +620,36 @@ void GridTestCase::ScrollWhenSelect()
         m_grid->MoveCursorDown(true);
     }
     CHECK( m_grid->IsVisible(6, 1) );
+}
+
+void GridTestCase::MoveGridCursorUsingEndKey()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxUIActionSimulator sim;
+
+    m_grid->AppendCols(10);
+
+    REQUIRE( m_grid->GetGridCursorCol() == 0 );
+    REQUIRE( m_grid->GetGridCursorRow() == 0 );
+    REQUIRE( m_grid->IsVisible(0, 0) );
+
+    // Hide the last row.
+    m_grid->HideRow(9);
+    // Hide the last column.
+    m_grid->HideCol(11);
+    // Move the penult column.
+    m_grid->SetColPos(10, 5);
+
+    m_grid->SetFocus();
+
+    sim.KeyDown(WXK_END, wxMOD_CONTROL);
+    sim.KeyUp(WXK_END, wxMOD_CONTROL);
+    wxYield();
+
+    CHECK( m_grid->GetGridCursorRow() == 8 );
+    CHECK( m_grid->GetGridCursorCol() == 9 );
+    CHECK( m_grid->IsVisible(8, 9) );
+#endif
 }
 
 void GridTestCase::AddRowCol()
