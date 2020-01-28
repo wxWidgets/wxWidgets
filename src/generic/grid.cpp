@@ -6831,13 +6831,16 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
 {
     attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
+    // The text will be displaced in final wxGrid::DrawTextRectangle function.
+    const int textMargin = 2;
+
     // This does nothing if there is no need to ellipsize.
     const wxString& ellipsizedText = wxControl::Ellipsize
                                      (
                                          text,
                                          dc,
                                          attr.GetFitMode().GetEllipsizeMode(),
-                                         rect.GetWidth(),
+                                         rect.GetWidth() - textMargin,
                                          wxELLIPSIZE_FLAGS_NONE
                                      );
 
