@@ -602,8 +602,6 @@ void GridTestCase::Selection()
 
 void GridTestCase::ScrollWhenSelect()
 {
-    wxUIActionSimulator sim;
-
     m_grid->AppendCols(10);
 
     REQUIRE( m_grid->GetGridCursorCol() == 0 );
