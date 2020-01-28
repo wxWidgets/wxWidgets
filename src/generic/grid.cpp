@@ -5822,11 +5822,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 }
 
 void
-wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
-                                 int bottomRow, int rightCol)
+wxGrid::UpdateBlockBeingSelected(int blockStartRow, int blockStartCol,
+                                 int blockEndRow, int blockEndCol)
 {
+    m_selectedBlockCorner = wxGridCellCoords(blockEndRow, blockEndCol);
     MakeCellVisible(m_selectedBlockCorner);
-    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
+
+    int topRow = wxMin(blockStartRow, blockEndRow);
+    int leftCol = wxMin(blockStartCol, blockEndCol);
+    int bottomRow = wxMax(blockStartRow, blockEndRow);
+    int rightCol = wxMax(blockStartCol, blockEndCol);
 
     if ( m_selection )
     {
@@ -5863,9 +5868,6 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 return;
         }
     }
-
-    EnsureFirstLessThanSecond(topRow, bottomRow);
-    EnsureFirstLessThanSecond(leftCol, rightCol);
 
     wxGridCellCoords updateTopLeft = wxGridCellCoords(topRow, leftCol),
                      updateBottomRight = wxGridCellCoords(bottomRow, rightCol);
