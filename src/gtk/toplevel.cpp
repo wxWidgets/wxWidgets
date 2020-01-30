@@ -361,6 +361,11 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
 
     GdkWindow* window = gtk_widget_get_window(m_widget);
 
+#ifdef __WXGTK3__
+    // Don't set WM decorations if GTK is using Client Side Decorations
+    if (gtk_style_context_has_class(gtk_widget_get_style_context(m_widget), "csd"))
+        m_gdkDecor = 0;
+#endif
     gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
     gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
@@ -990,6 +995,29 @@ void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect 
         gdk_window_invalidate_rect(window, NULL, true);
 }
 
+#if defined(__WXGTK3__) && defined(GDK_WINDOWING_X11)
+// Check conditions under which GTK will use Client Side Decorations with X11
+static bool isUsingCSD(GtkWidget* widget)
+{
+    const char* csd = getenv("GTK_CSD");
+    if (csd == NULL || strcmp(csd, "1") != 0)
+        return false;
+
+    GdkScreen* screen = gtk_widget_get_screen(widget);
+    if (!gdk_screen_is_composited(screen))
+        return false;
+
+    GdkAtom atom = gdk_atom_intern_static_string("_GTK_FRAME_EXTENTS");
+    if (!gdk_x11_screen_supports_net_wm_hint(screen, atom))
+        return false;
+
+    if (gdk_screen_get_rgba_visual(screen) == NULL)
+        return false;
+
+    return true;
+}
+#endif // __WXGTK3__ && GDK_WINDOWING_X11
+
 bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxCHECK_MSG(m_widget, false, "invalid frame");
@@ -1011,6 +1039,11 @@ bool wxTopLevelWindowGTK::Show( bool show )
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
                 0, NULL, NULL, this);
+#ifdef __WXGTK3__
+        // Don't defer with CSD, it isn't needed and causes pixman errors
+        if (deferShow)
+            deferShow = !isUsingCSD(m_widget);
+#endif
         if (deferShow)
         {
             GdkScreen* screen = gtk_widget_get_screen(m_widget);
