@@ -3279,8 +3279,6 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
     wxListHeaderData *column = node->GetData();
 
-    size_t count = GetItemCount();
-
     if ( width == wxLIST_AUTOSIZE_USEHEADER || width == wxLIST_AUTOSIZE )
     {
         wxListCtrlMaxWidthCalculator calculator(this, col);
@@ -3297,7 +3295,8 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             size_t first_visible, last_visible;
             GetVisibleLinesRange(&first_visible, &last_visible);
 
-            calculator.ComputeBestColumnWidth(count, first_visible, last_visible);
+            calculator.ComputeBestColumnWidth(GetItemCount(),
+                                              first_visible, last_visible);
             pWidthInfo->nMaxWidth = calculator.GetMaxWidth();
             pWidthInfo->bNeedsUpdate = false;
         }
