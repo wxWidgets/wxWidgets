@@ -2086,6 +2086,9 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
+    // Always let default handling of focus events to take place.
+    event.Skip();
+
     // On Mac, setting focus here led to infinite recursion so
     // m_resetFocus is used as a guard
 
