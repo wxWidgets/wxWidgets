@@ -844,7 +844,7 @@ template<> struct wxStrtoxCharType<int>
         return NULL;
     }
 };
-#if __cplusplus >= 201103
+#ifdef wxHAS_NULLPTR_T
 template<> struct wxStrtoxCharType<std::nullptr_t>
 {
     typedef const char* Type;

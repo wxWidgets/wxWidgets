@@ -233,3 +233,33 @@ TEST_CASE("CRT::Strnlen", "[crt][strnlen]")
     CHECK( wxStrnlen("1234" "\0" "78", 12) == 4 );
     CHECK( wxStrnlen(L"1234" L"\0" L"5678", 12) == 4 );
 }
+
+TEST_CASE("CRT::Strtod", "[crt][strtod]")
+{
+    const wxString s = "123@";
+    const double d = 123.0;
+
+    SECTION("char")
+    {
+        char* end = NULL;
+        CHECK( wxStrtod(s, &end) == d );
+        REQUIRE( end );
+        CHECK( *end == '@' );
+    }
+
+    SECTION("wchar_t")
+    {
+        wchar_t* end = NULL;
+        CHECK( wxStrtod(s, &end) == d );
+        REQUIRE( end );
+        CHECK( *end == L'@' );
+    }
+
+    SECTION("other")
+    {
+        CHECK( wxStrtod(s, 0) == d );
+#ifdef wxHAS_NULLPTR_T
+        CHECK( wxStrtod(s, nullptr) == d );
+#endif
+    }
+}
