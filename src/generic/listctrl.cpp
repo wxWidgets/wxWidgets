@@ -3307,6 +3307,13 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
         width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
 
+        if ( col == 0 && HasCheckBoxes() )
+        {
+            // also account for the space needed by the checkbox
+            width += wxRendererNative::Get().GetCheckBoxSize(this).x
+                        + 2*MARGIN_AROUND_CHECKBOX;
+        }
+
         // expand the last column to fit the client size
         // only for AUTOSIZE_USEHEADER to mimic MSW behaviour
         if ( (width == wxLIST_AUTOSIZE_USEHEADER) && (col == GetColumnCount() - 1) )
