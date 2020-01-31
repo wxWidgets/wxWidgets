@@ -3305,17 +3305,19 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             calculator.UpdateWithWidth(pWidthInfo->nMaxWidth);
         }
 
+        width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
+
         // expand the last column to fit the client size
         // only for AUTOSIZE_USEHEADER to mimic MSW behaviour
-        int margin = 0;
         if ( (width == wxLIST_AUTOSIZE_USEHEADER) && (col == GetColumnCount() - 1) )
         {
-            margin = GetClientSize().GetX();
+            int margin = GetClientSize().GetX();
             for ( int i = 0; i < col && margin > 0; ++i )
                 margin -= m_columns.Item(i)->GetData()->GetWidth();
-        }
 
-        width = wxMax(margin, calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN);
+            if ( margin > width )
+                width = margin;
+        }
     }
 
     column->SetWidth( width );
