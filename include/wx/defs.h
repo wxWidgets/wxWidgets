@@ -285,6 +285,14 @@ typedef short int WXTYPE;
     #define wxOVERRIDE
 #endif /*  HAVE_OVERRIDE */
 
+/*
+    Support for nullptr is available since MSVS 2010, even though it doesn't
+    define __cplusplus as a C++11 compiler.
+ */
+#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(10)
+    #define wxHAS_NULLPTR_T
+#endif
+
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 
 #if __cplusplus >= 201703L
