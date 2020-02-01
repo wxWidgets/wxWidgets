@@ -5885,7 +5885,7 @@ $(SETUPHDIR)\wx\msw: $(SETUPHDIR)\wx
 	if not exist $(SETUPHDIR)\wx\msw mkdir $(SETUPHDIR)\wx\msw
 
 $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs.h
-	$(CPP) "..\..\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+	$(CPP) $(CPPFLAGS) "..\..\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
 
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
