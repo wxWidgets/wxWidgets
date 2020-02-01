@@ -5563,71 +5563,66 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                if ( m_currentCellCoords != wxGridNoCellCoords )
-                {
-                    const bool useSelectedBlockCorner =
-                        event.ShiftDown() && m_selectedBlockCorner != wxGridNoCellCoords;
-                    int row = useSelectedBlockCorner ? m_selectedBlockCorner.GetRow()
-                                                     : m_currentCellCoords.GetRow();
-                    if ( event.ControlDown() )
-                    {
-                        row = 0;
-
-                        // Find visible row.
-                        for ( ; row < m_numRows; ++row )
-                        {
-                            if ( IsRowShown(row) )
-                                break;
-                        }
-                    }
-
-                    int col = 0;
-                    // Find visible column.
-                    for ( ; col < m_numCols; ++col )
-                    {
-                        if ( IsColShown(GetColAt(col)) )
-                            break;
-                    }
-
-                    if ( event.ShiftDown() )
-                    {
-                        UpdateBlockBeingSelected(m_currentCellCoords,
-                                                 wxGridCellCoords(row, col));
-                        MakeCellVisible(row, col);
-                    }
-                    else
-                    {
-                        ClearSelection();
-                        GoToCell(row, GetColAt(col));
-                    }
-                }
-                break;
-
             case WXK_END:
                 if ( m_currentCellCoords != wxGridNoCellCoords )
                 {
-                    const bool useSelectedBlockCorner =
-                        event.ShiftDown() && m_selectedBlockCorner != wxGridNoCellCoords;
-                    int row = useSelectedBlockCorner ? m_selectedBlockCorner.GetRow()
-                                                     : m_currentCellCoords.GetRow();
+                    const bool goToBeginning = event.GetKeyCode() == WXK_HOME;
+
+                    // Find the first or last visible row if we need to go to it
+                    // (without Control, we keep the current row).
+                    int row;
                     if ( event.ControlDown() )
                     {
-                        row = m_numRows - 1;
-
-                        // Find visible row.
-                        for ( ; row >= 0; --row )
+                        if ( goToBeginning )
                         {
-                            if ( IsRowShown(row) )
-                                break;
+                            for ( row = 0; row < m_numRows; ++row )
+                            {
+                                if ( IsRowShown(row) )
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            for ( row = m_numRows - 1; row >= 0; --row )
+                            {
+                                if ( IsRowShown(row) )
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // If we're selecting, continue in the same row, which
+                        // may well be different from the one in which we
+                        // started selecting.
+                        if ( event.ShiftDown() &&
+                                m_selectedBlockCorner != wxGridNoCellCoords )
+                        {
+                            row = m_selectedBlockCorner.GetRow();
+                        }
+                        else // Just use the current row.
+                        {
+                            row = m_currentCellCoords.GetRow();
                         }
                     }
 
-                    int col = m_numCols - 1;
-                    // Find visible column.
-                    for ( ; col >= 0; --col )
+                    // Also find the last or first visible column in any case.
+                    int col;
+                    if ( goToBeginning )
                     {
-                        if ( IsColShown(GetColAt(col)) )
-                            break;
+                        for ( col = 0; col < m_numCols; ++col )
+                        {
+                            if ( IsColShown(GetColAt(col)) )
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        for ( col = m_numCols - 1; col >= 0; --col )
+                        {
+                            if ( IsColShown(GetColAt(col)) )
+                                break;
+                        }
                     }
 
                     if ( event.ShiftDown() )
