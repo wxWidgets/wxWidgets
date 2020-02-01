@@ -5563,10 +5563,8 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
+                if ( m_currentCellCoords != wxGridNoCellCoords )
                 {
-                    if ( m_currentCellCoords == wxGridNoCellCoords )
-                        break;
-
                     const bool useSelectedBlockCorner =
                         event.ShiftDown() && m_selectedBlockCorner != wxGridNoCellCoords;
                     int row = useSelectedBlockCorner ? m_selectedBlockCorner.GetRow()
@@ -5606,10 +5604,8 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_END:
+                if ( m_currentCellCoords != wxGridNoCellCoords )
                 {
-                    if ( m_currentCellCoords == wxGridNoCellCoords )
-                        break;
-
                     const bool useSelectedBlockCorner =
                         event.ShiftDown() && m_selectedBlockCorner != wxGridNoCellCoords;
                     int row = useSelectedBlockCorner ? m_selectedBlockCorner.GetRow()
