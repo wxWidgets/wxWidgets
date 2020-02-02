@@ -142,6 +142,12 @@ extern WXDLLIMPEXP_AUI wxAuiDockInfo wxAuiNullDockInfo;
 extern WXDLLIMPEXP_AUI wxAuiPaneInfo wxAuiNullPaneInfo;
 
 
+class WXDLLIMPEXP_AUI wxAuiPaneButton
+{
+public:
+    int button_id;        // id of the button (e.g. buttonClose)
+};
+
 
 class WXDLLIMPEXP_AUI wxAuiPaneInfo
 {
@@ -316,6 +322,28 @@ public:
             test.state &= ~flag;
         wxCHECK_MSG(test.IsValid(), *this,
                     "window settings and pane settings are incompatible");
+
+        if (flag == buttonClose)
+        {
+            if (option_state && !this->HasCloseButton())
+            {
+                wxAuiPaneButton button;
+                button.button_id = wxAUI_BUTTON_CLOSE;
+                test.buttons.Add(button);
+            }
+            else if (!option_state && this->HasCloseButton())
+            {
+                for (std::size_t pos = 0; pos < test.buttons.GetCount(); ++pos)
+                {
+                    if (test.buttons[pos].button_id == wxAUI_BUTTON_CLOSE)
+                    {
+                        test.buttons.RemoveAt(pos);
+                        break;
+                    }
+                }
+            }
+        }
+
         *this = test;
         return *this;
     }
@@ -736,12 +764,6 @@ public:
     wxRect rect;             // client coord rectangle of the part itself
 };
 
-
-class WXDLLIMPEXP_AUI wxAuiPaneButton
-{
-public:
-    int button_id;        // id of the button (e.g. buttonClose)
-};
 
 
 
