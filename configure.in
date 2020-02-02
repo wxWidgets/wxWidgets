@@ -56,6 +56,17 @@ wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 AC_SUBST(wx_top_builddir)
 
 
+dnl Save the values of various standard flags that we modify below in order to
+dnl restore them at the very end. This is ugly, but changing the existing code
+dnl is non-trivial as sometimes we really need to set them, as we want them to
+dnl apply to the tests run by configure, and it gets the job done in the sense
+dnl that the generated makefile will only contain user-specified flags values,
+dnl just as it should.
+USER_CPPFLAGS=$CPPFLAGS
+USER_CFLAGS=$CFLAGS
+USER_CXXFLAGS=$CXXFLAGS
+USER_LDFLAGS=$LDFLAGS
+
 dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
 dnl ------------------------------------------------------------------------
@@ -7944,7 +7955,7 @@ CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
 
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `
-CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $CXXFLAGS `
+CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXWARNINGS $C_AND_CXX_FLAGS $CXXFLAGS `
 OBJCFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $OBJCFLAGS `
 OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 
@@ -8096,7 +8107,6 @@ AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
 AC_SUBST(USE_PLUGINS)
 AC_SUBST(LIBS)
-AC_SUBST(CXXWARNINGS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
 AC_SUBST(EXTRALIBS_HTML)
@@ -8257,10 +8267,23 @@ case "${host}" in
         ;;
 esac
 
-dnl Add visibility support flags to CFLAGS/CXXFLAGS - do it this late so that
-dnl it doesn't affect compilation checks above
-CFLAGS="$CFLAGS $CFLAGS_VISIBILITY"
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
+dnl Set the flags to be used for the library build itself using the flag names
+dnl used everywhere above.
+WX_CPPFLAGS=$CPPFLAGS
+WX_CFLAGS=$CFLAGS
+WX_CXXFLAGS=$CXXFLAGS
+WX_LDFLAGS=$LDFLAGS
+
+dnl Restore the original user-specified flags values, we won't run any tests
+dnl using them any more.
+CPPFLAGS=$USER_CPPFLAGS
+CFLAGS=$USER_CFLAGS
+CXXFLAGS=$USER_CXXFLAGS
+LDFLAGS=$USER_LDFLAGS
+
+dnl Add visibility support flags.
+WX_CFLAGS="$WX_CFLAGS $CFLAGS_VISIBILITY"
+WX_CXXFLAGS="$WX_CXXFLAGS $CXXFLAGS_VISIBILITY"
 OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
@@ -8300,18 +8323,24 @@ AC_SUBST(WX_VERSION)
 AC_SUBST(WX_SUBVERSION)
 AC_SUBST(WX_CHARTYPE)
 
-dnl note that in addition to the usual CPP/C/CXXFLAGS which are used for
-dnl building the library itself, we also have WXCONFIG_-prefixed variants which
+dnl both versions of all the usual flags variables: WX_FLAGS which are used for
+dnl building the library itself, and WXCONFIG_-prefixed variants which
 dnl are used when building the libraries using the library
 dnl
 dnl so put anything which should be used only during the library build in, e.g.
-dnl CXXFLAGS, but put everything else (by default) into WXCONFIG_CXXFLAGS
+dnl CXXFLAGS, which ends up in WX_CXXFLAGS, but put everything which should be
+dnl used when building both the library and the applications using it into
+dnl WXCONFIG_CXXFLAGS
+AC_SUBST(WX_CPPFLAGS)
 AC_SUBST(WXCONFIG_CPPFLAGS)
+AC_SUBST(WX_CFLAGS)
 AC_SUBST(WXCONFIG_CFLAGS)
+AC_SUBST(WX_CXXFLAGS)
 AC_SUBST(WXCONFIG_CXXFLAGS)
 
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
+AC_SUBST(WX_LDFLAGS)
 AC_SUBST(WXCONFIG_LDFLAGS)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WXCONFIG_RESFLAGS)
@@ -8324,7 +8353,6 @@ dnl additional subdirectories where we will build
 AC_SUBST(SAMPLES_SUBDIRS)
 
 dnl additional libraries and linker settings
-AC_SUBST(LDFLAGS)
 AC_SUBST(LDFLAGS_GL)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)

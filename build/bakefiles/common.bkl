@@ -379,6 +379,10 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
+        <cppflags cond="FORMAT=='autoconf'">$(WX_CPPFLAGS)</cppflags>
+        <cflags cond="FORMAT=='autoconf'">$(WX_CFLAGS)</cflags>
+        <cxxflags cond="FORMAT=='autoconf'">$(WX_CXXFLAGS)</cxxflags>
+        <ldflags cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldflags>
         <res-define>$(WIN32_DPI_MANIFEST)</res-define>
         <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
         <if cond="FORMAT=='msvc'">
@@ -557,7 +561,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <lib-path>$(LIBDIRNAME)</lib-path>
 
         <warnings>max</warnings>
-        <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
             -wcd=656 <!-- define this function inside its class definition (may improve code quality) -->
