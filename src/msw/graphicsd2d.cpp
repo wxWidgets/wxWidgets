@@ -1890,7 +1890,7 @@ void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
     // constraints this can be fully done only if open figure was empty.
     // So, Transform() can be safely called if path doesn't contain the open
     // sub-path or if open sub-path is empty.
-    
+
     // Close current geometry.
     Flush();
 
@@ -2427,15 +2427,15 @@ public:
         const wxDouble y2;
         const wxGraphicsGradientStops stops;
         const wxGraphicsMatrix matrix;
-        LinearGradientInfo(wxDouble& x1_, wxDouble& y1_, 
-                           wxDouble& x2_, wxDouble& y2_, 
+        LinearGradientInfo(wxDouble& x1_, wxDouble& y1_,
+                           wxDouble& x2_, wxDouble& y2_,
                            const wxGraphicsGradientStops& stops_,
                            const wxGraphicsMatrix& matrix_)
             : x1(x1_), y1(y1_), x2(x2_), y2(y2_), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
-                                           wxDouble& x2, wxDouble& y2, 
+    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1,
+                                           wxDouble& x2, wxDouble& y2,
                                            const wxGraphicsGradientStops& stops,
                                            const wxGraphicsMatrix& matrix)
         : m_linearGradientInfo(x1, y1, x2, y2, stops, matrix) {}
@@ -2478,17 +2478,17 @@ public:
         const wxGraphicsGradientStops stops;
         const wxGraphicsMatrix matrix;
 
-        RadialGradientInfo(wxDouble x1_, wxDouble y1_, 
-                           wxDouble x2_, wxDouble y2_, 
-                           wxDouble r, 
+        RadialGradientInfo(wxDouble x1_, wxDouble y1_,
+                           wxDouble x2_, wxDouble y2_,
+                           wxDouble r,
                            const wxGraphicsGradientStops& stops_,
                            const wxGraphicsMatrix& matrix_)
             : x1(x1_), y1(y1_), x2(x2_), y2(y2_), radius(r), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
-                                           wxDouble& x2, wxDouble& y2, 
-                                           wxDouble& r, 
+    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1,
+                                           wxDouble& x2, wxDouble& y2,
+                                           wxDouble& r,
                                            const wxGraphicsGradientStops& stops,
                                            const wxGraphicsMatrix& matrix)
         : m_radialGradientInfo(x1, y1, x2, y2, r, stops, matrix) {}
@@ -2535,14 +2535,14 @@ public:
 
     wxD2DBrushData(wxGraphicsRenderer* renderer);
 
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1, 
-                                   wxDouble x2, wxDouble y2, 
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
                                    const wxGraphicsGradientStops& stops,
                                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
-    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY, 
-                                   wxDouble endX, wxDouble endY, 
-                                   wxDouble radius, 
+    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                   wxDouble endX, wxDouble endY,
+                                   wxDouble radius,
                                    const wxGraphicsGradientStops& stops,
                                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
