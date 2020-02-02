@@ -2444,23 +2444,21 @@ protected:
     void DoAcquireResource() wxOVERRIDE
     {
         wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops, GetContext());
-        ID2D1LinearGradientBrush  *linearGradientBrush;
 
         HRESULT hr = GetContext()->CreateLinearGradientBrush(
             D2D1::LinearGradientBrushProperties(
                 D2D1::Point2F(m_linearGradientInfo.x1, m_linearGradientInfo.y1),
                 D2D1::Point2F(m_linearGradientInfo.x2, m_linearGradientInfo.y2)),
             helper.GetGradientStopCollection(),
-            &linearGradientBrush);
+            &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
 
         if (! m_linearGradientInfo.matrix.IsNull())
         {
             D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_linearGradientInfo.matrix)->GetMatrix3x2F();
             matrix.Invert();
-            linearGradientBrush->SetTransform(matrix);
+            m_nativeResource->SetTransform(matrix);
         }
-        m_nativeResource = linearGradientBrush;
     }
 private:
     const LinearGradientInfo m_linearGradientInfo;
@@ -2497,7 +2495,6 @@ protected:
     void DoAcquireResource() wxOVERRIDE
     {
         wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
-        ID2D1RadialGradientBrush *radialGradientBrush;
 
         wxDouble xo = m_radialGradientInfo.x1 - m_radialGradientInfo.x2;
         wxDouble yo = m_radialGradientInfo.y1 - m_radialGradientInfo.y2;
@@ -2508,16 +2505,15 @@ protected:
                 D2D1::Point2F(xo, yo),
                 m_radialGradientInfo.radius, m_radialGradientInfo.radius),
             helper.GetGradientStopCollection(),
-            &radialGradientBrush);
+            &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
 
         if (! m_radialGradientInfo.matrix.IsNull())
         {
             D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_radialGradientInfo.matrix)->GetMatrix3x2F();
             matrix.Invert();
-            radialGradientBrush->SetTransform(matrix);
+            m_nativeResource->SetTransform(matrix);
         }
-        m_nativeResource = radialGradientBrush;
     }
 
 private:
