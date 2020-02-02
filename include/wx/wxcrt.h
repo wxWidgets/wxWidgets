@@ -858,7 +858,8 @@ template<> struct wxStrtoxCharType<std::nullptr_t>
 template<typename T>
 inline double wxStrtod(const wxString& nptr, T endptr)
 {
-    if (endptr)
+    // Explicit comparison with 0 required when using T=nullptr with MSVS 2012.
+    if (endptr != 0)
     {
         // note that it is important to use c_str() here and not mb_str() or
         // wc_str(), because we store the pointer into (possibly converted)
