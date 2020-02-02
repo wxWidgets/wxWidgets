@@ -3785,10 +3785,6 @@ EOF
     esac
     fi
 
-    dnl this one shouldn't be used for the library build so put it in a
-    dnl separate variable from WXCONFIG_CPPFLAGS
-    WXCONFIG_ONLY_CPPFLAGS="$WXCONFIG_ONLY_CPPFLAGS -DWXUSINGDLL"
-
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
         DYLIB_PATH_POSTLINK=''
@@ -7954,8 +7950,9 @@ OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 
 dnl now that we added WXCONFIG_CPPFLAGS to CPPFLAGS we can add the wx-config
 dnl only stuff to it
-WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
-
+if test "SHARED" = 1; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DWXUSINGDLL"
+fi
 
 LIBS=`echo $LIBS`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
@@ -8309,10 +8306,6 @@ dnl are used when building the libraries using the library
 dnl
 dnl so put anything which should be used only during the library build in, e.g.
 dnl CXXFLAGS, but put everything else (by default) into WXCONFIG_CXXFLAGS
-dnl
-dnl and, finally, for some things which should be only used by wx-config but
-dnl not during the library compilation, use WXCONFIG_ONLY_CPPFLAGS which is
-dnl added to WXCONFIG_CPPFLAGS after adding the latter to CPPFLAGS
 AC_SUBST(WXCONFIG_CPPFLAGS)
 AC_SUBST(WXCONFIG_CFLAGS)
 AC_SUBST(WXCONFIG_CXXFLAGS)
