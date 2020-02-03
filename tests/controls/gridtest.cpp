@@ -73,6 +73,7 @@ private:
         WXUISIM_TEST( RangeSelect );
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( SelectEmptyGrid );
         CPPUNIT_TEST( ScrollWhenSelect );
         WXUISIM_TEST( MoveGridCursorUsingEndKey );
         WXUISIM_TEST( SelectUsingEndKey );
@@ -117,6 +118,7 @@ private:
     void RangeSelect();
     void Cursor();
     void Selection();
+    void SelectEmptyGrid();
     void ScrollWhenSelect();
     void MoveGridCursorUsingEndKey();
     void SelectUsingEndKey();
@@ -598,6 +600,30 @@ void GridTestCase::Selection()
     CPPUNIT_ASSERT(m_grid->IsInSelection(4, 0));
     CPPUNIT_ASSERT(m_grid->IsInSelection(4, 1));
     CPPUNIT_ASSERT(!m_grid->IsInSelection(3, 0));
+}
+
+void GridTestCase::SelectEmptyGrid()
+{
+    SECTION("No rows")
+    {
+        m_grid->DeleteRows(0, 10);
+        REQUIRE( m_grid->GetNumberRows() == 0 );
+
+        // Should not fail an assertion.
+        m_grid->SelectCol(1);
+    }
+
+    SECTION("No columns")
+    {
+        m_grid->DeleteCols(0, 2);
+        REQUIRE( m_grid->GetNumberCols() == 0 );
+
+        // Should not fail an assertion.
+        m_grid->SelectRow(1);
+    }
+
+    CHECK( m_grid->GetSelectionBlockTopLeft().Count() == 0 );
+    CHECK( m_grid->GetSelectionBlockBottomRight().Count() == 0 );
 }
 
 void GridTestCase::ScrollWhenSelect()
