@@ -401,7 +401,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     m_hWnd = (WXHWND)::CreateDialogIndirect
                        (
                         wxGetInstance(),
-                        (DLGTEMPLATE*)dlgTemplate,
+                        static_cast<const DLGTEMPLATE*>(dlgTemplate),
                         parent ? GetHwndOf(parent) : NULL,
                         (DLGPROC)wxDlgProc
                        );

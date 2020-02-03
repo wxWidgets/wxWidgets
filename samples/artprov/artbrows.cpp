@@ -28,7 +28,7 @@
 #include "artbrows.h"
 
 #define ART_CLIENT(id) \
-    choice->Append(#id, (void*)id);
+    choice->Append(#id, const_cast<void*>(static_cast<const void*>(id)));
 #define ART_ICON(id) \
     { \
         int ind; \

@@ -349,7 +349,7 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
 
 wxPrintDialogData& wxPrinterBase::GetPrintDialogData() const
 {
-    return (wxPrintDialogData&) m_printDialogData;
+    return const_cast<wxPrintDialogData&>(m_printDialogData);
 }
 
 //----------------------------------------------------------------------------

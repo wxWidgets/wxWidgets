@@ -989,7 +989,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
             CalcBoundingBox(points[i].x, points[i].y);
 
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)Polygon(GetHdc(), (POINT*) points, n);
+        Polygon(GetHdc(), reinterpret_cast<const POINT*>(points), n);
         SetPolyFillMode(GetHdc(),prev);
     }
 }
@@ -1029,7 +1029,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
             CalcBoundingBox(points[i].x, points[i].y);
 
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)PolyPolygon(GetHdc(), (POINT*) points, count, n);
+        PolyPolygon(GetHdc(), reinterpret_cast<const POINT*>(points), count, n);
         SetPolyFillMode(GetHdc(),prev);
     }
 }
@@ -1057,7 +1057,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        (void)Polyline(GetHdc(), (POINT*) points, n);
+        Polyline(GetHdc(), reinterpret_cast<const POINT*>(points), n);
     }
 }
 

@@ -5182,7 +5182,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
                                     GTK_SHADOW_NONE,
                                     &rect,
                                     parent->m_widget,
-                                    (char *)"base",
+                                    const_cast<char*>("base"),
                                     0, 0, w, h);
 #endif // !__WXGTK3__
             }

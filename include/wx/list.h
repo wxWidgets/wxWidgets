@@ -483,7 +483,8 @@ public:
     wxDEPRECATED( wxNode *Nth(size_t n) const );    // use Item
 
     // kludge for typesafe list migration in core classes.
-    wxDEPRECATED( operator wxList&() const );
+    wxDEPRECATED( operator wxList&() );
+    wxDEPRECATED( operator const wxList&() const );
 #endif // wxLIST_COMPATIBILITY
 
 protected:
@@ -1147,7 +1148,6 @@ inline int wxListBase::Number() const { return (int)GetCount(); }
 inline wxNode *wxListBase::First() const { return (wxNode *)GetFirst(); }
 inline wxNode *wxListBase::Last() const { return (wxNode *)GetLast(); }
 inline wxNode *wxListBase::Nth(size_t n) const { return (wxNode *)Item(n); }
-inline wxListBase::operator wxList&() const { return *(wxList*)this; }
 
 #endif
 
@@ -1199,6 +1199,10 @@ public:
 };
 
 #if !wxUSE_STD_CONTAINERS
+
+// wxListBase deprecated methods
+inline wxListBase::operator wxList&() { return *static_cast<wxList*>(this); }
+inline wxListBase::operator const wxList&() const { return *static_cast<const wxList*>(this); }
 
 // -----------------------------------------------------------------------------
 // wxStringList class for compatibility with the old code

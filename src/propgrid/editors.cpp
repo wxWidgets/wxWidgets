@@ -637,7 +637,8 @@ public:
         }
         else
         {
-            pg->OnComboItemPaint( this, item, &dc, (wxRect&)rect, flags );
+            wxRect r(rect);
+            pg->OnComboItemPaint(this, item, &dc, r, flags);
         }
     }
 

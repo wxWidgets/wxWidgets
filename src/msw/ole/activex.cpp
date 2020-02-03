@@ -768,7 +768,7 @@ namespace
 const int invalid_entry_marker = 0;
 }
 
-wxVariant wxActiveXEvents::ms_invalidEntryMarker((void*)&invalid_entry_marker);
+wxVariant wxActiveXEvents::ms_invalidEntryMarker(static_cast<const void*>(&invalid_entry_marker));
 
 size_t wxActiveXEvent::ParamCount() const
 {

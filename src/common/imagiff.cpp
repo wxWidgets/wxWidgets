@@ -360,7 +360,7 @@ int wxIFFDecoder::ReadIFF()
     }
 
     // check if we really got an IFF file
-    if (strncmp((char *)dataptr, "FORM", 4) != 0) {
+    if (strncmp(reinterpret_cast<const char*>(dataptr), "FORM", 4) != 0) {
         Destroy();
         return wxIFF_INVFORMAT;
     }
@@ -368,7 +368,7 @@ int wxIFFDecoder::ReadIFF()
     dataptr = dataptr + 8;                  // skip ID and length of FORM
 
     // check if the IFF file is an ILBM (picture) file
-    if (strncmp((char *) dataptr, "ILBM", 4) != 0) {
+    if (strncmp(reinterpret_cast<const char*>(dataptr), "ILBM", 4) != 0) {
         Destroy();
         return wxIFF_INVFORMAT;
     }
@@ -394,7 +394,7 @@ int wxIFFDecoder::ReadIFF()
     }
     bool truncated = (dataptr + 8 + chunkLen > dataend);
 
-    if (strncmp((char *)dataptr, "BMHD", 4) == 0) { // BMHD chunk?
+    if (strncmp(reinterpret_cast<const char*>(dataptr), "BMHD", 4) == 0) { // BMHD chunk?
         if (chunkLen < 12 + 2 || truncated) {
         break;
         }
@@ -407,7 +407,7 @@ int wxIFFDecoder::ReadIFF()
         BMHDok = true;                              // got BMHD
         dataptr += 8 + chunkLen;                    // to next chunk
     }
-    else if (strncmp((char *)dataptr, "CMAP", 4) == 0) { // CMAP ?
+    else if (strncmp(reinterpret_cast<const char*>(dataptr), "CMAP", 4) == 0) { // CMAP ?
         if (truncated) {
         break;
         }
@@ -435,7 +435,7 @@ int wxIFFDecoder::ReadIFF()
             colors);
 
         dataptr += 8 + chunkLen;                    // to next chunk
-    } else if (strncmp((char *)dataptr, "CAMG", 4) == 0) { // CAMG ?
+    } else if (strncmp(reinterpret_cast<const char*>(dataptr), "CAMG", 4) == 0) { // CAMG ?
         if (chunkLen < 4 || truncated) {
         break;
         }
@@ -443,7 +443,7 @@ int wxIFFDecoder::ReadIFF()
         CAMGok = true;                              // got CAMG
         dataptr += 8 + chunkLen;                    // to next chunk
     }
-    else if (strncmp((char *)dataptr, "BODY", 4) == 0) { // BODY ?
+    else if (strncmp(reinterpret_cast<const char*>(dataptr), "BODY", 4) == 0) { // BODY ?
         if (!BMHDok) {                              // BMHD found?
         break;
         }

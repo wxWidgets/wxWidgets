@@ -269,7 +269,7 @@ const wxHtmlCell *wxHtmlImageMapCell::Find( int cond, const void *param ) const
 {
     if (cond == wxHTML_COND_ISIMAGEMAP)
     {
-        if (m_Name == *((wxString*)(param)))
+        if (m_Name == *static_cast<const wxString*>(param))
             return this;
     }
     return wxHtmlCell::Find(cond, param);
@@ -331,8 +331,8 @@ private:
     size_t              m_nCurrFrame;
 #endif
     double              m_scale;
-    wxHtmlImageMapCell *m_imageMap;
-    wxString            m_mapName;
+    mutable const wxHtmlImageMapCell* m_imageMap;
+    mutable wxString    m_mapName;
     wxString            m_alt;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageCell);
@@ -655,18 +655,14 @@ wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
             p = p->GetParent();
         }
         p = op;
-        wxHtmlCell *cell = (wxHtmlCell*)p->Find(wxHTML_COND_ISIMAGEMAP,
+        const wxHtmlCell* cell = p->Find(wxHTML_COND_ISIMAGEMAP,
                                                 (const void*)(&m_mapName));
         if (!cell)
         {
-            ((wxString&)m_mapName).Clear();
+            m_mapName.Clear();
             return wxHtmlCell::GetLink( x, y );
         }
-        {   // dirty hack, ask Joel why he fills m_ImageMap in this place
-            // THE problem is that we're in const method and we can't modify m_ImageMap
-            wxHtmlImageMapCell **cx = (wxHtmlImageMapCell**)(&m_imageMap);
-            *cx = (wxHtmlImageMapCell*)cell;
-        }
+        m_imageMap = static_cast<const wxHtmlImageMapCell*>(cell);
     }
     return m_imageMap->GetLink(x, y);
 }

@@ -269,7 +269,7 @@ static void wxFSEventCallback(ConstFSEventStreamRef WXUNUSED(streamRef), void *c
 static void wxDeleteContext(const void* context)
 {
     wxFSEventWatcherContext* watcherContext =
-        (wxFSEventWatcherContext*) context;
+        static_cast<wxFSEventWatcherContext*>(const_cast<void*>(context));
     delete watcherContext;
 }
 

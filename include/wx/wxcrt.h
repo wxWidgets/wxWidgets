@@ -110,7 +110,7 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 // (notice that these intentionally return "char *" and not "void *" unlike the
 // standard memxxx() for symmetry with the wide char versions):
 inline char* wxTmemchr(const char* s, char c, size_t len)
-    { return (char*)memchr(s, c, len); }
+    { return const_cast<char*>(static_cast<const char*>(memchr(s, c, len))); }
 inline int wxTmemcmp(const char* sz1, const char* sz2, size_t len)
     { return memcmp(sz1, sz2, len); }
 inline char* wxTmemcpy(char* szOut, const char* szIn, size_t len)
@@ -727,7 +727,7 @@ inline char * wxStrchr(char *s, T c)
     { return const_cast<char*>(wxStrchr(const_cast<const char*>(s), c)); }
 template <typename T>
 inline wchar_t * wxStrchr(wchar_t *s, T c)
-    { return (wchar_t *)wxStrchr((const wchar_t *)s, c); }
+    { return const_cast<wchar_t*>(wxStrchr(const_cast<const wchar_t*>(s), c)); }
 template <typename T>
 inline char * wxStrrchr(char *s, T c)
     { return const_cast<char*>(wxStrrchr(const_cast<const char*>(s), c)); }

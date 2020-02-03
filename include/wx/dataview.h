@@ -1218,7 +1218,7 @@ public:
         { return m_data; }
 
     wxDataViewItem GetItem() const
-        { return wxDataViewItem( (void*) this ); }
+        { return wxDataViewItem(const_cast<void*>(static_cast<const void*>(this))); }
 
     virtual bool IsContainer()
         { return false; }

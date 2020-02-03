@@ -66,7 +66,7 @@ inline Type* wxCFRetain(Type *r)
     // Casting r to CFTypeRef ensures we are calling the real C version defined in CFBase.h
     // and not any possibly templated/overloaded CFRetain.
     if ( r != NULL )
-        r = (Type*)::CFRetain((CFTypeRef)r);
+        r = const_cast<Type*>(static_cast<const Type*>(::CFRetain(static_cast<CFTypeRef>(r))));
     return r;
 }
 

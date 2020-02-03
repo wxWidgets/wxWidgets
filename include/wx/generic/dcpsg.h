@@ -152,8 +152,8 @@ protected:
     unsigned char     m_currentBlue;
     int               m_pageNumber;
     bool              m_clipping;
-    double            m_underlinePosition;
-    double            m_underlineThickness;
+    mutable double    m_underlinePosition;
+    mutable double    m_underlineThickness;
     wxPrintData       m_printData;
     double            m_pageHeight;
     wxArrayString     m_definedPSFonts;

@@ -640,7 +640,7 @@ private:
     wxThreadInternal *m_internal;
 
     // protects access to any methods of wxThreadInternal object
-    wxCriticalSection m_critsect;
+    mutable wxCriticalSection m_critsect;
 
     // true if the thread is detached, false if it is joinable
     bool m_isDetached;
@@ -731,7 +731,7 @@ public:
     // returns a pointer to the thread which can be used to call Run()
     wxThread *GetThread() const
     {
-        wxCriticalSectionLocker locker((wxCriticalSection&)m_critSection);
+        wxCriticalSectionLocker locker(m_critSection);
 
         wxThread* thread = m_thread;
 
@@ -741,7 +741,7 @@ public:
 protected:
     wxThread *m_thread;
     wxThreadKind m_kind;
-    wxCriticalSection m_critSection; // To guard the m_thread variable
+    mutable wxCriticalSection m_critSection; // To guard the m_thread variable
 
     friend class wxThreadHelperThread;
 };

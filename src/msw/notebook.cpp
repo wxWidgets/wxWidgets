@@ -1225,7 +1225,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
 #if wxUSE_UXTHEME
     if (wxUxThemeIsActive())
     {
-        wxUxThemeHandle hTheme((wxNotebook*) this, L"TAB");
+        wxUxThemeHandle hTheme(this, L"TAB");
         if (hTheme)
         {
             // This is total guesswork.

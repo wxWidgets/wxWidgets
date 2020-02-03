@@ -122,7 +122,7 @@ public:
     // non NULL)
     static HBITMAP ConvertToBitmap(const BITMAPINFO *pbi,
                                    HDC hdc = 0,
-                                   void *bits = NULL);
+                                   const void *bits = NULL);
 
     // create a plain DIB (not a DIB section) from a DDB, the caller is
     // responsable for freeing it using ::GlobalFree()

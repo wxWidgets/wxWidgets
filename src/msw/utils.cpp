@@ -812,9 +812,9 @@ bool wxShell(const wxString& command)
 {
     wxString cmd;
 
-    wxChar *shell = wxGetenv(wxT("COMSPEC"));
+    const wxChar* shell = wxGetenv(wxT("COMSPEC"));
     if ( !shell )
-        shell = (wxChar*) wxT("\\COMMAND.COM");
+        shell = wxT("\\COMMAND.COM");
 
     if ( !command )
     {

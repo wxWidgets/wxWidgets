@@ -195,7 +195,7 @@ void wxMacStringToPascal( const wxString&from , unsigned char * to )
 
 wxString wxMacMakeStringFromPascal( const unsigned char * from )
 {
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
+    return wxString(&from[1], wxConvLocal, from[0]);
 }
 
 #endif // wxOSX_USE_COCOA_OR_CARBON

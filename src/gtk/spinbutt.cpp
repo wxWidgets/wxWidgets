@@ -188,13 +188,13 @@ void wxSpinButton::DoEnable(bool enable)
 void wxSpinButton::GtkDisableEvents() const
 {
     g_signal_handlers_block_by_func(m_widget,
-        (gpointer)gtk_value_changed, (void*) this);
+        (void*)gtk_value_changed, const_cast<wxSpinButton*>(this));
 }
 
 void wxSpinButton::GtkEnableEvents() const
 {
     g_signal_handlers_unblock_by_func(m_widget,
-        (gpointer)gtk_value_changed, (void*) this);
+        (void*)gtk_value_changed, const_cast<wxSpinButton*>(this));
 }
 
 GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED_IN_GTK2(windows)) const

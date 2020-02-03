@@ -71,7 +71,7 @@ wxRichTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTex
     const wxRichTextStyleDefinition* def = this;
     while (def)
     {
-        styles.Insert((wxObject*) def);
+        styles.Insert(const_cast<wxRichTextStyleDefinition*>(def));
         styleNames.Add(def->GetName());
 
         wxString baseStyleName = def->GetBaseStyle();
@@ -756,7 +756,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 
     if (attr.GetLeftIndent() > 0)
     {
-        wxClientDC dc((wxWindow*) this);
+        wxClientDC dc(const_cast<wxRichTextStyleListBox*>(this));
 
         str << wxT("<td width=") << wxMin(50, (ConvertTenthsMMToPixels(dc, attr.GetLeftIndent())/2)) << wxT("></td>");
     }

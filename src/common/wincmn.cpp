@@ -1768,7 +1768,7 @@ void wxWindowBase::SetPalette(const wxPalette& pal)
 
 wxWindow *wxWindowBase::GetAncestorWithCustomPalette() const
 {
-    wxWindow *win = (wxWindow *)this;
+    wxWindow* win = const_cast<wxWindow*>(static_cast<const wxWindow*>(this));
     while ( win && !win->HasCustomPalette() )
     {
         win = win->GetParent();
@@ -1858,7 +1858,7 @@ void wxWindowBase::ClearBackground()
 wxWindow *wxWindowBase::FindWindow(long id) const
 {
     if ( id == m_windowId )
-        return (wxWindow *)this;
+        return const_cast<wxWindow*>(static_cast<const wxWindow*>(this));
 
     wxWindowBase *res = NULL;
     wxWindowList::compatibility_iterator node;
@@ -1874,13 +1874,13 @@ wxWindow *wxWindowBase::FindWindow(long id) const
         res = child->FindWindow( id );
     }
 
-    return (wxWindow *)res;
+    return static_cast<wxWindow*>(res);
 }
 
 wxWindow *wxWindowBase::FindWindow(const wxString& name) const
 {
     if ( name == m_windowName )
-        return (wxWindow *)this;
+        return const_cast<wxWindow*>(static_cast<const wxWindow*>(this));
 
     wxWindowBase *res = NULL;
     wxWindowList::compatibility_iterator node;
@@ -1895,7 +1895,7 @@ wxWindow *wxWindowBase::FindWindow(const wxString& name) const
         res = child->FindWindow(name);
     }
 
-    return (wxWindow *)res;
+    return static_cast<wxWindow*>(res);
 }
 
 
@@ -1939,7 +1939,7 @@ wxWindow *wxFindWindowRecursively(const wxWindow *parent,
 {
     // see if this is the one we're looking for
     if ( (*cmp)(parent, label, id) )
-        return (wxWindow *)parent;
+        return const_cast<wxWindow*>(parent);
 
     // It wasn't, so check all its children
     for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
@@ -1947,7 +1947,7 @@ wxWindow *wxFindWindowRecursively(const wxWindow *parent,
           node = node->GetNext() )
     {
         // recursively check each child
-        wxWindow *win = (wxWindow *)node->GetData();
+        wxWindow* win = static_cast<wxWindow*>(node->GetData());
         wxWindow *retwin = wxFindWindowRecursively(win, label, id, cmp);
         if (retwin)
             return retwin;
@@ -2921,7 +2921,8 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 // using them.
 wxSize wxWindowBase::GetDlgUnitBase() const
 {
-    const wxWindowBase* const parent = wxGetTopLevelParent((wxWindow*)this);
+    const wxWindowBase* const parent =
+        wxGetTopLevelParent(const_cast<wxWindow*>(static_cast<const wxWindow*>(this)));
 
     wxCHECK_MSG( parent, wxDefaultSize, wxS("Must have TLW parent") );
 
@@ -3499,7 +3500,7 @@ wxWindow *wxWindowBase::DoGetSibling(WindowOrder order) const
                     wxT("GetPrev/NextSibling() don't work for TLWs!") );
 
     wxWindowList& siblings = GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator i = siblings.Find((wxWindow *)this);
+    wxWindowList::compatibility_iterator i = siblings.Find(this);
     wxCHECK_MSG( i, NULL, wxT("window not a child of its parent?") );
 
     if ( order == OrderBefore )

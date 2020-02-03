@@ -291,22 +291,16 @@ void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
     gtk_spin_button_set_increments( GTK_SPIN_BUTTON(m_widget), inc, page);
 }
 
-void wxSpinCtrlGTKBase::GtkDisableEvents() const
+void wxSpinCtrlGTKBase::GtkDisableEvents()
 {
-    g_signal_handlers_block_by_func( m_widget,
-        (gpointer)gtk_value_changed, (void*) this);
-
-    g_signal_handlers_block_by_func(m_widget,
-        (gpointer)gtk_changed, (void*) this);
+    g_signal_handlers_block_by_func(m_widget, (void*)gtk_value_changed, this);
+    g_signal_handlers_block_by_func(m_widget, (void*)gtk_changed, this);
 }
 
-void wxSpinCtrlGTKBase::GtkEnableEvents() const
+void wxSpinCtrlGTKBase::GtkEnableEvents()
 {
-    g_signal_handlers_unblock_by_func(m_widget,
-        (gpointer)gtk_value_changed, (void*) this);
-
-    g_signal_handlers_unblock_by_func(m_widget,
-        (gpointer)gtk_changed, (void*) this);
+    g_signal_handlers_unblock_by_func(m_widget, (void*)gtk_value_changed, this);
+    g_signal_handlers_unblock_by_func(m_widget, (void*)gtk_changed, this);
 }
 
 void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )

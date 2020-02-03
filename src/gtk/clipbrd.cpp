@@ -160,7 +160,7 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
                 clip.GetId().c_str() );
 
     // the atoms we received, holding a list of targets (= formats)
-    const GdkAtom* const atoms = (GdkAtom*)gtk_selection_data_get_data(selection_data);
+    const GdkAtom* const atoms = reinterpret_cast<const GdkAtom*>(gtk_selection_data_get_data(selection_data));
     for (size_t i = 0; i < selection_data_length / sizeof(GdkAtom); i++)
     {
         const wxDataFormat format(atoms[i]);
@@ -406,7 +406,7 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
                 clip.GetId().c_str() );
 
     // the atoms we received, holding a list of targets (= formats)
-    const GdkAtom* const atoms = (GdkAtom*)gtk_selection_data_get_data(selection_data);
+    const GdkAtom* const atoms = reinterpret_cast<const GdkAtom*>(gtk_selection_data_get_data(selection_data));
     for (size_t i = 0; i < selection_data_length / sizeof(GdkAtom); i++)
     {
         const wxDataFormat format(atoms[i]);

@@ -66,7 +66,7 @@ wxGtkTextRemoveTagsWithPrefix(GtkTextBuffer *text_buffer,
                                 text_buffer,
                                 "remove_tag",
                                 G_CALLBACK(wxGtkOnRemoveTag),
-                                gpointer(prefix)
+                                const_cast<void*>(static_cast<const void*>(prefix))
                                );
     gtk_text_buffer_remove_all_tags(text_buffer, start, end);
     g_signal_handler_disconnect(text_buffer, remove_handler_id);

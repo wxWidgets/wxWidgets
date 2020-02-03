@@ -173,7 +173,7 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy) : wxGDIRefData()
         UseAlpha(true);
 
     unsigned char* dest = (unsigned char*)GetRawAccess();
-    unsigned char* source = (unsigned char*)tocopy.GetRawAccess();
+    const unsigned char* source = static_cast<const unsigned char*>(tocopy.GetRawAccess());
     size_t numbytes = GetBytesPerRow() * GetHeight();
     memcpy( dest, source, numbytes );
 }
@@ -780,7 +780,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
             if ( the_width % 8 )
                 linesize++;
 
-            unsigned char* linestart = (unsigned char*) bits ;
+            const unsigned char* linestart = reinterpret_cast<const unsigned char*>(bits);
             unsigned char* destptr = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
 
             for ( int y = 0 ; y < the_height ; ++y , linestart += linesize, destptr += GetBitmapData()->GetBytesPerRow() )
@@ -949,7 +949,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     int destheight = rect.height*scale ;
 
     {
-        unsigned char *sourcedata = (unsigned char*) GetBitmapData()->GetRawAccess() ;
+        const unsigned char* sourcedata = static_cast<const unsigned char*>(GetBitmapData()->GetRawAccess());
         unsigned char *destdata = (unsigned char*) ret.GetBitmapData()->BeginRawAccess() ;
         wxASSERT((sourcedata != NULL) && (destdata != NULL));
 
@@ -957,7 +957,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         {
             int sourcelinesize = GetBitmapData()->GetBytesPerRow() ;
             int destlinesize = ret.GetBitmapData()->GetBytesPerRow() ;
-            unsigned char* source = sourcedata + size_t(rect.x * scale) * 4 + size_t(rect.y * scale) * sourcelinesize;
+            const unsigned char* source = sourcedata + size_t(rect.x * scale) * 4 + size_t(rect.y * scale) * sourcelinesize;
             unsigned char* dest = destdata;
 
             for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
@@ -1199,7 +1199,7 @@ wxImage wxBitmap::ConvertToImage() const
     // this call may trigger a conversion from platform image to bitmap, issue it
     // before any measurements are taken, multi-resolution platform images may be
     // rendered incorrectly otherwise
-    unsigned char* sourcestart = (unsigned char*) GetBitmapData()->GetRawAccess() ;
+    const unsigned char* sourcestart = static_cast<const unsigned char*>(GetBitmapData()->GetRawAccess());
 
     // create an wxImage object
     int width = GetWidth();
@@ -1244,7 +1244,7 @@ wxImage wxBitmap::ConvertToImage() const
     for (int yy = 0; yy < height; yy++ , sourcestart += GetBitmapData()->GetBytesPerRow() , mask += maskBytesPerRow )
     {
         unsigned char * maskp = mask ;
-        const wxUint32 * source = (wxUint32*)sourcestart;
+        const wxUint32* source = reinterpret_cast<const wxUint32*>(sourcestart);
 
         for (int xx = 0; xx < width; xx++)
         {

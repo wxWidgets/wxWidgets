@@ -53,7 +53,7 @@ public:
     bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
 
 //// Accessors
-    wxBitmap& GetBackgroundBitmap() const { return (wxBitmap&) m_background; }
+    const wxBitmap& GetBackgroundBitmap() const { return m_background; }
 
     bool GetUseScreen() const { return m_useScreen; }
     void SetUseScreen(bool useScreen) { m_useScreen = useScreen; }
@@ -136,7 +136,7 @@ public:
 
     wxRect GetRect() const { return wxRect(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight()); }
 
-    wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
+    const wxBitmap& GetBitmap() const { return m_bitmap; }
     void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
 
     int GetDragMethod() const { return m_dragMethod; }

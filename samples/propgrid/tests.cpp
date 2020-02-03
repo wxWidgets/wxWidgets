@@ -634,7 +634,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->SetPropertyValue("ArrayStringProperty",test_arrstr_1);
         wxColour emptyCol;
         pgman->SetPropertyValue("ColourProperty",emptyCol);
-        pgman->SetPropertyValue("ColourProperty",(wxObject*)wxBLACK);
+        pgman->SetPropertyValue("ColourProperty", const_cast<wxObject*>(static_cast<const wxObject*>(wxBLACK)));
         pgman->SetPropertyValue("Size",WXVARIANT(wxSize(150,150)));
         pgman->SetPropertyValue("Position",WXVARIANT(wxPoint(150,150)));
         pgman->SetPropertyValue("MultiChoiceProperty",test_arrint_1);
@@ -690,7 +690,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg->SetPropertyValue("BoolProperty",true);
         pg->SetPropertyValue("EnumProperty",80);
         pg->SetPropertyValue("ArrayStringProperty",test_arrstr_2);
-        pg->SetPropertyValue("ColourProperty",(wxObject*)wxWHITE);
+        pg->SetPropertyValue("ColourProperty", const_cast<wxObject*>(static_cast<const wxObject*>(wxWHITE)));
         pg->SetPropertyValue("Size",WXVARIANT(wxSize(300,300)));
         pg->SetPropertyValue("Position",WXVARIANT(wxPoint(300,300)));
         pg->SetPropertyValue("MultiChoiceProperty",test_arrint_2);

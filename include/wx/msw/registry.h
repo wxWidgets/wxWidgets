@@ -263,7 +263,7 @@ private:
   wxString      m_strKey;        // key name (relative to m_hRootKey)
   WOW64ViewMode m_viewMode;      // which view to select under WOW64
   AccessMode    m_mode;          // valid only if key is opened
-  long          m_dwLastError;   // last error (0 if none)
+  mutable long  m_dwLastError;   // last error (0 if none)
 
 
   wxDECLARE_NO_COPY_CLASS(wxRegKey);

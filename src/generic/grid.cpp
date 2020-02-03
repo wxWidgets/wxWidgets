@@ -7025,7 +7025,7 @@ bool wxGrid::IsCellEditControlShown() const
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellEditor* editor = attr->GetEditor((wxGrid*) this, row, col);
+        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
         attr->DecRef();
 
         if ( editor )
@@ -8743,7 +8743,7 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
 {
     wxGridCellAttr *attr = NULL;
-    bool canHave = ((wxGrid*)this)->CanHaveAttributes();
+    const bool canHave = CanHaveAttributes();
 
     wxCHECK_MSG( canHave, attr, wxT("Cell attributes not allowed"));
     wxCHECK_MSG( m_table, attr, wxT("must have a table") );

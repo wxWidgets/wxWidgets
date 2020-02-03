@@ -567,7 +567,7 @@ bool wxAutomationObject::GetInstance(const wxString& progId, int flags) const
         return false;
     }
 
-    hr = pUnk->QueryInterface(IID_IDispatch, (LPVOID*) &m_dispatchPtr);
+    hr = pUnk->QueryInterface(IID_IDispatch, const_cast<void**>(&m_dispatchPtr));
     if (FAILED(hr))
     {
         wxLogSysError(hr,

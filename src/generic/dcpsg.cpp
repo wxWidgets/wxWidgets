@@ -2253,13 +2253,8 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
         /* JC: calculate UnderlineThickness/UnderlinePosition */
 
-        // VS: dirty, but is there any better solution?
-        double *pt;
-        pt = (double*) &m_underlinePosition;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontSize)) / 1000.0f;
-        pt = (double*) &m_underlineThickness;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontSize)) / 1000.0f;
-
+        m_underlinePosition  = YLOG2DEVREL(int(UnderlinePosition  * fontSize)) / 1000.0;
+        m_underlineThickness = YLOG2DEVREL(int(UnderlineThickness * fontSize)) / 1000.0;
     }
 
 

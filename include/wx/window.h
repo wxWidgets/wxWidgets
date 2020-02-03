@@ -1032,7 +1032,7 @@ public:
 
         // does this window have the capture?
     virtual bool HasCapture() const
-        { return (wxWindow *)this == GetCapture(); }
+        { return reinterpret_cast<const wxWindow*>(this) == GetCapture(); }
 
         // enable the specified touch events for this window, return false if
         // the requested events are not supported

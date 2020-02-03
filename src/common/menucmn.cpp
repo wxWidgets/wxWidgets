@@ -537,7 +537,7 @@ wxMenuItem *wxMenuBase::FindItem(int itemId, wxMenu **itemMenu) const
         if ( item->GetId() == itemId )
         {
             if ( itemMenu )
-                *itemMenu = (wxMenu *)this;
+                *itemMenu = const_cast<wxMenu*>(static_cast<const wxMenu*>(this));
         }
         else if ( item->IsSubMenu() )
         {

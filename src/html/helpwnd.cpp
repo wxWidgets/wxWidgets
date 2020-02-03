@@ -877,7 +877,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
 #if wxUSE_PROGRESSDLG
                 progress.Update(status.GetCurIndex(), foundstr);
 #endif
-                m_SearchList->Append(status.GetName(), (void*)status.GetCurItem());
+                m_SearchList->Append(status.GetName(), const_cast<wxHtmlHelpDataItem*>(status.GetCurItem()));
             }
         }
 
