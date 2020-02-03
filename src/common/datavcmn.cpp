@@ -2485,8 +2485,7 @@ wxDataViewTreeStoreNode::wxDataViewTreeStoreNode(
 
 wxDataViewTreeStoreNode::~wxDataViewTreeStoreNode()
 {
-    if (m_data)
-        delete m_data;
+    delete m_data;
 }
 
 wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(

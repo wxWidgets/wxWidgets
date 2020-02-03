@@ -58,10 +58,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxGenericDragImage, wxObject);
 
 wxGenericDragImage::~wxGenericDragImage()
 {
-    if (m_windowDC)
-    {
-        delete m_windowDC;
-    }
+    delete m_windowDC;
 }
 
 void wxGenericDragImage::Init()

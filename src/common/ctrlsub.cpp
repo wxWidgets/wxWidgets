@@ -170,8 +170,7 @@ void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
     {
         wxClientData * clientDataOld =
             static_cast<wxClientData *>(DoGetItemClientData(n));
-        if ( clientDataOld )
-            delete clientDataOld;
+        delete clientDataOld;
     }
     else // didn't have any client data so far
     {

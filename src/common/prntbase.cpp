@@ -85,9 +85,7 @@ wxPrintFactory *wxPrintFactory::m_factory = NULL;
 
 void wxPrintFactory::SetPrintFactory( wxPrintFactory *factory )
 {
-    if (wxPrintFactory::m_factory)
-        delete wxPrintFactory::m_factory;
-
+    delete wxPrintFactory::m_factory;
     wxPrintFactory::m_factory = factory;
 }
 
@@ -1873,12 +1871,9 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
 
 wxPrintPreviewBase::~wxPrintPreviewBase()
 {
-    if (m_previewPrintout)
-        delete m_previewPrintout;
-    if (m_previewBitmap)
-        delete m_previewBitmap;
-    if (m_printPrintout)
-        delete m_printPrintout;
+    delete m_previewPrintout;
+    delete m_previewBitmap;
+    delete m_printPrintout;
 }
 
 bool wxPrintPreviewBase::SetCurrentPage(int pageNum)

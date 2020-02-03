@@ -1454,7 +1454,7 @@ wxFileIconsTable::~wxFileIconsTable()
         WX_CLEAR_HASH_TABLE(*m_HashTable);
         delete m_HashTable;
     }
-    if (m_smallImageList) delete m_smallImageList;
+    delete m_smallImageList;
 }
 
 // delayed initialization - wait until first use (wxArtProv not created yet)

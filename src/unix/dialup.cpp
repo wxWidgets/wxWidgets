@@ -304,7 +304,7 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
 {
-   if(m_timer) delete m_timer;
+   delete m_timer;
    if(m_DialProcess)
    {
       m_DialProcess->Disconnect();

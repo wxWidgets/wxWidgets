@@ -269,8 +269,7 @@ const wxClassInfo* wxMediaCtrl::NextBackend(wxClassInfo::const_iterator* it)
 //---------------------------------------------------------------------------
 wxMediaCtrl::~wxMediaCtrl()
 {
-    if (m_imp)
-        delete m_imp;
+    delete m_imp;
 }
 
 //---------------------------------------------------------------------------

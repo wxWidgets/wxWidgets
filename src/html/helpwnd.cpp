@@ -605,15 +605,15 @@ wxHtmlHelpWindow::~wxHtmlHelpWindow()
     // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)
     if (m_DataCreated)
         delete m_Data;
-    if (m_NormalFonts) delete m_NormalFonts;
-    if (m_FixedFonts) delete m_FixedFonts;
+    delete m_NormalFonts;
+    delete m_FixedFonts;
     if (m_PagesHash)
     {
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
     }
 #if wxUSE_PRINTING_ARCHITECTURE
-    if (m_Printer) delete m_Printer;
+    delete m_Printer;
 #endif
 }
 

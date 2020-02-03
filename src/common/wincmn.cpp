@@ -1782,11 +1782,7 @@ wxWindow *wxWindowBase::GetAncestorWithCustomPalette() const
 #if wxUSE_CARET
 void wxWindowBase::SetCaret(wxCaret *caret)
 {
-    if ( m_caret )
-    {
-        delete m_caret;
-    }
-
+    delete m_caret;
     m_caret = caret;
 
     if ( m_caret )
@@ -1804,8 +1800,7 @@ void wxWindowBase::SetCaret(wxCaret *caret)
 
 void wxWindowBase::SetValidator(const wxValidator& validator)
 {
-    if ( m_windowValidator )
-        delete m_windowValidator;
+    delete m_windowValidator;
 
     m_windowValidator = static_cast<wxValidator *>(validator.Clone());
 
@@ -2321,9 +2316,7 @@ void wxWindowBase::DoSetToolTip(wxToolTip *tooltip)
 {
     if ( m_tooltip != tooltip )
     {
-        if ( m_tooltip )
-            delete m_tooltip;
-
+        delete m_tooltip;
         m_tooltip = tooltip;
     }
 }

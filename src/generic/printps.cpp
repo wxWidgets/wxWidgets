@@ -100,7 +100,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
     {
-        if (dc) delete dc;
+        delete dc;
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }

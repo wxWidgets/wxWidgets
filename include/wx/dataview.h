@@ -1213,7 +1213,7 @@ public:
     const wxIcon &GetIcon() const
         { return m_icon; }
     void SetData( wxClientData *data )
-        { if (m_data) delete m_data; m_data = data; }
+        { delete m_data; m_data = data; }
     wxClientData *GetData() const
         { return m_data; }
 

@@ -5777,7 +5777,7 @@ void wxWindowGTK::SetDropTarget( wxDropTarget *dropTarget )
 
     if (m_dropTarget) m_dropTarget->GtkUnregisterWidget( dnd_widget );
 
-    if (m_dropTarget) delete m_dropTarget;
+    delete m_dropTarget;
     m_dropTarget = dropTarget;
 
     if (m_dropTarget) m_dropTarget->GtkRegisterWidget( dnd_widget );

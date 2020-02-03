@@ -757,8 +757,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                 cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);
-                if (str)
-                    delete str;
+                delete str;
             }
         }
         if (tag.GetName() == wxT("MAP"))
