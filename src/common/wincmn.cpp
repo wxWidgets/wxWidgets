@@ -3493,7 +3493,7 @@ wxWindow *wxWindowBase::DoGetSibling(WindowOrder order) const
                     wxT("GetPrev/NextSibling() don't work for TLWs!") );
 
     wxWindowList& siblings = GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator i = siblings.Find(this);
+    wxWindowList::compatibility_iterator i = siblings.Find(static_cast<const wxWindow*>(this));
     wxCHECK_MSG( i, NULL, wxT("window not a child of its parent?") );
 
     if ( order == OrderBefore )
