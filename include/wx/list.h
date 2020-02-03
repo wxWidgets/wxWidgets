@@ -71,7 +71,7 @@ class wxList_SortFunction
 public:
     wxList_SortFunction(wxSortCompareFunction f) : m_f(f) { }
     bool operator()(const T& i1, const T& i2)
-      { return m_f((T*)&i1, (T*)&i2) < 0; }
+      { return m_f(&i1, &i2) < 0; }
 private:
     wxSortCompareFunction m_f;
 };
