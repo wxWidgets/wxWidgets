@@ -65,7 +65,7 @@ public:
                      underlined, face, encoding);
     }
 
-    wxFont(const wxNativeFontInfo& info, WXHFONT hFont = 0)
+    wxFont(const wxNativeFontInfo& info, WXHFONT hFont = NULL)
     {
         Create(info, hFont);
     }
@@ -90,7 +90,7 @@ public:
                                              encoding));
     }
 
-    bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
+    bool Create(const wxNativeFontInfo& info, WXHFONT hFont = NULL);
 
     virtual ~wxFont();
 

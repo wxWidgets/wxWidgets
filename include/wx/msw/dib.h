@@ -73,11 +73,11 @@ public:
     // create a bitmap compatible with the given HDC (or screen by default) and
     // return its handle, the caller is responsible for freeing it (using
     // DeleteObject())
-    HBITMAP CreateDDB(HDC hdc = 0) const;
+    HBITMAP CreateDDB(HDC hdc = NULL) const;
 
     // get the handle from the DIB and reset it, i.e. this object won't destroy
     // the DIB after this (but the caller should do it)
-    HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = 0; return hbmp; }
+    HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = NULL; return hbmp; }
 
 #if defined(__WXMSW__) && wxUSE_PALETTE
     // create a palette for this DIB (always a trivial/default one for 24bpp)
@@ -92,7 +92,7 @@ public:
     // ---------
 
     // return true if DIB was successfully created, false otherwise
-    bool IsOk() const { return m_handle != 0; }
+    bool IsOk() const { return m_handle != NULL; }
 
     // get the bitmap size
     wxSize GetSize() const { DoGetObject(); return wxSize(m_width, m_height); }
@@ -121,7 +121,7 @@ public:
     // a plain DIB or a DIB section (in which case the last parameter must be
     // non NULL)
     static HBITMAP ConvertToBitmap(const BITMAPINFO *pbi,
-                                   HDC hdc = 0,
+                                   HDC hdc = NULL,
                                    const void *bits = NULL);
 
     // create a plain DIB (not a DIB section) from a DDB, the caller is
@@ -242,7 +242,7 @@ private:
 inline
 void wxDIB::Init()
 {
-    m_handle = 0;
+    m_handle = NULL;
     m_ownsHandle = true;
 
     m_data = NULL;

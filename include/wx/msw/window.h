@@ -453,7 +453,7 @@ public:
     // The brush returned from here must remain valid at least until the next
     // event loop iteration. Returning 0, as is done by default, indicates
     // there is no custom background brush.
-    virtual WXHBRUSH MSWGetCustomBgBrush() { return 0; }
+    virtual WXHBRUSH MSWGetCustomBgBrush() { return NULL; }
 
     // this function should return the brush to paint the children controls
     // background or 0 if this window doesn't impose any particular background

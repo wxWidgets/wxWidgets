@@ -1327,7 +1327,7 @@ public:
             : m_dc(thdc.m_dc),
               m_hdc(thdc.m_hdc)
         {
-            const_cast<TempHDC&>(thdc).m_hdc = 0;
+            const_cast<TempHDC&>(thdc).m_hdc = NULL;
         }
 
         ~TempHDC()

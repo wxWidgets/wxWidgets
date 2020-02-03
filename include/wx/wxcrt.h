@@ -858,21 +858,20 @@ template<> struct wxStrtoxCharType<std::nullptr_t>
 template<typename T>
 inline double wxStrtod(const wxString& nptr, T endptr)
 {
-    // Explicit comparison with 0 required when using T=nullptr with MSVS 2012.
-    if (endptr != 0)
+    if (!endptr)
     {
-        // note that it is important to use c_str() here and not mb_str() or
-        // wc_str(), because we store the pointer into (possibly converted)
-        // buffer in endptr and so it must be valid even when wxStrtod() returns
-        typedef typename wxStrtoxCharType<T>::Type CharType;
-        return wxStrtod((CharType)nptr.c_str(),
-                        wxStrtoxCharType<T>::AsPointer(endptr));
+        // when we don't care about endptr, use the string representation that
+        // doesn't require any conversion (it doesn't matter for this function
+        // even if its UTF-8):
+        wxStringCharType** p = NULL;
+        return wxStrtod(nptr.wx_str(), p);
     }
-    // when we don't care about endptr, use the string representation that
-    // doesn't require any conversion (it doesn't matter for this function
-    // even if its UTF-8):
-    wxStringCharType** p = NULL;
-    return wxStrtod(nptr.wx_str(), p);
+    // note that it is important to use c_str() here and not mb_str() or
+    // wc_str(), because we store the pointer into (possibly converted)
+    // buffer in endptr and so it must be valid even when wxStrtod() returns
+    typedef typename wxStrtoxCharType<T>::Type CharType;
+    return wxStrtod((CharType)nptr.c_str(),
+                    wxStrtoxCharType<T>::AsPointer(endptr));
 }
 template<typename T>
 inline double wxStrtod(const wxCStrData& nptr, T endptr)
@@ -891,15 +890,15 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
     template<typename T>                                                      \
     inline rettype name(const wxString& nptr, T endptr, int base)             \
     {                                                                         \
-        if (endptr)                                                           \
+        if (!endptr)                                                          \
         {                                                                     \
-            typedef typename wxStrtoxCharType<T>::Type CharType;              \
-            return name((CharType)nptr.c_str(),                               \
-                        wxStrtoxCharType<T>::AsPointer(endptr),               \
-                        base);                                                \
+            wxStringCharType** p = NULL;                                      \
+            return name(nptr.wx_str(), p, base);                              \
         }                                                                     \
-        wxStringCharType** p = NULL;                                          \
-        return name(nptr.wx_str(), p, base);                                  \
+        typedef typename wxStrtoxCharType<T>::Type CharType;                  \
+        return name((CharType)nptr.c_str(),                                   \
+                    wxStrtoxCharType<T>::AsPointer(endptr),                   \
+                    base);                                                    \
     }                                                                         \
     template<typename T>                                                      \
     inline rettype name(const wxCStrData& nptr, T endptr, int base)           \

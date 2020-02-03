@@ -598,7 +598,7 @@ public:
 
 protected:
     // exits from the current thread - can be called only from this thread
-    void Exit(ExitCode exitcode = 0);
+    void Exit(ExitCode exitcode = NULL);
 
     // entry point for the thread - called by Run() and executes in the context
     // of this thread.

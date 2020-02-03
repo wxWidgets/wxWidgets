@@ -709,7 +709,7 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(0); }
+    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(NULL); }
     virtual int GetCountPerPage() const { return wxNOT_FOUND; }
 
     // Currently focused column of the current item or NULL if no column has focus

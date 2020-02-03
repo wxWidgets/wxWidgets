@@ -162,7 +162,8 @@ protected:
     // implicitly convertible to HANDLE, which is a pointer.
     static HANDLE InvalidHandle()
     {
-        return reinterpret_cast<HANDLE>(INVALID_VALUE);
+        wxUIntPtr h = INVALID_VALUE;
+        return reinterpret_cast<HANDLE>(h);
     }
 
     void DoClose()
@@ -449,7 +450,7 @@ private:
 class MemoryHDC
 {
 public:
-    MemoryHDC(HDC hdc = 0) { m_hdc = ::CreateCompatibleDC(hdc); }
+    MemoryHDC(HDC hdc = NULL) { m_hdc = ::CreateCompatibleDC(hdc); }
    ~MemoryHDC() { ::DeleteDC(m_hdc); }
 
     operator HDC() const { return m_hdc; }
@@ -483,7 +484,7 @@ public:
     ~SelectInHDC() { if ( m_hdc ) ::SelectObject(m_hdc, m_hgdiobj); }
 
     // return true if the object was successfully selected
-    operator bool() const { return m_hgdiobj != 0; }
+    operator bool() const { return m_hgdiobj != NULL; }
 
 private:
     HDC m_hdc;
@@ -578,7 +579,7 @@ class MonoBitmap : public AutoHBITMAP
 {
 public:
     MonoBitmap(int w, int h)
-        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, 0))
+        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, NULL))
     {
     }
 };
