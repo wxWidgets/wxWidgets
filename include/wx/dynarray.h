@@ -391,7 +391,7 @@ public:
 
     void Insert(const T* pItem, size_t uiIndex)
     {
-        base::insert(this->begin() + uiIndex, pItem);
+        base::insert(this->begin() + uiIndex, const_cast<T*>(pItem));
     }
 
     void Empty() { DoEmpty(); base::clear(); }
