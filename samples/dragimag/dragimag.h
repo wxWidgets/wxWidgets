@@ -50,7 +50,7 @@ public:
 //// Operations
 
     // Tile the bitmap
-    bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
+    bool TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap);
 
 //// Accessors
     const wxBitmap& GetBackgroundBitmap() const { return m_background; }
