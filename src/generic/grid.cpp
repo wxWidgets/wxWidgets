@@ -114,6 +114,9 @@ const int DRAG_SENSITIVITY = 3;
 // the space between the cell edge and the checkbox mark
 const int GRID_CELL_CHECKBOX_MARGIN = 2;
 
+// the margin between a cell vertical line and a cell text
+const int GRID_TEXT_MARGIN = 1;
+
 } // anonymous namespace
 
 #include "wx/arrimpl.cpp"
@@ -6747,9 +6750,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
     {
         case wxALIGN_BOTTOM:
             if ( textOrientation == wxHORIZONTAL )
-                y = rect.y + (rect.height - textHeight - 1);
+                y = rect.y + (rect.height - textHeight - GRID_TEXT_MARGIN);
             else
-                x = rect.x + rect.width - textWidth;
+                x = rect.x + (rect.width - textWidth - GRID_TEXT_MARGIN);
             break;
 
         case wxALIGN_CENTRE:
@@ -6762,9 +6765,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
         case wxALIGN_TOP:
         default:
             if ( textOrientation == wxHORIZONTAL )
-                y = rect.y + 1;
+                y = rect.y + GRID_TEXT_MARGIN;
             else
-                x = rect.x + 1;
+                x = rect.x + GRID_TEXT_MARGIN;
             break;
     }
 
@@ -6788,9 +6791,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
         {
             case wxALIGN_RIGHT:
                 if ( textOrientation == wxHORIZONTAL )
-                    x = rect.x + (rect.width - lineWidth - 1);
+                    x = rect.x + (rect.width - lineWidth - GRID_TEXT_MARGIN);
                 else
-                    y = rect.y + lineWidth + 1;
+                    y = rect.y + lineWidth + GRID_TEXT_MARGIN;
                 break;
 
             case wxALIGN_CENTRE:
@@ -6803,9 +6806,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
             case wxALIGN_LEFT:
             default:
                 if ( textOrientation == wxHORIZONTAL )
-                    x = rect.x + 1;
+                    x = rect.x + GRID_TEXT_MARGIN;
                 else
-                    y = rect.y + rect.height - 1;
+                    y = rect.y + rect.height - GRID_TEXT_MARGIN;
                 break;
         }
 
@@ -6831,16 +6834,13 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
 {
     attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
-    // The text will be displaced in final wxGrid::DrawTextRectangle function.
-    const int textMargin = 2;
-
     // This does nothing if there is no need to ellipsize.
     const wxString& ellipsizedText = wxControl::Ellipsize
                                      (
                                          text,
                                          dc,
                                          attr.GetFitMode().GetEllipsizeMode(),
-                                         rect.GetWidth() - textMargin,
+                                         rect.GetWidth() - 2 * GRID_TEXT_MARGIN,
                                          wxELLIPSIZE_FLAGS_NONE
                                      );
 
