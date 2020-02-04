@@ -3279,8 +3279,6 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
     wxListHeaderData *column = node->GetData();
 
-    size_t count = GetItemCount();
-
     if ( width == wxLIST_AUTOSIZE_USEHEADER || width == wxLIST_AUTOSIZE )
     {
         wxListCtrlMaxWidthCalculator calculator(this, col);
@@ -3297,7 +3295,8 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             size_t first_visible, last_visible;
             GetVisibleLinesRange(&first_visible, &last_visible);
 
-            calculator.ComputeBestColumnWidth(count, first_visible, last_visible);
+            calculator.ComputeBestColumnWidth(GetItemCount(),
+                                              first_visible, last_visible);
             pWidthInfo->nMaxWidth = calculator.GetMaxWidth();
             pWidthInfo->bNeedsUpdate = false;
         }
@@ -3306,17 +3305,26 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             calculator.UpdateWithWidth(pWidthInfo->nMaxWidth);
         }
 
-        // expand the last column to fit the client size
-        // only for AUTOSIZE_USEHEADER to mimic MSW behaviour
-        int margin = 0;
-        if ( (width == wxLIST_AUTOSIZE_USEHEADER) && (col == GetColumnCount() - 1) )
+        width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
+
+        if ( col == 0 && HasCheckBoxes() )
         {
-            margin = GetClientSize().GetX();
-            for ( int i = 0; i < col && margin > 0; ++i )
-                margin -= m_columns.Item(i)->GetData()->GetWidth();
+            // also account for the space needed by the checkbox
+            width += wxRendererNative::Get().GetCheckBoxSize(this).x
+                        + 2*MARGIN_AROUND_CHECKBOX;
         }
 
-        width = wxMax(margin, calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN);
+        // expand the last column to fit the client size
+        // only for AUTOSIZE_USEHEADER to mimic MSW behaviour
+        if ( (width == wxLIST_AUTOSIZE_USEHEADER) && (col == GetColumnCount() - 1) )
+        {
+            int margin = GetClientSize().GetX();
+            for ( int i = 0; i < col && margin > 0; ++i )
+                margin -= m_columns.Item(i)->GetData()->GetWidth();
+
+            if ( margin > width )
+                width = margin;
+        }
     }
 
     column->SetWidth( width );
