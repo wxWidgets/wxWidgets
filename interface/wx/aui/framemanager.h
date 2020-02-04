@@ -1004,9 +1004,6 @@ public:
     /// proportion while docked
     int dock_proportion;
 
-    /// buttons on the pane
-    wxAuiPaneButtonArray buttons;
-
     /// current rectangle (populated by wxAUI)
     wxRect rect;
 
@@ -1175,16 +1172,8 @@ public:
     int orientation;         // orientation (either wxHORIZONTAL or wxVERTICAL)
     wxAuiDockInfo* dock;        // which dock the item is associated with
     wxAuiPaneInfo* pane;        // which pane the item is associated with
-    wxAuiPaneButton* button;    // which pane button the item is associated with
+    int button;              // which pane button the item is associated with
     wxSizer* cont_sizer;     // the part's containing sizer
     wxSizerItem* sizer_item; // the sizer item of the part
     wxRect rect;             // client coord rectangle of the part itself
-};
-
-
-
-class wxAuiPaneButton
-{
-public:
-    int button_id;        // id of the button (e.g. buttonClose)
 };

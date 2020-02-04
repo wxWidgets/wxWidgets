@@ -148,6 +148,9 @@ Changes in behaviour which may result in build errors
 
 - wxGridCellAttr ctor taking wxGridCellAttr pointer is now explicit.
 
+- wxAuiPaneButton doesn't exist any more, it was never supposed to be used
+  outside of the library, but if you did use, just use "int" button instead.
+
 
 3.1.4: (released ????-??-??)
 ----------------------------
