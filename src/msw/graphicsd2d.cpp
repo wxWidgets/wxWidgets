@@ -1890,7 +1890,7 @@ void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
     // constraints this can be fully done only if open figure was empty.
     // So, Transform() can be safely called if path doesn't contain the open
     // sub-path or if open sub-path is empty.
-    
+
     // Close current geometry.
     Flush();
 
@@ -2427,15 +2427,15 @@ public:
         const wxDouble y2;
         const wxGraphicsGradientStops stops;
         const wxGraphicsMatrix matrix;
-        LinearGradientInfo(wxDouble& x1_, wxDouble& y1_, 
-                           wxDouble& x2_, wxDouble& y2_, 
+        LinearGradientInfo(wxDouble& x1_, wxDouble& y1_,
+                           wxDouble& x2_, wxDouble& y2_,
                            const wxGraphicsGradientStops& stops_,
                            const wxGraphicsMatrix& matrix_)
             : x1(x1_), y1(y1_), x2(x2_), y2(y2_), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
-                                           wxDouble& x2, wxDouble& y2, 
+    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1,
+                                           wxDouble& x2, wxDouble& y2,
                                            const wxGraphicsGradientStops& stops,
                                            const wxGraphicsMatrix& matrix)
         : m_linearGradientInfo(x1, y1, x2, y2, stops, matrix) {}
@@ -2444,23 +2444,21 @@ protected:
     void DoAcquireResource() wxOVERRIDE
     {
         wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops, GetContext());
-        ID2D1LinearGradientBrush  *linearGradientBrush;
 
         HRESULT hr = GetContext()->CreateLinearGradientBrush(
             D2D1::LinearGradientBrushProperties(
                 D2D1::Point2F(m_linearGradientInfo.x1, m_linearGradientInfo.y1),
                 D2D1::Point2F(m_linearGradientInfo.x2, m_linearGradientInfo.y2)),
             helper.GetGradientStopCollection(),
-            &linearGradientBrush);
+            &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
 
         if (! m_linearGradientInfo.matrix.IsNull())
         {
             D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_linearGradientInfo.matrix)->GetMatrix3x2F();
             matrix.Invert();
-            linearGradientBrush->SetTransform(matrix);
+            m_nativeResource->SetTransform(matrix);
         }
-        m_nativeResource = linearGradientBrush;
     }
 private:
     const LinearGradientInfo m_linearGradientInfo;
@@ -2478,17 +2476,17 @@ public:
         const wxGraphicsGradientStops stops;
         const wxGraphicsMatrix matrix;
 
-        RadialGradientInfo(wxDouble x1_, wxDouble y1_, 
-                           wxDouble x2_, wxDouble y2_, 
-                           wxDouble r, 
+        RadialGradientInfo(wxDouble x1_, wxDouble y1_,
+                           wxDouble x2_, wxDouble y2_,
+                           wxDouble r,
                            const wxGraphicsGradientStops& stops_,
                            const wxGraphicsMatrix& matrix_)
             : x1(x1_), y1(y1_), x2(x2_), y2(y2_), radius(r), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
-                                           wxDouble& x2, wxDouble& y2, 
-                                           wxDouble& r, 
+    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1,
+                                           wxDouble& x2, wxDouble& y2,
+                                           wxDouble& r,
                                            const wxGraphicsGradientStops& stops,
                                            const wxGraphicsMatrix& matrix)
         : m_radialGradientInfo(x1, y1, x2, y2, r, stops, matrix) {}
@@ -2497,7 +2495,6 @@ protected:
     void DoAcquireResource() wxOVERRIDE
     {
         wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
-        ID2D1RadialGradientBrush *radialGradientBrush;
 
         wxDouble xo = m_radialGradientInfo.x1 - m_radialGradientInfo.x2;
         wxDouble yo = m_radialGradientInfo.y1 - m_radialGradientInfo.y2;
@@ -2508,16 +2505,15 @@ protected:
                 D2D1::Point2F(xo, yo),
                 m_radialGradientInfo.radius, m_radialGradientInfo.radius),
             helper.GetGradientStopCollection(),
-            &radialGradientBrush);
+            &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
 
         if (! m_radialGradientInfo.matrix.IsNull())
         {
             D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_radialGradientInfo.matrix)->GetMatrix3x2F();
             matrix.Invert();
-            radialGradientBrush->SetTransform(matrix);
+            m_nativeResource->SetTransform(matrix);
         }
-        m_nativeResource = radialGradientBrush;
     }
 
 private:
@@ -2535,14 +2531,14 @@ public:
 
     wxD2DBrushData(wxGraphicsRenderer* renderer);
 
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1, 
-                                   wxDouble x2, wxDouble y2, 
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
                                    const wxGraphicsGradientStops& stops,
                                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
-    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY, 
-                                   wxDouble endX, wxDouble endY, 
-                                   wxDouble radius, 
+    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                   wxDouble endX, wxDouble endY,
+                                   wxDouble radius,
                                    const wxGraphicsGradientStops& stops,
                                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 

@@ -745,7 +745,7 @@ wxGDIPlusPenBrushBaseData::CreateLinearGradientBrush(
     }
 
     SetGradientStops(brush, stops);
-    m_brush = brush;    
+    m_brush = brush;
 }
 
 void
@@ -769,7 +769,7 @@ wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
     brush->SetSurroundColors(&col, &count);
 
     // TODO: There doesn't seem to be an equivallent for SetWrapMode, so
-    // the area outside of the gradient's radius is not getting painted. 
+    // the area outside of the gradient's radius is not getting painted.
 
     // Apply the matrix if there is one
     if ( !matrix.IsNull() )
