@@ -604,22 +604,38 @@ void GridTestCase::Selection()
 
 void GridTestCase::SelectEmptyGrid()
 {
-    SECTION("No rows")
+    SECTION("Delete rows/columns")
     {
-        m_grid->DeleteRows(0, 10);
-        REQUIRE( m_grid->GetNumberRows() == 0 );
-
-        // Should not fail an assertion.
-        m_grid->SelectCol(1);
+        SECTION("No rows")
+        {
+            m_grid->DeleteRows(0, 10);
+            REQUIRE( m_grid->GetNumberRows() == 0 );
+        }
+        SECTION("No columns")
+        {
+            m_grid->DeleteCols(0, 2);
+            REQUIRE( m_grid->GetNumberCols() == 0 );
+        }
     }
 
-    SECTION("No columns")
+    SECTION("Select")
     {
-        m_grid->DeleteCols(0, 2);
-        REQUIRE( m_grid->GetNumberCols() == 0 );
-
-        // Should not fail an assertion.
-        m_grid->SelectRow(1);
+        SECTION("Move right")
+        {
+            m_grid->MoveCursorRight(true);
+        }
+        SECTION("Move down")
+        {
+            m_grid->MoveCursorDown(true);
+        }
+        SECTION("Select row")
+        {
+            m_grid->SelectRow(1);
+        }
+        SECTION("Select column")
+        {
+            m_grid->SelectCol(1);
+        }
     }
 
     CHECK( m_grid->GetSelectionBlockTopLeft().Count() == 0 );
