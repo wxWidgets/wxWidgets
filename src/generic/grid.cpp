@@ -5563,15 +5563,80 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                GoToCell(event.ControlDown() ? 0
-                                             : m_currentCellCoords.GetRow(),
-                         0);
-                break;
-
             case WXK_END:
-                GoToCell(event.ControlDown() ? m_numRows - 1
-                                             : m_currentCellCoords.GetRow(),
-                         m_numCols - 1);
+                if ( m_currentCellCoords != wxGridNoCellCoords )
+                {
+                    const bool goToBeginning = event.GetKeyCode() == WXK_HOME;
+
+                    // Find the first or last visible row if we need to go to it
+                    // (without Control, we keep the current row).
+                    int row;
+                    if ( event.ControlDown() )
+                    {
+                        if ( goToBeginning )
+                        {
+                            for ( row = 0; row < m_numRows; ++row )
+                            {
+                                if ( IsRowShown(row) )
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            for ( row = m_numRows - 1; row >= 0; --row )
+                            {
+                                if ( IsRowShown(row) )
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // If we're selecting, continue in the same row, which
+                        // may well be different from the one in which we
+                        // started selecting.
+                        if ( event.ShiftDown() &&
+                                m_selectedBlockCorner != wxGridNoCellCoords )
+                        {
+                            row = m_selectedBlockCorner.GetRow();
+                        }
+                        else // Just use the current row.
+                        {
+                            row = m_currentCellCoords.GetRow();
+                        }
+                    }
+
+                    // Also find the last or first visible column in any case.
+                    int col;
+                    if ( goToBeginning )
+                    {
+                        for ( col = 0; col < m_numCols; ++col )
+                        {
+                            if ( IsColShown(GetColAt(col)) )
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        for ( col = m_numCols - 1; col >= 0; --col )
+                        {
+                            if ( IsColShown(GetColAt(col)) )
+                                break;
+                        }
+                    }
+
+                    if ( event.ShiftDown() )
+                    {
+                        UpdateBlockBeingSelected(m_currentCellCoords,
+                                                 wxGridCellCoords(row, col));
+                        MakeCellVisible(row, col);
+                    }
+                    else
+                    {
+                        ClearSelection();
+                        GoToCell(row, GetColAt(col));
+                    }
+                }
                 break;
 
             case WXK_PAGEUP:
@@ -5822,11 +5887,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 }
 
 void
-wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
-                                 int bottomRow, int rightCol)
+wxGrid::UpdateBlockBeingSelected(int blockStartRow, int blockStartCol,
+                                 int blockEndRow, int blockEndCol)
 {
+    m_selectedBlockCorner = wxGridCellCoords(blockEndRow, blockEndCol);
     MakeCellVisible(m_selectedBlockCorner);
-    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
+
+    int topRow = wxMin(blockStartRow, blockEndRow);
+    int leftCol = wxMin(blockStartCol, blockEndCol);
+    int bottomRow = wxMax(blockStartRow, blockEndRow);
+    int rightCol = wxMax(blockStartCol, blockEndCol);
 
     if ( m_selection )
     {
@@ -5863,9 +5933,6 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 return;
         }
     }
-
-    EnsureFirstLessThanSecond(topRow, bottomRow);
-    EnsureFirstLessThanSecond(leftCol, rightCol);
 
     wxGridCellCoords updateTopLeft = wxGridCellCoords(topRow, leftCol),
                      updateBottomRight = wxGridCellCoords(bottomRow, rightCol);
