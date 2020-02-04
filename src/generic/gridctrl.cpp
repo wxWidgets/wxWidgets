@@ -591,9 +591,22 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     // erase only this cells background, overflow cells should have been erased
     wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
 
-    if (attr.GetOverflow())
+    int hAlign, vAlign;
+    // process overflow only if the overflow flag is set and the cell is left
+    // aligned
+    bool processOverflow;
+    if ( attr.GetOverflow() )
     {
-        int hAlign, vAlign;
+        attr.GetAlignment(&hAlign, &vAlign);
+        processOverflow = hAlign == wxALIGN_LEFT;
+    }
+    else
+    {
+        processOverflow = false;
+    }
+
+    if ( processOverflow )
+    {
         attr.GetAlignment(&hAlign, &vAlign);
 
         int overflowCols = 0;

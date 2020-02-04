@@ -6088,6 +6088,12 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                     {
                         if (GetCellOverflow(row + l, j))
                         {
+                            int hAlign;
+                            GetCellAlignment(row + l, j, &hAlign, NULL);
+                            // overflow supported only for left aligned cells
+                            if ( hAlign != wxALIGN_LEFT )
+                                break;
+
                             wxGridCellCoords cell(row + l, j);
                             bool marked = false;
 
