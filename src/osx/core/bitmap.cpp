@@ -1709,6 +1709,44 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler);
 
 #if wxOSX_USE_COCOA
 
+class WXDLLEXPORT wxICNSHandler: public wxBitmapHandler
+{
+    wxDECLARE_DYNAMIC_CLASS(wxICNSHandler);
+
+public:
+    inline wxICNSHandler()
+    {
+        SetName(wxT("icns file"));
+        SetExtension("icns");
+        SetType(wxBITMAP_TYPE_ICON);
+    }
+
+    bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth,
+                          int desiredHeight) wxOVERRIDE
+    {
+        wxCFRef<CFURLRef> iconURL;
+        wxCFStringRef filePath(name);
+
+        iconURL.reset(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, filePath, kCFURLPOSIXPathStyle, false));
+
+        WXImage img = wxOSXGetNSImageFromCFURL(iconURL);
+
+        if ( img )
+        {
+            bitmap->Create(img);
+            return true;
+        }
+
+        return wxBitmapHandler::LoadFile( bitmap, name, type, desiredWidth, desiredHeight);
+    }
+
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxICNSHandler, wxBitmapHandler);
+
 class WXDLLEXPORT wxICNSResourceHandler: public wxBundleResourceHandler
 {
     wxDECLARE_DYNAMIC_CLASS(wxICNSResourceHandler);
@@ -1915,6 +1953,7 @@ void wxBitmap::InitStandardHandlers()
 {
 #if wxOSX_USE_COCOA_OR_CARBON
     // no icns on iOS
+    AddHandler( new wxICNSHandler );
     AddHandler( new wxICNSResourceHandler ) ;
 #endif
     AddHandler( new wxPNGResourceHandler );
