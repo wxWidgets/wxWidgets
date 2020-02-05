@@ -234,15 +234,20 @@ TEST_CASE("CRT::Strnlen", "[crt][strnlen]")
     CHECK( wxStrnlen(L"1234" L"\0" L"5678", 12) == 4 );
 }
 
-TEST_CASE("CRT::Strtod", "[crt][strtod]")
+TEST_CASE("CRT::Strtox", "[crt][strtod][strtol]")
 {
     const wxString s = "123@";
     const double d = 123.0;
+    const long l = 123;
 
     SECTION("char")
     {
         char* end = NULL;
         CHECK( wxStrtod(s, &end) == d );
+        REQUIRE( end );
+        CHECK( *end == '@' );
+
+        CHECK( wxStrtol(s, &end, 10) == l );
         REQUIRE( end );
         CHECK( *end == '@' );
     }
@@ -253,6 +258,10 @@ TEST_CASE("CRT::Strtod", "[crt][strtod]")
         CHECK( wxStrtod(s, &end) == d );
         REQUIRE( end );
         CHECK( *end == L'@' );
+
+        CHECK( wxStrtol(s, &end, 10) == l );
+        REQUIRE( end );
+        CHECK( *end == L'@' );
     }
 
     SECTION("other")
@@ -260,6 +269,7 @@ TEST_CASE("CRT::Strtod", "[crt][strtod]")
         CHECK( wxStrtod(s, 0) == d );
 #ifdef wxHAS_NULLPTR_T
         CHECK( wxStrtod(s, nullptr) == d );
+        CHECK( wxStrtol(s, nullptr, 10) == l );
 #endif
     }
 }

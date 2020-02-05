@@ -844,16 +844,6 @@ template<> struct wxStrtoxCharType<int>
         return NULL;
     }
 };
-#ifdef wxHAS_NULLPTR_T
-template<> struct wxStrtoxCharType<std::nullptr_t>
-{
-    typedef const char* Type;
-    static char** AsPointer(std::nullptr_t)
-    {
-        return nullptr;
-    }
-};
-#endif
 
 template<typename T>
 inline double wxStrtod(const wxString& nptr, T endptr)
@@ -876,6 +866,25 @@ inline double wxStrtod(const wxString& nptr, T endptr)
 template<typename T>
 inline double wxStrtod(const wxCStrData& nptr, T endptr)
     { return wxStrtod(nptr.AsString(), endptr); }
+
+#ifdef wxHAS_NULLPTR_T
+
+inline double wxStrtod(const wxString& nptr, nullptr_t)
+    { return wxStrtod(nptr.wx_str(), static_cast<wxStringCharType**>(NULL)); };
+inline double wxStrtod(const wxCStrData& nptr, nullptr_t)
+    { return wxStrtod(nptr.AsString(), static_cast<wxStringCharType**>(NULL)); };
+
+#define WX_STRTOX_DEFINE_NULLPTR_OVERLOADS(rettype, name)                     \
+    inline rettype name(const wxString& nptr, nullptr_t, int base)            \
+        { return name(nptr.wx_str(), static_cast<wxStringCharType**>(NULL),   \
+                      base); };                                               \
+    inline rettype name(const wxCStrData& nptr, nullptr_t, int base)          \
+        { return name(nptr.AsString(), static_cast<wxStringCharType**>(NULL), \
+                      base); };
+
+#else // !wxHAS_NULLPTR_T
+#define WX_STRTOX_DEFINE_NULLPTR_OVERLOADS(rettype, name)
+#endif // wxHAS_NULLPTR_T/!wxHAS_NULLPTR_T
 
 
 #define WX_STRTOX_FUNC(rettype, name, implA, implW)                           \
@@ -902,7 +911,8 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
     }                                                                         \
     template<typename T>                                                      \
     inline rettype name(const wxCStrData& nptr, T endptr, int base)           \
-        { return name(nptr.AsString(), endptr, base); }
+        { return name(nptr.AsString(), endptr, base); }                       \
+    WX_STRTOX_DEFINE_NULLPTR_OVERLOADS(rettype, name)
 
 WX_STRTOX_FUNC(long, wxStrtol, wxCRT_StrtolA, wxCRT_StrtolW)
 WX_STRTOX_FUNC(unsigned long, wxStrtoul, wxCRT_StrtoulA, wxCRT_StrtoulW)
