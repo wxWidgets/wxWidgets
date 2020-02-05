@@ -37,11 +37,11 @@ public:
         m_outputVarName = wxString::Format("__wxOut%i", (*runScriptCount)++);
 
         // Adds one escape level.
-        const char *s_szCharsNeededToBeEscaped = "\\\"\n\r\v\t\b\f";
+        const char *charsNeededToBeEscaped = "\\\"\n\r\v\t\b\f";
         for (
-            size_t pos = m_escapedCode.find_first_of(s_szCharsNeededToBeEscaped, 0);
+            size_t pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, 0);
             pos != wxString::npos;
-            pos = m_escapedCode.find_first_of(s_szCharsNeededToBeEscaped, pos)
+            pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, pos)
         ) {
             switch (m_escapedCode[pos].GetValue())
             {
