@@ -338,6 +338,13 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
             &result));
         CHECK(result == "\"2016-10-08T21:30:40.000Z\"");
 
+        // Check for C++-style comments which used to be broken.
+        CHECK(m_browser->RunScript("function f() {\n"
+                                   "    // A C++ style comment\n"
+                                   "    return 17;\n"
+                                   "}f();", &result));
+        CHECK(result == "17");
+
         // Check for errors too.
         CHECK(!m_browser->RunScript("syntax(error"));
         CHECK(!m_browser->RunScript("syntax(error", &result));
