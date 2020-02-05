@@ -291,8 +291,8 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
         CHECK(result == _("Hello World!"));
 
-        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\vb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
-        CHECK(result == _("a\'aa\n\rb\vb\tb\\ccc\"ddd\b\fx"));
+        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
+        CHECK(result == _("a\'aa\n\rb\tb\\ccc\"ddd\b\fx"));
 
         CHECK(m_browser->RunScript("function f(a){return a;}f(123);", &result));
         CHECK(wxAtoi(result) == 123);
