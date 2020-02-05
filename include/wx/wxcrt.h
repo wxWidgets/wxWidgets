@@ -869,16 +869,16 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
 
 #ifdef wxHAS_NULLPTR_T
 
-inline double wxStrtod(const wxString& nptr, nullptr_t)
+inline double wxStrtod(const wxString& nptr, std::nullptr_t)
     { return wxStrtod(nptr.wx_str(), static_cast<wxStringCharType**>(NULL)); };
-inline double wxStrtod(const wxCStrData& nptr, nullptr_t)
+inline double wxStrtod(const wxCStrData& nptr, std::nullptr_t)
     { return wxStrtod(nptr.AsString(), static_cast<wxStringCharType**>(NULL)); };
 
 #define WX_STRTOX_DEFINE_NULLPTR_OVERLOADS(rettype, name)                     \
-    inline rettype name(const wxString& nptr, nullptr_t, int base)            \
+    inline rettype name(const wxString& nptr, std::nullptr_t, int base)       \
         { return name(nptr.wx_str(), static_cast<wxStringCharType**>(NULL),   \
                       base); };                                               \
-    inline rettype name(const wxCStrData& nptr, nullptr_t, int base)          \
+    inline rettype name(const wxCStrData& nptr, std::nullptr_t, int base)     \
         { return name(nptr.AsString(), static_cast<wxStringCharType**>(NULL), \
                       base); };
 
