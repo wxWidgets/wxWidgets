@@ -1234,6 +1234,18 @@ public:
      */
     bool GetOverflow() const;
 
+    /**
+        Returns @true if the cell will draw an overflowed text into the
+        neighbouring cells.
+
+        Note that only left aligned cells currenty can overflow. It means that
+        GetFitMode().IsOverflow() should returns true and GetAlignment should
+        returns wxALIGN_LEFT for hAlign parameter.
+
+        @since 3.1.4
+     */
+    bool CanOverflow() const;
+
     wxAttrKind GetKind();
 
 
