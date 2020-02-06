@@ -650,6 +650,10 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                 col_end = grid.GetNumberCols() - 1;
             for (int i = col + cell_cols; i <= col_end; i++)
             {
+                // redraw the cell to update the background
+                wxGridCellCoords coords(row, i);
+                grid.DrawCell(dc, coords);
+
                 clip.width = grid.GetColSize(i) - 1;
                 wxDCClipper clipper(dc, clip);
 
