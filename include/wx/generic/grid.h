@@ -570,6 +570,9 @@ public:
     void GetSize(int *num_rows, int *num_cols) const;
     wxGridFitMode GetFitMode() const;
     bool GetOverflow() const { return GetFitMode().IsOverflow(); }
+    // whether the cell will draw the overflowed text to neighbour cells
+    // currently only left aligned cells can overflow
+    bool CanOverflow() const;
     wxGridCellRenderer *GetRenderer(const wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(const wxGrid* grid, int row, int col) const;
 
