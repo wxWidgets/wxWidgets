@@ -356,7 +356,15 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     // Prevent gtk_init_check() from changing the locale automatically for
     // consistency with the other ports that don't do it. If necessary,
     // wxApp::SetCLocale() may be explicitly called.
-    gtk_disable_setlocale();
+    //
+    // Note that this function generates a warning if it's called more than
+    // once, so avoid them.
+    static bool s_gtkLocalDisabled = false;
+    if ( !s_gtkLocalDisabled )
+    {
+        s_gtkLocalDisabled = true;
+        gtk_disable_setlocale();
+    }
 
 #ifdef __WXGPE__
     init_result = true;  // is there a _check() version of this?
