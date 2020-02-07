@@ -67,6 +67,12 @@ public:
 class wxRibbonButtonBarButtonBase
 {
 public:
+    wxRibbonButtonBarButtonBase()
+    {
+        barButtonImageListPos =
+        barButtonSmallImageListPos = -1;
+    }
+
     wxRibbonButtonBarButtonInstance NewInstance()
     {
         wxRibbonButtonBarButtonInstance i;
@@ -128,8 +134,14 @@ public:
     wxBitmap bitmap_small;
     wxBitmap bitmap_small_disabled;
     wxCoord text_min_width[3];
+
+    // Index of the bitmap in the wxRibbonBar normal image list. Notice that
+    // the disabled bitmap is in the next position, so this one is always even.
     int barButtonImageListPos;
+
+    // Same thing for the small bitmap index in the small image list.
     int barButtonSmallImageListPos;
+
     wxRibbonButtonBarButtonSizeInfo sizes[3];
     wxRibbonButtonBarButtonState min_size_class;
     wxRibbonButtonBarButtonState max_size_class;
@@ -366,11 +378,6 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         base->bitmap_small = wxNullBitmap;
         buttonSmallImageList->Add(base->bitmap_small_disabled);
         base->bitmap_small_disabled = wxNullBitmap;
-    }
-    else
-    {
-        base->barButtonImageListPos = -1;
-        base->barButtonSmallImageListPos = -1;
     }
 
     wxClientDC temp_dc(this);
