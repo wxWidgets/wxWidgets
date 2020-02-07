@@ -213,7 +213,6 @@ protected:
     bool m_layouts_valid;
     bool m_lock_active_state;
     bool m_show_tooltips_for_disabled;
-    wxRibbonBar* m_ownerRibbonBar;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonButtonBar);

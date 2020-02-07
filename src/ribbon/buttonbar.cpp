@@ -350,11 +350,11 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
 
     wxImageList* buttonImageList = NULL;
     wxImageList* buttonSmallImageList = NULL;
-    if (m_ownerRibbonBar)
-        {
-        buttonImageList = m_ownerRibbonBar->GetButtonImageList(m_bitmap_size_large);
-        buttonSmallImageList = m_ownerRibbonBar->GetButtonSmallImageList(m_bitmap_size_small);
-        }
+    if ( wxRibbonBar* const ribbon = GetAncestorRibbonBar() )
+    {
+        buttonImageList = ribbon->GetButtonImageList(m_bitmap_size_large);
+        buttonSmallImageList = ribbon->GetButtonSmallImageList(m_bitmap_size_small);
+    }
     if (base->bitmap_large.IsOk() && buttonImageList)
     {
         base->barButtonImageListPos = buttonImageList->Add(base->bitmap_large);
@@ -880,10 +880,12 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRibbonButtonBarButtonInstance& button = layout->buttons.Item(btn_i);
         wxRibbonButtonBarButtonBase* base = button.base;
         wxRect rect(button.position + m_layout_offset, base->sizes[button.size].size);
-        if (base->barButtonImageListPos != -1 && m_ownerRibbonBar)
+
+        wxRibbonBar* const ribbon = GetAncestorRibbonBar();
+        if ( base->barButtonImageListPos != -1 && ribbon )
         {
-            wxImageList* buttonImageList = m_ownerRibbonBar->GetButtonImageList(m_bitmap_size_large);
-            wxImageList* buttonSmallImageList = m_ownerRibbonBar->GetButtonSmallImageList(m_bitmap_size_small);
+            wxImageList* buttonImageList = ribbon->GetButtonImageList(m_bitmap_size_large);
+            wxImageList* buttonSmallImageList = ribbon->GetButtonSmallImageList(m_bitmap_size_small);
 
             wxBitmap bitmap;
             wxBitmap bitmap_small;
@@ -939,20 +941,6 @@ void wxRibbonButtonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
 {
-    //Our ultimate parent MAY be a ribbon bar, in which case
-    //we can use its image list.
-    m_ownerRibbonBar = NULL;
-    wxWindow* pWin = GetParent();
-    while (pWin)
-    {
-        m_ownerRibbonBar = dynamic_cast<wxRibbonBar*>(pWin);
-        if (m_ownerRibbonBar)
-        {
-            break;
-        }
-        pWin = pWin->GetParent();
-    }
-
     m_bitmap_size_large = wxSize(32, 32);
     m_bitmap_size_small = wxSize(16, 16);
 
