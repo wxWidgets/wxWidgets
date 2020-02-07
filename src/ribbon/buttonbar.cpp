@@ -95,7 +95,8 @@ public:
         barButtonSmallImageListPos = -1;
     }
 
-    void SetBitmaps(wxSize bitmap_size_large,
+    void SetBitmaps(wxRibbonBar* ribbon,
+                    wxSize bitmap_size_large,
                     wxSize bitmap_size_small,
                     const wxBitmap& bitmap_large,
                     const wxBitmap& bitmap_large_disabled,
@@ -103,16 +104,17 @@ public:
                     const wxBitmap& bitmap_small_disabled)
     {
         m_bitmap_large = bitmap_large;
-        if(!m_bitmap_large.IsOk())
+        if(!bitmap_large.IsOk())
         {
             m_bitmap_large = MakeResizedBitmap(m_bitmap_small,
                 bitmap_size_large);
         }
-        else if(m_bitmap_large.GetScaledSize() != bitmap_size_large)
+        else if(bitmap_large.GetScaledSize() != bitmap_size_large)
         {
             m_bitmap_large = MakeResizedBitmap(m_bitmap_large,
                 bitmap_size_large);
         }
+
         m_bitmap_small = bitmap_small;
         if(!m_bitmap_small.IsOk())
         {
@@ -133,6 +135,28 @@ public:
         if(!m_bitmap_small_disabled.IsOk())
         {
             m_bitmap_small_disabled = MakeDisabledBitmap(m_bitmap_small);
+        }
+
+        if ( ribbon )
+        {
+            if ( m_bitmap_large.IsOk() )
+            {
+                wxImageList* const
+                    buttonImageList = ribbon->GetButtonImageList(bitmap_size_large);
+
+                barButtonImageListPos = buttonImageList->Add(m_bitmap_large);
+                m_bitmap_large = wxNullBitmap;
+                buttonImageList->Add(m_bitmap_large_disabled);
+                m_bitmap_large_disabled = wxNullBitmap;
+            }
+
+            wxImageList* const
+                buttonSmallImageList = ribbon->GetButtonSmallImageList(bitmap_size_small);
+
+            barButtonSmallImageListPos = buttonSmallImageList->Add(m_bitmap_small);
+            m_bitmap_small = wxNullBitmap;
+            buttonSmallImageList->Add(m_bitmap_small_disabled);
+            m_bitmap_small_disabled = wxNullBitmap;
         }
     }
 
@@ -412,7 +436,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
     base->id = button_id;
     base->label = label;
-    base->SetBitmaps(m_bitmap_size_large, m_bitmap_size_small,
+    base->SetBitmaps(GetAncestorRibbonBar(), m_bitmap_size_large, m_bitmap_size_small,
                      bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     base->kind = kind;
     base->help_string = help_string;
@@ -422,26 +446,6 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     base->text_min_width[2] = 0;
     base->min_size_class = wxRIBBON_BUTTONBAR_BUTTON_SMALL;
     base->max_size_class = wxRIBBON_BUTTONBAR_BUTTON_LARGE;
-
-    wxImageList* buttonImageList = NULL;
-    wxImageList* buttonSmallImageList = NULL;
-    if ( wxRibbonBar* const ribbon = GetAncestorRibbonBar() )
-    {
-        buttonImageList = ribbon->GetButtonImageList(m_bitmap_size_large);
-        buttonSmallImageList = ribbon->GetButtonSmallImageList(m_bitmap_size_small);
-    }
-    if (base->m_bitmap_large.IsOk() && buttonImageList)
-    {
-        base->barButtonImageListPos = buttonImageList->Add(base->m_bitmap_large);
-        base->m_bitmap_large = wxNullBitmap;
-        buttonImageList->Add(base->m_bitmap_large_disabled);
-        base->m_bitmap_large_disabled = wxNullBitmap;
-
-        base->barButtonSmallImageListPos = buttonSmallImageList->Add(base->m_bitmap_small);
-        base->m_bitmap_small = wxNullBitmap;
-        buttonSmallImageList->Add(base->m_bitmap_small_disabled);
-        base->m_bitmap_small_disabled = wxNullBitmap;
-    }
 
     wxClientDC temp_dc(this);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
@@ -672,7 +676,7 @@ void wxRibbonButtonBar::SetButtonIcon(
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == NULL)
         return;
-    base->SetBitmaps(m_bitmap_size_large, m_bitmap_size_small,
+    base->SetBitmaps(GetAncestorRibbonBar(), m_bitmap_size_large, m_bitmap_size_small,
                      bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     Refresh();
 }
