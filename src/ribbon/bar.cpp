@@ -736,8 +736,6 @@ wxRibbonBar::wxRibbonBar()
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
     m_help_button_hovered = false;
-    m_buttonImageList = NULL;
-    m_buttonSmallImageList = NULL;
 
 }
 
@@ -755,8 +753,10 @@ wxRibbonBar::~wxRibbonBar()
 {
     SetArtProvider(NULL);
 
-    delete m_buttonImageList;
-    delete m_buttonSmallImageList;
+    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    {
+        delete m_image_lists[n];
+    }
 }
 
 bool wxRibbonBar::Create(wxWindow* parent,
@@ -805,29 +805,21 @@ void wxRibbonBar::CommonInit(long style)
     m_bar_hovered = false;
 
     m_ribbon_state = wxRIBBON_BAR_PINNED;
-
-    m_buttonImageList = NULL;
-    m_buttonSmallImageList = NULL;
 }
 
 wxImageList* wxRibbonBar::GetButtonImageList(wxSize size)
 {
-    if ( !m_buttonImageList )
+    for ( size_t n = 0; n < m_image_lists.size(); ++n )
     {
-        m_buttonImageList = new wxImageList(size.GetWidth(), size.GetHeight(),
-                                            /*mask*/false);
+        if ( m_image_lists[n]->GetSize() == size )
+            return m_image_lists[n];
     }
-    return m_buttonImageList;
-}
 
-wxImageList* wxRibbonBar::GetButtonSmallImageList(wxSize size)
-{
-    if ( !m_buttonSmallImageList )
-    {
-        m_buttonSmallImageList = new wxImageList(size.GetWidth(), size.GetHeight(),
-                                                 /*mask*/false);
-    }
-    return m_buttonSmallImageList;
+    wxImageList* const
+        il = new wxImageList(size.GetWidth(), size.GetHeight(), /*mask*/false);
+    m_image_lists.push_back(il);
+
+    return il;
 }
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)

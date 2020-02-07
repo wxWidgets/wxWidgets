@@ -151,7 +151,7 @@ public:
             }
 
             wxImageList* const
-                buttonSmallImageList = ribbon->GetButtonSmallImageList(bitmap_size_small);
+                buttonSmallImageList = ribbon->GetButtonImageList(bitmap_size_small);
 
             barButtonSmallImageListPos = buttonSmallImageList->Add(m_bitmap_small);
             m_bitmap_small = wxNullBitmap;
@@ -164,12 +164,12 @@ public:
                     wxSize bitmap_size_large,
                     wxSize bitmap_size_small,
                     wxBitmap& bitmap,
-                    wxBitmap bitmap_small) const
+                    wxBitmap& bitmap_small) const
     {
         if ( barButtonImageListPos != -1 && ribbon )
         {
             wxImageList* buttonImageList = ribbon->GetButtonImageList(bitmap_size_large);
-            wxImageList* buttonSmallImageList = ribbon->GetButtonSmallImageList(bitmap_size_small);
+            wxImageList* buttonSmallImageList = ribbon->GetButtonImageList(bitmap_size_small);
 
             int pos = barButtonImageListPos;
             int pos_small = barButtonSmallImageListPos;

@@ -20,6 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/page.h"
 
+#include "wx/vector.h"
+
 enum wxRibbonBarOption
 {
     wxRIBBON_BAR_SHOW_PAGE_LABELS    = 1 << 0,
@@ -154,9 +156,9 @@ public:
 
     void HideIfExpanded();
 
-    // Implementation only.
+    // Return the image list containing images of the given size, creating it
+    // if necessary.
     wxImageList* GetButtonImageList(wxSize size);
-    wxImageList* GetButtonSmallImageList(wxSize size);
 
 protected:
     friend class wxRibbonPage;
@@ -214,8 +216,7 @@ protected:
 
     wxRibbonDisplayMode m_ribbon_state;
 
-    wxImageList* m_buttonImageList;
-    wxImageList* m_buttonSmallImageList;
+    wxVector<wxImageList*> m_image_lists;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonBar);
