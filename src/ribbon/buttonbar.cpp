@@ -129,10 +129,10 @@ public:
 
     wxString label;
     wxString help_string;
-    wxBitmap bitmap_large;
-    wxBitmap bitmap_large_disabled;
-    wxBitmap bitmap_small;
-    wxBitmap bitmap_small_disabled;
+    wxBitmap m_bitmap_large;
+    wxBitmap m_bitmap_large_disabled;
+    wxBitmap m_bitmap_small;
+    wxBitmap m_bitmap_small_disabled;
     wxCoord text_min_width[3];
 
     // Index of the bitmap in the wxRibbonBar normal image list. Notice that
@@ -367,17 +367,17 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         buttonImageList = ribbon->GetButtonImageList(m_bitmap_size_large);
         buttonSmallImageList = ribbon->GetButtonSmallImageList(m_bitmap_size_small);
     }
-    if (base->bitmap_large.IsOk() && buttonImageList)
+    if (base->m_bitmap_large.IsOk() && buttonImageList)
     {
-        base->barButtonImageListPos = buttonImageList->Add(base->bitmap_large);
-        base->bitmap_large = wxNullBitmap;
-        buttonImageList->Add(base->bitmap_large_disabled);
-        base->bitmap_large_disabled = wxNullBitmap;
+        base->barButtonImageListPos = buttonImageList->Add(base->m_bitmap_large);
+        base->m_bitmap_large = wxNullBitmap;
+        buttonImageList->Add(base->m_bitmap_large_disabled);
+        base->m_bitmap_large_disabled = wxNullBitmap;
 
-        base->barButtonSmallImageListPos = buttonSmallImageList->Add(base->bitmap_small);
-        base->bitmap_small = wxNullBitmap;
-        buttonSmallImageList->Add(base->bitmap_small_disabled);
-        base->bitmap_small_disabled = wxNullBitmap;
+        base->barButtonSmallImageListPos = buttonSmallImageList->Add(base->m_bitmap_small);
+        base->m_bitmap_small = wxNullBitmap;
+        buttonSmallImageList->Add(base->m_bitmap_small_disabled);
+        base->m_bitmap_small_disabled = wxNullBitmap;
     }
 
     wxClientDC temp_dc(this);
@@ -911,12 +911,12 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         }
         else
         {
-            wxBitmap* bitmap = &base->bitmap_large;
-            wxBitmap* bitmap_small = &base->bitmap_small;
+            wxBitmap* bitmap = &base->m_bitmap_large;
+            wxBitmap* bitmap_small = &base->m_bitmap_small;
             if(base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED)
             {
-                bitmap = &base->bitmap_large_disabled;
-                bitmap_small = &base->bitmap_small_disabled;
+                bitmap = &base->m_bitmap_large_disabled;
+                bitmap_small = &base->m_bitmap_small_disabled;
             }
             m_art->DrawButtonBarButton(dc, this, rect, base->kind,
                 base->state | button.size, base->label, *bitmap, *bitmap_small);
@@ -1226,37 +1226,37 @@ void wxRibbonButtonBar::MakeBitmaps(wxRibbonButtonBarButtonBase* base,
                                     const wxBitmap& bitmap_small,
                                     const wxBitmap& bitmap_small_disabled)
 {
-    base->bitmap_large = bitmap_large;
-    if(!base->bitmap_large.IsOk())
+    base->m_bitmap_large = bitmap_large;
+    if(!base->m_bitmap_large.IsOk())
     {
-        base->bitmap_large = MakeResizedBitmap(base->bitmap_small,
+        base->m_bitmap_large = MakeResizedBitmap(base->m_bitmap_small,
             m_bitmap_size_large);
     }
-    else if(base->bitmap_large.GetScaledSize() != m_bitmap_size_large)
+    else if(base->m_bitmap_large.GetScaledSize() != m_bitmap_size_large)
     {
-        base->bitmap_large = MakeResizedBitmap(base->bitmap_large,
+        base->m_bitmap_large = MakeResizedBitmap(base->m_bitmap_large,
             m_bitmap_size_large);
     }
-    base->bitmap_small = bitmap_small;
-    if(!base->bitmap_small.IsOk())
+    base->m_bitmap_small = bitmap_small;
+    if(!base->m_bitmap_small.IsOk())
     {
-        base->bitmap_small = MakeResizedBitmap(base->bitmap_large,
+        base->m_bitmap_small = MakeResizedBitmap(base->m_bitmap_large,
             m_bitmap_size_small);
     }
-    else if(base->bitmap_small.GetScaledSize() != m_bitmap_size_small)
+    else if(base->m_bitmap_small.GetScaledSize() != m_bitmap_size_small)
     {
-        base->bitmap_small = MakeResizedBitmap(base->bitmap_small,
+        base->m_bitmap_small = MakeResizedBitmap(base->m_bitmap_small,
             m_bitmap_size_small);
     }
-    base->bitmap_large_disabled = bitmap_large_disabled;
-    if(!base->bitmap_large_disabled.IsOk())
+    base->m_bitmap_large_disabled = bitmap_large_disabled;
+    if(!base->m_bitmap_large_disabled.IsOk())
     {
-        base->bitmap_large_disabled = MakeDisabledBitmap(base->bitmap_large);
+        base->m_bitmap_large_disabled = MakeDisabledBitmap(base->m_bitmap_large);
     }
-    base->bitmap_small_disabled = bitmap_small_disabled;
-    if(!base->bitmap_small_disabled.IsOk())
+    base->m_bitmap_small_disabled = bitmap_small_disabled;
+    if(!base->m_bitmap_small_disabled.IsOk())
     {
-        base->bitmap_small_disabled = MakeDisabledBitmap(base->bitmap_small);
+        base->m_bitmap_small_disabled = MakeDisabledBitmap(base->m_bitmap_small);
     }
 }
 
