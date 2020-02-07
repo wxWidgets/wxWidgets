@@ -453,26 +453,4 @@ public:
         Also calls wxRibbonPage::Realize() on each child page.
     */
     virtual bool Realize();
-
-    /**
-        If the ribbon bar has many buttons, wxImageList can be used to reduce
-        bitmap resources. Call SetUseImageList after creating the ribbon bar,
-        and any subsequent AddButton or InsertButton calls will have their
-        images stored in an image list instead. Note that the conversion might
-        cause some images created from icons with alpha layers to have a black
-        background. Such images need to be edited before use.
-
-        @since 3.1.4
-    */
-    void UseImageList(bool useImageList = true);
-
-    /**
-        Returns whether a wxImageList is being used for buttons.
-
-        @see SetUseImageList()
-
-        @since 3.1.4
-    */
-    bool UsesImageList() const;
-
 };

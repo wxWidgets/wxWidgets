@@ -352,8 +352,8 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     wxImageList* buttonSmallImageList = NULL;
     if (m_ownerRibbonBar)
         {
-        buttonImageList = m_ownerRibbonBar->GetButtonImageList(&m_bitmap_size_large);
-        buttonSmallImageList = m_ownerRibbonBar->GetButtonSmallImageList(&m_bitmap_size_small);
+        buttonImageList = m_ownerRibbonBar->GetButtonImageList(m_bitmap_size_large);
+        buttonSmallImageList = m_ownerRibbonBar->GetButtonSmallImageList(m_bitmap_size_small);
         }
     if (base->bitmap_large.IsOk() && buttonImageList)
     {
@@ -882,8 +882,8 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRect rect(button.position + m_layout_offset, base->sizes[button.size].size);
         if (base->barButtonImageListPos != -1 && m_ownerRibbonBar)
         {
-            wxImageList* buttonImageList = m_ownerRibbonBar->GetButtonImageList();
-            wxImageList* buttonSmallImageList = m_ownerRibbonBar->GetButtonSmallImageList();
+            wxImageList* buttonImageList = m_ownerRibbonBar->GetButtonImageList(m_bitmap_size_large);
+            wxImageList* buttonSmallImageList = m_ownerRibbonBar->GetButtonSmallImageList(m_bitmap_size_small);
 
             wxBitmap bitmap;
             wxBitmap bitmap_small;

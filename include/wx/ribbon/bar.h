@@ -154,12 +154,9 @@ public:
 
     void HideIfExpanded();
 
-    void UseImageList(bool useImageList = true) { m_useImageList = useImageList; }
-    bool UsesImageList() const { return m_useImageList; }
     // Implementation only.
-    wxImageList* GetButtonImageList(wxSize* isize = NULL);
-    // Implementation only.
-    wxImageList* GetButtonSmallImageList(wxSize* isize = NULL);
+    wxImageList* GetButtonImageList(wxSize size);
+    wxImageList* GetButtonSmallImageList(wxSize size);
 
 protected:
     friend class wxRibbonPage;
@@ -217,7 +214,6 @@ protected:
 
     wxRibbonDisplayMode m_ribbon_state;
 
-    bool m_useImageList;
     wxImageList* m_buttonImageList;
     wxImageList* m_buttonSmallImageList;
 
