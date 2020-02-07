@@ -128,7 +128,7 @@ public:
     wxBitmap bitmap_small;
     wxBitmap bitmap_small_disabled;
     wxCoord text_min_width[3];
-    wxCoord barButtonImageListPos;
+    int barButtonImageListPos;
     int barButtonSmallImageListPos;
     wxRibbonButtonBarButtonSizeInfo sizes[3];
     wxRibbonButtonBarButtonState min_size_class;
