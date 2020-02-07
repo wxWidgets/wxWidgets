@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/arrimpl.cpp"
+#include "wx/imaglist.h"
 
 WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray)
 
@@ -735,6 +736,10 @@ wxRibbonBar::wxRibbonBar()
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
     m_help_button_hovered = false;
+    m_useImageList = false;
+    m_buttonImageList = NULL;
+    m_buttonSmallImageList = NULL;
+
 }
 
 wxRibbonBar::wxRibbonBar(wxWindow* parent,
@@ -750,6 +755,14 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 wxRibbonBar::~wxRibbonBar()
 {
     SetArtProvider(NULL);
+    if (m_buttonImageList)
+       {
+       delete m_buttonImageList; m_buttonImageList = NULL;
+       }
+    if (m_buttonSmallImageList)
+       {
+       delete m_buttonSmallImageList; m_buttonSmallImageList = NULL;
+       }
 }
 
 bool wxRibbonBar::Create(wxWindow* parent,
@@ -798,6 +811,28 @@ void wxRibbonBar::CommonInit(long style)
     m_bar_hovered = false;
 
     m_ribbon_state = wxRIBBON_BAR_PINNED;
+
+    m_useImageList = false;
+    m_buttonImageList = NULL;
+    m_buttonSmallImageList = NULL;
+}
+
+wxImageList* wxRibbonBar::GetButtonImageList(wxSize* isize)
+{
+    if (m_useImageList && m_buttonImageList == NULL)
+    {
+        m_buttonImageList = new wxImageList(isize->GetWidth(), isize->GetHeight(), /*mask*/false);
+    }
+    return m_buttonImageList;
+}
+
+wxImageList* wxRibbonBar::GetButtonSmallImageList(wxSize* isize)
+{
+    if (m_useImageList && m_buttonSmallImageList == NULL)
+    {
+        m_buttonSmallImageList = new wxImageList(isize->GetWidth(), isize->GetHeight(), /*mask*/false);
+    }
+    return m_buttonSmallImageList;
 }
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)

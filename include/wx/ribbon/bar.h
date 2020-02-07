@@ -15,6 +15,8 @@
 
 #if wxUSE_RIBBON
 
+class wxImageList;
+
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/page.h"
 
@@ -152,6 +154,13 @@ public:
 
     void HideIfExpanded();
 
+    void UseImageList(bool useImageList = true) { m_useImageList = useImageList; }
+    bool UsesImageList() const { return m_useImageList; }
+    // Implementation only.
+    wxImageList* GetButtonImageList(wxSize* isize = NULL);
+    // Implementation only.
+    wxImageList* GetButtonSmallImageList(wxSize* isize = NULL);
+
 protected:
     friend class wxRibbonPage;
 
@@ -207,6 +216,10 @@ protected:
     bool m_help_button_hovered;
 
     wxRibbonDisplayMode m_ribbon_state;
+
+    bool m_useImageList;
+    wxImageList* m_buttonImageList;
+    wxImageList* m_buttonSmallImageList;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonBar);
