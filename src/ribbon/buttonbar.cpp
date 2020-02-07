@@ -64,6 +64,28 @@ public:
     wxRibbonButtonBarButtonState size;
 };
 
+namespace
+{
+
+wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size)
+{
+    double scale = original.GetScaleFactor();
+    if (scale > 1.0)
+        scale = 2.0;
+
+    wxImage img(original.ConvertToImage());
+    img.Rescale(scale * size.GetWidth(), scale * size.GetHeight(), wxIMAGE_QUALITY_HIGH);
+    return wxBitmap(img, -1, scale);
+}
+
+wxBitmap MakeDisabledBitmap(const wxBitmap& original)
+{
+    wxImage img(original.ConvertToImage());
+    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
+}
+
+} // anonymous namespace
+
 class wxRibbonButtonBarButtonBase
 {
 public:
@@ -71,6 +93,47 @@ public:
     {
         barButtonImageListPos =
         barButtonSmallImageListPos = -1;
+    }
+
+    void SetBitmaps(wxSize bitmap_size_large,
+                    wxSize bitmap_size_small,
+                    const wxBitmap& bitmap_large,
+                    const wxBitmap& bitmap_large_disabled,
+                    const wxBitmap& bitmap_small,
+                    const wxBitmap& bitmap_small_disabled)
+    {
+        m_bitmap_large = bitmap_large;
+        if(!m_bitmap_large.IsOk())
+        {
+            m_bitmap_large = MakeResizedBitmap(m_bitmap_small,
+                bitmap_size_large);
+        }
+        else if(m_bitmap_large.GetScaledSize() != bitmap_size_large)
+        {
+            m_bitmap_large = MakeResizedBitmap(m_bitmap_large,
+                bitmap_size_large);
+        }
+        m_bitmap_small = bitmap_small;
+        if(!m_bitmap_small.IsOk())
+        {
+            m_bitmap_small = MakeResizedBitmap(m_bitmap_large,
+                bitmap_size_small);
+        }
+        else if(m_bitmap_small.GetScaledSize() != bitmap_size_small)
+        {
+            m_bitmap_small = MakeResizedBitmap(m_bitmap_small,
+                bitmap_size_small);
+        }
+        m_bitmap_large_disabled = bitmap_large_disabled;
+        if(!m_bitmap_large_disabled.IsOk())
+        {
+            m_bitmap_large_disabled = MakeDisabledBitmap(m_bitmap_large);
+        }
+        m_bitmap_small_disabled = bitmap_small_disabled;
+        if(!m_bitmap_small_disabled.IsOk())
+        {
+            m_bitmap_small_disabled = MakeDisabledBitmap(m_bitmap_small);
+        }
     }
 
     wxRibbonButtonBarButtonInstance NewInstance()
@@ -349,8 +412,8 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
     base->id = button_id;
     base->label = label;
-    MakeBitmaps(base, bitmap, bitmap_disabled,
-                bitmap_small, bitmap_small_disabled);
+    base->SetBitmaps(m_bitmap_size_large, m_bitmap_size_small,
+                     bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     base->kind = kind;
     base->help_string = help_string;
     base->state = 0;
@@ -486,23 +549,6 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         info.is_supported = false;
 }
 
-wxBitmap wxRibbonButtonBar::MakeResizedBitmap(const wxBitmap& original, wxSize size)
-{
-    double scale = original.GetScaleFactor();
-    if (scale > 1.0)
-        scale = 2.0;
-
-    wxImage img(original.ConvertToImage());
-    img.Rescale(scale * size.GetWidth(), scale * size.GetHeight(), wxIMAGE_QUALITY_HIGH);
-    return wxBitmap(img, -1, scale);
-}
-
-wxBitmap wxRibbonButtonBar::MakeDisabledBitmap(const wxBitmap& original)
-{
-    wxImage img(original.ConvertToImage());
-    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
-}
-
 size_t wxRibbonButtonBar::GetButtonCount() const
 {
     return m_buttons.GetCount();
@@ -626,8 +672,8 @@ void wxRibbonButtonBar::SetButtonIcon(
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == NULL)
         return;
-    MakeBitmaps(base, bitmap, bitmap_small,
-                bitmap_disabled, bitmap_small_disabled);
+    base->SetBitmaps(m_bitmap_size_large, m_bitmap_size_small,
+                     bitmap, bitmap_disabled, bitmap_small, bitmap_small_disabled);
     Refresh();
 }
 
@@ -1218,46 +1264,6 @@ void wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
     layout->overall_size.SetHeight(original->overall_size.GetHeight());
 
     m_layouts.Add(layout);
-}
-
-void wxRibbonButtonBar::MakeBitmaps(wxRibbonButtonBarButtonBase* base,
-                                    const wxBitmap& bitmap_large,
-                                    const wxBitmap& bitmap_large_disabled,
-                                    const wxBitmap& bitmap_small,
-                                    const wxBitmap& bitmap_small_disabled)
-{
-    base->m_bitmap_large = bitmap_large;
-    if(!base->m_bitmap_large.IsOk())
-    {
-        base->m_bitmap_large = MakeResizedBitmap(base->m_bitmap_small,
-            m_bitmap_size_large);
-    }
-    else if(base->m_bitmap_large.GetScaledSize() != m_bitmap_size_large)
-    {
-        base->m_bitmap_large = MakeResizedBitmap(base->m_bitmap_large,
-            m_bitmap_size_large);
-    }
-    base->m_bitmap_small = bitmap_small;
-    if(!base->m_bitmap_small.IsOk())
-    {
-        base->m_bitmap_small = MakeResizedBitmap(base->m_bitmap_large,
-            m_bitmap_size_small);
-    }
-    else if(base->m_bitmap_small.GetScaledSize() != m_bitmap_size_small)
-    {
-        base->m_bitmap_small = MakeResizedBitmap(base->m_bitmap_small,
-            m_bitmap_size_small);
-    }
-    base->m_bitmap_large_disabled = bitmap_large_disabled;
-    if(!base->m_bitmap_large_disabled.IsOk())
-    {
-        base->m_bitmap_large_disabled = MakeDisabledBitmap(base->m_bitmap_large);
-    }
-    base->m_bitmap_small_disabled = bitmap_small_disabled;
-    if(!base->m_bitmap_small_disabled.IsOk())
-    {
-        base->m_bitmap_small_disabled = MakeDisabledBitmap(base->m_bitmap_small);
-    }
 }
 
 void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
