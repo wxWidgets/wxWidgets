@@ -628,6 +628,9 @@ private:
     friend class wxGridCellAttrDummyFriend;
 };
 
+// Smart pointer to wxGridCellAttr, calling DecRef() on it automatically.
+typedef wxObjectDataPtr<wxGridCellAttr> wxGridCellAttrPtr;
+
 // ----------------------------------------------------------------------------
 // wxGridCellAttrProvider: class used by wxGridTableBase to retrieve/store the
 // cell attributes.
@@ -649,6 +652,13 @@ public:
     // DecRef() must be called on the returned pointer
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind  kind ) const;
+
+    // Helper returning smart pointer calling DecRef() automatically.
+    wxGridCellAttrPtr GetAttrPtr(int row, int col,
+                                 wxGridCellAttr::wxAttrKind  kind ) const
+    {
+        return wxGridCellAttrPtr(GetAttr(row, col, kind));
+    }
 
     // all these functions take ownership of the pointer, don't call DecRef()
     // on it
@@ -824,6 +834,11 @@ public:
     virtual wxGridCellAttr *GetAttr( int row, int col,
                                      wxGridCellAttr::wxAttrKind  kind );
 
+    wxGridCellAttrPtr GetAttrPtr(int row, int col,
+                                 wxGridCellAttr::wxAttrKind  kind)
+    {
+        return wxGridCellAttrPtr(GetAttr(row, col, kind));
+    }
 
     // these functions take ownership of the pointer
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
@@ -1477,6 +1492,11 @@ public:
     //
     // DecRef() must be called on the returned pointer, as usual
     wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
+
+    wxGridCellAttrPtr GetOrCreateCellAttrPtr(int row, int col) const
+    {
+        return wxGridCellAttrPtr(GetOrCreateCellAttr(row, col));
+    }
 
 
     // shortcuts for setting the column parameters
@@ -2195,6 +2215,16 @@ protected:
     wxGridCellAttr *GetCellAttr(int row, int col) const;
     wxGridCellAttr *GetCellAttr(const wxGridCellCoords& coords ) const
         { return GetCellAttr( coords.GetRow(), coords.GetCol() ); }
+
+    wxGridCellAttrPtr GetCellAttrPtr(int row, int col) const
+    {
+        return wxGridCellAttrPtr(GetCellAttr(row, col));
+    }
+    wxGridCellAttrPtr GetCellAttrPtr(const wxGridCellCoords& coords) const
+    {
+        return wxGridCellAttrPtr(GetCellAttr(coords));
+    }
+
 
     // the default cell attr object for cells that don't have their own
     wxGridCellAttr*     m_defaultCellAttr;

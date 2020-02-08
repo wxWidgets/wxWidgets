@@ -976,6 +976,10 @@ public:
     changing their attributes from the defaults. An object of this class may be
     returned by wxGridTableBase::GetAttr().
 
+    Note that objects of this class are reference-counted and it's recommended
+    to use wxGridCellAttrPtr smart pointer class when working with them to
+    avoid memory leaks.
+
     @library{wxcore}
     @category{grid}
 */
@@ -1258,6 +1262,20 @@ protected:
 };
 
 /**
+    Smart pointer wrapping wxGridCellAttr.
+
+    wxGridCellAttrPtr takes ownership of wxGridCellAttr passed to it on
+    construction and calls DecRef() on it automatically when it is destroyed.
+    It also provides transparent access to wxGridCellAttr methods by allowing
+    to use objects of this class as if they were wxGridCellAttr pointers.
+
+    @since 3.1.4
+
+    @category{grid}
+*/
+typedef wxObjectDataPtr<wxGridCellAttr> wxGridCellAttrPtr;
+
+/**
     Base class for header cells renderers.
 
     A cell renderer can be used to draw the text of a cell's label, and/or
@@ -1459,7 +1477,7 @@ public:
         the cell attribute having the highest precedence.
 
         Notice that the caller must call DecRef() on the returned pointer if it
-        is non-@NULL.
+        is non-@NULL. GetAttrPtr() method can be used to do this automatically.
 
         @param row
             The row of the cell.
@@ -1473,6 +1491,17 @@ public:
      */
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind kind) const;
+
+    /**
+        Get the attribute to use for the specified cell.
+
+        This method is identical to GetAttr(), but returns a smart pointer,
+        which frees the caller from the need to call DecRef() manually.
+
+        @since 3.1.4
+     */
+    wxGridCellAttrPtr GetAttrPtr(int row, int col,
+                                 wxGridCellAttr::wxAttrKind kind) const;
 
     /*!
         @name Setting attributes.
@@ -2121,9 +2150,23 @@ public:
         By default this function is simply forwarded to
         wxGridCellAttrProvider::GetAttr() but it may be overridden to handle
         attributes directly in the table.
+
+        Prefer to use GetAttrPtr() to avoid the need to call DecRef() on the
+        returned pointer manually.
      */
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind kind);
+
+    /**
+        Return the attribute for the given cell.
+
+        This method is identical to GetAttr(), but returns a smart pointer,
+        which frees the caller from the need to call DecRef() manually.
+
+        @since 3.1.4
+     */
+    wxGridCellAttrPtr GetAttrPtr(int row, int col,
+                                 wxGridCellAttr::wxAttrKind kind);
 
     /**
         Set attribute of the specified cell.
@@ -4939,9 +4982,23 @@ public:
         attribute is created, associated with the cell and returned. In any
         case the caller must call DecRef() on the returned pointer.
 
+        Prefer to use GetOrCreateCellAttrPtr() to avoid the need to call
+        DecRef() on the returned pointer.
+
         This function may only be called if CanHaveAttributes() returns @true.
     */
     wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
+
+    /**
+        Returns the attribute for the given cell creating one if necessary.
+
+        This method is identical to GetOrCreateCellAttr(), but returns a smart
+        pointer, which frees the caller from the need to call DecRef()
+        manually.
+
+        @since 3.1.4
+     */
+    wxGridCellAttrPtr GetOrCreateCellAttrPtr(int row, int col) const;
 
     /**
         Returns a base pointer to the current table object.
