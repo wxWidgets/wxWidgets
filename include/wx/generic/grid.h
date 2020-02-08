@@ -206,6 +206,9 @@ public:
     virtual wxGridCellRenderer *Clone() const = 0;
 };
 
+// Smart pointer to wxGridCellRenderer, calling DecRef() on it automatically.
+typedef wxObjectDataPtr<wxGridCellRenderer> wxGridCellRendererPtr;
+
 // ----------------------------------------------------------------------------
 // wxGridCellEditor:  This class is responsible for providing and manipulating
 // the in-place edit controls for the grid.  Instances of wxGridCellEditor
@@ -332,6 +335,9 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellEditor);
 };
+
+// Smart pointer to wxGridCellEditor, calling DecRef() on it automatically.
+typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
 
 // ----------------------------------------------------------------------------
 // wxGridHeaderRenderer and company: like wxGridCellRenderer but for headers
@@ -573,8 +579,18 @@ public:
     // whether the cell will draw the overflowed text to neighbour cells
     // currently only left aligned cells can overflow
     bool CanOverflow() const;
+
     wxGridCellRenderer *GetRenderer(const wxGrid* grid, int row, int col) const;
+    wxGridCellRendererPtr GetRendererPtr(const wxGrid* grid, int row, int col) const
+    {
+        return wxGridCellRendererPtr(GetRenderer(grid, row, col));
+    }
+
     wxGridCellEditor *GetEditor(const wxGrid* grid, int row, int col) const;
+    wxGridCellEditorPtr GetEditorPtr(const wxGrid* grid, int row, int col) const
+    {
+        return wxGridCellEditorPtr(GetEditor(grid, row, col));
+    }
 
     bool IsReadOnly() const { return m_isReadOnly == wxGridCellAttr::ReadOnly; }
 

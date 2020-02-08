@@ -96,6 +96,20 @@ protected:
 };
 
 /**
+    Smart pointer wrapping wxGridCellRenderer.
+
+    wxGridCellRendererPtr takes ownership of wxGridCellRenderer passed to it on
+    construction and calls DecRef() on it automatically when it is destroyed.
+    It also provides transparent access to wxGridCellRenderer methods by allowing
+    to use objects of this class as if they were wxGridCellRenderer pointers.
+
+    @since 3.1.4
+
+    @category{grid}
+*/
+typedef wxObjectDataPtr<wxGridCellRenderer> wxGridCellRendererPtr;
+
+/**
     @class wxGridCellAutoWrapStringRenderer
 
     This class may be used to format string data in a cell. The too
@@ -592,6 +606,20 @@ protected:
 };
 
 /**
+    Smart pointer wrapping wxGridCellEditor.
+
+    wxGridCellEditorPtr takes ownership of wxGridCellEditor passed to it on
+    construction and calls DecRef() on it automatically when it is destroyed.
+    It also provides transparent access to wxGridCellEditor methods by allowing
+    to use objects of this class as if they were wxGridCellEditor pointers.
+
+    @since 3.1.4
+
+    @category{grid}
+*/
+typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
+
+/**
     @class wxGridCellAutoWrapStringEditor
 
     Grid cell editor for wrappable string/text data.
@@ -1058,8 +1086,21 @@ public:
 
     /**
         Returns the cell editor.
+
+        The caller is responsible for calling DecRef() on the returned pointer,
+        use GetEditorPtr() to do it automatically.
     */
     wxGridCellEditor* GetEditor(const wxGrid* grid, int row, int col) const;
+
+    /**
+        Returns the cell editor.
+
+        This method is identical to GetEditor(), but returns a smart pointer,
+        which frees the caller from the need to call DecRef() manually.
+
+        @since 3.1.4
+     */
+    wxGridCellEditorPtr GetEditorPtr(const wxGrid* grid, int row, int col) const;
 
     /**
         Returns the font.
@@ -1091,8 +1132,21 @@ public:
 
     /**
         Returns the cell renderer.
+
+        The caller is responsible for calling DecRef() on the returned pointer,
+        use GetRendererPtr() to do it automatically.
     */
     wxGridCellRenderer* GetRenderer(const wxGrid* grid, int row, int col) const;
+
+    /**
+        Returns the cell editor.
+
+        This method is identical to GetRenderer(), but returns a smart pointer,
+        which frees the caller from the need to call DecRef() manually.
+
+        @since 3.1.4
+     */
+    wxGridCellRendererPtr GetRendererPtr(const wxGrid* grid, int row, int col) const;
 
     /**
         Returns the text colour.
