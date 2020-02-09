@@ -2333,7 +2333,9 @@ public:
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        HRESULT hr = GetContext()->CreateGradientStopCollection(m_gradientStops.data(),
+        wxCHECK_RET(!m_gradientStops.empty(), "No gradient stops provided");
+
+        HRESULT hr = GetContext()->CreateGradientStopCollection(&m_gradientStops[0],
             m_gradientStops.size(), D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
     }
