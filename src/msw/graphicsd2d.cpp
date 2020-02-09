@@ -2314,33 +2314,32 @@ wxD2DBitmapData* wxGetD2DBitmapData(const wxGraphicsBitmap& bitmap)
 }
 
 // Helper class used to create and safely release a ID2D1GradientStopCollection from wxGraphicsGradientStops
-class wxD2DGradientStopsHelper
+class wxD2DGradientStopsHelper : public wxD2DResourceHolder<ID2D1GradientStopCollection>
 {
 public:
-    wxD2DGradientStopsHelper(const wxGraphicsGradientStops& gradientStops, ID2D1RenderTarget* renderTarget)
+    wxD2DGradientStopsHelper(const wxGraphicsGradientStops& gradientStops)
     {
-        int stopCount = gradientStops.GetCount();
-
-        D2D1_GRADIENT_STOP* gradientStopArray = new D2D1_GRADIENT_STOP[stopCount];
-
-        for (int i = 0; i < stopCount; ++i)
+        const int stopCount = gradientStops.GetCount();
+        m_gradientStops.reserve(stopCount);
+        for ( int i = 0; i < stopCount; ++i )
         {
-            gradientStopArray[i].color = wxD2DConvertColour(gradientStops.Item(i).GetColour());
-            gradientStopArray[i].position = gradientStops.Item(i).GetPosition();
+            D2D1_GRADIENT_STOP stop;
+            stop.position = gradientStops.Item(i).GetPosition();
+            stop.color = wxD2DConvertColour(gradientStops.Item(i).GetColour());
+            m_gradientStops.push_back(stop);
         }
-
-        renderTarget->CreateGradientStopCollection(gradientStopArray, stopCount, D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &m_gradientStopCollection);
-
-        delete[] gradientStopArray;
     }
 
-    ID2D1GradientStopCollection* GetGradientStopCollection()
+protected:
+    void DoAcquireResource() wxOVERRIDE
     {
-        return m_gradientStopCollection;
+        HRESULT hr = GetContext()->CreateGradientStopCollection(m_gradientStops.data(),
+            m_gradientStops.size(), D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &m_nativeResource);
+        wxCHECK_HRESULT_RET(hr);
     }
 
 private:
-    wxCOMPtr<ID2D1GradientStopCollection> m_gradientStopCollection;
+    wxVector<D2D1_GRADIENT_STOP> m_gradientStops;
 };
 
 template <typename B>
@@ -2443,13 +2442,14 @@ public:
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops, GetContext());
+        wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops);
+        helper.Bind(GetManager());
 
         HRESULT hr = GetContext()->CreateLinearGradientBrush(
             D2D1::LinearGradientBrushProperties(
                 D2D1::Point2F(m_linearGradientInfo.x1, m_linearGradientInfo.y1),
                 D2D1::Point2F(m_linearGradientInfo.x2, m_linearGradientInfo.y2)),
-            helper.GetGradientStopCollection(),
+            helper.GetD2DResource(),
             &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
 
@@ -2494,7 +2494,8 @@ public:
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
+        wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops);
+        helper.Bind(GetManager());
 
         wxDouble xo = m_radialGradientInfo.x1 - m_radialGradientInfo.x2;
         wxDouble yo = m_radialGradientInfo.y1 - m_radialGradientInfo.y2;
@@ -2504,7 +2505,7 @@ protected:
                 D2D1::Point2F(m_radialGradientInfo.x1, m_radialGradientInfo.y1),
                 D2D1::Point2F(xo, yo),
                 m_radialGradientInfo.radius, m_radialGradientInfo.radius),
-            helper.GetGradientStopCollection(),
+            helper.GetD2DResource(),
             &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
 
