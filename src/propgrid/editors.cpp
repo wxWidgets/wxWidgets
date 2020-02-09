@@ -1318,7 +1318,7 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
     ch_sz.x -= wxPG_TEXTCTRL_AND_BUTTON_SPACING;
 #endif
 
-    wxWindow* ch = wxPGEditor_Choice->CreateControls(propGrid,property,
+    wxWindow* ch = wxPGChoiceEditor::CreateControls(propGrid,property,
         pos,ch_sz).m_primary;
 
 #ifdef __WXMSW__
