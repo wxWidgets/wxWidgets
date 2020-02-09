@@ -27,11 +27,6 @@ class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
 class wxPGWindowList
 {
 public:
-    wxPGWindowList()
-    {
-        m_primary = m_secondary = NULL;
-    }
-
     void SetSecondary( wxWindow* secondary ) { m_secondary = secondary; }
 
     wxWindow*   m_primary;
