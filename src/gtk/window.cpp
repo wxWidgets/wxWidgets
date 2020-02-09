@@ -5535,6 +5535,13 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             g_string_append_printf(css, "%s{color:%s;background:%s}", s,
                 wxGtkString(gdk_rgba_to_string(fg_sel)).c_str(),
                 wxGtkString(gdk_rgba_to_string(bg_sel)).c_str());
+
+            if (isBg)
+            {
+                // make "undershoot" node background transparent,
+                // keeps expected look of GtkEntry with default theme
+                g_string_append(css, "* undershoot{background:transparent}");
+            }
         }
 
         if (m_styleProvider == NULL && (isFg || isBg || isFont))
