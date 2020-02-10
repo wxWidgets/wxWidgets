@@ -2215,7 +2215,12 @@ class wxPaintEvent : public wxEvent
 {
 public:
     /**
-        Constructor.
+        Constructor for exclusive use of wxWidgets itself.
+
+        Note that the objects of this class can @em not be created from
+        application code, they're only created by the library itself. If you
+        need a window to be repainted, use wxWindow::Refresh() instead of
+        trying to manually create an event of this class.
     */
     wxPaintEvent(int id = 0);
 };
