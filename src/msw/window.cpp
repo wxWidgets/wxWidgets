@@ -5260,8 +5260,7 @@ bool wxWindowMSW::HandlePaint()
 
     paintStack.push(PaintData(this));
 
-    wxPaintEvent event(m_windowId);
-    event.SetEventObject(this);
+    wxPaintEvent event(this);
 
     bool processed = HandleWindowEvent(event);
 
@@ -5280,8 +5279,7 @@ bool wxWindowMSW::HandlePaint()
     // note that we must generate NC event after the normal one as otherwise
     // BeginPaint() will happily overwrite our decorations with the background
     // colour
-    wxNcPaintEvent eventNc(m_windowId);
-    eventNc.SetEventObject(this);
+    wxNcPaintEvent eventNc(this);
     HandleWindowEvent(eventNc);
 
     // don't keep an HRGN we don't need any longer (GetUpdateRegion() can only

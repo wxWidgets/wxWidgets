@@ -365,9 +365,9 @@ failtest_combobox:
 
 failtest_evthandler:
 	@$(RM) test_evthandler.o
-	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
-	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
-	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&amp;2; \
+	@for d in BIND_GLOBAL BIND_STATIC BIND_METHOD BIND_FUNCTOR BIND_NO_HANDLER BIND_DERIVED BIND_WRONG_CLASS EVENT_CREATION; do \
+	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_$$d unexpectedly succeeded.">&amp;2; \
 	        exit 1; \
 	    fi; \
 	done; \

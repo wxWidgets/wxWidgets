@@ -5205,12 +5205,10 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             wxFAIL_MSG( "unsupported background style" );
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
+    wxNcPaintEvent nc_paint_event( this );
     HandleWindowEvent( nc_paint_event );
 
-    wxPaintEvent paint_event( GetId() );
-    paint_event.SetEventObject( this );
+    wxPaintEvent paint_event( this );
     HandleWindowEvent( paint_event );
 
 #if wxGTK_HAS_COMPOSITING_SUPPORT

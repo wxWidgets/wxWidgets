@@ -2222,7 +2222,7 @@ public:
         need a window to be repainted, use wxWindow::Refresh() instead of
         trying to manually create an event of this class.
     */
-    wxPaintEvent(int id = 0);
+    explicit wxPaintEvent(wxWindow* window);
 };
 
 

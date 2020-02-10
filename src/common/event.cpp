@@ -459,6 +459,22 @@ wxString wxCommandEvent::GetString() const
 }
 
 // ----------------------------------------------------------------------------
+// wxPaintEvent and wxNcPaintEvent
+// ----------------------------------------------------------------------------
+
+wxPaintEvent::wxPaintEvent(wxWindowBase* window)
+    : wxEvent(window ? window->GetId() : 0, wxEVT_PAINT)
+{
+    SetEventObject(window);
+}
+
+wxNcPaintEvent::wxNcPaintEvent(wxWindowBase* window)
+    : wxEvent(window ? window->GetId() : 0, wxEVT_NC_PAINT)
+{
+    SetEventObject(window);
+}
+
+// ----------------------------------------------------------------------------
 // wxUpdateUIEvent
 // ----------------------------------------------------------------------------
 

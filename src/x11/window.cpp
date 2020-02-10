@@ -1282,8 +1282,7 @@ void wxWindowX11::SendPaintEvents()
 
     m_clipPaintRegion = true;
 
-    wxPaintEvent paint_event( GetId() );
-    paint_event.SetEventObject( this );
+    wxPaintEvent paint_event( this );
     HandleWindowEvent( paint_event );
 
     m_updateRegion.Clear();
@@ -1324,8 +1323,7 @@ void wxWindowX11::SendNcPaintEvents()
         }
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
+    wxNcPaintEvent nc_paint_event( this );
     HandleWindowEvent( nc_paint_event );
 
     m_updateNcArea = false;
