@@ -36,6 +36,7 @@
 #include "wx/stack.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/paint.h"
 
 // ----------------------------------------------------------------------------
 // local data structures
@@ -257,11 +258,13 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
 
-    // see comments in src/msw/window.cpp where this is defined
-    extern wxStack<bool> wxDidCreatePaintDC;
+    using namespace wxMSWImpl;
+    wxCHECK_RET( !paintStack.empty(),
+                 "wxPaintDC can't be created outside wxEVT_PAINT handler" );
+    wxCHECK_RET( paintStack.top().window == window,
+                 "wxPaintDC must be associated with the window being repainted" );
 
-    wxDidCreatePaintDC.top() = true;
-
+    paintStack.top().createdPaintDC = true;
 
     m_window = window;
 
