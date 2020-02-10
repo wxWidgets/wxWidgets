@@ -209,8 +209,9 @@ public:
                         wxString& errmsg) wxOVERRIDE
     {
         wxGtkError error;
-        if ( !secret_password_clearv_sync
+        if ( !secret_service_clear_sync
               (
+                NULL,                           // Default service
                 GetSchema(),
                 BuildAttributes(service),
                 NULL,                           // Can't be cancelled
