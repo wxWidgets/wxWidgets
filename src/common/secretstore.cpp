@@ -163,6 +163,19 @@ wxSecretStore::~wxSecretStore()
 // ----------------------------------------------------------------------------
 
 bool
+wxSecretStore::IsOk(wxString* errmsg) const
+{
+    if ( !m_impl )
+    {
+        if ( errmsg )
+            *errmsg = _("Not available for this platform");
+        return false;
+    }
+
+    return m_impl->IsOk(errmsg);
+}
+
+bool
 wxSecretStore::Save(const wxString& service,
                     const wxString& user,
                     const wxSecretValue& secret)
