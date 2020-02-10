@@ -203,6 +203,9 @@ public:
         Returns the default secrets collection to use.
 
         Call IsOk() on the returned object to check if this method succeeded.
+
+        Note that this method may show a dialog to the user under some
+        platforms, so it can take an arbitrarily long time to return.
      */
     static wxSecretStore GetDefault();
 
