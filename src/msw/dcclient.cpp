@@ -138,18 +138,6 @@ PaintDCInfos gs_PaintDCInfos;
 
 } // anonymous namespace
 
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-#ifdef wxHAS_PAINT_DEBUG
-    // a global variable which we check to verify that wxPaintDC are only
-    // created in response to WM_PAINT message - doing this from elsewhere is a
-    // common programming error among wxWidgets programmers and might lead to
-    // very subtle and difficult to debug refresh/repaint bugs.
-    int g_isPainting = 0;
-#endif // wxHAS_PAINT_DEBUG
-
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -268,15 +256,6 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
    wxClientDCImpl( owner )
 {
     wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
-
-#ifdef wxHAS_PAINT_DEBUG
-    if ( g_isPainting <= 0 )
-    {
-        wxFAIL_MSG( wxT("wxPaintDCImpl may be created only in EVT_PAINT handler!") );
-
-        return;
-    }
-#endif // wxHAS_PAINT_DEBUG
 
     // see comments in src/msw/window.cpp where this is defined
     extern wxStack<bool> wxDidCreatePaintDC;

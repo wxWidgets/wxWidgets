@@ -2335,39 +2335,15 @@ private:
  wxEVT_NC_PAINT
  */
 
-#if wxDEBUG_LEVEL && defined(__WXMSW__)
-    #define wxHAS_PAINT_DEBUG
-
-    // see comments in src/msw/dcclient.cpp where g_isPainting is defined
-    extern WXDLLIMPEXP_CORE int g_isPainting;
-#endif // debug
-
 class WXDLLIMPEXP_CORE wxPaintEvent : public wxEvent
 {
 public:
     wxPaintEvent(int Id = 0)
         : wxEvent(Id, wxEVT_PAINT)
     {
-#ifdef wxHAS_PAINT_DEBUG
-        // set the internal flag for the duration of redrawing
-        g_isPainting++;
-#endif // debug
     }
 
-    // default copy ctor and dtor are normally fine, we only need them to keep
-    // g_isPainting updated in debug build
-#ifdef wxHAS_PAINT_DEBUG
-    wxPaintEvent(const wxPaintEvent& event)
-            : wxEvent(event)
-    {
-        g_isPainting++;
-    }
-
-    virtual ~wxPaintEvent()
-    {
-        g_isPainting--;
-    }
-#endif // debug
+    // default copy ctor and dtor are fine
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxPaintEvent(*this); }
 
