@@ -3599,12 +3599,10 @@ void wxWindowGTK::GtkSendPaintEvents()
         m_clearRegion.Clear();
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
+    wxNcPaintEvent nc_paint_event( this );
     HandleWindowEvent( nc_paint_event );
 
-    wxPaintEvent paint_event( GetId() );
-    paint_event.SetEventObject( this );
+    wxPaintEvent paint_event( this );
     HandleWindowEvent( paint_event );
 
     m_clipPaintRegion = false;

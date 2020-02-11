@@ -103,6 +103,10 @@ Changes in behaviour which may result in build errors
   then you will need to add these libraries to your make or project files
   yourself.
 
+- wxPaintEvent objects can no longer be created by the application code. This
+  was never supposed to work and is now forbidden at compile-time instead of
+  resulting in errors during run-time.
+
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
 - Never documented and not always available private wxGetClipboardData()

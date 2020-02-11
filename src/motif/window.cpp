@@ -1621,8 +1621,7 @@ void wxWindow::DoPaint()
         eraseEvent.SetEventObject(this);
         HandleWindowEvent(eraseEvent);
 
-        wxPaintEvent event(GetId());
-        event.SetEventObject(this);
+        wxPaintEvent event(this);
         HandleWindowEvent(event);
 
         m_needsRefresh = false;

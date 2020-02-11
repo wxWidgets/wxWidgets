@@ -1989,9 +1989,8 @@ bool wxWindowMac::MacDoRedraw( long time )
     {
         // paint the window itself
 
-        wxPaintEvent event(GetId());
+        wxPaintEvent event(this);
         event.SetTimestamp(time);
-        event.SetEventObject(this);
         handled = HandleWindowEvent(event);
     }
 
@@ -2040,8 +2039,7 @@ void wxWindowMac::MacPaintChildrenBorders()
         if ( m_updateRegion.Contains(clientOrigin.x+x-10, clientOrigin.y+y-10, w+20, h+20) )
         {
             // paint custom borders
-            wxNcPaintEvent eventNc( child->GetId() );
-            eventNc.SetEventObject( child );
+            wxNcPaintEvent eventNc( child );
             if ( !child->HandleWindowEvent( eventNc ) )
             {
                 child->MacPaintBorders(0, 0) ;

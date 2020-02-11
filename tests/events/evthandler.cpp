@@ -534,3 +534,14 @@ public:
     void OnIdle(wxIdleEvent&) { }
 };
 #endif // C++11
+
+// Another compilation-time-only test, but this one checking that these event
+// objects can't be created from outside of the library.
+#ifdef TEST_INVALID_EVENT_CREATION
+
+void TestEventCreation()
+{
+    wxPaintEvent eventPaint;
+}
+
+#endif // TEST_INVALID_EVENT_CREATION

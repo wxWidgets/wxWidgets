@@ -1281,8 +1281,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                 }
 
                 // send the paint event (wxWindowDC will draw directly):
-                wxPaintEvent paint( GetId() );
-                paint.SetEventObject(this);
+                wxPaintEvent paint( this );
                 handled = ProcessWindowEvent(paint);
                 m_updateRegion.Clear();
             }
