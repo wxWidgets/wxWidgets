@@ -695,7 +695,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     FSSpec sfFile;
 
     OSErr err = m_lib.NativePathNameToFSSpec(
-        (char*) (const char*) fileName.mb_str(),
+        const_cast<char*>(static_cast<const char*>(fileName.mb_str())),
         &sfFile, 0);
     bool result = (err == noErr);
 

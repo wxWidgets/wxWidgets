@@ -87,11 +87,7 @@ aStdKeys[] =
 // macros
 // ----------------------------------------------------------------------------
 
-// const_cast<> is not yet supported by all compilers
-#define CONST_CAST    ((wxRegKey *)this)->
-
-// and neither is mutable which m_dwLastError should be
-#define m_dwLastError   CONST_CAST m_dwLastError
+#define CONST_CAST const_cast<wxRegKey*>(this)->
 
 // ----------------------------------------------------------------------------
 // non member functions
@@ -1071,7 +1067,7 @@ bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey,
                                     RegValueStr(szValue),
                                     (DWORD) RESERVED, REG_SZ,
-                                    (RegString)wxMSW_CONV_LPCTSTR(strValue),
+                                    reinterpret_cast<const BYTE*>(wxMSW_CONV_LPCTSTR(strValue)),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return true;

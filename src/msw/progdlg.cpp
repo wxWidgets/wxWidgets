@@ -442,7 +442,7 @@ wxProgressDialog::~wxProgressDialog()
         DWORD rc = ::MsgWaitForMultipleObjects
                      (
                        1,                   // number of objects to wait for
-                       (HANDLE *)&hThread,  // the objects
+                       &hThread,            // the objects
                        false,               // wait for any objects, not all
                        INFINITE,            // no timeout
                        QS_ALLINPUT |        // return as soon as there are any events

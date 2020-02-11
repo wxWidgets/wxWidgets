@@ -68,8 +68,8 @@ protected:
     void DoSetRange(double min_val, double max_val);
     void DoSetIncrement(double inc);
 
-    void GtkDisableEvents() const;
-    void GtkEnableEvents() const;
+    void GtkDisableEvents();
+    void GtkEnableEvents();
 
     // Update the number of digits used to match our range (and base).
     void GtkSetEntryWidth();

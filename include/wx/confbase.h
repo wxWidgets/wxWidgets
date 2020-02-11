@@ -211,7 +211,7 @@ public:
       if ( !found )
       {
           if (IsRecordingDefaults())
-              ((wxConfigBase *)this)->Write(key, defVal);
+              const_cast<wxConfigBase*>(this)->Write(key, defVal);
           *value = defVal;
       }
       return found;

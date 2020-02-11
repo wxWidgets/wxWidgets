@@ -292,7 +292,7 @@ wxArrayVideoModes wxDisplayImplMacOSX::GetModes(const wxVideoMode& mode) const
     
     for (CFIndex i = 0; i < CFArrayGetCount(theArray); ++i)
     {
-        CGDisplayModeRef theValue = (CGDisplayModeRef) CFArrayGetValueAtIndex( theArray, i );
+        CGDisplayModeRef theValue = static_cast<CGDisplayModeRef>(const_cast<void*>(CFArrayGetValueAtIndex(theArray, i)));
         
         wxVideoMode theMode(
                             CGDisplayModeGetWidth(theValue),
@@ -336,7 +336,7 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
     
     for (CFIndex i = 0; i < CFArrayGetCount(theArray); ++i)
     {
-        CGDisplayModeRef theValue = (CGDisplayModeRef) CFArrayGetValueAtIndex( theArray, i );
+        CGDisplayModeRef theValue = static_cast<CGDisplayModeRef>(const_cast<void*>(CFArrayGetValueAtIndex(theArray, i)));
         
         wxVideoMode theMode(
                             CGDisplayModeGetWidth(theValue),

@@ -570,6 +570,9 @@ public:
     void GetSize(int *num_rows, int *num_cols) const;
     wxGridFitMode GetFitMode() const;
     bool GetOverflow() const { return GetFitMode().IsOverflow(); }
+    // whether the cell will draw the overflowed text to neighbour cells
+    // currently only left aligned cells can overflow
+    bool CanOverflow() const;
     wxGridCellRenderer *GetRenderer(const wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(const wxGrid* grid, int row, int col) const;
 
@@ -2325,13 +2328,13 @@ protected:
 
     // this function is called to extend the block being currently selected
     // from mouse and keyboard event handlers
-    void UpdateBlockBeingSelected(int topRow, int leftCol,
-                                  int bottomRow, int rightCol);
+    void UpdateBlockBeingSelected(int blockStartRow, int blockStartCol,
+                                  int blockEndRow, int blockEndCol);
 
-    void UpdateBlockBeingSelected(const wxGridCellCoords& topLeft,
-                        const wxGridCellCoords& bottomRight)
-        { UpdateBlockBeingSelected(topLeft.GetRow(), topLeft.GetCol(),
-                         bottomRight.GetRow(), bottomRight.GetCol()); }
+    void UpdateBlockBeingSelected(const wxGridCellCoords& blockStart,
+                                  const wxGridCellCoords& blockEnd)
+        { UpdateBlockBeingSelected(blockStart.GetRow(), blockStart.GetCol(),
+                                   blockEnd.GetRow(), blockEnd.GetCol()); }
 
     virtual bool ShouldScrollToChildOnFocus(wxWindow* WXUNUSED(win)) wxOVERRIDE
         { return false; }

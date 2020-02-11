@@ -1155,6 +1155,7 @@ public:
 
     const wxPGCommonValue* GetCommonValue( unsigned int i ) const
     {
+        wxCHECK_MSG( i < m_commonValues.size(), NULL, "Invalid item index" );
         return m_commonValues[i];
     }
 
@@ -1167,7 +1168,7 @@ public:
     // Returns label of given common value.
     wxString GetCommonValueLabel( unsigned int i ) const
     {
-        wxASSERT( GetCommonValue(i) );
+        wxCHECK_MSG( i < m_commonValues.size(), wxString(), "Invalid item index" );
         return GetCommonValue(i)->GetLabel();
     }
 

@@ -290,8 +290,7 @@ wxFileType::wxFileType()
 
 wxFileType::~wxFileType()
 {
-    if ( m_impl )
-        delete m_impl;
+    delete m_impl;
 }
 
 bool wxFileType::GetExtensions(wxArrayString& extensions)
@@ -589,8 +588,7 @@ wxMimeTypesManager::wxMimeTypesManager()
 
 wxMimeTypesManager::~wxMimeTypesManager()
 {
-    if ( m_impl )
-        delete m_impl;
+    delete m_impl;
 }
 
 bool wxMimeTypesManager::Unassociate(wxFileType *ft)

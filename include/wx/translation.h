@@ -247,7 +247,7 @@ protected:
     virtual wxString GetResourceType() const { return "MOFILE"; }
 
     // returns module to load resources from
-    virtual WXHINSTANCE GetModule() const { return 0; }
+    virtual WXHINSTANCE GetModule() const { return NULL; }
 };
 #endif // __WINDOWS__
 

@@ -14,6 +14,15 @@
     and the corresponding @e dst destination pixel gets combined together to produce
     the final pixel. E.g. @c wxCLEAR and @c wxSET completely ignore the source
     and the destination pixel and always put zeroes or ones in the final surface.
+
+    Note that not all modes are supported under all platforms. Notably wxGTK3
+    and wxMac only support the following modes:
+    - wxCOPY
+    - wxOR
+    - wxNO_OP
+    - wxCLEAR
+    - wxXOR
+    and, in particular, do @em not support the commonly used @c wxINVERT.
 */
 enum wxRasterOperationMode
 {
@@ -1504,6 +1513,14 @@ public:
 
     /**
         Sets the current logical function for the device context.
+
+        @note This function is not fully supported in all ports, due to the
+        limitations of the underlying drawing model. Notably, @c wxINVERT which
+        was commonly used for drawing rubber bands or other moving outlines in
+        the past, is not, and will not, be supported by wxGTK3 and wxMac. The
+        suggested alternative is to draw temporarily objects normally and
+        refresh the (affected part of the) window to remove them later.
+
         It determines how a @e source pixel (from a pen or brush colour, or source
         device context if using Blit()) combines with a @e destination pixel in
         the current device context.
@@ -1513,8 +1530,7 @@ public:
 
         The default is @c wxCOPY, which simply draws with the current colour.
         The others combine the current colour and the background using a logical
-        operation. @c wxINVERT is commonly used for drawing rubber bands or moving
-        outlines, since drawing twice reverts to the original colour.
+        operation.
     */
     void SetLogicalFunction(wxRasterOperationMode function);
 

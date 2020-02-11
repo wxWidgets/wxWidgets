@@ -138,7 +138,7 @@ bool Uuid::Set(const wxChar *pc)
 {
   // get UUID from string
 #ifdef _UNICODE
-  if ( UuidFromString((unsigned short *)pc, &m_uuid) != RPC_S_OK)
+  if ( UuidFromString(reinterpret_cast<unsigned short *>(const_cast<wxChar*>(pc)), &m_uuid) != RPC_S_OK )
 #else
   if ( UuidFromString((wxUChar *)pc, &m_uuid) != RPC_S_OK)
 #endif

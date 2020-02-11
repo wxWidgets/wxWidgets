@@ -2639,7 +2639,7 @@ size_t wxZipOutputStream::OnSysWrite(const void *buffer, size_t size)
 
     if (m_comp->Write(buffer, size).LastWrite() != size)
         m_lasterror = wxSTREAM_WRITE_ERROR;
-    m_crcAccumulator = crc32(m_crcAccumulator, (Byte*)buffer, size);
+    m_crcAccumulator = crc32(m_crcAccumulator, static_cast<const Byte*>(buffer), size);
     m_entrySize += m_comp->LastWrite();
 
     return m_comp->LastWrite();

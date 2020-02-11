@@ -213,9 +213,6 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-#ifndef __WXGTK4__
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-#endif
     wxString ok_btn_stock;
     if ( style & wxFD_SAVE )
     {
@@ -223,7 +220,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE));
 #else
-        ok_btn_stock = GTK_STOCK_SAVE;
+        ok_btn_stock = "gtk-save";
 #endif
     }
     else
@@ -232,7 +229,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN));
 #else
-        ok_btn_stock = GTK_STOCK_OPEN;
+        ok_btn_stock = "gtk-open";
 #endif
     }
 
@@ -243,14 +240,12 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
                    static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
-                   GTK_STOCK_CANCEL,
+                   "gtk-cancel",
 #endif
                    GTK_RESPONSE_CANCEL,
                    static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
                    NULL);
-#ifndef __WXGTK4__
-    wxGCC_WARNING_RESTORE()
-#endif
+
     g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
 

@@ -946,7 +946,9 @@ extern "C" void wxPthreadCleanup(void *ptr)
 
 void wxThreadInternal::Cleanup(wxThread *thread)
 {
-    if (pthread_getspecific(gs_keySelf) == 0) return;
+    if (pthread_getspecific(gs_keySelf) == 0)
+        return;
+
     {
         wxCriticalSectionLocker lock(thread->m_critsect);
         if ( thread->m_internal->GetState() == STATE_EXITED )
@@ -1460,7 +1462,7 @@ void wxThread::SetPriority(unsigned int prio)
 
 unsigned int wxThread::GetPriority() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect);
+    wxCriticalSectionLocker lock(m_critsect);
 
     return m_internal->GetPriority();
 }
@@ -1763,14 +1765,14 @@ wxThread::~wxThread()
 
 bool wxThread::IsRunning() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect);
+    wxCriticalSectionLocker lock(m_critsect);
 
     return m_internal->GetState() == STATE_RUNNING;
 }
 
 bool wxThread::IsAlive() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection&)m_critsect);
+    wxCriticalSectionLocker lock(m_critsect);
 
     switch ( m_internal->GetState() )
     {
@@ -1785,7 +1787,7 @@ bool wxThread::IsAlive() const
 
 bool wxThread::IsPaused() const
 {
-    wxCriticalSectionLocker lock((wxCriticalSection&)m_critsect);
+    wxCriticalSectionLocker lock(m_critsect);
 
     return (m_internal->GetState() == STATE_PAUSED);
 }

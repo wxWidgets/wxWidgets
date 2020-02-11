@@ -261,7 +261,7 @@ int wxFontBase::GetPointSize() const
 wxSize wxFontBase::GetPixelSize() const
 {
     wxScreenDC dc;
-    dc.SetFont(*(wxFont *)this);
+    dc.SetFont(*static_cast<const wxFont*>(this));
     return wxSize(dc.GetCharWidth(), dc.GetCharHeight());
 }
 

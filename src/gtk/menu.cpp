@@ -1349,6 +1349,7 @@ wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_m
 
 #ifndef __WXGTK4__
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+wxGCC_WARNING_SUPPRESS(cast-qual)
 const char *wxGetStockGtkID(wxWindowID id)
 {
     #define STOCKITEM(wx,gtk)      \
@@ -1451,6 +1452,7 @@ const char *wxGetStockGtkID(wxWindowID id)
 
     return NULL;
 }
+wxGCC_WARNING_RESTORE(cast-qual)
 wxGCC_WARNING_RESTORE()
 #endif // !__WXGTK4__
 

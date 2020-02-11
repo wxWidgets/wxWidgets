@@ -480,7 +480,7 @@ bool wxEnhMetaFileDataObject::SetData(const wxDataFormat& format,
 
     if ( format == wxDF_ENHMETAFILE )
     {
-        hEMF = *(HENHMETAFILE *)buf;
+        hEMF = *static_cast<const HENHMETAFILE*>(buf);
 
         wxCHECK_MSG( hEMF, false, wxT("pasting invalid enh metafile") );
     }
@@ -555,7 +555,7 @@ bool wxEnhMetaFileSimpleDataObject::GetDataHere(void *buf) const
 bool wxEnhMetaFileSimpleDataObject::SetData(size_t WXUNUSED(len),
                                             const void *buf)
 {
-    HENHMETAFILE hEMF = *(HENHMETAFILE *)buf;
+    HENHMETAFILE hEMF = *static_cast<const HENHMETAFILE*>(buf);
 
     wxCHECK_MSG( hEMF, false, wxT("pasting invalid enh metafile") );
     m_metafile.SetHENHMETAFILE((WXHANDLE)hEMF);

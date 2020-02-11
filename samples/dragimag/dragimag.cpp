@@ -429,7 +429,7 @@ int MyApp::OnExit()
     return 0;
 }
 
-bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
+bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();

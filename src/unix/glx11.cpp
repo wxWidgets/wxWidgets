@@ -502,7 +502,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     if (fbc)
     {
         wx_glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
-            glXGetProcAddress((GLubyte*)"glXCreateContextAttribsARB");
+            glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXCreateContextAttribsARB"));
     }
 
     glXDestroyContext( dpy, tempContext );

@@ -36,7 +36,7 @@ public:
     {
         m_width = m_height = m_depth = 0;
 
-        m_handle = 0;
+        m_handle = NULL;
     }
 
     wxGDIImageRefData(const wxGDIImageRefData& data) : wxGDIRefData()
@@ -50,7 +50,7 @@ public:
     }
 
     // accessors
-    virtual bool IsOk() const wxOVERRIDE { return m_handle != 0; }
+    virtual bool IsOk() const wxOVERRIDE { return m_handle != NULL; }
 
     void SetSize(int w, int h) { m_width = w; m_height = h; }
 
@@ -104,7 +104,7 @@ public:
 
     // accessors
     WXHANDLE GetHandle() const
-        { return IsNull() ? 0 : GetGDIImageData()->m_handle; }
+        { return IsNull() ? NULL : GetGDIImageData()->m_handle; }
     void SetHandle(WXHANDLE handle)
         { AllocExclusive(); GetGDIImageData()->m_handle = handle; }
 

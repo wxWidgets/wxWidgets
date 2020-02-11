@@ -257,7 +257,7 @@ void wxGridSelection::SelectRow(int row, const wxKeyboardState& kbd)
     }
 
     // Update View:
-    if ( !m_grid->GetBatchCount() )
+    if ( !m_grid->GetBatchCount() && m_grid->GetNumberCols() != 0 )
     {
         m_grid->RefreshBlock(row, 0, row, m_grid->GetNumberCols() - 1);
     }
@@ -349,7 +349,7 @@ void wxGridSelection::SelectCol(int col, const wxKeyboardState& kbd)
     }
 
     // Update View:
-    if ( !m_grid->GetBatchCount() )
+    if ( !m_grid->GetBatchCount() && m_grid->GetNumberRows() != 0 )
     {
         m_grid->RefreshBlock(0, col, m_grid->GetNumberRows() - 1, col);
     }

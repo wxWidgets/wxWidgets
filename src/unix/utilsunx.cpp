@@ -1265,7 +1265,7 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
     wxStatfs_t fs;
-    if ( wxStatfs((char *)(const char*)path.fn_str(), &fs) != 0 )
+    if ( wxStatfs(const_cast<char*>(static_cast<const char*>(path.fn_str())), &fs) != 0 )
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 

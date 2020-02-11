@@ -3913,8 +3913,8 @@ int wxDataViewMainWindow::RecalculateCount() const
 {
     if (IsVirtualList())
     {
-        wxDataViewVirtualListModel *list_model =
-            (wxDataViewVirtualListModel*) GetModel();
+        const wxDataViewVirtualListModel* list_model =
+            static_cast<const wxDataViewVirtualListModel*>(GetModel());
 
         return list_model->GetCount();
     }

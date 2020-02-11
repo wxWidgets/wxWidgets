@@ -184,7 +184,7 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
         GtkWidget *btn = gtk_button_new_with_mnemonic(labelGTK.utf8_str());
 #else
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+        GtkWidget* btn = gtk_button_new_from_stock("gtk-cancel");
         wxGCC_WARNING_RESTORE()
 #endif
         gtk_container_add(GTK_CONTAINER(box), btn);

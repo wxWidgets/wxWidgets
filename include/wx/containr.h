@@ -265,7 +265,7 @@ public:
     }
 
     WXDLLIMPEXP_INLINE_CORE
-    virtual void WXDoUpdatePendingFocus(wxWindow* win) wxOVERRIDE
+    virtual void WXSetPendingFocus(wxWindow* win) wxOVERRIDE
     {
         return m_container.SetLastFocus(win);
     }

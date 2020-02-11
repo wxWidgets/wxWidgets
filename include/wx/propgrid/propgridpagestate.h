@@ -571,7 +571,7 @@ protected:
 
     // Returns property by its label.
     wxPGProperty* BaseGetPropertyByLabel( const wxString& label,
-                                      wxPGProperty* parent = NULL ) const;
+                                      const wxPGProperty* parent = NULL ) const;
 
     // Unselect sub-properties.
     void DoRemoveChildrenFromSelection(wxPGProperty* p, bool recursive,

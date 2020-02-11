@@ -150,6 +150,8 @@ public:
 #endif
     }
 
+    const wxString& GetUnwrappedOutputCode() { return m_outputVarName; }
+
     // Execute the code returned by this function to let the output of the code
     // we executed be garbage-collected.
     wxString GetCleanUpCode() const

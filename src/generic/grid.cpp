@@ -114,6 +114,9 @@ const int DRAG_SENSITIVITY = 3;
 // the space between the cell edge and the checkbox mark
 const int GRID_CELL_CHECKBOX_MARGIN = 2;
 
+// the margin between a cell vertical line and a cell text
+const int GRID_TEXT_MARGIN = 1;
+
 } // anonymous namespace
 
 #include "wx/arrimpl.cpp"
@@ -640,6 +643,13 @@ wxGridFitMode wxGridCellAttr::GetFitMode() const
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return wxGridFitMode();
     }
+}
+
+bool wxGridCellAttr::CanOverflow() const
+{
+    int hAlign;
+    GetAlignment(&hAlign, NULL);
+    return GetOverflow() && (hAlign == wxALIGN_LEFT);
 }
 
 // GetRenderer and GetEditor use a slightly different decision path about
@@ -5563,15 +5573,80 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                GoToCell(event.ControlDown() ? 0
-                                             : m_currentCellCoords.GetRow(),
-                         0);
-                break;
-
             case WXK_END:
-                GoToCell(event.ControlDown() ? m_numRows - 1
-                                             : m_currentCellCoords.GetRow(),
-                         m_numCols - 1);
+                if ( m_currentCellCoords != wxGridNoCellCoords )
+                {
+                    const bool goToBeginning = event.GetKeyCode() == WXK_HOME;
+
+                    // Find the first or last visible row if we need to go to it
+                    // (without Control, we keep the current row).
+                    int row;
+                    if ( event.ControlDown() )
+                    {
+                        if ( goToBeginning )
+                        {
+                            for ( row = 0; row < m_numRows; ++row )
+                            {
+                                if ( IsRowShown(row) )
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            for ( row = m_numRows - 1; row >= 0; --row )
+                            {
+                                if ( IsRowShown(row) )
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // If we're selecting, continue in the same row, which
+                        // may well be different from the one in which we
+                        // started selecting.
+                        if ( event.ShiftDown() &&
+                                m_selectedBlockCorner != wxGridNoCellCoords )
+                        {
+                            row = m_selectedBlockCorner.GetRow();
+                        }
+                        else // Just use the current row.
+                        {
+                            row = m_currentCellCoords.GetRow();
+                        }
+                    }
+
+                    // Also find the last or first visible column in any case.
+                    int col;
+                    if ( goToBeginning )
+                    {
+                        for ( col = 0; col < m_numCols; ++col )
+                        {
+                            if ( IsColShown(GetColAt(col)) )
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        for ( col = m_numCols - 1; col >= 0; --col )
+                        {
+                            if ( IsColShown(GetColAt(col)) )
+                                break;
+                        }
+                    }
+
+                    if ( event.ShiftDown() )
+                    {
+                        UpdateBlockBeingSelected(m_currentCellCoords,
+                                                 wxGridCellCoords(row, col));
+                        MakeCellVisible(row, col);
+                    }
+                    else
+                    {
+                        ClearSelection();
+                        GoToCell(row, GetColAt(col));
+                    }
+                }
                 break;
 
             case WXK_PAGEUP:
@@ -5822,11 +5897,16 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 }
 
 void
-wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
-                                 int bottomRow, int rightCol)
+wxGrid::UpdateBlockBeingSelected(int blockStartRow, int blockStartCol,
+                                 int blockEndRow, int blockEndCol)
 {
+    m_selectedBlockCorner = wxGridCellCoords(blockEndRow, blockEndCol);
     MakeCellVisible(m_selectedBlockCorner);
-    m_selectedBlockCorner = wxGridCellCoords(bottomRow, rightCol);
+
+    int topRow = wxMin(blockStartRow, blockEndRow);
+    int leftCol = wxMin(blockStartCol, blockEndCol);
+    int bottomRow = wxMax(blockStartRow, blockEndRow);
+    int rightCol = wxMax(blockStartCol, blockEndCol);
 
     if ( m_selection )
     {
@@ -5863,9 +5943,6 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 return;
         }
     }
-
-    EnsureFirstLessThanSecond(topRow, bottomRow);
-    EnsureFirstLessThanSecond(leftCol, rightCol);
 
     wxGridCellCoords updateTopLeft = wxGridCellCoords(topRow, leftCol),
                      updateBottomRight = wxGridCellCoords(bottomRow, rightCol);
@@ -6009,7 +6086,11 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                 {
                     if (!m_table->IsEmptyCell(row + l, j))
                     {
-                        if (GetCellOverflow(row + l, j))
+                        wxGridCellAttr *attr = GetCellAttr(row + l, j);
+                        const bool canOverflow = attr->CanOverflow();
+                        attr->DecRef();
+
+                        if ( canOverflow )
                         {
                             wxGridCellCoords cell(row + l, j);
                             bool marked = false;
@@ -6106,15 +6187,9 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     // Note: However, only if it is really _shown_, i.e. not hidden!
     if ( isCurrent && IsCellEditControlShown() )
     {
-        // NB: this "#if..." is temporary and fixes a problem where the
-        // edit control is erased by this code after being rendered.
-        // On wxMac (QD build only), the cell editor is a wxTextCntl and is rendered
-        // implicitly, causing this out-of order render.
-#if !defined(__WXMAC__)
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
         editor->PaintBackground(dc, rect, *attr);
         editor->DecRef();
-#endif
     }
     else
     {
@@ -6747,9 +6822,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
     {
         case wxALIGN_BOTTOM:
             if ( textOrientation == wxHORIZONTAL )
-                y = rect.y + (rect.height - textHeight - 1);
+                y = rect.y + (rect.height - textHeight - GRID_TEXT_MARGIN);
             else
-                x = rect.x + rect.width - textWidth;
+                x = rect.x + (rect.width - textWidth - GRID_TEXT_MARGIN);
             break;
 
         case wxALIGN_CENTRE:
@@ -6762,9 +6837,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
         case wxALIGN_TOP:
         default:
             if ( textOrientation == wxHORIZONTAL )
-                y = rect.y + 1;
+                y = rect.y + GRID_TEXT_MARGIN;
             else
-                x = rect.x + 1;
+                x = rect.x + GRID_TEXT_MARGIN;
             break;
     }
 
@@ -6788,9 +6863,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
         {
             case wxALIGN_RIGHT:
                 if ( textOrientation == wxHORIZONTAL )
-                    x = rect.x + (rect.width - lineWidth - 1);
+                    x = rect.x + (rect.width - lineWidth - GRID_TEXT_MARGIN);
                 else
-                    y = rect.y + lineWidth + 1;
+                    y = rect.y + lineWidth + GRID_TEXT_MARGIN;
                 break;
 
             case wxALIGN_CENTRE:
@@ -6803,9 +6878,9 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
             case wxALIGN_LEFT:
             default:
                 if ( textOrientation == wxHORIZONTAL )
-                    x = rect.x + 1;
+                    x = rect.x + GRID_TEXT_MARGIN;
                 else
-                    y = rect.y + rect.height - 1;
+                    y = rect.y + rect.height - GRID_TEXT_MARGIN;
                 break;
         }
 
@@ -6837,7 +6912,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
                                          text,
                                          dc,
                                          attr.GetFitMode().GetEllipsizeMode(),
-                                         rect.GetWidth(),
+                                         rect.GetWidth() - 2 * GRID_TEXT_MARGIN,
                                          wxELLIPSIZE_FLAGS_NONE
                                      );
 
@@ -7025,7 +7100,7 @@ bool wxGrid::IsCellEditControlShown() const
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
         wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellEditor* editor = attr->GetEditor((wxGrid*) this, row, col);
+        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
         attr->DecRef();
 
         if ( editor )
@@ -8743,7 +8818,7 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
 {
     wxGridCellAttr *attr = NULL;
-    bool canHave = ((wxGrid*)this)->CanHaveAttributes();
+    const bool canHave = CanHaveAttributes();
 
     wxCHECK_MSG( canHave, attr, wxT("Cell attributes not allowed"));
     wxCHECK_MSG( m_table, attr, wxT("must have a table") );

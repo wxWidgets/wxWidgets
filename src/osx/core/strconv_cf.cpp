@@ -183,7 +183,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
         {
             theString = wxCFRef<CFStringRef>(CFStringCreateWithBytes(
                     kCFAllocatorDefault,
-                    (UInt8*)src,
+                    reinterpret_cast<const UInt8*>(src),
                     srcSize * sizeof(wchar_t),
                     wxCFStringEncodingWcharT,
                     false));

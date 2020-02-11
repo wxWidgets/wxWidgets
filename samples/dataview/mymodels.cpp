@@ -292,7 +292,7 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
 
     if (node == m_classical)
     {
-        MyMusicTreeModel *model = (MyMusicTreeModel*)(const MyMusicTreeModel*) this;
+        MyMusicTreeModel* model = const_cast<MyMusicTreeModel*>(this);
         model->m_classicalMusicIsKnownToControl = true;
     }
 

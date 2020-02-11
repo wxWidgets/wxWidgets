@@ -40,9 +40,7 @@ void wxClientDataContainer::DoSetClientObject( wxClientData *data )
     wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("can't have both object and void client data") );
 
-    if ( m_clientObject )
-        delete m_clientObject;
-
+    delete m_clientObject;
     m_clientObject = data;
     m_clientDataType = wxClientData_Object;
 }

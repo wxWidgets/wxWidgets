@@ -1702,7 +1702,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos, const wxString& text,
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
-            ft.lpstrText = (char*)(const char*)buf;
+            ft.lpstrText = buf;
 
             int pos = SendMsg(SCI_FINDTEXT, flags, (sptr_t)&ft);
             if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);

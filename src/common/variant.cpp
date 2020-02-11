@@ -99,7 +99,7 @@ wxObjectRefData *wxVariant::CreateRefData() const
 
 wxObjectRefData *wxVariant::CloneRefData(const wxObjectRefData *data) const
 {
-    return ((wxVariantData*) data)->Clone();
+    return static_cast<const wxVariantData*>(data)->Clone();
 }
 
 // Assignment

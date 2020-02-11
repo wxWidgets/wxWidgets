@@ -130,7 +130,7 @@ void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
         count = CFArrayGetCount(printerList);
         for (index = 0; index < count; index++)
         {
-            printer = (PMPrinter)CFArrayGetValueAtIndex(printerList, index);
+            printer = static_cast<PMPrinter>(const_cast<void*>(CFArrayGetValueAtIndex(printerList, index)));
             if ((data.GetPrinterName().empty()) && (PMPrinterIsDefault(printer)))
                 break;
 
@@ -184,7 +184,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
                 CFIndex top = CFArrayGetCount(paperlist);
                 for ( CFIndex i = 0 ; i < top ; ++ i )
                 {
-                    PMPaper paper = (PMPaper) CFArrayGetValueAtIndex( paperlist, i );
+                    PMPaper paper = static_cast<PMPaper>(const_cast<void*>(CFArrayGetValueAtIndex(paperlist, i)));
                     PMPaperGetHeight(paper, &height);
                     PMPaperGetWidth(paper, &width);
                     if ( fabs( width - papersize.x ) < 5 &&

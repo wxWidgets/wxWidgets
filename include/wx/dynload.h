@@ -123,7 +123,7 @@ public:
     void   Unload();
 
     bool   IsLoaded() const { return m_entry && m_entry->IsLoaded(); }
-    void  *GetSymbol(const wxString &symbol, bool *success = 0)
+    void* GetSymbol(const wxString& symbol, bool* success = NULL)
     {
         return m_entry->GetSymbol( symbol, success );
     }

@@ -181,11 +181,29 @@ void wxRadioButton::SetValue(bool value)
     }
     else
     {
-        // Don't change focus right now, this could be unexpected, but do
-        // ensure that when our parent regains focus, it goes to this button
-        // and not another one, which would result in this one losing its
-        // checked status.
-        GetParent()->WXSetPendingFocus(this);
+        // We don't need to change the focus right now, so avoid doing it as it
+        // could be unexpected (and also would result in focus set/kill events
+        // that wouldn't be generated under the other platforms).
+        if ( !GetParent()->IsDescendant(FindFocus()) )
+        {
+            // However tell the parent to focus this radio button when it
+            // regains the focus the next time, to avoid focusing another one
+            // and this changing the value. Note that this is not ideal: it
+            // would be better to only change pending focus if it currently
+            // points to a radio button, but this is much simpler to do, as
+            // otherwise we'd need to not only check if the pending focus is a
+            // radio button, but also if we'd give the focus to a radio button
+            // when there is no current pending focus, so don't bother with it
+            // until somebody really complains about it being a problem in
+            // practice.
+            GetParent()->WXSetPendingFocus(this);
+        }
+        //else: don't overwrite the pending focus if the window has the focus
+        // currently, as this would make its state inconsistent and would be
+        // useless anyhow, as the problem we're trying to solve here won't
+        // happen in this case (we know that our focused sibling is not a radio
+        // button in the same group, otherwise we would have set shouldSetFocus
+        // to true above).
     }
 }
 

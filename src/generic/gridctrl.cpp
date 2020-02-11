@@ -591,7 +591,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     // erase only this cells background, overflow cells should have been erased
     wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
 
-    if (attr.GetOverflow())
+    if ( attr.CanOverflow() )
     {
         int hAlign, vAlign;
         attr.GetAlignment(&hAlign, &vAlign);
@@ -650,6 +650,10 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                 col_end = grid.GetNumberCols() - 1;
             for (int i = col + cell_cols; i <= col_end; i++)
             {
+                // redraw the cell to update the background
+                wxGridCellCoords coords(row, i);
+                grid.DrawCell(dc, coords);
+
                 clip.width = grid.GetColSize(i) - 1;
                 wxDCClipper clipper(dc, clip);
 

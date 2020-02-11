@@ -107,8 +107,7 @@ wxPrintData::~wxPrintData()
     if (m_nativeData->m_ref == 0)
         delete m_nativeData;
 
-    if (m_privData)
-        delete [] m_privData;
+    delete[] m_privData;
 }
 
 void wxPrintData::ConvertToNative()

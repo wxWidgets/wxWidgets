@@ -407,8 +407,7 @@ wxFontMapperBase::wxFontMapperBase()
 wxFontMapperBase::~wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    if ( m_configDummy )
-        delete m_configDummy;
+    delete m_configDummy;
 #endif // wxUSE_CONFIG
 }
 

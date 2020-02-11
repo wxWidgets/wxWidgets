@@ -709,7 +709,7 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(0); }
+    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(NULL); }
     virtual int GetCountPerPage() const { return wxNOT_FOUND; }
 
     // Currently focused column of the current item or NULL if no column has focus
@@ -1213,12 +1213,12 @@ public:
     const wxIcon &GetIcon() const
         { return m_icon; }
     void SetData( wxClientData *data )
-        { if (m_data) delete m_data; m_data = data; }
+        { delete m_data; m_data = data; }
     wxClientData *GetData() const
         { return m_data; }
 
     wxDataViewItem GetItem() const
-        { return wxDataViewItem( (void*) this ); }
+        { return wxDataViewItem(const_cast<void*>(static_cast<const void*>(this))); }
 
     virtual bool IsContainer()
         { return false; }

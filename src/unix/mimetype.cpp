@@ -61,7 +61,7 @@ public:
 
        size_t size = file.Length();
        wxCharBuffer buffer( size );
-       file.Read( (void*) (const char*) buffer, size );
+       file.Read(buffer.data(), size);
 
        // Check for valid UTF-8 here?
        wxString all = wxString::FromUTF8( buffer, size );

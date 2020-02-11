@@ -717,7 +717,7 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
         memcpy(m_data->m_dataWithHeader, data, length);
     }
     else
-        m_data->m_dataWithHeader = (wxUint8*)data;
+        m_data->m_dataWithHeader = const_cast<wxUint8*>(data);
 
     m_data->m_data =
         (&m_data->m_dataWithHeader[FMT_INDEX + waveformat.uiSize + 8]);

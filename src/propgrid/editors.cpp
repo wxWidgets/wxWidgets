@@ -637,7 +637,8 @@ public:
         }
         else
         {
-            pg->OnComboItemPaint( this, item, &dc, (wxRect&)rect, flags );
+            wxRect r(rect);
+            pg->OnComboItemPaint(this, item, &dc, r, flags);
         }
     }
 
@@ -718,11 +719,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     int comValIndex = -1;
 
     const int choiceCount = choices.IsOk()? choices.GetCount(): 0;
-
     if ( item >= choiceCount && p->GetDisplayedCommonValueCount() > 0 )
     {
         comValIndex = item - choiceCount;
-        if ( !p->IsValueUnspecified() )
+        if ( !p->IsValueUnspecified() || !(flags & wxODCB_PAINTING_CONTROL) )
         {
             const wxPGCommonValue* cv = GetCommonValue(comValIndex);
             text = cv->GetLabel();
@@ -746,7 +746,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
+    if ( comValIndex == -1 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //
@@ -1317,7 +1317,7 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
     ch_sz.x -= wxPG_TEXTCTRL_AND_BUTTON_SPACING;
 #endif
 
-    wxWindow* ch = wxPGEditor_Choice->CreateControls(propGrid,property,
+    wxWindow* ch = wxPGChoiceEditor::CreateControls(propGrid,property,
         pos,ch_sz).m_primary;
 
 #ifdef __WXMSW__

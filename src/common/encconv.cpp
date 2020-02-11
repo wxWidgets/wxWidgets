@@ -80,7 +80,7 @@ extern "C"
 static int wxCMPFUNC_CONV
 CompareCharsetItems(const void *i1, const void *i2)
 {
-    return ( ((CharsetItem*)i1) -> u - ((CharsetItem*)i2) -> u );
+    return static_cast<const CharsetItem*>(i1)->u - static_cast<const CharsetItem*>(i2)->u;
 }
 }
 

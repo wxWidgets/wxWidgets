@@ -348,7 +348,7 @@ HBITMAP wxDIB::CreateDDB(HDC hdc) const
 }
 
 /* static */
-HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, void *bits)
+HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, const void *bits)
 {
     wxCHECK_MSG( pbmi, 0, wxT("invalid DIB in ConvertToBitmap") );
 
@@ -389,7 +389,7 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, void *bits)
                 numColors = 0;
         }
 
-        bits = (char *)pbmih + sizeof(*pbmih) + numColors*sizeof(RGBQUAD);
+        bits = reinterpret_cast<const char*>(pbmih + 1) + numColors * sizeof(RGBQUAD);
     }
 
     HBITMAP hbmp = ::CreateDIBitmap

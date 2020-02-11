@@ -454,7 +454,7 @@ public:
     // The brush returned from here must remain valid at least until the next
     // event loop iteration. Returning 0, as is done by default, indicates
     // there is no custom background brush.
-    virtual WXHBRUSH MSWGetCustomBgBrush() { return 0; }
+    virtual WXHBRUSH MSWGetCustomBgBrush() { return NULL; }
 
     // this function should return the brush to paint the children controls
     // background or 0 if this window doesn't impose any particular background
@@ -586,12 +586,11 @@ public:
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
     // This method is used for handling wxRadioButton-related complications,
-    // see wxRadioButton::SetValue(). It calls WXDoUpdatePendingFocus() for
-    // this window and all its parents up to the enclosing TLW, recursively.
-    void WXSetPendingFocus(wxWindow* win);
-
-    // Should be overridden by all classes storing the "last focused" window.
-    virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
+    // see wxRadioButton::SetValue().
+    //
+    // It should be overridden by all classes storing the "last focused"
+    // window to avoid focusing an unset radio button when regaining focus.
+    virtual void WXSetPendingFocus(wxWindow* WXUNUSED(win)) {}
 
     // Called from WM_DPICHANGED handler for all windows to let them update
     // any sizes and fonts used internally when the DPI changes and generate

@@ -48,46 +48,23 @@ const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 // -----------------------------------------------------------------------
 
-// In 3.0 comaptibilty mode we always need to use custom renderer because
-// native renderer for this port requires a reference to the valid window
-// to be drawn which is not passed to DrawCaptionSelectionRect function.
-#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
- #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 1
-#else
- #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 0
-#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
-
 static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
                               int x, int y, int w, int h)
 {
     wxRect rect(x, y+((h-dc.GetCharHeight())/2), w, h);
-#if wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+    // In 3.0 comaptibilty mode we always need to use custom renderer because
+    // native renderer for this port requires a reference to the valid window
+    // to be drawn which is not passed to DrawCaptionSelectionRect function.
+#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
     wxASSERT_MSG( win, wxS("Invalid window to be drawn") );
     wxRendererNative::Get().DrawFocusRect(win, dc, rect);
 #else
     wxUnusedVar(win);
-#ifdef __WXMSW__
-    dc.SetLogicalFunction(wxINVERT);
-
-    wxPen pen(*wxBLACK,1,wxPENSTYLE_DOT);
-    pen.SetCap(wxCAP_BUTT);
-    dc.SetPen(pen);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#else
-    dc.SetLogicalFunction(wxINVERT);
 
     dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
     dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#endif // __WXMSW__/!__WXMSW__
-#endif // wxPG_USE_NATIVE_FOCUS_RECT_RENDERER/!wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
 }
 
 // -----------------------------------------------------------------------
@@ -532,10 +509,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         wxPGCell& cell = m_cells[i];
         if ( cell.IsInvalid() )
         {
-            if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                cell = propgrid->GetPropertyDefaultCell();
-            else
-                cell = propgrid->GetCategoryDefaultCell();
+            cell = IsCategory() ? propgrid->GetCategoryDefaultCell()
+                                : propgrid->GetPropertyDefaultCell();
         }
     }
 
@@ -760,9 +735,7 @@ wxString wxPGProperty::GetName() const
 
 wxPropertyGrid* wxPGProperty::GetGrid() const
 {
-    if ( !m_parentState )
-        return NULL;
-    return m_parentState->GetGrid();
+    return m_parentState ? m_parentState->GetGrid() : NULL;
 }
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
@@ -1053,12 +1026,8 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
     }
 #endif
     wxPropertyGrid* pg = GetGrid();
-    wxASSERT_MSG( pg,
-                  wxS("Cannot get valid value for detached property") );
-    if ( !pg )
-    {
-        return wxEmptyString;
-    }
+    wxCHECK_MSG( pg, wxEmptyString,
+                 wxS("Cannot get valid value for detached property") );
 
     if ( IsValueUnspecified() )
         return pg->GetUnspecifiedValueText(argFlags);
@@ -1630,10 +1599,8 @@ void wxPGProperty::EnsureCells( unsigned int column )
 
         if ( pg )
         {
-            if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                defaultCell = pg->GetPropertyDefaultCell();
-            else
-                defaultCell = pg->GetCategoryDefaultCell();
+            defaultCell = IsCategory() ? pg->GetCategoryDefaultCell()
+                                       : pg->GetPropertyDefaultCell();
         }
 
         // Alloc new default cells.
@@ -1720,11 +1687,14 @@ const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
     wxPropertyGrid* pg = GetGrid();
     wxASSERT_MSG( pg,
                   wxS("Cannot get cell for detached property") );
+    if ( !pg )
+    {
+        static const wxPGCell invalidCell;
+        return invalidCell;
+    }
 
-    if ( IsCategory() )
-        return pg->GetCategoryDefaultCell();
-
-    return pg->GetPropertyDefaultCell();
+    return IsCategory() ? pg->GetCategoryDefaultCell()
+                        : pg->GetPropertyDefaultCell();
 }
 
 wxPGCell& wxPGProperty::GetOrCreateCell( unsigned int column )
@@ -2311,9 +2281,9 @@ int wxPGProperty::GetY2( int lh ) const
 int wxPGProperty::GetY() const
 {
     wxPropertyGrid *pg = GetGrid();
-    wxASSERT_MSG( pg,
-        wxS("Cannot obtain coordinates of detached property") );
-    return pg ? GetY2(pg->GetRowHeight()) : 0;
+    wxCHECK_MSG( pg, 0,
+                 wxS("Cannot obtain coordinates of detached property") );
+    return GetY2(pg->GetRowHeight());
 }
 
 // This is used by Insert etc.
@@ -2639,12 +2609,8 @@ void wxPGProperty::Empty()
 wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
 {
     wxPropertyGrid *pg = GetGrid();
-    wxASSERT_MSG( pg,
-                  wxS("Cannot obtain property item for detached property") );
-    if( !pg )
-    {
-        return NULL;
-    }
+    wxCHECK_MSG( pg, NULL,
+                 wxS("Cannot obtain property item for detached property") );
 
     unsigned int nextItem = 0;
     return GetItemAtY(y, pg->GetRowHeight(), &nextItem);

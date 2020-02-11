@@ -27,7 +27,7 @@ class WXDLLIMPEXP_PROPGRID wxPGPropArgCls
 public:
     wxPGPropArgCls( const wxPGProperty* property )
     {
-        m_ptr.property = (wxPGProperty*) property;
+        m_ptr.property = const_cast<wxPGProperty*>(property);
         m_flags = IsProperty;
     }
     wxPGPropArgCls( const wxString& str )

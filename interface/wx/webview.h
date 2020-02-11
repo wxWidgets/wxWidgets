@@ -279,6 +279,32 @@ public:
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
 
+    @par wxWEBVIEW_BACKEND_EDGE (MSW)
+
+    The Edge (Chromium) backend uses Microsoft's
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
+    It is available for Windows 7 and newer.
+    The following features are currently unsupported with this backend:
+    virtual filesystems, custom urls, find.
+
+    This backend is not enabled by default, to build it follow these steps:
+    - Visual Studio 2015, or newer, is required
+    - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
+      nuget package (Version 0.8.355 or newer)
+    - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
+      (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
+      file after unpacking it)
+    - Enable @c wxUSE_WEBVIEW_EDGE in CMake or @c setup.h
+    - Build wxWidgets webview library
+    - Copy @c WebView2Loader.dll from the subdirectory corresponding to the
+      architecture used (x86 or x64) of @c wxWidgets/3rdparty/webview2/build/
+      to your applications executable
+    - At runtime you can use wxWebView::IsBackendAvailable() to check if the
+      backend can be used (it will be available if @c WebView2Loader.dll can be
+      loaded and Edge (Chromium) is installed)
+    - Make sure to add a note about using the WebView2 SDK to your application
+      documentation, as required by its licence
+
     @par wxWEBVIEW_WEBKIT (GTK)
 
     Under GTK the WebKit backend uses
@@ -428,6 +454,14 @@ public:
                                 wxSharedPtr<wxWebViewFactory> factory);
 
     /**
+        Allows to check if a specific backend is currently available.
+
+        @since 3.1.4
+    */
+    static bool IsBackendAvailable(const wxString& backend);
+
+
+    /**
         Get the title of the current web page, or its URL/path if title is not
         available.
     */
@@ -512,6 +546,7 @@ public:
     /**
         Reload the currently displayed URL.
         @param flags A bit array that may optionally contain reload options.
+        @note The flags are ignored by the edge backend.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
@@ -589,7 +624,7 @@ public:
                     relative paths, for instance.
         @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend.
+              parameter is not used in this backend and the edge backend.
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
 
@@ -668,6 +703,27 @@ public:
         @since 2.9.5
     */
     virtual bool IsContextMenuEnabled() const;
+
+    /**
+        @name Dev Tools
+    */
+
+    /**
+        Enable or disable access to dev tools for the user.
+
+        This is currently only implemented for the Edge (Chromium) backend
+        where the dev tools are enabled by default.
+
+        @since 3.1.4
+    */
+    virtual void EnableAccessToDevTools(bool enable = true);
+
+    /**
+        Returns @true if dev tools are available to the user.
+
+        @since 3.1.4
+    */
+    virtual bool IsAccessToDevToolsEnabled() const;
 
     /**
         @name History

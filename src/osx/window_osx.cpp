@@ -1853,7 +1853,7 @@ void wxWindowMac::Update()
 
 wxNonOwnedWindow* wxWindowMac::MacGetTopLevelWindow() const
 {
-    wxWindowMac *iter = (wxWindowMac*)this ;
+    wxWindowMac* iter = const_cast<wxWindowMac*>(this);
 
     while ( iter )
     {
