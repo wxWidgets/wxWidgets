@@ -196,9 +196,11 @@ int main(int argc, char **argv)
     }
 
     wxSecretStore store = wxSecretStore::GetDefault();
-    if ( !store.IsOk() )
+    wxString errmsg;
+    if ( !store.IsOk(&errmsg) )
     {
-        wxFprintf(stderr, "Failed to create default secret store.\n");
+        wxFprintf(stderr, "Failed to create default secret store (%s)\n",
+                  errmsg);
         return EXIT_FAILURE;
     }
 

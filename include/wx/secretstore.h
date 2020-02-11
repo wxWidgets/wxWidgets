@@ -126,8 +126,9 @@ public:
     ~wxSecretStore();
 
 
-    // Check if this object is valid.
-    bool IsOk() const { return m_impl != NULL; }
+    // Check if this object is valid, i.e. can be used, and optionally fill in
+    // the provided error message string if it isn't.
+    bool IsOk(wxString* errmsg = NULL) const;
 
 
     // Store a username/password combination.
