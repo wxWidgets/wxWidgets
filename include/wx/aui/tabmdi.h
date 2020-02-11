@@ -108,6 +108,11 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
 private:
+    void OnClose(wxCloseEvent& event);
+
+    // close all children, return false if any of them vetoed it
+    bool CloseAll();
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxAuiMDIParentFrame);
 };
