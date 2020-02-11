@@ -1084,16 +1084,11 @@ test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/xml/xrctest.cpp
 
 
-# notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
-# currently the value in the makefile would be ignored if we did, but
-# warnings don't matter when we expect compilation to fail anyhow so we can
-# use this variable to enable the compilation of code which is supposed to
-# fail
 failtest: failtest_combobox failtest_evthandler failtest_weakref
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
-	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&2; \
 	    exit 1; \
 	fi; \
@@ -1101,9 +1096,9 @@ failtest_combobox:
 
 failtest_evthandler:
 	@$(RM) test_evthandler.o
-	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
-	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
-	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&2; \
+	@for d in BIND_GLOBAL BIND_STATIC BIND_METHOD BIND_FUNCTOR BIND_NO_HANDLER BIND_DERIVED BIND_WRONG_CLASS EVENT_CREATION; do \
+	    if $(MAKE) CPPFLAGS=-DTEST_INVALID_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_$$d unexpectedly succeeded.">&2; \
 	        exit 1; \
 	    fi; \
 	done; \
@@ -1111,7 +1106,7 @@ failtest_evthandler:
 
 failtest_weakref:
 	@$(RM) test_weakref.o
-	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_INVALID_INCOMPLETE_WEAKREF unexpectedly succeeded.">&2; \
 	    exit 1; \
 	fi; \
