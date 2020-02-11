@@ -36,10 +36,37 @@ public:
         // avoid any possible conflict between different calls.
         m_outputVarName = wxString::Format("__wxOut%i", (*runScriptCount)++);
 
-        // Adds one escape level if there is a single quote, double quotes or
-        // escape characters
-        wxRegEx escapeDoubleQuotes("(\\\\*)([\\'\"\n\r\v\t\b\f])");
-        escapeDoubleQuotes.Replace(&m_escapedCode,"\\1\\1\\\\\\2");
+        // Adds one escape level.
+        const char *charsNeededToBeEscaped = "\\\"\n\r\v\t\b\f";
+        for (
+            size_t pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, 0);
+            pos != wxString::npos;
+            pos = m_escapedCode.find_first_of(charsNeededToBeEscaped, pos)
+        ) {
+            switch (m_escapedCode[pos].GetValue())
+            {
+            case 0x0A: // '\n'
+                m_escapedCode[pos] = 'n';
+                break;
+            case 0x0D: // '\r'
+                m_escapedCode[pos] = 'r';
+                break;
+            case 0x0B: // '\v'
+                m_escapedCode[pos] = 'v';
+                break;
+            case 0x09: // '\t'
+                m_escapedCode[pos] = 't';
+                break;
+            case 0x08: // '\b'
+                m_escapedCode[pos] = 'b';
+                break;
+            case 0x0C: // '\f'
+                m_escapedCode[pos] = 'f';
+                break;
+            }
+            m_escapedCode.insert(pos, '\\');
+            pos += 2;
+        }
     }
 
     // Get the code to execute, its returned value will be either boolean true,
