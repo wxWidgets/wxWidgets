@@ -379,6 +379,10 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
+        <cppflags cond="FORMAT=='autoconf'">$(WX_CPPFLAGS)</cppflags>
+        <cflags cond="FORMAT=='autoconf'">$(WX_CFLAGS)</cflags>
+        <cxxflags cond="FORMAT=='autoconf'">$(WX_CXXFLAGS)</cxxflags>
+        <ldflags cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldflags>
         <res-define>$(WIN32_DPI_MANIFEST)</res-define>
         <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
         <if cond="FORMAT=='msvc'">
@@ -557,7 +561,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <lib-path>$(LIBDIRNAME)</lib-path>
 
         <warnings>max</warnings>
-        <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
             -wcd=656 <!-- define this function inside its class definition (may improve code quality) -->
@@ -727,46 +730,46 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>
 
-    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">
+    <template id="wx_3rdparty_dependencies_base">
+        <depends>wxexpat</depends>
+        <depends>wxzlib</depends>
+        <depends>wxregex</depends>
+    </template>
+
+    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'"
+              template="wx_3rdparty_dependencies_base">
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
         <depends>wxscintilla</depends>
     </template>
 
-    <template id="wx_3rdparty_dependencies"
-              template="wx_3rdparty_dependencies_gui">
-        <depends>wxexpat</depends>
-        <depends>wxzlib</depends>
-        <depends>wxregex</depends>
+    <template id="wx_3rdparty_includes_base">
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_REGEX)</include>
+        <include>$(INC_EXPAT)</include>
     </template>
 
-    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">
+    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'"
+              template_append="wx_3rdparty_includes_base">
         <include>$(INC_TIFF_BUILD)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>
     </template>
 
-    <template id="wx_3rdparty_includes"
-              template="wx_3rdparty_includes_gui">
-        <include>$(INC_ZLIB)</include>
-        <include>$(INC_REGEX)</include>
-        <include>$(INC_EXPAT)</include>
-    </template>
-
     <template id="wx_lib"
-              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h"/>
+              template="wx_3rdparty_includes_gui,wx_lib_b,msvc_setup_h"/>
     <template id="wx_base_lib"
-              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h">
+              template="wx_3rdparty_includes_base,wx_lib_b,msvc_setup_h">
         <define>wxUSE_GUI=0</define>
     </template>
 
     <template id="wx_dll"
-              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template="wx_3rdparty_includes_gui,wx_dll_b,wx_3rdparty_dependencies_gui"
               template_append="msvc_setup_h,wx_append_nomono"/>
     <template id="wx_base_dll"
-              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template="wx_3rdparty_includes_base,wx_dll_b,wx_3rdparty_dependencies_base"
               template_append="msvc_setup_h,wx_append_base_nomono">
         <define>wxUSE_GUI=0</define>
     </template>
