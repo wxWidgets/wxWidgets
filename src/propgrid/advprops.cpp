@@ -273,7 +273,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
         wnd2 = NULL;
     }
 
-    wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).m_primary;
+    wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).GetPrimary();
 #if wxUSE_VALIDATORS
     // Let's add validator to make sure only numbers can be entered
     wxTextValidator validator(wxFILTER_NUMERIC, &m_tempString);

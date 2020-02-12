@@ -4163,8 +4163,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                                            goodPos,
                                            grect.GetSize());
 
-                m_wndEditor = wndList.m_primary;
-                m_wndEditor2 = wndList.m_secondary;
+                m_wndEditor = wndList.GetPrimary();
+                m_wndEditor2 = wndList.GetSecondary();
                 // Remember actual positions within required cell.
                 // These values can be used when there will be required
                 // to reposition the cell.

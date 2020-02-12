@@ -1318,7 +1318,7 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
 #endif
 
     wxWindow* ch = wxPGChoiceEditor::CreateControls(propGrid,property,
-        pos,ch_sz).m_primary;
+        pos,ch_sz).GetPrimary();
 
 #ifdef __WXMSW__
     bt->Show();

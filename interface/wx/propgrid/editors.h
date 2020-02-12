@@ -17,6 +17,15 @@ public:
     wxPGWindowList(wxWindow* primary, wxWindow* secondary = NULL);
 
     void SetSecondary(wxWindow* secondary);
+
+    /** Gets window of primary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetPrimary() const;
+    /** Gets window of secondary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetSecondary() const;
 };
 
 
