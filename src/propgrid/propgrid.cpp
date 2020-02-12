@@ -2040,10 +2040,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                                  const wxRect* itemsRect ) const
 #endif
 {
-    const wxPGProperty* firstItem;
-    firstItem = DoGetItemAtY(itemsRect->y);
+    const wxPGProperty* firstItem = DoGetItemAtY(itemsRect->y);
+    if ( !firstItem ) // Signal a need to clear entire paint area if grid is empty
+        return -1;
 
-    if ( IsFrozen() || m_height < 1 || firstItem == NULL )
+    if ( IsFrozen() || m_height < 1 )
         return itemsRect->GetBottom();
 
     wxCHECK_MSG( !m_pState->m_itemsAdded, itemsRect->GetBottom(),
