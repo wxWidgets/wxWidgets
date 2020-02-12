@@ -122,13 +122,13 @@ endfunction()
 # Set common properties on wx library target
 function(wx_set_target_properties target_name is_base)
     # Set library name according to:
-    # docs/contrib/about-platform-toolkit-and-library-names.md
+    # docs/contributing/about-platform-toolkit-and-library-names.md
     if(is_base)
         set(lib_toolkit base)
     else()
         set(lib_toolkit ${wxBUILD_TOOLKIT}${wxBUILD_WIDGETSET})
     endif()
-    if(WIN32)
+    if(MSVC)
         set(lib_version ${wxMAJOR_VERSION}${wxMINOR_VERSION})
     else()
         set(lib_version ${wxMAJOR_VERSION}.${wxMINOR_VERSION})
@@ -144,40 +144,46 @@ function(wx_set_target_properties target_name is_base)
     else()
         set(lib_suffix)
     endif()
+
     if(WIN32)
+        if(MSVC)
+            # match visual studio name
+            set_target_properties(${target_name}
+                PROPERTIES
+                    OUTPUT_NAME "wx${lib_toolkit}${lib_version}${lib_unicode}${lib_suffix}"
+                    OUTPUT_NAME_DEBUG "wx${lib_toolkit}${lib_version}${lib_unicode}d${lib_suffix}"
+                    PREFIX ""
+                )
+        else()
+            # match configure name (mingw, cygwin)
+            set_target_properties(${target_name}
+                PROPERTIES
+                    OUTPUT_NAME "wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}"
+                    OUTPUT_NAME_DEBUG "wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}"
+                    PREFIX "lib"
+                )
+        endif()
+
         if(wxBUILD_SHARED)
             # Add compiler type and or vendor
-            set(dll_suffix "_${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}")
+            set(dll_suffix "_${wxCOMPILER_PREFIX}")
             if(wxBUILD_VENDOR)
                 wx_string_append(dll_suffix "_${wxBUILD_VENDOR}")
             endif()
 
-            set(dll_version ${lib_version})
+            set(dll_version ${wxMAJOR_VERSION}${wxMINOR_VERSION})
             if(wxVERSION_IS_DEV)
                 wx_string_append(dll_version ${wxRELEASE_NUMBER})
             endif()
             set_target_properties(${target_name}
                 PROPERTIES
-                    RUNTIME_OUTPUT_NAME wx${lib_toolkit}${dll_version}${lib_unicode}${lib_suffix}${dll_suffix}
-                    RUNTIME_OUTPUT_NAME_DEBUG wx${lib_toolkit}${dll_version}${lib_unicode}d${lib_suffix}${dll_suffix})
-            if(MINGW)
-                # Modify MinGW output to match other build systems
-                set_target_properties(${target_name}
-                    PROPERTIES
-                        PREFIX ""
-                        IMPORT_SUFFIX .a
-                    )
-            endif()
+                    RUNTIME_OUTPUT_NAME "wx${lib_toolkit}${dll_version}${lib_unicode}${lib_suffix}${dll_suffix}"
+                    RUNTIME_OUTPUT_NAME_DEBUG "wx${lib_toolkit}${dll_version}${lib_unicode}d${lib_suffix}${dll_suffix}"
+                    PREFIX ""
+                )
             target_compile_definitions(${target_name} PRIVATE
                 "-DWXDLLNAME=wx${lib_toolkit}${dll_version}${lib_unicode}$<$<CONFIG:Debug>:d>${lib_suffix}${dll_suffix}")
         endif()
-
-        set_target_properties(${target_name}
-            PROPERTIES
-                OUTPUT_NAME wx${lib_toolkit}${lib_version}${lib_unicode}${lib_suffix}
-                OUTPUT_NAME_DEBUG wx${lib_toolkit}${lib_version}${lib_unicode}d${lib_suffix}
-                PREFIX ""
-            )
     else()
         set_target_properties(${target_name}
             PROPERTIES
