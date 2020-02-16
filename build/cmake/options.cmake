@@ -50,14 +50,18 @@ endif()
 if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
+set(wxBUILD_FLAVOUR "" CACHE STRING "Specify a name to identify the build")
+mark_as_advanced(wxBUILD_FLAVOUR)
 
 wx_option(wxBUILD_OPTIMISE "use speed-optimised C/C++ compiler flags for release build" OFF)
+mark_as_advanced(wxBUILD_OPTIMISE)
 if(MSVC)
     set(wxBUILD_STRIPPED_RELEASE_DEFAULT OFF)
 else()
     set(wxBUILD_STRIPPED_RELEASE_DEFAULT ON)
 endif()
 wx_option(wxBUILD_STRIPPED_RELEASE "remove debug symbols in release build" ${wxBUILD_STRIPPED_RELEASE_DEFAULT})
+mark_as_advanced(wxBUILD_STRIPPED_RELEASE)
 wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options

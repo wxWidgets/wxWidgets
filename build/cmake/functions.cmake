@@ -144,29 +144,34 @@ function(wx_set_target_properties target_name is_base)
     else()
         set(lib_suffix)
     endif()
+    set(lib_flavour "")
+    if(wxBUILD_FLAVOUR)
+        set(lib_flavour "_${wxBUILD_FLAVOUR}")
+        string(REPLACE "-" "_" lib_flavour ${lib_flavour})
+    endif()
 
     if(WIN32)
         if(MSVC)
             # match visual studio name
             set_target_properties(${target_name}
                 PROPERTIES
-                    OUTPUT_NAME "wx${lib_toolkit}${lib_version}${lib_unicode}${lib_suffix}"
-                    OUTPUT_NAME_DEBUG "wx${lib_toolkit}${lib_version}${lib_unicode}d${lib_suffix}"
+                    OUTPUT_NAME "wx${lib_toolkit}${lib_version}${lib_unicode}${lib_flavour}${lib_suffix}"
+                    OUTPUT_NAME_DEBUG "wx${lib_toolkit}${lib_version}${lib_unicode}d${lib_flavour}${lib_suffix}"
                     PREFIX ""
                 )
         else()
             # match configure name (mingw, cygwin)
             set_target_properties(${target_name}
                 PROPERTIES
-                    OUTPUT_NAME "wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}"
-                    OUTPUT_NAME_DEBUG "wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}"
+                    OUTPUT_NAME "wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}"
+                    OUTPUT_NAME_DEBUG "wx_${lib_toolkit}${lib_unicode}d${lib_flavour}${lib_suffix}-${lib_version}"
                     PREFIX "lib"
                 )
         endif()
 
         if(wxBUILD_SHARED)
             # Add compiler type and or vendor
-            set(dll_suffix "_${wxCOMPILER_PREFIX}")
+            set(dll_suffix "${lib_flavour}${lib_suffix}_${wxCOMPILER_PREFIX}")
             if(wxBUILD_VENDOR)
                 wx_string_append(dll_suffix "_${wxBUILD_VENDOR}")
             endif()
@@ -177,20 +182,20 @@ function(wx_set_target_properties target_name is_base)
             endif()
             set_target_properties(${target_name}
                 PROPERTIES
-                    RUNTIME_OUTPUT_NAME "wx${lib_toolkit}${dll_version}${lib_unicode}${lib_suffix}${dll_suffix}"
-                    RUNTIME_OUTPUT_NAME_DEBUG "wx${lib_toolkit}${dll_version}${lib_unicode}d${lib_suffix}${dll_suffix}"
+                    RUNTIME_OUTPUT_NAME "wx${lib_toolkit}${dll_version}${lib_unicode}${dll_suffix}"
+                    RUNTIME_OUTPUT_NAME_DEBUG "wx${lib_toolkit}${dll_version}${lib_unicode}d${dll_suffix}"
                     PREFIX ""
                 )
             target_compile_definitions(${target_name} PRIVATE
-                "-DWXDLLNAME=wx${lib_toolkit}${dll_version}${lib_unicode}$<$<CONFIG:Debug>:d>${lib_suffix}${dll_suffix}")
+                "-DWXDLLNAME=wx${lib_toolkit}${dll_version}${lib_unicode}$<$<CONFIG:Debug>:d>${dll_suffix}")
         endif()
     else()
         set_target_properties(${target_name}
             PROPERTIES
-                OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}
+                OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}
                 # NOTE: wx-config can not be used to connect the libraries with the debug suffix.
-                #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}
-                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}
+                #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_flavour}${lib_suffix}-${lib_version}
+                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_flavour}${lib_suffix}-${lib_version}
             )
     endif()
     if(CYGWIN)

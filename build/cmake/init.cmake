@@ -118,6 +118,11 @@ if(NOT wxBUILD_SHARED)
     wx_string_append(wxBUILD_FILE_ID "-static")
 endif()
 wx_string_append(wxBUILD_FILE_ID "-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+if(wxBUILD_FLAVOUR)
+    set(lib_flavour ${wxBUILD_FLAVOUR})
+    string(REPLACE "-" "_" lib_flavour ${lib_flavour})
+    wx_string_append(wxBUILD_FILE_ID "-${lib_flavour}")
+endif()
 
 set(wxARCH_SUFFIX)
 
