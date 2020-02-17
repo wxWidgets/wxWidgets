@@ -1954,6 +1954,7 @@ set(MSW_LOWLEVEL_SRC
     src/msw/taskbar.cpp
     src/msw/richtooltip.cpp
     src/msw/evtloop.cpp
+    src/msw/ole/access.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -2020,7 +2021,6 @@ set(MSW_SRC
     src/msw/nativdlg.cpp
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
-    src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp

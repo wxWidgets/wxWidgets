@@ -2079,6 +2079,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/rt/notifmsgrt.cpp
     src/msw/ole/uuid.cpp
     src/msw/evtloop.cpp
+    src/msw/ole/access.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2131,7 +2132,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/nativdlg.cpp
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
-    src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp
