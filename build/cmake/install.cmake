@@ -12,27 +12,25 @@ if(NOT wxBUILD_INSTALL)
 endif()
 
 install(CODE "message(STATUS \"Installing: Headers...\")")
-if(UNIX)
-    wx_install(
-        DIRECTORY "${wxSOURCE_DIR}/include/wx"
-        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
-else()
+if(MSVC)
     wx_install(
         DIRECTORY "${wxSOURCE_DIR}/include/wx"
         DESTINATION "include")
-    if(MSVC)
-        wx_install(
-            DIRECTORY "${wxSOURCE_DIR}/include/msvc"
-            DESTINATION "include")
-    endif()
+    wx_install(
+        DIRECTORY "${wxSOURCE_DIR}/include/msvc"
+        DESTINATION "include")
+else()
+    wx_install(
+        DIRECTORY "${wxSOURCE_DIR}/include/wx"
+        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
 endif()
 
 # setup header and wx-config
-if(MSVC OR MINGW)
+if(MSVC)
     wx_install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
         DESTINATION "lib${wxPLATFORM_LIB_DIR}")
-elseif(UNIX)
+else()
     wx_install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
         DESTINATION "lib/wx/include")
