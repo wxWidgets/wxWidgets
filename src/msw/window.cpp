@@ -2676,7 +2676,9 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             return true;
         }
     }
-#endif // __WXUNIVERSAL__
+#else // __WXUNIVERSAL__
+    wxUnusedVar(pMsg);
+#endif // !__WXUNIVERSAL__/__WXUNIVERSAL__
 
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
