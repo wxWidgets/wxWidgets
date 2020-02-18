@@ -9124,7 +9124,86 @@ void wxGrid::DoSetRowSize( int row, int height )
     if ( !GetBatchCount() )
     {
         CalcDimensions();
-        Refresh();
+
+        // We need to check the size of all the currently visible cells and
+        // decrease the row to cover the start of the multirow cells, if any,
+        // because we need to refresh such cells entirely when resizing.
+        int topRow = row;
+
+        // Note that we don't care about the cells in frozen windows here as
+        // they can't have multiple rows currently.
+        const wxRect rect = m_gridWin->GetRect();
+        int left, right;
+        CalcUnscrolledPosition(rect.GetLeft(), 0, &left, NULL);
+        CalcUnscrolledPosition(rect.GetRight(), 0, &right, NULL);
+
+        const int posLeft = XToPos(left, m_gridWin);
+        const int posRight = XToPos(right, m_gridWin);
+        for ( int pos = posLeft; pos <= posRight; ++pos )
+        {
+            int col = GetColAt(pos);
+
+            int numRows, numCols;
+            if ( GetCellSize(row, col, &numRows, &numCols) == CellSpan_Inside )
+            {
+                // Notice that numRows here is negative.
+                if ( row + numRows < topRow )
+                    topRow = row + numRows;
+            }
+        }
+
+        // Helper object to refresh part of the window below the given position
+        // (in physical coordinates).
+        class LowerWindowPartRefresher
+        {
+        public:
+            explicit LowerWindowPartRefresher(int top)
+                : m_top(top)
+            {
+            }
+
+            void operator()(wxWindow* w) const
+            {
+                wxSize size = w->GetClientSize();
+                size.y -= m_top;
+                w->RefreshRect(wxRect(wxPoint(0, m_top), size));
+            }
+
+        private:
+            const int m_top;
+        };
+
+        int y;
+        CalcScrolledPosition(0, GetRowTop(topRow), NULL, &y);
+
+        if ( topRow < m_numFrozenRows )
+        {
+            // This row is frozen, refresh the frozen windows.
+            LowerWindowPartRefresher refreshLowerPart(y);
+
+            refreshLowerPart(m_rowFrozenLabelWin);
+            refreshLowerPart(m_frozenRowGridWin);
+
+            // If there are any frozen columns as well, there is one more
+            // window to refresh.
+            if ( m_frozenCornerGridWin )
+                refreshLowerPart(m_frozenCornerGridWin);
+        }
+        else // This row is not frozen.
+        {
+            // If we have any frozen rows, all the windows we're refreshing
+            // here are offset by their height.
+            if ( m_rowFrozenLabelWin )
+                y -= m_rowFrozenLabelWin->GetSize().y;
+
+            LowerWindowPartRefresher refreshLowerPart(y);
+
+            refreshLowerPart(m_rowLabelWin);
+            refreshLowerPart(m_gridWin);
+
+            if ( m_frozenColGridWin )
+                refreshLowerPart(m_frozenColGridWin);
+        }
     }
 }
 
@@ -9222,7 +9301,78 @@ void wxGrid::DoSetColSize( int col, int width )
     if ( !GetBatchCount() )
     {
         CalcDimensions();
-        Refresh();
+
+        // This code is symmetric with DoSetRowSize(), see there for more
+        // comments.
+
+        int leftCol = col;
+
+        const wxRect rect = m_gridWin->GetRect();
+        int top, bottom;
+        CalcUnscrolledPosition(0, rect.GetTop(), NULL, &top);
+        CalcUnscrolledPosition(0, rect.GetBottom(), NULL, &bottom);
+
+        const int rowTop = YToRow(top, m_gridWin);
+        const int rowBottom = YToRow(bottom, m_gridWin);
+        for ( int row = rowTop; row <= rowBottom; ++row )
+        {
+            int numRows, numCols;
+            if ( GetCellSize(row, col, &numRows, &numCols) == CellSpan_Inside )
+            {
+                if ( col + numCols < leftCol )
+                    leftCol = col + numCols;
+            }
+        }
+
+        // This is supposed to be the equivalent of LowerWindowPartRefresher
+        // for the rows, but there is no real counterpart to "lower" in
+        // horizontal direction, so use the clumsy "further" as the least bad
+        // alternative.
+        class FurtherWindowPartRefresher
+        {
+        public:
+            explicit FurtherWindowPartRefresher(int left)
+                : m_left(left)
+            {
+            }
+
+            void operator()(wxWindow* w) const
+            {
+                wxSize size = w->GetClientSize();
+                size.x -= m_left;
+                w->RefreshRect(wxRect(wxPoint(m_left, 0), size));
+            }
+
+        private:
+            const int m_left;
+        };
+
+        int x;
+        CalcScrolledPosition(GetColLeft(leftCol), 0, &x, NULL);
+
+        if ( leftCol < m_numFrozenCols )
+        {
+            FurtherWindowPartRefresher refreshFurtherPart(x);
+
+            refreshFurtherPart(m_colFrozenLabelWin);
+            refreshFurtherPart(m_frozenColGridWin);
+
+            if ( m_frozenCornerGridWin )
+                refreshFurtherPart(m_frozenCornerGridWin);
+        }
+        else
+        {
+            if ( m_colFrozenLabelWin )
+                x -= m_colFrozenLabelWin->GetSize().x;
+
+            FurtherWindowPartRefresher refreshFurtherPart(x);
+
+            refreshFurtherPart(m_colLabelWin);
+            refreshFurtherPart(m_gridWin);
+
+            if ( m_frozenRowGridWin )
+                refreshFurtherPart(m_frozenRowGridWin);
+        }
     }
 }
 
