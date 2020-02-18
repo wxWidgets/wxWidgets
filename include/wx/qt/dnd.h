@@ -8,7 +8,11 @@
 #ifndef _WX_QT_DND_H_
 #define _WX_QT_DND_H_
 
+#if defined(__WINDOWS__) && wxUSE_WXDIB
+#define wxDROP_ICON(name)   wxCursor(wxT(#name))
+#else
 #define wxDROP_ICON(name)   wxCursor(name##_xpm)
+#endif
 
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
