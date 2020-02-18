@@ -1235,7 +1235,7 @@ public:
     void     BeginBatch() { m_batchCount++; }
     void     EndBatch();
 
-    int      GetBatchCount() { return m_batchCount; }
+    int      GetBatchCount() const { return m_batchCount; }
 
     virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL) wxOVERRIDE;
 

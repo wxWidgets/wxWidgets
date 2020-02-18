@@ -4991,7 +4991,7 @@ public:
         (yet) matching calls to EndBatch(). While the grid's batch count is
         greater than zero the display will not be updated.
     */
-    int GetBatchCount();
+    int GetBatchCount() const;
 
     /**
         Returns the total number of grid columns.
