@@ -4740,63 +4740,6 @@ bool wxGrid::DoEndDragResizeLine(const wxGridOperations& oper, wxGridWindow *gri
 
     m_dragLastPos = -1;
 
-    // refresh now if we're not frozen
-    if ( !GetBatchCount() )
-    {
-        // we need to refresh everything beyond the resized line in the header
-        // window
-
-        // get the position from which to refresh in the other direction
-        wxRect rect(CellToRect(oper.MakeCoords(m_dragRowOrCol, 0)));
-        rect.SetPosition(CalcScrolledPosition(rect.GetPosition()));
-
-        // we only need the ordinate (for rows) or abscissa (for columns) here,
-        // and need to cover the entire window in the other direction
-        oper.Select(rect) = 0;
-
-        wxRect rectHeader(rect.GetPosition(),
-                          oper.MakeSize
-                               (
-                                    oper.GetHeaderWindowSize(this),
-                                    doper.Select(size) - doper.Select(rect)
-                               ));
-
-        oper.GetHeaderWindow(this)->Refresh(true, &rectHeader);
-
-
-        // also refresh the grid window: extend the rectangle
-        if ( m_table )
-        {
-            oper.SelectSize(rect) = oper.Select(size);
-
-            int subtractLines = 0;
-            int line = doper.PosToLine(this, posLineStart, NULL);
-            if ( line >= 0 )
-            {
-                // ensure that if we have a multi-cell block we redraw all of
-                // it by increasing the refresh area to cover it entirely if a
-                // part of it is affected
-                const int lineEnd = doper.PosToLine(this, posLineEnd, NULL, true);
-                for ( ; line < lineEnd; line++ )
-                {
-                    int cellLines = oper.Select(
-                        GetCellSize(oper.MakeCoords(m_dragRowOrCol, line)));
-                    if ( cellLines < subtractLines )
-                        subtractLines = cellLines;
-                }
-            }
-
-            int startPos =
-                oper.GetLineStartPos(this, m_dragRowOrCol + subtractLines);
-            startPos = doper.CalcScrolledPosition(this, startPos);
-
-            doper.Select(rect) = startPos;
-            doper.SelectSize(rect) = doper.Select(size) - startPos;
-
-            Refresh(false, &rect);
-        }
-    }
-
     // show the edit control back again
     ShowCellEditControl();
 
