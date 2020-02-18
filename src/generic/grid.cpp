@@ -2810,6 +2810,10 @@ int wxGrid::GetRowBottom(int row) const
 
 void wxGrid::CalcDimensions()
 {
+    // Wait until the window is thawed if it's currently frozen.
+    if ( GetBatchCount() )
+        return;
+
     // if our OnSize() hadn't been called (it would if we have scrollbars), we
     // still must reposition the children
     CalcWindowSizes();
@@ -2980,11 +2984,10 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if (attrProvider)
                 attrProvider->UpdateAttrRows( pos, numRows );
 
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
+            CalcDimensions();
+
+            if ( ShouldRefresh() )
                 m_rowLabelWin->Refresh();
-            }
         }
         result = true;
         break;
@@ -3013,11 +3016,10 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
             UpdateCurrentCellOnRedim();
 
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
+            CalcDimensions();
+
+            if ( ShouldRefresh() )
                 m_rowLabelWin->Refresh();
-            }
         }
         result = true;
         break;
@@ -3062,11 +3064,10 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 #endif
             }
 
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
+            CalcDimensions();
+
+            if ( ShouldRefresh() )
                 m_rowLabelWin->Refresh();
-            }
         }
         result = true;
         break;
@@ -3124,11 +3125,11 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             wxGridCellAttrProvider * attrProvider = m_table->GetAttrProvider();
             if (attrProvider)
                 attrProvider->UpdateAttrCols( pos, numCols );
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
+
+            CalcDimensions();
+
+            if ( ShouldRefresh() )
                 m_colLabelWin->Refresh();
-            }
         }
         result = true;
         break;
@@ -3177,11 +3178,10 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
             UpdateCurrentCellOnRedim();
 
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
+            CalcDimensions();
+
+            if ( ShouldRefresh() )
                 m_colLabelWin->Refresh();
-            }
         }
         result = true;
         break;
@@ -3246,11 +3246,10 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 #endif
             }
 
-            if ( !GetBatchCount() )
-            {
-                CalcDimensions();
+            CalcDimensions();
+
+            if ( ShouldRefresh() )
                 m_colLabelWin->Refresh();
-            }
         }
         result = true;
         break;
@@ -3258,7 +3257,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
     InvalidateBestSize();
 
-    if (result && !GetBatchCount() )
+    if (result && ShouldRefresh() )
         Refresh();
 
     return result;
@@ -4992,11 +4991,10 @@ bool wxGrid::FreezeTo(int row, int col)
     // recompute dimensions
     InvalidateBestSize();
 
-    if ( !GetBatchCount() )
-    {
-        CalcDimensions();
+    CalcDimensions();
+
+    if ( ShouldRefresh() )
         Refresh();
-    }
 
     return true;
 }
@@ -5053,7 +5051,7 @@ void wxGrid::ClearGrid()
             DisableCellEditControl();
 
         m_table->Clear();
-        if (!GetBatchCount())
+        if ( ShouldRefresh() )
             m_gridWin->Refresh();
     }
 }
@@ -5208,7 +5206,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 {
     // Don't do anything if between Begin/EndBatch...
     // EndBatch() will do all this on the last nested one anyway.
-    if ( m_created && !GetBatchCount() )
+    if ( m_created && ShouldRefresh() )
     {
         // Refresh to get correct scrolled position:
         wxScrolledCanvas::Refresh(eraseb, rect);
@@ -5803,7 +5801,7 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     m_currentCellCoords = coords;
 
 #if !defined(__WXMAC__)
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
     {
         wxGridCellAttrPtr attr = GetCellAttrPtr( coords );
         wxClientDC dc( currentGridWindow );
@@ -8032,7 +8030,7 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
         if ( m_frozenCornerGridWin )
             m_frozenCornerGridWin->SetBackgroundColour( colour );
 
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             m_rowLabelWin->Refresh();
             m_colLabelWin->Refresh();
@@ -8053,7 +8051,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
     if ( m_labelTextColour != colour )
     {
         m_labelTextColour = colour;
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             m_rowLabelWin->Refresh();
             m_colLabelWin->Refresh();
@@ -8064,7 +8062,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
 void wxGrid::SetLabelFont( const wxFont& font )
 {
     m_labelFont = font;
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
     {
         m_rowLabelWin->Refresh();
         m_colLabelWin->Refresh();
@@ -8098,7 +8096,7 @@ void wxGrid::SetRowLabelAlignment( int horiz, int vert )
         m_rowLabelVertAlign = vert;
     }
 
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
     {
         m_rowLabelWin->Refresh();
     }
@@ -8131,7 +8129,7 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
         m_colLabelVertAlign = vert;
     }
 
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
     {
         m_colLabelWin->Refresh();
     }
@@ -8164,7 +8162,7 @@ void wxGrid::SetCornerLabelAlignment( int horiz, int vert )
         m_cornerLabelVertAlign = vert;
     }
 
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
     {
         m_cornerLabelWin->Refresh();
     }
@@ -8182,7 +8180,7 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
     if ( textOrientation == wxHORIZONTAL || textOrientation == wxVERTICAL )
         m_colLabelTextOrientation = textOrientation;
 
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
         m_colLabelWin->Refresh();
 }
 
@@ -8191,7 +8189,7 @@ void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
     if ( textOrientation == wxHORIZONTAL || textOrientation == wxVERTICAL )
         m_cornerLabelTextOrientation = textOrientation;
 
-    if ( !GetBatchCount() )
+    if ( ShouldRefresh() )
         m_cornerLabelWin->Refresh();
 }
 
@@ -8200,7 +8198,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
     if ( m_table )
     {
         m_table->SetRowLabelValue( row, s );
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             wxRect rect = CellToRect( row, 0 );
             if ( rect.height > 0 )
@@ -8219,7 +8217,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
     if ( m_table )
     {
         m_table->SetColLabelValue( col, s );
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             if ( m_useNativeHeader )
             {
@@ -8245,7 +8243,7 @@ void wxGrid::SetCornerLabelValue( const wxString& s )
     if ( m_table )
     {
         m_table->SetCornerLabelValue( s );
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             wxRect rect = m_cornerLabelWin->GetRect();
             m_cornerLabelWin->Refresh(true, &rect);
@@ -8325,7 +8323,7 @@ void wxGrid::SetGridFrozenBorderColour(const wxColour &colour)
     {
         m_gridFrozenBorderColour = colour;
 
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             if ( m_frozenRowGridWin )
                 m_frozenRowGridWin->Refresh();
@@ -8341,7 +8339,7 @@ void wxGrid::SetGridFrozenBorderPenWidth(int width)
     {
         m_gridFrozenBorderPenWidth = width;
 
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             if ( m_frozenRowGridWin )
                 m_frozenRowGridWin->Refresh();
@@ -8353,8 +8351,8 @@ void wxGrid::SetGridFrozenBorderPenWidth(int width)
 
 void wxGrid::RedrawGridLines()
 {
-    // the lines will be redrawn when the window is thawn
-    if ( GetBatchCount() )
+    // the lines will be redrawn when the window is thawed or shown
+    if ( !ShouldRefresh() )
         return;
 
     if ( GridLinesEnabled() )
@@ -9013,8 +9011,7 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
         // some speed optimisations)
         m_rowHeights.Empty();
         m_rowBottoms.Empty();
-        if ( !GetBatchCount() )
-            CalcDimensions();
+        CalcDimensions();
     }
 }
 
@@ -9121,10 +9118,10 @@ void wxGrid::DoSetRowSize( int row, int height )
 
     InvalidateBestSize();
 
-    if ( !GetBatchCount() )
-    {
-        CalcDimensions();
+    CalcDimensions();
 
+    if ( ShouldRefresh() )
+    {
         // We need to check the size of all the currently visible cells and
         // decrease the row to cover the start of the multirow cells, if any,
         // because we need to refresh such cells entirely when resizing.
@@ -9220,8 +9217,8 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
         // some speed optimisations)
         m_colWidths.Empty();
         m_colRights.Empty();
-        if ( !GetBatchCount() )
-            CalcDimensions();
+
+        CalcDimensions();
     }
 }
 
@@ -9298,10 +9295,10 @@ void wxGrid::DoSetColSize( int col, int width )
 
     InvalidateBestSize();
 
-    if ( !GetBatchCount() )
-    {
-        CalcDimensions();
+    CalcDimensions();
 
+    if ( ShouldRefresh() )
+    {
         // This code is symmetric with DoSetRowSize(), see there for more
         // comments.
 
@@ -9634,7 +9631,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             extentMax = wxMax(extentMax, GetColMinimalWidth(colOrRow));
 
         SetColSize( colOrRow, extentMax );
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             if ( m_useNativeHeader )
             {
@@ -9662,7 +9659,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             extentMax = wxMax(extentMax, GetRowMinimalHeight(colOrRow));
 
         SetRowSize(colOrRow, extentMax);
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             int cw, ch, dummy;
             m_gridWin->GetClientSize( &cw, &ch );
@@ -9868,7 +9865,7 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
     if ( m_table )
     {
         m_table->SetValue( row, col, s );
-        if ( !GetBatchCount() )
+        if ( ShouldRefresh() )
         {
             int dummy;
             wxRect rect( CellToRect( row, col ) );
