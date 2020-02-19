@@ -801,7 +801,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     </set>
 
     <define-rule name="wx-base-plugin" extends="module">
-        <template>
+        <template template="common_settings">
             <dllname>
                 $(id)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
