@@ -1871,6 +1871,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notifmsgrt.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
+	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
@@ -1907,7 +1908,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_nativdlg.obj \
 	$(OBJS)\monodll_nativewin.obj \
 	$(OBJS)\monodll_msw_notebook.obj \
-	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_ownerdrw.obj \
 	$(OBJS)\monodll_progdlg.obj \
 	$(OBJS)\monodll_msw_radiobox.obj \
@@ -2213,6 +2213,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_notifmsgrt.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
+	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
@@ -2705,6 +2706,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notifmsgrt.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
+	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
@@ -2741,7 +2743,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_nativdlg.obj \
 	$(OBJS)\monolib_nativewin.obj \
 	$(OBJS)\monolib_msw_notebook.obj \
-	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_ownerdrw.obj \
 	$(OBJS)\monolib_progdlg.obj \
 	$(OBJS)\monolib_msw_radiobox.obj \
@@ -3047,6 +3048,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_notifmsgrt.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
+	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
@@ -3411,6 +3413,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_notifmsgrt.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
+	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
@@ -3447,7 +3450,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_nativdlg.obj \
 	$(OBJS)\coredll_nativewin.obj \
 	$(OBJS)\coredll_msw_notebook.obj \
-	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_ownerdrw.obj \
 	$(OBJS)\coredll_progdlg.obj \
 	$(OBJS)\coredll_msw_radiobox.obj \
@@ -3753,6 +3755,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_notifmsgrt.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
+	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
@@ -4083,6 +4086,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_notifmsgrt.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
+	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
@@ -4119,7 +4123,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_nativdlg.obj \
 	$(OBJS)\corelib_nativewin.obj \
 	$(OBJS)\corelib_msw_notebook.obj \
-	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_ownerdrw.obj \
 	$(OBJS)\corelib_progdlg.obj \
 	$(OBJS)\corelib_msw_radiobox.obj \
@@ -4425,6 +4428,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_notifmsgrt.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
+	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
@@ -6900,9 +6904,6 @@ $(OBJS)\monodll_nativewin.obj: ..\..\src\msw\nativewin.cpp
 $(OBJS)\monodll_msw_notebook.obj: ..\..\src\msw\notebook.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\notebook.cpp
 
-$(OBJS)\monodll_access.obj: ..\..\src\msw\ole\access.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ole\access.cpp
-
 $(OBJS)\monodll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
@@ -7936,6 +7937,11 @@ $(OBJS)\monodll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_access.obj: ..\..\src\msw\ole\access.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9455,9 +9461,6 @@ $(OBJS)\monolib_nativewin.obj: ..\..\src\msw\nativewin.cpp
 $(OBJS)\monolib_msw_notebook.obj: ..\..\src\msw\notebook.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\notebook.cpp
 
-$(OBJS)\monolib_access.obj: ..\..\src\msw\ole\access.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
-
 $(OBJS)\monolib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
@@ -10491,6 +10494,11 @@ $(OBJS)\monolib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_access.obj: ..\..\src\msw\ole\access.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12424,9 +12432,6 @@ $(OBJS)\coredll_nativewin.obj: ..\..\src\msw\nativewin.cpp
 $(OBJS)\coredll_msw_notebook.obj: ..\..\src\msw\notebook.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\notebook.cpp
 
-$(OBJS)\coredll_access.obj: ..\..\src\msw\ole\access.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ole\access.cpp
-
 $(OBJS)\coredll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
@@ -13001,6 +13006,11 @@ $(OBJS)\coredll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_access.obj: ..\..\src\msw\ole\access.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -14157,9 +14167,6 @@ $(OBJS)\corelib_nativewin.obj: ..\..\src\msw\nativewin.cpp
 $(OBJS)\corelib_msw_notebook.obj: ..\..\src\msw\notebook.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\notebook.cpp
 
-$(OBJS)\corelib_access.obj: ..\..\src\msw\ole\access.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
-
 $(OBJS)\corelib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
@@ -14734,6 +14741,11 @@ $(OBJS)\corelib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_access.obj: ..\..\src\msw\ole\access.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

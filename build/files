@@ -1924,6 +1924,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
     src/msw/notifmsg.cpp
+    src/msw/ole/access.cpp
     src/msw/ole/activex.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
@@ -2015,7 +2016,6 @@ MSW_SRC =
     src/msw/nativdlg.cpp
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
-    src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp

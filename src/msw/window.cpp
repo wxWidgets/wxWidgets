@@ -2676,7 +2676,9 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             return true;
         }
     }
-#endif // __WXUNIVERSAL__
+#else // __WXUNIVERSAL__
+    wxUnusedVar(pMsg);
+#endif // !__WXUNIVERSAL__/__WXUNIVERSAL__
 
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
@@ -4808,7 +4810,7 @@ wxSize wxWindowMSW::GetDPI() const
 
     if ( hwnd == NULL )
     {
-        const wxWindow* topWin = wxGetTopLevelParent(const_cast<wxWindow*>(this));
+        const wxWindow* topWin = wxGetTopLevelParent(const_cast<wxWindowMSW*>(this));
         if ( topWin )
         {
             hwnd = GetHwndOf(topWin);
