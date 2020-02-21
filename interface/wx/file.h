@@ -450,7 +450,7 @@ public:
         to write data with embedded @c NULs to the file you should use the other
         Write() overload.
     */
-    bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8);
+    bool Write(const wxString& s, const wxMBConv& conv = wxConvAuto());
 
     /**
         Returns the file descriptor associated with the file.
