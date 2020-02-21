@@ -49,6 +49,13 @@ class wxTempFFile
 {
 public:
     /**
+        Default constructor doesn't do anything.
+
+        Call Open() later.
+     */
+    wxTempFFile();
+
+    /**
         Associates wxTempFFile with the file to be replaced and opens it.
 
         @warning
