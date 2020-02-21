@@ -54,7 +54,7 @@ public:
         @warning
         You should use IsOpened() to verify that the constructor succeeded.
     */
-    wxTempFFile(const wxString& strName);
+    explicit wxTempFFile(const wxString& strName);
 
     /**
         Destructor calls Discard() if temporary file is still open.
