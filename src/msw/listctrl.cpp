@@ -3689,12 +3689,24 @@ static void wxConvertToMSWListCol(HWND hwndList,
         // seem to be generally nicer than on the left and the generic
         // version only draws them on the right (we don't have a flag to
         // specify the image location anyhow)
-        const int fmtImage = LVCFMT_BITMAP_ON_RIGHT | LVCFMT_COL_HAS_IMAGES;
-
-        if ( item.m_image != -1 )
+        const int fmtImage = LVCFMT_IMAGE | LVCFMT_BITMAP_ON_RIGHT; // Not sure if LVCFMT_COL_HAS_IMAGES means the whole column header is an image
+                                                                    // LVCFMT_IMAGE works well
+        if (item.m_image != -1)
+        {
+            lvCol.mask |= LVCF_IMAGE; // Since Windows Common Control Version 4.70,
+                                      // LVCF_IMAGE for column header is replace by LVCFMT_IMAGE,
+                                      // and this line of code is ignored (no problem to use lvCol.mask &= ~LVCF_IMAGE; here)
+                                      //
+                                      // However an exception (reason to keep this line, though not perfect):
+                                      // when inserting the first column with an image,
+                                      // only LVCF_IMAGE works, and the image is always at the left most side.
             lvCol.fmt |= fmtImage;
+        }
         else // remove any existing image
+        {
+            lvCol.mask &= ~LVCF_IMAGE; // If not, a blank icon will display at the left most side of the column
             lvCol.fmt &= ~fmtImage;
+        }
 
         lvCol.iImage = item.m_image;
     }
