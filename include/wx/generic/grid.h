@@ -2298,6 +2298,10 @@ protected:
     bool    m_canDragGridSize;
     bool    m_canDragCell;
 
+    // Index of the column being drag-moved or -1 if there is no move operation
+    // in progress.
+    int     m_dragMoveCol;
+
     // the last position (horizontal or vertical depending on whether the user
     // is resizing a column or a row) where a row or column separator line was
     // dragged by the user or -1 of there is no drag operation in progress

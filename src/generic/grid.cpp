@@ -2673,6 +2673,7 @@ void wxGrid::Init()
     m_canDragColSize = true;
     m_canDragGridSize = true;
     m_canDragCell = false;
+    m_dragMoveCol = -1;
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = false;
@@ -3837,7 +3838,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
                         const wxColour *color;
                         //Moving to the same place? Don't draw a marker
-                        if ( colNew == m_dragRowOrCol )
+                        if ( colNew == m_dragMoveCol )
                             color = wxLIGHT_GREY;
                         else
                             color = wxBLUE;
@@ -3963,7 +3964,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                 break;
 
             case WXGRID_CURSOR_MOVE_COL:
-                if ( m_dragLastPos == -1 || col == m_dragRowOrCol )
+                if ( m_dragLastPos == -1 || col == m_dragMoveCol )
                 {
                     // the column didn't actually move anywhere
                     if ( col != -1 )
@@ -3989,7 +3990,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                     const bool onNearPart = (x <= middle);
 
                     // adjust for the column being dragged itself
-                    if ( pos < GetColPos(m_dragRowOrCol) )
+                    if ( pos < GetColPos(m_dragMoveCol) )
                         pos++;
 
                     // and if it's on the near part of the target column,
@@ -4763,18 +4764,18 @@ void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow* gridWin
 
 void wxGrid::DoStartMoveCol(int col)
 {
-    m_dragRowOrCol = col;
+    m_dragMoveCol = col;
 }
 
 void wxGrid::DoEndMoveCol(int pos)
 {
-    wxASSERT_MSG( m_dragRowOrCol != -1, "no matching DoStartMoveCol?" );
+    wxASSERT_MSG( m_dragMoveCol != -1, "no matching DoStartMoveCol?" );
 
-    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragRowOrCol) != -1 )
-        SetColPos(m_dragRowOrCol, pos);
+    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragMoveCol) != -1 )
+        SetColPos(m_dragMoveCol, pos);
     //else: vetoed by user
 
-    m_dragRowOrCol = -1;
+    m_dragMoveCol = -1;
 }
 
 void wxGrid::RefreshAfterColPosChange()
