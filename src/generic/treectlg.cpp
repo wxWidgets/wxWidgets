@@ -2854,8 +2854,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
             }
             else // no custom buttons
             {
-                static const int wImage = 9;
-                static const int hImage = 9;
+                const int wImage = FromDIP(9);
+                const int hImage = FromDIP(9);
 
                 int flag = 0;
                 if (item->IsExpanded())
