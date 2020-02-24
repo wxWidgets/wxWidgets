@@ -2082,6 +2082,8 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     if (!wnd)
         return false;
 
+    ShowWnd(wnd, false);
+
     // find out which onscreen tab ctrl owns this tab
     wxAuiTabCtrl* ctrl;
     int ctrl_idx;

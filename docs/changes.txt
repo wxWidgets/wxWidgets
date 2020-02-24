@@ -90,6 +90,9 @@ Changes in behaviour not resulting in compilation errors
 - wxListCtrl::GetItemState() in wxMSW now checks the passed in item index for
   validity, as the generic version under the other platforms already did.
 
+- wxAuiNotebook::RemovePage() now hides the removed page, so it needs to be
+  shown again if it is reused in another place.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
