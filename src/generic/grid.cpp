@@ -2753,7 +2753,6 @@ wxGrid::SetTable(wxGridTableBase *table,
                  bool takeOwnership,
                  wxGrid::wxGridSelectionModes selmode )
 {
-    bool checkSelection = false;
     if ( m_created )
     {
         // stop all processing
@@ -2785,7 +2784,6 @@ wxGrid::SetTable(wxGridTableBase *table,
         m_numCols = 0;
         m_numFrozenRows = 0;
         m_numFrozenCols = 0;
-        checkSelection = true;
 
         // kill row and column size arrays
         m_colWidths.Empty();
@@ -2809,28 +2807,6 @@ wxGrid::SetTable(wxGridTableBase *table,
             SetNativeHeaderColCount();
 
         m_selection = new wxGridSelection( this, selmode );
-        if (checkSelection)
-        {
-            // If the newly set table is smaller than the
-            // original one current cell and selection regions
-            // might be invalid,
-            m_selectedBlockCorner = wxGridNoCellCoords;
-            m_currentCellCoords =
-              wxGridCellCoords(wxMin(m_numRows, m_currentCellCoords.GetRow()),
-                               wxMin(m_numCols, m_currentCellCoords.GetCol()));
-            if (m_selectedBlockTopLeft.GetRow() >= m_numRows ||
-                m_selectedBlockTopLeft.GetCol() >= m_numCols)
-            {
-                m_selectedBlockTopLeft = wxGridNoCellCoords;
-                m_selectedBlockBottomRight = wxGridNoCellCoords;
-            }
-            else
-                m_selectedBlockBottomRight =
-                  wxGridCellCoords(wxMin(m_numRows,
-                                         m_selectedBlockBottomRight.GetRow()),
-                                   wxMin(m_numCols,
-                                         m_selectedBlockBottomRight.GetCol()));
-        }
         CalcDimensions();
 
         m_created = true;
