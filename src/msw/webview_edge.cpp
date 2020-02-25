@@ -42,17 +42,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
             break;
 
 // WebView2Loader typedefs
-typedef HRESULT (__stdcall *CreateWebView2EnvironmentWithDetails_t)(
+typedef HRESULT (__stdcall *CreateCoreWebView2EnvironmentWithDetails_t)(
     PCWSTR browserExecutableFolder,
     PCWSTR userDataFolder,
     PCWSTR additionalBrowserArguments,
-    IWebView2CreateWebView2EnvironmentCompletedHandler* environment_created_handler);
-typedef HRESULT(__stdcall *GetWebView2BrowserVersionInfo_t)(
+    ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler* environment_created_handler);
+typedef HRESULT(__stdcall *GetCoreWebView2BrowserVersionInfo_t)(
     PCWSTR browserExecutableFolder,
     LPWSTR* versionInfo);
 
-CreateWebView2EnvironmentWithDetails_t wxCreateWebView2EnvironmentWithDetails = NULL;
-GetWebView2BrowserVersionInfo_t wxGetWebView2BrowserVersionInfo = NULL;
+CreateCoreWebView2EnvironmentWithDetails_t wxCreateCoreWebView2EnvironmentWithDetails = NULL;
+GetCoreWebView2BrowserVersionInfo_t wxGetCoreWebView2BrowserVersionInfo = NULL;
 
 int wxWebViewEdgeImpl::ms_isAvailable = -1;
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
@@ -71,7 +71,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
         m_webView->remove_DocumentTitleChanged(m_documentTitleChangedToken);
-        m_webView->remove_DocumentStateChanged(m_documentStateChangedToken);
+        m_webView->remove_ContentLoading(m_contentLoadingToken);
     }
 }
 
@@ -86,11 +86,11 @@ bool wxWebViewEdgeImpl::Create()
 
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 
-    HRESULT hr = wxCreateWebView2EnvironmentWithDetails(
+    HRESULT hr = wxCreateCoreWebView2EnvironmentWithDetails(
         nullptr,
         userDataPath.wc_str(),
         nullptr,
-        Callback<IWebView2CreateWebView2EnvironmentCompletedHandler>(this,
+        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
             &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
     if (FAILED(hr))
     {
@@ -102,12 +102,12 @@ bool wxWebViewEdgeImpl::Create()
 }
 
 HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
-    HRESULT WXUNUSED(result), IWebView2Environment* environment)
+    HRESULT WXUNUSED(result), ICoreWebView2Environment* environment)
 {
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
-    m_webViewEnvironment->CreateWebView(
+    m_webViewEnvironment->CreateCoreWebView2Host(
         m_ctrl->GetHWND(),
-        Callback<IWebView2CreateWebViewCompletedHandler>(
+        Callback<ICoreWebView2CreateCoreWebView2HostCompletedHandler>(
             this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
     return S_OK;
 }
@@ -118,14 +118,14 @@ bool wxWebViewEdgeImpl::Initialize()
         return false;
 
     // Try to load functions from loader DLL
-    wxDL_INIT_FUNC(wx, CreateWebView2EnvironmentWithDetails, ms_loaderDll);
-    wxDL_INIT_FUNC(wx, GetWebView2BrowserVersionInfo, ms_loaderDll);
-    if (!wxGetWebView2BrowserVersionInfo || !wxCreateWebView2EnvironmentWithDetails)
+    wxDL_INIT_FUNC(wx, CreateCoreWebView2EnvironmentWithDetails, ms_loaderDll);
+    wxDL_INIT_FUNC(wx, GetCoreWebView2BrowserVersionInfo, ms_loaderDll);
+    if (!wxGetCoreWebView2BrowserVersionInfo || !wxCreateCoreWebView2EnvironmentWithDetails)
         return false;
 
     // Check if a Edge browser can be found by the loader DLL
     LPWSTR versionStr;
-    HRESULT hr = wxGetWebView2BrowserVersionInfo(NULL, &versionStr);
+    HRESULT hr = wxGetCoreWebView2BrowserVersionInfo(NULL, &versionStr);
     if (SUCCEEDED(hr))
     {
         if (versionStr)
@@ -135,7 +135,7 @@ bool wxWebViewEdgeImpl::Initialize()
         }
     }
     else
-        wxLogApiError("GetWebView2BrowserVersionInfo", hr);
+        wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
 
     return false;
 }
@@ -154,10 +154,10 @@ void wxWebViewEdgeImpl::UpdateBounds()
     RECT r;
     wxCopyRectToRECT(m_ctrl->GetClientRect(), r);
     if (m_webView)
-        m_webView->put_Bounds(r);
+        m_webViewHost->put_Bounds(r);
 }
 
-HRESULT wxWebViewEdgeImpl::OnNavigationStarting(IWebView2WebView* WXUNUSED(sender), IWebView2NavigationStartingEventArgs* args)
+HRESULT wxWebViewEdgeImpl::OnNavigationStarting(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NavigationStartingEventArgs* args)
 {
     m_isBusy = true;
     wxString evtURL;
@@ -177,7 +177,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationStarting(IWebView2WebView* WXUNUSED(sende
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(sender), IWebView2NavigationCompletedEventArgs* args)
+HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NavigationCompletedEventArgs* args)
 {
     BOOL isSuccess;
     if (FAILED(args->get_IsSuccess(&isSuccess)))
@@ -187,7 +187,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(send
 
     if (!isSuccess)
     {
-        WEBVIEW2_WEB_ERROR_STATUS status;
+        CORE_WEBVIEW2_WEB_ERROR_STATUS status;
 
         wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), uri, wxString());
         event.SetEventObject(m_ctrl);
@@ -196,23 +196,23 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(send
         {
             switch (status)
             {
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_UNKNOWN, wxWEBVIEW_NAV_ERR_OTHER)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_COMMON_NAME_IS_INCORRECT, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_EXPIRED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CLIENT_CERTIFICATE_CONTAINS_ERRORS, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_REVOKED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_IS_INVALID, wxWEBVIEW_NAV_ERR_CERTIFICATE)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_SERVER_UNREACHABLE, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_ERROR_HTTP_INVALID_SERVER_RESPONSE, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_ABORTED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_RESET, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_DISCONNECTED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_CANNOT_CONNECT, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_HOST_NAME_NOT_RESOLVED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED, wxWEBVIEW_NAV_ERR_USER_CANCELLED)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
-                WX_ERROR2_CASE(WEBVIEW2_WEB_ERROR_STATUS_UNEXPECTED_ERROR, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_UNKNOWN, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_COMMON_NAME_IS_INCORRECT, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_EXPIRED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CLIENT_CERTIFICATE_CONTAINS_ERRORS, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_REVOKED, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CERTIFICATE_IS_INVALID, wxWEBVIEW_NAV_ERR_CERTIFICATE)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_SERVER_UNREACHABLE, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_TIMEOUT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_ERROR_HTTP_INVALID_SERVER_RESPONSE, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_ABORTED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CONNECTION_RESET, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_DISCONNECTED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_CANNOT_CONNECT, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_HOST_NAME_NOT_RESOLVED, wxWEBVIEW_NAV_ERR_CONNECTION)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED, wxWEBVIEW_NAV_ERR_USER_CANCELLED)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR2_CASE(CORE_WEBVIEW2_WEB_ERROR_STATUS_UNEXPECTED_ERROR, wxWEBVIEW_NAV_ERR_OTHER)
             }
         }
         m_ctrl->HandleWindowEvent(event);
@@ -243,7 +243,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(IWebView2WebView* WXUNUSED(send
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(IWebView2WebView* WXUNUSED(sender), IWebView2NewWindowRequestedEventArgs* args)
+HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NewWindowRequestedEventArgs* args)
 {
     LPWSTR uri;
     wxString evtURL;
@@ -258,7 +258,7 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(IWebView2WebView* WXUNUSED(sende
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(IWebView2WebView* WXUNUSED(sender), IUnknown* WXUNUSED(args))
+HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(ICoreWebView2* WXUNUSED(sender), IUnknown* WXUNUSED(args))
 {
     wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
         m_ctrl->GetId(), m_ctrl->GetCurrentURL(), "");
@@ -268,7 +268,7 @@ HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(IWebView2WebView* WXUNUSED(sen
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnDocumentStateChanged(IWebView2WebView* WXUNUSED(sender), IWebView2DocumentStateChangedEventArgs* WXUNUSED(args))
+HRESULT wxWebViewEdgeImpl::OnContentLoading(ICoreWebView2* WXUNUSED(sender), ICoreWebView2ContentLoadingEventArgs* WXUNUSED(args))
 {
     wxWebViewEvent event(wxEVT_WEBVIEW_LOADED, m_ctrl->GetId(),
         m_ctrl->GetCurrentURL(), "");
@@ -277,7 +277,7 @@ HRESULT wxWebViewEdgeImpl::OnDocumentStateChanged(IWebView2WebView* WXUNUSED(sen
     return S_OK;
 }
 
-HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, IWebView2WebView* webview)
+HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Host* webViewHost)
 {
     if (FAILED(result))
     {
@@ -285,32 +285,38 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, IWebView2WebView* we
         return result;
     }
 
-    webview->QueryInterface(IID_PPV_ARGS(&m_webView));
+    HRESULT hr = webViewHost->get_CoreWebView2(&m_webView);
+    if (FAILED(hr))
+    {
+        wxLogApiError("WebView2::WebViewCreated (get_CoreWebView2)", hr);
+        return result;
+    }
+    m_webViewHost = webViewHost;
 
     m_initialized = true;
     UpdateBounds();
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
-        Callback<IWebView2NavigationStartingEventHandler>(
+        Callback<ICoreWebView2NavigationStartingEventHandler>(
             this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
         &m_navigationStartingToken);
     m_webView->add_NavigationCompleted(
-        Callback<IWebView2NavigationCompletedEventHandler>(
+        Callback<ICoreWebView2NavigationCompletedEventHandler>(
             this, &wxWebViewEdgeImpl::OnNavigationCompleted).Get(),
         &m_navigationCompletedToken);
     m_webView->add_NewWindowRequested(
-        Callback<IWebView2NewWindowRequestedEventHandler>(
+        Callback<ICoreWebView2NewWindowRequestedEventHandler>(
             this, &wxWebViewEdgeImpl::OnNewWindowRequested).Get(),
         &m_newWindowRequestedToken);
     m_webView->add_DocumentTitleChanged(
-        Callback<IWebView2DocumentTitleChangedEventHandler>(
+        Callback<ICoreWebView2DocumentTitleChangedEventHandler>(
             this, &wxWebViewEdgeImpl::OnDocumentTitleChanged).Get(),
         &m_documentTitleChangedToken);
-    m_webView->add_DocumentStateChanged(
-        Callback<IWebView2DocumentStateChangedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnDocumentStateChanged).Get(),
-        &m_documentStateChangedToken);
+    m_webView->add_ContentLoading(
+        Callback<ICoreWebView2ContentLoadingEventHandler>(
+            this, &wxWebViewEdgeImpl::OnContentLoading).Get(),
+        &m_contentLoadingToken);
 
     if (!m_pendingURL.empty())
     {
@@ -321,9 +327,9 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, IWebView2WebView* we
     return S_OK;
 }
 
-IWebView2Settings2* wxWebViewEdgeImpl::GetSettings()
+ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
 {
-    IWebView2Settings* settings;
+    ICoreWebView2Settings* settings;
     HRESULT hr = m_webView->get_Settings(&settings);
     if (FAILED(hr))
     {
@@ -331,12 +337,7 @@ IWebView2Settings2* wxWebViewEdgeImpl::GetSettings()
         return NULL;
     }
 
-    IWebView2Settings2* settings2;
-    hr = settings->QueryInterface(IID_PPV_ARGS(&settings2));
-    if (FAILED(hr))
-        return NULL;
-
-    return settings2;
+    return settings;
 }
 
 bool wxWebViewEdge::IsAvailable()
@@ -559,7 +560,7 @@ void wxWebViewEdge::Print()
 wxWebViewZoom wxWebViewEdge::GetZoom() const
 {
     double old_zoom_factor = 0.0;
-    m_impl->m_webView->get_ZoomFactor(&old_zoom_factor);
+    m_impl->m_webViewHost->get_ZoomFactor(&old_zoom_factor);
     if (old_zoom_factor > 1.7)
         return wxWEBVIEW_ZOOM_LARGEST;
     if (old_zoom_factor > 1.3)
@@ -574,7 +575,7 @@ wxWebViewZoom wxWebViewEdge::GetZoom() const
 void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
 {
     double old_zoom_factor = 0.0;
-    m_impl->m_webView->get_ZoomFactor(&old_zoom_factor);
+    m_impl->m_webViewHost->get_ZoomFactor(&old_zoom_factor);
     double zoom_factor = 1.0;
     switch (zoom)
     {
@@ -596,7 +597,7 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
     default:
         break;
     }
-    m_impl->m_webView->put_ZoomFactor(zoom_factor);
+    m_impl->m_webViewHost->put_ZoomFactor(zoom_factor);
 }
 
 bool wxWebViewEdge::CanCut() const
@@ -703,14 +704,14 @@ void wxWebViewEdge::ClearSelection()
 
 void wxWebViewEdge::EnableContextMenu(bool enable)
 {
-    wxCOMPtr<IWebView2Settings2> settings(m_impl->GetSettings());
+    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
     if (settings)
         settings->put_AreDefaultContextMenusEnabled(enable);
 }
 
 bool wxWebViewEdge::IsContextMenuEnabled() const
 {
-    wxCOMPtr<IWebView2Settings2> settings(m_impl->GetSettings());
+    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
     if (settings)
     {
         BOOL menusEnabled = TRUE;
@@ -724,14 +725,14 @@ bool wxWebViewEdge::IsContextMenuEnabled() const
 
 void wxWebViewEdge::EnableAccessToDevTools(bool enable)
 {
-    wxCOMPtr<IWebView2Settings2> settings(m_impl->GetSettings());
+    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
     if (settings)
         settings->put_AreDevToolsEnabled(enable);
 }
 
 bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
 {
-    wxCOMPtr<IWebView2Settings2> settings(m_impl->GetSettings());
+    wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
     if (settings)
     {
         BOOL devToolsEnabled = TRUE;
@@ -767,7 +768,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
     bool scriptExecuted = false;
 
     // Start script execution
-    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<IWebView2ExecuteScriptCompletedHandler>(
+    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
         [&scriptExecuted, &executionResult, output](HRESULT error, PCWSTR result) -> HRESULT
     {
         // Handle script execution callback
