@@ -25,8 +25,9 @@ public:
 
     wxWebViewEdge* m_ctrl;
 
-    wxCOMPtr<IWebView2Environment3> m_webViewEnvironment;
-    wxCOMPtr<IWebView2WebView5> m_webView;
+    wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
+    wxCOMPtr<ICoreWebView2> m_webView;
+    wxCOMPtr<ICoreWebView2Host> m_webViewHost;
 
     bool m_initialized;
     bool m_isBusy;
@@ -37,17 +38,17 @@ public:
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
     EventRegistrationToken m_documentTitleChangedToken = { };
-    EventRegistrationToken m_documentStateChangedToken = { };
+    EventRegistrationToken m_contentLoadingToken = { };
 
     // WebView Event handlers
-    HRESULT OnNavigationStarting(IWebView2WebView* sender, IWebView2NavigationStartingEventArgs* args);
-    HRESULT OnNavigationCompleted(IWebView2WebView* sender, IWebView2NavigationCompletedEventArgs* args);
-    HRESULT OnNewWindowRequested(IWebView2WebView* sender, IWebView2NewWindowRequestedEventArgs* args);
-    HRESULT OnDocumentTitleChanged(IWebView2WebView* sender, IUnknown* args);
-    HRESULT OnDocumentStateChanged(IWebView2WebView* sender, IWebView2DocumentStateChangedEventArgs* args);
+    HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
+    HRESULT OnNavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
+    HRESULT OnNewWindowRequested(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args);
+    HRESULT OnDocumentTitleChanged(ICoreWebView2* sender, IUnknown* args);
+    HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
 
-    HRESULT OnEnvironmentCreated(HRESULT result, IWebView2Environment* environment);
-    HRESULT OnWebViewCreated(HRESULT result, IWebView2WebView* webview);
+    HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
+    HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Host* webViewHost);
 
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
@@ -56,7 +57,7 @@ public:
 
     void UpdateBounds();
 
-    IWebView2Settings2* GetSettings();
+    ICoreWebView2Settings* GetSettings();
 
     static int ms_isAvailable;
     static wxDynamicLibrary ms_loaderDll;
