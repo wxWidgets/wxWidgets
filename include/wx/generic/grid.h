@@ -2332,8 +2332,6 @@ protected:
 
     bool    m_waitForSlowClick;
 
-    wxGridCellCoords m_selectionStart;
-
     wxCursor m_rowResizeCursor;
     wxCursor m_colResizeCursor;
 
