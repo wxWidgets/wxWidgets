@@ -71,6 +71,31 @@ public:
     void UpdateRows( size_t pos, int numRows );
     void UpdateCols( size_t pos, int numCols );
 
+    const wxGridCellCoordsArray& GetCellSelection() const
+    {
+        return m_cellSelection;
+    }
+
+    const wxGridCellCoordsArray& GetBlockSelectionTopLeft() const
+    {
+        return m_blockSelectionTopLeft;
+    }
+
+    const wxGridCellCoordsArray& GetBlockSelectionBottomRight() const
+    {
+        return m_blockSelectionBottomRight;
+    }
+
+    const wxArrayInt& GetRowSelection() const
+    {
+        return m_rowSelection;
+    }
+
+    const wxArrayInt& GetColSelection() const
+    {
+        return m_colSelection;
+    }
+
 private:
     int BlockContain( int topRow1, int leftCol1,
                        int bottomRow1, int rightCol1,
@@ -105,8 +130,6 @@ private:
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
-
-    friend class WXDLLIMPEXP_FWD_CORE wxGrid;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };
