@@ -2406,10 +2406,15 @@ public:
 
         Dialogs, notebook pages and the status bar have this flag set to @true
         by default so that the default look and feel is simulated best.
+
+        @see GetThemeEnabled()
     */
     virtual void SetThemeEnabled(bool enable);
 
     /**
+        Returns @true if the window uses the system theme for drawing its background.
+
+        @see SetThemeEnabled()
      */
     virtual bool GetThemeEnabled() const;
 
