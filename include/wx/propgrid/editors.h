@@ -35,6 +35,9 @@ public:
 
     void SetSecondary(wxWindow* secondary) { m_secondary = secondary; }
 
+    wxWindow* GetPrimary() const { return m_primary; }
+    wxWindow* GetSecondary() const { return m_secondary; }
+
     wxWindow*   m_primary;
     wxWindow*   m_secondary;
 };

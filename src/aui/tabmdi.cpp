@@ -54,6 +54,7 @@ enum MDI_MENU_ID
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIParentFrame, wxFrame);
 
 wxBEGIN_EVENT_TABLE(wxAuiMDIParentFrame, wxFrame)
+    EVT_CLOSE(wxAuiMDIParentFrame::OnClose)
 #if wxUSE_MENUS
     EVT_MENU (wxID_ANY, wxAuiMDIParentFrame::DoHandleMenu)
     EVT_UPDATE_UI (wxID_ANY, wxAuiMDIParentFrame::DoHandleUpdateUI)
@@ -241,6 +242,29 @@ bool wxAuiMDIParentFrame::ProcessEvent(wxEvent& event)
     return res;
 }
 
+void wxAuiMDIParentFrame::OnClose(wxCloseEvent& event)
+{
+    if (!CloseAll())
+        event.Veto();
+    else
+        event.Skip();
+}
+
+bool wxAuiMDIParentFrame::CloseAll()
+{
+    wxAuiMDIChildFrame* pActiveChild;
+    while ((pActiveChild = GetActiveChild()) != NULL)
+    {
+        if (!pActiveChild->Close())
+        {
+            // it refused to close, don't close the remaining ones neither
+            return false;
+        }
+    }
+
+    return true;
+}
+
 wxAuiMDIChildFrame *wxAuiMDIParentFrame::GetActiveChild() const
 {
     // We can be called before the client window is created, so check for its
@@ -343,14 +367,7 @@ void wxAuiMDIParentFrame::DoHandleMenu(wxCommandEvent& event)
         }
         case wxWINDOWCLOSEALL:
         {
-            wxAuiMDIChildFrame* pActiveChild;
-            while ((pActiveChild = GetActiveChild()) != NULL)
-            {
-                if (!pActiveChild->Close())
-                {
-                    return; // failure
-                }
-            }
+            CloseAll();
             break;
         }
         case wxWINDOWNEXT:

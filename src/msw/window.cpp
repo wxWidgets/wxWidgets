@@ -63,7 +63,6 @@
 #include "wx/popupwin.h"
 #include "wx/power.h"
 #include "wx/scopeguard.h"
-#include "wx/stack.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -81,6 +80,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/keyboard.h"
+#include "wx/msw/private/paint.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
 #include "wx/msw/seh.h"
@@ -2720,7 +2720,9 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             return true;
         }
     }
-#endif // __WXUNIVERSAL__
+#else // __WXUNIVERSAL__
+    wxUnusedVar(pMsg);
+#endif // !__WXUNIVERSAL__/__WXUNIVERSAL__
 
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
@@ -4863,7 +4865,7 @@ wxSize wxWindowMSW::GetDPI() const
 
     if ( hwnd == NULL )
     {
-        const wxWindow* topWin = wxGetTopLevelParent(const_cast<wxWindow*>(this));
+        const wxWindow* topWin = wxGetTopLevelParent(const_cast<wxWindowMSW*>(this));
         if ( topWin )
         {
             hwnd = GetHwndOf(topWin);
@@ -5295,8 +5297,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
 // endless stream of WM_PAINT messages for this window resulting in a lot of
 // difficult to debug problems (e.g. impossibility to repaint other windows,
 // lack of timer and idle events and so on)
-extern wxStack<bool> wxDidCreatePaintDC;
-wxStack<bool> wxDidCreatePaintDC;
+wxStack<wxMSWImpl::PaintData> wxMSWImpl::paintStack;
 
 bool wxWindowMSW::HandlePaint()
 {
@@ -5312,14 +5313,16 @@ bool wxWindowMSW::HandlePaint()
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
 
-    wxDidCreatePaintDC.push(false);
+    using namespace wxMSWImpl;
 
-    wxPaintEvent event(m_windowId);
-    event.SetEventObject(this);
+    paintStack.push(PaintData(this));
+
+    wxPaintEvent event(this);
 
     bool processed = HandleWindowEvent(event);
 
-    if ( wxDidCreatePaintDC.top() && !processed )
+    const bool createdPaintDC = paintStack.top().createdPaintDC;
+    if ( createdPaintDC && !processed )
     {
         // Event handler did paint something as wxPaintDC object was created
         // but then it must have skipped the event to indicate that default
@@ -5333,8 +5336,7 @@ bool wxWindowMSW::HandlePaint()
     // note that we must generate NC event after the normal one as otherwise
     // BeginPaint() will happily overwrite our decorations with the background
     // colour
-    wxNcPaintEvent eventNc(m_windowId);
-    eventNc.SetEventObject(this);
+    wxNcPaintEvent eventNc(this);
     HandleWindowEvent(eventNc);
 
     // don't keep an HRGN we don't need any longer (GetUpdateRegion() can only
@@ -5343,16 +5345,16 @@ bool wxWindowMSW::HandlePaint()
 
     wxPaintDCImpl::EndPaint((wxWindow *)this);
 
+    paintStack.pop();
+
     // It doesn't matter whether the event was actually processed or not here,
     // what matters is whether we already painted, and hence validated, the
     // window or not. If we did, either the event was processed or we called
     // OnPaint() above, so we should return true. If we did not, even the event
     // was processed, we must still call MSWDefWindowProc() to ensure that the
     // window is validated, i.e. to avoid the problem described in the comment
-    // before wxDidCreatePaintDC definition above.
-    const bool ret = wxDidCreatePaintDC.top();
-    wxDidCreatePaintDC.pop();
-    return ret;
+    // before paintStack definition above.
+    return createdPaintDC;
 }
 
 // Can be called from an application's OnPaint handler

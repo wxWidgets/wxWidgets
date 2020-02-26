@@ -206,6 +206,9 @@ public:
     virtual wxGridCellRenderer *Clone() const = 0;
 };
 
+// Smart pointer to wxGridCellRenderer, calling DecRef() on it automatically.
+typedef wxObjectDataPtr<wxGridCellRenderer> wxGridCellRendererPtr;
+
 // ----------------------------------------------------------------------------
 // wxGridCellEditor:  This class is responsible for providing and manipulating
 // the in-place edit controls for the grid.  Instances of wxGridCellEditor
@@ -332,6 +335,9 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellEditor);
 };
+
+// Smart pointer to wxGridCellEditor, calling DecRef() on it automatically.
+typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
 
 // ----------------------------------------------------------------------------
 // wxGridHeaderRenderer and company: like wxGridCellRenderer but for headers
@@ -573,8 +579,18 @@ public:
     // whether the cell will draw the overflowed text to neighbour cells
     // currently only left aligned cells can overflow
     bool CanOverflow() const;
+
     wxGridCellRenderer *GetRenderer(const wxGrid* grid, int row, int col) const;
+    wxGridCellRendererPtr GetRendererPtr(const wxGrid* grid, int row, int col) const
+    {
+        return wxGridCellRendererPtr(GetRenderer(grid, row, col));
+    }
+
     wxGridCellEditor *GetEditor(const wxGrid* grid, int row, int col) const;
+    wxGridCellEditorPtr GetEditorPtr(const wxGrid* grid, int row, int col) const
+    {
+        return wxGridCellEditorPtr(GetEditor(grid, row, col));
+    }
 
     bool IsReadOnly() const { return m_isReadOnly == wxGridCellAttr::ReadOnly; }
 
@@ -628,6 +644,9 @@ private:
     friend class wxGridCellAttrDummyFriend;
 };
 
+// Smart pointer to wxGridCellAttr, calling DecRef() on it automatically.
+typedef wxObjectDataPtr<wxGridCellAttr> wxGridCellAttrPtr;
+
 // ----------------------------------------------------------------------------
 // wxGridCellAttrProvider: class used by wxGridTableBase to retrieve/store the
 // cell attributes.
@@ -649,6 +668,13 @@ public:
     // DecRef() must be called on the returned pointer
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind  kind ) const;
+
+    // Helper returning smart pointer calling DecRef() automatically.
+    wxGridCellAttrPtr GetAttrPtr(int row, int col,
+                                 wxGridCellAttr::wxAttrKind  kind ) const
+    {
+        return wxGridCellAttrPtr(GetAttr(row, col, kind));
+    }
 
     // all these functions take ownership of the pointer, don't call DecRef()
     // on it
@@ -824,6 +850,11 @@ public:
     virtual wxGridCellAttr *GetAttr( int row, int col,
                                      wxGridCellAttr::wxAttrKind  kind );
 
+    wxGridCellAttrPtr GetAttrPtr(int row, int col,
+                                 wxGridCellAttr::wxAttrKind  kind)
+    {
+        return wxGridCellAttrPtr(GetAttr(row, col, kind));
+    }
 
     // these functions take ownership of the pointer
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
@@ -1477,6 +1508,11 @@ public:
     //
     // DecRef() must be called on the returned pointer, as usual
     wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
+
+    wxGridCellAttrPtr GetOrCreateCellAttrPtr(int row, int col) const
+    {
+        return wxGridCellAttrPtr(GetOrCreateCellAttr(row, col));
+    }
 
 
     // shortcuts for setting the column parameters
@@ -2195,6 +2231,16 @@ protected:
     wxGridCellAttr *GetCellAttr(int row, int col) const;
     wxGridCellAttr *GetCellAttr(const wxGridCellCoords& coords ) const
         { return GetCellAttr( coords.GetRow(), coords.GetCol() ); }
+
+    wxGridCellAttrPtr GetCellAttrPtr(int row, int col) const
+    {
+        return wxGridCellAttrPtr(GetCellAttr(row, col));
+    }
+    wxGridCellAttrPtr GetCellAttrPtr(const wxGridCellCoords& coords) const
+    {
+        return wxGridCellAttrPtr(GetCellAttr(coords));
+    }
+
 
     // the default cell attr object for cells that don't have their own
     wxGridCellAttr*     m_defaultCellAttr;

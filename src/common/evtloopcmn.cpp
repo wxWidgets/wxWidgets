@@ -270,7 +270,15 @@ int wxEventLoopManual::DoRun()
                 // generate and process idle events for as long as we don't
                 // have anything else to do, but stop doing this if Exit() is
                 // called by one of the idle handlers
-                while ( !m_shouldExit && !Pending() && ProcessIdle() )
+                //
+                // note that Pending() only checks for pending events from the
+                // underlying toolkit, but not our own pending events added by
+                // QueueEvent(), so we need to call HasPendingEvents() to check
+                // for them too
+                while ( !m_shouldExit
+                            && !Pending()
+                                && !(wxTheApp && wxTheApp->HasPendingEvents())
+                                    && ProcessIdle() )
                     ;
 
                 // if Exit() was called, don't dispatch any more events here

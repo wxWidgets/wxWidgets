@@ -147,7 +147,7 @@ public:
     // default
   wxTempFile() { }
     // associates the temp file with the file to be replaced and opens it
-  wxTempFile(const wxString& strName);
+  explicit wxTempFile(const wxString& strName);
 
   // open the temp file (strName is the name of file to be replaced)
   bool Open(const wxString& strName);

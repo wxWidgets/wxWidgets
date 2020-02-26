@@ -291,8 +291,8 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
         CHECK(result == _("Hello World!"));
 
-        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\vb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
-        CHECK(result == _("a\'aa\n\rb\vb\tb\\ccc\"ddd\b\fx"));
+        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
+        CHECK(result == _("a\'aa\n\rb\tb\\ccc\"ddd\b\fx"));
 
         CHECK(m_browser->RunScript("function f(a){return a;}f(123);", &result));
         CHECK(wxAtoi(result) == 123);
@@ -337,6 +337,13 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
             var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
             &result));
         CHECK(result == "\"2016-10-08T21:30:40.000Z\"");
+
+        // Check for C++-style comments which used to be broken.
+        CHECK(m_browser->RunScript("function f() {\n"
+                                   "    // A C++ style comment\n"
+                                   "    return 17;\n"
+                                   "}f();", &result));
+        CHECK(result == "17");
 
         // Check for errors too.
         CHECK(!m_browser->RunScript("syntax(error"));

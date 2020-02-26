@@ -166,14 +166,16 @@ public:
     Example of storing credentials using this class:
     @code
     wxSecretStore store = wxSecretStore::GetDefault();
-    if ( store.IsOk() )
+    wxString errmsg;
+    if ( store.IsOk(&errmsg) )
     {
         if ( !store.Save("MyApp/MyService", username, password) )
             wxLogWarning("Failed to save credentials to the system secret store.");
     }
     else
     {
-        wxLogWarning("This system doesn't support storing passwords securely.");
+        wxLogWarning("This system doesn't support storing passwords securely "
+                     "(%s).", errmsg);
     }
     @endcode
 
@@ -201,13 +203,20 @@ public:
         Returns the default secrets collection to use.
 
         Call IsOk() on the returned object to check if this method succeeded.
+
+        Note that this method may show a dialog to the user under some
+        platforms, so it can take an arbitrarily long time to return.
      */
     static wxSecretStore GetDefault();
 
     /**
-        Check if this object is valid.
+        Check if this object can actually be used.
+
+        @param errmsg If not @NULL, this parameter is filled with a
+            user-readable error message explaining why the secret store can't
+            be used (this argument is new since wxWidgets 3.1.4)
      */
-    bool IsOk() const;
+    bool IsOk(wxString* errmsg = NULL) const;
 
     /**
         Store a username/password combination.
