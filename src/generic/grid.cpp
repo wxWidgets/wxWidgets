@@ -94,6 +94,7 @@ struct DefaultHeaderRenderers
 // ----------------------------------------------------------------------------
 
 wxGridCellCoords wxGridNoCellCoords( -1, -1 );
+wxGridBlockCoords wxGridNoBlockCoords( -1, -1, -1, -1 );
 wxRect wxGridNoCellRect( -1, -1, -1, -1 );
 
 namespace
@@ -1150,6 +1151,226 @@ wxGridCellAttrProvider::GetRowHeaderRenderer(int WXUNUSED(row))
 const wxGridCornerHeaderRenderer& wxGridCellAttrProvider::GetCornerRenderer()
 {
     return gs_defaultHeaderRenderers.cornerRenderer;
+}
+
+// ----------------------------------------------------------------------------
+// wxGridBlockCoords
+// ----------------------------------------------------------------------------
+
+bool wxGridBlockCoords::ContainCell(const wxGridCellCoords& cell) const
+{
+        return m_topRow <= cell.GetRow() && cell.GetRow() <= m_bottomRow &&
+               m_leftCol <= cell.GetCol() && cell.GetCol() <= m_rightCol;
+}
+
+int wxGridBlockCoords::ContainBlock(const wxGridBlockCoords& other) const
+{
+// returns 1, if this block contains the other,
+//        -1, if the other block contains this one,
+//         0, otherwise
+    if ( m_topRow <= other.m_topRow && other.m_bottomRow <= m_bottomRow &&
+         m_leftCol <= other.m_leftCol && other.m_rightCol <= m_rightCol )
+        return 1;
+    else if ( other.m_topRow <= m_topRow && m_bottomRow <= other.m_bottomRow &&
+              other.m_leftCol <= m_leftCol && m_rightCol <= other.m_rightCol )
+        return -1;
+
+    return 0;
+}
+
+wxGridBlockDiffResult
+wxGridBlockCoords::Difference(const wxGridBlockCoords& other,
+                              int splitOrientation) const
+{
+    wxGridBlockDiffResult result;
+
+    // Check whether the blocks intersect.
+    if (!Intersects(other))
+    {
+        result.m_parts[0] = *this;
+        return result;
+    }
+
+    // Split the block in up to 4 new parts, that don't contain the other
+    // block, like this (for wxHORIZONTAL):
+    // |-----------------------------|
+    // |                             |
+    // |           part[0]           |
+    // |                             |
+    // |-----------------------------|
+    // | part[2] |  other  | part[3] |
+    // |-----------------------------|
+    // |                             |
+    // |           part[1]           |
+    // |                             |
+    // |-----------------------------|
+    // And for wxVERTICAL:
+    // |-----------------------------|
+    // |         |         |         |
+    // |         | part[2] |         |
+    // |         |         |         |
+    // |         |---------|         |
+    // | part[0] |  other  | part[1] |
+    // |         |---------|         |
+    // |         |         |         |
+    // |         | part[3] |         |
+    // |         |         |         |
+    // |-----------------------------|
+
+    if ( splitOrientation == wxHORIZONTAL )
+    {
+        // Part[0].
+        if ( m_topRow < other.m_topRow )
+            result.m_parts[0] =
+                wxGridBlockCoords(m_topRow, m_leftCol,
+                                  other.m_topRow - 1, m_rightCol);
+
+        // Part[1].
+        if ( m_bottomRow > other.m_bottomRow )
+            result.m_parts[1] =
+                wxGridBlockCoords(other.m_bottomRow + 1, m_leftCol,
+                                  m_bottomRow, m_rightCol);
+
+        const int maxTopRow = wxMax(m_topRow, other.m_topRow);
+        const int minBottomRow = wxMin(m_bottomRow, other.m_bottomRow);
+
+        // Part[2].
+        if ( m_leftCol < other.m_leftCol )
+            result.m_parts[2] =
+                wxGridBlockCoords(maxTopRow, m_leftCol,
+                                  minBottomRow, other.m_leftCol - 1);
+
+        // Part[3].
+        if ( m_rightCol > other.m_rightCol )
+            result.m_parts[3] =
+                wxGridBlockCoords(maxTopRow, other.m_rightCol + 1,
+                                  minBottomRow, m_rightCol);
+    }
+    else // wxVERTICAL
+    {
+        // Part[0].
+        if ( m_leftCol < other.m_leftCol )
+            result.m_parts[0] =
+                wxGridBlockCoords(m_topRow, m_leftCol,
+                                  m_bottomRow, other.m_leftCol - 1);
+
+        // Part[1].
+        if ( m_rightCol > other.m_rightCol )
+            result.m_parts[1] =
+                wxGridBlockCoords(m_topRow, other.m_rightCol + 1,
+                                  m_bottomRow, m_rightCol);
+
+        const int maxLeftCol = wxMax(m_leftCol, other.m_leftCol);
+        const int minRightCol = wxMin(m_rightCol, other.m_rightCol);
+
+        // Part[2].
+        if ( m_topRow < other.m_topRow )
+            result.m_parts[2] =
+                wxGridBlockCoords(m_topRow, maxLeftCol,
+                                  other.m_topRow - 1, minRightCol);
+
+        // Part[3].
+        if ( m_bottomRow > other.m_bottomRow )
+            result.m_parts[3] =
+                wxGridBlockCoords(other.m_bottomRow + 1, maxLeftCol,
+                                  m_bottomRow, minRightCol);
+    }
+
+    return result;
+}
+
+wxGridBlockDiffResult
+wxGridBlockCoords::SymDifference(const wxGridBlockCoords& other) const
+{
+    wxGridBlockDiffResult result;
+
+    // Check whether the blocks intersect.
+    if ( !Intersects(other) )
+    {
+        result.m_parts[0] = *this;
+        result.m_parts[1] = other;
+        return result;
+    }
+
+    // Possible result blocks:
+    // |------------------|
+    // |                  |            minUpper->m_topRow
+    // |      part[0]     |
+    // |                  |            maxUpper->m_topRow - 1
+    // |-----------------------------|
+    // |         |         |         | maxUpper->m_topRow
+    // | part[2] |    x    | part[3] |
+    // |         |         |         | minLower->m_bottomRow
+    // |-----------------------------|
+    //           |                   | minLower->m_bottomRow + 1
+    //           |      part[1]      |
+    //           |                   | maxLower->m_bottomRow
+    //           |-------------------|
+    //
+    // The x marks the intersection of the blocks, which is not a part
+    // of the result.
+
+    // Part[0].
+    int maxUpperRow;
+    if ( m_topRow != other.m_topRow )
+    {
+        const bool block1Min = m_topRow < other.m_topRow;
+        const wxGridBlockCoords& minUpper = block1Min ? *this : other;
+        const wxGridBlockCoords& maxUpper = block1Min ? other : *this;
+        maxUpperRow = maxUpper.m_topRow;
+
+        result.m_parts[0] = wxGridBlockCoords(minUpper.m_topRow,
+                                           minUpper.m_leftCol,
+                                           maxUpper.m_topRow - 1,
+                                           minUpper.m_rightCol);
+    }
+    else
+    {
+        maxUpperRow = m_topRow;
+    }
+
+    // Part[1].
+    int minLowerRow;
+    if ( m_bottomRow != other.m_bottomRow )
+    {
+        const bool block1Min = m_bottomRow < other.m_bottomRow;
+        const wxGridBlockCoords& minLower = block1Min ? *this : other;
+        const wxGridBlockCoords& maxLower = block1Min ? other : *this;
+        minLowerRow = minLower.m_bottomRow;
+
+        result.m_parts[1] = wxGridBlockCoords(minLower.m_bottomRow + 1,
+                                           maxLower.m_leftCol,
+                                           maxLower.m_bottomRow,
+                                           maxLower.m_rightCol);
+    }
+    else
+    {
+        minLowerRow = m_bottomRow;
+    }
+
+    // Part[2].
+    if ( m_leftCol != other.m_leftCol )
+    {
+        result.m_parts[2] = wxGridBlockCoords(maxUpperRow,
+                                           wxMin(m_leftCol,
+                                                 other.m_leftCol),
+                                           minLowerRow,
+                                           wxMax(m_leftCol,
+                                                 other.m_leftCol) - 1);
+    }
+
+    // Part[3].
+    if ( m_rightCol != other.m_rightCol )
+    {
+        result.m_parts[3] = wxGridBlockCoords(maxUpperRow,
+                                           wxMin(m_rightCol,
+                                                 other.m_rightCol) + 1,
+                                           minLowerRow,
+                                           wxMax(m_rightCol,
+                                                 other.m_rightCol));
+    }
+
+    return result;
 }
 
 // ----------------------------------------------------------------------------

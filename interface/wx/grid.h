@@ -1817,6 +1817,195 @@ public:
 };
 
 /**
+    Represents coordinates of a block of cells in the grid.
+
+    An object of this class contains coordinates of the left top and the bottom right
+    corners of a block.
+
+    @since 3.1.4
+ */
+class wxGridBlockCoords
+{
+public:
+    /**
+        Default constructor initializes the object to invalid state.
+
+        Initially the coordinates are invalid (-1) and so operator!() for an
+        uninitialized wxGridBlockCoords returns @true.
+     */
+    wxGridBlockCoords();
+
+    /**
+        Constructor taking a coordinates of the left top and the bottom right
+        corners.
+     */
+    wxGridBlockCoords(int topRow, int leftCol, int bottomRow, int rightCol);
+
+    /**
+        Return the row of the left top corner.
+     */
+    int GetTopRow() const;
+
+    /**
+        Set the row of the left top corner.
+     */
+    void SetTopRow(int row);
+
+    /**
+        Return the column of the left top corner.
+     */
+    int GetLeftCol() const;
+
+    /**
+        Set the column of the left top corner.
+     */
+    void SetLeftCol(int col);
+
+    /**
+        Return the row of the bottom right corner.
+     */
+    int GetBottomRow() const;
+
+    /**
+        Set the row of the bottom right corner.
+     */
+    void SetBottomRow(int row);
+
+    /**
+        Return the column of the bottom right corner.
+     */
+    int GetRightCol() const;
+
+    /**
+        Set the column of the bottom right corner.
+     */
+    void SetRightCol(int col);
+
+    /**
+        Return the coordinates of the top left corner.
+     */
+    wxGridCellCoords GetTopLeft() const
+    {
+        return wxGridCellCoords(m_topRow, m_leftCol);
+    }
+
+    /**
+        Return the coordinates of the bottom right corner.
+     */
+    wxGridCellCoords GetBottomRight() const
+    {
+        return wxGridCellCoords(m_bottomRow, m_rightCol);
+    }
+
+    /**
+        Return the canonicalized block where top left coordinates is less
+        then bottom right coordinates.
+     */
+    wxGridBlockCoords Canonicalize() const;
+
+    /**
+        Whether the blocks intersects.
+
+        @return
+            @true, if the block intersects with the other, @false, otherwise.
+     */
+    bool Intersects(const wxGridBlockCoords& other) const
+    {
+        return m_topRow <= other.m_bottomRow && m_bottomRow >= other.m_topRow &&
+               m_leftCol <= other.m_rightCol && m_rightCol >= other.m_leftCol;
+    }
+
+    /**
+        Whether the block contains the cell.
+
+        @return
+            @true, if the block contains the cell, @false, otherwise.
+     */
+    bool ContainCell(const wxGridCellCoords& cell) const;
+
+    /**
+        Whether the blocks contain each other.
+
+        @return
+            1, if this block contains the other,
+            -1, if the other block contains this one,
+            0, otherwise.
+     */
+    int ContainBlock(const wxGridBlockCoords& other) const;
+
+    /**
+        Calculates the result blocks by subtracting the other block from this
+        block.
+
+        @param other
+            The block to subtract from this block.
+        @param splitOrientation
+            The block splitting orientation (either @c wxHORIZONTAL or
+            @c wxVERTICAL).
+        @return
+            Up to 4 blocks. If block doesn't exist in the result, it has value
+            of @c wxGridNoBlockCoords.
+     */
+    wxGridBlockDiffResult
+    Difference(const wxGridBlockCoords& other, int splitOrientation) const;
+
+    /**
+        Calculates the symmetric difference of the blocks.
+
+        @param other
+            The block to subtract from this block.
+        @return
+            Up to 4 blocks. If block doesn't exist in the result, it has value
+            of @c wxGridNoBlockCoords.
+     */
+    wxGridBlockDiffResult
+    SymDifference(const wxGridBlockCoords& other) const;
+
+    /**
+        Equality operator.
+     */
+    bool operator==(const wxGridBlockCoords& other) const;
+
+    /**
+        Inequality operator.
+     */
+    bool operator!=(const wxGridBlockCoords& other) const;
+
+    /**
+        Checks whether the cells block is invalid.
+
+        Returns @true only if all components are -1. Notice that if one
+        of the components (but not all) is -1, this method returns @false even
+        if the object is invalid. This is done because objects in such state
+        should actually never exist, i.e. either all components should be -1
+        or none of them should be -1.
+     */
+    bool operator!() const;
+
+private:
+    int m_topRow;
+    int m_leftCol;
+    int m_bottomRow;
+    int m_rightCol;
+};
+
+/**
+    @class wxGridBlockDiffResult
+
+    The helper struct uses as a result type for difference functions of
+    @c wxGridBlockCoords class.
+
+    Parts can be uninitialized (equals to @c wxGridNoBlockCoords), that means
+    that the corresponding part doesn't exists in the result.
+
+    @since 3.1.4
+ */
+struct wxGridBlockDiffResult
+{
+    wxGridBlockCoords m_parts[4];
+};
+
+/**
     @class wxGridTableBase
 
     The almost abstract base class for grid tables.

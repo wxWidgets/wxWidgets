@@ -1259,4 +1259,191 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
     }
 }
 
+// Test wxGridBlockCoords here because it'a a part of grid sources.
+
+std::ostream& operator<<(std::ostream& os, const wxGridBlockCoords& block) {
+    os << "wxGridBlockCoords(" <<
+        block.GetTopRow() << ", " << block.GetLeftCol() << ", " <<
+        block.GetBottomRow() << ", " << block.GetRightCol() << ")";
+    return os;
+}
+
+TEST_CASE("GridBlockCoords::Canonicalize", "[grid]")
+{
+    const wxGridBlockCoords block =
+        wxGridBlockCoords(4, 3, 2, 1).Canonicalize();
+
+    CHECK(block.GetTopRow() == 2);
+    CHECK(block.GetLeftCol() == 1);
+    CHECK(block.GetBottomRow() == 4);
+    CHECK(block.GetRightCol() == 3);
+}
+
+TEST_CASE("GridBlockCoords::Intersects", "[grid]")
+{
+    // Inside.
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(1, 2, 2, 3)));
+
+    // Intersects.
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(2, 2, 4, 4)));
+
+    // Doesn't intersects.
+    CHECK(!wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(4, 4, 6, 6)));
+}
+
+TEST_CASE("GridBlockCoords::ContainCell", "[grid]")
+{
+    // Inside.
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).ContainCell(wxGridCellCoords(2, 2)));
+
+    // Outside.
+    CHECK(!wxGridBlockCoords(1, 1, 3, 3).ContainCell(wxGridCellCoords(5, 5)));
+}
+
+TEST_CASE("GridBlockCoords::ContainBlock", "[grid]")
+{
+    wxGridBlockCoords block1(1, 1, 5, 5);
+    wxGridBlockCoords block2(1, 1, 3, 3);
+    wxGridBlockCoords block3(2, 2, 7, 7);
+    wxGridBlockCoords block4(10, 10, 12, 12);
+
+    CHECK(block1.ContainBlock(block2) == 1);
+    CHECK(block2.ContainBlock(block1) == -1);
+    CHECK(block1.ContainBlock(block3) == 0);
+    CHECK(block1.ContainBlock(block4) == 0);
+}
+
+TEST_CASE("GridBlockCoords::Difference", "[grid]")
+{
+    SECTION("Subtract contained block (splitted horizontally)")
+    {
+        const wxGridBlockCoords block1(1, 1, 7, 7);
+        const wxGridBlockCoords block2(3, 3, 5, 5);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 7));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(6, 1, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(3, 6, 5, 7));
+    }
+
+    SECTION("Subtract contained block (splitted vertically)")
+    {
+        const wxGridBlockCoords block1(1, 1, 7, 7);
+        const wxGridBlockCoords block2(3, 3, 5, 5);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxVERTICAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 7, 2));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(1, 6, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(1, 3, 2, 5));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(6, 3, 7, 5));
+    }
+
+    SECTION("Blocks intersect by the corner (splitted horizontally)")
+    {
+        const wxGridBlockCoords block1(1, 1, 5, 5);
+        const wxGridBlockCoords block2(3, 3, 7, 7);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 5));
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks intersect by the corner (splitted vertically)")
+    {
+        const wxGridBlockCoords block1(1, 1, 5, 5);
+        const wxGridBlockCoords block2(3, 3, 7, 7);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxVERTICAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 5, 2));
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridBlockCoords(1, 3, 2, 5));
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks are the same")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(1, 1, 3, 3);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks doesn't intersects")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(5, 5, 7, 7);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 3, 3));
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+}
+
+
+TEST_CASE("GridBlockCoords::SymDifference", "[grid]")
+{
+    SECTION("With contained block")
+    {
+        const wxGridBlockCoords block1(1, 1, 7, 7);
+        const wxGridBlockCoords block2(3, 3, 5, 5);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 7));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(6, 1, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(3, 6, 5, 7));
+    }
+
+    SECTION("Blocks intersect by the corner")
+    {
+        const wxGridBlockCoords block1(1, 1, 5, 5);
+        const wxGridBlockCoords block2(3, 3, 7, 7);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 5));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(6, 3, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(3, 6, 5, 7));
+    }
+
+    SECTION("Blocks are the same")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(1, 1, 3, 3);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks doesn't intersects")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(5, 5, 7, 7);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 3, 3));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(5, 5, 7, 7));
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+}
+
 #endif //wxUSE_GRID
