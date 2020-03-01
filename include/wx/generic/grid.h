@@ -2302,10 +2302,11 @@ protected:
     // in progress.
     int     m_dragMoveCol;
 
-    // the last position (horizontal or vertical depending on whether the user
-    // is resizing a column or a row) where a row or column separator line was
-    // dragged by the user or -1 of there is no drag operation in progress
+    // Last horizontal mouse position while drag-moving a column.
     int     m_dragLastPos;
+
+    // Row or column (depending on m_cursorMode value) currently being resized
+    // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
     // true if a drag operation is in progress; when this is true,
@@ -2480,11 +2481,6 @@ private:
                         const wxGridCellCoords& coords,
                         bool isFirstDrag);
 
-    // process row/column resizing drag event
-    void DoGridLineDrag(int pos,
-                        const wxGridOperations& oper,
-                        wxGridWindow* gridWindow);
-
     // process mouse drag event in the grid window, return false if starting
     // dragging was vetoed by the user-defined wxEVT_GRID_CELL_BEGIN_DRAG
     // handler
@@ -2493,15 +2489,10 @@ private:
                          bool isFirstDrag,
                          wxGridWindow* gridWindow);
 
-    void DrawGridDragLine(wxPoint position,
+    // Update the width/height of the column/row being drag-resized.
+    void DoGridDragResize(const wxPoint& position,
                           const wxGridOperations& oper,
                           wxGridWindow* gridWindow);
-
-    // return the current grid windows involved in the drag process
-    void GetDragGridWindows(int pos,
-                            const wxGridOperations& oper,
-                            wxGridWindow*& firstGridWindow,
-                            wxGridWindow*& secondGridWindow);
 
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
@@ -2534,6 +2525,7 @@ private:
 
     void DoColHeaderClick(int col);
 
+    void DoStartResizeRowOrCol(int col);
     void DoStartMoveCol(int col);
 
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);

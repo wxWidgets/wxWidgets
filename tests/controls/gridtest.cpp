@@ -1144,10 +1144,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
     sim.MouseUp();
     wxYield();
 
-    if ( m_grid->IsUsingNativeHeader() )
-        CHECK(m_grid->GetColSize(0) == startwidth);
-    else
-        CHECK(m_grid->GetColSize(0) == newminwidth);
+    CHECK(m_grid->GetColSize(0) == newminwidth);
 #endif
 }
 
