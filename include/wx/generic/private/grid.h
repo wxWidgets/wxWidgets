@@ -163,12 +163,13 @@ protected:
     wxGrid *GetOwner() const { return static_cast<wxGrid *>(GetParent()); }
 
 private:
-    static wxMouseEvent GetDummyMouseEvent()
+    wxMouseEvent GetDummyMouseEvent() const
     {
         // make up a dummy event for the grid event to use -- unfortunately we
         // can't do anything else here
         wxMouseEvent e;
         e.SetState(wxGetMouseState());
+        GetOwner()->ScreenToClient(&e.m_x, &e.m_y);
         return e;
     }
 
