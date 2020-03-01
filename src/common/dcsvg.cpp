@@ -340,11 +340,12 @@ wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
         }
 
         wxString brushColourStr = Col2SVG(brush.GetColour());
+        wxString brushStrokeStr = wxS("stroke-width:1; stroke-linecap:round; stroke-linejoin:round;");
 
         s += wxString::Format(wxS("  <pattern id=\"%s%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
             patternName, brushColourStr.substr(1));
-        s += wxString::Format(wxS("    <path style=\"stroke:%s;\" %s %s/>\n"),
-            brushColourStr, pattern, GetRenderMode(mode));
+        s += wxString::Format(wxS("    <path style=\"stroke:%s; stroke-opacity:1.0; %s\" %s %s/>\n"),
+            brushColourStr, brushStrokeStr, pattern, GetRenderMode(mode));
         s += wxS("  </pattern>\n");
     }
 
