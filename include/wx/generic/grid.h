@@ -2534,17 +2534,25 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeCol(int col);
-    void DoUpdateResizeColWidth(int w);
     void DoStartMoveCol(int col);
 
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
-    void DoEndDragResizeCol(const wxMouseEvent& event)
-    {
-        DoEndDragResizeCol(event, m_gridWin);
-    }
     void DoEndMoveCol(int pos);
+
+    // Helper function returning the position (only the horizontal component
+    // really counts) corresponding to the given column drag-resize event.
+    //
+    // It's a bit ugly to create a phantom mouse position when we really only
+    // need the column width anyhow, but wxGrid code was originally written to
+    // expect the position and not the width and it's simpler to keep it happy
+    // by giving it the position than to change it.
+    wxPoint GetPositionForResizeEvent(int width) const;
+
+    // functions called by wxGridHeaderCtrl while resizing m_dragRowOrCol
+    void DoHeaderStartDragResizeCol(int col);
+    void DoHeaderDragResizeCol(int width);
+    void DoHeaderEndDragResizeCol(int width);
 
     // process a TAB keypress
     void DoGridProcessTab(wxKeyboardState& kbdState);

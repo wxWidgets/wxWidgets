@@ -3745,21 +3745,6 @@ void wxGrid::DoColHeaderClick(int col)
     }
 }
 
-void wxGrid::DoStartResizeCol(int col)
-{
-    m_dragRowOrCol = col;
-    m_dragLastPos = -1;
-    DoUpdateResizeColWidth(GetColWidth(m_dragRowOrCol));
-}
-
-void wxGrid::DoUpdateResizeColWidth(int w)
-{
-    wxPoint pt(GetColLeft(m_dragRowOrCol) + w, 0);
-
-    pt = CalcGridWindowScrolledPosition(pt, m_gridWin);
-    DrawGridDragLine(pt, wxGridColumnOperations(), m_gridWin);
-}
-
 void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindow* colLabelWin )
 {
     int x;
@@ -4746,6 +4731,19 @@ bool wxGrid::DoEndDragResizeLine(const wxGridOperations& oper, wxGridWindow *gri
     return sizeChanged;
 }
 
+wxPoint wxGrid::GetPositionForResizeEvent(int width) const
+{
+    // Note that we currently always use m_gridWin here as using
+    // wxGridHeaderCtrl is incompatible with using frozen rows/columns.
+    // This would need to be changed if they're allowed to be used together.
+    int x;
+    CalcGridWindowScrolledPosition(GetColLeft(m_dragRowOrCol) + width, 0,
+                                   &x, NULL,
+                                   m_gridWin);
+
+    return wxPoint(x, 0);
+}
+
 void wxGrid::DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow* gridWindow)
 {
     // TODO: generate RESIZING event, see #10754
@@ -4760,6 +4758,34 @@ void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow* gridWin
 
     if ( DoEndDragResizeLine(wxGridColumnOperations(), gridWindow) )
         SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event);
+}
+
+void wxGrid::DoHeaderStartDragResizeCol(int col)
+{
+    m_dragRowOrCol = col;
+    m_dragLastPos = -1;
+    DoHeaderDragResizeCol(GetColWidth(m_dragRowOrCol));
+}
+
+void wxGrid::DoHeaderDragResizeCol(int width)
+{
+    DrawGridDragLine(GetPositionForResizeEvent(width),
+                     wxGridColumnOperations(),
+                     m_gridWin);
+}
+
+void wxGrid::DoHeaderEndDragResizeCol(int width)
+{
+    // Unfortunately we need to create a dummy mouse event here to avoid
+    // modifying too much existing code. Note that only position and keyboard
+    // state parts of this event object are actually used, so the rest
+    // (even including some crucial parts, such as event type) can be left
+    // uninitialized.
+    wxMouseEvent e;
+    e.SetState(wxGetMouseState());
+    e.SetPosition(GetPositionForResizeEvent(width));
+
+    DoEndDragResizeCol(e, m_gridWin);
 }
 
 void wxGrid::DoStartMoveCol(int col)

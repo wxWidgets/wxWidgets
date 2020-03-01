@@ -252,24 +252,19 @@ private:
 
     void OnBeginResize(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoStartResizeCol(event.GetColumn());
+        GetOwner()->DoHeaderStartDragResizeCol(event.GetColumn());
 
         event.Skip();
     }
 
     void OnResizing(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoUpdateResizeColWidth(event.GetWidth());
+        GetOwner()->DoHeaderDragResizeCol(event.GetWidth());
     }
 
     void OnEndResize(wxHeaderCtrlEvent& event)
     {
-        // we again need to pass a mouse event to be used for the grid event
-        // generation but we don't have it here so use a dummy one as in
-        // UpdateColumnVisibility()
-        wxMouseEvent e;
-        e.SetState(wxGetMouseState());
-        GetOwner()->DoEndDragResizeCol(e);
+        GetOwner()->DoHeaderEndDragResizeCol(event.GetWidth());
 
         event.Skip();
     }
