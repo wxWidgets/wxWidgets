@@ -17,6 +17,10 @@
 
 #include "wx/grid.h"
 
+#include "wx/vector.h"
+
+typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
+
 class WXDLLIMPEXP_CORE wxGridSelection
 {
 public:
@@ -48,16 +52,6 @@ public:
                     kbd, sendEvent);
     }
 
-    void SelectCell(int row, int col,
-                    const wxKeyboardState& kbd = wxKeyboardState(),
-                    bool sendEvent = true);
-    void SelectCell(const wxGridCellCoords& coords,
-                    const wxKeyboardState& kbd = wxKeyboardState(),
-                    bool sendEvent = true)
-    {
-        SelectCell(coords.GetRow(), coords.GetCol(), kbd, sendEvent);
-    }
-
     void ToggleCellSelection(int row, int col,
                              const wxKeyboardState& kbd = wxKeyboardState());
     void ToggleCellSelection(const wxGridCellCoords& coords,
@@ -66,35 +60,20 @@ public:
         ToggleCellSelection(coords.GetRow(), coords.GetCol(), kbd);
     }
 
+    void DeselectBlock(const wxGridBlockCoords& block,
+                       const wxKeyboardState& kbd = wxKeyboardState(),
+                       bool sendEvent = true );
+
     void ClearSelection();
 
     void UpdateRows( size_t pos, int numRows );
     void UpdateCols( size_t pos, int numCols );
 
-    const wxGridCellCoordsArray& GetCellSelection() const
-    {
-        return m_cellSelection;
-    }
-
-    const wxGridCellCoordsArray& GetBlockSelectionTopLeft() const
-    {
-        return m_blockSelectionTopLeft;
-    }
-
-    const wxGridCellCoordsArray& GetBlockSelectionBottomRight() const
-    {
-        return m_blockSelectionBottomRight;
-    }
-
-    const wxArrayInt& GetRowSelection() const
-    {
-        return m_rowSelection;
-    }
-
-    const wxArrayInt& GetColSelection() const
-    {
-        return m_colSelection;
-    }
+    wxGridCellCoordsArray GetCellSelection() const;
+    wxGridCellCoordsArray GetBlockSelectionTopLeft() const;
+    wxGridCellCoordsArray GetBlockSelectionBottomRight() const;
+    wxArrayInt GetRowSelection() const;
+    wxArrayInt GetColSelection() const;
 
 private:
     int BlockContain( int topRow1, int leftCol1,
@@ -105,28 +84,27 @@ private:
       //        -1, if Block2 contains Block1,
       //         0, otherwise
 
-    int BlockContainsCell( int topRow, int leftCol,
-                           int bottomRow, int rightCol,
-                           int row, int col )
-      // returns 1, if Block contains Cell,
-      //         0, otherwise
+    void SelectBlockNoEvent(const wxGridBlockCoords& block)
     {
-        return ( topRow <= row && row <= bottomRow &&
-                 leftCol <= col && col <= rightCol );
-    }
-
-    void SelectBlockNoEvent(int topRow, int leftCol,
-                            int bottomRow, int rightCol)
-    {
-        SelectBlock(topRow, leftCol, bottomRow, rightCol,
+        SelectBlock(block.GetTopRow(), block.GetLeftCol(),
+                    block.GetBottomRow(), block.GetRightCol(),
                     wxKeyboardState(), false);
     }
 
-    wxGridCellCoordsArray               m_cellSelection;
-    wxGridCellCoordsArray               m_blockSelectionTopLeft;
-    wxGridCellCoordsArray               m_blockSelectionBottomRight;
-    wxArrayInt                          m_rowSelection;
-    wxArrayInt                          m_colSelection;
+    // Really select the block and don't check for the current selection mode.
+    void Select(const wxGridBlockCoords& block,
+                const wxKeyboardState& kbd, bool sendEvent);
+
+    // If the new block containing any of the passed blocks, remove them.
+    // if a new block contained in the passed blockc, return.
+    // Otherwise add the new block to the blocks array.
+    void MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
+                         const wxGridBlockCoords& block);
+
+    // The vector of selection blocks. We expect that the users select
+    // relatively small amount of blocks. K-D tree can be used to speed up
+    // searching speed.
+    wxVectorGridBlockCoords             m_selection;
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;

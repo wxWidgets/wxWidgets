@@ -1904,7 +1904,7 @@ public:
     wxGridBlockCoords Canonicalize() const;
 
     /**
-        Whether the blocks intersects.
+        Whether the blocks intersect.
 
         @return
             @true, if the block intersects with the other, @false, otherwise.
