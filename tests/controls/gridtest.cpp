@@ -526,42 +526,46 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectEmptyGrid", "[grid]")
 {
-    SECTION("Delete rows/columns")
+    for ( int i = 0; i < 2; ++i )
     {
-        SECTION("No rows")
+        SECTION(i == 0 ? "No rows" : "No columns")
         {
-            m_grid->DeleteRows(0, 10);
-            REQUIRE( m_grid->GetNumberRows() == 0 );
-        }
-        SECTION("No columns")
-        {
-            m_grid->DeleteCols(0, 2);
-            REQUIRE( m_grid->GetNumberCols() == 0 );
+
+            if ( i == 0 )
+            {
+                m_grid->DeleteRows(0, 10);
+                REQUIRE( m_grid->GetNumberRows() == 0 );
+            }
+            else
+            {
+                m_grid->DeleteCols(0, 2);
+                REQUIRE( m_grid->GetNumberCols() == 0 );
+            }
+
+            SECTION("Move right")
+            {
+                m_grid->MoveCursorRight(true);
+            }
+            SECTION("Move down")
+            {
+                m_grid->MoveCursorDown(true);
+            }
+            SECTION("Select row")
+            {
+                m_grid->SelectRow(1);
+            }
+            SECTION("Select column")
+            {
+                m_grid->SelectCol(1);
+            }
         }
     }
 
-    SECTION("Select")
-    {
-        SECTION("Move right")
-        {
-            m_grid->MoveCursorRight(true);
-        }
-        SECTION("Move down")
-        {
-            m_grid->MoveCursorDown(true);
-        }
-        SECTION("Select row")
-        {
-            m_grid->SelectRow(1);
-        }
-        SECTION("Select column")
-        {
-            m_grid->SelectCol(1);
-        }
-    }
-
+    CHECK( m_grid->GetSelectedCells().Count() == 0 );
     CHECK( m_grid->GetSelectionBlockTopLeft().Count() == 0 );
     CHECK( m_grid->GetSelectionBlockBottomRight().Count() == 0 );
+    CHECK( m_grid->GetSelectedRows().Count() == 0 );
+    CHECK( m_grid->GetSelectedCols().Count() == 0 );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ScrollWhenSelect", "[grid]")
