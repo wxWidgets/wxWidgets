@@ -87,6 +87,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
 
 private:
 #if wxUSE_MARKUP && wxOSX_USE_COCOA
@@ -111,7 +112,7 @@ public:
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 
     virtual bool MacRender() wxOVERRIDE;
-
+    virtual wxSize GetSize() const wxOVERRIDE;
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
 };
@@ -136,7 +137,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
-
+    virtual wxSize GetSize() const wxOVERRIDE;
 private:
     wxArrayString m_choices;
 
@@ -160,6 +161,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
 };
 
 // ---------------------------------------------------------
@@ -179,7 +181,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
-
+    virtual wxSize GetSize() const wxOVERRIDE;
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer);
 };
@@ -205,7 +207,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
-
+    virtual wxSize GetSize() const wxOVERRIDE;
 private:
     void DoInitButtonCell(int buttonType);
 
@@ -231,7 +233,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
-
+    virtual wxSize GetSize() const wxOVERRIDE;
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
 };
@@ -254,7 +256,7 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) wxOVERRIDE;
-
+    virtual wxSize GetSize() const wxOVERRIDE;
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer);
 };

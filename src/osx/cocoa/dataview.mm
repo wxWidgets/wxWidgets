@@ -3003,6 +3003,12 @@ wxDataViewTextRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueText, item, col);
 }
 
+wxSize wxDataViewTextRenderer::GetSize() const
+{
+    wxSize textSize = GetView()->GetTextExtent( GetValue() );
+    return textSize;
+}
+
 wxIMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
@@ -3041,6 +3047,29 @@ bool wxDataViewBitmapRenderer::MacRender()
             [GetNativeData()->GetItemCell() setObjectValue:icon.GetNSImage()];
     }
     return true;
+}
+
+wxSize wxDataViewBitmapRenderer::GetSize() const
+{
+    wxSize size;
+    if (GetValue().GetType() == wxS("wxBitmap"))
+    {
+        wxBitmap bitmap;
+        bitmap << GetValue();
+        if (bitmap.IsOk())
+            size = bitmap.GetSize();
+    }
+    else if (GetValue().GetType() == wxS("wxIcon"))
+    {
+        wxIcon icon;
+        icon << GetValue();
+        if (icon.IsOk())
+        {
+            size.x = icon.GetWidth();
+            size.y = icon.GetHeight();
+        }
+    }
+    return size;
 }
 
 wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
@@ -3100,6 +3129,12 @@ bool wxDataViewChoiceRenderer::MacRender()
     return true;
 }
 
+wxSize wxDataViewChoiceRenderer::GetSize() const
+{
+    wxSize size(0, 0);
+    return size;
+}
+
 wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewRenderer);
 
 // ----------------------------------------------------------------------------
@@ -3143,6 +3178,12 @@ wxDataViewChoiceByIndexRenderer::GetValue(wxVariant& value) const
 
     value = (long) GetChoices().Index(valueStr.GetString());
     return true;
+}
+
+wxSize wxDataViewChoiceByIndexRenderer::GetSize() const
+{
+    wxSize size( 0, 0 );
+    return size;
 }
 
 // ---------------------------------------------------------
@@ -3230,6 +3271,14 @@ wxDataViewDateRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueDate, item, col);
 }
 
+wxSize wxDataViewDateRenderer::GetSize() const
+{
+    wxDateTime dt = GetValue();
+    wxString str = dt.Format();
+    wxSize size = GetView()->GetTextExtent( str );
+    return size;
+}
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
@@ -3290,6 +3339,24 @@ void wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueIconText, item, col);
 }
 
+wxSize wxDataViewIconTextRenderer::GetSize() const
+{
+    wxDataViewIconText iconText;
+    wxSize size, cellSize, textSize;
+    
+    wxImageTextCell* cell;
+    
+    cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
+    iconText << GetValue();
+    size = iconText.GetIcon().GetSize();
+    textSize = GetView()->GetTextExtent( iconText.GetText() );
+    cellSize.y = size.y;
+    if( textSize.y > size.y )
+        cellSize.y = textSize.y;
+    cellSize.x = textSize.x + size.x;
+    return cellSize;
+}
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer);
 
 // ---------------------------------------------------------
@@ -3344,6 +3411,13 @@ wxDataViewToggleRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueToggle, item, col);
 }
 
+wxSize wxDataViewToggleRenderer::GetSize() const
+{
+    CGSize osxSize = [GetNativeData()->GetItemCell() cellSize];
+    wxSize size( wxRound( osxSize.width ), wxRound( osxSize.height ) );
+    return size;
+}
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
@@ -3383,6 +3457,13 @@ wxDataViewProgressRenderer::OSXOnCellChanged(NSObject *value,
 
     wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
     model->ChangeValue(valueProgress, item, col);
+}
+
+wxSize wxDataViewProgressRenderer::GetSize() const
+{
+    CGSize cellSize = [GetNativeData()->GetItemCell() cellSize];
+    wxSize size( wxRound( cellSize.width ), wxRound( cellSize.height ) );
+    return size;
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewRenderer);
