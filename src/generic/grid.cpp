@@ -4492,13 +4492,6 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
         case wxMOD_CONTROL:
             if ( isFirstDrag )
                 SetGridCursor(coords);
-            if ( m_selection )
-            {
-                m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
-                                                        coords,
-                                                        event);
-                MakeCellVisible(coords);
-            }
             break;
 
         case wxMOD_NONE:
@@ -4513,19 +4506,12 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                     return performDefault;
                 }
             }
-            if ( m_selection )
-            {
-                m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
-                                                        coords,
-                                                        event);
-                MakeCellVisible(coords);
-            }
             break;
-
-        default:
-            // we don't handle the other key modifiers
-            event.Skip();
     }
+
+    // Edit the current selection block independently of the modifiers state.
+    if ( m_selection )
+        m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords, coords, event);
 
     return performDefault;
 }
@@ -4566,10 +4552,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         return;
     }
 
-    if ( !event.CmdDown() )
-        ClearSelection();
-
-    if ( event.ShiftDown() )
+    if ( event.ShiftDown() && !event.CmdDown() )
     {
         if ( m_selection )
         {
@@ -4584,7 +4567,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         DisableCellEditControl();
         MakeCellVisible( coords );
 
-        if ( event.CmdDown() )
+        if ( event.CmdDown() && !event.ShiftDown() )
         {
             if ( m_selection )
             {
@@ -4607,6 +4590,8 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         }
         else
         {
+            ClearSelection();
+
             if ( m_selection )
             {
                 // In row or column selection mode just clicking on the cell
@@ -4632,8 +4617,8 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
 
             m_waitForSlowClick = m_currentCellCoords == coords &&
                                         coords != wxGridNoCellCoords;
-            SetCurrentCell( coords );
         }
+        SetCurrentCell(coords);
     }
 }
 
