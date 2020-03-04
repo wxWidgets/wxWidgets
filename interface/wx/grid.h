@@ -4835,6 +4835,11 @@ public:
         Returns -1 if the grid doesn't have any rows.
     */
     int GetFirstFullyVisibleRow() const;
+    /**
+        Returns the leftmost column of the current visible area.
+        Returns -1 if the grid doesn't have any columns.
+    */
+   int GetFirstFullyVisibleColumn() const;
 
     /**
         Sets the number of pixels per horizontal scroll increment.

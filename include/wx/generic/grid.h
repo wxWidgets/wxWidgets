@@ -1468,7 +1468,8 @@ public:
 
     // Returns the topmost row of the current visible area.
     int GetFirstFullyVisibleRow() const;
-
+    // Returns the leftmost column of the current visible area.
+    int GetFirstFullyVisibleColumn() const;
 
     // ------ grid cursor movement functions
     //

@@ -3691,10 +3691,15 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
                 case WXGRID_CURSOR_SELECT_ROW:
                 {
+                    if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
+                        break;
+
                     if ( (row = YToRow( pos.y )) >= 0 )
                     {
-                        if ( m_selection )
-                            m_selection->SelectRow(row, event);
+                        m_selection->ExtendOrCreateCurrentBlock(
+                            wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
+                            wxGridCellCoords(row, GetNumberCols() - 1),
+                            event);
                     }
                 }
                 break;
@@ -3736,12 +3741,14 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
             if ( row >= 0 &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
             {
-                if ( !event.ShiftDown() && !event.CmdDown() )
-                    ClearSelection();
-                if ( m_selection )
+                if ( m_selection && m_numRows > 0 && m_numCols > 0 )
                 {
-                    if ( event.ShiftDown() )
+                    bool selectNewRow = false;
+
+                    if ( event.ShiftDown() && !event.CmdDown() )
                     {
+                        // Continue editing the current selection and don't
+                        // move the grid cursor.
                         m_selection->ExtendOrCreateCurrentBlock
                                      (
                                         wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
@@ -3750,9 +3757,25 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                                      );
                         MakeCellVisible(row, -1);
                     }
+                    else if ( event.CmdDown() && !event.ShiftDown() )
+                    {
+                        if ( GetSelectedRows().Index(row) != wxNOT_FOUND )
+                            DeselectRow(row);
+                        else
+                            selectNewRow = true;
+                    }
                     else
                     {
+                        ClearSelection();
+                        selectNewRow = true;
+                    }
+
+                    if ( selectNewRow )
+                    {
+                        // Select the new row.
                         m_selection->SelectRow(row, event);
+
+                        SetCurrentCell(row, GetFirstFullyVisibleColumn());
                     }
                 }
 
@@ -7851,6 +7874,40 @@ int wxGrid::GetFirstFullyVisibleRow() const
     }
 
     return row;
+}
+
+int wxGrid::GetFirstFullyVisibleColumn() const
+{
+    if ( m_numCols == 0 )
+        return -1;
+
+    int col;
+    if ( GetNumberFrozenCols() > 0 )
+    {
+        col = 0;
+    }
+    else
+    {
+        int x;
+        CalcGridWindowUnscrolledPosition(0, 0,
+                                         &x, NULL,
+                                         m_gridWin);
+
+        col = XToCol(x, true, m_gridWin);
+
+        // If the column is not fully visible.
+        if ( GetColLeft(col) < x )
+        {
+            // Use the next visible column.
+            for ( ; col < m_numCols; ++col )
+            {
+                if ( IsColShown(GetColAt(col)) )
+                    break;
+            }
+        }
+    }
+
+    return col;
 }
 
 //
