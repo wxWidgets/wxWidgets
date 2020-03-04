@@ -1466,6 +1466,9 @@ public:
     void MakeCellVisible( const wxGridCellCoords& coords )
         { MakeCellVisible( coords.GetRow(), coords.GetCol() ); }
 
+    // Returns the topmost row of the current visible area.
+    int GetFirstFullyVisibleRow() const;
+
 
     // ------ grid cursor movement functions
     //
