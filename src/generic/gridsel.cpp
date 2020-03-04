@@ -454,6 +454,121 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
     }
 }
 
+bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockStart,
+                                                 const wxGridCellCoords& blockEnd,
+                                                 const wxKeyboardState& kbd)
+{
+    if ( m_selection.empty() )
+    {
+        SelectBlock(blockStart, blockEnd);
+        return true;
+    }
+
+    wxGridBlockCoords& block = *m_selection.rbegin();
+    wxGridBlockCoords newBlock = block;
+
+    bool editBlock = false;
+
+    if ( blockEnd.GetRow() != -1 )
+    {
+        if ( newBlock.GetTopRow() == blockStart.GetRow() )
+        {
+            newBlock.SetBottomRow(blockEnd.GetRow());
+            editBlock = true;
+        }
+        else if ( newBlock.GetBottomRow() == blockStart.GetRow() )
+        {
+            newBlock.SetTopRow(blockEnd.GetRow());
+            editBlock = true;
+        }
+    }
+    if ( blockEnd.GetCol() != -1 )
+    {
+        if ( newBlock.GetLeftCol() == blockStart.GetCol() )
+        {
+            newBlock.SetRightCol(blockEnd.GetCol());
+            editBlock = true;
+        }
+        else if ( newBlock.GetRightCol() == blockStart.GetCol() )
+        {
+            newBlock.SetLeftCol(blockEnd.GetCol());
+            editBlock = true;
+        }
+    }
+
+    newBlock = newBlock.Canonicalize();
+
+    const bool endCoordsSet =
+        blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1;
+
+    if ( editBlock )
+    {
+        if ( newBlock == block )
+            return false;
+
+        // Update View.
+        if ( !m_grid->GetBatchCount() )
+        {
+            wxGridBlockDiffResult refreshBlocks = block.SymDifference(newBlock);
+            for ( int i = 0; i < 4; ++i )
+            {
+                const wxGridBlockCoords& refreshBlock = refreshBlocks.m_parts[i];
+                m_grid->RefreshBlock(refreshBlock.GetTopLeft(),
+                                     refreshBlock.GetBottomRight());
+            }
+        }
+
+        // Edit the current block.
+        block = newBlock;
+
+        // Send Event.
+        wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
+                                        wxEVT_GRID_RANGE_SELECT,
+                                        m_grid,
+                                        newBlock.GetTopLeft(),
+                                        newBlock.GetBottomRight(),
+                                        true,
+                                        kbd);
+        m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+        return true;
+    }
+    else if ( endCoordsSet )
+    {
+        // Select the new one.
+        SelectBlock(newBlock.GetTopLeft(), newBlock.GetBottomRight(), kbd);
+        return true;
+    }
+    return false;
+}
+
+int wxGridSelection::GetCurrentBlockCornerRow() const
+{
+    if ( m_selection.empty() )
+        return -1;
+
+    const wxGridBlockCoords& block = *m_selection.rbegin();
+    if ( block.GetTopRow() == m_grid->m_currentCellCoords.GetRow() )
+        return block.GetBottomRow();
+    if ( block.GetBottomRow() == m_grid->m_currentCellCoords.GetRow() )
+        return block.GetTopRow();
+
+    return -1;
+}
+
+int wxGridSelection::GetCurrentBlockCornerCol() const
+{
+    if ( m_selection.empty() )
+        return -1;
+
+    const wxGridBlockCoords& block = *m_selection.rbegin();
+    if ( block.GetLeftCol() == m_grid->m_currentCellCoords.GetCol() )
+        return block.GetRightCol();
+    if ( block.GetRightCol() == m_grid->m_currentCellCoords.GetCol() )
+        return block.GetLeftCol();
+
+    return -1;
+}
+
 wxGridCellCoordsArray wxGridSelection::GetCellSelection() const
 {
     if ( m_selectionMode != wxGrid::wxGridSelectCells )

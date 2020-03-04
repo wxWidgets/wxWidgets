@@ -2508,16 +2508,6 @@ protected:
         { return SetCurrentCell( wxGridCellCoords(row, col) ); }
 
 
-    // this function is called to extend the block being currently selected
-    // from mouse and keyboard event handlers
-    void UpdateBlockBeingSelected(int blockStartRow, int blockStartCol,
-                                  int blockEndRow, int blockEndCol);
-
-    void UpdateBlockBeingSelected(const wxGridCellCoords& blockStart,
-                                  const wxGridCellCoords& blockEnd)
-        { UpdateBlockBeingSelected(blockStart.GetRow(), blockStart.GetCol(),
-                                   blockEnd.GetRow(), blockEnd.GetCol()); }
-
     virtual bool ShouldScrollToChildOnFocus(wxWindow* WXUNUSED(win)) wxOVERRIDE
         { return false; }
 
