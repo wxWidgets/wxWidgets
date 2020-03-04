@@ -104,6 +104,7 @@ bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataV
   wxCHECK_MSG(item.IsOk(),false,"Added item is invalid.");
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,item);
   AdjustRowHeight(item);
+  AdjustAutosizedColumns();
   return noFailureFlag;
 }
 
@@ -116,6 +117,7 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,items);
  // adjust row heights:
   AdjustRowHeights(items);
+  AdjustAutosizedColumns();
  // done:
   return noFailureFlag;
 }
