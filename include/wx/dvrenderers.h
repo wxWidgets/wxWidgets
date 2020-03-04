@@ -317,9 +317,6 @@ public:
     // Render the item using the current value (returned by GetValue()).
     virtual bool Render(wxRect cell, wxDC *dc, int state) = 0;
 
-    // Return the size of the item appropriate to its current value.
-    virtual wxSize GetSize() const = 0;
-
     // Define virtual function which are called when a key is pressed on the
     // item, clicked or the user starts to drag it: by default they all simply
     // return false indicating that the events are not handled

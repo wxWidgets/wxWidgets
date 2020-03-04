@@ -44,7 +44,7 @@ public:
         value = m_value;
         return true;
     }
-
+    virtual wxSize GetSize() const { return wxSize( 0, 0 ); }
     // NB: in Carbon this is always identical to the header alignment
     virtual void SetAlignment(int align) wxOVERRIDE;
     virtual void SetMode(wxDataViewCellMode mode) wxOVERRIDE;
