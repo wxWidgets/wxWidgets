@@ -2,21 +2,21 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 3 January 2008                                                      *
+# Date : 4 March 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
+CC_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)
 .else
 CXX_DEFINE =
