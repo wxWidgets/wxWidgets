@@ -202,9 +202,8 @@ void IntlTestCase::DateTimeFmtFrench()
     // Things are difficult to test under macOS as the format keeps changing,
     // e.g. at some time between 10.10 and 10.12 a new " à " string appeared in
     // its middle, so test it piece-wise and hope it doesn't change too much.
-    INFO("French date and time format is \"" << fmtDT << "\"");
-    CHECK( fmtDT.StartsWith("%A %d %B %Y") );
-    CHECK( fmtDT.EndsWith("%H:%M:%S") );
+    CPPUNIT_ASSERT( fmtDT.StartsWith("%A %d %B %Y") );
+    CPPUNIT_ASSERT( fmtDT.EndsWith("%H:%M:%S") );
 #else
     WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT, fmtDT );
 #endif
