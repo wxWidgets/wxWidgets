@@ -2492,9 +2492,6 @@ void wxGDIPlusRenderer::Unload()
 {
     if ( m_gditoken )
     {
-        GdiplusShutdown(m_gditoken);
-        m_gditoken = 0;
-
 #if wxUSE_PRIVATE_FONTS
         if ( gs_privateFonts )
         {
@@ -2505,6 +2502,9 @@ void wxGDIPlusRenderer::Unload()
             gs_pFontFamily = NULL;
         }
 #endif // wxUSE_PRIVATE_FONTS
+
+        GdiplusShutdown(m_gditoken);
+        m_gditoken = 0;
     }
     m_loaded = -1; // next Load() will try again
 }
