@@ -422,10 +422,6 @@ static void v(int x, ...)
         wxVLogFatalError("vhello fatal %d", list);
     if (true)
         wxVLogSysError("vhello syserror %d", list);
-#if wxUSE_GUI
-    if (true)
-        wxVLogStatus("vhello status %d", list);
-#endif
     if (true)
         wxVLogDebug("vhello debug %d", list);
 
@@ -451,10 +447,6 @@ void macroCompilabilityTest()
         wxLogFatalError("hello fatal %d", 42);
     if (true)
         wxLogSysError("hello syserror %d", 42);
-#if wxUSE_GUI
-    if (true)
-        wxLogStatus("hello status %d", 42);
-#endif
     if (true)
         wxLogDebug("hello debug %d", 42);
 }
