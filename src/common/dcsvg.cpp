@@ -264,6 +264,9 @@ wxString wxGetBrushStyleName(wxBrush& brush)
             break;
     }
 
+    if (!brushStyle.empty())
+        brushStyle += wxString::Format(wxS("%s%02X"), Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
+
     return brushStyle;
 }
 
@@ -273,7 +276,7 @@ wxString wxGetBrushFill(wxBrush& brush)
     wxString brushStyle = wxGetBrushStyleName(brush);
 
     if (!brushStyle.IsEmpty())
-        s = wxS("fill=\"url(#") + brushStyle + Col2SVG(brush.GetColour()).substr(1) + wxS(")\"");
+        s = wxString::Format(wxS("fill=\"url(#%s)\""), brushStyle);
 
     return s;
 }
@@ -310,12 +313,14 @@ wxString wxCreateBrushFill(wxBrush& brush)
                 break;
         }
 
-        wxString brushColourStr = Col2SVG(brush.GetColour());
+        float opacity;
+        wxString brushColourStr = Col2SVG(brush.GetColour(), &opacity);
+        wxString brushStrokeStr = wxS("stroke-width:1; stroke-linecap:round; stroke-linejoin:round;");
 
-        s += wxString::Format(wxS("  <pattern id=\"%s%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
-            patternName, brushColourStr.substr(1));
-        s += wxString::Format(wxS("    <path style=\"stroke:%s;\" %s/>\n"),
-            brushColourStr, pattern);
+        s += wxString::Format(wxS("  <pattern id=\"%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
+            patternName);
+        s += wxString::Format(wxS("    <path style=\"stroke:%s; stroke-opacity:%s; %s\" %s/>\n"),
+            brushColourStr, NumStr(opacity), brushStrokeStr, pattern);
         s += wxS("  </pattern>\n");
     }
 
