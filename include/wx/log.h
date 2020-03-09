@@ -1241,77 +1241,30 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 
 // this macro generates the expression which logs whatever follows it in
 // parentheses at the level specified as argument
-#define wxDO_LOG_WITH_FUNC(level, func) wxMAKE_LOGGER(level).func
 #define wxDO_LOG(level) wxDO_LOG_WITH_FUNC(level, Log)
+
+// generalization of the macro above that uses the given function of wxLogger
+// object rather than the default "Log"
+#define wxDO_LOG_WITH_FUNC(level, func) wxMAKE_LOGGER(level).func
 
 // this is the non-vararg equivalent
 #define wxDO_LOGV(level, format, argptr) \
     wxMAKE_LOGGER(level).LogV(format, argptr)
-#define wxDO_LOGV_WITH_FUNC(level, format, argptr, func) \
-    wxMAKE_LOGGER(level).func(format, argptr)
 
-// this macro declares wxLog<level>() macro which logs whatever follows it if
-// logging at specified level is enabled (notice that if it is false, the
-// following arguments are not even evaluated which is good as it avoids
-// unnecessary overhead)
-//
-// Note: the strange (because executing at most once) for() loop because we
-//       must arrange for wxDO_LOG() to be at the end of the macro and using a
-//       more natural "if (IsLevelEnabled()) wxDO_LOG()" would result in wrong
-//       behaviour for the following code ("else" would bind to the wrong "if"):
-//
-//          if ( cond )
-//              wxLogError("!!!");
-//          else
-//              ...
-//
-//       See also #11829 for the problems with other simpler approaches,
-//       notably the need for two macros due to buggy __LINE__ in MSVC.
-#define wxDO_LOG_IF_ENABLED_HELPER(level, loopvar, extraCond, func)           \
-    for ( bool loopvar = false;                                               \
-          !loopvar && wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT) &&\
-              extraCond ;                                                     \
-          loopvar = true )                                                    \
-        wxDO_LOG_WITH_FUNC(level, func)
+// Macro evaluating to true if logging at the given level is enabled.
+#define wxLOG_IS_ENABLED(level) \
+    wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT)
 
-#define wxDO_LOGV_IF_ENABLED_HELPER(level, format, argptr, loopvar, extraCond)\
-    for ( bool loopvar = false;                                               \
-          !loopvar && wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT) &&\
-              extraCond ;                                                     \
-          loopvar = true )                                                    \
-        wxDO_LOGV(level, format, argptr)
-
-#define wxDO_LOGV_IF_ENABLED_HELPER_WITH_FUNC(level, format, argptr, loopvar, \
-    extraCond, func)                                                          \
-    for ( bool loopvar = false;                                               \
-          !loopvar && wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT) &&\
-              extraCond ;                                                     \
-          loopvar = true )                                                    \
-        wxDO_LOGV_WITH_FUNC(level, format, argptr, func)
-
-#define wxDO_LOG_IF_ENABLED_WITH_FUNC(level, func)                            \
-    wxDO_LOG_IF_ENABLED_HELPER(level, wxMAKE_UNIQUE_NAME(wxlogcheck), true,   \
-        func)
-
+// Macro used to define most of the actual wxLogXXX() macros: just calls
+// wxLogger::Log(), if logging at the specified level is enabled.
 #define wxDO_LOG_IF_ENABLED(level)                                            \
-    wxDO_LOG_IF_ENABLED_HELPER(level, wxMAKE_UNIQUE_NAME(wxlogcheck), true,   \
-        Log)
+    wxDO_IF(wxLOG_IS_ENABLED(level))                                          \
+    wxDO_LOG(level)
 
-#define wxDO_LOGV_IF_ENABLED_WITH_FUNC(level, func)                           \
-    wxDO_LOGV_IF_ENABLED_HELPER_WITH_FUNC(level,                              \
-        wxMAKE_UNIQUE_NAME(wxlogcheck), true, func)
-
-#define wxDO_LOGV_IF_ENABLED(level, format, argptr)                           \
-    wxDO_LOGV_IF_ENABLED_HELPER_WITH_FUNC(level, format, argptr,              \
-        wxMAKE_UNIQUE_NAME(wxlogcheck), true, LogV)
-
-#define wxDO_LOG_IF_ENABLED_WITH_COND(level, extraCond)                       \
-    wxDO_LOG_IF_ENABLED_HELPER(level, wxMAKE_UNIQUE_NAME(wxlogcheck),         \
-        extraCond, Log)
-
-#define wxDO_LOGV_IF_ENABLED_WITH_COND(level, format, argptr, extraCond)      \
-    wxDO_LOGV_IF_ENABLED_HELPER(level, format, argptr,                        \
-        wxMAKE_UNIQUE_NAME(wxlogcheck), extraCond)
+// Similar to above, but calls the given function instead of Log().
+#define wxDO_LOG_IF_ENABLED_WITH_FUNC(level, func)                            \
+    wxDO_IF(wxLOG_IS_ENABLED(level))                                          \
+    wxDO_LOG_WITH_FUNC(level, func)
 
 // wxLogFatalError() is special as it can't be disabled
 #define wxLogFatalError wxDO_LOG(FatalError)
@@ -1331,9 +1284,13 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 
 
 // this one is special as it only logs if we're in verbose mode
-#define wxLogVerbose wxDO_LOG_IF_ENABLED_WITH_COND(Info, wxLog::GetVerbose())
+#define wxLogVerbose                                                          \
+    wxDO_IF(wxLOG_IS_ENABLED(Info) && wxLog::GetVerbose())                    \
+    wxDO_LOG(Info)
+
 #define wxVLogVerbose(format, argptr)                                         \
-    wxDO_LOGV_IF_ENABLED_WITH_COND(Info, format, argptr, wxLog::GetVerbose())
+    wxDO_IF(wxLOG_IS_ENABLED(Info) && wxLog::GetVerbose())                    \
+    wxDO_LOGV(Info, format, argptr)
 
 // another special case: the level is passed as first argument of the function
 // and so is not available to the macro
@@ -1342,7 +1299,8 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 // always evaluated, unlike for the other log functions
 #define wxLogGeneric wxMAKE_LOGGER(Max).LogAtLevel
 #define wxVLogGeneric(level, format, argptr) \
-    wxDO_LOGV_IF_ENABLED(level, format, argptr)
+    wxDO_IF(wxLOG_IS_ENABLED(level))                                          \
+    wxDO_LOGV(level, format, argptr)
 
 
 // wxLogSysError() needs to stash the error code value in the log record info
@@ -1359,8 +1317,9 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 // change even much sooner)
 #define wxLOG_KEY_SYS_ERROR_CODE "wx.sys_error"
 
-#define wxLogSysError wxDO_LOG_IF_ENABLED_WITH_FUNC(Error,                    \
-        MaybeStore(wxLOG_KEY_SYS_ERROR_CODE, wxSysErrorCode()).Log)
+#define wxLogSysError \
+    wxDO_LOG_IF_ENABLED_WITH_FUNC(Error, MaybeStore(wxLOG_KEY_SYS_ERROR_CODE, \
+                                                    wxSysErrorCode()).Log)
 
 // unfortunately we can't have overloaded macros so we can't define versions
 // both with and without error code argument and have to rely on LogV()
@@ -1374,8 +1333,8 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
     // specify the frame to which the message should go
     #define wxLOG_KEY_FRAME "wx.frame"
 
-    #define wxLogStatus wxDO_LOG_IF_ENABLED_WITH_FUNC(Status,                 \
-            MaybeStore(wxLOG_KEY_FRAME).Log)
+    #define wxLogStatus \
+        wxDO_LOG_IF_ENABLED_WITH_FUNC(Status, MaybeStore(wxLOG_KEY_FRAME).Log)
 
     #define wxVLogStatus \
         wxMAKE_LOGGER(Status).MaybeStore(wxLOG_KEY_FRAME).LogV
