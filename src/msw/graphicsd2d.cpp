@@ -72,6 +72,7 @@
 
 #include "wx/graphics.h"
 #include "wx/dynlib.h"
+#include "wx/msw/ole/comimpl.h"
 #include "wx/msw/private/comptr.h"
 #include "wx/private/graphics.h"
 #include "wx/stack.h"
@@ -272,6 +273,14 @@ DEFINE_GUID(CLSID_WICImagingFactory,
             0xcacaf262, 0x9370, 0x4615, 0xa1, 0x3b, 0x9f, 0x55, 0x39, 0xda, 0x4c, 0xa);
 #endif
 
+#if wxUSE_PRIVATE_FONTS
+DEFINE_GUID(wxIID_IDWriteFontFileEnumerator,
+            0x72755049, 0x5ff7, 0x435d, 0x83, 0x48, 0x4b, 0xe9, 0x7c, 0xfa, 0x6c, 0x7c);
+
+DEFINE_GUID(wxIID_IDWriteFontCollectionLoader,
+            0xcca920e4, 0x52f0, 0x492b, 0xbf, 0xa8, 0x29, 0xc7, 0x2e, 0xe0, 0xa4, 0x68);
+#endif // wxUSE_PRIVATE_FONTS
+
 // Implementation of the Direct2D functions
 HRESULT WINAPI wxD2D1CreateFactory(
     D2D1_FACTORY_TYPE factoryType,
@@ -360,6 +369,166 @@ HRESULT WINAPI wxD3D11CreateDevice(
 }
 #endif
 
+#if wxUSE_PRIVATE_FONTS
+
+// This function is defined in src/msw/font.cpp.
+extern const wxArrayString& wxGetPrivateFontFileNames();
+
+namespace
+{
+wxCOMPtr<IDWriteFontCollection> gs_pPrivateFontCollection;
+
+typedef unsigned int wxDirect2DFontKey;
+
+class wxDirect2DFontFileEnumerator : public IDWriteFontFileEnumerator
+{
+public:
+    wxDirect2DFontFileEnumerator(IDWriteFactory* pFactory, const wxArrayString& fontCollection)
+        : m_factory(pFactory)
+        , m_nextIndex(0)
+        , m_filePaths(fontCollection)
+    {
+    }
+
+    // IDWriteFontFileEnumerator methods
+    virtual HRESULT STDMETHODCALLTYPE MoveNext(BOOL* pHasCurrentFile) wxOVERRIDE
+    {
+        HRESULT hr = S_OK;
+
+        *pHasCurrentFile = FALSE;
+        m_currentFile.reset();
+
+        if ( m_nextIndex < m_filePaths.size() )
+        {
+            hr = m_factory->CreateFontFileReference(m_filePaths[m_nextIndex].wc_str(), NULL, &m_currentFile);
+            if ( SUCCEEDED(hr) )
+            {
+                *pHasCurrentFile = TRUE;
+                ++m_nextIndex;
+            }
+        }
+
+        return hr;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentFontFile(IDWriteFontFile** ppFontFile) wxOVERRIDE
+    {
+        if ( m_currentFile )
+        {
+            m_currentFile.get()->AddRef();
+        }
+        *ppFontFile = m_currentFile;
+
+        return m_currentFile ? S_OK : E_FAIL;
+    }
+
+    // IUnknown methods
+    DECLARE_IUNKNOWN_METHODS;
+
+private:
+    wxCOMPtr<IDWriteFactory> m_factory;
+    wxCOMPtr<IDWriteFontFile> m_currentFile;
+    wxArrayString m_filePaths;
+    size_t m_nextIndex;
+
+    wxDECLARE_NO_COPY_CLASS(wxDirect2DFontFileEnumerator);
+};
+
+BEGIN_IID_TABLE(wxDirect2DFontFileEnumerator)
+ADD_IID(Unknown)
+ADD_RAW_IID(wxIID_IDWriteFontFileEnumerator)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxDirect2DFontFileEnumerator)
+
+class wxDirect2DFontCollectionLoader : public IDWriteFontCollectionLoader
+{
+public:
+    wxDirect2DFontCollectionLoader()
+    {
+        ms_isInitialized = true;
+    }
+
+    // IDWriteFontCollectionLoader methods
+    virtual HRESULT STDMETHODCALLTYPE CreateEnumeratorFromKey(IDWriteFactory* pFactory,
+                                        void const* pCollectionKey, UINT32 collectionKeySize,
+                                        IDWriteFontFileEnumerator** pFontFileEnumerator) wxOVERRIDE
+    {
+        if ( !pFontFileEnumerator )
+            return E_INVALIDARG;
+
+        *pFontFileEnumerator = NULL;
+
+        if ( collectionKeySize != sizeof(wxDirect2DFontKey) )
+            return E_INVALIDARG;
+
+        wxDirect2DFontKey key = *static_cast<wxDirect2DFontKey const*>(pCollectionKey);
+        if ( key != ms_key )
+            return E_INVALIDARG;
+
+        if ( ms_fontList.empty() )
+            return E_INVALIDARG;
+
+        wxDirect2DFontFileEnumerator* pEnumerator = new wxDirect2DFontFileEnumerator(pFactory, ms_fontList);
+        if ( !pEnumerator )
+            return E_OUTOFMEMORY;
+
+        pEnumerator->AddRef();
+        *pFontFileEnumerator = pEnumerator;
+
+        return S_OK;
+    }
+
+    // Singleton loader instance
+    static IDWriteFontCollectionLoader* GetLoader()
+    {
+        static wxCOMPtr<wxDirect2DFontCollectionLoader> instance(new wxDirect2DFontCollectionLoader());
+
+        return instance;
+    }
+
+    static bool IsInitialized()
+    {
+        return ms_isInitialized;
+    }
+
+    static unsigned int SetFontList(const wxArrayString& list)
+    {
+        ms_fontList = list;
+        // Every time font collection is changed, generate unique key
+        return ++ms_key;
+    }
+
+    static const wxArrayString& GetFontList()
+    {
+        return ms_fontList;
+    }
+
+    // IUnknown methods
+    DECLARE_IUNKNOWN_METHODS;
+
+private:
+    static bool ms_isInitialized;
+    static wxArrayString ms_fontList;
+    static wxDirect2DFontKey ms_key;
+
+    wxDECLARE_NO_COPY_CLASS(wxDirect2DFontCollectionLoader);
+};
+
+BEGIN_IID_TABLE(wxDirect2DFontCollectionLoader)
+ADD_IID(Unknown)
+ADD_RAW_IID(wxIID_IDWriteFontCollectionLoader)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxDirect2DFontCollectionLoader)
+
+bool wxDirect2DFontCollectionLoader::ms_isInitialized(false);
+wxArrayString wxDirect2DFontCollectionLoader::ms_fontList;
+wxDirect2DFontKey wxDirect2DFontCollectionLoader::ms_key(0);
+} // anonymous namespace
+
+#endif // wxUSE_PRIVATE_FONTS
+
 static IWICImagingFactory* gs_WICImagingFactory = NULL;
 
 IWICImagingFactory* wxWICImagingFactory()
@@ -423,6 +592,14 @@ IDWriteFactory* wxDWriteFactory()
             wxIID_IDWriteFactory,
             reinterpret_cast<IUnknown**>(&gs_IDWriteFactory)
             );
+#if wxUSE_PRIVATE_FONTS
+        // Register our custom font loader
+        HRESULT hr = gs_IDWriteFactory->RegisterFontCollectionLoader(wxDirect2DFontCollectionLoader::GetLoader());
+        if ( FAILED(hr) )
+        {
+            wxLogError(_("Could not register custom DirectWrite font loader."));
+        }
+#endif // wxUSE_PRIVATE_FONTS
     }
     return gs_IDWriteFactory;
 }
@@ -2843,19 +3020,77 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
         logfont.lfFaceName[name.Length()] = L'\0';
     }
 
+    wxCOMPtr<IDWriteFontFamily> fontFamily;
+    wxCOMPtr<IDWriteFontCollection> fontCollection; // NULL if font is taken from the system collection
+
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
     if ( hr == DWRITE_E_NOFONT )
     {
-        // It was attempted to create DirectWrite font from non-TrueType GDI font.
+        // It was attempted to create DirectWrite font from non-TrueType GDI font
+        // or from private GDI font.
+#if wxUSE_PRIVATE_FONTS
+        // Make private fonts available to D2D.
+        const wxArrayString& privateFonts = wxGetPrivateFontFileNames();
+        if ( privateFonts.empty() )
+        {
+            wxLogApiError(wxString::Format("IDWriteGdiInterop::CreateFontFromLOGFONT() for '%s'", logfont.lfFaceName), hr);
+            return;
+        }
+        // Update font collection if the list of private fonts has changed.
+        if ( privateFonts != wxDirect2DFontCollectionLoader::GetFontList() )
+        {
+            wxDirect2DFontKey collectionKey = wxDirect2DFontCollectionLoader::SetFontList(privateFonts);
+
+            gs_pPrivateFontCollection.reset();
+            hr = wxDWriteFactory()->CreateCustomFontCollection(
+                                        wxDirect2DFontCollectionLoader::GetLoader(),
+                                        &collectionKey, sizeof(collectionKey),
+                                        &gs_pPrivateFontCollection);
+            wxCHECK_HRESULT_RET(hr);
+        }
+        wxCHECK_RET(gs_pPrivateFontCollection != NULL, "No custom font collection created");
+
+        UINT32 fontIdx = ~0U;
+        BOOL fontFound = FALSE;
+        hr = gs_pPrivateFontCollection->FindFamilyName(logfont.lfFaceName, &fontIdx, &fontFound);
+        wxCHECK_HRESULT_RET(hr);
+        if ( !fontFound )
+        {
+            wxFAIL_MSG(wxString::Format("Couldn't find custom font family '%s'", logfont.lfFaceName));
+            return;
+        }
+        hr = gs_pPrivateFontCollection->GetFontFamily(fontIdx, &fontFamily);
+        wxCHECK_HRESULT_RET(hr);
+
+        // Even though DWRITE_FONT_WEIGHT is an enum, it's values are within the same range
+        // as font width values in LOGFONT (0-1000) so we can cast LONG to this enum.
+        DWRITE_FONT_WEIGHT fWeight = static_cast<DWRITE_FONT_WEIGHT>(logfont.lfWeight);
+
+        DWRITE_FONT_STYLE fStyle;
+        if ( logfont.lfItalic == TRUE )
+            fStyle = DWRITE_FONT_STYLE_ITALIC;
+        else
+            fStyle = DWRITE_FONT_STYLE_NORMAL;
+
+        DWRITE_FONT_STRETCH fStretch = DWRITE_FONT_STRETCH_NORMAL;
+
+        hr = fontFamily->GetFirstMatchingFont(fWeight, fStretch, fStyle, &m_font);
+        wxCHECK_RET(SUCCEEDED(hr),
+            wxString::Format("Failed to find custom font '%s' (HRESULT = %x)", logfont.lfFaceName, hr));
+
+        fontCollection = gs_pPrivateFontCollection;
+#else
         return;
+#endif // wxUSE_PRIVATE_FONTS
     }
+    else
+    {
+        wxCHECK_RET(SUCCEEDED(hr),
+            wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr));
 
-    wxCHECK_RET( SUCCEEDED(hr),
-                 wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr) );
-
-    wxCOMPtr<IDWriteFontFamily> fontFamily;
-    hr = m_font->GetFontFamily(&fontFamily);
-    wxCHECK_HRESULT_RET(hr);
+        hr = m_font->GetFontFamily(&fontFamily);
+        wxCHECK_HRESULT_RET(hr);
+    }
 
     wxCOMPtr<IDWriteLocalizedStrings> familyNames;
     hr = fontFamily->GetFamilyNames(&familyNames);
@@ -2875,7 +3110,7 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
 
     hr = wxDWriteFactory()->CreateTextFormat(
         name,
-        NULL,
+        fontCollection,
         m_font->GetWeight(),
         m_font->GetStyle(),
         m_font->GetStretch(),
@@ -5029,6 +5264,13 @@ public:
 
         if ( gs_IDWriteFactory )
         {
+#if wxUSE_PRIVATE_FONTS
+            if ( wxDirect2DFontCollectionLoader::IsInitialized() )
+            {
+                gs_pPrivateFontCollection.reset();
+                gs_IDWriteFactory->UnregisterFontCollectionLoader(wxDirect2DFontCollectionLoader::GetLoader());
+            }
+#endif // wxUSE_PRIVATE_FONTS
             gs_IDWriteFactory->Release();
             gs_IDWriteFactory = NULL;
         }
