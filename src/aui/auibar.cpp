@@ -1165,15 +1165,7 @@ void wxAuiToolBar::Clear()
 
 bool wxAuiToolBar::DeleteTool(int tool_id)
 {
-    int idx = GetToolIndex(tool_id);
-    if (idx >= 0 && idx < (int)m_items.GetCount())
-    {
-        m_items.RemoveAt(idx);
-        Realize();
-        return true;
-    }
-
-    return false;
+    return DeleteByIndex(GetToolIndex(tool_id));
 }
 
 bool wxAuiToolBar::DeleteByIndex(int idx)
