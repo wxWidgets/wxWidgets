@@ -2194,7 +2194,8 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
     // This can cause idle processing to select the root
     // if no item is selected, so it must be after the
     // selection is set
-    EnsureVisible( itemId );
+    if (is_single)
+        EnsureVisible( itemId );
 
     event.SetEventType(wxEVT_TREE_SEL_CHANGED);
     GetEventHandler()->ProcessEvent( event );
