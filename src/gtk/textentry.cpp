@@ -1003,14 +1003,21 @@ int wxTextEntry::GTKEntryIMFilterKeypress(GdkEventKey* event) const
 
 void wxTextEntry::EnableTextChangedEvents(bool enable)
 {
+    // Check that we have the associated text, as it may happen (for e.g.
+    // read-only wxBitmapComboBox) and shouldn't result in any errors, we just
+    // don't have any events to enable or disable in this case.
+    void* const entry = GetTextObject();
+    if ( !entry )
+        return;
+
     if ( enable )
     {
-        g_signal_handlers_unblock_by_func(GetTextObject(),
+        g_signal_handlers_unblock_by_func(entry,
             (gpointer)wx_gtk_text_changed_callback, this);
     }
     else // disable events
     {
-        g_signal_handlers_block_by_func(GetTextObject(),
+        g_signal_handlers_block_by_func(entry,
             (gpointer)wx_gtk_text_changed_callback, this);
     }
 }
