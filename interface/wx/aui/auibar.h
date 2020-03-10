@@ -722,8 +722,32 @@ public:
 
     void ClearTools();
     void Clear();
+
+    /**
+        Removes the tool with the given ID from the tool bar.
+
+        Note that if this tool was added by AddControl(), the associated
+        control is @e not deleted and must either be reused (e.g. by
+        reparenting it under a different window) or destroyed by caller.
+
+        @param tool_id ID of a previously added tool.
+        @return @true if the tool was removed or @false otherwise, e.g. if the
+            tool with the given ID was not found.
+     */
     bool DeleteTool(int tool_id);
-    bool DeleteByIndex(int tool_id);
+
+    /**
+        Removes the tool at the given position from the tool bar.
+
+        Note that if this tool was added by AddControl(), the associated
+        control is @e not deleted and must either be reused (e.g. by
+        reparenting it under a different window) or destroyed by caller.
+
+        @param idx The index, or position, of a previously added tool.
+        @return @true if the tool was removed or @false otherwise, e.g. if the
+            provided index is out of range.
+     */
+    bool DeleteByIndex(int idx);
 
     size_t GetToolCount() const;
     int GetToolPos(int tool_id) const;
