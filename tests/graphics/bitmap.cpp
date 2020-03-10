@@ -1036,4 +1036,95 @@ TEST_CASE("DC::Clear", "[bitmap][dc]")
     }
 }
 
+#if wxUSE_GRAPHICS_CONTEXT
+
+inline void DrawScaledBmp(wxBitmap& bmp, float scale, wxGraphicsRenderer* renderer)
+{
+    if ( !renderer )
+        return;
+
+    wxBitmap canvas(bmp.GetWidth() * scale, bmp.GetHeight() * scale, 24);
+    {
+        wxMemoryDC mdc(canvas);
+        mdc.SetBackground(*wxBLACK_BRUSH);
+        mdc.Clear();
+        wxGraphicsContext* gc = renderer->CreateContext(mdc);
+        gc->DrawBitmap(bmp, 0, 0, canvas.GetSize().GetWidth(), canvas.GetSize().GetHeight());
+        delete gc;
+    }
+
+    wxNativePixelData bmpData(bmp);
+    REQUIRE(bmpData);
+    wxNativePixelData::Iterator bmpP(bmpData);
+
+    wxNativePixelData canvasData(canvas);
+    REQUIRE(canvasData);
+    wxNativePixelData::Iterator canvasP(canvasData);
+
+    bmpP.MoveTo(bmpData, 0, 0);
+    canvasP.MoveTo(canvasData, 0, 0);
+    ASSERT_EQUAL_COLOUR_RGB(bmpP, canvasP);
+
+    bmpP.MoveTo(bmpData, bmp.GetWidth() / 2, bmp.GetHeight() / 2);
+    canvasP.MoveTo(canvasData, canvas.GetWidth() / 2, canvas.GetHeight() / 2);
+    ASSERT_EQUAL_COLOUR_RGB(bmpP, canvasP);
+
+    bmpP.MoveTo(bmpData, bmp.GetWidth() - 1, bmp.GetHeight() - 1);
+    canvasP.MoveTo(canvasData, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
+    ASSERT_EQUAL_COLOUR_RGB(bmpP, canvasP);
+}
+
+TEST_CASE("GC::DrawBitmap", "[bitmap][drawbitmap]")
+{
+    // Draw a red rectangle to a bitmap, draw the bitmap using a GC to a larger
+    // canvas and test if the bitmap scaled correctly by checking pixels
+    // inside and outside the rectangle.
+
+    wxBitmap bmp(100, 100, 24);
+    {
+        wxMemoryDC mdc(bmp);
+        mdc.SetBackground(*wxBLACK_BRUSH);
+        mdc.Clear();
+        mdc.SetBrush(*wxRED_BRUSH);
+        mdc.DrawRectangle(20, 20, 60, 60);
+    }
+
+    SECTION("Draw bitmap using default GC")
+    {
+        DrawScaledBmp(bmp, 1, wxGraphicsRenderer::GetDefaultRenderer());
+    }
+
+    SECTION("Draw bitmap 0.5x scaled using default GC")
+    {
+        DrawScaledBmp(bmp, 0.5, wxGraphicsRenderer::GetDefaultRenderer());
+    }
+
+    SECTION("Draw bitmap 5x scaled using default GC")
+    {
+        DrawScaledBmp(bmp, 5, wxGraphicsRenderer::GetDefaultRenderer());
+    }
+
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
+
+    SECTION("Draw bitmap using Direct2D GC")
+    {
+        DrawScaledBmp(bmp, 1, wxGraphicsRenderer::GetDirect2DRenderer());
+    }
+
+    SECTION("Draw bitmap 0.5x scaled using Direct2D GC")
+    {
+        DrawScaledBmp(bmp, 0.5, wxGraphicsRenderer::GetDirect2DRenderer());
+    }
+
+    SECTION("Draw bitmap 5x scaled using Direct2D GC")
+    {
+        DrawScaledBmp(bmp, 5, wxGraphicsRenderer::GetDirect2DRenderer());
+    }
+
+#endif //defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
+
+}
+
+#endif //wxUSE_GRAPHICS_CONTEXT
+
 #endif //wxHAS_RAW_BITMAP
