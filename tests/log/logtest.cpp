@@ -398,7 +398,13 @@ void LogTestCase::NoWarnings()
 // any test, and their purpose is merely to guarantee that the wx(V)LogXXX
 // macros compile without 'dangling else' warnings.
 #if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
-    #pragma GCC diagnostic error "-Wdangling-else"
+    // gcc 7 split -Wdangling-else from the much older -Wparentheses, so use
+    // the new warning if it's available or the old one otherwise.
+    #if wxCHECK_GCC_VERSION(7, 0)
+        #pragma GCC diagnostic error "-Wdangling-else"
+    #else
+        #pragma GCC diagnostic error "-Wparentheses"
+    #endif
 #endif
 
 static void v(int x, ...)
