@@ -1938,14 +1938,14 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     for (i = 0, count = m_items.GetCount(); i < count; ++i)
     {
         wxAuiToolBarItem& item = m_items.Item(i);
-        wxSizerItem* m_sizerItem = NULL;
+        wxSizerItem* sizerItem = NULL;
 
         switch (item.m_kind)
         {
             case wxITEM_LABEL:
             {
                 wxSize size = m_art->GetLabelSize(dc, this, item);
-                m_sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
+                sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
                                         size.y + (m_toolBorderPadding*2),
                                         item.m_proportion,
                                         item.m_alignment);
@@ -1962,7 +1962,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
             case wxITEM_RADIO:
             {
                 wxSize size = m_art->GetToolSize(dc, this, item);
-                m_sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
+                sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
                                         size.y + (m_toolBorderPadding*2),
                                         0,
                                         item.m_alignment);
@@ -1978,9 +1978,9 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
             case wxITEM_SEPARATOR:
             {
                 if (horizontal)
-                    m_sizerItem = sizer->Add(separatorSize, 1, 0, wxEXPAND);
+                    sizerItem = sizer->Add(separatorSize, 1, 0, wxEXPAND);
                 else
-                    m_sizerItem = sizer->Add(1, separatorSize, 0, wxEXPAND);
+                    sizerItem = sizer->Add(1, separatorSize, 0, wxEXPAND);
 
                 // add tool packing
                 if (i+1 < count)
@@ -1993,14 +1993,13 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
             case wxITEM_SPACER:
                 if (item.m_proportion > 0)
-                    m_sizerItem = sizer->AddStretchSpacer(item.m_proportion);
+                    sizerItem = sizer->AddStretchSpacer(item.m_proportion);
                 else
-                    m_sizerItem = sizer->Add(item.m_spacerPixels, 1);
+                    sizerItem = sizer->Add(item.m_spacerPixels, 1);
                 break;
 
             case wxITEM_CONTROL:
             {
-                //m_sizerItem = sizer->Add(item.m_window, item.m_proportion, wxEXPAND);
                 wxSizerItem* ctrl_m_sizerItem;
 
                 wxBoxSizer* vert_sizer = new wxBoxSizer(wxVERTICAL);
@@ -2016,7 +2015,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 }
 
 
-                m_sizerItem = sizer->Add(vert_sizer, item.m_proportion, wxEXPAND);
+                sizerItem = sizer->Add(vert_sizer, item.m_proportion, wxEXPAND);
 
                 wxSize min_size = item.m_minSize;
 
@@ -2030,7 +2029,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
                 if (min_size.IsFullySpecified())
                 {
-                    m_sizerItem->SetMinSize(min_size);
+                    sizerItem->SetMinSize(min_size);
                     ctrl_m_sizerItem->SetMinSize(min_size);
                 }
 
@@ -2042,7 +2041,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
             }
         }
 
-        item.m_sizerItem = m_sizerItem;
+        item.m_sizerItem = sizerItem;
     }
 
     // add "right" padding
