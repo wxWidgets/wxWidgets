@@ -286,7 +286,9 @@ wxSize wxSpinCtrlGenericBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     tsize.IncBy(4*totalS.y/10 + 4, 0);
 #elif defined(__WXGTK__)
     tsize.IncBy(totalS.y + 10, 0);
-#endif // MSW GTK
+#elif defined(__WXOSX_COCOA__)
+    tsize.IncBy(totalS.y - GetCharHeight(), 0);
+#endif
 
     // Check if the user requested a non-standard height.
     if ( ylen > 0 )
