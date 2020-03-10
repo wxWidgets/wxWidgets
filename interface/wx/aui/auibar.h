@@ -724,11 +724,33 @@ public:
     void Clear();
 
     /**
-        Removes the tool with the given ID from the tool bar.
+        Destroys the tool with the given ID and its associated window, if any.
+
+        @param tool_id ID of a previously added tool.
+        @return @true if the tool was destroyed or @false otherwise, e.g. if
+            the tool with the given ID was not found.
+
+        @since 3.1.4
+     */
+    bool DestroyTool(int tool_id);
+
+    /**
+        Destroys the tool at the given position and its associated window, if
+        any.
+
+        @param idx The index, or position, of a previously added tool.
+        @return @true if the tool was destroyed or @false otherwise, e.g. if
+            the provided index is out of range.
+     */
+    bool DestroyToolByIndex(int idx);
+
+    /**
+        Removes the tool with the given ID from the toolbar.
 
         Note that if this tool was added by AddControl(), the associated
         control is @e not deleted and must either be reused (e.g. by
         reparenting it under a different window) or destroyed by caller.
+        If this behaviour is unwanted, prefer using DestroyTool() instead.
 
         @param tool_id ID of a previously added tool.
         @return @true if the tool was removed or @false otherwise, e.g. if the
@@ -737,11 +759,13 @@ public:
     bool DeleteTool(int tool_id);
 
     /**
-        Removes the tool at the given position from the tool bar.
+        Removes the tool at the given position from the toolbar.
 
         Note that if this tool was added by AddControl(), the associated
         control is @e not deleted and must either be reused (e.g. by
         reparenting it under a different window) or destroyed by caller.
+        If this behaviour is unwanted, prefer using DestroyToolByIndex()
+        instead.
 
         @param idx The index, or position, of a previously added tool.
         @return @true if the tool was removed or @false otherwise, e.g. if the

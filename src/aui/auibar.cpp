@@ -1180,6 +1180,22 @@ bool wxAuiToolBar::DeleteByIndex(int idx)
     return false;
 }
 
+bool wxAuiToolBar::DestroyTool(int tool_id)
+{
+    return DestroyToolByIndex(GetToolIndex(tool_id));
+}
+
+bool wxAuiToolBar::DestroyToolByIndex(int idx)
+{
+    if ( idx < 0 || static_cast<unsigned>(idx) >= m_items.GetCount() )
+        return false;
+
+    if ( wxWindow* window = m_items[idx].GetWindow() )
+        window->Destroy();
+
+    return DeleteByIndex(idx);
+}
+
 
 wxControl* wxAuiToolBar::FindControl(int id)
 {
