@@ -53,100 +53,18 @@ public:
 
 } // anonymous namespace
 
-class GridTestCase : public CppUnit::TestCase
+class GridTestCase
 {
 public:
-    GridTestCase() { }
+    GridTestCase();
+    ~GridTestCase();
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( GridTestCase );
-        WXUISIM_TEST( CellEdit );
-        WXUISIM_TEST( CellClick );
-        WXUISIM_TEST( ReorderedColumnsCellClick );
-        WXUISIM_TEST( CellSelect );
-        WXUISIM_TEST( LabelClick );
-        WXUISIM_TEST( SortClick );
-        WXUISIM_TEST( Size );
-        WXUISIM_TEST( RangeSelect );
-        CPPUNIT_TEST( Cursor );
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( SelectEmptyGrid );
-        CPPUNIT_TEST( ScrollWhenSelect );
-        WXUISIM_TEST( MoveGridCursorUsingEndKey );
-        WXUISIM_TEST( SelectUsingEndKey );
-        CPPUNIT_TEST( AddRowCol );
-        CPPUNIT_TEST( DeleteAndAddRowCol );
-        CPPUNIT_TEST( ColumnOrder );
-        CPPUNIT_TEST( ColumnVisibility );
-        CPPUNIT_TEST( LineFormatting );
-        CPPUNIT_TEST( SortSupport );
-        CPPUNIT_TEST( Labels );
-        CPPUNIT_TEST( SelectionMode );
-        CPPUNIT_TEST( CellFormatting );
-        CPPUNIT_TEST( GetNonDefaultAlignment );
-        WXUISIM_TEST( Editable );
-        WXUISIM_TEST( ReadOnly );
-        WXUISIM_TEST( ResizeScrolledHeader );
-        WXUISIM_TEST( ColumnMinWidth );
-        WXUISIM_TEST( AutoSizeColumn );
-        CPPUNIT_TEST( PseudoTest_NativeHeader );
-        WXUISIM_TEST( LabelClick );
-        WXUISIM_TEST( SortClick );
-        CPPUNIT_TEST( ColumnOrder );
-        WXUISIM_TEST( ResizeScrolledHeader );
-        WXUISIM_TEST( ColumnMinWidth );
-        WXUISIM_TEST( AutoSizeColumn );
-        CPPUNIT_TEST( DeleteAndAddRowCol );
-        CPPUNIT_TEST( PseudoTest_NativeLabels );
-        WXUISIM_TEST( LabelClick );
-        WXUISIM_TEST( SortClick );
-        CPPUNIT_TEST( ColumnOrder );
-        WXUISIM_TEST( WindowAsEditorControl );
-        WXUISIM_TEST( AutoSizeColumn );
-    CPPUNIT_TEST_SUITE_END();
-
-    void CellEdit();
-    void CellClick();
-    void ReorderedColumnsCellClick();
-    void CellSelect();
-    void LabelClick();
-    void SortClick();
-    void Size();
-    void RangeSelect();
-    void Cursor();
-    void Selection();
-    void SelectEmptyGrid();
-    void ScrollWhenSelect();
-    void MoveGridCursorUsingEndKey();
-    void SelectUsingEndKey();
-    void AddRowCol();
-    void DeleteAndAddRowCol();
-    void ColumnOrder();
-    void ColumnVisibility();
-    void LineFormatting();
-    void SortSupport();
-    void Labels();
-    void SelectionMode();
-    void CellFormatting();
-    void GetNonDefaultAlignment();
-    void Editable();
-    void ReadOnly();
-    void WindowAsEditorControl();
-    void ResizeScrolledHeader();
-    void ColumnMinWidth();
-    void AutoSizeColumn();
-    void PseudoTest_NativeHeader() { ms_nativeheader = true; }
-    void PseudoTest_NativeLabels() { ms_nativeheader = false;
-                                     ms_nativelabels = true; }
-
+protected:
     // The helper function to determine the width of the column label depending
-    // on whether the native column is used.
+    // on whether the native column header is used.
     int GetColumnLabelWidth(wxClientDC& dc, int col, int margin) const
     {
-        if (ms_nativeheader)
+        if ( m_grid->IsUsingNativeHeader() )
             return m_grid->GetGridColHeader()->GetColumnTitleWidth(col);
 
         int w, h;
@@ -156,35 +74,16 @@ private:
 
     void CheckFirstColAutoSize(int expected);
 
-    static bool ms_nativeheader;
-    static bool ms_nativelabels;
-
     TestableGrid *m_grid;
 
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( GridTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GridTestCase, "GridTestCase" );
-
-//initialise the static variable
-bool GridTestCase::ms_nativeheader = false;
-bool GridTestCase::ms_nativelabels = false;
-
-void GridTestCase::setUp()
+GridTestCase::GridTestCase()
 {
     m_grid = new TestableGrid(wxTheApp->GetTopWindow());
     m_grid->CreateGrid(10, 2);
     m_grid->SetSize(400, 200);
-
-    if( ms_nativeheader )
-        m_grid->UseNativeColHeader();
-
-    if( ms_nativelabels )
-        m_grid->SetUseNativeColLabels();
 
     WaitForPaint waitForPaint(m_grid->GetGridWindow());
 
@@ -197,7 +96,7 @@ void GridTestCase::setUp()
     }
 }
 
-void GridTestCase::tearDown()
+GridTestCase::~GridTestCase()
 {
     // This is just a hack to continue the rest of the tests to run: if we
     // destroy the header control while it has capture, this results in an
@@ -214,11 +113,14 @@ void GridTestCase::tearDown()
     wxDELETE(m_grid);
 }
 
-void GridTestCase::CellEdit()
+TEST_CASE_METHOD(GridTestCase, "Grid::CellEdit", "[grid]")
 {
     // TODO on OSX when running the grid test suite solo this works
     // but not when running it together with other tests
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
+    if ( !EnableUITests() )
+        return;
+
     EventCounter changing(m_grid, wxEVT_GRID_CELL_CHANGING);
     EventCounter changed(m_grid, wxEVT_GRID_CELL_CHANGED);
     EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
@@ -272,7 +174,7 @@ void GridTestCase::CellEdit()
 #endif
 }
 
-void GridTestCase::CellClick()
+TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
     EventCounter lclick(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
@@ -320,7 +222,7 @@ void GridTestCase::CellClick()
 #endif
 }
 
-void GridTestCase::ReorderedColumnsCellClick()
+TEST_CASE_METHOD(GridTestCase, "Grid::ReorderedColumnsCellClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
     EventCounter click(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
@@ -349,7 +251,7 @@ void GridTestCase::ReorderedColumnsCellClick()
 #endif
 }
 
-void GridTestCase::CellSelect()
+TEST_CASE_METHOD(GridTestCase, "Grid::CellSelect", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
     EventCounter cell(m_grid, wxEVT_GRID_SELECT_CELL);
@@ -385,9 +287,16 @@ void GridTestCase::CellSelect()
 #endif
 }
 
-void GridTestCase::LabelClick()
+TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+
     EventCounter lclick(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
     EventCounter ldclick(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
     EventCounter rclick(m_grid, wxEVT_GRID_LABEL_RIGHT_CLICK);
@@ -420,7 +329,7 @@ void GridTestCase::LabelClick()
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    if( ms_nativeheader )
+    if ( m_grid->IsUsingNativeHeader() )
     {
         //Right double click not supported with native headers so we get two
         //right click events
@@ -434,9 +343,16 @@ void GridTestCase::LabelClick()
 #endif
 }
 
-void GridTestCase::SortClick()
+TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+
     m_grid->SetSortingColumn(0);
 
     EventCounter sort(m_grid, wxEVT_GRID_COL_SORT);
@@ -456,13 +372,16 @@ void GridTestCase::SortClick()
 #endif
 }
 
-void GridTestCase::Size()
+TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
 {
     // TODO on OSX resizing interactively works, but not automated
     // Grid could not pass the test under GTK, OSX, and Universal.
     // So there may has bug in Grid implementation
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) && !defined(__WXOSX__) \
 && !defined(__WXUNIVERSAL__)
+    if ( !EnableUITests() )
+        return;
+
     EventCounter colsize(m_grid, wxEVT_GRID_COL_SIZE);
     EventCounter rowsize(m_grid, wxEVT_GRID_ROW_SIZE);
 
@@ -495,9 +414,12 @@ void GridTestCase::Size()
 #endif
 }
 
-void GridTestCase::RangeSelect()
+TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECT);
 
     wxUIActionSimulator sim;
@@ -523,7 +445,7 @@ void GridTestCase::RangeSelect()
 #endif
 }
 
-void GridTestCase::Cursor()
+TEST_CASE_METHOD(GridTestCase, "Grid::Cursor", "[grid]")
 {
     m_grid->SetGridCursor(1, 1);
 
@@ -568,7 +490,7 @@ void GridTestCase::Cursor()
     CPPUNIT_ASSERT_EQUAL(0, m_grid->GetGridCursorRow());
 }
 
-void GridTestCase::Selection()
+TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
 {
     m_grid->SelectAll();
 
@@ -602,7 +524,7 @@ void GridTestCase::Selection()
     CPPUNIT_ASSERT(!m_grid->IsInSelection(3, 0));
 }
 
-void GridTestCase::SelectEmptyGrid()
+TEST_CASE_METHOD(GridTestCase, "Grid::SelectEmptyGrid", "[grid]")
 {
     SECTION("Delete rows/columns")
     {
@@ -642,7 +564,7 @@ void GridTestCase::SelectEmptyGrid()
     CHECK( m_grid->GetSelectionBlockBottomRight().Count() == 0 );
 }
 
-void GridTestCase::ScrollWhenSelect()
+TEST_CASE_METHOD(GridTestCase, "Grid::ScrollWhenSelect", "[grid]")
 {
     m_grid->AppendCols(10);
 
@@ -666,9 +588,12 @@ void GridTestCase::ScrollWhenSelect()
     CHECK( m_grid->IsVisible(6, 1) );
 }
 
-void GridTestCase::MoveGridCursorUsingEndKey()
+TEST_CASE_METHOD(GridTestCase, "Grid::MoveGridCursorUsingEndKey", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     wxUIActionSimulator sim;
 
     m_grid->AppendCols(10);
@@ -696,9 +621,12 @@ void GridTestCase::MoveGridCursorUsingEndKey()
 #endif
 }
 
-void GridTestCase::SelectUsingEndKey()
+TEST_CASE_METHOD(GridTestCase, "Grid::SelectUsingEndKey", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     wxUIActionSimulator sim;
 
     m_grid->AppendCols(10);
@@ -728,7 +656,7 @@ void GridTestCase::SelectUsingEndKey()
 #endif
 }
 
-void GridTestCase::AddRowCol()
+TEST_CASE_METHOD(GridTestCase, "Grid::AddRowCol", "[grid]")
 {
     CPPUNIT_ASSERT_EQUAL(10, m_grid->GetNumberRows());
     CPPUNIT_ASSERT_EQUAL(2, m_grid->GetNumberCols());
@@ -752,8 +680,11 @@ void GridTestCase::AddRowCol()
     CPPUNIT_ASSERT_EQUAL(7, m_grid->GetNumberCols());
 }
 
-void GridTestCase::DeleteAndAddRowCol()
+TEST_CASE_METHOD(GridTestCase, "Grid::DeleteAndAddRowCol", "[grid]")
 {
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+
     CPPUNIT_ASSERT_EQUAL(10, m_grid->GetNumberRows());
     CPPUNIT_ASSERT_EQUAL(2, m_grid->GetNumberCols());
 
@@ -781,8 +712,12 @@ void GridTestCase::DeleteAndAddRowCol()
     m_grid->AppendRows(5);
 }
 
-void GridTestCase::ColumnOrder()
+TEST_CASE_METHOD(GridTestCase, "Grid::ColumnOrder", "[grid]")
 {
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+
     m_grid->AppendCols(2);
 
     CPPUNIT_ASSERT_EQUAL(4, m_grid->GetNumberCols());
@@ -813,7 +748,7 @@ void GridTestCase::ColumnOrder()
     CPPUNIT_ASSERT_EQUAL(3, m_grid->GetColPos(3));
 }
 
-void GridTestCase::ColumnVisibility()
+TEST_CASE_METHOD(GridTestCase, "Grid::ColumnVisibility", "[grid]")
 {
     m_grid->AppendCols(3);
     CPPUNIT_ASSERT( m_grid->IsColShown(1) );
@@ -826,7 +761,7 @@ void GridTestCase::ColumnVisibility()
     CPPUNIT_ASSERT( m_grid->IsColShown(1) );
 }
 
-void GridTestCase::LineFormatting()
+TEST_CASE_METHOD(GridTestCase, "Grid::LineFormatting", "[grid]")
 {
     CPPUNIT_ASSERT(m_grid->GridLinesEnabled());
 
@@ -841,7 +776,7 @@ void GridTestCase::LineFormatting()
     CPPUNIT_ASSERT_EQUAL(m_grid->GetGridLineColour(), *wxRED);
 }
 
-void GridTestCase::SortSupport()
+TEST_CASE_METHOD(GridTestCase, "Grid::SortSupport", "[grid]")
 {
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, m_grid->GetSortingColumn());
 
@@ -863,7 +798,7 @@ void GridTestCase::SortSupport()
     CPPUNIT_ASSERT(!m_grid->IsSortingBy(1));
 }
 
-void GridTestCase::Labels()
+TEST_CASE_METHOD(GridTestCase, "Grid::Labels", "[grid]")
 {
     CPPUNIT_ASSERT_EQUAL("A", m_grid->GetColLabelValue(0));
     CPPUNIT_ASSERT_EQUAL("1", m_grid->GetRowLabelValue(0));
@@ -886,7 +821,7 @@ void GridTestCase::Labels()
                          static_cast<int>(m_grid->GetColLabelTextOrientation()));
 }
 
-void GridTestCase::SelectionMode()
+TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
 {
     //We already test this mode in Select
     CPPUNIT_ASSERT_EQUAL(wxGrid::wxGridSelectCells,
@@ -918,7 +853,7 @@ void GridTestCase::SelectionMode()
                          m_grid->GetSelectionMode());
 }
 
-void GridTestCase::CellFormatting()
+TEST_CASE_METHOD(GridTestCase, "Grid::CellFormatting", "[grid]")
 {
     //Check that initial alignment is default
     int horiz, cellhoriz, vert, cellvert;
@@ -963,7 +898,7 @@ void GridTestCase::CellFormatting()
     CPPUNIT_ASSERT_EQUAL(*wxGREEN, m_grid->GetCellTextColour(0, 0));
 }
 
-void GridTestCase::GetNonDefaultAlignment()
+TEST_CASE_METHOD(GridTestCase, "Grid::GetNonDefaultAlignment", "[grid]")
 {
     // GetNonDefaultAlignment() is used by several renderers having their own
     // preferred alignment, so check that if we don't reset the alignment
@@ -996,9 +931,12 @@ void GridTestCase::GetNonDefaultAlignment()
     CHECK( vAlign == wxALIGN_CENTRE_VERTICAL );
 }
 
-void GridTestCase::Editable()
+TEST_CASE_METHOD(GridTestCase, "Grid::Editable", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     //As the grid is not editable we shouldn't create an editor
     EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
 
@@ -1023,9 +961,12 @@ void GridTestCase::Editable()
 #endif
 }
 
-void GridTestCase::ReadOnly()
+TEST_CASE_METHOD(GridTestCase, "Grid::ReadOnly", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     //As the cell is readonly we shouldn't create an editor
     EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
 
@@ -1062,9 +1003,12 @@ void GridTestCase::ReadOnly()
 #endif
 }
 
-void GridTestCase::WindowAsEditorControl()
+TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     // A very simple editor using a window not derived from wxControl as the
     // editor.
     class TestEditor : public wxGridCellEditor
@@ -1122,10 +1066,16 @@ void GridTestCase::WindowAsEditorControl()
 #endif
 }
 
-void GridTestCase::ResizeScrolledHeader()
+TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {
     // TODO this test currently works only under Windows unfortunately
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
+    if ( !EnableUITests() )
+        return;
+
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+
     int const startwidth = m_grid->GetColSize(0);
     int const draglength = 100;
 
@@ -1161,10 +1111,16 @@ void GridTestCase::ResizeScrolledHeader()
 #endif
 }
 
-void GridTestCase::ColumnMinWidth()
+TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
 {
     // TODO this test currently works only under Windows unfortunately
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
+    if ( !EnableUITests() )
+        return;
+
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+
     int const startminwidth = m_grid->GetColMinimalAcceptableWidth();
     m_grid->SetColMinimalAcceptableWidth(startminwidth*2);
     int const newminwidth = m_grid->GetColMinimalAcceptableWidth();
@@ -1207,8 +1163,12 @@ void GridTestCase::CheckFirstColAutoSize(int expected)
     CHECK(m_grid->GetColSize(0) == expected);
 }
 
-void GridTestCase::AutoSizeColumn()
+TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
 {
+    SECTION("Default") {}
+    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+
     // Hardcoded extra margin for the columns used in grid.cpp.
     const int margin = m_grid->FromDIP(10);
 
