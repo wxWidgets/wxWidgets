@@ -580,3 +580,5 @@ backends are avaiable here.
 @subpage plat_msw_msys2_gtk "Building with Win32 MSys2 GDK backend"
 
 @subpage plat_msw_gtk "Building wxGTK port with Win32 GDK backend"
+
+@subpage plat_msw_msys2_qt "Building with Win32 MSys2 Qt backend"
