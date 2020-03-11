@@ -5373,8 +5373,17 @@ public:
 
         This function can only be called if UseNativeColHeader() had been
         called.
+
+        @see IsUsingNativeHeader()
      */
     wxHeaderCtrl *GetGridColHeader() const;
+
+    /**
+        Return true if native header control is currently being used.
+
+        @since 3.1.4
+     */
+    bool IsUsingNativeHeader() const;
 
     //@}
 
