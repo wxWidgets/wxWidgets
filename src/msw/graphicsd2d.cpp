@@ -3182,17 +3182,17 @@ public:
     // The default implementation works for all render targets, but the D2D 1.0
     // render target holders shouldn't need to override it, since none of the
     // 1.0 render targets offer a better version of this method.
-    virtual void DrawBitmap(ID2D1Bitmap* bitmap, D2D1_POINT_2F offset,
-        D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
+    virtual void DrawBitmap(ID2D1Bitmap* bitmap,
+        const D2D1_RECT_F& srcRect, const D2D1_RECT_F& destRect,
+        wxInterpolationQuality interpolationQuality,
         wxCompositionMode WXUNUSED(compositionMode))
     {
-        D2D1_RECT_F destinationRectangle = D2D1::RectF(offset.x, offset.y, offset.x + imageRectangle.right, offset.y + imageRectangle.bottom);
         m_nativeResource->DrawBitmap(
             bitmap,
-            destinationRectangle,
+            destRect,
             1.0f,
             wxD2DConvertBitmapInterpolationMode(interpolationQuality),
-            imageRectangle);
+            srcRect);
     }
 
     // We use this method instead of the one provided by the native render target
@@ -3477,13 +3477,15 @@ public:
         wxCHECK_HRESULT_RET(hr);
     }
 
-    void DrawBitmap(ID2D1Bitmap* image, D2D1_POINT_2F offset,
-        D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
+    void DrawBitmap(ID2D1Bitmap* bitmap,
+        const D2D1_RECT_F& srcRect, const D2D1_RECT_F& destRect,
+        wxInterpolationQuality interpolationQuality,
         wxCompositionMode compositionMode) wxOVERRIDE
     {
-        m_context->DrawImage(image,
+        D2D1_POINT_2F offset = D2D1::Point2(destRect.left, destRect.top);
+        m_context->DrawImage(bitmap,
             offset,
-            imageRectangle,
+            srcRect,
             wxD2DConvertInterpolationMode(interpolationQuality),
             wxD2DConvertCompositionMode(compositionMode));
     }
@@ -4484,11 +4486,12 @@ void wxD2DContext::DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble 
 
     wxD2DBitmapData* bitmapData = wxGetD2DBitmapData(bmp);
     bitmapData->Bind(this);
+    D2D1_SIZE_F imgSize = bitmapData->GetD2DBitmap()->GetSize();
 
     m_renderTargetHolder->DrawBitmap(
         bitmapData->GetD2DBitmap(),
-        D2D1::Point2F(x, y),
-        D2D1::RectF(0, 0, w, h),
+        D2D1::RectF(0, 0, imgSize.width, imgSize.height),
+        D2D1::RectF(x, y, x + w, y + h),
         GetInterpolationQuality(),
         GetCompositionMode());
 }
