@@ -1837,6 +1837,9 @@ public:
     wxWindow* GetGridColLabelWindow() const    { return m_colLabelWin; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
 
+    // Return true if native header is used by the grid.
+    bool IsUsingNativeHeader() const { return m_useNativeHeader; }
+
     // This one can only be called if we are using the native header window
     wxHeaderCtrl *GetGridColHeader() const
     {
