@@ -6643,7 +6643,14 @@ bool wxGrid::UseNativeColHeader(bool native)
     CreateColumnWindow();
 
     if ( m_useNativeHeader )
+    {
         SetNativeHeaderColCount();
+
+        wxHeaderCtrl* const colHeader = GetGridColHeader();
+        colHeader->SetBackgroundColour( GetLabelBackgroundColour() );
+        colHeader->SetForegroundColour( GetLabelTextColour() );
+        colHeader->SetFont( GetLabelFont() );
+    }
 
     CalcWindowSizes();
 
@@ -8126,6 +8133,10 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
     if ( m_labelTextColour != colour )
     {
         m_labelTextColour = colour;
+
+        if ( IsUsingNativeHeader() )
+            GetGridColHeader()->SetForegroundColour( colour );
+
         if ( !GetBatchCount() )
         {
             m_rowLabelWin->Refresh();
@@ -8137,6 +8148,10 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
 void wxGrid::SetLabelFont( const wxFont& font )
 {
     m_labelFont = font;
+
+    if ( IsUsingNativeHeader() )
+        GetGridColHeader()->SetFont( font );
+
     if ( !GetBatchCount() )
     {
         m_rowLabelWin->Refresh();
