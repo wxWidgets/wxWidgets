@@ -158,6 +158,9 @@ Changes in behaviour which may result in build errors
 - wxAuiPaneButton doesn't exist any more, it was never supposed to be used
   outside of the library, but if you did use, just use "int" button instead.
 
+- wxAuiMDIChildFrame now inherits from wxFrame and not wxPanel, you will need
+  to change your code and XRC definitions accordingly.
+
 
 3.1.4: (released ????-??-??)
 ----------------------------
