@@ -1235,7 +1235,7 @@ public:
     void     BeginBatch() { m_batchCount++; }
     void     EndBatch();
 
-    int      GetBatchCount() { return m_batchCount; }
+    int      GetBatchCount() const { return m_batchCount; }
 
     virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL) wxOVERRIDE;
 
@@ -2298,10 +2298,15 @@ protected:
     bool    m_canDragGridSize;
     bool    m_canDragCell;
 
-    // the last position (horizontal or vertical depending on whether the user
-    // is resizing a column or a row) where a row or column separator line was
-    // dragged by the user or -1 of there is no drag operation in progress
+    // Index of the column being drag-moved or -1 if there is no move operation
+    // in progress.
+    int     m_dragMoveCol;
+
+    // Last horizontal mouse position while drag-moving a column.
     int     m_dragLastPos;
+
+    // Row or column (depending on m_cursorMode value) currently being resized
+    // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
     // true if a drag operation is in progress; when this is true,
@@ -2361,12 +2366,10 @@ protected:
                            int row, int col,
                            const wxMouseEvent& mouseEv);
 
-    void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
-    void OnEraseBackground( wxEraseEvent& );
     void OnHideEditor( wxCommandEvent& );
 
 
@@ -2456,6 +2459,12 @@ private:
     // release the mouse capture if it's currently captured
     void EndDraggingIfNecessary();
 
+    // return true if the grid should be refreshed right now
+    bool ShouldRefresh() const
+    {
+        return !GetBatchCount() && IsShownOnScreen();
+    }
+
 
     // return the position (not index) of the column at the given logical pixel
     // position
@@ -2472,11 +2481,6 @@ private:
                         const wxGridCellCoords& coords,
                         bool isFirstDrag);
 
-    // process row/column resizing drag event
-    void DoGridLineDrag(int pos,
-                        const wxGridOperations& oper,
-                        wxGridWindow* gridWindow);
-
     // process mouse drag event in the grid window, return false if starting
     // dragging was vetoed by the user-defined wxEVT_GRID_CELL_BEGIN_DRAG
     // handler
@@ -2485,15 +2489,10 @@ private:
                          bool isFirstDrag,
                          wxGridWindow* gridWindow);
 
-    void DrawGridDragLine(wxPoint position,
+    // Update the width/height of the column/row being drag-resized.
+    void DoGridDragResize(const wxPoint& position,
                           const wxGridOperations& oper,
                           wxGridWindow* gridWindow);
-
-    // return the current grid windows involved in the drag process
-    void GetDragGridWindows(int pos,
-                            const wxGridOperations& oper,
-                            wxGridWindow*& firstGridWindow,
-                            wxGridWindow*& secondGridWindow);
 
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
@@ -2526,17 +2525,26 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeCol(int col);
-    void DoUpdateResizeColWidth(int w);
+    void DoStartResizeRowOrCol(int col);
     void DoStartMoveCol(int col);
 
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
-    void DoEndDragResizeCol(const wxMouseEvent& event)
-    {
-        DoEndDragResizeCol(event, m_gridWin);
-    }
     void DoEndMoveCol(int pos);
+
+    // Helper function returning the position (only the horizontal component
+    // really counts) corresponding to the given column drag-resize event.
+    //
+    // It's a bit ugly to create a phantom mouse position when we really only
+    // need the column width anyhow, but wxGrid code was originally written to
+    // expect the position and not the width and it's simpler to keep it happy
+    // by giving it the position than to change it.
+    wxPoint GetPositionForResizeEvent(int width) const;
+
+    // functions called by wxGridHeaderCtrl while resizing m_dragRowOrCol
+    void DoHeaderStartDragResizeCol(int col);
+    void DoHeaderDragResizeCol(int width);
+    void DoHeaderEndDragResizeCol(int width);
 
     // process a TAB keypress
     void DoGridProcessTab(wxKeyboardState& kbdState);
