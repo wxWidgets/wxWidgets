@@ -5038,6 +5038,8 @@ void wxWindowGTK::SetScrollbar(int orient,
         range =
         thumbVisible = 1;
     }
+    else if (thumbVisible <= 0)
+        thumbVisible = 1;
 
     g_signal_handlers_block_by_func(
         sb, (void*)gtk_scrollbar_value_changed, this);
