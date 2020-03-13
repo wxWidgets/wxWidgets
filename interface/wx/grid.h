@@ -556,6 +556,16 @@ public:
     virtual void StartingKey(wxKeyEvent& event);
 
     /**
+       Return @true to allow the given key to start editing: the base class
+       version only checks that the event has no modifiers. 
+
+       If the key is F2 (special), editing will always start and this
+       method will not be called at all (but StartingKey() will)
+    */
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
+    
+
+    /**
        Returns the value currently in the editor control.
      */
     virtual wxString GetValue() const = 0;
