@@ -68,21 +68,6 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
     wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
 }
 
-wxTextEntry *wxNumValidatorBase::GetTextEntry() const
-{
-#if wxUSE_TEXTCTRL
-    if ( wxTextCtrl *text = wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        return text;
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-    if ( wxComboBox *combo = wxDynamicCast(m_validatorWindow, wxComboBox) )
-        return combo;
-#endif // wxUSE_COMBOBOX
-
-    return NULL;
-}
-
 void
 wxNumValidatorBase::GetCurrentValueAndInsertionPoint(wxString& val,
                                                              int& pos) const
@@ -279,6 +264,14 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     return IsInRange(value);
 }
 
+wxString
+wxIntegerValidatorBase::IsValid(const wxString& newval) const
+{
+    // Will be implemented.
+    wxUnusedVar(newval);
+    return wxString();
+}
+
 // ============================================================================
 // wxFloatingPointValidatorBase implementation
 // ============================================================================
@@ -356,6 +349,14 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
 
     // Finally check whether it is in the range.
     return IsInRange(value);
+}
+
+wxString
+wxFloatingPointValidatorBase::IsValid(const wxString& newval) const
+{
+    // Will be implemented.
+    wxUnusedVar(newval);
+    return wxString();
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

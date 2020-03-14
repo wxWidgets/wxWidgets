@@ -51,47 +51,27 @@ static bool wxIsNumeric(const wxString& val)
 }
 
 // ----------------------------------------------------------------------------
-// wxTextValidator
+// wxTextEntryValidator
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
-wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
-    EVT_CHAR(wxTextValidator::OnChar)
-wxEND_EVENT_TABLE()
-
-wxTextValidator::wxTextValidator(long style, wxString *val)
+void wxTextEntryValidator::SetWindow(wxWindow *win)
 {
-    m_stringValue = val;
-    SetStyle(style);
+    wxValidator::SetWindow(win);
+
+    if ( GetTextEntry() != NULL )
+    {
+        // Bind some event handlers
+    }
+    else
+    {
+        wxFAIL_MSG(
+            "wxTextValidator can only be used with wxTextCtrl, wxComboBox "
+            "or wxComboCtrl"
+        );
+    }
 }
 
-wxTextValidator::wxTextValidator(const wxTextValidator& val)
-    : wxValidator()
-{
-    Copy(val);
-}
-
-void wxTextValidator::SetStyle(long style)
-{
-    m_validatorStyle = style;
-}
-
-bool wxTextValidator::Copy(const wxTextValidator& val)
-{
-    wxValidator::Copy(val);
-
-    m_validatorStyle = val.m_validatorStyle;
-    m_stringValue    = val.m_stringValue;
-
-    m_charIncludes = val.m_charIncludes;
-    m_charExcludes = val.m_charExcludes;
-    m_includes     = val.m_includes;
-    m_excludes     = val.m_excludes;
-
-    return true;
-}
-
-wxTextEntry *wxTextValidator::GetTextEntry()
+wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 {
 #if wxUSE_TEXTCTRL
     if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
@@ -114,12 +94,48 @@ wxTextEntry *wxTextValidator::GetTextEntry()
     }
 #endif
 
-    wxFAIL_MSG(
-        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
-        "or wxComboCtrl"
-    );
-
     return NULL;
+}
+
+// ----------------------------------------------------------------------------
+// wxTextValidator
+// ----------------------------------------------------------------------------
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
+wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
+    EVT_CHAR(wxTextValidator::OnChar)
+wxEND_EVENT_TABLE()
+
+wxTextValidator::wxTextValidator(long style, wxString *val)
+{
+    m_stringValue = val;
+    SetStyle(style);
+}
+
+wxTextValidator::wxTextValidator(const wxTextValidator& val)
+    : wxTextEntryValidator()
+{
+    Copy(val);
+}
+
+void wxTextValidator::SetStyle(long style)
+{
+    m_validatorStyle = style;
+}
+
+bool wxTextValidator::Copy(const wxTextValidator& val)
+{
+    wxValidator::Copy(val);
+
+    m_validatorStyle = val.m_validatorStyle;
+    m_stringValue    = val.m_stringValue;
+
+    m_charIncludes = val.m_charIncludes;
+    m_charExcludes = val.m_charExcludes;
+    m_includes     = val.m_includes;
+    m_excludes     = val.m_excludes;
+
+    return true;
 }
 
 // Called when the value in the window must be validated.
