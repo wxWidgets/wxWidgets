@@ -46,9 +46,8 @@ public:
     void SetStyle(int style) { m_style = style; }
 
 
-    // Override base class method to not do anything but always return success:
-    // we don't need this as we do our validation on the fly here.
-    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
+    // Override base class method.
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
 
 protected:
     wxNumValidatorBase(int style)

@@ -192,6 +192,28 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
         text->MarkDirty();
 }
 
+bool wxNumValidatorBase::Validate(wxWindow* WXUNUSED(parent))
+{
+    // If window is disabled, simply return
+    if ( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry * const text = GetTextEntry();
+    if ( !text )
+        return false;
+
+    const wxString& newval   = text->GetValue();
+    const wxString& errormsg = IsValid(newval);
+
+    if ( !errormsg.empty() )
+    {
+        SendErrorEvent(wxString::Format("%s: %s", errormsg, newval));
+        return false;
+    }
+
+    return true;
+}
+
 // ============================================================================
 // wxIntegerValidatorBase implementation
 // ============================================================================
@@ -239,19 +261,26 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // And the value after insertion needs to be in the defined range.
-    LongestValueType value;
-    if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
-        return false;
+    // We don't check the value against the range here (but in IsValid())
+    // as doing so might prevent us from entering any (or some) value at all
+    // if the lower bound value is greater than the typed-in number.
 
-    return IsInRange(value);
+    return true;
 }
 
 wxString
 wxIntegerValidatorBase::IsValid(const wxString& newval) const
 {
-    // Will be implemented.
-    wxUnusedVar(newval);
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxString();
+
+    LongestValueType value;
+    if ( !FromString(newval, &value) )
+        return _("Invalid value");
+
+    if ( !IsInRange(value) )
+        return _("Value out of range");
+
     return wxString();
 }
 
@@ -318,27 +347,31 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // Check whether the value we'd obtain if we accepted this key is correct.
-    const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
+    // We don't check the value against the range here (but in IsValid())
+    // as doing so might prevent us from entering any (or some) value at all
+    // if the lower bound value is greater than the typed-in number.
 
-    LongestValueType value;
-    if ( !FromString(newval, &value) )
-        return false;
-
-    // Also check that it doesn't have too many decimal digits.
-    const size_t posSep = newval.find(separator);
-    if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
-        return false;
-
-    // Finally check whether it is in the range.
-    return IsInRange(value);
+    return true;
 }
 
 wxString
 wxFloatingPointValidatorBase::IsValid(const wxString& newval) const
 {
-    // Will be implemented.
-    wxUnusedVar(newval);
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxString();
+
+    LongestValueType value;
+    if ( !FromString(newval, &value) )
+        return _("Invalid value");
+
+    // Also check that it doesn't have too many decimal digits.
+    const size_t posSep = newval.find(wxNumberFormatter::GetDecimalSeparator());
+    if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
+        return _("Invalid value");
+
+    if ( !IsInRange(value) )
+        return _("Value out of range");
+
     return wxString();
 }
 
