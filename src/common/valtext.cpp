@@ -61,6 +61,7 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
+        Bind(wxEVT_TEXT, &wxTextValidator::OnText, this);
         Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
         Bind(wxEVT_VALIDATE_ERROR, &wxTextEntryValidator::OnValidate, this);
     }
@@ -97,6 +98,17 @@ wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 #endif
 
     return NULL;
+}
+
+void wxTextEntryValidator::OnText(wxCommandEvent& event)
+{
+    if ( IsInteractive() )
+    {
+        SetValidationNeeded();
+        DoValidate(NULL);
+    }
+
+    event.Skip();
 }
 
 void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)

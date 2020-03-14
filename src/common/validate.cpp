@@ -96,9 +96,6 @@ bool wxValidator::ProcessEvent(wxEvent& event)
 
 void wxValidator::SendValidationEvent(wxEventType type, const wxString& errormsg)
 {
-    // The validation is done, only the events have to be sent.
-    m_validationStatus &= ~Validation_Needed;
-
     if ( type == wxEVT_VALIDATE_OK && IsOk() )
     {
         // We don't send the 'Ok' event needlessly. i.e:
@@ -107,10 +104,16 @@ void wxValidator::SendValidationEvent(wxEventType type, const wxString& errormsg
         return;
     }
 
+    // If true, it means that we're still typing and no message should pop up
+    // in this case.
+    const bool isInteractive = (m_validationStatus & Validation_Needed) != 0;
+
     m_validationStatus = type == wxEVT_VALIDATE_ERROR ? Validation_Error
                                                       : Validation_Ok;
 
-    const bool canPopup = (m_validationStatus != Validation_Ok) && !errormsg.empty();
+    const bool canPopup = !isInteractive
+                        && m_validationStatus != Validation_Ok
+                        && !errormsg.empty();
 
     wxValidationStatusEvent event(type, m_validatorWindow);
     event.SetErrorMessage(errormsg);
