@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/clipbrd.h"
 #include "wx/combo.h"
 
 // ----------------------------------------------------------------------------
@@ -60,7 +61,7 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
-        // Bind some event handlers
+        Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
     }
     else
     {
@@ -95,6 +96,48 @@ wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 #endif
 
     return NULL;
+}
+
+void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
+{
+#if wxUSE_CLIPBOARD
+    wxTextEntry * const entry = GetTextEntry();
+    if ( !entry )
+        return;
+
+    wxClipboardLocker clipLock;
+    if ( !clipLock )
+        return;
+
+    wxTextDataObject data;
+
+    if ( wxTheClipboard->IsSupported(data.GetFormat())
+            && wxTheClipboard->GetData(data) )
+    {
+        wxString text = entry->GetValue();
+
+        long from, to;
+        entry->GetSelection(&from, &to);
+
+        if ( from != to )
+        {
+            // Replace selection with the pasted text.
+            text.replace(from, (to - from), data.GetText());
+        }
+        else
+        {
+            text.insert(entry->GetInsertionPoint(), data.GetText());
+        }
+
+        if ( IsValid(text).empty() )
+        {
+            // Accept the pasted text.
+            event.Skip();
+        }
+    }
+#else
+    event.Skip();
+#endif // wxUSE_CLIPBOARD
 }
 
 // ----------------------------------------------------------------------------
