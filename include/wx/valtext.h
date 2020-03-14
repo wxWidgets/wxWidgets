@@ -69,6 +69,7 @@ protected:
 
     // Events handlers
     void OnPasteText(wxClipboardTextEvent& event);
+    void OnValidate(wxValidationStatusEvent& event);
 };
 
 // ----------------------------------------------------------------------------
