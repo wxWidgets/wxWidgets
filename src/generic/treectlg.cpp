@@ -3790,14 +3790,10 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             }
 
             // this facilitates multiple-item drag-and-drop
-            if ( HasFlag(wxTR_MULTIPLE))
+            if ( HasFlag(wxTR_MULTIPLE) && !(event.CmdDown() || event.ShiftDown()) )
             {
                 wxArrayTreeItemIds selections;
-                size_t count = GetSelections(selections);
-
-                if (count > 1 &&
-                    !event.CmdDown() &&
-                    !event.ShiftDown())
+                if ( GetSelections(selections) > 1 )
                 {
                     DoSelectItem(item, true, false);
                 }
