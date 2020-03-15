@@ -3789,13 +3789,19 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 GetEventHandler()->ProcessEvent(nevent);
             }
 
-            // this facilitates multiple-item drag-and-drop
-            if ( HasFlag(wxTR_MULTIPLE) && !(event.CmdDown() || event.ShiftDown()) )
+            // Don't deselect anything if we're just collapsing or expanding
+            // the item.
+            if ( !(flags & wxTREE_HITTEST_ONITEMBUTTON) )
             {
-                wxArrayTreeItemIds selections;
-                if ( GetSelections(selections) > 1 )
+                // this facilitates multiple-item drag-and-drop
+                if ( HasFlag(wxTR_MULTIPLE) &&
+                        !(event.CmdDown() || event.ShiftDown()) )
                 {
-                    DoSelectItem(item, true, false);
+                    wxArrayTreeItemIds selections;
+                    if ( GetSelections(selections) > 1 )
+                    {
+                        DoSelectItem(item, true, false);
+                    }
                 }
             }
 
