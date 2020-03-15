@@ -64,6 +64,12 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
         Bind(wxEVT_TEXT, &wxTextValidator::OnText, this);
         Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
         Bind(wxEVT_VALIDATE_ERROR, &wxTextEntryValidator::OnValidate, this);
+
+        if ( ShouldValidateOnFocusLost() )
+        {
+            Bind(wxEVT_KILL_FOCUS, &wxTextEntryValidator::OnKillFocus, this);
+        }
+
     }
     else
     {
@@ -167,6 +173,12 @@ void wxTextEntryValidator::OnValidate(wxValidationStatusEvent& event)
     m_validatorWindow->SetFocus();
     wxMessageBox(errormsg, _("Validation conflict"),
                  wxOK | wxICON_EXCLAMATION, NULL);
+}
+
+void wxTextEntryValidator::OnKillFocus(wxFocusEvent& event)
+{
+    event.Skip();
+    DoValidate(NULL);
 }
 
 // ----------------------------------------------------------------------------

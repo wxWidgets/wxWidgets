@@ -130,9 +130,17 @@ public:
     // test if beep is currently disabled
     static bool IsSilent() { return ms_isSilent; }
 
-    // Interactive validation
-    static bool IsInteractive() { return ms_isInteractive; }
-    static void SetInteractive(bool interactive = true) { ms_isInteractive = interactive; }
+    // Validation method helpers
+    static bool IsInteractive()
+        { return ms_validationMethod == Validate_Interactively; }
+    static void ValidateInteractively()
+        { ms_validationMethod = Validate_Interactively; }
+    static void ValidateOnFocusLost()
+        { ms_validationMethod = Validate_On_Focus_Lost; }
+    static bool ShouldValidateOnFocusLost()
+        { return ms_validationMethod == Validate_On_Focus_Lost; }
+    static void ResetValidationMethod()
+        { ms_validationMethod = Validate_Default; }
 
     // this function is deprecated because it handled its parameter
     // unnaturally: it disabled the bell when it was true, not false as could
@@ -175,7 +183,15 @@ private:
 
 private:
     static bool ms_isSilent;
-    static bool ms_isInteractive;
+
+    enum /*Validation method*/
+    {
+        Validate_Default       = 0x0,
+        Validate_On_Focus_Lost = 0x1,
+        Validate_Interactively = 0x2
+    };
+
+    static int ms_validationMethod;
 
     enum /*Validation status*/
     {

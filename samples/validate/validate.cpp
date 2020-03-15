@@ -235,7 +235,17 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 
 void MyFrame::OnToggleInteractive(wxCommandEvent& event)
 {
-    wxValidator::SetInteractive(!wxValidator::IsInteractive());
+    if ( wxValidator::IsInteractive() )
+    {
+        wxValidator::ValidateOnFocusLost();
+        wxLogMessage("Validate on focus lost.");
+    }
+    else
+    {
+        wxValidator::ValidateInteractively();
+        wxLogMessage("Validate interactively.");
+    }
+
     event.Skip();
 }
 

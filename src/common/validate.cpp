@@ -29,7 +29,7 @@ const wxValidator wxDefaultValidator;
 // VZ: personally, I think true would be more appropriate - these bells are
 //     _annoying_
 bool wxValidator::ms_isSilent = false;
-bool wxValidator::ms_isInteractive = false;
+int  wxValidator::ms_validationMethod;
 
 wxValidator::wxValidator()
 {
