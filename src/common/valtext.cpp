@@ -102,9 +102,13 @@ wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 
 void wxTextEntryValidator::OnText(wxCommandEvent& event)
 {
+    // N.B. wxValidator::DoValidate() tries to optimize the validation process
+    // by completely ignoring the validation if the entry was valid and no change
+    // has occurred in the meantime. which is not the case if this handler is called.
+    SetValidationNeeded();
+
     if ( IsInteractive() )
     {
-        SetValidationNeeded();
         DoValidate(NULL);
     }
 
