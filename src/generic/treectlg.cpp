@@ -3081,8 +3081,8 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     // ' ' | return : activate
     // up    : go up (not last children!)
     // down  : go down
-    // left  : go to parent
-    // right : open if parent and go next
+    // left  : collapse or go to parent
+    // right : expand or go to first child
     // home  : go to root
     // end   : go to last item without opening parents
     // alnum : start or continue searching for the item with this prefix
@@ -3210,28 +3210,57 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             }
             break;
 
-            // left arrow goes to the parent
+            // left arrow collapses or goes to the parent if it's not expanded
         case WXK_LEFT:
             {
-                wxTreeItemId prev = GetItemParent( m_current );
-                if ((prev == GetRootItem()) && HasFlag(wxTR_HIDE_ROOT))
+                if (m_current == GetRootItem().m_pItem && HasFlag(wxTR_HIDE_ROOT))
                 {
-                    // don't go to root if it is hidden
-                    prev = GetPrevSibling( m_current );
+                    // don't try to collapse hidden root item
+                    // (which can be the current one when the tree is empty)
+                    break;
                 }
-                if (prev)
+                if (IsExpanded(m_current))
                 {
-                    DoSelectItem( prev, unselect_others, extended_select );
+                    Collapse(m_current);
+                }
+                else
+                {
+                    // select parent unless it's the hidden root
+                    wxTreeItemId parent = GetItemParent(m_current);
+                    if (parent && (parent != GetRootItem() || !HasFlag(wxTR_HIDE_ROOT)))
+                    {
+                        DoSelectItem(parent, unselect_others, extended_select);
+                    }
                 }
             }
             break;
 
+            // right arrow expands or goes to first child if it's already expanded
         case WXK_RIGHT:
-            // right arrow just expand the item will be fine
-            if (m_current != GetRootItem().m_pItem || !HasFlag(wxTR_HIDE_ROOT))
-                Expand(m_current);
-            //else: don't try to expand hidden root item (which can be the
-            //      current one when the tree is empty)
+            {
+                if (m_current == GetRootItem().m_pItem && HasFlag(wxTR_HIDE_ROOT))
+                {
+                    // don't try to expand hidden root item
+                    // (which can be the current one when the tree is empty)
+                    break;
+                }
+                if (HasChildren(m_current))
+                {
+                    if (IsExpanded(m_current))
+                    {
+                        wxTreeItemIdValue cookie;
+                        wxTreeItemId child = GetFirstChild(m_current, cookie);
+                        if (child)
+                        {
+                            DoSelectItem(child, unselect_others, extended_select);
+                        }
+                    }
+                    else
+                    {
+                        Expand(m_current);
+                    }
+                }
+            }
             break;
 
         case WXK_DOWN:
