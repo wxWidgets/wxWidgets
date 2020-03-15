@@ -149,6 +149,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(VALIDATE_TOGGLE_INTERACTIVE, MyFrame::OnToggleInteractive)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -165,6 +166,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     file_menu->Append(VALIDATE_TEST_DIALOG, "&Test dialog...\tCtrl-T", "Demonstrate validators");
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error");
+    file_menu->AppendCheckItem(VALIDATE_TOGGLE_INTERACTIVE, "&Interactive", "Validate interactively");
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, "E&xit");
 
@@ -228,6 +230,12 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 {
     m_silent = !m_silent;
     wxValidator::SuppressBellOnError(m_silent);
+    event.Skip();
+}
+
+void MyFrame::OnToggleInteractive(wxCommandEvent& event)
+{
+    wxValidator::SetInteractive(!wxValidator::IsInteractive());
     event.Skip();
 }
 
@@ -382,6 +390,10 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // Now sets the focus to m_text
     m_text->SetFocus();
+
+    // Bind event handlers
+    Bind(wxEVT_VALIDATE_OK, &MyDialog::OnValidate, this);
+    Bind(wxEVT_VALIDATE_ERROR, &MyDialog::OnValidate, this);
 }
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
@@ -391,6 +403,34 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
     if ( dialog.ShowModal() == wxID_OK )
     {
         dialog.ApplyValidator();
+    }
+}
+
+void MyDialog::OnValidate(wxValidationStatusEvent& event)
+{
+    wxWindow* const win = event.GetWindow();
+
+    if ( event.GetEventType() == wxEVT_VALIDATE_OK )
+    {
+        // Restore the default properties.
+        win->SetBackgroundColour(wxNullColour);
+    }
+    else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
+    {
+        // Make the control reflect the invalid state.
+        // or a wxRichToolTip can be used here to show the error message.
+        win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
+
+        if ( event.GetId() == VALIDATE_COMBO )
+        {
+            if ( event.CanPopup() )
+                wxLogError(event.GetErrorMessage());
+        }
+        else
+        {
+            // Show the default error message box
+            event.Skip();
+        }
     }
 }
 
