@@ -525,6 +525,12 @@ public:
 
     void ClearTools() { Clear() ; }
     void Clear();
+
+    bool DestroyTool(int toolId);
+    bool DestroyToolByIndex(int idx);
+
+    // Note that these methods do _not_ delete the associated control, if any.
+    // Use DestroyTool() or DestroyToolByIndex() if this is wanted.
     bool DeleteTool(int toolId);
     bool DeleteByIndex(int toolId);
 
