@@ -30,6 +30,9 @@ public:
     NumValidatorTestCase();
     ~NumValidatorTestCase();
 
+    void OnValidate(wxValidationStatusEvent& WXUNUSED(event))
+        { /*No one will see the error messages, only the test*/ }
+
 protected:
     wxTextCtrl* const m_text;
 
@@ -39,6 +42,7 @@ protected:
 NumValidatorTestCase::NumValidatorTestCase()
     : m_text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY))
 {
+    m_text->Bind(wxEVT_VALIDATE_ERROR, &NumValidatorTestCase::OnValidate, this);
 }
 
 NumValidatorTestCase::~NumValidatorTestCase()
@@ -222,6 +226,54 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")
     value = 1.234;
     CHECK( val->TransferToWindow() );
     CHECK( m_text->GetValue() == "1.234" );
+}
+
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::ClipboardTest", "[valnum]")
+{
+    int value = 9;
+    wxIntegerValidator<int> valInt(&value);
+    valInt.SetRange(0, 999);
+
+    m_text->SetValidator(valInt);
+
+    wxWindow * const parent = m_text->GetParent();
+    CHECK( parent != NULL );
+
+    CHECK( parent->TransferDataToWindow() );
+    CHECK( parent->Validate() );
+    CHECK( m_text->GetValue() == "9" );
+
+    m_text->SelectAll();
+    m_text->Cut();
+
+    // The validator is created without wxNUM_VAL_ZERO_AS_BLANK
+    // therefore the validation should fail.
+    CHECK( m_text->GetValue() == "" );
+    CHECK( !parent->Validate() );
+
+    m_text->Paste();
+    m_text->Paste();
+
+    CHECK( m_text->GetValue() == "99" );
+    CHECK( parent->Validate() );
+
+    m_text->Paste();
+    m_text->Paste(); // Should not be allowed: 9999 is out-of-range.
+
+    CHECK( m_text->GetValue() == "999" );
+    CHECK( parent->Validate() );
+
+    m_text->SetValue("-1");
+
+    CHECK( m_text->GetValue() == "-1" );
+    CHECK( !parent->Validate() );
+
+    m_text->SelectAll();
+    m_text->Cut();
+    m_text->Paste(); // Should not be allowed: -1 is out-of-range.
+
+    CHECK( m_text->GetValue() == "" );
+    CHECK( !parent->Validate() );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
