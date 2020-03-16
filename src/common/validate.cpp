@@ -41,12 +41,15 @@ wxValidator::~wxValidator()
 {
 }
 
-bool wxValidator::DoValidate(wxWindow *parent)
+bool wxValidator::DoValidate(wxWindow *parent, bool canPopup)
 {
     // We do nothing if the window is already validated
     // and in a valid state.
     if ( IsOk() )
         return true;
+
+    if ( !canPopup )
+        m_validationStatus |= Validation_NoPopup;
 
     if ( Validate(parent) )
     {
@@ -104,16 +107,10 @@ void wxValidator::SendValidationEvent(wxEventType type, const wxString& errormsg
         return;
     }
 
-    // If true, it means that we're still typing and no message should pop up
-    // in this case.
-    const bool isInteractive = (m_validationStatus & Validation_Needed) != 0;
+    const bool canPopup = (m_validationStatus & Validation_NoPopup) == 0;
 
     m_validationStatus = type == wxEVT_VALIDATE_ERROR ? Validation_Error
                                                       : Validation_Ok;
-
-    const bool canPopup = !isInteractive
-                        && m_validationStatus != Validation_Ok
-                        && !errormsg.empty();
 
     wxValidationStatusEvent event(type, m_validatorWindow);
     event.SetErrorMessage(errormsg);

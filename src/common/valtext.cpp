@@ -115,7 +115,7 @@ void wxTextEntryValidator::OnText(wxCommandEvent& event)
 
     if ( IsInteractive() )
     {
-        DoValidate(NULL);
+        DoValidate(NULL, wxVALIDATOR_NO_POPUP);
     }
 
     event.Skip();
@@ -178,7 +178,7 @@ void wxTextEntryValidator::OnValidate(wxValidationStatusEvent& event)
 void wxTextEntryValidator::OnKillFocus(wxFocusEvent& event)
 {
     event.Skip();
-    DoValidate(NULL);
+    DoValidate(NULL, wxVALIDATOR_NO_POPUP);
 }
 
 // ----------------------------------------------------------------------------

@@ -20,6 +20,9 @@
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
+// A more readable flag used when calling wxValidator::DoValidate()
+#define wxVALIDATOR_NO_POPUP false
+
 // ----------------------------------------------------------------------------
 // wxValidationStatusEvent
 // ----------------------------------------------------------------------------
@@ -161,7 +164,7 @@ protected:
 
     // This non-virtual function calls Validate() internally and ensures
     // proper generation of validation events.
-    bool DoValidate(wxWindow *parent);
+    bool DoValidate(wxWindow *parent, bool canPopup = true);
 
     void SendOkEvent()
         { SendValidationEvent(wxEVT_VALIDATE_OK); }
@@ -198,6 +201,7 @@ private:
         Validation_Needed  = 0x1,
         Validation_Ok      = 0x2,
         Validation_Error   = 0x4,
+        Validation_NoPopup = 0x8,
 
         // Special flag to bypass the validator when processing
         // wxEVT_VALIDATE_XXX events. see ProcessEvent().
