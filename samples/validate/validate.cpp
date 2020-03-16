@@ -80,6 +80,7 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     {
         // we accept any string != g_combobox_choices[1|2] !
 
+        // N.B. SendErrorEvent() could be used here instead of wxLogError()
         wxLogError("Invalid combo box text!");
         return false;
     }
@@ -404,6 +405,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // Bind event handlers
     Bind(wxEVT_VALIDATE_OK, &MyDialog::OnValidate, this);
     Bind(wxEVT_VALIDATE_ERROR, &MyDialog::OnValidate, this);
+    Bind(wxEVT_UPDATE_UI, &MyDialog::OnUpdateUI, this);
 }
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
@@ -420,6 +422,8 @@ void MyDialog::OnValidate(wxValidationStatusEvent& event)
 {
     wxWindow* const win = event.GetWindow();
 
+    bool validationFailed = false;
+
     if ( event.GetEventType() == wxEVT_VALIDATE_OK )
     {
         // Restore the default properties.
@@ -427,6 +431,8 @@ void MyDialog::OnValidate(wxValidationStatusEvent& event)
     }
     else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
     {
+        validationFailed = true;
+
         // Make the control reflect the invalid state.
         // or a wxRichToolTip can be used here to show the error message.
         win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
@@ -442,6 +448,22 @@ void MyDialog::OnValidate(wxValidationStatusEvent& event)
             event.Skip();
         }
     }
+
+    if ( wxValidator::IsInteractive() || wxValidator::ShouldValidateOnFocusLost() )
+    {
+        if ( validationFailed )
+            m_invalidWins.insert(win);
+        else
+            m_invalidWins.erase(win);
+    }
+}
+
+void MyDialog::OnUpdateUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetId() == wxID_OK )
+        event.Enable(m_invalidWins.empty());
+    else
+        event.Skip();
 }
 
 // ----------------------------------------------------------------------------
