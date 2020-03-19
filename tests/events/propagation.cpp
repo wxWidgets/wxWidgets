@@ -251,7 +251,9 @@ private:
 #if !defined (__WXX11__)
         CPPUNIT_TEST( MenuEvent );
 #endif
+#if wxUSE_DOC_VIEW_ARCHITECTURE
         CPPUNIT_TEST( DocView );
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
         WXUISIM_TEST( ContextMenuEvent );
         WXUISIM_TEST( PropagationLevel );
     CPPUNIT_TEST_SUITE_END();
@@ -264,7 +266,9 @@ private:
     void ScrollWindowWithoutHandler();
     void ScrollWindowWithHandler();
     void MenuEvent();
+#if wxUSE_DOC_VIEW_ARCHITECTURE
     void DocView();
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
 #if wxUSE_UIACTIONSIMULATOR
     void ContextMenuEvent();
     void PropagationLevel();
@@ -502,6 +506,8 @@ void EventPropagationTestCase::MenuEvent()
     ASSERT_MENU_EVENT_RESULT( menu, "aomobowA" );
 }
 
+#if wxUSE_DOC_VIEW_ARCHITECTURE
+
 // Minimal viable implementations of wxDocument and wxView.
 class EventTestDocument : public wxDocument
 {
@@ -612,6 +618,8 @@ void EventPropagationTestCase::DocView()
     CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
 #endif // wxUSE_TOOLBAR
 }
+
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
 
 #if wxUSE_UIACTIONSIMULATOR
 
