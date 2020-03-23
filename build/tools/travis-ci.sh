@@ -62,6 +62,7 @@ case $wxTOOLSET in
         echo -en 'travis_fold:end:script.build\\r'
 
         echo 'Building tests...' && echo -en 'travis_fold:start:script.tests\\r'
+        make -C tests $wxJOBS failtest
         make -C tests $wxJOBS
         echo -en 'travis_fold:end:script.tests\\r'
 
