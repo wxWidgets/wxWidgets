@@ -3435,15 +3435,19 @@ public:
 
   bool starts_with(const wxString &str) const
     { return StartsWith(str); }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   bool starts_with(const char *sz) const
     { return StartsWith(sz); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
   bool starts_with(const wchar_t *sz) const
     { return StartsWith(sz); }
 
   bool ends_with(const wxString &str) const
     { return EndsWith(str); }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   bool ends_with(const char *sz) const
     { return EndsWith(sz); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
   bool ends_with(const wchar_t *sz) const
     { return EndsWith(sz); }
 
