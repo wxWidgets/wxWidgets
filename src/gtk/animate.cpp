@@ -12,8 +12,9 @@
 #include "wx/wxprec.h"
 
 #if wxUSE_ANIMATIONCTRL && !defined(__WXUNIVERSAL__)
-
 #include "wx/animate.h"
+
+#if !wxUSE_GENERIC_ANIMATIONCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/image.h"
@@ -466,4 +467,5 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
     }
 }
 
+#endif      // !wxUSE_GENERIC_ANIMATIONCTRL
 #endif      // wxUSE_ANIMATIONCTRL

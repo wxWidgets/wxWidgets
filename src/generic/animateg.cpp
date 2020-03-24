@@ -14,9 +14,10 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#if wxUSE_ANIMATIONCTRL
-
+#if wxUSE_ANIMATIONCTRL 
 #include "wx/animate.h"
+
+#if wxUSE_GENERIC_ANIMATIONCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -692,5 +693,6 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
     }
 }
 
+#endif // wxUSE_GENERIC_ANIMATIONCTRL
 #endif // wxUSE_ANIMATIONCTRL
 
