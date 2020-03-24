@@ -38,6 +38,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
 
 // These Vista+ only types used by DrawThemeTextEx may not be available in older SDK headers
