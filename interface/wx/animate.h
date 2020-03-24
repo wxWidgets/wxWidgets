@@ -174,6 +174,50 @@ public:
         the window's background colour as specified by the last SetInactiveBitmap() call.
     */
     virtual void Stop();
+
+
+    /**
+       Specify whether the animation's background colour is to be shown (the default),
+       or whether the window background should show through
+    
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+    */
+    void SetUseWindowBackgroundColour(bool useWinBackground = true);
+
+    /**
+       Returns @c true if the window's background colour is being used.
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+    */
+    bool IsUsingWindowBackgroundColour() const;
+
+    /**
+       This overload of Play() lets you specify if the animation must loop or not
+       
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+    */
+    bool Play(bool looped);
+
+    /**
+       Draw the current frame of the animation into given DC.
+       This is fast as current frame is always cached.
+
+      @note This method is only available when using the generic version of
+      @c wxAnimation and @c wxAnimationCtrl.
+    */
+    void DrawCurrentFrame(wxDC& dc);
+
+    
+    /**
+       Returns a wxBitmap with the current frame drawn in it.
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+    */
+    wxBitmap& GetBackingStore();
 };
 
 
@@ -291,9 +335,60 @@ public:
                           wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
-        Assignment operator, using @ref overview_refcount "reference counting".
-    */
-    wxAnimation& operator =(const wxAnimation& brush);
+       Retuns the position of the given frame.
+
+       Some kinds animation formats may provide partial frames that should be
+       overlayed on the previous frame at a postion other than (0,0).
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+     */
+    wxPoint GetFramePosition(unsigned int frame) const;
+
+    /**
+       Returns the size of the given animation frame.
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+     */
+    wxSize GetFrameSize(unsigned int frame) const;
+
+    /**
+       Returns the type of disposal that should be done for the given
+       animation frame.
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+     */
+    wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+
+    /**
+       Returns the colour that should be treated as transparent. Returns @c
+       wxNullColour if the current decoder does not indicate a transparent
+       colour is to be used.
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+     */
+    wxColour GetTransparentColour(unsigned int frame) const;
+
+    /**
+       Returns the colour that should be on the animation's background, if any.
+       Returns @c wxNullColour otherwise.
+
+       @note This method is only available when using the generic version of
+       @c wxAnimation and @c wxAnimationCtrl.
+     */
+    wxColour GetBackgroundColour() const;
+
+
+    static inline wxAnimationDecoderList& GetHandlers();
+    static void AddHandler(wxAnimationDecoder *handler);
+    static void InsertHandler(wxAnimationDecoder *handler);
+    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
+
+    static void CleanUpHandlers();
+    static void InitStandardHandlers();
 };
 
 
