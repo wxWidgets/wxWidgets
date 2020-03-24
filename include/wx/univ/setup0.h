@@ -922,6 +922,15 @@
 // the native control limitations.
 #define wxUSE_NATIVE_DATAVIEWCTRL 1
 
+// Use generic version of wxAnimationCtrl and supporting classes, even if a 
+// native one is available?
+//
+// Default is 1.
+//
+// Recommended setting: 1, but can be set to 0 if your program is affected by
+// the native control limitations.
+#define wxUSE_NATIVE_ANIMATIONCTRL 1
+
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.
 //

@@ -934,6 +934,7 @@ WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], w
 WX_ARG_FEATURE(commandlinkbutton, [  --enable-commandlinkbutton      use wxCommmandLinkButton class], wxUSE_COMMANDLINKBUTTON)
 WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_DISABLE(nativedvc,   [  --disable-nativedvc     disable use of native wxDataViewCtrl even if available], wxUSE_NATIVE_DATAVIEWCTRL)
+WX_ARG_DISABLE(nativeanimation, [  --disable-nativeanimation     disable use of native wxAnimationCtrl (and supporting classes) even if available], wxUSE_NATIVE_ANIMATIONCTRL)
 WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
 WX_ARG_FEATURE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
@@ -6699,6 +6700,11 @@ if test "$wxUSE_ANIMATIONCTRL" = "yes"; then
   AC_DEFINE(wxUSE_ANIMATIONCTRL)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
+
+  if test "$wxUSE_NATIVE_ANIMATIONCTRL" = "yes"; then
+    AC_DEFINE(wxUSE_NATIVE_ANIMATIONCTRL)
+  fi
+
 fi
 
 if test "$wxUSE_BANNERWINDOW" = "yes"; then

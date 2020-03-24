@@ -415,6 +415,8 @@
 
 #define wxUSE_NATIVE_DATAVIEWCTRL 0
 
+#define wxUSE_NATIVE_ANIMATIONCTRL 0
+
 #define wxUSE_STATUSBAR    0
 
 #define wxUSE_NATIVE_STATUSBAR        0

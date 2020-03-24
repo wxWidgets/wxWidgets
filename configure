@@ -1253,6 +1253,7 @@ enable_comboctrl
 enable_commandlinkbutton
 enable_dataviewctrl
 enable_nativedvc
+enable_nativeanimation
 enable_datepick
 enable_detect_sm
 enable_dirpicker
@@ -2208,6 +2209,7 @@ Optional Features:
   --enable-commandlinkbutton      use wxCommmandLinkButton class
   --enable-dataviewctrl   use wxDataViewCtrl class
   --disable-nativedvc     disable use of native wxDataViewCtrl even if available
+  --disable-nativeanimation     disable use of native wxAnimationCtrl (and supporting classes) even if available
   --enable-datepick       use wxDatePickerCtrl class
   --enable-detect_sm      use code to detect X11 session manager
   --enable-dirpicker      use wxDirPickerCtrl class
@@ -9756,6 +9758,35 @@ fi
 
 
           eval "$wx_cv_use_nativedvc"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-nativeanimation was given.
+if test "${enable_nativeanimation+set}" = set; then :
+  enableval=$enable_nativeanimation;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_nativeanimation='wxUSE_NATIVE_ANIMATIONCTRL=yes'
+                          else
+                            wx_cv_use_nativeanimation='wxUSE_NATIVE_ANIMATIONCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_nativeanimation='wxUSE_NATIVE_ANIMATIONCTRL=${'DEFAULT_wxUSE_NATIVE_ANIMATIONCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_nativeanimation"
 
 
           enablestring=
@@ -35766,6 +35797,12 @@ if test "$wxUSE_ANIMATIONCTRL" = "yes"; then
 
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
+
+  if test "$wxUSE_NATIVE_ANIMATIONCTRL" = "yes"; then
+    $as_echo "#define wxUSE_NATIVE_ANIMATIONCTRL 1" >>confdefs.h
+
+  fi
+
 fi
 
 if test "$wxUSE_BANNERWINDOW" = "yes"; then
