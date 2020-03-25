@@ -2258,6 +2258,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treectrl.obj \
 	$(OBJS)\monodll_systhemectrl.obj \
 	$(OBJS)\monodll_customdraw.obj \
+	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_commandlinkbutton.obj \
 	$(OBJS)\monodll_bmpcbox.obj \
 	$(OBJS)\monodll_hyperlink.obj \
@@ -2398,7 +2399,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_windowid.obj \
 	$(OBJS)\monodll_wrapsizer.obj \
 	$(OBJS)\monodll_xpmdecod.obj \
-	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_busyinfo.obj \
 	$(OBJS)\monodll_generic_buttonbar.obj \
 	$(OBJS)\monodll_choicdgg.obj \
@@ -2542,6 +2542,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_access.obj \
+	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -2725,7 +2726,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_windowid.obj \
 	$(OBJS)\monodll_wrapsizer.obj \
 	$(OBJS)\monodll_xpmdecod.obj \
-	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_busyinfo.obj \
 	$(OBJS)\monodll_generic_buttonbar.obj \
 	$(OBJS)\monodll_choicdgg.obj \
@@ -3099,6 +3099,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treectrl.obj \
 	$(OBJS)\monolib_systhemectrl.obj \
 	$(OBJS)\monolib_customdraw.obj \
+	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_commandlinkbutton.obj \
 	$(OBJS)\monolib_bmpcbox.obj \
 	$(OBJS)\monolib_hyperlink.obj \
@@ -3239,7 +3240,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_windowid.obj \
 	$(OBJS)\monolib_wrapsizer.obj \
 	$(OBJS)\monolib_xpmdecod.obj \
-	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_busyinfo.obj \
 	$(OBJS)\monolib_generic_buttonbar.obj \
 	$(OBJS)\monolib_choicdgg.obj \
@@ -3383,6 +3383,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_access.obj \
+	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3566,7 +3567,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_windowid.obj \
 	$(OBJS)\monolib_wrapsizer.obj \
 	$(OBJS)\monolib_xpmdecod.obj \
-	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_busyinfo.obj \
 	$(OBJS)\monolib_generic_buttonbar.obj \
 	$(OBJS)\monolib_choicdgg.obj \
@@ -3872,6 +3872,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_treectrl.obj \
 	$(OBJS)\coredll_systhemectrl.obj \
 	$(OBJS)\coredll_customdraw.obj \
+	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_commandlinkbutton.obj \
 	$(OBJS)\coredll_bmpcbox.obj \
 	$(OBJS)\coredll_hyperlink.obj \
@@ -4012,7 +4013,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_windowid.obj \
 	$(OBJS)\coredll_wrapsizer.obj \
 	$(OBJS)\coredll_xpmdecod.obj \
-	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_busyinfo.obj \
 	$(OBJS)\coredll_buttonbar.obj \
 	$(OBJS)\coredll_choicdgg.obj \
@@ -4156,6 +4156,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_access.obj \
+	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -4339,7 +4340,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_windowid.obj \
 	$(OBJS)\coredll_wrapsizer.obj \
 	$(OBJS)\coredll_xpmdecod.obj \
-	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_busyinfo.obj \
 	$(OBJS)\coredll_buttonbar.obj \
 	$(OBJS)\coredll_choicdgg.obj \
@@ -4551,6 +4551,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_treectrl.obj \
 	$(OBJS)\corelib_systhemectrl.obj \
 	$(OBJS)\corelib_customdraw.obj \
+	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_commandlinkbutton.obj \
 	$(OBJS)\corelib_bmpcbox.obj \
 	$(OBJS)\corelib_hyperlink.obj \
@@ -4691,7 +4692,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_windowid.obj \
 	$(OBJS)\corelib_wrapsizer.obj \
 	$(OBJS)\corelib_xpmdecod.obj \
-	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_busyinfo.obj \
 	$(OBJS)\corelib_buttonbar.obj \
 	$(OBJS)\corelib_choicdgg.obj \
@@ -4835,6 +4835,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_access.obj \
+	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -5018,7 +5019,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_windowid.obj \
 	$(OBJS)\corelib_wrapsizer.obj \
 	$(OBJS)\corelib_xpmdecod.obj \
-	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_busyinfo.obj \
 	$(OBJS)\corelib_buttonbar.obj \
 	$(OBJS)\corelib_choicdgg.obj \
@@ -8690,6 +8690,11 @@ $(OBJS)\monodll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
@@ -9332,11 +9337,6 @@ $(OBJS)\monodll_wrapsizer.obj: ..\..\src\common\wrapsizer.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_xpmdecod.obj: ..\..\src\common\xpmdecod.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\xpmdecod.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11247,6 +11247,11 @@ $(OBJS)\monolib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
@@ -11889,11 +11894,6 @@ $(OBJS)\monolib_wrapsizer.obj: ..\..\src\common\wrapsizer.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_xpmdecod.obj: ..\..\src\common\xpmdecod.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\xpmdecod.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13759,6 +13759,11 @@ $(OBJS)\coredll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
@@ -14401,11 +14406,6 @@ $(OBJS)\coredll_wrapsizer.obj: ..\..\src\common\wrapsizer.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_xpmdecod.obj: ..\..\src\common\xpmdecod.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\xpmdecod.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15494,6 +15494,11 @@ $(OBJS)\corelib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
@@ -16136,11 +16141,6 @@ $(OBJS)\corelib_wrapsizer.obj: ..\..\src\common\wrapsizer.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_xpmdecod.obj: ..\..\src\common\xpmdecod.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\xpmdecod.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
