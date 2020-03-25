@@ -229,9 +229,12 @@ public:
     An animation is a sequence of frames of the same size.
     Sound is not supported by wxAnimation.
 
-    Note that on wxGTK wxAnimation is capable of loading the formats supported
-    by the internally-used @c gdk-pixbuf library (typically this means only
-    @c wxANIMATION_TYPE_GIF).
+    Note that on wxGTK wxAnimation by default is capable of loading the
+    formats supported by the internally-used @c gdk-pixbuf library (typically
+    this means only @c wxANIMATION_TYPE_GIF). To use the generic version of
+    wxAnimation and wxAnimationCtrl instead, use the --disable-nativeanimation
+    configure option when buildign wxWidgets.
+
     On other platforms wxAnimation is always capable of loading both GIF and ANI
     formats (i.e. both @c wxANIMATION_TYPE_GIF and @c wxANIMATION_TYPE_ANI).
 
