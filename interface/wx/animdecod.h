@@ -24,15 +24,6 @@ enum wxAnimationDisposal
 };
 
 
-enum wxAnimationType
-{
-    wxANIMATION_TYPE_INVALID,
-    wxANIMATION_TYPE_GIF,
-    wxANIMATION_TYPE_ANI,
-
-    wxANIMATION_TYPE_ANY
-};
-
 
 /**
    @class wxAnimationDecoder
