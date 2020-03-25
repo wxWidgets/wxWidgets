@@ -2687,7 +2687,6 @@ private:
     void DoGridProcessTab(wxKeyboardState& kbdState);
 
     // common implementations of methods defined for both rows and columns
-    void DeselectLine(int line, const wxGridOperations& oper);
     bool DoEndDragResizeLine(const wxGridOperations& oper, wxGridWindow *gridWindow);
     int PosToLinePos(int pos, bool clipToMinMax,
                      const wxGridOperations& oper,

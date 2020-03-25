@@ -10198,47 +10198,30 @@ void wxGrid::SelectAll()
 // cell, row and col deselection
 // ----------------------------------------------------------------------------
 
-void wxGrid::DeselectLine(int line, const wxGridOperations& oper)
-{
-    if ( !m_selection )
-        return;
-
-    const wxGridSelectionModes mode = m_selection->GetSelectionMode();
-    if ( mode == oper.GetSelectionMode() ||
-            mode == wxGrid::wxGridSelectRowsOrColumns )
-    {
-        const wxGridCellCoords c(oper.MakeCoords(line, 0));
-        if ( m_selection->IsInSelection(c) )
-            m_selection->ToggleCellSelection(c);
-    }
-    else if ( mode != oper.Dual().GetSelectionMode() )
-    {
-        const int nOther = oper.Dual().GetNumberOfLines(this, NULL);
-        for ( int i = 0; i < nOther; i++ )
-        {
-            const wxGridCellCoords c(oper.MakeCoords(line, i));
-            if ( m_selection->IsInSelection(c) )
-                m_selection->ToggleCellSelection(c);
-        }
-    }
-    //else: can only select orthogonal lines so no lines in this direction
-    //      could have been selected anyhow
-}
-
 void wxGrid::DeselectRow(int row)
 {
-    DeselectLine(row, wxGridRowOperations());
+    wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
+
+    if ( m_selection )
+        m_selection->DeselectBlock(wxGridBlockCoords(row, 0, row, m_numRows - 1));
 }
 
 void wxGrid::DeselectCol(int col)
 {
-    DeselectLine(col, wxGridColumnOperations());
+    wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
+
+    if ( m_selection )
+        m_selection->DeselectBlock(wxGridBlockCoords(0, col, m_numCols - 1, col));
 }
 
 void wxGrid::DeselectCell( int row, int col )
 {
-    if ( m_selection && m_selection->IsInSelection(row, col) )
-        m_selection->ToggleCellSelection(row, col);
+    wxCHECK_RET( row >= 0 && row < m_numRows &&
+                 col >= 0 && col < m_numCols,
+                 wxT("invalid cell coords") );
+
+    if ( m_selection )
+        m_selection->DeselectBlock(wxGridBlockCoords(row, col, row, col));
 }
 
 bool wxGrid::IsSelection() const
