@@ -7829,22 +7829,54 @@ void wxGrid::MakeCellVisible( int row, int col )
 {
     int xpos = -1, ypos = -1;
 
-    if ( row >= 0 && row < m_numRows &&
-         col >= 0 && col < m_numCols )
+    if ( row < -1 || row >= m_numRows ||
+         col < -1 || col >= m_numCols )
+        return;
+
+    const bool processRow = row != -1;
+    const bool processCol = col != -1;
+
+    // Get the cell rectangle in logical coords.
+    wxRect r;
+    wxGridWindow *gridWindow;
+
+    if ( processRow && processCol )
     {
-        // get the cell rectangle in logical coords
-        wxRect r( CellToRect( row, col ) );
+        r = CellToRect(row, col);
+        gridWindow = CellToGridWindow(row, col);
+    }
+    else if ( processRow )
+    {
+        r.SetTop(GetRowTop(row));
+        r.SetHeight(GetRowHeight(row));
+        gridWindow = row < m_numFrozenRows
+                        ? m_frozenRowGridWin
+                        : m_gridWin;
+    }
+    else if ( processCol )
+    {
+        r.SetLeft(GetColLeft(col));
+        r.SetWidth(GetColWidth(col));
+        gridWindow = col < m_numFrozenCols
+                        ? m_frozenColGridWin
+                        : m_gridWin;
+    }
+    else
+    {
+        return;
+    }
 
-        wxGridWindow *gridWindow = CellToGridWindow(row, col);
-        wxPoint gridOffset = GetGridWindowOffset(gridWindow);
+    wxPoint gridOffset = GetGridWindowOffset(gridWindow);
 
-        // convert to device coords
-        int left, top, right, bottom;
-        CalcGridWindowScrolledPosition( r.GetLeft(), r.GetTop(), &left, &top, gridWindow );
-        CalcGridWindowScrolledPosition( r.GetRight(), r.GetBottom(), &right, &bottom, gridWindow );
+    if ( processRow )
+    {
+        // Convert to device coords.
+        int top, bottom;
+        CalcGridWindowScrolledPosition(0, r.GetTop(), NULL, &top, gridWindow);
+        CalcGridWindowScrolledPosition(0, r.GetBottom(), NULL, &bottom, gridWindow);
 
-        int cw, ch;
-        gridWindow->GetClientSize( &cw, &ch );
+        int ch;
+        gridWindow->GetClientSize(NULL, &ch);
 
         if ( top < gridOffset.y )
         {
@@ -7875,6 +7907,17 @@ void wxGrid::MakeCellVisible( int row, int col )
             // so just add a full scroll unit...
             ypos += m_yScrollPixelsPerLine;
         }
+    }
+
+    if ( processCol )
+    {
+        // Convert to device coords.
+        int left, right;
+        CalcGridWindowScrolledPosition(r.GetLeft(), 0, &left, NULL, gridWindow);
+        CalcGridWindowScrolledPosition(r.GetRight(), 0, &right, NULL, gridWindow);
+
+        int cw;
+        gridWindow->GetClientSize(&cw, NULL);
 
         // special handling for wide cells - show always left part of the cell!
         // Otherwise, e.g. when stepping from row to row, it would jump between
@@ -7894,17 +7937,17 @@ void wxGrid::MakeCellVisible( int row, int col )
             // see comment for ypos above
             xpos += m_xScrollPixelsPerLine;
         }
-
-        if ( xpos != -1 || ypos != -1 )
-        {
-            if ( xpos != -1 )
-                xpos /= m_xScrollPixelsPerLine;
-            if ( ypos != -1 )
-                ypos /= m_yScrollPixelsPerLine;
-            Scroll( xpos, ypos );
-            AdjustScrollbars();
-        }
     }
+
+    if ( xpos == -1 && ypos == -1 )
+        return;
+
+    if ( xpos != -1 )
+        xpos /= m_xScrollPixelsPerLine;
+    if ( ypos != -1 )
+        ypos /= m_yScrollPixelsPerLine;
+    Scroll(xpos, ypos);
+    AdjustScrollbars();
 }
 
 //
