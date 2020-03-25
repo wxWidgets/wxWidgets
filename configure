@@ -699,7 +699,6 @@ COND_USE_EXCEPTIONS_1
 COND_USE_EXCEPTIONS_0
 COND_USE_CAIRO_1
 COND_UNICODE_1
-COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
 COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
@@ -728,7 +727,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2
@@ -1030,7 +1028,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1253,7 +1250,6 @@ enable_comboctrl
 enable_commandlinkbutton
 enable_dataviewctrl
 enable_nativedvc
-enable_nativeanimation
 enable_datepick
 enable_detect_sm
 enable_dirpicker
@@ -1458,7 +1454,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1711,15 +1706,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1857,7 +1843,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -2010,7 +1996,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2209,7 +2194,6 @@ Optional Features:
   --enable-commandlinkbutton      use wxCommmandLinkButton class
   --enable-dataviewctrl   use wxDataViewCtrl class
   --disable-nativedvc     disable use of native wxDataViewCtrl even if available
-  --disable-nativeanimation     disable use of native wxAnimationCtrl (and supporting classes) even if available
   --enable-datepick       use wxDatePickerCtrl class
   --enable-detect_sm      use code to detect X11 session manager
   --enable-dirpicker      use wxDirPickerCtrl class
@@ -9758,35 +9742,6 @@ fi
 
 
           eval "$wx_cv_use_nativedvc"
-
-
-          enablestring=disable
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-nativeanimation was given.
-if test "${enable_nativeanimation+set}" = set; then :
-  enableval=$enable_nativeanimation;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_nativeanimation='wxUSE_NATIVE_ANIMATIONCTRL=yes'
-                          else
-                            wx_cv_use_nativeanimation='wxUSE_NATIVE_ANIMATIONCTRL=no'
-                          fi
-
-else
-
-                          wx_cv_use_nativeanimation='wxUSE_NATIVE_ANIMATIONCTRL=${'DEFAULT_wxUSE_NATIVE_ANIMATIONCTRL":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_nativeanimation"
 
 
           enablestring=
@@ -35797,12 +35752,6 @@ if test "$wxUSE_ANIMATIONCTRL" = "yes"; then
 
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS animate"
-
-  if test "$wxUSE_NATIVE_ANIMATIONCTRL" = "yes"; then
-    $as_echo "#define wxUSE_NATIVE_ANIMATIONCTRL 1" >>confdefs.h
-
-  fi
-
 fi
 
 if test "$wxUSE_BANNERWINDOW" = "yes"; then
@@ -40001,11 +39950,6 @@ EOF
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0=""
     fi
 
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1=""
-    fi
-
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
@@ -40144,11 +40088,6 @@ EOF
     COND_TOOLKIT_X11_USE_GUI_1="#"
     if test "x$TOOLKIT" = "xX11" -a "x$USE_GUI" = "x1" ; then
         COND_TOOLKIT_X11_USE_GUI_1=""
-    fi
-
-    COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xX11" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1=""
     fi
 
     COND_UNICODE_1="#"
