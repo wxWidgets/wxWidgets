@@ -415,8 +415,6 @@
 
 #cmakedefine01 wxUSE_NATIVE_DATAVIEWCTRL
 
-#cmakedefine01 wxUSE_NATIVE_ANIMATIONCTRL
-
 #cmakedefine01 wxUSE_STATUSBAR
 
 #cmakedefine01 wxUSE_NATIVE_STATUSBAR
