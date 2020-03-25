@@ -919,8 +919,8 @@
 // the native control limitations.
 #define wxUSE_NATIVE_DATAVIEWCTRL 1
 
-// Use generic version of wxAnimationCtrl and supporting classes, even if a 
-// native one is available?
+// Use native version of wxAnimationCtrl and supporting classes, if available,
+// otherwise use the generic version of the animation classes.
 //
 // Default is 1.
 //
