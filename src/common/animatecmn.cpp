@@ -34,8 +34,8 @@ const char wxAnimationCtrlNameStr[] = "animationctrl";
 // global object
 wxAnimation wxNullAnimation;
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationBase, wxObject);
 wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrl, wxAnimationCtrlBase);
 
 
 // ----------------------------------------------------------------------------

@@ -17,8 +17,6 @@
 #if wxUSE_ANIMATIONCTRL 
 #include "wx/animate.h"
 
-#if wxUSE_GENERIC_ANIMATIONCTRL
-
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/image.h"
@@ -41,7 +39,7 @@ wxAnimationDecoderList wxAnimation::sm_handlers;
 // wxAnimation
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxObject);
 #define M_ANIMDATA      static_cast<wxAnimationDecoder*>(m_refData)
 
 wxSize wxAnimation::GetSize() const
@@ -265,14 +263,14 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule);
 // wxAnimationCtrl
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_CLASS(wxAnimationCtrl, wxAnimationCtrlBase);
-wxBEGIN_EVENT_TABLE(wxAnimationCtrl, wxAnimationCtrlBase)
-    EVT_PAINT(wxAnimationCtrl::OnPaint)
-    EVT_SIZE(wxAnimationCtrl::OnSize)
-    EVT_TIMER(wxID_ANY, wxAnimationCtrl::OnTimer)
+wxIMPLEMENT_CLASS(wxGenericAnimationCtrl, wxAnimationCtrlBase);
+wxBEGIN_EVENT_TABLE(wxGenericAnimationCtrl, wxAnimationCtrlBase)
+    EVT_PAINT(wxGenericAnimationCtrl::OnPaint)
+    EVT_SIZE(wxGenericAnimationCtrl::OnSize)
+    EVT_TIMER(wxID_ANY, wxGenericAnimationCtrl::OnTimer)
 wxEND_EVENT_TABLE()
 
-void wxAnimationCtrl::Init()
+void wxGenericAnimationCtrl::Init()
 {
     m_currentFrame = 0;
     m_looped = false;
@@ -283,7 +281,7 @@ void wxAnimationCtrl::Init()
     m_useWinBackgroundColour = true;
 }
 
-bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
+bool wxGenericAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxAnimation& animation, const wxPoint& pos,
             const wxSize& size, long style, const wxString& name)
 {
@@ -300,12 +298,12 @@ bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-wxAnimationCtrl::~wxAnimationCtrl()
+wxGenericAnimationCtrl::~wxGenericAnimationCtrl()
 {
     Stop();
 }
 
-bool wxAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
+bool wxGenericAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
 {
     wxFileInputStream fis(filename);
     if (!fis.IsOk())
@@ -313,7 +311,7 @@ bool wxAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
     return Load(fis, type);
 }
 
-bool wxAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
+bool wxGenericAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
 {
     wxAnimation anim;
     if ( !anim.Load(stream, type) || !anim.IsOk() )
@@ -323,7 +321,7 @@ bool wxAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
     return true;
 }
 
-wxSize wxAnimationCtrl::DoGetBestSize() const
+wxSize wxGenericAnimationCtrl::DoGetBestSize() const
 {
     if (m_animation.IsOk() && !this->HasFlag(wxAC_NO_AUTORESIZE))
         return m_animation.GetSize();
@@ -331,10 +329,10 @@ wxSize wxAnimationCtrl::DoGetBestSize() const
     return FromDIP(wxSize(100, 100));
 }
 
-void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
+void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
 {
     if (IsPlaying())
-        Stop();
+        Stop(); 
 
     // set new animation even if it's wxNullAnimation
     m_animation = animation;
@@ -352,7 +350,7 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
     DisplayStaticImage();
 }
 
-void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
+void wxGenericAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
 {
     // if the bitmap has an associated mask, we need to set our background to
     // the colour of our parent otherwise when calling DrawCurrentFrame()
@@ -365,12 +363,12 @@ void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
     wxAnimationCtrlBase::SetInactiveBitmap(bmp);
 }
 
-void wxAnimationCtrl::FitToAnimation()
+void wxGenericAnimationCtrl::FitToAnimation()
 {
     SetSize(m_animation.GetSize());
 }
 
-bool wxAnimationCtrl::SetBackgroundColour(const wxColour& colour)
+bool wxGenericAnimationCtrl::SetBackgroundColour(const wxColour& colour)
 {
     if ( !wxWindow::SetBackgroundColour(colour) )
         return false;
@@ -388,7 +386,7 @@ bool wxAnimationCtrl::SetBackgroundColour(const wxColour& colour)
 // wxAnimationCtrl - stop/play methods
 // ----------------------------------------------------------------------------
 
-void wxAnimationCtrl::Stop()
+void wxGenericAnimationCtrl::Stop()
 {
     m_timer.Stop();
     m_isPlaying = false;
@@ -399,7 +397,7 @@ void wxAnimationCtrl::Stop()
     DisplayStaticImage();
 }
 
-bool wxAnimationCtrl::Play(bool looped)
+bool wxGenericAnimationCtrl::Play(bool looped)
 {
     if (!m_animation.IsOk())
         return false;
@@ -435,7 +433,7 @@ bool wxAnimationCtrl::Play(bool looped)
 // wxAnimationCtrl - rendering methods
 // ----------------------------------------------------------------------------
 
-bool wxAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
+bool wxGenericAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
 {
     // if we've not created the backing store yet or it's too
     // small, then recreate it
@@ -477,7 +475,7 @@ bool wxAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
     return true;
 }
 
-void wxAnimationCtrl::IncrementalUpdateBackingStore()
+void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
 {
     wxMemoryDC dc;
     dc.SelectObject(m_backingStore);
@@ -529,7 +527,7 @@ void wxAnimationCtrl::IncrementalUpdateBackingStore()
     dc.SelectObject(wxNullBitmap);
 }
 
-void wxAnimationCtrl::DisplayStaticImage()
+void wxGenericAnimationCtrl::DisplayStaticImage()
 {
     wxASSERT(!IsPlaying());
 
@@ -564,7 +562,7 @@ void wxAnimationCtrl::DisplayStaticImage()
     Refresh();
 }
 
-void wxAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
+void wxGenericAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
 {
     // PERFORMANCE NOTE:
     // this draw stuff is not as fast as possible: the wxAnimationDecoder
@@ -577,7 +575,7 @@ void wxAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
                   true /* use mask */);
 }
 
-void wxAnimationCtrl::DrawCurrentFrame(wxDC& dc)
+void wxGenericAnimationCtrl::DrawCurrentFrame(wxDC& dc)
 {
     wxASSERT( m_backingStore.IsOk() );
 
@@ -585,7 +583,7 @@ void wxAnimationCtrl::DrawCurrentFrame(wxDC& dc)
     dc.DrawBitmap(m_backingStore, 0, 0, true /* use mask in case it's present */);
 }
 
-void wxAnimationCtrl::DisposeToBackground()
+void wxGenericAnimationCtrl::DisposeToBackground()
 {
     // clear the backing store
     wxMemoryDC dc;
@@ -594,7 +592,7 @@ void wxAnimationCtrl::DisposeToBackground()
         DisposeToBackground(dc);
 }
 
-void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
+void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc)
 {
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
@@ -605,7 +603,7 @@ void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
     dc.Clear();
 }
 
-void wxAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz)
+void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz)
 {
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
@@ -620,7 +618,7 @@ void wxAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, const wx
 // wxAnimationCtrl - event handlers
 // ----------------------------------------------------------------------------
 
-void wxAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
+void wxGenericAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     // VERY IMPORTANT: the wxPaintDC *must* be created in any case
     wxPaintDC dc(this);
@@ -640,7 +638,7 @@ void wxAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 }
 
-void wxAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
+void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
 {
     m_currentFrame++;
     if (m_currentFrame == m_animation.GetFrameCount())
@@ -672,7 +670,7 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
     m_timer.Start(delay, true);
 }
 
-void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
+void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
 {
     // NB: resizing an animation control may take a lot of time
     //     for big animations as the backing store must be
@@ -693,6 +691,5 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
     }
 }
 
-#endif // wxUSE_GENERIC_ANIMATIONCTRL
 #endif // wxUSE_ANIMATIONCTRL
 
