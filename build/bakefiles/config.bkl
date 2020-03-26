@@ -132,6 +132,12 @@ Accepted values: IA64, X64, ARM64
 (AMD64 accepted as synonym for X64 but should not be used any more).
             </description>
         </option>
+        <option name="VISUALSTUDIOVERSION">
+            <default-value>$(DOLLAR)(VISUALSTUDIOVERSION)</default-value>
+            <description>
+                Visual Studio version set by the VS command prompt.
+            </description>
+        </option>
     </if>
     <if cond="FORMAT!='msvc'">
         <set var="TARGET_CPU"/>
