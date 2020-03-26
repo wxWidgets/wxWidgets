@@ -138,6 +138,12 @@ Accepted values: IA64, X64, ARM64
                 Visual Studio version set by the VS command prompt.
             </description>
         </option>
+        <option name="VISUALSTUDIOPLATFORM">
+            <default-value>$(DOLLAR)(PLATFORM)</default-value>
+            <description>
+                Platform architecture set by the VS command prompt.
+            </description>
+        </option>
     </if>
     <if cond="FORMAT!='msvc'">
         <set var="TARGET_CPU"/>
