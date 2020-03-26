@@ -396,6 +396,15 @@
         </set>
     </if>
 
+    <set var="TARGET_CPU_COMPFLAG"></set>
+    <if cond="FORMAT=='msvc'">
+        <set var="TARGET_CPU_COMPFLAG">
+            <if cond="TARGET_CPU==''">TARGET_CPU_COMPFLAG=0</if>
+            <if cond="TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'"></if>
+            <if cond="TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'"></if>
+        </set>
+    </if>
+
     <template id="common_settings">
         <debug-info>$(DEBUGINFO)</debug-info>
         <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
@@ -423,6 +432,7 @@
         <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
+            <define>$(TARGET_CPU_COMPFLAG)</define>
         </if>
     </template>
 
