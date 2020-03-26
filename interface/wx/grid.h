@@ -2006,6 +2006,45 @@ struct wxGridBlockDiffResult
 };
 
 /**
+    The range of grid selection blocks.
+
+    @since 3.1.4
+ */
+class wxGridSelectionRange
+{
+public:
+    /**
+        Default constructor initializes the iterator.
+     */
+    wxGridSelectionRange();
+
+    /**
+     * Get the current selection block coordinates.
+     */
+    const wxGridBlockCoords& GetBlockCoords() const;
+
+    /**
+     * Iterate to the next block.
+     */
+    void Next();
+
+    /**
+     * Whether the iterator is valid.
+     */
+    bool Valid();
+
+    /**
+     * The function to allow using range-based for.
+     */
+    wxGridBlockCoords *begin() const;
+
+    /**
+     * The function to allow using range-based for.
+     */
+    wxGridBlockCoords *end() const;
+};
+
+/**
     @class wxGridTableBase
 
     The almost abstract base class for grid tables.
@@ -4609,6 +4648,13 @@ public:
     void DeselectCell( int row, int col );
 
     /**
+        Returns an range of grid selection blocks.
+
+        @since 3.1.4
+    */
+    wxGridSelectionRange GetSelectionRange() const;
+
+    /**
         Returns an array of individually selected cells.
 
         Notice that this array does @em not contain all the selected cells in
@@ -4623,6 +4669,9 @@ public:
         a grid with a million of columns, we don't want to create an array with
         a million of entries in this function, instead it returns an empty
         array and GetSelectedCols() returns an array containing one element).
+
+        The function can be slow for the big grids, use GetSelectionRange()
+        in the new code.
     */
     wxGridCellCoordsArray GetSelectedCells() const;
 
@@ -4634,6 +4683,9 @@ public:
         individually selected but not those being part of the block selection
         or being selected in virtue of all of their cells being selected
         individually, please see GetSelectedCells() for more details.
+
+        The function can be slow for the big grids, use GetSelectionRange()
+        in the new code.
     */
     wxArrayInt GetSelectedCols() const;
 
@@ -4645,6 +4697,9 @@ public:
         selected but not those being part of the block selection or being
         selected in virtue of all of their cells being selected individually,
         please see GetSelectedCells() for more details.
+
+        The function can be slow for the big grids, use GetSelectionRange()
+        in the new code.
     */
     wxArrayInt GetSelectedRows() const;
 
@@ -4660,6 +4715,9 @@ public:
         Please see GetSelectedCells() for more information about the selection
         representation in wxGrid.
 
+        The function can be slow for the big grids, use GetSelectionRange()
+        in the new code.
+
         @see GetSelectionBlockTopLeft()
     */
     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
@@ -4669,6 +4727,9 @@ public:
 
         Please see GetSelectedCells() for more information about the selection
         representation in wxGrid.
+
+        The function can be slow for the big grids, use GetSelectionRange()
+        in the new code.
 
         @see GetSelectionBlockBottomRight()
     */

@@ -868,6 +868,66 @@ struct wxGridBlockDiffResult
     wxGridBlockCoords m_parts[4];
 };
 
+// ----------------------------------------------------------------------------
+// wxGridSelectionRange: the range of grid selection blocks
+// ----------------------------------------------------------------------------
+
+class wxGridSelectionRange
+{
+public:
+    typedef wxGridBlockCoords* iterator;
+
+    wxGridSelectionRange() :
+        m_begin(NULL),
+        m_end(NULL),
+        m_it(NULL)
+    {
+    }
+
+    // Get the current selection block coordinates.
+    const wxGridBlockCoords& GetBlockCoords() const
+    {
+        static wxGridBlockCoords empty;
+        return Valid() ? *m_it : empty;
+    }
+
+    // Iterate to the next block.
+    void Next()
+    {
+        if ( Valid() )
+            ++m_it;
+    }
+
+    // Whether the iterator is valid.
+    bool Valid() const
+    {
+        return m_it != m_end;
+    }
+
+    iterator begin() const
+    {
+        return m_begin;
+    }
+
+    iterator end() const
+    {
+        return m_end;
+    }
+
+private:
+    wxGridSelectionRange(iterator begin, iterator end) :
+        m_begin(begin),
+        m_end(end),
+        m_it(begin)
+    {
+    }
+
+    const iterator m_begin;
+    const iterator m_end;
+    iterator m_it;
+
+    friend class wxGrid;
+};
 
 // For comparisons...
 //
@@ -1918,6 +1978,7 @@ public:
     bool IsInSelection( const wxGridCellCoords& coords ) const
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
 
+    wxGridSelectionRange GetSelectionRange() const;
     wxGridCellCoordsArray GetSelectedCells() const;
     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;

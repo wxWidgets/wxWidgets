@@ -89,6 +89,8 @@ public:
     wxArrayInt GetRowSelection() const;
     wxArrayInt GetColSelection() const;
 
+    wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
+
 private:
     int BlockContain( int topRow1, int leftCol1,
                        int bottomRow1, int rightCol1,
