@@ -284,9 +284,7 @@ bool wxPenRefData::Alloc()
    // CreatePen()
    if ( m_join == wxJOIN_ROUND &&
             m_cap == wxCAP_ROUND &&
-                m_style != wxPENSTYLE_USER_DASH &&
-                    m_style != wxPENSTYLE_STIPPLE &&
-                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
+                m_style == wxPENSTYLE_SOLID )
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
    }
