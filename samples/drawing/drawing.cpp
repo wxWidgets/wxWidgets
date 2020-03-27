@@ -639,7 +639,7 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( *wxBLACK, width ) );
-    dc.SetBrush( *wxRED_BRUSH );
+    dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawText(wxString::Format("Testing lines of width %d", width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
