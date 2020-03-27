@@ -4567,6 +4567,10 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         DisableCellEditControl();
         MakeCellVisible( coords );
 
+        // Whether we should move the current grid cell to the corrner of the
+        // last selected block.
+        bool goToLastBlock = false;
+
         if ( event.CmdDown() && !event.ShiftDown() )
         {
             if ( m_selection )
@@ -4585,6 +4589,8 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                         wxGridBlockCoords(coords.GetRow(), coords.GetCol(),
                                           coords.GetRow(), coords.GetCol()),
                                           event);
+
+                    goToLastBlock = true;
                 }
             }
         }
@@ -4618,7 +4624,16 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
             m_waitForSlowClick = m_currentCellCoords == coords &&
                                         coords != wxGridNoCellCoords;
         }
-        SetCurrentCell(coords);
+
+        if ( goToLastBlock && m_selection->IsSelection() )
+        {
+            wxGridBlockCoords& lastBlock = m_selection->GetBlocks().back();
+            SetCurrentCell(lastBlock.GetTopLeft());
+        }
+        else
+        {
+            SetCurrentCell(coords);
+        }
     }
 }
 
