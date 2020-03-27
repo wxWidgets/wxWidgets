@@ -613,7 +613,7 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     if (m_grid->GetNumberRows() == 0 || m_grid->GetNumberCols() == 0)
         return;
 
-    MergeOrAddBlock(m_selection, block);
+    m_selection.push_back(block);
 
     // Update View:
     if ( !m_grid->GetBatchCount() )
@@ -638,18 +638,12 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
 void wxGridSelection::MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
                                       const wxGridBlockCoords& newBlock)
 {
-    // If a block containing the selection is already selected, return,
-    // if a block contained in the selection is found, remove it.
-
     size_t count = blocks.size();
     for ( size_t n = 0; n < count; n++ )
     {
         const wxGridBlockCoords& block = blocks[n];
 
-        switch ( BlockContain(block.GetTopRow(), block.GetLeftCol(),
-                              block.GetBottomRow(), block.GetRightCol(),
-                              newBlock.GetTopRow(), newBlock.GetLeftCol(),
-                              newBlock.GetBottomRow(), newBlock.GetRightCol()) )
+        switch ( block.ContainBlock(newBlock) )
         {
             case 1:
                 return;
