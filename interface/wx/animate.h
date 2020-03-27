@@ -28,7 +28,7 @@ enum wxAnimationType
 
 
 /**
-    @class wxAnimationCtrl
+    @class wxGenericAnimationCtrl
 
     This is a static control which displays an animation.
     wxAnimationCtrl API is as simple as possible and won't give you full control
@@ -57,15 +57,15 @@ enum wxAnimationType
 
     @see wxAnimation, @sample{animate}
 */
-class wxAnimationCtrl : public wxControl
+class wxGenericAnimationCtrl : public wxControl
 {
 public:
     /**
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxAnimationCtrl(wxWindow* parent, wxWindowID id,
-                    const wxAnimation& anim = wxNullAnimation,
+    wxGenericAnimationCtrl(wxWindow* parent, wxWindowID id,
+                    const wxGenericAnimation& anim = wxNullAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
@@ -97,7 +97,7 @@ public:
                 creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxAnimation& anim = wxNullAnimation,
+                const wxGenericAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -106,7 +106,7 @@ public:
     /**
         Returns the animation associated with this control.
     */
-    virtual wxAnimation GetAnimation() const;
+    virtual wxGenericAnimation GetAnimation() const;
 
     /**
         Returns the inactive bitmap shown in this control when the;
@@ -150,7 +150,7 @@ public:
         animation or the background colour will be shown
         (see SetInactiveBitmap() for more info).
     */
-    virtual void SetAnimation(const wxAnimation& anim);
+    virtual void SetAnimation(const wxGenericAnimation& anim);
 
     /**
         Sets the bitmap to show on the control when it's not playing an animation.
@@ -221,9 +221,31 @@ public:
 };
 
 
+/**
+   @class wxAnimationCtrl
+
+   If the platform supports a native animation control (currently just wxGTK)
+   then this class implements the control via the native widget. 
+   Otherwise it is virtually the same as @c wxGenericAnimationCtrl.
+*/
+
+class wxAnimationCtrl : public wxGenericAnimationCtrl
+{
+public: 
+    wxAnimationCtrl();
+    wxAnimationCtrl(wxWindow *parent,
+                    wxWindowID id,
+                    const wxGenericAnimation& anim = wxNullAnimation,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxAC_DEFAULT_STYLE,
+                    const wxString& name = wxAnimationCtrlNameStr);
+};
+
+
 
 /**
-    @class wxAnimation
+    @class wxGenericAnimation
 
     This class encapsulates the concept of a platform-dependent animation.
     An animation is a sequence of frames of the same size.
@@ -246,18 +268,18 @@ public:
 
     @see wxAnimationCtrl, @sample{animate}
 */
-class wxAnimation : public wxObject
+class wxGenericAnimation : public wxObject
 {
 public:
     /**
        Default ctor.
     */
-    wxAnimation();
+    wxGenericAnimation();
 
     /**
         Copy ctor.
     */
-    wxAnimation(const wxAnimation& anim);
+//    wxAnimation(const wxAnimation& anim);
 
     /**
         Loads an animation from a file.
@@ -267,14 +289,14 @@ public:
         @param type
             See LoadFile() for more info.
     */
-    wxAnimation(const wxString& name,
+    wxGenericAnimation(const wxString& name,
                 wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
         Destructor.
         See @ref overview_refcount_destruct for more info.
     */
-    virtual ~wxAnimation();
+    virtual ~wxGenericAnimation();
 
     /**
         Returns the delay for the i-th frame in milliseconds.
@@ -395,6 +417,21 @@ public:
 };
 
 
+/**
+   @class wxAnimation
+
+   If the platform supports a native animation control (currently just wxGTK)
+   then this is the animation class that should be used with @c wxAnimationCtrl.
+   Otherwise it is virtually the same as @c wxGenericAnimation.
+*/
+class wxAnimation : public wxGenericAnimation
+{
+public:
+    wxAnimation();
+    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
+};
+
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -402,5 +439,5 @@ public:
 /**
     An empty animation object.
 */
-wxAnimation wxNullAnimation;
+wxGenericAnimation wxNullAnimation;
 

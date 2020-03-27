@@ -20,10 +20,9 @@
 #include "wx/timer.h"
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_FWD_CORE wxAnimation;
-//class WXDLLIMPEXP_FWD_CORE wxAnimationGeneric;
+class WXDLLIMPEXP_FWD_CORE wxGenericAnimation;
 
-extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
+extern WXDLLIMPEXP_DATA_CORE(wxGenericAnimation) wxNullAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
 
@@ -99,8 +98,8 @@ public:
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
-    virtual void SetAnimation(const wxAnimation &anim) = 0;
-    virtual wxAnimation GetAnimation() const = 0;
+    virtual void SetAnimation(const wxGenericAnimation &anim) = 0;
+    virtual wxGenericAnimation GetAnimation() const = 0;
 
     virtual bool Play() = 0;
     virtual void Stop() = 0;
@@ -139,6 +138,7 @@ private:
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/animate.h"
 #else  
+    #include "wx/generic/animate.h"
 
     class WXDLLIMPEXP_ADV wxAnimation : public wxGenericAnimation
     {
@@ -151,8 +151,6 @@ private:
         wxDECLARE_DYNAMIC_CLASS(wxAnimation);
     };
 
-    #include "wx/generic/animate.h"
-
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl
     {
     public: 
@@ -161,7 +159,7 @@ private:
             {}
         wxAnimationCtrl(wxWindow *parent,
                         wxWindowID id,
-                        const wxAnimation& anim = wxNullAnimation,
+                        const wxGenericAnimation& anim = wxNullAnimation,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxAC_DEFAULT_STYLE,

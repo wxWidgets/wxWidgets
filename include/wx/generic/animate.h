@@ -23,7 +23,7 @@ public:
     wxGenericAnimationCtrl() { Init(); }
     wxGenericAnimationCtrl(wxWindow *parent,
                            wxWindowID id,
-                           const wxAnimation& anim = wxNullAnimation,
+                           const wxGenericAnimation& anim = wxNullAnimation,
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxAC_DEFAULT_STYLE,
@@ -37,7 +37,7 @@ public:
     void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
-                const wxAnimation& anim = wxNullAnimation,
+                const wxGenericAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -55,8 +55,8 @@ public:
     virtual bool IsPlaying() const wxOVERRIDE
         { return m_isPlaying; }
 
-    void SetAnimation(const wxAnimation &animation) wxOVERRIDE; 
-    wxAnimation GetAnimation() const wxOVERRIDE
+    void SetAnimation(const wxGenericAnimation &animation) wxOVERRIDE; 
+    wxGenericAnimation GetAnimation() const wxOVERRIDE
         { return m_animation; }
 
     virtual void SetInactiveBitmap(const wxBitmap &bmp) wxOVERRIDE;
@@ -111,7 +111,7 @@ protected:
     unsigned int  m_currentFrame;     // Current frame
     bool          m_looped;           // Looped, or not
     wxTimer       m_timer;            // The timer
-    wxAnimation   m_animation;        // The animation
+    wxGenericAnimation   m_animation;        // The animation
 
     bool          m_isPlaying;        // Is the animation playing?
     bool          m_useWinBackgroundColour; // Use animation bg colour or window bg colour?

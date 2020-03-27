@@ -282,7 +282,7 @@ void wxGenericAnimationCtrl::Init()
 }
 
 bool wxGenericAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
-            const wxAnimation& animation, const wxPoint& pos,
+            const wxGenericAnimation& animation, const wxPoint& pos,
             const wxSize& size, long style, const wxString& name)
 {
     m_timer.SetOwner(this);
@@ -329,7 +329,7 @@ wxSize wxGenericAnimationCtrl::DoGetBestSize() const
     return FromDIP(wxSize(100, 100));
 }
 
-void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
+void wxGenericAnimationCtrl::SetAnimation(const wxGenericAnimation& animation)
 {
     if (IsPlaying())
         Stop(); 
