@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/animate.h
-// Purpose:     wxAnimation and wxAnimationCtrl
+// Purpose:     wxGenericAnimation and wxGenericAnimationCtrl
 // Author:      Julian Smart and Guillermo Rodriguez Garcia
 // Modified by: Francesco Montorsi
 // Created:     13/8/99
@@ -14,7 +14,7 @@
 #include "wx/bitmap.h"
 
 // ----------------------------------------------------------------------------
-// wxAnimationCtrl
+// wxGenericAnimationCtrl
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_ADV wxGenericAnimationCtrl: public wxAnimationCtrlBase

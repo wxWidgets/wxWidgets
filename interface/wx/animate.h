@@ -346,7 +346,7 @@ public:
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
      */
-    wxPoint GetFramePosition(unsigned int frame) const;
+    virtual wxPoint GetFramePosition(unsigned int frame) const;
 
     /**
        Returns the size of the given animation frame.
@@ -354,7 +354,7 @@ public:
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
      */
-    wxSize GetFrameSize(unsigned int frame) const;
+    virtual wxSize GetFrameSize(unsigned int frame) const;
 
     /**
        Returns the type of disposal that should be done for the given
@@ -363,7 +363,7 @@ public:
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
      */
-    wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
 
     /**
        Returns the colour that should be treated as transparent. Returns @c
@@ -373,7 +373,7 @@ public:
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
      */
-    wxColour GetTransparentColour(unsigned int frame) const;
+    virtual wxColour GetTransparentColour(unsigned int frame) const;
 
     /**
        Returns the colour that should be on the animation's background, if any.
@@ -382,7 +382,7 @@ public:
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
      */
-    wxColour GetBackgroundColour() const;
+    virtual wxColour GetBackgroundColour() const;
 
 
     static inline wxAnimationDecoderList& GetHandlers();

@@ -21,6 +21,7 @@
 #include "wx/bitmap.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAnimation;
+//class WXDLLIMPEXP_FWD_CORE wxAnimationGeneric;
 
 extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
@@ -32,11 +33,11 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
 WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
 
-class WXDLLIMPEXP_ADV wxAnimation : public wxObject
+class WXDLLIMPEXP_ADV wxGenericAnimation : public wxObject
 {
 public:
-    wxAnimation() {}
-    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
+    wxGenericAnimation() {}
+    wxGenericAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
         { LoadFile(name, type); }
 
     virtual bool IsOk() const 
@@ -71,7 +72,7 @@ public:
     static void CleanUpHandlers();
     static void InitStandardHandlers();
 
-    wxDECLARE_DYNAMIC_CLASS(wxAnimation);
+    wxDECLARE_DYNAMIC_CLASS(wxGenericAnimation);
 };
 
 
@@ -138,6 +139,18 @@ private:
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/animate.h"
 #else  
+
+    class WXDLLIMPEXP_ADV wxAnimation : public wxGenericAnimation
+    {
+    public:
+        wxAnimation()
+            : wxGenericAnimation() {}
+        wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
+            : wxGenericAnimation(name, type) {}
+    private:
+        wxDECLARE_DYNAMIC_CLASS(wxAnimation);
+    };
+
     #include "wx/generic/animate.h"
 
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl

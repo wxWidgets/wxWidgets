@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/animateg.cpp
-// Purpose:     wxAnimation and wxAnimationCtrl
+// Purpose:     wxGenericAnimation and wxGenericAnimationCtrl
 // Author:      Julian Smart and Guillermo Rodriguez Garcia
 // Modified by: Francesco Montorsi
 // Created:     13/8/99
@@ -32,31 +32,31 @@
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxAnimationDecoderList)
 
-wxAnimationDecoderList wxAnimation::sm_handlers;
+wxAnimationDecoderList wxGenericAnimation::sm_handlers;
 
 
 // ----------------------------------------------------------------------------
 // wxAnimation
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericAnimation, wxObject);
 #define M_ANIMDATA      static_cast<wxAnimationDecoder*>(m_refData)
 
-wxSize wxAnimation::GetSize() const
+wxSize wxGenericAnimation::GetSize() const
 {
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
 
     return M_ANIMDATA->GetAnimationSize();
 }
 
-unsigned int wxAnimation::GetFrameCount() const
+unsigned int wxGenericAnimation::GetFrameCount() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
 
     return M_ANIMDATA->GetFrameCount();
 }
 
-wxImage wxAnimation::GetFrame(unsigned int i) const
+wxImage wxGenericAnimation::GetFrame(unsigned int i) const
 {
     wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid animation") );
 
@@ -66,49 +66,49 @@ wxImage wxAnimation::GetFrame(unsigned int i) const
     return ret;
 }
 
-int wxAnimation::GetDelay(unsigned int i) const
+int wxGenericAnimation::GetDelay(unsigned int i) const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
 
     return M_ANIMDATA->GetDelay(i);
 }
 
-wxPoint wxAnimation::GetFramePosition(unsigned int frame) const
+wxPoint wxGenericAnimation::GetFramePosition(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxDefaultPosition, wxT("invalid animation") );
 
     return M_ANIMDATA->GetFramePosition(frame);
 }
 
-wxSize wxAnimation::GetFrameSize(unsigned int frame) const
+wxSize wxGenericAnimation::GetFrameSize(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
 
     return M_ANIMDATA->GetFrameSize(frame);
 }
 
-wxAnimationDisposal wxAnimation::GetDisposalMethod(unsigned int frame) const
+wxAnimationDisposal wxGenericAnimation::GetDisposalMethod(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
 
     return M_ANIMDATA->GetDisposalMethod(frame);
 }
 
-wxColour wxAnimation::GetTransparentColour(unsigned int frame) const
+wxColour wxGenericAnimation::GetTransparentColour(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
 
     return M_ANIMDATA->GetTransparentColour(frame);
 }
 
-wxColour wxAnimation::GetBackgroundColour() const
+wxColour wxGenericAnimation::GetBackgroundColour() const
 {
     wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
 
     return M_ANIMDATA->GetBackgroundColour();
 }
 
-bool wxAnimation::LoadFile(const wxString& filename, wxAnimationType type)
+bool wxGenericAnimation::LoadFile(const wxString& filename, wxAnimationType type)
 {
     wxFileInputStream stream(filename);
     if ( !stream.IsOk() )
@@ -117,7 +117,7 @@ bool wxAnimation::LoadFile(const wxString& filename, wxAnimationType type)
     return Load(stream, type);
 }
 
-bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
+bool wxGenericAnimation::Load(wxInputStream &stream, wxAnimationType type)
 {
     UnRef();
 
@@ -170,7 +170,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
 // animation decoders
 // ----------------------------------------------------------------------------
 
-void wxAnimation::AddHandler( wxAnimationDecoder *handler )
+void wxGenericAnimation::AddHandler( wxAnimationDecoder *handler )
 {
     // Check for an existing handler of the type being added.
     if (FindHandler( handler->GetType() ) == 0)
@@ -190,7 +190,7 @@ void wxAnimation::AddHandler( wxAnimationDecoder *handler )
     }
 }
 
-void wxAnimation::InsertHandler( wxAnimationDecoder *handler )
+void wxGenericAnimation::InsertHandler( wxAnimationDecoder *handler )
 {
     // Check for an existing handler of the type being added.
     if (FindHandler( handler->GetType() ) == 0)
@@ -206,7 +206,7 @@ void wxAnimation::InsertHandler( wxAnimationDecoder *handler )
     }
 }
 
-const wxAnimationDecoder *wxAnimation::FindHandler( wxAnimationType animType )
+const wxAnimationDecoder *wxGenericAnimation::FindHandler( wxAnimationType animType )
 {
     wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
@@ -218,7 +218,7 @@ const wxAnimationDecoder *wxAnimation::FindHandler( wxAnimationType animType )
     return 0;
 }
 
-void wxAnimation::InitStandardHandlers()
+void wxGenericAnimation::InitStandardHandlers()
 {
 #if wxUSE_GIF
     AddHandler(new wxGIFDecoder);
@@ -228,7 +228,7 @@ void wxAnimation::InitStandardHandlers()
 #endif // wxUSE_ICO_CUR
 }
 
-void wxAnimation::CleanUpHandlers()
+void wxGenericAnimation::CleanUpHandlers()
 {
     wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
@@ -252,8 +252,8 @@ class wxAnimationModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxAnimationModule);
 public:
     wxAnimationModule() {}
-    bool OnInit() wxOVERRIDE { wxAnimation::InitStandardHandlers(); return true; }
-    void OnExit() wxOVERRIDE { wxAnimation::CleanUpHandlers(); }
+    bool OnInit() wxOVERRIDE { wxGenericAnimation::InitStandardHandlers(); return true; }
+    void OnExit() wxOVERRIDE { wxGenericAnimation::CleanUpHandlers(); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule);
