@@ -52,14 +52,6 @@ public:
                     kbd, sendEvent);
     }
 
-    void ToggleCellSelection(int row, int col,
-                             const wxKeyboardState& kbd = wxKeyboardState());
-    void ToggleCellSelection(const wxGridCellCoords& coords,
-                             const wxKeyboardState& kbd = wxKeyboardState())
-    {
-        ToggleCellSelection(coords.GetRow(), coords.GetCol(), kbd);
-    }
-
     void DeselectBlock(const wxGridBlockCoords& block,
                        const wxKeyboardState& kbd = wxKeyboardState(),
                        bool sendEvent = true );

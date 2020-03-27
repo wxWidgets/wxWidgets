@@ -184,23 +184,6 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
 }
 
 void
-wxGridSelection::ToggleCellSelection(int row, int col,
-                                     const wxKeyboardState& kbd)
-{
-    // if the cell is not selected, select it
-    if ( !IsInSelection ( row, col ) )
-    {
-        SelectBlock(row, col, row, col, kbd);
-
-        return;
-    }
-
-    // otherwise deselect it.
-    DeselectBlock(wxGridBlockCoords(row, col, row, col), kbd);
-}
-
-
-void
 wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                const wxKeyboardState& kbd,
                                bool sendEvent)

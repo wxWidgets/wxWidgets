@@ -4577,7 +4577,21 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         {
             if ( m_selection )
             {
-                m_selection->ToggleCellSelection(coords, event);
+                if ( !m_selection->IsInSelection(coords) )
+                {
+                    // If the cell is not selected, select it.
+                    m_selection->SelectBlock(coords.GetRow(), coords.GetCol(),
+                                             coords.GetRow(), coords.GetCol(),
+                                             event);
+                }
+                else
+                {
+                    // Otherwise deselect it.
+                    m_selection->DeselectBlock(
+                        wxGridBlockCoords(coords.GetRow(), coords.GetCol(),
+                                          coords.GetRow(), coords.GetCol()),
+                                          event);
+                }
             }
 
             m_selectedBlockTopLeft = wxGridNoCellCoords;
