@@ -203,30 +203,15 @@ public:
         m_canvas->UseGraphicRenderer(NULL);
     }
 
-    void OnGraphicContextNoneUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->GetRenderer() == NULL);
-    }
-
     void OnGraphicContextDefault(wxCommandEvent& WXUNUSED(event))
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
-    }
-
-    void OnGraphicContextDefaultUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->IsDefaultRenderer());
     }
 
 #if wxUSE_CAIRO
     void OnGraphicContextCairo(wxCommandEvent& WXUNUSED(event))
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetCairoRenderer());
-    }
-
-    void OnGraphicContextCairoUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetCairoRenderer());
     }
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
@@ -235,21 +220,11 @@ public:
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetGDIPlusRenderer());
     }
-
-    void OnGraphicContextGDIPlusUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer());
-    }
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
     void OnGraphicContextDirect2D(wxCommandEvent& WXUNUSED(event))
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDirect2DRenderer());
-    }
-
-    void OnGraphicContextDirect2DUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetDirect2DRenderer());
     }
 #endif
 #endif // __WXMSW__
@@ -2230,21 +2205,16 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_GRAPHICS_CONTEXT
     EVT_MENU      (File_GC_Default, MyFrame::OnGraphicContextDefault)
-    EVT_UPDATE_UI (File_GC_Default, MyFrame::OnGraphicContextDefaultUpdateUI)
     EVT_MENU      (File_DC,         MyFrame::OnGraphicContextNone)
-    EVT_UPDATE_UI (File_DC,         MyFrame::OnGraphicContextNoneUpdateUI)
 #if wxUSE_CAIRO
     EVT_MENU      (File_GC_Cairo, MyFrame::OnGraphicContextCairo)
-    EVT_UPDATE_UI (File_GC_Cairo, MyFrame::OnGraphicContextCairoUpdateUI)
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
     EVT_MENU      (File_GC_GDIPlus, MyFrame::OnGraphicContextGDIPlus)
-    EVT_UPDATE_UI (File_GC_GDIPlus, MyFrame::OnGraphicContextGDIPlusUpdateUI)
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
     EVT_MENU      (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2D)
-    EVT_UPDATE_UI (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2DUpdateUI)
 #endif
 #endif // __WXMSW__
     EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
@@ -2292,8 +2262,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
-    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\t1");
     m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\t0");
+    menuFile->AppendRadioItem(File_GC_Default, "Use default wx&GraphicContext\t1");
 #if wxUSE_CAIRO
     menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\t2");
 #endif // wxUSE_CAIRO
