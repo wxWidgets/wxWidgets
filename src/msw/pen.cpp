@@ -356,7 +356,10 @@ bool wxPenRefData::Alloc()
            dash = NULL;
        }
 
-       m_hPen = ::ExtCreatePen(styleMSW, m_width, &lb, m_nbDash, (LPDWORD)dash);
+       // Note that width can't be 0 for ExtCreatePen(), unlike for CreatePen().
+       int width = m_width == 0 ? 1 : m_width;
+
+       m_hPen = ::ExtCreatePen(styleMSW, width, &lb, m_nbDash, (LPDWORD)dash);
 
        delete [] dash;
    }
