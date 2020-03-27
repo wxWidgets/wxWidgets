@@ -2262,17 +2262,39 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
-    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\t0");
-    menuFile->AppendRadioItem(File_GC_Default, "Use default wx&GraphicContext\t1");
+    // Number the different renderer choices consecutively, starting from 0.
+    int accel = 0;
+    m_menuItemUseDC = menuFile->AppendRadioItem
+                      (
+                        File_DC,
+                        wxString::Format("Use wx&DC\t%d", accel++)
+                      );
+    menuFile->AppendRadioItem
+              (
+                File_GC_Default,
+                wxString::Format("Use default wx&GraphicContext\t%d", accel++)
+              );
 #if wxUSE_CAIRO
-    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\t2");
+    menuFile->AppendRadioItem
+              (
+                File_GC_Cairo,
+                wxString::Format("Use &Cairo\t%d", accel++)
+              );
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\t3");
+    menuFile->AppendRadioItem
+              (
+                File_GC_GDIPlus,
+                wxString::Format("Use &GDI+\t%d", accel++)
+              );
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
-    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\t4");
+    menuFile->AppendRadioItem
+              (
+                File_GC_Direct2D,
+                wxString::Format("Use &Direct2D\t%d", accel++)
+              );
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
