@@ -13,6 +13,13 @@
 #ifndef _WX_MSW_CHKCONF_H_
 #define _WX_MSW_CHKCONF_H_
 
+/* ensure that CPU parameter is specified (only nmake .vc makefile) */
+#ifdef _MSC_VER
+    #if defined(_WIN64) && defined(TARGET_CPU_COMPFLAG) && (TARGET_CPU_COMPFLAG == 0)
+        #error CPU must be defined
+    #endif
+#endif
+
 /* ensure that MSW-specific settings are defined */
 #ifndef wxUSE_ACTIVEX
 #    ifdef wxABORT_ON_CONFIG_ERROR

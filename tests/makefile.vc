@@ -23,8 +23,8 @@ SETUPHDIR = \
 TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(OBJS)\test.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	/D_CRT_SECURE_NO_DEPRECATE=1 /D_CRT_NON_CONFORMING_SWPRINTFS=1 \
-	/D_SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	/D_SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) \
+	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
@@ -122,9 +122,10 @@ TEST_DRAWING_CXXFLAGS = /M$(__RUNTIME_LIBS_27)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_drawing.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
-	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
+	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
 	/DwxUSE_GUI=0 /I.\..\3rdparty\catch\include $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test_drawing.pch" \
@@ -140,9 +141,10 @@ TEST_DRAWINGPLUGIN_CXXFLAGS = /M$(__RUNTIME_LIBS_45)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_drawingplugin.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
-	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
+	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 $(__DLLFLAG_p) $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 TEST_DRAWINGPLUGIN_OBJECTS =  \
@@ -151,9 +153,10 @@ TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_59)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_gui.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
-	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
+	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /I.\..\samples \
 	/DNOPCH /I.\..\3rdparty\catch\include /D_CONSOLE $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test_gui.pch" \
@@ -276,6 +279,12 @@ ARCH_SUFFIX = _ia64
 !if "$(TARGET_CPU)" == "X64"
 ARCH_SUFFIX = _x64
 !endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "X64"
+ARCH_SUFFIX = _x64
+!endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "x64"
+ARCH_SUFFIX = _x64
+!endif
 !if "$(TARGET_CPU)" == "amd64"
 ARCH_SUFFIX = _x64
 !endif
@@ -330,6 +339,12 @@ LINK_TARGET_CPU = /MACHINE:IA64
 !if "$(TARGET_CPU)" == "X64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "X64"
+LINK_TARGET_CPU = /MACHINE:X64
+!endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "x64"
+LINK_TARGET_CPU = /MACHINE:X64
+!endif
 !if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
@@ -342,43 +357,171 @@ LINK_TARGET_CPU = /MACHINE:IA64
 !if "$(TARGET_CPU)" == "x64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1"
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1"
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1"
+!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1"
+!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1"
+!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
 !endif
-!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2"
+!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "1" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2"
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/wx_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2"
+!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2"
+!if "$(TARGET_CPU)" == "amd64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
 !endif
-!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2"
+!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "AMD64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "x64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "X64" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "x64" && "$(VISUALSTUDIOVERSION)" == "16.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "14.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "15.0"
+WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
+	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
+!endif
+!if "$(TARGET_CPU)" == "" && "$(USE_DPI_AWARE_MANIFEST)" == "2" && "$(VISUALSTUDIOPLATFORM)" == "X64" && "$(VISUALSTUDIOVERSION)" == "16.0"
 WIN32_DPI_LINKFLAG = /MANIFEST:EMBED \
 	/MANIFESTINPUT:./../include/wx/msw/amd64_dpi_aware_pmv2.manifest
 !endif
@@ -489,6 +632,15 @@ __NO_VC_CRTDBG_p_7 = /d __NO_VC_CRTDBG__
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
 __NO_VC_CRTDBG_p_7 = /d __NO_VC_CRTDBG__
+!endif
+!if "$(TARGET_CPU)" == ""
+__TARGET_CPU_COMPFLAG_p_7 = /d TARGET_CPU_COMPFLAG=0
+!endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "X64"
+__TARGET_CPU_COMPFLAG_p_7 = 
+!endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "x64"
+__TARGET_CPU_COMPFLAG_p_7 = 
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p_7 = /d __WXUNIVERSAL__
@@ -648,6 +800,15 @@ __NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
 __NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
+!if "$(TARGET_CPU)" == ""
+__TARGET_CPU_COMPFLAG_p = /DTARGET_CPU_COMPFLAG=0
+!endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "X64"
+__TARGET_CPU_COMPFLAG_p = 
+!endif
+!if "$(TARGET_CPU)" == "" && "$(VISUALSTUDIOPLATFORM)" == "x64"
+__TARGET_CPU_COMPFLAG_p = 
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
@@ -1064,7 +1225,7 @@ $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_52_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_7)   /d __WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) /i . $(__DLLFLAG_p_7) /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\include /d _CONSOLE .\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_52_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_7)   $(__TARGET_CPU_COMPFLAG_p_7) /d __WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) /i . $(__DLLFLAG_p_7) /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\include /d _CONSOLE .\..\samples\sample.rc
 
 $(OBJS)\test_gui_asserthelper.obj: .\asserthelper.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\asserthelper.cpp
