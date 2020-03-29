@@ -134,6 +134,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 {
     wxCHECK_MSG( !isResource, false, "not implemented" );
 
+#ifndef __WXOSX_IPHONE__
     wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(fileName));
 
     SystemSoundID soundID;
@@ -145,7 +146,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
     }
 
     m_data = new wxOSXAudioToolboxSoundData(soundID);
-
+#endif
     return true;
 }
 

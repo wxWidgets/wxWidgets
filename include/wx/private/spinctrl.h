@@ -10,6 +10,11 @@
 #ifndef _WX_PRIVATE_SPINCTRL_H_
 #define _WX_PRIVATE_SPINCTRL_H_
 
+#ifdef __WXOSX_IPHONE__
+#include "wx/gdicmn.h"
+#include "wx/control.h"
+#endif
+
 namespace wxSpinCtrlImpl
 {
 

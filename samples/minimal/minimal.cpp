@@ -29,6 +29,9 @@
     #include "wx/wx.h"
 #endif
 
+//#include <wx/treectrl.h>
+//#include <wx/combobox.h>
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -59,6 +62,8 @@ public:
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
+    
+    wxBitmap bitmap;
 public:
     // ctor(s)
     MyFrame(const wxString& title);
@@ -66,6 +71,8 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnPaint(wxPaintEvent& WXUNUSED(event));
+
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -98,6 +105,7 @@ enum
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_PAINT(MyFrame::OnPaint)
 wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -122,6 +130,8 @@ bool MyApp::OnInit()
     // few common command-line options but it could be do more in the future
     if ( !wxApp::OnInit() )
         return false;
+
+    wxImage::AddHandler( new wxPNGHandler );
 
     // create the main application window
     MyFrame *frame = new MyFrame("Minimal wxWidgets App");
@@ -165,12 +175,38 @@ MyFrame::MyFrame(const wxString& title)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 #else // !wxUSE_MENUS
+    
+    
+    wxImage image;
+    if (image.LoadFile("/Users/cberhorster/Downloads/wxWidgets-3/samples/minimal/backgrnd.png", wxBITMAP_TYPE_PNG))
+    {
+        bitmap = wxBitmap(image);
+    }
     // If menus are not available add a button to access the about box
-    wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    //wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
     wxButton* aboutBtn = new wxButton(this, wxID_ANY, "About...");
     aboutBtn->Bind(wxEVT_BUTTON, &MyFrame::OnAbout, this);
-    sizer->Add(aboutBtn, wxSizerFlags().Center());
-    SetSizer(sizer);
+    aboutBtn->SetSize(100, 100, 200, 50);
+    aboutBtn->SetBackgroundColour(*wxYELLOW);
+    wxSlider* doBtn = new wxSlider(this, wxID_ANY, 50,0,100);
+    doBtn->SetSize(100, 200, 200, 50);
+    doBtn->SetBackgroundColour(*wxGREEN);
+    wxTextCtrl* textCtrl = new wxTextCtrl(this, wxID_ANY, "50,0,100");
+    textCtrl->SetSize(100, 300, 200, 50);
+    textCtrl->SetBackgroundColour(*wxBLUE);
+/*
+    wxTreeCtrl* treeCtrl = new wxTextCtrl(this, wxID_ANY);
+    textCtrl->SetSize(100, 400, 200, 20);
+    textCtrl->SetBackgroundColour(*wxYELLOW);
+    
+    wxComboBox* comboCtrl = new wxComboBox(this, wxID_ANY);
+    comboCtrl->SetSize(100, 400, 200, 20);
+    comboCtrl->SetBackgroundColour(*wxGREEN);
+*/
+    
+    //sizer->Add(aboutBtn/*, wxSizerFlags().Center()*/);
+    //sizer->Add(doBtn /*, wxSizerFlags().Center()*/);
+
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
@@ -204,3 +240,29 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION,
                  this);
 }
+
+
+void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    
+    
+    wxPaintDC painter(this);
+    int w, h;
+    
+    GetSize(&w,&h);
+    painter.SetPen(* wxRED_PEN);
+    painter.SetBrush(* wxRED_BRUSH);
+    painter.DrawRectangle(0, 0, w, h);
+    painter.DrawText("Hallo Torsten", 100, 400);
+    
+    
+    if ( bitmap.IsOk() )
+    {
+        PrepareDC(painter);
+        
+        painter.DrawBitmap(bitmap, 100, 500);
+    }
+
+
+}
+

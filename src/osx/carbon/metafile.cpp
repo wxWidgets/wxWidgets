@@ -92,12 +92,13 @@ wxMetafileRefData::wxMetafileRefData(CFDataRef data) :
 wxMetafileRefData::wxMetafileRefData( const wxString& filename )
 {
     Init();
-
+#ifndef __WXOSX_IPHONE__
     if ( !filename.empty() )
     {
         wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(filename));
         m_pdfDoc.reset(CGPDFDocumentCreateWithURL(url));
     }
+#endif
 }
 
 
