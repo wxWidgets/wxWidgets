@@ -14,7 +14,6 @@
 #if wxUSE_ANIMATIONCTRL
 #include "wx/animate.h"
 
-#if !wxUSE_GENERIC_ANIMATIONCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/image.h"
@@ -53,7 +52,6 @@ void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
 // wxAnimation
 //-----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase);
 
 wxAnimation::wxAnimation(const wxAnimation& that)
     : base_type(that)
@@ -175,11 +173,6 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
 
     // wait until we get the last area_updated signal
     return data_written;
-}
-
-wxImage wxAnimation::GetFrame(unsigned int WXUNUSED(frame)) const
-{
-    return wxNullImage;
 }
 
 wxSize wxAnimation::GetSize() const
@@ -467,5 +460,4 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
     }
 }
 
-#endif      // !wxUSE_GENERIC_ANIMATIONCTRL
 #endif      // wxUSE_ANIMATIONCTRL

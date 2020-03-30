@@ -39,7 +39,6 @@ wxAnimationDecoderList wxGenericAnimation::sm_handlers;
 // wxAnimation
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxGenericAnimation, wxObject);
 #define M_ANIMDATA      static_cast<wxAnimationDecoder*>(m_refData)
 
 wxSize wxGenericAnimation::GetSize() const
@@ -313,7 +312,7 @@ bool wxGenericAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType 
 
 bool wxGenericAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
 {
-    wxAnimation anim;
+    wxGenericAnimation anim;
     if ( !anim.Load(stream, type) || !anim.IsOk() )
         return false;
 
@@ -554,7 +553,7 @@ void wxGenericAnimationCtrl::DisplayStaticImage()
         if (!m_animation.IsOk() ||
             !RebuildBackingStoreUpToFrame(0))
         {
-            m_animation = wxNullAnimation;
+            m_animation = wxNullGenericAnimation;
             DisposeToBackground();
         }
     }

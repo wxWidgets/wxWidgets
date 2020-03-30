@@ -20,9 +20,11 @@
 #include "wx/timer.h"
 #include "wx/bitmap.h"
 
+class WXDLLIMPEXP_FWD_CORE wxAnimation;
 class WXDLLIMPEXP_FWD_CORE wxGenericAnimation;
 
-extern WXDLLIMPEXP_DATA_CORE(wxGenericAnimation) wxNullAnimation;
+extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
+extern WXDLLIMPEXP_DATA_CORE(wxGenericAnimation) wxNullGenericAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
 
@@ -32,46 +34,38 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
 WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
 
-class WXDLLIMPEXP_ADV wxGenericAnimation : public wxObject
+// ----------------------------------------------------------------------------
+// wxAnimationBase
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxAnimationBase : public wxObject
 {
 public:
-    wxGenericAnimation() {}
-    wxGenericAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
-        { LoadFile(name, type); }
+    wxAnimationBase() {}
 
-    virtual bool IsOk() const 
-        { return m_refData != NULL; }
+    virtual bool IsOk() const = 0;
 
-    virtual unsigned int GetFrameCount() const;
-    virtual int GetDelay(unsigned int i) const;
-    virtual wxImage GetFrame(unsigned int i) const;
-    virtual wxSize GetSize() const;
+    // can be -1
+    virtual int GetDelay(unsigned int frame) const = 0;
 
-    virtual bool LoadFile(const wxString& filename,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual unsigned int GetFrameCount() const = 0;
+    virtual wxImage GetFrame(unsigned int frame) const = 0;
+    virtual wxSize GetSize() const = 0;
+
+    virtual bool LoadFile(const wxString& name,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
     virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY);
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
-    // extended interface used by the generic implementation of wxAnimationCtrl
-    virtual wxPoint GetFramePosition(unsigned int frame) const;
-    virtual wxSize GetFrameSize(unsigned int frame) const;
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
-    virtual wxColour GetTransparentColour(unsigned int frame) const;
-    virtual wxColour GetBackgroundColour() const;
+    // extended interface used only by the generic implementation of wxAnimationCtrl
+    virtual wxPoint GetFramePosition(unsigned int frame) const = 0;
+    virtual wxSize GetFrameSize(unsigned int frame) const = 0;
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const = 0;
+    virtual wxColour GetTransparentColour(unsigned int frame) const = 0;
+    virtual wxColour GetBackgroundColour() const = 0;
 
 protected:
-    static wxAnimationDecoderList sm_handlers;
-
-public:
-    static inline wxAnimationDecoderList& GetHandlers() { return sm_handlers; }
-    static void AddHandler(wxAnimationDecoder *handler);
-    static void InsertHandler(wxAnimationDecoder *handler);
-    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
-
-    static void CleanUpHandlers();
-    static void InitStandardHandlers();
-
-    wxDECLARE_DYNAMIC_CLASS(wxGenericAnimation);
+    wxDECLARE_ABSTRACT_CLASS(wxAnimationBase);
 };
 
 
@@ -97,9 +91,6 @@ public:
                           wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-
-    virtual void SetAnimation(const wxGenericAnimation &anim) = 0;
-    virtual wxGenericAnimation GetAnimation() const = 0;
 
     virtual bool Play() = 0;
     virtual void Stop() = 0;
@@ -135,7 +126,8 @@ private:
 // include the platform-specific version of the wxAnimationCtrl class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK20__)
+    #include "wx/generic/animate.h"
     #include "wx/gtk/animate.h"
 #else  
     #include "wx/generic/animate.h"
@@ -147,6 +139,8 @@ private:
             : wxGenericAnimation() {}
         wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
             : wxGenericAnimation(name, type) {}
+        wxAnimation(const wxGenericAnimation& other)
+            : wxGenericAnimation(other) {}
     private:
         wxDECLARE_DYNAMIC_CLASS(wxAnimation);
     };
@@ -154,18 +148,22 @@ private:
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl
     {
     public: 
-        wxAnimationCtrl()
+        wxAnimationCtrl() 
             : wxGenericAnimationCtrl()
             {}
         wxAnimationCtrl(wxWindow *parent,
                         wxWindowID id,
-                        const wxGenericAnimation& anim = wxNullAnimation,
+                        const wxAnimation& anim = wxNullAnimation,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxAC_DEFAULT_STYLE,
                         const wxString& name = wxAnimationCtrlNameStr)
             : wxGenericAnimationCtrl(parent, id, anim, pos, size, style, name)
             {}
+
+    virtual wxAnimation GetAnimation() const
+         { return wxAnimation(m_animation) ; }
+            
     private:
         wxDECLARE_DYNAMIC_CLASS(wxAnimationCtrl);
     };

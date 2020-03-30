@@ -30,14 +30,18 @@
 #include "wx/dcmemory.h"
 
 const char wxAnimationCtrlNameStr[] = "animationctrl";
+wxGenericAnimation wxNullGenericAnimation;
+wxAnimation wxNullAnimation;
 
-// global object
-wxGenericAnimation wxNullAnimation;
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxGenericAnimation);
+wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationBase, wxObject);
 wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl);
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrl, wxAnimationCtrlBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericAnimation, wxAnimationBase);
 
+#if !defined(__WXGTK20__)
+    // In this case the "native" ctrl is the generic ctrl. See wx/animate.h
+    wxIMPLEMENT_CLASS(wxAnimationCtrl, wxGenericAnimationCtrl);
+#endif
 
 // ----------------------------------------------------------------------------
 // wxAnimationCtrlBase

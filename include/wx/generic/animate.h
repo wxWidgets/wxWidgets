@@ -14,6 +14,53 @@
 #include "wx/bitmap.h"
 
 // ----------------------------------------------------------------------------
+// wxGenericAnimation
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxGenericAnimation : public wxAnimationBase
+{
+public:
+    wxGenericAnimation() {}
+    wxGenericAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
+        { LoadFile(name, type); }
+
+    virtual bool IsOk() const 
+        { return m_refData != NULL; }
+
+    virtual unsigned int GetFrameCount() const wxOVERRIDE;
+    virtual int GetDelay(unsigned int i) const wxOVERRIDE;
+    virtual wxImage GetFrame(unsigned int i) const wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
+
+    virtual bool LoadFile(const wxString& filename,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+
+    // extended interface used only by the generic implementation of wxAnimationCtrl
+    virtual wxPoint GetFramePosition(unsigned int frame) const wxOVERRIDE;
+    virtual wxSize GetFrameSize(unsigned int frame) const wxOVERRIDE;
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const wxOVERRIDE;
+    virtual wxColour GetTransparentColour(unsigned int frame) const wxOVERRIDE;
+    virtual wxColour GetBackgroundColour() const wxOVERRIDE;
+
+protected:
+    static wxAnimationDecoderList sm_handlers;
+
+public:
+    static inline wxAnimationDecoderList& GetHandlers() { return sm_handlers; }
+    static void AddHandler(wxAnimationDecoder *handler);
+    static void InsertHandler(wxAnimationDecoder *handler);
+    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
+
+    static void CleanUpHandlers();
+    static void InitStandardHandlers();
+
+    wxDECLARE_DYNAMIC_CLASS(wxGenericAnimation);
+};
+
+
+// ----------------------------------------------------------------------------
 // wxGenericAnimationCtrl
 // ----------------------------------------------------------------------------
 
@@ -23,7 +70,7 @@ public:
     wxGenericAnimationCtrl() { Init(); }
     wxGenericAnimationCtrl(wxWindow *parent,
                            wxWindowID id,
-                           const wxGenericAnimation& anim = wxNullAnimation,
+                           const wxGenericAnimation& anim = wxNullGenericAnimation,
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxAC_DEFAULT_STYLE,
@@ -37,7 +84,7 @@ public:
     void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
-                const wxGenericAnimation& anim = wxNullAnimation,
+                const wxGenericAnimation& anim = wxNullGenericAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -45,6 +92,7 @@ public:
 
     ~wxGenericAnimationCtrl();
 
+    
 public:
     virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
     virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
@@ -55,8 +103,8 @@ public:
     virtual bool IsPlaying() const wxOVERRIDE
         { return m_isPlaying; }
 
-    void SetAnimation(const wxGenericAnimation &animation) wxOVERRIDE; 
-    wxGenericAnimation GetAnimation() const wxOVERRIDE
+    void SetAnimation(const wxGenericAnimation &animation); 
+    wxGenericAnimation GetAnimation() const
         { return m_animation; }
 
     virtual void SetInactiveBitmap(const wxBitmap &bmp) wxOVERRIDE;
