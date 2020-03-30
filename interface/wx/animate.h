@@ -265,7 +265,7 @@ class wxAnimationBase : public wxObject
 public:
     wxAnimationBase();
 
-    virtual bool IsOk() const;
+    virtual bool IsOk() const = 0;
 
     virtual int GetDelay(unsigned int frame) const = 0;
 
@@ -460,12 +460,16 @@ public:
    If the platform supports a native animation control (currently just wxGTK)
    then this is the animation class that should be used with @c wxAnimationCtrl.
    Otherwise it is virtually the same as @c wxGenericAnimation.
+
+   @see wxGenericAnimation
 */
 class wxAnimation : public wxAnimationBase
 {
 public:
     wxAnimation();
     wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
+
+    virtual bool IsOk() const;
 
     virtual int GetDelay(unsigned int frame) const;
     virtual unsigned int GetFrameCount() const;
