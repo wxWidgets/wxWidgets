@@ -65,7 +65,7 @@ public:
         all the parameters.
     */
     wxGenericAnimationCtrl(wxWindow* parent, wxWindowID id,
-                    const wxGenericAnimation& anim = wxNullAnimation,
+                    const wxGenericAnimation& anim = wxNullGenericAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
@@ -97,7 +97,7 @@ public:
                 creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxGenericAnimation& anim = wxNullAnimation,
+                const wxGenericAnimation& anim = wxNullGenericAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -235,13 +235,55 @@ public:
     wxAnimationCtrl();
     wxAnimationCtrl(wxWindow *parent,
                     wxWindowID id,
-                    const wxGenericAnimation& anim = wxNullAnimation,
+                    const wxAnimation& anim = wxNullAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
                     const wxString& name = wxAnimationCtrlNameStr);
+
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxAnimation& anim = wxNullAnimation,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxAC_DEFAULT_STYLE,
+                const wxString& name = wxAnimationCtrlNameStr);
+
+    void SetAnimation(const wxAnimation &anim);
+    wxAnimation GetAnimation() const;
 };
 
+
+/**
+   @class wxAnimationBase
+
+   Abstract base class for native and generic animation classes.
+
+   @See wxGenericAnimation, wxAnimation
+*/
+class wxAnimationBase : public wxObject
+{
+public:
+    wxAnimationBase();
+
+    virtual bool IsOk() const;
+
+    virtual int GetDelay(unsigned int frame) const = 0;
+
+    virtual unsigned int GetFrameCount() const = 0;
+    virtual wxImage GetFrame(unsigned int frame) const = 0;
+    virtual wxSize GetSize() const = 0;
+
+    virtual bool LoadFile(const wxString& name,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+
+    virtual wxPoint GetFramePosition(unsigned int frame) const = 0;
+    virtual wxSize GetFrameSize(unsigned int frame) const = 0;
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const = 0;
+    virtual wxColour GetTransparentColour(unsigned int frame) const = 0;
+    virtual wxColour GetBackgroundColour() const = 0;
+};
 
 
 /**
@@ -268,18 +310,13 @@ public:
 
     @see wxAnimationCtrl, @sample{animate}
 */
-class wxGenericAnimation : public wxObject
+class wxGenericAnimation : public wxAnimationBase
 {
 public:
     /**
        Default ctor.
     */
     wxGenericAnimation();
-
-    /**
-        Copy ctor.
-    */
-//    wxAnimation(const wxAnimation& anim);
 
     /**
         Loads an animation from a file.
@@ -424,11 +461,28 @@ public:
    then this is the animation class that should be used with @c wxAnimationCtrl.
    Otherwise it is virtually the same as @c wxGenericAnimation.
 */
-class wxAnimation : public wxGenericAnimation
+class wxAnimation : public wxAnimationBase
 {
 public:
     wxAnimation();
     wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
+
+    virtual int GetDelay(unsigned int frame) const;
+    virtual unsigned int GetFrameCount() const;
+    virtual wxImage GetFrame(unsigned int frame) const;
+    virtual wxSize GetSize() const;
+
+    virtual bool LoadFile(const wxString& name,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY);
+
+    virtual wxPoint GetFramePosition(unsigned int frame) const;
+    virtual wxSize GetFrameSize(unsigned int frame) const;
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+    virtual wxColour GetTransparentColour(unsigned int frame) const;
+    virtual wxColour GetBackgroundColour() const;
+    
 };
 
 
@@ -439,5 +493,6 @@ public:
 /**
     An empty animation object.
 */
-wxGenericAnimation wxNullAnimation;
+wxAnimation wxNullAnimation;
+wxGenericAnimation wxNullGenericAnimation;
 
