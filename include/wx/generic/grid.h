@@ -1075,12 +1075,13 @@ public:
 
     virtual ~wxGrid();
 
-    // however to initialize grid data either CreateGrid() or SetTable() must
+    // however to initialize grid data either CreateGrid() (to use a simple
+    // default table class) or {Set,Assign}Table() (to use a custom table) must
     // be also called
 
     // this is basically equivalent to
     //
-    //   SetTable(new wxGridStringTable(numRows, numCols), true, selmode)
+    //   AssignTable(new wxGridStringTable(numRows, numCols), selmode)
     //
     bool CreateGrid( int numRows, int numCols,
                      wxGridSelectionModes selmode = wxGridSelectCells );
@@ -1088,6 +1089,9 @@ public:
     bool SetTable( wxGridTableBase *table,
                    bool takeOwnership = false,
                    wxGridSelectionModes selmode = wxGridSelectCells );
+
+    void AssignTable( wxGridTableBase *table,
+                      wxGridSelectionModes selmode = wxGridSelectCells );
 
     bool ProcessTableMessage(wxGridTableMessage&);
 
