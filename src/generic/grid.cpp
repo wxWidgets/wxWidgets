@@ -2601,6 +2601,14 @@ wxGrid::SetTable(wxGridTableBase *table,
     return m_created;
 }
 
+void wxGrid::AssignTable(wxGridTableBase *table, wxGridSelectionModes selmode)
+{
+    wxCHECK_RET( table, wxS("Table pointer must be valid") );
+    wxCHECK_RET( !m_created, wxS("wxGrid already has a table") );
+
+    SetTable(table, true /* take ownership */, selmode);
+}
+
 void wxGrid::Init()
 {
     m_created = false;
