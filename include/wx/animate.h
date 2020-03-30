@@ -161,6 +161,16 @@ private:
             : wxGenericAnimationCtrl(parent, id, anim, pos, size, style, name)
             {}
 
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxAnimation& anim = wxNullGenericAnimation,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxAC_DEFAULT_STYLE,
+                const wxString& name = wxAnimationCtrlNameStr)
+        { return wxGenericAnimationCtrl::Create(parent, id, anim, pos, size, style, name); }
+
+    void SetAnimation(const wxAnimation &anim)
+        { wxGenericAnimationCtrl::SetAnimation(anim); }
     virtual wxAnimation GetAnimation() const
          { return wxAnimation(m_animation) ; }
             
