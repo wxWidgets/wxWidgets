@@ -5376,7 +5376,11 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
         }
     }
 
-    // Similarly for columns.
+    // Similarly for columns, except that here we need to update the native
+    // control even if none of the widths had been changed, as it's not going
+    // to do it on its own when redisplayed.
+    wxHeaderCtrl* const
+        colHeader = m_useNativeHeader ? GetGridColHeader() : NULL;
     if ( !m_colWidths.empty() )
     {
         int total = 0;
@@ -5392,6 +5396,16 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
 
             m_colWidths[i] = width;
             m_colRights[i] = total;
+
+            if ( colHeader )
+                colHeader->UpdateColumn(i);
+        }
+    }
+    else if ( colHeader )
+    {
+        for ( int i = 0; i < m_numCols; ++i )
+        {
+            colHeader->UpdateColumn(i);
         }
     }
 
