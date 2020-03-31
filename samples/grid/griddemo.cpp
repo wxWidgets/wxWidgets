@@ -1605,8 +1605,7 @@ MyGridCellAttrProvider::MyGridCellAttrProvider()
 wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
                            wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
 {
-    wxObjectDataPtr<wxGridCellAttr>
-        attr(wxGridCellAttrProvider::GetAttr(row, col, kind));
+    wxGridCellAttrPtr attr(wxGridCellAttrProvider::GetAttr(row, col, kind));
 
     if ( row % 2 )
     {
