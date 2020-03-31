@@ -2317,6 +2317,7 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 
 wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_SIZE( wxGrid::OnSize )
+    EVT_DPI_CHANGED( wxGrid::OnDPIChanged )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
@@ -2457,8 +2458,11 @@ void wxGrid::Create()
     m_labelBackgroundColour = m_rowLabelWin->GetBackgroundColour();
     m_labelTextColour = m_rowLabelWin->GetForegroundColour();
 
-    // now that we have the grid window, use its font to compute the default
-    // row height
+    InitPixelFields();
+}
+
+void wxGrid::InitPixelFields()
+{
     m_defaultRowHeight = m_gridWin->GetCharHeight();
 #if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
@@ -5344,6 +5348,19 @@ void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
         // reposition our children windows
         CalcWindowSizes();
     }
+}
+
+void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    InitPixelFields();
+
+    InvalidateBestSize();
+
+    CalcWindowSizes();
+
+    Refresh();
+
+    event.Skip();
 }
 
 void wxGrid::OnKeyDown( wxKeyEvent& event )

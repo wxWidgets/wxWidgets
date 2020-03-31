@@ -2415,6 +2415,13 @@ protected:
     friend class wxGridHeaderCtrl;
 
 private:
+    // This is called from both Create() and OnDPIChanged() to (re)initialize
+    // the values in pixels, which depend on the current DPI.
+    void InitPixelFields();
+
+    // Event handler for DPI change event recomputes pixel values and relays
+    // out the grid.
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // implement wxScrolledCanvas method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
