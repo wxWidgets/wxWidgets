@@ -899,7 +899,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::GetNonDefaultAlignment", "[grid]")
     // GetNonDefaultAlignment() is used by several renderers having their own
     // preferred alignment, so check that if we don't reset the alignment
     // explicitly, it doesn't override the alignment used by default.
-    wxGridCellAttr* attr = NULL;
+    wxGridCellAttrPtr attr;
     int hAlign = wxALIGN_RIGHT,
         vAlign = wxALIGN_INVALID;
 
@@ -1174,9 +1174,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
     // Hardcoded extra margin for the columns used in grid.cpp.
     const int margin = m_grid->FromDIP(10);
 
-    wxGridCellAttr *attr = m_grid->GetOrCreateCellAttr(0, 0);
-    wxGridCellRenderer *renderer = attr->GetRenderer(m_grid, 0, 0);
-    REQUIRE(renderer != NULL);
+    wxGridCellAttrPtr attr(m_grid->GetOrCreateCellAttr(0, 0));
+    wxGridCellRendererPtr renderer(attr->GetRenderer(m_grid, 0, 0));
+    REQUIRE(renderer);
 
     wxClientDC dcCell(m_grid->GetGridWindow());
 
