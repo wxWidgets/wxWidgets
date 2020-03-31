@@ -925,6 +925,14 @@ TEST_CASE_METHOD(GridTestCase, "Grid::GetNonDefaultAlignment", "[grid]")
     attr->GetNonDefaultAlignment(&hAlign, &vAlign);
     CHECK( hAlign == wxALIGN_RIGHT );
     CHECK( vAlign == wxALIGN_CENTRE_VERTICAL );
+
+    // This is only indirectly related, but test here for CanOverflow() working
+    // correctly for the cells with non-default alignment, as this used to be
+    // broken.
+    m_grid->SetCellAlignment(0, 0, wxALIGN_INVALID, wxALIGN_CENTRE);
+    attr = m_grid->CallGetCellAttr(0, 0);
+    REQUIRE( attr );
+    CHECK( attr->CanOverflow() );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::Editable", "[grid]")

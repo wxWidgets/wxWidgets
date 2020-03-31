@@ -614,6 +614,7 @@ GridFrame::GridFrame()
     grid->SetRowSize(10, 30);
     attr = new wxGridCellAttr;
     attr->SetBackgroundColour(*wxLIGHT_GREY);
+    attr->SetAlignment(wxALIGN_INVALID, wxALIGN_CENTRE);
     grid->SetRowAttr(10, attr);
     grid->SetCellValue(10, 0, "You can't resize this row interactively -- try it");
 

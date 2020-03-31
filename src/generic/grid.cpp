@@ -647,9 +647,17 @@ wxGridFitMode wxGridCellAttr::GetFitMode() const
 
 bool wxGridCellAttr::CanOverflow() const
 {
-    int hAlign;
-    GetAlignment(&hAlign, NULL);
-    return GetOverflow() && (hAlign == wxALIGN_LEFT);
+    // If overflow is disabled anyhow, we definitely can't overflow.
+    if ( !GetOverflow() )
+        return false;
+
+    // But if it is enabled, we still don't use it for right-aligned or
+    // centered cells because it's not really clear how it should work for
+    // them.
+    int hAlign = wxALIGN_LEFT;
+    GetNonDefaultAlignment(&hAlign, NULL);
+
+    return hAlign == wxALIGN_LEFT;
 }
 
 // GetRenderer and GetEditor use a slightly different decision path about
