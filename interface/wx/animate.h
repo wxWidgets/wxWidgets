@@ -179,7 +179,7 @@ public:
     /**
        Specify whether the animation's background colour is to be shown (the default),
        or whether the window background should show through
-    
+
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
     */
@@ -195,7 +195,7 @@ public:
 
     /**
        This overload of Play() lets you specify if the animation must loop or not
-       
+
        @note This method is only available when using the generic version of
        @c wxAnimation and @c wxAnimationCtrl.
     */
@@ -210,7 +210,7 @@ public:
     */
     void DrawCurrentFrame(wxDC& dc);
 
-    
+
     /**
        Returns a wxBitmap with the current frame drawn in it.
 
@@ -225,13 +225,13 @@ public:
    @class wxAnimationCtrl
 
    If the platform supports a native animation control (currently just wxGTK)
-   then this class implements the control via the native widget. 
+   then this class implements the control via the native widget.
    Otherwise it is virtually the same as @c wxGenericAnimationCtrl.
 */
 
 class wxAnimationCtrl : public wxGenericAnimationCtrl
 {
-public: 
+public:
     wxAnimationCtrl();
     wxAnimationCtrl(wxWindow *parent,
                     wxWindowID id,
@@ -486,7 +486,7 @@ public:
     virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
     virtual wxColour GetTransparentColour(unsigned int frame) const;
     virtual wxColour GetBackgroundColour() const;
-    
+
 };
 
 

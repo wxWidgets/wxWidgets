@@ -24,7 +24,7 @@ public:
     wxGenericAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
         { LoadFile(name, type); }
 
-    virtual bool IsOk() const 
+    virtual bool IsOk() const
         { return m_refData != NULL; }
 
     virtual unsigned int GetFrameCount() const wxOVERRIDE;
@@ -92,7 +92,7 @@ public:
 
     ~wxGenericAnimationCtrl();
 
-    
+
 public:
     virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
     virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
@@ -103,7 +103,7 @@ public:
     virtual bool IsPlaying() const wxOVERRIDE
         { return m_isPlaying; }
 
-    void SetAnimation(const wxGenericAnimation &animation); 
+    void SetAnimation(const wxGenericAnimation &animation);
     wxGenericAnimation GetAnimation() const
         { return m_animation; }
 

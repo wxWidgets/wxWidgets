@@ -129,7 +129,7 @@ private:
 #if defined(__WXGTK20__)
     #include "wx/generic/animate.h"
     #include "wx/gtk/animate.h"
-#else  
+#else
     #include "wx/generic/animate.h"
 
     class WXDLLIMPEXP_ADV wxAnimation : public wxGenericAnimation
@@ -147,8 +147,8 @@ private:
 
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl
     {
-    public: 
-        wxAnimationCtrl() 
+    public:
+        wxAnimationCtrl()
             : wxGenericAnimationCtrl()
             {}
         wxAnimationCtrl(wxWindow *parent,
@@ -173,7 +173,7 @@ private:
         { wxGenericAnimationCtrl::SetAnimation(anim); }
     virtual wxAnimation GetAnimation() const
          { return wxAnimation(m_animation) ; }
-            
+
     private:
         wxDECLARE_DYNAMIC_CLASS(wxAnimationCtrl);
     };

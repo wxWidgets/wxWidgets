@@ -14,8 +14,7 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#if wxUSE_ANIMATIONCTRL 
-
+#if wxUSE_ANIMATIONCTRL
 #include "wx/animate.h"
 
 #ifndef WX_PRECOMP
@@ -332,7 +331,7 @@ wxSize wxGenericAnimationCtrl::DoGetBestSize() const
 void wxGenericAnimationCtrl::SetAnimation(const wxGenericAnimation& animation)
 {
     if (IsPlaying())
-        Stop(); 
+        Stop();
 
     // set new animation even if it's wxNullAnimation
     m_animation = animation;

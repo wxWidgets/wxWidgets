@@ -48,7 +48,7 @@ public:
 
     // unfortunately GdkPixbufAnimation does not expose these info:
 
-    virtual unsigned int GetFrameCount() const wxOVERRIDE 
+    virtual unsigned int GetFrameCount() const wxOVERRIDE
         { return 0; }
     virtual wxImage GetFrame(unsigned int WXUNUSED(frame)) const wxOVERRIDE
         { return wxNullImage; }
