@@ -1596,41 +1596,34 @@ void GridFrame::OnBugsTable(wxCommandEvent& )
 // ----------------------------------------------------------------------------
 
 MyGridCellAttrProvider::MyGridCellAttrProvider()
+    : m_attrForOddRows(new wxGridCellAttr)
 {
-    m_attrForOddRows = new wxGridCellAttr;
     m_attrForOddRows->SetBackgroundColour(*wxLIGHT_GREY);
-}
-
-MyGridCellAttrProvider::~MyGridCellAttrProvider()
-{
-    m_attrForOddRows->DecRef();
 }
 
 wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
                            wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
 {
-    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
+    wxObjectDataPtr<wxGridCellAttr>
+        attr(wxGridCellAttrProvider::GetAttr(row, col, kind));
 
     if ( row % 2 )
     {
         if ( !attr )
         {
             attr = m_attrForOddRows;
-            attr->IncRef();
         }
         else
         {
             if ( !attr->HasBackgroundColour() )
             {
-                wxGridCellAttr *attrNew = attr->Clone();
-                attr->DecRef();
-                attr = attrNew;
+                attr = attr->Clone();
                 attr->SetBackgroundColour(*wxLIGHT_GREY);
             }
         }
     }
 
-    return attr;
+    return attr.release();
 }
 
 void GridFrame::OnVTable(wxCommandEvent& )

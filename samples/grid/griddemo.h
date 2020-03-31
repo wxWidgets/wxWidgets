@@ -296,13 +296,12 @@ class MyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     MyGridCellAttrProvider();
-    virtual ~MyGridCellAttrProvider();
 
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind  kind) const wxOVERRIDE;
 
 private:
-    wxGridCellAttr *m_attrForOddRows;
+    wxObjectDataPtr<wxGridCellAttr> m_attrForOddRows;
 };
 
 // ----------------------------------------------------------------------------
