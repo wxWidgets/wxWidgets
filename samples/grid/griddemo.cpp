@@ -461,7 +461,7 @@ GridFrame::GridFrame()
     grid->DeleteRows(0, ir);
     grid->AppendRows(ir);
 
-    grid->SetRowSize( 0, FromDIP(60) );
+    grid->SetRowSize( 0, 4*grid->GetDefaultRowSize() );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
 
     grid->SetCellValue( 0, 1, "A long piece of text to demonstrate wrapping." );
@@ -491,7 +491,7 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
-    grid->SetRowSize( 99, FromDIP(60) );
+    grid->SetRowSize( 99, 4*grid->GetDefaultRowSize() );
     grid->SetCellValue(98, 98, "Test background colour setting");
     grid->SetCellBackgroundColour(98, 99, wxColour(255, 127, 127));
     grid->SetCellBackgroundColour(99, 98, wxColour(255, 127, 127));
@@ -534,8 +534,8 @@ GridFrame::GridFrame()
     grid->SetRowAttr(5, attr);
 
     grid->SetCellValue(2, 4, "a wider column");
-    grid->SetColSize(4, FromDIP(120));
-    grid->SetColMinimalWidth(4, FromDIP(120));
+    grid->SetColSize(4, 3*grid->GetDefaultColLabelSize()/2);
+    grid->SetColMinimalWidth(4, grid->GetColSize(4));
 
     grid->SetCellTextColour(5, 8, *wxGREEN);
     grid->SetCellValue(5, 8, "Bg from row attr\nText col from cell attr");
@@ -608,7 +608,7 @@ GridFrame::GridFrame()
 
     // create a separator-like row: it's grey and it's non-resizable
     grid->DisableRowResize(10);
-    grid->SetRowSize(10, FromDIP(30));
+    grid->SetRowSize(10, 3*grid->GetDefaultRowSize()/2);
     attr = new wxGridCellAttr;
     attr->SetBackgroundColour(*wxLIGHT_GREY);
     grid->SetRowAttr(10, attr);
