@@ -15,6 +15,7 @@
 #endif  //__BORLANDC__
 
 #if wxUSE_ANIMATIONCTRL 
+
 #include "wx/animate.h"
 
 #ifndef WX_PRECOMP
@@ -691,4 +692,3 @@ void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
 }
 
 #endif // wxUSE_ANIMATIONCTRL
-
