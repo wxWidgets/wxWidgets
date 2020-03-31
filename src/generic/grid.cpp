@@ -5354,9 +5354,50 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
 {
     InitPixelFields();
 
+    // If we have any non-default row sizes, we need to scale them (default
+    // ones will be scaled due to the reinitialization of m_defaultRowHeight
+    // inside InitPixelFields() above).
+    if ( !m_rowHeights.empty() )
+    {
+        int total = 0;
+        for ( unsigned i = 0; i < m_rowHeights.size(); ++i )
+        {
+            int height = m_rowHeights[i];
+
+            // Skip hidden rows.
+            if ( height <= 0 )
+                continue;
+
+            height = height * event.GetNewDPI().x / event.GetOldDPI().x;
+            total += height;
+
+            m_rowHeights[i] = height;
+            m_rowBottoms[i] = total;
+        }
+    }
+
+    // Similarly for columns.
+    if ( !m_colWidths.empty() )
+    {
+        int total = 0;
+        for ( unsigned i = 0; i < m_colWidths.size(); ++i )
+        {
+            int width = m_colWidths[i];
+
+            if ( width <= 0 )
+                continue;
+
+            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+            total += width;
+
+            m_colWidths[i] = width;
+            m_colRights[i] = total;
+        }
+    }
+
     InvalidateBestSize();
 
-    CalcWindowSizes();
+    CalcDimensions();
 
     Refresh();
 
