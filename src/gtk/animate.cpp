@@ -14,7 +14,6 @@
 #if wxUSE_ANIMATIONCTRL
 #include "wx/animate.h"
 
-
 #ifndef WX_PRECOMP
     #include "wx/image.h"
     #include "wx/log.h"
