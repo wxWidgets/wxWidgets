@@ -25,8 +25,8 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGridNameStr[];
 
-// Default parameters for wxGrid
-//
+// Obsolete constants not used by wxWidgets itself any longer, preserved only
+// for compatibility.
 #define WXGRID_DEFAULT_NUMBER_ROWS            10
 #define WXGRID_DEFAULT_NUMBER_COLS            10
 #if defined(__WXMSW__) || defined(__WXGTK20__)
@@ -34,13 +34,18 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGridNameStr[];
 #else
 #define WXGRID_DEFAULT_ROW_HEIGHT             30
 #endif  // __WXMSW__
+#define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
+
+// Various constants used in wxGrid code.
+//
+// Note that all the values are in DIPs, not pixels, i.e. you must use
+// FromDIP() when using them in your code.
 #define WXGRID_DEFAULT_COL_WIDTH              80
 #define WXGRID_DEFAULT_COL_LABEL_HEIGHT       32
 #define WXGRID_DEFAULT_ROW_LABEL_WIDTH        82
 #define WXGRID_LABEL_EDGE_ZONE                 2
 #define WXGRID_MIN_ROW_HEIGHT                 15
 #define WXGRID_MIN_COL_WIDTH                  15
-#define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
 
 // type names for grid table values
 #define wxGRID_VALUE_STRING     wxT("string")
@@ -1372,9 +1377,9 @@ public:
 
     // ------ label and gridline formatting
     //
-    int      GetDefaultRowLabelSize() const { return WXGRID_DEFAULT_ROW_LABEL_WIDTH; }
+    int      GetDefaultRowLabelSize() const { return FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH); }
     int      GetRowLabelSize() const { return m_rowLabelWidth; }
-    int      GetDefaultColLabelSize() const { return WXGRID_DEFAULT_COL_LABEL_HEIGHT; }
+    int      GetDefaultColLabelSize() const { return FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT); }
     int      GetColLabelSize() const { return m_colLabelHeight; }
     wxColour GetLabelBackgroundColour() const { return m_labelBackgroundColour; }
     wxColour GetLabelTextColour() const { return m_labelTextColour; }

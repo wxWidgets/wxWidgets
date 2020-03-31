@@ -2466,6 +2466,13 @@ void wxGrid::Create()
     m_defaultRowHeight += 4;
 #endif
 
+    m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
+    m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
+
+    m_defaultColWidth = FromDIP(WXGRID_DEFAULT_COL_WIDTH);
+
+    m_minAcceptableColWidth  = FromDIP(WXGRID_MIN_COL_WIDTH);
+    m_minAcceptableRowHeight = FromDIP(WXGRID_MIN_ROW_HEIGHT);
 }
 
 void wxGrid::CreateColumnWindow()
@@ -2478,7 +2485,7 @@ void wxGrid::CreateColumnWindow()
     else // draw labels ourselves
     {
         m_colLabelWin = new wxGridColLabelWindow(this);
-        m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
+        m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
     }
 }
 
@@ -2630,9 +2637,6 @@ void wxGrid::Init()
     m_defaultCellAttr = NULL;
     m_typeRegistry = NULL;
 
-    m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
-    m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
-
     m_setFixedRows =
     m_setFixedCols = NULL;
 
@@ -2655,11 +2659,15 @@ void wxGrid::Init()
     m_cornerLabelVertAlign = wxALIGN_CENTRE;
     m_cornerLabelTextOrientation = wxHORIZONTAL;
 
-    m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
-    m_defaultRowHeight = 0; // this will be initialized after creation
+    // All these fields require a valid window, so are initialized in Create().
+    m_rowLabelWidth  =
+    m_colLabelHeight = 0;
 
-    m_minAcceptableColWidth  = WXGRID_MIN_COL_WIDTH;
-    m_minAcceptableRowHeight = WXGRID_MIN_ROW_HEIGHT;
+    m_defaultColWidth  =
+    m_defaultRowHeight = 0;
+
+    m_minAcceptableColWidth  =
+    m_minAcceptableRowHeight = 0;
 
     m_gridLineColour = wxColour( 192,192,192 );
     m_gridLinesEnabled = true;
@@ -7322,15 +7330,15 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
     if ( line == wxNOT_FOUND )
         return -1;
 
-    if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
+    const int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
+
+    if ( oper.GetLineSize(this, line) > edge )
     {
         // We know that we are in this line, test whether we are close enough
         // to start or end border, respectively.
-        if ( abs(oper.GetLineEndPos(this, line) - pos) < WXGRID_LABEL_EDGE_ZONE )
+        if ( abs(oper.GetLineEndPos(this, line) - pos) < edge )
             return line;
-        else if ( line > 0 &&
-                    pos - oper.GetLineStartPos(this,
-                                               line) < WXGRID_LABEL_EDGE_ZONE )
+        else if ( line > 0 && pos - oper.GetLineStartPos(this, line) < edge )
         {
             // We need to find the previous visible line, so skip all the
             // hidden (of size 0) ones.
