@@ -619,12 +619,12 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ScrollWhenSelect", "[grid]")
     CHECK( m_grid->IsVisible(0, 4) );
 
     m_grid->ClearSelection();
-    m_grid->SetGridCursor(1, 1);
-    for ( int i = 0; i < 5; ++i )
+    m_grid->GoToCell(1, 1);
+    for ( int i = 0; i < 8; ++i )
     {
         m_grid->MoveCursorDown(true);
     }
-    CHECK( m_grid->IsVisible(6, 1) );
+    CHECK( m_grid->IsVisible(9, 1) );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::MoveGridCursorUsingEndKey", "[grid]")
