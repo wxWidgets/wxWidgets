@@ -28,10 +28,6 @@ class WXDLLIMPEXP_ADV wxAnimationGTKImpl : public wxAnimationImpl
 public:
     wxAnimationGTKImpl()
         : m_pixbuf(NULL) {}
-    // wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
-    //     : m_pixbuf(NULL) { LoadFile(name, type); }
-    // wxAnimation(GdkPixbufAnimation *p = NULL);
-    // wxAnimation(const wxAnimation&);
     ~wxAnimationGTKImpl() { UnRef(); }
 
     // wxAnimation& operator= (const wxAnimation&);
@@ -119,7 +115,7 @@ public:     // public API
     virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
     virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
 
-    void SetAnimation(const wxAnimation &anim);
+    void SetAnimation(const wxAnimation &anim) wxOVERRIDE;
 
     virtual bool Play() wxOVERRIDE;
     virtual void Stop() wxOVERRIDE;

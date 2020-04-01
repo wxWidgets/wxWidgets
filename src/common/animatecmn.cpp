@@ -90,7 +90,7 @@ wxSize wxAnimation::GetSize() const
 bool wxAnimation::LoadFile(const wxString& name, wxAnimationType type)
 {
     // the animation impl may not be fully ready until after it has loaded the
-    // file, so just check GetImpl the Load methods
+    // file, so just check GetImpl in the Load methods
     wxCHECK_MSG( GetImpl(), false, wxT("invalid animation") );
     return GetImpl()->LoadFile(name, type);
 }
