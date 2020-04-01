@@ -32,6 +32,7 @@
 #include "wx/renderer.h"
 
 #include "wx/generic/private/grid.h"
+#include "wx/private/window.h"
 
 // ----------------------------------------------------------------------------
 // wxGridCellRenderer
@@ -926,16 +927,19 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
                                            int WXUNUSED(row),
                                            int WXUNUSED(col))
 {
-    static wxSize s_sizeCheckMark;
+    static wxPrivate::DpiDependentValue<wxSize> s_sizeCheckMark;
 
-    // compute it only once (no locks for MT safeness in GUI thread...)
-    if ( !s_sizeCheckMark.x )
+    // Get the check mark size in pixels if it hadn't been done yet or if the
+    // DPI has changed.
+    if ( s_sizeCheckMark.HasChanged(&grid) )
     {
-        s_sizeCheckMark =
-            wxRendererNative::Get().GetCheckBoxSize(&grid, wxCONTROL_CELL);
+        s_sizeCheckMark.SetAtNewDPI
+            (
+                wxRendererNative::Get().GetCheckBoxSize(&grid, wxCONTROL_CELL)
+            );
     }
 
-    return s_sizeCheckMark;
+    return s_sizeCheckMark.Get();
 }
 
 void wxGridCellBoolRenderer::Draw(wxGrid& grid,
