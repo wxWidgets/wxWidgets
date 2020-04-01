@@ -346,6 +346,9 @@ void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
         return;
     }
 
+    wxCHECK_RET(animation.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_GENERIC,
+                wxT("incorrect animation implementation type provided") );
+
     if (m_animation.GetBackgroundColour() == wxNullColour)
         SetUseWindowBackgroundColour();
     if (!this->HasFlag(wxAC_NO_AUTORESIZE))
