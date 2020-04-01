@@ -301,7 +301,8 @@ bool wxGenericAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
 
 wxGenericAnimationCtrl::~wxGenericAnimationCtrl()
 {
-    Stop();
+    if (IsPlaying())
+        Stop();
 }
 
 bool wxGenericAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)

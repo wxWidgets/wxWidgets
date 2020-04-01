@@ -31,12 +31,12 @@
 
 extern "C" {
 static
-void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
-                             gint             WXUNUSED(x),
-                             gint             WXUNUSED(y),
-                             gint             WXUNUSED(width),
-                             gint             WXUNUSED(height),
-                             wxAnimation      *anim)
+void gdk_pixbuf_area_updated(GdkPixbufLoader    *loader,
+                             gint               WXUNUSED(x),
+                             gint               WXUNUSED(y),
+                             gint               WXUNUSED(width),
+                             gint               WXUNUSED(height),
+                             wxAnimationGTKImpl *anim)
 {
     if (anim && anim->GetPixbuf() == NULL)
     {
@@ -48,46 +48,19 @@ void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
 }
 
 //-----------------------------------------------------------------------------
-// wxAnimation
+// wxAnimationGTKImpl
 //-----------------------------------------------------------------------------
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationGTKImpl, wxAnimationImpl);
 
-wxAnimation::wxAnimation(const wxAnimation& that)
-    : base_type(that)
-{
-    m_pixbuf = that.m_pixbuf;
-    if (m_pixbuf)
-        g_object_ref(m_pixbuf);
-}
-
-wxAnimation::wxAnimation(GdkPixbufAnimation *p)
-{
-    m_pixbuf = p;
-    if ( m_pixbuf )
-        g_object_ref(m_pixbuf);
-}
-
-wxAnimation& wxAnimation::operator=(const wxAnimation& that)
-{
-    if (this != &that)
-    {
-        base_type::operator=(that);
-        UnRef();
-        m_pixbuf = that.m_pixbuf;
-        if (m_pixbuf)
-            g_object_ref(m_pixbuf);
-    }
-    return *this;
-}
-
-bool wxAnimation::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
+bool wxAnimationGTKImpl::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
     m_pixbuf = gdk_pixbuf_animation_new_from_file(wxGTK_CONV_FN(name), NULL);
     return IsOk();
 }
 
-bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
+bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
 {
     UnRef();
 
@@ -174,20 +147,21 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     return data_written;
 }
 
-wxSize wxAnimation::GetSize() const
+wxSize wxAnimationGTKImpl::GetSize() const
 {
     return wxSize(gdk_pixbuf_animation_get_width(m_pixbuf),
                   gdk_pixbuf_animation_get_height(m_pixbuf));
 }
 
-void wxAnimation::UnRef()
+void wxAnimationGTKImpl::UnRef()
 {
+    base_type::UnRef();
     if (m_pixbuf)
         g_object_unref(m_pixbuf);
     m_pixbuf = NULL;
 }
 
-void wxAnimation::SetPixbuf(GdkPixbufAnimation* p)
+void wxAnimationGTKImpl::SetPixbuf(GdkPixbufAnimation* p)
 {
     UnRef();
     m_pixbuf = p;
@@ -247,6 +221,8 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
 
 wxAnimationCtrl::~wxAnimationCtrl()
 {
+    if (IsPlaying())
+        Stop();
     ResetAnim();
     ResetIter();
 }
@@ -261,7 +237,7 @@ bool wxAnimationCtrl::LoadFile(const wxString &filename, wxAnimationType type)
 
 bool wxAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
 {
-    wxAnimation anim;
+    wxAnimation anim(wxANIMATION_IMPL_TYPE_NATIVE);
     if ( !anim.Load(stream, type) || !anim.IsOk() )
         return false;
 
@@ -277,8 +253,19 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
     ResetAnim();
     ResetIter();
 
+    m_animation = anim;
+    if (!m_animation.IsOk())
+    {
+        m_anim = NULL;
+        DisplayStaticImage();
+        return;
+    }
+
+    wxCHECK_RET(anim.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_NATIVE,
+                wxT("incorrect animation implementation type provided") );
+
     // copy underlying GdkPixbuf object
-    m_anim = anim.GetPixbuf();
+    m_anim = animation_GetPixbuf();
 
     // m_anim may be null in case wxNullAnimation has been passed
     if (m_anim)
@@ -457,6 +444,38 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
         // no need to update the m_widget yet
         m_timer.Start(10, true);
     }
+}
+
+
+// static
+wxAnimationImpl* wxAnimationCtrl::CreateAnimationImpl(wxAnimationImplType implType)
+{
+    switch (implType) {
+        case wxANIMATION_IMPL_TYPE_GENERIC:
+            return new wxAnimationGenericImpl();
+
+        case wxANIMATION_IMPL_TYPE_NATIVE:
+            return new wxAnimationGTKImpl();
+
+        default:
+            return NULL;
+    }
+}
+
+
+// helpers to safely access wxAnimationGenericImpl methods
+#define ANIMATION (static_cast<wxAnimationGTKImpl*>(m_animation.GetImpl()))
+
+GdkPixbufAnimation* wxAnimationCtrl::animation_GetPixbuf() const
+{
+    wxCHECK_MSG( m_animation.IsOk(), NULL, wxT("invalid animation") );
+    return ANIMATION->GetPixbuf();
+}
+
+void wxAnimationCtrl::animation_SetPixbuf(GdkPixbufAnimation* p)
+{
+    wxCHECK_RET( m_animation.IsOk(), wxT("invalid animation") );
+    ANIMATION->SetPixbuf(p);
 }
 
 #endif      // wxUSE_ANIMATIONCTRL

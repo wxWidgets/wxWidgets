@@ -23,16 +23,21 @@ typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 // refcounted so that assignment is very fast
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
+class WXDLLIMPEXP_ADV wxAnimationGTKImpl : public wxAnimationImpl
 {
 public:
-    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
-        : m_pixbuf(NULL) { LoadFile(name, type); }
-    wxAnimation(GdkPixbufAnimation *p = NULL);
-    wxAnimation(const wxAnimation&);
-    ~wxAnimation() { UnRef(); }
+    wxAnimationGTKImpl()
+        : m_pixbuf(NULL) {}
+    // wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
+    //     : m_pixbuf(NULL) { LoadFile(name, type); }
+    // wxAnimation(GdkPixbufAnimation *p = NULL);
+    // wxAnimation(const wxAnimation&);
+    ~wxAnimationGTKImpl() { UnRef(); }
 
-    wxAnimation& operator= (const wxAnimation&);
+    // wxAnimation& operator= (const wxAnimation&);
+
+    virtual wxAnimationImplType GetImplType() wxOVERRIDE
+        { return wxANIMATION_IMPL_TYPE_NATIVE; }
 
     virtual bool IsOk() const wxOVERRIDE
         { return m_pixbuf != NULL; }
@@ -52,16 +57,6 @@ public:
         { return 0; }
     virtual wxImage GetFrame(unsigned int WXUNUSED(frame)) const wxOVERRIDE
         { return wxNullImage; }
-    virtual wxPoint GetFramePosition(unsigned int WXUNUSED(frame)) const wxOVERRIDE
-        { return wxDefaultPosition; }
-    virtual wxSize GetFrameSize(unsigned int WXUNUSED(frame)) const wxOVERRIDE
-        { return wxDefaultSize; }
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int WXUNUSED(frame)) const wxOVERRIDE
-        { return wxANIM_UNSPECIFIED; }
-    virtual wxColour GetTransparentColour(unsigned int WXUNUSED(frame)) const wxOVERRIDE
-        { return wxNullColour; }
-    virtual wxColour GetBackgroundColour() const wxOVERRIDE
-        { return wxNullColour; }
 
 
     // Implementation
@@ -77,8 +72,8 @@ protected:
 private:
     void UnRef();
 
-    typedef wxAnimationBase base_type;
-    wxDECLARE_DYNAMIC_CLASS(wxAnimation);
+    typedef wxAnimationImpl base_type;
+    wxDECLARE_DYNAMIC_CLASS(wxAnimationGTKImpl);
 };
 
 
@@ -125,8 +120,6 @@ public:     // public API
     virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
 
     void SetAnimation(const wxAnimation &anim);
-    wxAnimation GetAnimation() const
-         { return wxAnimation(m_anim) ; }
 
     virtual bool Play() wxOVERRIDE;
     virtual void Stop() wxOVERRIDE;
@@ -134,6 +127,9 @@ public:     // public API
     virtual bool IsPlaying() const wxOVERRIDE;
 
     bool SetBackgroundColour( const wxColour &colour ) wxOVERRIDE;
+
+    static wxAnimationImpl* CreateAnimationImpl(wxAnimationImplType implType);
+
 
 protected:
 
@@ -144,6 +140,11 @@ protected:
 
     void ResetAnim();
     void ResetIter();
+
+    // Helpers to safely access methods in the wxAnimationGTKImpl that are
+    // specific to the gtk implementation
+    GdkPixbufAnimation *animation_GetPixbuf() const;
+    void animation_SetPixbuf(GdkPixbufAnimation* p);
 
 protected:      // internal vars
 
