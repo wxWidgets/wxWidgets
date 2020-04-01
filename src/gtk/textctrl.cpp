@@ -816,7 +816,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if (!value.empty())
     {
-        SetValue( value );
+        ChangeValue(value);
         InvalidateBestSize();
     }
 
