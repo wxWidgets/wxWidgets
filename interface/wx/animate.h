@@ -27,6 +27,14 @@ enum wxAnimationType
 #define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
 
 
+enum wxAnimationImplType
+{
+    wxANIMATION_IMPL_TYPE_NATIVE,
+    wxANIMATION_IMPL_TYPE_GENERIC
+};
+
+
+
 /**
     @class wxGenericAnimationCtrl
 
@@ -65,7 +73,7 @@ public:
         all the parameters.
     */
     wxGenericAnimationCtrl(wxWindow* parent, wxWindowID id,
-                    const wxGenericAnimation& anim = wxNullGenericAnimation,
+                    const wxAnimation& anim = wxNullAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
@@ -97,7 +105,7 @@ public:
                 creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxGenericAnimation& anim = wxNullGenericAnimation,
+                const wxAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -106,7 +114,7 @@ public:
     /**
         Returns the animation associated with this control.
     */
-    virtual wxGenericAnimation GetAnimation() const;
+    virtual wxAnimation GetAnimation() const;
 
     /**
         Returns the inactive bitmap shown in this control when the;
@@ -150,7 +158,7 @@ public:
         animation or the background colour will be shown
         (see SetInactiveBitmap() for more info).
     */
-    virtual void SetAnimation(const wxGenericAnimation& anim);
+    virtual void SetAnimation(const wxAnimation& anim);
 
     /**
         Sets the bitmap to show on the control when it's not playing an animation.
@@ -254,16 +262,20 @@ public:
 
 
 /**
-   @class wxAnimationBase
+   @class wxAnimationImpl
 
-   Abstract base class for native and generic animation classes.
+   Abstract base class for native and generic animation classes. An instance
+   of one of these classes is used by @c wxAnimation to handle the details of
+   the animation file.
 
-   @See wxGenericAnimation, wxAnimation
+   @See wxAnimationGenericImpl, wxAnimationGTKImpl
 */
-class wxAnimationBase : public wxObject
+class  wxAnimationImpl : public wxObject, public wxRefCounter
 {
 public:
-    wxAnimationBase();
+    wxAnimationImpl();
+
+    virtual wxAnimationImplType GetImplType() = 0;
 
     virtual bool IsOk() const = 0;
 
@@ -278,16 +290,11 @@ public:
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
-    virtual wxPoint GetFramePosition(unsigned int frame) const = 0;
-    virtual wxSize GetFrameSize(unsigned int frame) const = 0;
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const = 0;
-    virtual wxColour GetTransparentColour(unsigned int frame) const = 0;
-    virtual wxColour GetBackgroundColour() const = 0;
 };
 
 
 /**
-    @class wxGenericAnimation
+    @class wxAnimationGenericImpl
 
     This class encapsulates the concept of a platform-dependent animation.
     An animation is a sequence of frames of the same size.
@@ -310,30 +317,15 @@ public:
 
     @see wxAnimationCtrl, @sample{animate}
 */
-class wxGenericAnimation : public wxAnimationBase
+class wxAnimationGenericImpl : public wxAnimationImpl
 {
 public:
     /**
        Default ctor.
     */
-    wxGenericAnimation();
+    wxAnimationGenericImpl();
 
-    /**
-        Loads an animation from a file.
-
-        @param name
-            The name of the file to load.
-        @param type
-            See LoadFile() for more info.
-    */
-    wxGenericAnimation(const wxString& name,
-                wxAnimationType type = wxANIMATION_TYPE_ANY);
-
-    /**
-        Destructor.
-        See @ref overview_refcount_destruct for more info.
-    */
-    virtual ~wxGenericAnimation();
+    virtual wxAnimationImplType GetImplType();
 
     /**
         Returns the delay for the i-th frame in milliseconds.
@@ -457,37 +449,32 @@ public:
 /**
    @class wxAnimation
 
-   If the platform supports a native animation control (currently just wxGTK)
-   then this is the animation class that should be used with @c wxAnimationCtrl.
-   Otherwise it is virtually the same as @c wxGenericAnimation.
-
-   @see wxGenericAnimation
-*/
-class wxAnimation : public wxAnimationBase
+   The @c wxAnimation class handles the interface between the animation
+   control and the deails of the animation image or data.
+  
+   
+ */
+class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 {
 public:
-    wxAnimation();
-    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
+    wxAnimation(wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY,
+                wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation(const wxAnimation& other);
 
-    virtual bool IsOk() const;
+    wxAnimationImpl* GetImpl() const;
+    
+    bool IsOk() const;
 
-    virtual int GetDelay(unsigned int frame) const;
-    virtual unsigned int GetFrameCount() const;
-    virtual wxImage GetFrame(unsigned int frame) const;
-    virtual wxSize GetSize() const;
+    int GetDelay(unsigned int frame) const;
+    unsigned int GetFrameCount() const;
+    wxImage GetFrame(unsigned int frame);
+    wxSize GetSize() const;
 
-    virtual bool LoadFile(const wxString& name,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY);
-    virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY);
-
-    virtual wxPoint GetFramePosition(unsigned int frame) const;
-    virtual wxSize GetFrameSize(unsigned int frame) const;
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
-    virtual wxColour GetTransparentColour(unsigned int frame) const;
-    virtual wxColour GetBackgroundColour() const;
-
+    bool LoadFile(const wxString& name, wxAnimationType type = wxANIMATION_TYPE_ANY);
+    bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
 };
+
 
 
 // ============================================================================
@@ -498,5 +485,4 @@ public:
     An empty animation object.
 */
 wxAnimation wxNullAnimation;
-wxGenericAnimation wxNullGenericAnimation;
 
