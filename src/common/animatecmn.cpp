@@ -30,18 +30,107 @@
 #include "wx/dcmemory.h"
 
 const char wxAnimationCtrlNameStr[] = "animationctrl";
-wxGenericAnimation wxNullGenericAnimation;
 wxAnimation wxNullAnimation;
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationBase, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationImpl, wxObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxObject);
 wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl);
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase);
-wxIMPLEMENT_DYNAMIC_CLASS(wxGenericAnimation, wxAnimationBase);
 
 #if !defined(__WXGTK20__)
     // In this case the "native" ctrl is the generic ctrl. See wx/animate.h
     wxIMPLEMENT_CLASS(wxAnimationCtrl, wxGenericAnimationCtrl);
 #endif
+
+
+// ----------------------------------------------------------------------------
+// wxAnimation
+// ----------------------------------------------------------------------------
+
+wxAnimation::wxAnimation(wxAnimationImplType implType)
+{
+    m_refData = wxAnimationCtrl::CreateAnimationImpl(implType);
+}
+
+wxAnimation::wxAnimation(const wxString &name, wxAnimationType type,
+                         wxAnimationImplType implType)
+{
+    m_refData = wxAnimationCtrl::CreateAnimationImpl(implType);
+    LoadFile(name, type);
+}
+
+wxAnimation::wxAnimation(const wxAnimation& other)
+{
+    Ref(other);
+}
+
+int wxAnimation::GetDelay(unsigned int frame) const
+{
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid animation") );
+    return GetImpl()->GetDelay(frame);
+}
+
+unsigned int wxAnimation::GetFrameCount() const
+{
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
+    return GetImpl()->GetFrameCount();
+}
+
+wxImage wxAnimation::GetFrame(unsigned int frame)
+{
+    wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid animation") );
+    return GetImpl()->GetFrame(frame);
+}
+
+wxSize wxAnimation::GetSize() const
+{
+    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
+    return GetImpl()->GetSize();
+}
+
+bool wxAnimation::LoadFile(const wxString& name, wxAnimationType type)
+{
+    // the animation impl may not be fully ready until after it has loaded the
+    // file, so just check GetImpl the Load methods
+    wxCHECK_MSG( GetImpl(), false, wxT("invalid animation") );
+    return GetImpl()->LoadFile(name, type);
+}
+
+bool wxAnimation::Load(wxInputStream& stream, wxAnimationType type)
+{
+    wxCHECK_MSG( GetImpl(), false, wxT("invalid animation") );
+    return GetImpl()->Load(stream, type);
+}
+
+wxPoint wxAnimation::GetFramePosition(unsigned int frame) const
+{
+    wxCHECK_MSG( IsOk(), wxDefaultPosition, wxT("invalid animation") );
+    return GetImpl()->GetFramePosition(frame);
+}
+
+wxSize wxAnimation::GetFrameSize(unsigned int frame) const
+{
+    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
+    return GetImpl()->GetFrameSize(frame);
+}
+
+wxAnimationDisposal wxAnimation::GetDisposalMethod(unsigned int frame) const
+{
+    wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
+    return GetImpl()->GetDisposalMethod(frame);
+}
+
+wxColour wxAnimation::GetTransparentColour(unsigned int frame) const
+{
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
+    return GetImpl()->GetTransparentColour(frame);
+}
+
+wxColour wxAnimation::GetBackgroundColour() const
+{
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
+    return GetImpl()->GetBackgroundColour();
+}
+
 
 // ----------------------------------------------------------------------------
 // wxAnimationCtrlBase

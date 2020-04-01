@@ -21,27 +21,25 @@
 #include "wx/bitmap.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAnimation;
-class WXDLLIMPEXP_FWD_CORE wxGenericAnimation;
 
 extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
-extern WXDLLIMPEXP_DATA_CORE(wxGenericAnimation) wxNullGenericAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
 
 // ----------------------------------------------------------------------------
-// wxAnimation
+// wxAnimationImpl
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
+enum wxAnimationImplType
+{
+    wxANIMATION_IMPL_TYPE_NATIVE,
+    wxANIMATION_IMPL_TYPE_GENERIC
+};
 
-// ----------------------------------------------------------------------------
-// wxAnimationBase
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxAnimationBase : public wxObject
+class WXDLLIMPEXP_CORE wxAnimationImpl : public wxObject, public wxRefCounter
 {
 public:
-    wxAnimationBase() {}
+    wxAnimationImpl() {}
 
     virtual bool IsOk() const = 0;
 
@@ -65,9 +63,46 @@ public:
     virtual wxColour GetBackgroundColour() const = 0;
 
 protected:
-    wxDECLARE_ABSTRACT_CLASS(wxAnimationBase);
+    wxDECLARE_ABSTRACT_CLASS(wxAnimationImpl);
 };
 
+
+// ----------------------------------------------------------------------------
+// wxAnimation
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxAnimation : public wxObject
+{
+public:
+    wxAnimation(wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY,
+                wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation(const wxAnimation& other);
+
+    wxAnimationImpl* GetImpl() const
+        { return static_cast<wxAnimationImpl*>(m_refData); }
+
+    bool IsOk() const
+        { return GetImpl() && GetImpl()->IsOk(); }
+
+    int GetDelay(unsigned int frame) const;
+    unsigned int GetFrameCount() const;
+    wxImage GetFrame(unsigned int frame);
+    wxSize GetSize() const;
+
+    bool LoadFile(const wxString& name, wxAnimationType type = wxANIMATION_TYPE_ANY);
+    bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
+
+    // extended interface used only by wxGenericAnimationCtrl
+    wxPoint GetFramePosition(unsigned int frame) const;
+    wxSize GetFrameSize(unsigned int frame) const;
+    wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+    wxColour GetTransparentColour(unsigned int frame) const;
+    wxColour GetBackgroundColour() const;
+
+protected:
+    wxDECLARE_DYNAMIC_CLASS(wxAnimation);
+};
 
 
 // ----------------------------------------------------------------------------
@@ -91,6 +126,9 @@ public:
                           wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+
+    virtual void SetAnimation(const wxAnimation &anim) = 0;
+    virtual wxAnimation GetAnimation() const = 0;
 
     virtual bool Play() = 0;
     virtual void Stop() = 0;
@@ -126,25 +164,11 @@ private:
 // include the platform-specific version of the wxAnimationCtrl class
 // ----------------------------------------------------------------------------
 
+#include "wx/generic/animate.h"
+
 #if defined(__WXGTK20__)
-    #include "wx/generic/animate.h"
     #include "wx/gtk/animate.h"
 #else
-    #include "wx/generic/animate.h"
-
-    class WXDLLIMPEXP_ADV wxAnimation : public wxGenericAnimation
-    {
-    public:
-        wxAnimation()
-            : wxGenericAnimation() {}
-        wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
-            : wxGenericAnimation(name, type) {}
-        wxAnimation(const wxGenericAnimation& other)
-            : wxGenericAnimation(other) {}
-    private:
-        wxDECLARE_DYNAMIC_CLASS(wxAnimation);
-    };
-
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl
     {
     public:
@@ -162,22 +186,23 @@ private:
             {}
 
     bool Create(wxWindow *parent, wxWindowID id,
-                const wxAnimation& anim = wxNullGenericAnimation,
+                const wxAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
                 const wxString& name = wxAnimationCtrlNameStr)
         { return wxGenericAnimationCtrl::Create(parent, id, anim, pos, size, style, name); }
 
-    void SetAnimation(const wxAnimation &anim)
-        { wxGenericAnimationCtrl::SetAnimation(anim); }
-    virtual wxAnimation GetAnimation() const
-         { return wxAnimation(m_animation) ; }
+    static wxAnimationImpl* CreateAnimationImpl(wxAnimationImplType WXUNUSED(implType))
+        {
+            // For the generic widget we always use the generic impl and ignore the given type
+            return new wxAnimationGenericImpl();
+        }
 
     private:
         wxDECLARE_DYNAMIC_CLASS(wxAnimationCtrl);
     };
-#endif
+#endif // defined(__WXGTK20__)
 
 #endif // wxUSE_ANIMATIONCTRL
 

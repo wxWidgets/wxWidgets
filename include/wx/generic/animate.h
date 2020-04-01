@@ -17,14 +17,14 @@
 // wxGenericAnimation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGenericAnimation : public wxAnimationBase
+WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
+
+class WXDLLIMPEXP_ADV wxAnimationGenericImpl : public wxAnimationImpl
 {
 public:
-    wxGenericAnimation() {}
-    wxGenericAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
-        { LoadFile(name, type); }
+    wxAnimationGenericImpl() {}
 
-    virtual bool IsOk() const
+    virtual bool IsOk() const wxOVERRIDE
         { return m_refData != NULL; }
 
     virtual unsigned int GetFrameCount() const wxOVERRIDE;
@@ -56,7 +56,7 @@ public:
     static void CleanUpHandlers();
     static void InitStandardHandlers();
 
-    wxDECLARE_DYNAMIC_CLASS(wxGenericAnimation);
+    wxDECLARE_DYNAMIC_CLASS(wxAnimationGenericImpl);
 };
 
 
@@ -70,7 +70,7 @@ public:
     wxGenericAnimationCtrl() { Init(); }
     wxGenericAnimationCtrl(wxWindow *parent,
                            wxWindowID id,
-                           const wxGenericAnimation& anim = wxNullGenericAnimation,
+                           const wxAnimation& anim = wxNullAnimation,
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxAC_DEFAULT_STYLE,
@@ -84,7 +84,7 @@ public:
     void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
-                const wxGenericAnimation& anim = wxNullGenericAnimation,
+                const wxAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -103,8 +103,8 @@ public:
     virtual bool IsPlaying() const wxOVERRIDE
         { return m_isPlaying; }
 
-    void SetAnimation(const wxGenericAnimation &animation);
-    wxGenericAnimation GetAnimation() const
+    void SetAnimation(const wxAnimation &animation) wxOVERRIDE;
+    wxAnimation GetAnimation() const wxOVERRIDE
         { return m_animation; }
 
     virtual void SetInactiveBitmap(const wxBitmap &bmp) wxOVERRIDE;
@@ -159,7 +159,7 @@ protected:
     unsigned int  m_currentFrame;     // Current frame
     bool          m_looped;           // Looped, or not
     wxTimer       m_timer;            // The timer
-    wxGenericAnimation   m_animation;        // The animation
+    wxAnimation   m_animation;        // The animation
 
     bool          m_isPlaying;        // Is the animation playing?
     bool          m_useWinBackgroundColour; // Use animation bg colour or window bg colour?
