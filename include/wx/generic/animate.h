@@ -41,11 +41,11 @@ public:
                       wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
 
     // extended interface used only by the generic implementation of wxAnimationCtrl
-    virtual wxPoint GetFramePosition(unsigned int frame) const wxOVERRIDE;
-    virtual wxSize GetFrameSize(unsigned int frame) const wxOVERRIDE;
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const wxOVERRIDE;
-    virtual wxColour GetTransparentColour(unsigned int frame) const wxOVERRIDE;
-    virtual wxColour GetBackgroundColour() const wxOVERRIDE;
+    virtual wxPoint GetFramePosition(unsigned int frame) const;
+    virtual wxSize GetFrameSize(unsigned int frame) const;
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+    virtual wxColour GetTransparentColour(unsigned int frame) const;
+    virtual wxColour GetBackgroundColour() const;
 
 protected:
     static wxAnimationDecoderList sm_handlers;
