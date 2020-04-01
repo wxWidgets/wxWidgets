@@ -24,6 +24,9 @@ class WXDLLIMPEXP_ADV wxAnimationGenericImpl : public wxAnimationImpl
 public:
     wxAnimationGenericImpl() {}
 
+    virtual wxAnimationImplType GetImplType() wxOVERRIDE
+        { return wxANIMATION_IMPL_TYPE_GENERIC; }
+
     virtual bool IsOk() const wxOVERRIDE
         { return m_refData != NULL; }
 

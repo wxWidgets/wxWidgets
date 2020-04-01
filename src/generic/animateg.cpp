@@ -335,6 +335,9 @@ void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
     if (IsPlaying())
         Stop();
 
+    wxCHECK_RET(animation.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_GENERIC,
+                wxT("incorrect animation implementation type provided") );
+
     // set new animation even if it's wxNullAnimation
     m_animation = animation;
     if (!m_animation.IsOk())

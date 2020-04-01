@@ -41,6 +41,8 @@ class WXDLLIMPEXP_CORE wxAnimationImpl : public wxObject, public wxRefCounter
 public:
     wxAnimationImpl() {}
 
+    virtual wxAnimationImplType GetImplType() = 0;
+
     virtual bool IsOk() const = 0;
 
     // can be -1
