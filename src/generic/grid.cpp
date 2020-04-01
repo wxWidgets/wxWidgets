@@ -5413,8 +5413,6 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
 
     CalcDimensions();
 
-    Refresh();
-
     event.Skip();
 }
 
