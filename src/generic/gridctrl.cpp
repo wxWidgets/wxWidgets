@@ -920,22 +920,22 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 // wxGridCellBoolRenderer
 // ----------------------------------------------------------------------------
 
-wxSize wxGridCellBoolRenderer::ms_sizeCheckMark;
-
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
                                            wxGridCellAttr& WXUNUSED(attr),
                                            wxDC& WXUNUSED(dc),
                                            int WXUNUSED(row),
                                            int WXUNUSED(col))
 {
+    static wxSize s_sizeCheckMark;
+
     // compute it only once (no locks for MT safeness in GUI thread...)
-    if ( !ms_sizeCheckMark.x )
+    if ( !s_sizeCheckMark.x )
     {
-        ms_sizeCheckMark =
+        s_sizeCheckMark =
             wxRendererNative::Get().GetCheckBoxSize(&grid, wxCONTROL_CELL);
     }
 
-    return ms_sizeCheckMark;
+    return s_sizeCheckMark;
 }
 
 void wxGridCellBoolRenderer::Draw(wxGrid& grid,
