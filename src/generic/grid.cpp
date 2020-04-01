@@ -5287,24 +5287,10 @@ wxGrid::SendEvent(wxEventType type,
 {
    bool claimed, vetoed;
 
-   if ( type == wxEVT_GRID_RANGE_SELECT )
-   {
-       // Right now, it should _never_ end up here!
-       wxGridRangeSelectEvent gridEvt( GetId(),
-               type,
-               this,
-               m_selectedBlockTopLeft,
-               m_selectedBlockBottomRight,
-               true,
-               mouseEv);
-
-       claimed = GetEventHandler()->ProcessEvent(gridEvt);
-       vetoed = !gridEvt.IsAllowed();
-   }
-   else if ( type == wxEVT_GRID_LABEL_LEFT_CLICK ||
-             type == wxEVT_GRID_LABEL_LEFT_DCLICK ||
-             type == wxEVT_GRID_LABEL_RIGHT_CLICK ||
-             type == wxEVT_GRID_LABEL_RIGHT_DCLICK )
+   if ( type == wxEVT_GRID_LABEL_LEFT_CLICK ||
+        type == wxEVT_GRID_LABEL_LEFT_DCLICK ||
+        type == wxEVT_GRID_LABEL_RIGHT_CLICK ||
+        type == wxEVT_GRID_LABEL_RIGHT_DCLICK )
    {
        wxPoint pos = mouseEv.GetPosition();
 
