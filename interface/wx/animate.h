@@ -26,10 +26,14 @@ enum wxAnimationType
 #define wxAC_NO_AUTORESIZE       (0x0010)
 #define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
 
-
+/**
+   Animation implementation types
+*/
 enum wxAnimationImplType
 {
+    /** With this flag wxAnimation will use a native implemetation if available. */
     wxANIMATION_IMPL_TYPE_NATIVE,
+    /** Using this flag will cause wxAnimation to use a generic implementation. */
     wxANIMATION_IMPL_TYPE_GENERIC
 };
 
@@ -188,24 +192,21 @@ public:
        Specify whether the animation's background colour is to be shown (the default),
        or whether the window background should show through
 
-       @note This method is only available when using the generic version of
-       @c wxAnimation and @c wxAnimationCtrl.
+       @note This method is only effective when using the generic version of the control.
     */
     void SetUseWindowBackgroundColour(bool useWinBackground = true);
 
     /**
        Returns @c true if the window's background colour is being used.
 
-       @note This method is only available when using the generic version of
-       @c wxAnimation and @c wxAnimationCtrl.
+       @note This method is only effective when using the generic version of the control.
     */
     bool IsUsingWindowBackgroundColour() const;
 
     /**
        This overload of Play() lets you specify if the animation must loop or not
 
-       @note This method is only available when using the generic version of
-       @c wxAnimation and @c wxAnimationCtrl.
+       @note This method is only effective when using the generic version of the control.
     */
     bool Play(bool looped);
 
@@ -213,8 +214,7 @@ public:
        Draw the current frame of the animation into given DC.
        This is fast as current frame is always cached.
 
-      @note This method is only available when using the generic version of
-      @c wxAnimation and @c wxAnimationCtrl.
+       @note This method is only effective when using the generic version of the control.
     */
     void DrawCurrentFrame(wxDC& dc);
 
@@ -222,8 +222,7 @@ public:
     /**
        Returns a wxBitmap with the current frame drawn in it.
 
-       @note This method is only available when using the generic version of
-       @c wxAnimation and @c wxAnimationCtrl.
+       @note This method is only effective when using the generic version of the control.
     */
     wxBitmap& GetBackingStore();
 };
@@ -235,6 +234,14 @@ public:
    If the platform supports a native animation control (currently just wxGTK)
    then this class implements the control via the native widget.
    Otherwise it is virtually the same as @c wxGenericAnimationCtrl.
+
+   Note that on wxGTK wxAnimationCtrl by default is capable of loading the
+   formats supported by the internally-used @c gdk-pixbuf library (typically
+   this means only @c wxANIMATION_TYPE_GIF). See @c wxGenericAnimationCtrl if
+   you need to support additional file types.
+
+   @library{wxcore}
+   @category{gdi}
 */
 
 class wxAnimationCtrl : public wxGenericAnimationCtrl
@@ -256,8 +263,6 @@ public:
                 long style = wxAC_DEFAULT_STYLE,
                 const wxString& name = wxAnimationCtrlNameStr);
 
-    void SetAnimation(const wxAnimation &anim);
-    wxAnimation GetAnimation() const;
 };
 
 
@@ -266,9 +271,9 @@ public:
 
    Abstract base class for native and generic animation classes. An instance
    of one of these classes is used by @c wxAnimation to handle the details of
-   the animation file.
+   the interface between the animation file and the animation control.
 
-   @See wxAnimationGenericImpl, wxAnimationGTKImpl
+   @See wxAnimationGenericImpl
 */
 class  wxAnimationImpl : public wxObject, public wxRefCounter
 {
@@ -296,26 +301,23 @@ public:
 /**
     @class wxAnimationGenericImpl
 
-    This class encapsulates the concept of a platform-dependent animation.
-    An animation is a sequence of frames of the same size.
-    Sound is not supported by wxAnimation.
+    This class provides a generic implementation for the @c wxAnimation
+    class. It can be used all platforms even if the platform provides a native
+    implementation.
 
-    Note that on wxGTK wxAnimation by default is capable of loading the
-    formats supported by the internally-used @c gdk-pixbuf library (typically
-    this means only @c wxANIMATION_TYPE_GIF). To use the generic version of
-    wxAnimation and wxAnimationCtrl instead, use the --disable-nativeanimation
-    configure option when buildign wxWidgets.
+    It is unlikely that an application developer would explicitly create
+    instances of this class, instead the @c wxAnimation class will create its
+    own instance of an implementation when it is created.
 
-    On other platforms wxAnimation is always capable of loading both GIF and ANI
-    formats (i.e. both @c wxANIMATION_TYPE_GIF and @c wxANIMATION_TYPE_ANI).
+    @c wxAnimationGenericImpl supports animated GIF and ANI files out of the
+    box. Additional file types can be supported by implementing a class
+    derived from @c wxAnimationDecoder and adding an instance of it to the
+    handlers managed by this class.
 
     @library{wxcore}
     @category{gdi}
 
-    @stdobjects
-    ::wxNullAnimation
-
-    @see wxAnimationCtrl, @sample{animate}
+    @see wxAnimationCtrl, wxAnimation @sample{animate}
 */
 class wxAnimationGenericImpl : public wxAnimationImpl
 {
@@ -451,8 +453,9 @@ public:
 
    The @c wxAnimation class handles the interface between the animation
    control and the deails of the animation image or data.
-  
-   
+
+    @stdobjects
+    ::wxNullAnimation
  */
 class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 {
@@ -463,7 +466,7 @@ public:
     wxAnimation(const wxAnimation& other);
 
     wxAnimationImpl* GetImpl() const;
-    
+
     bool IsOk() const;
 
     int GetDelay(unsigned int frame) const;
