@@ -335,9 +335,6 @@ void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
     if (IsPlaying())
         Stop();
 
-    wxCHECK_RET(animation.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_GENERIC,
-                wxT("incorrect animation implementation type provided") );
-
     // set new animation even if it's wxNullAnimation
     m_animation = animation;
     if (!m_animation.IsOk())
@@ -349,7 +346,7 @@ void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
     wxCHECK_RET(animation.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_GENERIC,
                 wxT("incorrect animation implementation type provided") );
 
-    if (m_animation.GetBackgroundColour() == wxNullColour)
+    if (animation_GetBackgroundColour() == wxNullColour)
         SetUseWindowBackgroundColour();
     if (!this->HasFlag(wxAC_NO_AUTORESIZE))
         FitToAnimation();
@@ -465,14 +462,14 @@ bool wxGenericAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
     // Draw all intermediate frames that haven't been removed from the animation
     for (unsigned int i = 0; i < frame; i++)
     {
-        if (m_animation.GetDisposalMethod(i) == wxANIM_DONOTREMOVE ||
-            m_animation.GetDisposalMethod(i) == wxANIM_UNSPECIFIED)
+        if (animation_GetDisposalMethod(i) == wxANIM_DONOTREMOVE ||
+            animation_GetDisposalMethod(i) == wxANIM_UNSPECIFIED)
         {
             DrawFrame(dc, i);
         }
-        else if (m_animation.GetDisposalMethod(i) == wxANIM_TOBACKGROUND)
-            DisposeToBackground(dc, m_animation.GetFramePosition(i),
-                                    m_animation.GetFrameSize(i));
+        else if (animation_GetDisposalMethod(i) == wxANIM_TOBACKGROUND)
+            DisposeToBackground(dc, animation_GetFramePosition(i),
+                                    animation_GetFrameSize(i));
     }
 
     // finally draw this frame
@@ -500,11 +497,11 @@ void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
     }
     else
     {
-        switch (m_animation.GetDisposalMethod(m_currentFrame-1))
+        switch (animation_GetDisposalMethod(m_currentFrame-1))
         {
         case wxANIM_TOBACKGROUND:
-            DisposeToBackground(dc, m_animation.GetFramePosition(m_currentFrame-1),
-                                    m_animation.GetFrameSize(m_currentFrame-1));
+            DisposeToBackground(dc, animation_GetFramePosition(m_currentFrame-1),
+                                    animation_GetFrameSize(m_currentFrame-1));
             break;
 
         case wxANIM_TOPREVIOUS:
@@ -578,7 +575,7 @@ void wxGenericAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
     // If wxAnimationDecoder had a function to convert directly from its
     // internal format to a port-specific wxBitmap, it would be somewhat faster.
     wxBitmap bmp(m_animation.GetFrame(frame));
-    dc.DrawBitmap(bmp, m_animation.GetFramePosition(frame),
+    dc.DrawBitmap(bmp, animation_GetFramePosition(frame),
                   true /* use mask */);
 }
 
@@ -603,7 +600,7 @@ void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc)
 {
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
-                    : m_animation.GetBackgroundColour();
+                    : animation_GetBackgroundColour();
 
     wxBrush brush(col);
     dc.SetBackground(brush);
@@ -614,7 +611,7 @@ void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, c
 {
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
-                    : m_animation.GetBackgroundColour();
+                    : animation_GetBackgroundColour();
     wxBrush brush(col);
     dc.SetBrush(brush);         // SetBrush and not SetBackground !!
     dc.SetPen(*wxTRANSPARENT_PEN);
@@ -696,6 +693,39 @@ void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
                 Stop();     // in case we are playing
         }
     }
+}
+
+// helpers to safely access wxAnimationGenericImpl methods
+#define ANIMATION (static_cast<wxAnimationGenericImpl*>(m_animation.GetImpl()))
+
+wxPoint wxGenericAnimationCtrl::animation_GetFramePosition(unsigned int frame) const
+{
+    wxCHECK_MSG( m_animation.IsOk(), wxDefaultPosition, wxT("invalid animation") );
+    return ANIMATION->GetFramePosition(frame);
+}
+
+wxSize wxGenericAnimationCtrl::animation_GetFrameSize(unsigned int frame) const
+{
+    wxCHECK_MSG( m_animation.IsOk(), wxDefaultSize, wxT("invalid animation") );
+    return ANIMATION->GetFrameSize(frame);
+}
+
+wxAnimationDisposal wxGenericAnimationCtrl::animation_GetDisposalMethod(unsigned int frame) const
+{
+    wxCHECK_MSG( m_animation.IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
+    return ANIMATION->GetDisposalMethod(frame);
+}
+
+wxColour wxGenericAnimationCtrl::animation_GetTransparentColour(unsigned int frame) const
+{
+    wxCHECK_MSG( m_animation.IsOk(), wxNullColour, wxT("invalid animation") );
+    return ANIMATION->GetTransparentColour(frame);
+}
+
+wxColour wxGenericAnimationCtrl::animation_GetBackgroundColour() const
+{
+    wxCHECK_MSG( m_animation.IsOk(), wxNullColour, wxT("invalid animation") );
+    return ANIMATION->GetBackgroundColour();
 }
 
 #endif // wxUSE_ANIMATIONCTRL

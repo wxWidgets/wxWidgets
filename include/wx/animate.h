@@ -57,13 +57,6 @@ public:
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
-    // extended interface used only by the generic implementation of wxAnimationCtrl
-    virtual wxPoint GetFramePosition(unsigned int frame) const = 0;
-    virtual wxSize GetFrameSize(unsigned int frame) const = 0;
-    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const = 0;
-    virtual wxColour GetTransparentColour(unsigned int frame) const = 0;
-    virtual wxColour GetBackgroundColour() const = 0;
-
 protected:
     wxDECLARE_ABSTRACT_CLASS(wxAnimationImpl);
 };
@@ -94,13 +87,6 @@ public:
 
     bool LoadFile(const wxString& name, wxAnimationType type = wxANIMATION_TYPE_ANY);
     bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
-
-    // extended interface used only by wxGenericAnimationCtrl
-    wxPoint GetFramePosition(unsigned int frame) const;
-    wxSize GetFrameSize(unsigned int frame) const;
-    wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
-    wxColour GetTransparentColour(unsigned int frame) const;
-    wxColour GetBackgroundColour() const;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxAnimation);

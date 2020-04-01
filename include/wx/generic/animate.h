@@ -158,6 +158,15 @@ protected:      // internal utilities
     virtual void DisplayStaticImage() wxOVERRIDE;
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
+    // Helpers to safely access methods in the wxAnimationGenericImpl that are
+    // specific to the generic implementation
+    wxPoint animation_GetFramePosition(unsigned int frame) const;
+    wxSize animation_GetFrameSize(unsigned int frame) const;
+    wxAnimationDisposal animation_GetDisposalMethod(unsigned int frame) const;
+    wxColour animation_GetTransparentColour(unsigned int frame) const;
+    wxColour animation_GetBackgroundColour() const;
+
+
 protected:
     unsigned int  m_currentFrame;     // Current frame
     bool          m_looped;           // Looped, or not

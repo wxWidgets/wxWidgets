@@ -101,36 +101,6 @@ bool wxAnimation::Load(wxInputStream& stream, wxAnimationType type)
     return GetImpl()->Load(stream, type);
 }
 
-wxPoint wxAnimation::GetFramePosition(unsigned int frame) const
-{
-    wxCHECK_MSG( IsOk(), wxDefaultPosition, wxT("invalid animation") );
-    return GetImpl()->GetFramePosition(frame);
-}
-
-wxSize wxAnimation::GetFrameSize(unsigned int frame) const
-{
-    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
-    return GetImpl()->GetFrameSize(frame);
-}
-
-wxAnimationDisposal wxAnimation::GetDisposalMethod(unsigned int frame) const
-{
-    wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
-    return GetImpl()->GetDisposalMethod(frame);
-}
-
-wxColour wxAnimation::GetTransparentColour(unsigned int frame) const
-{
-    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
-    return GetImpl()->GetTransparentColour(frame);
-}
-
-wxColour wxAnimation::GetBackgroundColour() const
-{
-    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
-    return GetImpl()->GetBackgroundColour();
-}
-
 
 // ----------------------------------------------------------------------------
 // wxAnimationCtrlBase
