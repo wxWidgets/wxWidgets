@@ -457,10 +457,8 @@ wxAnimationImpl* wxAnimationCtrl::CreateAnimationImpl(wxAnimationImplType implTy
 
         case wxANIMATION_IMPL_TYPE_NATIVE:
             return new wxAnimationGTKImpl();
-
-        default:
-            return NULL;
     }
+    return NULL;
 }
 
 
