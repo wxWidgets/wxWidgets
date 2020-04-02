@@ -63,6 +63,16 @@ wxAnimation::wxAnimation(const wxAnimation& other)
     Ref(other);
 }
 
+wxAnimation& wxAnimation::operator=(const wxAnimation& other)
+{
+    if (this != &other)
+    {
+        UnRef();
+        Ref(other);
+    }
+    return *this;
+}
+
 int wxAnimation::GetDelay(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid animation") );

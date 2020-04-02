@@ -71,6 +71,8 @@ public:
                 wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
     wxAnimation(const wxAnimation& other);
 
+    wxAnimation& operator=(const wxAnimation& other);
+
     wxAnimationImpl* GetImpl() const
         { return static_cast<wxAnimationImpl*>(m_refData); }
 
