@@ -29,10 +29,10 @@
 #include "wx/image.h"
 #include "wx/dcmemory.h"
 
+// global objects
 const char wxAnimationCtrlNameStr[] = "animationctrl";
 wxAnimation wxNullAnimation;
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationImpl, wxObject);
 wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxObject);
 wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl);
 

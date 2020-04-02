@@ -56,9 +56,6 @@ public:
                           wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-
-protected:
-    wxDECLARE_ABSTRACT_CLASS(wxAnimationImpl);
 };
 
 
