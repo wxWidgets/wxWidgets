@@ -147,6 +147,11 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
     return data_written;
 }
 
+wxImage wxAnimationGTKImpl::GetFrame(unsigned int WXUNUSED(frame)) const
+{
+    return wxNullImage;
+}
+
 wxSize wxAnimationGTKImpl::GetSize() const
 {
     return wxSize(gdk_pixbuf_animation_get_width(m_pixbuf),
