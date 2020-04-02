@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/animate.h
-// Purpose:     wxGenericAnimation and wxGenericAnimationCtrl
+// Purpose:     wxAnimationGenericImpl and wxGenericAnimationCtrl
 // Author:      Julian Smart and Guillermo Rodriguez Garcia
 // Modified by: Francesco Montorsi
 // Created:     13/8/99
