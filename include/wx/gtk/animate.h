@@ -136,8 +136,8 @@ protected:
 
     // Helpers to safely access methods in the wxAnimationGTKImpl that are
     // specific to the gtk implementation
-    GdkPixbufAnimation *animation_GetPixbuf() const;
-    void animation_SetPixbuf(GdkPixbufAnimation* p);
+    GdkPixbufAnimation *AnimationImplGetPixbuf() const;
+    void AnimationImplSetPixbuf(GdkPixbufAnimation* p);
 
 protected:      // internal vars
 

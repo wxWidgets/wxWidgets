@@ -265,7 +265,7 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
                 wxT("incorrect animation implementation type provided") );
 
     // copy underlying GdkPixbuf object
-    m_anim = animation_GetPixbuf();
+    m_anim = AnimationImplGetPixbuf();
 
     // m_anim may be null in case wxNullAnimation has been passed
     if (m_anim)
@@ -467,13 +467,13 @@ wxAnimationImpl* wxAnimationCtrl::CreateAnimationImpl(wxAnimationImplType implTy
 // helpers to safely access wxAnimationGTKImpl methods
 #define ANIMATION (static_cast<wxAnimationGTKImpl*>(m_animation.GetImpl()))
 
-GdkPixbufAnimation* wxAnimationCtrl::animation_GetPixbuf() const
+GdkPixbufAnimation* wxAnimationCtrl::AnimationImplGetPixbuf() const
 {
     wxCHECK_MSG( m_animation.IsOk(), NULL, wxT("invalid animation") );
     return ANIMATION->GetPixbuf();
 }
 
-void wxAnimationCtrl::animation_SetPixbuf(GdkPixbufAnimation* p)
+void wxAnimationCtrl::AnimationImplSetPixbuf(GdkPixbufAnimation* p)
 {
     wxCHECK_RET( m_animation.IsOk(), wxT("invalid animation") );
     ANIMATION->SetPixbuf(p);

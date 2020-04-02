@@ -161,11 +161,11 @@ protected:      // internal utilities
 
     // Helpers to safely access methods in the wxAnimationGenericImpl that are
     // specific to the generic implementation
-    wxPoint animation_GetFramePosition(unsigned int frame) const;
-    wxSize animation_GetFrameSize(unsigned int frame) const;
-    wxAnimationDisposal animation_GetDisposalMethod(unsigned int frame) const;
-    wxColour animation_GetTransparentColour(unsigned int frame) const;
-    wxColour animation_GetBackgroundColour() const;
+    wxPoint AnimationImplGetFramePosition(unsigned int frame) const;
+    wxSize AnimationImplGetFrameSize(unsigned int frame) const;
+    wxAnimationDisposal AnimationImplGetDisposalMethod(unsigned int frame) const;
+    wxColour AnimationImplGetTransparentColour(unsigned int frame) const;
+    wxColour AnimationImplGetBackgroundColour() const;
 
 
 protected:
