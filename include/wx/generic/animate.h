@@ -59,6 +59,7 @@ public:
     static void CleanUpHandlers();
     static void InitStandardHandlers();
 
+    wxDECLARE_NO_COPY_CLASS(wxAnimationGenericImpl);
     wxDECLARE_DYNAMIC_CLASS(wxAnimationGenericImpl);
 };
 
