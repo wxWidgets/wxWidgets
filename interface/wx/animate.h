@@ -28,6 +28,8 @@ enum wxAnimationType
 
 /**
    Animation implementation types
+
+   @since 3.1.4
 */
 enum wxAnimationImplType
 {
@@ -456,6 +458,8 @@ public:
 
     @stdobjects
     ::wxNullAnimation
+
+    @see wxAnimationCtrl, @sample{animate}
  */
 class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 {
