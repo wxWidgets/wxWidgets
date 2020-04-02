@@ -452,7 +452,7 @@ public:
    @class wxAnimation
 
    The @c wxAnimation class handles the interface between the animation
-   control and the deails of the animation image or data.
+   control and the details of the animation image or data.
 
     @stdobjects
     ::wxNullAnimation
@@ -488,4 +488,3 @@ public:
     An empty animation object.
 */
 wxAnimation wxNullAnimation;
-

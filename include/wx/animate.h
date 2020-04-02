@@ -69,8 +69,8 @@ protected:
 class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 {
 public:
-    wxAnimation(wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
-    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY,
+    explicit wxAnimation(wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    explicit wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY,
                 wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
     wxAnimation(const wxAnimation& other);
 
@@ -173,13 +173,6 @@ private:
             : wxGenericAnimationCtrl(parent, id, anim, pos, size, style, name)
             {}
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxAnimation& anim = wxNullAnimation,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxAC_DEFAULT_STYLE,
-                const wxString& name = wxAnimationCtrlNameStr)
-        { return wxGenericAnimationCtrl::Create(parent, id, anim, pos, size, style, name); }
 
     static wxAnimationImpl* CreateAnimationImpl(wxAnimationImplType WXUNUSED(implType))
         {

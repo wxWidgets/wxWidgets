@@ -450,7 +450,8 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
 // static
 wxAnimationImpl* wxAnimationCtrl::CreateAnimationImpl(wxAnimationImplType implType)
 {
-    switch (implType) {
+    switch (implType)
+    {
         case wxANIMATION_IMPL_TYPE_GENERIC:
             return new wxAnimationGenericImpl();
 
@@ -463,7 +464,7 @@ wxAnimationImpl* wxAnimationCtrl::CreateAnimationImpl(wxAnimationImplType implTy
 }
 
 
-// helpers to safely access wxAnimationGenericImpl methods
+// helpers to safely access wxAnimationGTKImpl methods
 #define ANIMATION (static_cast<wxAnimationGTKImpl*>(m_animation.GetImpl()))
 
 GdkPixbufAnimation* wxAnimationCtrl::animation_GetPixbuf() const

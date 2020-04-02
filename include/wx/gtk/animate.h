@@ -30,7 +30,6 @@ public:
         : m_pixbuf(NULL) {}
     ~wxAnimationGTKImpl() { UnRef(); }
 
-    // wxAnimation& operator= (const wxAnimation&);
 
     virtual wxAnimationImplType GetImplType() wxOVERRIDE
         { return wxANIMATION_IMPL_TYPE_NATIVE; }
