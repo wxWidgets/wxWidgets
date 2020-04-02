@@ -38,6 +38,11 @@ public:
         { return m_pixbuf != NULL; }
 
 
+    // unfortunately GdkPixbufAnimation does not expose these info:
+
+    virtual unsigned int GetFrameCount() const wxOVERRIDE { return 0; }
+    virtual wxImage GetFrame(unsigned int frame) const wxOVERRIDE;
+
     // we can retrieve the delay for a frame only after building
     // a GdkPixbufAnimationIter...
     virtual int GetDelay(unsigned int WXUNUSED(frame)) const wxOVERRIDE { return 0; }
@@ -45,14 +50,6 @@ public:
 
     virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
     virtual bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-
-    // unfortunately GdkPixbufAnimation does not expose these info:
-
-    virtual unsigned int GetFrameCount() const wxOVERRIDE
-        { return 0; }
-    virtual wxImage GetFrame(unsigned int WXUNUSED(frame)) const wxOVERRIDE
-        { return wxNullImage; }
-
 
     // Implementation
 public:     // used by GTK callbacks
