@@ -737,7 +737,7 @@ private:
     void OnCloseWindow(wxCloseEvent& event)
     {
         if ( CloseView(event) )
-            BaseClass::Destroy();
+            this->Destroy();
         //else: vetoed
     }
 
