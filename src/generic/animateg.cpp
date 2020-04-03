@@ -16,6 +16,7 @@
 
 #if wxUSE_ANIMATIONCTRL
 #include "wx/animate.h"
+#include "wx/generic/private/animate.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -594,7 +595,18 @@ void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
     }
 }
 
+// ----------------------------------------------------------------------------
+
+//static
+wxAnimationImpl* wxGenericAnimationCtrl::CreateAnimationImpl(wxAnimationImplType WXUNUSED(implType))
+{
+    // For the generic widget we always use the generic impl and ignore the given type
+    return new wxAnimationGenericImpl();
+}
+
+// ----------------------------------------------------------------------------
 // helpers to safely access wxAnimationGenericImpl methods
+// ----------------------------------------------------------------------------
 #define ANIMATION (static_cast<wxAnimationGenericImpl*>(m_animation.GetImpl()))
 
 wxPoint wxGenericAnimationCtrl::AnimationImplGetFramePosition(unsigned int frame) const

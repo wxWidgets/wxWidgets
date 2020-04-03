@@ -15,62 +15,6 @@ typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 
 // ----------------------------------------------------------------------------
-// wxAnimation
-// Unlike the generic wxAnimation object (see generic\animate.cpp), we won't
-// use directly wxAnimationHandlers as gdk-pixbuf already provides the
-// concept of handler and will automatically use the available handlers.
-// Like generic wxAnimation object, this implementation of wxAnimation is
-// refcounted so that assignment is very fast
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxAnimationGTKImpl : public wxAnimationImpl
-{
-public:
-    wxAnimationGTKImpl()
-        : m_pixbuf(NULL) {}
-    ~wxAnimationGTKImpl() { UnRef(); }
-
-
-    virtual wxAnimationImplType GetImplType() wxOVERRIDE
-        { return wxANIMATION_IMPL_TYPE_NATIVE; }
-
-    virtual bool IsOk() const wxOVERRIDE
-        { return m_pixbuf != NULL; }
-
-
-    // unfortunately GdkPixbufAnimation does not expose these info:
-
-    virtual unsigned int GetFrameCount() const wxOVERRIDE { return 0; }
-    virtual wxImage GetFrame(unsigned int frame) const wxOVERRIDE;
-
-    // we can retrieve the delay for a frame only after building
-    // a GdkPixbufAnimationIter...
-    virtual int GetDelay(unsigned int WXUNUSED(frame)) const wxOVERRIDE { return 0; }
-    virtual wxSize GetSize() const wxOVERRIDE;
-
-    virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-    virtual bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-
-    // Implementation
-public:     // used by GTK callbacks
-
-    GdkPixbufAnimation *GetPixbuf() const
-        { return m_pixbuf; }
-    void SetPixbuf(GdkPixbufAnimation* p);
-
-protected:
-    GdkPixbufAnimation *m_pixbuf;
-
-private:
-    void UnRef();
-
-    typedef wxAnimationImpl base_type;
-    wxDECLARE_NO_COPY_CLASS(wxAnimationGTKImpl);
-    wxDECLARE_DYNAMIC_CLASS(wxAnimationGTKImpl);
-};
-
-
-// ----------------------------------------------------------------------------
 // wxAnimationCtrl
 // ----------------------------------------------------------------------------
 

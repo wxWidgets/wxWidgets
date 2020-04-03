@@ -184,13 +184,6 @@ private:
             : wxGenericAnimationCtrl(parent, id, anim, pos, size, style, name)
             {}
 
-
-    static wxAnimationImpl* CreateAnimationImpl(wxAnimationImplType WXUNUSED(implType))
-        {
-            // For the generic widget we always use the generic impl and ignore the given type
-            return new wxAnimationGenericImpl();
-        }
-
     private:
         wxDECLARE_DYNAMIC_CLASS(wxAnimationCtrl);
     };
