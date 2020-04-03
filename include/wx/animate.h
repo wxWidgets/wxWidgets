@@ -25,6 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxAnimation;
 extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
+WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
 
 // ----------------------------------------------------------------------------
 // wxAnimationImpl
@@ -87,7 +88,18 @@ public:
     bool LoadFile(const wxString& name, wxAnimationType type = wxANIMATION_TYPE_ANY);
     bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
+    // Methods for managing the list of decoders
+    static inline wxAnimationDecoderList& GetHandlers() { return sm_handlers; }
+    static void AddHandler(wxAnimationDecoder *handler);
+    static void InsertHandler(wxAnimationDecoder *handler);
+    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
+
+    static void CleanUpHandlers();
+    static void InitStandardHandlers();
+
 protected:
+    static wxAnimationDecoderList sm_handlers;
+
     wxDECLARE_DYNAMIC_CLASS(wxAnimation);
 };
 

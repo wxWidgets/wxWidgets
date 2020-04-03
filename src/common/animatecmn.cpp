@@ -28,6 +28,10 @@
 #include "wx/brush.h"
 #include "wx/image.h"
 #include "wx/dcmemory.h"
+#include "wx/module.h"
+
+#include "wx/gifdecod.h"
+#include "wx/anidecod.h"
 
 // global objects
 const char wxAnimationCtrlNameStr[] = "animationctrl";
@@ -41,6 +45,10 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl);
     wxIMPLEMENT_CLASS(wxAnimationCtrl, wxGenericAnimationCtrl);
 #endif
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxAnimationDecoderList)
+
+wxAnimationDecoderList wxAnimation::sm_handlers;
 
 // ----------------------------------------------------------------------------
 // wxAnimation
@@ -176,5 +184,97 @@ void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmap &bmp)
     if ( !IsPlaying() )
         DisplayStaticImage();
 }
+
+// ----------------------------------------------------------------------------
+// animation decoders
+// ----------------------------------------------------------------------------
+
+void wxAnimation::AddHandler( wxAnimationDecoder *handler )
+{
+    // Check for an existing handler of the type being added.
+    if (FindHandler( handler->GetType() ) == 0)
+    {
+        sm_handlers.Append( handler );
+    }
+    else
+    {
+        // This is not documented behaviour, merely the simplest 'fix'
+        // for preventing duplicate additions.  If someone ever has
+        // a good reason to add and remove duplicate handlers (and they
+        // may) we should probably refcount the duplicates.
+
+        wxLogDebug( wxT("Adding duplicate animation handler for '%d' type"),
+                    handler->GetType() );
+        delete handler;
+    }
+}
+
+void wxAnimation::InsertHandler( wxAnimationDecoder *handler )
+{
+    // Check for an existing handler of the type being added.
+    if (FindHandler( handler->GetType() ) == 0)
+    {
+        sm_handlers.Insert( handler );
+    }
+    else
+    {
+        // see AddHandler for additional comments.
+        wxLogDebug( wxT("Inserting duplicate animation handler for '%d' type"),
+                    handler->GetType() );
+        delete handler;
+    }
+}
+
+const wxAnimationDecoder *wxAnimation::FindHandler( wxAnimationType animType )
+{
+    wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
+    while (node)
+    {
+        const wxAnimationDecoder *handler = (const wxAnimationDecoder *)node->GetData();
+        if (handler->GetType() == animType) return handler;
+        node = node->GetNext();
+    }
+    return 0;
+}
+
+void wxAnimation::InitStandardHandlers()
+{
+#if wxUSE_GIF
+    AddHandler(new wxGIFDecoder);
+#endif // wxUSE_GIF
+#if wxUSE_ICO_CUR
+    AddHandler(new wxANIDecoder);
+#endif // wxUSE_ICO_CUR
+}
+
+void wxAnimation::CleanUpHandlers()
+{
+    wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
+    while (node)
+    {
+        wxAnimationDecoder *handler = (wxAnimationDecoder *)node->GetData();
+        wxAnimationDecoderList::compatibility_iterator next = node->GetNext();
+        delete handler;
+        node = next;
+    }
+
+    sm_handlers.Clear();
+}
+
+
+// A module to allow wxAnimation initialization/cleanup
+// without calling these functions from app.cpp or from
+// the user's application.
+
+class wxAnimationModule: public wxModule
+{
+    wxDECLARE_DYNAMIC_CLASS(wxAnimationModule);
+public:
+    wxAnimationModule() {}
+    bool OnInit() wxOVERRIDE { wxAnimation::InitStandardHandlers(); return true; }
+    void OnExit() wxOVERRIDE { wxAnimation::CleanUpHandlers(); }
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule);
 
 #endif      // wxUSE_ANIMATIONCTRL

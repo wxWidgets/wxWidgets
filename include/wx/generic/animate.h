@@ -17,8 +17,6 @@
 // wxGenericAnimation
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
-
 class WXDLLIMPEXP_ADV wxAnimationGenericImpl : public wxAnimationImpl
 {
 public:
@@ -48,17 +46,6 @@ public:
     virtual wxColour GetBackgroundColour() const;
 
 protected:
-    static wxAnimationDecoderList sm_handlers;
-
-public:
-    static inline wxAnimationDecoderList& GetHandlers() { return sm_handlers; }
-    static void AddHandler(wxAnimationDecoder *handler);
-    static void InsertHandler(wxAnimationDecoder *handler);
-    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
-
-    static void CleanUpHandlers();
-    static void InitStandardHandlers();
-
     wxDECLARE_NO_COPY_CLASS(wxAnimationGenericImpl);
     wxDECLARE_DYNAMIC_CLASS(wxAnimationGenericImpl);
 };

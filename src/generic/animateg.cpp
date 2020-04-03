@@ -22,18 +22,9 @@
     #include "wx/image.h"
     #include "wx/dcmemory.h"
     #include "wx/dcclient.h"
-    #include "wx/module.h"
 #endif
 
 #include "wx/wfstream.h"
-#include "wx/gifdecod.h"
-#include "wx/anidecod.h"
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxAnimationDecoderList)
-
-wxAnimationDecoderList wxAnimationGenericImpl::sm_handlers;
-
 
 // ----------------------------------------------------------------------------
 // wxAnimation
@@ -125,7 +116,7 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
     const wxAnimationDecoder *handler;
     if ( type == wxANIMATION_TYPE_ANY )
     {
-        for ( wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
+        for ( wxAnimationDecoderList::compatibility_iterator node = wxAnimation::GetHandlers().GetFirst();
               node; node = node->GetNext() )
         {
             handler=(const wxAnimationDecoder*)node->GetData();
@@ -143,7 +134,7 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
         return false;
     }
 
-    handler = FindHandler(type);
+    handler = wxAnimation::FindHandler(type);
 
     if (handler == NULL)
     {
@@ -165,99 +156,6 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
     else
         return M_ANIMDATA->Load(stream);
 }
-
-
-// ----------------------------------------------------------------------------
-// animation decoders
-// ----------------------------------------------------------------------------
-
-void wxAnimationGenericImpl::AddHandler( wxAnimationDecoder *handler )
-{
-    // Check for an existing handler of the type being added.
-    if (FindHandler( handler->GetType() ) == 0)
-    {
-        sm_handlers.Append( handler );
-    }
-    else
-    {
-        // This is not documented behaviour, merely the simplest 'fix'
-        // for preventing duplicate additions.  If someone ever has
-        // a good reason to add and remove duplicate handlers (and they
-        // may) we should probably refcount the duplicates.
-
-        wxLogDebug( wxT("Adding duplicate animation handler for '%d' type"),
-                    handler->GetType() );
-        delete handler;
-    }
-}
-
-void wxAnimationGenericImpl::InsertHandler( wxAnimationDecoder *handler )
-{
-    // Check for an existing handler of the type being added.
-    if (FindHandler( handler->GetType() ) == 0)
-    {
-        sm_handlers.Insert( handler );
-    }
-    else
-    {
-        // see AddHandler for additional comments.
-        wxLogDebug( wxT("Inserting duplicate animation handler for '%d' type"),
-                    handler->GetType() );
-        delete handler;
-    }
-}
-
-const wxAnimationDecoder *wxAnimationGenericImpl::FindHandler( wxAnimationType animType )
-{
-    wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
-    while (node)
-    {
-        const wxAnimationDecoder *handler = (const wxAnimationDecoder *)node->GetData();
-        if (handler->GetType() == animType) return handler;
-        node = node->GetNext();
-    }
-    return 0;
-}
-
-void wxAnimationGenericImpl::InitStandardHandlers()
-{
-#if wxUSE_GIF
-    AddHandler(new wxGIFDecoder);
-#endif // wxUSE_GIF
-#if wxUSE_ICO_CUR
-    AddHandler(new wxANIDecoder);
-#endif // wxUSE_ICO_CUR
-}
-
-void wxAnimationGenericImpl::CleanUpHandlers()
-{
-    wxAnimationDecoderList::compatibility_iterator node = sm_handlers.GetFirst();
-    while (node)
-    {
-        wxAnimationDecoder *handler = (wxAnimationDecoder *)node->GetData();
-        wxAnimationDecoderList::compatibility_iterator next = node->GetNext();
-        delete handler;
-        node = next;
-    }
-
-    sm_handlers.Clear();
-}
-
-
-// A module to allow wxAnimation initialization/cleanup
-// without calling these functions from app.cpp or from
-// the user's application.
-
-class wxAnimationModule: public wxModule
-{
-    wxDECLARE_DYNAMIC_CLASS(wxAnimationModule);
-public:
-    wxAnimationModule() {}
-    bool OnInit() wxOVERRIDE { wxAnimationGenericImpl::InitStandardHandlers(); return true; }
-    void OnExit() wxOVERRIDE { wxAnimationGenericImpl::CleanUpHandlers(); }
-};
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule);
 
 
 // ----------------------------------------------------------------------------
