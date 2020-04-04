@@ -301,7 +301,7 @@ public:
                                     wxGridCellAttr::wxAttrKind  kind) const wxOVERRIDE;
 
 private:
-    wxObjectDataPtr<wxGridCellAttr> m_attrForOddRows;
+    wxGridCellAttrPtr m_attrForOddRows;
 };
 
 // ----------------------------------------------------------------------------
