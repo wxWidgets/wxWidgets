@@ -94,7 +94,6 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
     }
     else
     {
-        // Note that m_blockSelectionTopLeft's size may be changing!
         for ( size_t n = m_selection.size(); n > 0; )
         {
             n--;
