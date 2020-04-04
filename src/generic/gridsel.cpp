@@ -58,6 +58,12 @@ bool wxGridSelection::IsSelection()
 bool wxGridSelection::IsInSelection( int row, int col )
 {
     // Check whether the given cell is contained in one of the selected blocks.
+    //
+    // Note that this algorithm is O(N) in number of selected blocks, not in
+    // number of cells in the grid, so it should be reasonably efficient even
+    // for very large grids, as the user shouldn't be able to select too many
+    // blocks. If we still run into problems with this, we should find a more
+    // efficient way of storing the selection, e.g. using k-d trees.
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; n++ )
     {
