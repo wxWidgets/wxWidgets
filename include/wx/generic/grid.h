@@ -19,6 +19,10 @@
 
 #include "wx/scrolwin.h"
 
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    #include <iterator>
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -869,40 +873,45 @@ struct wxGridBlockDiffResult
 };
 
 // ----------------------------------------------------------------------------
-// wxGridSelectionRange: the range of grid selection blocks
+// wxGridSelectionRange: a range of grid blocks that can be iterated over
 // ----------------------------------------------------------------------------
 
 class wxGridSelectionRange
 {
+    typedef wxVector<wxGridBlockCoords>::const_iterator iterator_impl;
+
 public:
-    typedef wxVector<wxGridBlockCoords>::const_iterator iterator;
-
-    wxGridSelectionRange() :
-        m_begin(),
-        m_end(),
-        m_it()
+    class iterator
     {
-    }
+    public:
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+        typedef std::forward_iterator_tag iterator_category;
+#endif
+        typedef ptrdiff_t difference_type;
+        typedef wxGridBlockCoords value_type;
+        typedef const value_type& reference;
 
-    // Get the current selection block coordinates.
-    const wxGridBlockCoords& GetBlockCoords() const
-    {
-        static wxGridBlockCoords empty;
-        return Valid() ? *m_it : empty;
-    }
+        iterator() : m_it() { }
 
-    // Iterate to the next block.
-    void Next()
-    {
-        if ( Valid() )
-            ++m_it;
-    }
+        reference operator*() const { return *m_it; }
 
-    // Whether the iterator is valid.
-    bool Valid() const
-    {
-        return m_it != m_end;
-    }
+        iterator& operator++()
+            { ++m_it; return *this; }
+        iterator operator++(int)
+            { iterator tmp = *this; ++m_it; return tmp; }
+
+        bool operator==(const iterator& it) const
+            { return m_it == it.m_it; }
+        bool operator!=(const iterator& it) const
+            { return m_it != it.m_it; }
+
+    private:
+        explicit iterator(iterator_impl it) : m_it(it) { }
+
+        iterator_impl m_it;
+
+        friend class wxGridSelectionRange;
+    };
 
     iterator begin() const
     {
@@ -915,16 +924,20 @@ public:
     }
 
 private:
-    wxGridSelectionRange(iterator begin, iterator end) :
+    wxGridSelectionRange() :
+        m_begin(),
+        m_end()
+    {
+    }
+
+    wxGridSelectionRange(iterator_impl begin, iterator_impl end) :
         m_begin(begin),
-        m_end(end),
-        m_it(begin)
+        m_end(end)
     {
     }
 
     const iterator m_begin;
     const iterator m_end;
-    iterator m_it;
 
     friend class wxGrid;
 };

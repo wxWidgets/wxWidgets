@@ -2006,7 +2006,29 @@ struct wxGridBlockDiffResult
 };
 
 /**
-    The range of grid selection blocks.
+    Represents a range of grid blocks that can be iterated over.
+
+    This class provides read-only access to the blocks making up the grid
+    selection in the most general case.
+
+    Note that objects of this class can only be returned by wxGrid, but not
+    constructed in the application code.
+
+    The preferable way to iterate over it is using C++11 range-for loop:
+    @code
+        for ( const auto block: grid->GetSelectionRange() ) {
+            ... do something with block ...
+        }
+    @endcode
+    When not using C++11, iteration has to be done manually:
+    @code
+        wxGridSelectionRange range = grid->GetSelectionRange();
+        for ( wxGridSelectionRange::iterator it = range.begin();
+              it != range.end();
+              ++it ) {
+            ... do something with *it ...
+        }
+    @endcode
 
     @since 3.1.4
  */
@@ -2014,34 +2036,30 @@ class wxGridSelectionRange
 {
 public:
     /**
-        Default constructor initializes the iterator.
-     */
-    wxGridSelectionRange();
+        Read-only forward iterator type.
 
-    /**
-     * Get the current selection block coordinates.
+        This is an opaque type, which satisfies the forward iterator
+        requirements, i.e. provides all the expected operations, such as
+        comparison, dereference and pre- and post-increment.
      */
-    const wxGridBlockCoords& GetBlockCoords() const;
+    class iterator
+    {
+        iterator();
 
-    /**
-     * Iterate to the next block.
-     */
-    void Next();
+        const wxGridBlockCoords& operator*() const;
 
-    /**
-     * Whether the iterator is valid.
-     */
-    bool Valid();
+        iterator& operator++();
+        iterator operator++(int);
 
-    /**
-     * The function to allow using range-based for.
-     */
-    wxGridBlockCoords *begin() const;
+        bool operator==(const iterator& it) const;
+        bool operator!=(const iterator& it) const;
+    };
 
-    /**
-     * The function to allow using range-based for.
-     */
-    wxGridBlockCoords *end() const;
+    /// Return iterator corresponding to the beginning of the range.
+    iterator begin() const;
+
+    /// Return iterator corresponding to the end of the range.
+    iterator end() const;
 };
 
 /**
@@ -4648,7 +4666,15 @@ public:
     void DeselectCell( int row, int col );
 
     /**
-        Returns an range of grid selection blocks.
+        Returns a range of grid selection blocks.
+
+        The returned range can be iterated over, e.g. with C++11 range-for loop:
+        @code
+            for ( const auto block: grid->GetSelectionRange() ) {
+                if ( block.Intersects(myBlock) )
+                    break;
+            }
+        @endcode
 
         @since 3.1.4
     */

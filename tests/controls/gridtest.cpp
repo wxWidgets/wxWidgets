@@ -524,18 +524,16 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(!m_grid->IsInSelection(3, 0));
 }
 
-TEST_CASE_METHOD(GridTestCase, "Grid::SelectionIterator", "[grid]")
+TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
 {
-    CHECK(!m_grid->GetSelectionRange().Valid());
+    const wxGridSelectionRange empty = m_grid->GetSelectionRange();
+    CHECK( empty.begin() == empty.end() );
 
     m_grid->SelectBlock(1, 0, 3, 1);
 
     wxGridSelectionRange sel = m_grid->GetSelectionRange();
-    CHECK(sel.Valid());
-    CHECK(sel.GetBlockCoords() == wxGridBlockCoords(1, 0, 3, 1));
-
-    sel.Next();
-    CHECK(!sel.Valid());
+    REQUIRE( sel.begin() != sel.end() );
+    CHECK( *sel.begin() == wxGridBlockCoords(1, 0, 3, 1) );
 
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
     m_grid->SelectBlock(4, 0, 7, 1, true);
