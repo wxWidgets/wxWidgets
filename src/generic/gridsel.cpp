@@ -61,7 +61,7 @@ bool wxGridSelection::IsInSelection( int row, int col )
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( m_selection[n].ContainCell(wxGridCellCoords(row, col)) )
+        if ( m_selection[n].ContainsCell(wxGridCellCoords(row, col)) )
             return true;
     }
 

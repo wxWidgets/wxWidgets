@@ -1140,12 +1140,6 @@ const wxGridCornerHeaderRenderer& wxGridCellAttrProvider::GetCornerRenderer()
 // wxGridBlockCoords
 // ----------------------------------------------------------------------------
 
-bool wxGridBlockCoords::ContainCell(const wxGridCellCoords& cell) const
-{
-        return m_topRow <= cell.GetRow() && cell.GetRow() <= m_bottomRow &&
-               m_leftCol <= cell.GetCol() && cell.GetCol() <= m_rightCol;
-}
-
 int wxGridBlockCoords::ContainBlock(const wxGridBlockCoords& other) const
 {
 // returns 1, if this block contains the other,

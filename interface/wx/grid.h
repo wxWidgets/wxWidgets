@@ -1916,12 +1916,12 @@ public:
     }
 
     /**
-        Whether the block contains the cell.
+        Check whether this block contains the given cell.
 
         @return
-            @true, if the block contains the cell, @false, otherwise.
+            @true, if the block contains the cell, @false otherwise.
      */
-    bool ContainCell(const wxGridCellCoords& cell) const;
+    bool ContainsCell(const wxGridCellCoords& cell) const;
 
     /**
         Whether the blocks contain each other.

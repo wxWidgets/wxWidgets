@@ -1328,13 +1328,13 @@ TEST_CASE("GridBlockCoords::Intersects", "[grid]")
     CHECK(!wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(4, 4, 6, 6)));
 }
 
-TEST_CASE("GridBlockCoords::ContainCell", "[grid]")
+TEST_CASE("GridBlockCoords::ContainsCell", "[grid]")
 {
     // Inside.
-    CHECK(wxGridBlockCoords(1, 1, 3, 3).ContainCell(wxGridCellCoords(2, 2)));
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).ContainsCell(wxGridCellCoords(2, 2)));
 
     // Outside.
-    CHECK(!wxGridBlockCoords(1, 1, 3, 3).ContainCell(wxGridCellCoords(5, 5)));
+    CHECK(!wxGridBlockCoords(1, 1, 3, 3).ContainsCell(wxGridCellCoords(5, 5)));
 }
 
 TEST_CASE("GridBlockCoords::ContainBlock", "[grid]")

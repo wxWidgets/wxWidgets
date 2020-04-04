@@ -816,10 +816,12 @@ public:
                m_leftCol <= other.m_rightCol && m_rightCol >= other.m_leftCol;
     }
 
-    // Whether the block contains the cell.
-    // returns @true, if the block contains the cell,
-    //         @false, otherwise
-    bool ContainCell(const wxGridCellCoords& cell) const;
+    // Return whether this block contains the given cell.
+    bool ContainsCell(const wxGridCellCoords& cell) const
+    {
+        return m_topRow <= cell.GetRow() && cell.GetRow() <= m_bottomRow &&
+               m_leftCol <= cell.GetCol() && cell.GetCol() <= m_rightCol;
+    }
 
     // Whether the blocks contain each other.
     // returns 1, if this block contains the other,
