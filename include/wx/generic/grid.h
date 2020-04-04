@@ -875,12 +875,12 @@ struct wxGridBlockDiffResult
 class wxGridSelectionRange
 {
 public:
-    typedef wxGridBlockCoords* iterator;
+    typedef wxVector<wxGridBlockCoords>::const_iterator iterator;
 
     wxGridSelectionRange() :
-        m_begin(NULL),
-        m_end(NULL),
-        m_it(NULL)
+        m_begin(),
+        m_end(),
+        m_it()
     {
     }
 
