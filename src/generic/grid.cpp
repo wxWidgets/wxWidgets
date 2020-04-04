@@ -2325,6 +2325,7 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 
 wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_SIZE( wxGrid::OnSize )
+    EVT_DPI_CHANGED( wxGrid::OnDPIChanged )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
@@ -2465,8 +2466,11 @@ void wxGrid::Create()
     m_labelBackgroundColour = m_rowLabelWin->GetBackgroundColour();
     m_labelTextColour = m_rowLabelWin->GetForegroundColour();
 
-    // now that we have the grid window, use its font to compute the default
-    // row height
+    InitPixelFields();
+}
+
+void wxGrid::InitPixelFields()
+{
     m_defaultRowHeight = m_gridWin->GetCharHeight();
 #if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
@@ -2474,6 +2478,13 @@ void wxGrid::Create()
     m_defaultRowHeight += 4;
 #endif
 
+    m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
+    m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
+
+    m_defaultColWidth = FromDIP(WXGRID_DEFAULT_COL_WIDTH);
+
+    m_minAcceptableColWidth  = FromDIP(WXGRID_MIN_COL_WIDTH);
+    m_minAcceptableRowHeight = FromDIP(WXGRID_MIN_ROW_HEIGHT);
 }
 
 void wxGrid::CreateColumnWindow()
@@ -2486,7 +2497,7 @@ void wxGrid::CreateColumnWindow()
     else // draw labels ourselves
     {
         m_colLabelWin = new wxGridColLabelWindow(this);
-        m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
+        m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
     }
 }
 
@@ -2638,9 +2649,6 @@ void wxGrid::Init()
     m_defaultCellAttr = NULL;
     m_typeRegistry = NULL;
 
-    m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
-    m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
-
     m_setFixedRows =
     m_setFixedCols = NULL;
 
@@ -2663,11 +2671,15 @@ void wxGrid::Init()
     m_cornerLabelVertAlign = wxALIGN_CENTRE;
     m_cornerLabelTextOrientation = wxHORIZONTAL;
 
-    m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
-    m_defaultRowHeight = 0; // this will be initialized after creation
+    // All these fields require a valid window, so are initialized in Create().
+    m_rowLabelWidth  =
+    m_colLabelHeight = 0;
 
-    m_minAcceptableColWidth  = WXGRID_MIN_COL_WIDTH;
-    m_minAcceptableRowHeight = WXGRID_MIN_ROW_HEIGHT;
+    m_defaultColWidth  =
+    m_defaultRowHeight = 0;
+
+    m_minAcceptableColWidth  =
+    m_minAcceptableRowHeight = 0;
 
     m_gridLineColour = wxColour( 192,192,192 );
     m_gridLinesEnabled = true;
@@ -5346,6 +5358,72 @@ void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
     }
 }
 
+void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    InitPixelFields();
+
+    // If we have any non-default row sizes, we need to scale them (default
+    // ones will be scaled due to the reinitialization of m_defaultRowHeight
+    // inside InitPixelFields() above).
+    if ( !m_rowHeights.empty() )
+    {
+        int total = 0;
+        for ( unsigned i = 0; i < m_rowHeights.size(); ++i )
+        {
+            int height = m_rowHeights[i];
+
+            // Skip hidden rows.
+            if ( height <= 0 )
+                continue;
+
+            height = height * event.GetNewDPI().x / event.GetOldDPI().x;
+            total += height;
+
+            m_rowHeights[i] = height;
+            m_rowBottoms[i] = total;
+        }
+    }
+
+    // Similarly for columns, except that here we need to update the native
+    // control even if none of the widths had been changed, as it's not going
+    // to do it on its own when redisplayed.
+    wxHeaderCtrl* const
+        colHeader = m_useNativeHeader ? GetGridColHeader() : NULL;
+    if ( !m_colWidths.empty() )
+    {
+        int total = 0;
+        for ( unsigned i = 0; i < m_colWidths.size(); ++i )
+        {
+            int width = m_colWidths[i];
+
+            if ( width <= 0 )
+                continue;
+
+            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+            total += width;
+
+            m_colWidths[i] = width;
+            m_colRights[i] = total;
+
+            if ( colHeader )
+                colHeader->UpdateColumn(i);
+        }
+    }
+    else if ( colHeader )
+    {
+        for ( int i = 0; i < m_numCols; ++i )
+        {
+            colHeader->UpdateColumn(i);
+        }
+    }
+
+    InvalidateBestSize();
+
+    CalcDimensions();
+
+    event.Skip();
+}
+
 void wxGrid::OnKeyDown( wxKeyEvent& event )
 {
     if ( m_inOnKeyDown )
@@ -7330,15 +7408,15 @@ int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
     if ( line == wxNOT_FOUND )
         return -1;
 
-    if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
+    const int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
+
+    if ( oper.GetLineSize(this, line) > edge )
     {
         // We know that we are in this line, test whether we are close enough
         // to start or end border, respectively.
-        if ( abs(oper.GetLineEndPos(this, line) - pos) < WXGRID_LABEL_EDGE_ZONE )
+        if ( abs(oper.GetLineEndPos(this, line) - pos) < edge )
             return line;
-        else if ( line > 0 &&
-                    pos - oper.GetLineStartPos(this,
-                                               line) < WXGRID_LABEL_EDGE_ZONE )
+        else if ( line > 0 && pos - oper.GetLineStartPos(this, line) < edge )
         {
             // We need to find the previous visible line, so skip all the
             // hidden (of size 0) ones.
