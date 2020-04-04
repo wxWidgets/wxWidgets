@@ -823,11 +823,12 @@ public:
                m_leftCol <= cell.GetCol() && cell.GetCol() <= m_rightCol;
     }
 
-    // Whether the blocks contain each other.
-    // returns 1, if this block contains the other,
-    //        -1, if the other block contains this one,
-    //         0, otherwise
-    int ContainBlock(const wxGridBlockCoords& other) const;
+    // Return whether this blocks fully contains another one.
+    bool ContainsBlock(const wxGridBlockCoords& other) const
+    {
+        return m_topRow <= other.m_topRow && other.m_bottomRow <= m_bottomRow &&
+               m_leftCol <= other.m_leftCol && other.m_rightCol <= m_rightCol;
+    }
 
     // Calculates the result blocks by subtracting the other block from this
     // block. splitOrientation can be wxVERTICAL or wxHORIZONTAL.

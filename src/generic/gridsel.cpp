@@ -741,19 +741,14 @@ void wxGridSelection::MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
     {
         const wxGridBlockCoords& block = blocks[n];
 
-        switch ( block.ContainBlock(newBlock) )
+        if ( block.ContainsBlock(newBlock) )
+            return;
+
+        if ( newBlock.ContainsBlock(block) )
         {
-            case 1:
-                return;
-
-            case -1:
-                blocks.erase(blocks.begin() + n);
-                n--;
-                count--;
-                break;
-
-            default:
-                break;
+            blocks.erase(blocks.begin() + n);
+            n--;
+            count--;
         }
     }
 

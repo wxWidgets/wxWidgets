@@ -1140,21 +1140,6 @@ const wxGridCornerHeaderRenderer& wxGridCellAttrProvider::GetCornerRenderer()
 // wxGridBlockCoords
 // ----------------------------------------------------------------------------
 
-int wxGridBlockCoords::ContainBlock(const wxGridBlockCoords& other) const
-{
-// returns 1, if this block contains the other,
-//        -1, if the other block contains this one,
-//         0, otherwise
-    if ( m_topRow <= other.m_topRow && other.m_bottomRow <= m_bottomRow &&
-         m_leftCol <= other.m_leftCol && other.m_rightCol <= m_rightCol )
-        return 1;
-    else if ( other.m_topRow <= m_topRow && m_bottomRow <= other.m_bottomRow &&
-              other.m_leftCol <= m_leftCol && m_rightCol <= other.m_rightCol )
-        return -1;
-
-    return 0;
-}
-
 wxGridBlockDiffResult
 wxGridBlockCoords::Difference(const wxGridBlockCoords& other,
                               int splitOrientation) const

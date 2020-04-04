@@ -1924,14 +1924,12 @@ public:
     bool ContainsCell(const wxGridCellCoords& cell) const;
 
     /**
-        Whether the blocks contain each other.
+        Check whether this block contains another one.
 
         @return
-            1, if this block contains the other,
-            -1, if the other block contains this one,
-            0, otherwise.
+            @true if @a other is entirely contained within this block.
      */
-    int ContainBlock(const wxGridBlockCoords& other) const;
+    int ContainsBlock(const wxGridBlockCoords& other) const;
 
     /**
         Calculates the result blocks by subtracting the other block from this
