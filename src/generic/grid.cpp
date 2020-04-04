@@ -10251,7 +10251,7 @@ wxGridSelectionRange wxGrid::GetSelectionRange() const
     if ( !m_selection )
         return wxGridSelectionRange();
 
-    wxVectorGridBlockCoords& blocks = m_selection->GetBlocks();
+    const wxVectorGridBlockCoords& blocks = m_selection->GetBlocks();
     return wxGridSelectionRange(blocks.begin(), blocks.end());
 }
 
