@@ -81,6 +81,11 @@ class WXDLLIMPEXP_FWD_BASE wxString;
     #define WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER 1
 #endif
 
+// enforce consistency among encoding-related macros
+#if defined wxNO_IMPLICIT_WXSTRING_ENCODING && !defined wxNO_UNSAFE_WXSTRING_CONV
+#define wxNO_UNSAFE_WXSTRING_CONV
+#endif
+
 namespace wxPrivate
 {
     template <typename T> struct wxStringAsBufHelper;
