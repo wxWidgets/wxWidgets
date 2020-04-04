@@ -1979,6 +1979,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxPGProperty* selected = GetSelection();
     wxASSERT(selected);
 
+    const wxString label = wxString::FromUTF8("\xe2\x80\xa6"); // "Horizontal ellipsis" character
 #ifdef __WXMAC__
    // Decorations are chunky on Mac, and we can't make the button square, so
    // do things a bit differently on this platform.
@@ -1987,7 +1988,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    wxSize s(25, wxDefaultCoord);
 
    wxButton* but = new wxButton();
-   but->Create(GetPanel(),wxID_ANY,wxS("..."),p,s,wxWANTS_CHARS);
+   but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS);
 
    // Now that we know the size, move to the correct position
    p.x = pos.x + sz.x - but->GetSize().x - 2;
@@ -2012,15 +2013,8 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
   #ifdef __WXMSW__
     but->Hide();
   #endif
-    but->Create(GetPanel(),wxID_ANY,wxS("..."),p,s,wxWANTS_CHARS);
-
-  #ifdef __WXGTK__
-    wxFont font = GetFont();
-    font.SetFractionalPointSize(font.GetFractionalPointSize()-2);
-    but->SetFont(font);
-  #else
+    but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS);
     but->SetFont(GetFont());
-  #endif
 #endif
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) && !selected->HasFlag(wxPG_PROP_ACTIVE_BTN) )
