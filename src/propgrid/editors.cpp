@@ -97,6 +97,8 @@
 
 #endif
 
+#define wxPG_BUTTON_BORDER_WIDTH (-wxPG_BUTTON_SIZEDEC + wxPG_NAT_BUTTON_BORDER_Y)
+
 // for odcombo
 #ifdef __WXMAC__
 #define wxPG_CHOICEXADJUST           -3 // required because wxComboCtrl reserves 3pixels for wxTextCtrl's focus ring
@@ -1981,8 +1983,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    // Decorations are chunky on Mac, and we can't make the button square, so
    // do things a bit differently on this platform.
 
-   wxPoint p(pos.x+sz.x,
-             pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
+   wxPoint p(pos.x+sz.x, pos.y- wxPG_BUTTON_BORDER_WIDTH);
    wxSize s(25, wxDefaultCoord);
 
    wxButton* but = new wxButton();
@@ -1993,8 +1994,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    but->Move(p);
 
 #else
-    wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
-        sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
+    wxSize s(sz.y + 2*wxPG_BUTTON_BORDER_WIDTH, sz.y + 2*wxPG_BUTTON_BORDER_WIDTH);
 
     // Reduce button width to line height
     if ( s.x > m_lineHeight )
@@ -2006,8 +2006,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
         s.x = 25;
 #endif
 
-    wxPoint p(pos.x+sz.x-s.x,
-        pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
+    wxPoint p(pos.x+sz.x-s.x, pos.y-wxPG_BUTTON_BORDER_WIDTH);
 
     wxButton* but = new wxButton();
   #ifdef __WXMSW__
@@ -2140,7 +2139,7 @@ bool wxPGEditorDialogAdapter::ShowDialog( wxPropertyGrid* propGrid, wxPGProperty
 // -----------------------------------------------------------------------
 
 wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
-    : wxWindow( pg->GetPanel(), wxID_ANY, wxPoint(-100,-100), wxSize(0, sz.y) ),
+    : wxWindow( pg->GetPanel(), wxID_ANY, wxPoint(-100,-100), wxSize(0, sz.y + 2*wxPG_BUTTON_BORDER_WIDTH) ),
       m_fullEditorSize(sz), m_buttonsWidth(0)
 {
     SetBackgroundColour(pg->GetCellBackgroundColour());
@@ -2149,7 +2148,7 @@ wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
 void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
                                 const wxPoint& pos )
 {
-    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y );
+    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH);
 }
 
 int wxPGMultiButton::GenId( int itemid ) const
