@@ -153,9 +153,6 @@ protected:
 
     // called by SetInactiveBitmap
     virtual void DisplayStaticImage() = 0;
-
-private:
-    wxDECLARE_ABSTRACT_CLASS(wxAnimationCtrlBase);
 };
 
 

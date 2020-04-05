@@ -180,7 +180,8 @@ void wxAnimationGTKImpl::SetPixbuf(GdkPixbufAnimation* p)
 // wxAnimationCtrl
 //-----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrl, wxAnimationCtrlBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrl, wxControl);
+
 wxBEGIN_EVENT_TABLE(wxAnimationCtrl, wxAnimationCtrlBase)
     EVT_TIMER(wxID_ANY, wxAnimationCtrl::OnTimer)
 wxEND_EVENT_TABLE()
