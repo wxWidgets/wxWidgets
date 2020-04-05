@@ -64,7 +64,6 @@ private:
 
     typedef wxAnimationImpl base_type;
     wxDECLARE_NO_COPY_CLASS(wxAnimationGTKImpl);
-    wxDECLARE_DYNAMIC_CLASS(wxAnimationGTKImpl);
 };
 
 

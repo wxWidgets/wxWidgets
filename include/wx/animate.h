@@ -37,10 +37,11 @@ enum wxAnimationImplType
     wxANIMATION_IMPL_TYPE_GENERIC
 };
 
-class WXDLLIMPEXP_CORE wxAnimationImpl : public wxObject, public wxRefCounter
+class WXDLLIMPEXP_CORE wxAnimationImpl : public wxRefCounter
 {
 public:
     wxAnimationImpl() {}
+    virtual ~wxAnimationImpl() {}
 
     virtual wxAnimationImplType GetImplType() = 0;
 

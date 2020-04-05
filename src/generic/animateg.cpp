@@ -32,22 +32,18 @@
 // wxAnimation
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationGenericImpl, wxAnimationImpl);
-
-#define M_ANIMDATA      static_cast<wxAnimationDecoder*>(m_refData)
-
 wxSize wxAnimationGenericImpl::GetSize() const
 {
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetAnimationSize();
+    return m_decoder->GetAnimationSize();
 }
 
 unsigned int wxAnimationGenericImpl::GetFrameCount() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetFrameCount();
+    return m_decoder->GetFrameCount();
 }
 
 wxImage wxAnimationGenericImpl::GetFrame(unsigned int i) const
@@ -55,7 +51,7 @@ wxImage wxAnimationGenericImpl::GetFrame(unsigned int i) const
     wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid animation") );
 
     wxImage ret;
-    if (!M_ANIMDATA->ConvertToImage(i, &ret))
+    if (!m_decoder->ConvertToImage(i, &ret))
         return wxNullImage;
     return ret;
 }
@@ -64,42 +60,42 @@ int wxAnimationGenericImpl::GetDelay(unsigned int i) const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetDelay(i);
+    return m_decoder->GetDelay(i);
 }
 
 wxPoint wxAnimationGenericImpl::GetFramePosition(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxDefaultPosition, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetFramePosition(frame);
+    return m_decoder->GetFramePosition(frame);
 }
 
 wxSize wxAnimationGenericImpl::GetFrameSize(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetFrameSize(frame);
+    return m_decoder->GetFrameSize(frame);
 }
 
 wxAnimationDisposal wxAnimationGenericImpl::GetDisposalMethod(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetDisposalMethod(frame);
+    return m_decoder->GetDisposalMethod(frame);
 }
 
 wxColour wxAnimationGenericImpl::GetTransparentColour(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetTransparentColour(frame);
+    return m_decoder->GetTransparentColour(frame);
 }
 
 wxColour wxAnimationGenericImpl::GetBackgroundColour() const
 {
     wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
 
-    return M_ANIMDATA->GetBackgroundColour();
+    return m_decoder->GetBackgroundColour();
 }
 
 bool wxAnimationGenericImpl::LoadFile(const wxString& filename, wxAnimationType type)
@@ -127,8 +123,8 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
             {
                 // do a copy of the handler from the static list which we will own
                 // as our reference data
-                m_refData = handler->Clone();
-                return M_ANIMDATA->Load(stream);
+                m_decoder = handler->Clone();
+                return m_decoder->Load(stream);
             }
         }
 
@@ -148,17 +144,25 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
 
     // do a copy of the handler from the static list which we will own
     // as our reference data
-    m_refData = handler->Clone();
+    m_decoder = handler->Clone();
 
-    if (stream.IsSeekable() && !M_ANIMDATA->CanRead(stream))
+    if (stream.IsSeekable() && !m_decoder->CanRead(stream))
     {
         wxLogError(_("Animation file is not of type %ld."), type);
         return false;
     }
     else
-        return M_ANIMDATA->Load(stream);
+        return m_decoder->Load(stream);
 }
 
+void wxAnimationGenericImpl::UnRef()
+{
+    if ( m_decoder )
+    {
+        m_decoder->DecRef();
+        m_decoder = NULL;
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxAnimationCtrl

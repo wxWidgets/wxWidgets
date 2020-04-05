@@ -53,8 +53,6 @@ void gdk_pixbuf_area_updated(GdkPixbufLoader    *loader,
 // wxAnimationGTKImpl
 //-----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationGTKImpl, wxAnimationImpl);
-
 bool wxAnimationGTKImpl::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
@@ -162,7 +160,6 @@ wxSize wxAnimationGTKImpl::GetSize() const
 
 void wxAnimationGTKImpl::UnRef()
 {
-    base_type::UnRef();
     if (m_pixbuf)
         g_object_unref(m_pixbuf);
     m_pixbuf = NULL;

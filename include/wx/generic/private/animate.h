@@ -11,8 +11,6 @@
 #ifndef _WX_GENERIC_PRIVATE_ANIMATEH__
 #define _WX_GENERIC_PRIVATE_ANIMATEH__
 
-#include "wx/bitmap.h"
-
 // ----------------------------------------------------------------------------
 // wxAnimationGenericImpl
 // ----------------------------------------------------------------------------
@@ -20,13 +18,14 @@
 class WXDLLIMPEXP_ADV wxAnimationGenericImpl : public wxAnimationImpl
 {
 public:
-    wxAnimationGenericImpl() {}
+    wxAnimationGenericImpl() : m_decoder(NULL) {}
+    virtual ~wxAnimationGenericImpl() { UnRef(); }
 
     virtual wxAnimationImplType GetImplType() wxOVERRIDE
         { return wxANIMATION_IMPL_TYPE_GENERIC; }
 
     virtual bool IsOk() const wxOVERRIDE
-        { return m_refData != NULL; }
+        { return m_decoder != NULL; }
 
     virtual unsigned int GetFrameCount() const wxOVERRIDE;
     virtual int GetDelay(unsigned int i) const wxOVERRIDE;
@@ -45,9 +44,12 @@ public:
     virtual wxColour GetTransparentColour(unsigned int frame) const;
     virtual wxColour GetBackgroundColour() const;
 
-protected:
+private:
+    void UnRef();
+
+    wxAnimationDecoder* m_decoder;
+
     wxDECLARE_NO_COPY_CLASS(wxAnimationGenericImpl);
-    wxDECLARE_DYNAMIC_CLASS(wxAnimationGenericImpl);
 };
 
 
