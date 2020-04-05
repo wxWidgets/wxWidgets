@@ -15,6 +15,7 @@
 #endif  //__BORLANDC__
 
 #if wxUSE_ANIMATIONCTRL
+
 #include "wx/animate.h"
 #include "wx/generic/private/animate.h"
 
