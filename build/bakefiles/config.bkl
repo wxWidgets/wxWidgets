@@ -132,6 +132,18 @@ Accepted values: IA64, X64, ARM64
 (AMD64 accepted as synonym for X64 but should not be used any more).
             </description>
         </option>
+        <option name="VISUALSTUDIOVERSION">
+            <default-value>$(DOLLAR)(VISUALSTUDIOVERSION)</default-value>
+            <description>
+                Visual Studio version set by the VS command prompt.
+            </description>
+        </option>
+        <option name="VISUALSTUDIOPLATFORM">
+            <default-value>$(DOLLAR)(PLATFORM)</default-value>
+            <description>
+                Platform architecture set by the VS command prompt.
+            </description>
+        </option>
     </if>
     <if cond="FORMAT!='msvc'">
         <set var="TARGET_CPU"/>
@@ -536,7 +548,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_GUI">1</set>
         <set var="USE_EXCEPTIONS">1</set>
         <set var="USE_RTTI">1</set>
-        <set var="USE_DPI_AWARE_MANIFEST">2</set>
+        <set var="USE_DPI_AWARE_MANIFEST">0</set>
         <set var="USE_THREADS">1</set>
         <set var="USE_CAIRO">0</set>
         <set var="DEBUG_INFO">$(DEBUG_INFO_DEFAULT)</set>

@@ -19,7 +19,8 @@ main top-level window.
 
 This window can be a wxFrame or a wxDialog and may contain one or more
 instances of classes such as wxPanel, wxSplitterWindow or other windows and
-controls.
+controls. These windows can be created from C++ code or loaded from resource
+definitions in @ref overview_xrc "XRC format".
 
 A frame can have a wxMenuBar, a wxToolBar, a wxStatusBar, and a wxIcon for when
 the frame is iconized.

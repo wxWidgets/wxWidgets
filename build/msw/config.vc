@@ -56,6 +56,12 @@ BUILD = debug
 # (AMD64 accepted as synonym for X64 but should not be used any more). 
 TARGET_CPU = $(CPU)
 
+# Visual Studio version set by the VS command prompt. 
+VISUALSTUDIOVERSION = $(VISUALSTUDIOVERSION)
+
+# Platform architecture set by the VS command prompt. 
+VISUALSTUDIOPLATFORM = $(PLATFORM)
+
 # Should debugging info be included in the executables? The default value
 # "default" means that debug info will be included if BUILD=debug
 # and not included if BUILD=release. [0,1,default]

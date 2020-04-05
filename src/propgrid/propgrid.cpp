@@ -1331,7 +1331,9 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
 
     m_lineHeight = m_fontHeight+(2*m_spacingy)+1;
-
+#if defined(__WXGTK3__)
+    m_lineHeight = wxMax(35, m_lineHeight);
+#endif
     // button spacing
     m_buttonSpacingY = (m_lineHeight - m_iconHeight) / 2;
     if ( m_buttonSpacingY < 0 ) m_buttonSpacingY = 0;
