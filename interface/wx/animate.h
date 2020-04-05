@@ -26,11 +26,11 @@ enum wxAnimationType
 #define wxAC_NO_AUTORESIZE       (0x0010)
 #define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
 
+
 /**
     @class wxAnimationCtrl
 
     This is a static control which displays an animation.
-
     wxAnimationCtrl API is as simple as possible and won't give you full control
     on the animation; if you need it then use wxMediaCtrl.
 
@@ -299,8 +299,8 @@ public:
     ::wxNullAnimation
 
     @see wxAnimationCtrl, @sample{animate}
- */
-class WXDLLIMPEXP_CORE wxAnimation : public wxObject
+*/
+class wxAnimation : public wxObject
 {
 public:
     /**
