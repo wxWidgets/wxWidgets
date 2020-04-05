@@ -473,7 +473,7 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
 
 
 // helpers to safely access wxAnimationGTKImpl methods
-#define ANIMATION (static_cast<wxAnimationGTKImpl*>(GetAnimImpl(m_animation)))
+#define ANIMATION (static_cast<wxAnimationGTKImpl*>(GetAnimImpl()))
 
 GdkPixbufAnimation* wxAnimationCtrl::AnimationImplGetPixbuf() const
 {

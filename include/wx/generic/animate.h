@@ -58,8 +58,6 @@ public:
         { return m_isPlaying; }
 
     void SetAnimation(const wxAnimation &animation) wxOVERRIDE;
-    wxAnimation GetAnimation() const wxOVERRIDE
-        { return m_animation; }
 
     virtual void SetInactiveBitmap(const wxBitmap &bmp) wxOVERRIDE;
 
@@ -123,7 +121,6 @@ protected:
     unsigned int  m_currentFrame;     // Current frame
     bool          m_looped;           // Looped, or not
     wxTimer       m_timer;            // The timer
-    wxAnimation   m_animation;        // The animation
 
     bool          m_isPlaying;        // Is the animation playing?
     bool          m_useWinBackgroundColour; // Use animation bg colour or window bg colour?

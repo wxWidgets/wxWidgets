@@ -623,7 +623,7 @@ void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
 // ----------------------------------------------------------------------------
 // helpers to safely access wxAnimationGenericImpl methods
 // ----------------------------------------------------------------------------
-#define ANIMATION (static_cast<wxAnimationGenericImpl*>(GetAnimImpl(m_animation)))
+#define ANIMATION (static_cast<wxAnimationGenericImpl*>(GetAnimImpl()))
 
 wxPoint wxGenericAnimationCtrl::AnimationImplGetFramePosition(unsigned int frame) const
 {

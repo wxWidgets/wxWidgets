@@ -101,7 +101,7 @@ public:
                       wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
     virtual void SetAnimation(const wxAnimation &anim) = 0;
-    virtual wxAnimation GetAnimation() const = 0;
+    wxAnimation GetAnimation() const { return m_animation; }
 
     virtual bool Play() = 0;
     virtual void Stop() = 0;
@@ -121,8 +121,11 @@ protected:
     virtual wxAnimationImpl* DoCreateAnimationImpl() const = 0;
 
     // This method allows derived classes access to wxAnimation::GetImpl().
-    wxAnimationImpl* GetAnimImpl(const wxAnimation& anim) const
-        { return anim.GetImpl(); }
+    wxAnimationImpl* GetAnimImpl() const
+        { return m_animation.GetImpl(); }
+
+    // The associated animation, possibly invalid/empty.
+    wxAnimation m_animation;
 
     // the inactive bitmap as it was set by the user
     wxBitmap m_bmpStatic;
