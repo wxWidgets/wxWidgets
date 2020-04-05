@@ -81,8 +81,6 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
     if (selmode == m_selectionMode)
         return;
 
-    // TODO: wxGridSelectRowsOrColumns?
-
     if ( m_selectionMode != wxGrid::wxGridSelectCells )
     {
         // if changing form row to column selection
@@ -94,6 +92,11 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
     }
     else
     {
+        // Preserve only fully selected rows/columns when switching from cell
+        // selection mode and discard the selected blocks that are invalid in
+        // the new selection mode.
+        const int lastCol = m_grid->GetNumberCols() - 1;
+        const int lastRow = m_grid->GetNumberRows() - 1;
         for ( size_t n = m_selection.size(); n > 0; )
         {
             n--;
@@ -103,26 +106,29 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
             const int bottomRow = block.GetBottomRow();
             const int rightCol = block.GetRightCol();
 
-            if (selmode == wxGrid::wxGridSelectRows)
+            bool valid = false;
+            switch ( selmode )
             {
-                if (leftCol != 0 || rightCol != m_grid->GetNumberCols() - 1 )
-                {
-                    m_selection.erase(m_selection.begin() + n);
-                    SelectBlockNoEvent(
-                        wxGridBlockCoords(topRow, 0,
-                                          bottomRow, m_grid->GetNumberCols() - 1));
-                }
+                case wxGrid::wxGridSelectCells:
+                    wxFAIL_MSG("unreachable");
+                    break;
+
+                case wxGrid::wxGridSelectRows:
+                    valid = leftCol == 0 && rightCol == lastCol;
+                    break;
+
+                case wxGrid::wxGridSelectColumns:
+                    valid = topRow == 0 && bottomRow == lastRow;
+                    break;
+
+                case wxGrid::wxGridSelectRowsOrColumns:
+                    valid = (leftCol == 0 && rightCol == lastCol) ||
+                            (topRow == 0 && bottomRow == lastRow);
+                    break;
             }
-            else // selmode == wxGridSelectColumns)
-            {
-                if (topRow != 0 || bottomRow != m_grid->GetNumberRows() - 1 )
-                {
-                    m_selection.erase(m_selection.begin() + n);
-                    SelectBlockNoEvent(
-                        wxGridBlockCoords(0, leftCol,
-                                          m_grid->GetNumberRows() - 1, rightCol));
-                }
-            }
+
+            if ( !valid )
+                m_selection.erase(m_selection.begin() + n);
         }
 
         m_selectionMode = selmode;

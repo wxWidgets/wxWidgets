@@ -862,9 +862,20 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     //We already test this mode in Select
     CHECK(m_grid->GetSelectionMode() == wxGrid::wxGridSelectCells);
 
+    // Select an individual cell and an entire row.
+    m_grid->SelectBlock(3, 1, 3, 1);
+    m_grid->SelectRow(5, true /* add to selection */);
+
+    // Test that after switching to row selection mode only the row remains
+    // selected.
+    m_grid->SetSelectionMode(wxGrid::wxGridSelectRows);
+    CHECK( m_grid->IsInSelection(5, 0) );
+    CHECK( m_grid->IsInSelection(5, 1) );
+    CHECK( !m_grid->IsInSelection(3, 1) );
+
     //Test row selection be selecting a single cell and checking the whole
     //row is selected
-    m_grid->SetSelectionMode(wxGrid::wxGridSelectRows);
+    m_grid->ClearSelection();
     m_grid->SelectBlock(3, 1, 3, 1);
 
     wxArrayInt selectedRows = m_grid->GetSelectedRows();
