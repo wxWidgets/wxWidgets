@@ -27,9 +27,10 @@ enum wxAnimationType
 #define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
 
 /**
-    @class wxGenericAnimationCtrl
+    @class wxAnimationCtrl
 
     This is a static control which displays an animation.
+
     wxAnimationCtrl API is as simple as possible and won't give you full control
     on the animation; if you need it then use wxMediaCtrl.
 
@@ -37,6 +38,10 @@ enum wxAnimationType
     (e.g. a "throbber").
 
     It is only available if @c wxUSE_ANIMATIONCTRL is set to 1 (the default).
+
+    For the platforms where this control has a native implementation, it may
+    have only limited support for the animation types, see @c
+    wxGenericAnimationCtrl if you need to support all of them.
 
     @beginStyleTable
     @style{wxAC_DEFAULT_STYLE}
@@ -56,14 +61,14 @@ enum wxAnimationType
 
     @see wxAnimation, @sample{animate}
 */
-class wxGenericAnimationCtrl : public wxControl
+class wxAnimationCtrl : public wxControl
 {
 public:
     /**
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxGenericAnimationCtrl(wxWindow* parent, wxWindowID id,
+    wxAnimationCtrl(wxWindow* parent, wxWindowID id,
                     const wxAnimation& anim = wxNullAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
@@ -183,82 +188,104 @@ public:
         the window's background colour as specified by the last SetInactiveBitmap() call.
     */
     virtual void Stop();
-
-
-    /**
-       Specify whether the animation's background colour is to be shown (the default),
-       or whether the window background should show through
-
-       @note This method is only effective when using the generic version of the control.
-    */
-    void SetUseWindowBackgroundColour(bool useWinBackground = true);
-
-    /**
-       Returns @c true if the window's background colour is being used.
-
-       @note This method is only effective when using the generic version of the control.
-    */
-    bool IsUsingWindowBackgroundColour() const;
-
-    /**
-       This overload of Play() lets you specify if the animation must loop or not
-
-       @note This method is only effective when using the generic version of the control.
-    */
-    bool Play(bool looped);
-
-    /**
-       Draw the current frame of the animation into given DC.
-       This is fast as current frame is always cached.
-
-       @note This method is only effective when using the generic version of the control.
-    */
-    void DrawCurrentFrame(wxDC& dc);
-
-
-    /**
-       Returns a wxBitmap with the current frame drawn in it.
-
-       @note This method is only effective when using the generic version of the control.
-    */
-    wxBitmap& GetBackingStore();
 };
 
 
 /**
-   @class wxAnimationCtrl
+    @class wxGenericAnimationCtrl
 
-   If the platform supports a native animation control (currently just wxGTK)
-   then this class implements the control via the native widget.
-   Otherwise it is virtually the same as @c wxGenericAnimationCtrl.
+    Generic implementation of wxAnimationCtrl interface.
 
-   Note that on wxGTK wxAnimationCtrl by default is capable of loading the
-   formats supported by the internally-used @c gdk-pixbuf library (typically
-   this means only @c wxANIMATION_TYPE_GIF). See @c wxGenericAnimationCtrl if
-   you need to support additional file types.
+    If the platform supports a native animation control (currently just wxGTK)
+    then this class implements the same interface internally in wxWidgets.
+    One advantage of using this class instead of the native version is that
+    this version of the control is capable of using animations in other formats
+    than the ones supported by the @c gdk-pixbuf library used by wxGTK, which
+    typically only supports @c wxANIMATION_TYPE_GIF.
 
-   @library{wxcore}
-   @category{gdi}
+    Note that to use this class you need to explicitly include the generic
+    header after including the main one before using it, i.e.
+    @code
+    #include <wx/animate.h>
+    #include <wx/generic/animate.h>
+    @endcode
+
+    @library{wxcore}
+    @category{gdi}
 */
 
-class wxAnimationCtrl : public wxGenericAnimationCtrl
+class wxGenericAnimationCtrl : public wxAnimationCtrl
 {
 public:
-    wxAnimationCtrl();
-    wxAnimationCtrl(wxWindow *parent,
-                    wxWindowID id,
+    /**
+        Initializes the object and calls Create() with
+        all the parameters.
+    */
+    wxGenericAnimationCtrl(wxWindow* parent, wxWindowID id,
                     const wxAnimation& anim = wxNullAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
                     const wxString& name = wxAnimationCtrlNameStr);
 
-    bool Create(wxWindow *parent, wxWindowID id,
+    /**
+        Creates the control with the given @a anim animation.
+
+        After control creation you must explicitly call Play() to start to play
+        the animation. Until that function won't be called, the first frame
+        of the animation is displayed.
+
+        @param parent
+            Parent window, must be non-@NULL.
+        @param id
+            The identifier for the control.
+        @param anim
+            The initial animation shown in the control.
+        @param pos
+            Initial position.
+        @param size
+            Initial size.
+        @param style
+            The window style, see wxAC_* flags.
+        @param name
+            Control name.
+
+        @return @true if the control was successfully created or @false if
+                creation failed.
+    */
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
                 const wxString& name = wxAnimationCtrlNameStr);
+
+    /**
+       Draw the current frame of the animation into given DC.
+       This is fast as current frame is always cached.
+    */
+    void DrawCurrentFrame(wxDC& dc);
+
+    /**
+       Returns a wxBitmap with the current frame drawn in it.
+    */
+    wxBitmap& GetBackingStore();
+
+    /**
+       This overload of Play() lets you specify if the animation must loop or not
+    */
+    bool Play(bool looped);
+
+    /**
+       Specify whether the animation's background colour is to be shown (the default),
+       or whether the window background should show through
+    */
+    void SetUseWindowBackgroundColour(bool useWinBackground = true);
+
+    /**
+       Returns @c true if the window's background colour is being used.
+    */
+    bool IsUsingWindowBackgroundColour() const;
 };
 
 
