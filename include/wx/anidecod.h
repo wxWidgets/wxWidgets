@@ -53,7 +53,7 @@ public:
     wxAnimationType GetType() const wxOVERRIDE
         { return wxANIMATION_TYPE_ANI; }
 
-protected:   
+protected:
     // wxAnimationDecoder pure virtual:
     virtual bool DoCanRead( wxInputStream& stream ) const wxOVERRIDE;
             // modifies current stream position (see wxAnimationDecoder::CanRead)

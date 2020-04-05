@@ -90,7 +90,7 @@ protected:
     virtual bool DoCanRead( wxInputStream& stream ) const wxOVERRIDE;
         // modifies current stream position (see wxAnimationDecoder::CanRead)
 
-private:  
+private:
     int getcode(wxInputStream& stream, int bits, int abfin);
     wxGIFErrorCode dgif(wxInputStream& stream,
                         GIFImage *img, int interl, int bits);
