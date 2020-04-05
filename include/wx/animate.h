@@ -25,7 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxAnimation;
 extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
-WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
+WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_CORE);
 
 // ----------------------------------------------------------------------------
 // wxAnimationImpl
