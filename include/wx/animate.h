@@ -146,7 +146,7 @@ protected:
 // include the platform-specific version of the wxAnimationCtrl class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/animate.h"
 
     #define wxHAS_NATIVE_ANIMATIONCTRL
