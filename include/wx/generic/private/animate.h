@@ -11,6 +11,8 @@
 #ifndef _WX_GENERIC_PRIVATE_ANIMATEH__
 #define _WX_GENERIC_PRIVATE_ANIMATEH__
 
+#include "wx/private/animate.h"
+
 // ----------------------------------------------------------------------------
 // wxAnimationGenericImpl
 // ----------------------------------------------------------------------------
@@ -21,11 +23,9 @@ public:
     wxAnimationGenericImpl() : m_decoder(NULL) {}
     virtual ~wxAnimationGenericImpl() { UnRef(); }
 
-    virtual wxAnimationImplType GetImplType() wxOVERRIDE
-        { return wxANIMATION_IMPL_TYPE_GENERIC; }
-
     virtual bool IsOk() const wxOVERRIDE
         { return m_decoder != NULL; }
+    virtual bool IsCompatibleWith(wxClassInfo* ci) const wxOVERRIDE;
 
     virtual unsigned int GetFrameCount() const wxOVERRIDE;
     virtual int GetDelay(unsigned int i) const wxOVERRIDE;

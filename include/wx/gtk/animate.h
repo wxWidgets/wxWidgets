@@ -65,10 +65,8 @@ public:     // public API
 
     bool SetBackgroundColour( const wxColour &colour ) wxOVERRIDE;
 
-    static wxAnimationImpl* CreateAnimationImpl(wxAnimationImplType implType);
-
-
 protected:
+    virtual wxAnimationImpl* DoCreateAnimationImpl() const wxOVERRIDE;
 
     virtual void DisplayStaticImage() wxOVERRIDE;
     virtual wxSize DoGetBestSize() const wxOVERRIDE;

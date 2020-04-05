@@ -27,21 +27,6 @@ enum wxAnimationType
 #define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
 
 /**
-   Animation implementation types
-
-   @since 3.1.4
-*/
-enum wxAnimationImplType
-{
-    /** With this flag wxAnimation will use a native implemetation if available. */
-    wxANIMATION_IMPL_TYPE_NATIVE,
-    /** Using this flag will cause wxAnimation to use a generic implementation. */
-    wxANIMATION_IMPL_TYPE_GENERIC
-};
-
-
-
-/**
     @class wxGenericAnimationCtrl
 
     This is a static control which displays an animation.
@@ -116,6 +101,16 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
                 const wxString& name = wxAnimationCtrlNameStr);
+
+    /**
+        Create a new animation object compatible with this control.
+
+        A wxAnimation object created using this function is always compatible
+        with controls of this type, see wxAnimation::IsCompatibleWith().
+
+        @since 3.1.4
+     */
+    wxAnimation CreateAnimation() const;
 
     /**
         Returns the animation associated with this control.
@@ -268,38 +263,6 @@ public:
 
 
 /**
-   @class wxAnimationImpl
-
-   Abstract base class for native and generic animation classes. An instance
-   of one of these classes is used by @c wxAnimation to handle the details of
-   the interface between the animation file and the animation control.
-
-   @See wxAnimationGenericImpl
-*/
-class  wxAnimationImpl : public wxObject, public wxRefCounter
-{
-public:
-    wxAnimationImpl();
-
-    virtual wxAnimationImplType GetImplType() = 0;
-
-    virtual bool IsOk() const = 0;
-
-    virtual int GetDelay(unsigned int frame) const = 0;
-
-    virtual unsigned int GetFrameCount() const = 0;
-    virtual wxImage GetFrame(unsigned int frame) const = 0;
-    virtual wxSize GetSize() const = 0;
-
-    virtual bool LoadFile(const wxString& name,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-    virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-
-};
-
-
-/**
    @class wxAnimation
 
    The @c wxAnimation class handles the interface between the animation
@@ -314,15 +277,13 @@ class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 {
 public:
     /**
-       Constructs a new animation object.
+       Constructs a new empty animation object.
 
-        @param implType
-            Specifies if the native or generic animation implementation should
-            be used. Most of the time this can be ignored, but if you want to
-            force the use of the generic back-end implementation on a platform
-            which has a native version, then pass ::wxANIMATION_IMPL_TYPE_GENERIC.
+       Call Load() to initialize it.
+
+       @see wxAnimationCtrl::CreateAnimation()
      */
-    wxAnimation(wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation();
 
     /**
        Constructs a new animation object and load the animation data from the
@@ -333,14 +294,10 @@ public:
         @param type
             One of the ::wxAnimationType values; wxANIMATION_TYPE_ANY
             means that the function should try to autodetect the filetype.
-        @param implType
-            Specifies if the native or generic animation implementation should
-            be used. Most of the time this can be ignored, but if you want to
-            force the use of the generic back-end implementation on a platform
-            which has a native version, then pass ::wxANIMATION_IMPL_TYPE_GENERIC.
+
+        @see wxAnimationCtrl::CreateAnimation()
      */
-    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY,
-                wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
        Copy constructor.
@@ -348,14 +305,22 @@ public:
     wxAnimation(const wxAnimation& other);
 
     /**
-       Returns a pointer to the backend animation implementation object.
-     */
-    wxAnimationImpl* GetImpl() const;
-
-    /**
         Returns @true if animation data is present.
     */
     bool IsOk() const;
+
+    /**
+        Returns @true if animation can be used with controls of the given type.
+
+        This function checks if this animation object can be used with
+        wxAnimationCtrl of particular type. This will be always the case for
+        the platforms where only a single wxAnimationCtrl implementation is
+        available, but not necessarily under e.g. wxGTK where both native (but
+        limited) GTK implementation and generic implementation can be used.
+
+        @since 3.1.4
+     */
+    bool IsCompatibleWith(wxClassInfo* ci) const;
 
     /**
         Returns the delay for the i-th frame in milliseconds.

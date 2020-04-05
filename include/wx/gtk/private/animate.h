@@ -11,6 +11,8 @@
 #ifndef _WX_GTK_PRIVATE_ANIMATEH__
 #define _WX_GTK_PRIVATE_ANIMATEH__
 
+#include "wx/private/animate.h"
+
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 
@@ -28,12 +30,9 @@ public:
         : m_pixbuf(NULL) {}
     ~wxAnimationGTKImpl() { UnRef(); }
 
-
-    virtual wxAnimationImplType GetImplType() wxOVERRIDE
-        { return wxANIMATION_IMPL_TYPE_NATIVE; }
-
     virtual bool IsOk() const wxOVERRIDE
         { return m_pixbuf != NULL; }
+    virtual bool IsCompatibleWith(wxClassInfo* ci) const wxOVERRIDE;
 
 
     // unfortunately GdkPixbufAnimation does not expose these info:

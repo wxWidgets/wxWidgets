@@ -53,6 +53,21 @@ void gdk_pixbuf_area_updated(GdkPixbufLoader    *loader,
 // wxAnimationGTKImpl
 //-----------------------------------------------------------------------------
 
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+
+/* static */
+wxAnimationImpl *wxAnimationImpl::CreateDefault()
+{
+    return new wxAnimationGTKImpl();
+}
+
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
+
+bool wxAnimationGTKImpl::IsCompatibleWith(wxClassInfo* ci) const
+{
+    return ci->IsKindOf(&wxAnimationCtrl::ms_classInfo);
+}
+
 bool wxAnimationGTKImpl::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
@@ -242,12 +257,17 @@ bool wxAnimationCtrl::LoadFile(const wxString &filename, wxAnimationType type)
 
 bool wxAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
 {
-    wxAnimation anim(wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation anim(CreateAnimation());
     if ( !anim.Load(stream, type) || !anim.IsOk() )
         return false;
 
     SetAnimation(anim);
     return true;
+}
+
+wxAnimationImpl* wxAnimationCtrl::DoCreateAnimationImpl() const
+{
+    return new wxAnimationGTKImpl();
 }
 
 void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
@@ -266,8 +286,8 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
         return;
     }
 
-    wxCHECK_RET(anim.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_NATIVE,
-                wxT("incorrect animation implementation type provided") );
+    wxCHECK_RET(anim.IsCompatibleWith(GetClassInfo()),
+                wxT("incompatible animation") );
 
     // copy underlying GdkPixbuf object
     m_anim = AnimationImplGetPixbuf();
@@ -452,23 +472,8 @@ void wxAnimationCtrl::OnTimer(wxTimerEvent& WXUNUSED(ev))
 }
 
 
-// static
-wxAnimationImpl* wxAnimationCtrl::CreateAnimationImpl(wxAnimationImplType implType)
-{
-    switch (implType)
-    {
-        case wxANIMATION_IMPL_TYPE_GENERIC:
-            return new wxAnimationGenericImpl();
-
-        case wxANIMATION_IMPL_TYPE_NATIVE:
-            return new wxAnimationGTKImpl();
-    }
-    return NULL;
-}
-
-
 // helpers to safely access wxAnimationGTKImpl methods
-#define ANIMATION (static_cast<wxAnimationGTKImpl*>(m_animation.GetImpl()))
+#define ANIMATION (static_cast<wxAnimationGTKImpl*>(GetAnimImpl(m_animation)))
 
 GdkPixbufAnimation* wxAnimationCtrl::AnimationImplGetPixbuf() const
 {

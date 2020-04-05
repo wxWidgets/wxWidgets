@@ -21,45 +21,12 @@
 #include "wx/bitmap.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAnimation;
+class wxAnimationImpl;
 
 extern WXDLLIMPEXP_DATA_CORE(wxAnimation) wxNullAnimation;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxAnimationCtrlNameStr[];
 
 WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_CORE);
-
-// ----------------------------------------------------------------------------
-// wxAnimationImpl
-// ----------------------------------------------------------------------------
-
-enum wxAnimationImplType
-{
-    wxANIMATION_IMPL_TYPE_NATIVE,
-    wxANIMATION_IMPL_TYPE_GENERIC
-};
-
-class WXDLLIMPEXP_CORE wxAnimationImpl : public wxRefCounter
-{
-public:
-    wxAnimationImpl() {}
-    virtual ~wxAnimationImpl() {}
-
-    virtual wxAnimationImplType GetImplType() = 0;
-
-    virtual bool IsOk() const = 0;
-
-    // can be -1
-    virtual int GetDelay(unsigned int frame) const = 0;
-
-    virtual unsigned int GetFrameCount() const = 0;
-    virtual wxImage GetFrame(unsigned int frame) const = 0;
-    virtual wxSize GetSize() const = 0;
-
-    virtual bool LoadFile(const wxString& name,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-    virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-};
-
 
 // ----------------------------------------------------------------------------
 // wxAnimation
@@ -68,18 +35,14 @@ public:
 class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 {
 public:
-    explicit wxAnimation(wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
-    explicit wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY,
-                wxAnimationImplType implType = wxANIMATION_IMPL_TYPE_NATIVE);
+    wxAnimation();
+    explicit wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
     wxAnimation(const wxAnimation& other);
 
     wxAnimation& operator=(const wxAnimation& other);
 
-    wxAnimationImpl* GetImpl() const
-        { return static_cast<wxAnimationImpl*>(m_refData); }
-
-    bool IsOk() const
-        { return GetImpl() && GetImpl()->IsOk(); }
+    bool IsOk() const;
+    bool IsCompatibleWith(wxClassInfo* ci) const;
 
     int GetDelay(unsigned int frame) const;
     unsigned int GetFrameCount() const;
@@ -99,7 +62,17 @@ public:
     static void InitStandardHandlers();
 
 protected:
+    wxAnimationImpl* GetImpl() const;
+
+private:
     static wxAnimationDecoderList sm_handlers;
+
+    // Ctor used by wxAnimationCtrl::CreateAnimation() only.
+    explicit wxAnimation(wxAnimationImpl* impl);
+
+    // Give it permission to create objects of this class using specific impl
+    // and access our GetImpl().
+    friend class wxAnimationCtrlBase;
 
     wxDECLARE_DYNAMIC_CLASS(wxAnimation);
 };
@@ -141,7 +114,16 @@ public:
     wxBitmap GetInactiveBitmap() const
         { return m_bmpStatic; }
 
+    wxAnimation CreateAnimation() const
+        { return wxAnimation(DoCreateAnimationImpl()); }
+
 protected:
+    virtual wxAnimationImpl* DoCreateAnimationImpl() const = 0;
+
+    // This method allows derived classes access to wxAnimation::GetImpl().
+    wxAnimationImpl* GetAnimImpl(const wxAnimation& anim) const
+        { return anim.GetImpl(); }
+
     // the inactive bitmap as it was set by the user
     wxBitmap m_bmpStatic;
 

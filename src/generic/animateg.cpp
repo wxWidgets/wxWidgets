@@ -32,6 +32,21 @@
 // wxAnimation
 // ----------------------------------------------------------------------------
 
+#ifndef wxHAS_NATIVE_ANIMATIONCTRL
+
+/* static */
+wxAnimationImpl *wxAnimationImpl::CreateDefault()
+{
+    return new wxAnimationGenericImpl();
+}
+
+#endif // !wxHAS_NATIVE_ANIMATIONCTRL
+
+bool wxAnimationGenericImpl::IsCompatibleWith(wxClassInfo* ci) const
+{
+    return ci->IsKindOf(&wxGenericAnimationCtrl::ms_classInfo);
+}
+
 wxSize wxAnimationGenericImpl::GetSize() const
 {
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
@@ -219,12 +234,17 @@ bool wxGenericAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType 
 
 bool wxGenericAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
 {
-    wxAnimation anim(wxANIMATION_IMPL_TYPE_GENERIC);
+    wxAnimation anim(CreateAnimation());
     if ( !anim.Load(stream, type) || !anim.IsOk() )
         return false;
 
     SetAnimation(anim);
     return true;
+}
+
+wxAnimationImpl* wxGenericAnimationCtrl::DoCreateAnimationImpl() const
+{
+    return new wxAnimationGenericImpl();
 }
 
 wxSize wxGenericAnimationCtrl::DoGetBestSize() const
@@ -248,8 +268,8 @@ void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
         return;
     }
 
-    wxCHECK_RET(animation.GetImpl()->GetImplType() == wxANIMATION_IMPL_TYPE_GENERIC,
-                wxT("incorrect animation implementation type provided") );
+    wxCHECK_RET(animation.IsCompatibleWith(GetClassInfo()),
+                wxT("incompatible animation") );
 
     if (AnimationImplGetBackgroundColour() == wxNullColour)
         SetUseWindowBackgroundColour();
@@ -601,18 +621,9 @@ void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
 }
 
 // ----------------------------------------------------------------------------
-
-//static
-wxAnimationImpl* wxGenericAnimationCtrl::CreateAnimationImpl(wxAnimationImplType WXUNUSED(implType))
-{
-    // For the generic widget we always use the generic impl and ignore the given type
-    return new wxAnimationGenericImpl();
-}
-
-// ----------------------------------------------------------------------------
 // helpers to safely access wxAnimationGenericImpl methods
 // ----------------------------------------------------------------------------
-#define ANIMATION (static_cast<wxAnimationGenericImpl*>(m_animation.GetImpl()))
+#define ANIMATION (static_cast<wxAnimationGenericImpl*>(GetAnimImpl(m_animation)))
 
 wxPoint wxGenericAnimationCtrl::AnimationImplGetFramePosition(unsigned int frame) const
 {

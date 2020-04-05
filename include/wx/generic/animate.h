@@ -92,9 +92,8 @@ public:     // extended API specific to this implementation of wxAnimateCtrl
     wxBitmap& GetBackingStore()
         { return m_backingStore; }
 
-    static wxAnimationImpl* CreateAnimationImpl(wxAnimationImplType implType);
-
 protected:      // internal utilities
+    virtual wxAnimationImpl* DoCreateAnimationImpl() const wxOVERRIDE;
 
     // resize this control to fit m_animation
     void FitToAnimation();

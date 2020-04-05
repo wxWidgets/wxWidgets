@@ -33,6 +33,8 @@
 #include "wx/gifdecod.h"
 #include "wx/anidecod.h"
 
+#include "wx/private/animate.h"
+
 // global objects
 const char wxAnimationCtrlNameStr[] = "animationctrl";
 wxAnimation wxNullAnimation;
@@ -53,15 +55,19 @@ wxAnimationDecoderList wxAnimation::sm_handlers;
 // wxAnimation
 // ----------------------------------------------------------------------------
 
-wxAnimation::wxAnimation(wxAnimationImplType implType)
+wxAnimation::wxAnimation()
 {
-    m_refData = wxAnimationCtrl::CreateAnimationImpl(implType);
+    m_refData = wxAnimationImpl::CreateDefault();
 }
 
-wxAnimation::wxAnimation(const wxString &name, wxAnimationType type,
-                         wxAnimationImplType implType)
+wxAnimation::wxAnimation(wxAnimationImpl* impl)
 {
-    m_refData = wxAnimationCtrl::CreateAnimationImpl(implType);
+    m_refData = impl;
+}
+
+wxAnimation::wxAnimation(const wxString &name, wxAnimationType type)
+{
+    m_refData = wxAnimationImpl::CreateDefault();
     LoadFile(name, type);
 }
 
@@ -78,6 +84,23 @@ wxAnimation& wxAnimation::operator=(const wxAnimation& other)
         Ref(other);
     }
     return *this;
+}
+
+wxAnimationImpl* wxAnimation::GetImpl() const
+{
+    return static_cast<wxAnimationImpl*>(m_refData);
+}
+
+bool wxAnimation::IsOk() const
+{
+    return GetImpl() && GetImpl()->IsOk();
+}
+
+bool wxAnimation::IsCompatibleWith(wxClassInfo* ci) const
+{
+    wxCHECK_MSG( IsOk(), false, wxT("invalid animation") );
+
+    return GetImpl()->IsCompatibleWith(ci);
 }
 
 int wxAnimation::GetDelay(unsigned int frame) const

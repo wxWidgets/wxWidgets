@@ -316,14 +316,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     {
         wxString filename(dialog.GetPath());
 
-        wxAnimation temp
-#ifdef wxHAS_NATIVE_ANIMATIONCTRL
-            (GetMenuBar()->IsChecked(ID_USE_GENERIC)
-                ? wxANIMATION_IMPL_TYPE_GENERIC
-                : wxANIMATION_IMPL_TYPE_NATIVE)
-#endif // wxHAS_NATIVE_ANIMATIONCTRL
-            ;
-
+        wxAnimation temp(m_animationCtrl->CreateAnimation());
         if (!temp.LoadFile(filename))
         {
             wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
