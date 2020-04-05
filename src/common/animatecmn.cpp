@@ -40,7 +40,7 @@ wxAnimation wxNullAnimation;
 wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxObject);
 wxIMPLEMENT_ABSTRACT_CLASS(wxAnimationCtrlBase, wxControl);
 
-#if !defined(__WXGTK20__)
+#if !defined(wxHAS_NATIVE_ANIMATIONCTRL)
     // In this case the "native" ctrl is the generic ctrl. See wx/animate.h
     wxIMPLEMENT_CLASS(wxAnimationCtrl, wxGenericAnimationCtrl);
 #endif

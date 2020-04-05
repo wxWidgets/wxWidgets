@@ -167,6 +167,8 @@ private:
 
 #if defined(__WXGTK20__)
     #include "wx/gtk/animate.h"
+
+    #define wxHAS_NATIVE_ANIMATIONCTRL
 #else
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl
     {
