@@ -2767,10 +2767,12 @@ private:
                   wxGridWindow *gridWindow) const;
     int PosToEdgeOfLine(int pos, const wxGridOperations& oper) const;
 
-    bool DoMoveCursor(bool expandSelection,
+    void DoMoveCursorFromKeyboard(const wxKeyboardState& kbdState,
+                                  const wxGridDirectionOperations& diroper);
+    bool DoMoveCursor(const wxKeyboardState& kbdState,
                       const wxGridDirectionOperations& diroper);
     bool DoMoveCursorByPage(const wxGridDirectionOperations& diroper);
-    bool DoMoveCursorByBlock(bool expandSelection,
+    bool DoMoveCursorByBlock(const wxKeyboardState& kbdState,
                              const wxGridDirectionOperations& diroper);
     void AdvanceToNextNonEmpty(wxGridCellCoords& coords,
                                const wxGridDirectionOperations& diroper);

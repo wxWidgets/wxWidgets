@@ -5650,31 +5650,35 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
         switch ( event.GetKeyCode() )
         {
             case WXK_UP:
-                if ( event.ControlDown() )
-                    MoveCursorUpBlock( event.ShiftDown() );
-                else
-                    MoveCursorUp( event.ShiftDown() );
+                DoMoveCursorFromKeyboard
+                (
+                    event,
+                    wxGridBackwardOperations(this, wxGridRowOperations())
+                );
                 break;
 
             case WXK_DOWN:
-                if ( event.ControlDown() )
-                    MoveCursorDownBlock( event.ShiftDown() );
-                else
-                    MoveCursorDown( event.ShiftDown() );
+                DoMoveCursorFromKeyboard
+                (
+                    event,
+                    wxGridForwardOperations(this, wxGridRowOperations())
+                );
                 break;
 
             case WXK_LEFT:
-                if ( event.ControlDown() )
-                    MoveCursorLeftBlock( event.ShiftDown() );
-                else
-                    MoveCursorLeft( event.ShiftDown() );
+                DoMoveCursorFromKeyboard
+                (
+                    event,
+                    wxGridBackwardOperations(this, wxGridColumnOperations())
+                );
                 break;
 
             case WXK_RIGHT:
-                if ( event.ControlDown() )
-                    MoveCursorRightBlock( event.ShiftDown() );
-                else
-                    MoveCursorRight( event.ShiftDown() );
+                DoMoveCursorFromKeyboard
+                (
+                    event,
+                    wxGridForwardOperations(this, wxGridColumnOperations())
+                );
                 break;
 
             case WXK_RETURN:
@@ -7893,14 +7897,42 @@ int wxGrid::GetFirstFullyVisibleColumn() const
 // ------ Grid cursor movement functions
 //
 
+namespace
+{
+
+// Helper function creating dummy wxKeyboardState object corresponding to the
+// value of "expandSelection" flag specified to our public MoveCursorXXX().
+// This function only exists to avoid breaking compatibility in the public API,
+// all internal code should use the real, not dummy, wxKeyboardState.
+inline
+wxKeyboardState DummyKeyboardState(bool expandSelection)
+{
+    // Normally "expandSelection" is set depending on whether Shift is pressed
+    // or not, but here we reconstruct the keyboard state from this flag.
+    return wxKeyboardState(false /* control */, expandSelection /* shift */);
+}
+
+} // anonymous namespace
+
+void
+wxGrid::DoMoveCursorFromKeyboard(const wxKeyboardState& kbdState,
+                                 const wxGridDirectionOperations& diroper)
+{
+    if ( kbdState.ControlDown() )
+        DoMoveCursorByBlock(kbdState, diroper);
+    else
+        DoMoveCursor(kbdState, diroper);
+}
+
 bool
-wxGrid::DoMoveCursor(bool expandSelection,
+wxGrid::DoMoveCursor(const wxKeyboardState& kbdState,
                      const wxGridDirectionOperations& diroper)
 {
     if ( m_currentCellCoords == wxGridNoCellCoords )
         return false;
 
-    if ( expandSelection )
+    // Expand selection if Shift is pressed.
+    if ( kbdState.ShiftDown() )
     {
         if ( !m_selection )
             return false;
@@ -7925,7 +7957,7 @@ wxGrid::DoMoveCursor(bool expandSelection,
 
         if ( m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
                                                      coords,
-                                                     wxKeyboardState()) )
+                                                     kbdState) )
         {
             // We want to show a line (a row or a column), not the end of
             // the selection block. And do it only if the selection block
@@ -7951,25 +7983,25 @@ wxGrid::DoMoveCursor(bool expandSelection,
 
 bool wxGrid::MoveCursorUp(bool expandSelection)
 {
-    return DoMoveCursor(expandSelection,
+    return DoMoveCursor(DummyKeyboardState(expandSelection),
                         wxGridBackwardOperations(this, wxGridRowOperations()));
 }
 
 bool wxGrid::MoveCursorDown(bool expandSelection)
 {
-    return DoMoveCursor(expandSelection,
+    return DoMoveCursor(DummyKeyboardState(expandSelection),
                         wxGridForwardOperations(this, wxGridRowOperations()));
 }
 
 bool wxGrid::MoveCursorLeft(bool expandSelection)
 {
-    return DoMoveCursor(expandSelection,
+    return DoMoveCursor(DummyKeyboardState(expandSelection),
                         wxGridBackwardOperations(this, wxGridColumnOperations()));
 }
 
 bool wxGrid::MoveCursorRight(bool expandSelection)
 {
-    return DoMoveCursor(expandSelection,
+    return DoMoveCursor(DummyKeyboardState(expandSelection),
                         wxGridForwardOperations(this, wxGridColumnOperations()));
 }
 
@@ -8022,7 +8054,7 @@ wxGrid::AdvanceToNextNonEmpty(wxGridCellCoords& coords,
 }
 
 bool
-wxGrid::DoMoveCursorByBlock(bool expandSelection,
+wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
                             const wxGridDirectionOperations& diroper)
 {
     if ( !m_table || m_currentCellCoords == wxGridNoCellCoords )
@@ -8061,15 +8093,14 @@ wxGrid::DoMoveCursorByBlock(bool expandSelection,
         }
     }
 
-    if ( expandSelection )
+    if ( kbdState.ShiftDown() )
     {
         // TODO: Select the next block every time (not the same as now).
-        // And provide the keyboard state.
         if ( m_selection )
         {
             if ( m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
                                                          coords,
-                                                         wxKeyboardState()) )
+                                                         kbdState) )
             {
                 // We want to show a line (a row or a column), not the end of
                 // the selection block. And do it only if the selection block
@@ -8090,7 +8121,7 @@ wxGrid::DoMoveCursorByBlock(bool expandSelection,
 bool wxGrid::MoveCursorUpBlock(bool expandSelection)
 {
     return DoMoveCursorByBlock(
-                expandSelection,
+                DummyKeyboardState(expandSelection),
                 wxGridBackwardOperations(this, wxGridRowOperations())
            );
 }
@@ -8098,7 +8129,7 @@ bool wxGrid::MoveCursorUpBlock(bool expandSelection)
 bool wxGrid::MoveCursorDownBlock( bool expandSelection )
 {
     return DoMoveCursorByBlock(
-                expandSelection,
+                DummyKeyboardState(expandSelection),
                 wxGridForwardOperations(this, wxGridRowOperations())
            );
 }
@@ -8106,7 +8137,7 @@ bool wxGrid::MoveCursorDownBlock( bool expandSelection )
 bool wxGrid::MoveCursorLeftBlock( bool expandSelection )
 {
     return DoMoveCursorByBlock(
-                expandSelection,
+                DummyKeyboardState(expandSelection),
                 wxGridBackwardOperations(this, wxGridColumnOperations())
            );
 }
@@ -8114,7 +8145,7 @@ bool wxGrid::MoveCursorLeftBlock( bool expandSelection )
 bool wxGrid::MoveCursorRightBlock( bool expandSelection )
 {
     return DoMoveCursorByBlock(
-                expandSelection,
+                DummyKeyboardState(expandSelection),
                 wxGridForwardOperations(this, wxGridColumnOperations())
            );
 }
