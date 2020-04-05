@@ -92,14 +92,6 @@ public:
     wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
 
 private:
-    int BlockContain( int topRow1, int leftCol1,
-                       int bottomRow1, int rightCol1,
-                       int topRow2, int leftCol2,
-                       int bottomRow2, int rightCol2 );
-      // returns 1, if Block1 contains Block2,
-      //        -1, if Block2 contains Block1,
-      //         0, otherwise
-
     void SelectBlockNoEvent(const wxGridBlockCoords& block)
     {
         SelectBlock(block.GetTopRow(), block.GetLeftCol(),

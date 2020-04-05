@@ -697,24 +697,6 @@ wxArrayInt wxGridSelection::GetColSelection() const
     return result;
 }
 
-int wxGridSelection::BlockContain( int topRow1, int leftCol1,
-                                   int bottomRow1, int rightCol1,
-                                   int topRow2, int leftCol2,
-                                   int bottomRow2, int rightCol2 )
-// returns 1, if Block1 contains Block2,
-//        -1, if Block2 contains Block1,
-//         0, otherwise
-{
-    if ( topRow1 <= topRow2 && bottomRow2 <= bottomRow1 &&
-         leftCol1 <= leftCol2 && rightCol2 <= rightCol1 )
-        return 1;
-    else if ( topRow2 <= topRow1 && bottomRow1 <= bottomRow2 &&
-              leftCol2 <= leftCol1 && rightCol1 <= rightCol2 )
-        return -1;
-
-    return 0;
-}
-
 void
 wxGridSelection::Select(const wxGridBlockCoords& block,
                         const wxKeyboardState& kbd, bool sendEvent)
