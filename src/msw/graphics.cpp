@@ -1109,8 +1109,8 @@ wxGDIPlusFontData::Init(const wxString& name,
         for ( int j = 0 ; j < found; j++ )
         {
             wchar_t familyName[LF_FACESIZE];
-            int rc = gs_pFontFamily[j].GetFamilyName(familyName);
-            if ( rc == 0 && name == familyName )
+            Status rc = gs_pFontFamily[j].GetFamilyName(familyName);
+            if ( rc == Ok && name == familyName )
             {
                 // Store reference to the cached FontFamily to avoid calling Font::GetFamily()
                 // for private font because calling this method apparently is messing up something
