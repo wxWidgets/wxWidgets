@@ -1639,6 +1639,10 @@ GetInfoFromLCID(LCID lcid,
             }
             break;
 
+        case wxLOCALE_GROUPING:
+            if ( ::GetLocaleInfo(lcid, LOCALE_SGROUPING, buf, WXSIZEOF(buf)) )
+                str = buf;
+            break;
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_TIME_FMT:
@@ -1712,6 +1716,9 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             case wxLOCALE_DECIMAL_POINT:
                 return ".";
 
+            case wxLOCALE_GROUPING:
+                return "3;0";
+
             case wxLOCALE_SHORT_DATE_FMT:
                 return "%m/%d/%y";
 
@@ -1768,6 +1775,10 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
         case wxLOCALE_DECIMAL_POINT:
             cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
+            break;
+
+        case wxLOCALE_GROUPING:
+            cfstr = (CFStringRef) "3;0";
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1920,12 +1931,20 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;
 
-
         case wxLOCALE_DECIMAL_POINT:
             if ( cat == wxLOCALE_CAT_NUMBER )
                 return lc->decimal_point;
             else if ( cat == wxLOCALE_CAT_MONEY )
                 return lc->mon_decimal_point;
+
+            wxFAIL_MSG( "invalid wxLocaleCategory" );
+            break;
+
+        case wxLOCALE_GROUPING:
+            if ( cat == wxLOCALE_CAT_NUMBER )
+                return lc->grouping;
+            else if ( cat == wxLOCALE_CAT_MONEY )
+                return lc->mon_grouping;
 
             wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;
