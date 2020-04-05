@@ -432,7 +432,7 @@ GridFrame::GridFrame()
     grid = new wxGrid( this,
                        wxID_ANY,
                        wxPoint( 0, 0 ),
-                       FromDIP(wxSize( 400, 300 )) );
+                       FromDIP(wxSize( 800, 450 )) );
 
 
 #if wxUSE_LOG
@@ -440,7 +440,7 @@ GridFrame::GridFrame()
                              wxID_ANY,
                              wxEmptyString,
                              wxDefaultPosition,
-                             wxDefaultSize,
+                             wxSize(-1, 8*GetCharHeight()),
                              wxTE_MULTILINE );
 
     logger = new wxLogTextCtrl( logWin );
