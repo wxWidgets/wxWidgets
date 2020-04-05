@@ -17,6 +17,7 @@
 #if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"
+#include "wx/generic/animate.h"
 #include "wx/generic/private/animate.h"
 
 #ifndef WX_PRECOMP

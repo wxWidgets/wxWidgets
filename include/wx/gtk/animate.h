@@ -21,7 +21,7 @@ typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 // Resize to animation size if this is set
 #define wxAN_FIT_ANIMATION       0x0010
 
-class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxGenericAnimationCtrl
+class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxAnimationCtrlBase
 {
 public:
     wxAnimationCtrl() { Init(); }

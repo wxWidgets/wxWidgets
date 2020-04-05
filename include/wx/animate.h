@@ -146,13 +146,13 @@ protected:
 // include the platform-specific version of the wxAnimationCtrl class
 // ----------------------------------------------------------------------------
 
-#include "wx/generic/animate.h"
-
 #if defined(__WXGTK20__)
     #include "wx/gtk/animate.h"
 
     #define wxHAS_NATIVE_ANIMATIONCTRL
 #else
+    #include "wx/generic/animate.h"
+
     class WXDLLIMPEXP_ADV wxAnimationCtrl : public wxGenericAnimationCtrl
     {
     public:

@@ -42,6 +42,9 @@
     #error Cannot compile this sample if wxAnimationCtrl is not enabled
 #endif
 
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    #include "wx/generic/animate.h"
+#endif
 
 wxIMPLEMENT_APP(MyApp);
 
