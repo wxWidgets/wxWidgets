@@ -22,6 +22,7 @@
 #include "wx/intl.h"
 
 #include <locale.h> // for setlocale and LC_ALL
+#include <limits.h> // for CHAR_MAX
 
 // ----------------------------------------------------------------------------
 // local helpers
@@ -140,10 +141,11 @@ wxChar wxNumberFormatter::GetDecimalSeparator()
 #endif // wxUSE_INTL/!wxUSE_INTL
 }
 
-bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
+bool wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr)
 {
 #if wxUSE_INTL
     static wxChar s_thousandsSeparator = 0;
+    static wxString s_grouping;
     static LocaleId s_localeUsedForInit;
 
     if ( s_localeUsedForInit.NotInitializedOrHasChanged() )
@@ -153,6 +155,10 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
         if ( s.length() == 1 )
         {
             s_thousandsSeparator = s[0];
+            const wxString
+                g = wxLocale::GetInfo(wxLOCALE_GROUPING, wxLOCALE_CAT_NUMBER);
+            if ( g[0] != '\0' || g[0] != CHAR_MAX )
+                s_grouping = g;
         }
         //else: Unlike above it's perfectly fine for the thousands separator to
         //      be empty if grouping is not used, so just leave it as 0.
@@ -162,11 +168,16 @@ bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
         return false;
 
     if ( sep )
+    {
         *sep = s_thousandsSeparator;
+        if ( gr )
+            *gr = s_grouping;
+    }
 
     return true;
 #else // !wxUSE_INTL
     wxUnusedVar(sep);
+    wxUnusedVar(gr);
     return false;
 #endif // wxUSE_INTL/!wxUSE_INTL
 }
@@ -221,7 +232,8 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
         return;
 
     wxChar thousandsSep;
-    if ( !GetThousandsSeparatorIfUsed(&thousandsSep) )
+    wxString grouping;
+    if ( !GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) )
         return;
 
     size_t pos = s.find(GetDecimalSeparator());
@@ -235,19 +247,27 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
     // before their start.
     const size_t start = s.find_first_of("0123456789");
 
-    // We currently group digits by 3 independently of the locale. This is not
-    // the right thing to do and we should use lconv::grouping (under POSIX)
-    // and GetLocaleInfo(LOCALE_SGROUPING) (under MSW) to get information about
-    // the correct grouping to use. This is something that needs to be done at
-    // wxLocale level first and then used here in the future (TODO).
+    // We get the grouping style from locale. This is represented by a character
+    // array where each element is the number of digits in a group starting
+    // from the right of the number. If the last element in the grouping is a 0
+    // then the last but one element is the number used for grouping the
+    // remaining digits. If the last element is CHAR_MAX then no grouping is
+    // done for the remaining digits.
 
-    wxString g = wxLocale::GetInfo(wxLOCALE_GROUPING, wxLOCALE_CAT_NUMBER);
-    const size_t GROUP_LEN = 3;
-
-    while ( pos > start + GROUP_LEN )
+    size_t i = 0;
+    while((grouping[i] != '\0') && (grouping[i] != CHAR_MAX) && (pos > start + (size_t)grouping[i]))
     {
-        pos -= GROUP_LEN;
+        pos -= (size_t)grouping[i];
         s.insert(pos, thousandsSep);
+        i++;
+    }
+    if ( grouping[i] == '\0' && i > 0 )
+    {
+        while ( pos > start + (size_t)grouping[i - 1] )
+        {
+            pos -= (size_t)grouping[i - 1];
+            s.insert(pos, thousandsSep);
+        }
     }
 }
 
@@ -283,7 +303,8 @@ void wxNumberFormatter::RemoveTrailingZeroes(wxString& s)
 void wxNumberFormatter::RemoveThousandsSeparators(wxString& s)
 {
     wxChar thousandsSep;
-    if ( !GetThousandsSeparatorIfUsed(&thousandsSep) )
+    wxString grouping;
+    if ( !GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) )
         return;
 
     s.Replace(wxString(thousandsSep), wxString());

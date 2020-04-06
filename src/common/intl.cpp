@@ -1717,7 +1717,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
                 return ".";
 
             case wxLOCALE_GROUPING:
-                return "3;0";
+                return "\3\0";
 
             case wxLOCALE_SHORT_DATE_FMT:
                 return "%m/%d/%y";

@@ -121,6 +121,6 @@ public:
             if it is used by the current locale. May be @NULL if only the
             function return value is needed.
      */
-    static bool GetThousandsSeparatorIfUsed(wxChar *sep);
+    static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
 
 };

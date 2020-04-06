@@ -388,6 +388,9 @@
 #ifndef SUBLANG_ENGLISH_ZIMBABWE
 #define SUBLANG_ENGLISH_ZIMBABWE SUBLANG_DEFAULT
 #endif
+#ifndef SUBLANG_ENGLISH_INDIA
+#define SUBLANG_ENGLISH_INDIA SUBLANG_DEFAULT
+#endif
 #ifndef SUBLANG_FRENCH
 #define SUBLANG_FRENCH SUBLANG_DEFAULT
 #endif
@@ -628,6 +631,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ENGLISH_SOUTH_AFRICA,       "en_ZA", LANG_ENGLISH   , SUBLANG_ENGLISH_SOUTH_AFRICA      , wxLayout_LeftToRight, "English (South Africa)")
    LNG(wxLANGUAGE_ENGLISH_TRINIDAD,           "en_TT", LANG_ENGLISH   , SUBLANG_ENGLISH_TRINIDAD          , wxLayout_LeftToRight, "English (Trinidad)")
    LNG(wxLANGUAGE_ENGLISH_ZIMBABWE,           "en_ZW", LANG_ENGLISH   , SUBLANG_ENGLISH_ZIMBABWE          , wxLayout_LeftToRight, "English (Zimbabwe)")
+   LNG(wxLANGUAGE_ENGLISH_INDIA,              "en_IN", LANG_ENGLISH   , SUBLANG_ENGLISH_INDIA             , wxLayout_LeftToRight, "English (India)")
    LNG(wxLANGUAGE_ESPERANTO,                  "eo"   , 0              , 0                                 , wxLayout_LeftToRight, "Esperanto")
    LNG(wxLANGUAGE_ESTONIAN,                   "et_EE", LANG_ESTONIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Estonian")
    LNG(wxLANGUAGE_FAEROESE,                   "fo_FO", LANG_FAEROESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Faeroese")

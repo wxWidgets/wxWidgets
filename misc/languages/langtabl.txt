@@ -69,6 +69,7 @@ wxLANGUAGE_ENGLISH_PHILIPPINES         en_PH  LANG_ENGLISH     SUBLANG_ENGLISH_P
 wxLANGUAGE_ENGLISH_SOUTH_AFRICA        en_ZA  LANG_ENGLISH     SUBLANG_ENGLISH_SOUTH_AFRICA        LTR    "English (South Africa)"
 wxLANGUAGE_ENGLISH_TRINIDAD            en_TT  LANG_ENGLISH     SUBLANG_ENGLISH_TRINIDAD            LTR    "English (Trinidad)"
 wxLANGUAGE_ENGLISH_ZIMBABWE            en_ZW  LANG_ENGLISH     SUBLANG_ENGLISH_ZIMBABWE            LTR    "English (Zimbabwe)"
+wxLANGUAGE_ENGLISH_INDIA               en_IN  LANG_ENGLISH     SUBLANG_ENGLISH_INDIA               LTR    "English (India)"
 wxLANGUAGE_ESPERANTO                   eo     -                -                                   LTR    "Esperanto"
 wxLANGUAGE_ESTONIAN                    et_EE  LANG_ESTONIAN    SUBLANG_DEFAULT                     LTR    "Estonian"
 wxLANGUAGE_FAEROESE                    fo_FO  LANG_FAEROESE    SUBLANG_DEFAULT                     LTR    "Faeroese"
