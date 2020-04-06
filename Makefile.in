@@ -2266,10 +2266,6 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 	wx/msw/joystick.h \
 	wx/msw/taskbar.h
 @COND_PLATFORM_WIN32_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@UNIV_PLATFORM_HDR \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/generic/animate.h
-@COND_TOOLKIT_MSW@UNIV_PLATFORM_HDR = wx/generic/animate.h
-@COND_TOOLKIT_X11@UNIV_PLATFORM_HDR = wx/generic/animate.h
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
 @COND_PLATFORM_MACOSX_1@WEBVIEW_HDR_PLATFORM = \
 @COND_PLATFORM_MACOSX_1@	wx/osx/webviewhistoryitem_webkit.h \
@@ -2654,7 +2650,6 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/fswatcher.h
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
 COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
-	wx/generic/animate.h \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
 	wx/generic/icon.h \
@@ -2916,7 +2911,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 	wx/gtk1/textctrl.h \
 	wx/gtk1/tglbtn.h \
 	wx/gtk1/treectrl.h \
-	wx/generic/animate.h \
 	wx/generic/activityindicator.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
@@ -3177,9 +3171,7 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/tglbtn.h \
 	wx/motif/toolbar.h \
 	wx/motif/toplevel.h \
-	wx/motif/window.h \
-	wx/generic/animate.h \
-	wx/generic/animateanimate.h
+	wx/motif/window.h
 @COND_TOOLKIT_MOTIF@GUI_HDR = $(COND_TOOLKIT_MOTIF_GUI_HDR)
 COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -3280,7 +3272,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/rt/utils.h \
 	wx/msw/hyperlink.h \
 	wx/msw/bmpcbox.h \
-	wx/generic/animate.h \
 	wx/msw/commandlinkbutton.h \
 	wx/msw/datetimectrl.h \
 	wx/msw/timectrl.h \
@@ -3417,7 +3408,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/generic/region.h \
 	wx/osx/cocoa/stdpaths.h \
 	wx/osx/sound.h \
-	wx/generic/animate.h \
 	wx/osx/dvrenderer.h \
 	wx/osx/cocoa/dataview.h \
 	wx/osx/dvrenderers.h \
@@ -3524,7 +3514,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/iphone/evtloop.h \
 	wx/osx/iphone/private.h \
 	wx/generic/region.h \
-	wx/generic/animate.h \
 	wx/osx/sound.h
 @COND_TOOLKIT_OSX_IPHONE@GUI_HDR = $(COND_TOOLKIT_OSX_IPHONE_GUI_HDR)
 COND_TOOLKIT_QT_GUI_HDR =  \
@@ -3607,7 +3596,6 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/generic/fontpickerg.h \
 	wx/generic/caret.h \
 	wx/qt/calctrl.h \
-	wx/generic/animate.h \
 	wx/qt/dvrenderer.h \
 	wx/qt/taskbar.h \
 	wx/generic/activityindicator.h \
@@ -3626,9 +3614,7 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 @COND_TOOLKIT_X11@MEDIA_PLATFORM_HDR = 
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
 COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
-	$(UNIV_PLATFORM_HDR) \
 	wx/generic/accel.h \
-	wx/generic/animate.h \
 	wx/generic/clrpickerg.h \
 	wx/generic/collpaneg.h \
 	wx/generic/ctrlsub.h \
@@ -3723,6 +3709,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/gbsizer.h \
 	wx/gdicmn.h \
 	wx/generic/accel.h \
+	wx/generic/animate.h \
 	wx/generic/buttonbar.h \
 	wx/generic/choicdgg.h \
 	wx/generic/combo.h \
@@ -4552,6 +4539,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_windowid.o \
 	monodll_wrapsizer.o \
 	monodll_xpmdecod.o \
+	monodll_animateg.o \
 	monodll_busyinfo.o \
 	monodll_generic_buttonbar.o \
 	monodll_choicdgg.o \
@@ -4629,7 +4617,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
 	$(__PLATFORM_SRC_OBJECTS) \
-	$(__UNIV_PLATFORM_SRC_OBJECTS) \
 	monodll_generic_accel.o \
 	monodll_clrpickerg.o \
 	monodll_collpaneg.o \
@@ -4813,6 +4800,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_windowid.o \
 	monodll_wrapsizer.o \
 	monodll_xpmdecod.o \
+	monodll_animateg.o \
 	monodll_busyinfo.o \
 	monodll_generic_buttonbar.o \
 	monodll_choicdgg.o \
@@ -4889,7 +4877,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
-	monodll_animateg.o \
 	monodll_generic_caret.o \
 	monodll_generic_colour.o \
 	monodll_generic_icon.o \
@@ -5262,8 +5249,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_gtk1_tglbtn.o \
 	monodll_gtk1_taskbar.o \
 	monodll_generic_activityindicator.o \
-	monodll_gtk1_eggtrayicon.o \
-	monodll_animateg.o
+	monodll_gtk1_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5528,7 +5514,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_generic_statline.o \
 	monodll_generic_statusbr.o \
 	monodll_tabg.o \
-	monodll_animateg.o \
 	monodll_generic_activityindicator.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
@@ -5590,7 +5575,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_treectrl.o \
 	monodll_systhemectrl.o \
 	monodll_customdraw.o \
-	monodll_animateg.o \
 	monodll_commandlinkbutton.o \
 	monodll_msw_bmpcbox.o \
 	monodll_msw_hyperlink.o \
@@ -5644,7 +5628,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_settings.o \
 	monodll_cocoa_overlay.o \
 	monodll_cocoa_aboutdlg.o \
-	monodll_animateg.o \
 	monodll_dataview_osx.o \
 	monodll_cocoa_notifmsg.o \
 	monodll_cocoa_taskbar.o \
@@ -5683,7 +5666,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_settings.o \
 	monodll_sound_osx.o \
 	monodll_core_sound.o \
-	monodll_animateg.o \
 	monodll_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
@@ -5698,7 +5680,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_generic_imaglist.o \
 	monodll_prntdlgg.o \
 	monodll_generic_textmeasure.o \
-	monodll_animateg.o \
 	monodll_generic_activityindicator.o \
 	monodll_qt_accel.o \
 	monodll_qt_app.o \
@@ -5798,7 +5779,6 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
-	monodll_animateg.o \
 	monodll_generic_caret.o \
 	monodll_generic_colour.o \
 	monodll_generic_icon.o \
@@ -6124,10 +6104,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_x11_window.o \
 	monodll_displayx11.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_animateg.o
-@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS = monodll_animateg.o
-@COND_TOOLKIT_X11@__UNIV_PLATFORM_SRC_OBJECTS = monodll_animateg.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = \
@@ -6543,6 +6519,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_windowid.o \
 	monolib_wrapsizer.o \
 	monolib_xpmdecod.o \
+	monolib_animateg.o \
 	monolib_busyinfo.o \
 	monolib_generic_buttonbar.o \
 	monolib_choicdgg.o \
@@ -6620,7 +6597,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
 	$(__PLATFORM_SRC_OBJECTS_0) \
-	$(__UNIV_PLATFORM_SRC_OBJECTS_1) \
 	monolib_generic_accel.o \
 	monolib_clrpickerg.o \
 	monolib_collpaneg.o \
@@ -6804,6 +6780,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_windowid.o \
 	monolib_wrapsizer.o \
 	monolib_xpmdecod.o \
+	monolib_animateg.o \
 	monolib_busyinfo.o \
 	monolib_generic_buttonbar.o \
 	monolib_choicdgg.o \
@@ -6880,7 +6857,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
-	monolib_animateg.o \
 	monolib_generic_caret.o \
 	monolib_generic_colour.o \
 	monolib_generic_icon.o \
@@ -7253,8 +7229,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk1_tglbtn.o \
 	monolib_gtk1_taskbar.o \
 	monolib_generic_activityindicator.o \
-	monolib_gtk1_eggtrayicon.o \
-	monolib_animateg.o
+	monolib_gtk1_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -7519,7 +7494,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_statline.o \
 	monolib_generic_statusbr.o \
 	monolib_tabg.o \
-	monolib_animateg.o \
 	monolib_generic_activityindicator.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
@@ -7581,7 +7555,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_treectrl.o \
 	monolib_systhemectrl.o \
 	monolib_customdraw.o \
-	monolib_animateg.o \
 	monolib_commandlinkbutton.o \
 	monolib_msw_bmpcbox.o \
 	monolib_msw_hyperlink.o \
@@ -7635,7 +7608,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_settings.o \
 	monolib_cocoa_overlay.o \
 	monolib_cocoa_aboutdlg.o \
-	monolib_animateg.o \
 	monolib_dataview_osx.o \
 	monolib_cocoa_notifmsg.o \
 	monolib_cocoa_taskbar.o \
@@ -7674,7 +7646,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_settings.o \
 	monolib_sound_osx.o \
 	monolib_core_sound.o \
-	monolib_animateg.o \
 	monolib_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
@@ -7689,7 +7660,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_imaglist.o \
 	monolib_prntdlgg.o \
 	monolib_generic_textmeasure.o \
-	monolib_animateg.o \
 	monolib_generic_activityindicator.o \
 	monolib_qt_accel.o \
 	monolib_qt_app.o \
@@ -7789,7 +7759,6 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
-	monolib_animateg.o \
 	monolib_generic_caret.o \
 	monolib_generic_colour.o \
 	monolib_generic_icon.o \
@@ -8115,10 +8084,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_x11_window.o \
 	monolib_displayx11.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS_1 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_animateg.o
-@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS_1 = monolib_animateg.o
-@COND_TOOLKIT_X11@__UNIV_PLATFORM_SRC_OBJECTS_1 = monolib_animateg.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monolib_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
@@ -8679,6 +8644,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_windowid.o \
 	coredll_wrapsizer.o \
 	coredll_xpmdecod.o \
+	coredll_animateg.o \
 	coredll_busyinfo.o \
 	coredll_buttonbar.o \
 	coredll_choicdgg.o \
@@ -8756,7 +8722,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
 	$(__PLATFORM_SRC_OBJECTS_8) \
-	$(__UNIV_PLATFORM_SRC_OBJECTS_2) \
 	coredll_generic_accel.o \
 	coredll_clrpickerg.o \
 	coredll_collpaneg.o \
@@ -8940,6 +8905,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_windowid.o \
 	coredll_wrapsizer.o \
 	coredll_xpmdecod.o \
+	coredll_animateg.o \
 	coredll_busyinfo.o \
 	coredll_buttonbar.o \
 	coredll_choicdgg.o \
@@ -9016,7 +8982,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
-	coredll_animateg.o \
 	coredll_generic_caret.o \
 	coredll_generic_colour.o \
 	coredll_generic_icon.o \
@@ -9389,8 +9354,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk1_tglbtn.o \
 	coredll_gtk1_taskbar.o \
 	coredll_generic_activityindicator.o \
-	coredll_gtk1_eggtrayicon.o \
-	coredll_animateg.o
+	coredll_gtk1_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -9655,7 +9619,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_statline.o \
 	coredll_generic_statusbr.o \
 	coredll_tabg.o \
-	coredll_animateg.o \
 	coredll_generic_activityindicator.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
@@ -9717,7 +9680,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_treectrl.o \
 	coredll_systhemectrl.o \
 	coredll_customdraw.o \
-	coredll_animateg.o \
 	coredll_commandlinkbutton.o \
 	coredll_msw_bmpcbox.o \
 	coredll_msw_hyperlink.o \
@@ -9771,7 +9733,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_settings.o \
 	coredll_cocoa_overlay.o \
 	coredll_cocoa_aboutdlg.o \
-	coredll_animateg.o \
 	coredll_dataview_osx.o \
 	coredll_cocoa_notifmsg.o \
 	coredll_cocoa_taskbar.o \
@@ -9810,7 +9771,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_settings.o \
 	coredll_sound_osx.o \
 	coredll_core_sound.o \
-	coredll_animateg.o \
 	coredll_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
@@ -9825,7 +9785,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_imaglist.o \
 	coredll_prntdlgg.o \
 	coredll_generic_textmeasure.o \
-	coredll_animateg.o \
 	coredll_generic_activityindicator.o \
 	coredll_qt_accel.o \
 	coredll_qt_app.o \
@@ -9925,7 +9884,6 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
-	coredll_animateg.o \
 	coredll_generic_caret.o \
 	coredll_generic_colour.o \
 	coredll_generic_icon.o \
@@ -10251,10 +10209,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_x11_window.o \
 	coredll_displayx11.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS_2 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= coredll_animateg.o
-@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS_2 = coredll_animateg.o
-@COND_TOOLKIT_X11@__UNIV_PLATFORM_SRC_OBJECTS_2 = coredll_animateg.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_SRC_OBJECTS_2 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= coredll_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
@@ -10405,6 +10359,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_windowid.o \
 	corelib_wrapsizer.o \
 	corelib_xpmdecod.o \
+	corelib_animateg.o \
 	corelib_busyinfo.o \
 	corelib_buttonbar.o \
 	corelib_choicdgg.o \
@@ -10482,7 +10437,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
 	$(__PLATFORM_SRC_OBJECTS_9) \
-	$(__UNIV_PLATFORM_SRC_OBJECTS_3) \
 	corelib_generic_accel.o \
 	corelib_clrpickerg.o \
 	corelib_collpaneg.o \
@@ -10666,6 +10620,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_windowid.o \
 	corelib_wrapsizer.o \
 	corelib_xpmdecod.o \
+	corelib_animateg.o \
 	corelib_busyinfo.o \
 	corelib_buttonbar.o \
 	corelib_choicdgg.o \
@@ -10742,7 +10697,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
-	corelib_animateg.o \
 	corelib_generic_caret.o \
 	corelib_generic_colour.o \
 	corelib_generic_icon.o \
@@ -11115,8 +11069,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk1_tglbtn.o \
 	corelib_gtk1_taskbar.o \
 	corelib_generic_activityindicator.o \
-	corelib_gtk1_eggtrayicon.o \
-	corelib_animateg.o
+	corelib_gtk1_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -11381,7 +11334,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_statline.o \
 	corelib_generic_statusbr.o \
 	corelib_tabg.o \
-	corelib_animateg.o \
 	corelib_generic_activityindicator.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
@@ -11443,7 +11395,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_treectrl.o \
 	corelib_systhemectrl.o \
 	corelib_customdraw.o \
-	corelib_animateg.o \
 	corelib_commandlinkbutton.o \
 	corelib_msw_bmpcbox.o \
 	corelib_msw_hyperlink.o \
@@ -11497,7 +11448,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_settings.o \
 	corelib_cocoa_overlay.o \
 	corelib_cocoa_aboutdlg.o \
-	corelib_animateg.o \
 	corelib_dataview_osx.o \
 	corelib_cocoa_notifmsg.o \
 	corelib_cocoa_taskbar.o \
@@ -11536,7 +11486,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_settings.o \
 	corelib_sound_osx.o \
 	corelib_core_sound.o \
-	corelib_animateg.o \
 	corelib_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
@@ -11551,7 +11500,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_imaglist.o \
 	corelib_prntdlgg.o \
 	corelib_generic_textmeasure.o \
-	corelib_animateg.o \
 	corelib_generic_activityindicator.o \
 	corelib_qt_accel.o \
 	corelib_qt_app.o \
@@ -11651,7 +11599,6 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
-	corelib_animateg.o \
 	corelib_generic_caret.o \
 	corelib_generic_colour.o \
 	corelib_generic_icon.o \
@@ -11977,10 +11924,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_x11_window.o \
 	corelib_displayx11.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS_3 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= corelib_animateg.o
-@COND_TOOLKIT_MSW@__UNIV_PLATFORM_SRC_OBJECTS_3 = corelib_animateg.o
-@COND_TOOLKIT_X11@__UNIV_PLATFORM_SRC_OBJECTS_3 = corelib_animateg.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_SRC_OBJECTS_3 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= corelib_sound_sdl.o
 @COND_SHARED_1@____wxcore_namedll_DEP = $(__coredll___depname)
@@ -18993,33 +18936,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
@@ -20603,6 +20519,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
+
+@COND_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_USE_GUI_1@monodll_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
@@ -24273,33 +24192,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
@@ -25883,6 +25775,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
+
+@COND_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_USE_GUI_1@monolib_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
@@ -29631,33 +29526,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
@@ -31241,6 +31109,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
+
+@COND_USE_GUI_1@coredll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_USE_GUI_1@coredll_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
@@ -33897,33 +33768,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_colour.o: $(srcdir)/src/generic/colour.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
@@ -35507,6 +35351,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
+
+@COND_USE_GUI_1@corelib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_USE_GUI_1@corelib_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
