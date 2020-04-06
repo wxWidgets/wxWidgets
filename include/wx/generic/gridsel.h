@@ -61,14 +61,14 @@ public:
     void UpdateRows( size_t pos, int numRows );
     void UpdateCols( size_t pos, int numCols );
 
-    // Extend (or shrink) the current selection block or select a new one.
+    // Extend (or shrink) the current selection block or create a new one.
     // blockStart and blockEnd specifies the opposite corners of the currently
     // edited selection block. In almost all cases blockStart equals to
     // wxGrid::m_currentCellCoords (the exception is when we scrolled out from
     // the top of the grid and select a column or scrolled right and select
     // a row: in this case the lowest visible row/column will be set as
     // current, not the first one). If the row or the column component of
-    // blockEnd parametr has value of -1, it means that the corresponding
+    // blockEnd parameter has value of -1, it means that the corresponding
     // component of the current block should not be changed.
     // Return true if the current block was actually changed or created.
     bool ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockStart,
@@ -103,15 +103,25 @@ private:
     void Select(const wxGridBlockCoords& block,
                 const wxKeyboardState& kbd, bool sendEvent);
 
-    // If the new block containing any of the passed blocks, remove them.
-    // if a new block contained in the passed blockc, return.
-    // Otherwise add the new block to the blocks array.
+    // Ensure that the new "block" becomes part of "blocks", adding it to them
+    // if necessary and, if we do it, also removing any existing elements of
+    // "blocks" that become unnecessary because they're entirely contained in
+    // the new "block". However note that we may also not to have to add it at
+    // all, if it's already contained in one of the existing blocks.
+    //
+    // We don't currently check if the new block is contained by several
+    // existing blocks, as this would be more difficult and doesn't seem to be
+    // really needed in practice.
     void MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
                          const wxGridBlockCoords& block);
 
-    // The vector of selection blocks. We expect that the users select
-    // relatively small amount of blocks. K-D tree can be used to speed up
-    // searching speed.
+    // All currently selected blocks. We expect there to be a relatively small
+    // amount of them, even for very large grids, as each block must be
+    // selected by the user, so we store them unsorted.
+    //
+    // Selection may be empty, but if it isn't, the last block is special, as
+    // it is the current block, which is affected by operations such as
+    // extending the current selection from keyboard.
     wxVectorGridBlockCoords             m_selection;
 
     wxGrid                              *m_grid;
