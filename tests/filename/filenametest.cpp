@@ -1060,7 +1060,7 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
     CHECK( size > 0 );
 
     // All files in /sys seem to have size of 4KiB currently.
-    CHECK( wxFileName::GetSize("/sys/power/state") == 4096 );
+    CHECK( wxFileName::GetSize("/sys/power/state") == sysconf(_SC_PAGESIZE) );
 }
 
 #endif // __LINUX__

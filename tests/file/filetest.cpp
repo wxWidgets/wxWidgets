@@ -159,7 +159,7 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     // All files in /sys seem to have size of 4KiB currently, even if they
     // don't have that much data in them.
     wxFile fileSys("/sys/power/state");
-    CHECK( fileSys.Length() == 4096 );
+    CHECK( fileSys.Length() == sysconf(_SC_PAGESIZE) );
     CHECK( fileSys.IsOpened() );
     CHECK( fileSys.ReadAll(&s) );
     CHECK( !s.empty() );
