@@ -7914,6 +7914,29 @@ wxKeyboardState DummyKeyboardState(bool expandSelection)
 
 } // anonymous namespace
 
+bool
+wxGrid::PrepareForSelectionExpansion(wxGridCellCoords& coords,
+                                     const wxGridDirectionOperations& diroper)
+{
+    coords.SetRow(m_selection->GetCurrentBlockCornerRow());
+    coords.SetCol(m_selection->GetCurrentBlockCornerCol());
+
+    if ( coords == wxGridNoCellCoords )
+        coords = m_currentCellCoords;
+    else if ( !diroper.IsValid(coords) )
+    {
+        // The component of the current block corner in our direction
+        // is not valid. This means we can't change the selection block
+        // in this direction.
+        return false;
+    }
+
+    if ( diroper.IsAtBoundary(coords) )
+        return false;
+
+    return true;
+}
+
 void
 wxGrid::DoMoveCursorFromKeyboard(const wxKeyboardState& kbdState,
                                  const wxGridDirectionOperations& diroper)
@@ -7937,20 +7960,8 @@ wxGrid::DoMoveCursor(const wxKeyboardState& kbdState,
         if ( !m_selection )
             return false;
 
-        wxGridCellCoords coords(m_selection->GetCurrentBlockCornerRow(),
-                                m_selection->GetCurrentBlockCornerCol());
-
-        if ( coords == wxGridNoCellCoords )
-            coords = m_currentCellCoords;
-        else if ( !diroper.IsValid(coords) )
-        {
-            // The component of the current block corner in our direction
-            // is not valid. This means we can't change the selection block
-            // in this direction.
-            return false;
-        }
-
-        if ( diroper.IsAtBoundary(coords) )
+        wxGridCellCoords coords;
+        if ( !PrepareForSelectionExpansion(coords, diroper) )
             return false;
 
         diroper.Advance(coords);
@@ -8057,13 +8068,22 @@ bool
 wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
                             const wxGridDirectionOperations& diroper)
 {
-    if ( !m_table || m_currentCellCoords == wxGridNoCellCoords )
+    if ( !m_table )
         return false;
 
-    if ( diroper.IsAtBoundary(m_currentCellCoords) )
-        return false;
+    wxGridCellCoords coords;
 
-    wxGridCellCoords coords(m_currentCellCoords);
+    // Expand selection if Shift is pressed.
+    if ( kbdState.ShiftDown() )
+    {
+        if ( !PrepareForSelectionExpansion(coords, diroper) )
+            return false;
+    }
+    else
+    {
+        coords = m_currentCellCoords;
+    }
+
     if ( m_table->IsEmpty(coords) )
     {
         // we are in an empty cell: find the next block of non-empty cells
@@ -8095,7 +8115,6 @@ wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
 
     if ( kbdState.ShiftDown() )
     {
-        // TODO: Select the next block every time (not the same as now).
         if ( m_selection )
         {
             if ( m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
