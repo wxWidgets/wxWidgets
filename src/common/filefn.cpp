@@ -796,7 +796,16 @@ wxString wxPathOnly (const wxString& path)
 // and back again - or we get nasty problems with delimiters.
 // Also, convert to lower case, since case is significant in UNIX.
 
-#if defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
+#ifdef __WXOSX__
+
+CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path)
+{
+    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(path)));
+    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
+    return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false);
+}
+
+#ifndef __WXOSX_IPHONE__
 
 wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent )
 {
@@ -842,13 +851,6 @@ wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname )
     return wxCFStringRef::AsStringWithNormalizationFormC(cfname);
 }
 
-CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path)
-{
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(path)));
-    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false);
-}
-
 #ifndef __LP64__
 
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
@@ -870,6 +872,8 @@ void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
     __Verify_noErr(err);
 }
 #endif
+
+#endif // !__WXOSX_IPHONE__
 
 #endif // __WXMAC__
 
