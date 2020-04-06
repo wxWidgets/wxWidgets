@@ -50,22 +50,16 @@ bool wxAnimationGenericImpl::IsCompatibleWith(wxClassInfo* ci) const
 
 wxSize wxAnimationGenericImpl::GetSize() const
 {
-    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
-
     return m_decoder->GetAnimationSize();
 }
 
 unsigned int wxAnimationGenericImpl::GetFrameCount() const
 {
-    wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
-
     return m_decoder->GetFrameCount();
 }
 
 wxImage wxAnimationGenericImpl::GetFrame(unsigned int i) const
 {
-    wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid animation") );
-
     wxImage ret;
     if (!m_decoder->ConvertToImage(i, &ret))
         return wxNullImage;
@@ -74,43 +68,31 @@ wxImage wxAnimationGenericImpl::GetFrame(unsigned int i) const
 
 int wxAnimationGenericImpl::GetDelay(unsigned int i) const
 {
-    wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
-
     return m_decoder->GetDelay(i);
 }
 
 wxPoint wxAnimationGenericImpl::GetFramePosition(unsigned int frame) const
 {
-    wxCHECK_MSG( IsOk(), wxDefaultPosition, wxT("invalid animation") );
-
     return m_decoder->GetFramePosition(frame);
 }
 
 wxSize wxAnimationGenericImpl::GetFrameSize(unsigned int frame) const
 {
-    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
-
     return m_decoder->GetFrameSize(frame);
 }
 
 wxAnimationDisposal wxAnimationGenericImpl::GetDisposalMethod(unsigned int frame) const
 {
-    wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
-
     return m_decoder->GetDisposalMethod(frame);
 }
 
 wxColour wxAnimationGenericImpl::GetTransparentColour(unsigned int frame) const
 {
-    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
-
     return m_decoder->GetTransparentColour(frame);
 }
 
 wxColour wxAnimationGenericImpl::GetBackgroundColour() const
 {
-    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
-
     return m_decoder->GetBackgroundColour();
 }
 
