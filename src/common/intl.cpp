@@ -1778,7 +1778,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 
         case wxLOCALE_GROUPING:
-            cfstr = (CFStringRef) "3;0";
+            cfstr = (CFStringRef) "\3\0";
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
