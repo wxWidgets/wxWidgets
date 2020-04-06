@@ -43,7 +43,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxObject);
 
 #if !defined(wxHAS_NATIVE_ANIMATIONCTRL)
     // In this case the "native" ctrl is the generic ctrl. See wx/animate.h
-    wxIMPLEMENT_CLASS(wxAnimationCtrl, wxControl);
+    // Notice that it's important to use wxGenericAnimationCtrl here because
+    // wxAnimation::IsCompatibleWith() relies on control deriving from
+    // wxGenericAnimationCtrl when using generic wxAnimation implementation.
+    wxIMPLEMENT_CLASS(wxAnimationCtrl, wxGenericAnimationCtrl);
 #endif
 
 #include "wx/listimpl.cpp"
