@@ -78,8 +78,6 @@ function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
     if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
-        # TODO: implement for older CMake versions ?
-        set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
         if(
             APPLE AND
             CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
