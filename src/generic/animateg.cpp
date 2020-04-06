@@ -225,6 +225,11 @@ bool wxGenericAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
     return true;
 }
 
+wxAnimation wxGenericAnimationCtrl::CreateCompatibleAnimation()
+{
+    return MakeAnimFromImpl(new wxAnimationGenericImpl());
+}
+
 wxAnimationImpl* wxGenericAnimationCtrl::DoCreateAnimationImpl() const
 {
     return new wxAnimationGenericImpl();

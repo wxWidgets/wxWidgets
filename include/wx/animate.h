@@ -115,12 +115,16 @@ public:
         { return m_bmpStatic; }
 
     wxAnimation CreateAnimation() const
-        { return wxAnimation(DoCreateAnimationImpl()); }
+        { return MakeAnimFromImpl(DoCreateAnimationImpl()); }
 
 protected:
     virtual wxAnimationImpl* DoCreateAnimationImpl() const = 0;
 
-    // This method allows derived classes access to wxAnimation::GetImpl().
+    // These methods allow derived classes access to private wxAnimation ctor
+    // and wxAnimation::GetImpl(), respectively.
+    static wxAnimation MakeAnimFromImpl(wxAnimationImpl* impl)
+        { return wxAnimation(impl); }
+
     wxAnimationImpl* GetAnimImpl() const
         { return m_animation.GetImpl(); }
 

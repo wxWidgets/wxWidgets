@@ -64,6 +64,8 @@ public:
     // override base class method
     virtual bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
 
+    static wxAnimation CreateCompatibleAnimation();
+
 public:     // event handlers
 
     void OnPaint(wxPaintEvent& event);

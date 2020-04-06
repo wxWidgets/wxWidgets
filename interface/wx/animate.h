@@ -113,9 +113,21 @@ public:
         A wxAnimation object created using this function is always compatible
         with controls of this type, see wxAnimation::IsCompatibleWith().
 
+        @see CreateCompatibleAnimation()
+
         @since 3.1.4
      */
     wxAnimation CreateAnimation() const;
+
+    /**
+        Create a new animation object compatible with this control.
+
+        This method does the same thing as CreateAnimation() but is static,
+        i.e. can be called without creating any wxAnimationCtrl objects.
+
+        @since 3.1.4
+     */
+    static wxAnimation CreateCompatibleAnimation();
 
     /**
         Returns the animation associated with this control.

@@ -265,6 +265,11 @@ bool wxAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
     return true;
 }
 
+wxAnimation wxAnimationCtrl::CreateCompatibleAnimation()
+{
+    return MakeAnimFromImpl(new wxAnimationGTKImpl());
+}
+
 wxAnimationImpl* wxAnimationCtrl::DoCreateAnimationImpl() const
 {
     return new wxAnimationGTKImpl();
