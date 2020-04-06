@@ -143,7 +143,7 @@ wx_check_c_source_compiles(
     stdio.h
     )
 #TODO: wxNO_VARIADIC_MACROS
-if(wxUSE_STL)
+if(wxUSE_STL AND NOT wxHAS_CXX11)
     wx_check_cxx_source_compiles("
         std::vector<int> moo;
         std::list<int> foo;
@@ -166,6 +166,12 @@ if(wxUSE_STL)
         foo.compare(1, 1, \"\");
         foo.compare(1, 1, \"\", 2);"
         HAVE_STD_STRING_COMPARE
+        string
+        )
+
+    wx_check_cxx_source_compiles(
+        "std::wstring s;"
+        HAVE_STD_WSTRING
         string
         )
 endif()
@@ -583,13 +589,6 @@ check_include_file(unistd.h HAVE_UNISTD_H)
 check_include_file(w32api.h HAVE_W32API_H)
 check_include_file(wchar.h HAVE_WCHAR_H)
 check_include_file(wcstr.h HAVE_WCSTR_H)
-
-
-wx_check_cxx_source_compiles(
-    "std::wstring s;"
-    HAVE_STD_WSTRING
-    string
-    )
 
 if(wxUSE_DATETIME)
     # check for timezone variable
