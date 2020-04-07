@@ -357,7 +357,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
         CHECK( f.Open("/sys/power/state") );
         REQUIRE( f.GetLineCount() == 1 );
         INFO( "/sys/power/state contains \"" << f[0] << "\"" );
-        CHECK( f[0].find("mem") != wxString::npos );
+        CHECK( (f[0].find("mem") != wxString::npos || f[0].find("disk") != wxString::npos) );
     }
 }
 
