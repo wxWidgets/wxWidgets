@@ -149,7 +149,7 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     // for reading) and usually we don't have the permissions to do it.
 
     // This file is not seekable and has 0 size, but can still be read.
-    wxFile fileProc("/proc/diskstats");
+    wxFile fileProc("/proc/cpuinfo");
     CHECK( fileProc.IsOpened() );
 
     wxString s;

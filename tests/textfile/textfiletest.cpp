@@ -347,7 +347,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
     SECTION("/proc")
     {
         wxTextFile f;
-        CHECK( f.Open("/proc/diskstats") );
+        CHECK( f.Open("/proc/cpuinfo") );
         CHECK( f.GetLineCount() > 1 );
     }
 
