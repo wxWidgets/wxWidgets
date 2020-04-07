@@ -74,21 +74,6 @@ wxAnimation::wxAnimation(const wxString &name, wxAnimationType type)
     LoadFile(name, type);
 }
 
-wxAnimation::wxAnimation(const wxAnimation& other)
-{
-    Ref(other);
-}
-
-wxAnimation& wxAnimation::operator=(const wxAnimation& other)
-{
-    if (this != &other)
-    {
-        UnRef();
-        Ref(other);
-    }
-    return *this;
-}
-
 wxAnimationImpl* wxAnimation::GetImpl() const
 {
     return static_cast<wxAnimationImpl*>(m_refData);

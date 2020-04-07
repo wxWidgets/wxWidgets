@@ -37,9 +37,11 @@ class WXDLLIMPEXP_CORE wxAnimation : public wxObject
 public:
     wxAnimation();
     explicit wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
-    wxAnimation(const wxAnimation& other);
 
-    wxAnimation& operator=(const wxAnimation& other);
+#if __cplusplus >= 201103
+    wxAnimation(const wxAnimation&) = default;
+    wxAnimation& operator=(const wxAnimation&) = default;
+#endif
 
     bool IsOk() const;
     bool IsCompatibleWith(wxClassInfo* ci) const;
