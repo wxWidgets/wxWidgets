@@ -134,6 +134,8 @@ enum wxLocaleInfo
 
         This value can be used with either wxLOCALE_CAT_NUMBER or
         wxLOCALE_CAT_MONEY categories.
+
+         @since 3.1.4
      */
     wxLOCALE_GROUPING,
 
@@ -536,4 +538,3 @@ public:
    Get the current locale object (note that it may be NULL!)
 */
 wxLocale* wxGetLocale();
-
