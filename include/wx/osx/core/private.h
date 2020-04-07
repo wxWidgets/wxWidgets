@@ -59,6 +59,11 @@ WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 
 #endif
 
+// NSString<->wxString
+
+WXDLLIMPEXP_BASE wxString wxStringWithNSString(NSString *nsstring);
+WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
+
 WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
 #if wxUSE_GUI
