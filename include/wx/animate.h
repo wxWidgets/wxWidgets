@@ -38,9 +38,9 @@ public:
     wxAnimation();
     explicit wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
-#if __cplusplus >= 201103
-    wxAnimation(const wxAnimation&) = default;
-    wxAnimation& operator=(const wxAnimation&) = default;
+#ifdef wxHAS_MEMBER_DEFAULT
+    wxAnimation(const wxAnimation&) wxMEMBER_DEFAULT;
+    wxAnimation& operator=(const wxAnimation&) wxMEMBER_DEFAULT;
 #endif
 
     bool IsOk() const;
