@@ -1920,6 +1920,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     if ( !lc )
         return wxString();
 
+
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
