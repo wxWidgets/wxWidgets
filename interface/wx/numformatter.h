@@ -121,6 +121,26 @@ public:
             if it is used by the current locale. May be @NULL if only the
             function return value is needed.
      */
+    static bool GetThousandsSeparatorIfUsed(wxChar *sep);
+
+    /**
+        Get the thousands separator and grouping format if grouping of the
+        digits is used by the current locale.
+
+        The value returned in @a sep and @a gr should be only used if the
+        function returns @true, otherwise no thousands separator should be
+        used at all.
+
+        @param sep
+            Points to the variable receiving the thousands separator character
+            if it is used by the current locale. May be @NULL if only the
+            function return value is needed.
+
+        @param gr
+            Points to the variable receiving the grouping format string
+            if it is used by the current locale. May be @NULL if only the
+            function return value is needed.
+     */
     static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
 
 };

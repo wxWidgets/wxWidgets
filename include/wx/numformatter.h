@@ -56,6 +56,9 @@ public:
     // Get the thousands separator if grouping of the digits is used by the
     // current locale. The value returned in sep should be only used if the
     // function returns true.
+    static bool GetThousandsSeparatorIfUsed(wxChar *sep);
+
+    // Same as the above method but provides the grouping format as well
     static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
 
 private:

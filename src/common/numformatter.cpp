@@ -141,6 +141,37 @@ wxChar wxNumberFormatter::GetDecimalSeparator()
 #endif // wxUSE_INTL/!wxUSE_INTL
 }
 
+bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
+{
+#if wxUSE_INTL
+    static wxChar s_thousandsSeparator = 0;
+    static LocaleId s_localeUsedForInit;
+
+    if ( s_localeUsedForInit.NotInitializedOrHasChanged() )
+    {
+        const wxString
+            s = wxLocale::GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
+        if ( s.length() == 1 )
+        {
+            s_thousandsSeparator = s[0];
+        }
+        //else: Unlike above it's perfectly fine for the thousands separator to
+        //      be empty if grouping is not used, so just leave it as 0.
+    }
+
+    if ( !s_thousandsSeparator )
+        return false;
+
+    if ( sep )
+        *sep = s_thousandsSeparator;
+
+    return true;
+#else // !wxUSE_INTL
+    wxUnusedVar(sep);
+    return false;
+#endif // wxUSE_INTL/!wxUSE_INTL
+}
+
 bool wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr)
 {
 #if wxUSE_INTL
@@ -303,8 +334,7 @@ void wxNumberFormatter::RemoveTrailingZeroes(wxString& s)
 void wxNumberFormatter::RemoveThousandsSeparators(wxString& s)
 {
     wxChar thousandsSep;
-    wxString grouping;
-    if ( !GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) )
+    if ( !GetThousandsSeparatorIfUsed(&thousandsSep) )
         return;
 
     s.Replace(wxString(thousandsSep), wxString());
