@@ -1920,7 +1920,6 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     if ( !lc )
         return wxString();
 
-
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
@@ -1931,6 +1930,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 
             wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;
+
 
         case wxLOCALE_DECIMAL_POINT:
             if ( cat == wxLOCALE_CAT_NUMBER )
