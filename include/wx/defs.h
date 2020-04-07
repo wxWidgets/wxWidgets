@@ -2994,7 +2994,7 @@ typedef const void* WXWidget;
 /*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
-#if defined(__cplusplus) && __cplusplus >= 201103L
+#if defined(__cplusplus) && (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14))
     #define wxMEMBER_DELETE = delete
 #else
     #define wxMEMBER_DELETE
