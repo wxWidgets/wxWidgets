@@ -13,10 +13,6 @@ matrix:
           arch: ppc64le
         - os: linux
           arch: s390x
-        - os: osx
-          osx_image: xcode10
-          env: wxCONFIGURE_FLAGS="--with-osx_iphone --enable-monolithic --disable-shared" wxSKIP_SAMPLES=1
-
 #        - dist: precise
 #          compiler: gcc
 #          env: wxUSE_XVFB=1
