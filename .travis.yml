@@ -9,10 +9,13 @@ matrix:
     include:
         - os: linux
           arch: arm64
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
         - os: linux
           arch: ppc64le
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
         - os: linux
           arch: s390x
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
 #        - dist: precise
 #          compiler: gcc
 #          env: wxUSE_XVFB=1

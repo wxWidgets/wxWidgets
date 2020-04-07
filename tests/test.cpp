@@ -69,10 +69,6 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
 #endif // __WXGTK__
 #endif // wxUSE_GUI
 
-#ifdef __LINUX__
-    #include "wx/filename.h"
-#endif
-
 #include "wx/socket.h"
 #include "wx/evtloop.h"
 
@@ -426,9 +422,12 @@ extern bool IsRunningUnderXVFB()
 
 extern bool IsRunningInLXC()
 {
-    // This is simplistic but should work in the normal cases and can always be
-    // made more precise later if necessary.
-    return wxFileName::DirExists("/dev/lxd");
+    // We're supposed to be able to detect running in LXC by checking for
+    // /dev/lxd existency, but this doesn't work under Travis for some reason,
+    // so just rely on having the environment variable defined for the
+    // corresponding builds in our .travis.yml.
+    wxString value;
+    return wxGetEnv("wxLXC", &value) && value == "1";
 }
 
 #endif // __LINUX__
