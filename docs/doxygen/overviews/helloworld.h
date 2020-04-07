@@ -17,7 +17,7 @@ important concepts and explains how to write a working wxWidgets application.
 
 Note that this simple example creates the UI entirely from C++ code which is
 fine for a simple example, but more realistic examples will typically define
-their UI at least partially in @c overview_xrc "XRC resource files".
+their UI at least partially in @ref overview_xrc "XRC resource files".
 
 First, you have to include wxWidgets' header files, of course. This can be done
 on a file by file basis (such as @c wx/window.h) or using one global include
