@@ -492,7 +492,7 @@ public:
         return ms_isInitialized;
     }
 
-    static unsigned int SetFontList(const wxArrayString& list)
+    static wxDirect2DFontKey SetFontList(const wxArrayString& list)
     {
         ms_fontList = list;
         // Every time font collection is changed, generate unique key

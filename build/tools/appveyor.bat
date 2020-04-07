@@ -14,13 +14,11 @@ goto :eof
 :nmake
 cd build\msw
 call "C:\Program Files (x86)\Microsoft Visual Studio %VS%\VC\vcvarsall.bat" %ARCH%
-if "%ARCH%"=="amd64" set CPUARG=CPU=%X64
-if "%VS%"=="9.0" set DPIARG=USE_DPI_AWARE_MANIFEST=0
-nmake -f makefile.vc BUILD=%BUILD% %CPUARG% %DPIARG%
+nmake -f makefile.vc BUILD=%BUILD%
 cd ..\..\tests
-nmake -f makefile.vc BUILD=%BUILD% %CPUARG% %DPIARG%
+nmake -f makefile.vc BUILD=%BUILD%
 cd  ..\samples\minimal
-nmake -f makefile.vc BUILD=%BUILD% %CPUARG% %DPIARG%
+nmake -f makefile.vc BUILD=%BUILD%
 goto :eof
 
 :mingw

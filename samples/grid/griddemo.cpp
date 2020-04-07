@@ -432,18 +432,15 @@ GridFrame::GridFrame()
     grid = new wxGrid( this,
                        wxID_ANY,
                        wxPoint( 0, 0 ),
-                       wxSize( 400, 300 ) );
+                       FromDIP(wxSize( 400, 300 )) );
 
 
 #if wxUSE_LOG
-    int gridW = 600, gridH = 300;
-    int logW = gridW, logH = 100;
-
     logWin = new wxTextCtrl( this,
                              wxID_ANY,
                              wxEmptyString,
-                             wxPoint( 0, gridH + 20 ),
-                             wxSize( logW, logH ),
+                             wxDefaultPosition,
+                             wxDefaultSize,
                              wxTE_MULTILINE );
 
     logger = new wxLogTextCtrl( logWin );
@@ -464,7 +461,7 @@ GridFrame::GridFrame()
     grid->DeleteRows(0, ir);
     grid->AppendRows(ir);
 
-    grid->SetRowSize( 0, 60 );
+    grid->SetRowSize( 0, 4*grid->GetDefaultRowSize() );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
 
     grid->SetCellValue( 0, 1, "A long piece of text to demonstrate wrapping." );
@@ -477,7 +474,7 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 4, "Can veto edit this cell" );
 
-    grid->SetColSize(10, 150);
+    grid->SetColSize(10, FromDIP(150));
     wxString longtext = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\n\n";
     longtext += "With tabs :\n";
     longtext += "Home,\t\thome\t\t\tagain\n";
@@ -494,7 +491,7 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
-    grid->SetRowSize( 99, 60 );
+    grid->SetRowSize( 99, 4*grid->GetDefaultRowSize() );
     grid->SetCellValue(98, 98, "Test background colour setting");
     grid->SetCellBackgroundColour(98, 99, wxColour(255, 127, 127));
     grid->SetCellBackgroundColour(99, 98, wxColour(255, 127, 127));
@@ -537,8 +534,8 @@ GridFrame::GridFrame()
     grid->SetRowAttr(5, attr);
 
     grid->SetCellValue(2, 4, "a wider column");
-    grid->SetColSize(4, 120);
-    grid->SetColMinimalWidth(4, 120);
+    grid->SetColSize(4, 3*grid->GetDefaultColLabelSize()/2);
+    grid->SetColMinimalWidth(4, grid->GetColSize(4));
 
     grid->SetCellTextColour(5, 8, *wxGREEN);
     grid->SetCellValue(5, 8, "Bg from row attr\nText col from cell attr");
@@ -611,9 +608,10 @@ GridFrame::GridFrame()
 
     // create a separator-like row: it's grey and it's non-resizable
     grid->DisableRowResize(10);
-    grid->SetRowSize(10, 30);
+    grid->SetRowSize(10, 3*grid->GetDefaultRowSize()/2);
     attr = new wxGridCellAttr;
     attr->SetBackgroundColour(*wxLIGHT_GREY);
+    attr->SetAlignment(wxALIGN_INVALID, wxALIGN_CENTRE);
     grid->SetRowAttr(10, attr);
     grid->SetCellValue(10, 0, "You can't resize this row interactively -- try it");
 
@@ -1596,41 +1594,33 @@ void GridFrame::OnBugsTable(wxCommandEvent& )
 // ----------------------------------------------------------------------------
 
 MyGridCellAttrProvider::MyGridCellAttrProvider()
+    : m_attrForOddRows(new wxGridCellAttr)
 {
-    m_attrForOddRows = new wxGridCellAttr;
     m_attrForOddRows->SetBackgroundColour(*wxLIGHT_GREY);
-}
-
-MyGridCellAttrProvider::~MyGridCellAttrProvider()
-{
-    m_attrForOddRows->DecRef();
 }
 
 wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
                            wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
 {
-    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
+    wxGridCellAttrPtr attr(wxGridCellAttrProvider::GetAttr(row, col, kind));
 
     if ( row % 2 )
     {
         if ( !attr )
         {
             attr = m_attrForOddRows;
-            attr->IncRef();
         }
         else
         {
             if ( !attr->HasBackgroundColour() )
             {
-                wxGridCellAttr *attrNew = attr->Clone();
-                attr->DecRef();
-                attr = attrNew;
+                attr = attr->Clone();
                 attr->SetBackgroundColour(*wxLIGHT_GREY);
             }
         }
     }
 
-    return attr;
+    return attr.release();
 }
 
 void GridFrame::OnVTable(wxCommandEvent& )
@@ -1676,8 +1666,7 @@ void MyGridCellRenderer::Draw(wxGrid& grid,
 // ============================================================================
 
 BigGridFrame::BigGridFrame(long sizeGrid)
-            : wxFrame(NULL, wxID_ANY, "Plugin Virtual Table",
-                      wxDefaultPosition, wxSize(500, 450))
+            : wxFrame(NULL, wxID_ANY, "Plugin Virtual Table")
 {
     m_grid = new wxGrid(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
@@ -1686,14 +1675,9 @@ BigGridFrame::BigGridFrame(long sizeGrid)
     //     must profile it...
     //m_table->SetAttrProvider(new MyGridCellAttrProvider);
 
-    m_grid->SetTable(m_table, true);
+    m_grid->AssignTable(m_table);
 
-#if defined __WXMOTIF__
-    // MB: the grid isn't getting a sensible default size under wxMotif
-    int cw, ch;
-    GetClientSize( &cw, &ch );
-    m_grid->SetSize( cw, ch );
-#endif
+    SetClientSize(FromDIP(wxSize(500, 450)));
 }
 
 // ============================================================================
@@ -1977,7 +1961,7 @@ BugsGridFrame::BugsGridFrame()
     wxGrid *grid = new wxGrid(this, wxID_ANY);
     wxGridTableBase *table = new BugsGridTable();
     table->SetAttrProvider(new MyGridCellAttrProvider);
-    grid->SetTable(table, true);
+    grid->AssignTable(table);
 
     wxGridCellAttr *attrRO = new wxGridCellAttr,
                    *attrRangeEditor = new wxGridCellAttr,
@@ -2338,7 +2322,7 @@ TabularGridFrame::TabularGridFrame()
     m_grid = new wxGrid(panel, wxID_ANY,
                         wxDefaultPosition, wxDefaultSize,
                         wxBORDER_STATIC | wxWANTS_CHARS);
-    m_grid->SetTable(m_table, true, wxGrid::wxGridSelectRows);
+    m_grid->AssignTable(m_table, wxGrid::wxGridSelectRows);
 
     m_grid->EnableDragColMove();
     m_grid->UseNativeColHeader();
@@ -2370,7 +2354,7 @@ TabularGridFrame::TabularGridFrame()
     sizerStyles->Add(m_chkEnableColMove, wxSizerFlags().Border());
     sizerControls->Add(sizerStyles);
 
-    sizerControls->AddSpacer(10);
+    sizerControls->AddSpacer(FromDIP(10));
 
     wxSizer * const sizerColumns = new wxBoxSizer(wxVERTICAL);
     wxSizer * const sizerMoveCols = new wxBoxSizer(wxHORIZONTAL);

@@ -313,6 +313,13 @@ public:
         m_ptr = ptr;
     }
 
+    T* release()
+    {
+        T* const ptr = m_ptr;
+        m_ptr = NULL;
+        return ptr;
+    }
+
     wxObjectDataPtr& operator=(const wxObjectDataPtr &tocopy)
     {
         if (m_ptr)

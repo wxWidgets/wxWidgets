@@ -35,7 +35,7 @@ Most popular C++ compilers are supported including but not limited to:
 - g++ 3.4 or later, including MinGW/MinGW-64/TDM under Windows.
 - Clang under OS X and Linux.
 - Intel icc compiler.
-- Oracle (ex-Sun) aCC.
+- Oracle (ex-Sun) CC.
 
 
 Licence

@@ -41,8 +41,9 @@ Compared to the other similar libraries, wxWidgets is:
 3. Open source and free for use in both open source and commercial projects.
 
 
-wxWidgets provides a simple, easy to learn, yet very rich API. It is also
-mature and stable, and the applications written using wxWidgets 2.0
+wxWidgets provides a simple, easy to learn, yet very rich API, while also
+proposing a simple way to define application UI in the external XML files.
+It is also mature and stable, and the applications written using wxWidgets 2.0
 pre-releases almost 20 years ago can still be built today with wxWidgets 3
 almost unchanged. wxWidgets has a large, active and friendly community of
 people, including both the users and developers of the library. It is also
@@ -59,7 +60,7 @@ paragraphs, but here are some of the benefits:
 @li Extensive documentation (almost 200,000 lines of it).
 @li Straightforward API.
 @li Simple but powerful layout system.
-@li Run-time loadable or compile-time embeddable resources.
+@li Run-time loadable or compile-time embeddable resources for UI definition.
 @li Flexible event system.
 @li All the usual and quite a few of more rare GUI controls.
 @li And also all the standard dialogs.

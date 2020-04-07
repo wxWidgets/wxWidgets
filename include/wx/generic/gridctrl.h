@@ -143,9 +143,6 @@ public:
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
         { return new wxGridCellBoolRenderer; }
-
-private:
-    static wxSize ms_sizeCheckMark;
 };
 
 

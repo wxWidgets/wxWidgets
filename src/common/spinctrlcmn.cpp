@@ -22,12 +22,12 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_SPINCTRL
+
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 
 #include "wx/private/spinctrl.h"
-
-#if wxUSE_SPINCTRL
 
 wxDEFINE_EVENT(wxEVT_SPINCTRL, wxSpinEvent);
 wxDEFINE_EVENT(wxEVT_SPINCTRLDOUBLE, wxSpinDoubleEvent);

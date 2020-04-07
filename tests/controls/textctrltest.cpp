@@ -1422,4 +1422,22 @@ TEST_CASE("wxTextCtrl::LongPaste", "[wxTextCtrl][clipboard][paste]")
 
 #endif // wxUSE_CLIPBOARD
 
+TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    EventCounter updated(parent, wxEVT_TEXT);
+
+    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "Hello"));
+
+    // Creating the control shouldn't result in any wxEVT_TEXT events.
+    CHECK( updated.GetCount() == 0 );
+
+    // Check that modifying using SetValue() it does generate the event, just
+    // to verify that this test works (there are more detailed tests for this
+    // in TextEntryTestCase::TextChangeEvents()).
+    text->SetValue("Bye");
+    CHECK( updated.GetCount() == 1 );
+}
+
 #endif //wxUSE_TEXTCTRL

@@ -82,7 +82,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswud\layout.exe"
 				LinkIncremental="2"
@@ -176,7 +176,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswu\layout.exe"
 				LinkIncremental="1"
@@ -275,7 +275,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswuddll\layout.exe"
 				LinkIncremental="2"
@@ -369,7 +369,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/wx_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswudll\layout.exe"
 				LinkIncremental="1"
@@ -468,7 +468,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswud_x64\layout.exe"
 				LinkIncremental="2"
@@ -562,7 +562,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswu_x64\layout.exe"
 				LinkIncremental="1"
@@ -661,7 +661,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswuddll_x64\layout.exe"
 				LinkIncremental="2"
@@ -755,7 +755,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MANIFEST:EMBED /MANIFESTINPUT:./../../include/wx/msw/amd64_dpi_aware_pmv2.manifest"
+				AdditionalOptions=""
 				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswudll_x64\layout.exe"
 				LinkIncremental="1"

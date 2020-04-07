@@ -284,9 +284,7 @@ bool wxPenRefData::Alloc()
    // CreatePen()
    if ( m_join == wxJOIN_ROUND &&
             m_cap == wxCAP_ROUND &&
-                m_style != wxPENSTYLE_USER_DASH &&
-                    m_style != wxPENSTYLE_STIPPLE &&
-                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
+                m_style == wxPENSTYLE_SOLID )
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
    }
@@ -358,7 +356,10 @@ bool wxPenRefData::Alloc()
            dash = NULL;
        }
 
-       m_hPen = ::ExtCreatePen(styleMSW, m_width, &lb, m_nbDash, (LPDWORD)dash);
+       // Note that width can't be 0 for ExtCreatePen(), unlike for CreatePen().
+       int width = m_width == 0 ? 1 : m_width;
+
+       m_hPen = ::ExtCreatePen(styleMSW, width, &lb, m_nbDash, (LPDWORD)dash);
 
        delete [] dash;
    }
