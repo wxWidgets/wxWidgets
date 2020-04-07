@@ -336,11 +336,11 @@ Installing and building wxWidgets using vcpkg         {#msw_install_and_build}
 You can download and install wxWidgets using the [vcpkg](https://github.com/Microsoft/vcpkg) 
 dependency manager:
 
-    $ git clone https://github.com/Microsoft/vcpkg.git
-    $ cd vcpkg
-    $ ./bootstrap-vcpkg.sh
-    $ ./vcpkg integrate install
-    $ vcpkg install wxwidgets
+    > git clone https://github.com/Microsoft/vcpkg.git
+    > cd vcpkg
+    > bootstrap-vcpkg.bat
+    > vcpkg integrate install
+    > vcpkg install wxwidgets
 
 The wxWidgets port in vcpkg is kept up to date by Microsoft team members and community 
 contributors. If the version is out of date, please [create an issue or pull request]
