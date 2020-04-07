@@ -156,14 +156,16 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     CHECK( fileProc.ReadAll(&s) );
     CHECK( !s.empty() );
 
-    // All files in /sys seem to have size of 4KiB currently, even if they
-    // don't have that much data in them.
+    // All files in /sys have the size of one kernel page, even if they don't
+    // have that much data in them.
+    const long pageSize = sysconf(_SC_PAGESIZE);
+
     wxFile fileSys("/sys/power/state");
-    CHECK( fileSys.Length() == sysconf(_SC_PAGESIZE) );
+    CHECK( fileSys.Length() == pageSize );
     CHECK( fileSys.IsOpened() );
     CHECK( fileSys.ReadAll(&s) );
     CHECK( !s.empty() );
-    CHECK( s.length() < 4096 );
+    CHECK( s.length() < pageSize );
 }
 
 #endif // __LINUX__
