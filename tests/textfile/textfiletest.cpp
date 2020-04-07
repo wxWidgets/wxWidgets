@@ -348,7 +348,11 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
     {
         wxTextFile f;
         CHECK( f.Open("/proc/cpuinfo") );
-        CHECK( f.GetLineCount() > 1 );
+
+        // /proc files seem to be always empty in LXC containers, so skip this
+        // check there.
+        if ( !IsRunningInLXC() )
+            CHECK( f.GetLineCount() > 1 );
     }
 
     SECTION("/sys")

@@ -69,6 +69,10 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
 #endif // __WXGTK__
 #endif // wxUSE_GUI
 
+#ifdef __LINUX__
+    #include "wx/filename.h"
+#endif
+
 #include "wx/socket.h"
 #include "wx/evtloop.h"
 
@@ -417,6 +421,17 @@ extern bool IsRunningUnderXVFB()
 
     return s_isRunningUnderXVFB == 1;
 }
+
+#ifdef __LINUX__
+
+extern bool IsRunningInLXC()
+{
+    // This is simplistic but should work in the normal cases and can always be
+    // made more precise later if necessary.
+    return wxFileName::DirExists("/dev/lxd");
+}
+
+#endif // __LINUX__
 
 #if wxUSE_GUI
 

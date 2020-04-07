@@ -154,7 +154,10 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
 
     wxString s;
     CHECK( fileProc.ReadAll(&s) );
-    CHECK( !s.empty() );
+
+    // /proc files seem to be always empty in LXC containers.
+    if ( !IsRunningInLXC() )
+        CHECK( !s.empty() );
 
     // All files in /sys have the size of one kernel page, even if they don't
     // have that much data in them.

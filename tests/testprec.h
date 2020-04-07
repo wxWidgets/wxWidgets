@@ -123,6 +123,10 @@ extern bool IsAutomaticTest();
 
 extern bool IsRunningUnderXVFB();
 
+#ifdef __LINUX__
+extern bool IsRunningInLXC();
+#endif // __LINUX__
+
 // Helper class setting the locale to the given one for its lifetime.
 class LocaleSetter
 {
