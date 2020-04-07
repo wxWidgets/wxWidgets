@@ -7,42 +7,52 @@ sudo: required
 
 matrix:
     include:
-        - dist: precise
-          compiler: gcc
-          env: wxUSE_XVFB=1
-        - dist: trusty
-          compiler: gcc
-        - dist: trusty
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
-        - dist: trusty
-          compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxUSE_XVFB=1
-        - dist: trusty
-          compiler: clang
-          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
-        - dist: trusty
-          compiler: gcc
-          env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
+        - os: linux
+          arch: arm64
+        - os: linux
+          arch: ppc64le
+        - os: linux
+          arch: s390x
         - os: osx
-          osx_image: xcode6.4
-          compiler: clang
-          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxSKIP_SAMPLES=1
-        - os: osx
-          compiler: clang
-          env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_CXX_STANDARD=11"
-        - dist: trusty
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-x11 --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-        - dist: trusty
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-        - dist: trusty
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-motif --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-        - dist: trusty
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
+          osx_image: xcode10
+          env: wxCONFIGURE_FLAGS="--with-osx_iphone --enable-monolithic --disable-shared" wxSKIP_SAMPLES=1
+
+#        - dist: precise
+#          compiler: gcc
+#          env: wxUSE_XVFB=1
+#        - dist: trusty
+#          compiler: gcc
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxUSE_XVFB=1
+#        - dist: trusty
+#          compiler: clang
+#          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
+#        - os: osx
+#          osx_image: xcode6.4
+#          compiler: clang
+#          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxSKIP_SAMPLES=1
+#        - os: osx
+#          compiler: clang
+#          env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_CXX_STANDARD=11"
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxCONFIGURE_FLAGS="--with-x11 --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxCONFIGURE_FLAGS="--with-motif --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+#        - dist: trusty
+#          compiler: gcc
+#          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
 
 branches:
     only:
