@@ -135,7 +135,11 @@ static void TestAssertHandler(const wxString& file,
         // so we'd just die without any useful information -- abort instead.
         abortReason << assertMessage << "in a worker thread.";
     }
+#if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
+    else if ( uncaught_exceptions() )
+#else
     else if ( uncaught_exception() )
+#endif
     {
         // Throwing while already handling an exception would result in
         // terminate() being called and we wouldn't get any useful information
