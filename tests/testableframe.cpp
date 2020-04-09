@@ -16,7 +16,7 @@
 #include "wx/app.h"
 #include "testableframe.h"
 
-wxTestableFrame::wxTestableFrame() : wxFrame(NULL, wxID_ANY, "Test Frame")
+wxTestableFrame::wxTestableFrame() : wxFrame(NULL, wxID_ANY, wxASCII_STR("Test Frame"))
 {
     // Use fixed position to facilitate debugging.
     Move(200, 200);
