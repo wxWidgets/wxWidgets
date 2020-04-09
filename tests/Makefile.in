@@ -271,6 +271,20 @@ TEST_GUI_OBJECTS =  \
 	test_gui_setsize.o \
 	test_gui_xrctest.o
 TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
+TEST_ALLHEADERS_CXXFLAGS = $(__test_allheaders_PCH_INC) $(WX_CPPFLAGS) \
+	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
+	-I$(top_srcdir)/3rdparty/catch/include -DwxNO_IMPLICIT_WXSTRING_ENCODING \
+	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+TEST_ALLHEADERS_OBJECTS =  \
+	$(__test_allheaders___win32rc) \
+	test_allheaders_asserthelper.o \
+	test_allheaders_test.o \
+	test_allheaders_allheaders.o \
+	test_allheaders_testableframe.o
+TEST_ALLHEADERS_ODEP = \
+	$(_____pch_testprec_test_allheaders_testprec_h_gch___depname)
 
 ### Conditionally set variables: ###
 
@@ -304,21 +318,12 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_SHARED_1_USE_GUI_1@	= \
 @COND_SHARED_1_USE_GUI_1@	$(DLLPREFIX_MODULE)test_drawingplugin.$(SO_SUFFIX_MODULE)
 @COND_USE_GUI_1@__test_gui___depname = test_gui$(EXEEXT)
-@COND_PLATFORM_WIN32_1@__WIN32_DPI_MANIFEST_p_2 = \
-@COND_PLATFORM_WIN32_1@	--define \
-@COND_PLATFORM_WIN32_1@	wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_6 = --define __WXUNIVERSAL__
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_6 = --define wxDEBUG_LEVEL=0
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_6 = --define wxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p_6 = --define wxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p_6 = --define wxNO_THREADS
-@COND_SHARED_1@__DLLFLAG_p_6 = --define WXUSINGDLL
-@COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
-@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_bundle___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_gui_bundle
+@COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____test_gui_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____test_gui_BUNDLE_TGT_REF_DEP \
@@ -327,20 +332,12 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_TOOLKIT_OSX_COCOA@	= $(__test_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_IPHONE@____test_gui_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__test_gui_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
 @COND_GCC_PCH_1@__test_gui_PCH_INC = -I./.pch/testprec_test_gui
 @COND_ICC_PCH_1@__test_gui_PCH_INC = $(ICC_PCH_USE_SWITCH) \
 @COND_ICC_PCH_1@	./.pch/testprec_test_gui/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_gui_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test_gui/testprec.h.gch
-COND_MONOLITHIC_0_USE_WEBVIEW_1___WXLIB_WEBVIEW_p = \
-	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0_USE_WEBVIEW_1@__WXLIB_WEBVIEW_p = $(COND_MONOLITHIC_0_USE_WEBVIEW_1___WXLIB_WEBVIEW_p)
-COND_MONOLITHIC_0_USE_STC_1___WXLIB_STC_p = \
-	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0_USE_STC_1@__WXLIB_STC_p = $(COND_MONOLITHIC_0_USE_STC_1___WXLIB_STC_p)
 COND_MONOLITHIC_0___WXLIB_AUI_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_AUI_p = $(COND_MONOLITHIC_0___WXLIB_AUI_p)
@@ -356,21 +353,65 @@ COND_MONOLITHIC_0___WXLIB_XRC_p = \
 COND_MONOLITHIC_0___WXLIB_HTML_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_HTML_p = $(COND_MONOLITHIC_0___WXLIB_HTML_p)
+@COND_USE_GUI_1@__test_allheaders___depname = test_allheaders$(EXEEXT)
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_allheaders_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_allheaders.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_allheaders_bundle___depname \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_allheaders_bundle
+@COND_TOOLKIT_COCOA@____test_allheaders_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_COCOA@	= $(__test_allheaders_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____test_allheaders_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_MAC@	= $(__test_allheaders_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_CARBON@____test_allheaders_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_CARBON@	= \
+@COND_TOOLKIT_OSX_CARBON@	$(__test_allheaders_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_COCOA@____test_allheaders_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_COCOA@	= \
+@COND_TOOLKIT_OSX_COCOA@	$(__test_allheaders_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_IPHONE@____test_allheaders_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_IPHONE@	= \
+@COND_TOOLKIT_OSX_IPHONE@	$(__test_allheaders_app_Contents_PkgInfo___depname)
+@COND_GCC_PCH_1@__test_allheaders_PCH_INC = \
+@COND_GCC_PCH_1@	-I./.pch/testprec_test_allheaders
+@COND_ICC_PCH_1@__test_allheaders_PCH_INC = \
+@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@	./.pch/testprec_test_allheaders/testprec.h.gch
+@COND_USE_PCH_1@_____pch_testprec_test_allheaders_testprec_h_gch___depname \
+@COND_USE_PCH_1@	= ./.pch/testprec_test_allheaders/testprec.h.gch
+@COND_PLATFORM_WIN32_1@__test_allheaders___win32rc = \
+@COND_PLATFORM_WIN32_1@	test_allheaders_sample_rc.o
 COND_MONOLITHIC_0___WXLIB_XML_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
-COND_MONOLITHIC_0___WXLIB_NET_p = \
-	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
+@COND_PLATFORM_WIN32_1@__WIN32_DPI_MANIFEST_p = \
+@COND_PLATFORM_WIN32_1@	--define \
+@COND_PLATFORM_WIN32_1@	wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_0 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_0 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
+@COND_USE_RTTI_0@__RTTI_DEFINE_p_0 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
+@COND_USE_THREADS_0@__THREAD_DEFINE_p_0 = --define wxNO_THREADS
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_0 = --define WXUSINGDLL
+@COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
+@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+COND_MONOLITHIC_0_USE_WEBVIEW_1___WXLIB_WEBVIEW_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0_USE_WEBVIEW_1@__WXLIB_WEBVIEW_p = $(COND_MONOLITHIC_0_USE_WEBVIEW_1___WXLIB_WEBVIEW_p)
+COND_MONOLITHIC_0_USE_STC_1___WXLIB_STC_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0_USE_STC_1@__WXLIB_STC_p = $(COND_MONOLITHIC_0_USE_STC_1___WXLIB_STC_p)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
+COND_MONOLITHIC_0___WXLIB_NET_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
@@ -399,7 +440,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr ja
+all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-images fr ja
 
 install: 
 
@@ -415,6 +456,8 @@ clean:
 	rm -f $(DLLPREFIX_MODULE)test_drawingplugin.$(SO_SUFFIX_MODULE)
 	rm -f test_gui$(EXEEXT)
 	rm -rf test_gui.app
+	rm -f test_allheaders$(EXEEXT)
+	rm -rf test_allheaders.app
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -461,6 +504,34 @@ test$(EXEEXT): $(TEST_OBJECTS)
 
 @COND_USE_PCH_1@./.pch/testprec_test_gui/testprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_gui/testprec.h.gch testprec.h $(CXX) $(TEST_GUI_CXXFLAGS)
+
+@COND_USE_GUI_1@test_allheaders$(EXEEXT): $(TEST_ALLHEADERS_OBJECTS) $(__test_allheaders___win32rc)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_ALLHEADERS_OBJECTS)    $(WX_LDFLAGS)  -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG)  $(LDFLAGS)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_STC_p) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@test_allheaders.app/Contents/PkgInfo: $(__test_allheaders___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p test_allheaders.app/Contents
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p test_allheaders.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p test_allheaders.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/test_allheaders/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >test_allheaders.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	/bin/echo "APPL????" >test_allheaders.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f test_allheaders$(EXEEXT) test_allheaders.app/Contents/MacOS/test_allheaders
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns test_allheaders.app/Contents/Resources/wxmac.icns
+
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@test_allheaders_bundle: $(____test_allheaders_BUNDLE_TGT_REF_DEP)
+
+@COND_USE_PCH_1@./.pch/testprec_test_allheaders/testprec.h.gch: 
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_allheaders/testprec.h.gch testprec.h $(CXX) $(TEST_ALLHEADERS_CXXFLAGS)
 
 data: 
 	@mkdir -p .
@@ -784,7 +855,7 @@ test_drawingplugin_pluginsample.o: $(srcdir)/drawing/pluginsample.cpp
 	$(CXXC) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(srcdir)/drawing/pluginsample.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p_2) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6) $(__DEBUG_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)  --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include
+	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include
 
 test_gui_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/asserthelper.cpp
@@ -1083,8 +1154,23 @@ test_gui_setsize.o: $(srcdir)/window/setsize.cpp $(TEST_GUI_ODEP)
 test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/xml/xrctest.cpp
 
+test_allheaders_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_ALLHEADERS_ODEP)
+	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include --define wxNO_IMPLICIT_WXSTRING_ENCODING
 
-failtest: failtest_combobox failtest_evthandler failtest_weakref
+test_allheaders_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_ALLHEADERS_ODEP)
+	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/asserthelper.cpp
+
+test_allheaders_test.o: $(srcdir)/test.cpp $(TEST_ALLHEADERS_ODEP)
+	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/test.cpp
+
+test_allheaders_allheaders.o: $(srcdir)/allheaders.cpp $(TEST_ALLHEADERS_ODEP)
+	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/allheaders.cpp
+
+test_allheaders_testableframe.o: $(srcdir)/testableframe.cpp $(TEST_ALLHEADERS_ODEP)
+	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/testableframe.cpp
+
+
+failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
@@ -1112,9 +1198,18 @@ failtest_weakref:
 	fi; \
 	exit 0
 
-.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref
+failtest_allheaders:
+	@$(RM) test_allheaders.o
+	if $(MAKE) CPPFLAGS=-DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_IMPLICIT_WXSTRING_ENCODING unexpectedly succeeded.">&2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr ja
+.PHONY: all install uninstall clean distclean test_gui_bundle \
+	test_allheaders_bundle data data-images fr ja
