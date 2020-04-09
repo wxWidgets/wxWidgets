@@ -285,6 +285,14 @@ typedef short int WXTYPE;
     #define wxOVERRIDE
 #endif /*  HAVE_OVERRIDE */
 
+/* same for noexcept keyword */
+#if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
+    #define wxHAS_NOEXCEPT
+    #define wxNOEXCEPT noexcept
+#else
+    #define wxNOEXCEPT
+#endif
+
 /*
     Support for nullptr is available since MSVS 2010, even though it doesn't
     define __cplusplus as a C++11 compiler.
