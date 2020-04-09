@@ -135,6 +135,11 @@ bool wxButton::Create(wxWindow *parent,
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
+#ifdef __WXGTK3__
+    if ( useLabel && (style & wxBU_EXACTFIT) )
+        GTKApplyCssStyle("* { padding:0 }");
+#endif // __WXGTK3__
+
     g_signal_connect_after (m_widget, "clicked",
                             G_CALLBACK (wxgtk_button_clicked_callback),
                             this);
@@ -365,5 +370,4 @@ wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_button_new());
 }
-
 #endif // wxUSE_BUTTON
