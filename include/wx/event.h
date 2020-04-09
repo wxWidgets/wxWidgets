@@ -144,9 +144,43 @@ inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
     wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 }
 
+// Special hack to remove "noexcept" from the function type when using C++17 or
+// later: static_cast<> below would fail to cast a member function pointer to a
+// member of a derived class to the base class if noexcept is specified for the
+// former, so remove it first if necessary.
+#if __cplusplus >= 201703L
+
+namespace wxPrivate
+{
+
+// Generic template version, doing nothing.
+template <typename T>
+struct RemoveNoexceptEventHandler
+{
+    using type = T;
+};
+
+// Specialization removing noexcept when it's specified.
+//
+// Note that this doesn't pretend to be generally suitable, this is just enough
+// to work in our particular case.
+template <typename R, typename C, typename E>
+struct RemoveNoexceptEventHandler<R (C::*)(E&) noexcept>
+{
+    using type = R (C::*)(E&);
+};
+
+} // namespace wxPrivate
+
+#define wxREMOVE_NOEXCEPT_EVENT_HANDLER(pmf) \
+    static_cast<wxPrivate::RemoveNoexceptEventHandler<decltype(pmf)>::type>(pmf)
+#else
+#define wxREMOVE_NOEXCEPT_EVENT_HANDLER(pmf) pmf
+#endif
+
 // Try to cast the given event handler to the correct handler type:
 #define wxEVENT_HANDLER_CAST( functype, func ) \
-    wxEventFunctionCast(static_cast<functype>(&func))
+    wxEventFunctionCast(static_cast<functype>(wxREMOVE_NOEXCEPT_EVENT_HANDLER(&func)))
 
 
 // The tag is a type associated to the event type (which is an integer itself,
