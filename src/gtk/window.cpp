@@ -2997,6 +2997,7 @@ enum TrackedGestures
     vertical_pan   = 0x0008
 };
 
+extern "C" {
 static void
 pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* WXUNUSED(win))
 {
@@ -3005,7 +3006,9 @@ pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUN
     // Set it to 0, as this will be used to calculate the deltas for new pan gesture
     gs_lastOffset = 0;
 }
+}
 
+extern "C" {
 static void
 horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindow* win)
 {
@@ -3036,7 +3039,9 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindow* win)
 {
@@ -3067,7 +3072,9 @@ vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequenc
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble offset, wxWindow* win)
 {
@@ -3139,7 +3146,9 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindow* win)
 {
@@ -3174,7 +3183,9 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindow* win)
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
@@ -3199,7 +3210,9 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequ
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 zoom_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
@@ -3212,7 +3225,9 @@ zoom_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNU
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
@@ -3235,7 +3250,9 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(se
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdouble angle, wxWindowGTK* win)
 {
@@ -3262,7 +3279,9 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdou
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 rotate_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
@@ -3275,7 +3294,9 @@ rotate_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXU
 
     win->GTKProcessEvent(event);
 }
+}
 
+extern "C" {
 static void
 long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y, wxWindowGTK* win)
 {
@@ -3287,6 +3308,7 @@ long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y,
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
+}
 }
 
 static void
@@ -3356,6 +3378,7 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindow* win)
     win->GTKProcessEvent(event);
 }
 
+extern "C" {
 static void
 touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* win)
 {
@@ -3454,6 +3477,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* 
         default:
         break;
     }
+}
 }
 
 void wxWindowGesturesData::Reinit(wxWindowGTK* win,
