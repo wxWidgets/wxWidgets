@@ -131,7 +131,8 @@ protected:
 #endif // wxUSE_MARKUP
                *m_chkDefault,
                *m_chkUseBitmapClass,
-               *m_chkDisable;
+               *m_chkDisable,
+               *m_chkNoBorder;
 
     // more checkboxes for wxBitmapButton only
     wxCheckBox *m_chkUsePressed,
@@ -215,6 +216,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkDefault =
     m_chkUseBitmapClass =
     m_chkDisable =
+    m_chkNoBorder =
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
@@ -256,6 +258,7 @@ void ButtonWidgetsPage::CreateContent()
     m_chkUseBitmapClass->SetValue(true);
 
     m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable");
+    m_chkNoBorder = CreateCheckBoxAndAddToSizer(sizerLeft, "No border");
 
     sizerLeft->AddSpacer(5);
 
@@ -373,6 +376,7 @@ void ButtonWidgetsPage::Reset()
 #endif // wxUSE_MARKUP
     m_chkUseBitmapClass->SetValue(true);
     m_chkDisable->SetValue(false);
+    m_chkNoBorder->SetValue(false);
 
     m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
@@ -453,6 +457,10 @@ void ButtonWidgetsPage::CreateButton()
     if ( m_chkFit->GetValue() )
     {
         flags |= wxBU_EXACTFIT;
+    }
+    if ( m_chkNoBorder->GetValue() )
+    {
+        flags |= wxNO_BORDER;
     }
 
     bool showsBitmap = false;
