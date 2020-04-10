@@ -187,6 +187,9 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 #endif // wxUSE_OWNER_DRAWN
 
+    if (m_windowStyle & wxLB_USETABSTOPS)
+        msStyle |= LBS_USETABSTOPS;
+
     return msStyle;
 }
 
@@ -609,6 +612,11 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         SendMessage(GetHwnd(), LB_SETHORIZONTALEXTENT, LOWORD(largestExtent), 0L);
     }
     //else: it shouldn't change
+}
+
+void wxListBox::SetTabStops(const wxArrayInt& tabStops)
+{
+    SendMessage(GetHwnd(), LB_SETTABSTOPS, (WPARAM)tabStops.Count(), (LPARAM)tabStops.begin());
 }
 
 wxSize wxListBox::DoGetBestClientSize() const

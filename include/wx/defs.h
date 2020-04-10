@@ -1557,6 +1557,8 @@ enum wxBorder
 #define wxLB_HSCROLL        wxHSCROLL
 /*  always show an entire number of rows */
 #define wxLB_INT_HEIGHT     0x0800
+/* Windows-only: recognize and expand tab characters when drawing strings */
+#define wxLB_USETABSTOPS    0x1000
 
 /*
  * wxComboBox style flags
