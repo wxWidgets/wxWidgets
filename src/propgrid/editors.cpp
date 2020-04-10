@@ -2138,9 +2138,55 @@ void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
 {
     itemid = GenId(itemid);
     wxSize sz = GetSize();
-    wxButton* button = new wxBitmapButton( this, itemid, bitmap,
-                                           wxPoint(sz.x, 0),
-                                           wxSize(sz.y, sz.y) );
+
+    // Internal margins around the bitmap inside the button
+    const int margins =
+#if defined(__WXMSW__)
+            2*4;
+#elif defined(__WXGTK3__)
+            2*4;
+#elif defined(__WXGTK__)
+            2*8;
+#elif defined(__WXOSX__)
+            2*3;
+#else
+            0;
+#endif
+    // Maximal heigth of the bitmap
+    const int hMax = sz.y - margins;
+
+    wxBitmap scaledBmp;
+    // Scale bitmap down if necessary
+    if ( bitmap.GetHeight() > hMax )
+    {
+        double scale = (double)hMax / bitmap.GetHeight();
+        int w = wxRound(bitmap.GetWidth()*scale);
+        int h = wxRound(bitmap.GetHeight()*scale);
+#if wxUSE_IMAGE
+        // Here we use high-quality wxImage scaling functions available
+        wxImage img = bitmap.ConvertToImage();
+        img.Rescale(w, h, wxIMAGE_QUALITY_HIGH);
+        scaledBmp = img;
+#else // !wxUSE_IMAGE
+        scaledBmp.Create(w, h, bitmap.GetDepth());
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
+        scaledBmp.UseAlpha(bitmap.HasAlpha());
+#endif // __WXMSW__ || __WXOSX__
+        {
+            wxMemoryDC dc(scaledBmp);
+            dc.SetUserScale(scale, scale);
+            dc.DrawBitmap(bitmap, 0, 0);
+        }
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+    }
+    else
+    {
+        scaledBmp = bitmap;
+    }
+
+    wxBitmapButton* button = new wxBitmapButton(this, itemid, scaledBmp,
+                           wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y));
     DoAddButton( button, sz );
 }
 #endif
