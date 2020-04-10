@@ -38,19 +38,35 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
         return;
     }
 
-    int inc = pos - oldPos;
-    // Adjust for wrap arounds
-    // (Doesn't work for degenerated cases, like [0..1] range.)
+    // Normally we can determine which way we're going by just comparing the
+    // old and the new values.
+    bool up = pos > oldPos;
+
+    // However we need to account for the possibility of wrapping around.
     if ( win->HasFlag(wxSP_WRAP) )
     {
-        if ( inc > 1 )
-            inc = -1;
-        else if ( inc < -1 )
-            inc = 1;
-    }
-    wxASSERT( inc == 1 || inc == -1 );
+        // We have no way of distinguishing between wraparound and normal
+        // change when the range is just 1, as pressing either arrow results in
+        // the same change, so don't even try doing it in this case.
+        const int spinMin = win->GetMin();
+        const int spinMax = win->GetMax();
 
-    wxSpinEvent event(inc > 0 ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
+        if ( spinMax - spinMin > 1 )
+        {
+            if ( up )
+            {
+                if ( oldPos == spinMin && pos == spinMax )
+                    up = false;
+            }
+            else // down
+            {
+                if ( oldPos == spinMax && pos == spinMin )
+                    up = true;
+            }
+        }
+    }
+
+    wxSpinEvent event(up ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
     event.SetPosition(pos);
     event.SetEventObject(win);
 

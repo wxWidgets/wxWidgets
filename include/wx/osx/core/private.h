@@ -51,7 +51,6 @@ wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from 
 WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
-WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
 // keycode utils from app.cpp
 
@@ -59,6 +58,13 @@ WXDLLIMPEXP_BASE CGKeyCode wxCharCodeWXToOSX(wxKeyCode code);
 WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 
 #endif
+
+// NSString<->wxString
+
+WXDLLIMPEXP_BASE wxString wxStringWithNSString(NSString *nsstring);
+WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
+
+WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
 #if wxUSE_GUI
 

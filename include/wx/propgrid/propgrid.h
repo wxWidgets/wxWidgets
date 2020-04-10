@@ -1235,6 +1235,9 @@ public:
     // Checks system screen design used for laying out various dialogs.
     static bool IsSmallScreen();
 
+    // Returns rescaled bitmap
+    static wxBitmap RescaleBitmap(const wxBitmap& srcBmp, double scaleX, double scaleY);
+
     // Returns rectangle that fully contains properties between and including
     // p1 and p2. Rectangle is in virtual scrolled window coordinates.
     wxRect GetPropertyRect( const wxPGProperty* p1,

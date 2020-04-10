@@ -1112,7 +1112,7 @@ failtest_weakref:
 	fi; \
 	exit 0
 
-.PHONY: failtest
+.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d

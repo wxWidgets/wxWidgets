@@ -66,6 +66,15 @@
     #include "wx/ffile.h"
 #endif
 
+// We don't provide wxAtomicLong and it doesn't seem really useful to add it
+// now when C++11 is widely available, so just use the standard C++11 type if
+// possible and live without it otherwise.
+#if __cplusplus >= 201103L
+    #include <atomic>
+
+    #define HAS_ATOMIC_ULONG
+#endif // C++11
+
 #define THR_ID_CAST(id)  (reinterpret_cast<void*>(id))
 #define THR_ID(thr)      THR_ID_CAST((thr)->GetId())
 
@@ -187,7 +196,13 @@ private:
     pthread_mutex_t m_mutex;
     bool m_isOk;
     wxMutexType m_type;
-    unsigned long m_owningThread;
+
+    // This member must be atomic as it's written and read from different
+    // threads. If atomic operations are not available, we won't detect mutex
+    // deadlocks at wx level.
+#ifdef HAS_ATOMIC_ULONG
+    std::atomic_ulong m_owningThread;
+#endif
 
     // wxConditionInternal uses our m_mutex
     friend class wxConditionInternal;
@@ -203,7 +218,9 @@ extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t *, int);
 wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
 {
     m_type = mutexType;
+#ifdef HAS_ATOMIC_ULONG
     m_owningThread = 0;
+#endif
 
     int err;
     switch ( mutexType )
@@ -265,11 +282,10 @@ wxMutexInternal::~wxMutexInternal()
 
 wxMutexError wxMutexInternal::Lock()
 {
-    if ((m_type == wxMUTEX_DEFAULT) && (m_owningThread != 0))
-    {
-        if (m_owningThread == wxThread::GetCurrentId())
+#ifdef HAS_ATOMIC_ULONG
+    if ( m_type == wxMUTEX_DEFAULT && m_owningThread == wxThread::GetCurrentId() )
            return wxMUTEX_DEAD_LOCK;
-    }
+#endif // HAS_ATOMIC_ULONG
 
     return HandleLockResult(pthread_mutex_lock(&m_mutex));
 }
@@ -344,8 +360,10 @@ wxMutexError wxMutexInternal::HandleLockResult(int err)
             return wxMUTEX_TIMEOUT;
 
         case 0:
+#ifdef HAS_ATOMIC_ULONG
             if (m_type == wxMUTEX_DEFAULT)
                 m_owningThread = wxThread::GetCurrentId();
+#endif // HAS_ATOMIC_ULONG
             return wxMUTEX_NO_ERROR;
 
         default:
@@ -371,8 +389,10 @@ wxMutexError wxMutexInternal::TryLock()
             break;
 
         case 0:
+#ifdef HAS_ATOMIC_ULONG
             if (m_type == wxMUTEX_DEFAULT)
                 m_owningThread = wxThread::GetCurrentId();
+#endif // HAS_ATOMIC_ULONG
             return wxMUTEX_NO_ERROR;
 
         default:
@@ -384,7 +404,9 @@ wxMutexError wxMutexInternal::TryLock()
 
 wxMutexError wxMutexInternal::Unlock()
 {
+#ifdef HAS_ATOMIC_ULONG
     m_owningThread = 0;
+#endif // HAS_ATOMIC_ULONG
 
     int err = pthread_mutex_unlock(&m_mutex);
     switch ( err )

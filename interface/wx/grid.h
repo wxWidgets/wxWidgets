@@ -556,6 +556,16 @@ public:
     virtual void StartingKey(wxKeyEvent& event);
 
     /**
+       Return @true to allow the given key to start editing: the base class
+       version only checks that the event has no modifiers. 
+
+       If the key is F2 (special), editing will always start and this
+       method will not be called at all (but StartingKey() will)
+    */
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
+    
+
+    /**
        Returns the value currently in the editor control.
      */
     virtual wxString GetValue() const = 0;
@@ -2540,14 +2550,14 @@ public:
         Default constructor.
 
         You must call Create() to really create the grid window and also call
-        CreateGrid() or SetTable() to initialize the grid contents.
+        CreateGrid() or SetTable() or AssignTable() to initialize its contents.
      */
     wxGrid();
     /**
         Constructor creating the grid window.
 
-        You must call either CreateGrid() or SetTable() to initialize the grid
-        contents before using it.
+        You must call either CreateGrid() or SetTable() or AssignTable() to
+        initialize the grid contents before using it.
     */
     wxGrid(wxWindow* parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -2568,8 +2578,8 @@ public:
         Creates the grid window for an object initialized using the default
         constructor.
 
-        You must call either CreateGrid() or SetTable() to initialize the grid
-        contents before using it.
+        You must call either CreateGrid() or SetTable() or AssignTable() to
+        initialize the grid contents before using it.
      */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -2586,7 +2596,8 @@ public:
 
         For applications with more complex data types or relationships, or for
         dealing with very large datasets, you should derive your own grid table
-        class and pass a table object to the grid with SetTable().
+        class and pass a table object to the grid with SetTable() or
+        AssignTable().
     */
     bool CreateGrid(int numRows, int numCols,
                     wxGridSelectionModes selmode = wxGridSelectCells);
@@ -2601,9 +2612,33 @@ public:
         Use this function instead of CreateGrid() when your application
         involves complex or non-string data or data sets that are too large to
         fit wholly in memory.
+
+        When the custom table should be owned by the grid, consider using the
+        simpler AssignTable() function instead of this one with @true value of
+        @a takeOwnership parameter.
     */
     bool SetTable(wxGridTableBase* table, bool takeOwnership = false,
                   wxGridSelectionModes selmode = wxGridSelectCells);
+
+    /**
+        Assigns a pointer to a custom grid table to be used by the grid.
+
+        This function is identical to SetTable() with @c takeOwnership
+        parameter set to @true, i.e. it simply always takes the ownership of
+        the passed in pointer. This makes it simpler to use than SetTable() in
+        the common case when the table should be owned by the grid object.
+
+        Note that this function should be called at most once and can't be used
+        to change the table used by the grid later on or reset it: if such
+        extra flexibility is needed, use SetTable() directly.
+
+        @since 3.1.4
+
+        @param table The heap-allocated pointer to the table.
+        @param selmode Selection mode to use.
+    */
+    void AssignTable( wxGridTableBase *table,
+                      wxGridSelectionModes selmode = wxGridSelectCells);
 
     /**
        Receive and handle a message from the table.
@@ -4991,7 +5026,7 @@ public:
         (yet) matching calls to EndBatch(). While the grid's batch count is
         greater than zero the display will not be updated.
     */
-    int GetBatchCount();
+    int GetBatchCount() const;
 
     /**
         Returns the total number of grid columns.
@@ -5071,7 +5106,7 @@ public:
         successful the table notifies the grid and the grid updates the
         display. For a default grid (one where you have called CreateGrid())
         this process is automatic. If you are using a custom grid table
-        (specified with SetTable()) then you must override
+        (specified with SetTable() or AssignTable()) then you must override
         wxGridTableBase::InsertCols() in your derived table class.
 
         @param pos
@@ -5373,8 +5408,17 @@ public:
 
         This function can only be called if UseNativeColHeader() had been
         called.
+
+        @see IsUsingNativeHeader()
      */
     wxHeaderCtrl *GetGridColHeader() const;
+
+    /**
+        Return true if native header control is currently being used.
+
+        @since 3.1.4
+     */
+    bool IsUsingNativeHeader() const;
 
     //@}
 

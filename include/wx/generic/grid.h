@@ -25,8 +25,8 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGridNameStr[];
 
-// Default parameters for wxGrid
-//
+// Obsolete constants not used by wxWidgets itself any longer, preserved only
+// for compatibility.
 #define WXGRID_DEFAULT_NUMBER_ROWS            10
 #define WXGRID_DEFAULT_NUMBER_COLS            10
 #if defined(__WXMSW__) || defined(__WXGTK20__)
@@ -34,13 +34,18 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGridNameStr[];
 #else
 #define WXGRID_DEFAULT_ROW_HEIGHT             30
 #endif  // __WXMSW__
+#define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
+
+// Various constants used in wxGrid code.
+//
+// Note that all the values are in DIPs, not pixels, i.e. you must use
+// FromDIP() when using them in your code.
 #define WXGRID_DEFAULT_COL_WIDTH              80
 #define WXGRID_DEFAULT_COL_LABEL_HEIGHT       32
 #define WXGRID_DEFAULT_ROW_LABEL_WIDTH        82
 #define WXGRID_LABEL_EDGE_ZONE                 2
 #define WXGRID_MIN_ROW_HEIGHT                 15
 #define WXGRID_MIN_COL_WIDTH                  15
-#define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
 
 // type names for grid table values
 #define wxGRID_VALUE_STRING     wxT("string")
@@ -1075,12 +1080,13 @@ public:
 
     virtual ~wxGrid();
 
-    // however to initialize grid data either CreateGrid() or SetTable() must
+    // however to initialize grid data either CreateGrid() (to use a simple
+    // default table class) or {Set,Assign}Table() (to use a custom table) must
     // be also called
 
     // this is basically equivalent to
     //
-    //   SetTable(new wxGridStringTable(numRows, numCols), true, selmode)
+    //   AssignTable(new wxGridStringTable(numRows, numCols), selmode)
     //
     bool CreateGrid( int numRows, int numCols,
                      wxGridSelectionModes selmode = wxGridSelectCells );
@@ -1088,6 +1094,9 @@ public:
     bool SetTable( wxGridTableBase *table,
                    bool takeOwnership = false,
                    wxGridSelectionModes selmode = wxGridSelectCells );
+
+    void AssignTable( wxGridTableBase *table,
+                      wxGridSelectionModes selmode = wxGridSelectCells );
 
     bool ProcessTableMessage(wxGridTableMessage&);
 
@@ -1235,7 +1244,7 @@ public:
     void     BeginBatch() { m_batchCount++; }
     void     EndBatch();
 
-    int      GetBatchCount() { return m_batchCount; }
+    int      GetBatchCount() const { return m_batchCount; }
 
     virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL) wxOVERRIDE;
 
@@ -1368,9 +1377,9 @@ public:
 
     // ------ label and gridline formatting
     //
-    int      GetDefaultRowLabelSize() const { return WXGRID_DEFAULT_ROW_LABEL_WIDTH; }
+    int      GetDefaultRowLabelSize() const { return FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH); }
     int      GetRowLabelSize() const { return m_rowLabelWidth; }
-    int      GetDefaultColLabelSize() const { return WXGRID_DEFAULT_COL_LABEL_HEIGHT; }
+    int      GetDefaultColLabelSize() const { return FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT); }
     int      GetColLabelSize() const { return m_colLabelHeight; }
     wxColour GetLabelBackgroundColour() const { return m_labelBackgroundColour; }
     wxColour GetLabelTextColour() const { return m_labelTextColour; }
@@ -1837,6 +1846,9 @@ public:
     wxWindow* GetGridColLabelWindow() const    { return m_colLabelWin; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
 
+    // Return true if native header is used by the grid.
+    bool IsUsingNativeHeader() const { return m_useNativeHeader; }
+
     // This one can only be called if we are using the native header window
     wxHeaderCtrl *GetGridColHeader() const
     {
@@ -2295,10 +2307,15 @@ protected:
     bool    m_canDragGridSize;
     bool    m_canDragCell;
 
-    // the last position (horizontal or vertical depending on whether the user
-    // is resizing a column or a row) where a row or column separator line was
-    // dragged by the user or -1 of there is no drag operation in progress
+    // Index of the column being drag-moved or -1 if there is no move operation
+    // in progress.
+    int     m_dragMoveCol;
+
+    // Last horizontal mouse position while drag-moving a column.
     int     m_dragLastPos;
+
+    // Row or column (depending on m_cursorMode value) currently being resized
+    // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
     // true if a drag operation is in progress; when this is true,
@@ -2358,12 +2375,10 @@ protected:
                            int row, int col,
                            const wxMouseEvent& mouseEv);
 
-    void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
-    void OnEraseBackground( wxEraseEvent& );
     void OnHideEditor( wxCommandEvent& );
 
 
@@ -2400,6 +2415,13 @@ protected:
     friend class wxGridHeaderCtrl;
 
 private:
+    // This is called from both Create() and OnDPIChanged() to (re)initialize
+    // the values in pixels, which depend on the current DPI.
+    void InitPixelFields();
+
+    // Event handler for DPI change event recomputes pixel values and relays
+    // out the grid.
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // implement wxScrolledCanvas method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
@@ -2453,6 +2475,12 @@ private:
     // release the mouse capture if it's currently captured
     void EndDraggingIfNecessary();
 
+    // return true if the grid should be refreshed right now
+    bool ShouldRefresh() const
+    {
+        return !GetBatchCount() && IsShownOnScreen();
+    }
+
 
     // return the position (not index) of the column at the given logical pixel
     // position
@@ -2469,11 +2497,6 @@ private:
                         const wxGridCellCoords& coords,
                         bool isFirstDrag);
 
-    // process row/column resizing drag event
-    void DoGridLineDrag(int pos,
-                        const wxGridOperations& oper,
-                        wxGridWindow* gridWindow);
-
     // process mouse drag event in the grid window, return false if starting
     // dragging was vetoed by the user-defined wxEVT_GRID_CELL_BEGIN_DRAG
     // handler
@@ -2482,15 +2505,10 @@ private:
                          bool isFirstDrag,
                          wxGridWindow* gridWindow);
 
-    void DrawGridDragLine(wxPoint position,
+    // Update the width/height of the column/row being drag-resized.
+    void DoGridDragResize(const wxPoint& position,
                           const wxGridOperations& oper,
                           wxGridWindow* gridWindow);
-
-    // return the current grid windows involved in the drag process
-    void GetDragGridWindows(int pos,
-                            const wxGridOperations& oper,
-                            wxGridWindow*& firstGridWindow,
-                            wxGridWindow*& secondGridWindow);
 
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
@@ -2523,17 +2541,26 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeCol(int col);
-    void DoUpdateResizeColWidth(int w);
+    void DoStartResizeRowOrCol(int col);
     void DoStartMoveCol(int col);
 
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
-    void DoEndDragResizeCol(const wxMouseEvent& event)
-    {
-        DoEndDragResizeCol(event, m_gridWin);
-    }
     void DoEndMoveCol(int pos);
+
+    // Helper function returning the position (only the horizontal component
+    // really counts) corresponding to the given column drag-resize event.
+    //
+    // It's a bit ugly to create a phantom mouse position when we really only
+    // need the column width anyhow, but wxGrid code was originally written to
+    // expect the position and not the width and it's simpler to keep it happy
+    // by giving it the position than to change it.
+    wxPoint GetPositionForResizeEvent(int width) const;
+
+    // functions called by wxGridHeaderCtrl while resizing m_dragRowOrCol
+    void DoHeaderStartDragResizeCol(int col);
+    void DoHeaderDragResizeCol(int width);
+    void DoHeaderEndDragResizeCol(int width);
 
     // process a TAB keypress
     void DoGridProcessTab(wxKeyboardState& kbdState);

@@ -2162,30 +2162,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
         if ( imSz.y != maxSz.y )
         {
-#if wxUSE_IMAGE
-            // Here we use high-quality wxImage scaling functions available
-            wxImage img = bmp.ConvertToImage();
             double scaleY = (double)maxSz.y / (double)imSz.y;
-            img.Rescale(wxRound(bmp.GetWidth()*scaleY),
-                        wxRound(bmp.GetHeight()*scaleY),
-                        wxIMAGE_QUALITY_HIGH);
-            wxBitmap* bmpNew = new wxBitmap(img);
-#else // !wxUSE_IMAGE
-            // This is the old, deprecated method of scaling the image
-            wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-            // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-            bmpNew->UseAlpha(bmp.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
-            {
-                wxMemoryDC dc(*bmpNew);
-                double scaleY = (double)maxSz.y / (double)imSz.y;
-                dc.SetUserScale(scaleY, scaleY);
-                dc.DrawBitmap(bmp, 0, 0);
-            }
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
-
-            m_valueBitmap = bmpNew;
+            m_valueBitmap = new wxBitmap(wxPropertyGrid::RescaleBitmap(bmp, scaleY, scaleY));
         }
         else
         {

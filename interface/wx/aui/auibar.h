@@ -681,13 +681,13 @@ public:
     bool SetFont(const wxFont& font);
 
 
-    wxAuiToolBarItem* AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxString& short_help_string = wxEmptyString,
                  wxItemKind kind = wxITEM_NORMAL);
 
-    wxAuiToolBarItem* AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
@@ -696,7 +696,7 @@ public:
                  const wxString& long_help_string,
                  wxObject* client_data);
 
-    wxAuiToolBarItem* AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int toolId,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
                  bool toggle = false,
@@ -704,7 +704,7 @@ public:
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString);
 
-    wxAuiToolBarItem* AddLabel(int tool_id,
+    wxAuiToolBarItem* AddLabel(int toolId,
                   const wxString& label = wxEmptyString,
                   const int width = -1);
     wxAuiToolBarItem* AddControl(wxControl* control,
@@ -718,19 +718,67 @@ public:
     wxControl* FindControl(int window_id);
     wxAuiToolBarItem* FindToolByPosition(wxCoord x, wxCoord y) const;
     wxAuiToolBarItem* FindToolByIndex(int idx) const;
-    wxAuiToolBarItem* FindTool(int tool_id) const;
+    wxAuiToolBarItem* FindTool(int toolId) const;
 
     void ClearTools();
     void Clear();
-    bool DeleteTool(int tool_id);
-    bool DeleteByIndex(int tool_id);
+
+    /**
+        Destroys the tool with the given ID and its associated window, if any.
+
+        @param toolId ID of a previously added tool.
+        @return @true if the tool was destroyed or @false otherwise, e.g. if
+            the tool with the given ID was not found.
+
+        @since 3.1.4
+     */
+    bool DestroyTool(int toolId);
+
+    /**
+        Destroys the tool at the given position and its associated window, if
+        any.
+
+        @param idx The index, or position, of a previously added tool.
+        @return @true if the tool was destroyed or @false otherwise, e.g. if
+            the provided index is out of range.
+     */
+    bool DestroyToolByIndex(int idx);
+
+    /**
+        Removes the tool with the given ID from the toolbar.
+
+        Note that if this tool was added by AddControl(), the associated
+        control is @e not deleted and must either be reused (e.g. by
+        reparenting it under a different window) or destroyed by caller.
+        If this behaviour is unwanted, prefer using DestroyTool() instead.
+
+        @param toolId ID of a previously added tool.
+        @return @true if the tool was removed or @false otherwise, e.g. if the
+            tool with the given ID was not found.
+     */
+    bool DeleteTool(int toolId);
+
+    /**
+        Removes the tool at the given position from the toolbar.
+
+        Note that if this tool was added by AddControl(), the associated
+        control is @e not deleted and must either be reused (e.g. by
+        reparenting it under a different window) or destroyed by caller.
+        If this behaviour is unwanted, prefer using DestroyToolByIndex()
+        instead.
+
+        @param idx The index, or position, of a previously added tool.
+        @return @true if the tool was removed or @false otherwise, e.g. if the
+            provided index is out of range.
+     */
+    bool DeleteByIndex(int idx);
 
     size_t GetToolCount() const;
-    int GetToolPos(int tool_id) const;
-    int GetToolIndex(int tool_id) const;
-    bool GetToolFits(int tool_id) const;
-    wxRect GetToolRect(int tool_id) const;
-    bool GetToolFitsByIndex(int tool_id) const;
+    int GetToolPos(int toolId) const;
+    int GetToolIndex(int toolId) const;
+    bool GetToolFits(int toolId) const;
+    wxRect GetToolRect(int toolId) const;
+    bool GetToolFitsByIndex(int toolId) const;
     bool GetToolBarFits() const;
 
     void SetMargins(const wxSize& size);
@@ -746,11 +794,11 @@ public:
     bool GetGripperVisible() const;
     void SetGripperVisible(bool visible);
 
-    void ToggleTool(int tool_id, bool state);
-    bool GetToolToggled(int tool_id) const;
+    void ToggleTool(int toolId, bool state);
+    bool GetToolToggled(int toolId) const;
 
-    void EnableTool(int tool_id, bool state);
-    bool GetToolEnabled(int tool_id) const;
+    void EnableTool(int toolId, bool state);
+    bool GetToolEnabled(int toolId) const;
 
     /**
         Set whether the specified toolbar item has a drop down button.
@@ -759,7 +807,7 @@ public:
 
         @see wxAuiToolBarItem::SetHasDropDown()
     */
-    void SetToolDropDown(int tool_id, bool dropdown);
+    void SetToolDropDown(int toolId, bool dropdown);
 
     /**
         Returns whether the specified toolbar item has an associated drop down
@@ -767,7 +815,7 @@ public:
 
         @see wxAuiToolBarItem::HasDropDown()
     */
-    bool GetToolDropDown(int tool_id) const;
+    bool GetToolDropDown(int toolId) const;
 
     void SetToolBorderPadding(int padding);
     int  GetToolBorderPadding() const;
@@ -778,26 +826,26 @@ public:
     void SetToolPacking(int packing);
     int  GetToolPacking() const;
 
-    void SetToolProportion(int tool_id, int proportion);
-    int  GetToolProportion(int tool_id) const;
+    void SetToolProportion(int toolId, int proportion);
+    int  GetToolProportion(int toolId) const;
 
     void SetToolSeparation(int separation);
     int GetToolSeparation() const;
 
-    void SetToolSticky(int tool_id, bool sticky);
-    bool GetToolSticky(int tool_id) const;
+    void SetToolSticky(int toolId, bool sticky);
+    bool GetToolSticky(int toolId) const;
 
-    wxString GetToolLabel(int tool_id) const;
-    void SetToolLabel(int tool_id, const wxString& label);
+    wxString GetToolLabel(int toolId) const;
+    void SetToolLabel(int toolId, const wxString& label);
 
-    wxBitmap GetToolBitmap(int tool_id) const;
-    void SetToolBitmap(int tool_id, const wxBitmap& bitmap);
+    wxBitmap GetToolBitmap(int toolId) const;
+    void SetToolBitmap(int toolId, const wxBitmap& bitmap);
 
-    wxString GetToolShortHelp(int tool_id) const;
-    void SetToolShortHelp(int tool_id, const wxString& help_string);
+    wxString GetToolShortHelp(int toolId) const;
+    void SetToolShortHelp(int toolId, const wxString& help_string);
 
-    wxString GetToolLongHelp(int tool_id) const;
-    void SetToolLongHelp(int tool_id, const wxString& help_string);
+    wxString GetToolLongHelp(int toolId) const;
+    void SetToolLongHelp(int toolId, const wxString& help_string);
 
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);

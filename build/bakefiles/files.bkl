@@ -353,7 +353,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontpickerg.h
     wx/generic/caret.h
     wx/qt/calctrl.h
-    wx/generic/animate.h
     wx/qt/dvrenderer.h
     wx/qt/taskbar.h
     wx/generic/activityindicator.h
@@ -375,7 +374,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/imaglist.cpp
     src/generic/prntdlgg.cpp
     src/generic/textmeasure.cpp
-    src/generic/animateg.cpp
     src/generic/activityindicator.cpp
     src/qt/accel.cpp
     src/qt/app.cpp
@@ -934,6 +932,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/windowid.cpp
     src/common/wrapsizer.cpp
     src/common/xpmdecod.cpp
+    src/generic/animateg.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
@@ -1045,6 +1044,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gbsizer.h
     wx/gdicmn.h
     wx/generic/accel.h
+    wx/generic/animate.h
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
     wx/generic/combo.h
@@ -1712,7 +1712,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/taskbar.cpp
     src/generic/activityindicator.cpp
     src/gtk1/eggtrayicon.c
-    src/generic/animateg.cpp
 </set>
 <set var="GTK1_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1760,7 +1759,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk1/textctrl.h
     wx/gtk1/tglbtn.h
     wx/gtk1/treectrl.h
-    wx/generic/animate.h
     wx/generic/activityindicator.h
 </set>
 
@@ -1857,7 +1855,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statline.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
-    src/generic/animateg.cpp
     src/generic/activityindicator.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
@@ -1929,8 +1926,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/toolbar.h
     wx/motif/toplevel.h
     wx/motif/window.h
-    wx/generic/animate.h
-    wx/generic/animateanimate.h
 </set>
 
 
@@ -2154,7 +2149,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/treectrl.cpp
     src/msw/systhemectrl.cpp
     src/msw/customdraw.cpp
-    src/generic/animateg.cpp
     src/msw/commandlinkbutton.cpp
     src/msw/bmpcbox.cpp
     src/msw/hyperlink.cpp
@@ -2264,7 +2258,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/rt/utils.h
     wx/msw/hyperlink.h
     wx/msw/bmpcbox.h
-    wx/generic/animate.h
     wx/msw/commandlinkbutton.h
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
@@ -2328,7 +2321,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
     src/common/fontmgrcmn.cpp
-    src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -2359,7 +2351,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/wrapdfb.cpp
 </set>
 <set var="DFB_LOWLEVEL_HDR" hints="files">
-    wx/generic/animate.h
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
@@ -2642,7 +2633,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/settings.mm
     src/osx/cocoa/overlay.mm
     src/osx/cocoa/aboutdlg.mm
-    src/generic/animateg.cpp
     src/osx/dataview_osx.cpp
     src/osx/cocoa/notifmsg.mm
     src/osx/cocoa/taskbar.mm
@@ -2667,7 +2657,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/region.h
     wx/osx/cocoa/stdpaths.h
     wx/osx/sound.h
-    wx/generic/animate.h
     wx/osx/dvrenderer.h
     wx/osx/cocoa/dataview.h
     wx/osx/dvrenderers.h
@@ -2707,7 +2696,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/settings.mm
     src/osx/sound_osx.cpp
     src/osx/core/sound.cpp
-    src/generic/animateg.cpp
     src/osx/iphone/statbmp.mm
 </set>
 
@@ -2716,7 +2704,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
-    wx/generic/animate.h
     wx/osx/sound.h
 </set>
 
@@ -2732,35 +2719,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/themes/win32.cpp
 </set>
 
-<set var="UNIV_PLATFORM_SRC" hints="files">
-<!--
-    Including src/generic/animateg.cpp hre unconditionally results in bakefile
-    errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
--->
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
-        src/generic/animateg.cpp
-    </if>
-    <if cond="TOOLKIT=='MSW'">
-        src/generic/animateg.cpp
-    </if>
-    <if cond="TOOLKIT=='X11'">
-        src/generic/animateg.cpp
-    </if>
-</set>
-<set var="UNIV_PLATFORM_HDR" hints="files">
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
-        wx/generic/animate.h
-    </if>
-    <if cond="TOOLKIT=='MSW'">
-        wx/generic/animate.h
-    </if>
-    <if cond="TOOLKIT=='X11'">
-        wx/generic/animate.h
-    </if>
-</set>
-
 <set var="UNIV_SRC" hints="files">
-    $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -2814,9 +2773,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/activityindicator.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
-    $(UNIV_PLATFORM_HDR)
     wx/generic/accel.h
-    wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/generic/ctrlsub.h

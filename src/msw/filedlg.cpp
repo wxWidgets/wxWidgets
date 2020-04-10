@@ -44,6 +44,7 @@
 
 #include "wx/dynlib.h"
 #include "wx/filename.h"
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
