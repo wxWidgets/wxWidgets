@@ -2160,25 +2160,7 @@ void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
     if ( bitmap.GetHeight() > hMax )
     {
         double scale = (double)hMax / bitmap.GetHeight();
-        int w = wxRound(bitmap.GetWidth()*scale);
-        int h = wxRound(bitmap.GetHeight()*scale);
-#if wxUSE_IMAGE
-        // Here we use high-quality wxImage scaling functions available
-        wxImage img = bitmap.ConvertToImage();
-        img.Rescale(w, h, wxIMAGE_QUALITY_HIGH);
-        scaledBmp = img;
-#else // !wxUSE_IMAGE
-        scaledBmp.Create(w, h, bitmap.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-        // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-        scaledBmp.UseAlpha(bitmap.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
-        {
-            wxMemoryDC dc(scaledBmp);
-            dc.SetUserScale(scale, scale);
-            dc.DrawBitmap(bitmap, 0, 0);
-        }
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+        scaledBmp = wxPropertyGrid::RescaleBitmap(bitmap, scale, scale);
     }
     else
     {
