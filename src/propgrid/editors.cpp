@@ -1980,42 +1980,24 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxASSERT(selected);
 
     const wxString label = wxString::FromUTF8("\xe2\x80\xa6"); // "Horizontal ellipsis" character
-#ifdef __WXMAC__
-   // Decorations are chunky on Mac, and we can't make the button square, so
-   // do things a bit differently on this platform.
 
-   wxPoint p(pos.x+sz.x, pos.y- wxPG_BUTTON_BORDER_WIDTH);
-   wxSize s(25, wxDefaultCoord);
+    int dim = sz.y + 2*wxPG_BUTTON_BORDER_WIDTH;
 
-   wxButton* but = new wxButton();
-   but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS);
-
-   // Now that we know the size, move to the correct position
-   p.x = pos.x + sz.x - but->GetSize().x - 2;
-   but->Move(p);
-
-#else
-    wxSize s(sz.y + 2*wxPG_BUTTON_BORDER_WIDTH, sz.y + 2*wxPG_BUTTON_BORDER_WIDTH);
-
-    // Reduce button width to line height
-    if ( s.x > m_lineHeight )
-        s.x = m_lineHeight;
-
-#ifdef __WXGTK__
-    // On wxGTK, take fixed button margins into account
-    if ( s.x < 25 )
-        s.x = 25;
-#endif
-
-    wxPoint p(pos.x+sz.x-s.x, pos.y-wxPG_BUTTON_BORDER_WIDTH);
+    wxPoint p(pos.x + sz.x, pos.y - wxPG_BUTTON_BORDER_WIDTH);
+    wxSize s(wxDefaultCoord, dim);
 
     wxButton* but = new wxButton();
   #ifdef __WXMSW__
     but->Hide();
   #endif
-    but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS);
-    but->SetFont(GetFont());
-#endif
+    but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS|wxBU_EXACTFIT);
+    but->SetFont(GetFont().GetBaseFont().Smaller());
+    // If button is narrow make it a square and move it to the correct position
+    s = but->GetSize();
+    if ( s.x < s.y )
+        but->SetSize(wxSize(s.y, s.y));
+    p.x = pos.x + sz.x - s.y;
+    but->Move(p);
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) && !selected->HasFlag(wxPG_PROP_ACTIVE_BTN) )
         but->Disable();
@@ -2137,6 +2119,7 @@ wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
       m_fullEditorSize(sz), m_buttonsWidth(0)
 {
     SetBackgroundColour(pg->GetCellBackgroundColour());
+    SetFont(pg->GetFont().GetBaseFont().Smaller());
 }
 
 void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
@@ -2166,8 +2149,13 @@ void wxPGMultiButton::Add( const wxString& label, int itemid )
 {
     itemid = GenId(itemid);
     wxSize sz = GetSize();
-    wxButton* button = new wxButton( this, itemid, label, wxPoint(sz.x, 0),
-                                     wxSize(sz.y, sz.y) );
+    wxButton* button = new wxButton(this, itemid, label,
+                    wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y), wxBU_EXACTFIT);
+    // If button is narrow make it a square
+    wxSize szBtn = button->GetSize();
+    if ( szBtn.x < szBtn.y )
+        button->SetSize(wxSize(szBtn.y, szBtn.y));
+
     DoAddButton( button, sz );
 }
 
