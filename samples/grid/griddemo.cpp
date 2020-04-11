@@ -1220,32 +1220,68 @@ void GridFrame::SetCornerLabelValue( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )
 {
-    switch ( grid->GetSelectionMode() )
+    int count = 0;
+    wxString desc;
+    const wxGridSelectionRange& sel = grid->GetSelectionRange();
+    for ( wxGridSelectionRange::iterator it = sel.begin();
+          it != sel.end();
+          ++it, ++count )
     {
-        case wxGrid::wxGridSelectCells:
-            wxLogMessage("%zu individual cells and "
-                         "%zu blocks of contiguous cells selected",
-                         grid->GetSelectedCells().size(),
-                         grid->GetSelectionBlockTopLeft().size());
-            return;
+        const wxGridBlockCoords& b = *it;
 
-        case wxGrid::wxGridSelectRows:
-        case wxGrid::wxGridSelectColumns:
-        case wxGrid::wxGridSelectRowsOrColumns:
-            const wxArrayInt& rows = grid->GetSelectedRows();
-            if ( !rows.empty() )
-                wxLogMessage("%zu rows selected", rows.size());
+        wxString blockDesc;
+        if ( b.GetLeftCol() == 0 &&
+                b.GetRightCol() == grid->GetNumberCols() - 1 )
+        {
+            if ( b.GetTopRow() == b.GetBottomRow() )
+                blockDesc.Printf("row %d", b.GetTopRow() + 1);
+            else
+                blockDesc.Printf("rows %d..%d",
+                                 b.GetTopRow() + 1, b.GetBottomRow() + 1);
+        }
+        else if ( b.GetTopRow() == 0 &&
+                        b.GetBottomRow() == grid->GetNumberRows() - 1 )
+        {
+            if ( b.GetLeftCol() == b.GetRightCol() )
+                blockDesc.Printf("column %d", b.GetLeftCol() + 1);
+            else
+                blockDesc.Printf("columns %d..%d",
+                                 b.GetLeftCol() + 1,
+                                 b.GetRightCol() + 1);
+        }
+        else if ( b.GetTopRow() == b.GetBottomRow() &&
+                    b.GetLeftCol() == b.GetRightCol() )
+        {
+            blockDesc.Printf("cell R%dC%d",
+                             b.GetTopRow() + 1, b.GetLeftCol() + 1);
+        }
+        else
+        {
+            blockDesc.Printf("block R%dC%d - R%dC%d",
+                             b.GetTopRow() + 1,
+                             b.GetLeftCol() + 1,
+                             b.GetBottomRow() + 1,
+                             b.GetRightCol() + 1);
+        }
 
-            const wxArrayInt& cols = grid->GetSelectedCols();
-            if ( !cols.empty() )
-                wxLogMessage("%zu columns selected", rows.size());
-
-            if ( rows.empty() && cols.empty() )
-                wxLogMessage("No selection");
-            return;
+        if ( count )
+            desc += "\n\t";
+        desc += blockDesc;
     }
 
-    wxLogError("Unknown grid selection mode.");
+    switch ( count )
+    {
+        case 0:
+            wxLogMessage("No selection");
+            break;
+
+        case 1:
+            wxLogMessage("Selection: %s", desc);
+            break;
+
+        default:
+            wxLogMessage("%d selected blocks:\n\t%s", count, desc);
+    }
 }
 
 void GridFrame::SelectCells( wxCommandEvent& WXUNUSED(ev) )
