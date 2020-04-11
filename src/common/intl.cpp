@@ -1778,7 +1778,31 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 
         case wxLOCALE_GROUPING:
-            cfstr = CFStringCreateWithCString(NULL, "3;0", kCFStringEncodingASCII);
+            wxCFRef<CFNumberFormatterRef> numFormatterRef(
+                CFNumberFormatterCreate(NULL, userLocalRef, kCFNumberFormatterDecimalStyle));
+            CFNumberRef size = (CFNumberRef) CFNumberFormatterCopyProperty(
+                numFormatterRef, kCFNumberFormatterGroupingSize);
+            CFNumberRef secSize = (CFNumberRef) CFNumberFormatterCopyProperty(
+                numFormatterRef, kCFNumberFormatterSecondaryGroupingSize);
+            // Convert the size and secondary size to char and create the grouping string
+            char s, ss;
+            if (CFNumberGetValue(size, kCFNumberCharType, &s))
+            {
+                if (CFNumberGetValue(secSize, kCFNumberCharType, &ss) && ss != s)
+                {
+                    s += '0';
+                    ss += '0';
+                    cfstr = CFStringCreateWithCString(
+                        NULL, {s, ';', ss, ';', '0', '\0'}, kCFStringEncodingASCII);
+                } else {
+                    s += '0';
+                    cfstr = CFStringCreateWithCString(
+                        NULL, {s, ';', '0', '\0'}, kCFStringEncodingASCII);
+                }
+            } else {
+                // No grouping
+                cfstr = CFStringCreateWithCString(NULL, "", kCFStringEncodingASCII);
+            }
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
