@@ -73,9 +73,10 @@ public:
     // wxGrid::m_currentCellCoords (the exception is when we scrolled out from
     // the top of the grid and select a column or scrolled right and select
     // a row: in this case the lowest visible row/column will be set as
-    // current, not the first one). If the row or the column component of
-    // blockEnd parameter has value of -1, it means that the corresponding
-    // component of the current block should not be changed.
+    // current, not the first one).
+    //
+    // Both components of both blockStart and blockEnd must be valid.
+    //
     // Return true if the current block was actually changed or created.
     bool ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockStart,
                                     const wxGridCellCoords& blockEnd,

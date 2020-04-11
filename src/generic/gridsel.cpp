@@ -486,6 +486,9 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
                                                  const wxGridCellCoords& blockEnd,
                                                  const wxKeyboardState& kbd)
 {
+    wxASSERT( blockStart.GetRow() != -1 && blockStart.GetCol() != -1 &&
+              blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1 );
+
     if ( m_selection.empty() )
     {
         SelectBlock(blockStart, blockEnd);
@@ -497,41 +500,33 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
 
     bool editBlock = false;
 
-    if ( blockEnd.GetRow() != -1 )
+    // If the new block starts at the same top row as the current one, the
+    // end block coordinates must correspond to the new bottom row -- and
+    // vice versa, if the new block starts at the bottom, its other end
+    // must correspond to the top.
+    if ( blockStart.GetRow() == block.GetTopRow() )
     {
-        // If the new block starts at the same top row as the current one, the
-        // end block coordinates must correspond to the new bottom row -- and
-        // vice versa, if the new block starts at the bottom, its other end
-        // must correspond to the top.
-        if ( blockStart.GetRow() == block.GetTopRow() )
-        {
-            newBlock.SetBottomRow(blockEnd.GetRow());
-            editBlock = true;
-        }
-        else if ( blockStart.GetRow() == block.GetBottomRow() )
-        {
-            newBlock.SetTopRow(blockEnd.GetRow());
-            editBlock = true;
-        }
+        newBlock.SetBottomRow(blockEnd.GetRow());
+        editBlock = true;
     }
-    if ( blockEnd.GetCol() != -1 )
+    else if ( blockStart.GetRow() == block.GetBottomRow() )
     {
-        if ( newBlock.GetLeftCol() == blockStart.GetCol() )
-        {
-            newBlock.SetRightCol(blockEnd.GetCol());
-            editBlock = true;
-        }
-        else if ( newBlock.GetRightCol() == blockStart.GetCol() )
-        {
-            newBlock.SetLeftCol(blockEnd.GetCol());
-            editBlock = true;
-        }
+        newBlock.SetTopRow(blockEnd.GetRow());
+        editBlock = true;
+    }
+
+    if ( blockStart.GetCol() == block.GetLeftCol() )
+    {
+        newBlock.SetRightCol(blockEnd.GetCol());
+        editBlock = true;
+    }
+    else if ( blockStart.GetCol() == block.GetRightCol() )
+    {
+        newBlock.SetLeftCol(blockEnd.GetCol());
+        editBlock = true;
     }
 
     newBlock = newBlock.Canonicalize();
-
-    const bool endCoordsSet =
-        blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1;
 
     if ( editBlock )
     {
@@ -562,15 +557,14 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
                                         true,
                                         kbd);
         m_grid->GetEventHandler()->ProcessEvent(gridEvt);
-        return true;
     }
-    else if ( endCoordsSet )
+    else
     {
         // Select the new one.
         SelectBlock(newBlock.GetTopLeft(), newBlock.GetBottomRight(), kbd);
-        return true;
     }
-    return false;
+
+    return true;
 }
 
 int wxGridSelection::GetCurrentBlockCornerRow() const

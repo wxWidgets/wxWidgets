@@ -7925,12 +7925,17 @@ bool
 wxGrid::PrepareForSelectionExpansion(wxGridCellCoords& coords,
                                      const wxGridDirectionOperations& diroper)
 {
-    coords.SetRow(m_selection->GetCurrentBlockCornerRow());
-    coords.SetCol(m_selection->GetCurrentBlockCornerCol());
+    int row = m_selection->GetCurrentBlockCornerRow();
+    if ( row == -1 )
+        row = m_currentCellCoords.GetRow();
 
-    if ( coords == wxGridNoCellCoords )
-        coords = m_currentCellCoords;
-    else if ( !diroper.IsValid(coords) )
+    int col = m_selection->GetCurrentBlockCornerCol();
+    if ( col == -1 )
+        col = m_currentCellCoords.GetCol();
+
+    coords.Set(row, col);
+
+    if ( !diroper.IsValid(coords) )
     {
         // The component of the current block corner in our direction
         // is not valid. This means we can't change the selection block
