@@ -5558,6 +5558,11 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
                 wxGtkString(gdk_rgba_to_string(fg_sel)).c_str(),
                 wxGtkString(gdk_rgba_to_string(bg_sel)).c_str());
 
+            if (isFg)
+            {
+                g_string_append_printf(css, "*{caret-color:%s}",
+                    wxGtkString(gdk_rgba_to_string(fg)).c_str());
+            }
             if (isBg)
             {
                 // make "undershoot" node background transparent,
