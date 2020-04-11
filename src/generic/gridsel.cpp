@@ -475,19 +475,23 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
         return true;
     }
 
-    wxGridBlockCoords& block = *m_selection.rbegin();
+    const wxGridBlockCoords& block = *m_selection.rbegin();
     wxGridBlockCoords newBlock = block;
 
     bool editBlock = false;
 
     if ( blockEnd.GetRow() != -1 )
     {
-        if ( newBlock.GetTopRow() == blockStart.GetRow() )
+        // If the new block starts at the same top row as the current one, the
+        // end block coordinates must correspond to the new bottom row -- and
+        // vice versa, if the new block starts at the bottom, its other end
+        // must correspond to the top.
+        if ( blockStart.GetRow() == block.GetTopRow() )
         {
             newBlock.SetBottomRow(blockEnd.GetRow());
             editBlock = true;
         }
-        else if ( newBlock.GetBottomRow() == blockStart.GetRow() )
+        else if ( blockStart.GetRow() == block.GetBottomRow() )
         {
             newBlock.SetTopRow(blockEnd.GetRow());
             editBlock = true;
@@ -529,8 +533,8 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
             }
         }
 
-        // Edit the current block.
-        block = newBlock;
+        // Update the current block in place.
+        *m_selection.rbegin() = newBlock;
 
         // Send Event.
         wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
