@@ -1717,7 +1717,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
                 return ".";
 
             case wxLOCALE_GROUPING:
-                return "\3\0";
+                return "3;0";
 
             case wxLOCALE_SHORT_DATE_FMT:
                 return "%m/%d/%y";
@@ -1778,7 +1778,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 
         case wxLOCALE_GROUPING:
-            cfstr = CFStringCreateWithCString(NULL, "\3\0", kCFStringEncodingASCII);
+            cfstr = CFStringCreateWithCString(NULL, "3;0", kCFStringEncodingASCII);
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1911,6 +1911,32 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
 
 } // anonymous namespace
 
+// Convert a grouping format string returned by localeconv() to
+// a standardized format. Our standard format is the one used on
+// Windows SGROUPING. Here we convert char sized integers to ASCII
+// characters. That is, for example '\3' becomes '3'. We also add
+// the a ';' delimiter between each number. A '\0' or a CHAR_MAX
+// signifies the end of the argument string. If the argument string
+// ends with a '\0' then we insert a '0' to the return string.
+// The return string will be NULL terminated.
+
+/* static */
+wxString wxLocale::StandardizeGroupingString(wxString g)
+{
+    wxString s = "";
+    int i;
+    for (i = 0; g[i] != '\0' && g[i] != CHAR_MAX; i++)
+    {
+        s.Append((char)((int)g[i] + (int)'0'));
+        s.Append(';');
+    }
+    if (g[i] == '\0')
+        s.Append('0');
+    else
+        s.RemoveLast();    // Remove extra ;
+    return s;
+}
+
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
@@ -1943,9 +1969,9 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 
         case wxLOCALE_GROUPING:
             if ( cat == wxLOCALE_CAT_NUMBER )
-                return lc->grouping;
+                return StandardizeGroupingString(lc->grouping);
             else if ( cat == wxLOCALE_CAT_MONEY )
-                return lc->mon_grouping;
+                return StandardizeGroupingString(lc->mon_grouping);
 
             wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;

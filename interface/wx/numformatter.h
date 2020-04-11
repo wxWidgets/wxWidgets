@@ -140,6 +140,8 @@ public:
             Points to the variable receiving the grouping format string
             if it is used by the current locale. May be @NULL if only the
             function return value is needed.
+
+        @since 3.1.4
      */
     static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
 

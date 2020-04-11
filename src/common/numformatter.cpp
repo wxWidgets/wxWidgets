@@ -278,25 +278,29 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
     // before their start.
     const size_t start = s.find_first_of("0123456789");
 
-    // We get the grouping style from locale. This is represented by a character
-    // array where each element is the number of digits in a group starting
-    // from the right of the number. If the last element in the grouping is a 0
-    // then the last but one element is the number used for grouping the
-    // remaining digits. If the last element is CHAR_MAX then no grouping is
-    // done for the remaining digits.
+    // We get the grouping style from locale. This is represented by a ';'
+    // delimited character array where each element is the number of digits
+    // in a group starting from the right of the number. If the last element
+    // in the grouping is a 0 then the last but one element is the number
+    // used for grouping the remaining digits.
 
     size_t i = 0;
-    while((grouping[i] != '\0') && (grouping[i] != CHAR_MAX) && (pos > start + (size_t)grouping[i]))
+    while((grouping[i] != '\0') && (grouping[i] != '0'))
     {
-        pos -= (size_t)grouping[i];
-        s.insert(pos, thousandsSep);
+        if (grouping[i] != ';')
+        {
+            if (pos <= start + (size_t)(grouping[i] - '0'))
+                break;
+            pos -= (size_t)(grouping[i] - '0');
+            s.insert(pos, thousandsSep);
+        }
         i++;
     }
-    if ( grouping[i] == '\0' && i > 0 )
+    if ( grouping[i] == '0' && i > 0 )
     {
-        while ( pos > start + (size_t)grouping[i - 1] )
+        while ( pos > start + (size_t)(grouping[i - 2] - '0'))
         {
-            pos -= (size_t)grouping[i - 1];
+            pos -= (size_t)(grouping[i - 2] - '0');
             s.insert(pos, thousandsSep);
         }
     }
