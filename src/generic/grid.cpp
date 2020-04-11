@@ -7848,9 +7848,13 @@ int wxGrid::GetFirstFullyVisibleRow() const
         if ( GetRowTop(row) - 2 < y )
         {
             // Use the next visible row.
-            for ( ; row < m_numRows; ++row )
+            for ( ;; )
             {
-                if ( IsRowShown(row) )
+                // But we can't go beyond the last row anyhow.
+                if ( row == m_numRows - 1 )
+                    break;
+
+                if ( IsRowShown(++row) )
                     break;
             }
         }
@@ -7882,9 +7886,12 @@ int wxGrid::GetFirstFullyVisibleColumn() const
         if ( GetColLeft(col) < x )
         {
             // Use the next visible column.
-            for ( ; col < m_numCols; ++col )
+            for ( ;; )
             {
-                if ( IsColShown(GetColAt(col)) )
+                if ( col == m_numCols - 1 )
+                    break;
+
+                if ( IsColShown(GetColAt(++col)) )
                     break;
             }
         }
