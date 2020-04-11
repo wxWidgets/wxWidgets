@@ -56,6 +56,8 @@ public:
                        const wxKeyboardState& kbd = wxKeyboardState(),
                        bool sendEvent = true );
 
+    // Note that this method refreshes the previously selected blocks and sends
+    // an event about the selection change.
     void ClearSelection();
 
     void UpdateRows( size_t pos, int numRows );
