@@ -195,6 +195,23 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
 }
 
 void
+wxGridSelection::SelectAll()
+{
+    // There is no need to refresh anything, as Select() will do it anyhow, and
+    // no need to generate any events, so do not call ClearSelection() here.
+    m_selection.clear();
+
+    const int numRows = m_grid->GetNumberRows();
+    const int numCols = m_grid->GetNumberCols();
+
+    if ( numRows && numCols )
+    {
+        Select(wxGridBlockCoords(0, 0, numRows - 1, numCols - 1),
+               wxKeyboardState(), true /* send event */);
+    }
+}
+
+void
 wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                const wxKeyboardState& kbd,
                                bool sendEvent)

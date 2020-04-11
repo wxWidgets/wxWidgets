@@ -52,6 +52,10 @@ public:
                     kbd, sendEvent);
     }
 
+    // This function replaces all the existing selected blocks (which become
+    // redundant) with a single block covering the entire grid.
+    void SelectAll();
+
     void DeselectBlock(const wxGridBlockCoords& block,
                        const wxKeyboardState& kbd = wxKeyboardState(),
                        bool sendEvent = true );

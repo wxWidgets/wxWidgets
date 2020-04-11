@@ -10235,11 +10235,8 @@ void wxGrid::SelectBlock(int topRow, int leftCol, int bottomRow, int rightCol,
 
 void wxGrid::SelectAll()
 {
-    if ( m_numRows > 0 && m_numCols > 0 )
-    {
-        if ( m_selection )
-            m_selection->SelectBlock( 0, 0, m_numRows - 1, m_numCols - 1 );
-    }
+    if ( m_selection )
+        m_selection->SelectAll();
 }
 
 // ----------------------------------------------------------------------------
