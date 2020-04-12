@@ -1889,13 +1889,19 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
     if ( m_pBitmap || (m_pImage && m_pImage->IsOk() ) )
     {
         // Draw the thumbnail
-
         // Create the bitmap here because required size is not known in OnSetValue().
+
+        // Delete the cache if required size changed
+        if ( m_pBitmap && (m_pBitmap->GetWidth() != rect.width || m_pBitmap->GetHeight() != rect.height) )
+        {
+            delete m_pBitmap;
+            m_pBitmap = NULL;
+        }
+
         if ( !m_pBitmap )
         {
             m_pImage->Rescale( rect.width, rect.height );
             m_pBitmap = new wxBitmap( *m_pImage );
-            wxDELETE(m_pImage);
         }
 
         dc.DrawBitmap( *m_pBitmap, rect.x, rect.y, false );
