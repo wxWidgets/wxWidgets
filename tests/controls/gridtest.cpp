@@ -526,19 +526,19 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
 {
-    const wxGridSelectionRange empty = m_grid->GetSelectionRange();
+    const wxGridBlocks empty = m_grid->GetSelectedBlocks();
     CHECK( empty.begin() == empty.end() );
 
     m_grid->SelectBlock(1, 0, 3, 1);
 
-    wxGridSelectionRange sel = m_grid->GetSelectionRange();
+    wxGridBlocks sel = m_grid->GetSelectedBlocks();
     REQUIRE( sel.begin() != sel.end() );
     CHECK( *sel.begin() == wxGridBlockCoords(1, 0, 3, 1) );
 
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
     m_grid->SelectBlock(4, 0, 7, 1, true);
     int index = 0;
-    for ( const wxGridBlockCoords& block : m_grid->GetSelectionRange() )
+    for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
     {
         switch ( index )
         {

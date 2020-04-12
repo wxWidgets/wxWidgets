@@ -2004,7 +2004,7 @@ struct wxGridBlockDiffResult
 };
 
 /**
-    Represents a range of grid blocks that can be iterated over.
+    Represents a collection of grid blocks that can be iterated over.
 
     This class provides read-only access to the blocks making up the grid
     selection in the most general case.
@@ -2014,14 +2014,14 @@ struct wxGridBlockDiffResult
 
     The preferable way to iterate over it is using C++11 range-for loop:
     @code
-        for ( const auto block: grid->GetSelectionRange() ) {
+        for ( const auto& block: grid->GetSelectedBlocks() ) {
             ... do something with block ...
         }
     @endcode
     When not using C++11, iteration has to be done manually:
     @code
-        wxGridSelectionRange range = grid->GetSelectionRange();
-        for ( wxGridSelectionRange::iterator it = range.begin();
+        wxGridBlocks range = grid->GetSelectedBlocks();
+        for ( wxGridBlocks::iterator it = range.begin();
               it != range.end();
               ++it ) {
             ... do something with *it ...
@@ -2030,7 +2030,7 @@ struct wxGridBlockDiffResult
 
     @since 3.1.4
  */
-class wxGridSelectionRange
+class wxGridBlocks
 {
 public:
     /**
@@ -4668,7 +4668,7 @@ public:
 
         The returned range can be iterated over, e.g. with C++11 range-for loop:
         @code
-            for ( const auto block: grid->GetSelectionRange() ) {
+            for ( const auto block: grid->GetSelectedBlocks() ) {
                 if ( block.Intersects(myBlock) )
                     break;
             }
@@ -4676,7 +4676,7 @@ public:
 
         @since 3.1.4
     */
-    wxGridSelectionRange GetSelectionRange() const;
+    wxGridBlocks GetSelectedBlocks() const;
 
     /**
         Returns an array of individually selected cells.
@@ -4694,7 +4694,7 @@ public:
         a million of entries in this function, instead it returns an empty
         array and GetSelectedCols() returns an array containing one element).
 
-        The function can be slow for the big grids, use GetSelectionRange()
+        The function can be slow for the big grids, use GetSelectedBlocks()
         in the new code.
     */
     wxGridCellCoordsArray GetSelectedCells() const;
@@ -4708,7 +4708,7 @@ public:
         or being selected in virtue of all of their cells being selected
         individually, please see GetSelectedCells() for more details.
 
-        The function can be slow for the big grids, use GetSelectionRange()
+        The function can be slow for the big grids, use GetSelectedBlocks()
         in the new code.
     */
     wxArrayInt GetSelectedCols() const;
@@ -4722,7 +4722,7 @@ public:
         selected in virtue of all of their cells being selected individually,
         please see GetSelectedCells() for more details.
 
-        The function can be slow for the big grids, use GetSelectionRange()
+        The function can be slow for the big grids, use GetSelectedBlocks()
         in the new code.
     */
     wxArrayInt GetSelectedRows() const;
@@ -4739,7 +4739,7 @@ public:
         Please see GetSelectedCells() for more information about the selection
         representation in wxGrid.
 
-        The function can be slow for the big grids, use GetSelectionRange()
+        The function can be slow for the big grids, use GetSelectedBlocks()
         in the new code.
 
         @see GetSelectionBlockTopLeft()
@@ -4752,7 +4752,7 @@ public:
         Please see GetSelectedCells() for more information about the selection
         representation in wxGrid.
 
-        The function can be slow for the big grids, use GetSelectionRange()
+        The function can be slow for the big grids, use GetSelectedBlocks()
         in the new code.
 
         @see GetSelectionBlockBottomRight()

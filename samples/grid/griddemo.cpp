@@ -1222,10 +1222,8 @@ void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )
 {
     int count = 0;
     wxString desc;
-    const wxGridSelectionRange& sel = grid->GetSelectionRange();
-    for ( wxGridSelectionRange::iterator it = sel.begin();
-          it != sel.end();
-          ++it, ++count )
+    const wxGridBlocks& sel = grid->GetSelectedBlocks();
+    for ( wxGridBlocks::iterator it = sel.begin(); it != sel.end(); ++it )
     {
         const wxGridBlockCoords& b = *it;
 
@@ -1264,7 +1262,7 @@ void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )
                              b.GetRightCol() + 1);
         }
 
-        if ( count )
+        if ( count++ )
             desc += "\n\t";
         desc += blockDesc;
     }

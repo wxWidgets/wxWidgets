@@ -876,10 +876,10 @@ struct wxGridBlockDiffResult
 };
 
 // ----------------------------------------------------------------------------
-// wxGridSelectionRange: a range of grid blocks that can be iterated over
+// wxGridBlocks: a range of grid blocks that can be iterated over
 // ----------------------------------------------------------------------------
 
-class wxGridSelectionRange
+class wxGridBlocks
 {
     typedef wxVector<wxGridBlockCoords>::const_iterator iterator_impl;
 
@@ -913,7 +913,7 @@ public:
 
         iterator_impl m_it;
 
-        friend class wxGridSelectionRange;
+        friend class wxGridBlocks;
     };
 
     iterator begin() const
@@ -927,13 +927,13 @@ public:
     }
 
 private:
-    wxGridSelectionRange() :
+    wxGridBlocks() :
         m_begin(),
         m_end()
     {
     }
 
-    wxGridSelectionRange(iterator_impl begin, iterator_impl end) :
+    wxGridBlocks(iterator_impl begin, iterator_impl end) :
         m_begin(begin),
         m_end(end)
     {
@@ -1994,7 +1994,7 @@ public:
     bool IsInSelection( const wxGridCellCoords& coords ) const
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
 
-    wxGridSelectionRange GetSelectionRange() const;
+    wxGridBlocks GetSelectedBlocks() const;
     wxGridCellCoordsArray GetSelectedCells() const;
     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;

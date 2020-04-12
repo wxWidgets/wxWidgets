@@ -10284,13 +10284,13 @@ bool wxGrid::IsInSelection( int row, int col ) const
     return m_selection && m_selection->IsInSelection(row, col);
 }
 
-wxGridSelectionRange wxGrid::GetSelectionRange() const
+wxGridBlocks wxGrid::GetSelectedBlocks() const
 {
     if ( !m_selection )
-        return wxGridSelectionRange();
+        return wxGridBlocks();
 
     const wxVectorGridBlockCoords& blocks = m_selection->GetBlocks();
-    return wxGridSelectionRange(blocks.begin(), blocks.end());
+    return wxGridBlocks(blocks.begin(), blocks.end());
 }
 
 wxGridCellCoordsArray wxGrid::GetSelectedCells() const
