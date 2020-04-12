@@ -285,12 +285,19 @@ typedef short int WXTYPE;
     #define wxOVERRIDE
 #endif /*  HAVE_OVERRIDE */
 
-/* same for defaulted member function keyword */
+/* same for more C++11 keywords which don't have such historic baggage as
+   override and so can be detected by just testing for C++11 support (which
+   still requires handling MSVS specially, unfortunately) */
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
     #define wxHAS_MEMBER_DEFAULT
     #define wxMEMBER_DEFAULT = default
+
+    #define wxHAS_NOEXCEPT
+    #define wxNOEXCEPT noexcept
 #else
     #define wxMEMBER_DEFAULT
+
+    #define wxNOEXCEPT
 #endif
 
 /*
