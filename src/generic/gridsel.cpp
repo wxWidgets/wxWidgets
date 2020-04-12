@@ -499,11 +499,53 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     const wxGridBlockCoords& block = *m_selection.rbegin();
     wxGridBlockCoords newBlock = block;
 
-    // Don't adjust the blocks rows at all in column selection mode as the
-    // top/bottom row are always fixed to the first/last grid row anyhow in
-    // this case and we shouldn't select only part of a column just because the
-    // user Shift-clicked somewhere in the middle of the grid.
-    if ( m_selectionMode != wxGrid::wxGridSelectColumns )
+    // Determine if we should try to extend the current block rows and/or
+    // columns at all.
+    bool canChangeRow = false,
+         canChangeCol = false;
+
+    switch ( m_selectionMode )
+    {
+        case wxGrid::wxGridSelectCells:
+            // Nothing prevents us from doing it in this case.
+            canChangeRow =
+            canChangeCol = true;
+            break;
+
+        case wxGrid::wxGridSelectColumns:
+            // Rows are always fixed, so prevent us from ever selecting only
+            // part of a column in this case by leaving canChangeRow false.
+            canChangeCol = true;
+            break;
+
+        case wxGrid::wxGridSelectRows:
+            // Same as above but mirrored.
+            canChangeRow = true;
+            break;
+
+        case wxGrid::wxGridSelectRowsOrColumns:
+            // In this case we may only change component which is not fixed.
+            if ( block.GetTopRow() != 0 ||
+                    block.GetBottomRow() != m_grid->GetNumberRows() - 1 )
+            {
+                // This is a row block, so we can extend it in row direction.
+                canChangeRow = true;
+            }
+            else if ( block.GetLeftCol() != 0 ||
+                        block.GetRightCol() != m_grid->GetNumberCols() - 1 )
+            {
+                canChangeCol = true;
+            }
+            else // The entire grid is selected.
+            {
+                // In this case we can shrink it in either direction.
+                canChangeRow =
+                canChangeCol = true;
+            }
+            break;
+    }
+
+    if ( canChangeRow )
     {
         // If the new block starts at the same top row as the current one, the
         // end block coordinates must correspond to the new bottom row -- and
@@ -540,7 +582,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     }
 
     // Same as above but mirrored for columns.
-    if ( m_selectionMode != wxGrid::wxGridSelectRows )
+    if ( canChangeCol )
     {
         if ( blockStart.GetCol() == block.GetLeftCol() )
         {
