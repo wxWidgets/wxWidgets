@@ -3720,7 +3720,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
             if ( row >= 0 &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
             {
-                if ( m_selection && m_numRows > 0 && m_numCols > 0 )
+                // Check if row selection is possible and allowed, before doing
+                // anything else, including changing the cursor mode to "select
+                // row".
+                if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
+                        m_selection->GetSelectionMode() != wxGridSelectColumns )
                 {
                     bool selectNewRow = false;
 
@@ -3756,9 +3760,9 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
                         SetCurrentCell(row, GetFirstFullyVisibleColumn());
                     }
-                }
 
-                ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, rowLabelWin);
+                    ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, rowLabelWin);
+                }
             }
         }
     }
@@ -4118,7 +4122,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                 }
                 else
                 {
-                    if ( m_selection && m_numRows > 0 && m_numCols > 0 )
+                    if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
+                            m_selection->GetSelectionMode() != wxGridSelectRows )
                     {
                         bool selectNewCol = false;
 
@@ -4154,9 +4159,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
                             SetCurrentCell(GetFirstFullyVisibleRow(), col);
                         }
-                    }
 
-                    ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, colLabelWin);
+                        ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, colLabelWin);
+                    }
                 }
             }
         }
