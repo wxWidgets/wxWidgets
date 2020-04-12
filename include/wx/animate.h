@@ -48,7 +48,7 @@ public:
 
     int GetDelay(unsigned int frame) const;
     unsigned int GetFrameCount() const;
-    wxImage GetFrame(unsigned int frame);
+    wxImage GetFrame(unsigned int frame) const;
     wxSize GetSize() const;
 
     bool LoadFile(const wxString& name, wxAnimationType type = wxANIMATION_TYPE_ANY);
