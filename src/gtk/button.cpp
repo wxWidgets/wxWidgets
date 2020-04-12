@@ -135,10 +135,14 @@ bool wxButton::Create(wxWindow *parent,
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-#ifdef __WXGTK3__
     if ( useLabel && (style & wxBU_EXACTFIT) )
+    {
+#ifdef __WXGTK3__
         GTKApplyCssStyle("* { padding:0 }");
-#endif // __WXGTK3__
+#else
+        GTKApplyWidgetStyle(true); // To enforce call to DoApplyWidgetStyle()
+#endif // __WXGTK3__ / !__WXGTK3__
+    }
 
     g_signal_connect_after (m_widget, "clicked",
                             G_CALLBACK (wxgtk_button_clicked_callback),
@@ -307,6 +311,11 @@ GtkLabel *wxButton::GTKGetLabel() const
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
+    if ( style && HasFlag(wxBU_EXACTFIT) )
+    {
+        style->xthickness = 0;
+        style->ythickness = 0;
+    }
     GTKApplyStyle(m_widget, style);
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     GTKApplyStyle(child, style);
