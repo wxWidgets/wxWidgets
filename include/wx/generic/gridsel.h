@@ -67,17 +67,19 @@ public:
     void UpdateRows( size_t pos, int numRows );
     void UpdateCols( size_t pos, int numCols );
 
-    // Extend (or shrink) the current selection block or create a new one.
-    // blockStart and blockEnd specifies the opposite corners of the currently
-    // edited selection block. In almost all cases blockStart equals to
-    // wxGrid::m_currentCellCoords (the exception is when we scrolled out from
+    // Extend (or shrink) the current selection block to the one specified by
+    // the start and end coordinates of its opposite corners (which don't have
+    // to be in top/bottom left/right order).
+    //
+    // Note that blockStart is equal to wxGrid::m_currentCellCoords almost
+    // always, but not always (the exception is when we scrolled out from
     // the top of the grid and select a column or scrolled right and select
     // a row: in this case the lowest visible row/column will be set as
     // current, not the first one).
     //
     // Both components of both blockStart and blockEnd must be valid.
     //
-    // Return true if the current block was actually changed or created.
+    // Return true if the current block was actually changed.
     bool ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockStart,
                                     const wxGridCellCoords& blockEnd,
                                     const wxKeyboardState& kbd);

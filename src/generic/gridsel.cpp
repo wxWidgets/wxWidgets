@@ -498,8 +498,6 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
     const wxGridBlockCoords& block = *m_selection.rbegin();
     wxGridBlockCoords newBlock = block;
 
-    bool editBlock = false;
-
     // If the new block starts at the same top row as the current one, the
     // end block coordinates must correspond to the new bottom row -- and
     // vice versa, if the new block starts at the bottom, its other end
@@ -507,62 +505,83 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
     if ( blockStart.GetRow() == block.GetTopRow() )
     {
         newBlock.SetBottomRow(blockEnd.GetRow());
-        editBlock = true;
     }
     else if ( blockStart.GetRow() == block.GetBottomRow() )
     {
         newBlock.SetTopRow(blockEnd.GetRow());
-        editBlock = true;
+    }
+    else // current and new block don't have common row boundary
+    {
+        // This can happen when mixing entire column and cell selection, e.g.
+        // by Shift-clicking on the column header. In this case, the right
+        // thing to do is to just expand the current block to the new one
+        // boundaries, extending the selection to the entire column height when
+        // a column is selected. However notice that we should not shrink the
+        // current block here, in order to allow Shift-Left/Right (which don't
+        // know anything about the column selection and so just use single row
+        // blocks) to keep the full column selection.
+        int top = blockStart.GetRow(),
+            bottom = blockEnd.GetRow();
+        if ( top > bottom )
+            wxSwap(top, bottom);
+
+        if ( top < newBlock.GetTopRow() )
+            newBlock.SetTopRow(top);
+        if ( bottom > newBlock.GetBottomRow() )
+            newBlock.SetBottomRow(bottom);
     }
 
+    // Same as above but mirrored for columns.
     if ( blockStart.GetCol() == block.GetLeftCol() )
     {
         newBlock.SetRightCol(blockEnd.GetCol());
-        editBlock = true;
     }
     else if ( blockStart.GetCol() == block.GetRightCol() )
     {
         newBlock.SetLeftCol(blockEnd.GetCol());
-        editBlock = true;
+    }
+    else
+    {
+        int left = blockStart.GetCol(),
+            right = blockEnd.GetCol();
+        if ( left > right )
+            wxSwap(left, right);
+
+        if ( left < newBlock.GetLeftCol() )
+            newBlock.SetLeftCol(left);
+        if ( right > newBlock.GetRightCol() )
+            newBlock.SetRightCol(right);
     }
 
     newBlock = newBlock.Canonicalize();
 
-    if ( editBlock )
-    {
-        if ( newBlock == block )
-            return false;
+    if ( newBlock == block )
+        return false;
 
-        // Update View.
-        if ( !m_grid->GetBatchCount() )
+    // Update View.
+    if ( !m_grid->GetBatchCount() )
+    {
+        wxGridBlockDiffResult refreshBlocks = block.SymDifference(newBlock);
+        for ( int i = 0; i < 4; ++i )
         {
-            wxGridBlockDiffResult refreshBlocks = block.SymDifference(newBlock);
-            for ( int i = 0; i < 4; ++i )
-            {
-                const wxGridBlockCoords& refreshBlock = refreshBlocks.m_parts[i];
-                m_grid->RefreshBlock(refreshBlock.GetTopLeft(),
-                                     refreshBlock.GetBottomRight());
-            }
+            const wxGridBlockCoords& refreshBlock = refreshBlocks.m_parts[i];
+            m_grid->RefreshBlock(refreshBlock.GetTopLeft(),
+                                 refreshBlock.GetBottomRight());
         }
-
-        // Update the current block in place.
-        *m_selection.rbegin() = newBlock;
-
-        // Send Event.
-        wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                        wxEVT_GRID_RANGE_SELECT,
-                                        m_grid,
-                                        newBlock.GetTopLeft(),
-                                        newBlock.GetBottomRight(),
-                                        true,
-                                        kbd);
-        m_grid->GetEventHandler()->ProcessEvent(gridEvt);
     }
-    else
-    {
-        // Select the new one.
-        SelectBlock(newBlock.GetTopLeft(), newBlock.GetBottomRight(), kbd);
-    }
+
+    // Update the current block in place.
+    *m_selection.rbegin() = newBlock;
+
+    // Send Event.
+    wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
+                                    wxEVT_GRID_RANGE_SELECT,
+                                    m_grid,
+                                    newBlock.GetTopLeft(),
+                                    newBlock.GetBottomRight(),
+                                    true,
+                                    kbd);
+    m_grid->GetEventHandler()->ProcessEvent(gridEvt);
 
     return true;
 }
