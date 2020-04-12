@@ -597,32 +597,25 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     return true;
 }
 
-int wxGridSelection::GetCurrentBlockCornerRow() const
+wxGridCellCoords wxGridSelection::GetExtensionAnchor() const
 {
+    wxGridCellCoords coords = m_grid->m_currentCellCoords;
+
     if ( m_selection.empty() )
-        return -1;
+        return coords;
 
     const wxGridBlockCoords& block = *m_selection.rbegin();
-    if ( block.GetTopRow() == m_grid->m_currentCellCoords.GetRow() )
-        return block.GetBottomRow();
-    if ( block.GetBottomRow() == m_grid->m_currentCellCoords.GetRow() )
-        return block.GetTopRow();
+    if ( block.GetTopRow() == coords.GetRow() )
+        coords.SetRow(block.GetBottomRow());
+    else if ( block.GetBottomRow() == coords.GetRow() )
+        coords.SetRow(block.GetTopRow());
 
-    return -1;
-}
+    if ( block.GetLeftCol() == coords.GetCol() )
+        coords.SetCol(block.GetRightCol());
+    else if ( block.GetRightCol() == coords.GetCol() )
+        coords.SetCol(block.GetLeftCol());
 
-int wxGridSelection::GetCurrentBlockCornerCol() const
-{
-    if ( m_selection.empty() )
-        return -1;
-
-    const wxGridBlockCoords& block = *m_selection.rbegin();
-    if ( block.GetLeftCol() == m_grid->m_currentCellCoords.GetCol() )
-        return block.GetRightCol();
-    if ( block.GetRightCol() == m_grid->m_currentCellCoords.GetCol() )
-        return block.GetLeftCol();
-
-    return -1;
+    return coords;
 }
 
 wxGridCellCoordsArray wxGridSelection::GetCellSelection() const

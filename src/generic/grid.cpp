@@ -5753,16 +5753,12 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     }
                     else
                     {
-                        int currentBlockRow = -1;
-                        if ( m_selection )
-                            currentBlockRow = m_selection->GetCurrentBlockCornerRow();
-
-                        // If we're selecting, continue in the same row, which
-                        // may well be different from the one in which we
-                        // started selecting.
-                        if ( event.ShiftDown() && currentBlockRow != -1 )
+                        // If we're extending the selection, try to continue in
+                        // the same row, which may well be different from the
+                        // one in which we started selecting.
+                        if ( m_selection && event.ShiftDown() )
                         {
-                            row = currentBlockRow;
+                            row = m_selection->GetExtensionAnchor().GetRow();
                         }
                         else // Just use the current row.
                         {
@@ -7924,34 +7920,6 @@ wxKeyboardState DummyKeyboardState(bool expandSelection)
 
 } // anonymous namespace
 
-bool
-wxGrid::PrepareForSelectionExpansion(wxGridCellCoords& coords,
-                                     const wxGridDirectionOperations& diroper)
-{
-    int row = m_selection->GetCurrentBlockCornerRow();
-    if ( row == -1 )
-        row = m_currentCellCoords.GetRow();
-
-    int col = m_selection->GetCurrentBlockCornerCol();
-    if ( col == -1 )
-        col = m_currentCellCoords.GetCol();
-
-    coords.Set(row, col);
-
-    if ( !diroper.IsValid(coords) )
-    {
-        // The component of the current block corner in our direction
-        // is not valid. This means we can't change the selection block
-        // in this direction.
-        return false;
-    }
-
-    if ( diroper.IsAtBoundary(coords) )
-        return false;
-
-    return true;
-}
-
 void
 wxGrid::DoMoveCursorFromKeyboard(const wxKeyboardState& kbdState,
                                  const wxGridDirectionOperations& diroper)
@@ -7975,11 +7943,9 @@ wxGrid::DoMoveCursor(const wxKeyboardState& kbdState,
         if ( !m_selection )
             return false;
 
-        wxGridCellCoords coords;
-        if ( !PrepareForSelectionExpansion(coords, diroper) )
+        wxGridCellCoords coords(m_selection->GetExtensionAnchor());
+        if ( !diroper.TryToAdvance(coords) )
             return false;
-
-        diroper.Advance(coords);
 
         if ( m_selection->ExtendCurrentBlock(m_currentCellCoords,
                                              coords,
@@ -7995,11 +7961,9 @@ wxGrid::DoMoveCursor(const wxKeyboardState& kbdState,
     {
         ClearSelection();
 
-        if ( diroper.IsAtBoundary(m_currentCellCoords) )
-            return false;
-
         wxGridCellCoords coords = m_currentCellCoords;
-        diroper.Advance(coords);
+        if ( !diroper.TryToAdvance(coords) )
+            return false;
 
         GoToCell(coords);
     }
@@ -8080,25 +8044,9 @@ wxGrid::AdvanceToNextNonEmpty(wxGridCellCoords& coords,
 }
 
 bool
-wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
-                            const wxGridDirectionOperations& diroper)
+wxGrid::AdvanceByBlock(wxGridCellCoords& coords,
+                       const wxGridDirectionOperations& diroper)
 {
-    if ( !m_table )
-        return false;
-
-    wxGridCellCoords coords;
-
-    // Expand selection if Shift is pressed.
-    if ( kbdState.ShiftDown() )
-    {
-        if ( !PrepareForSelectionExpansion(coords, diroper) )
-            return false;
-    }
-    else
-    {
-        coords = m_currentCellCoords;
-    }
-
     if ( m_table->IsEmpty(coords) )
     {
         // we are in an empty cell: find the next block of non-empty cells
@@ -8106,7 +8054,9 @@ wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
     }
     else // current cell is not empty
     {
-        diroper.Advance(coords);
+        if ( !diroper.TryToAdvance(coords) )
+            return false;
+
         if ( m_table->IsEmpty(coords) )
         {
             // we started at the end of a block, find the next one
@@ -8128,23 +8078,81 @@ wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
         }
     }
 
+    return true;
+}
+
+bool
+wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
+                            const wxGridDirectionOperations& diroper)
+{
+    if ( !m_table )
+        return false;
+
+    wxGridCellCoords coords(m_currentCellCoords);
     if ( kbdState.ShiftDown() )
     {
-        if ( m_selection )
+        if ( !m_selection )
+            return false;
+
+        // Extending selection by block is tricky for several reasons. First of
+        // all, we need to combine the coordinates of the current cell and the
+        // anchor point of selection to find our starting point.
+        //
+        // To explain why we need to do this, consider the example of moving by
+        // rows (i.e. vertically). In this case, it's the contents of column
+        // containing the current cell which should determine the destination
+        // of Shift-Ctrl-Up/Down movement, just as it does for Ctrl-Up/Down. In
+        // fact, the column containing the selection anchor might not even be
+        // visible at all, e.g. if a whole row is selected and that column is
+        // the last one, so we definitely don't want to use the contents of
+        // this column to determine the destination row.
+        //
+        // So instead of using the anchor itself here, use only its component
+        // component in "our" direction with the current cell component.
+        const wxGridCellCoords anchor = m_selection->GetExtensionAnchor();
+
+        // This is a really ugly hack that we use to check if we're moving by
+        // rows or columns here, but it's not worth adding a specific method
+        // just for this, so just check if MakeWholeLineCoords() fixes the
+        // column or the row as -1 to determine the direction we're moving in.
+        const bool byRow = diroper.MakeWholeLineCoords(coords).GetCol() == -1;
+
+        if ( byRow )
+            coords.SetRow(anchor.GetRow());
+        else
+            coords.SetCol(anchor.GetCol());
+
+        if ( !AdvanceByBlock(coords, diroper) )
+            return false;
+
+        // Second, now that we've found the destination, we need to copy the
+        // other component, i.e. the one we didn't modify, from the anchor to
+        // do as if we started from the anchor originally.
+        //
+        // Again, to understand why this is necessary, consider the same
+        // example as above: if we didn't do this, we would lose the column of
+        // the original anchor completely and end up with a single column
+        // selection block even if we had started with the full row selection.
+        if ( byRow )
+            coords.SetCol(anchor.GetCol());
+        else
+            coords.SetRow(anchor.GetRow());
+
+        if ( m_selection->ExtendCurrentBlock(m_currentCellCoords,
+                                             coords,
+                                             kbdState) )
         {
-            if ( m_selection->ExtendCurrentBlock(m_currentCellCoords,
-                                                 coords,
-                                                 kbdState) )
-            {
-                // We want to show a line (a row or a column), not the end of
-                // the selection block. And do it only if the selection block
-                // was actually changed.
-                MakeCellVisible(diroper.MakeWholeLineCoords(coords));
-            }
+            // We want to show a line (a row or a column), not the end of
+            // the selection block. And do it only if the selection block
+            // was actually changed.
+            MakeCellVisible(diroper.MakeWholeLineCoords(coords));
         }
     }
     else
     {
+        if ( !AdvanceByBlock(coords, diroper) )
+            return false;
+
         ClearSelection();
         GoToCell(coords);
     }

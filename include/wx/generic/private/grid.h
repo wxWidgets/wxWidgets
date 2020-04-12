@@ -807,7 +807,22 @@ public:
     }
 
     // Increment the component of this point in our direction
+    //
+    // Note that this can't be called if IsAtBoundary() is true, use
+    // TryToAdvance() if this might be the case.
     virtual void Advance(wxGridCellCoords& coords) const = 0;
+
+    // Try to advance in our direction, return true if succeeded or false
+    // otherwise, i.e. if the coordinates are already at the grid boundary.
+    bool TryToAdvance(wxGridCellCoords& coords) const
+    {
+        if ( IsAtBoundary(coords) )
+            return false;
+
+        Advance(coords);
+
+        return true;
+    }
 
     // Find the line at the given distance, in pixels, away from this one
     // (this uses clipping, i.e. anything after the last line is counted as the

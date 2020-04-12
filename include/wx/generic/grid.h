@@ -2767,12 +2767,6 @@ private:
                   wxGridWindow *gridWindow) const;
     int PosToEdgeOfLine(int pos, const wxGridOperations& oper) const;
 
-    // Fill the coords with the cell coordinates to use for the movement
-    // extending the current selection. Return false if, for whatever reason,
-    // we can't expand the selection at all.
-    bool PrepareForSelectionExpansion(wxGridCellCoords& coords,
-                                      const wxGridDirectionOperations& diroper);
-
     void DoMoveCursorFromKeyboard(const wxKeyboardState& kbdState,
                                   const wxGridDirectionOperations& diroper);
     bool DoMoveCursor(const wxKeyboardState& kbdState,
@@ -2782,6 +2776,8 @@ private:
                              const wxGridDirectionOperations& diroper);
     void AdvanceToNextNonEmpty(wxGridCellCoords& coords,
                                const wxGridDirectionOperations& diroper);
+    bool AdvanceByBlock(wxGridCellCoords& coords,
+                        const wxGridDirectionOperations& diroper);
 
     // common part of {Insert,Delete}{Rows,Cols}
     bool DoModifyLines(bool (wxGridTableBase::*funcModify)(size_t, size_t),

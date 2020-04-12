@@ -74,6 +74,17 @@ protected:
 
     void CheckFirstColAutoSize(int expected);
 
+    // Helper to check that the selection is equal to the specified block.
+    void CheckSelection(const wxGridBlockCoords& block)
+    {
+        const wxGridBlocks selected = m_grid->GetSelectedBlocks();
+        wxGridBlocks::iterator it = selected.begin();
+
+        REQUIRE( it != selected.end() );
+        CHECK( *it == block );
+        CHECK( ++it == selected.end() );
+    }
+
     TestableGrid *m_grid;
 
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
@@ -488,6 +499,35 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Cursor", "[grid]")
 
     CHECK(m_grid->GetGridCursorCol() == 1);
     CHECK(m_grid->GetGridCursorRow() == 0);
+}
+
+TEST_CASE_METHOD(GridTestCase, "Grid::KeyboardSelection", "[grid][selection]")
+{
+    m_grid->SetCellValue(1, 1, "R2C2");
+    m_grid->SetCellValue(2, 0, "R3C1");
+    m_grid->SetCellValue(3, 0, "R4C1");
+    m_grid->SetCellValue(4, 0, "R5C1");
+    m_grid->SetCellValue(7, 0, "R8C1");
+
+    CHECK(m_grid->GetGridCursorCoords() == wxGridCellCoords(0, 0));
+
+    m_grid->MoveCursorRight(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 0, 1));
+
+    m_grid->MoveCursorDownBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 2, 1));
+
+    m_grid->MoveCursorDownBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 4, 1));
+
+    m_grid->MoveCursorDownBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 7, 1));
+
+    m_grid->MoveCursorUpBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 4, 1));
+
+    m_grid->MoveCursorLeft(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 4, 0));
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")

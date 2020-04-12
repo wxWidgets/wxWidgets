@@ -86,12 +86,12 @@ public:
                             const wxKeyboardState& kbd);
 
 
-    // Return the row of the current selection block if it exists and we can
-    // edit the block vertically. Otherwise return -1.
-    int GetCurrentBlockCornerRow() const;
-    // Return the column of the current selection block if it exists and we can
-    // edit the block horizontally. Otherwise return -1.
-    int GetCurrentBlockCornerCol() const;
+    // Return the coordinates of the cell from which the selection should
+    // continue to be extended. This is normally the opposite corner of the
+    // last selected block from the current cell coordinates.
+    //
+    // If there is no selection, just returns the current cell coordinates.
+    wxGridCellCoords GetExtensionAnchor() const;
 
     wxGridCellCoordsArray GetCellSelection() const;
     wxGridCellCoordsArray GetBlockSelectionTopLeft() const;
