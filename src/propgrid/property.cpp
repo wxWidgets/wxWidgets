@@ -150,16 +150,28 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
         dc.SetFont(font);
 
     const wxBitmap& bmp = cell.GetBitmap();
-    if ( bmp.IsOk() &&
-        // Do not draw oversized bitmap outside choice popup
-         ((flags & ChoicePopup) || bmp.GetHeight() < rect.height )
-        )
+    if ( bmp.IsOk() )
     {
-        dc.DrawBitmap( bmp,
+        int hMax = rect.height - wxPG_CUSTOM_IMAGE_SPACINGY;
+        wxBitmap scaledBmp;
+        int yOfs;
+        if ( bmp.GetHeight() <= hMax )
+        {
+            scaledBmp = bmp;
+            yOfs = (hMax - bmp.GetHeight()) / 2;
+        }
+        else
+        {
+            double scale = (double)hMax / bmp.GetHeight();
+            scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
+            yOfs = 0;
+        }
+
+        dc.DrawBitmap( scaledBmp,
                        rect.x + wxPG_CONTROL_MARGIN + wxCC_CUSTOM_IMAGE_MARGIN1,
-                       rect.y + wxPG_CUSTOM_IMAGE_SPACINGY,
+                       rect.y + wxPG_CUSTOM_IMAGE_SPACINGY + yOfs,
                        true );
-        imageWidth = bmp.GetWidth();
+        imageWidth = scaledBmp.GetWidth();
     }
 
     return imageWidth;
