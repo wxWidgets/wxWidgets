@@ -498,59 +498,69 @@ bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockSt
     const wxGridBlockCoords& block = *m_selection.rbegin();
     wxGridBlockCoords newBlock = block;
 
-    // If the new block starts at the same top row as the current one, the
-    // end block coordinates must correspond to the new bottom row -- and
-    // vice versa, if the new block starts at the bottom, its other end
-    // must correspond to the top.
-    if ( blockStart.GetRow() == block.GetTopRow() )
+    // Don't adjust the blocks rows at all in column selection mode as the
+    // top/bottom row are always fixed to the first/last grid row anyhow in
+    // this case and we shouldn't select only part of a column just because the
+    // user Shift-clicked somewhere in the middle of the grid.
+    if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
-        newBlock.SetBottomRow(blockEnd.GetRow());
-    }
-    else if ( blockStart.GetRow() == block.GetBottomRow() )
-    {
-        newBlock.SetTopRow(blockEnd.GetRow());
-    }
-    else // current and new block don't have common row boundary
-    {
-        // This can happen when mixing entire column and cell selection, e.g.
-        // by Shift-clicking on the column header. In this case, the right
-        // thing to do is to just expand the current block to the new one
-        // boundaries, extending the selection to the entire column height when
-        // a column is selected. However notice that we should not shrink the
-        // current block here, in order to allow Shift-Left/Right (which don't
-        // know anything about the column selection and so just use single row
-        // blocks) to keep the full column selection.
-        int top = blockStart.GetRow(),
-            bottom = blockEnd.GetRow();
-        if ( top > bottom )
-            wxSwap(top, bottom);
+        // If the new block starts at the same top row as the current one, the
+        // end block coordinates must correspond to the new bottom row -- and
+        // vice versa, if the new block starts at the bottom, its other end
+        // must correspond to the top.
+        if ( blockStart.GetRow() == block.GetTopRow() )
+        {
+            newBlock.SetBottomRow(blockEnd.GetRow());
+        }
+        else if ( blockStart.GetRow() == block.GetBottomRow() )
+        {
+            newBlock.SetTopRow(blockEnd.GetRow());
+        }
+        else // current and new block don't have common row boundary
+        {
+            // This can happen when mixing entire column and cell selection, e.g.
+            // by Shift-clicking on the column header. In this case, the right
+            // thing to do is to just expand the current block to the new one
+            // boundaries, extending the selection to the entire column height when
+            // a column is selected. However notice that we should not shrink the
+            // current block here, in order to allow Shift-Left/Right (which don't
+            // know anything about the column selection and so just use single row
+            // blocks) to keep the full column selection.
+            int top = blockStart.GetRow(),
+                bottom = blockEnd.GetRow();
+            if ( top > bottom )
+                wxSwap(top, bottom);
 
-        if ( top < newBlock.GetTopRow() )
-            newBlock.SetTopRow(top);
-        if ( bottom > newBlock.GetBottomRow() )
-            newBlock.SetBottomRow(bottom);
+            if ( top < newBlock.GetTopRow() )
+                newBlock.SetTopRow(top);
+            if ( bottom > newBlock.GetBottomRow() )
+                newBlock.SetBottomRow(bottom);
+        }
     }
 
     // Same as above but mirrored for columns.
-    if ( blockStart.GetCol() == block.GetLeftCol() )
+    if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
-        newBlock.SetRightCol(blockEnd.GetCol());
-    }
-    else if ( blockStart.GetCol() == block.GetRightCol() )
-    {
-        newBlock.SetLeftCol(blockEnd.GetCol());
-    }
-    else
-    {
-        int left = blockStart.GetCol(),
-            right = blockEnd.GetCol();
-        if ( left > right )
-            wxSwap(left, right);
+        if ( blockStart.GetCol() == block.GetLeftCol() )
+        {
+            newBlock.SetRightCol(blockEnd.GetCol());
+        }
+        else if ( blockStart.GetCol() == block.GetRightCol() )
+        {
+            newBlock.SetLeftCol(blockEnd.GetCol());
+        }
+        else
+        {
+            int left = blockStart.GetCol(),
+                right = blockEnd.GetCol();
+            if ( left > right )
+                wxSwap(left, right);
 
-        if ( left < newBlock.GetLeftCol() )
-            newBlock.SetLeftCol(left);
-        if ( right > newBlock.GetRightCol() )
-            newBlock.SetRightCol(right);
+            if ( left < newBlock.GetLeftCol() )
+                newBlock.SetLeftCol(left);
+            if ( right > newBlock.GetRightCol() )
+                newBlock.SetRightCol(right);
+        }
     }
 
     newBlock = newBlock.Canonicalize();
