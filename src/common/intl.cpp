@@ -69,6 +69,7 @@
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
+    #include <CoreFoundation/CFNumberFormatter.h>
     #include <CoreFoundation/CFString.h>
 #endif
 
@@ -1779,7 +1780,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
         case wxLOCALE_GROUPING:
             wxCFRef<CFNumberFormatterRef> numFormatterRef(
-                CFNumberFormatterCreate(NULL, userLocalRef, kCFNumberFormatterDecimalStyle));
+                CFNumberFormatterCreate(NULL, userLocaleRef, kCFNumberFormatterDecimalStyle));
             CFNumberRef size = (CFNumberRef) CFNumberFormatterCopyProperty(
                 numFormatterRef, kCFNumberFormatterGroupingSize);
             CFNumberRef secSize = (CFNumberRef) CFNumberFormatterCopyProperty(
@@ -1792,12 +1793,14 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                 {
                     s += '0';
                     ss += '0';
+                    char gstr[] = {s, ';', ss, ';', '0', '\0'};
                     cfstr = CFStringCreateWithCString(
-                        NULL, {s, ';', ss, ';', '0', '\0'}, kCFStringEncodingASCII);
+                        NULL, &gstr[0], kCFStringEncodingASCII);
                 } else {
                     s += '0';
+                    char gstr[] = {s, ';', '0', '\0'};
                     cfstr = CFStringCreateWithCString(
-                        NULL, {s, ';', '0', '\0'}, kCFStringEncodingASCII);
+                        NULL, &gstr[0], kCFStringEncodingASCII);
                 }
             } else {
                 // No grouping
