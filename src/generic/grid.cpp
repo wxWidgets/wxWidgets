@@ -5803,11 +5803,19 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_PAGEUP:
-                MovePageUp();
+                DoMoveCursorByPage
+                (
+                    event,
+                    wxGridBackwardOperations(this, wxGridRowOperations())
+                );
                 break;
 
             case WXK_PAGEDOWN:
-                MovePageDown();
+                DoMoveCursorByPage
+                (
+                    event,
+                    wxGridForwardOperations(this, wxGridRowOperations())
+                );
                 break;
 
             case WXK_SPACE:
@@ -7995,37 +8003,67 @@ bool wxGrid::MoveCursorRight(bool expandSelection)
                         wxGridForwardOperations(this, wxGridColumnOperations()));
 }
 
-bool wxGrid::DoMoveCursorByPage(const wxGridDirectionOperations& diroper)
+bool
+wxGrid::AdvanceByPage(wxGridCellCoords& coords,
+                      const wxGridDirectionOperations& diroper)
+{
+    if ( diroper.IsAtBoundary(coords) )
+        return false;
+
+    const int oldRow = coords.GetRow();
+    coords.SetRow(diroper.MoveByPixelDistance(oldRow, m_gridWin->GetClientSize().y));
+    if ( coords.GetRow() == oldRow )
+        diroper.Advance(coords);
+
+    return true;
+}
+
+bool
+wxGrid::DoMoveCursorByPage(const wxKeyboardState& kbdState,
+                           const wxGridDirectionOperations& diroper)
 {
     if ( m_currentCellCoords == wxGridNoCellCoords )
         return false;
 
-    if ( diroper.IsAtBoundary(m_currentCellCoords) )
+    // We don't handle Ctrl-PageUp/Down, it's not really clear what are they
+    // supposed to do, so don't do anything for now.
+    if ( kbdState.ControlDown() )
         return false;
 
-    const int oldRow = m_currentCellCoords.GetRow();
-    int newRow = diroper.MoveByPixelDistance(oldRow, m_gridWin->GetClientSize().y);
-    if ( newRow == oldRow )
+    if ( kbdState.ShiftDown() )
+    {
+        if ( !m_selection )
+            return false;
+
+        wxGridCellCoords coords = m_selection->GetExtensionAnchor();
+        if ( !AdvanceByPage(coords, diroper) )
+            return false;
+
+        if ( m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, kbdState) )
+            MakeCellVisible(coords);
+    }
+    else
     {
         wxGridCellCoords coords(m_currentCellCoords);
-        diroper.Advance(coords);
-        newRow = coords.GetRow();
-    }
+        if ( !AdvanceByPage(coords, diroper) )
+            return false;
 
-    GoToCell(newRow, m_currentCellCoords.GetCol());
+        ClearSelection();
+        GoToCell(coords);
+    }
 
     return true;
 }
 
 bool wxGrid::MovePageUp()
 {
-    return DoMoveCursorByPage(
+    return DoMoveCursorByPage(DummyKeyboardState(false),
                 wxGridBackwardOperations(this, wxGridRowOperations()));
 }
 
 bool wxGrid::MovePageDown()
 {
-    return DoMoveCursorByPage(
+    return DoMoveCursorByPage(DummyKeyboardState(false),
                 wxGridForwardOperations(this, wxGridRowOperations()));
 }
 

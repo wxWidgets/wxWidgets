@@ -2771,7 +2771,10 @@ private:
                                   const wxGridDirectionOperations& diroper);
     bool DoMoveCursor(const wxKeyboardState& kbdState,
                       const wxGridDirectionOperations& diroper);
-    bool DoMoveCursorByPage(const wxGridDirectionOperations& diroper);
+    bool DoMoveCursorByPage(const wxKeyboardState& kbdState,
+                            const wxGridDirectionOperations& diroper);
+    bool AdvanceByPage(wxGridCellCoords& coords,
+                       const wxGridDirectionOperations& diroper);
     bool DoMoveCursorByBlock(const wxKeyboardState& kbdState,
                              const wxGridDirectionOperations& diroper);
     void AdvanceToNextNonEmpty(wxGridCellCoords& coords,
