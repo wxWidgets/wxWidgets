@@ -7843,7 +7843,7 @@ int wxGrid::GetFirstFullyVisibleRow() const
 
         // If the row is not fully visible (if only 2 pixels is hidden
         // the row still looks fully visible).
-        if ( GetRowTop(row) - 2 < y )
+        if ( GetRowTop(row) + 2 < y )
         {
             // Use the next visible row.
             for ( ;; )
