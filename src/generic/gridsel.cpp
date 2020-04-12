@@ -290,13 +290,14 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
             break;
         }
 
-        // remove the block
+        const wxGridBlockDiffResult result =
+            selBlock.Difference(canonicalizedBlock, splitOrientation);
+
+        // remove the block (note that selBlock, being a reference, is
+        // invalidated here and can't be used any more below)
         m_selection.erase(m_selection.begin() + n);
         n--;
         count--;
-
-        wxGridBlockDiffResult result =
-            selBlock.Difference(canonicalizedBlock, splitOrientation);
 
         for ( int i = 0; i < 2; ++i )
         {
