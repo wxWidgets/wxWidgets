@@ -1779,32 +1779,34 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 
         case wxLOCALE_GROUPING:
-            wxCFRef<CFNumberFormatterRef> numFormatterRef(
-                CFNumberFormatterCreate(NULL, userLocaleRef, kCFNumberFormatterDecimalStyle));
-            CFNumberRef size = (CFNumberRef) CFNumberFormatterCopyProperty(
-                numFormatterRef, kCFNumberFormatterGroupingSize);
-            CFNumberRef secSize = (CFNumberRef) CFNumberFormatterCopyProperty(
-                numFormatterRef, kCFNumberFormatterSecondaryGroupingSize);
-            // Convert the size and secondary size to char and create the grouping string
-            char s, ss;
-            if (CFNumberGetValue(size, kCFNumberCharType, &s))
             {
-                if (CFNumberGetValue(secSize, kCFNumberCharType, &ss) && ss != s)
+                wxCFRef<CFNumberFormatterRef> numFormatterRef(
+                    CFNumberFormatterCreate(NULL, userLocaleRef, kCFNumberFormatterDecimalStyle));
+                CFNumberRef size = (CFNumberRef) CFNumberFormatterCopyProperty(
+                    numFormatterRef, kCFNumberFormatterGroupingSize);
+                CFNumberRef secSize = (CFNumberRef) CFNumberFormatterCopyProperty(
+                    numFormatterRef, kCFNumberFormatterSecondaryGroupingSize);
+                // Convert the size and secondary size to char and create the grouping string
+                char s, ss;
+                if (CFNumberGetValue(size, kCFNumberCharType, &s))
                 {
-                    s += '0';
-                    ss += '0';
-                    char gstr[] = {s, ';', ss, ';', '0', '\0'};
-                    cfstr = CFStringCreateWithCString(
-                        NULL, &gstr[0], kCFStringEncodingASCII);
+                    if (CFNumberGetValue(secSize, kCFNumberCharType, &ss) && ss != s)
+                    {
+                        s += '0';
+                        ss += '0';
+                        char gstr[] = {s, ';', ss, ';', '0', '\0'};
+                        cfstr = CFStringCreateWithCString(
+                            NULL, &gstr[0], kCFStringEncodingASCII);
+                    } else {
+                        s += '0';
+                        char gstr[] = {s, ';', '0', '\0'};
+                        cfstr = CFStringCreateWithCString(
+                            NULL, &gstr[0], kCFStringEncodingASCII);
+                    }
                 } else {
-                    s += '0';
-                    char gstr[] = {s, ';', '0', '\0'};
-                    cfstr = CFStringCreateWithCString(
-                        NULL, &gstr[0], kCFStringEncodingASCII);
+                    // No grouping
+                    cfstr = CFStringCreateWithCString(NULL, "", kCFStringEncodingASCII);
                 }
-            } else {
-                // No grouping
-                cfstr = CFStringCreateWithCString(NULL, "", kCFStringEncodingASCII);
             }
             break;
 
