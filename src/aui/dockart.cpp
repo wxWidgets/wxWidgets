@@ -550,10 +550,9 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
     {
         for (i = 0; i < border_width; ++i)
         {
-            dc.SetPen(*wxWHITE_PEN);
+            dc.SetPen(m_borderPen);
             dc.DrawLine(rect.x, rect.y, rect.x+rect.width, rect.y);
             dc.DrawLine(rect.x, rect.y, rect.x, rect.y+rect.height);
-            dc.SetPen(m_borderPen);
             dc.DrawLine(rect.x, rect.y+rect.height-1,
                         rect.x+rect.width, rect.y+rect.height-1);
             dc.DrawLine(rect.x+rect.width-1, rect.y,
