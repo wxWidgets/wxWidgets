@@ -36,15 +36,17 @@ endif()
 
 if(MSVC)
     wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
-else()
-    # Other compilers support setting the C++ standard, present it an option to the user
+endif()
+
+if(NOT MSVC OR MSVC_VERSION GREATER 1800)
+    # support setting the C++ standard, present it an option to the user
     if(DEFINED CMAKE_CXX_STANDARD)
         set(wxCXX_STANDARD_DEFAULT ${CMAKE_CXX_STANDARD})
     else()
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
     wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17)
+              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17 20)
 endif()
 
 if(WIN32)

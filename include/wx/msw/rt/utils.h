@@ -66,11 +66,9 @@ public:
 
     operator HSTRING() const { return m_hstring; };
 
-    static const TempStringRef Make(const wxString &str);
+    TempStringRef(const wxString& str);
 
 private:
-    TempStringRef(const wxString &str);
-
     HSTRING             m_hstring;
     HSTRING_HEADER      m_header;
 

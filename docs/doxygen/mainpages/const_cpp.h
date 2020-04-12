@@ -171,6 +171,9 @@ Currently the following symbols exist:
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
+@itemdef{wxHAS_MEMBER_DEFAULT, Defined if the currently used compiler supports
+    C++11 @c =default. @c wxMEMBER_DEFAULT is defined as this keyword in this
+    case, and as nothing otherwise.}
 @itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in
     size (notice that you must include @c wx/filefn.h before testing for this
     symbol).}

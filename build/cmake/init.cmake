@@ -8,6 +8,15 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+    set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
+endif()
+if(NOT CMAKE_CXX_STANDARD EQUAL 98)
+    set(wxHAS_CXX11 TRUE)
+else()
+    set(wxHAS_CXX11 FALSE)
+endif()
+
 if(MSVC)
     # Determine MSVC runtime library flag
     set(MSVC_LIB_USE "/MD")
