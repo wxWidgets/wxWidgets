@@ -3675,7 +3675,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
                     if ( (row = YToRow( pos.y )) >= 0 )
                     {
-                        m_selection->ExtendOrCreateCurrentBlock(
+                        m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
                             wxGridCellCoords(row, GetNumberCols() - 1),
                             event);
@@ -3728,7 +3728,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                     {
                         // Continue editing the current selection and don't
                         // move the grid cursor.
-                        m_selection->ExtendOrCreateCurrentBlock
+                        m_selection->ExtendCurrentBlock
                                      (
                                         wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
                                         wxGridCellCoords(row, GetNumberCols() - 1),
@@ -4006,7 +4006,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                         if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
                             break;
 
-                        m_selection->ExtendOrCreateCurrentBlock(
+                        m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(0, m_currentCellCoords.GetCol()),
                             wxGridCellCoords(GetNumberRows() - 1, col),
                             event);
@@ -4126,7 +4126,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                         {
                             // Continue editing the current selection and don't
                             // move the grid cursor.
-                            m_selection->ExtendOrCreateCurrentBlock
+                            m_selection->ExtendCurrentBlock
                                          (
                                             wxGridCellCoords(0, m_currentCellCoords.GetCol()),
                                             wxGridCellCoords(GetNumberRows() - 1, col),
@@ -4490,7 +4490,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
 
     // Edit the current selection block independently of the modifiers state.
     if ( m_selection )
-        m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords, coords, event);
+        m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
 
     return performDefault;
 }
@@ -4535,9 +4535,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
     {
         if ( m_selection )
         {
-            m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
-                                                    coords,
-                                                    event);
+            m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
             MakeCellVisible(coords);
         }
     }
@@ -5789,7 +5787,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     if ( event.ShiftDown() )
                     {
                         if ( m_selection )
-                            m_selection->ExtendOrCreateCurrentBlock(
+                            m_selection->ExtendCurrentBlock(
                                              m_currentCellCoords,
                                              wxGridCellCoords(row, col),
                                              event);
@@ -7978,9 +7976,9 @@ wxGrid::DoMoveCursor(const wxKeyboardState& kbdState,
 
         diroper.Advance(coords);
 
-        if ( m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
-                                                     coords,
-                                                     kbdState) )
+        if ( m_selection->ExtendCurrentBlock(m_currentCellCoords,
+                                             coords,
+                                             kbdState) )
         {
             // We want to show a line (a row or a column), not the end of
             // the selection block. And do it only if the selection block
@@ -8129,9 +8127,9 @@ wxGrid::DoMoveCursorByBlock(const wxKeyboardState& kbdState,
     {
         if ( m_selection )
         {
-            if ( m_selection->ExtendOrCreateCurrentBlock(m_currentCellCoords,
-                                                         coords,
-                                                         kbdState) )
+            if ( m_selection->ExtendCurrentBlock(m_currentCellCoords,
+                                                 coords,
+                                                 kbdState) )
             {
                 // We want to show a line (a row or a column), not the end of
                 // the selection block. And do it only if the selection block

@@ -482,9 +482,9 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
     }
 }
 
-bool wxGridSelection::ExtendOrCreateCurrentBlock(const wxGridCellCoords& blockStart,
-                                                 const wxGridCellCoords& blockEnd,
-                                                 const wxKeyboardState& kbd)
+bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
+                                         const wxGridCellCoords& blockEnd,
+                                         const wxKeyboardState& kbd)
 {
     wxASSERT( blockStart.GetRow() != -1 && blockStart.GetCol() != -1 &&
               blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1 );
