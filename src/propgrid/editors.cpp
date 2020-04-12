@@ -2193,7 +2193,7 @@ void wxPGMultiButton::Add( const wxBitmap& bitmap, int itemid )
             0;
 #endif
     // Maximal heigth of the bitmap
-    const int hMax = sz.y - margins;
+    const int hMax = wxMax(4, sz.y - margins);
 
     wxBitmap scaledBmp;
     // Scale bitmap down if necessary
