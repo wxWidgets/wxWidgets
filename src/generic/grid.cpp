@@ -4483,31 +4483,36 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
             SaveEditControlValue();
         }
 
-        if ( !event.HasAnyModifiers() )
+        switch ( event.GetModifiers() )
         {
-            if ( CanDragCell() )
-            {
-                // if event is handled by user code, no further processing
-                return SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 0;
-            }
+            case wxMOD_CONTROL:
+                // Ctrl-dragging is special, because we could have started it
+                // by Ctrl-clicking a previously selected cell, which has the
+                // effect of deselecting it and in this case we can't start
+                // drag-selection from it because the selection anchor should
+                // always be selected itself.
+                if ( !m_selection->IsInSelection(m_currentCellCoords) )
+                    return false;
+                break;
 
-            // When Shift-dragging, we must have already selected the initial
-            // cell and when Ctrl-dragging we may have either selected or
-            // deselected it, depending on its previous state. But when
-            // dragging without any modifiers, we want it to start in the
-            // selected state even though it's not selected on a simple click.
-            if ( m_selection )
-                m_selection->SelectBlock(m_currentCellCoords, coords, event);
+            case wxMOD_NONE:
+                if ( CanDragCell() )
+                {
+                    // if event is handled by user code, no further processing
+                    return SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 0;
+                }
+                break;
+
+            //default: In all the other cases, we don't have anything special
+            //         to do and we'll just extend the selection below.
         }
     }
 
-    // Extend the selection if possible: this is not the case if we're dragging
-    // from an unselected cell, as can be the case if the drag was started by
-    // Ctrl-clicking a previously selected cell (notice that the modifier of
-    // the current event is irrelevant, it's too late to change the behaviour
-    // by pressing or releasing Ctrl later, only its initial state, as
-    // indicated by the state of the starting cell, counts).
-    if ( m_selection && m_selection->IsInSelection(m_currentCellCoords) )
+    // Note that we don't need to check the modifiers here, it doesn't matter
+    // which keys are pressed for the current event, as pressing or releasing
+    // Ctrl later can't change the dragging behaviour. Only the initial state
+    // of the modifier keys matters.
+    if ( m_selection )
         m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
 
     return true;
