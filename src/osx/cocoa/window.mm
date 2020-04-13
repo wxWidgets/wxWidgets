@@ -3271,14 +3271,14 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
             if ( f.GetStrikethrough() )
             {
                 [attrString addAttribute:NSStrikethroughStyleAttributeName
-                                   value:@(NSUnderlineStyleSingle)
+                                   value:[NSNumber numberWithInteger:NSUnderlineStyleSingle]
                                    range:NSMakeRange(0, [attrString length])];
             }
 
             if ( f.GetUnderlined() )
             {
                 [attrString addAttribute:NSUnderlineStyleAttributeName
-                                   value:@(NSUnderlineStyleSingle)
+                                   value:[NSNumber numberWithInteger:NSUnderlineStyleSingle]
                                    range:NSMakeRange(0, [attrString length])];
 
             }
