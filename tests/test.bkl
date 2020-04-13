@@ -301,8 +301,6 @@
     <exe id="test_allheaders" template="wx_sample,wx_test"
                               template_append="wx_append"
          cond="USE_GUI=='1'">
-
-        <define>wxNO_IMPLICIT_WXSTRING_ENCODING</define>
         <!-- link against GUI libraries, but be a console app: -->
         <app-type>console</app-type>
 
@@ -405,7 +403,7 @@ failtest_weakref:
 
 failtest_allheaders:
 	@$(RM) test_allheaders.o
-	if $(MAKE) CPPFLAGS=-DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DwxNO_IMPLICIT_WXSTRING_ENCODING -DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_IMPLICIT_WXSTRING_ENCODING unexpectedly succeeded.">&amp;2; \
 	    exit 1; \
 	fi; \

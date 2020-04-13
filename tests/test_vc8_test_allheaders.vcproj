@@ -47,14 +47,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -147,14 +147,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -173,7 +173,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -246,14 +246,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -275,7 +275,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -346,14 +346,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -372,7 +372,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -445,14 +445,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -474,7 +474,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -545,14 +545,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -571,7 +571,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -644,14 +644,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -673,7 +673,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
@@ -744,14 +744,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -770,7 +770,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_x64_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
 			/>

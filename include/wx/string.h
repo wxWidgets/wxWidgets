@@ -82,8 +82,16 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 #endif
 
 // enforce consistency among encoding-related macros
-#if defined wxNO_IMPLICIT_WXSTRING_ENCODING && !defined wxNO_UNSAFE_WXSTRING_CONV
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+
+#ifndef wxNO_UNSAFE_WXSTRING_CONV
 #define wxNO_UNSAFE_WXSTRING_CONV
+#endif
+
+#if wxUSE_UTF8_LOCALE_ONLY
+#error wxNO_IMPLICIT_WXSTRING_ENCODING cannot be used in UTF-8 only builds
+#endif
+
 #endif
 
 namespace wxPrivate

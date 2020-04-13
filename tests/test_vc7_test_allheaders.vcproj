@@ -28,7 +28,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -60,7 +60,7 @@
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -70,7 +70,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
@@ -96,7 +96,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -127,7 +127,7 @@
 				EnableCOMDATFolding="2"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -137,7 +137,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
@@ -163,7 +163,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -195,7 +195,7 @@
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -205,7 +205,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
@@ -231,7 +231,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -262,7 +262,7 @@
 				EnableCOMDATFolding="2"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -272,7 +272,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;wxNO_IMPLICIT_WXSTRING_ENCODING;_CONSOLE"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples;.\..\3rdparty\catch\include"/>
 			<Tool

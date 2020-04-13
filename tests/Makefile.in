@@ -275,8 +275,8 @@ TEST_ALLHEADERS_CXXFLAGS = $(__test_allheaders_PCH_INC) $(WX_CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
-	-I$(top_srcdir)/3rdparty/catch/include -DwxNO_IMPLICIT_WXSTRING_ENCODING \
-	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(top_srcdir)/3rdparty/catch/include $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_ALLHEADERS_OBJECTS =  \
 	$(__test_allheaders___win32rc) \
 	test_allheaders_asserthelper.o \
@@ -371,6 +371,8 @@ COND_MONOLITHIC_0___WXLIB_HTML_p = \
 @COND_TOOLKIT_OSX_IPHONE@____test_allheaders_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= \
 @COND_TOOLKIT_OSX_IPHONE@	$(__test_allheaders_app_Contents_PkgInfo___depname)
+@COND_PLATFORM_WIN32_1@__test_allheaders___win32rc = \
+@COND_PLATFORM_WIN32_1@	test_allheaders_sample_rc.o
 @COND_GCC_PCH_1@__test_allheaders_PCH_INC = \
 @COND_GCC_PCH_1@	-I./.pch/testprec_test_allheaders
 @COND_ICC_PCH_1@__test_allheaders_PCH_INC = \
@@ -378,8 +380,6 @@ COND_MONOLITHIC_0___WXLIB_HTML_p = \
 @COND_ICC_PCH_1@	./.pch/testprec_test_allheaders/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_allheaders_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test_allheaders/testprec.h.gch
-@COND_PLATFORM_WIN32_1@__test_allheaders___win32rc = \
-@COND_PLATFORM_WIN32_1@	test_allheaders_sample_rc.o
 COND_MONOLITHIC_0___WXLIB_XML_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
@@ -1155,7 +1155,7 @@ test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/xml/xrctest.cpp
 
 test_allheaders_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_ALLHEADERS_ODEP)
-	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include --define wxNO_IMPLICIT_WXSTRING_ENCODING
+	$(WINDRES) -i$< -o$@    $(__WIN32_DPI_MANIFEST_p) --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/include
 
 test_allheaders_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_ALLHEADERS_ODEP)
 	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/asserthelper.cpp
@@ -1200,7 +1200,7 @@ failtest_weakref:
 
 failtest_allheaders:
 	@$(RM) test_allheaders.o
-	if $(MAKE) CPPFLAGS=-DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DwxNO_IMPLICIT_WXSTRING_ENCODING -DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_IMPLICIT_WXSTRING_ENCODING unexpectedly succeeded.">&2; \
 	    exit 1; \
 	fi; \

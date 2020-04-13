@@ -10,11 +10,18 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "testprec.h"
-
+// Avoid pre-compiled headers at all
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#include "wx/setup.h"
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+#define wxNO_IMPLICIT_WXSTRING_ENCODING
+#endif
+
+#include "testprec.h"
 
 #include "allheaders.h"
 
