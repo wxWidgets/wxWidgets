@@ -4483,26 +4483,19 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
         SaveEditControlValue();
     }
 
-    switch ( event.GetModifiers() )
+    if ( !event.HasAnyModifiers() )
     {
-        case wxMOD_CONTROL:
+        if ( CanDragCell() )
+        {
             if ( isFirstDrag )
-                SetGridCursor(coords);
-            break;
-
-        case wxMOD_NONE:
-            if ( CanDragCell() )
             {
-                if ( isFirstDrag )
-                {
-                    // if event is handled by user code, no further processing
-                    if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
-                        performDefault = false;
+                // if event is handled by user code, no further processing
+                if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
+                    performDefault = false;
 
-                    return performDefault;
-                }
+                return performDefault;
             }
-            break;
+        }
     }
 
     // Edit the current selection block independently of the modifiers state.
