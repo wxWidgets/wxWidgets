@@ -1562,22 +1562,6 @@ typedef double wxDouble;
 #define wxDECLARE_NO_COPY_TEMPLATE_CLASS_2(classname, arg1, arg2)
 
 /**
-    This macro can be used in a class declaration to enable declaring the
-    default copy constructor and assignment operator.
-
-    @since 3.1.4
- */
-#define wxDECLARE_DEFAULT_COPY_CLASS(classname)
-
-/**
-    This macro can be used in a class declaration to enable declaring the
-    default copy constructor.
-
-    @since 3.1.4
- */
-#define wxDECLARE_DEFAULT_COPY_CTOR(classname)
-
-/**
     A function which deletes and nulls the pointer.
 
     This function uses operator delete to free the pointer and also sets it to

@@ -3040,22 +3040,6 @@ typedef const void* WXWidget;
     wxDECLARE_NO_ASSIGN_CLASS(classname);
 
 /*  --------------------------------------------------------------------------- */
-/*  macros to define a class with default copy constructor and/or assignment operator */
-/*  --------------------------------------------------------------------------- */
-
-#ifdef wxHAS_MEMBER_DEFAULT
-#define wxDECLARE_DEFAULT_COPY_CTOR(classname) \
-    classname(const classname&) = default
-
-#define wxDECLARE_DEFAULT_COPY_CLASS(classname) \
-    wxDECLARE_DEFAULT_COPY_CTOR(classname); \
-    classname& operator=(const classname&) = default
-#else
-#define wxDECLARE_DEFAULT_COPY_CTOR(classname)
-#define wxDECLARE_DEFAULT_COPY_CLASS(classname)
-#endif
-
-/*  --------------------------------------------------------------------------- */
 /*  If a manifest is being automatically generated, add common controls 6 to it */
 /*  --------------------------------------------------------------------------- */
 
