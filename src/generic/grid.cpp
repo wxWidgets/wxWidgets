@@ -3673,6 +3673,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                     if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
                         break;
 
+                    // We can't extend the selection from non-selected row,
+                    // which may happen if we Ctrl-clicked it initially.
+                    if ( !m_selection->IsInSelection(m_currentCellCoords) )
+                        break;
+
                     if ( (row = YToRow( pos.y )) >= 0 )
                     {
                         m_selection->ExtendCurrentBlock(
@@ -4014,6 +4019,12 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                     if ( col != -1 )
                     {
                         if ( !m_selection || m_numRows == 0 || m_numCols == 0 )
+                            break;
+
+                        // We can't extend the selection from non-selected
+                        // column which may happen if we Ctrl-clicked it
+                        // initially.
+                        if ( !m_selection->IsInSelection(m_currentCellCoords) )
                             break;
 
                         m_selection->ExtendCurrentBlock(
