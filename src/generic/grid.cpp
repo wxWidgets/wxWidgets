@@ -8040,7 +8040,7 @@ wxGrid::DoMoveCursorByPage(const wxKeyboardState& kbdState,
             return false;
 
         if ( m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, kbdState) )
-            MakeCellVisible(coords);
+            MakeCellVisible(diroper.MakeWholeLineCoords(coords));
     }
     else
     {
