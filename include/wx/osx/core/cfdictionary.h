@@ -80,7 +80,7 @@ public:
     }
 
     wxCFDictionaryRef(CFDictionaryRef r)
-        : wxCFDictionaryRefCommon(r)
+        : wxCFDictionaryRefCommon<CFDictionaryRef>(r)
     {
     }
 
@@ -101,12 +101,12 @@ class wxCFMutableDictionaryRef : public wxCFDictionaryRefCommon<CFMutableDiction
 {
 public:
     wxCFMutableDictionaryRef()
-        : wxCFDictionaryRefCommon(CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks))
+        : wxCFDictionaryRefCommon<CFMutableDictionaryRef>(CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks))
     {
     }
 
     wxCFMutableDictionaryRef(CFMutableDictionaryRef r)
-        : wxCFDictionaryRefCommon(r)
+        : wxCFDictionaryRefCommon<CFMutableDictionaryRef>(r)
     {
     }
 
