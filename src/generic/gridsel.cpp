@@ -128,7 +128,13 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
             }
 
             if ( !valid )
+            {
+                if ( !m_grid->GetBatchCount() )
+                {
+                    m_grid->RefreshBlock(block.GetTopLeft(), block.GetBottomRight());
+                }
                 m_selection.erase(m_selection.begin() + n);
+            }
         }
 
         m_selectionMode = selmode;
