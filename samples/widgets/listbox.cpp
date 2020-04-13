@@ -395,7 +395,7 @@ void ListboxWidgetsPage::CreateContent()
     m_lbox = new wxListBox(this, ListboxPage_Listbox,
                            wxDefaultPosition, wxDefaultSize,
                            0, NULL,
-                           wxLB_HSCROLL | wxLB_USETABSTOPS);
+                           wxLB_HSCROLL);
     sizerRight->Add(m_lbox, 1, wxGROW | wxALL, 5);
     sizerRight->SetMinSize(150, 0);
     m_sizerLbox = sizerRight; // save it to modify it later

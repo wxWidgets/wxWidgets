@@ -128,9 +128,8 @@ public:
     // extent of all strings is used. In any case calls InvalidateBestSize()
     virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
-    // Windows-specific code to set tab stops when wxLB_USETABSTOPS is enabled
     // measured in "quarters of the average character width for the font that is selected into the list box"
-    virtual void SetTabStops(const wxArrayInt& tabStops);
+    virtual void MSWSetTabStops(const wxArrayInt& tabStops);
 
     // Windows callbacks
     bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;

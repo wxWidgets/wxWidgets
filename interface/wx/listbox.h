@@ -24,10 +24,7 @@
     performance nor from user interface point of view, for large number of
     items.
 
-    Notice that currently @c TAB characters in list box items text are not
-    handled consistently under all platforms, so they should be replaced by
-    spaces to display strings properly everywhere. The list box doesn't
-    support any other control characters at all.
+    Notice that the list box doesn't support control characters other than @c TAB.
 
     @beginStyleTable
     @style{wxLB_SINGLE}
@@ -320,6 +317,20 @@ public:
         @since 3.1.0
     */
     int GetTopItem() const;
+
+    /**
+        MSW-specific function for setting custom tab stop distances.
+
+        @param tabStops
+            Cumulative tab distances array measured in "quarters of the average character width for the font that is selected into the list box."
+
+        This function is not available in the other ports by design, any
+        occurrences of it in the portable code must be guarded by
+        @code #ifdef __WXMSW__ @endcode preprocessor guards.
+
+        @onlyfor{wxmsw}
+     */
+    virtual void MSWSetTabStops(const wxArrayInt& tabStops);
 
     // NOTE: Phoenix needs to see the implementation of pure virtuals so it
     // knows that this class is not abstract.
