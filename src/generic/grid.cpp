@@ -3726,7 +3726,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                 if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
                         m_selection->GetSelectionMode() != wxGridSelectColumns )
                 {
-                    bool selectNewRow = false;
+                    bool selectNewRow = false,
+                         makeRowCurrent = false;
 
                     if ( event.ShiftDown() && !event.CmdDown() )
                     {
@@ -3743,23 +3744,28 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                     else if ( event.CmdDown() && !event.ShiftDown() )
                     {
                         if ( GetSelectedRows().Index(row) != wxNOT_FOUND )
+                        {
                             DeselectRow(row);
+                            makeRowCurrent = true;
+                        }
                         else
+                        {
+                            makeRowCurrent =
                             selectNewRow = true;
+                        }
                     }
                     else
                     {
                         ClearSelection();
+                        makeRowCurrent =
                         selectNewRow = true;
                     }
 
                     if ( selectNewRow )
-                    {
-                        // Select the new row.
                         m_selection->SelectRow(row, event);
 
+                    if ( makeRowCurrent )
                         SetCurrentCell(row, GetFirstFullyVisibleColumn());
-                    }
 
                     ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, rowLabelWin);
                 }
@@ -4125,7 +4131,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                     if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
                             m_selection->GetSelectionMode() != wxGridSelectRows )
                     {
-                        bool selectNewCol = false;
+                        bool selectNewCol = false,
+                             makeColCurrent = false;
 
                         if ( event.ShiftDown() && !event.CmdDown() )
                         {
@@ -4142,23 +4149,28 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                         else if ( event.CmdDown() && !event.ShiftDown() )
                         {
                             if ( GetSelectedCols().Index(col) != wxNOT_FOUND )
+                            {
                                 DeselectCol(col);
+                                makeColCurrent = true;
+                            }
                             else
+                            {
+                                makeColCurrent =
                                 selectNewCol = true;
+                            }
                         }
                         else
                         {
                             ClearSelection();
+                            makeColCurrent =
                             selectNewCol = true;
                         }
 
-                        if (selectNewCol)
-                        {
-                            // Select the new column.
+                        if ( selectNewCol )
                             m_selection->SelectCol(col, event);
 
+                        if ( makeColCurrent )
                             SetCurrentCell(GetFirstFullyVisibleRow(), col);
-                        }
 
                         ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, colLabelWin);
                     }
