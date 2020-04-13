@@ -5834,33 +5834,45 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_SPACE:
-                // Ctrl-Space selects the current column, Shift-Space -- the
-                // current row and Ctrl-Shift-Space -- everything
-                switch ( m_selection ? event.GetModifiers() : wxMOD_NONE )
+                // Ctrl-Space selects the current column or, if there is a
+                // selection, all columns containing the selected cells,
+                // Shift-Space -- the current row (or all selection rows) and
+                // Ctrl-Shift-Space -- everything.
                 {
-                    case wxMOD_CONTROL:
-                        m_selection->SelectCol(m_currentCellCoords.GetCol());
-                        break;
-
-                    case wxMOD_SHIFT:
-                        m_selection->SelectRow(m_currentCellCoords.GetRow());
-                        break;
-
-                    case wxMOD_CONTROL | wxMOD_SHIFT:
-                        m_selection->SelectBlock(0, 0,
-                                                 m_numRows - 1, m_numCols - 1);
-                        break;
-
-                    case wxMOD_NONE:
-                        if ( !IsEditable() )
-                        {
-                            MoveCursorRight(false);
+                    wxGridCellCoords selStart, selEnd;
+                    switch ( m_selection ? event.GetModifiers() : wxMOD_NONE )
+                    {
+                        case wxMOD_CONTROL:
+                            selStart.Set(0, m_currentCellCoords.GetCol());
+                            selEnd.Set(m_numRows - 1,
+                                       m_selection->GetExtensionAnchor().GetCol());
                             break;
-                        }
-                        wxFALLTHROUGH;
 
-                    default:
-                        event.Skip();
+                        case wxMOD_SHIFT:
+                            selStart.Set(m_currentCellCoords.GetRow(), 0);
+                            selEnd.Set(m_selection->GetExtensionAnchor().GetRow(),
+                                       m_numCols - 1);
+                            break;
+
+                        case wxMOD_CONTROL | wxMOD_SHIFT:
+                            selStart.Set(0, 0);
+                            selEnd.Set(m_numRows - 1, m_numCols - 1);
+                            break;
+
+                        case wxMOD_NONE:
+                            if ( !IsEditable() )
+                            {
+                                MoveCursorRight(false);
+                                break;
+                            }
+                            wxFALLTHROUGH;
+
+                        default:
+                            event.Skip();
+                    }
+
+                    if ( selStart != wxGridNoCellCoords )
+                        m_selection->SelectBlock(selStart, selEnd);
                 }
                 break;
 
