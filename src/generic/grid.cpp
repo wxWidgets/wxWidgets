@@ -4471,29 +4471,24 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                        const wxGridCellCoords& coords,
                        bool isFirstDrag)
 {
-    bool performDefault = true ;
-
     if ( coords == wxGridNoCellCoords )
-        return performDefault; // we're outside any valid cell
+        return false; // we're outside any valid cell
 
-    // Hide the edit control, so it won't interfere with drag-shrinking.
-    if ( IsCellEditControlShown() )
+    if ( isFirstDrag )
     {
-        HideCellEditControl();
-        SaveEditControlValue();
-    }
-
-    if ( !event.HasAnyModifiers() )
-    {
-        if ( CanDragCell() )
+        // Hide the edit control, so it won't interfere with drag-shrinking.
+        if ( IsCellEditControlShown() )
         {
-            if ( isFirstDrag )
+            HideCellEditControl();
+            SaveEditControlValue();
+        }
+
+        if ( !event.HasAnyModifiers() )
+        {
+            if ( CanDragCell() )
             {
                 // if event is handled by user code, no further processing
-                if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
-                    performDefault = false;
-
-                return performDefault;
+                return SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 0;
             }
         }
     }
@@ -4502,7 +4497,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
     if ( m_selection )
         m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
 
-    return performDefault;
+    return true;
 }
 
 bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
