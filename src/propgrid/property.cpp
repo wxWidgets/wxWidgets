@@ -230,6 +230,10 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
 
     property->GetDisplayInfo(column, selItem, flags, &text, &cell);
 
+    // Property image takes precedence over cell image
+    if ( column == 1 && !isUnspecified && property->GetValueImage() )
+        cell.SetBitmap(wxNullBitmap);
+
     imageWidth = PreDrawCell( dc, rect, cell, preDrawFlags );
 
     if ( column == 1 )
