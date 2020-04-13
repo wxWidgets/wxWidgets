@@ -128,6 +128,10 @@ public:
     // extent of all strings is used. In any case calls InvalidateBestSize()
     virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
+    // This is a wrapper for LB_SETTABSTOPS message and takes tab stops in
+    // dialog units, with the same conventions as LB_SETTABSTOPS uses.
+    virtual bool MSWSetTabStops(const wxVector<int>& tabStops);
+
     // Windows callbacks
     bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;

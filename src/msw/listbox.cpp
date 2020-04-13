@@ -187,6 +187,9 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 #endif // wxUSE_OWNER_DRAWN
 
+    // tabs stops are expanded by default on linux/GTK and macOS/Cocoa
+    msStyle |= LBS_USETABSTOPS;
+
     return msStyle;
 }
 
@@ -609,6 +612,12 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         SendMessage(GetHwnd(), LB_SETHORIZONTALEXTENT, LOWORD(largestExtent), 0L);
     }
     //else: it shouldn't change
+}
+
+bool wxListBox::MSWSetTabStops(const wxVector<int>& tabStops)
+{
+    return SendMessage(GetHwnd(), LB_SETTABSTOPS, (WPARAM)tabStops.size(),
+                       tabStops.size() ? (LPARAM)tabStops.begin() : NULL);
 }
 
 wxSize wxListBox::DoGetBestClientSize() const
