@@ -4490,11 +4490,24 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                 // if event is handled by user code, no further processing
                 return SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 0;
             }
+
+            // When Shift-dragging, we must have already selected the initial
+            // cell and when Ctrl-dragging we may have either selected or
+            // deselected it, depending on its previous state. But when
+            // dragging without any modifiers, we want it to start in the
+            // selected state even though it's not selected on a simple click.
+            if ( m_selection )
+                m_selection->SelectBlock(m_currentCellCoords, coords, event);
         }
     }
 
-    // Edit the current selection block independently of the modifiers state.
-    if ( m_selection )
+    // Extend the selection if possible: this is not the case if we're dragging
+    // from an unselected cell, as can be the case if the drag was started by
+    // Ctrl-clicking a previously selected cell (notice that the modifier of
+    // the current event is irrelevant, it's too late to change the behaviour
+    // by pressing or releasing Ctrl later, only its initial state, as
+    // indicated by the state of the starting cell, counts).
+    if ( m_selection && m_selection->IsInSelection(m_currentCellCoords) )
         m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
 
     return true;
