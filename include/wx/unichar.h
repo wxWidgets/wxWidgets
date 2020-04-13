@@ -267,9 +267,7 @@ public:
     wxUniCharRef& operator=(const wxUniCharRef& c)
         { if (&c != this) *this = c.UniChar(); return *this; }
 
-#ifdef wxHAS_MEMBER_DEFAULT
-    wxUniCharRef(const wxUniCharRef&) wxMEMBER_DEFAULT;
-#endif
+    wxDECLARE_DEFAULT_COPY_CTOR(wxUniCharRef);
 
 #define wxUNICHAR_REF_DEFINE_OPERATOR_EQUAL(type) \
     wxUniCharRef& operator=(type c) { return *this = wxUniChar(c); }

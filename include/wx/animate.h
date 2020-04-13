@@ -38,10 +38,7 @@ public:
     wxAnimation();
     explicit wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
-#ifdef wxHAS_MEMBER_DEFAULT
-    wxAnimation(const wxAnimation&) wxMEMBER_DEFAULT;
-    wxAnimation& operator=(const wxAnimation&) wxMEMBER_DEFAULT;
-#endif
+    wxDECLARE_DEFAULT_COPY_CLASS(wxAnimation);
 
     bool IsOk() const;
     bool IsCompatibleWith(wxClassInfo* ci) const;
