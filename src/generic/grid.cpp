@@ -3748,7 +3748,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                     }
                     else if ( event.CmdDown() && !event.ShiftDown() )
                     {
-                        if ( GetSelectedRows().Index(row) != wxNOT_FOUND )
+                        if ( m_selection->IsInSelection(row, 0) )
                         {
                             DeselectRow(row);
                             makeRowCurrent = true;
@@ -4159,7 +4159,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                         }
                         else if ( event.CmdDown() && !event.ShiftDown() )
                         {
-                            if ( GetSelectedCols().Index(col) != wxNOT_FOUND )
+                            if ( m_selection->IsInSelection(0, col) )
                             {
                                 DeselectCol(col);
                                 makeColCurrent = true;
