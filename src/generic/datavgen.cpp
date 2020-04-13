@@ -2395,11 +2395,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 if ( m_useCellFocus && m_currentCol && m_currentColSetByKeyboard )
                 {
                     // If this is an item with a single column, render full-row focus:
-                    numColsWithValue = 0;
+                    unsigned int numColsWithValue = 0;
                     unsigned int cols = GetOwner()->GetColumnCount();
                     for ( unsigned int i = 0; i < cols; i++ )
                     {
-                        if ( model->HasValue(item, i) )
+                        wxDataViewTreeNode *node = GetTreeNodeByRow(item);
+                        if ( model->HasValue(node->GetItem(), i) )
                             numColsWithValue++;
                         if ( numColsWithValue > 1 )
                             break;
@@ -4497,7 +4498,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
     if ( node )
     {
         // navigation shouldn't work in nodes with fewer than two columns
-        numColsWithValue = 0;
+        unsigned int numColsWithValue = 0;
         unsigned int cols = GetOwner()->GetColumnCount();
         for ( unsigned int i = 0; i < cols; i++ )
             if ( GetModel()->HasValue(node->GetItem(), i) )
@@ -4559,7 +4560,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
             if ( GetCurrentRow() > 0 )
             {
                 // go to the last column of the previous row:
-                idx = col_last-1;
+                idx = (int)GetOwner()->GetColumnCount() - 1;
                 OnVerticalNavigation(wxKeyEvent()/*dummy*/, -1);
             }
             else
