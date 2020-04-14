@@ -269,32 +269,28 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
         if ( !m_selection[n].Intersects(canonicalizedBlock) )
             continue;
 
-        int splitOrientation = wxHORIZONTAL;
+        int splitOrientation = -1;
         switch ( m_selectionMode )
         {
-        case wxGrid::wxGridSelectCells:
-            if ( selBlock.GetLeftCol() == 0 &&
-                 selBlock.GetRightCol() == m_grid->GetNumberCols() - 1 )
-                break;
-
-            if ( selBlock.GetTopRow() == 0 &&
-                 selBlock.GetBottomRow() == m_grid->GetNumberRows() - 1 )
-                splitOrientation = wxVERTICAL;
-
+        case wxGrid::wxGridSelectRows:
+            splitOrientation = wxHORIZONTAL;
             break;
 
         case wxGrid::wxGridSelectColumns:
             splitOrientation = wxVERTICAL;
             break;
 
+        case wxGrid::wxGridSelectCells:
         case wxGrid::wxGridSelectRowsOrColumns:
             if ( selBlock.GetLeftCol() == 0 &&
                  selBlock.GetRightCol() == m_grid->GetNumberCols() - 1 )
-                break;
-
-            splitOrientation = wxVERTICAL;
+                splitOrientation = wxHORIZONTAL;
+            else
+                splitOrientation = wxVERTICAL;
             break;
         }
+
+        wxASSERT_MSG( splitOrientation != -1, "unknown selection mode" );
 
         const wxGridBlockDiffResult result =
             selBlock.Difference(canonicalizedBlock, splitOrientation);
