@@ -1890,7 +1890,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
    // Need to reduce width of text control on Mac
 #if defined(__WXMAC__)
-    s.x -= 8;
+    s.x -= 4;
 #endif
 
     // For label editors, trim the size to allow better splitter grabbing
