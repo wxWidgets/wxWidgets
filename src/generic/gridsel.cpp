@@ -55,7 +55,7 @@ bool wxGridSelection::IsSelection()
     return !m_selection.empty();
 }
 
-bool wxGridSelection::IsInSelection( int row, int col )
+bool wxGridSelection::IsInSelection( int row, int col ) const
 {
     // Check whether the given cell is contained in one of the selected blocks.
     //

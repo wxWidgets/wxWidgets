@@ -28,8 +28,8 @@ public:
                     wxGrid::wxGridSelectionModes sel = wxGrid::wxGridSelectCells);
 
     bool IsSelection();
-    bool IsInSelection(int row, int col);
-    bool IsInSelection(const wxGridCellCoords& coords)
+    bool IsInSelection(int row, int col) const;
+    bool IsInSelection(const wxGridCellCoords& coords) const
     {
         return IsInSelection(coords.GetRow(), coords.GetCol());
     }
