@@ -910,6 +910,22 @@ private:
     // assumes that all columns were modified, otherwise just this one.
     bool DoItemChanged(const wxDataViewItem& item, int view_column);
 
+    // Return whether the item has more than one column that have values
+    bool HasItemMultipleValues(const wxDataViewItem& item)
+    {
+        unsigned int numColsWithValue = 0;
+        unsigned int cols = GetOwner()->GetColumnCount();
+        wxDataViewModel* model = GetModel();
+        for ( unsigned int i = 0; i < cols; i++ )
+        {
+            if ( model->HasValue(item, i) )
+                numColsWithValue++;
+            if ( numColsWithValue > 1 )
+                return true;
+        }
+        return false;
+    }
+
 private:
     wxDataViewCtrl             *m_owner;
     int                         m_lineHeight;
@@ -2394,18 +2410,15 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 if ( m_useCellFocus && m_currentCol && m_currentColSetByKeyboard )
                 {
-                    // If this is an item with a single column, render full-row focus:
-                    unsigned int numColsWithValue = 0;
-                    unsigned int cols = GetOwner()->GetColumnCount();
-                    for ( unsigned int i = 0; i < cols; i++ )
+                    renderColumnFocus = true;
+
+                    // If this is container node without columns, render full-row focus:
+                    if ( !IsList() )
                     {
                         wxDataViewTreeNode *node = GetTreeNodeByRow(item);
-                        if ( model->HasValue(node->GetItem(), i) )
-                            numColsWithValue++;
-                        if ( numColsWithValue > 1 )
-                            break;
+                        if ( !HasItemMultipleValues(node->GetItem()) )
+                            renderColumnFocus = false;
                     }
-                    renderColumnFocus = numColsWithValue<2;
                 }
 
                 if ( renderColumnFocus )
@@ -4498,12 +4511,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
     if ( node )
     {
         // navigation shouldn't work in nodes with fewer than two columns
-        unsigned int numColsWithValue = 0;
-        unsigned int cols = GetOwner()->GetColumnCount();
-        for ( unsigned int i = 0; i < cols; i++ )
-            if ( GetModel()->HasValue(node->GetItem(), i) )
-                numColsWithValue++;
-        if (numColsWithValue<2)
+        if ( !HasItemMultipleValues(node->GetItem()) )
             return false;
     }
 
