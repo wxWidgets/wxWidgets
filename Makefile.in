@@ -2472,6 +2472,9 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfarray.h \
 	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2507,7 +2510,10 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/osx/carbon/region.h \
 	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h
+	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h
 @COND_TOOLKIT_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2532,7 +2538,10 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/osx/carbon/region.h \
 	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h
+	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h
 @COND_TOOLKIT_GTK@BASE_OSX_HDR = $(COND_TOOLKIT_GTK_BASE_OSX_HDR)
 COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2557,7 +2566,10 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/osx/carbon/region.h \
 	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h
+	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h
 @COND_TOOLKIT_X11@BASE_OSX_HDR = $(COND_TOOLKIT_X11_BASE_OSX_HDR)
 COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2582,7 +2594,10 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/osx/carbon/region.h \
 	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h
+	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h
 @COND_TOOLKIT_MOTIF@BASE_OSX_HDR = $(COND_TOOLKIT_MOTIF_BASE_OSX_HDR)
 COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2607,7 +2622,10 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/osx/carbon/region.h \
 	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h
+	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h
 @COND_TOOLKIT_@BASE_OSX_HDR = $(COND_TOOLKIT__BASE_OSX_HDR)
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_OSX_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
@@ -3417,8 +3435,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/dataview.h \
 	wx/osx/datectrl.h \
 	wx/osx/timectrl.h \
-	wx/osx/datetimectrl.h \
-	wx/osx/core/joystick.h
+	wx/osx/datetimectrl.h
 @COND_TOOLKIT_OSX_COCOA@GUI_HDR = $(COND_TOOLKIT_OSX_COCOA_GUI_HDR)
 COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/html/webkit.h \
