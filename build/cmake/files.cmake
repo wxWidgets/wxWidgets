@@ -129,6 +129,9 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/cfdictionary.h
     wx/osx/core/cfarray.h
     wx/osx/core/cftype.h
+    wx/osx/core/joystick.h
+    wx/osx/core/mimetype.h
+    wx/osx/core/dataview.h
 )
 
 set(BASE_OSX_SHARED_SRC
@@ -2541,7 +2544,6 @@ set(OSX_COCOA_HDR
     wx/osx/datetimectrl.h
     wx/osx/taskbarosx.h
     wx/osx/dvrenderers.h
-    wx/osx/core/joystick.h
 )
 
 set(OSX_IPHONE_SRC

@@ -201,6 +201,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/cfdictionary.h
     wx/osx/core/cfarray.h
     wx/osx/core/cftype.h
+    wx/osx/core/joystick.h
+    wx/osx/core/mimetype.h
+    wx/osx/core/dataview.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->
@@ -2667,7 +2670,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/datectrl.h
     wx/osx/timectrl.h
     wx/osx/datetimectrl.h
-    wx/osx/core/joystick.h
 </set>
 
 <!-- ====================================================================== -->
