@@ -496,7 +496,11 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     wxASSERT( blockStart.GetRow() != -1 && blockStart.GetCol() != -1 &&
               blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1 );
 
-    if ( m_selection.empty() )
+    // If selection doesn't contain the current cell (which also covers the
+    // special case of nothing being selected yet), we have to create a new
+    // block containing it because it doesn't make sense to extend any existing
+    // block to non-selected current cell.
+    if ( !IsInSelection(m_grid->GetGridCursorCoords()) )
     {
         SelectBlock(blockStart, blockEnd);
         return true;
@@ -649,7 +653,10 @@ wxGridCellCoords wxGridSelection::GetExtensionAnchor() const
 {
     wxGridCellCoords coords = m_grid->m_currentCellCoords;
 
-    if ( m_selection.empty() )
+    // If the current cell isn't selected (which also covers the special case
+    // of nothing being selected yet), we have to use it as anchor as we need
+    // to ensure that it will get selected.
+    if ( !IsInSelection(coords) )
         return coords;
 
     const wxGridBlockCoords& block = *m_selection.rbegin();
