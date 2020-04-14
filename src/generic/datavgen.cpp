@@ -911,11 +911,11 @@ private:
     bool DoItemChanged(const wxDataViewItem& item, int view_column);
 
     // Return whether the item has more than one column that have values
-    bool HasItemMultipleValues(const wxDataViewItem& item)
+    bool IsItemMultivalued(const wxDataViewItem& item) const
     {
         unsigned int numColsWithValue = 0;
         unsigned int cols = GetOwner()->GetColumnCount();
-        wxDataViewModel* model = GetModel();
+        const wxDataViewModel* model = GetModel();
         for ( unsigned int i = 0; i < cols; i++ )
         {
             if ( model->HasValue(item, i) )
@@ -924,6 +924,17 @@ private:
                 return true;
         }
         return false;
+    }
+
+    // find first column with value
+    wxDataViewColumn * FindFirstColumnWithValue(const wxDataViewItem& item) const
+    {
+        unsigned int cols = GetOwner()->GetColumnCount();
+        const wxDataViewModel* model = GetModel();
+        for ( unsigned int i ; i < cols; i++ )
+            if ( model->HasValue(item, i) )
+                return GetOwner()->GetColumnAt(i);
+        return NULL;
     }
 
 private:
@@ -2416,7 +2427,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                     if ( !IsList() )
                     {
                         wxDataViewTreeNode *node = GetTreeNodeByRow(item);
-                        if ( !HasItemMultipleValues(node->GetItem()) )
+                        if ( !IsItemMultivalued(node->GetItem()) )
                             renderColumnFocus = false;
                     }
                 }
@@ -4115,14 +4126,9 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
         }
     }
 
-    // If on container item without columns, only the expander column
-    // may be directly editable:
-    if ( candidate &&
-         GetOwner()->GetExpanderColumn() != candidate &&
-         !GetModel()->HasValue(item, candidate->GetModelColumn()) )
-    {
-        candidate = GetOwner()->GetExpanderColumn();
-    }
+    // Switch to the first column with value if the current column has no value
+    if ( candidate && !GetModel()->HasValue(item, candidate->GetModelColumn()) )
+        candidate = FindFirstColumnWithValue(item);
 
     if ( !candidate )
        return NULL;
@@ -4508,24 +4514,16 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
 
     const bool wrapAround = event.GetKeyCode() == WXK_TAB;
 
-    if ( node )
-    {
-        // navigation shouldn't work in nodes with fewer than two columns
-        if ( !HasItemMultipleValues(node->GetItem()) )
-            return false;
-    }
+    // navigation shouldn't work in nodes with fewer than two columns
+    if ( node && !IsItemMultivalued(node->GetItem()) )
+        return false;
 
     if ( m_currentCol == NULL || !m_currentColSetByKeyboard )
     {
         if ( forward )
         {
             // find first column with value
-            unsigned int i = 0;
-            unsigned int cols = GetOwner()->GetColumnCount();
-            for ( ; i < cols; i++ )
-                if ( GetModel()->HasValue(node->GetItem(), i) )
-                    break;
-            m_currentCol = GetOwner()->GetColumnAt(i);
+            m_currentCol = FindFirstColumnWithValue(node->GetItem());
             m_currentColSetByKeyboard = true;
             RefreshRow(m_currentRow);
             return true;
