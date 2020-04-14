@@ -1929,7 +1929,7 @@ public:
         @return
             @true if @a other is entirely contained within this block.
      */
-    int ContainsBlock(const wxGridBlockCoords& other) const;
+    bool ContainsBlock(const wxGridBlockCoords& other) const;
 
     /**
         Calculates the result blocks by subtracting the other block from this
