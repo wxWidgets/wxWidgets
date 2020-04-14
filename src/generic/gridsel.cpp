@@ -186,9 +186,16 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
             break;
 
         case wxGrid::wxGridSelectRowsOrColumns:
-            // block selection doesn't make sense for this mode, we could only
-            // select the entire grid but this wouldn't be useful
-            allowed = 0;
+            // Arbitrary block selection doesn't make sense for this mode, as
+            // we could only select the entire grid, which wouldn't be useful,
+            // but we do allow selecting blocks that are already composed of
+            // only rows or only columns.
+            if ( topRow == 0 && bottomRow == m_grid->GetNumberRows() - 1 )
+                allowed = 1;
+            else if ( leftCol == 0 && rightCol == m_grid->GetNumberCols() - 1 )
+                allowed = 1;
+            else
+                allowed = 0;
             break;
     }
 
