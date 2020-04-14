@@ -132,7 +132,6 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/mimetype.h
     wx/osx/core/objcid.h
     wx/osx/core/private.h
-
 )
 
 set(BASE_OSX_SHARED_SRC
