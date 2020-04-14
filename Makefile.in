@@ -2460,18 +2460,21 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
+	wx/osx/carbon/region.h \
+	wx/osx/core/cfarray.h \
 	wx/osx/core/cfdataref.h \
+	wx/osx/core/cfdictionary.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
-	wx/osx/core/hid.h \
+	wx/osx/core/cftype.h \
+	wx/osx/core/colour.h \
+	wx/osx/core/dataview.h \
 	wx/osx/core/evtloop.h \
+	wx/osx/core/hid.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
 	wx/osx/core/objcid.h \
 	wx/osx/core/private.h \
-	wx/osx/core/colour.h \
-	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h \
-	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -3417,8 +3420,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/dataview.h \
 	wx/osx/datectrl.h \
 	wx/osx/timectrl.h \
-	wx/osx/datetimectrl.h \
-	wx/osx/core/joystick.h
+	wx/osx/datetimectrl.h
 @COND_TOOLKIT_OSX_COCOA@GUI_HDR = $(COND_TOOLKIT_OSX_COCOA_GUI_HDR)
 COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/html/webkit.h \
