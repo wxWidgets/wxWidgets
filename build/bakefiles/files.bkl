@@ -189,6 +189,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/secretstore.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
+    wx/osx/carbon/region.h
     wx/osx/core/cfarray.h
     wx/osx/core/cfdataref.h
     wx/osx/core/cfdictionary.h
