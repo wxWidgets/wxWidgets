@@ -182,6 +182,7 @@ private:
         Page_TreeStore,
         Page_VarHeight,
         Page_IndexList,
+        Page_HasValue,
         Page_Max
     };
 
@@ -713,6 +714,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     sixthPanelSz->Add(button_sizer6);
     sixthPanel->SetSizerAndFit(sixthPanelSz);
 
+    // page showing that some columns don't have values for some items
+    // ---------------------------------------------------------------
+
+    wxPanel *seventhPanel = new wxPanel( m_notebook, wxID_ANY );
+
+    BuildDataViewCtrl(seventhPanel, Page_HasValue);
+
+    wxSizer *seventhPanelSz = new wxBoxSizer( wxVERTICAL );
+    seventhPanelSz->Add(m_ctrl[Page_HasValue], 1, wxGROW|wxALL, 5);
+    seventhPanel->SetSizerAndFit(seventhPanelSz);
 
     // complete GUI
     // ------------
@@ -723,6 +734,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_notebook->AddPage(fourthPanel, "wxDataViewTreeCtrl");
     m_notebook->AddPage(fifthPanel, "Variable line height");
     m_notebook->AddPage(sixthPanel, "MyIndexListModel");
+    m_notebook->AddPage(seventhPanel, "MyDataViewHasValue");
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -987,7 +999,50 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                                          this);
         }
         break;
+
+    case Page_HasValue:
+        {
+            wxDataViewListCtrl* lc =
+                new wxDataViewListCtrl( parent, wxID_ANY, wxDefaultPosition,
+                                        wxDefaultSize, style );
+            m_ctrl[Page_HasValue] = lc;
+
+            MyListStoreDerivedModel* page7_model = new MyListStoreHasValueModel();
+            lc->AssociateModel(page7_model);
+            page7_model->DecRef();
+
+            lc->AppendToggleColumn( "Toggle" );
+
+            // We're not limited to convenience column-appending functions, it
+            // can also be done fully manually, which allows us to customize
+            // the renderer being used.
+            wxDataViewToggleRenderer* const rendererRadio =
+                new wxDataViewToggleRenderer("bool", wxDATAVIEW_CELL_ACTIVATABLE);
+            rendererRadio->ShowAsRadio();
+            wxDataViewColumn* const colRadio =
+                new wxDataViewColumn("Radio", rendererRadio, 1);
+            lc->AppendColumn(colRadio, "bool");
+
+            lc->AppendTextColumn( "Text" );
+            lc->AppendProgressColumn( "Progress" )->SetMinWidth(FromDIP(100));
+
+            wxVector<wxVariant> data;
+            for (unsigned int i=0; i<10; i++)
+            {
+                data.clear();
+                data.push_back( (i%3) == 0 );
+                data.push_back( i == 7 ); // select a single (random) radio item
+                data.push_back( wxString::Format("row %d", i) );
+                data.push_back( long(5*i) );
+
+                lc->AppendItem( data );
+            }
+
+            lc->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &MyFrame::OnListValueChanged, this);
+        }
+        break;
     }
+
 }
 
 
