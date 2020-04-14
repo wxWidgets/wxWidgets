@@ -1070,9 +1070,9 @@ bool RegTreeCtrl::TreeNode::OnExpand()
 
         case wxRegKey::Type_Dword:
         {
-            long l;
-            m_pKey->QueryValue(str, &l);
-            strItem << l;
+            long ldw;
+            m_pKey->QueryValue(str, &ldw);
+            strItem << ldw;
         }
         wxFALLTHROUGH;
 

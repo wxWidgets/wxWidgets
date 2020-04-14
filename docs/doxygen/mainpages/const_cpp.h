@@ -171,6 +171,9 @@ Currently the following symbols exist:
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
+@itemdef{wxHAS_MEMBER_DEFAULT, Defined if the currently used compiler supports
+    C++11 @c =default. @c wxMEMBER_DEFAULT is defined as this keyword in this
+    case, and as nothing otherwise.}
 @itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in
     size (notice that you must include @c wx/filefn.h before testing for this
     symbol).}
@@ -188,6 +191,7 @@ Currently the following symbols exist:
 @itemdef{wxHAS_NATIVE_ANIMATIONCTRL, Defined if native wxAnimationCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
 @itemdef{wxHAS_NATIVE_DATAVIEWCTRL, Defined if native wxDataViewCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
 @itemdef{wxHAS_NATIVE_WINDOW, Defined if wxNativeWindow class is available.}
+@itemdef{wxHAS_NOEXCEPT, Defined if the currently used compiler supports C++11 @c noexcept. @c wxNOEXCEPT is defined as this keyword in this case, and as nothing otherwise.}
 @itemdef{wxHAS_NULLPTR_T, Defined if the currently used compiler supports C++11 @c nullptr.}
 @itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
     Windows resource files</a> or OS/2 resource files are available on the current platform.}

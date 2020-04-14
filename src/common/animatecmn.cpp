@@ -103,7 +103,7 @@ unsigned int wxAnimation::GetFrameCount() const
     return GetImpl()->GetFrameCount();
 }
 
-wxImage wxAnimation::GetFrame(unsigned int frame)
+wxImage wxAnimation::GetFrame(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid animation") );
     return GetImpl()->GetFrame(frame);

@@ -381,7 +381,7 @@ public:
         This method is not implemented in the native wxGTK implementation of
         this class and always returns an invalid image there.
     */
-    wxImage GetFrame(unsigned int frame);
+    wxImage GetFrame(unsigned int frame) const;
 
     /**
        Returns the size of the animation.

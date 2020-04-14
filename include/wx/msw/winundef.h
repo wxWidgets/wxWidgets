@@ -268,7 +268,7 @@
    #else
    inline int StartDoc(HDC h, CONST DOCINFOA* info)
    {
-      return StartDocA(h, const_cast<DOCINFOA*>(info);
+      return StartDocA(h, const_cast<DOCINFOA*>(info));
    }
    #endif
 #endif

@@ -285,6 +285,21 @@ typedef short int WXTYPE;
     #define wxOVERRIDE
 #endif /*  HAVE_OVERRIDE */
 
+/* same for more C++11 keywords which don't have such historic baggage as
+   override and so can be detected by just testing for C++11 support (which
+   still requires handling MSVS specially, unfortunately) */
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
+    #define wxHAS_MEMBER_DEFAULT
+    #define wxMEMBER_DEFAULT = default
+
+    #define wxHAS_NOEXCEPT
+    #define wxNOEXCEPT noexcept
+#else
+    #define wxMEMBER_DEFAULT
+
+    #define wxNOEXCEPT
+#endif
+
 /*
     Support for nullptr is available since MSVS 2010, even though it doesn't
     define __cplusplus as a C++11 compiler.
@@ -2994,7 +3009,7 @@ typedef const void* WXWidget;
 /*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
-#if defined(__cplusplus) && __cplusplus >= 201103L
+#if defined(__cplusplus) && (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14))
     #define wxMEMBER_DELETE = delete
 #else
     #define wxMEMBER_DELETE

@@ -150,16 +150,28 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
         dc.SetFont(font);
 
     const wxBitmap& bmp = cell.GetBitmap();
-    if ( bmp.IsOk() &&
-        // Do not draw oversized bitmap outside choice popup
-         ((flags & ChoicePopup) || bmp.GetHeight() < rect.height )
-        )
+    if ( bmp.IsOk() )
     {
-        dc.DrawBitmap( bmp,
+        int hMax = rect.height - wxPG_CUSTOM_IMAGE_SPACINGY;
+        wxBitmap scaledBmp;
+        int yOfs;
+        if ( bmp.GetHeight() <= hMax )
+        {
+            scaledBmp = bmp;
+            yOfs = (hMax - bmp.GetHeight()) / 2;
+        }
+        else
+        {
+            double scale = (double)hMax / bmp.GetHeight();
+            scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
+            yOfs = 0;
+        }
+
+        dc.DrawBitmap( scaledBmp,
                        rect.x + wxPG_CONTROL_MARGIN + wxCC_CUSTOM_IMAGE_MARGIN1,
-                       rect.y + wxPG_CUSTOM_IMAGE_SPACINGY,
+                       rect.y + wxPG_CUSTOM_IMAGE_SPACINGY + yOfs,
                        true );
-        imageWidth = bmp.GetWidth();
+        imageWidth = scaledBmp.GetWidth();
     }
 
     return imageWidth;
@@ -217,6 +229,10 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     wxPGCell cell;
 
     property->GetDisplayInfo(column, selItem, flags, &text, &cell);
+
+    // Property image takes precedence over cell image
+    if ( column == 1 && !isUnspecified && property->GetValueImage() )
+        cell.SetBitmap(wxNullBitmap);
 
     imageWidth = PreDrawCell( dc, rect, cell, preDrawFlags );
 
@@ -1301,7 +1317,20 @@ bool wxPGProperty::SetValueFromInt( long number, int argFlags )
 wxSize wxPGProperty::OnMeasureImage( int WXUNUSED(item) ) const
 {
     if ( m_valueBitmap )
-        return wxSize(m_valueBitmap->GetWidth(), wxDefaultCoord);
+    {
+        wxPropertyGrid* pg = GetGrid();
+        double scale = 1.0;
+        if ( pg )
+        {
+            int hMax = pg->GetImageSize().GetHeight();
+            if ( m_valueBitmap->GetHeight() > hMax )
+            {
+                scale = (double)hMax / m_valueBitmap->GetHeight();
+            }
+        }
+
+        return wxSize(wxRound(scale*m_valueBitmap->GetWidth()), wxDefaultCoord);
+    }
 
     return wxSize(0,0);
 }
@@ -1331,11 +1360,23 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
                                   const wxRect& rect,
                                   wxPGPaintData& )
 {
-    wxBitmap* bmp = m_valueBitmap;
+    wxCHECK_RET( m_valueBitmap && m_valueBitmap->IsOk(), wxS("invalid bitmap") );
 
-    wxCHECK_RET( bmp && bmp->IsOk(), wxS("invalid bitmap") );
+    wxBitmap scaledBmp;
+    int yOfs;
+    if ( m_valueBitmap->GetHeight() <= rect.height )
+    {
+        scaledBmp = *m_valueBitmap;
+        yOfs = (rect.height - m_valueBitmap->GetHeight()) / 2;
+    }
+    else
+    {
+        double scale = (double)rect.height / m_valueBitmap->GetHeight();
+        scaledBmp = wxPropertyGrid::RescaleBitmap(*m_valueBitmap, scale, scale);
+        yOfs = 0;
+    }
 
-    dc.DrawBitmap(*bmp,rect.x,rect.y);
+    dc.DrawBitmap(scaledBmp,rect.x, rect.y + yOfs);
 }
 
 const wxPGEditor* wxPGProperty::DoGetEditorClass() const
@@ -2148,7 +2189,6 @@ bool wxPGProperty::RecreateEditor()
 
 void wxPGProperty::SetValueImage( wxBitmap& bmp )
 {
-    // We need PG to obtain default image size
     wxCHECK_RET( GetGrid(),
                  wxS("Cannot set image for detached property") );
 
@@ -2156,20 +2196,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
     if ( bmp.IsOk() )
     {
-        // Resize the image
-        wxSize maxSz = GetGrid()->GetImageSize();
-        wxSize imSz = bmp.GetSize();
-
-        if ( imSz.y != maxSz.y )
-        {
-            double scaleY = (double)maxSz.y / (double)imSz.y;
-            m_valueBitmap = new wxBitmap(wxPropertyGrid::RescaleBitmap(bmp, scaleY, scaleY));
-        }
-        else
-        {
-            m_valueBitmap = new wxBitmap(bmp);
-        }
-
+        m_valueBitmap = new wxBitmap(bmp);
         m_flags |= wxPG_PROP_CUSTOMIMAGE;
     }
     else

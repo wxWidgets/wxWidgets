@@ -166,15 +166,14 @@ int RTCore::ms_isAvailable = -1;
 // wxWinRT::TempStringRef
 //
 
-const TempStringRef TempStringRef::Make(const wxString &str)
-{
-    return TempStringRef(str);
-}
-
 TempStringRef::TempStringRef(const wxString &str)
+    : m_hstring(NULL), m_header()
 {
     if ( !RTCore::IsAvailable() )
+    {
         wxLogDebug("Can not create string reference without WinRT");
+        return;
+    }
 
     // This creates a fast-pass string which must not be deleted using WindowsDeleteString
     HRESULT hr = RTCore::Get().WindowsCreateStringReference(
@@ -221,7 +220,7 @@ bool GetActivationFactory(const wxString& activatableClassId, REFIID iid, void *
     if ( !RTCore::IsAvailable() )
         return false;
 
-    HRESULT hr = RTCore::Get().RoGetActivationFactory(TempStringRef::Make(activatableClassId), iid, factory);
+    HRESULT hr = RTCore::Get().RoGetActivationFactory(TempStringRef(activatableClassId), iid, factory);
     if ( FAILED(hr) )
     {
         wxLogDebug("RoGetActivationFactory failed %.8x", hr);
