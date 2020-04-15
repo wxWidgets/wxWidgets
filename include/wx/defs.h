@@ -290,13 +290,10 @@ typedef short int WXTYPE;
    still requires handling MSVS specially, unfortunately) */
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
     #define wxHAS_MEMBER_DEFAULT
-    #define wxMEMBER_DEFAULT = default
 
     #define wxHAS_NOEXCEPT
     #define wxNOEXCEPT noexcept
 #else
-    #define wxMEMBER_DEFAULT
-
     #define wxNOEXCEPT
 #endif
 
