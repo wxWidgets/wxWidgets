@@ -2564,7 +2564,6 @@ UNIV_THEMES_SRC =
     src/univ/themes/win32.cpp
 
 UNIV_SRC =
-    $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
     src/generic/activityindicator.cpp
     src/generic/clrpickerg.cpp
@@ -2617,7 +2616,6 @@ UNIV_SRC =
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
 UNIV_HDR =
-    $(UNIV_PLATFORM_HDR)
     wx/generic/accel.h
     wx/generic/activityindicator.h
     wx/generic/clrpickerg.h
