@@ -1379,28 +1379,25 @@ TEST_CASE("GridBlockCoords::Intersects", "[grid]")
     CHECK(!wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(4, 4, 6, 6)));
 }
 
-TEST_CASE("GridBlockCoords::ContainsCell", "[grid]")
+TEST_CASE("GridBlockCoords::Contains", "[grid]")
 {
     // Inside.
-    CHECK(wxGridBlockCoords(1, 1, 3, 3).ContainsCell(wxGridCellCoords(2, 2)));
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).Contains(wxGridCellCoords(2, 2)));
 
     // Outside.
-    CHECK(!wxGridBlockCoords(1, 1, 3, 3).ContainsCell(wxGridCellCoords(5, 5)));
-}
+    CHECK(!wxGridBlockCoords(1, 1, 3, 3).Contains(wxGridCellCoords(5, 5)));
 
-TEST_CASE("GridBlockCoords::ContainsBlock", "[grid]")
-{
     wxGridBlockCoords block1(1, 1, 5, 5);
     wxGridBlockCoords block2(1, 1, 3, 3);
     wxGridBlockCoords block3(2, 2, 7, 7);
     wxGridBlockCoords block4(10, 10, 12, 12);
 
-    CHECK( block1.ContainsBlock(block2));
-    CHECK(!block2.ContainsBlock(block1));
-    CHECK(!block1.ContainsBlock(block3));
-    CHECK(!block1.ContainsBlock(block4));
-    CHECK(!block3.ContainsBlock(block1));
-    CHECK(!block4.ContainsBlock(block1));
+    CHECK( block1.Contains(block2));
+    CHECK(!block2.Contains(block1));
+    CHECK(!block1.Contains(block3));
+    CHECK(!block1.Contains(block4));
+    CHECK(!block3.Contains(block1));
+    CHECK(!block4.Contains(block1));
 }
 
 TEST_CASE("GridBlockCoords::Difference", "[grid]")

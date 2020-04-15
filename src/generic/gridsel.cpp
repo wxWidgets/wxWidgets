@@ -67,7 +67,7 @@ bool wxGridSelection::IsInSelection( int row, int col ) const
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( m_selection[n].ContainsCell(wxGridCellCoords(row, col)) )
+        if ( m_selection[n].Contains(wxGridCellCoords(row, col)) )
             return true;
     }
 
@@ -830,10 +830,10 @@ void wxGridSelection::MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
     {
         const wxGridBlockCoords& block = blocks[n];
 
-        if ( block.ContainsBlock(newBlock) )
+        if ( block.Contains(newBlock) )
             return;
 
-        if ( newBlock.ContainsBlock(block) )
+        if ( newBlock.Contains(block) )
         {
             blocks.erase(blocks.begin() + n);
             n--;

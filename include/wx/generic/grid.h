@@ -817,14 +817,14 @@ public:
     }
 
     // Return whether this block contains the given cell.
-    bool ContainsCell(const wxGridCellCoords& cell) const
+    bool Contains(const wxGridCellCoords& cell) const
     {
         return m_topRow <= cell.GetRow() && cell.GetRow() <= m_bottomRow &&
                m_leftCol <= cell.GetCol() && cell.GetCol() <= m_rightCol;
     }
 
     // Return whether this blocks fully contains another one.
-    bool ContainsBlock(const wxGridBlockCoords& other) const
+    bool Contains(const wxGridBlockCoords& other) const
     {
         return m_topRow <= other.m_topRow && other.m_bottomRow <= m_bottomRow &&
                m_leftCol <= other.m_leftCol && other.m_rightCol <= m_rightCol;
