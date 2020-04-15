@@ -87,6 +87,11 @@ static wxColor GetBaseColor()
     return baseColour;
 }
 
+static bool IsThemeDark()
+{
+    return wxSystemSettings::GetAppearance().IsDark();
+}
+
 
 
 class ToolbarCommandCapture : public wxEvtHandler
@@ -139,11 +144,12 @@ wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
     static const unsigned char overflowBits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
 
     m_buttonDropDownBmp = wxAuiBitmapFromBits(buttonDropdownBits, 5, 3,
-                                                *wxBLACK);
+                                              wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     m_disabledButtonDropDownBmp = wxAuiBitmapFromBits(
                                                 buttonDropdownBits, 5, 3,
                                                 wxColor(128,128,128));
-    m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, *wxBLACK);
+    m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6,
+                                        wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     m_disabledOverflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, wxColor(128,128,128));
 
     m_font = *wxNORMAL_FONT;
@@ -328,18 +334,18 @@ void wxAuiGenericToolBarArt::DrawButton(
         if (item.GetState() & wxAUI_BUTTON_STATE_PRESSED)
         {
             dc.SetPen(wxPen(m_highlightColour));
-            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(150)));
+            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 20 : 150)));
             dc.DrawRectangle(rect);
         }
         else if ((item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky())
         {
             dc.SetPen(wxPen(m_highlightColour));
-            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(170)));
+            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
 
             // draw an even lighter background for checked item hovers (since
             // the hover background is the same color as the check background)
             if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
-                dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(180)));
+                dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 50 : 180)));
 
             dc.DrawRectangle(rect);
         }
@@ -348,7 +354,7 @@ void wxAuiGenericToolBarArt::DrawButton(
             // it's important to put this code in an else statement after the
             // hover, otherwise hovers won't draw properly for checked items
             dc.SetPen(wxPen(m_highlightColour));
-            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(170)));
+            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
             dc.DrawRectangle(rect);
         }
     }
@@ -357,11 +363,7 @@ void wxAuiGenericToolBarArt::DrawButton(
         dc.DrawBitmap(bmp, bmpX, bmpY, true);
 
     // set the item's text color based on if it is disabled
-#ifdef __WXMAC__
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-#else
-    dc.SetTextForeground(*wxBLACK);
-#endif
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
 #ifdef __WXMAC__
@@ -451,17 +453,17 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     if (item.GetState() & wxAUI_BUTTON_STATE_PRESSED)
     {
         dc.SetPen(wxPen(m_highlightColour));
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(140)));
+        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 10 : 140)));
         dc.DrawRectangle(buttonRect);
 
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(170)));
+        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
         dc.DrawRectangle(dropDownRect);
     }
     else if (item.GetState() & wxAUI_BUTTON_STATE_HOVER ||
              item.IsSticky())
     {
         dc.SetPen(wxPen(m_highlightColour));
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(170)));
+        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
         dc.DrawRectangle(buttonRect);
         dc.DrawRectangle(dropDownRect);
     }
@@ -470,7 +472,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
         // Notice that this branch must come after the hover one to ensure the
         // correct appearance when the mouse hovers over a checked item.m_
         dc.SetPen(wxPen(m_highlightColour));
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(170)));
+        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
         dc.DrawRectangle(buttonRect);
         dc.DrawRectangle(dropDownRect);
     }
@@ -495,11 +497,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     dc.DrawBitmap(dropbmp, dropBmpX, dropBmpY, true);
 
     // set the item's text color based on if it is disabled
-#ifdef __WXMAC__
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-#else
-    dc.SetTextForeground(*wxBLACK);
-#endif
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
 #ifdef __WXMAC__
@@ -718,7 +716,7 @@ void wxAuiGenericToolBarArt::DrawOverflowButton(wxDC& dc,
     if (state & wxAUI_BUTTON_STATE_HOVER ||
         state & wxAUI_BUTTON_STATE_PRESSED)
     {
-        wxColor light_gray_bg = m_highlightColour.ChangeLightness(170);
+        wxColor light_gray_bg = m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170);
 
         if (m_flags & wxAUI_TB_VERTICAL)
         {

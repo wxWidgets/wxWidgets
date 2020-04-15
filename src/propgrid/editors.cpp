@@ -1890,7 +1890,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
    // Need to reduce width of text control on Mac
 #if defined(__WXMAC__)
-    s.x -= 8;
+    s.x -= 4;
 #endif
 
     // For label editors, trim the size to allow better splitter grabbing
@@ -1995,8 +1995,11 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     // If button is narrow make it a square and move it to the correct position
     s = but->GetSize();
     if ( s.x < s.y )
-        but->SetSize(wxSize(s.y, s.y));
-    p.x = pos.x + sz.x - s.y;
+    {
+        s.x = s.y;
+        but->SetSize(s);
+    }
+    p.x = pos.x + sz.x - s.x;
     but->Move(p);
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) && !selected->HasFlag(wxPG_PROP_ACTIVE_BTN) )

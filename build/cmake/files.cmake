@@ -118,20 +118,20 @@ set(BASE_COREFOUNDATION_SRC
 
 set(BASE_COREFOUNDATION_HDR
     wx/osx/carbon/region.h
-    wx/osx/core/cfarray.h
     wx/osx/core/cfdataref.h
-    wx/osx/core/cfdictionary.h
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
-    wx/osx/core/cftype.h
     wx/osx/core/colour.h
-    wx/osx/core/dataview.h
-    wx/osx/core/evtloop.h
     wx/osx/core/hid.h
-    wx/osx/core/joystick.h
-    wx/osx/core/mimetype.h
+    wx/osx/core/evtloop.h
     wx/osx/core/objcid.h
     wx/osx/core/private.h
+    wx/osx/core/cfdictionary.h
+    wx/osx/core/cfarray.h
+    wx/osx/core/cftype.h
+    wx/osx/core/joystick.h
+    wx/osx/core/mimetype.h
+    wx/osx/core/dataview.h
 )
 
 set(BASE_OSX_SHARED_SRC
@@ -2544,7 +2544,6 @@ set(OSX_COCOA_HDR
     wx/osx/datetimectrl.h
     wx/osx/taskbarosx.h
     wx/osx/dvrenderers.h
-    wx/osx/core/joystick.h
 )
 
 set(OSX_IPHONE_SRC
