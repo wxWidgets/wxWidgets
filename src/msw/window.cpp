@@ -4851,6 +4851,45 @@ static void ScaleCoordIfSet(int& coord, float scaleFactor)
     }
 }
 
+// Called from MSWUpdateonDPIChange() to recursively update the window
+// sizer and any child sizers and spacers.
+static void UpdateSizerOnDPIChange(wxSizer* sizer, float scaleFactor)
+{
+    if ( !sizer )
+    {
+        return;
+    }
+
+    for ( wxSizerItemList::compatibility_iterator
+            node = sizer->GetChildren().GetFirst();
+            node;
+            node = node->GetNext() )
+    {
+        wxSizerItem* sizerItem = node->GetData();
+
+        int border = sizerItem->GetBorder();
+        ScaleCoordIfSet(border, scaleFactor);
+        sizerItem->SetBorder(border);
+
+        // only scale sizers and spacers, not windows
+        if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
+        {
+            wxSize min = sizerItem->GetMinSize();
+            ScaleCoordIfSet(min.x, scaleFactor);
+            ScaleCoordIfSet(min.y, scaleFactor);
+            sizerItem->SetMinSize(min);
+
+            wxSize size = sizerItem->GetSize();
+            ScaleCoordIfSet(size.x, scaleFactor);
+            ScaleCoordIfSet(size.y, scaleFactor);
+            sizerItem->SetDimension(wxDefaultPosition, size);
+
+            // Update any child sizers if this is a sizer
+            UpdateSizerOnDPIChange(sizerItem->GetSizer(), scaleFactor);
+        }
+    }
+}
+
 void
 wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 {
@@ -4868,34 +4907,7 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     MSWUpdateFontOnDPIChange(newDPI);
 
     // update sizers
-    if ( GetSizer() )
-    {
-        for ( wxSizerItemList::compatibility_iterator
-              node = GetSizer()->GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxSizerItem* sizerItem = node->GetData();
-
-            int border = sizerItem->GetBorder();
-            ScaleCoordIfSet(border, scaleFactor);
-            sizerItem->SetBorder(border);
-
-            // only scale sizers and spacers, not windows
-            if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
-            {
-                wxSize min = sizerItem->GetMinSize();
-                ScaleCoordIfSet(min.x, scaleFactor);
-                ScaleCoordIfSet(min.y, scaleFactor);
-                sizerItem->SetMinSize(min);
-
-                wxSize size = sizerItem->GetSize();
-                ScaleCoordIfSet(size.x, scaleFactor);
-                ScaleCoordIfSet(size.y, scaleFactor);
-                sizerItem->SetDimension(wxDefaultPosition, size);
-            }
-        }
-    }
+    UpdateSizerOnDPIChange(GetSizer(), scaleFactor);
 
     // update children
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
