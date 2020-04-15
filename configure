@@ -32967,23 +32967,24 @@ fi
 if test "$wxUSE_FSWATCHER" = "yes"; then
                 if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
-            for ac_header in sys/inotify.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "sys/inotify.h" "ac_cv_header_sys_inotify_h" "$ac_includes_default
-"
-if test "x$ac_cv_header_sys_inotify_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_SYS_INOTIFY_H 1
+                                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether inotify is usable" >&5
+$as_echo_n "checking whether inotify is usable... " >&6; }
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int main() { return inotify_init(); }
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wx_cv_inotify_usable=yes; $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
+
+else
+  wx_cv_inotify_usable=no
 
 fi
-
-done
-
-            if test "$ac_cv_header_sys_inotify_h" = "yes"; then
-                $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
-
-            else
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_inotify_usable" >&5
+$as_echo "$wx_cv_inotify_usable" >&6; }
+            if test "$wx_cv_inotify_usable" = "no"; then
                 for ac_header in sys/event.h
 do :
   ac_fn_c_check_header_compile "$LINENO" "sys/event.h" "ac_cv_header_sys_event_h" "$ac_includes_default
