@@ -19,6 +19,10 @@
 
 #include "wx/scrolwin.h"
 
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    #include <iterator>
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -747,10 +751,205 @@ private:
 };
 
 
+// ----------------------------------------------------------------------------
+// wxGridBlockCoords: location of a block of cells in the grid
+// ----------------------------------------------------------------------------
+
+struct wxGridBlockDiffResult;
+
+class WXDLLIMPEXP_CORE wxGridBlockCoords
+{
+public:
+    wxGridBlockCoords() :
+        m_topRow(-1),
+        m_leftCol(-1),
+        m_bottomRow(-1),
+        m_rightCol(-1)
+    {
+    }
+
+    wxGridBlockCoords(int topRow, int leftCol, int bottomRow, int rightCol) :
+        m_topRow(topRow),
+        m_leftCol(leftCol),
+        m_bottomRow(bottomRow),
+        m_rightCol(rightCol)
+    {
+    }
+
+    // default copy ctor is ok
+
+    int GetTopRow() const { return m_topRow; }
+    void SetTopRow(int row) { m_topRow = row; }
+    int GetLeftCol() const { return m_leftCol; }
+    void SetLeftCol(int col) { m_leftCol = col; }
+    int GetBottomRow() const { return m_bottomRow; }
+    void SetBottomRow(int row) { m_bottomRow = row; }
+    int GetRightCol() const { return m_rightCol; }
+    void SetRightCol(int col) { m_rightCol = col; }
+
+    wxGridCellCoords GetTopLeft() const
+    {
+        return wxGridCellCoords(m_topRow, m_leftCol);
+    }
+
+    wxGridCellCoords GetBottomRight() const
+    {
+        return wxGridCellCoords(m_bottomRow, m_rightCol);
+    }
+
+    wxGridBlockCoords Canonicalize() const
+    {
+        wxGridBlockCoords result = *this;
+
+        if ( result.m_topRow > result.m_bottomRow )
+            wxSwap(result.m_topRow, result.m_bottomRow);
+
+        if ( result.m_leftCol > result.m_rightCol )
+            wxSwap(result.m_leftCol, result.m_rightCol);
+
+        return result;
+    }
+
+    bool Intersects(const wxGridBlockCoords& other) const
+    {
+        return m_topRow <= other.m_bottomRow && m_bottomRow >= other.m_topRow &&
+               m_leftCol <= other.m_rightCol && m_rightCol >= other.m_leftCol;
+    }
+
+    // Return whether this block contains the given cell.
+    bool ContainsCell(const wxGridCellCoords& cell) const
+    {
+        return m_topRow <= cell.GetRow() && cell.GetRow() <= m_bottomRow &&
+               m_leftCol <= cell.GetCol() && cell.GetCol() <= m_rightCol;
+    }
+
+    // Return whether this blocks fully contains another one.
+    bool ContainsBlock(const wxGridBlockCoords& other) const
+    {
+        return m_topRow <= other.m_topRow && other.m_bottomRow <= m_bottomRow &&
+               m_leftCol <= other.m_leftCol && other.m_rightCol <= m_rightCol;
+    }
+
+    // Calculates the result blocks by subtracting the other block from this
+    // block. splitOrientation can be wxVERTICAL or wxHORIZONTAL.
+    wxGridBlockDiffResult
+    Difference(const wxGridBlockCoords& other, int splitOrientation) const;
+
+    // Calculates the symmetric difference of the blocks.
+    wxGridBlockDiffResult
+    SymDifference(const wxGridBlockCoords& other) const;
+
+    bool operator==(const wxGridBlockCoords& other) const
+    {
+        return m_topRow == other.m_topRow && m_leftCol == other.m_leftCol &&
+               m_bottomRow == other.m_bottomRow && m_rightCol == other.m_rightCol;
+    }
+
+    bool operator!=(const wxGridBlockCoords& other) const
+    {
+        return !(*this == other);
+    }
+
+    bool operator!() const
+    {
+        return m_topRow == -1 && m_leftCol == -1 &&
+               m_bottomRow == -1 && m_rightCol == -1;
+    }
+
+private:
+    int m_topRow;
+    int m_leftCol;
+    int m_bottomRow;
+    int m_rightCol;
+};
+
+// ----------------------------------------------------------------------------
+// wxGridBlockDiffResult: The helper struct uses as a result type for difference
+// functions of wxGridBlockCoords class.
+// Parts can be uninitialized (equals to wxGridNoBlockCoords), that means
+// that the corresponding part doesn't exists in the result.
+// ----------------------------------------------------------------------------
+
+struct wxGridBlockDiffResult
+{
+    wxGridBlockCoords m_parts[4];
+};
+
+// ----------------------------------------------------------------------------
+// wxGridBlocks: a range of grid blocks that can be iterated over
+// ----------------------------------------------------------------------------
+
+class wxGridBlocks
+{
+    typedef wxVector<wxGridBlockCoords>::const_iterator iterator_impl;
+
+public:
+    class iterator
+    {
+    public:
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+        typedef std::forward_iterator_tag iterator_category;
+#endif
+        typedef ptrdiff_t difference_type;
+        typedef wxGridBlockCoords value_type;
+        typedef const value_type& reference;
+
+        iterator() : m_it() { }
+
+        reference operator*() const { return *m_it; }
+
+        iterator& operator++()
+            { ++m_it; return *this; }
+        iterator operator++(int)
+            { iterator tmp = *this; ++m_it; return tmp; }
+
+        bool operator==(const iterator& it) const
+            { return m_it == it.m_it; }
+        bool operator!=(const iterator& it) const
+            { return m_it != it.m_it; }
+
+    private:
+        explicit iterator(iterator_impl it) : m_it(it) { }
+
+        iterator_impl m_it;
+
+        friend class wxGridBlocks;
+    };
+
+    iterator begin() const
+    {
+        return m_begin;
+    }
+
+    iterator end() const
+    {
+        return m_end;
+    }
+
+private:
+    wxGridBlocks() :
+        m_begin(),
+        m_end()
+    {
+    }
+
+    wxGridBlocks(iterator_impl begin, iterator_impl end) :
+        m_begin(begin),
+        m_end(end)
+    {
+    }
+
+    const iterator m_begin;
+    const iterator m_end;
+
+    friend class wxGrid;
+};
+
 // For comparisons...
 //
-extern WXDLLIMPEXP_CORE wxGridCellCoords wxGridNoCellCoords;
-extern WXDLLIMPEXP_CORE wxRect           wxGridNoCellRect;
+extern WXDLLIMPEXP_CORE wxGridCellCoords  wxGridNoCellCoords;
+extern WXDLLIMPEXP_CORE wxGridBlockCoords wxGridNoBlockCoords;
+extern WXDLLIMPEXP_CORE wxRect            wxGridNoCellRect;
 
 // An array of cell coords...
 //
@@ -1343,6 +1542,10 @@ public:
     void MakeCellVisible( const wxGridCellCoords& coords )
         { MakeCellVisible( coords.GetRow(), coords.GetCol() ); }
 
+    // Returns the topmost row of the current visible area.
+    int GetFirstFullyVisibleRow() const;
+    // Returns the leftmost column of the current visible area.
+    int GetFirstFullyVisibleColumn() const;
 
     // ------ grid cursor movement functions
     //
@@ -1791,6 +1994,7 @@ public:
     bool IsInSelection( const wxGridCellCoords& coords ) const
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
 
+    wxGridBlocks GetSelectedBlocks() const;
     wxGridCellCoordsArray GetSelectedCells() const;
     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
@@ -2332,8 +2536,6 @@ protected:
 
     bool    m_waitForSlowClick;
 
-    wxGridCellCoords m_selectionStart;
-
     wxCursor m_rowResizeCursor;
     wxCursor m_colResizeCursor;
 
@@ -2386,16 +2588,6 @@ protected:
     bool SetCurrentCell( int row, int col )
         { return SetCurrentCell( wxGridCellCoords(row, col) ); }
 
-
-    // this function is called to extend the block being currently selected
-    // from mouse and keyboard event handlers
-    void UpdateBlockBeingSelected(int blockStartRow, int blockStartCol,
-                                  int blockEndRow, int blockEndCol);
-
-    void UpdateBlockBeingSelected(const wxGridCellCoords& blockStart,
-                                  const wxGridCellCoords& blockEnd)
-        { UpdateBlockBeingSelected(blockStart.GetRow(), blockStart.GetCol(),
-                                   blockEnd.GetRow(), blockEnd.GetCol()); }
 
     virtual bool ShouldScrollToChildOnFocus(wxWindow* WXUNUSED(win)) wxOVERRIDE
         { return false; }
@@ -2566,7 +2758,6 @@ private:
     void DoGridProcessTab(wxKeyboardState& kbdState);
 
     // common implementations of methods defined for both rows and columns
-    void DeselectLine(int line, const wxGridOperations& oper);
     bool DoEndDragResizeLine(const wxGridOperations& oper, wxGridWindow *gridWindow);
     int PosToLinePos(int pos, bool clipToMinMax,
                      const wxGridOperations& oper,
@@ -2576,13 +2767,20 @@ private:
                   wxGridWindow *gridWindow) const;
     int PosToEdgeOfLine(int pos, const wxGridOperations& oper) const;
 
-    bool DoMoveCursor(bool expandSelection,
+    void DoMoveCursorFromKeyboard(const wxKeyboardState& kbdState,
+                                  const wxGridDirectionOperations& diroper);
+    bool DoMoveCursor(const wxKeyboardState& kbdState,
                       const wxGridDirectionOperations& diroper);
-    bool DoMoveCursorByPage(const wxGridDirectionOperations& diroper);
-    bool DoMoveCursorByBlock(bool expandSelection,
+    bool DoMoveCursorByPage(const wxKeyboardState& kbdState,
+                            const wxGridDirectionOperations& diroper);
+    bool AdvanceByPage(wxGridCellCoords& coords,
+                       const wxGridDirectionOperations& diroper);
+    bool DoMoveCursorByBlock(const wxKeyboardState& kbdState,
                              const wxGridDirectionOperations& diroper);
     void AdvanceToNextNonEmpty(wxGridCellCoords& coords,
                                const wxGridDirectionOperations& diroper);
+    bool AdvanceByBlock(wxGridCellCoords& coords,
+                        const wxGridDirectionOperations& diroper);
 
     // common part of {Insert,Delete}{Rows,Cols}
     bool DoModifyLines(bool (wxGridTableBase::*funcModify)(size_t, size_t),

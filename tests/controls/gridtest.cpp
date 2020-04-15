@@ -74,6 +74,17 @@ protected:
 
     void CheckFirstColAutoSize(int expected);
 
+    // Helper to check that the selection is equal to the specified block.
+    void CheckSelection(const wxGridBlockCoords& block)
+    {
+        const wxGridBlocks selected = m_grid->GetSelectedBlocks();
+        wxGridBlocks::iterator it = selected.begin();
+
+        REQUIRE( it != selected.end() );
+        CHECK( *it == block );
+        CHECK( ++it == selected.end() );
+    }
+
     TestableGrid *m_grid;
 
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
@@ -490,6 +501,35 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Cursor", "[grid]")
     CHECK(m_grid->GetGridCursorRow() == 0);
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::KeyboardSelection", "[grid][selection]")
+{
+    m_grid->SetCellValue(1, 1, "R2C2");
+    m_grid->SetCellValue(2, 0, "R3C1");
+    m_grid->SetCellValue(3, 0, "R4C1");
+    m_grid->SetCellValue(4, 0, "R5C1");
+    m_grid->SetCellValue(7, 0, "R8C1");
+
+    CHECK(m_grid->GetGridCursorCoords() == wxGridCellCoords(0, 0));
+
+    m_grid->MoveCursorRight(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 0, 1));
+
+    m_grid->MoveCursorDownBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 2, 1));
+
+    m_grid->MoveCursorDownBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 4, 1));
+
+    m_grid->MoveCursorDownBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 7, 1));
+
+    m_grid->MoveCursorUpBlock(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 4, 1));
+
+    m_grid->MoveCursorLeft(true);
+    CheckSelection(wxGridBlockCoords(0, 0, 4, 0));
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
 {
     m_grid->SelectAll();
@@ -524,44 +564,81 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(!m_grid->IsInSelection(3, 0));
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
+{
+    const wxGridBlocks empty = m_grid->GetSelectedBlocks();
+    CHECK( empty.begin() == empty.end() );
+
+    m_grid->SelectBlock(1, 0, 3, 1);
+
+    wxGridBlocks sel = m_grid->GetSelectedBlocks();
+    REQUIRE( sel.begin() != sel.end() );
+    CHECK( *sel.begin() == wxGridBlockCoords(1, 0, 3, 1) );
+
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+    m_grid->SelectBlock(4, 0, 7, 1, true);
+    int index = 0;
+    for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
+    {
+        switch ( index )
+        {
+        case 0:
+            CHECK(block == wxGridBlockCoords(1, 0, 3, 1));
+            break;
+        case 1:
+            CHECK(block == wxGridBlockCoords(4, 0, 7, 1));
+            break;
+        default:
+            FAIL("Unexpected iterations count");
+            break;
+        }
+        ++index;
+    }
+#endif
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectEmptyGrid", "[grid]")
 {
-    SECTION("Delete rows/columns")
+    for ( int i = 0; i < 2; ++i )
     {
-        SECTION("No rows")
+        SECTION(i == 0 ? "No rows" : "No columns")
         {
-            m_grid->DeleteRows(0, 10);
-            REQUIRE( m_grid->GetNumberRows() == 0 );
-        }
-        SECTION("No columns")
-        {
-            m_grid->DeleteCols(0, 2);
-            REQUIRE( m_grid->GetNumberCols() == 0 );
+
+            if ( i == 0 )
+            {
+                m_grid->DeleteRows(0, 10);
+                REQUIRE( m_grid->GetNumberRows() == 0 );
+            }
+            else
+            {
+                m_grid->DeleteCols(0, 2);
+                REQUIRE( m_grid->GetNumberCols() == 0 );
+            }
+
+            SECTION("Move right")
+            {
+                m_grid->MoveCursorRight(true);
+            }
+            SECTION("Move down")
+            {
+                m_grid->MoveCursorDown(true);
+            }
+            SECTION("Select row")
+            {
+                m_grid->SelectRow(1);
+            }
+            SECTION("Select column")
+            {
+                m_grid->SelectCol(1);
+            }
         }
     }
 
-    SECTION("Select")
-    {
-        SECTION("Move right")
-        {
-            m_grid->MoveCursorRight(true);
-        }
-        SECTION("Move down")
-        {
-            m_grid->MoveCursorDown(true);
-        }
-        SECTION("Select row")
-        {
-            m_grid->SelectRow(1);
-        }
-        SECTION("Select column")
-        {
-            m_grid->SelectCol(1);
-        }
-    }
-
+    CHECK( m_grid->GetSelectedCells().Count() == 0 );
     CHECK( m_grid->GetSelectionBlockTopLeft().Count() == 0 );
     CHECK( m_grid->GetSelectionBlockBottomRight().Count() == 0 );
+    CHECK( m_grid->GetSelectedRows().Count() == 0 );
+    CHECK( m_grid->GetSelectedCols().Count() == 0 );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ScrollWhenSelect", "[grid]")
@@ -580,12 +657,12 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ScrollWhenSelect", "[grid]")
     CHECK( m_grid->IsVisible(0, 4) );
 
     m_grid->ClearSelection();
-    m_grid->SetGridCursor(1, 1);
-    for ( int i = 0; i < 5; ++i )
+    m_grid->GoToCell(1, 1);
+    for ( int i = 0; i < 8; ++i )
     {
         m_grid->MoveCursorDown(true);
     }
-    CHECK( m_grid->IsVisible(6, 1) );
+    CHECK( m_grid->IsVisible(9, 1) );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::MoveGridCursorUsingEndKey", "[grid]")
@@ -825,9 +902,20 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     //We already test this mode in Select
     CHECK(m_grid->GetSelectionMode() == wxGrid::wxGridSelectCells);
 
+    // Select an individual cell and an entire row.
+    m_grid->SelectBlock(3, 1, 3, 1);
+    m_grid->SelectRow(5, true /* add to selection */);
+
+    // Test that after switching to row selection mode only the row remains
+    // selected.
+    m_grid->SetSelectionMode(wxGrid::wxGridSelectRows);
+    CHECK( m_grid->IsInSelection(5, 0) );
+    CHECK( m_grid->IsInSelection(5, 1) );
+    CHECK( !m_grid->IsInSelection(3, 1) );
+
     //Test row selection be selecting a single cell and checking the whole
     //row is selected
-    m_grid->SetSelectionMode(wxGrid::wxGridSelectRows);
+    m_grid->ClearSelection();
     m_grid->SelectBlock(3, 1, 3, 1);
 
     wxArrayInt selectedRows = m_grid->GetSelectedRows();
@@ -1256,6 +1344,195 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         // We can't be sure which size will be greater because of different fonts
         // so just calculate the maximum width.
         CheckFirstColAutoSize( wxMax(labelWidth, cellWidth) );
+    }
+}
+
+// Test wxGridBlockCoords here because it'a a part of grid sources.
+
+std::ostream& operator<<(std::ostream& os, const wxGridBlockCoords& block) {
+    os << "wxGridBlockCoords(" <<
+        block.GetTopRow() << ", " << block.GetLeftCol() << ", " <<
+        block.GetBottomRow() << ", " << block.GetRightCol() << ")";
+    return os;
+}
+
+TEST_CASE("GridBlockCoords::Canonicalize", "[grid]")
+{
+    const wxGridBlockCoords block =
+        wxGridBlockCoords(4, 3, 2, 1).Canonicalize();
+
+    CHECK(block.GetTopRow() == 2);
+    CHECK(block.GetLeftCol() == 1);
+    CHECK(block.GetBottomRow() == 4);
+    CHECK(block.GetRightCol() == 3);
+}
+
+TEST_CASE("GridBlockCoords::Intersects", "[grid]")
+{
+    // Inside.
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(1, 2, 2, 3)));
+
+    // Intersects.
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(2, 2, 4, 4)));
+
+    // Doesn't intersects.
+    CHECK(!wxGridBlockCoords(1, 1, 3, 3).Intersects(wxGridBlockCoords(4, 4, 6, 6)));
+}
+
+TEST_CASE("GridBlockCoords::ContainsCell", "[grid]")
+{
+    // Inside.
+    CHECK(wxGridBlockCoords(1, 1, 3, 3).ContainsCell(wxGridCellCoords(2, 2)));
+
+    // Outside.
+    CHECK(!wxGridBlockCoords(1, 1, 3, 3).ContainsCell(wxGridCellCoords(5, 5)));
+}
+
+TEST_CASE("GridBlockCoords::ContainsBlock", "[grid]")
+{
+    wxGridBlockCoords block1(1, 1, 5, 5);
+    wxGridBlockCoords block2(1, 1, 3, 3);
+    wxGridBlockCoords block3(2, 2, 7, 7);
+    wxGridBlockCoords block4(10, 10, 12, 12);
+
+    CHECK( block1.ContainsBlock(block2));
+    CHECK(!block2.ContainsBlock(block1));
+    CHECK(!block1.ContainsBlock(block3));
+    CHECK(!block1.ContainsBlock(block4));
+    CHECK(!block3.ContainsBlock(block1));
+    CHECK(!block4.ContainsBlock(block1));
+}
+
+TEST_CASE("GridBlockCoords::Difference", "[grid]")
+{
+    SECTION("Subtract contained block (splitted horizontally)")
+    {
+        const wxGridBlockCoords block1(1, 1, 7, 7);
+        const wxGridBlockCoords block2(3, 3, 5, 5);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 7));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(6, 1, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(3, 6, 5, 7));
+    }
+
+    SECTION("Subtract contained block (splitted vertically)")
+    {
+        const wxGridBlockCoords block1(1, 1, 7, 7);
+        const wxGridBlockCoords block2(3, 3, 5, 5);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxVERTICAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 7, 2));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(1, 6, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(1, 3, 2, 5));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(6, 3, 7, 5));
+    }
+
+    SECTION("Blocks intersect by the corner (splitted horizontally)")
+    {
+        const wxGridBlockCoords block1(1, 1, 5, 5);
+        const wxGridBlockCoords block2(3, 3, 7, 7);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 5));
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks intersect by the corner (splitted vertically)")
+    {
+        const wxGridBlockCoords block1(1, 1, 5, 5);
+        const wxGridBlockCoords block2(3, 3, 7, 7);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxVERTICAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 5, 2));
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridBlockCoords(1, 3, 2, 5));
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks are the same")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(1, 1, 3, 3);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks doesn't intersects")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(5, 5, 7, 7);
+        const wxGridBlockDiffResult result =
+            block1.Difference(block2, wxHORIZONTAL);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 3, 3));
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+}
+
+
+TEST_CASE("GridBlockCoords::SymDifference", "[grid]")
+{
+    SECTION("With contained block")
+    {
+        const wxGridBlockCoords block1(1, 1, 7, 7);
+        const wxGridBlockCoords block2(3, 3, 5, 5);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 7));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(6, 1, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(3, 6, 5, 7));
+    }
+
+    SECTION("Blocks intersect by the corner")
+    {
+        const wxGridBlockCoords block1(1, 1, 5, 5);
+        const wxGridBlockCoords block2(3, 3, 7, 7);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 2, 5));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(6, 3, 7, 7));
+        CHECK(result.m_parts[2] == wxGridBlockCoords(3, 1, 5, 2));
+        CHECK(result.m_parts[3] == wxGridBlockCoords(3, 6, 5, 7));
+    }
+
+    SECTION("Blocks are the same")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(1, 1, 3, 3);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[1] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
+    }
+
+    SECTION("Blocks doesn't intersects")
+    {
+        const wxGridBlockCoords block1(1, 1, 3, 3);
+        const wxGridBlockCoords block2(5, 5, 7, 7);
+        const wxGridBlockDiffResult result = block1.SymDifference(block2);
+
+        CHECK(result.m_parts[0] == wxGridBlockCoords(1, 1, 3, 3));
+        CHECK(result.m_parts[1] == wxGridBlockCoords(5, 5, 7, 7));
+        CHECK(result.m_parts[2] == wxGridNoBlockCoords);
+        CHECK(result.m_parts[3] == wxGridNoBlockCoords);
     }
 }
 

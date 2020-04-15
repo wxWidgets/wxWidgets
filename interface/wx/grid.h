@@ -1817,6 +1817,250 @@ public:
 };
 
 /**
+    Represents coordinates of a block of cells in the grid.
+
+    An object of this class contains coordinates of the left top and the bottom right
+    corners of a block.
+
+    @since 3.1.4
+ */
+class wxGridBlockCoords
+{
+public:
+    /**
+        Default constructor initializes the object to invalid state.
+
+        Initially the coordinates are invalid (-1) and so operator!() for an
+        uninitialized wxGridBlockCoords returns @true.
+     */
+    wxGridBlockCoords();
+
+    /**
+        Constructor taking a coordinates of the left top and the bottom right
+        corners.
+     */
+    wxGridBlockCoords(int topRow, int leftCol, int bottomRow, int rightCol);
+
+    /**
+        Return the row of the left top corner.
+     */
+    int GetTopRow() const;
+
+    /**
+        Set the row of the left top corner.
+     */
+    void SetTopRow(int row);
+
+    /**
+        Return the column of the left top corner.
+     */
+    int GetLeftCol() const;
+
+    /**
+        Set the column of the left top corner.
+     */
+    void SetLeftCol(int col);
+
+    /**
+        Return the row of the bottom right corner.
+     */
+    int GetBottomRow() const;
+
+    /**
+        Set the row of the bottom right corner.
+     */
+    void SetBottomRow(int row);
+
+    /**
+        Return the column of the bottom right corner.
+     */
+    int GetRightCol() const;
+
+    /**
+        Set the column of the bottom right corner.
+     */
+    void SetRightCol(int col);
+
+    /**
+        Return the coordinates of the top left corner.
+     */
+    wxGridCellCoords GetTopLeft() const
+    {
+        return wxGridCellCoords(m_topRow, m_leftCol);
+    }
+
+    /**
+        Return the coordinates of the bottom right corner.
+     */
+    wxGridCellCoords GetBottomRight() const
+    {
+        return wxGridCellCoords(m_bottomRow, m_rightCol);
+    }
+
+    /**
+        Return the canonicalized block where top left coordinates is less
+        then bottom right coordinates.
+     */
+    wxGridBlockCoords Canonicalize() const;
+
+    /**
+        Whether the blocks intersect.
+
+        @return
+            @true, if the block intersects with the other, @false, otherwise.
+     */
+    bool Intersects(const wxGridBlockCoords& other) const
+    {
+        return m_topRow <= other.m_bottomRow && m_bottomRow >= other.m_topRow &&
+               m_leftCol <= other.m_rightCol && m_rightCol >= other.m_leftCol;
+    }
+
+    /**
+        Check whether this block contains the given cell.
+
+        @return
+            @true, if the block contains the cell, @false otherwise.
+     */
+    bool ContainsCell(const wxGridCellCoords& cell) const;
+
+    /**
+        Check whether this block contains another one.
+
+        @return
+            @true if @a other is entirely contained within this block.
+     */
+    bool ContainsBlock(const wxGridBlockCoords& other) const;
+
+    /**
+        Calculates the result blocks by subtracting the other block from this
+        block.
+
+        @param other
+            The block to subtract from this block.
+        @param splitOrientation
+            The block splitting orientation (either @c wxHORIZONTAL or
+            @c wxVERTICAL).
+        @return
+            Up to 4 blocks. If block doesn't exist in the result, it has value
+            of @c wxGridNoBlockCoords.
+     */
+    wxGridBlockDiffResult
+    Difference(const wxGridBlockCoords& other, int splitOrientation) const;
+
+    /**
+        Calculates the symmetric difference of the blocks.
+
+        @param other
+            The block to subtract from this block.
+        @return
+            Up to 4 blocks. If block doesn't exist in the result, it has value
+            of @c wxGridNoBlockCoords.
+     */
+    wxGridBlockDiffResult
+    SymDifference(const wxGridBlockCoords& other) const;
+
+    /**
+        Equality operator.
+     */
+    bool operator==(const wxGridBlockCoords& other) const;
+
+    /**
+        Inequality operator.
+     */
+    bool operator!=(const wxGridBlockCoords& other) const;
+
+    /**
+        Checks whether the cells block is invalid.
+
+        Returns @true only if all components are -1. Notice that if one
+        of the components (but not all) is -1, this method returns @false even
+        if the object is invalid. This is done because objects in such state
+        should actually never exist, i.e. either all components should be -1
+        or none of them should be -1.
+     */
+    bool operator!() const;
+
+private:
+    int m_topRow;
+    int m_leftCol;
+    int m_bottomRow;
+    int m_rightCol;
+};
+
+/**
+    @class wxGridBlockDiffResult
+
+    The helper struct uses as a result type for difference functions of
+    @c wxGridBlockCoords class.
+
+    Parts can be uninitialized (equals to @c wxGridNoBlockCoords), that means
+    that the corresponding part doesn't exists in the result.
+
+    @since 3.1.4
+ */
+struct wxGridBlockDiffResult
+{
+    wxGridBlockCoords m_parts[4];
+};
+
+/**
+    Represents a collection of grid blocks that can be iterated over.
+
+    This class provides read-only access to the blocks making up the grid
+    selection in the most general case.
+
+    Note that objects of this class can only be returned by wxGrid, but not
+    constructed in the application code.
+
+    The preferable way to iterate over it is using C++11 range-for loop:
+    @code
+        for ( const auto& block: grid->GetSelectedBlocks() ) {
+            ... do something with block ...
+        }
+    @endcode
+    When not using C++11, iteration has to be done manually:
+    @code
+        wxGridBlocks range = grid->GetSelectedBlocks();
+        for ( wxGridBlocks::iterator it = range.begin();
+              it != range.end();
+              ++it ) {
+            ... do something with *it ...
+        }
+    @endcode
+
+    @since 3.1.4
+ */
+class wxGridBlocks
+{
+public:
+    /**
+        Read-only forward iterator type.
+
+        This is an opaque type, which satisfies the forward iterator
+        requirements, i.e. provides all the expected operations, such as
+        comparison, dereference and pre- and post-increment.
+     */
+    class iterator
+    {
+        iterator();
+
+        const wxGridBlockCoords& operator*() const;
+
+        iterator& operator++();
+        iterator operator++(int);
+
+        bool operator==(const iterator& it) const;
+        bool operator!=(const iterator& it) const;
+    };
+
+    /// Return iterator corresponding to the beginning of the range.
+    iterator begin() const;
+
+    /// Return iterator corresponding to the end of the range.
+    iterator end() const;
+};
+
+/**
     @class wxGridTableBase
 
     The almost abstract base class for grid tables.
@@ -4420,6 +4664,21 @@ public:
     void DeselectCell( int row, int col );
 
     /**
+        Returns a range of grid selection blocks.
+
+        The returned range can be iterated over, e.g. with C++11 range-for loop:
+        @code
+            for ( const auto block: grid->GetSelectedBlocks() ) {
+                if ( block.Intersects(myBlock) )
+                    break;
+            }
+        @endcode
+
+        @since 3.1.4
+    */
+    wxGridBlocks GetSelectedBlocks() const;
+
+    /**
         Returns an array of individually selected cells.
 
         Notice that this array does @em not contain all the selected cells in
@@ -4434,6 +4693,9 @@ public:
         a grid with a million of columns, we don't want to create an array with
         a million of entries in this function, instead it returns an empty
         array and GetSelectedCols() returns an array containing one element).
+
+        The function can be slow for the big grids, use GetSelectedBlocks()
+        in the new code.
     */
     wxGridCellCoordsArray GetSelectedCells() const;
 
@@ -4445,6 +4707,9 @@ public:
         individually selected but not those being part of the block selection
         or being selected in virtue of all of their cells being selected
         individually, please see GetSelectedCells() for more details.
+
+        The function can be slow for the big grids, use GetSelectedBlocks()
+        in the new code.
     */
     wxArrayInt GetSelectedCols() const;
 
@@ -4456,6 +4721,9 @@ public:
         selected but not those being part of the block selection or being
         selected in virtue of all of their cells being selected individually,
         please see GetSelectedCells() for more details.
+
+        The function can be slow for the big grids, use GetSelectedBlocks()
+        in the new code.
     */
     wxArrayInt GetSelectedRows() const;
 
@@ -4471,6 +4739,9 @@ public:
         Please see GetSelectedCells() for more information about the selection
         representation in wxGrid.
 
+        The function can be slow for the big grids, use GetSelectedBlocks()
+        in the new code.
+
         @see GetSelectionBlockTopLeft()
     */
     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
@@ -4480,6 +4751,9 @@ public:
 
         Please see GetSelectedCells() for more information about the selection
         representation in wxGrid.
+
+        The function can be slow for the big grids, use GetSelectedBlocks()
+        in the new code.
 
         @see GetSelectionBlockBottomRight()
     */
@@ -4640,6 +4914,17 @@ public:
         Does nothing if the cell is already visible.
     */
     void MakeCellVisible(const wxGridCellCoords& coords);
+
+    /**
+        Returns the topmost row of the current visible area.
+        Returns -1 if the grid doesn't have any rows.
+    */
+    int GetFirstFullyVisibleRow() const;
+    /**
+        Returns the leftmost column of the current visible area.
+        Returns -1 if the grid doesn't have any columns.
+    */
+   int GetFirstFullyVisibleColumn() const;
 
     /**
         Sets the number of pixels per horizontal scroll increment.
