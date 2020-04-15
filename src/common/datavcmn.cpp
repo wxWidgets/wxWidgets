@@ -334,8 +334,8 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
                               unsigned int column, bool ascending ) const
 {
     wxVariant value1,value2;
-    GetValue( value1, item1, column );
-    GetValue( value2, item2, column );
+    HasValue(item1, column) ? GetValue( value1, item1, column ) : value1.MakeNull();
+    HasValue(item2, column) ? GetValue( value2, item2, column ) : value2.MakeNull();
 
     if (!ascending)
     {
