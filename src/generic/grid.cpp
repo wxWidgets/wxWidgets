@@ -5872,7 +5872,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     }
 
                     if ( selStart != wxGridNoCellCoords )
-                        m_selection->SelectBlock(selStart, selEnd);
+                        m_selection->ExtendCurrentBlock(selStart, selEnd, event);
                 }
                 break;
 
