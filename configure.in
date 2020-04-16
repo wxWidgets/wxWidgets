@@ -5476,10 +5476,19 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
     dnl includes OS X which does have kqueue but no other platforms)
     if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
-            AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
-            if test "$ac_cv_header_sys_inotify_h" = "yes"; then
-                AC_DEFINE(wxHAS_INOTIFY)
-            else
+            dnl inotify header may be present from a compatibility library so
+            dnl check that the function is usable. We don't try to link with,
+            dnl e.g. -linotify so native kqueue support is used in preference.
+            AC_CACHE_CHECK(
+                [whether inotify is usable],
+                wx_cv_inotify_usable,
+                AC_LINK_IFELSE(
+                    [AC_LANG_SOURCE([int main() { return inotify_init(); }])],
+                    [wx_cv_inotify_usable=yes; AC_DEFINE(wxHAS_INOTIFY) ],
+                    [wx_cv_inotify_usable=no]
+                )
+            )
+            if test "$wx_cv_inotify_usable" = "no"; then
                 AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
                 if test "$ac_cv_header_sys_event_h" = "yes"; then
                     AC_DEFINE(wxHAS_KQUEUE)
