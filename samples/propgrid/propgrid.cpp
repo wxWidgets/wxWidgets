@@ -3126,7 +3126,7 @@ bool cxApplication::OnInit()
     if ( frameSize.x > 500 )
         frameSize.x = 500;
 
-    FormMain* frame = Form1 = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), frameSize);
+    FormMain* frame = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), frameSize);
     frame->Show(true);
 
     //

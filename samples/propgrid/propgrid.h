@@ -275,9 +275,6 @@ class cxApplication : public wxApp
 public:
 
     virtual bool OnInit() wxOVERRIDE;
-
-private:
-    FormMain    *Form1;
 };
 
 wxDECLARE_APP(cxApplication);
