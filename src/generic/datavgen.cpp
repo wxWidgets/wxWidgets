@@ -4525,8 +4525,18 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
     {
         if ( forward )
         {
-            // find first column with value
-            m_currentCol = FindFirstColumnWithValue(node->GetItem());
+            if ( node )
+            {
+                // find first column with value
+                m_currentCol = FindFirstColumnWithValue(node->GetItem());
+            }
+            else
+            {
+                // in the special "list" case, all columns have values, so just
+                // take the first one
+                m_currentCol = GetOwner()->GetColumnAt(0);
+            }
+
             m_currentColSetByKeyboard = true;
             RefreshRow(m_currentRow);
             return true;
@@ -4579,7 +4589,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
                 return false;
             }
         }
-        if ( GetModel()->HasValue(node->GetItem(), i) )
+        if ( !node || GetModel()->HasValue(node->GetItem(), i) )
             break;
     }
 
