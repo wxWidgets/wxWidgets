@@ -88,11 +88,6 @@ WXHMENU wxMenu::GetHMenu() const
     return NULL;
 }
 
-void wxMenu::Break()
-{
-    // not available on the mac platform
-}
-
 void wxMenu::SetAllowRearrange( bool allow )
 {
     m_allowRearrange = allow;
