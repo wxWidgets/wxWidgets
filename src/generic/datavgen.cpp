@@ -914,8 +914,8 @@ private:
     bool IsItemSingleValued(const wxDataViewItem& item) const
     {
         bool hadColumnWithValue = false;
-        unsigned int cols = GetOwner()->GetColumnCount();
-        const wxDataViewModel* model = GetModel();
+        const unsigned int cols = GetOwner()->GetColumnCount();
+        const wxDataViewModel* const model = GetModel();
         for ( unsigned int i = 0; i < cols; i++ )
         {
             if ( model->HasValue(item, i) )
@@ -929,14 +929,17 @@ private:
         return true;
     }
 
-    // find first column with value
-    wxDataViewColumn * FindFirstColumnWithValue(const wxDataViewItem& item) const
+    // Find the first column with a value in it.
+    wxDataViewColumn* FindFirstColumnWithValue(const wxDataViewItem& item) const
     {
-        unsigned int cols = GetOwner()->GetColumnCount();
-        const wxDataViewModel* model = GetModel();
-        for ( unsigned int i ; i < cols; i++ )
+        const unsigned int cols = GetOwner()->GetColumnCount();
+        const wxDataViewModel* const model = GetModel();
+        for ( unsigned int i = 0; i < cols; i++ )
+        {
             if ( model->HasValue(item, i) )
                 return GetOwner()->GetColumnAt(i);
+        }
+
         return NULL;
     }
 
@@ -4549,7 +4552,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
     }
 
     int idx = GetOwner()->GetColumnIndex(m_currentCol);
-    unsigned int cols = GetOwner()->GetColumnCount();
+    const unsigned int cols = GetOwner()->GetColumnCount();
     for ( unsigned int i = 0; i < cols; i++ )
     {
         idx += (forward ? +1 : -1);
