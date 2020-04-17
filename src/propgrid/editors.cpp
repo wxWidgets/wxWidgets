@@ -800,14 +800,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                 rect.y + 1);
 
     int renderFlags = wxPGCellRenderer::DontUseCellColours;
-    bool useCustomPaintProcedure;
 
     // If custom image had some size, we will start from the assumption
     // that custom paint procedure is required
-    if ( cis.x > 0 )
-        useCustomPaintProcedure = true;
-    else
-        useCustomPaintProcedure = false;
+    bool useCustomPaintProcedure =  cis.x > 0;
 
     if ( flags & wxODCB_PAINTING_SELECTED )
         renderFlags |= wxPGCellRenderer::Selected;
