@@ -910,20 +910,23 @@ private:
     // assumes that all columns were modified, otherwise just this one.
     bool DoItemChanged(const wxDataViewItem& item, int view_column);
 
-    // Return whether the item has more than one column that have values
-    bool IsItemMultivalued(const wxDataViewItem& item) const
+    // Return whether the item has at most one column with a value.
+    bool IsItemSingleValued(const wxDataViewItem& item) const
     {
-        unsigned int numColsWithValue = 0;
+        bool hadColumnWithValue = false;
         unsigned int cols = GetOwner()->GetColumnCount();
         const wxDataViewModel* model = GetModel();
         for ( unsigned int i = 0; i < cols; i++ )
         {
             if ( model->HasValue(item, i) )
-                numColsWithValue++;
-            if ( numColsWithValue > 1 )
-                return true;
+            {
+                if ( hadColumnWithValue )
+                    return false;
+                hadColumnWithValue = true;
+            }
         }
-        return false;
+
+        return true;
     }
 
     // find first column with value
@@ -2423,11 +2426,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 {
                     renderColumnFocus = true;
 
-                    // If this is container node without columns, render full-row focus:
+                    // If there is just a single value, render full-row focus:
                     if ( !IsList() )
                     {
                         wxDataViewTreeNode *node = GetTreeNodeByRow(item);
-                        if ( !IsItemMultivalued(node->GetItem()) )
+                        if ( IsItemSingleValued(node->GetItem()) )
                             renderColumnFocus = false;
                     }
                 }
@@ -4515,7 +4518,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
     const bool wrapAround = event.GetKeyCode() == WXK_TAB;
 
     // navigation shouldn't work in nodes with fewer than two columns
-    if ( node && !IsItemMultivalued(node->GetItem()) )
+    if ( node && IsItemSingleValued(node->GetItem()) )
         return false;
 
     if ( m_currentCol == NULL || !m_currentColSetByKeyboard )
