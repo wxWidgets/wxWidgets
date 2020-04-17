@@ -1009,15 +1009,8 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     if (!m_hasFont)
         SetOwnFont(attr.font);
 
-    // this is a misnomer: it's called "dotted pen" but uses (default) wxPENSTYLE_SOLID
-    // style because we apparently get performance problems when using dotted
-    // pen for drawing in some ports -- but under MSW it seems to work fine
-#ifdef __WXMSW__
     m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
                         1, wxPENSTYLE_DOT);
-#else
-    m_dottedPen = *wxGREY_PEN;
-#endif
 
     SetInitialSize(size);
 
