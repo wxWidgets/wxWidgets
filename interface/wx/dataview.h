@@ -309,8 +309,9 @@ public:
         item is not a container or HasContainerColumns() was overridden to
         return true for it.
 
-        Override this method to explicitly specify for which columns a given
-        item has values.
+        Since wxWidgets 3.1.4, this method is virtual and can be overridden to
+        explicitly specify for which columns a given item has, and doesn't
+        have, values.
 
         @since 2.9.1
      */
