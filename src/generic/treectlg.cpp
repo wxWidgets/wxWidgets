@@ -1013,7 +1013,8 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     // style because we apparently get performance problems when using dotted
     // pen for drawing in some ports -- but under MSW it seems to work fine
 #ifdef __WXMSW__
-    m_dottedPen = wxPen(*wxLIGHT_GREY, 0, wxPENSTYLE_DOT);
+    m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
+                        1, wxPENSTYLE_DOT);
 #else
     m_dottedPen = *wxGREY_PEN;
 #endif
