@@ -3054,6 +3054,9 @@ public:
         The position where the menu will appear can be specified either as a
         wxPoint @a pos or by two integers (@a x and @a y).
 
+        Note that this function switches focus to this window before showing
+        the menu.
+
         @remarks Just before the menu is popped up, wxMenu::UpdateUI is called to
                  ensure that the menu items are in the correct state.
                  The menu does not get deleted by the window.
