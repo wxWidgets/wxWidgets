@@ -2121,12 +2121,14 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     m_topSizer->Add(m_pPropGridManager, wxSizerFlags(1).Expand());
 
     // Button for tab traversal testing
-    m_topSizer->Add(new wxButton(m_panel, wxID_ANY,
+    wxBoxSizer* btnSizer = new wxBoxSizer(wxHORIZONTAL);
+    btnSizer->Add(new wxButton(m_panel, wxID_ANY,
         "Should be able to move here with Tab"),
-        wxSizerFlags(0).Expand());
-    m_topSizer->Add(new wxButton(m_panel, ID_SHOWPOPUP,
+        wxSizerFlags(1).Border(wxALL, 10));
+    btnSizer->Add(new wxButton(m_panel, ID_SHOWPOPUP,
         "Show Popup"),
-        wxSizerFlags(0).Expand());
+        wxSizerFlags(1).Border(wxALL, 10));
+    m_topSizer->Add(btnSizer, wxSizerFlags(0).Border(wxALL, 5).Expand());
 
     m_panel->SetSizer(m_topSizer);
     m_topSizer->SetSizeHints(m_panel);
