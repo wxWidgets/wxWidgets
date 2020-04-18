@@ -1992,7 +1992,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 #endif
 
     // Register all editors (SpinCtrl etc.)
-    m_pPropGridManager->RegisterAdditionalEditors();
+    wxPropertyGridInterface::RegisterAdditionalEditors();
 
     // Register our sample custom editors
     m_pSampleMultiButtonEditor =
