@@ -87,21 +87,6 @@ static GtkWidget* ButtonWidget()
     return s_widget;
 }
 
-#if GTK_CHECK_VERSION(2,10,0)
-static GtkWidget* LinkButtonWidget()
-{
-    static GtkWidget *s_widget;
-    if (s_widget == NULL && wx_is_at_least_gtk2(10))
-    {
-        s_widget = gtk_link_button_new("http://test.com");
-        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
-        gtk_container_add(ContainerWidget(), s_widget);
-        gtk_widget_ensure_style(s_widget);
-    }
-    return s_widget;
-}
-#endif // GTK 2.10+
-
 static GtkWidget* ListWidget()
 {
     static GtkWidget* s_widget;
@@ -638,18 +623,6 @@ static const GtkStyle* ButtonStyle()
     return gtk_widget_get_style(ButtonWidget());
 }
 
-static const wxColor LinkButtonColor()
-{
-#if GTK_CHECK_VERSION(2,10,0)
-    GdkColor *link_color = NULL;
-    gtk_widget_style_get(LinkButtonWidget(), "link-color", &link_color, NULL);
-    if (link_color)
-        return wxColor(*link_color);
-#endif // GTK 2.10+
-
-    return *wxBLUE;
-}
-
 static const GtkStyle* ListStyle()
 {
     return gtk_widget_get_style(ListWidget());
@@ -775,7 +748,20 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
-            color = LinkButtonColor();
+            {
+                GdkColor c = { 0, 0, 0, 0xeeee };
+                if (gtk_check_version(2,10,0) == NULL)
+                {
+                    GdkColor* linkColor = NULL;
+                    gtk_widget_style_get(ButtonWidget(), "link-color", &linkColor, NULL);
+                    if (linkColor)
+                    {
+                        c = *linkColor;
+                        gdk_color_free(linkColor);
+                    }
+                }
+                color = wxColour(c);
+            }
             break;
 
         case wxSYS_COLOUR_MAX:
