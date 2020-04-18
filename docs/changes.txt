@@ -610,6 +610,7 @@ wxGTK:
   rather than triggering a reload of the model.  If you are working around the
   broken behaviour with wxGTK-specific code in your application you should
   check that your application works correctly with this change.
+- Return appropriate values for some previously hard-coded system colours.
 
 
 3.0.4: (released 2018-03-08)
