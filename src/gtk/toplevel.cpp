@@ -340,6 +340,16 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
+#if GTK_CHECK_VERSION(3,10,0)
+extern "C" {
+static void findTitlebar(GtkWidget* widget, void* data)
+{
+    if (GTK_IS_HEADER_BAR(widget))
+        *static_cast<GtkWidget**>(data) = widget;
+}
+}
+#endif
+
 // we cannot the WM hints and icons before the widget has been realized,
 // so we do this directly after realization
 
@@ -349,11 +359,31 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
 
     GdkWindow* window = gtk_widget_get_window(m_widget);
 
-#ifdef __WXGTK3__
-    // Don't set WM decorations if GTK is using Client Side Decorations
-    if (gtk_style_context_has_class(gtk_widget_get_style_context(m_widget), "csd"))
-        m_gdkDecor = 0;
-#endif
+#if GTK_CHECK_VERSION(3,10,0)
+    if (wx_is_at_least_gtk3(10))
+    {
+        GtkWidget* titlebar = NULL;
+        gtk_container_forall(GTK_CONTAINER(m_widget), findTitlebar, &titlebar);
+        if (titlebar)
+        {
+#if GTK_CHECK_VERSION(3,12,0)
+            if (m_gdkDecor && wx_is_at_least_gtk3(12))
+            {
+                char layout[sizeof("icon,menu:minimize,maximize,close")];
+                snprintf(layout, sizeof(layout), "icon%s:%s%s%s",
+                     m_gdkDecor & GDK_DECOR_MENU ? ",menu" : "",
+                     m_gdkDecor & GDK_DECOR_MINIMIZE ? "minimize," : "",
+                     m_gdkDecor & GDK_DECOR_MAXIMIZE ? "maximize," : "",
+                     m_gdkFunc & GDK_FUNC_CLOSE ? "close" : "");
+                gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(titlebar), layout);
+            }
+#endif // 3.12
+            // Don't set WM decorations when GTK is using Client Side Decorations
+            m_gdkDecor = 0;
+        }
+    }
+#endif // 3.10
+
     gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
     gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
