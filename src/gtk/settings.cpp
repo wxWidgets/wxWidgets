@@ -87,6 +87,19 @@ static GtkWidget* ButtonWidget()
     return s_widget;
 }
 
+static GtkWidget* LinkButtonWidget()
+{
+    static GtkWidget *s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_link_button_new("http://test.com");
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
+        gtk_container_add(ContainerWidget(), s_widget);
+        gtk_widget_ensure_style(s_widget);
+    }
+    return s_widget;
+}
+
 static GtkWidget* ListWidget()
 {
     static GtkWidget* s_widget;
@@ -623,6 +636,16 @@ static const GtkStyle* ButtonStyle()
     return gtk_widget_get_style(ButtonWidget());
 }
 
+static const wxColor LinkButtonStyle()
+{
+    GdkColor *link_color = NULL;
+    gtk_widget_style_get(LinkButtonWidget(), "link-color", &link_color, NULL);
+    if (link_color)
+        return wxColor(*link_color);
+    else
+        return *wxBLUE;
+}
+
 static const GtkStyle* ListStyle()
 {
     return gtk_widget_get_style(ListWidget());
@@ -748,8 +771,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
-            // TODO
-            color = *wxBLACK;
+            color = LinkButtonStyle();
             break;
 
         case wxSYS_COLOUR_MAX:
