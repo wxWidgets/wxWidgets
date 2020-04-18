@@ -1822,45 +1822,6 @@ wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
 
-void FormMain::InitPanel()
-{
-    if ( m_panel )
-        m_panel->Destroy();
-
-    wxWindow* panel = new wxPanel(this, wxID_ANY,
-                                  wxPoint(0, 0), wxSize(400, 400),
-                                  wxTAB_TRAVERSAL);
-    m_panel = panel;
-
-    // Column
-    wxBoxSizer* topSizer = new wxBoxSizer ( wxVERTICAL );
-
-    m_topSizer = topSizer;
-}
-
-void FormMain::FinalizePanel( bool wasCreated )
-{
-    // Button for tab traversal testing
-    m_topSizer->Add( new wxButton(m_panel, wxID_ANY,
-                     "Should be able to move here with Tab"),
-                     wxSizerFlags(0).Expand());
-    m_topSizer->Add( new wxButton(m_panel, ID_SHOWPOPUP,
-                     "Show Popup"),
-                     wxSizerFlags(0).Expand());
-
-    m_panel->SetSizer( m_topSizer );
-    m_topSizer->SetSizeHints( m_panel );
-
-    wxBoxSizer* panelSizer = new wxBoxSizer( wxHORIZONTAL );
-    panelSizer->Add( m_panel, wxSizerFlags(1).Expand().FixedMinSize());
-
-    SetSizer( panelSizer );
-    panelSizer->SetSizeHints( this );
-
-    if ( wasCreated )
-        FinalizeFramePosition();
-}
-
 void FormMain::PopulateGrid()
 {
     wxPropertyGridManager* pgman = m_pPropGridManager;
@@ -1911,10 +1872,6 @@ void FormMain::CreateGrid( int style, int extraStyle )
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
                 //| wxPG_EX_HELP_AS_TOOLTIPS
 
-    bool wasCreated = m_panel ? false : true;
-
-    InitPanel();
-
     //
     // This shows how to combine two static choice descriptors
     m_combinedFlags.Add( WXSIZEOF(_fs_windowstyle_labels), _fs_windowstyle_labels, _fs_windowstyle_values );
@@ -1960,10 +1917,17 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     //m_pPropGridManager->SetSplitterLeft(true);
     //m_pPropGridManager->SetSplitterPosition(137);
+}
 
-    m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
+void FormMain::ReplaceGrid(int style, int extraStyle)
+{
+    wxPropertyGridManager* pgmanOld = m_pPropGridManager;
+    CreateGrid(style, extraStyle);
+    m_topSizer->Replace(pgmanOld, m_pPropGridManager);
+    pgmanOld->Destroy();
+    m_pPropGridManager->SetFocus();
 
-    FinalizePanel(wasCreated);
+    m_panel->Layout();
 }
 
 // -----------------------------------------------------------------------
@@ -1976,7 +1940,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     SetIcon(wxICON(sample));
 
     m_propGrid = NULL;
-    m_panel = NULL;
+    m_pPropGridManager = NULL;
     m_hasHeader = false;
     m_labelEditingEnabled = false;
 
@@ -1990,34 +1954,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     // This is here to really test the wxImageFileProperty.
     wxInitAllImageHandlers();
 #endif
-
-    // Register all editors (SpinCtrl etc.)
-    wxPropertyGridInterface::RegisterAdditionalEditors();
-
-    // Register our sample custom editors
-    m_pSampleMultiButtonEditor =
-        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
-
-    CreateGrid( // style
-                wxPG_BOLD_MODIFIED |
-                wxPG_SPLITTER_AUTO_CENTER |
-                wxPG_AUTO_SORT |
-                //wxPG_HIDE_MARGIN|wxPG_STATIC_SPLITTER |
-                //wxPG_TOOLTIPS |
-                //wxPG_HIDE_CATEGORIES |
-                //wxPG_LIMITED_EDITING |
-                wxPG_TOOLBAR |
-                wxPG_DESCRIPTION,
-                // extra style
-#if wxALWAYS_NATIVE_DOUBLE_BUFFER
-                wxPG_EX_NATIVE_DOUBLE_BUFFERING |
-#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
-                wxPG_EX_MODE_BUTTONS |
-                wxPG_EX_MULTIPLE_SELECTION
-                //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
-                //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
-                //| wxPG_EX_HELP_AS_TOOLTIPS
-              );
 
     //
     // Create menu bar
@@ -2149,6 +2085,53 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     CreateStatusBar(1);
     SetStatusText(wxEmptyString);
 #endif // wxUSE_STATUSBAR
+
+    // Register all editors (SpinCtrl etc.)
+    wxPropertyGridInterface::RegisterAdditionalEditors();
+
+    // Register our sample custom editors
+    m_pSampleMultiButtonEditor =
+        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
+
+    m_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+
+    CreateGrid( // style
+        wxPG_BOLD_MODIFIED |
+        wxPG_SPLITTER_AUTO_CENTER |
+        wxPG_AUTO_SORT |
+        //wxPG_HIDE_MARGIN|wxPG_STATIC_SPLITTER |
+        //wxPG_TOOLTIPS |
+        //wxPG_HIDE_CATEGORIES |
+        //wxPG_LIMITED_EDITING |
+        wxPG_TOOLBAR |
+        wxPG_DESCRIPTION,
+        // extra style
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+        wxPG_EX_NATIVE_DOUBLE_BUFFERING |
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
+        wxPG_EX_MODE_BUTTONS |
+        wxPG_EX_MULTIPLE_SELECTION
+        //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
+        //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
+        //| wxPG_EX_HELP_AS_TOOLTIPS
+    );
+
+    m_topSizer = new wxBoxSizer(wxVERTICAL);
+
+    m_topSizer->Add(m_pPropGridManager, wxSizerFlags(1).Expand());
+
+    // Button for tab traversal testing
+    m_topSizer->Add(new wxButton(m_panel, wxID_ANY,
+        "Should be able to move here with Tab"),
+        wxSizerFlags(0).Expand());
+    m_topSizer->Add(new wxButton(m_panel, ID_SHOWPOPUP,
+        "Show Popup"),
+        wxSizerFlags(0).Expand());
+
+    m_panel->SetSizer(m_topSizer);
+    m_topSizer->SetSizeHints(m_panel);
+
+    m_panel->Layout();
 
     FinalizeFramePosition();
 
@@ -2933,9 +2916,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         extraStyle = flags;
     }
 
-    CreateGrid( style, extraStyle );
-
-    FinalizeFramePosition();
+    ReplaceGrid( style, extraStyle );
 }
 
 // -----------------------------------------------------------------------
