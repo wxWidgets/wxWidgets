@@ -1932,17 +1932,17 @@ void FormMain::ReplaceGrid(int style, int extraStyle)
 
 // -----------------------------------------------------------------------
 
-FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size) :
-           wxFrame((wxFrame *)NULL, -1, title, pos, size,
+FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size)
+    : wxFrame((wxFrame *)NULL, -1, title, pos, size,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
                 wxTAB_TRAVERSAL|wxCLOSE_BOX) )
+    , m_pPropGridManager(NULL)
+    , m_propGrid(NULL)
+    , m_hasHeader(false)
+    , m_labelEditingEnabled(false)
 {
     SetIcon(wxICON(sample));
-
-    m_propGrid = NULL;
-    m_pPropGridManager = NULL;
-    m_hasHeader = false;
-    m_labelEditingEnabled = false;
+    Centre();
 
 #ifdef __WXMAC__
     // we need this in order to allow the about menu relocation, since ABOUT is
@@ -2133,8 +2133,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 
     m_panel->Layout();
 
-    FinalizeFramePosition();
-
 #if wxUSE_LOGWINDOW
     // Create log window
     m_logWindow = new wxLogWindow(this, "Log Messages", false);
@@ -2142,19 +2140,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                                   GetPosition().y);
     m_logWindow->Show();
 #endif
-}
-
-void FormMain::FinalizeFramePosition()
-{
-    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X)/10)*4,
-                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)/10)*8);
-
-    if ( frameSize.x > 500 )
-        frameSize.x = 500;
-
-    SetSize(frameSize);
-
-    Centre();
 }
 
 //
@@ -3134,7 +3119,12 @@ bool cxApplication::OnInit()
     //wxLocale Locale;
     //Locale.Init(wxLANGUAGE_FINNISH);
 
-    FormMain* frame = Form1 = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), wxSize(300,500) );
+    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 10) * 4,
+                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 10) * 8);
+    if ( frameSize.x > 500 )
+        frameSize.x = 500;
+
+    FormMain* frame = Form1 = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), frameSize);
     frame->Show(true);
 
     //

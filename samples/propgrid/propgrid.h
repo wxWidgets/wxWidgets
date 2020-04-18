@@ -159,7 +159,6 @@ public:
 
     void CreateGrid( int style, int extraStyle );
     void ReplaceGrid(int style, int extraStyle);
-    void FinalizeFramePosition();
 
     // These are used in CreateGrid(), and in tests to compose
     // grids for testing purposes.

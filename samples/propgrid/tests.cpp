@@ -1765,7 +1765,6 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         // Test with multiple columns
         ReplaceGrid( -1, -1 );
-        FinalizeFramePosition();
         pgman = m_pPropGridManager;
         for ( i=3; i<12; i+=2 )
         {
@@ -1810,9 +1809,6 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         ReplaceGrid( -1, -1 );
         pgman = m_pPropGridManager;
     }
-
-    // Restore original grid size
-    FinalizeFramePosition();
 
     RT_START_TEST(none)
 
