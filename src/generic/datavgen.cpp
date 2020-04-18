@@ -4155,6 +4155,9 @@ bool wxDataViewMainWindow::IsCellEditableInMode(const wxDataViewItem& item,
     if ( !GetModel()->IsEnabled(item, col->GetModelColumn()) )
         return false;
 
+    if ( !GetModel()->HasValue(item, col->GetModelColumn()) )
+        return false;
+
     return true;
 }
 
