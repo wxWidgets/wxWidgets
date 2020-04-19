@@ -10,48 +10,64 @@ matrix:
         - dist: precise
           compiler: gcc
           env: wxUSE_XVFB=1
+          name: wxGTK Ubuntu 12.04
         - dist: trusty
           compiler: gcc
+          name: wxGTK Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
+          name: wxGTK UTF-8 Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxUSE_XVFB=1
+          name: wxGTK 3 STL Ubuntu 14.04
         - dist: trusty
           compiler: clang
           env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
+          name: wxGTK clang Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
+          name: wxGTK CMake Ubuntu 14.04
         - os: osx
           osx_image: xcode6.4
           compiler: clang
           env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxSKIP_SAMPLES=1
+          name: wxOSX Xcode 6.4
         - os: osx
+          osx_image: xcode9.4
           compiler: clang
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_CXX_STANDARD=11"
+          name: wxOSX Xcode 9.4
         - dist: trusty
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-x11 --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+          name: wxX11 Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+          name: wxDFB Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-motif --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+          name: wxMotif Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
+          name: wxQt Ubuntu 14.04
         - os: linux
           arch: arm64
           env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
+          name: wxGTK ARM64
         - os: linux
           arch: ppc64le
           env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
+          name: wxGTK PowerPC64
         - os: linux
           arch: s390x
           env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
+          name: wxGTK S/390
 
 branches:
     only:
