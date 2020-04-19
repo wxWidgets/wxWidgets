@@ -124,7 +124,16 @@ WXPNG_OBJECTS =  \
 	wxpng_pngwio.o \
 	wxpng_pngwrite.o \
 	wxpng_pngwtran.o \
-	wxpng_pngwutil.o
+	wxpng_pngwutil.o \
+	wxpng_arm_init.o \
+	wxpng_filter_neon_intrinsics.o \
+	wxpng_palette_neon_intrinsics.o \
+	wxpng_intel_init.o \
+	wxpng_filter_sse2_intrinsics.o \
+	wxpng_filter_msa_intrinsics.o \
+	wxpng_mips_init.o \
+	wxpng_filter_vsx_intrinsics.o \
+	wxpng_powerpc_init.o
 WXJPEG_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) \
 	$(CFLAGS)
 WXJPEG_OBJECTS =  \
@@ -14819,6 +14828,33 @@ wxpng_pngwtran.o: $(srcdir)/src/png/pngwtran.c
 
 wxpng_pngwutil.o: $(srcdir)/src/png/pngwutil.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngwutil.c
+
+wxpng_arm_init.o: $(srcdir)/src/png/arm/arm_init.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/arm/arm_init.c
+
+wxpng_filter_neon_intrinsics.o: $(srcdir)/src/png/arm/filter_neon_intrinsics.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/arm/filter_neon_intrinsics.c
+
+wxpng_palette_neon_intrinsics.o: $(srcdir)/src/png/arm/palette_neon_intrinsics.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/arm/palette_neon_intrinsics.c
+
+wxpng_intel_init.o: $(srcdir)/src/png/intel/intel_init.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/intel/intel_init.c
+
+wxpng_filter_sse2_intrinsics.o: $(srcdir)/src/png/intel/filter_sse2_intrinsics.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/intel/filter_sse2_intrinsics.c
+
+wxpng_filter_msa_intrinsics.o: $(srcdir)/src/png/mips/filter_msa_intrinsics.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/mips/filter_msa_intrinsics.c
+
+wxpng_mips_init.o: $(srcdir)/src/png/mips/mips_init.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/mips/mips_init.c
+
+wxpng_filter_vsx_intrinsics.o: $(srcdir)/src/png/powerpc/filter_vsx_intrinsics.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/powerpc/filter_vsx_intrinsics.c
+
+wxpng_powerpc_init.o: $(srcdir)/src/png/powerpc/powerpc_init.c
+	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/powerpc/powerpc_init.c
 
 wxjpeg_jaricom.o: $(srcdir)/src/jpeg/jaricom.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jaricom.c

@@ -417,6 +417,11 @@
     <ClCompile Include="..\..\src\png\pngwrite.c" />
     <ClCompile Include="..\..\src\png\pngwtran.c" />
     <ClCompile Include="..\..\src\png\pngwutil.c" />
+    <ClCompile Include="..\..\src\png\arm\arm_init.c" />
+    <ClCompile Include="..\..\src\png\arm\filter_neon_intrinsics.c" />
+    <ClCompile Include="..\..\src\png\arm\palette_neon_intrinsics.c" />
+    <ClCompile Include="..\..\src\png\intel\intel_init.c" />
+    <ClCompile Include="..\..\src\png\intel\filter_sse2_intrinsics.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
