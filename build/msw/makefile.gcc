@@ -68,7 +68,8 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_uncompr.o \
 	$(OBJS)\wxzlib_zutil.o
 WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -DNDEBUG -I..\..\src\zlib $(CPPFLAGS) $(CFLAGS)
+	-DHAVE_W32API_H -DNDEBUG -I..\..\src\zlib -DPNG_INTEL_SSE $(CPPFLAGS) \
+	$(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.o \
 	$(OBJS)\wxpng_pngerror.o \

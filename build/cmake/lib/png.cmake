@@ -46,6 +46,7 @@ if(wxUSE_LIBPNG STREQUAL "builtin")
         # http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=101278
         target_compile_definitions(wxpng PRIVATE _CRT_NONSTDC_NO_WARNINGS)
     endif()
+    target_compile_definitions(wxpng PRIVATE PNG_INTEL_SSE)
     target_include_directories(wxpng PRIVATE ${ZLIB_INCLUDE_DIRS})
     target_link_libraries(wxpng PRIVATE ${ZLIB_LIBRARIES})
     set(PNG_LIBRARIES wxpng)

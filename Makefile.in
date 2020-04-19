@@ -107,8 +107,8 @@ WXZLIB_OBJECTS =  \
 	wxzlib_trees.o \
 	wxzlib_uncompr.o \
 	wxzlib_zutil.o
-WXPNG_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG $(__INC_ZLIB_p) $(WX_CFLAGS) \
-	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXPNG_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG $(__INC_ZLIB_p) -DPNG_INTEL_SSE \
+	$(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
 	wxpng_pngerror.o \

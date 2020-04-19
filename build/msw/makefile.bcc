@@ -76,8 +76,8 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_uncompr.obj \
 	$(OBJS)\wxzlib_zutil.obj
 WXPNG_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I..\..\src\zlib -w-8004 \
-	$(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I..\..\src\zlib -DPNG_INTEL_SSE \
+	-w-8004 $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.obj \
 	$(OBJS)\wxpng_pngerror.obj \

@@ -25,6 +25,7 @@
          cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include>$(INC_ZLIB)</include>
+        <define>PNG_INTEL_SSE</define>
         <cflags-borland>-w-8004</cflags-borland>
         <cflags-watcom>-wcd=124</cflags-watcom>
         <sources>
