@@ -61,6 +61,11 @@ public:
     // Same as the above method but provides the grouping format as well
     static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
 
+    // Format a number s with the specified thousands separator, decimal separator
+    // and grouping format for the thousands separator
+    static void FormatNumber(wxString &s, wxChar thousandsSep,
+                             wxChar decSep, wxString grouping);
+
 private:
     // Post-process the string representing an integer.
     static wxString PostProcessIntString(wxString s, int style);

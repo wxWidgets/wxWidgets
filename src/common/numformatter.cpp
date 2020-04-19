@@ -22,7 +22,6 @@
 #include "wx/intl.h"
 
 #include <locale.h> // for setlocale and LC_ALL
-#include <limits.h> // for CHAR_MAX
 
 // ----------------------------------------------------------------------------
 // local helpers
@@ -188,7 +187,7 @@ bool wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxSt
             s_thousandsSeparator = s[0];
             const wxString
                 g = wxLocale::GetInfo(wxLOCALE_GROUPING, wxLOCALE_CAT_NUMBER);
-            if ( g[0] != '\0' || g[0] != CHAR_MAX )
+            if ( g[0] != '\0')
                 s_grouping = g;
         }
         //else: Unlike above it's perfectly fine for the thousands separator to
@@ -263,11 +262,20 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
         return;
 
     wxChar thousandsSep;
+    wxChar decSep;
     wxString grouping;
     if ( !GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) )
         return;
 
-    size_t pos = s.find(GetDecimalSeparator());
+    decSep = GetDecimalSeparator();
+    wxNumberFormatter::FormatNumber(
+        s, thousandsSep, decSep, grouping);
+}
+
+void wxNumberFormatter::FormatNumber(
+    wxString& s, wxChar thousandsSep, wxChar decSep, wxString grouping)
+{
+    size_t pos = s.find(decSep);
     if ( pos == wxString::npos )
     {
         // Start grouping at the end of an integer number.
