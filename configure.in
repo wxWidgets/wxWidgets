@@ -435,7 +435,7 @@ fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
-AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 4 (EXPERIMENTAL), 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
@@ -2896,13 +2896,16 @@ if test "$wxUSE_GUI" = "yes"; then
                             fi
                     esac
 
-                    if test "$wxGTK_VERSION" != 4 -a "$wxGTK_VERSION" != 3; then
-                        AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                    if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
+                        AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
                     fi
                     if test -z "$wx_cv_lib_gtk"; then
-                        if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
-                            AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
-                        elif test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
+                        if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
+                            AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                        fi
+                    fi
+                    if test -z "$wx_cv_lib_gtk"; then
+                        if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
                             AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
                         fi
                     fi
