@@ -1059,8 +1059,9 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
     INFO( "size of /proc/kcore=" << size );
     CHECK( size > 0 );
 
-    // All files in /sys seem to have size of 4KiB currently.
-    CHECK( wxFileName::GetSize("/sys/power/state") == 4096 );
+    // All files in /sys are one page in size, irrespectively of the size of
+    // their actual contents.
+    CHECK( wxFileName::GetSize("/sys/power/state") == sysconf(_SC_PAGESIZE) );
 }
 
 #endif // __LINUX__

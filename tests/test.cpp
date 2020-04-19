@@ -422,6 +422,20 @@ extern bool IsRunningUnderXVFB()
     return s_isRunningUnderXVFB == 1;
 }
 
+#ifdef __LINUX__
+
+extern bool IsRunningInLXC()
+{
+    // We're supposed to be able to detect running in LXC by checking for
+    // /dev/lxd existency, but this doesn't work under Travis for some reason,
+    // so just rely on having the environment variable defined for the
+    // corresponding builds in our .travis.yml.
+    wxString value;
+    return wxGetEnv("wxLXC", &value) && value == "1";
+}
+
+#endif // __LINUX__
+
 #if wxUSE_GUI
 
 bool EnableUITests()
