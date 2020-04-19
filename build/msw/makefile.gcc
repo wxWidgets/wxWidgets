@@ -68,7 +68,8 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_uncompr.o \
 	$(OBJS)\wxzlib_zutil.o
 WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
-	-DHAVE_W32API_H -DNDEBUG -I..\..\src\zlib $(CPPFLAGS) $(CFLAGS)
+	-DHAVE_W32API_H -DNDEBUG -I..\..\src\zlib -DPNG_INTEL_SSE $(CPPFLAGS) \
+	$(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.o \
 	$(OBJS)\wxpng_pngerror.o \
@@ -84,7 +85,16 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngwio.o \
 	$(OBJS)\wxpng_pngwrite.o \
 	$(OBJS)\wxpng_pngwtran.o \
-	$(OBJS)\wxpng_pngwutil.o
+	$(OBJS)\wxpng_pngwutil.o \
+	$(OBJS)\wxpng_arm_init.o \
+	$(OBJS)\wxpng_filter_neon_intrinsics.o \
+	$(OBJS)\wxpng_palette_neon_intrinsics.o \
+	$(OBJS)\wxpng_intel_init.o \
+	$(OBJS)\wxpng_filter_sse2_intrinsics.o \
+	$(OBJS)\wxpng_filter_msa_intrinsics.o \
+	$(OBJS)\wxpng_mips_init.o \
+	$(OBJS)\wxpng_filter_vsx_intrinsics.o \
+	$(OBJS)\wxpng_powerpc_init.o
 WXJPEG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -DNDEBUG -I$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
@@ -6035,6 +6045,33 @@ $(OBJS)\wxpng_pngwtran.o: ../../src/png/pngwtran.c
 	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxpng_pngwutil.o: ../../src/png/pngwutil.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_arm_init.o: ../../src/png/arm/arm_init.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_filter_neon_intrinsics.o: ../../src/png/arm/filter_neon_intrinsics.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_palette_neon_intrinsics.o: ../../src/png/arm/palette_neon_intrinsics.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_intel_init.o: ../../src/png/intel/intel_init.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_filter_sse2_intrinsics.o: ../../src/png/intel/filter_sse2_intrinsics.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_filter_msa_intrinsics.o: ../../src/png/mips/filter_msa_intrinsics.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_mips_init.o: ../../src/png/mips/mips_init.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_filter_vsx_intrinsics.o: ../../src/png/powerpc/filter_vsx_intrinsics.c
+	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxpng_powerpc_init.o: ../../src/png/powerpc/powerpc_init.c
 	$(CC) -c -o $@ $(WXPNG_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxjpeg_jaricom.o: ../../src/jpeg/jaricom.c

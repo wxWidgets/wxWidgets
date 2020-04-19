@@ -8,6 +8,14 @@
 #############################################################################
 
 if(wxUSE_LIBPNG STREQUAL "builtin")
+    if(NOT MSVC)
+        set(PNG_EXTRA_SOURCES
+            src/png/mips/filter_msa_intrinsics.c
+            src/png/mips/mips_init.c
+            src/png/powerpc/filter_vsx_intrinsics.c
+            src/png/powerpc/powerpc_init.c
+        )
+    endif()
     wx_add_builtin_library(wxpng
             src/png/png.c
             src/png/pngerror.c
@@ -24,6 +32,12 @@ if(wxUSE_LIBPNG STREQUAL "builtin")
             src/png/pngwrite.c
             src/png/pngwtran.c
             src/png/pngwutil.c
+            src/png/arm/arm_init.c
+            src/png/arm/filter_neon_intrinsics.c
+            src/png/arm/palette_neon_intrinsics.c
+            src/png/intel/intel_init.c
+            src/png/intel/filter_sse2_intrinsics.c
+            ${PNG_EXTRA_SOURCES}
     )
     if(WIN32)
         # define this to get rid of a warning about using POSIX lfind():
@@ -32,6 +46,7 @@ if(wxUSE_LIBPNG STREQUAL "builtin")
         # http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=101278
         target_compile_definitions(wxpng PRIVATE _CRT_NONSTDC_NO_WARNINGS)
     endif()
+    target_compile_definitions(wxpng PRIVATE PNG_INTEL_SSE)
     target_include_directories(wxpng PRIVATE ${ZLIB_INCLUDE_DIRS})
     target_link_libraries(wxpng PRIVATE ${ZLIB_LIBRARIES})
     set(PNG_LIBRARIES wxpng)
