@@ -64,7 +64,7 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual float GetFractionalPointSize() const wxOVERRIDE;
+    virtual double GetFractionalPointSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
     virtual wxString GetFaceName() const wxOVERRIDE;
@@ -74,7 +74,7 @@ public:
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
     virtual bool IsFixedWidth() const wxOVERRIDE;
 
-    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
+    virtual void SetFractionalPointSize(double pointSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
     virtual void SetNumericWeight(int weight) wxOVERRIDE;

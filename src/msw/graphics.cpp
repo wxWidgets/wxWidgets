@@ -1148,9 +1148,9 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    REAL fontSize = (REAL)(!dpi.y
-        ? font.GetPixelSize().GetHeight()
-        : (font.GetFractionalPointSize() * dpi.y / 72.0f));
+    REAL fontSize = !dpi.y
+        ? REAL(font.GetPixelSize().GetHeight())
+        : REAL(font.GetFractionalPointSize()) * dpi.y / 72.0f;
 
     Init(font.GetFaceName(), fontSize, style, col);
 }

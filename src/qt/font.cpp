@@ -241,7 +241,7 @@ int wxFont::GetPointSize() const
     return M_FONTDATA.wxNativeFontInfo::GetPointSize();
 }
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     return M_FONTDATA.GetFractionalPointSize();
 }
@@ -287,7 +287,7 @@ bool wxFont::GetStrikethrough() const
 }
 
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -390,7 +390,7 @@ void wxNativeFontInfo::Init()
 {
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_qtFont.pointSizeF();
 }
@@ -501,7 +501,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_UTF8;
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     m_qtFont.setPointSizeF(pointsize);
 }

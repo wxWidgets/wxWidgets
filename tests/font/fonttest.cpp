@@ -454,7 +454,7 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
     // strings (see #18590).
     wxFont font(*wxNORMAL_FONT);
 
-    static const float sizes[] = { 12.0f, 10.5f, 13.8f, 10.123f, 11.1f };
+    static const double sizes[] = { 12.0, 10.5, 13.8, 10.123, 11.1 };
     for ( unsigned n = 0; n < WXSIZEOF(sizes); n++ )
     {
         font.SetFractionalPointSize(sizes[n]);
@@ -462,7 +462,7 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
         // Just setting the font can slightly change it because of rounding
         // errors, so don't expect the actual size to be exactly equal to what
         // we used -- but close enough.
-        const float sizeUsed = font.GetFractionalPointSize();
+        const double sizeUsed = font.GetFractionalPointSize();
         CHECK( sizeUsed == Approx(sizes[n]).epsilon(0.001) );
 
         const wxString& desc = font.GetNativeFontInfoDesc();
