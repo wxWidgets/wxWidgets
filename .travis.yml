@@ -29,8 +29,8 @@ matrix:
           name: wxGTK 2 clang Ubuntu 14.04
         - dist: trusty
           compiler: gcc
-          env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
-          name: wxGTK CMake Ubuntu 14.04
+          env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles" wxCMAKE_DEFINES="-DWXGTK2=1"
+          name: wxGTK 2 CMake Ubuntu 14.04
         - os: osx
           osx_image: xcode6.4
           compiler: clang
