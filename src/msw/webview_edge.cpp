@@ -252,7 +252,13 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender),
         evtURL = wxString(uri);
         CoTaskMemFree(uri);
     }
-    wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString());
+    wxWebViewNavigationActionFlags navFlags = wxWEBVIEW_NAV_ACTION_OTHER;
+
+    BOOL isUserInitiated;
+    if (SUCCEEDED(args->get_IsUserInitiated(&isUserInitiated)) && isUserInitiated)
+        navFlags = wxWEBVIEW_NAV_ACTION_USER;
+
+    wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString(), navFlags);
     m_ctrl->HandleWindowEvent(evt);
     args->put_Handled(true);
     return S_OK;
