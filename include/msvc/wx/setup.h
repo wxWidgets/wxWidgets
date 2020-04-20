@@ -65,6 +65,10 @@
         #define wxCOMPILER_PREFIX vc120
     #elif _MSC_VER == 1900
         #define wxCOMPILER_PREFIX vc140
+    #elif _MSC_VER >= 1910 && _MSC_VER < 1920
+        #define wxCOMPILER_PREFIX vc141
+    #elif _MSC_VER >= 1920 && _MSC_VER < 1930
+        #define wxCOMPILER_PREFIX vc142
     #else
         #error "Unknown MSVC compiler version, please report to wx-dev."
     #endif
