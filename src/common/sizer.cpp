@@ -968,9 +968,28 @@ wxSize wxSizer::ComputeFittingWindowSize(wxWindow *window)
     return window->ClientToWindowSize(ComputeFittingClientSize(window));
 }
 
+#ifdef __WXGTK3__
+static void FitOnShow(wxShowEvent& event)
+{
+    wxWindow* win = static_cast<wxWindow*>(event.GetEventObject());
+    wxSizer* sizer = win->GetSizer();
+    if (sizer)
+        sizer->Fit(win);
+    win->Unbind(wxEVT_SHOW, FitOnShow);
+}
+#endif
+
 wxSize wxSizer::Fit( wxWindow *window )
 {
     wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
+
+#ifdef __WXGTK3__
+    // GTK3 updates cached style information before showing a TLW,
+    // which may affect best size calculations, so add a handler to
+    // redo the calculations at that time
+    if (!window->IsShown() && window->IsTopLevel())
+        window->Bind(wxEVT_SHOW, FitOnShow);
+#endif
 
     // set client size
     window->SetClientSize(ComputeFittingClientSize(window));
@@ -1009,6 +1028,17 @@ void wxSizer::Layout()
     RepositionChildren(minSize);
 }
 
+#ifdef __WXGTK3__
+static void SetSizeHintsOnShow(wxShowEvent& event)
+{
+    wxWindow* win = static_cast<wxWindow*>(event.GetEventObject());
+    wxSizer* sizer = win->GetSizer();
+    if (sizer)
+        sizer->SetSizeHints(win);
+    win->Unbind(wxEVT_SHOW, SetSizeHintsOnShow);
+}
+#endif
+
 void wxSizer::SetSizeHints( wxWindow *window )
 {
     // Preserve the window's max size hints, but set the
@@ -1019,6 +1049,12 @@ void wxSizer::SetSizeHints( wxWindow *window )
     // (1. ComputeFittingClientSize, 2. SetClientSize). That's because
     // otherwise SetClientSize() could have no effect if there already are
     // size hints in effect that forbid requested client size.
+
+#ifdef __WXGTK3__
+    // see comment in Fit()
+    if (!window->IsShown() && window->IsTopLevel())
+        window->Bind(wxEVT_SHOW, SetSizeHintsOnShow);
+#endif
 
     const wxSize clientSize = ComputeFittingClientSize(window);
 
