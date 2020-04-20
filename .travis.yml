@@ -9,23 +9,24 @@ matrix:
     include:
         - dist: precise
           compiler: gcc
-          env: wxUSE_XVFB=1
-          name: wxGTK Ubuntu 12.04
+          env: wxGTK_VERSION=2 wxUSE_XVFB=1
+          name: wxGTK 2 Ubuntu 12.04
         - dist: trusty
           compiler: gcc
-          name: wxGTK Ubuntu 14.04
+          env: wxGTK_VERSION=3
+          name: wxGTK 3 Ubuntu 14.04
         - dist: trusty
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
-          name: wxGTK UTF-8 Ubuntu 14.04
+          env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
+          name: wxGTK 2 UTF-8 Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxUSE_XVFB=1
           name: wxGTK 3 STL Ubuntu 14.04
         - dist: trusty
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
-          name: wxGTK clang Ubuntu 14.04
+          env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
+          name: wxGTK 2 clang Ubuntu 14.04
         - dist: trusty
           compiler: gcc
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
