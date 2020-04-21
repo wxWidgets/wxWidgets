@@ -10,6 +10,7 @@ skip_commits:
     - docs/
     - interface/
     - misc/
+    - .travis.yml
 
 environment:
   matrix:
