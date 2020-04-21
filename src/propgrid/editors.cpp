@@ -2136,7 +2136,11 @@ int wxPGMultiButton::GenId( int itemid ) const
 
 #if defined(__WXGTK__)
 // Dedicated wxBitmapButton with reduced internal borders
+#if defined( __WXGTK127__ )
+#include "wx/gtk1/private.h"
+#else
 #include "wx/gtk/private.h"
+#endif
 
 class wxPGEditorBitmapButton : public wxBitmapButton
 {
@@ -2149,7 +2153,9 @@ public:
 #if defined(__WXGTK3__)
         GTKApplyCssStyle("*{ padding:0 }");
 #else
+#if !defined( __WXGTK127__ )
         GTKApplyWidgetStyle(true); // To enforce call to DoApplyWidgetStyle()
+#endif
 #endif
     }
 
@@ -2160,8 +2166,10 @@ protected:
     {
         if ( style )
         {
+#if !defined( __WXGTK127__ )
             style->xthickness = 0;
             style->ythickness = 0;
+#endif
         }
         wxBitmapButton::DoApplyWidgetStyle(style);
     }
