@@ -349,7 +349,7 @@ bool wxGenericValidator::TransferToWindow()
         }
         else if (m_pFloat)
         {
-            pControl->SetValue(wxString::Format(wxT("%g"), *m_pFloat));
+            pControl->SetValue(wxString::Format(wxS("%g"), double(*m_pFloat)));
             return true;
         }
         else if (m_pDouble)

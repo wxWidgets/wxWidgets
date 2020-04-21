@@ -141,7 +141,7 @@ wxString GetPenPattern(const wxPen& pen)
     // When the pen width increases, lines become thicker and unrecognizable.
     // Multiplying with 1/3th of the width creates line styles matching the appearance of wxDC.
     // The pen width is not used to modify user provided dash styles.
-    float w = pen.GetWidth();
+    double w = pen.GetWidth();
     if (pen.GetWidth() == 0)
         w = 1;
     w = w / 3;
