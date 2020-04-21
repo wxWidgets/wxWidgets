@@ -4139,16 +4139,15 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
 
     // Switch to the first column with value if the current column has no value
     if ( candidate && !GetModel()->HasValue(item, candidate->GetModelColumn()) )
-       candidate = FindFirstColumnWithValue(item);
-
+        candidate = FindFirstColumnWithValue(item);
 
     if ( !candidate )
-       return NULL;
+        return NULL;
 
-   if ( !IsCellEditableInMode(item, candidate, mode) )
-       return NULL;
+    if ( !IsCellEditableInMode(item, candidate, mode) )
+        return NULL;
 
-   return candidate;
+    return candidate;
 }
 
 bool wxDataViewMainWindow::IsCellEditableInMode(const wxDataViewItem& item,
