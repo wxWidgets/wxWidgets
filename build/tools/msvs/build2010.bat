@@ -1,17 +1,17 @@
+set origin_dir=%cd%
+
 if "%1" == "" goto ERR_NOPARM
 if "%2" == "" goto ERR_NOPARM
 if "%3" == "" goto ERR_NOPARM
 
-cd c:\wxWidgets-%1.%2.%3\build\msw
+cd ..\..\msw
 
 rem ================ VS 2010 Official Build ===============
 rem
-rem Copy this file to the \wxwidgets-x.y.z\build\msw folder
-rem
 rem Open a Windows SDK V7.1 command prompt.
 rem
-rem cd \wxwidgets-x.y.z\build\msw
-rem build2010
+rem cd \wxwidgets\build\tools\msvs
+rem build2010 x y z
 rem
 rem ========================================================
 
@@ -62,4 +62,4 @@ goto End
 
 :End
 
-cd c:\wxWidgets
+cd %origin_dir%

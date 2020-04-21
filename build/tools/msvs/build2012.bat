@@ -1,17 +1,17 @@
+set origin_dir=%cd%
+
 if "%1" == "" goto ERR_NOPARM
 if "%2" == "" goto ERR_NOPARM
 if "%3" == "" goto ERR_NOPARM
 
-cd c:\wxWidgets-%1.%2.%3\build\msw
+cd ..\..\msw
 
 rem ================ VS 2012 Official Build ===============
 rem
-rem Copy this file to the \wxwidgets-x.y.z\build\msw folder
-rem
 rem Open a Visual Studio 2012 Developer command prompt.
 rem
-rem cd \wxwidgets-x.y.z\build\msw
-rem build2012
+rem cd \wxwidgetsz\build\msw
+rem build2012 x y z
 rem
 rem ========================================================
 
@@ -61,4 +61,4 @@ goto End
 
 :End
 
-cd c:\wxWidgets
+cd %origin_dir%
