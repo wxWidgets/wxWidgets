@@ -170,6 +170,9 @@ private:
     enum Lang { Lang_English, Lang_French };
     void FillIndexList(Lang lang);
 
+    // HasValue page.
+    void OnHasValueValueChanged(wxDataViewEvent& event);
+
 
     wxNotebook* m_notebook;
 
@@ -1038,7 +1041,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                 lc->AppendItem( data );
             }
 
-            lc->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &MyFrame::OnListValueChanged, this);
+            lc->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &MyFrame::OnHasValueValueChanged, this);
         }
         break;
     }
@@ -1771,4 +1774,46 @@ void MyFrame::OnIndexListSelectionChanged(wxDataViewEvent& event)
     }
 
     wxLogMessage("Selected week day: %s", weekday);
+}
+
+// ----------------------------------------------------------------------------
+// MyFrame - event handlers for the HasValue (wxDataViewListCtrl) page
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnHasValueValueChanged(wxDataViewEvent& event)
+{
+    // Ignore changes coming from our own SetToggleValue() calls below.
+    if ( m_eventFromProgram )
+    {
+        m_eventFromProgram = false;
+        return;
+    }
+
+    wxDataViewListCtrl* const lc = static_cast<wxDataViewListCtrl*>(m_ctrl[Page_HasValue]);
+
+    const int columnToggle = 1;
+
+    // Handle selecting a radio button by unselecting all the other ones.
+    if ( event.GetColumn() == columnToggle )
+    {
+        const int rowChanged = lc->ItemToRow(event.GetItem());
+        if ( lc->GetToggleValue(rowChanged, columnToggle) )
+        {
+            for ( int row = 0; row < lc->GetItemCount(); ++row )
+            {
+                if ( row != rowChanged )
+                {
+                    m_eventFromProgram = true;
+                    lc->SetToggleValue(false, row, columnToggle);
+                }
+            }
+        }
+        else // The item was cleared.
+        {
+            // Explicitly check it back, we want to always have exactly one
+            // checked radio item in this column.
+            m_eventFromProgram = true;
+            lc->SetToggleValue(true, rowChanged, columnToggle);
+        }
+    }
 }
