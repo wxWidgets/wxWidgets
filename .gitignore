@@ -216,11 +216,9 @@
 /lib/dmc_lib
 /lib/expat*.lib
 /lib/gcc*_dll
-/lib/gcc*_x64_dll
 /lib/gcc_dll32
 /lib/gcc_dll64
 /lib/gcc*_lib
-/lib/gcc*_x64_lib
 /lib/gcc_lib32
 /lib/gcc_lib64
 /lib/jpeg*.lib
@@ -244,10 +242,6 @@
 /lib/univdlld
 /lib/vc*_dll
 /lib/vc*_lib
-/lib/vc*_x64_dll
-/lib/vc*_x64_lib
-/lib/vc*_arm64_dll
-/lib/vc*_arm64_lib
 /lib/wat_lib
 /lib/winmm32_sc.lib
 /lib/wsock32_sc.lib
