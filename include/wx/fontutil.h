@@ -132,18 +132,18 @@ public:
 
     // MSW-specific: get point size from LOGFONT height using specified DPI,
     // or screen DPI when 0.
-    static float GetPointSizeAtPPI(int lfHeight, int ppi = 0);
+    static double GetPointSizeAtPPI(int lfHeight, int ppi = 0);
 
     // MSW-specific: get the height value in pixels using LOGFONT convention
     // (i.e. negative) corresponding to the given size in points and DPI.
-    static int GetLogFontHeightAtPPI(float size, int ppi);
+    static int GetLogFontHeightAtPPI(double size, int ppi);
 
     LOGFONT      lf;
 
     // MSW only has limited support for fractional point sizes and we need to
     // store the fractional point size separately if it was initially specified
     // as we can't losslessly recover it from LOGFONT later.
-    float        pointSize;
+    double       pointSize;
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
@@ -208,7 +208,7 @@ public :
     //
     #define wxNO_NATIVE_FONTINFO
 
-    float         pointSize;
+    double        pointSize;
     wxFontFamily  family;
     wxFontStyle   style;
     int           weight;
@@ -280,7 +280,7 @@ public:
 
     // accessors and modifiers for the font elements
     int GetPointSize() const;
-    float GetFractionalPointSize() const;
+    double GetFractionalPointSize() const;
     wxSize GetPixelSize() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
@@ -292,7 +292,7 @@ public:
     wxFontEncoding GetEncoding() const;
 
     void SetPointSize(int pointsize);
-    void SetFractionalPointSize(float pointsize);
+    void SetFractionalPointSize(double pointsize);
     void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);
@@ -305,7 +305,7 @@ public:
 
     // Helper used in many ports: use the normal font size if the input is
     // negative, as we handle -1 as meaning this for compatibility.
-    void SetSizeOrDefault(float size)
+    void SetSizeOrDefault(double size)
     {
         SetFractionalPointSize
         (

@@ -280,7 +280,7 @@ wxFontMgrFontRefData::GetFontInstance(float scale, bool antialiased) const
                                        antialiased);
 }
 
-void wxFontMgrFontRefData::SetFractionalPointSize(float pointSize)
+void wxFontMgrFontRefData::SetFractionalPointSize(double pointSize)
 {
     m_info.pointSize = pointSize;
     m_fontValid = false;

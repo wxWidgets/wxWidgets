@@ -3383,7 +3383,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     // Determine the pointSize that was used in SetStyle. Don't worry about
     // lfHeight or PPI, style.SetFont() will lose this information anyway.
     wxFont font(wxNativeFontInfo(lf, this));
-    font.SetFractionalPointSize(cf.yHeight / 20.0f); // 1 pt = 20 twips
+    font.SetFractionalPointSize(cf.yHeight / 20.0); // 1 pt = 20 twips
     if (font.IsOk())
     {
         style.SetFont(font);
