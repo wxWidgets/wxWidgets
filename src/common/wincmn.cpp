@@ -1036,22 +1036,22 @@ void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
     // adjust the font height to correspond to our new variant (notice that
     // we're only called if something really changed)
     wxFont font = GetFont();
-    float size = font.GetFractionalPointSize();
+    double size = font.GetFractionalPointSize();
     switch ( variant )
     {
         case wxWINDOW_VARIANT_NORMAL:
             break;
 
         case wxWINDOW_VARIANT_SMALL:
-            size /= 1.2f;
+            size /= 1.2;
             break;
 
         case wxWINDOW_VARIANT_MINI:
-            size /= 1.2f * 1.2f;
+            size /= 1.2 * 1.2;
             break;
 
         case wxWINDOW_VARIANT_LARGE:
-            size *= 1.2f;
+            size *= 1.2;
             break;
 
         default:

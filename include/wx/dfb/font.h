@@ -74,7 +74,7 @@ public:
     bool Create(const wxNativeFontInfo& fontinfo);
 
     // implement base class pure virtuals
-    virtual float GetFractionalPointSize() const;
+    virtual double GetFractionalPointSize() const;
     virtual wxFontStyle GetStyle() const;
     virtual int GetNumericWeight() const;
     virtual wxString GetFaceName() const;
@@ -83,7 +83,7 @@ public:
     virtual bool IsFixedWidth() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
-    virtual void SetFractionalPointSize(float pointSize);
+    virtual void SetFractionalPointSize(double pointSize);
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
     virtual void SetNumericWeight(int weight);

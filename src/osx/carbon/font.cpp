@@ -49,7 +49,7 @@ public:
 
     wxFontRefData(CTFontRef font);
 
-    float GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
+    double GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
 
     wxFontFamily GetFamily() const { return m_info.GetFamily(); }
 
@@ -75,7 +75,7 @@ public:
 
     const wxNativeFontInfo& GetNativeFontInfo() const;
 
-    void SetFractionalPointSize(float size)
+    void SetFractionalPointSize(double size)
     {
         if (GetFractionalPointSize() != size)
         {
@@ -569,7 +569,7 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
     return new wxFontRefData(*static_cast<const wxFontRefData*>(data));
 }
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -626,7 +626,7 @@ void wxFont::SetStrikethrough(bool strikethrough)
 
 // TODO: insert checks everywhere for M_FONTDATA == NULL!
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
 
@@ -1040,7 +1040,7 @@ wxString wxNativeFontInfo::ToString() const
     return s;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_ctSize;
 }
@@ -1087,7 +1087,7 @@ bool wxNativeFontInfo::GetStrikethrough() const
 
 // changing the font descriptor
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     if (GetFractionalPointSize() != pointsize)
     {

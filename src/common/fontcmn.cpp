@@ -44,8 +44,6 @@
 
 #include "wx/tokenzr.h"
 
-#include <float.h>       // for FLT_MAX
-
 // debugger helper: this function can be called from a debugger to show what
 // the date really is
 extern const char *wxDumpFont(const wxFont *font)
@@ -254,7 +252,7 @@ int wxFontBase::GetNumericWeightOf(wxFontWeight weight_)
 
 int wxFontBase::GetPointSize() const
 {
-    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
+    return wxRound(GetFractionalPointSize());
 }
 
 
@@ -279,7 +277,7 @@ bool wxFontBase::IsUsingSizeInPixels() const
 
 void wxFontBase::SetPointSize(int pointSize)
 {
-    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointSize));
+    SetFractionalPointSize(pointSize);
 }
 
 void wxFontBase::SetPixelSize( const wxSize& pixelSize )
@@ -688,7 +686,7 @@ wxFont& wxFont::MakeStrikethrough()
 
 wxFont& wxFont::Scale(float x)
 {
-    SetFractionalPointSize(x*GetFractionalPointSize());
+    SetFractionalPointSize(double(x) * GetFractionalPointSize());
     return *this;
 }
 
@@ -727,12 +725,12 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
+    return wxRound(GetFractionalPointSize());
 }
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
-    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointsize));
+    SetFractionalPointSize(pointsize);
 }
 
 #ifdef wxNO_NATIVE_FONTINFO
@@ -760,9 +758,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToCDouble(&d) )
         return false;
-    if ( d < 0 || d > FLT_MAX )
+    if ( d < 0 )
         return false;
-    pointSize = static_cast<float>(d);
+    pointSize = d;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -839,7 +837,7 @@ void wxNativeFontInfo::Init()
     encoding = wxFONTENCODING_DEFAULT;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return pointSize;
 }
@@ -879,7 +877,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return encoding;
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     pointSize = pointsize;
 }
