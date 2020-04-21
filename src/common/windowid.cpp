@@ -22,9 +22,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/hashmap.h"
-
-// Not needed, included in defs.h
-// #include "wx/windowid.h"
+#include "wx/windowid.h"
 
 namespace
 {
