@@ -214,8 +214,6 @@
 /lib/bcc_lib
 /lib/cdef*.res
 /lib/dmc_lib
-/lib/evc_armv4_lib
-/lib/evc_emulator_lib
 /lib/expat*.lib
 /lib/gcc*_dll
 /lib/gcc*_x64_dll
