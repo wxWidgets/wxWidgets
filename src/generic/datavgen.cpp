@@ -4099,20 +4099,25 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
 
     wxDataViewColumn *candidate = m_currentCol;
 
-    if ( candidate &&
-         !IsCellEditableInMode(item, candidate, mode) &&
-         !m_currentColSetByKeyboard )
+    if ( candidate && !IsCellEditableInMode(item, candidate, mode) )
     {
-        // If current column was set by mouse to something not editable (in
-        // 'mode') and the user pressed Space/F2 to edit it, treat the
-        // situation as if there was whole-row focus, because that's what is
-        // visually indicated and the mouse click could very well be targeted
-        // on the row rather than on an individual cell.
-        //
-        // But if it was done by keyboard, respect that even if the column
-        // isn't editable, because focus is visually on that column and editing
-        // something else would be surprising.
-        candidate = NULL;
+        if ( m_currentColSetByKeyboard )
+        {
+            // If current column was set by keyboard to something not editable (in
+            // 'mode') and the user pressed Space/F2 then do not edit anything
+            // because focus is visually on that column and editing
+            // something else would be surprising.
+            return NULL;
+        }
+        else
+        {
+            // But if the current column was set by mouse to something not editable (in
+            // 'mode') and the user pressed Space/F2 to edit it, treat the
+            // situation as if there was whole-row focus, because that's what is
+            // visually indicated and the mouse click could very well be targeted
+            // on the row rather than on an individual cell.
+            candidate = NULL;
+        }
     }
 
     if ( !candidate )
@@ -4134,7 +4139,8 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
 
     // Switch to the first column with value if the current column has no value
     if ( candidate && !GetModel()->HasValue(item, candidate->GetModelColumn()) )
-        candidate = FindFirstColumnWithValue(item);
+       candidate = FindFirstColumnWithValue(item);
+
 
     if ( !candidate )
        return NULL;
