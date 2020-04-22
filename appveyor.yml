@@ -11,6 +11,8 @@ skip_commits:
     - interface/
     - misc/
     - .travis.yml
+    - build/tools/travis-ci.sh
+    - build/tools/before_install.sh
 
 environment:
   matrix:
