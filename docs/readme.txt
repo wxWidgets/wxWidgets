@@ -41,29 +41,31 @@ The full list of changes in this release is available at
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.5/docs/changes.txt
 
-(starting from the line 583, or search for "3.0.4" in this file), here are
+(starting from the line 583, or search for "3.0.5" in this file), here are
 some selected ones:
 
 * In all ports:
- - Support requestion modern (3.x+) OpenGL version in wxGLCanvas.
- - Fix using wxHTTP and wxFTP from worker thread.
+- Support nullptr in wxPrintf() and other pseudo-vararg functions.
+- Fix problem with wx-config installation and use under NetBSD (wiz).
+- Avoid spurious errors on thread creation under NetBSD.
+- Improve stock items consistency and aesthetics (dhowland).
+- Implement wxTextCtrl::HitTest() for single line controls.
+- Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 
 * In wxGTK:
- - Support for Gstreamer 1.0 in wxMediaCtrl, in addition to obsolete 0.x.
- - Several fatal bug fixes for GTK+ 3.
+- Fix position of popup menus shown in wxListCtrl.
+- Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
+- Potentially incompatible change: wxDataViewModel::Cleared() now works as
+  documented cross-platform.  Previously on wxGTK it just emptied the model
+  rather than triggering a reload of the model.  If you are working around the
+  broken behaviour with wxGTK-specific code in your application you should
+  check that your application works correctly with this change.
+- Return appropriate values for some previously hard-coded system colours.
 
 * In wxMSW:
- - Build fixes for MinGW 4.9.
- - Improve wxSearchCtrl appearance.
- - Fix creating or modifying file associations under recent Windows versions.
-
-* In wxOSX:
- - Build fixes for wxWebView and wxMediaCtrl when using 10.10 or later SDK.
- - Implement wxTE_{RIGHT,CENTER} support in multiline wxTextCtrl.
- - Generate wxEVT_TEXT_ENTER for wxTE_PASSWORD controls.
- - Fix handling of WXK_NUMPAD_ENTER.
- - Fix length of text in wxTextDataObject.
- - Fix wxDatePickerCtrl appearance.
+- Fix handling of AUX2 mouse button events (Trylz).
+- Honour alignment flags for multiline buttons using custom colours too.
+- Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
 
 
 If you are upgrading from wxWidgets 2.8 or earlier, please read the

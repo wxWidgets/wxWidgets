@@ -1,8 +1,8 @@
-March 8, 2018 -- The wxWidgets team is pleased to announce a
+April 27, 2020 -- The wxWidgets team is pleased to announce a
 major new release of our open source framework for the development
 of native cross-platform applications in C++.
 
-wxWidgets 3.0.4 is a stable bug fix release in 3.0 branch and is
+wxWidgets 3.0.5 is a stable bug fix release in 3.0 branch and is
 available at
 
 	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.4/
@@ -29,24 +29,31 @@ The full list of changes in this release is available at
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.4/docs/changes.txt
 
-(starting from the line 583, or search for "3.0.4" in this file), here are
+(starting from the line 583, or search for "3.0.5" in this file), here are
 some selected ones:
 
 * In all ports:
- - Fix various problems when parsing invalid ZIP files.
- - Update selection in wxAuiNotebook correctly after tab move.
+- Support nullptr in wxPrintf() and other pseudo-vararg functions.
+- Fix problem with wx-config installation and use under NetBSD (wiz).
+- Avoid spurious errors on thread creation under NetBSD.
+- Improve stock items consistency and aesthetics (dhowland).
+- Implement wxTextCtrl::HitTest() for single line controls.
+- Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 
 * In wxGTK:
- - Allow using more recent WebKit2GTK+ in wxWebView (Scott Talbert).
- - Fix keyboard navigation for controls which are initially disabled.
+- Fix position of popup menus shown in wxListCtrl.
+- Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
+- Potentially incompatible change: wxDataViewModel::Cleared() now works as
+  documented cross-platform.  Previously on wxGTK it just emptied the model
+  rather than triggering a reload of the model.  If you are working around the
+  broken behaviour with wxGTK-specific code in your application you should
+  check that your application works correctly with this change.
+- Return appropriate values for some previously hard-coded system colours.
 
 * In wxMSW:
- - Fix BSTR memory leaks in wxMediaCtrl and wxWebView (PB).
-
-* In wxOSX:
- - Fix build with 10.13 (High Sierra) SDK (François-Xavier Coudert).
- - Fix removing tools from wxToolBar.
- - Fix crash when switching between monitors.
+- Fix handling of AUX2 mouse button events (Trylz).
+- Honour alignment flags for multiline buttons using custom colours too.
+- Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
 
 
 If you are upgrading from wxWidgets 2.8 or earlier, please read the
@@ -57,7 +64,7 @@ corresponding part of the manual at
 
 
 
-We recommend that you upgrade to wxWidgets 3.0.4 if you already use an
+We recommend that you upgrade to wxWidgets 3.0.5 if you already use an
 earlier wxWidgets 3.0.x release, the upgrade is completely transparent
 and doesn't require any changes in the existing code. If you are still
 using wxWidgets 2.8 or earlier, please consider updating to wxWidgets
