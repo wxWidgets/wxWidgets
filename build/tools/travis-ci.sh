@@ -70,7 +70,7 @@ case $wxTOOLSET in
 
         echo 'Building tests...' && echo -en 'travis_fold:start:script.tests\\r'
         [ "$wxSKIP_GUI" = 1 ] || make -C tests $wxJOBS failtest
-        make -C tests $wxJOBS
+        make -C tests $wxJOBS $wxMAKEFILE_FLAGS
         echo -en 'travis_fold:end:script.tests\\r'
 
         echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
