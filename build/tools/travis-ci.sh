@@ -54,7 +54,7 @@ case $wxTOOLSET in
         ;;
     *)
         echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
-        ./configure --disable-optimise $wxCONFIGURE_FLAGS
+        ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS
         echo -en 'travis_fold:end:script.configure\\r'
 
         echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
