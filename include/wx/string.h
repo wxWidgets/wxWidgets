@@ -2027,7 +2027,7 @@ public:
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a float into string
   wxString& operator<<(float f)
-    { return *this << static_cast<double>(f); }
+    { return *this << Format(wxS("%f"), static_cast<double>(f)); }
       // insert a double into string
   wxString& operator<<(double d)
     { return (*this) << Format(wxT("%g"), d); }
