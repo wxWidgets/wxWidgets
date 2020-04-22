@@ -43,7 +43,7 @@ matrix:
           name: wxOSX Xcode 9.4
         - os: osx
           osx_image: xcode11.3
-          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --enable-stl"
+          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --with-macosx-version-min=10.12 --enable-stl"
           name: wxOSX Xcode 11.3
         - dist: bionic
           compiler: gcc
