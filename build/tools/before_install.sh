@@ -18,7 +18,7 @@ case $(uname -s) in
             case "$wxCONFIGURE_FLAGS" in
                 *--with-directfb*) libtoolkit_dev='libdirectfb-dev'         ;;
                 *--with-motif*)    libtoolkit_dev='libmotif-dev libxmu-dev' ;;
-                *--with-qt*)       libtoolkit_dev='qtdeclarative5-dev'      ;;
+                *--with-qt*)       libtoolkit_dev='qtdeclarative5-dev libqt5opengl5-dev';;
             esac
 
             pgk_check="libgstreamermm-1.0-dev libgstreamermm-0.10-dev \
