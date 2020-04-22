@@ -16,6 +16,7 @@ case $(uname -s) in
                 *--with-motif*)    libtoolkit_dev='libmotif-dev libxmu-dev' ;;
                 *--with-qt*)       libtoolkit_dev='qtdeclarative5-dev libqt5opengl5-dev';;
                 *--with-x11*)      extra_deps='libpango1.0-dev' ;;
+                *--disable-gui*)   ;;
                 *)
                     case "$wxGTK_VERSION" in
                         3)  libtoolkit_dev=libgtk-3-dev
