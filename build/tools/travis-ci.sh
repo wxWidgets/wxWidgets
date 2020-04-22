@@ -55,7 +55,7 @@ case $wxTOOLSET in
     *)
         echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
         ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
-        if [ $rc != 0 ]; then
+        if [ "$rc" != 0 ]; then
             echo '*** Configuring failed, contents of config.log follows: ***'
             echo '-----------------------------------------------------------'
             cat config.log
