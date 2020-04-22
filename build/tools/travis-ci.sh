@@ -69,13 +69,18 @@ case $wxTOOLSET in
         echo -en 'travis_fold:end:script.build\\r'
 
         echo 'Building tests...' && echo -en 'travis_fold:start:script.tests\\r'
-        make -C tests $wxJOBS failtest
+        [ "$wxSKIP_GUI" = 1 ] || make -C tests $wxJOBS failtest
         make -C tests $wxJOBS
         echo -en 'travis_fold:end:script.tests\\r'
 
         echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
         pushd tests && ./test && popd
         echo -en 'travis_fold:end:script.testing\\r'
+
+        if [ "$wxSKIP_GUI" = 1 ]; then
+            echo 'Skipping the rest of tests for non-GUI build.'
+            exit 0
+        fi
 
         if [ "$wxUSE_XVFB" = 1 ]; then
             echo 'Testing GUI using Xvfb...' && echo -en 'travis_fold:start:script.testing_gui\\r'
