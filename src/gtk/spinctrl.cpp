@@ -284,11 +284,10 @@ void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
 
     wxSpinCtrlEventDisabler disable(this);
 
-    // Preserve the old page value when changing just the increment.
-    double page = 10*inc;
-    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), NULL, &page);
-
-    gtk_spin_button_set_increments( GTK_SPIN_BUTTON(m_widget), inc, page);
+    // With GTK2, gtk_spin_button_set_increments() does not emit the GtkAdjustment
+    // "changed" signal, which is needed to properly update the state of the control
+    GtkAdjustment* adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(m_widget));
+    gtk_adjustment_set_step_increment(adj, inc);
 }
 
 void wxSpinCtrlGTKBase::GtkDisableEvents()
