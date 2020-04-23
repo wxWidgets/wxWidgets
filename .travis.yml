@@ -7,30 +7,30 @@ sudo: required
 
 matrix:
     include:
-        - dist: precise
+        - dist: trusty
           compiler: gcc
           env: wxGTK_VERSION=2 wxUSE_XVFB=1
-          name: wxGTK 2 Ubuntu 12.04
-        - dist: trusty
+          name: wxGTK 2 Ubuntu 14.04
+        - dist: xenial
           compiler: gcc
           env: wxGTK_VERSION=3
-          name: wxGTK 3 Ubuntu 14.04
-        - dist: trusty
+          name: wxGTK 3 Ubuntu 16.04
+        - dist: bionic
           compiler: gcc
           env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
-          name: wxGTK 2 UTF-8 Ubuntu 14.04
-        - dist: trusty
+          name: wxGTK 2 UTF-8 Ubuntu 18.04
+        - dist: bionic
           compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxUSE_XVFB=1
-          name: wxGTK 3 STL Ubuntu 14.04
-        - dist: trusty
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11 LDFLAGS=-Wl,--no-as-needed" wxUSE_XVFB=1
+          name: wxGTK 3 STL Ubuntu 18.04
+        - dist: bionic
           compiler: clang
           env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
-          name: wxGTK 2 clang Ubuntu 14.04
-        - dist: trusty
+          name: wxGTK 2 clang Ubuntu 18.04
+        - dist: bionic
           compiler: gcc
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
-          name: wxGTK CMake Ubuntu 14.04
+          name: wxGTK CMake Ubuntu 18.04
         - os: osx
           osx_image: xcode6.4
           compiler: clang
@@ -40,34 +40,38 @@ matrix:
           osx_image: xcode9.4
           compiler: clang
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_CXX_STANDARD=11"
-          name: wxOSX Xcode 9.4
-        - dist: trusty
+          name: wxOSX CMake Xcode 9.4
+        - os: osx
+          osx_image: xcode11.3
+          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --with-macosx-version-min=10.12 --enable-stl"
+          name: wxOSX Xcode 11.3
+        - dist: bionic
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-x11 --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-          name: wxX11 Ubuntu 14.04
-        - dist: trusty
+          name: wxX11 Ubuntu 18.04
+        - dist: bionic
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-          name: wxDFB Ubuntu 14.04
-        - dist: trusty
+          name: wxDFB Ubuntu 18.04
+        - dist: bionic
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-motif --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-          name: wxMotif Ubuntu 14.04
-        - dist: trusty
+          name: wxMotif Ubuntu 18.04
+        - dist: bionic
           compiler: gcc
           env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
-          name: wxQt Ubuntu 14.04
+          name: wxQt Ubuntu 18.04
         - os: linux
           arch: arm64
           env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
           name: wxGTK ARM64
         - os: linux
           arch: ppc64le
-          env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
           name: wxGTK PowerPC64
         - os: linux
           arch: s390x
-          env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
           name: wxGTK S/390
 
 branches:
