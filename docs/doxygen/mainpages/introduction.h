@@ -111,13 +111,12 @@ configurations but at least 1GB and possibly more is required.
 
 @section page_introduction_where Where to get wxWidgets and support for it
 
-The download links can be found at https://www.wxwidgets.org. The primary
-download location is https://github.com/wxWidgets/wxWidgets/releases/latest.
+The download links can be found at https://www.wxwidgets.org/downloads/.
 Additionally, the latest version can always be retrieved from our version
 control system using Git (https://github.com/wxWidgets/wxWidgets).
 
-wxWidgets documentation that you are reading is also available online at
-https://docs.wxwidgets.org/trunk/ and please also visit our wiki at
+The latest version of wxWidgets documentation that you are reading is available
+online at https://docs.wxwidgets.org/trunk/ and please also see
 https://wiki.wxwidgets.org/ for user-contributed contents.
 
 And if you have any questions, you can join wxWidgets community using

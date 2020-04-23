@@ -5,7 +5,7 @@ cross-platform applications in C++.
 wxWidgets 3.1.3 is the latest release in the 3.1 development
 branch and is now available at
 
-    https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.3
+    https://www.wxwidgets.org/downloads/
 
 Compared to the stable 3.0.x series, this version brings many
 improvements and even more bug fixes, please see the change log
