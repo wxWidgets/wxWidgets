@@ -5,7 +5,7 @@ of native cross-platform applications in C++.
 wxWidgets 3.0.5 is a stable bug fix release in 3.0 branch and is
 available at
 
-	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.4/
+	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.5/
 
 Please choose the archive format suitable for your platform, i.e. 7z
 or ZIP for Windows platforms and tar.bz2 for the Unix systems
@@ -22,12 +22,12 @@ selected compilers.
 This is a bug fix release with no significant new features compared to
 the previous 3.0.x releases and compatible with them at both the API
 and the ABI level (i.e. all applications linked against earlier 3.0.x
-DLLs or shared libraries will continue to work when using 3.0.4
+DLLs or shared libraries will continue to work when using 3.0.5
 libraries).
 
 The full list of changes in this release is available at
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.4/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.5/docs/changes.txt
 
 (starting from the line 583, or search for "3.0.5" in this file), here are
 some selected ones:
@@ -60,7 +60,7 @@ If you are upgrading from wxWidgets 2.8 or earlier, please read the
 "INCOMPATIBLE CHANGES" section in the beginning of this file and the
 corresponding part of the manual at
 
-    http://docs.wxwidgets.org/3.0.4/overview_changes_since28.html
+    http://docs.wxwidgets.org/3.0.5/overview_changes_since28.html
 
 
 
