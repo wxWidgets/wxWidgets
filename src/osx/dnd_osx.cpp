@@ -36,8 +36,31 @@ wxDragResult wxDropTarget::OnDragOver(
 
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
-    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/osx/dnd_osx.cpp");
-    return wxDF_INVALID;
+    if (m_dataObject == NULL)
+        return wxDataFormat(wxDF_INVALID);
+
+    if (wxDropSource* currentSource = wxDropSource::GetCurrentDropSource())
+    {
+        wxDataObject* data = currentSource->GetDataObject();
+
+        if (data)
+        {
+            size_t formatcount = data->GetFormatCount();
+            wxScopedArray<wxDataFormat> array(formatcount);
+            data->GetAllFormats(array.get());
+            for (size_t i = 0; i < formatcount; i++)
+            {
+                wxDataFormat format = array[i];
+                if (m_dataObject->IsSupported(format, wxDataObject::Set))
+                {
+                    return format;
+                }
+            }
+        }
+    }
+    // TODO: m_currentDragPasteboard
+
+    return wxDataFormat(wxDF_INVALID);
 }
 
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
