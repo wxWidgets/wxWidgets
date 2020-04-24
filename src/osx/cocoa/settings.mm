@@ -163,8 +163,15 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowBackgroundColor];
         break;
     case wxSYS_COLOUR_HOTLIGHT:
-        // OSX doesn't change color on mouse hover
-        sysColor = [NSColor controlTextColor];
+        if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+        {
+            sysColor = [NSColor linkColor];
+        }
+        else
+        {
+            // OSX doesn't change color on mouse hover
+            sysColor = [NSColor controlTextColor];
+        }
         break;
     case wxSYS_COLOUR_MENUHILIGHT:
         sysColor = [NSColor selectedMenuItemColor];
