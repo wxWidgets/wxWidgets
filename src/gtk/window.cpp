@@ -1695,7 +1695,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
-        (gs_currentFocus != win) /* && win->IsFocusable() */)
+        (gs_currentFocus != win) && win->IsFocusable())
     {
         win->SetFocus();
     }
@@ -5605,19 +5605,18 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 
         if (isFg || isBg)
         {
+            const bool isGTK3_20 = wx_is_at_least_gtk3(20);
             // Selection may be invisible, so add textview selection colors.
             // This is specifically for wxTextCtrl, but may be useful for other
             // controls, and seems to do no harm to apply to all.
             const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
             const wxColour bg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-            const char* s = "*:selected";
-            if (gtk_check_version(3,20,0) == NULL)
-                s = "selection";
-            g_string_append_printf(css, "%s{color:%s;background:%s}", s,
+            g_string_append_printf(css, "%s{color:%s;background:%s}",
+                isGTK3_20 ? "selection" : "*:selected",
                 wxGtkString(gdk_rgba_to_string(fg_sel)).c_str(),
                 wxGtkString(gdk_rgba_to_string(bg_sel)).c_str());
 
-            if (isFg)
+            if (isFg && isGTK3_20)
             {
                 g_string_append_printf(css, "*{caret-color:%s}",
                     wxGtkString(gdk_rgba_to_string(fg)).c_str());

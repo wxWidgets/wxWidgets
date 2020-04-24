@@ -458,10 +458,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject);
 
 wxClipboard::wxClipboard()
 {
-#if wxUSE_OLE_CLIPBOARD
-    wxOleInitialize();
-#endif
-
     m_lastDataObject = NULL;
     m_isOpened = false;
 }
@@ -472,10 +468,6 @@ wxClipboard::~wxClipboard()
     {
         Clear();
     }
-
-#if wxUSE_OLE_CLIPBOARD
-    wxOleUninitialize();
-#endif
 }
 
 void wxClipboard::Clear()

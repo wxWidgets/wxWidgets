@@ -3104,9 +3104,9 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
     hr = familyNames->GetString(0, name, length+1);
     wxCHECK_HRESULT_RET(hr);
 
-    FLOAT fontSize = (FLOAT)(!dpi.y
-        ? font.GetPixelSize().GetHeight()
-        : (font.GetFractionalPointSize() * dpi.y / 72.0f));
+    FLOAT fontSize = !dpi.y
+        ? FLOAT(font.GetPixelSize().GetHeight())
+        : FLOAT(font.GetFractionalPointSize()) * dpi.y / 72.0f;
 
     hr = wxDWriteFactory()->CreateTextFormat(
         name,
@@ -5247,14 +5247,14 @@ class wxDirect2DModule : public wxModule
 public:
     wxDirect2DModule()
     {
+        // Using Direct2D requires OLE and, importantly, we must ensure our
+        // OnExit() runs before it is uninitialized.
+        AddDependency("wxOleInitModule");
     }
 
     virtual bool OnInit() wxOVERRIDE
     {
-        HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-        // RPC_E_CHANGED_MODE is not considered as an error
-        // - see remarks for wxOleInitialize().
-        return SUCCEEDED(hr) || hr == RPC_E_CHANGED_MODE;
+        return true;
     }
 
     virtual void OnExit() wxOVERRIDE
@@ -5289,8 +5289,6 @@ public:
             gs_ID2D1Factory->Release();
             gs_ID2D1Factory = NULL;
         }
-
-        ::CoUninitialize();
     }
 
 private:

@@ -78,7 +78,8 @@ WXPNG_CFLAGS = /M$(__RUNTIME_LIBS_40)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\zlib $(CPPFLAGS) $(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\zlib /DPNG_INTEL_SSE $(CPPFLAGS) \
+	$(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.obj \
 	$(OBJS)\wxpng_pngerror.obj \
@@ -94,7 +95,12 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngwio.obj \
 	$(OBJS)\wxpng_pngwrite.obj \
 	$(OBJS)\wxpng_pngwtran.obj \
-	$(OBJS)\wxpng_pngwutil.obj
+	$(OBJS)\wxpng_pngwutil.obj \
+	$(OBJS)\wxpng_arm_init.obj \
+	$(OBJS)\wxpng_filter_neon_intrinsics.obj \
+	$(OBJS)\wxpng_palette_neon_intrinsics.obj \
+	$(OBJS)\wxpng_intel_init.obj \
+	$(OBJS)\wxpng_filter_sse2_intrinsics.obj
 WXJPEG_CFLAGS = /M$(__RUNTIME_LIBS_55)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
@@ -6651,6 +6657,21 @@ $(OBJS)\wxpng_pngwtran.obj: ..\..\src\png\pngwtran.c
 
 $(OBJS)\wxpng_pngwutil.obj: ..\..\src\png\pngwutil.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\pngwutil.c
+
+$(OBJS)\wxpng_arm_init.obj: ..\..\src\png\arm\arm_init.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\arm\arm_init.c
+
+$(OBJS)\wxpng_filter_neon_intrinsics.obj: ..\..\src\png\arm\filter_neon_intrinsics.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\arm\filter_neon_intrinsics.c
+
+$(OBJS)\wxpng_palette_neon_intrinsics.obj: ..\..\src\png\arm\palette_neon_intrinsics.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\arm\palette_neon_intrinsics.c
+
+$(OBJS)\wxpng_intel_init.obj: ..\..\src\png\intel\intel_init.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\intel\intel_init.c
+
+$(OBJS)\wxpng_filter_sse2_intrinsics.obj: ..\..\src\png\intel\filter_sse2_intrinsics.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\intel\filter_sse2_intrinsics.c
 
 $(OBJS)\wxjpeg_jaricom.obj: ..\..\src\jpeg\jaricom.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jaricom.c

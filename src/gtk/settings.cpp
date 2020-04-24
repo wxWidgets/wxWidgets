@@ -748,8 +748,20 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
-            // TODO
-            color = *wxBLACK;
+            {
+                GdkColor c = { 0, 0, 0, 0xeeee };
+                if (gtk_check_version(2,10,0) == NULL)
+                {
+                    GdkColor* linkColor = NULL;
+                    gtk_widget_style_get(ButtonWidget(), "link-color", &linkColor, NULL);
+                    if (linkColor)
+                    {
+                        c = *linkColor;
+                        gdk_color_free(linkColor);
+                    }
+                }
+                color = wxColour(c);
+            }
             break;
 
         case wxSYS_COLOUR_MAX:

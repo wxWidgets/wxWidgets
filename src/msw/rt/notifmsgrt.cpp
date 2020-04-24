@@ -463,6 +463,9 @@ class wxToastNotifMsgModule : public wxModule
 public:
     wxToastNotifMsgModule()
     {
+        // Using RT API requires OLE and, importantly, we must ensure our
+        // OnExit() runs before it is uninitialized.
+        AddDependency("wxOleInitModule");
     }
 
     virtual bool OnInit() wxOVERRIDE

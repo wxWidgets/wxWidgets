@@ -2191,9 +2191,9 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
     wxASSERT_MSG(value.IsType(wxS("string")), "Function called for incompatible property");
 
-    wxString strVal = value.GetString();
-    wxFileName filename = strVal;
+    wxFileName filename(value.GetString());
     wxString path = filename.GetPath();
+    wxString file = filename.GetFullName();
 
     if ( path.empty() && !m_basePath.empty() )
         path = m_basePath;
@@ -2201,7 +2201,7 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
     wxFileDialog dlg(pg->GetPanel(),
         m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
-        strVal,
+        file,
         m_wildcard.empty() ? wxALL_FILES : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);

@@ -10,6 +10,11 @@ skip_commits:
     - docs/
     - interface/
     - misc/
+    - include/wx/osx/
+    - src/osx/
+    - .travis.yml
+    - build/tools/travis-ci.sh
+    - build/tools/before_install.sh
 
 environment:
   matrix:

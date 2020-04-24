@@ -847,7 +847,8 @@ MyFrame::MyFrame(wxWindow* parent,
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
     tb4->SetToolSticky(ID_SampleItem+23, true);
-    tb4->AddTool(ID_SampleItem+24, "Item 3", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+24, "Disabled", tb4_bmp1);
+    tb4->EnableTool(ID_SampleItem+24, false); // Just to show disabled items look
     tb4->AddTool(ID_SampleItem+25, "Item 4", tb4_bmp1);
     tb4->AddSeparator();
     tb4->AddTool(ID_SampleItem+26, "Item 5", tb4_bmp1);

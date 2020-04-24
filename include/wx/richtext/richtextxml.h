@@ -51,7 +51,7 @@ public:
 
     static wxString MakeString(const int& v) { return wxString::Format(wxT("%d"), v); }
     static wxString MakeString(const long& v) { return wxString::Format(wxT("%ld"), v); }
-    static wxString MakeString(const double& v) { return wxString::Format(wxT("%.2f"), (float) v); }
+    static wxString MakeString(const double& v) { return wxString::Format(wxS("%.2f"), v); }
     static wxString MakeString(const wxString& s) { return s; }
     static wxString MakeString(const wxColour& col) { return wxT("#") + ColourToHexString(col); }
 
@@ -101,7 +101,7 @@ public:
 
     static void AddString(wxString& str, const int& v) { str << wxString::Format(wxT("%d"), v); }
     static void AddString(wxString& str, const long& v) { str << wxString::Format(wxT("%ld"), v); }
-    static void AddString(wxString& str, const double& v) { str << wxString::Format(wxT("%.2f"), (float) v); }
+    static void AddString(wxString& str, const double& v) { str << wxString::Format(wxS("%.2f"), v); }
     static void AddString(wxString& str, const wxChar* s) { str << s; }
     static void AddString(wxString& str, const wxString& s) { str << s; }
     static void AddString(wxString& str, const wxColour& col) { str << wxT("#") << ColourToHexString(col); }

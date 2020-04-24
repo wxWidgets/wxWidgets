@@ -290,7 +290,7 @@ public:
     This backend is not enabled by default, to build it follow these steps:
     - Visual Studio 2015, or newer, is required
     - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
-      nuget package (Version 0.9.430 or newer)
+      nuget package (Version 0.9.488 or newer)
     - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
       (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
       file after unpacking it)

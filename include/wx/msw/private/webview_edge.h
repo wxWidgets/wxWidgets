@@ -31,7 +31,7 @@ public:
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2> m_webView;
-    wxCOMPtr<ICoreWebView2Host> m_webViewHost;
+    wxCOMPtr<ICoreWebView2Controller> m_webViewController;
 
     bool m_initialized;
     bool m_isBusy;
@@ -52,7 +52,7 @@ public:
     HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
-    HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Host* webViewHost);
+    HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
 
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;

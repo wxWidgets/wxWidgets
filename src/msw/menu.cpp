@@ -452,6 +452,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     mii.fState = MFS_CHECKED;
                 }
 
+                if ( flags & MF_MENUBREAK )
+                {
+                    mii.fMask |= MIIM_FTYPE;
+                    mii.fType = MFT_MENUBREAK;
+                }
+
                 mii.dwItemData = reinterpret_cast<ULONG_PTR>(pItem);
 
                 ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */, &mii);

@@ -34,8 +34,6 @@ public:
 
     virtual ~wxMenu();
 
-    virtual void Break() wxOVERRIDE;
-
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
     bool ProcessCommand(wxCommandEvent& event);

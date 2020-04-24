@@ -800,14 +800,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                 rect.y + 1);
 
     int renderFlags = wxPGCellRenderer::DontUseCellColours;
-    bool useCustomPaintProcedure;
 
     // If custom image had some size, we will start from the assumption
     // that custom paint procedure is required
-    if ( cis.x > 0 )
-        useCustomPaintProcedure = true;
-    else
-        useCustomPaintProcedure = false;
+    bool useCustomPaintProcedure =  cis.x > 0;
 
     if ( flags & wxODCB_PAINTING_SELECTED )
         renderFlags |= wxPGCellRenderer::Selected;
@@ -2140,7 +2136,11 @@ int wxPGMultiButton::GenId( int itemid ) const
 
 #if defined(__WXGTK__)
 // Dedicated wxBitmapButton with reduced internal borders
+#if defined( __WXGTK127__ )
+#include "wx/gtk1/private.h"
+#else
 #include "wx/gtk/private.h"
+#endif
 
 class wxPGEditorBitmapButton : public wxBitmapButton
 {
@@ -2153,7 +2153,9 @@ public:
 #if defined(__WXGTK3__)
         GTKApplyCssStyle("*{ padding:0 }");
 #else
+#if !defined( __WXGTK127__ )
         GTKApplyWidgetStyle(true); // To enforce call to DoApplyWidgetStyle()
+#endif
 #endif
     }
 
@@ -2164,8 +2166,10 @@ protected:
     {
         if ( style )
         {
+#if !defined( __WXGTK127__ )
             style->xthickness = 0;
             style->ythickness = 0;
+#endif
         }
         wxBitmapButton::DoApplyWidgetStyle(style);
     }

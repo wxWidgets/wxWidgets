@@ -143,10 +143,12 @@ protected:
 
 #elif defined(__WXGTK__)
 
-// Avoid a bunch of warnings from gtk.h for some GTK+ 3 versions.
+// Avoid a bunch of warnings from gtk.h for some GTK+ versions.
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 wxGCC_WARNING_SUPPRESS(parentheses)
 #include <gtk/gtk.h>
 wxGCC_WARNING_RESTORE(parentheses)
+wxGCC_WARNING_RESTORE(deprecated-declarations)
 
 class NativeWindow : public wxNativeWindow
 {

@@ -427,7 +427,13 @@
         <cppflags cond="FORMAT=='autoconf'">$(WX_CPPFLAGS)</cppflags>
         <cflags cond="FORMAT=='autoconf'">$(WX_CFLAGS)</cflags>
         <cxxflags cond="FORMAT=='autoconf'">$(WX_CXXFLAGS)</cxxflags>
-        <ldflags cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldflags>
+        <!--
+            Surprisingly, WX_LDFLAGS doesn't go into ldflags, but into ldlibs,
+            because we need it to come after <lib-path> contents, which is
+            appended to ldflags, because we want to link with wx libraries in
+            the LIBDIRNAME and not any wx libraries installed system-wide.
+        -->
+        <ldlibs cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldlibs>
         <res-define>$(WIN32_DPI_MANIFEST)</res-define>
         <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
         <if cond="FORMAT=='msvc'">
