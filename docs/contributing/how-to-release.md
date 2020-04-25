@@ -123,7 +123,39 @@ Attach the following files to it:
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z
 
-Create https://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
+## Update documentation
+
+This requires being able to ssh to docs.wxwidgets.org, please ask Bryan if you
+think you should be able to do it, but can't.
+
+Once logged in, run `~/update-trunk-docs.sh` script to update files in
+`public_html/trunk` directory, copy its contents to `public_html/x.y.z`, switch
+any links, such as `3.1` to point to `x.y.z` by doing
+
+    $ cd ~/public_html
+    $ ln -sfn 3.y.z 3.y
+
+and edit `~/public_html/index.md` to add the link to the new release to it.
+
+If the docs must be generated from the tag itself, and not from master, note
+that you need to apply the special commit which is always the tip of master
+branch in `~/wxWidgets` git repository on this machine.
+
+E.g. to create documentation for `v3.0.z` release:
+
+    $ cd ~/wxWidgets
+    $ git fetch --tags
+    $ git checkout -b my-tmp-branch v3.0.z
+    $ git cherry-pick master
+    $ vi docs/doxygen/Doxyfile
+    ... edit HTML_OUTPUT to create files in ~/public_html/3.0.z
+    $ cd docs/doxygen
+    $ PATH="$HOME/doxygen/bin:$PATH" WX_SKIP_DOXYGEN_VERSION_CHECK=1 nice -n 15 ./regen.sh php
+
+    # Cleanup
+    $ git reset --hard master
+    $ git checkout master
+    $ git branch -d my-tmp-branch
 
 ## Announcement
 
