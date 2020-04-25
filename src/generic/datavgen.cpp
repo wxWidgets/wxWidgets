@@ -2264,10 +2264,13 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x,
         return wxDragNone;
     }
 
-    if (nextDropItemInfo.m_hint != 0)
+    if (nextDropItemInfo.m_hint != DropHint_None)
     {
-        if (m_dropItemInfo.m_hint != nextDropItemInfo.m_hint || m_dropItemInfo.m_row != nextDropItemInfo.m_row)
+        if (m_dropItemInfo.m_hint != nextDropItemInfo.m_hint ||
+            m_dropItemInfo.m_row != nextDropItemInfo.m_row)
+        {
             RefreshDropHint();   // refresh previous rows
+        }
 
         m_dropItemInfo.m_hint   = nextDropItemInfo.m_hint;
         m_dropItemInfo.m_row    = nextDropItemInfo.m_row;
