@@ -385,8 +385,8 @@ class wxDirect2DFontFileEnumerator : public IDWriteFontFileEnumerator
 public:
     wxDirect2DFontFileEnumerator(IDWriteFactory* pFactory, const wxArrayString& fontCollection)
         : m_factory(pFactory)
-        , m_nextIndex(0)
         , m_filePaths(fontCollection)
+        , m_nextIndex(0)
     {
     }
 
