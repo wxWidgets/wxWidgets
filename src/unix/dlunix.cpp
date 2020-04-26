@@ -120,8 +120,8 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 
 #if defined(USE_POSIX_DL_FUNCS) && defined(HAVE_DLERROR)
     if ( rc != 0 )
-        Error();
 #endif
+        ReportError(_("Failed to unload shared library"));
 }
 
 /* static */
@@ -145,20 +145,27 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 // error handling
 // ----------------------------------------------------------------------------
 
-#ifdef HAVE_DLERROR
-
 /* static */
-void wxDynamicLibrary::Error()
+void wxDynamicLibrary::ReportError(const wxString& message,
+                                   const wxString& name)
 {
+    wxString msg(message);
+    if ( name.IsEmpty() && msg.Find("%s") == wxNOT_FOUND )
+        msg += "%s";
+    // msg needs a %s for the name
+    wxASSERT(msg.Find("%s") != wxNOT_FOUND);
+#ifdef HAVE_DLERROR
     wxString err(dlerror());
 
     if ( err.empty() )
         err = _("Unknown dynamic library error");
 
-    wxLogError(wxT("%s"), err);
+    wxLogError(msg + wxT(": %s"), name, err);
+#else // !HAVE_DLERROR
+    wxLogSysError(msg, name);
+#endif // HAVE_DLERROR
 }
 
-#endif // HAVE_DLERROR
 
 // ----------------------------------------------------------------------------
 // listing loaded modules

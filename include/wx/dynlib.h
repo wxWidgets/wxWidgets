@@ -357,11 +357,9 @@ protected:
     // common part of GetSymbol() and HasSymbol()
     void* DoGetSymbol(const wxString& name, bool* success = NULL) const;
 
-#ifdef HAVE_DLERROR
-    // log the error after a dlxxx() function failure
-    static void Error();
-#endif // HAVE_DLERROR
-
+    // log the error after an OS dynamic library function failure
+    static void ReportError(const wxString& msg,
+                            const wxString& name = wxString());
 
     // the handle to DLL or NULL
     wxDllType m_handle;
