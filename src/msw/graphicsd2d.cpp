@@ -390,6 +390,10 @@ public:
     {
     }
 
+    virtual ~wxDirect2DFontFileEnumerator()
+    {
+    }
+
     // IDWriteFontFileEnumerator methods
     virtual wxSTDMETHODIMP MoveNext(BOOL* pHasCurrentFile) wxOVERRIDE
     {
@@ -447,6 +451,10 @@ public:
     wxDirect2DFontCollectionLoader()
     {
         ms_isInitialized = true;
+    }
+
+    virtual ~wxDirect2DFontCollectionLoader()
+    {
     }
 
     // IDWriteFontCollectionLoader methods
