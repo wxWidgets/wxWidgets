@@ -1716,10 +1716,10 @@ wxWizardPage_any =
 
 t_sizer_flags_grow = xsd:string {
         pattern = "(wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1727,12 +1727,12 @@ t_sizer_flags_alignv = xsd:string {
         pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1740,12 +1740,12 @@ t_sizer_flags_alignh = xsd:string {
         pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1763,13 +1763,13 @@ t_sizer_flags_grow_alignv = xsd:string {
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1778,13 +1778,13 @@ t_sizer_flags_grow_alignh = xsd:string {
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1794,14 +1794,14 @@ t_sizer_flags_align = xsd:string {
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1903,7 +1903,7 @@ wxSizerGB_item =
         [xrc:p="o"] element cellspan {_, t_pair_ints }* &
         [xrc:p="o"] element flag     {_,
             xsd:string {
-                pattern = "(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN)( *\| *(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN))*"
+                pattern = "(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)( *\| *(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN))*"
             }
         }*
     }
