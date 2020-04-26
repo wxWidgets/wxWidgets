@@ -372,7 +372,7 @@ public:
             wxChar thousandsSep;
             wxString grouping;
             if ( wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) ) {
-                std::cout << "*** Grouping : " << grouping << " Locale C Name: " << m_locale->GetCanonicalName() << std::endl;
+                std::cout << "*** Grouping: " << grouping << " Locale: " << m_locale->GetLocale() << " Name: " << m_locale->GetName() << " SysName: " << m_locale->GetSysName() << std::endl;
             } else
                 std::cout << "*** Unable to get grouping" << std::endl;
         }
