@@ -893,10 +893,12 @@ public:
         typedef ptrdiff_t difference_type;
         typedef wxGridBlockCoords value_type;
         typedef const value_type& reference;
+        typedef const value_type* pointer;
 
         iterator() : m_it() { }
 
         reference operator*() const { return *m_it; }
+        pointer operator->() const { return &*m_it; }
 
         iterator& operator++()
             { ++m_it; return *this; }
