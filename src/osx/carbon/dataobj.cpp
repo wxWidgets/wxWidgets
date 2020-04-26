@@ -329,6 +329,36 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
     }
 }
 
+bool wxDataObject::ReadFromSource(wxDataObject * source)
+{
+    bool transferred = false;
+    
+    size_t formatcount = source->GetFormatCount();
+    wxScopedArray<wxDataFormat> array(formatcount);
+    source->GetAllFormats( array.get() );
+    for (size_t i = 0; !transferred && i < formatcount; i++)
+    {
+        wxDataFormat format = array[i];
+        if ( IsSupported( format, wxDataObject::Set ) )
+        {
+            int size = source->GetDataSize( format );
+            transferred = true;
+            
+            if (size == 0)
+            {
+                SetData( format, 0, 0 );
+            }
+            else
+            {
+                wxCharBuffer d(size);
+                source->GetDataHere( format, d.data() );
+                SetData( format, size, d.data() );
+            }
+        }
+    }
+    return transferred;
+}
+
 bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
 {
     bool transferred = false;
@@ -439,30 +469,58 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
     return transferred;
 }
 
-bool wxDataObject::CanReadFromSource( wxOSXDataSource * source ) const
+wxDataFormat wxDataObject::GetSupportedFormatInSource(wxDataObject *source) const
 {
-    bool hasData = false;
+    wxDataFormat format;
+    size_t formatcount = source->GetFormatCount();
+    wxScopedArray<wxDataFormat> array(formatcount);
+    
+    source->GetAllFormats( array.get() );
+    for (size_t i = 0; i < formatcount; i++)
+    {
+        wxDataFormat testFormat = array[i];
+        if ( IsSupported( testFormat, wxDataObject::Set ) )
+        {
+            format = testFormat;
+            break;
+        }
+    }
+    return format;
+}
 
+
+wxDataFormat wxDataObject::GetSupportedFormatInSource(wxOSXDataSource *source) const
+{
+    wxDataFormat format;
+    
     size_t formatcount = GetFormatCount(wxDataObject::Set);
     wxScopedArray<wxDataFormat> array(formatcount);
     GetAllFormats(array.get(), wxDataObject::Set);
     
-    wxString filenamesPassed;
-    
-    for (size_t i = 0; !hasData && i < formatcount; i++)
+    for (size_t i = 0; i < formatcount; i++)
     {
         // go through the data in our order of preference
         wxDataFormat dataFormat = array[i];
         
         if (source->IsSupported(dataFormat))
         {
-            hasData = true;
+            format = dataFormat;
+            break;
         }
     }
-
-    return hasData;
+    
+    return format;
 }
 
+bool wxDataObject::CanReadFromSource( wxOSXDataSource * source ) const
+{
+    return GetSupportedFormatInSource(source) != wxDF_INVALID;
+}
+
+bool wxDataObject::CanReadFromSource( wxDataObject * source ) const
+{
+    return GetSupportedFormatInSource(source) != wxDF_INVALID;
+}
 
 void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray) const
 {

@@ -36,8 +36,22 @@ wxDragResult wxDropTarget::OnDragOver(
 
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
-    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/osx/dnd_osx.cpp");
-    return wxDF_INVALID;
+    wxDataFormat supported;
+    if (m_dataObject != NULL)
+    {
+        if ( wxDropSource* currentSource = wxDropSource::GetCurrentDropSource() )
+        {
+            wxDataObject* data = currentSource->GetDataObject();
+        
+            if ( data )
+                supported = m_dataObject->GetSupportedFormatInSource(data);
+        }
+    
+        if ( supported == wxDF_INVALID )
+            supported = m_dataObject->GetSupportedFormatInSource( m_currentDragPasteboard );
+    }
+    
+    return supported;
 }
 
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
@@ -63,37 +77,7 @@ wxDragResult wxDropTarget::OnData(
 
 bool wxDropTarget::CurrentDragHasSupportedFormat()
 {
-    bool supported = false;
-    if (m_dataObject == NULL)
-        return false;
-
-    if ( wxDropSource* currentSource = wxDropSource::GetCurrentDropSource() )
-    {
-        wxDataObject* data = currentSource->GetDataObject();
-
-        if ( data )
-        {
-            size_t formatcount = data->GetFormatCount();
-            wxScopedArray<wxDataFormat> array(formatcount);
-            data->GetAllFormats( array.get() );
-            for (size_t i = 0; !supported && i < formatcount; i++)
-            {
-                wxDataFormat format = array[i];
-                if ( m_dataObject->IsSupported( format, wxDataObject::Set ) )
-                {
-                    supported = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    if ( !supported )
-    {
-        supported = m_dataObject->CanReadFromSource( m_currentDragPasteboard );
-    }
-
-    return supported;
+    return GetMatchingPair() != wxDF_INVALID;
 }
 
 bool wxDropTarget::GetData()
@@ -110,37 +94,11 @@ bool wxDropTarget::GetData()
         wxDataObject* data = currentSource->GetDataObject();
 
         if (data != NULL)
-        {
-            size_t formatcount = data->GetFormatCount();
-            wxScopedArray<wxDataFormat> array(formatcount);
-            data->GetAllFormats( array.get() );
-            for (size_t i = 0; !transferred && i < formatcount; i++)
-            {
-                wxDataFormat format = array[i];
-                if ( m_dataObject->IsSupported( format, wxDataObject::Set ) )
-                {
-                    int size = data->GetDataSize( format );
-                    transferred = true;
-
-                    if (size == 0)
-                    {
-                        m_dataObject->SetData( format, 0, 0 );
-                    }
-                    else
-                    {
-                        wxCharBuffer d(size);
-                        data->GetDataHere( format, d.data() );
-                        m_dataObject->SetData( format, size, d.data() );
-                    }
-                }
-            }
-        }
+            transferred = m_dataObject->ReadFromSource(data);
     }
 
     if ( !transferred )
-    {
         transferred = m_dataObject->ReadFromSource(m_currentDragPasteboard);
-    }
 
     return transferred;
 }
