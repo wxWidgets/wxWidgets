@@ -49,6 +49,12 @@
 #include "wx/headerctrl.h"
 #include "wx/hashset.h"
 
+#if wxUSE_CLIPBOARD
+    #include "wx/clipbrd.h"
+    #include "wx/msgdlg.h"
+    #include <iterator>
+#endif // wxUSE_CLIPBOARD
+
 #include "wx/generic/gridsel.h"
 #include "wx/generic/gridctrl.h"
 #include "wx/generic/grideditors.h"
@@ -5874,6 +5880,48 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     if ( selStart != wxGridNoCellCoords )
                         m_selection->ExtendCurrentBlock(selStart, selEnd, event);
                 }
+                break;
+
+            case WXK_INSERT:
+            case 'C':
+                #if wxUSE_CLIPBOARD
+
+                if (event.GetModifiers() == wxMOD_CONTROL)
+                {
+                    wxGridBlocks blocks = GetSelectedBlocks();
+                    int diff = std::distance(blocks.begin(), blocks.end());
+                    wxString buf, eol;
+
+                    #if defined(__WINDOWS__)
+                        eol = "\r\n";
+                    #else
+                        eol = "\n";
+                    #endif
+                    
+                    if (diff == 1 && wxTheClipboard->Open())
+                    {                        
+                        for (int i = blocks.begin()->GetTopRow(); i <= blocks.begin()->GetBottomRow(); i++)
+                        {
+                            for (int j = blocks.begin()->GetLeftCol(); j <= blocks.begin()->GetRightCol(); j++)
+                            {
+                                buf << GetCellValue(i, j) << '\t';
+                            }
+                            buf << eol;
+                        }
+
+                        wxTheClipboard->SetData(new wxTextDataObject(buf));
+                        wxTheClipboard->Close();
+                        break;
+                    }
+
+                    if(diff > 1)
+                    {
+                        wxMessageDialog(NULL, "Impossible to copy from several selected blocks", "Info", wxICON_ERROR).ShowModal();
+                    }
+                    event.Skip();
+                }
+
+                #endif // wxUSE_CLIPBOARD
                 break;
 
             default:

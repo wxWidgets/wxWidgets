@@ -2045,6 +2045,7 @@ public:
         iterator();
 
         const wxGridBlockCoords& operator*() const;
+        const wxGridBlockCoords* operator->() const;
 
         iterator& operator++();
         iterator operator++(int);
