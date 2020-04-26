@@ -69,9 +69,6 @@ namespace
 // Local functions
 //-----------------------------------------------------------------------------
 
-inline double dmin(double a, double b) { return a < b ? a : b; }
-inline double dmax(double a, double b) { return a > b ? a : b; }
-
 // translate a wxColour to a Color
 inline Color wxColourToColor(const wxColour& col)
 {
