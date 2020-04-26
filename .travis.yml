@@ -29,8 +29,8 @@ matrix:
           name: wxGTK 2 clang Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
-          name: wxGTK CMake Ubuntu 18.04
+          env: wxGTK_VERSION=3 wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
+          name: wxGTK 3 CMake Ubuntu 18.04
         - os: osx
           osx_image: xcode6.4
           compiler: clang
