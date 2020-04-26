@@ -19,6 +19,9 @@
 #include "wx/numformatter.h"
 #include "wx/intl.h"
 
+// ===== Temporary: For debug info
+#include <iostream>
+
 // ----------------------------------------------------------------------------
 // test class (UK locale)
 // ----------------------------------------------------------------------------
@@ -364,6 +367,16 @@ public:
                                 wxLOCALE_DONT_LOAD_DEFAULT);
         if ( !m_locale->IsOk() )
             tearDown();
+        // ===== Debugging info
+        else {
+            wxChar thousandsSep;
+            wxString grouping;
+            if ( wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) ) {
+                std::cout << "*** Grouping : " << grouping << " Locale C Name: " << m_locale->GetCanonicalName() << std::endl;
+            } else
+                std::cout << "*** Unable to get grouping" << std::endl;
+        }
+        // =====
     }
 
     virtual void tearDown() wxOVERRIDE
