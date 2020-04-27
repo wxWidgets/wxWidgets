@@ -689,3 +689,202 @@ void NumFormatterAlternateTestCase::DoubleFromString()
     CPPUNIT_ASSERT( wxNumberFormatter::FromString("123456789.012", &d) );
     CPPUNIT_ASSERT_EQUAL( 123456789.012, d );
 }
+
+//--------------------------------------------------------------------------
+// Test case for wxNumberFormatter::FormatNumber
+//--------------------------------------------------------------------------
+
+class FormatNumberTestCase : public CppUnit::TestCase
+{
+public:
+    FormatNumberTestCase() {}
+private:
+    static const wxChar thousandsSep = ',', decSep = '.';
+    static const wxString grouping_UK;
+
+    static wxString FormatNumberAndReturn(wxString s);
+
+    CPPUNIT_TEST_SUITE( FormatNumberTestCase );
+        CPPUNIT_TEST( PositiveIntegers );
+        CPPUNIT_TEST( NegativeIntegers );
+        CPPUNIT_TEST( PositiveReals );
+        CPPUNIT_TEST( NegativeReals );
+    CPPUNIT_TEST_SUITE_END();
+
+    void PositiveIntegers();
+    void NegativeIntegers();
+    void PositiveReals();
+    void NegativeReals();
+};
+
+const wxString FormatNumberTestCase::grouping_UK = "3;0";
+wxString FormatNumberTestCase::FormatNumberAndReturn(wxString s)
+{
+    wxString ret = s.Clone();
+    wxNumberFormatter::FormatNumber(ret, thousandsSep, decSep, grouping_UK);
+    return ret;
+}
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( FormatNumberTestCase );
+
+// also include in its own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FormatNumberTestCase, "FormatNumberTestCase" );
+
+void FormatNumberTestCase::PositiveIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0").IsSameAs(            "0"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1").IsSameAs(            "1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12").IsSameAs(           "12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123").IsSameAs(          "123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234").IsSameAs(        "1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345").IsSameAs(       "12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456").IsSameAs(      "123,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567").IsSameAs(    "1,234,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678").IsSameAs(   "12,345,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789").IsSameAs(  "123,456,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890").IsSameAs("1,234,567,890"));
+}
+
+void FormatNumberTestCase::NegativeIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1").IsSameAs(            "-1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12").IsSameAs(           "-12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123").IsSameAs(          "-123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234").IsSameAs(        "-1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345").IsSameAs(       "-12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456").IsSameAs(      "-123,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567").IsSameAs(    "-1,234,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678").IsSameAs(   "-12,345,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789").IsSameAs(  "-123,456,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890").IsSameAs("-1,234,567,890"));
+}
+
+void FormatNumberTestCase::PositiveReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0.1234").IsSameAs(            "0.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1.1234").IsSameAs(            "1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12.1234").IsSameAs(           "12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123.1234").IsSameAs(          "123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234.1234").IsSameAs(        "1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345.1234").IsSameAs(       "12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456.1234").IsSameAs(      "123,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567.1234").IsSameAs(    "1,234,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678.1234").IsSameAs(   "12,345,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789.1234").IsSameAs(  "123,456,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890.1234").IsSameAs("1,234,567,890.1234"));
+}
+
+void FormatNumberTestCase::NegativeReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1.1234").IsSameAs(            "-1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12.1234").IsSameAs(           "-12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123.1234").IsSameAs(          "-123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234.1234").IsSameAs(        "-1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345.1234").IsSameAs(       "-12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456.1234").IsSameAs(      "-123,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567.1234").IsSameAs(    "-1,234,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678.1234").IsSameAs(   "-12,345,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789.1234").IsSameAs(  "-123,456,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890.1234").IsSameAs("-1,234,567,890.1234"));
+}
+
+//--------------------------------------------------------------------------
+// Alternate test case for wxNumberFormatter::FormatNumber with grouping in
+// Indian format i.e, "3;2;0"
+//--------------------------------------------------------------------------
+
+class FormatNumberAlternateTestCase : public CppUnit::TestCase
+{
+public:
+    FormatNumberAlternateTestCase() {}
+private:
+    static const wxChar thousandsSep = ',', decSep = '.';
+    static const wxString grouping_India;
+
+    static wxString FormatNumberAndReturn(wxString s);
+
+    CPPUNIT_TEST_SUITE( FormatNumberAlternateTestCase );
+        CPPUNIT_TEST( PositiveIntegers );
+        CPPUNIT_TEST( NegativeIntegers );
+        CPPUNIT_TEST( PositiveReals );
+        CPPUNIT_TEST( NegativeReals );
+    CPPUNIT_TEST_SUITE_END();
+
+    void PositiveIntegers();
+    void NegativeIntegers();
+    void PositiveReals();
+    void NegativeReals();
+};
+
+const wxString FormatNumberAlternateTestCase::grouping_India = "3;2;0";
+wxString FormatNumberAlternateTestCase::FormatNumberAndReturn(wxString s)
+{
+    wxString ret = s.Clone();
+    wxNumberFormatter::FormatNumber(ret, thousandsSep, decSep, grouping_India);
+    return ret;
+}
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( FormatNumberAlternateTestCase );
+
+// also include in its own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FormatNumberAlternateTestCase, "FormatNumberAlternateTestCase" );
+
+void FormatNumberAlternateTestCase::PositiveIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0").IsSameAs(             "0"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1").IsSameAs(             "1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12").IsSameAs(            "12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123").IsSameAs(           "123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234").IsSameAs(         "1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345").IsSameAs(        "12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456").IsSameAs(      "1,23,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567").IsSameAs(     "12,34,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678").IsSameAs(   "1,23,45,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789").IsSameAs(  "12,34,56,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890").IsSameAs("1,23,45,67,890"));
+}
+
+void FormatNumberAlternateTestCase::NegativeIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1").IsSameAs(             "-1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12").IsSameAs(            "-12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123").IsSameAs(           "-123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234").IsSameAs(         "-1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345").IsSameAs(        "-12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456").IsSameAs(      "-1,23,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567").IsSameAs(     "-12,34,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678").IsSameAs(   "-1,23,45,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789").IsSameAs(  "-12,34,56,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890").IsSameAs("-1,23,45,67,890"));
+}
+
+void FormatNumberAlternateTestCase::PositiveReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0.1234").IsSameAs(             "0.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1.1234").IsSameAs(             "1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12.1234").IsSameAs(            "12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123.1234").IsSameAs(           "123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234.1234").IsSameAs(         "1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345.1234").IsSameAs(        "12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456.1234").IsSameAs(      "1,23,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567.1234").IsSameAs(     "12,34,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678.1234").IsSameAs(   "1,23,45,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789.1234").IsSameAs(  "12,34,56,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890.1234").IsSameAs("1,23,45,67,890.1234"));
+}
+
+void FormatNumberAlternateTestCase::NegativeReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1.1234").IsSameAs(             "-1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12.1234").IsSameAs(            "-12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123.1234").IsSameAs(           "-123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234.1234").IsSameAs(         "-1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345.1234").IsSameAs(        "-12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456.1234").IsSameAs(      "-1,23,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567.1234").IsSameAs(     "-12,34,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678.1234").IsSameAs(   "-1,23,45,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789.1234").IsSameAs(  "-12,34,56,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890.1234").IsSameAs("-1,23,45,67,890.1234"));
+}
