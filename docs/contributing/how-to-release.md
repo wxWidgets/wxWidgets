@@ -161,14 +161,16 @@ E.g. to create documentation for `v3.0.z` release:
 
 Update https://www.wxwidgets.org:
 * Update release information (at least `version` and `released`) in `_data/relases.yml`.
-* Download information can then be updated by running `update_release_info.rb`.
-  This will update the asset information from GitHub.
 * Update the list of compilers used for making MSW binaries in
   `downloads/index.md` if necessary (note that there is no need to update
   anything else, the page will dynamically show the release files with the
   specified prefixes).
 * Add a news item. Usually a news item is enough but something
   more can be called for for major releases
+* Push the changes (or create the PR with them) to GitHub. Note that this will
+  trigger the site rebuild which will fail if the release statistics are not
+  available yet, so make sure to publish the release on GitHub first (or wait
+  an hour for the next scheduled site rebuild to happen).
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
 to wx-users.
