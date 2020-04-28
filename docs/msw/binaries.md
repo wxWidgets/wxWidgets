@@ -30,7 +30,7 @@ e.g. for 32-bit MSVS 2017 development you need
 
 All binaries are available at:
 
-https://github.com/wxWidgets/wxWidgets/releases/v3.1.3
+https://www.wxwidgets.org/downloads#v3.1.3_msw
 
 Once you have the files you need, unzip all of them into the same directory, for
 example `c:\wx\3.1.3`. You should have only include and lib subdirectories under

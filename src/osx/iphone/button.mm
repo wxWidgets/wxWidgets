@@ -92,3 +92,30 @@ wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
 }
+
+#if wxUSE_BMPBUTTON
+
+wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
+                                                   wxWindowMac* WXUNUSED(parent),
+                                                   wxWindowID winid,
+                                                   const wxBitmap& bitmap,
+                                                   const wxPoint& pos,
+                                                   const wxSize& size,
+                                                   long style,
+                                                   long WXUNUSED(extraStyle))
+{
+    CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
+    UIButtonType buttonType = UIButtonTypeRoundedRect;
+
+    UIButton* v = [[UIButton buttonWithType:buttonType] retain];
+    v.frame = r;
+
+    if (bitmap.IsOk())
+        [v setImage:bitmap.GetImage() forState:UIControlStateNormal];
+
+    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
+    return c;
+}
+
+#endif // wxUSE_BMPBUTTON
+

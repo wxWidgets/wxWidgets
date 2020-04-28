@@ -26,12 +26,14 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl);
 wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
    wxWindowDCImpl( owner )
 {
+#if !wxOSX_USE_IPHONE
     CGRect cgbounds ;
     cgbounds = CGDisplayBounds(CGMainDisplayID());
     m_width = (wxCoord)cgbounds.size.width;
     m_height = (wxCoord)cgbounds.size.height;
     SetGraphicsContext( wxGraphicsContext::Create() );
     m_ok = true ;
+#endif
 }
 
 wxScreenDCImpl::~wxScreenDCImpl()

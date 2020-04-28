@@ -24,7 +24,12 @@ public:
 
     void WriteToSink(wxOSXDataSink *sink) const;
     bool ReadFromSource(wxOSXDataSource *source);
+    bool ReadFromSource(wxDataObject *source);
     bool CanReadFromSource(wxOSXDataSource *source) const;
+    bool CanReadFromSource(wxDataObject *source) const;
+
+    wxDataFormat GetSupportedFormatInSource(wxOSXDataSource *source) const;
+    wxDataFormat GetSupportedFormatInSource(wxDataObject *source) const;
 
 #if wxOSX_USE_COCOA
     // adds all the native formats (in descending order of preference) this data object supports

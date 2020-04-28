@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/hashmap.h"
-#include <wx/vector.h>
+#include "wx/vector.h"
 
 WX_DECLARE_HASH_MAP(unsigned, wxString, wxIntegerHash, wxIntegerEqual,
                     IntToStringMap);

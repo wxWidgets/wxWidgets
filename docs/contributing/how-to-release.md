@@ -123,20 +123,54 @@ Attach the following files to it:
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z
 
-Create https://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
+## Update documentation
+
+This requires being able to ssh to docs.wxwidgets.org, please ask Bryan if you
+think you should be able to do it, but can't.
+
+Once logged in, run `~/update-trunk-docs.sh` script to update files in
+`public_html/trunk` directory, copy its contents to `public_html/x.y.z`, switch
+any links, such as `3.1` to point to `x.y.z` by doing
+
+    $ cd ~/public_html
+    $ ln -sfn 3.y.z 3.y
+
+and edit `~/public_html/index.md` to add the link to the new release to it.
+
+If the docs must be generated from the tag itself, and not from master, note
+that you need to apply the special commit which is always the tip of master
+branch in `~/wxWidgets` git repository on this machine.
+
+E.g. to create documentation for `v3.0.z` release:
+
+    $ cd ~/wxWidgets
+    $ git fetch --tags
+    $ git checkout -b my-tmp-branch v3.0.z
+    $ git cherry-pick master
+    $ vi docs/doxygen/Doxyfile
+    ... edit HTML_OUTPUT to create files in ~/public_html/3.0.z
+    $ cd docs/doxygen
+    $ PATH="$HOME/doxygen/bin:$PATH" WX_SKIP_DOXYGEN_VERSION_CHECK=1 nice -n 15 ./regen.sh php
+
+    # Cleanup
+    $ git reset --hard master
+    $ git checkout master
+    $ git branch -d my-tmp-branch
 
 ## Announcement
 
 Update https://www.wxwidgets.org:
 * Update release information (at least `version` and `released`) in `_data/relases.yml`.
-* Download information can then be updated by running `update_release_info.rb`.
-  This will update the asset information from GitHub.
 * Update the list of compilers used for making MSW binaries in
   `downloads/index.md` if necessary (note that there is no need to update
   anything else, the page will dynamically show the release files with the
   specified prefixes).
 * Add a news item. Usually a news item is enough but something
   more can be called for for major releases
+* Push the changes (or create the PR with them) to GitHub. Note that this will
+  trigger the site rebuild which will fail if the release statistics are not
+  available yet, so make sure to publish the release on GitHub first (or wait
+  an hour for the next scheduled site rebuild to happen).
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
 to wx-users.
