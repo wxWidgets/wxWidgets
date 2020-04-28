@@ -129,7 +129,7 @@ public:
     virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
     // measured in "quarters of the average character width for the font that is selected into the list box"
-    virtual void MSWSetTabStops(const wxArrayInt& tabStops);
+    virtual void MSWSetTabStops(const wxVector<int>& tabStops);
 
     // Windows callbacks
     bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;

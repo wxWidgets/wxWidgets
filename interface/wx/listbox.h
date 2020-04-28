@@ -329,6 +329,8 @@ public:
         @code #ifdef __WXMSW__ @endcode preprocessor guards.
 
         @onlyfor{wxmsw}
+
+        @since 3.1.0
      */
     virtual void MSWSetTabStops(const wxArrayInt& tabStops);
 
