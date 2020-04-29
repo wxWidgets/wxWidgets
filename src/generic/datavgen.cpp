@@ -2253,9 +2253,6 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x,
                 RemoveDropHint();
                 return result;
             }
-
-            default:
-                break;
         }
     }
     else
