@@ -324,9 +324,7 @@ public:
         @param tabStops
             Cumulative tab distances array measured in "quarters of the average character width for the font that is selected into the list box."
 
-        This function is not available in the other ports by design, any
-        occurrences of it in the portable code must be guarded by
-        @code #ifdef __WXMSW__ @endcode preprocessor guards.
+        @return @true if all specified tabs are set, @false otherwise
 
         @onlyfor{wxmsw}
 
