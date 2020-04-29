@@ -359,6 +359,10 @@ void TextCtrlTestCase::HitTestSingleLine()
 
     long pos = -1;
 
+#ifdef __WXGTK__
+    wxYield();
+#endif
+
     // Hitting a point near the left side of the control should find one of the
     // first few characters under it.
     SECTION("Normal")
@@ -384,8 +388,11 @@ void TextCtrlTestCase::HitTestSingleLine()
         m_text->ChangeValue(wxString(200, 'X'));
         m_text->SetInsertionPointEnd();
 
+    #ifdef __WXGTK__
         // wxGTK must be given an opportunity to lay the text out.
-        wxYield();
+        for ( wxStopWatch sw; sw.Time() < 10; )
+            wxYield();
+    #endif
 
         // For some reason, this test consistently fails when running under
         // Xvfb. Debugging shows that the text gets scrolled too far, instead

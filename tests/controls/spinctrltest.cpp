@@ -21,6 +21,7 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 #include "wx/spinctrl.h"
+#include "wx/textctrl.h"
 
 class SpinCtrlTestCase : public CppUnit::TestCase
 {
@@ -245,6 +246,10 @@ void SpinCtrlTestCase::SetValueInsideEventHandler()
 #if wxUSE_UIACTIONSIMULATOR
     m_spin->Bind(wxEVT_SPINCTRL, &SpinCtrlTestCase::OnSpinSetValue, this);
 
+    // A dummy control with which we change the focus.
+    wxTextCtrl* text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+    text->Move(m_spin->GetSize().x, m_spin->GetSize().y * 3);
+
     wxUIActionSimulator sim;
 
     // run multiple times to make sure there are no issues with keeping old value
@@ -258,7 +263,7 @@ void SpinCtrlTestCase::SetValueInsideEventHandler()
         sim.Text("20");
         wxYield();
 
-        wxTheApp->GetTopWindow()->SetFocus();
+        text->SetFocus();
         wxYield();
 
         CPPUNIT_ASSERT_EQUAL(32, m_spin->GetValue());

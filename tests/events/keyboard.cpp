@@ -27,6 +27,10 @@
 #include "wx/uiaction.h"
 #include "wx/vector.h"
 
+#ifdef __WXGTK__
+#include "wx/stopwatch.h"
+#endif
+
 namespace
 {
 
@@ -219,6 +223,19 @@ private:
 
     KeyboardTestWindow *m_win;
 
+#ifdef __WXGTK__
+    // This struct affects wxUIActionSimulator in such a way that the simulator
+    // will sleep with an additional delay (10 ms) after each simulation.
+    // Otherwise, the test would fail.
+    struct SimDelay
+    {
+        SimDelay() { wxSetEnv("WX_UI_TESTS_DELAY", "10"); }
+       ~SimDelay() { wxUnsetEnv("WX_UI_TESTS_DELAY"); }
+    };
+
+    SimDelay m_delay;
+#endif // __WXGTK__
+
     wxDECLARE_NO_COPY_CLASS(KeyboardEventTestCase);
 };
 
@@ -229,7 +246,11 @@ void KeyboardEventTestCase::setUp()
     m_win = new KeyboardTestWindow(wxTheApp->GetTopWindow());
     wxYield();
     m_win->SetFocus();
-    wxYield(); // needed to show the new window
+
+#ifdef __WXGTK__
+    for ( wxStopWatch sw; sw.Time() < 10; )
+#endif
+        wxYield(); // needed to show the new window
 
     // The window might get some key up events when it's being shown if the key
     // was pressed when the program was started and released after the window
