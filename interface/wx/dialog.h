@@ -581,7 +581,7 @@ public:
             otherwise the box is hidden. If @false and the dialog is modal,
             control is returned to the calling program.
     */
-    virtual bool Show(bool show = 1);
+    virtual bool Show(bool show = true);
 
     /**
         Shows an application-modal dialog.
