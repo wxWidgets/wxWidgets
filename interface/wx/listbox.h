@@ -330,7 +330,7 @@ public:
 
         @onlyfor{wxmsw}
 
-        @since 3.1.0
+        @since 3.1.4
      */
     virtual void MSWSetTabStops(const wxArrayInt& tabStops);
 
@@ -341,4 +341,3 @@ public:
     virtual void SetString(unsigned int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
 };
-
