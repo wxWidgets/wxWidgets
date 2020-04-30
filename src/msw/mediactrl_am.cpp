@@ -1562,7 +1562,7 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 
 					else
 					{
-		                m_bLoadEventSent	= true;
+		                m_bLoadEventSent	= false;
 						
 						m_amb->FinishLoad();
 					}
