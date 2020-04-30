@@ -15,7 +15,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CAIRO
+#if wxUSE_CAIRO && !defined(__WXGTK20__)
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
