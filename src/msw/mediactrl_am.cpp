@@ -1562,7 +1562,9 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 
 					else
 					{
-		                m_amb->FinishLoad();
+		                m_bLoadEventSent	= true;
+						
+						m_amb->FinishLoad();
 					}
                 }
                 break;
@@ -1598,11 +1600,7 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             // size of the video (will error) - however on 4
             // it won't play on downloaded things until it is
             // completely downloaded so we use the lesser of two evils...
-<<<<<<< HEAD
             else if(event[0].GetInteger() >= 3 &&
-=======
-            else if(event[0].GetInteger() == 3 &&
->>>>>>> parent of cf79c6d38a... Update mediactrl_am.cpp
                 !m_bLoadEventSent)
             {
                 m_bLoadEventSent = true;
