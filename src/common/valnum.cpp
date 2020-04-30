@@ -32,6 +32,8 @@
 #include "wx/valnum.h"
 #include "wx/numformatter.h"
 
+#include <math.h>
+
 // ============================================================================
 // wxNumValidatorBase implementation
 // ============================================================================
@@ -261,8 +263,18 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
 wxString wxFloatingPointValidatorBase::ToString(LongestValueType value) const
 {
+    // When using factor > 1 we're going to show more digits than are
+    // significant in the real value, so decrease precision to account for it.
+    int precision = m_precision;
+    if ( precision && m_factor > 1 )
+    {
+        precision -= static_cast<int>(log10(static_cast<double>(m_factor)));
+        if ( precision < 0 )
+            precision = 0;
+    }
+
     return wxNumberFormatter::ToString(value*m_factor,
-                                       m_precision,
+                                       precision,
                                        GetFormatFlags());
 }
 
