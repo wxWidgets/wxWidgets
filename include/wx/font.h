@@ -142,7 +142,9 @@ public:
     {
         Init();
         if (!wxIsSameDouble(m_pointSize, pointSize))
+        {
             wxFAIL_MSG("Invalid font point size");
+        }
     }
     explicit wxFontInfo(const wxSize& pixelSize)
         : m_pointSize(-1.0)
