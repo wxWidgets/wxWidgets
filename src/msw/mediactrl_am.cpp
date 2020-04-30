@@ -1030,7 +1030,6 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     else
     {
         m_pMP->QueryInterface(IID_IActiveMovie, (void**)&m_pAM);
-		m_pMP->put_EnableContextMenu(FALSE);
     }
 
     //
@@ -1175,7 +1174,7 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
 //---------------------------------------------------------------------------
 void wxAMMediaBackend::FinishLoad()
 {
-	NotifyMovieLoaded();
+    NotifyMovieLoaded();
 }
 
 //---------------------------------------------------------------------------
@@ -1531,7 +1530,7 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //---------------------------------------------------------------------------
 void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 {
-	// cast to unsigned long to fix narrowing error with case 0xfffffd9f
+    // cast to unsigned long to fix narrowing error with case 0xfffffd9f
     // when using clang
     switch (static_cast<unsigned long>(event.GetDispatchId()))
     {
@@ -1599,7 +1598,11 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             // size of the video (will error) - however on 4
             // it won't play on downloaded things until it is
             // completely downloaded so we use the lesser of two evils...
+<<<<<<< HEAD
             else if(event[0].GetInteger() >= 3 &&
+=======
+            else if(event[0].GetInteger() == 3 &&
+>>>>>>> parent of cf79c6d38a... Update mediactrl_am.cpp
                 !m_bLoadEventSent)
             {
                 m_bLoadEventSent = true;
