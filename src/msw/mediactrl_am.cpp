@@ -1556,7 +1556,15 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
                 }
                 else
                 {
-                    m_amb->QueueStopEvent();
+                    if (false == m_bLoadEventSent)
+					{
+						m_amb->QueueStopEvent();
+					}
+
+					else
+					{
+		                m_amb->FinishLoad();
+					}
                 }
                 break;
             case 1: // pause
@@ -1591,10 +1599,10 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             // size of the video (will error) - however on 4
             // it won't play on downloaded things until it is
             // completely downloaded so we use the lesser of two evils...
+            else if(event[0].GetInteger() >= 3 &&
                 !m_bLoadEventSent)
             {
                 m_bLoadEventSent = true;
-                m_amb->FinishLoad();
             }
         }
         else
