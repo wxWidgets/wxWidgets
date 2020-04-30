@@ -5272,7 +5272,7 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 
     // Update the last column size to take all the available space. Note that
     // this must be done after calling Layout() to update m_clientArea size.
-    if ( m_clientArea && GetColumnCount() )
+    if ( m_clientArea )
         m_clientArea->UpdateColumnSizes();
 
     AdjustScrollbars();
