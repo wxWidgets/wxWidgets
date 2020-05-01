@@ -5112,9 +5112,11 @@ void wxDataViewMainWindow::UpdateColumnSizes()
         const int availableWidth = fullWinWidth - lastColX;
 
         // Never make the column automatically smaller than the last width it
-        // was explicitly given nor its minimum width.
-        if ( availableWidth <= wxMax(lastCol->GetMinWidth(),
-                                     lastCol->WXGetManuallySetWidth()) )
+        // was explicitly given nor its minimum width (however we do need to
+        // reduce it until this size if it's currently wider, so this
+        // comparison needs to be strict).
+        if ( availableWidth < wxMax(lastCol->GetMinWidth(),
+                                    lastCol->WXGetManuallySetWidth()) )
         {
             return;
         }
