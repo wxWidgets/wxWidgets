@@ -161,7 +161,6 @@ int wxPGEditor::InsertItem( wxWindow*, const wxString&, int ) const
 
 void wxPGEditor::DeleteItem( wxWindow*, int ) const
 {
-    return;
 }
 
 void wxPGEditor::SetItems(wxWindow* WXUNUSED(ctrl), const wxArrayString& WXUNUSED(labels)) const
