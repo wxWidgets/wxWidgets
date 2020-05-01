@@ -5075,7 +5075,7 @@ void wxDataViewMainWindow::UpdateColumnSizes()
 
     wxDataViewCtrl *owner = GetOwner();
 
-    int fullWinWidth = GetSize().x;
+    int fullWinWidth = GetClientSize().x;
 
     // Find the last shown column: we shouldn't bother to resize the columns
     // that are hidden anyhow.
