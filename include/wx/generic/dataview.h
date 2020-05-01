@@ -145,7 +145,7 @@ public:
     // user interactively.
     void WXOnResize(int width);
 
-    int WXGetManuallySetWidth() const;
+    virtual int WXGetSpecifiedWidth() const wxOVERRIDE;
 
 private:
     // common part of all ctors

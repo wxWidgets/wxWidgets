@@ -217,7 +217,7 @@ void wxDataViewColumn::WXOnResize(int width)
     m_owner->OnColumnResized();
 }
 
-int wxDataViewColumn::WXGetManuallySetWidth() const
+int wxDataViewColumn::WXGetSpecifiedWidth() const
 {
     // Note that we need to return valid value even if no width was initially
     // specified, as otherwise the last column created without any explicit
@@ -5130,7 +5130,7 @@ void wxDataViewMainWindow::UpdateColumnSizes()
         // reduce it until this size if it's currently wider, so this
         // comparison needs to be strict).
         if ( availableWidth < wxMax(lastCol->GetMinWidth(),
-                                    lastCol->WXGetManuallySetWidth()) )
+                                    lastCol->WXGetSpecifiedWidth()) )
         {
             return;
         }
@@ -5319,7 +5319,7 @@ void wxDataViewCtrl::OnDPIChanged(wxDPIChangedEvent& event)
             minWidth = minWidth * event.GetNewDPI().x / event.GetOldDPI().x;
         m_cols[i]->SetMinWidth(minWidth);
 
-        int width = m_cols[i]->WXGetManuallySetWidth();
+        int width = m_cols[i]->WXGetSpecifiedWidth();
         if ( width > 0 )
             width = width * event.GetNewDPI().x / event.GetOldDPI().x;
         m_cols[i]->SetWidth(width);
