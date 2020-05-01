@@ -2553,8 +2553,10 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    // Send the given grid event and return -1 if it was vetoed, 1 if
-    // it was processed (but not vetoed) and 0 if it wasn't processed.
+    // Send the given grid event and return -1 if it was vetoed or, as a
+    // special exception, if an event for a particular cell resulted in this
+    // cell being deleted, 1 if it was processed (but not vetoed) and 0 if it
+    // wasn't processed.
     int DoSendEvent(wxGridEvent& gridEvt);
 
     // Generate an event of the given type and call DoSendEvent().

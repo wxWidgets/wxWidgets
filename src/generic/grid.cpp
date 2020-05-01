@@ -5294,7 +5294,7 @@ wxGrid::SendGridSizeEvent(wxEventType type,
 }
 
 // Process the event and return
-//  -1 if the event was vetoed
+//  -1 if the event was vetoed or if event cell was deleted
 //  +1 if the event was processed (but not vetoed)
 //   0 if the event wasn't handled
 int wxGrid::DoSendEvent(wxGridEvent& gridEvt)
@@ -5303,6 +5303,14 @@ int wxGrid::DoSendEvent(wxGridEvent& gridEvt)
 
     // A Veto'd event may not be `claimed' so test this first
     if ( !gridEvt.IsAllowed() )
+        return -1;
+
+    // We also return -1 if the event cell was deleted, as this allows to have
+    // checks in several functions that generate an event and then proceed
+    // doing something by default with the selected cell: this shouldn't be
+    // done if the user-defined handler deleted this cell.
+    if ( gridEvt.GetRow() >= GetNumberRows() ||
+            gridEvt.GetCol() >= GetNumberCols() )
         return -1;
 
     return claimed ? 1 : 0;
