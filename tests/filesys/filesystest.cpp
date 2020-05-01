@@ -24,6 +24,8 @@
 
 #if wxUSE_FILESYSTEM
 
+#include "wx/fs_mem.h"
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -174,6 +176,54 @@ TEST_CASE("wxFileSystem::UnicodeFileNameToUrlConversion", "[filesys][url][filena
     wxString url = wxFileSystem::FileNameToURL(filename);
 
     CHECK( filename.SameAs(wxFileName::URLToFileName(url)) );
+}
+
+// Test that using FindFirst() after removing a previously found URL works:
+// this used to be broken, see https://trac.wxwidgets.org/ticket/18744
+TEST_CASE("wxFileSystem::MemoryFSHandler", "[filesys][memoryfshandler][find]")
+{
+    // Install wxMemoryFSHandler just for the duration of this test.
+    class AutoMemoryFSHandler
+    {
+    public:
+        AutoMemoryFSHandler()
+            : m_handler(new wxMemoryFSHandler())
+        {
+            wxFileSystem::AddHandler(m_handler);
+        }
+
+        ~AutoMemoryFSHandler()
+        {
+            wxFileSystem::RemoveHandler(m_handler);
+        }
+
+    private:
+        wxMemoryFSHandler* const m_handler;
+    } autoMemoryFSHandler;
+
+    wxMemoryFSHandler::AddFile("foo.txt", "foo contents");
+    wxMemoryFSHandler::AddFile("bar.txt", "bar contents");
+    wxFileSystem fs;
+
+    wxString const url = fs.FindFirst("memory:*.txt");
+    INFO("Found URL was: " << url);
+
+    wxString filename;
+    REQUIRE( url.StartsWith("memory:", &filename) );
+
+    // We don't know which of the two files will be found, this depends on the
+    // details of the hash table implementation and varies across builds, so
+    // handle both cases and remove the other file, which should certainly
+    // invalidate the iterator pointing to it.
+    if ( filename == "foo.txt" )
+        wxMemoryFSHandler::RemoveFile("bar.txt");
+    else if ( filename == "bar.txt" )
+        wxMemoryFSHandler::RemoveFile("foo.txt");
+    else
+        FAIL("Unexpected filename: " << filename);
+
+    CHECK( fs.FindFirst(url) == url );
+    CHECK( fs.FindNext() == "" );
 }
 
 #endif // wxUSE_FILESYSTEM
