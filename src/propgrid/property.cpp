@@ -2091,19 +2091,30 @@ bool wxPGProperty::SetChoices( const wxPGChoices& choices )
     // Property must be de-selected first (otherwise choices in
     // the control would be de-synced with true choices)
     wxPropertyGrid* pg = GetGrid();
-    if ( pg && pg->GetSelection() == this )
+    bool isSelected = pg && pg->GetSelection() == this;
+    if ( isSelected )
+    {
         pg->ClearSelection();
+    }
 
     m_choices.Assign(choices);
-
+    if ( isSelected )
     {
-        // This may be needed to trigger some initialization
-        // (but don't do it if property is somewhat uninitialized)
-        wxVariant defVal = GetDefaultValue();
-        if ( defVal.IsNull() )
-            return false;
+        wxWindow* ctrl = pg->GetEditorControl();
+        if ( ctrl )
+            GetEditorClass()->SetItems(ctrl, m_choices.GetLabels());
+    }
 
+    // This may be needed to trigger some initialization
+    // (but don't do it if property is somewhat uninitialized)
+    wxVariant defVal = GetDefaultValue();
+    if ( !defVal.IsNull() )
         SetValue(defVal);
+
+    if ( isSelected )
+    {
+        // Recreate editor
+        pg->DoSelectProperty(this, wxPG_SEL_FORCE);
     }
 
     return true;
