@@ -3078,7 +3078,6 @@ void wxDataViewMainWindow::OnInternalIdle()
 
     if (m_dirty)
     {
-        UpdateColumnSizes();
         RecalculateDisplay();
         m_dirty = false;
     }
@@ -3098,6 +3097,7 @@ void wxDataViewMainWindow::RecalculateDisplay()
 
     SetVirtualSize( width, height );
     GetOwner()->SetScrollRate( 10, m_lineHeight );
+    UpdateColumnSizes();
 
     Refresh();
 }
