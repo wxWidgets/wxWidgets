@@ -5293,16 +5293,27 @@ wxGrid::SendGridSizeEvent(wxEventType type,
    return GetEventHandler()->ProcessEvent(gridEvt);
 }
 
-// Generate a grid event based on a mouse event and return:
+// Process the event and return
 //  -1 if the event was vetoed
 //  +1 if the event was processed (but not vetoed)
 //   0 if the event wasn't handled
+int wxGrid::DoSendEvent(wxGridEvent& gridEvt)
+{
+    const bool claimed = GetEventHandler()->ProcessEvent(gridEvt);
+
+    // A Veto'd event may not be `claimed' so test this first
+    if ( !gridEvt.IsAllowed() )
+        return -1;
+
+    return claimed ? 1 : 0;
+}
+
+// Generate a grid event based on a mouse event and call DoSendEvent() with it.
 int
 wxGrid::SendEvent(wxEventType type,
                   int row, int col,
                   const wxMouseEvent& mouseEv)
 {
-   bool claimed, vetoed;
 
    if ( type == wxEVT_GRID_LABEL_LEFT_CLICK ||
         type == wxEVT_GRID_LABEL_LEFT_DCLICK ||
@@ -5324,8 +5335,8 @@ wxGrid::SendEvent(wxEventType type,
                pos.y,
                false,
                mouseEv);
-       claimed = GetEventHandler()->ProcessEvent(gridEvt);
-       vetoed = !gridEvt.IsAllowed();
+
+       return DoSendEvent(gridEvt);
    }
    else
    {
@@ -5345,15 +5356,8 @@ wxGrid::SendEvent(wxEventType type,
            gridEvt.Veto();
        }
 
-       claimed = GetEventHandler()->ProcessEvent(gridEvt);
-       vetoed = !gridEvt.IsAllowed();
+       return DoSendEvent(gridEvt);
    }
-
-   // A Veto'd event may not be `claimed' so test this first
-   if (vetoed)
-       return -1;
-
-   return claimed ? 1 : 0;
 }
 
 // Generate a grid event of specified type, return value same as above
@@ -5364,13 +5368,7 @@ wxGrid::SendEvent(wxEventType type, int row, int col, const wxString& s)
     wxGridEvent gridEvt( GetId(), type, this, row, col );
     gridEvt.SetString(s);
 
-    const bool claimed = GetEventHandler()->ProcessEvent(gridEvt);
-
-    // A Veto'd event may not be `claimed' so test this first
-    if ( !gridEvt.IsAllowed() )
-        return -1;
-
-    return claimed ? 1 : 0;
+    return DoSendEvent(gridEvt);
 }
 
 void wxGrid::Refresh(bool eraseb, const wxRect* rect)

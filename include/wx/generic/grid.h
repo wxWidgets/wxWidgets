@@ -97,6 +97,7 @@ class WXDLLIMPEXP_FWD_CORE wxGridCellAttr;
 class WXDLLIMPEXP_FWD_CORE wxGridCellAttrProviderData;
 class WXDLLIMPEXP_FWD_CORE wxGridColLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridCornerLabelWindow;
+class WXDLLIMPEXP_FWD_CORE wxGridEvent;
 class WXDLLIMPEXP_FWD_CORE wxGridRowLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridTypeRegistry;
@@ -2552,8 +2553,11 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    // generate the appropriate grid event and return -1 if it was vetoed, 1 if
-    // it was processed (but not vetoed) and 0 if it wasn't processed
+    // Send the given grid event and return -1 if it was vetoed, 1 if
+    // it was processed (but not vetoed) and 0 if it wasn't processed.
+    int DoSendEvent(wxGridEvent& gridEvt);
+
+    // Generate an event of the given type and call DoSendEvent().
     int SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxMouseEvent& e);
