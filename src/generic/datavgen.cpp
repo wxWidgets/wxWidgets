@@ -217,6 +217,15 @@ void wxDataViewColumn::WXOnResize(int width)
     m_owner->OnColumnResized();
 }
 
+int wxDataViewColumn::WXGetManuallySetWidth() const
+{
+    // Note that we need to return valid value even if no width was initially
+    // specified, as otherwise the last column created without any explicit
+    // width could be reduced to nothing by UpdateColumnSizes() when the
+    // control is shrunk.
+    return DoGetEffectiveWidth(m_manuallySetWidth);
+}
+
 void wxDataViewColumn::UpdateDisplay()
 {
     if (m_owner)

@@ -154,7 +154,7 @@ public:
     // user interactively.
     void WXOnResize(int width);
 
-    int WXGetManuallySetWidth() const { return m_manuallySetWidth; }
+    int WXGetManuallySetWidth() const;
 
 private:
     // common part of all ctors
