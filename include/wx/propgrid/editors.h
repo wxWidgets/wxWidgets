@@ -167,6 +167,10 @@ public:
     // Default implementation does nothing.
     virtual void DeleteItem( wxWindow* ctrl, int index ) const;
 
+    // Sets items of existing control.
+    // Default implementation does nothing.
+    virtual void SetItems(wxWindow* ctrl,  const wxArrayString& labels) const;
+
     // Extra processing when control gains focus. For example, wxTextCtrl
     // based controls should select all text.
     virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
@@ -273,6 +277,8 @@ public:
                             const wxString& label,
                             int index ) const wxOVERRIDE;
     virtual void DeleteItem( wxWindow* ctrl, int index ) const wxOVERRIDE;
+    virtual void SetItems(wxWindow* ctrl, const wxArrayString& labels) const wxOVERRIDE;
+
     virtual bool CanContainCustomImage() const wxOVERRIDE;
 
     // CreateControls calls this with CB_READONLY in extraStyle
