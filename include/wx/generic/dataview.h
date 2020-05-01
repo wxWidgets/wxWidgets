@@ -166,6 +166,11 @@ private:
     void UpdateDisplay();
     void UpdateWidth();
 
+    // Return the effective value corresponding to the given width, handling
+    // its negative values such as wxCOL_WIDTH_DEFAULT.
+    int DoGetEffectiveWidth(int width) const;
+
+
     wxString m_title;
     int m_width,
         m_manuallySetWidth,

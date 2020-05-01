@@ -188,9 +188,9 @@ void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
     m_sortAscending = true;
 }
 
-int wxDataViewColumn::GetWidth() const
+int wxDataViewColumn::DoGetEffectiveWidth(int width) const
 {
-    switch ( m_width )
+    switch ( width )
     {
         case wxCOL_WIDTH_DEFAULT:
             return wxWindow::FromDIP(wxDVC_DEFAULT_WIDTH, m_owner);
@@ -200,8 +200,13 @@ int wxDataViewColumn::GetWidth() const
             return m_owner->GetBestColumnWidth(m_owner->GetColumnIndex(this));
 
         default:
-            return m_width;
+            return width;
     }
+}
+
+int wxDataViewColumn::GetWidth() const
+{
+    return DoGetEffectiveWidth(m_width);
 }
 
 void wxDataViewColumn::WXOnResize(int width)
