@@ -988,7 +988,10 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -3731,7 +3734,10 @@ public:
            Currently this event is not generated when using the native GTK+
            version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -3844,6 +3850,12 @@ public:
 
     /**
         Set wxDataObject for data transfer within a drag operation.
+
+        This method must be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        handler to associate the data object to be dragged with the item.
+
+        Note that the control takes ownership of the data object, i.e. @a obj
+        must be heap-allocated and will be deleted by wxDataViewCtrl itself.
     */
     void SetDataObject( wxDataObject *obj );
 
@@ -3865,7 +3877,7 @@ public:
     /**
         Specify the kind of the drag operation to perform.
 
-        This method can be used inside a wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        This method can be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
         handler in order to configure the drag operation. Valid values are
         ::wxDrag_CopyOnly (default), ::wxDrag_AllowMove (allow the data to be
         moved) and ::wxDrag_DefaultMove.
