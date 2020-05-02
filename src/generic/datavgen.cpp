@@ -910,6 +910,39 @@ private:
     // assumes that all columns were modified, otherwise just this one.
     bool DoItemChanged(const wxDataViewItem& item, int view_column);
 
+    // Return whether the item has at most one column with a value.
+    bool IsItemSingleValued(const wxDataViewItem& item) const
+    {
+        bool hadColumnWithValue = false;
+        const unsigned int cols = GetOwner()->GetColumnCount();
+        const wxDataViewModel* const model = GetModel();
+        for ( unsigned int i = 0; i < cols; i++ )
+        {
+            if ( model->HasValue(item, i) )
+            {
+                if ( hadColumnWithValue )
+                    return false;
+                hadColumnWithValue = true;
+            }
+        }
+
+        return true;
+    }
+
+    // Find the first column with a value in it.
+    wxDataViewColumn* FindFirstColumnWithValue(const wxDataViewItem& item) const
+    {
+        const unsigned int cols = GetOwner()->GetColumnCount();
+        const wxDataViewModel* const model = GetModel();
+        for ( unsigned int i = 0; i < cols; i++ )
+        {
+            if ( model->HasValue(item, i) )
+                return GetOwner()->GetColumnAt(i);
+        }
+
+        return NULL;
+    }
+
 private:
     wxDataViewCtrl             *m_owner;
     int                         m_lineHeight;
@@ -2396,11 +2429,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 {
                     renderColumnFocus = true;
 
-                    // If this is container node without columns, render full-row focus:
+                    // If there is just a single value, render full-row focus:
                     if ( !IsList() )
                     {
                         wxDataViewTreeNode *node = GetTreeNodeByRow(item);
-                        if ( node->HasChildren() && !model->HasContainerColumns(node->GetItem()) )
+                        if ( IsItemSingleValued(node->GetItem()) )
                             renderColumnFocus = false;
                     }
                 }
@@ -2547,11 +2580,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 dataitem = node->GetItem();
 
-                // Skip all columns of "container" rows except the expander
-                // column itself unless HasContainerColumns() overrides this.
-                if ( col != expander &&
-                        model->IsContainer(dataitem) &&
-                            !model->HasContainerColumns(dataitem) )
+                // Skip al columns  that do not have values
+                if ( !model->HasValue(dataitem, col->GetModelColumn()) )
                 {
                     cell_rect.y += line_height;
                     continue;
@@ -3491,9 +3521,7 @@ int wxDataViewMainWindow::QueryAndCacheLineHeight(unsigned int row, wxDataViewIt
         if (column->IsHidden())
             continue;      // skip it!
 
-        if ((col != 0) &&
-            model->IsContainer(item) &&
-            !model->HasContainerColumns(item))
+        if ( !model->HasValue(item, col) )
             continue;      // skip it!
 
         wxDataViewRenderer *renderer =
@@ -4071,20 +4099,25 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
 
     wxDataViewColumn *candidate = m_currentCol;
 
-    if ( candidate &&
-         !IsCellEditableInMode(item, candidate, mode) &&
-         !m_currentColSetByKeyboard )
+    if ( candidate && !IsCellEditableInMode(item, candidate, mode) )
     {
-        // If current column was set by mouse to something not editable (in
-        // 'mode') and the user pressed Space/F2 to edit it, treat the
-        // situation as if there was whole-row focus, because that's what is
-        // visually indicated and the mouse click could very well be targeted
-        // on the row rather than on an individual cell.
-        //
-        // But if it was done by keyboard, respect that even if the column
-        // isn't editable, because focus is visually on that column and editing
-        // something else would be surprising.
-        candidate = NULL;
+        if ( m_currentColSetByKeyboard )
+        {
+            // If current column was set by keyboard to something not editable (in
+            // 'mode') and the user pressed Space/F2 then do not edit anything
+            // because focus is visually on that column and editing
+            // something else would be surprising.
+            return NULL;
+        }
+        else
+        {
+            // But if the current column was set by mouse to something not editable (in
+            // 'mode') and the user pressed Space/F2 to edit it, treat the
+            // situation as if there was whole-row focus, because that's what is
+            // visually indicated and the mouse click could very well be targeted
+            // on the row rather than on an individual cell.
+            candidate = NULL;
+        }
     }
 
     if ( !candidate )
@@ -4104,23 +4137,17 @@ wxDataViewMainWindow::FindColumnForEditing(const wxDataViewItem& item, wxDataVie
         }
     }
 
-    // If on container item without columns, only the expander column
-    // may be directly editable:
-    if ( candidate &&
-         GetOwner()->GetExpanderColumn() != candidate &&
-         GetModel()->IsContainer(item) &&
-         !GetModel()->HasContainerColumns(item) )
-    {
-        candidate = GetOwner()->GetExpanderColumn();
-    }
+    // Switch to the first column with value if the current column has no value
+    if ( candidate && !GetModel()->HasValue(item, candidate->GetModelColumn()) )
+        candidate = FindFirstColumnWithValue(item);
 
     if ( !candidate )
-       return NULL;
+        return NULL;
 
-   if ( !IsCellEditableInMode(item, candidate, mode) )
-       return NULL;
+    if ( !IsCellEditableInMode(item, candidate, mode) )
+        return NULL;
 
-   return candidate;
+    return candidate;
 }
 
 bool wxDataViewMainWindow::IsCellEditableInMode(const wxDataViewItem& item,
@@ -4131,6 +4158,9 @@ bool wxDataViewMainWindow::IsCellEditableInMode(const wxDataViewItem& item,
         return false;
 
     if ( !GetModel()->IsEnabled(item, col->GetModelColumn()) )
+        return false;
+
+    if ( !GetModel()->HasValue(item, col->GetModelColumn()) )
         return false;
 
     return true;
@@ -4498,18 +4528,26 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
 
     const bool wrapAround = event.GetKeyCode() == WXK_TAB;
 
-    if ( node )
-    {
-        // navigation shouldn't work in branch nodes without other columns:
-        if ( node->HasChildren() && !GetModel()->HasContainerColumns(node->GetItem()) )
-            return false;
-    }
+    // navigation shouldn't work in nodes with fewer than two columns
+    if ( node && IsItemSingleValued(node->GetItem()) )
+        return false;
 
     if ( m_currentCol == NULL || !m_currentColSetByKeyboard )
     {
         if ( forward )
         {
-            m_currentCol = GetOwner()->GetColumnAt(0);
+            if ( node )
+            {
+                // find first column with value
+                m_currentCol = FindFirstColumnWithValue(node->GetItem());
+            }
+            else
+            {
+                // in the special "list" case, all columns have values, so just
+                // take the first one
+                m_currentCol = GetOwner()->GetColumnAt(0);
+            }
+
             m_currentColSetByKeyboard = true;
             RefreshRow(m_currentRow);
             return true;
@@ -4521,41 +4559,49 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
         }
     }
 
-    int idx = GetOwner()->GetColumnIndex(m_currentCol) + (forward ? +1 : -1);
-
-    if ( idx >= (int)GetOwner()->GetColumnCount() )
+    int idx = GetOwner()->GetColumnIndex(m_currentCol);
+    const unsigned int cols = GetOwner()->GetColumnCount();
+    for ( unsigned int i = 0; i < cols; i++ )
     {
-        if ( !wrapAround )
-            return false;
+        idx += (forward ? +1 : -1);
+        if ( idx >= (int)GetOwner()->GetColumnCount() )
+        {
+            if ( !wrapAround )
+                return false;
 
-        if ( GetCurrentRow() < GetRowCount() - 1 )
-        {
-            // go to the first column of the next row:
-            idx = 0;
-            OnVerticalNavigation(wxKeyEvent()/*dummy*/, +1);
+            if ( GetCurrentRow() < GetRowCount() - 1 )
+            {
+                // go to the first column of the next row:
+                idx = 0;
+                OnVerticalNavigation(wxKeyEvent()/*dummy*/, +1);
+            }
+            else
+            {
+                // allow focus change
+                event.Skip();
+                return false;
+            }
         }
-        else
+        else if ( idx < 0 )
         {
-            // allow focus change
-            event.Skip();
-            return false;
-        }
-    }
+            if ( !wrapAround )
+                return false;
 
-    if ( idx < 0 && wrapAround )
-    {
-        if ( GetCurrentRow() > 0 )
-        {
-            // go to the last column of the previous row:
-            idx = (int)GetOwner()->GetColumnCount() - 1;
-            OnVerticalNavigation(wxKeyEvent()/*dummy*/, -1);
+            if ( GetCurrentRow() > 0 )
+            {
+                // go to the last column of the previous row:
+                idx = (int)GetOwner()->GetColumnCount() - 1;
+                OnVerticalNavigation(wxKeyEvent()/*dummy*/, -1);
+            }
+            else
+            {
+                // allow focus change
+                event.Skip();
+                return false;
+            }
         }
-        else
-        {
-            // allow focus change
-            event.Skip();
-            return false;
-        }
+        if ( !node || GetModel()->HasValue(node->GetItem(), i) )
+            break;
     }
 
     GetOwner()->EnsureVisibleRowCol(m_currentRow, idx);
@@ -4767,9 +4813,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
 
     bool ignore_other_columns =
-        ((expander != col) &&
-        (model->IsContainer(item)) &&
-        (!model->HasContainerColumns(item)));
+        (expander != col) &&
+        (!model->HasValue(item, col->GetModelColumn()));
 
     if (event.LeftDClick())
     {
@@ -6495,7 +6540,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetDescription(int childId, wxString* desc
         const unsigned int numCols = dvCtrl->GetColumnCount();
         for ( unsigned int col = 0; col < numCols; col++ )
         {
-            if ( model->IsContainer(item) && !model->HasContainerColumns(item) )
+            if ( !model->HasValue(item, col) )
                 continue; // skip it
 
             wxDataViewColumn *dvCol = dvCtrl->GetColumnAt(col);

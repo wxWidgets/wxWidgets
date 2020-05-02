@@ -334,8 +334,13 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
                               unsigned int column, bool ascending ) const
 {
     wxVariant value1,value2;
-    GetValue( value1, item1, column );
-    GetValue( value2, item2, column );
+
+    // Avoid calling GetValue() for the cells that are not supposed to have any
+    // value, this might be unexpected.
+    if ( HasValue(item1, column) )
+        GetValue( value1, item1, column );
+    if ( HasValue(item2, column) )
+        GetValue( value2, item2, column );
 
     if (!ascending)
     {

@@ -3146,16 +3146,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     if (!wx_model->IsVirtualListModel())
     {
-        gboolean visible;
-        if (wx_model->IsContainer( item ))
-        {
-            visible = wx_model->HasContainerColumns( item ) || (column == 0);
-        }
-        else
-        {
-            visible = true;
-        }
-
+        gboolean visible = wx_model->HasValue(item, column);
         GValue gvalue = G_VALUE_INIT;
         g_value_init( &gvalue, G_TYPE_BOOLEAN );
         g_value_set_boolean( &gvalue, visible );

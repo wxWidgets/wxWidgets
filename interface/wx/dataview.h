@@ -304,14 +304,18 @@ public:
 
         All normal items have values in all columns but the container items
         only show their label in the first column (@a col == 0) by default (but
-        see HasContainerColumns()). So this function always returns true for
+        see HasContainerColumns()). So this function by default returns true for
         the first column while for the other ones it returns true only if the
         item is not a container or HasContainerColumns() was overridden to
         return true for it.
 
+        Since wxWidgets 3.1.4, this method is virtual and can be overridden to
+        explicitly specify for which columns a given item has, and doesn't
+        have, values.
+
         @since 2.9.1
      */
-    bool HasValue(const wxDataViewItem& item, unsigned col) const;
+    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const;
 
     /**
         Override this to indicate of @a item is a container, i.e.\ if

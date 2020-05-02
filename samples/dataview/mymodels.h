@@ -267,6 +267,16 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+// MyListStoreHasValueModel
+// ----------------------------------------------------------------------------
+
+class MyListStoreHasValueModel : public MyListStoreDerivedModel
+{
+public:
+    virtual bool HasValue(const wxDataViewItem &item, unsigned int col) const wxOVERRIDE;
+};
+
+// ----------------------------------------------------------------------------
 // MyIndexListModel
 // ----------------------------------------------------------------------------
 

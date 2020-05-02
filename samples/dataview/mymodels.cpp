@@ -626,3 +626,15 @@ bool MyListStoreDerivedModel::IsEnabledByRow(unsigned int row, unsigned int col)
     // disabled the last two checkboxes
     return !(col == 0 && 8 <= row && row <= 9);
 }
+
+// ----------------------------------------------------------------------------
+// MyListStoreHasValueModel
+// ----------------------------------------------------------------------------
+
+bool MyListStoreHasValueModel::HasValue(const wxDataViewItem &item, unsigned int col) const
+{
+    unsigned int row = GetRow( item );
+    // the diagonal entries don't have values. This is just a silly example to demonstrate the
+    // usage of overriding HasValue to specify that some columns don't have values for some items
+    return row != col;
+}
