@@ -73,6 +73,9 @@ public:
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
 
+    // Filter pasted text
+    void OnTextPaste(wxClipboardTextEvent& event);
+
     // ACCESSORS
     inline long GetStyle() const { return m_validatorStyle; }
     void SetStyle(long style);
@@ -145,6 +148,19 @@ protected:
     // These two functions (undocumented now) are kept for compatibility reasons.
     bool ContainsOnlyIncludedCharacters(const wxString& val) const;
     bool ContainsExcludedCharacters(const wxString& val) const;
+
+    // Check whether the specified character can be inserted in the control at
+    // the given position in the string representing the current controls
+    // contents.
+    virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const;
+
+private:
+    // Determine the current insertion point and text in the associated control.
+    void GetCurrentValueAndInsertionPoint(wxString& val, int& pos);
+
+    // Simulates wxEVT_CHAR by inserting the specified char in the associated
+    // wxTextEntry.
+    void InsertChar(const wxChar ch);
 
 protected:
     long                 m_validatorStyle;

@@ -27,10 +27,38 @@
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
+    #include "wx/clipbrd.h"
 #endif
 
 #include "wx/valnum.h"
 #include "wx/numformatter.h"
+
+// ----------------------------------------------------------------------------
+// global helpers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+wxString GetClipboardTextData()
+{
+    wxString strTxtData;
+
+    if (wxTheClipboard->Open())
+    {
+        if (wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT :
+                                        wxDF_TEXT))
+        {
+            wxTextDataObject txtDataObj;
+            wxTheClipboard->GetData(txtDataObj);
+            strTxtData = txtDataObj.GetText();
+        }
+
+        wxTheClipboard->Close();
+    }
+
+    return strTxtData;
+}
+} // Anonymous namespace
 
 // ============================================================================
 // wxNumValidatorBase implementation
@@ -38,6 +66,7 @@
 
 wxBEGIN_EVENT_TABLE(wxNumValidatorBase, wxValidator)
     EVT_CHAR(wxNumValidatorBase::OnChar)
+    EVT_TEXT_PASTE(wxID_ANY, wxNumValidatorBase::OnTextPaste)
     EVT_KILL_FOCUS(wxNumValidatorBase::OnKillFocus)
 wxEND_EVENT_TABLE()
 
@@ -176,6 +205,33 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
     }
 }
 
+void wxNumValidatorBase::OnTextPaste(wxClipboardTextEvent& WXUNUSED(event))
+{
+    wxString strTxtData = GetClipboardTextData();
+
+    // Here we simulate wxEVT_CHAR for each char of the clipboard text data.
+    for (wxString::const_iterator it = strTxtData.begin();
+            it != strTxtData.end(); it++)
+    {
+        // Check if this character is allowed in the current state.
+        wxString strValue;
+        int nPos;
+        GetCurrentValueAndInsertionPoint(strValue, nPos);
+
+        if (!IsCharOk(strValue, nPos, *it))
+        {
+            if (!wxValidator::IsSilent())
+            {
+                wxBell();
+            }
+        }
+        else
+        {
+            InsertChar(*it);
+        }
+    }
+}
+
 void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 {
     event.Skip();
@@ -207,6 +263,26 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 
     if ( wasModified )
         text->MarkDirty();
+}
+
+// Simulates wxEVT_CHAR by inserting the specified char in the associated
+// wxTextEntry.
+void wxNumValidatorBase::InsertChar(const wxChar ch) const
+{
+    wxString strValue;
+    int nPos;
+    GetCurrentValueAndInsertionPoint(strValue, nPos);
+    strValue.insert(nPos, ch);
+
+    wxTextEntry *pTextEntry = GetTextEntry();
+
+    if (!pTextEntry)
+    {
+        return;
+    }
+
+    pTextEntry->ChangeValue(strValue);
+    pTextEntry->SetInsertionPoint(nPos + 1);
 }
 
 // ============================================================================
