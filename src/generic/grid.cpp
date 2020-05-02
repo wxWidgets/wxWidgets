@@ -5707,13 +5707,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    if ( GetGridCursorRow() < GetNumberRows()-1 )
+                    if ( !MoveCursorDown( event.ShiftDown() ) )
                     {
-                        MoveCursorDown( event.ShiftDown() );
-                    }
-                    else
-                    {
-                        // at the bottom of a column
+                        // Normally this would be done by MoveCursorDown(), but
+                        // if it failed to move the cursor, e.g. because we're
+                        // at the bottom of a column, do it here.
                         DisableCellEditControl();
                     }
                 }
