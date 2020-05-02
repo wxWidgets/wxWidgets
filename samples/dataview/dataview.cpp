@@ -1262,6 +1262,7 @@ void MyFrame::OnBeginDrag( wxDataViewEvent &event )
     // only allow drags for item, not containers
     if (m_music_model->IsContainer( item ) )
     {
+        wxLogMessage("Forbidding starting dragging");
         event.Veto();
         return;
     }
@@ -1271,6 +1272,8 @@ void MyFrame::OnBeginDrag( wxDataViewEvent &event )
     obj->SetText( node->m_title );
     event.SetDataObject( obj );
     event.SetDragFlags(wxDrag_AllowMove); // allows both copy and move
+
+    wxLogMessage("Starting dragging \"%s\"", node->m_title);
 }
 
 void MyFrame::OnDropPossible( wxDataViewEvent &event )
