@@ -2233,15 +2233,25 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
                 if (m_owner->GetModel()->IsContainer(ascendNode->GetItem()))
                 {
                     // Item can be inserted
+                    dropItemInfo.m_item = ascendNode->GetItem();
 
                     int itemPosition = ascendNode->FindChildByItem(prevAscendNode->GetItem());
-                    dropItemInfo.m_proposedDropIndex  = itemPosition == wxNOT_FOUND ? 0 : itemPosition + 1;
-                    dropItemInfo.m_item               = ascendNode->GetItem();
+                    if ( itemPosition == wxNOT_FOUND )
+                        itemPosition = 0;
+                    else
+                        itemPosition++;
 
-                    // We must break the loop if the applied node is expanded (opened)
-                    // and the proposed drop position is not the last in this node
-                    if (ascendNode->IsOpen() && dropItemInfo.m_proposedDropIndex != static_cast<int>(ascendNode->GetChildNodes().size()))
-                        break;
+                    dropItemInfo.m_proposedDropIndex = itemPosition;
+
+                    // We must break the loop if the applied node is expanded
+                    // (opened) and the proposed drop position is not the last
+                    // in this node.
+                    if ( ascendNode->IsOpen() )
+                    {
+                        const size_t lastPos = ascendNode->GetChildNodes().size();
+                        if ( static_cast<size_t>(itemPosition) != lastPos )
+                            break;
+                    }
 
                     int indent = GetOwner()->GetIndent()*level + expanderWidth;
 
