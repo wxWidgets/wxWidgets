@@ -2165,7 +2165,11 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
         const int itemStart = GetLineStart(row);
         const int itemHeight = GetLineHeight(row);
 
-        bool insertAbove = yy - itemStart < itemHeight*0.15;       // 15%, TODO: configurable
+        // 15% is an arbitrarily chosen threshold here, which could be changed
+        // or made configurable if really needed.
+        static const double UPPER_ITEM_PART = 0.15;
+
+        bool insertAbove = yy - itemStart < itemHeight*UPPER_ITEM_PART;
         if (insertAbove)
         {
             // Can be treated as 'insertBelow" with the small difference:
@@ -2186,7 +2190,7 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
 
         }
 
-        bool insertBelow = yy - itemStart > itemHeight*0.85;        // 15%, TODO: configurable
+        bool insertBelow = yy - itemStart > itemHeight*(1.0 - UPPER_ITEM_PART);
         if (insertBelow)
             dropItemInfo.m_hint = DropHint_Below;
 
