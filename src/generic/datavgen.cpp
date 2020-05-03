@@ -2162,8 +2162,8 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
 
         dropItemInfo.m_item = node->GetItem();
 
-        unsigned int itemStart = GetLineStart(row);
-        int itemHeight = GetLineHeight(row);
+        const int itemStart = GetLineStart(row);
+        const int itemHeight = GetLineHeight(row);
 
         bool insertAbove = yy - itemStart < itemHeight*0.15;       // 15%, TODO: configurable
         if (insertAbove)
