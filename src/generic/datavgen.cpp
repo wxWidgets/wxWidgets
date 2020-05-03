@@ -2107,21 +2107,25 @@ bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
 
 void wxDataViewMainWindow::RefreshDropHint()
 {
+    const unsigned row = m_dropItemInfo.m_row;
+
     switch (m_dropItemInfo.m_hint)
     {
         case DropHint_None:
             break;
 
         case DropHint_Inside:
-            RefreshRow(m_dropItemInfo.m_row);
+            RefreshRow(row);
             break;
 
         case DropHint_Above:
-            RefreshRows(m_dropItemInfo.m_row == 0 ? 0 : m_dropItemInfo.m_row - 1, m_dropItemInfo.m_row);
+            RefreshRows(row == 0 ? 0 : row - 1, row);
             break;
 
         case DropHint_Below:
-            RefreshRows(m_dropItemInfo.m_row, std::max(m_dropItemInfo.m_row + 1, GetRowCount() - 1));
+            // It's not a problem here if row+1 is out of range, RefreshRows()
+            // allows this.
+            RefreshRows(row, row + 1);
             break;
     }
 }
