@@ -692,13 +692,16 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
 #ifdef __WXMAC__
             // according to the drawing code the triangels are drawn
             // at -4 , -4  from the position up to +10/+10 max
-            if ((point.x > xCross-4) && (point.x < xCross+10) &&
-                (point.y > y_mid-4) && (point.y < y_mid+10) &&
+            const int triangleStart = theCtrl->FromDIP(4);
+            const int triangleEnd = theCtrl->FromDIP(10);
+            if ((point.x > xCross - triangleStart) && (point.x < xCross + triangleEnd) &&
+                (point.y > y_mid - triangleStart) && (point.y < y_mid + triangleEnd) &&
                 HasPlus() && theCtrl->HasButtons() )
 #else
             // 5 is the size of the plus sign
-            if ((point.x > xCross-6) && (point.x < xCross+6) &&
-                (point.y > y_mid-6) && (point.y < y_mid+6) &&
+            const int plusSize = 1 + theCtrl->FromDIP(5);
+            if ((point.x > xCross - plusSize) && (point.x < xCross + plusSize) &&
+                (point.y > y_mid - plusSize) && (point.y < y_mid + plusSize) &&
                 HasPlus() && theCtrl->HasButtons() )
 #endif
             {
