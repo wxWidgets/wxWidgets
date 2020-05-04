@@ -1,4 +1,4 @@
-                wxWidgets 3.0.5 Release Notes
+                wxWidgets 3.0.6 Release Notes
                 =============================
 
 Welcome to the latest stable release of wxWidgets, a free and open
@@ -18,13 +18,13 @@ You can learn more about wxWidgets at
 
 and read its documentation online at
 
-        http://docs.wxwidgets.org/3.0.5/
+        http://docs.wxwidgets.org/3.0.6/
 
 
 wxWidgets sources and binaries for the selected platforms are
 available for download from
 
-	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.5/
+	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.6/
 
 
 
@@ -39,7 +39,7 @@ libraries).
 
 The full list of changes in this release is available at
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.5/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.6/docs/changes.txt
 
 (starting from the line 583, or search for "3.0.5" in this file), here are
 some selected ones:
@@ -72,7 +72,7 @@ If you are upgrading from wxWidgets 2.8 or earlier, please read the
 "INCOMPATIBLE CHANGES" section in the beginning of this file and the
 corresponding part of the manual at
 
-    http://docs.wxwidgets.org/3.0.5/overview_changes_since28.html
+    http://docs.wxwidgets.org/3.0.6/overview_changes_since28.html
 
 
 Platforms supported
