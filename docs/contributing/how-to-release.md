@@ -215,8 +215,6 @@ with x.y.z+1.
 	
 	autoconf -B build/autoconf_prepend-include
 
-	and rerun both `bakefile_gen` and `autoconf` afterwards to update the version in the generated files too.
-
 ## MSW Visual Studio Official Builds
 
 To build official x86 and x64 shared binaries the following are prerequisites:
