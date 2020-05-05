@@ -315,7 +315,7 @@ void wxFrame::PositionStatusBar()
     int x = 0;
 #if wxUSE_TOOLBAR
     wxToolBar * const toolbar = GetToolBar();
-    if ( toolbar && !toolbar->HasFlag(wxTB_TOP) )
+    if ( toolbar )
     {
         const wxSize sizeTB = toolbar->GetSize();
 
@@ -326,13 +326,14 @@ void wxFrame::PositionStatusBar()
 
             w += sizeTB.x;
         }
-        else // wxTB_BOTTOM
+        else
+        if ( toolbar->HasFlag(wxTB_BOTTOM) )
         {
             // we need to position the status bar below the toolbar
             h += sizeTB.y;
         }
+        //else: no adjustments necessary for the toolbar on top
     }
-    //else: no adjustments necessary for the toolbar on top
 #endif // wxUSE_TOOLBAR
 
     // GetSize returns the height of the clientSize in which the statusbar
@@ -933,7 +934,12 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     {
         const wxSize sizeTB = toolbar->GetSize();
 
-        if ( toolbar->HasFlag(wxTB_TOP) )
+        // wxTB_TOP has the same value as wxTB_HORIZONTAL so HasFlag(wxTB_TOP)
+        // returns true for a toolbar created with wxTB_HORIZONTAL | wxTB_BOTTOM
+        // style despite the toolbar being on the frame bottom and not affecting
+        // the client area origin. We therefore need to check here not only for
+        // presence of wxTB_TOP but also for absence of wxTB_BOTTOM.
+        if ( toolbar->HasFlag(wxTB_TOP) && !toolbar->HasFlag(wxTB_BOTTOM) )
         {
             pt.y += sizeTB.y;
         }
