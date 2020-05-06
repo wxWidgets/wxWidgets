@@ -321,13 +321,12 @@ void wxFrame::PositionStatusBar()
 
         if ( toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT) )
         {
-            if ( toolbar->HasFlag(wxTB_LEFT) )
+            if ( !toolbar->HasFlag(wxTB_RIGHT) )
                 x -= sizeTB.x;
 
             w += sizeTB.x;
         }
-        else
-        if ( toolbar->HasFlag(wxTB_BOTTOM) )
+        else if ( toolbar->HasFlag(wxTB_BOTTOM) )
         {
             // we need to position the status bar below the toolbar
             h += sizeTB.y;
@@ -943,7 +942,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
         {
             pt.y += sizeTB.y;
         }
-        else if ( toolbar->HasFlag(wxTB_LEFT) )
+        else if ( toolbar->HasFlag(wxTB_LEFT) && !toolbar->HasFlag(wxTB_RIGHT) )
         {
             pt.x += sizeTB.x;
         }
