@@ -74,6 +74,18 @@ matrix:
           env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
           name: wxBase S/390
 
+    # The environments running these builds are flaky and often fail for the
+    # reasons that have nothing to do with the build itself.
+    allow_failures:
+        - os: linux
+          arch: ppc64le
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
+          name: wxBase PowerPC64
+        - os: linux
+          arch: s390x
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
+          name: wxBase S/390
+
 branches:
     only:
         - master
