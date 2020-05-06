@@ -68,11 +68,11 @@ matrix:
         - os: linux
           arch: ppc64le
           env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
-          name: wxGTK PowerPC64
+          name: wxBase PowerPC64
         - os: linux
           arch: s390x
           env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
-          name: wxGTK S/390
+          name: wxBase S/390
 
 branches:
     only:
