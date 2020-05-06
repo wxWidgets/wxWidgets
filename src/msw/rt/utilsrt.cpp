@@ -215,19 +215,17 @@ void Uninitialize()
     RTCore::Get().RoUninitialize();
 }
 
-bool GetActivationFactory(const wxString& activatableClassId, REFIID iid, void ** factory)
+HRESULT GetActivationFactory(const wxString& activatableClassId, REFIID iid, void ** factory)
 {
     if ( !RTCore::IsAvailable() )
-        return false;
+        return CLASS_E_CLASSNOTAVAILABLE;
 
     HRESULT hr = RTCore::Get().RoGetActivationFactory(TempStringRef(activatableClassId), iid, factory);
     if ( FAILED(hr) )
     {
         wxLogDebug("RoGetActivationFactory failed %.8x", hr);
-        return false;
     }
-    else
-        return true;
+    return hr;
 }
 
 // ----------------------------------------------------------------------------

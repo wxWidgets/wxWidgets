@@ -98,8 +98,15 @@ function(wx_set_common_target_properties target_name)
             set(MSVC_WARNING_LEVEL "/W4")
         endif()
         target_compile_options(${target_name} PRIVATE ${MSVC_WARNING_LEVEL})
-    else()
-        # TODO: add warning flags for other compilers
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        target_compile_options(${target_name} PRIVATE
+            -Wall
+            )
+    elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        target_compile_options(${target_name} PRIVATE
+            -Wall
+            -Wno-ignored-attributes
+            )
     endif()
 
     if(CMAKE_USE_PTHREADS_INIT)

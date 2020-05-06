@@ -91,11 +91,13 @@ static wxLocale *wxSetLocale(wxLocale *pLocale);
 namespace
 {
 
+#if defined(__UNIX__)
 // get just the language part ("en" in "en_GB")
 inline wxString ExtractLang(const wxString& langFull)
 {
     return langFull.BeforeFirst('_');
 }
+#endif
 
 // helper functions of GetSystemLanguage()
 #ifdef __UNIX__
@@ -606,7 +608,7 @@ bool wxLocale::Init(int language, int flags)
 namespace
 {
 
-#ifndef __WXOSX__
+#if defined(__UNIX__) && !defined(__WXOSX__)
 // Small helper function: get the value of the given environment variable and
 // return true only if the variable was found and has non-empty value.
 inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)

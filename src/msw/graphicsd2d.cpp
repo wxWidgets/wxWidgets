@@ -385,13 +385,17 @@ class wxDirect2DFontFileEnumerator : public IDWriteFontFileEnumerator
 public:
     wxDirect2DFontFileEnumerator(IDWriteFactory* pFactory, const wxArrayString& fontCollection)
         : m_factory(pFactory)
-        , m_nextIndex(0)
         , m_filePaths(fontCollection)
+        , m_nextIndex(0)
+    {
+    }
+
+    virtual ~wxDirect2DFontFileEnumerator()
     {
     }
 
     // IDWriteFontFileEnumerator methods
-    virtual HRESULT STDMETHODCALLTYPE MoveNext(BOOL* pHasCurrentFile) wxOVERRIDE
+    virtual wxSTDMETHODIMP MoveNext(BOOL* pHasCurrentFile) wxOVERRIDE
     {
         HRESULT hr = S_OK;
 
@@ -411,7 +415,7 @@ public:
         return hr;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE GetCurrentFontFile(IDWriteFontFile** ppFontFile) wxOVERRIDE
+    virtual wxSTDMETHODIMP GetCurrentFontFile(IDWriteFontFile** ppFontFile) wxOVERRIDE
     {
         if ( m_currentFile )
         {
@@ -449,8 +453,12 @@ public:
         ms_isInitialized = true;
     }
 
+    virtual ~wxDirect2DFontCollectionLoader()
+    {
+    }
+
     // IDWriteFontCollectionLoader methods
-    virtual HRESULT STDMETHODCALLTYPE CreateEnumeratorFromKey(IDWriteFactory* pFactory,
+    virtual wxSTDMETHODIMP CreateEnumeratorFromKey(IDWriteFactory* pFactory,
                                         void const* pCollectionKey, UINT32 collectionKeySize,
                                         IDWriteFontFileEnumerator** pFontFileEnumerator) wxOVERRIDE
     {
