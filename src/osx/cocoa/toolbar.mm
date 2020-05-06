@@ -1688,10 +1688,14 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         }
         
         dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
-        if ( HasFlag(wxTB_LEFT) )
-            dc.DrawLine(w-1, 0, w-1, h);
-        else if ( HasFlag(wxTB_RIGHT) )
+
+        // Note that testing this is in the "reverse" order, i.e. right before
+        // left and bottom before top because these flags can actually be
+        // combined because left/top are the same as vertical/horizontal
+        if ( HasFlag(wxTB_RIGHT) )
             dc.DrawLine(0, 0, 0, h);
+        else if ( HasFlag(wxTB_LEFT) )
+            dc.DrawLine(w-1, 0, w-1, h);
         else if ( HasFlag(wxTB_BOTTOM) )
             dc.DrawLine(0, 0, w, 0);
         else if ( HasFlag(wxTB_TOP) )
