@@ -188,9 +188,9 @@ void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
     m_sortAscending = true;
 }
 
-int wxDataViewColumn::GetWidth() const
+int wxDataViewColumn::DoGetEffectiveWidth(int width) const
 {
-    switch ( m_width )
+    switch ( width )
     {
         case wxCOL_WIDTH_DEFAULT:
             return wxWindow::FromDIP(wxDVC_DEFAULT_WIDTH, m_owner);
@@ -200,8 +200,13 @@ int wxDataViewColumn::GetWidth() const
             return m_owner->GetBestColumnWidth(m_owner->GetColumnIndex(this));
 
         default:
-            return m_width;
+            return width;
     }
+}
+
+int wxDataViewColumn::GetWidth() const
+{
+    return DoGetEffectiveWidth(m_width);
 }
 
 void wxDataViewColumn::WXOnResize(int width)
@@ -210,6 +215,15 @@ void wxDataViewColumn::WXOnResize(int width)
     m_manuallySetWidth = width;
 
     m_owner->OnColumnResized();
+}
+
+int wxDataViewColumn::WXGetSpecifiedWidth() const
+{
+    // Note that we need to return valid value even if no width was initially
+    // specified, as otherwise the last column created without any explicit
+    // width could be reduced to nothing by UpdateColumnSizes() when the
+    // control is shrunk.
+    return DoGetEffectiveWidth(m_manuallySetWidth);
 }
 
 void wxDataViewColumn::UpdateDisplay()
@@ -3108,7 +3122,6 @@ void wxDataViewMainWindow::OnInternalIdle()
 
     if (m_dirty)
     {
-        UpdateColumnSizes();
         RecalculateDisplay();
         m_dirty = false;
     }
@@ -3128,6 +3141,7 @@ void wxDataViewMainWindow::RecalculateDisplay()
 
     SetVirtualSize( width, height );
     GetOwner()->SetScrollRate( 10, m_lineHeight );
+    UpdateColumnSizes();
 
     Refresh();
 }
@@ -5123,7 +5137,7 @@ void wxDataViewMainWindow::UpdateColumnSizes()
 
     wxDataViewCtrl *owner = GetOwner();
 
-    int fullWinWidth = GetSize().x;
+    int fullWinWidth = GetClientSize().x;
 
     // Find the last shown column: we shouldn't bother to resize the columns
     // that are hidden anyhow.
@@ -5160,9 +5174,11 @@ void wxDataViewMainWindow::UpdateColumnSizes()
         const int availableWidth = fullWinWidth - lastColX;
 
         // Never make the column automatically smaller than the last width it
-        // was explicitly given nor its minimum width.
-        if ( availableWidth <= wxMax(lastCol->GetMinWidth(),
-                                     lastCol->WXGetManuallySetWidth()) )
+        // was explicitly given nor its minimum width (however we do need to
+        // reduce it until this size if it's currently wider, so this
+        // comparison needs to be strict).
+        if ( availableWidth < wxMax(lastCol->GetMinWidth(),
+                                    lastCol->WXGetSpecifiedWidth()) )
         {
             return;
         }
@@ -5320,7 +5336,7 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 
     // Update the last column size to take all the available space. Note that
     // this must be done after calling Layout() to update m_clientArea size.
-    if ( m_clientArea && GetColumnCount() )
+    if ( m_clientArea )
         m_clientArea->UpdateColumnSizes();
 
     AdjustScrollbars();
@@ -5351,7 +5367,7 @@ void wxDataViewCtrl::OnDPIChanged(wxDPIChangedEvent& event)
             minWidth = minWidth * event.GetNewDPI().x / event.GetOldDPI().x;
         m_cols[i]->SetMinWidth(minWidth);
 
-        int width = m_cols[i]->WXGetManuallySetWidth();
+        int width = m_cols[i]->WXGetSpecifiedWidth();
         if ( width > 0 )
             width = width * event.GetNewDPI().x / event.GetOldDPI().x;
         m_cols[i]->SetWidth(width);

@@ -514,6 +514,12 @@ public:
     virtual void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE { m_bitmap = bitmap; }
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
 
+    // Special accessor for use by wxWidgets only returning the width that was
+    // explicitly set, either by the application, using SetWidth(), or by the
+    // user, resizing the column interactively. It is usually the same as
+    // GetWidth(), but can be different for the last column.
+    virtual int WXGetSpecifiedWidth() const { return GetWidth(); }
+
 protected:
     wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
