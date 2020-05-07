@@ -180,14 +180,18 @@ protected:
 
     // 'archive up' the test data
     void CreateArchive(wxOutputStream& out);
+#ifndef __WXOSX_IPHONE__
     void CreateArchive(wxOutputStream& out, const wxString& archiver);
+#endif
 
     // perform various modifications on the archive
     void ModifyArchive(wxInputStream& in, wxOutputStream& out);
 
     // extract the archive and verify its contents
     void ExtractArchive(wxInputStream& in);
+#ifndef __WXOSX_IPHONE__
     void ExtractArchive(wxInputStream& in, const wxString& unarchiver);
+#endif
     void VerifyDir(wxString& path, size_t rootlen = 0);
 
     // tests for the iterators

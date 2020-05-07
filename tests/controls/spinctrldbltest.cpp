@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_SPINCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -220,3 +222,5 @@ void SpinCtrlDoubleTestCase::Digits()
 
     CPPUNIT_ASSERT_EQUAL(5, m_spin->GetDigits());
 }
+
+#endif
