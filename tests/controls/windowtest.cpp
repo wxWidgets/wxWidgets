@@ -27,6 +27,7 @@
 #include "wx/caret.h"
 #include "wx/cshelp.h"
 #include "wx/scopedptr.h"
+#include "wx/stopwatch.h"
 #include "wx/tooltip.h"
 
 class WindowTestCase
@@ -35,6 +36,13 @@ public:
     WindowTestCase()
         : m_window(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY))
     {
+    #ifdef __WXGTK3__
+        // Without this, when running this test suite solo it succeeds,
+        // but not when running it together with the other tests !!
+        // Not needed when run under Xvfb display.
+        for ( wxStopWatch sw; sw.Time() < 50; )
+            wxYield();
+    #endif
     }
 
     ~WindowTestCase()

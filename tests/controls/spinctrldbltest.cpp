@@ -91,7 +91,7 @@ void SpinCtrlDoubleTestCase::NoEventsInCtor()
 
 void SpinCtrlDoubleTestCase::Arrows()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
 
     wxUIActionSimulator sim;
@@ -196,9 +196,10 @@ void SpinCtrlDoubleTestCase::Value()
 
 void SpinCtrlDoubleTestCase::Increment()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetIncrement());
 
+    m_spin->SetDigits(1); // GTK would fail without this.
     m_spin->SetIncrement(0.1);
 
     CPPUNIT_ASSERT_EQUAL(0.1, m_spin->GetIncrement());

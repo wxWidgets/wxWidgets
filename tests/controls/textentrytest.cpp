@@ -292,6 +292,7 @@ void TextEntryTestCase::Editable()
     CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 
+    wxYield();
 
     // And that the event carries the right value.
     TextEventHandler handler(window);
