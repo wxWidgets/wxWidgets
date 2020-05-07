@@ -73,10 +73,10 @@ public:
 
         if ( depressed )
         {
-            ++ms_numDepressed; // A key or button is down.
+            wxASSERT_MSG( ms_numDepressed == s_maxDepressed,
+                         "Invalid call to wxXSync() ctor" );
 
-            if ( ms_numDepressed - s_maxDepressed != 1 )
-                wxFAIL_MSG("Invalid call to wxXSync() ctor");
+            ++ms_numDepressed; // A key or button is down.
 
             s_maxDepressed = ms_numDepressed;
         }
@@ -92,8 +92,7 @@ public:
 
             --ms_numDepressed; // A key or button is up.
 
-            if ( ms_numDepressed < 0 )
-                wxFAIL_MSG("Invalid call to wxXSync() ctor");
+            wxASSERT_MSG( ms_numDepressed >= 0, "Invalid call to wxXSync() ctor" );
         }
     }
 
@@ -101,31 +100,28 @@ public:
     {
         XSync(m_display, False);
 
-        m_isMotion ? OnMotion() : OnKeyOrButtonUp();
+        if ( m_isMotion )
+        {
+            wxYield();
+            wxMilliSleep(Motion_Delay);
+        }
+        else // it's button or key event
+        {
+            if ( ms_numDepressed > 0 )
+            {
+                // Do nothing if a key / button is still depressed.
+                return;
+            }
+
+            wxYield();
+
+            // Default_Delay might not be sufficient for some
+            // tests which need more additionnal time to pass.
+            wxMilliSleep(Default_Delay + GetAdditionalDelay());
+        }
     }
 
 private:
-    static void OnMotion()
-    {
-        wxMilliSleep(Motion_Delay);
-        wxYield();
-    }
-
-    static void OnKeyOrButtonUp()
-    {
-        if ( ms_numDepressed > 0 )
-        {
-            // Do nothing if a key / button is still depressed.
-            return;
-        }
-
-        wxYield();
-
-        // Default_Delay might not be sufficient for some
-        // tests which need more additionnal time to pass.
-        wxMilliSleep(Default_Delay + GetAdditionalDelay());
-    }
-
     static long GetAdditionalDelay()
     {
         long delay;
@@ -146,7 +142,7 @@ private:
 
 private:
     wxX11Display& m_display;
-    const bool    m_isMotion;
+    const bool    m_isMotion; // false if it's button or key event.
 
     enum
     {
