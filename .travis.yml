@@ -47,7 +47,7 @@ matrix:
           name: wxOSX Xcode 11.3
         - os: osx
           osx_image: xcode11.4
-          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0 --with-osx_iphone --with-macosx-version-min=9.0 --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path) --enable-stl"
+          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0 --with-osx_iphone --with-macosx-version-min=9.0 --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path) --enable-stl --with-tiff=builtin"
           name: wxOSX iOS Xcode 11.4
         - dist: bionic
           compiler: gcc
