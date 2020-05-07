@@ -2154,6 +2154,22 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     // set new active pane unless we're being destroyed anyhow
     if (new_active && !m_isBeingDeleted)
         SetSelectionToWindow(new_active);
+        
+    // If last page was removed generate selection change events
+    // that usually produce in SetSelection method. See ticket #9920.
+    if (m_tabs.GetPageCount() == 0)
+    {
+        wxAuiNotebookEvent evt(wxEVT_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+        evt.SetSelection(-1);
+        evt.SetOldSelection(page_idx);
+        evt.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(evt);
+        if (evt.IsAllowed())
+        {
+            evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(evt);
+        }
+    }
 
     return true;
 }
