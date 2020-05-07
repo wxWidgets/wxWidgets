@@ -87,7 +87,7 @@ public:
                 s_maxDepressed = 0; // reset
 
                 wxYield();
-                wxMilliSleep(Default_Delay);
+                wxMilliSleep(Default_Delay); // No need for additional delay here.
             }
 
             --ms_numDepressed; // A key or button is up.
@@ -103,7 +103,6 @@ public:
         if ( m_isMotion )
         {
             wxYield();
-            wxMilliSleep(Motion_Delay);
         }
         else // it's button or key event
         {
@@ -146,7 +145,6 @@ private:
 
     enum
     {
-        Motion_Delay  = 50, // amount of ms to sleep after a motion event.
         Default_Delay = 10  // amount of ms to sleep after a key / button
                             // press or release.
     };
