@@ -210,3 +210,8 @@ and from the root directory run
 
   autoconf -B build/autoconf_prepend-include
 
+Add a new section for the next micro release at line number 583 and set the
+date to ????-??-?? in `docs/changes.txt`.
+
+Update `docs/release.md` to match the GitHub release description box. Set
+all SHA-1 sums to 0. Set the 'x.y.z' fields to 'x.y.z+1'.

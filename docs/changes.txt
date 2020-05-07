@@ -580,6 +580,28 @@ Major new features in this release
 
 
 
+3.0.6 (released ????-??-??)
+---------------------------
+
+All:
+
+- 
+
+All (GUI):
+
+- 
+
+wxMSW:
+
+- 
+
+wxGTK:
+
+- Ensure that scrollbar GtkRange page increment is set to a 
+  positive value (Paul Cornett).
+
+
+
 3.0.5 (released 2020-04-27)
 ---------------------------
 
