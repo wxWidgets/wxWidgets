@@ -27,12 +27,21 @@
 
 #include "wx/unix/utilsx11.h"
 
-#ifdef __WXGTK3__
-#include "wx/utils.h"
-
+#ifdef __WXGTK__
 #include "wx/gtk/private/wrapgtk.h"
+#include <gdk/gdkx.h>
+
 GtkWidget* wxGetTopLevelGTK();
-#endif
+GdkWindow* wxGetTopLevelGDK();
+
+static inline void wxSetInputFocusToXWindow(wxX11Display& display)
+{
+    XSetInputFocus(display, GDK_WINDOW_XID(wxGetTopLevelGDK()),
+                   RevertToPointerRoot, CurrentTime);
+}
+#else // !__WXGTK__
+#define wxSetInputFocusToXWindow(display)
+#endif // __WXGTK__
 
 // Normally we fall back on "plain X" implementation if XTest is not available,
 // but it's useless to do it when using GTK+ 3 as it's not going to work with
@@ -46,6 +55,113 @@ GtkWidget* wxGetTopLevelGTK();
 
 namespace
 {
+// Like the real events, this class tries to add a _fake_ delay to the generated
+// (fake) events so that chances that they got lost or ignored (for whatever reasons)
+// by the X server (or the WM, or even the input device driver) are minimized.
+class wxXSync
+{
+public:
+    wxXSync(wxX11Display& display)
+        : m_display(display), m_isMotion(true)
+    {
+    }
+
+    wxXSync(wxX11Display& display, bool depressed)
+        : m_display(display), m_isMotion(false)
+    {
+        static int s_maxDepressed = 0;
+
+        if ( depressed )
+        {
+            ++ms_numDepressed; // A key or button is down.
+
+            if ( ms_numDepressed - s_maxDepressed != 1 )
+                wxFAIL_MSG("Invalid call to wxXSync() ctor");
+
+            s_maxDepressed = ms_numDepressed;
+        }
+        else
+        {
+            if ( s_maxDepressed != 0 )
+            {
+                s_maxDepressed = 0; // reset
+
+                wxYield();
+                wxMilliSleep(Default_Delay);
+            }
+
+            --ms_numDepressed; // A key or button is up.
+
+            if ( ms_numDepressed < 0 )
+                wxFAIL_MSG("Invalid call to wxXSync() ctor");
+        }
+    }
+
+    ~wxXSync()
+    {
+        XSync(m_display, False);
+
+        m_isMotion ? OnMotion() : OnKeyOrButtonUp();
+    }
+
+private:
+    static void OnMotion()
+    {
+        wxMilliSleep(Motion_Delay);
+        wxYield();
+    }
+
+    static void OnKeyOrButtonUp()
+    {
+        if ( ms_numDepressed > 0 )
+        {
+            // Do nothing if a key / button is still depressed.
+            return;
+        }
+
+        wxYield();
+
+        // Default_Delay might not be sufficient for some
+        // tests which need more additionnal time to pass.
+        wxMilliSleep(Default_Delay + GetAdditionalDelay());
+    }
+
+    static long GetAdditionalDelay()
+    {
+        long delay;
+        wxString delayStr;
+
+        if ( wxGetEnv("WX_UI_TESTS_DELAY", &delayStr) &&
+             delayStr.ToCLong(&delay) )
+        {
+            delay = wxClip(delay, 0, 1000); // up to 1s
+        }
+        else
+        {
+            delay = 0;
+        }
+
+        return delay;
+    }
+
+private:
+    wxX11Display& m_display;
+    const bool    m_isMotion;
+
+    enum
+    {
+        Motion_Delay  = 50, // amount of ms to sleep after a motion event.
+        Default_Delay = 10  // amount of ms to sleep after a key / button
+                            // press or release.
+    };
+
+    static int ms_numDepressed;
+
+    wxDECLARE_NO_COPY_CLASS(wxXSync);
+};
+
+/*static*/
+int wxXSync::ms_numDepressed = 0;
 
 // Base class for both available X11 implementations.
 class wxUIActionSimulatorX11Impl : public wxUIActionSimulatorImpl
@@ -106,16 +222,7 @@ bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
             return false;
     }
 
-    // Ensure that the event is received by the correct window by processing
-    // all pending events, notably mouse moves.
-    XSync(m_display, False /* don't discard */);
-
-    if ( !DoX11Button(xbutton, isDown) )
-        return false;
-
-    XFlush(m_display);
-
-    return true;
+    return DoX11Button(xbutton, isDown);
 }
 
 #if wxUSE_PLAINX_IMPL
@@ -127,6 +234,10 @@ public:
     explicit wxUIActionSimulatorPlainX11Impl(wxX11Display& display)
         : wxUIActionSimulatorX11Impl(display)
     {
+        wxYield();
+        wxMilliSleep(50);
+
+        wxSetInputFocusToXWindow(m_display);
     }
 
 private:
@@ -161,6 +272,7 @@ bool wxUIActionSimulatorPlainX11Impl::DoX11Button(int xbutton, bool isDown)
                       &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
     }
 
+    wxXSync sync(m_display, isDown);
     XSendEvent(m_display, PointerWindow, True, 0xfff, &event);
 
     return true;
@@ -168,6 +280,7 @@ bool wxUIActionSimulatorPlainX11Impl::DoX11Button(int xbutton, bool isDown)
 
 bool wxUIActionSimulatorPlainX11Impl::DoX11MouseMove(long x, long y)
 {
+    wxXSync sync(m_display);
     Window root = m_display.DefaultRoot();
     XWarpPointer(m_display, None, root, 0, 0, 0, 0, x, y);
     return true;
@@ -222,6 +335,7 @@ wxUIActionSimulatorPlainX11Impl::DoX11Key(KeyCode xkeycode,
     event.state = mod;
     event.keycode = xkeycode;
 
+    wxXSync sync(m_display, isDown);
     XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
 
     return true;
@@ -238,6 +352,10 @@ public:
     explicit wxUIActionSimulatorXTestImpl(wxX11Display& display)
         : wxUIActionSimulatorX11Impl(display)
     {
+        wxYield();
+        wxMilliSleep(50);
+
+        wxSetInputFocusToXWindow(m_display);
     }
 
 private:
@@ -250,6 +368,7 @@ private:
 
 bool wxUIActionSimulatorXTestImpl::DoX11Button(int xbutton, bool isDown)
 {
+    wxXSync sync(m_display, isDown);
     return XTestFakeButtonEvent(m_display, xbutton, isDown, CurrentTime) != 0;
 }
 
@@ -273,6 +392,7 @@ bool wxUIActionSimulatorXTestImpl::DoX11MouseMove(long x, long y)
 #endif // GTK+ 3.10+
 #endif // __WXGTK3__
 
+    wxXSync sync(m_display);
     return XTestFakeMotionEvent(m_display, -1, x, y, CurrentTime) != 0;
 }
 
@@ -281,6 +401,7 @@ wxUIActionSimulatorXTestImpl::DoX11Key(KeyCode xkeycode,
                                        int WXUNUSED(modifiers),
                                        bool isDown)
 {
+    wxXSync sync(m_display, isDown);
     return XTestFakeKeyEvent(m_display, xkeycode, isDown, CurrentTime) != 0;
 }
 
@@ -318,30 +439,11 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
     if ( !m_display )
         return false;
 
-    if ( !DoX11MouseMove(x, y) )
-        return false;
-
-    // At least with wxGTK we must always process the pending events before the
-    // mouse position change really takes effect, so just do it from here
-    // instead of forcing the client code using this function to always use
-    // wxYield() which is unnecessary under the other platforms.
-    if ( wxEventLoopBase* const loop = wxEventLoop::GetActive() )
-    {
-        loop->YieldFor(wxEVT_CATEGORY_USER_INPUT);
-    }
-
-    return true;
+    return DoX11MouseMove(x, y);
 }
 
 bool wxUIActionSimulatorX11Impl::MouseUp(int button)
 {
-#ifdef __WXGTK3__
-    // This is a horrible hack, but some mouse click events are just lost
-    // without any apparent reason when using GTK 3 without this, i.e. they
-    // simply never reach GTK in some runs of the tests.
-    wxMilliSleep(10);
-#endif
-
     return SendButtonEvent(button, false);
 }
 
@@ -355,12 +457,7 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
     if ( xkeycode == NoSymbol )
         return false;
 
-    if ( !DoX11Key(xkeycode, modifiers, isDown) )
-        return false;
-
-    XFlush(m_display);
-
-    return true;
+    return DoX11Key(xkeycode, modifiers, isDown);
 }
 
 wxUIActionSimulator::wxUIActionSimulator()

@@ -128,9 +128,6 @@ void RichTextCtrlTestCase::CharacterEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
 
-  // There seems to be an event sequence problem on GTK+ that causes the events
-  // to be disconnected before they're processed, generating spurious errors.
-#if !defined(__WXGTK__)
     EventCounter character(m_rich, wxEVT_RICHTEXT_CHARACTER);
     EventCounter content(m_rich, wxEVT_RICHTEXT_CONTENT_INSERTED);
 
@@ -154,15 +151,12 @@ void RichTextCtrlTestCase::CharacterEvent()
     CPPUNIT_ASSERT_EQUAL(0, character.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, content.GetCount());
 #endif
-#endif
 }
 
 void RichTextCtrlTestCase::DeleteEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-  // There seems to be an event sequence problem on GTK+ that causes the events
-  // to be disconnected before they're processed, generating spurious errors.
-#if !defined(__WXGTK__)
+
     EventCounter deleteevent(m_rich, wxEVT_RICHTEXT_DELETE);
     EventCounter contentdelete(m_rich, wxEVT_RICHTEXT_CONTENT_DELETED);
 
@@ -178,15 +172,12 @@ void RichTextCtrlTestCase::DeleteEvent()
     //Only one as the delete doesn't delete anthing
     CPPUNIT_ASSERT_EQUAL(1, contentdelete.GetCount());
 #endif
-#endif
 }
 
 void RichTextCtrlTestCase::ReturnEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-  // There seems to be an event sequence problem on GTK+ that causes the events
-  // to be disconnected before they're processed, generating spurious errors.
-#if !defined(__WXGTK__)
+
     EventCounter returnevent(m_rich, wxEVT_RICHTEXT_RETURN);
 
     m_rich->SetFocus();
@@ -196,7 +187,6 @@ void RichTextCtrlTestCase::ReturnEvent()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, returnevent.GetCount());
-#endif
 #endif
 }
 
@@ -235,8 +225,7 @@ void RichTextCtrlTestCase::BufferResetEvent()
 void RichTextCtrlTestCase::UrlEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    // Mouse up event not being caught on GTK+
-#if !defined(__WXGTK__)
+
     EventCounter url(m_rich, wxEVT_TEXT_URL);
 
     m_rich->BeginURL("http://www.wxwidgets.org");
@@ -252,13 +241,11 @@ void RichTextCtrlTestCase::UrlEvent()
 
     CPPUNIT_ASSERT_EQUAL(1, url.GetCount());
 #endif
-#endif
 }
 
 void RichTextCtrlTestCase::TextEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-#if !defined(__WXGTK__)
     EventCounter updated(m_rich, wxEVT_TEXT);
 
     m_rich->SetFocus();
@@ -269,7 +256,6 @@ void RichTextCtrlTestCase::TextEvent()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
-#endif
 #endif
 }
 
@@ -418,7 +404,6 @@ void RichTextCtrlTestCase::Selection()
 void RichTextCtrlTestCase::Editable()
 {
 #if wxUSE_UIACTIONSIMULATOR
-#if !defined(__WXGTK__)
     EventCounter updated(m_rich, wxEVT_TEXT);
 
     m_rich->SetFocus();
@@ -437,7 +422,6 @@ void RichTextCtrlTestCase::Editable()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
     CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
-#endif
 #endif
 }
 
