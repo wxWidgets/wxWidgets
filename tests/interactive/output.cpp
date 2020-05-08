@@ -29,7 +29,9 @@
 // ----------------------------------------------------------------------------
 
 #define TEST_DYNLIB
+#if wxUSE_MIMETYPE
 #define TEST_MIME
+#endif
 #define TEST_INFO_FUNCTIONS
 #define TEST_STACKWALKER
 #define TEST_STDPATHS

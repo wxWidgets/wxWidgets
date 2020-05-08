@@ -73,6 +73,11 @@ case $wxTOOLSET in
         make -C tests $wxJOBS $wxMAKEFILE_FLAGS
         echo -en 'travis_fold:end:script.tests\\r'
 
+        if [ "$wxSKIP_TESTING" = 1 ]; then
+            echo 'Skipping running tests'
+            exit 0
+        fi
+
         echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
         pushd tests && ./test && popd
         echo -en 'travis_fold:end:script.testing\\r'

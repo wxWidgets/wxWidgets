@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_MENUS
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -811,3 +813,5 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
         }
     }
 }
+
+#endif

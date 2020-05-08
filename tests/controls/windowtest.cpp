@@ -127,6 +127,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 
     CHECK(m_window->GetCursor().IsOk());
 
+#if wxUSE_CARET
     //A plain window doesn't have a caret
     CHECK(!m_window->GetCaret());
 
@@ -134,6 +135,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     m_window->SetCaret(caret);
 
     CHECK(m_window->GetCaret()->IsOk());
+#endif
 
     m_window->CaptureMouse();
 
@@ -188,6 +190,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ToolTip", "[window]")
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
 {
+#if wxUSE_HELP
     wxHelpProvider::Set(new wxSimpleHelpProvider());
 
     CHECK( m_window->GetHelpText() == "" );
@@ -195,6 +198,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
     m_window->SetHelpText("helptext");
 
     CHECK( m_window->GetHelpText() == "helptext" );
+#endif
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Parent", "[window]")

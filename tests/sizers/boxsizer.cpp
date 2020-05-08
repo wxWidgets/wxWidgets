@@ -287,6 +287,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::SetMinSize", "[sizer]")
     CHECK(m_sizer->GetMinSize().x == 100);
 }
 
+#if wxUSE_LISTBOX
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::BestSizeRespectsMaxSize", "[sizer]")
 {
     m_sizer->Clear();
@@ -332,6 +333,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize1", "[si
 
     CHECK(listbox2->GetSize().GetWidth() == maxWidth);
 }
+#endif
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize2", "[sizer]")
 {
