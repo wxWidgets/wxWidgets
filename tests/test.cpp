@@ -61,6 +61,11 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
     #include "wx/osx/private.h"
 #endif
 
+#ifdef __WXMAC_XCODE__
+#undef wxUSE_GUI
+#define wxUSE_GUI 0
+#endif
+
 #if wxUSE_GUI
     #include "testableframe.h"
 
