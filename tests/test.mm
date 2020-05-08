@@ -290,6 +290,7 @@ Class createTestClassForName(const char* description)
         [NSException raise:NSInternalInconsistencyException format:@"Could not allocate test class: %@", clsName];
         __builtin_trap();
     }
+    objc_registerClassPair( cls);
     return cls;
 }
 
@@ -414,6 +415,9 @@ void XCTestReporterAdapter::testCaseEnded( TestCaseStats const& _testCaseStats )
     StreamingReporterBase::testCaseEnded( _testCaseStats );
     
     endXCTestSuite();
+    
+    objc_disposeClassPair(m_testClass);
+    m_testClass = nil;
 }
 
 void XCTestReporterAdapter::startXCTestSuite( XCTestSuite * suite)
@@ -441,7 +445,7 @@ void XCTestReporterAdapter::sectionStarting( SectionInfo const& _sectionInfo )
 {
     StreamingReporterBase::sectionStarting(_sectionInfo);
     
-    if (currentTestCaseInfo->name != _sectionInfo.name )
+    if ( currentTestCaseInfo->name != _sectionInfo.name || _sectionInfo.name.find("::") != std::string::npos)
     {
         SEL newTestMethod = createTestMethodForName(m_testClass, _sectionInfo.name.c_str());
         
@@ -459,7 +463,7 @@ void XCTestReporterAdapter::sectionStarting( SectionInfo const& _sectionInfo )
 
 void XCTestReporterAdapter::sectionEnded( SectionStats const& _sectionStats )
 {
-    if (currentTestCaseInfo->name != _sectionStats.sectionInfo.name )
+    if ( currentTestCaseInfo->name != _sectionStats.sectionInfo.name || _sectionStats.sectionInfo.name.find("::") != std::string::npos)
     {
         endXCTestCase();
     }
