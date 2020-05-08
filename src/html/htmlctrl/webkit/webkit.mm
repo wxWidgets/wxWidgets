@@ -21,8 +21,10 @@
 #include "wx/osx/private.h"
 
 #include <WebKit/WebKit.h>
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_15
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
+#endif
 
 #include "wx/html/webkit.h"
 

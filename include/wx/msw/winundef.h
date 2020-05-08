@@ -263,12 +263,12 @@
    #if wxUSE_UNICODE_WINDOWS_H
    inline int StartDoc(HDC h, CONST DOCINFOW* info)
    {
-      return StartDocW(h, (DOCINFOW*) info);
+      return StartDocW(h, const_cast<DOCINFOW*>(info));
    }
    #else
    inline int StartDoc(HDC h, CONST DOCINFOA* info)
    {
-      return StartDocA(h, (DOCINFOA*) info);
+      return StartDocA(h, const_cast<DOCINFOA*>(info));
    }
    #endif
 #endif

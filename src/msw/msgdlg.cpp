@@ -397,8 +397,10 @@ void wxMessageDialog::AdjustButtonLabels()
 wxFont wxMessageDialog::GetMessageFont()
 {
     const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics(win);
-    return wxNativeFontInfo(ncm.lfMessageFont);
+    const wxNativeFontInfo
+        info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
+
+    return info;
 }
 
 int wxMessageDialog::ShowMessageBox()

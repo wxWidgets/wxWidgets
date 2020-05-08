@@ -371,6 +371,9 @@ public:
 
     /**
         Scrolls and/or expands items to ensure that the given item is visible.
+
+        This method can be used, and will work, even while the window is frozen
+        (see wxWindow::Freeze()).
     */
     virtual void EnsureVisible(const wxTreeItemId& item);
 
@@ -502,6 +505,12 @@ public:
         Returns the current tree control indentation.
     */
     virtual unsigned int GetIndent() const;
+
+    /**
+        Returns the current tree control spacing.  This is the number of
+        horizontal pixels between the buttons and the state images.
+    */
+    unsigned int GetSpacing() const;
 
     /**
         Returns the background colour of the item.
@@ -797,6 +806,11 @@ public:
 
     /**
         Scrolls the specified item into view.
+
+        Note that this method doesn't work while the window is frozen (See
+        wxWindow::Freeze()), at least under MSW.
+
+        @see EnsureVisible()
     */
     virtual void ScrollTo(const wxTreeItemId& item);
 
@@ -841,6 +855,13 @@ public:
         Sets the indentation for the tree control.
     */
     virtual void SetIndent(unsigned int indent);
+
+    /**
+        Sets the spacing for the tree control. Spacing is the number of
+        horizontal pixels between the buttons and the state images.
+        This has no effect under wxMSW.
+    */
+    void SetSpacing(unsigned int spacing);
 
     /**
         Sets the colour of the item's background.

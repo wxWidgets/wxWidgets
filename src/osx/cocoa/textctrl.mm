@@ -34,11 +34,7 @@
 #endif
 
 #if wxUSE_STD_IOSTREAM
-    #if wxUSE_IOSTREAMH
-        #include <fstream.h>
-    #else
-        #include <fstream>
-    #endif
+    #include <fstream>
 #endif
 
 #include "wx/filefn.h"
@@ -370,12 +366,6 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
         [super flagsChanged:event];
-}
-
-- (BOOL) performKeyEquivalent:(NSEvent*) event
-{
-    BOOL retval = [super performKeyEquivalent:event];
-    return retval;
 }
 
 - (void) insertText:(id) str

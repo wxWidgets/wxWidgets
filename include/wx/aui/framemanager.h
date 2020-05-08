@@ -123,7 +123,6 @@ enum wxAuiPaneInsertLevel
 
 // forwards and array declarations
 class wxAuiDockUIPart;
-class wxAuiPaneButton;
 class wxAuiPaneInfo;
 class wxAuiDockInfo;
 class wxAuiDockArt;
@@ -132,7 +131,6 @@ class wxAuiManagerEvent;
 #ifndef SWIG
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockInfo, wxAuiDockInfoArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockUIPart, wxAuiDockUIPartArray, WXDLLIMPEXP_AUI);
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiPaneButton, wxAuiPaneButtonArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiPaneInfo, wxAuiPaneInfoArray, WXDLLIMPEXP_AUI);
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiPaneInfo*, wxAuiPaneInfoPtrArray, class WXDLLIMPEXP_AUI);
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiDockInfo*, wxAuiDockInfoPtrArray, class WXDLLIMPEXP_AUI);
@@ -176,7 +174,6 @@ public:
         // unsafe bits of "dest"
         source.window = window;
         source.frame = frame;
-        source.buttons = buttons;
         wxCHECK_RET(source.IsValid(),
                     "window settings and pane settings are incompatible");
         // now assign
@@ -392,9 +389,6 @@ public:
     wxPoint floating_pos; // position while floating
     wxSize floating_size; // size while floating
     int dock_proportion;  // proportion while docked
-
-    wxAuiPaneButtonArray buttons; // buttons on the pane
-
 
     wxRect rect;              // current rectangle (populated by wxAUI)
 
@@ -730,18 +724,12 @@ public:
     int orientation;         // orientation (either wxHORIZONTAL or wxVERTICAL)
     wxAuiDockInfo* dock;        // which dock the item is associated with
     wxAuiPaneInfo* pane;        // which pane the item is associated with
-    wxAuiPaneButton* button;    // which pane button the item is associated with
+    int button;              // which pane button the item is associated with
     wxSizer* cont_sizer;     // the part's containing sizer
     wxSizerItem* sizer_item; // the sizer item of the part
     wxRect rect;             // client coord rectangle of the part itself
 };
 
-
-class WXDLLIMPEXP_AUI wxAuiPaneButton
-{
-public:
-    int button_id;        // id of the button (e.g. buttonClose)
-};
 
 
 

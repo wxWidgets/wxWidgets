@@ -318,6 +318,8 @@ public:
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
+    // Note that these functions work with the size in DIPs, not physical
+    // pixels.
     virtual int GetElementSize(int elementId) = 0;
     virtual void SetElementSize(int elementId, int size) = 0;
 
@@ -431,6 +433,7 @@ protected:
     wxPen m_gripperPen2;
     wxPen m_gripperPen3;
 
+    // These values are in DIPs and not physical pixels.
     int m_separatorSize;
     int m_gripperSize;
     int m_overflowSize;
@@ -522,6 +525,12 @@ public:
 
     void ClearTools() { Clear() ; }
     void Clear();
+
+    bool DestroyTool(int toolId);
+    bool DestroyToolByIndex(int idx);
+
+    // Note that these methods do _not_ delete the associated control, if any.
+    // Use DestroyTool() or DestroyToolByIndex() if this is wanted.
     bool DeleteTool(int toolId);
     bool DeleteByIndex(int toolId);
 
@@ -614,12 +623,6 @@ protected:
     wxRect GetOverflowRect() const;
     wxSize GetLabelSize(const wxString& label);
     wxAuiToolBarItem* FindToolByPositionWithPacking(wxCoord x, wxCoord y) const;
-
-    void DoSetSize(int x,
-                   int y,
-                   int width,
-                   int height,
-                   int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
 protected: // handlers
 

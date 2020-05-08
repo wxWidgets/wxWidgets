@@ -104,6 +104,9 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsShowing = false;
 
     m_menuSystem = NULL;
+
+    m_activeDPI = wxDefaultSize;
+    m_perMonitorDPIaware = false;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -246,6 +249,26 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     return (WXHWND)hwndParent;
 }
 
+bool wxTopLevelWindowMSW::HandleDPIChange(const wxSize& newDPI, const wxRect& newRect)
+{
+    if ( !m_perMonitorDPIaware )
+    {
+        return false;
+    }
+
+    if ( newDPI != m_activeDPI )
+    {
+        MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+        m_activeDPI = newDPI;
+    }
+
+    SetSize(newRect);
+
+    Refresh();
+
+    return true;
+}
+
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -306,12 +329,64 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
 #endif // #ifndef __WXUNIVERSAL__
             }
             break;
+
+        case WM_DPICHANGED:
+            {
+                const RECT* const prcNewWindow =
+                                         reinterpret_cast<const RECT*>(lParam);
+
+                processed = HandleDPIChange(wxSize(LOWORD(wParam),
+                                                   HIWORD(wParam)),
+                                            wxRectFromRECT(*prcNewWindow));
+            }
+            break;
     }
 
     if ( !processed )
         rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
 
     return rc;
+}
+
+namespace
+{
+
+static bool IsPerMonitorDPIAware(HWND hwnd)
+{
+    bool dpiAware = false;
+
+    // Determine if 'Per Monitor v2' DPI awareness is enabled in the
+    // applications manifest.
+#if wxUSE_DYNLIB_CLASS
+    #define WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((WXDPI_AWARENESS_CONTEXT)-4)
+    typedef WXDPI_AWARENESS_CONTEXT(WINAPI * GetWindowDpiAwarenessContext_t)(HWND hwnd);
+    typedef BOOL(WINAPI * AreDpiAwarenessContextsEqual_t)(WXDPI_AWARENESS_CONTEXT dpiContextA, WXDPI_AWARENESS_CONTEXT dpiContextB);
+    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = NULL;
+    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = NULL;
+    static bool s_initDone = false;
+
+    if ( !s_initDone )
+    {
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetWindowDpiAwarenessContext, dllUser32);
+        wxDL_INIT_FUNC(s_pfn, AreDpiAwarenessContextsEqual, dllUser32);
+        s_initDone = true;
+    }
+
+    if ( s_pfnGetWindowDpiAwarenessContext && s_pfnAreDpiAwarenessContextsEqual )
+    {
+        WXDPI_AWARENESS_CONTEXT dpiAwarenessContext = s_pfnGetWindowDpiAwarenessContext(hwnd);
+
+        if ( s_pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) == TRUE )
+        {
+            dpiAware = true;
+        }
+    }
+#endif // wxUSE_DYNLIB_CLASS
+
+    return dpiAware;
+}
+
 }
 
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
@@ -326,7 +401,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     m_hWnd = (WXHWND)::CreateDialogIndirect
                        (
                         wxGetInstance(),
-                        (DLGTEMPLATE*)dlgTemplate,
+                        static_cast<const DLGTEMPLATE*>(dlgTemplate),
                         parent ? GetHwndOf(parent) : NULL,
                         (DLGPROC)wxDlgProc
                        );
@@ -484,6 +559,10 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         EnableCloseButton(false);
     }
 
+    m_activeDPI = GetDPI();
+
+    m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
+
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
     // make the keyboard indicators (such as underlines for accelerators and
@@ -498,19 +577,6 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
     delete m_menuSystem;
 
     SendDestroyEvent();
-
-    // after destroying an owned window, Windows activates the next top level
-    // window in Z order but it may be different from our owner (to reproduce
-    // this simply Alt-TAB to another application and back before closing the
-    // owned frame) whereas we always want to yield activation to our parent
-    if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
-    {
-        wxWindow *parent = GetParent();
-        if ( parent )
-        {
-            ::BringWindowToTop(GetHwndOf(parent));
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -519,6 +585,26 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 
 void wxTopLevelWindowMSW::DoShowWindow(int nShowCmd)
 {
+    // After hiding or minimizing an owned window, Windows activates the next
+    // top level window in Z order but it may be different from our owner (to
+    // reproduce this simply Alt-TAB to another application and back before
+    // closing the owned frame) whereas we always want to yield activation to
+    // our parent, so do it explicitly _before_ yielding activation.
+    switch ( nShowCmd )
+    {
+        case SW_HIDE:
+        case SW_MINIMIZE:
+            if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
+            {
+                wxWindow *parent = GetParent();
+                if ( parent )
+                {
+                    ::BringWindowToTop(GetHwndOf(parent));
+                }
+            }
+            break;
+    }
+
     ::ShowWindow(GetHwnd(), nShowCmd);
 
 #if wxUSE_TOOLTIPS
@@ -735,6 +821,22 @@ void wxTopLevelWindowMSW::Restore()
     // unlike in Maximize() and Iconize(), we do it even if the window is
     // currently hidden, i.e. Restore() is supposed to show it in this case.
     DoShowWindow(SW_RESTORE);
+}
+
+bool wxTopLevelWindowMSW::Destroy()
+{
+    if ( !wxTopLevelWindowBase::Destroy() )
+        return false;
+
+    // Under Windows 10 iconized windows don't get any messages, so delayed
+    // destruction doesn't work for them if we don't force a message dispatch
+    // here (and it doesn't seem useful to test for MSWIsIconized() as doing
+    // this doesn't do any harm for non-iconized windows neither). For that
+    // matter, doing this shouldn't do any harm under previous OS versions
+    // neither, so checking for the OS version doesn't seem useful too.
+    wxWakeUpIdle();
+
+    return true;
 }
 
 void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)

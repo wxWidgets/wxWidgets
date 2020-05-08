@@ -150,7 +150,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info(lf);
+            wxNativeFontInfo info(lf, NULL);
             font.Create(info);
         }
         else
@@ -184,7 +184,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // is more appropriate for them
             const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
             const wxNativeFontInfo
-                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
+                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
+
             gs_fontDefault = new wxFont(info);
         }
 
@@ -349,7 +350,7 @@ extern wxFont wxGetCCDefaultFont()
                 win
            ) )
     {
-        return wxFont(lf);
+        return wxFont(wxNativeFontInfo(lf, win));
     }
     else
     {

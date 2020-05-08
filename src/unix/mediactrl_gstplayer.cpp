@@ -15,8 +15,6 @@
 
 #include "wx/mediactrl.h"
 
-#include <gst/player/player.h>      // main gstreamer player header
-
 #ifndef  WX_PRECOMP
     #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace
     #include "wx/app.h"             // wxTheApp->argc, wxTheApp->argv
@@ -31,6 +29,10 @@
     #include "wx/gtk/private/wrapgtk.h"
     #include <gdk/gdkx.h>
 #endif
+
+wxGCC_WARNING_SUPPRESS(cast-qual)
+#include <gst/player/player.h>      // main gstreamer player header
+wxGCC_WARNING_RESTORE()
 
 //=============================================================================
 //  Declarations

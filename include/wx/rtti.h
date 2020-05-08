@@ -62,7 +62,7 @@ public:
     ~wxClassInfo();
 
     wxObject *CreateObject() const
-        { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
+        { return m_objectConstructor ? (*m_objectConstructor)() : NULL; }
     bool IsDynamic() const { return (NULL != m_objectConstructor); }
 
     const wxChar       *GetClassName() const { return m_className; }

@@ -80,7 +80,7 @@ void DynamicLibraryTestCase::Load()
 
     wxString errMsg = wxString::Format("ERROR: function '%s' wasn't found in '%s'.\n",
                                        FUNC_NAME, LIB_NAME);
-    CPPUNIT_ASSERT_MESSAGE( errMsg.ToStdString(), pfnStrlen );
+    CPPUNIT_ASSERT_MESSAGE( errMsg.ToStdString(), (pfnStrlen != NULL) );
 
     // Call the function dynamically loaded
     CPPUNIT_ASSERT( pfnStrlen("foo") == 3 );
@@ -94,7 +94,7 @@ void DynamicLibraryTestCase::Load()
 
     wxString errMsg2 = wxString::Format("ERROR: function '%s' wasn't found in '%s'.\n",
                                        FUNC_NAME_AW, LIB_NAME);
-    CPPUNIT_ASSERT_MESSAGE( errMsg2.ToStdString(), pfnStrlenAorW );
+    CPPUNIT_ASSERT_MESSAGE( errMsg2.ToStdString(), (pfnStrlenAorW != NULL) );
 
     CPPUNIT_ASSERT( pfnStrlenAorW(wxT("foobar")) == 6 );
 #endif // __WINDOWS__

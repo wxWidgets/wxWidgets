@@ -23,6 +23,10 @@
 #include <sys/types.h>
 #include <sys/event.h>
 
+#ifdef __NetBSD__
+    #include <sys/param.h>
+#endif
+
 #include "wx/dynarray.h"
 #include "wx/evtloop.h"
 #include "wx/evtloopsrc.h"
@@ -32,9 +36,10 @@
 namespace
 {
 
-// NetBSD is different as it uses intptr_t as type of kevent struct udata field
-// for some reason, instead of "void*" as all the other platforms using kqueue.
-#ifdef __NetBSD__
+// NetBSD was different until version 10 (or almost), as it used intptr_t as
+// type of kevent struct udata field, instead of "void*" as all the other
+// platforms using kqueue, so accommodate it by adding an extra cast.
+#if defined(__NetBSD__) && (__NetBSD_Version__ <= 999001400)
     inline intptr_t ToUdata(void* d) { return reinterpret_cast<intptr_t>(d); }
     inline void* FromUdata(intptr_t d) { return reinterpret_cast<void*>(d); }
 #else

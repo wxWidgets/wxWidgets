@@ -136,14 +136,6 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #include "wx/generic/spinctlg.h"
 #endif
-namespace wxPrivate
-{
-
-// This is an internal helper function currently used by all ports: return the
-// string containing hexadecimal representation of the given number.
-extern wxString wxSpinCtrlFormatAsHex(long val, long maxVal);
-
-} // namespace wxPrivate
 
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_SPINCTRL_UPDATED         wxEVT_SPINCTRL

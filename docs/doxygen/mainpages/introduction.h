@@ -41,8 +41,9 @@ Compared to the other similar libraries, wxWidgets is:
 3. Open source and free for use in both open source and commercial projects.
 
 
-wxWidgets provides a simple, easy to learn, yet very rich API. It is also
-mature and stable, and the applications written using wxWidgets 2.0
+wxWidgets provides a simple, easy to learn, yet very rich API, while also
+proposing a simple way to define application UI in the external XML files.
+It is also mature and stable, and the applications written using wxWidgets 2.0
 pre-releases almost 20 years ago can still be built today with wxWidgets 3
 almost unchanged. wxWidgets has a large, active and friendly community of
 people, including both the users and developers of the library. It is also
@@ -59,7 +60,7 @@ paragraphs, but here are some of the benefits:
 @li Extensive documentation (almost 200,000 lines of it).
 @li Straightforward API.
 @li Simple but powerful layout system.
-@li Run-time loadable or compile-time embeddable resources.
+@li Run-time loadable or compile-time embeddable resources for UI definition.
 @li Flexible event system.
 @li All the usual and quite a few of more rare GUI controls.
 @li And also all the standard dialogs.
@@ -110,13 +111,12 @@ configurations but at least 1GB and possibly more is required.
 
 @section page_introduction_where Where to get wxWidgets and support for it
 
-The download links can be found at https://www.wxwidgets.org. The primary
-download location is https://github.com/wxWidgets/wxWidgets/releases/latest.
+The download links can be found at https://www.wxwidgets.org/downloads/.
 Additionally, the latest version can always be retrieved from our version
 control system using Git (https://github.com/wxWidgets/wxWidgets).
 
-wxWidgets documentation that you are reading is also available online at
-https://docs.wxwidgets.org/trunk/ and please also visit our wiki at
+The latest version of wxWidgets documentation that you are reading is available
+online at https://docs.wxwidgets.org/trunk/ and please also see
 https://wiki.wxwidgets.org/ for user-contributed contents.
 
 And if you have any questions, you can join wxWidgets community using

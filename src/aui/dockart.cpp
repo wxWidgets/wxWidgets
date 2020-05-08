@@ -55,15 +55,8 @@
 #endif
 #endif
 
+#include <math.h>
 
-// -- wxAuiDefaultDockArt class implementation --
-
-// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
-// wxAuiManager.  This allows the library caller to customize the dock art
-// (probably by deriving from this class), or to completely replace all drawing
-// with custom dock art (probably by writing a new stand-alone class derived
-// from the wxAuiDockArt base class). The active dock art class can be set via
-// wxAuiManager::SetDockArt()
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
     int amount = 120;
@@ -74,6 +67,26 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
         amount = 160;
 
     return c.ChangeLightness(amount);
+}
+
+inline float wxAuiGetSRGB(float r) {
+    return r <= 0.03928 ? r/12.92 : pow((r+0.055)/1.055, 2.4);
+}
+
+float wxAuiGetRelativeLuminance(const wxColour& c)
+{
+    // based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+    return 0.2126 * wxAuiGetSRGB(c.Red()/255.0)
+        + 0.7152 * wxAuiGetSRGB(c.Green()/255.0)
+        + 0.0722 * wxAuiGetSRGB(c.Blue()/255.0);
+}
+
+float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
+{
+    // based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html
+    float L1 = wxAuiGetRelativeLuminance(c1);
+    float L2 = wxAuiGetRelativeLuminance(c2);
+    return L1 > L2 ? (L1 + 0.05) / (L2 + 0.05) : (L2 + 0.05) / (L1 + 0.05);
 }
 
 // wxAuiBitmapFromBits() is a utility function that creates a
@@ -88,6 +101,25 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
     return wxBitmap(img);
 }
 
+// A utility function to scales a bitmap in place for use at the given scale
+// factor.
+void wxAuiScaleBitmap(wxBitmap& bmp, double scale)
+{
+#if wxUSE_IMAGE && !defined(__WXGTK3__) && !defined(__WXMAC__)
+    // scale to a close round number to improve quality
+    scale = floor(scale + 0.25);
+    if (scale > 1.0 && !(bmp.GetScaleFactor() > 1.0))
+    {
+        wxImage img = bmp.ConvertToImage();
+        img.Rescale(bmp.GetWidth()*scale, bmp.GetHeight()*scale,
+            wxIMAGE_QUALITY_BOX_AVERAGE);
+        bmp = wxBitmap(img);
+    }
+#else
+    wxUnusedVar(bmp);
+    wxUnusedVar(scale);
+#endif // wxUSE_IMAGE
+}
 
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
@@ -154,6 +186,14 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
     return ret;
 }
 
+// -- wxAuiDefaultDockArt class implementation --
+
+// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
+// wxAuiManager.  This allows the library caller to customize the dock art
+// (probably by deriving from this class), or to completely replace all drawing
+// with custom dock art (probably by writing a new stand-alone class derived
+// from the wxAuiDockArt base class). The active dock art class can be set via
+// wxAuiManager::SetDockArt()
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
     UpdateColoursFromSystem();
@@ -284,11 +324,7 @@ void wxAuiDefaultDockArt::UpdateColoursFromSystem()
     m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactiveCaptionColour = darker1Colour;
     m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
-#ifdef __WXMAC__
     m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-#else
-    m_inactiveCaptionTextColour = *wxBLACK;
-#endif
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
@@ -748,6 +784,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             break;
     }
 
+    wxAuiScaleBitmap(bmp, window->GetContentScaleFactor());
 
     wxRect rect = _rect;
 
@@ -774,9 +811,10 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
         }
 
         // draw the background behind the button
-        dc.DrawRectangle(rect.x, rect.y, 16-window->FromDIP(1), 16-window->FromDIP(1));
+        dc.DrawRectangle(rect.x, rect.y,
+            bmp.GetScaledWidth() - window->FromDIP(1),
+            bmp.GetScaledHeight() - window->FromDIP(1));
     }
-
 
     // draw the button itself
     dc.DrawBitmap(bmp, rect.x, rect.y, true);

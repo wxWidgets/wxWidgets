@@ -140,6 +140,24 @@ wxTaskBarIcon::~wxTaskBarIcon()
 // Operations
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
+    if ( !DoSetIcon(icon, tooltip,
+                    m_iconAdded ? Operation_Modify : Operation_Add) )
+    {
+        return false;
+    }
+
+    // We surely have it now, after setting it successfully (we could also have
+    // had it before, but it's harmless to set this flag again in this case).
+    m_iconAdded = true;
+
+    return true;
+}
+
+bool
+wxTaskBarIcon::DoSetIcon(const wxIcon& icon,
+                         const wxString& tooltip,
+                         Operation operation)
+{
     // NB: we have to create the window lazily because of backward compatibility,
     //     old applications may create a wxTaskBarIcon instance before wxApp
     //     is initialized (as samples/taskbar used to do)
@@ -167,18 +185,35 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         wxStrlcpy(notifyData.szTip, tooltip.t_str(), WXSIZEOF(notifyData.szTip));
     }
 
-    bool ok = Shell_NotifyIcon(m_iconAdded ? NIM_MODIFY
-                                            : NIM_ADD, &notifyData) != 0;
-
-    if ( !ok )
+    switch ( operation )
     {
-        wxLogLastError(wxT("Shell_NotifyIcon(NIM_MODIFY/ADD)"));
+        case Operation_Add:
+            if ( !Shell_NotifyIcon(NIM_ADD, &notifyData) )
+            {
+                wxLogLastError("Shell_NotifyIcon(NIM_ADD)");
+                return false;
+            }
+            break;
+
+        case Operation_Modify:
+            if ( !Shell_NotifyIcon(NIM_MODIFY, &notifyData) )
+            {
+                wxLogLastError("Shell_NotifyIcon(NIM_MODIFY)");
+                return false;
+            }
+            break;
+
+        case Operation_TryBoth:
+            if ( !Shell_NotifyIcon(NIM_ADD, &notifyData) &&
+                    !Shell_NotifyIcon(NIM_MODIFY, &notifyData) )
+            {
+                wxLogLastError("Shell_NotifyIcon(NIM_ADD/NIM_MODIFY)");
+                return false;
+            }
+            break;
     }
 
-    if ( !m_iconAdded && ok )
-        m_iconAdded = true;
-
-    return ok;
+    return true;
 }
 
 #if wxUSE_TASKBARICON_BALLOONS
@@ -325,8 +360,11 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
 {
     if ( msg == gs_msgRestartTaskbar )   // does the icon need to be redrawn?
     {
-        m_iconAdded = false;
-        SetIcon(m_icon, m_strTooltip);
+        // We can get this message after the taskbar has been really recreated,
+        // in which case we need to add our icon anew, or if it just needs to
+        // be refreshed, in which case the existing icon just needs to be
+        // updated, so try doing both in DoSetIcon().
+        DoSetIcon(m_icon, m_strTooltip, Operation_TryBoth);
         return 0;
     }
 

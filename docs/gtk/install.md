@@ -1,4 +1,4 @@
-wxWidgets for GTK+ installation        {#plat_gtk_install}
+wxWidgets for GTK installation        {#plat_gtk_install}
 -------------------------------
 
 [TOC]
@@ -13,7 +13,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are
   using (including the beta) and what compiler on what system. One
-  example: wxGTK 3.0.0, GCC 4.8.1, Fedora 19
+  example: wxGTK 3.0.5, GCC 9.3.1, Fedora 31
 
 Installation                           {#gtk_install}
 ============
@@ -44,20 +44,20 @@ If you want to remove wxWidgets on Unix you can do this:
     > make uninstall
     > ldconfig
 
-Note that by default, GTK+ 2.x is used. GTK+ 3 can be specified
-with --with-gtk=3.
+Note that by default, GTK 3 is used. GTK 2 can be specified
+with --with-gtk=2.
 
 The expert case                        {#gtk_expert}
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
-such as for GTK+ and Motif, you can now build two complete libraries and use
+such as for GTK and Motif, you can now build two complete libraries and use
 them concurrently. To do this, create a separate directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
 with --enable-debug and one without.
 
-For building three versions (one GTK+, one Motif and a debug version of the GTK
+For building three versions (one GTK, one Motif and a debug version of the GTK
 source) you'd do this:
 
     mkdir buildmotif
@@ -87,13 +87,13 @@ The simplest errors                    {#gtk_errors_simple}
 For any configure errors: please look at config.log file which was generated
 during configure run, it usually contains some useful information.
 
-configure reports, that you don't have GTK+ 1.2/2.0/3.0 installed although you
+configure reports, that you don't have GTK 1.2/2.0/3.0 installed although you
 are very sure you have. Well, you have installed it, but you also have another
-version of the GTK+ installed, which you may need to remove including other
+version of the GTK installed, which you may need to remove including other
 versions of glib (and its headers). Or maybe you installed it in a non-default
 location and configure can't find it there, so please check that your PATH
 variable includes the path to the correct gtk-config/pkg-config. Also check
-that your LD_LIBRARY_PATH or equivalent variable contains the path to GTK+
+that your LD_LIBRARY_PATH or equivalent variable contains the path to GTK
 libraries if they were installed in a non-default location.
 
 You get errors from make: please use GNU make instead of the native make
@@ -122,17 +122,11 @@ Now create your super-application myfoo.cpp and compile anywhere with
 GUI libraries                          {#gtk_libs_gui}
 ---------------
 
-wxWidgets/GTK+ requires the GTK+ library to be installed on your system. It has
-to be a stable version, preferably GTK+ 2.x.y, where x is an even number.
-GTK+ version 1.2 is highly discouraged, but if you decide to still use it,
-please use version 1.2.10 (at least 1.2.3 is required, 1.2.7 is strongly recommended).
+wxWidgets/GTK requires the GTK library to be installed on your system.
 
-You can get the newest version of the GTK+ from the GTK+ homepage at:
+You can get the newest version of GTK from the GTK homepage at:
 
   http://www.gtk.org
-
-We also mirror GTK+ at my ftp site. You'll find information about downloading
-at my homepage.
 
 Additional libraries                   {#gtk_libs_misc}
 ----------------------
@@ -202,9 +196,9 @@ you download wxGTK, it will default to --with-gtk etc. But
 if you use the git repository you have to choose a toolkit.
 You must do this by running configure with either of:
 
-    --with-gtk=2            Use the GTK+ 2.0. Default.
-    --with-gtk=3            Use the GTK+ 3.
-    --with-gtk=1            Use the GTK+ 1.2.
+    --with-gtk=3            Use GTK 3. Default.
+    --with-gtk=2            Use GTK 2.
+    --with-gtk=1            Use GTK 1.2.
 
 The following options handle the kind of library you want to build.
 

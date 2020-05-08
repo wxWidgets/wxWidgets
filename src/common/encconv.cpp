@@ -27,6 +27,7 @@
 
 #ifdef __WXMAC__
     #include "wx/osx/core/cfstring.h"
+    #include <CoreFoundation/CFString.h>
     #include <CoreFoundation/CFStringEncodingExt.h>
 
     wxUint16 gMacEncodings[wxFONTENCODING_MACMAX-wxFONTENCODING_MACMIN+1][128] ;
@@ -79,7 +80,7 @@ extern "C"
 static int wxCMPFUNC_CONV
 CompareCharsetItems(const void *i1, const void *i2)
 {
-    return ( ((CharsetItem*)i1) -> u - ((CharsetItem*)i2) -> u );
+    return static_cast<const CharsetItem*>(i1)->u - static_cast<const CharsetItem*>(i2)->u;
 }
 }
 

@@ -15,6 +15,29 @@
 
 #include "wx/gtk/private/wrapgtk.h"
 
+#ifdef __WXGTK3__
+extern "C" {
+static gboolean image_draw(GtkWidget* widget, cairo_t* cr, wxStaticBitmap* win)
+{
+    wxBitmap bitmap(win->GetBitmap());
+    if (!bitmap.IsOk() || bitmap.GetScaleFactor() <= 1)
+        return false;
+
+    GtkAllocation alloc;
+    gtk_widget_get_allocation(widget, &alloc);
+    gtk_render_background(gtk_widget_get_style_context(widget),
+        cr, 0, 0, alloc.width, alloc.height);
+    const wxSize size(bitmap.GetScaledSize());
+    int x = (alloc.width  - size.x) / 2;
+    int y = (alloc.height - size.y) / 2;
+    if (!win->IsEnabled())
+        bitmap = bitmap.CreateDisabled();
+    bitmap.Draw(cr, x, y);
+    return true;
+}
+}
+#endif
+
 //-----------------------------------------------------------------------------
 // wxStaticBitmap
 //-----------------------------------------------------------------------------
@@ -41,8 +64,6 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         return false;
     }
 
-    m_bitmap = bitmap;
-
     m_widget = gtk_image_new();
     g_object_ref(m_widget);
 
@@ -51,6 +72,9 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
     PostCreation(size);
     m_parent->DoAddChild( this );
+#ifdef __WXGTK3__
+    g_signal_connect(m_widget, "draw", G_CALLBACK(image_draw), this);
+#endif
 
     return true;
 }
@@ -62,7 +86,24 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
     // always use pixbuf, because pixmap mask does not
     // work with disabled images in some themes
     if (m_bitmap.IsOk())
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), m_bitmap.GetPixbuf());
+    {
+#ifdef __WXGTK3__
+        if (bitmap.GetScaleFactor() > 1)
+        {
+            // Use a placeholder pixbuf with the correct size.
+            // The original will be used by our "draw" signal handler.
+            const wxSize size(bitmap.GetScaledSize());
+            GdkPixbuf* pixbuf =
+                gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8, size.x, size.y);
+            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), pixbuf);
+            g_object_unref(pixbuf);
+        }
+        else
+#endif
+        {
+            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), m_bitmap.GetPixbuf());
+        }
+    }
     else
         gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), NULL);
 

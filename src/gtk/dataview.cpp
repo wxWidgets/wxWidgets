@@ -250,6 +250,11 @@ public:
     }
 
 
+    // Associate our model with the tree view or disassociate it from it
+    // without generating any selection changed events, unlike
+    // gtk_tree_view_set_model() that this function wraps.
+    void UseModel(bool use);
+
     // accessors
     wxDataViewModel* GetDataViewModel() { return m_wx_model; }
     const wxDataViewModel* GetDataViewModel() const { return m_wx_model; }
@@ -695,11 +700,21 @@ wxgtk_tree_model_init(GTypeInstance* instance, void*)
 // them call the methods of wxWidgets' wxDataViewModel
 //-----------------------------------------------------------------------------
 
+// Note that all the model methods check if its stamp is valid because we want
+// to avoid using the model being dissociated from the tree: its items may have
+// been already deleted and referencing them can result in a crash. And while
+// it's probably unnecessary to perform this check in all the methods, as only
+// a couple of them can be really called from inside gtk_tree_view_set_model(),
+// it does no harm to check this everywhere and this should be more robust.
+
 static GtkTreeModelFlags
 wxgtk_tree_model_get_flags (GtkTreeModel *tree_model)
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), (GtkTreeModelFlags)0 );
+
+    if ( wxtree_model->stamp == 0 )
+        return (GtkTreeModelFlags)0;
 
     return wxtree_model->internal->get_flags();
 }
@@ -710,6 +725,9 @@ wxgtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), 0);
 
+    if ( wxtree_model->stamp == 0 )
+        return 0;
+
     return wxtree_model->internal->GetDataViewModel()->GetColumnCount();
 }
 
@@ -719,6 +737,9 @@ wxgtk_tree_model_get_column_type (GtkTreeModel *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), G_TYPE_INVALID);
+
+    if ( wxtree_model->stamp == 0 )
+        return G_TYPE_INVALID;
 
     GType gtype = G_TYPE_INVALID;
 
@@ -744,6 +765,9 @@ wxgtk_tree_model_get_iter (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
+
     return wxtree_model->internal->get_iter( iter, path );
 }
 
@@ -754,13 +778,9 @@ wxgtk_tree_model_get_path (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), NULL);
 
     GtkWxTreeModel *wxtree_model = GTK_WX_TREE_MODEL (tree_model);
+
     if ( wxtree_model->stamp == 0 )
-    {
-        // The model is temporarily invalid and can't be used, see Cleared(),
-        // but we need to return some valid path from here -- just return an
-        // empty one.
         return gtk_tree_path_new();
-    }
 
     g_return_val_if_fail (iter->stamp == wxtree_model->stamp, NULL);
 
@@ -775,6 +795,9 @@ wxgtk_tree_model_get_value (GtkTreeModel *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model) );
+
+    if ( wxtree_model->stamp == 0 )
+        return;
 
     wxDataViewModel *model = wxtree_model->internal->GetDataViewModel();
     wxString mtype = model->GetColumnType( (unsigned int) column );
@@ -799,11 +822,11 @@ wxgtk_tree_model_iter_next (GtkTreeModel  *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
 
-    // This happens when clearing the view by calling .._set_model( NULL );
-    if (iter->stamp == 0) return FALSE;
-
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     g_return_val_if_fail (wxtree_model->stamp == iter->stamp, FALSE);
+
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
 
     return wxtree_model->internal->iter_next( iter );
 }
@@ -814,11 +837,15 @@ wxgtk_tree_model_iter_children (GtkTreeModel *tree_model,
                                 GtkTreeIter  *parent)
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
+
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     if (parent)
     {
         g_return_val_if_fail (wxtree_model->stamp == parent->stamp, FALSE);
     }
+
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
 
     return wxtree_model->internal->iter_children( iter, parent );
 }
@@ -842,6 +869,9 @@ wxgtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), 0);
     g_return_val_if_fail ( !iter || wxtree_model->stamp == iter->stamp, 0);
 
+    if ( wxtree_model->stamp == 0 )
+        return 0;
+
     return wxtree_model->internal->iter_n_children( iter );
 }
 
@@ -853,6 +883,9 @@ wxgtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
+
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
 
     return wxtree_model->internal->iter_nth_child( iter, parent, n );
 }
@@ -866,6 +899,9 @@ wxgtk_tree_model_iter_parent (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     g_return_val_if_fail (wxtree_model->stamp == child->stamp, FALSE);
 
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
+
     return wxtree_model->internal->iter_parent( iter, child );
 }
 
@@ -877,6 +913,9 @@ wxgtk_tree_model_row_draggable (GtkTreeDragSource *drag_source,
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_source;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
 
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
+
     return wxtree_model->internal->row_draggable( drag_source, path );
 }
 
@@ -886,6 +925,9 @@ wxgtk_tree_model_drag_data_delete (GtkTreeDragSource *drag_source,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_source;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
+
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
 
     return wxtree_model->internal->drag_data_delete( drag_source, path );
 }
@@ -913,6 +955,9 @@ wxgtk_tree_model_drag_data_get (GtkTreeDragSource *drag_source,
     wxPrintf( "format %d\n", selection_data->format );
 #endif
 
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
+
     return wxtree_model->internal->drag_data_get( drag_source, path, selection_data );
 }
 
@@ -924,6 +969,9 @@ wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *drag_dest,
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_dest;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
 
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
+
     return wxtree_model->internal->drag_data_received( drag_dest, dest, selection_data );
 }
 
@@ -934,6 +982,9 @@ wxgtk_tree_model_row_drop_possible (GtkTreeDragDest  *drag_dest,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) drag_dest;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
+
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
 
     return wxtree_model->internal->row_drop_possible( drag_dest, dest_path, selection_data );
 }
@@ -947,6 +998,9 @@ wxgtk_tree_model_get_sort_column_id (GtkTreeSortable *sortable,
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) sortable;
 
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (sortable), FALSE);
+
+    if ( wxtree_model->stamp == 0 )
+        return FALSE;
 
     if (!wxtree_model->internal->IsSorted())
     {
@@ -976,6 +1030,9 @@ wxgtk_tree_model_set_sort_column_id (GtkTreeSortable *sortable,
 {
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
+
+    if ( tree_model->stamp == 0 )
+        return;
 
     tree_model->internal->SetDataViewSortColumn( gs_lastLeftClickHeader );
 
@@ -1875,55 +1932,23 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
 
 bool wxGtkDataViewModelNotifier::BeforeReset()
 {
-    GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
-    gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), NULL );
+    m_internal->UseModel(false);
 
     return true;
 }
 
 bool wxGtkDataViewModelNotifier::AfterReset()
 {
-    GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
-    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
-
     m_internal->Cleared();
 
-    gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), GTK_TREE_MODEL(wxgtk_model) );
+    m_internal->UseModel(true);
 
     return true;
 }
 
 bool wxGtkDataViewModelNotifier::Cleared()
 {
-    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
-
-    // There is no call to tell the model that everything
-    // has been deleted so call row_deleted() for every
-    // child of root...
-
-    // It is important to avoid selection changed events being generated from
-    // here as they would reference the already deleted model items, which
-    // would result in crashes in any code attempting to handle these events.
-    wxDataViewCtrl::SelectionEventsSuppressor noSelection(m_internal->GetOwner());
-
-    // We also need to prevent wxGtkTreeCellDataFunc from using the model items
-    // not existing any longer, so change the model stamp to indicate that it
-    // temporarily can't be used.
-    const gint stampOrig = wxgtk_model->stamp;
-    wxgtk_model->stamp = 0;
-
-    {
-        wxGtkTreePath path(gtk_tree_path_new_first());  // points to root
-        const int count = m_internal->iter_n_children( NULL ); // number of children of root
-        for (int i = 0; i < count; i++)
-            gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
-    }
-
-    wxgtk_model->stamp = stampOrig;
-
-    m_internal->Cleared();
-
-    return true;
+    return BeforeReset() && AfterReset();
 }
 
 // ---------------------------------------------------------
@@ -2604,6 +2629,7 @@ public:
         m_window = window;
 
         m_context = window->GTKGetPangoDefaultContext();
+        g_object_ref(m_context);
         m_layout = pango_layout_new( m_context );
         m_fontdesc = pango_font_description_copy(gtk_widget_get_style(widget)->font_desc);
 
@@ -3107,7 +3133,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     if ( !tree_model->stamp )
     {
         // The model is temporarily invalid and can't be used, see the code in
-        // wxGtkDataViewModelNotifier::Cleared().
+        // wxDataViewCtrlInternal::UseModel().
         return;
     }
 
@@ -3120,16 +3146,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     if (!wx_model->IsVirtualListModel())
     {
-        gboolean visible;
-        if (wx_model->IsContainer( item ))
-        {
-            visible = wx_model->HasContainerColumns( item ) || (column == 0);
-        }
-        else
-        {
-            visible = true;
-        }
-
+        gboolean visible = wx_model->HasValue(item, column);
         GValue gvalue = G_VALUE_INIT;
         g_value_init( &gvalue, G_TYPE_BOOLEAN );
         g_value_set_boolean( &gvalue, visible );
@@ -3596,7 +3613,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     if (!m_wx_model->IsVirtualListModel())
         InitTree();
 
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->GtkGetTreeView()), GTK_TREE_MODEL(m_gtk_model) );
+    UseModel(true);
 }
 
 wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
@@ -3604,13 +3621,41 @@ wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
     m_wx_model->RemoveNotifier( m_notifier );
 
     // remove the model from the GtkTreeView before it gets destroyed
-    gtk_tree_view_set_model( GTK_TREE_VIEW( m_owner->GtkGetTreeView() ), NULL );
+    UseModel(false);
 
     g_object_unref( m_gtk_model );
 
     delete m_root;
     delete m_dragDataObject;
     delete m_dropDataObject;
+}
+
+void wxDataViewCtrlInternal::UseModel(bool use)
+{
+    // Avoid any selection changed events from gtk_tree_view_set_model() call
+    // below as they don't happen under the other platforms and can be
+    // unexpected with the possibly fatal consequences for the user-defined
+    // event handler.
+    wxDataViewCtrl::SelectionEventsSuppressor noSelection(m_owner);
+
+    if ( use )
+    {
+        gtk_tree_view_set_model(GTK_TREE_VIEW(m_owner->GtkGetTreeView()),
+                                GTK_TREE_MODEL(m_gtk_model));
+    }
+    else // Disassociate the model from the control.
+    {
+        // We need to prevent wxGtkTreeCellDataFunc and other callbacks that
+        // may be called from inside gtk_tree_view_set_model() from using the
+        // model items not existing any longer, so change the model stamp to
+        // indicate that it temporarily can't be used.
+        const gint stampOrig = m_gtk_model->stamp;
+        m_gtk_model->stamp = 0;
+
+        gtk_tree_view_set_model(GTK_TREE_VIEW(m_owner->GtkGetTreeView()), NULL);
+
+        m_gtk_model->stamp = stampOrig;
+    }
 }
 
 void wxDataViewCtrlInternal::ScheduleRefresh()

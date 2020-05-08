@@ -31,6 +31,8 @@
 #include <map>
 #include <string>
 
+#include <float.h>       // for FLT_MAX
+
 #define TRACE_CTFONT "ctfont"
 
 class WXDLLEXPORT wxFontRefData : public wxGDIRefData
@@ -47,7 +49,7 @@ public:
 
     wxFontRefData(CTFontRef font);
 
-    float GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
+    double GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
 
     wxFontFamily GetFamily() const { return m_info.GetFamily(); }
 
@@ -73,7 +75,7 @@ public:
 
     const wxNativeFontInfo& GetNativeFontInfo() const;
 
-    void SetFractionalPointSize(float size)
+    void SetFractionalPointSize(double size)
     {
         if (GetFractionalPointSize() != size)
         {
@@ -288,6 +290,8 @@ void wxFontRefData::SetFont(CTFontRef font)
     dict.SetValue(kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
 
     m_ctFontAttributes = dict;
+
+    m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
 }
 
 static const CGAffineTransform kSlantTransform = CGAffineTransformMake(1, 0, tan(wxDegToRad(11)), 1, 0, 0);
@@ -349,7 +353,6 @@ void wxFontRefData::Alloc()
             m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
             entryWithSize.font = m_ctFont;
             entryWithSize.cgFont = m_cgFont;
-            entryWithSize.cgFont = m_cgFont;
             entryWithSize.fontAttributes = m_ctFontAttributes;
             entryWithSize.used = true;
         }
@@ -366,7 +369,7 @@ void wxFontRefData::Alloc()
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
 
-            SetFont(font);
+            SetFont(font); // Sets m_ctFont, m_ctFontAttributes, m_cgFont
             if ( difference != 0 )
             {
                 if ( difference > 0 )
@@ -382,7 +385,6 @@ void wxFontRefData::Alloc()
                 }
             }
 
-            m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
             entryWithSize.font = m_ctFont;
             entryWithSize.cgFont = m_cgFont;
             entryWithSize.fontAttributes = m_ctFontAttributes;
@@ -567,7 +569,7 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
     return new wxFontRefData(*static_cast<const wxFontRefData*>(data));
 }
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -624,7 +626,7 @@ void wxFont::SetStrikethrough(bool strikethrough)
 
 // TODO: insert checks everywhere for M_FONTDATA == NULL!
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
 
@@ -636,7 +638,7 @@ wxSize wxFont::GetPixelSize() const
 #if wxUSE_GRAPHICS_CONTEXT
     // TODO: consider caching the value
     wxGraphicsContext* dc = wxGraphicsContext::CreateFromNative((CGContextRef)NULL);
-    dc->SetFont(*(wxFont*)this, *wxBLACK);
+    dc->SetFont(*this, *wxBLACK);
     wxDouble width, height = 0;
     dc->GetTextExtent(wxT("g"), &width, &height, NULL, NULL);
     delete dc;
@@ -957,13 +959,13 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToCDouble(&d) )
         return false;
+    if ( d < 0 || d > FLT_MAX )
+        return false;
 #ifdef __LP64__
     // CGFloat is just double in this case.
     m_ctSize = d;
 #else // !__LP64__
     m_ctSize = static_cast<CGFloat>(d);
-    if ( static_cast<double>(m_ctSize) != d )
-        return false;
 #endif // __LP64__/!__LP64__
 
     token = tokenizer.GetNextToken();
@@ -1038,7 +1040,7 @@ wxString wxNativeFontInfo::ToString() const
     return s;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_ctSize;
 }
@@ -1085,7 +1087,7 @@ bool wxNativeFontInfo::GetStrikethrough() const
 
 // changing the font descriptor
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     if (GetFractionalPointSize() != pointsize)
     {

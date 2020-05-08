@@ -5943,7 +5943,7 @@ msgstr "退出 %s"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Quit this program"
-msgstr "推出此程序"
+msgstr "退出此程序"
 
 #: ../src/common/accelcmn.cpp:338
 msgid "RawCtrl+"

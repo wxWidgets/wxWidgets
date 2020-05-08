@@ -59,7 +59,7 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 
 #include "wx/arrstr.h"
 
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
 
 int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
 {
@@ -153,7 +153,7 @@ wxStringCompareLess<F> wxStringCompare(F f)
 void wxArrayString::Sort(CompareFunction function)
 {
     std::sort(begin(), end(),
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
               [function](const wxString& s1, const wxString& s2)
               {
                   return function(s1, s2) < 0;
@@ -185,7 +185,7 @@ int wxSortedArrayString::Index(const wxString& str,
 
     wxSortedArrayString::const_iterator
         it = std::lower_bound(begin(), end(), str,
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
                               [](const wxString& s1, const wxString& s2)
                               {
                                   return s1 < s2;

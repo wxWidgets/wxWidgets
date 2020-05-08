@@ -1629,12 +1629,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         // (a) it's a command event and so is propagated to the parent
         // (b) under some ports it can be generated from kbd too
         // (c) it uses screen coords (because of (a))
-        wxContextMenuEvent evtCtx(
-            wxEVT_CONTEXT_MENU,
-            win->GetId(),
-            win->ClientToScreen(event.GetPosition()));
-        evtCtx.SetEventObject(win);
-        return win->HandleWindowEvent(evtCtx);
+        const wxPoint pos = win->ClientToScreen(event.GetPosition());
+        return win->WXSendContextMenuEvent(pos);
     }
 
     return FALSE;
@@ -3603,12 +3599,10 @@ void wxWindowGTK::GtkSendPaintEvents()
         m_clearRegion.Clear();
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
+    wxNcPaintEvent nc_paint_event( this );
     HandleWindowEvent( nc_paint_event );
 
-    wxPaintEvent paint_event( GetId() );
-    paint_event.SetEventObject( this );
+    wxPaintEvent paint_event( this );
     HandleWindowEvent( paint_event );
 
     m_clipPaintRegion = false;

@@ -85,9 +85,7 @@ wxPrintFactory *wxPrintFactory::m_factory = NULL;
 
 void wxPrintFactory::SetPrintFactory( wxPrintFactory *factory )
 {
-    if (wxPrintFactory::m_factory)
-        delete wxPrintFactory::m_factory;
-
+    delete wxPrintFactory::m_factory;
     wxPrintFactory::m_factory = factory;
 }
 
@@ -349,7 +347,7 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
 
 wxPrintDialogData& wxPrinterBase::GetPrintDialogData() const
 {
-    return (wxPrintDialogData&) m_printDialogData;
+    return const_cast<wxPrintDialogData&>(m_printDialogData);
 }
 
 //----------------------------------------------------------------------------
@@ -640,6 +638,8 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
 
 bool wxPrintout::SetUp(wxDC& dc)
 {
+    wxCHECK_MSG( dc.IsOk(), false, "should have a valid DC to set up" );
+
     SetPPIScreen(wxGetDisplayPPI());
 
     // We need to know printer PPI. In most ports, this can be retrieved from
@@ -659,7 +659,10 @@ bool wxPrintout::SetUp(wxDC& dc)
     SetDC(&dc);
 
     dc.GetSize(&m_pageWidthPixels, &m_pageHeightPixels);
-    m_paperRectPixels = wxRect(0, 0, m_pageWidthPixels, m_pageHeightPixels);
+    // This is ugly, but wxDCImpl itself has GetPaperRect() method while wxDC
+    // doesn't (only wxPrinterDC does), so use GetImpl() to avoid having to use
+    // a dynamic cast.
+    m_paperRectPixels = dc.GetImpl()->GetPaperRect();
     dc.GetSizeMM(&m_pageWidthMM, &m_pageHeightMM);
 
     return true;
@@ -1868,12 +1871,9 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
 
 wxPrintPreviewBase::~wxPrintPreviewBase()
 {
-    if (m_previewPrintout)
-        delete m_previewPrintout;
-    if (m_previewBitmap)
-        delete m_previewBitmap;
-    if (m_printPrintout)
-        delete m_printPrintout;
+    delete m_previewPrintout;
+    delete m_previewBitmap;
+    delete m_printPrintout;
 }
 
 bool wxPrintPreviewBase::SetCurrentPage(int pageNum)

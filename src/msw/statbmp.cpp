@@ -293,17 +293,9 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 
     Free();
 
-    if ( sizeNew != sizeOld )
-        InvalidateBestSize();
-
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
     // the image has already been copied
     m_image = image;
-
-    int x, y;
-    int w, h;
-    GetPosition(&x, &y);
-    GetSize(&w, &h);
 
     // Normally we just use the handle of provided image but in some cases we
     // create our own temporary bitmap, so the actual handle may end up being
@@ -343,17 +335,11 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 
     if ( sizeNew != sizeOld )
     {
-        w += sizeNew.x - sizeOld.x;
-        h += sizeNew.y - sizeOld.y;
-
-        MSWMoveWindowToAnyPosition(GetHwnd(), x, y, w, h, false);
+        InvalidateBestSize();
+        SetSize(GetBestSize());
     }
 
-    RECT rect;
-    rect.left   = x;
-    rect.top    = y;
-    rect.right  = x + w;
-    rect.bottom = y + h;
+    RECT rect = wxGetWindowRect(GetHwnd());
     ::InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
 

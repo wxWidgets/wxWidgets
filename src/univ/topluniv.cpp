@@ -216,8 +216,7 @@ long wxTopLevelWindow::GetDecorationsStyle() const
 
 void wxTopLevelWindow::RefreshTitleBar()
 {
-    wxNcPaintEvent event(GetId());
-    event.SetEventObject(this);
+    wxNcPaintEvent event(this);
     GetEventHandler()->ProcessEvent(event);
 }
 

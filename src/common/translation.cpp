@@ -1065,6 +1065,7 @@ private:
 
     // data description
     size_t32          m_numStrings;   // number of strings in this domain
+    const
     wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
                      *m_pTransTable;  //            translated
 
@@ -1079,7 +1080,7 @@ private:
                             : ui;
     }
 
-    const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 n) const
+    const char* StringAtOfs(const wxMsgTableEntry* pTable, size_t32 n) const
     {
         const wxMsgTableEntry * const ent = pTable + n;
 
@@ -1155,7 +1156,7 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
     // examine header
     bool bValid = data.length() > sizeof(wxMsgCatalogHeader);
 
-    const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)data.data();
+    const wxMsgCatalogHeader* pHeader = reinterpret_cast<const wxMsgCatalogHeader*>(data.data());
     if ( bValid ) {
         // we'll have to swap all the integers if it's true
         m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
@@ -1174,9 +1175,9 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
 
     // initialize
     m_numStrings  = Swap(pHeader->numStrings);
-    m_pOrigTable  = (wxMsgTableEntry *)(data.data() +
+    m_pOrigTable  = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
                     Swap(pHeader->ofsOrigTable));
-    m_pTransTable = (wxMsgTableEntry *)(data.data() +
+    m_pTransTable = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
                     Swap(pHeader->ofsTransTable));
 
     // now parse catalog's header and try to extract catalog charset and

@@ -64,7 +64,7 @@ else()
 endif()
 
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "1992-2019 wxWidgets")
+set(wxCOPYRIGHT "1992-2020 wxWidgets")
 
 include(build/cmake/main.cmake)
 

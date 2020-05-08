@@ -267,6 +267,7 @@ public:
     @section descriptions Backend Descriptions
 
     @par wxWEBVIEW_BACKEND_IE (MSW)
+    @anchor wxWEBVIEW_BACKEND_IE
 
     The IE backend uses Microsoft's Trident rendering engine, specifically the
     version used by the locally installed copy of Internet Explorer. As such it
@@ -277,6 +278,32 @@ public:
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
+
+    @par wxWEBVIEW_BACKEND_EDGE (MSW)
+
+    The Edge (Chromium) backend uses Microsoft's
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
+    It is available for Windows 7 and newer.
+    The following features are currently unsupported with this backend:
+    virtual filesystems, custom urls, find.
+
+    This backend is not enabled by default, to build it follow these steps:
+    - Visual Studio 2015, or newer, is required
+    - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
+      nuget package (Version 0.9.488 or newer)
+    - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
+      (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
+      file after unpacking it)
+    - Enable @c wxUSE_WEBVIEW_EDGE in CMake or @c setup.h
+    - Build wxWidgets webview library
+    - Copy @c WebView2Loader.dll from the subdirectory corresponding to the
+      architecture used (x86 or x64) of @c wxWidgets/3rdparty/webview2/build/
+      to your applications executable
+    - At runtime you can use wxWebView::IsBackendAvailable() to check if the
+      backend can be used (it will be available if @c WebView2Loader.dll can be
+      loaded and Edge (Chromium) is installed)
+    - Make sure to add a note about using the WebView2 SDK to your application
+      documentation, as required by its licence
 
     @par wxWEBVIEW_WEBKIT (GTK)
 
@@ -427,6 +454,14 @@ public:
                                 wxSharedPtr<wxWebViewFactory> factory);
 
     /**
+        Allows to check if a specific backend is currently available.
+
+        @since 3.1.4
+    */
+    static bool IsBackendAvailable(const wxString& backend);
+
+
+    /**
         Get the title of the current web page, or its URL/path if title is not
         available.
     */
@@ -511,58 +546,9 @@ public:
     /**
         Reload the currently displayed URL.
         @param flags A bit array that may optionally contain reload options.
+        @note The flags are ignored by the edge backend.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
-
-    /**
-        Sets emulation level.
-
-        This function is useful to change the emulation level of
-        the system browser control used for wxWebView implementation under
-        MSW, rather than using the currently default, IE7-compatible, level.
-
-        Please notice that this function works by modifying the per-user part
-        of MSW registry, which has several implications: first, it is
-        sufficient to call it only once (per user) as the changes done by it
-        are persistent and, second, if you do not want them to be persistent,
-        you need to call it with @c wxWEBVIEWIE_EMU_DEFAULT argument explicitly.
-
-        In particular, this function should be called to allow RunScript() to
-        work for JavaScript code returning arbitrary objects, which is not
-        supported at the default emulation level.
-
-        If set to a level higher than installed version, the highest available
-        level will be used instead. @c wxWEBVIEWIE_EMU_IE11 is recommended for
-        best performance and experience.
-
-        This function is MSW-specific and doesn't exist under other platforms.
-
-        See https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation
-        for more information about browser control emulation levels.
-
-        @param level the target emulation level
-        @return @true on success, @false on failure (a warning message is also
-        logged in the latter case).
-
-        @since 3.1.3
-    */
-    static bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
-
-    /**
-        @deprecated
-        This function is kept mostly for backwards compatibility.
-
-        Please explicitly specify emulation level with MSWSetEmulationLevel().
-
-        @param modernLevel @true to set level to IE8, synonym for @c wxWEBVIEWIE_EMU_IE8.
-            @false to reset the emulation level to its default,
-            synonym for @c wxWEBVIEWIE_EMU_DEFAULT.
-        @return @true on success, @false on failure (a warning message is also
-            logged in the latter case).
-
-        @since 3.1.1
-    */
-    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
 
     /**
         Runs the given JavaScript code.
@@ -638,7 +624,7 @@ public:
                     relative paths, for instance.
         @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend.
+              parameter is not used in this backend and the edge backend.
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
 
@@ -717,6 +703,27 @@ public:
         @since 2.9.5
     */
     virtual bool IsContextMenuEnabled() const;
+
+    /**
+        @name Dev Tools
+    */
+
+    /**
+        Enable or disable access to dev tools for the user.
+
+        This is currently only implemented for the Edge (Chromium) backend
+        where the dev tools are enabled by default.
+
+        @since 3.1.4
+    */
+    virtual void EnableAccessToDevTools(bool enable = true);
+
+    /**
+        Returns @true if dev tools are available to the user.
+
+        @since 3.1.4
+    */
+    virtual bool IsAccessToDevToolsEnabled() const;
 
     /**
         @name History
@@ -902,6 +909,72 @@ public:
     virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
 };
 
+
+
+/**
+    @class wxWebViewIE
+
+    wxWebView using IE backend, see @ref wxWEBVIEW_BACKEND_IE.
+
+    @onlyfor{wxmsw}
+    @since 2.9.3
+    @library{wxwebview}
+    @category{ctrl,webview}
+    @see wxWebView
+ */
+class wxWebViewIE : public wxWebView
+{
+public:
+    /**
+        Sets emulation level.
+
+        This function is useful to change the emulation level of
+        the system browser control used for wxWebView implementation under
+        MSW, rather than using the currently default, IE7-compatible, level.
+
+        Please notice that this function works by modifying the per-user part
+        of MSW registry, which has several implications: first, it is
+        sufficient to call it only once (per user) as the changes done by it
+        are persistent and, second, if you do not want them to be persistent,
+        you need to call it with @c wxWEBVIEWIE_EMU_DEFAULT argument explicitly.
+
+        In particular, this function should be called to allow RunScript() to
+        work for JavaScript code returning arbitrary objects, which is not
+        supported at the default emulation level.
+
+        If set to a level higher than installed version, the highest available
+        level will be used instead. @c wxWEBVIEWIE_EMU_IE11 is recommended for
+        best performance and experience.
+
+        This function is MSW-specific and doesn't exist under other platforms.
+
+        See https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation
+        for more information about browser control emulation levels.
+
+        @param level the target emulation level
+        @return @true on success, @false on failure (a warning message is also
+        logged in the latter case).
+
+        @since 3.1.3
+    */
+    static bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
+
+    /**
+        @deprecated
+        This function is kept mostly for backwards compatibility.
+
+        Please explicitly specify emulation level with MSWSetEmulationLevel().
+
+        @param modernLevel @true to set level to IE8, synonym for @c wxWEBVIEWIE_EMU_IE8.
+            @false to reset the emulation level to its default,
+            synonym for @c wxWEBVIEWIE_EMU_DEFAULT.
+        @return @true on success, @false on failure (a warning message is also
+            logged in the latter case).
+
+        @since 3.1.1
+    */
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
+};
 
 
 

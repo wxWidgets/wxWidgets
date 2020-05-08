@@ -248,10 +248,12 @@ private:
         CPPUNIT_TEST( ScrollWindowWithHandler );
 // for unknown reason, this test will cause the tests segmentation failed
 // under x11, disable it for now.
-#if !defined (__WXX11__)
+#if !defined (__WXX11__) && wxUSE_MENUS
         CPPUNIT_TEST( MenuEvent );
 #endif
+#if wxUSE_DOC_VIEW_ARCHITECTURE
         CPPUNIT_TEST( DocView );
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
         WXUISIM_TEST( ContextMenuEvent );
         WXUISIM_TEST( PropagationLevel );
     CPPUNIT_TEST_SUITE_END();
@@ -263,8 +265,12 @@ private:
     void ForwardEvent();
     void ScrollWindowWithoutHandler();
     void ScrollWindowWithHandler();
+#if wxUSE_MENUS
     void MenuEvent();
+#endif
+#if wxUSE_DOC_VIEW_ARCHITECTURE
     void DocView();
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
 #if wxUSE_UIACTIONSIMULATOR
     void ContextMenuEvent();
     void PropagationLevel();
@@ -425,6 +431,8 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 
+#if wxUSE_MENUS
+
 // Create a menu bar with a single menu containing wxID_APPLY menu item and
 // attach it to the specified frame.
 wxMenu* CreateTestMenu(wxFrame* frame)
@@ -501,6 +509,9 @@ void EventPropagationTestCase::MenuEvent()
 
     ASSERT_MENU_EVENT_RESULT( menu, "aomobowA" );
 }
+#endif
+
+#if wxUSE_DOC_VIEW_ARCHITECTURE
 
 // Minimal viable implementations of wxDocument and wxView.
 class EventTestDocument : public wxDocument
@@ -612,6 +623,8 @@ void EventPropagationTestCase::DocView()
     CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
 #endif // wxUSE_TOOLBAR
 }
+
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
 
 #if wxUSE_UIACTIONSIMULATOR
 

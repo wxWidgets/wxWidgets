@@ -150,7 +150,7 @@ protected:
     #endif
 
 private:
-    wxPoint   m_initialPosition;
+    wxPoint   m_lastKnownPosition;
     wxWindow* m_tlw;
 };
 

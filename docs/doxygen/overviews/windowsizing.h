@@ -116,4 +116,9 @@ some simple explanations of things.
     the constraints algorithm is run. The @c Layout() method is what is called by
     the default @c EVT_SIZE handler for container windows.
 
+@li wxTopLevelWindow::Layout(): this overridden version does the same thing as
+    the base wxWindow::Layout() except, for convenience, it will also resize
+    the only child of the top-level window to cover its entire client area if
+    there is no sizer associated with the window. Note that this only happens
+    if there is exactly one child.
 */

@@ -2047,7 +2047,7 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
 #define ICONV_FAILED(cres, bufLeft)  (cres == (size_t)-1)
 #endif
 
-#define ICONV_CHAR_CAST(x)  ((ICONV_CONST char **)(x))
+#define ICONV_CHAR_CAST(x) const_cast<ICONV_CONST char**>(x)
 
 #define ICONV_T_INVALID ((iconv_t)-1)
 
@@ -2396,7 +2396,7 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
         src = tmpbuf;
     }
 
-    char* inbuf = (char*)src;
+    const char* inbuf = reinterpret_cast<const char*>(src);
     if ( dst )
     {
         // have destination buffer, convert there
@@ -2450,7 +2450,7 @@ size_t wxMBConv_iconv::GetMBNulLen() const
         char buf[8]; // should be enough for NUL in any encoding
         size_t inLen = sizeof(wchar_t),
                outLen = WXSIZEOF(buf);
-        char *inBuff = (char *)wnul;
+        const char* inBuff = reinterpret_cast<const char*>(wnul);
         char *outBuff = buf;
         if ( iconv(w2m, ICONV_CHAR_CAST(&inBuff), &inLen, &outBuff, &outLen) == (size_t)-1 )
         {

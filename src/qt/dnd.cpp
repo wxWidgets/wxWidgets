@@ -16,10 +16,10 @@
 
 #include "wx/qt/private/converter.h"
 
-#include <QDrag>
-#include <QWidget>
-#include <QMimeData>
-#include <QCloseEvent>
+#include <QtGui/QDrag>
+#include <QtWidgets/QWidget>
+#include <QtCore/QMimeData>
+#include <QtGui/QCloseEvent>
 
 namespace
 {

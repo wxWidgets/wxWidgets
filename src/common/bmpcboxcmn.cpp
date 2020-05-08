@@ -68,7 +68,8 @@ void wxBitmapComboBoxBase::Init()
 
 void wxBitmapComboBoxBase::UpdateInternals()
 {
-    m_fontHeight = GetControl()->GetCharHeight() + EXTRA_FONT_HEIGHT;
+    m_fontHeight = GetControl()->GetCharHeight()
+        + GetControl()->FromDIP(EXTRA_FONT_HEIGHT);
 
     while ( m_bitmaps.GetCount() < GetItemContainer()->GetCount() )
         m_bitmaps.Add( new wxBitmap() );
@@ -159,7 +160,9 @@ int wxBitmapComboBoxBase::DetermineIndent()
 
     if ( m_usedImgSize.x > 0 )
     {
-        indent = m_usedImgSize.x + IMAGE_SPACING_LEFT + IMAGE_SPACING_RIGHT;
+        indent = m_usedImgSize.x
+            + GetControl()->FromDIP(IMAGE_SPACING_LEFT)
+            + GetControl()->FromDIP(IMAGE_SPACING_RIGHT);
         m_imgAreaWidth = indent;
 
         indent -= 3;
@@ -214,9 +217,12 @@ void wxBitmapComboBoxBase::DrawItem(wxDC& dc,
         wxCoord w = bmp.GetWidth();
         wxCoord h = bmp.GetHeight();
 
+        const wxWindow* win = const_cast<wxBitmapComboBoxBase*>(this)->GetControl();
+        const int imgSpacingLeft = win->FromDIP(IMAGE_SPACING_LEFT);
+
         // Draw the image centered
         dc.DrawBitmap(bmp,
-                      rect.x + (m_usedImgSize.x-w)/2 + IMAGE_SPACING_LEFT,
+                      rect.x + (m_usedImgSize.x-w)/2 + imgSpacingLeft,
                       rect.y + (rect.height-h)/2,
                       true);
     }
@@ -235,7 +241,8 @@ wxCoord wxBitmapComboBoxBase::MeasureItem(size_t WXUNUSED(item)) const
         return imgHeightArea > m_fontHeight ? imgHeightArea : m_fontHeight;
     }
 
-    return wxBCB_DEFAULT_ITEM_HEIGHT;
+    const wxWindow* win = const_cast<wxBitmapComboBoxBase*>(this)->GetControl();
+    return win->FromDIP(wxBCB_DEFAULT_ITEM_HEIGHT);
 }
 
 #endif // wxBITMAPCOMBOBOX_OWNERDRAWN_BASED

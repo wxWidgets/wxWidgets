@@ -748,6 +748,15 @@ enum
     context to the canvas, and then finally call SwapBuffers() to swap the
     buffers of the OpenGL canvas and thus show your current output.
 
+    Please note that wxGLContext always uses physical pixels, even on the
+    platforms where wxWindow uses logical pixels, affected by the coordinate
+    scaling, on high DPI displays. Thus, if you want to set the OpenGL view
+    port to the size of entire window, you must multiply the result returned by
+    wxWindow::GetClientSize() by wxWindow::GetContentScaleFactor() before
+    passing it to @c glViewport(). Same considerations apply to other OpenGL
+    functions and other coordinates, notably those retrieved from wxMouseEvent
+    in the event handlers.
+
     Notice that versions of wxWidgets previous to 2.9 used to implicitly create a
     wxGLContext inside wxGLCanvas itself. This is still supported in the
     current version but is deprecated now and will be removed in the future,
@@ -823,6 +832,10 @@ public:
         If @a attribList is not specified, wxGLAttributes::PlatformDefaults()
         is used, plus some other attributes (see below).
 
+        @param parent
+            Pointer to a parent window.
+        @param id
+            Window identifier. If -1, will automatically create an identifier.
         @param attribList
             Array of integers. With this parameter you can set the device
             context attributes associated to this window. This array is
@@ -841,6 +854,22 @@ public:
             WX_GL_DOUBLEBUFFER are used. But notice that if you do specify some
             attributes you also need to explicitly include these two default
             attributes in the list if you need them.
+        @param pos
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
+            wxWidgets should generate a default position for the window.
+        @param size
+            Window size. wxDefaultSize is (-1, -1) which indicates that
+            wxWidgets should generate a default size for the window. If no
+            suitable size can be found, the window will be sized to 20x20
+            pixels so that the window is visible but obviously not correctly
+            sized.
+        @param style
+            Window style.
+        @param name
+            Window name.
+        @param palette
+            Palette for indexed colour (i.e. non WX_GL_RGBA) mode. Ignored
+            under most platforms.
     */
     wxGLCanvas(wxWindow* parent, wxWindowID id = wxID_ANY,
                const int* attribList = NULL,

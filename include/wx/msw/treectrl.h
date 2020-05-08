@@ -261,6 +261,7 @@ protected:
     // return true if the key was processed, false otherwise
     bool MSWHandleSelectionKey(unsigned vkey);
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // data used only while editing the item label:
     wxTextCtrl  *m_textCtrl;        // text control in which it is edited

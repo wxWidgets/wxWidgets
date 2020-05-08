@@ -59,6 +59,13 @@ WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 
 #endif
 
+// NSString<->wxString
+
+WXDLLIMPEXP_BASE wxString wxStringWithNSString(NSString *nsstring);
+WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
+
+WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
+
 #if wxUSE_GUI
 
 #if wxOSX_USE_IPHONE
@@ -108,7 +115,7 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRe
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 
-WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 

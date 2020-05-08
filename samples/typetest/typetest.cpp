@@ -32,13 +32,8 @@
 #undef new
 #endif
 
-#include "wx/ioswrap.h"
-
-#if wxUSE_IOSTREAMH
-    #include <fstream.h>
-#else
-    #include <fstream>
-#endif
+#include <iostream>
+#include <fstream>
 
 #include "wx/wfstream.h"
 #include "wx/datstrm.h"
@@ -151,8 +146,8 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     text_output << d << "\n";
     std_file_output << d << "\n";
 
-    float f = (float)0.00001;
-    tmp.Printf( "Float: %f\n", f );
+    float f = 0.00001f;
+    tmp.Printf( "Float: %f\n", double(f) );
     textCtrl.WriteText( tmp );
     text_output << f << "\n";
     std_file_output << f << "\n";
@@ -182,7 +177,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
 
     std_file_input >> f;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( "Float: %f\n", double(f) );
     textCtrl.WriteText( tmp );
 
     char std_buf[200];
@@ -212,7 +207,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
 
     text_input >> f;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( "Float: %f\n", double(f) );
     textCtrl.WriteText( tmp );
 
     text_input >> str;

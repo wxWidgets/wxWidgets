@@ -138,7 +138,7 @@ public:
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
-    void SetFractionalPointSize(float pointSize);
+    void SetFractionalPointSize(double pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);
@@ -250,7 +250,7 @@ void wxFontRefData::Init(int pointSize,
     m_nativeFontInfo.SetUnderlined(underlined);
 #endif // wxUSE_UNICODE
 
-    SetFractionalPointSize(static_cast<float>(pointSize));
+    SetFractionalPointSize(pointSize);
 }
 
 void wxFontRefData::InitFromNative()
@@ -426,7 +426,7 @@ wxFontRefData::~wxFontRefData()
 // wxFontRefData SetXXX()
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::SetFractionalPointSize(float pointSize)
+void wxFontRefData::SetFractionalPointSize(double pointSize)
 {
     // NB: Pango doesn't support point sizes less than 1
     m_pointSize = pointSize == wxDEFAULT || pointSize < 1 ? wxDEFAULT_FONT_SIZE
@@ -692,7 +692,7 @@ void wxFont::Unshare()
 // accessors
 // ----------------------------------------------------------------------------
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
@@ -799,7 +799,7 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     Unshare();
 

@@ -63,9 +63,6 @@ public:
 
 private:
     bool m_destroyCursor;
-
-    // standard cursor size, computed on first use
-    static wxSize ms_sizeStd;
 };
 
 // ----------------------------------------------------------------------------
@@ -110,28 +107,17 @@ public:
 // wxCursorRefData
 // ----------------------------------------------------------------------------
 
-wxSize wxCursorRefData::ms_sizeStd;
 
 wxCoord wxCursorRefData::GetStandardWidth()
 {
-    if ( !ms_sizeStd.x )
-    {
-        wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-        ms_sizeStd.x = wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
-    }
-
-    return ms_sizeStd.x;
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    return wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
 }
 
 wxCoord wxCursorRefData::GetStandardHeight()
 {
-    if ( !ms_sizeStd.y )
-    {
-        wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-        ms_sizeStd.y = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, win);
-    }
-
-    return ms_sizeStd.y;
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    return wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, win);
 }
 
 wxCursorRefData::wxCursorRefData(HCURSOR hcursor, bool destroy)

@@ -759,6 +759,8 @@ public:
         return GetCompositeControlsDefaultAttributes(variant);
     }
 
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+
 protected:
     // Override wxEvtHandler method to check for a common problem of binding
     // wxEVT_TEXT_ENTER to a control without wxTE_PROCESS_ENTER style, which is

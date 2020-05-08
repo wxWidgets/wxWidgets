@@ -114,6 +114,31 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTempFileOutputStream);
 };
 
+class WXDLLIMPEXP_BASE wxTempFFileOutputStream : public wxOutputStream
+{
+public:
+    wxTempFFileOutputStream(const wxString& fileName);
+    virtual ~wxTempFFileOutputStream();
+
+    bool Close() wxOVERRIDE { return Commit(); }
+    WXDLLIMPEXP_INLINE_BASE virtual bool Commit() { return m_file->Commit(); }
+    WXDLLIMPEXP_INLINE_BASE virtual void Discard() { m_file->Discard(); }
+
+    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_file->Length(); }
+    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+
+protected:
+    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE
+        { return m_file->Seek(pos, mode); }
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_file->Tell(); }
+
+private:
+    wxTempFFile *m_file;
+
+    wxDECLARE_NO_COPY_CLASS(wxTempFFileOutputStream);
+};
+
 class WXDLLIMPEXP_BASE wxFileStream : public wxFileInputStream,
                                       public wxFileOutputStream
 {

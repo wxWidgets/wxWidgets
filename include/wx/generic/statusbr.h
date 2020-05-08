@@ -81,7 +81,7 @@ protected:
 
     // true if the status bar shows the size grip: for this it must have
     // wxSTB_SIZEGRIP style and the window it is attached to must be resizable
-    // and not maximized
+    // and not maximized (note that currently size grip is only used in wxGTK)
     bool ShowsSizeGrip() const;
 
     // returns the position and the size of the size grip

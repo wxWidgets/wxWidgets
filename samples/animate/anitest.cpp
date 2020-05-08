@@ -42,6 +42,9 @@
     #error Cannot compile this sample if wxAnimationCtrl is not enabled
 #endif
 
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    #include "wx/generic/animate.h"
+#endif
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -59,7 +62,8 @@ enum
     ID_SET_NULL_ANIMATION,
     ID_SET_INACTIVE_BITMAP,
     ID_SET_NO_AUTO_RESIZE,
-    ID_SET_BGCOLOR
+    ID_SET_BGCOLOR,
+    ID_USE_GENERIC
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -68,6 +72,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_SET_INACTIVE_BITMAP, MyFrame::OnSetInactiveBitmap)
     EVT_MENU(ID_SET_NO_AUTO_RESIZE, MyFrame::OnSetNoAutoResize)
     EVT_MENU(ID_SET_BGCOLOR, MyFrame::OnSetBgColor)
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    EVT_MENU(ID_USE_GENERIC, MyFrame::OnUseGeneric)
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
 
     EVT_MENU(wxID_STOP, MyFrame::OnStop)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
@@ -115,8 +122,7 @@ MyFrame::MyFrame(wxWindow *parent,
                  const wxPoint& pos,
                  const wxSize& size,
                  const long style)
-       : wxFrame(parent, id, title, pos, size,
-                          style | wxNO_FULL_REPAINT_ON_RESIZE)
+       : wxFrame(parent, id, title, pos, size, style)
 {
     SetIcon(wxICON(sample));
 
@@ -140,6 +146,12 @@ MyFrame::MyFrame(wxWindow *parent,
                                "Tells the control not to resize automatically");
     play_menu->Append(ID_SET_BGCOLOR, "Set background colour...",
                       "Sets the background colour of the control");
+
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    play_menu->AppendSeparator();
+    play_menu->AppendCheckItem(ID_USE_GENERIC, "Use &generic animation\tCtrl+G",
+                               "Selects whether native or generic version is used");
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(wxID_ABOUT);
@@ -214,25 +226,7 @@ void MyFrame::OnSetNoAutoResize(wxCommandEvent& event)
 
     if (style != m_animationCtrl->GetWindowStyle())
     {
-        // save status of the control before destroying it
-        wxAnimation curr = m_animationCtrl->GetAnimation();
-        wxBitmap inactive = m_animationCtrl->GetInactiveBitmap();
-        wxColour bg = m_animationCtrl->GetBackgroundColour();
-
-        // destroy & rebuild
-        wxAnimationCtrl *old = m_animationCtrl;
-        m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY, curr,
-                                              wxDefaultPosition, wxDefaultSize,
-                                              style);
-
-        GetSizer()->Replace(old, m_animationCtrl);
-        delete old;
-
-        // load old status in new control
-        m_animationCtrl->SetInactiveBitmap(inactive);
-        m_animationCtrl->SetBackgroundColour(bg);
-
-        GetSizer()->Layout();
+        RecreateAnimation(style);
     }
 }
 
@@ -244,6 +238,58 @@ void MyFrame::OnSetBgColor(wxCommandEvent& WXUNUSED(event))
     if (clr.IsOk())
         m_animationCtrl->SetBackgroundColour(clr);
 }
+
+void MyFrame::RecreateAnimation(long style)
+{
+    // save status of the control before destroying it
+
+    // We can't reuse the existing animation if we're switching from native to
+    // generic control or vice versa (as indicated by the absence of change in
+    // the style, which is the only other reason we can get called). We could
+    // save the file name we loaded it from and recreate it, of course, but for
+    // now, for simplicity, just start without any animation in this case.
+    wxAnimation curr;
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    if ( style != m_animationCtrl->GetWindowStyle() )
+        curr = m_animationCtrl->GetAnimation();
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
+
+    wxBitmap inactive = m_animationCtrl->GetInactiveBitmap();
+    wxColour bg = m_animationCtrl->GetBackgroundColour();
+
+    // destroy & rebuild
+    wxAnimationCtrlBase *old = m_animationCtrl;
+
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    if ( GetMenuBar()->IsChecked(ID_USE_GENERIC) )
+        m_animationCtrl = new wxGenericAnimationCtrl(this, wxID_ANY, curr,
+                                                     wxDefaultPosition,
+                                                     wxDefaultSize,
+                                                     style);
+    else
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
+    m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY, curr,
+                                          wxDefaultPosition, wxDefaultSize,
+                                          style);
+
+    GetSizer()->Replace(old, m_animationCtrl);
+    delete old;
+
+    // load old status in new control
+    m_animationCtrl->SetInactiveBitmap(inactive);
+    m_animationCtrl->SetBackgroundColour(bg);
+
+    GetSizer()->Layout();
+}
+
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+
+void MyFrame::OnUseGeneric(wxCommandEvent& WXUNUSED(event))
+{
+    RecreateAnimation(m_animationCtrl->GetWindowStyle());
+}
+
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
@@ -273,15 +319,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     {
         wxString filename(dialog.GetPath());
 
-        // enable one of the two chunk of codes to test different parts of wxAnimation/wxAnimationCtrl
-#if 0
-        if (m_animationCtrl->LoadFile(filename))
-            m_animationCtrl->Play();
-        else
-            wxMessageBox("Sorry, this animation is not a valid format for wxAnimation.");
-#else
-    #if 0
-        wxAnimation temp;
+        wxAnimation temp(m_animationCtrl->CreateAnimation());
         if (!temp.LoadFile(filename))
         {
             wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
@@ -290,25 +328,6 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
         m_animationCtrl->SetAnimation(temp);
         m_animationCtrl->Play();
-    #else
-        wxFileInputStream stream(filename);
-        if (!stream.IsOk())
-        {
-            wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
-            return;
-        }
-
-        wxAnimation temp;
-        if (!temp.Load(stream))
-        {
-            wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
-            return;
-        }
-
-        m_animationCtrl->SetAnimation(temp);
-        m_animationCtrl->Play();
-    #endif
-#endif
 
         GetSizer()->Layout();
     }

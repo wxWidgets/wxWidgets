@@ -21,6 +21,8 @@
 
 #include "textentrytest.h"
 #include "testableframe.h"
+
+#include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 
 void TextEntryTestCase::SetValue()
@@ -384,21 +386,20 @@ enum ProcessEnter
 class TestDialog : public wxDialog
 {
 public:
-    explicit TestDialog(TextLikeControlCreator controlCreator,
+    explicit TestDialog(const TextLikeControlCreator& controlCreator,
                         ProcessEnter processEnter)
         : wxDialog(wxTheApp->GetTopWindow(), wxID_ANY, "Test dialog"),
-          m_control((*controlCreator)(this,
-                                      processEnter == ProcessEnter_No
-                                        ? 0
-                                        : wxTE_PROCESS_ENTER)),
+          m_control
+          (
+              controlCreator.Create
+              (
+               this,
+               processEnter == ProcessEnter_No ? 0 : wxTE_PROCESS_ENTER
+              )
+          ),
           m_processEnter(processEnter),
           m_gotEnter(false)
     {
-        // We can't always bind this handler because wx will helpfully
-        // complain if we bind it without using wxTE_PROCESS_ENTER.
-        if ( processEnter != ProcessEnter_No )
-            m_control->Bind(wxEVT_TEXT_ENTER, &TestDialog::OnTextEnter, this);
-
         wxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
         sizer->Add(m_control, wxSizerFlags().Expand());
         sizer->Add(CreateStdDialogButtonSizer(wxOK));
@@ -435,6 +436,25 @@ private:
         }
     }
 
+    void OnText(wxCommandEvent& WXUNUSED(e))
+    {
+        // This should only happen for the multiline text controls.
+        switch ( m_processEnter )
+        {
+            case ProcessEnter_No:
+            case ProcessEnter_ButSkip:
+                // We consider that the text succeeded, but in a different way,
+                // so use a different ID to be able to distinguish between this
+                // scenario and Enter activating the default button.
+                EndModal(wxID_CLOSE);
+                break;
+
+            case ProcessEnter_WithoutSkipping:
+                FAIL("Shouldn't be getting wxEVT_TEXT if handled");
+                break;
+        }
+    }
+
     void OnTimeOut(wxTimerEvent&)
     {
         EndModal(wxID_CANCEL);
@@ -451,11 +471,22 @@ private:
     const ProcessEnter m_processEnter;
     wxTimer m_timer;
     bool m_gotEnter;
+
+    wxDECLARE_EVENT_TABLE();
 };
+
+// Note that we must use event table macros here instead of Bind() because
+// binding wxEVT_TEXT_ENTER handler for a control without wxTE_PROCESS_ENTER
+// style would fail with an assertion failure, due to wx helpfully complaining
+// about it.
+wxBEGIN_EVENT_TABLE(TestDialog, wxDialog)
+    EVT_TEXT(wxID_ANY, TestDialog::OnText)
+    EVT_TEXT_ENTER(wxID_ANY, TestDialog::OnTextEnter)
+wxEND_EVENT_TABLE()
 
 } // anonymous namespace
 
-void TestProcessEnter(TextLikeControlCreator controlCreator)
+void TestProcessEnter(const TextLikeControlCreator& controlCreator)
 {
     if ( !EnableUITests() )
     {
@@ -483,11 +514,47 @@ void TestProcessEnter(TextLikeControlCreator controlCreator)
         REQUIRE( dlgProcessEnter.ShowModal() == wxID_APPLY );
         CHECK( dlgProcessEnter.GotEnter() );
     }
+
+    SECTION("Without wxTE_PROCESS_ENTER but with wxTE_MULTILINE")
+    {
+        wxScopedPtr<TextLikeControlCreator>
+            multiLineCreator(controlCreator.CloneAsMultiLine());
+        if ( !multiLineCreator )
+            return;
+
+        TestDialog dlg(*multiLineCreator, ProcessEnter_No);
+        REQUIRE( dlg.ShowModal() == wxID_CLOSE );
+        CHECK( !dlg.GotEnter() );
+    }
+
+    SECTION("With wxTE_PROCESS_ENTER and wxTE_MULTILINE but skipping")
+    {
+        wxScopedPtr<TextLikeControlCreator>
+            multiLineCreator(controlCreator.CloneAsMultiLine());
+        if ( !multiLineCreator )
+            return;
+
+        TestDialog dlg(*multiLineCreator, ProcessEnter_ButSkip);
+        REQUIRE( dlg.ShowModal() == wxID_CLOSE );
+        CHECK( dlg.GotEnter() );
+    }
+
+    SECTION("With wxTE_PROCESS_ENTER and wxTE_MULTILINE without skipping")
+    {
+        wxScopedPtr<TextLikeControlCreator>
+            multiLineCreator(controlCreator.CloneAsMultiLine());
+        if ( !multiLineCreator )
+            return;
+
+        TestDialog dlg(*multiLineCreator, ProcessEnter_WithoutSkipping);
+        REQUIRE( dlg.ShowModal() == wxID_APPLY );
+        CHECK( dlg.GotEnter() );
+    }
 }
 
 #else // !wxUSE_UIACTIONSIMULATOR
 
-void TestProcessEnter(TextLikeControlCreator WXUNUSED(controlCreator))
+void TestProcessEnter(const TextLikeControlCreator& WXUNUSED(controlCreator))
 {
     WARN("Skipping wxTE_PROCESS_ENTER tests: wxUIActionSimulator not available");
 }

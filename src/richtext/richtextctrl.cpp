@@ -343,7 +343,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(new wxRichTextDropTarget(this));
 #endif
-
+    SetModified( false );
     return true;
 }
 
@@ -3239,8 +3239,8 @@ wxTextCtrlHitTestResult
 wxRichTextCtrl::HitTest(const wxPoint& pt,
                         long * pos) const
 {
-    wxClientDC dc((wxRichTextCtrl*) this);
-    ((wxRichTextCtrl*)this)->PrepareDC(dc);
+    wxClientDC dc(const_cast<wxRichTextCtrl*>(this));
+    const_cast<wxRichTextCtrl*>(this)->PrepareDC(dc);
 
     // Buffer uses logical position (relative to start of buffer)
     // so convert
@@ -3248,8 +3248,8 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
-    wxRichTextDrawingContext context((wxRichTextBuffer*) & GetBuffer());
-    int hit = ((wxRichTextCtrl*)this)->GetFocusObject()->HitTest(dc, context, pt2, *pos, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
+    wxRichTextDrawingContext context(const_cast<wxRichTextBuffer*>(&GetBuffer()));
+    int hit = const_cast<wxRichTextCtrl*>(this)->GetFocusObject()->HitTest(dc, context, pt2, *pos, &hitObj, &contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
 
     if ((hit & wxRICHTEXT_HITTEST_BEFORE) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
         return wxTE_HT_BEFORE;
@@ -3808,7 +3808,7 @@ void wxRichTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 wxSize wxRichTextCtrl::DoGetBestSize() const
 {
-    return wxSize(10, 10);
+    return FromDIP(wxSize(10, 10));
 }
 
 // ----------------------------------------------------------------------------

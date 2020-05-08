@@ -128,13 +128,6 @@ operator==(const wxColourPropertyValue&, const wxColourPropertyValue&);
 DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
 // -----------------------------------------------------------------------
-// Declare part of custom colour property macro pairs.
-
-#if wxUSE_IMAGE
-    #include "wx/image.h"
-#endif
-
-// -----------------------------------------------------------------------
 
 // Property representing wxFont.
 class WXDLLIMPEXP_PROPGRID wxFontProperty : public wxEditorDialogProperty
@@ -282,6 +275,8 @@ class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
 #if wxUSE_IMAGE
 
 WXDLLIMPEXP_PROPGRID const wxString& wxPGGetDefaultImageWildcard();
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 // Property representing image file(name).
 class WXDLLIMPEXP_PROPGRID wxImageFileProperty : public wxFileProperty

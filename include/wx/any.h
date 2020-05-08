@@ -41,6 +41,11 @@ union wxAnyValueBuffer
 
     void*   m_ptr;
     wxByte  m_buffer[WX_ANY_VALUE_BUFFER_SIZE];
+
+    wxAnyValueBuffer()
+    {
+        m_ptr = NULL;
+    }
 };
 
 //

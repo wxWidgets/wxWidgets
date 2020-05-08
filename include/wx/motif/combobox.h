@@ -108,6 +108,8 @@ public:
     virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
     virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }
 
+    virtual const wxTextEntry* WXGetTextEntry() const { return this; }
+
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoSetSize(int x, int y,

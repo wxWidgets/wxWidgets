@@ -50,25 +50,21 @@
 // wxControlContainerBase
 // ----------------------------------------------------------------------------
 
-void wxControlContainerBase::UpdateParentCanFocus()
+void wxControlContainerBase::UpdateParentCanFocus(bool acceptsFocusChildren)
 {
     // In the ports where it does something non trivial, the parent window
     // should only be focusable if it doesn't have any focusable children
     // (e.g. native focus handling in wxGTK totally breaks down otherwise).
-    m_winParent->SetCanFocus(m_acceptsFocusSelf && !m_acceptsFocusChildren);
+    m_winParent->SetCanFocus(m_acceptsFocusSelf && !acceptsFocusChildren);
 }
 
 bool wxControlContainerBase::UpdateCanFocusChildren()
 {
     const bool acceptsFocusChildren = HasAnyFocusableChildren();
-    if ( acceptsFocusChildren != m_acceptsFocusChildren )
-    {
-        m_acceptsFocusChildren = acceptsFocusChildren;
 
-        UpdateParentCanFocus();
-    }
+    UpdateParentCanFocus(acceptsFocusChildren);
 
-    return m_acceptsFocusChildren;
+    return acceptsFocusChildren;
 }
 
 bool wxControlContainerBase::HasAnyFocusableChildren() const
@@ -714,6 +710,16 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                 }
                 else
                     deepestVisibleWindow = NULL;
+
+                // We shouldn't be looking for the child to focus beyond the
+                // TLW boundary. And we use IsTopNavigationDomain() here
+                // instead of IsTopLevel() because wxMDIChildFrame is also TLW
+                // from this point of view.
+                if ( (*childLastFocused)->
+                        IsTopNavigationDomain(wxWindow::Navigation_Tab) )
+                {
+                    break;
+                }
 
                 *childLastFocused = (*childLastFocused)->GetParent();
             }

@@ -29,7 +29,7 @@
 #define M_GDIDATA static_cast<wxGDIRefData*>(m_refData)
 
 /*
-void wxGDIObject::IncrementResourceUsage(void)
+void wxGDIObject::IncrementResourceUsage()
 {
     if ( !M_GDIDATA )
         return;
@@ -38,7 +38,7 @@ void wxGDIObject::IncrementResourceUsage(void)
   M_GDIDATA->m_usageCount ++;
 };
 
-void wxGDIObject::DecrementResourceUsage(void)
+void wxGDIObject::DecrementResourceUsage()
 {
     if ( !M_GDIDATA )
         return;

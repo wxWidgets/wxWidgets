@@ -101,6 +101,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[];
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactory : public wxObject
@@ -151,12 +152,14 @@ public:
 
     static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
+    static bool IsBackendAvailable(const wxString& backend);
 
     // General methods
     virtual void EnableContextMenu(bool enable = true)
     {
         m_showMenu = enable;
     }
+    virtual void EnableAccessToDevTools(bool WXUNUSED(enable) = true) { }
     virtual wxString GetCurrentTitle() const = 0;
     virtual wxString GetCurrentURL() const = 0;
     // TODO: handle choosing a frame when calling GetPageSource()?
@@ -164,6 +167,7 @@ public:
     virtual wxString GetPageText() const = 0;
     virtual bool IsBusy() const = 0;
     virtual bool IsContextMenuEnabled() const { return m_showMenu; }
+    virtual bool IsAccessToDevToolsEnabled() const { return false; }
     virtual bool IsEditable() const = 0;
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;

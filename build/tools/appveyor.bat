@@ -7,6 +7,8 @@ msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc12.
 cd ..\..\tests
 msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc12.sln %MSBUILD_LOGGER%
 msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc12.sln %MSBUILD_LOGGER%
+cd  ..\samples\minimal
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" minimal_vc12.sln %MSBUILD_LOGGER%
 goto :eof
 
 :nmake
@@ -14,6 +16,8 @@ cd build\msw
 call "C:\Program Files (x86)\Microsoft Visual Studio %VS%\VC\vcvarsall.bat" %ARCH%
 nmake -f makefile.vc BUILD=%BUILD%
 cd ..\..\tests
+nmake -f makefile.vc BUILD=%BUILD%
+cd  ..\samples\minimal
 nmake -f makefile.vc BUILD=%BUILD%
 goto :eof
 

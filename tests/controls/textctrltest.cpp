@@ -23,8 +23,14 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/uiaction.h"
+
+#if wxUSE_CLIPBOARD
+    #include "wx/clipbrd.h"
+    #include "wx/dataobj.h"
+#endif // wxUSE_CLIPBOARD
 
 #ifdef __WXGTK__
     #include "wx/stopwatch.h"
@@ -82,7 +88,9 @@ private:
         CPPUNIT_TEST( Style );
         CPPUNIT_TEST( FontStyle );
         CPPUNIT_TEST( Lines );
+#if wxUSE_LOG
         CPPUNIT_TEST( LogTextCtrl );
+#endif // wxUSE_LOG
         CPPUNIT_TEST( LongText );
         CPPUNIT_TEST( PositionToCoords );
         CPPUNIT_TEST( PositionToCoordsRich );
@@ -113,7 +121,9 @@ private:
     void Style();
     void FontStyle();
     void Lines();
+#if wxUSE_LOG
     void LogTextCtrl();
+#endif // wxUSE_LOG
     void LongText();
     void PositionToCoords();
     void PositionToCoordsRich();
@@ -603,6 +613,7 @@ void TextCtrlTestCase::Lines()
 #endif
 }
 
+#if wxUSE_LOG
 void TextCtrlTestCase::LogTextCtrl()
 {
     CPPUNIT_ASSERT(m_text->IsEmpty());
@@ -617,6 +628,7 @@ void TextCtrlTestCase::LogTextCtrl()
 
     CPPUNIT_ASSERT(!m_text->IsEmpty());
 }
+#endif // wxUSE_LOG
 
 void TextCtrlTestCase::LongText()
 {
@@ -1271,17 +1283,161 @@ void TextCtrlTestCase::XYToPositionSingleLine()
 
 TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
 {
-    struct TextCtrlCreator
+    class TextCtrlCreator : public TextLikeControlCreator
     {
-        static wxControl* Do(wxWindow* parent, int style)
+    public:
+        explicit TextCtrlCreator(int styleToAdd = 0)
+            : m_styleToAdd(styleToAdd)
+        {
+        }
+
+        virtual wxControl* Create(wxWindow* parent, int style) const wxOVERRIDE
         {
             return new wxTextCtrl(parent, wxID_ANY, wxString(),
                                   wxDefaultPosition, wxDefaultSize,
-                                  style);
+                                  style | m_styleToAdd);
         }
+
+        virtual TextLikeControlCreator* CloneAsMultiLine() const wxOVERRIDE
+        {
+            return new TextCtrlCreator(wxTE_MULTILINE);
+        }
+
+    private:
+        int m_styleToAdd;
     };
 
-    TestProcessEnter(&TextCtrlCreator::Do);
+    TestProcessEnter(TextCtrlCreator());
+}
+
+TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
+{
+    struct GetBestSizeFor
+    {
+        wxSize operator()(const wxString& text) const
+        {
+            wxScopedPtr<wxTextCtrl>
+                t(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, text,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE));
+            return t->GetBestSize();
+        }
+    } getBestSizeFor;
+
+    wxString s;
+    const wxSize sizeEmpty = getBestSizeFor(s);
+
+    // Empty control should have some reasonable vertical size.
+    CHECK( sizeEmpty.y > 0 );
+
+    s += "1\n2\n3\n4\n5\n";
+    const wxSize sizeMedium = getBestSizeFor(s);
+
+    // Control with a few lines of text in it should be taller.
+    CHECK( sizeMedium.y > sizeEmpty.y );
+
+    s += "6\n7\n8\n9\n10\n";
+    const wxSize sizeLong = getBestSizeFor(s);
+
+    // And a control with many lines in it should be even more so.
+    CHECK( sizeLong.y > sizeMedium.y );
+
+    s += s;
+    s += s;
+    s += s;
+    const wxSize sizeVeryLong = getBestSizeFor(s);
+
+    // However there is a cutoff at 10 lines currently, so anything longer than
+    // that should still have the same best size.
+    CHECK( sizeVeryLong.y == sizeLong.y );
+}
+
+#if wxUSE_CLIPBOARD
+
+TEST_CASE("wxTextCtrl::LongPaste", "[wxTextCtrl][clipboard][paste]")
+{
+    long style = 0;
+
+    SECTION("Plain")
+    {
+        style = wxTE_MULTILINE;
+    }
+
+    // wxTE_RICH[2] style only makes any different under MSW, so don't bother
+    // testing it under the other platforms.
+#ifdef __WXMSW__
+    SECTION("Rich")
+    {
+        style = wxTE_MULTILINE | wxTE_RICH;
+    }
+
+    SECTION("Rich v2")
+    {
+        style = wxTE_MULTILINE | wxTE_RICH2;
+    }
+#endif // __WXMSW__
+
+    if ( !style )
+    {
+        // This can happen when explicitly selecting just a single section to
+        // execute -- this code still runs even if the corresponding section is
+        // skipped, so we have to explicitly skip it too in this case.
+        return;
+    }
+
+    wxScopedPtr<wxTextCtrl>
+        text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, wxString(),
+                            wxDefaultPosition, wxDefaultSize, style));
+
+    // This could actually be much higher, but it makes the test proportionally
+    // slower, so use a relatively small (but still requiring more space than
+    // the default maximum length under MSW) number here.
+    const int NUM_LINES = 10000;
+
+    {
+        wxClipboardLocker lock;
+
+        // Build a longish string.
+        wxString s;
+        s.reserve(NUM_LINES*5 + 10);
+        for ( int n = 0; n < NUM_LINES; ++n )
+        {
+            s += wxString::Format("%04d\n", n);
+        }
+
+        s += "THE END";
+
+        wxTheClipboard->AddData(new wxTextDataObject(s));
+    }
+
+    text->ChangeValue("THE BEGINNING\n");
+    text->SetInsertionPointEnd();
+    text->Paste();
+
+    const int numLines = text->GetNumberOfLines();
+
+    CHECK( numLines == NUM_LINES + 2 );
+    CHECK( text->GetLineText(numLines - 1) == "THE END" );
+}
+
+#endif // wxUSE_CLIPBOARD
+
+TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    EventCounter updated(parent, wxEVT_TEXT);
+
+    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "Hello"));
+
+    // Creating the control shouldn't result in any wxEVT_TEXT events.
+    CHECK( updated.GetCount() == 0 );
+
+    // Check that modifying using SetValue() it does generate the event, just
+    // to verify that this test works (there are more detailed tests for this
+    // in TextEntryTestCase::TextChangeEvents()).
+    text->SetValue("Bye");
+    CHECK( updated.GetCount() == 1 );
 }
 
 #endif //wxUSE_TEXTCTRL

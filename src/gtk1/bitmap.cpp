@@ -172,6 +172,9 @@ bool wxMask::Create( const wxBitmap& bitmap,
 
     gdk_gc_unref( gc );
 
+    m_width = bitmap.GetWidth();
+    m_height = bitmap.GetHeight();
+
     return true;
 }
 
@@ -211,12 +214,24 @@ bool wxMask::Create( const wxBitmap& bitmap )
 
     gdk_gc_unref( gc );
 
+    m_width = bitmap.GetWidth();
+    m_height = bitmap.GetHeight();
+
     return true;
 }
 
-GdkBitmap *wxMask::GetBitmap() const
+wxBitmap wxMask::GetBitmap() const
 {
-    return m_bitmap;
+   wxBitmap bitmap;
+
+   if (m_bitmap)
+     {
+	bitmap.SetBitmap( m_bitmap );
+	bitmap.SetWidth( m_width );
+	bitmap.SetHeight( m_height );
+     }
+
+   return bitmap;
 }
 
 
@@ -534,7 +549,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
         if (width % 8 != 0)
             dstbyteperline++;
         dst = (char*) malloc(dstbyteperline*height);
-        img = gdk_image_get( GetMask()->GetBitmap(), 0, 0, GetWidth(), GetHeight() );
+        img = gdk_image_get( GetMask()->m_bitmap, 0, 0, GetWidth(), GetHeight() );
 
         for (int h = 0; h < height; h++)
         {
@@ -698,9 +713,9 @@ bool wxBitmap::CreateFromImageAsBitmap(const wxImage& img)
 
     if (image.HasMask())
     {
-        GdkGC *mask_gc = gdk_gc_new( GetMask()->GetBitmap() );
+        GdkGC *mask_gc = gdk_gc_new( GetMask()->m_bitmap );
 
-        gdk_draw_image( GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
+        gdk_draw_image( GetMask()->m_bitmap, mask_gc, mask_image, 0, 0, 0, 0, width, height );
 
         gdk_image_destroy( mask_image );
         gdk_gc_unref( mask_gc );
@@ -938,9 +953,9 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& img)
 
     if (image.HasMask())
     {
-        GdkGC *mask_gc = gdk_gc_new( GetMask()->GetBitmap() );
+        GdkGC *mask_gc = gdk_gc_new( GetMask()->m_bitmap );
 
-        gdk_draw_image( GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
+        gdk_draw_image( GetMask()->m_bitmap, mask_gc, mask_image, 0, 0, 0, 0, width, height );
 
         gdk_image_destroy( mask_image );
         gdk_gc_unref( mask_gc );
@@ -995,7 +1010,7 @@ wxImage wxBitmap::ConvertToImage() const
     GdkImage *gdk_image_mask = NULL;
     if (GetMask())
     {
-        gdk_image_mask = gdk_image_get( GetMask()->GetBitmap(),
+        gdk_image_mask = gdk_image_get( GetMask()->m_bitmap,
                                         0, 0,
                                         GetWidth(), GetHeight() );
 

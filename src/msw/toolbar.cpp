@@ -38,6 +38,8 @@
     #include "wx/region.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
+    #include "wx/choice.h"
+    #include "wx/combobox.h"
     #include "wx/app.h"         // for GetComCtl32Version
     #include "wx/image.h"
     #include "wx/stattext.h"
@@ -127,6 +129,7 @@ wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
     EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
+    EVT_DPI_CHANGED(wxToolBar::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -594,28 +597,15 @@ wxSize wxToolBar::DoGetBestSize() const
 
     wxToolBarToolsList::compatibility_iterator node;
     int toolIndex = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext(),
+                                           toolIndex++ )
     {
         wxToolBarTool * const
             tool = static_cast<wxToolBarTool *>(node->GetData());
 
-        // Note that we can't just reuse sizeTool here, even though all normal
-        // items do have this size, this is not true for the separators and it
-        // is both more robust and simpler to just always use TB_GETITEMRECT
-        // rather than handling the separators specially.
-        const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
-
-        if ( IsVertical() )
+        if ( tool->IsControl() )
         {
-            if ( !tool->IsControl() )
-            {
-                sizeBest.y += rcItem.bottom - rcItem.top;
-            }
-            //else: Controls are not shown in vertical toolbars at all.
-        }
-        else
-        {
-            if ( tool->IsControl() )
+            if ( !IsVertical() )
             {
                 const wxSize sizeControl = MSWGetFittingtSizeForControl(tool);
 
@@ -623,6 +613,20 @@ wxSize wxToolBar::DoGetBestSize() const
                 sizeBest.IncTo(wxSize(-1, sizeControl.y));
 
                 sizeBest.x += sizeControl.x;
+            }
+            //else: Controls are not shown in vertical toolbars at all.
+        }
+        else
+        {
+            // Note that we can't just reuse sizeTool here, even though all normal
+            // items do have this size, this is not true for the separators and it
+            // is both more robust and simpler to just always use TB_GETITEMRECT
+            // rather than handling the separators specially.
+            const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex);
+
+            if ( IsVertical() )
+            {
+                sizeBest.y += rcItem.bottom - rcItem.top;
             }
             else
             {
@@ -1001,7 +1005,7 @@ bool wxToolBar::Realize()
             // Strangely, toolbar expects bitmaps with transparency to not
             // be premultiplied, unlike most of the rest of win32. Without this
             // conversion, e.g. antialiased lines would be subtly, but
-            // noticeably misrendered. 
+            // noticeably misrendered.
             hBitmap = wxDIB(bitmap.ConvertToImage(),
                             wxDIB::PixelFormat_NotPreMultiplied).Detach();
         }
@@ -1893,6 +1897,57 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
     MSWDoEraseBackground(event.GetDC()->GetHDC());
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+}
+
+void wxToolBar::RealizeHelper()
+{
+    Realize();
+}
+
+void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Manually scale the size of the controls. Even though the font has been
+    // updated, the internal size of the controls does not.
+    const float scaleFactor = (float)event.GetNewDPI().y / event.GetOldDPI().y;
+
+    wxToolBarToolsList::compatibility_iterator node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        wxToolBarTool* const tool = static_cast<wxToolBarTool*>(node->GetData());
+        if ( !tool->IsControl() )
+            continue;
+
+        if ( wxControl* const control = tool->GetControl() )
+        {
+            const wxSize oldSize = control->GetSize();
+            wxSize newSize = oldSize * scaleFactor;
+
+            // Use the best height for choice-based controls.
+            // Scaling the current size does not work, because the control
+            // automatically increases size when the font-size increases.
+            if ( wxDynamicCast(control, wxComboBox) ||
+                 wxDynamicCast(control, wxChoice) )
+            {
+                const wxSize bestSize = control->GetBestSize();
+                newSize.y = bestSize.y;
+            }
+
+            control->SetSize(newSize);
+        }
+
+        if ( wxStaticText* const staticText = tool->GetStaticText() )
+        {
+            // Use the best size for the label
+            staticText->SetSize(staticText->GetBestSize());
+        }
+    }
+
+    // Use CallAfter because creating the toolbar directly sometimes doesn't
+    // work. E.g. when switching from 125% to 150%. All the sizes are set
+    // correctly, but after all dpi events are handled, 5px of the toolbar are
+    // gone and a dark-gray bar appears. After resizing the window, the gray
+    // bar disapears as well.
+    CallAfter(&wxToolBar::RealizeHelper);
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))

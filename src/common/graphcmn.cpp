@@ -29,9 +29,8 @@
     #include "wx/pen.h"
     #include "wx/region.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
-
-#include "wx/display.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
@@ -620,11 +619,11 @@ wxDouble wxGraphicsContext::GetAlpha() const
 }
 #endif
 
-void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
+void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
 {
     if ( m_window )
     {
-        const wxSize ppi = wxDisplay(m_window).GetPPI();
+        const wxSize ppi = m_window->GetDPI();
         *dpiX = ppi.x;
         *dpiY = ppi.y;
     }
@@ -883,13 +882,15 @@ wxGraphicsBrush
 wxGraphicsContext::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxColour& c1, const wxColour& c2) const
+    const wxColour& c1, const wxColour& c2,
+    const wxGraphicsMatrix& matrix) const
 {
     return GetRenderer()->CreateLinearGradientBrush
                           (
                             x1, y1,
                             x2, y2,
-                            wxGraphicsGradientStops(c1,c2)
+                            wxGraphicsGradientStops(c1,c2),
+                            matrix
                           );
 }
 
@@ -897,51 +898,64 @@ wxGraphicsBrush
 wxGraphicsContext::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& gradientStops) const
+    const wxGraphicsGradientStops& gradientStops,
+    const wxGraphicsMatrix& matrix) const
 {
-    return GetRenderer()->CreateLinearGradientBrush(x1,y1,x2,y2, gradientStops);
-}
-
-wxGraphicsBrush
-wxGraphicsContext::CreateRadialGradientBrush(
-        wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) const
-{
-    return GetRenderer()->CreateRadialGradientBrush
+    return GetRenderer()->CreateLinearGradientBrush
                           (
-                            xo, yo,
-                            xc, yc, radius,
-                            wxGraphicsGradientStops(oColor, cColor)
+                            x1, y1,
+                            x2, y2, 
+                            gradientStops, 
+                            matrix
                           );
 }
 
 wxGraphicsBrush
 wxGraphicsContext::CreateRadialGradientBrush(
-        wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxGraphicsGradientStops& gradientStops) const
+        wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY, wxDouble radius,
+        const wxColour &oColor, const wxColour &cColor,
+        const wxGraphicsMatrix& matrix) const
 {
     return GetRenderer()->CreateRadialGradientBrush
                           (
-                            xo, yo,
-                            xc, yc, radius,
-                            gradientStops
+                            startX, startY,
+                            endX, endY, radius,
+                            wxGraphicsGradientStops(oColor, cColor),
+                            matrix
+                          );
+}
+
+wxGraphicsBrush
+wxGraphicsContext::CreateRadialGradientBrush(
+        wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY, wxDouble radius,
+        const wxGraphicsGradientStops& gradientStops,
+        const wxGraphicsMatrix& matrix) const
+{
+    return GetRenderer()->CreateRadialGradientBrush
+                          (
+                            startX, startY,
+                            endX, endY, radius,
+                            gradientStops,
+                            matrix
                           );
 }
 
 wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col ) const
 {
-    return GetRenderer()->CreateFont(font,col);
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    return GetRenderer()->CreateFontAtDPI(font, dpi, col);
 }
 
 wxGraphicsFont
-wxGraphicsContext::CreateFont(double size,
+wxGraphicsContext::CreateFont(double sizeInPixels,
                               const wxString& facename,
                               int flags,
                               const wxColour& col) const
 {
-    return GetRenderer()->CreateFont(size, facename, flags, col);
+    return GetRenderer()->CreateFont(sizeInPixels, facename, flags, col);
 }
 
 wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const

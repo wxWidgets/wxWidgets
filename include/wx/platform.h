@@ -47,6 +47,12 @@
 #    ifndef MAC_OS_X_VERSION_10_13
 #       define MAC_OS_X_VERSION_10_13 101300
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_14
+#       define MAC_OS_X_VERSION_10_14 101400
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_15
+#       define MAC_OS_X_VERSION_10_15 101500
+#    endif
 #    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #        ifndef NSAppKitVersionNumber10_10
 #            define NSAppKitVersionNumber10_10 1343
@@ -279,6 +285,11 @@
 
 #    if defined(__INNOTEK_LIBC__)
         /* Ensure visibility of strnlen declaration */
+#        define _GNU_SOURCE
+#    endif
+
+#    if defined(__CYGWIN__)
+        /* Ensure visibility of Dl_info and pthread_setconcurrency declarations */
 #        define _GNU_SOURCE
 #    endif
 
@@ -518,32 +529,9 @@
 #include "wx/chkconf.h"
 
 
-/*
-   some compilers don't support iostream.h any longer, while some of theme
-   are not updated with <iostream> yet, so override the users setting here
-   in such case.
- */
-#if defined(_MSC_VER) && (_MSC_VER >= 1310)
-#    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 0
-#elif defined(__MINGW32__)
-#    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 0
-#endif /* compilers with/without iostream.h */
-
-/*
-   old C++ headers (like <iostream.h>) declare classes in the global namespace
-   while the new, standard ones (like <iostream>) do it in std:: namespace,
-   unless it's an old gcc version.
-
-   using this macro allows constuctions like "wxSTD iostream" to work in
-   either case
- */
-#if !wxUSE_IOSTREAMH && (!defined(__GNUC__) || ( __GNUC__ > 2 ) || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
-#    define wxSTD std::
-#else
-#    define wxSTD
-#endif
+/* These macros exist only for compatibility, don't use them in the new code */
+#define wxUSE_IOSTREAMH 0
+#define wxSTD std::
 
 /* On OpenVMS with the most recent HP C++ compiler some function (i.e. wscanf)
  * are only available in the std-namespace. (BUG???)

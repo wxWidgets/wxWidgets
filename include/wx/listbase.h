@@ -378,6 +378,12 @@ public:
     virtual bool DeleteColumn(int col) = 0;
     virtual bool DeleteAllColumns() = 0;
 
+    // Return the current number of items.
+    virtual int GetItemCount() const = 0;
+
+    // Check if the control is empty, i.e. doesn't contain any items.
+    bool IsEmpty() const { return GetItemCount() == 0; }
+
     // Return the current number of columns.
     virtual int GetColumnCount() const = 0;
 
@@ -399,6 +405,9 @@ public:
     // Convenient functions for testing the list control mode:
     bool InReportView() const { return HasFlag(wxLC_REPORT); }
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
+
+    // Check if the item is visible
+    virtual bool IsVisible(long WXUNUSED(item)) const { return false; }
 
     // Enable or disable beep when incremental match doesn't find any item.
     // Only implemented in the generic version currently.

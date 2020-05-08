@@ -62,6 +62,8 @@ protected:
     void OnIdle( wxIdleEvent &event );
 
 private:
+    bool IsEditorSubControl(wxWindow* win) const;
+
     wxDataViewRenderer     *m_owner;
     wxWindow               *m_editorCtrl;
     bool                    m_finished;
@@ -332,8 +334,13 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
                               unsigned int column, bool ascending ) const
 {
     wxVariant value1,value2;
-    GetValue( value1, item1, column );
-    GetValue( value2, item2, column );
+
+    // Avoid calling GetValue() for the cells that are not supposed to have any
+    // value, this might be unexpected.
+    if ( HasValue(item1, column) )
+        GetValue( value1, item1, column );
+    if ( HasValue(item2, column) )
+        GetValue( value2, item2, column );
 
     if (!ascending)
     {
@@ -1113,8 +1120,13 @@ void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
     if (m_focusOnIdle)
     {
         m_focusOnIdle = false;
-        if (wxWindow::FindFocus() != m_editorCtrl)
+
+        // Ignore focused items within the compound editor control
+        wxWindow* win = wxWindow::FindFocus();
+        if ( !IsEditorSubControl(win) )
+        {
             m_editorCtrl->SetFocus();
+        }
     }
 
     event.Skip();
@@ -1151,6 +1163,14 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
 
 void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 {
+    // Ignore focus changes within the compound editor control
+    wxWindow* win = event.GetWindow();
+    if ( IsEditorSubControl(win) )
+    {
+        event.Skip();
+        return;
+    }
+
     if (!m_finished)
     {
         m_finished = true;
@@ -1158,6 +1178,23 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
     }
 
     event.Skip();
+}
+
+bool wxDataViewEditorCtrlEvtHandler::IsEditorSubControl(wxWindow* win) const
+{
+    // Checks whether the given window belongs to the editor control
+    // (is either the editor itself or a child of the compound editor).
+    while ( win )
+    {
+        if ( win == m_editorCtrl )
+        {
+            return true;
+        }
+
+        win = win->GetParent();
+    }
+
+    return false;
 }
 
 // ---------------------------------------------------------
@@ -1972,6 +2009,8 @@ wxSize wxDataViewDateRenderer::GetSize() const
 // wxDataViewCheckIconTextRenderer implementation
 // ----------------------------------------------------------------------------
 
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || !defined(__WXOSX__)
+
 IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_ADV)
 
 wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
@@ -2161,6 +2200,8 @@ wxSize wxDataViewCheckIconTextRenderer::GetCheckSize() const
 {
     return wxRendererNative::Get().GetCheckBoxSize(GetView());
 }
+
+#endif // ! native __WXOSX__
 
 //-----------------------------------------------------------------------------
 // wxDataViewListStore
@@ -2449,8 +2490,7 @@ wxDataViewTreeStoreNode::wxDataViewTreeStoreNode(
 
 wxDataViewTreeStoreNode::~wxDataViewTreeStoreNode()
 {
-    if (m_data)
-        delete m_data;
+    delete m_data;
 }
 
 wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(

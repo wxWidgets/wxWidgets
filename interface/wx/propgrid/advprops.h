@@ -65,6 +65,9 @@ public:
 /** @class wxFontProperty
     @ingroup classes
     Property representing wxFont.
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the font dialog (since 3.1.3).
 */
 class wxFontProperty : public wxEditorDialogProperty
 {
@@ -219,6 +222,17 @@ const wxString& wxPGGetDefaultImageWildcard();
 /** @class wxImageFileProperty
     @ingroup classes
     Property representing image file(name).
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog (since 3.1.3).
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
+    - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    files..." is default.
+    - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    (i.e. drive and directory are hidden).
+    - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+    given path string.
+    - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
 */
 class wxImageFileProperty : public wxFileProperty
 {
@@ -253,6 +267,7 @@ protected:
       enter strings that are not in the list of choices. If this value is 1,
       user strings are preferably placed in front of valid choices. If value is
       2, then those strings will placed behind valid choices.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog (since 3.1.3).
 */
 class wxMultiChoiceProperty : public wxEditorDialogProperty
 {

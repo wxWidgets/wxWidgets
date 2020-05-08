@@ -140,7 +140,7 @@ wxConfigBase *wxConfigBase::Create()
         {                                                                   \
             if ( IsRecordingDefaults() )                                    \
             {                                                               \
-                ((wxConfigBase *)this)->DoWrite##name(key, defVal);         \
+                const_cast<wxConfigBase*>(this)->DoWrite##name(key, defVal);\
             }                                                               \
                                                                             \
             *val = defVal;                                                  \

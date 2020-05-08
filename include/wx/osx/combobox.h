@@ -102,6 +102,8 @@ class WXDLLIMPEXP_CORE wxComboBox :
 #endif // wxOSX_USE_COCOA
 
 
+    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+
     // osx specific event handling common for all osx-ports
 
     virtual bool OSXHandleClicked(double timestampsec) wxOVERRIDE;

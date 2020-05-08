@@ -64,7 +64,7 @@ public:
         m_impl = NULL;
     }
 
-    // DesktopToastActivatedEventHandler 
+    // DesktopToastActivatedEventHandler
     IFACEMETHODIMP Invoke(IToastNotification *sender, IInspectable* args);
 
     // DesktopToastDismissedEventHandler
@@ -170,7 +170,7 @@ public:
 
     HRESULT CreateToast(IXmlDocument *xml)
     {
-        HRESULT hr = ms_toastMgr->CreateToastNotifierWithId(rt::TempStringRef::Make(ms_appId), &m_notifier);
+        HRESULT hr = ms_toastMgr->CreateToastNotifierWithId(rt::TempStringRef(ms_appId), &m_notifier);
         if ( SUCCEEDED(hr) )
         {
             wxCOMPtr<IToastNotificationFactory> factory;
@@ -215,7 +215,7 @@ public:
         if ( SUCCEEDED(hr) )
         {
             wxCOMPtr<IXmlNodeList> nodeList;
-            hr = (*toastXml)->GetElementsByTagName(rt::TempStringRef::Make("text"), &nodeList);
+            hr = (*toastXml)->GetElementsByTagName(rt::TempStringRef("text"), &nodeList);
             if ( SUCCEEDED(hr) )
             {
                 hr = SetNodeListValueString(0, m_title, nodeList, *toastXml);
@@ -244,7 +244,7 @@ public:
     {
         wxCOMPtr<IXmlText> inputText;
 
-        HRESULT hr = xml->CreateTextNode(rt::TempStringRef::Make(str), &inputText);
+        HRESULT hr = xml->CreateTextNode(rt::TempStringRef(str), &inputText);
         if ( SUCCEEDED(hr) )
         {
             wxCOMPtr<IXmlNode> inputTextNode;
@@ -463,6 +463,9 @@ class wxToastNotifMsgModule : public wxModule
 public:
     wxToastNotifMsgModule()
     {
+        // Using RT API requires OLE and, importantly, we must ensure our
+        // OnExit() runs before it is uninitialized.
+        AddDependency("wxOleInitModule");
     }
 
     virtual bool OnInit() wxOVERRIDE

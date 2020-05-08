@@ -276,6 +276,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     if ( !wxAppBase::Initialize(argc_, argv_) )
         return false;
 
+    // Thread support is always on since glib 2.31.
+#if !GLIB_CHECK_VERSION(2, 31, 0)
 #if wxUSE_THREADS
     if (!g_thread_supported())
     {
@@ -283,12 +285,11 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         // might still be needed in the older versions, which are the only ones
         // for which this code is going to be executed (as g_thread_supported()
         // is always TRUE in these recent glib versions anyhow).
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         g_thread_init(NULL);
-        wxGCC_WARNING_RESTORE()
         gdk_threads_init();
     }
 #endif // wxUSE_THREADS
+#endif // glib < 2.31
 
     // gtk+ 2.0 supports Unicode through UTF-8 strings
     wxConvCurrent = &wxConvUTF8;
@@ -355,7 +356,15 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     // Prevent gtk_init_check() from changing the locale automatically for
     // consistency with the other ports that don't do it. If necessary,
     // wxApp::SetCLocale() may be explicitly called.
-    gtk_disable_setlocale();
+    //
+    // Note that this function generates a warning if it's called more than
+    // once, so avoid them.
+    static bool s_gtkLocalDisabled = false;
+    if ( !s_gtkLocalDisabled )
+    {
+        s_gtkLocalDisabled = true;
+        gtk_disable_setlocale();
+    }
 
 #ifdef __WXGPE__
     init_result = true;  // is there a _check() version of this?

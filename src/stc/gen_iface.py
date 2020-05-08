@@ -78,7 +78,8 @@ notMappedSciValues = set([
     'INDIC0_MASK',
     'INDIC1_MASK',
     'INDIC2_MASK',
-    'INDICS_MASK'
+    'INDICS_MASK',
+    'SCFIND_CXX11REGEX'
 ])
 
 # Map some generic typenames to wx types, using return value syntax
@@ -551,7 +552,7 @@ methodOverrideMap = {
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
-            ft.lpstrText = (char*)(const char*)buf;
+            ft.lpstrText = buf;
 
             int pos = SendMsg(%s, flags, (sptr_t)&ft);
             if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);

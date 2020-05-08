@@ -43,21 +43,21 @@ public:
     void SetFont(const wxFont& font)
         { m_font = font; m_ownerDrawn = true; }
 
-    wxFont& GetFont() const
-        { return (wxFont&) m_font; }
+    wxFont& GetFont() { return m_font; }
+    const wxFont& GetFont() const { return m_font; }
 
 
     void SetTextColour(const wxColour& colText)
         { m_colText = colText; m_ownerDrawn = true; }
 
-    wxColour& GetTextColour() const
-        { return (wxColour&) m_colText; }
+    wxColour& GetTextColour() { return m_colText; }
+    const wxColour& GetTextColour() const { return m_colText; }
 
     void SetBackgroundColour(const wxColour& colBack)
         { m_colBack = colBack; m_ownerDrawn = true; }
 
-    wxColour& GetBackgroundColour() const
-        { return (wxColour&) m_colBack ; }
+    wxColour& GetBackgroundColour() { return m_colBack; }
+    const wxColour& GetBackgroundColour() const { return m_colBack ; }
 
 
     void SetMarginWidth(int width)

@@ -44,15 +44,15 @@ public:
 
     virtual bool Initialize(const wxString& dir) wxOVERRIDE;
     virtual bool LoadFile(const wxString& file = wxEmptyString) wxOVERRIDE;
-    virtual bool DisplayContents(void) wxOVERRIDE;
+    virtual bool DisplayContents() wxOVERRIDE;
     virtual bool DisplaySection(int sectionNo) wxOVERRIDE;
     virtual bool DisplaySection(const wxString& section) wxOVERRIDE;
     virtual bool DisplayBlock(long blockNo) wxOVERRIDE;
     virtual bool KeywordSearch(const wxString& k,
                                 wxHelpSearchMode mode = wxHELP_SEARCH_ALL) wxOVERRIDE;
 
-    virtual bool Quit(void) wxOVERRIDE;
-    virtual void OnQuit(void) wxOVERRIDE;
+    virtual bool Quit() wxOVERRIDE;
+    virtual void OnQuit() wxOVERRIDE;
 
     virtual bool DisplayHelp(const wxString &) ;
 
@@ -88,7 +88,7 @@ private:
     bool ParseMapFileLine(const wxString& line);
 
     // Deletes the list and all objects.
-    void DeleteList(void);
+    void DeleteList();
 
 
     // How to call the html viewer.

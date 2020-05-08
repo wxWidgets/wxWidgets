@@ -285,6 +285,26 @@ typedef short int WXTYPE;
     #define wxOVERRIDE
 #endif /*  HAVE_OVERRIDE */
 
+/* same for more C++11 keywords which don't have such historic baggage as
+   override and so can be detected by just testing for C++11 support (which
+   still requires handling MSVS specially, unfortunately) */
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
+    #define wxHAS_MEMBER_DEFAULT
+
+    #define wxHAS_NOEXCEPT
+    #define wxNOEXCEPT noexcept
+#else
+    #define wxNOEXCEPT
+#endif
+
+/*
+    Support for nullptr is available since MSVS 2010, even though it doesn't
+    define __cplusplus as a C++11 compiler.
+ */
+#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(10)
+    #define wxHAS_NULLPTR_T
+#endif
+
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 
 #if __cplusplus >= 201703L
@@ -327,6 +347,9 @@ typedef short int WXTYPE;
     }
 
     #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
+
+#elif defined(__clang__)
+    #define wx_truncate_cast(t, x) static_cast<t>(x)
 
 #elif defined(__VISUALC__) && __VISUALC__ >= 1310
     template <typename T, typename X>
@@ -460,21 +483,10 @@ typedef short int WXTYPE;
     /*
         Mingw <= 3.4 and all versions of Cygwin don't have std::wostream
      */
-    #if (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
-        defined(__CYGWIN__)
-        #define wxNO_WOSTREAM
-    #endif
-
-    /* VC++ doesn't have it in the old iostream library */
-    #if defined(__VISUALC__) && wxUSE_IOSTREAMH
-        #define wxNO_WOSTREAM
-    #endif
-
-    #ifndef wxNO_WOSTREAM
+    #if (!defined(__MINGW32__) || wxCHECK_GCC_VERSION(4, 0)) && \
+        !defined(__CYGWIN__)
         #define HAVE_WOSTREAM
     #endif
-
-    #undef wxNO_WOSTREAM
 #endif /* HAVE_WOSTREAM */
 
 /*  ---------------------------------------------------------------------------- */
@@ -849,7 +861,7 @@ typedef short int WXTYPE;
 
 /*  where should i put this? we need to make sure of this as it breaks */
 /*  the <iostream> code. */
-#if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
+#if defined(__WXDEBUG__)
 #    undef wxUSE_DEBUG_NEW_ALWAYS
 #    define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
@@ -2790,7 +2802,7 @@ typedef WX_UIImage WXImage;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
-typedef WX_UIPasteboard OSXPasteboard;
+typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 
@@ -2830,6 +2842,7 @@ WX_MSW_DECLARE_HANDLE(HBITMAP);
 WX_MSW_DECLARE_HANDLE(HIMAGELIST);
 WX_MSW_DECLARE_HANDLE(HGLOBAL);
 WX_MSW_DECLARE_HANDLE(HDC);
+WX_MSW_DECLARE_HANDLE(DPI_AWARENESS_CONTEXT);
 typedef WXHINSTANCE WXHMODULE;
 
 #undef WX_MSW_DECLARE_HANDLE
@@ -2993,24 +3006,30 @@ typedef const void* WXWidget;
 /*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
+#if defined(__cplusplus) && (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14))
+    #define wxMEMBER_DELETE = delete
+#else
+    #define wxMEMBER_DELETE
+#endif
+
 #define wxDECLARE_NO_COPY_CLASS(classname)      \
     private:                                    \
-        classname(const classname&);            \
-        classname& operator=(const classname&)
+        classname(const classname&) wxMEMBER_DELETE; \
+        classname& operator=(const classname&) wxMEMBER_DELETE
 
 #define wxDECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)  \
     private:                                              \
-        classname(const classname<arg>&);                 \
-        classname& operator=(const classname<arg>&)
+        classname(const classname<arg>&) wxMEMBER_DELETE; \
+        classname& operator=(const classname<arg>&) wxMEMBER_DELETE
 
 #define wxDECLARE_NO_COPY_TEMPLATE_CLASS_2(classname, arg1, arg2) \
     private:                                                      \
-        classname(const classname<arg1, arg2>&);                  \
-        classname& operator=(const classname<arg1, arg2>&)
+        classname(const classname<arg1, arg2>&) wxMEMBER_DELETE; \
+        classname& operator=(const classname<arg1, arg2>&) wxMEMBER_DELETE
 
 #define wxDECLARE_NO_ASSIGN_CLASS(classname)    \
     private:                                    \
-        classname& operator=(const classname&)
+        classname& operator=(const classname&) wxMEMBER_DELETE
 
 /* deprecated variants _not_ requiring a semicolon after them */
 #define DECLARE_NO_COPY_CLASS(classname) \

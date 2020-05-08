@@ -21,78 +21,36 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
+#include "wx/scopedptr.h"
 
-class ClientSizeTestCase : public CppUnit::TestCase
-{
-public:
-    ClientSizeTestCase() { }
-
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( ClientSizeTestCase );
-        CPPUNIT_TEST( ClientToWindow );
-        CPPUNIT_TEST( ClientSizeNotNegative );
-        CPPUNIT_TEST( WindowToClient );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ClientToWindow();
-    void ClientSizeNotNegative();
-    void WindowToClient();
-
-    wxWindow *m_win;
-
-    wxDECLARE_NO_COPY_CLASS(ClientSizeTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClientSizeTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClientSizeTestCase, "ClientSizeTestCase" );
-
-// ----------------------------------------------------------------------------
-// test initialization
-// ----------------------------------------------------------------------------
-
-void ClientSizeTestCase::setUp()
-{
-    m_win = wxTheApp->GetTopWindow();
-}
-
-void ClientSizeTestCase::tearDown()
-{
-    m_win = NULL;
-}
+#include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void ClientSizeTestCase::ClientToWindow()
+TEST_CASE("wxWindow::ClientWindowSizeRoundTrip", "[window][client-size]")
 {
-    CPPUNIT_ASSERT(m_win->GetSize() ==
-                   m_win->ClientToWindowSize(m_win->GetClientSize()));
+    wxWindow* const w = wxTheApp->GetTopWindow();
+    REQUIRE( w );
+
+    const wxSize sizeWindow = w->GetSize();
+    const wxSize sizeClient = w->GetClientSize();
+
+    INFO("client size: " << sizeClient);
+    CHECK( sizeWindow == w->ClientToWindowSize(sizeClient) );
+
+    INFO("window size: " << sizeWindow);
+    CHECK( sizeClient == w->WindowToClientSize(sizeWindow) );
 }
 
-void ClientSizeTestCase::ClientSizeNotNegative()
+TEST_CASE("wxWindow::MinClientSize", "[window][client-size]")
 {
-    wxWindow* w = new wxWindow(wxTheApp->GetTopWindow(), -1,
-                               wxDefaultPosition, wxDefaultSize,
-                               wxBORDER_THEME);
+    wxScopedPtr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxDefaultSize,
+                                         wxBORDER_THEME));
     w->SetSize(wxSize(1,1));
     const wxSize szw = w->GetClientSize();
-    CPPUNIT_ASSERT(szw.GetWidth() >= 0);
-    CPPUNIT_ASSERT(szw.GetHeight() >= 0);
-    w->Destroy();
-}
-
-void ClientSizeTestCase::WindowToClient()
-{
-    CPPUNIT_ASSERT(m_win->GetClientSize() ==
-                   m_win->WindowToClientSize(m_win->GetSize()));
+    CHECK(szw.GetWidth() >= 0);
+    CHECK(szw.GetHeight() >= 0);
 }

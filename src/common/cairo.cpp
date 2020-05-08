@@ -15,7 +15,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CAIRO
+#if wxUSE_CAIRO && !defined(__WXGTK20__)
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
@@ -110,6 +110,8 @@
         (cairo_pattern_t *pattern, cairo_extend_t extend), (pattern, extend) ) \
     m( cairo_pattern_set_filter, \
         (cairo_pattern_t *pattern, cairo_filter_t filter), (pattern, filter) ) \
+    m( cairo_pattern_set_matrix, \
+        (cairo_pattern_t *pattern, const cairo_matrix_t *matrix), (pattern, matrix) ) \
     m( cairo_pop_group_to_source, \
         (cairo_t *cr), (cr) ) \
     m( cairo_push_group, \
@@ -393,7 +395,10 @@ bool wxCairoInit()
     return wxCairo::Initialize();
 }
 
-#ifndef __WXGTK__
+// the following code will not make sense on OpenVMS : dynamically loading
+// of the cairo library is not possible, since on OpenVMS the library is
+// created as a static library.
+#if !( defined(__WXGTK__) || defined(__VMS) )
 extern "C"
 {
 

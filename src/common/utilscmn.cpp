@@ -86,6 +86,7 @@
 #include <errno.h>
 
 #if wxUSE_GUI
+    #include "wx/filename.h"
     #include "wx/filesys.h"
     #include "wx/notebook.h"
     #include "wx/statusbr.h"
@@ -696,9 +697,9 @@ long wxExecute(const wxString& command,
 // ----------------------------------------------------------------------------
 
 // Id generation
-static int wxCurrentId = 100;
+static wxWindowID wxCurrentId = 100;
 
-int wxNewId()
+wxWindowID wxNewId()
 {
     // skip the part of IDs space that contains hard-coded values:
     if (wxCurrentId == wxID_LOWEST)
@@ -707,11 +708,11 @@ int wxNewId()
     return wxCurrentId++;
 }
 
-int
+wxWindowID
 wxGetCurrentId(void) { return wxCurrentId; }
 
 void
-wxRegisterId (int id)
+wxRegisterId (wxWindowID id)
 {
   if (id >= wxCurrentId)
     wxCurrentId = id + 1;
@@ -1132,12 +1133,8 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& url, int flags)
 
         if ( params.scheme == "file" )
         {
-            // TODO: extract URLToFileName() to some always compiled in
-            //       function
-#if wxUSE_FILESYSTEM
             // for same reason as above, remove the scheme from the URL
-            params.path = wxFileSystem::URLToFileName(url).GetFullPath();
-#endif // wxUSE_FILESYSTEM
+            params.path = wxFileName::URLToFileName(url).GetFullPath();
         }
     }
 
@@ -1435,7 +1432,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1995-2019 wxWidgets team"));
+                         wxS("Copyright (c) 1995-2020 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)

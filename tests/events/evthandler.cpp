@@ -122,6 +122,9 @@ public:
     void OnEvent(wxEvent&) { g_called.method = true; }
     void OnAnotherEvent(AnotherEvent&);
     void OnIdle(wxIdleEvent&) { g_called.method = true; }
+#ifdef wxHAS_NOEXCEPT
+    void OnIdleNoExcept(wxIdleEvent&) noexcept { }
+#endif
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -137,6 +140,10 @@ wxBEGIN_EVENT_TABLE(MyClassWithEventTable, wxEvtHandler)
 
     EVT_MYEVENT(MyClassWithEventTable::OnMyEvent)
     EVT_MYEVENT(MyClassWithEventTable::OnEvent)
+
+#ifdef wxHAS_NOEXCEPT
+    EVT_IDLE(MyClassWithEventTable::OnIdleNoExcept)
+#endif
 
     // this shouldn't compile:
     //EVT_MYEVENT(MyClassWithEventTable::OnIdle)
@@ -534,3 +541,14 @@ public:
     void OnIdle(wxIdleEvent&) { }
 };
 #endif // C++11
+
+// Another compilation-time-only test, but this one checking that these event
+// objects can't be created from outside of the library.
+#ifdef TEST_INVALID_EVENT_CREATION
+
+void TestEventCreation()
+{
+    wxPaintEvent eventPaint;
+}
+
+#endif // TEST_INVALID_EVENT_CREATION

@@ -109,6 +109,8 @@ public:
     wxMask(const wxBitmap& bitmap);
     virtual ~wxMask();
 
+    wxBitmap GetBitmap() const;
+
     // Implementation
     QBitmap *GetHandle() const;
 
@@ -118,8 +120,6 @@ protected:
     // by the public wrappers
     bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour) wxOVERRIDE;
     bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
-
-    wxBitmap GetBitmap() const;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxMask);

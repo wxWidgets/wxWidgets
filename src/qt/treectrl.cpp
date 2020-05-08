@@ -23,6 +23,7 @@
 
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QScrollBar>
 #include <QtGui/QPainter>
 
 namespace
@@ -142,6 +143,8 @@ public:
                 this, &wxQTreeWidget::OnItemCollapsed);
         connect(this, &QTreeWidget::itemExpanded,
                 this, &wxQTreeWidget::OnItemExpanded);
+        connect(verticalScrollBar(), &QScrollBar::valueChanged,
+                this, &wxQTreeWidget::OnTreeScrolled);
 
         setItemDelegate(&m_item_delegate);
         setDragEnabled(true);
@@ -242,6 +245,12 @@ public:
     QPixmap GetPlaceHolderImage() const
     {
         return m_placeHolderImage;
+    }
+
+    void select(QTreeWidgetItem* item, QItemSelectionModel::SelectionFlag selectionFlag)
+    {
+        const QModelIndex &index = indexFromItem(item);
+        selectionModel()->select(index, selectionFlag);
     }
 
 protected:
@@ -432,6 +441,12 @@ private:
         EmitEvent(expandedEvent);
     }
 
+    void OnTreeScrolled(int)
+    {
+        if ( GetEditControl() != NULL )
+            closeEditor(GetEditControl()->GetHandle(), QAbstractItemDelegate::RevertModelCache);
+    }
+
     void tryStartDrag(const QMouseEvent *event)
     {
         wxEventType command = event->buttons() & Qt::RightButton
@@ -448,14 +463,14 @@ private:
 
         tree_event.SetPoint(wxQtConvertPoint(event->pos()));
 
-        // Vetoed unless explicitly accepted.
+        // Client must explicitly accept drag and drop. Vetoed by default.
         tree_event.Veto();
 
         EmitEvent(tree_event);
 
         if ( !tree_event.IsAllowed() )
         {
-            setState(DragSelectingState);
+            setState(NoState);
         }
     }
 
@@ -472,6 +487,11 @@ private:
         tree_event.SetPoint(wxQtConvertPoint(position));
 
         EmitEvent(tree_event);
+    }
+
+    virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const wxOVERRIDE
+    {
+        return state() == DragSelectingState ? QItemSelectionModel::NoUpdate : QTreeWidget::selectionCommand(index, event);
     }
 
     virtual void dropEvent(QDropEvent* event) wxOVERRIDE
@@ -1158,25 +1178,19 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    qTreeItem->setSelected(!qTreeItem->isSelected());
+    qTreeItem->setExpanded(!qTreeItem->isExpanded());
 }
 
 void wxTreeCtrl::Unselect()
 {
     QTreeWidgetItem *current = m_qtTreeWidget->currentItem();
-
     if ( current != NULL )
-        current->setSelected(false);
+        m_qtTreeWidget->select(current, QItemSelectionModel::Deselect);
 }
 
 void wxTreeCtrl::UnselectAll()
 {
-    QList<QTreeWidgetItem *> selections = m_qtTreeWidget->selectedItems();
-    const size_t selectedCount = selections.size();
-    for ( size_t i = 0; i < selectedCount; ++i)
-    {
-        selections[i]->setSelected(false);
-    }
+    m_qtTreeWidget->selectionModel()->clearSelection();
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
@@ -1189,7 +1203,15 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     }
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    qTreeItem->setSelected(select);
+
+    if ( qTreeItem )
+    {
+        m_qtTreeWidget->select(qTreeItem, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+        if ( select && m_qtTreeWidget->selectionMode() == QTreeWidget::SingleSelection )
+        {
+            m_qtTreeWidget->setCurrentItem(qTreeItem);
+        }
+    }
 }
 
 void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
@@ -1201,7 +1223,7 @@ void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
 
     for ( int i = 0; i < childCount; ++i )
     {
-        qTreeItem->child(i)->setSelected(true);
+        m_qtTreeWidget->select(qTreeItem->child(i), QItemSelectionModel::Select);
     }
 }
 

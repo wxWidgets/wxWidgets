@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#ifndef __WXOSX_IPHONE__
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -155,3 +157,5 @@ void RearrangeListTestCase::MoveClientData()
     CPPUNIT_ASSERT_EQUAL("third", m_rearrange->GetString(1));
     CPPUNIT_ASSERT_EQUAL("first", m_rearrange->GetString(2));
 }
+
+#endif

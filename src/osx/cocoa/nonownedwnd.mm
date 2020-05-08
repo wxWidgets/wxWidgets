@@ -707,10 +707,6 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     {
         windowstyle |= NSUtilityWindowMask;
     }
-    else if ( ( style & wxPOPUP_WINDOW ) )
-    {
-        level = NSPopUpMenuWindowLevel;
-    }
     else if ( ( style & wxFRAME_DRAWER ) )
     {
         /*
@@ -743,6 +739,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     if ( ( style & wxSTAY_ON_TOP ) )
         level = NSModalPanelWindowLevel;
+
+    if ( ( style & wxPOPUP_WINDOW ) )
+        level = NSPopUpMenuWindowLevel;
 
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
 
@@ -940,9 +939,13 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
             level = NSModalPanelWindowLevel;
         else if (( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ))
             level = NSFloatingWindowLevel;
-        
-        [m_macWindow setLevel: level];
-        m_macWindowLevel = level;
+
+        // Only update the level when it has changed, setting a level can cause the OS to reorder the windows in the level
+        if ( level != m_macWindowLevel )
+        {
+            [m_macWindow setLevel: level];
+            m_macWindowLevel = level;
+        }
     }
 }
 

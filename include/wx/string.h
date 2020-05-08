@@ -911,8 +911,6 @@ public:
 
   public:
       iterator() {}
-      iterator(const iterator& i) : m_cur(i.m_cur) {}
-
       reference operator*()
         { return wxUniCharRef::CreateForString(m_cur); }
 
@@ -946,7 +944,6 @@ public:
 
   public:
       const_iterator() {}
-      const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       const_reference operator*() const
@@ -1015,8 +1012,6 @@ public:
 
       reverse_iterator_impl() {}
       reverse_iterator_impl(iterator_type i) : m_cur(i) {}
-      reverse_iterator_impl(const reverse_iterator_impl& ri)
-          : m_cur(ri.m_cur) {}
 
       iterator_type base() const { return m_cur; }
 
@@ -1349,6 +1344,8 @@ public:
   // NB: these methods don't have a well-defined meaning in UTF-8 case
   size_type capacity() const { return m_impl.capacity(); }
   void reserve(size_t sz) { m_impl.reserve(sz); }
+
+  void shrink_to_fit() { Shrink(); }
 
   void resize(size_t nSize, wxUniChar ch = wxT('\0'))
   {
@@ -1707,7 +1704,11 @@ public:
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
 #endif
     const wxScopedCharBuffer utf8_str() const
-      { return wxMBConvUTF8().cWC2MB(wc_str()); }
+    {
+        if (empty())
+            return wxScopedCharBuffer::CreateNonOwned("", 0);
+        return wxMBConvUTF8().cWC2MB(wc_str());
+    }
 #endif
 
     const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
@@ -2026,7 +2027,7 @@ public:
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a float into string
   wxString& operator<<(float f)
-    { return (*this) << Format(wxT("%f"), f); }
+    { return *this << Format(wxS("%f"), static_cast<double>(f)); }
       // insert a double into string
   wxString& operator<<(double d)
     { return (*this) << Format(wxT("%g"), d); }
@@ -3255,6 +3256,20 @@ public:
   size_t find_last_not_of(const wxScopedWCharBuffer& sz, size_t nStart, size_t n) const
     { return find_last_not_of(sz.data(), nStart, n); }
 
+  bool starts_with(const wxString &str) const
+    { return StartsWith(str); }
+  bool starts_with(const char *sz) const
+    { return StartsWith(sz); }
+  bool starts_with(const wchar_t *sz) const
+    { return StartsWith(sz); }
+
+  bool ends_with(const wxString &str) const
+    { return EndsWith(str); }
+  bool ends_with(const char *sz) const
+    { return EndsWith(sz); }
+  bool ends_with(const wchar_t *sz) const
+    { return EndsWith(sz); }
+
       // string += string
   wxString& operator+=(const wxString& s)
   {
@@ -3359,7 +3374,7 @@ private:
   {
       // notice that there is no need to initialize m_len here as it's unused
       // as long as m_str is NULL
-      ConvertedBuffer() : m_str(NULL) {}
+      ConvertedBuffer() : m_str(NULL), m_len(0) {}
       ~ConvertedBuffer()
           { free(m_str); }
 

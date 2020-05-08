@@ -17,15 +17,13 @@
 
 // -----------------------------------------------------------------------
 
-class wxPGArrayEditorDialog;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGArrayEditorDialog;
 
-#include "wx/propgrid/editors.h"
+#include "wx/propgrid/property.h"
 
 #include "wx/filename.h"
 #include "wx/dialog.h"
 #include "wx/textctrl.h"
-#include "wx/button.h"
-#include "wx/listbox.h"
 #include "wx/valtext.h"
 
 // -----------------------------------------------------------------------
@@ -577,12 +575,13 @@ protected:
 class WXDLLIMPEXP_PROPGRID wxEditorDialogProperty : public wxPGProperty
 {
     friend class wxPGDialogAdapter;
-    wxDECLARE_ABSTRACT_CLASS(wxDialogProperty);
+    wxDECLARE_ABSTRACT_CLASS(wxEditorDialogProperty);
 
 public:
     virtual ~wxEditorDialogProperty();
 
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE;
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
 
 protected:
     wxEditorDialogProperty(const wxString& label, const wxString& name);
@@ -666,15 +665,17 @@ class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxDirProperty)
 public:
-    wxDirProperty( const wxString& name = wxPG_LABEL,
-                   const wxString& label = wxPG_LABEL,
+    wxDirProperty( const wxString& label = wxPG_LABEL,
+                   const wxString& name = wxPG_LABEL,
                    const wxString& value = wxEmptyString );
     virtual ~wxDirProperty();
 
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const wxOVERRIDE;
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
                                int argFlags = 0) const wxOVERRIDE;
+#if WXWIN_COMPATIBILITY_3_0
     virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
+#endif // WXWIN_COMPATIBILITY_3_0
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
 
 protected:

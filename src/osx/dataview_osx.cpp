@@ -104,6 +104,7 @@ bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataV
   wxCHECK_MSG(item.IsOk(),false,"Added item is invalid.");
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,item);
   AdjustRowHeight(item);
+  AdjustAutosizedColumns();
   return noFailureFlag;
 }
 
@@ -116,6 +117,7 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,items);
  // adjust row heights:
   AdjustRowHeights(items);
+  AdjustAutosizedColumns();
  // done:
   return noFailureFlag;
 }
@@ -170,7 +172,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
   m_DataViewCtrlPtr->SetDeleting(true);
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,item);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
 
@@ -179,7 +181,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
   return noFailureFlag;
 }
 
-bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items)
+bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(items))
 {
   bool noFailureFlag;
 
@@ -190,7 +192,7 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
  // has been started and that variables can currently not be updated even when requested by the system:
   m_DataViewCtrlPtr->SetDeleting(true);
  // delete all specified items:
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,items);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
 
@@ -365,6 +367,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
+  // Remove wxVSCROLL and wxHSCROLL from the style, since the dataview panel has scrollbars
+  // by default, and wxControl::Create trys to make some but crashes in the process
+  style &= ~(wxVSCROLL | wxHSCROLL);
+
   DontCreatePeer();
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;

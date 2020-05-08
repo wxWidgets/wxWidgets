@@ -347,8 +347,12 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
     SECTION("/proc")
     {
         wxTextFile f;
-        CHECK( f.Open("/proc/diskstats") );
-        CHECK( f.GetLineCount() > 1 );
+        CHECK( f.Open("/proc/cpuinfo") );
+
+        // /proc files seem to be always empty in LXC containers, so skip this
+        // check there.
+        if ( !IsRunningInLXC() )
+            CHECK( f.GetLineCount() > 1 );
     }
 
     SECTION("/sys")
@@ -357,7 +361,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
         CHECK( f.Open("/sys/power/state") );
         REQUIRE( f.GetLineCount() == 1 );
         INFO( "/sys/power/state contains \"" << f[0] << "\"" );
-        CHECK( f[0].find("mem") != wxString::npos );
+        CHECK( (f[0].find("mem") != wxString::npos || f[0].find("disk") != wxString::npos) );
     }
 }
 

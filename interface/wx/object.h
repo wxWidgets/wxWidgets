@@ -609,6 +609,21 @@ public:
     void reset(T *ptr);
 
     /**
+        Release the owned pointer, making caller responsible for decrementing
+        its reference count.
+
+        This method should be used only for interoperating with the existing
+        code working with raw pointers, typically when returning a raw pointer
+        from a function.
+
+        After calling this function, this object becomes invalid, i.e. it
+        doesn't hold any valid pointer value any more.
+
+        @since 3.1.4
+    */
+    T* release();
+
+    /**
         Conversion to a boolean expression (in a variant which is not
         convertable to anything but a boolean expression).
 
@@ -726,7 +741,7 @@ public:
     @code
     wxIMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject);
 
-    wxCommand::wxCommand(void)
+    wxCommand::wxCommand()
     {
         ...
     }
@@ -754,7 +769,7 @@ public:
     @code
     wxIMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow);
 
-    wxFrame::wxFrame(void)
+    wxFrame::wxFrame()
     {
         ...
     }

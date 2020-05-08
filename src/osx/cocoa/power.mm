@@ -114,8 +114,8 @@ bool wxPowerResource::Acquire(wxPowerResourceKind kind, const wxString& reason)
 {
     wxAtomicInc(g_powerResourceSystemRefCount);
 
-        bool success = UpdatePowerResourceUsage(kind, reason);
-        if (!success)
+    bool success = UpdatePowerResourceUsage(kind, reason);
+    if (!success)
         wxAtomicDec(g_powerResourceSystemRefCount);
 
     return success;

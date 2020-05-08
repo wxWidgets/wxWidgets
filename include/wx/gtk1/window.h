@@ -149,8 +149,8 @@ public:
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // Call after modifing the value of m_hAdjust or m_vAdjust to bring the
-    // scrolbar in sync (this does not generate any wx events)
+    // Call after modifying the value of m_hAdjust or m_vAdjust to bring the
+    // scrollbar in sync (this does not generate any wx events)
     void GtkUpdateScrollbar(int orient);
 
     // Called from GTK signal handlers. it indicates that

@@ -34,7 +34,9 @@ private:
 #if !defined (__WXX11__)
         CPPUNIT_TEST( MessageDialog );
 #endif
+#if wxUSE_FILEDLG
         CPPUNIT_TEST( FileDialog );
+#endif
         CPPUNIT_TEST( CustomDialog );
         CPPUNIT_TEST( InitDialog );
     CPPUNIT_TEST_SUITE_END();
@@ -60,13 +62,16 @@ void ModalDialogsTestCase::MessageDialog()
     wxTEST_DIALOG
     (
         rc = wxMessageBox("Should I fail?", "Question", wxYES|wxNO),
-        wxExpectModal<wxMessageDialog>(wxNO),
-        wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt").Optional()
+        wxExpectModal<wxMessageDialog>(wxNO)
+#if wxUSE_FILEDLG
+        ,wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt").Optional()
+#endif
     );
 
     CPPUNIT_ASSERT_EQUAL(wxNO, rc);
 }
 
+#if wxUSE_FILEDLG
 void ModalDialogsTestCase::FileDialog()
 {
     wxFileDialog dlg(NULL);
@@ -89,7 +94,7 @@ void ModalDialogsTestCase::FileDialog()
     wxYield();
 #endif
 }
-
+#endif
 
 class MyDialog : public wxDialog
 {

@@ -649,6 +649,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATAVIEWCTRL) */
 
+#ifndef wxUSE_NATIVE_DATAVIEWCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_NATIVE_DATAVIEWCTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_NATIVE_DATAVIEWCTRL 1
+#   endif
+#endif /* !defined(wxUSE_NATIVE_DATAVIEWCTRL) */
+
 #ifndef wxUSE_DATEPICKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DATEPICKCTRL must be defined, please read comment near the top of this file."
@@ -2282,7 +2290,8 @@
 #   endif
 #endif /* wxUSE_TREELISTCTRL */
 
-#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || \
+                       wxUSE_WEBVIEW_IE || wxUSE_WEBVIEW_EDGE)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WEBVIEW requires at least one backend"
 #   else

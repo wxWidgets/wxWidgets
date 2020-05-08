@@ -501,9 +501,9 @@ public:
         @param pubid
             The public identifier.
     */
-    wxXmlDoctype(const wxString& rootName = wxString(),
-                 const wxString& systemId = wxString(),
-                 const wxString& publicId = wxString());
+    wxXmlDoctype(const wxString& name = wxString(),
+                 const wxString& sysid = wxString(),
+                 const wxString& pubid = wxString());
 
     /**
         Removes all the DOCTYPE values.
@@ -715,7 +715,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().

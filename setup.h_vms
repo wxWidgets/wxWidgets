@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 31 January 2019                                                    *
+ * Date : 18 December 2019                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -109,7 +109,7 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#ifdef VMS_GTK2
+#if defined( VMS_GTK2 ) || defined( __WXX11__ ) 
 #define wxUSE_CAIRO 1
 #else
 #define wxUSE_CAIRO 0
@@ -218,8 +218,6 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#define wxUSE_WCHAR_T 1
-
 
 #define wxUSE_EXCEPTIONS 1
 
@@ -259,8 +257,6 @@ typedef pid_t GPid;
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#define wxUSE_IOSTREAMH     1
 
 #define wxUSE_LONGLONG      1
 
@@ -466,6 +462,8 @@ typedef pid_t GPid;
 #endif
 #define wxUSE_TREECTRL     1
 #define wxUSE_TREELISTCTRL  1
+
+#define wxUSE_NATIVE_DATAVIEWCTRL 0
 
 #define wxUSE_STATUSBAR    1
 

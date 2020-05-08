@@ -18,33 +18,9 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
     #include "wx/dc.h"
-    #include "wx/dcclient.h"
-    #include "wx/button.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
     #include "wx/textctrl.h"
-    #include "wx/scrolwin.h"
-    #include "wx/dirdlg.h"
-    #include "wx/combobox.h"
-    #include "wx/sizer.h"
-    #include "wx/textdlg.h"
-    #include "wx/filedlg.h"
-    #include "wx/intl.h"
     #include "wx/wxcrtvararg.h"
 #endif
 
@@ -56,13 +32,7 @@
 
 #include "wx/propgrid/advprops.h"
 
-#ifdef __WXMSW__
-    #include "wx/msw/private.h"
-    #include "wx/msw/dc.h"
-#endif
-
 #include "wx/odcombo.h"
-#include "wx/numformatter.h"
 
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
@@ -75,7 +45,10 @@
 
 #if wxPG_USE_GC_FOR_ALPHA
 #include "wx/dcgraph.h"
+#ifndef WX_PRECOMP
+#include "wx/dcclient.h" // for wxDynamicCast purposes
 #include "wx/dcmemory.h" // for wxDynamicCast purposes
+#endif // WX_PRECOMP
 #if wxUSE_METAFILE
     #include "wx/metafile.h"  // for wxDynamicCast purposes
 #endif // wxUSE_METAFILE
@@ -300,7 +273,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
         wnd2 = NULL;
     }
 
-    wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).m_primary;
+    wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).GetPrimary();
 #if wxUSE_VALIDATORS
     // Let's add validator to make sure only numbers can be entered
     wxTextValidator validator(wxFILTER_NUMERIC, &m_tempString);
@@ -1916,13 +1889,19 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
     if ( m_pBitmap || (m_pImage && m_pImage->IsOk() ) )
     {
         // Draw the thumbnail
-
         // Create the bitmap here because required size is not known in OnSetValue().
+
+        // Delete the cache if required size changed
+        if ( m_pBitmap && (m_pBitmap->GetWidth() != rect.width || m_pBitmap->GetHeight() != rect.height) )
+        {
+            delete m_pBitmap;
+            m_pBitmap = NULL;
+        }
+
         if ( !m_pBitmap )
         {
             m_pImage->Rescale( rect.width, rect.height );
             m_pBitmap = new wxBitmap( *m_pImage );
-            wxDELETE(m_pImage);
         }
 
         dc.DrawBitmap( *m_pBitmap, rect.x, rect.y, false );

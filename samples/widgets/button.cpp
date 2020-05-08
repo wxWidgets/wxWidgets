@@ -111,9 +111,6 @@ protected:
     // (re)create the wxButton
     void CreateButton();
 
-    // add m_button to m_sizerButton using current value of m_chkFit
-    void AddButtonToSizer();
-
     // helper function: create a bitmap for wxBitmapButton
     wxBitmap CreateBitmap(const wxString& label, const wxArtID& type);
 
@@ -315,7 +312,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(this, ButtonPage_Reset, "&Reset");
-    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder(wxALL));
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Operations");
@@ -340,15 +337,15 @@ void ButtonWidgetsPage::CreateContent()
 
     // right pane
     m_sizerButton = new wxBoxSizer(wxHORIZONTAL);
-    m_sizerButton->SetMinSize(150, 0);
+    m_sizerButton->SetMinSize(FromDIP(150), 0);
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
-                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
+                  wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxLEFT));
     sizerTop->Add(sizerMiddle,
-                  wxSizerFlags(1).Expand().Border(wxALL, 10));
+                  wxSizerFlags(1).Expand().DoubleBorder(wxALL));
     sizerTop->Add(m_sizerButton,
-                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), 10));
+                  wxSizerFlags(1).Expand().DoubleBorder((wxALL & ~wxRIGHT)));
 
     // do create the main control
     Reset();
@@ -364,7 +361,7 @@ void ButtonWidgetsPage::CreateContent()
 void ButtonWidgetsPage::Reset()
 {
     m_chkBitmapOnly->SetValue(false);
-    m_chkFit->SetValue(true);
+    m_chkFit->SetValue(false);
     m_chkAuthNeeded->SetValue(false);
     m_chkTextAndBitmap->SetValue(false);
     m_chkDefault->SetValue(false);
@@ -451,6 +448,11 @@ void ButtonWidgetsPage::CreateButton()
         case ButtonVAlign_Bottom:
             flags |= wxBU_BOTTOM;
             break;
+    }
+
+    if ( m_chkFit->GetValue() )
+    {
+        flags |= wxBU_EXACTFIT;
     }
 
     bool showsBitmap = false;
@@ -557,23 +559,11 @@ void ButtonWidgetsPage::CreateButton()
 
     m_button->Enable(!m_chkDisable->IsChecked());
 
-    AddButtonToSizer();
+    m_sizerButton->AddStretchSpacer();
+    m_sizerButton->Add(m_button, wxSizerFlags().Centre().Border());
+    m_sizerButton->AddStretchSpacer();
 
     m_sizerButton->Layout();
-}
-
-void ButtonWidgetsPage::AddButtonToSizer()
-{
-    if ( m_chkFit->GetValue() )
-    {
-        m_sizerButton->AddStretchSpacer(1);
-        m_sizerButton->Add(m_button, wxSizerFlags(0).Centre().Border());
-        m_sizerButton->AddStretchSpacer(1);
-    }
-    else // take up the entire space
-    {
-        m_sizerButton->Add(m_button, wxSizerFlags(1).Expand().Border());
-    }
 }
 
 // ----------------------------------------------------------------------------

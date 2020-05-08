@@ -44,6 +44,7 @@
 #include "wx/xml/xml.h"
 #include "wx/hashset.h"
 #include "wx/scopedptr.h"
+#include "wx/config.h"
 
 #include <limits.h>
 #include <locale.h>
@@ -1825,7 +1826,7 @@ wxBitmap wxXmlResourceHandlerImpl::GetBitmap(const wxXmlNode* node,
     }
 
     /* ...or load the bitmap from file: */
-    wxString name = GetParamValue(node);
+    wxString name = GetFilePath(node);
     if (name.empty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
@@ -1898,7 +1899,7 @@ wxIconBundle wxXmlResourceHandlerImpl::GetIconBundle(const wxString& param,
             return stockArt;
     }
 
-    const wxString name = GetParamValue(param);
+    const wxString name = GetFilePath(GetParamNode(param));
     if ( name.empty() )
         return wxNullIconBundle;
 
@@ -1980,6 +1981,16 @@ wxImageList *wxXmlResourceHandlerImpl::GetImageList(const wxString& param)
 
     m_handler->m_node = oldnode;
     return imagelist;
+}
+
+wxString wxXmlResourceHandlerImpl::GetFilePath(const wxXmlNode* node)
+{
+    wxString path = GetParamValue(node);
+
+    if ( m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS )
+        path = wxExpandEnvVars(path);
+
+    return path;
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetParamNode(const wxString& param)
@@ -2777,8 +2788,8 @@ void AddStdXRCID_Records()
     stdID(wxID_PREVIEW);
     stdID(wxID_ABOUT);
     stdID(wxID_HELP_CONTENTS);
-    stdID(wxID_HELP_INDEX),
-    stdID(wxID_HELP_SEARCH),
+    stdID(wxID_HELP_INDEX);
+    stdID(wxID_HELP_SEARCH);
     stdID(wxID_HELP_COMMANDS);
     stdID(wxID_HELP_PROCEDURES);
     stdID(wxID_HELP_CONTEXT);

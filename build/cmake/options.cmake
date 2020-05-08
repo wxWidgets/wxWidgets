@@ -23,6 +23,10 @@ wx_option(wxBUILD_COMPATIBILITY
 set(wxBUILD_CUSTOM_SETUP_HEADER_PATH "" CACHE PATH "Include path containing custom wx/setup.h")
 mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 
+if(WIN32)
+    wx_option(wxUSE_DPI_AWARE_MANIFEST "DPI Awareness" "per-monitor" STRINGS "none" "system" "per-monitor")
+endif()
+
 wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
 mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 
@@ -32,28 +36,34 @@ endif()
 
 if(MSVC)
     wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
-else()
-    # Other compilers support setting the C++ standard, present it an option to the user
+endif()
+
+if(NOT MSVC OR MSVC_VERSION GREATER 1800)
+    # support setting the C++ standard, present it an option to the user
     if(DEFINED CMAKE_CXX_STANDARD)
         set(wxCXX_STANDARD_DEFAULT ${CMAKE_CXX_STANDARD})
     else()
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
     wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17)
+              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17 20)
 endif()
 
 if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
+set(wxBUILD_FLAVOUR "" CACHE STRING "Specify a name to identify the build")
+mark_as_advanced(wxBUILD_FLAVOUR)
 
 wx_option(wxBUILD_OPTIMISE "use speed-optimised C/C++ compiler flags for release build" OFF)
+mark_as_advanced(wxBUILD_OPTIMISE)
 if(MSVC)
     set(wxBUILD_STRIPPED_RELEASE_DEFAULT OFF)
 else()
     set(wxBUILD_STRIPPED_RELEASE_DEFAULT ON)
 endif()
 wx_option(wxBUILD_STRIPPED_RELEASE "remove debug symbols in release build" ${wxBUILD_STRIPPED_RELEASE_DEFAULT})
+mark_as_advanced(wxBUILD_STRIPPED_RELEASE)
 wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options
@@ -284,6 +294,7 @@ wx_option(wxUSE_COMBOBOX "use wxComboBox class")
 wx_option(wxUSE_COMBOCTRL "use wxComboCtrl class")
 wx_option(wxUSE_COMMANDLINKBUTTON "use wxCommmandLinkButton class")
 wx_option(wxUSE_DATAVIEWCTRL "use wxDataViewCtrl class")
+wx_option(wxUSE_NATIVE_DATAVIEWCTRL "use the native wxDataViewCtrl if available")
 wx_option(wxUSE_DATEPICKCTRL "use wxDatePickerCtrl class")
 wx_option(wxUSE_DETECT_SM "use code to detect X11 session manager" OFF)
 wx_option(wxUSE_DIRPICKERCTRL "use wxDirPickerCtrl class")
@@ -416,6 +427,7 @@ if(WIN32)
     wx_option(wxUSE_TASKBARICON_BALLOONS "enable wxTaskBarIcon::ShowBalloon() method (Win32 only)")
     wx_option(wxUSE_UXTHEME "enable support for Windows XP themed look (Win32 only)")
     wx_option(wxUSE_WEBVIEW_IE "use wxWebView IE backend (Win32 only)")
+    wx_option(wxUSE_WEBVIEW_EDGE "use wxWebView Edge (Chromium) backend (Windows 7+ only)" OFF)
     wx_option(wxUSE_WXDIB "use wxDIB class (Win32 only)")
     if(MSVC_VERSION GREATER 1600 AND NOT CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$")
         set(wxUSE_WINRT_DEFAULT ON)

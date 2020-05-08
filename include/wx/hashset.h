@@ -106,11 +106,6 @@ public:                                                                      \
     CLASSNAME() { }                                                          \
     const_key_reference operator()( const_key_reference key ) const          \
         { return key; }                                                      \
-                                                                             \
-    /* the dummy assignment operator is needed to suppress compiler */       \
-    /* warnings from hash table class' operator=(): gcc complains about */   \
-    /* "statement with no effect" without it */                              \
-    CLASSNAME& operator=(const CLASSNAME&) { return *this; }                 \
 };
 
 #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )\

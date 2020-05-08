@@ -142,6 +142,7 @@ public:
 
         [m_origFont release];
         [m_origTextColour release];
+        [m_origBackgroundColour release];
     }
 
     NSCell* GetColumnCell() const { return m_ColumnCell; }
@@ -186,6 +187,7 @@ public:
     // ones that do.
     NSFont *GetOriginalFont() const { return m_origFont; }
     NSColor *GetOriginalTextColour() const { return m_origTextColour; }
+    NSColor *GetOriginalBackgroundColour() const { return m_origBackgroundColour; }
 
     void SaveOriginalFont(NSFont *font)
     {
@@ -195,6 +197,11 @@ public:
     void SaveOriginalTextColour(NSColor *textColour)
     {
         m_origTextColour = [textColour retain];
+    }
+
+    void SaveOriginalBackgroundColour(NSColor *backgroundColour)
+    {
+        m_origBackgroundColour = [backgroundColour retain];
     }
 
     // The ellipsization mode which we need to set for each cell being rendered.
@@ -226,6 +233,7 @@ private:
     // we own those if they're non-NULL
     NSFont *m_origFont;
     NSColor *m_origTextColour;
+    NSColor *m_origBackgroundColour;
 
     wxEllipsizeMode m_ellipsizeMode;
 
@@ -486,10 +494,7 @@ public:
     virtual wxDataViewItem GetTopItem() const;
     virtual bool IsExpanded(const wxDataViewItem& item) const;
     virtual bool Reload();
-    virtual bool Remove(const wxDataViewItem& parent,
-                        const wxDataViewItem& item);
-    virtual bool Remove(const wxDataViewItem& parent,
-                        const wxDataViewItemArray& item);
+    virtual bool Remove(const wxDataViewItem& parent);
     virtual bool Update(const wxDataViewColumn* columnPtr);
     virtual bool Update(const wxDataViewItem& parent,
                         const wxDataViewItem& item);

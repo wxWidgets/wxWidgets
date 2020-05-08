@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.3], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.1.4], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -40,7 +40,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=1
-wx_release_number=3
+wx_release_number=4
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -55,6 +55,17 @@ dnl to use our own replacement that will work with both 2.5x and 2.60+:
 wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 AC_SUBST(wx_top_builddir)
 
+
+dnl Save the values of various standard flags that we modify below in order to
+dnl restore them at the very end. This is ugly, but changing the existing code
+dnl is non-trivial as sometimes we really need to set them, as we want them to
+dnl apply to the tests run by configure, and it gets the job done in the sense
+dnl that the generated makefile will only contain user-specified flags values,
+dnl just as it should.
+USER_CPPFLAGS=$CPPFLAGS
+USER_CFLAGS=$CFLAGS
+USER_CXXFLAGS=$CXXFLAGS
+USER_LDFLAGS=$LDFLAGS
 
 dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
@@ -335,6 +346,7 @@ DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
+DEFAULT_wxUSE_CAIRO=no
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -408,6 +420,8 @@ if test "$wxUSE_ALL_FEATURES" = "no"; then
     DEFAULT_wxUSE_MEDIACTRL=no
 fi
 
+AC_ARG_WITH(dpi, [  --with-dpi=none|system|per-monitor   set dpi-awareness (Win32 only), default is per-monitor], [wxWITH_DPI_MANIFEST="$withval"])
+
 dnl ---------------------------------------------------------------------------
 dnl port selection
 dnl ---------------------------------------------------------------------------
@@ -421,7 +435,7 @@ fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
-AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 4 (EXPERIMENTAL), 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
@@ -537,7 +551,7 @@ dnl libraries is explicitly disabled, we can't use it at all.
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
     wxUSE_LIBJBIG=no
 else
-    WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available)], wxUSE_LIBJBIG)
+    WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available], wxUSE_LIBJBIG)
 fi
 
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
@@ -548,6 +562,16 @@ WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associat
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
+
+if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
+    wx_needs_cairo_for_gc=1
+fi
+
+dnl If we do _not_ need Cairo anyhow, provide an option to request enabling it
+dnl explicitly.
+if test "$wx_needs_cairo_for_gc" != 1; then
+WX_ARG_WITH(cairo,         [  --with-cairo            use Cairo-based wxGraphicsContext implementation], wxUSE_CAIRO)
+fi
 
 fi
 dnl for GUI only
@@ -909,6 +933,7 @@ WX_ARG_FEATURE(combobox,    [  --enable-combobox       use wxComboBox class], wx
 WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
 WX_ARG_FEATURE(commandlinkbutton, [  --enable-commandlinkbutton      use wxCommmandLinkButton class], wxUSE_COMMANDLINKBUTTON)
 WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
+WX_ARG_DISABLE(nativedvc,   [  --disable-nativedvc     disable use of native wxDataViewCtrl even if available], wxUSE_NATIVE_DATAVIEWCTRL)
 WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
 WX_ARG_FEATURE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
@@ -1123,6 +1148,18 @@ if test -n "$wxWITH_CXX"; then
         OBJCXXFLAGS="$OBJCXXFLAGS $switch"
     fi
 fi
+
+case "$wxWITH_DPI_MANIFEST" in
+    none)
+        USE_DPI_AWARE_MANIFEST=0 ;;
+    system)
+        USE_DPI_AWARE_MANIFEST=1 ;;
+    ''|per-monitor)
+        USE_DPI_AWARE_MANIFEST=2 ;;
+    *)
+        USE_DPI_AWARE_MANIFEST=0
+        AC_MSG_WARN([Unsupported DPI awareness value "$wxWITH_DPI_MANIFEST" ignored.])
+esac
 
 dnl ar command
 dnl   defines AR with the appropriate command
@@ -1561,7 +1598,6 @@ AC_CHECK_SIZEOF(wchar_t, 0,
 if test "$ac_cv_sizeof_wchar_t" = 0; then
     AC_MSG_ERROR([wxWidgets requires wchar_t support.])
 fi
-AC_DEFINE(wxUSE_WCHAR_T)
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
@@ -1847,9 +1883,6 @@ AC_DEFINE(HAVE_STD_UNORDERED_SET)
 AC_DEFINE(HAVE_TYPE_TRAITS)
 
 else dnl Not using C++11, so we do need to run the checks.
-
-dnl check for iostream (as opposed to iostream.h) standard header
-WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
@@ -2863,13 +2896,16 @@ if test "$wxUSE_GUI" = "yes"; then
                             fi
                     esac
 
-                    if test "$wxGTK_VERSION" != 4 -a "$wxGTK_VERSION" != 3; then
-                        AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                    if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
+                        AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
                     fi
                     if test -z "$wx_cv_lib_gtk"; then
-                        if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
-                            AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
-                        elif test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
+                        if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
+                            AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                        fi
+                    fi
+                    if test -z "$wx_cv_lib_gtk"; then
+                        if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
                             AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
                         fi
                     fi
@@ -3762,10 +3798,6 @@ EOF
 
     esac
     fi
-
-    dnl this one shouldn't be used for the library build so put it in a
-    dnl separate variable from WXCONFIG_CPPFLAGS
-    WXCONFIG_ONLY_CPPFLAGS="$WXCONFIG_ONLY_CPPFLAGS -DWXUSINGDLL"
 
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
@@ -5447,10 +5479,19 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
     dnl includes OS X which does have kqueue but no other platforms)
     if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
-            AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
-            if test "$ac_cv_header_sys_inotify_h" = "yes"; then
-                AC_DEFINE(wxHAS_INOTIFY)
-            else
+            dnl inotify header may be present from a compatibility library so
+            dnl check that the function is usable. We don't try to link with,
+            dnl e.g. -linotify so native kqueue support is used in preference.
+            AC_CACHE_CHECK(
+                [whether inotify is usable],
+                wx_cv_inotify_usable,
+                AC_LINK_IFELSE(
+                    [AC_LANG_SOURCE([int main() { return inotify_init(); }])],
+                    [wx_cv_inotify_usable=yes; AC_DEFINE(wxHAS_INOTIFY) ],
+                    [wx_cv_inotify_usable=no]
+                )
+            )
+            if test "$wx_cv_inotify_usable" = "no"; then
                 AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
                 if test "$ac_cv_header_sys_event_h" = "yes"; then
                     AC_DEFINE(wxHAS_KQUEUE)
@@ -6507,43 +6548,30 @@ dnl ---------------------------------------------------------------------------
 dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
-dnl check for ole headers and disable a few features requiring it if not
-dnl present (earlier versions of mingw32 don't have ole2.h)
-if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
-                          -o "$wxUSE_CLIPBOARD"     = "yes" \
-                          -o "$wxUSE_OLE"     = "yes" \
-                          -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
-    AC_CHECK_HEADER(ole2.h,,, [ ])
+if test "$USE_WIN32" = 1 ; then
+    if test "$wxUSE_OLE" = "yes" ; then
+        LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
 
-    if test "$ac_cv_header_ole2_h" = "yes" ; then
-        if test "$GCC" = yes ; then
-            AC_MSG_CHECKING([if g++ requires -fvtable-thunks])
-            AC_TRY_COMPILE([#include <windows.h>
-                            #include <ole2.h>],
-                           [],
-                           [AC_MSG_RESULT(no)],
-                           [AC_MSG_RESULT(yes)
-                            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"])
-            LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
-            if test "$wxUSE_OLE" = "yes" ; then
-                AC_DEFINE(wxUSE_OLE)
-                AC_DEFINE(wxUSE_OLE_AUTOMATION)
-                AC_DEFINE(wxUSE_ACTIVEX)
-                SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
-            fi
-        fi
-
-        dnl for OLE clipboard and dnd
-        if test "$wxUSE_DATAOBJ" = "yes" ; then
-            AC_DEFINE(wxUSE_DATAOBJ)
-        fi
+        AC_DEFINE(wxUSE_OLE)
+        AC_DEFINE(wxUSE_OLE_AUTOMATION)
+        AC_DEFINE(wxUSE_ACTIVEX)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
     else
-        AC_MSG_WARN([Some features disabled because OLE headers not found])
-
+        dnl Turn off features depending on OLE directly...
         wxUSE_CLIPBOARD=no
         wxUSE_DRAG_AND_DROP=no
         wxUSE_DATAOBJ=no
-        wxUSE_OLE=no
+
+        dnl ... or indirectly (via wxUSE_ACTIVEX)
+        if test "$wxUSE_MEDIACTRL" = "yes"; then
+            AC_MSG_WARN(wxMediaCtrl requires wxUSE_OLE... disabled)
+            wxUSE_MEDIACTRL=no
+        fi
+
+        if test "$wxUSE_WEBVIEW" = "yes"; then
+            AC_MSG_WARN(wxWebView requires wxUSE_OLE... disabled)
+            wxUSE_WEBVIEW=no
+        fi
     fi
 fi
 
@@ -6826,6 +6854,10 @@ if test "$wxUSE_DATAVIEWCTRL" = "yes"; then
   AC_DEFINE(wxUSE_DATAVIEWCTRL)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dataview"
+
+  if test "$wxUSE_NATIVE_DATAVIEWCTRL" = "yes"; then
+    AC_DEFINE(wxUSE_NATIVE_DATAVIEWCTRL)
+  fi
 fi
 
 if test "$wxUSE_IMAGLIST" = "yes"; then
@@ -7004,7 +7036,7 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
         AC_MSG_WARN([wxTooltip not supported yet under Motif... disabled])
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            AC_MSG_WARN([wxTooltip not supported yet in $TOOLKIT... disabled])
+            AC_MSG_WARN([wxTooltip not supported yet in wxUniversal... disabled])
         else
             AC_DEFINE(wxUSE_TOOLTIPS)
         fi
@@ -7137,22 +7169,8 @@ if test "$wxUSE_HTML" = "yes"; then
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
     if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-        old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-x objective-c++ $CPPFLAGS"
-        AC_CHECK_HEADER([WebKit/HIWebView.h],
-                        [
-                           AC_DEFINE(wxUSE_WEBKIT)
-                           WEBKIT_LINK="-framework WebKit"
-                        ],
-                        [
-                           AC_MSG_WARN([WebKit headers not found; disabling wxWebKit])
-                           wxUSE_WEBKIT=no
-                        ],
-                        [
-                           #include <Carbon/Carbon.h>
-                           #include <WebKit/WebKit.h>
-                        ])
-        CPPFLAGS="$old_CPPFLAGS"
+        AC_DEFINE(wxUSE_WEBKIT)
+        WEBKIT_LINK="-framework WebKit"
     else
         wxUSE_WEBKIT=no
     fi
@@ -7292,23 +7310,9 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                   ])
             fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-            dnl Under Mac we always have the libraries but check for the
-            dnl headers
-            old_CPPFLAGS="$CPPFLAGS"
-            CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            AC_CHECK_HEADER([WebKit/HIWebView.h],
-                            [
-                                USE_WEBVIEW_WEBKIT=1
-                                WEBKIT_LINK="-framework WebKit"
-                            ],
-                            [
-                                AC_MSG_WARN([WebKit headers not found])
-                            ],
-                            [
-                                #include <Carbon/Carbon.h>
-                                #include <WebKit/WebKit.h>
-                            ])
-            CPPFLAGS="$old_CPPFLAGS"
+            dnl Under Mac we always have the libraries
+            USE_WEBVIEW_WEBKIT=1
+            WEBKIT_LINK="-framework WebKit"
         fi
     fi
 
@@ -7539,6 +7543,42 @@ if test "$wxUSE_MAC" = 1; then
     wxUSE_GRAPHICS_CONTEXT="yes"
 fi
 
+dnl We need to check for Cairo if explicitly requested under MSW or Mac or if
+dnl we're going to use as the default wxGraphicsContext implementation with the
+dnl target toolkit.
+if test "$wx_needs_cairo_for_gc" = 1 -a "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
+    wx_needs_cairo=1
+fi
+
+if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
+    PKG_CHECK_MODULES(CAIRO, cairo,
+        [wx_has_cairo=1],
+        [AC_MSG_RESULT(no)]
+    )
+    if test "$wx_has_cairo" = 1; then
+        dnl Check that Cairo library is new enough: wxGraphicsContext
+        dnl won't compile without cairo_push_group() and
+        dnl cairo_pop_group_to_source() which are new in 1.2.
+        save_LIBS="$LIBS"
+        LIBS="$LIBS $CAIRO_LIBS"
+        AC_CHECK_FUNCS([cairo_push_group])
+        LIBS="$save_LIBS"
+        if test "$ac_cv_func_cairo_push_group" = "no"; then
+            wx_has_cairo=0
+            AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
+        else
+            AC_DEFINE(wxUSE_CAIRO)
+
+            dnl We don't need to do this for wxGTK as we already get Cairo
+            dnl flags as part of GTK+ ones.
+            if test "$wxUSE_GTK" != 1; then
+                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+            fi
+        fi
+    fi
+fi
+
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
     wx_has_graphics=0
     if test "$wxUSE_MSW" = 1; then
@@ -7564,33 +7604,8 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         fi
     elif test "$WXGTK1" = "1"; then
         AC_MSG_WARN([wxGraphicsContext not supported with GTK +1])
-    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
-        PKG_CHECK_MODULES(CAIRO, cairo,
-            [wx_has_graphics=1],
-            [AC_MSG_WARN([Cairo library not found])]
-        )
-        if test "$wx_has_graphics" = 1; then
-            dnl Check that Cairo library is new enough: wxGraphicsContext
-            dnl won't compile without cairo_push_group() and
-            dnl cairo_pop_group_to_source() which are new in 1.2.
-            save_LIBS="$LIBS"
-            LIBS="$LIBS $CAIRO_LIBS"
-            AC_CHECK_FUNCS([cairo_push_group])
-            LIBS="$save_LIBS"
-            if test "$ac_cv_func_cairo_push_group" = "no"; then
-                wx_has_graphics=0
-                AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
-            else
-                AC_DEFINE(wxUSE_CAIRO)
-
-                dnl We don't need to do this for wxGTK as we already get Cairo
-                dnl flags as part of GTK+ ones.
-                if test "$wxUSE_GTK" != 1; then
-                    CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
-                fi
-            fi
-        fi
+    elif test "$wx_needs_cairo_for_gc" = 1; then
+        wx_has_graphics=$wx_has_cairo
     else
         dnl assume it's ok, add more checks here if needed
         wx_has_graphics=1
@@ -7952,14 +7967,15 @@ CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
 
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `
-CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $CXXFLAGS `
+CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXWARNINGS $C_AND_CXX_FLAGS $CXXFLAGS `
 OBJCFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $OBJCFLAGS `
 OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 
 dnl now that we added WXCONFIG_CPPFLAGS to CPPFLAGS we can add the wx-config
 dnl only stuff to it
-WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
-
+if test "SHARED" = 1; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DWXUSINGDLL"
+fi
 
 LIBS=`echo $LIBS`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
@@ -8103,7 +8119,6 @@ AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
 AC_SUBST(USE_PLUGINS)
 AC_SUBST(LIBS)
-AC_SUBST(CXXWARNINGS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
 AC_SUBST(EXTRALIBS_HTML)
@@ -8126,6 +8141,7 @@ AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_CXXFLAGS)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
+AC_SUBST(USE_DPI_AWARE_MANIFEST)
 
 case "$TOOLKIT" in
     GTK)
@@ -8263,10 +8279,32 @@ case "${host}" in
         ;;
 esac
 
-dnl Add visibility support flags to CFLAGS/CXXFLAGS - do it this late so that
-dnl it doesn't affect compilation checks above
-CFLAGS="$CFLAGS $CFLAGS_VISIBILITY"
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
+dnl Set the flags to be used for the library build itself using the flag names
+dnl used everywhere above.
+dnl
+dnl Also get rid of duplicates in the flags, which results in dramatically
+dnl shorter build logs and so is well worth it.
+dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '!seen[[$0]]++'; }
+
+WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
+WX_CFLAGS=`dedup_flags "$CFLAGS"`
+WX_CXXFLAGS=`dedup_flags "$CXXFLAGS"`
+
+dnl For link flags we can use "-framework" multiple times and all of their
+dnl occurrences need to be preserved, so add extra pre/post-processing.
+LDFLAGS=`printf %s "$LDFLAGS" | sed 's/-framework  */-framework_/g'`
+WX_LDFLAGS=`dedup_flags "$LDFLAGS" | sed 's/-framework_/-framework /g'`
+
+dnl Restore the original user-specified flags values, we won't run any tests
+dnl using them any more.
+CPPFLAGS=$USER_CPPFLAGS
+CFLAGS=$USER_CFLAGS
+CXXFLAGS=$USER_CXXFLAGS
+LDFLAGS=$USER_LDFLAGS
+
+dnl Add visibility support flags.
+WX_CFLAGS="$WX_CFLAGS $CFLAGS_VISIBILITY"
+WX_CXXFLAGS="$WX_CXXFLAGS $CXXFLAGS_VISIBILITY"
 OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
@@ -8306,22 +8344,24 @@ AC_SUBST(WX_VERSION)
 AC_SUBST(WX_SUBVERSION)
 AC_SUBST(WX_CHARTYPE)
 
-dnl note that in addition to the usual CPP/C/CXXFLAGS which are used for
-dnl building the library itself, we also have WXCONFIG_-prefixed variants which
+dnl both versions of all the usual flags variables: WX_FLAGS which are used for
+dnl building the library itself, and WXCONFIG_-prefixed variants which
 dnl are used when building the libraries using the library
 dnl
 dnl so put anything which should be used only during the library build in, e.g.
-dnl CXXFLAGS, but put everything else (by default) into WXCONFIG_CXXFLAGS
-dnl
-dnl and, finally, for some things which should be only used by wx-config but
-dnl not during the library compilation, use WXCONFIG_ONLY_CPPFLAGS which is
-dnl added to WXCONFIG_CPPFLAGS after adding the latter to CPPFLAGS
+dnl CXXFLAGS, which ends up in WX_CXXFLAGS, but put everything which should be
+dnl used when building both the library and the applications using it into
+dnl WXCONFIG_CXXFLAGS
+AC_SUBST(WX_CPPFLAGS)
 AC_SUBST(WXCONFIG_CPPFLAGS)
+AC_SUBST(WX_CFLAGS)
 AC_SUBST(WXCONFIG_CFLAGS)
+AC_SUBST(WX_CXXFLAGS)
 AC_SUBST(WXCONFIG_CXXFLAGS)
 
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
+AC_SUBST(WX_LDFLAGS)
 AC_SUBST(WXCONFIG_LDFLAGS)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WXCONFIG_RESFLAGS)
@@ -8334,7 +8374,6 @@ dnl additional subdirectories where we will build
 AC_SUBST(SAMPLES_SUBDIRS)
 
 dnl additional libraries and linker settings
-AC_SUBST(LDFLAGS)
 AC_SUBST(LDFLAGS_GL)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)

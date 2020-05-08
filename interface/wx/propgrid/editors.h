@@ -14,14 +14,18 @@
 class wxPGWindowList
 {
 public:
-    wxPGWindowList();
-    void SetSecondary( wxWindow* secondary );
+    wxPGWindowList(wxWindow* primary, wxWindow* secondary = NULL);
 
-    wxWindow*   m_primary;
-    wxWindow*   m_secondary;
+    void SetSecondary(wxWindow* secondary);
 
-    wxPGWindowList( wxWindow* a );
-    wxPGWindowList( wxWindow* a, wxWindow* b );
+    /** Gets window of primary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetPrimary() const;
+    /** Gets window of secondary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetSecondary() const;
 };
 
 

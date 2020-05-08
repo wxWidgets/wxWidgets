@@ -25,7 +25,7 @@
             wxPanel *panel = new wxPanel(this);
             wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
 
-            new wxStaticText(box, wxID_ANY "This window is a child of the staticbox");
+            new wxStaticText(box, wxID_ANY, "This window is a child of the staticbox");
             ...
         }
     @endcode
@@ -34,7 +34,7 @@
     @code
             wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
 
-            new wxStaticText(panel, wxID_ANY "This window is a child of the panel");
+            new wxStaticText(panel, wxID_ANY, "This window is a child of the panel");
             ...
     @endcode
 

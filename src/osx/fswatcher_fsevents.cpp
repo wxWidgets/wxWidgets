@@ -19,6 +19,8 @@
 
 #include "wx/fswatcher.h"
 #include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/private/strconv_cf.h"
+
 #include <CoreFoundation/CoreFoundation.h>
 
 // A small class that we will give the FSEvents
@@ -267,7 +269,7 @@ static void wxFSEventCallback(ConstFSEventStreamRef WXUNUSED(streamRef), void *c
 static void wxDeleteContext(const void* context)
 {
     wxFSEventWatcherContext* watcherContext =
-        (wxFSEventWatcherContext*) context;
+        static_cast<wxFSEventWatcherContext*>(const_cast<void*>(context));
     delete watcherContext;
 }
 

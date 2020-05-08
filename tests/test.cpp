@@ -135,7 +135,11 @@ static void TestAssertHandler(const wxString& file,
         // so we'd just die without any useful information -- abort instead.
         abortReason << assertMessage << "in a worker thread.";
     }
+#if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
+    else if ( uncaught_exceptions() )
+#else
     else if ( uncaught_exception() )
+#endif
     {
         // Throwing while already handling an exception would result in
         // terminate() being called and we wouldn't get any useful information
@@ -424,6 +428,20 @@ extern bool IsRunningUnderXVFB()
     return s_isRunningUnderXVFB == 1;
 }
 
+#ifdef __LINUX__
+
+extern bool IsRunningInLXC()
+{
+    // We're supposed to be able to detect running in LXC by checking for
+    // /dev/lxd existency, but this doesn't work under Travis for some reason,
+    // so just rely on having the environment variable defined for the
+    // corresponding builds in our .travis.yml.
+    wxString value;
+    return wxGetEnv("wxLXC", &value) && value == "1";
+}
+
+#endif // __LINUX__
+
 #if wxUSE_GUI
 
 bool EnableUITests()
@@ -496,12 +514,30 @@ wxTestGLogHandler(const gchar* domain,
                   const gchar* message,
                   gpointer data)
 {
+    // Check if debug messages in this domain will be logged.
+    if ( level == G_LOG_LEVEL_DEBUG )
+    {
+        static const char* const allowed = getenv("G_MESSAGES_DEBUG");
+
+        // By default debug messages are dropped, but if G_MESSAGES_DEBUG is
+        // defined, they're logged for the domains specified in it and if it
+        // has the special value "all", then all debug messages are shown.
+        //
+        // Note that the check here can result in false positives, e.g. domain
+        // "foo" would pass it even if G_MESSAGES_DEBUG only contains "foobar",
+        // but such cases don't seem to be important enough to bother
+        // accounting for them.
+        if ( !allowed ||
+                (strcmp(allowed, "all") != 0 && !strstr(allowed, domain)) )
+        {
+            return;
+        }
+    }
+
     fprintf(stderr, "\n*** GTK log message while running %s(): ",
             wxGetCurrentTestName().c_str());
 
     g_log_default_handler(domain, level, message, data);
-
-    fprintf(stderr, "\n");
 }
 
 #endif // __WXGTK__
@@ -583,11 +619,11 @@ bool TestApp::ProcessEvent(wxEvent& event)
 int TestApp::RunTests()
 {
 #if wxUSE_LOG
-    // Switch off logging unless --verbose
-    bool verbose = wxLog::GetVerbose();
-    wxLog::EnableLogging(verbose);
-#else
-    bool verbose = false;
+    // Switch off logging to avoid interfering with the tests output unless
+    // WXTRACE is set, as otherwise setting it would have no effect while
+    // running the tests.
+    if ( !wxGetEnv("WXTRACE", NULL) )
+        wxLog::EnableLogging(false);
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking

@@ -908,7 +908,7 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
                 {
                     // Then it's an error.
                     if ( endptr )
-                        *endptr = (T*) nptr;
+                        *endptr = const_cast<T*>(nptr);
                     errno = EINVAL;
                     return sum;
                 }

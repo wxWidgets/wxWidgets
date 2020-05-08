@@ -58,6 +58,7 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -949,14 +950,16 @@ public:
     // translation between different units
     // -----------------------------------
 
+        // Get the DPI used by the given window or wxSize(0, 0) if unknown.
+    virtual wxSize GetDPI() const;
+
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by
         // GetContentScaleFactor()) if necessary for the current platform.
         //
-        // Currently the conversion factor is the same for all windows but this
-        // will change with the monitor-specific resolution support in the
-        // future, so prefer using the non-static member functions.
+        // To support monitor-specific resolutions, prefer using the non-static
+        // member functions or use a valid (non-null) window pointer.
         //
         // Similarly, currently in practice the factor is the same in both
         // horizontal and vertical directions, but this could, in principle,
@@ -1029,7 +1032,7 @@ public:
 
         // does this window have the capture?
     virtual bool HasCapture() const
-        { return (wxWindow *)this == GetCapture(); }
+        { return reinterpret_cast<const wxWindow*>(this) == GetCapture(); }
 
         // enable the specified touch events for this window, return false if
         // the requested events are not supported
@@ -1511,6 +1514,12 @@ public:
     // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxIdleEvent& event);
 
+    // Send wxContextMenuEvent and return true if it was processed.
+    //
+    // Note that the event may end up being sent to a different window, if this
+    // window is part of a composite control.
+    bool WXSendContextMenuEvent(const wxPoint& posInScreenCoords);
+
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
         // platform-specific APIs
@@ -1580,6 +1589,8 @@ public:
         return false;
     }
 
+    // This is an internal helper function implemented by text-like controls.
+    virtual const wxTextEntry* WXGetTextEntry() const { return NULL; }
 
 protected:
     // helper for the derived class Create() methods: the first overload, with
@@ -2062,7 +2073,7 @@ extern WXDLLIMPEXP_CORE wxPoint wxGetMousePosition();
 extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 
 // get the (first) top level parent window
-WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindow *win);
+WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindowBase *win);
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------

@@ -462,7 +462,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-bool wxMacLaunch(const char* const* argv);
+bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
 #endif
 
 long wxExecute(const wxString& command, int flags, wxProcess *process,
@@ -585,15 +585,15 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     wxASSERT_MSG( wxThread::IsMain(),
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
-
+    pid_t pid;
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-    // wxMacLaunch() only executes app bundles and only does it asynchronously.
+    pid = -1;
+    // wxCocoaLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
     // through to the regular code for non app bundles.
-    if ( !(flags & wxEXEC_SYNC) && wxMacLaunch(argv) )
+    if ( !(flags & wxEXEC_SYNC) && wxCocoaLaunch(argv, pid) )
     {
-        // we don't have any PID to return so just make up something non null
-        return -1;
+        return pid;
     }
 #endif // __DARWIN__
 
@@ -641,9 +641,9 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     //     But on OpenVMS we do not have fork so we have to use vfork and
     //     cross our fingers that it works.
 #ifdef __VMS
-   pid_t pid = vfork();
+   pid = vfork();
 #else
-   pid_t pid = fork();
+   pid = fork();
 #endif
    if ( pid == -1 )     // error?
     {
@@ -1078,12 +1078,17 @@ bool wxGetUserName(wxChar *buf, int sz)
 
 bool wxIsPlatform64Bit()
 {
+#if SIZEOF_VOID_P == 8
+    (void)wxGetCommandOutput;
+    return true;  // 64-bit programs run only on 64-bit platforms
+#else
     const wxString machine = wxGetCommandOutput(wxT("uname -m"));
 
     // the test for "64" is obviously not 100% reliable but seems to work fine
     // in practice
     return machine.Contains(wxT("64")) ||
                 machine.Contains(wxT("alpha"));
+#endif
 }
 
 #ifdef __LINUX__
@@ -1120,7 +1125,7 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 }
 #endif // __LINUX__
 
-// these functions are in src/osx/utilsexc_base.cpp for wxMac
+// these functions are in src/osx/utils_base.mm for wxOSX.
 #ifndef __DARWIN__
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
@@ -1260,7 +1265,7 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
     wxStatfs_t fs;
-    if ( wxStatfs((char *)(const char*)path.fn_str(), &fs) != 0 )
+    if ( wxStatfs(const_cast<char*>(static_cast<const char*>(path.fn_str())), &fs) != 0 )
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 

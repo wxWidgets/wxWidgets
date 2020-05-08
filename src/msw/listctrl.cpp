@@ -67,6 +67,10 @@
     #define NO_ITEM (-1)
 #endif
 
+#ifndef LVM_ISITEMVISIBLE
+    #define LVM_ISITEMVISIBLE (LVM_FIRST + 182)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -261,6 +265,7 @@ private:
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
+    EVT_DPI_CHANGED(wxListCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -315,6 +320,9 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( InReportView() )
         MSWSetExListStyles();
 
+    if ( HasFlag(wxLC_LIST) )
+        m_colCount = 1;
+
     return true;
 }
 
@@ -323,13 +331,19 @@ void wxListCtrl::MSWSetExListStyles()
     // we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
     int exStyle =
-        LVS_EX_LABELTIP |
         LVS_EX_FULLROWSELECT |
         LVS_EX_SUBITEMIMAGES |
         // normally this should be governed by a style as it's probably not
         // always appropriate, but we don't have any free styles left and
         // it seems better to enable it by default than disable
         LVS_EX_HEADERDRAGDROP;
+
+    // Showing the tooltip items not fitting into the control is nice, but not
+    // really compatible with having custom tooltips, as this could result in
+    // showing 2 tooltips simultaneously, which would be confusing. So only
+    // enable this style if there is no risk of this happening.
+    if ( !GetToolTip() )
+        exStyle |= LVS_EX_LABELTIP;
 
     if ( wxApp::GetComCtl32Version() >= 600 )
     {
@@ -409,6 +423,58 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 
     return wstyle;
+}
+
+void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxListCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    for ( int i = 0; i < GetItemCount(); i++ )
+    {
+        wxMSWListItemData *data = MSWGetItemData(i);
+        if ( data && data->attr && data->attr->HasFont() )
+        {
+            wxFont f = data->attr->GetFont();
+            f.WXAdjustToPPI(newDPI);
+            SetItemFont(i, f);
+        }
+    }
+
+    if ( m_headerCustomDraw && m_headerCustomDraw->m_attr.HasFont() )
+    {
+        wxItemAttr item(m_headerCustomDraw->m_attr);
+        wxFont f = item.GetFont();
+        f.WXAdjustToPPI(newDPI);
+        item.SetFont(f);
+
+        // reset the item attribute first so wxListCtrl::SetHeaderAttr
+        // will detect the font change
+        SetHeaderAttr(wxItemAttr());
+        SetHeaderAttr(item);
+    }
+}
+
+void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
+{
+    const int numCols = GetColumnCount();
+    for ( int i = 0; i < numCols; ++i )
+    {
+        int width = GetColumnWidth(i);
+        if ( width > 0 )
+            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+        SetColumnWidth(i, width);
+    }
+}
+
+bool wxListCtrl::IsDoubleBuffered() const
+{
+    // LVS_EX_DOUBLEBUFFER is turned on for comctl32 v6+.
+    return wxApp::GetComCtl32Version() >= 600;
+}
+
+void wxListCtrl::SetDoubleBuffered(bool WXUNUSED(on))
+{
+    // Nothing to do, it's always enabled if supported.
 }
 
 #if WXWIN_COMPATIBILITY_3_0
@@ -622,11 +688,16 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
             // Don't just reset the font if no font is specified, as the header
             // uses the same font as the listview control and not the ugly
             // default GUI font by default.
-            const wxFont& font = attr.HasFont() ? attr.GetFont() : GetFont();
-
-            // We need to tell the header about its new font to let it compute
-            // its new height.
-            wxSetWindowFont(hwndHdr, font);
+            if ( attr.HasFont() )
+            {
+                wxSetWindowFont(hwndHdr, attr.GetFont());
+            }
+            else
+            {
+                // make sure m_font is valid before using its HFONT reference
+                SetFont(GetFont());
+                wxSetWindowFont(hwndHdr, m_font);
+            }
         }
 
         // Refreshing the listview makes it notice the change in height of its
@@ -880,6 +951,25 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     return success;
 }
 
+// Check if the item is visible
+bool wxListCtrl::IsVisible(long item) const
+{
+    bool result = ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 ) != 0;
+    if ( result )
+    {
+        HWND hwndHdr = ListView_GetHeader(GetHwnd());
+        wxRect itemRect;
+        RECT headerRect;
+        if ( Header_GetItemRect( hwndHdr, 0, &headerRect ) )
+        {
+            GetItemRect( item, itemRect );
+            wxRect rectHeader = wxRectFromRECT( headerRect );
+            result = itemRect.GetBottom() > rectHeader.GetBottom();
+        }
+    }
+    return result;
+}
+
 // Sets information about the item
 bool wxListCtrl::SetItem(wxListItem& info)
 {
@@ -924,6 +1014,13 @@ bool wxListCtrl::SetItem(wxListItem& info)
                 data->attr->AssignFrom(attrNew);
             else
                 data->attr = new wxItemAttr(attrNew);
+
+            if ( data->attr->HasFont() )
+            {
+                wxFont f = data->attr->GetFont();
+                f.WXAdjustToPPI(GetDPI());
+                data->attr->SetFont(f);
+            }
         }
     }
 
@@ -980,6 +1077,9 @@ bool wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId
 // Gets the item state
 int wxListCtrl::GetItemState(long item, long stateMask) const
 {
+    wxCHECK_MSG( item >= 0 && item < GetItemCount(), 0,
+                 wxS("invalid list control item index in GetItemState()") );
+
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_STATE;
@@ -1194,16 +1294,33 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
                  wxT("invalid item in GetSubItemRect") );
 
     int codeWin;
-    if ( code == wxLIST_RECT_BOUNDS )
-        codeWin = LVIR_BOUNDS;
-    else if ( code == wxLIST_RECT_ICON )
-        codeWin = LVIR_ICON;
-    else if ( code == wxLIST_RECT_LABEL )
-        codeWin = LVIR_LABEL;
-    else
+    switch ( code )
     {
-        wxFAIL_MSG( wxT("incorrect code in GetItemRect() / GetSubItemRect()") );
-        codeWin = LVIR_BOUNDS;
+        case wxLIST_RECT_BOUNDS:
+            codeWin = LVIR_BOUNDS;
+            break;
+
+        case wxLIST_RECT_ICON:
+            // Only the first subitem can have an icon, so it doesn't make
+            // sense to query the native control for the other ones --
+            // especially because it returns a nonsensical non-empty icon
+            // rectangle for them.
+            if ( subItem > 0 )
+            {
+                rect = wxRect();
+                return true;
+            }
+
+            codeWin = LVIR_ICON;
+            break;
+
+        case wxLIST_RECT_LABEL:
+            codeWin = LVIR_LABEL;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("incorrect code in GetItemRect() / GetSubItemRect()") );
+            return false;
     }
 
     RECT rectWin;
@@ -2186,6 +2303,21 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_item.m_width = nmHDR->pitem->cxy;
                 event.m_col = nmHDR->iItem;
                 break;
+
+            case HDN_DIVIDERDBLCLICK:
+            {
+                NMHEADER *pHeader = (NMHEADER *) lParam;
+                // If the control is non-empty, the native control will
+                // autosize the column to its contents, however if it is empty,
+                // it just resets it to some default width, while we want to
+                // still autosize it in this case, to fit its label width.
+                if ( IsEmpty() )
+                {
+                    SetColumnWidth(pHeader->iItem, wxLIST_AUTOSIZE_USEHEADER);
+                    return true;
+                }
+            }
+            break;
 
             case NM_RCLICK:
                 {
@@ -3536,37 +3668,50 @@ static void wxConvertToMSWListCol(HWND hwndList,
 
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
-        lvCol.mask |= LVCF_IMAGE;
+        // as we're going to overwrite the format field, get its
+        // current value first -- unless we want to overwrite it anyhow
+        if ( !(lvCol.mask & LVCF_FMT) )
+        {
+            LV_COLUMN lvColOld;
+            wxZeroMemory(lvColOld);
+            lvColOld.mask = LVCF_FMT;
+            if ( ListView_GetColumn(hwndList, col, &lvColOld) )
+            {
+                lvCol.fmt = lvColOld.fmt;
+            }
+
+            lvCol.mask |= LVCF_FMT;
+        }
 
         // we use LVCFMT_BITMAP_ON_RIGHT because the images on the right
         // seem to be generally nicer than on the left and the generic
         // version only draws them on the right (we don't have a flag to
         // specify the image location anyhow)
-        //
-        // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
-        // make any difference in my tests -- but maybe we should?
+        const int fmtImage = LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
         if ( item.m_image != -1 )
         {
-            // as we're going to overwrite the format field, get its
-            // current value first -- unless we want to overwrite it anyhow
-            if ( !(lvCol.mask & LVCF_FMT) )
-            {
-                LV_COLUMN lvColOld;
-                wxZeroMemory(lvColOld);
-                lvColOld.mask = LVCF_FMT;
-                if ( ListView_GetColumn(hwndList, col, &lvColOld) )
-                {
-                    lvCol.fmt = lvColOld.fmt;
-                }
+            lvCol.fmt |= fmtImage;
 
-                lvCol.mask |= LVCF_FMT;
-            }
-
-            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+            lvCol.mask |= LVCF_IMAGE;
+            lvCol.iImage = item.m_image;
         }
-
-        lvCol.iImage = item.m_image;
+        else // remove any existing image
+        {
+            lvCol.fmt &= ~fmtImage;
+        }
     }
 }
+
+#if wxUSE_TOOLTIPS
+
+void wxListCtrl::DoSetToolTip(wxToolTip *tip)
+{
+    wxWindow::DoSetToolTip(tip);
+
+    // Add or remove LVS_EX_LABELTIP style as necessary.
+    MSWSetExListStyles();
+}
+
+#endif // wxUSE_TOOLTIPS
 
 #endif // wxUSE_LISTCTRL

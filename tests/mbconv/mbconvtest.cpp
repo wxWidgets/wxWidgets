@@ -259,7 +259,7 @@ void MBConvTestCase::WC2CP1250()
 //     it's very useful when debugging a failed test.
 wxString CByteArrayFormat( const void* data, size_t len, const wxChar* name )
 {
-    const unsigned char* bytes = (unsigned char*)data;
+    const unsigned char* bytes = static_cast<const unsigned char*>(data);
     wxString result;
 
     result.Printf( wxT("static const unsigned char %s[%i] = \n{"), name, (int)len );

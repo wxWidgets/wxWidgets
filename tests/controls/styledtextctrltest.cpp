@@ -11,7 +11,7 @@
 
 #if wxUSE_STC
 
-#if WXUSINGDLL
+#if defined(WXUSINGDLL)
 
 #ifdef __BORLANDC__
     #pragma hdrstop

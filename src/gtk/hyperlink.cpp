@@ -27,6 +27,7 @@
 #include "wx/hyperlink.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
 #endif
 
 #include "wx/gtk/private.h"
@@ -220,28 +221,9 @@ void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
-    wxColour ret;
-    if ( UseNative() )
-    {
-        GdkColor* link_color;
-        GdkColor color = { 0, 0, 0, 0xeeee };
-
-        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_widget_ensure_style(widget);
-        gtk_widget_style_get(widget, "link-color", &link_color, NULL);
-        if (link_color)
-        {
-            color = *link_color;
-            gdk_color_free(link_color);
-        }
-        wxGCC_WARNING_RESTORE()
-        ret = wxColour(color);
-    }
-    else
-        ret = wxGenericHyperlinkCtrl::GetNormalColour();
-
-    return ret;
+    return UseNative()
+        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT)
+        : wxGenericHyperlinkCtrl::GetNormalColour();
 }
 
 void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)

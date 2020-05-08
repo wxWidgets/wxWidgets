@@ -36,10 +36,6 @@
     #include <dlfcn.h>
 #endif
 
-#ifdef __DARWIN__
-    #include <AvailabilityMacros.h>
-#endif
-
 // if some flags are not supported, just ignore them
 #ifndef RTLD_LAZY
     #define RTLD_LAZY 0
@@ -54,7 +50,7 @@
 #endif
 
 
-#if defined(HAVE_DLOPEN) || defined(__DARWIN__)
+#if defined(HAVE_DLOPEN)
     #define USE_POSIX_DL_FUNCS
 #elif !defined(HAVE_SHL_LOAD)
     #error "Don't know how to load dynamic libraries on this platform!"
@@ -112,7 +108,7 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
-#ifdef wxHAVE_DYNLIB_ERROR
+#ifdef HAVE_DLERROR
     int rc =
 #endif
 
@@ -122,7 +118,7 @@ void wxDynamicLibrary::Unload(wxDllType handle)
     shl_unload(handle);
 #endif // USE_POSIX_DL_FUNCS/!USE_POSIX_DL_FUNCS
 
-#if defined(USE_POSIX_DL_FUNCS) && defined(wxHAVE_DYNLIB_ERROR)
+#if defined(USE_POSIX_DL_FUNCS) && defined(HAVE_DLERROR)
     if ( rc != 0 )
         Error();
 #endif
@@ -149,7 +145,7 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 // error handling
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAVE_DYNLIB_ERROR
+#ifdef HAVE_DLERROR
 
 /* static */
 void wxDynamicLibrary::Error()
@@ -162,7 +158,7 @@ void wxDynamicLibrary::Error()
     wxLogError(wxT("%s"), err);
 }
 
-#endif // wxHAVE_DYNLIB_ERROR
+#endif // HAVE_DLERROR
 
 // ----------------------------------------------------------------------------
 // listing loaded modules

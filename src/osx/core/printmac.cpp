@@ -37,6 +37,15 @@
 
 #include <stdlib.h>
 
+// Helper function to get the printer "name": actually we use its unique ID
+// instead of the human-readable name which is not guaranteed to be unique.
+static wxString MacGetPrinterName(PMPrinter printer)
+{
+    CFStringRef printerId = PMPrinterGetID(printer);
+    CFRetain(printerId);
+    return wxCFStringRef(printerId).AsString();
+}
+
 //
 // move to print_osx.cpp
 //
@@ -121,17 +130,12 @@ void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
         count = CFArrayGetCount(printerList);
         for (index = 0; index < count; index++)
         {
-            printer = (PMPrinter)CFArrayGetValueAtIndex(printerList, index);
+            printer = static_cast<PMPrinter>(const_cast<void*>(CFArrayGetValueAtIndex(printerList, index)));
             if ((data.GetPrinterName().empty()) && (PMPrinterIsDefault(printer)))
                 break;
-            else
-            {
-                CFStringRef name;
-                name = PMPrinterGetName(printer);
-                CFRetain(name);
-                if (data.GetPrinterName() == wxCFStringRef(name).AsString())
-                    break;
-            }
+
+            if (data.GetPrinterName() == MacGetPrinterName(printer))
+                break;
         }
         if (index < count)
             PMSessionSetCurrentPMPrinter(m_macPrintSession, printer);
@@ -180,7 +184,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
                 CFIndex top = CFArrayGetCount(paperlist);
                 for ( CFIndex i = 0 ; i < top ; ++ i )
                 {
-                    PMPaper paper = (PMPaper) CFArrayGetValueAtIndex( paperlist, i );
+                    PMPaper paper = static_cast<PMPaper>(const_cast<void*>(CFArrayGetValueAtIndex(paperlist, i)));
                     PMPaperGetHeight(paper, &height);
                     PMPaperGetWidth(paper, &width);
                     if ( fabs( width - papersize.x ) < 5 &&
@@ -301,17 +305,12 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
 
 void wxOSXPrintData::TransferPrinterNameTo( wxPrintData &data )
 {
-    CFStringRef name;
     PMPrinter printer ;
     PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
     if (PMPrinterIsDefault(printer))
         data.SetPrinterName(wxEmptyString);
     else
-    {
-        name = PMPrinterGetName(printer);
-        CFRetain(name);
-        data.SetPrinterName(wxCFStringRef(name).AsString());
-    }
+        data.SetPrinterName(MacGetPrinterName(printer));
 }
 
 void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )
@@ -541,7 +540,7 @@ wxPrinterBase(data)
 {
 }
 
-wxMacPrinter::~wxMacPrinter(void)
+wxMacPrinter::~wxMacPrinter()
 {
 }
 
@@ -735,7 +734,7 @@ wxPrintPreviewBase(printout, printoutForPrinting, data)
     DetermineScaling();
 }
 
-wxMacPrintPreview::~wxMacPrintPreview(void)
+wxMacPrintPreview::~wxMacPrintPreview()
 {
 }
 
@@ -748,7 +747,7 @@ bool wxMacPrintPreview::Print(bool interactive)
     return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
 
-void wxMacPrintPreview::DetermineScaling(void)
+void wxMacPrintPreview::DetermineScaling()
 {
     int screenWidth , screenHeight ;
     wxDisplaySize( &screenWidth , &screenHeight ) ;

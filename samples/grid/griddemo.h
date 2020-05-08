@@ -36,6 +36,7 @@ class GridFrame : public wxFrame
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
+    void ToggleColHiding( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
     void SetNativeColHeader ( wxCommandEvent& );
@@ -68,6 +69,7 @@ class GridFrame : public wxFrame
     void DeleteSelectedRows( wxCommandEvent& );
     void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
+    void EditCell( wxCommandEvent& );
     void SetCornerLabelValue( wxCommandEvent& );
     void ShowSelection( wxCommandEvent& );
     void SelectCells( wxCommandEvent& );
@@ -120,6 +122,8 @@ class GridFrame : public wxFrame
 
     void OnGridCustomTab(wxGridEvent& event);
 
+    void OnGridContextMenu(wxContextMenuEvent& event);
+
 public:
     GridFrame();
     ~GridFrame();
@@ -140,6 +144,7 @@ public:
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
         ID_TOGGLECOLMOVING,
+        ID_TOGGLECOLHIDING,
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDDRAGCELL,
         ID_TOGGLEGRIDLINES,
@@ -177,6 +182,7 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
+        ID_EDITCELL,
         ID_SETCORNERLABEL,
         ID_SHOWSEL,
         ID_CHANGESEL,
@@ -290,13 +296,12 @@ class MyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     MyGridCellAttrProvider();
-    virtual ~MyGridCellAttrProvider();
 
     virtual wxGridCellAttr *GetAttr(int row, int col,
                                     wxGridCellAttr::wxAttrKind  kind) const wxOVERRIDE;
 
 private:
-    wxGridCellAttr *m_attrForOddRows;
+    wxGridCellAttrPtr m_attrForOddRows;
 };
 
 // ----------------------------------------------------------------------------

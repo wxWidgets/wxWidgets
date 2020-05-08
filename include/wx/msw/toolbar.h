@@ -139,6 +139,9 @@ protected:
     // set native toolbar padding
     void MSWSetPadding(WXWORD padding);
 
+    void RealizeHelper();
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
 

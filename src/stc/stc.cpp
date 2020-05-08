@@ -46,6 +46,8 @@
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
+#include "wx/vlbox.h"
+#include "wx/stack.h"
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
@@ -157,6 +159,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
     EVT_SET_FOCUS               (wxStyledTextCtrl::OnGainFocus)
+    EVT_DPI_CHANGED             (wxStyledTextCtrl::OnDPIChanged)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
@@ -235,6 +238,18 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
 
 #if wxUSE_GRAPHICS_DIRECT2D
     SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
+#endif
+
+#ifdef __WXMSW__
+    // Set initial zoom for active DPI
+    const HDC hdc = ::GetDC(parent->GetHWND());
+    const int baseDPI = ::GetDeviceCaps(hdc, LOGPIXELSY);
+    const int activeDPI = parent->GetDPI().y;
+    ::ReleaseDC(parent->GetHWND(), hdc);
+
+    const int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
+    const int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, activeDPI, baseDPI);
+    SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
 #endif
 
     return true;
@@ -1687,7 +1702,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos, const wxString& text,
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
-            ft.lpstrText = (char*)(const char*)buf;
+            ft.lpstrText = buf;
 
             int pos = SendMsg(SCI_FINDTEXT, flags, (sptr_t)&ft);
             if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
@@ -5153,6 +5168,27 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
     SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
+void wxStyledTextCtrl::ReplaceSelectionRaw(const char* text)
+{
+    SendMsg(SCI_REPLACESEL, 0, reinterpret_cast<sptr_t>(text));
+}
+
+int wxStyledTextCtrl::ReplaceTargetRaw(const char* text, int length)
+{
+    if ( length == -1 )
+        length = strlen(text);
+
+    return SendMsg(SCI_REPLACETARGET, length, reinterpret_cast<sptr_t>(text));
+}
+
+int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
+{
+    if ( length == -1 )
+        length = strlen(text);
+
+    return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
@@ -5251,29 +5287,89 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
+    // The default action of this method is to call m_swx->DoMouseWheel.
+    // However, it might be necessary to do something else depending on whether
+    //     1) the mouse wheel captures for the STC,
+    //     2) the event's position is in the STC's rect, and
+    //     3) and an autocompletion list is currently being shown.
+    // This table summarizes when each action is needed.
+
+    // InRect | MouseWheelCaptures | Autocomp Active |      action
+    // -------+--------------------+-----------------+-------------------
+    //  true  |       true         |      true       | scroll ac list
+    //  true  |       true         |      false      | default
+    //  true  |       false        |      true       | scroll ac list
+    //  true  |       false        |      false      | default
+    //  false |       true         |      true       | scroll ac list
+    //  false |       true         |      false      | default
+    //  false |       false        |      true       | forward to parent
+    //  false |       false        |      false      | forward to parent
+
     // if the mouse wheel is not captured, test if the mouse
     // pointer is over the editor window and if not, don't
     // handle the message but pass it on.
-    if ( !GetMouseWheelCaptures() ) {
-        if ( !GetRect().Contains(evt.GetPosition()) ) {
-            wxWindow* parent = GetParent();
-            if (parent != NULL) {
-                wxMouseEvent newevt(evt);
-                newevt.SetPosition(
-                    parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
-                parent->ProcessWindowEvent(newevt);
-            }
-            return;
+    if ( !GetMouseWheelCaptures() && !GetRect().Contains(evt.GetPosition()) )
+    {
+        wxWindow* parent = GetParent();
+        if ( parent != NULL )
+        {
+            wxMouseEvent newevt(evt);
+            newevt.SetPosition(
+                parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
+            parent->ProcessWindowEvent(newevt);
         }
     }
+    else if ( AutoCompActive() )
+    {
+        // When the autocompletion popup is active, Scintilla uses the mouse
+        // wheel to scroll the autocomp list instead of the editor.
 
-    m_swx->DoMouseWheel(evt.GetWheelAxis(),
-                        evt.GetWheelRotation(),
-                        evt.GetWheelDelta(),
-                        evt.GetLinesPerAction(),
-                        evt.GetColumnsPerAction(),
-                        evt.ControlDown(),
-                        evt.IsPageScroll());
+        // First try to find the list. It will be a wxVListBox named
+        // "AutoCompListBox".
+        wxWindow* curWin  = this, *acListBox = NULL;
+        wxStack<wxWindow*> windows;
+        windows.push(curWin);
+
+        while ( !windows.empty() )
+        {
+            curWin = windows.top();
+            windows.pop();
+
+            if ( curWin->IsKindOf(wxCLASSINFO(wxVListBox)) &&
+                    curWin->GetName() == "AutoCompListBox")
+            {
+                acListBox = curWin;
+                break;
+            }
+
+            wxWindowList& children = curWin->GetChildren();
+            wxWindowList::iterator it;
+
+            for ( it = children.begin(); it!=children.end(); ++it )
+            {
+                windows.push(*it);
+            }
+        }
+
+        // Next if the list was found, send it a copy of this event.
+        if ( acListBox )
+        {
+            wxMouseEvent newevt(evt);
+            newevt.SetPosition(
+                acListBox->ScreenToClient(ClientToScreen(evt.GetPosition())));
+            acListBox->ProcessWindowEvent(newevt);
+        }
+    }
+    else
+    {
+        m_swx->DoMouseWheel(evt.GetWheelAxis(),
+                            evt.GetWheelRotation(),
+                            evt.GetWheelDelta(),
+                            evt.GetLinesPerAction(),
+                            evt.GetColumnsPerAction(),
+                            evt.ControlDown(),
+                            evt.IsPageScroll());
+    }
 }
 
 
@@ -5349,6 +5445,19 @@ void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
 }
 
 
+void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt)
+{
+    int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
+    int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, evt.GetNewDPI().y, evt.GetOldDPI().y);
+    SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
+
+    for ( int i = 0; i < SC_MAX_MARGIN; ++i )
+    {
+        SetMarginWidth(i, (int)wxMulDivInt32(GetMarginWidth(i), evt.GetNewDPI().y, evt.GetOldDPI().y));
+    }
+}
+
+
 void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(evt)) {
     m_swx->DoSysColourChange();
 }
@@ -5384,7 +5493,7 @@ wxSize wxStyledTextCtrl::DoGetBestSize() const
 {
     // What would be the best size for a wxSTC?
     // Just give a reasonable minimum until something else can be figured out.
-    return wxSize(200,100);
+    return FromDIP(wxSize(200,100));
 }
 
 

@@ -565,7 +565,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
     }
     else // no conversion necessary for wxIPC_UNICODETEXT
     {
-        realData = (LPBYTE)data;
+        realData = const_cast<BYTE*>(static_cast<const BYTE*>(data));
         realSize = size;
     }
 
@@ -689,7 +689,7 @@ bool wxDDEConnection::DoPoke(const wxString& item, const void *data, size_t size
     DWORD result;
 
     HSZ item_atom = DDEGetAtom(item);
-    bool ok = DdeClientTransaction((LPBYTE)data,
+    bool ok = DdeClientTransaction(const_cast<BYTE*>(static_cast<const BYTE*>(data)),
                                    size,
                                    GetHConv(),
                                    item_atom, format,
@@ -952,7 +952,7 @@ _DDECallback(UINT wType,
                         }
 
                         HDDEDATA handle = DdeCreateDataHandle(DDEIdInst,
-                                                              (LPBYTE)data,
+                                                              const_cast<BYTE*>(static_cast<const BYTE*>(data)),
                                                               user_size,
                                                               0,
                                                               hsz2,
@@ -1035,7 +1035,7 @@ _DDECallback(UINT wType,
                     HDDEDATA data = DdeCreateDataHandle
                                     (
                                         DDEIdInst,
-                                        (LPBYTE)connection->m_sendingData,
+                                        const_cast<BYTE*>(static_cast<const BYTE*>(connection->m_sendingData)),
                                         connection->m_dataSize,
                                         0,
                                         hsz2,

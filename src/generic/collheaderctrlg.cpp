@@ -30,6 +30,10 @@
 
 #include "wx/renderer.h"
 
+#ifdef __WXMSW__
+    #include "wx/msw/private.h"
+#endif // __WXMSW__
+
 // if we have another implementation of this class we should extract
 // the lines below to a common file
 
@@ -77,17 +81,29 @@ bool wxGenericCollapsibleHeaderCtrl::Create(wxWindow *parent,
 
 wxSize wxGenericCollapsibleHeaderCtrl::DoGetBestClientSize() const
 {
-    wxClientDC dc(const_cast<wxGenericCollapsibleHeaderCtrl*>(this));
-    wxSize btnSize = wxRendererNative::Get().GetCollapseButtonSize(const_cast<wxGenericCollapsibleHeaderCtrl*>(this), dc);
+    wxGenericCollapsibleHeaderCtrl* const
+        self = const_cast<wxGenericCollapsibleHeaderCtrl*>(this);
+
+    // The code here parallels that of OnPaint() -- except without drawing.
+    wxClientDC dc(self);
+
+    wxSize size = wxRendererNative::Get().GetCollapseButtonSize(self, dc);
+
     wxString text;
     wxControl::FindAccelIndex(GetLabel(), &text);
-    wxSize textSize = dc.GetTextExtent(text);
-    // Add some padding if the label is not empty
-    if ( textSize.x > 0 )
-        textSize.x += FromDIP(4);
 
-    return wxSize(btnSize.x + textSize.x,
-        wxMax(textSize.y, btnSize.y));
+    const wxSize textSize = dc.GetTextExtent(text);
+
+    size.x += FromDIP(2) + textSize.x;
+    if ( textSize.y > size.y )
+        size.y = textSize.y;
+
+#ifdef __WXMSW__
+    size.IncBy(wxGetSystemMetrics(SM_CXFOCUSBORDER, this),
+               wxGetSystemMetrics(SM_CYFOCUSBORDER, this));
+#endif // __WXMSW__
+
+    return size;
 }
 
 void wxGenericCollapsibleHeaderCtrl::SetCollapsed(bool collapsed)

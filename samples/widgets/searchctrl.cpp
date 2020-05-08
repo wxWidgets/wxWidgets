@@ -124,7 +124,7 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-#if defined(__WXMAC__)
+#if defined(__WXMAC__) || defined(__WXGTK20__)
     #define FAMILY_CTRLS NATIVE_CTRLS
 #else
     #define FAMILY_CTRLS GENERIC_CTRLS
@@ -156,13 +156,13 @@ void SearchCtrlWidgetsPage::CreateContent()
 
     m_searchBtnCheck->SetValue(true);
 
-    box->Add(m_searchBtnCheck, 0, wxALL, 5);
-    box->Add(m_cancelBtnCheck, 0, wxALL, 5);
-    box->Add(m_menuBtnCheck,   0, wxALL, 5);
+    box->Add(m_searchBtnCheck, wxSizerFlags().Border());
+    box->Add(m_cancelBtnCheck, wxSizerFlags().Border());
+    box->Add(m_menuBtnCheck,   wxSizerFlags().Border());
 
     wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(box, 0,  wxALL|wxEXPAND, 15);
-    sizer->Add(m_srchCtrl, 0, wxALL|wxALIGN_CENTER, 15);
+    sizer->Add(box, wxSizerFlags().Expand().TripleBorder());
+    sizer->Add(m_srchCtrl, wxSizerFlags().Centre().TripleBorder());
 
     SetSizer(sizer);
 }

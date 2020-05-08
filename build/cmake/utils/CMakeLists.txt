@@ -21,17 +21,17 @@ if(wxUSE_XRC)
     set_target_properties(wxrc PROPERTIES FOLDER "Utilities")
 
     wx_install(TARGETS wxrc RUNTIME DESTINATION "bin")
-    if(UNIX)
+    if(NOT MSVC)
         install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E rename \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION} \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc${CMAKE_EXECUTABLE_SUFFIX} \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${CMAKE_EXECUTABLE_SUFFIX} \
             )"
         )
         install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E create_symlink \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION} \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${CMAKE_EXECUTABLE_SUFFIX} \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc${CMAKE_EXECUTABLE_SUFFIX} \
             )"
         )
     endif()

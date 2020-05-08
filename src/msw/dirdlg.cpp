@@ -292,7 +292,7 @@ int wxDirDialog::ShowSHBrowseForFolder(WXHWND owner)
     // do show the dialog
     wxItemIdList pidl(SHBrowseForFolder(&bi));
 
-    wxItemIdList::Free((LPITEMIDLIST)bi.pidlRoot);
+    wxItemIdList::Free(const_cast<LPITEMIDLIST>(bi.pidlRoot));
 
     if ( !pidl )
     {

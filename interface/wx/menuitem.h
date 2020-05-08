@@ -31,8 +31,10 @@
         A menu has been just closed.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT(id, func)}
-        The menu item with the specified id has been highlighted: used to show
-        help prompts in the status bar by wxFrame
+        The menu item with the specified id has been highlighted. If the id is
+        ::wxID_NONE, highlighting has been removed from the previously
+        highlighted menu item and there is no highlighted item any more.
+        This is used by wxFrame to show help prompts in the status bar.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT_ALL(func)}
         A menu item has been highlighted, i.e. the currently selected menu item has changed.
@@ -500,6 +502,27 @@ public:
         to GTK+ limitation. E.g. @c Shift+Ctrl+A works but @c Shift+Ctrl+1 or
         @c Shift+/ do not, so avoid using accelerators of this form in portable
         code.
+
+        @note In wxGTk, the left/right/up/down arrow keys do not work as
+        accelerator keys for a menu item unless a modifier key is used.
+        Additionally, the following keycodes are not supported as menu
+        accelerator keys:
+        - WXK_COMMAND/WXK_CONTROL
+        - WXK_SHIFT
+        - WXK_ALT
+        - WXK_SCROLL
+        - WXK_CAPITAL
+        - WXK_NUMLOCK
+        - WXK_NUMPAD_TAB
+        - WXK_TAB
+        - WXK_WINDOWS_LEFT
+        - WXK_WINDOWS_RIGHT
+        - WXK_ADD
+        - WXK_SEPARATOR
+        - WXK_SUBTRACT
+        - WXK_DECIMAL
+        - WXK_DIVIDE
+        - WXK_SNAPSHOT
 
         @see GetItemLabel(), GetItemLabelText()
     */

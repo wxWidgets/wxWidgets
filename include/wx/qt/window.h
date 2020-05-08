@@ -168,6 +168,7 @@ public:
 
     static void QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window );
     static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
+    static void QtSendSetCursorEvent(wxWindowQt* win, wxPoint posClient);
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
@@ -215,6 +216,12 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y) wxOVERRIDE;
 #endif // wxUSE_MENUS
 
+    // Return the parent to use for children being reparented to us: this is
+    // overridden in wxFrame to use its central widget rather than the frame
+    // itself.
+    virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
+
+
     QWidget *m_qtWindow;
 
 private:
@@ -223,6 +230,11 @@ private:
 
     QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
     QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
+
+    // Return the viewport of m_qtContainer, if it's used, or just m_qtWindow.
+    //
+    // Always returns non-null pointer if the window has been already created.
+    QWidget *QtGetClientWidget() const;
 
     QScrollBar *QtGetScrollBar( int orientation ) const;
     QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );

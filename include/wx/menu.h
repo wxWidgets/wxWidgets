@@ -398,7 +398,7 @@ protected:
     static bool      ms_locked;
 
 
-private:
+protected:
     // Common part of SendEvent() and ProcessMenuEvent(): sends the event to
     // its intended recipients, returns true if it was processed.
     static bool DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win);

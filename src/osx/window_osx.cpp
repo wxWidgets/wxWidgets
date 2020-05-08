@@ -71,6 +71,8 @@
 
 #include <string.h>
 
+#define TRACE_KEYS  "keyevent"
+
 #ifdef __WXUNIVERSAL__
     wxIMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase);
 #endif
@@ -177,6 +179,27 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxBlindPlateWindow, wxWindow);
 wxBEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
 wxEND_EVENT_TABLE()
 
+// ----------------------------------------------------------------------------
+// debug helpers
+// ----------------------------------------------------------------------------
+
+// Function used to dump a brief description of a window.
+extern
+wxString wxDumpWindow(wxWindowMac* win)
+{
+    if ( !win )
+        return "(no window)";
+
+    wxString s = wxString::Format("%s(%p",
+                                  win->GetClassInfo()->GetClassName(), win);
+
+    wxString label = win->GetLabel();
+    if ( !label.empty() )
+        s += wxString::Format(", \"%s\"", label);
+    s += ")";
+
+    return s;
+}
 
 // ----------------------------------------------------------------------------
  // constructors and such
@@ -542,23 +565,9 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
     return true ;
 }
 
-static bool wxIsWindowOrParentDisabled(wxWindow* w)
-{
-    while (w && !w->IsTopLevel())
-    {
-        if (!w->IsEnabled())
-            return true;
-        w = w->GetParent();
-    }
-    return false;
-}
-
 void wxWindowMac::SetFocus()
 {
-    if ( !AcceptsFocus() )
-            return ;
-
-    if (wxIsWindowOrParentDisabled((wxWindow*) this))
+    if ( !IsEnabled() )
         return;
 
     wxWindow* former = FindFocus() ;
@@ -1844,7 +1853,7 @@ void wxWindowMac::Update()
 
 wxNonOwnedWindow* wxWindowMac::MacGetTopLevelWindow() const
 {
-    wxWindowMac *iter = (wxWindowMac*)this ;
+    wxWindowMac* iter = const_cast<wxWindowMac*>(this);
 
     while ( iter )
     {
@@ -1980,9 +1989,8 @@ bool wxWindowMac::MacDoRedraw( long time )
     {
         // paint the window itself
 
-        wxPaintEvent event(GetId());
+        wxPaintEvent event(this);
         event.SetTimestamp(time);
-        event.SetEventObject(this);
         handled = HandleWindowEvent(event);
     }
 
@@ -2031,8 +2039,7 @@ void wxWindowMac::MacPaintChildrenBorders()
         if ( m_updateRegion.Contains(clientOrigin.x+x-10, clientOrigin.y+y-10, w+20, h+20) )
         {
             // paint custom borders
-            wxNcPaintEvent eventNc( child->GetId() );
-            eventNc.SetEventObject( child );
+            wxNcPaintEvent eventNc( child );
             if ( !child->HandleWindowEvent( eventNc ) )
             {
                 child->MacPaintBorders(0, 0) ;
@@ -2329,20 +2336,7 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 {
     if ( event.GetEventType() == wxEVT_RIGHT_DOWN )
     {
-        // copied from wxGTK : CS
-        // VZ: shouldn't we move this to base class then?
-
-        // generate a "context menu" event: this is similar to wxEVT_RIGHT_DOWN
-        // except that:
-        //
-        // (a) it's a command event and so is propagated to the parent
-        // (b) under MSW it can be generated from kbd too
-        // (c) it uses screen coords (because of (a))
-        wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
-                                  this->GetId(),
-                                  this->ClientToScreen(event.GetPosition()));
-        evtCtx.SetEventObject(this);
-        if ( ! HandleWindowEvent(evtCtx) )
+        if ( !WXSendContextMenuEvent(ClientToScreen(event.GetPosition())) )
             event.Skip() ;
     }
     else
@@ -2570,6 +2564,18 @@ bool wxWindowMac::UnregisterHotKey(int hotkeyId)
 
 bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {
+    wxLogTrace(TRACE_KEYS, "Handling %s event in %s",
+               event.GetEventType() == wxEVT_KEY_DOWN
+                ? "key down"
+                : event.GetEventType() == wxEVT_CHAR
+                    ? "char"
+                    : event.GetEventType() == wxEVT_KEY_UP
+                        ? "key up"
+                        : event.GetEventType() == wxEVT_CHAR_HOOK
+                            ? "char hook"
+                            : "unknown",
+               wxDumpWindow(this));
+
     bool handled = false;
 
     // moved the ordinary key event sending AFTER the accel evaluation

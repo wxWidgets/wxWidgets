@@ -751,6 +751,14 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
     return wxNOT_FOUND;
 }
 
+void wxRadioBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxStaticBox::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_font.IsOk() )
+        m_radioButtons->SetFont(m_font);
+}
+
 // ----------------------------------------------------------------------------
 // radio box drawing
 // ----------------------------------------------------------------------------

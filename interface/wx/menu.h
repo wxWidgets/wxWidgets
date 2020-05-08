@@ -665,6 +665,9 @@ public:
     /**
         Inserts a break in a menu, causing the next appended item to appear in
         a new column.
+
+        This function only actually inserts a break in wxMSW and does nothing
+        under the other platforms.
     */
     virtual void Break();
 

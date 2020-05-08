@@ -21,6 +21,7 @@ Platforms
 
 [![AppVeyor](https://img.shields.io/appveyor/ci/wxWidgets/wxWidgets/master.svg?label=Windows)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
 [![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets/master.svg?label=Linux)](https://travis-ci.org/wxWidgets/wxWidgets)
+[![OSS-Fuzz](https://oss-fuzz-build-logs.storage.googleapis.com/badges/wxwidgets.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:wxwidgets)
 
 This version of wxWidgets supports the following primary platforms:
 
@@ -34,7 +35,7 @@ Most popular C++ compilers are supported including but not limited to:
 - g++ 3.4 or later, including MinGW/MinGW-64/TDM under Windows.
 - Clang under OS X and Linux.
 - Intel icc compiler.
-- Oracle (ex-Sun) aCC.
+- Oracle (ex-Sun) CC.
 
 
 Licence

@@ -505,6 +505,12 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
 wxImage wxImage::ResampleNearest(int width, int height) const
 {
     wxImage image;
+
+    const unsigned long old_width  = M_IMGDATA->m_width;
+    const unsigned long old_height = M_IMGDATA->m_height;
+    wxCHECK_MSG(old_width  <= (ULONG_MAX >> 16) &&
+                old_height <= (ULONG_MAX >> 16), image, "image dimension too large");
+
     image.Create( width, height, false );
 
     unsigned char *data = image.GetData();
@@ -526,21 +532,19 @@ wxImage wxImage::ResampleNearest(int width, int height) const
         }
     }
 
-    long old_height = M_IMGDATA->m_height,
-         old_width  = M_IMGDATA->m_width;
-    long x_delta = (old_width<<16) / width;
-    long y_delta = (old_height<<16) / height;
+    const unsigned long x_delta = (old_width  << 16) / width;
+    const unsigned long y_delta = (old_height << 16) / height;
 
     unsigned char* dest_pixel = target_data;
 
-    long y = 0;
-    for ( long j = 0; j < height; j++ )
+    unsigned long y = 0;
+    for (int j = 0; j < height; j++)
     {
         const unsigned char* src_line = &source_data[(y>>16)*old_width*3];
         const unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
 
-        long x = 0;
-        for ( long i = 0; i < width; i++ )
+        unsigned long x = 0;
+        for (int i = 0; i < width; i++)
         {
             const unsigned char* src_pixel = &src_line[(x>>16)*3];
             const unsigned char* src_alpha_pixel = source_alpha ? &src_alpha_line[(x>>16)] : 0 ;
@@ -1313,8 +1317,8 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 
         for (long j = 0; j < height; j++)
         {
-            const unsigned char *source_data
-                                     = M_IMGDATA->m_data + (j*width + ii)*3;
+            const unsigned char *source_data =
+                M_IMGDATA->m_data + (j*width + ii)*3;
 
             for (long i = ii; i < next_ii; i++)
             {
@@ -2637,7 +2641,7 @@ bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
 #if HAS_FILE_STREAMS
     wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
-    ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
+    const_cast<wxImage*>(this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
 
     wxImageFileOutputStream stream(filename);
 
@@ -2657,7 +2661,7 @@ bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
 #if HAS_FILE_STREAMS
     wxCHECK_MSG( IsOk(), false, wxT("invalid image") );
 
-    ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
+    const_cast<wxImage*>(this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
 
     wxImageFileOutputStream stream(filename);
 

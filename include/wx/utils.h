@@ -20,6 +20,7 @@
 #include "wx/filefn.h"
 #include "wx/hashmap.h"
 #include "wx/versioninfo.h"
+#include "wx/windowid.h"
 #include "wx/meta/implicitconversion.h"
 
 #if wxUSE_GUI
@@ -274,13 +275,13 @@ inline bool wxPlatformIs(int platform) { return wxPlatform::Is(platform); }
 // ----------------------------------------------------------------------------
 
 // Ensure subsequent IDs don't clash with this one
-WXDLLIMPEXP_BASE void wxRegisterId(int id);
+WXDLLIMPEXP_BASE void wxRegisterId(wxWindowID id);
 
 // Return the current ID
-WXDLLIMPEXP_BASE int wxGetCurrentId();
+WXDLLIMPEXP_BASE wxWindowID wxGetCurrentId();
 
 // Generate a unique ID
-WXDLLIMPEXP_BASE int wxNewId();
+WXDLLIMPEXP_BASE wxWindowID wxNewId();
 
 // ----------------------------------------------------------------------------
 // Various conversions
@@ -839,7 +840,7 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
                        size_t *outLen,
                        const wxString& resourceName,
                        const wxChar* resourceType = wxUserResourceStr,
-                       WXHINSTANCE module = 0);
+                       WXHINSTANCE module = NULL);
 
     // This function allocates a new buffer and makes a copy of the resource
     // data, remember to delete[] the buffer. And avoid using it entirely if
@@ -850,7 +851,7 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     wxLoadUserResource(const wxString& resourceName,
                        const wxChar* resourceType = wxUserResourceStr,
                        int* pLen = NULL,
-                       WXHINSTANCE module = 0);
+                       WXHINSTANCE module = NULL);
 #endif // __WINDOWS__
 
 #endif

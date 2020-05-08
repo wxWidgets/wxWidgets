@@ -135,7 +135,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
     m_refData = new wxRegionRefData;
     M_REGION = ::CreatePolygonRgn
                (
-                    (POINT*)points,
+                    reinterpret_cast<const POINT*>(points),
                     n,
                     fillStyle == wxODDEVEN_RULE ? ALTERNATE : WINDING
                );
@@ -153,7 +153,7 @@ wxGDIRefData *wxRegion::CreateGDIRefData() const
 
 wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxRegionRefData(*(wxRegionRefData *)data);
+    return new wxRegionRefData(*static_cast<const wxRegionRefData*>(data));
 }
 
 // ----------------------------------------------------------------------------

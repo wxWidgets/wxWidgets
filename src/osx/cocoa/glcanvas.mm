@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
@@ -149,17 +150,12 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
-// We intentionally don't call [super update], so suppress the warning about it.
-wxCLANG_WARNING_SUPPRESS(objc-missing-super-calls)
-
-- (void) update
+- (NSOpenGLContext *) openGLContext
 {
-    // Prevent the base class code from breaking resizing on macOS 10.14.5
-    // (this is not necessary on the older versions, but doesn't seem to do any
-    // harm there neither).
+    // Prevent the NSOpenGLView from making it's own context
+    // We want to force using wxGLContexts
+    return NULL;
 }
-
-wxCLANG_WARNING_RESTORE(objc-missing-super-calls)
 
 @end
 
@@ -178,6 +174,7 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
     
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
+    [v setWantsBestResolutionOpenGLSurface:YES];
     
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_UserKeyEvents | wxWidgetImpl::Widget_UserMouseEvents );
     SetPeer(c);

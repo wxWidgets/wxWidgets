@@ -244,8 +244,8 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 
     const int borderFlags = wxALL;
 
-    wxSizerFlags sizerFlags
-        = wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
+    wxSizerFlags sizerFlags =
+        wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
 
     if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
@@ -600,6 +600,7 @@ void wxGenericProgressDialog::SetMaximum(int maximum)
     // we can't have values > 65,536 in the progress control under Windows, so
     // scale everything down
     m_factor = m_maximum / 65536 + 1;
+    m_maximum /= m_factor;
 #endif // __WXMSW__
 }
 

@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_CORE wxCheckBox : public wxMSWOwnerDrawnButton<wxCheckBoxBase>
 {
 public:
-    wxCheckBox() { }
+    wxCheckBox() : m_state(wxCHK_UNCHECKED) { }
     wxCheckBox(wxWindow *parent,
                wxWindowID id,
                const wxString& label,
@@ -44,6 +44,11 @@ public:
 
     // override some base class virtuals
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
+
+    virtual void SetTransparentPartColour(const wxColour& col) wxOVERRIDE
+    {
+        SetBackgroundColour(col);
+    }
 
     virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
     virtual void Command(wxCommandEvent& event) wxOVERRIDE;

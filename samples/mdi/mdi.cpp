@@ -363,9 +363,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, wxID_ANY, pos, size,
-                           wxSUNKEN_BORDER |
-                           wxNO_FULL_REPAINT_ON_RESIZE |
-                           wxVSCROLL | wxHSCROLL),
+                           wxSUNKEN_BORDER | wxVSCROLL | wxHSCROLL),
           MenuEventLogger("canvas", parent)
 
 {

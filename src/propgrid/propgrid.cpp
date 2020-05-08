@@ -260,6 +260,7 @@ wxBEGIN_EVENT_TABLE(wxPropertyGrid, wxControl)
   EVT_SET_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_KILL_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_SYS_COLOUR_CHANGED(wxPropertyGrid::OnSysColourChanged)
+  EVT_DPI_CHANGED(wxPropertyGrid::OnDPIChanged)
   EVT_MOTION(wxPropertyGrid::OnMouseMove)
   EVT_LEFT_DOWN(wxPropertyGrid::OnMouseClick)
   EVT_LEFT_UP(wxPropertyGrid::OnMouseUp)
@@ -453,9 +454,9 @@ void wxPropertyGrid::Init2()
     m_cursorSizeWE = new wxCursor( wxCURSOR_SIZEWE );
 
     // adjust bitmap icon y position so they are centered
-    m_vspacing = wxPG_DEFAULT_VSPACING;
+    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
 
-    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    CalculateFontAndBitmapStuff( m_vspacing );
 
     // Allocate cell data
     m_propertyDefaultCell.SetEmptyData();
@@ -1167,7 +1168,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 // returns the best acceptable minimal size
 wxSize wxPropertyGrid::DoGetBestSize() const
 {
-    int lineHeight = wxMax(15, m_lineHeight);
+    int lineHeight = wxMax(FromDIP(15), m_lineHeight);
 
     // don't make the grid too tall (limit height to 10 items) but don't
     // make it too small neither
@@ -1301,7 +1302,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
-    m_iconWidth = wxPG_ICON_WIDTH;
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
 #elif wxPG_ICON_WIDTH
     // scale icon
     m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
@@ -1354,6 +1355,13 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
         RegainColours();
         Refresh();
     }
+}
+
+void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+{
+    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
+    CalculateFontAndBitmapStuff(m_vspacing);
+    Refresh();
 }
 
 // -----------------------------------------------------------------------
@@ -1830,6 +1838,36 @@ bool wxPropertyGrid::IsSmallScreen()
 
 // -----------------------------------------------------------------------
 
+// static
+wxBitmap wxPropertyGrid::RescaleBitmap(const wxBitmap& srcBmp,
+                                       double scaleX, double scaleY)
+{
+    int w = wxRound(srcBmp.GetWidth()*scaleX);
+    int h = wxRound(srcBmp.GetHeight()*scaleY);
+
+#if wxUSE_IMAGE
+    // Here we use high-quality wxImage scaling functions available
+    wxImage img = srcBmp.ConvertToImage();
+    img.Rescale(w, h, wxIMAGE_QUALITY_HIGH);
+    wxBitmap dstBmp(img);
+#else // !wxUSE_IMAGE
+    wxBitmap dstBmp(w, h, srcBmp.GetDepth());
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
+    dstBmp.UseAlpha(srcBmp.HasAlpha());
+#endif // __WXMSW__ || __WXOSX__
+    {
+        wxMemoryDC dc(dstBmp);
+        dc.SetUserScale(scaleX, scaleY);
+        dc.DrawBitmap(srcBmp, 0, 0);
+    }
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+
+    return dstBmp;
+}
+
+// -----------------------------------------------------------------------
+
 wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
 {
     // Outside?
@@ -1928,7 +1966,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     // Hopefully this does not cause problems.
     #if (wxPG_USE_RENDERER_NATIVE)
         wxRendererNative::Get().DrawTreeItemButton(
-                (wxWindow*)this,
+                const_cast<wxPropertyGrid*>(this),
                 dc,
                 r,
                 wxCONTROL_EXPANDED
@@ -1944,7 +1982,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     {
     #if (wxPG_USE_RENDERER_NATIVE)
         wxRendererNative::Get().DrawTreeItemButton(
-                (wxWindow*)this,
+                const_cast<wxPropertyGrid*>(this),
                 dc,
                 r,
                 0
@@ -2032,10 +2070,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                                  const wxRect* itemsRect ) const
 #endif
 {
-    const wxPGProperty* firstItem;
-    firstItem = DoGetItemAtY(itemsRect->y);
+    const wxPGProperty* firstItem = DoGetItemAtY(itemsRect->y);
+    if ( !firstItem ) // Signal a need to clear entire paint area if grid is empty
+        return -1;
 
-    if ( IsFrozen() || m_height < 1 || firstItem == NULL )
+    if ( IsFrozen() || m_height < 1 )
         return itemsRect->GetBottom();
 
     wxCHECK_MSG( !m_pState->m_itemsAdded, itemsRect->GetBottom(),
@@ -2203,17 +2242,17 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         bool suppressMarginEdge = (GetWindowStyle() & wxPG_HIDE_MARGIN) &&
             (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME) ||
             (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_NONE) && ((GetParent()->GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME)));
-#else
-        bool suppressMarginEdge = false;
-#endif
-        if (!suppressMarginEdge)
-            dc.DrawLine( greyDepth, y, greyDepth, y2 );
-        else
+        if (suppressMarginEdge)
         {
             // Blank out the margin edge
             dc.SetPen(wxPen(GetBackgroundColour()));
             dc.DrawLine( greyDepth, y, greyDepth, y2 );
             dc.SetPen( linepen );
+        }
+        else
+#endif // __WXMSW__
+        {
+            dc.DrawLine(greyDepth, y, greyDepth, y2);
         }
 
         // Splitters
@@ -3549,8 +3588,24 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     m_iFlags &= ~wxPG_FL_VALUE_CHANGE_IN_EVENT;
 
     //
+    // Ignore focus changes within the composite editor control
+    if ( event.GetEventType() == wxEVT_SET_FOCUS || event.GetEventType() == wxEVT_KILL_FOCUS )
+    {
+        wxFocusEvent* fevt = wxDynamicCast(&event, wxFocusEvent);
+        wxWindow* win = fevt->GetWindow();
+        while ( win )
+        {
+            if ( win == wnd )
+            {
+                event.Skip();
+                return true;
+            }
+
+            win = win->GetParent();
+        }
+    }
     // Filter out excess wxTextCtrl modified events
-    if ( event.GetEventType() == wxEVT_TEXT && wnd )
+    else if ( event.GetEventType() == wxEVT_TEXT && wnd )
     {
         if ( wxDynamicCast(wnd, wxTextCtrl) )
         {
@@ -4138,8 +4193,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                                            goodPos,
                                            grect.GetSize());
 
-                m_wndEditor = wndList.m_primary;
-                m_wndEditor2 = wndList.m_secondary;
+                m_wndEditor = wndList.GetPrimary();
+                m_wndEditor2 = wndList.GetSecondary();
                 // Remember actual positions within required cell.
                 // These values can be used when there will be required
                 // to reposition the cell.

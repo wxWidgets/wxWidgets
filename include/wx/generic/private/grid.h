@@ -15,6 +15,8 @@
 
 #if wxUSE_GRID
 
+#include "wx/headerctrl.h"
+
 // Internally used (and hence intentionally not exported) event telling wxGrid
 // to hide the currently shown editor.
 wxDECLARE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
@@ -95,7 +97,7 @@ public:
     virtual wxString GetTitle() const wxOVERRIDE { return m_grid->GetColLabelValue(m_col); }
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return wxNullBitmap; }
     virtual int GetWidth() const wxOVERRIDE { return m_grid->GetColSize(m_col); }
-    virtual int GetMinWidth() const wxOVERRIDE { return 0; }
+    virtual int GetMinWidth() const wxOVERRIDE { return m_grid->GetColMinimalWidth(m_col); }
     virtual wxAlignment GetAlignment() const wxOVERRIDE
     {
         int horz,
@@ -147,7 +149,7 @@ public:
                        wxID_ANY,
                        wxDefaultPosition,
                        wxDefaultSize,
-                       wxHD_ALLOW_HIDE |
+                       (owner->CanHideColumns() ? wxHD_ALLOW_HIDE : 0) |
                        (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
     {
     }
@@ -161,12 +163,13 @@ protected:
     wxGrid *GetOwner() const { return static_cast<wxGrid *>(GetParent()); }
 
 private:
-    static wxMouseEvent GetDummyMouseEvent()
+    wxMouseEvent GetDummyMouseEvent() const
     {
         // make up a dummy event for the grid event to use -- unfortunately we
         // can't do anything else here
         wxMouseEvent e;
         e.SetState(wxGetMouseState());
+        GetOwner()->ScreenToClient(&e.m_x, &e.m_y);
         return e;
     }
 
@@ -191,11 +194,9 @@ private:
     }
 
     // override to implement column auto sizing
-    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) wxOVERRIDE
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int WXUNUSED(widthTitle)) wxOVERRIDE
     {
-        // TODO: currently grid doesn't support computing the column best width
-        //       from its contents so we just use the best label width as is
-        GetOwner()->SetColSize(idx, widthTitle);
+        GetOwner()->HandleColumnAutosize(idx, GetDummyMouseEvent());
 
         return true;
     }
@@ -251,24 +252,19 @@ private:
 
     void OnBeginResize(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoStartResizeCol(event.GetColumn());
+        GetOwner()->DoHeaderStartDragResizeCol(event.GetColumn());
 
         event.Skip();
     }
 
     void OnResizing(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoUpdateResizeColWidth(event.GetWidth());
+        GetOwner()->DoHeaderDragResizeCol(event.GetWidth());
     }
 
     void OnEndResize(wxHeaderCtrlEvent& event)
     {
-        // we again need to pass a mouse event to be used for the grid event
-        // generation but we don't have it here so use a dummy one as in
-        // UpdateColumnVisibility()
-        wxMouseEvent e;
-        e.SetState(wxGetMouseState());
-        GetOwner()->DoEndDragResizeCol(e);
+        GetOwner()->DoHeaderEndDragResizeCol(event.GetWidth());
 
         event.Skip();
     }
@@ -347,7 +343,7 @@ public:
     {
     }
 
-    virtual bool IsFrozen() const { return true; }
+    virtual bool IsFrozen() const wxOVERRIDE { return true; }
 };
 
 
@@ -379,7 +375,7 @@ public:
     {
     }
 
-    virtual bool IsFrozen() const { return true; }
+    virtual bool IsFrozen() const wxOVERRIDE { return true; }
 };
 
 
@@ -419,6 +415,7 @@ public:
                           "GridWindow"),
           m_type(type)
     {
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
     }
 
 
@@ -437,7 +434,6 @@ private:
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
-    void OnEraseBackground( wxEraseEvent& );
     void OnFocus( wxFocusEvent& );
 
     wxDECLARE_EVENT_TABLE();
@@ -797,8 +793,36 @@ public:
     // boundary, i.e. is the first/last row/column
     virtual bool IsAtBoundary(const wxGridCellCoords& coords) const = 0;
 
+    // Check if the component of this point in our direction is
+    // valid, i.e. not -1
+    bool IsValid(const wxGridCellCoords& coords) const
+    {
+        return m_oper.Select(coords) != -1;
+    }
+
+    // Make the coordinates with the other component value of -1.
+    wxGridCellCoords MakeWholeLineCoords(const wxGridCellCoords& coords) const
+    {
+        return m_oper.MakeCoords(m_oper.Select(coords), -1);
+    }
+
     // Increment the component of this point in our direction
+    //
+    // Note that this can't be called if IsAtBoundary() is true, use
+    // TryToAdvance() if this might be the case.
     virtual void Advance(wxGridCellCoords& coords) const = 0;
+
+    // Try to advance in our direction, return true if succeeded or false
+    // otherwise, i.e. if the coordinates are already at the grid boundary.
+    bool TryToAdvance(wxGridCellCoords& coords) const
+    {
+        if ( IsAtBoundary(coords) )
+            return false;
+
+        Advance(coords);
+
+        return true;
+    }
 
     // Find the line at the given distance, in pixels, away from this one
     // (this uses clipping, i.e. anything after the last line is counted as the
@@ -1006,6 +1030,17 @@ public:
 private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
+
+// Returns the rectangle for showing something of the given size in a cell with
+// the given alignment.
+//
+// The function is used by wxGridCellBoolEditor and wxGridCellBoolRenderer to
+// draw a check mark and position wxCheckBox respectively.
+wxRect
+wxGetContentRect(wxSize contentSize,
+                 const wxRect& cellRect,
+                 int hAlign,
+                 int vAlign);
 
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_PRIVATE_H_

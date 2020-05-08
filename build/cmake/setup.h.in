@@ -182,8 +182,6 @@
     #cmakedefine01 wxUSE_UNICODE
 #endif
 
-#cmakedefine01 wxUSE_WCHAR_T
-
 
 #cmakedefine01 wxUSE_EXCEPTIONS
 
@@ -221,9 +219,6 @@
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#cmakedefine01 wxUSE_IOSTREAMH
-
 
 
 #cmakedefine01 wxUSE_LONGLONG
@@ -341,6 +336,8 @@
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #endif
 
+#cmakedefine01 wxUSE_WEBVIEW_EDGE
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT
 #else
@@ -415,6 +412,8 @@
 #cmakedefine01 wxUSE_TOGGLEBTN
 #cmakedefine01 wxUSE_TREECTRL
 #cmakedefine01 wxUSE_TREELISTCTRL
+
+#cmakedefine01 wxUSE_NATIVE_DATAVIEWCTRL
 
 #cmakedefine01 wxUSE_STATUSBAR
 
@@ -631,7 +630,6 @@
 #cmakedefine01 wxUSE_THEME_METAL
 #cmakedefine01 wxUSE_THEME_MONO
 #cmakedefine01 wxUSE_THEME_WIN32
-
 
 /* --- end common options --- */
 

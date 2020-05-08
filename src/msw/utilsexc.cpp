@@ -520,7 +520,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
         if ( !chunkWritten )
             break;
 
-        buffer = (char *)buffer + chunkWritten;
+        buffer = static_cast<const char*>(buffer) + chunkWritten;
         totalWritten += chunkWritten;
         len -= chunkWritten;
     }

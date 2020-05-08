@@ -32,84 +32,47 @@ static const wchar_t *strWC = L"hello, world";
 static const wxString strWX("hello, world");
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
 
-class CrtTestCase : public CppUnit::TestCase
-{
-public:
-    CrtTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( CrtTestCase );
-        CPPUNIT_TEST( SetGetEnv );
-#if wxUSE_UNICODE
-        CPPUNIT_TEST( Strchr );
-#endif // wxUSE_UNICODE
-        CPPUNIT_TEST( Strcmp );
-        CPPUNIT_TEST( Strspn );
-        CPPUNIT_TEST( Strcspn );
-        CPPUNIT_TEST( Strpbrk );
-        CPPUNIT_TEST( Strnlen );
-    CPPUNIT_TEST_SUITE_END();
-
-    void SetGetEnv();
-#if wxUSE_UNICODE
-    void Strchr();
-#endif // wxUSE_UNICODE
-    void Strcmp();
-    void Strspn();
-    void Strcspn();
-    void Strpbrk();
-    void Strnlen();
-
-    wxDECLARE_NO_COPY_CLASS(CrtTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( CrtTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CrtTestCase, "CrtTestCase" );
-
-void CrtTestCase::SetGetEnv()
+TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
 {
 #define TESTVAR_NAME wxT("WXTESTVAR")
 
     wxString val;
     wxSetEnv(TESTVAR_NAME, wxT("value"));
-    CPPUNIT_ASSERT( wxGetEnv(TESTVAR_NAME, &val) );
-    CPPUNIT_ASSERT_EQUAL( "value", val );
-    CPPUNIT_ASSERT_EQUAL( "value", wxString(wxGetenv(TESTVAR_NAME)) );
+    CHECK( wxGetEnv(TESTVAR_NAME, &val) );
+    CHECK( val == "value" );
+    CHECK( wxString(wxGetenv(TESTVAR_NAME)) == "value" );
 
     wxSetEnv(TESTVAR_NAME, wxT("something else"));
-    CPPUNIT_ASSERT( wxGetEnv(TESTVAR_NAME, &val) );
-    CPPUNIT_ASSERT_EQUAL( "something else", val );
-    CPPUNIT_ASSERT_EQUAL( "something else", wxString(wxGetenv(TESTVAR_NAME)) );
+    CHECK( wxGetEnv(TESTVAR_NAME, &val) );
+    CHECK( val == "something else" );
+    CHECK( wxString(wxGetenv(TESTVAR_NAME)) == "something else" );
 
-    CPPUNIT_ASSERT( wxUnsetEnv(TESTVAR_NAME) );
-    CPPUNIT_ASSERT( !wxGetEnv(TESTVAR_NAME, NULL) );
-    CPPUNIT_ASSERT( !wxGetenv(TESTVAR_NAME) );
+    CHECK( wxUnsetEnv(TESTVAR_NAME) );
+    CHECK( !wxGetEnv(TESTVAR_NAME, NULL) );
+    CHECK( !wxGetenv(TESTVAR_NAME) );
 
 #undef TESTVAR_NAME
 }
 
 #if wxUSE_UNICODE
-void CrtTestCase::Strchr()
+TEST_CASE("CRT::Strchr", "[crt][strchr]")
 {
     // test that searching for a wide character in a narrow string simply
     // doesn't find it but doesn't fail with an assert (#11487)
     const wxUniChar smiley = *wxString::FromUTF8("\xe2\x98\xba").begin();
 
-    CPPUNIT_ASSERT( !wxStrchr("hello", smiley) );
+    CHECK( !wxStrchr("hello", smiley) );
 
     // but searching for an explicitly wide character does find it
-    CPPUNIT_ASSERT( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
+    CHECK( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
                     static_cast<wchar_t>(smiley)) );
 }
 #endif // wxUSE_UNICODE
 
-void CrtTestCase::Strcmp()
+TEST_CASE("CRT::Strcmp", "[crt][strcmp]")
 {
     // this code tests if all possible ways of calling wxStrcmp() compile:
     const char * const char1 = "first";
@@ -126,150 +89,187 @@ void CrtTestCase::Strcmp()
     wxCharBuffer charbuf2(char2);
     wxWCharBuffer wcharbuf2(wchar2);
 
-    CPPUNIT_ASSERT( wxStrcmp(char1, char2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(char1, wchar2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(char1, str2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(char1, cstr2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(char1, charbuf2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(char1, wcharbuf2) < 0 );
+    CHECK( wxStrcmp(char1, char2) < 0 );
+    CHECK( wxStrcmp(char1, wchar2) < 0 );
+    CHECK( wxStrcmp(char1, str2) < 0 );
+    CHECK( wxStrcmp(char1, cstr2) < 0 );
+    CHECK( wxStrcmp(char1, charbuf2) < 0 );
+    CHECK( wxStrcmp(char1, wcharbuf2) < 0 );
 
-    CPPUNIT_ASSERT( wxStrcmp(wchar1, char2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wchar1, wchar2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wchar1, str2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wchar1, cstr2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wchar1, charbuf2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wchar1, wcharbuf2) < 0 );
+    CHECK( wxStrcmp(wchar1, char2) < 0 );
+    CHECK( wxStrcmp(wchar1, wchar2) < 0 );
+    CHECK( wxStrcmp(wchar1, str2) < 0 );
+    CHECK( wxStrcmp(wchar1, cstr2) < 0 );
+    CHECK( wxStrcmp(wchar1, charbuf2) < 0 );
+    CHECK( wxStrcmp(wchar1, wcharbuf2) < 0 );
 
-    CPPUNIT_ASSERT( wxStrcmp(str1, char2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(str1, wchar2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(str1, str2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(str1, cstr2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(str1, charbuf2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(str1, wcharbuf2) < 0 );
+    CHECK( wxStrcmp(str1, char2) < 0 );
+    CHECK( wxStrcmp(str1, wchar2) < 0 );
+    CHECK( wxStrcmp(str1, str2) < 0 );
+    CHECK( wxStrcmp(str1, cstr2) < 0 );
+    CHECK( wxStrcmp(str1, charbuf2) < 0 );
+    CHECK( wxStrcmp(str1, wcharbuf2) < 0 );
 
-    CPPUNIT_ASSERT( wxStrcmp(cstr1, char2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(cstr1, wchar2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(cstr1, str2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(cstr1, cstr2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(cstr1, charbuf2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(cstr1, wcharbuf2) < 0 );
+    CHECK( wxStrcmp(cstr1, char2) < 0 );
+    CHECK( wxStrcmp(cstr1, wchar2) < 0 );
+    CHECK( wxStrcmp(cstr1, str2) < 0 );
+    CHECK( wxStrcmp(cstr1, cstr2) < 0 );
+    CHECK( wxStrcmp(cstr1, charbuf2) < 0 );
+    CHECK( wxStrcmp(cstr1, wcharbuf2) < 0 );
 
-    CPPUNIT_ASSERT( wxStrcmp(charbuf1, char2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(charbuf1, wchar2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(charbuf1, str2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(charbuf1, cstr2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(charbuf1, charbuf2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(charbuf1, wcharbuf2) < 0 );
+    CHECK( wxStrcmp(charbuf1, char2) < 0 );
+    CHECK( wxStrcmp(charbuf1, wchar2) < 0 );
+    CHECK( wxStrcmp(charbuf1, str2) < 0 );
+    CHECK( wxStrcmp(charbuf1, cstr2) < 0 );
+    CHECK( wxStrcmp(charbuf1, charbuf2) < 0 );
+    CHECK( wxStrcmp(charbuf1, wcharbuf2) < 0 );
 
-    CPPUNIT_ASSERT( wxStrcmp(wcharbuf1, char2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wcharbuf1, wchar2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wcharbuf1, str2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wcharbuf1, cstr2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wcharbuf1, charbuf2) < 0 );
-    CPPUNIT_ASSERT( wxStrcmp(wcharbuf1, wcharbuf2) < 0 );
+    CHECK( wxStrcmp(wcharbuf1, char2) < 0 );
+    CHECK( wxStrcmp(wcharbuf1, wchar2) < 0 );
+    CHECK( wxStrcmp(wcharbuf1, str2) < 0 );
+    CHECK( wxStrcmp(wcharbuf1, cstr2) < 0 );
+    CHECK( wxStrcmp(wcharbuf1, charbuf2) < 0 );
+    CHECK( wxStrcmp(wcharbuf1, wcharbuf2) < 0 );
 }
 
-void CrtTestCase::Strspn()
+TEST_CASE("CRT::Strspn", "[crt][strspn]")
 {
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strMB, "xyz") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWC, "xyz") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWX, "xyz") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strMB, L"xyz") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWC, L"xyz") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWX, L"xyz") );
+    CHECK( wxStrspn(strMB, "xyz") == 0 );
+    CHECK( wxStrspn(strWC, "xyz") == 0 );
+    CHECK( wxStrspn(strWX, "xyz") == 0 );
+    CHECK( wxStrspn(strMB, L"xyz") == 0 );
+    CHECK( wxStrspn(strWC, L"xyz") == 0 );
+    CHECK( wxStrspn(strWX, L"xyz") == 0 );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrspn(strMB, "hleo") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrspn(strWC, "hleo") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrspn(strWX, "hleo") );
+    CHECK( wxStrspn(strMB, "hleo") == 5 );
+    CHECK( wxStrspn(strWC, "hleo") == 5 );
+    CHECK( wxStrspn(strWX, "hleo") == 5 );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strMB, "ld") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWC, "ld") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWX, "ld") );
+    CHECK( wxStrspn(strMB, "ld") == 0 );
+    CHECK( wxStrspn(strWC, "ld") == 0 );
+    CHECK( wxStrspn(strWX, "ld") == 0 );
 
-    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrspn(strMB, strWC) );
-    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrspn(strWC, strWX) );
-    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrspn(strWX, strMB) );
+    CHECK( wxStrspn(strMB, strWC) == strWX.length() );
+    CHECK( wxStrspn(strWC, strWX) == strWX.length() );
+    CHECK( wxStrspn(strWX, strMB) == strWX.length() );
 }
 
-void CrtTestCase::Strcspn()
+TEST_CASE("CRT::Strcspn", "[crt][strcspn]")
 {
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strMB, strWX) );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWC, strMB) );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWX, strWC) );
+    CHECK( wxStrcspn(strMB, strWX) == 0 );
+    CHECK( wxStrcspn(strWC, strMB) == 0 );
+    CHECK( wxStrcspn(strWX, strWC) == 0 );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrcspn(strMB, ", ") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrcspn(strWC, ", ") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrcspn(strWX, ", ") );
+    CHECK( wxStrcspn(strMB, ", ") == 5 );
+    CHECK( wxStrcspn(strWC, ", ") == 5 );
+    CHECK( wxStrcspn(strWX, ", ") == 5 );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strMB, "hel") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWC, "hel") );
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWX, "hel") );
+    CHECK( wxStrcspn(strMB, "hel") == 0 );
+    CHECK( wxStrcspn(strWC, "hel") == 0 );
+    CHECK( wxStrcspn(strWX, "hel") == 0 );
 
-    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strMB, "xy") );
-    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strWC, "xy") );
-    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strWX, "xy") );
+    CHECK( wxStrcspn(strMB, "xy") == strWX.length() );
+    CHECK( wxStrcspn(strWC, "xy") == strWX.length() );
+    CHECK( wxStrcspn(strWX, "xy") == strWX.length() );
 }
 
-void CrtTestCase::Strpbrk()
+TEST_CASE("CRT::Strpbrk", "[crt][strpbrk]")
 {
     const wxString s(", ");
 
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB,  ", ") );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, L", ") );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX,  ", ") );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX, L", ") );
+    CHECK( *wxStrpbrk(strMB,  ", ") ==  ',' );
+    CHECK( *wxStrpbrk(strWC, L", ") == L',' );
+    CHECK( *wxStrpbrk(strWX,  ", ") ==  ',' );
+    CHECK( *wxStrpbrk(strWX, L", ") == L',' );
 
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB, s) );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, s) );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX, s) );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s) );
+    CHECK( *wxStrpbrk(strMB, s) ==  ',' );
+    CHECK( *wxStrpbrk(strWC, s) == L',' );
+    CHECK( *wxStrpbrk(strWX, s) ==  ',' );
+    CHECK( *wxStrpbrk(strWX.c_str(), s) == ',' );
 
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB, s.c_str()) );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, s.c_str()) );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX, s.c_str()) );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s.c_str()) );
+    CHECK( *wxStrpbrk(strMB, s.c_str()) ==  ',' );
+    CHECK( *wxStrpbrk(strWC, s.c_str()) == L',' );
+    CHECK( *wxStrpbrk(strWX, s.c_str()) ==  ',' );
+    CHECK( *wxStrpbrk(strWX.c_str(), s.c_str()) == ',' );
 
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB, s.mb_str()) );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, s.wc_str()) );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX, s.mb_str()) );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX, s.wc_str()) );
-    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s.mb_str()) );
-    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX.c_str(), s.wc_str()) );
+    CHECK( *wxStrpbrk(strMB, s.mb_str()) ==  ',' );
+    CHECK( *wxStrpbrk(strWC, s.wc_str()) == L',' );
+    CHECK( *wxStrpbrk(strWX, s.mb_str()) ==  ',' );
+    CHECK( *wxStrpbrk(strWX, s.wc_str()) == L',' );
+    CHECK( *wxStrpbrk(strWX.c_str(), s.mb_str()) ==  ',' );
+    CHECK( *wxStrpbrk(strWX.c_str(), s.wc_str()) == L',' );
 
-    CPPUNIT_ASSERT( !wxStrpbrk(strWX, "xyz") );
-    CPPUNIT_ASSERT( !wxStrpbrk(strWX.c_str(), L"xyz") );
+    CHECK( !wxStrpbrk(strWX, "xyz") );
+    CHECK( !wxStrpbrk(strWX.c_str(), L"xyz") );
 }
 
-void CrtTestCase::Strnlen()
+TEST_CASE("CRT::Strnlen", "[crt][strnlen]")
 {
     // other misc tests for wxStrnlen(const char*, size_t)
 
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("", 0) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("1234", 0) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)2, wxStrnlen("1234", 2) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen("1234", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)7, wxStrnlen("1234567", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen("12345678", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen("123456789", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)9, wxStrnlen("123456789", 12) );
+    CHECK( wxStrnlen("", 0) == 0 );
+    CHECK( wxStrnlen("", 8) == 0 );
+    CHECK( wxStrnlen("1234", 0) == 0 );
+    CHECK( wxStrnlen("1234", 2) == 2 );
+    CHECK( wxStrnlen("1234", 8) == 4 );
+    CHECK( wxStrnlen("1234567", 8) == 7 );
+    CHECK( wxStrnlen("12345678", 8) == 8 );
+    CHECK( wxStrnlen("123456789", 8) == 8 );
+    CHECK( wxStrnlen("123456789", 12) == 9 );
 
     // other misc tests for wxStrnlen(const wchar_t*, size_t)
 
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen(L"", 0) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen(L"", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen(L"1234", 0) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)2, wxStrnlen(L"1234", 2) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen(L"1234", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)7, wxStrnlen(L"1234567", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen(L"12345678", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen(L"123456789", 8) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)9, wxStrnlen(L"123456789", 12) );
+    CHECK( wxStrnlen(L"", 0) == 0 );
+    CHECK( wxStrnlen(L"", 8) == 0 );
+    CHECK( wxStrnlen(L"1234", 0) == 0 );
+    CHECK( wxStrnlen(L"1234", 2) == 2 );
+    CHECK( wxStrnlen(L"1234", 8) == 4 );
+    CHECK( wxStrnlen(L"1234567", 8) == 7 );
+    CHECK( wxStrnlen(L"12345678", 8) == 8 );
+    CHECK( wxStrnlen(L"123456789", 8) == 8 );
+    CHECK( wxStrnlen(L"123456789", 12) == 9 );
 
     // wxStrlen() is only for NULL-terminated strings:
-    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen("1234" "\0" "78", 12) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen(L"1234" L"\0" L"5678", 12) );
+    CHECK( wxStrnlen("1234" "\0" "78", 12) == 4 );
+    CHECK( wxStrnlen(L"1234" L"\0" L"5678", 12) == 4 );
 }
 
+TEST_CASE("CRT::Strtox", "[crt][strtod][strtol]")
+{
+    const wxString s = "123@";
+    const double d = 123.0;
+    const long l = 123;
 
+    SECTION("char")
+    {
+        char* end = NULL;
+        CHECK( wxStrtod(s, &end) == d );
+        REQUIRE( end );
+        CHECK( *end == '@' );
 
+        CHECK( wxStrtol(s, &end, 10) == l );
+        REQUIRE( end );
+        CHECK( *end == '@' );
+    }
+
+    SECTION("wchar_t")
+    {
+        wchar_t* end = NULL;
+        CHECK( wxStrtod(s, &end) == d );
+        REQUIRE( end );
+        CHECK( *end == L'@' );
+
+        CHECK( wxStrtol(s, &end, 10) == l );
+        REQUIRE( end );
+        CHECK( *end == L'@' );
+    }
+
+    SECTION("other")
+    {
+        CHECK( wxStrtod(s, 0) == d );
+#ifdef wxHAS_NULLPTR_T
+        CHECK( wxStrtod(s, nullptr) == d );
+        CHECK( wxStrtol(s, nullptr, 10) == l );
+#endif
+    }
+}

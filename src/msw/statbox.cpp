@@ -550,15 +550,16 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
 
         // first we need to correctly paint the background of the label
         // as Windows ignores the brush offset when doing it
-        const int x = FromDIP(LABEL_HORZ_OFFSET);
+        // NOTE: Border intentionally does not use DIPs in order to match native look
+        const int x = LABEL_HORZ_OFFSET;
         RECT dimensions = { x, 0, 0, height };
         dimensions.left = x;
         dimensions.right = x + width;
 
         // need to adjust the rectangle to cover all the label background
-        dimensions.left -= FromDIP(LABEL_HORZ_BORDER);
-        dimensions.right += FromDIP(LABEL_HORZ_BORDER);
-        dimensions.bottom += FromDIP(LABEL_VERT_BORDER);
+        dimensions.left -= LABEL_HORZ_BORDER;
+        dimensions.right += LABEL_HORZ_BORDER;
+        dimensions.bottom += LABEL_VERT_BORDER;
 
         if ( UseBgCol() )
         {

@@ -23,6 +23,8 @@
 
 #include "wx/scopeguard.h"
 
+#if wxUSE_LOG
+
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #else
@@ -391,3 +393,68 @@ void LogTestCase::NoWarnings()
 
     CPPUNIT_ASSERT_EQUAL( "If", m_log->GetLog(wxLOG_Error) );
 }
+
+// The following two functions (v, macroCompilabilityTest) are not run by
+// any test, and their purpose is merely to guarantee that the wx(V)LogXXX
+// macros compile without 'dangling else' warnings.
+#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
+    // gcc 7 split -Wdangling-else from the much older -Wparentheses, so use
+    // the new warning if it's available or the old one otherwise.
+    #if wxCHECK_GCC_VERSION(7, 0)
+        #pragma GCC diagnostic error "-Wdangling-else"
+    #else
+        #pragma GCC diagnostic error "-Wparentheses"
+    #endif
+#endif
+
+static void v(int x, ...)
+{
+    va_list list;
+    va_start(list, x);
+
+    if (true)
+        wxVLogGeneric(Info, "vhello generic %d", list);
+    if (true)
+        wxVLogTrace(wxTRACE_Messages, "vhello trace %d", list);
+    if (true)
+        wxVLogError("vhello error %d", list);
+    if (true)
+        wxVLogMessage("vhello message %d", list);
+    if (true)
+        wxVLogVerbose("vhello verbose %d", list);
+    if (true)
+        wxVLogWarning("vhello warning %d", list);
+    if (true)
+        wxVLogFatalError("vhello fatal %d", list);
+    if (true)
+        wxVLogSysError("vhello syserror %d", list);
+    if (true)
+        wxVLogDebug("vhello debug %d", list);
+
+    va_end(list);
+}
+
+void macroCompilabilityTest()
+{
+    v(123, 456);
+    if (true)
+        wxLogGeneric(wxLOG_Info, "hello generic %d", 42);
+    if (true)
+        wxLogTrace(wxTRACE_Messages, "hello trace %d", 42);
+    if (true)
+        wxLogError("hello error %d", 42);
+    if (true)
+        wxLogMessage("hello message %d", 42);
+    if (true)
+        wxLogVerbose("hello verbose %d", 42);
+    if (true)
+        wxLogWarning("hello warning %d", 42);
+    if (true)
+        wxLogFatalError("hello fatal %d", 42);
+    if (true)
+        wxLogSysError("hello syserror %d", 42);
+    if (true)
+        wxLogDebug("hello debug %d", 42);
+}
+
+#endif // wxUSE_LOG

@@ -62,7 +62,7 @@ void wxQtGLWidget::resizeGL(int w, int h)
 
 void wxQtGLWidget::paintGL()
 {
-    wxPaintEvent event( GetHandler()->GetId() );
+    wxPaintEvent event( GetHandler() );
     EmitEvent(event);
 }
 

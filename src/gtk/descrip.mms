@@ -2,27 +2,27 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 June 2016                                                        *
+# Date : 4 March 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXUNIVERSAL__
-CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm
 .else
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/iee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
+CC_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/iee=denorm
 .endif
 .endif
 

@@ -337,7 +337,7 @@ void ListboxWidgetsPage::CreateContent()
 
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(this, ListboxPage_Add, "&Add this string");
-    m_textAdd = new wxTextCtrl(this, ListboxPage_AddText, "test item 0");
+    m_textAdd = new wxTextCtrl(this, ListboxPage_AddText, "test item \t0");
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textAdd, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
@@ -500,6 +500,8 @@ void ListboxWidgetsPage::CreateLbox()
                                     flags);
             break;
 #endif // wxUSE_REARRANGECTRL
+        case LboxType_ListBox:
+            wxFALLTHROUGH;
         default:
             m_lbox = new wxListBox(this, ListboxPage_Listbox,
                                wxDefaultPosition, wxDefaultSize,
@@ -617,7 +619,7 @@ void ListboxWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
     if ( !m_textAdd->IsModified() )
     {
         // update the default string
-        m_textAdd->SetValue(wxString::Format("test item %u", ++s_item));
+        m_textAdd->SetValue(wxString::Format("test item \t%u", ++s_item));
     }
 
     m_lbox->Append(s);

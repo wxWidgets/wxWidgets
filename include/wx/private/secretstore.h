@@ -78,6 +78,8 @@ private:
 class wxSecretStoreImpl : public wxRefCounter
 {
 public:
+    virtual bool IsOk(wxString* WXUNUSED(errmsg)) const { return true; }
+
     virtual bool Save(const wxString& service,
                       const wxString& username,
                       const wxSecretValueImpl& password,

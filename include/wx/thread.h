@@ -559,9 +559,6 @@ public:
     // priority
         // Sets the priority to "prio" which must be in 0..100 range (see
         // also wxPRIORITY_XXX constants).
-        //
-        // NB: under MSW the priority can only be set after the thread is
-        //     created (but possibly before it is launched)
     void SetPriority(unsigned int prio);
 
         // Get the current priority.
@@ -601,7 +598,7 @@ public:
 
 protected:
     // exits from the current thread - can be called only from this thread
-    void Exit(ExitCode exitcode = 0);
+    void Exit(ExitCode exitcode = NULL);
 
     // entry point for the thread - called by Run() and executes in the context
     // of this thread.
@@ -622,15 +619,15 @@ protected:
     // in the context of the thread that called Kill().
     virtual void OnKill() {}
 
+    // called when the thread exits - in the context of this thread
+    //
+    // NB: this function will not be called if the thread is Kill()ed
+    virtual void OnExit() {}
+
 private:
     // no copy ctor/assignment operator
     wxThread(const wxThread&);
     wxThread& operator=(const wxThread&);
-
-    // called when the thread exits - in the context of this thread
-    //
-    // NB: this function will not be called if the thread is Kill()ed
-    virtual void OnExit() { }
 
     friend class wxThreadInternal;
     friend class wxThreadModule;
@@ -643,7 +640,7 @@ private:
     wxThreadInternal *m_internal;
 
     // protects access to any methods of wxThreadInternal object
-    wxCriticalSection m_critsect;
+    mutable wxCriticalSection m_critsect;
 
     // true if the thread is detached, false if it is joinable
     bool m_isDetached;
@@ -734,7 +731,7 @@ public:
     // returns a pointer to the thread which can be used to call Run()
     wxThread *GetThread() const
     {
-        wxCriticalSectionLocker locker((wxCriticalSection&)m_critSection);
+        wxCriticalSectionLocker locker(m_critSection);
 
         wxThread* thread = m_thread;
 
@@ -744,7 +741,7 @@ public:
 protected:
     wxThread *m_thread;
     wxThreadKind m_kind;
-    wxCriticalSection m_critSection; // To guard the m_thread variable
+    mutable wxCriticalSection m_critSection; // To guard the m_thread variable
 
     friend class wxThreadHelperThread;
 };

@@ -144,7 +144,7 @@ public:
     wxDataObject *GetDataObject() const
         { return m_dataObject; }
     void SetDataObject(wxDataObject *dataObject)
-        { if (m_dataObject) delete m_dataObject;
+        { delete m_dataObject;
     m_dataObject = dataObject; }
 
     // these functions are called when data is moved over position (x, y) and

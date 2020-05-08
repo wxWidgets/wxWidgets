@@ -118,6 +118,9 @@ public:
         @c wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
         specified in flags.
 
+        @note For non-solid (i.e. non-RGB) colour this function returns
+        "rgb(??, ?? ??)" or "#??????".
+
         @since 2.7.0
     */
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;

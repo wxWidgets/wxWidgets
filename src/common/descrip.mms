@@ -2,33 +2,33 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 June 2017                                                        *
+# Date : 4 March 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)/incl=[-.regex]
+CC_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)/incl=[-.regex]
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CC_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	/incl=[-.regex]
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1,WXBUILDING=1)/float=ieee/name=(as_is,short)\
 	/ieee=denorm/incl=[-.regex]
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/incl=[-.regex]
 .else
 CXX_DEFINE =
@@ -235,7 +235,7 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
-	combocmn.obj
+	combocmn.obj,cairo.obj
 
 
 OBJECTS_GTK2=fontutilcmn.obj,cairo.obj

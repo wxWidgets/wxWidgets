@@ -28,11 +28,13 @@
     #include "wx/button.h"
     #include "wx/statbox.h"
     #include "wx/toplevel.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/display.h"
 #include "wx/vector.h"
 #include "wx/listimpl.cpp"
+#include "wx/private/window.h"
 
 
 //---------------------------------------------------------------------------
@@ -90,10 +92,8 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 
 #ifdef wxNEEDS_BORDER_IN_PX
 
-int wxSizerFlags::ms_defaultBorderInPx = 0;
-
 /* static */
-int wxSizerFlags::DoGetDefaultBorderInPx()
+float wxSizerFlags::DoGetDefaultBorderInPx()
 {
     // Hard code 5px as it's the minimal border size between two controls, see
     // the table at the bottom of
@@ -103,11 +103,17 @@ int wxSizerFlags::DoGetDefaultBorderInPx()
     // between related and unrelated controls, as explained at the above URL,
     // but we don't have a way to specify this in our API currently.
     //
-    // We also have to use the DPI for the primary monitor here as we don't
-    // have any associated window, so this is wrong on systems using multiple
-    // monitors with different resolutions too -- but, again, without changes
+    // We also have to use the DPI for the monitor showing the top window here
+    // as we don't have any associated window -- but, again, without changes
     // in the API, there is nothing we can do about this.
-    return wxWindow::FromDIP(5, NULL);
+    const wxWindow* const win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    static wxPrivate::DpiDependentValue<float> s_defaultBorderInPx;
+    if ( s_defaultBorderInPx.HasChanged(win) )
+    {
+        s_defaultBorderInPx.SetAtNewDPI(
+            (float)(5 * (win ? win->GetContentScaleFactor() : 1)));
+    }
+    return s_defaultBorderInPx.Get();
 }
 
 #endif // wxNEEDS_BORDER_IN_PX
@@ -962,9 +968,28 @@ wxSize wxSizer::ComputeFittingWindowSize(wxWindow *window)
     return window->ClientToWindowSize(ComputeFittingClientSize(window));
 }
 
+#ifdef __WXGTK3__
+static void FitOnShow(wxShowEvent& event)
+{
+    wxWindow* win = static_cast<wxWindow*>(event.GetEventObject());
+    wxSizer* sizer = win->GetSizer();
+    if (sizer)
+        sizer->Fit(win);
+    win->Unbind(wxEVT_SHOW, FitOnShow);
+}
+#endif
+
 wxSize wxSizer::Fit( wxWindow *window )
 {
     wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
+
+#ifdef __WXGTK3__
+    // GTK3 updates cached style information before showing a TLW,
+    // which may affect best size calculations, so add a handler to
+    // redo the calculations at that time
+    if (!window->IsShown() && window->IsTopLevel())
+        window->Bind(wxEVT_SHOW, FitOnShow);
+#endif
 
     // set client size
     window->SetClientSize(ComputeFittingClientSize(window));
@@ -1003,6 +1028,17 @@ void wxSizer::Layout()
     RepositionChildren(minSize);
 }
 
+#ifdef __WXGTK3__
+static void SetSizeHintsOnShow(wxShowEvent& event)
+{
+    wxWindow* win = static_cast<wxWindow*>(event.GetEventObject());
+    wxSizer* sizer = win->GetSizer();
+    if (sizer)
+        sizer->SetSizeHints(win);
+    win->Unbind(wxEVT_SHOW, SetSizeHintsOnShow);
+}
+#endif
+
 void wxSizer::SetSizeHints( wxWindow *window )
 {
     // Preserve the window's max size hints, but set the
@@ -1013,6 +1049,12 @@ void wxSizer::SetSizeHints( wxWindow *window )
     // (1. ComputeFittingClientSize, 2. SetClientSize). That's because
     // otherwise SetClientSize() could have no effect if there already are
     // size hints in effect that forbid requested client size.
+
+#ifdef __WXGTK3__
+    // see comment in Fit()
+    if (!window->IsShown() && window->IsTopLevel())
+        window->Bind(wxEVT_SHOW, SetSizeHintsOnShow);
+#endif
 
     const wxSize clientSize = ComputeFittingClientSize(window);
 

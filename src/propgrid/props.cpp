@@ -18,41 +18,17 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcclient.h"
-    #include "wx/dcmemory.h"
-    #include "wx/button.h"
-    #include "wx/bmpbuttn.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
-    #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
-    #include "wx/scrolwin.h"
     #include "wx/dirdlg.h"
-    #include "wx/combobox.h"
-    #include "wx/layout.h"
-    #include "wx/sizer.h"
-    #include "wx/textdlg.h"
     #include "wx/filedlg.h"
-    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
 #endif
 
-#include "wx/filename.h"
+#include "wx/numformatter.h"
 
 #include "wx/propgrid/propgrid.h"
-#include "wx/numformatter.h"
+#include "wx/propgrid/editors.h"
 
 #include <float.h>
 #include <limits.h>
@@ -1879,8 +1855,8 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxDirProperty, wxEditorDialogProperty, TextCtrlAndButton)
 
-wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
-    : wxEditorDialogProperty(name, label)
+wxDirProperty::wxDirProperty( const wxString& label, const wxString& name, const wxString& value )
+    : wxEditorDialogProperty(label, name)
 {
     m_flags &= ~wxPG_PROP_ACTIVE_BTN; // Property button enabled only in not read-only mode.
     SetValue(value);
@@ -1938,6 +1914,7 @@ bool wxDirProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
     return false;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
 {
     if ( name == wxPG_DIR_DIALOG_MESSAGE )
@@ -1947,6 +1924,7 @@ bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
     }
     return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 // wxPGDialogAdapter
@@ -1998,6 +1976,16 @@ wxEditorDialogProperty::~wxEditorDialogProperty()
 wxPGEditorDialogAdapter* wxEditorDialogProperty::GetEditorDialog() const
 {
     return new wxPGDialogAdapter();
+}
+
+bool wxEditorDialogProperty::DoSetAttribute(const wxString& name, wxVariant& value)
+{
+    if ( name == wxPG_DIALOG_TITLE )
+    {
+        m_dlgTitle = value.GetString();
+        return true;
+    }
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -2184,11 +2172,13 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_initialPath = value.GetString();
         return true;
     }
+#if WXWIN_COMPATIBILITY_3_0
     else if ( name == wxPG_FILE_DIALOG_TITLE )
     {
         m_dlgTitle = value.GetString();
         return true;
     }
+#endif // WXWIN_COMPATIBILITY_3_0
     else if ( name == wxPG_FILE_DIALOG_STYLE )
     {
         m_dlgStyle = value.GetLong();
@@ -2201,9 +2191,9 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
     wxASSERT_MSG(value.IsType(wxS("string")), "Function called for incompatible property");
 
-    wxString strVal = value.GetString();
-    wxFileName filename = strVal;
+    wxFileName filename(value.GetString());
     wxString path = filename.GetPath();
+    wxString file = filename.GetFullName();
 
     if ( path.empty() && !m_basePath.empty() )
         path = m_basePath;
@@ -2211,7 +2201,7 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
     wxFileDialog dlg(pg->GetPanel(),
         m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
-        strVal,
+        file,
         m_wildcard.empty() ? wxALL_FILES : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);

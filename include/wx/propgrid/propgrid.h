@@ -15,12 +15,7 @@
 
 #if wxUSE_PROPGRID
 
-#include "wx/thread.h"
-#include "wx/dcclient.h"
-#include "wx/control.h"
 #include "wx/scrolwin.h"
-#include "wx/tooltip.h"
-#include "wx/datetime.h"
 #include "wx/recguard.h"
 #include "wx/time.h" // needed for wxMilliClock_t
 
@@ -559,8 +554,6 @@ enum wxPG_INTERNAL_FLAGS
     wxPG_FL_NOSTATUSBARHELP             =     0x1000,
     // Marks that we created the state, so we have to destroy it too.
     wxPG_FL_CREATEDSTATE                =     0x2000,
-    // Set if scrollbar's existence was detected in last onresize.
-    wxPG_FL_SCROLLBAR_DETECTED          =     0x4000,
     // Set if wxPGMan requires redrawing of description text box.
     wxPG_FL_DESC_REFRESH_REQUIRED       =     0x8000,
     // Set if contained in wxPropertyGridManager
@@ -1162,6 +1155,7 @@ public:
 
     const wxPGCommonValue* GetCommonValue( unsigned int i ) const
     {
+        wxCHECK_MSG( i < m_commonValues.size(), NULL, "Invalid item index" );
         return m_commonValues[i];
     }
 
@@ -1174,7 +1168,7 @@ public:
     // Returns label of given common value.
     wxString GetCommonValueLabel( unsigned int i ) const
     {
-        wxASSERT( GetCommonValue(i) );
+        wxCHECK_MSG( i < m_commonValues.size(), wxString(), "Invalid item index" );
         return GetCommonValue(i)->GetLabel();
     }
 
@@ -1240,6 +1234,9 @@ public:
 
     // Checks system screen design used for laying out various dialogs.
     static bool IsSmallScreen();
+
+    // Returns rescaled bitmap
+    static wxBitmap RescaleBitmap(const wxBitmap& srcBmp, double scaleX, double scaleY);
 
     // Returns rectangle that fully contains properties between and including
     // p1 and p2. Rectangle is in virtual scrolled window coordinates.
@@ -1773,6 +1770,8 @@ protected:
 
     void OnSysColourChanged( wxSysColourChangedEvent &event );
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     void OnTLPClose( wxCloseEvent& event );
 
 protected:
@@ -2258,13 +2257,9 @@ protected:
 //
 #ifndef __wxPG_SOURCE_FILE__
     #undef wxPG_FL_DESC_REFRESH_REQUIRED
-    #undef wxPG_FL_SCROLLBAR_DETECTED
     #undef wxPG_FL_CREATEDSTATE
     #undef wxPG_FL_NOSTATUSBARHELP
     #undef wxPG_FL_SCROLLED
-    #undef wxPG_FL_FOCUS_INSIDE_CHILD
-    #undef wxPG_FL_FOCUS_INSIDE
-    #undef wxPG_FL_MOUSE_INSIDE_CHILD
     #undef wxPG_FL_CUR_USES_CUSTOM_IMAGE
     #undef wxPG_FL_PRIMARY_FILLS_ENTIRE
     #undef wxPG_FL_VALUE_MODIFIED
@@ -2275,8 +2270,6 @@ protected:
     #undef wxPG_FL_ACTIVATION_BY_CLICK
     #undef wxPG_ICON_WIDTH
     #undef wxPG_USE_RENDERER_NATIVE
-// Following are needed by the manager headers
-//    #undef const wxString&
 #endif
 
 // -----------------------------------------------------------------------

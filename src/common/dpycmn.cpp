@@ -77,6 +77,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule);
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
+wxDisplay::wxDisplay()
+{
+    m_impl = Factory().GetPrimaryDisplay();
+}
+
 wxDisplay::wxDisplay(unsigned n)
 {
     wxASSERT_MSG( n == 0 || n < GetCount(),
@@ -89,7 +94,8 @@ wxDisplay::wxDisplay(const wxWindow* window)
 {
     const int n = GetFromWindow(window);
 
-    m_impl = Factory().GetDisplay(n != wxNOT_FOUND ? n : 0);
+    m_impl = n != wxNOT_FOUND ? Factory().GetDisplay(n)
+                              : Factory().GetPrimaryDisplay();
 }
 
 // ----------------------------------------------------------------------------
@@ -159,7 +165,7 @@ wxString wxDisplay::GetName() const
 
 bool wxDisplay::IsPrimary() const
 {
-    return m_impl && m_impl->GetIndex() == 0;
+    return m_impl && m_impl->IsPrimary();
 }
 
 #if wxUSE_DISPLAY
@@ -245,9 +251,34 @@ void wxDisplayFactory::ClearImpls()
     m_impls.clear();
 }
 
+wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
+{
+    // Just use dumb linear search -- there seems to be the most reliable way
+    // to do this in general. In particular, primary monitor is not guaranteed
+    // to be the first one and it's not obvious if it always contains (0, 0).
+    const unsigned count = GetCount();
+    for ( unsigned n = 0; n < count; ++n )
+    {
+        wxDisplayImpl* const d = GetDisplay(n);
+        if ( d && d->IsPrimary() )
+            return d;
+    }
+
+    // This is not supposed to happen, but what else can we do if it
+    // somehow does?
+    return NULL;
+}
+
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
+
+    // Check if the window is created: we can't find its display before this is
+    // done anyhow, as we simply don't know on which display will it appear,
+    // and trying to do this below would just result in assert failures inside
+    // GetScreenRect() if the window doesn't yet exist, so return immediately.
+    if ( !window->GetHandle() )
+        return wxNOT_FOUND;
 
     // consider that the window belongs to the display containing its centre
     const wxRect r(window->GetScreenRect());

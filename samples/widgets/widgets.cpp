@@ -992,8 +992,8 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    WidgetsPage::GetAttrs().m_cursor = *(event.IsChecked() ? wxHOURGLASS_CURSOR
-                                                          : wxSTANDARD_CURSOR);
+    WidgetsPage::GetAttrs().m_cursor = (event.IsChecked() ? *wxHOURGLASS_CURSOR
+                                                          : wxNullCursor);
 
     CurrentPage()->SetUpWidget();
 }
@@ -1236,7 +1236,8 @@ void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
     // only log these events in our own logger.
     if ( wxGetApp().IsUsingLogWindow() )
     {
-        wxLogMessage("Widgets %s focus",
+        wxWindow* win = (wxWindow*)event.GetEventObject();
+        wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
                      event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
     }
 
@@ -1311,7 +1312,6 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          const char *const icon[])
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
-                     wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
@@ -1359,10 +1359,7 @@ void WidgetsPage::SetUpWidget()
         (*it)->Enable(GetAttrs().m_enabled);
         (*it)->Show(GetAttrs().m_show);
 
-        if ( GetAttrs().m_cursor.IsOk() )
-        {
-            (*it)->SetCursor(GetAttrs().m_cursor);
-        }
+        (*it)->SetCursor(GetAttrs().m_cursor);
 
         (*it)->SetWindowVariant(GetAttrs().m_variant);
 

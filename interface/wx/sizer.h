@@ -1493,8 +1493,20 @@ public:
         This value is scaled appropriately for the current DPI on the systems
         where physical pixel values are used for the control positions and
         sizes, i.e. not with wxGTK or wxOSX.
+
+        @see GetDefaultBorderFractional()
     */
     static int GetDefaultBorder();
+
+    /**
+        Returns the border used by default, with fractional precision. For
+        example when the border is scaled to a non-integer DPI.
+
+        @see GetDefaultBorder()
+
+        @since 3.1.4
+    */
+    static float GetDefaultBorderFractional();
 
     /**
         Aligns the object to the left, similar for @c Align(wxALIGN_LEFT).

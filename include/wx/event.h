@@ -91,7 +91,7 @@ typedef int wxEventType;
     wxEventTableEntry(type, winid, idLast, wxNewEventTableFunctor(type, fn), obj)
 
 #define wxDECLARE_EVENT_TABLE_TERMINATOR() \
-    wxEventTableEntry(wxEVT_NULL, 0, 0, 0, 0)
+    wxEventTableEntry(wxEVT_NULL, 0, 0, NULL, NULL)
 
 // generate a new unique event type
 extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
@@ -144,9 +144,43 @@ inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
     wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 }
 
+// Special hack to remove "noexcept" from the function type when using C++17 or
+// later: static_cast<> below would fail to cast a member function pointer to a
+// member of a derived class to the base class if noexcept is specified for the
+// former, so remove it first if necessary.
+#if __cplusplus >= 201703L
+
+namespace wxPrivate
+{
+
+// Generic template version, doing nothing.
+template <typename T>
+struct RemoveNoexceptEventHandler
+{
+    using type = T;
+};
+
+// Specialization removing noexcept when it's specified.
+//
+// Note that this doesn't pretend to be generally suitable, this is just enough
+// to work in our particular case.
+template <typename R, typename C, typename E>
+struct RemoveNoexceptEventHandler<R (C::*)(E&) noexcept>
+{
+    using type = R (C::*)(E&);
+};
+
+} // namespace wxPrivate
+
+#define wxREMOVE_NOEXCEPT_EVENT_HANDLER(pmf) \
+    static_cast<wxPrivate::RemoveNoexceptEventHandler<decltype(pmf)>::type>(pmf)
+#else
+#define wxREMOVE_NOEXCEPT_EVENT_HANDLER(pmf) pmf
+#endif
+
 // Try to cast the given event handler to the correct handler type:
 #define wxEVENT_HANDLER_CAST( functype, func ) \
-    wxEventFunctionCast(static_cast<functype>(&func))
+    wxEventFunctionCast(static_cast<functype>(wxREMOVE_NOEXCEPT_EVENT_HANDLER(&func)))
 
 
 // The tag is a type associated to the event type (which is an integer itself,
@@ -244,7 +278,7 @@ private:
     wxEventFunction m_method;
 
     // Provide a dummy default ctor for type info purposes
-    wxObjectEventFunctor() { }
+    wxObjectEventFunctor() : m_handler(NULL), m_method(NULL) { }
 
     WX_DECLARE_TYPEINFO_INLINE(wxObjectEventFunctor)
 };
@@ -641,6 +675,7 @@ class WXDLLIMPEXP_FWD_CORE wxMenuEvent;
 class WXDLLIMPEXP_FWD_CORE wxContextMenuEvent;
 class WXDLLIMPEXP_FWD_CORE wxSysColourChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxDisplayChangedEvent;
+class WXDLLIMPEXP_FWD_CORE wxDPIChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxQueryNewPaletteEvent;
 class WXDLLIMPEXP_FWD_CORE wxPaletteChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxJoystickEvent;
@@ -793,6 +828,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MENU_HIGHLIGHT, wxMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_CONTEXT_MENU, wxContextMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DPI_CHANGED, wxDPIChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PALETTE_CHANGED, wxPaletteChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_JOY_BUTTON_DOWN, wxJoystickEvent);
@@ -2186,20 +2222,7 @@ public:
 
     // we do need to copy wxKeyEvent sometimes (in wxTreeCtrl code, for
     // example)
-    wxKeyEvent& operator=(const wxKeyEvent& evt)
-    {
-        if ( &evt != this )
-        {
-            wxEvent::operator=(evt);
-
-            // Borland C++ 5.82 doesn't compile an explicit call to an
-            // implicitly defined operator=() so need to do it this way:
-            *static_cast<wxKeyboardState *>(this) = evt;
-
-            DoAssignMembers(evt);
-        }
-        return *this;
-    }
+    wxKeyEvent& operator=(const wxKeyEvent& evt);
 
 public:
     // Do not use these fields directly, they are initialized on demand, so
@@ -2346,39 +2369,17 @@ private:
  wxEVT_NC_PAINT
  */
 
-#if wxDEBUG_LEVEL && defined(__WXMSW__)
-    #define wxHAS_PAINT_DEBUG
-
-    // see comments in src/msw/dcclient.cpp where g_isPainting is defined
-    extern WXDLLIMPEXP_CORE int g_isPainting;
-#endif // debug
-
 class WXDLLIMPEXP_CORE wxPaintEvent : public wxEvent
 {
+    // This ctor is only intended to be used by wxWidgets itself, so it's
+    // intentionally declared as private when not building the library itself.
+#ifdef WXBUILDING
 public:
-    wxPaintEvent(int Id = 0)
-        : wxEvent(Id, wxEVT_PAINT)
-    {
-#ifdef wxHAS_PAINT_DEBUG
-        // set the internal flag for the duration of redrawing
-        g_isPainting++;
-#endif // debug
-    }
+#endif // WXBUILDING
+    explicit wxPaintEvent(wxWindowBase* window = NULL);
 
-    // default copy ctor and dtor are normally fine, we only need them to keep
-    // g_isPainting updated in debug build
-#ifdef wxHAS_PAINT_DEBUG
-    wxPaintEvent(const wxPaintEvent& event)
-            : wxEvent(event)
-    {
-        g_isPainting++;
-    }
-
-    virtual ~wxPaintEvent()
-    {
-        g_isPainting--;
-    }
-#endif // debug
+public:
+    // default copy ctor and dtor are fine
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxPaintEvent(*this); }
 
@@ -2388,11 +2389,14 @@ private:
 
 class WXDLLIMPEXP_CORE wxNcPaintEvent : public wxEvent
 {
+    // This ctor is only intended to be used by wxWidgets itself, so it's
+    // intentionally declared as private when not building the library itself.
+#ifdef WXBUILDING
 public:
-    wxNcPaintEvent(int winid = 0)
-        : wxEvent(winid, wxEVT_NC_PAINT)
-        { }
+#endif // WXBUILDING
+    explicit wxNcPaintEvent(wxWindowBase* window = NULL);
 
+public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxNcPaintEvent(*this); }
 
 private:
@@ -3042,6 +3046,32 @@ public:
         { }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDisplayChangedEvent(*this); }
+};
+
+/*
+ wxEVT_DPI_CHANGED
+ */
+class WXDLLIMPEXP_CORE wxDPIChangedEvent : public wxEvent
+{
+public:
+    explicit
+    wxDPIChangedEvent(const wxSize& oldDPI = wxDefaultSize,
+                      const wxSize& newDPI = wxDefaultSize)
+        : wxEvent(0, wxEVT_DPI_CHANGED),
+          m_oldDPI(oldDPI),
+          m_newDPI(newDPI)
+        { }
+
+    wxSize GetOldDPI() const { return m_oldDPI; }
+    wxSize GetNewDPI() const { return m_newDPI; }
+
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }
+
+private:
+    wxSize m_oldDPI;
+    wxSize m_newDPI;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDPIChangedEvent);
 };
 
 /*
@@ -4121,6 +4151,7 @@ typedef void (wxEvtHandler::*wxDropFilesEventFunction)(wxDropFilesEvent&);
 typedef void (wxEvtHandler::*wxInitDialogEventFunction)(wxInitDialogEvent&);
 typedef void (wxEvtHandler::*wxSysColourChangedEventFunction)(wxSysColourChangedEvent&);
 typedef void (wxEvtHandler::*wxDisplayChangedEventFunction)(wxDisplayChangedEvent&);
+typedef void (wxEvtHandler::*wxDPIChangedEventFunction)(wxDPIChangedEvent&);
 typedef void (wxEvtHandler::*wxUpdateUIEventFunction)(wxUpdateUIEvent&);
 typedef void (wxEvtHandler::*wxCloseEventFunction)(wxCloseEvent&);
 typedef void (wxEvtHandler::*wxShowEventFunction)(wxShowEvent&);
@@ -4184,6 +4215,8 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
     wxEVENT_HANDLER_CAST(wxSysColourChangedEventFunction, func)
 #define wxDisplayChangedEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxDisplayChangedEventFunction, func)
+#define wxDPIChangedEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxDPIChangedEventFunction, func)
 #define wxUpdateUIEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxUpdateUIEventFunction, func)
 #define wxCloseEventHandler(func) \
@@ -4443,6 +4476,7 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 #define EVT_INIT_DIALOG(func)  wx__DECLARE_EVT0(wxEVT_INIT_DIALOG, wxInitDialogEventHandler(func))
 #define EVT_SYS_COLOUR_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler(func))
 #define EVT_DISPLAY_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DISPLAY_CHANGED, wxDisplayChangedEventHandler(func))
+#define EVT_DPI_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DPI_CHANGED, wxDPIChangedEventHandler(func))
 #define EVT_SHOW(func) wx__DECLARE_EVT0(wxEVT_SHOW, wxShowEventHandler(func))
 #define EVT_MAXIMIZE(func) wx__DECLARE_EVT0(wxEVT_MAXIMIZE, wxMaximizeEventHandler(func))
 #define EVT_ICONIZE(func) wx__DECLARE_EVT0(wxEVT_ICONIZE, wxIconizeEventHandler(func))

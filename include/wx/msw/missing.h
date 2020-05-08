@@ -23,7 +23,11 @@
 #endif
 
 #ifndef WM_PRINTCLIENT
-    #define WM_PRINTCLIENT 0x318
+    #define WM_PRINTCLIENT      0x0318
+#endif
+
+#ifndef WM_DPICHANGED
+    #define WM_DPICHANGED       0x02E0
 #endif
 
 #ifndef DT_HIDEPREFIX

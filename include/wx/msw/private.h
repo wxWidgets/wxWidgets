@@ -91,12 +91,13 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // Return the height of a native text control corresponding to the given
 // character height (as returned by GetCharHeight() or wxGetCharSize()).
 //
-// The wxWindow parameter must be valid and used for getting the DPI.
-inline int wxGetEditHeightFromCharHeight(int cy, const wxWindow* w)
+// The wxWindow parameter is currently not used but should still be valid.
+inline int wxGetEditHeightFromCharHeight(int cy, const wxWindow* WXUNUSED(w))
 {
     // The value 8 here is empiric, i.e. it's not necessarily correct, but
     // seems to work relatively well.
-    return cy + w->FromDIP(8);
+    // Don't use FromDIP(8), this seems not needed.
+    return cy + 8;
 }
 
 // Compatibility macro used in the existing code. It assumes that it's called
@@ -161,7 +162,8 @@ protected:
     // implicitly convertible to HANDLE, which is a pointer.
     static HANDLE InvalidHandle()
     {
-        return reinterpret_cast<HANDLE>(INVALID_VALUE);
+        wxUIntPtr h = INVALID_VALUE;
+        return reinterpret_cast<HANDLE>(h);
     }
 
     void DoClose()
@@ -208,6 +210,12 @@ struct WinStruct : public T
 
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
+
+#ifdef COM_DECLSPEC_NOTHROW
+    #define wxSTDMETHODIMP COM_DECLSPEC_NOTHROW STDMETHODIMP
+#else
+    #define wxSTDMETHODIMP STDMETHODIMP
+#endif
 
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)
@@ -448,7 +456,7 @@ private:
 class MemoryHDC
 {
 public:
-    MemoryHDC(HDC hdc = 0) { m_hdc = ::CreateCompatibleDC(hdc); }
+    MemoryHDC(HDC hdc = NULL) { m_hdc = ::CreateCompatibleDC(hdc); }
    ~MemoryHDC() { ::DeleteDC(m_hdc); }
 
     operator HDC() const { return m_hdc; }
@@ -482,7 +490,7 @@ public:
     ~SelectInHDC() { if ( m_hdc ) ::SelectObject(m_hdc, m_hgdiobj); }
 
     // return true if the object was successfully selected
-    operator bool() const { return m_hgdiobj != 0; }
+    operator bool() const { return m_hgdiobj != NULL; }
 
 private:
     HDC m_hdc;
@@ -577,7 +585,7 @@ class MonoBitmap : public AutoHBITMAP
 {
 public:
     MonoBitmap(int w, int h)
-        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, 0))
+        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, NULL))
     {
     }
 };
@@ -965,6 +973,13 @@ extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 // GetCursorPos can fail without populating the POINT. This falls back to GetMessagePos.
 WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
 
+#if WXWIN_COMPATIBILITY_3_0
+wxDEPRECATED_MSG("Use wxNativeFontInfo::lf directly instead of this private function")
+WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
+wxDEPRECATED_MSG("Use wxNativeFontInfo(LOGFONT) ctor instead of this private function")
+WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
+#endif // WXWIN_COMPATIBILITY_3_0
+
 WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
 
@@ -1101,6 +1116,8 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 extern WXDLLIMPEXP_CORE wxSize wxGetHiconSize(HICON hicon);
 
 WXDLLIMPEXP_CORE void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
+
+WXDLLIMPEXP_CORE void wxDrawHVLine(HDC hdc, int x1, int y1, int x2, int y2, COLORREF color, int width);
 
 // fill the client rect of the given window on the provided dc using this brush
 inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)

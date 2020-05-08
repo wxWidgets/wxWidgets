@@ -49,8 +49,10 @@ public:
 
     // implementation
     GdkBitmap   *m_bitmap;
+    int m_width;
+    int m_height;
 
-    GdkBitmap *GetBitmap() const;
+    wxBitmap GetBitmap() const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxMask);

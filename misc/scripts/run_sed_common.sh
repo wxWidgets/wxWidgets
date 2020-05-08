@@ -37,6 +37,7 @@ run_sed() {
         rm $filename.$$
         msgc "unchanged"
     else
+        chmod --reference=$filename $filename.$$
         mv $filename.$$ $filename
         msgc "done"
     fi
