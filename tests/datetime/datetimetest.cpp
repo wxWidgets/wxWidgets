@@ -870,8 +870,10 @@ void DateTimeTestCase::TestTimeFormat()
 
     // test partially specified dates too
     wxDateTime dtDef(26, wxDateTime::Sep, 2008);
-    CPPUNIT_ASSERT( dt.ParseFormat("17", "%d") );
+    CPPUNIT_ASSERT( dt.ParseFormat("17", "%d", dtDef) );
     CPPUNIT_ASSERT_EQUAL( 17, dt.GetDay() );
+    CPPUNIT_ASSERT_EQUAL( wxDateTime::Sep, dt.GetMonth() );
+    CPPUNIT_ASSERT_EQUAL( 2008, dt.GetYear() );
 
     // test some degenerate cases
     CPPUNIT_ASSERT( !dt.ParseFormat("", "%z") );
