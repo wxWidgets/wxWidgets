@@ -223,19 +223,6 @@ private:
 
     KeyboardTestWindow *m_win;
 
-#ifdef __WXGTK__
-    // This struct affects wxUIActionSimulator in such a way that the simulator
-    // will sleep with an additional delay (10 ms) after each simulation.
-    // Otherwise, the test would fail.
-    struct SimDelay
-    {
-        SimDelay() { wxSetEnv("WX_UI_TESTS_DELAY", "10"); }
-       ~SimDelay() { wxUnsetEnv("WX_UI_TESTS_DELAY"); }
-    };
-
-    SimDelay m_delay;
-#endif // __WXGTK__
-
     wxDECLARE_NO_COPY_CLASS(KeyboardEventTestCase);
 };
 

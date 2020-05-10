@@ -80,31 +80,9 @@ public:
     wxXSync(wxX11Display& display, bool depressed)
         : m_display(display), m_isMotion(false)
     {
-        static int s_maxDepressed = 0;
+        depressed ? ++ms_numDepressed : --ms_numDepressed;
 
-        if ( depressed )
-        {
-            wxASSERT_MSG( ms_numDepressed == s_maxDepressed,
-                         "Invalid call to wxXSync() ctor" );
-
-            ++ms_numDepressed; // A key or button is down.
-
-            s_maxDepressed = ms_numDepressed;
-        }
-        else
-        {
-            if ( s_maxDepressed != 0 )
-            {
-                s_maxDepressed = 0; // reset
-
-                wxYield();
-                wxMilliSleep(Default_Delay); // No need for additional delay here.
-            }
-
-            --ms_numDepressed; // A key or button is up.
-
-            wxASSERT_MSG( ms_numDepressed >= 0, "Invalid call to wxXSync() ctor" );
-        }
+        wxASSERT_MSG( ms_numDepressed >= 0, "Invalid call to wxXSync() ctor" );
     }
 
     ~wxXSync()
@@ -124,30 +102,8 @@ public:
             }
 
             wxYield();
-
-            // Default_Delay might not be sufficient for some
-            // tests which need more additionnal time to pass.
-            wxMilliSleep(Default_Delay + GetAdditionalDelay());
+            wxMilliSleep(Default_Delay);
         }
-    }
-
-private:
-    static long GetAdditionalDelay()
-    {
-        long delay;
-        wxString delayStr;
-
-        if ( wxGetEnv("WX_UI_TESTS_DELAY", &delayStr) &&
-             delayStr.ToCLong(&delay) )
-        {
-            delay = wxClip(delay, 0, 1000); // up to 1s
-        }
-        else
-        {
-            delay = 0;
-        }
-
-        return delay;
     }
 
 private:
@@ -156,8 +112,7 @@ private:
 
     enum
     {
-        Default_Delay = 10  // amount of ms to sleep after a key / button
-                            // press or release.
+        Default_Delay = 20  // amount of ms to sleep after key/button release.
     };
 
     static int ms_numDepressed;

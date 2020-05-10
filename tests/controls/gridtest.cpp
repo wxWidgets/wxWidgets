@@ -710,9 +710,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectUsingEndKey", "[grid]")
 
     sim.KeyDown(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
     sim.KeyUp(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
-#ifdef __WXGTK20__
-    wxMilliSleep(10);
-#endif
     wxYield();
 
     wxGridCellCoordsArray topleft = m_grid->GetSelectionBlockTopLeft();
