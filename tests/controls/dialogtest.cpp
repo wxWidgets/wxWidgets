@@ -59,13 +59,18 @@ void ModalDialogsTestCase::MessageDialog()
 {
     int rc;
 
+#if wxUSE_FILEDLG
+    #define FILE_DIALOG_TEST ,\
+        wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt").Optional()
+#else
+    #define FILE_DIALOG_TEST
+#endif
+
     wxTEST_DIALOG
     (
         rc = wxMessageBox("Should I fail?", "Question", wxYES|wxNO),
         wxExpectModal<wxMessageDialog>(wxNO)
-#if wxUSE_FILEDLG
-        ,wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt").Optional()
-#endif
+        FILE_DIALOG_TEST
     );
 
     CPPUNIT_ASSERT_EQUAL(wxNO, rc);
