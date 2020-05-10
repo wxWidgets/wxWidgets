@@ -5674,6 +5674,26 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     GetEventHandler()->ProcessEvent(evt);
 }
 
+#ifdef __WXMSW__
+WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
+    WXWPARAM wParam,
+    WXLPARAM lParam)
+{
+    switch(nMsg) {
+    // Forward IME messages to ScintillaWX
+    case WM_IME_KEYDOWN:
+    case WM_IME_REQUEST:
+    case WM_IME_STARTCOMPOSITION:
+    case WM_IME_ENDCOMPOSITION:
+    case WM_IME_COMPOSITION:
+    case WM_IME_SETCONTEXT:
+        return SendMsg(nMsg, wParam, lParam);
+    default:
+        return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+    }
+}
+#endif
+
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

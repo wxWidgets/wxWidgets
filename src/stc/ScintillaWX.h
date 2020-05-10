@@ -238,6 +238,15 @@ private:
     wxDataFormat m_clipRectTextFormat;
 #endif
 
+#ifdef __WXMSW__
+    // ScintillaWin
+    HWND MainHWND() const wxNOEXCEPT;
+
+    // DBCS
+    void ImeStartComposition();
+    void ImeEndComposition();
+#endif
+
     friend class wxSTCCallTip;
     friend class wxSTCTimer; // To get access to TickReason declaration
 };
