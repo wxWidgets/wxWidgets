@@ -3,7 +3,36 @@
 # It is used automatically for the repositories on Github if it's found in the
 # root directory of the project.
 
-language: objective-c
-osx_image: xcode11.4
-xcode_project: tests/test_cocoa.xcodeproj
-xcode_scheme: test-app
+# This is the control file for Travis continuous integration system.
+#
+# It is used automatically for the repositories on Github if it's found in the
+# root directory of the project.
+language: cpp
+sudo: required
+
+matrix:
+    include:
+        - os: osx
+          language: objective-c
+          osx_image: xcode11.4
+          xcode_sdk: macosx10.15
+          xcode_project: tests/test_cocoa.xcodeproj
+          xcode_scheme: test-app
+          xcode_destination: arch=x86_64
+          env: XCODE_ACTION="build"
+          name: wxOSX macOS Xcode 11.4 xcodebuild
+        - os: osx
+          osx_image: xcode11.4
+          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0 --with-osx_iphone --with-macosx-version-min=10.0 --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path) --enable-stl --disable-sys-libs" wxSKIP_GUI=1 wxSKIP_TESTING=1 wxSKIP_SAMPLES=1
+          name: wxOSX iOSSimulator Xcode 11.4
+        - os: osx
+          osx_image: xcode11.3
+          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --with-macosx-version-min=10.12 --enable-stl"
+          name: wxOSX macOS Xcode 11.3
+
+script:
+    - if [[ -z "${TRAVIS_XCODE_PROJECT}" ]]; then
+        bash build/tools/travis-ci.sh
+      else
+        set -o pipefail && xcodebuild -project "$TRAVIS_XCODE_PROJECT" -sdk "TRAVIS_XCODE_SDK" -destination "$TRAVIS_XCODE_DESTINATION" -scheme "$TRAVIS_XCODE_SCHEME" $XCODE_ACTION | xcpretty
+      fi
