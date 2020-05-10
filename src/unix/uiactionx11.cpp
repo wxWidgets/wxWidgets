@@ -28,16 +28,27 @@
 #include "wx/unix/utilsx11.h"
 
 #ifdef __WXGTK__
+#include "wx/window.h"
 #include "wx/gtk/private/wrapgtk.h"
 #include <gdk/gdkx.h>
 
 GtkWidget* wxGetTopLevelGTK();
 GdkWindow* wxGetTopLevelGDK();
 
+// This helper function tries to set the input focus to the correct (top level)
+// window, i.e.: the window to which keyboard events will be reported.
 static inline void wxSetInputFocusToXWindow(wxX11Display& display)
 {
-    XSetInputFocus(display, GDK_WINDOW_XID(wxGetTopLevelGDK()),
-                   RevertToPointerRoot, CurrentTime);
+    wxWindow* const win = wxGetActiveWindow();
+
+    GdkWindow* gdkwin;
+
+    if ( win && win->IsTopLevel() )
+        gdkwin = gtk_widget_get_window(win->GetHandle());
+    else
+        gdkwin = wxGetTopLevelGDK();
+
+    XSetInputFocus(display, GDK_WINDOW_XID(gdkwin), RevertToPointerRoot, CurrentTime);
 }
 #else // !__WXGTK__
 #define wxSetInputFocusToXWindow(display)
