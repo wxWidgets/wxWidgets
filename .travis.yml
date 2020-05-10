@@ -28,7 +28,33 @@ matrix:
         - os: osx
           osx_image: xcode11.3
           env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --with-macosx-version-min=10.12 --enable-stl"
-          name: wxOSX macOS Xcode 11.3
+          name: wxOSX Xcode 11.3
+
+    # The environments running these builds are flaky and often fail for the
+    # reasons that have nothing to do with the build itself.
+    allow_failures:
+        - os: linux
+          arch: ppc64le
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
+          name: wxBase PowerPC64
+        - os: linux
+          arch: s390x
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
+          name: wxBase S/390
+
+branches:
+    only:
+        - master
+        - WX_3_0_BRANCH
+
+notifications:
+    email:
+        recipients:
+            - vadim@wxwidgets.org
+        on_success: change
+        on_failure: change
+
+before_install: ./build/tools/before_install.sh
 
 script:
     - if [[ -z "${TRAVIS_XCODE_PROJECT}" ]]; then

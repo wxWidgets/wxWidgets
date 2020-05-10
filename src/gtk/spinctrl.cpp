@@ -353,18 +353,6 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
     return NULL;
 }
 
-void wxSpinCtrlGTKBase::GtkSetEntryWidth()
-{
-    const int minVal = static_cast<int>(DoGetMin());
-    const int maxVal = static_cast<int>(DoGetMax());
-
-    gtk_entry_set_width_chars
-    (
-        GTK_ENTRY(m_widget),
-        wxSpinCtrlImpl::GetMaxValueLength(minVal, maxVal, GetBase())
-    );
-}
-
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
@@ -436,6 +424,18 @@ wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
 
 } // extern "C"
 
+void wxSpinCtrl::GtkSetEntryWidth()
+{
+    const int minVal = static_cast<int>(DoGetMin());
+    const int maxVal = static_cast<int>(DoGetMax());
+
+    gtk_entry_set_width_chars
+    (
+        GTK_ENTRY(m_widget),
+        wxSpinCtrlImpl::GetMaxValueLength(minVal, maxVal, GetBase())
+    );
+}
+
 bool wxSpinCtrl::SetBase(int base)
 {
     // Currently we only support base 10 and 16. We could add support for base
@@ -485,6 +485,15 @@ bool wxSpinCtrl::SetBase(int base)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGTKBase);
 
+void wxSpinCtrlDouble::GtkSetEntryWidth()
+{
+    const unsigned digits = GetDigits();
+    const int lenMin = wxString::Format("%.*f", digits, GetMin()).length();
+    const int lenMax = wxString::Format("%.*f", digits, GetMax()).length();
+
+    gtk_entry_set_width_chars(GTK_ENTRY(m_widget), wxMax(lenMin, lenMax));
+}
+
 unsigned wxSpinCtrlDouble::GetDigits() const
 {
     wxCHECK_MSG( m_widget, 0, "invalid spin button" );
@@ -498,6 +507,10 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 
     wxSpinCtrlEventDisabler disable(this);
     gtk_spin_button_set_digits( GTK_SPIN_BUTTON(m_widget), digits);
+
+    InvalidateBestSize();
+
+    GtkSetEntryWidth();
 }
 
 #endif // wxUSE_SPINCTRL
