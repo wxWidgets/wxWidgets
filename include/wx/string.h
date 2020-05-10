@@ -4030,9 +4030,7 @@ namespace std
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxCStrData&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxScopedCharBuffer&);
-#ifndef __BORLANDC__
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxScopedWCharBuffer&);
-#endif
 
 #if wxUSE_UNICODE && defined(HAVE_WOSTREAM)
 
