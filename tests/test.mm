@@ -93,8 +93,10 @@ extern "C" int XCTmain(int argc, char **argv);
 
     [testSuiteRun start];
 
-    wxString cwd = wxGetCwd();
-    wxSetWorkingDirectory( cwd + "/tests.xctest/Contents/Resources" ) ;
+    NSBundle* testBundle = [NSBundle bundleForClass:[wxXCTestsWrapper class]];
+    wxString bundle = wxCFStringRef::AsString([testBundle bundlePath], wxLocale::GetSystemEncoding());
+    
+    wxSetWorkingDirectory( bundle + "/Contents/Resources" ) ;
 
     XCTmain(argc, argv);
     
