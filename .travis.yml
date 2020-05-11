@@ -61,5 +61,5 @@ script:
     if [[ -z "${TRAVIS_XCODE_PROJECT}" ]]; then
         bash build/tools/travis-ci.sh
     else
-        set -o pipefail && xcodebuild -project "$TRAVIS_XCODE_PROJECT" -sdk "TRAVIS_XCODE_SDK" -destination "$TRAVIS_XCODE_DESTINATION" -scheme "$TRAVIS_XCODE_SCHEME" $XCODE_ACTION | xcpretty
+        set -o pipefail && xcodebuild -project "$TRAVIS_XCODE_PROJECT" -sdk "$TRAVIS_XCODE_SDK" -destination "$TRAVIS_XCODE_DESTINATION" -scheme "$TRAVIS_XCODE_SCHEME" $XCODE_ACTION | xcpretty
     fi
