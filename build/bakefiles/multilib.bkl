@@ -402,6 +402,7 @@
         <sources>$(STC_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_STC)</ldlibs>
         <msvc-headers>$(STC_HDR)</msvc-headers>
     </dll>
 

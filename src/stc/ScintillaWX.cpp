@@ -1438,6 +1438,10 @@ sptr_t ScintillaWX::DirectFunction(
 
 #ifdef __WXMSW__
 
+#ifdef __VISUALC__
+#pragma comment(lib, "imm32.lib")
+#endif
+
 namespace {
 
 POINT POINTFromPoint(Point pt) wxNOEXCEPT {

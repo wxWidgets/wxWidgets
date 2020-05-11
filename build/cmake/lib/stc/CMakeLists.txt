@@ -195,5 +195,8 @@ wx_lib_compile_definitions(stc PRIVATE
     LINK_LEXERS
 )
 wx_lib_link_libraries(stc PRIVATE wxscintilla)
+if(WXMSW)
+    wx_lib_link_libraries(stc PRIVATE imm32)
+endif()
 
 wx_finalize_lib(stc)
