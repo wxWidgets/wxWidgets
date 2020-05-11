@@ -13,17 +13,13 @@
     <set var="BUNDLE_IDENTIFIER">
         `echo $(DOLLAR)(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`
     </set>
-    
-    <set var="BUNDLE_PLIST" overwrite="0">
-        $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
-    </set>
-    <set var="BUNDLE_ICON" overwrite="0">
-        $(TOP_SRCDIR)src/osx/carbon/wxmac.icns
-    </set>
+
     <set var="BUNDLE_RESOURCES" overwrite="0"></set>
     <set var="BUNDLE_FONT_RESOURCES" overwrite="0"></set>
 
-    <define-tag name="wx-mac-app-bundle" rules="exe">
+    <define-tag name="wx-mac-app-bundle" rules="exe" cond="TOOLKIT=='OSX_COCOA'">
+        <set var="BUNDLE_PLIST" overwrite="0">$(TOP_SRCDIR)src/osx/carbon/Info.plist.in</set>
+        <set var="BUNDLE_ICON" overwrite="0">$(TOP_SRCDIR)src/osx/carbon/wxmac.icns</set>
 
         <!-- bundle directory: -->
         <set var="BUNDLE">$(id).app/Contents</set>
@@ -33,12 +29,12 @@
             <if cond="TOOLKIT=='MAC'">$(BUNDLE)/PkgInfo</if>
             <if cond="TOOLKIT=='OSX_CARBON'">$(BUNDLE)/PkgInfo</if>
             <if cond="TOOLKIT=='OSX_COCOA'">$(BUNDLE)/PkgInfo</if>
-            <if cond="TOOLKIT=='OSX_IPHONE'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_IPHONE'">$(id).app/PkgInfo</if>
             <if cond="TOOLKIT=='COCOA'">$(BUNDLE)/PkgInfo</if>
         </set>
 
         <add-target target="$(BUNDLE_TGT)" type="action"
-                    cond="target and PLATFORM_MACOSX=='1'"/>
+                    cond="target and TOOLKIT=='OSX_COCOA'"/>
         <modify-target target="$(BUNDLE_TGT)">
             <!-- required data: -->
             <depends>$(id)</depends>
@@ -99,7 +95,64 @@
         <modify-target target="clean">
             <command>rm -rf $(id).app</command>
         </modify-target>
-        
+
+    </define-tag>
+
+    <define-tag name="wx-mac-app-bundle" rules="exe" cond="TOOLKIT=='OSX_IPHONE'">
+        <set var="IOS_BUNDLE_PLIST" overwrite="0">$(TOP_SRCDIR)src/osx/iphone/Info.plist.in</set>
+        <set var="IOS_BUNDLE_ICONSET" overwrite="0">$(TOP_SRCDIR)src/osx/iphone/AppIcon.appiconset</set>
+
+        <!-- bundle directory: -->
+        <set var="IOS_BUNDLE">$(id).app</set>
+        <set var="IOS_BUNDLE_TGT">$(IOS_BUNDLE)/PkgInfo</set>
+
+        <add-target target="$(IOS_BUNDLE_TGT)" type="action"
+                    cond="target and TOOLKIT=='OSX_IPHONE'"/>
+        <modify-target target="$(IOS_BUNDLE_TGT)">
+            <!-- required data: -->
+            <depends>$(id)</depends>
+            <depends-on-file>$(IOS_BUNDLE_PLIST)</depends-on-file>
+            <depends-on-file>$(IOS_BUNDLE_ICONSET)</depends-on-file>
+            <depends-on-file>$(BUNDLE_RESOURCES)</depends-on-file>
+            <depends-on-file>$(BUNDLE_FONT_RESOURCES)</depends-on-file>
+
+            <command>
+                <!-- create the directories: -->
+                <!-- mkdir -p $(IOS_BUNDLE) -->
+
+                <!-- Info.plist: -->
+                sed -e "s/IDENTIFIER/$(BUNDLE_IDENTIFIER)/" \
+                    -e "s/EXECUTABLE/$(id)/" \
+                    -e "s/VERSION/$(WX_VERSION)/" \
+                    $(IOS_BUNDLE_PLIST) >$(IOS_BUNDLE)/Info.plist
+
+                <!-- PkgInfo: -->
+                /bin/echo "APPL????" >$(IOS_BUNDLE)/PkgInfo
+
+                <!-- move the binary: -->
+                ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(IOS_BUNDLE)/$(id)
+
+                <!-- copy the application icon: -->
+                cp -rf $(IOS_BUNDLE_ICONSET) $(IOS_BUNDLE)
+	        </command>
+            <if cond="BUNDLE_RESOURCES!=''">
+                <command>
+                    <!-- copy all other bundle resources: -->
+                    cp -f $(BUNDLE_RESOURCES) $(IOS_BUNDLE)
+                </command>
+            </if>
+            <if cond="BUNDLE_FONT_RESOURCES!=''">
+                <!--
+                    Special case of font resources, which must be copied into
+                    the Fonts subdirectory used in src/osx/carbon/Info.plist.in file.
+                 -->
+                <command>
+                    cp -f $(BUNDLE_FONT_RESOURCES) $(IOS_BUNDLE)
+                </command>
+            </if>
+
+        </modify-target>
+
     </define-tag>
 
 </makefile>
