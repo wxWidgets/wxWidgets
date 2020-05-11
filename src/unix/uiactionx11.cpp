@@ -144,6 +144,10 @@ protected:
     explicit wxUIActionSimulatorX11Impl(wxX11Display& display)
         : m_display(display)
     {
+        wxYield();
+        wxMilliSleep(50);
+
+        wxSetInputFocusToXWindow(m_display);
     }
 
     wxX11Display m_display;
@@ -194,10 +198,6 @@ public:
     explicit wxUIActionSimulatorPlainX11Impl(wxX11Display& display)
         : wxUIActionSimulatorX11Impl(display)
     {
-        wxYield();
-        wxMilliSleep(50);
-
-        wxSetInputFocusToXWindow(m_display);
     }
 
 private:
@@ -312,10 +312,6 @@ public:
     explicit wxUIActionSimulatorXTestImpl(wxX11Display& display)
         : wxUIActionSimulatorX11Impl(display)
     {
-        wxYield();
-        wxMilliSleep(50);
-
-        wxSetInputFocusToXWindow(m_display);
     }
 
 private:
