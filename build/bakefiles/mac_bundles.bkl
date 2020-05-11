@@ -118,7 +118,7 @@
 
             <command>
                 <!-- create the directories: -->
-                <!-- mkdir -p $(IOS_BUNDLE) -->
+                mkdir -p $(IOS_BUNDLE)
 
                 <!-- Info.plist: -->
                 sed -e "s/IDENTIFIER/$(BUNDLE_IDENTIFIER)/" \
