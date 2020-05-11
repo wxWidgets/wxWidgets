@@ -380,10 +380,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     wxPoint pt = m_grid->ClientToScreen(wxPoint(m_grid->GetRowLabelSize() +
                                         m_grid->GetColSize(0), 5));
     sim.MouseMove(pt);
-#ifdef __WXGTK20__
-    // see below why.
-    sim.MouseMove(pt);
-#endif
     wxYield();
 
     sim.MouseDown();
@@ -400,18 +396,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     pt = m_grid->ClientToScreen(wxPoint(5, m_grid->GetColLabelSize() +
                                         m_grid->GetRowSize(0)));
 
-#ifndef __WXGTK20__
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
-#else
-    // wxGrid need a motion event to be able to initiate a drag operation,
-    // and a mere call to MouseMove() doesn't generate this event unless
-    // the pointer is already inside the Grid{Col,Row}LabelWindow itself.
-    sim.MouseMove(pt);
-    sim.MouseMove(pt); // a second call is needed.
-    sim.MouseDown();
-    sim.MouseMove(pt.x, pt.y + 50);
-    sim.MouseUp();
-#endif
 
     wxYield();
 
@@ -1178,9 +1163,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 
     wxYield();
     sim.MouseMove(point);
-#ifdef __WXGTK20__
-    sim.MouseMove(point);
-#endif
 
     wxYield();
     sim.MouseDown();
@@ -1241,9 +1223,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
     // Drag to reach the minimal width.
     wxYield();
     sim.MouseMove(point);
-#ifdef __WXGTK20__
-    sim.MouseMove(point);
-#endif
     wxYield();
     sim.MouseDown();
     wxYield();

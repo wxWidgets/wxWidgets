@@ -395,6 +395,24 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
     if ( !m_display )
         return false;
 
+#ifdef  __WXGTK20__
+    GdkWindow* const gdkwin1 = gdk_window_at_pointer(NULL, NULL);
+    const bool ret = DoX11MouseMove(x, y);
+    GdkWindow* const gdkwin2 = gdk_window_at_pointer(NULL, NULL);
+
+    if ( gdkwin1 != gdkwin2 )
+    {
+        // Workaround the problem of destination window not getting a motion event
+        // after our fake mouse movement (unless the pointer is already inside it)
+        // by issuing a second call to 'DoX11MouseMove()' to get the event.
+        // Notice that ret is true here and we don't want to override it by whatever
+        // this second call returns.
+        DoX11MouseMove(x, y);
+    }
+
+    return ret;
+#endif
+
     return DoX11MouseMove(x, y);
 }
 
