@@ -37550,6 +37550,11 @@ $as_echo "$as_me: WARNING: GStreamer not available... disabling wxMediaCtrl" >&2
 fi
 
 
+if test "$wxUSE_MSW" = 1 ; then
+    EXTRALIBS_STC="-limm32"
+fi
+
+
 if test "x$prefix" != "xNONE"; then
     wxPREFIX=$prefix
 else
@@ -37815,7 +37820,6 @@ EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
-EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
