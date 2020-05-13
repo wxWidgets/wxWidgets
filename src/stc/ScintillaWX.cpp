@@ -847,18 +847,12 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
 
 #ifdef __WXMSW__
       // ScintillaWin
-      case WM_IME_STARTCOMPOSITION: 	// dbcs
-          // TODO: We haven't ported WM_IME_COMPOSITION yet, so always use windowed IME to make it at least work
-          //if (KoreanIME() || imeInteraction == imeInline) {
-          if (false) {
-              return 0;
-          }
-          else {
-              ImeStartComposition();
-              return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
-          }
+      case WM_IME_STARTCOMPOSITION:
+          // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
+          ImeStartComposition();
+          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 
-      case WM_IME_ENDCOMPOSITION: 	// dbcs
+      case WM_IME_ENDCOMPOSITION:
           ImeEndComposition();
           return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 
@@ -866,7 +860,7 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
       case WM_IME_REQUEST:
       case WM_IME_COMPOSITION:
       case WM_IME_SETCONTEXT:
-          // TODO: Port event handling from ScintillaWin
+          // These events are forwarded here for future inline IME implementation
           return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 #endif
 
