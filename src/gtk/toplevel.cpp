@@ -25,6 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/app.h"
     #include "wx/icon.h"
     #include "wx/log.h"
 #endif
@@ -688,6 +689,18 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (!name.empty())
         gtk_window_set_role( GTK_WINDOW(m_widget), wxGTK_CONV( name ) );
 #endif
+
+    // if application name has not been set
+    if (g_get_application_name() == g_get_prgname())
+    {
+        g_set_application_name(wxTheApp->GetAppDisplayName().utf8_str());
+
+#ifndef __WXGTK4__
+        const wxString appClassName(wxTheApp->GetClassName());
+        if (!appClassName.empty())
+            gdk_set_program_class(appClassName.utf8_str());
+#endif
+    }
 
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
     gtk_widget_set_can_focus(m_widget, false);
