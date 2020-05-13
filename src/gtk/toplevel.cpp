@@ -690,9 +690,11 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_window_set_role( GTK_WINDOW(m_widget), wxGTK_CONV( name ) );
 #endif
 
+    const wxString& exeName = wxTheApp->DetectExeName();
     const wxString& appCls = wxTheApp->GetClassName();
     if (!appCls.empty())
-        gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( appCls ), wxGTK_CONV( appCls ) );
+        gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( exeName ),
+                                wxGTK_CONV( appCls ) );
 
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
     gtk_widget_set_can_focus(m_widget, false);

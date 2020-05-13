@@ -180,6 +180,11 @@ public:
         m_vendorDisplayName = name;
     }
 
+    // detect the filename of the application executable
+    //
+    // returns the empty string if it fails
+    wxString DetectExeName() const;
+
 
     // cmd line parsing stuff
     // ----------------------

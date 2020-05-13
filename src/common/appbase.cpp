@@ -214,26 +214,7 @@ bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 
 wxString wxAppConsoleBase::GetAppName() const
 {
-    wxString name = m_appName;
-    if ( name.empty() )
-    {
-        if ( argv )
-        {
-            // the application name is, by default, the name of its executable file
-            wxFileName::SplitPath(argv[0], NULL, &name, NULL);
-        }
-#if wxUSE_STDPATHS
-        else // fall back to the executable file name, if we can determine it
-        {
-            const wxString pathExe = wxStandardPaths::Get().GetExecutablePath();
-            if ( !pathExe.empty() )
-            {
-                wxFileName::SplitPath(pathExe, NULL, &name, NULL);
-            }
-        }
-#endif // wxUSE_STDPATHS
-    }
-    return name;
+    return m_appName.empty() ? DetectExeName() : m_appName;
 }
 
 wxString wxAppConsoleBase::GetAppDisplayName() const
@@ -250,6 +231,26 @@ wxString wxAppConsoleBase::GetAppDisplayName() const
     // if neither is set, use the capitalized version of the program file as
     // it's the most reasonable default
     return GetAppName().Capitalize();
+}
+
+wxString wxAppConsoleBase::DetectExeName() const {
+    wxString name;
+    if ( argv )
+    {
+        // the application name is, by default, the name of its executable file
+        wxFileName::SplitPath(argv[0], NULL, &name, NULL);
+    }
+#if wxUSE_STDPATHS
+    else // fall back to the executable file name, if we can determine it
+    {
+        const wxString pathExe = wxStandardPaths::Get().GetExecutablePath();
+        if ( !pathExe.empty() )
+        {
+            wxFileName::SplitPath(pathExe, NULL, &name, NULL);
+        }
+    }
+#endif // wxUSE_STDPATHS
+    return name;
 }
 
 wxEventLoopBase *wxAppConsoleBase::CreateMainLoop()
