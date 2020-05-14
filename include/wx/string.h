@@ -884,10 +884,18 @@ public:
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
 
-      // Notice that comparison operators taking non-const iterator are not
-      // needed here because of the implicit conversion from non-const iterator
-      // to const ones ensure that the versions for const_iterator declared
-      // inside WX_STR_ITERATOR_IMPL can be used.
+      // Until C++20 we could avoid defining these comparison operators because
+      // the implicit conversion from iterator to const_iterator was used to
+      // reuse the operators defined inside WX_STR_ITERATOR_IMPL. However in
+      // C++20 the operator overloads with reversed arguments would be used
+      // instead, resulting in infinite recursion, so we do need them and, just
+      // for consistency, define them in all cases.
+      bool operator==(const iterator& i) const;
+      bool operator!=(const iterator& i) const;
+      bool operator<(const iterator& i) const;
+      bool operator>(const iterator& i) const;
+      bool operator<=(const iterator& i) const;
+      bool operator>=(const iterator& i) const;
 
   private:
       // for internal wxString use only:
@@ -954,10 +962,13 @@ public:
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, -n)); }
 
-      // As in UTF-8 case above, we don't need comparison operators taking
-      // iterator because we have an implicit conversion from iterator to
-      // const_iterator so the operators declared by WX_STR_ITERATOR_IMPL will
-      // be used.
+      // See comment for comparison operators in the UTF-8 case above.
+      bool operator==(const iterator& i) const;
+      bool operator!=(const iterator& i) const;
+      bool operator<(const iterator& i) const;
+      bool operator>(const iterator& i) const;
+      bool operator<=(const iterator& i) const;
+      bool operator>=(const iterator& i) const;
 
   private:
       // for internal wxString use only:
@@ -3934,6 +3945,19 @@ inline bool operator!=(const wxString& s, wchar_t c) { return !s.IsSameAs(c); }
 
 
 // wxString iterators comparisons
+inline bool wxString::const_iterator::operator==(const iterator& i) const
+    { return *this == const_iterator(i); }
+inline bool wxString::const_iterator::operator!=(const iterator& i) const
+    { return *this != const_iterator(i); }
+inline bool wxString::const_iterator::operator<(const iterator& i) const
+    { return *this < const_iterator(i); }
+inline bool wxString::const_iterator::operator>(const iterator& i) const
+    { return *this > const_iterator(i); }
+inline bool wxString::const_iterator::operator<=(const iterator& i) const
+    { return *this <= const_iterator(i); }
+inline bool wxString::const_iterator::operator>=(const iterator& i) const
+    { return *this >= const_iterator(i); }
+
 inline bool wxString::iterator::operator==(const const_iterator& i) const
     { return i == *this; }
 inline bool wxString::iterator::operator!=(const const_iterator& i) const
@@ -4006,9 +4030,7 @@ namespace std
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxCStrData&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxScopedCharBuffer&);
-#ifndef __BORLANDC__
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxScopedWCharBuffer&);
-#endif
 
 #if wxUSE_UNICODE && defined(HAVE_WOSTREAM)
 
