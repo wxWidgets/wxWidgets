@@ -1194,9 +1194,6 @@ typedef pid_t GPid;
 /* Define if wchar_t is distinct type in your compiler. */
 #define wxWCHAR_T_IS_REAL_TYPE 1
 
-/* Define if you have the dlerror function.  */
-#define HAVE_DLERROR 1
-
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
 

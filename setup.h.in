@@ -1086,9 +1086,6 @@
 /* Define if wchar_t is distinct type in your compiler. */
 #undef wxWCHAR_T_IS_REAL_TYPE
 
-/* Define if you have the dlerror function.  */
-#undef HAVE_DLERROR
-
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
 
