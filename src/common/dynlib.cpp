@@ -110,8 +110,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
     void *symbol = DoGetSymbol(name, success);
     if ( !symbol )
     {
-        ReportError(_("Couldn't find symbol '%s' in a dynamic library"),
-                    name.c_str());
+        ReportError(_("Couldn't find symbol '%s' in a dynamic library"), name);
     }
 
     return symbol;
