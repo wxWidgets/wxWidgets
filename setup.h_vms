@@ -1076,9 +1076,6 @@ typedef pid_t GPid;
 #undef HAVE_SETENV
 #endif
 
-/* Define if you have shl_load() */
-#undef HAVE_SHL_LOAD
-
 #if __CRTL_VER >= 70312000
 /* Define if you have snprintf() */
 #define HAVE_SNPRINTF 1

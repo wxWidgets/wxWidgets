@@ -29,9 +29,6 @@ class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 #elif defined(HAVE_DLOPEN)
     #include <dlfcn.h>
     typedef void               *wxDllType;
-#elif defined(HAVE_SHL_LOAD)
-    #include <dl.h>
-    typedef shl_t               wxDllType;
 #elif defined(__WXMAC__)
     #include <CodeFragments.h>
     typedef CFragConnectionID   wxDllType;
