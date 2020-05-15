@@ -25,33 +25,16 @@
 #include <X11/extensions/XTest.h>
 #endif
 
+#include "wx/log.h"
+#include "wx/window.h" // for wxGetActiveWindow
 #include "wx/unix/utilsx11.h"
 
 #ifdef __WXGTK20__
-#include "wx/window.h"
 #include "wx/gtk/private/wrapgtk.h"
 #include <gdk/gdkx.h>
 
 GtkWidget* wxGetTopLevelGTK();
 GdkWindow* wxGetTopLevelGDK();
-
-// This helper function tries to set the input focus to the correct (top level)
-// window, i.e.: the window to which keyboard events will be reported.
-static inline void wxSetInputFocusToXWindow(wxX11Display& display)
-{
-    wxWindow* const win = wxGetActiveWindow();
-
-    GdkWindow* gdkwin;
-
-    if ( win && win->IsTopLevel() )
-        gdkwin = gtk_widget_get_window(win->GetHandle());
-    else
-        gdkwin = wxGetTopLevelGDK();
-
-    XSetInputFocus(display, GDK_WINDOW_XID(gdkwin), RevertToPointerRoot, CurrentTime);
-}
-#else // !__WXGTK__
-#define wxSetInputFocusToXWindow(display)
 #endif // __WXGTK__
 
 // Normally we fall back on "plain X" implementation if XTest is not available,
@@ -147,7 +130,53 @@ protected:
         wxYield();
         wxMilliSleep(50);
 
-        wxSetInputFocusToXWindow(m_display);
+        SetInputFocusToXWindow();
+    }
+
+    // This helper function tries to set the input focus to the active (top level)
+    // window, i.e.: the window to which keyboard events will be reported.
+    //
+    // Normally we would expect the input focus to be correctly set by the WM.
+    // But for some reasons, the input focus is set to PointerRoot under Xvfb,
+    // which means: all keyboard events are forewarded to whatever is underneath
+    // mouse pointer. and consequently, our fake events could be simply lost and
+    // do not reach the subject window at all.
+    void SetInputFocusToXWindow()
+    {
+        Window focus;
+        int revert_to; // dummy
+
+        XGetInputFocus(m_display, &focus, &revert_to);
+
+        if ( focus != PointerRoot && focus != None )
+            return;
+
+        wxWindow* win = wxGetActiveWindow();
+
+    #if defined(__WXGTK__)
+        if ( win && !win->IsTopLevel() )
+        {
+            win = wxGetTopLevelParent(win);
+        }
+
+        GdkWindow* gdkwin;
+
+        if ( win )
+            gdkwin = gtk_widget_get_window(win->GetHandle());
+        else
+            gdkwin = wxGetTopLevelGDK();
+
+        focus = GDK_WINDOW_XID(gdkwin);
+    #elif defined(__WXX11__)
+        if ( !win )
+            return;
+
+        focus = (Window)(win->GetHandle());
+    #endif // __WXGTK__
+
+        wxLogTrace("focus", "SetInputFocusToXWindow on Window 0x%ul.", focus);
+
+        XSetInputFocus(m_display, focus, RevertToPointerRoot, CurrentTime);
     }
 
     wxX11Display m_display;

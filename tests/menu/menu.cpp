@@ -584,6 +584,10 @@ void MenuTestCase::Events()
     // Invoke the accelerator.
     m_frame->Show();
     m_frame->SetFocus();
+#ifdef __WXGTK__
+    // Without this, test fails when run with other tests under Xvfb.
+    m_frame->Raise();
+#endif
     wxYield();
 
     wxUIActionSimulator sim;
