@@ -132,13 +132,13 @@ public:
 
     @section zipentry_avail Field availability
 
-    When reading a zip from a stream that is seekable, wxZipEntry::GetNextEntry()
+    When reading a zip from a stream that is seekable, wxZipInputStream::GetNextEntry()
     returns a fully populated wxZipEntry object except for wxZipEntry::GetLocalExtra().
     wxZipEntry::GetLocalExtra() becomes available when the entry is opened, either by
     calling wxZipInputStream::OpenEntry() or by making an attempt to read the entry's data.
 
     For zips on non-seekable streams, the following fields are always available
-    when wxZipEntry::GetNextEntry() returns:
+    when wxZipInputStream::GetNextEntry() returns:
     - wxZipEntry::GetDateTime
     - wxZipEntry::GetInternalFormat
     - wxZipEntry::GetInternalName
