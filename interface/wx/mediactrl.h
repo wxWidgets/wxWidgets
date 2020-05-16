@@ -203,8 +203,8 @@ public:
       xoverlay and gst-play modules of gstreamer to function.
       You need the correct modules to play the relevant files, for example the
       mad module to play mp3s, etc.
-    - @b wxMEDIABACKEND_WMP10, Uses Windows Media Player 10 (Windows only) -
-      works systems with either Windows Media Player 9 or 10 installed.
+    - @b wxMEDIABACKEND_WMP10, Use Windows Media Player 10 (Windows only).
+      Works on systems with either Windows Media Player 9 or 10 installed.
 
     Note that other backends such as wxMEDIABACKEND_MCI can now be found at
     wxCode (http://wxcode.sourceforge.net/).
@@ -222,7 +222,7 @@ public:
 
     The only real tricky part is that you need to make sure the file in compiled in,
     which if there are just backends in there will not happen and you may need to
-    use a force link hack (see https://wiki.wxwidgets.org/RTTI).
+    use a force link hack (see @c wxFORCE_LINK_MODULE usage in the mediactrl sample).
 
     There is a rather simple example of how to create a backend in the
     wxActiveXContainer documentation.
