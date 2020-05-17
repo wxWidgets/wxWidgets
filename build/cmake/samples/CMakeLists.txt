@@ -11,7 +11,7 @@ wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY)
 wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
-wx_add_sample(aui auidemo.cpp LIBRARIES aui html NAME auidemo DEPENDS wxUSE_AUI)
+wx_add_sample(aui auidemo.cpp LIBRARIES wxaui wxhtml NAME auidemo DEPENDS wxUSE_AUI)
 wx_add_sample(calendar RES calendar.rc DEPENDS wxUSE_CALENDARCTRL)
 wx_add_sample(caret DEPENDS wxUSE_CARET)
 wx_add_sample(clipboard DEPENDS wxUSE_CLIPBOARD)
@@ -21,7 +21,7 @@ wx_add_sample(config conftest.cpp DEPENDS wxUSE_CONFIG)
 wx_add_sample(console CONSOLE IMPORTANT)
 wx_add_sample(dataview IMPORTANT dataview.cpp mymodels.cpp mymodels.h DEPENDS wxUSE_DATAVIEWCTRL)
 if(wxUSE_ON_FATAL_EXCEPTION AND (NOT WIN32 OR MSVC))
-    wx_add_sample(debugrpt LIBRARIES qa DEPENDS wxUSE_DEBUGREPORT)
+    wx_add_sample(debugrpt LIBRARIES wxqa DEPENDS wxUSE_DEBUGREPORT)
 endif()
 set(SAMPLE_DIALOGS_SRC dialogs.cpp dialogs.h)
 if(NOT wxBUILD_SHARED AND (WXMSW OR APPLE)) # AND NOT WXUNIV
@@ -34,11 +34,11 @@ if(WXGTK2)
     wx_list_add_prefix(SAMPLE_DIALOGS_SRC ../../src/generic/ filedlgg.cpp)
 endif()
 wx_add_sample(dialogs ${SAMPLE_DIALOGS_SRC} DATA tips.txt)
-wx_add_sample(dialup nettest.cpp LIBRARIES net DEPENDS wxUSE_DIALUP_MANAGER)
+wx_add_sample(dialup nettest.cpp LIBRARIES wxnet DEPENDS wxUSE_DIALUP_MANAGER)
 wx_add_sample(display)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
-    RES docview.rc LIBRARIES aui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
+    RES docview.rc LIBRARIES wxaui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
 wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png
     DEPENDS wxUSE_DRAGIMAGE)
@@ -55,7 +55,7 @@ wx_list_add_prefix(HELP_DOC_FILES doc/
     aindex.html down.gif dxxgifs.tex HIER.html icon1.gif icon2.gif index.html
     logo.gif wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm
     )
-wx_add_sample(help demo.cpp LIBRARIES html
+wx_add_sample(help demo.cpp LIBRARIES wxhtml
     DATA
     back.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc
     doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif
@@ -63,7 +63,7 @@ wx_add_sample(help demo.cpp LIBRARIES html
     NAME helpdemo
     DEPENDS wxUSE_HELP
     )
-wx_add_sample(htlbox LIBRARIES html DEPENDS wxUSE_HTML)
+wx_add_sample(htlbox LIBRARIES wxhtml DEPENDS wxUSE_HTML)
 if(wxUSE_HTML)
     include(html.cmake)
 endif()
@@ -78,35 +78,35 @@ endforeach()
 wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} DEPENDS wxUSE_INTL)
 # IPC samples
 set(wxSAMPLE_FOLDER ipc)
-wx_add_sample(ipc client.cpp client.h connection.h ipcsetup.h NAME ipcclient LIBRARIES net DEPENDS wxUSE_IPC)
-wx_add_sample(ipc server.cpp server.h connection.h ipcsetup.h NAME ipcserver LIBRARIES net DEPENDS wxUSE_IPC)
-wx_add_sample(ipc CONSOLE baseclient.cpp connection.h ipcsetup.h NAME baseipcclient LIBRARIES net DEPENDS wxUSE_IPC)
-wx_add_sample(ipc CONSOLE baseserver.cpp connection.h ipcsetup.h NAME baseipcserver LIBRARIES net DEPENDS wxUSE_IPC)
+wx_add_sample(ipc client.cpp client.h connection.h ipcsetup.h NAME ipcclient LIBRARIES wxnet DEPENDS wxUSE_IPC)
+wx_add_sample(ipc server.cpp server.h connection.h ipcsetup.h NAME ipcserver LIBRARIES wxnet DEPENDS wxUSE_IPC)
+wx_add_sample(ipc CONSOLE baseclient.cpp connection.h ipcsetup.h NAME baseipcclient LIBRARIES wxnet DEPENDS wxUSE_IPC)
+wx_add_sample(ipc CONSOLE baseserver.cpp connection.h ipcsetup.h NAME baseipcserver LIBRARIES wxnet DEPENDS wxUSE_IPC)
 set(wxSAMPLE_FOLDER)
 wx_add_sample(joytest joytest.cpp joytest.h DATA buttonpress.wav DEPENDS wxUSE_JOYSTICK)
 wx_add_sample(keyboard)
 wx_add_sample(layout layout.cpp layout.h)
 wx_add_sample(listctrl listtest.cpp listtest.h RES listtest.rc DEPENDS wxUSE_LISTCTRL)
 wx_add_sample(mdi mdi.cpp mdi.h RES mdi.rc DEPENDS wxUSE_MDI wxUSE_DOC_VIEW_ARCHITECTURE wxUSE_MDI_ARCHITECTURE)
-wx_add_sample(mediaplayer LIBRARIES media DEPENDS wxUSE_MEDIACTRL)
+wx_add_sample(mediaplayer LIBRARIES wxmedia DEPENDS wxUSE_MEDIACTRL)
 wx_add_sample(memcheck)
 wx_add_sample(menu DEPENDS wxUSE_MENUS)
 wx_add_sample(minimal IMPORTANT)
-wx_add_sample(notebook notebook.cpp notebook.h LIBRARIES aui DEPENDS wxUSE_NOTEBOOK)
+wx_add_sample(notebook notebook.cpp notebook.h LIBRARIES wxaui DEPENDS wxUSE_NOTEBOOK)
 if(wxUSE_OPENGL)
     set(wxSAMPLE_SUBDIR opengl/)
     set(wxSAMPLE_FOLDER OpenGL)
-    wx_add_sample(cube cube.cpp cube.h LIBRARIES gl)
-    wx_add_sample(isosurf isosurf.cpp isosurf.h LIBRARIES gl DATA isosurf.dat.gz)
+    wx_add_sample(cube cube.cpp cube.h LIBRARIES wxgl)
+    wx_add_sample(isosurf isosurf.cpp isosurf.h LIBRARIES wxgl DATA isosurf.dat.gz)
     wx_add_sample(penguin
         penguin.cpp dxfrenderer.cpp trackball.c
         dxfrenderer.h penguin.h trackball.h
-        LIBRARIES gl
+        LIBRARIES wxgl
         DATA penguin.dxf.gz)
     wx_add_sample(pyramid
         pyramid.cpp oglstuff.cpp mathstuff.cpp oglpfuncs.cpp
         pyramid.h oglstuff.h mathstuff.h oglpfuncs.h
-        LIBRARIES gl)
+        LIBRARIES wxgl)
     set(wxSAMPLE_SUBDIR)
     set(wxSAMPLE_FOLDER)
 endif()
@@ -116,30 +116,30 @@ wx_add_sample(power)
 wx_add_sample(preferences DEPENDS wxUSE_PREFERENCES_EDITOR)
 wx_add_sample(printing printing.cpp printing.h DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(propgrid propgrid.cpp propgrid_minimal.cpp sampleprops.cpp
-    tests.cpp sampleprops.h propgrid.h LIBRARIES propgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
+    tests.cpp sampleprops.h propgrid.h LIBRARIES wxpropgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
 wx_add_sample(render FOLDER render)
 wx_add_sample(render DLL renddll.cpp NAME renddll FOLDER render)
-wx_add_sample(ribbon ribbondemo.cpp LIBRARIES ribbon NAME ribbondemo DEPENDS wxUSE_RIBBON)
-wx_add_sample(richtext LIBRARIES richtext html xml NAME richtextdemo DEPENDS wxUSE_XML wxUSE_RICHTEXT)
+wx_add_sample(ribbon ribbondemo.cpp LIBRARIES wxribbon NAME ribbondemo DEPENDS wxUSE_RIBBON)
+wx_add_sample(richtext LIBRARIES wxrichtext wxhtml wxxml NAME richtextdemo DEPENDS wxUSE_XML wxUSE_RICHTEXT)
 wx_add_sample(sashtest sashtest.cpp sashtest.h RES sashtest.rc DEPENDS wxUSE_SASH)
 wx_add_sample(scroll)
 wx_add_sample(secretstore CONSOLE DEPENDS wxUSE_SECRETSTORE)
 wx_add_sample(shaped DATA star.png)
 if(wxUSE_SOCKETS)
-    wx_add_sample(sockets client.cpp NAME client LIBRARIES net FOLDER sockets)
-    wx_add_sample(sockets server.cpp NAME server LIBRARIES net FOLDER sockets)
-    wx_add_sample(sockets CONSOLE baseclient.cpp NAME baseclient LIBRARIES net FOLDER sockets)
-    wx_add_sample(sockets CONSOLE baseserver.cpp NAME baseserver LIBRARIES net FOLDER sockets)
+    wx_add_sample(sockets client.cpp NAME client LIBRARIES wxnet FOLDER sockets)
+    wx_add_sample(sockets server.cpp NAME server LIBRARIES wxnet FOLDER sockets)
+    wx_add_sample(sockets CONSOLE baseclient.cpp NAME baseclient LIBRARIES wxnet FOLDER sockets)
+    wx_add_sample(sockets CONSOLE baseserver.cpp NAME baseserver LIBRARIES wxnet FOLDER sockets)
 endif()
 wx_add_sample(sound RES sound.rc DATA 9000g.wav cuckoo.wav doggrowl.wav tinkalink2.wav DEPENDS wxUSE_SOUND)
 wx_add_sample(splash DATA splash.png press.mpg DEPENDS wxUSE_SPLASH)
 if(TARGET splash AND wxUSE_MEDIACTRL)
-    wx_exe_link_libraries(splash media)
+    wx_exe_link_libraries(splash wxmedia)
 endif()
 wx_add_sample(splitter DEPENDS wxUSE_SPLITTER)
 wx_add_sample(statbar DEPENDS wxUSE_STATUSBAR)
 wx_add_sample(stc stctest.cpp edit.cpp prefs.cpp edit.h defsext.h prefs.h
-    DATA stctest.cpp NAME stctest LIBRARIES stc DEPENDS wxUSE_STC)
+    DATA stctest.cpp NAME stctest LIBRARIES wxstc DEPENDS wxUSE_STC)
 wx_add_sample(svg svgtest.cpp RES svgtest.rc DEPENDS wxUSE_SVG)
 wx_add_sample(taborder)
 wx_add_sample(taskbar tbtest.cpp tbtest.h DEPENDS wxUSE_TASKBARICON)
@@ -152,9 +152,9 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES webview NAME webviewsample DEPENDS wxUSE_WEBVIEW)
+wx_add_sample(webview LIBRARIES wxwebview NAME webviewsample DEPENDS wxUSE_WEBVIEW)
 if(TARGET webviewsample AND wxUSE_STC)
-    wx_exe_link_libraries(webviewsample stc)
+    wx_exe_link_libraries(webviewsample wxstc)
 endif()
 # widgets Sample
 set(SAMPLE_WIDGETS_SRC
@@ -244,12 +244,12 @@ wx_add_sample(xrc
     custclas.h
     objrefdlg.h
     DATA ${XRC_RC_FILES}
-    LIBRARIES aui ribbon xrc html
+    LIBRARIES wxaui wxribbon wxxrc wxhtml
     NAME xrcdemo
     DEPENDS wxUSE_XML wxUSE_XRC
     )
 wx_add_sample(xti xti.cpp classlist.cpp codereadercallback.cpp
-    classlist.h codereadercallback.h LIBRARIES xml
+    classlist.h codereadercallback.h LIBRARIES wxxml
     DEPENDS wxUSE_XML wxUSE_EXTENDED_RTTI)
 
 if(WIN32)

@@ -21,8 +21,8 @@ elseif(WXQT)
     wx_append_sources(GL_FILES OPENGL_QT)
 endif()
 
-wx_add_library(gl ${GL_FILES})
-wx_lib_include_directories(gl PUBLIC ${OPENGL_INCLUDE_DIR})
-wx_lib_link_libraries(gl PUBLIC ${OPENGL_LIBRARIES})
+wx_add_library(wxgl ${GL_FILES})
+wx_lib_include_directories(wxgl PUBLIC ${OPENGL_INCLUDE_DIR})
+wx_lib_link_libraries(wxgl PUBLIC ${OPENGL_LIBRARIES})
 
-wx_finalize_lib(gl)
+wx_finalize_lib(wxgl)

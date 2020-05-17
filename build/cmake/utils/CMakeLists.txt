@@ -14,9 +14,9 @@ if(wxUSE_XRC)
         target_compile_definitions(wxrc PRIVATE WXUSINGDLL)
     endif()
     if(wxUSE_XML)
-        wx_exe_link_libraries(wxrc xml)
+        wx_exe_link_libraries(wxrc wxxml)
     endif()
-    wx_exe_link_libraries(wxrc base)
+    wx_exe_link_libraries(wxrc wxbase)
 
     set_target_properties(wxrc PROPERTIES FOLDER "Utilities")
 

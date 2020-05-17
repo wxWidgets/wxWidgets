@@ -11,7 +11,7 @@ include(../../source_groups.cmake)
 
 wx_append_sources(QA_FILES QA)
 
-wx_add_library(qa ${QA_FILES})
-wx_lib_link_libraries(qa PUBLIC xml)
+wx_add_library(wxqa ${QA_FILES})
+wx_lib_link_libraries(wxqa PUBLIC wxxml)
 
-wx_finalize_lib(qa)
+wx_finalize_lib(wxqa)
