@@ -334,6 +334,7 @@ macro(wx_add_library name)
         endif()
 
         add_library(${name} ${wxBUILD_LIB_TYPE} ${src_files})
+        add_library(wx::${name} ALIAS ${name})
         wx_set_target_properties(${name} ${wxADD_LIBRARY_IS_BASE})
 
         # Setup install
@@ -501,7 +502,15 @@ endfunction()
 # Add a third party builtin library
 function(wx_add_builtin_library name)
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
+
+    if(${name} MATCHES "wx.*")
+        string(SUBSTRING ${name} 2 -1 name_short)
+    else()
+        set(name_short ${name})
+    endif()
+
     add_library(${name} STATIC ${src_list})
+    add_library(wx::${name_short} ALIAS ${name})
     wx_set_builtin_target_properties(${name})
     if(wxBUILD_SHARED)
         set_target_properties(${name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)

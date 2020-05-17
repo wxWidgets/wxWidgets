@@ -14,6 +14,11 @@ if(POLICY CMP0025)
     cmake_policy(SET CMP0025 NEW)
 endif()
 
+if(POLICY CMP0028)
+    # Double colon in target name means ALIAS or IMPORTED target.
+    cmake_policy(SET CMP0028 NEW)
+endif()
+
 if(POLICY CMP0038)
     # targets may not link directly to themselves
     cmake_policy(SET CMP0038 NEW)
