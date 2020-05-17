@@ -262,10 +262,12 @@ if(WIN32)
         if(NOT wxBUILD_SHARED)
             # this test only makes sense with statically built wx, otherwise
             # the same copy of wx would be used
-            wx_add_sample(dll wx_exe.cpp my_dll.h NAME wx_exe FOLDER dll LIBRARIES my_dll)
+            wx_add_sample(dll wx_exe.cpp my_dll.h NAME wx_exe FOLDER dll)
+            wx_link_sample_libraries(wx_exe my_dll)
         endif()
 
-        wx_add_sample(dll sdk_exe.cpp my_dll.h NAME sdk_exe FOLDER dll LIBRARIES my_dll)
+        wx_add_sample(dll sdk_exe.cpp my_dll.h NAME sdk_exe FOLDER dll)
+        wx_link_sample_libraries(sdk_exe my_dll)
     endif()
 
     wx_add_sample(regtest RES regtest.rc DEPENDS wxUSE_REGKEY)

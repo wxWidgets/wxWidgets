@@ -791,7 +791,9 @@ endfunction()
 
 # Link libraries to a sample
 function(wx_link_sample_libraries name)
-    target_link_libraries(${name} ${ARGN})
+    if(TARGET ${name})
+        target_link_libraries(${name} PUBLIC ${ARGN})
+    endif()
 endfunction()
 
 # Add a option and mark is as advanced if it starts with wxUSE_
