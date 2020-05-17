@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        build/cmake/tests/base/CMakeLists.txt
+# Name:        build/cmake/tests/gui/CMakeLists.txt
 # Purpose:     CMake file for gui test
 # Author:      Tobias Taschner
 # Created:     2016-10-31

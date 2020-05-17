@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        CMakeLists.txt
+# Name:        build/cmake/policies.cmake
 # Purpose:     CMake policies for wxWidgets
 # Author:      Tobias Taschner
 # Created:     2016-10-21
