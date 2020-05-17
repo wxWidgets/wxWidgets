@@ -599,7 +599,7 @@ endfunction()
 # all following parameters a src files for the executable
 # source files are relative to samples/${name}/
 # Optionally:
-# DATA followed by required data files
+# DATA followed by required data files. Use a colon to separate different source and dest paths
 # DEFINITIONS list of definitions for the target
 # FOLDER subfolder in IDE
 # LIBRARIES followed by required libraries
@@ -715,10 +715,19 @@ function(wx_add_sample name)
     if(SAMPLE_DATA)
         # TODO: handle data files differently for OS X bundles
         # Copy data files to output directory
-        foreach(data_file ${SAMPLE_DATA})
+        foreach(data_src ${SAMPLE_DATA})
+            string(FIND ${data_src} ":" HAS_COLON)
+            if(${HAS_COLON} GREATER -1)
+                MATH(EXPR DEST_INDEX "${HAS_COLON}+1")
+                string(SUBSTRING ${data_src} ${DEST_INDEX} -1 data_dst)
+                string(SUBSTRING ${data_src} 0 ${HAS_COLON} data_src)
+            else()
+                set(data_dst ${data_src})
+            endif()
+
             list(APPEND cmds COMMAND ${CMAKE_COMMAND}
-                -E copy ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${data_file}
-                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
+                -E copy ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${data_src}
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_dst})
         endforeach()
         add_custom_command(
             TARGET ${target_name} ${cmds}

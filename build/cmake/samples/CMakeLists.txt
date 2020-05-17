@@ -213,7 +213,7 @@ wx_list_add_prefix(WIDGETS_RC_FILES icons/
     stattext.xpm text.xpm timepick.xpm toggle.xpm
     )
 wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
-    DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png
+    DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png:toucan.png
     )
 wx_add_sample(wizard DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
