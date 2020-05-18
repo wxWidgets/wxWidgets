@@ -261,6 +261,10 @@ public:
         @param name
             Window name.
 
+        The precision (number of digits after the decimal point) of the value
+        of the spin control is derived from the precision of @a inc.
+        If necessary, default precision can be adjusted by call to SetDigits().
+
         @see Create()
     */
     wxSpinCtrlDouble(wxWindow* parent, wxWindowID id = -1,
@@ -285,7 +289,7 @@ public:
                 const wxString& name = "wxSpinCtrlDouble");
 
     /**
-        Gets the number of digits in the display.
+        Gets precision of the value of the spin control.
     */
     unsigned int GetDigits() const;
 
@@ -310,14 +314,15 @@ public:
     double GetValue() const;
 
     /**
-        Sets the number of digits in the display.
+        Sets precision of the value of the spin control.
+        Up to 20 digits are allowed after the decimal point.
     */
     void SetDigits(unsigned int digits);
 
     /**
         Sets the increment value.
-        @note You may also need to increase the number of visible digits
-        using SetDigits
+        @note You may also need to change the precision of the value
+        using SetDigits().
     */
     void SetIncrement(double inc);
 
