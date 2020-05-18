@@ -420,7 +420,7 @@ private:
     void Init()
     {
         m_digits = 0;
-        m_format = wxS("%g");
+        m_format = "%0.0f";
     }
 
     wxString m_format;

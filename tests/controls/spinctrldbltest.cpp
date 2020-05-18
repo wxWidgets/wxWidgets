@@ -199,7 +199,7 @@ void SpinCtrlDoubleTestCase::Increment()
 #if wxUSE_UIACTIONSIMULATOR
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetIncrement());
 
-    m_spin->SetDigits(1); // GTK would fail without this.
+    m_spin->SetDigits(1);
     m_spin->SetIncrement(0.1);
 
     CPPUNIT_ASSERT_EQUAL(0.1, m_spin->GetIncrement());
