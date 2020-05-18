@@ -673,6 +673,8 @@ wxString wxSpinCtrl::DoValueToText(double val)
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
 
+#define SPINCTRLDBL_MAX_DIGITS 20
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase);
 
 void wxSpinCtrlDouble::DoSendEvent()
@@ -696,7 +698,7 @@ wxString wxSpinCtrlDouble::DoValueToText(double val)
 
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
-    wxCHECK_RET( digits <= 20, "too many digits for wxSpinCtrlDouble" );
+    wxCHECK_RET( digits <= SPINCTRLDBL_MAX_DIGITS, "too many digits for wxSpinCtrlDouble" );
 
     if ( digits == m_digits )
         return;
@@ -706,6 +708,16 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     m_format.Printf(wxT("%%0.%ulf"), digits);
 
     DoSetValue(m_value, SendEvent_None);
+}
+
+void wxSpinCtrlDouble::DetermineDigits(double inc)
+{
+    inc = fabs(inc);
+    if ( inc > 0.0 && inc < 1.0 )
+    {
+        m_digits = wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
+        m_format.Printf("%%0.%ulf", m_digits);
+    }
 }
 
 #endif // wxUSE_SPINBTN
