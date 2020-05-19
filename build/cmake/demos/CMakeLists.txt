@@ -56,7 +56,7 @@ function(wx_add_demo name)
     if(wxBUILD_SHARED)
         target_compile_definitions(${DEMO_NAME} PRIVATE WXUSINGDLL)
     endif()
-    wx_exe_link_libraries(${DEMO_NAME} core ${DEMO_LIBRARIES})
+    wx_exe_link_libraries(${DEMO_NAME} wxcore ${DEMO_LIBRARIES})
     wx_set_common_target_properties(${DEMO_NAME})
     set_target_properties(${DEMO_NAME} PROPERTIES FOLDER "Demos")
     set_target_properties(${DEMO_NAME} PROPERTIES
@@ -92,7 +92,7 @@ wx_add_demo(forty
     DATA
         about.htm
     LIBRARIES
-        html xml
+        wxhtml wxxml
     )
 
 wx_add_demo(fractal
@@ -118,7 +118,7 @@ wx_add_demo(poem
     DATA
         wxpoem.txt wxpoem.dat wxpoem.idx
     LIBRARIES
-        html
+        wxhtml
     NAME
         wxpoem
     )

@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        build/cmake/tests/base/CMakeLists.txt
+# Name:        build/cmake/tests/gui/CMakeLists.txt
 # Purpose:     CMake file for gui test
 # Author:      Tobias Taschner
 # Created:     2016-10-31
@@ -168,29 +168,29 @@ wx_add_test(test_gui ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     RES ../samples/sample.rc
     )
-wx_exe_link_libraries(test_gui core)
+wx_exe_link_libraries(test_gui wxcore)
 if(wxUSE_RICHTEXT)
-    wx_exe_link_libraries(test_gui richtext)
+    wx_exe_link_libraries(test_gui wxrichtext)
 endif()
 if(wxUSE_STC)
-    wx_exe_link_libraries(test_gui stc)
+    wx_exe_link_libraries(test_gui wxstc)
 endif()
 if(wxUSE_MEDIACTRL)
-    wx_exe_link_libraries(test_gui media)
+    wx_exe_link_libraries(test_gui wxmedia)
 endif()
 if(wxUSE_XRC)
-    wx_exe_link_libraries(test_gui xrc)
+    wx_exe_link_libraries(test_gui wxxrc)
 endif()
 if(wxUSE_XML)
-    wx_exe_link_libraries(test_gui xml)
+    wx_exe_link_libraries(test_gui wxxml)
 endif()
 if(wxUSE_HTML)
-    wx_exe_link_libraries(test_gui html)
+    wx_exe_link_libraries(test_gui wxhtml)
 endif()
 if(wxUSE_SOCKETS)
-    wx_exe_link_libraries(test_gui net)
+    wx_exe_link_libraries(test_gui wxnet)
 endif()
 if(wxUSE_WEBVIEW)
-    wx_exe_link_libraries(test_gui webview)
+    wx_exe_link_libraries(test_gui wxwebview)
 endif()
 wx_test_enable_precomp(test_gui)

@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        CMakeLists.txt
+# Name:        build/cmake/policies.cmake
 # Purpose:     CMake policies for wxWidgets
 # Author:      Tobias Taschner
 # Created:     2016-10-21
@@ -12,6 +12,11 @@
 if(POLICY CMP0025)
     # Compiler id for Apple Clang is now AppleClang
     cmake_policy(SET CMP0025 NEW)
+endif()
+
+if(POLICY CMP0028)
+    # Double colon in target name means ALIAS or IMPORTED target.
+    cmake_policy(SET CMP0028 NEW)
 endif()
 
 if(POLICY CMP0038)
