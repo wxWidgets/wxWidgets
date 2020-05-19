@@ -206,19 +206,19 @@ wxSize wxTextCtrl::DoGetBestSize() const
         switch ( m_windowVariant )
         {
             case wxWINDOW_VARIANT_NORMAL :
-                hText = 22 - 6 ;
+                hText = 22 - 5 ;
                 break ;
 
             case wxWINDOW_VARIANT_SMALL :
-                hText = 19 - 6 ;
+                hText = 19 - 5 ;
                 break ;
 
             case wxWINDOW_VARIANT_MINI :
-                hText = 15 - 6 ;
+                hText = 15 - 5 ;
                 break ;
 
             default :
-                hText = 22 - 6;
+                hText = 22 - 5;
                 break ;
         }
     }
@@ -229,9 +229,17 @@ wxSize wxTextCtrl::DoGetBestSize() const
          hText *= 5 ;
 
     if ( !HasFlag(wxNO_BORDER) )
-        hText += 6 ;
+        hText += 5 ;
 
     return wxSize(wText, hText);
+}
+
+wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxSize size = wxDefaultSize;
+    if (xlen > 0) size.SetWidth(HasFlag(wxNO_BORDER) ? xlen + 4 : xlen + 9);
+    if (ylen > 0) size.SetHeight(HasFlag(wxNO_BORDER) ? ylen + 2 : ylen + 7);
+    return size;
 }
 
 bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
