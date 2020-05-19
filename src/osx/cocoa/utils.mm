@@ -596,30 +596,43 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     NSView* view = (NSView*) m_window->GetHandle();
     if ( [view isHiddenOrHasHiddenAncestor] == NO )
     {
-        [view lockFocus];
-        // we use this method as other methods force a repaint, and this method can be
-        // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
-        NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]];
-        [view unlockFocus];
-        if ( [rep respondsToSelector:@selector(CGImage)] )
+        // the old implementaiton is not working under 10.15, the new one should work for older systems as well
+        // however the new implementation does not take into account the backgroundViews, and I'm not sure about
+        // until we're
+        // sure the replacement is always better
+         
+        bool useOldImplementation = false;
+        NSBitmapImageRep *rep = nil;
+        
+        if ( useOldImplementation )
         {
-            CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
+            [view lockFocus];
+            // we use this method as other methods force a repaint, and this method can be
+            // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
+            rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]];
+            [view unlockFocus];
 
-            CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-
-            // The bitmap created by wxBitmap::CreateScaled() above is scaled,
-            // so we need to adjust the coordinates for it.
-            r.size.width /= m_contentScaleFactor;
-            r.size.height /= m_contentScaleFactor;
-
-            // since our context is upside down we dont use CGContextDrawImage
-            wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
         }
         else
         {
-            // TODO for 10.4 in case we can support this for osx_cocoa
+            [view bitmapImageRepForCachingDisplayInRect:[view bounds]];
+            [view cacheDisplayInRect:[view bounds] toBitmapImageRep:rep];
         }
-        [rep release];
+        
+        CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
+
+        CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+
+        // The bitmap created by wxBitmap::CreateScaled() above is scaled,
+        // so we need to adjust the coordinates for it.
+        r.size.width /= m_contentScaleFactor;
+        r.size.height /= m_contentScaleFactor;
+
+        // since our context is upside down we dont use CGContextDrawImage
+        wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
+        
+        if ( useOldImplementation )
+            [rep release];
     }
 
     return bitmap;
