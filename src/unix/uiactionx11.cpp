@@ -27,7 +27,7 @@
 
 #include "wx/unix/utilsx11.h"
 
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
 #include "wx/window.h"
 #include "wx/gtk/private/wrapgtk.h"
 #include <gdk/gdkx.h>
