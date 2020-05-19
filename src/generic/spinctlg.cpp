@@ -278,6 +278,10 @@ wxSize wxSpinCtrlGenericBase::DoGetBestSize() const
 
 wxSize wxSpinCtrlGenericBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
+#ifdef __WXOSX__
+    wxSize sizeBtn = m_spinButton->GetBestSize(), sizeText = m_textCtrl->GetSizeFromTextSize(xlen, ylen);
+    return wxSize(sizeBtn.GetWidth() + sizeText.GetWidth() + MARGIN, wxMax(sizeBtn.GetHeight(), sizeText.GetHeight()));
+#else
     wxSize sizeBtn  = m_spinButton->GetBestSize();
     wxSize totalS( m_textCtrl->GetBestSize() );
 
@@ -293,6 +297,7 @@ wxSize wxSpinCtrlGenericBase::DoGetSizeFromTextSize(int xlen, int ylen) const
         tsize.IncBy(0, ylen - GetCharHeight());
 
     return tsize;
+#endif
 }
 
 void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
