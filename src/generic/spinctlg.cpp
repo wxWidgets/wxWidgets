@@ -74,6 +74,8 @@ public:
     {
         m_spin = spin;
 
+        InvalidateBestSize();
+
         // remove the default minsize, the spinctrl will have one instead
         SetSizeHints(wxDefaultCoord, wxDefaultCoord);
     }
@@ -108,6 +110,16 @@ public:
             m_spin->ProcessWindowEvent(event);
 
         event.Skip();
+    }
+
+    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    {
+        wxString minVal = m_spin->DoValueToText(m_spin->m_min);
+        wxString maxVal = m_spin->DoValueToText(m_spin->m_max);
+        wxSize minValSize = GetSizeFromText(minVal);
+        wxSize maxValSize = GetSizeFromText(maxVal);
+
+        return wxSize(wxMax(minValSize.x, maxValSize.x), wxMax(minValSize.y, maxValSize.y));
     }
 
     wxSpinCtrlGenericBase *m_spin;
@@ -575,6 +587,9 @@ double wxSpinCtrlGenericBase::AdjustToFitInRange(double value) const
 
 void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
 {
+    if ( min != m_min || max != m_max )
+        m_textCtrl->InvalidateBestSize();
+
     m_min = min;
     if ( m_value < m_min )
         DoSetValue(m_min, SendEvent_None);
@@ -706,6 +721,8 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     m_digits = digits;
 
     m_format.Printf(wxT("%%0.%ulf"), digits);
+
+    m_textCtrl->InvalidateBestSize();
 
     DoSetValue(m_value, SendEvent_None);
 }
