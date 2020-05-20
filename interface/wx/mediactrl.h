@@ -206,9 +206,6 @@ public:
     - @b wxMEDIABACKEND_WMP10, Use Windows Media Player 10 (Windows only).
       Works on systems with either Windows Media Player 9 or 10 installed.
 
-    Note that other backends such as wxMEDIABACKEND_MCI can now be found at
-    wxCode (http://wxcode.sourceforge.net/).
-
 
     @section mediactrl_creating_backend Creating a backend
 
