@@ -615,7 +615,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         }
         else
         {
-            [view bitmapImageRepForCachingDisplayInRect:[view bounds]];
+            rep = [view bitmapImageRepForCachingDisplayInRect:[view bounds]];
             [view cacheDisplayInRect:[view bounds] toBitmapImageRep:rep];
         }
         
