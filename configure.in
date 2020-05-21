@@ -5385,31 +5385,11 @@ if test "$TOOLKIT" != "MSW"; then
                                 AC_DEFINE(HAVE_DLOPEN)
                                 HAVE_DL_FUNCS=1
                                 DL_LINK="-ldl $DL_LINK"
-                            ],
-                            [
-                                AC_CHECK_FUNCS(shl_load,
-                                              [
-                                                AC_DEFINE(HAVE_SHL_LOAD)
-                                                HAVE_SHL_FUNCS=1
-                                              ],
-                                              [
-                                                AC_CHECK_LIB(shl_load, dld,
-                                                             [
-                                                                HAVE_SHL_FUNCS=1
-                                                                DL_LINK="-ldld $DL_LINK"
-                                                             ])
-                                              ])
                             ])
             ])
 
             dnl check also for dlerror()
             if test "$HAVE_DL_FUNCS" = 1; then
-                AC_CHECK_FUNCS(dlerror,
-                    AC_DEFINE(HAVE_DLERROR),
-                    [
-                        AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR))
-                    ]
-                )
                 AC_CHECK_FUNCS(dladdr,
                     AC_DEFINE(HAVE_DLADDR),
                     [

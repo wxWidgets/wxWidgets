@@ -984,9 +984,6 @@
 /* Define if you have pthread_attr_setstacksize */
 #cmakedefine HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
-/* Define if you have shl_load() */
-#cmakedefine HAVE_SHL_LOAD 1
-
 /* Define if you have snprintf() */
 #cmakedefine HAVE_SNPRINTF 1
 
@@ -1088,9 +1085,6 @@
 
 /* Define if wchar_t is distinct type in your compiler. */
 #cmakedefine wxWCHAR_T_IS_REAL_TYPE 1
-
-/* Define if you have the dlerror function.  */
-#cmakedefine HAVE_DLERROR 1
 
 /* Define if you have the dladdr function.  */
 #cmakedefine HAVE_DLADDR 1
