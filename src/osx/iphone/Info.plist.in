@@ -42,5 +42,7 @@
 		<key>CFBundleIconName</key>
 		<string>AppIcon</string>
 	</dict>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 </dict>
 </plist>

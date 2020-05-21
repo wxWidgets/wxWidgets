@@ -321,6 +321,7 @@ void TextFileTestCase::ReadBig()
 
     {
         wxFFile f(GetTestFileName(), "w");
+        CPPUNIT_ASSERT( f.IsOpened() );
         for ( size_t n = 0; n < NUM_LINES; n++ )
         {
             fprintf(f.fp(), "Line %lu\n", (unsigned long)n + 1);

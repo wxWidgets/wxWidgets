@@ -61,6 +61,11 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
     #include "wx/osx/private.h"
 #endif
 
+#ifdef __WXMAC_XCODE__
+#undef wxUSE_GUI
+#define wxUSE_GUI 0
+#endif
+
 #if wxUSE_GUI
     #include "testableframe.h"
 
@@ -324,7 +329,13 @@ static int TestCrtReportHook(int reportType, char *message, int *)
 
 #endif // wxUSE_VC_CRTDBG
 
+#ifndef __WXOSX_XCTEST__
 int main(int argc, char **argv)
+#else
+extern "C" int XCTmain(int argc, char **argv);
+
+int XCTmain(int argc, char **argv)
+#endif
 {
     // tests can be ran non-interactively so make sure we don't show any assert
     // dialog boxes -- neither our own nor from MSVC debug CRT -- which would
@@ -623,7 +634,12 @@ int TestApp::RunTests()
     // Cast is needed under MSW where Catch also provides an overload taking
     // wchar_t, but as it simply converts arguments to char internally anyhow,
     // we can just as well always use the char version.
-    return Catch::Session().run(argc, static_cast<char**>(argv));
+    Catch::Session session;
+#ifdef __WXOSX_XCTEST__
+    session.configData().reporterNames.push_back("XCTestReporter");
+#endif
+
+    return session.run(argc, static_cast<char**>(argv));
 }
 
 int TestApp::OnExit()

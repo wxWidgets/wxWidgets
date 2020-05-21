@@ -20,7 +20,7 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#include <wx/protocol/ftp.h>
+#include "wx/protocol/ftp.h"
 
 // For this to run, the following environment variables need to be defined:
 //
