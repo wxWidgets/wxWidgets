@@ -112,6 +112,9 @@ public:
         event.Skip();
     }
 
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    // GetSizeFromTextSize() is not implemented in wxOSX
+    // so GetSizeFromText() cannot be used for size calculations.
     virtual wxSize DoGetBestSize() const wxOVERRIDE
     {
         wxString minVal = m_spin->DoValueToText(m_spin->m_min);
@@ -121,6 +124,7 @@ public:
 
         return wxSize(wxMax(minValSize.x, maxValSize.x), wxMax(minValSize.y, maxValSize.y));
     }
+#endif // __WXMSW || __WXGTK__
 
     wxSpinCtrlGenericBase *m_spin;
 
