@@ -66,11 +66,13 @@ class wxSpinCtrlTextGeneric : public wxTextCtrl
 public:
     wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
         : wxTextCtrl(spin, wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     // This is tricky: we want to honour any alignment flags
-                     // but not wxALIGN_CENTER_VERTICAL because it's the same
+                     // This is tricky: we want to honour all alignment flags
+                     // except wxALIGN_CENTER_VERTICAL because it's the same
                      // as wxTE_PASSWORD and we definitely don't want to show
-                     // asterisks in spin control.
-                     style & (wxALIGN_MASK | wxTE_PROCESS_ENTER) & ~wxTE_PASSWORD)
+                     // asterisks in spin control. We also want to respect
+                     // wxTE_PROCESS and the border flags as well.
+                     style & (wxALIGN_MASK | wxBORDER_MASK | wxTE_PROCESS_ENTER)
+                           & ~wxTE_PASSWORD)
     {
         m_spin = spin;
 
