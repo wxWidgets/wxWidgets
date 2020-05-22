@@ -4250,7 +4250,6 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         }
 
         Update();
-        Repaint(NULL);
     }
     else if (m_actionPart &&
         m_actionPart->type == wxAuiDockUIPart::typePaneSizer)
@@ -4418,10 +4417,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         dock.panes.Item(borrow_pane)->dock_proportion = prop_borrow;
         pane.dock_proportion = new_proportion;
 
-
-        // repaint
         Update();
-        Repaint(NULL);
     }
 
     return true;
