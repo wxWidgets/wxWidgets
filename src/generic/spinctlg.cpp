@@ -70,7 +70,7 @@ public:
                      // but not wxALIGN_CENTER_VERTICAL because it's the same
                      // as wxTE_PASSWORD and we definitely don't want to show
                      // asterisks in spin control.
-                     style & (wxALIGN_MASK | wxTE_PROCESS_ENTER) & ~wxTE_PASSWORD)
+                     style & (wxALIGN_MASK | wxBORDER_MASK | wxTE_PROCESS_ENTER) & ~wxTE_PASSWORD)
     {
         m_spin = spin;
 
