@@ -2844,7 +2844,7 @@ void wxGrid::Init()
     m_minAcceptableColWidth  =
     m_minAcceptableRowHeight = 0;
 
-    m_gridLineColour = wxColour( 192,192,192 );
+    m_gridLineColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
     m_gridLinesEnabled = true;
     m_gridLinesClipHorz =
     m_gridLinesClipVert = true;
