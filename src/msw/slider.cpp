@@ -548,7 +548,11 @@ wxSize wxSlider::DoGetBestSize() const
 {
     // this value is arbitrary:
     const int length = FromDIP(100);
-    const int thumbSize = GetThumbLength();
+
+    // We need 2 extra pixels (which are not scaled by the DPI by the native
+    // control) on either side to account for the focus rectangle.
+    const int thumbSize = GetThumbLength() + 4;
+
     const int tickSize = FromDIP(TICK);
 
     int *width;
