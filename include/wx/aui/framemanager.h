@@ -412,6 +412,7 @@ public:
 
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
+    bool HasLiveResize() const;
 
     void SetManagedWindow(wxWindow* managedWnd);
     wxWindow* GetManagedWindow() const;

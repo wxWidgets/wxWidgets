@@ -771,17 +771,14 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
-// Convenience function
-static
-bool wxAuiManager_HasLiveResize(wxAuiManager& manager)
+bool wxAuiManager::HasLiveResize() const
 {
     // With Core Graphics on Mac, it's not possible to show sash feedback,
     // so we'll always use live update instead.
 #if defined(__WXMAC__)
-    wxUnusedVar(manager);
     return true;
 #else
-    return (manager.GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
+    return (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
 #endif
 }
 
@@ -4429,13 +4426,13 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     {
         m_frame->ReleaseMouse();
 
-        if (!wxAuiManager_HasLiveResize(*this))
+        if (!HasLiveResize())
         {
             // get rid of the hint rectangle
             wxScreenDC dc;
             DrawResizeHint(dc, m_actionHintRect);
         }
-        if (m_currentDragItem != -1 && wxAuiManager_HasLiveResize(*this))
+        if (m_currentDragItem != -1 && HasLiveResize())
             m_actionPart = & (m_uiParts.Item(m_currentDragItem));
 
         DoEndResizeAction(event);
@@ -4539,7 +4536,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             else
                 pos.x = wxMax(0, event.m_x - m_actionOffset.x);
 
-            if (wxAuiManager_HasLiveResize(*this))
+            if (HasLiveResize())
             {
                 m_frame->ReleaseMouse();
                 DoEndResizeAction(event);

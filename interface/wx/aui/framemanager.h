@@ -311,6 +311,20 @@ public:
     //@}
 
     /**
+        Returns true if windows are resized live.
+
+        Live resizing behaviour is specified by wxAUI_MGR_LIVE_RESIZE flag,
+        however some platforms (currently wxOSX) ignore it and always use live
+        resizing because this is the only implemented resize mode.
+
+        Using this accessor allows to verify whether live resizing is being
+        actually used.
+
+        @since 3.1.4
+    */
+    bool HasLiveResize() const;
+
+    /**
         HideHint() hides any docking hint that may be visible.
     */
     virtual void HideHint();
