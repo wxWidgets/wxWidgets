@@ -30,6 +30,7 @@
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
 #include "wx/mdi.h"
+#include "wx/wupdlock.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -2533,6 +2534,20 @@ void wxAuiManager::Update()
         }
     }
 
+    // Disable all updates until everything can be repainted at once at the end
+    // when not using live resizing.
+    //
+    // Note that:
+    //  - This is useless under Mac, where HasLiveResize() always returns false.
+    //  - This is harmful under GTK, where it results in extra flicker (sic).
+    //  - This results in display artefacts when using live resizing under MSW.
+    //
+    // So we only do this under MSW and only when not using live resizing.
+#ifdef __WXMSW__
+    wxWindowUpdateLocker noUpdates;
+    if (!HasLiveResize())
+        noUpdates.Lock(m_frame);
+#endif // __WXMSW__
 
     // delete old sizer first
     m_frame->SetSizer(NULL);
