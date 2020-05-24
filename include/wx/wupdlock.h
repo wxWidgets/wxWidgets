@@ -21,7 +21,7 @@ class wxWindowUpdateLocker
 public:
     // create an object preventing updates of the given window (which must have
     // a lifetime at least as great as ours)
-    wxWindowUpdateLocker(wxWindow *win) : m_win(win) { win->Freeze(); }
+    explicit wxWindowUpdateLocker(wxWindow *win) : m_win(win) { win->Freeze(); }
 
     // dtor thaws the window to permit updates again
     ~wxWindowUpdateLocker() { m_win->Thaw(); }

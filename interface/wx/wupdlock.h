@@ -40,7 +40,7 @@ public:
         The parameter must be non-@NULL and the window must exist for longer than
         wxWindowUpdateLocker object itself.
     */
-    wxWindowUpdateLocker(wxWindow* win);
+    explicit wxWindowUpdateLocker(wxWindow* win);
 
     /**
         Destructor reenables updates for the window this object is associated with.
