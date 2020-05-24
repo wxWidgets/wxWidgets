@@ -45,6 +45,7 @@
 
 #include "ScintillaWX.h"
 #include "ExternalLexer.h"
+#include "UniConversion.h"
 #include "wx/stc/stc.h"
 #include "wx/stc/private.h"
 #include "PlatWX.h"
@@ -844,6 +845,25 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
       case SCI_GETDIRECTPOINTER:
             return reinterpret_cast<sptr_t>(this);
 
+#ifdef __WXMSW__
+      // ScintillaWin
+      case WM_IME_STARTCOMPOSITION:
+          // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
+          ImeStartComposition();
+          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+
+      case WM_IME_ENDCOMPOSITION:
+          ImeEndComposition();
+          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+
+      case WM_IME_KEYDOWN:
+      case WM_IME_REQUEST:
+      case WM_IME_COMPOSITION:
+      case WM_IME_SETCONTEXT:
+          // These events are forwarded here for future inline IME implementation
+          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+#endif
+
       default:
           return ScintillaBase::WndProc(iMessage, wParam, lParam);
       }
@@ -1406,6 +1426,118 @@ sptr_t ScintillaWX::DirectFunction(
     ScintillaWX* swx, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
     return swx->WndProc(iMessage, wParam, lParam);
 }
+
+//----------------------------------------------------------------------
+// ScintillaWin
+
+#ifdef __WXMSW__
+
+#ifdef __VISUALC__
+#pragma comment(lib, "imm32.lib")
+#endif
+
+namespace {
+
+POINT POINTFromPoint(Point pt) wxNOEXCEPT {
+    POINT ret;
+    ret.x = static_cast<LONG>(pt.x);
+    ret.y = static_cast<LONG>(pt.y);
+    return ret;
+}
+
+class IMContext {
+    HWND hwnd;
+public:
+    HIMC hIMC;
+    IMContext(HWND hwnd_) wxNOEXCEPT :
+        hwnd(hwnd_), hIMC(::ImmGetContext(hwnd_)) {
+    }
+    ~IMContext() {
+        if (hIMC)
+            ::ImmReleaseContext(hwnd, hIMC);
+    }
+
+    unsigned int GetImeCaretPos() const wxNOEXCEPT {
+        return ImmGetCompositionStringW(hIMC, GCS_CURSORPOS, wxNullPtr, 0);
+    }
+
+    std::vector<BYTE> GetImeAttributes() {
+        const int attrLen = ::ImmGetCompositionStringW(hIMC, GCS_COMPATTR, wxNullPtr, 0);
+        std::vector<BYTE> attr(attrLen, 0);
+        ::ImmGetCompositionStringW(hIMC, GCS_COMPATTR, &attr[0], static_cast<DWORD>(attr.size()));
+        return attr;
+    }
+
+    std::wstring GetCompositionString(DWORD dwIndex) {
+        const LONG byteLen = ::ImmGetCompositionStringW(hIMC, dwIndex, wxNullPtr, 0);
+        std::wstring wcs(byteLen / 2, 0);
+        ::ImmGetCompositionStringW(hIMC, dwIndex, &wcs[0], byteLen);
+        return wcs;
+    }
+private:
+    // Private so IMContext objects can not be copied.
+    IMContext(const IMContext&);
+    IMContext& operator=(const IMContext&);
+};
+
+}
+
+HWND ScintillaWX::MainHWND() const wxNOEXCEPT {
+    return static_cast<HWND>(wMain.GetID());
+}
+
+/**
+ * DBCS: support Input Method Editor (IME).
+ * Called when IME Window opened.
+ */
+void ScintillaWX::ImeStartComposition() {
+    if (caret.active) {
+        // Move IME Window to current caret position
+        IMContext imc(stc->GetHandle());
+        const Point pos = PointMainCaret();
+        COMPOSITIONFORM CompForm;
+        CompForm.dwStyle = CFS_POINT;
+        CompForm.ptCurrentPos = POINTFromPoint(pos);
+
+        ::ImmSetCompositionWindow(imc.hIMC, &CompForm);
+
+        // Set font of IME window to same as surrounded text.
+        if (stylesValid) {
+            // Since the style creation code has been made platform independent,
+            // The logfont for the IME is recreated here.
+            const int styleHere = pdoc->StyleIndexAt(sel.MainCaret());
+            LOGFONTW lf = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, L"" };
+            int sizeZoomed = vs.styles[styleHere].size + vs.zoomLevel * SC_FONT_SIZE_MULTIPLIER;
+            if (sizeZoomed <= 2 * SC_FONT_SIZE_MULTIPLIER)	// Hangs if sizeZoomed <= 1
+                sizeZoomed = 2 * SC_FONT_SIZE_MULTIPLIER;
+            AutoSurface surface(this);
+            int deviceHeight = sizeZoomed;
+            if (surface) {
+                deviceHeight = (sizeZoomed * surface->LogPixelsY()) / 72;
+            }
+            // The negative is to allow for leading
+            lf.lfHeight = -(std::abs(deviceHeight / SC_FONT_SIZE_MULTIPLIER));
+            lf.lfWeight = vs.styles[styleHere].weight;
+            lf.lfItalic = static_cast<BYTE>(vs.styles[styleHere].italic ? 1 : 0);
+            lf.lfCharSet = DEFAULT_CHARSET;
+            lf.lfFaceName[0] = L'\0';
+            if (vs.styles[styleHere].fontName) {
+                const char* fontName = vs.styles[styleHere].fontName;
+                UTF16FromUTF8(fontName, strlen(fontName)+1, lf.lfFaceName, LF_FACESIZE);
+            }
+
+            ::ImmSetCompositionFontW(imc.hIMC, &lf);
+        }
+        // Caret is displayed in IME window. So, caret in Scintilla is useless.
+        DropCaret();
+    }
+}
+
+/** Called when IME Window closed. */
+void ScintillaWX::ImeEndComposition() {
+    ShowCaretAtCurrentPosition();
+}
+#endif // __WXMSW__
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
