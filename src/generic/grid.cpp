@@ -5955,8 +5955,9 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     }
 
                     wxTheClipboard->SetData(new wxTextDataObject(buf));
+                    break;
                 }
-                break;
+                wxFALLTHROUGH;
 #endif // wxUSE_CLIPBOARD
 
             default:
