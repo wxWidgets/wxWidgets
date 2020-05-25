@@ -310,9 +310,9 @@ public:
 
         @see @ref overview_archive_byname
     */
-    wxString GetInternalName(const wxString& name,
-                            wxPathFormat format = wxPATH_NATIVE,
-                            bool* pIsDir = NULL);
+    static wxString GetInternalName(const wxString& name,
+                                    wxPathFormat format = wxPATH_NATIVE,
+                                    bool* pIsDir = NULL);
     /**
         Returns the entry's filename in the internal format used within the archive.
         The name can include directory components, i.e. it can be a full path.
