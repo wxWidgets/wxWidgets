@@ -3,7 +3,7 @@
     This is a property sheet to be included in MSVS projects of the applications
     using wxWidgets. Use "View|Property Manager" and choose "Add Existing
     Property Sheet..." from the context menu to add it from the IDE or edit your
-    .vcxproj file directly and add <Import Project="$(WXWIN)\wxwidgets.props /">
+    .vcxproj file directly and add <Import Project="$(WXWIN)\wxwidgets.props" />
     tag to it.
   -->
 <Project ToolsVersion="4.0" InitialTargets="CheckWXLibs" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
