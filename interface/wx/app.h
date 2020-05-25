@@ -401,6 +401,12 @@ public:
         Called from OnInit() and may be used to initialize the parser with the
         command line options for this application. The base class versions adds
         support for a few standard options only.
+
+        Note that this method should just configure @a parser to accept the
+        desired command line options by calling wxCmdLineParser::AddOption(),
+        wxCmdLineParser::AddSwitch() and similar methods, but should @e not
+        call wxCmdLineParser::Parse() as this will be done by wxWidgets itself
+        slightly later.
     */
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
