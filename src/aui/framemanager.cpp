@@ -772,11 +772,22 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
+// With Core Graphics on Mac, it's not possible to show sash feedback,
+// so we'll always use live update instead.
+#if defined(__WXMAC__)
+    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 1
+#else
+    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 0
+#endif
+
+/* static */ bool wxAuiManager::AlwaysUsesLiveResize()
+{
+    return wxUSE_AUI_LIVE_RESIZE_ALWAYS;
+}
+
 bool wxAuiManager::HasLiveResize() const
 {
-    // With Core Graphics on Mac, it's not possible to show sash feedback,
-    // so we'll always use live update instead.
-#if defined(__WXMAC__)
+#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
     return true;
 #else
     return (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;

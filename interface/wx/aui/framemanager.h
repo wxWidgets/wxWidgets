@@ -208,6 +208,19 @@ public:
     //@}
 
     /**
+        Returns true if live resize is always used on the current platform.
+
+        If this function returns true, ::wxAUI_MGR_LIVE_RESIZE flag is ignored
+        and live resize is always used, whether it's specified or not.
+
+        Currently this is the case for wxOSX port, as live resizing is the only
+        implemented method there.
+
+        @since 3.1.4
+     */
+    static bool AlwaysUsesLiveResize();
+
+    /**
         This function is used by controls to calculate the drop hint rectangle.
 
         The method first calls DoDrop() to determine the exact position the
@@ -313,9 +326,9 @@ public:
     /**
         Returns true if windows are resized live.
 
-        Live resizing behaviour is specified by wxAUI_MGR_LIVE_RESIZE flag,
-        however some platforms (currently wxOSX) ignore it and always use live
-        resizing because this is the only implemented resize mode.
+        This function combines the check for AlwaysUsesLiveResize() and, for
+        the platforms where live resizing is optional, the check for
+        wxAUI_MGR_LIVE_RESIZE flag.
 
         Using this accessor allows to verify whether live resizing is being
         actually used.
