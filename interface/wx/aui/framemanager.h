@@ -213,8 +213,8 @@ public:
         If this function returns true, ::wxAUI_MGR_LIVE_RESIZE flag is ignored
         and live resize is always used, whether it's specified or not.
 
-        Currently this is the case for wxOSX port, as live resizing is the only
-        implemented method there.
+        Currently this is the case for wxOSX and wxGTK3 ports, as live resizing
+        is the only implemented method there.
 
         @since 3.1.4
      */
