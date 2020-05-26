@@ -1203,7 +1203,7 @@ int wxCmdLineParser::Parse(bool showUsage)
     if ( ok )
     {
         size_t countOpt = m_data->m_options.GetCount();
-        for ( size_t n = 0; ok && (n < countOpt); n++ )
+        for ( size_t n = 0; n < countOpt; n++ )
         {
             wxCmdLineOption& opt = m_data->m_options[n];
             if ( (opt.flags & wxCMD_LINE_OPTION_MANDATORY) && !opt.HasValue() )
