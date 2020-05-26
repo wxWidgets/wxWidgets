@@ -59,14 +59,15 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
+        const int direction = toolbar->GetDirection();
         int w, h;
         toolbar->GetSize(&w, &h);
 
-        if ( toolbar->HasFlag(wxTB_LEFT) && !toolbar->HasFlag(wxTB_RIGHT) )
+        if ( direction == wxTB_LEFT )
         {
             pt.x += w;
         }
-        else if ( toolbar->HasFlag(wxTB_TOP) && !toolbar->HasFlag(wxTB_BOTTOM) )
+        else if ( direction == wxTB_TOP )
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
             pt.y += h;
@@ -338,16 +339,20 @@ void wxFrame::PositionToolBar()
 
     if (GetToolBar())
     {
+        const int direction = GetToolBar()->GetDirection();
         int tx, ty, tw, th;
 
         tx = ty = 0 ;
         GetToolBar()->GetSize(&tw, &th);
 
-        // Note: we need to test for wxTB_RIGHT before wxTB_LEFT, as the latter
-        // is the same as wxTB_VERTICAL and it's possible to combine wxTB_RIGHT
-        // with wxTB_VERTICAL, so testing for wxTB_LEFT could be true for a
-        // right-aligned toolbar (while the reverse is, luckily, impossible).
-        if (GetToolBar()->HasFlag(wxTB_RIGHT))
+        if (direction == wxTB_LEFT)
+        {
+            // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
+            // means, pretend we don't have toolbar/status bar, so we
+            // have the original client size.
+            GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
+        }
+        else if (direction == wxTB_RIGHT)
         {
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
             // means, pretend we don't have toolbar/status bar, so we
@@ -355,14 +360,7 @@ void wxFrame::PositionToolBar()
             tx = cw - tw;
             GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
-        else if (GetToolBar()->HasFlag(wxTB_LEFT))
-        {
-            // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
-            // means, pretend we don't have toolbar/status bar, so we
-            // have the original client size.
-            GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
-        }
-        else if (GetToolBar()->HasFlag(wxTB_BOTTOM))
+        else if (direction == wxTB_BOTTOM)
         {
             tx = 0;
             ty = ch - th;
