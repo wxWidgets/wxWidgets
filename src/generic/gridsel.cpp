@@ -749,7 +749,8 @@ wxArrayInt wxGridSelection::GetRowSelection() const
         {
             for ( int r = block.GetTopRow(); r <= block.GetBottomRow(); ++r )
             {
-                uniqueRows.Add(r);
+                if ( uniqueRows.Index(r) == wxNOT_FOUND )
+                    uniqueRows.Add(r);
             }
         }
     }
@@ -779,7 +780,8 @@ wxArrayInt wxGridSelection::GetColSelection() const
         {
             for ( int c = block.GetLeftCol(); c <= block.GetRightCol(); ++c )
             {
-                uniqueCols.Add(c);
+                if ( uniqueCols.Index(c) == wxNOT_FOUND )
+                    uniqueCols.Add(c);
             }
         }
     }

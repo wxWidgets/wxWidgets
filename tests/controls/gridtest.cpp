@@ -901,6 +901,12 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     CHECK(selectedRows.Count() == 1);
     CHECK(selectedRows[0] == 3);
 
+    // Check that overlapping selection blocks are handled correctly.
+    m_grid->ClearSelection();
+    m_grid->SelectBlock(0, 0, 4, 1);
+    m_grid->SelectBlock(2, 0, 6, 1, true /* add to selection */);
+    CHECK( m_grid->GetSelectedRows().size() == 7 );
+
     CHECK(m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows);
 
 
