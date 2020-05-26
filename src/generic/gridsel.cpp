@@ -40,7 +40,7 @@ int CompareInts(int n1, int n2)
 
 }
 
-WX_DEFINE_SORTED_ARRAY_INT(int, wxIntSortedArray);
+WX_DEFINE_SORTED_ARRAY_CMP_INT(int, CompareInts, wxIntSortedArray);
 
 
 wxGridSelection::wxGridSelection( wxGrid * grid,
@@ -739,7 +739,7 @@ wxArrayInt wxGridSelection::GetRowSelection() const
     if ( m_selectionMode == wxGrid::wxGridSelectColumns )
         return wxArrayInt();
 
-    wxIntSortedArray uniqueRows(&CompareInts);
+    wxIntSortedArray uniqueRows;
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; ++n )
     {
@@ -770,7 +770,7 @@ wxArrayInt wxGridSelection::GetColSelection() const
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
         return wxArrayInt();
 
-    wxIntSortedArray uniqueCols(&CompareInts);
+    wxIntSortedArray uniqueCols;
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; ++n )
     {
