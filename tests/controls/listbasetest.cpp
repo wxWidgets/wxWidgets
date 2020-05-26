@@ -203,6 +203,7 @@ void ListBaseTestCase::ItemClick()
     EventCounter focused(list, wxEVT_LIST_ITEM_FOCUSED);
     EventCounter activated(list, wxEVT_LIST_ITEM_ACTIVATED);
     EventCounter rclick(list, wxEVT_LIST_ITEM_RIGHT_CLICK);
+    EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);
 
     wxUIActionSimulator sim;
 
@@ -224,6 +225,15 @@ void ListBaseTestCase::ItemClick()
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
+    // We want a point within the listctrl but below any items
+    point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 50);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
 
@@ -234,6 +244,7 @@ void ListBaseTestCase::ItemClick()
 #ifndef _WX_GENERIC_LISTCTRL_H_
     CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, deselected.GetCount());
 #endif
     CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
