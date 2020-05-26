@@ -40,7 +40,7 @@ int CompareInts(int n1, int n2)
 
 }
 
-WX_DEFINE_SORTED_ARRAY(int, wxIntSortedArray);
+WX_DEFINE_SORTED_ARRAY_INT(int, wxIntSortedArray);
 
 
 wxGridSelection::wxGridSelection( wxGrid * grid,
