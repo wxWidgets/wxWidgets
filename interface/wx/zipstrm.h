@@ -301,7 +301,6 @@ public:
     */
     int GetFlags() const;
 
-    //@{
     /**
         A static member that translates a filename into the internal format used
         within the archive. If the third parameter is provided, the bool pointed
@@ -321,7 +320,6 @@ public:
         This gives a canonical name that can be used in comparisons.
     */
     wxString GetInternalName() const;
-    //@}
 
     /**
         Returns @true if GetSystemMadeBy() is a flavour of unix.
