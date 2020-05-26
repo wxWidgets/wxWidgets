@@ -300,15 +300,6 @@ inline const wxString& wxGetTranslation(const wxString& str1,
                : wxTranslations::GetUntranslatedString(str2);
 }
 
-/*
- * Get and set the default encoding for strings to be translated.
- * These are only useful when the wxNO_IMPLICIT_WXSTRING_ENCODING macro is
- * defined.
- */
-WXDLLIMPEXP_BASE const wxMBConv &wxGetInlineEncoding();
-
-WXDLLIMPEXP_BASE void wxSetInlineEncoding(const wxMBConv &conv);
-
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
 
 /*
@@ -318,7 +309,7 @@ WXDLLIMPEXP_BASE void wxSetInlineEncoding(const wxMBConv &conv);
 inline const wxString& wxGetTranslation(const char *str,
                                         const char *domain = "",
                                         const char *context = "") {
-    const wxMBConv &conv = wxGetInlineEncoding();
+    const wxMBConv &conv = wxConvWhateverWorks;
     return wxGetTranslation(wxString(str, conv), wxString(domain, conv),
                             wxString(context, conv));
 }
@@ -328,7 +319,7 @@ inline const wxString& wxGetTranslation(const char *str1,
                                         unsigned n,
                                         const char *domain = "",
                                         const char *context = "") {
-    const wxMBConv &conv = wxGetInlineEncoding();
+    const wxMBConv &conv = wxConvWhateverWorks;
     return wxGetTranslation(wxString(str1, conv), wxString(str2, conv), n,
                             wxString(domain, conv),
                             wxString(context, conv));
