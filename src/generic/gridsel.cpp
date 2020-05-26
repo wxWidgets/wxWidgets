@@ -769,7 +769,7 @@ wxArrayInt wxGridSelection::GetColSelection() const
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
         return wxArrayInt();
 
-    wxIntSortedArray uniqueRows(&CompareInts);
+    wxIntSortedArray uniqueCols(&CompareInts);
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; ++n )
     {
@@ -779,16 +779,16 @@ wxArrayInt wxGridSelection::GetColSelection() const
         {
             for ( int c = block.GetLeftCol(); c <= block.GetRightCol(); ++c )
             {
-                uniqueRows.Add(c);
+                uniqueCols.Add(c);
             }
         }
     }
 
     wxArrayInt result;
-    result.reserve(uniqueRows.size());
-    for( size_t i = 0; i < uniqueRows.size(); ++i )
+    result.reserve(uniqueCols.size());
+    for( size_t i = 0; i < uniqueCols.size(); ++i )
     {
-        result.push_back(uniqueRows[i]);
+        result.push_back(uniqueCols[i]);
     }
     return result;
 }
