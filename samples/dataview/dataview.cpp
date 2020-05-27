@@ -1278,12 +1278,6 @@ void MyFrame::OnBeginDrag( wxDataViewEvent &event )
 
 void MyFrame::OnDropPossible( wxDataViewEvent &event )
 {
-    wxDataViewItem item( event.GetItem() );
-
-    // only allow drags for item or background, not containers
-    if ( item.IsOk() && m_music_model->IsContainer( item ) )
-        event.Veto();
-
     if (event.GetDataFormat() != wxDF_UNICODETEXT)
         event.Veto();
 }
@@ -1291,13 +1285,6 @@ void MyFrame::OnDropPossible( wxDataViewEvent &event )
 void MyFrame::OnDrop( wxDataViewEvent &event )
 {
     wxDataViewItem item( event.GetItem() );
-
-    // only allow drops for item, not containers
-    if ( item.IsOk() && m_music_model->IsContainer( item ) )
-    {
-        event.Veto();
-        return;
-    }
 
     if (event.GetDataFormat() != wxDF_UNICODETEXT)
     {
@@ -1309,9 +1296,17 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
     obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
 
     if ( item.IsOk() )
-        wxLogMessage( "Text dropped on item %s: %s", m_music_model->GetTitle( item ), obj.GetText() );
+    {
+        if (m_music_model->IsContainer(item))
+        {
+            wxLogMessage("Text '%s' dropped in container '%s' (proposed index = %i)",
+                         obj.GetText(), m_music_model->GetTitle(item), event.GetProposedDropIndex());
+        }
+        else
+            wxLogMessage("Text '%s' dropped on item '%s'", obj.GetText(), m_music_model->GetTitle(item));
+    }
     else
-        wxLogMessage( "Text dropped on background: %s", obj.GetText() );
+        wxLogMessage("Text '%s' dropped on background (proposed index = %i)", obj.GetText(), event.GetProposedDropIndex());
 }
 
 #endif // wxUSE_DRAG_AND_DROP
