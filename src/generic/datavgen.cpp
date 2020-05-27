@@ -2,8 +2,7 @@
 // Name:        src/generic/datavgen.cpp
 // Purpose:     wxDataViewCtrl generic implementation
 // Author:      Robert Roebling
-// Modified by: Francesco Montorsi, Guru Kathiresan, Bo Yang,
-//              Konstantin S. Matveyev
+// Modified by: Francesco Montorsi, Guru Kathiresan, Bo Yang
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -879,7 +878,7 @@ public:
         int                 m_indentLevel;
 
         DropItemInfo()
-        :   m_row(-1)
+        :   m_row(static_cast<unsigned int>(-1))
         ,   m_hint(DropHint_None)
         ,   m_item(NULL)
         ,   m_proposedDropIndex(-1)
@@ -2163,10 +2162,10 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
             // Insert inside the 'item' or after (below) it. Depends on:
             // 1 - the 'item' is a container
             // 2 - item's child index in it's parent (the last in the parent or not)
-            // 3 - expanded or not
+            // 3 - expanded (opened) or not
             // 4 - mouse x position
 
-            unsigned int start_x = 0;       // Expander column x position start
+            int xStart = 0;     // Expander column x position start
             wxDataViewColumn* const expander = GetExpanderColumnOrFirstOne(GetOwner());
             for (unsigned int i = 0; i < GetOwner()->GetColumnCount(); i++)
             {
@@ -2177,7 +2176,7 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
                 if (col == expander)
                     break;
 
-                start_x += col->GetWidth();
+                xStart += col->GetWidth();
             }
 
             const int expanderWidth = wxRendererNative::Get().GetExpanderSize(this).GetWidth();
@@ -2198,12 +2197,14 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
                     dropItemInfo.m_proposedDropIndex  = itemPosition == wxNOT_FOUND ? 0 : itemPosition + 1;
                     dropItemInfo.m_item               = ascendNode->GetItem();
 
-                    if (IsExpanded(row) && itemPosition != ascendNode->GetChildNodes().size() - 1)
+                    // We must break the loop if the applied node is expanded (opened)
+                    // and the proposed drop position is not the last in this node
+                    if (ascendNode->IsOpen() && dropItemInfo.m_proposedDropIndex != static_cast<int>(ascendNode->GetChildNodes().size()))
                         break;
 
                     int indent = GetOwner()->GetIndent()*level + expanderWidth;
 
-                    if (xx >= start_x + indent)
+                    if (xx >= xStart + indent)
                         break;
                 }
 
