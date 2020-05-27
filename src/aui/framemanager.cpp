@@ -2536,11 +2536,6 @@ void wxAuiManager::Update()
         }
     }
 
-#ifdef __WXMSW__
-    // freeze managed window before layouting
-    if (!wxAuiManager_HasLiveResize(*this))
-        m_frame->Freeze();
-#endif
 
     // delete old sizer first
     m_frame->SetSizer(NULL);
@@ -2645,6 +2640,7 @@ void wxAuiManager::Update()
     DoFrameLayout();
 
 
+
     // now that the frame layout is done, we need to check
     // the new pane rectangles against the old rectangles that
     // we saved a few lines above here.  If the rectangles have
@@ -2664,12 +2660,6 @@ void wxAuiManager::Update()
 
 
     Repaint();
-
-#ifdef __WXMSW__
-    // thaw managed window after layouting
-    if (!wxAuiManager_HasLiveResize(*this))
-        m_frame->Thaw();
-#endif
 
     // set frame's minimum size
 
@@ -4260,6 +4250,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         }
 
         Update();
+        Repaint(NULL);
     }
     else if (m_actionPart &&
         m_actionPart->type == wxAuiDockUIPart::typePaneSizer)
@@ -4427,7 +4418,10 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         dock.panes.Item(borrow_pane)->dock_proportion = prop_borrow;
         pane.dock_proportion = new_proportion;
 
+
+        // repaint
         Update();
+        Repaint(NULL);
     }
 
     return true;
