@@ -10453,6 +10453,141 @@ wxGridBlocks wxGrid::GetSelectedBlocks() const
     return wxGridBlocks(blocks.begin(), blocks.end());
 }
 
+static
+wxGridBlockCoordsVector
+DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
+{
+    wxGridBlockCoordsVector res;
+
+    for ( wxGridBlocks::iterator it = blocks.begin(); it != blocks.end(); ++it )
+    {
+        const int firstNew = oper.SelectFirst(*it);
+        const int lastNew = oper.SelectLast(*it);
+
+        // Check if this block intersects any of the existing ones.
+        //
+        // We use simple linear search because we assume there are only a few
+        // blocks in all, and it's not worth complicating the code to use
+        // anything more advanced, but this definitely could be improved to use
+        // the fact that the vector is always sorted.
+        for ( size_t n = 0;; )
+        {
+            if ( n == res.size() )
+            {
+                // We didn't find any overlapping blocks, so add this one to
+                // the end.
+                res.push_back(*it);
+                break;
+            }
+
+            wxGridBlockCoords& block = res[n];
+            const int firstThis = oper.SelectFirst(block);
+            const int lastThis = oper.SelectLast(block);
+
+            if ( lastNew < firstThis )
+            {
+                // Not only it doesn't overlap this block, but it won't overlap
+                // any subsequent ones neither, so insert it here and stop.
+                res.insert(res.begin() + n, *it);
+                break;
+            }
+
+            if ( lastThis < firstNew )
+            {
+                // It doesn't overlap this one, but continue checking.
+                n++;
+                continue;
+            }
+
+            // The blocks overlap, combine them by adjusting the bounds of the
+            // current block.
+
+            // The first bound is simple as we know that firstNew must be
+            // strictly greater than the last coordinate of all the previous
+            // elements, otherwise we would have combined it with them earlier.
+            if ( firstNew < firstThis )
+                oper.SetFirst(block, firstNew);
+
+            // But for the last one, we need to find the last element it
+            // overlaps (which may be this block itself). We call its index n2
+            // to avoid confusion with "last" used for the block component.
+            size_t n2 = n;
+            for ( ;; )
+            {
+                const wxGridBlockCoords& block2 = res[n2];
+                if ( lastNew < oper.SelectFirst(block2) )
+                {
+                    oper.SetLast(block, lastNew);
+                    break;
+                }
+
+                // Do it here as we'll need to remove the current block if it's
+                // the last overlapping one and we break just below.
+                n2++;
+
+                if ( lastNew < oper.SelectLast(block2) )
+                {
+                    oper.SetLast(block, oper.SelectLast(block2));
+                    break;
+                }
+
+                if ( n2 == res.size() )
+                {
+                    oper.SetLast(block, lastNew);
+                    break;
+                }
+            }
+
+            if ( n2 > n + 1 )
+                res.erase(res.begin() + n + 1, res.begin() + n2);
+
+            break;
+        }
+    }
+
+    // This is another inefficiency: it would be also possible to do everything
+    // in one pass, combining the adjacent ranges in the loop above. But this
+    // is more complicated and doesn't seem to be worth it, for the arrays of
+    // small sizes that we work with here, so do an extra path combining the
+    // adjacent ranges.
+    for ( size_t n = 0;; )
+    {
+        if ( n + 1 >= res.size() )
+            break;
+
+        if ( oper.SelectFirst(res[n + 1]) == oper.SelectLast(res[n]) + 1 )
+        {
+            // The ranges touch, combine them.
+            oper.SetLast(res[n], oper.SelectLast(res[n + 1]));
+
+            // And erase the subsumed range.
+            res.erase(res.begin() + n + 1, res.begin() + n + 2);
+        }
+        else // Just go to the next one.
+        {
+            n++;
+        }
+    }
+
+    return res;
+}
+
+wxGridBlockCoordsVector wxGrid::GetSelectedRowBlocks() const
+{
+    if ( !m_selection || m_selection->GetSelectionMode() != wxGridSelectRows )
+        return wxGridBlockCoordsVector();
+
+    return DoGetRowOrColBlocks(GetSelectedBlocks(), wxGridRowOperations());
+}
+
+wxGridBlockCoordsVector wxGrid::GetSelectedColBlocks() const
+{
+    if ( !m_selection || m_selection->GetSelectionMode() != wxGridSelectColumns )
+        return wxGridBlockCoordsVector();
+
+    return DoGetRowOrColBlocks(GetSelectedBlocks(), wxGridColumnOperations());
+}
+
 wxGridCellCoordsArray wxGrid::GetSelectedCells() const
 {
     if (!m_selection)
