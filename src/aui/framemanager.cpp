@@ -30,6 +30,7 @@
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
 #include "wx/mdi.h"
+#include "wx/wupdlock.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -771,17 +772,25 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
-// Convenience function
-static
-bool wxAuiManager_HasLiveResize(wxAuiManager& manager)
+// With Core Graphics on Mac or GTK 3, it's not possible to show sash feedback,
+// so we'll always use live update instead.
+#if defined(__WXMAC__) || defined(__WXGTK3__)
+    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 1
+#else
+    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 0
+#endif
+
+/* static */ bool wxAuiManager::AlwaysUsesLiveResize()
 {
-    // With Core Graphics on Mac, it's not possible to show sash feedback,
-    // so we'll always use live update instead.
-#if defined(__WXMAC__)
-    wxUnusedVar(manager);
+    return wxUSE_AUI_LIVE_RESIZE_ALWAYS;
+}
+
+bool wxAuiManager::HasLiveResize() const
+{
+#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
     return true;
 #else
-    return (manager.GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
+    return (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
 #endif
 }
 
@@ -2536,6 +2545,20 @@ void wxAuiManager::Update()
         }
     }
 
+    // Disable all updates until everything can be repainted at once at the end
+    // when not using live resizing.
+    //
+    // Note that:
+    //  - This is useless under Mac, where HasLiveResize() always returns false.
+    //  - This is harmful under GTK, where it results in extra flicker (sic).
+    //  - This results in display artefacts when using live resizing under MSW.
+    //
+    // So we only do this under MSW and only when not using live resizing.
+#ifdef __WXMSW__
+    wxWindowUpdateLocker noUpdates;
+    if (!HasLiveResize())
+        noUpdates.Lock(m_frame);
+#endif // __WXMSW__
 
     // delete old sizer first
     m_frame->SetSizer(NULL);
@@ -4250,7 +4273,6 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         }
 
         Update();
-        Repaint(NULL);
     }
     else if (m_actionPart &&
         m_actionPart->type == wxAuiDockUIPart::typePaneSizer)
@@ -4418,10 +4440,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         dock.panes.Item(borrow_pane)->dock_proportion = prop_borrow;
         pane.dock_proportion = new_proportion;
 
-
-        // repaint
         Update();
-        Repaint(NULL);
     }
 
     return true;
@@ -4433,13 +4452,13 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     {
         m_frame->ReleaseMouse();
 
-        if (!wxAuiManager_HasLiveResize(*this))
+        if (!HasLiveResize())
         {
             // get rid of the hint rectangle
             wxScreenDC dc;
             DrawResizeHint(dc, m_actionHintRect);
         }
-        if (m_currentDragItem != -1 && wxAuiManager_HasLiveResize(*this))
+        if (m_currentDragItem != -1 && HasLiveResize())
             m_actionPart = & (m_uiParts.Item(m_currentDragItem));
 
         DoEndResizeAction(event);
@@ -4543,7 +4562,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             else
                 pos.x = wxMax(0, event.m_x - m_actionOffset.x);
 
-            if (wxAuiManager_HasLiveResize(*this))
+            if (HasLiveResize())
             {
                 m_frame->ReleaseMouse();
                 DoEndResizeAction(event);

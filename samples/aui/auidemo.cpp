@@ -709,7 +709,9 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
-    options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
+    // Only show "live resize" toggle if it's actually functional.
+    if ( !wxAuiManager::AlwaysUsesLiveResize() )
+        options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
     options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
     options_menu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
