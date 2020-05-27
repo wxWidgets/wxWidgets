@@ -43,6 +43,8 @@
 
 #include "wx/osx/private.h"
 
+static const int TEXTCTRL_BORDER_SIZE = 5;
+
 wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
@@ -199,28 +201,31 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
     if ( hText == - 1)
     {
-        // these are the numbers from the HIG:
-        // we reduce them by the borders first
         wText = 100 ;
 
+        // these are the numbers from the HIG:
         switch ( m_windowVariant )
         {
             case wxWINDOW_VARIANT_NORMAL :
-                hText = 22 - 5 ;
+                hText = 22;
                 break ;
 
             case wxWINDOW_VARIANT_SMALL :
-                hText = 19 - 5 ;
+                hText = 19;
                 break ;
 
             case wxWINDOW_VARIANT_MINI :
-                hText = 15 - 5 ;
+                hText = 15;
                 break ;
 
             default :
-                hText = 22 - 5;
+                hText = 22;
                 break ;
         }
+
+        // the numbers above include the border size, so subtract it before
+        // possibly adding it back below
+        hText -= TEXTCTRL_BORDER_SIZE;
     }
 
     // as the above numbers have some free space around the text
@@ -229,7 +234,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
          hText *= 5 ;
 
     if ( !HasFlag(wxNO_BORDER) )
-        hText += 5 ;
+        hText += TEXTCTRL_BORDER_SIZE ;
 
     return wxSize(wText, hText);
 }
