@@ -20,9 +20,11 @@
 
 #if wxUSE_CAIRO
 
+#ifndef __WXGTK20__
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
 #define cairo_public
+#endif
 
 #include <cairo.h>
 #include <float.h>
@@ -63,7 +65,6 @@ using namespace std;
 // wxGraphicsPath implementation
 //-----------------------------------------------------------------------------
 
-#include <cairo.h>
 #ifdef __WXMSW__
 // TODO remove this dependency (gdiplus needs the macros)
 

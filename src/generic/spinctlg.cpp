@@ -66,13 +66,17 @@ class wxSpinCtrlTextGeneric : public wxTextCtrl
 public:
     wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
         : wxTextCtrl(spin, wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     // This is tricky: we want to honour any alignment flags
-                     // but not wxALIGN_CENTER_VERTICAL because it's the same
+                     // This is tricky: we want to honour all alignment flags
+                     // except wxALIGN_CENTER_VERTICAL because it's the same
                      // as wxTE_PASSWORD and we definitely don't want to show
-                     // asterisks in spin control.
-                     style & (wxALIGN_MASK | wxBORDER_MASK | wxTE_PROCESS_ENTER) & ~wxTE_PASSWORD)
+                     // asterisks in spin control. We also want to respect
+                     // wxTE_PROCESS and the border flags as well.
+                     style & (wxALIGN_MASK | wxBORDER_MASK | wxTE_PROCESS_ENTER)
+                           & ~wxTE_PASSWORD)
     {
         m_spin = spin;
+
+        InvalidateBestSize();
 
         // remove the default minsize, the spinctrl will have one instead
         SetSizeHints(wxDefaultCoord, wxDefaultCoord);
@@ -109,6 +113,20 @@ public:
 
         event.Skip();
     }
+
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    // GetSizeFromTextSize() is not implemented in wxOSX
+    // so GetSizeFromText() cannot be used for size calculations.
+    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    {
+        wxString minVal = m_spin->DoValueToText(m_spin->m_min);
+        wxString maxVal = m_spin->DoValueToText(m_spin->m_max);
+        wxSize minValSize = GetSizeFromText(minVal);
+        wxSize maxValSize = GetSizeFromText(maxVal);
+
+        return wxSize(wxMax(minValSize.x, maxValSize.x), wxMax(minValSize.y, maxValSize.y));
+    }
+#endif // __WXMSW || __WXGTK__
 
     wxSpinCtrlGenericBase *m_spin;
 
@@ -575,6 +593,9 @@ double wxSpinCtrlGenericBase::AdjustToFitInRange(double value) const
 
 void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
 {
+    if ( min != m_min || max != m_max )
+        m_textCtrl->InvalidateBestSize();
+
     m_min = min;
     if ( m_value < m_min )
         DoSetValue(m_min, SendEvent_None);
@@ -673,6 +694,8 @@ wxString wxSpinCtrl::DoValueToText(double val)
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
 
+#define SPINCTRLDBL_MAX_DIGITS 20
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase);
 
 void wxSpinCtrlDouble::DoSendEvent()
@@ -696,7 +719,7 @@ wxString wxSpinCtrlDouble::DoValueToText(double val)
 
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
-    wxCHECK_RET( digits <= 20, "too many digits for wxSpinCtrlDouble" );
+    wxCHECK_RET( digits <= SPINCTRLDBL_MAX_DIGITS, "too many digits for wxSpinCtrlDouble" );
 
     if ( digits == m_digits )
         return;
@@ -705,7 +728,19 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 
     m_format.Printf(wxT("%%0.%ulf"), digits);
 
+    m_textCtrl->InvalidateBestSize();
+
     DoSetValue(m_value, SendEvent_None);
+}
+
+void wxSpinCtrlDouble::DetermineDigits(double inc)
+{
+    inc = fabs(inc);
+    if ( inc > 0.0 && inc < 1.0 )
+    {
+        m_digits = wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));
+        m_format.Printf("%%0.%ulf", m_digits);
+    }
 }
 
 #endif // wxUSE_SPINBTN

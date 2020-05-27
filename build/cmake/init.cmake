@@ -530,3 +530,37 @@ if(wxUSE_GUI)
         set(wxUSE_LIBGNOMEVFS OFF)
     endif()
 endif()
+
+# test if precompiled headers are supported using the cotire test project
+if(DEFINED wxBUILD_PRECOMP_PREV AND NOT wxBUILD_PRECOMP STREQUAL wxBUILD_PRECOMP_PREV)
+    set(CLEAN_PRECOMP_TEST TRUE)
+endif()
+set(wxBUILD_PRECOMP_PREV ${wxBUILD_PRECOMP} CACHE INTERNAL "")
+
+if(wxBUILD_PRECOMP)
+    if (CLEAN_PRECOMP_TEST)
+        try_compile(RESULT_VAR_CLEAN
+                    "${wxBINARY_DIR}/CMakeFiles/cotire_test"
+                    "${wxSOURCE_DIR}/build/cmake/modules/cotire_test"
+                    CotireExample clean_cotire
+        )
+    endif()
+    try_compile(RESULT_VAR
+                "${wxBINARY_DIR}/CMakeFiles/cotire_test"
+                "${wxSOURCE_DIR}/build/cmake/modules/cotire_test"
+                CotireExample OUTPUT_VARIABLE OUTPUT_VAR
+    )
+
+    # check if output has precompiled header warnings. The build can still succeed, so check the output
+    # likely caused by gcc hardening: https://bugzilla.redhat.com/show_bug.cgi?id=1721553
+    # cc1plus: warning /path/to/project/cotire/name_CXX_prefix.hxx.gch: had text segment at different address
+    string(FIND "${OUTPUT_VAR}" "had text segment at different address" HAS_MESSAGE)
+    if(${HAS_MESSAGE} GREATER -1)
+        set(RESULT_VAR FALSE)
+    endif()
+
+    if(NOT RESULT_VAR)
+        message(WARNING "precompiled header (PCH) test failed, it will be turned off")
+        wx_option_force_value(wxBUILD_PRECOMP OFF)
+    endif()
+endif(wxBUILD_PRECOMP)

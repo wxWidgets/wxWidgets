@@ -251,7 +251,7 @@ void ListBaseTestCase::KeyDown()
 
     list->SetFocus();
     wxYield();
-    sim.Text("aAbB");
+    sim.Text("aAbB"); // 4 letters + 2 shift mods.
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());

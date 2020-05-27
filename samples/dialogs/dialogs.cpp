@@ -3038,7 +3038,9 @@ void MyFrame::ShowReplaceDialog( wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_dlgReplace )
     {
-        wxDELETE(m_dlgReplace);
+        m_dlgReplace->Destroy();
+
+        m_dlgReplace = NULL;
     }
     else
     {
@@ -3058,7 +3060,9 @@ void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_dlgFind )
     {
-        wxDELETE(m_dlgFind);
+        m_dlgFind->Destroy();
+
+        m_dlgFind = NULL;
     }
     else
     {

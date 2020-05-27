@@ -61,7 +61,15 @@ public:
             SaveValue(columnPrefix + wxPERSIST_DVC_HIDDEN, column->IsHidden());
             SaveValue(columnPrefix + wxPERSIST_DVC_POS,
                       control->GetColumnPosition(column));
-            SaveValue(columnPrefix + wxPERSIST_DVC_WIDTH, column->GetWidth());
+
+            // We take special care to save only the specified width instead of
+            // the currently used one. Usually they're one and the same, but
+            // they can be different for the last column, whose size can be
+            // greater than specified, as it's always expanded to fill the
+            // entire control width.
+            const int width = column->WXGetSpecifiedWidth();
+            if ( width > 0 )
+                SaveValue(columnPrefix + wxPERSIST_DVC_WIDTH, width);
 
             // Check if this column is the current sort key.
             if ( column->IsSortKey() )

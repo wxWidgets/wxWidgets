@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_LISTCTRL
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -115,3 +117,5 @@ void ListViewTestCase::Focus()
 
     CPPUNIT_ASSERT_EQUAL(0, m_list->GetFocusedItem());
 }
+
+#endif

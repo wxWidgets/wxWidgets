@@ -359,6 +359,10 @@ void TextCtrlTestCase::HitTestSingleLine()
 
     long pos = -1;
 
+#ifdef __WXGTK__
+    wxYield();
+#endif
+
     // Hitting a point near the left side of the control should find one of the
     // first few characters under it.
     SECTION("Normal")
@@ -384,24 +388,14 @@ void TextCtrlTestCase::HitTestSingleLine()
         m_text->ChangeValue(wxString(200, 'X'));
         m_text->SetInsertionPointEnd();
 
+    #ifdef __WXGTK__
         // wxGTK must be given an opportunity to lay the text out.
-        wxYield();
+        for ( wxStopWatch sw; sw.Time() < 50; )
+            wxYield();
+    #endif
 
-        // For some reason, this test consistently fails when running under
-        // Xvfb. Debugging shows that the text gets scrolled too far, instead
-        // of scrolling by ~156 characters, leaving the remaining 44 shown, in
-        // normal runs, it gets scrolled by all 200 characters, leaving nothing
-        // shown. It's not clear why does it happen, and there doesn't seem
-        // anything we can do about it.
-        if ( IsRunningUnderXVFB() )
-        {
-            WARN("Skipping test known to fail under Xvfb");
-        }
-        else
-        {
-            REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
-            CHECK( pos > 3 );
-        }
+        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        CHECK( pos > 3 );
 
         // Using negative coordinates works even under Xvfb, so test at least
         // for this -- however this only works in wxGTK, not wxMSW.

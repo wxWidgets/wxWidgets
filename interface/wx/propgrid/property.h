@@ -581,11 +581,11 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     a different way in the editor and therefore such sequences may not be
     the same before and after the edition.
 
-    To display custom dialog on button press, you can subclass
-    wxLongStringProperty and implement OnButtonClick, like this:
+    To display a custom dialog on button press, you can subclass
+    wxLongStringProperty and override DisplayEditorDialog, like this:
 
     @code
-        virtual bool OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
+        bool DisplayEditorDialog( wxPropertyGrid* propGrid, wxVariant& value ) wxOVERRIDE
         {
             wxSize dialogSize(...size of your dialog...);
 

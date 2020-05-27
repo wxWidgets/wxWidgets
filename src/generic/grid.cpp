@@ -49,6 +49,10 @@
 #include "wx/headerctrl.h"
 #include "wx/hashset.h"
 
+#if wxUSE_CLIPBOARD
+    #include "wx/clipbrd.h"
+#endif // wxUSE_CLIPBOARD
+
 #include "wx/generic/gridsel.h"
 #include "wx/generic/gridctrl.h"
 #include "wx/generic/grideditors.h"
@@ -2840,7 +2844,7 @@ void wxGrid::Init()
     m_minAcceptableColWidth  =
     m_minAcceptableRowHeight = 0;
 
-    m_gridLineColour = wxColour( 192,192,192 );
+    m_gridLineColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
     m_gridLinesEnabled = true;
     m_gridLinesClipHorz =
     m_gridLinesClipVert = true;
@@ -5293,16 +5297,35 @@ wxGrid::SendGridSizeEvent(wxEventType type,
    return GetEventHandler()->ProcessEvent(gridEvt);
 }
 
-// Generate a grid event based on a mouse event and return:
-//  -1 if the event was vetoed
+// Process the event and return
+//  -1 if the event was vetoed or if event cell was deleted
 //  +1 if the event was processed (but not vetoed)
 //   0 if the event wasn't handled
+int wxGrid::DoSendEvent(wxGridEvent& gridEvt)
+{
+    const bool claimed = GetEventHandler()->ProcessEvent(gridEvt);
+
+    // A Veto'd event may not be `claimed' so test this first
+    if ( !gridEvt.IsAllowed() )
+        return -1;
+
+    // We also return -1 if the event cell was deleted, as this allows to have
+    // checks in several functions that generate an event and then proceed
+    // doing something by default with the selected cell: this shouldn't be
+    // done if the user-defined handler deleted this cell.
+    if ( gridEvt.GetRow() >= GetNumberRows() ||
+            gridEvt.GetCol() >= GetNumberCols() )
+        return -1;
+
+    return claimed ? 1 : 0;
+}
+
+// Generate a grid event based on a mouse event and call DoSendEvent() with it.
 int
 wxGrid::SendEvent(wxEventType type,
                   int row, int col,
                   const wxMouseEvent& mouseEv)
 {
-   bool claimed, vetoed;
 
    if ( type == wxEVT_GRID_LABEL_LEFT_CLICK ||
         type == wxEVT_GRID_LABEL_LEFT_DCLICK ||
@@ -5324,8 +5347,8 @@ wxGrid::SendEvent(wxEventType type,
                pos.y,
                false,
                mouseEv);
-       claimed = GetEventHandler()->ProcessEvent(gridEvt);
-       vetoed = !gridEvt.IsAllowed();
+
+       return DoSendEvent(gridEvt);
    }
    else
    {
@@ -5345,15 +5368,8 @@ wxGrid::SendEvent(wxEventType type,
            gridEvt.Veto();
        }
 
-       claimed = GetEventHandler()->ProcessEvent(gridEvt);
-       vetoed = !gridEvt.IsAllowed();
+       return DoSendEvent(gridEvt);
    }
-
-   // A Veto'd event may not be `claimed' so test this first
-   if (vetoed)
-       return -1;
-
-   return claimed ? 1 : 0;
 }
 
 // Generate a grid event of specified type, return value same as above
@@ -5364,13 +5380,7 @@ wxGrid::SendEvent(wxEventType type, int row, int col, const wxString& s)
     wxGridEvent gridEvt( GetId(), type, this, row, col );
     gridEvt.SetString(s);
 
-    const bool claimed = GetEventHandler()->ProcessEvent(gridEvt);
-
-    // A Veto'd event may not be `claimed' so test this first
-    if ( !gridEvt.IsAllowed() )
-        return -1;
-
-    return claimed ? 1 : 0;
+    return DoSendEvent(gridEvt);
 }
 
 void wxGrid::Refresh(bool eraseb, const wxRect* rect)
@@ -5707,13 +5717,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    if ( GetGridCursorRow() < GetNumberRows()-1 )
+                    if ( !MoveCursorDown( event.ShiftDown() ) )
                     {
-                        MoveCursorDown( event.ShiftDown() );
-                    }
-                    else
-                    {
-                        // at the bottom of a column
+                        // Normally this would be done by MoveCursorDown(), but
+                        // if it failed to move the cursor, e.g. because we're
+                        // at the bottom of a column, do it here.
                         DisableCellEditControl();
                     }
                 }
@@ -5875,6 +5883,82 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         m_selection->ExtendCurrentBlock(selStart, selEnd, event);
                 }
                 break;
+
+#if wxUSE_CLIPBOARD
+            case WXK_INSERT:
+            case 'C':
+                if ( event.GetModifiers() == wxMOD_CONTROL )
+                {
+                    // Coordinates of the selected block to copy to clipboard.
+                    wxGridBlockCoords sel;
+
+                    // Check if we have any selected blocks and if we don't
+                    // have too many of them.
+                    const wxGridBlocks blocks = GetSelectedBlocks();
+                    wxGridBlocks::iterator iter = blocks.begin();
+                    if ( iter == blocks.end() )
+                    {
+                        // No selection, copy just the current cell.
+                        if ( m_currentCellCoords == wxGridNoCellCoords )
+                        {
+                            // But we don't even have it -- nothing to do then.
+                            event.Skip();
+                            break;
+                        }
+
+                        sel = wxGridBlockCoords(GetGridCursorRow(),
+                                                GetGridCursorCol(),
+                                                GetGridCursorRow(),
+                                                GetGridCursorCol());
+                    }
+                    else // We do have at least one selected block.
+                    {
+                        sel = *blocks.begin();
+
+                        if ( ++iter != blocks.end() )
+                        {
+                            // As we use simple text format, we can't copy more
+                            // than one block to clipboard.
+                            wxLogWarning
+                            (
+                                _("Copying more than one selected block "
+                                  "to clipboard is not supported.")
+                            );
+                            break;
+                        }
+                    }
+
+                    wxClipboardLocker lockClipboard;
+                    if ( !lockClipboard )
+                    {
+                        // Error message should have been already given and we
+                        // don't have much to add.
+                        break;
+                    }
+
+                    wxString buf;
+                    for ( int row = sel.GetTopRow(); row <= sel.GetBottomRow(); row++ )
+                    {
+                        bool first = true;
+
+                        for ( int col = sel.GetLeftCol(); col <= sel.GetRightCol(); col++ )
+                        {
+                            if ( first )
+                                first = false;
+                            else
+                                buf += '\t';
+
+                            buf += GetCellValue(row, col);
+                        }
+
+                        buf += wxTextFile::GetEOL();
+                    }
+
+                    wxTheClipboard->SetData(new wxTextDataObject(buf));
+                    break;
+                }
+                wxFALLTHROUGH;
+#endif // wxUSE_CLIPBOARD
 
             default:
                 event.Skip();

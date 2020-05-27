@@ -18,11 +18,6 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
-// note that we have our own dlerror() implementation under Darwin
-#if defined(HAVE_DLERROR) || defined(__DARWIN__)
-    #define wxHAVE_DYNLIB_ERROR
-#endif
-
 class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 
 // ----------------------------------------------------------------------------
@@ -31,15 +26,9 @@ class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 
 #if defined(__WINDOWS__)
     typedef WXHMODULE           wxDllType;
-#elif defined(__DARWIN__)
-    // Don't include dlfcn.h on Darwin, we may be using our own replacements.
-    typedef void               *wxDllType;
 #elif defined(HAVE_DLOPEN)
     #include <dlfcn.h>
     typedef void               *wxDllType;
-#elif defined(HAVE_SHL_LOAD)
-    #include <dl.h>
-    typedef shl_t               wxDllType;
 #elif defined(__WXMAC__)
     #include <CodeFragments.h>
     typedef CFragConnectionID   wxDllType;
@@ -365,11 +354,9 @@ protected:
     // common part of GetSymbol() and HasSymbol()
     void* DoGetSymbol(const wxString& name, bool* success = NULL) const;
 
-#ifdef wxHAVE_DYNLIB_ERROR
-    // log the error after a dlxxx() function failure
-    static void Error();
-#endif // wxHAVE_DYNLIB_ERROR
-
+    // log the error after an OS dynamic library function failure
+    static void ReportError(const wxString& msg,
+                            const wxString& name = wxString());
 
     // the handle to DLL or NULL
     wxDllType m_handle;

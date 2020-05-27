@@ -347,7 +347,9 @@ bool wxFindReplaceDialog::Create(wxWindow *parent,
 {
     m_windowStyle = flags;
     m_FindReplaceData = data;
-    m_parent = parent;
+
+    if ( parent )
+        parent->AddChild(this);
 
     SetTitle(title);
 

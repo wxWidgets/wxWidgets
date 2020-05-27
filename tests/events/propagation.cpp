@@ -30,6 +30,7 @@
 #include "wx/scopeguard.h"
 #include "wx/toolbar.h"
 #include "wx/uiaction.h"
+#include "wx/stopwatch.h"
 
 // FIXME: Currently under OS X testing paint event doesn't work because neither
 //        calling Refresh()+Update() nor even sending wxPaintEvent directly to
@@ -37,12 +38,7 @@
 //        some tests there. But this should be fixed and the tests reenabled
 //        because wxPaintEvent propagation in wxScrolledWindow is a perfect
 //        example of fragile code that could be broken under OS X.
-//
-// FIXME: Under GTK+ 3 the test is broken because a simple wxYield() is not
-//        enough to map the frame. It should be also fixed there by waiting for
-//        it to come up, with some timeout, but for now it always fails, so
-//        it's useless to run it.
-#if !defined(__WXOSX__) && !defined(__WXGTK3__)
+#if !defined(__WXOSX__)
     #define CAN_TEST_PAINT_EVENTS
 #endif
 
@@ -180,7 +176,8 @@ public:
 #ifdef __WXGTK__
         // We need to map the window, otherwise we're not going to get any
         // paint events for it.
-        wxYield();
+        for ( wxStopWatch sw; sw.Time() < 50; )
+            wxYield();
 
         // Ignore events generated during the initial mapping.
         g_str.clear();
@@ -248,7 +245,7 @@ private:
         CPPUNIT_TEST( ScrollWindowWithHandler );
 // for unknown reason, this test will cause the tests segmentation failed
 // under x11, disable it for now.
-#if !defined (__WXX11__)
+#if !defined (__WXX11__) && wxUSE_MENUS
         CPPUNIT_TEST( MenuEvent );
 #endif
 #if wxUSE_DOC_VIEW_ARCHITECTURE
@@ -265,7 +262,9 @@ private:
     void ForwardEvent();
     void ScrollWindowWithoutHandler();
     void ScrollWindowWithHandler();
+#if wxUSE_MENUS
     void MenuEvent();
+#endif
 #if wxUSE_DOC_VIEW_ARCHITECTURE
     void DocView();
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
@@ -429,6 +428,8 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 
+#if wxUSE_MENUS
+
 // Create a menu bar with a single menu containing wxID_APPLY menu item and
 // attach it to the specified frame.
 wxMenu* CreateTestMenu(wxFrame* frame)
@@ -505,6 +506,7 @@ void EventPropagationTestCase::MenuEvent()
 
     ASSERT_MENU_EVENT_RESULT( menu, "aomobowA" );
 }
+#endif
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 

@@ -137,15 +137,6 @@ public:
         if ( width == m_width )
             return;
 
-        // Normally we don't update it here as this method is called by
-        // UpdateColumnSizes() which resizes the column automatically, and not
-        // "manually", but if it's the first time the width is being set for a
-        // column created with the default width, do set m_manuallySetWidth in
-        // order to prevent the column from becoming narrower than its initial
-        // size when the control is resized, as this is unexpected.
-        if ( m_width == -1 )
-            m_manuallySetWidth = width;
-
         m_width = width;
         UpdateWidth();
     }
@@ -154,7 +145,7 @@ public:
     // user interactively.
     void WXOnResize(int width);
 
-    int WXGetManuallySetWidth() const { return m_manuallySetWidth; }
+    virtual int WXGetSpecifiedWidth() const wxOVERRIDE;
 
 private:
     // common part of all ctors
@@ -165,6 +156,11 @@ private:
     // former.
     void UpdateDisplay();
     void UpdateWidth();
+
+    // Return the effective value corresponding to the given width, handling
+    // its negative values such as wxCOL_WIDTH_DEFAULT.
+    int DoGetEffectiveWidth(int width) const;
+
 
     wxString m_title;
     int m_width,

@@ -27,6 +27,7 @@
 #include "wx/caret.h"
 #include "wx/cshelp.h"
 #include "wx/scopedptr.h"
+#include "wx/stopwatch.h"
 #include "wx/tooltip.h"
 
 class WindowTestCase
@@ -35,6 +36,13 @@ public:
     WindowTestCase()
         : m_window(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY))
     {
+    #ifdef __WXGTK3__
+        // Without this, when running this test suite solo it succeeds,
+        // but not when running it together with the other tests !!
+        // Not needed when run under Xvfb display.
+        for ( wxStopWatch sw; sw.Time() < 50; )
+            wxYield();
+    #endif
     }
 
     ~WindowTestCase()
@@ -127,6 +135,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 
     CHECK(m_window->GetCursor().IsOk());
 
+#if wxUSE_CARET
     //A plain window doesn't have a caret
     CHECK(!m_window->GetCaret());
 
@@ -134,6 +143,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     m_window->SetCaret(caret);
 
     CHECK(m_window->GetCaret()->IsOk());
+#endif
 
     m_window->CaptureMouse();
 
@@ -188,6 +198,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ToolTip", "[window]")
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
 {
+#if wxUSE_HELP
     wxHelpProvider::Set(new wxSimpleHelpProvider());
 
     CHECK( m_window->GetHelpText() == "" );
@@ -195,6 +206,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
     m_window->SetHelpText("helptext");
 
     CHECK( m_window->GetHelpText() == "helptext" );
+#endif
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Parent", "[window]")

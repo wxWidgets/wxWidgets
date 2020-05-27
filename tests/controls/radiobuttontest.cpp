@@ -75,8 +75,8 @@ void RadioButtonTestCase::tearDown()
 
 void RadioButtonTestCase::Click()
 {
-    // GTK and OS X do not support selecting a single radio button
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) && !defined(__WXOSX__)
+    // OS X doesn't support selecting a single radio button
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
     EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     wxUIActionSimulator sim;

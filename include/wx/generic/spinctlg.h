@@ -380,6 +380,7 @@ public:
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrlDouble"))
     {
+        DetermineDigits(inc);
         return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
                                              style, min, max, initial,
                                              inc, name);
@@ -410,6 +411,7 @@ protected:
 
     virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
     virtual wxString DoValueToText(double val) wxOVERRIDE;
+    void DetermineDigits(double inc);
 
     unsigned m_digits;
 
@@ -418,7 +420,7 @@ private:
     void Init()
     {
         m_digits = 0;
-        m_format = wxS("%g");
+        m_format = "%0.0f";
     }
 
     wxString m_format;

@@ -161,9 +161,11 @@ int wxPGEditor::InsertItem( wxWindow*, const wxString&, int ) const
 
 void wxPGEditor::DeleteItem( wxWindow*, int ) const
 {
-    return;
 }
 
+void wxPGEditor::SetItems(wxWindow* WXUNUSED(ctrl), const wxArrayString& WXUNUSED(labels)) const
+{
+}
 
 void wxPGEditor::OnFocus( wxPGProperty*, wxWindow* ) const
 {
@@ -1089,6 +1091,15 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
     wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
 
     cb->Delete(index);
+}
+
+void wxPGChoiceEditor::SetItems(wxWindow* ctrl, const wxArrayString& labels) const
+{
+    wxASSERT( ctrl );
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxASSERT( cb );
+
+    cb->Set(labels);
 }
 
 bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property,

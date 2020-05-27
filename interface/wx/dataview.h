@@ -304,14 +304,18 @@ public:
 
         All normal items have values in all columns but the container items
         only show their label in the first column (@a col == 0) by default (but
-        see HasContainerColumns()). So this function always returns true for
+        see HasContainerColumns()). So this function by default returns true for
         the first column while for the other ones it returns true only if the
         item is not a container or HasContainerColumns() was overridden to
         return true for it.
 
+        Since wxWidgets 3.1.4, this method is virtual and can be overridden to
+        explicitly specify for which columns a given item has, and doesn't
+        have, values.
+
         @since 2.9.1
      */
-    bool HasValue(const wxDataViewItem& item, unsigned col) const;
+    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const;
 
     /**
         Override this to indicate of @a item is a container, i.e.\ if
@@ -984,7 +988,10 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -3727,7 +3734,10 @@ public:
            Currently this event is not generated when using the native GTK+
            version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -3840,6 +3850,12 @@ public:
 
     /**
         Set wxDataObject for data transfer within a drag operation.
+
+        This method must be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        handler to associate the data object to be dragged with the item.
+
+        Note that the control takes ownership of the data object, i.e. @a obj
+        must be heap-allocated and will be deleted by wxDataViewCtrl itself.
     */
     void SetDataObject( wxDataObject *obj );
 
@@ -3861,7 +3877,7 @@ public:
     /**
         Specify the kind of the drag operation to perform.
 
-        This method can be used inside a wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        This method can be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
         handler in order to configure the drag operation. Valid values are
         ::wxDrag_CopyOnly (default), ::wxDrag_AllowMove (allow the data to be
         moved) and ::wxDrag_DefaultMove.

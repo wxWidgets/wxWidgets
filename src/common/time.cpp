@@ -64,8 +64,12 @@ namespace
 {
 
 const int MILLISECONDS_PER_SECOND = 1000;
+#if !defined(__WINDOWS__)
 const int MICROSECONDS_PER_MILLISECOND = 1000;
+#ifdef HAVE_GETTIMEOFDAY
 const int MICROSECONDS_PER_SECOND = 1000*1000;
+#endif
+#endif
 
 } // anonymous namespace
 
@@ -332,7 +336,7 @@ wxLongLong wxGetLocalTimeMillis()
 
 double wxGetLocalTimeMillis()
 {
-    return (double(clock()) / double(CLOCKS_PER_SEC)) * 1000.0;
+    return (double(clock()) / double(CLOCKS_PER_SEC)) * MILLISECONDS_PER_SECOND;
 }
 
 #endif // wxUSE_LONGLONG/!wxUSE_LONGLONG

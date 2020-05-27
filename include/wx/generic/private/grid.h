@@ -343,7 +343,7 @@ public:
     {
     }
 
-    virtual bool IsFrozen() const { return true; }
+    virtual bool IsFrozen() const wxOVERRIDE { return true; }
 };
 
 
@@ -375,7 +375,7 @@ public:
     {
     }
 
-    virtual bool IsFrozen() const { return true; }
+    virtual bool IsFrozen() const wxOVERRIDE { return true; }
 };
 
 

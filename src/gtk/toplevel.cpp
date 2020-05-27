@@ -25,6 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/app.h"     // GetAppDisplayName()
     #include "wx/icon.h"
     #include "wx/log.h"
 #endif
@@ -628,6 +629,11 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     m_title = title;
+
+#ifndef __WXGTK4__
+    // Gnome uses class as display name
+    gdk_set_program_class(wxTheApp->GetAppDisplayName().utf8_str());
+#endif
 
     // NB: m_widget may be !=NULL if it was created by derived class' Create,
     //     e.g. in wxTaskBarIconAreaGTK

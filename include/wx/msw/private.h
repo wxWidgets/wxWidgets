@@ -211,6 +211,12 @@ struct WinStruct : public T
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 
+#ifdef COM_DECLSPEC_NOTHROW
+    #define wxSTDMETHODIMP COM_DECLSPEC_NOTHROW STDMETHODIMP
+#else
+    #define wxSTDMETHODIMP STDMETHODIMP
+#endif
+
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)
 {

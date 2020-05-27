@@ -1937,17 +1937,9 @@ enum wxStandardID
 /*  wxWindowID type                                                              */
 /*  ---------------------------------------------------------------------------- */
 
-/*
- * wxWindowID used to be just a typedef defined here, now it's a class, but we
- * still continue to define it here for compatibility, so that the code using
- * it continues to compile even if it includes just wx/defs.h.
- *
- * Notice that wx/windowid.h can only be included after wxID_XYZ definitions
- * (as it uses them).
- */
-#if defined(__cplusplus) && wxUSE_GUI
-    #include "wx/windowid.h"
-#endif
+/* Note that this is defined even in non-GUI code as the same type is also used
+   for e.g. timer IDs. */
+typedef int wxWindowID;
 
 /*  ---------------------------------------------------------------------------- */
 /*  other constants */

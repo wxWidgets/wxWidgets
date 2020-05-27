@@ -112,11 +112,6 @@ wxDateTime wxDateTimePickerCtrl::GetValue() const
 
 wxSize wxDateTimePickerCtrl::DoGetBestSize() const
 {
-    // Do not use DateTime_GetIdealSize / DTM_GETIDEALSIZE. It returns
-    // incorrect sizes after the DPI of the window has changed. For every DPI
-    // change, the returned size is 4 pixels higher, even if the DPI is
-    // lowered.
-
     wxClientDC dc(const_cast<wxDateTimePickerCtrl *>(this));
 
     // Use the same native format as the underlying native control.
@@ -134,15 +129,34 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
 
     wxSize size = dc.GetTextExtent(s);
 
-    // Account for the drop-down arrow or spin arrows.
-    size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X, m_parent);
+    // We can ask the control itself to compute its ideal size, but we only use
+    // it for the horizontal component: the vertical size is not computed
+    // correctly after the DPI of the window has changed because for every DPI
+    // change, the returned size is 4 pixels higher, even if the DPI is
+    // lowered, so we always need to compute it ourselves below.
+    //
+    // Also work around https://bugs.winehq.org/show_bug.cgi?id=44680 by
+    // checking for the return value: even if all "real" MSW systems do support
+    // this message, Wine does not, even when it's configured to return Vista
+    // or later version to the application, and returns FALSE for it.
+    SIZE idealSize;
+    if ( wxGetWinVersion() >= wxWinVersion_Vista
+            && ::SendMessage(m_hWnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
+    {
+        size.x = idealSize.cx;
+    }
+    else // Adjust the size ourselves.
+    {
+        // Account for the drop-down arrow or spin arrows.
+        size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X, m_parent);
+
+        // We need to account for the checkbox, if we have one.
+        if ( MSWAllowsNone() )
+            size.x += 3 * GetCharWidth();
+    }
 
     int scrollY = wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_Y, m_parent);
     size.y = wxMax(size.y, scrollY);
-
-    // We need to account for the checkbox, if we have one.
-    if ( MSWAllowsNone() )
-        size.x += 3 * GetCharWidth();
 
     // In any case, adjust the height to be the same as for the text controls.
     size.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(size.y);

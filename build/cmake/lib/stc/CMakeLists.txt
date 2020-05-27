@@ -182,18 +182,21 @@ if(wxBUILD_PRECOMP)
     wx_target_enable_precomp(wxscintilla ${wxSCINTILLA_PREC_HEADER})
 endif()
 
-wx_add_library(stc ${STC_FILES})
-wx_lib_include_directories(stc PRIVATE
+wx_add_library(wxstc ${STC_FILES})
+wx_lib_include_directories(wxstc PRIVATE
     ${wxSOURCE_DIR}/src/stc/scintilla/include
     ${wxSOURCE_DIR}/src/stc/scintilla/lexlib
     ${wxSOURCE_DIR}/src/stc/scintilla/src
     )
-wx_lib_compile_definitions(stc PRIVATE
+wx_lib_compile_definitions(wxstc PRIVATE
     NO_CXX11_REGEX
     __WX__
     SCI_LEXER
     LINK_LEXERS
 )
-wx_lib_link_libraries(stc PRIVATE wxscintilla)
+wx_lib_link_libraries(wxstc PRIVATE wxscintilla)
+if(WXMSW)
+    wx_lib_link_libraries(wxstc PRIVATE imm32)
+endif()
 
-wx_finalize_lib(stc)
+wx_finalize_lib(wxstc)

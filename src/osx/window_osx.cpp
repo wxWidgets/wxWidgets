@@ -1339,13 +1339,13 @@ void wxWindowMac::DoGetTextExtent(const wxString& str,
     delete ctx;
 
     if ( externalLeading )
-        *externalLeading = (wxCoord)(e+0.5);
+        *externalLeading = (wxCoord)wxRound(e);
     if ( descent )
-        *descent = (wxCoord)(d+0.5);
+        *descent = (wxCoord)wxRound(d);
     if ( x )
-        *x = (wxCoord)(w+0.5);
+        *x = (wxCoord)wxRound(w);
     if ( y )
-        *y = (wxCoord)(h+0.5);
+        *y = (wxCoord)wxRound(h);
 }
 
 /*

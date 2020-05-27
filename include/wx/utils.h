@@ -20,7 +20,6 @@
 #include "wx/filefn.h"
 #include "wx/hashmap.h"
 #include "wx/versioninfo.h"
-#include "wx/windowid.h"
 #include "wx/meta/implicitconversion.h"
 
 #if wxUSE_GUI

@@ -97,6 +97,7 @@ class WXDLLIMPEXP_FWD_CORE wxGridCellAttr;
 class WXDLLIMPEXP_FWD_CORE wxGridCellAttrProviderData;
 class WXDLLIMPEXP_FWD_CORE wxGridColLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridCornerLabelWindow;
+class WXDLLIMPEXP_FWD_CORE wxGridEvent;
 class WXDLLIMPEXP_FWD_CORE wxGridRowLabelWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridWindow;
 class WXDLLIMPEXP_FWD_CORE wxGridTypeRegistry;
@@ -893,10 +894,12 @@ public:
         typedef ptrdiff_t difference_type;
         typedef wxGridBlockCoords value_type;
         typedef const value_type& reference;
+        typedef const value_type* pointer;
 
         iterator() : m_it() { }
 
         reference operator*() const { return *m_it; }
+        pointer operator->() const { return &*m_it; }
 
         iterator& operator++()
             { ++m_it; return *this; }
@@ -2552,8 +2555,13 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    // generate the appropriate grid event and return -1 if it was vetoed, 1 if
-    // it was processed (but not vetoed) and 0 if it wasn't processed
+    // Send the given grid event and return -1 if it was vetoed or, as a
+    // special exception, if an event for a particular cell resulted in this
+    // cell being deleted, 1 if it was processed (but not vetoed) and 0 if it
+    // wasn't processed.
+    int DoSendEvent(wxGridEvent& gridEvt);
+
+    // Generate an event of the given type and call DoSendEvent().
     int SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxMouseEvent& e);
