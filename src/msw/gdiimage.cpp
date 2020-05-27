@@ -629,7 +629,7 @@ bool wxPNGResourceHandler::LoadFile(wxBitmap *bitmap,
     *bitmap = wxBitmap::NewFromPNGData(pngData, pngSize);
     if ( !bitmap->IsOk() )
     {
-        wxLogError(wxS("Couldn't load resource bitmap \"%s\" as a PNG. "),
+        wxLogError(wxS("Couldn't load resource bitmap \"%s\" as a PNG. ")
                    wxS("Have you registered PNG image handler?"),
                    name);
 
