@@ -85,6 +85,30 @@ protected:
         CHECK( ++it == selected.end() );
     }
 
+    // Or specified ranges.
+    struct RowRange
+    {
+        RowRange(int top, int bottom) : top(top), bottom(bottom) { }
+
+        int top, bottom;
+    };
+
+    typedef wxVector<RowRange> RowRanges;
+
+    void CheckRowSelection(const RowRanges& ranges)
+    {
+        const wxGridBlockCoordsVector sel = m_grid->GetSelectedRowBlocks();
+        REQUIRE( sel.size() == ranges.size() );
+
+        for ( size_t n = 0; n < sel.size(); ++n )
+        {
+            INFO("n = " << n);
+
+            const RowRange& r = ranges[n];
+            CHECK( sel[n] == wxGridBlockCoords(r.top, 0, r.bottom, 1) );
+        }
+    }
+
     TestableGrid *m_grid;
 
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
@@ -907,6 +931,41 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     m_grid->SelectBlock(2, 0, 6, 1, true /* add to selection */);
     CHECK( m_grid->GetSelectedRows().size() == 7 );
 
+    CHECK( m_grid->GetSelectedColBlocks().empty() );
+
+    RowRanges rowRanges;
+    rowRanges.push_back(RowRange(0, 6));
+    CheckRowSelection(rowRanges);
+
+    m_grid->SelectBlock(6, 0, 8, 1);
+    m_grid->SelectBlock(1, 0, 4, 1, true /* add to selection */);
+    m_grid->SelectBlock(0, 0, 2, 1, true /* add to selection */);
+    CHECK( m_grid->GetSelectedRows().size() == 8 );
+
+    rowRanges.clear();
+    rowRanges.push_back(RowRange(0, 4));
+    rowRanges.push_back(RowRange(6, 8));
+    CheckRowSelection(rowRanges);
+
+    // Select all odd rows.
+    m_grid->ClearSelection();
+    rowRanges.clear();
+    for ( int i = 1; i < m_grid->GetNumberRows(); i += 2 )
+    {
+        m_grid->SelectBlock(i, 0, i, 1, true);
+        rowRanges.push_back(RowRange(i, i));
+    }
+
+    CheckRowSelection(rowRanges);
+
+    // Now select another block overlapping 2 of them and bordering 2 others.
+    m_grid->SelectBlock(2, 0, 6, 1, true);
+
+    rowRanges.clear();
+    rowRanges.push_back(RowRange(1, 7));
+    rowRanges.push_back(RowRange(9, 9));
+    CheckRowSelection(rowRanges);
+
     CHECK(m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows);
 
 
@@ -915,9 +974,15 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionMode", "[grid]")
     m_grid->SetSelectionMode(wxGrid::wxGridSelectColumns);
     m_grid->SelectBlock(3, 1, 3, 1);
 
+    CHECK( m_grid->GetSelectedRowBlocks().empty() );
+
     wxArrayInt selectedCols = m_grid->GetSelectedCols();
     CHECK(selectedCols.Count() == 1);
     CHECK(selectedCols[0] == 1);
+
+    wxGridBlockCoordsVector colBlocks = m_grid->GetSelectedColBlocks();
+    CHECK( colBlocks.size() == 1 );
+    CHECK( colBlocks.at(0) == wxGridBlockCoords(0, 1, 9, 1) );
 
     CHECK(m_grid->GetSelectionMode() == wxGrid::wxGridSelectColumns);
 }

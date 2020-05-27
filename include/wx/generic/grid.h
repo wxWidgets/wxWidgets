@@ -864,6 +864,8 @@ private:
     int m_rightCol;
 };
 
+typedef wxVector<wxGridBlockCoords> wxGridBlockCoordsVector;
+
 // ----------------------------------------------------------------------------
 // wxGridBlockDiffResult: The helper struct uses as a result type for difference
 // functions of wxGridBlockCoords class.
@@ -882,7 +884,7 @@ struct wxGridBlockDiffResult
 
 class wxGridBlocks
 {
-    typedef wxVector<wxGridBlockCoords>::const_iterator iterator_impl;
+    typedef wxGridBlockCoordsVector::const_iterator iterator_impl;
 
 public:
     class iterator
@@ -1997,7 +1999,13 @@ public:
     bool IsInSelection( const wxGridCellCoords& coords ) const
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
 
+    // Efficient methods returning the selected blocks (there are few of those).
     wxGridBlocks GetSelectedBlocks() const;
+    wxGridBlockCoordsVector GetSelectedRowBlocks() const;
+    wxGridBlockCoordsVector GetSelectedColBlocks() const;
+
+    // Less efficient (but maybe more convenient methods) returning all
+    // selected cells, rows or columns -- there can be many and many of those.
     wxGridCellCoordsArray GetSelectedCells() const;
     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
     wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
