@@ -278,26 +278,12 @@ wxSize wxSpinCtrlGenericBase::DoGetBestSize() const
 
 wxSize wxSpinCtrlGenericBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
-#ifdef __WXOSX__
-    wxSize sizeBtn = m_spinButton->GetBestSize(), sizeText = m_textCtrl->GetSizeFromTextSize(xlen, ylen);
-    return wxSize(sizeBtn.GetWidth() + sizeText.GetWidth() + MARGIN, wxMax(sizeBtn.GetHeight(), sizeText.GetHeight()));
-#else
-    wxSize sizeBtn  = m_spinButton->GetBestSize();
-    wxSize totalS( m_textCtrl->GetBestSize() );
+    const wxSize sizeBtn = m_spinButton->GetBestSize();
+    const wxSize sizeText = m_textCtrl->GetSizeFromTextSize(xlen, ylen);
 
-    wxSize tsize(xlen + sizeBtn.x + MARGIN, totalS.y);
-#if defined(__WXMSW__)
-    tsize.IncBy(4*totalS.y/10 + 4, 0);
-#elif defined(__WXGTK__)
-    tsize.IncBy(totalS.y + 10, 0);
-#endif // MSW GTK
-
-    // Check if the user requested a non-standard height.
-    if ( ylen > 0 )
-        tsize.IncBy(0, ylen - GetCharHeight());
-
-    return tsize;
-#endif
+    // Note that we don't use the button height here, as it can be
+    // much greater than that of a text control that we want to resemble.
+    return wxSize(sizeText.x + sizeBtn.x + MARGIN, sizeText.y);
 }
 
 void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
