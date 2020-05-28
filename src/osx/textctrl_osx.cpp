@@ -241,9 +241,24 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
-    wxSize size = wxDefaultSize;
-    if (xlen > 0) size.SetWidth(HasFlag(wxNO_BORDER) ? xlen + 4 : xlen + 9);
-    if (ylen > 0) size.SetHeight(HasFlag(wxNO_BORDER) ? ylen + 2 : ylen + 7);
+    wxSize size;
+
+    // Initialize to defaults unless both components are specified (at least
+    // one of them should be, but the other one could be -1).
+    if ( xlen <= 0 || ylen <= 0 )
+        size = DoGetBestSize();
+
+    // Use extra margin size which works under macOS 10.15 and also add the
+    // border for consistency with DoGetBestSize() -- we'll remove it below if
+    // it's not needed.
+    if ( xlen > 0 )
+        size.x = xlen + 4 + TEXTCTRL_BORDER_SIZE;
+    if ( ylen > 0 )
+        size.y = ylen + 2 + TEXTCTRL_BORDER_SIZE;
+
+    if ( HasFlag(wxNO_BORDER) )
+        size.DecBy(TEXTCTRL_BORDER_SIZE);
+
     return size;
 }
 
