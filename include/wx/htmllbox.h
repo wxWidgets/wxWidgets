@@ -11,6 +11,8 @@
 #ifndef _WX_HTMLLBOX_H_
 #define _WX_HTMLLBOX_H_
 
+#if wxUSE_HTML
+
 #include "wx/vlbox.h"               // base class
 #include "wx/html/htmlwin.h"
 #include "wx/ctrlsub.h"
@@ -319,6 +321,8 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxSimpleHtmlListBox);
 };
+
+#endif // wxUSE_HTML
 
 #endif // _WX_HTMLLBOX_H_
 
