@@ -758,7 +758,7 @@ public:
     }
     virtual bool SetFont(const wxFont& font) wxOVERRIDE
     {
-        StyleSetFont(wxSTC_STYLE_DEFAULT, (wxFont&)font);
+        StyleSetFont(wxSTC_STYLE_DEFAULT, font);
         return wxStyledTextCtrl::SetFont(font);
     }
     void SetLexerXml()
@@ -818,7 +818,7 @@ public:
     MinimalEditorFrame() : wxFrame(NULL, wxID_ANY, _("Minimal Editor"))
     {
         MinimalEditor* editor = new MinimalEditor(this);
-        editor->SetFont(wxSystemSettings::GetFont(wxSYS_ANSI_FIXED_FONT));
+        editor->SetFont(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
         wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
         sizer->Add(editor, 1, wxEXPAND);
         SetSizer(sizer);
