@@ -161,6 +161,12 @@ static bool MapUnshifted(char& ch)
     return true;
 }
 
+bool wxUIActionSimulator::Text(const wxString& text)
+{
+    const wxScopedCharBuffer ascii = text.ToAscii();
+    return Text(ascii.data());
+}
+
 bool wxUIActionSimulator::Text(const char *s)
 {
     while ( *s != '\0' )

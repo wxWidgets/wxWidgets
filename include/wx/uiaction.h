@@ -60,6 +60,7 @@ public:
     bool Char(int keycode, int modifiers = wxMOD_NONE);
 
     bool Text(const char *text);
+    bool Text(const wxString& text);
 
     // Select the item with the given text in the currently focused control.
     bool Select(const wxString& text);
