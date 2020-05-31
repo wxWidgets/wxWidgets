@@ -1975,9 +1975,9 @@ void Window::SetCursor(Cursor curs) {
         break;
     }
 
-    wxCursor wc = wxCursor(cursorId);
     if(curs != cursorLast)
     {
+        wxCursor wc = wxCursor(cursorId);
         GETWIN(wid)->SetCursor(wc);
         cursorLast = curs;
     }
