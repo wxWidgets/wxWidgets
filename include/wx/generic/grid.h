@@ -1869,11 +1869,8 @@ public:
         { AutoSizeColOrRow(row, setAsMin, wxGRID_ROW); }
 
     // auto size all columns (very ineffective for big grids!)
-    void     AutoSizeColumns( bool setAsMin = true )
-        { (void)SetOrCalcColumnSizes(false, setAsMin); }
-
-    void     AutoSizeRows( bool setAsMin = true )
-        { (void)SetOrCalcRowSizes(false, setAsMin); }
+    void     AutoSizeColumns( bool setAsMin = true );
+    void     AutoSizeRows( bool setAsMin = true );
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
@@ -2413,10 +2410,6 @@ protected:
     int        m_cellHighlightROPenWidth;
     wxColour   m_gridFrozenBorderColour;
     int        m_gridFrozenBorderPenWidth;
-
-    // common part of AutoSizeColumn/Row() and GetBestSize()
-    int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = true);
-    int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = true);
 
     // common part of AutoSizeColumn/Row()
     void AutoSizeColOrRow(int n, bool setAsMin, wxGridDirection direction);

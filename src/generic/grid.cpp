@@ -10206,50 +10206,28 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
     return extentMax;
 }
 
-int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
+void wxGrid::AutoSizeColumns(bool setAsMin)
 {
-    int width = m_rowLabelWidth;
-
-    wxGridUpdateLocker locker;
-    if(!calcOnly)
-        locker.Create(this);
+    wxGridUpdateLocker locker(this);
 
     for ( int col = 0; col < m_numCols; col++ )
-    {
-        if ( !calcOnly )
-            AutoSizeColumn(col, setAsMin);
-
-        width += GetColWidth(col);
-    }
-
-    return width;
+        AutoSizeColumn(col, setAsMin);
 }
 
-int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
+void wxGrid::AutoSizeRows(bool setAsMin)
 {
-    int height = m_colLabelHeight;
-
-    wxGridUpdateLocker locker;
-    if(!calcOnly)
-        locker.Create(this);
+    wxGridUpdateLocker locker(this);
 
     for ( int row = 0; row < m_numRows; row++ )
-    {
-        if ( !calcOnly )
-            AutoSizeRow(row, setAsMin);
-
-        height += GetRowHeight(row);
-    }
-
-    return height;
+        AutoSizeRow(row, setAsMin);
 }
 
 void wxGrid::AutoSize()
 {
     wxGridUpdateLocker locker(this);
 
-    wxSize size(SetOrCalcColumnSizes(false) + m_extraWidth,
-                SetOrCalcRowSizes(false) + m_extraHeight);
+    AutoSizeColumns();
+    AutoSizeRows();
 
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
@@ -10257,7 +10235,7 @@ void wxGrid::AutoSize()
     SetScrollbars(m_xScrollPixelsPerLine, m_yScrollPixelsPerLine,
                   0, 0, 0, 0, true);
 
-    SetClientSize(size);
+    SetSize(DoGetBestSize());
 }
 
 void wxGrid::AutoSizeRowLabelSize( int row )
@@ -10294,12 +10272,14 @@ void wxGrid::AutoSizeColLabelSize( int col )
 
 wxSize wxGrid::DoGetBestSize() const
 {
-    wxGrid * const self = const_cast<wxGrid *>(this);
+    wxSize size(m_rowLabelWidth + m_extraWidth,
+                m_colLabelHeight + m_extraHeight);
 
-    // we do the same as in AutoSize() here with the exception that we don't
-    // change the column/row sizes, only calculate them
-    wxSize size(self->SetOrCalcColumnSizes(true) + m_extraWidth,
-                self->SetOrCalcRowSizes(true) + m_extraHeight);
+    for ( int col = 0; col < m_numCols; col++ )
+        size.x += GetColWidth(col);
+
+    for ( int row = 0; row < m_numRows; row++ )
+        size.y += GetRowHeight(row);
 
     return size + GetWindowBorderSize();
 }
