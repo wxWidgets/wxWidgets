@@ -196,7 +196,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
 
     // miscellaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, "_999999");
-    m_FoldingMargin = 16;
+    m_FoldingMargin = FromDIP(16);
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
     SetLayoutCache (wxSTC_CACHE_PAGE);
     UsePopUp(wxSTC_POPUP_ALL);

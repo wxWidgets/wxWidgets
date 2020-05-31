@@ -103,6 +103,8 @@ wxColour wxColourFromCDandAlpha(ColourDesired& cd, int alpha) {
 namespace
 {
 
+inline wxWindow* GETWIN(WindowID id) { return (wxWindow*)id; }
+
 // wxFont with ascent cached, a pointer to this type is stored in Font::fid.
 class wxFontWithAscent : public wxFont
 {
@@ -295,15 +297,15 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
         hdc = new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc);
     else
         hdc = new wxMemoryDC();
+    ((wxMemoryDC*)hdc)->GetImpl()->SetWindow(GETWIN(winid));
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
 #ifdef __WXMSW__
     bitmap = new wxBitmap(width, height);
-    wxUnusedVar(winid);
 #else
     bitmap = new wxBitmap();
-    bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,((wxWindow*)winid)->GetContentScaleFactor());
+    bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,(GETWIN(winid))->GetContentScaleFactor());
 #endif
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
 }
@@ -999,7 +1001,6 @@ public:
 
     // helpers
     void SetFont(Font &font_);
-    void SetScale(wxDC* dc);
     HRESULT FlushDrawing();
     void D2DPenColour(ColourDesired fore, int alpha=255);
     void DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
@@ -1057,19 +1058,18 @@ SurfaceD2D::~SurfaceD2D()
     Release();
 }
 
-void SurfaceD2D::Init(WindowID WXUNUSED(wid))
+void SurfaceD2D::Init(WindowID wid)
 {
     Release();
 
-    wxScreenDC sdc;
-    SetScale(&sdc);
+    m_logPixelsY = GETWIN(wid)->GetDPI().GetY();
 }
 
 void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
 {
     Release();
 
-    wxWindow* win = wxDynamicCast(wid,wxWindow);
+    wxWindow* win = GETWIN(wid);
     if ( win && win->GetName() == "wxSTCCallTip" )
         win = win->GetParent();
 
@@ -1078,7 +1078,7 @@ void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
     {
         wxDC* const dc = static_cast<wxDC*>(sid);
         const wxSize sz = dc->GetSize();
-        SetScale(dc);
+        m_logPixelsY = win->GetDPI().GetY();
         ScintillaWX* const
             sciwx = reinterpret_cast<ScintillaWX*>(stc->GetDirectPointer());
         m_surfaceData = static_cast<SurfaceDataD2D*>(sciwx->GetSurfaceData());
@@ -1773,12 +1773,6 @@ void SurfaceD2D::SetFont(Font &font_)
     }
 }
 
-void SurfaceD2D::SetScale(wxDC* dc)
-{
-    wxSize sz = dc->GetPPI();
-    m_logPixelsY = sz.GetY();
-}
-
 HRESULT SurfaceD2D::FlushDrawing()
 {
     return m_pRenderTarget->Flush();
@@ -1860,8 +1854,6 @@ Surface *Surface::Allocate(int technology) {
 
 //----------------------------------------------------------------------
 
-
-inline wxWindow* GETWIN(WindowID id) { return (wxWindow*)id; }
 
 Window::~Window() {
 }
