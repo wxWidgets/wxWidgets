@@ -5436,6 +5436,11 @@ void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
 void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt) {
     m_swx->DoInvalidateStyleData();
 
+    // trigger a cursor change, so any cursors created by wxWidgets (like reverse arrow) will be recreated
+    const int oldCursor = GetSTCCursor();
+    SetSTCCursor(-1);
+    SetSTCCursor(oldCursor);
+
     // adjust the margins to the new DPI
     for ( int i = 0; i < SC_MAX_MARGIN; ++i )
     {
