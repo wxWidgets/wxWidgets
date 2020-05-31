@@ -10248,8 +10248,8 @@ void wxGrid::AutoSize()
 {
     wxGridUpdateLocker locker(this);
 
-    wxSize size(SetOrCalcColumnSizes(false) - m_rowLabelWidth + m_extraWidth,
-                SetOrCalcRowSizes(false) - m_colLabelHeight + m_extraHeight);
+    wxSize size(SetOrCalcColumnSizes(false) + m_extraWidth,
+                SetOrCalcRowSizes(false) + m_extraHeight);
 
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
@@ -10257,7 +10257,7 @@ void wxGrid::AutoSize()
     SetScrollbars(m_xScrollPixelsPerLine, m_yScrollPixelsPerLine,
                   0, 0, 0, 0, true);
 
-    SetClientSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight);
+    SetClientSize(size);
 }
 
 void wxGrid::AutoSizeRowLabelSize( int row )
@@ -10298,11 +10298,10 @@ wxSize wxGrid::DoGetBestSize() const
 
     // we do the same as in AutoSize() here with the exception that we don't
     // change the column/row sizes, only calculate them
-    wxSize size(self->SetOrCalcColumnSizes(true) - m_rowLabelWidth + m_extraWidth,
-                self->SetOrCalcRowSizes(true) - m_colLabelHeight + m_extraHeight);
+    wxSize size(self->SetOrCalcColumnSizes(true) + m_extraWidth,
+                self->SetOrCalcRowSizes(true) + m_extraHeight);
 
-    return wxSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight)
-            + GetWindowBorderSize();
+    return size + GetWindowBorderSize();
 }
 
 void wxGrid::Fit()
