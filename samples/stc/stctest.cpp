@@ -63,12 +63,6 @@
 #define APP_LICENCE "wxWidgets"
 
 #define APP_VERSION "0.1.alpha"
-#define APP_BUILD __DATE__
-
-#define APP_WEBSITE "http://www.wxWidgets.org"
-#define APP_MAIL "mailto://???"
-
-#define NONAME _("<untitled>")
 
 class AppBook;
 
@@ -132,12 +126,8 @@ public:
     void OnClose (wxCloseEvent &event);
     void OnAbout (wxCommandEvent &event);
     void OnExit (wxCommandEvent &event);
-    void OnTimerEvent (wxTimerEvent &event);
     //! file
-    void OnFileNew (wxCommandEvent &event);
-    void OnFileNewFrame (wxCommandEvent &event);
     void OnFileOpen (wxCommandEvent &event);
-    void OnFileOpenFrame (wxCommandEvent &event);
     void OnFileSave (wxCommandEvent &event);
     void OnFileSaveAs (wxCommandEvent &event);
     void OnFileClose (wxCommandEvent &event);
@@ -586,8 +576,6 @@ void AppFrame::CreateMenu ()
 
     // Window menu
     wxMenu *menuWindow = new wxMenu;
-    menuWindow->Append (myID_PAGEPREV, _("&Previous\tCtrl+Shift+Tab"));
-    menuWindow->Append (myID_PAGENEXT, _("&Next\tCtrl+Tab"));
     menuWindow->Append(myID_WINDOW_MINIMAL, _("&Minimal editor"));
 
     // Help menu
