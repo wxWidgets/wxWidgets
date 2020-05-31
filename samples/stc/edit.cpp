@@ -128,6 +128,8 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
     EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
     EVT_MENU(myID_CUSTOM_POPUP,                 Edit::OnCustomPopup)
+    EVT_MENU(myID_TECHNOLOGY_DEFAULT,           Edit::OnTechnology)
+    EVT_MENU(myID_TECHNOLOGY_DIRECTWRITE,       Edit::OnTechnology)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
@@ -478,6 +480,11 @@ void Edit::OnMultipleSelectionsTyping(wxCommandEvent& WXUNUSED(event)) {
 void Edit::OnCustomPopup(wxCommandEvent& evt)
 {
     UsePopUp(evt.IsChecked() ? wxSTC_POPUP_NEVER : wxSTC_POPUP_ALL);
+}
+
+void Edit::OnTechnology(wxCommandEvent& event)
+{
+    SetTechnology(event.GetId() == myID_TECHNOLOGY_DIRECTWRITE ? wxSTC_TECHNOLOGY_DIRECTWRITE : wxSTC_TECHNOLOGY_DEFAULT);
 }
 
 //! misc

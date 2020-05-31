@@ -572,7 +572,14 @@ void AppFrame::CreateMenu ()
     menuExtra->AppendCheckItem(myID_MULTI_PASTE, _("Toggle multi-&paste"));
     menuExtra->AppendCheckItem(myID_MULTIPLE_SELECTIONS_TYPING, _("Toggle t&yping on multiple selections"));
     menuExtra->AppendSeparator();
-    menuExtra->AppendCheckItem (myID_CUSTOM_POPUP, _("C&ustom popup menu"));
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
+    wxMenu* menuTechnology = new wxMenu;
+    menuTechnology->AppendRadioItem(myID_TECHNOLOGY_DEFAULT, _("&Default"));
+    menuTechnology->AppendRadioItem(myID_TECHNOLOGY_DIRECTWRITE, _("Direct&Write"));
+    menuExtra->AppendSubMenu(menuTechnology, _("&Technology"));
+    menuExtra->AppendSeparator();
+#endif
+    menuExtra->AppendCheckItem (myID_CUSTOM_POPUP, _("C&ustom context menu"));
 
     // Window menu
     wxMenu *menuWindow = new wxMenu;
