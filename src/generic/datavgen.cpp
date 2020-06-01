@@ -2090,7 +2090,9 @@ bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
     wxDataObjectComposite *dataObject;
     wxDropTarget* const dropTarget = GetDropTarget();
     if (dropTarget)
+    {
         dataObject = static_cast<wxDataObjectComposite*>(dropTarget->GetDataObject());
+    }
     else
     {
         dataObject = new wxDataObjectComposite;
