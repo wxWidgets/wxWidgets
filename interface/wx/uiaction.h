@@ -176,8 +176,8 @@ public:
         keyboard layout but may not work with other layouts.
 
         @param text
-            The string to type.
+            The string, containing only US ASCII characters, to type.
     */
-    bool Text(const wxString& text);
+    bool Text(const char* text);
 };
 
