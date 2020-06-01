@@ -1586,7 +1586,7 @@ enum wxMutexError
     // this variable has an "s_" prefix because it is static: seeing an "s_" in
     // a multithreaded program is in general a good sign that you should use a
     // mutex (or a critical section)
-    static wxMutex *s_mutexProtectingTheGlobalData;
+    static wxMutex s_mutexProtectingTheGlobalData;
 
     // we store some numbers in this global array which is presumably used by
     // several threads simultaneously
@@ -1595,11 +1595,15 @@ enum wxMutexError
     void MyThread::AddNewNode(int num)
     {
         // ensure that no other thread accesses the list
-        s_mutexProtectingTheGlobalList->Lock();
+
+        // Note that using Lock() and Unlock() explicitly is not recommended
+        // and only done here for illustrative purposes, prefer to use
+        // wxMutexLocker, as shown below, instead!
+        s_mutexProtectingTheGlobalData.Lock();
 
         s_data.Add(num);
 
-        s_mutexProtectingTheGlobalList->Unlock();
+        s_mutexProtectingTheGlobaData.Unlock();
     }
 
     // return true if the given number is greater than all array elements
