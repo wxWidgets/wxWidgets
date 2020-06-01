@@ -687,6 +687,23 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
     GetDataViewPeer()->StartEditor(item, GetColumnPosition(column));
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+bool wxDataViewCtrl::DoEnableDropTarget(const wxDataFormatArray &formats)
+{
+    wxDropTarget* dt = NULL;
+    if (wxDataObject* dataObject = CreateDataObject(formats))
+    {
+        dt = new wxDropTarget(dataObject);
+    }
+
+    SetDropTarget(dt);
+
+    return true;
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
 void wxDataViewCtrl::FinishCustomItemEditing()
 {
   if (GetCustomRendererItem().IsOk())

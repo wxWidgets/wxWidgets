@@ -120,6 +120,7 @@ WX_DEFINE_ARRAY(wxDataViewColumn*,wxDataViewColumnPtrArrayType);
 // ---------------------------------------------------------
 // wxDataViewCtrl
 // ---------------------------------------------------------
+
 class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
@@ -207,6 +208,10 @@ public:
   void FinishCustomItemEditing();
 
   virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
+
+#if wxUSE_DRAG_AND_DROP
+  virtual bool DoEnableDropTarget( const wxDataFormatArray& formats ) wxOVERRIDE;
+#endif // wxUSE_DRAG_AND_DROP
 
  // returns the n-th pointer to a column;
  // this method is different from GetColumn(unsigned int pos) because here 'n' is not a position in the control but the n-th
@@ -316,4 +321,3 @@ private:
 };
 
 #endif // _WX_DATAVIEWCTRL_OSX_H_
-

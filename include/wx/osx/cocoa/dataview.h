@@ -541,10 +541,6 @@ public:
 
     virtual void StartEditor( const wxDataViewItem & item, unsigned int column ) wxOVERRIDE;
 
-    // drag & drop helper methods
-    wxDataFormat GetDnDDataFormat(wxDataObjectComposite* dataObjects);
-    wxDataObjectComposite* GetDnDDataObjects(NSData* dataObject) const;
-
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
 
