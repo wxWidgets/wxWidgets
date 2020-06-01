@@ -5446,6 +5446,13 @@ void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt) {
     {
         SetMarginWidth(i, (int)wxMulDivInt32(GetMarginWidth(i), evt.GetNewDPI().y, evt.GetOldDPI().y));
     }
+
+    // Hide auto-complete popup, there is no (easy) way to set it to the correct size
+    // and position
+    if ( AutoCompActive() )
+    {
+        AutoCompCancel();
+    }
 }
 
 
