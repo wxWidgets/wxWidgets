@@ -2649,6 +2649,7 @@ protected:
     void OnSelection(wxCommandEvent&);
     void OnDClick(wxCommandEvent&);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
     void OnMouseMotion(wxMouseEvent& event);
     void OnMouseLeaveWindow(wxMouseEvent& event);
 
@@ -2704,6 +2705,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
     Bind(wxEVT_LISTBOX, &wxSTCListBox::OnSelection, this);
     Bind(wxEVT_LISTBOX_DCLICK, &wxSTCListBox::OnDClick, this);
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxSTCListBox::OnSysColourChanged, this);
+    Bind(wxEVT_DPI_CHANGED, &wxSTCListBox::OnDPIChanged, this);
 
     if ( m_visualData->HasListCtrlAppearance() )
     {
@@ -2941,6 +2943,18 @@ void wxSTCListBox::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     GetParent()->SetOwnBackgroundColour(m_visualData->GetBgColour());
     SetBackgroundColour(m_visualData->GetBgColour());
     GetParent()->Refresh();
+}
+
+void wxSTCListBox::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    m_imagePadding = FromDIP(1);
+    m_textBoxToTextGap = FromDIP(3);
+    m_textExtraVerticalPadding = FromDIP(1);
+
+    int w;
+    GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
+
+    RecalculateItemHeight();
 }
 
 void wxSTCListBox::OnMouseLeaveWindow(wxMouseEvent& event)
