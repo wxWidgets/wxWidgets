@@ -2161,7 +2161,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
     #ifdef __WXMSW__
 
         // Use ShowWithoutActivating instead of show.
-        bool wxSTCPopupBase::Show(bool show) wxOVERRIDE
+        bool wxSTCPopupBase::Show(bool show)
         {
             if ( show )
             {
@@ -2179,7 +2179,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
         // Do not activate in response to mouse clicks on this window.
         bool wxSTCPopupBase::MSWHandleMessage(WXLRESULT *res, WXUINT msg,
-                                              WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE
+                                              WXWPARAM wParam, WXLPARAM lParam)
         {
             if ( msg == WM_MOUSEACTIVATE )
             {
