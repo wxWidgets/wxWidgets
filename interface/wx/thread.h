@@ -23,6 +23,8 @@ enum wxCondError
     They may be used in a multithreaded application to wait until the given condition
     becomes @true which happens when the condition becomes signaled.
 
+    @note In C++11 programs, prefer using @c std::condition to this class.
+
     For example, if a worker thread is doing some long task and another thread has
     to wait until it is finished, the latter thread will wait on the condition
     object and the worker thread will signal it on exit (this example is not
@@ -719,6 +721,8 @@ enum wxThreadError
     Threads are sometimes called @e light-weight processes, but the fundamental difference
     between threads and processes is that memory spaces of different processes are
     separated while all threads share the same address space.
+
+    @note In C++11 programs, consider using @c std::thread instead of this class.
 
     While it makes it much easier to share common data between several threads, it
     also makes it much easier to shoot oneself in the foot, so careful use of
@@ -1568,6 +1572,8 @@ enum wxMutexError
     it is not owned by any thread, and nonsignaled when it is owned. Its name comes
     from its usefulness in coordinating mutually-exclusive access to a shared
     resource as only one thread at a time can own a mutex object.
+
+    @note In C++11 programs, prefer using @c std::mutex to this class.
 
     Mutexes may be recursive in the sense that a thread can lock a mutex which it
     had already locked before (instead of dead locking the entire process in this
