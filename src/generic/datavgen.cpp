@@ -2084,11 +2084,61 @@ bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
 
 bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
 {
-    m_dropFormat = format;
-    m_dropEnabled = format != wxDF_INVALID;
+    if (format == wxDF_INVALID)
+        return false;
 
-    if (m_dropEnabled)
-        SetDropTarget( new wxDataViewDropTarget( new wxCustomDataObject( format ), this ) );
+    wxDataObjectComposite *dataObject;
+    wxDataViewDropTarget *dropTarget = static_cast<wxDataViewDropTarget*>(GetDropTarget());
+    if (dropTarget)
+        dataObject = static_cast<wxDataObjectComposite*>(dropTarget->GetDataObject());
+    else
+    {
+        dataObject = new wxDataObjectComposite;
+        SetDropTarget(new wxDataViewDropTarget(dataObject, this));
+    }
+
+    if (dataObject->IsSupported(format))
+        return true;
+
+    switch (format)
+    {
+        case wxDF_TEXT:
+        case wxDF_OEMTEXT:
+        case wxDF_UNICODETEXT:
+            dataObject->Add(new wxTextDataObject);
+            break;
+
+        case wxDF_BITMAP:
+            dataObject->Add(new wxBitmapDataObject);
+            break;
+
+        case wxDF_FILENAME:
+            dataObject->Add(new wxFileDataObject);
+            break;
+
+        case wxDF_HTML:
+            dataObject->Add(new wxHTMLDataObject);
+            break;
+
+        case wxDF_METAFILE:
+        case wxDF_SYLK:
+        case wxDF_DIF:
+        case wxDF_TIFF:
+        case wxDF_DIB:
+        case wxDF_PALETTE:
+        case wxDF_PENDATA:
+        case wxDF_RIFF:
+        case wxDF_WAVE:
+        case wxDF_ENHMETAFILE:
+        case wxDF_LOCALE:
+        case wxDF_PRIVATE:
+            dataObject->Add(new wxCustomDataObject(format));
+            break;
+
+        case wxDF_INVALID:
+        case wxDF_MAX:
+            break;
+    }
 
     return true;
 }
@@ -2176,12 +2226,18 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
     if ( row < GetRowCount() && xx <= GetEndOfLastCol() )
         item = GetItemByRow( row );
 
-    wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
+    wxDataObjectComposite *obj = static_cast<wxDataObjectComposite*>(GetDropTarget()->GetDataObject());
+
+    size_t dataSize = obj->GetDataSize(format);
+    wxMemoryBuffer buffer;
+    obj->GetDataHere(format, buffer.GetWriteBuf(dataSize));
+    buffer.UngetWriteBuf(dataSize);
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, item);
     event.SetDataFormat( format );
-    event.SetDataSize( obj->GetSize() );
-    event.SetDataBuffer( obj->GetData() );
+    event.SetDataSize(dataSize);
+    event.SetDataBuffer(buffer.GetData());
+    event.SetDataObject(obj);
     event.SetDropEffect( def );
     if ( !m_owner->HandleWindowEvent( event ) || !event.IsAllowed() )
         return wxDragNone;
