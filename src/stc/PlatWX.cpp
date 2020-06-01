@@ -1906,7 +1906,6 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
     if (position.y + height > displayRect.GetBottom())
         position.y = displayRect.GetBottom() - height;
 
-    position = relativeWin->ScreenToClient(position);
     wxWindow *window = GETWIN(wid);
     window->SetSize(position.x, position.y, width, height);
 }
@@ -2219,7 +2218,9 @@ PRectangle Window::GetMonitorRect(Point pt) {
 #endif // __WXOSX_COCOA__
 
 wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
-                 :wxSTCPopupBase(parent), m_lastKnownPosition(wxDefaultPosition)
+    : wxSTCPopupBase(parent)
+    , m_relPos(wxDefaultPosition)
+    , m_absPos(wxDefaultPosition)
 {
     #if !wxSTC_POPUP_IS_CUSTOM
         Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
@@ -2270,22 +2271,20 @@ bool wxSTCPopupWindow::AcceptsFocus() const
 
 void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 {
-    m_lastKnownPosition = wxPoint(x, y);
+    wxPoint pos(x, y);
+    if ( pos.IsFullySpecified() && !m_relPos.IsFullySpecified() )
+    {
+        m_relPos = GetParent()->ScreenToClient(pos);
+    }
 
-    // convert coords to screen coords since we're a top-level window
-    if (x != wxDefaultCoord)
-        GetParent()->ClientToScreen(&x, NULL);
+    m_absPos = GetParent()->ClientToScreen(m_relPos);
 
-    if (y != wxDefaultCoord)
-        GetParent()->ClientToScreen(NULL, &y);
-
-    wxSTCPopupBase::DoSetSize(x, y, width, height, flags);
+    wxSTCPopupBase::DoSetSize(m_absPos.x, m_absPos.y, width, height, flags);
 }
 
 void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
 {
-    if ( m_lastKnownPosition.IsFullySpecified() )
-        SetPosition(m_lastKnownPosition);
+    SetPosition(m_absPos);
     event.Skip();
 }
 
