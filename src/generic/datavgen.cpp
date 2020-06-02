@@ -2230,15 +2230,9 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
 
     wxDataObjectComposite *obj = static_cast<wxDataObjectComposite*>(GetDropTarget()->GetDataObject());
 
-    size_t dataSize = obj->GetDataSize(format);
-    wxMemoryBuffer buffer;
-    obj->GetDataHere(format, buffer.GetWriteBuf(dataSize));
-    buffer.UngetWriteBuf(dataSize);
-
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, item);
     event.SetDataFormat( format );
-    event.SetDataSize(dataSize);
-    event.SetDataBuffer(buffer.GetData());
+    event.SetDataSize(obj->GetDataSize(format));
     event.SetDataObject(obj->GetObject(format));
     event.SetDropEffect( def );
     if ( !m_owner->HandleWindowEvent( event ) || !event.IsAllowed() )
