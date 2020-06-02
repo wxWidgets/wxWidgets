@@ -2239,7 +2239,7 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
     event.SetDataFormat( format );
     event.SetDataSize(dataSize);
     event.SetDataBuffer(buffer.GetData());
-    event.SetDataObject(obj);
+    event.SetDataObject(obj->GetObject(format));
     event.SetDropEffect( def );
     if ( !m_owner->HandleWindowEvent( event ) || !event.IsAllowed() )
         return wxDragNone;
