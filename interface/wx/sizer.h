@@ -1266,8 +1266,8 @@ public:
     /**
         Sets the minimum size to be allocated for this item.
 
-        If this item is a window, the @a size is also passed to
-        wxWindow::SetMinSize().
+        This is identical to SetMinSize(), prefer to use the other function, as
+        its name is more clear.
     */
     void SetInitSize(int x, int y);
 
