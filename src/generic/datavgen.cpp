@@ -2099,7 +2099,7 @@ bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
     if (dataObject->IsSupported(format))
         return true;
 
-    switch (format)
+    switch (format.GetType())
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
