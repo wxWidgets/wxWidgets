@@ -981,8 +981,6 @@ private:
     bool                        m_dragEnabled;
     wxDataFormat                m_dragFormat;
 
-    bool                        m_dropEnabled;
-    wxDataFormat                m_dropFormat;
     bool                        m_dropHint;
     unsigned int                m_dropHintLine;
 #endif // wxUSE_DRAG_AND_DROP
@@ -2025,7 +2023,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_dragStart = wxPoint(0,0);
 
     m_dragEnabled = false;
-    m_dropEnabled = false;
     m_dropHint = false;
     m_dropHintLine = (unsigned int) -1;
 #endif // wxUSE_DRAG_AND_DROP
