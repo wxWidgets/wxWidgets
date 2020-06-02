@@ -88,7 +88,12 @@ public:
     virtual void SetPath(const wxString& path) { m_path = path; }
 
     virtual wxString GetMessage() const { return m_message; }
-    virtual wxString GetPath() const { return m_path; }
+    virtual wxString GetPath() const
+    {
+        wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(), "When using wxDD_MULTIPLE, must call GetPaths() instead" );
+        return m_path;
+    }
+
     virtual void GetPaths(wxArrayString& paths) const { paths.Empty(); paths.Add(m_path); }
 
 protected:

@@ -190,6 +190,7 @@ void wxDirDialog::SetPath(const wxString& dir)
 
 wxString wxDirDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(), "When using wxDD_MULTIPLE, must call GetPaths() instead" );
     return m_paths.Last();
 }
 

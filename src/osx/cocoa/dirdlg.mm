@@ -173,6 +173,7 @@ void wxDirDialog::SetTitle(const wxString &title)
 
 wxString wxDirDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(), "When using wxDD_MULTIPLE, must call GetPaths() instead" );
     return m_paths.Last();
 }
 

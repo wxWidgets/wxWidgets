@@ -122,6 +122,9 @@ public:
 
     /**
         Returns the default or user-selected path.
+
+        @note This function can't be used with dialogs which have the @c wxDD_MULTIPLE style,
+              use GetPaths() instead.
     */
     virtual wxString GetPath() const;
 
