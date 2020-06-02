@@ -396,6 +396,7 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 
 wxString wxFileDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetPath called when wxFD_MULTIPLE defined") );
     return m_fc.GetPath();
 }
 
@@ -463,6 +464,8 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 wxString wxFileDialog::GetFilename() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetFilename called when wxFD_MULTIPLE defined") );
+
     wxString currentFilename( m_fc.GetFilename() );
     if (currentFilename.empty())
     {

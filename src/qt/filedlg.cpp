@@ -103,6 +103,8 @@ bool wxFileDialog::Create(wxWindow *parent,
 
 wxString wxFileDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetPath called when wxFD_MULTIPLE defined") );
+
     wxArrayString paths;
     GetPaths(paths);
     if (paths.empty())
@@ -120,6 +122,8 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
 
 wxString wxFileDialog::GetFilename() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetFilename called when wxFD_MULTIPLE defined") );
+
     wxArrayString filenames;
     GetFilenames(filenames);
     if ( filenames.empty() )

@@ -73,13 +73,19 @@ public:
         { m_filectrl->SetWildcard(wildCard); }
 
     virtual wxString GetPath() const wxOVERRIDE
-        { return m_filectrl->GetPath(); }
+        {
+            wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetPath called when wxFD_MULTIPLE defined") );
+            return m_filectrl->GetPath();
+        }
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE
         { m_filectrl->GetPaths(paths); }
     virtual wxString GetDirectory() const wxOVERRIDE
         { return m_filectrl->GetDirectory(); }
     virtual wxString GetFilename() const wxOVERRIDE
-        { return m_filectrl->GetFilename(); }
+        {
+            wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetFilename called when wxFD_MULTIPLE defined") );
+            return m_filectrl->GetFilename();
+        }
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE
         { m_filectrl->GetFilenames(files); }
     virtual wxString GetWildcard() const wxOVERRIDE
