@@ -733,8 +733,6 @@ outlineView:(NSOutlineView*)outlineView
             //copy/move or similar to support it.
             event.SetDropEffect(wxDragNone);
         }
-        wxDataFormatId formatId = event.GetDataFormat().GetType();
-        wxMemoryBuffer buffer;
 
         // finally, send event:
         if (dvc->HandleWindowEvent(event) && event.IsAllowed())
