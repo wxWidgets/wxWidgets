@@ -736,17 +736,6 @@ outlineView:(NSOutlineView*)outlineView
         wxDataFormatId formatId = event.GetDataFormat().GetType();
         wxMemoryBuffer buffer;
 
-        // copy data into buffer:
-        if ( formatId != wxDF_INVALID)
-        {
-            size_t size = dataObjects->GetDataSize(formatId);
-
-            event.SetDataSize(size);
-            dataObjects->GetDataHere(formatId,buffer.GetWriteBuf(size));
-            buffer.UngetWriteBuf(size);
-            event.SetDataBuffer(buffer.GetData());
-        }
-
         // finally, send event:
         if (dvc->HandleWindowEvent(event) && event.IsAllowed())
         {
