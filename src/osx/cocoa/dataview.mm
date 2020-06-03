@@ -26,6 +26,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/osx/private/datatransfer.h"
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
@@ -819,34 +820,37 @@ outlineView:(NSOutlineView*)outlineView
             // clean-up:
             delete dataObjects;
         }
+
+        return dragOperation;
+    }
+
+    wxDataObjectComposite* dataObjects(new wxDataObjectComposite());
+    wxDataObjectSimple* dataObject;
+
+    dragOperation = wxDragError;
+    if ([bestType compare:NSFilenamesPboardType] == NSOrderedSame)
+    {
+        dataObject = new wxFileDataObject;
+    }
+    else if ([bestType compare:NSStringPboardType] == NSOrderedSame)
+    {
+        dataObject = new wxTextDataObject;
     }
     else
     {
-        // needed to convert internally used UTF-16 representation to a UTF-8
-        // representation
-        CFDataRef              osxData;
-        wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
-        wxTextDataObject*      textDataObject(new wxTextDataObject());
-
-        osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],
-#if defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
-                                                         kCFStringEncodingUTF16,
-#else
-                                                         kCFStringEncodingUTF8,
-#endif
-                                                         32);
-        if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
-            dataObjects->Add(textDataObject);
-        else
-            delete textDataObject;
-        // send event if data could be copied:
-
-        dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
-
-        // clean up:
-        ::CFRelease(osxData);
-        delete dataObjects;
+        dragOperation = wxDragNone;
     }
+
+    if (dataObject)
+    {
+        dataObjects->Add(dataObject);
+
+        wxOSXPasteboard wxPastboard(pasteboard);
+        if (dataObject->ReadFromSource(&wxPastboard))
+            dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
+    }
+
+    delete dataObjects;
 
     return dragOperation;
 }
@@ -2647,6 +2651,13 @@ wxDataFormat wxCocoaDataViewControl::GetDnDDataFormat(wxDataObjectComposite* dat
                 break;
             case wxDF_UNICODETEXT:
                 if (formats[indexFormat].GetType() != wxDF_TEXT)
+                {
+                    resultFormat.SetType(wxDF_INVALID);
+                    compatible = false;
+                }
+                break;
+            case wxDF_FILENAME:
+                if (formats[indexFormat].GetType() != wxDF_FILENAME)
                 {
                     resultFormat.SetType(wxDF_INVALID);
                     compatible = false;
