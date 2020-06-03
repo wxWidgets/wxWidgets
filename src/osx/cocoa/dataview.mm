@@ -2552,6 +2552,70 @@ void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned 
     [m_OutlineView editColumn:column row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]] withEvent:nil select:YES];
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+bool wxCocoaDataViewControl::EnableDropTarget(wxDataFormatArray& formats)
+{
+    [m_OutlineView unregisterDraggedTypes];
+
+    if (formats.GetCount() > 0)
+    {
+        wxCFMutableArrayRef<CFStringRef> typesarray;
+        for (size_t i = 0; i < formats.GetCount(); ++i)
+            // formats.Item(i).AddSupportedTypes(typesarray);
+        {
+            switch (formats.Item(i).GetType())
+            {
+                case wxDF_TEXT:
+                case wxDF_OEMTEXT:
+                case wxDF_UNICODETEXT:
+                    CFArrayAppendValue(typesarray, NSStringPboardType);
+                    break;
+
+                case wxDF_BITMAP:
+                    CFArrayAppendValue(typesarray, NSPICTPboardType);
+                    break;
+
+                case wxDF_FILENAME:
+                    CFArrayAppendValue(typesarray, NSFilenamesPboardType);
+                    break;
+
+                case wxDF_HTML:
+                    CFArrayAppendValue(typesarray, NSHTMLPboardType);
+                    break;
+
+                case wxDF_TIFF:
+                    CFArrayAppendValue(typesarray, NSTIFFPboardType);
+                    break;
+
+                case wxDF_METAFILE:
+                case wxDF_SYLK:
+                case wxDF_DIF:
+                case wxDF_DIB:
+                case wxDF_PALETTE:
+                case wxDF_PENDATA:
+                case wxDF_RIFF:
+                case wxDF_WAVE:
+                case wxDF_ENHMETAFILE:
+                case wxDF_LOCALE:
+                case wxDF_PRIVATE:
+                case wxDF_INVALID:
+                case wxDF_MAX:
+                    break;
+            }
+        }
+
+        // Add support for internal dataView items' DnD?
+        // CFArrayAppendValue(typesarray, DataViewPboardType);
+
+        [m_OutlineView registerForDraggedTypes:typesarray];
+    }
+
+    return true;
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
 //
 // other methods (inherited from wxDataViewWidgetImpl)
 //

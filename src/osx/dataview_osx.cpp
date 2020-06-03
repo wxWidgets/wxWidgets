@@ -685,6 +685,15 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
     GetDataViewPeer()->StartEditor(item, GetColumnPosition(column));
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+bool wxDataViewCtrl::EnableDropTarget(wxDataFormatArray &formats)
+{
+  return GetDataViewPeer()->EnableDropTarget(formats);
+}
+
+#endif
+
 void wxDataViewCtrl::FinishCustomItemEditing()
 {
   if (GetCustomRendererItem().IsOk())
