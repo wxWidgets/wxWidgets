@@ -876,7 +876,7 @@ public:
 
 #if wxUSE_DRAG_AND_DROP
     bool EnableDragSource( const wxDataFormat &format );
-    bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTarget( wxDataFormatArray &formats );
 
     void RemoveDropHint();
     wxDragResult OnDragOver( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def );
@@ -2079,65 +2079,60 @@ bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
     return true;
 }
 
-bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewMainWindow::EnableDropTarget( wxDataFormatArray &formats )
 {
-    if (format == wxDF_INVALID)
-        return false;
-
-    wxDataObjectComposite *dataObject;
-    wxDropTarget* const dropTarget = GetDropTarget();
-    if (dropTarget)
+    if (formats.GetCount() == 0)
     {
-        dataObject = static_cast<wxDataObjectComposite*>(dropTarget->GetDataObject());
-    }
-    else
-    {
-        dataObject = new wxDataObjectComposite;
-        SetDropTarget(new wxDataViewDropTarget(dataObject, this));
-    }
+        SetDropTarget(nullptr);
 
-    if (dataObject->IsSupported(format))
         return true;
-
-    switch (format.GetType())
-    {
-        case wxDF_TEXT:
-        case wxDF_OEMTEXT:
-        case wxDF_UNICODETEXT:
-            dataObject->Add(new wxTextDataObject);
-            break;
-
-        case wxDF_BITMAP:
-            dataObject->Add(new wxBitmapDataObject);
-            break;
-
-        case wxDF_FILENAME:
-            dataObject->Add(new wxFileDataObject);
-            break;
-
-        case wxDF_HTML:
-            dataObject->Add(new wxHTMLDataObject);
-            break;
-
-        case wxDF_METAFILE:
-        case wxDF_SYLK:
-        case wxDF_DIF:
-        case wxDF_TIFF:
-        case wxDF_DIB:
-        case wxDF_PALETTE:
-        case wxDF_PENDATA:
-        case wxDF_RIFF:
-        case wxDF_WAVE:
-        case wxDF_ENHMETAFILE:
-        case wxDF_LOCALE:
-        case wxDF_PRIVATE:
-            dataObject->Add(new wxCustomDataObject(format));
-            break;
-
-        case wxDF_INVALID:
-        case wxDF_MAX:
-            break;
     }
+
+    wxDataObjectComposite *dataObject(new wxDataObjectComposite);
+    for (size_t i = 0; i < formats.GetCount(); ++i)
+    {
+        switch (formats.Item(i).GetType())
+        {
+            case wxDF_TEXT:
+            case wxDF_OEMTEXT:
+            case wxDF_UNICODETEXT:
+                dataObject->Add(new wxTextDataObject);
+                break;
+
+            case wxDF_BITMAP:
+                dataObject->Add(new wxBitmapDataObject);
+                break;
+
+            case wxDF_FILENAME:
+                dataObject->Add(new wxFileDataObject);
+                break;
+
+            case wxDF_HTML:
+                dataObject->Add(new wxHTMLDataObject);
+                break;
+
+            case wxDF_METAFILE:
+            case wxDF_SYLK:
+            case wxDF_DIF:
+            case wxDF_TIFF:
+            case wxDF_DIB:
+            case wxDF_PALETTE:
+            case wxDF_PENDATA:
+            case wxDF_RIFF:
+            case wxDF_WAVE:
+            case wxDF_ENHMETAFILE:
+            case wxDF_LOCALE:
+            case wxDF_PRIVATE:
+                dataObject->Add(new wxCustomDataObject(formats.Item(i)));
+                break;
+
+            case wxDF_INVALID:
+            case wxDF_MAX:
+                break;
+        }
+    }
+
+    SetDropTarget(new wxDataViewDropTarget(dataObject, this));
 
     return true;
 }
@@ -5535,9 +5530,9 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_clientArea->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::EnableDropTarget( wxDataFormatArray &formats )
 {
-    return m_clientArea->EnableDropTarget( format );
+    return m_clientArea->EnableDropTarget(formats);
 }
 
 #endif // wxUSE_DRAG_AND_DROP
