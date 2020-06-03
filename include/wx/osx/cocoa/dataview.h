@@ -549,6 +549,8 @@ public:
 
     virtual void SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true);
 
+    const wxCocoaOutlineView* GetView() { return m_OutlineView; }
+
 private:
     void InitOutlineView(long style);
     int GetDefaultRowHeight() const;

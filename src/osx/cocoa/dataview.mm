@@ -785,13 +785,9 @@ outlineView:(NSOutlineView*)outlineView
 -(NSDragOperation) setupAndCallDataViewEvents:(wxEventType)eventType dropInfo:(id<NSDraggingInfo>)info item:(id)item
                            proposedChildIndex:(NSInteger)index
 {
-    NSArray* supportedTypes(
-                            [NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]
-                            );
-
     NSPasteboard* pasteboard([info draggingPasteboard]);
 
-    NSString* bestType([pasteboard availableTypeFromArray:supportedTypes]);
+    NSString* bestType([pasteboard availableTypeFromArray:implementation->GetView().registeredDraggedTypes]);
 
     if ( bestType == nil )
         return NSDragOperationNone;
