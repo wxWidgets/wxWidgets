@@ -717,8 +717,14 @@ outlineView:(NSOutlineView*)outlineView
     if (dataObjects && (dataObjects->GetFormatCount() > 0))
     {
         // copy data into data object:
-        event.SetDataObject(dataObjects);
         event.SetDataFormat(implementation->GetDnDDataFormat(dataObjects));
+
+        if (event.GetDataFormat().GetType() != wxDF_INVALID)
+        {
+            event.SetDataSize(dataObjects->GetDataSize(event.GetDataFormat()));
+            event.SetDataObject(dataObjects->GetObject(event.GetDataFormat()));
+        }
+
         event.SetProposedDropIndex(index);
         if (index == -1)
         {
