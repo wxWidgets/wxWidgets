@@ -541,7 +541,7 @@ public:
     virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
 #if wxUSE_DRAG_AND_DROP
-    virtual bool EnableDropTarget(wxDataFormatArray& formats) wxOVERRIDE;
+    virtual bool EnableDropTarget(const wxDataFormatArray& formats) wxOVERRIDE;
 #endif // wxUSE_DRAG_AND_DROP
 
     // drag & drop helper methods
