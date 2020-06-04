@@ -43,6 +43,8 @@
 
 #include "wx/osx/private.h"
 
+static const int TEXTCTRL_BORDER_SIZE = 5;
+
 wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
@@ -199,28 +201,31 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
     if ( hText == - 1)
     {
-        // these are the numbers from the HIG:
-        // we reduce them by the borders first
         wText = 100 ;
 
+        // these are the numbers from the HIG:
         switch ( m_windowVariant )
         {
             case wxWINDOW_VARIANT_NORMAL :
-                hText = 22 - 6 ;
+                hText = 22;
                 break ;
 
             case wxWINDOW_VARIANT_SMALL :
-                hText = 19 - 6 ;
+                hText = 19;
                 break ;
 
             case wxWINDOW_VARIANT_MINI :
-                hText = 15 - 6 ;
+                hText = 15;
                 break ;
 
             default :
-                hText = 22 - 6;
+                hText = 22;
                 break ;
         }
+
+        // the numbers above include the border size, so subtract it before
+        // possibly adding it back below
+        hText -= TEXTCTRL_BORDER_SIZE;
     }
 
     // as the above numbers have some free space around the text
@@ -229,9 +234,32 @@ wxSize wxTextCtrl::DoGetBestSize() const
          hText *= 5 ;
 
     if ( !HasFlag(wxNO_BORDER) )
-        hText += 6 ;
+        hText += TEXTCTRL_BORDER_SIZE ;
 
     return wxSize(wText, hText);
+}
+
+wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxSize size;
+
+    // Initialize to defaults unless both components are specified (at least
+    // one of them should be, but the other one could be -1).
+    if ( xlen <= 0 || ylen <= 0 )
+        size = DoGetBestSize();
+
+    // Use extra margin size which works under macOS 10.15 and also add the
+    // border for consistency with DoGetBestSize() -- we'll remove it below if
+    // it's not needed.
+    if ( xlen > 0 )
+        size.x = xlen + 4 + TEXTCTRL_BORDER_SIZE;
+    if ( ylen > 0 )
+        size.y = ylen + 2 + TEXTCTRL_BORDER_SIZE;
+
+    if ( HasFlag(wxNO_BORDER) )
+        size.DecBy(TEXTCTRL_BORDER_SIZE);
+
+    return size;
 }
 
 bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)

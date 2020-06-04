@@ -40,7 +40,7 @@ int CompareInts(int n1, int n2)
 
 }
 
-WX_DEFINE_SORTED_ARRAY(int, wxIntSortedArray);
+WX_DEFINE_SORTED_ARRAY_CMP_INT(int, CompareInts, wxIntSortedArray);
 
 
 wxGridSelection::wxGridSelection( wxGrid * grid,
@@ -739,7 +739,7 @@ wxArrayInt wxGridSelection::GetRowSelection() const
     if ( m_selectionMode == wxGrid::wxGridSelectColumns )
         return wxArrayInt();
 
-    wxIntSortedArray uniqueRows(&CompareInts);
+    wxIntSortedArray uniqueRows;
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; ++n )
     {
@@ -749,7 +749,8 @@ wxArrayInt wxGridSelection::GetRowSelection() const
         {
             for ( int r = block.GetTopRow(); r <= block.GetBottomRow(); ++r )
             {
-                uniqueRows.Add(r);
+                if ( uniqueRows.Index(r) == wxNOT_FOUND )
+                    uniqueRows.Add(r);
             }
         }
     }
@@ -769,7 +770,7 @@ wxArrayInt wxGridSelection::GetColSelection() const
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
         return wxArrayInt();
 
-    wxIntSortedArray uniqueRows(&CompareInts);
+    wxIntSortedArray uniqueCols;
     const size_t count = m_selection.size();
     for ( size_t n = 0; n < count; ++n )
     {
@@ -779,16 +780,17 @@ wxArrayInt wxGridSelection::GetColSelection() const
         {
             for ( int c = block.GetLeftCol(); c <= block.GetRightCol(); ++c )
             {
-                uniqueRows.Add(c);
+                if ( uniqueCols.Index(c) == wxNOT_FOUND )
+                    uniqueCols.Add(c);
             }
         }
     }
 
     wxArrayInt result;
-    result.reserve(uniqueRows.size());
-    for( size_t i = 0; i < uniqueRows.size(); ++i )
+    result.reserve(uniqueCols.size());
+    for( size_t i = 0; i < uniqueCols.size(); ++i )
     {
-        result.push_back(uniqueRows[i]);
+        result.push_back(uniqueCols[i]);
     }
     return result;
 }

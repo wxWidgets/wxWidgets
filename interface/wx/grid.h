@@ -4675,9 +4675,49 @@ public:
             }
         @endcode
 
+        Notice that the blocks returned by this method are not ordered in any
+        particular way and may overlap. For grids using rows or columns-only
+        selection modes, GetSelectedRowBlocks() or GetSelectedColBlocks() can
+        be more convenient, as they return ordered and non-overlapping blocks.
+
         @since 3.1.4
     */
     wxGridBlocks GetSelectedBlocks() const;
+
+    /**
+        Returns an ordered range of non-overlapping selected rows.
+
+        For the grids using wxGridSelectRows selection mode, returns the
+        possibly empty vector containing the coordinates of non-overlapping
+        selected row blocks in the natural order, i.e. from smallest to the
+        biggest row indices.
+
+        To see the difference between this method and GetSelectedBlocks(),
+        consider the case when the user selects rows 2..4 in the grid and then
+        also selects (using Ctrl/Shift keys) the rows 1..3. Iterating over the
+        result of GetSelectedBlocks() would yield two blocks directly
+        corresponding to the users selection, while this method returns a
+        vector with a single element corresponding to the rows 1..4.
+
+        This method returns empty vector for the other selection modes.
+
+        @see GetSelectedBlocks(), GetSelectedColBlocks()
+
+        @since 3.1.4
+     */
+    wxGridBlockCoordsVector GetSelectedRowBlocks() const;
+
+    /**
+        Returns an ordered range of non-overlapping selected columns.
+
+        This method is symmetric to GetSelectedRowBlocks(), but is useful only
+        in wxGridSelectColumns selection mode.
+
+        @see GetSelectedBlocks()
+
+        @since 3.1.4
+     */
+    wxGridBlockCoordsVector GetSelectedColBlocks() const;
 
     /**
         Returns an array of individually selected cells.

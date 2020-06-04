@@ -535,6 +535,10 @@ private:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP
+WX_DEFINE_ARRAY(wxDataFormat,wxDataFormatArray);
+#endif
+
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
 
@@ -759,8 +763,18 @@ public:
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
-    virtual bool EnableDropTarget(const wxDataFormat& WXUNUSED(format))
+
+    virtual bool EnableDropTarget(wxDataFormatArray& WXUNUSED(formats))
         { return false; }
+
+    virtual bool EnableDropTarget(const wxDataFormat& format)
+    {
+        wxDataFormatArray formats;
+        formats.Add(format);
+
+        return EnableDropTarget(formats);
+    }
+
 #endif // wxUSE_DRAG_AND_DROP
 
     // define control visual attributes

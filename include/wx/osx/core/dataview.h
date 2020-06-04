@@ -111,6 +111,10 @@ public:
   virtual void SetRowHeight(wxDataViewItem const& item, unsigned int height)                                = 0; // sets the height of the row containg the passed item in the native control
   virtual void OnSize()                                                                                     = 0; // updates the layout of the native control after a size event
   virtual void StartEditor( const wxDataViewItem & item, unsigned int column )                              = 0; // starts editing the passed in item and column
+
+#if wxUSE_DRAG_AND_DROP
+  virtual bool EnableDropTarget(wxDataFormatArray& formats)                                                 = 0;
+#endif // wxUSE_DRAG_AND_DROP
 };
 
 #endif // _WX_DATAVIEWCTRL_CORE_H_

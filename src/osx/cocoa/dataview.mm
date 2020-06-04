@@ -26,6 +26,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/osx/private/datatransfer.h"
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
@@ -716,8 +717,14 @@ outlineView:(NSOutlineView*)outlineView
     if (dataObjects && (dataObjects->GetFormatCount() > 0))
     {
         // copy data into data object:
-        event.SetDataObject(dataObjects);
         event.SetDataFormat(implementation->GetDnDDataFormat(dataObjects));
+
+        if (event.GetDataFormat().GetType() != wxDF_INVALID)
+        {
+            event.SetDataSize(dataObjects->GetDataSize(event.GetDataFormat()));
+            event.SetDataObject(dataObjects->GetObject(event.GetDataFormat()));
+        }
+
         event.SetProposedDropIndex(index);
         if (index == -1)
         {
@@ -731,19 +738,6 @@ outlineView:(NSOutlineView*)outlineView
             //user code for for the event, they can set this to
             //copy/move or similar to support it.
             event.SetDropEffect(wxDragNone);
-        }
-        wxDataFormatId formatId = event.GetDataFormat().GetType();
-        wxMemoryBuffer buffer;
-
-        // copy data into buffer:
-        if ( formatId != wxDF_INVALID)
-        {
-            size_t size = dataObjects->GetDataSize(formatId);
-
-            event.SetDataSize(size);
-            dataObjects->GetDataHere(formatId,buffer.GetWriteBuf(size));
-            buffer.UngetWriteBuf(size);
-            event.SetDataBuffer(buffer.GetData());
         }
 
         // finally, send event:
@@ -785,13 +779,9 @@ outlineView:(NSOutlineView*)outlineView
 -(NSDragOperation) setupAndCallDataViewEvents:(wxEventType)eventType dropInfo:(id<NSDraggingInfo>)info item:(id)item
                            proposedChildIndex:(NSInteger)index
 {
-    NSArray* supportedTypes(
-                            [NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]
-                            );
-
     NSPasteboard* pasteboard([info draggingPasteboard]);
 
-    NSString* bestType([pasteboard availableTypeFromArray:supportedTypes]);
+    NSString* bestType([pasteboard availableTypeFromArray:implementation->GetView().registeredDraggedTypes]);
 
     if ( bestType == nil )
         return NSDragOperationNone;
@@ -823,34 +813,37 @@ outlineView:(NSOutlineView*)outlineView
             // clean-up:
             delete dataObjects;
         }
+
+        return dragOperation;
+    }
+
+    wxDataObjectComposite* dataObjects(new wxDataObjectComposite());
+    wxDataObjectSimple* dataObject;
+
+    dragOperation = wxDragError;
+    if ([bestType compare:NSFilenamesPboardType] == NSOrderedSame)
+    {
+        dataObject = new wxFileDataObject;
+    }
+    else if ([bestType compare:NSStringPboardType] == NSOrderedSame)
+    {
+        dataObject = new wxTextDataObject;
     }
     else
     {
-        // needed to convert internally used UTF-16 representation to a UTF-8
-        // representation
-        CFDataRef              osxData;
-        wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
-        wxTextDataObject*      textDataObject(new wxTextDataObject());
-
-        osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],
-#if defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
-                                                         kCFStringEncodingUTF16,
-#else
-                                                         kCFStringEncodingUTF8,
-#endif
-                                                         32);
-        if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
-            dataObjects->Add(textDataObject);
-        else
-            delete textDataObject;
-        // send event if data could be copied:
-
-        dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
-
-        // clean up:
-        ::CFRelease(osxData);
-        delete dataObjects;
+        dragOperation = wxDragNone;
     }
+
+    if (dataObject)
+    {
+        dataObjects->Add(dataObject);
+
+        wxOSXPasteboard wxPastboard(pasteboard);
+        if (dataObject->ReadFromSource(&wxPastboard))
+            dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
+    }
+
+    delete dataObjects;
 
     return dragOperation;
 }
@@ -1643,7 +1636,6 @@ outlineView:(NSOutlineView*)outlineView
         currentlyEditedColumn =
             currentlyEditedRow = -1;
 
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]];
         [self setDelegate:self];
         [self setDoubleAction:@selector(actionDoubleClick:)];
         [self setDraggingSourceOperationMask:NSDragOperationEvery forLocal:NO];
@@ -2552,6 +2544,70 @@ void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned 
     [m_OutlineView editColumn:column row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]] withEvent:nil select:YES];
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+bool wxCocoaDataViewControl::EnableDropTarget(wxDataFormatArray& formats)
+{
+    [m_OutlineView unregisterDraggedTypes];
+
+    if (formats.GetCount() > 0)
+    {
+        wxCFMutableArrayRef<CFStringRef> typesarray;
+        for (size_t i = 0; i < formats.GetCount(); ++i)
+            // formats.Item(i).AddSupportedTypes(typesarray);
+        {
+            switch (formats.Item(i).GetType())
+            {
+                case wxDF_TEXT:
+                case wxDF_OEMTEXT:
+                case wxDF_UNICODETEXT:
+                    CFArrayAppendValue(typesarray, NSStringPboardType);
+                    break;
+
+                case wxDF_BITMAP:
+                    CFArrayAppendValue(typesarray, NSPICTPboardType);
+                    break;
+
+                case wxDF_FILENAME:
+                    CFArrayAppendValue(typesarray, NSFilenamesPboardType);
+                    break;
+
+                case wxDF_HTML:
+                    CFArrayAppendValue(typesarray, NSHTMLPboardType);
+                    break;
+
+                case wxDF_TIFF:
+                    CFArrayAppendValue(typesarray, NSTIFFPboardType);
+                    break;
+
+                case wxDF_METAFILE:
+                case wxDF_SYLK:
+                case wxDF_DIF:
+                case wxDF_DIB:
+                case wxDF_PALETTE:
+                case wxDF_PENDATA:
+                case wxDF_RIFF:
+                case wxDF_WAVE:
+                case wxDF_ENHMETAFILE:
+                case wxDF_LOCALE:
+                case wxDF_PRIVATE:
+                case wxDF_INVALID:
+                case wxDF_MAX:
+                    break;
+            }
+        }
+
+        // Add support for internal dataView items' DnD?
+        // CFArrayAppendValue(typesarray, DataViewPboardType);
+
+        [m_OutlineView registerForDraggedTypes:typesarray];
+    }
+
+    return true;
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
 //
 // other methods (inherited from wxDataViewWidgetImpl)
 //
@@ -2651,6 +2707,13 @@ wxDataFormat wxCocoaDataViewControl::GetDnDDataFormat(wxDataObjectComposite* dat
                 break;
             case wxDF_UNICODETEXT:
                 if (formats[indexFormat].GetType() != wxDF_TEXT)
+                {
+                    resultFormat.SetType(wxDF_INVALID);
+                    compatible = false;
+                }
+                break;
+            case wxDF_FILENAME:
+                if (formats[indexFormat].GetType() != wxDF_FILENAME)
                 {
                     resultFormat.SetType(wxDF_INVALID);
                     compatible = false;

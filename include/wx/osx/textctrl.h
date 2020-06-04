@@ -139,6 +139,7 @@ protected:
     void Init();
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen) const wxOVERRIDE;
 
     // flag is set to true when the user edits the controls contents
     bool m_dirty;

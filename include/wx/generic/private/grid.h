@@ -530,6 +530,12 @@ public:
     virtual int Select(const wxRect& r) const = 0;
     virtual int& Select(wxRect& r) const = 0;
 
+    // Return or set left/top or right/bottom component of a block.
+    virtual int SelectFirst(const wxGridBlockCoords& block) const = 0;
+    virtual int SelectLast(const wxGridBlockCoords& block) const = 0;
+    virtual void SetFirst(wxGridBlockCoords& block, int line) const = 0;
+    virtual void SetLast(wxGridBlockCoords& block, int line) const = 0;
+
     // Returns width or height of the rectangle
     virtual int& SelectSize(wxRect& r) const = 0;
 
@@ -642,6 +648,14 @@ public:
     virtual int Select(const wxSize& sz) const wxOVERRIDE { return sz.x; }
     virtual int Select(const wxRect& r) const wxOVERRIDE { return r.x; }
     virtual int& Select(wxRect& r) const wxOVERRIDE { return r.x; }
+    virtual int SelectFirst(const wxGridBlockCoords& block) const wxOVERRIDE
+        { return block.GetTopRow(); }
+    virtual int SelectLast(const wxGridBlockCoords& block) const wxOVERRIDE
+        { return block.GetBottomRow(); }
+    virtual void SetFirst(wxGridBlockCoords& block, int line) const wxOVERRIDE
+        { block.SetTopRow(line); }
+    virtual void SetLast(wxGridBlockCoords& block, int line) const wxOVERRIDE
+        { block.SetBottomRow(line); }
     virtual int& SelectSize(wxRect& r) const wxOVERRIDE { return r.width; }
     virtual wxSize MakeSize(int first, int second) const wxOVERRIDE
         { return wxSize(first, second); }
@@ -715,6 +729,14 @@ public:
     virtual int Select(const wxSize& sz) const wxOVERRIDE { return sz.y; }
     virtual int Select(const wxRect& r) const wxOVERRIDE { return r.y; }
     virtual int& Select(wxRect& r) const wxOVERRIDE { return r.y; }
+    virtual int SelectFirst(const wxGridBlockCoords& block) const wxOVERRIDE
+        { return block.GetLeftCol(); }
+    virtual int SelectLast(const wxGridBlockCoords& block) const wxOVERRIDE
+        { return block.GetRightCol(); }
+    virtual void SetFirst(wxGridBlockCoords& block, int line) const wxOVERRIDE
+        { block.SetLeftCol(line); }
+    virtual void SetLast(wxGridBlockCoords& block, int line) const wxOVERRIDE
+        { block.SetRightCol(line); }
     virtual int& SelectSize(wxRect& r) const wxOVERRIDE { return r.height; }
     virtual wxSize MakeSize(int first, int second) const wxOVERRIDE
         { return wxSize(second, first); }
