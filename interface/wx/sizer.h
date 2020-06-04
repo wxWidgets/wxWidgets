@@ -1179,7 +1179,7 @@ public:
     int GetProportion() const;
 
     /**
-        Get the ration item attribute.
+        Get the ratio item attribute.
     */
     float GetRatio() const;
 
@@ -1264,7 +1264,10 @@ public:
     void SetId(int id);
 
     /**
-        @todo docme.
+        Sets the minimum size to be allocated for this item.
+
+        This is identical to SetMinSize(), prefer to use the other function, as
+        its name is more clear.
     */
     void SetInitSize(int x, int y);
 

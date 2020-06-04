@@ -153,7 +153,7 @@ protected:
 
         wxWindow* win = wxGetActiveWindow();
 
-    #if defined(__WXGTK__)
+    #if defined(__WXGTK20__)
         if ( win && !win->IsTopLevel() )
         {
             win = wxGetTopLevelParent(win);

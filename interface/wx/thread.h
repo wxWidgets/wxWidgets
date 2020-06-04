@@ -23,6 +23,8 @@ enum wxCondError
     They may be used in a multithreaded application to wait until the given condition
     becomes @true which happens when the condition becomes signaled.
 
+    @note In C++11 programs, prefer using @c std::condition to this class.
+
     For example, if a worker thread is doing some long task and another thread has
     to wait until it is finished, the latter thread will wait on the condition
     object and the worker thread will signal it on exit (this example is not
@@ -719,6 +721,8 @@ enum wxThreadError
     Threads are sometimes called @e light-weight processes, but the fundamental difference
     between threads and processes is that memory spaces of different processes are
     separated while all threads share the same address space.
+
+    @note In C++11 programs, consider using @c std::thread instead of this class.
 
     While it makes it much easier to share common data between several threads, it
     also makes it much easier to shoot oneself in the foot, so careful use of
@@ -1569,6 +1573,8 @@ enum wxMutexError
     from its usefulness in coordinating mutually-exclusive access to a shared
     resource as only one thread at a time can own a mutex object.
 
+    @note In C++11 programs, prefer using @c std::mutex to this class.
+
     Mutexes may be recursive in the sense that a thread can lock a mutex which it
     had already locked before (instead of dead locking the entire process in this
     situation by starting to wait on a mutex which will never be released while the
@@ -1586,7 +1592,7 @@ enum wxMutexError
     // this variable has an "s_" prefix because it is static: seeing an "s_" in
     // a multithreaded program is in general a good sign that you should use a
     // mutex (or a critical section)
-    static wxMutex *s_mutexProtectingTheGlobalData;
+    static wxMutex s_mutexProtectingTheGlobalData;
 
     // we store some numbers in this global array which is presumably used by
     // several threads simultaneously
@@ -1595,11 +1601,15 @@ enum wxMutexError
     void MyThread::AddNewNode(int num)
     {
         // ensure that no other thread accesses the list
-        s_mutexProtectingTheGlobalList->Lock();
+
+        // Note that using Lock() and Unlock() explicitly is not recommended
+        // and only done here for illustrative purposes, prefer to use
+        // wxMutexLocker, as shown below, instead!
+        s_mutexProtectingTheGlobalData.Lock();
 
         s_data.Add(num);
 
-        s_mutexProtectingTheGlobalList->Unlock();
+        s_mutexProtectingTheGlobaData.Unlock();
     }
 
     // return true if the given number is greater than all array elements

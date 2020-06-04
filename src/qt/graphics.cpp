@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPicture>
 
 #ifndef WX_PRECOMP
