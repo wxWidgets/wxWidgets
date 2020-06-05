@@ -113,7 +113,7 @@ public:
   virtual void StartEditor( const wxDataViewItem & item, unsigned int column )                              = 0; // starts editing the passed in item and column
 
 #if wxUSE_DRAG_AND_DROP
-  virtual bool EnableDropTarget(wxDataFormatArray& formats)                                                 = 0;
+  virtual bool EnableDropTarget(const wxDataFormatArray& formats)                                           = 0;
 #endif // wxUSE_DRAG_AND_DROP
 };
 

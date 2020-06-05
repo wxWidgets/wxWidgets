@@ -5530,7 +5530,7 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_clientArea->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::EnableDropTarget( wxDataFormatArray &formats )
+bool wxDataViewCtrl::EnableDropTarget( const wxDataFormatArray &formats )
 {
     return m_clientArea->EnableDropTarget(formats);
 }

@@ -764,7 +764,7 @@ public:
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
 
-    virtual bool EnableDropTarget(wxDataFormatArray& WXUNUSED(formats))
+    virtual bool EnableDropTarget(const wxDataFormatArray& WXUNUSED(formats))
         { return false; }
 
     virtual bool EnableDropTarget(const wxDataFormat& format)

@@ -818,7 +818,7 @@ outlineView:(NSOutlineView*)outlineView
     }
 
     wxDataObjectComposite* dataObjects(new wxDataObjectComposite());
-    wxDataObjectSimple* dataObject;
+    wxDataObjectSimple* dataObject = NULL;
 
     dragOperation = wxDragError;
     if ([bestType compare:NSFilenamesPboardType] == NSOrderedSame)
@@ -2546,7 +2546,7 @@ void wxCocoaDataViewControl::StartEditor( const wxDataViewItem & item, unsigned 
 
 #if wxUSE_DRAG_AND_DROP
 
-bool wxCocoaDataViewControl::EnableDropTarget(wxDataFormatArray& formats)
+bool wxCocoaDataViewControl::EnableDropTarget(const wxDataFormatArray& formats)
 {
     [m_OutlineView unregisterDraggedTypes];
 
@@ -2565,7 +2565,9 @@ bool wxCocoaDataViewControl::EnableDropTarget(wxDataFormatArray& formats)
                     break;
 
                 case wxDF_BITMAP:
+                    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                     CFArrayAppendValue(typesarray, NSPICTPboardType);
+                    wxGCC_WARNING_RESTORE(deprecated-declarations)
                     break;
 
                 case wxDF_FILENAME:
