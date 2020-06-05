@@ -1305,13 +1305,12 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
         return;
     }
 
-    wxTextDataObject obj;
-    obj.SetData( wxDF_UNICODETEXT, event.GetDataSize(), event.GetDataBuffer() );
+    wxTextDataObject* obj = static_cast<wxTextDataObject*>(event.GetDataObject());
 
     if ( item.IsOk() )
-        wxLogMessage( "Text dropped on item %s: %s", m_music_model->GetTitle( item ), obj.GetText() );
+        wxLogMessage( "Text dropped on item %s: %s", m_music_model->GetTitle( item ), obj->GetText() );
     else
-        wxLogMessage( "Text dropped on background: %s", obj.GetText() );
+        wxLogMessage( "Text dropped on background: %s", obj->GetText() );
 }
 
 #endif // wxUSE_DRAG_AND_DROP
