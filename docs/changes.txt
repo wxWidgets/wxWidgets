@@ -96,7 +96,7 @@ Changes in behaviour not resulting in compilation errors
 - wxAuiNotebook::RemovePage() now hides the removed page, so it needs to be
   shown again if it is reused in another place.
 
-- wxFileDialog::GetPath and wxFileDialog::GetFilename now assert and return
+- wxFileDialog::GetPath() and wxFileDialog::GetFilename() now assert and return
   an empty string if called on dialogs with the wxFD_MULTIPLE style.
 
 
