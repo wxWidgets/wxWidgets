@@ -58,11 +58,13 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
     if ( GetBitmapLabel().IsOk() )
     {
-        // Hack to stop 16x16 bitmap being clipped
-        if (GetBitmapLabel().GetScaledSize().x == 16)
+        wxSize bitmapSize = GetBitmapLabel().GetScaledSize();
+        best += bitmapSize;
+
+        // The NSRoundedBezelStyle and NSTexturedRoundedBezelStyle used when the image is less than 20
+        // tall have a small border on x that cuts off the image
+        if ( bitmapSize.y <= 20 )
             best += wxSize(4,0);
-            
-        best += GetBitmapLabel().GetScaledSize();
     }
 
     return best;
