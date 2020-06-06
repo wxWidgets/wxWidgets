@@ -51,7 +51,7 @@ find_package(PkgConfig)
 
 # Determine the version in the library name, default is 1.0
 set(GST_LIB_VERSION 1.0)
-if(DEFINED GStreamer_FIND_VERSION AND GStreamer_FIND_VERSION VERSION_LESS 1.0)
+if(DEFINED GSTREAMER_FIND_VERSION AND GSTREAMER_FIND_VERSION VERSION_LESS 1.0)
     set(GST_LIB_VERSION 0.10)
 endif()
 
@@ -120,7 +120,7 @@ FIND_GSTREAMER_COMPONENT(GSTREAMER_PLAYER gstreamer-player gst/player/player.h g
 # ------------------------------------------------
 set(_GSTREAMER_REQUIRED_VARS GSTREAMER_VERSION GSTREAMER_INCLUDE_DIRS GSTREAMER_LIBRARIES GSTREAMER_BASE_INCLUDE_DIRS GSTREAMER_BASE_LIBRARIES)
 
-foreach (_component ${GStreamer_FIND_COMPONENTS})
+foreach (_component ${GSTREAMER_FIND_COMPONENTS})
     set(_gst_component "GSTREAMER_${_component}")
     string(TOUPPER ${_gst_component} _UPPER_NAME)
 
@@ -128,4 +128,4 @@ foreach (_component ${GStreamer_FIND_COMPONENTS})
 endforeach ()
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(GStreamer DEFAULT_MSG ${_GSTREAMER_REQUIRED_VARS})
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(GSTREAMER DEFAULT_MSG ${_GSTREAMER_REQUIRED_VARS})
