@@ -43,8 +43,6 @@
 
 #include "wx/osx/private.h"
 
-static const int TEXTCTRL_BORDER_SIZE = 5;
-
 wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
@@ -180,23 +178,25 @@ bool wxTextCtrl::IsModified() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    int wText = -1;
-    int hText = -1;
-
+    wxSize size;
     if (GetTextPeer())
-    {
-        wxSize size = GetTextPeer()->GetBestSize();
-        if (size.x > 0 && size.y > 0)
-        {
-            hText = size.y;
-            wText = size.x;
-        }
-    }
+        size = GetTextPeer()->GetBestSize();
 
-    if ( hText == - 1)
-    {
-        wText = 100 ;
+    // Normally the width passed to GetSizeFromTextSize() is supposed to be
+    // valid, i.e. positive, but we use our knowledge of its implementation
+    // just below to rely on it returning the default size if we don't have
+    // any valid best size in the peer and size remained default-initialized.
+    return GetSizeFromTextSize(size);
+}
 
+wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    static const int TEXTCTRL_BORDER_SIZE = 5;
+
+    // Compute the default height if not specified.
+    int hText = ylen;
+    if ( hText <= 0 )
+    {
         // these are the numbers from the HIG:
         switch ( m_windowVariant )
         {
@@ -220,38 +220,26 @@ wxSize wxTextCtrl::DoGetBestSize() const
         // the numbers above include the border size, so subtract it before
         // possibly adding it back below
         hText -= TEXTCTRL_BORDER_SIZE;
+
+        // make the control 5 lines tall by default for consistently with how
+        // the old code behaved
+        if ( m_windowStyle & wxTE_MULTILINE )
+            hText *= 5 ;
     }
 
-    // as the above numbers have some free space around the text
-    // we get 5 lines like this anyway
-    if ( m_windowStyle & wxTE_MULTILINE )
-         hText *= 5 ;
+    // Keep using the same default 100px width as was used previously in the
+    // special case of having invalid width.
+    wxSize size(xlen > 0 ? xlen : 100, hText);
+
+    // Use extra margin size which works under macOS 10.15: note that we don't
+    // need the vertical margin when using the automatically determined hText.
+    if ( xlen > 0 )
+        size.x += 4;
+    if ( ylen > 0 )
+        size.y += 2;
 
     if ( !HasFlag(wxNO_BORDER) )
-        hText += TEXTCTRL_BORDER_SIZE ;
-
-    return wxSize(wText, hText);
-}
-
-wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
-{
-    wxSize size;
-
-    // Initialize to defaults unless both components are specified (at least
-    // one of them should be, but the other one could be -1).
-    if ( xlen <= 0 || ylen <= 0 )
-        size = DoGetBestSize();
-
-    // Use extra margin size which works under macOS 10.15 and also add the
-    // border for consistency with DoGetBestSize() -- we'll remove it below if
-    // it's not needed.
-    if ( xlen > 0 )
-        size.x = xlen + 4 + TEXTCTRL_BORDER_SIZE;
-    if ( ylen > 0 )
-        size.y = ylen + 2 + TEXTCTRL_BORDER_SIZE;
-
-    if ( HasFlag(wxNO_BORDER) )
-        size.DecBy(TEXTCTRL_BORDER_SIZE);
+        size += wxSize(TEXTCTRL_BORDER_SIZE, TEXTCTRL_BORDER_SIZE) ;
 
     return size;
 }
