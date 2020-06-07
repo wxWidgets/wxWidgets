@@ -38,6 +38,7 @@
 
 #include "wx/dynlib.h"
 #include "wx/scopedptr.h"
+#include "wx/msw/missing.h"
 
 // ============================================================================
 // wxNonOwnedWindow implementation
