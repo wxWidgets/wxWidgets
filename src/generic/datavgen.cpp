@@ -1009,9 +1009,9 @@ private:
     bool                        m_dragEnabled;
     wxDataFormat                m_dragFormat;
 
+    bool                        m_dropEnabled;
+    wxDataFormat                m_dropFormat;
     DropItemInfo                m_dropItemInfo;
-    bool                        m_dropHint;
-    unsigned int                m_dropHintLine;
 #endif // wxUSE_DRAG_AND_DROP
 
     // for double click logic
@@ -2052,9 +2052,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_dragStart = wxPoint(0,0);
 
     m_dragEnabled = false;
+    m_dropEnabled = false;
     m_dropItemInfo = DropItemInfo();
-    m_dropHint = false;
-    m_dropHintLine = (unsigned int) -1;
 #endif // wxUSE_DRAG_AND_DROP
 
     m_lineLastClicked = (unsigned int) -1;
@@ -2169,21 +2168,25 @@ bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormatArray &formats )
 
 void wxDataViewMainWindow::RefreshDropHint()
 {
+    const unsigned row = m_dropItemInfo.m_row;
+
     switch (m_dropItemInfo.m_hint)
     {
         case DropHint_None:
             break;
 
         case DropHint_Inside:
-            RefreshRow(m_dropItemInfo.m_row);
+            RefreshRow(row);
             break;
 
         case DropHint_Above:
-            RefreshRows(m_dropItemInfo.m_row == 0 ? 0 : m_dropItemInfo.m_row - 1, m_dropItemInfo.m_row);
+            RefreshRows(row == 0 ? 0 : row - 1, row);
             break;
 
         case DropHint_Below:
-            RefreshRows(m_dropItemInfo.m_row, std::max(m_dropItemInfo.m_row + 1, GetRowCount() - 1));
+            // It's not a problem here if row+1 is out of range, RefreshRows()
+            // allows this.
+            RefreshRows(row, row + 1);
             break;
     }
 }
@@ -2224,10 +2227,14 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
 
         dropItemInfo.m_item = node->GetItem();
 
-        unsigned int itemStart = GetLineStart(row);
-        int itemHeight = GetLineHeight(row);
+        const int itemStart = GetLineStart(row);
+        const int itemHeight = GetLineHeight(row);
 
-        bool insertAbove = yy - itemStart < itemHeight*0.15;       // 15%, TODO: configurable
+        // 15% is an arbitrarily chosen threshold here, which could be changed
+        // or made configurable if really needed.
+        static const double UPPER_ITEM_PART = 0.15;
+
+        bool insertAbove = yy - itemStart < itemHeight*UPPER_ITEM_PART;
         if (insertAbove)
         {
             // Can be treated as 'insertBelow" with the small difference:
@@ -2248,7 +2255,7 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
 
         }
 
-        bool insertBelow = yy - itemStart > itemHeight*0.85;        // 15%, TODO: configurable
+        bool insertBelow = yy - itemStart > itemHeight*(1.0 - UPPER_ITEM_PART);
         if (insertBelow)
             dropItemInfo.m_hint = DropHint_Below;
 
@@ -2287,15 +2294,25 @@ wxDataViewMainWindow::DropItemInfo wxDataViewMainWindow::GetDropItemInfo(const w
                 if (m_owner->GetModel()->IsContainer(ascendNode->GetItem()))
                 {
                     // Item can be inserted
+                    dropItemInfo.m_item = ascendNode->GetItem();
 
                     int itemPosition = ascendNode->FindChildByItem(prevAscendNode->GetItem());
-                    dropItemInfo.m_proposedDropIndex  = itemPosition == wxNOT_FOUND ? 0 : itemPosition + 1;
-                    dropItemInfo.m_item               = ascendNode->GetItem();
+                    if ( itemPosition == wxNOT_FOUND )
+                        itemPosition = 0;
+                    else
+                        itemPosition++;
 
-                    // We must break the loop if the applied node is expanded (opened)
-                    // and the proposed drop position is not the last in this node
-                    if (ascendNode->IsOpen() && dropItemInfo.m_proposedDropIndex != static_cast<int>(ascendNode->GetChildNodes().size()))
-                        break;
+                    dropItemInfo.m_proposedDropIndex = itemPosition;
+
+                    // We must break the loop if the applied node is expanded
+                    // (opened) and the proposed drop position is not the last
+                    // in this node.
+                    if ( ascendNode->IsOpen() )
+                    {
+                        const size_t lastPos = ascendNode->GetChildNodes().size();
+                        if ( static_cast<size_t>(itemPosition) != lastPos )
+                            break;
+                    }
 
                     int indent = GetOwner()->GetIndent()*level + expanderWidth;
 
