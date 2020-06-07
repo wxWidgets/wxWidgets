@@ -902,7 +902,7 @@ public:
     };
 
     bool EnableDragSource( const wxDataFormat &format );
-    bool EnableDropTarget( wxDataFormatArray &formats );
+    bool EnableDropTarget( const wxDataFormatArray &formats );
 
     void RefreshDropHint();
     void RemoveDropHint();
@@ -2109,7 +2109,7 @@ bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
     return true;
 }
 
-bool wxDataViewMainWindow::EnableDropTarget( wxDataFormatArray &formats )
+bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormatArray &formats )
 {
     if (formats.GetCount() == 0)
     {
