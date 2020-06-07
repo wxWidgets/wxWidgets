@@ -10275,11 +10275,25 @@ wxSize wxGrid::DoGetBestSize() const
     wxSize size(m_rowLabelWidth + m_extraWidth,
                 m_colLabelHeight + m_extraHeight);
 
-    for ( int col = 0; col < m_numCols; col++ )
-        size.x += GetColWidth(col);
+    if ( m_colWidths.empty() )
+    {
+        size.x += m_defaultColWidth*m_numCols;
+    }
+    else
+    {
+        for ( int col = 0; col < m_numCols; col++ )
+            size.x += GetColWidth(col);
+    }
 
-    for ( int row = 0; row < m_numRows; row++ )
-        size.y += GetRowHeight(row);
+    if ( m_rowHeights.empty() )
+    {
+        size.y += m_defaultRowHeight*m_numRows;
+    }
+    else
+    {
+        for ( int row = 0; row < m_numRows; row++ )
+            size.y += GetRowHeight(row);
+    }
 
     return size + GetWindowBorderSize();
 }
