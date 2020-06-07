@@ -905,8 +905,8 @@ public:
     int GetDragFlags() const { return m_dragFlags; }
     void SetDropEffect( wxDragResult effect ) { m_dropEffect = effect; }
     wxDragResult GetDropEffect() const { return m_dropEffect; }
-    // for plaforms (currently only OSX) that support Drag/Drop insertion of items,
-    // this is the proposed child index for the insertion
+    // For platforms (currently generic and OSX) that support Drag/Drop
+    // insertion of items, this is the proposed child index for the insertion.
     void SetProposedDropIndex(int index) { m_proposedDropIndex = index; }
     int GetProposedDropIndex() const { return m_proposedDropIndex;}
 #endif // wxUSE_DRAG_AND_DROP
