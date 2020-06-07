@@ -148,6 +148,7 @@ void wxToggleButton::SetValue(bool state)
     wxGtkEventsDisabler<wxToggleButton> noEvents(this);
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
+    GTKUpdateBitmap();
 }
 
 // bool GetValue() const

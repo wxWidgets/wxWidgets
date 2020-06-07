@@ -15,6 +15,7 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
