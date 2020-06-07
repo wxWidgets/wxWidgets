@@ -293,11 +293,11 @@ void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
 
 void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID winid) {
     Release();
-    if (surface)
-        hdc = new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc);
-    else
-        hdc = new wxMemoryDC();
-    ((wxMemoryDC*)hdc)->GetImpl()->SetWindow(GETWIN(winid));
+    wxMemoryDC* mdc = surface
+        ? new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc)
+        : new wxMemoryDC();
+    mdc->GetImpl()->SetWindow(GETWIN(winid));
+    hdc = mdc;
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
@@ -307,7 +307,7 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     bitmap = new wxBitmap();
     bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,(GETWIN(winid))->GetContentScaleFactor());
 #endif
-    ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
+    mdc->SelectObject(*bitmap);
 }
 
 
