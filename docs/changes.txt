@@ -96,6 +96,9 @@ Changes in behaviour not resulting in compilation errors
 - wxAuiNotebook::RemovePage() now hides the removed page, so it needs to be
   shown again if it is reused in another place.
 
+- wxSizer::RecalcSizes() shouldn't be called directly (note that it was never
+  supposed to be called, only implemented), call Layout() instead.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

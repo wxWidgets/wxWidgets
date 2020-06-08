@@ -733,6 +733,10 @@ public:
         total size available to the sizer (@c m_size) and the size computed by
         the last call to CalcMin().
 
+        Note that you should never call this method directly, call Layout()
+        instead if you need to manually update the sizer elements positions.
+        This method is only called by wxWidgets itself.
+
         @since 3.1.3, before this version RecalcSizes() method not taking any
             arguments had to be overridden in the derived classes instead.
     */
