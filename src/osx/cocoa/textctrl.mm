@@ -1556,7 +1556,7 @@ void wxNSTextFieldControl::SetJustification()
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    const wxString& WXUNUSED(str),
+                                    const wxString& str,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -1569,8 +1569,11 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v, style );
+        wxNSTextViewControl* t = new wxNSTextViewControl( wxpeer, v, style );
+        c = t;
         c->SetNeedsFocusRect( true );
+
+        t->SetStringValue(str);
     }
     else
     {
@@ -1593,7 +1596,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [cell setWraps:NO];
         [cell setScrollable:YES];
 
-        c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        wxNSTextFieldControl* t = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        c = t;
 
         if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )
         {
@@ -1608,6 +1612,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             // use native border
             c->SetNeedsFrame(false);
         }
+
+        t->SetStringValue(str);
     }
 
     return c;

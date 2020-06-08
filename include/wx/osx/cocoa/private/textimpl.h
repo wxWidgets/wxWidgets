@@ -32,6 +32,12 @@ public :
     virtual ~wxNSTextBase() { }
 
     virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const wxOVERRIDE;
+
+    virtual void SetInitialLabel(const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding)) wxOVERRIDE
+    {
+        // Don't do anything here, text controls don't have any label and
+        // setting it would overwrite the string value set when creating it.
+    }
 };
 
 // implementation exposed, so that search control can pull it
