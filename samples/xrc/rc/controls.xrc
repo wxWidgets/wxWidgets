@@ -68,7 +68,7 @@
                     <object class="wxPanel" name="animctrl">
                         <object class="wxFlexGridSizer">
                             <cols>2</cols>
-                            <rows>1</rows>
+                            <rows>2</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
                             <growablecols>0,1</growablecols>
@@ -86,6 +86,17 @@
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxAnimationCtrl" name="controls_animation_ctrl">
+                                    <animation>throbber.gif</animation>
+                                    <inactive-bitmap>stop.xpm</inactive-bitmap>
+                                </object>
+                            </object>
+
+                            <object class="spacer"/>
+
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxGenericAnimationCtrl" name="controls_generic_animation_ctrl">
                                     <animation>throbber.gif</animation>
                                     <inactive-bitmap>stop.xpm</inactive-bitmap>
                                 </object>

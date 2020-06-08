@@ -18,6 +18,7 @@
 
 #include "wx/xrc/xh_animatctrl.h"
 #include "wx/animate.h"
+#include "wx/generic/animate.h"
 #include "wx/scopedptr.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrlXmlHandler, wxXmlResourceHandler);
@@ -31,16 +32,65 @@ wxAnimationCtrlXmlHandler::wxAnimationCtrlXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(ctrl, wxAnimationCtrl)
+    wxAnimationCtrlBase *ctrl = NULL;
+    if ( m_instance )
+        ctrl = wxStaticCast(m_instance, wxAnimationCtrlBase);
 
-    wxScopedPtr<wxAnimation> animation(GetAnimation(wxT("animation")));
+    if ( !ctrl )
+    {
+        if ( m_class == "wxAnimationCtrl" )
+        {
+            ctrl = new wxAnimationCtrl(m_parentAsWindow,
+                                       GetID(),
+                                       wxNullAnimation,
+                                       GetPosition(), GetSize(),
+                                       GetStyle("style", wxAC_DEFAULT_STYLE),
+                                       GetName());
+        }
+        else
+        {
+            ctrl = new wxGenericAnimationCtrl(m_parentAsWindow,
+                                              GetID(),
+                                              wxNullAnimation,
+                                              GetPosition(), GetSize(),
+                                              GetStyle("style", wxAC_DEFAULT_STYLE),
+                                              GetName());
+        }
+    }
+    if ( GetBool("hidden", 0) == 1 )
+        ctrl->Hide();
 
-    ctrl->Create(m_parentAsWindow,
-                  GetID(),
-                  animation ? *animation : wxNullAnimation,
-                  GetPosition(), GetSize(),
-                  GetStyle(wxT("style"), wxAC_DEFAULT_STYLE),
-                  GetName());
+    const wxString aniParam = "animation";
+    wxString path = GetFilePath(GetParamNode(aniParam));
+    // load the animation from file
+    if ( !path.empty() )
+    {
+        wxAnimation ani = ctrl->CreateAnimation();
+#if wxUSE_FILESYSTEM
+        wxScopedPtr<wxFSFile> fsfile(
+            GetCurFileSystem().OpenFile(path, wxFS_READ | wxFS_SEEKABLE)
+        );
+        if (fsfile)
+        {
+            ani.Load(*fsfile->GetStream());
+        }
+#else
+        ani.LoadFile(name);
+#endif
+
+        if ( ani.IsOk() )
+        {
+            ctrl->SetAnimation(ani);
+        }
+        else
+        {
+            ReportParamError
+            (
+                aniParam,
+                wxString::Format("cannot create animation from \"%s\"", path)
+            );
+        }
+    }
 
     // if no inactive-bitmap has been provided, GetBitmap() will return wxNullBitmap
     // which just tells wxAnimationCtrl to use the default for inactive status
@@ -53,7 +103,8 @@ wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
 
 bool wxAnimationCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, wxT("wxAnimationCtrl"));
+    return IsOfClass(node, wxT("wxAnimationCtrl")) ||
+           IsOfClass(node, wxT("wxGenericAnimationCtrl"));
 }
 
 #endif // wxUSE_XRC && wxUSE_ANIMATIONCTRL
