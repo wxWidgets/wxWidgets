@@ -1222,9 +1222,9 @@ void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
 
 wxSize wxNSTextViewControl::GetBestSize() const
 {
-    if (m_textView && [m_textView layoutManager])
+    if ( NSLayoutManager* const layoutManager = [m_textView layoutManager] )
     {
-        NSRect rect = [[m_textView layoutManager] usedRectForTextContainer: [m_textView textContainer]];
+        NSRect rect = [layoutManager usedRectForTextContainer: [m_textView textContainer]];
         return wxSize((int)(rect.size.width + [m_textView textContainerInset].width),
                       (int)(rect.size.height + [m_textView textContainerInset].height));
     }
