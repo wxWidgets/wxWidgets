@@ -1185,6 +1185,14 @@ objects. If sizer child is used, it sets
     Ignored, preserved only for compatibility.}
 @endTable
 
+@subsubsection xrc_wxgenericanimationctrl wxGenericAnimationCtrl
+
+This handler is identical to the one for @ref xrc_wxanimationctrl
+"wxAnimationCtrl", please see it for more information. The only difference is
+that, for the platforms with a native wxAnimationCtrl implementation, using
+this handler creates a generic control rather than a native one.
+
+
 @subsubsection xrc_wxgenericdirctrl wxGenericDirCtrl
 
 @beginTable
