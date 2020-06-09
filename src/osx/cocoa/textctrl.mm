@@ -1222,13 +1222,25 @@ void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
 
 wxSize wxNSTextViewControl::GetBestSize() const
 {
+    wxSize size;
     if ( NSLayoutManager* const layoutManager = [m_textView layoutManager] )
     {
-        NSRect rect = [layoutManager usedRectForTextContainer: [m_textView textContainer]];
-        return wxSize((int)(rect.size.width + [m_textView textContainerInset].width),
-                      (int)(rect.size.height + [m_textView textContainerInset].height));
+        // We could have used usedRectForTextContainer: here to compute the
+        // total rectangle needed for the current text, but this is actually
+        // not too helpful for determining the best size of the control, as we
+        // don't always want to fit it to its text: e.g. if it contains 1000
+        // lines, we definitely don't want to make it higher than display.
+        //
+        // So instead we just get the height of a single line (which works for
+        // any non-empty control) and then multiply it by the number of lines
+        // we want to have by default, which is currently just hardcoded as 5
+        // for compatibility with the behaviour of the previous versions.
+        NSRect rect = [layoutManager lineFragmentRectForGlyphAtIndex: 0
+                                     effectiveRange: nil];
+        size.y = (int)(5*rect.size.height + [m_textView textContainerInset].height);
     }
-    return wxSize(0,0);
+
+    return size;
 }
 
 void wxNSTextViewControl::SetJustification()
