@@ -105,6 +105,7 @@ public:
 
     virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL) = 0;
     virtual bool GetBoolAttr(const wxString& attr, bool defaultv) = 0;
+    virtual wxString GetFilePath(const wxXmlNode* node) = 0;
     virtual void SetupWindow(wxWindow *wnd) = 0;
     virtual void CreateChildren(wxObject *parent, bool this_hnd_only = false) = 0;
     virtual void CreateChildrenPrivately(wxObject *parent,
@@ -366,6 +367,10 @@ protected:
     bool GetBoolAttr(const wxString& attr, bool defaultv)
     {
         return GetImpl()->GetBoolAttr(attr, defaultv);
+    }
+    wxString GetFilePath(const wxXmlNode* node)
+    {
+        return GetImpl()->GetFilePath(node);
     }
     void SetupWindow(wxWindow *wnd)
     {
