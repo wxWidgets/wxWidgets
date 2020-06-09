@@ -3095,7 +3095,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_unkwn.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
-    src/xrc/xmladv.cpp
     src/xrc/xmlrsall.cpp
 </set>
 <set var="XRC_HDR" hints="files">

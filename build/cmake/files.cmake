@@ -2587,7 +2587,6 @@ set(UNIV_THEMES_SRC
 )
 
 set(UNIV_SRC
-    ${UNIV_PLATFORM_SRC}
     src/generic/accel.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -2642,7 +2641,6 @@ set(UNIV_SRC
 )
 
 set(UNIV_HDR
-    ${UNIV_PLATFORM_HDR}
     wx/generic/accel.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
@@ -2937,7 +2935,6 @@ set(XRC_SRC
     src/xrc/xh_unkwn.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
-    src/xrc/xmladv.cpp
     src/xrc/xmlrsall.cpp
     src/xrc/xh_dataview.cpp
 )

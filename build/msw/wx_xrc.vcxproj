@@ -520,7 +520,6 @@
     <ClCompile Include="..\..\src\xrc\xh_treebk.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_unkwn.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_wizrd.cpp" />
-    <ClCompile Include="..\..\src\xrc\xmladv.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlres.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlrsall.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_activityindicator.cpp" />

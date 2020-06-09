@@ -223,9 +223,6 @@
     <ClCompile Include="..\..\src\xrc\xh_wizrd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\xrc\xmladv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\xrc\xmlres.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

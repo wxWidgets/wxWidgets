@@ -107,4 +107,37 @@ bool wxAnimationCtrlXmlHandler::CanHandle(wxXmlNode *node)
            IsOfClass(node, wxT("wxGenericAnimationCtrl"));
 }
 
+wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
+{
+    wxString name = GetFilePath(GetParamNode(param));
+    if ( name.empty() )
+        return NULL;
+
+    // load the animation from file
+    wxScopedPtr<wxAnimation> ani(new wxAnimation);
+#if wxUSE_FILESYSTEM
+    wxFSFile * const
+        fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
+    if ( fsfile )
+    {
+        ani->Load(*fsfile->GetStream());
+        delete fsfile;
+    }
+#else
+    ani->LoadFile(name);
+#endif
+
+    if ( !ani->IsOk() )
+    {
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot create animation from \"%s\"", name)
+        );
+        return NULL;
+    }
+
+    return ani.release();
+}
+
 #endif // wxUSE_XRC && wxUSE_ANIMATIONCTRL
