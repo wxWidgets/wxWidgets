@@ -1596,10 +1596,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\xrc\xmladv.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\xrc\xmlres.cpp"
 				>
 			</File>

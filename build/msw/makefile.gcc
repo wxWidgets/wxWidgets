@@ -1297,7 +1297,6 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_unkwn.o \
 	$(OBJS)\xrcdll_xh_wizrd.o \
 	$(OBJS)\xrcdll_xmlres.o \
-	$(OBJS)\xrcdll_xmladv.o \
 	$(OBJS)\xrcdll_xmlrsall.o
 XRCLIB_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\expat\lib \
@@ -1376,7 +1375,6 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_unkwn.o \
 	$(OBJS)\xrclib_xh_wizrd.o \
 	$(OBJS)\xrclib_xmlres.o \
-	$(OBJS)\xrclib_xmladv.o \
 	$(OBJS)\xrclib_xmlrsall.o
 AUIDLL_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\expat\lib \
@@ -1791,7 +1789,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_unkwn.o \
 	$(OBJS)\monodll_xh_wizrd.o \
 	$(OBJS)\monodll_xmlres.o \
-	$(OBJS)\monodll_xmladv.o \
 	$(OBJS)\monodll_xmlrsall.o \
 	$(OBJS)\monodll_framemanager.o \
 	$(OBJS)\monodll_dockart.o \
@@ -2632,7 +2629,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_unkwn.o \
 	$(OBJS)\monolib_xh_wizrd.o \
 	$(OBJS)\monolib_xmlres.o \
-	$(OBJS)\monolib_xmladv.o \
 	$(OBJS)\monolib_xmlrsall.o \
 	$(OBJS)\monolib_framemanager.o \
 	$(OBJS)\monolib_dockart.o \
@@ -7805,9 +7801,6 @@ $(OBJS)\monodll_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
 $(OBJS)\monodll_xmlres.o: ../../src/xrc/xmlres.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_xmladv.o: ../../src/xrc/xmladv.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10360,9 +10353,6 @@ $(OBJS)\monolib_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xmlres.o: ../../src/xrc/xmlres.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_xmladv.o: ../../src/xrc/xmladv.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
@@ -16629,9 +16619,6 @@ $(OBJS)\xrcdll_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
 $(OBJS)\xrcdll_xmlres.o: ../../src/xrc/xmlres.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\xrcdll_xmladv.o: ../../src/xrc/xmladv.cpp
-	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\xrcdll_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -16837,9 +16824,6 @@ $(OBJS)\xrclib_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xmlres.o: ../../src/xrc/xmlres.cpp
-	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\xrclib_xmladv.o: ../../src/xrc/xmladv.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xmlrsall.o: ../../src/xrc/xmlrsall.cpp

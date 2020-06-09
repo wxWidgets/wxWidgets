@@ -55,7 +55,7 @@ OBJECTS=xh_bmp.obj,xh_bmpbt.obj,xh_bttn.obj,xh_cald.obj,xh_chckb.obj,\
 	xh_fontpicker.obj,xh_clrpicker.obj,xh_odcombo.obj,xh_mdi.obj,\
 	xh_grid.obj,xh_datectrl.obj,xh_treebk.obj,xh_bmpcbox.obj,\
 	xh_animatctrl.obj,xh_htmllbox.obj,xh_collpane.obj,xh_srchctrl.obj,\
-	xh_propdlg.obj,xh_comboctrl.obj,xmladv.obj,xh_editlbox.obj,\
+	xh_propdlg.obj,xh_comboctrl.obj,xh_editlbox.obj,\
 	xh_filectrl.obj,xh_cmdlinkbn.obj,xh_toolbk.obj,xh_bannerwindow.obj,\
 	xh_timectrl.obj,xmlreshandler.obj,xh_ribbon.obj,xh_auitoolb.obj,\
 	xh_aui.obj,xh_simplebook.obj,xh_activityindicator.obj,\
@@ -73,7 +73,7 @@ SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_fontpicker.cpp,xh_clrpicker.cpp,xh_odcombo.cpp,xh_mdi.cpp,\
 	xh_grid.cpp,xh_datectrl.cpp,xh_treebk.cpp,xh_bmpcbox.cpp,\
 	xh_animatctrl.cpp,xh_htmllbox.cpp,xh_collpane.cpp,xh_srchctrl.cpp,\
-	xh_propdlg.cpp,xh_comboctrl.cpp,xmladv.cpp,xh_editlbox.cpp,\
+	xh_propdlg.cpp,xh_comboctrl.cpp,xh_editlbox.cpp,\
 	xh_filectrl.cpp,xh_cmdlinkbn.cpp,xh_toolbk.cpp,xh_bannerwindow.cpp,\
 	xh_timectrl.cpp,xmlreshandler.cpp,xh_ribbon.cpp,xh_auitoolb.cpp,\
 	xh_aui.cpp,xh_simplebook.cpp,xh_activityindicator.cpp,\
@@ -158,7 +158,6 @@ xh_htmllbox.obj : xh_htmllbox.cpp
 xh_collpane.obj : xh_collpane.cpp
 xh_srchctrl.obj : xh_srchctrl.cpp
 xh_propdlg.obj : xh_propdlg.cpp
-xmladv.obj : xmladv.cpp
 xh_editlbox.obj : xh_editlbox.cpp
 xh_filectrl.obj : xh_filectrl.cpp
 xh_cmdlinkbn.obj : xh_cmdlinkbn.cpp
