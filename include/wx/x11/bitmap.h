@@ -139,6 +139,10 @@ public:
 
     WXDisplay *GetDisplay() const;
 
+    // This is provided only for compatibility with the other ports, there is
+    // no alpha support in X11 bitmaps.
+    bool HasAlpha() const { return false; }
+
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
