@@ -542,8 +542,15 @@ protected:
 
     /**
         Creates an animation (see wxAnimation) from the filename specified in @a param.
+
+        It is recommended to provide @a ctrl argument to this function (which
+        is only available in wxWidgets 3.1.4 or later) to make sure that the
+        created animation is compatible with the specified control, otherwise a
+        wxAnimation object compatible with the default wxAnimationCtrl
+        implementation is created.
     */
-    wxAnimation* GetAnimation(const wxString& param = "animation");
+    wxAnimation* GetAnimation(const wxString& param = "animation",
+                              wxAnimationCtrlBase* ctrl = NULL);
 
     /**
         Gets a bitmap.

@@ -60,37 +60,9 @@ wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
     if ( GetBool("hidden", 0) == 1 )
         ctrl->Hide();
 
-    const wxString aniParam = "animation";
-    wxString path = GetFilePath(GetParamNode(aniParam));
-    // load the animation from file
-    if ( !path.empty() )
-    {
-        wxAnimation ani = ctrl->CreateAnimation();
-#if wxUSE_FILESYSTEM
-        wxScopedPtr<wxFSFile> fsfile(
-            GetCurFileSystem().OpenFile(path, wxFS_READ | wxFS_SEEKABLE)
-        );
-        if (fsfile)
-        {
-            ani.Load(*fsfile->GetStream());
-        }
-#else
-        ani.LoadFile(name);
-#endif
-
-        if ( ani.IsOk() )
-        {
-            ctrl->SetAnimation(ani);
-        }
-        else
-        {
-            ReportParamError
-            (
-                aniParam,
-                wxString::Format("cannot create animation from \"%s\"", path)
-            );
-        }
-    }
+    wxScopedPtr<wxAnimation> animation(GetAnimation("animation", ctrl));
+    if ( animation )
+        ctrl->SetAnimation(*animation);
 
     // if no inactive-bitmap has been provided, GetBitmap() will return wxNullBitmap
     // which just tells wxAnimationCtrl to use the default for inactive status
@@ -107,14 +79,16 @@ bool wxAnimationCtrlXmlHandler::CanHandle(wxXmlNode *node)
            IsOfClass(node, wxT("wxGenericAnimationCtrl"));
 }
 
-wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
+wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param,
+                                                    wxAnimationCtrlBase* ctrl)
 {
     wxString name = GetFilePath(GetParamNode(param));
     if ( name.empty() )
         return NULL;
 
     // load the animation from file
-    wxScopedPtr<wxAnimation> ani(new wxAnimation);
+    wxScopedPtr<wxAnimation> ani(ctrl ? new wxAnimation(ctrl->CreateAnimation())
+                                      : new wxAnimation);
 #if wxUSE_FILESYSTEM
     wxFSFile * const
         fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);

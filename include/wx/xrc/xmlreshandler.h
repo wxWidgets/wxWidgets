@@ -22,6 +22,7 @@
 #include "wx/window.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimationCtrlBase;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XML wxXmlResource;
@@ -100,7 +101,8 @@ public:
     virtual wxImageList *GetImageList(const wxString& param = wxT("imagelist")) = 0;
 
 #if wxUSE_ANIMATIONCTRL
-    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation")) = 0;
+    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                                      wxAnimationCtrlBase* ctrl = NULL) = 0;
 #endif
 
     virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL) = 0;
@@ -353,9 +355,10 @@ protected:
     }
 
 #if wxUSE_ANIMATIONCTRL
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation"))
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL)
     {
-        return GetImpl()->GetAnimation(param);
+        return GetImpl()->GetAnimation(param, ctrl);
     }
 #endif
 

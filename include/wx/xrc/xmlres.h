@@ -591,8 +591,10 @@ public:
     wxImageList *GetImageList(const wxString& param = wxT("imagelist")) wxOVERRIDE;
 
 #if wxUSE_ANIMATIONCTRL
-    // Gets an animation.
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation")) wxOVERRIDE;
+    // Gets an animation creating it using the provided control (so that it
+    // will be compatible with it) if any.
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL) wxOVERRIDE;
 #endif
 
     // Gets a font.
