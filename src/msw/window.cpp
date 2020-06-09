@@ -3696,6 +3696,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
+#if wxUSE_POPUPWIN
         case WM_NCACTIVATE:
             // When we're losing activation to our own popup window, we want to
             // retain the "active" appearance of the title bar, as dropping
@@ -3712,6 +3713,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 processed = true;
             }
             break;
+#endif
 
 #if wxUSE_UXTHEME
         // If we want the default themed border then we need to draw it ourselves

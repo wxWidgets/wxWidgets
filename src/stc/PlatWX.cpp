@@ -103,6 +103,8 @@ wxColour wxColourFromCDandAlpha(ColourDesired& cd, int alpha) {
 namespace
 {
 
+inline wxWindow* GETWIN(WindowID id) { return (wxWindow*)id; }
+
 // wxFont with ascent cached, a pointer to this type is stored in Font::fid.
 class wxFontWithAscent : public wxFont
 {
@@ -291,21 +293,21 @@ void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
 
 void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID winid) {
     Release();
-    if (surface)
-        hdc = new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc);
-    else
-        hdc = new wxMemoryDC();
+    wxMemoryDC* mdc = surface
+        ? new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc)
+        : new wxMemoryDC();
+    mdc->GetImpl()->SetWindow(GETWIN(winid));
+    hdc = mdc;
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
 #ifdef __WXMSW__
     bitmap = new wxBitmap(width, height);
-    wxUnusedVar(winid);
 #else
     bitmap = new wxBitmap();
-    bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,((wxWindow*)winid)->GetContentScaleFactor());
+    bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,(GETWIN(winid))->GetContentScaleFactor());
 #endif
-    ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
+    mdc->SelectObject(*bitmap);
 }
 
 
@@ -999,7 +1001,6 @@ public:
 
     // helpers
     void SetFont(Font &font_);
-    void SetScale(wxDC* dc);
     HRESULT FlushDrawing();
     void D2DPenColour(ColourDesired fore, int alpha=255);
     void DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
@@ -1057,19 +1058,18 @@ SurfaceD2D::~SurfaceD2D()
     Release();
 }
 
-void SurfaceD2D::Init(WindowID WXUNUSED(wid))
+void SurfaceD2D::Init(WindowID wid)
 {
     Release();
 
-    wxScreenDC sdc;
-    SetScale(&sdc);
+    m_logPixelsY = GETWIN(wid)->GetDPI().GetY();
 }
 
 void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
 {
     Release();
 
-    wxWindow* win = wxDynamicCast(wid,wxWindow);
+    wxWindow* win = GETWIN(wid);
     if ( win && win->GetName() == "wxSTCCallTip" )
         win = win->GetParent();
 
@@ -1078,7 +1078,7 @@ void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
     {
         wxDC* const dc = static_cast<wxDC*>(sid);
         const wxSize sz = dc->GetSize();
-        SetScale(dc);
+        m_logPixelsY = win->GetDPI().GetY();
         ScintillaWX* const
             sciwx = reinterpret_cast<ScintillaWX*>(stc->GetDirectPointer());
         m_surfaceData = static_cast<SurfaceDataD2D*>(sciwx->GetSurfaceData());
@@ -1773,12 +1773,6 @@ void SurfaceD2D::SetFont(Font &font_)
     }
 }
 
-void SurfaceD2D::SetScale(wxDC* dc)
-{
-    wxSize sz = dc->GetPPI();
-    m_logPixelsY = sz.GetY();
-}
-
 HRESULT SurfaceD2D::FlushDrawing()
 {
     return m_pRenderTarget->Flush();
@@ -1861,8 +1855,6 @@ Surface *Surface::Allocate(int technology) {
 //----------------------------------------------------------------------
 
 
-inline wxWindow* GETWIN(WindowID id) { return (wxWindow*)id; }
-
 Window::~Window() {
 }
 
@@ -1914,7 +1906,6 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
     if (position.y + height > displayRect.GetBottom())
         position.y = displayRect.GetBottom() - height;
 
-    position = relativeWin->ScreenToClient(position);
     wxWindow *window = GETWIN(wid);
     window->SetSize(position.x, position.y, width, height);
 }
@@ -1975,9 +1966,9 @@ void Window::SetCursor(Cursor curs) {
         break;
     }
 
-    wxCursor wc = wxCursor(cursorId);
     if(curs != cursorLast)
     {
+        wxCursor wc = wxCursor(cursorId);
         GETWIN(wid)->SetCursor(wc);
         cursorLast = curs;
     }
@@ -2170,7 +2161,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
     #ifdef __WXMSW__
 
         // Use ShowWithoutActivating instead of show.
-        bool wxSTCPopupBase::Show(bool show) wxOVERRIDE
+        bool wxSTCPopupBase::Show(bool show)
         {
             if ( show )
             {
@@ -2188,7 +2179,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
         // Do not activate in response to mouse clicks on this window.
         bool wxSTCPopupBase::MSWHandleMessage(WXLRESULT *res, WXUINT msg,
-                                              WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE
+                                              WXWPARAM wParam, WXLPARAM lParam)
         {
             if ( msg == WM_MOUSEACTIVATE )
             {
@@ -2227,7 +2218,9 @@ PRectangle Window::GetMonitorRect(Point pt) {
 #endif // __WXOSX_COCOA__
 
 wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
-                 :wxSTCPopupBase(parent), m_lastKnownPosition(wxDefaultPosition)
+    : wxSTCPopupBase(parent)
+    , m_relPos(wxDefaultPosition)
+    , m_absPos(wxDefaultPosition)
 {
     #if !wxSTC_POPUP_IS_CUSTOM
         Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
@@ -2278,22 +2271,20 @@ bool wxSTCPopupWindow::AcceptsFocus() const
 
 void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 {
-    m_lastKnownPosition = wxPoint(x, y);
+    wxPoint pos(x, y);
+    if ( pos.IsFullySpecified() && !m_relPos.IsFullySpecified() )
+    {
+        m_relPos = GetParent()->ScreenToClient(pos);
+    }
 
-    // convert coords to screen coords since we're a top-level window
-    if (x != wxDefaultCoord)
-        GetParent()->ClientToScreen(&x, NULL);
+    m_absPos = GetParent()->ClientToScreen(m_relPos);
 
-    if (y != wxDefaultCoord)
-        GetParent()->ClientToScreen(NULL, &y);
-
-    wxSTCPopupBase::DoSetSize(x, y, width, height, flags);
+    wxSTCPopupBase::DoSetSize(m_absPos.x, m_absPos.y, width, height, flags);
 }
 
 void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
 {
-    if ( m_lastKnownPosition.IsFullySpecified() )
-        SetPosition(m_lastKnownPosition);
+    SetPosition(m_absPos);
     event.Skip();
 }
 
@@ -2657,6 +2648,7 @@ protected:
     void OnSelection(wxCommandEvent&);
     void OnDClick(wxCommandEvent&);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
     void OnMouseMotion(wxMouseEvent& event);
     void OnMouseLeaveWindow(wxMouseEvent& event);
 
@@ -2712,6 +2704,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
     Bind(wxEVT_LISTBOX, &wxSTCListBox::OnSelection, this);
     Bind(wxEVT_LISTBOX_DCLICK, &wxSTCListBox::OnDClick, this);
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxSTCListBox::OnSysColourChanged, this);
+    Bind(wxEVT_DPI_CHANGED, &wxSTCListBox::OnDPIChanged, this);
 
     if ( m_visualData->HasListCtrlAppearance() )
     {
@@ -2949,6 +2942,18 @@ void wxSTCListBox::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     GetParent()->SetOwnBackgroundColour(m_visualData->GetBgColour());
     SetBackgroundColour(m_visualData->GetBgColour());
     GetParent()->Refresh();
+}
+
+void wxSTCListBox::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    m_imagePadding = FromDIP(1);
+    m_textBoxToTextGap = FromDIP(3);
+    m_textExtraVerticalPadding = FromDIP(1);
+
+    int w;
+    GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
+
+    RecalculateItemHeight();
 }
 
 void wxSTCListBox::OnMouseLeaveWindow(wxMouseEvent& event)

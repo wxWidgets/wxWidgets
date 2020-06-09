@@ -1039,7 +1039,7 @@ void ScintillaWX::DoGainFocus(){
     CreateSystemCaret();
 }
 
-void ScintillaWX::DoSysColourChange() {
+void ScintillaWX::DoInvalidateStyleData() {
     InvalidateStyleData();
 }
 

@@ -24,11 +24,6 @@
 //============================================================================
 
 #define DEFAULT_LANGUAGE "<default>"
-
-#define PAGE_COMMON _("Common")
-#define PAGE_LANGUAGES _("Languages")
-#define PAGE_STYLE_TYPES _("Style types")
-
 #define STYLE_TYPES_COUNT 32
 
 
@@ -47,7 +42,6 @@ enum {
     myID_REPLACENEXT,
     myID_BRACEMATCH,
     myID_GOTO,
-    myID_PAGEACTIVE,
     myID_DISPLAYEOL,
     myID_INDENTGUIDE,
     myID_LINENUMBER,
@@ -76,29 +70,18 @@ enum {
     myID_MULTIPLE_SELECTIONS,
     myID_MULTI_PASTE,
     myID_MULTIPLE_SELECTIONS_TYPING,
+    myID_TECHNOLOGY_DEFAULT,
+    myID_TECHNOLOGY_DIRECTWRITE,
     myID_CUSTOM_POPUP,
     myID_USECHARSET,
     myID_CHARSETANSI,
     myID_CHARSETMAC,
-    myID_PAGEPREV,
-    myID_PAGENEXT,
     myID_SELECTLINE,
     myID_EDIT_LAST = myID_SELECTLINE,
     myID_WINDOW_MINIMAL,
 
     // other IDs
-    myID_STATUSBAR,
-    myID_TITLEBAR,
     myID_ABOUTTIMER,
-    myID_UPDATETIMER,
-
-    // dialog find IDs
-    myID_DLG_FIND_TEXT,
-
-    // preferences IDs
-    myID_PREFS_LANGUAGE,
-    myID_PREFS_STYLETYPE,
-    myID_PREFS_KEYWORDS,
 };
 
 // ----------------------------------------------------------------------------
