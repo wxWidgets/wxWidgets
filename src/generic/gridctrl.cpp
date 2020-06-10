@@ -557,18 +557,8 @@ wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
                                                wxDC& dc,
                                                const wxString& text)
 {
-    wxCoord x = 0, y = 0, max_x = 0;
     dc.SetFont(attr.GetFont());
-    wxStringTokenizer tk(text, wxT('\n'));
-    while ( tk.HasMoreTokens() )
-    {
-        dc.GetTextExtent(tk.GetNextToken(), &x, &y);
-        max_x = wxMax(max_x, x);
-    }
-
-    y *= 1 + text.Freq(wxT('\n')); // multiply by the number of lines.
-
-    return wxSize(max_x, y);
+    return dc.GetMultiLineTextExtent(text);
 }
 
 wxSize wxGridCellStringRenderer::GetBestSize(wxGrid& grid,
