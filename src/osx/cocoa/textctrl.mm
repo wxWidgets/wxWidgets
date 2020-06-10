@@ -1222,13 +1222,25 @@ void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
 
 wxSize wxNSTextViewControl::GetBestSize() const
 {
-    if (m_textView && [m_textView layoutManager])
+    wxSize size;
+    if ( NSLayoutManager* const layoutManager = [m_textView layoutManager] )
     {
-        NSRect rect = [[m_textView layoutManager] usedRectForTextContainer: [m_textView textContainer]];
-        return wxSize((int)(rect.size.width + [m_textView textContainerInset].width),
-                      (int)(rect.size.height + [m_textView textContainerInset].height));
+        // We could have used usedRectForTextContainer: here to compute the
+        // total rectangle needed for the current text, but this is actually
+        // not too helpful for determining the best size of the control, as we
+        // don't always want to fit it to its text: e.g. if it contains 1000
+        // lines, we definitely don't want to make it higher than display.
+        //
+        // So instead we just get the height of a single line (which works for
+        // any non-empty control) and then multiply it by the number of lines
+        // we want to have by default, which is currently just hardcoded as 5
+        // for compatibility with the behaviour of the previous versions.
+        NSRect rect = [layoutManager lineFragmentRectForGlyphAtIndex: 0
+                                     effectiveRange: nil];
+        size.y = (int)(5*rect.size.height + [m_textView textContainerInset].height);
     }
-    return wxSize(0,0);
+
+    return size;
 }
 
 void wxNSTextViewControl::SetJustification()
@@ -1556,7 +1568,7 @@ void wxNSTextFieldControl::SetJustification()
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    const wxString& WXUNUSED(str),
+                                    const wxString& str,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -1569,8 +1581,11 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v, style );
+        wxNSTextViewControl* t = new wxNSTextViewControl( wxpeer, v, style );
+        c = t;
         c->SetNeedsFocusRect( true );
+
+        t->SetStringValue(str);
     }
     else
     {
@@ -1593,7 +1608,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [cell setWraps:NO];
         [cell setScrollable:YES];
 
-        c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        wxNSTextFieldControl* t = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        c = t;
 
         if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )
         {
@@ -1608,6 +1624,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             // use native border
             c->SetNeedsFrame(false);
         }
+
+        t->SetStringValue(str);
     }
 
     return c;
