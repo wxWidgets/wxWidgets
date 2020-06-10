@@ -31,20 +31,20 @@ public:
         : m_ptr(ptr)
     {}
 
-    // Uses ::CoTaskMemAlloc() to allocate size bytes.    
+    // Uses ::CoTaskMemAlloc() to allocate size bytes.
     explicit wxCoTaskMemPtr(size_t size)
         : m_ptr(static_cast<T*>(::CoTaskMemAlloc(size)))
     {}
 
     ~wxCoTaskMemPtr()
-    {        
+    {
         ::CoTaskMemFree(m_ptr);
     }
 
     void reset(T* ptr = NULL)
     {
-        if ( m_ptr != ptr)
-        {                        
+        if ( m_ptr != ptr )
+        {
             ::CoTaskMemFree(m_ptr);
             m_ptr = ptr;
         }
