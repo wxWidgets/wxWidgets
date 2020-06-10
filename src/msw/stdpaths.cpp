@@ -36,6 +36,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
+#include "wx/msw/private/cotaskmemptr.h"
 #include <initguid.h>
 
 // ----------------------------------------------------------------------------
@@ -171,12 +172,11 @@ wxString wxStandardPaths::DoGetKnownFolder(const GUID& rfid)
 
     if ( gs_shellFuncs.pSHGetKnownFolderPath )
     {
-        PWSTR pDir;
+        wxCoTaskMemPtr<wchar_t> pDir;
         HRESULT hr = gs_shellFuncs.pSHGetKnownFolderPath(rfid, 0, 0, &pDir);
         if ( SUCCEEDED(hr) )
         {
             dir = pDir;
-            CoTaskMemFree(pDir);
         }
     }
 
