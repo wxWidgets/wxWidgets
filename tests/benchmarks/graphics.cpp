@@ -66,6 +66,7 @@ struct GraphicsBenchmarkOptions
         testCircles =
         testEllipses =
         testTextExtent =
+        testMultiLineTextExtent =
         testPartialTextExtents = false;
 
         usePaint =
@@ -95,6 +96,7 @@ struct GraphicsBenchmarkOptions
          testCircles,
          testEllipses,
          testTextExtent,
+         testMultiLineTextExtent,
          testPartialTextExtents;
 
     bool usePaint,
@@ -634,7 +636,10 @@ private:
         wxStopWatch sw;
         for ( long n = 0; n < opts.numIters; n++ )
         {
-            size += dc.GetTextExtent(str);
+            if ( opts.testMultiLineTextExtent )
+                size += dc.GetMultiLineTextExtent(str);
+            else
+                size += dc.GetTextExtent(str);
         }
 
         const long t = sw.Time();
@@ -847,6 +852,7 @@ public:
             { wxCMD_LINE_SWITCH, "",  "circles" },
             { wxCMD_LINE_SWITCH, "",  "ellipses" },
             { wxCMD_LINE_SWITCH, "",  "textextent" },
+            { wxCMD_LINE_SWITCH, "",  "multilinetextextent" },
             { wxCMD_LINE_SWITCH, "",  "partialtextextents" },
             { wxCMD_LINE_SWITCH, "",  "paint" },
             { wxCMD_LINE_SWITCH, "",  "client" },
@@ -922,6 +928,7 @@ public:
         opts.testCircles = parser.Found("circles");
         opts.testEllipses = parser.Found("ellipses");
         opts.testTextExtent = parser.Found("textextent");
+        opts.testMultiLineTextExtent = parser.Found("multilinetextextent");
         opts.testPartialTextExtents = parser.Found("partialtextextents");
         if ( !(opts.testBitmaps || opts.testImages || opts.testLines
                     || opts.testRawBitmaps || opts.testRectangles

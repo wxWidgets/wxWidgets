@@ -105,17 +105,27 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
                                                wxCoord *height,
                                                wxCoord *heightOneLine)
 {
+    // It's noticeably faster to handle the case of a string which isn't
+    // actually multiline specially here, to skip iteration above in this case.
+    if ( text.find('\n') == wxString::npos )
+    {
+        GetTextExtent(text, width, height);
+        if ( heightOneLine && height )
+            *heightOneLine = *height;
+        return;
+    }
+
     MeasuringGuard guard(*this);
 
     wxCoord widthTextMax = 0, widthLine,
             heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
 
-    wxString curLine;
+    wxString::const_iterator lineStart = text.begin();
     for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
         if ( pc == text.end() || *pc == wxS('\n') )
         {
-            if ( curLine.empty() )
+            if ( pc == lineStart )
             {
                 // we can't use GetTextExtent - it will return 0 for both width
                 // and height and an empty line should count in height
@@ -137,7 +147,7 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
             }
             else
             {
-                CallGetTextExtent(curLine, &widthLine, &heightLine);
+                CallGetTextExtent(wxString(lineStart, pc), &widthLine, &heightLine);
                 if ( widthLine > widthTextMax )
                     widthTextMax = widthLine;
                 heightTextTotal += heightLine;
@@ -149,12 +159,9 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
             }
             else // '\n'
             {
-               curLine.clear();
+               lineStart = pc;
+               ++lineStart;
             }
-        }
-        else
-        {
-            curLine += *pc;
         }
     }
 
