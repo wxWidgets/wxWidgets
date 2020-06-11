@@ -319,20 +319,20 @@ public:
     int GetIncrement() const { return int(m_increment); }
 
     // operations
-    void SetValue(const wxString& value)
+    virtual void SetValue(const wxString& value) wxOVERRIDE
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue( int value )              { DoSetValue(value, SendEvent_None); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement(int inc) { DoSetIncrement(inc); }
 
-    virtual int GetBase() const { return m_base; }
-    virtual bool SetBase(int base);
+    virtual int GetBase() const wxOVERRIDE { return m_base; }
+    virtual bool SetBase(int base) wxOVERRIDE;
 
 protected:
-    virtual void DoSendEvent();
+    virtual void DoSendEvent() wxOVERRIDE;
 
-    virtual bool DoTextToValue(const wxString& text, double *val);
-    virtual wxString DoValueToText(double val);
+    virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
+    virtual wxString DoValueToText(double val) wxOVERRIDE;
     virtual void ResetTextValidator() wxOVERRIDE;
 
 private:
