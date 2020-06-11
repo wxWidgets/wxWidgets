@@ -147,6 +147,8 @@ protected:
     // ensure that the value is in range wrapping it round if necessary
     double AdjustToFitInRange(double value) const;
 
+    // Assign validator with current parameters
+    virtual void ResetTextValidator() = 0;
 
     double m_value;
     double m_min;
@@ -331,6 +333,7 @@ protected:
 
     virtual bool DoTextToValue(const wxString& text, double *val);
     virtual wxString DoValueToText(double val);
+    virtual void ResetTextValidator() wxOVERRIDE;
 
 private:
     // Common part of all ctors.
@@ -411,6 +414,7 @@ protected:
 
     virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
     virtual wxString DoValueToText(double val) wxOVERRIDE;
+    virtual void ResetTextValidator() wxOVERRIDE;
     void DetermineDigits(double inc);
 
     unsigned m_digits;

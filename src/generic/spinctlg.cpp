@@ -44,6 +44,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent);
 
 #if wxUSE_SPINBTN
 
+#include "wx/valnum.h"
+#include "wx/valtext.h"
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -249,6 +252,8 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     m_textCtrl->SetToolTip(GetToolTipText());
     m_spinButton->SetToolTip(GetToolTipText());
 #endif // wxUSE_TOOLTIPS
+
+    ResetTextValidator();
 
     m_spin_value = m_spinButton->GetValue();
 
@@ -593,6 +598,8 @@ void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
     m_max = max;
     if ( m_value > m_max )
         DoSetValue(m_max, SendEvent_None);
+
+    ResetTextValidator();
 }
 
 void wxSpinCtrlGenericBase::DoSetIncrement(double inc)
@@ -635,6 +642,8 @@ bool wxSpinCtrl::SetBase(int base)
     const bool hasValidVal = DoTextToValue(m_textCtrl->GetValue(), &val);
 
     m_base = base;
+
+    ResetTextValidator();
 
     // ... but DoValueToText() after doing it.
     if ( hasValidVal )
@@ -679,6 +688,24 @@ wxString wxSpinCtrl::DoValueToText(double val)
     }
 }
 
+void wxSpinCtrl::ResetTextValidator()
+{
+#if wxUSE_VALIDATORS
+    if ( GetBase() == 10 )
+    {
+        wxIntegerValidator<int> validator;
+        validator.SetRange(GetMin(), GetMax());
+        m_textCtrl->SetValidator(validator);
+    }
+    else // == 16
+    {
+        wxTextValidator validator(wxFILTER_XDIGITS);
+        m_textCtrl->SetValidator(validator);
+
+    }
+#endif // wxUSE_VALIDATORS
+}
+
 #endif // !wxHAS_NATIVE_SPINCTRL
 
 //-----------------------------------------------------------------------------
@@ -719,9 +746,19 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 
     m_format.Printf(wxT("%%0.%ulf"), digits);
 
+    ResetTextValidator();
     m_textCtrl->InvalidateBestSize();
 
     DoSetValue(m_value, SendEvent_None);
+}
+
+void wxSpinCtrlDouble::ResetTextValidator()
+{
+#if wxUSE_VALIDATORS
+    wxFloatingPointValidator<double> validator(m_digits);
+    validator.SetRange(m_min, m_max);
+    m_textCtrl->SetValidator(validator);
+#endif // wxUSE_VALIDATORS
 }
 
 void wxSpinCtrlDouble::DetermineDigits(double inc)
