@@ -2517,6 +2517,25 @@ public:
         returns @true.
      */
     virtual bool CanHaveAttributes();
+
+    /**
+        Override to return true if the same attribute can be used for measuring
+        all cells in the given column.
+
+        This function is provided for optimization purposes: it returns @false
+        by default, but can be overridden to return @true when all the cells in
+        the same grid column use sensibly the same attribute, i.e. they use the
+        same renderer (either explicitly, or implicitly, due to their type as
+        returned by GetTypeName()) and the font of the same size.
+
+        Returning @true from this function allows AutoSizeColumns() to skip
+        looking up the attribute and the renderer for each individual cell,
+        which results in very noticeable performance improvements for the grids
+        with many rows.
+
+        @since 3.1.4
+     */
+    virtual bool CanMeasureColUsingSameAttr(int col) const;
 };
 
 

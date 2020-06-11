@@ -1065,6 +1065,16 @@ public:
         return wxGridCellAttrPtr(GetAttr(row, col, kind));
     }
 
+    // This is an optimization for a common case when the entire column uses
+    // roughly the same attribute, which can thus be reused for measuring all
+    // the cells in this column. Override this to return true (possibly for
+    // some columns only) to speed up AutoSizeColumns() for the grids using
+    // this table.
+    virtual bool CanMeasureColUsingSameAttr(int WXUNUSED(col)) const
+    {
+        return false;
+    }
+
     // these functions take ownership of the pointer
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);

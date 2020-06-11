@@ -9967,6 +9967,14 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         col = -1;
     }
 
+    // If possible, reuse the same attribute and renderer for all cells: this
+    // is an important optimization (resulting in up to 80% speed up of
+    // AutoSizeColumns()) as finding the attribute and renderer for the cell
+    // are very slow operations, due to the number of steps involved in them.
+    const bool canReuseAttr = column && m_table->CanMeasureColUsingSameAttr(col);
+    wxGridCellAttrPtr attr;
+    wxGridCellRendererPtr renderer;
+
     wxCoord extent, extentMax = 0;
     int max = column ? m_numRows : m_numCols;
     for ( int rowOrCol = 0; rowOrCol < max; rowOrCol++ )
@@ -10005,8 +10013,12 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         }
 
         // get cell ( main cell if CellSpan_Inside ) renderer best size
-        wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-        wxGridCellRendererPtr renderer = attr->GetRendererPtr(this, row, col);
+        if ( !canReuseAttr || !attr )
+        {
+            attr = GetCellAttrPtr(row, col);
+            renderer = attr->GetRendererPtr(this, row, col);
+        }
+
         if ( renderer )
         {
             extent = column
