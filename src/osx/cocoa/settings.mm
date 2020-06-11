@@ -163,8 +163,8 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowBackgroundColor];
         break;
     case wxSYS_COLOUR_HOTLIGHT:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-        if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
         {
             sysColor = [NSColor linkColor];
         }
