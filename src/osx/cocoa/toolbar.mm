@@ -1670,6 +1670,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     else
 #endif
     {
+        const int direction = GetDirection();
         int w, h;
         GetSize( &w, &h );
 
@@ -1688,13 +1689,14 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         }
         
         dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
-        if ( HasFlag(wxTB_LEFT) )
-            dc.DrawLine(w-1, 0, w-1, h);
-        else if ( HasFlag(wxTB_RIGHT) )
+
+        if ( direction == wxTB_RIGHT )
             dc.DrawLine(0, 0, 0, h);
-        else if ( HasFlag(wxTB_BOTTOM) )
+        else if ( direction == wxTB_LEFT )
+            dc.DrawLine(w-1, 0, w-1, h);
+        else if ( direction == wxTB_BOTTOM )
             dc.DrawLine(0, 0, w, 0);
-        else if ( HasFlag(wxTB_TOP) )
+        else if ( direction == wxTB_TOP )
             dc.DrawLine(0, h-1, w, h-1);
     }
     event.Skip();
