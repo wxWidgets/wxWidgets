@@ -112,7 +112,7 @@ void VirtListCtrlTestCase::UpdateSelection()
 void VirtListCtrlTestCase::DeselectedEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-	m_list->AppendColumn("Col0");
+    m_list->AppendColumn("Col0");
     m_list->SetItemCount(1);
     wxListCtrl* const list = m_list;
 
