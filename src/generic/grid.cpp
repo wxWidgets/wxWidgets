@@ -11017,7 +11017,7 @@ int wxGridTypeRegistry::FindDataType(const wxString& typeName)
         if ( typeName == wxGRID_VALUE_CHOICE )
         {
             RegisterDataType(wxGRID_VALUE_CHOICE,
-                             new wxGridCellStringRenderer,
+                             new wxGridCellChoiceRenderer,
                              new wxGridCellChoiceEditor);
         }
         else

@@ -221,8 +221,37 @@ protected:
 
 #endif // wxUSE_DATETIME
 
+// Renderer for fields taking one of a limited set of values: this is the same
+// as the renderer for strings, except that it can implement GetMaxBestSize().
+class WXDLLIMPEXP_ADV wxGridCellChoiceRenderer : public wxGridCellStringRenderer
+{
+public:
+    wxGridCellChoiceRenderer() { }
+
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc) wxOVERRIDE;
+
+    // Parameters string is a comma-separated list of values.
+    virtual void SetParameters(const wxString& params) wxOVERRIDE;
+
+    virtual wxGridCellRenderer *Clone() const wxOVERRIDE
+    {
+        return new wxGridCellChoiceRenderer(*this);
+    }
+
+protected:
+    wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
+        : m_choices(other.m_choices)
+    {
+    }
+
+    wxArrayString m_choices;
+};
+
+
 // renders a number using the corresponding text string
-class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellStringRenderer
+class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellChoiceRenderer
 {
 public:
     wxGridCellEnumRenderer( const wxString& choices = wxEmptyString );
@@ -240,20 +269,10 @@ public:
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
 
-    virtual wxSize GetMaxBestSize(wxGrid& grid,
-                                  wxGridCellAttr& attr,
-                                  wxDC& dc) wxOVERRIDE;
-
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
-
-    // parameters string format is "item1[,item2[...,itemN]]" where itemN will
-    // be used if the cell value is N-1
-    virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
 protected:
     wxString GetString(const wxGrid& grid, int row, int col);
-
-    wxArrayString m_choices;
 };
 
 

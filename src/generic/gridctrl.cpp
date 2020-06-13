@@ -213,6 +213,38 @@ bool wxGridCellDateTimeRenderer::Parse(const wxString& text, wxDateTime& result)
 #endif // wxUSE_DATETIME
 
 // ----------------------------------------------------------------------------
+// wxGridCellChoiceRenderer
+// ----------------------------------------------------------------------------
+
+wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                                wxGridCellAttr& attr,
+                                                wxDC& dc)
+{
+    wxSize size;
+
+    for ( size_t n = 0; n < m_choices.size(); ++n )
+    {
+        size.IncTo(DoGetBestSize(attr, dc, m_choices[n]));
+    }
+
+    return size;
+}
+
+void wxGridCellChoiceRenderer::SetParameters(const wxString& params)
+{
+    m_choices.clear();
+
+    if ( params.empty() )
+        return;
+
+    wxStringTokenizer tk(params, wxT(','));
+    while ( tk.HasMoreTokens() )
+    {
+        m_choices.Add(tk.GetNextToken());
+    }
+}
+
+// ----------------------------------------------------------------------------
 // wxGridCellEnumRenderer
 // ----------------------------------------------------------------------------
 // Renders a number as a textual equivalent.
@@ -277,38 +309,6 @@ wxSize wxGridCellEnumRenderer::GetBestSize(wxGrid& grid,
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
-
-wxSize wxGridCellEnumRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
-                                              wxGridCellAttr& attr,
-                                              wxDC& dc)
-{
-    wxSize size;
-
-    for ( size_t n = 0; n < m_choices.size(); ++n )
-    {
-        size.IncTo(DoGetBestSize(attr, dc, m_choices[n]));
-    }
-
-    return size;
-}
-
-void wxGridCellEnumRenderer::SetParameters(const wxString& params)
-{
-    if ( !params )
-    {
-        // what can we do?
-        return;
-    }
-
-    m_choices.Empty();
-
-    wxStringTokenizer tk(params, wxT(','));
-    while ( tk.HasMoreTokens() )
-    {
-        m_choices.Add(tk.GetNextToken());
-    }
-}
-
 
 // ----------------------------------------------------------------------------
 // wxGridCellAutoWrapStringRenderer
