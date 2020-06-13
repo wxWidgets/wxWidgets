@@ -1,0 +1,1 @@
+wxMSW: Fix flicker when resizing MDI frames (Richard Reznicek).
