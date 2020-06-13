@@ -748,6 +748,34 @@ wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
 
+wxSize wxGridCellNumberRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                                wxGridCellAttr& attr,
+                                                wxDC& dc)
+{
+    // In theory, it's possible that there is a value in min..max range which
+    // is longer than both min and max, e.g. we could conceivably have "88" be
+    // wider than both "87" and "91" with some fonts, but it seems something
+    // too exotic to worry about in practice.
+    wxSize size = DoGetBestSize(attr, dc, wxString::Format("%ld", m_minValue));
+    size.IncTo(DoGetBestSize(attr, dc, wxString::Format("%ld", m_maxValue)));
+
+    return size;
+}
+
+void wxGridCellNumberRenderer::SetParameters(const wxString& params)
+{
+    if ( params.empty() )
+        return;
+
+    wxString maxStr;
+    const wxString minStr = params.BeforeFirst(',', &maxStr);
+
+    if ( !minStr.ToLong(&m_minValue) || !maxStr.ToLong(&m_maxValue) )
+    {
+        wxLogDebug("Invalid wxGridCellNumberRenderer parameters \"%s\"", params);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellFloatRenderer
 // ----------------------------------------------------------------------------

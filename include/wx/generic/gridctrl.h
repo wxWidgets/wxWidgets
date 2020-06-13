@@ -57,6 +57,13 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellNumberRenderer : public wxGridCellStringRenderer
 {
 public:
+    explicit wxGridCellNumberRenderer(long minValue = LONG_MIN,
+                                      long maxValue = LONG_MAX)
+        : m_minValue(minValue),
+          m_maxValue(maxValue)
+    {
+    }
+
     // draw the string right aligned
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -70,11 +77,21 @@ public:
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
 
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc) wxOVERRIDE;
+
+    // Optional parameters for this renderer are "<min>,<max>".
+    virtual void SetParameters(const wxString& params) wxOVERRIDE;
+
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
-        { return new wxGridCellNumberRenderer; }
+        { return new wxGridCellNumberRenderer(m_minValue, m_maxValue); }
 
 protected:
     wxString GetString(const wxGrid& grid, int row, int col);
+
+    long m_minValue,
+         m_maxValue;
 };
 
 class WXDLLIMPEXP_ADV wxGridCellFloatRenderer : public wxGridCellStringRenderer
