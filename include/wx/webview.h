@@ -203,6 +203,7 @@ public:
     virtual wxWebViewZoom GetZoom() const = 0;
     virtual wxWebViewZoomType GetZoomType() const = 0;
     virtual void SetZoom(wxWebViewZoom zoom) = 0;
+    virtual void SetZoomFactor(float zoom) = 0;
     virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
 
     //Selection
