@@ -23,6 +23,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/listctrl.h"
+#include "testableframe.h"
+#include "wx/uiaction.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -39,9 +41,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( VirtListCtrlTestCase );
         CPPUNIT_TEST( UpdateSelection );
+        WXUISIM_TEST( DeselectedEvent );
     CPPUNIT_TEST_SUITE_END();
 
     void UpdateSelection();
+    void DeselectedEvent();
 
     wxListCtrl *m_list;
 
@@ -103,6 +107,44 @@ void VirtListCtrlTestCase::UpdateSelection()
     // more.
     m_list->SetItemCount(5);
     CPPUNIT_ASSERT_EQUAL( 1, m_list->GetSelectedItemCount() );
+}
+
+void VirtListCtrlTestCase::DeselectedEvent()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    m_list->AppendColumn("Col0");
+    m_list->SetItemCount(1);
+    wxListCtrl* const list = m_list;
+
+    EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
+    EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);
+
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    list->GetItemRect(0, pos);
+
+    //We move in slightly so we are not on the edge
+    wxPoint point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 10);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    // We want a point within the listctrl but below any items
+    point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 50);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, deselected.GetCount());
+#endif
 }
 
 #endif // wxUSE_LISTCTRL
