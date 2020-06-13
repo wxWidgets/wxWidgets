@@ -53,8 +53,6 @@
 // Constants and globals
 // ----------------------------------------------------------------------------
 
-wxButton *m_button;
-
 const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
 {
     { wxT("Cat"), wxT("meow") },
@@ -310,12 +308,8 @@ MyFrame::MyFrame(const wxString& title)
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
-	m_button = new wxButton(m_panel, wxID_ANY, "Do something with the selected item");
-	m_button->Enable(false);
-
     wxBoxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(m_listCtrl, wxSizerFlags(2).Expand().Border());
-	sizer->Add(m_button, wxSizerFlags(2));
     sizer->Add(m_logWindow, wxSizerFlags(1).Expand().Border());
     m_panel->SetSizer(sizer);
 
@@ -1190,9 +1184,7 @@ void MyListCtrl::OnDeleteAllItems(wxListEvent& event)
 
 void MyListCtrl::OnSelected(wxListEvent& event)
 {
-	m_button->Enable(true);
-
-	LogEvent(event, "OnSelected");
+    LogEvent(event, "OnSelected");
 
     if ( GetWindowStyle() & wxLC_REPORT )
     {
@@ -1214,8 +1206,6 @@ void MyListCtrl::OnSelected(wxListEvent& event)
 
 void MyListCtrl::OnDeselected(wxListEvent& event)
 {
-	if (GetSelectedItemCount() == 0)
-		m_button->Enable(false);
     LogEvent(event, "OnDeselected");
 }
 
@@ -1268,7 +1258,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 
     if ( !wxGetKeyState(WXK_SHIFT) )
     {
-        //LogEvent(event, "OnListKeyDown");
+        LogEvent(event, "OnListKeyDown");
         event.Skip();
     }
 
@@ -1419,7 +1409,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             wxFALLTHROUGH;
 
         default:
-            //LogEvent(event, "OnListKeyDown");
+            LogEvent(event, "OnListKeyDown");
 
             event.Skip();
     }
