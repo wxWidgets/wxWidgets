@@ -113,7 +113,8 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
     // and calling GetCharABCWidths() is pretty slow and much slower than
     // calling GetTextExtentPoint32() itself, so avoid its overhead unless it's
     // really, really necessary).
-    if ( GetFont().GetStyle() != wxFONTSTYLE_NORMAL && len > 0 )
+    const wxFont font = GetFont();
+    if ( font.IsOk() && font.GetStyle() != wxFONTSTYLE_NORMAL && len > 0 )
     {
         ABC widthABC;
         const wxChar chFirst = *string.begin();
