@@ -284,6 +284,44 @@ wxWebViewZoom wxWebViewIE::GetZoom() const
 
 }
 
+float wxWebViewIE::GetZoomFactor() const
+{
+    wxWebViewZoom level = wxWEBVIEW_ZOOM_MEDIUM;
+    float zoomFactor = 1.0;
+
+    if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_LAYOUT)
+    {
+        zoomFactor = (float)GetIEOpticalZoomFactor();
+        zoomFactor /= 100;
+    }
+    else if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_TEXT)
+    {
+        level = GetIETextZoom();
+        switch(level)
+        {
+            case wxWEBVIEW_ZOOM_TINY:
+                zoomFactor = 0.6;
+                break;
+            case wxWEBVIEW_ZOOM_SMALL:
+                zoomFactor = 0.8;
+                break;
+            case wxWEBVIEW_ZOOM_MEDIUM:
+                zoomFactor = 1.0;
+                break;
+            case wxWEBVIEW_ZOOM_LARGE:
+                zoomFactor = 1.3;
+                break;
+            case wxWEBVIEW_ZOOM_LARGEST:
+                zoomFactor = 1.6;
+                break;
+            default:
+                wxFAIL;
+        }
+    }
+
+    return zoomFactor;
+}
+
 void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 {
     switch( m_impl->m_zoomType )
@@ -296,6 +334,41 @@ void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
             break;
         default:
             wxFAIL;
+    }
+}
+
+void wxWebViewIE::SetZoomFactor(float zoom)
+{
+    wxWebViewZoom level = wxWEBVIEW_ZOOM_MEDIUM;
+
+    if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_LAYOUT)
+    {
+        SetIEOpticalZoomFactor(zoom * 100);
+    }
+    else if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_TEXT)
+    {
+        //We make a somewhat arbitray map here, taken from values used by webkit
+        if (zoom <= 65)
+        {
+            level = wxWEBVIEW_ZOOM_TINY;
+        }
+        else if (zoom > 65 && zoom <= 90)
+        {
+            level = wxWEBVIEW_ZOOM_SMALL;
+        }
+        else if (zoom > 90 && zoom <= 115)
+        {
+            level = wxWEBVIEW_ZOOM_MEDIUM;
+        }
+        else if (zoom > 115 && zoom <= 145)
+        {
+            level = wxWEBVIEW_ZOOM_LARGE;
+        }
+        else
+        {
+            level = wxWEBVIEW_ZOOM_LARGEST;
+        }
+        SetIETextZoom(level);
     }
 }
 
@@ -338,33 +411,40 @@ wxWebViewZoom wxWebViewIE::GetIETextZoom() const
 
 void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
 {
-    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range
-    //is 10 to 1000 so the check is unnecessary
-    VARIANT zoomVariant;
-    VariantInit (&zoomVariant);
-    V_VT(&zoomVariant) = VT_I4;
+    int zoom = 100;
 
     //We make a somewhat arbitray map here, taken from values used by webkit
     switch(level)
     {
         case wxWEBVIEW_ZOOM_TINY:
-            V_I4(&zoomVariant) = 60;
+            zoom = 60;
             break;
         case wxWEBVIEW_ZOOM_SMALL:
-            V_I4(&zoomVariant) = 80;
+            zoom = 80;
             break;
         case wxWEBVIEW_ZOOM_MEDIUM:
-            V_I4(&zoomVariant) = 100;
+            zoom = 100;
             break;
         case wxWEBVIEW_ZOOM_LARGE:
-            V_I4(&zoomVariant) = 130;
+            zoom = 130;
             break;
         case wxWEBVIEW_ZOOM_LARGEST:
-            V_I4(&zoomVariant) = 160;
+            zoom = 160;
             break;
         default:
             wxFAIL;
     }
+    SetIEOpticalZoomFactor(zoom);
+}
+
+void wxWebViewIE::SetIEOpticalZoomFactor(int zoom)
+{
+    //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range
+    //is 10 to 1000 so the check is unnecessary
+    VARIANT zoomVariant;
+    VariantInit (&zoomVariant);
+    V_VT(&zoomVariant) = VT_I4;
+    V_I4(&zoomVariant) = zoom;
 
 #if wxDEBUG_LEVEL
     HRESULT result =
@@ -378,19 +458,7 @@ void wxWebViewIE::SetIEOpticalZoom(wxWebViewZoom level)
 
 wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
 {
-    VARIANT zoomVariant;
-    VariantInit (&zoomVariant);
-    V_VT(&zoomVariant) = VT_I4;
-
-#if wxDEBUG_LEVEL
-    HRESULT result =
-#endif
-            m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
-                                         OLECMDEXECOPT_DODEFAULT, NULL,
-                                         &zoomVariant);
-    wxASSERT(result == S_OK);
-
-    const int zoom = V_I4(&zoomVariant);
+    const int zoom = GetIEOpticalZoomFactor();
 
     //We make a somewhat arbitray map here, taken from values used by webkit
     if (zoom <= 65)
@@ -413,6 +481,25 @@ wxWebViewZoom wxWebViewIE::GetIEOpticalZoom() const
     {
         return wxWEBVIEW_ZOOM_LARGEST;
     }
+}
+
+int wxWebViewIE::GetIEOpticalZoomFactor() const
+{
+    VARIANT zoomVariant;
+    VariantInit (&zoomVariant);
+    V_VT(&zoomVariant) = VT_I4;
+
+#if wxDEBUG_LEVEL
+    HRESULT result =
+#endif
+            m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                         OLECMDEXECOPT_DODEFAULT, NULL,
+                                         &zoomVariant);
+    wxASSERT(result == S_OK);
+
+    const int zoom = V_I4(&zoomVariant);
+
+    return zoom;
 }
 
 void wxWebViewIE::SetZoomType(wxWebViewZoomType type)

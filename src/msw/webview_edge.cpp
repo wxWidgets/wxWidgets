@@ -560,6 +560,13 @@ wxWebViewZoom wxWebViewEdge::GetZoom() const
     return wxWEBVIEW_ZOOM_TINY;
 }
 
+float wxWebViewEdge::GetZoomFactor() const
+{
+    double old_zoom_factor = 0.0;
+    m_impl->m_webViewController->get_ZoomFactor(&old_zoom_factor);
+    return old_zoom_factor;
+}
+
 void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
 {
     double old_zoom_factor = 0.0;
@@ -585,7 +592,12 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
     default:
         break;
     }
-    m_impl->m_webViewController->put_ZoomFactor(zoom_factor);
+    SetZoomFactor(zoom_factor);
+}
+
+void wxWebViewEdge::SetZoomFactor(float zoom)
+{
+    m_impl->m_webViewController->put_ZoomFactor(zoom);
 }
 
 bool wxWebViewEdge::CanCut() const

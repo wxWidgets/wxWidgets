@@ -913,6 +913,10 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     return wxWEBVIEW_ZOOM_LARGEST;
 }
 
+float wxWebViewWebKit::GetZoomFactor() const
+{
+    return GetWebkitZoom();
+}
 
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
@@ -942,6 +946,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
         default:
             wxFAIL;
     }
+}
+
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
 }
 
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
