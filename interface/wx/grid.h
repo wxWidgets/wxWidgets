@@ -88,6 +88,26 @@ public:
     virtual int GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                              int row, int col, int height);
 
+    /**
+        Get the maximum possible size for a cell using this renderer, if
+        possible.
+
+        This function may be overridden in the derived class if it can return
+        the maximum size needed for displaying the cells rendered it without
+        iterating over all cells. The base class version simply returns
+        ::wxDefaultSize, indicating that this is infeasible and that
+        GetBestSize() should be called for each cell individually.
+
+        Note that this method will only be used if
+        wxGridTableBase::CanMeasureColUsingSameAttr() is overriden to return
+        @true.
+
+        @since 3.1.4
+     */
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc);
+
 protected:
     /**
         The destructor is private because only DecRef() can delete us.

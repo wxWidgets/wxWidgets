@@ -165,6 +165,24 @@ wxSize wxGridCellDateRenderer::GetBestSize(wxGrid& grid,
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
 
+wxSize wxGridCellDateRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                              wxGridCellAttr& attr,
+                                              wxDC& dc)
+{
+    wxSize size;
+
+    // Try to produce the longest string in the current format: as we don't
+    // know which month is the longest, we need to try all of them.
+    for ( int m = wxDateTime::Jan; m <= wxDateTime::Dec; ++m )
+    {
+        const wxDateTime d(28, static_cast<wxDateTime::Month>(m), 9999);
+
+        size.IncTo(DoGetBestSize(attr, dc, d.Format(m_oformat, m_tz)));
+    }
+
+    return size;
+}
+
 void wxGridCellDateRenderer::SetParameters(const wxString& params)
 {
     if (!params.empty())
@@ -258,6 +276,20 @@ wxSize wxGridCellEnumRenderer::GetBestSize(wxGrid& grid,
                                             int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
+}
+
+wxSize wxGridCellEnumRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                              wxGridCellAttr& attr,
+                                              wxDC& dc)
+{
+    wxSize size;
+
+    for ( size_t n = 0; n < m_choices.size(); ++n )
+    {
+        size.IncTo(DoGetBestSize(attr, dc, m_choices[n]));
+    }
+
+    return size;
 }
 
 void wxGridCellEnumRenderer::SetParameters(const wxString& params)
@@ -912,10 +944,17 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 // ----------------------------------------------------------------------------
 
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
-                                           wxGridCellAttr& WXUNUSED(attr),
-                                           wxDC& WXUNUSED(dc),
+                                           wxGridCellAttr& attr,
+                                           wxDC& dc,
                                            int WXUNUSED(row),
                                            int WXUNUSED(col))
+{
+    return GetMaxBestSize(grid, attr, dc);
+}
+
+wxSize wxGridCellBoolRenderer::GetMaxBestSize(wxGrid& grid,
+                                              wxGridCellAttr& WXUNUSED(attr),
+                                              wxDC& WXUNUSED(dc))
 {
     static wxPrivate::DpiDependentValue<wxSize> s_sizeCheckMark;
 

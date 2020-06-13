@@ -212,6 +212,20 @@ public:
         return GetBestSize(grid, attr, dc, row, col).GetWidth();
     }
 
+
+    // Unlike GetBestSize(), this functions is optional: it is used when
+    // auto-sizing columns to determine the best width without iterating over
+    // all cells in this column, if possible.
+    //
+    // If it isn't, return wxDefaultSize as the base class version does by
+    // default.
+    virtual wxSize GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                  wxGridCellAttr& WXUNUSED(attr),
+                                  wxDC& WXUNUSED(dc))
+    {
+        return wxDefaultSize;
+    }
+
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
 };

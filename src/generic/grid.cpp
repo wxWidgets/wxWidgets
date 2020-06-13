@@ -10017,6 +10017,21 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         {
             attr = GetCellAttrPtr(row, col);
             renderer = attr->GetRendererPtr(this, row, col);
+
+            if ( canReuseAttr )
+            {
+                // Try to get the best width for the entire column at once, if
+                // it's supported by the renderer.
+                extent = renderer->GetMaxBestSize(*this, *attr, dc).x;
+
+                if ( extent != wxDefaultCoord )
+                {
+                    extentMax = extent;
+
+                    // No need to check all the values.
+                    break;
+                }
+            }
         }
 
         if ( renderer )

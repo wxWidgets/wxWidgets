@@ -141,6 +141,10 @@ public:
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
 
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc) wxOVERRIDE;
+
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
         { return new wxGridCellBoolRenderer; }
 };
@@ -174,6 +178,10 @@ public:
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
+
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc) wxOVERRIDE;
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
 
@@ -231,6 +239,10 @@ public:
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
+
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc) wxOVERRIDE;
 
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
 
