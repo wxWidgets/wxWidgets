@@ -299,6 +299,12 @@ void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
     }
 }
 
+void wxWebViewIE::SetZoomFactor(float zoom)
+{
+    SetIEOpticalZoom(zoom);
+    SetIETextZoom(zoom);
+}
+
 void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)
 {
     //We do not use OLECMDID_OPTICAL_GETZOOMRANGE as the docs say the range

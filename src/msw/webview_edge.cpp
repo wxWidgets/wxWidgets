@@ -588,6 +588,11 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
     m_impl->m_webViewController->put_ZoomFactor(zoom_factor);
 }
 
+void wxWebViewEdge::SetZoomFactor(float zoom)
+{
+    m_impl->m_webViewController->put_ZoomFactor(zoom);
+}
+
 bool wxWebViewEdge::CanCut() const
 {
     return QueryCommandEnabled("cut");

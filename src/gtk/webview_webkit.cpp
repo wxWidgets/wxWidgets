@@ -805,6 +805,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
     }
 }
 
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
+}
+
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     webkit_web_view_set_full_content_zoom(m_web_view,

@@ -551,6 +551,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 
 }
 
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
+}
+
 void wxWebViewWebKit::DoSetPage(const wxString& src, const wxString& baseUrl)
 {
    if ( !m_webView )

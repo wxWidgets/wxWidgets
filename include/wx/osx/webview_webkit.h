@@ -64,6 +64,7 @@ public:
     virtual wxString GetCurrentTitle() const wxOVERRIDE;
     virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
     virtual void SetZoom(wxWebViewZoom zoom) wxOVERRIDE;
+    virtual void SetZoomFactor(float zoom) wxOVERRIDE;
 
     virtual void SetZoomType(wxWebViewZoomType zoomType) wxOVERRIDE;
     virtual wxWebViewZoomType GetZoomType() const wxOVERRIDE;

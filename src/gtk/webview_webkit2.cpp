@@ -944,6 +944,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
     }
 }
 
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
+}
+
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
