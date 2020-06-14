@@ -903,9 +903,8 @@ public:
         Set the zoom factor of the page.
         @param zoom How much to zoom (scale) the HTML document in arbitrary
                     number.
-        @note zoom  scale in IE and Edge will be converted into @c wxWebViewZoom
-                    levels for @c wxWebViewZoomType of 
-                    @c wxWEBVIEW_ZOOM_TYPE_TEXT.
+        @note zoom  scale in IE will be converted into @c wxWebViewZoom levels 
+                    for @c wxWebViewZoomType of @c wxWEBVIEW_ZOOM_TYPE_TEXT.
         @since 3.1.4
     */
     virtual void SetZoomFactor(float zoom) = 0;

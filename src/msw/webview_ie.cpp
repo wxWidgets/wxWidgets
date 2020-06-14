@@ -301,8 +301,63 @@ void wxWebViewIE::SetZoom(wxWebViewZoom zoom)
 
 void wxWebViewIE::SetZoomFactor(float zoom)
 {
-    SetIEOpticalZoom(zoom);
-    SetIETextZoom(zoom);
+    VARIANT zoomVariant;
+    VariantInit (&zoomVariant);
+    V_VT(&zoomVariant) = VT_I4;
+
+    // set zoom limit between .5 and 2 times original size
+    zoom = (zoom >= .5) ? zoom : .5;
+    zoom = (zoom <= 2) ? zoom : 2;
+    zoom *= 100;
+
+    switch( m_impl->m_zoomType )
+    {
+        case wxWEBVIEW_ZOOM_TYPE_LAYOUT:
+            V_I4(&zoomVariant) = zoom;
+#if wxDEBUG_LEVEL
+            HRESULT result =
+#endif
+                m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                             OLECMDEXECOPT_DODEFAULT,
+                                             &zoomVariant,
+                                             NULL);
+            break;
+        case wxWEBVIEW_ZOOM_TYPE_TEXT:
+            //We make a somewhat arbitray map here, taken from values used by webkit
+            if (zoom <= 65)
+            {
+                V_I4(&zoomVariant) = 60;
+            }
+            else if (zoom > 65 && zoom <= 90)
+            {
+                V_I4(&zoomVariant) = 80;
+            }
+            else if (zoom > 90 && zoom <= 115)
+            {
+                V_I4(&zoomVariant) = 100;
+            }
+            else if (zoom > 115 && zoom <= 145)
+            {
+                V_I4(&zoomVariant) = 130;
+            }
+            else
+            {
+                V_I4(&zoomVariant) = 160;
+            }
+
+#if wxDEBUG_LEVEL
+            HRESULT result =
+#endif
+                m_impl->m_webBrowser->ExecWB(OLECMDID_ZOOM,
+                                             OLECMDEXECOPT_DONTPROMPTUSER,
+                                             &zoomVariant,
+                                             NULL);
+            break;
+        default:
+            wxFAIL;
+    }
+
+    wxASSERT(result == S_OK);
 }
 
 void wxWebViewIE::SetIETextZoom(wxWebViewZoom level)

@@ -585,7 +585,7 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
     default:
         break;
     }
-    m_impl->m_webViewController->put_ZoomFactor(zoom_factor);
+    SetZoomFactor(zoom_factor);
 }
 
 void wxWebViewEdge::SetZoomFactor(float zoom)
