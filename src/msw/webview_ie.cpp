@@ -352,10 +352,9 @@ void wxWebViewIE::SetZoomFactor(float zoom)
                                          OLECMDEXECOPT_DONTPROMPTUSER,
                                          &zoomVariant,
                                          NULL);
-    {
+    }
     else
         wxFAIL;
-    }
 
     wxASSERT(result == S_OK);
 }
