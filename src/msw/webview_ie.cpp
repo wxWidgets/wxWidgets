@@ -310,51 +310,51 @@ void wxWebViewIE::SetZoomFactor(float zoom)
     zoom = (zoom <= 2) ? zoom : 2;
     zoom *= 100;
 
-    switch( m_impl->m_zoomType )
+    if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_LAYOUT)
     {
-        case wxWEBVIEW_ZOOM_TYPE_LAYOUT:
-            V_I4(&zoomVariant) = zoom;
+        V_I4(&zoomVariant) = zoom;
 #if wxDEBUG_LEVEL
-            HRESULT result =
+    HRESULT result =
 #endif
-                m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
-                                             OLECMDEXECOPT_DODEFAULT,
-                                             &zoomVariant,
-                                             NULL);
-            break;
-        case wxWEBVIEW_ZOOM_TYPE_TEXT:
-            //We make a somewhat arbitray map here, taken from values used by webkit
-            if (zoom <= 65)
-            {
-                V_I4(&zoomVariant) = 60;
-            }
-            else if (zoom > 65 && zoom <= 90)
-            {
-                V_I4(&zoomVariant) = 80;
-            }
-            else if (zoom > 90 && zoom <= 115)
-            {
-                V_I4(&zoomVariant) = 100;
-            }
-            else if (zoom > 115 && zoom <= 145)
-            {
-                V_I4(&zoomVariant) = 130;
-            }
-            else
-            {
-                V_I4(&zoomVariant) = 160;
-            }
+            m_impl->m_webBrowser->ExecWB((OLECMDID)63 /*OLECMDID_OPTICAL_ZOOM*/,
+                                         OLECMDEXECOPT_DODEFAULT,
+                                         &zoomVariant,
+                                         NULL);
+    }
+    else if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_TEXT)
+    {
+        //We make a somewhat arbitray map here, taken from values used by webkit
+        if (zoom <= 65)
+        {
+            V_I4(&zoomVariant) = 60;
+        }
+        else if (zoom > 65 && zoom <= 90)
+        {
+            V_I4(&zoomVariant) = 80;
+        }
+        else if (zoom > 90 && zoom <= 115)
+        {
+            V_I4(&zoomVariant) = 100;
+        }
+        else if (zoom > 115 && zoom <= 145)
+        {
+            V_I4(&zoomVariant) = 130;
+        }
+        else
+        {
+            V_I4(&zoomVariant) = 160;
+        }
 
 #if wxDEBUG_LEVEL
-            HRESULT result =
+    HRESULT result =
 #endif
-                m_impl->m_webBrowser->ExecWB(OLECMDID_ZOOM,
-                                             OLECMDEXECOPT_DONTPROMPTUSER,
-                                             &zoomVariant,
-                                             NULL);
-            break;
-        default:
-            wxFAIL;
+            m_impl->m_webBrowser->ExecWB(OLECMDID_ZOOM,
+                                         OLECMDEXECOPT_DONTPROMPTUSER,
+                                         &zoomVariant,
+                                         NULL);
+    {
+    else
+        wxFAIL;
     }
 
     wxASSERT(result == S_OK);
