@@ -1309,6 +1309,13 @@ void wxTopLevelWindowMSW::DoRestoreLastFocus()
 
 void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 {
+    if ( IsBeingDeleted() )
+    {
+        // Ignore activations when being deleted #18790
+        event.Skip();
+        return;
+    }
+
     if ( event.GetActive() )
     {
         // We get WM_ACTIVATE before being restored from iconized state, so we
