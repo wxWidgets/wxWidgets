@@ -212,6 +212,20 @@ public:
         return GetBestSize(grid, attr, dc, row, col).GetWidth();
     }
 
+
+    // Unlike GetBestSize(), this functions is optional: it is used when
+    // auto-sizing columns to determine the best width without iterating over
+    // all cells in this column, if possible.
+    //
+    // If it isn't, return wxDefaultSize as the base class version does by
+    // default.
+    virtual wxSize GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                  wxGridCellAttr& WXUNUSED(attr),
+                                  wxDC& WXUNUSED(dc))
+    {
+        return wxDefaultSize;
+    }
+
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
 };
@@ -1065,6 +1079,16 @@ public:
         return wxGridCellAttrPtr(GetAttr(row, col, kind));
     }
 
+    // This is an optimization for a common case when the entire column uses
+    // roughly the same attribute, which can thus be reused for measuring all
+    // the cells in this column. Override this to return true (possibly for
+    // some columns only) to speed up AutoSizeColumns() for the grids using
+    // this table.
+    virtual bool CanMeasureColUsingSameAttr(int WXUNUSED(col)) const
+    {
+        return false;
+    }
+
     // these functions take ownership of the pointer
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);
@@ -1869,11 +1893,8 @@ public:
         { AutoSizeColOrRow(row, setAsMin, wxGRID_ROW); }
 
     // auto size all columns (very ineffective for big grids!)
-    void     AutoSizeColumns( bool setAsMin = true )
-        { (void)SetOrCalcColumnSizes(false, setAsMin); }
-
-    void     AutoSizeRows( bool setAsMin = true )
-        { (void)SetOrCalcRowSizes(false, setAsMin); }
+    void     AutoSizeColumns( bool setAsMin = true );
+    void     AutoSizeRows( bool setAsMin = true );
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
@@ -2413,10 +2434,6 @@ protected:
     int        m_cellHighlightROPenWidth;
     wxColour   m_gridFrozenBorderColour;
     int        m_gridFrozenBorderPenWidth;
-
-    // common part of AutoSizeColumn/Row() and GetBestSize()
-    int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = true);
-    int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = true);
 
     // common part of AutoSizeColumn/Row()
     void AutoSizeColOrRow(int n, bool setAsMin, wxGridDirection direction);
