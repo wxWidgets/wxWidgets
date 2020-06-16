@@ -132,6 +132,7 @@ public:
     void OnRedo(wxCommandEvent& evt);
     void OnMode(wxCommandEvent& evt);
     void OnZoomLayout(wxCommandEvent& evt);
+    void OnZoomCustom(wxCommandEvent& evt);
     void OnHistory(wxCommandEvent& evt);
     void OnScrollLineUp(wxCommandEvent&) { m_browser->LineUp(); }
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
@@ -194,6 +195,7 @@ private:
     wxMenuItem* m_tools_medium;
     wxMenuItem* m_tools_large;
     wxMenuItem* m_tools_largest;
+    wxMenuItem* m_tools_custom;
     wxMenuItem* m_tools_handle_navigation;
     wxMenuItem* m_tools_handle_new_window;
     wxMenuItem* m_tools_enable_history;
@@ -408,6 +410,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_tools_medium = m_tools_menu->AppendCheckItem(wxID_ANY, _("Medium"));
     m_tools_large = m_tools_menu->AppendCheckItem(wxID_ANY, _("Large"));
     m_tools_largest = m_tools_menu->AppendCheckItem(wxID_ANY, _("Largest"));
+    m_tools_custom = m_tools_menu->AppendCheckItem(wxID_ANY, _("Custom Size"));
     m_tools_menu->AppendSeparator();
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
@@ -527,6 +530,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_medium->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_large->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_largest->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_custom->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearHistory, this, clearhist->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableHistory, this, m_tools_enable_history->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnCut, this, m_edit_cut->GetId());
@@ -928,30 +932,27 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     if(m_browser->GetCurrentURL() == "")
         return;
 
-    m_tools_tiny->Check(false);
-    m_tools_small->Check(false);
-    m_tools_medium->Check(false);
-    m_tools_large->Check(false);
-    m_tools_largest->Check(false);
-
-    wxWebViewZoom zoom = m_browser->GetZoom();
-    switch (zoom)
+    if(!m_tools_custom->IsChecked())
     {
-    case wxWEBVIEW_ZOOM_TINY:
-        m_tools_tiny->Check();
-        break;
-    case wxWEBVIEW_ZOOM_SMALL:
-        m_tools_small->Check();
-        break;
-    case wxWEBVIEW_ZOOM_MEDIUM:
-        m_tools_medium->Check();
-        break;
-    case wxWEBVIEW_ZOOM_LARGE:
-        m_tools_large->Check();
-        break;
-    case wxWEBVIEW_ZOOM_LARGEST:
-        m_tools_largest->Check();
-        break;
+        wxWebViewZoom zoom = m_browser->GetZoom();
+        switch (zoom)
+        {
+        case wxWEBVIEW_ZOOM_TINY:
+            m_tools_tiny->Check();
+            break;
+        case wxWEBVIEW_ZOOM_SMALL:
+            m_tools_small->Check();
+            break;
+        case wxWEBVIEW_ZOOM_MEDIUM:
+            m_tools_medium->Check();
+            break;
+        case wxWEBVIEW_ZOOM_LARGE:
+            m_tools_large->Check();
+            break;
+        case wxWEBVIEW_ZOOM_LARGEST:
+            m_tools_largest->Check();
+            break;
+        }
     }
 
     m_edit_cut->Enable(m_browser->CanCut());
@@ -1013,25 +1014,42 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
   */
 void WebFrame::OnSetZoom(wxCommandEvent& evt)
 {
+    m_tools_tiny->Check(false);
+    m_tools_small->Check(false);
+    m_tools_medium->Check(false);
+    m_tools_large->Check(false);
+    m_tools_largest->Check(false);
+    m_tools_custom->Check(false);
+
     if (evt.GetId() == m_tools_tiny->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
+        m_tools_tiny->Check();
     }
     else if (evt.GetId() == m_tools_small->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_SMALL);
+        m_tools_small->Check();
     }
     else if (evt.GetId() == m_tools_medium->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_MEDIUM);
+        m_tools_medium->Check();
     }
     else if (evt.GetId() == m_tools_large->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGE);
+        m_tools_large->Check();
     }
     else if (evt.GetId() == m_tools_largest->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGEST);
+        m_tools_largest->Check();
+    }
+    else if (evt.GetId() == m_tools_custom->GetId())
+    {
+        m_tools_custom->Check();
+        OnZoomCustom(evt);
     }
     else
     {
@@ -1045,6 +1063,24 @@ void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
         m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
     else
         m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
+}
+
+void WebFrame::OnZoomCustom(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString inputval;
+
+    wxTextEntryDialog dialog
+                      (
+                        this,
+                        "Please enter a float number as zoom scale",
+                        wxGetTextFromUserPromptStr,
+                        inputval,
+                        wxOK | wxCANCEL | wxCENTRE
+                      );
+    if( dialog.ShowModal() != wxID_OK )
+        return;
+
+    m_browser->SetZoomFactor(wxAtof(dialog.GetValue()));
 }
 
 void WebFrame::OnHistory(wxCommandEvent& evt)

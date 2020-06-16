@@ -148,6 +148,7 @@ public:
 
     wxWebViewZoom GetIEOpticalZoom() const;
     void SetIEOpticalZoom(wxWebViewZoom level);
+    void SetIEOpticalZoom(float zoom);
 
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
