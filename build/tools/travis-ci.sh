@@ -6,15 +6,14 @@ set -e
 
 wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
 ((wxPROC_COUNT++))
-if [ "$wxTOOLSET" == "cmake" ] && [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then
-    wxJOBS="-jobs $wxPROC_COUNT"
-else
-    wxJOBS="-j$wxPROC_COUNT"
-fi
+wxBUILD_ARGS="-j$wxPROC_COUNT"
 
 case $wxTOOLSET in
     cmake)
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
+        if [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then
+            wxBUILD_ARGS="-jobs $wxPROC_COUNT -quiet"
+        fi
         cmake --version
 
         echo 'travis_fold:start:configure'
@@ -26,10 +25,7 @@ case $wxTOOLSET in
 
         echo 'travis_fold:start:building'
         echo 'Building...'
-        if [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then
-            wxTOOL_ARG="-quiet"
-        fi
-        cmake --build . -- $wxJOBS $wxTOOL_ARG
+        cmake --build . -- $wxBUILD_ARGS
         echo 'travis_fold:end:building'
 
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
@@ -39,21 +35,24 @@ case $wxTOOLSET in
             echo 'travis_fold:end:testing'
         fi
 
-        echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
-        sudo env "PATH=$PATH" cmake --build . --target install
+        echo 'travis_fold:start:install'
+        echo 'Installing...'
+        sudo env "PATH=$PATH" cmake --build . --target install -- $wxBUILD_ARGS
         popd
-        echo -en 'travis_fold:end:script.install\\r'
+        echo 'travis_fold:end:install'
 
-        echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
+        echo 'travis_fold:start:testinstall'
+        echo 'Testing installation...'
         mkdir build_cmake_install_test
         pushd build_cmake_install_test
-        cmake "$wxCMAKE_GENERATOR" $wxCMAKE_DEFINES ../samples/minimal
-        cmake --build .
+        cmake -G "$wxCMAKE_GENERATOR" $wxCMAKE_DEFINES ../samples/minimal
+        cmake --build . -- $wxBUILD_ARGS
         popd
-        echo -en 'travis_fold:end:script.testinstall\\r'
+        echo 'travis_fold:end:testinstall'
         ;;
     *)
-        echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
+        echo 'travis_fold:start:configure'
+        echo 'Configuring...'
         ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
         if [ -n "$rc" ]; then
             echo '*** Configuring failed, contents of config.log follows: ***'
@@ -62,25 +61,28 @@ case $wxTOOLSET in
             echo '-----------------------------------------------------------'
             exit $rc
         fi
-        echo -en 'travis_fold:end:script.configure\\r'
+        echo 'travis_fold:end:configure'
 
-        echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
-        make $wxJOBS
-        echo -en 'travis_fold:end:script.build\\r'
+        echo 'travis_fold:start:building'
+        echo 'Building...'
+        make $wxBUILD_ARGS
+        echo 'travis_fold:end:building'
 
-        echo 'Building tests...' && echo -en 'travis_fold:start:script.tests\\r'
-        [ "$wxSKIP_GUI" = 1 ] || make -C tests $wxJOBS failtest
-        make -C tests $wxJOBS $wxMAKEFILE_FLAGS
-        echo -en 'travis_fold:end:script.tests\\r'
+        echo 'travis_fold:start:tests'
+        echo 'Building tests...'
+        [ "$wxSKIP_GUI" = 1 ] || make -C tests $wxBUILD_ARGS failtest
+        make -C tests $wxBUILD_ARGS $wxMAKEFILE_FLAGS
+        echo 'travis_fold:end:tests'
 
         if [ "$wxSKIP_TESTING" = 1 ]; then
             echo 'Skipping running tests'
             exit 0
         fi
 
-        echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
+        echo 'travis_fold:start:testing'
+        echo 'Testing...'
         pushd tests && ./test && popd
-        echo -en 'travis_fold:end:script.testing\\r'
+        echo 'travis_fold:end:testing'
 
         if [ "$wxSKIP_GUI" = 1 ]; then
             echo 'Skipping the rest of tests for non-GUI build.'
@@ -88,22 +90,26 @@ case $wxTOOLSET in
         fi
 
         if [ "$wxUSE_XVFB" = 1 ]; then
-            echo 'Testing GUI using Xvfb...' && echo -en 'travis_fold:start:script.testing_gui\\r'
+            echo 'travis_fold:start:testing_gui'
+            echo 'Testing GUI using Xvfb...'
             pushd tests && xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui && popd
-            echo -en 'travis_fold:end:script.testing_gui\\r'
+            echo 'travis_fold:end:testing_gui'
         fi
 
-        echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
+        echo 'travis_fold:start:samples'
+        echo 'Building samples...'
         (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make samples
-        echo -en 'travis_fold:end:script.samples\\r'
+        echo 'travis_fold:end:samples'
 
-        echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
+        echo 'travis_fold:start:install'
+        echo 'Installing...'
         sudo make install
-        echo -en 'travis_fold:end:script.install\\r'
+        echo 'travis_fold:end:install'
 
-        echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
+        echo 'travis_fold:start:testinstall'
+        echo 'Testing installation...'
         make -C samples/minimal -f makefile.unx clean
         make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
-        echo -en 'travis_fold:end:script.testinstall\\r'
+        echo 'travis_fold:end:testinstall'
         ;;
 esac
