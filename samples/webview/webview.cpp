@@ -35,6 +35,7 @@
 #endif
 #include "wx/webviewarchivehandler.h"
 #include "wx/webviewfshandler.h"
+#include "wx/numdlg.h"
 #include "wx/infobar.h"
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
@@ -239,6 +240,7 @@ private:
     wxMenuHistoryMap m_histMenuItems;
     wxString m_findText;
     int m_findFlags, m_findCount;
+    long m_zoomFactor;
 
     // Last executed JavaScript snippet, for convenience.
     wxString m_javascript;
@@ -404,13 +406,13 @@ WebFrame::WebFrame(const wxString& url) :
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
     wxMenuItem* viewText = m_tools_menu->Append(wxID_ANY, _("View Text"));
     m_tools_menu->AppendSeparator();
-    m_tools_layout = m_tools_menu->AppendCheckItem(wxID_ANY, _("Use Layout Zoom"));
-    m_tools_tiny = m_tools_menu->AppendCheckItem(wxID_ANY, _("Tiny"));
-    m_tools_small = m_tools_menu->AppendCheckItem(wxID_ANY, _("Small"));
-    m_tools_medium = m_tools_menu->AppendCheckItem(wxID_ANY, _("Medium"));
-    m_tools_large = m_tools_menu->AppendCheckItem(wxID_ANY, _("Large"));
-    m_tools_largest = m_tools_menu->AppendCheckItem(wxID_ANY, _("Largest"));
-    m_tools_custom = m_tools_menu->AppendCheckItem(wxID_ANY, _("Custom Size"));
+    m_tools_layout = m_tools_menu->AppendRadioItem(wxID_ANY, _("Use Layout Zoom"));
+    m_tools_tiny = m_tools_menu->AppendRadioItem(wxID_ANY, _("Tiny"));
+    m_tools_small = m_tools_menu->AppendRadioItem(wxID_ANY, _("Small"));
+    m_tools_medium = m_tools_menu->AppendRadioItem(wxID_ANY, _("Medium"));
+    m_tools_large = m_tools_menu->AppendRadioItem(wxID_ANY, _("Large"));
+    m_tools_largest = m_tools_menu->AppendRadioItem(wxID_ANY, _("Largest"));
+    m_tools_custom = m_tools_menu->AppendRadioItem(wxID_ANY, _("Custom Size"));
     m_tools_menu->AppendSeparator();
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
@@ -489,9 +491,13 @@ WebFrame::WebFrame(const wxString& url) :
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
     m_tools_enable_history->Check();
+
+    //Zoom
+    m_zoomFactor = 100;
+    m_tools_medium->Check();
+
     if(!m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
         m_tools_layout->Enable(false);
-
 
     // Connect the toolbar events
     Bind(wxEVT_TOOL, &WebFrame::OnBack, this, m_toolbar_back->GetId());
@@ -932,29 +938,6 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     if(m_browser->GetCurrentURL() == "")
         return;
 
-    if(!m_tools_custom->IsChecked())
-    {
-        wxWebViewZoom zoom = m_browser->GetZoom();
-        switch (zoom)
-        {
-        case wxWEBVIEW_ZOOM_TINY:
-            m_tools_tiny->Check();
-            break;
-        case wxWEBVIEW_ZOOM_SMALL:
-            m_tools_small->Check();
-            break;
-        case wxWEBVIEW_ZOOM_MEDIUM:
-            m_tools_medium->Check();
-            break;
-        case wxWEBVIEW_ZOOM_LARGE:
-            m_tools_large->Check();
-            break;
-        case wxWEBVIEW_ZOOM_LARGEST:
-            m_tools_largest->Check();
-            break;
-        }
-    }
-
     m_edit_cut->Enable(m_browser->CanCut());
     m_edit_copy->Enable(m_browser->CanCopy());
     m_edit_paste->Enable(m_browser->CanPaste());
@@ -1014,41 +997,28 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
   */
 void WebFrame::OnSetZoom(wxCommandEvent& evt)
 {
-    m_tools_tiny->Check(false);
-    m_tools_small->Check(false);
-    m_tools_medium->Check(false);
-    m_tools_large->Check(false);
-    m_tools_largest->Check(false);
-    m_tools_custom->Check(false);
-
     if (evt.GetId() == m_tools_tiny->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
-        m_tools_tiny->Check();
     }
     else if (evt.GetId() == m_tools_small->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_SMALL);
-        m_tools_small->Check();
     }
     else if (evt.GetId() == m_tools_medium->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_MEDIUM);
-        m_tools_medium->Check();
     }
     else if (evt.GetId() == m_tools_large->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGE);
-        m_tools_large->Check();
     }
     else if (evt.GetId() == m_tools_largest->GetId())
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGEST);
-        m_tools_largest->Check();
     }
     else if (evt.GetId() == m_tools_custom->GetId())
     {
-        m_tools_custom->Check();
         OnZoomCustom(evt);
     }
     else
@@ -1067,20 +1037,20 @@ void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnZoomCustom(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString inputval;
-
-    wxTextEntryDialog dialog
+    wxNumberEntryDialog dialog
                       (
                         this,
-                        "Please enter a float number as zoom scale",
-                        wxGetTextFromUserPromptStr,
-                        inputval,
-                        wxOK | wxCANCEL | wxCENTRE
+                        "Enter zoom factor as a percentage (10-10000)%",
+                        "Zoom Factor:",
+                        "Change Zoom Factor",
+                        m_zoomFactor,
+                        10, 10000
                       );
     if( dialog.ShowModal() != wxID_OK )
         return;
 
-    m_browser->SetZoomFactor(wxAtof(dialog.GetValue()));
+    m_zoomFactor = dialog.GetValue();
+    m_browser->SetZoomFactor((float)m_zoomFactor/100);
 }
 
 void WebFrame::OnHistory(wxCommandEvent& evt)

@@ -913,6 +913,10 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     return wxWEBVIEW_ZOOM_LARGEST;
 }
 
+float wxWebViewWebKit::GetZoomFactor() const
+{
+    return GetWebkitZoom();
+}
 
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
@@ -1264,7 +1268,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
 {
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
     bool newSearch = false;
-    if(text != m_findText || 
+    if(text != m_findText ||
        (flags & wxWEBVIEW_FIND_MATCH_CASE) != (m_findFlags & wxWEBVIEW_FIND_MATCH_CASE))
     {
         newSearch = true;

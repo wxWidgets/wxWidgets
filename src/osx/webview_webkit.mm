@@ -13,7 +13,7 @@
 
 #include "wx/osx/webview_webkit.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__) 
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -116,7 +116,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 #if wxOSX_USE_IPHONE
     CGRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     m_webView = [[UIWebView alloc] initWithFrame:r];
-    
+
     SetPeer( new wxWidgetIPhoneImpl( this, m_webView ) );
 
 #else
@@ -139,7 +139,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[WebViewLoadDelegate alloc] initWithWxWindow: this];
 
     [m_webView setFrameLoadDelegate:loadDelegate];
-    
+
     m_loadDelegate = loadDelegate;
 
     // this is used to veto page loads, etc.
@@ -147,14 +147,14 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[WebViewPolicyDelegate alloc] initWithWxWindow: this];
 
     [m_webView setPolicyDelegate:policyDelegate];
-    
+
     m_policyDelegate = policyDelegate;
 
     WebViewUIDelegate* uiDelegate =
             [[WebViewUIDelegate alloc] initWithWxWindow: this];
 
     [m_webView setUIDelegate:uiDelegate];
-    
+
     m_UIDelegate = uiDelegate;
 #endif
     //Register our own class for custom scheme handling
@@ -518,6 +518,11 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     // to shut up compilers, this can never be reached logically
     wxASSERT(false);
     return wxWEBVIEW_ZOOM_MEDIUM;
+}
+
+float wxWebViewWebKit::GetZoomFactor() const
+{
+    return GetWebkitZoom();
 }
 
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
@@ -1038,7 +1043,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     wxString wxpath = wxCFStringRef::AsString(path);
     wxString scheme = wxCFStringRef::AsString([[request URL] scheme]);
-    
+
     // since canInitRequest has already checked whether this scheme is supported
     // the hash map contains this entry, but to satisfy static code analysis
     // suspecting nullptr dereference ...
@@ -1047,7 +1052,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 #else
     wxFSFile* file = NULL;
 #endif
-    
+
     if (!file)
     {
         NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
@@ -1055,7 +1060,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                             userInfo:nil];
 
         [client URLProtocol:self didFailWithError:error];
-        
+
         [error release];
 
         return;
@@ -1085,7 +1090,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     [client URLProtocolDidFinishLoading:self];
 
     [data release];
-    
+
     [response release];
 }
 

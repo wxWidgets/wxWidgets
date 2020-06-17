@@ -882,10 +882,19 @@ public:
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
 
     /**
-        Get the zoom factor of the page.
+        Get the zoom level of the page.
+        See GetZoomFactor() to get more precise zoom scale value other than
+        as provided by @c wxWebViewZoom.
         @return The current level of zoom.
     */
     virtual wxWebViewZoom GetZoom() const = 0;
+
+    /**
+        Get the zoom factor of the page.
+        @return The current factor of zoom.
+        @since 3.1.4
+    */
+    virtual float GetZoomFactor() const = 0;
 
     /**
         Get how the zoom factor is currently interpreted.
@@ -895,6 +904,8 @@ public:
 
     /**
         Set the zoom level of the page.
+        See SetZoomFactor() for more precise scaling other than the measured
+        steps provided by @c wxWebViewZoom.
         @param zoom How much to zoom (scale) the HTML document.
     */
     virtual void SetZoom(wxWebViewZoom zoom) = 0;
@@ -903,7 +914,7 @@ public:
         Set the zoom factor of the page.
         @param zoom How much to zoom (scale) the HTML document in arbitrary
                     number.
-        @note zoom  scale in IE will be converted into @c wxWebViewZoom levels 
+        @note zoom  scale in IE will be converted into @c wxWebViewZoom levels
                     for @c wxWebViewZoomType of @c wxWEBVIEW_ZOOM_TYPE_TEXT.
         @since 3.1.4
     */

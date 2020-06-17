@@ -98,6 +98,7 @@ public:
     virtual void Print() wxOVERRIDE;
 
     virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
+    virtual float GetZoomFactor() const wxOVERRIDE;
     virtual void SetZoom(wxWebViewZoom zoom) wxOVERRIDE;
     virtual void SetZoomFactor(float zoom) wxOVERRIDE;
 
@@ -147,8 +148,9 @@ public:
     void SetIETextZoom(wxWebViewZoom level);
 
     wxWebViewZoom GetIEOpticalZoom() const;
+    int GetIEOpticalZoomFactor() const;
     void SetIEOpticalZoom(wxWebViewZoom level);
-    void SetIEOpticalZoom(float zoom);
+    void SetIEOpticalZoomFactor(int zoom);
 
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
