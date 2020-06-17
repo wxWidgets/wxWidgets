@@ -21885,8 +21885,6 @@ if test "x$ac_cv_lib_jbig_jbg_dec_init" = xyes; then :
   JBIG_LINK=" -ljbig"
 fi
 
-else
-    ac_configure_args="$ac_configure_args --disable-jbig"
 fi
 
 
@@ -22123,6 +22121,7 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
         if test "$wxUSE_LIBJPEG" = "no"; then
                                                                                     ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
+                        ac_configure_args="$ac_configure_args --disable-jbig"
 
 
 subdirs="$subdirs src/tiff"

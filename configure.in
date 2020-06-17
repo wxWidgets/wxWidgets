@@ -2629,8 +2629,6 @@ dnl ------------------------------------------------------------------------
 JBIG_LINK=
 if test "$wxUSE_LIBJBIG" = "yes"; then
     AC_CHECK_LIB(jbig, jbg_dec_init, JBIG_LINK=" -ljbig")
-else
-    ac_configure_args="$ac_configure_args --disable-jbig"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2710,6 +2708,9 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we need to hack around this
             ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
+        dnl We don't provide a built-in version of the libjbig library, so
+        dnl disable it for the builtin libtiff.
+        ac_configure_args="$ac_configure_args --disable-jbig"
         AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
