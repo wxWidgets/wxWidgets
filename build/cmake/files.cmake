@@ -153,10 +153,6 @@ set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/power.mm
 )
 
-set(BASE_AND_GUI_OSX_IPHONE_SRC
-    src/osx/iphone/utils.mm
-)
-
 set(BASE_OSX_NOTWXMAC_SRC
     ${BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC}
     ${BASE_COREFOUNDATION_SRC}

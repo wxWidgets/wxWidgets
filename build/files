@@ -176,9 +176,6 @@ BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
 
-BASE_AND_GUI_OSX_IPHONE_SRC =
-    src/osx/iphone/utils.mm
-
 # files used by non-wxMac OS X builds
 BASE_OSX_NOTWXMAC_SRC =
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
