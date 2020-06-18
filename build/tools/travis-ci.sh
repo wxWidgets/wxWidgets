@@ -11,6 +11,7 @@ wxBUILD_ARGS="-j$wxPROC_COUNT"
 case $wxTOOLSET in
     cmake)
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
+        if [ -z $wxCMAKE_SAMPLES ]; then wxCMAKE_SAMPLES=SOME; fi
         if [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then
             wxBUILD_ARGS="-jobs $wxPROC_COUNT -quiet"
         fi
@@ -20,13 +21,22 @@ case $wxTOOLSET in
         echo 'Configuring...'
         mkdir build_cmake
         pushd build_cmake
-        cmake -G "$wxCMAKE_GENERATOR" $wxCMAKE_DEFINES -D wxBUILD_SAMPLES=SOME -D wxBUILD_TESTS=$wxCMAKE_TESTS ..
+        cmake -G "$wxCMAKE_GENERATOR" $wxCMAKE_DEFINES -D wxBUILD_SAMPLES=$wxCMAKE_SAMPLES -D wxBUILD_TESTS=$wxCMAKE_TESTS ..
         echo 'travis_fold:end:configure'
 
-        echo 'travis_fold:start:building'
-        echo 'Building...'
-        cmake --build . -- $wxBUILD_ARGS
-        echo 'travis_fold:end:building'
+        if [ "$wxCMAKE_GENERATOR" != "Xcode" ]; then
+            echo 'travis_fold:start:building'
+            echo 'Building...'
+            cmake --build . -- $wxBUILD_ARGS
+            echo 'travis_fold:end:building'
+        fi
+
+        echo 'travis_fold:start:install'
+        if [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then echo -n 'Building and '; fi
+        echo 'Installing...'
+        sudo env "PATH=$PATH" cmake --build . --target install -- $wxBUILD_ARGS
+        popd
+        echo 'travis_fold:end:install'
 
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
             echo 'travis_fold:start:testing'
@@ -34,12 +44,6 @@ case $wxTOOLSET in
             ctest -V -C Debug -R "test_base" --output-on-failure --interactive-debug-mode 0 .
             echo 'travis_fold:end:testing'
         fi
-
-        echo 'travis_fold:start:install'
-        echo 'Installing...'
-        sudo env "PATH=$PATH" cmake --build . --target install -- $wxBUILD_ARGS
-        popd
-        echo 'travis_fold:end:install'
 
         echo 'travis_fold:start:testinstall'
         echo 'Testing installation...'
