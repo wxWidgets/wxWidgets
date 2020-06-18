@@ -385,7 +385,12 @@ if(wxUSE_GUI)
 
     # extra dependencies
     if(wxUSE_OPENGL)
-        find_package(OpenGL)
+        if(WXOSX_IPHONE)
+            set(OPENGL_FOUND TRUE)
+            set(OPENGL_LIBRARIES "-framework OpenGLES" "-framework QuartzCore")
+        else()
+            find_package(OpenGL)
+        endif()
         if(NOT OPENGL_FOUND)
             message(WARNING "opengl not found, wxGLCanvas won't be available")
             wx_option_force_value(wxUSE_OPENGL OFF)

@@ -2980,8 +2980,12 @@ OPENGL_GTK_SRC =
 OPENGL_MSW_HDR =
     wx/msw/glcanvas.h
 
-OPENGL_OSX_SHARED_SRC =
+OPENGL_OSX_COCOA_SRC =
     src/osx/cocoa/glcanvas.mm
+    src/osx/glcanvas_osx.cpp
+
+OPENGL_OSX_IPHONE_SRC =
+    src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
 
 # Misc plugin sources:

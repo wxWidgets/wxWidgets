@@ -3041,8 +3041,13 @@ set(OPENGL_GTK_HDR
     wx/unix/glx11.h
 )
 
-set(OPENGL_OSX_SHARED_SRC
+set(OPENGL_OSX_COCOA_SRC
     src/osx/cocoa/glcanvas.mm
+    src/osx/glcanvas_osx.cpp
+)
+
+set(OPENGL_OSX_IPHONE_SRC
+    src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
 )
 
