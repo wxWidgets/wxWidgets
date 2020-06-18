@@ -2552,7 +2552,6 @@ OSX_IPHONE_SRC =
 OSX_IPHONE_HDR =
     wx/generic/region.h
     wx/osx/iphone/chkconf.h
-    wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/osx/sound.h
 

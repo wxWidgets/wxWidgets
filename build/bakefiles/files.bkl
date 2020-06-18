@@ -2703,7 +2703,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_IPHONE_HDR" hints="files">
     wx/osx/iphone/chkconf.h
-    wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
     wx/osx/sound.h

@@ -2573,7 +2573,6 @@ set(OSX_IPHONE_SRC
 
 set(OSX_IPHONE_HDR
     wx/osx/iphone/chkconf.h
-    wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
     wx/osx/sound.h
