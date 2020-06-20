@@ -9844,7 +9844,10 @@ void wxGrid::DoSetColSize( int col, int width )
 
             FurtherWindowPartRefresher refreshFurtherPart(x);
 
-            refreshFurtherPart(m_colLabelWin);
+            // Refreshing the native header is unnecessary, as it updates
+            // itself correctly anyhow, and just results in extra flicker.
+            if ( !IsUsingNativeHeader() )
+                refreshFurtherPart(m_colLabelWin);
             refreshFurtherPart(m_gridWin);
 
             if ( m_frozenRowGridWin )
