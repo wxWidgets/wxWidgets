@@ -2622,17 +2622,6 @@ if test "$wxUSE_LIBLZMA" != "no"; then
     fi
 fi
 
-dnl Disable the use of lzma, webp and zstd in built-in libtiff explicitly, as
-dnl otherwise we'd depend on the system libraries, which is typically
-dnl undesirable when using builtin libraries. If we use lzma ourselves, keep it
-dnl enabled.
-if test "$wxUSE_LIBTIFF" = "builtin"; then
-    ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
-    if test "$wxUSE_LIBLZMA" = "no"; then
-        ac_configure_args="$ac_configure_args --disable-lzma"
-    fi
-fi
-
 dnl ------------------------------------------------------------------------
 dnl Check for jbig library
 dnl ------------------------------------------------------------------------
@@ -2640,8 +2629,6 @@ dnl ------------------------------------------------------------------------
 JBIG_LINK=
 if test "$wxUSE_LIBJBIG" = "yes"; then
     AC_CHECK_LIB(jbig, jbg_dec_init, JBIG_LINK=" -ljbig")
-else
-    ac_configure_args="$ac_configure_args --disable-jbig"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2704,6 +2691,14 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         fi
     fi
     if test "$wxUSE_LIBTIFF" = "builtin" ; then
+        dnl Disable the use of lzma, webp and zstd in built-in libtiff explicitly, as
+        dnl otherwise we'd depend on the system libraries, which is typically
+        dnl undesirable when using builtin libraries. If we use lzma ourselves, keep it
+        dnl enabled.
+        ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
+        if test "$wxUSE_LIBLZMA" = "no"; then
+            ac_configure_args="$ac_configure_args --disable-lzma"
+        fi
         if test "$wxUSE_LIBJPEG" = "no"; then
             dnl we have to prevent the builtin libtiff configure from building the
             dnl library with JPEG support as this was explicitly disabled by user,
@@ -2713,6 +2708,9 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we need to hack around this
             ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
+        dnl We don't provide a built-in version of the libjbig library, so
+        dnl disable it for the builtin libtiff.
+        ac_configure_args="$ac_configure_args --disable-jbig"
         AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
