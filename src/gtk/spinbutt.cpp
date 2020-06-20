@@ -186,6 +186,16 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     GtkDisableEvents();
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
     m_pos = int(gtk_spin_button_get_value((GtkSpinButton*)m_widget));
+
+    // Gradually reduce the page increment in the case of a narrow range for convenience
+    // and to limit possible up/down ambiguity in gtk_value_changed() when wrapping is on
+    // (The maximal page increment of 10 is consistent with the default page increment set
+    // by calling gtk_spin_button_new_with_range(0, 100, 1) in wxSpinButton::Create().)
+    const int rng = maxVal - minVal;
+    const int inc = 10 - ( (rng < 50) ? 5 : 0 ) - ( (rng < 20) ? 3 : 0 ) - ( (rng < 10) ? 1 : 0 );
+    GtkAdjustment* adj = gtk_spin_button_get_adjustment((GtkSpinButton*)m_widget);
+    gtk_adjustment_set_page_increment(adj, inc);
+
     GtkEnableEvents();
 }
 
