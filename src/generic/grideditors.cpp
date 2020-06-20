@@ -836,10 +836,19 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
         int keycode = event.GetKeyCode();
-        if ( (keycode < 128) &&
-             (wxIsdigit(keycode) || keycode == '+' || keycode == '-'))
+        switch ( keycode )
         {
-            return true;
+            // Accept +/- because they can be part of the number and space just
+            // because it's a convenient key to start editing with and is also
+            // consistent with many (all?) other editors, which allow starting
+            // editing using it.
+            case '+':
+            case '-':
+            case ' ':
+                return true;
+
+            default:
+                return (keycode < 128) && wxIsdigit(keycode);
         }
     }
 
