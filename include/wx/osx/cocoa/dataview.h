@@ -547,6 +547,8 @@ public:
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
 
+    wxCocoaOutlineView *GetNativeControl() { return m_OutlineView; }
+
     virtual void SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true);
 
 private:

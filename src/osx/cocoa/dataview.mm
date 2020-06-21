@@ -379,6 +379,13 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
                             : NSTableColumnNoResizing;
     }
     [nativeColumn setResizingMask:resizingMask];
+    
+    if( column->GetOwner() )
+    {
+        wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl *>( column->GetOwner()->GetPeer() );
+        if( peer )
+            [peer->GetNativeControl() sizeToFit];
+    }
 
     // setting the visibility:
     [nativeColumn setHidden:static_cast<BOOL>(column->IsHidden())];
@@ -2068,7 +2075,7 @@ void wxCocoaDataViewControl::InitOutlineView(long style)
 
     [m_OutlineView setImplementation:this];
     [m_OutlineView setFocusRingType:NSFocusRingTypeNone];
-    [m_OutlineView setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
+    [m_OutlineView setColumnAutoresizingStyle:NSTableViewReverseSequentialColumnAutoresizingStyle];
     [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
     NSUInteger maskGridStyle(NSTableViewGridNone);
     if (style & wxDV_HORIZ_RULES)
@@ -2276,6 +2283,8 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     }
 
     [column setWidth:calculator.GetMaxWidth()];
+    column.resizingMask = NSTableColumnAutoresizingMask;
+    [m_OutlineView sizeToFit];
 }
 
 //
@@ -2287,6 +2296,7 @@ bool wxCocoaDataViewControl::Add(const wxDataViewItem& parent, const wxDataViewI
         [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
     else
         [m_OutlineView reloadData];
+    [m_OutlineView sizeToFit];
     return true;
 }
 
@@ -3734,6 +3744,11 @@ void wxDataViewColumn::SetResizeable(bool resizable)
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask];
     else
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
+    if( !GetOwner() )
+        return;
+    wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl *>( GetOwner()->GetPeer() );
+    if( peer )
+        [peer->GetNativeControl() sizeToFit];
 }
 
 void wxDataViewColumn::UnsetAsSortKey()
@@ -3790,20 +3805,18 @@ void wxDataViewColumn::SetTitle(const wxString& title)
 
 void wxDataViewColumn::SetWidth(int width)
 {
-    m_width = width;
+     m_width = width;
 
     if ( !GetOwner() )
     {
         // can't set the real width yet
         return;
     }
-
+    wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl *>( GetOwner()->GetPeer() );
     switch ( width )
     {
         case wxCOL_WIDTH_AUTOSIZE:
             {
-                wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl*>(GetOwner()->GetPeer());
-                peer->FitColumnWidthToContent(GetOwner()->GetColumnPosition(this));
                 break;
             }
 
