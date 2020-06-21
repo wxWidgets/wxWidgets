@@ -9765,7 +9765,16 @@ void wxGrid::DoSetColSize( int col, int width )
         return;
 
     if ( m_useNativeHeader )
-        GetGridColHeader()->UpdateColumn(col);
+    {
+        // We have to update the native control if we're called from the
+        // program (directly or indirectly, e.g. via AutoSizeColumn()), but we
+        // want to avoid doing it when the column is being resized
+        // interactively, as this is unnecessary and results in very visible
+        // flicker, so take care to call the special method of our header
+        // control checking for whether it's being resized interactively
+        // instead of the usual UpdateColumn().
+        static_cast<wxGridHeaderCtrl*>(m_colLabelWin)->UpdateIfNotResizing(col);
+    }
     //else: will be refreshed when the header is redrawn
 
     for ( int colPos = GetColPos(col); colPos < m_numCols; colPos++ )
