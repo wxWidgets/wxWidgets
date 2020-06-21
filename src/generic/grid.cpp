@@ -3015,22 +3015,17 @@ void wxGrid::CalcDimensions()
     // take into account editor if shown
     if ( IsCellEditControlShown() )
     {
-        int w2, h2;
         int r = m_currentCellCoords.GetRow();
         int c = m_currentCellCoords.GetCol();
-        int x = GetColLeft(c);
-        int y = GetRowTop(r);
 
         // how big is the editor
         wxGridCellAttrPtr attr = GetCellAttrPtr(r, c);
         wxGridCellEditorPtr editor = attr->GetEditorPtr(this, r, c);
-        editor->GetWindow()->GetSize(&w2, &h2);
-        w2 += x;
-        h2 += y;
-        if ( w2 > w )
-            w = w2;
-        if ( h2 > h )
-            h = h2;
+        const wxRect rect = editor->GetWindow()->GetRect();
+        if ( rect.GetRight() > w )
+            w = rect.GetRight();
+        if ( rect.GetBottom() > h )
+            h = rect.GetBottom();
     }
 
     wxPoint offset = GetGridWindowOffset(m_gridWin);
@@ -7284,10 +7279,6 @@ void wxGrid::ShowCellEditControl()
             // convert to scrolled coords
             CalcGridWindowScrolledPosition( rect.x, rect.y, &rect.x, &rect.y, gridWindow );
 
-            int nXMove = 0;
-            if (rect.x < 0)
-                nXMove = rect.x;
-
 #ifdef __WXQT__
             // Substract 1 pixel in every dimension to fit in the cell area.
             // If not, Qt will draw the control outside the cell.
@@ -7336,10 +7327,6 @@ void wxGrid::ShowCellEditControl()
                     maxWidth = rect.width;
             }
 
-            int client_right = gridWindow->GetClientSize().GetWidth();
-            if (rect.x + maxWidth > client_right)
-                maxWidth = client_right - rect.x;
-
             if ((maxWidth > rect.width) && (col < m_numCols) && m_table)
             {
                 GetCellSize( row, col, &cell_rows, &cell_cols );
@@ -7358,17 +7345,35 @@ void wxGrid::ShowCellEditControl()
                     else
                         break;
                 }
-
-                if (rect.GetRight() > client_right)
-                    rect.SetRight( client_right - 1 );
             }
 
             editor->SetCellAttr( attr.get() );
             editor->SetSize( rect );
-            if (nXMove != 0)
-                editor->GetWindow()->Move(
-                    editor->GetWindow()->GetPosition().x + nXMove,
-                    editor->GetWindow()->GetPosition().y );
+
+            // Note that the actual rectangle used by the editor could be
+            // different from the one we proposed.
+            rect = editor->GetWindow()->GetRect();
+
+            // Ensure that the edit control fits into the visible part of the
+            // window by shifting it if necessary: we don't want to truncate
+            // any part of it by trying to position it too far to the left or
+            // top and we definitely don't want to start showing scrollbars by
+            // positioning it too far to the right or bottom.
+            const wxSize sizeMax = gridWindow->GetClientSize();
+            if ( !wxRect(sizeMax).Contains(rect) )
+            {
+                if ( rect.x < 0 )
+                    rect.x = 0;
+                if ( rect.y < 0 )
+                    rect.y = 0;
+                if ( rect.x > sizeMax.x - rect.width )
+                    rect.x = sizeMax.x - rect.width;
+                if ( rect.y > sizeMax.y - rect.height )
+                    rect.y = sizeMax.y - rect.height;
+
+                editor->GetWindow()->Move(rect.x, rect.y);
+            }
+
             editor->Show( true, attr.get() );
 
             // recalc dimensions in case we need to
