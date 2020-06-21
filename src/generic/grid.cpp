@@ -4577,8 +4577,20 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
             MakeCellVisible(coords);
         }
     }
-    else if ( XToEdgeOfCol(pos.x) < 0 && YToEdgeOfRow(pos.y) < 0 )
+    else
     {
+        // Clicking on (or very near) the separating lines shouldn't change the
+        // selection when it's used for resizing -- but should still do it if
+        // resizing is disabled (notice that we intentionally don't check for
+        // it being disabled for a particular row/column as it would be
+        // surprising to have different mouse behaviour in different parts of
+        // the same grid, so we only check for it being globally disabled).
+        if ( CanDragGridColEdges() && XToEdgeOfCol(pos.x) != wxNOT_FOUND )
+            return;
+
+        if ( CanDragGridRowEdges() && YToEdgeOfRow(pos.y) != wxNOT_FOUND )
+            return;
+
         DisableCellEditControl();
         MakeCellVisible( coords );
 
@@ -4718,7 +4730,7 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
         return;
     }
 
-    if ( dragRow >= 0 && CanDragGridSize() && CanDragRowSize(dragRow) )
+    if ( dragRow >= 0 && CanDragGridRowEdges() && CanDragRowSize(dragRow) )
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
@@ -4726,11 +4738,7 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
         }
     }
-    // When using the native header window we can only resize the columns by
-    // dragging the dividers in it because we can't make it enter into the
-    // column resizing mode programmatically
-    else if ( dragCol >= 0 && !m_useNativeHeader &&
-                CanDragGridSize() && CanDragColSize(dragCol) )
+    else if ( dragCol >= 0 && CanDragGridColEdges() && CanDragColSize(dragCol) )
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
