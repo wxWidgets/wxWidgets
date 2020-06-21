@@ -153,10 +153,6 @@ set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/power.mm
 )
 
-set(BASE_AND_GUI_OSX_IPHONE_SRC
-    src/osx/iphone/utils.mm
-)
-
 set(BASE_OSX_NOTWXMAC_SRC
     ${BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC}
     ${BASE_COREFOUNDATION_SRC}
@@ -2573,7 +2569,6 @@ set(OSX_IPHONE_SRC
 
 set(OSX_IPHONE_HDR
     wx/osx/iphone/chkconf.h
-    wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
     wx/osx/sound.h
@@ -3046,8 +3041,13 @@ set(OPENGL_GTK_HDR
     wx/unix/glx11.h
 )
 
-set(OPENGL_OSX_SHARED_SRC
+set(OPENGL_OSX_COCOA_SRC
     src/osx/cocoa/glcanvas.mm
+    src/osx/glcanvas_osx.cpp
+)
+
+set(OPENGL_OSX_IPHONE_SRC
+    src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
 )
 

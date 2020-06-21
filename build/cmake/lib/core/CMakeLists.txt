@@ -47,6 +47,9 @@ elseif(WXOSX_COCOA)
     wx_append_sources(CORE_SRC OSX_LOWLEVEL)
     wx_append_sources(CORE_SRC OSX_SHARED)
     wx_append_sources(CORE_SRC OSX_COCOA)
+elseif(WXOSX_IPHONE)
+    wx_append_sources(CORE_SRC OSX_LOWLEVEL)
+    wx_append_sources(CORE_SRC OSX_IPHONE)
 elseif(WXQT)
     wx_append_sources(CORE_SRC QT)
     if(WIN32)
@@ -75,6 +78,15 @@ if(WXOSX_COCOA)
     if(wxUSE_WEBKIT)
         wx_lib_link_libraries(wxcore PUBLIC "-framework WebKit")
     endif()
+endif()
+if(WXOSX_IPHONE)
+    wx_lib_link_libraries(wxcore
+        PUBLIC
+        "-framework AudioToolbox"
+        "-framework CoreGraphics"
+        "-framework CoreText"
+        "-framework UIKit"
+        )
 endif()
 if(WXGTK AND wxUSE_PRIVATE_FONTS)
     wx_lib_include_directories(wxcore PUBLIC ${FONTCONFIG_INCLUDE_DIRS} ${PANGOFT2_INCLUDE_DIRS})

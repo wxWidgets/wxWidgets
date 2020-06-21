@@ -226,10 +226,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/utils.mm
 </set>
 
-<set var="BASE_AND_GUI_OSX_IPHONE_SRC" hints="files">
-    src/osx/iphone/utils.mm
-</set>
-
 <!-- Base files used by non-wxMac OS X builds -->
 <set var="BASE_OSX_NOTWXMAC_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
@@ -2703,7 +2699,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_IPHONE_HDR" hints="files">
     wx/osx/iphone/chkconf.h
-    wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
     wx/osx/sound.h
