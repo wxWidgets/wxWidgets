@@ -22,6 +22,7 @@ class ListBoxImpl : public ListBox {
 private:
     wxSTCListBox*           m_listBox;
     wxSTCListBoxVisualData* m_visualData;
+    int                     m_technology;
 
 public:
     ListBoxImpl();

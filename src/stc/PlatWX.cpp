@@ -2624,7 +2624,7 @@ public:
     void SetContainerBorderSize(int);
 
     // ListBoxImpl implementation
-    void SetListBoxFont(Font &font);
+    void SetListBoxFont(wxFont &font);
     void SetAverageCharWidth(int width);
     PRectangle GetDesiredRect() const;
     int CaretFromEdge() const;
@@ -2736,9 +2736,9 @@ void wxSTCListBox::SetContainerBorderSize(int s)
     m_borderSize = s;
 }
 
-void wxSTCListBox::SetListBoxFont(Font &font)
+void wxSTCListBox::SetListBoxFont(wxFont &font)
 {
-    SetFont(*((wxFont*)font.GetID()));
+    SetFont(font);
     int w;
     GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
     RecalculateItemHeight();
@@ -3155,7 +3155,9 @@ void wxSTCListBoxWin::OnPaint(wxPaintEvent& WXUNUSED(evt))
 //----------------------------------------------------------------------
 
 ListBoxImpl::ListBoxImpl()
-            :m_listBox(NULL), m_visualData(new wxSTCListBoxVisualData(5))
+    : m_listBox(NULL)
+    , m_visualData(new wxSTCListBoxVisualData(5))
+    , m_technology(wxSTC_TECHNOLOGY_DEFAULT)
 {
 }
 
@@ -3164,17 +3166,27 @@ ListBoxImpl::~ListBoxImpl() {
 }
 
 
-void ListBoxImpl::SetFont(Font &font) {
-    m_listBox->SetListBoxFont(font);
+void ListBoxImpl::SetFont(Font& font)
+{
+    wxFont newFont(*static_cast<wxFont*>(font.GetID()));
+    if ( m_technology == wxSTC_TECHNOLOGY_DIRECTWRITE )
+    {
+        // Convert the D2D DPI-dependent point size (based on SurfaceD2D::DeviceHeightFont)
+        // to the DPI independent point size.
+        newFont.SetPointSize(wxMulDivInt32(newFont.GetPointSize(), 72, m_listBox->GetParent()->GetDPI().y));
+    }
+    m_listBox->SetListBoxFont(newFont);
 }
 
 
 void ListBoxImpl::Create(Window &parent, int WXUNUSED(ctrlID),
                          Point WXUNUSED(location_), int lineHeight_,
                          bool WXUNUSED(unicodeMode_),
-                         int WXUNUSED(technology_)) {
+                         int technology)
+{
     wid = new wxSTCListBoxWin(GETWIN(parent.GetID()), &m_listBox, m_visualData,
                               lineHeight_);
+    m_technology = technology;
 }
 
 
