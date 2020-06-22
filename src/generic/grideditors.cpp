@@ -1800,7 +1800,7 @@ void wxGridCellDateEditor::SetSize(const wxRect& r)
         rect.SetWidth(wxMin(r.GetWidth(), 2*bestSize.GetWidth()));
     }
 
-    wxGridCellEditor::SetSize(rect);
+    wxGridCellEditor::SetSize(rect.CenterIn(r, wxVERTICAL));
 }
 
 void wxGridCellDateEditor::BeginEdit(int row, int col, wxGrid* grid)
