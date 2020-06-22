@@ -426,14 +426,6 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
 
-void wxGridCellTextEditor::PaintBackground(wxDC& WXUNUSED(dc),
-                                           const wxRect& WXUNUSED(rectCell),
-                                           const wxGridCellAttr& WXUNUSED(attr))
-{
-    // as we fill the entire client area,
-    // don't do anything here to minimize flicker
-}
-
 void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
 {
     wxRect rect(rectOrig);

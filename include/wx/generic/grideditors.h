@@ -60,10 +60,6 @@ public:
                         wxEvtHandler* evtHandler) wxOVERRIDE;
     virtual void SetSize(const wxRect& rect) wxOVERRIDE;
 
-    virtual void PaintBackground(wxDC& dc,
-                                 const wxRect& rectCell,
-                                 const wxGridCellAttr& attr) wxOVERRIDE;
-
     virtual bool IsAcceptedKey(wxKeyEvent& event) wxOVERRIDE;
     virtual void BeginEdit(int row, int col, wxGrid* grid) wxOVERRIDE;
     virtual bool EndEdit(int row, int col, const wxGrid* grid,

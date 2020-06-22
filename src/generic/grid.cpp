@@ -7265,15 +7265,6 @@ void wxGrid::ShowCellEditControl()
                 m_currentCellCoords.SetCol( col );
             }
 
-            // erase the highlight and the cell contents because the editor
-            // might not cover the entire cell
-            wxClientDC dc( gridWindow );
-            PrepareDCFor(dc, gridWindow);
-            wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-            dc.SetBrush(wxBrush(attr->GetBackgroundColour()));
-            dc.SetPen(*wxTRANSPARENT_PEN);
-            dc.DrawRectangle(rect);
-
             rect.Offset(-GetGridWindowOffset(gridWindow));
 
             // convert to scrolled coords
@@ -7286,6 +7277,7 @@ void wxGrid::ShowCellEditControl()
             rect.Deflate(1, 1);
 #endif
 
+            wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
             wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
             if ( !editor->IsCreated() )
             {
