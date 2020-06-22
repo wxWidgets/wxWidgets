@@ -1972,3 +1972,4 @@ public:
     */
     void SetWidth(int width);
 };
+

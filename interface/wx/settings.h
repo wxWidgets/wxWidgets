@@ -389,3 +389,4 @@ public:
     */
     static bool HasFeature(wxSystemFeature index);
 };
+
