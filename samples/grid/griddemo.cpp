@@ -565,6 +565,8 @@ GridFrame::GridFrame()
     grid->SetCellValue(0, 9, "Integer\ncolumn");
     grid->SetCellValue(1, 9, "17");
     grid->SetCellValue(2, 9, "0");
+    grid->SetCellEditor(2, 9, new wxGridCellNumberEditor(0, 100));
+    grid->SetCellValue(2, 10, "<- This cell uses [0, 100] range");
     grid->SetCellValue(3, 9, "-666");
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
