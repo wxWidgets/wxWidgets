@@ -1793,11 +1793,12 @@ void wxGridCellDateEditor::SetSize(const wxRect& r)
 
     wxRect rect(r.GetPosition(), bestSize);
 
-    // Allow edit picker to become a bit wider, if necessary, but no more than
-    // twice as wide as the best width, otherwise they just look ugly.
-    if ( r.GetWidth() > bestSize.GetWidth() )
+    // Allow date picker to become a bit wider, if necessary, but not too wide,
+    // otherwise it just looks ugly.
+    if ( r.GetWidth() > bestSize.GetWidth()
+            && r.GetWidth() < 3*bestSize.GetWidth()/2 )
     {
-        rect.SetWidth(wxMin(r.GetWidth(), 2*bestSize.GetWidth()));
+        rect.SetWidth(r.GetWidth());
     }
 
     wxGridCellEditor::SetSize(rect.CenterIn(r, wxVERTICAL));
