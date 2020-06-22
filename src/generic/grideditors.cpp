@@ -1447,12 +1447,16 @@ void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellChoiceEditor must be created first!"));
 
-    // Check that the rectangle is big enough to fit the combobox, we can't
-    // afford truncating it.
-    wxSize size = rect.GetSize();
-    size.IncTo(m_control->GetBestSize());
+    // Use normal wxChoice size, except for extending it to fill the cell
+    // width: we can't be smaller because this could make the control unusable
+    // and we don't want to be taller because this looks unusual and weird.
+    wxSize size = m_control->GetBestSize();
+    if ( size.x < rect.width )
+        size.x = rect.width;
 
-    wxGridCellEditor::SetSize(wxRect(size).CentreIn(rect));
+    wxRect rectChoice(rect.GetPosition(), size);
+
+    wxGridCellEditor::SetSize(rectChoice.CenterIn(rect, wxVERTICAL));
 }
 
 void wxGridCellChoiceEditor::PaintBackground(wxDC& dc,
