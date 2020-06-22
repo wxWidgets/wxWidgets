@@ -78,14 +78,14 @@ enum wxSystemColour
     wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
 
     /**
-        Right side colour in the color gradient of an active window's title bar.
-        @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an active window's title
+        bar. @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
 
     /**
-        Right side colour in the color gradient of an inactive window's title bar.
-        @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an inactive window's title
+        bar. @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
 
@@ -97,7 +97,7 @@ enum wxSystemColour
 
     /**
         The background colour for the menu bar when menus appear as flat menus.
-        However, @c wxSYS_COLOUR_MENU continues to specify the background color of the menu popup.
+        However, @c wxSYS_COLOUR_MENU continues to specify the background colour of the menu popup.
     */
     wxSYS_COLOUR_MENUBAR,
 
