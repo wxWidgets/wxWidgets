@@ -265,7 +265,7 @@ public:
     /**
         Returns the default filename.
 
-        @note This function should not be used with dialogs which have the @c wxFD_MULTIPLE style,
+        @note This function can't be used with dialogs which have the @c wxFD_MULTIPLE style,
               use GetFilenames() instead.
     */
     virtual wxString GetFilename() const;
@@ -302,7 +302,7 @@ public:
     /**
         Returns the full path (directory and filename) of the selected file.
 
-        @note This function should not be used with dialogs which have the @c wxFD_MULTIPLE style,
+        @note This function can't be used with dialogs which have the @c wxFD_MULTIPLE style,
               use GetPaths() instead.
     */
     virtual wxString GetPath() const;

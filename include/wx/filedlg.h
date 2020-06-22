@@ -106,7 +106,7 @@ public:
     virtual wxString GetMessage() const { return m_message; }
     virtual wxString GetPath() const
     {
-        wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetPath called when wxFD_MULTIPLE defined") );
+        wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
         return m_path;
     }
 
@@ -114,7 +114,7 @@ public:
     virtual wxString GetDirectory() const { return m_dir; }
     virtual wxString GetFilename() const
     {
-        wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetFilename called when wxFD_MULTIPLE defined") );
+        wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
         return m_fileName;
     }
     virtual void GetFilenames(wxArrayString& files) const { files.Empty(); files.Add(m_fileName); }

@@ -74,7 +74,7 @@ public:
 
     virtual wxString GetPath() const wxOVERRIDE
         {
-            wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetPath called when wxFD_MULTIPLE defined") );
+            wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
             return m_filectrl->GetPath();
         }
     virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE
@@ -83,7 +83,7 @@ public:
         { return m_filectrl->GetDirectory(); }
     virtual wxString GetFilename() const wxOVERRIDE
         {
-            wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxEmptyString, wxT("GetFilename called when wxFD_MULTIPLE defined") );
+            wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
             return m_filectrl->GetFilename();
         }
     virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE
