@@ -705,20 +705,7 @@ void wxGridCellNumberEditor::SetSize(const wxRect& rectCell)
 
         wxRect rectSpin(rectCell.GetPosition(), size);
 
-        // If possible, i.e. if we're not editing the topmost or leftmost cell,
-        // center the control rectangle in the cell.
-        if ( rectCell.GetTop() > 0 )
-        {
-            rectSpin.SetTop(rectCell.GetTop() -
-                            (rectSpin.GetHeight() - rectCell.GetHeight()) / 2);
-        }
-        if ( rectCell.GetLeft() > 0 )
-        {
-            rectSpin.SetLeft(rectCell.GetLeft() -
-                             (rectSpin.GetWidth() - rectCell.GetWidth()) / 2);
-        }
-
-        wxGridCellEditor::SetSize(rectSpin);
+        wxGridCellEditor::SetSize(rectSpin.CenterIn(rectCell, wxVERTICAL));
     }
     else
 #endif // wxUSE_SPINCTRL
