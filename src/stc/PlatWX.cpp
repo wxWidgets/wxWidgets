@@ -2330,6 +2330,8 @@ public:
 
     // Image data
     const wxBitmap* GetImage(int i) const;
+    int GetImageAreaWidth() const;
+    int GetImageAreaHeight() const;
 
     // Colour data
     void ComputeColours();
@@ -2358,6 +2360,8 @@ private:
 
     int      m_desiredVisibleRows;
     ImgList  m_imgList;
+    int      m_imageAreaWidth;
+    int      m_imageAreaHeight;
 
     wxColour m_borderColour;
     wxColour m_bgColour;
@@ -2381,6 +2385,7 @@ private:
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
+                        m_imageAreaWidth(0), m_imageAreaHeight(0),
                         m_useDefaultBgColour(true),
                         m_useDefaultTextColour(true),
                         m_useDefaultHighlightBgColour(true),
@@ -2414,10 +2419,40 @@ void wxSTCListBoxVisualData::RegisterImage(int type, const wxBitmap& bmp)
         return;
 
     ImgList::iterator it=m_imgList.find(type);
+    bool preExisting = false;
     if ( it != m_imgList.end() )
+    {
         m_imgList.erase(it);
+        preExisting = true;
+    }
 
     m_imgList[type] = bmp;
+
+    if ( preExisting )
+    {
+        m_imageAreaWidth = 0;
+        m_imageAreaHeight = 0;
+
+        for ( ImgList::iterator it = m_imgList.begin() ; it != m_imgList.end() ; ++it )
+        {
+            wxBitmap bmp = it->second;
+
+            if ( bmp.GetWidth() > m_imageAreaWidth )
+            {
+                m_imageAreaWidth = bmp.GetWidth();
+            }
+
+            if ( bmp.GetHeight() > m_imageAreaHeight )
+            {
+                m_imageAreaHeight = bmp.GetHeight();
+            }
+        }
+    }
+    else
+    {
+        m_imageAreaWidth = wxMax(m_imageAreaWidth, bmp.GetWidth());
+        m_imageAreaHeight = wxMax(m_imageAreaHeight, bmp.GetHeight());
+    }
 }
 
 void wxSTCListBoxVisualData::RegisterImage(int type, const char *xpm_data)
@@ -2451,6 +2486,8 @@ void wxSTCListBoxVisualData::RegisterRGBAImage(int type, int width, int height,
 void wxSTCListBoxVisualData::ClearRegisteredImages()
 {
     m_imgList.clear();
+    m_imageAreaWidth = 0;
+    m_imageAreaHeight = 0;
 }
 
 const wxBitmap* wxSTCListBoxVisualData::GetImage(int i) const
@@ -2461,6 +2498,16 @@ const wxBitmap* wxSTCListBoxVisualData::GetImage(int i) const
         return &(it->second);
     else
         return NULL;
+}
+
+int wxSTCListBoxVisualData::GetImageAreaWidth() const
+{
+    return m_imageAreaWidth;
+}
+
+int wxSTCListBoxVisualData::GetImageAreaHeight() const
+{
+    return m_imageAreaHeight;
 }
 
 void wxSTCListBoxVisualData::ComputeColours()
@@ -2640,7 +2687,6 @@ protected:
     // Helpers
     void AppendHelper(const wxString& text, int type);
     void SelectHelper(int i);
-    void AccountForBitmap(int type, bool recalculateItemHeight);
     void RecalculateItemHeight();
     int TextBoxFromClientEdge() const;
 
@@ -2658,8 +2704,6 @@ protected:
     virtual void OnDrawBackground(wxDC&, const wxRect&,size_t) const wxOVERRIDE;
 
 private:
-    WX_DECLARE_HASH_SET(int, wxIntegerHash, wxIntegerEqual, SetOfInts);
-
     wxSTCListBoxVisualData* m_visualData;
     wxVector<wxString>      m_labels;
     wxVector<int>           m_imageNos;
@@ -2675,8 +2719,6 @@ private:
     int m_textHeight;
     int m_itemHeight;
     int m_textTopGap;
-    int m_imageAreaWidth;
-    int m_imageAreaHeight;
 
     // These drawing parameters are set internally and can be changed if needed
     // to better match the appearance of a list box on a specific platform.
@@ -2690,7 +2732,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
               m_visualData(v), m_maxStrWidth(0), m_currentRow(wxNOT_FOUND),
               m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
               m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
-              m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0)
+              m_textTopGap(0)
 {
     wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                        wxBORDER_NONE, "AutoCompListBox");
@@ -2796,8 +2838,6 @@ int wxSTCListBox::CaretFromEdge() const
 
 void wxSTCListBox::Clear()
 {
-    m_imageAreaWidth = 0;
-    m_imageAreaHeight = 0;
     m_labels.clear();
     m_imageNos.clear();
 }
@@ -2805,7 +2845,7 @@ void wxSTCListBox::Clear()
 void wxSTCListBox::Append(char *s, int type)
 {
     AppendHelper(stc2wx(s), type);
-    AccountForBitmap(type, true);
+    RecalculateItemHeight();
 }
 
 int wxSTCListBox::Length() const
@@ -2835,7 +2875,6 @@ void wxSTCListBox::SetList(const char* list, char separator, char typesep)
 {
     wxWindowUpdateLocker noUpdates(this);
     Clear();
-    SetOfInts bitmapNos;
     wxStringTokenizer tkzr(stc2wx(list), (wxChar)separator);
     while ( tkzr.HasMoreTokens() ) {
         wxString token = tkzr.GetNextToken();
@@ -2846,14 +2885,9 @@ void wxSTCListBox::SetList(const char* list, char separator, char typesep)
             token.Truncate(pos);
         }
         AppendHelper(token, (int)type);
-        bitmapNos.insert(static_cast<int>(type));
     }
 
-    for ( SetOfInts::iterator it=bitmapNos.begin(); it!=bitmapNos.end(); ++it )
-        AccountForBitmap(*it, false);
-
-    if ( m_imageAreaHeight > 0 )
-        RecalculateItemHeight();
+    RecalculateItemHeight();
 }
 
 void wxSTCListBox::AppendHelper(const wxString& text, int type)
@@ -2895,34 +2929,17 @@ void wxSTCListBox::SelectHelper(int i)
     }
 }
 
-void wxSTCListBox::AccountForBitmap(int type, bool recalculateItemHeight)
-{
-    const int oldHeight = m_imageAreaHeight;
-    const wxBitmap* bmp = m_visualData->GetImage(type);
-
-    if ( bmp )
-    {
-        if ( bmp->GetWidth() > m_imageAreaWidth )
-            m_imageAreaWidth = bmp->GetWidth();
-
-        if ( bmp->GetHeight() > m_imageAreaHeight )
-            m_imageAreaHeight = bmp->GetHeight();
-    }
-
-    if ( recalculateItemHeight && m_imageAreaHeight != oldHeight )
-        RecalculateItemHeight();
-}
-
 void wxSTCListBox::RecalculateItemHeight()
 {
     m_itemHeight = wxMax(m_textHeight + 2 * m_textExtraVerticalPadding,
-                         m_imageAreaHeight + 2 * m_imagePadding);
+                       m_visualData->GetImageAreaHeight() + 2 * m_imagePadding);
     m_textTopGap = (m_itemHeight - m_textHeight)/2;
 }
 
 int wxSTCListBox::TextBoxFromClientEdge() const
 {
-    return (m_imageAreaWidth == 0 ? 0 : m_imageAreaWidth + 2 * m_imagePadding);
+    const int width = m_visualData->GetImageAreaWidth();
+    return (width == 0 ? 0 : width + 2 * m_imagePadding);
 }
 
 void wxSTCListBox::OnSelection(wxCommandEvent& event)
@@ -2993,7 +3010,7 @@ wxCoord wxSTCListBox::OnMeasureItem(size_t WXUNUSED(n)) const
 //
 //    +++++++++++++++++++++++++   =====ITEM TEXT================
 //  |         |                 |    |
-//  |       m_imageAreaWidth    |    |
+//  |       imageAreaWidth      |    |
 //  |                           |    |
 // m_imagePadding               |   m_textBoxToTextGap
 //                              |
@@ -3002,8 +3019,8 @@ wxCoord wxSTCListBox::OnMeasureItem(size_t WXUNUSED(n)) const
 //
 // m_imagePadding            : Used to give a little extra space between the
 //                             client edge and an item's bitmap.
-// m_imageAreaWidth          : Computed as the width of the largest registered
-//                             bitmap.
+// imageAreaWidth            : Computed as the width of the largest registered
+//                             bitmap (part of wxSTCListBoxVisualData).
 // m_textBoxToTextGap        : Used so that item text does not begin immediately
 //                             at the edge of the highlight box.
 //
@@ -3042,8 +3059,9 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     const wxBitmap* b = m_visualData->GetImage(imageNo);
     if ( b )
     {
+        const int width = m_visualData->GetImageAreaWidth();
         topGap = (m_itemHeight - b->GetHeight())/2;
-        leftGap = m_imagePadding + (m_imageAreaWidth - b->GetWidth())/2;
+        leftGap = m_imagePadding + (width - b->GetWidth())/2;
         dc.DrawBitmap(*b, rect.GetLeft()+leftGap, rect.GetTop()+topGap, true);
     }
 }
