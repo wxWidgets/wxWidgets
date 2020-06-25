@@ -2360,8 +2360,7 @@ private:
 
     int      m_desiredVisibleRows;
     ImgList  m_imgList;
-    int      m_imageAreaWidth;
-    int      m_imageAreaHeight;
+    wxSize   m_imgAreaSize;
 
     wxColour m_borderColour;
     wxColour m_bgColour;
@@ -2385,8 +2384,7 @@ private:
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
-                        m_imageAreaWidth(0), m_imageAreaHeight(0),
-                        m_useDefaultBgColour(true),
+                        m_imgAreaSize(0,0), m_useDefaultBgColour(true),
                         m_useDefaultTextColour(true),
                         m_useDefaultHighlightBgColour(true),
                         m_useDefaultHighlightTextColour(true),
@@ -2419,39 +2417,32 @@ void wxSTCListBoxVisualData::RegisterImage(int type, const wxBitmap& bmp)
         return;
 
     ImgList::iterator it=m_imgList.find(type);
-    bool preExisting = false;
+    bool preExistingWithDifferentSize = false;
     if ( it != m_imgList.end() )
     {
+        if ( it->second.GetSize() != bmp.GetSize() )
+        {
+            preExistingWithDifferentSize = true;
+        }
+
         m_imgList.erase(it);
-        preExisting = true;
     }
 
     m_imgList[type] = bmp;
 
-    if ( preExisting )
+    if ( preExistingWithDifferentSize )
     {
-        m_imageAreaWidth = 0;
-        m_imageAreaHeight = 0;
+        m_imgAreaSize.Set(0,0);
 
-        for ( ImgList::iterator it = m_imgList.begin() ; it != m_imgList.end() ; ++it )
+        for ( ImgList::iterator imgIt = m_imgList.begin() ;
+              imgIt != m_imgList.end() ; ++imgIt )
         {
-            wxBitmap bmp = it->second;
-
-            if ( bmp.GetWidth() > m_imageAreaWidth )
-            {
-                m_imageAreaWidth = bmp.GetWidth();
-            }
-
-            if ( bmp.GetHeight() > m_imageAreaHeight )
-            {
-                m_imageAreaHeight = bmp.GetHeight();
-            }
+            m_imgAreaSize.IncTo(it->second.GetSize());
         }
     }
     else
     {
-        m_imageAreaWidth = wxMax(m_imageAreaWidth, bmp.GetWidth());
-        m_imageAreaHeight = wxMax(m_imageAreaHeight, bmp.GetHeight());
+        m_imgAreaSize.IncTo(bmp.GetSize());
     }
 }
 
@@ -2486,8 +2477,7 @@ void wxSTCListBoxVisualData::RegisterRGBAImage(int type, int width, int height,
 void wxSTCListBoxVisualData::ClearRegisteredImages()
 {
     m_imgList.clear();
-    m_imageAreaWidth = 0;
-    m_imageAreaHeight = 0;
+    m_imgAreaSize.Set(0,0);
 }
 
 const wxBitmap* wxSTCListBoxVisualData::GetImage(int i) const
@@ -2502,12 +2492,12 @@ const wxBitmap* wxSTCListBoxVisualData::GetImage(int i) const
 
 int wxSTCListBoxVisualData::GetImageAreaWidth() const
 {
-    return m_imageAreaWidth;
+    return m_imgAreaSize.GetWidth();
 }
 
 int wxSTCListBoxVisualData::GetImageAreaHeight() const
 {
-    return m_imageAreaHeight;
+    return m_imgAreaSize.GetHeight();
 }
 
 void wxSTCListBoxVisualData::ComputeColours()
@@ -2729,7 +2719,9 @@ private:
 
     // These are needed when Direct2D is used for drawing.
     int m_technology;
-    void* m_surfaceFontData;
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
+    SurfaceFontDataD2D* m_surfaceFontData;
+#endif
 };
 
 wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v,
@@ -2738,7 +2730,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v,
               m_visualData(v), m_maxStrWidth(0), m_currentRow(wxNOT_FOUND),
               m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
               m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
-              m_textTopGap(0), m_technology(technology), m_surfaceFontData(NULL)
+              m_textTopGap(0), m_technology(technology)
 {
     wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                        wxBORDER_NONE, "AutoCompListBox");
@@ -2767,6 +2759,10 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v,
             parent->SetOwnBackgroundColour(m_visualData->GetBgColour());
         #endif
     }
+
+    #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
+        m_surfaceFontData = NULL;
+    #endif
 }
 
 wxSTCListBox::~wxSTCListBox()
@@ -2774,9 +2770,7 @@ wxSTCListBox::~wxSTCListBox()
 #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
     if ( m_surfaceFontData )
     {
-        SurfaceFontDataD2D* fontData =
-            reinterpret_cast<SurfaceFontDataD2D*>(m_surfaceFontData);
-        delete fontData;
+        delete m_surfaceFontData;
     }
 #endif
 }
@@ -2798,13 +2792,7 @@ void wxSTCListBox::SetContainerBorderSize(int s)
 
 void wxSTCListBox::SetListBoxFont(Font &font)
 {
-    if ( m_technology == wxSTC_TECHNOLOGY_DEFAULT )
-    {
-        SetFont(*((wxFont*)font.GetID()));
-        int w;
-        GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
-    }
-    else
+    if ( m_technology == wxSTC_TECHNOLOGY_DIRECTWRITE )
     {
     #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
         wxFontWithAscent* fwa = wxFontWithAscent::FromFID(font.GetID());
@@ -2813,19 +2801,18 @@ void wxSTCListBox::SetListBoxFont(Font &font)
         SurfaceFontDataD2D* d2dft = static_cast<SurfaceFontDataD2D*>(data);
         m_surfaceFontData = new SurfaceFontDataD2D(*d2dft);
 
-        wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
-        SurfaceFontDataD2D* newSurfaceData = new SurfaceFontDataD2D(*d2dft);
-        fontCopy->SetSurfaceFontData(newSurfaceData);
-        Font tempFont;
-        tempFont.SetID(fontCopy);
-
         SurfaceD2D surface;
         wxClientDC dc(this);
         surface.Init(&dc,GetGrandParent());
-        m_textHeight = surface.Height(tempFont);
-        tempFont.Release();
+        m_textHeight = surface.Height(font);
         surface.Release();
     #endif
+    }
+    else
+    {
+        SetFont(*((wxFont*)font.GetID()));
+        int w;
+        GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
     }
 
     RecalculateItemHeight();
@@ -3097,15 +3084,7 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     else
         textCol = m_visualData->GetTextColour();
 
-    if ( m_technology == wxSTC_TECHNOLOGY_DEFAULT )
-    {
-        wxDCTextColourChanger tcc(dc, textCol);
-
-        label = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
-                                     rect.GetWidth() - leftGap);
-        dc.DrawText(label, rect.GetLeft() + leftGap, rect.GetTop() + topGap);
-    }
-    else
+    if ( m_technology == wxSTC_TECHNOLOGY_DIRECTWRITE )
     {
     #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
         SurfaceD2D surface;
@@ -3113,10 +3092,9 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 
         wxString ellipsizedLabel = label;
 
-        SurfaceFontDataD2D* fontData =
-            reinterpret_cast<SurfaceFontDataD2D*>(m_surfaceFontData);
         wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
-        SurfaceFontDataD2D* newSurfaceData = new SurfaceFontDataD2D(*fontData);
+        SurfaceFontDataD2D* newSurfaceData =
+            new SurfaceFontDataD2D(*m_surfaceFontData);
         fontCopy->SetSurfaceFontData(newSurfaceData);
         Font tempFont;
         tempFont.SetID(fontCopy);
@@ -3153,13 +3131,21 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
         PRectangle prect = PRectangleFromwxRect(rect2);
         ColourDesired fore(textCol.Red(), textCol.Green(), textCol.Blue());
 
-        XYPOSITION ybase = rect2.GetTop() + fontData->GetAscent();
+        XYPOSITION ybase = rect2.GetTop() + m_surfaceFontData->GetAscent();
 
         surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
                                     wx2stclen(wxString(),buffer), fore);
         tempFont.Release();
         surface.Release();
     #endif // HAVE_DIRECTWRITE_TECHNOLOGY
+    }
+    else
+    {
+        wxDCTextColourChanger tcc(dc, textCol);
+
+        label = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
+                                     rect.GetWidth() - leftGap);
+        dc.DrawText(label, rect.GetLeft() + leftGap, rect.GetTop() + topGap);
     }
 
     const wxBitmap* b = m_visualData->GetImage(imageNo);
