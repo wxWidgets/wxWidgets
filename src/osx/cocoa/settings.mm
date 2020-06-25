@@ -48,7 +48,7 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
 
 wxString wxSystemAppearance::GetName() const
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
         return wxStringWithNSString([[NSApp effectiveAppearance] name]);
@@ -60,7 +60,7 @@ wxString wxSystemAppearance::GetName() const
 
 bool wxSystemAppearance::IsDark() const
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
         const NSAppearanceName
@@ -163,7 +163,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowBackgroundColor];
         break;
     case wxSYS_COLOUR_HOTLIGHT:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
         if ( WX_IS_MACOS_AVAILABLE(10, 14) )
         {
             sysColor = [NSColor linkColor];

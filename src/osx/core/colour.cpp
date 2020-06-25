@@ -118,7 +118,7 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     }
     else if (model != kCGColorSpaceModelRGB)
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
         if ( WX_IS_MACOS_AVAILABLE(10, 11) )
         {
             rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);

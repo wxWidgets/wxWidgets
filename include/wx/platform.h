@@ -16,7 +16,7 @@
 #ifdef __WXMAC_XCODE__
 #    include <unistd.h>
 #    include <TargetConditionals.h>
-#    include <AvailabilityMacros.h>
+#    include <Availability.h>
 #    ifndef MAC_OS_X_VERSION_10_4
 #       define MAC_OS_X_VERSION_10_4 1040
 #    endif
@@ -53,7 +53,13 @@
 #    ifndef MAC_OS_X_VERSION_10_15
 #       define MAC_OS_X_VERSION_10_15 101500
 #    endif
-#    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#    ifndef MAC_OS_X_VERSION_10_16
+#       define MAC_OS_X_VERSION_10_16 101600
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_16
+#       define MAC_OS_VERSION_11_0 110000
+#    endif
+#    if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #        ifndef NSAppKitVersionNumber10_10
 #            define NSAppKitVersionNumber10_10 1343
 #        endif
@@ -467,7 +473,7 @@
 
 #ifdef __WXOSX_MAC__
 #    if defined(__MACH__)
-#        include <AvailabilityMacros.h>
+#        include <Availability.h>
 #        ifndef MAC_OS_X_VERSION_10_4
 #           define MAC_OS_X_VERSION_10_4 1040
 #        endif
@@ -501,7 +507,16 @@
 #        ifndef MAC_OS_X_VERSION_10_14
 #           define MAC_OS_X_VERSION_10_14 101400
 #        endif
-#        if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#        ifndef MAC_OS_X_VERSION_10_15
+#           define MAC_OS_X_VERSION_10_15 101500
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_16
+#           define MAC_OS_X_VERSION_10_16 101600
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_16
+#           define MAC_OS_VERSION_11_0 110000
+#        endif
+#        if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #            ifndef NSAppKitVersionNumber10_10
 #                define NSAppKitVersionNumber10_10 1343
 #            endif

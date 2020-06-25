@@ -21,7 +21,7 @@
 #include "wx/osx/private.h"
 
 #include <WebKit/WebKit.h>
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_15
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_15
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
 #endif
@@ -30,7 +30,7 @@
 
 #define DEBUG_WEBKIT_SIZING 0
 
-#if defined(MAC_OS_X_VERSION_10_11) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11)
+#if defined(MAC_OS_X_VERSION_10_11) && (__MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11)
     #define wxWEBKIT_PROTOCOL_SINCE_10_11(proto) < proto >
 #else
     #define wxWEBKIT_PROTOCOL_SINCE_10_11(proto)

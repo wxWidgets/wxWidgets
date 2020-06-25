@@ -24,7 +24,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-#if (defined(__WXOSX_COCOA__) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10) \
+#if (defined(__WXOSX_COCOA__) && __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10) \
     || (defined(__WXOSX_IPHONE__) && defined(__IPHONE_8_0))
     #define wxHAS_NSPROCESSINFO 1
 #endif
@@ -238,7 +238,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     }
 
     NSMutableArray *params = [[NSMutableArray alloc] init];
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     if (  WX_IS_MACOS_AVAILABLE(10, 10) )
     {
         // Loop through command line arguments to the bundle,
@@ -287,7 +287,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     
     NSRunningApplication *app = nil;
     
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     if ( WX_IS_MACOS_AVAILABLE(10, 10) )
     {
         if ( [params count] > 0 )

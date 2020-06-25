@@ -118,7 +118,7 @@ void wxStatusBarMac::InitColours()
             SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
         }
     }
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+#if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
     else
     {
         // 10.9 Mavericks and older:
@@ -130,7 +130,7 @@ void wxStatusBarMac::InitColours()
         m_borderInactive = wxColour(0xA3, 0xA3, 0xA3);
         SetBackgroundColour(wxColour(0xE1, 0xE1, 0xE1)); // inactive bg
     }
-#endif // MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+#endif // __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
 }
 
 void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
