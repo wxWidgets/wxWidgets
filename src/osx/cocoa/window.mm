@@ -3504,6 +3504,11 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            if ( WX_IS_MACOS_AVAILABLE( 10, 16 ))
+                size = NSControlSizeLarge;
+            else
+#endif
             size = NSRegularControlSize;
             break ;
 
