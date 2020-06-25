@@ -4716,29 +4716,23 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
     int dragRow = YToEdgeOfRow( pos.y );
     int dragCol = XToEdgeOfCol( pos.x );
 
-    // Dragging on the corner of a cell to resize in both
-    // directions is not implemented yet...
-    //
-    if ( dragRow >= 0 && dragCol >= 0 )
-    {
-        ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
-        return;
-    }
-
-    if ( dragRow >= 0 && CanDragGridRowEdges() && CanDragRowSize(dragRow) )
-    {
-        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
-        {
-            DoStartResizeRowOrCol(dragRow);
-            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
-        }
-    }
-    else if ( dragCol >= 0 && CanDragGridColEdges() && CanDragColSize(dragCol) )
+    // Dragging on the corner of a cell to resize in both directions is not
+    // implemented, so choose to resize the column when the cursor is over the
+    // cell corner, as this is a more common operation.
+    if ( dragCol >= 0 && CanDragGridColEdges() && CanDragColSize(dragCol) )
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
             DoStartResizeRowOrCol(dragCol);
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, gridWindow, false);
+        }
+    }
+    else if ( dragRow >= 0 && CanDragGridRowEdges() && CanDragRowSize(dragRow) )
+    {
+        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+        {
+            DoStartResizeRowOrCol(dragRow);
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
         }
     }
     else // Neither on a row or col edge
