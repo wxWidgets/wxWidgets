@@ -339,6 +339,16 @@ protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellEditor();
 
+    // Helper for the derived classes positioning the control according to the
+    // attribute alignment if the desired control size is smaller than the cell
+    // size, or centering it vertically if its size is bigger: this looks like
+    // the best compromise when the editor control doesn't fit into the cell.
+    void DoPositionEditor(const wxSize& size,
+                          const wxRect& rectCell,
+                          int hAlign = wxALIGN_LEFT,
+                          int vAlign = wxALIGN_CENTRE_VERTICAL);
+
+
     // the actual window we show on screen (this variable should actually be
     // named m_window, but m_control is kept for backward compatibility)
     wxWindow*  m_control;
@@ -1675,7 +1685,27 @@ public:
     void DisableRowResize(int row) { DoDisableLineResize(row, m_setFixedRows); }
     void DisableColResize(int col) { DoDisableLineResize(col, m_setFixedCols); }
 
-        // these functions return whether the given row/column can be
+        // These function return true if resizing rows/columns by dragging
+        // their edges inside the grid is enabled. Note that this doesn't cover
+        // dragging their separators in the label windows (which can be enabled
+        // for the columns even if dragging inside the grid is not), nor checks
+        // whether a particular row/column is resizeable or not, so you should
+        // always check CanDrag{Row,Col}Size() below too.
+    bool CanDragGridRowEdges() const
+    {
+        return m_canDragGridSize && m_canDragRowSize;
+    }
+
+    bool CanDragGridColEdges() const
+    {
+        // When using the native header window we can only resize the columns by
+        // dragging the dividers in the header itself, but not by dragging them
+        // in the grid because we can't make the native control enter into the
+        // column resizing mode programmatically.
+        return m_canDragGridSize && m_canDragColSize && !m_useNativeHeader;
+    }
+
+        // These functions return whether the given row/column can be
         // effectively resized: for this interactive resizing must be enabled
         // and this index must not have been passed to DisableRow/ColResize()
     bool CanDragRowSize(int row) const

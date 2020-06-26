@@ -290,6 +290,22 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
 
                     DoRestoreLastFocus();
                 }
+                else if ( id == SC_KEYMENU )
+                {
+                    // Alt-Backspace is understood as an accelerator for "Undo"
+                    // by the native EDIT control, but pressing it results in a
+                    // beep by default when the resulting SC_KEYMENU is handled
+                    // by DefWindowProc(), so pretend to handle it ourselves if
+                    // we're editing a text control to avoid the annoying beep.
+                    if ( lParam == VK_BACK )
+                    {
+                        if ( wxWindow* const focus = FindFocus() )
+                        {
+                            if ( focus->WXGetTextEntry() )
+                                processed = true;
+                        }
+                    }
+                }
 
 #ifndef __WXUNIVERSAL__
                 // We need to generate events for the custom items added to the

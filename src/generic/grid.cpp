@@ -3015,22 +3015,17 @@ void wxGrid::CalcDimensions()
     // take into account editor if shown
     if ( IsCellEditControlShown() )
     {
-        int w2, h2;
         int r = m_currentCellCoords.GetRow();
         int c = m_currentCellCoords.GetCol();
-        int x = GetColLeft(c);
-        int y = GetRowTop(r);
 
         // how big is the editor
         wxGridCellAttrPtr attr = GetCellAttrPtr(r, c);
         wxGridCellEditorPtr editor = attr->GetEditorPtr(this, r, c);
-        editor->GetWindow()->GetSize(&w2, &h2);
-        w2 += x;
-        h2 += y;
-        if ( w2 > w )
-            w = w2;
-        if ( h2 > h )
-            h = h2;
+        const wxRect rect = editor->GetWindow()->GetRect();
+        if ( rect.GetRight() > w )
+            w = rect.GetRight();
+        if ( rect.GetBottom() > h )
+            h = rect.GetBottom();
     }
 
     wxPoint offset = GetGridWindowOffset(m_gridWin);
@@ -4577,8 +4572,20 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
             MakeCellVisible(coords);
         }
     }
-    else if ( XToEdgeOfCol(pos.x) < 0 && YToEdgeOfRow(pos.y) < 0 )
+    else
     {
+        // Clicking on (or very near) the separating lines shouldn't change the
+        // selection when it's used for resizing -- but should still do it if
+        // resizing is disabled (notice that we intentionally don't check for
+        // it being disabled for a particular row/column as it would be
+        // surprising to have different mouse behaviour in different parts of
+        // the same grid, so we only check for it being globally disabled).
+        if ( CanDragGridColEdges() && XToEdgeOfCol(pos.x) != wxNOT_FOUND )
+            return;
+
+        if ( CanDragGridRowEdges() && YToEdgeOfRow(pos.y) != wxNOT_FOUND )
+            return;
+
         DisableCellEditControl();
         MakeCellVisible( coords );
 
@@ -4709,33 +4716,23 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
     int dragRow = YToEdgeOfRow( pos.y );
     int dragCol = XToEdgeOfCol( pos.x );
 
-    // Dragging on the corner of a cell to resize in both
-    // directions is not implemented yet...
-    //
-    if ( dragRow >= 0 && dragCol >= 0 )
-    {
-        ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
-        return;
-    }
-
-    if ( dragRow >= 0 && CanDragGridSize() && CanDragRowSize(dragRow) )
-    {
-        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
-        {
-            DoStartResizeRowOrCol(dragRow);
-            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
-        }
-    }
-    // When using the native header window we can only resize the columns by
-    // dragging the dividers in it because we can't make it enter into the
-    // column resizing mode programmatically
-    else if ( dragCol >= 0 && !m_useNativeHeader &&
-                CanDragGridSize() && CanDragColSize(dragCol) )
+    // Dragging on the corner of a cell to resize in both directions is not
+    // implemented, so choose to resize the column when the cursor is over the
+    // cell corner, as this is a more common operation.
+    if ( dragCol >= 0 && CanDragGridColEdges() && CanDragColSize(dragCol) )
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
             DoStartResizeRowOrCol(dragCol);
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, gridWindow, false);
+        }
+    }
+    else if ( dragRow >= 0 && CanDragGridRowEdges() && CanDragRowSize(dragRow) )
+    {
+        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+        {
+            DoStartResizeRowOrCol(dragRow);
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
         }
     }
     else // Neither on a row or col edge
@@ -7262,23 +7259,10 @@ void wxGrid::ShowCellEditControl()
                 m_currentCellCoords.SetCol( col );
             }
 
-            // erase the highlight and the cell contents because the editor
-            // might not cover the entire cell
-            wxClientDC dc( gridWindow );
-            PrepareDCFor(dc, gridWindow);
-            wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-            dc.SetBrush(wxBrush(attr->GetBackgroundColour()));
-            dc.SetPen(*wxTRANSPARENT_PEN);
-            dc.DrawRectangle(rect);
-
             rect.Offset(-GetGridWindowOffset(gridWindow));
 
             // convert to scrolled coords
             CalcGridWindowScrolledPosition( rect.x, rect.y, &rect.x, &rect.y, gridWindow );
-
-            int nXMove = 0;
-            if (rect.x < 0)
-                nXMove = rect.x;
 
 #ifdef __WXQT__
             // Substract 1 pixel in every dimension to fit in the cell area.
@@ -7287,6 +7271,7 @@ void wxGrid::ShowCellEditControl()
             rect.Deflate(1, 1);
 #endif
 
+            wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
             wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
             if ( !editor->IsCreated() )
             {
@@ -7328,10 +7313,6 @@ void wxGrid::ShowCellEditControl()
                     maxWidth = rect.width;
             }
 
-            int client_right = gridWindow->GetClientSize().GetWidth();
-            if (rect.x + maxWidth > client_right)
-                maxWidth = client_right - rect.x;
-
             if ((maxWidth > rect.width) && (col < m_numCols) && m_table)
             {
                 GetCellSize( row, col, &cell_rows, &cell_cols );
@@ -7350,17 +7331,35 @@ void wxGrid::ShowCellEditControl()
                     else
                         break;
                 }
-
-                if (rect.GetRight() > client_right)
-                    rect.SetRight( client_right - 1 );
             }
 
             editor->SetCellAttr( attr.get() );
             editor->SetSize( rect );
-            if (nXMove != 0)
-                editor->GetWindow()->Move(
-                    editor->GetWindow()->GetPosition().x + nXMove,
-                    editor->GetWindow()->GetPosition().y );
+
+            // Note that the actual rectangle used by the editor could be
+            // different from the one we proposed.
+            rect = editor->GetWindow()->GetRect();
+
+            // Ensure that the edit control fits into the visible part of the
+            // window by shifting it if necessary: we don't want to truncate
+            // any part of it by trying to position it too far to the left or
+            // top and we definitely don't want to start showing scrollbars by
+            // positioning it too far to the right or bottom.
+            const wxSize sizeMax = gridWindow->GetClientSize();
+            if ( !wxRect(sizeMax).Contains(rect) )
+            {
+                if ( rect.x < 0 )
+                    rect.x = 0;
+                if ( rect.y < 0 )
+                    rect.y = 0;
+                if ( rect.x > sizeMax.x - rect.width )
+                    rect.x = sizeMax.x - rect.width;
+                if ( rect.y > sizeMax.y - rect.height )
+                    rect.y = sizeMax.y - rect.height;
+
+                editor->GetWindow()->Move(rect.x, rect.y);
+            }
+
             editor->Show( true, attr.get() );
 
             // recalc dimensions in case we need to
@@ -9757,7 +9756,16 @@ void wxGrid::DoSetColSize( int col, int width )
         return;
 
     if ( m_useNativeHeader )
-        GetGridColHeader()->UpdateColumn(col);
+    {
+        // We have to update the native control if we're called from the
+        // program (directly or indirectly, e.g. via AutoSizeColumn()), but we
+        // want to avoid doing it when the column is being resized
+        // interactively, as this is unnecessary and results in very visible
+        // flicker, so take care to call the special method of our header
+        // control checking for whether it's being resized interactively
+        // instead of the usual UpdateColumn().
+        static_cast<wxGridHeaderCtrl*>(m_colLabelWin)->UpdateIfNotResizing(col);
+    }
     //else: will be refreshed when the header is redrawn
 
     for ( int colPos = GetColPos(col); colPos < m_numCols; colPos++ )
@@ -9836,7 +9844,10 @@ void wxGrid::DoSetColSize( int col, int width )
 
             FurtherWindowPartRefresher refreshFurtherPart(x);
 
-            refreshFurtherPart(m_colLabelWin);
+            // Refreshing the native header is unnecessary, as it updates
+            // itself correctly anyhow, and just results in extra flicker.
+            if ( !IsUsingNativeHeader() )
+                refreshFurtherPart(m_colLabelWin);
             refreshFurtherPart(m_gridWin);
 
             if ( m_frozenRowGridWin )

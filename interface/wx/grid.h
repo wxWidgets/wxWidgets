@@ -4323,6 +4323,26 @@ public:
     bool CanDragColSize(int col) const;
 
     /**
+        Return @true if column edges inside the grid can be dragged to resize
+        the rows.
+
+        @see CanDragGridSize(), CanDragColSize()
+
+        @since 3.1.4
+     */
+    bool CanDragGridColEdges() const;
+
+    /**
+        Return @true if row edges inside the grid can be dragged to resize the
+        rows.
+
+        @see CanDragGridSize(), CanDragRowSize()
+
+        @since 3.1.4
+     */
+    bool CanDragGridRowEdges() const;
+
+    /**
         Return @true if the dragging of grid lines to resize rows and columns
         is enabled or @false otherwise.
     */
