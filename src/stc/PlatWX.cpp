@@ -3181,7 +3181,12 @@ public:
         for ( int i = label.length(); curWidth > rect.GetWidth() && i; --i )
         {
             ellipsizedLabel = label.Left(i);
-            ellipsizedLabel << "...";
+            #if wxUSE_UNICODE
+                // Add the "Horizontal Ellipsis" character (U+2026).
+                ellipsizedLabel << wxUniChar(0x2026);
+            #else
+                ellipsizedLabel << "...";
+            #endif
 
             buffer = wx2stc(ellipsizedLabel);
             ellipsizedLen = wx2stclen(ellipsizedLabel, buffer);
