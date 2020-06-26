@@ -331,6 +331,62 @@ void wxGridCellEditor::SetSize(const wxRect& rect)
     m_control->SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 }
 
+void wxGridCellEditor::DoPositionEditor(const wxSize& size,
+                                        const wxRect& rectCell,
+                                        int hAlign,
+                                        int vAlign)
+{
+    wxRect rect(rectCell.GetPosition(), size);
+
+    // We center the control around the cell if it doesn't fit into it in one
+    // or both of directions, as this seems to look the best (difference is
+    // typically relatively small and by centering it, we divide it by two on
+    // each side, making it even smaller).
+    //
+    // For now just remember in which direction to do it in this variable and
+    // then do it at the end.
+    int centerDir = 0;
+
+    // We're only going to need the alignment if the control is smaller than
+    // the cell in at least one direction.
+    if ( size.x < rectCell.width || size.y < rectCell.height )
+    {
+        if ( GetCellAttr() )
+            GetCellAttr()->GetNonDefaultAlignment(&hAlign, &vAlign);
+    }
+
+    if ( size.x < rectCell.width )
+    {
+        if ( hAlign == wxALIGN_CENTER_HORIZONTAL )
+            centerDir |= wxHORIZONTAL;
+        else if ( hAlign == wxALIGN_RIGHT )
+            rect.x = rectCell.x + rectCell.width - rect.width;
+        //else: nothing to do for the left alignment
+    }
+    else
+    {
+        centerDir |= wxHORIZONTAL;
+    }
+
+    if ( size.y < rectCell.height )
+    {
+        if ( vAlign == wxALIGN_CENTRE_VERTICAL )
+            centerDir |= wxVERTICAL;
+        else if ( vAlign == wxALIGN_BOTTOM )
+            rect.y = rectCell.y + rectCell.height - rect.height;
+        //else: nothing to do for the top alignment
+    }
+    else
+    {
+        centerDir |= wxVERTICAL;
+    }
+
+    if ( centerDir )
+        rect = rect.CenterIn(rectCell, centerDir);
+
+    wxGridCellEditor::SetSize(rect);
+}
+
 void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 {
     event.Skip();
@@ -695,9 +751,7 @@ void wxGridCellNumberEditor::SetSize(const wxRect& rectCell)
         if ( size.y <= 0 )
             size.y = rectCell.GetHeight();
 
-        wxRect rectSpin(rectCell.GetPosition(), size);
-
-        wxGridCellEditor::SetSize(rectSpin.CenterIn(rectCell, wxVERTICAL));
+        DoPositionEditor(size, rectCell);
     }
     else
 #endif // wxUSE_SPINCTRL
@@ -1446,9 +1500,7 @@ void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
     if ( size.x < rect.width )
         size.x = rect.width;
 
-    wxRect rectChoice(rect.GetPosition(), size);
-
-    wxGridCellEditor::SetSize(rectChoice.CenterIn(rect, wxVERTICAL));
+    DoPositionEditor(size, rect);
 }
 
 void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
@@ -1759,19 +1811,18 @@ void wxGridCellDateEditor::SetSize(const wxRect& r)
 {
     wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
 
-    const wxSize bestSize = DatePicker()->GetBestSize();
-
-    wxRect rect(r.GetPosition(), bestSize);
+    wxSize size = DatePicker()->GetBestSize();
 
     // Allow date picker to become a bit wider, if necessary, but not too wide,
     // otherwise it just looks ugly.
-    if ( r.GetWidth() > bestSize.GetWidth()
-            && r.GetWidth() < 3*bestSize.GetWidth()/2 )
+    if ( r.GetWidth() > size.GetWidth()
+            && r.GetWidth() < 3*size.GetWidth()/2 )
     {
-        rect.SetWidth(r.GetWidth());
+        size.x = r.GetWidth();
     }
 
-    wxGridCellEditor::SetSize(rect.CenterIn(r, wxVERTICAL));
+    // Use right alignment by default for consistency with the date renderer.
+    DoPositionEditor(size, r, wxALIGN_RIGHT);
 }
 
 void wxGridCellDateEditor::BeginEdit(int row, int col, wxGrid* grid)

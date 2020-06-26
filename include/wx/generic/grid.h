@@ -339,6 +339,16 @@ protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellEditor();
 
+    // Helper for the derived classes positioning the control according to the
+    // attribute alignment if the desired control size is smaller than the cell
+    // size, or centering it vertically if its size is bigger: this looks like
+    // the best compromise when the editor control doesn't fit into the cell.
+    void DoPositionEditor(const wxSize& size,
+                          const wxRect& rectCell,
+                          int hAlign = wxALIGN_LEFT,
+                          int vAlign = wxALIGN_CENTRE_VERTICAL);
+
+
     // the actual window we show on screen (this variable should actually be
     // named m_window, but m_control is kept for backward compatibility)
     wxWindow*  m_control;
