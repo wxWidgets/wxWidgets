@@ -3223,15 +3223,17 @@ wxSTCListBoxWin::wxSTCListBoxWin(wxWindow* parent, wxSTCListBox** lb,
                                  wxSTCListBoxVisualData* v, int h, int tech)
                 :wxSTCPopupWindow(parent)
 {
+    switch ( tech )
+    {
 #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
-    if ( tech == wxSTC_TECHNOLOGY_DIRECTWRITE )
-    {
-        *lb = new wxSTCListBoxD2D(this, v, h);
-    }
-    else
+        case wxSTC_TECHNOLOGY_DIRECTWRITE:
+            *lb = new wxSTCListBoxD2D(this, v, h);
+            break;
 #endif
-    {
-        *lb = new wxSTCListBox(this, v, h);
+        case wxSTC_TECHNOLOGY_DEFAULT:
+            wxFALLTHROUGH;
+        default:
+            *lb = new wxSTCListBox(this, v, h);
     }
 
     // Use the background of this window to form a frame around the listbox
