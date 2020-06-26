@@ -1687,6 +1687,21 @@ public:
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
     //@}
+
+    /**
+       If supported by the platform and the @a wxDC implementation, this method
+       will return the @a wxGraphicsContext associated with the DC. Otherwise
+       @NULL is returned.
+    */
+    virtual wxGraphicsContext* GetGraphicsContext() const;
+
+    /**
+       Associate a wxGraphicsContext with the DC. Ignored if not supported by
+       the specific @a wxDC implementation. It is unlikely that this will need to
+       be used in application code.
+    */
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+
 };
 
 
