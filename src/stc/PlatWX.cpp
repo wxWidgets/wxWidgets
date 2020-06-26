@@ -2679,6 +2679,8 @@ protected:
     void SelectHelper(int i);
     void RecalculateItemHeight();
     int TextBoxFromClientEdge() const;
+    virtual void OnDrawItemText(wxDC&, const wxRect&,
+                                const wxString&, const wxColour&) const;
 
     // Event handlers
     void OnSelection(wxCommandEvent&);
@@ -3019,6 +3021,17 @@ wxCoord wxSTCListBox::OnMeasureItem(size_t WXUNUSED(n)) const
 //       x = m_imagePadding + m_imageAreaWidth + m_imagePadding.
 // Text is drawn at x + m_textBoxToTextGap and centered vertically.
 
+void wxSTCListBox::OnDrawItemText(wxDC& dc, const wxRect& rect,
+                                  const wxString& label,
+                                  const wxColour& textCol) const
+{
+    wxDCTextColourChanger tcc(dc, textCol);
+
+    wxString ellipsizedlabel = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
+                                                    rect.GetWidth());
+    dc.DrawText(ellipsizedlabel, rect.GetLeft(), rect.GetTop());
+}
+
 void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 {
     wxString label;
@@ -3041,11 +3054,10 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     else
         textCol = m_visualData->GetTextColour();
 
-    wxDCTextColourChanger tcc(dc, textCol);
+    wxRect rect2(rect.GetLeft() + leftGap, rect.GetTop() + topGap,
+                 rect.GetWidth() - leftGap, m_textHeight);
 
-    label = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
-                                 rect.GetWidth() - leftGap);
-    dc.DrawText(label, rect.GetLeft() + leftGap, rect.GetTop() + topGap);
+    OnDrawItemText(dc, rect2, label, textCol);
 
     const wxBitmap* b = m_visualData->GetImage(imageNo);
     if ( b )
@@ -3148,47 +3160,25 @@ public:
         RecalculateItemHeight();
     }
 
-    void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const wxOVERRIDE
+    void OnDrawItemText(wxDC& dc, const wxRect& rect, const wxString& label,
+                        const wxColour& textCol) const wxOVERRIDE
     {
-        wxString label;
-        int imageNo = -1;
-        if ( n < m_labels.size() )
-        {
-            label = m_labels[n];
-            imageNo = m_imageNos[n];
-        }
-
-        int topGap = m_textTopGap;
-        int leftGap = TextBoxFromClientEdge() + m_textBoxToTextGap;
-
-        wxColour textCol;
-
-        if ( IsSelected(n) )
-            textCol = m_visualData->GetHighlightTextColour();
-        else if ( static_cast<int>(n) == m_currentRow )
-            textCol = m_visualData->GetCurrentTextColour();
-        else
-            textCol = m_visualData->GetTextColour();
+        wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
+        SurfaceFontDataD2D* sfd = new SurfaceFontDataD2D(*m_surfaceFontData);
+        fontCopy->SetSurfaceFontData(sfd);
+        Font tempFont;
+        tempFont.SetID(fontCopy);
 
         SurfaceD2D surface;
         surface.Init(&dc, GetGrandParent());
 
         wxString ellipsizedLabel = label;
 
-        wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
-        SurfaceFontDataD2D* newSurfaceData =
-            new SurfaceFontDataD2D(*m_surfaceFontData);
-        fontCopy->SetSurfaceFontData(newSurfaceData);
-        Font tempFont;
-        tempFont.SetID(fontCopy);
-
-        wxCharBuffer buffer = wx2stc(label);
+        wxCharBuffer buffer = wx2stc(ellipsizedLabel);
         int curWidth = surface.WidthText(tempFont, buffer.data(),
                                          wx2stclen(wxString(), buffer));
 
-        int maxWidth = rect.GetWidth() - leftGap;
-
-        if ( curWidth > maxWidth )
+        if ( curWidth > rect.GetWidth() )
         {
             int len = label.Length();
 
@@ -3201,34 +3191,22 @@ public:
                 curWidth = surface.WidthText(tempFont, buffer.data(),
                                               wx2stclen(wxString(), buffer));
 
-                if ( curWidth <= maxWidth )
+                if ( curWidth <= rect.GetWidth() )
                 {
                     break;
                 }
             }
         }
 
-        wxRect rect2(rect.GetLeft() + leftGap, rect.GetTop() + topGap,
-                     rect.GetWidth() - leftGap, m_textHeight);
-
-        PRectangle prect = PRectangleFromwxRect(rect2);
+        PRectangle prect = PRectangleFromwxRect(rect);
         ColourDesired fore(textCol.Red(), textCol.Green(), textCol.Blue());
 
-        XYPOSITION ybase = rect2.GetTop() + m_surfaceFontData->GetAscent();
+        XYPOSITION ybase = rect.GetTop() + m_surfaceFontData->GetAscent();
 
         surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
                                     wx2stclen(wxString(), buffer), fore);
         tempFont.Release();
         surface.Release();
-
-        const wxBitmap* b = m_visualData->GetImage(imageNo);
-        if ( b )
-        {
-            const int width = m_visualData->GetImageAreaWidth();
-            topGap = (m_itemHeight - b->GetHeight()) / 2;
-            leftGap = m_imagePadding + (width - b->GetWidth()) / 2;
-            dc.DrawBitmap(*b, rect.GetLeft() + leftGap, rect.GetTop() + topGap, true);
-        }
     }
 
 private:
