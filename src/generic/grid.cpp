@@ -4892,6 +4892,9 @@ void wxGrid::DoGridDragResize(const wxPoint& position,
 
 wxPoint wxGrid::GetPositionForResizeEvent(int width) const
 {
+    wxCHECK_MSG( m_dragRowOrCol != -1, wxPoint(),
+                 "shouldn't be called when not drag resizing" );
+
     // Note that we currently always use m_gridWin here as using
     // wxGridHeaderCtrl is incompatible with using frozen rows/columns.
     // This would need to be changed if they're allowed to be used together.
@@ -4935,6 +4938,14 @@ void wxGrid::DoHeaderDragResizeCol(int width)
 
 void wxGrid::DoHeaderEndDragResizeCol(int width)
 {
+    // We can sometimes be called even when we're not resizing any more,
+    // although it's rather difficult to reproduce: one way to do it is to
+    // double click the column separator line while pressing Esc at the same
+    // time. There seems to be some kind of check for Esc inside the native
+    // header control and so an extra "end resizing" message gets generated.
+    if ( m_dragRowOrCol == -1 )
+        return;
+
     // Unfortunately we need to create a dummy mouse event here to avoid
     // modifying too much existing code. Note that only position and keyboard
     // state parts of this event object are actually used, so the rest
