@@ -543,12 +543,14 @@ GridFrame::GridFrame()
 
     // Some numeric columns with different formatting.
     grid->SetColFormatFloat(6);
+    grid->SetReadOnly(0, 6);
     grid->SetCellValue(0, 6, "Default\nfloat format");
     grid->SetCellValue(1, 6, wxString::Format("%g", 3.1415));
     grid->SetCellValue(2, 6, wxString::Format("%g", 1415.0));
     grid->SetCellValue(3, 6, wxString::Format("%g", 12345.67890));
 
     grid->SetColFormatFloat(7, 6, 2);
+    grid->SetReadOnly(0, 7);
     grid->SetCellValue(0, 7, "Width 6\nprecision 2");
     grid->SetCellValue(1, 7, wxString::Format("%g", 3.1415));
     grid->SetCellValue(2, 7, wxString::Format("%g", 1415.0));
@@ -556,12 +558,14 @@ GridFrame::GridFrame()
 
     grid->SetColFormatCustom(8,
             wxString::Format("%s:%i,%i,%s", wxGRID_VALUE_FLOAT, -1, 4, "g"));
+    grid->SetReadOnly(0, 8);
     grid->SetCellValue(0, 8, "Compact\nformat");
     grid->SetCellValue(1, 8, "31415e-4");
     grid->SetCellValue(2, 8, "1415");
     grid->SetCellValue(3, 8, "123456789e-4");
 
     grid->SetColFormatNumber(9);
+    grid->SetReadOnly(0, 9);
     grid->SetCellValue(0, 9, "Integer\ncolumn");
     grid->SetCellValue(1, 9, "17");
     grid->SetCellValue(2, 9, "0");
@@ -571,9 +575,11 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
+    grid->SetReadOnly(0, 13);
     grid->SetCellValue(0, 13, "Localized date\ncolumn");
     grid->SetColFormatDate(13); // Localized by default.
     grid->SetCellValue(1, 13, "Today");
+    grid->SetReadOnly(0, 14);
     grid->SetCellValue(0, 14, "ISO 8601 date\ncolumn");
     grid->SetColFormatDate(14, "%Y-%m-%d"); // ISO 8601 date format.
     grid->SetCellValue(1, 14, "Tomorrow");
