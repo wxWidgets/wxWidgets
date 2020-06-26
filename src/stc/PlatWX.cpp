@@ -3126,6 +3126,11 @@ void wxSTCListBox::OnDrawBackground(wxDC &dc, const wxRect &rect,size_t n) const
 
 
 #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
+
+// This class will use SurfaceD2D methods to measure and draw items in the popup
+// listbox. This is needed to ensure that the text in the listbox matches the
+// text in the editor window as closely as possible.
+
 class wxSTCListBoxD2D : public wxSTCListBox
 {
 public:
@@ -3145,12 +3150,14 @@ public:
 
     void SetListBoxFont(Font& font) wxOVERRIDE
     {
+        // Retrieve the SurfaceFontDataD2D from font and store a copy of it.
         wxFontWithAscent* fwa = wxFontWithAscent::FromFID(font.GetID());
 
         SurfaceData* data = fwa->GetSurfaceFontData();
         SurfaceFontDataD2D* d2dft = static_cast<SurfaceFontDataD2D*>(data);
         m_surfaceFontData = new SurfaceFontDataD2D(*d2dft);
 
+        // Create a SurfaceD2D object to measure text height for the font.
         SurfaceD2D surface;
         wxClientDC dc(this);
         surface.Init(&dc, GetGrandParent());
@@ -3163,6 +3170,7 @@ public:
     void OnDrawItemText(wxDC& dc, const wxRect& rect, const wxString& label,
                         const wxColour& textCol) const wxOVERRIDE
     {
+        // Create a font and a surface object.
         wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
         SurfaceFontDataD2D* sfd = new SurfaceFontDataD2D(*m_surfaceFontData);
         fontCopy->SetSurfaceFontData(sfd);
@@ -3172,6 +3180,8 @@ public:
         SurfaceD2D surface;
         surface.Init(&dc, GetGrandParent());
 
+        // Ellipsize the label if necessary. This is done by manually removing
+        // characters from the end of the label until it's short enough.
         wxString ellipsizedLabel = label;
 
         wxCharBuffer buffer = wx2stc(ellipsizedLabel);
@@ -3193,6 +3203,7 @@ public:
             curWidth = surface.WidthText(tempFont, buffer.data(),ellipsizedLen);
         }
 
+        // Construct the necessary Scintilla objects and then draw the label.
         PRectangle prect = PRectangleFromwxRect(rect);
         ColourDesired fore(textCol.Red(), textCol.Green(), textCol.Blue());
 
@@ -3200,6 +3211,8 @@ public:
 
         surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
                                     ellipsizedLen, fore);
+
+        // Clean up.
         tempFont.Release();
         surface.Release();
     }
