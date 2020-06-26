@@ -2384,7 +2384,7 @@ private:
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
-                        m_imgAreaSize(0,0), m_useDefaultBgColour(true),
+                        m_useDefaultBgColour(true),
                         m_useDefaultTextColour(true),
                         m_useDefaultHighlightBgColour(true),
                         m_useDefaultHighlightTextColour(true),
@@ -3178,24 +3178,14 @@ public:
         int curWidth = surface.WidthText(tempFont, buffer.data(),
                                          wx2stclen(wxString(), buffer));
 
-        if ( curWidth > rect.GetWidth() )
+        for ( int i = label.length(); curWidth > rect.GetWidth() && i; --i )
         {
-            int len = label.Length();
+            ellipsizedLabel = label.Left(i);
+            ellipsizedLabel << "...";
 
-            for ( int i = len; i >= 0; --i )
-            {
-                ellipsizedLabel = label.Left(i);
-                ellipsizedLabel << "...";
-
-                buffer = wx2stc(ellipsizedLabel);
-                curWidth = surface.WidthText(tempFont, buffer.data(),
-                                              wx2stclen(wxString(), buffer));
-
-                if ( curWidth <= rect.GetWidth() )
-                {
-                    break;
-                }
-            }
+            buffer = wx2stc(ellipsizedLabel);
+            curWidth = surface.WidthText(tempFont, buffer.data(),
+                                          wx2stclen(wxString(), buffer));
         }
 
         PRectangle prect = PRectangleFromwxRect(rect);
