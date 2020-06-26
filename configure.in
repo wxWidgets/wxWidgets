@@ -4516,22 +4516,11 @@ if test "$ac_cv_func_setenv" = "yes"; then
     AC_CHECK_FUNCS(unsetenv)
 fi
 
-HAVE_SOME_SLEEP_FUNC=0
-if test "$USE_BEOS" = 1; then
-    dnl BeOS has its own (wonder where did they get it from) sleep() function
-    dnl in unistd.h
-    AC_DEFINE(HAVE_SLEEP)
-    HAVE_SOME_SLEEP_FUNC=1
-fi
-
 if test "$USE_DARWIN" = 1; then
     dnl Mac OS X/Darwin has both nanosleep and usleep
     dnl but only usleep is defined in unistd.h
     AC_DEFINE(HAVE_USLEEP)
-    HAVE_SOME_SLEEP_FUNC=1
-fi
-
-if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
+else
     dnl try nanosleep() in libc and libposix4, if this fails - usleep()
     POSIX4_LINK=
     AC_CHECK_FUNCS(nanosleep,
@@ -4544,7 +4533,7 @@ if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
                 ],
                 [
                     WX_CHECK_FUNCS(usleep,,
-                                    AC_MSG_WARN([wxSleep() function will not work])
+                                   AC_MSG_ERROR([wxMicroSleep() can't be implemented])
                     )
                 ]
             )

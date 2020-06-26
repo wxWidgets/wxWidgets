@@ -30411,20 +30411,10 @@ done
 
 fi
 
-HAVE_SOME_SLEEP_FUNC=0
-if test "$USE_BEOS" = 1; then
-            $as_echo "#define HAVE_SLEEP 1" >>confdefs.h
-
-    HAVE_SOME_SLEEP_FUNC=1
-fi
-
 if test "$USE_DARWIN" = 1; then
             $as_echo "#define HAVE_USLEEP 1" >>confdefs.h
 
-    HAVE_SOME_SLEEP_FUNC=1
-fi
-
-if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
+else
         POSIX4_LINK=
     for ac_func in nanosleep
 do :
@@ -30533,8 +30523,7 @@ _ACEOF
 
     else
       :
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxSleep() function will not work" >&5
-$as_echo "$as_me: WARNING: wxSleep() function will not work" >&2;}
+      as_fn_error $? "wxMicroSleep() can't be implemented" "$LINENO" 5
 
     fi
   done
