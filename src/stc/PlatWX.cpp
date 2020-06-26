@@ -2651,8 +2651,7 @@ int wxSTCListBoxVisualData::GetStartLen() const
 class wxSTCListBox : public wxSystemThemedControl<wxVListBox>
 {
 public:
-    wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int, int);
-    ~wxSTCListBox();
+    wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int);
 
     // wxWindow overrides
     virtual bool AcceptsFocus() const wxOVERRIDE;
@@ -2662,7 +2661,7 @@ public:
     void SetContainerBorderSize(int);
 
     // ListBoxImpl implementation
-    void SetListBoxFont(Font &font);
+    virtual void SetListBoxFont(Font &font);
     void SetAverageCharWidth(int width);
     PRectangle GetDesiredRect() const;
     int CaretFromEdge() const;
@@ -2694,7 +2693,6 @@ protected:
     virtual void OnDrawItem(wxDC& , const wxRect &, size_t) const wxOVERRIDE;
     virtual void OnDrawBackground(wxDC&, const wxRect&,size_t) const wxOVERRIDE;
 
-private:
     wxSTCListBoxVisualData* m_visualData;
     wxVector<wxString>      m_labels;
     wxVector<int>           m_imageNos;
@@ -2716,21 +2714,14 @@ private:
     int m_imagePadding;
     int m_textBoxToTextGap;
     int m_textExtraVerticalPadding;
-
-    // These are needed when Direct2D is used for drawing.
-    int m_technology;
-#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
-    SurfaceFontDataD2D* m_surfaceFontData;
-#endif
 };
 
-wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v,
-                           int ht, int technology)
+wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
              :wxSystemThemedControl<wxVListBox>(),
               m_visualData(v), m_maxStrWidth(0), m_currentRow(wxNOT_FOUND),
               m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
               m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
-              m_textTopGap(0), m_technology(technology)
+              m_textTopGap(0)
 {
     wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                        wxBORDER_NONE, "AutoCompListBox");
@@ -2759,20 +2750,6 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v,
             parent->SetOwnBackgroundColour(m_visualData->GetBgColour());
         #endif
     }
-
-    #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
-        m_surfaceFontData = NULL;
-    #endif
-}
-
-wxSTCListBox::~wxSTCListBox()
-{
-#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
-    if ( m_surfaceFontData )
-    {
-        delete m_surfaceFontData;
-    }
-#endif
 }
 
 bool wxSTCListBox::AcceptsFocus() const
@@ -2792,29 +2769,9 @@ void wxSTCListBox::SetContainerBorderSize(int s)
 
 void wxSTCListBox::SetListBoxFont(Font &font)
 {
-    if ( m_technology == wxSTC_TECHNOLOGY_DIRECTWRITE )
-    {
-    #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
-        wxFontWithAscent* fwa = wxFontWithAscent::FromFID(font.GetID());
-
-        SurfaceData* data = fwa->GetSurfaceFontData();
-        SurfaceFontDataD2D* d2dft = static_cast<SurfaceFontDataD2D*>(data);
-        m_surfaceFontData = new SurfaceFontDataD2D(*d2dft);
-
-        SurfaceD2D surface;
-        wxClientDC dc(this);
-        surface.Init(&dc,GetGrandParent());
-        m_textHeight = surface.Height(font);
-        surface.Release();
-    #endif
-    }
-    else
-    {
-        SetFont(*((wxFont*)font.GetID()));
-        int w;
-        GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
-    }
-
+    SetFont(*((wxFont*)font.GetID()));
+    int w;
+    GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
     RecalculateItemHeight();
 }
 
@@ -3084,69 +3041,11 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     else
         textCol = m_visualData->GetTextColour();
 
-    if ( m_technology == wxSTC_TECHNOLOGY_DIRECTWRITE )
-    {
-    #ifdef HAVE_DIRECTWRITE_TECHNOLOGY
-        SurfaceD2D surface;
-        surface.Init(&dc, GetGrandParent());
+    wxDCTextColourChanger tcc(dc, textCol);
 
-        wxString ellipsizedLabel = label;
-
-        wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
-        SurfaceFontDataD2D* newSurfaceData =
-            new SurfaceFontDataD2D(*m_surfaceFontData);
-        fontCopy->SetSurfaceFontData(newSurfaceData);
-        Font tempFont;
-        tempFont.SetID(fontCopy);
-
-        wxCharBuffer buffer = wx2stc(label);
-        int curWidth = surface.WidthText(tempFont, buffer.data(),
-                                          wx2stclen(wxString(),buffer));
-
-        int maxWidth = rect.GetWidth() - leftGap;
-
-        if ( curWidth > maxWidth )
-        {
-            int len = label.Length();
-
-            for ( int i = len ; i >= 0 ; --i)
-            {
-                ellipsizedLabel = label.Left(i);
-                ellipsizedLabel << "...";
-
-                buffer = wx2stc(ellipsizedLabel);
-                curWidth = surface.WidthText(tempFont, buffer.data(),
-                                             wx2stclen(wxString(),buffer));
-
-                if ( curWidth <= maxWidth )
-                {
-                    break;
-                }
-            }
-        }
-
-        wxRect rect2(rect.GetLeft() + leftGap, rect.GetTop() + topGap,
-                    rect.GetWidth() - leftGap, m_textHeight);
-
-        PRectangle prect = PRectangleFromwxRect(rect2);
-        ColourDesired fore(textCol.Red(), textCol.Green(), textCol.Blue());
-
-        XYPOSITION ybase = rect2.GetTop() + m_surfaceFontData->GetAscent();
-
-        surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
-                                    wx2stclen(wxString(),buffer), fore);
-        tempFont.Release();
-        surface.Release();
-    #endif // HAVE_DIRECTWRITE_TECHNOLOGY
-    }
-    else
-    {
-        wxDCTextColourChanger tcc(dc, textCol);
-
-        label = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
-                                     rect.GetWidth() - leftGap);
-        dc.DrawText(label, rect.GetLeft() + leftGap, rect.GetTop() + topGap);
-    }
+    label = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
+                                 rect.GetWidth() - leftGap);
+    dc.DrawText(label, rect.GetLeft() + leftGap, rect.GetTop() + topGap);
 
     const wxBitmap* b = m_visualData->GetImage(imageNo);
     if ( b )
@@ -3214,6 +3113,130 @@ void wxSTCListBox::OnDrawBackground(wxDC &dc, const wxRect &rect,size_t n) const
 }
 
 
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
+class wxSTCListBoxD2D : public wxSTCListBox
+{
+public:
+    wxSTCListBoxD2D(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
+        : wxSTCListBox(parent, v, ht)
+        , m_surfaceFontData(NULL)
+    {
+    }
+
+    ~wxSTCListBoxD2D()
+    {
+        if ( m_surfaceFontData )
+        {
+            delete m_surfaceFontData;
+        }
+    }
+
+    void SetListBoxFont(Font& font) wxOVERRIDE
+    {
+        wxFontWithAscent* fwa = wxFontWithAscent::FromFID(font.GetID());
+
+        SurfaceData* data = fwa->GetSurfaceFontData();
+        SurfaceFontDataD2D* d2dft = static_cast<SurfaceFontDataD2D*>(data);
+        m_surfaceFontData = new SurfaceFontDataD2D(*d2dft);
+
+        SurfaceD2D surface;
+        wxClientDC dc(this);
+        surface.Init(&dc, GetGrandParent());
+        m_textHeight = surface.Height(font);
+        surface.Release();
+
+        RecalculateItemHeight();
+    }
+
+    void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const wxOVERRIDE
+    {
+        wxString label;
+        int imageNo = -1;
+        if ( n < m_labels.size() )
+        {
+            label = m_labels[n];
+            imageNo = m_imageNos[n];
+        }
+
+        int topGap = m_textTopGap;
+        int leftGap = TextBoxFromClientEdge() + m_textBoxToTextGap;
+
+        wxColour textCol;
+
+        if ( IsSelected(n) )
+            textCol = m_visualData->GetHighlightTextColour();
+        else if ( static_cast<int>(n) == m_currentRow )
+            textCol = m_visualData->GetCurrentTextColour();
+        else
+            textCol = m_visualData->GetTextColour();
+
+        SurfaceD2D surface;
+        surface.Init(&dc, GetGrandParent());
+
+        wxString ellipsizedLabel = label;
+
+        wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
+        SurfaceFontDataD2D* newSurfaceData =
+            new SurfaceFontDataD2D(*m_surfaceFontData);
+        fontCopy->SetSurfaceFontData(newSurfaceData);
+        Font tempFont;
+        tempFont.SetID(fontCopy);
+
+        wxCharBuffer buffer = wx2stc(label);
+        int curWidth = surface.WidthText(tempFont, buffer.data(),
+                                         wx2stclen(wxString(), buffer));
+
+        int maxWidth = rect.GetWidth() - leftGap;
+
+        if ( curWidth > maxWidth )
+        {
+            int len = label.Length();
+
+            for ( int i = len; i >= 0; --i )
+            {
+                ellipsizedLabel = label.Left(i);
+                ellipsizedLabel << "...";
+
+                buffer = wx2stc(ellipsizedLabel);
+                curWidth = surface.WidthText(tempFont, buffer.data(),
+                                              wx2stclen(wxString(), buffer));
+
+                if ( curWidth <= maxWidth )
+                {
+                    break;
+                }
+            }
+        }
+
+        wxRect rect2(rect.GetLeft() + leftGap, rect.GetTop() + topGap,
+                     rect.GetWidth() - leftGap, m_textHeight);
+
+        PRectangle prect = PRectangleFromwxRect(rect2);
+        ColourDesired fore(textCol.Red(), textCol.Green(), textCol.Blue());
+
+        XYPOSITION ybase = rect2.GetTop() + m_surfaceFontData->GetAscent();
+
+        surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
+                                    wx2stclen(wxString(), buffer), fore);
+        tempFont.Release();
+        surface.Release();
+
+        const wxBitmap* b = m_visualData->GetImage(imageNo);
+        if ( b )
+        {
+            const int width = m_visualData->GetImageAreaWidth();
+            topGap = (m_itemHeight - b->GetHeight()) / 2;
+            leftGap = m_imagePadding + (width - b->GetWidth()) / 2;
+            dc.DrawBitmap(*b, rect.GetLeft() + leftGap, rect.GetTop() + topGap, true);
+        }
+    }
+
+private:
+    SurfaceFontDataD2D* m_surfaceFontData;
+};
+#endif
+
+
 // A popup window to place the wxSTCListBox upon
 class wxSTCListBoxWin : public wxSTCPopupWindow
 {
@@ -3232,7 +3255,16 @@ wxSTCListBoxWin::wxSTCListBoxWin(wxWindow* parent, wxSTCListBox** lb,
                                  wxSTCListBoxVisualData* v, int h, int tech)
                 :wxSTCPopupWindow(parent)
 {
-    *lb = new wxSTCListBox(this, v, h, tech);
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
+    if ( tech == wxSTC_TECHNOLOGY_DIRECTWRITE )
+    {
+        *lb = new wxSTCListBoxD2D(this, v, h);
+    }
+    else
+#endif
+    {
+        *lb = new wxSTCListBox(this, v, h);
+    }
 
     // Use the background of this window to form a frame around the listbox
     // except on macos where the native Scintilla popup has no frame.
