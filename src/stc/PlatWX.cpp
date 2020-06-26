@@ -3175,8 +3175,8 @@ public:
         wxString ellipsizedLabel = label;
 
         wxCharBuffer buffer = wx2stc(ellipsizedLabel);
-        int curWidth = surface.WidthText(tempFont, buffer.data(),
-                                         wx2stclen(wxString(), buffer));
+        int ellipsizedLen = wx2stclen(ellipsizedLabel, buffer);
+        int curWidth = surface.WidthText(tempFont, buffer.data(),ellipsizedLen);
 
         for ( int i = label.length(); curWidth > rect.GetWidth() && i; --i )
         {
@@ -3184,8 +3184,8 @@ public:
             ellipsizedLabel << "...";
 
             buffer = wx2stc(ellipsizedLabel);
-            curWidth = surface.WidthText(tempFont, buffer.data(),
-                                          wx2stclen(wxString(), buffer));
+            ellipsizedLen = wx2stclen(ellipsizedLabel, buffer);
+            curWidth = surface.WidthText(tempFont, buffer.data(),ellipsizedLen);
         }
 
         PRectangle prect = PRectangleFromwxRect(rect);
@@ -3194,7 +3194,7 @@ public:
         XYPOSITION ybase = rect.GetTop() + m_surfaceFontData->GetAscent();
 
         surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
-                                    wx2stclen(wxString(), buffer), fore);
+                                    ellipsizedLen, fore);
         tempFont.Release();
         surface.Release();
     }
