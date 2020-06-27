@@ -3142,10 +3142,7 @@ public:
 
     ~wxSTCListBoxD2D()
     {
-        if ( m_surfaceFontData )
-        {
-            delete m_surfaceFontData;
-        }
+        delete m_surfaceFontData;
     }
 
     void SetListBoxFont(Font& font) wxOVERRIDE
