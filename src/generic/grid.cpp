@@ -4663,12 +4663,6 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
 
             m_waitForSlowClick = false;
         }
-        else if ( m_selection && m_selection->IsSelection() )
-        {
-            // Show the edit control, if it has been hidden for
-            // drag-shrinking.
-            ShowCellEditControl();
-        }
     }
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
     {
