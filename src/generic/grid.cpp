@@ -7149,11 +7149,11 @@ void wxGrid::EnableCellEditControl( bool enable )
     {
         if ( enable )
         {
+            // this should be checked by the caller!
+            wxCHECK_RET( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
+
             if ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) == -1 )
                 return;
-
-            // this should be checked by the caller!
-            wxASSERT_MSG( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
 
             // do it before ShowCellEditControl()
             m_cellEditCtrlEnabled = enable;
@@ -7179,13 +7179,6 @@ bool wxGrid::CanEnableCellControl() const
 {
     return m_editable && (m_currentCellCoords != wxGridNoCellCoords) &&
         !IsCurrentCellReadOnly();
-}
-
-bool wxGrid::IsCellEditControlEnabled() const
-{
-    // the cell edit control might be disable for all cells or just for the
-    // current one if it's read only
-    return m_cellEditCtrlEnabled ? !IsCurrentCellReadOnly() : false;
 }
 
 bool wxGrid::IsCellEditControlShown() const

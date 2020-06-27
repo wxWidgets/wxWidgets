@@ -3440,6 +3440,9 @@ public:
         currently show, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
         generated but, unlike the "shown" event, it can't be vetoed and the
         in-place editor is dismissed unconditionally.
+
+        Note that it is an error to call this function if the current cell is
+        read-only, use CanEnableCellControl() to check for this precondition.
     */
     void EnableCellEditControl(bool enable = true);
 

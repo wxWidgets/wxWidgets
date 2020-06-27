@@ -1504,7 +1504,7 @@ public:
     void EnableCellEditControl( bool enable = true );
     void DisableCellEditControl() { EnableCellEditControl(false); }
     bool CanEnableCellControl() const;
-    bool IsCellEditControlEnabled() const;
+    bool IsCellEditControlEnabled() const { return m_cellEditCtrlEnabled; }
     bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
