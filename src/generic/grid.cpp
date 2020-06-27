@@ -2012,7 +2012,7 @@ void wxGridRowLabelWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridRowLabelWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    if (!m_owner->GetEventHandler()->ProcessEvent( event ))
+    if (!m_owner->ProcessWindowEvent( event ))
         event.Skip();
 }
 
@@ -2061,7 +2061,7 @@ void wxGridColLabelWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridColLabelWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    if (!m_owner->GetEventHandler()->ProcessEvent( event ))
+    if (!m_owner->ProcessWindowEvent( event ))
         event.Skip();
 }
 
@@ -2087,7 +2087,7 @@ void wxGridCornerLabelWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridCornerLabelWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    if (!m_owner->GetEventHandler()->ProcessEvent(event))
+    if (!m_owner->ProcessWindowEvent(event))
         event.Skip();
 }
 
@@ -2450,7 +2450,7 @@ void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    if (!m_owner->GetEventHandler()->ProcessEvent( event ))
+    if (!m_owner->ProcessWindowEvent( event ))
         event.Skip();
 }
 
@@ -2459,19 +2459,19 @@ void wxGridWindow::OnMouseWheel( wxMouseEvent& event )
 //
 void wxGridWindow::OnKeyDown( wxKeyEvent& event )
 {
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
+    if ( !m_owner->ProcessWindowEvent( event ) )
         event.Skip();
 }
 
 void wxGridWindow::OnKeyUp( wxKeyEvent& event )
 {
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
+    if ( !m_owner->ProcessWindowEvent( event ) )
         event.Skip();
 }
 
 void wxGridWindow::OnChar( wxKeyEvent& event )
 {
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
+    if ( !m_owner->ProcessWindowEvent( event ) )
         event.Skip();
 }
 
@@ -2501,7 +2501,7 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
             Refresh(true, &cursor);
     }
 
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
+    if ( !m_owner->ProcessWindowEvent( event ) )
         event.Skip();
 }
 
@@ -5294,7 +5294,7 @@ wxGrid::SendGridSizeEvent(wxEventType type,
            mouseEv.GetY() + GetColLabelSize(),
            mouseEv);
 
-   return GetEventHandler()->ProcessEvent(gridEvt);
+   return ProcessWindowEvent(gridEvt);
 }
 
 // Process the event and return
@@ -5303,7 +5303,7 @@ wxGrid::SendGridSizeEvent(wxEventType type,
 //   0 if the event wasn't handled
 int wxGrid::DoSendEvent(wxGridEvent& gridEvt)
 {
-    const bool claimed = GetEventHandler()->ProcessEvent(gridEvt);
+    const bool claimed = ProcessWindowEvent(gridEvt);
 
     // A Veto'd event may not be `claimed' so test this first
     if ( !gridEvt.IsAllowed() )
@@ -5664,7 +5664,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
     wxKeyEvent keyEvt( event );
     keyEvt.SetEventObject( parent );
 
-    if ( !parent->GetEventHandler()->ProcessEvent( keyEvt ) )
+    if ( !parent->ProcessWindowEvent( keyEvt ) )
     {
         if (GetLayoutDirection() == wxLayout_RightToLeft)
         {
@@ -7291,7 +7291,7 @@ void wxGrid::ShowCellEditControl()
                                              row,
                                              col,
                                              editorWindow);
-                GetEventHandler()->ProcessEvent(evt);
+                ProcessWindowEvent(evt);
             }
             else if ( editor->GetWindow() &&
                       editor->GetWindow()->GetParent() != gridWindow )
