@@ -2912,6 +2912,14 @@ private:
     void DoShowCellEditControl();
     void DoHideCellEditControl();
 
+    // Unconditionally try showing the editor for the current cell.
+    //
+    // Returns false if the user code vetoed wxEVT_GRID_EDITOR_SHOWN.
+    bool DoEnableCellEditControl();
+
+    // Unconditionally disable (accepting the changes) the editor.
+    void DoDisableCellEditControl();
+
     // Accept the changes in the edit control, i.e. save them to the table and
     // dismiss the editor. Also reset m_cellEditCtrlEnabled.
     void DoAcceptCellEditControl();

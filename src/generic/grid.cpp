@@ -4657,9 +4657,9 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
         if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl() )
         {
             ClearSelection();
-            EnableCellEditControl();
 
-            GetCurrentCellEditorPtr()->StartingClick();
+            if ( DoEnableCellEditControl() )
+                GetCurrentCellEditorPtr()->StartingClick();
 
             m_waitForSlowClick = false;
         }
@@ -5968,18 +5968,14 @@ void wxGrid::OnChar( wxKeyEvent& event )
 
         // <F2> is special and will always start editing, for
         // other keys - ask the editor itself
-        if ( (event.GetKeyCode() == WXK_F2 && !event.HasModifiers())
-             || editor->IsAcceptedKey(event) )
+        const bool specialEditKey = event.GetKeyCode() == WXK_F2 &&
+                                        !event.HasModifiers();
+        if ( specialEditKey || editor->IsAcceptedKey(event) )
         {
             // ensure cell is visble
             MakeCellVisible(m_currentCellCoords);
-            EnableCellEditControl();
 
-            // a problem can arise if the cell is not completely
-            // visible (even after calling MakeCellVisible the
-            // control is not created and calling StartingKey will
-            // crash the app
-            if ( event.GetKeyCode() != WXK_F2 && editor->IsCreated() && m_cellEditCtrlEnabled )
+            if ( DoEnableCellEditControl() && !specialEditKey )
                 editor->StartingKey(event);
         }
         else
@@ -7150,20 +7146,32 @@ void wxGrid::EnableCellEditControl( bool enable )
             // this should be checked by the caller!
             wxCHECK_RET( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
 
-            if ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) == -1 )
-                return;
-
-            m_cellEditCtrlEnabled = true;
-
-            DoShowCellEditControl();
+            DoEnableCellEditControl();
         }
         else
         {
-            SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
-
-            DoAcceptCellEditControl();
+            DoDisableCellEditControl();
         }
     }
+}
+
+bool wxGrid::DoEnableCellEditControl()
+{
+    if ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) == -1 )
+        return false;
+
+    m_cellEditCtrlEnabled = true;
+
+    DoShowCellEditControl();
+
+    return true;
+}
+
+void wxGrid::DoDisableCellEditControl()
+{
+    SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
+
+    DoAcceptCellEditControl();
 }
 
 bool wxGrid::IsCurrentCellReadOnly() const
