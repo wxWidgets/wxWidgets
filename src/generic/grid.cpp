@@ -4742,8 +4742,8 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     wxGridCellCoords coords = XYToCell(pos, gridWindow);
 
     int cell_rows, cell_cols;
-    GetCellSize( coords.GetRow(), coords.GetCol(), &cell_rows, &cell_cols );
-    if ( (cell_rows < 0) || (cell_cols < 0) )
+    if ( GetCellSize( coords.GetRow(), coords.GetCol(), &cell_rows, &cell_cols )
+            == CellSpan_Inside )
     {
         coords.SetRow(coords.GetRow() + cell_rows);
         coords.SetCol(coords.GetCol() + cell_cols);
@@ -6135,10 +6135,9 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         int row, col, cell_rows, cell_cols;
         row = cells[i].GetRow();
         col = cells[i].GetCol();
-        GetCellSize( row, col, &cell_rows, &cell_cols );
 
         // If this cell is part of a multicell block, find owner for repaint
-        if ( cell_rows <= 0 || cell_cols <= 0 )
+        if ( GetCellSize( row, col, &cell_rows, &cell_cols ) == CellSpan_Inside )
         {
             wxGridCellCoords cell( row + cell_rows, col + cell_cols );
             bool marked = false;
@@ -6506,26 +6505,31 @@ wxGrid::DrawRangeGridLines(wxDC& dc,
         for ( int col = topLeft.GetCol(); col <= bottomRight.GetCol(); col++ )
         {
             int cell_rows, cell_cols;
-            GetCellSize( row, col, &cell_rows, &cell_cols );
-            if ( cell_rows > 1 || cell_cols > 1 ) // multi cell
+            switch ( GetCellSize( row, col, &cell_rows, &cell_cols ) )
             {
-                rect = CellToRect( row, col );
-                // cater for scaling
-                // device origin already set in ::Render() for x, y
-                rect.x = dc.LogicalToDeviceX( rect.x );
-                rect.y = dc.LogicalToDeviceY( rect.y );
-                rect.width = dc.LogicalToDeviceXRel( rect.width );
-                rect.height = dc.LogicalToDeviceYRel( rect.height ) - 1;
-                clippedcells.Subtract( rect );
-            }
-            else if ( cell_rows < 0 || cell_cols < 0 ) // part of multicell
-            {
-                rect = CellToRect( row + cell_rows, col + cell_cols );
-                rect.x = dc.LogicalToDeviceX( rect.x );
-                rect.y = dc.LogicalToDeviceY( rect.y );
-                rect.width = dc.LogicalToDeviceXRel( rect.width );
-                rect.height = dc.LogicalToDeviceYRel( rect.height ) - 1;
-                clippedcells.Subtract( rect );
+                case CellSpan_Main: // multi cell
+                    rect = CellToRect( row, col );
+                    // cater for scaling
+                    // device origin already set in ::Render() for x, y
+                    rect.x = dc.LogicalToDeviceX( rect.x );
+                    rect.y = dc.LogicalToDeviceY( rect.y );
+                    rect.width = dc.LogicalToDeviceXRel( rect.width );
+                    rect.height = dc.LogicalToDeviceYRel( rect.height ) - 1;
+                    clippedcells.Subtract( rect );
+                    break;
+
+                case CellSpan_Inside: // part of multicell
+                    rect = CellToRect( row + cell_rows, col + cell_cols );
+                    rect.x = dc.LogicalToDeviceX( rect.x );
+                    rect.y = dc.LogicalToDeviceY( rect.y );
+                    rect.width = dc.LogicalToDeviceXRel( rect.width );
+                    rect.height = dc.LogicalToDeviceYRel( rect.height ) - 1;
+                    clippedcells.Subtract( rect );
+                    break;
+
+                case CellSpan_None:
+                    // Nothing special to do.
+                    break;
             }
         }
     }
@@ -6597,20 +6601,25 @@ void wxGrid::DrawAllGridWindowLines(wxDC& dc, const wxRegion & WXUNUSED(reg), wx
             {
                 int i = GetColAt( colPos );
 
-                GetCellSize( j, i, &cell_rows, &cell_cols );
-                if ((cell_rows > 1) || (cell_cols > 1))
+                switch ( GetCellSize( j, i, &cell_rows, &cell_cols ) )
                 {
-                    rect = CellToRect(j,i);
-                    rect.Offset(-gridOffset);
-                    CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-                    clippedcells.Subtract(rect);
-                }
-                else if ((cell_rows < 0) || (cell_cols < 0))
-                {
-                    rect = CellToRect(j + cell_rows, i + cell_cols);
-                    rect.Offset(-gridOffset);
-                    CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-                    clippedcells.Subtract(rect);
+                    case CellSpan_Main:
+                        rect = CellToRect(j,i);
+                        rect.Offset(-gridOffset);
+                        CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+                        clippedcells.Subtract(rect);
+                        break;
+
+                    case CellSpan_Inside:
+                        rect = CellToRect(j + cell_rows, i + cell_cols);
+                        rect.Offset(-gridOffset);
+                        CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+                        clippedcells.Subtract(rect);
+                        break;
+
+                    case CellSpan_None:
+                        // Nothing special to do.
+                        break;
                 }
             }
         }
@@ -7228,8 +7237,7 @@ void wxGrid::DoShowCellEditControl()
 
     // if this is part of a multicell, find owner (topleft)
     int cell_rows, cell_cols;
-    GetCellSize( row, col, &cell_rows, &cell_cols );
-    if ( cell_rows <= 0 || cell_cols <= 0 )
+    if ( GetCellSize( row, col, &cell_rows, &cell_cols ) == CellSpan_Inside )
     {
         row += cell_rows;
         col += cell_cols;
@@ -7637,13 +7645,12 @@ wxRect wxGrid::CellToRect( int row, int col ) const
     {
         int i, cell_rows, cell_cols;
         rect.width = rect.height = 0;
-        GetCellSize( row, col, &cell_rows, &cell_cols );
-        // if negative then find multicell owner
-        if (cell_rows < 0)
+        if ( GetCellSize( row, col, &cell_rows, &cell_cols ) == CellSpan_Inside )
+        {
             row += cell_rows;
-        if (cell_cols < 0)
-             col += cell_cols;
-        GetCellSize( row, col, &cell_rows, &cell_cols );
+            col += cell_cols;
+            GetCellSize( row, col, &cell_rows, &cell_cols );
+        }
 
         rect.x = GetColLeft(col);
         rect.y = GetRowTop(row);
