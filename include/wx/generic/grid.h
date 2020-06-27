@@ -2908,11 +2908,12 @@ private:
                 );
     }
 
-    // Show the cell editor for the current cell unconditionally.
+    // Show/hide the cell editor for the current cell unconditionally.
     void DoShowCellEditControl();
+    void DoHideCellEditControl();
 
     // Accept the changes in the edit control, i.e. save them to the table and
-    // dismiss the editor.
+    // dismiss the editor. Also reset m_cellEditCtrlEnabled.
     void DoAcceptCellEditControl();
 
     // As above, but do nothing if the control is not currently shown.

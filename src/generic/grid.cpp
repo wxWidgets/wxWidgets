@@ -7344,49 +7344,54 @@ void wxGrid::HideCellEditControl()
 {
     if ( IsCellEditControlEnabled() )
     {
-        wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
-        const bool editorHadFocus = editor->GetWindow()->IsDescendant(FindFocus());
+        DoHideCellEditControl();
+    }
+}
 
-        if ( editor->GetWindow()->GetParent() != m_gridWin )
-            editor->GetWindow()->Reparent(m_gridWin);
+void wxGrid::DoHideCellEditControl()
+{
+    wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
+    const bool editorHadFocus = editor->GetWindow()->IsDescendant(FindFocus());
 
-        editor->Show( false );
+    if ( editor->GetWindow()->GetParent() != m_gridWin )
+        editor->GetWindow()->Reparent(m_gridWin);
 
-        wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
-        // return the focus to the grid itself if the editor had it
-        //
-        // note that we must not do this unconditionally to avoid stealing
-        // focus from the window which just received it if we are hiding the
-        // editor precisely because we lost focus
-        if ( editorHadFocus )
-            gridWindow->SetFocus();
+    editor->Show( false );
 
-        // refresh whole row to the right
-        wxRect rect( CellToRect(m_currentCellCoords) );
-        rect.Offset( -GetGridWindowOffset(gridWindow) );
-        CalcGridWindowScrolledPosition(rect.x, rect.y, &rect.x, &rect.y, gridWindow);
-        rect.width = gridWindow->GetClientSize().GetWidth() - rect.x;
+    wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
+    // return the focus to the grid itself if the editor had it
+    //
+    // note that we must not do this unconditionally to avoid stealing
+    // focus from the window which just received it if we are hiding the
+    // editor precisely because we lost focus
+    if ( editorHadFocus )
+        gridWindow->SetFocus();
+
+    // refresh whole row to the right
+    wxRect rect( CellToRect(m_currentCellCoords) );
+    rect.Offset( -GetGridWindowOffset(gridWindow) );
+    CalcGridWindowScrolledPosition(rect.x, rect.y, &rect.x, &rect.y, gridWindow);
+    rect.width = gridWindow->GetClientSize().GetWidth() - rect.x;
 
 #ifdef __WXMAC__
-        // ensure that the pixels under the focus ring get refreshed as well
-        rect.Inflate(10, 10);
+    // ensure that the pixels under the focus ring get refreshed as well
+    rect.Inflate(10, 10);
 #endif
 
-        gridWindow->Refresh( false, &rect );
+    gridWindow->Refresh( false, &rect );
 
-        // refresh also the grid to the right
-        wxGridWindow *rightGridWindow = NULL;
-        if ( gridWindow->GetType() == wxGridWindow::wxGridWindowFrozenCorner )
-            rightGridWindow = m_frozenRowGridWin;
-        else if ( gridWindow->GetType() == wxGridWindow::wxGridWindowFrozenCol )
-            rightGridWindow = m_gridWin;
+    // refresh also the grid to the right
+    wxGridWindow *rightGridWindow = NULL;
+    if ( gridWindow->GetType() == wxGridWindow::wxGridWindowFrozenCorner )
+        rightGridWindow = m_frozenRowGridWin;
+    else if ( gridWindow->GetType() == wxGridWindow::wxGridWindowFrozenCol )
+        rightGridWindow = m_gridWin;
 
-        if ( rightGridWindow )
-        {
-            rect.x = 0;
-            rect.width = rightGridWindow->GetClientSize().GetWidth();
-            rightGridWindow->Refresh( false, &rect );
-        }
+    if ( rightGridWindow )
+    {
+        rect.x = 0;
+        rect.width = rightGridWindow->GetClientSize().GetWidth();
+        rightGridWindow->Refresh( false, &rect );
     }
 }
 
@@ -7400,14 +7405,12 @@ void wxGrid::AcceptCellEditControlIfShown()
 
 void wxGrid::DoAcceptCellEditControl()
 {
-    HideCellEditControl();
-
-    // do it after HideCellEditControl() but before invoking
-    // user-defined handlers invoked by DoSaveEditControlValue() to
-    // ensure that we don't enter infinite loop if any of them try to
-    // disable the edit control again by calling DisableCellEditControl()
-    // from which we can be called
+    // Reset it first to avoid any problems with recursion via
+    // DisableCellEditControl() if it's called from the user-defined event
+    // handlers.
     m_cellEditCtrlEnabled = false;
+
+    DoHideCellEditControl();
 
     DoSaveEditControlValue();
 }
