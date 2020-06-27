@@ -3437,7 +3437,7 @@ public:
         allows the user to change the cell value.
 
         Disabling in-place editing does nothing if the in-place editor isn't
-        currently show, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
+        currently shown, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
         generated but, unlike the "shown" event, it can't be vetoed and the
         in-place editor is dismissed unconditionally.
 
