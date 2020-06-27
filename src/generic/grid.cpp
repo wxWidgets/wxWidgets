@@ -7170,15 +7170,7 @@ void wxGrid::EnableCellEditControl( bool enable )
         {
             SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
 
-            HideCellEditControl();
-
-            // do it after HideCellEditControl() but before invoking
-            // user-defined handlers invoked by DoSaveEditControlValue() to
-            // ensure that we don't enter infinite loop if any of them try to
-            // disable the edit control again.
-            m_cellEditCtrlEnabled = false;
-
-            DoSaveEditControlValue();
+            DoAcceptCellEditControl();
         }
     }
 }
@@ -7415,9 +7407,22 @@ void wxGrid::AcceptCellEditControlIfShown()
 {
     if ( IsCellEditControlShown() )
     {
-        HideCellEditControl();
-        DoSaveEditControlValue();
+        DoAcceptCellEditControl();
     }
+}
+
+void wxGrid::DoAcceptCellEditControl()
+{
+    HideCellEditControl();
+
+    // do it after HideCellEditControl() but before invoking
+    // user-defined handlers invoked by DoSaveEditControlValue() to
+    // ensure that we don't enter infinite loop if any of them try to
+    // disable the edit control again by calling DisableCellEditControl()
+    // from which we can be called
+    m_cellEditCtrlEnabled = false;
+
+    DoSaveEditControlValue();
 }
 
 void wxGrid::SaveEditControlValue()

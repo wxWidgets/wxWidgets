@@ -2908,8 +2908,11 @@ private:
                 );
     }
 
-    // Accept the changes in the edit control, if it's currently shown, and
-    // dismiss it.
+    // Accept the changes in the edit control, i.e. save them to the table and
+    // dismiss the editor.
+    void DoAcceptCellEditControl();
+
+    // As above, but do nothing if the control is not currently shown.
     void AcceptCellEditControlIfShown();
 
     // Unlike the public SaveEditControlValue(), this method doesn't check if
