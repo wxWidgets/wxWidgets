@@ -3217,7 +3217,7 @@ public:
 private:
     SurfaceFontDataD2D* m_surfaceFontData;
 };
-#endif
+#endif // HAVE_DIRECTWRITE_TECHNOLOGY
 
 
 // A popup window to place the wxSTCListBox upon
