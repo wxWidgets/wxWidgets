@@ -135,7 +135,7 @@ bool wxWebViewEdgeImpl::Initialize()
     return false;
 }
 
-void wxWebViewEdgeImpl::Uninitalize()
+void wxWebViewEdgeImpl::Uninitialize()
 {
     if (ms_isAvailable == 1)
     {
@@ -861,7 +861,7 @@ public:
 
     virtual void OnExit() wxOVERRIDE
     {
-        wxWebViewEdgeImpl::Uninitalize();
+        wxWebViewEdgeImpl::Uninitialize();
     }
 
 private:
