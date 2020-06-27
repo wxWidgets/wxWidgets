@@ -3827,8 +3827,9 @@ public:
         Displays the active in-place cell edit control for the current cell
         after it was hidden.
 
-        Note that this method does @em not start editing the cell, this is only
-        done by EnableCellEditControl().
+        This method should only be called after calling HideCellEditControl(),
+        to start editing the current grid cell use EnableCellEditControl()
+        instead.
     */
     void ShowCellEditControl();
 

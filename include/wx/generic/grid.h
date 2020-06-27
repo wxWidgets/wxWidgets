@@ -1509,7 +1509,7 @@ public:
 
     bool IsCurrentCellReadOnly() const;
 
-    void ShowCellEditControl();
+    void ShowCellEditControl(); // Use EnableCellEditControl() instead.
     void HideCellEditControl();
     void SaveEditControlValue();
 
@@ -2907,6 +2907,9 @@ private:
                     m_currentCellCoords.GetCol()
                 );
     }
+
+    // Show the cell editor for the current cell unconditionally.
+    void DoShowCellEditControl();
 
     // Accept the changes in the edit control, i.e. save them to the table and
     // dismiss the editor.
