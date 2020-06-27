@@ -5222,8 +5222,7 @@ void wxGrid::ClearGrid()
 {
     if ( m_table )
     {
-        if (IsCellEditControlEnabled())
-            DisableCellEditControl();
+        DisableCellEditControl();
 
         m_table->Clear();
         if ( ShouldRefresh() )
@@ -5240,8 +5239,7 @@ wxGrid::DoModifyLines(bool (wxGridTableBase::*funcModify)(size_t, size_t),
     if ( !m_table )
         return false;
 
-    if ( IsCellEditControlEnabled() )
-        DisableCellEditControl();
+    DisableCellEditControl();
 
     return (m_table->*funcModify)(pos, num);
 
