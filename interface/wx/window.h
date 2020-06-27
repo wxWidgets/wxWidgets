@@ -1964,7 +1964,7 @@ public:
         Freezes the window or, in other words, prevents any updates from taking
         place on screen, the window is not redrawn at all.
 
-        Thaw() must be called to reenable window redrawing. Calls to these two
+        Thaw() must be called to re-enable window redrawing. Calls to these two
         functions may be nested but to ensure that the window is properly
         repainted again, you must thaw it exactly as many times as you froze it.
 
@@ -2855,7 +2855,7 @@ public:
 
     /**
         Enable or disable the window for user input. Note that when a parent window is
-        disabled, all of its children are disabled as well and they are reenabled again
+        disabled, all of its children are disabled as well and they are re-enabled again
         when the parent is.
 
         A window can be created initially disabled by calling this method on it

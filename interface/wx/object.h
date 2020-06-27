@@ -625,7 +625,7 @@ public:
 
     /**
         Conversion to a boolean expression (in a variant which is not
-        convertable to anything but a boolean expression).
+        convertible to anything but a boolean expression).
 
         If this class contains a valid pointer it will return @true, if it contains
         a @NULL pointer it will return @false.

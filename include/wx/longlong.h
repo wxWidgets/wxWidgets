@@ -707,7 +707,7 @@ public:
     wxLongLongWx operator-() const;
     wxLongLongWx& Negate();
 
-        // subraction
+        // subtraction
     wxLongLongWx operator-(const wxLongLongWx& ll) const;
     wxLongLongWx& operator-=(const wxLongLongWx& ll);
 

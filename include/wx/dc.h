@@ -528,7 +528,7 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
-    // this needs to overidden if the axis is inverted
+    // this needs to overridden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }

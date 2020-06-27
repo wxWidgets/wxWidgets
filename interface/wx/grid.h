@@ -99,7 +99,7 @@ public:
         GetBestSize() should be called for each cell individually.
 
         Note that this method will only be used if
-        wxGridTableBase::CanMeasureColUsingSameAttr() is overriden to return
+        wxGridTableBase::CanMeasureColUsingSameAttr() is overridden to return
         @true.
 
         @since 3.1.4
@@ -1326,7 +1326,7 @@ public:
         Returns @true if the cell will draw an overflowed text into the
         neighbouring cells.
 
-        Note that only left aligned cells currenty can overflow. It means that
+        Note that only left aligned cells currently can overflow. It means that
         GetFitMode().IsOverflow() should returns true and GetAlignment should
         returns wxALIGN_LEFT for hAlign parameter.
 

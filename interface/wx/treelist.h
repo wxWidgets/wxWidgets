@@ -90,7 +90,7 @@ public:
     /**
         Default constructor.
 
-        Notice that this class is not copyable, comparators are not passed by
+        Notice that this class is not copiable, comparators are not passed by
         value.
      */
     wxTreeListItemComparator();

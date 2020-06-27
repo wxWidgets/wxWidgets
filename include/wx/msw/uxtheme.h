@@ -33,8 +33,8 @@
 // ----------------------------------------------------------------------------
 // Definitions for legacy Windows SDKs
 // ----------------------------------------------------------------------------
-// Some defintions introduced with Windows Vista might be missing in older SDKs
-// Missing defintions are added here for compatiblity
+// Some definitions introduced with Windows Vista might be missing in older SDKs
+// Missing definitions are added here for compatibility
 
 #ifndef VSCLASS_LISTVIEW
 #define LISS_NORMAL 1

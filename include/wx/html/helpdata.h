@@ -203,7 +203,7 @@ protected:
     wxHtmlBookRecArray m_bookRecords;
 
     wxHtmlHelpDataItems m_contents; // list of all available books and pages
-    wxHtmlHelpDataItems m_index; // list of index itesm
+    wxHtmlHelpDataItems m_index; // list of index items
 
 protected:
     // Imports .hhp files (MS HTML Help Workshop)

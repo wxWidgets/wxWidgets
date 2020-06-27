@@ -133,7 +133,7 @@ public:
     wxFileName(const wxFileName& filepath) { Assign(filepath); }
 
         // from a full filename: if it terminates with a '/', a directory path
-        // is contructed (the name will be empty), otherwise a file name and
+        // is constructed (the name will be empty), otherwise a file name and
         // extension are extracted from it
     wxFileName( const wxString& fullpath, wxPathFormat format = wxPATH_NATIVE )
         { Assign( fullpath, format ); m_dontFollowLinks = false; }

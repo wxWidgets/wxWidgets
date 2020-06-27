@@ -894,7 +894,7 @@ public:
 
     For example:
     @code
-    // this function loads somes settings from the given wxConfig object;
+    // this function loads some settings from the given wxConfig object;
     // the path selected inside it is left unchanged
     bool LoadMySettings(wxConfigBase* cfg)
     {

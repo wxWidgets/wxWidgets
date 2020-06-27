@@ -445,7 +445,7 @@ public:
         @param height
             The height of the bitmap in pixels, must be strictly positive.
         @param dc
-            DC from wich the scaling factor is inherited
+            DC from which the scaling factor is inherited
 
         @return @true if the creation was successful.
 

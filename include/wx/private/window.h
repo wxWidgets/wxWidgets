@@ -76,7 +76,7 @@ public:
         }
 
         // Ensure that we return true the first time we're called,
-        // asuming that the value will always be set to a non-default value.
+        // assuming that the value will always be set to a non-default value.
         return m_value == T();
     }
 

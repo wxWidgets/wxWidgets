@@ -5324,7 +5324,7 @@ public:
     void MarkerSetBackgroundSelected(int markerNumber, const wxColour& back);
 
     /**
-        Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+        Enable/disable highlight for current folding block (smallest one that contains the caret)
     */
     void MarkerEnableHighlight(bool enabled);
 
@@ -7927,7 +7927,7 @@ public:
     @section event_types Event Types
 
     The following is a brief description of when the control generates these
-    events and a list of which methods provide relevent information.  Additional
+    events and a list of which methods provide relevant information.  Additional
     details can be found in the Scintilla documentation
     (http://www.scintilla.org/ScintillaDoc.html#Notifications).
 

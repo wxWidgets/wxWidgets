@@ -62,7 +62,7 @@ enum wxTextValidatorStyle
     /// wxFILTER_ASCII, wxFILTER_ALPHA, wxFILTER_ALPHANUMERIC, wxFILTER_DIGITS,
     /// wxFILTER_XDIGITS, wxFILTER_NUMERIC it just extends the character class
     /// denoted by the aforementioned styles with those specified in the include
-    /// char list. If set alone, then the charactes allowed to be in the user input
+    /// char list. If set alone, then the characters allowed to be in the user input
     /// are restricted to those, and only those, present in the include char list.
     wxFILTER_INCLUDE_CHAR_LIST,
 

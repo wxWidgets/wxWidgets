@@ -56,7 +56,7 @@ extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size
  */
 
 /*
-  wxAutoULong: this class is used for automatically initalising m_cRef to 0
+  wxAutoULong: this class is used for automatically initialising m_cRef to 0
 */
 class wxAutoULong
 {

@@ -668,7 +668,7 @@ public:
         By default, the log messages are passed to the previously active log target.
         Calling this function with @false parameter disables this behaviour
         (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
-        it can be reenabled by calling it again with @a passMessages set to @true.
+        it can be re-enabled by calling it again with @a passMessages set to @true.
     */
     void PassMessages(bool passMessages);
 

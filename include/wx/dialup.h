@@ -118,7 +118,7 @@ public:
     // set misc wxDialUpManager options
     // --------------------------------
 
-    // enable automatical checks for the connection status and sending of
+    // enable automatic checks for the connection status and sending of
     // wxEVT_DIALUP_CONNECTED/wxEVT_DIALUP_DISCONNECTED events. The interval
     // parameter is only for Unix where we do the check manually: under
     // Windows, the notification about the change of connection status is

@@ -164,7 +164,7 @@ class wxWebViewHistoryItem
 {
 public:
     /**
-        Construtor.
+        Constructor.
     */
     wxWebViewHistoryItem(const wxString& url, const wxString& title);
 

@@ -125,7 +125,7 @@ public:
                                    const void *bits = NULL);
 
     // create a plain DIB (not a DIB section) from a DDB, the caller is
-    // responsable for freeing it using ::GlobalFree()
+    // responsible for freeing it using ::GlobalFree()
     static HGLOBAL ConvertFromBitmap(HBITMAP hbmp);
 
     // creates a DIB from the given DDB or calculates the space needed by it:

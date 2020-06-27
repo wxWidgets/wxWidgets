@@ -24,7 +24,7 @@
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
 
-// Available since Windows 7 only. With this style, the value of guage will
+// Available since Windows 7 only. With this style, the value of gauge will
 // reflect on the taskbar button.
 #define wxGA_PROGRESS        0x0010
 // Win32 only, is default (and only) on some other platforms

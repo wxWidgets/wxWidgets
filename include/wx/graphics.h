@@ -104,7 +104,7 @@ class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmap;
 /*
  * notes about the graphics context apis
  *
- * angles : are measured in radians, 0.0 being in direction of positiv x axis, PI/2 being
+ * angles : are measured in radians, 0.0 being in direction of positive x axis, PI/2 being
  * in direction of positive y axis.
  */
 
@@ -218,7 +218,7 @@ public:
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0);
 
-    // gets the component valuess of the matrix
+    // gets the component values of the matrix
     virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
                      wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
 

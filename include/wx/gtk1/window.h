@@ -211,7 +211,7 @@ public:
     bool                 m_needsStyleChange:1;  // May not be able to change
                                                 // background style until OnIdle
 
-    // C++ has no virtual methods in the constrcutor of any class but we need
+    // C++ has no virtual methods in the constructor of any class but we need
     // different methods of inserting a child window into a wxFrame,
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
     wxInsertChildFunction  m_insertCallback;

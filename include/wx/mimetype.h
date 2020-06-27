@@ -32,7 +32,7 @@ class WXDLLIMPEXP_FWD_BASE wxIconLocation;
 class WXDLLIMPEXP_FWD_BASE wxFileTypeImpl;
 class WXDLLIMPEXP_FWD_BASE wxMimeTypesManagerImpl;
 
-// these constants define the MIME informations source under UNIX and are used
+// these constants define the MIME information source under UNIX and are used
 // by wxMimeTypesManager::Initialize()
 enum wxMailcapStyle
 {

@@ -39,7 +39,7 @@ typedef wxDLManifest wxDLImports;
 //       wxDL is not virtual and we deliberately hide some of it's
 //       methods here.
 //
-//       Unless you know exacty why you need to, you probably shouldn't
+//       Unless you know exactly why you need to, you probably shouldn't
 //       instantiate this class directly anyway, use wxPluginManager
 //       instead.
 

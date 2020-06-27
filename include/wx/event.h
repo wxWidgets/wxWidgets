@@ -2190,7 +2190,7 @@ public:
             *ypos = GetY();
     }
 
-    // This version if provided only for backwards compatiblity, don't use.
+    // This version if provided only for backwards compatibility, don't use.
     void GetPosition(long *xpos, long *ypos) const
     {
         if (xpos)

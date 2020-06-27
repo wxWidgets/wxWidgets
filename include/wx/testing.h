@@ -320,7 +320,7 @@ public:
 
     // Called to verify that all expectations were met. This cannot be done in
     // the destructor, because ReportFailure() may throw (either because it's
-    // overriden or because wx's assertions handling is, globally). And
+    // overridden or because wx's assertions handling is, globally). And
     // throwing from the destructor would introduce all sort of problems,
     // including messing up the order of errors in some cases.
     void CheckUnmetExpectations()

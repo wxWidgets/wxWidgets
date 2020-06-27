@@ -26,7 +26,7 @@
 
 // dock art provider code - a dock provider provides all drawing
 // functionality to the wxAui dock manager.  This allows the dock
-// manager to have plugable look-and-feels
+// manager to have pluggable look-and-feels
 
 class WXDLLIMPEXP_AUI wxAuiDockArt
 {
