@@ -3015,13 +3015,7 @@ void wxGrid::CalcDimensions()
     // take into account editor if shown
     if ( IsCellEditControlShown() )
     {
-        int r = m_currentCellCoords.GetRow();
-        int c = m_currentCellCoords.GetCol();
-
-        // how big is the editor
-        wxGridCellAttrPtr attr = GetCellAttrPtr(r, c);
-        wxGridCellEditorPtr editor = attr->GetEditorPtr(this, r, c);
-        const wxRect rect = editor->GetWindow()->GetRect();
+        const wxRect rect = GetCurrentCellEditorPtr()->GetWindow()->GetRect();
         if ( rect.GetRight() > w )
             w = rect.GetRight();
         if ( rect.GetBottom() > h )
@@ -4673,9 +4667,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
             ClearSelection();
             EnableCellEditControl();
 
-            wxGridCellAttrPtr attr = GetCellAttrPtr(coords);
-            wxGridCellEditorPtr editor = attr->GetEditorPtr(this, coords.GetRow(), coords.GetCol());
-            editor->StartingClick();
+            GetCurrentCellEditorPtr()->StartingClick();
 
             m_waitForSlowClick = false;
         }
@@ -5988,10 +5980,7 @@ void wxGrid::OnChar( wxKeyEvent& event )
     if ( !IsCellEditControlEnabled() && CanEnableCellControl() )
     {
         // yes, now check whether the cells editor accepts the key
-        int row = m_currentCellCoords.GetRow();
-        int col = m_currentCellCoords.GetCol();
-        wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-        wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
+        wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
 
         // <F2> is special and will always start editing, for
         // other keys - ask the editor itself
@@ -5999,7 +5988,7 @@ void wxGrid::OnChar( wxKeyEvent& event )
              || editor->IsAcceptedKey(event) )
         {
             // ensure cell is visble
-            MakeCellVisible(row, col);
+            MakeCellVisible(m_currentCellCoords);
             EnableCellEditControl();
 
             // a problem can arise if the cell is not completely
@@ -7227,10 +7216,7 @@ bool wxGrid::IsCellEditControlShown() const
 
     if ( m_cellEditCtrlEnabled )
     {
-        int row = m_currentCellCoords.GetRow();
-        int col = m_currentCellCoords.GetCol();
-        wxGridCellEditorPtr editor = GetCellAttrPtr(row, col)->GetEditorPtr(this, row, col);
-        if ( editor )
+        if ( wxGridCellEditorPtr editor = GetCurrentCellEditorPtr() )
         {
             if ( editor->IsCreated() )
             {
@@ -7387,11 +7373,7 @@ void wxGrid::HideCellEditControl()
 {
     if ( IsCellEditControlEnabled() )
     {
-        int row = m_currentCellCoords.GetRow();
-        int col = m_currentCellCoords.GetCol();
-
-        wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-        wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
+        wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
         const bool editorHadFocus = editor->GetWindow()->IsDescendant(FindFocus());
 
         if ( editor->GetWindow()->GetParent() != m_gridWin )
@@ -7399,7 +7381,7 @@ void wxGrid::HideCellEditControl()
 
         editor->Show( false );
 
-        wxGridWindow *gridWindow = CellToGridWindow(row, col);
+        wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
         // return the focus to the grid itself if the editor had it
         //
         // note that we must not do this unconditionally to avoid stealing
@@ -7409,7 +7391,7 @@ void wxGrid::HideCellEditControl()
             gridWindow->SetFocus();
 
         // refresh whole row to the right
-        wxRect rect( CellToRect(row, col) );
+        wxRect rect( CellToRect(m_currentCellCoords) );
         rect.Offset( -GetGridWindowOffset(gridWindow) );
         CalcGridWindowScrolledPosition(rect.x, rect.y, &rect.x, &rect.y, gridWindow);
         rect.width = gridWindow->GetClientSize().GetWidth() - rect.x;
@@ -7450,10 +7432,9 @@ void wxGrid::DoSaveEditControlValue()
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
 
-    wxString oldval = GetCellValue(row, col);
+    wxString oldval = GetCellValue(m_currentCellCoords);
 
-    wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-    wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
+    wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
 
     wxString newval;
     bool changed = editor->EndEdit(row, col, this, oldval, &newval);
@@ -7468,7 +7449,7 @@ void wxGrid::DoSaveEditControlValue()
         if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
         {
             // Event has been vetoed, set the data back.
-            SetCellValue(row, col, oldval);
+            SetCellValue(m_currentCellCoords, oldval);
         }
     }
 }

@@ -2897,6 +2897,17 @@ private:
     void SetNativeHeaderColCount();
     void SetNativeHeaderColOrder();
 
+    // Return the editor which should be used for the current cell.
+    wxGridCellEditorPtr GetCurrentCellEditorPtr() const
+    {
+        return GetCellAttrPtr(m_currentCellCoords)->GetEditorPtr
+                (
+                    this,
+                    m_currentCellCoords.GetRow(),
+                    m_currentCellCoords.GetCol()
+                );
+    }
+
     // Unlike the public SaveEditControlValue(), this method doesn't check if
     // the edit control is shown, but just supposes that it is.
     void DoSaveEditControlValue();
