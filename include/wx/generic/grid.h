@@ -2908,6 +2908,10 @@ private:
                 );
     }
 
+    // Accept the changes in the edit control, if it's currently shown, and
+    // dismiss it.
+    void AcceptCellEditControlIfShown();
+
     // Unlike the public SaveEditControlValue(), this method doesn't check if
     // the edit control is shown, but just supposes that it is.
     void DoSaveEditControlValue();

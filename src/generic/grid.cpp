@@ -3966,11 +3966,7 @@ void wxGrid::DoStartResizeRowOrCol(int col)
 {
     // Hide the editor if it's currently shown to avoid any weird interactions
     // with it while dragging the row/column separator.
-    if ( IsCellEditControlShown() )
-    {
-        HideCellEditControl();
-        SaveEditControlValue();
-    }
+    AcceptCellEditControlIfShown();
 
     m_dragRowOrCol = col;
 }
@@ -4481,11 +4477,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
     if ( isFirstDrag )
     {
         // Hide the edit control, so it won't interfere with drag-shrinking.
-        if ( IsCellEditControlShown() )
-        {
-            HideCellEditControl();
-            SaveEditControlValue();
-        }
+        AcceptCellEditControlIfShown();
 
         switch ( event.GetModifiers() )
         {
@@ -7419,6 +7411,15 @@ void wxGrid::HideCellEditControl()
     }
 }
 
+void wxGrid::AcceptCellEditControlIfShown()
+{
+    if ( IsCellEditControlShown() )
+    {
+        HideCellEditControl();
+        DoSaveEditControlValue();
+    }
+}
+
 void wxGrid::SaveEditControlValue()
 {
     if ( IsCellEditControlEnabled() )
@@ -9951,9 +9952,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 
     wxClientDC dc(m_gridWin);
 
-    // cancel editing of cell
-    HideCellEditControl();
-    SaveEditControlValue();
+    AcceptCellEditControlIfShown();
 
     // initialize both of them just to avoid compiler warnings even if only
     // really needs to be initialized here
@@ -10272,11 +10271,7 @@ void wxGrid::AutoSizeRowLabelSize( int row )
 {
     // Hide the edit control, so it
     // won't interfere with drag-shrinking.
-    if ( IsCellEditControlShown() )
-    {
-        HideCellEditControl();
-        SaveEditControlValue();
-    }
+    AcceptCellEditControlIfShown();
 
     // autosize row height depending on label text
     SetRowSize(row, -1);
@@ -10288,11 +10283,7 @@ void wxGrid::AutoSizeColLabelSize( int col )
 {
     // Hide the edit control, so it
     // won't interfere with drag-shrinking.
-    if ( IsCellEditControlShown() )
-    {
-        HideCellEditControl();
-        SaveEditControlValue();
-    }
+    AcceptCellEditControlIfShown();
 
     // autosize column width depending on label text
     SetColSize(col, -1);
