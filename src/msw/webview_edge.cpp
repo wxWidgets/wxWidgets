@@ -26,6 +26,7 @@
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/json.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/cotaskmemptr.h"
 #include "wx/msw/private/webview_edge.h"
 
 #include <wrl/event.h>
@@ -124,16 +125,10 @@ bool wxWebViewEdgeImpl::Initialize()
         return false;
 
     // Check if a Edge browser can be found by the loader DLL
-    LPWSTR versionStr;
+    wxCoTaskMemPtr<wchar_t> versionStr;
     HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(NULL, &versionStr);
-    if (SUCCEEDED(hr))
-    {
-        if (versionStr)
-        {
-            CoTaskMemFree(versionStr);
-            return true;
-        }
-    }
+    if (SUCCEEDED(hr) && versionStr)
+        return true;
     else
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
 
@@ -161,12 +156,10 @@ HRESULT wxWebViewEdgeImpl::OnNavigationStarting(ICoreWebView2* WXUNUSED(sender),
 {
     m_isBusy = true;
     wxString evtURL;
-    LPWSTR uri;
+    wxCoTaskMemPtr<wchar_t> uri;
     if (SUCCEEDED(args->get_Uri(&uri)))
-    {
         evtURL = wxString(uri);
-        CoTaskMemFree(uri);
-    }
+
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), evtURL, wxString());
     event.SetEventObject(m_ctrl);
     m_ctrl->HandleWindowEvent(event);
@@ -245,13 +238,10 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
 
 HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NewWindowRequestedEventArgs* args)
 {
-    LPWSTR uri;
+    wxCoTaskMemPtr<wchar_t> uri;
     wxString evtURL;
     if (SUCCEEDED(args->get_Uri(&uri)))
-    {
         evtURL = wxString(uri);
-        CoTaskMemFree(uri);
-    }
     wxWebViewNavigationActionFlags navFlags = wxWEBVIEW_NAV_ACTION_OTHER;
 
     BOOL isUserInitiated;
@@ -519,26 +509,18 @@ bool wxWebViewEdge::IsBusy() const
 
 wxString wxWebViewEdge::GetCurrentURL() const
 {
-    LPWSTR uri;
+    wxCoTaskMemPtr<wchar_t> uri;
     if (m_impl->m_webView && SUCCEEDED(m_impl->m_webView->get_Source(&uri)))
-    {
-        wxString uriStr(uri);
-        CoTaskMemFree(uri);
-        return uriStr;
-    }
+        return wxString(uri);
     else
         return wxString();
 }
 
 wxString wxWebViewEdge::GetCurrentTitle() const
 {
-    LPWSTR title;
+    wxCoTaskMemPtr<wchar_t> title;
     if (m_impl->m_webView && SUCCEEDED(m_impl->m_webView->get_DocumentTitle(&title)))
-    {
-        wxString titleStr(title);
-        CoTaskMemFree(title);
-        return titleStr;
-    }
+        return wxString(title);
     else
         return wxString();
 }
@@ -578,6 +560,13 @@ wxWebViewZoom wxWebViewEdge::GetZoom() const
     return wxWEBVIEW_ZOOM_TINY;
 }
 
+float wxWebViewEdge::GetZoomFactor() const
+{
+    double old_zoom_factor = 0.0;
+    m_impl->m_webViewController->get_ZoomFactor(&old_zoom_factor);
+    return old_zoom_factor;
+}
+
 void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
 {
     double old_zoom_factor = 0.0;
@@ -603,7 +592,12 @@ void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
     default:
         break;
     }
-    m_impl->m_webViewController->put_ZoomFactor(zoom_factor);
+    SetZoomFactor(zoom_factor);
+}
+
+void wxWebViewEdge::SetZoomFactor(float zoom)
+{
+    m_impl->m_webViewController->put_ZoomFactor(zoom);
 }
 
 bool wxWebViewEdge::CanCut() const

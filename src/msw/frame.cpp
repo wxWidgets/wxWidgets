@@ -315,24 +315,25 @@ void wxFrame::PositionStatusBar()
     int x = 0;
 #if wxUSE_TOOLBAR
     wxToolBar * const toolbar = GetToolBar();
-    if ( toolbar && !toolbar->HasFlag(wxTB_TOP) )
+    if ( toolbar )
     {
         const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
 
-        if ( toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT) )
+        if ( toolbar->IsVertical() )
         {
-            if ( toolbar->HasFlag(wxTB_LEFT) )
+            if ( directionTB == wxTB_LEFT )
                 x -= sizeTB.x;
 
             w += sizeTB.x;
         }
-        else // wxTB_BOTTOM
+        else if ( directionTB == wxTB_BOTTOM )
         {
             // we need to position the status bar below the toolbar
             h += sizeTB.y;
         }
+        //else: no adjustments necessary for the toolbar on top
     }
-    //else: no adjustments necessary for the toolbar on top
 #endif // wxUSE_TOOLBAR
 
     // GetSize returns the height of the clientSize in which the statusbar
@@ -932,12 +933,13 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     if ( toolbar && toolbar->IsShown() )
     {
         const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
 
-        if ( toolbar->HasFlag(wxTB_TOP) )
+        if ( directionTB == wxTB_TOP )
         {
             pt.y += sizeTB.y;
         }
-        else if ( toolbar->HasFlag(wxTB_LEFT) )
+        else if ( directionTB == wxTB_LEFT )
         {
             pt.x += sizeTB.x;
         }

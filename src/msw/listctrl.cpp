@@ -2470,74 +2470,78 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case LVN_ITEMCHANGED:
                 // we translate this catch all message into more interesting
                 // (and more easy to process) wxWidgets events
-
-                // first of all, we deal with the state change events only and
-                // only for valid items (item == -1 for the virtual list
-                // control)
-                if ( nmLV->uChanged & LVIF_STATE && iItem != -1 )
                 {
                     // temp vars for readability
                     const UINT stOld = nmLV->uOldState;
                     const UINT stNew = nmLV->uNewState;
 
-                    event.m_item.SetId(iItem);
-                    event.m_item.SetMask(wxLIST_MASK_TEXT |
-                                         wxLIST_MASK_IMAGE |
-                                         wxLIST_MASK_DATA);
-                    GetItem(event.m_item);
-
-                    // has the focus changed?
-                    if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
+                    // first of all, we deal with the state change events only and
+                    // only for valid items (item == -1 for the virtual list
+                    // control)
+                    if ( nmLV->uChanged & LVIF_STATE &&
+                         (iItem != -1 || (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED)))
                     {
-                        eventType = wxEVT_LIST_ITEM_FOCUSED;
-                        event.m_itemIndex = iItem;
-                    }
 
-                    if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
-                    {
-                        if ( eventType != wxEVT_NULL )
+                        event.m_item.SetId(iItem);
+                        event.m_item.SetMask(wxLIST_MASK_TEXT |
+                                             wxLIST_MASK_IMAGE |
+                                             wxLIST_MASK_DATA);
+                        if (iItem != -1)
+                            GetItem(event.m_item);
+
+                        // has the focus changed?
+                        if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
                         {
-                            // focus and selection have both changed: send the
-                            // focus event from here and the selection one
-                            // below
-                            event.SetEventType(eventType);
-                            (void)HandleWindowEvent(event);
-                        }
-                        else // no focus event to send
-                        {
-                            // then need to set m_itemIndex as it wasn't done
-                            // above
+                            eventType = wxEVT_LIST_ITEM_FOCUSED;
                             event.m_itemIndex = iItem;
                         }
 
-                        eventType = stNew & LVIS_SELECTED
-                                        ? wxEVT_LIST_ITEM_SELECTED
-                                        : wxEVT_LIST_ITEM_DESELECTED;
-                    }
+                        if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
+                        {
+                            if ( eventType != wxEVT_NULL )
+                            {
+                                // focus and selection have both changed: send the
+                                // focus event from here and the selection one
+                                // below
+                                event.SetEventType(eventType);
+                                (void)HandleWindowEvent(event);
+                            }
+                            else // no focus event to send
+                            {
+                                // then need to set m_itemIndex as it wasn't done
+                                // above
+                                event.m_itemIndex = iItem;
+                            }
 
-                    if ( (stNew & LVIS_STATEIMAGEMASK) != (stOld & LVIS_STATEIMAGEMASK) )
-                    {
-                        if ( stOld == INDEXTOSTATEIMAGEMASK(0) )
-                        {
-                            // item does not yet have a state
-                            // occurs when checkboxes are enabled and when a new item is added
-                            eventType = wxEVT_NULL;
-                        }
-                        else if ( stNew == INDEXTOSTATEIMAGEMASK(1) )
-                        {
-                            eventType = wxEVT_LIST_ITEM_UNCHECKED;
-                        }
-                        else if ( stNew == INDEXTOSTATEIMAGEMASK(2) )
-                        {
-                            eventType = wxEVT_LIST_ITEM_CHECKED;
-                        }
-                        else
-                        {
-                            eventType = wxEVT_NULL;
-                            wxLogDebug(wxS("Unknown LVIS_STATEIMAGE state: %u"), stNew);
+                            eventType = stNew & LVIS_SELECTED
+                                            ? wxEVT_LIST_ITEM_SELECTED
+                                            : wxEVT_LIST_ITEM_DESELECTED;
                         }
 
-                        event.m_itemIndex = iItem;
+                        if ( (stNew & LVIS_STATEIMAGEMASK) != (stOld & LVIS_STATEIMAGEMASK) )
+                        {
+                            if ( stOld == INDEXTOSTATEIMAGEMASK(0) )
+                            {
+                                // item does not yet have a state
+                                // occurs when checkboxes are enabled and when a new item is added
+                                eventType = wxEVT_NULL;
+                            }
+                            else if ( stNew == INDEXTOSTATEIMAGEMASK(1) )
+                            {
+                                eventType = wxEVT_LIST_ITEM_UNCHECKED;
+                            }
+                            else if ( stNew == INDEXTOSTATEIMAGEMASK(2) )
+                            {
+                                eventType = wxEVT_LIST_ITEM_CHECKED;
+                            }
+                            else
+                            {
+                                eventType = wxEVT_NULL;
+                                wxLogDebug(wxS("Unknown LVIS_STATEIMAGE state: %u"), stNew);
+                            }
+
+                            event.m_itemIndex = iItem;
+                        }
                     }
                 }
 

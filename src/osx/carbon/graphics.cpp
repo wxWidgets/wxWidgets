@@ -504,6 +504,7 @@ protected:
 
     CGFunctionRef CreateGradientFunction(const wxGraphicsGradientStops& stops);
     static void CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out);
+    static void ReleaseComponents (void *info);
 
     bool m_isShading;
     CGFunctionRef m_gradientFunction;
@@ -544,7 +545,7 @@ protected:
         GradientComponent *comps;
     };
 
-    GradientComponents m_gradientComponents;
+    GradientComponents* m_gradientComponents;
 };
 
 
@@ -564,6 +565,8 @@ wxMacCoreGraphicsPenBrushDataBase::~wxMacCoreGraphicsPenBrushDataBase()
 
     if ( m_shadingMatrix )
         delete m_shadingMatrix;
+    
+    // an eventual existing m_gradientComponents will be deallocated via the CGFunction callback
 }
 
 void
@@ -573,6 +576,7 @@ wxMacCoreGraphicsPenBrushDataBase::Init()
     m_shading = NULL;
     m_isShading = false;
     m_shadingMatrix = NULL;
+    m_gradientComponents = NULL;
 }
 
 void
@@ -614,6 +618,13 @@ wxMacCoreGraphicsPenBrushDataBase::CreateRadialGradientShading(
         m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
         m_shadingMatrix->Invert();
     }
+}
+
+void wxMacCoreGraphicsPenBrushDataBase::ReleaseComponents(void *info)
+{
+    const GradientComponents* stops = (GradientComponents*) info ;
+    if ( stops )
+        delete stops;
 }
 
 void wxMacCoreGraphicsPenBrushDataBase::CalculateShadingValues(void *info, const CGFloat *in, CGFloat *out)
@@ -662,26 +673,27 @@ void wxMacCoreGraphicsPenBrushDataBase::CalculateShadingValues(void *info, const
 CGFunctionRef
 wxMacCoreGraphicsPenBrushDataBase::CreateGradientFunction(const wxGraphicsGradientStops& stops)
 {
-
-    static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, NULL };
+    m_gradientComponents = new GradientComponents();
+    
+    static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, &ReleaseComponents };
     static const CGFloat input_value_range [2] = { 0, 1 };
     static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
 
-    m_gradientComponents.Init(stops.GetCount());
-    for ( unsigned i = 0; i < m_gradientComponents.count; i++ )
+    m_gradientComponents->Init(stops.GetCount());
+    for ( unsigned i = 0; i < m_gradientComponents->count; i++ )
     {
         const wxGraphicsGradientStop stop = stops.Item(i);
 
-        m_gradientComponents.comps[i].pos = stop.GetPosition();
+        m_gradientComponents->comps[i].pos = stop.GetPosition();
 
         const wxColour col = stop.GetColour();
-        m_gradientComponents.comps[i].red = (CGFloat) (col.Red() / 255.0);
-        m_gradientComponents.comps[i].green = (CGFloat) (col.Green() / 255.0);
-        m_gradientComponents.comps[i].blue = (CGFloat) (col.Blue() / 255.0);
-        m_gradientComponents.comps[i].alpha = (CGFloat) (col.Alpha() / 255.0);
+        m_gradientComponents->comps[i].red = (CGFloat) (col.Red() / 255.0);
+        m_gradientComponents->comps[i].green = (CGFloat) (col.Green() / 255.0);
+        m_gradientComponents->comps[i].blue = (CGFloat) (col.Blue() / 255.0);
+        m_gradientComponents->comps[i].alpha = (CGFloat) (col.Alpha() / 255.0);
     }
 
-    return CGFunctionCreate ( &m_gradientComponents,  1,
+    return CGFunctionCreate ( m_gradientComponents,  1,
                             input_value_range,
                             4,
                             output_value_ranges,

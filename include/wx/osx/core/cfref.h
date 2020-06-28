@@ -18,8 +18,8 @@
 
 // Include unistd to ensure that NULL is defined
 #include <unistd.h>
-// Include AvailabilityMacros for DEPRECATED_ATTRIBUTE
-#include <AvailabilityMacros.h>
+// Include Availability for __AVAILABILITY_INTERNAL_DEPRECATED
+#include <Availability.h>
 
 #if __has_feature(objc_arc)
 #define WX_OSX_BRIDGE_RETAINED __bridge_retained
@@ -391,7 +391,7 @@ inline wxCFWeakRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &other
                 Normally, this function is unimplemented resulting in a linker error if used.
 */
 template <class T>
-inline void CFRelease(const wxCFRef<T*> & cfref) DEPRECATED_ATTRIBUTE;
+inline void CFRelease(const wxCFRef<T*> & cfref) __AVAILABILITY_INTERNAL_DEPRECATED;
 
 /*! @function   CFRetain
     @abstract   Overloads CFRetain so that the user is warned of bad behaviour.
@@ -400,7 +400,7 @@ inline void CFRelease(const wxCFRef<T*> & cfref) DEPRECATED_ATTRIBUTE;
                 Normally, this function is unimplemented resulting in a linker error if used.
 */
 template <class T>
-inline void CFRetain(const wxCFRef<T*>& cfref) DEPRECATED_ATTRIBUTE;
+inline void CFRetain(const wxCFRef<T*>& cfref) __AVAILABILITY_INTERNAL_DEPRECATED;
 
 // Change the 0 to a 1 if you want the functions to work (no link errors)
 // Neither function will cause retain/release side-effects if implemented.

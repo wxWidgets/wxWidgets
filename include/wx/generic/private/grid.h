@@ -152,6 +152,14 @@ public:
                        (owner->CanHideColumns() ? wxHD_ALLOW_HIDE : 0) |
                        (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
     {
+        m_inResizing = 0;
+    }
+
+    // Special method to call from wxGrid::DoSetColSize(), see comments there.
+    void UpdateIfNotResizing(unsigned int idx)
+    {
+        if ( !m_inResizing )
+            UpdateColumn(idx);
     }
 
 protected:
@@ -259,7 +267,20 @@ private:
 
     void OnResizing(wxHeaderCtrlEvent& event)
     {
+        // Calling wxGrid method results in a call to our own UpdateColumn()
+        // because it ends up in wxGrid::SetColSize() which must indeed update
+        // the column when it's called by the program -- but in the case where
+        // the size change comes from the column itself, it is useless and, in
+        // fact, harmful, as it results in extra flicker due to the inefficient
+        // implementation of UpdateColumn() in wxMSW wxHeaderCtrl, so skip
+        // calling it from our overridden version by setting this flag for the
+        // duration of this function execution and checking it in our
+        // UpdateIfNotResizing().
+        m_inResizing++;
+
         GetOwner()->DoHeaderDragResizeCol(event.GetWidth());
+
+        m_inResizing--;
     }
 
     void OnEndResize(wxHeaderCtrlEvent& event)
@@ -280,6 +301,9 @@ private:
     }
 
     wxVector<wxGridHeaderColumn> m_columns;
+
+    // The count of OnResizing() call nesting, 0 if not inside it.
+    int m_inResizing;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGridHeaderCtrl);

@@ -148,7 +148,7 @@ public :
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     #ifdef API_AVAILABLE
         #define WX_AVAILABLE_10_10 API_AVAILABLE(macos(10.10))
     #else
@@ -164,7 +164,7 @@ public :
     WX_AVAILABLE_10_10 virtual void        TouchesEnded(NSEvent *event);
 
     #undef WX_AVAILABLE_10_10
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);

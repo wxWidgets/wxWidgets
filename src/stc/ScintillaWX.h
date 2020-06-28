@@ -161,7 +161,7 @@ public:
     void DoSize(int width, int height);
     void DoLoseFocus();
     void DoGainFocus();
-    void DoSysColourChange();
+    void DoInvalidateStyleData();
     void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);

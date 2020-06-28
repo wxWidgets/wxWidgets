@@ -33,7 +33,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9 && defined(__LP64__)
+#if wxOSX_USE_COCOA && __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9 && defined(__LP64__)
     #define wxOSX_USE_AVKIT 1
 #else
     #define wxOSX_USE_AVKIT 0

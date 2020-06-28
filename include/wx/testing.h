@@ -39,10 +39,10 @@ class WXDLLIMPEXP_FWD_CORE wxFileDialogBase;
 class wxTestingModalHook;
 
 // This helper is used to construct the best possible name for the dialog of
-// the given type using wxRTTI for this type, if any, and the C++ RTTI for
-// either the type T statically or the dynamic type of "dlg" if it's non-null.
-template <class T>
-wxString wxGetDialogClassDescription(const wxClassInfo *ci, T* dlg = NULL)
+// the given type using either wxRTTI or C++ RTTI.
+inline
+wxString
+wxGetDialogClassDescription(const wxClassInfo *ci, const std::type_info& ti)
 {
     // We prefer to use the name from wxRTTI as it's guaranteed to be readable,
     // unlike the name returned by type_info::name() which may need to be
@@ -51,8 +51,7 @@ wxString wxGetDialogClassDescription(const wxClassInfo *ci, T* dlg = NULL)
     // than a readable but useless "wxDialog".
     if ( ci == wxCLASSINFO(wxDialog) )
     {
-        return wxString::Format("dialog of type \"%s\"",
-                                (dlg ? typeid(*dlg) : typeid(T)).name());
+        return wxString::Format("dialog of type \"%s\"", ti.name());
     }
 
     // We consider that an unmangled name is clear enough to be used on its own.
@@ -175,7 +174,7 @@ protected:
     /// Returns description of the expected dialog (by default, its class).
     virtual wxString GetDefaultDescription() const wxOVERRIDE
     {
-        return wxGetDialogClassDescription<T>(wxCLASSINFO(T));
+        return wxGetDialogClassDescription(wxCLASSINFO(T), typeid(T));
     }
 
     /**
@@ -411,7 +410,7 @@ protected:
         return wxString::Format
                (
                     "A %s with title \"%s\"",
-                    wxGetDialogClassDescription(dlg->GetClassInfo(), dlg),
+                    wxGetDialogClassDescription(dlg->GetClassInfo(), typeid(*dlg)),
                     dlg->GetTitle()
                );
     }

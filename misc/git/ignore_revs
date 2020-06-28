@@ -1,0 +1,14 @@
+# This file can be used with git blame --ignore-revs-file option or used as
+# the value of blame.ignoreRevsFile in git config to ignore the changes done by
+# the following "not interesting" commits.
+#
+# It's supported by Git 2.23 or later and to use it by default for all the
+# future git-blame invocations, run the following command:
+#
+#   git config blame.ignoreRevsFile misc/git/ignore_revs
+
+# Globally replace _T() with wxT()., 2009-07-23
+9a83f860948059b0273b5cc6d9e43fadad3ebfca
+
+# cleanup - reformatting, 2006-04-20
+a9339fe22c1815cfbbf2ed9c300c897256644d18

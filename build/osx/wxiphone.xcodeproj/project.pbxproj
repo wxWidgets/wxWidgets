@@ -449,7 +449,6 @@
 		84B3625464F732C3A79E1314 /* xh_bmpbt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11AE4D94B791344AB6BF6397 /* xh_bmpbt.cpp */; };
 		85F9828B80B03178A274BD17 /* selstore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ED2105A5A033E3384EBC4ED /* selstore.cpp */; };
 		86003C8EB906304F9025F788 /* jcinit.c in Sources */ = {isa = PBXBuildFile; fileRef = AA6C6739C3BD3EFA9CF71102 /* jcinit.c */; };
-		867F5D1962383C98A8ADDC3D /* xmladv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E1A01885B036C28EBDAE27 /* xmladv.cpp */; };
 		86AED49CEAFC3637B1F10537 /* dialog_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BDE76674C0F5391BAD2AFA2F /* dialog_osx.cpp */; };
 		86B0D280A43C308CAC14BE24 /* CaseFolder.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F52DCBC0442233738B39138E /* CaseFolder.cxx */; };
 		86BE5213D3F131D8A6862679 /* hid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 160EB9744CB63A0B81DC651F /* hid.cpp */; };
@@ -1391,7 +1390,6 @@
 		A1276C0E5D48337489DEE8DF /* LexErlang.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexErlang.cxx; path = ../../src/stc/scintilla/lexers/LexErlang.cxx; sourceTree = "<group>"; };
 		A1A53EC3A3463EFDB7614E93 /* bitmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cpp; path = ../../src/osx/core/bitmap.cpp; sourceTree = "<group>"; };
 		A1CB6A4171D4343BB0A9858A /* msgdlgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = msgdlgg.cpp; path = ../../src/generic/msgdlgg.cpp; sourceTree = "<group>"; };
-		A1E1A01885B036C28EBDAE27 /* xmladv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmladv.cpp; path = ../../src/xrc/xmladv.cpp; sourceTree = "<group>"; };
 		A284E855892F3A9E9E19E854 /* LexTADS3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTADS3.cxx; path = ../../src/stc/scintilla/lexers/LexTADS3.cxx; sourceTree = "<group>"; };
 		A298576700C33F018616E7BD /* auibook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = auibook.cpp; path = ../../src/aui/auibook.cpp; sourceTree = "<group>"; };
 		A37E3D1FB4FB31AFAE88665A /* dpycmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dpycmn.cpp; path = ../../src/common/dpycmn.cpp; sourceTree = "<group>"; };
@@ -2396,7 +2394,6 @@
 				15FCCD1B587637DDA3C1748A /* xh_unkwn.cpp */,
 				EBD381E57BAE3F2AA31A68CB /* xh_wizrd.cpp */,
 				087B66573CD33DA99DA82B1C /* xmlres.cpp */,
-				A1E1A01885B036C28EBDAE27 /* xmladv.cpp */,
 				29922DF1D0D63C33A186E783 /* xmlrsall.cpp */,
 			);
 			name = xrc;
@@ -3410,7 +3407,6 @@
 				C5A8DF376BB13A2A8290C2E5 /* xh_unkwn.cpp in Sources */,
 				37DD17F479A1371ABF3589B9 /* xh_wizrd.cpp in Sources */,
 				1710A4BB0E6339558A187F8D /* xmlres.cpp in Sources */,
-				867F5D1962383C98A8ADDC3D /* xmladv.cpp in Sources */,
 				135DFCE48FC03D8294D01A89 /* xmlrsall.cpp in Sources */,
 				50E89226E8D7390D9D21C809 /* debugrpt.cpp in Sources */,
 				7C5552FA058034238F485900 /* dbgrptg.cpp in Sources */,

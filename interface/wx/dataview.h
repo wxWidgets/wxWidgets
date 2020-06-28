@@ -3919,6 +3919,19 @@ public:
     */
     int GetCacheTo() const;
 
+    /**
+        Returns the index of the child item at which an item currently being
+        dragged would be dropped.
+
+        This function can be used from wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE
+        handlers to determine the exact position of the item being dropped.
+
+        Note that it currently always returns wxNOT_FOUND when using native GTK
+        implementation of this control.
+
+        @since 3.1.2
+     */
+    int GetProposedDropIndex() const;
 
     /**
         Returns the item affected by the event.

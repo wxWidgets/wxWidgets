@@ -121,7 +121,7 @@ public:
     
     virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
         // Additional icon in the notification is only supported on OS X 10.9+
         if ( WX_IS_MACOS_AVAILABLE(10, 9) )
             m_notif.contentImage = icon.GetNSImage();

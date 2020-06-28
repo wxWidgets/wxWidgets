@@ -108,7 +108,7 @@ NSFont* wxFont::OSXGetNSFont() const
 
     NSFont *font = const_cast<NSFont*>(reinterpret_cast<const NSFont*>(OSXGetCTFont()));
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
+#if __MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
     // There's a bug in OS X 10.11 (but not present in 10.10 or 10.12) where a
     // toll-free bridged font may have an attributed of private class __NSCFCharacterSet
     // that unlike NSCharacterSet doesn't conform to NSSecureCoding. This poses
@@ -122,7 +122,7 @@ NSFont* wxFont::OSXGetNSFont() const
     {
         return [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]];
     }
-#endif // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
+#endif // __MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
 
     return font;
 }
@@ -633,7 +633,7 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 
 wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
     {
         formerAppearance = NSAppearance.currentAppearance;
@@ -646,7 +646,7 @@ wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 
 wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
 #endif

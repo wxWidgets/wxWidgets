@@ -591,8 +591,10 @@ public:
     wxImageList *GetImageList(const wxString& param = wxT("imagelist")) wxOVERRIDE;
 
 #if wxUSE_ANIMATIONCTRL
-    // Gets an animation.
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation")) wxOVERRIDE;
+    // Gets an animation creating it using the provided control (so that it
+    // will be compatible with it) if any.
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL) wxOVERRIDE;
 #endif
 
     // Gets a font.
@@ -603,7 +605,7 @@ public:
 
     // Gets a file path from the given node, expanding environment variables in
     // it if wxXRC_USE_ENVVARS is in use.
-    wxString GetFilePath(const wxXmlNode* node);
+    wxString GetFilePath(const wxXmlNode* node) wxOVERRIDE;
 
     // Returns the window associated with the handler (may be NULL).
     wxWindow* GetParentAsWindow() const { return m_handler->GetParentAsWindow(); }

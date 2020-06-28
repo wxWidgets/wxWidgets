@@ -1128,7 +1128,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
     impl->insertText(text, self, _cmd);
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
 {
@@ -1198,7 +1198,7 @@ void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 
     impl->TouchesEnded(event);
 }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
 {
@@ -1577,7 +1577,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     m_lastKeyDownEvent = NULL;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 // Class containing data used for gestures support.
 class WX_API_AVAILABLE_MACOS(10, 10) wxCocoaGesturesImpl
@@ -2140,7 +2140,7 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
         m_activeGestures &= ~press_and_tap;
     }
 }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
@@ -2577,9 +2577,9 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     if ( m_osxView )
         CFRelease(m_osxView);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     wxCocoaGestures::EraseForObject(this);
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
@@ -2592,7 +2592,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     [m_osxView setHidden:(visible ? NO:YES)];
     
     // trigger redraw upon shown for layer-backed views
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         if( !m_osxView.isHiddenOrHasHiddenAncestor )
             SetNeedsDisplay(NULL);
@@ -2846,7 +2846,7 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
 // maybe even earlier? This has changed at some time between 10.9 and 10.11),
 // we need to constrain the comparison function arguments instead of just using
 // "id".
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11 && __has_feature(objc_kindof)
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11 && __has_feature(objc_kindof)
 typedef __kindof NSView* KindOfView;
 #else
 typedef id KindOfView;
@@ -3048,7 +3048,7 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
 namespace
 {
     
@@ -3080,7 +3080,7 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
     // Layer-backed views (which are all in Mojave's Dark Mode) may not have
     // their children implicitly redrawn with the parent. For compatibility,
     // do it manually here:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         SetSubviewsNeedDisplay(m_osxView);
 #endif
@@ -3448,8 +3448,8 @@ void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
         [m_osxView sizeToFit];
         NSRect best = [m_osxView frame];
         [m_osxView setFrame:former];
-        r->width = (int)best.size.width;
-        r->height = (int)best.size.height;
+        r->width = (int)ceil(best.size.width);
+        r->height = (int)ceil(best.size.height);
     }
 }
 
@@ -3504,6 +3504,11 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            if ( WX_IS_MACOS_AVAILABLE( 10, 16 ))
+                size = NSControlSizeLarge;
+            else
+#endif
             size = NSRegularControlSize;
             break ;
 
@@ -3593,7 +3598,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
 bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     if ( WX_IS_MACOS_AVAILABLE(10, 10) )
     {
         if ( HasUserMouseHandling() )
@@ -3623,7 +3628,7 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
             return true;
         }
     }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
     wxUnusedVar(eventsMask);
     return false;

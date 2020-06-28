@@ -305,7 +305,7 @@ public:
 
     /**
         Draw a bitmap on the device context at the specified point. If
-        @a transparent is @true and the bitmap has a transparency mask, the
+        @a useMask is @true and the bitmap has a transparency mask, the
         bitmap will be drawn transparently.
 
         When drawing a mono-bitmap, the current text foreground colour will be

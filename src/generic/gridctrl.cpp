@@ -165,6 +165,24 @@ wxSize wxGridCellDateRenderer::GetBestSize(wxGrid& grid,
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
 
+wxSize wxGridCellDateRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                              wxGridCellAttr& attr,
+                                              wxDC& dc)
+{
+    wxSize size;
+
+    // Try to produce the longest string in the current format: as we don't
+    // know which month is the longest, we need to try all of them.
+    for ( int m = wxDateTime::Jan; m <= wxDateTime::Dec; ++m )
+    {
+        const wxDateTime d(28, static_cast<wxDateTime::Month>(m), 9999);
+
+        size.IncTo(DoGetBestSize(attr, dc, d.Format(m_oformat, m_tz)));
+    }
+
+    return size;
+}
+
 void wxGridCellDateRenderer::SetParameters(const wxString& params)
 {
     if (!params.empty())
@@ -193,6 +211,38 @@ bool wxGridCellDateTimeRenderer::Parse(const wxString& text, wxDateTime& result)
 }
 
 #endif // wxUSE_DATETIME
+
+// ----------------------------------------------------------------------------
+// wxGridCellChoiceRenderer
+// ----------------------------------------------------------------------------
+
+wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                                wxGridCellAttr& attr,
+                                                wxDC& dc)
+{
+    wxSize size;
+
+    for ( size_t n = 0; n < m_choices.size(); ++n )
+    {
+        size.IncTo(DoGetBestSize(attr, dc, m_choices[n]));
+    }
+
+    return size;
+}
+
+void wxGridCellChoiceRenderer::SetParameters(const wxString& params)
+{
+    m_choices.clear();
+
+    if ( params.empty() )
+        return;
+
+    wxStringTokenizer tk(params, wxT(','));
+    while ( tk.HasMoreTokens() )
+    {
+        m_choices.Add(tk.GetNextToken());
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxGridCellEnumRenderer
@@ -259,24 +309,6 @@ wxSize wxGridCellEnumRenderer::GetBestSize(wxGrid& grid,
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
-
-void wxGridCellEnumRenderer::SetParameters(const wxString& params)
-{
-    if ( !params )
-    {
-        // what can we do?
-        return;
-    }
-
-    m_choices.Empty();
-
-    wxStringTokenizer tk(params, wxT(','));
-    while ( tk.HasMoreTokens() )
-    {
-        m_choices.Add(tk.GetNextToken());
-    }
-}
-
 
 // ----------------------------------------------------------------------------
 // wxGridCellAutoWrapStringRenderer
@@ -557,18 +589,8 @@ wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
                                                wxDC& dc,
                                                const wxString& text)
 {
-    wxCoord x = 0, y = 0, max_x = 0;
     dc.SetFont(attr.GetFont());
-    wxStringTokenizer tk(text, wxT('\n'));
-    while ( tk.HasMoreTokens() )
-    {
-        dc.GetTextExtent(tk.GetNextToken(), &x, &y);
-        max_x = wxMax(max_x, x);
-    }
-
-    y *= 1 + text.Freq(wxT('\n')); // multiply by the number of lines.
-
-    return wxSize(max_x, y);
+    return dc.GetMultiLineTextExtent(text);
 }
 
 wxSize wxGridCellStringRenderer::GetBestSize(wxGrid& grid,
@@ -724,6 +746,34 @@ wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
                                              int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
+}
+
+wxSize wxGridCellNumberRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                                wxGridCellAttr& attr,
+                                                wxDC& dc)
+{
+    // In theory, it's possible that there is a value in min..max range which
+    // is longer than both min and max, e.g. we could conceivably have "88" be
+    // wider than both "87" and "91" with some fonts, but it seems something
+    // too exotic to worry about in practice.
+    wxSize size = DoGetBestSize(attr, dc, wxString::Format("%ld", m_minValue));
+    size.IncTo(DoGetBestSize(attr, dc, wxString::Format("%ld", m_maxValue)));
+
+    return size;
+}
+
+void wxGridCellNumberRenderer::SetParameters(const wxString& params)
+{
+    if ( params.empty() )
+        return;
+
+    wxString maxStr;
+    const wxString minStr = params.BeforeFirst(',', &maxStr);
+
+    if ( !minStr.ToLong(&m_minValue) || !maxStr.ToLong(&m_maxValue) )
+    {
+        wxLogDebug("Invalid wxGridCellNumberRenderer parameters \"%s\"", params);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -922,10 +972,17 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 // ----------------------------------------------------------------------------
 
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
-                                           wxGridCellAttr& WXUNUSED(attr),
-                                           wxDC& WXUNUSED(dc),
+                                           wxGridCellAttr& attr,
+                                           wxDC& dc,
                                            int WXUNUSED(row),
                                            int WXUNUSED(col))
+{
+    return GetMaxBestSize(grid, attr, dc);
+}
+
+wxSize wxGridCellBoolRenderer::GetMaxBestSize(wxGrid& grid,
+                                              wxGridCellAttr& WXUNUSED(attr),
+                                              wxDC& WXUNUSED(dc))
 {
     static wxPrivate::DpiDependentValue<wxSize> s_sizeCheckMark;
 
