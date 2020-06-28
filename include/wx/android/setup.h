@@ -1129,12 +1129,19 @@
 // depends on it)
 #define wxUSE_INFOBAR       1
 
-// Use wxMenu, wxMenuBar, wxMenuItem.
+// Use wxMenu, wxMenuItem.
 //
 // Default is 1.
 //
 // Recommended setting: 1 (can't be disabled under MSW)
 #define wxUSE_MENUS         1
+
+// Use wxMenuBar.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (can't be disabled under MSW)
+#define wxUSE_MENUBAR       1
 
 // Use wxNotificationMessage.
 //
