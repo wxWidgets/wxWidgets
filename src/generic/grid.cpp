@@ -5696,13 +5696,14 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    if ( !MoveCursorDown( event.ShiftDown() ) )
-                    {
-                        // Normally this would be done by MoveCursorDown(), but
-                        // if it failed to move the cursor, e.g. because we're
-                        // at the bottom of a column, do it here.
-                        DisableCellEditControl();
-                    }
+                    // We want to accept the changes in the editor when Enter
+                    // is pressed in any case, so do it (note that in many
+                    // cases this would be done by MoveCursorDown() itself, but
+                    // not always, e.g. it wouldn't do it when editing the
+                    // cells in the last row or when using Shift-Enter).
+                    DisableCellEditControl();
+
+                    MoveCursorDown( event.ShiftDown() );
                 }
                 break;
 
