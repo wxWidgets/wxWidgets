@@ -245,8 +245,6 @@ public:
 #if wxOSX_USE_NATIVE_TOOLBAR
     void SetToolbarItemRef( NSToolbarItem* ref )
     {
-        if ( m_controlHandle )
-            [m_controlHandle setHidden:YES];
         if ( m_toolbarItem )
             [m_toolbarItem release];
 
