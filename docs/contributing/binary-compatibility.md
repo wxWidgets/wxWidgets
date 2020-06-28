@@ -209,7 +209,7 @@ so a line like this could be added to version-script.in:
     \*wxGenericListCtrl*GetItemFont*;
 
 Allow for the fact that the name mangling is going to vary from compiler to
-complier.
+compiler.
 
 When adding a class you can match all the symbols it adds with a single
 pattern, so long as that pattern is not likely to also match other symbols.

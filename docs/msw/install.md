@@ -603,7 +603,7 @@ application.
 Advanced Library Configurations        {#msw_advanced}
 ===============================
 Build instructions to less common library configurations using different UI
-backends are avaiable here.
+backends are available here.
 
 @subpage plat_msw_msys2 "Building with Win32 MSys2 backend"
 

@@ -126,7 +126,7 @@ Controls that are not static can have wxValidator associated with them.
     mode
 @li wxNotebook: A notebook class
 @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
-@li wxPropertyGrid: A complex control to display hierachical, editable information
+@li wxPropertyGrid: A complex control to display hierarchical, editable information
 @li wxRadioBox: A group of radio buttons
 @li wxRadioButton: A round button to be used with others in a mutually
     exclusive way
