@@ -1235,9 +1235,20 @@ wxSize wxNSTextViewControl::GetBestSize() const
         // any non-empty control) and then multiply it by the number of lines
         // we want to have by default, which is currently just hardcoded as 5
         // for compatibility with the behaviour of the previous versions.
-        NSRect rect = [layoutManager lineFragmentRectForGlyphAtIndex: 0
-                                     effectiveRange: nil];
-        size.y = (int)(5*rect.size.height + [m_textView textContainerInset].height);
+        CGFloat height;
+        if ( [[m_textView string] length] )
+        {
+            NSRect rect = [layoutManager lineFragmentRectForGlyphAtIndex: 0
+                                         effectiveRange: nil];
+            height = rect.size.height;
+        }
+        else // The control is empty.
+        {
+            // Not really clear what else could we use here.
+            height = GetWXPeer()->GetCharHeight();
+        }
+
+        size.y = (int)(5*height + [m_textView textContainerInset].height);
     }
 
     return size;
