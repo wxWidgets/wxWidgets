@@ -2887,7 +2887,6 @@ void wxGrid::Init()
 
     m_editable = true;  // default for whole grid
 
-    m_inOnKeyDown = false;
     m_batchCount = 0;
 
     m_extraWidth =
@@ -5639,15 +5638,6 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
 
 void wxGrid::OnKeyDown( wxKeyEvent& event )
 {
-    if ( m_inOnKeyDown )
-    {
-        // shouldn't be here - we are going round in circles...
-        //
-        wxFAIL_MSG( wxT("wxGrid::OnKeyDown called while already active") );
-    }
-
-    m_inOnKeyDown = true;
-
     // propagate the event up and see if it gets processed
     wxWindow *parent = GetParent();
     wxKeyEvent keyEvt( event );
@@ -5954,8 +5944,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
         }
     }
-
-    m_inOnKeyDown = false;
 }
 
 void wxGrid::OnKeyUp( wxKeyEvent& WXUNUSED(event) )

@@ -2520,7 +2520,6 @@ protected:
     wxGridCellAttr*     m_defaultCellAttr;
 
 
-    bool m_inOnKeyDown;
     int  m_batchCount;
 
 
