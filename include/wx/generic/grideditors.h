@@ -210,7 +210,7 @@ public:
         { return new wxGridCellFloatEditor(m_width, m_precision); }
 
     // parameters string format is "width[,precision[,format]]"
-    // format to choose beween f|e|g|E|G (f is used by default)
+    // format to choose between f|e|g|E|G (f is used by default)
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
 protected:

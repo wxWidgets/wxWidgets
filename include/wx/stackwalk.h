@@ -143,7 +143,7 @@ public:
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 protected:
-    // this function must be overrided to process the given frame
+    // this function must be overridden to process the given frame
     virtual void OnStackFrame(const wxStackFrame& frame) = 0;
 };
 

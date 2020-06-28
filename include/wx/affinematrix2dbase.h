@@ -44,7 +44,7 @@ public:
     // sets the matrix to the respective values
     virtual void Set(const wxMatrix2D& mat2D, const wxPoint2DDouble& tr) = 0;
 
-    // gets the component valuess of the matrix
+    // gets the component values of the matrix
     virtual void Get(wxMatrix2D* mat2D, wxPoint2DDouble* tr) const = 0;
 
     // concatenates the matrix

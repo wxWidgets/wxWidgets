@@ -140,7 +140,7 @@ private:
     int m_col;
 };
 
-// header control retreiving column information from the grid
+// header control retrieving column information from the grid
 class wxGridHeaderCtrl : public wxHeaderCtrl
 {
 public:

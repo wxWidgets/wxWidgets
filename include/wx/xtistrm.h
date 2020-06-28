@@ -233,7 +233,7 @@ public:
     // The return value is the root object ID, which can
     // then be used to ask the depersister about that object
     // if there was a problem you will get back wxInvalidObjectID and the current
-    // error log will carry the problems encoutered
+    // error log will carry the problems encountered
     virtual int ReadObject( const wxString &name, wxObjectReaderCallback *readercallback ) = 0;
 
 private:

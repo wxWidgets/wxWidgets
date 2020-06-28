@@ -302,7 +302,7 @@ public:
     // version only checks that the event has no modifiers. The derived
     // classes are supposed to do "if ( base::IsAcceptedKey() && ... )" in
     // their IsAcceptedKey() implementation, although, of course, it is not a
-    // mandatory requirment.
+    // mandatory requirement.
     //
     // NB: if the key is F2 (special), editing will always start and this
     //     method will not be called at all (but StartingKey() will)

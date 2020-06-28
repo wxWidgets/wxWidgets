@@ -85,7 +85,7 @@ Hmm. I might buy a mug that had, say, a wxLogo and "wxWidgets" (and
 maybe the website URL underneath in smaller type) on one side and
 "Specialization is for insects ... and templates" on the other.
 
-.. only if it held at leat a full half (imperial) pint, mind. Not
+.. only if it held at least a full half (imperial) pint, mind. Not
 one of those wussy 8.5 fl.oz. jobbies.
 
 That'd be a nice ice-breaker when working at a new client's site -

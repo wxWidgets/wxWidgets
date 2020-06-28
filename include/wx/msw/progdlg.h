@@ -64,7 +64,7 @@ private:
     // generic version does. This is done as part of DoNativeBeforeUpdate().
     void DispatchEvents();
 
-    // Updates the various timing informations for both determinate
+    // Updates the various timing information for both determinate
     // and indeterminate modes. Requires the shared object to have
     // been entered.
     void UpdateExpandedInformation(int value);

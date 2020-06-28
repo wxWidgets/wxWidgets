@@ -2,11 +2,11 @@
 
 ## Internals
 
-wxQT uses the same techniques like other ports to wrap the Qt toolkit classes inside the wxWidget hierachy (especially similar to wxGTK).
+wxQT uses the same techniques like other ports to wrap the Qt toolkit classes inside the wxWidget hierarchy (especially similar to wxGTK).
 
 ### Current (original) Approach
 
-An '''internal pointer m_qtWindow''' in wxWindow holds the reference to the QWidget (or derived) counterpart, and is accesible through the virtual method '''GetHandle'''.
+An '''internal pointer m_qtWindow''' in wxWindow holds the reference to the QWidget (or derived) counterpart, and is accessible through the virtual method '''GetHandle'''.
 This pointer and other window styles are set up in the '''PostCreation''' method that must be called by the derived classes (mostly controls) to initialize the widget correctly.
 Not doing so will cause painting and deletion issues, as the base class  will not know how to handle the Qt widget.
 wxControl even provides a protected method '''QtCreateControl''' that will do the common initialization (including post creation step, moving, sizing, etc., and calling the base to add the child to the parent).
@@ -19,7 +19,7 @@ Many controls have also other pointers to allow to map different sub-widgets and
 ### New (tentative) Approach
 
 In the other end, Top Level Windows (frames and dialogs) '''uses directly the internal window pointer''', doing a static cast to return the correct type for GetHandle, avoiding multilevel pointer hierarchies.
-This would be the ideal solution, but not all classes could be mapped 1:1 and that could introduce potential issues (i.e. invalid static casts) and more boilerplate due to additional specific accesor methods.
+This would be the ideal solution, but not all classes could be mapped 1:1 and that could introduce potential issues (i.e. invalid static casts) and more boilerplate due to additional specific accessor methods.
 
 For a longer discussion of pro and cons, see [PR#43 comments](https://github.com/reingart/wxWidgets/pull/43)
 
@@ -59,7 +59,7 @@ The approach chosen was to use templates to help inherit QObject's (QWidget), pr
 
 ### Delete later
 
-Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reseted to NULL when the wx counterpart is marked to deletion).
+Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reset to NULL when the wx counterpart is marked to deletion).
 
 This is due that in some situations, Qt object could still be referenced in the Qt event queue, so it cannot be removed immediately.
 

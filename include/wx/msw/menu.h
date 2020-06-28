@@ -136,7 +136,7 @@ private:
     // It is initially NULL and only allocated if we have any radio items.
     wxMenuRadioItemsData *m_radioData;
 
-    // if true, insert a breal before appending the next item
+    // if true, insert a break before appending the next item
     bool m_doBreak;
 
     // the menu handle of this menu

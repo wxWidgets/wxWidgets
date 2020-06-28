@@ -540,7 +540,7 @@ public:
 
     // Hides or reveals a property.
     // hide - If true, hides property, otherwise reveals it.
-    // flags - By default changes are applied recursively. Set this paramter
+    // flags - By default changes are applied recursively. Set this parameter
     //   wxPG_DONT_RECURSE to prevent this.
     bool HideProperty( wxPGPropArg id,
                        bool hide = true,

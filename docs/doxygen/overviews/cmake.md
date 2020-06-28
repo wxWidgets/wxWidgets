@@ -26,7 +26,7 @@ Using the CMake Command Line           {#cmake_cli}
 2. Change into the created folder
 3. Run `cmake -G "Unix Makefiles" path_to_wxWidgets_root`
 4. After that you can run `cmake --build .` to start the build process or
-   directly use your choosen build system.
+   directly use your chosen build system.
 
 Run `cmake --help` to see a list of available generators on your platform.
 These can than be specified using the -G command line option. On Windows it

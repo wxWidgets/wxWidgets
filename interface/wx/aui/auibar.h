@@ -90,7 +90,7 @@ enum wxAuiToolBarStyle
 enum wxAuiToolBarArtSetting
 {
     /**
-      wxAuiToolBar seperator size.
+      wxAuiToolBar separator size.
     */
     wxAUI_TBART_SEPARATOR_SIZE = 0,
 

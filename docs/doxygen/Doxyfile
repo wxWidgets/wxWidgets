@@ -214,7 +214,7 @@ ALIASES += rightCurly="}"
 # For indicating a sample location
 ALIASES += sampledir{1}="@e Location: @c samples/\1 subdirectory of your wxWidgets installation or https://github.com/wxWidgets/wxWidgets/tree/master/samples/\1"
 
-# For refering to the corresponding sample in a class document or a overview
+# For referring to the corresponding sample in a class document or a overview
 # Usually placed in the queue of @see
 ALIASES += sample{1}="\ref page_samples_\1"
 

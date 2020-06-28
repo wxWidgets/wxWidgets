@@ -90,7 +90,7 @@ public:
 
     void PsPrint( const wxString& psdata );
 
-    // Overrridden for wxPrinterDC Impl
+    // Overridden for wxPrinterDC Impl
 
     virtual int GetResolution() const wxOVERRIDE;
     virtual wxRect GetPaperRect() const wxOVERRIDE;

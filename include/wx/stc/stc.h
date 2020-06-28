@@ -3074,7 +3074,7 @@ public:
     // Set the background colour used for a particular marker number when its folding block is selected.
     void MarkerSetBackgroundSelected(int markerNumber, const wxColour& back);
 
-    // Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+    // Enable/disable highlight for current folding block (smallest one that contains the caret)
     void MarkerEnableHighlight(bool enabled);
 
     // Add a marker to a line, returning an ID which can be used to find or delete the marker.

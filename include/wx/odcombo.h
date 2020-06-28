@@ -369,7 +369,7 @@ protected:
     // NULL popup can be used to indicate default interface
     virtual void DoSetPopupControl(wxComboPopup* popup) wxOVERRIDE;
 
-    // clears all allocated client datas
+    // clears all allocated client data
     void ClearClientDatas();
 
     wxVListBoxComboPopup* GetVListBoxComboPopup() const

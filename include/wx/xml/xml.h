@@ -171,7 +171,7 @@ public:
     void SetAttributes(wxXmlAttribute *attr) { m_attrs = attr; }
     virtual void AddAttribute(wxXmlAttribute *attr);
 
-    // If true, don't do encoding conversion to improve efficiency - node content is ACII text
+    // If true, don't do encoding conversion to improve efficiency - node content is ASCII text
     bool GetNoConversion() const { return m_noConversion; }
     void SetNoConversion(bool noconversion) { m_noConversion = noconversion; }
 

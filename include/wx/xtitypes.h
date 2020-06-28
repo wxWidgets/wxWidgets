@@ -263,7 +263,7 @@ void wxFlagsToString( wxString &s, const e& data )
 //  The first characterization is done by wxTypeKind. All enums up to and including
 //  wxT_CUSTOM represent so called simple types. These cannot be divided any further.
 //  They can be converted to and from wxStrings, that's all.
-//  Other wxTypeKinds can instead be splitted recursively into smaller parts until
+//  Other wxTypeKinds can instead be split recursively into smaller parts until
 //  the simple types are reached.
 
 enum wxTypeKind

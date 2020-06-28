@@ -804,7 +804,7 @@ public:
     // change the new log target
     void SetLog(wxLog *logger);
 
-    // this can be used to temporarily disable (and then reenable) passing
+    // this can be used to temporarily disable (and then re-enable) passing
     // messages to the old logger (by default we do pass them)
     void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
 

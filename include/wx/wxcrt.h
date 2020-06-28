@@ -490,7 +490,7 @@ inline int wxStrcoll_String(const wxString& s1, const T& s2)
 }
 
 #ifndef wxNEEDS_DECL_BEFORE_TEMPLATE
-// this is exactly the same WX_STRCMP_FUNC line as above, insde the
+// this is exactly the same WX_STRCMP_FUNC line as above, inside the
 // wxNEEDS_DECL_BEFORE_TEMPLATE case
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif

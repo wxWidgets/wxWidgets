@@ -163,7 +163,7 @@ protected:
     // Adds tag and proceeds it. Parse() may (and usually is) called from this method.
     // This is called from Parse() and may be overridden.
     // Default behaviour is that it looks for proper handler in m_Handlers. The tag is
-    // ignored if no hander is found.
+    // ignored if no handler is found.
     // Derived class is *responsible* for filling in m_Handlers table.
     virtual void AddTag(const wxHtmlTag& tag);
 
@@ -236,7 +236,7 @@ public:
     //   is capable of handling italic, bold, font and paragraph tags
     virtual wxString GetSupportedTags() = 0;
 
-    // This is hadling core method. It does all the Steps 1-3.
+    // This is handling core method. It does all the Steps 1-3.
     // To process step 2, you can call ParseInner()
     // returned value : true if it called ParseInner(),
     //                  false etherwise
@@ -282,7 +282,7 @@ public:
     // (with respect to output encoding)
     wxString Parse(const wxString& input) const;
 
-    // Returns character for given entity or 0 if the enity is unknown
+    // Returns character for given entity or 0 if the entity is unknown
     wxChar GetEntityChar(const wxString& entity) const;
 
     // Returns character that represents given Unicode code

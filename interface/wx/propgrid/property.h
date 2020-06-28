@@ -469,7 +469,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @subsection wxIntProperty
 
     It derives from wxNumericProperty and displays value as a signed long integer.
-    wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
+    wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overflow.
     To safely convert variant to integer, use code like this:
 
     @code
@@ -1397,7 +1397,7 @@ public:
         Returns property attribute value, null variant if not found.
 
         @remarks
-        For built-in atrribute returns null variant if extra style
+        For built-in attribute returns null variant if extra style
         ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     wxVariant GetAttribute( const wxString& name ) const;
@@ -1405,7 +1405,7 @@ public:
     /** Returns named attribute, as string, if found. Otherwise @a defVal is returned.
 
         @remarks
-        For built-in atrribute returns @a defVal if extra style
+        For built-in attribute returns @a defVal if extra style
         ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     wxString GetAttribute( const wxString& name, const wxString& defVal ) const;
@@ -1413,7 +1413,7 @@ public:
     /** Returns named attribute, as long, if found. Otherwise @a defVal is returned.
 
         @remarks
-        For built-in atrribute returns @a defVal if extra style
+        For built-in attribute returns @a defVal if extra style
         ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     long GetAttributeAsLong( const wxString& name, long defVal ) const;
@@ -1421,7 +1421,7 @@ public:
     /** Returns named attribute, as double, if found. Otherwise @a defVal is returned.
 
         @remarks
-        For built-in atrribute returns @a defVal if extra style
+        For built-in attribute returns @a defVal if extra style
         ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     double GetAttributeAsDouble( const wxString& name, double defVal ) const;
