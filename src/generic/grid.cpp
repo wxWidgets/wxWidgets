@@ -3710,6 +3710,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
         row = YToEdgeOfRow(pos.y);
         if ( row != wxNOT_FOUND && CanDragRowSize(row) )
         {
+            DoStartResizeRowOrCol(row);
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, rowLabelWin);
         }
         else // not a request to start resizing
@@ -3847,7 +3848,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
             {
                 if ( CanDragRowSize(dragRowOrCol) )
                 {
-                    DoStartResizeRowOrCol(dragRowOrCol);
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, rowLabelWin, false);
                 }
             }
@@ -4107,6 +4107,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         int colEdge = XToEdgeOfCol(x);
         if ( colEdge != wxNOT_FOUND && CanDragColSize(colEdge) )
         {
+            DoStartResizeRowOrCol(colEdge);
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, colLabelWin);
         }
         else // not a request to start resizing
@@ -4298,7 +4299,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
             {
                 if ( CanDragColSize(dragRowOrCol) )
                 {
-                    DoStartResizeRowOrCol(dragRowOrCol);
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, colLabelWin, false);
                 }
             }
@@ -4566,11 +4566,18 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         // it being disabled for a particular row/column as it would be
         // surprising to have different mouse behaviour in different parts of
         // the same grid, so we only check for it being globally disabled).
-        if ( CanDragGridColEdges() && XToEdgeOfCol(pos.x) != wxNOT_FOUND )
-            return;
+        int dragRowOrCol = wxNOT_FOUND;
+        if ( CanDragGridColEdges() )
+            dragRowOrCol = XToEdgeOfCol(pos.x);
 
-        if ( CanDragGridRowEdges() && YToEdgeOfRow(pos.y) != wxNOT_FOUND )
+        if ( dragRowOrCol == wxNOT_FOUND && CanDragGridRowEdges() )
+            dragRowOrCol = YToEdgeOfRow(pos.y);
+
+        if ( dragRowOrCol != wxNOT_FOUND )
+        {
+            DoStartResizeRowOrCol(dragRowOrCol);
             return;
+        }
 
         DisableCellEditControl();
         MakeCellVisible( coords );
@@ -4701,7 +4708,6 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
-            DoStartResizeRowOrCol(dragCol);
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, gridWindow, false);
         }
     }
@@ -4709,7 +4715,6 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
     {
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
-            DoStartResizeRowOrCol(dragRow);
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
         }
     }
