@@ -2418,29 +2418,6 @@ wxByte wxWindowMac::GetTransparent() const
     return m_macAlpha ;
 }
 
-bool wxWindowMac::IsShownOnScreen() const
-{
-    if ( GetPeer() && GetPeer()->IsOk() )
-    {
-        bool peerVis = GetPeer()->IsVisible();
-        bool wxVis = wxWindowBase::IsShownOnScreen();
-        if( peerVis != wxVis )
-        {
-            // CS : put a breakpoint here to investigate differences
-            // between native an wx visibilities
-            // the only place where I've encountered them until now
-            // are the hiding/showing sequences where the vis-changed event is
-            // first sent to the innermost control, while wx does things
-            // from the outmost control
-            wxVis = wxWindowBase::IsShownOnScreen();
-            return wxVis;
-        }
-
-        return GetPeer()->IsVisible();
-    }
-    return wxWindowBase::IsShownOnScreen();
-}
-
 #if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
 
 OSStatus

@@ -72,8 +72,6 @@ public:
         return OSXShowWithEffect(false, effect, timeout);
     }
 
-    virtual bool IsShownOnScreen() const wxOVERRIDE;
-
     virtual void SetFocus() wxOVERRIDE;
 
     virtual void WarpPointer( int x, int y ) wxOVERRIDE;
