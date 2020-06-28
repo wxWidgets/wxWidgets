@@ -1128,8 +1128,6 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
     impl->insertText(text, self, _cmd);
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1139,7 +1137,6 @@ void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGe
     impl->PanGestureEvent(panGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1149,7 +1146,6 @@ void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecogn
     impl->ZoomGestureEvent(magnificationGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1159,7 +1155,6 @@ void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognize
     impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pressGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1169,7 +1164,6 @@ void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pres
     impl->LongPressEvent(pressGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1179,7 +1173,6 @@ void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesBegan(event);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1189,7 +1182,6 @@ void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesMoved(event);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1198,7 +1190,6 @@ void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 
     impl->TouchesEnded(event);
 }
-#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
 {
@@ -1577,10 +1568,8 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     m_lastKeyDownEvent = NULL;
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-
 // Class containing data used for gestures support.
-class WX_API_AVAILABLE_MACOS(10, 10) wxCocoaGesturesImpl
+class wxCocoaGesturesImpl
 {
 public:
     wxCocoaGesturesImpl(wxWidgetCocoaImpl* impl, NSView* view, int eventsMask)
@@ -2140,7 +2129,6 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
         m_activeGestures &= ~press_and_tap;
     }
 }
-#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
@@ -2577,9 +2565,7 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     if ( m_osxView )
         CFRelease(m_osxView);
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     wxCocoaGestures::EraseForObject(this);
-#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
@@ -3598,37 +3584,32 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
 bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
 {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+    if ( HasUserMouseHandling() )
     {
-        if ( HasUserMouseHandling() )
+        if ( eventsMask == wxTOUCH_NONE )
         {
-            if ( eventsMask == wxTOUCH_NONE )
+            if ( wxCocoaGestures::EraseForObject(this) )
             {
-                if ( wxCocoaGestures::EraseForObject(this) )
-                {
-                    [m_osxView setAcceptsTouchEvents:NO];
-                }
-                //else: we didn't have any gesture data anyhow
+                [m_osxView setAcceptsTouchEvents:NO];
             }
-            else // We do want to have gesture events.
-            {
-                // clang does not see that the owning object always destroys its extra field
-#ifndef __clang_analyzer__
-                wxCocoaGestures::StoreForObject
-                (
-                    this,
-                    new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
-                );
-#endif
-                
-                [m_osxView setAcceptsTouchEvents:YES];
-            }
-
-            return true;
+            //else: we didn't have any gesture data anyhow
         }
+        else // We do want to have gesture events.
+        {
+            // clang does not see that the owning object always destroys its extra field
+#ifndef __clang_analyzer__
+            wxCocoaGestures::StoreForObject
+            (
+                this,
+                new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
+            );
+#endif
+            
+            [m_osxView setAcceptsTouchEvents:YES];
+        }
+
+        return true;
     }
-#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
     wxUnusedVar(eventsMask);
     return false;

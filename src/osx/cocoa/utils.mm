@@ -350,16 +350,8 @@ void wxBell()
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    if ( WX_IS_MACOS_AVAILABLE(10, 9) )
-    {
-        [[NSRunningApplication currentApplication] activateWithOptions:
-         (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
-    }
-    else
-    {
-        [self deactivate];
-        [self activateIgnoringOtherApps:YES];
-    }
+    [[NSRunningApplication currentApplication] activateWithOptions:
+        (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
 }
 
 

@@ -76,61 +76,45 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
 
 void wxStatusBarMac::InitColours()
 {
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
-        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
-        {
-            // FIXME: None of this is correct and is only very loose
-            //        approximation. 10.14's dark mode uses dynamic colors that
-            //        use desktop tinting. The only correct way to render the
-            //        statusbar is to use windowBackgroundColor in a NSBox.
-            wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
-            m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
-            m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+        // FIXME: None of this is correct and is only very loose
+        //        approximation. 10.14's dark mode uses dynamic colors that
+        //        use desktop tinting. The only correct way to render the
+        //        statusbar is to use windowBackgroundColor in a NSBox.
+        wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+        m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
+        m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
 
-            if ( wxSystemSettings::GetAppearance().IsDark() )
-            {
-                // dark mode appearance
-                m_textActive = wxColour(0xB0, 0xB0, 0xB0);
-                m_bgActiveFrom = wxColour(0x32, 0x32, 0x34);
-                m_bgActiveTo = wxColour(0x29, 0x29, 0x2A);
-                m_borderActive = wxColour(0x00, 0x00, 0x00);
-                m_borderInactive = wxColour(0x00, 0x00, 0x00);
-            }
-            else
-            {
-                m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
-                m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
-                m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
-                m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
-            }
-            SetBackgroundColour(bg); // inactive bg
+        if ( wxSystemSettings::GetAppearance().IsDark() )
+        {
+            // dark mode appearance
+            m_textActive = wxColour(0xB0, 0xB0, 0xB0);
+            m_bgActiveFrom = wxColour(0x32, 0x32, 0x34);
+            m_bgActiveTo = wxColour(0x29, 0x29, 0x2A);
+            m_borderActive = wxColour(0x00, 0x00, 0x00);
+            m_borderInactive = wxColour(0x00, 0x00, 0x00);
         }
         else
         {
-            // 10.10 Yosemite to 10.13 :
-            m_textActive = wxColour(0x40, 0x40, 0x40);
-            m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
             m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
             m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
             m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
             m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
-            SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
         }
+        SetBackgroundColour(bg); // inactive bg
     }
-#if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
     else
     {
-        // 10.9 Mavericks and older:
-        m_textActive = wxColour(0x2F, 0x2F, 0x2F);
-        m_textInactive = wxColour(0x4D, 0x4D, 0x4D);
-        m_bgActiveFrom = wxColour(0xDA, 0xDA, 0xDA);
-        m_bgActiveTo = wxColour(0xA0, 0xA0, 0xA0);
-        m_borderActive = wxColour(0x6E, 0x6E, 0x6E);
-        m_borderInactive = wxColour(0xA3, 0xA3, 0xA3);
-        SetBackgroundColour(wxColour(0xE1, 0xE1, 0xE1)); // inactive bg
+        // 10.10 Yosemite to 10.13 :
+        m_textActive = wxColour(0x40, 0x40, 0x40);
+        m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
+        m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
+        m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
+        m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
+        m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
+        SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
     }
-#endif // __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
 }
 
 void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)

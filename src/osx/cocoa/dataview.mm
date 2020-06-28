@@ -3042,12 +3042,7 @@ bool wxDataViewTextRenderer::MacRender()
             }
             else
 #endif
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-            if ( WX_IS_MACOS_AVAILABLE(10, 10) )
-            {
-                [par setTighteningFactorForTruncation:0.0];
-            }
-#endif
+            [par setTighteningFactorForTruncation:0.0];
 
             [str addAttribute:NSParagraphStyleAttributeName
                         value:par
