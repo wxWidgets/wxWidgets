@@ -36411,6 +36411,7 @@ fi
 
 if test "$wxUSE_MENUS" = "yes"; then
     $as_echo "#define wxUSE_MENUS 1" >>confdefs.h
+    $as_echo "#define wxUSE_MENUBAR 1" >>confdefs.h
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
 fi
