@@ -22,6 +22,13 @@
 
 #include "wx/osx/private.h"
 
+void wxButton::SetMenu( wxMenu* menu, bool isPrimaryAction )
+{
+    UIButton* native = (UIButton*) GetPeer()->GetWXWidget();
+    native.menu = menu->GetHMenu();
+    native.showsMenuAsPrimaryAction = isPrimaryAction;
+}
+
 @implementation wxUIButton
 
 + (void)initialize

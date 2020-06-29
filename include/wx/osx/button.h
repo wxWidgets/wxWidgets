@@ -46,6 +46,9 @@ public:
 
     // osx specific event handling common for all osx-ports
 
+#if wxOSX_USE_IPHONE
+    virtual void SetMenu( wxMenu* menu, bool isPrimaryAction = false);
+#endif
     virtual bool OSXHandleClicked(double timestampsec) wxOVERRIDE;
 
 #if wxOSX_USE_COCOA

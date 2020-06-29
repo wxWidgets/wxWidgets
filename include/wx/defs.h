@@ -98,7 +98,7 @@
      */
     #pragma warning(disable: 4127) /*  conditional expression is constant */
 
-    /* There are too many false positives for this one, particularly when
+    /* There are too many false positivies for this one, particularly when
        using templates like wxVector<T> */
     /* class 'foo' needs to have dll-interface to be used by clients of
        class 'bar'" */
@@ -2777,6 +2777,8 @@ typedef WX_NSPasteboard OSXPasteboard;
 
 #elif wxOSX_USE_IPHONE
 
+DECLARE_WXCOCOA_OBJC_CLASS(UIMenu);
+DECLARE_WXCOCOA_OBJC_CLASS(UIMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(UImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIView);
@@ -2791,6 +2793,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
 typedef WX_UIImage WXImage;
+typedef WX_UIMenu WXHMENU;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;

@@ -157,6 +157,7 @@ MyFrame::MyFrame(const wxString& title)
 
     fileMenu->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
+#if wxUSE_MENUBAR
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(fileMenu, "&File");
@@ -164,6 +165,15 @@ MyFrame::MyFrame(const wxString& title)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
+#else
+    wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxButton* menuBtn = new wxButton(this, wxID_ANY, "Menu...");
+    helpMenu->SetInvokingWindow(this);
+    menuBtn->SetMenu((helpMenu));
+    sizer->Add(menuBtn, wxSizerFlags().Center());
+    SetSizer(sizer);
+#endif
+    
 #else // !wxUSE_MENUS
     // If menus are not available add a button to access the about box
     wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
