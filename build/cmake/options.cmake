@@ -377,7 +377,8 @@ wx_option(wxUSE_WIZARDDLG "use wxWizard")
 # misc GUI options
 # ---------------------------------------------------------------------------
 
-wx_option(wxUSE_MENUS "use wxMenu/wxMenuBar/wxMenuItem classes")
+wx_option(wxUSE_MENUS "use wxMenu and wxMenuItem classes")
+wx_option(wxUSE_MENUBAR "use wxMenuBar class")
 wx_option(wxUSE_MINIFRAME "use wxMiniFrame class")
 wx_option(wxUSE_TOOLTIPS "use wxToolTip class")
 wx_option(wxUSE_SPLINES "use spline drawing code")

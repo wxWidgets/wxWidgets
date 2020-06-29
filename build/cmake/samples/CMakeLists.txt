@@ -90,7 +90,7 @@ wx_add_sample(listctrl listtest.cpp listtest.h RES listtest.rc DEPENDS wxUSE_LIS
 wx_add_sample(mdi mdi.cpp mdi.h RES mdi.rc DEPENDS wxUSE_MDI wxUSE_DOC_VIEW_ARCHITECTURE wxUSE_MDI_ARCHITECTURE)
 wx_add_sample(mediaplayer LIBRARIES wxmedia DEPENDS wxUSE_MEDIACTRL)
 wx_add_sample(memcheck)
-wx_add_sample(menu DEPENDS wxUSE_MENUS)
+wx_add_sample(menu DEPENDS wxUSE_MENUS wxUSE_MENUBAR)
 wx_add_sample(minimal IMPORTANT)
 wx_add_sample(notebook notebook.cpp notebook.h LIBRARIES wxaui DEPENDS wxUSE_NOTEBOOK)
 if(wxUSE_OPENGL)
