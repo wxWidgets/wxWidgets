@@ -1255,7 +1255,7 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
             if ( win->UseBgCol() )
             {
                 
-                CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+                CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
                 CGContextSaveGState( context );
 
                 CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
@@ -2298,7 +2298,7 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 
     // setting up the drawing context
     // note that starting from 10.14 this may be NULL in certain views
-    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
     wxpeer->MacSetCGContextRef( context );
     if ( context != NULL )
     {

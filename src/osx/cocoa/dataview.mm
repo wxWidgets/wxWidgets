@@ -1180,7 +1180,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
     // if this method is called everything is already setup correctly,
-    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
     CGContextSaveGState( context );
 
     if ( ![controlView isFlipped] )
