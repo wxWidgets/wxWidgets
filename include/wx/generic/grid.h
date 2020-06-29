@@ -1504,12 +1504,12 @@ public:
     void EnableCellEditControl( bool enable = true );
     void DisableCellEditControl() { EnableCellEditControl(false); }
     bool CanEnableCellControl() const;
-    bool IsCellEditControlEnabled() const;
+    bool IsCellEditControlEnabled() const { return m_cellEditCtrlEnabled; }
     bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
 
-    void ShowCellEditControl();
+    void ShowCellEditControl(); // Use EnableCellEditControl() instead.
     void HideCellEditControl();
     void SaveEditControlValue();
 
@@ -2520,7 +2520,6 @@ protected:
     wxGridCellAttr*     m_defaultCellAttr;
 
 
-    bool m_inOnKeyDown;
     int  m_batchCount;
 
 
@@ -2896,6 +2895,36 @@ private:
     // the second one, so it's never necessary to call both of them.
     void SetNativeHeaderColCount();
     void SetNativeHeaderColOrder();
+
+    // Return the editor which should be used for the current cell.
+    wxGridCellEditorPtr GetCurrentCellEditorPtr() const
+    {
+        return GetCellAttrPtr(m_currentCellCoords)->GetEditorPtr
+                (
+                    this,
+                    m_currentCellCoords.GetRow(),
+                    m_currentCellCoords.GetCol()
+                );
+    }
+
+    // Show/hide the cell editor for the current cell unconditionally.
+    void DoShowCellEditControl();
+    void DoHideCellEditControl();
+
+    // Unconditionally try showing the editor for the current cell.
+    //
+    // Returns false if the user code vetoed wxEVT_GRID_EDITOR_SHOWN.
+    bool DoEnableCellEditControl();
+
+    // Unconditionally disable (accepting the changes) the editor.
+    void DoDisableCellEditControl();
+
+    // Accept the changes in the edit control, i.e. save them to the table and
+    // dismiss the editor. Also reset m_cellEditCtrlEnabled.
+    void DoAcceptCellEditControl();
+
+    // As above, but do nothing if the control is not currently shown.
+    void AcceptCellEditControlIfShown();
 
     // Unlike the public SaveEditControlValue(), this method doesn't check if
     // the edit control is shown, but just supposes that it is.

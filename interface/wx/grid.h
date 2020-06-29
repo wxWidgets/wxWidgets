@@ -3437,9 +3437,12 @@ public:
         allows the user to change the cell value.
 
         Disabling in-place editing does nothing if the in-place editor isn't
-        currently show, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
+        currently shown, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
         generated but, unlike the "shown" event, it can't be vetoed and the
         in-place editor is dismissed unconditionally.
+
+        Note that it is an error to call this function if the current cell is
+        read-only, use CanEnableCellControl() to check for this precondition.
     */
     void EnableCellEditControl(bool enable = true);
 
@@ -3824,8 +3827,9 @@ public:
         Displays the active in-place cell edit control for the current cell
         after it was hidden.
 
-        Note that this method does @em not start editing the cell, this is only
-        done by EnableCellEditControl().
+        This method should only be called after calling HideCellEditControl(),
+        to start editing the current grid cell use EnableCellEditControl()
+        instead.
     */
     void ShowCellEditControl();
 
