@@ -1319,6 +1319,7 @@ enable_tipdlg
 enable_progressdlg
 enable_wizarddlg
 enable_menus
+enable_menubar
 enable_miniframe
 enable_tooltips
 enable_splines
@@ -2274,7 +2275,8 @@ Optional Features:
   --enable-tipdlg         use startup tips
   --enable-progressdlg    use wxProgressDialog
   --enable-wizarddlg      use wxWizard
-  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes
+  --enable-menus          use wxMenu and wxMenuItem classes
+  --enable-menubar        use wxMenuBar class
   --enable-miniframe      use wxMiniFrame class
   --enable-tooltips       use wxToolTip class
   --enable-splines        use spline drawing code
@@ -11726,6 +11728,35 @@ fi
 
 
           eval "$wx_cv_use_menus"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-menubar was given.
+if test "${enable_menubar+set}" = set; then :
+  enableval=$enable_menubar;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_menubar='wxUSE_MENUBAR=yes'
+                          else
+                            wx_cv_use_menubar='wxUSE_MENUBAR=no'
+                          fi
+
+else
+
+                          wx_cv_use_menubar='wxUSE_MENUBAR=${'DEFAULT_wxUSE_MENUBAR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_menubar"
 
 
           enablestring=
@@ -36559,7 +36590,14 @@ fi
 if test "$wxUSE_MENUS" = "yes"; then
     $as_echo "#define wxUSE_MENUS 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+    if test "$wxUSE_MENUBAR" = "yes"; then
+        $as_echo "#define wxUSE_MENUBAR 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+    fi
+elif test "$wxUSE_MENUBAR" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxMenuBar can't be used without wxMenu and will be disabled" >&5
+$as_echo "$as_me: WARNING: wxMenuBar can't be used without wxMenu and will be disabled" >&2;}
 fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then
