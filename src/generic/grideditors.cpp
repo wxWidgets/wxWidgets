@@ -1430,6 +1430,9 @@ void wxGridCellBoolEditor::SetValueFromGrid(int row, int col, wxGrid* grid)
             // this risks to be very surprising for the user code, let them
             // know about it
             wxFAIL_MSG( wxT("invalid value for a cell with bool editor!") );
+
+            // Still need to initialize it to something.
+            m_value = false;
         }
     }
 }
