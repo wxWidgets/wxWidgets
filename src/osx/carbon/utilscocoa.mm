@@ -47,7 +47,7 @@ wxMacAutoreleasePool::~wxMacAutoreleasePool()
 CGContextRef wxOSXGetContextFromCurrentContext()
 {
     CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext]
-                                          graphicsPort];
+                                          CGContext];
     return context;
 }
 
@@ -209,7 +209,7 @@ WXImage  wxOSXGetImageFromCGImage( CGImageRef image, double scaleFactor, bool is
     sz.height = CGImageGetHeight(image)/scaleFactor;
     sz.width = CGImageGetWidth(image)/scaleFactor;
     NSImage* newImage = [[NSImage alloc] initWithCGImage:image size:sz];
-    
+
     [newImage setTemplate:isTemplate];
 
     [newImage autorelease];
@@ -240,7 +240,7 @@ CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r
 #if wxOSX_USE_COCOA
     NSRect nsRect = NSRectFromCGRect(*r);
     return [nsimage CGImageForProposedRect:&nsRect
-                               context:[NSGraphicsContext graphicsContextWithGraphicsPort:cg flipped:YES]
+                               context:[NSGraphicsContext graphicsContextWithCGContext:cg flipped:YES]
                                         hints:nil];
 #else
     return [nsimage CGImage];
@@ -250,21 +250,21 @@ CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r
 CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate)
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
-    
+
     CGContextRef hbitmap = NULL;
     if (nsimage != nil)
     {
         double scale = wxOSXGetMainScreenContentScaleFactor();
 
         CGSize imageSize = wxOSXGetImageSize(nsimage);
-        
+
         hbitmap = CGBitmapContextCreate(NULL, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
         CGContextScaleCTM( hbitmap, scale, scale );
         CGContextClearRect(hbitmap,CGRectMake(0, 0, imageSize.width, imageSize.height));
 
 #if wxOSX_USE_COCOA
         NSGraphicsContext *previousContext = [NSGraphicsContext currentContext];
-        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:hbitmap flipped:NO];
+        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithCGContext:hbitmap flipped:NO];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];
         [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
         [NSGraphicsContext setCurrentContext:previousContext];
@@ -294,7 +294,7 @@ void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
 
 #if wxOSX_USE_COCOA
        NSGraphicsContext *previousContext = [NSGraphicsContext currentContext];
-        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:inContext flipped:NO];
+        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithCGContext:inContext flipped:NO];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];
         [inImage drawInRect:NSRectFromCGRect(r) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
         [NSGraphicsContext setCurrentContext:previousContext];
@@ -561,10 +561,10 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
     default:
         break;
     }
-    
+
     if ( cursor == nil )
         cursor = [[NSCursor arrowCursor] retain];
-    
+
     return cursor;
 }
 
@@ -653,4 +653,3 @@ wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
 }
 
 #endif
-
