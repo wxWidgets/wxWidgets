@@ -1261,15 +1261,15 @@ wxFindMenuItemId(wxFrame *frame,
                  const wxString& menuString,
                  const wxString& itemString)
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     wxMenuBar *menuBar = frame->GetMenuBar ();
     if ( menuBar )
         return menuBar->FindMenuItem (menuString, itemString);
-#else // !wxUSE_MENUS
+#else // !wxUSE_MENUBAR
     wxUnusedVar(frame);
     wxUnusedVar(menuString);
     wxUnusedVar(itemString);
-#endif // wxUSE_MENUS/!wxUSE_MENUS
+#endif // wxUSE_MENUBAR/!wxUSE_MENUBAR
 
     return wxNOT_FOUND;
 }

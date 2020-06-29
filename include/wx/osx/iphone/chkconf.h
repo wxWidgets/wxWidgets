@@ -255,7 +255,12 @@
 
 #if wxUSE_MENUS
 #undef wxUSE_MENUS
-#define wxUSE_MENUS 0
+#define wxUSE_MENUS 1
+#endif
+
+#if wxUSE_MENUBAR
+#undef wxUSE_MENUBAR
+#define wxUSE_MENUBAR 0
 #endif
 
 /*

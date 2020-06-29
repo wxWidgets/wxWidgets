@@ -102,7 +102,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxMenu);
 };
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxUSE_MENUBAR
 
 // the iphone only has popup-menus
 
