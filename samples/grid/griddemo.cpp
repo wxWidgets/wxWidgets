@@ -534,7 +534,7 @@ GridFrame::GridFrame()
     grid->SetRowAttr(5, attr);
 
     grid->SetCellValue(2, 4, "a wider column");
-    grid->SetColSize(4, 3*grid->GetDefaultColLabelSize()/2);
+    grid->SetColSize(4, 3*grid->GetDefaultColSize()/2);
     grid->SetColMinimalWidth(4, grid->GetColSize(4));
 
     grid->SetCellTextColour(5, 8, *wxGREEN);
