@@ -275,6 +275,15 @@ protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
 
 private:
+    // These functions modify or use m_value.
+    void SetValueFromGrid(int row, int col, wxGrid* grid);
+    void SetGridFromValue(int row, int col, wxGrid* grid) const;
+
+    wxString GetStringValue() const { return GetStringValue(m_value); }
+
+    static
+    wxString GetStringValue(bool value) { return ms_stringValues[value]; }
+
     bool m_value;
 
     static wxString ms_stringValues[2];
