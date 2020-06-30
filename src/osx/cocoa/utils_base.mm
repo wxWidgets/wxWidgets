@@ -108,6 +108,15 @@ wxString wxGetOsDescription()
                 break;
         };
     }
+    else if (majorVer > 10)
+    {
+        switch (majorVer)
+        {
+            case 11:
+                osName = "Big Sur";
+                break;
+        }
+    }
 #else
     wxString osBrand = "iOS";
     wxString osName;
