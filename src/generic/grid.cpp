@@ -7531,7 +7531,11 @@ void wxGrid::DoSaveEditControlValue()
             if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
             {
                 // Event has been vetoed, set the data back.
-                SetCellValue(m_currentCellCoords, oldval);
+                //
+                // Note that we must use row and col here, which are sure to
+                // not have been changed, while m_currentCellCoords could have
+                // been changed by the event handler.
+                SetCellValue(row, col, oldval);
             }
         }
 }
