@@ -924,7 +924,10 @@ outlineView:(NSOutlineView*)outlineView
                                     [dataArray replaceObjectAtIndex:itemCounter withObject:[NSData dataWithBytes:dataBuffer.GetData() length:dataBufferSize]];
                                 else
                                     [dataArray addObject:[NSData dataWithBytes:dataBuffer.GetData() length:dataBufferSize]];
-                                itemString = wxString::FromUTF8(static_cast<char const*>(dataBuffer.GetData())+sizeof(wxDataFormatId),dataSize);
+
+                                static wxMBConvUTF16 s_UTF16Converter;
+                                itemString = wxString( static_cast<char const*>(dataBuffer.GetData())+sizeof(wxDataFormatId), s_UTF16Converter, dataSize );
+
                                 itemStringAvailable = true;
                             } /* block */
                             break;
