@@ -787,6 +787,9 @@ outlineView:(NSOutlineView*)outlineView
         return NSDragOperationNone;
 
     NSDragOperation dragOperation = NSDragOperationNone;
+    wxDataObjectComposite* dataObjects = NULL;
+    wxDataObjectSimple* dataObject = NULL;
+
     wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
 
     wxCHECK_MSG(dvc, false, "Pointer to data view control not set correctly.");
@@ -801,7 +804,7 @@ outlineView:(NSOutlineView*)outlineView
         indexDraggedItem = 0;
         while (indexDraggedItem < noOfDraggedItems)
         {
-            wxDataObjectComposite* dataObjects(implementation->GetDnDDataObjects((NSData*)[dataArray objectAtIndex:indexDraggedItem]));
+            dataObjects = implementation->GetDnDDataObjects((NSData*)[dataArray objectAtIndex:indexDraggedItem]);
 
             dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
 
@@ -810,40 +813,35 @@ outlineView:(NSOutlineView*)outlineView
             else
                 indexDraggedItem = noOfDraggedItems;
 
-            // clean-up:
             delete dataObjects;
+            dataObjects = NULL;
         }
-
-        return dragOperation;
-    }
-
-    wxDataObjectComposite* dataObjects(new wxDataObjectComposite());
-    wxDataObjectSimple* dataObject = NULL;
-
-    dragOperation = wxDragError;
-    if ([bestType compare:NSFilenamesPboardType] == NSOrderedSame)
-    {
-        dataObject = new wxFileDataObject;
-    }
-    else if ([bestType compare:NSStringPboardType] == NSOrderedSame)
-    {
-        dataObject = new wxTextDataObject;
     }
     else
     {
-        dragOperation = wxDragNone;
+        dataObjects = new wxDataObjectComposite();
+
+        if ([bestType compare:NSFilenamesPboardType] == NSOrderedSame)
+        {
+            dataObject = new wxFileDataObject;
+        }
+        else if ([bestType compare:NSStringPboardType] == NSOrderedSame)
+        {
+            dataObject = new wxTextDataObject;
+        }
+        // TODO check for other formats here?
+
+        if (dataObject)
+        {
+            dataObjects->Add(dataObject);
+
+            wxOSXPasteboard wxPastboard(pasteboard);
+            if (dataObject->ReadFromSource(&wxPastboard))
+                dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
+        }
+
+        delete dataObjects; // Internal dataObject will be deleted too
     }
-
-    if (dataObject)
-    {
-        dataObjects->Add(dataObject);
-
-        wxOSXPasteboard wxPastboard(pasteboard);
-        if (dataObject->ReadFromSource(&wxPastboard))
-            dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
-    }
-
-    delete dataObjects;
 
     return dragOperation;
 }
