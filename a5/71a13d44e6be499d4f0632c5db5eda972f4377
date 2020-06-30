@@ -1,0 +1,1 @@
+All: Fix bug with multiple leading ".." in wxFileName::Normalize() (Fabian Cenedese).
