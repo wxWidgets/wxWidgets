@@ -650,12 +650,7 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
             CGImageDestinationFinalize( destination );
             CFRelease( destination );
         }
-        m_pictHandle = NewHandle(CFDataGetLength(data));
-        if ( m_pictHandle )
-        {
-            memcpy( *(Handle)m_pictHandle, (const char *)CFDataGetBytePtr(data), CFDataGetLength(data) );
-        }
-        CFRelease( data );
+        m_pictData = data;
 
         CGImageRelease(cgImageRef);
     }
@@ -663,23 +658,23 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
 
 void wxBitmapDataObject::Init()
 {
-    m_pictHandle = NULL;
+    m_pictData = NULL;
     m_pictCreated = false;
 }
 
 void wxBitmapDataObject::Clear()
 {
-    if (m_pictHandle != NULL)
+    if (m_pictData != NULL)
     {
-        DisposeHandle( (Handle) m_pictHandle );
-        m_pictHandle = NULL;
+        CFRelease( m_pictData );
+        m_pictData = NULL;
     }
     m_pictCreated = false;
 }
 
 bool wxBitmapDataObject::GetDataHere( void *pBuf ) const
 {
-    if (m_pictHandle == NULL)
+    if (m_pictData == NULL)
     {
         wxFAIL_MSG( wxT("attempt to copy empty bitmap failed") );
         return false;
@@ -688,28 +683,17 @@ bool wxBitmapDataObject::GetDataHere( void *pBuf ) const
     if (pBuf == NULL)
         return false;
 
-    memcpy( pBuf, *(Handle)m_pictHandle, GetHandleSize( (Handle)m_pictHandle ) );
+    memcpy( pBuf, (const char *)CFDataGetBytePtr(m_pictData), CFDataGetLength(m_pictData) );
 
     return true;
 }
 
 size_t wxBitmapDataObject::GetDataSize() const
 {
-    if (m_pictHandle != NULL)
-        return GetHandleSize( (Handle)m_pictHandle );
+    if (m_pictData != NULL)
+        return CFDataGetLength(m_pictData);
     else
         return 0;
-}
-
-Handle MacCreateDataReferenceHandle(Handle theDataHandle)
-{
-    Handle  dataRef = NULL;
-    OSErr   err     = noErr;
-
-    // Create a data reference handle for our data.
-    err = PtrToHand( &theDataHandle, &dataRef, sizeof(Handle));
-
-    return dataRef;
 }
 
 bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
@@ -719,19 +703,16 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     if ((pBuf == NULL) || (nSize == 0))
         return false;
 
-    Handle picHandle = NewHandle( nSize );
-    memcpy( *picHandle, pBuf, nSize );
-    m_pictHandle = picHandle;
     CGImageRef cgImageRef = 0;
 
-    CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) pBuf, nSize, kCFAllocatorNull);
+    CFDataRef data = CFDataCreate( kCFAllocatorDefault, (const UInt8*) pBuf, nSize);
     CGImageSourceRef source = CGImageSourceCreateWithData( data, NULL );
     if ( source )
     {
         cgImageRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
         CFRelease( source );
     }
-    CFRelease( data );
+    m_pictData = data;
 
     if ( cgImageRef )
     {
