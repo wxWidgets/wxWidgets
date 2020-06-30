@@ -5292,13 +5292,13 @@ wxGrid::EventResult wxGrid::DoSendEvent(wxGridEvent& gridEvt)
     if ( !gridEvt.IsAllowed() )
         return Event_Vetoed;
 
-    // We also return -1 if the event cell was deleted, as this allows to have
-    // checks in several functions that generate an event and then proceed
-    // doing something by default with the selected cell: this shouldn't be
-    // done if the user-defined handler deleted this cell.
+    // Detect the special case in which the event cell was deleted, as this
+    // allows to have checks in several functions that generate an event and
+    // then proceed doing something by default with the selected cell: this
+    // shouldn't be done if the user-defined handler deleted this cell.
     if ( gridEvt.GetRow() >= GetNumberRows() ||
             gridEvt.GetCol() >= GetNumberCols() )
-        return Event_Vetoed;
+        return Event_CellDeleted;
 
     return claimed ? Event_Handled : Event_Unhandled;
 }
@@ -6044,10 +6044,18 @@ void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
 
 bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
-    if ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) == Event_Vetoed )
+    switch ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) )
     {
-        // the event has been vetoed - do nothing
-        return false;
+        case Event_Vetoed:
+        case Event_CellDeleted:
+            // We shouldn't do anything if the event was vetoed and can't do
+            // anything if the cell doesn't exist any longer.
+            return false;
+
+        case Event_Unhandled:
+        case Event_Handled:
+            // But it doesn't matter here if the event was skipped or not.
+            break;
     }
 
     wxGridWindow *currentGridWindow = CellToGridWindow(coords);
@@ -7156,8 +7164,19 @@ void wxGrid::EnableCellEditControl( bool enable )
 
 bool wxGrid::DoEnableCellEditControl(const wxGridActivationSource& actSource)
 {
-    if ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) == Event_Vetoed )
-        return false;
+    switch ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) )
+    {
+        case Event_Vetoed:
+        case Event_CellDeleted:
+            // We shouldn't do anything if the event was vetoed and can't do
+            // anything if the cell doesn't exist any longer.
+            return false;
+
+        case Event_Unhandled:
+        case Event_Handled:
+            // But it doesn't matter here if the event was skipped or not.
+            break;
+    }
 
     if ( !DoShowCellEditControl(actSource) )
     {
@@ -7240,19 +7259,26 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
             // This is somewhat similar to what DoSaveEditControlValue() does.
             // but we don't allow vetoing CHANGED event here as this code is
             // new and shouldn't have to support this obsolete usage.
-            if ( SendEvent(wxEVT_GRID_CELL_CHANGING, res.GetNewValue()) != Event_Vetoed )
+            switch ( SendEvent(wxEVT_GRID_CELL_CHANGING, res.GetNewValue()) )
             {
-                const wxString& oldval = GetCellValue(m_currentCellCoords);
+                case Event_Vetoed:
+                case Event_CellDeleted:
+                    break;
 
-                editor->DoActivate(row, col, this);
+                case Event_Unhandled:
+                case Event_Handled:
+                    const wxString& oldval = GetCellValue(m_currentCellCoords);
 
-                // Show the new cell value.
-                RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+                    editor->DoActivate(row, col, this);
 
-                if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
-                {
-                    wxFAIL_MSG( "Vetoing wxEVT_GRID_CELL_CHANGED is ignored" );
-                }
+                    // Show the new cell value.
+                    RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+
+                    if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
+                    {
+                        wxFAIL_MSG( "Vetoing wxEVT_GRID_CELL_CHANGED is ignored" );
+                    }
+                    break;
             }
             wxFALLTHROUGH;
 
@@ -7486,21 +7512,28 @@ void wxGrid::DoSaveEditControlValue()
     wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
 
     wxString newval;
-    bool changed = editor->EndEdit(row, col, this, oldval, &newval);
+    if ( !editor->EndEdit(row, col, this, oldval, &newval) )
+        return;
 
-    if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != Event_Vetoed )
+    switch ( SendEvent(wxEVT_GRID_CELL_CHANGING, newval) )
     {
-        editor->ApplyEdit(row, col, this);
+        case Event_Vetoed:
+        case Event_CellDeleted:
+            break;
 
-        // for compatibility reasons dating back to wx 2.8 when this event
-        // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
-        // didn't exist we allow vetoing this one too
-        if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
-        {
-            // Event has been vetoed, set the data back.
-            SetCellValue(m_currentCellCoords, oldval);
+        case Event_Unhandled:
+        case Event_Handled:
+            editor->ApplyEdit(row, col, this);
+
+            // for compatibility reasons dating back to wx 2.8 when this event
+            // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
+            // didn't exist we allow vetoing this one too
+            if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
+            {
+                // Event has been vetoed, set the data back.
+                SetCellValue(m_currentCellCoords, oldval);
+            }
         }
-    }
 }
 
 void wxGrid::OnHideEditor(wxCommandEvent& WXUNUSED(event))

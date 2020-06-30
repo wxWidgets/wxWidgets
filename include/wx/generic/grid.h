@@ -2789,9 +2789,10 @@ protected:
 
     enum EventResult
     {
-        Event_Vetoed = -1, // Also returned when cell was deleted.
+        Event_Vetoed = -1,
         Event_Unhandled,
-        Event_Handled
+        Event_Handled,
+        Event_CellDeleted   // Event handler deleted the cell.
     };
 
     // Send the given grid event and returns one of the event handling results
