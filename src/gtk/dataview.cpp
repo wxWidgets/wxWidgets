@@ -3729,7 +3729,7 @@ bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormatArray& formats 
         return true;
     }
 
-    wxGtkString atom_str( gdk_atom_name( format  ) );
+    wxGtkString atom_str( gdk_atom_name( formats.Item(0) ) );
     m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
 
     m_dropTargetTargetEntry.target =  m_dropTargetTargetEntryTarget.data();
