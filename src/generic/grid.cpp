@@ -4664,7 +4664,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
         {
             ClearSelection();
 
-            if ( DoEnableCellEditControl() )
+            if ( DoEnableCellEditControl(wxGridActivationSource::From(event)) )
                 GetCurrentCellEditorPtr()->StartingClick();
 
             m_waitForSlowClick = false;
@@ -5969,7 +5969,8 @@ void wxGrid::OnChar( wxKeyEvent& event )
             // ensure cell is visble
             MakeCellVisible(m_currentCellCoords);
 
-            if ( DoEnableCellEditControl() && !specialEditKey )
+            if ( DoEnableCellEditControl(wxGridActivationSource::From(event))
+                    && !specialEditKey )
                 editor->StartingKey(event);
         }
         else
@@ -7149,7 +7150,7 @@ void wxGrid::EnableCellEditControl( bool enable )
             // this should be checked by the caller!
             wxCHECK_RET( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
 
-            DoEnableCellEditControl();
+            DoEnableCellEditControl(wxGridActivationSource::FromProgram());
         }
         else
         {
@@ -7158,14 +7159,20 @@ void wxGrid::EnableCellEditControl( bool enable )
     }
 }
 
-bool wxGrid::DoEnableCellEditControl()
+bool wxGrid::DoEnableCellEditControl(const wxGridActivationSource& actSource)
 {
     if ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) == -1 )
         return false;
 
-    m_cellEditCtrlEnabled = true;
+    if ( !DoShowCellEditControl(actSource) )
+    {
+        // We have to send the HIDDEN event matching the SHOWN one above as the
+        // user code may reasonably expect always getting them in pairs, so do
+        // it even if the editor hadn't really been shown at all.
+        SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
 
-    DoShowCellEditControl();
+        return false;
+    }
 
     return true;
 }
@@ -7217,15 +7224,56 @@ void wxGrid::ShowCellEditControl()
             return;
         }
 
-        DoShowCellEditControl();
+        DoShowCellEditControl(wxGridActivationSource::FromProgram());
     }
 }
 
-void wxGrid::DoShowCellEditControl()
+bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
 {
     wxRect rect = CellToRect( m_currentCellCoords );
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
+
+    wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
+    wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
+
+    const wxGridActivationResult&
+        res = editor->TryActivate(row, col, this, actSource);
+    switch ( res.GetAction() )
+    {
+        case wxGridActivationResult::Change:
+            // This is somewhat similar to what DoSaveEditControlValue() does.
+            // but we don't allow vetoing CHANGED event here as this code is
+            // new and shouldn't have to support this obsolete usage.
+            if ( SendEvent(wxEVT_GRID_CELL_CHANGING, res.GetNewValue()) != -1 )
+            {
+                const wxString& oldval = GetCellValue(m_currentCellCoords);
+
+                editor->DoActivate(row, col, this);
+
+                // Show the new cell value.
+                RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+
+                if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
+                {
+                    wxFAIL_MSG( "Vetoing wxEVT_GRID_CELL_CHANGED is ignored" );
+                }
+            }
+            wxFALLTHROUGH;
+
+        case wxGridActivationResult::Ignore:
+            // In any case, don't start editing normally.
+            return false;
+
+        case wxGridActivationResult::ShowEditor:
+            // Continue normally.
+            break;
+    }
+
+    // It's not enabled just yet, but will be soon, and we need to set it
+    // before generating any events in case their user-defined handlers decide
+    // to call EnableCellEditControl() to avoid reentrancy problems.
+    m_cellEditCtrlEnabled = true;
 
     wxGridWindow *gridWindow = CellToGridWindow(row, col);
 
@@ -7251,8 +7299,6 @@ void wxGrid::DoShowCellEditControl()
     rect.Deflate(1, 1);
 #endif
 
-    wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-    wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
     if ( !editor->IsCreated() )
     {
         editor->Create(gridWindow, wxID_ANY,
@@ -7348,6 +7394,8 @@ void wxGrid::DoShowCellEditControl()
 
     editor->BeginEdit(row, col, this);
     editor->SetCellAttr(NULL);
+
+    return true;
 }
 
 void wxGrid::HideCellEditControl()
