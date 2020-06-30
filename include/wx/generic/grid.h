@@ -2787,28 +2787,33 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    // Send the given grid event and return -1 if it was vetoed or, as a
-    // special exception, if an event for a particular cell resulted in this
-    // cell being deleted, 1 if it was processed (but not vetoed) and 0 if it
-    // wasn't processed.
-    int DoSendEvent(wxGridEvent& gridEvt);
+    enum EventResult
+    {
+        Event_Vetoed = -1, // Also returned when cell was deleted.
+        Event_Unhandled,
+        Event_Handled
+    };
+
+    // Send the given grid event and returns one of the event handling results
+    // defined above.
+    EventResult DoSendEvent(wxGridEvent& gridEvt);
 
     // Generate an event of the given type and call DoSendEvent().
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxMouseEvent& e);
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   const wxGridCellCoords& coords,
                   const wxMouseEvent& e)
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), e); }
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxString& s = wxString());
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   const wxGridCellCoords& coords,
                   const wxString& s = wxString())
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), s); }
-    int SendEvent(wxEventType evtType, const wxString& s = wxString())
+    EventResult SendEvent(wxEventType evtType, const wxString& s = wxString())
         { return SendEvent(evtType, m_currentCellCoords, s); }
 
     // send wxEVT_GRID_{ROW,COL}_SIZE or wxEVT_GRID_COL_AUTO_SIZE, return true
