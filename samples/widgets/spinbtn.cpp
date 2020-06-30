@@ -480,6 +480,8 @@ void SpinBtnWidgetsPage::OnButtonSetBase(wxCommandEvent& WXUNUSED(event))
     {
         wxLogWarning("Setting base %d failed.", m_base);
     }
+
+    m_sizerSpin->Layout();
 }
 
 void SpinBtnWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
