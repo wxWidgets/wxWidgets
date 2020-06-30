@@ -1518,10 +1518,13 @@ bool wxFileName::Normalize(int flags,
                         continue;
 
                 }
-                else // Normal case, go one step up.
+                else // Normal case, go one step up unless it's .. as well.
                 {
-                    m_dirs.pop_back();
-                    continue;
+                    if (m_dirs.back() != wxT("..") )
+                    {
+                        m_dirs.pop_back();
+                        continue;
+                    }
                 }
             }
         }
