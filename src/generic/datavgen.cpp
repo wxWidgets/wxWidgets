@@ -1009,8 +1009,6 @@ private:
     bool                        m_dragEnabled;
     wxDataFormat                m_dragFormat;
 
-    bool                        m_dropEnabled;
-    wxDataFormat                m_dropFormat;
     DropItemInfo                m_dropItemInfo;
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -2052,7 +2050,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_dragStart = wxPoint(0,0);
 
     m_dragEnabled = false;
-    m_dropEnabled = false;
+
     m_dropItemInfo = DropItemInfo();
 #endif // wxUSE_DRAG_AND_DROP
 
