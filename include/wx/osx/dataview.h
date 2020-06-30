@@ -210,11 +210,7 @@ public:
   virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
-  virtual bool EnableDropTarget(const wxDataFormatArray& formats) wxOVERRIDE;
-  virtual bool EnableDropTarget(const wxDataFormat& format) wxOVERRIDE
-  {
-    return wxDataViewCtrlBase::EnableDropTarget(format);
-  }
+  virtual bool DoEnableDropTarget( const wxDataFormatArray& formats ) wxOVERRIDE;
 #endif // wxUSE_DRAG_AND_DROP
 
  // returns the n-th pointer to a column;

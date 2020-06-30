@@ -764,10 +764,13 @@ public:
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
 
-    virtual bool EnableDropTarget(const wxDataFormatArray& WXUNUSED(formats))
+    virtual bool DoEnableDropTarget(const wxDataFormatArray& WXUNUSED(formats))
         { return false; }
 
-    virtual bool EnableDropTarget(const wxDataFormat& format)
+    bool EnableDropTarget(const wxDataFormatArray& formats)
+        { return DoEnableDropTarget(formats); }
+
+    bool EnableDropTarget(const wxDataFormat& format)
     {
         wxDataFormatArray formats;
         formats.Add(format);
