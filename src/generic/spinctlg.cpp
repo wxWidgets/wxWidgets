@@ -652,7 +652,7 @@ void wxSpinCtrl::DoSendEvent()
 {
     wxSpinEvent event( wxEVT_SPINCTRL, GetId());
     event.SetEventObject( this );
-    event.SetPosition((int)(m_value + 0.5)); // FIXME should be SetValue
+    event.SetPosition(GetValue());
     event.SetString(m_textCtrl->GetValue());
     GetEventHandler()->ProcessEvent( event );
 }
