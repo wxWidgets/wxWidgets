@@ -523,6 +523,34 @@ protected:
 // Smart pointer to wxGridCellEditor, calling DecRef() on it automatically.
 typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
 
+// Base class for editors that can be only activated and not edited normally.
+class wxGridCellActivatableEditor : public wxGridCellEditor
+{
+public:
+    // In this class these methods must be overridden.
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) = 0;
+    virtual void DoActivate(int row, int col, wxGrid* grid) = 0;
+
+    // All the other methods that normally must be implemented in an editor are
+    // defined as just stubs below, as they should be never called.
+
+    virtual void Create(wxWindow*, wxWindowID, wxEvtHandler*) wxOVERRIDE
+        { wxFAIL; }
+    virtual void BeginEdit(int, int, wxGrid*) wxOVERRIDE
+        { wxFAIL; }
+    virtual bool EndEdit(int, int, const wxGrid*,
+                         const wxString&, wxString*) wxOVERRIDE
+        { wxFAIL; return false; }
+    virtual void ApplyEdit(int, int, wxGrid*) wxOVERRIDE
+        { wxFAIL; }
+    virtual void Reset() wxOVERRIDE
+        { wxFAIL; }
+    virtual wxString GetValue() const wxOVERRIDE
+        { wxFAIL; return wxString(); }
+};
+
 // ----------------------------------------------------------------------------
 // wxGridHeaderRenderer and company: like wxGridCellRenderer but for headers
 // ----------------------------------------------------------------------------

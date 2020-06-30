@@ -551,7 +551,10 @@ public:
     the cell, but starting with wxWidgets 3.1.4 it's also possible to define
     "activatable" cell editors, that change the value of the cell directly when
     it's activated (typically by pressing Space key or clicking on it), see
-    TryActivate() method.
+    TryActivate() method. Note that when implementing an editor which is always
+    activatable, i.e. never shows any in-place editor, it is more convenient to
+    derive its class from wxGridCellActivatableEditor than from wxGridCellEditor
+    itself.
 
     @library{wxcore}
     @category{grid}
@@ -765,6 +768,34 @@ protected:
         The destructor is private because only DecRef() can delete us.
     */
     virtual ~wxGridCellEditor();
+};
+
+/**
+    Base class for activatable editors.
+
+    Inheriting from this class makes it simpler to implement editors that
+    support only activation, but not in-place editing, as they only need to
+    implement TryActivate(), DoActivate() and Clone() methods, but not all the
+    other pure virtual methods of wxGridCellEditor.
+
+    @since 3.1.4
+ */
+class wxGridCellActivatableEditor : public wxGridCellEditor
+{
+public:
+    /**
+        Same method as in wxGridCellEditor, but pure virtual.
+
+        Note that the implementation of this method must never return
+        wxGridActivationResult::DoEdit() for the editors inheriting from this
+        class, as it doesn't support normal editing.
+     */
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) = 0;
+
+    /// Same method as in wxGridCellEditor, but pure virtual.
+    virtual void DoActivate(int row, int col, wxGrid* grid) = 0;
 };
 
 /**
