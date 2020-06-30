@@ -639,6 +639,7 @@ bool wxSpinCtrl::SetBase(int base)
 
     m_base = base;
 
+    m_textCtrl->InvalidateBestSize();
     ResetTextValidator();
 
     // ... but DoValueToText() after doing it.
