@@ -238,6 +238,11 @@ class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 public:
     wxGridCellBoolEditor() { }
 
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) wxOVERRIDE;
+    virtual void DoActivate(int row, int col, wxGrid* grid) wxOVERRIDE;
+
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler) wxOVERRIDE;

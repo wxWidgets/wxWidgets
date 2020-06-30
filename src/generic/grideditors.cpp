@@ -1247,6 +1247,61 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 // the default values for GetValue()
 wxString wxGridCellBoolEditor::ms_stringValues[2] = { wxT(""), wxT("1") };
 
+wxGridActivationResult
+wxGridCellBoolEditor::TryActivate(int row, int col, wxGrid* grid,
+                                  const wxGridActivationSource& actSource)
+{
+    SetValueFromGrid(row, col, grid);
+
+    switch ( actSource.GetOrigin() )
+    {
+        case wxGridActivationSource::Program:
+            // It's not really clear what should happen in this case, so for
+            // now show the editor interactively to avoid making the choice.
+            return wxGridActivationResult::DoEdit();
+
+        case wxGridActivationSource::Mouse:
+            m_value = !m_value;
+            return wxGridActivationResult::DoChange(GetStringValue());
+
+        case wxGridActivationSource::Key:
+            switch ( actSource.GetKeyEvent().GetKeyCode() )
+            {
+                // Handle F2 as space here because we must handle it somehow,
+                // because pressing it always starts editing in wxGrid, and
+                // it's not really clear what else could it do.
+                case WXK_F2:
+                case WXK_SPACE:
+                    m_value = !m_value;
+                    break;
+
+                case '+':
+                    if ( m_value )
+                        return wxGridActivationResult::DoNothing();
+
+                    m_value = true;
+                    break;
+
+                case '-':
+                    if ( !m_value )
+                        return wxGridActivationResult::DoNothing();
+
+                    m_value = false;
+                    break;
+            }
+
+            return wxGridActivationResult::DoChange(GetStringValue());
+    }
+
+    wxFAIL_MSG( "unknown activation source origin" );
+    return wxGridActivationResult::DoNothing();
+}
+
+void wxGridCellBoolEditor::DoActivate(int row, int col, wxGrid* grid)
+{
+    SetGridFromValue(row, col, grid);
+}
+
 void wxGridCellBoolEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
