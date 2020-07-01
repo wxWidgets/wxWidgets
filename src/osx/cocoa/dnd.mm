@@ -336,7 +336,7 @@ Note that this, compared to the previous behaviour, adds
 NSDragOperationDelete to the mask which seems harmless.
 
 We are also keeping NSDragOperationLink and NSDragOperationPrivate
-in to preserve previous behaviour.
+in it to preserve previous behaviour.
 */
 #if wxOSX_USE_DRAG_SESSION
 
