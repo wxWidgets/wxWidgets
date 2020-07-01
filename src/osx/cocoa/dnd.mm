@@ -479,7 +479,8 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return self;
 }
 
-- (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type {
+- (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
+{
     wxDataFormat format((wxDataFormat::NativeFormat) type);
     size_t size = m_data->GetDataSize(format);
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
