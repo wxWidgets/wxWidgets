@@ -489,7 +489,8 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return (id) data;
 }
 
-- (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard {
+- (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
+{
     wxCFMutableArrayRef<CFStringRef> typesarray;
     m_data->AddSupportedTypes(typesarray);
     return (NSArray<NSPasteboardType>*) typesarray.autorelease();
