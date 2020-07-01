@@ -40295,14 +40295,12 @@ case "${host}" in
         ;;
 esac
 
-dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '!seen[$0]++'; }
+dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '$0=="-arch" || $0=="-framework" || !seen[$0]++'; }
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
 WX_CFLAGS=`dedup_flags "$CFLAGS"`
 WX_CXXFLAGS=`dedup_flags "$CXXFLAGS"`
-
-LDFLAGS=`printf %s "$LDFLAGS" | sed 's/-framework  */-framework_/g'`
-WX_LDFLAGS=`dedup_flags "$LDFLAGS" | sed 's/-framework_/-framework /g'`
+WX_LDFLAGS=`dedup_flags "$LDFLAGS"`
 
 CPPFLAGS=$USER_CPPFLAGS
 CFLAGS=$USER_CFLAGS
