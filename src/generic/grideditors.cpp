@@ -671,6 +671,8 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
 void wxGridCellTextEditor::SetValidator(const wxValidator& validator)
 {
     m_validator.reset(static_cast<wxValidator*>(validator.Clone()));
+    if ( m_validator && IsCreated() )
+        Text()->SetValidator(*m_validator);
 }
 #endif
 
@@ -1247,6 +1249,61 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 // the default values for GetValue()
 wxString wxGridCellBoolEditor::ms_stringValues[2] = { wxT(""), wxT("1") };
 
+wxGridActivationResult
+wxGridCellBoolEditor::TryActivate(int row, int col, wxGrid* grid,
+                                  const wxGridActivationSource& actSource)
+{
+    SetValueFromGrid(row, col, grid);
+
+    switch ( actSource.GetOrigin() )
+    {
+        case wxGridActivationSource::Program:
+            // It's not really clear what should happen in this case, so for
+            // now show the editor interactively to avoid making the choice.
+            return wxGridActivationResult::DoEdit();
+
+        case wxGridActivationSource::Mouse:
+            m_value = !m_value;
+            return wxGridActivationResult::DoChange(GetStringValue());
+
+        case wxGridActivationSource::Key:
+            switch ( actSource.GetKeyEvent().GetKeyCode() )
+            {
+                // Handle F2 as space here because we must handle it somehow,
+                // because pressing it always starts editing in wxGrid, and
+                // it's not really clear what else could it do.
+                case WXK_F2:
+                case WXK_SPACE:
+                    m_value = !m_value;
+                    break;
+
+                case '+':
+                    if ( m_value )
+                        return wxGridActivationResult::DoNothing();
+
+                    m_value = true;
+                    break;
+
+                case '-':
+                    if ( !m_value )
+                        return wxGridActivationResult::DoNothing();
+
+                    m_value = false;
+                    break;
+            }
+
+            return wxGridActivationResult::DoChange(GetStringValue());
+    }
+
+    wxFAIL_MSG( "unknown activation source origin" );
+    return wxGridActivationResult::DoNothing();
+}
+
+void wxGridCellBoolEditor::DoActivate(int row, int col, wxGrid* grid)
+{
+    SetGridFromValue(row, col, grid);
+}
+
 void wxGridCellBoolEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
@@ -1312,27 +1369,7 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be created first!"));
 
-    if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
-    {
-        m_value = grid->GetTable()->GetValueAsBool(row, col);
-    }
-    else
-    {
-        wxString cellval( grid->GetTable()->GetValue(row, col) );
-
-        if ( cellval == ms_stringValues[false] )
-            m_value = false;
-        else if ( cellval == ms_stringValues[true] )
-            m_value = true;
-        else
-        {
-            // do not try to be smart here and convert it to true or false
-            // because we'll still overwrite it with something different and
-            // this risks to be very surprising for the user code, let them
-            // know about it
-            wxFAIL_MSG( wxT("invalid value for a cell with bool editor!") );
-        }
-    }
+    SetValueFromGrid(row, col, grid);
 
     CBox()->SetValue(m_value);
     CBox()->SetFocus();
@@ -1358,11 +1395,7 @@ bool wxGridCellBoolEditor::EndEdit(int WXUNUSED(row),
 
 void wxGridCellBoolEditor::ApplyEdit(int row, int col, wxGrid* grid)
 {
-    wxGridTableBase * const table = grid->GetTable();
-    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
-        table->SetValueAsBool(row, col, m_value);
-    else
-        table->SetValue(row, col, GetValue());
+    SetGridFromValue(row, col, grid);
 }
 
 void wxGridCellBoolEditor::Reset()
@@ -1416,7 +1449,7 @@ void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
 
 wxString wxGridCellBoolEditor::GetValue() const
 {
-  return ms_stringValues[CBox()->GetValue()];
+  return GetStringValue(CBox()->GetValue());
 }
 
 /* static */ void
@@ -1431,6 +1464,43 @@ wxGridCellBoolEditor::UseStringValues(const wxString& valueTrue,
 wxGridCellBoolEditor::IsTrueValue(const wxString& value)
 {
     return value == ms_stringValues[true];
+}
+
+void wxGridCellBoolEditor::SetValueFromGrid(int row, int col, wxGrid* grid)
+{
+    if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
+    {
+        m_value = grid->GetTable()->GetValueAsBool(row, col);
+    }
+    else
+    {
+        wxString cellval( grid->GetTable()->GetValue(row, col) );
+
+        if ( cellval == ms_stringValues[false] )
+            m_value = false;
+        else if ( cellval == ms_stringValues[true] )
+            m_value = true;
+        else
+        {
+            // do not try to be smart here and convert it to true or false
+            // because we'll still overwrite it with something different and
+            // this risks to be very surprising for the user code, let them
+            // know about it
+            wxFAIL_MSG( wxT("invalid value for a cell with bool editor!") );
+
+            // Still need to initialize it to something.
+            m_value = false;
+        }
+    }
+}
+
+void wxGridCellBoolEditor::SetGridFromValue(int row, int col, wxGrid* grid) const
+{
+    wxGridTableBase * const table = grid->GetTable();
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
+        table->SetValueAsBool(row, col, m_value);
+    else
+        table->SetValue(row, col, GetStringValue());
 }
 
 #endif // wxUSE_CHECKBOX

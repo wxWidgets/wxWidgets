@@ -238,6 +238,11 @@ class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 public:
     wxGridCellBoolEditor() { }
 
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) wxOVERRIDE;
+    virtual void DoActivate(int row, int col, wxGrid* grid) wxOVERRIDE;
+
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler) wxOVERRIDE;
@@ -275,6 +280,15 @@ protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
 
 private:
+    // These functions modify or use m_value.
+    void SetValueFromGrid(int row, int col, wxGrid* grid);
+    void SetGridFromValue(int row, int col, wxGrid* grid) const;
+
+    wxString GetStringValue() const { return GetStringValue(m_value); }
+
+    static
+    wxString GetStringValue(bool value) { return ms_stringValues[value]; }
+
     bool m_value;
 
     static wxString ms_stringValues[2];

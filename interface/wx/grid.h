@@ -448,6 +448,97 @@ public:
 
 
 /**
+    Represents a source of cell activation, which may be either a user event
+    (mouse or keyboard) or the program itself.
+
+    An object of this class is passed to wxGridCellEditor::TryActivate() by the
+    library and the code overriding this method may use its GetOrigin() method
+    to determine how exactly the cell is being activated.
+
+    @since 3.1.4
+ */
+class wxGridActivationSource
+{
+public:
+    /// Result of GetOrigin().
+    enum Origin
+    {
+        /// Activated due to an explicit wxGrid::EnableCellEditControl() call.
+        Program,
+
+        /// Activated due to the user pressing a key, see GetKeyEvent().
+        Key,
+
+        /// Activated due to the user clicking on a cell, see GetMouseEvent().
+        Mouse
+    };
+
+    /// Get the origin of the activation.
+    Origin GetOrigin() const;
+
+    /**
+        Get the key event corresponding to the key press activating the cell.
+
+        This method can be called for objects with Key origin only, use
+        GetOrigin() to check for this first.
+     */
+    const wxKeyEvent& GetKeyEvent() const;
+
+    /**
+        Get the mouse event corresponding to the click activating the cell.
+
+        This method can be called for objects with Mouse origin only, use
+        GetOrigin() to check for this first.
+     */
+    const wxMouseEvent& GetMouseEvent() const;
+};
+
+/**
+    Represents the result of wxGridCellEditor::TryActivate().
+
+    Editors overriding wxGridCellEditor::TryActivate() must use one of
+    DoNothing(), DoChange() or DoEdit() methods to return an object of this
+    type corresponding to the desired action.
+
+    @since 3.1.4
+ */
+class wxGridActivationResult
+{
+public:
+    /**
+        Indicate that nothing should be done and the cell shouldn't be edited
+        at all.
+
+        Note that this is different from DoEdit() and may be useful when the
+        value of the cell wouldn't change if it were activated anyhow, e.g.
+        because the key or mouse event carried by wxGridActivationSource would
+        leave the cell value unchanged.
+     */
+    static wxGridActivationResult DoNothing();
+
+    /**
+        Indicate that activating the cell is possible and would change its
+        value to the given one.
+
+        This is the method to call for activatable editors, using it will
+        result in changing the value of the cell to @a newval without showing
+        the editor control at all.
+
+        Note that the change may still be vetoed by wxEVT_GRID_CELL_CHANGING
+        handler.
+     */
+    static wxGridActivationResult DoChange(const wxString& newval);
+
+    /**
+        Indicate that the editor control should be shown and the cell should be
+        edited normally.
+
+        This is the default return value of wxGridCellEditor::TryActivate().
+     */
+    static wxGridActivationResult DoEdit();
+};
+
+/**
     @class wxGridCellEditor
 
     This class is responsible for providing and manipulating the in-place edit
@@ -455,6 +546,15 @@ public:
     of derived classes since it is an abstract class) can be associated with
     the cell attributes for individual cells, rows, columns, or even for the
     entire grid.
+
+    Normally wxGridCellEditor shows some UI control allowing the user to edit
+    the cell, but starting with wxWidgets 3.1.4 it's also possible to define
+    "activatable" cell editors, that change the value of the cell directly when
+    it's activated (typically by pressing Space key or clicking on it), see
+    TryActivate() method. Note that when implementing an editor which is always
+    activatable, i.e. never shows any in-place editor, it is more convenient to
+    derive its class from wxGridCellActivatableEditor than from wxGridCellEditor
+    itself.
 
     @library{wxcore}
     @category{grid}
@@ -627,12 +727,75 @@ public:
     void SetControl(wxControl* control);
 
 
+    /**
+        Function allowing to create an "activatable" editor.
+
+        As explained in this class description, activatable editors don't show
+        any edit control but change the cell value directly, when it is
+        activated (by any way described by wxGridActivationSource).
+
+        To create such editor, this method must be overridden to return
+        wxGridActivationResult::DoChange() passing it the new value of the
+        cell. If the change is not vetoed by wxEVT_GRID_CELL_CHANGING handler,
+        DoActivate() will be called to actually change the value, so it must be
+        overridden as well if TryActivate() is overridden.
+
+        By default, wxGridActivationResult::DoEdit() is returned, meaning that
+        this is a normal editor, using an edit control for changing the cell
+        value.
+
+        @since 3.1.4
+     */
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource);
+
+    /**
+        Function which must be overridden for "activatable" editors.
+
+        If TryActivate() is overridden to return "change" action, this function
+        will be called to actually apply this change. Note that it is not
+        passed the value to apply, as it is assumed that the editor class
+        stores this value as a member variable anyhow.
+
+        @since 3.1.4
+     */
+    virtual void DoActivate(int row, int col, wxGrid* grid);
+
 protected:
 
     /**
         The destructor is private because only DecRef() can delete us.
     */
     virtual ~wxGridCellEditor();
+};
+
+/**
+    Base class for activatable editors.
+
+    Inheriting from this class makes it simpler to implement editors that
+    support only activation, but not in-place editing, as they only need to
+    implement TryActivate(), DoActivate() and Clone() methods, but not all the
+    other pure virtual methods of wxGridCellEditor.
+
+    @since 3.1.4
+ */
+class wxGridCellActivatableEditor : public wxGridCellEditor
+{
+public:
+    /**
+        Same method as in wxGridCellEditor, but pure virtual.
+
+        Note that the implementation of this method must never return
+        wxGridActivationResult::DoEdit() for the editors inheriting from this
+        class, as it doesn't support normal editing.
+     */
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) = 0;
+
+    /// Same method as in wxGridCellEditor, but pure virtual.
+    virtual void DoActivate(int row, int col, wxGrid* grid) = 0;
 };
 
 /**

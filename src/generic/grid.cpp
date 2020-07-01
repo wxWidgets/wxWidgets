@@ -3716,7 +3716,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
         {
             row = YToRow(pos.y);
             if ( row >= 0 &&
-                 !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
+                 SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) == Event_Unhandled )
             {
                 // Check if row selection is possible and allowed, before doing
                 // anything else, including changing the cursor mode to "select
@@ -3792,7 +3792,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
         {
             row = YToRow(pos.y);
             if ( row >=0 &&
-                 !SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, row, -1, event ) )
+                 SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, row, -1, event ) == Event_Unhandled )
             {
                 // no default action at the moment
             }
@@ -3816,7 +3816,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     {
         row = YToRow(pos.y);
         if ( row < 0 ||
-             !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
+             SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) == Event_Unhandled )
         {
             // no default action at the moment
             event.Skip();
@@ -3829,7 +3829,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     {
         row = YToRow(pos.y);
         if ( row < 0 ||
-             !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) )
+             SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, row, -1, event ) == Event_Unhandled )
         {
             // no default action at the moment
             event.Skip();
@@ -3954,7 +3954,7 @@ void wxGrid::DoColHeaderClick(int col)
 {
     // we consider that the grid was resorted if this event is processed and
     // not vetoed
-    if ( SendEvent(wxEVT_GRID_COL_SORT, -1, col) == 1 )
+    if ( SendEvent(wxEVT_GRID_COL_SORT, -1, col) == Event_Handled )
     {
         SetSortingColumn(col, IsSortingBy(col) ? !m_sortIsAscending : true);
         Refresh();
@@ -4112,7 +4112,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         else // not a request to start resizing
         {
             if ( col >= 0 &&
-                 !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
+                 SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) == Event_Unhandled )
             {
                 if ( m_canDragColMove )
                 {
@@ -4187,7 +4187,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         if ( colEdge == -1 )
         {
             if ( col >= 0 &&
-                 ! SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event ) )
+                 SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event ) == Event_Unhandled )
             {
                 // no default action at the moment
             }
@@ -4268,7 +4268,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     else if ( event.RightDown() )
     {
         if ( col < 0 ||
-             !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
+             SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) == Event_Unhandled )
         {
             // no default action at the moment
             event.Skip();
@@ -4280,7 +4280,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
     else if ( event.RightDClick() )
     {
         if ( col < 0 ||
-             !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
+             SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) == Event_Unhandled )
         {
             // no default action at the moment
             event.Skip();
@@ -4322,7 +4322,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
         // indicate corner label by having both row and
         // col args == -1
         //
-        if ( !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, -1, event ) )
+        if ( SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, -1, event ) == Event_Unhandled )
         {
             SelectAll();
         }
@@ -4333,7 +4333,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
     }
     else if ( event.RightDown() )
     {
-        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, -1, event ) )
+        if ( SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, -1, event ) == Event_Unhandled )
         {
             // no default action at the moment
             event.Skip();
@@ -4341,7 +4341,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
     }
     else if ( event.RightDClick() )
     {
-        if ( !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, event ) )
+        if ( SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, -1, event ) == Event_Unhandled )
         {
             // no default action at the moment
             event.Skip();
@@ -4494,7 +4494,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                 if ( CanDragCell() )
                 {
                     // if event is handled by user code, no further processing
-                    return SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == 0;
+                    return SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) == Event_Unhandled;
                 }
                 break;
 
@@ -4543,7 +4543,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                            const wxGridCellCoords& coords,
                            const wxPoint& pos)
 {
-    if ( SendEvent(wxEVT_GRID_CELL_LEFT_CLICK, coords, event) )
+    if ( SendEvent(wxEVT_GRID_CELL_LEFT_CLICK, coords, event) != Event_Unhandled )
     {
         // event handled by user code, no need to do anything here
         return;
@@ -4644,7 +4644,7 @@ wxGrid::DoGridCellLeftDClick(wxMouseEvent& event,
 {
     if ( XToEdgeOfCol(pos.x) < 0 && YToEdgeOfRow(pos.y) < 0 )
     {
-        if ( !SendEvent(wxEVT_GRID_CELL_LEFT_DCLICK, coords, event) )
+        if ( SendEvent(wxEVT_GRID_CELL_LEFT_DCLICK, coords, event) == Event_Unhandled )
         {
             // we want double click to select a cell and start editing
             // (i.e. to behave in same way as sequence of two slow clicks):
@@ -4664,7 +4664,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
         {
             ClearSelection();
 
-            if ( DoEnableCellEditControl() )
+            if ( DoEnableCellEditControl(wxGridActivationSource::From(event)) )
                 GetCurrentCellEditorPtr()->StartingClick();
 
             m_waitForSlowClick = false;
@@ -4835,9 +4835,9 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             else if ( event.LeftDClick() )
                 handled = (DoGridCellLeftDClick(event, coords, pos), true);
             else if ( event.RightDown() )
-                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event) != 0;
+                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event) != Event_Unhandled;
             else if ( event.RightDClick() )
-                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event) != 0;
+                handled = SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event) != Event_Unhandled;
         }
     }
     else if ( event.Moving() )
@@ -4949,9 +4949,8 @@ void wxGrid::DoEndMoveCol(int pos)
 {
     wxASSERT_MSG( m_dragMoveCol != -1, "no matching DoStartMoveCol?" );
 
-    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragMoveCol) != -1 )
+    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragMoveCol) != Event_Vetoed )
         SetColPos(m_dragMoveCol, pos);
-    //else: vetoed by user
 
     m_dragMoveCol = -1;
 }
@@ -5285,31 +5284,27 @@ wxGrid::SendGridSizeEvent(wxEventType type,
    return ProcessWindowEvent(gridEvt);
 }
 
-// Process the event and return
-//  -1 if the event was vetoed or if event cell was deleted
-//  +1 if the event was processed (but not vetoed)
-//   0 if the event wasn't handled
-int wxGrid::DoSendEvent(wxGridEvent& gridEvt)
+wxGrid::EventResult wxGrid::DoSendEvent(wxGridEvent& gridEvt)
 {
     const bool claimed = ProcessWindowEvent(gridEvt);
 
     // A Veto'd event may not be `claimed' so test this first
     if ( !gridEvt.IsAllowed() )
-        return -1;
+        return Event_Vetoed;
 
-    // We also return -1 if the event cell was deleted, as this allows to have
-    // checks in several functions that generate an event and then proceed
-    // doing something by default with the selected cell: this shouldn't be
-    // done if the user-defined handler deleted this cell.
+    // Detect the special case in which the event cell was deleted, as this
+    // allows to have checks in several functions that generate an event and
+    // then proceed doing something by default with the selected cell: this
+    // shouldn't be done if the user-defined handler deleted this cell.
     if ( gridEvt.GetRow() >= GetNumberRows() ||
             gridEvt.GetCol() >= GetNumberCols() )
-        return -1;
+        return Event_CellDeleted;
 
-    return claimed ? 1 : 0;
+    return claimed ? Event_Handled : Event_Unhandled;
 }
 
 // Generate a grid event based on a mouse event and call DoSendEvent() with it.
-int
+wxGrid::EventResult
 wxGrid::SendEvent(wxEventType type,
                   int row, int col,
                   const wxMouseEvent& mouseEv)
@@ -5362,7 +5357,7 @@ wxGrid::SendEvent(wxEventType type,
 
 // Generate a grid event of specified type, return value same as above
 //
-int
+wxGrid::EventResult
 wxGrid::SendEvent(wxEventType type, int row, int col, const wxString& s)
 {
     wxGridEvent gridEvt( GetId(), type, this, row, col );
@@ -5969,7 +5964,8 @@ void wxGrid::OnChar( wxKeyEvent& event )
             // ensure cell is visble
             MakeCellVisible(m_currentCellCoords);
 
-            if ( DoEnableCellEditControl() && !specialEditKey )
+            if ( DoEnableCellEditControl(wxGridActivationSource::From(event))
+                    && !specialEditKey )
                 editor->StartingKey(event);
         }
         else
@@ -6048,10 +6044,18 @@ void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
 
 bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
-    if ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) == -1 )
+    switch ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) )
     {
-        // the event has been vetoed - do nothing
-        return false;
+        case Event_Vetoed:
+        case Event_CellDeleted:
+            // We shouldn't do anything if the event was vetoed and can't do
+            // anything if the cell doesn't exist any longer.
+            return false;
+
+        case Event_Unhandled:
+        case Event_Handled:
+            // But it doesn't matter here if the event was skipped or not.
+            break;
     }
 
     wxGridWindow *currentGridWindow = CellToGridWindow(coords);
@@ -7149,7 +7153,7 @@ void wxGrid::EnableCellEditControl( bool enable )
             // this should be checked by the caller!
             wxCHECK_RET( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
 
-            DoEnableCellEditControl();
+            DoEnableCellEditControl(wxGridActivationSource::FromProgram());
         }
         else
         {
@@ -7158,14 +7162,31 @@ void wxGrid::EnableCellEditControl( bool enable )
     }
 }
 
-bool wxGrid::DoEnableCellEditControl()
+bool wxGrid::DoEnableCellEditControl(const wxGridActivationSource& actSource)
 {
-    if ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) == -1 )
+    switch ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) )
+    {
+        case Event_Vetoed:
+        case Event_CellDeleted:
+            // We shouldn't do anything if the event was vetoed and can't do
+            // anything if the cell doesn't exist any longer.
+            return false;
+
+        case Event_Unhandled:
+        case Event_Handled:
+            // But it doesn't matter here if the event was skipped or not.
+            break;
+    }
+
+    if ( !DoShowCellEditControl(actSource) )
+    {
+        // We have to send the HIDDEN event matching the SHOWN one above as the
+        // user code may reasonably expect always getting them in pairs, so do
+        // it even if the editor hadn't really been shown at all.
+        SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
+
         return false;
-
-    m_cellEditCtrlEnabled = true;
-
-    DoShowCellEditControl();
+    }
 
     return true;
 }
@@ -7217,15 +7238,63 @@ void wxGrid::ShowCellEditControl()
             return;
         }
 
-        DoShowCellEditControl();
+        DoShowCellEditControl(wxGridActivationSource::FromProgram());
     }
 }
 
-void wxGrid::DoShowCellEditControl()
+bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
 {
     wxRect rect = CellToRect( m_currentCellCoords );
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
+
+    wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
+    wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
+
+    const wxGridActivationResult&
+        res = editor->TryActivate(row, col, this, actSource);
+    switch ( res.GetAction() )
+    {
+        case wxGridActivationResult::Change:
+            // This is somewhat similar to what DoSaveEditControlValue() does.
+            // but we don't allow vetoing CHANGED event here as this code is
+            // new and shouldn't have to support this obsolete usage.
+            switch ( SendEvent(wxEVT_GRID_CELL_CHANGING, res.GetNewValue()) )
+            {
+                case Event_Vetoed:
+                case Event_CellDeleted:
+                    break;
+
+                case Event_Unhandled:
+                case Event_Handled:
+                    const wxString& oldval = GetCellValue(m_currentCellCoords);
+
+                    editor->DoActivate(row, col, this);
+
+                    // Show the new cell value.
+                    RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+
+                    if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
+                    {
+                        wxFAIL_MSG( "Vetoing wxEVT_GRID_CELL_CHANGED is ignored" );
+                    }
+                    break;
+            }
+            wxFALLTHROUGH;
+
+        case wxGridActivationResult::Ignore:
+            // In any case, don't start editing normally.
+            return false;
+
+        case wxGridActivationResult::ShowEditor:
+            // Continue normally.
+            break;
+    }
+
+    // It's not enabled just yet, but will be soon, and we need to set it
+    // before generating any events in case their user-defined handlers decide
+    // to call EnableCellEditControl() to avoid reentrancy problems.
+    m_cellEditCtrlEnabled = true;
 
     wxGridWindow *gridWindow = CellToGridWindow(row, col);
 
@@ -7251,8 +7320,6 @@ void wxGrid::DoShowCellEditControl()
     rect.Deflate(1, 1);
 #endif
 
-    wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
-    wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
     if ( !editor->IsCreated() )
     {
         editor->Create(gridWindow, wxID_ANY,
@@ -7348,6 +7415,8 @@ void wxGrid::DoShowCellEditControl()
 
     editor->BeginEdit(row, col, this);
     editor->SetCellAttr(NULL);
+
+    return true;
 }
 
 void wxGrid::HideCellEditControl()
@@ -7443,21 +7512,32 @@ void wxGrid::DoSaveEditControlValue()
     wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
 
     wxString newval;
-    bool changed = editor->EndEdit(row, col, this, oldval, &newval);
+    if ( !editor->EndEdit(row, col, this, oldval, &newval) )
+        return;
 
-    if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
+    switch ( SendEvent(wxEVT_GRID_CELL_CHANGING, newval) )
     {
-        editor->ApplyEdit(row, col, this);
+        case Event_Vetoed:
+        case Event_CellDeleted:
+            break;
 
-        // for compatibility reasons dating back to wx 2.8 when this event
-        // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
-        // didn't exist we allow vetoing this one too
-        if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
-        {
-            // Event has been vetoed, set the data back.
-            SetCellValue(m_currentCellCoords, oldval);
+        case Event_Unhandled:
+        case Event_Handled:
+            editor->ApplyEdit(row, col, this);
+
+            // for compatibility reasons dating back to wx 2.8 when this event
+            // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
+            // didn't exist we allow vetoing this one too
+            if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
+            {
+                // Event has been vetoed, set the data back.
+                //
+                // Note that we must use row and col here, which are sure to
+                // not have been changed, while m_currentCellCoords could have
+                // been changed by the event handler.
+                SetCellValue(row, col, oldval);
+            }
         }
-    }
 }
 
 void wxGrid::OnHideEditor(wxCommandEvent& WXUNUSED(event))
