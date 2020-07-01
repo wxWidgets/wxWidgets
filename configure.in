@@ -282,17 +282,9 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  arm-apple-darwin*)
-    dnl iPhone
-    USE_BSD=1
-    USE_DARWIN=1
-    AC_DEFINE(__BSD__)
-    AC_DEFINE(__DARWIN__)
-    DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=1
-  ;;
-
   *-*-darwin* )
-    dnl Darwin based distributions (including Mac OS X)
+    dnl Some platform using Darwin, i.e. one of the Apple OS: we target macOS
+    dnl by default on them, use --with-osx_iphone explicitly for iOS.
     USE_BSD=1
     USE_DARWIN=1
     AC_DEFINE(__BSD__)

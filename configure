@@ -4015,18 +4015,8 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  arm-apple-darwin*)
-        USE_BSD=1
-    USE_DARWIN=1
-    $as_echo "#define __BSD__ 1" >>confdefs.h
-
-    $as_echo "#define __DARWIN__ 1" >>confdefs.h
-
-    DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=1
-  ;;
-
   *-*-darwin* )
-        USE_BSD=1
+            USE_BSD=1
     USE_DARWIN=1
     $as_echo "#define __BSD__ 1" >>confdefs.h
 
