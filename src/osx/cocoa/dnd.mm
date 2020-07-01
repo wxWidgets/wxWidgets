@@ -264,6 +264,8 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
             return wxDragLink;
         case NSDragOperationNone:
             return wxDragNone;
+        case NSDragOperationDelete:
+            return wxDragNone;
         default:
             wxFAIL_MSG("Unexpected result code");
     }
@@ -326,27 +328,24 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     return resultCode;
 }
 
-/*
-By default drag targets receive a mask of NSDragOperationAll (0xf)
-which, despite its name, does not include the later added
-NSDragOperationMove (0x10) that sometimes is wanted.
-Use NSDragOperationEvery instead because it includes all flags.
-
-Note that this, compared to the previous behaviour, adds
-NSDragOperationDelete to the mask which seems harmless.
-
-We are also keeping NSDragOperationLink and NSDragOperationPrivate
-in it to preserve previous behaviour.
-*/
 #if wxOSX_USE_DRAG_SESSION
 
-- (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+- (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
     NSDragOperation allowedDragOperations = NSDragOperationEvery;
+
+    // NSDragOperationGeneric also makes a drag to the trash possible
+    // resulting in something we don't support (NSDragOperationDelete)
+
+    allowedDragOperations &= ~(NSDragOperationDelete | NSDragOperationGeneric);
 
     if (m_dragFlags == wxDrag_CopyOnly)
     {
         allowedDragOperations &= ~NSDragOperationMove;
     }
+
+    // we might adapt flags here in the future
+    // context can be NSDraggingContextOutsideApplication or NSDraggingContextWithinApplication
 
     return allowedDragOperations;
 }
