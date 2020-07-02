@@ -4015,18 +4015,8 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  arm-apple-darwin*)
-        USE_BSD=1
-    USE_DARWIN=1
-    $as_echo "#define __BSD__ 1" >>confdefs.h
-
-    $as_echo "#define __DARWIN__ 1" >>confdefs.h
-
-    DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=1
-  ;;
-
   *-*-darwin* )
-        USE_BSD=1
+            USE_BSD=1
     USE_DARWIN=1
     $as_echo "#define __BSD__ 1" >>confdefs.h
 
@@ -40305,14 +40295,12 @@ case "${host}" in
         ;;
 esac
 
-dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '!seen[$0]++'; }
+dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '$0=="-arch" || $0=="-framework" || !seen[$0]++'; }
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
 WX_CFLAGS=`dedup_flags "$CFLAGS"`
 WX_CXXFLAGS=`dedup_flags "$CXXFLAGS"`
-
-LDFLAGS=`printf %s "$LDFLAGS" | sed 's/-framework  */-framework_/g'`
-WX_LDFLAGS=`dedup_flags "$LDFLAGS" | sed 's/-framework_/-framework /g'`
+WX_LDFLAGS=`dedup_flags "$LDFLAGS"`
 
 CPPFLAGS=$USER_CPPFLAGS
 CFLAGS=$USER_CFLAGS

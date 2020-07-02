@@ -282,17 +282,9 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  arm-apple-darwin*)
-    dnl iPhone
-    USE_BSD=1
-    USE_DARWIN=1
-    AC_DEFINE(__BSD__)
-    AC_DEFINE(__DARWIN__)
-    DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=1
-  ;;
-
   *-*-darwin* )
-    dnl Darwin based distributions (including Mac OS X)
+    dnl Some platform using Darwin, i.e. one of the Apple OS: we target macOS
+    dnl by default on them, use --with-osx_iphone explicitly for iOS.
     USE_BSD=1
     USE_DARWIN=1
     AC_DEFINE(__BSD__)
@@ -8257,17 +8249,15 @@ dnl Set the flags to be used for the library build itself using the flag names
 dnl used everywhere above.
 dnl
 dnl Also get rid of duplicates in the flags, which results in dramatically
-dnl shorter build logs and so is well worth it.
-dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '!seen[[$0]]++'; }
+dnl shorter build logs and so is well worth it (but preserve some special
+dnl flags which are explicitly allowed to occur multiple times, as all their
+dnl occurrences must be preserved).
+dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '$0=="-arch" || $0=="-framework" || !seen[[$0]]++'; }
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
 WX_CFLAGS=`dedup_flags "$CFLAGS"`
 WX_CXXFLAGS=`dedup_flags "$CXXFLAGS"`
-
-dnl For link flags we can use "-framework" multiple times and all of their
-dnl occurrences need to be preserved, so add extra pre/post-processing.
-LDFLAGS=`printf %s "$LDFLAGS" | sed 's/-framework  */-framework_/g'`
-WX_LDFLAGS=`dedup_flags "$LDFLAGS" | sed 's/-framework_/-framework /g'`
+WX_LDFLAGS=`dedup_flags "$LDFLAGS"`
 
 dnl Restore the original user-specified flags values, we won't run any tests
 dnl using them any more.
