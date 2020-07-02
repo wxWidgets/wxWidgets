@@ -659,7 +659,6 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
 void wxBitmapDataObject::Init()
 {
     m_pictData = NULL;
-    m_pictCreated = false;
 }
 
 void wxBitmapDataObject::Clear()
@@ -669,7 +668,6 @@ void wxBitmapDataObject::Clear()
         CFRelease( m_pictData );
         m_pictData = NULL;
     }
-    m_pictCreated = false;
 }
 
 bool wxBitmapDataObject::GetDataHere( void *pBuf ) const
@@ -703,7 +701,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     if ((pBuf == NULL) || (nSize == 0))
         return false;
 
-    CGImageRef cgImageRef = 0;
+    CGImageRef cgImageRef = NULL;
 
     CFDataRef data = CFDataCreate( kCFAllocatorDefault, (const UInt8*) pBuf, nSize);
     CGImageSourceRef source = CGImageSourceCreateWithData( data, NULL );
