@@ -729,142 +729,170 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 }
 
 
-namespace    // enum, class and functions needed by wxCmpNatural().
+namespace    // helpers needed by wxCmpGenericNatural()
 {
-    enum wxStringFragmentType
+    // Used for comparison of string parts
+    struct wxStringFragment
     {
-        wxFRAGMENT_TYPE_EMPTY = 0,
-        wxFRAGMENT_TYPE_ALPHA = 1,
-        wxFRAGMENT_TYPE_DIGIT = 2
-    };
+        // Fragment types are generally sorted like this:
+        // Empty < SpaceOrPunct < Digit < LetterOrSymbol
+        // Fragments of the same type are compared as follows:
+        // SpaceOrPunct - collated, Digit - as numbers using value
+        // LetterOrSymbol - lower-cased and then collated
+        enum Type
+        {
+            Empty,
+            SpaceOrPunct,  // whitespace or punctuation
+            Digit,         // a sequence of decimal digits
+            LetterOrSymbol // letters and symbols, i.e., anything not covered by the above types
+        };
 
+        wxStringFragment() : type(Empty), value(0) {}
 
-    // ----------------------------------------------------------------------------
-    // wxStringFragment
-    // ----------------------------------------------------------------------------
-    // 
-    // Lightweight object returned by GetNaturalFragment().
-    // Represents either a number, or a string which contains no numerical digits.
-    class wxStringFragment
-    {
-    public:
-        wxStringFragment()
-            : type(wxFRAGMENT_TYPE_EMPTY)
-        {}
-
-        wxString              text;
-        long                  value;
-        wxStringFragmentType  type;
+        Type     type;
+        wxString text;
+        wxUint64 value; // used only for Digit type
     };
 
 
     wxStringFragment GetFragment(wxString& text)
     {
-        static const wxRegEx naturalNumeric(wxS("[0-9]+"));
-        static const wxRegEx naturalAlpha(wxS("[^0-9]+"));
+        static const wxRegEx reSpaceOrPunct(wxS("^([[:space:]]|[[:punct:]])+"));
+        static const wxRegEx reDigit(wxS("^[[:digit:]]+"));
+        static const wxRegEx reLetterOrSymbol("^[^[:space:]|[:punct:]|[:digit:]]+");
 
-        size_t           digitStart  = 0;
-        size_t           digitLength = 0;
-        size_t           alphaStart  = 0;
-        size_t           alphaLength = 0;
         wxStringFragment fragment;
+        size_t           length = wxString::npos;
 
         if ( text.empty() )
             return fragment;
 
-        if ( naturalNumeric.Matches(text) )
+        // In attempt to minimize the number of wxRegEx.Matches() calls,
+        // try to do them from the most expected to the least expected
+        // string fragment type.
+        if ( reLetterOrSymbol.Matches(text) )
         {
-            naturalNumeric.GetMatch(&digitStart, &digitLength, 0);
+            if ( reLetterOrSymbol.GetMatch(NULL, &length) )
+            {
+                fragment.type = wxStringFragment::LetterOrSymbol;
+                fragment.text = text.Left(length);
+            }
+        }
+        else if ( reDigit.Matches(text) )
+        {
+            if ( reDigit.GetMatch(NULL, &length) )
+            {
+                fragment.type = wxStringFragment::Digit;
+
+                // The number may be too big to fit into a wxUint64,
+                // so take at most its first 19 digits, the rest of
+                // the number will be processed as the next string fragment.
+                // Not perfect, but I could not think of a better simple solution.
+                length = wxMin(length, 19);
+                fragment.text = text.Left(length);
+                fragment.text.ToULongLong(&fragment.value);
+            }
+        }
+        else if ( reSpaceOrPunct.Matches(text) )
+        {
+            if ( reSpaceOrPunct.GetMatch(NULL, &length) )
+            {
+                fragment.type = wxStringFragment::SpaceOrPunct;
+                fragment.text = text.Left(length);
+            }
+        } else
+        {
+            wxFAIL_MSG("text doesn't start with any recognizable fragment type");
+            return fragment;
         }
 
-        if ( naturalAlpha.Matches(text) )
-        {
-            naturalAlpha.GetMatch(&alphaStart, &alphaLength, 0);
-        }
-
-
-        if ( alphaStart == 0 )
-        {
-            fragment.text = text.Mid(0, alphaLength);
-            fragment.value = 0;
-            fragment.type = wxFRAGMENT_TYPE_ALPHA;
-
-            text.erase(0, alphaLength);
-        }
-
-        if ( digitStart == 0 )
-        {
-            fragment.text = text.Mid(0, digitLength);
-            fragment.text.ToLong(&fragment.value);
-            fragment.type = wxFRAGMENT_TYPE_DIGIT;
-
-            text.erase(0, digitLength);
-        }
-
+        text.erase(0, length);
         return fragment;
     }
 
     int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& rhs)
     {
-        if ( (lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
-             (rhs.type == wxFRAGMENT_TYPE_ALPHA) )
-        {
-            return lhs.text.CmpNoCase(rhs.text);
-        }
+        int result = 1;
 
-        if ( (lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
-             (rhs.type == wxFRAGMENT_TYPE_DIGIT) )
+        if ( lhs.type == wxStringFragment::Empty )
         {
-            if ( lhs.value == rhs.value )
+            if ( rhs.type == wxStringFragment::Empty )
+                result = 0;
+            else
+                result = -1;
+        }
+        else if ( lhs.type == wxStringFragment::SpaceOrPunct )
+        {
+            switch ( rhs.type )
             {
-                return  0;
+                case wxStringFragment::Empty:
+                    result = 1;
+                case wxStringFragment::SpaceOrPunct:
+                    result = wxStrcoll_String(lhs.text, rhs.text);
+                    break;
+                case wxStringFragment::Digit:
+                case wxStringFragment::LetterOrSymbol:
+                    result = -1;
+                    break;
+                default:
+                    wxFAIL_MSG("Unknown string fragment type");
             }
-
-            if ( lhs.value < rhs.value )
+        }
+        else if ( lhs.type == wxStringFragment::Digit )
+        {
+            switch ( rhs.type )
             {
-                return -1;
+                case wxStringFragment::Empty:
+                case wxStringFragment::SpaceOrPunct:
+                    result = 1;
+                    break;
+                case wxStringFragment::Digit:
+                    if ( lhs.value >  rhs.value )
+                        result = 1;
+                    else if ( lhs.value <  rhs.value )
+                        result = -1;
+                    else
+                        result = 0;
+                    break;
+                case wxStringFragment::LetterOrSymbol:
+                    result = -1;
+                    break;
+                default:
+                    wxFAIL_MSG("Unknown string fragment type");
             }
-
-            if ( lhs.value > rhs.value )
+        }
+        else if ( lhs.type == wxStringFragment::LetterOrSymbol )
+        {
+            switch ( rhs.type )
             {
-                return  1;
+                case wxStringFragment::Empty:
+                case wxStringFragment::SpaceOrPunct:
+                case wxStringFragment::Digit:
+                    result = 1;
+                    break;
+                case wxStringFragment::LetterOrSymbol:
+                    result = wxStrcoll_String(lhs.text.Lower(), rhs.text.Lower());
+                    break;
+                default:
+                    wxFAIL_MSG("Unknown string fragment type");
             }
         }
-
-        if ( (lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
-             (rhs.type == wxFRAGMENT_TYPE_ALPHA) )
+        else
         {
-            return -1;
+            wxFAIL_MSG("Unknown string fragment type");
         }
 
-        if ( (lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
-             (rhs.type == wxFRAGMENT_TYPE_DIGIT) )
-        {
-            return 1;
-        }
-
-        if ( lhs.type == wxFRAGMENT_TYPE_EMPTY )
-        {
-            return -1;
-        }
-
-        if ( rhs.type == wxFRAGMENT_TYPE_EMPTY )
-        {
-            return 1;
-        }
-
-        return 0;
+        return result;
     }
 
 } // unnamed namespace
 
 
-
 // ----------------------------------------------------------------------------
-// wxCmpNaturalNative
+// wxCmpGenericNatural
 // ----------------------------------------------------------------------------
-// 
-int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+//
+int wxCMPFUNC_CONV wxCmpGenericNatural(const wxString& s1, const wxString& s2)
 {
     wxString lhs(s1);
     wxString rhs(s2);
@@ -873,9 +901,10 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 
     while ( (comparison == 0) && (!lhs.empty() || !rhs.empty()) )
     {
-        wxStringFragment fragmentL = GetFragment(lhs);
-        wxStringFragment fragmentR = GetFragment(rhs);
-        comparison = CompareFragmentNatural(fragmentL, fragmentR);
+        const wxStringFragment fragmentLHS = GetFragment(lhs);
+        const wxStringFragment fragmentRHS = GetFragment(rhs);
+
+        comparison = CompareFragmentNatural(fragmentLHS, fragmentRHS);
     }
 
     return comparison;
@@ -885,7 +914,7 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 // ----------------------------------------------------------------------------
 // Declaration of StrCmpLogicalW()
 // ----------------------------------------------------------------------------
-// 
+//
 // In some distributions of MinGW32, this function is exported in the library,
 // but not declared in shlwapi.h. Therefore we declare it here.
 #if defined( __MINGW32_TOOLCHAIN__ )
@@ -894,18 +923,16 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 
 
 // ----------------------------------------------------------------------------
-// wxCmpNaturalNative
+// wxCmpNatural
 // ----------------------------------------------------------------------------
-// 
+//
 // If a native version of Natural sort is available, then use that, otherwise
-// use the wxWidgets version, wxCmpNatural(). 
-int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
+// use the generic version.
+inline int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
-    #if defined( __WINDOWS__ ) 
-        return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
-
+    #if defined( __WINDOWS__ )
+        return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
     #else
-        return wxCmpNatural( s1, s2 );
-
-    #endif
+        return wxCmpGenericNatural(s1, s2);
+    #endif // #if defined( __WINDOWS__ )
 }
