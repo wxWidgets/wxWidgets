@@ -46,8 +46,7 @@ wxMacAutoreleasePool::~wxMacAutoreleasePool()
 
 CGContextRef wxOSXGetContextFromCurrentContext()
 {
-    CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext]
-                                          CGContext];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
     return context;
 }
 
