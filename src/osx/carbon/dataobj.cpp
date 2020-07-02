@@ -659,7 +659,6 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
 void wxBitmapDataObject::Init()
 {
     m_pictData = NULL;
-    m_pictCreated = false;
 }
 
 void wxBitmapDataObject::Clear()
@@ -669,7 +668,6 @@ void wxBitmapDataObject::Clear()
         CFRelease( m_pictData );
         m_pictData = NULL;
     }
-    m_pictCreated = false;
 }
 
 bool wxBitmapDataObject::GetDataHere( void *pBuf ) const
