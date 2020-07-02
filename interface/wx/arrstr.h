@@ -397,7 +397,7 @@ int wxStringSortDescending(const wxString& s1, const wxString& s2);
     @see wxDictionaryStringSortDescending(),
          wxStringSortAscending(),
          wxNaturalStringSortAscending()
-         
+
     @since 3.1.0
  */
 int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
@@ -416,88 +416,84 @@ int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
 int wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2);
 
 
-    /**
-        Comparison function used for Natural Sort.
-        
-        Functions in the same way as wxDictionaryStringSortAscending(), with
-        the exception that numbers within the string are recognised, and
-        compared numerically, rather than alphabetically. When used for
-        sorting, the result is that e.g. file names containing numbers are
-        sorted in a natural way.
+/**
+    Comparison function comparing strings in natural order.
 
-        This function will use an OS native function if one is available,
-        to ensure that the sort order is the same as the OS uses.
-        
-        Comparison is case insensitive.
-            
-        e.g. Sorting using wxDictionaryStringSortAscending() results in:
-        - file1.txt
-        - file10.txt
-        - file100.txt
-        - file2.txt
-        - file20.txt
-        - file3.txt
-        
-        e.g. Sorting using wxNaturalStringSortAscending() results in:
-        - file1.txt
-        - file2.txt
-        - file3.txt
-        - file11.txt
-        - file20.txt
-        - file100.txt
-        
-        @see wxNaturalStringSortDescending(),
-             wxStringSortAscending(),
-             wxDictionaryStringSortAscending()
-        
-        @since 3.1.2  
-    */
+    This function can be used with wxSortedArrayString::Sort()
+    or passed as an argument to wxSortedArrayString constructor.
+
+    See wxCmpNatural() for more information about how natural
+    sort order is implemented.
+
+    @see wxNaturalStringSortDescending(),
+         wxStringSortAscending(), wxDictionaryStringSortAscending()
+
+    @since 3.1.4
+*/
 int wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
 
+/**
+    Comparison function comparing strings in reverse natural order.
 
-    /**
-        Comparison function comparing strings in reverse natural order.
-        
-        See wxNaturalStringSortAscending() for the natural sort description.
-    
-        @see wxNaturalStringSortAscending(),
-             wxStringSortDescending(),
-             wxDictionaryStringSortDescending()
-             
-        @since 3.1.2
-    */
+    This function can be used with wxSortedArrayString::Sort()
+    or passed as an argument to wxSortedArrayString constructor.
+
+    See wxCmpNatural() for more information about how natural
+    sort order is implemented.
+
+    @see wxNaturalStringSortAscending(),
+         wxStringSortDescending(), wxDictionaryStringSortDescending()
+
+    @since 3.1.4
+*/
 int wxNaturalStringSortDescending(const wxString& s1, const wxString& s2);
 
+/**
+    This function compares strings using case-insensitive collation and
+    additionally, numbers within strings are recognised and compared
+    numerically, rather than alphabetically. When used for sorting,
+    the result is that e.g. file names containing numbers are sorted
+    in a natural way.
 
-    /**
-        This is wxWidgets' own implementation of the natural sort comparison
-        function. This will be used whenever an OS native function is not available.
-        
-        Since OS native implementations might differ from each other, the user might
-        wish to use this function which behaves in the same way across all platforms.
-        
-        @since 3.1.2
-    */
-int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2);
+    For example, sorting with a simple string comparison results in:
+    - file1.txt
+    - file10.txt
+    - file100.txt
+    - file2.txt
+    - file20.txt
+    - file3.txt
 
+    But sorting the same strings in natural sort order results in:
+    - file1.txt
+    - file2.txt
+    - file3.txt
+    - file10.txt
+    - file20.txt
+    - file100.txt
 
-    /**
-        Comparison function, identical to wxNaturalStringSortAscending().
-        In fact, wxNaturalStringSortAscending() and wxNaturalStringSortDescending()
-        are both implemented using this function.
-        
-        When an OS native natural sort function is available, that will be used,
-        otherwise wxCmpNatural() will be used.
+    wxCmpNatural() uses an OS native natural sort function when available
+    (currently only under Microsoft Windows), wxCmpNaturalGeneric() otherwise.
 
-        Be aware that OS native implementations might differ from each other, and
-        might change behaviour from release to release.
-        
-        @see wxNaturalStringSortAscending(),
-             wxNaturalStringSortDescending()
-             
-        @since 3.1.2
-    */
-int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2);
+    Be aware that OS native implementations might differ from each other,
+    and might change behaviour from release to release.
+
+    @see wxNaturalStringSortAscending(), wxNaturalStringSortDescending()
+
+    @since 3.1.4
+*/
+int wxCmpNatural(const wxString& s1, const wxString& s2);
+
+/**
+    This is wxWidgets' own implementation of the natural sort comparison function.
+
+    Requires wxRegEx, if it is unavailable numbers within strings are not
+    recognised and only case-insensitive collation is performed.
+
+    @see wxCmpNatural()
+
+    @since 3.1.4
+*/
+int wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
 
 
 // ============================================================================
