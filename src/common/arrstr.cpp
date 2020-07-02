@@ -26,7 +26,10 @@
 #include <algorithm>
 #include <functional>
 #include "wx/afterstd.h"
+
+#include "wx/wxcrt.h"
 #include "wx/regex.h"
+#include "wx/utils.h"
 
 #if defined( __WINDOWS__ )
     #include <shlwapi.h>
