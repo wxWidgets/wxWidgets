@@ -996,7 +996,7 @@ wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const
     const wxDirItemData*
         data = static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
 
-    return data->m_path;
+    return data ? data->m_path : wxString();
 }
 
 wxString wxGenericDirCtrl::GetPath() const
