@@ -384,7 +384,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     {
         wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl *>( column->GetOwner()->GetPeer() );
         if( peer )
-            [peer->GetNativeControl() sizeToFit];
+            peer->SizeToFit();
     }
 
     // setting the visibility:
@@ -3748,7 +3748,7 @@ void wxDataViewColumn::SetResizeable(bool resizable)
         return;
     wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl *>( GetOwner()->GetPeer() );
     if( peer )
-        [peer->GetNativeControl() sizeToFit];
+        peer->SizeToFit();
 }
 
 void wxDataViewColumn::UnsetAsSortKey()
