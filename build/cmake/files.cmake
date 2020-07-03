@@ -2045,6 +2045,7 @@ set(MSW_SRC
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
+    src/msw/srchctrl.cpp
 )
 
 set(MSW_HDR
@@ -2152,6 +2153,7 @@ set(MSW_HDR
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
     wx/generic/activityindicator.h
+    wx/msw/srchctrl.h
 )
 
 set(MSW_RSC

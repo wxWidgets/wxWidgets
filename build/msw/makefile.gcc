@@ -1970,6 +1970,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_timectrl.o \
 	$(OBJS)\monodll_datecontrols.o \
 	$(OBJS)\monodll_activityindicator.o \
+	$(OBJS)\monodll_srchctrl.o \
 	$(OBJS)\monodll_msw_checklst.o \
 	$(OBJS)\monodll_msw_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
@@ -2810,6 +2811,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_timectrl.o \
 	$(OBJS)\monolib_datecontrols.o \
 	$(OBJS)\monolib_activityindicator.o \
+	$(OBJS)\monolib_srchctrl.o \
 	$(OBJS)\monolib_msw_checklst.o \
 	$(OBJS)\monolib_msw_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
@@ -3533,6 +3535,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_timectrl.o \
 	$(OBJS)\coredll_datecontrols.o \
 	$(OBJS)\coredll_activityindicator.o \
+	$(OBJS)\coredll_srchctrl.o \
 	$(OBJS)\coredll_msw_checklst.o \
 	$(OBJS)\coredll_msw_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
@@ -4214,6 +4217,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_timectrl.o \
 	$(OBJS)\corelib_datecontrols.o \
 	$(OBJS)\corelib_activityindicator.o \
+	$(OBJS)\corelib_srchctrl.o \
 	$(OBJS)\corelib_msw_checklst.o \
 	$(OBJS)\corelib_msw_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
@@ -7330,6 +7334,9 @@ $(OBJS)\monodll_timectrl.o: ../../src/msw/timectrl.cpp
 $(OBJS)\monodll_datecontrols.o: ../../src/msw/datecontrols.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_srchctrl.o: ../../src/msw/srchctrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_msw_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9882,6 +9889,9 @@ $(OBJS)\monolib_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_datecontrols.o: ../../src/msw/datecontrols.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_srchctrl.o: ../../src/msw/srchctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msw_checklst.o: ../../src/msw/checklst.cpp
@@ -12852,6 +12862,9 @@ $(OBJS)\coredll_timectrl.o: ../../src/msw/timectrl.cpp
 $(OBJS)\coredll_datecontrols.o: ../../src/msw/datecontrols.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_srchctrl.o: ../../src/msw/srchctrl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_msw_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14585,6 +14598,9 @@ $(OBJS)\corelib_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_datecontrols.o: ../../src/msw/datecontrols.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_srchctrl.o: ../../src/msw/srchctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msw_checklst.o: ../../src/msw/checklst.cpp

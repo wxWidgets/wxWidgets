@@ -993,6 +993,9 @@
     <ClCompile Include="..\..\src\msw\spinctrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\srchctrl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\statbmp.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -1939,6 +1942,9 @@
     <ClInclude Include="..\..\include\wx\msw\spinctrl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\srchctrl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\statbmp.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>

@@ -16,7 +16,8 @@
 
 #include "wx/textctrl.h"
 
-#if (!defined(__WXMAC__) && !defined(__WXGTK20__)) || defined(__WXUNIVERSAL__)
+#if (!defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK20__)) \
+    || defined(__WXUNIVERSAL__)
     // no native version, use the generic one
     #define wxUSE_NATIVE_SEARCH_CONTROL 0
 
@@ -28,6 +29,12 @@
           public wxTextCtrlIface
     {
     };
+#elif defined(__WXMSW__)
+    #if wxUSE_GRAPHICS_CONTEXT
+        #define wxUSE_NATIVE_SEARCH_CONTROL 1
+
+        #define wxSearchCtrlBaseBaseClass wxTextCtrl
+    #endif
 #elif defined(__WXMAC__)
     // search control was introduced in Mac OS X 10.3 Panther
     #define wxUSE_NATIVE_SEARCH_CONTROL 1
@@ -96,6 +103,8 @@ private:
 #if wxUSE_NATIVE_SEARCH_CONTROL
     #if defined(__WXMAC__)
         #include "wx/osx/srchctrl.h"
+    #elif defined(__WXMSW__)
+        #include "wx/msw/srchctrl.h"
     #elif defined(__WXGTK__)
         #include "wx/gtk/srchctrl.h"
     #endif
