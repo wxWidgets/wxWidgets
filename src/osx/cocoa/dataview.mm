@@ -2286,7 +2286,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     }
 
     [column setWidth:calculator.GetMaxWidth()];
-    column.resizingMask = NSTableColumnAutoresizingMask;
+    [column setResizingMask:NSTableColumnAutoresizingMask];
     [m_OutlineView sizeToFit];
 }
 
