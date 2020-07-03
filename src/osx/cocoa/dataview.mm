@@ -3808,20 +3808,19 @@ void wxDataViewColumn::SetTitle(const wxString& title)
 
 void wxDataViewColumn::SetWidth(int width)
 {
-     m_width = width;
+    m_width = width;
 
     if ( !GetOwner() )
     {
         // can't set the real width yet
         return;
     }
-    wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl *>( GetOwner()->GetPeer() );
     switch ( width )
     {
         case wxCOL_WIDTH_AUTOSIZE:
-            {
+                // This will now be handled by the native control.
+                // So we don't need to do anything special here.
                 break;
-            }
 
         case wxCOL_WIDTH_DEFAULT:
             width = wxDVC_DEFAULT_WIDTH;
