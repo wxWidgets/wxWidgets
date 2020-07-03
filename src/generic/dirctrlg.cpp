@@ -1222,7 +1222,7 @@ void wxGenericDirCtrl::DoResize()
         wxSize filterSz ;
         if (m_filterListCtrl)
         {
-            filterSz = m_filterListCtrl->GetSize();
+            filterSz = m_filterListCtrl->GetBestSize();
             sz.y -= (filterSz.y + verticalSpacing);
         }
         m_treeCtrl->SetSize(0, 0, sz.x, sz.y);
