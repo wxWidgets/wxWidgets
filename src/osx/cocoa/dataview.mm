@@ -2075,6 +2075,9 @@ void wxCocoaDataViewControl::InitOutlineView(long style)
 
     [m_OutlineView setImplementation:this];
     [m_OutlineView setFocusRingType:NSFocusRingTypeNone];
+    // According to the Apple docs in order to resize from the left to right columns
+    // we should be using NSTableViewReverseSequentialColumnAutoresizingStyle
+    // not sure if the RTL languages will need to use another option?
     [m_OutlineView setColumnAutoresizingStyle:NSTableViewReverseSequentialColumnAutoresizingStyle];
     [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
     NSUInteger maskGridStyle(NSTableViewGridNone);
