@@ -447,11 +447,11 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return self;
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_11
-- (id)pasteboardPropertyListForType:(NSString *)type;
-#else
-- (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+typedef NSString* NSPasteboardType;
 #endif
+
+- (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
 {
     wxDataFormat format((wxDataFormat::NativeFormat) type);
     size_t size = m_data->GetDataSize(format);
@@ -461,19 +461,11 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return (id) data;
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_11
-- (NSArray *)writableTypesForPasteboard:(NSPasteboard *)pasteboard;
-#else
 - (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
-#endif
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
     m_data->AddSupportedTypes(typesarray);
-#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_11
-    return (NSArray*) typesarray.autorelease();
-#else
     return (NSArray<NSPasteboardType>*) typesarray.autorelease();
-#endif
 }
 
 @end
