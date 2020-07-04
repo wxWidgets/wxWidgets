@@ -13,7 +13,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_SEARCHCTRL
+#if wxUSE_SEARCHCTRL && wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/srchctrl.h"
 
@@ -27,13 +27,20 @@
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
+#include "wx/msw/private.h"
+
 #include <windowsx.h> // For GET_X_LPARAM and GET_Y_LPARAM macros
 
 #include "wx/dcgraph.h"
 #include "wx/graphics.h"
 #include "wx/utils.h"
-#include "wx/msw/private.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// the margin between the text control and the search/cancel buttons
+static const int MARGIN = 2;
 
 // ============================================================================
 // wxSearchCtrl implementation
@@ -114,20 +121,20 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
                     if ( GetLayoutDirection() == wxLayout_LeftToRight )
                     {
-                        csparam->rgrc [0].left  += bitmapWidth - 2;
+                        csparam->rgrc [0].left  += bitmapWidth - MARGIN;
 
                         if ( IsCancelButtonVisible() )
                         {
-                            csparam->rgrc [0].right -= bitmapWidth - 2;
+                            csparam->rgrc [0].right -= bitmapWidth - MARGIN;
                         }
                     }
                     else // wxLayout_RightToLeft
                     {
-                        csparam->rgrc [0].right -= bitmapWidth - 2;
+                        csparam->rgrc [0].right -= bitmapWidth - MARGIN;
 
                         if ( IsCancelButtonVisible() )
                         {
-                            csparam->rgrc [0].left  += bitmapWidth - 2;
+                            csparam->rgrc [0].left  += bitmapWidth - MARGIN;
                         }
                     }
                 }
@@ -137,7 +144,6 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
         case WM_NCPAINT:
             {
                 const RECT rcWindow = wxGetWindowRect(GetHwnd());
-                
                 RECT rcClient = wxGetClientRect(GetHwnd());
                 ::MapWindowPoints(GetHwnd(), NULL, reinterpret_cast<LPPOINT>(&rcClient), 2);
 
@@ -155,8 +161,8 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                     cancelButtonRect = &leftRect;
                 }
 
-                // In RTL layout, we can skip leftRect (cancel button) calculation.
-                if ( !(GetLayoutDirection() == wxLayout_RightToLeft && !IsCancelButtonVisible()) )
+                // In RTL layout, we can skip leftRect (cancel button) calculation unless it's visible.
+                if ( GetLayoutDirection() == wxLayout_LeftToRight || IsCancelButtonVisible() )
                 {
                     // Calculate leftRect
                     leftRect = rcWindow;
@@ -164,12 +170,11 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
                     leftRect.top += rcClient.top - rcWindow.top;
                     leftRect.bottom -= rcWindow.bottom - rcClient.bottom;
-
                     ::OffsetRect(&leftRect, -rcWindow.left, -rcWindow.top);
                 }
                 
-                // In LTR layout, we can skip rightRect (cancel button) calculation.
-                if ( !(GetLayoutDirection() == wxLayout_LeftToRight && !IsCancelButtonVisible()) )
+                // In LTR layout, we can skip rightRect (cancel button) calculation unless it's visible.
+                if ( GetLayoutDirection() == wxLayout_RightToLeft || IsCancelButtonVisible() )
                 {
                     // Calculate rightRect
                     rightRect = rcWindow;
@@ -178,7 +183,6 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                     ::OffsetRect(&rightRect, rcClient.right + bitmapWidth - rcWindow.right, 0);
                     rightRect.top += rcClient.top - rcWindow.top;
                     rightRect.bottom -= rcWindow.bottom - rcClient.bottom;
-
                     ::OffsetRect(&rightRect, -rcWindow.left, -rcWindow.top);
                 }
 
@@ -231,7 +235,9 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
         case WM_NCMOUSEMOVE:
             {
-                HighlightButton();
+                // if this causes a noticeable flicker, we better off handling
+                // WM_NCMOUSEHOVER instead.
+                ::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
             }
             break;
 
@@ -258,6 +264,8 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
 void wxSearchCtrl::DrawButtons(int width)
 {
+    // For better results, the drawing is made with a larger dimension
+    // (here we use 80) with an appropriate scale applied.
     const double xWidth = 80.;
     const double radius = xWidth / 4. + 5;
     const double scale  = 0.6 * (width / xWidth);
@@ -291,10 +299,16 @@ void wxSearchCtrl::DrawButtons(int width)
         wxGCDC gdc(winDC);
         wxDCClipper clip(gdc, m_cancelButtonRect);
 
+        // _shift_ value is calculated to work well with the calculated _scale_
+        // above, but since we are applying an altered value of the _scale_ below,
+        // a little adjustment to the _shift_ value seems to be necessary for better
+        // positioning of the cancel button.
         const double adj = GetLayoutDirection() == wxLayout_LeftToRight ? 1 : 2;
         gdc.SetDeviceOrigin(m_cancelButtonRect.x + shift + adj, shift + adj);
 
-        gdc.SetBackground(m_highlightColour.IsOk() ? m_highlightColour : bg);
+        const wxColour& highlightColour = m_mouseInCancelButton ?
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) : bg;
+        gdc.SetBackground(highlightColour);
         gdc.Clear();
 
         gdc.SetUserScale(0.75 * scale, 0.75 * scale);
@@ -309,21 +323,6 @@ void wxSearchCtrl::DrawButtons(int width)
 
 // search control specific interfaces
 // ----------------------------------
-void wxSearchCtrl::HighlightButton()
-{
-    if ( (m_mouseInCancelButton && m_highlightColour.IsOk()) ||
-            (!m_mouseInCancelButton && !m_highlightColour.IsOk()) )
-    {
-        // Skip unnecessary call to RedrawWindow().
-        return;
-    }
-
-    m_highlightColour = m_mouseInCancelButton ?
-        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) : wxNullColour;
-
-    ::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-}
-
 void wxSearchCtrl::ClickButton()
 {
     if ( m_mouseInCancelButton )
@@ -338,7 +337,11 @@ void wxSearchCtrl::ClickButton()
 #if wxUSE_MENUS
     else if ( HasMenu() )
     {
-        PopupSearchMenu();
+        if ( m_menu )
+        {
+            const wxSize& size = GetSize();
+            PopupMenu(m_menu, 0, size.y);
+        }
     }
 #endif // wxUSE_MENUS
 }
@@ -431,18 +434,5 @@ void wxSearchCtrl::ToggleCancelButtonVisibility()
                    SWP_NOSENDCHANGING);
     }
 }
-
-#if wxUSE_MENUS
-
-void wxSearchCtrl::PopupSearchMenu()
-{
-    if ( m_menu )
-    {
-        const wxSize& size = GetSize();
-        PopupMenu(m_menu, 0, size.y);
-    }
-}
-
-#endif // wxUSE_MENUS
 
 #endif // wxUSE_SEARCHCTRL

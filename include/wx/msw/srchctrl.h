@@ -67,10 +67,6 @@ public:
     virtual void SetDescriptiveText(const wxString& text) wxOVERRIDE;
     virtual wxString GetDescriptiveText() const wxOVERRIDE;
 
-#if wxUSE_MENUS
-    void PopupSearchMenu();
-#endif // wxUSE_MENUS
-
     // intercept WM_NCCALCSIZE & WM_NCPAINT
     virtual bool MSWHandleMessage(WXLRESULT *result,
                                   WXUINT message,
@@ -79,8 +75,6 @@ public:
 
 private:
     void Init();
-
-    void HighlightButton();
 
     void ClickButton();
 
@@ -107,8 +101,6 @@ private:
 
     bool m_isCancelButtonShown;
     bool m_mouseInCancelButton;
-
-    wxColour m_highlightColour;
 
 #if wxUSE_MENUS
     wxMenu *m_menu;
