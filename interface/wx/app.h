@@ -771,7 +771,7 @@ public:
 
         Under Windows and Linux/Unix, you should parse the command line
         arguments and check for files to be opened when starting your
-        application. Under OS X, you need to override MacOpenFiles()
+        application. Under macOS, you need to override MacOpenFiles()
         since command line arguments are used differently there.
 
         You may use the wxCmdLineParser to parse command line arguments.
@@ -1054,7 +1054,7 @@ public:
 
     /**
         May be overridden to indicate that the application is not a foreground
-        GUI application under OS X.
+        GUI application under macOS.
 
         This method is called during the application startup and returns @true
         by default. In this case, wxWidgets ensures that the application is ran

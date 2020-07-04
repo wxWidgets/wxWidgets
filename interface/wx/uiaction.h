@@ -109,7 +109,7 @@ public:
         Press a key.
 
         If you are using modifiers then it needs to be paired with an identical
-        KeyUp or the modifiers will not be released (MSW and OS X).
+        KeyUp or the modifiers will not be released (MSW and macOS).
 
         @param keycode
             Key to operate on, as an integer. It is interpreted as a wxKeyCode.

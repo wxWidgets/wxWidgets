@@ -52,8 +52,8 @@ starting with 3.1.4. Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 @section page_port_wxosx wxOSX/Cocoa
 
-wxOSX/Cocoa is the port of wxWidgets for the OS X platform. It requires
-OS X 10.10 or later, Xcode 7.2.1 or greater, and fully supports 64 bit builds.
+wxOSX/Cocoa is the port of wxWidgets for the macOS platform. It requires
+macOS 10.10 or later, Xcode 7.2.1 or greater, and fully supports 64 bit builds.
 
 @subpage plat_osx_install "Build and Install Instructions"
 

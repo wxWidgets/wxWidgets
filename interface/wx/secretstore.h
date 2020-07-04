@@ -139,7 +139,7 @@ public:
     A collection of secrets, sometimes called a key chain.
 
     This class provides access to the secrets stored in the OS-provided
-    facility, e.g. credentials manager under MSW, keychain under OS X or
+    facility, e.g. credentials manager under MSW, keychain under macOS or
     Freedesktop-compliant password storage mechanism such as GNOME keyring
     under Unix systems.
 
@@ -155,7 +155,7 @@ public:
     included in the string to allow storing passwords for more than one server.
 
     Notice that this class is always available under MSW (except when using
-    MinGW32 which doesn't provide the required @c wincred.h header) and OS X
+    MinGW32 which doesn't provide the required @c wincred.h header) and macOS
     but requires libsecret (see https://developer.gnome.org/libsecret/) under
     Unix and may not be compiled in if it wasn't found. You can check @c
     wxUSE_SECRETSTORE to test for this. Moreover, retrieving the default

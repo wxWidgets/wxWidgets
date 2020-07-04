@@ -164,7 +164,7 @@ struct wxFontMetrics
     In general wxDC methods don't support alpha transparency and the alpha
     component of wxColour is simply ignored and you need to use wxGraphicsContext
     for full transparency support. There are, however, a few exceptions: first,
-    under OS X and GTK+ 3 colours with alpha channel are supported in all the normal
+    under macOS and GTK+ 3 colours with alpha channel are supported in all the normal
     wxDC-derived classes as they use wxGraphicsContext internally. Second,
     under all platforms wxSVGFileDC also fully supports alpha channel. In both
     of these cases the instances of wxPen or wxBrush that are built from
@@ -173,7 +173,7 @@ struct wxFontMetrics
 
     @section dc_transform_support Support for Transformation Matrix
 
-    On some platforms (currently under MSW, GTK+ 3, OS X) wxDC has support for
+    On some platforms (currently under MSW, GTK+ 3, macOS) wxDC has support for
     applying an arbitrary affine transformation matrix to its coordinate system
     (since 3.1.1 this feature is also supported by wxGCDC in all ports).
     Call CanUseTransformMatrix() to check if this support is available and then
@@ -1640,7 +1640,7 @@ public:
        context, if this wxDC has something that could be thought of in that
        way.  (Not all of them do.)
 
-       For example, on Windows the return value is an HDC, on OS X it is a
+       For example, on Windows the return value is an HDC, on macOS it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
        wxGraphicsContext::GetNativeContext.  A value of NULL is returned if

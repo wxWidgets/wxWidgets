@@ -56,7 +56,7 @@ const char wxMessageBoxCaptionStr[] = "Message";
         Displays a warning icon in the dialog. This style should be used for
         informative warnings or, in combination with @c wxYES_NO or @c wxCANCEL,
         for questions that have potentially serious consequences (caution
-        icon is used on OS X in this case).
+        icon is used on macOS in this case).
     @style{wxICON_QUESTION}
         Displays a question mark symbol. This icon is automatically used
         with @c wxYES_NO so it's usually unnecessary to specify it explicitly.

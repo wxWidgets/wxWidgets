@@ -140,7 +140,7 @@ public:
             - under MacOS, it defaults to @c wxBITMAP_TYPE_MACCURSOR_RESOURCE;
               when specifying a string resource name, first the color cursors 'crsr'
               and then the black/white cursors 'CURS' in the resource chain are scanned
-              through. Note that resource forks are deprecated on OS X so this
+              through. Note that resource forks are deprecated on macOS so this
               is only available for legacy reasons and should not be used in
               new code.
             - under GTK, it defaults to @c wxBITMAP_TYPE_XPM.

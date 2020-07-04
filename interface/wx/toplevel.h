@@ -594,7 +594,7 @@ public:
     virtual bool ShouldPreventAppExit() const;
 
     /**
-        This function sets the wxTopLevelWindow's modified state on OS X,
+        This function sets the wxTopLevelWindow's modified state on macOS,
         which currently draws a black dot in the wxTopLevelWindow's close button.
         On other platforms, this method does nothing.
 
@@ -603,7 +603,7 @@ public:
     virtual void OSXSetModified(bool modified);
 
     /**
-        Returns the current modified state of the wxTopLevelWindow on OS X.
+        Returns the current modified state of the wxTopLevelWindow on macOS.
         On other platforms, this method does nothing.
 
         @see OSXSetModified()
@@ -613,7 +613,7 @@ public:
     /**
         Sets the file name represented by this wxTopLevelWindow.
 
-        Under OS X, this file name is used to set the "proxy icon", which
+        Under macOS, this file name is used to set the "proxy icon", which
         appears in the window title bar near its title, corresponding to this
         file name. Under other platforms it currently doesn't do anything but
         it is harmless to call it now and it might be implemented to do
@@ -633,7 +633,7 @@ public:
 
     /**
         Enables the maximize button to toggle full screen mode. Prior to
-        OS X 10.10 a full screen button is added to the right upper corner
+        macOS 10.10 a full screen button is added to the right upper corner
         of a window's title bar.
 
         Currently only available for wxOSX/Cocoa.

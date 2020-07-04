@@ -613,9 +613,9 @@ public:
     wxDataViewVirtualListModel is a specialized data model which lets you address
     an item by its position (row) rather than its wxDataViewItem and as such offers
     the exact same interface as wxDataViewIndexListModel.
-    The important difference is that under platforms other than OS X, using this
+    The important difference is that under platforms other than macOS, using this
     model will result in a truly virtual control able to handle millions of items
-    as the control doesn't store any item (a feature not supported by OS X).
+    as the control doesn't store any item (a feature not supported by macOS).
 
     @see wxDataViewListModel for the API.
 
@@ -733,7 +733,7 @@ public:
         text.
 
         Currently this attribute is only supported in the generic version of
-        wxDataViewCtrl and GTK and ignored by the native OS X implementations.
+        wxDataViewCtrl and GTK and ignored by the native macOS implementations.
 
         @since 3.1.2
     */
@@ -981,7 +981,7 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK event.
-           Notice that currently this event is not generated in the native OS X
+           Notice that currently this event is not generated in the native macOS
            versions of the control.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
@@ -1433,8 +1433,8 @@ public:
         style as in the case of single selection it returns the same thing as
         GetSelection().
 
-        Notice that under all platforms except OS X the currently focused
-        item may be selected or not but under OS X the current item is always
+        Notice that under all platforms except macOS the currently focused
+        item may be selected or not but under macOS the current item is always
         selected.
 
         @see SetCurrentItem(), GetCurrentColumn()
@@ -1639,7 +1639,7 @@ public:
         In single selection mode, calling this method is the same as calling
         Select() and is thus not very useful. In multiple selection mode this
         method only moves the current item however without changing the
-        selection except under OS X where the current item is always selected,
+        selection except under macOS where the current item is always selected,
         so calling SetCurrentItem() selects @a item if it hadn't been selected
         before.
 
@@ -1695,7 +1695,7 @@ public:
         This function can only be used when all rows have the same height, i.e.
         when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
 
-        Currently this is implemented in the generic and native GTK and OS X
+        Currently this is implemented in the generic and native GTK and macOS
         (since 3.1.1) versions.
 
         Also notice that this method can only be used to increase the row
@@ -2030,7 +2030,7 @@ public:
         The default value of @c wxDVR_DEFAULT_ALIGNMENT indicates that the content
         should have the same alignment as the column header.
 
-        The method is not implemented under OS X and the renderer always aligns
+        The method is not implemented under macOS and the renderer always aligns
         its contents as the column header on that platform. The other platforms
         support both vertical and horizontal alignment.
     */
@@ -3822,7 +3822,7 @@ public:
 
         Currently support for setting this field and for vetoing the change is
         only available in the generic version of wxDataViewCtrl, i.e. under MSW
-        but not GTK nor OS X.
+        but not GTK nor macOS.
 
         @since 2.9.3
      */
@@ -3883,7 +3883,7 @@ public:
         moved) and ::wxDrag_DefaultMove.
 
         Currently it is only honoured by the generic version of wxDataViewCtrl
-        (used e.g. under MSW) and not supported by the native GTK and OS X
+        (used e.g. under MSW) and not supported by the native GTK and macOS
         versions.
 
         @see GetDropEffect()
@@ -3903,7 +3903,7 @@ public:
 
         Currently this is only available when using the generic version of
         wxDataViewCtrl (used e.g. under MSW) and always returns ::wxDragNone in
-        the GTK and OS X native versions.
+        the GTK and macOS native versions.
 
         @since 2.9.4
     */
