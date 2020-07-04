@@ -1557,7 +1557,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             return;
         }
 
-        m_lastKeyDownEvent = event;
+        BeginNativeKeyDownEvent(event);
     }
     
     if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
@@ -1565,7 +1565,11 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
     }
-    m_lastKeyDownEvent = NULL;
+    
+    if ( [event type] == NSKeyDown )
+    {
+        EndNativeKeyDownEvent();
+    }
 }
 
 // Class containing data used for gestures support.
@@ -2138,18 +2142,18 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
     bool result = false;
     if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
-        if ( m_lastKeyDownEvent!=NULL && [text isEqualToString:[m_lastKeyDownEvent characters]])
+        if ( IsInNativeKeyDown() && [text isEqualToString:[GetLastNativeKeyDownEvent() characters]])
         {
             // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
             // (see also: wxWidgetCocoaImpl::DoHandleKeyEvent)
             {
                 wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-                SetupKeyEvent( wxevent, m_lastKeyDownEvent );
+                SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
                 result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
             }
 
             // ...and wxEVT_CHAR.
-            result = result || DoHandleCharEvent(m_lastKeyDownEvent, text);
+            result = result || DoHandleCharEvent(GetLastNativeKeyDownEvent(), text);
         }
         else
         {
@@ -2170,12 +2174,18 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
     wxLogTrace(TRACE_KEYS, "Selector %s for %s",
                wxDumpSelector((SEL)sel), wxDumpNSView(slf));
 
-    if ( m_lastKeyDownEvent!=NULL )
+    // keystrokes can be translated on macos to selectors, see
+    // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
+    // it is also possible to map 1 keystroke to multiple commands, eg Ctrl-O on mac is translated to the bash-equivalent of
+    // execute and move back in history, since this results in two commands, Ctrl-O was sent twice as a wx key down event.
+    // we now track the sending of the events to avoid duplicates.
+    
+    if ( IsInNativeKeyDown() && !WasKeyDownSent())
     {
         // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
         // (see also: wxWidgetCocoaImpl::DoHandleKeyEvent)
         wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-        SetupKeyEvent( wxevent, m_lastKeyDownEvent );
+        SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
         bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
 
         if (!result)
@@ -2184,9 +2194,10 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
 
             wxKeyEvent wxevent2(wxevent) ;
             wxevent2.SetEventType(wxEVT_CHAR);
-            SetupKeyEvent( wxevent2, m_lastKeyDownEvent );
+            SetupKeyEvent( wxevent2, GetLastNativeKeyDownEvent() );
             GetWXPeer()->OSXHandleKeyEvent(wxevent2);
         }
+        SetKeyDownSent();
     }
     else
     {
@@ -2544,7 +2555,8 @@ void wxWidgetCocoaImpl::Init()
 #if !wxOSX_USE_NATIVE_FLIPPED
     m_isFlipped = true;
 #endif
-    m_lastKeyDownEvent = NULL;
+    m_lastKeyDownEvent = nil;
+    m_lastKeyDownWXSent = false;
     m_hasEditor = false;
 }
 
@@ -2566,6 +2578,54 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         CFRelease(m_osxView);
 
     wxCocoaGestures::EraseForObject(this);
+}
+
+void wxWidgetCocoaImpl::BeginNativeKeyDownEvent( NSEvent* event )
+{
+    m_lastKeyDownEvent = event;
+    m_lastKeyDownWXSent = false;
+}
+
+void wxWidgetCocoaImpl::EndNativeKeyDownEvent()
+{
+    m_lastKeyDownEvent = nil;
+    m_lastKeyDownWXSent = false;
+}
+
+bool wxWidgetCocoaImpl::IsInNativeKeyDown() const
+{
+    return m_lastKeyDownEvent != nil;
+}
+
+NSEvent* wxWidgetCocoaImpl::GetLastNativeKeyDownEvent()
+{
+    wxASSERT( m_lastKeyDownEvent != nil);
+    return m_lastKeyDownEvent;
+}
+
+void wxWidgetCocoaImpl::SetKeyDownSent()
+{
+    wxASSERT( !m_lastKeyDownWXSent );
+    m_lastKeyDownWXSent = true;
+}
+
+bool wxWidgetCocoaImpl::WasKeyDownSent() const
+{
+    return m_lastKeyDownWXSent;
+}
+
+wxWidgetCocoaNativeKeyDownSuspender::wxWidgetCocoaNativeKeyDownSuspender( wxWidgetCocoaImpl *target ) : m_target(target)
+{
+    m_nsevent = m_target->m_lastKeyDownEvent;
+    m_wxsent = m_target->m_lastKeyDownWXSent;
+    
+    m_target->m_lastKeyDownEvent = nil;
+}
+
+wxWidgetCocoaNativeKeyDownSuspender::~wxWidgetCocoaNativeKeyDownSuspender()
+{
+    m_target->m_lastKeyDownEvent = m_nsevent;
+    m_target->m_lastKeyDownWXSent = m_wxsent;
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
