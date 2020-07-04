@@ -3035,14 +3035,12 @@ bool wxDataViewTextRenderer::MacRender()
             [par setLineBreakMode:[cell lineBreakMode]];
             // Tightening looks very ugly when combined with non-tightened rows,
             // so disabled it on OS X version where it's used:
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
             if ( WX_IS_MACOS_AVAILABLE(10, 11) )
             {
                 [par setAllowsDefaultTighteningForTruncation:NO];
             }
             else
-#endif
-            [par setTighteningFactorForTruncation:0.0];
+                [par setTighteningFactorForTruncation:0.0];
 
             [str addAttribute:NSParagraphStyleAttributeName
                         value:par

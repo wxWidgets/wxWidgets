@@ -30,12 +30,6 @@
 
 #define DEBUG_WEBKIT_SIZING 0
 
-#if defined(MAC_OS_X_VERSION_10_11) && (__MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11)
-    #define wxWEBKIT_PROTOCOL_SINCE_10_11(proto) < proto >
-#else
-    #define wxWEBKIT_PROTOCOL_SINCE_10_11(proto)
-#endif
-
 extern WXDLLEXPORT_DATA(const char) wxWebKitCtrlNameStr[] = "webkitctrl";
 
 // ----------------------------------------------------------------------------
@@ -114,7 +108,7 @@ inline int wxNavTypeFromWebNavType(int type){
     return wxWEBKIT_NAV_OTHER;
 }
 
-@interface MyFrameLoadMonitor : NSObject wxWEBKIT_PROTOCOL_SINCE_10_11(WebFrameLoadDelegate)
+@interface MyFrameLoadMonitor : NSObject<WebFrameLoadDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -123,7 +117,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyPolicyDelegate : NSObject wxWEBKIT_PROTOCOL_SINCE_10_11(WebPolicyDelegate)
+@interface MyPolicyDelegate : NSObject<WebPolicyDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -132,7 +126,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyUIDelegate : NSObject wxWEBKIT_PROTOCOL_SINCE_10_11(WebUIDelegate)
+@interface MyUIDelegate : NSObject<WebUIDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
