@@ -144,7 +144,7 @@ public:
         Returns true if system tray is available in the desktop environment the
         app runs under.
 
-        On Windows and OS X, the tray is always available and this function
+        On Windows and macOS, the tray is always available and this function
         simply returns true.
 
         On Unix, X11 environment may or may not provide the tray, depending on

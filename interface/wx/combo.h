@@ -730,7 +730,7 @@ public:
         Sets a hint shown in an empty unfocused combo control.
 
         Notice that hints are known as <em>cue banners</em> under MSW or
-        <em>placeholder strings</em> under OS X.
+        <em>placeholder strings</em> under macOS.
 
         @see wxTextEntry::SetHint()
 

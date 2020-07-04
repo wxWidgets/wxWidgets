@@ -681,7 +681,7 @@ public:
 
     /**
         Converts the strings contents to the wide character representation
-        and returns it as a temporary wxWCharBuffer object (Unix and OS X)
+        and returns it as a temporary wxWCharBuffer object (Unix and macOS)
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
 

@@ -756,7 +756,7 @@ public:
         @endcode
         but be warned that locale support in C++ standard library can be poor
         or worse under some platforms, e.g. the above line results in an
-        immediate crash under OS X up to the version 10.8.2.
+        immediate crash under macOS up to the version 10.8.2.
 
         @since 2.9.5
      */
@@ -772,7 +772,7 @@ public:
 
         Under Windows and Linux/Unix, you should parse the command line
         arguments and check for files to be opened when starting your
-        application. Under OS X, you need to override MacOpenFiles()
+        application. Under macOS, you need to override MacOpenFiles()
         since command line arguments are used differently there.
 
         You may use the wxCmdLineParser to parse command line arguments.
@@ -1055,7 +1055,7 @@ public:
 
     /**
         May be overridden to indicate that the application is not a foreground
-        GUI application under OS X.
+        GUI application under macOS.
 
         This method is called during the application startup and returns @true
         by default. In this case, wxWidgets ensures that the application is ran

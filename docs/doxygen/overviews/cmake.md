@@ -5,7 +5,7 @@ CMake Overview                         {#overview_cmake}
 CMake allows building wxWidgets on various platforms with your preferred build
 system.
 
-Most linux distributions contain CMake as a package on Windows and OS X you can
+Most linux distributions contain CMake as a package on Windows and macOS you can
 download an installer at the [CMake Page](https://cmake.org).
 
 Using the CMake GUI                    {#cmake_gui}
@@ -30,7 +30,7 @@ Using the CMake Command Line           {#cmake_cli}
 
 Run `cmake --help` to see a list of available generators on your platform.
 These can than be specified using the -G command line option. On Windows it
-is recommended to use Visual Studio and on OS X Xcode is recommended.
+is recommended to use Visual Studio and on macOS Xcode is recommended.
 Various build options can be specified using -D see
 [available options](#cmake_options).
 

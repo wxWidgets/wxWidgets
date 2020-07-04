@@ -97,7 +97,7 @@ This version of wxWidgets supports the following primary platforms:
 
 * Windows XP, Vista, 7, 8 and 10 (32/64 bits).
 * Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-* OS X (10.7 or newer) using Cocoa (32/64 bits)
+* macOS (10.7 or newer) using Cocoa (32/64 bits)
 
 There is some support for the following platforms:
 
@@ -116,7 +116,7 @@ Files
 wxWidgets is distributed in source form in several archive formats. ZIP and 7z
 archives are for Microsoft Windows users and contain the files with DOS/Windows
 line endings while the compressed tar archives are for Unix systems (including
-OS X) and contain the files with Unix line endings. Please notice that some
+macOS) and contain the files with Unix line endings. Please notice that some
 Windows tools still don't accept files with Unix line endings and that compiling
 sources with DOS line endings under Unix will fail, so please choose the correct
 file for your system.

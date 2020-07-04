@@ -3237,9 +3237,9 @@ public:
         Chooses a different variant of the window display to use.
 
         Window variants currently just differ in size, as can be seen from
-        ::wxWindowVariant documentation. Under all platforms but OS X, this
+        ::wxWindowVariant documentation. Under all platforms but macOS, this
         function does nothing more than change the font used by the window.
-        However under OS X it is implemented natively and selects the
+        However under macOS it is implemented natively and selects the
         appropriate variant of the native widget, which has better appearance
         than just scaled down or up version of the normal variant, so it should
         be preferred to directly tweaking the font size.
@@ -3799,7 +3799,7 @@ public:
 
         @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
                  event. This function is currently only implemented under MSW
-                 and OS X and always returns false in the other ports.
+                 and macOS and always returns false in the other ports.
 
         @see UnregisterHotKey()
     */

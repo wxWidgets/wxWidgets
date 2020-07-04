@@ -418,7 +418,7 @@ public:
         "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
         @c '-' or @c '+' characters and followed by the accelerator itself.
         Notice that @c CTRL corresponds to the "Ctrl" key on most platforms but
-        not under OS X where it is mapped to "Cmd" key on Mac keyboard.
+        not under macOS where it is mapped to "Cmd" key on Mac keyboard.
         Usually this is exactly what you want in portable code but if you
         really need to use the (rarely used for this purpose) "Ctrl" key even
         under Mac, you may use @c RAWCTRL to prevent this mapping. Under the

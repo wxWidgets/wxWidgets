@@ -652,7 +652,7 @@ first argument of @c save, @c load or @c delete, followed by the "service" and
 "user" arguments as used by wxSecretStore methods. After storing some password,
 you can check that it can be retrieved later and also that it can be seen in
 the OS-provided password manager (e.g. credential manager under MSW or keychain
-utility under OS X).
+utility under macOS).
 
 @sampledir{secretstore}
 

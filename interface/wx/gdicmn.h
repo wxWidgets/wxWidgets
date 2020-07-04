@@ -1131,7 +1131,7 @@ const wxSize wxDefaultSize;
     @endcode
     to be able to use @c wxBITMAP_PNG(mybitmap) in the code.
 
-    Under OS X the file with the specified name and "png" extension must be
+    Under macOS the file with the specified name and "png" extension must be
     present in the "Resources" subdirectory of the application bundle.
 
     Under the other platforms, this is equivalent to wxBITMAP_PNG_FROM_DATA()
@@ -1175,7 +1175,7 @@ const wxSize wxDefaultSize;
 
     You can use wxBITMAP_PNG() to load the PNG bitmaps from resources on the
     platforms that support this and only fall back to loading them from data
-    under the other ones (i.e. not Windows and not OS X).
+    under the other ones (i.e. not Windows and not macOS).
 
     @header{wx/gdicmn.h}
 

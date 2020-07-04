@@ -1327,7 +1327,7 @@ public:
         Creates wxGraphicsBitmap from a native bitmap handle.
 
         @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c
-        Bitmap pointer under MSW, @c CGImage pointer under OS X or a @c
+        Bitmap pointer under MSW, @c CGImage pointer under macOS or a @c
         cairo_surface_t pointer when using Cairo under any platform.
 
         Notice that this method takes ownership of @a bitmap, i.e. it will be
@@ -1478,7 +1478,7 @@ public:
         and end colours could be specified.
 
         The ability to apply a transformation matrix to the gradient was added in 3.1.3
-        
+
     */
     virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
                                                       wxDouble y1,
@@ -1534,7 +1534,7 @@ public:
 
         Currently this function returns "gdiplus" for Windows GDI+
         implementation, "direct2d" for Windows Direct2D implementation,
-        "cairo" for Cairo implementation and "cg" for OS X CoreGraphics
+        "cairo" for Cairo implementation and "cg" for macOS CoreGraphics
         implementation.
 
         @remarks The string returned by this method is not user-readable and is
@@ -1559,7 +1559,7 @@ public:
     virtual void GetVersion(int* major, int* minor = NULL, int* micro=NULL) const = 0;
 
     /**
-        Returns the default renderer on this platform. On OS X this is the Core
+        Returns the default renderer on this platform. On macOS this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
         on GTK we currently default to the Cairo renderer.
     */
@@ -1660,25 +1660,25 @@ public:
 
     wxGraphicsPenInfo& Cap(wxPenCap cap);
 
-    wxGraphicsPenInfo& 
+    wxGraphicsPenInfo&
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                    const wxColour& c1, const wxColour& c2,
                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
-    wxGraphicsPenInfo& 
+    wxGraphicsPenInfo&
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                    const wxGraphicsGradientStops& stops,
                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
-    wxGraphicsPenInfo& 
+    wxGraphicsPenInfo&
     RadialGradient(wxDouble startX, wxDouble startY,
-                   wxDouble endX, wxDouble endY, wxDouble radius, 
+                   wxDouble endX, wxDouble endY, wxDouble radius,
                    const wxColour& oColor, const wxColour& cColor,
                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
-    wxGraphicsPenInfo& 
+    wxGraphicsPenInfo&
     RadialGradient(wxDouble startX, wxDouble startY,
-                   wxDouble endX, wxDouble endY, 
+                   wxDouble endX, wxDouble endY,
                    wxDouble radius, const wxGraphicsGradientStops& stops,
                    const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
@@ -1690,7 +1690,7 @@ public:
     int GetDashes(wxDash **ptr);
     int GetDashCount() const;
     wxDash* GetDash() const;
-    bool IsTransparent() const;    
+    bool IsTransparent() const;
     wxDouble GetWidth() const;
     wxGradientType GetGradientType() const;
     wxDouble GetX1() const;
