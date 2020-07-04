@@ -131,7 +131,7 @@ enum wxLocaleInfo
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX
-        systems currently but may, and typically are, different under MSW or OS X.
+        systems currently but may, and typically are, different under MSW or macOS.
 
         @since 2.9.0
      */

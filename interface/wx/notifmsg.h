@@ -10,7 +10,7 @@
 
     This class allows showing the user a message non intrusively.
 
-    Currently it is implemented natively for Windows, OS X, GTK and uses
+    Currently it is implemented natively for Windows, macOS, GTK and uses
     generic toast notifications under the other platforms. It's not recommended
     but @c wxGenericNotificationMessage can be used instead of the native ones.
     This might make sense if your application requires features not available in
@@ -30,8 +30,8 @@
     recommended to call MSWUseToasts() before showing the first notification
     message.
 
-    @par OS X
-    The OS X implementation uses Notification Center to display native notifications.
+    @par macOS
+    The macOS implementation uses Notification Center to display native notifications.
     In order to use actions your notifications must use the alert style. This can
     be enabled by the user in system settings or by setting the
     @c NSUserNotificationAlertStyle value in Info.plist to @c alert. Please note

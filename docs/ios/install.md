@@ -5,7 +5,7 @@ wxiOS is far from a full supported port, but can be used
 as base for simple applications and future improvements.
 
 It requires Xcode with iOS SDK 9.0 or later. Xcode is available
-for free in the OS X app store.
+for free in the macOS app store.
 
 To build wxiOS you should use Xcode to open the minimal samples
 Xcode project file located at:

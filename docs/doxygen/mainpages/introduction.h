@@ -91,7 +91,7 @@ NetBSD, Solaris, AIX, ...) and require GTK+ 2.6 or later or GTK+ 3.x. The
 primary supported compiler is GNU g++.
 
 @li wxOSX/Cocoa: This is the native port for Apple computers. wxOSX/Cocoa
-supports 32 or 64 bit Intel Macs running OS X 10.7 or later. The port can be
+supports 32 or 64 bit Intel Macs running macOS 10.7 or later. The port can be
 built either with g++ or clang.
 
 Other platforms (e.g. iOS - with a minimum requirement of iOS 9), compilers (Borland C++

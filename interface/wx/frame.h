@@ -119,7 +119,7 @@
            frames having this style (the dialogs don't have a minimize or a
            maximize box by default)
     @style{wxFRAME_EX_METAL}
-           On OS X, frames with this style will be shown with a metallic
+           On macOS, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endExtraStyleTable
 

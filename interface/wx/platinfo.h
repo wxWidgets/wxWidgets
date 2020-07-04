@@ -23,7 +23,7 @@ enum wxOperatingSystemId
     wxOS_UNKNOWN = 0,                 //!< returned on error
 
     wxOS_MAC_OS         = 1 << 0,     //!< Apple Mac OS 8/9/X with Mac paths
-    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple OS X with Unix paths
+    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple macOS with Unix paths
 
     //! A combination of all @c wxOS_MAC_* values previously listed.
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,

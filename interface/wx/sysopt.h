@@ -111,7 +111,7 @@
     @flag{mac.textcontrol-use-spell-checker}
         If 1 activates the spell checking in wxTextCtrl.
     @flag{osx.openfiledialog.always-show-types}
-        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OS X but allows
+        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on macOS but allows
         the selection of files from any of the supported types. Setting this to 1 shows a wxChoice
         for selection (if there is more than one supported filetype).
     @endFlagTable

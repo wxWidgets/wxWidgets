@@ -135,7 +135,7 @@ to buffer overflows. At last, C++ has a standard string class (@c std::string). 
 why the need for wxString? There are several advantages:
 
 @li <b>Efficiency:</b> Since wxWidgets 3.0 wxString uses @c std::string (in UTF8
-    mode under Linux, Unix and OS X) or @c std::wstring (in UTF16 mode under Windows)
+    mode under Linux, Unix and macOS) or @c std::wstring (in UTF16 mode under Windows)
     internally by default to store its contents. wxString will therefore inherit the
     performance characteristics from @c std::string.
 @li <b>Compatibility:</b> This class tries to combine almost full compatibility

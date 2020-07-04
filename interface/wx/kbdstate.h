@@ -85,7 +85,7 @@ public:
     /**
         Returns true if Control or Alt are pressed.
 
-        Checks if Control, Alt or, under OS X only, Command key are pressed
+        Checks if Control, Alt or, under macOS only, Command key are pressed
         (notice that the real Control key is still taken into account under OS
         X too).
 
@@ -97,7 +97,7 @@ public:
     bool HasModifiers() const;
 
     /**
-        Returns true if the Control key or Apple/Command key under OS X is pressed.
+        Returns true if the Control key or Apple/Command key under macOS is pressed.
 
         This function doesn't distinguish between right and left control keys.
 
@@ -106,7 +106,7 @@ public:
     bool ControlDown() const;
 
     /**
-        Returns true if the Control key (also under OS X).
+        Returns true if the Control key (also under macOS).
 
         This function doesn't distinguish between right and left control keys.
 

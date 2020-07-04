@@ -39,9 +39,9 @@ Notice that for compatibility reasons, this symbol is defined for console
 applications under Windows as well, but it should only be used in the GUI code
 while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{__WXOSX__, OS X GUI using any Apple widget framework (AppKit or UIKit)}
-@itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
-@itemdef{__WXOSX_COCOA__, OS X using Cocoa (AppKit)}
-@itemdef{__WXOSX_MAC__, OS X (Cocoa)}
+@itemdef{__WXOSX_IPHONE__, iPhone (UIKit)}
+@itemdef{__WXOSX_COCOA__, macOS using Cocoa (AppKit)}
+@itemdef{__WXOSX_MAC__, macOS (Cocoa)}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
@@ -59,7 +59,7 @@ versions: Cocoa for the desktop and a very early iPhone port. To summarize:
     <tt>__WXOSX_MAC__</tt>.
 @li If you want to test for wxOSX on the iPhone, use
     <tt>__WXOSX_IPHONE__</tt>.
-@li If you want to test for any port under OS X, including, for
+@li If you want to test for any port under macOS, including, for
     example, wxGTK and also wxBase, use <tt>__DARWIN__</tt> (see below).
 
 The convention is to use the <tt>__WX</tt> prefix for these

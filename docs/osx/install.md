@@ -1,4 +1,4 @@
-wxWidgets for OS X installation        {#plat_osx_install}
+wxWidgets for macOS installation        {#plat_osx_install}
 -----------------------------------
 
 [TOC]
@@ -33,7 +33,7 @@ After the compilation completes, use Finder to run the samples and demos
 * The source code for the samples is in wxWidgets/samples
 * The source code for the demos is in wxWidgets/demos
 
-More information about building on OS X is available in the wxWiki.
+More information about building on macOS is available in the wxWiki.
 Here are two useful links
   * https://wiki.wxwidgets.org/Guides_%26_Tutorials
   * https://wiki.wxwidgets.org/Development:_wxMac

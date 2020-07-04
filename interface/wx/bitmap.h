@@ -665,7 +665,7 @@ public:
         @endcode
         in your application startup code.
 
-        However under OS X this function uses native image loading and so
+        However under macOS this function uses native image loading and so
         doesn't require wxWidgets PNG support.
 
         @since 2.9.5
