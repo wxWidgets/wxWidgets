@@ -2168,7 +2168,7 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
 {
     wxLogTrace(TRACE_KEYS, "Selector %s for %s",
-               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+               wxDumpSelector((SEL)sel), wxDumpNSView(slf));
 
     if ( m_lastKeyDownEvent!=NULL )
     {
