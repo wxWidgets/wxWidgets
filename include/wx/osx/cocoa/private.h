@@ -48,6 +48,8 @@ WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 
+struct WXDLLIMPEXP_FWD_CORE wxWidgetCocoaKeyDownEvent;
+
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
 public :
@@ -203,7 +205,26 @@ public :
 
 protected:
     WXWidget m_osxView;
+    
+    // begins processing of native key down event, storing the native event for later wx event generation
+    void BeginNativeKeyDownEvent( NSEvent* event );
+    // done with the current native key down event
+    void EndNativeKeyDownEvent();
+    // allow executing text changes without triggering key down events
+    void PauseNativeKeyDownEvent(wxWidgetCocoaKeyDownEvent* &token);
+    // resume normal key down processing
+    void ResumeNativeKeyDownEvent(wxWidgetCocoaKeyDownEvent* token);
+    // is currently processing a native key down event
+    bool IsInNativeKeyDown();
+    // the native key event
+    NSEvent* GetLastNativeKeyDownEvent();
+    // did send the wx event for the current native key down event
+    void SetKeyDownSent();
+    // was the wx event for the current native key down event sent
+    bool WasKeyDownSent();
+
     NSEvent* m_lastKeyDownEvent;
+    int m_lastKeyDownWXSent;
 #if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
 #endif
