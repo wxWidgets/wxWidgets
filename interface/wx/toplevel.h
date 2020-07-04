@@ -646,9 +646,8 @@ public:
         under another OS.
 
         @note Having the button is also required to let ShowFullScreen()
-        make use of the full screen API available since OS X 10.7: a full
-        screen window gets its own space and entering and exiting the mode
-        is animated.
+        make use of the full screen API: a full screen window gets its own space
+        and entering and exiting the mode is animated.
         If the button is not present the old way of switching to full screen
         is used.
 

@@ -152,9 +152,8 @@ Changes in behaviour which may result in build errors
   wxArrayString. Please update your code to use the appropriate setter
   Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly.
 
-- Under macOS, 10.9 SDK is used by default now. 10.7 SDK is still supported,
-  but must be explicitly selected (and libstdc++ must be installed in order
-  to use it).
+- Under macOS, 10.11 SDK is the minimum SDK, building and deploying under 10.10.5 and
+  higher is supported, you must at least use Xcode 7.2.1.
 
 - wxPGProperty ctors are not longer public since this class is intended to be
   a base class and should not be instantiated directly.
@@ -802,7 +801,7 @@ wxMSW:
 wxOSX/Cocoa:
 
 - Make wxiOS (iPhone) port build and minimally work again (Tobias Taschner).
-- Use more efficient FSEvents (10.7+) in wxFileSystemWatcher (Roberto Perpuly).
+- Use more efficient FSEvents in wxFileSystemWatcher (Roberto Perpuly).
 - Implement wxWindow::Disable() for non-native controls too (Steve Browne).
 - Implement wxTopLevelWindow::EnableCloseButton() (John Roberts).
 - Fix wxEVT_CHAR for non-BMP Unicode characters (ARATA Mizuki).
