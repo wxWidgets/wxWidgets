@@ -244,10 +244,6 @@ size_t wxOSXPasteboard::GetItemCount() const
 
 #if wxUSE_DRAG_AND_DROP
 
-// the new API will be used with 1, with 0 the old API is in place
-
-#define wxOSX_USE_DRAG_SESSION 1
-
 wxDropSource* gCurrentSource = NULL;
 
 wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
@@ -272,11 +268,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     return wxDragNone;
 }
 
-#if wxOSX_USE_DRAG_SESSION
 @interface DropSourceDelegate : NSObject<NSDraggingSource>
-#else
-@interface DropSourceDelegate : NSObject
-#endif
 {
     BOOL dragFinished;
     int resultCode;
@@ -289,11 +281,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 - (void)setImplementation:(wxDropSource *)dropSource flags:(int)flags;
 - (BOOL)finished;
 - (NSDragOperation)code;
-#if wxOSX_USE_DRAG_SESSION
 - (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context;
-#else
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)forLocal;
-#endif
 - (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint;
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
 @end
@@ -328,8 +316,6 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     return resultCode;
 }
 
-#if wxOSX_USE_DRAG_SESSION
-
 - (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
     NSDragOperation allowedDragOperations = NSDragOperationEvery;
@@ -349,23 +335,6 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
     return allowedDragOperations;
 }
-
-#else
-
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)forLocal
-{
-
-    NSDragOperation allowedDragOperations = NSDragOperationEvery;
-
-    if (m_dragFlags == wxDrag_CopyOnly)
-    {
-        allowedDragOperations &= ~NSDragOperationMove;
-    }
-
-    return allowedDragOperations;
-}
-
-#endif
 
 - (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint
 {
@@ -546,23 +515,13 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         NSPoint down = [theEvent locationInWindow];
         NSPoint p = [view convertPoint:down fromView:nil];
 
-#if wxOSX_USE_DRAG_SESSION
         wxPasteBoardWriter* writer = [[wxPasteBoardWriter alloc] initWithDataObject:m_data];
         wxCFMutableArrayRef<NSDraggingItem*> items;
         NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:writer];
         [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
         items.push_back(item);
         [view beginDraggingSessionWithItems:items event:theEvent source:delegate];
-#else
-        NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-wxOSXPasteboard dragPasteboard( pboard );
-        dragPasteboard.Clear();
-        m_data->WriteToSink( &dragPasteboard);
-        dragPasteboard.Flush();
 
-        [view dragImage:image at:p offset:NSMakeSize(0.0,0.0)
-            event: theEvent pasteboard: pboard source:delegate slideBack: NO];
-#endif
         wxEventLoopBase * const loop = wxEventLoop::GetActive();
         while ( ![delegate finished] )
             loop->Dispatch();
