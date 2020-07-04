@@ -24,6 +24,8 @@
 
 #include "asserthelper.h"
 
+#include "wx/scopedptr.h"
+
 // ----------------------------------------------------------------------------
 // test fixture
 // ----------------------------------------------------------------------------
@@ -367,7 +369,9 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 #define ASSERT_SIZER_INVALID_FLAGS(f, msg) \
     WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE( \
             "Expected assertion not generated for " msg, \
-            sizer->Add(10, 10, 0, f) \
+            wxScopedPtr<wxSizerItem> item(new wxSizerItem(10, 10, 0, f)); \
+            sizer->Add(item.get()); \
+            item.release() \
         )
 
 #define ASSERT_SIZER_INCOMPATIBLE_FLAGS(f1, f2) \
