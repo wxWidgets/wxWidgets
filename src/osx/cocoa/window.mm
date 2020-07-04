@@ -2828,14 +2828,7 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
-// To avoid warnings about incompatible pointer types with OS X 10.11 SDK
-// we need to constrain the comparison function arguments instead of just using
-// "id".
-#if __has_feature(objc_kindof)
 typedef __kindof NSView* KindOfView;
-#else
-typedef id KindOfView;
-#endif
 
 class CocoaWindowCompareContext
 {
