@@ -530,8 +530,8 @@ public:
     // In this class these methods must be overridden.
     virtual wxGridActivationResult
     TryActivate(int row, int col, wxGrid* grid,
-                const wxGridActivationSource& actSource) = 0;
-    virtual void DoActivate(int row, int col, wxGrid* grid) = 0;
+                const wxGridActivationSource& actSource) wxOVERRIDE = 0;
+    virtual void DoActivate(int row, int col, wxGrid* grid) wxOVERRIDE = 0;
 
     // All the other methods that normally must be implemented in an editor are
     // defined as just stubs below, as they should be never called.
