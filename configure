@@ -18786,11 +18786,15 @@ int
 main ()
 {
 
+            #if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
             #if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
             #error macOS versions < 10.10 are not supported.
             #endif
             #if __MAC_OS_X_VERSION_MAX_ALLOWED < 101100
             #error macOS SDK version is too low, 10.11 or later is required.
+            #endif
+            #elif !defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+            #error unrecognized platform
             #endif
 
   ;
