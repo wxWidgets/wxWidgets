@@ -2505,6 +2505,9 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
         event.Skip();
 }
 
+// Unlike XToCol() and YToRow() these macros always return a valid column/row,
+// so their results don't need to be checked, while the results of the public
+// functions always must be.
 #define internalXToCol(x, gridWindowPtr) XToCol(x, true, gridWindowPtr)
 #define internalYToRow(y, gridWindowPtr) YToRow(y, true, gridWindowPtr)
 
@@ -8035,7 +8038,7 @@ int wxGrid::GetFirstFullyVisibleRow() const
                                          NULL, &y,
                                          m_gridWin);
 
-        row = YToRow(y, true, m_gridWin);
+        row = internalYToRow(y, m_gridWin);
 
         // If the row is not fully visible (if only 2 pixels is hidden
         // the row still looks fully visible).
@@ -8074,7 +8077,7 @@ int wxGrid::GetFirstFullyVisibleColumn() const
                                          &x, NULL,
                                          m_gridWin);
 
-        col = XToCol(x, true, m_gridWin);
+        col = internalXToCol(x, m_gridWin);
 
         // If the column is not fully visible.
         if ( GetColLeft(col) < x )
