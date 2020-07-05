@@ -18715,10 +18715,6 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     retest_macosx_linking=yes
 fi
 
-if test "$HAVE_CXX11" = "1" ; then
-                        eval "CXX=\"$CXX -stdlib=libc++\""
-fi
-
 if test "x$retest_macosx_linking" = "xyes"; then
     if test "x$macosx_sdk_specified" = "xyes"; then
         error_message="try using --with-macosx-sdk with a different SDK or \

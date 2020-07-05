@@ -1332,15 +1332,6 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     retest_macosx_linking=yes
 fi
 
-if test "$HAVE_CXX11" = "1" ; then
-    dnl We also need to use libc++ standard library instead of libstdc++ for
-    dnl C++11 support, both when compiling (for both C++ and Objective-C++, so
-    dnl putting this in just CXXFLAGS wouldn't be enough) and when linking
-    dnl (both libraries and plugins, using bakefile shared-ld-sh script which
-    dnl doesn't handle this option, so putting it in LDFLAGS wouldn't work).
-    eval "CXX=\"$CXX -stdlib=libc++\""
-fi
-
 dnl If either an SDK or a version option was added, make sure that we can
 dnl still compile and link both C and C++.  If we didn't do this, then most
 dnl of the remaining tests would fail.
