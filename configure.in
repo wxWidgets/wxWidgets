@@ -1350,7 +1350,7 @@ if test "x$retest_macosx_linking" = "xyes"; then
     elif test "x$macosx_minver_specified" = "xyes"; then
         error_message="no, try using a different min OS version or omitting it."
     else
-        error_message="no, check that Xcode command line tools are installed."
+        error_message="no, check that command line tools from Xcode 7.3 or later are installed."
     fi
 
     AC_LANG_PUSH(C)
@@ -1360,7 +1360,19 @@ if test "x$retest_macosx_linking" = "xyes"; then
 
     AC_LANG_PUSH(C++)
     AC_MSG_CHECKING([if C++ compiler ($CXX) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([$error_message])])
+    AC_TRY_LINK(
+        [
+            #include <Availability.h>
+        ],
+        [
+            #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101100
+            #else
+            #error macOS SDK version is too low, 10.11 or later is required.
+            #endif
+        ],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_ERROR([$error_message])]
+    )
     AC_LANG_POP()
 fi
 

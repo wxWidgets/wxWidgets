@@ -18725,7 +18725,7 @@ if test "x$retest_macosx_linking" = "xyes"; then
     elif test "x$macosx_minver_specified" = "xyes"; then
         error_message="no, try using a different min OS version or omitting it."
     else
-        error_message="no, check that Xcode command line tools are installed."
+        error_message="no, check that command line tools from Xcode 7.3 or later are installed."
     fi
 
     ac_ext=c
@@ -18773,9 +18773,16 @@ $as_echo_n "checking if C++ compiler ($CXX) works with SDK/version options... " 
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+            #include <Availability.h>
+
 int
 main ()
 {
+
+            #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101100
+            #else
+            #error macOS SDK version is too low, 10.11 or later is required.
+            #endif
 
   ;
   return 0;
@@ -18786,6 +18793,7 @@ if ac_fn_cxx_try_link "$LINENO"; then :
 $as_echo "yes" >&6; }
 else
   as_fn_error $? "$error_message" "$LINENO" 5
+
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
