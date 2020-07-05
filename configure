@@ -18725,7 +18725,7 @@ if test "x$retest_macosx_linking" = "xyes"; then
     elif test "x$macosx_minver_specified" = "xyes"; then
         error_message="no, try using a different min OS version or omitting it."
     else
-        error_message="no, check that command line tools from Xcode 7.3 or later are installed."
+        error_message="no, check that command line tools from Xcode 7.2.1 or later are installed."
     fi
 
     ac_ext=c
