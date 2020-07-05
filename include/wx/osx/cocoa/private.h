@@ -237,7 +237,7 @@ protected:
     // did send the wx event for the current native key down event
     void SetKeyDownSent();
     // was the wx event for the current native key down event sent
-    bool WasKeyDownSent();
+    bool WasKeyDownSent() const;
 
     NSEvent* m_lastKeyDownEvent;
     bool m_lastKeyDownWXSent;
