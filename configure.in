@@ -582,7 +582,7 @@ AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use an OS X SDK at PATH], 
         wx_cv_use_macosx_sdk="wxUSE_MACOSX_SDK=$withval"
     ])
 
-AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version], [
+AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version (default and lowest supported: 10.10)], [
         wxUSE_MACOSX_VERSION_MIN=$withval
         wx_cv_use_macosx_version_min="wxUSE_MACOSX_VERSION_MIN=$withval"
     ])
@@ -1369,8 +1369,10 @@ version or omitting it entirely."
             #include <Availability.h>
         ],
         [
-            #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101100
-            #else
+            #if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+            #error macOS versions < 10.10 are not supported.
+            #endif
+            #if __MAC_OS_X_VERSION_MAX_ALLOWED < 101100
             #error macOS SDK version is too low, 10.11 or later is required.
             #endif
         ],

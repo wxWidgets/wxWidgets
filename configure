@@ -2341,7 +2341,7 @@ Optional Packages:
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
   --with-macosx-sdk=PATH  use an OS X SDK at PATH
-  --with-macosx-version-min=VER   build binaries which require at least this OS X version
+  --with-macosx-version-min=VER   build binaries which require at least this OS X version (default and lowest supported: 10.10)
   --with-cxx=11|14|17     use the given C++ dialect
   --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)
   --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)
@@ -18786,8 +18786,10 @@ int
 main ()
 {
 
-            #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101100
-            #else
+            #if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+            #error macOS versions < 10.10 are not supported.
+            #endif
+            #if __MAC_OS_X_VERSION_MAX_ALLOWED < 101100
             #error macOS SDK version is too low, 10.11 or later is required.
             #endif
 
