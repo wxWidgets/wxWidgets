@@ -2592,13 +2592,14 @@ void wxWidgetCocoaImpl::EndNativeKeyDownEvent()
     m_lastKeyDownWXSent = false;
 }
 
-bool wxWidgetCocoaImpl::IsInNativeKeyDown()
+bool wxWidgetCocoaImpl::IsInNativeKeyDown() const
 {
     return m_lastKeyDownEvent != nil;
 }
 
 NSEvent* wxWidgetCocoaImpl::GetLastNativeKeyDownEvent()
 {
+    wxASSERT( m_lastKeyDownEvent != nil);
     return m_lastKeyDownEvent;
 }
 
@@ -2608,7 +2609,7 @@ void wxWidgetCocoaImpl::SetKeyDownSent()
     m_lastKeyDownWXSent = true;
 }
 
-bool wxWidgetCocoaImpl::WasKeyDownSent()
+bool wxWidgetCocoaImpl::WasKeyDownSent() const
 {
     return m_lastKeyDownWXSent;
 }
