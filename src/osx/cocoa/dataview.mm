@@ -3036,9 +3036,7 @@ bool wxDataViewTextRenderer::MacRender()
             // Tightening looks very ugly when combined with non-tightened rows,
             // so disabled it on OS X version where it's used:
             if ( WX_IS_MACOS_AVAILABLE(10, 11) )
-            {
                 [par setAllowsDefaultTighteningForTruncation:NO];
-            }
             else
                 [par setTighteningFactorForTruncation:0.0];
 
