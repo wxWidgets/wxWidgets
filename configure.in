@@ -1253,6 +1253,8 @@ if test "x$wxUSE_MACOSX_SDK" = "xno"; then
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
     dnl Try to use the default SDK.
     wxUSE_MACOSX_SDK="`xcode-select -p`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+elif test "x$wxUSE_MACOSX_SDK" != "x"; then
+    macosx_sdk_specified=yes
 fi
 
 
@@ -1305,6 +1307,8 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
     wxUSE_MACOSX_VERSION_MIN=10.10
+else
+    macosx_minver_specified=yes
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
@@ -1341,14 +1345,22 @@ dnl If either an SDK or a version option was added, make sure that we can
 dnl still compile and link both C and C++.  If we didn't do this, then most
 dnl of the remaining tests would fail.
 if test "x$retest_macosx_linking" = "xyes"; then
+    if test "x$macosx_sdk_specified" = "xyes"; then
+        error_message="no, try using a different SDK or using the default one."
+    elif test "x$macosx_minver_specified" = "xyes"; then
+        error_message="no, try using a different min OS version or omitting it."
+    else
+        error_message="no, check that Xcode command line tools are installed."
+    fi
+
     AC_LANG_PUSH(C)
     AC_MSG_CHECKING([if C compiler ($CC) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
+    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([$error_message])])
     AC_LANG_POP()
 
     AC_LANG_PUSH(C++)
     AC_MSG_CHECKING([if C++ compiler ($CXX) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
+    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([$error_message])])
     AC_LANG_POP()
 fi
 

@@ -1028,7 +1028,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1455,7 +1454,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1708,15 +1706,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1854,7 +1843,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -2007,7 +1996,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -18650,6 +18638,8 @@ if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
         wxUSE_MACOSX_SDK="`xcode-select -p`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+elif test "x$wxUSE_MACOSX_SDK" != "x"; then
+    macosx_sdk_specified=yes
 fi
 
 
@@ -18700,6 +18690,8 @@ $as_echo "$as_me: WARNING: Could not determine deployment target from SDKSetting
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
     wxUSE_MACOSX_VERSION_MIN=10.10
+else
+    macosx_minver_specified=yes
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
@@ -18728,6 +18720,14 @@ if test "$HAVE_CXX11" = "1" ; then
 fi
 
 if test "x$retest_macosx_linking" = "xyes"; then
+    if test "x$macosx_sdk_specified" = "xyes"; then
+        error_message="no, try using a different SDK or using the default one."
+    elif test "x$macosx_minver_specified" = "xyes"; then
+        error_message="no, try using a different min OS version or omitting it."
+    else
+        error_message="no, check that Xcode command line tools are installed."
+    fi
+
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -18751,10 +18751,7 @@ if ac_fn_c_try_link "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "no.  Try a different SDK
-See \`config.log' for more details" "$LINENO" 5; }; exit 1
+  as_fn_error $? "$error_message" "$LINENO" 5
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -18788,10 +18785,7 @@ if ac_fn_cxx_try_link "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "no.  Try a different SDK
-See \`config.log' for more details" "$LINENO" 5; }; exit 1
+  as_fn_error $? "$error_message" "$LINENO" 5
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
