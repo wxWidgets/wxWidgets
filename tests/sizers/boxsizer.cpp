@@ -444,3 +444,9 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 #undef ASSERT_SIZER_INCOMPATIBLE_FLAGS
 #undef ASSERT_SIZER_INVALID_FLAGS
 }
+
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Replace", "[sizer]")
+{
+    m_sizer->AddSpacer(1);
+    m_sizer->Replace(0, new wxSizerItem(new wxWindow(m_win, wxID_ANY)));
+}

@@ -883,6 +883,9 @@ bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
 
     delete item;
 
+    if (wxWindow* const w = newitem->GetWindow())
+        w->SetContainingSizer(this);
+
     return true;
 }
 
