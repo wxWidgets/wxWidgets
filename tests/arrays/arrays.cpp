@@ -811,8 +811,6 @@ TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
     // empty strings sort before letters and symbols
     CHECK(wxCmpNaturalGeneric("", "abc") < 0);
     CHECK(wxCmpNaturalGeneric("abc", "") > 0);
-    CHECK(wxCmpNaturalGeneric("", "$") < 0);
-    CHECK(wxCmpNaturalGeneric("$", "") > 0);
 
     // whitespace and punctiation sort before numbers
     CHECK(wxCmpNaturalGeneric(" ", "1") < 0);
@@ -823,8 +821,6 @@ TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
     // strings containing numbers sort before letters and symbols
     CHECK(wxCmpNaturalGeneric("00", "a") < 0);
     CHECK(wxCmpNaturalGeneric("a", "00") > 0);
-    CHECK(wxCmpNaturalGeneric("00", "$") < 0);
-    CHECK(wxCmpNaturalGeneric("$", "00") > 0);
 
     // strings containing numbers are compared by their value
     CHECK(wxCmpNaturalGeneric("01", "1") == 0);
