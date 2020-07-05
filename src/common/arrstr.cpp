@@ -837,6 +837,7 @@ int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& 
             {
                 case wxStringFragment::Empty:
                     result = 1;
+                    break;
                 case wxStringFragment::SpaceOrPunct:
                     result = wxStrcoll_String(lhs.text, rhs.text);
                     break;
