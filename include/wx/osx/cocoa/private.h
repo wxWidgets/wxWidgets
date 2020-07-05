@@ -55,7 +55,7 @@ class wxWidgetCocoaNativeKeyDownSuspender
 {
 public:
     // stops sending keydown events for text inserted into this widget
-    wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
+    explicit wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
     
     // resumes sending keydown events
     ~wxWidgetCocoaNativeKeyDownSuspender();
@@ -573,4 +573,3 @@ private:
 
 #endif
     // _WX_PRIVATE_COCOA_H_
-
