@@ -92,10 +92,7 @@ protected:
     virtual GtkEntry *GetEntry() const wxOVERRIDE { return NULL; }
 #endif
 #elif defined(__WXOSX__)
-    virtual wxTextWidgetImpl * GetTextPeer() const wxOVERRIDE
-    {
-        return m_text ? m_text->GetTextPeer() : NULL;
-    }
+    virtual wxTextWidgetImpl * GetTextPeer() const wxOVERRIDE;
 #endif
 
     // For better transparent background rendering
