@@ -56,6 +56,7 @@ case $wxTOOLSET in
         ;;
     *)
         echo 'travis_fold:start:configure'
+        export CXXFLAGS=-Werror
         echo 'Configuring...'
         ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
         if [ -n "$rc" ]; then
