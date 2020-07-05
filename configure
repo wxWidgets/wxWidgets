@@ -2310,9 +2310,9 @@ Optional Packages:
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
   --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"
   --with-motif            use Motif/Lesstif
-  --with-osx_cocoa        use Mac OS X (Cocoa)
-  --with-osx_iphone       use iPhone OS X port
-  --with-osx              use Mac OS X (default port, Cocoa)
+  --with-osx_cocoa        use macOS (Cocoa)
+  --with-osx_iphone       use iOS
+  --with-osx              use macOS (default port, Cocoa)
   --with-cocoa            same as --with-osx_cocoa
   --with-iphone           same as --with-osx_iphone
   --with-mac              same as --with-osx
@@ -2340,8 +2340,8 @@ Optional Packages:
   --with-liblzma          use LZMA compression)
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
-  --with-macosx-sdk=PATH  use an OS X SDK at PATH
-  --with-macosx-version-min=VER   build binaries which require at least this OS X version (default and lowest supported: 10.10)
+  --with-macosx-sdk=PATH  use macOS SDK at PATH
+  --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)
   --with-cxx=11|14|17     use the given C++ dialect
   --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)
   --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)

@@ -81,7 +81,7 @@ USE_MAC=0
 dnl Unix kind
 USE_AIX=
 USE_BSD=                            dnl any BSD
-USE_DARWIN=                         dnl a.k.a. Mac OS X
+USE_DARWIN=                         dnl a.k.a. macOS
 USE_FREEBSD=
 USE_GNU=                            dnl GNU/Hurd
 USE_HPUX=
@@ -429,9 +429,9 @@ dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
-WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
-WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
-WX_ARG_ONLY_WITH(osx,           [  --with-osx              use Mac OS X (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use macOS (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iOS], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(osx,           [  --with-osx              use macOS (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(cocoa,         [  --with-cocoa            same as --with-osx_cocoa], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(iphone,        [  --with-iphone           same as --with-osx_iphone], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
@@ -577,12 +577,12 @@ WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using e
 
 if test "$USE_DARWIN" = 1; then
 
-AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use an OS X SDK at PATH], [
+AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use macOS SDK at PATH], [
         wxUSE_MACOSX_SDK=$withval
         wx_cv_use_macosx_sdk="wxUSE_MACOSX_SDK=$withval"
     ])
 
-AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version (default and lowest supported: 10.10)], [
+AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)], [
         wxUSE_MACOSX_VERSION_MIN=$withval
         wx_cv_use_macosx_version_min="wxUSE_MACOSX_VERSION_MIN=$withval"
     ])
