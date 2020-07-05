@@ -77,14 +77,6 @@ endmacro()
 function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
-    if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND wxHAS_CXX11)
-        if(CMAKE_GENERATOR STREQUAL "Xcode")
-            set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
-        else()
-            target_compile_options(${target_name} PUBLIC "-stdlib=libc++")
-            target_link_libraries(${target_name} PRIVATE "-stdlib=libc++")
-        endif()
-    endif()
     set_target_properties(${target_name} PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"

@@ -81,7 +81,7 @@ USE_MAC=0
 dnl Unix kind
 USE_AIX=
 USE_BSD=                            dnl any BSD
-USE_DARWIN=                         dnl a.k.a. Mac OS X
+USE_DARWIN=                         dnl a.k.a. macOS
 USE_FREEBSD=
 USE_GNU=                            dnl GNU/Hurd
 USE_HPUX=
@@ -429,9 +429,9 @@ dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
-WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
-WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
-WX_ARG_ONLY_WITH(osx,           [  --with-osx              use Mac OS X (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use macOS (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iOS], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(osx,           [  --with-osx              use macOS (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(cocoa,         [  --with-cocoa            same as --with-osx_cocoa], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(iphone,        [  --with-iphone           same as --with-osx_iphone], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
@@ -577,12 +577,12 @@ WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using e
 
 if test "$USE_DARWIN" = 1; then
 
-AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use an OS X SDK at PATH], [
+AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use macOS SDK at PATH], [
         wxUSE_MACOSX_SDK=$withval
         wx_cv_use_macosx_sdk="wxUSE_MACOSX_SDK=$withval"
     ])
 
-AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version], [
+AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)], [
         wxUSE_MACOSX_VERSION_MIN=$withval
         wx_cv_use_macosx_version_min="wxUSE_MACOSX_VERSION_MIN=$withval"
     ])
@@ -1098,6 +1098,13 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
+dnl Always use C++11 under macOS, there are no supported compilers not
+dnl supporting it there, but don't prevent a latest version of C++ from being
+dnl used.
+if test "$wxUSE_MAC" = 1 -a -z "$wxWITH_CXX"; then
+    wxWITH_CXX=11
+fi
+
 if test -n "$wxWITH_CXX"; then
     dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
     dnl autoconf, not run, time.
@@ -1253,6 +1260,8 @@ if test "x$wxUSE_MACOSX_SDK" = "xno"; then
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
     dnl Try to use the default SDK.
     wxUSE_MACOSX_SDK="`xcode-select -p`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+elif test "x$wxUSE_MACOSX_SDK" != "x"; then
+    macosx_sdk_specified=yes
 fi
 
 
@@ -1304,7 +1313,9 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    wxUSE_MACOSX_VERSION_MIN=10.9
+    wxUSE_MACOSX_VERSION_MIN=10.10
+else
+    macosx_minver_specified=yes
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
@@ -1328,27 +1339,48 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     retest_macosx_linking=yes
 fi
 
-if test "$HAVE_CXX11" = "1" ; then
-    dnl We also need to use libc++ standard library instead of libstdc++ for
-    dnl C++11 support, both when compiling (for both C++ and Objective-C++, so
-    dnl putting this in just CXXFLAGS wouldn't be enough) and when linking
-    dnl (both libraries and plugins, using bakefile shared-ld-sh script which
-    dnl doesn't handle this option, so putting it in LDFLAGS wouldn't work).
-    eval "CXX=\"$CXX -stdlib=libc++\""
-fi
-
 dnl If either an SDK or a version option was added, make sure that we can
 dnl still compile and link both C and C++.  If we didn't do this, then most
 dnl of the remaining tests would fail.
 if test "x$retest_macosx_linking" = "xyes"; then
+    if test "x$macosx_sdk_specified" = "xyes"; then
+        error_message="try using --with-macosx-sdk with a different SDK or \
+omitting it entirely to use the default one."
+    elif test "x$macosx_minver_specified" = "xyes"; then
+        error_message="try using --with-macosx-version-min with a different OS \
+version or omitting it entirely."
+    else
+        error_message="check that command line tools from Xcode 7.2.1 or later are installed."
+    fi
+
+    error_message="building C++ programs doesn't work, $error_message"
+
     AC_LANG_PUSH(C)
     AC_MSG_CHECKING([if C compiler ($CC) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
+    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([$error_message])])
     AC_LANG_POP()
 
     AC_LANG_PUSH(C++)
     AC_MSG_CHECKING([if C++ compiler ($CXX) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([no.  Try a different SDK]); exit 1])
+    AC_TRY_LINK(
+        [
+            #include <Availability.h>
+        ],
+        [
+            #if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
+            #if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+            #error macOS versions < 10.10 are not supported.
+            #endif
+            #if __MAC_OS_X_VERSION_MAX_ALLOWED < 101100
+            #error macOS SDK version is too low, 10.11 or later is required.
+            #endif
+            #elif !defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+            #error unrecognized platform
+            #endif
+        ],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_FAILURE([$error_message])]
+    )
     AC_LANG_POP()
 fi
 

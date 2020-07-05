@@ -755,8 +755,7 @@ public:
             std::locale::global(std::locale(""));
         @endcode
         but be warned that locale support in C++ standard library can be poor
-        or worse under some platforms, e.g. the above line results in an
-        immediate crash under macOS up to the version 10.8.2.
+        or worse under some platforms.
 
         @since 2.9.5
      */

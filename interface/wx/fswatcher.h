@@ -85,7 +85,7 @@ public:
         Additionally a file mask can be specified to include only files
         matching that particular mask.
 
-        This method is implemented efficiently on MSW and macOS >= 10.7, but
+        This method is implemented efficiently on MSW and macOS, but
         should be used with care on other platforms for directories with lots
         of children (e.g. the root directory) as it calls Add() for each
         subdirectory, potentially creating a lot of watches and taking a long
