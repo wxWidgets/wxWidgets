@@ -198,13 +198,6 @@ wxGenericComboCtrl::~wxGenericComboCtrl()
 {
 }
 
-#ifdef __WXOSX__
-wxTextWidgetImpl * wxGenericComboCtrl::GetTextPeer() const
-{
-    return m_text ? m_text->GetTextPeer() : NULL;
-}
-#endif
-
 bool wxGenericComboCtrl::HasTransparentBackground()
 {
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER
