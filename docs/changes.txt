@@ -153,7 +153,7 @@ Changes in behaviour which may result in build errors
   Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly.
 
 - Under macOS, 10.11 SDK is the minimum SDK, building and deploying under 10.10.5 and
-  higher is supported, you must at least use Xcode 7.2.1.
+  higher is supported, you must use at least Xcode 7.2.1.
 
 - wxPGProperty ctors are not longer public since this class is intended to be
   a base class and should not be instantiated directly.
