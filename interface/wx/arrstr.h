@@ -417,7 +417,7 @@ int wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2);
 
 
 /**
-    Comparison function used for natural sort order.
+    Comparison function comparing strings in natural order.
 
     This function can be used with wxSortedArrayString::Sort()
     or passed as an argument to wxSortedArrayString constructor.
@@ -486,8 +486,8 @@ int wxCmpNatural(const wxString& s1, const wxString& s2);
 /**
     This is wxWidgets' own implementation of the natural sort comparison function.
 
-    Requires wxRegEx, when wxRegex is not available, it just returns the result
-    of wxStrcmp().
+    Requires wxRegEx, when it is not available just returns the result
+    of @c s1.compare(s2).
 
     @see wxCmpNatural()
 

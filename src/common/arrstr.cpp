@@ -915,7 +915,7 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 
 int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 {
-    return wxStrcmp(s1, s2);
+    return s1.compare(s2);
 }
 
 #endif // #if wxUSE_REGEX
