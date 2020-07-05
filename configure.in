@@ -1346,16 +1346,20 @@ dnl still compile and link both C and C++.  If we didn't do this, then most
 dnl of the remaining tests would fail.
 if test "x$retest_macosx_linking" = "xyes"; then
     if test "x$macosx_sdk_specified" = "xyes"; then
-        error_message="no, try using a different SDK or using the default one."
+        error_message="try using --with-macosx-sdk with a different SDK or \
+omitting it entirely to use the default one."
     elif test "x$macosx_minver_specified" = "xyes"; then
-        error_message="no, try using a different min OS version or omitting it."
+        error_message="try using --with-macosx-version-min with a different OS \
+version or omitting it entirely."
     else
-        error_message="no, check that command line tools from Xcode 7.2.1 or later are installed."
+        error_message="check that command line tools from Xcode 7.2.1 or later are installed."
     fi
+
+    error_message="building C++ programs doesn't work, $error_message"
 
     AC_LANG_PUSH(C)
     AC_MSG_CHECKING([if C compiler ($CC) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([$error_message])])
+    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([$error_message])])
     AC_LANG_POP()
 
     AC_LANG_PUSH(C++)
@@ -1371,7 +1375,7 @@ if test "x$retest_macosx_linking" = "xyes"; then
             #endif
         ],
         [AC_MSG_RESULT([yes])],
-        [AC_MSG_ERROR([$error_message])]
+        [AC_MSG_FAILURE([$error_message])]
     )
     AC_LANG_POP()
 fi
