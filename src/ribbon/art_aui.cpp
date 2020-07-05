@@ -244,11 +244,10 @@ void wxRibbonAUIArtProvider::SetColourScheme(
 
     m_tab_ctrl_background_colour = LikePrimary(0.9);
 #ifdef __WXMAC__
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
-        m_tab_ctrl_background_gradient_colour = m_tab_ctrl_background_colour;
-    else
-#endif
+    m_tab_ctrl_background_gradient_colour = m_tab_ctrl_background_colour;
+#else
     m_tab_ctrl_background_gradient_colour = LikePrimary(1.7);
+#endif
     m_tab_border_pen = LikePrimary(0.75);
 #ifdef __WXMAC__
     m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
@@ -259,19 +258,17 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_tab_hover_label_colour = m_tab_label_colour;
     m_tab_hover_background_top_colour =  primary_hsl.ToRGB();
 #ifdef __WXMAC__
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
-        m_tab_hover_background_top_gradient_colour = m_tab_hover_background_top_colour;
-    else
-#endif
+    m_tab_hover_background_top_gradient_colour = m_tab_hover_background_top_colour;
+#else
     m_tab_hover_background_top_gradient_colour = LikePrimary(1.6);
+#endif
     m_tab_hover_background_brush = m_tab_hover_background_top_colour;
     m_tab_active_background_colour = m_tab_ctrl_background_gradient_colour;
 #ifdef __WXMAC__
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
-        m_tab_active_background_gradient_colour = m_tab_active_background_colour;
-    else
-#endif
+    m_tab_active_background_gradient_colour = m_tab_active_background_colour;
+#else
     m_tab_active_background_gradient_colour = primary_hsl.ToRGB();
+#endif
     m_tab_active_top_background_brush = m_tab_active_background_colour;
     m_panel_label_colour = m_tab_label_colour;
     m_panel_minimised_label_colour = m_panel_label_colour;
