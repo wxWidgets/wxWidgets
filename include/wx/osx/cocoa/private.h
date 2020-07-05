@@ -231,7 +231,7 @@ protected:
     // allow executing text changes without triggering key down events
 
     // is currently processing a native key down event
-    bool IsInNativeKeyDown();
+    bool IsInNativeKeyDown() const;
     // the native key event
     NSEvent* GetLastNativeKeyDownEvent();
     // did send the wx event for the current native key down event
