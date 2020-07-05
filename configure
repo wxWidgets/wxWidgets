@@ -15152,6 +15152,10 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     as_fn_error $? "C++ compiler is needed to build wxWidgets" "$LINENO" 5
 fi
 
+if test "$wxUSE_MAC" = 1 -a -z "$wxWITH_CXX"; then
+    wxWITH_CXX=11
+fi
+
 if test -n "$wxWITH_CXX"; then
             case "$wxWITH_CXX" in
         11)
