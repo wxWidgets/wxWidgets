@@ -782,82 +782,86 @@ void ArraysTestCase::IndexFromEnd()
 }
 
 
-TEST_CASE("wxGenericNaturalStringComparison()", "[wxString][compare]")
+TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
 {
+#if !wxUSE_REGEX
+    WARN("Skipping wxCmpNaturalGeneric() tests: wxRegEx not available");
+#else
     // simple string comparison
-    CHECK(wxCmpGenericNatural("a", "a") == 0);
-    CHECK(wxCmpGenericNatural("a", "z") < 0);
-    CHECK(wxCmpGenericNatural("z", "a") > 0);
+    CHECK(wxCmpNaturalGeneric("a", "a") == 0);
+    CHECK(wxCmpNaturalGeneric("a", "z") < 0);
+    CHECK(wxCmpNaturalGeneric("z", "a") > 0);
 
     // case insensitivity
-    CHECK(wxCmpGenericNatural("a", "A") == 0);
-    CHECK(wxCmpGenericNatural("A", "a") == 0);
-    CHECK(wxCmpGenericNatural("AB", "a") > 0);
-    CHECK(wxCmpGenericNatural("a", "AB") < 0);
+    CHECK(wxCmpNaturalGeneric("a", "A") == 0);
+    CHECK(wxCmpNaturalGeneric("A", "a") == 0);
+    CHECK(wxCmpNaturalGeneric("AB", "a") > 0);
+    CHECK(wxCmpNaturalGeneric("a", "AB") < 0);
 
     // empty strings sort before whitespace and punctiation
-    CHECK(wxCmpGenericNatural("", " ") < 0);
-    CHECK(wxCmpGenericNatural(" ", "") > 0);
-    CHECK(wxCmpGenericNatural("", ",") < 0);
-    CHECK(wxCmpGenericNatural(",", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", " ") < 0);
+    CHECK(wxCmpNaturalGeneric(" ", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", ",") < 0);
+    CHECK(wxCmpNaturalGeneric(",", "") > 0);
 
     // empty strings sort before numbers
-    CHECK(wxCmpGenericNatural("", "0") < 0);
-    CHECK(wxCmpGenericNatural("0", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", "0") < 0);
+    CHECK(wxCmpNaturalGeneric("0", "") > 0);
 
     // empty strings sort before letters and symbols
-    CHECK(wxCmpGenericNatural("", "abc") < 0);
-    CHECK(wxCmpGenericNatural("abc", "") > 0);
-    CHECK(wxCmpGenericNatural("", "$") < 0);
-    CHECK(wxCmpGenericNatural("$", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", "abc") < 0);
+    CHECK(wxCmpNaturalGeneric("abc", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", "$") < 0);
+    CHECK(wxCmpNaturalGeneric("$", "") > 0);
 
     // whitespace and punctiation sort before numbers
-    CHECK(wxCmpGenericNatural(" ", "1") < 0);
-    CHECK(wxCmpGenericNatural("1", " ") > 0);
-    CHECK(wxCmpGenericNatural(",", "1") < 0);
-    CHECK(wxCmpGenericNatural("1", ",") > 0);
+    CHECK(wxCmpNaturalGeneric(" ", "1") < 0);
+    CHECK(wxCmpNaturalGeneric("1", " ") > 0);
+    CHECK(wxCmpNaturalGeneric(",", "1") < 0);
+    CHECK(wxCmpNaturalGeneric("1", ",") > 0);
 
     // strings containing numbers sort before letters and symbols
-    CHECK(wxCmpGenericNatural("00", "a") < 0);
-    CHECK(wxCmpGenericNatural("a", "00") > 0);
-    CHECK(wxCmpGenericNatural("00", "$") < 0);
-    CHECK(wxCmpGenericNatural("$", "00") > 0);
+    CHECK(wxCmpNaturalGeneric("00", "a") < 0);
+    CHECK(wxCmpNaturalGeneric("a", "00") > 0);
+    CHECK(wxCmpNaturalGeneric("00", "$") < 0);
+    CHECK(wxCmpNaturalGeneric("$", "00") > 0);
 
     // strings containing numbers are compared by their value
-    CHECK(wxCmpGenericNatural("01", "1") == 0);
-    CHECK(wxCmpGenericNatural("1", "01") == 0);
-    CHECK(wxCmpGenericNatural("1", "05") < 0);
-    CHECK(wxCmpGenericNatural("05", "1") > 0);
-    CHECK(wxCmpGenericNatural("10", "5") > 0);
-    CHECK(wxCmpGenericNatural("5", "10") < 0);
-    CHECK(wxCmpGenericNatural("1", "9999999999999999999") < 0);
-    CHECK(wxCmpGenericNatural("9999999999999999999", "1") > 0);
+    CHECK(wxCmpNaturalGeneric("01", "1") == 0);
+    CHECK(wxCmpNaturalGeneric("1", "01") == 0);
+    CHECK(wxCmpNaturalGeneric("1", "05") < 0);
+    CHECK(wxCmpNaturalGeneric("05", "1") > 0);
+    CHECK(wxCmpNaturalGeneric("10", "5") > 0);
+    CHECK(wxCmpNaturalGeneric("5", "10") < 0);
+    CHECK(wxCmpNaturalGeneric("1", "9999999999999999999") < 0);
+    CHECK(wxCmpNaturalGeneric("9999999999999999999", "1") > 0);
 
     // comparing strings composed from whitespace,
     //  punctuation, numbers, letters, and symbols
-    CHECK(wxCmpGenericNatural("1st", " 1st") > 0);
-    CHECK(wxCmpGenericNatural(" 1st", "1st") < 0);
+    CHECK(wxCmpNaturalGeneric("1st", " 1st") > 0);
+    CHECK(wxCmpNaturalGeneric(" 1st", "1st") < 0);
 
-    CHECK(wxCmpGenericNatural("1st", ",1st") > 0);
-    CHECK(wxCmpGenericNatural(",1st", "1st") < 0);
+    CHECK(wxCmpNaturalGeneric("1st", ",1st") > 0);
+    CHECK(wxCmpNaturalGeneric(",1st", "1st") < 0);
 
-    CHECK(wxCmpGenericNatural("1st", "01st") == 0);
-    CHECK(wxCmpGenericNatural("01st", "1st") == 0);
-    CHECK(wxCmpGenericNatural("10th", "5th") > 0);
-    CHECK(wxCmpGenericNatural("5th", "10th") < 0);
+    CHECK(wxCmpNaturalGeneric("1st", "01st") == 0);
+    CHECK(wxCmpNaturalGeneric("01st", "1st") == 0);
+    CHECK(wxCmpNaturalGeneric("10th", "5th") > 0);
+    CHECK(wxCmpNaturalGeneric("5th", "10th") < 0);
 
-    CHECK(wxCmpGenericNatural("a1st", "a01st") == 0);
-    CHECK(wxCmpGenericNatural("a01st", "a1st") == 0);
-    CHECK(wxCmpGenericNatural("a10th", "a5th") > 0);
-    CHECK(wxCmpGenericNatural("a5th", "a10th") < 0);
-    CHECK(wxCmpGenericNatural("a 10th", "a5th") < 0);
-    CHECK(wxCmpGenericNatural("a5th", "a 10th") > 0);
+    CHECK(wxCmpNaturalGeneric("a1st", "a01st") == 0);
+    CHECK(wxCmpNaturalGeneric("a01st", "a1st") == 0);
+    CHECK(wxCmpNaturalGeneric("a10th", "a5th") > 0);
+    CHECK(wxCmpNaturalGeneric("a5th", "a10th") < 0);
+    CHECK(wxCmpNaturalGeneric("a 10th", "a5th") < 0);
+    CHECK(wxCmpNaturalGeneric("a5th", "a 10th") > 0);
 
-    CHECK(wxCmpGenericNatural("a1st1", "a01st01") == 0);
-    CHECK(wxCmpGenericNatural("a01st01", "a1st1") == 0);
-    CHECK(wxCmpGenericNatural("a10th10", "a5th5") > 0);
-    CHECK(wxCmpGenericNatural("a5th5", "a10th10") < 0);
-    CHECK(wxCmpGenericNatural("a 10th 10", "a5th 5") < 0);
-    CHECK(wxCmpGenericNatural("a5th 5", "a 10th 10") > 0);
+    CHECK(wxCmpNaturalGeneric("a1st1", "a01st01") == 0);
+    CHECK(wxCmpNaturalGeneric("a01st01", "a1st1") == 0);
+    CHECK(wxCmpNaturalGeneric("a10th10", "a5th5") > 0);
+    CHECK(wxCmpNaturalGeneric("a5th5", "a10th10") < 0);
+    CHECK(wxCmpNaturalGeneric("a 10th 10", "a5th 5") < 0);
+    CHECK(wxCmpNaturalGeneric("a5th 5", "a 10th 10") > 0);
+#endif // #if !wxUSE_REGEX
 }
 

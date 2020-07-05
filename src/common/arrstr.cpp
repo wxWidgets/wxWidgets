@@ -27,9 +27,11 @@
 #include <functional>
 #include "wx/afterstd.h"
 
-#include "wx/wxcrt.h"
-#include "wx/regex.h"
-#include "wx/utils.h"
+#if wxUSE_REGEX
+    #include "wx/wxcrt.h"
+    #include "wx/regex.h"
+    #include "wx/utils.h"
+#endif // #if wxUSE_REGEX
 
 #if defined( __WINDOWS__ )
     #include <shlwapi.h>
@@ -731,101 +733,106 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
     return ret;
 }
 
+#if wxUSE_REGEX
 
-namespace    // helpers needed by wxCmpGenericNatural()
+namespace // helpers needed by wxCmpNaturalGeneric()
 {
-    // Used for comparison of string parts
-    struct wxStringFragment
+// Used for comparison of string parts
+struct wxStringFragment
+{
+    // Fragment types are generally sorted like this:
+    // Empty < SpaceOrPunct < Digit < LetterOrSymbol
+    // Fragments of the same type are compared as follows:
+    // SpaceOrPunct - collated, Digit - as numbers using value
+    // LetterOrSymbol - lower-cased and then collated
+    enum Type
     {
-        // Fragment types are generally sorted like this:
-        // Empty < SpaceOrPunct < Digit < LetterOrSymbol
-        // Fragments of the same type are compared as follows:
-        // SpaceOrPunct - collated, Digit - as numbers using value
-        // LetterOrSymbol - lower-cased and then collated
-        enum Type
-        {
-            Empty,
-            SpaceOrPunct,  // whitespace or punctuation
-            Digit,         // a sequence of decimal digits
-            LetterOrSymbol // letters and symbols, i.e., anything not covered by the above types
-        };
-
-        wxStringFragment() : type(Empty), value(0) {}
-
-        Type     type;
-        wxString text;
-        wxUint64 value; // used only for Digit type
+        Empty,
+        SpaceOrPunct,  // whitespace or punctuation
+        Digit,         // a sequence of decimal digits
+        LetterOrSymbol // letters and symbols, i.e., anything not covered by the above types
     };
 
+    wxStringFragment() : type(Empty), value(0) {}
 
-    wxStringFragment GetFragment(wxString& text)
-    {
-        static const wxRegEx reSpaceOrPunct(wxS("^([[:space:]]|[[:punct:]])+"));
-        static const wxRegEx reDigit(wxS("^[[:digit:]]+"));
-        static const wxRegEx reLetterOrSymbol("^[^[:space:]|[:punct:]|[:digit:]]+");
+    Type     type;
+    wxString text;
+    wxUint64 value; // used only for Digit type
+};
 
-        wxStringFragment fragment;
-        size_t           length = wxString::npos;
 
-        if ( text.empty() )
-            return fragment;
+wxStringFragment GetFragment(wxString& text)
+{
+    static const wxRegEx reSpaceOrPunct(wxS("^([[:space:]]|[[:punct:]])+"));
+    static const wxRegEx reDigit(wxS("^[[:digit:]]+"));
+    static const wxRegEx reLetterOrSymbol("^[^[:space:]|[:punct:]|[:digit:]]+");
 
-        // In attempt to minimize the number of wxRegEx.Matches() calls,
-        // try to do them from the most expected to the least expected
-        // string fragment type.
-        if ( reLetterOrSymbol.Matches(text) )
-        {
-            if ( reLetterOrSymbol.GetMatch(NULL, &length) )
-            {
-                fragment.type = wxStringFragment::LetterOrSymbol;
-                fragment.text = text.Left(length);
-            }
-        }
-        else if ( reDigit.Matches(text) )
-        {
-            if ( reDigit.GetMatch(NULL, &length) )
-            {
-                fragment.type = wxStringFragment::Digit;
+    wxStringFragment fragment;
+    size_t           length = 0;
 
-                // The number may be too big to fit into a wxUint64,
-                // so take at most its first 19 digits, the rest of
-                // the number will be processed as the next string fragment.
-                // Not perfect, but I could not think of a better simple solution.
-                length = wxMin(length, 19);
-                fragment.text = text.Left(length);
-                fragment.text.ToULongLong(&fragment.value);
-            }
-        }
-        else if ( reSpaceOrPunct.Matches(text) )
-        {
-            if ( reSpaceOrPunct.GetMatch(NULL, &length) )
-            {
-                fragment.type = wxStringFragment::SpaceOrPunct;
-                fragment.text = text.Left(length);
-            }
-        } else
-        {
-            wxFAIL_MSG("text doesn't start with any recognizable fragment type");
-            return fragment;
-        }
-
-        text.erase(0, length);
+    if ( text.empty() )
         return fragment;
+
+    // In attempt to minimize the number of wxRegEx.Matches() calls,
+    // try to do them from the most expected to the least expected
+    // string fragment type.
+    if ( reLetterOrSymbol.Matches(text) )
+    {
+        if ( reLetterOrSymbol.GetMatch(NULL, &length) )
+        {
+            fragment.type = wxStringFragment::LetterOrSymbol;
+            fragment.text = text.Left(length);
+        }
+    }
+    else if ( reDigit.Matches(text) )
+    {
+        if ( reDigit.GetMatch(NULL, &length) )
+        {
+            fragment.type = wxStringFragment::Digit;
+
+            // The number may be too big to fit into a wxUint64,
+            // so take at most its first 19 digits, the rest of
+            // the number will be processed as the next string fragment.
+            // Not perfect, but I could not think of a better simple solution.
+            length = wxMin(length, 19);
+            fragment.text = text.Left(length);
+            fragment.text.ToULongLong(&fragment.value);
+        }
+    }
+    else if ( reSpaceOrPunct.Matches(text) )
+    {
+        if ( reSpaceOrPunct.GetMatch(NULL, &length) )
+        {
+            fragment.type = wxStringFragment::SpaceOrPunct;
+            fragment.text = text.Left(length);
+        }
     }
 
-    int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& rhs)
-    {
-        int result = 1;
+    text.erase(0, length);
+    return fragment;
+}
 
-        if ( lhs.type == wxStringFragment::Empty )
-        {
-            if ( rhs.type == wxStringFragment::Empty )
-                result = 0;
-            else
-                result = -1;
-        }
-        else if ( lhs.type == wxStringFragment::SpaceOrPunct )
-        {
+int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& rhs)
+{
+    int result = 1;
+
+    switch ( lhs.type )
+    {
+        case wxStringFragment::Empty:
+            switch ( rhs.type )
+            {
+                case wxStringFragment::Empty:
+                    result = 0;
+                    break;
+                case wxStringFragment::SpaceOrPunct:
+                case wxStringFragment::Digit:
+                case wxStringFragment::LetterOrSymbol:
+                    result = -1;
+                    break;
+            }
+            break;
+
+        case wxStringFragment::SpaceOrPunct:
             switch ( rhs.type )
             {
                 case wxStringFragment::Empty:
@@ -837,12 +844,10 @@ namespace    // helpers needed by wxCmpGenericNatural()
                 case wxStringFragment::LetterOrSymbol:
                     result = -1;
                     break;
-                default:
-                    wxFAIL_MSG("Unknown string fragment type");
             }
-        }
-        else if ( lhs.type == wxStringFragment::Digit )
-        {
+            break;
+
+        case wxStringFragment::Digit:
             switch ( rhs.type )
             {
                 case wxStringFragment::Empty:
@@ -860,12 +865,10 @@ namespace    // helpers needed by wxCmpGenericNatural()
                 case wxStringFragment::LetterOrSymbol:
                     result = -1;
                     break;
-                default:
-                    wxFAIL_MSG("Unknown string fragment type");
             }
-        }
-        else if ( lhs.type == wxStringFragment::LetterOrSymbol )
-        {
+            break;
+
+        case wxStringFragment::LetterOrSymbol:
             switch ( rhs.type )
             {
                 case wxStringFragment::Empty:
@@ -876,26 +879,21 @@ namespace    // helpers needed by wxCmpGenericNatural()
                 case wxStringFragment::LetterOrSymbol:
                     result = wxStrcoll_String(lhs.text.Lower(), rhs.text.Lower());
                     break;
-                default:
-                    wxFAIL_MSG("Unknown string fragment type");
             }
-        }
-        else
-        {
-            wxFAIL_MSG("Unknown string fragment type");
-        }
-
-        return result;
+            break;
     }
+
+    return result;
+}
 
 } // unnamed namespace
 
 
 // ----------------------------------------------------------------------------
-// wxCmpGenericNatural
+// wxCmpNaturalGeneric
 // ----------------------------------------------------------------------------
 //
-int wxCMPFUNC_CONV wxCmpGenericNatural(const wxString& s1, const wxString& s2)
+int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 {
     wxString lhs(s1);
     wxString rhs(s2);
@@ -913,6 +911,14 @@ int wxCMPFUNC_CONV wxCmpGenericNatural(const wxString& s1, const wxString& s2)
     return comparison;
 }
 
+#else
+
+int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
+{
+    return wxStrcmp(s1, s2);
+}
+
+#endif // #if wxUSE_REGEX
 
 // ----------------------------------------------------------------------------
 // Declaration of StrCmpLogicalW()
@@ -936,6 +942,6 @@ inline int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
     #if defined( __WINDOWS__ )
         return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
     #else
-        return wxCmpGenericNatural(s1, s2);
+        return wxCmpNaturalGeneric(s1, s2);
     #endif // #if defined( __WINDOWS__ )
 }
