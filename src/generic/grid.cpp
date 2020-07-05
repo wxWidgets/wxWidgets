@@ -9869,8 +9869,8 @@ void wxGrid::DoSetColSize( int col, int width )
         CalcUnscrolledPosition(0, rect.GetTop(), NULL, &top);
         CalcUnscrolledPosition(0, rect.GetBottom(), NULL, &bottom);
 
-        const int rowTop = YToRow(top, m_gridWin);
-        const int rowBottom = YToRow(bottom, m_gridWin);
+        const int rowTop = internalYToRow(top, m_gridWin);
+        const int rowBottom = internalYToRow(bottom, m_gridWin);
         for ( int row = rowTop; row <= rowBottom; ++row )
         {
             int numRows, numCols;
