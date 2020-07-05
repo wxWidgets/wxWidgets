@@ -48,7 +48,25 @@ WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 
-struct WXDLLIMPEXP_FWD_CORE wxWidgetCocoaKeyDownEvent;
+class WXDLLIMPEXP_FWD_CORE wxWidgetCocoaImpl;
+
+// a class which disables sending wx keydown events useful when adding text programmatically, for wx-internal use only
+class wxWidgetCocoaNativeKeyDownSuspender
+{
+public:
+    // stops sending keydown events for text inserted into this widget
+    wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
+    
+    // resumes sending keydown events
+    ~wxWidgetCocoaNativeKeyDownSuspender();
+    
+private:
+    wxWidgetCocoaImpl *m_target;
+    NSEvent* m_nsevent;
+    bool m_wxsent;
+
+    wxDECLARE_NO_COPY_CLASS(wxWidgetCocoaNativeKeyDownSuspender);
+};
 
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
@@ -211,9 +229,7 @@ protected:
     // done with the current native key down event
     void EndNativeKeyDownEvent();
     // allow executing text changes without triggering key down events
-    void PauseNativeKeyDownEvent(wxWidgetCocoaKeyDownEvent* &token);
-    // resume normal key down processing
-    void ResumeNativeKeyDownEvent(wxWidgetCocoaKeyDownEvent* token);
+
     // is currently processing a native key down event
     bool IsInNativeKeyDown();
     // the native key event
@@ -224,7 +240,7 @@ protected:
     bool WasKeyDownSent();
 
     NSEvent* m_lastKeyDownEvent;
-    int m_lastKeyDownWXSent;
+    bool m_lastKeyDownWXSent;
 #if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
 #endif
@@ -232,6 +248,8 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
+    friend class wxWidgetCocoaNativeKeyDownSuspender;
+    
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 

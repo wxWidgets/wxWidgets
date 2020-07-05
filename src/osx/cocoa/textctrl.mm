@@ -988,10 +988,8 @@ void wxNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
-    wxWidgetCocoaKeyDownEvent* formerEvent = NULL;
-    PauseNativeKeyDownEvent(formerEvent);
+    wxWidgetCocoaNativeKeyDownSuspender suspend(this);
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
-    ResumeNativeKeyDownEvent(formerEvent);
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
 }
@@ -1467,8 +1465,7 @@ void wxNSTextFieldControl::ShowPosition(long pos)
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
 {
-    wxWidgetCocoaKeyDownEvent* formerEvent = NULL;
-    PauseNativeKeyDownEvent(formerEvent);
+    wxWidgetCocoaNativeKeyDownSuspender suspend(this);
     NSText* editor = [m_textField currentEditor];
     if ( editor )
     {
@@ -1490,7 +1487,6 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
         SetStringValue( val ) ;
         SetSelection( start + str.length() , start + str.length() ) ;
     }
-    ResumeNativeKeyDownEvent(formerEvent);
 }
 
 void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
