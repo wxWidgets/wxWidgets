@@ -1,0 +1,1 @@
+wxOSX: Avoid duplicate key down events for Ctrl-O.
