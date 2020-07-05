@@ -1304,7 +1304,7 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    wxUSE_MACOSX_VERSION_MIN=10.9
+    wxUSE_MACOSX_VERSION_MIN=10.10
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
