@@ -129,7 +129,7 @@ case $wxTOOLSET in
 
         echo 'travis_fold:start:samples'
         echo 'Building samples...'
-        (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make -k samples
+        (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make -k $wxMAKEFILE_FLAGS samples
         echo 'travis_fold:end:samples'
 
         echo 'travis_fold:start:install'
