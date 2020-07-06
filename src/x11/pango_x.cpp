@@ -57,7 +57,7 @@ x11_pango_get_item_properties( PangoItem      *item,
 
 void
 x11_draw_glyphs( Drawable            drawable,
-                 GC                  gc,
+                 GC                  WXUNUSED(gc),
                  PangoFont          *font,
                  int                 x,
                  int                 y,
