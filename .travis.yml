@@ -4,6 +4,10 @@
 # root directory of the project.
 language: cpp
 
+# Specify the default platform.
+os: linux
+dist: xenial
+
 jobs:
     include:
         - dist: trusty
