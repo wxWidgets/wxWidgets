@@ -35,6 +35,11 @@
 #include "wx/graphics.h"
 #include "wx/utils.h"
 
+// missing from mingw32 header
+#ifndef TME_NONCLIENT
+#define TME_NONCLIENT 0x00000010
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
