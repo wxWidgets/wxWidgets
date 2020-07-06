@@ -67,7 +67,11 @@ case $wxTOOLSET in
         fi
         echo 'travis_fold:end:configure'
 
-        [ "$wxALLOW_WARNINGS" = 1 ] || export CXXFLAGS='-Werror -Wno-error=cpp'
+        if [ "$wxALLOW_WARNINGS" != 1 ]; then
+            error_opts="-Werror -Wno-error=cpp"
+            wxMAKEFILE_CXXFLAGS="$wxMAKEFILE_CXXFLAGS $error_opts"
+            wxMAKEFILE_ERROR_CXXFLAGS="CXXFLAGS=$error_opts"
+        fi
 
         if [ -n "$wxMAKEFILE_CXXFLAGS" ]; then
             wxMAKEFILE_FLAGS="CXXFLAGS=$wxMAKEFILE_CXXFLAGS"
@@ -78,7 +82,7 @@ case $wxTOOLSET in
 
         echo 'travis_fold:start:building'
         echo 'Building...'
-        make -k $wxBUILD_ARGS
+        make -k $wxBUILD_ARGS $wxMAKEFILE_ERROR_CXXFLAGS
         echo 'travis_fold:end:building'
 
         echo 'travis_fold:start:tests'
