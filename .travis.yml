@@ -4,7 +4,7 @@
 # root directory of the project.
 language: cpp
 
-matrix:
+jobs:
     include:
         - dist: trusty
           compiler: gcc
