@@ -2608,7 +2608,7 @@ void wxGetTextExtent(const wxWindow* window, const wxString& str,
     if (table == NULL)
         table = XmeGetDefaultRenderTable(w, XmTEXT_RENDER_TABLE);
 
-    rendition = XmRenderTableGetRendition( table, "" );
+    rendition = XmRenderTableGetRendition( table, (char*)"" );
     XtSetArg( args[count], XmNfont, 0 ); ++count;
     XtSetArg( args[count], XmNfontType, 0 ); ++count;
     XmRenditionRetrieve( rendition, args, count );
