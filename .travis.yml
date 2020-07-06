@@ -101,6 +101,7 @@ branches:
 
 notifications:
     email:
+        if: repo = wxWidgets/wxWidgets
         recipients:
             - vadim@wxwidgets.org
         on_success: change
