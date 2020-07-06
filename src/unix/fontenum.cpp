@@ -282,7 +282,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 #else
     wxString pattern;
     pattern.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
-                   family.empty() ? wxT("*") : family.c_str());
+                   family.empty() ? wxString("*") : family);
 
     // get the list of all fonts
     int nFonts;
