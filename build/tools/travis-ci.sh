@@ -68,7 +68,21 @@ case $wxTOOLSET in
         echo 'travis_fold:end:configure'
 
         if [ "$wxALLOW_WARNINGS" != 1 ]; then
-            error_opts="-Werror -Wno-error=cpp"
+            case "$TRAVIS_COMPILER" in
+                clang)
+                    allow_warn_opt="-Wno-error=#warnings"
+                    ;;
+
+                gcc)
+                    allow_warn_opt="-Wno-error=cpp"
+                    ;;
+
+                *)
+                    echo "*** Unknown compiler: $TRAVIS_COMPILER ***"
+                    ;;
+            esac
+
+            error_opts="-Werror $allow_warn_opt"
             wxMAKEFILE_CXXFLAGS="$wxMAKEFILE_CXXFLAGS $error_opts"
             wxMAKEFILE_ERROR_CXXFLAGS="CXXFLAGS=$error_opts"
         fi
