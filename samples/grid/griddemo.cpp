@@ -241,7 +241,7 @@ public:
         grid->SetCellValue(row, col, m_value);
     }
 
-    virtual wxGridCellEditor *Clone() const
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE
     {
         return new MyGridStarEditor();
     }
