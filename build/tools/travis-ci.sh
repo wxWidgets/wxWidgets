@@ -70,13 +70,13 @@ case $wxTOOLSET in
 
         echo 'travis_fold:start:building'
         echo 'Building...'
-        make $wxBUILD_ARGS
+        make -k $wxBUILD_ARGS
         echo 'travis_fold:end:building'
 
         echo 'travis_fold:start:tests'
         echo 'Building tests...'
         [ "$wxSKIP_GUI" = 1 ] || make -C tests $wxBUILD_ARGS failtest
-        make -C tests $wxBUILD_ARGS $wxMAKEFILE_FLAGS
+        make -k -C tests $wxBUILD_ARGS $wxMAKEFILE_FLAGS
         echo 'travis_fold:end:tests'
 
         if [ "$wxSKIP_TESTING" = 1 ]; then
@@ -103,7 +103,7 @@ case $wxTOOLSET in
 
         echo 'travis_fold:start:samples'
         echo 'Building samples...'
-        (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make samples
+        (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make -k samples
         echo 'travis_fold:end:samples'
 
         echo 'travis_fold:start:install'
