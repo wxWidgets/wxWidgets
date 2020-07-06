@@ -345,7 +345,7 @@ void wxSearchCtrl::ClickButton()
         if ( m_menu )
         {
             const wxSize& size = GetSize();
-            PopupMenu(m_menu, 0, size.y);
+            PopupMenu(m_menu, -size.y, size.y);
         }
     }
 #endif // wxUSE_MENUS
