@@ -56,7 +56,6 @@ case $wxTOOLSET in
         ;;
     *)
         echo 'travis_fold:start:configure'
-        [ "$wxALLOW_WARNINGS" = 1 ] || export CXXFLAGS='-Werror -Wno-error=cpp'
         echo 'Configuring...'
         ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
         if [ -n "$rc" ]; then
@@ -67,6 +66,8 @@ case $wxTOOLSET in
             exit $rc
         fi
         echo 'travis_fold:end:configure'
+
+        [ "$wxALLOW_WARNINGS" = 1 ] || export CXXFLAGS='-Werror -Wno-error=cpp'
 
         echo 'travis_fold:start:building'
         echo 'Building...'
