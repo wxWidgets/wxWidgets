@@ -59,7 +59,7 @@ matrix:
           name: wxX11 Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1 wxALLOW_WARNINGS=1
           name: wxDFB Ubuntu 18.04
         - dist: bionic
           compiler: gcc
