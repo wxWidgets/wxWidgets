@@ -988,14 +988,7 @@ void wxOwnerDrawnComboBox::DoClear()
 
     // There is no text entry when using wxCB_READONLY style, so test for it.
     if ( GetTextCtrl() )
-    {
-#ifdef __WXOSX__
-        // this has to be rerouted to the text control explicitly on macOS
-        GetTextCtrl()->Clear();
-#else
         wxTextEntry::Clear();
-#endif
-    }
 }
 
 void wxOwnerDrawnComboBox::Clear()
