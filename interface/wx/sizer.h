@@ -1098,7 +1098,19 @@ public:
     /**
         Set the window to be tracked by this item.
 
-        The old window isn't deleted as it is now owned by the sizer item.
+        @note This is a low-level method which is dangerous if used
+            incorrectly, avoid using it if possible, i.e. if higher level
+            methods such as wxSizer::Replace() can be used instead.
+
+        If the sizer item previously contained a window, it is dissociated from
+        the sizer containing this sizer item (if any), but this object doesn't
+        have the pointer to the containing sizer and so it's the caller's
+        responsibility to call wxWindow::SetContainingSizer() on @a window.
+        Failure to do this can result in memory corruption when the window is
+        destroyed later, so it is crucial to not forget to do it.
+
+        Also note that the previously contained window is @e not deleted, so
+        it's also the callers responsibility to do it, if necessary.
     */
     void AssignWindow(wxWindow *window);
 
