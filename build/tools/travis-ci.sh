@@ -69,6 +69,13 @@ case $wxTOOLSET in
 
         [ "$wxALLOW_WARNINGS" = 1 ] || export CXXFLAGS='-Werror -Wno-error=cpp'
 
+        if [ -n "$wxMAKEFILE_CXXFLAGS" ]; then
+            wxMAKEFILE_FLAGS="CXXFLAGS=$wxMAKEFILE_CXXFLAGS"
+        fi
+        if [ -n "$wxMAKEFILE_LDFLAGS" ]; then
+            wxMAKEFILE_FLAGS="$wxMAKEFILE_FLAGS LDFLAGS=$wxMAKEFILE_LDFLAGS"
+        fi
+
         echo 'travis_fold:start:building'
         echo 'Building...'
         make -k $wxBUILD_ARGS

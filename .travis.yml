@@ -21,7 +21,7 @@ matrix:
           name: wxGTK 2 UTF-8 Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11 LDFLAGS=-Wl,--no-as-needed" wxUSE_XVFB=1
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_CXXFLAGS=-std=c++11 wxMAKEFILE_LDFLAGS=-Wl,--no-as-needed wxUSE_XVFB=1
           name: wxGTK 3 STL Ubuntu 18.04
         - dist: bionic
           compiler: clang
