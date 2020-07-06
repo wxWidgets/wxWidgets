@@ -205,12 +205,19 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
                 if ( IsCancelButtonVisible() && m_cancelButtonRect.Contains(point) )
                 {
+                    // minimize flicker by sending mouse notifications only once.
+                    const bool postMouseNotifications = !m_mouseInCancelButton;
+
                     m_mouseInCancelButton = true;
                     *rc = HTCAPTION;
                     processed = true;
 
-                    TRACKMOUSEEVENT tme = { sizeof(tme), TME_NONCLIENT | TME_LEAVE, GetHwnd() };
-                    TrackMouseEvent(&tme);
+                    if ( postMouseNotifications )
+                    {
+                        const DWORD flags = TME_NONCLIENT | TME_HOVER | TME_LEAVE;
+                        TRACKMOUSEEVENT tme = { sizeof(tme), flags, GetHwnd(), 10 /*dwHoverTime*/ };
+                        TrackMouseEvent(&tme);
+                    }
                 }
                 else if ( m_searchButtonRect.Contains(point) )
                 {
@@ -233,10 +240,8 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
             }
             wxFALLTHROUGH;
 
-        case WM_NCMOUSEMOVE:
+        case WM_NCMOUSEHOVER:
             {
-                // if this causes a noticeable flicker, we better off handling
-                // WM_NCMOUSEHOVER instead.
                 ::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
             }
             break;
