@@ -279,6 +279,16 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
     return processed || wxTextCtrl::MSWHandleMessage(rc, nMsg, wParam, lParam);
 }
 
+#define SRCHCTRL_COMMON_GCDC_SETUP(rect)            \
+        wxGCDC gdc(winDC);                          \
+        wxDCClipper clip(gdc, rect);                \
+                                                    \
+        gdc.SetDeviceOrigin(rect.x + shift, shift); \
+        gdc.SetUserScale(scale, scale);             \
+                                                    \
+        gdc.SetBackground(bg);                      \
+        gdc.Clear()
+
 void wxSearchCtrl::DrawButtons(int width)
 {
     static const int SEARCH_BITMAP_LIGHTNESS = 130; // slightly lighter
@@ -297,14 +307,7 @@ void wxSearchCtrl::DrawButtons(int width)
     wxWindowDC winDC(this);
 
     {
-        wxGCDC gdc(winDC);
-        wxDCClipper clip(gdc, m_searchButtonRect);
-
-        gdc.SetDeviceOrigin(m_searchButtonRect.x + shift, shift);
-        gdc.SetUserScale(scale, scale);
-
-        gdc.SetBackground(bg);
-        gdc.Clear();
+        SRCHCTRL_COMMON_GCDC_SETUP(m_searchButtonRect);
 
         gdc.SetPen(wxPen(fg, 8));
         gdc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -315,14 +318,7 @@ void wxSearchCtrl::DrawButtons(int width)
 
     if ( IsCancelButtonVisible() )
     {
-        wxGCDC gdc(winDC);
-        wxDCClipper clip(gdc, m_cancelButtonRect);
-
-        gdc.SetDeviceOrigin(m_cancelButtonRect.x + shift, shift);
-        gdc.SetUserScale(scale, scale);
-
-        gdc.SetBackground(bg);
-        gdc.Clear();
+        SRCHCTRL_COMMON_GCDC_SETUP(m_cancelButtonRect);
 
         const wxColour col1 = m_mouseInCancelButton ? fg.ChangeLightness(CANCEL_BITMAP_LIGHTNESS) : bg;
         const wxColour col2 = m_mouseInCancelButton ? bg : fg;
