@@ -91,6 +91,28 @@ protected:
     wxDECLARE_NO_COPY_CLASS(MultiColumnsDataViewCtrlTestCase);
 };
 
+class AutosizeWithConstantWidthTestCase
+{
+public:
+    AutosizeWithConstantWidthTestCase();
+    ~AutosizeWithConstantWidthTestCase();
+
+protected:
+    // the dataview control itself
+    wxDataViewListCtrl *m_dvc;
+
+    // constants
+    const wxSize m_size;
+    const int m_firstColumnWidth;
+
+    // and the columns
+    wxDataViewColumn* m_firstColumn;
+    wxDataViewColumn* m_secondColumn;
+    wxDataViewColumn* m_lastColumn;
+
+    wxDECLARE_NO_COPY_CLASS(AutosizeWithConstantWidthTestCase);
+};
+
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
@@ -138,6 +160,31 @@ MultiColumnsDataViewCtrlTestCase::MultiColumnsDataViewCtrlTestCase()
 }
 
 MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
+{
+    delete m_dvc;
+}
+
+AutosizeWithConstantWidthTestCase::AutosizeWithConstantWidthTestCase()
+              : m_size(300, 100),
+              m_firstColumnWidth(50)
+{
+    m_dvc = new wxDataViewListCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    m_firstColumn =
+    m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE);
+    m_secondColumn =
+    m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT, m_firstColumnWidth);
+    m_lastColumn =
+    m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT);
+
+    // Set size after columns appending to extend size of the last column.
+    m_dvc->SetSize(m_size);
+    m_dvc->Layout();
+    m_dvc->Refresh();
+    m_dvc->Update();
+}
+
+AutosizeWithConstantWidthTestCase::~AutosizeWithConstantWidthTestCase()
 {
     delete m_dvc;
 }
@@ -352,6 +399,14 @@ TEST_CASE_METHOD(MultiColumnsDataViewCtrlTestCase,
     const int lastColumnMinWidth = lastColumnMaxWidth - 10;
     CHECK( m_lastColumn->GetWidth() <= lastColumnMaxWidth );
     CHECK( m_lastColumn->GetWidth() >= lastColumnMinWidth );
+}
+
+TEST_CASE_METHOD(AutosizeWithConstantWidthTestCase,
+"wxDVC::AppendAutosizedTextColumn",
+"[wxDataViewCtrl][column]")
+{
+    // Check the width of the first column.
+    CHECK( m_secondColumn->GetWidth() == m_firstColumnWidth );
 }
 
 #endif //wxUSE_DATAVIEWCTRL
