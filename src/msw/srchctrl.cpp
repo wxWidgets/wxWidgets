@@ -47,6 +47,16 @@
 // the margin between the text control and the search/cancel buttons
 static const int MARGIN = 2;
 
+// ----------------------------------------------------------------------------
+// variables
+// ----------------------------------------------------------------------------
+
+// A variable to exctude the search button from certain (unnecessary) redraw operations.
+// Notice that the search and cancel buttons are both redrawn in response to the
+// WM_NCPAINT message and this may leads to noticeable flicker if all we want is
+// to redraw the cancel button only.
+static bool gs_redrawSearchButton = true;
+
 // ============================================================================
 // wxSearchCtrl implementation
 // ============================================================================
@@ -254,6 +264,8 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
         case WM_NCMOUSEHOVER:
             {
+                gs_redrawSearchButton = false;
+
                 ::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
             }
             break;
@@ -306,6 +318,7 @@ void wxSearchCtrl::DrawButtons(int width)
 
     wxWindowDC winDC(this);
 
+    if ( gs_redrawSearchButton )
     {
         SRCHCTRL_COMMON_GCDC_SETUP(m_searchButtonRect);
 
@@ -314,6 +327,10 @@ void wxSearchCtrl::DrawButtons(int width)
 
         gdc.DrawCircle(xWidth - radius, radius, radius);
         gdc.DrawLine(0, xWidth, xWidth/2. - 5, xWidth/2. + 5);
+    }
+    else // !gs_redrawSearchButton
+    {
+        gs_redrawSearchButton = true;
     }
 
     if ( IsCancelButtonVisible() )
@@ -434,6 +451,7 @@ void wxSearchCtrl::ToggleCancelButtonVisibility()
 {
     if ( m_isCancelButtonShown != IsCancelButtonVisible() )
     {
+        gs_redrawSearchButton = false;
         m_isCancelButtonShown = IsCancelButtonVisible();
 
         // Calling RedrawWindow() is of no help here, because to show/hide
