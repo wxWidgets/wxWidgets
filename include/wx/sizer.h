@@ -23,6 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
 class WXDLLIMPEXP_FWD_CORE wxSizerItem;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 #ifndef wxUSE_BORDER_BY_DEFAULT
     #define wxUSE_BORDER_BY_DEFAULT 1
@@ -261,6 +262,21 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxBmpSpacer: used by wxSizerItem to represent a bitmap
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxBmpSpacer : public wxSizerSpacer
+{
+public:
+    wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp) : wxSizerSpacer(bmp->GetSize()), m_bmp(bmp) { }
+
+    const wxSharedPtr<wxBitmap>& GetBitmap() const { return m_bmp; }
+
+private:
+    wxSharedPtr<wxBitmap> m_bmp;
+};
+
+// ----------------------------------------------------------------------------
 // wxSizerItem
 // ----------------------------------------------------------------------------
 
@@ -311,6 +327,21 @@ public:
         Init(flags);
 
         DoSetSpacer(wxSize(width, height));
+    }
+
+    // bitmap
+    wxSizerItem( const wxSharedPtr<wxBitmap>& bmp,
+                 int proportion=0,
+                 int flag=0,
+                 int border=0,
+                 wxObject* userData=NULL );
+
+    // bitmap with flags
+    wxSizerItem(const wxSharedPtr<wxBitmap>& bmp, const wxSizerFlags& flags)
+    {
+        Init(flags);
+
+        DoSetBitmap(bmp);
     }
 
     wxSizerItem();
@@ -365,6 +396,7 @@ public:
     bool IsWindow() const { return m_kind == Item_Window; }
     bool IsSizer() const { return m_kind == Item_Sizer; }
     bool IsSpacer() const { return m_kind == Item_Spacer; }
+    bool IsBitmap() const { return m_kind == Item_Bitmap; }
 
     void SetProportion( int proportion )
         { m_proportion = proportion; }
@@ -384,6 +416,16 @@ public:
     wxSizer *GetSizer() const
         { return m_kind == Item_Sizer ? m_sizer : NULL; }
     wxSize GetSpacer() const;
+    const wxSharedPtr<wxBitmap>& GetBitmap() const
+    {
+        if ( m_kind == Item_Bitmap )
+            return m_bmpSpacer->GetBitmap();
+        else
+        {
+            static wxSharedPtr<wxBitmap> dummy;
+            return dummy;
+        }
+    }
 
     // This function behaves obviously for the windows and spacers but for the
     // sizers it returns true if any sizer element is shown and only returns
@@ -428,6 +470,12 @@ public:
 
     void AssignSpacer(int w, int h) { AssignSpacer(wxSize(w, h)); }
 
+    void AssignBitmap(const wxSharedPtr<wxBitmap>& bmp)
+    {
+        Free();
+        DoSetBitmap(bmp);
+    }
+
 #if WXWIN_COMPATIBILITY_2_8
     // these functions do not free the old sizer/spacer and so can easily
     // provoke the memory leaks and so shouldn't be used, use Assign() instead
@@ -451,6 +499,7 @@ protected:
     void DoSetWindow(wxWindow *window);
     void DoSetSizer(wxSizer *sizer);
     void DoSetSpacer(const wxSize& size);
+    void DoSetBitmap(const wxSharedPtr<wxBitmap>& bmp);
 
     // Add the border specified for this item to the given size
     // if it's != wxDefaultSize, just return wxDefaultSize otherwise.
@@ -463,6 +512,7 @@ protected:
         Item_Window,
         Item_Sizer,
         Item_Spacer,
+        Item_Bitmap,
         Item_Max
     } m_kind;
     union
@@ -470,6 +520,7 @@ protected:
         wxWindow      *m_window;
         wxSizer       *m_sizer;
         wxSizerSpacer *m_spacer;
+        wxBmpSpacer   *m_bmpSpacer;
     };
 
     wxPoint      m_pos;
@@ -508,7 +559,7 @@ public:
     virtual ~wxSizer();
 
     // methods for adding elements to the sizer: there are Add/Insert/Prepend
-    // overloads for each of window/sizer/spacer/wxSizerItem
+    // overloads for each of window/sizer/spacer/bitmap/wxSizerItem
     wxSizerItem* Add(wxWindow *window,
                      int proportion = 0,
                      int flag = 0,
@@ -525,10 +576,16 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
+    wxSizerItem* Add(const wxSharedPtr<wxBitmap>& bmp,
+                     int proportion = 0,
+                     int flag = 0,
+                     int border = 0,
+                     wxObject* userData = NULL);
     wxSizerItem* Add( wxWindow *window, const wxSizerFlags& flags);
     wxSizerItem* Add( wxSizer *sizer, const wxSizerFlags& flags);
     wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
     wxSizerItem* Add( wxSizerItem *item);
+    wxSizerItem* Add( const wxSharedPtr<wxBitmap>& bmp, const wxSizerFlags& flags );
 
     virtual wxSizerItem *AddSpacer(int size);
     wxSizerItem* AddStretchSpacer(int prop = 1);
@@ -553,6 +610,12 @@ public:
                         int border = 0,
                         wxObject* userData = NULL);
     wxSizerItem* Insert(size_t index,
+                        const wxSharedPtr<wxBitmap>& bmp,
+                        int proportion = 0,
+                        int flag = 0,
+                        int border = 0,
+                        wxObject* userData = NULL);
+    wxSizerItem* Insert(size_t index,
                         wxWindow *window,
                         const wxSizerFlags& flags);
     wxSizerItem* Insert(size_t index,
@@ -561,6 +624,9 @@ public:
     wxSizerItem* Insert(size_t index,
                         int width,
                         int height,
+                        const wxSizerFlags& flags);
+    wxSizerItem* Insert(size_t index,
+                        const wxSharedPtr<wxBitmap>& bmp,
                         const wxSizerFlags& flags);
 
     // NB: do _not_ override this function in the derived classes, this one is
@@ -587,10 +653,16 @@ public:
                          int flag = 0,
                          int border = 0,
                          wxObject* userData = NULL);
+    wxSizerItem* Prepend(const wxSharedPtr<wxBitmap>& bmp,
+                         int proportion = 0,
+                         int flag = 0,
+                         int border = 0,
+                         wxObject* userData = NULL);
     wxSizerItem* Prepend(wxWindow *window, const wxSizerFlags& flags);
     wxSizerItem* Prepend(wxSizer *sizer, const wxSizerFlags& flags);
     wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
     wxSizerItem* Prepend(wxSizerItem *item);
+    wxSizerItem* Prepend(const wxSharedPtr<wxBitmap>& bmp, const wxSizerFlags& flags);
 
     wxSizerItem* PrependSpacer(int size);
     wxSizerItem* PrependStretchSpacer(int prop = 1);
@@ -605,10 +677,12 @@ public:
 
     virtual bool Detach( wxWindow *window );
     virtual bool Detach( wxSizer *sizer );
+    virtual bool Detach( const wxSharedPtr<wxBitmap>& bmp );
     virtual bool Detach( int index );
 
     virtual bool Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive = false );
     virtual bool Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive = false );
+    virtual bool Replace( const wxSharedPtr<wxBitmap>& oldbmp, const wxSharedPtr<wxBitmap>& newbmp, bool recursive = false );
     virtual bool Replace( size_t index, wxSizerItem *newitem );
 
     virtual void Clear( bool delete_windows = false );
@@ -639,6 +713,12 @@ public:
         { return DoSetItemMinSize( sizer, width, height ); }
     bool SetItemMinSize( wxSizer *sizer, const wxSize& size )
         { return DoSetItemMinSize( sizer, size.x, size.y ); }
+
+    // Searches recursively
+    bool SetItemMinSize( const wxSharedPtr<wxBitmap>& bmp, int width, int height )
+        { return DoSetItemMinSize( bmp, width, height ); }
+    bool SetItemMinSize( const wxSharedPtr<wxBitmap>& bmp, const wxSize& size )
+        { return DoSetItemMinSize( bmp, size.x, size.y ); }
 
     bool SetItemMinSize( size_t index, int width, int height )
         { return DoSetItemMinSize( index, width, height ); }
@@ -712,6 +792,7 @@ public:
 
     wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
     wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
+    wxSizerItem* GetItem( const wxSharedPtr<wxBitmap>& bmp, bool recursive = false );
     wxSizerItem* GetItem( size_t index );
     wxSizerItem* GetItemById( int id, bool recursive = false );
 
@@ -719,17 +800,21 @@ public:
     // in the layout calculations or not.
     bool Show( wxWindow *window, bool show = true, bool recursive = false );
     bool Show( wxSizer *sizer, bool show = true, bool recursive = false );
+    bool Show( const wxSharedPtr<wxBitmap>& bmp, bool show = true, bool recursive = false );
     bool Show( size_t index, bool show = true );
 
     bool Hide( wxSizer *sizer, bool recursive = false )
         { return Show( sizer, false, recursive ); }
     bool Hide( wxWindow *window, bool recursive = false )
         { return Show( window, false, recursive ); }
+    bool Hide( const wxSharedPtr<wxBitmap>& bmp, bool recursive = false )
+        { return Show( bmp, false, recursive ); }
     bool Hide( size_t index )
         { return Show( index, false ); }
 
     bool IsShown( wxWindow *window ) const;
     bool IsShown( wxSizer *sizer ) const;
+    bool IsShown( const wxSharedPtr<wxBitmap>& bmp ) const;
     bool IsShown( size_t index ) const;
 
     // Recursively call wxWindow::Show () on all sizer items.
@@ -757,6 +842,7 @@ protected:
     virtual void DoSetMinSize( int width, int height );
     virtual bool DoSetItemMinSize( wxWindow *window, int width, int height );
     virtual bool DoSetItemMinSize( wxSizer *sizer, int width, int height );
+    virtual bool DoSetItemMinSize( const wxSharedPtr<wxBitmap>& bmp, int width, int height );
     virtual bool DoSetItemMinSize( size_t index, int width, int height );
 
     // insert a new item into m_children at given index and return the item
@@ -1139,6 +1225,11 @@ inline void wxSizerItem::SetWindow(wxWindow *window)
     DoSetWindow(window);
 }
 
+inline void wxSizerItem::SetBitmap(const wxSharedPtr<wxBitmap>& bmp)
+{
+    DoSetBitmap(bmp);
+}
+
 inline void wxSizerItem::SetSizer(wxSizer *sizer)
 {
     DoSetSizer(sizer);
@@ -1176,6 +1267,12 @@ wxSizer::Add( wxWindow *window, int proportion, int flag, int border, wxObject* 
 }
 
 inline wxSizerItem*
+wxSizer::Add( const wxSharedPtr<wxBitmap>& bmp, int proportion, int flag, int border, wxObject* userData )
+{
+    return Add( new wxSizerItem( bmp, proportion, flag, border, userData ) );
+}
+
+inline wxSizerItem*
 wxSizer::Add( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData )
 {
     return Add( new wxSizerItem( sizer, proportion, flag, border, userData ) );
@@ -1191,6 +1288,12 @@ inline wxSizerItem*
 wxSizer::Add( wxWindow *window, const wxSizerFlags& flags )
 {
     return Add( new wxSizerItem(window, flags) );
+}
+
+inline wxSizerItem*
+wxSizer::Add( const wxSharedPtr<wxBitmap>& bmp, const wxSizerFlags& flags )
+{
+    return Add( new wxSizerItem(bmp, flags) );
 }
 
 inline wxSizerItem*
@@ -1230,6 +1333,12 @@ wxSizer::Prepend( wxWindow *window, int proportion, int flag, int border, wxObje
 }
 
 inline wxSizerItem*
+wxSizer::Prepend( const wxSharedPtr<wxBitmap>& bmp, int proportion, int flag, int border, wxObject* userData )
+{
+    return Prepend( new wxSizerItem( bmp, proportion, flag, border, userData ) );
+}
+
+inline wxSizerItem*
 wxSizer::Prepend( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData )
 {
     return Prepend( new wxSizerItem( sizer, proportion, flag, border, userData ) );
@@ -1260,6 +1369,12 @@ wxSizer::Prepend( wxWindow *window, const wxSizerFlags& flags )
 }
 
 inline wxSizerItem*
+wxSizer::Prepend( const wxSharedPtr<wxBitmap>& bmp, const wxSizerFlags& flags )
+{
+    return Prepend( new wxSizerItem(bmp, flags) );
+}
+
+inline wxSizerItem*
 wxSizer::Prepend( wxSizer *sizer, const wxSizerFlags& flags )
 {
     return Prepend( new wxSizerItem(sizer, flags) );
@@ -1280,6 +1395,17 @@ wxSizer::Insert( size_t index,
                  wxObject* userData )
 {
     return Insert( index, new wxSizerItem( window, proportion, flag, border, userData ) );
+}
+
+inline wxSizerItem*
+wxSizer::Insert( size_t index,
+                 const wxSharedPtr<wxBitmap>& bmp,
+                 int proportion,
+                 int flag,
+                 int border,
+                 wxObject* userData )
+{
+    return Insert( index, new wxSizerItem( bmp, proportion, flag, border, userData ) );
 }
 
 inline wxSizerItem*
@@ -1309,6 +1435,12 @@ inline wxSizerItem*
 wxSizer::Insert( size_t index, wxWindow *window, const wxSizerFlags& flags )
 {
     return Insert( index, new wxSizerItem(window, flags) );
+}
+
+inline wxSizerItem*
+wxSizer::Insert( size_t index, const wxSharedPtr<wxBitmap>& bmp, const wxSizerFlags& flags )
+{
+    return Insert( index, new wxSizerItem(bmp, flags) );
 }
 
 inline wxSizerItem*

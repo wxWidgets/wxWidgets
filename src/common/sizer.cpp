@@ -29,6 +29,7 @@
     #include "wx/statbox.h"
     #include "wx/toplevel.h"
     #include "wx/app.h"
+    #include "wx/bitmap.h"
 #endif // WX_PRECOMP
 
 #include "wx/display.h"
@@ -217,6 +218,38 @@ wxSizerItem::wxSizerItem(wxWindow *window,
     DoSetWindow(window);
 }
 
+// bitmap item
+void wxSizerItem::DoSetBitmap(const wxSharedPtr<wxBitmap>& bmp)
+{
+    wxCHECK_RET( bmp, wxT("NULL bitmap in wxSizerItem::SetBitmap()") );
+
+    m_kind = Item_Bitmap;
+    m_bmpSpacer = new wxBmpSpacer(bmp);
+
+    // bitmap doesn't become smaller than its initial size, whatever happens
+    m_minSize = bmp->GetSize();
+
+    // aspect ratio calculated from initial size
+    SetRatio(m_minSize);
+}
+
+wxSizerItem::wxSizerItem(const wxSharedPtr<wxBitmap>& bmp,
+                         int proportion,
+                         int flag,
+                         int border,
+                         wxObject* userData)
+           : m_kind(Item_None),
+             m_proportion(proportion),
+             m_border(border),
+             m_flag(flag),
+             m_id(wxID_NONE),
+             m_userData(userData)
+{
+    ASSERT_VALID_SIZER_FLAGS( m_flag );
+
+    DoSetBitmap(bmp);
+}
+
 // sizer item
 void wxSizerItem::DoSetSizer(wxSizer *sizer)
 {
@@ -326,6 +359,10 @@ void wxSizerItem::Free()
             delete m_spacer;
             break;
 
+        case Item_Bitmap:
+            delete m_bmpSpacer;
+            break;
+
         case Item_Max:
         default:
             wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
@@ -362,6 +399,10 @@ wxSize wxSizerItem::GetSize() const
 
         case Item_Spacer:
             ret = m_spacer->GetSize();
+            break;
+
+        case Item_Bitmap:
+            ret = m_bmpSpacer->GetSize(); // the current [stretched] size
             break;
 
         case Item_Max:
@@ -571,6 +612,10 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
             m_spacer->SetSize(size);
             break;
 
+        case Item_Bitmap:
+            m_bmpSpacer->SetSize(size);
+            break;
+
         case Item_Max:
         default:
             wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
@@ -583,6 +628,7 @@ void wxSizerItem::DeleteWindows()
     {
         case Item_None:
         case Item_Spacer:
+        case Item_Bitmap:
             break;
 
         case Item_Window:
@@ -627,6 +673,10 @@ void wxSizerItem::Show( bool show )
             m_spacer->Show(show);
             break;
 
+        case Item_Bitmap:
+            m_bmpSpacer->Show(show);
+            break;
+
         case Item_Max:
         default:
             wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
@@ -656,6 +706,9 @@ bool wxSizerItem::IsShown() const
 
         case Item_Spacer:
             return m_spacer->IsShown();
+
+        case Item_Bitmap:
+            return m_bmpSpacer->IsShown();
 
         case Item_Max:
         default:
@@ -791,6 +844,27 @@ bool wxSizer::Detach( wxWindow *window )
     return false;
 }
 
+bool wxSizer::Detach( const wxSharedPtr<wxBitmap>& bmp )
+{
+    wxASSERT_MSG( bmp, wxT("Detaching NULL bitmap") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetBitmap() == bmp)
+        {
+            delete item;
+            m_children.Erase( node );
+            return true;
+        }
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
 bool wxSizer::Detach( int index )
 {
     wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
@@ -830,6 +904,33 @@ bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
         else if (recursive && item->IsSizer())
         {
             if (item->GetSizer()->Replace( oldwin, newwin, true ))
+                return true;
+        }
+
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
+bool wxSizer::Replace( const wxSharedPtr<wxBitmap>& oldbmp, const wxSharedPtr<wxBitmap>& newbmp, bool recursive )
+{
+    wxASSERT_MSG( oldbmp, wxT("Replacing NULL bitmap") );
+    wxASSERT_MSG( newbmp, wxT("Replacing with NULL bitmap") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetBitmap() == oldbmp)
+        {
+            item->AssignBitmap(newbmp);
+            return true;
+        }
+        else if (recursive && item->IsSizer())
+        {
+            if (item->GetSizer()->Replace( oldbmp, newbmp, true ))
                 return true;
         }
 
@@ -1152,6 +1253,44 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
     return false;
 }
 
+bool wxSizer::DoSetItemMinSize( const wxSharedPtr<wxBitmap>& bmp, int width, int height )
+{
+    wxASSERT_MSG( bmp, wxT("SetMinSize for NULL bitmap") );
+
+    // Is it our immediate child?
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetBitmap() == bmp)
+        {
+            item->SetMinSize( width, height );
+            return true;
+        }
+        node = node->GetNext();
+    }
+
+    // No?  Search any subsizers we own then
+
+    node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if ( item->GetSizer() &&
+             item->GetSizer()->DoSetItemMinSize( bmp, width, height ) )
+        {
+            // A child sizer found the requested windw, exit.
+            return true;
+        }
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
 bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
 {
     wxASSERT_MSG( sizer, wxT("SetMinSize for NULL sizer") );
@@ -1238,6 +1377,32 @@ wxSizerItem* wxSizer::GetItem( wxWindow *window, bool recursive )
     return NULL;
 }
 
+wxSizerItem* wxSizer::GetItem( const wxSharedPtr<wxBitmap>& bmp, bool recursive )
+{
+    wxASSERT_MSG( bmp, wxT("GetItem for NULL bitmap") );
+
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetBitmap() == bmp)
+        {
+            return item;
+        }
+        else if (recursive && item->IsSizer())
+        {
+            wxSizerItem *subitem = item->GetSizer()->GetItem( bmp, true );
+            if (subitem)
+                return subitem;
+        }
+
+        node = node->GetNext();
+    }
+
+    return NULL;
+}
+
 wxSizerItem* wxSizer::GetItem( wxSizer *sizer, bool recursive )
 {
     wxASSERT_MSG( sizer, wxT("GetItem for NULL sizer") );
@@ -1313,6 +1478,19 @@ bool wxSizer::Show( wxWindow *window, bool show, bool recursive )
     return false;
 }
 
+bool wxSizer::Show( const wxSharedPtr<wxBitmap>& bmp, bool show, bool recursive )
+{
+    wxSizerItem *item = GetItem( bmp, recursive );
+
+    if ( item )
+    {
+         item->Show( show );
+         return true;
+    }
+
+    return false;
+}
+
 bool wxSizer::Show( wxSizer *sizer, bool show, bool recursive )
 {
     wxSizerItem *item = GetItem( sizer, recursive );
@@ -1370,6 +1548,25 @@ bool wxSizer::IsShown( wxWindow *window ) const
         wxSizerItem     *item = node->GetData();
 
         if (item->GetWindow() == window)
+        {
+            return item->IsShown();
+        }
+        node = node->GetNext();
+    }
+
+    wxFAIL_MSG( wxT("IsShown failed to find sizer item") );
+
+    return false;
+}
+
+bool wxSizer::IsShown( const wxSharedPtr<wxBitmap>& bmp ) const
+{
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxSizerItem     *item = node->GetData();
+
+        if (item->GetBitmap() == bmp)
         {
             return item->IsShown();
         }
