@@ -175,7 +175,7 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
                     leftRect.top += rcClient.top - rcWindow.top;
                     leftRect.bottom -= rcWindow.bottom - rcClient.bottom;
-                    ::OffsetRect(&leftRect, -rcWindow.left, -rcWindow.top);
+                    ::OffsetRect(&leftRect, -rcWindow.left + MARGIN, -rcWindow.top);
                 }
                 
                 // In LTR layout, we can skip rightRect (cancel button) calculation unless it's visible.
@@ -242,6 +242,13 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
         case WM_NCMOUSELEAVE:
             {
                 m_mouseInCancelButton = false;
+
+                if ( !IsCancelButtonVisible() )
+                {
+                    // Notice that this message is also sent when ToggleCancelButtonVisibility()
+                    // is called and calling RedrawWindow() below would be redundant then.
+                    break;
+                }
             }
             wxFALLTHROUGH;
 
@@ -279,7 +286,7 @@ void wxSearchCtrl::DrawButtons(int width)
     const double xWidth = 80.;
     const double radius = xWidth / 4. + 5;
     const double scale  = 0.6 * (width / xWidth);
-    const double shift  = (width / 4.) - 1;
+    const double shift  = (width / 5.);
 
     const wxColour bg = GetBackgroundColour();
     const wxColour fg = GetForegroundColour().ChangeLightness(130);
@@ -291,11 +298,10 @@ void wxSearchCtrl::DrawButtons(int width)
         wxDCClipper clip(gdc, m_searchButtonRect);
 
         gdc.SetDeviceOrigin(m_searchButtonRect.x + shift, shift);
+        gdc.SetUserScale(scale, scale);
 
         gdc.SetBackground(bg);
         gdc.Clear();
-
-        gdc.SetUserScale(scale, scale);
 
         gdc.SetPen(wxPen(fg, 8));
         gdc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -309,25 +315,21 @@ void wxSearchCtrl::DrawButtons(int width)
         wxGCDC gdc(winDC);
         wxDCClipper clip(gdc, m_cancelButtonRect);
 
-        // _shift_ value is calculated to work well with the calculated _scale_
-        // above, but since we are applying an altered value of the _scale_ below,
-        // a little adjustment to the _shift_ value seems to be necessary for better
-        // positioning of the cancel button.
-        const double adj = GetLayoutDirection() == wxLayout_LeftToRight ? 1 : 2;
-        gdc.SetDeviceOrigin(m_cancelButtonRect.x + shift + adj, shift + adj);
+        gdc.SetDeviceOrigin(m_cancelButtonRect.x + shift, shift);
+        gdc.SetUserScale(scale, scale);
 
         const wxColour& highlightColour = m_mouseInCancelButton ?
             wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) : bg;
         gdc.SetBackground(highlightColour);
         gdc.Clear();
 
-        gdc.SetUserScale(0.75 * scale, 0.75 * scale);
-
-        gdc.SetPen(wxPen(fg, 10));
+        gdc.SetPen(wxPen(fg, 8));
         gdc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        gdc.DrawLine(0, 0, xWidth, xWidth);
-        gdc.DrawLine(0, xWidth, xWidth, 0);
+        const double s = 2*shift;
+        const double w = xWidth - s;
+        gdc.DrawLine(s, s, w, w);
+        gdc.DrawLine(s, w, w, s);
     }
 }
 
