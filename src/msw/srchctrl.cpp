@@ -281,6 +281,9 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
 void wxSearchCtrl::DrawButtons(int width)
 {
+    static const int SEARCH_BITMAP_LIGHTNESS = 130; // slightly lighter
+    static const int CANCEL_BITMAP_LIGHTNESS = 140; // a bit more lighter
+
     // For better results, the drawing is made with a larger dimension
     // (here we use 80) with an appropriate scale applied.
     const double xWidth = 80.;
@@ -289,7 +292,7 @@ void wxSearchCtrl::DrawButtons(int width)
     const double shift  = (width / 5.);
 
     const wxColour bg = GetBackgroundColour();
-    const wxColour fg = GetForegroundColour().ChangeLightness(130);
+    const wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
 
     wxWindowDC winDC(this);
 
@@ -318,12 +321,18 @@ void wxSearchCtrl::DrawButtons(int width)
         gdc.SetDeviceOrigin(m_cancelButtonRect.x + shift, shift);
         gdc.SetUserScale(scale, scale);
 
-        const wxColour& highlightColour = m_mouseInCancelButton ?
-            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) : bg;
-        gdc.SetBackground(highlightColour);
+        gdc.SetBackground(bg);
         gdc.Clear();
 
-        gdc.SetPen(wxPen(fg, 8));
+        const wxColour col1 = m_mouseInCancelButton ? fg.ChangeLightness(CANCEL_BITMAP_LIGHTNESS) : bg;
+        const wxColour col2 = m_mouseInCancelButton ? bg : fg;
+
+        gdc.SetPen(wxPen(col1));
+        gdc.SetBrush(wxBrush(col1));
+
+        gdc.DrawCircle(xWidth/2., xWidth/2., 2*radius);
+
+        gdc.SetPen(wxPen(col2, 8));
         gdc.SetBrush(*wxTRANSPARENT_BRUSH);
 
         const double s = 2*shift;
