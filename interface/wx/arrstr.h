@@ -486,8 +486,8 @@ int wxCmpNatural(const wxString& s1, const wxString& s2);
 /**
     This is wxWidgets' own implementation of the natural sort comparison function.
 
-    Requires wxRegEx, when it is not available just returns the result
-    of @c s1.compare(s2).
+    Requires wxRegEx, if it is unavailable numbers within strings are not
+    recognised and only case-insensitive collation is performed.
 
     @see wxCmpNatural()
 

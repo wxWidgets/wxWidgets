@@ -27,8 +27,9 @@
 #include <functional>
 #include "wx/afterstd.h"
 
+#include "wx/wxcrt.h"
+
 #if wxUSE_REGEX
-    #include "wx/wxcrt.h"
     #include "wx/regex.h"
 #endif // #if wxUSE_REGEX
 
@@ -896,7 +897,7 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 
 int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 {
-    return s1.compare(s2);
+    return wxStrcoll_String(s1.Lower(), s2.Lower());
 }
 
 #endif // #if wxUSE_REGEX
