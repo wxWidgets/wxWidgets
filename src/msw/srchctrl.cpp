@@ -326,12 +326,12 @@ void wxSearchCtrl::DrawButtons(int width)
         gdc.SetPen(wxPen(col1));
         gdc.SetBrush(wxBrush(col1));
 
-        gdc.DrawCircle(xWidth/2., xWidth/2., 2*radius);
+        gdc.DrawCircle(xWidth/2., xWidth/2., 1.75*radius);
 
         gdc.SetPen(wxPen(col2, 8));
         gdc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        const double s = 2*shift;
+        const double s = 25.;
         const double w = xWidth - s;
         gdc.DrawLine(s, s, w, w);
         gdc.DrawLine(s, w, w, s);
