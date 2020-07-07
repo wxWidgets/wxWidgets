@@ -20,18 +20,14 @@
 #endif
 
 #include "wx/arrstr.h"
+#include "wx/regex.h"
 #include "wx/scopedarray.h"
+#include "wx/wxcrt.h"
 
 #include "wx/beforestd.h"
 #include <algorithm>
 #include <functional>
 #include "wx/afterstd.h"
-
-#include "wx/wxcrt.h"
-
-#if wxUSE_REGEX
-    #include "wx/regex.h"
-#endif // #if wxUSE_REGEX
 
 #if defined( __WINDOWS__ )
     #include <shlwapi.h>
