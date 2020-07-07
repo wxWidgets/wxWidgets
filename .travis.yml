@@ -67,7 +67,7 @@ matrix:
           name: wxMotif Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch --without-opengl" wxSKIP_SAMPLES=1
           name: wxQt Ubuntu 18.04
         - os: linux
           arch: arm64
