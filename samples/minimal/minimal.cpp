@@ -140,6 +140,68 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
+class MyScrolled : public wxScrolledWindow
+{
+public:
+    MyScrolled() : wxScrolledWindow() {}
+
+    MyScrolled(wxWindow* parent,
+        wxWindowID winid = wxID_ANY,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxScrolledWindowStyle,
+        const wxString& name = wxPanelNameStr) :
+        wxScrolledWindow(parent, winid, pos, size, style, name)
+    {}
+
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE
+    {
+        // there can be something to paint only if a sizer was set
+        if ( !GetSizer() )
+        {
+            return;
+        }
+
+        // loop all sizer items and paint the bitmaps
+        const wxSizerItemList& kids = GetSizer()->GetChildren();
+        for ( wxSizerItemList::const_iterator k = kids.begin(); k != kids.end(); ++k )
+        {
+            const wxSizerItem* item = *k;
+            const wxSize& itemSize = item->GetSize();
+            const wxSharedPtr<wxBitmap>& sharedBmp = item->GetBitmap();
+
+            // ignore items that are hidden, too small, or have invalid bitmaps
+            if ( !item->IsShown() || !itemSize.x || !itemSize.y || !sharedBmp || !sharedBmp->IsOk() )
+            {
+                continue;
+            }
+
+#if 1
+            // small optimization for bitmaps that do not need to be stretched
+            // and a test for drawing without a matrix
+            if ( sharedBmp->GetSize() == itemSize )
+            {
+                dc.DrawBitmap(*sharedBmp, item->GetPosition());
+            }
+
+            // paint other [possibly stretched] bitmaps
+            else
+#endif
+            {
+                const wxPoint& itemPos = item->GetPosition();
+                wxAffineMatrix2D mat;
+                mat.Translate(itemPos.x, itemPos.y);
+                mat.Scale((wxDouble)itemSize.GetWidth() / sharedBmp->GetWidth(),
+                          (wxDouble)itemSize.GetHeight() / sharedBmp->GetHeight());
+                dc.SetTransformMatrix(mat);
+                dc.DrawBitmap(*sharedBmp, 0, 0);
+                dc.ResetTransformMatrix();
+            }
+        }
+    }
+
+};
+
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title)
@@ -178,6 +240,31 @@ MyFrame::MyFrame(const wxString& title)
     CreateStatusBar(2);
     SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
+
+
+
+    wxInitAllImageHandlers();
+    wxSharedPtr<wxBitmap> horse(new wxBitmap("../image/horse.png", wxBITMAP_TYPE_PNG));
+    wxSharedPtr<wxBitmap> toucan(new wxBitmap("../image/toucan.png", wxBITMAP_TYPE_PNG));
+
+    wxScrolledWindow* sw = new MyScrolled(this);
+    sw->SetScrollRate(10, 10);
+
+    wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
+
+    // Proportion = 1, Shaped
+    bs->Add(horse, 1, wxSHAPED);
+    bs->Add(new wxButton(sw, -1, "prop=1, wxSHAPED"), 1, wxSHAPED);
+
+    // Proportion = 0, no flag
+    bs->Add(toucan);
+    bs->Add(new wxButton(sw, -1, "no flag"));
+
+    // Proportion = 1, Expand
+    bs->Add(horse, 1, wxEXPAND);
+    bs->Add(new wxButton(sw, -1, "prop=1, wxEXPAND"), 1, wxEXPAND);
+
+    sw->SetSizer(bs);
 }
 
 
