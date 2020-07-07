@@ -30,7 +30,6 @@
 #if wxUSE_REGEX
     #include "wx/wxcrt.h"
     #include "wx/regex.h"
-    #include "wx/utils.h"
 #endif // #if wxUSE_REGEX
 
 #if defined( __WINDOWS__ )
@@ -764,14 +763,15 @@ struct wxStringFragment
 wxStringFragment GetFragment(wxString& text)
 {
     static const wxRegEx reSpaceOrPunct(wxS("^([[:space:]]|[[:punct:]])+"));
-    static const wxRegEx reDigit(wxS("^[[:digit:]]+"));
+    // Limit the length to make sure the value will fit into a wxUint64
+    static const wxRegEx reDigit(wxS("^[[:digit:]]{1,19}"));
     static const wxRegEx reLetterOrSymbol("^[^[:space:]|[:punct:]|[:digit:]]+");
+
+    if ( text.empty() )
+        return wxStringFragment();
 
     wxStringFragment fragment;
     size_t           length = 0;
-
-    if ( text.empty() )
-        return fragment;
 
     // In attempt to minimize the number of wxRegEx.Matches() calls,
     // try to do them from the most expected to the least expected
@@ -789,12 +789,6 @@ wxStringFragment GetFragment(wxString& text)
         if ( reDigit.GetMatch(NULL, &length) )
         {
             fragment.type = wxStringFragment::Digit;
-
-            // The number may be too big to fit into a wxUint64,
-            // so take at most its first 19 digits, the rest of
-            // the number will be processed as the next string fragment.
-            // Not perfect, but I could not think of a better simple solution.
-            length = wxMin(length, 19);
             fragment.text = text.Left(length);
             fragment.text.ToULongLong(&fragment.value);
         }
@@ -814,60 +808,47 @@ wxStringFragment GetFragment(wxString& text)
 
 int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& rhs)
 {
-    int result = 1;
-
     switch ( lhs.type )
     {
         case wxStringFragment::Empty:
             switch ( rhs.type )
             {
                 case wxStringFragment::Empty:
-                    result = 0;
-                    break;
+                    return 0;
                 case wxStringFragment::SpaceOrPunct:
                 case wxStringFragment::Digit:
                 case wxStringFragment::LetterOrSymbol:
-                    result = -1;
-                    break;
+                    return -1;
             }
-            break;
 
         case wxStringFragment::SpaceOrPunct:
             switch ( rhs.type )
             {
                 case wxStringFragment::Empty:
-                    result = 1;
-                    break;
+                    return 1;
                 case wxStringFragment::SpaceOrPunct:
-                    result = wxStrcoll_String(lhs.text, rhs.text);
-                    break;
+                    return wxStrcoll_String(lhs.text, rhs.text);
                 case wxStringFragment::Digit:
                 case wxStringFragment::LetterOrSymbol:
-                    result = -1;
-                    break;
+                    return -1;
             }
-            break;
 
         case wxStringFragment::Digit:
             switch ( rhs.type )
             {
                 case wxStringFragment::Empty:
                 case wxStringFragment::SpaceOrPunct:
-                    result = 1;
-                    break;
+                    return 1;
                 case wxStringFragment::Digit:
                     if ( lhs.value >  rhs.value )
-                        result = 1;
+                        return 1;
                     else if ( lhs.value <  rhs.value )
-                        result = -1;
+                        return -1;
                     else
-                        result = 0;
-                    break;
+                        return 0;
                 case wxStringFragment::LetterOrSymbol:
-                    result = -1;
-                    break;
+                    return -1;
             }
-            break;
 
         case wxStringFragment::LetterOrSymbol:
             switch ( rhs.type )
@@ -875,16 +856,15 @@ int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& 
                 case wxStringFragment::Empty:
                 case wxStringFragment::SpaceOrPunct:
                 case wxStringFragment::Digit:
-                    result = 1;
-                    break;
+                    return 1;
                 case wxStringFragment::LetterOrSymbol:
-                    result = wxStrcoll_String(lhs.text.Lower(), rhs.text.Lower());
-                    break;
+                    return wxStrcoll_String(lhs.text.Lower(), rhs.text.Lower());
             }
-            break;
     }
 
-    return result;
+    // all possible cases should be covered by the switch above
+    // but return also from here to prevent the compiler warning
+    return 1;
 }
 
 } // unnamed namespace
@@ -940,9 +920,9 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 // use the generic version.
 inline int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
-    #if defined( __WINDOWS__ )
-        return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
-    #else
-        return wxCmpNaturalGeneric(s1, s2);
-    #endif // #if defined( __WINDOWS__ )
+#if defined( __WINDOWS__ )
+    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
+#else
+    return wxCmpNaturalGeneric(s1, s2);
+#endif // #if defined( __WINDOWS__ )
 }
