@@ -1303,6 +1303,8 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
     {
         SetToolTip(tooltipButton->base->help_string);
     }
+#else
+    wxUnusedVar(tooltipButton);
 #endif
 
     if(new_hovered != m_hovered_button || (m_hovered_button != NULL &&

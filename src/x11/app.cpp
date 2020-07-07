@@ -721,7 +721,15 @@ PangoContext* wxApp::GetPangoContext()
         Display *dpy = wxGlobalDisplay();
         int xscreen = DefaultScreen(dpy);
 
+        // Calling pango_xft_get_context() is exactly the same as doing
+        // pango_font_map_create_context(pango_xft_get_font_map(dpy, xscreen))
+        // so continue to use it even if it's deprecated to not bother with
+        // checking for Pango 1.2 in configure and just disable the warning.
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
         s_pangoContext = pango_xft_get_context(dpy, xscreen);
+
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
 
         if (!PANGO_IS_CONTEXT(s_pangoContext))
         {

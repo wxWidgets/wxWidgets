@@ -3,9 +3,12 @@
 # It is used automatically for the repositories on Github if it's found in the
 # root directory of the project.
 language: cpp
-sudo: required
 
-matrix:
+# Specify the default platform.
+os: linux
+dist: xenial
+
+jobs:
     include:
         - dist: trusty
           compiler: gcc
@@ -21,7 +24,7 @@ matrix:
           name: wxGTK 2 UTF-8 Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11 LDFLAGS=-Wl,--no-as-needed" wxUSE_XVFB=1
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl --disable-webview" wxMAKEFILE_CXXFLAGS=-std=c++11 wxMAKEFILE_LDFLAGS=-Wl,--no-as-needed wxUSE_XVFB=1
           name: wxGTK 3 STL Ubuntu 18.04
         - dist: bionic
           compiler: clang
@@ -47,7 +50,7 @@ matrix:
           name: wxOSX Xcode 11.3
         - os: osx
           osx_image: xcode11.4
-          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0 --with-osx_iphone --with-macosx-version-min=10.0 --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path) --enable-stl --disable-sys-libs" wxSKIP_GUI=1 wxSKIP_TESTING=1 wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--enable-monolithic --with-cxx=17 --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0 --with-osx_iphone --with-macosx-version-min=10.0 --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path) --enable-stl --disable-sys-libs" wxALLOW_WARNINGS=1 wxSKIP_GUI=1 wxSKIP_TESTING=1 wxSKIP_SAMPLES=1
           name: wxOSX iOS Xcode 11.4
         - os: osx
           osx_image: xcode11.4
@@ -59,7 +62,7 @@ matrix:
           name: wxX11 Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1 wxALLOW_WARNINGS=1
           name: wxDFB Ubuntu 18.04
         - dist: bionic
           compiler: gcc
@@ -67,7 +70,7 @@ matrix:
           name: wxMotif Ubuntu 18.04
         - dist: bionic
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch --without-opengl" wxSKIP_SAMPLES=1
           name: wxQt Ubuntu 18.04
         - os: linux
           arch: arm64
@@ -101,6 +104,7 @@ branches:
 
 notifications:
     email:
+        if: repo = wxWidgets/wxWidgets
         recipients:
             - vadim@wxwidgets.org
         on_success: change
@@ -108,4 +112,4 @@ notifications:
 
 before_install: ./build/tools/before_install.sh
 
-script: bash build/tools/travis-ci.sh
+script: ./build/tools/travis-ci.sh

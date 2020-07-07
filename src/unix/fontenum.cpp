@@ -62,6 +62,10 @@ wxCompareFamilies (const void *a, const void *b)
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+    // This parameter may be unused when pango_font_family_is_monospace() is
+    // not available, suppress the (unavoidable) warning in this case.
+    wxUnusedVar(fixedWidthOnly);
+
     if ( encoding != wxFONTENCODING_SYSTEM && encoding != wxFONTENCODING_UTF8 )
     {
         // Pango supports only UTF-8 encoding (and system means any, so we
@@ -278,7 +282,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 #else
     wxString pattern;
     pattern.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
-                   family.empty() ? wxT("*") : family.c_str());
+                   family.empty() ? wxString("*") : family);
 
     // get the list of all fonts
     int nFonts;

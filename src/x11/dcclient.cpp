@@ -1965,6 +1965,10 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         }
     }
 
+    wxUnusedVar(req_dash);
+    wxUnusedVar(req_nb_dash);
+    #warning "TODO: support for dashed lines in wxX11"
+
     int capStyle = CapRound;
     switch (m_pen.GetCap())
     {

@@ -171,7 +171,7 @@ void wxFontRefData::Init(double pointSize,
                          const wxString& faceName,
                          wxFontEncoding encoding)
 {
-    if (family == wxDEFAULT)
+    if (family == wxFONTFAMILY_DEFAULT)
         m_family = wxFONTFAMILY_SWISS;
     else
         m_family = family;
