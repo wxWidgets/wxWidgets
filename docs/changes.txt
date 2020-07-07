@@ -600,6 +600,9 @@ wxGTK:
 - Ensure that scrollbar GtkRange page increment is set to a 
   positive value (Paul Cornett).
 
+wxOSX:
+
+- Fix wxMediaCtrl::Seek() for sub-second resolution (Scott Talbert).
 
 
 3.0.5 (released 2020-04-27)
