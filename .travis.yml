@@ -108,4 +108,4 @@ notifications:
 
 before_install: ./build/tools/before_install.sh
 
-script: bash build/tools/travis-ci.sh
+script: ./build/tools/travis-ci.sh

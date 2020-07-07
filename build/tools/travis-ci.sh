@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This script is used by Travis CI to configure, build and test wxWidgets
 
