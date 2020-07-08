@@ -411,7 +411,11 @@ wx_gtk_spin_input(GtkSpinButton* spin, gdouble* val, wxSpinCtrl* win)
 static gint
 wx_gtk_spin_output(GtkSpinButton* spin, wxSpinCtrl* win)
 {
-    const gint val = gtk_spin_button_get_value_as_int(spin);
+    gint val = gtk_spin_button_get_value_as_int(spin);
+    long max = win->GetMax();
+    win->SetRange(0, (int)max);
+    if(val < 0)
+        val = 0;
 
     gtk_entry_set_text
     (
