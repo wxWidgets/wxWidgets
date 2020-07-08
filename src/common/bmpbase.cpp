@@ -234,6 +234,8 @@ bool wxMaskBase::Create(const wxBitmap& bitmap)
 // ----------------------------------------------------------------------------
 // wxSizer support for wxBitmap
 // ----------------------------------------------------------------------------
+#include "wx/sizer.h"
+#include "wx/sharedptr.h"
 
 // define this here to avoid including bitmap.h in sizer.h
 wxBmpSpacer::wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp) : wxSizerSpacer(bmp->GetSize()), m_bmp(new wxSharedPtr<wxBitmap>(bmp))
