@@ -198,7 +198,7 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                     ::OffsetRect(&rightRect, rcClient.right + bitmapWidth - rcWindow.right, 0);
                     rightRect.top += rcClient.top - rcWindow.top;
                     rightRect.bottom -= rcWindow.bottom - rcClient.bottom;
-                    ::OffsetRect(&rightRect, -rcWindow.left, -rcWindow.top);
+                    ::OffsetRect(&rightRect, -rcWindow.left - MARGIN, -rcWindow.top);
                 }
 
                 // copy results
