@@ -1151,6 +1151,7 @@ public:
     virtual bool Detach( wxWindow *window ) wxOVERRIDE;
     virtual bool Detach( wxSizer *sizer ) wxOVERRIDE { return wxBoxSizer::Detach(sizer); }
     virtual bool Detach( int index ) wxOVERRIDE { return wxBoxSizer::Detach(index); }
+    virtual bool Detach( const wxSharedPtr<wxBitmap>& bmp ) wxOVERRIDE { return wxBoxSizer::Detach(bmp); }
 
 protected:
     wxStaticBox   *m_staticBox;
