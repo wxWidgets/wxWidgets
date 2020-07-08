@@ -3823,11 +3823,13 @@ void wxDataViewColumn::SetWidth(int width)
                 break;
 
         case wxCOL_WIDTH_DEFAULT:
-            width = wxDVC_DEFAULT_WIDTH;
-            wxFALLTHROUGH;
+            [m_NativeDataPtr->GetNativeColumnPtr() setWidth:wxDVC_DEFAULT_WIDTH];
+            break;
 
         default:
             [m_NativeDataPtr->GetNativeColumnPtr() setWidth:width];
+            [m_NativeDataPtr->GetNativeColumnPtr() setMinWidth:width];
+            [m_NativeDataPtr->GetNativeColumnPtr() setMaxWidth:width];
             break;
     }
 }
