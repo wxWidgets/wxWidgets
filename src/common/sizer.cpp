@@ -120,6 +120,14 @@ float wxSizerFlags::DoGetDefaultBorderInPx()
 #endif // wxNEEDS_BORDER_IN_PX
 
 // ----------------------------------------------------------------------------
+// wxBmpSpacer
+// ----------------------------------------------------------------------------
+
+// define this here to avoid including bitmap.h in sizer.h
+wxBmpSpacer::wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp) : wxSizerSpacer(bmp->GetSize()), m_bmp(bmp)
+{}
+
+// ----------------------------------------------------------------------------
 // wxSizerItem
 // ----------------------------------------------------------------------------
 

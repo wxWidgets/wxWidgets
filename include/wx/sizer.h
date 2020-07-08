@@ -14,6 +14,7 @@
 #include "wx/defs.h"
 
 #include "wx/window.h"
+#include "wx/sharedptr.h"
 
 //---------------------------------------------------------------------------
 // classes
@@ -268,7 +269,7 @@ private:
 class WXDLLIMPEXP_CORE wxBmpSpacer : public wxSizerSpacer
 {
 public:
-    wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp) : wxSizerSpacer(bmp->GetSize()), m_bmp(bmp) { }
+    wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp);
 
     const wxSharedPtr<wxBitmap>& GetBitmap() const { return m_bmp; }
 
