@@ -817,6 +817,7 @@ int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& 
                 case wxStringFragment::LetterOrSymbol:
                     return -1;
             }
+            break;
 
         case wxStringFragment::SpaceOrPunct:
             switch ( rhs.type )
@@ -829,6 +830,7 @@ int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& 
                 case wxStringFragment::LetterOrSymbol:
                     return -1;
             }
+            break;
 
         case wxStringFragment::Digit:
             switch ( rhs.type )
@@ -846,6 +848,7 @@ int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& 
                 case wxStringFragment::LetterOrSymbol:
                     return -1;
             }
+            break;
 
         case wxStringFragment::LetterOrSymbol:
             switch ( rhs.type )
@@ -857,6 +860,7 @@ int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& 
                 case wxStringFragment::LetterOrSymbol:
                     return wxStrcoll_String(lhs.text.Lower(), rhs.text.Lower());
             }
+            break;
     }
 
     // all possible cases should be covered by the switch above
