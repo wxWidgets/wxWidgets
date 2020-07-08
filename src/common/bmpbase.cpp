@@ -229,3 +229,24 @@ bool wxMaskBase::Create(const wxBitmap& bitmap)
 
     return InitFromMonoBitmap(bitmap);
 }
+
+
+// ----------------------------------------------------------------------------
+// wxSizer support for wxBitmap
+// ----------------------------------------------------------------------------
+
+// define this here to avoid including bitmap.h in sizer.h
+wxBmpSpacer::wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp) : wxSizerSpacer(bmp->GetSize()), m_bmp(new wxSharedPtr<wxBitmap>(bmp))
+{}
+
+wxBmpSpacer::~wxBmpSpacer()
+{
+    delete m_bmp;
+}
+
+const wxSharedPtr<wxBitmap>& wxSizerItem::GetDummyBmpSharedPtr() const
+{
+    static wxSharedPtr<wxBitmap> dummy;
+
+    return dummy;
+}

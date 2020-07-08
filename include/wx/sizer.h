@@ -270,11 +270,12 @@ class WXDLLIMPEXP_CORE wxBmpSpacer : public wxSizerSpacer
 {
 public:
     wxBmpSpacer(const wxSharedPtr<wxBitmap>& bmp);
+    ~wxBmpSpacer();
 
-    const wxSharedPtr<wxBitmap>& GetBitmap() const { return m_bmp; }
+    const wxSharedPtr<wxBitmap>& GetBitmap() const { return *m_bmp; }
 
 private:
-    wxSharedPtr<wxBitmap> m_bmp;
+    wxSharedPtr<wxBitmap>* m_bmp;
 };
 
 // ----------------------------------------------------------------------------
@@ -423,8 +424,7 @@ public:
             return m_bmpSpacer->GetBitmap();
         else
         {
-            static wxSharedPtr<wxBitmap> dummy;
-            return dummy;
+            return GetDummyBmpSharedPtr();
         }
     }
 
@@ -542,6 +542,8 @@ protected:
     wxObject    *m_userData;
 
 private:
+    const wxSharedPtr<wxBitmap>& GetDummyBmpSharedPtr() const;
+
     wxDECLARE_CLASS(wxSizerItem);
     wxDECLARE_NO_COPY_CLASS(wxSizerItem);
 };
