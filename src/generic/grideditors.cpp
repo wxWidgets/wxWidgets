@@ -1580,7 +1580,12 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     wxGridCellEditorEvtHandler* evtHandler = NULL;
     if (m_control)
+    {
+        // These event handlers are needed to properly dismiss the editor when the popup is closed
+        m_control->Bind(wxEVT_COMBOBOX_DROPDOWN, &wxGridCellChoiceEditor::onComboDropDown, this);
+        m_control->Bind(wxEVT_COMBOBOX_CLOSEUP, &wxGridCellChoiceEditor::onComboCloseUp, this);
         evtHandler = wxDynamicCast(m_control->GetEventHandler(), wxGridCellEditorEvtHandler);
+    }
 
     // Don't immediately end if we get a kill focus event within BeginEdit
     if (evtHandler)
@@ -1677,6 +1682,35 @@ void wxGridCellChoiceEditor::SetParameters(const wxString& params)
 wxString wxGridCellChoiceEditor::GetValue() const
 {
   return Combo()->GetValue();
+}
+
+void wxGridCellChoiceEditor::onComboDropDown(wxCommandEvent& WXUNUSED(evt))
+{
+    wxGridCellEditorEvtHandler* evtHandler = wxDynamicCast(m_control->GetEventHandler(),
+                                                           wxGridCellEditorEvtHandler);
+
+    if ( !evtHandler )
+        return;
+
+    // Once the combobox is dropped, reset the flag to allow the focus-loss handler
+    // to function and close the editor.
+    evtHandler->SetInSetFocus(false);
+}
+
+void wxGridCellChoiceEditor::onComboCloseUp(wxCommandEvent& WXUNUSED(evt))
+{
+    wxGridCellEditorEvtHandler* evtHandler = wxDynamicCast(m_control->GetEventHandler(),
+                                                           wxGridCellEditorEvtHandler);
+
+    if ( !evtHandler )
+        return;
+
+    // Forward the combobox close up event to the cell event handler as a focus kill event
+    // so that the grid editor is dismissed when the combox closes, otherwise it leaves the
+    // dropdown arrow visible in the cell.
+    wxFocusEvent event(wxEVT_KILL_FOCUS, m_control->GetId());
+    event.SetEventObject(m_control);
+    evtHandler->ProcessEvent(event);
 }
 
 #endif // wxUSE_COMBOBOX

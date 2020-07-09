@@ -335,6 +335,9 @@ public:
 protected:
     wxComboBox *Combo() const { return (wxComboBox *)m_control; }
 
+    void onComboCloseUp(wxCommandEvent& evt);
+    void onComboDropDown(wxCommandEvent& evt);
+
     wxString        m_value;
     wxArrayString   m_choices;
     bool            m_allowOthers;
