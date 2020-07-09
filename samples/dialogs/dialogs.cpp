@@ -194,6 +194,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
     EVT_MENU(DIALOGS_FILE_OPEN2,                    MyFrame::FileOpen2)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
+    EVT_MENU(DIALOGS_FILES_OPEN_WINDOW_MODAL,       MyFrame::FilesOpenWindowModal)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
 #endif // wxUSE_FILEDLG
 
@@ -479,6 +480,7 @@ bool MyApp::OnInit()
     filedlg_menu->Append(DIALOGS_FILE_OPEN,  "&Open file\tCtrl-O");
     filedlg_menu->Append(DIALOGS_FILE_OPEN2,  "&Second open file\tCtrl-2");
     filedlg_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tShift-Ctrl-O");
+    filedlg_menu->Append(DIALOGS_FILES_OPEN_WINDOW_MODAL, "Window Modal Open files");
     filedlg_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
 
 #if USE_FILEDLG_GENERIC
@@ -1698,6 +1700,63 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
         dialog2.ShowModal();
     }
 }
+
+void MyFrame::FilesOpenWindowModal(wxCommandEvent& WXUNUSED(event) )
+{
+    wxString wildcards =
+#ifdef __WXMOTIF__
+                    "C++ files (*.cpp)|*.cpp";
+#else
+                    wxString::Format
+                    (
+                        "All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h",
+                        wxFileSelectorDefaultWildcardStr,
+                        wxFileSelectorDefaultWildcardStr
+                    );
+#endif
+    wxFileDialog* dialog = new wxFileDialog(this, "Testing open multiple file dialog",
+                        wxEmptyString, wxEmptyString, wildcards,
+                        wxFD_OPEN|wxFD_MULTIPLE);
+
+    dialog->Bind(wxEVT_WINDOW_MODAL_DIALOG_CLOSED,
+                 &MyFrame::FilesOpenWindowModalClosed, this);
+
+    dialog->ShowWindowModal();
+}
+
+void MyFrame::FilesOpenWindowModalClosed(wxWindowModalDialogEvent& event)
+{
+    wxFileDialog* dialog = dynamic_cast<wxFileDialog*>(event.GetDialog());
+    if ( dialog->GetReturnCode() == wxID_OK)
+    {
+        wxArrayString paths, filenames;
+
+        dialog->GetPaths(paths);
+        dialog->GetFilenames(filenames);
+
+        wxString msg, s;
+        size_t count = paths.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            s.Printf("File %d: %s (%s)\n",
+                     (int)n, paths[n], filenames[n]);
+
+            msg += s;
+        }
+        s.Printf("Filter index: %d", dialog->GetFilterIndex());
+        msg += s;
+
+        wxMessageDialog dialog2(this, msg, "Selected files");
+        dialog2.ShowModal();
+    }
+    else
+    {
+        wxLogError("Unexpected window modal wxFileDialog return code!");
+    }
+    delete dialog;
+}
+
+
 
 void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {

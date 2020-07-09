@@ -422,6 +422,8 @@ public:
     void FileOpen(wxCommandEvent& event);
     void FileOpen2(wxCommandEvent& event);
     void FilesOpen(wxCommandEvent& event);
+    void FilesOpenWindowModal(wxCommandEvent& event);
+    void FilesOpenWindowModalClosed(wxWindowModalDialogEvent& event);
     void FileSave(wxCommandEvent& event);
 #endif // wxUSE_FILEDLG
 
@@ -596,6 +598,7 @@ enum
     DIALOGS_FILE_OPEN,
     DIALOGS_FILE_OPEN2,
     DIALOGS_FILES_OPEN,
+    DIALOGS_FILES_OPEN_WINDOW_MODAL,
     DIALOGS_FILE_SAVE,
     DIALOGS_FILE_OPEN_GENERIC,
     DIALOGS_FILES_OPEN_GENERIC,
