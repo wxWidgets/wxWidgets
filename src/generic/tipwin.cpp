@@ -136,7 +136,9 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     // set size, position and show it
     m_view = new wxTipWindowView(this);
     m_view->Adjust(text, maxLength);
+#if !wxUSE_POPUPWIN
     m_view->SetFocus();
+#endif
 
     int x, y;
     wxGetMousePosition(&x, &y);
