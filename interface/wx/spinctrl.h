@@ -149,11 +149,15 @@ public:
         the numbers in the specified base when they are changed using the spin
         control arrows.
 
+        @note Under wxMSW setting a base to 16 is allowed only if current range
+        does not include negative values.
+
         @param base
             Numeric base, currently only 10 and 16 are supported.
         @return
             @true if the base was successfully changed or @false if it failed,
-            usually meaning that either the base is not 10 or 16.
+            usually meaning that either the base is not 10 or 16 or that
+            the base is not supported for values in the current range.
 
         @since 2.9.5
      */
@@ -166,6 +170,9 @@ public:
         it's not inside the new valid range, e.g. it will become @a minVal if
         it is less than it now. However no @c wxEVT_SPINCTRL
         event is generated, even if it the value does change.
+
+        @note Under wxMSW setting a range including negative values is silently
+        ignored if current base is set to 16.
     */
     void SetRange(int minVal, int maxVal);
 
