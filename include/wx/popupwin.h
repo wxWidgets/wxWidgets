@@ -133,13 +133,6 @@ public:
     wxPopupTransientWindow() { }
     wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE)
         { Create(parent, style); }
-    bool Create(wxWindow *parent, int style = wxBORDER_NONE)
-    {
-        return wxPopupTransientWindowBase::Create
-               (
-                    parent, style | wxPU_CONTAINS_CONTROLS
-               );
-    }
 
     // Implement base class pure virtuals.
     virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
