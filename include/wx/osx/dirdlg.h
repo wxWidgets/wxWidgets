@@ -61,8 +61,6 @@ private:
     // Create and initialize NSOpenPanel that we use in both ShowModal() and
     // ShowWindowModal().
     WX_NSOpenPanel OSXCreatePanel() const;
-
-    WX_NSObject m_sheetDelegate;
 #endif
 
     // Common part of all ctors.

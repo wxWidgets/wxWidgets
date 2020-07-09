@@ -94,8 +94,6 @@ protected:
     bool m_useFileTypeFilter;
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
-    WX_NSObject m_delegate;
-    WX_NSObject m_sheetDelegate;
 #endif
 
 private:
