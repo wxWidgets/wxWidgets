@@ -195,7 +195,7 @@ void wxPopupTransientWindow::Dismiss()
 void wxPopupTransientWindow::DismissOnDeactivate()
 {
     // Hide the window automatically when it loses activation.
-    Dismiss();
+    DismissAndNotify();
 
     // Activation might have gone to a different window or maybe
     // even a different application, don't let our owner continue
