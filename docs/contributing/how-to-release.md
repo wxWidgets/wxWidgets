@@ -177,7 +177,7 @@ E.g. to create documentation for `v3.0.z` release:
 ## Announcement
 
 Update https://www.wxwidgets.org:
-* Update release information (at least `version` and `released`) in `_data/relases.yml`.
+* Update release information (at least `version` and `released`) in `_data/releases.yml`.
 * Update the list of compilers used for making MSW binaries in
   `downloads/index.md` if necessary (note that there is no need to update
   anything else, the page will dynamically show the release files with the

@@ -588,7 +588,7 @@ public:
         Returns @NULL if no label is being edited.
 
         @note It is currently only implemented for wxMSW and the generic version,
-              not for the native OS X version.
+              not for the native macOS version.
     */
     wxTextCtrl* GetEditControl() const;
 
@@ -906,7 +906,7 @@ public:
     long InsertItem(wxListItem& info);
 
     /**
-        Insert an string item.
+        Insert a string item.
 
         @param index
             Index of the new item, supplied by the application
@@ -1442,7 +1442,7 @@ protected:
         control itself when this event is generated, see @ref
         overview_events_with_mouse_capture "event handling overview".
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
-        The item has been deselected.
+        The item has been deselected. GetIndex() may be -1 with virtual lists.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
         The item has been activated (ENTER or double click).
     @event{EVT_LIST_ITEM_FOCUSED(id, func)}

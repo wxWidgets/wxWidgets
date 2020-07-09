@@ -1037,7 +1037,7 @@ public:
                                 wxPGValidationInfo& validationInfo ) const;
 
     // Converts text into wxVariant value appropriate for this property.
-    // Prameters:
+    // Parameters:
     // variant - On function entry this is the old value (should not be
     //   wxNullVariant in normal cases). Translated value must be assigned
     //   back to it.

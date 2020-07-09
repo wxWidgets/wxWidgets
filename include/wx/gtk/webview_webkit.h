@@ -83,7 +83,9 @@ public:
     wxWebViewZoomType GetZoomType() const wxOVERRIDE;
     bool CanSetZoomType(wxWebViewZoomType) const wxOVERRIDE;
     virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
+    virtual float GetZoomFactor() const wxOVERRIDE;
     virtual void SetZoom(wxWebViewZoom) wxOVERRIDE;
+    virtual void SetZoomFactor(float) wxOVERRIDE;
 
     //Clipboard functions
     virtual bool CanCut() const wxOVERRIDE;

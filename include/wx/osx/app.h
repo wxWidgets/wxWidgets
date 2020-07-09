@@ -77,7 +77,7 @@ public:
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 
     // adding a CFType object to be released only at the end of the current event cycle (increases the
-    // refcount of the object passed), needed in case we are in the middle of an event concering an object
+    // refcount of the object passed), needed in case we are in the middle of an event concerning an object
     // we want to delete and cannot do it immediately
     // TODO change semantics to be in line with cocoa (make autrelease NOT increase the count)
     void                  MacAddToAutorelease( void* cfrefobj );

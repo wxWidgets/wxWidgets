@@ -60,10 +60,6 @@ public:
                         wxEvtHandler* evtHandler) wxOVERRIDE;
     virtual void SetSize(const wxRect& rect) wxOVERRIDE;
 
-    virtual void PaintBackground(wxDC& dc,
-                                 const wxRect& rectCell,
-                                 const wxGridCellAttr& attr) wxOVERRIDE;
-
     virtual bool IsAcceptedKey(wxKeyEvent& event) wxOVERRIDE;
     virtual void BeginEdit(int row, int col, wxGrid* grid) wxOVERRIDE;
     virtual bool EndEdit(int row, int col, const wxGrid* grid,
@@ -214,7 +210,7 @@ public:
         { return new wxGridCellFloatEditor(m_width, m_precision); }
 
     // parameters string format is "width[,precision[,format]]"
-    // format to choose beween f|e|g|E|G (f is used by default)
+    // format to choose between f|e|g|E|G (f is used by default)
     virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
 protected:
@@ -241,6 +237,11 @@ class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
     wxGridCellBoolEditor() { }
+
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) wxOVERRIDE;
+    virtual void DoActivate(int row, int col, wxGrid* grid) wxOVERRIDE;
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -279,6 +280,15 @@ protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
 
 private:
+    // These functions modify or use m_value.
+    void SetValueFromGrid(int row, int col, wxGrid* grid);
+    void SetGridFromValue(int row, int col, wxGrid* grid) const;
+
+    wxString GetStringValue() const { return GetStringValue(m_value); }
+
+    static
+    wxString GetStringValue(bool value) { return ms_stringValues[value]; }
+
     bool m_value;
 
     static wxString ms_stringValues[2];
@@ -306,10 +316,6 @@ public:
                         wxEvtHandler* evtHandler) wxOVERRIDE;
 
     virtual void SetSize(const wxRect& rect) wxOVERRIDE;
-
-    virtual void PaintBackground(wxDC& dc,
-                                 const wxRect& rectCell,
-                                 const wxGridCellAttr& attr) wxOVERRIDE;
 
     virtual void BeginEdit(int row, int col, wxGrid* grid) wxOVERRIDE;
     virtual bool EndEdit(int row, int col, const wxGrid* grid,

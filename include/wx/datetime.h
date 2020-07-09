@@ -723,7 +723,7 @@ public:
         // get the broken down date/time representation in the given timezone
         //
         // If you wish to get several time components (day, month and year),
-        // consider getting the whole Tm strcuture first and retrieving the
+        // consider getting the whole Tm structure first and retrieving the
         // value from it - this is much more efficient
     Tm GetTm(const TimeZone& tz = Local) const;
 
@@ -861,7 +861,7 @@ public:
         return m_time != dt.m_time;
     }
 
-    // arithmetics with dates (see also below for more operators)
+    // arithmetic with dates (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of the date with a time span (positive or negative)
@@ -1207,7 +1207,7 @@ public:
 
         // no dtor
 
-    // arithmetics with time spans (see also below for more operators)
+    // arithmetic with time spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of two timespans
@@ -1448,7 +1448,7 @@ public:
         // returns 7*GetWeeks() + GetDays()
     int GetTotalDays() const { return 7*m_weeks + m_days; }
 
-    // arithmetics with date spans (see also below for more operators)
+    // arithmetic with date spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return sum of two date spans
@@ -1848,7 +1848,7 @@ inline bool wxDateTime::IsEqualUpTo(const wxDateTime& dt,
 }
 
 // ----------------------------------------------------------------------------
-// wxDateTime arithmetics
+// wxDateTime arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxDateTime wxDateTime::Add(const wxTimeSpan& diff) const
@@ -1997,7 +1997,7 @@ inline int wxTimeSpan::GetWeeks() const
 }
 
 // ----------------------------------------------------------------------------
-// wxTimeSpan arithmetics
+// wxTimeSpan arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxTimeSpan wxTimeSpan::Add(const wxTimeSpan& diff) const

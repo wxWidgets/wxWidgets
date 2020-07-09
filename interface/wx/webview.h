@@ -164,7 +164,7 @@ class wxWebViewHistoryItem
 {
 public:
     /**
-        Construtor.
+        Constructor.
     */
     wxWebViewHistoryItem(const wxString& url, const wxString& title);
 
@@ -261,7 +261,7 @@ public:
     It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Trident on MSW and
-    Webkit on OS X and GTK. This allows the correct viewing of complex pages with
+    Webkit on macOS and GTK. This allows the correct viewing of complex pages with
     javascript and css.
 
     @section descriptions Backend Descriptions
@@ -324,7 +324,7 @@ public:
 
     @par wxWEBVIEW_WEBKIT (OSX)
 
-    The OS X WebKit backend uses Apple's
+    The macOS WebKit backend uses Apple's
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
     class. This backend has full support for custom schemes and virtual file
     systems.
@@ -478,7 +478,7 @@ public:
         This method can be used to retrieve the pointer to the native rendering
         engine used by this control. The return value needs to be down-casted
         to the appropriate type depending on the platform: under Windows, it's
-        a pointer to IWebBrowser2 interface, under OS X it's a WebView pointer
+        a pointer to IWebBrowser2 interface, under macOS it's a WebView pointer
         and under GTK it's a WebKitWebView.
 
         For example, you could set the WebKit options using this method:
@@ -650,21 +650,21 @@ public:
     /**
         Returns @true if the current selection can be copied.
 
-        @note This always returns @c true on the OS X WebKit backend.
+        @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanCopy() const = 0;
 
     /**
         Returns @true if the current selection can be cut.
 
-         @note This always returns @c true on the OS X WebKit backend.
+         @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanCut() const = 0;
 
     /**
         Returns @true if data can be pasted.
 
-        @note This always returns @c true on the OS X WebKit backend.
+        @note This always returns @c true on the macOS WebKit backend.
     */
     virtual bool CanPaste() const = 0;
 
@@ -864,7 +864,7 @@ public:
               are changed, since this will require a new search. To reset the
               search, for example resetting the highlights call the function
               with an empty search phrase. This always returns @c wxNOT_FOUND
-              on the OS X WebKit backend.
+              on the macOS WebKit backend.
         @since 2.9.5
     */
     virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT) = 0;
@@ -882,10 +882,19 @@ public:
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
 
     /**
-        Get the zoom factor of the page.
+        Get the zoom level of the page.
+        See GetZoomFactor() to get more precise zoom scale value other than
+        as provided by @c wxWebViewZoom.
         @return The current level of zoom.
     */
     virtual wxWebViewZoom GetZoom() const = 0;
+
+    /**
+        Get the zoom factor of the page.
+        @return The current factor of zoom.
+        @since 3.1.4
+    */
+    virtual float GetZoomFactor() const = 0;
 
     /**
         Get how the zoom factor is currently interpreted.
@@ -894,12 +903,24 @@ public:
     virtual wxWebViewZoomType GetZoomType() const = 0;
 
     /**
-        Set the zoom factor of the page.
+        Set the zoom level of the page.
+        See SetZoomFactor() for more precise scaling other than the measured
+        steps provided by @c wxWebViewZoom.
         @param zoom How much to zoom (scale) the HTML document.
     */
     virtual void SetZoom(wxWebViewZoom zoom) = 0;
 
     /**
+        Set the zoom factor of the page.
+        @param zoom How much to zoom (scale) the HTML document in arbitrary
+                    number.
+        @note zoom  scale in IE will be converted into @c wxWebViewZoom levels
+                    for @c wxWebViewZoomType of @c wxWEBVIEW_ZOOM_TYPE_TEXT.
+        @since 3.1.4
+    */
+    virtual void SetZoomFactor(float zoom) = 0;
+
+        /**
         Set how to interpret the zoom factor.
         @param zoomType How the zoom factor should be interpreted by the
                         HTML engine.

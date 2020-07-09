@@ -122,6 +122,135 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// Custom wxGrid renderer and editor for showing stars as used for rating
+// ----------------------------------------------------------------------------
+
+// Max number of stars shown by MyGridStarRenderer.
+static const int MAX_STARS = 5;
+
+// Helper function returning the number between 0 and MAX_STARS corresponding
+// to the value of the cell.
+static int GetStarValue(wxGrid& grid, int row, int col)
+{
+    unsigned long n = 0;
+    if ( !grid.GetCellValue(row, col).ToULong(&n) || n > MAX_STARS )
+        n = 0;
+
+    return static_cast<int>(n);
+}
+
+// Another helper returning the string containing the appropriate number of
+// black and white stars.
+static wxString GetStarString(int numBlackStars)
+{
+    const wxUniChar BLACK_STAR = 0x2605;
+    const wxUniChar WHITE_STAR = 0x2606;
+
+    return wxString(BLACK_STAR, numBlackStars) +
+            wxString(WHITE_STAR, MAX_STARS - numBlackStars);
+}
+
+// Renders the value of the cell, which is supposed to be a number between 1
+// and 5, as a sequence of that number of black stars followed by the number of
+// white stars needed to have 5 stars in total.
+class MyGridStarRenderer : public wxGridCellRenderer
+{
+public:
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected) wxOVERRIDE
+    {
+        wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
+
+        grid.DrawTextRectangle(dc, GetStarString(GetStarValue(grid, row, col)),
+                               rect, attr);
+    }
+
+    virtual wxSize GetBestSize(wxGrid& WXUNUSED(grid),
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int WXUNUSED(row),
+                               int WXUNUSED(col)) wxOVERRIDE
+    {
+        dc.SetFont(attr.GetFont());
+        return dc.GetTextExtent(GetStarString(MAX_STARS));
+    }
+
+    virtual wxGridCellRenderer *Clone() const wxOVERRIDE
+    {
+        return new MyGridStarRenderer();
+    }
+};
+
+// Activatable editor cycling the number of stars on each activation.
+class MyGridStarEditor : public wxGridCellActivatableEditor
+{
+public:
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) wxOVERRIDE
+    {
+        int numStars = -1;
+
+        switch ( actSource.GetOrigin() )
+        {
+            case wxGridActivationSource::Program:
+                // It isn't really possible to programmatically start editing a
+                // cell using this editor.
+                return wxGridActivationResult::DoNothing();
+
+            case wxGridActivationSource::Key:
+                switch ( actSource.GetKeyEvent().GetKeyCode() )
+                {
+                    case '0': numStars = 0; break;
+                    case '1': numStars = 1; break;
+                    case '2': numStars = 2; break;
+                    case '3': numStars = 3; break;
+                    case '4': numStars = 4; break;
+                    case '5': numStars = 5; break;
+                    case ' ':
+                        // Use space key to cycle over the values.
+                        break;
+
+                    default:
+                        return wxGridActivationResult::DoNothing();
+                }
+
+                break;
+
+            case wxGridActivationSource::Mouse:
+                // Ideally we should use the mouse event position to determine
+                // on which star the user clicked, but for now keep it simple
+                // and just cycle through the star value.
+                break;
+        }
+
+        if ( numStars == -1 )
+            numStars = (GetStarValue(*grid, row, col) + 1) % (MAX_STARS + 1);
+
+        m_value.Printf("%d", numStars);
+
+        return wxGridActivationResult::DoChange(m_value);
+    }
+
+    virtual void DoActivate(int row, int col, wxGrid* grid) wxOVERRIDE
+    {
+        grid->SetCellValue(row, col, m_value);
+    }
+
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE
+    {
+        return new MyGridStarEditor();
+    }
+
+private:
+    wxString m_value;
+};
+
+// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -517,6 +646,10 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(4, 4, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
 
+    grid->SetCellValue(4, 5, "3");
+    grid->SetCellRenderer(4, 5, new MyGridStarRenderer);
+    grid->SetCellEditor(4, 5, new MyGridStarEditor);
+
     grid->SetCellRenderer(3, 0, new wxGridCellBoolRenderer);
     grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
     grid->SetCellBackgroundColour(3, 0, wxColour(255, 127, 127));
@@ -534,7 +667,7 @@ GridFrame::GridFrame()
     grid->SetRowAttr(5, attr);
 
     grid->SetCellValue(2, 4, "a wider column");
-    grid->SetColSize(4, 3*grid->GetDefaultColLabelSize()/2);
+    grid->SetColSize(4, 3*grid->GetDefaultColSize()/2);
     grid->SetColMinimalWidth(4, grid->GetColSize(4));
 
     grid->SetCellTextColour(5, 8, *wxGREEN);
@@ -543,12 +676,14 @@ GridFrame::GridFrame()
 
     // Some numeric columns with different formatting.
     grid->SetColFormatFloat(6);
+    grid->SetReadOnly(0, 6);
     grid->SetCellValue(0, 6, "Default\nfloat format");
     grid->SetCellValue(1, 6, wxString::Format("%g", 3.1415));
     grid->SetCellValue(2, 6, wxString::Format("%g", 1415.0));
     grid->SetCellValue(3, 6, wxString::Format("%g", 12345.67890));
 
     grid->SetColFormatFloat(7, 6, 2);
+    grid->SetReadOnly(0, 7);
     grid->SetCellValue(0, 7, "Width 6\nprecision 2");
     grid->SetCellValue(1, 7, wxString::Format("%g", 3.1415));
     grid->SetCellValue(2, 7, wxString::Format("%g", 1415.0));
@@ -556,22 +691,28 @@ GridFrame::GridFrame()
 
     grid->SetColFormatCustom(8,
             wxString::Format("%s:%i,%i,%s", wxGRID_VALUE_FLOAT, -1, 4, "g"));
+    grid->SetReadOnly(0, 8);
     grid->SetCellValue(0, 8, "Compact\nformat");
     grid->SetCellValue(1, 8, "31415e-4");
     grid->SetCellValue(2, 8, "1415");
     grid->SetCellValue(3, 8, "123456789e-4");
 
     grid->SetColFormatNumber(9);
+    grid->SetReadOnly(0, 9);
     grid->SetCellValue(0, 9, "Integer\ncolumn");
     grid->SetCellValue(1, 9, "17");
     grid->SetCellValue(2, 9, "0");
+    grid->SetCellEditor(2, 9, new wxGridCellNumberEditor(0, 100));
+    grid->SetCellValue(2, 10, "<- This cell uses [0, 100] range");
     grid->SetCellValue(3, 9, "-666");
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
+    grid->SetReadOnly(0, 13);
     grid->SetCellValue(0, 13, "Localized date\ncolumn");
     grid->SetColFormatDate(13); // Localized by default.
     grid->SetCellValue(1, 13, "Today");
+    grid->SetReadOnly(0, 14);
     grid->SetCellValue(0, 14, "ISO 8601 date\ncolumn");
     grid->SetColFormatDate(14, "%Y-%m-%d"); // ISO 8601 date format.
     grid->SetCellValue(1, 14, "Tomorrow");

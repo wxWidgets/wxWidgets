@@ -80,12 +80,12 @@ locations when possible.
 
 Depending on the platform, the default location differs. On Windows, it is
 alongside the executable. On Unix, translations are expected to be in
-"$prefix/share/locale". On OS X, application bundle's @em Resources subdirectory
+"$prefix/share/locale". On macOS, application bundle's @em Resources subdirectory
 is used.
 
 In all cases, translations are searched for in subdirectories named using the
 languages codes from ISO 639. The .mo file(s) should be located either directly
-in that directory or in LC_MESSAGES subdirectory. On OS X, ".lproj" extension
+in that directory or in LC_MESSAGES subdirectory. On macOS, ".lproj" extension
 is used for the per-languages Resources subdirectories.
 
 Here's how an app would typically install the files on Unix:
@@ -94,7 +94,7 @@ Here's how an app would typically install the files on Unix:
 /usr/share/locale/de/LC_MESSAGES/myapp.mo
 /usr/share/locale/fr/LC_MESSAGES/myapp.mo
 @endcode
-And on OS X:
+And on macOS:
 @code
 MyApp.app/Contents/MacOS/MyApp
 MyApp.app/Contents/Resources/de.lproj/myapp.mo

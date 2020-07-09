@@ -14,7 +14,7 @@ to write wxWidgets applications for the [GNOME][] desktop, I will focus on the
 GTK+ port, which is generally referred to as wxGTK.
 
 wxGTK still supports the old version GTK+ 1.2, but it now defaults to the
-uptodate version GTK+ 2.X, which is the basis for the current GNOME desktop. By
+up-to-date version GTK+ 2.X, which is the basis for the current GNOME desktop. By
 way of using GTK+ 2.X and its underlying text rendering library [Pango][], wxGTK
 fully supports the Unicode character set and it can render text in any language
 and script, that is supported by Pango.
@@ -111,7 +111,7 @@ single application binary. This was possible since most of the relevant
 functionality was either located in the only required library (GTK+) or was
 implemented within wxWidgets. Recent development outside the actual GTK+ project
 has made it necessary to rethink this design and make use of other projects'
-features in order to stay uptodate with current techological trends. Therefore,
+features in order to stay up-to-date with current techological trends. Therefore,
 a system was implemented within wxWidgets that queries the system at runtime
 about various libraries and makes use of their features whenever possible, but
 falls back to a reasonable solution if not. The result is that you can create

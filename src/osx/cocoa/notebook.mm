@@ -142,7 +142,6 @@
     {
         imageSize.width *= labelSize.height/imageSize.height;
         imageSize.height *= labelSize.height/imageSize.height;
-        [m_image setScalesWhenResized:YES];
         [m_image setSize: imageSize];
     }
     labelSize.width += imageSize.width;
@@ -153,9 +152,19 @@
     if(m_image)
     {
         NSSize imageSize = [m_image size];
-        [m_image compositeToPoint:NSMakePoint(tabRect.origin.x,
-                tabRect.origin.y+imageSize.height)
-            operation:NSCompositeSourceOver];
+        NSAffineTransform* imageTransform = [NSAffineTransform transform];
+        if( [[self view] isFlipped] )
+        {
+            [imageTransform translateXBy:tabRect.origin.x yBy:tabRect.origin.y+imageSize.height];
+            [imageTransform scaleXBy:1.0 yBy:-1.0];
+            [imageTransform concat];
+        }
+        [m_image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        if( [[self view] isFlipped] )
+        {
+            [imageTransform invert];
+            [imageTransform concat];
+        }
         tabRect.size.width -= imageSize.width;
         tabRect.origin.x += imageSize.width;
     }
@@ -165,6 +174,7 @@
 {
     return m_image;
 }
+
 - (void)setImage:(NSImage*)image
 {
     [image retain];
@@ -173,6 +183,7 @@
     if(!m_image)
         return;
 }
+
 @end // implementation WXCTabViewImageItem : NSTabViewItem
 
 

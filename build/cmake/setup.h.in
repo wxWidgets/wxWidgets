@@ -469,6 +469,8 @@
 
 #cmakedefine01 wxUSE_MENUS
 
+#cmakedefine01 wxUSE_MENUBAR
+
 #cmakedefine01 wxUSE_NOTIFICATION_MESSAGE
 
 #cmakedefine01 wxUSE_PREFERENCES_EDITOR

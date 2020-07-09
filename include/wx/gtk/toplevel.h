@@ -74,6 +74,7 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
     virtual wxString GetLabel() const wxOVERRIDE            { return GetTitle(); }
 
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
 
     virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
     virtual bool CanSetTransparent() wxOVERRIDE;
@@ -124,7 +125,7 @@ public:
     };
     DecorSize m_decorSize;
 
-    // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
+    // private gtk_timeout_add result for mimicking wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;
     // timer for detecting WM with broken _NET_REQUEST_FRAME_EXTENTS handling

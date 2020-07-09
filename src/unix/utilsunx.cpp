@@ -192,9 +192,6 @@ void wxMicroSleep(unsigned long microseconds)
     #endif // Sun
 
     usleep(microseconds);
-#elif defined(HAVE_SLEEP)
-    // under BeOS sleep() takes seconds (what about other platforms, if any?)
-    sleep(microseconds * 1000000);
 #else // !sleep function
     #error "usleep() or nanosleep() function required for wxMicroSleep"
 #endif // sleep function

@@ -55,3 +55,12 @@ executables will require wxWidgets DLLs in addition to MSVC run-time DLLs, so
 you should consider adding the directory containing these DLLs to your PATH and
 either distributing them with your application or instructing your users to
 download them.
+
+Building samples with nmake
+---------------------------
+
+When using `makefile.vc` files for building wxWidgets samples using `nmake`
+from command line, you need to use `SHARED=1` and also define `COMPILER_PREFIX`
+appropriately, e.g. the full command line could be
+
+    > nmake /f makefile.vc BUILD=release SHARED=1 COMPILER_PREFIX=vc14x

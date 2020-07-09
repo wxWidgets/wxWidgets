@@ -14,7 +14,7 @@ fname = sys.argv[1] + ".plist"
 # The second argument is the key to replace
 key = sys.argv[2]
 
-# The thrid argument is the value of the key
+# The third argument is the value of the key
 val = sys.argv[3]
 
 # Handle boolean values

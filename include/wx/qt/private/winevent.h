@@ -54,7 +54,7 @@ public:
         : Widget( parent != NULL ? parent->GetHandle() : NULL )
         , wxQtSignalHandler< Handler >( handler )
     {
-        // Set immediatelly as it is used to check if wxWindow is alive
+        // Set immediately as it is used to check if wxWindow is alive
         wxWindow::QtStoreWindowPointer( this, handler );
 
         // Handle QWidget destruction signal AFTER it gets deleted

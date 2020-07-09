@@ -48,6 +48,26 @@ WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 
+class WXDLLIMPEXP_FWD_CORE wxWidgetCocoaImpl;
+
+// a class which disables sending wx keydown events useful when adding text programmatically, for wx-internal use only
+class wxWidgetCocoaNativeKeyDownSuspender
+{
+public:
+    // stops sending keydown events for text inserted into this widget
+    explicit wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
+    
+    // resumes sending keydown events
+    ~wxWidgetCocoaNativeKeyDownSuspender();
+    
+private:
+    wxWidgetCocoaImpl *m_target;
+    NSEvent* m_nsevent;
+    bool m_wxsent;
+
+    wxDECLARE_NO_COPY_CLASS(wxWidgetCocoaNativeKeyDownSuspender);
+};
+
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
 public :
@@ -148,7 +168,7 @@ public :
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     #ifdef API_AVAILABLE
         #define WX_AVAILABLE_10_10 API_AVAILABLE(macos(10.10))
     #else
@@ -164,7 +184,7 @@ public :
     WX_AVAILABLE_10_10 virtual void        TouchesEnded(NSEvent *event);
 
     #undef WX_AVAILABLE_10_10
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
@@ -203,7 +223,24 @@ public :
 
 protected:
     WXWidget m_osxView;
+    
+    // begins processing of native key down event, storing the native event for later wx event generation
+    void BeginNativeKeyDownEvent( NSEvent* event );
+    // done with the current native key down event
+    void EndNativeKeyDownEvent();
+    // allow executing text changes without triggering key down events
+
+    // is currently processing a native key down event
+    bool IsInNativeKeyDown() const;
+    // the native key event
+    NSEvent* GetLastNativeKeyDownEvent();
+    // did send the wx event for the current native key down event
+    void SetKeyDownSent();
+    // was the wx event for the current native key down event sent
+    bool WasKeyDownSent() const;
+
     NSEvent* m_lastKeyDownEvent;
+    bool m_lastKeyDownWXSent;
 #if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
 #endif
@@ -211,6 +248,8 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
+    friend class wxWidgetCocoaNativeKeyDownSuspender;
+    
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 
@@ -534,4 +573,3 @@ private:
 
 #endif
     // _WX_PRIVATE_COCOA_H_
-

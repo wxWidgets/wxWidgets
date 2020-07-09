@@ -96,7 +96,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             bool Convert(wchar_t* str) const { return Convert(str, str); }
 
             // Return equivalent(s) for given font that are used
-            // under given platform. wxPLATFORM_CURRENT means the plaform
+            // under given platform. wxPLATFORM_CURRENT means the platform
             // this binary was compiled for
             //
             // Examples:

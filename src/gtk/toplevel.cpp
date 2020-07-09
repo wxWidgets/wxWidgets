@@ -35,6 +35,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -1814,4 +1815,13 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
     return XQueryExtension(gdk_x11_get_default_xdisplay (),
                            "Composite", &opcode, &event, &error);
 #endif
+}
+
+wxVisualAttributes wxTopLevelWindowGTK::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs(GetClassDefaultAttributes());
+#ifdef __WXGTK3__
+    wxGtkStyleContext().AddWindow().Bg(attrs.colBg);
+#endif
+    return attrs;
 }

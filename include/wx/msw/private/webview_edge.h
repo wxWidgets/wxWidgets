@@ -68,7 +68,7 @@ public:
 
     static bool Initialize();
 
-    static void Uninitalize();
+    static void Uninitialize();
 
     friend class wxWebViewEdgeModule;
 };

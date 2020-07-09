@@ -2392,6 +2392,17 @@
 #   endif
 #endif /* wxUSE_RICHTEXT */
 
+#if wxUSE_RICHTOOLTIP
+#   if !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichToolTip requires wxUSE_POPUPWIN"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+#endif /* wxUSE_RICHTOOLTIP */
+
 #if wxUSE_PROPGRID
 #   if !wxUSE_VARIANT
 #       ifdef wxABORT_ON_CONFIG_ERROR

@@ -203,7 +203,7 @@ private:
 // undesired effects.
 //
 // Usage: create an instance of this class on the stack to disable the size
-// optimisation, it will be reenabled as soon as the object goes out from scope.
+// optimisation, it will be re-enabled as soon as the object goes out from scope.
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxNoOptimize

@@ -133,7 +133,7 @@ public:
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
 
-    // these functions must be overidden in the derived class to return
+    // these functions must be overridden in the derived class to return
     // orientation specific data (e.g. the width for vertically scrolling
     // derivatives in the case of GetOrientationTargetSize())
     virtual int GetOrientationTargetSize() const = 0;

@@ -74,7 +74,9 @@ public:
     virtual void Print() wxOVERRIDE;
 
     virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
+    virtual float GetZoomFactor() const wxOVERRIDE;
     virtual void SetZoom(wxWebViewZoom zoom) wxOVERRIDE;
+    virtual void SetZoomFactor(float zoom) wxOVERRIDE;
 
     //Clipboard functions
     virtual bool CanCut() const wxOVERRIDE;

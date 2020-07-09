@@ -18,8 +18,8 @@
 
 // Include unistd to ensure that NULL is defined
 #include <unistd.h>
-// Include AvailabilityMacros for DEPRECATED_ATTRIBUTE
-#include <AvailabilityMacros.h>
+// Include Availability for __AVAILABILITY_INTERNAL_DEPRECATED
+#include <Availability.h>
 
 #if __has_feature(objc_arc)
 #define WX_OSX_BRIDGE_RETAINED __bridge_retained
@@ -35,12 +35,15 @@
  * Note that Darwin CF uses extern for CF_EXPORT.  If we need this on Win32
  * or non-Darwin Mac OS we'll need to define the appropriate __declspec.
  */
+
 typedef const void *CFTypeRef;
 extern "C" {
 extern /* CF_EXPORT */
 CFTypeRef CFRetain(CFTypeRef cf);
 extern /* CF_EXPORT */
 void CFRelease(CFTypeRef cf);
+extern /* CF_EXPORT */
+CFTypeRef CFAutorelease(CFTypeRef cf);
 } // extern "C"
 
 
@@ -54,6 +57,19 @@ inline void wxCFRelease(Type *r)
 {
     if ( r != NULL )
         ::CFRelease((CFTypeRef)r);
+}
+
+/*! @function   wxCFAutorelease
+    @abstract   A CFAutorelease variant that checks for NULL before releasing.
+    @discussion The parameter is template not for type safety but to ensure the argument
+                is a raw pointer and not a ref holder of any type.
+*/
+template <class Type>
+inline Type* wxCFAutorelease(Type *r)
+{
+    if ( r != NULL )
+        return (Type*)::CFAutorelease((CFTypeRef)r);
+    return NULL;
 }
 
 /*! @function   wxCFRetain
@@ -340,6 +356,15 @@ public:
         m_ptr = NULL;
         return p;
     }
+    
+    // Autorelease the pointer, i.e. during the next cleanup it will be released
+    refType autorelease()
+    {
+        refType p = m_ptr;
+        m_ptr = NULL;
+        return wxCFAutorelease(p);
+    }
+
 
 protected:
     /*! @var m_ptr      The raw pointer.
@@ -391,7 +416,7 @@ inline wxCFWeakRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &other
                 Normally, this function is unimplemented resulting in a linker error if used.
 */
 template <class T>
-inline void CFRelease(const wxCFRef<T*> & cfref) DEPRECATED_ATTRIBUTE;
+inline void CFRelease(const wxCFRef<T*> & cfref) __AVAILABILITY_INTERNAL_DEPRECATED;
 
 /*! @function   CFRetain
     @abstract   Overloads CFRetain so that the user is warned of bad behaviour.
@@ -400,7 +425,7 @@ inline void CFRelease(const wxCFRef<T*> & cfref) DEPRECATED_ATTRIBUTE;
                 Normally, this function is unimplemented resulting in a linker error if used.
 */
 template <class T>
-inline void CFRetain(const wxCFRef<T*>& cfref) DEPRECATED_ATTRIBUTE;
+inline void CFRetain(const wxCFRef<T*>& cfref) __AVAILABILITY_INTERNAL_DEPRECATED;
 
 // Change the 0 to a 1 if you want the functions to work (no link errors)
 // Neither function will cause retain/release side-effects if implemented.

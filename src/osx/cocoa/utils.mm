@@ -350,16 +350,8 @@ void wxBell()
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    if ( WX_IS_MACOS_AVAILABLE(10, 9) )
-    {
-        [[NSRunningApplication currentApplication] activateWithOptions:
-         (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
-    }
-    else
-    {
-        [self deactivate];
-        [self activateIgnoringOtherApps:YES];
-    }
+    [[NSRunningApplication currentApplication] activateWithOptions:
+        (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
 }
 
 
@@ -478,7 +470,7 @@ void wxApp::DoCleanUp()
 void wxApp::OSXEnableAutomaticTabbing(bool enable)
 {
     // Automatic tabbing was first introduced in 10.12
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
     if ( WX_IS_MACOS_AVAILABLE(10, 12) )
     {
         [NSWindow setAllowsAutomaticWindowTabbing:enable];

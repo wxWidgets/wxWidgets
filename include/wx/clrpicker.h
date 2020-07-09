@@ -74,7 +74,7 @@ protected:
 // under the name "wxColourPickerWidget".
 // NOTE: wxColourPickerCtrl allocates a wxColourPickerWidget and relies on the
 //       fact that all classes being mapped as wxColourPickerWidget have the
-//       same prototype for their contructor (and also explains why we use
+//       same prototype for their constructor (and also explains why we use
 //       define instead of a typedef)
 // since GTK > 2.4, there is GtkColorButton
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)

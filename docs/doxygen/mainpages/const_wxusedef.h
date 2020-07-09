@@ -169,7 +169,8 @@ library:
 @itemdef{wxUSE_MDI_ARCHITECTURE, Use MDI-based document-view classes.}
 @itemdef{wxUSE_MEDIACTRL, Use wxMediaCtrl.}
 @itemdef{wxUSE_MEMORY_TRACING, Use wxWidgets memory leak detection, not recommended if using another memory debugging tool.}
-@itemdef{wxUSE_MENUS, Use wxMenu and related classes.}
+@itemdef{wxUSE_MENUS, Use wxMenu and wxMenuItem.}
+@itemdef{wxUSE_MENUBAR, Use wxMenubar.}
 @itemdef{wxUSE_METAFILE, Use wxMetaFile and related classes.}
 @itemdef{wxUSE_MIMETYPE, Use wxFileType class.}
 @itemdef{wxUSE_MINIFRAME, Use wxMiniFrame class.}

@@ -119,7 +119,7 @@ private:
     void DoRemoveNode( wxHashTableBase_Node* node );
 
     // destroys data contained in the node if appropriate:
-    // deletes the key if it is a string and destrys
+    // deletes the key if it is a string and destroys
     // the value if m_deleteContents is true
     void DoDestroyNode( wxHashTableBase_Node* node );
 

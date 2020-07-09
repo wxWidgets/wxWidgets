@@ -1173,7 +1173,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
     // if this method is called everything is already setup correctly,
-    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
     CGContextSaveGState( context );
 
     if ( ![controlView isFlipped] )
@@ -3100,19 +3100,10 @@ bool wxDataViewTextRenderer::MacRender()
             [par setLineBreakMode:[cell lineBreakMode]];
             // Tightening looks very ugly when combined with non-tightened rows,
             // so disabled it on OS X version where it's used:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
             if ( WX_IS_MACOS_AVAILABLE(10, 11) )
-            {
                 [par setAllowsDefaultTighteningForTruncation:NO];
-            }
             else
-#endif
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-            if ( WX_IS_MACOS_AVAILABLE(10, 10) )
-            {
                 [par setTighteningFactorForTruncation:0.0];
-            }
-#endif
 
             [str addAttribute:NSParagraphStyleAttributeName
                         value:par

@@ -212,12 +212,150 @@ public:
         return GetBestSize(grid, attr, dc, row, col).GetWidth();
     }
 
+
+    // Unlike GetBestSize(), this functions is optional: it is used when
+    // auto-sizing columns to determine the best width without iterating over
+    // all cells in this column, if possible.
+    //
+    // If it isn't, return wxDefaultSize as the base class version does by
+    // default.
+    virtual wxSize GetMaxBestSize(wxGrid& WXUNUSED(grid),
+                                  wxGridCellAttr& WXUNUSED(attr),
+                                  wxDC& WXUNUSED(dc))
+    {
+        return wxDefaultSize;
+    }
+
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
 };
 
 // Smart pointer to wxGridCellRenderer, calling DecRef() on it automatically.
 typedef wxObjectDataPtr<wxGridCellRenderer> wxGridCellRendererPtr;
+
+
+// ----------------------------------------------------------------------------
+// Helper classes used by wxGridCellEditor::TryActivate() and DoActivate().
+// ----------------------------------------------------------------------------
+
+// This class represents a source of cell activation, which may be either a
+// user event (mouse or keyboard) or the program itself.
+//
+// Note that objects of this class are supposed to be ephemeral and so store
+// pointers to the events specified when creating them, which are supposed to
+// have life-time greater than that of the objects of this class.
+class wxGridActivationSource
+{
+public:
+    enum Origin
+    {
+        Program,
+        Key,
+        Mouse
+    };
+
+    // Factory functions, only used by the library itself.
+    static wxGridActivationSource FromProgram()
+    {
+        return wxGridActivationSource(Program, NULL);
+    }
+
+    static wxGridActivationSource From(const wxKeyEvent& event)
+    {
+        return wxGridActivationSource(Key, &event);
+    }
+
+    static wxGridActivationSource From(const wxMouseEvent& event)
+    {
+        return wxGridActivationSource(Mouse, &event);
+    }
+
+    // Accessors allowing to retrieve information about the source.
+
+    // Can be called for any object.
+    Origin GetOrigin() const { return m_origin; }
+
+    // Can be called for objects with Key origin only.
+    const wxKeyEvent& GetKeyEvent() const
+    {
+        wxASSERT( m_origin == Key );
+
+        return *static_cast<const wxKeyEvent*>(m_event);
+    }
+
+    // Can be called for objects with Mouse origin only.
+    const wxMouseEvent& GetMouseEvent() const
+    {
+        wxASSERT( m_origin == Mouse );
+
+        return *static_cast<const wxMouseEvent*>(m_event);
+    }
+
+private:
+    wxGridActivationSource(Origin origin, const wxEvent* event)
+        : m_origin(origin),
+          m_event(event)
+    {
+    }
+
+    const Origin m_origin;
+    const wxEvent* const m_event;
+};
+
+// This class represents the result of TryActivate(), which may be either
+// absence of any action (if activating wouldn't change the value anyhow),
+// attempt to change the value to the specified one or just start normal
+// editing, which is the default for the editors not supporting activation.
+class wxGridActivationResult
+{
+public:
+    enum Action
+    {
+        Ignore,
+        Change,
+        ShowEditor
+    };
+
+    // Factory functions, only used by the library itself.
+    static wxGridActivationResult DoNothing()
+    {
+        return wxGridActivationResult(Ignore);
+    }
+
+    static wxGridActivationResult DoChange(const wxString& newval)
+    {
+        return wxGridActivationResult(Change, newval);
+    }
+
+    static wxGridActivationResult DoEdit()
+    {
+        return wxGridActivationResult(ShowEditor);
+    }
+
+    // Accessors allowing to retrieve information about the result.
+
+    // Can be called for any object.
+    Action GetAction() const { return m_action; }
+
+    // Can be called for objects with Change action type only.
+    const wxString& GetNewValue() const
+    {
+        wxASSERT( m_action == Change );
+
+        return m_newval;
+    }
+
+private:
+    explicit
+    wxGridActivationResult(Action action, const wxString& newval = wxString())
+        : m_action(action),
+          m_newval(newval)
+    {
+    }
+
+    const Action m_action;
+    const wxString m_newval;
+};
 
 // ----------------------------------------------------------------------------
 // wxGridCellEditor:  This class is responsible for providing and manipulating
@@ -288,7 +426,7 @@ public:
     // version only checks that the event has no modifiers. The derived
     // classes are supposed to do "if ( base::IsAcceptedKey() && ... )" in
     // their IsAcceptedKey() implementation, although, of course, it is not a
-    // mandatory requirment.
+    // mandatory requirement.
     //
     // NB: if the key is F2 (special), editing will always start and this
     //     method will not be called at all (but StartingKey() will)
@@ -321,9 +459,45 @@ public:
     wxControl* GetControl() { return wxDynamicCast(m_control, wxControl); }
     void SetControl(wxControl* control) { m_control = control; }
 
+
+    // Support for "activatable" editors: those change the value of the cell
+    // immediately, instead of creating an editor control and waiting for user
+    // input.
+    //
+    // See wxGridCellBoolEditor for an example of such editor.
+
+    // Override this function to return "Change" activation result from it to
+    // show that the editor supports activation. DoActivate() will be called if
+    // the cell changing event is not vetoed.
+    virtual
+    wxGridActivationResult
+    TryActivate(int WXUNUSED(row), int WXUNUSED(col),
+                wxGrid* WXUNUSED(grid),
+                const wxGridActivationSource& WXUNUSED(actSource))
+    {
+        return wxGridActivationResult::DoEdit();
+    }
+
+    virtual
+    void
+    DoActivate(int WXUNUSED(row), int WXUNUSED(col), wxGrid* WXUNUSED(grid))
+    {
+        wxFAIL_MSG( "Must be overridden if TryActivate() is overridden" );
+    }
+
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellEditor();
+
+    // Helper for the derived classes positioning the control according to the
+    // attribute alignment if the desired control size is smaller than the cell
+    // size, or centering it vertically if its size is bigger: this looks like
+    // the best compromise when the editor control doesn't fit into the cell.
+    void DoPositionEditor(const wxSize& size,
+                          const wxRect& rectCell,
+                          int hAlign = wxALIGN_LEFT,
+                          int vAlign = wxALIGN_CENTRE_VERTICAL);
+
 
     // the actual window we show on screen (this variable should actually be
     // named m_window, but m_control is kept for backward compatibility)
@@ -348,6 +522,34 @@ protected:
 
 // Smart pointer to wxGridCellEditor, calling DecRef() on it automatically.
 typedef wxObjectDataPtr<wxGridCellEditor> wxGridCellEditorPtr;
+
+// Base class for editors that can be only activated and not edited normally.
+class wxGridCellActivatableEditor : public wxGridCellEditor
+{
+public:
+    // In this class these methods must be overridden.
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) wxOVERRIDE = 0;
+    virtual void DoActivate(int row, int col, wxGrid* grid) wxOVERRIDE = 0;
+
+    // All the other methods that normally must be implemented in an editor are
+    // defined as just stubs below, as they should be never called.
+
+    virtual void Create(wxWindow*, wxWindowID, wxEvtHandler*) wxOVERRIDE
+        { wxFAIL; }
+    virtual void BeginEdit(int, int, wxGrid*) wxOVERRIDE
+        { wxFAIL; }
+    virtual bool EndEdit(int, int, const wxGrid*,
+                         const wxString&, wxString*) wxOVERRIDE
+        { wxFAIL; return false; }
+    virtual void ApplyEdit(int, int, wxGrid*) wxOVERRIDE
+        { wxFAIL; }
+    virtual void Reset() wxOVERRIDE
+        { wxFAIL; }
+    virtual wxString GetValue() const wxOVERRIDE
+        { wxFAIL; return wxString(); }
+};
 
 // ----------------------------------------------------------------------------
 // wxGridHeaderRenderer and company: like wxGridCellRenderer but for headers
@@ -1065,6 +1267,16 @@ public:
         return wxGridCellAttrPtr(GetAttr(row, col, kind));
     }
 
+    // This is an optimization for a common case when the entire column uses
+    // roughly the same attribute, which can thus be reused for measuring all
+    // the cells in this column. Override this to return true (possibly for
+    // some columns only) to speed up AutoSizeColumns() for the grids using
+    // this table.
+    virtual bool CanMeasureColUsingSameAttr(int WXUNUSED(col)) const
+    {
+        return false;
+    }
+
     // these functions take ownership of the pointer
     virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
     virtual void SetRowAttr(wxGridCellAttr *attr, int row);
@@ -1470,12 +1682,12 @@ public:
     void EnableCellEditControl( bool enable = true );
     void DisableCellEditControl() { EnableCellEditControl(false); }
     bool CanEnableCellControl() const;
-    bool IsCellEditControlEnabled() const;
+    bool IsCellEditControlEnabled() const { return m_cellEditCtrlEnabled; }
     bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
 
-    void ShowCellEditControl();
+    void ShowCellEditControl(); // Use EnableCellEditControl() instead.
     void HideCellEditControl();
     void SaveEditControlValue();
 
@@ -1651,7 +1863,27 @@ public:
     void DisableRowResize(int row) { DoDisableLineResize(row, m_setFixedRows); }
     void DisableColResize(int col) { DoDisableLineResize(col, m_setFixedCols); }
 
-        // these functions return whether the given row/column can be
+        // These function return true if resizing rows/columns by dragging
+        // their edges inside the grid is enabled. Note that this doesn't cover
+        // dragging their separators in the label windows (which can be enabled
+        // for the columns even if dragging inside the grid is not), nor checks
+        // whether a particular row/column is resizeable or not, so you should
+        // always check CanDrag{Row,Col}Size() below too.
+    bool CanDragGridRowEdges() const
+    {
+        return m_canDragGridSize && m_canDragRowSize;
+    }
+
+    bool CanDragGridColEdges() const
+    {
+        // When using the native header window we can only resize the columns by
+        // dragging the dividers in the header itself, but not by dragging them
+        // in the grid because we can't make the native control enter into the
+        // column resizing mode programmatically.
+        return m_canDragGridSize && m_canDragColSize && !m_useNativeHeader;
+    }
+
+        // These functions return whether the given row/column can be
         // effectively resized: for this interactive resizing must be enabled
         // and this index must not have been passed to DisableRow/ColResize()
     bool CanDragRowSize(int row) const
@@ -1869,11 +2101,8 @@ public:
         { AutoSizeColOrRow(row, setAsMin, wxGRID_ROW); }
 
     // auto size all columns (very ineffective for big grids!)
-    void     AutoSizeColumns( bool setAsMin = true )
-        { (void)SetOrCalcColumnSizes(false, setAsMin); }
-
-    void     AutoSizeRows( bool setAsMin = true )
-        { (void)SetOrCalcRowSizes(false, setAsMin); }
+    void     AutoSizeColumns( bool setAsMin = true );
+    void     AutoSizeRows( bool setAsMin = true );
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
@@ -2414,10 +2643,6 @@ protected:
     wxColour   m_gridFrozenBorderColour;
     int        m_gridFrozenBorderPenWidth;
 
-    // common part of AutoSizeColumn/Row() and GetBestSize()
-    int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = true);
-    int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = true);
-
     // common part of AutoSizeColumn/Row()
     void AutoSizeColOrRow(int n, bool setAsMin, wxGridDirection direction);
 
@@ -2473,7 +2698,6 @@ protected:
     wxGridCellAttr*     m_defaultCellAttr;
 
 
-    bool m_inOnKeyDown;
     int  m_batchCount;
 
 
@@ -2563,28 +2787,34 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    // Send the given grid event and return -1 if it was vetoed or, as a
-    // special exception, if an event for a particular cell resulted in this
-    // cell being deleted, 1 if it was processed (but not vetoed) and 0 if it
-    // wasn't processed.
-    int DoSendEvent(wxGridEvent& gridEvt);
+    enum EventResult
+    {
+        Event_Vetoed = -1,
+        Event_Unhandled,
+        Event_Handled,
+        Event_CellDeleted   // Event handler deleted the cell.
+    };
+
+    // Send the given grid event and returns one of the event handling results
+    // defined above.
+    EventResult DoSendEvent(wxGridEvent& gridEvt);
 
     // Generate an event of the given type and call DoSendEvent().
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxMouseEvent& e);
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   const wxGridCellCoords& coords,
                   const wxMouseEvent& e)
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), e); }
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxString& s = wxString());
-    int SendEvent(wxEventType evtType,
+    EventResult SendEvent(wxEventType evtType,
                   const wxGridCellCoords& coords,
                   const wxString& s = wxString())
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), s); }
-    int SendEvent(wxEventType evtType, const wxString& s = wxString())
+    EventResult SendEvent(wxEventType evtType, const wxString& s = wxString())
         { return SendEvent(evtType, m_currentCellCoords, s); }
 
     // send wxEVT_GRID_{ROW,COL}_SIZE or wxEVT_GRID_COL_AUTO_SIZE, return true
@@ -2849,6 +3079,40 @@ private:
     // the second one, so it's never necessary to call both of them.
     void SetNativeHeaderColCount();
     void SetNativeHeaderColOrder();
+
+    // Return the editor which should be used for the current cell.
+    wxGridCellEditorPtr GetCurrentCellEditorPtr() const
+    {
+        return GetCellAttrPtr(m_currentCellCoords)->GetEditorPtr
+                (
+                    this,
+                    m_currentCellCoords.GetRow(),
+                    m_currentCellCoords.GetCol()
+                );
+    }
+
+    // Show/hide the cell editor for the current cell unconditionally.
+
+    // Return false if the editor was activated instead of being shown and also
+    // sets m_cellEditCtrlEnabled to true when it returns true as a side effect.
+    bool DoShowCellEditControl(const wxGridActivationSource& actSource);
+    void DoHideCellEditControl();
+
+    // Unconditionally try showing the editor for the current cell.
+    //
+    // Returns false if the user code vetoed wxEVT_GRID_EDITOR_SHOWN or if the
+    // editor was simply activated and won't be permanently shown.
+    bool DoEnableCellEditControl(const wxGridActivationSource& actSource);
+
+    // Unconditionally disable (accepting the changes) the editor.
+    void DoDisableCellEditControl();
+
+    // Accept the changes in the edit control, i.e. save them to the table and
+    // dismiss the editor. Also reset m_cellEditCtrlEnabled.
+    void DoAcceptCellEditControl();
+
+    // As above, but do nothing if the control is not currently shown.
+    void AcceptCellEditControlIfShown();
 
     // Unlike the public SaveEditControlValue(), this method doesn't check if
     // the edit control is shown, but just supposes that it is.

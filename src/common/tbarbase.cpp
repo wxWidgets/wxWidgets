@@ -628,6 +628,24 @@ bool wxToolBarBase::IsVertical() const
     return HasFlag(wxTB_LEFT | wxTB_RIGHT);
 }
 
+// wxTB_HORIZONTAL is same as wxTB_TOP and wxTB_VERTICAL is same as wxTB_LEFT,
+// so a toolbar created with wxTB_HORIZONTAL | wxTB_BOTTOM style can have set both
+// wxTB_TOP and wxTB_BOTTOM, similarly wxTB_VERTICAL | wxTB_RIGHT == wxTB_LEFT | wxTB_RIGHT.
+// GetDirection() makes things less confusing and returns just one of wxTB_TOP, wxTB_BOTTOM,
+// wxTB_LEFT, wxTB_RIGHT indicating where the toolbar is placed in the associated frame.
+int wxToolBarBase::GetDirection() const
+{
+    if ( HasFlag(wxTB_BOTTOM) )
+        return wxTB_BOTTOM;
+
+    if ( HasFlag(wxTB_RIGHT) )
+        return wxTB_RIGHT;
+
+    if ( HasFlag(wxTB_LEFT) )
+        return wxTB_LEFT;
+
+    return wxTB_TOP;
+}
 
 // ----------------------------------------------------------------------------
 // event processing

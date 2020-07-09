@@ -189,6 +189,7 @@ builtinWindowClasses =
     | wxFontPickerCtrl
     | wxFrame
     | wxGauge
+    | wxGenericAnimationCtrl
     | wxGenericDirCtrl
     | wxGrid
     | wxHtmlWindow
@@ -290,6 +291,7 @@ builtinClassesNames =
     | "wxFontPickerCtrl"
     | "wxFrame"
     | "wxGauge"
+    | "wxGenericAnimationCtrl"
     | "wxGenericDirCtrl"
     | "wxGrid"
     | "wxHtmlWindow"
@@ -983,6 +985,16 @@ wxGauge =
         [xrc:p="o"] element value  {_, t_integer }* &
         [xrc:p="o"] element shadow {_, t_dimension }* &
         [xrc:p="o"] element bezel  {_, t_dimension }*
+    }
+
+
+wxGenericAnimationCtrl =
+    element object {
+        attribute class { "wxGenericAnimationCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element animation       {_, t_url }* &
+        [xrc:p="o"] element inactive-bitmap {_, t_bitmap }*
     }
 
 

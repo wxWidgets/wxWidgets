@@ -45,7 +45,7 @@ public:
 //--------------------------------------------------------------------------------
 // wxHtmlFilterPlainText
 //                  This filter is used as default filter if no other can
-//                  be used (= uknown type of file). It is used by
+//                  be used (= unknown type of file). It is used by
 //                  wxHtmlWindow itself.
 //--------------------------------------------------------------------------------
 

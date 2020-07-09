@@ -445,7 +445,7 @@ public:
         @param height
             The height of the bitmap in pixels, must be strictly positive.
         @param dc
-            DC from wich the scaling factor is inherited
+            DC from which the scaling factor is inherited
 
         @return @true if the creation was successful.
 
@@ -665,7 +665,7 @@ public:
         @endcode
         in your application startup code.
 
-        However under OS X this function uses native image loading and so
+        However under macOS this function uses native image loading and so
         doesn't require wxWidgets PNG support.
 
         @since 2.9.5

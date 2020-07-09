@@ -1128,8 +1128,6 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
     impl->insertText(text, self, _cmd);
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1139,7 +1137,6 @@ void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGe
     impl->PanGestureEvent(panGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1149,7 +1146,6 @@ void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecogn
     impl->ZoomGestureEvent(magnificationGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1159,7 +1155,6 @@ void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognize
     impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pressGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1169,7 +1164,6 @@ void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pres
     impl->LongPressEvent(pressGestureRecognizer);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1179,7 +1173,6 @@ void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesBegan(event);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1189,7 +1182,6 @@ void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesMoved(event);
 }
 
-WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1198,7 +1190,6 @@ void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 
     impl->TouchesEnded(event);
 }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
 {
@@ -1264,7 +1255,7 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
             if ( win->UseBgCol() )
             {
                 
-                CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+                CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
                 CGContextSaveGState( context );
 
                 CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
@@ -1566,7 +1557,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             return;
         }
 
-        m_lastKeyDownEvent = event;
+        BeginNativeKeyDownEvent(event);
     }
     
     if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
@@ -1574,13 +1565,15 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
     }
-    m_lastKeyDownEvent = NULL;
+    
+    if ( [event type] == NSKeyDown )
+    {
+        EndNativeKeyDownEvent();
+    }
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-
 // Class containing data used for gestures support.
-class WX_API_AVAILABLE_MACOS(10, 10) wxCocoaGesturesImpl
+class wxCocoaGesturesImpl
 {
 public:
     wxCocoaGesturesImpl(wxWidgetCocoaImpl* impl, NSView* view, int eventsMask)
@@ -2140,7 +2133,6 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
         m_activeGestures &= ~press_and_tap;
     }
 }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
@@ -2150,18 +2142,18 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
     bool result = false;
     if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
-        if ( m_lastKeyDownEvent!=NULL && [text isEqualToString:[m_lastKeyDownEvent characters]])
+        if ( IsInNativeKeyDown() && [text isEqualToString:[GetLastNativeKeyDownEvent() characters]])
         {
             // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
             // (see also: wxWidgetCocoaImpl::DoHandleKeyEvent)
             {
                 wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-                SetupKeyEvent( wxevent, m_lastKeyDownEvent );
+                SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
                 result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
             }
 
             // ...and wxEVT_CHAR.
-            result = result || DoHandleCharEvent(m_lastKeyDownEvent, text);
+            result = result || DoHandleCharEvent(GetLastNativeKeyDownEvent(), text);
         }
         else
         {
@@ -2180,14 +2172,20 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
 {
     wxLogTrace(TRACE_KEYS, "Selector %s for %s",
-               wxDumpSelector((SEL)_cmd), wxDumpNSView(slf));
+               wxDumpSelector((SEL)sel), wxDumpNSView(slf));
 
-    if ( m_lastKeyDownEvent!=NULL )
+    // keystrokes can be translated on macos to selectors, see
+    // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
+    // it is also possible to map 1 keystroke to multiple commands, eg Ctrl-O on mac is translated to the bash-equivalent of
+    // execute and move back in history, since this results in two commands, Ctrl-O was sent twice as a wx key down event.
+    // we now track the sending of the events to avoid duplicates.
+    
+    if ( IsInNativeKeyDown() && !WasKeyDownSent())
     {
         // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
         // (see also: wxWidgetCocoaImpl::DoHandleKeyEvent)
         wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-        SetupKeyEvent( wxevent, m_lastKeyDownEvent );
+        SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
         bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
 
         if (!result)
@@ -2196,9 +2194,10 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
 
             wxKeyEvent wxevent2(wxevent) ;
             wxevent2.SetEventType(wxEVT_CHAR);
-            SetupKeyEvent( wxevent2, m_lastKeyDownEvent );
+            SetupKeyEvent( wxevent2, GetLastNativeKeyDownEvent() );
             GetWXPeer()->OSXHandleKeyEvent(wxevent2);
         }
+        SetKeyDownSent();
     }
     else
     {
@@ -2310,7 +2309,7 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 
     // setting up the drawing context
     // note that starting from 10.14 this may be NULL in certain views
-    CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
     wxpeer->MacSetCGContextRef( context );
     if ( context != NULL )
     {
@@ -2556,7 +2555,8 @@ void wxWidgetCocoaImpl::Init()
 #if !wxOSX_USE_NATIVE_FLIPPED
     m_isFlipped = true;
 #endif
-    m_lastKeyDownEvent = NULL;
+    m_lastKeyDownEvent = nil;
+    m_lastKeyDownWXSent = false;
     m_hasEditor = false;
 }
 
@@ -2577,9 +2577,55 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     if ( m_osxView )
         CFRelease(m_osxView);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     wxCocoaGestures::EraseForObject(this);
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+}
+
+void wxWidgetCocoaImpl::BeginNativeKeyDownEvent( NSEvent* event )
+{
+    m_lastKeyDownEvent = event;
+    m_lastKeyDownWXSent = false;
+}
+
+void wxWidgetCocoaImpl::EndNativeKeyDownEvent()
+{
+    m_lastKeyDownEvent = nil;
+    m_lastKeyDownWXSent = false;
+}
+
+bool wxWidgetCocoaImpl::IsInNativeKeyDown() const
+{
+    return m_lastKeyDownEvent != nil;
+}
+
+NSEvent* wxWidgetCocoaImpl::GetLastNativeKeyDownEvent()
+{
+    wxASSERT( m_lastKeyDownEvent != nil);
+    return m_lastKeyDownEvent;
+}
+
+void wxWidgetCocoaImpl::SetKeyDownSent()
+{
+    wxASSERT( !m_lastKeyDownWXSent );
+    m_lastKeyDownWXSent = true;
+}
+
+bool wxWidgetCocoaImpl::WasKeyDownSent() const
+{
+    return m_lastKeyDownWXSent;
+}
+
+wxWidgetCocoaNativeKeyDownSuspender::wxWidgetCocoaNativeKeyDownSuspender( wxWidgetCocoaImpl *target ) : m_target(target)
+{
+    m_nsevent = m_target->m_lastKeyDownEvent;
+    m_wxsent = m_target->m_lastKeyDownWXSent;
+    
+    m_target->m_lastKeyDownEvent = nil;
+}
+
+wxWidgetCocoaNativeKeyDownSuspender::~wxWidgetCocoaNativeKeyDownSuspender()
+{
+    m_target->m_lastKeyDownEvent = m_nsevent;
+    m_target->m_lastKeyDownWXSent = m_wxsent;
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
@@ -2592,7 +2638,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     [m_osxView setHidden:(visible ? NO:YES)];
     
     // trigger redraw upon shown for layer-backed views
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         if( !m_osxView.isHiddenOrHasHiddenAncestor )
             SetNeedsDisplay(NULL);
@@ -2842,15 +2888,7 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
-// To avoid warnings about incompatible pointer types with OS X 10.11 SDK (and
-// maybe even earlier? This has changed at some time between 10.9 and 10.11),
-// we need to constrain the comparison function arguments instead of just using
-// "id".
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11 && __has_feature(objc_kindof)
 typedef __kindof NSView* KindOfView;
-#else
-typedef id KindOfView;
-#endif
 
 class CocoaWindowCompareContext
 {
@@ -3048,7 +3086,7 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
 namespace
 {
     
@@ -3080,7 +3118,7 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
     // Layer-backed views (which are all in Mojave's Dark Mode) may not have
     // their children implicitly redrawn with the parent. For compatibility,
     // do it manually here:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         SetSubviewsNeedDisplay(m_osxView);
 #endif
@@ -3448,8 +3486,8 @@ void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
         [m_osxView sizeToFit];
         NSRect best = [m_osxView frame];
         [m_osxView setFrame:former];
-        r->width = (int)best.size.width;
-        r->height = (int)best.size.height;
+        r->width = (int)ceil(best.size.width);
+        r->height = (int)ceil(best.size.height);
     }
 }
 
@@ -3504,6 +3542,11 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            if ( WX_IS_MACOS_AVAILABLE( 10, 16 ))
+                size = NSControlSizeLarge;
+            else
+#endif
             size = NSRegularControlSize;
             break ;
 
@@ -3593,37 +3636,32 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
 bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+    if ( HasUserMouseHandling() )
     {
-        if ( HasUserMouseHandling() )
+        if ( eventsMask == wxTOUCH_NONE )
         {
-            if ( eventsMask == wxTOUCH_NONE )
+            if ( wxCocoaGestures::EraseForObject(this) )
             {
-                if ( wxCocoaGestures::EraseForObject(this) )
-                {
-                    [m_osxView setAcceptsTouchEvents:NO];
-                }
-                //else: we didn't have any gesture data anyhow
+                [m_osxView setAcceptsTouchEvents:NO];
             }
-            else // We do want to have gesture events.
-            {
-                // clang does not see that the owning object always destroys its extra field
-#ifndef __clang_analyzer__
-                wxCocoaGestures::StoreForObject
-                (
-                    this,
-                    new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
-                );
-#endif
-                
-                [m_osxView setAcceptsTouchEvents:YES];
-            }
-
-            return true;
+            //else: we didn't have any gesture data anyhow
         }
+        else // We do want to have gesture events.
+        {
+            // clang does not see that the owning object always destroys its extra field
+#ifndef __clang_analyzer__
+            wxCocoaGestures::StoreForObject
+            (
+                this,
+                new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
+            );
+#endif
+            
+            [m_osxView setAcceptsTouchEvents:YES];
+        }
+
+        return true;
     }
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
     wxUnusedVar(eventsMask);
     return false;

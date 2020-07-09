@@ -331,6 +331,62 @@ void wxGridCellEditor::SetSize(const wxRect& rect)
     m_control->SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 }
 
+void wxGridCellEditor::DoPositionEditor(const wxSize& size,
+                                        const wxRect& rectCell,
+                                        int hAlign,
+                                        int vAlign)
+{
+    wxRect rect(rectCell.GetPosition(), size);
+
+    // We center the control around the cell if it doesn't fit into it in one
+    // or both of directions, as this seems to look the best (difference is
+    // typically relatively small and by centering it, we divide it by two on
+    // each side, making it even smaller).
+    //
+    // For now just remember in which direction to do it in this variable and
+    // then do it at the end.
+    int centerDir = 0;
+
+    // We're only going to need the alignment if the control is smaller than
+    // the cell in at least one direction.
+    if ( size.x < rectCell.width || size.y < rectCell.height )
+    {
+        if ( GetCellAttr() )
+            GetCellAttr()->GetNonDefaultAlignment(&hAlign, &vAlign);
+    }
+
+    if ( size.x < rectCell.width )
+    {
+        if ( hAlign == wxALIGN_CENTER_HORIZONTAL )
+            centerDir |= wxHORIZONTAL;
+        else if ( hAlign == wxALIGN_RIGHT )
+            rect.x = rectCell.x + rectCell.width - rect.width;
+        //else: nothing to do for the left alignment
+    }
+    else
+    {
+        centerDir |= wxHORIZONTAL;
+    }
+
+    if ( size.y < rectCell.height )
+    {
+        if ( vAlign == wxALIGN_CENTRE_VERTICAL )
+            centerDir |= wxVERTICAL;
+        else if ( vAlign == wxALIGN_BOTTOM )
+            rect.y = rectCell.y + rectCell.height - rect.height;
+        //else: nothing to do for the top alignment
+    }
+    else
+    {
+        centerDir |= wxVERTICAL;
+    }
+
+    if ( centerDir )
+        rect = rect.CenterIn(rectCell, centerDir);
+
+    wxGridCellEditor::SetSize(rect);
+}
+
 void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 {
     event.Skip();
@@ -424,14 +480,6 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
 #endif
 
     wxGridCellEditor::Create(parent, id, evtHandler);
-}
-
-void wxGridCellTextEditor::PaintBackground(wxDC& WXUNUSED(dc),
-                                           const wxRect& WXUNUSED(rectCell),
-                                           const wxGridCellAttr& WXUNUSED(attr))
-{
-    // as we fill the entire client area,
-    // don't do anything here to minimize flicker
 }
 
 void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
@@ -623,6 +671,8 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
 void wxGridCellTextEditor::SetValidator(const wxValidator& validator)
 {
     m_validator.reset(static_cast<wxValidator*>(validator.Clone()));
+    if ( m_validator && IsCreated() )
+        Text()->SetValidator(*m_validator);
 }
 #endif
 
@@ -703,22 +753,7 @@ void wxGridCellNumberEditor::SetSize(const wxRect& rectCell)
         if ( size.y <= 0 )
             size.y = rectCell.GetHeight();
 
-        wxRect rectSpin(rectCell.GetPosition(), size);
-
-        // If possible, i.e. if we're not editing the topmost or leftmost cell,
-        // center the control rectangle in the cell.
-        if ( rectCell.GetTop() > 0 )
-        {
-            rectSpin.SetTop(rectCell.GetTop() -
-                            (rectSpin.GetHeight() - rectCell.GetHeight()) / 2);
-        }
-        if ( rectCell.GetLeft() > 0 )
-        {
-            rectSpin.SetLeft(rectCell.GetLeft() -
-                             (rectSpin.GetWidth() - rectCell.GetWidth()) / 2);
-        }
-
-        wxGridCellEditor::SetSize(rectSpin);
+        DoPositionEditor(size, rectCell);
     }
     else
 #endif // wxUSE_SPINCTRL
@@ -836,10 +871,19 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
         int keycode = event.GetKeyCode();
-        if ( (keycode < 128) &&
-             (wxIsdigit(keycode) || keycode == '+' || keycode == '-'))
+        switch ( keycode )
         {
-            return true;
+            // Accept +/- because they can be part of the number and space just
+            // because it's a convenient key to start editing with and is also
+            // consistent with many (all?) other editors, which allow starting
+            // editing using it.
+            case '+':
+            case '-':
+            case ' ':
+                return true;
+
+            default:
+                return (keycode < 128) && wxIsdigit(keycode);
         }
     }
 
@@ -1205,6 +1249,61 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 // the default values for GetValue()
 wxString wxGridCellBoolEditor::ms_stringValues[2] = { wxT(""), wxT("1") };
 
+wxGridActivationResult
+wxGridCellBoolEditor::TryActivate(int row, int col, wxGrid* grid,
+                                  const wxGridActivationSource& actSource)
+{
+    SetValueFromGrid(row, col, grid);
+
+    switch ( actSource.GetOrigin() )
+    {
+        case wxGridActivationSource::Program:
+            // It's not really clear what should happen in this case, so for
+            // now show the editor interactively to avoid making the choice.
+            return wxGridActivationResult::DoEdit();
+
+        case wxGridActivationSource::Mouse:
+            m_value = !m_value;
+            return wxGridActivationResult::DoChange(GetStringValue());
+
+        case wxGridActivationSource::Key:
+            switch ( actSource.GetKeyEvent().GetKeyCode() )
+            {
+                // Handle F2 as space here because we must handle it somehow,
+                // because pressing it always starts editing in wxGrid, and
+                // it's not really clear what else could it do.
+                case WXK_F2:
+                case WXK_SPACE:
+                    m_value = !m_value;
+                    break;
+
+                case '+':
+                    if ( m_value )
+                        return wxGridActivationResult::DoNothing();
+
+                    m_value = true;
+                    break;
+
+                case '-':
+                    if ( !m_value )
+                        return wxGridActivationResult::DoNothing();
+
+                    m_value = false;
+                    break;
+            }
+
+            return wxGridActivationResult::DoChange(GetStringValue());
+    }
+
+    wxFAIL_MSG( "unknown activation source origin" );
+    return wxGridActivationResult::DoNothing();
+}
+
+void wxGridCellBoolEditor::DoActivate(int row, int col, wxGrid* grid)
+{
+    SetGridFromValue(row, col, grid);
+}
+
 void wxGridCellBoolEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
@@ -1270,27 +1369,7 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be created first!"));
 
-    if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
-    {
-        m_value = grid->GetTable()->GetValueAsBool(row, col);
-    }
-    else
-    {
-        wxString cellval( grid->GetTable()->GetValue(row, col) );
-
-        if ( cellval == ms_stringValues[false] )
-            m_value = false;
-        else if ( cellval == ms_stringValues[true] )
-            m_value = true;
-        else
-        {
-            // do not try to be smart here and convert it to true or false
-            // because we'll still overwrite it with something different and
-            // this risks to be very surprising for the user code, let them
-            // know about it
-            wxFAIL_MSG( wxT("invalid value for a cell with bool editor!") );
-        }
-    }
+    SetValueFromGrid(row, col, grid);
 
     CBox()->SetValue(m_value);
     CBox()->SetFocus();
@@ -1316,11 +1395,7 @@ bool wxGridCellBoolEditor::EndEdit(int WXUNUSED(row),
 
 void wxGridCellBoolEditor::ApplyEdit(int row, int col, wxGrid* grid)
 {
-    wxGridTableBase * const table = grid->GetTable();
-    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
-        table->SetValueAsBool(row, col, m_value);
-    else
-        table->SetValue(row, col, GetValue());
+    SetGridFromValue(row, col, grid);
 }
 
 void wxGridCellBoolEditor::Reset()
@@ -1374,7 +1449,7 @@ void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
 
 wxString wxGridCellBoolEditor::GetValue() const
 {
-  return ms_stringValues[CBox()->GetValue()];
+  return GetStringValue(CBox()->GetValue());
 }
 
 /* static */ void
@@ -1389,6 +1464,43 @@ wxGridCellBoolEditor::UseStringValues(const wxString& valueTrue,
 wxGridCellBoolEditor::IsTrueValue(const wxString& value)
 {
     return value == ms_stringValues[true];
+}
+
+void wxGridCellBoolEditor::SetValueFromGrid(int row, int col, wxGrid* grid)
+{
+    if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
+    {
+        m_value = grid->GetTable()->GetValueAsBool(row, col);
+    }
+    else
+    {
+        wxString cellval( grid->GetTable()->GetValue(row, col) );
+
+        if ( cellval == ms_stringValues[false] )
+            m_value = false;
+        else if ( cellval == ms_stringValues[true] )
+            m_value = true;
+        else
+        {
+            // do not try to be smart here and convert it to true or false
+            // because we'll still overwrite it with something different and
+            // this risks to be very surprising for the user code, let them
+            // know about it
+            wxFAIL_MSG( wxT("invalid value for a cell with bool editor!") );
+
+            // Still need to initialize it to something.
+            m_value = false;
+        }
+    }
+}
+
+void wxGridCellBoolEditor::SetGridFromValue(int row, int col, wxGrid* grid) const
+{
+    wxGridTableBase * const table = grid->GetTable();
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
+        table->SetValueAsBool(row, col, m_value);
+    else
+        table->SetValue(row, col, GetStringValue());
 }
 
 #endif // wxUSE_CHECKBOX
@@ -1451,35 +1563,14 @@ void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellChoiceEditor must be created first!"));
 
-    // Check that the height is not too small to fit the combobox.
-    wxRect rectTallEnough = rect;
-    const wxSize bestSize = m_control->GetBestSize();
-    const wxCoord diffY = bestSize.GetHeight() - rectTallEnough.GetHeight();
-    if ( diffY > 0 )
-    {
-        // Do make it tall enough.
-        rectTallEnough.height += diffY;
+    // Use normal wxChoice size, except for extending it to fill the cell
+    // width: we can't be smaller because this could make the control unusable
+    // and we don't want to be taller because this looks unusual and weird.
+    wxSize size = m_control->GetBestSize();
+    if ( size.x < rect.width )
+        size.x = rect.width;
 
-        // Also centre the effective rectangle vertically with respect to the
-        // original one.
-        rectTallEnough.y -= diffY/2;
-    }
-    //else: The rectangle provided is already tall enough.
-
-    wxGridCellEditor::SetSize(rectTallEnough);
-}
-
-void wxGridCellChoiceEditor::PaintBackground(wxDC& dc,
-                                             const wxRect& rectCell,
-                                             const wxGridCellAttr& attr)
-{
-    // as we fill the entire client area, don't do anything here to minimize
-    // flicker
-
-    // TODO: It doesn't actually fill the client area since the height of a
-    // combo always defaults to the standard.  Until someone has time to
-    // figure out the right rectangle to paint, just do it the normal way.
-    wxGridCellEditor::PaintBackground(dc, rectCell, attr);
+    DoPositionEditor(size, rect);
 }
 
 void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
@@ -1790,18 +1881,18 @@ void wxGridCellDateEditor::SetSize(const wxRect& r)
 {
     wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
 
-    const wxSize bestSize = DatePicker()->GetBestSize();
+    wxSize size = DatePicker()->GetBestSize();
 
-    wxRect rect(r.GetPosition(), bestSize);
-
-    // Allow edit picker to become a bit wider, if necessary, but no more than
-    // twice as wide as the best width, otherwise they just look ugly.
-    if ( r.GetWidth() > bestSize.GetWidth() )
+    // Allow date picker to become a bit wider, if necessary, but not too wide,
+    // otherwise it just looks ugly.
+    if ( r.GetWidth() > size.GetWidth()
+            && r.GetWidth() < 3*size.GetWidth()/2 )
     {
-        rect.SetWidth(wxMin(r.GetWidth(), 2*bestSize.GetWidth()));
+        size.x = r.GetWidth();
     }
 
-    wxGridCellEditor::SetSize(rect);
+    // Use right alignment by default for consistency with the date renderer.
+    DoPositionEditor(size, r, wxALIGN_RIGHT);
 }
 
 void wxGridCellDateEditor::BeginEdit(int row, int col, wxGrid* grid)

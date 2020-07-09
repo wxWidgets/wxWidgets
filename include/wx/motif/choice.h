@@ -102,7 +102,7 @@ public:
 protected:
     // minimum size for the text ctrl
     wxSize GetItemsSize() const;
-    // common part of all contructors
+    // common part of all constructors
     void Init();
 
     WXWidget      m_menuWidget;

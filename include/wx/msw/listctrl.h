@@ -414,7 +414,7 @@ protected:
     // get the internal data object for this item (may return NULL)
     wxMSWListItemData *MSWGetItemData(long item) const;
 
-    // get the item attribute, either by quering it for virtual control, or by
+    // get the item attribute, either by querying it for virtual control, or by
     // returning the one previously set using setter methods for a normal one
     wxItemAttr *DoGetItemColumnAttr(long item, long column) const;
 

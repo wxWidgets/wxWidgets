@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxFindReplaceDialogImpl;
 // Flags for wxFindReplaceData.Flags
 // ----------------------------------------------------------------------------
 
-// flages used by wxFindDialogEvent::GetFlags()
+// flags used by wxFindDialogEvent::GetFlags()
 enum wxFindReplaceFlags
 {
     // downward search/replace selected (otherwise - upwards)

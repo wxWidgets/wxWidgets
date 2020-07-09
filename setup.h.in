@@ -469,6 +469,8 @@
 
 #define wxUSE_MENUS         0
 
+#define wxUSE_MENUBAR       0
+
 #define wxUSE_NOTIFICATION_MESSAGE 0
 
 #define wxUSE_PREFERENCES_EDITOR 0

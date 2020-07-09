@@ -88,6 +88,26 @@ public:
     virtual int GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                              int row, int col, int height);
 
+    /**
+        Get the maximum possible size for a cell using this renderer, if
+        possible.
+
+        This function may be overridden in the derived class if it can return
+        the maximum size needed for displaying the cells rendered it without
+        iterating over all cells. The base class version simply returns
+        ::wxDefaultSize, indicating that this is infeasible and that
+        GetBestSize() should be called for each cell individually.
+
+        Note that this method will only be used if
+        wxGridTableBase::CanMeasureColUsingSameAttr() is overridden to return
+        @true.
+
+        @since 3.1.4
+     */
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc);
+
 protected:
     /**
         The destructor is private because only DecRef() can delete us.
@@ -428,6 +448,97 @@ public:
 
 
 /**
+    Represents a source of cell activation, which may be either a user event
+    (mouse or keyboard) or the program itself.
+
+    An object of this class is passed to wxGridCellEditor::TryActivate() by the
+    library and the code overriding this method may use its GetOrigin() method
+    to determine how exactly the cell is being activated.
+
+    @since 3.1.4
+ */
+class wxGridActivationSource
+{
+public:
+    /// Result of GetOrigin().
+    enum Origin
+    {
+        /// Activated due to an explicit wxGrid::EnableCellEditControl() call.
+        Program,
+
+        /// Activated due to the user pressing a key, see GetKeyEvent().
+        Key,
+
+        /// Activated due to the user clicking on a cell, see GetMouseEvent().
+        Mouse
+    };
+
+    /// Get the origin of the activation.
+    Origin GetOrigin() const;
+
+    /**
+        Get the key event corresponding to the key press activating the cell.
+
+        This method can be called for objects with Key origin only, use
+        GetOrigin() to check for this first.
+     */
+    const wxKeyEvent& GetKeyEvent() const;
+
+    /**
+        Get the mouse event corresponding to the click activating the cell.
+
+        This method can be called for objects with Mouse origin only, use
+        GetOrigin() to check for this first.
+     */
+    const wxMouseEvent& GetMouseEvent() const;
+};
+
+/**
+    Represents the result of wxGridCellEditor::TryActivate().
+
+    Editors overriding wxGridCellEditor::TryActivate() must use one of
+    DoNothing(), DoChange() or DoEdit() methods to return an object of this
+    type corresponding to the desired action.
+
+    @since 3.1.4
+ */
+class wxGridActivationResult
+{
+public:
+    /**
+        Indicate that nothing should be done and the cell shouldn't be edited
+        at all.
+
+        Note that this is different from DoEdit() and may be useful when the
+        value of the cell wouldn't change if it were activated anyhow, e.g.
+        because the key or mouse event carried by wxGridActivationSource would
+        leave the cell value unchanged.
+     */
+    static wxGridActivationResult DoNothing();
+
+    /**
+        Indicate that activating the cell is possible and would change its
+        value to the given one.
+
+        This is the method to call for activatable editors, using it will
+        result in changing the value of the cell to @a newval without showing
+        the editor control at all.
+
+        Note that the change may still be vetoed by wxEVT_GRID_CELL_CHANGING
+        handler.
+     */
+    static wxGridActivationResult DoChange(const wxString& newval);
+
+    /**
+        Indicate that the editor control should be shown and the cell should be
+        edited normally.
+
+        This is the default return value of wxGridCellEditor::TryActivate().
+     */
+    static wxGridActivationResult DoEdit();
+};
+
+/**
     @class wxGridCellEditor
 
     This class is responsible for providing and manipulating the in-place edit
@@ -435,6 +546,15 @@ public:
     of derived classes since it is an abstract class) can be associated with
     the cell attributes for individual cells, rows, columns, or even for the
     entire grid.
+
+    Normally wxGridCellEditor shows some UI control allowing the user to edit
+    the cell, but starting with wxWidgets 3.1.4 it's also possible to define
+    "activatable" cell editors, that change the value of the cell directly when
+    it's activated (typically by pressing Space key or clicking on it), see
+    TryActivate() method. Note that when implementing an editor which is always
+    activatable, i.e. never shows any in-place editor, it is more convenient to
+    derive its class from wxGridCellActivatableEditor than from wxGridCellEditor
+    itself.
 
     @library{wxcore}
     @category{grid}
@@ -607,12 +727,75 @@ public:
     void SetControl(wxControl* control);
 
 
+    /**
+        Function allowing to create an "activatable" editor.
+
+        As explained in this class description, activatable editors don't show
+        any edit control but change the cell value directly, when it is
+        activated (by any way described by wxGridActivationSource).
+
+        To create such editor, this method must be overridden to return
+        wxGridActivationResult::DoChange() passing it the new value of the
+        cell. If the change is not vetoed by wxEVT_GRID_CELL_CHANGING handler,
+        DoActivate() will be called to actually change the value, so it must be
+        overridden as well if TryActivate() is overridden.
+
+        By default, wxGridActivationResult::DoEdit() is returned, meaning that
+        this is a normal editor, using an edit control for changing the cell
+        value.
+
+        @since 3.1.4
+     */
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource);
+
+    /**
+        Function which must be overridden for "activatable" editors.
+
+        If TryActivate() is overridden to return "change" action, this function
+        will be called to actually apply this change. Note that it is not
+        passed the value to apply, as it is assumed that the editor class
+        stores this value as a member variable anyhow.
+
+        @since 3.1.4
+     */
+    virtual void DoActivate(int row, int col, wxGrid* grid);
+
 protected:
 
     /**
         The destructor is private because only DecRef() can delete us.
     */
     virtual ~wxGridCellEditor();
+};
+
+/**
+    Base class for activatable editors.
+
+    Inheriting from this class makes it simpler to implement editors that
+    support only activation, but not in-place editing, as they only need to
+    implement TryActivate(), DoActivate() and Clone() methods, but not all the
+    other pure virtual methods of wxGridCellEditor.
+
+    @since 3.1.4
+ */
+class wxGridCellActivatableEditor : public wxGridCellEditor
+{
+public:
+    /**
+        Same method as in wxGridCellEditor, but pure virtual.
+
+        Note that the implementation of this method must never return
+        wxGridActivationResult::DoEdit() for the editors inheriting from this
+        class, as it doesn't support normal editing.
+     */
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) = 0;
+
+    /// Same method as in wxGridCellEditor, but pure virtual.
+    virtual void DoActivate(int row, int col, wxGrid* grid) = 0;
 };
 
 /**
@@ -1306,7 +1489,7 @@ public:
         Returns @true if the cell will draw an overflowed text into the
         neighbouring cells.
 
-        Note that only left aligned cells currenty can overflow. It means that
+        Note that only left aligned cells currently can overflow. It means that
         GetFitMode().IsOverflow() should returns true and GetAlignment should
         returns wxALIGN_LEFT for hAlign parameter.
 
@@ -2517,6 +2700,25 @@ public:
         returns @true.
      */
     virtual bool CanHaveAttributes();
+
+    /**
+        Override to return true if the same attribute can be used for measuring
+        all cells in the given column.
+
+        This function is provided for optimization purposes: it returns @false
+        by default, but can be overridden to return @true when all the cells in
+        the same grid column use sensibly the same attribute, i.e. they use the
+        same renderer (either explicitly, or implicitly, due to their type as
+        returned by GetTypeName()) and the font of the same size.
+
+        Returning @true from this function allows AutoSizeColumns() to skip
+        looking up the attribute and the renderer for each individual cell,
+        which results in very noticeable performance improvements for the grids
+        with many rows.
+
+        @since 3.1.4
+     */
+    virtual bool CanMeasureColUsingSameAttr(int col) const;
 };
 
 
@@ -3398,9 +3600,12 @@ public:
         allows the user to change the cell value.
 
         Disabling in-place editing does nothing if the in-place editor isn't
-        currently show, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
+        currently shown, otherwise the @c wxEVT_GRID_EDITOR_HIDDEN event is
         generated but, unlike the "shown" event, it can't be vetoed and the
         in-place editor is dismissed unconditionally.
+
+        Note that it is an error to call this function if the current cell is
+        read-only, use CanEnableCellControl() to check for this precondition.
     */
     void EnableCellEditControl(bool enable = true);
 
@@ -3785,8 +3990,9 @@ public:
         Displays the active in-place cell edit control for the current cell
         after it was hidden.
 
-        Note that this method does @em not start editing the cell, this is only
-        done by EnableCellEditControl().
+        This method should only be called after calling HideCellEditControl(),
+        to start editing the current grid cell use EnableCellEditControl()
+        instead.
     */
     void ShowCellEditControl();
 
@@ -4282,6 +4488,26 @@ public:
         DisableColResize().
     */
     bool CanDragColSize(int col) const;
+
+    /**
+        Return @true if column edges inside the grid can be dragged to resize
+        the rows.
+
+        @see CanDragGridSize(), CanDragColSize()
+
+        @since 3.1.4
+     */
+    bool CanDragGridColEdges() const;
+
+    /**
+        Return @true if row edges inside the grid can be dragged to resize the
+        rows.
+
+        @see CanDragGridSize(), CanDragRowSize()
+
+        @since 3.1.4
+     */
+    bool CanDragGridRowEdges() const;
 
     /**
         Return @true if the dragging of grid lines to resize rows and columns

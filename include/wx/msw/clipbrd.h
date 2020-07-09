@@ -13,7 +13,7 @@
 
 #if wxUSE_CLIPBOARD
 
-// These functions superceded by wxClipboard, but retained in order to
+// These functions superseded by wxClipboard, but retained in order to
 // implement wxClipboard, and for compatibility.
 
 // open/close the clipboard

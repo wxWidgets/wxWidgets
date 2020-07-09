@@ -260,13 +260,15 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
             return wxDragLink;
         case NSDragOperationNone:
             return wxDragNone;
+        case NSDragOperationDelete:
+            return wxDragNone;
         default:
             wxFAIL_MSG("Unexpected result code");
     }
     return wxDragNone;
 }
 
-@interface DropSourceDelegate : NSObject
+@interface DropSourceDelegate : NSObject<NSDraggingSource>
 {
     BOOL dragFinished;
     int resultCode;
@@ -279,7 +281,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 - (void)setImplementation:(wxDropSource *)dropSource flags:(int)flags;
 - (BOOL)finished;
 - (NSDragOperation)code;
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)forLocal;
+- (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context;
 - (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint;
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
 @end
@@ -314,27 +316,22 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     return resultCode;
 }
 
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)forLocal
+- (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
-    /*
-    By default drag targets receive a mask of NSDragOperationAll (0xf)
-    which, despite its name, does not include the later added
-    NSDragOperationMove (0x10) that sometimes is wanted.
-    Use NSDragOperationEvery instead because it includes all flags.
-
-    Note that this, compared to the previous behaviour, adds
-    NSDragOperationDelete to the mask which seems harmless.
-
-    We are also keeping NSDragOperationLink and NSDragOperationPrivate
-    in to preserve previous behaviour.
-    */
-
     NSDragOperation allowedDragOperations = NSDragOperationEvery;
+
+    // NSDragOperationGeneric also makes a drag to the trash possible
+    // resulting in something we don't support (NSDragOperationDelete)
+
+    allowedDragOperations &= ~(NSDragOperationDelete | NSDragOperationGeneric);
 
     if (m_dragFlags == wxDrag_CopyOnly)
     {
         allowedDragOperations &= ~NSDragOperationMove;
     }
+
+    // we might adapt flags here in the future
+    // context can be NSDraggingContextOutsideApplication or NSDraggingContextWithinApplication
 
     return allowedDragOperations;
 }
@@ -434,6 +431,45 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return gCurrentSource;
 }
 
+@interface wxPasteBoardWriter : NSObject<NSPasteboardWriting>
+{
+    wxDataObject* m_data;
+}
+
+- (id) initWithDataObject:(wxDataObject*) obj;
+@end
+
+@implementation wxPasteBoardWriter
+
+- (id) initWithDataObject:(wxDataObject*) obj
+{
+    m_data = obj;
+    return self;
+}
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+typedef NSString* NSPasteboardType;
+#endif
+
+- (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
+{
+    wxDataFormat format((wxDataFormat::NativeFormat) type);
+    size_t size = m_data->GetDataSize(format);
+    CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
+    m_data->GetDataHere(format, CFDataGetMutableBytePtr(data));
+    CFDataSetLength(data, size);
+    return (id) data;
+}
+
+- (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
+{
+    wxCFMutableArrayRef<CFStringRef> typesarray;
+    m_data->AddSupportedTypes(typesarray);
+    return (NSArray<NSPasteboardType>*) typesarray.autorelease();
+}
+
+@end
+
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
@@ -445,21 +481,13 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     NSView* view = m_window->GetPeer()->GetWXWidget();
     if (view)
     {
-        NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-        wxOSXPasteboard dragPasteboard( pboard );
-        dragPasteboard.Clear();
-
-        m_data->WriteToSink( &dragPasteboard);
-
-        dragPasteboard.Flush();
-
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
         wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
 
-        NSPoint down = [theEvent locationInWindow];
-        NSPoint p = [view convertPoint:down fromView:nil];
-
         gCurrentSource = this;
+
+        DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
+        [delegate setImplementation:this flags:flags];
 
         // add a dummy square as dragged image for the moment,
         // TODO: proper drag image for data
@@ -476,10 +504,15 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         [image unlockFocus];
 
-        DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
-        [delegate setImplementation:this flags:flags];
-        [view dragImage:image at:p offset:NSMakeSize(0.0,0.0)
-            event: theEvent pasteboard: pboard source:delegate slideBack: NO];
+        NSPoint down = [theEvent locationInWindow];
+        NSPoint p = [view convertPoint:down fromView:nil];
+
+        wxPasteBoardWriter* writer = [[wxPasteBoardWriter alloc] initWithDataObject:m_data];
+        wxCFMutableArrayRef<NSDraggingItem*> items;
+        NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:writer];
+        [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
+        items.push_back(item);
+        [view beginDraggingSessionWithItems:items event:theEvent source:delegate];
 
         wxEventLoopBase * const loop = wxEventLoop::GetActive();
         while ( ![delegate finished] )

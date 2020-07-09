@@ -114,7 +114,7 @@ include: Microsoft Visual C++ (.vc), Borland C++ (.bcc) and MinGW/Cygwin
 (.gcc). Makefiles are provided for the wxWidgets library itself, samples,
 demos, and utilities.
 
-On Linux and OS X, you use the @c 'configure' command to generate the
+On Linux and macOS, you use the @c 'configure' command to generate the
 necessary makefiles. You should also use this method when building with
 MinGW/Cygwin on Windows.
 
@@ -127,7 +127,7 @@ On Windows using a compiler other than MinGW/Cygwin, you would build the
 wxWidgets library from the @c "build/msw" directory which contains the relevant
 makefiles.
 
-On Windows using MinGW/Cygwin, and on Unix and OS X, you invoke
+On Windows using MinGW/Cygwin, and on Unix and macOS, you invoke
 'configure' (found in the top-level of the wxWidgets source hierarchy), from
 within a suitable empty directory for containing makefiles, object files and
 libraries.

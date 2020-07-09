@@ -50,7 +50,7 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
  * found in winevent_qt.(h|cpp) to send all Qt events here to QtHandleXXXEvent()
  * methods. All these methods receive the Qt event and the handler. This is
  * done because events of the containers (the scrolled part of the window) are
- * sent to the same wxWindow instance, that must be able to differenciate them
+ * sent to the same wxWindow instance, that must be able to differentiate them
  * as some events need different handling (paintEvent) depending on that.
  * We pass the QWidget pointer to all event handlers for consistency.
  */

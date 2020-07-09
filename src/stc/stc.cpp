@@ -240,18 +240,6 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
 #endif
 
-#ifdef __WXMSW__
-    // Set initial zoom for active DPI
-    const HDC hdc = ::GetDC(parent->GetHWND());
-    const int baseDPI = ::GetDeviceCaps(hdc, LOGPIXELSY);
-    const int activeDPI = parent->GetDPI().y;
-    ::ReleaseDC(parent->GetHWND(), hdc);
-
-    const int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
-    const int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, activeDPI, baseDPI);
-    SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
-#endif
-
     return true;
 }
 
@@ -5445,21 +5433,31 @@ void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
 }
 
 
-void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt)
-{
-    int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
-    int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, evt.GetNewDPI().y, evt.GetOldDPI().y);
-    SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
+void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt) {
+    m_swx->DoInvalidateStyleData();
 
+    // trigger a cursor change, so any cursors created by wxWidgets (like reverse arrow) will be recreated
+    const int oldCursor = GetSTCCursor();
+    SetSTCCursor(-1);
+    SetSTCCursor(oldCursor);
+
+    // adjust the margins to the new DPI
     for ( int i = 0; i < SC_MAX_MARGIN; ++i )
     {
         SetMarginWidth(i, (int)wxMulDivInt32(GetMarginWidth(i), evt.GetNewDPI().y, evt.GetOldDPI().y));
+    }
+
+    // Hide auto-complete popup, there is no (easy) way to set it to the correct size
+    // and position
+    if ( AutoCompActive() )
+    {
+        AutoCompCancel();
     }
 }
 
 
 void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(evt)) {
-    m_swx->DoSysColourChange();
+    m_swx->DoInvalidateStyleData();
 }
 
 

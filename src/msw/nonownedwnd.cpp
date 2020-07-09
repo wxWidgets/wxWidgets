@@ -36,7 +36,9 @@
     #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+#include "wx/dynlib.h"
 #include "wx/scopedptr.h"
+#include "wx/msw/missing.h"
 
 // ============================================================================
 // wxNonOwnedWindow implementation
@@ -128,16 +130,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxNonOwnedWindowShapeImpl);
 };
 
-wxNonOwnedWindow::wxNonOwnedWindow()
-{
-    m_shapeImpl = NULL;
-}
-
-wxNonOwnedWindow::~wxNonOwnedWindow()
-{
-    delete m_shapeImpl;
-}
-
 bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 {
     delete m_shapeImpl;
@@ -146,17 +138,133 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
     return true;
 }
 
-#else // !wxUSE_GRAPHICS_CONTEXT
+#endif // wxUSE_GRAPHICS_CONTEXT
 
-// Trivial ctor and dtor as we don't have anything to do when wxGraphicsContext
-// is not used but still define them here to avoid adding even more #if checks
-// to the header, it it doesn't do any harm even though it's not needed.
 wxNonOwnedWindow::wxNonOwnedWindow()
 {
+#if wxUSE_GRAPHICS_CONTEXT
+    m_shapeImpl = NULL;
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+    m_activeDPI = wxDefaultSize;
+    m_perMonitorDPIaware = false;
 }
 
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
+#if wxUSE_GRAPHICS_CONTEXT
+    delete m_shapeImpl;
+#endif // wxUSE_GRAPHICS_CONTEXT
 }
 
-#endif // wxUSE_GRAPHICS_CONTEXT/!wxUSE_GRAPHICS_CONTEXT
+bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
+{
+    // ::SetParent() can't be used for non-owned windows, as they don't have
+    // any parent, only the owner, so use a different function for them even
+    // if, confusingly, the owner is stored at the same location as the parent
+    // and so uses the same GWLP_HWNDPARENT offset.
+
+    // Do not call the base class function here to skip wxWindow reparenting.
+    if ( !wxWindowBase::Reparent(newParent) )
+        return false;
+
+    const HWND hwndOwner = GetParent() ? GetHwndOf(GetParent()) : 0;
+
+    ::SetWindowLongPtr(GetHwnd(), GWLP_HWNDPARENT, (LONG_PTR)hwndOwner);
+
+    return true;
+}
+
+namespace
+{
+
+static bool IsPerMonitorDPIAware(HWND hwnd)
+{
+    bool dpiAware = false;
+
+    // Determine if 'Per Monitor v2' DPI awareness is enabled in the
+    // applications manifest.
+#if wxUSE_DYNLIB_CLASS
+    #define WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((WXDPI_AWARENESS_CONTEXT)-4)
+    typedef WXDPI_AWARENESS_CONTEXT(WINAPI * GetWindowDpiAwarenessContext_t)(HWND hwnd);
+    typedef BOOL(WINAPI * AreDpiAwarenessContextsEqual_t)(WXDPI_AWARENESS_CONTEXT dpiContextA, WXDPI_AWARENESS_CONTEXT dpiContextB);
+    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = NULL;
+    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = NULL;
+    static bool s_initDone = false;
+
+    if ( !s_initDone )
+    {
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetWindowDpiAwarenessContext, dllUser32);
+        wxDL_INIT_FUNC(s_pfn, AreDpiAwarenessContextsEqual, dllUser32);
+        s_initDone = true;
+    }
+
+    if ( s_pfnGetWindowDpiAwarenessContext && s_pfnAreDpiAwarenessContextsEqual )
+    {
+        WXDPI_AWARENESS_CONTEXT dpiAwarenessContext = s_pfnGetWindowDpiAwarenessContext(hwnd);
+
+        if ( s_pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) == TRUE )
+        {
+            dpiAware = true;
+        }
+    }
+#endif // wxUSE_DYNLIB_CLASS
+
+    return dpiAware;
+}
+
+}
+
+void wxNonOwnedWindow::InheritAttributes()
+{
+    m_activeDPI = GetDPI();
+    m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
+
+    wxNonOwnedWindowBase::InheritAttributes();
+}
+
+WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    WXLRESULT rc = 0;
+    bool processed = false;
+
+    switch ( message )
+    {
+        case WM_DPICHANGED:
+            {
+                const RECT* const prcNewWindow =
+                                         reinterpret_cast<const RECT*>(lParam);
+
+                processed = HandleDPIChange(wxSize(LOWORD(wParam),
+                                                   HIWORD(wParam)),
+                                            wxRectFromRECT(*prcNewWindow));
+            }
+            break;
+    }
+
+    if (!processed)
+        rc = wxNonOwnedWindowBase::MSWWindowProc(message, wParam, lParam);
+
+    return rc;
+}
+
+bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRect)
+{
+    if ( !m_perMonitorDPIaware )
+    {
+        return false;
+    }
+
+    if ( newDPI != m_activeDPI )
+    {
+        MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+        m_activeDPI = newDPI;
+    }
+
+    SetSize(newRect);
+
+    Refresh();
+
+    return true;
+}

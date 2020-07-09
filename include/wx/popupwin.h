@@ -176,7 +176,7 @@ public:
     virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
     virtual void Dismiss() wxOVERRIDE;
 
-    // Overridden to grab the input on some plaforms
+    // Overridden to grab the input on some platforms
     virtual bool Show( bool show = true ) wxOVERRIDE;
 
 protected:

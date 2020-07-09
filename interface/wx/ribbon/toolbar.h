@@ -315,7 +315,7 @@ public:
     virtual size_t GetToolCount() const;
 
     /**
-        Return the id assciated to the tool opaque structure.
+        Return the id associated to the tool opaque structure.
 
         The structure pointer must not be @NULL.
 

@@ -102,6 +102,7 @@ public:
     void OnMultiPaste(wxCommandEvent& event);
     void OnMultipleSelectionsTyping(wxCommandEvent& event);
     void OnCustomPopup(wxCommandEvent& evt);
+    void OnTechnology(wxCommandEvent& event);
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
@@ -115,7 +116,6 @@ public:
     //! language/lexer
     wxString DeterminePrefs (const wxString &filename);
     bool InitializePrefs (const wxString &filename);
-    bool UserSettings (const wxString &filename);
     LanguageInfo const* GetLanguageInfo () {return m_language;}
 
     //! load/save file

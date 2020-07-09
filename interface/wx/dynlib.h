@@ -123,7 +123,7 @@ public:
         is included.
 
         For example, on Windows @c ".dll" is returned, and either @c ".dylib"
-        or @c ".bundle" on OS X.
+        or @c ".bundle" on macOS.
     */
     static wxString GetDllExt(wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 

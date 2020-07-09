@@ -489,7 +489,7 @@ public:
 
         Here are the trivial accessors. Other functions, which might have to
         perform some more complicated calculations to find the answer are under
-        the "Date Arithmetics" section.
+        the "Date Arithmetic" section.
     */
     //@{
 
@@ -738,10 +738,10 @@ public:
 
 
     /**
-        @name Date Arithmetics
+        @name Date Arithmetic
 
         These functions carry out
-        @ref overview_datetime_arithmetics "arithmetics" on the wxDateTime
+        @ref overview_datetime_arithmetics "arithmetic" on the wxDateTime
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan
         may be added to wxDateTime, hence all functions are overloaded to
         accept both arguments.

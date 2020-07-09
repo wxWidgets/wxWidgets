@@ -108,7 +108,7 @@ compatible but can also be binary compatible.
 
 Binary compatibility makes it possible to get the maximum benefit from using
 shared libraries, also known as dynamic link libraries (DLLs) on Windows or
-dynamic shared libraries on OS X.
+dynamic shared libraries on macOS.
 
 For example, suppose several applications are installed on a system requiring
 wxWidgets 2.6.0, 2.6.1 and 2.6.2. Since 2.6.2 is backward compatible with the

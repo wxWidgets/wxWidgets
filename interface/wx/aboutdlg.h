@@ -230,7 +230,7 @@ public:
         "Version " to @a version).
 
         The generic about dialog and native GTK+ dialog use @a version only,
-        as a suffix to the program name. The native MSW and OS X about dialogs
+        as a suffix to the program name. The native MSW and macOS about dialogs
         use the long version.
     */
     void SetVersion(const wxString& version, const wxString& longVersion = wxString());

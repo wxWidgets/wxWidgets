@@ -739,7 +739,7 @@ public:
         This method can be used to allow this application to use the font from
         the given file even if it is not globally installed on the system.
 
-        Under OS X this method actually doesn't do anything other than check
+        Under macOS this method actually doesn't do anything other than check
         for the existence of the file in the "Fonts" subdirectory of the
         application bundle "Resources" directory. You are responsible for
         actually making the font file available in this directory and setting

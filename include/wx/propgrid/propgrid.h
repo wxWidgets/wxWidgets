@@ -593,7 +593,7 @@ enum wxPG_INTERNAL_FLAGS
 // used to do the very same thing, but it hasn't been updated for a while
 // and it is currently deprecated.
 // Please note that most member functions are inherited and as such not
-// documented heree. This means you will probably also want to read
+// documented here. This means you will probably also want to read
 // wxPropertyGridInterface class reference.
 // To process input from a propertygrid control, use these event handler
 // macros to direct input to member functions that take a wxPropertyGridEvent

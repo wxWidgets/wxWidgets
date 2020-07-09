@@ -157,50 +157,39 @@ void wxApp::MacReopenApp()
     // if there is no open window -> create a new one
     // if all windows are hidden -> show the first
     // if some windows are not hidden -> do nothing
+    //
+    // Showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
+    // as hidden TLWs, so do preferences and some classes like wxTaskBarIconWindow use placeholder TLWs.
+    // We don't want to reshow those, so let's just reopen the minimized a.k.a. iconized TLWs.
 
+    wxTopLevelWindow* firstIconized = NULL;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-    if ( !node )
-    {
-        MacNewFile() ;
-    }
-    else
-    {
-        wxTopLevelWindow* firstIconized = NULL ;
-        wxTopLevelWindow* firstHidden = NULL ;
-        while (node)
-        {
-            wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
-            if ( !win->IsShown() )
-            {
-                // make sure we don't show 'virtual toplevel windows' like wxTaskBarIconWindow
-                if ( firstHidden == NULL && ( wxDynamicCast( win, wxFrame ) || wxDynamicCast( win, wxDialog ) ) )
-                   firstHidden = win ;
-            }
-            else if ( win->IsIconized() )
-            {
-                if ( firstIconized == NULL )
-                    firstIconized = win ;
-            }
-            else
-            {
-                // we do have a visible, non-iconized toplevelwindow -> do nothing
-                return;
-            }
 
-            node = node->GetNext();
+    while (node)
+    {
+        wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
+        if ( win->IsShown() )
+        {
+            // we do have a visible, non-iconized toplevelwindow -> do nothing
+            return;
+        }
+        else if ( win->IsIconized() )
+        {
+            if ( firstIconized == NULL )
+                firstIconized = win;
         }
 
-        if ( firstIconized )
-            firstIconized->Iconize( false ) ;
-        
-        // showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
-        // as hidden tlws, we don't want to reshow those, so let's just reopen the minimized a.k.a. iconized tlws
-        // unless we find a regression ...
-#if 0
-        else if ( firstHidden )
-            firstHidden->Show( true );
-#endif
+        node = node->GetNext();
     }
+
+    if ( firstIconized )
+    {
+        firstIconized->Iconize(false);
+        return;
+    }
+
+    // no window was shown, we need to create a new one
+    MacNewFile();
 }
 
 #if wxOSX_USE_COCOA_OR_IPHONE

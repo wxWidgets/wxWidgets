@@ -172,7 +172,11 @@ protected:
             return;
 
         focus = (Window)(win->GetHandle());
-    #endif // __WXGTK__
+    #else
+        // We probably need to do something similar here for the other ports,
+        // but for now just avoid the warning about an unused variable.
+        wxUnusedVar(win);
+    #endif // platform
 
         wxLogTrace("focus", "SetInputFocusToXWindow on Window 0x%ul.", focus);
 

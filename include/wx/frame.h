@@ -18,7 +18,7 @@
 #include "wx/toplevel.h"      // the base class
 #include "wx/statusbr.h"
 
-// the default names for various classs
+// the default names for various classes
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxToolBarNameStr[];
 

@@ -14,6 +14,15 @@
 
 #include <QtOpenGL/QGLWidget>
 
+#if defined(__VISUALC__)
+    #pragma message("OpenGL support is not implemented in wxQt")
+#elif defined(__BORLANDC__)
+    #pragma message "OpenGL support is not implemented in wxQt"
+#else
+    #warning "OpenGL support is not implemented in wxQt"
+#endif
+wxGCC_WARNING_SUPPRESS(unused-parameter)
+
 class wxQtGLWidget : public wxQtEventSignalHandler< QGLWidget, wxGLCanvas >
 {
 public:

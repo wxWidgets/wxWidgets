@@ -454,8 +454,9 @@ void wxGenericAnimationCtrl::DisplayStaticImage()
     if (m_bmpStaticReal.IsOk())
     {
         // copy the inactive bitmap in the backing store
-        // eventually using the mask if the static bitmap has one
-        if ( m_bmpStaticReal.GetMask() )
+        // eventually using the mask or the alpha if the static
+        // bitmap has one
+        if ( m_bmpStaticReal.GetMask() || m_bmpStaticReal.HasAlpha() )
         {
             wxMemoryDC temp;
             temp.SelectObject(m_backingStore);

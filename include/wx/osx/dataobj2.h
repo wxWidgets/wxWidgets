@@ -52,8 +52,7 @@ protected :
     void Init() ;
     void Clear() ;
 
-    void* m_pictHandle ;
-    bool m_pictCreated ;
+    CFDataRef m_pictData ;
 };
 
 // ----------------------------------------------------------------------------

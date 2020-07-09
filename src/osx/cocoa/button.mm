@@ -156,6 +156,9 @@ void wxButtonCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &b
     {
         switch( size )
         {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            case NSControlSizeLarge:
+#endif
             case NSRegularControlSize:
                 left = right = 6;
                 top = 4;
