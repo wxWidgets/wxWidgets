@@ -2112,7 +2112,7 @@ bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormatArray &formats )
 {
     if (formats.GetCount() == 0)
     {
-        SetDropTarget(nullptr);
+        SetDropTarget(NULL);
 
         return true;
     }
