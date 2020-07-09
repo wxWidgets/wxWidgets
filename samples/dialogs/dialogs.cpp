@@ -58,6 +58,10 @@
     #include "wx/tipdlg.h"
 #endif // wxUSE_STARTUP_TIPS
 
+#if wxUSE_TIPWINDOW
+    #include "wx/tipwin.h"
+#endif // wxUSE_TIPWINDOW
+
 #if wxUSE_PROGRESSDLG
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
     #include "wx/datetime.h"      // wxDateTime
@@ -279,6 +283,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_NOTIFY_MSG,                    MyFrame::OnNotifMsg)
 #endif // wxUSE_NOTIFICATION_MESSAGE
 
+#if wxUSE_TIPWINDOW
+    EVT_MENU(DIALOGS_SHOW_TIP,                      MyFrame::OnShowTip)
+    EVT_UPDATE_UI(DIALOGS_SHOW_TIP,                 MyFrame::OnUpdateShowTipUI)
+#endif // wxUSE_TIPWINDOW
 #if wxUSE_RICHTOOLTIP
     EVT_MENU(DIALOGS_RICHTIP_DIALOG,                MyFrame::OnRichTipDialog)
 #endif // wxUSE_RICHTOOLTIP
@@ -588,6 +596,10 @@ bool MyApp::OnInit()
 #endif // wxUSE_NOTIFICATION_MESSAGE
     menuDlg->AppendSubMenu(menuNotif, "&User notifications");
 
+#if wxUSE_TIPWINDOW
+    menuDlg->AppendCheckItem(DIALOGS_SHOW_TIP, "Show &tip window\tShift-Ctrl-H");
+#endif // wxUSE_TIPWINDOW
+
 #if wxUSE_RICHTOOLTIP
     menuDlg->Append(DIALOGS_RICHTIP_DIALOG, "Rich &tooltip dialog...\tCtrl-H");
     menuDlg->AppendSeparator();
@@ -710,6 +722,10 @@ MyFrame::MyFrame(const wxString& title)
     // covers our entire client area to avoid jarring colour jumps
     SetOwnBackgroundColour(m_canvas->GetBackgroundColour());
 #endif // wxUSE_INFOBAR
+
+#if wxUSE_TIPWINDOW
+    m_tipWindow = NULL;
+#endif // wxUSE_TIPWINDOW
 
 #ifdef __WXMSW__
     // Test MSW-specific function allowing to access the "system" menu.
@@ -2356,6 +2372,35 @@ void MyFrame::OnNotifMsg(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_NOTIFICATION_MESSAGE
+
+#if wxUSE_TIPWINDOW
+
+void MyFrame::OnShowTip(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_tipWindow )
+    {
+        m_tipWindow->Close();
+    }
+    else
+    {
+        m_tipWindow = new wxTipWindow
+                          (
+                            this,
+                            "This is just some text to be shown in the tip "
+                            "window, broken into multiple lines, each less "
+                            "than 60 logical pixels wide.",
+                            FromDIP(60),
+                            &m_tipWindow
+                          );
+    }
+}
+
+void MyFrame::OnUpdateShowTipUI(wxUpdateUIEvent& event)
+{
+    event.Check(m_tipWindow != NULL);
+}
+
+#endif // wxUSE_TIPWINDOW
 
 #if wxUSE_RICHTOOLTIP
 
