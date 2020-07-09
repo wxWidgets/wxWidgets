@@ -210,6 +210,19 @@ void wxPopupTransientWindow::DismissOnDeactivate()
     }
 }
 
+void wxPopupTransientWindow::MSWDismissUnfocusedPopup()
+{
+    // When we use wxPU_CONTAINS_CONTROLS, we can react to the popup
+    // deactivation in MSWHandleMessage(), but if we don't have focus, we don't
+    // get any events ourselves, so we rely on wxWindow to forward them to us.
+    if ( !HasFlag(wxPU_CONTAINS_CONTROLS) )
+    {
+        // It doesn't seem necessary to use CallAfter() here, as dismissing
+        // this window shouldn't affect the focus, as it never has it anyhow.
+        DismissAndNotify();
+    }
+}
+
 bool
 wxPopupTransientWindow::MSWHandleMessage(WXLRESULT *result,
                                          WXUINT message,

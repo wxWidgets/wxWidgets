@@ -151,6 +151,9 @@ public:
                                   WXWPARAM wParam,
                                   WXLPARAM lParam) wxOVERRIDE;
 
+    // Override to dismiss the popup.
+    virtual void MSWDismissUnfocusedPopup() wxOVERRIDE;
+
 private:
     void DismissOnDeactivate();
 
