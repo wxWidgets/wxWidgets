@@ -464,9 +464,10 @@ WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 // the template's implementation uses overloaded function declared later (see
 // the wxStrcoll() call in wxStrcoll_String<T>()), so we have to
 // forward-declare the template and implement it below WX_STRCMP_FUNC. OTOH,
-// this fails to compile with VC6, so don't do it for VC. It also causes
+// this fails to compile with VC6, so don't do it for this VC version, but do
+// it for MSVS 2019 which is broken by this workaround. It also causes
 // problems with GCC visibility in newer GCC versions.
-#if !(defined(__VISUALC__) || (wxCHECK_GCC_VERSION(3,5) && !wxCHECK_GCC_VERSION(4,7))) || defined(__clang__)
+#if !((defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(14)) || (wxCHECK_GCC_VERSION(3,5) && !wxCHECK_GCC_VERSION(4,7))) || defined(__clang__)
     #define wxNEEDS_DECL_BEFORE_TEMPLATE
 #endif
 
