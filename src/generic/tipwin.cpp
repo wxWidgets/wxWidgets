@@ -33,6 +33,8 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
+#include "wx/vector.h"
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -60,6 +62,10 @@ public:
 
 private:
     wxTipWindow* m_parent;
+
+    wxVector<wxString> m_textLines;
+    wxCoord m_heightLine;
+
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTipWindowView);
@@ -192,6 +198,8 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 
     m_parent = (wxTipWindow*)parent;
+
+    m_heightLine = 0;
 }
 
 void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
@@ -204,7 +212,6 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
     wxString current;
     wxCoord height, width,
             widthMax = 0;
-    m_parent->m_heightLine = 0;
 
     bool breakLine = false;
     for ( const wxChar *p = text.c_str(); ; p++ )
@@ -215,10 +222,10 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
             if ( width > widthMax )
                 widthMax = width;
 
-            if ( height > m_parent->m_heightLine )
-                m_parent->m_heightLine = height;
+            if ( height > m_heightLine )
+                m_heightLine = height;
 
-            m_parent->m_textLines.Add(current);
+            m_textLines.push_back(current);
 
             if ( !*p )
             {
@@ -232,7 +239,7 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
         else if ( breakLine && (*p == wxT(' ') || *p == wxT('\t')) )
         {
             // word boundary - break the line here
-            m_parent->m_textLines.Add(current);
+            m_textLines.push_back(current);
             current.clear();
             breakLine = false;
         }
@@ -246,14 +253,14 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
             if ( width > widthMax )
                 widthMax = width;
 
-            if ( height > m_parent->m_heightLine )
-                m_parent->m_heightLine = height;
+            if ( height > m_heightLine )
+                m_heightLine = height;
         }
     }
 
     // take into account the border size and the margins
     width  = 2*(TEXT_MARGIN_X + 1) + widthMax;
-    height = 2*(TEXT_MARGIN_Y + 1) + wx_truncate_cast(wxCoord, m_parent->m_textLines.GetCount())*m_parent->m_heightLine;
+    height = 2*(TEXT_MARGIN_Y + 1) + wx_truncate_cast(wxCoord, m_textLines.size())*m_heightLine;
     m_parent->SetClientSize(width, height);
     SetSize(0, 0, width, height);
 }
@@ -280,12 +287,12 @@ void wxTipWindowView::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPoint pt;
     pt.x = TEXT_MARGIN_X;
     pt.y = TEXT_MARGIN_Y;
-    size_t count = m_parent->m_textLines.GetCount();
+    const size_t count = m_textLines.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        dc.DrawText(m_parent->m_textLines[n], pt);
+        dc.DrawText(m_textLines[n], pt);
 
-        pt.y += m_parent->m_heightLine;
+        pt.y += m_heightLine;
     }
 }
 

@@ -16,8 +16,6 @@
 
 #include "wx/popupwin.h"
 
-#include "wx/arrstr.h"
-
 class WXDLLIMPEXP_FWD_CORE wxTipWindowView;
 
 // ----------------------------------------------------------------------------
@@ -65,9 +63,6 @@ protected:
     virtual void OnDismiss() wxOVERRIDE;
 
 private:
-    wxArrayString m_textLines;
-    wxCoord m_heightLine;
-
     wxTipWindowView *m_view;
 
     wxTipWindow** m_windowPtr;
