@@ -163,6 +163,11 @@ void wxDirDialog::GTKOnAccept()
         wxSetWorkingDirectory(m_paths.Last());
     }
 
+    if (!HasFlag(wxDD_MULTIPLE))
+    {
+        m_path = m_paths.Last();
+    }
+
     EndDialog(wxID_OK);
 }
 
@@ -186,17 +191,6 @@ void wxDirDialog::SetPath(const wxString& dir)
         gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
                                             wxGTK_CONV_FN(dir));
     }
-}
-
-wxString wxDirDialog::GetPath() const
-{
-    wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(), "When using wxDD_MULTIPLE, must call GetPaths() instead" );
-    return m_paths.Last();
-}
-
-void wxDirDialog::GetPaths(wxArrayString& paths) const
-{
-    paths = m_paths;
 }
 
 #endif // wxUSE_DIRDLG

@@ -157,6 +157,11 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_paths.Add([url fileSystemRepresentation]);
         }
 
+        if ( !HasFlag(wxDD_MULTIPLE) )
+        {
+            m_path = m_paths.Last();
+        }
+
         result = wxID_OK;
     }
     SetReturnCode(result);
@@ -170,17 +175,5 @@ void wxDirDialog::SetTitle(const wxString &title)
     m_title = title;
     wxDialog::SetTitle(title);
 }
-
-wxString wxDirDialog::GetPath() const
-{
-    wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(), "When using wxDD_MULTIPLE, must call GetPaths() instead" );
-    return m_paths.Last();
-}
-
-void wxDirDialog::GetPaths(wxArrayString& paths) const
-{
-    paths = m_paths;
-}
-
 
 #endif // wxUSE_DIRDLG

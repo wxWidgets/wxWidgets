@@ -151,19 +151,6 @@ void wxDirDialog::SetPath(const wxString& path)
     }
 }
 
-wxString wxDirDialog::GetPath() const
-{
-    wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxEmptyString,
-         "When using wxDD_MULTIPLE, must call GetPaths() instead" );
-
-    return m_path;
-}
-
-void wxDirDialog::GetPaths(wxArrayString& paths) const
-{
-    paths = m_paths;
-}
-
 int wxDirDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -293,7 +280,7 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
     {
         if ( !HasFlag(wxDD_MULTIPLE) )
         {
-            m_path = m_paths.front();
+            m_path = m_paths.Last();
         }
 
         return wxID_OK;

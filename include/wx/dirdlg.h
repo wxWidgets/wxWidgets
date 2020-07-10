@@ -90,19 +90,20 @@ public:
     virtual wxString GetMessage() const { return m_message; }
     virtual wxString GetPath() const
     {
-        wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(), "When using wxDD_MULTIPLE, must call GetPaths() instead" );
+        wxCHECK_MSG( !HasFlag(wxDD_MULTIPLE), wxString(),
+                     "When using wxDD_MULTIPLE, must call GetPaths() instead" );
         return m_path;
     }
 
     virtual void GetPaths(wxArrayString& paths) const
     {
-        paths.clear();
-        paths.push_back(m_path);
+        paths = m_paths;
     }
 
 protected:
     wxString m_message;
     wxString m_path;
+    wxArrayString m_paths;
 };
 
 

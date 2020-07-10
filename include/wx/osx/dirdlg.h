@@ -51,10 +51,6 @@ public:
     // only for compatibility with older versions
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
-    virtual wxString GetPath() const wxOVERRIDE;
-    virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
-
-
 #if wxOSX_USE_COCOA
     virtual void ShowWindowModal() wxOVERRIDE;
     virtual void ModalFinishedCallback(void* panel, int returnCode) wxOVERRIDE;
@@ -72,7 +68,6 @@ private:
     // Common part of all ctors.
     void Init();
 
-    wxArrayString m_paths;
     wxString m_title;
 
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
