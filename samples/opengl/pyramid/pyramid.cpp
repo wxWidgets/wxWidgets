@@ -565,7 +565,7 @@ void MyGLCanvas::OnSize(wxSizeEvent& event)
     SetCurrent(*m_oglContext);
 
     // It's up to the application code to update the OpenGL viewport settings.
-    const wxSize size = event.GetSize() * GetContentScaleFactor();
+    const wxSize size = event.GetSize() * GetOpenGLScaleFactor();
     m_winHeight = size.y;
     m_oglManager->SetViewport(0, 0, size.x, m_winHeight);
 

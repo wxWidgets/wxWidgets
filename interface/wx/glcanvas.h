@@ -752,7 +752,7 @@ enum
     platforms where wxWindow uses logical pixels, affected by the coordinate
     scaling, on high DPI displays. Thus, if you want to set the OpenGL view
     port to the size of entire window, you must multiply the result returned by
-    wxWindow::GetClientSize() by wxWindow::GetContentScaleFactor() before
+    wxWindow::GetClientSize() by wxGLCanvas::GetOpenGLScaleFactor() before
     passing it to @c glViewport(). Same considerations apply to other OpenGL
     functions and other coordinates, notably those retrieved from wxMouseEvent
     in the event handlers.
@@ -935,6 +935,23 @@ public:
         @return @false if an error occurred.
     */
     bool SetCurrent(const wxGLContext& context) const;
+
+    /**
+        Returns the scale factor for transformation between logical and
+        physical OpenGL coordinates.
+
+        This factor is always 1 on the platforms where logical pixels are the
+        same as physical ones, in any DPI (such as MSW), but can be different
+        from it on the platforms where logical and physical pixels may differ
+        due to DPI scaling (such as GTK 3 or macOS).
+
+        To handle the differences between the platforms, always multiply the
+        values expressed in window coordinates (window sizes, mouse position
+        etc) by this factor before passing them to OpenGL functions.
+
+        @since 3.1.4
+    */
+    double GetOpenGLScaleFactor() const;
 
     /**
         Swaps the double-buffer of this window, making the back-buffer the
