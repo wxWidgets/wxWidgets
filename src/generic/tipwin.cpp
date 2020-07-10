@@ -33,6 +33,7 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
+#include "wx/display.h"
 #include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
@@ -116,19 +117,45 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 
-    // set size, position and show it
-    m_view = new wxTipWindowView(this);
-    m_view->Adjust(text, maxLength);
-
     int x, y;
     wxGetMousePosition(&x, &y);
 
-    // we want to show the tip below the mouse, not over it
+    // move to the center of the target display so wxTipWindowView will use the
+    // correct DPI
+    wxPoint posScreen;
+    wxSize sizeScreen;
+
+    const int displayNum = wxDisplay::GetFromPoint(wxPoint(x, y));
+    if ( displayNum != wxNOT_FOUND )
+    {
+        const wxRect rectScreen = wxDisplay(displayNum).GetGeometry();
+        posScreen = rectScreen.GetPosition();
+        sizeScreen = rectScreen.GetSize();
+    }
+    else // outside of any display?
+    {
+        // just use the primary one then
+        posScreen = wxPoint(0, 0);
+        sizeScreen = wxGetDisplaySize();
+    }
+    wxPoint center(posScreen.x + sizeScreen.GetWidth() / 2,
+                   posScreen.y + sizeScreen.GetHeight() / 2);
+    Move(center, wxSIZE_NO_ADJUSTMENTS);
+
+    // set size, position and show it
+    m_view = new wxTipWindowView(this);
+    m_view->Adjust(text, FromDIP(parent->ToDIP(maxLength)) );
+
+    // we want to show the tip below the mouse, not over it, make sure to not
+    // overflow into the next display
     //
     // NB: the reason we use "/ 2" here is that we don't know where the current
     //     cursors hot spot is... it would be nice if we could find this out
     //     though
-    y += wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this) / 2;
+    int cursorOffset = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this) / 2;
+    if (y + cursorOffset >= posScreen.y + sizeScreen.GetHeight())
+        cursorOffset = posScreen.y + sizeScreen.GetHeight() - y - 1;
+    y += cursorOffset;
 
     Position(wxPoint(x, y), wxSize(0,0));
     Popup(m_view);
