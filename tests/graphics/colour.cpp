@@ -37,33 +37,10 @@
     CPPUNIT_ASSERT_EQUAL( a, (int)c.Alpha() )
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
 
-class ColourTestCase : public CppUnit::TestCase
-{
-public:
-    ColourTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( ColourTestCase );
-        CPPUNIT_TEST( GetSetRGB );
-        CPPUNIT_TEST( FromString );
-    CPPUNIT_TEST_SUITE_END();
-
-    void GetSetRGB();
-    void FromString();
-
-    wxDECLARE_NO_COPY_CLASS(ColourTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ColourTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ColourTestCase, "ColourTestCase" );
-
-void ColourTestCase::GetSetRGB()
+TEST_CASE("wxColour::GetSetRGB", "[colour][rgb]")
 {
     wxColour c;
     c.SetRGB(0x123456);
@@ -96,7 +73,7 @@ void ColourTestCase::GetSetRGB()
 #endif // __WXX11__
 }
 
-void ColourTestCase::FromString()
+TEST_CASE("wxColour::FromString", "[colour][string]")
 {
     ASSERT_EQUAL_RGB( wxColour("rgb(11, 22, 33)"), 11, 22, 33 );
     // wxX11 doesn't support alpha at all currently.
