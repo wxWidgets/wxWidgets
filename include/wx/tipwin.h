@@ -14,15 +14,8 @@
 
 #if wxUSE_TIPWINDOW
 
-#if wxUSE_POPUPWIN
-    #include "wx/popupwin.h"
+#include "wx/popupwin.h"
 
-    #define wxTipWindowBase wxPopupTransientWindow
-#else
-    #include "wx/frame.h"
-
-    #define wxTipWindowBase wxFrame
-#endif
 #include "wx/arrstr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxTipWindowView;
@@ -31,7 +24,7 @@ class WXDLLIMPEXP_FWD_CORE wxTipWindowView;
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTipWindow : public wxTipWindowBase
+class WXDLLIMPEXP_CORE wxTipWindow : public wxPopupTransientWindow
 {
 public:
     // the mandatory ctor parameters are: the parent window and the text to
@@ -69,12 +62,7 @@ protected:
     // event handlers
     void OnMouseClick(wxMouseEvent& event);
 
-#if !wxUSE_POPUPWIN
-    void OnActivate(wxActivateEvent& event);
-    void OnKillFocus(wxFocusEvent& event);
-#else // wxUSE_POPUPWIN
     virtual void OnDismiss() wxOVERRIDE;
-#endif // wxUSE_POPUPWIN/!wxUSE_POPUPWIN
 
 private:
     wxArrayString m_textLines;

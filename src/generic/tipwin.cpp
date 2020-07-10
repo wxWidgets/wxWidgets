@@ -55,19 +55,11 @@ public:
     void OnMouseClick(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
 
-#if !wxUSE_POPUPWIN
-    void OnKillFocus(wxFocusEvent& event);
-#endif // wxUSE_POPUPWIN
-
     // calculate the client rect we need to display the text
     void Adjust(const wxString& text, wxCoord maxLength);
 
 private:
     wxTipWindow* m_parent;
-
-#if !wxUSE_POPUPWIN
-    long m_creationTime;
-#endif // !wxUSE_POPUPWIN
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTipWindowView);
@@ -81,15 +73,10 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(wxTipWindow, wxTipWindowBase)
+wxBEGIN_EVENT_TABLE(wxTipWindow, wxPopupTransientWindow)
     EVT_LEFT_DOWN(wxTipWindow::OnMouseClick)
     EVT_RIGHT_DOWN(wxTipWindow::OnMouseClick)
     EVT_MIDDLE_DOWN(wxTipWindow::OnMouseClick)
-
-#if !wxUSE_POPUPWIN
-    EVT_KILL_FOCUS(wxTipWindow::OnKillFocus)
-    EVT_ACTIVATE(wxTipWindow::OnActivate)
-#endif // !wxUSE_POPUPWIN
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(wxTipWindowView, wxWindow)
@@ -100,10 +87,6 @@ wxBEGIN_EVENT_TABLE(wxTipWindowView, wxWindow)
     EVT_MIDDLE_DOWN(wxTipWindowView::OnMouseClick)
 
     EVT_MOTION(wxTipWindowView::OnMouseMove)
-
-#if !wxUSE_POPUPWIN
-    EVT_KILL_FOCUS(wxTipWindowView::OnKillFocus)
-#endif // !wxUSE_POPUPWIN
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -115,13 +98,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
                          wxCoord maxLength,
                          wxTipWindow** windowPtr,
                          wxRect *rectBounds)
-#if wxUSE_POPUPWIN
            : wxPopupTransientWindow(parent)
-#else
-           : wxFrame(parent, wxID_ANY, wxEmptyString,
-                     wxDefaultPosition, wxDefaultSize,
-                     wxNO_BORDER | wxFRAME_NO_TASKBAR )
-#endif
 {
     SetTipWindowPtr(windowPtr);
     if ( rectBounds )
@@ -136,9 +113,6 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     // set size, position and show it
     m_view = new wxTipWindowView(this);
     m_view->Adjust(text, maxLength);
-#if !wxUSE_POPUPWIN
-    m_view->SetFocus();
-#endif
 
     int x, y;
     wxGetMousePosition(&x, &y);
@@ -150,16 +124,11 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     //     though
     y += wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this) / 2;
 
-#if wxUSE_POPUPWIN
     Position(wxPoint(x, y), wxSize(0,0));
     Popup(m_view);
     #ifdef __WXGTK__
         m_view->CaptureMouse();
     #endif
-#else
-    Move(x, y);
-    Show(true);
-#endif
 }
 
 wxTipWindow::~wxTipWindow()
@@ -168,11 +137,9 @@ wxTipWindow::~wxTipWindow()
     {
         *m_windowPtr = NULL;
     }
-    #if wxUSE_POPUPWIN
-        #ifdef __WXGTK__
-            if ( m_view->HasCapture() )
-                m_view->ReleaseMouse();
-        #endif
+    #ifdef __WXGTK__
+        if ( m_view->HasCapture() )
+            m_view->ReleaseMouse();
     #endif
 }
 
@@ -181,32 +148,10 @@ void wxTipWindow::OnMouseClick(wxMouseEvent& WXUNUSED(event))
     Close();
 }
 
-#if wxUSE_POPUPWIN
-
 void wxTipWindow::OnDismiss()
 {
     Close();
 }
-
-#else // !wxUSE_POPUPWIN
-
-void wxTipWindow::OnActivate(wxActivateEvent& event)
-{
-    if (!event.GetActive())
-        Close();
-}
-
-void wxTipWindow::OnKillFocus(wxFocusEvent& WXUNUSED(event))
-{
-    // Under Windows at least, we will get this immediately
-    // because when the view window is focussed, the
-    // tip window goes out of focus.
-#ifdef __WXGTK__
-    Close();
-#endif
-}
-
-#endif // wxUSE_POPUPWIN // !wxUSE_POPUPWIN
 
 void wxTipWindow::SetBoundingRect(const wxRect& rectBound)
 {
@@ -221,7 +166,6 @@ void wxTipWindow::Close()
         m_windowPtr = NULL;
     }
 
-#if wxUSE_POPUPWIN
     Show(false);
     #ifdef __WXGTK__
         if ( m_view->HasCapture() )
@@ -232,9 +176,6 @@ void wxTipWindow::Close()
     #ifndef __WXOSX__
         Destroy();
     #endif
-#else
-    wxFrame::Close();
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -249,10 +190,6 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
     // set colours
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
-
-#if !wxUSE_POPUPWIN
-    m_creationTime = wxGetLocalTime();
-#endif // !wxUSE_POPUPWIN
 
     m_parent = (wxTipWindow*)parent;
 }
@@ -372,14 +309,5 @@ void wxTipWindowView::OnMouseMove(wxMouseEvent& event)
         event.Skip();
     }
 }
-
-#if !wxUSE_POPUPWIN
-void wxTipWindowView::OnKillFocus(wxFocusEvent& WXUNUSED(event))
-{
-    // Workaround the kill focus event happening just after creation in wxGTK
-    if (wxGetLocalTime() > m_creationTime + 1)
-        m_parent->Close();
-}
-#endif // !wxUSE_POPUPWIN
 
 #endif // wxUSE_TIPWINDOW
