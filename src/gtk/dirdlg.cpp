@@ -196,7 +196,6 @@ wxString wxDirDialog::GetPath() const
 
 void wxDirDialog::GetPaths(wxArrayString& paths) const
 {
-    paths.Empty();
     paths = m_paths;
 }
 

@@ -94,7 +94,11 @@ public:
         return m_path;
     }
 
-    virtual void GetPaths(wxArrayString& paths) const { paths.Empty(); paths.Add(m_path); }
+    virtual void GetPaths(wxArrayString& paths) const
+    {
+        paths.clear();
+        paths.push_back(m_path);
+    }
 
 protected:
     wxString m_message;
