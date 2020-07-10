@@ -100,7 +100,7 @@ public:
 
     // implement wxGLCanvasBase methods
     virtual bool SwapBuffers() wxOVERRIDE;
-
+    virtual double GetOpenGLScaleFactor() const wxOVERRIDE;
 
     // Mac-specific functions
     // ----------------------

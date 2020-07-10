@@ -280,7 +280,7 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     // This is OK here only because there is only one canvas that uses the
     // context. See the cube sample for that case that multiple canvases are
     // made current with one context.
-    const wxSize size = event.GetSize() * GetContentScaleFactor();
+    const wxSize size = event.GetSize() * GetOpenGLScaleFactor();
     glViewport(0, 0, size.x, size.y);
 }
 
