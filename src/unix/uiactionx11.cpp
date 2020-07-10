@@ -130,27 +130,19 @@ protected:
         wxYield();
         wxMilliSleep(50);
 
+    #ifndef __WXGTK3__
         SetInputFocusToXWindow();
+    #endif
     }
 
-    // This helper function tries to set the input focus to the active (top level)
-    // window, i.e.: the window to which keyboard events will be reported.
+    // Workaround a focus problem happening with GTK2 when running under Xvfb,
+    // i.e. keyboard and mouse events not delivered to the right window.
     //
-    // Normally we would expect the input focus to be correctly set by the WM.
-    // But for some reasons, the input focus is set to PointerRoot under Xvfb,
-    // which means: all keyboard events are forewarded to whatever is underneath
-    // mouse pointer. and consequently, our fake events could be simply lost and
-    // do not reach the subject window at all.
+    // This helper function tries to set the input focus to the active (top level)
+    // window, i.e.: the window to which keyboard events will be delivered.
     void SetInputFocusToXWindow()
     {
-        Window focus;
-        int revert_to; // dummy
-
-        XGetInputFocus(m_display, &focus, &revert_to);
-
-        if ( focus != PointerRoot && focus != None )
-            return;
-
+        Window focus = None;
         wxWindow* win = wxGetActiveWindow();
 
     #if defined(__WXGTK20__)
@@ -180,7 +172,8 @@ protected:
 
         wxLogTrace("focus", "SetInputFocusToXWindow on Window 0x%lu.", focus);
 
-        XSetInputFocus(m_display, focus, RevertToPointerRoot, CurrentTime);
+        if ( focus != None )
+            XSetInputFocus(m_display, focus, RevertToPointerRoot, CurrentTime);
     }
 
     wxX11Display m_display;
