@@ -178,7 +178,7 @@ protected:
         wxUnusedVar(win);
     #endif // platform
 
-        wxLogTrace("focus", "SetInputFocusToXWindow on Window 0x%ul.", focus);
+        wxLogTrace("focus", "SetInputFocusToXWindow on Window 0x%lu.", focus);
 
         XSetInputFocus(m_display, focus, RevertToPointerRoot, CurrentTime);
     }
