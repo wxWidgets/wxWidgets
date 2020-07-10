@@ -40,6 +40,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
 #include "wx/msw/private/comptr.h"
+#include "wx/msw/private/cotaskmemptr.h"
 #include "wx/dynlib.h"
 
 #include <initguid.h>
@@ -483,8 +484,8 @@ bool GetPathsFromIFileOpenDialog(const wxCOMPtr<IFileOpenDialog>& fileDialog, bo
 // helper function for wxDirDialog::ShowIFileOpenDialog()
 bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path)
 {
-    LPOLESTR pathOLE = NULL;
-    const HRESULT hr = item->GetDisplayName(SIGDN_FILESYSPATH, &pathOLE);
+    wxCoTaskMemPtr<WCHAR> pOLEPath;
+    const HRESULT hr = item->GetDisplayName(SIGDN_FILESYSPATH, &pOLEPath);
 
     if ( FAILED(hr) )
     {
@@ -492,8 +493,7 @@ bool ConvertIShellItemToPath(const wxCOMPtr<IShellItem>& item, wxString& path)
         return false;
     }
 
-    path = pathOLE;
-    CoTaskMemFree(pathOLE);
+    path = pOLEPath;
 
     return true;
 }
