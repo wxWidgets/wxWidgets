@@ -108,7 +108,9 @@ wxBEGIN_EVENT_TABLE(SimpleTransientPopup,wxPopupTransientWindow)
 wxEND_EVENT_TABLE()
 
 SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
-                     :wxPopupTransientWindow( parent )
+                     :wxPopupTransientWindow( parent,
+                                              wxBORDER_NONE |
+                                              wxPU_CONTAINS_CONTROLS )
 {
     m_panel = new wxScrolledWindow( this, wxID_ANY );
     m_panel->SetBackgroundColour( *wxLIGHT_GREY );

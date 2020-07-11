@@ -544,6 +544,13 @@ private:
     SettingsData m_settingsData;
 #endif // USE_SETTINGS_DIALOG
 
+#if wxUSE_TIPWINDOW
+    void OnShowTip(wxCommandEvent& event);
+    void OnUpdateShowTipUI(wxUpdateUIEvent& event);
+
+    wxTipWindow *m_tipWindow;
+#endif // wxUSE_TIPWINDOW
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -623,6 +630,7 @@ enum
     DIALOGS_REPLACE,
     DIALOGS_REQUEST,
     DIALOGS_NOTIFY_MSG,
+    DIALOGS_SHOW_TIP,
     DIALOGS_RICHTIP_DIALOG,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
