@@ -270,6 +270,12 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
+    // Negative values in the range are allowed only if base == 10
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(minVal, maxVal, GetBase()) )
+    {
+        return;
+    }
+
     wxSpinCtrlEventDisabler disable(this);
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
 
@@ -446,6 +452,10 @@ bool wxSpinCtrl::SetBase(int base)
 
     if ( base == m_base )
         return true;
+
+    // For negative values in the range only base == 10 is allowed
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(static_cast<int>(DoGetMin()), static_cast<int>(DoGetMax()), base) )
+        return false;
 
     m_base = base;
 
