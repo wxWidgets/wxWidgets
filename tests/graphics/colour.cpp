@@ -145,6 +145,16 @@ TEST_CASE("wxColour::FromString", "[colour][string]")
     CHECK( !wxFromString("rgba(1, 2, 3.456, foo)", &col) );
 }
 
+TEST_CASE("wxColour::GetAsString", "[colour][string]")
+{
+    CHECK( wxColour().GetAsString() == "" );
+
+    wxColour red("red");
+    CHECK( red.GetAsString() == "red" );
+    CHECK( red.GetAsString(wxC2S_CSS_SYNTAX) == "rgb(255, 0, 0)" );
+    CHECK( red.GetAsString(wxC2S_HTML_SYNTAX) == "#FF0000" );
+}
+
 TEST_CASE("wxColour::GetLuminance", "[colour][luminance]")
 {
     CHECK( wxBLACK->GetLuminance() == Approx(0.0) );

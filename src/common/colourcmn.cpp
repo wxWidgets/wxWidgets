@@ -218,6 +218,9 @@ bool wxColourBase::FromString(const wxString& str)
 
 wxString wxColourBase::GetAsString(long flags) const
 {
+    if ( !IsOk() )
+        return wxString();
+
     wxString colName;
 
     if ( IsSolid() )
