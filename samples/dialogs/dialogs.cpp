@@ -202,6 +202,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_DIRDLG
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
     EVT_MENU(DIALOGS_DIRNEW_CHOOSE,                 MyFrame::DirChooseNew)
+    EVT_MENU(DIALOGS_DIRMULTIPLE_CHOOSE,            MyFrame::DirChooseMultiple)
 #endif // wxUSE_DIRDLG
 
 #if USE_MODAL_PRESENTATION
@@ -488,6 +489,7 @@ bool MyApp::OnInit()
 
     dir_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
     dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  "Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D");
+    dir_menu->Append(DIALOGS_DIRMULTIPLE_CHOOSE,  "Choose multiple and hidden directories\tAlt-Ctrl-D");
     menuDlg->Append(wxID_ANY,"&Directory operations",dir_menu);
 
     #if USE_DIRDLG_GENERIC
@@ -1802,6 +1804,36 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
 {
     DoDirChoose(wxDD_DEFAULT_STYLE & ~wxDD_DIR_MUST_EXIST);
+}
+
+void MyFrame::DirChooseMultiple(wxCommandEvent& WXUNUSED(event))
+{
+    // pass some initial dir and the style to wxDirDialog
+    int style = wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE | wxDD_SHOW_HIDDEN;
+    wxString dirHome;
+    wxGetHomeDir(&dirHome);
+
+    wxDirDialog dialog(this, "Testing multiple directory picker", dirHome, style);
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        wxArrayString paths;
+
+        dialog.GetPaths(paths);
+
+        wxString msg, s;
+        size_t count = paths.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            s.Printf("Directory %d: %s\n",
+                     (int)n, paths[n]);
+
+            msg += s;
+        }
+
+        wxMessageDialog dialog2(this, msg, "Selected directories");
+        dialog2.ShowModal();
+    }
 }
 #endif // wxUSE_DIRDLG
 
