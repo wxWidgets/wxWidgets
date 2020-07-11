@@ -323,7 +323,7 @@ void wxInfoBar::RemoveButton(wxWindowID btnid)
         if (i->id == btnid)
         {
             gtk_widget_destroy(i->button);
-            buttons.erase(i.base());
+            buttons.erase(i.base() - 1);
 
             // see comment in GTKAddButton()
             InvalidateBestSize();
