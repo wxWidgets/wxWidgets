@@ -198,7 +198,7 @@ public:
         reference operator*() const { return *m_ptr; }
         pointer operator->() const { return m_ptr; }
 
-        iterator base() const { return m_ptr; }
+        iterator base() const { return m_ptr + 1; }
 
         reverse_iterator& operator++()
             { --m_ptr; return *this; }
@@ -261,7 +261,7 @@ public:
         const_reference operator*() const { return *m_ptr; }
         const_pointer operator->() const { return m_ptr; }
 
-        const_iterator base() const { return m_ptr; }
+        const_iterator base() const { return m_ptr + 1; }
 
         const_reverse_iterator& operator++()
             { --m_ptr; return *this; }
