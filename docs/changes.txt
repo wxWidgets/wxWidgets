@@ -590,6 +590,7 @@ All:
 All (GUI):
 
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
+- Use system colour in AUI dock art (Michel Le Bihan).
 
 wxMSW:
 

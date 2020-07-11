@@ -183,7 +183,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactiveCaptionColour = darker1Colour;
     m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
-    m_inactiveCaptionTextColour = *wxBLACK;
+    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
