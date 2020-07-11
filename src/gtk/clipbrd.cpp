@@ -306,6 +306,8 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     if ( !size )
         return;
 
+    wxLogTrace(TRACE_CLIPBOARD, "Valid clipboard data found");
+
     wxCharBuffer buf(size - 1); // it adds 1 internally (for NUL)
 
     // text data must be returned in UTF8 if format is wxDF_UNICODETEXT
@@ -595,8 +597,19 @@ void wxClipboard::Clear()
 
 bool wxClipboard::Flush()
 {
-    gtk_clipboard_store( gtk_clipboard_get( GTKGetClipboardAtom() ) );
-    return true;
+    // Only store the non-primary clipboard when flushing. The primary clipboard is a scratch-space
+    // formed using the currently selected text.
+    if ( !m_usePrimary )
+    {
+        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+
+        gtk_clipboard_set_can_store(clipboard, NULL, 0);
+        gtk_clipboard_store(clipboard);
+
+        return true;
+    }
+
+    return false;
 }
 
 bool wxClipboard::Open()
