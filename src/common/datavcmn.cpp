@@ -989,7 +989,8 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
     const int align = GetEffectiveAlignment();
 
     const wxSize size = GetSize();
-
+    rectItem.width = size.GetWidth();
+    rectItem.height = size.GetHeight();
     // take alignment into account only if there is enough space, otherwise
     // show as much contents as possible
     //
