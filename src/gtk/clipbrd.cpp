@@ -41,7 +41,6 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 // data
 // ----------------------------------------------------------------------------
 
-static GdkAtom  g_clipboardAtom   = 0;
 static GdkAtom  g_targetsAtom     = 0;
 static GdkAtom  g_timestampAtom   = 0;
 
@@ -231,7 +230,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 
         kind = wxClipboard::Primary;
     }
-    else if (event->selection == g_clipboardAtom)
+    else if ( event->selection == GDK_SELECTION_CLIPBOARD )
     {
         wxLogTrace(TRACE_CLIPBOARD, wxT("Lost clipboard" ));
 
@@ -471,8 +470,6 @@ wxClipboard::wxClipboard()
                       G_CALLBACK (selection_clear_clip), NULL);
 
     // initialize atoms we use if not done yet
-    if ( !g_clipboardAtom )
-        g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
     if ( !g_targetsAtom )
         g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
     if ( !g_timestampAtom )
@@ -494,7 +491,7 @@ wxClipboard::~wxClipboard()
 GdkAtom wxClipboard::GTKGetClipboardAtom() const
 {
     return m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
-                        : g_clipboardAtom;
+                        : (GdkAtom)GDK_SELECTION_CLIPBOARD;
 }
 
 void wxClipboard::GTKClearData(Kind kind)
@@ -775,7 +772,7 @@ wxDataObject* wxClipboard::GTKGetDataObject( GdkAtom atom )
 
         return Data( wxClipboard::Primary );
     }
-    else if ( atom == g_clipboardAtom )
+    else if ( atom == GDK_SELECTION_CLIPBOARD )
     {
         wxLogTrace(TRACE_CLIPBOARD, wxT("Clipboard data requested" ));
 
