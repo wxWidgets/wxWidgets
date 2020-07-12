@@ -1028,6 +1028,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1059,6 +1060,7 @@ enable_official_build
 enable_vendor
 enable_all_features
 enable_sys_libs
+enable_tests
 with_dpi
 enable_universal
 with_themes
@@ -1454,6 +1456,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1706,6 +1709,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1843,7 +1855,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1996,6 +2008,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2040,6 +2053,7 @@ Optional Features:
   --enable-vendor=VENDOR  vendor name (win32 DLL only)
   --disable-all-features  disable all optional features to build minimal library
   --disable-sys-libs      disable all use of system libraries, use only built-in ones
+  --disable-tests         disable building tests
   --enable-universal      use wxWidgets GUI controls instead of native ones
   --enable-nanox          use NanoX
   --enable-gpe            use GNOME PDA Environment features if possible
@@ -4290,6 +4304,35 @@ fi
 
 
           eval "$wx_cv_use_sys_libs"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-tests was given.
+if test "${enable_tests+set}" = set; then :
+  enableval=$enable_tests;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_tests='wxUSE_TESTS_SUBDIR=yes'
+                          else
+                            wx_cv_use_tests='wxUSE_TESTS_SUBDIR=no'
+                          fi
+
+else
+
+                          wx_cv_use_tests='wxUSE_TESTS_SUBDIR=${'DEFAULT_wxUSE_TESTS_SUBDIR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_tests"
 
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
@@ -21525,6 +21568,26 @@ $as_echo "$as_me: WARNING: zlib library not found or too old, will use built-in 
                         wxUSE_ZLIB=sys
         fi
     fi
+
+                if test "$wxUSE_ZLIB" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether zlib.h file exists" >&5
+$as_echo_n "checking whether zlib.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/zlib/zlib.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in zlib library, but the required file
+    $ac_confdir/src/zlib/zlib.h couldn't be found.
+    You might need to run
+
+        git submodule update --init src/zlib
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+    fi
 fi
 
 
@@ -21639,6 +21702,26 @@ $as_echo "$as_me: WARNING: system png library not found or too old, will use bui
             fi
         else
                         wxUSE_LIBPNG=sys
+        fi
+    fi
+
+                if test "$wxUSE_LIBPNG" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether png.c file exists" >&5
+$as_echo_n "checking whether png.c file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/png/png.c" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in png library, but the required file
+    $ac_confdir/src/png/png.c couldn't be found.
+    You might need to run
+
+        git submodule update --init src/png
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
         fi
     fi
 fi
@@ -21794,6 +21877,26 @@ _ACEOF
 fi
 
             fi
+        fi
+    fi
+
+                if test "$wxUSE_LIBJPEG" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether jpeglib.h file exists" >&5
+$as_echo_n "checking whether jpeglib.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/jpeg/jpeglib.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in jpeg library, but the required file
+    $ac_confdir/src/jpeg/jpeglib.h couldn't be found.
+    You might need to run
+
+        git submodule update --init src/jpeg
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
         fi
     fi
 fi
@@ -22134,6 +22237,24 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
         fi
     fi
     if test "$wxUSE_LIBTIFF" = "builtin" ; then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether tiff.h file exists" >&5
+$as_echo_n "checking whether tiff.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/tiff/libtiff/tiff.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in tiff library, but the required file
+    $ac_confdir/src/tiff/libtiff/tiff.h couldn't be found.
+    You might need to run:
+
+        git submodule update --init src/tiff
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+
                                         ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
         if test "$wxUSE_LIBLZMA" = "no"; then
             ac_configure_args="$ac_configure_args --disable-lzma"
@@ -22263,6 +22384,24 @@ $as_echo "$as_me: WARNING: system expat library not found, will use built-in ins
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether expat.h file exists" >&5
+$as_echo_n "checking whether expat.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/expat/expat/lib/expat.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in expat library, but the required file
+    $ac_confdir/src/expat/expat/lib/expat.h couldn't be found.
+    You might need to run:
+
+        git submodule update --init src/expat
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+
                         save_CC="$CC"
            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to accept ISO C99" >&5
 $as_echo_n "checking for $CC option to accept ISO C99... " >&6; }
@@ -40448,7 +40587,29 @@ if test "$wxUSE_GUI" = "yes"; then
 else
             SUBDIRS="samples utils"
 fi
-SUBDIRS="$SUBDIRS tests"
+
+if test "$wxUSE_TESTS_SUBDIR" != "no"; then
+        SUBDIRS="$SUBDIRS tests"
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch.hpp file exists" >&5
+$as_echo_n "checking whether catch.hpp file exists... " >&6; }
+    if ! test -f "$ac_confdir/3rdparty/catch/include/catch.hpp" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        as_fn_error $? "
+    CATCH (C++ Automated Test Cases in Headers) is required, the required file
+    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't found.
+
+    You might need to run
+
+        git submodule update --init 3rdparty/catch
+
+    to fix this." "$LINENO" 5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    fi
+fi
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then

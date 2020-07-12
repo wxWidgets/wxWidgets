@@ -402,6 +402,7 @@ fi
 
 WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
 WX_ARG_DISABLE(sys-libs,    [  --disable-sys-libs      disable all use of system libraries, use only built-in ones], wxUSE_SYS_LIBS)
+WX_ARG_DISABLE(tests,       [  --disable-tests         disable building tests], wxUSE_TESTS_SUBDIR)
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
     dnl this is a bit ugly but currently we have no choice but to manually
@@ -2487,6 +2488,26 @@ if test "$wxUSE_ZLIB" != "no" ; then
             wxUSE_ZLIB=sys
         fi
     fi
+
+    dnl We should test if built-in zlib library is avalable, preferably
+    dnl downloaded through --recurse-submodules option if cloned from git.
+    dnl Would be available when downloaded as a zipped or tarball release.
+    if test "$wxUSE_ZLIB" = "builtin" ; then
+        AC_MSG_CHECKING([whether zlib.h file exists])
+        if ! test -f "$ac_confdir/src/zlib/zlib.h" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in zlib library, but the required file
+    $ac_confdir/src/zlib/zlib.h couldn't be found.
+    You might need to run
+
+        git submodule update --init src/zlib
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
+        fi
+    fi
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2545,6 +2566,26 @@ if test "$wxUSE_LIBPNG" != "no" ; then
         else
             dnl we are using the system library
             wxUSE_LIBPNG=sys
+        fi
+    fi
+
+    dnl We should test if built-in png library is avalable, preferably
+    dnl downloaded through --recurse-submodules option if cloned from git.
+    dnl Would be available when downloaded as a zipped or tarball release.
+    if test "$wxUSE_LIBPNG" = "builtin" ; then
+        AC_MSG_CHECKING([whether png.c file exists])
+        if ! test -f "$ac_confdir/src/png/png.c" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in png library, but the required file
+    $ac_confdir/src/png/png.c couldn't be found.
+    You might need to run
+
+        git submodule update --init src/png
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
         fi
     fi
 fi
@@ -2617,6 +2658,26 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
                     [],
                     [#include <windows.h>])
             fi
+        fi
+    fi
+
+    dnl We should test if built-in jpeg library is avalable, preferably
+    dnl downloaded through --recurse-submodules option if cloned from git.
+    dnl Would be available when downloaded as a zipped or tarball release.
+    if test "$wxUSE_LIBJPEG" = "builtin" ; then
+        AC_MSG_CHECKING([whether jpeglib.h file exists])
+        if ! test -f "$ac_confdir/src/jpeg/jpeglib.h" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in jpeg library, but the required file
+    $ac_confdir/src/jpeg/jpeglib.h couldn't be found.
+    You might need to run
+
+        git submodule update --init src/jpeg
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
         fi
     fi
 fi
@@ -2715,6 +2776,22 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         fi
     fi
     if test "$wxUSE_LIBTIFF" = "builtin" ; then
+        dnl Test for built-in tiff library avalability.
+        AC_MSG_CHECKING([whether tiff.h file exists])
+        if ! test -f "$ac_confdir/src/tiff/libtiff/tiff.h" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in tiff library, but the required file
+    $ac_confdir/src/tiff/libtiff/tiff.h couldn't be found.
+    You might need to run:
+
+        git submodule update --init src/tiff
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
+        fi
+
         dnl Disable the use of lzma, webp and zstd in built-in libtiff explicitly, as
         dnl otherwise we'd depend on the system libraries, which is typically
         dnl undesirable when using builtin libraries. If we use lzma ourselves, keep it
@@ -2780,6 +2857,22 @@ if test "$wxUSE_EXPAT" != "no"; then
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
+        dnl Test for built-in expat library avalability.
+        AC_MSG_CHECKING([whether expat.h file exists])
+        if ! test -f "$ac_confdir/src/expat/expat/lib/expat.h" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in expat library, but the required file
+    $ac_confdir/src/expat/expat/lib/expat.h couldn't be found.
+    You might need to run:
+
+        git submodule update --init src/expat
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
+        fi
+
         dnl Expat requires C99 compiler, so define wxCFLAGS_C99 variable which
         dnl is used when compiling it in our makefiles.
         save_CC="$CC"
@@ -8445,7 +8538,28 @@ else
     dnl there are no wxBase programs in demos
     SUBDIRS="samples utils"
 fi
-SUBDIRS="$SUBDIRS tests"
+
+if test "$wxUSE_TESTS_SUBDIR" != "no"; then
+    dnl Configure tests directory
+    SUBDIRS="$SUBDIRS tests"
+
+    dnl Check for catch (C++ Automated Test Cases in Headers) availability.
+    AC_MSG_CHECKING([whether catch.hpp file exists])
+    if ! test -f "$ac_confdir/3rdparty/catch/include/catch.hpp" ; then
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([
+    CATCH (C++ Automated Test Cases in Headers) is required, the required file
+    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't found.
+
+    You might need to run
+
+        git submodule update --init 3rdparty/catch
+
+    to fix this.])
+    else
+        AC_MSG_RESULT([yes])
+    fi
+fi
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
