@@ -22,22 +22,6 @@
 
 #include "wx/osx/private.h"
 
-void wxButton::SetMenu( wxMenu* menu, bool isPrimaryAction )
-{
-    UIButton* native = (UIButton*) GetPeer()->GetWXWidget();
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
-    if ( wxCheckOsVersion(14))
-    {
-        native.menu = menu->GetHMenu();
-        native.showsMenuAsPrimaryAction = isPrimaryAction;
-    }
-    else
-#endif
-    {
-        
-    }
-}
-
 @implementation wxUIButton
 
 + (void)initialize

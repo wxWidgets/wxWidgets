@@ -165,13 +165,6 @@ MyFrame::MyFrame(const wxString& title)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
-#else
-    wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-    wxButton* menuBtn = new wxButton(this, wxID_ANY, "Menu...");
-    helpMenu->SetInvokingWindow(this);
-    menuBtn->SetMenu((helpMenu));
-    sizer->Add(menuBtn, wxSizerFlags().Center());
-    SetSizer(sizer);
 #endif
     
 #else // !wxUSE_MENUS
