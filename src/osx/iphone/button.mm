@@ -25,8 +25,17 @@
 void wxButton::SetMenu( wxMenu* menu, bool isPrimaryAction )
 {
     UIButton* native = (UIButton*) GetPeer()->GetWXWidget();
-    native.menu = menu->GetHMenu();
-    native.showsMenuAsPrimaryAction = isPrimaryAction;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+    if ( wxCheckOsVersion(14))
+    {
+        native.menu = menu->GetHMenu();
+        native.showsMenuAsPrimaryAction = isPrimaryAction;
+    }
+    else
+#endif
+    {
+        
+    }
 }
 
 @implementation wxUIButton
