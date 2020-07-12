@@ -93,7 +93,13 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
             break;
             
         case wxDF_UNICODETEXT:
+#ifdef wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
+            f = kUTTypeUTF8PlainText;
+#elif defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
             f = kUTTypeUTF16PlainText;
+#else
+#error "one of wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ must be defined"
+#endif
             break;
             
         case wxDF_HTML:
@@ -125,7 +131,17 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
     m_format = GetFormatForType(dataType);
 }
 
-void wxDataFormat::AddSupportedTypes(CFMutableArrayRef cfarray) const
+void wxDataFormat::AddSupportedTypesForSetting(CFMutableArrayRef types) const
+{
+    DoAddSupportedTypes(types, true);
+}
+
+void wxDataFormat::AddSupportedTypesForGetting(CFMutableArrayRef types) const
+{
+    DoAddSupportedTypes(types, false);
+}
+
+void wxDataFormat::DoAddSupportedTypes(CFMutableArrayRef cfarray, bool forSetting) const
 {
     if ( GetType() == wxDF_PRIVATE )
     {
@@ -134,20 +150,18 @@ void wxDataFormat::AddSupportedTypes(CFMutableArrayRef cfarray) const
     else
     {
         CFArrayAppendValue(cfarray, GetFormatForType(m_type));
-        // add additional accepted types
-        switch (GetType())
+        if ( forSetting )
         {
-            case wxDF_UNICODETEXT:
-                CFArrayAppendValue(cfarray, kUTTypeUTF8PlainText);
-                break;
-            case wxDF_FILENAME:
-                CFArrayAppendValue(cfarray, kPasteboardTypeFileURLPromise);
-                break;
-            case wxDF_BITMAP:
-                CFArrayAppendValue(cfarray, kUTTypePICT);
-                break;
-            default:
-                break;
+            // add additional accepted types which we are ready to accept and can
+            // convert to our internal formats
+            switch (GetType())
+            {
+                case wxDF_FILENAME:
+                    CFArrayAppendValue(cfarray, kPasteboardTypeFileURLPromise);
+                    break;
+                 default:
+                    break;
+            }
         }
     }
 }
@@ -377,7 +391,7 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
         if (source->IsSupported(dataFormat))
         {
             wxCFMutableArrayRef<CFStringRef> typesarray;
-            dataFormat.AddSupportedTypes(typesarray);
+            dataFormat.AddSupportedTypesForSetting(typesarray);
             size_t itemCount = source->GetItemCount();
             
             for ( size_t itemIndex = 0; itemIndex < itemCount && !transferred; ++itemIndex)
@@ -522,15 +536,19 @@ bool wxDataObject::CanReadFromSource( wxDataObject * source ) const
     return GetSupportedFormatInSource(source) != wxDF_INVALID;
 }
 
-void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray) const
+void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir) const
 {
     size_t nFormats = GetFormatCount(wxDataObject::Set);
     wxScopedArray<wxDataFormat> array(GetFormatCount());
     GetAllFormats(array.get(), wxDataObject::Set);
 
     for (size_t i = 0; i < nFormats; i++)
-        array[i].AddSupportedTypes(cfarray);
-
+    {
+        if ( dir == Direction::Get)
+            array[i].AddSupportedTypesForGetting(cfarray);
+        else
+            array[i].AddSupportedTypesForSetting(cfarray);
+    }
 }
 
 // ----------------------------------------------------------------------------

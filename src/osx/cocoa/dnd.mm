@@ -50,14 +50,14 @@ wxOSXDataSourceItem::~wxOSXDataSourceItem()
 bool wxOSXDataSource::IsSupported(const wxDataFormat &dataFormat)
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    dataFormat.AddSupportedTypes(typesarray);
+    dataFormat.AddSupportedTypesForSetting(typesarray);
     return HasData(typesarray);
 }
 
 bool wxOSXDataSource::IsSupported(const wxDataObject &dataobj)
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    dataobj.AddSupportedTypes(typesarray);
+    dataobj.AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
     return HasData(typesarray);
 }
 
@@ -431,6 +431,10 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return gCurrentSource;
 }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+typedef NSString* NSPasteboardType;
+#endif
+
 @interface wxPasteBoardWriter : NSObject<NSPasteboardWriting>
 {
     wxDataObject* m_data;
@@ -447,10 +451,6 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return self;
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
-typedef NSString* NSPasteboardType;
-#endif
-
 - (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
 {
     wxDataFormat format((wxDataFormat::NativeFormat) type);
@@ -464,7 +464,7 @@ typedef NSString* NSPasteboardType;
 - (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    m_data->AddSupportedTypes(typesarray);
+    m_data->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
     return (NSArray<NSPasteboardType>*) typesarray.autorelease();
 }
 
