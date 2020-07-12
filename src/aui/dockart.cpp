@@ -268,8 +268,8 @@ wxAuiDefaultDockArt::InitBitmaps ()
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 
 #ifdef __WXMAC__
-    const wxColour inactive = *wxWHITE;
-    const wxColour active = *wxWHITE;
+    const wxColour inactive = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
+    const wxColour active = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
 #else
     const wxColor inactive = m_inactiveCaptionTextColour;
     const wxColor active = m_activeCaptionTextColour;
