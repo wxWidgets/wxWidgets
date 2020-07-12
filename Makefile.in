@@ -3537,7 +3537,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/osx/iphone/chkconf.h \
-	wx/osx/iphone/evtloop.h \
 	wx/osx/iphone/private.h \
 	wx/generic/region.h \
 	wx/osx/sound.h
@@ -5691,7 +5690,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_settings.o \
 	monodll_sound_osx.o \
 	monodll_core_sound.o \
-	monodll_iphone_statbmp.o
+	monodll_iphone_statbmp.o \
+	monodll_iphone_menuitem.o \
+	monodll_iphone_menu.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -7670,7 +7671,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_settings.o \
 	monolib_sound_osx.o \
 	monolib_core_sound.o \
-	monolib_iphone_statbmp.o
+	monolib_iphone_statbmp.o \
+	monolib_iphone_menuitem.o \
+	monolib_iphone_menu.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
@@ -9795,7 +9798,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_settings.o \
 	coredll_sound_osx.o \
 	coredll_core_sound.o \
-	coredll_iphone_statbmp.o
+	coredll_iphone_statbmp.o \
+	coredll_iphone_menuitem.o \
+	coredll_iphone_menu.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_taskbarcmn.o \
@@ -11510,7 +11515,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_settings.o \
 	corelib_sound_osx.o \
 	corelib_core_sound.o \
-	corelib_iphone_statbmp.o
+	corelib_iphone_statbmp.o \
+	corelib_iphone_menuitem.o \
+	corelib_iphone_menu.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_taskbarcmn.o \
@@ -16658,6 +16665,12 @@ monodll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(MONODLL_ODEP)
 
 monodll_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
+
+monodll_iphone_menuitem.o: $(srcdir)/src/osx/iphone/menuitem.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menuitem.mm
+
+monodll_iphone_menu.o: $(srcdir)/src/osx/iphone/menu.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menu.mm
 
 monodll_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
@@ -21911,6 +21924,12 @@ monolib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(MONOLIB_ODEP)
 
 monolib_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
+
+monolib_iphone_menuitem.o: $(srcdir)/src/osx/iphone/menuitem.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menuitem.mm
+
+monolib_iphone_menu.o: $(srcdir)/src/osx/iphone/menu.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menu.mm
 
 monolib_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
@@ -27822,6 +27841,12 @@ coredll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(COREDLL_ODEP)
 coredll_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
 
+coredll_iphone_menuitem.o: $(srcdir)/src/osx/iphone/menuitem.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menuitem.mm
+
+coredll_iphone_menu.o: $(srcdir)/src/osx/iphone/menu.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menu.mm
+
 coredll_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
 
@@ -32063,6 +32088,12 @@ corelib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(CORELIB_ODEP)
 
 corelib_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
+
+corelib_iphone_menuitem.o: $(srcdir)/src/osx/iphone/menuitem.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menuitem.mm
+
+corelib_iphone_menu.o: $(srcdir)/src/osx/iphone/menu.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/menu.mm
 
 corelib_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
