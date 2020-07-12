@@ -451,20 +451,29 @@ typedef NSString* NSPasteboardType;
     return self;
 }
 
+- (void) clearDataObject
+{
+    m_data = NULL;
+}
 - (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
 {
-    wxDataFormat format((wxDataFormat::NativeFormat) type);
-    size_t size = m_data->GetDataSize(format);
-    CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
-    m_data->GetDataHere(format, CFDataGetMutableBytePtr(data));
-    CFDataSetLength(data, size);
-    return (id) data;
+    if ( m_data )
+    {
+        wxDataFormat format((wxDataFormat::NativeFormat) type);
+        size_t size = m_data->GetDataSize(format);
+        CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
+        m_data->GetDataHere(format, CFDataGetMutableBytePtr(data));
+        CFDataSetLength(data, size);
+        return (id) data;
+    }
+    return nil;
 }
 
 - (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    m_data->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
+    if ( m_data )
+        m_data->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
     return (NSArray<NSPasteboardType>*) typesarray.autorelease();
 }
 
@@ -521,6 +530,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         result = NSDragOperationToWxDragResult([delegate code]);
         [delegate release];
         [image release];
+        [writer clearDataObject];
+        [writer release];
 
         wxWindow* mouseUpTarget = wxWindow::GetCapture();
 
