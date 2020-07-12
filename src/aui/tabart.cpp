@@ -281,9 +281,19 @@ void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
                                         wxWindow* WXUNUSED(wnd),
                                         const wxRect& rect)
 {
-    // draw background
-    int topLightness = 90;
-    int bottomLightness = 170;
+    // draw background using arbitrary hard-coded, but at least adapted to dark
+    // mode, gradient
+    int topLightness, bottomLightness;
+    if (wxSystemSettings::GetAppearance().IsUsingDarkBackground())
+    {
+        topLightness = 110;
+        bottomLightness = 90;
+    }
+    else
+    {
+        topLightness = 90;
+        bottomLightness = 170;
+    }
 
     wxColor top_color    = m_baseColour.ChangeLightness(topLightness);
     wxColor bottom_color = m_baseColour.ChangeLightness(bottomLightness);
