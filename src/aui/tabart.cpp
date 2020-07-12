@@ -176,14 +176,6 @@ static const unsigned char list_bits[] = {
 wxAuiGenericTabArt::wxAuiGenericTabArt()
     : m_normalFont(*wxNORMAL_FONT)
     , m_selectedFont(m_normalFont)
-    , m_activeCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT)))
-    , m_disabledCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION)))
-    , m_activeLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT)))
-    , m_disabledLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION)))
-    , m_activeRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT)))
-    , m_disabledRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION)))
-    , m_activeWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT)))
-    , m_disabledWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION)))
 {
     m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
     m_measuringFont = m_selectedFont;
@@ -223,6 +215,15 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
     m_borderPen = wxPen(borderColour);
     m_baseColourPen = wxPen(m_baseColour);
     m_baseColourBrush = wxBrush(m_baseColour);
+
+    m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_activeWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
 }
 
 wxAuiTabArt* wxAuiGenericTabArt::Clone()

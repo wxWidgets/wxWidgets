@@ -139,18 +139,6 @@ wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
     m_overflowSize  = wxWindow::FromDIP(16, NULL);
     m_dropdownSize  = wxWindow::FromDIP(10, NULL);
 
-    // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
-    static const unsigned char buttonDropdownBits[] = { 0xe0, 0xf1, 0xfb };
-    static const unsigned char overflowBits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
-
-    m_buttonDropDownBmp = wxAuiBitmapFromBits(buttonDropdownBits, 5, 3,
-                                              wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledButtonDropDownBmp = wxAuiBitmapFromBits(
-                                                buttonDropdownBits, 5, 3,
-                                                wxColor(128,128,128));
-    m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6,
-                                        wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledOverflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, wxColor(128,128,128));
 
     m_font = *wxNORMAL_FONT;
 }
@@ -175,6 +163,21 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
     m_gripperPen1 = wxPen(darker5Colour, pen_width);
     m_gripperPen2 = wxPen(darker3Colour, pen_width);
     m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+
+    // Note: update the bitmaps here as they depend on the system colours too.
+
+    // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
+    static const unsigned char buttonDropdownBits[] = { 0xe0, 0xf1, 0xfb };
+    static const unsigned char overflowBits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
+
+    m_buttonDropDownBmp = wxAuiBitmapFromBits(buttonDropdownBits, 5, 3,
+                                              wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledButtonDropDownBmp = wxAuiBitmapFromBits(
+                                                buttonDropdownBits, 5, 3,
+                                                wxColor(128,128,128));
+    m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6,
+                                        wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledOverflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, wxColor(128,128,128));
 }
 
 void wxAuiGenericToolBarArt::SetFlags(unsigned int flags)
