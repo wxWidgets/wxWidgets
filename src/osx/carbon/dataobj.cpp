@@ -156,6 +156,9 @@ void wxDataFormat::DoAddSupportedTypes(CFMutableArrayRef cfarray, bool forSettin
             // convert to our internal formats
             switch (GetType())
             {
+                case wxDF_UNICODETEXT:
+                    CFArrayAppendValue(cfarray, kUTTypeUTF8PlainText);
+                    break;
                 case wxDF_FILENAME:
                     CFArrayAppendValue(cfarray, kPasteboardTypeFileURLPromise);
                     break;
