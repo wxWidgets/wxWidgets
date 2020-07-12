@@ -199,6 +199,7 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Range", "[spinctrl]")
 {
     CHECK(m_spin->GetMin() == 0);
     CHECK(m_spin->GetMax() == 100);
+    CHECK(m_spin->GetBase() == 10);
 
     // Test that the value is adjusted to be inside the new valid range but
     // that this doesn't result in any events (as this is not something done by
@@ -214,11 +215,35 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Range", "[spinctrl]")
         CHECK(updatedText.GetCount() == 0);
     }
 
-    //Test negative ranges
+    // Test negative ranges
     m_spin->SetRange(-10, 10);
 
     CHECK(m_spin->GetMin() == -10);
     CHECK(m_spin->GetMax() == 10);
+
+    // With base 16 only ranges including values >= 0 are allowed
+    m_spin->SetRange(0, 10);
+    int oldMinVal = m_spin->GetMin();
+    int oldMaxVal = m_spin->GetMax();
+    CHECK(oldMinVal == 0);
+    CHECK(oldMaxVal == 10);
+
+    CHECK(m_spin->SetBase(16) == true);
+    CHECK(m_spin->GetBase() == 16);
+
+    // New range should be silently ignored
+    m_spin->SetRange(-20, 20);
+    CHECK(m_spin->GetMin() == oldMinVal);
+    CHECK(m_spin->GetMax() == oldMaxVal);
+
+    // This range should be accepted
+    m_spin->SetRange(2, 8);
+    CHECK(m_spin->GetMin() == 2);
+    CHECK(m_spin->GetMax() == 8);
+
+    CHECK(m_spin->SetBase(10) == true);
+
+    CHECK(m_spin->GetBase() == 10);
 
     //Test backwards ranges
     m_spin->SetRange(75, 50);
@@ -246,6 +271,46 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
     // Calling SetValue() shouldn't have generated any events.
     CHECK(updatedSpin.GetCount() == 0);
     CHECK(updatedText.GetCount() == 0);
+}
+
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Base`", "[spinctrl]")
+{
+    CHECK(m_spin->GetMin() == 0);
+    CHECK(m_spin->GetMax() == 100);
+    CHECK(m_spin->GetBase() == 10);
+
+    // Only 10 and 16 bases are allowed
+    CHECK(m_spin->SetBase(10) == true);
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(8));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(2));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK(m_spin->SetBase(16) == true);
+    CHECK(m_spin->GetBase() == 16);
+
+    CHECK(m_spin->SetBase(10) == true);
+    CHECK(m_spin->GetBase() == 10);
+
+    // When range contains negative values only base 10 is allowed
+    m_spin->SetRange(-10, 10);
+    CHECK(m_spin->GetMin() == -10);
+    CHECK(m_spin->GetMax() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(8));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(2));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(16));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK(m_spin->SetBase(10) == true);
+    CHECK(m_spin->GetBase() == 10);
 }
 
 TEST_CASE_METHOD(SpinCtrlTestCase3, "SpinCtrl::SetValueInsideEventHandler", "[spinctrl]")
