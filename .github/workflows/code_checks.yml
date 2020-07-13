@@ -40,4 +40,4 @@ jobs:
 
       - name: Run codespell
         run: |
-          codespell -I misc/suppressions/codespell-words -x misc/suppressions/codespell-lines -S docs/changes.txt -S docs/changes_30.txt -S '*.png' -S '*.ico' -S '*.bmp' -S '*.cur' -S docs/doxygen/images README.md docs include interface
+          codespell -I misc/suppressions/codespell-words -x misc/suppressions/codespell-lines -S 'docs/changes.txt,docs/changes_30.txt,*.png,*.ico,*.bmp,*.cur,docs/doxygen/images' README.md docs include interface
