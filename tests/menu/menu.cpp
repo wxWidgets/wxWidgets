@@ -12,7 +12,7 @@
 
 #include "testprec.h"
 
-#if wxUSE_MENUBAR
+#if wxUSE_MENUS
 
 #ifdef __BORLANDC__
     #pragma hdrstop
