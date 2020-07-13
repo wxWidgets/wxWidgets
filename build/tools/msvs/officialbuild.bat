@@ -124,7 +124,7 @@ if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X86 /Release
 
 @echo 32 bit release build
 
-nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Release.txt
+nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE TARGET_CPU=X86 >> %compvers%x86_Release.txt
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
@@ -132,7 +132,7 @@ cd ..\..\utils\wxrc
 
 rmdir %compvers%_mswuddll /s /q
 del %compvers%x86_Release.txt
-nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Release.txt
+nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE TARGET_CPU=X86 >> %compvers%x86_Release.txt
 
 cd %build_dir%
 
@@ -143,7 +143,7 @@ if ERRORLEVEL 1 goto ERR_BUILD
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X86 /Debug
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X86 /Debug
 
-nmake -f makefile.vc BUILD=debug SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Debug.txt
+nmake -f makefile.vc BUILD=debug SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE TARGET_CPU=X86 >> %compvers%x86_Debug.txt
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
