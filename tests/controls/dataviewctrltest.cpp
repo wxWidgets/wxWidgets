@@ -405,6 +405,19 @@ TEST_CASE_METHOD(AutosizeWithConstantWidthTestCase,
 "wxDVC::AppendAutosizedTextColumn",
 "[wxDataViewCtrl][column]")
 {
+#ifdef __WXGTK__
+    // Wait for the list control to be realized.
+    wxStopWatch sw;
+    while ( m_firstColumn->GetWidth() == 0 )
+    {
+        if ( sw.Time() > 500 )
+        {
+            WARN("Timed out waiting for wxDataViewListCtrl to be realized");
+            break;
+        }
+        wxYield();
+    }
+#endif
     // Check the width of the first column.
     CHECK( m_secondColumn->GetWidth() == m_firstColumnWidth );
 }
