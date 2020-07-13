@@ -61,9 +61,14 @@ public:
     // returns true if the format is one of those defined in wxDataFormatId
     bool IsStandard() const { return m_type > 0 && m_type < wxDF_PRIVATE; }
 
-    // adds all the native formats for this format to an array
-    void AddSupportedTypes(CFMutableArrayRef types) const;
+    // adds all the native formats for this format when calling a GetData
+    void AddSupportedTypesForGetting(CFMutableArrayRef types) const;
+
+    // adds all the native formats for this format when calling a SetData
+    void AddSupportedTypesForSetting(CFMutableArrayRef types) const;
 private:
+    void DoAddSupportedTypes(CFMutableArrayRef types, bool forSetting) const;
+
     void ClearNativeFormat();
 
     wxDataFormatId  m_type;

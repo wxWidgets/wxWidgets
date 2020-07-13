@@ -780,3 +780,84 @@ void ArraysTestCase::IndexFromEnd()
     CPPUNIT_ASSERT_EQUAL( 1, a.Index(1, /*bFromEnd=*/true) );
     CPPUNIT_ASSERT_EQUAL( 2, a.Index(42, /*bFromEnd=*/true) );
 }
+
+
+TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
+{
+#if !wxUSE_REGEX
+    WARN("Skipping wxCmpNaturalGeneric() tests: wxRegEx not available");
+#else
+    // simple string comparison
+    CHECK(wxCmpNaturalGeneric("a", "a") == 0);
+    CHECK(wxCmpNaturalGeneric("a", "z") < 0);
+    CHECK(wxCmpNaturalGeneric("z", "a") > 0);
+
+    // case insensitivity
+    CHECK(wxCmpNaturalGeneric("a", "A") == 0);
+    CHECK(wxCmpNaturalGeneric("A", "a") == 0);
+    CHECK(wxCmpNaturalGeneric("AB", "a") > 0);
+    CHECK(wxCmpNaturalGeneric("a", "AB") < 0);
+
+    // empty strings sort before whitespace and punctiation
+    CHECK(wxCmpNaturalGeneric("", " ") < 0);
+    CHECK(wxCmpNaturalGeneric(" ", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", ",") < 0);
+    CHECK(wxCmpNaturalGeneric(",", "") > 0);
+
+    // empty strings sort before numbers
+    CHECK(wxCmpNaturalGeneric("", "0") < 0);
+    CHECK(wxCmpNaturalGeneric("0", "") > 0);
+
+    // empty strings sort before letters and symbols
+    CHECK(wxCmpNaturalGeneric("", "abc") < 0);
+    CHECK(wxCmpNaturalGeneric("abc", "") > 0);
+
+    // whitespace and punctiation sort before numbers
+    CHECK(wxCmpNaturalGeneric(" ", "1") < 0);
+    CHECK(wxCmpNaturalGeneric("1", " ") > 0);
+    CHECK(wxCmpNaturalGeneric(",", "1") < 0);
+    CHECK(wxCmpNaturalGeneric("1", ",") > 0);
+
+    // strings containing numbers sort before letters and symbols
+    CHECK(wxCmpNaturalGeneric("00", "a") < 0);
+    CHECK(wxCmpNaturalGeneric("a", "00") > 0);
+
+    // strings containing numbers are compared by their value
+    CHECK(wxCmpNaturalGeneric("01", "1") == 0);
+    CHECK(wxCmpNaturalGeneric("1", "01") == 0);
+    CHECK(wxCmpNaturalGeneric("1", "05") < 0);
+    CHECK(wxCmpNaturalGeneric("05", "1") > 0);
+    CHECK(wxCmpNaturalGeneric("10", "5") > 0);
+    CHECK(wxCmpNaturalGeneric("5", "10") < 0);
+    CHECK(wxCmpNaturalGeneric("1", "9999999999999999999") < 0);
+    CHECK(wxCmpNaturalGeneric("9999999999999999999", "1") > 0);
+
+    // comparing strings composed from whitespace,
+    //  punctuation, numbers, letters, and symbols
+    CHECK(wxCmpNaturalGeneric("1st", " 1st") > 0);
+    CHECK(wxCmpNaturalGeneric(" 1st", "1st") < 0);
+
+    CHECK(wxCmpNaturalGeneric("1st", ",1st") > 0);
+    CHECK(wxCmpNaturalGeneric(",1st", "1st") < 0);
+
+    CHECK(wxCmpNaturalGeneric("1st", "01st") == 0);
+    CHECK(wxCmpNaturalGeneric("01st", "1st") == 0);
+    CHECK(wxCmpNaturalGeneric("10th", "5th") > 0);
+    CHECK(wxCmpNaturalGeneric("5th", "10th") < 0);
+
+    CHECK(wxCmpNaturalGeneric("a1st", "a01st") == 0);
+    CHECK(wxCmpNaturalGeneric("a01st", "a1st") == 0);
+    CHECK(wxCmpNaturalGeneric("a10th", "a5th") > 0);
+    CHECK(wxCmpNaturalGeneric("a5th", "a10th") < 0);
+    CHECK(wxCmpNaturalGeneric("a 10th", "a5th") < 0);
+    CHECK(wxCmpNaturalGeneric("a5th", "a 10th") > 0);
+
+    CHECK(wxCmpNaturalGeneric("a1st1", "a01st01") == 0);
+    CHECK(wxCmpNaturalGeneric("a01st01", "a1st1") == 0);
+    CHECK(wxCmpNaturalGeneric("a10th10", "a5th5") > 0);
+    CHECK(wxCmpNaturalGeneric("a5th5", "a10th10") < 0);
+    CHECK(wxCmpNaturalGeneric("a 10th 10", "a5th 5") < 0);
+    CHECK(wxCmpNaturalGeneric("a5th 5", "a 10th 10") > 0);
+#endif // #if !wxUSE_REGEX
+}
+

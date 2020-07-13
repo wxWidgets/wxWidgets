@@ -82,7 +82,7 @@ XPM nor BMP formats are appropriate as they don't have support for alpha and
 another format, typically PNG, should be used. wxWidgets provides a similar
 helper for PNG bitmaps called wxBITMAP_PNG() that can be used to either load
 PNG files embedded in resources (meaning either Windows resource section of the
-executable file or OS X "Resource" subdirectory of the application bundle) or
+executable file or macOS "Resource" subdirectory of the application bundle) or
 arrays containing PNG data included into the program code itself.
 
 @see @ref group_class_gdi

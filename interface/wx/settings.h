@@ -274,7 +274,7 @@ public:
     /**
         Return the name if available or empty string otherwise.
 
-        This is currently only implemented for macOS 10.9 or later and returns
+        This is currently only implemented for macOS and returns
         a not necessarily user-readable string such as "NSAppearanceNameAqua"
         there and an empty string under all the other platforms.
      */

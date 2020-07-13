@@ -140,6 +140,10 @@ int wxFontDialog::ShowModal()
       flags |= CF_EFFECTS;
     if ( m_fontData.GetShowHelp() )
       flags |= CF_SHOWHELP;
+    if ( m_fontData.GetRestrictSelection() & wxFONTRESTRICT_SCALABLE )
+      flags |= CF_SCALABLEONLY;
+    if ( m_fontData.GetRestrictSelection() & wxFONTRESTRICT_FIXEDPITCH )
+      flags |= CF_FIXEDPITCHONLY;
 
     if ( m_fontData.m_minSize != 0 || m_fontData.m_maxSize != 0 )
     {

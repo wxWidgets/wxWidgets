@@ -300,19 +300,19 @@ float wxWebViewIE::GetZoomFactor() const
         switch(level)
         {
             case wxWEBVIEW_ZOOM_TINY:
-                zoomFactor = 0.6;
+                zoomFactor = 0.6f;
                 break;
             case wxWEBVIEW_ZOOM_SMALL:
-                zoomFactor = 0.8;
+                zoomFactor = 0.8f;
                 break;
             case wxWEBVIEW_ZOOM_MEDIUM:
-                zoomFactor = 1.0;
+                zoomFactor = 1.0f;
                 break;
             case wxWEBVIEW_ZOOM_LARGE:
-                zoomFactor = 1.3;
+                zoomFactor = 1.3f;
                 break;
             case wxWEBVIEW_ZOOM_LARGEST:
-                zoomFactor = 1.6;
+                zoomFactor = 1.6f;
                 break;
             default:
                 wxFAIL;

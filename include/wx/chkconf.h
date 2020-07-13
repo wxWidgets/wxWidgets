@@ -2414,6 +2414,17 @@
 #   endif
 #endif /* wxUSE_PROPGRID */
 
+#if wxUSE_TIPWINDOW
+#   if !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxTipWindow requires wxUSE_POPUPWIN"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+#endif /* wxUSE_TIPWINDOW */
+
 #endif /* wxUSE_GUI */
 
 #endif /* _WX_CHKCONF_H_ */

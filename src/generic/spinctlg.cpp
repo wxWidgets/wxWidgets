@@ -117,9 +117,6 @@ public:
         event.Skip();
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK__)
-    // GetSizeFromTextSize() is not implemented in wxOSX
-    // so GetSizeFromText() cannot be used for size calculations.
     virtual wxSize DoGetBestSize() const wxOVERRIDE
     {
         wxString minVal = m_spin->DoValueToText(m_spin->m_min);
@@ -129,7 +126,6 @@ public:
 
         return wxSize(wxMax(minValSize.x, maxValSize.x), wxMax(minValSize.y, maxValSize.y));
     }
-#endif // __WXMSW || __WXGTK__
 
     wxSpinCtrlGenericBase *m_spin;
 
@@ -589,6 +585,12 @@ double wxSpinCtrlGenericBase::AdjustToFitInRange(double value) const
 
 void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
 {
+    // Negative values in the range are allowed only if base == 10
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(min, max, GetBase()) )
+    {
+        return;
+    }
+
     if ( min != m_min || max != m_max )
         m_textCtrl->InvalidateBestSize();
 
@@ -636,6 +638,10 @@ bool wxSpinCtrl::SetBase(int base)
     if ( base == m_base )
         return true;
 
+    // For negative values in the range only base == 10 is allowed
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(m_min, m_max, base) )
+        return false;
+
     // Update the current control contents to show in the new base: be careful
     // to call DoTextToValue() before changing the base...
     double val;
@@ -643,6 +649,7 @@ bool wxSpinCtrl::SetBase(int base)
 
     m_base = base;
 
+    m_textCtrl->InvalidateBestSize();
     ResetTextValidator();
 
     // ... but DoValueToText() after doing it.
@@ -656,7 +663,7 @@ void wxSpinCtrl::DoSendEvent()
 {
     wxSpinEvent event( wxEVT_SPINCTRL, GetId());
     event.SetEventObject( this );
-    event.SetPosition((int)(m_value + 0.5)); // FIXME should be SetValue
+    event.SetPosition(GetValue());
     event.SetString(m_textCtrl->GetValue());
     GetEventHandler()->ProcessEvent( event );
 }

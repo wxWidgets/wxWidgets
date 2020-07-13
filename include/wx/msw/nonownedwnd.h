@@ -22,6 +22,9 @@ public:
     wxNonOwnedWindow();
     virtual ~wxNonOwnedWindow();
 
+    virtual bool Reparent(wxWindowBase* newParent);
+    virtual void InheritAttributes() wxOVERRIDE;
+
 protected:
     virtual bool DoClearShape() wxOVERRIDE;
     virtual bool DoSetRegionShape(const wxRegion& region) wxOVERRIDE;
@@ -30,7 +33,6 @@ protected:
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
-    virtual void InheritAttributes() wxOVERRIDE;
 
 private:
     bool HandleDPIChange(const wxSize& newDPI, const wxRect& newRect);

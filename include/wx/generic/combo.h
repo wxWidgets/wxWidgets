@@ -91,8 +91,8 @@ protected:
     virtual GtkEditable *GetEditable() const wxOVERRIDE { return NULL; }
     virtual GtkEntry *GetEntry() const wxOVERRIDE { return NULL; }
 #endif
-#elif defined(__WXMAC__)
-    // Looks like there's nothing we need to override here
+#elif defined(__WXOSX__)
+    virtual wxTextWidgetImpl * GetTextPeer() const wxOVERRIDE;
 #endif
 
     // For better transparent background rendering

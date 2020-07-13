@@ -58,6 +58,10 @@
     #include "wx/tipdlg.h"
 #endif // wxUSE_STARTUP_TIPS
 
+#if wxUSE_TIPWINDOW
+    #include "wx/tipwin.h"
+#endif // wxUSE_TIPWINDOW
+
 #if wxUSE_PROGRESSDLG
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
     #include "wx/datetime.h"      // wxDateTime
@@ -202,6 +206,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_DIRDLG
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
     EVT_MENU(DIALOGS_DIRNEW_CHOOSE,                 MyFrame::DirChooseNew)
+    EVT_MENU(DIALOGS_DIRMULTIPLE_CHOOSE,            MyFrame::DirChooseMultiple)
 #endif // wxUSE_DIRDLG
 
 #if USE_MODAL_PRESENTATION
@@ -279,6 +284,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_NOTIFY_MSG,                    MyFrame::OnNotifMsg)
 #endif // wxUSE_NOTIFICATION_MESSAGE
 
+#if wxUSE_TIPWINDOW
+    EVT_MENU(DIALOGS_SHOW_TIP,                      MyFrame::OnShowTip)
+    EVT_UPDATE_UI(DIALOGS_SHOW_TIP,                 MyFrame::OnUpdateShowTipUI)
+#endif // wxUSE_TIPWINDOW
 #if wxUSE_RICHTOOLTIP
     EVT_MENU(DIALOGS_RICHTIP_DIALOG,                MyFrame::OnRichTipDialog)
 #endif // wxUSE_RICHTOOLTIP
@@ -488,6 +497,7 @@ bool MyApp::OnInit()
 
     dir_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
     dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  "Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D");
+    dir_menu->Append(DIALOGS_DIRMULTIPLE_CHOOSE,  "Choose multiple and hidden directories\tAlt-Ctrl-D");
     menuDlg->Append(wxID_ANY,"&Directory operations",dir_menu);
 
     #if USE_DIRDLG_GENERIC
@@ -587,6 +597,10 @@ bool MyApp::OnInit()
     menuNotif->Append(DIALOGS_NOTIFY_MSG, "User &Notification\tCtrl-Shift-N");
 #endif // wxUSE_NOTIFICATION_MESSAGE
     menuDlg->AppendSubMenu(menuNotif, "&User notifications");
+
+#if wxUSE_TIPWINDOW
+    menuDlg->AppendCheckItem(DIALOGS_SHOW_TIP, "Show &tip window\tShift-Ctrl-H");
+#endif // wxUSE_TIPWINDOW
 
 #if wxUSE_RICHTOOLTIP
     menuDlg->Append(DIALOGS_RICHTIP_DIALOG, "Rich &tooltip dialog...\tCtrl-H");
@@ -710,6 +724,10 @@ MyFrame::MyFrame(const wxString& title)
     // covers our entire client area to avoid jarring colour jumps
     SetOwnBackgroundColour(m_canvas->GetBackgroundColour());
 #endif // wxUSE_INFOBAR
+
+#if wxUSE_TIPWINDOW
+    m_tipWindow = NULL;
+#endif // wxUSE_TIPWINDOW
 
 #ifdef __WXMSW__
     // Test MSW-specific function allowing to access the "system" menu.
@@ -1803,6 +1821,36 @@ void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
 {
     DoDirChoose(wxDD_DEFAULT_STYLE & ~wxDD_DIR_MUST_EXIST);
 }
+
+void MyFrame::DirChooseMultiple(wxCommandEvent& WXUNUSED(event))
+{
+    // pass some initial dir and the style to wxDirDialog
+    int style = wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE | wxDD_SHOW_HIDDEN;
+    wxString dirHome;
+    wxGetHomeDir(&dirHome);
+
+    wxDirDialog dialog(this, "Testing multiple directory picker", dirHome, style);
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        wxArrayString paths;
+
+        dialog.GetPaths(paths);
+
+        wxString msg, s;
+        size_t count = paths.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            s.Printf("Directory %d: %s\n",
+                     (int)n, paths[n]);
+
+            msg += s;
+        }
+
+        wxMessageDialog dialog2(this, msg, "Selected directories");
+        dialog2.ShowModal();
+    }
+}
 #endif // wxUSE_DIRDLG
 
 #if USE_DIRDLG_GENERIC
@@ -2356,6 +2404,35 @@ void MyFrame::OnNotifMsg(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_NOTIFICATION_MESSAGE
+
+#if wxUSE_TIPWINDOW
+
+void MyFrame::OnShowTip(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_tipWindow )
+    {
+        m_tipWindow->Close();
+    }
+    else
+    {
+        m_tipWindow = new wxTipWindow
+                          (
+                            this,
+                            "This is just some text to be shown in the tip "
+                            "window, broken into multiple lines, each less "
+                            "than 60 logical pixels wide.",
+                            FromDIP(60),
+                            &m_tipWindow
+                          );
+    }
+}
+
+void MyFrame::OnUpdateShowTipUI(wxUpdateUIEvent& event)
+{
+    event.Check(m_tipWindow != NULL);
+}
+
+#endif // wxUSE_TIPWINDOW
 
 #if wxUSE_RICHTOOLTIP
 

@@ -83,7 +83,7 @@ Changes in behaviour not resulting in compilation errors
 
 - wxGLCanvas now uses physical pixels on high DPI displays under platforms
   where they're different from logical ones (wxGTK3, wxOSX). Multiply logical
-  coordinates, e.g. returned by wxWindow::GetSize() by GetContentScaleFactor()
+  coordinates, e.g. returned by wxWindow::GetSize() by GetOpenGLScaleFactor()
   before using them with OpenGL functions.
 
 - wxGTK now uses wxID_NONE item ID for wxEVT_MENU_HIGHLIGHT events sent when
@@ -152,9 +152,8 @@ Changes in behaviour which may result in build errors
   wxArrayString. Please update your code to use the appropriate setter
   Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly.
 
-- Under macOS, 10.9 SDK is used by default now. 10.7 SDK is still supported,
-  but must be explicitly selected (and libstdc++ must be installed in order
-  to use it).
+- Under macOS, 10.11 SDK is the minimum SDK, building and deploying under 10.10.5 and
+  higher is supported, you must use at least Xcode 7.2.1.
 
 - wxPGProperty ctors are not longer public since this class is intended to be
   a base class and should not be instantiated directly.
@@ -188,6 +187,10 @@ INCOMPATIBLE CHANGES SINCE 3.1.3:
 - CMake library targets were renamed and now start with 'wx'. In addition,
   aliases for the libraries have been added using the 'wx::' namespace. For
   example, the core library is now named wxcore and has alias wx::core.
+
+- Building on ARM Apple platforms using configure now targets macOS by
+  default, and not iOS. Please use --with-osx_iphone explicitly if you need
+  the latter.
 
 
 3.1.3: (released 2019-10-28)
@@ -798,7 +801,7 @@ wxMSW:
 wxOSX/Cocoa:
 
 - Make wxiOS (iPhone) port build and minimally work again (Tobias Taschner).
-- Use more efficient FSEvents (10.7+) in wxFileSystemWatcher (Roberto Perpuly).
+- Use more efficient FSEvents in wxFileSystemWatcher (Roberto Perpuly).
 - Implement wxWindow::Disable() for non-native controls too (Steve Browne).
 - Implement wxTopLevelWindow::EnableCloseButton() (John Roberts).
 - Fix wxEVT_CHAR for non-BMP Unicode characters (ARATA Mizuki).

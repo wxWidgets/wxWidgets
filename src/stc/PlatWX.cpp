@@ -1201,108 +1201,106 @@ static float RoundFloat(float f)
 
 void SurfaceD2D::LineTo(int x_, int y_)
 {
-    if ( m_pRenderTarget.get() )
+    wxCHECK( Initialised(), void() );
+
+    int xDiff = x_ - m_x;
+    int xDelta = Delta(xDiff);
+    int yDiff = y_ - m_y;
+    int yDelta = Delta(yDiff);
+    if ( (xDiff == 0) || (yDiff == 0) )
     {
-        int xDiff = x_ - m_x;
-        int xDelta = Delta(xDiff);
-        int yDiff = y_ - m_y;
-        int yDelta = Delta(yDiff);
-        if ( (xDiff == 0) || (yDiff == 0) )
-        {
-            // Horizontal or vertical lines can be more precisely drawn as a
-            // filled rectangle
-            int xEnd = x_ - xDelta;
-            int left = Platform::Minimum(m_x, xEnd);
-            int width = abs(m_x - xEnd) + 1;
-            int yEnd = y_ - yDelta;
-            int top = Platform::Minimum(m_y, yEnd);
-            int height = abs(m_y - yEnd) + 1;
-            D2D1_RECT_F rectangle1 = D2D1::RectF(static_cast<float>(left),
-                static_cast<float>(top), static_cast<float>(left+width),
-                static_cast<float>(top+height));
-            m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
-        }
-        else if ( (abs(xDiff) == abs(yDiff)) )
-        {
-            // 45 degree slope
-            m_pRenderTarget->DrawLine(D2D1::Point2F(m_x + 0.5f, m_y + 0.5f),
-                D2D1::Point2F(x_ + 0.5f - xDelta, y_ + 0.5f - yDelta),
-                m_pSolidBrush);
-        }
-        else
-        {
-            // Line has a different slope so difficult to avoid last pixel
-            m_pRenderTarget->DrawLine(D2D1::Point2F(m_x + 0.5f, m_y + 0.5f),
-                D2D1::Point2F(x_ + 0.5f, y_ + 0.5f), m_pSolidBrush);
-        }
-        m_x = x_;
-        m_y = y_;
+        // Horizontal or vertical lines can be more precisely drawn as a
+        // filled rectangle
+        int xEnd = x_ - xDelta;
+        int left = Platform::Minimum(m_x, xEnd);
+        int width = abs(m_x - xEnd) + 1;
+        int yEnd = y_ - yDelta;
+        int top = Platform::Minimum(m_y, yEnd);
+        int height = abs(m_y - yEnd) + 1;
+        D2D1_RECT_F rectangle1 = D2D1::RectF(static_cast<float>(left),
+            static_cast<float>(top), static_cast<float>(left + width),
+            static_cast<float>(top + height));
+        m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
     }
+    else if ( (abs(xDiff) == abs(yDiff)) )
+    {
+        // 45 degree slope
+        m_pRenderTarget->DrawLine(D2D1::Point2F(m_x + 0.5f, m_y + 0.5f),
+            D2D1::Point2F(x_ + 0.5f - xDelta, y_ + 0.5f - yDelta),
+            m_pSolidBrush);
+    }
+    else
+    {
+        // Line has a different slope so difficult to avoid last pixel
+        m_pRenderTarget->DrawLine(D2D1::Point2F(m_x + 0.5f, m_y + 0.5f),
+            D2D1::Point2F(x_ + 0.5f, y_ + 0.5f), m_pSolidBrush);
+    }
+    m_x = x_;
+    m_y = y_;
 }
 
 void SurfaceD2D::Polygon(Point *pts, int npts, ColourDesired fore,
                          ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
+    wxCHECK( Initialised(), void() );
+
+    wxCOMPtr<ID2D1Factory> pFactory;
+    wxCOMPtr<ID2D1PathGeometry> geometry;
+    wxCOMPtr<ID2D1GeometrySink> sink;
+
+    m_pRenderTarget->GetFactory(&pFactory);
+
+    HRESULT hr = pFactory->CreatePathGeometry(&geometry);
+    if ( SUCCEEDED(hr) )
     {
-        wxCOMPtr<ID2D1Factory> pFactory;
-        wxCOMPtr<ID2D1PathGeometry> geometry;
-        wxCOMPtr<ID2D1GeometrySink> sink;
+        hr = geometry->Open(&sink);
+    }
 
-        m_pRenderTarget->GetFactory(&pFactory);
-
-        HRESULT hr = pFactory->CreatePathGeometry(&geometry);
-        if ( SUCCEEDED(hr) )
+    if ( SUCCEEDED(hr) )
+    {
+        sink->BeginFigure(D2D1::Point2F(pts[0].x + 0.5f, pts[0].y + 0.5f),
+            D2D1_FIGURE_BEGIN_FILLED);
+        for ( size_t i = 1; i < static_cast<size_t>(npts); i++ )
         {
-            hr = geometry->Open(&sink);
+            sink->AddLine(D2D1::Point2F(pts[i].x + 0.5f, pts[i].y + 0.5f));
         }
+        sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+        sink->Close();
 
-        if ( SUCCEEDED(hr) )
-        {
-            sink->BeginFigure(D2D1::Point2F(pts[0].x + 0.5f, pts[0].y + 0.5f),
-                D2D1_FIGURE_BEGIN_FILLED);
-            for ( size_t i=1; i<static_cast<size_t>(npts); i++ )
-            {
-                sink->AddLine(D2D1::Point2F(pts[i].x + 0.5f, pts[i].y + 0.5f));
-            }
-            sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-            sink->Close();
-
-            D2DPenColour(back);
-            m_pRenderTarget->FillGeometry(geometry,m_pSolidBrush);
-            D2DPenColour(fore);
-            m_pRenderTarget->DrawGeometry(geometry,m_pSolidBrush);
-        }
+        D2DPenColour(back);
+        m_pRenderTarget->FillGeometry(geometry, m_pSolidBrush);
+        D2DPenColour(fore);
+        m_pRenderTarget->DrawGeometry(geometry, m_pSolidBrush);
     }
 }
 
 void SurfaceD2D::RectangleDraw(PRectangle rc, ColourDesired fore,
                                ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        D2D1_RECT_F rectangle1 = D2D1::RectF(RoundFloat(rc.left) + 0.5f,
-            rc.top+0.5f, RoundFloat(rc.right) - 0.5f, rc.bottom-0.5f);
-        D2DPenColour(back);
-        m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
-        D2DPenColour(fore);
-        m_pRenderTarget->DrawRectangle(&rectangle1, m_pSolidBrush);
-    }
+    wxCHECK( Initialised(), void() );
+
+    D2D1_RECT_F rectangle1 = D2D1::RectF(RoundFloat(rc.left) + 0.5f,
+        rc.top + 0.5f, RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f);
+    D2DPenColour(back);
+    m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
+    D2DPenColour(fore);
+    m_pRenderTarget->DrawRectangle(&rectangle1, m_pSolidBrush);
 }
 
 void SurfaceD2D::FillRectangle(PRectangle rc, ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        D2DPenColour(back);
-        D2D1_RECT_F rectangle1 = D2D1::RectF(RoundFloat(rc.left), rc.top,
-            RoundFloat(rc.right), rc.bottom);
-        m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
-    }
+    wxCHECK( Initialised(), void() );
+
+    D2DPenColour(back);
+    D2D1_RECT_F rectangle1 = D2D1::RectF(RoundFloat(rc.left), rc.top,
+        RoundFloat(rc.right), rc.bottom);
+    m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
 }
 
 void SurfaceD2D::FillRectangle(PRectangle rc, Surface &surfacePattern)
 {
+    wxCHECK( Initialised(), void() );
+
     SurfaceD2D &surfOther = static_cast<SurfaceD2D &>(surfacePattern);
     surfOther.FlushDrawing();
 
@@ -1342,20 +1340,19 @@ void SurfaceD2D::FillRectangle(PRectangle rc, Surface &surfacePattern)
 void SurfaceD2D::RoundedRectangle(PRectangle rc, ColourDesired fore,
                                   ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        D2D1_ROUNDED_RECT roundedRectFill = {
-            D2D1::RectF(rc.left+1.0f, rc.top+1.0f, rc.right-1.0f, rc.bottom-1.0f),
-            4, 4};
-        D2DPenColour(back);
-        m_pRenderTarget->FillRoundedRectangle(roundedRectFill, m_pSolidBrush);
+    wxCHECK( Initialised(), void() );
 
-        D2D1_ROUNDED_RECT roundedRect = {
-            D2D1::RectF(rc.left + 0.5f, rc.top+0.5f, rc.right - 0.5f, rc.bottom-0.5f),
-            4, 4};
-        D2DPenColour(fore);
-        m_pRenderTarget->DrawRoundedRectangle(roundedRect, m_pSolidBrush);
-    }
+    D2D1_ROUNDED_RECT roundedRectFill = {
+        D2D1::RectF(rc.left + 1.0f, rc.top + 1.0f, rc.right - 1.0f, rc.bottom - 1.0f),
+        4, 4 };
+    D2DPenColour(back);
+    m_pRenderTarget->FillRoundedRectangle(roundedRectFill, m_pSolidBrush);
+
+    D2D1_ROUNDED_RECT roundedRect = {
+        D2D1::RectF(rc.left + 0.5f, rc.top + 0.5f, rc.right - 0.5f, rc.bottom - 0.5f),
+        4, 4 };
+    D2DPenColour(fore);
+    m_pRenderTarget->DrawRoundedRectangle(roundedRect, m_pSolidBrush);
 }
 
 void SurfaceD2D::AlphaRectangle(PRectangle rc, int cornerSize,
@@ -1363,103 +1360,103 @@ void SurfaceD2D::AlphaRectangle(PRectangle rc, int cornerSize,
                                 ColourDesired outline, int alphaOutline,
                                 int /* flags*/ )
 {
-    if ( m_pRenderTarget.get() )
+    wxCHECK( Initialised(), void() );
+
+    if ( cornerSize == 0 )
     {
-        if (cornerSize == 0)
-        {
-            // When corner size is zero, draw square rectangle to prevent
-            // blurry pixels at corners
-            D2D1_RECT_F rectFill = D2D1::RectF(RoundFloat(rc.left) + 1.0f,
-                rc.top + 1.0f, RoundFloat(rc.right) - 1.0f, rc.bottom - 1.0f);
-            D2DPenColour(fill, alphaFill);
-            m_pRenderTarget->FillRectangle(rectFill, m_pSolidBrush);
+        // When corner size is zero, draw square rectangle to prevent
+        // blurry pixels at corners
+        D2D1_RECT_F rectFill = D2D1::RectF(RoundFloat(rc.left) + 1.0f,
+            rc.top + 1.0f, RoundFloat(rc.right) - 1.0f, rc.bottom - 1.0f);
+        D2DPenColour(fill, alphaFill);
+        m_pRenderTarget->FillRectangle(rectFill, m_pSolidBrush);
 
-            D2D1_RECT_F rectOutline = D2D1::RectF(RoundFloat(rc.left) + 0.5f,
-                rc.top + 0.5f, RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f);
-            D2DPenColour(outline, alphaOutline);
-            m_pRenderTarget->DrawRectangle(rectOutline, m_pSolidBrush);
-        }
-        else
-        {
-            const float cornerSizeF = static_cast<float>(cornerSize);
-            D2D1_ROUNDED_RECT roundedRectFill = {
-                D2D1::RectF(RoundFloat(rc.left) + 1.0f, rc.top + 1.0f,
-                    RoundFloat(rc.right) - 1.0f, rc.bottom - 1.0f),
-                cornerSizeF, cornerSizeF};
-            D2DPenColour(fill, alphaFill);
-            m_pRenderTarget->FillRoundedRectangle(roundedRectFill, m_pSolidBrush);
+        D2D1_RECT_F rectOutline = D2D1::RectF(RoundFloat(rc.left) + 0.5f,
+            rc.top + 0.5f, RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f);
+        D2DPenColour(outline, alphaOutline);
+        m_pRenderTarget->DrawRectangle(rectOutline, m_pSolidBrush);
+    }
+    else
+    {
+        const float cornerSizeF = static_cast<float>(cornerSize);
+        D2D1_ROUNDED_RECT roundedRectFill = {
+            D2D1::RectF(RoundFloat(rc.left) + 1.0f, rc.top + 1.0f,
+                RoundFloat(rc.right) - 1.0f, rc.bottom - 1.0f),
+            cornerSizeF, cornerSizeF };
+        D2DPenColour(fill, alphaFill);
+        m_pRenderTarget->FillRoundedRectangle(roundedRectFill, m_pSolidBrush);
 
-            D2D1_ROUNDED_RECT roundedRect = {
-                D2D1::RectF(RoundFloat(rc.left) + 0.5f, rc.top + 0.5f,
-                    RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f),
-                cornerSizeF, cornerSizeF};
-            D2DPenColour(outline, alphaOutline);
-            m_pRenderTarget->DrawRoundedRectangle(roundedRect, m_pSolidBrush);
-        }
+        D2D1_ROUNDED_RECT roundedRect = {
+            D2D1::RectF(RoundFloat(rc.left) + 0.5f, rc.top + 0.5f,
+                RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f),
+            cornerSizeF, cornerSizeF };
+        D2DPenColour(outline, alphaOutline);
+        m_pRenderTarget->DrawRoundedRectangle(roundedRect, m_pSolidBrush);
     }
 }
 
 void SurfaceD2D::DrawRGBAImage(PRectangle rc, int width, int height,
                                const unsigned char *pixelsImage)
 {
-    if ( m_pRenderTarget.get() )
+    wxCHECK( Initialised(), void() );
+
+    if ( rc.Width() > width )
+        rc.left += static_cast<int>((rc.Width() - width) / 2);
+    rc.right = rc.left + width;
+    if ( rc.Height() > height )
+        rc.top += static_cast<int>((rc.Height() - height) / 2);
+    rc.bottom = rc.top + height;
+
+    wxVector<unsigned char> image(height * width * 4);
+    for ( int yPixel = 0; yPixel < height; yPixel++ )
     {
-        if (rc.Width() > width)
-            rc.left += static_cast<int>((rc.Width() - width) / 2);
-        rc.right = rc.left + width;
-        if (rc.Height() > height)
-            rc.top += static_cast<int>((rc.Height() - height) / 2);
-        rc.bottom = rc.top + height;
-
-        wxVector<unsigned char> image(height * width * 4);
-        for ( int yPixel=0; yPixel<height; yPixel++ )
+        for ( int xPixel = 0; xPixel < width; xPixel++ )
         {
-            for ( int xPixel = 0; xPixel<width; xPixel++ )
-            {
-                unsigned char *pixel = &image[0] + (yPixel*width + xPixel) * 4;
-                unsigned char alpha = pixelsImage[3];
-                // Input is RGBA, output is BGRA with premultiplied alpha
-                pixel[2] = (*pixelsImage++) * alpha / 255;
-                pixel[1] = (*pixelsImage++) * alpha / 255;
-                pixel[0] = (*pixelsImage++) * alpha / 255;
-                pixel[3] = *pixelsImage++;
-            }
+            unsigned char* pixel = &image[0] + (yPixel * width + xPixel) * 4;
+            unsigned char alpha = pixelsImage[3];
+            // Input is RGBA, output is BGRA with premultiplied alpha
+            pixel[2] = (*pixelsImage++) * alpha / 255;
+            pixel[1] = (*pixelsImage++) * alpha / 255;
+            pixel[0] = (*pixelsImage++) * alpha / 255;
+            pixel[3] = *pixelsImage++;
         }
+    }
 
-        wxCOMPtr<ID2D1Bitmap> bitmap;
-        D2D1_SIZE_U size = D2D1::SizeU(width, height);
-        D2D1_BITMAP_PROPERTIES props = {{DXGI_FORMAT_B8G8R8A8_UNORM,
-            D2D1_ALPHA_MODE_PREMULTIPLIED}, 72.0, 72.0};
-        HRESULT hr = m_pRenderTarget->CreateBitmap(size, &image[0],
-                  width * 4, &props, &bitmap);
+    wxCOMPtr<ID2D1Bitmap> bitmap;
+    D2D1_SIZE_U size = D2D1::SizeU(width, height);
+    D2D1_BITMAP_PROPERTIES props = { {DXGI_FORMAT_B8G8R8A8_UNORM,
+        D2D1_ALPHA_MODE_PREMULTIPLIED}, 72.0, 72.0 };
+    HRESULT hr = m_pRenderTarget->CreateBitmap(size, &image[0],
+        width * 4, &props, &bitmap);
 
-        if ( SUCCEEDED(hr) )
-        {
-            D2D1_RECT_F rcDestination = {rc.left, rc.top, rc.right, rc.bottom};
-            m_pRenderTarget->DrawBitmap(bitmap, rcDestination);
-        }
+    if ( SUCCEEDED(hr) )
+    {
+        D2D1_RECT_F rcDestination = { rc.left, rc.top, rc.right, rc.bottom };
+        m_pRenderTarget->DrawBitmap(bitmap, rcDestination);
     }
 }
 
 void SurfaceD2D::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        FLOAT radius = rc.Width() / 2.0f;
-        D2D1_ELLIPSE ellipse = {
-            D2D1::Point2F((rc.left + rc.right) / 2.0f,
-                (rc.top + rc.bottom) / 2.0f),
-            radius, radius};
+    wxCHECK( Initialised(), void() );
 
-        PenColour(back);
-        m_pRenderTarget->FillEllipse(ellipse, m_pSolidBrush);
-        PenColour(fore);
-        m_pRenderTarget->DrawEllipse(ellipse, m_pSolidBrush);
-    }
+    FLOAT radius = rc.Width() / 2.0f;
+    D2D1_ELLIPSE ellipse = {
+        D2D1::Point2F((rc.left + rc.right) / 2.0f,
+            (rc.top + rc.bottom) / 2.0f),
+        radius, radius };
+
+    PenColour(back);
+    m_pRenderTarget->FillEllipse(ellipse, m_pSolidBrush);
+    PenColour(fore);
+    m_pRenderTarget->DrawEllipse(ellipse, m_pSolidBrush);
 }
 
-void SurfaceD2D::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
-    SurfaceD2D &surfOther = static_cast<SurfaceD2D &>(surfaceSource);
+void SurfaceD2D::Copy(PRectangle rc, Point from, Surface& surfaceSource)
+{
+    wxCHECK( Initialised(), void() );
+
+    SurfaceD2D& surfOther = static_cast<SurfaceD2D&>(surfaceSource);
     surfOther.FlushDrawing();
 
     wxCOMPtr<ID2D1Bitmap> pBitmap;
@@ -1470,9 +1467,9 @@ void SurfaceD2D::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
 
     if ( SUCCEEDED(hr) )
     {
-        D2D1_RECT_F rcDestination = {rc.left, rc.top, rc.right, rc.bottom};
+        D2D1_RECT_F rcDestination = { rc.left, rc.top, rc.right, rc.bottom };
         D2D1_RECT_F rcSource =
-            {from.x, from.y, from.x + rc.Width(), from.y + rc.Height()};
+        { from.x, from.y, from.x + rc.Width(), from.y + rc.Height() };
         m_pRenderTarget->DrawBitmap(pBitmap, rcDestination, 1.0f,
             D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, rcSource);
 
@@ -1488,40 +1485,37 @@ void SurfaceD2D::DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase,
                                 const char *s, int len, ColourDesired fore,
                                 ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        FillRectangle(rc, back);
-        D2DPenColour(fore);
-        DrawTextCommon(rc, font_, ybase, s, len, ETO_OPAQUE);
-    }
+    wxCHECK( Initialised(), void() );
+
+    FillRectangle(rc, back);
+    D2DPenColour(fore);
+    DrawTextCommon(rc, font_, ybase, s, len, ETO_OPAQUE);
 }
 
 void SurfaceD2D::DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase,
                                  const char *s, int len, ColourDesired fore,
                                  ColourDesired back)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        FillRectangle(rc, back);
-        D2DPenColour(fore);
-        DrawTextCommon(rc, font_, ybase, s, len, ETO_OPAQUE | ETO_CLIPPED);
-    }
+    wxCHECK( Initialised(), void() );
+
+    FillRectangle(rc, back);
+    D2DPenColour(fore);
+    DrawTextCommon(rc, font_, ybase, s, len, ETO_OPAQUE | ETO_CLIPPED);
 }
 
 void SurfaceD2D::DrawTextTransparent(PRectangle rc, Font &font_,
                                      XYPOSITION ybase, const char *s, int len,
                                      ColourDesired fore)
 {
+    wxCHECK( Initialised(), void() );
+
     // Avoid drawing spaces in transparent mode
     for ( int i=0; i<len; i++ )
     {
         if ( s[i] != ' ' )
         {
-            if ( m_pRenderTarget.get() )
-            {
-                D2DPenColour(fore);
-                DrawTextCommon(rc, font_, ybase, s, len, 0);
-            }
+            D2DPenColour(fore);
+            DrawTextCommon(rc, font_, ybase, s, len, 0);
             return;
         }
     }
@@ -1708,12 +1702,11 @@ XYPOSITION SurfaceD2D::AverageCharWidth(Font &font_)
 
 void SurfaceD2D::SetClip(PRectangle rc)
 {
-    if ( m_pRenderTarget.get() )
-    {
-        D2D1_RECT_F rcClip = {rc.left, rc.top, rc.right, rc.bottom};
-        m_pRenderTarget->PushAxisAlignedClip(rcClip, D2D1_ANTIALIAS_MODE_ALIASED);
-        m_clipsActive++;
-    }
+    wxCHECK( Initialised(), void() );
+
+    D2D1_RECT_F rcClip = { rc.left, rc.top, rc.right, rc.bottom };
+    m_pRenderTarget->PushAxisAlignedClip(rcClip, D2D1_ANTIALIAS_MODE_ALIASED);
+    m_clipsActive++;
 }
 
 void SurfaceD2D::FlushCachedState()
@@ -1747,7 +1740,7 @@ void SurfaceD2D::SetFont(Font &font_)
             m_yInternalLeading = sfd->GetInternalLeading();
             m_averageCharWidth = sfd->GetAverageCharWidth();
 
-            if ( m_pRenderTarget.get() )
+            if ( Initialised() )
             {
                 D2D1_TEXT_ANTIALIAS_MODE aaMode = sfd->GetFontQuality();
 
@@ -1775,29 +1768,29 @@ void SurfaceD2D::SetFont(Font &font_)
 
 HRESULT SurfaceD2D::FlushDrawing()
 {
+    wxCHECK( Initialised(), E_POINTER );
     return m_pRenderTarget->Flush();
 }
 
 void SurfaceD2D::D2DPenColour(ColourDesired fore, int alpha)
 {
-    if ( m_pRenderTarget.get() )
+    wxCHECK( Initialised(), void() );
+
+    D2D_COLOR_F col;
+    col.r = (fore.AsLong() & 0xff) / 255.0f;
+    col.g = ((fore.AsLong() & 0xff00) >> 8) / 255.0f;
+    col.b = (fore.AsLong() >> 16) / 255.0f;
+    col.a = alpha / 255.0f;
+    if ( m_pSolidBrush.get() )
     {
-        D2D_COLOR_F col;
-        col.r = (fore.AsLong() & 0xff) / 255.0f;
-        col.g = ((fore.AsLong() & 0xff00) >> 8) / 255.0f;
-        col.b = (fore.AsLong() >> 16) / 255.0f;
-        col.a = alpha / 255.0f;
-        if ( m_pSolidBrush.get() )
+        m_pSolidBrush->SetColor(col);
+    }
+    else
+    {
+        HRESULT hr = m_pRenderTarget->CreateSolidColorBrush(col, &m_pSolidBrush);
+        if ( !SUCCEEDED(hr) )
         {
-            m_pSolidBrush->SetColor(col);
-        }
-        else
-        {
-            HRESULT hr = m_pRenderTarget->CreateSolidColorBrush(col, &m_pSolidBrush);
-            if ( !SUCCEEDED(hr) )
-            {
-                m_pSolidBrush.reset();
-            }
+            m_pSolidBrush.reset();
         }
     }
 }
@@ -1805,9 +1798,11 @@ void SurfaceD2D::D2DPenColour(ColourDesired fore, int alpha)
 void SurfaceD2D::DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
                                 const char *s, int len, UINT fuOptions)
 {
+    wxCHECK( Initialised(), void() );
+
     SetFont(font_);
 
-    if ( m_pRenderTarget.get() && m_pSolidBrush.get() && m_pTextFormat.get() )
+    if ( m_pSolidBrush.get() && m_pTextFormat.get() )
     {
         // Explicitly creating a text layout appears a little faster
         wxCOMPtr<IDWriteTextLayout> pTextLayout;

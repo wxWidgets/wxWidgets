@@ -157,6 +157,24 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
 
+bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
+{
+    // ::SetParent() can't be used for non-owned windows, as they don't have
+    // any parent, only the owner, so use a different function for them even
+    // if, confusingly, the owner is stored at the same location as the parent
+    // and so uses the same GWLP_HWNDPARENT offset.
+
+    // Do not call the base class function here to skip wxWindow reparenting.
+    if ( !wxWindowBase::Reparent(newParent) )
+        return false;
+
+    const HWND hwndOwner = GetParent() ? GetHwndOf(GetParent()) : 0;
+
+    ::SetWindowLongPtr(GetHwnd(), GWLP_HWNDPARENT, (LONG_PTR)hwndOwner);
+
+    return true;
+}
+
 namespace
 {
 

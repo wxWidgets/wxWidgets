@@ -1917,9 +1917,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     // Since we switched from MM_ANISOTROPIC to MM_TEXT mapping mode
     // we have to apply rescaled DC's device origin to Cairo context.
     ApplyTransformFromDC(dc, Apply_scaled_dev_origin);
-#endif //  __WXMSW__
-
-#ifdef __WXGTK20__
+#elif defined(__WXGTK20__)
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* cr = static_cast<cairo_t*>(impl->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
@@ -1930,6 +1928,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 
     // Transfer transformation settings from source DC to Cairo context.
     ApplyTransformFromDC(dc);
+#else
+    #warning "Constructing wxCairoContext from wxPrinterDC not implemented."
+    wxUnusedVar(dc);
 #endif
 }
 #endif

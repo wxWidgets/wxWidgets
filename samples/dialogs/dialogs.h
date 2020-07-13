@@ -434,6 +434,7 @@ public:
 #if wxUSE_DIRDLG
     void DirChoose(wxCommandEvent& event);
     void DirChooseNew(wxCommandEvent& event);
+    void DirChooseMultiple(wxCommandEvent& event);
 #endif // wxUSE_DIRDLG
 
 #if USE_DIRDLG_GENERIC
@@ -543,6 +544,13 @@ private:
     SettingsData m_settingsData;
 #endif // USE_SETTINGS_DIALOG
 
+#if wxUSE_TIPWINDOW
+    void OnShowTip(wxCommandEvent& event);
+    void OnUpdateShowTipUI(wxUpdateUIEvent& event);
+
+    wxTipWindow *m_tipWindow;
+#endif // wxUSE_TIPWINDOW
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -594,6 +602,7 @@ enum
     DIALOGS_FILE_SAVE_GENERIC,
     DIALOGS_DIR_CHOOSE,
     DIALOGS_DIRNEW_CHOOSE,
+    DIALOGS_DIRMULTIPLE_CHOOSE,
     DIALOGS_GENERIC_DIR_CHOOSE,
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,
@@ -621,6 +630,7 @@ enum
     DIALOGS_REPLACE,
     DIALOGS_REQUEST,
     DIALOGS_NOTIFY_MSG,
+    DIALOGS_SHOW_TIP,
     DIALOGS_RICHTIP_DIALOG,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,

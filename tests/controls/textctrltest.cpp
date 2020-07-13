@@ -24,7 +24,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/scopedptr.h"
-#include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
 #if wxUSE_CLIPBOARD
@@ -290,8 +289,7 @@ void TextCtrlTestCase::StreamInput()
 #ifndef __WXOSX__
     {
         // Ensure we use decimal point and not a comma.
-        char * const locOld = setlocale(LC_NUMERIC, "C");
-        wxON_BLOCK_EXIT2( setlocale, (int)LC_NUMERIC, locOld );
+        LocaleSetter setCLocale("C");
 
         *m_text << "stringinput"
                 << 10

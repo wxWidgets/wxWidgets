@@ -251,7 +251,7 @@ public:
         and this function can be used to retrieve it. Notice that the default
         menu can be replaced by calling SetWindowMenu().
 
-        This function is currently not available under OS X.
+        This function is currently not available under macOS.
 
         @return The current Window menu or @NULL.
     */
@@ -320,7 +320,7 @@ public:
         All of which are handled by wxMDIParentFrame itself. If any other
         commands are used in the menu, the derived frame should handle them.
 
-        This function is currently not available under OS X.
+        This function is currently not available under macOS.
 
         @param menu
             The menu to be used instead of the standard MDI Window menu or @NULL.

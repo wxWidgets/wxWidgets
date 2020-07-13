@@ -74,6 +74,7 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
     virtual wxString GetLabel() const wxOVERRIDE            { return GetTitle(); }
 
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
 
     virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
     virtual bool CanSetTransparent() wxOVERRIDE;

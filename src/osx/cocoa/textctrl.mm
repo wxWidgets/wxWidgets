@@ -781,7 +781,7 @@ bool wxNSTextViewControl::CanFocus() const
 void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
 {
     NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [(id)str string] : str;
-    if ( m_lastKeyDownEvent ==NULL || !DoHandleCharEvent(m_lastKeyDownEvent, text) )
+    if ( !IsInNativeKeyDown() || !DoHandleCharEvent(GetLastNativeKeyDownEvent(), text) )
     {
         wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, str);
@@ -988,10 +988,8 @@ void wxNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
-    NSEvent* formerEvent = m_lastKeyDownEvent;
-    m_lastKeyDownEvent = nil;
+    wxWidgetCocoaNativeKeyDownSuspender suspend(this);
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
-    m_lastKeyDownEvent = formerEvent;
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
 }
@@ -1467,8 +1465,7 @@ void wxNSTextFieldControl::ShowPosition(long pos)
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
 {
-    NSEvent* formerEvent = m_lastKeyDownEvent;
-    m_lastKeyDownEvent = nil;
+    wxWidgetCocoaNativeKeyDownSuspender suspend(this);
     NSText* editor = [m_textField currentEditor];
     if ( editor )
     {
@@ -1490,7 +1487,6 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
         SetStringValue( val ) ;
         SetSelection( start + str.length() , start + str.length() ) ;
     }
-    m_lastKeyDownEvent = formerEvent;
 }
 
 void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),

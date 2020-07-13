@@ -83,7 +83,7 @@ protected:
     void OnButtonSetFilename( wxCommandEvent& event );
     void OnButtonReset( wxCommandEvent& event );
     void OnCheckBox( wxCommandEvent& event );
-    void OnRadioBox( wxCommandEvent& event );
+    void OnSwitchMode( wxCommandEvent& event );
     void OnFileCtrl( wxFileCtrlEvent& event );
 
     // reset the control parameters
@@ -127,7 +127,7 @@ wxBEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_BUTTON( FileCtrlPage_SetPath, FileCtrlWidgetsPage::OnButtonSetPath )
     EVT_BUTTON( FileCtrlPage_SetFilename, FileCtrlWidgetsPage::OnButtonSetFilename )
     EVT_CHECKBOX( wxID_ANY, FileCtrlWidgetsPage::OnCheckBox )
-    EVT_RADIOBOX( wxID_ANY, FileCtrlWidgetsPage::OnRadioBox )
+    EVT_RADIOBOX( wxID_ANY, FileCtrlWidgetsPage::OnSwitchMode )
 
     EVT_FILECTRL_FILTERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_FOLDERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
@@ -228,11 +228,22 @@ void FileCtrlWidgetsPage::CreateFileCtrl()
     wxWindowUpdateLocker noUpdates( this );
 
     long style = GetAttrs().m_defaultFlags;
-    style |= m_radioFileCtrlMode->GetSelection() == FileCtrlMode_Open
-                ? wxFC_OPEN
-                : wxFC_SAVE;
-    if ( m_chkMultiple->IsChecked() )
-        style |= wxFC_MULTIPLE;
+
+    if ( m_radioFileCtrlMode->GetSelection() == FileCtrlMode_Open )
+    {
+        style |= wxFC_OPEN;
+        m_chkMultiple->Enable();
+        if ( m_chkMultiple->IsChecked() )
+            style |= wxFC_MULTIPLE;
+    }
+    else
+    {
+        style |= wxFC_SAVE;
+        // wxFC_SAVE is incompatible with wxFC_MULTIPLE
+        m_chkMultiple->SetValue(false);
+        m_chkMultiple->Enable(false);
+    }
+
     if ( m_chkNoShowHidden->IsChecked() )
         style |= wxFC_NOSHOWHIDDEN;
 
@@ -301,7 +312,7 @@ void FileCtrlWidgetsPage::OnCheckBox( wxCommandEvent& WXUNUSED( event ) )
     CreateFileCtrl();
 }
 
-void FileCtrlWidgetsPage::OnRadioBox( wxCommandEvent& WXUNUSED( event ) )
+void FileCtrlWidgetsPage::OnSwitchMode( wxCommandEvent& WXUNUSED( event ) )
 {
     CreateFileCtrl();
 }

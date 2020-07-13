@@ -23,10 +23,6 @@ include(CheckTypeSize)
 include(CMakePushCheckState)
 include(TestBigEndian)
 
-if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND wxHAS_CXX11)
-    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-stdlib=libc++")
-endif()
-
 # Add a definition to setup.h and append it to a list of defines for
 # for compile checks
 macro(wx_setup_definition def)
@@ -143,7 +139,7 @@ wx_check_c_source_compiles(
     stdio.h
     )
 #TODO: wxNO_VARIADIC_MACROS
-if(wxUSE_STL AND NOT wxHAS_CXX11)
+if(wxUSE_STL AND CMAKE_CXX_STANDARD EQUAL 98)
     wx_check_cxx_source_compiles("
         std::vector<int> moo;
         std::list<int> foo;

@@ -355,6 +355,7 @@ void FileNameTestCase::TestNormalize()
         { "b/../bar", wxPATH_NORM_DOTS, "bar", wxPATH_UNIX },
         { "c/../../quux", wxPATH_NORM_DOTS, "../quux", wxPATH_UNIX },
         { "/c/../../quux", wxPATH_NORM_DOTS, "/quux", wxPATH_UNIX },
+        { "../../quux", wxPATH_NORM_DOTS, "../../quux", wxPATH_UNIX },
 
         // test wxPATH_NORM_TILDE: notice that ~ is only interpreted specially
         // when it is the first character in the file name

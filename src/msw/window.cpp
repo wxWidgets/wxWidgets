@@ -3844,6 +3844,42 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
     }
 
+    // Special hook for dismissing the current popup if it's active. It's a bit
+    // ugly to have to do this here, but the only alternatives seem to be
+    // installing a WH_CBT hook in wxPopupTransientWindow code, which is not
+    // really much better.
+#if wxUSE_POPUPWIN
+    if ( wxCurrentPopupWindow )
+    {
+        switch ( message )
+        {
+            case WM_NCLBUTTONDOWN:
+            case WM_NCLBUTTONUP:
+            case WM_NCLBUTTONDBLCLK:
+            case WM_NCRBUTTONDOWN:
+            case WM_NCRBUTTONUP:
+            case WM_NCRBUTTONDBLCLK:
+            case WM_NCMBUTTONDOWN:
+            case WM_NCMBUTTONUP:
+            case WM_NCMBUTTONDBLCLK:
+
+            case WM_LBUTTONDOWN:
+            case WM_LBUTTONUP:
+            case WM_LBUTTONDBLCLK:
+            case WM_RBUTTONDOWN:
+            case WM_RBUTTONUP:
+            case WM_RBUTTONDBLCLK:
+            case WM_MBUTTONDOWN:
+            case WM_MBUTTONUP:
+            case WM_MBUTTONDBLCLK:
+
+            case WM_SETFOCUS:
+            case WM_KILLFOCUS:
+                wxCurrentPopupWindow->MSWDismissUnfocusedPopup();
+        }
+    }
+#endif // wxUSE_POPUPWIN
+
     if ( !processed )
         return false;
 

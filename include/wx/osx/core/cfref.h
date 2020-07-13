@@ -35,12 +35,15 @@
  * Note that Darwin CF uses extern for CF_EXPORT.  If we need this on Win32
  * or non-Darwin Mac OS we'll need to define the appropriate __declspec.
  */
+
 typedef const void *CFTypeRef;
 extern "C" {
 extern /* CF_EXPORT */
 CFTypeRef CFRetain(CFTypeRef cf);
 extern /* CF_EXPORT */
 void CFRelease(CFTypeRef cf);
+extern /* CF_EXPORT */
+CFTypeRef CFAutorelease(CFTypeRef cf);
 } // extern "C"
 
 
@@ -54,6 +57,19 @@ inline void wxCFRelease(Type *r)
 {
     if ( r != NULL )
         ::CFRelease((CFTypeRef)r);
+}
+
+/*! @function   wxCFAutorelease
+    @abstract   A CFAutorelease variant that checks for NULL before releasing.
+    @discussion The parameter is template not for type safety but to ensure the argument
+                is a raw pointer and not a ref holder of any type.
+*/
+template <class Type>
+inline Type* wxCFAutorelease(Type *r)
+{
+    if ( r != NULL )
+        return (Type*)::CFAutorelease((CFTypeRef)r);
+    return NULL;
 }
 
 /*! @function   wxCFRetain
@@ -340,6 +356,15 @@ public:
         m_ptr = NULL;
         return p;
     }
+    
+    // Autorelease the pointer, i.e. during the next cleanup it will be released
+    refType autorelease()
+    {
+        refType p = m_ptr;
+        m_ptr = NULL;
+        return wxCFAutorelease(p);
+    }
+
 
 protected:
     /*! @var m_ptr      The raw pointer.

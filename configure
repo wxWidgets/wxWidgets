@@ -1028,7 +1028,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1456,7 +1455,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1709,15 +1707,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1855,7 +1844,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -2008,7 +1997,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2324,9 +2312,9 @@ Optional Packages:
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
   --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"
   --with-motif            use Motif/Lesstif
-  --with-osx_cocoa        use Mac OS X (Cocoa)
-  --with-osx_iphone       use iPhone OS X port
-  --with-osx              use Mac OS X (default port, Cocoa)
+  --with-osx_cocoa        use macOS (Cocoa)
+  --with-osx_iphone       use iOS
+  --with-osx              use macOS (default port, Cocoa)
   --with-cocoa            same as --with-osx_cocoa
   --with-iphone           same as --with-osx_iphone
   --with-mac              same as --with-osx
@@ -2354,8 +2342,8 @@ Optional Packages:
   --with-liblzma          use LZMA compression)
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
-  --with-macosx-sdk=PATH  use an OS X SDK at PATH
-  --with-macosx-version-min=VER   build binaries which require at least this OS X version
+  --with-macosx-sdk=PATH  use macOS SDK at PATH
+  --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)
   --with-cxx=11|14|17     use the given C++ dialect
   --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)
   --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)
@@ -4017,18 +4005,8 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  arm-apple-darwin*)
-        USE_BSD=1
-    USE_DARWIN=1
-    $as_echo "#define __BSD__ 1" >>confdefs.h
-
-    $as_echo "#define __DARWIN__ 1" >>confdefs.h
-
-    DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=1
-  ;;
-
   *-*-darwin* )
-        USE_BSD=1
+            USE_BSD=1
     USE_DARWIN=1
     $as_echo "#define __BSD__ 1" >>confdefs.h
 
@@ -15205,6 +15183,10 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     as_fn_error $? "C++ compiler is needed to build wxWidgets" "$LINENO" 5
 fi
 
+if test "$wxUSE_MAC" = 1 -a -z "$wxWITH_CXX"; then
+    wxWITH_CXX=11
+fi
+
 if test -n "$wxWITH_CXX"; then
             case "$wxWITH_CXX" in
         11)
@@ -18691,6 +18673,8 @@ if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
         wxUSE_MACOSX_SDK="`xcode-select -p`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+elif test "x$wxUSE_MACOSX_SDK" != "x"; then
+    macosx_sdk_specified=yes
 fi
 
 
@@ -18740,7 +18724,9 @@ $as_echo "$as_me: WARNING: Could not determine deployment target from SDKSetting
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    wxUSE_MACOSX_VERSION_MIN=10.9
+    wxUSE_MACOSX_VERSION_MIN=10.10
+else
+    macosx_minver_specified=yes
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
@@ -18764,11 +18750,19 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     retest_macosx_linking=yes
 fi
 
-if test "$HAVE_CXX11" = "1" ; then
-                        eval "CXX=\"$CXX -stdlib=libc++\""
-fi
-
 if test "x$retest_macosx_linking" = "xyes"; then
+    if test "x$macosx_sdk_specified" = "xyes"; then
+        error_message="try using --with-macosx-sdk with a different SDK or \
+omitting it entirely to use the default one."
+    elif test "x$macosx_minver_specified" = "xyes"; then
+        error_message="try using --with-macosx-version-min with a different OS \
+version or omitting it entirely."
+    else
+        error_message="check that command line tools from Xcode 7.2.1 or later are installed."
+    fi
+
+    error_message="building C++ programs doesn't work, $error_message"
+
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -18794,8 +18788,8 @@ $as_echo "yes" >&6; }
 else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "no.  Try a different SDK
-See \`config.log' for more details" "$LINENO" 5; }; exit 1
+as_fn_error $? "$error_message
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -18817,9 +18811,22 @@ $as_echo_n "checking if C++ compiler ($CXX) works with SDK/version options... " 
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+            #include <Availability.h>
+
 int
 main ()
 {
+
+            #if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
+            #if __MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+            #error macOS versions < 10.10 are not supported.
+            #endif
+            #if __MAC_OS_X_VERSION_MAX_ALLOWED < 101100
+            #error macOS SDK version is too low, 10.11 or later is required.
+            #endif
+            #elif !defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+            #error unrecognized platform
+            #endif
 
   ;
   return 0;
@@ -18831,8 +18838,9 @@ $as_echo "yes" >&6; }
 else
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "no.  Try a different SDK
-See \`config.log' for more details" "$LINENO" 5; }; exit 1
+as_fn_error $? "$error_message
+See \`config.log' for more details" "$LINENO" 5; }
+
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -40343,14 +40351,12 @@ case "${host}" in
         ;;
 esac
 
-dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '!seen[$0]++'; }
+dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '$0=="-arch" || $0=="-framework" || !seen[$0]++'; }
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
 WX_CFLAGS=`dedup_flags "$CFLAGS"`
 WX_CXXFLAGS=`dedup_flags "$CXXFLAGS"`
-
-LDFLAGS=`printf %s "$LDFLAGS" | sed 's/-framework  */-framework_/g'`
-WX_LDFLAGS=`dedup_flags "$LDFLAGS" | sed 's/-framework_/-framework /g'`
+WX_LDFLAGS=`dedup_flags "$LDFLAGS"`
 
 CPPFLAGS=$USER_CPPFLAGS
 CFLAGS=$USER_CFLAGS

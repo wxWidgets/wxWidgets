@@ -996,7 +996,7 @@ wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const
     const wxDirItemData*
         data = static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
 
-    return data->m_path;
+    return data ? data->m_path : wxString();
 }
 
 wxString wxGenericDirCtrl::GetPath() const
@@ -1222,7 +1222,7 @@ void wxGenericDirCtrl::DoResize()
         wxSize filterSz ;
         if (m_filterListCtrl)
         {
-            filterSz = m_filterListCtrl->GetSize();
+            filterSz = m_filterListCtrl->GetBestSize();
             sz.y -= (filterSz.y + verticalSpacing);
         }
         m_treeCtrl->SetSize(0, 0, sz.x, sz.y);

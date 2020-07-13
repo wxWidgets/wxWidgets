@@ -35,6 +35,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -842,7 +843,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_widget_set_size_request(m_widget, w, h);
     }
 
-    g_signal_connect(gtk_settings_get_default(), "notify::gtk-theme-name",
+    // Note that we need to connect after this signal in order to let the
+    // normal g_signal_connect() in wxSystemSettings code to run before our
+    // handler: this ensures that system settings cache is cleared before the
+    // user-defined wxSysColourChangedEvent handlers using wxSystemSettings
+    // methods are executed, which is important as otherwise they would use the
+    // old colours etc.
+    g_signal_connect_after(gtk_settings_get_default(), "notify::gtk-theme-name",
         G_CALLBACK(notify_gtk_theme_name), this);
 
     return true;
@@ -1814,4 +1821,13 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
     return XQueryExtension(gdk_x11_get_default_xdisplay (),
                            "Composite", &opcode, &event, &error);
 #endif
+}
+
+wxVisualAttributes wxTopLevelWindowGTK::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs(GetClassDefaultAttributes());
+#ifdef __WXGTK3__
+    wxGtkStyleContext().AddWindow().Bg(attrs.colBg);
+#endif
+    return attrs;
 }

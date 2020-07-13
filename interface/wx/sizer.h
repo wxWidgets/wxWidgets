@@ -969,7 +969,7 @@ public:
     and ordering defined by the platform or toolkit's user interface guidelines
     (if such things exist). By using this class, you can ensure that all your
     standard dialogs look correct on all major platforms. Currently it conforms to
-    the Windows, GTK+ and OS X human interface guidelines.
+    the Windows, GTK+ and macOS human interface guidelines.
 
     When there aren't interface guidelines defined for a particular platform or
     toolkit, wxStdDialogButtonSizer reverts to the Windows implementation.
@@ -980,9 +980,9 @@ public:
     and then call Realize in order to create the actual button layout used.
     Other than these special operations, this sizer works like any other sizer.
 
-    If you add a button with wxID_SAVE, on OS X the button will be renamed to
+    If you add a button with wxID_SAVE, on macOS the button will be renamed to
     "Save" and the wxID_NO button will be renamed to "Don't Save" in accordance
-    with the OS X Human Interface Guidelines.
+    with the macOS Human Interface Guidelines.
 
     @library{wxcore}
     @category{winlayout}
@@ -1098,7 +1098,19 @@ public:
     /**
         Set the window to be tracked by this item.
 
-        The old window isn't deleted as it is now owned by the sizer item.
+        @note This is a low-level method which is dangerous if used
+            incorrectly, avoid using it if possible, i.e. if higher level
+            methods such as wxSizer::Replace() can be used instead.
+
+        If the sizer item previously contained a window, it is dissociated from
+        the sizer containing this sizer item (if any), but this object doesn't
+        have the pointer to the containing sizer and so it's the caller's
+        responsibility to call wxWindow::SetContainingSizer() on @a window.
+        Failure to do this can result in memory corruption when the window is
+        destroyed later, so it is crucial to not forget to do it.
+
+        Also note that the previously contained window is @e not deleted, so
+        it's also the callers responsibility to do it, if necessary.
     */
     void AssignWindow(wxWindow *window);
 
