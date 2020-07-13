@@ -41,6 +41,8 @@ public:
     bool operator!=(wxDataFormatId format) const;
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
+    bool operator==(NativeFormat format) const;
+    bool operator!=(NativeFormat format) const;
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
