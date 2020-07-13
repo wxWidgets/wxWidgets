@@ -2445,7 +2445,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/tglbtn_osx.cpp
     src/osx/toolbar_osx.cpp
     <!-- wxWebKit files -->
-    src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
     src/osx/carbon/colordlgosx.mm
     src/osx/carbon/fontdlgosx.mm
@@ -2496,7 +2495,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Header files like wx/osx/foo.h which include wx/osx/carbon/foo.h -->
 <set var="OSX_SHARED_HDR" hints="files">
     <!-- wxWebKit headers -->
-    wx/html/webkit.h
     <!-- other shared headers -->
     wx/osx/accel.h
     wx/osx/anybutton.h
