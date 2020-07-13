@@ -36,7 +36,7 @@ jobs:
 
       - name: Install codespell
         run: |
-          pip install --no-warn-script-location codespell==1.17.1
+          pip3 install --no-warn-script-location codespell==1.17.1
 
       - name: Run codespell
         run: |
