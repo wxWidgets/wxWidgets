@@ -69,11 +69,7 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
 static wxColor GetBaseColor()
 {
 
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -252,11 +248,7 @@ void wxAuiGenericToolBarArt::DrawLabel(
                                     const wxRect& rect)
 {
     dc.SetFont(m_font);
-#ifdef __WXMAC__
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-#else
-    dc.SetTextForeground(*wxBLACK);
-#endif
 
     // we only care about the text height here since the text
     // will get cropped based on the width of the item
@@ -369,11 +361,7 @@ void wxAuiGenericToolBarArt::DrawButton(
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
-#ifdef __WXMAC__
         dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
-#else
-        dc.SetTextForeground(DISABLED_TEXT_COLOR);
-#endif
     }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
@@ -503,11 +491,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
-#ifdef __WXMAC__
         dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
-#else
-        dc.SetTextForeground(DISABLED_TEXT_COLOR);
-#endif
     }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
@@ -547,11 +531,7 @@ void wxAuiGenericToolBarArt::DrawControlLabel(
         return;
 
     // set the label's text color
-#ifdef __WXMAC__
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-#else
-    dc.SetTextForeground(*wxBLACK);
-#endif
 
     textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
     textY = rect.y + rect.height - textHeight - 1;
