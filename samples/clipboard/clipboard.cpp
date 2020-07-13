@@ -151,7 +151,8 @@ void MyFrame::OnFlush(wxCommandEvent &WXUNUSED(event))
         return;
     }
 
-    if ( !wxTheClipboard->AddData(new wxTextDataObject("Text from wx clipboard sample")) )
+    wxString clipData = wxString::Format("Text from wx clipboard sample at %s" , wxDateTime::Now().Format());
+    if ( !wxTheClipboard->AddData(new wxTextDataObject(clipData)) )
     {
         m_textctrl->AppendText("Failed to put text on clipboard.\n");
         return;
