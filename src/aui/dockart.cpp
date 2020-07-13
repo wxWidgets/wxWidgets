@@ -95,9 +95,38 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color)
 {
     wxImage img = wxBitmap((const char*)bits, w, h).ConvertToImage();
-    img.Replace(0,0,0,123,123,123);
-    img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
-    img.SetMaskColour(123,123,123);
+    if (color.Alpha() == wxALPHA_OPAQUE)
+    {
+        img.Replace(0,0,0,123,123,123);
+        img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
+        img.SetMaskColour(123,123,123);
+    }
+    else
+    {
+        img.InitAlpha();
+        const int newr = color.Red();
+        const int newg = color.Green();
+        const int newb = color.Blue();
+        const int newa = color.Alpha();
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
+            {
+                int r = img.GetRed(x, y);
+                int g = img.GetGreen(x, y);
+                int b = img.GetBlue(x, y);
+                if (r == 0 && g == 0 && b == 0)
+                {
+                    img.SetAlpha(x, y, wxALPHA_TRANSPARENT);
+                }
+                else
+                {
+                    img.SetRGB(x, y, newr, newg, newb);
+                    img.SetAlpha(x, y, newa);
+                }
+            }
+        }
+    }
     return wxBitmap(img);
 }
 

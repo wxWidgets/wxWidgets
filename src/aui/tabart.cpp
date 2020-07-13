@@ -217,13 +217,13 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
     m_baseColourBrush = wxBrush(m_baseColour);
 
     m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
     m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
     m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
     m_activeWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION));
+    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
 }
 
 wxAuiTabArt* wxAuiGenericTabArt::Clone()
