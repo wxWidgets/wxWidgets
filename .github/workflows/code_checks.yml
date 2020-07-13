@@ -36,7 +36,7 @@ jobs:
 
       - name: Install codespell
         run: |
-          sudo apt install codespell
+          pip install codespell==1.17.1
 
       - name: Run codespell
         run: |
