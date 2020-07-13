@@ -116,13 +116,6 @@ private:
 };
 
 
-
-static const unsigned char
-    DISABLED_TEXT_GREY_HUE = wxColour::AlphaBlend(0, 255, 0.4);
-const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
-                                   DISABLED_TEXT_GREY_HUE,
-                                   DISABLED_TEXT_GREY_HUE);
-
 wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
 {
     UpdateColoursFromSystem();
