@@ -354,7 +354,7 @@ void wxAuiGenericToolBarArt::DrawButton(
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
@@ -484,7 +484,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
