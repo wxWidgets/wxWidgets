@@ -145,5 +145,5 @@ GCC_VERSION ?= 3
 
 # Windows resource compiler to use, possibly including extra options.
 # For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build. 
-WINDRES ?= windres --use-temp-file
+WINDRES ?= windres
 
