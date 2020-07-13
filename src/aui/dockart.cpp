@@ -546,7 +546,7 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
     {
         for (i = 0; i < border_width; ++i)
         {
-            dc.SetPen(*wxWHITE_PEN);
+            dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
             dc.DrawLine(rect.x, rect.y, rect.x+rect.width, rect.y);
             dc.DrawLine(rect.x, rect.y, rect.x, rect.y+rect.height);
             dc.SetPen(m_borderPen);
