@@ -118,15 +118,13 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     }
     else if (model != kCGColorSpaceModelRGB)
     {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
-        if ( WX_IS_MACOS_AVAILABLE(10, 11) )
+        if ( WX_IS_MACOS_OR_IOS_AVAILABLE(10, 11, 9, 0) )
         {
             rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
             noComp = CGColorGetNumberOfComponents(rgbacol);
             components = CGColorGetComponents(rgbacol);
         }
         else
-#endif
         {
             isRGB = false;
         }
