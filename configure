@@ -40598,7 +40598,7 @@ $as_echo_n "checking whether catch.hpp file exists... " >&6; }
 $as_echo "no" >&6; }
         as_fn_error $? "
     CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't found.
+    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't be found.
 
     You might need to run
 
