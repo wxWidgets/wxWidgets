@@ -350,8 +350,17 @@ public:
         @param depth
             Specifies the depth of the bitmap.
             If this is omitted, the display depth of the screen is used.
+        @param scale
+            Specifies the scale for a scaled bitmap. This corresponds to the size
+            of a device-independent standard pixel relative to that of a
+            device-dependent, actual pixel.
+            If this is omitted, 1.0 is used.
+
+            @since 3.1.0
+            NOTE: scale is ignored in wxMSW. In wxMSW, bitmap dpi awareness is
+                  specified per process via @see SetProcessDpiAwareness
     */
-    wxBitmap(const wxImage& img, int depth = wxBITMAP_SCREEN_DEPTH);
+    wxBitmap(const wxImage& img, int depth = wxBITMAP_SCREEN_DEPTH, double scale=1.0);
 
     /**
         Creates bitmap corresponding to the given cursor.
@@ -762,6 +771,31 @@ public:
             Bitmap width in pixels.
     */
     virtual void SetWidth(int width);
+
+    /**
+       Retrieves the size of a device-independent standard pixel relative to that
+       of a device-dependent, actual pixel for a scaled bitmap
+       @since 3.1.0
+    */
+    virtual double GetScaleFactor() const;
+
+    /**
+       Retrieves the width of a scaled bitmap in device-independent standard pixels
+       @since 3.1.0
+     */
+    virtual double GetScaledWidth() const;
+
+    /**
+       Retrieves the height of a scaled bitmap in device-independent standard pixels
+       @since 3.1.0
+    */
+    virtual double GetScaledHeight() const;
+
+    /**
+       Retrieves the size of a scaled bitmap in device-independent standard pixels
+       @since 3.1.0
+    */
+    virtual wxSize GetScaledSize() const;
 };
 
 /**
@@ -856,4 +890,3 @@ public:
     */
     wxBitmap GetBitmap() const;
 };
-
