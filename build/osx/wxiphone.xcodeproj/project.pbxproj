@@ -227,6 +227,8 @@
 		3E99016BDE043A08B4D6B3CE /* htmprint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 194ADD28300E329E80F7892E /* htmprint.cpp */; };
 		3EB6B8528A0D3B6CADAE1256 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02D2E8B5C89939CE90B99E2B /* archive.cpp */; };
 		3ED6F4B64C283232A79423CF /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */; };
+		400DE11324A9D41800F526FE /* menuitem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 400DE11124A9D41800F526FE /* menuitem.mm */; };
+		400DE11424A9D41800F526FE /* menu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 400DE11224A9D41800F526FE /* menu.mm */; };
 		403FBA20CEFE3EAFB4E6B905 /* dir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7332A03D93D3DABB050615D /* dir.cpp */; };
 		4040AE89BF9F34668091064A /* dragimgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A67053D16D63C588E555C84 /* dragimgg.cpp */; };
 		41943A8F82723027A151A468 /* fileconf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61DA2A4C0D143CBE804BB8A1 /* fileconf.cpp */; };
@@ -1058,6 +1060,8 @@
 		3FB6D34C3029357EB64AECAA /* scrlwing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrlwing.cpp; path = ../../src/generic/scrlwing.cpp; sourceTree = "<group>"; };
 		3FEBA7AC7F743EE88352AEBC /* htmlwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmlwin.cpp; path = ../../src/html/htmlwin.cpp; sourceTree = "<group>"; };
 		400275BE019D3E5BA47988BE /* inffast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = inffast.c; path = ../../src/zlib/inffast.c; sourceTree = "<group>"; };
+		400DE11124A9D41800F526FE /* menuitem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = menuitem.mm; path = ../../src/osx/iphone/menuitem.mm; sourceTree = "<group>"; };
+		400DE11224A9D41800F526FE /* menu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = menu.mm; path = ../../src/osx/iphone/menu.mm; sourceTree = "<group>"; };
 		4048A3523EC03409BD899BEF /* xtixml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xtixml.cpp; path = ../../src/common/xtixml.cpp; sourceTree = "<group>"; };
 		40586C8986443431A64EB066 /* LexLisp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLisp.cxx; path = ../../src/stc/scintilla/lexers/LexLisp.cxx; sourceTree = "<group>"; };
 		4071FF90F1D4336C836B2AE4 /* tif_pixarlog.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_pixarlog.c; path = ../../src/tiff/libtiff/tif_pixarlog.c; sourceTree = "<group>"; };
@@ -2024,6 +2028,8 @@
 				83B878A16ABC396E8C03A15E /* dialog.mm */,
 				8D2549709E0133C9A267E3A5 /* evtloop.mm */,
 				98A7F0605AAC3D28A8C9F253 /* gauge.mm */,
+				400DE11224A9D41800F526FE /* menu.mm */,
+				400DE11124A9D41800F526FE /* menuitem.mm */,
 				33CFE51FD6F0362092DF1A85 /* msgdlg.mm */,
 				AECB45CEAC093CE4AB4B7E45 /* nonownedwnd.mm */,
 				CC2E24773D853A77B9FEFA4C /* scrolbar.mm */,
@@ -2824,7 +2830,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */;
+			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -3045,6 +3051,7 @@
 				774EB9F3F7E93A379E1F7551 /* graphics.cpp in Sources */,
 				5792675690843C6AA4125A72 /* font.cpp in Sources */,
 				BDAB44F5D017395D9D3A1F23 /* frame.cpp in Sources */,
+				400DE11324A9D41800F526FE /* menuitem.mm in Sources */,
 				27E2EABB117334CD89CFD2A4 /* mdi.cpp in Sources */,
 				73AA68AB9F1236ED9F1FBB2E /* metafile.cpp in Sources */,
 				805CCAE64D023561AD334B53 /* popupwin.cpp in Sources */,
@@ -3294,6 +3301,7 @@
 				8AA341CCFB8E3F6AB3523595 /* splash.cpp in Sources */,
 				98F52D5224B438DFA8887E06 /* timectrlg.cpp in Sources */,
 				77BC918AF05C30E8A0BD27F8 /* tipdlg.cpp in Sources */,
+				400DE11424A9D41800F526FE /* menu.mm in Sources */,
 				060E095718B03EF98C754799 /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266700 /* wizard.cpp in Sources */,
 				EC3D181D65F33E09A675FFF2 /* addremovectrl.cpp in Sources */,
@@ -3771,7 +3779,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */ = {
+		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,

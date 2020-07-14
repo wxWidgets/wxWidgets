@@ -2533,6 +2533,8 @@ OSX_IPHONE_SRC =
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
+    src/osx/iphone/menu.mm
+    src/osx/iphone/menuitem.mm
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/nonownedwnd.mm
     src/osx/iphone/scrolbar.mm

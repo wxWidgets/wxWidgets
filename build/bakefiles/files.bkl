@@ -2695,6 +2695,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/sound_osx.cpp
     src/osx/core/sound.cpp
     src/osx/iphone/statbmp.mm
+    src/osx/iphone/menuitem.mm
+    src/osx/iphone/menu.mm
 </set>
 
 <set var="OSX_IPHONE_HDR" hints="files">
