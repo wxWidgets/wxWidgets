@@ -983,8 +983,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     }
 
     m_hasExplicitFont = m_hasFont;
-    wxSysColourChangedEvent evt;
-    OnSysColourChanged(evt);
+    InitVisualAttributes();
 
     SetInitialSize(size);
 
@@ -1007,7 +1006,7 @@ void wxGenericTreeCtrl::EnableBellOnNoMatch( bool on )
     m_findBell = on;
 }
 
-void wxGenericTreeCtrl::OnSysColourChanged(wxSysColourChangedEvent&)
+void wxGenericTreeCtrl::InitVisualAttributes()
 {
     const wxVisualAttributes attr(GetDefaultAttributes());
     SetOwnForegroundColour(attr.colFg);

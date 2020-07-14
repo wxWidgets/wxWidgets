@@ -354,7 +354,14 @@ protected:
 private:
     bool m_hasExplicitFont;
 
-    void OnSysColourChanged(wxSysColourChangedEvent&);
+    void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+    {
+        InitVisualAttributes();
+    }
+
+    // (Re)initialize colours, fonts, pens, brushes used by the control using
+    // the current system colours and font.
+    void InitVisualAttributes();
 
     // Reset the state of the last find (i.e. keyboard incremental search)
     // operation.
