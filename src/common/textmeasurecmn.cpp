@@ -123,17 +123,17 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
     *width = 0;
     *height = 0;
 
+    MeasuringGuard guard(*this);
+
     // It's noticeably faster to handle the case of a string which isn't
     // actually multiline specially here, to skip iteration above in this case.
     if ( text.find('\n') == wxString::npos )
     {
-        GetTextExtent(text, width, height);
+        CallGetTextExtent(text, width, height);
         if ( heightOneLine )
             *heightOneLine = *height;
         return;
     }
-
-    MeasuringGuard guard(*this);
 
     wxCoord widthLine, heightLine = 0, heightLineDefault = 0;
 
