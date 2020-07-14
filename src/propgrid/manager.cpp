@@ -551,6 +551,7 @@ void wxPropertyGridManager::Init2( int style )
 
    propGridFlags &= ~wxBORDER_MASK;
 
+   long pgManExStyle = 0;
    if ((style & wxPG_NO_INTERNAL_BORDER) == 0)
    {
        propGridFlags |= wxBORDER_THEME;
@@ -558,7 +559,7 @@ void wxPropertyGridManager::Init2( int style )
    else
    {
        propGridFlags |= wxBORDER_NONE;
-       wxWindow::SetExtraStyle(wxPG_EX_TOOLBAR_SEPARATOR);
+       pgManExStyle |= wxPG_EX_TOOLBAR_SEPARATOR;
    }
 
     // Create propertygrid.
@@ -573,11 +574,12 @@ void wxPropertyGridManager::Init2( int style )
     m_pState = m_pPropGrid->m_pState;
 
     // Rely on native double-buffering by default.
+    long pgExStyle = wxPG_EX_INIT_NOCAT;
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER
-    m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT | wxPG_EX_NATIVE_DOUBLE_BUFFERING);
-#else
-    m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT);
-#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER/!wxALWAYS_NATIVE_DOUBLE_BUFFER
+    pgExStyle |= wxPG_EX_NATIVE_DOUBLE_BUFFERING;
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
+    m_pPropGrid->SetExtraStyle(pgExStyle);
+    wxWindow::SetExtraStyle(pgManExStyle | pgExStyle);
 
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
