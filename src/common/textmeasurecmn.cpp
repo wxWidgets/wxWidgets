@@ -129,7 +129,13 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
     // actually multiline specially here, to skip iteration above in this case.
     if ( text.find('\n') == wxString::npos )
     {
-        CallGetTextExtent(text, width, height);
+        // This case needs to be handled specially as we're supposed to return
+        // a non-zero height even for empty string.
+        if ( text.empty() )
+            *height = GetEmptyLineHeight();
+        else
+            CallGetTextExtent(text, width, height);
+
         if ( heightOneLine )
             *heightOneLine = *height;
         return;

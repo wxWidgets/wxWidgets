@@ -77,6 +77,12 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
 
     CHECK( dc.GetMultiLineTextExtent("Good\nbye").y >= 2*sz.y );
 
+    // Check that empty lines get counted
+    CHECK( dc.GetMultiLineTextExtent("\n\n\n").y >= 3*sz.y );
+
+    // And even empty strings count like one line.
+    CHECK( dc.GetMultiLineTextExtent(wxString()) == wxSize(0, sz.y) );
+
     // Test the functions with some other DC kinds also.
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
     wxPostScriptDC psdc;
