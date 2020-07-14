@@ -160,12 +160,12 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
     static const unsigned char overflowBits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
 
     m_buttonDropDownBmp = wxAuiBitmapFromBits(buttonDropdownBits, 5, 3,
-                                              wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+                                              wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     m_disabledButtonDropDownBmp = wxAuiBitmapFromBits(
                                                 buttonDropdownBits, 5, 3,
                                                 wxColor(128,128,128));
     m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6,
-                                        wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+                                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     m_disabledOverflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, wxColor(128,128,128));
 }
 
@@ -241,7 +241,7 @@ void wxAuiGenericToolBarArt::DrawLabel(
                                     const wxRect& rect)
 {
     dc.SetFont(m_font);
-    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 
     // we only care about the text height here since the text
     // will get cropped based on the width of the item
@@ -351,7 +351,7 @@ void wxAuiGenericToolBarArt::DrawButton(
         dc.DrawBitmap(bmp, bmpX, bmpY, true);
 
     // set the item's text color based on if it is disabled
-    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
         dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
@@ -481,7 +481,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     dc.DrawBitmap(dropbmp, dropBmpX, dropBmpY, true);
 
     // set the item's text color based on if it is disabled
-    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
         dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
@@ -524,7 +524,7 @@ void wxAuiGenericToolBarArt::DrawControlLabel(
         return;
 
     // set the label's text color
-    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 
     textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
     textY = rect.y + rect.height - textHeight - 1;
