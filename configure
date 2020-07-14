@@ -18505,7 +18505,7 @@ $as_echo "#define HAVE_CXX17 1" >>confdefs.h
             ;;
 
         *)
-            as_fn_error $? "Invalid --with-cxx=\"$wxWITH_CXX\" option value, only 11, 14 or 17 supported" "$LINENO" 5
+            as_fn_error $? "Invalid --with-cxx=$wxWITH_CXX option value, only 11, 14 or 17 supported" "$LINENO" 5
     esac
 
     if test "$HAVE_CXX11" = "1" ; then

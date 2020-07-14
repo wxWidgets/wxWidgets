@@ -1139,7 +1139,7 @@ if test -n "$wxWITH_CXX"; then
             ;;
 
         *)
-            AC_MSG_ERROR([Invalid --with-cxx="$wxWITH_CXX" option value, only 11, 14 or 17 supported])
+            AC_MSG_ERROR([Invalid --with-cxx=$wxWITH_CXX option value, only 11, 14 or 17 supported])
     esac
 
     if test "$HAVE_CXX11" = "1" ; then
