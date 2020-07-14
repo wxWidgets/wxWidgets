@@ -100,6 +100,13 @@ void wxTextMeasureBase::GetTextExtent(const wxString& string,
     CallGetTextExtent(string, width, height, descent, externalLeading);
 }
 
+int wxTextMeasureBase::GetEmptyLineHeight()
+{
+    int dummy, height;
+    CallGetTextExtent(wxS("W"), &dummy, &height);
+    return height;
+}
+
 void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
                                                wxCoord *width,
                                                wxCoord *height,
@@ -136,12 +143,9 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
                 if ( !heightLineDefault )
                     heightLineDefault = heightLine;
 
+                // and if we hadn't had any previous one neither, compute it now
                 if ( !heightLineDefault )
-                {
-                    // but we don't know it yet - choose something reasonable
-                    int dummy;
-                    CallGetTextExtent(wxS("W"), &dummy, &heightLineDefault);
-                }
+                    heightLineDefault = GetEmptyLineHeight();
 
                 heightTextTotal += heightLineDefault;
             }
