@@ -8549,7 +8549,7 @@ if test "$wxUSE_TESTS_SUBDIR" != "no"; then
         AC_MSG_RESULT([no])
         AC_MSG_ERROR([
     CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't found.
+    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't be found.
 
     You might need to run
 
