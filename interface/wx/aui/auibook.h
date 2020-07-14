@@ -831,7 +831,7 @@ protected:
     wxBrush m_baseColourBrush;
     wxColour m_activeColour;
     wxBitmap m_activeCloseBmp;
-    wxBitmap m_disabledCloseBmp;
+    wxBitmap m_inactiveCloseBmp;
     wxBitmap m_activeLeftBmp;
     wxBitmap m_disabledLeftBmp;
     wxBitmap m_activeRightBmp;
@@ -934,7 +934,7 @@ protected:
     wxBrush m_selectedBkBrush;
     wxBrush m_bkBrush;
     wxBitmap m_activeCloseBmp;
-    wxBitmap m_disabledCloseBmp;
+    wxBitmap m_inactiveCloseBmp;
     wxBitmap m_activeLeftBmp;
     wxBitmap m_disabledLeftBmp;
     wxBitmap m_activeRightBmp;

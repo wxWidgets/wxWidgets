@@ -215,7 +215,7 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
     const int disabledLightness = wxSystemSettings::GetAppearance().IsUsingDarkBackground() ? 130 : 70;
 
     m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
+    m_inactiveCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
     m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
@@ -570,7 +570,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     int close_button_width = 0;
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
-        wxBitmap bmp = m_disabledCloseBmp;
+        wxBitmap bmp = m_inactiveCloseBmp;
 
         if (close_button_state == wxAUI_BUTTON_STATE_HOVER ||
             close_button_state == wxAUI_BUTTON_STATE_PRESSED)
@@ -727,7 +727,7 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     {
         case wxAUI_BUTTON_CLOSE:
             if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                bmp = m_disabledCloseBmp;
+                bmp = m_inactiveCloseBmp;
             else
                 bmp = m_activeCloseBmp;
             break;
@@ -908,7 +908,7 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     : m_normalFont(*wxNORMAL_FONT)
     , m_selectedFont(m_normalFont)
     , m_activeCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK))
-    , m_disabledCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128)))
+    , m_inactiveCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128)))
     , m_activeLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK))
     , m_disabledLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128)))
     , m_activeRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK))
@@ -1123,7 +1123,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
         if (page.active)
             bmp = m_activeCloseBmp;
         else
-            bmp = m_disabledCloseBmp;
+            bmp = m_inactiveCloseBmp;
 
         wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
@@ -1246,7 +1246,7 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     {
         case wxAUI_BUTTON_CLOSE:
             if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                bmp = m_disabledCloseBmp;
+                bmp = m_inactiveCloseBmp;
             else
                 bmp = m_activeCloseBmp;
             break;
