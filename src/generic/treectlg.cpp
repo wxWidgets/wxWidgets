@@ -937,8 +937,6 @@ void wxGenericTreeCtrl::Init()
     m_indent = 15;
     m_spacing = 18;
 
-    m_hilightBrush = NULL;
-    m_hilightUnfocusedBrush = NULL;
     m_imageListButtons = NULL;
     m_ownsImageListButtons = false;
 
@@ -995,9 +993,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 
 wxGenericTreeCtrl::~wxGenericTreeCtrl()
 {
-    delete m_hilightBrush;
-    delete m_hilightUnfocusedBrush;
-
     DeleteAllItems();
 
     delete m_renameTimer;
@@ -1020,10 +1015,8 @@ void wxGenericTreeCtrl::OnSysColourChanged(wxSysColourChangedEvent&)
     if (!m_hasExplicitFont)
         SetOwnFont(attr.font);
 
-    delete m_hilightBrush;
-    m_hilightBrush = new wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    delete m_hilightUnfocusedBrush;
-    m_hilightUnfocusedBrush = new wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+    m_hilightBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_hilightUnfocusedBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 
     m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT), 1, wxPENSTYLE_DOT);
 
@@ -2544,7 +2537,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( item->IsSelected() )
     {
-        dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
+        dc.SetBrush(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush);
         drawItemBackground = true;
     }
     else

@@ -13,8 +13,9 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/scrolwin.h"
+#include "wx/brush.h"
 #include "wx/pen.h"
+#include "wx/scrolwin.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -243,8 +244,8 @@ protected:
     unsigned short       m_indent;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
-    wxBrush             *m_hilightBrush,
-                        *m_hilightUnfocusedBrush;
+    wxBrush              m_hilightBrush,
+                         m_hilightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
     bool                 m_ownsImageListButtons;
