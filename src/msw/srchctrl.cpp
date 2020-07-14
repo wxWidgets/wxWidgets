@@ -51,7 +51,7 @@ static const int MARGIN = 2;
 // variables
 // ----------------------------------------------------------------------------
 
-// A variable to exctude the search button from certain (unnecessary) redraw operations.
+// A variable to exclude the search button from certain (unnecessary) redraw operations.
 // Notice that the search and cancel buttons are both redrawn in response to the
 // WM_NCPAINT message and this may leads to noticeable flicker if all we want is
 // to redraw the cancel button only.
@@ -152,33 +152,36 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                             csparam->rgrc [0].left  += bitmapWidth - MARGIN;
                         }
                     }
+
+                    // Invalidate button rectangles. In fact, invalidating only one is
+                    // sufficient here as they will be both recalculated in WM_NCPAINT below.
+                    m_cancelButtonRect = wxRect();
                 }
             }
             break;
 
         case WM_NCPAINT:
             {
-                const RECT rcWindow = wxGetWindowRect(GetHwnd());
-                RECT rcClient = wxGetClientRect(GetHwnd());
-                ::MapWindowPoints(GetHwnd(), NULL, reinterpret_cast<LPPOINT>(&rcClient), 2);
-
-                RECT leftRect, rightRect;
-                RECT *searchButtonRect, *cancelButtonRect;
-
-                if ( GetLayoutDirection() == wxLayout_LeftToRight )
+                if ( m_cancelButtonRect.IsEmpty() )
                 {
-                    searchButtonRect = &leftRect;
-                    cancelButtonRect = &rightRect;
-                }
-                else // wxLayout_RightToLeft
-                {
-                    searchButtonRect = &rightRect;
-                    cancelButtonRect = &leftRect;
-                }
+                    const RECT rcWindow = wxGetWindowRect(GetHwnd());
+                    RECT rcClient = wxGetClientRect(GetHwnd());
+                    ::MapWindowPoints(GetHwnd(), NULL, reinterpret_cast<LPPOINT>(&rcClient), 2);
 
-                // In RTL layout, we can skip leftRect (cancel button) calculation unless it's visible.
-                if ( GetLayoutDirection() == wxLayout_LeftToRight || IsCancelButtonVisible() )
-                {
+                    RECT leftRect, rightRect;
+                    RECT *searchButtonRect, *cancelButtonRect;
+
+                    if ( GetLayoutDirection() == wxLayout_LeftToRight )
+                    {
+                        searchButtonRect = &leftRect;
+                        cancelButtonRect = &rightRect;
+                    }
+                    else // wxLayout_RightToLeft
+                    {
+                        searchButtonRect = &rightRect;
+                        cancelButtonRect = &leftRect;
+                    }
+
                     // Calculate leftRect
                     leftRect = rcWindow;
                     leftRect.right = leftRect.left + bitmapWidth;
@@ -186,11 +189,7 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                     leftRect.top += rcClient.top - rcWindow.top;
                     leftRect.bottom -= rcWindow.bottom - rcClient.bottom;
                     ::OffsetRect(&leftRect, -rcWindow.left + MARGIN, -rcWindow.top);
-                }
-                
-                // In LTR layout, we can skip rightRect (cancel button) calculation unless it's visible.
-                if ( GetLayoutDirection() == wxLayout_RightToLeft || IsCancelButtonVisible() )
-                {
+
                     // Calculate rightRect
                     rightRect = rcWindow;
                     rightRect.left = rightRect.right - bitmapWidth;
@@ -199,11 +198,16 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                     rightRect.top += rcClient.top - rcWindow.top;
                     rightRect.bottom -= rcWindow.bottom - rcClient.bottom;
                     ::OffsetRect(&rightRect, -rcWindow.left - MARGIN, -rcWindow.top);
+
+                    // copy results
+                    wxCopyRECTToRect(*searchButtonRect, m_searchButtonRect);
+                    wxCopyRECTToRect(*cancelButtonRect, m_cancelButtonRect);
                 }
 
-                // copy results
-                wxCopyRECTToRect(*searchButtonRect, m_searchButtonRect);
-                wxCopyRECTToRect(*cancelButtonRect, m_cancelButtonRect);
+                if ( !gs_redrawSearchButton )
+                {
+                    processed = true;
+                }
 
                 DrawButtons(bitmapWidth);
             }
@@ -292,7 +296,11 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 }
 
 #define SRCHCTRL_COMMON_GCDC_SETUP(rect)            \
-        wxGCDC gdc(winDC);                          \
+        wxBitmap bmp(rect.GetWidth() + MARGIN,      \
+                     rect.GetHeight() + MARGIN);    \
+        wxMemoryDC memDC(&winDC);                   \
+        memDC.SelectObject(bmp);                    \
+        wxGCDC gdc(memDC);                          \
         wxDCClipper clip(gdc, rect);                \
                                                     \
         gdc.SetDeviceOrigin(rect.x + shift, shift); \
@@ -318,15 +326,28 @@ void wxSearchCtrl::DrawButtons(int width)
 
     wxWindowDC winDC(this);
 
+    // N.B. We just switch around the buttons on RTL layout.
+    // not disabling mirroring on the DC will screw up the drawing
+    // and we'll end up with unuseable control on that layout.
+    winDC.SetLayoutDirection(wxLayout_LeftToRight);
+
+    // _rect_ should always be the left rectangle.
+    const wxRect& rect = GetLayoutDirection() == wxLayout_LeftToRight ?
+                            m_searchButtonRect : m_cancelButtonRect;
+
     if ( gs_redrawSearchButton )
     {
-        SRCHCTRL_COMMON_GCDC_SETUP(m_searchButtonRect);
+        SRCHCTRL_COMMON_GCDC_SETUP(rect);
 
         gdc.SetPen(wxPen(fg, 8));
         gdc.SetBrush(*wxTRANSPARENT_BRUSH);
 
         gdc.DrawCircle(xWidth - radius, radius, radius);
         gdc.DrawLine(0, xWidth, xWidth/2. - 5, xWidth/2. + 5);
+
+        winDC.Blit(m_searchButtonRect.GetX(), m_searchButtonRect.GetY(),
+                   m_searchButtonRect.GetWidth(), m_searchButtonRect.GetHeight(),
+                   &memDC, MARGIN, MARGIN);
     }
     else // !gs_redrawSearchButton
     {
@@ -335,7 +356,7 @@ void wxSearchCtrl::DrawButtons(int width)
 
     if ( IsCancelButtonVisible() )
     {
-        SRCHCTRL_COMMON_GCDC_SETUP(m_cancelButtonRect);
+        SRCHCTRL_COMMON_GCDC_SETUP(rect);
 
         const wxColour col1 = m_mouseInCancelButton ? fg.ChangeLightness(CANCEL_BITMAP_LIGHTNESS) : bg;
         const wxColour col2 = m_mouseInCancelButton ? bg : fg;
@@ -352,6 +373,10 @@ void wxSearchCtrl::DrawButtons(int width)
         const double w = xWidth - s;
         gdc.DrawLine(s, s, w, w);
         gdc.DrawLine(s, w, w, s);
+
+        winDC.Blit(m_cancelButtonRect.GetX(), m_cancelButtonRect.GetY(),
+                   m_cancelButtonRect.GetWidth(), m_cancelButtonRect.GetHeight(),
+                   &memDC, MARGIN, MARGIN);
     }
 }
 
