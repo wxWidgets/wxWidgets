@@ -1007,11 +1007,30 @@ void wxGenericTreeCtrl::EnableBellOnNoMatch( bool on )
 
 void wxGenericTreeCtrl::InitVisualAttributes()
 {
+    // We want to use the default system colours/fonts here unless the user
+    // explicitly configured something different. We also need to reset the
+    // various m_hasXXX variables to false to prevent them from being left set
+    // to "true", as otherwise we wouldn't update the colours/fonts the next
+    // time the system colours change.
     const wxVisualAttributes attr(GetDefaultAttributes());
-    SetOwnForegroundColour(attr.colFg);
-    SetOwnBackgroundColour(attr.colBg);
-    if (!m_hasFont)
+    if ( !m_hasFgCol )
+    {
+        SetOwnForegroundColour(attr.colFg);
+        m_hasFgCol = false;
+    }
+
+    if ( !m_hasBgCol )
+    {
+        SetOwnBackgroundColour(attr.colBg);
+        m_hasBgCol = false;
+    }
+
+    if ( !m_hasFont )
+    {
         SetOwnFont(attr.font);
+        m_hasFont = false;
+    }
+
 
     m_hilightBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     m_hilightUnfocusedBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
