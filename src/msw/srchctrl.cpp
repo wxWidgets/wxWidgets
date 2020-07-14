@@ -51,11 +51,9 @@ static const int MARGIN = 2;
 // variables
 // ----------------------------------------------------------------------------
 
-// A variable to exclude the search button from certain (unnecessary) redraw operations.
-// Notice that the search and cancel buttons are both redrawn in response to the
-// WM_NCPAINT message and this may leads to noticeable flicker if all we want is
-// to redraw the cancel button only.
-static bool gs_redrawSearchButton = true;
+// A variable to exclude the search button from certain (unnecessary) redraw
+// operations, i.e. (un)highlight the cancel button only.
+static bool gs_redrawCancelButtonOnly = false;
 
 // ============================================================================
 // wxSearchCtrl implementation
@@ -204,8 +202,9 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
                     wxCopyRECTToRect(*cancelButtonRect, m_cancelButtonRect);
                 }
 
-                if ( !gs_redrawSearchButton )
+                if ( gs_redrawCancelButtonOnly )
                 {
+                    // We are going to repaint the cancel button only.
                     processed = true;
                 }
 
@@ -268,7 +267,7 @@ wxSearchCtrl::MSWHandleMessage(WXLRESULT *rc,
 
         case WM_NCMOUSEHOVER:
             {
-                gs_redrawSearchButton = false;
+                gs_redrawCancelButtonOnly = true;
 
                 ::RedrawWindow(GetHwnd(), NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
             }
@@ -335,25 +334,6 @@ void wxSearchCtrl::DrawButtons(int width)
     const wxRect& rect = GetLayoutDirection() == wxLayout_LeftToRight ?
                             m_searchButtonRect : m_cancelButtonRect;
 
-    if ( gs_redrawSearchButton )
-    {
-        SRCHCTRL_COMMON_GCDC_SETUP(rect);
-
-        gdc.SetPen(wxPen(fg, 8));
-        gdc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        gdc.DrawCircle(xWidth - radius, radius, radius);
-        gdc.DrawLine(0, xWidth, xWidth/2. - 5, xWidth/2. + 5);
-
-        winDC.Blit(m_searchButtonRect.GetX(), m_searchButtonRect.GetY(),
-                   m_searchButtonRect.GetWidth(), m_searchButtonRect.GetHeight(),
-                   &memDC, MARGIN, MARGIN);
-    }
-    else // !gs_redrawSearchButton
-    {
-        gs_redrawSearchButton = true;
-    }
-
     if ( IsCancelButtonVisible() )
     {
         SRCHCTRL_COMMON_GCDC_SETUP(rect);
@@ -378,6 +358,24 @@ void wxSearchCtrl::DrawButtons(int width)
                    m_cancelButtonRect.GetWidth(), m_cancelButtonRect.GetHeight(),
                    &memDC, MARGIN, MARGIN);
     }
+
+    if ( gs_redrawCancelButtonOnly )
+    {
+        gs_redrawCancelButtonOnly = false;
+        return;
+    }
+
+    SRCHCTRL_COMMON_GCDC_SETUP(rect);
+
+    gdc.SetPen(wxPen(fg, 8));
+    gdc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    gdc.DrawCircle(xWidth - radius, radius, radius);
+    gdc.DrawLine(0, xWidth, xWidth/2. - 5, xWidth/2. + 5);
+
+    winDC.Blit(m_searchButtonRect.GetX(), m_searchButtonRect.GetY(),
+               m_searchButtonRect.GetWidth(), m_searchButtonRect.GetHeight(),
+               &memDC, MARGIN, MARGIN);
 }
 
 // search control specific interfaces
@@ -476,7 +474,7 @@ void wxSearchCtrl::ToggleCancelButtonVisibility()
 {
     if ( m_isCancelButtonShown != IsCancelButtonVisible() )
     {
-        gs_redrawSearchButton = false;
+        gs_redrawCancelButtonOnly = true;
         m_isCancelButtonShown = IsCancelButtonVisible();
 
         // Calling RedrawWindow() is of no help here, because to show/hide
