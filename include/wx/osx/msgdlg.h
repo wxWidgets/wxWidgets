@@ -21,10 +21,6 @@ public:
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
 
-#if wxOSX_USE_COCOA
-    ~wxMessageDialog();
-#endif
-
     virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA

@@ -56,10 +56,6 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 {
 }
 
-wxMessageDialog::~wxMessageDialog()
-{
-}
-
 int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
