@@ -64,7 +64,7 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
     // if the color is especially dark, then
     // make the contrast even lighter
     if (c.Red() < 128 && c.Green() < 128 && c.Blue() < 128)
-        amount = 160;
+        amount = 80;
 
     return c.ChangeLightness(amount);
 }
@@ -337,11 +337,11 @@ void wxAuiDefaultDockArt::UpdateColoursFromSystem()
     //wxColor darker4Colour = baseColour.ChangeLightness(50);
     wxColor darker5Colour = baseColour.ChangeLightness(40);
 
-    m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    m_activeCaptionGradientColour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_inactiveCaptionColour = darker1Colour;
-    m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
+    m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION);
+    m_activeCaptionGradientColour = wxAuiLightContrastColour(m_activeCaptionColour);
+    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
+    m_inactiveCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
+    m_inactiveCaptionGradientColour = wxAuiLightContrastColour(m_inactiveCaptionColour);
     m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
 
     m_sashBrush = wxBrush(baseColour);
