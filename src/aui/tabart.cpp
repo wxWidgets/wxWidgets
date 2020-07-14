@@ -212,8 +212,10 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
     m_baseColourPen = wxPen(m_baseColour);
     m_baseColourBrush = wxBrush(m_baseColour);
 
+    const int disabledLightness = wxSystemSettings::GetAppearance().IsUsingDarkBackground() ? 130 : 70;
+
     m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
     m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
