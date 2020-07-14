@@ -436,10 +436,11 @@ wxMenu* CreateTestMenu(wxFrame* frame)
 {
     wxMenu* const menu = new wxMenu;
     menu->Append(wxID_APPLY);
+#if wxUSE_MENUBAR
     wxMenuBar* const mb = new wxMenuBar;
     mb->Append(menu, "&Menu");
     frame->SetMenuBar(mb);
-
+#endif
     return menu;
 }
 
@@ -464,10 +465,11 @@ void EventPropagationTestCase::MenuEvent()
 
     // Create a minimal menu bar.
     wxMenu* const menu = CreateTestMenu(frame);
+#if wxUSE_MENUBAR
     wxMenuBar* const mb = menu->GetMenuBar();
     wxScopedPtr<wxMenuBar> ensureMenuBarDestruction(mb);
     wxON_BLOCK_EXIT_OBJ1( *frame, wxFrame::SetMenuBar, (wxMenuBar*)NULL );
-
+#endif
     // Check that wxApp gets the event exactly once.
     ASSERT_MENU_EVENT_RESULT( menu, "aA" );
 
@@ -491,13 +493,14 @@ void EventPropagationTestCase::MenuEvent()
                           wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
     ASSERT_MENU_EVENT_RESULT_FOR( wxID_ABOUT, submenu, "aosomA" );
 
+#if wxUSE_MENUBAR
     // Test that the event handler associated with the menu bar gets the event.
     TestMenuEvtHandler hb('b'); // 'b' for "menu Bar"
     mb->PushEventHandler(&hb);
     wxON_BLOCK_EXIT_OBJ1( *mb, wxWindow::PopEventHandler, false );
 
     ASSERT_MENU_EVENT_RESULT( menu, "aomobA" );
-
+#endif
 
     // Also test that the window to which the menu belongs gets the event.
     TestMenuEvtHandler hw('w'); // 'w' for "Window"
