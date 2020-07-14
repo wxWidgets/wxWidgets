@@ -69,11 +69,7 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
 static wxColor GetBaseColor()
 {
 
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -120,13 +116,6 @@ private:
 };
 
 
-
-static const unsigned char
-    DISABLED_TEXT_GREY_HUE = wxColour::AlphaBlend(0, 255, 0.4);
-const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
-                                   DISABLED_TEXT_GREY_HUE,
-                                   DISABLED_TEXT_GREY_HUE);
-
 wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
 {
     UpdateColoursFromSystem();
@@ -139,18 +128,6 @@ wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
     m_overflowSize  = wxWindow::FromDIP(16, NULL);
     m_dropdownSize  = wxWindow::FromDIP(10, NULL);
 
-    // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
-    static const unsigned char buttonDropdownBits[] = { 0xe0, 0xf1, 0xfb };
-    static const unsigned char overflowBits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
-
-    m_buttonDropDownBmp = wxAuiBitmapFromBits(buttonDropdownBits, 5, 3,
-                                              wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledButtonDropDownBmp = wxAuiBitmapFromBits(
-                                                buttonDropdownBits, 5, 3,
-                                                wxColor(128,128,128));
-    m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6,
-                                        wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-    m_disabledOverflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, wxColor(128,128,128));
 
     m_font = *wxNORMAL_FONT;
 }
@@ -175,6 +152,21 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
     m_gripperPen1 = wxPen(darker5Colour, pen_width);
     m_gripperPen2 = wxPen(darker3Colour, pen_width);
     m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+
+    // Note: update the bitmaps here as they depend on the system colours too.
+
+    // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
+    static const unsigned char buttonDropdownBits[] = { 0xe0, 0xf1, 0xfb };
+    static const unsigned char overflowBits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
+
+    m_buttonDropDownBmp = wxAuiBitmapFromBits(buttonDropdownBits, 5, 3,
+                                              wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledButtonDropDownBmp = wxAuiBitmapFromBits(
+                                                buttonDropdownBits, 5, 3,
+                                                wxColor(128,128,128));
+    m_overflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6,
+                                        wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    m_disabledOverflowBmp = wxAuiBitmapFromBits(overflowBits, 7, 6, wxColor(128,128,128));
 }
 
 void wxAuiGenericToolBarArt::SetFlags(unsigned int flags)
@@ -249,11 +241,7 @@ void wxAuiGenericToolBarArt::DrawLabel(
                                     const wxRect& rect)
 {
     dc.SetFont(m_font);
-#ifdef __WXMAC__
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-#else
-    dc.SetTextForeground(*wxBLACK);
-#endif
 
     // we only care about the text height here since the text
     // will get cropped based on the width of the item
@@ -366,11 +354,7 @@ void wxAuiGenericToolBarArt::DrawButton(
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
-#ifdef __WXMAC__
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
-#else
-        dc.SetTextForeground(DISABLED_TEXT_COLOR);
-#endif
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
@@ -500,11 +484,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
     {
-#ifdef __WXMAC__
-        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
-#else
-        dc.SetTextForeground(DISABLED_TEXT_COLOR);
-#endif
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
@@ -544,11 +524,7 @@ void wxAuiGenericToolBarArt::DrawControlLabel(
         return;
 
     // set the label's text color
-#ifdef __WXMAC__
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
-#else
-    dc.SetTextForeground(*wxBLACK);
-#endif
 
     textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
     textY = rect.y + rect.height - textHeight - 1;

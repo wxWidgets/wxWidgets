@@ -176,14 +176,6 @@ static const unsigned char list_bits[] = {
 wxAuiGenericTabArt::wxAuiGenericTabArt()
     : m_normalFont(*wxNORMAL_FONT)
     , m_selectedFont(m_normalFont)
-    , m_activeCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK))
-    , m_disabledCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128)))
-    , m_activeLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK))
-    , m_disabledLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128)))
-    , m_activeRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK))
-    , m_disabledRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128)))
-    , m_activeWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK))
-    , m_disabledWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128)))
 {
     m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
     m_measuringFont = m_selectedFont;
@@ -201,11 +193,7 @@ wxAuiGenericTabArt::~wxAuiGenericTabArt()
 
 void wxAuiGenericTabArt::UpdateColoursFromSystem()
 {
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -223,6 +211,17 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
     m_borderPen = wxPen(borderColour);
     m_baseColourPen = wxPen(m_baseColour);
     m_baseColourBrush = wxBrush(m_baseColour);
+
+    const int disabledLightness = wxSystemSettings::GetAppearance().IsUsingDarkBackground() ? 130 : 70;
+
+    m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
+    m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+    m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+    m_activeWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
 }
 
 wxAuiTabArt* wxAuiGenericTabArt::Clone()
@@ -280,9 +279,19 @@ void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
                                         wxWindow* WXUNUSED(wnd),
                                         const wxRect& rect)
 {
-    // draw background
-    int topLightness = 90;
-    int bottomLightness = 170;
+    // draw background using arbitrary hard-coded, but at least adapted to dark
+    // mode, gradient
+    int topLightness, bottomLightness;
+    if (wxSystemSettings::GetAppearance().IsUsingDarkBackground())
+    {
+        topLightness = 110;
+        bottomLightness = 90;
+    }
+    else
+    {
+        topLightness = 90;
+        bottomLightness = 170;
+    }
 
     wxColor top_color    = m_baseColour.ChangeLightness(topLightness);
     wxColor bottom_color = m_baseColour.ChangeLightness(bottomLightness);
@@ -436,9 +445,8 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     int drawn_tab_yoff = border_points[1].y;
     int drawn_tab_height = border_points[0].y - border_points[1].y;
 
-    bool isdark = (m_baseColour.Red() < 75)
-        && (m_baseColour.Green() < 75)
-        && (m_baseColour.Blue() < 75);
+    bool isdark = wxSystemSettings::GetAppearance().IsUsingDarkBackground();
+
     wxColor back_color = m_baseColour;
     if (page.active)
     {

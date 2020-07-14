@@ -95,9 +95,38 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color)
 {
     wxImage img = wxBitmap((const char*)bits, w, h).ConvertToImage();
-    img.Replace(0,0,0,123,123,123);
-    img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
-    img.SetMaskColour(123,123,123);
+    if (color.Alpha() == wxALPHA_OPAQUE)
+    {
+        img.Replace(0,0,0,123,123,123);
+        img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
+        img.SetMaskColour(123,123,123);
+    }
+    else
+    {
+        img.InitAlpha();
+        const int newr = color.Red();
+        const int newg = color.Green();
+        const int newb = color.Blue();
+        const int newa = color.Alpha();
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
+            {
+                int r = img.GetRed(x, y);
+                int g = img.GetGreen(x, y);
+                int b = img.GetBlue(x, y);
+                if (r == 0 && g == 0 && b == 0)
+                {
+                    img.SetAlpha(x, y, wxALPHA_TRANSPARENT);
+                }
+                else
+                {
+                    img.SetRGB(x, y, newr, newg, newb);
+                    img.SetAlpha(x, y, newa);
+                }
+            }
+        }
+    }
     return wxBitmap(img);
 }
 
@@ -268,40 +297,29 @@ wxAuiDefaultDockArt::InitBitmaps ()
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 
 #ifdef __WXMAC__
-    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, *wxWHITE);
-    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, *wxWHITE );
+    const wxColour inactive = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
+    const wxColour active = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
 #else
-    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, m_activeCaptionTextColour);
+    const wxColor inactive = m_inactiveCaptionTextColour;
+    const wxColor active = m_activeCaptionTextColour;
 #endif
 
-#ifdef __WXMAC__
-    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, *wxWHITE);
-    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, *wxWHITE );
-#else
-    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, m_activeCaptionTextColour);
-#endif
+    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, inactive);
+    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, active);
 
-#ifdef __WXMAC__
-    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, *wxWHITE);
-    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, *wxWHITE );
-#else
-    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, m_activeCaptionTextColour);
-#endif
+    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, inactive);
+    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, active);
 
-    m_inactivePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_activeCaptionTextColour);
+    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, inactive);
+    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, active);
+
+    m_inactivePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, inactive);
+    m_activePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, active);
 }
 
 void wxAuiDefaultDockArt::UpdateColoursFromSystem()
 {
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
