@@ -982,7 +982,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
         m_spacing = 10;
     }
 
-    m_hasExplicitFont = m_hasFont;
     InitVisualAttributes();
 
     SetInitialSize(size);
@@ -1011,7 +1010,7 @@ void wxGenericTreeCtrl::InitVisualAttributes()
     const wxVisualAttributes attr(GetDefaultAttributes());
     SetOwnForegroundColour(attr.colFg);
     SetOwnBackgroundColour(attr.colBg);
-    if (!m_hasExplicitFont)
+    if (!m_hasFont)
         SetOwnFont(attr.font);
 
     m_hilightBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));

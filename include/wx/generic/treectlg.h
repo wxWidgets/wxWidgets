@@ -352,8 +352,6 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 private:
-    bool m_hasExplicitFont;
-
     void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     {
         InitVisualAttributes();
