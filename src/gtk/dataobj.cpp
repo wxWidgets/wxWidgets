@@ -110,14 +110,23 @@ wxDataFormatId wxDataFormat::GetType() const
 
 wxString wxDataFormat::GetId() const
 {
+#ifdef __WXGTK4__
+    return wxString::FromAscii(m_format);
+#else
     wxGtkString atom_name(gdk_atom_name(m_format));
     return wxString::FromAscii(atom_name);
+#endif
 }
 
 void wxDataFormat::SetId( NativeFormat format )
 {
     PrepareFormats();
+#ifdef __WXGTK4__
+    // NativeFormat is const char *, so canonicalize first
+    m_format = g_intern_string(format);
+#else
     m_format = format;
+#endif
 
     if (m_format == g_textAtom)
 #if wxUSE_UNICODE
@@ -141,12 +150,19 @@ void wxDataFormat::SetId( NativeFormat format )
         m_type = wxDF_PRIVATE;
 }
 
+#ifdef __WXGTK4__
+void wxDataFormat::SetId( const wxString& id )
+{
+    SetId((NativeFormat)id.ToAscii());
+}
+#else
 void wxDataFormat::SetId( const wxString& id )
 {
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     m_format = gdk_atom_intern( id.ToAscii(), FALSE );
 }
+#endif
 
 void wxDataFormat::PrepareFormats()
 {
