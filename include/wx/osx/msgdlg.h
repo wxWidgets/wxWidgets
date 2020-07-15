@@ -21,10 +21,6 @@ public:
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
 
-#if wxOSX_USE_COCOA
-    ~wxMessageDialog();
-#endif
-
     virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
@@ -45,9 +41,6 @@ protected:
     int m_buttonId[4];
     int m_buttonCount;
 
-#if wxOSX_USE_COCOA
-    WX_NSObject m_sheetDelegate;
-#endif
     wxDECLARE_DYNAMIC_CLASS(wxMessageDialog);
 };
 

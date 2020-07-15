@@ -74,11 +74,6 @@ public:
 
     // implementation only
 
-#if wxOSX_USE_COCOA
-    // returns true if the file can be shown as active
-    bool CheckFile( const wxString& filename );
-#endif
-
 protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -99,8 +94,6 @@ protected:
     bool m_useFileTypeFilter;
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
-    WX_NSObject m_delegate;
-    WX_NSObject m_sheetDelegate;
 #endif
 
 private:

@@ -368,6 +368,8 @@ public:
 #if wxUSE_MSGDLG
     void MessageBox(wxCommandEvent& event);
     void MessageBoxDialog(wxCommandEvent& event);
+    void MessageBoxDialogWindowModal(wxCommandEvent& event);
+    void MessageBoxDialogWindowModalClosed(wxWindowModalDialogEvent& event);
     void MessageBoxInfo(wxCommandEvent& event);
     void MessageBoxWindowModal(wxCommandEvent& event);
     void MessageBoxWindowModalClosed(wxWindowModalDialogEvent& event);
@@ -422,7 +424,11 @@ public:
     void FileOpen(wxCommandEvent& event);
     void FileOpen2(wxCommandEvent& event);
     void FilesOpen(wxCommandEvent& event);
+    void FilesOpenWindowModal(wxCommandEvent& event);
+    void FilesOpenWindowModalClosed(wxWindowModalDialogEvent& event);
     void FileSave(wxCommandEvent& event);
+    void FileSaveWindowModal(wxCommandEvent& event);
+    void FileSaveWindowModalClosed(wxWindowModalDialogEvent& event);
 #endif // wxUSE_FILEDLG
 
 #if USE_FILEDLG_GENERIC
@@ -433,6 +439,8 @@ public:
 
 #if wxUSE_DIRDLG
     void DirChoose(wxCommandEvent& event);
+    void DirChooseWindowModal(wxCommandEvent& event);
+    void DirChooseWindowModalClosed(wxWindowModalDialogEvent& event);
     void DirChooseNew(wxCommandEvent& event);
     void DirChooseMultiple(wxCommandEvent& event);
 #endif // wxUSE_DIRDLG
@@ -584,6 +592,7 @@ enum
     DIALOGS_MESSAGE_BOX,
     DIALOGS_MESSAGE_BOX_WINDOW_MODAL,
     DIALOGS_MESSAGE_DIALOG,
+    DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL,
     DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_RICH_MESSAGE_DIALOG,
     DIALOGS_SINGLE_CHOICE,
@@ -596,11 +605,14 @@ enum
     DIALOGS_FILE_OPEN,
     DIALOGS_FILE_OPEN2,
     DIALOGS_FILES_OPEN,
+    DIALOGS_FILES_OPEN_WINDOW_MODAL,
     DIALOGS_FILE_SAVE,
+    DIALOGS_FILE_SAVE_WINDOW_MODAL,
     DIALOGS_FILE_OPEN_GENERIC,
     DIALOGS_FILES_OPEN_GENERIC,
     DIALOGS_FILE_SAVE_GENERIC,
     DIALOGS_DIR_CHOOSE,
+    DIALOGS_DIR_CHOOSE_WINDOW_MODAL,
     DIALOGS_DIRNEW_CHOOSE,
     DIALOGS_DIRMULTIPLE_CHOOSE,
     DIALOGS_GENERIC_DIR_CHOOSE,

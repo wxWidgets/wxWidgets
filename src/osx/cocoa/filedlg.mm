@@ -45,135 +45,15 @@
 // implementation
 // ============================================================================
 
-// Open Items:
-// - parameter support for descending into packages as directories (setTreatsFilePackagesAsDirectories)
-// - as setAllowedFileTypes is only functional for NSOpenPanel on 10.6+, on earlier systems, the file
-// type choice will not be shown, but all possible file items will be shown, if a popup must be working
-// then the delegate method - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename will have to
-// be implemented
-
-@interface wxOpenPanelDelegate : NSObject <NSOpenSavePanelDelegate>
-{
-    wxFileDialog* _dialog;
-}
-
-- (wxFileDialog*) fileDialog;
-- (void) setFileDialog:(wxFileDialog*) dialog;
-
-- (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename;
-
-@end
-
-@implementation wxOpenPanelDelegate
-
-- (id) init
-{
-    if ( self = [super init] )
-    {
-        _dialog = NULL;
-    }
-    return self;
-}
-
-- (wxFileDialog*) fileDialog
-{
-    return _dialog;
-}
-
-- (void) setFileDialog:(wxFileDialog*) dialog
-{
-    _dialog = dialog;
-}
-
-- (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
-{
-    BOOL showObject = YES;
-
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-
-    NSString* resolvedLink = [[NSFileManager defaultManager] pathContentOfSymbolicLinkAtPath:filename];
-    if ( resolvedLink != nil )
-        filename = resolvedLink;
-
-    NSDictionary* fileAttribs = [[NSFileManager defaultManager]
-                                 fileAttributesAtPath:filename traverseLink:YES];
-
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
-
-    if (fileAttribs)
-    {
-        // check for packages
-        if ([NSFileTypeDirectory isEqualTo:[fileAttribs objectForKey:NSFileType]])
-        {
-            if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:filename] == NO)
-                showObject = YES;    // it's a folder, OK to show
-            else
-            {
-                // it's a packaged directory, apply check
-                wxCFStringRef filecf([filename retain]);
-                showObject = _dialog->CheckFile(filecf.AsString());  
-            }
-        }
-        else
-        {
-            // the code above only solves links, not aliases, do this here:
-            
-            NSString* resolvedAlias = nil;
-            
-            CFURLRef url = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, 
-                                                          (CFStringRef)filename, 
-                                                          kCFURLPOSIXPathStyle,
-                                                          NO); 
-            if (url != NULL) 
-            {
-                FSRef fsRef; 
-                if (CFURLGetFSRef(url, &fsRef)) 
-                {
-                    Boolean targetIsFolder, wasAliased;
-                    OSErr err = FSResolveAliasFile (&fsRef, true, &targetIsFolder, &wasAliased);
-                    
-                    if ((err == noErr) && wasAliased) 
-                    {
-                        CFURLRef resolvedUrl = CFURLCreateFromFSRef(kCFAllocatorDefault,  &fsRef);
-                        if (resolvedUrl != NULL) 
-                        {
-                            resolvedAlias = (NSString*) CFURLCopyFileSystemPath(resolvedUrl,
-                                                                               kCFURLPOSIXPathStyle); 
-                            CFRelease(resolvedUrl);
-                        }
-                    } 
-                }
-                CFRelease(url);
-            }
-
-            if (resolvedAlias != nil) 
-            {
-                // recursive call
-                [resolvedAlias autorelease];
-                showObject = [self panel:sender shouldShowFilename:resolvedAlias];
-            }
-            else
-            {
-                wxCFStringRef filecf([filename retain]);
-                showObject = _dialog->CheckFile(filecf.AsString());  
-            }
-        }
-    }
-
-    return showObject;    
-}
-
-@end
-
 wxIMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase);
 
 void wxFileDialog::Init()
 {
     m_filterIndex = -1;
-    m_delegate = nil;
-    m_sheetDelegate = nil;
     m_filterPanel = NULL;
     m_filterChoice = NULL;
+    m_useFileTypeFilter = false;
+    m_firstFileTypeFilter = 0;
 }
 
 void wxFileDialog::Create(
@@ -183,13 +63,10 @@ void wxFileDialog::Create(
 {
     wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name);
 
-    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
-    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
 }
 
 wxFileDialog::~wxFileDialog()
 {
-    [m_sheetDelegate release];
 }
 
 bool wxFileDialog::SupportsExtraControl() const
@@ -316,8 +193,6 @@ void wxFileDialog::ShowWindowModal()
 
     wxCHECK_RET(parentWindow, "Window modal display requires parent.");
 
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-
     NSArray* types = GetTypesFromFilter( m_wildCard, m_filterNames, m_filterExtensions ) ;
     if ( HasFlag(wxFD_SAVE) )
     {
@@ -334,13 +209,20 @@ void wxFileDialog::ShowWindowModal()
         [sPanel setCanSelectHiddenExtension:YES];
         [sPanel setAllowedFileTypes:types];
         [sPanel setAllowsOtherFileTypes:NO];
-        
-        NSWindow* nativeParent = parentWindow->GetWXWindow();
-        [sPanel beginSheetForDirectory:dir.AsNSString() file:file.AsNSString()
-            modalForWindow: nativeParent modalDelegate: m_sheetDelegate
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
         [sPanel setShowsHiddenFiles: HasFlag(wxFD_SHOW_HIDDEN) ? YES : NO];
+
+        NSWindow* nativeParent = parentWindow->GetWXWindow();
+        if ( !m_dir.IsEmpty() )
+            [sPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString()
+                                               isDirectory:YES]];
+        if ( !m_fileName.IsEmpty() )
+            [sPanel setNameFieldStringValue: file.AsNSString()];
+
+        [sPanel beginSheetModalForWindow:nativeParent completionHandler:
+         ^(NSModalResponse returnCode)
+        {
+            this->ModalFinishedCallback(sPanel, returnCode);
+        }];
     }
     else 
     {
@@ -354,17 +236,19 @@ void wxFileDialog::ShowWindowModal()
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
         [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
-        
-        NSWindow* nativeParent = parentWindow->GetWXWindow();
-        [oPanel beginSheetForDirectory:dir.AsNSString() file:file.AsNSString()
-            types: types modalForWindow: nativeParent
-            modalDelegate: m_sheetDelegate
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
         [oPanel setShowsHiddenFiles: HasFlag(wxFD_SHOW_HIDDEN) ? YES : NO];
+
+        NSWindow* nativeParent = parentWindow->GetWXWindow();
+        if ( !m_dir.IsEmpty() )
+            [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString()
+                                               isDirectory:YES]];
+        [oPanel beginSheetModalForWindow:nativeParent completionHandler:
+         ^(NSModalResponse returnCode)
+        {
+            this->ModalFinishedCallback(oPanel, returnCode);
+        }];
     }
 
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 // Create a panel with the file type drop down list
@@ -413,31 +297,13 @@ void wxFileDialog::DoOnFilterSelected(int index)
 {
     NSArray* types = GetTypesFromExtension(m_filterExtensions[index],m_currentExtensions);
     NSSavePanel* panel = (NSSavePanel*) GetWXWindow();
-    if ( m_delegate )
-        [panel validateVisibleColumns];
-    else
-        [panel setAllowedFileTypes:types];
+    [panel setAllowedFileTypes:types];
 }
 
 // An item has been selected in the file filter wxChoice:
 void wxFileDialog::OnFilterSelected( wxCommandEvent &WXUNUSED(event) )
 {
     DoOnFilterSelected( m_filterChoice->GetSelection() );
-}
-
-bool wxFileDialog::CheckFile( const wxString& filename )
-{
-    if ( m_currentExtensions.GetCount() == 0 )
-        return true;
-    
-    wxString ext = filename.AfterLast('.').Lower();
-    
-    for ( size_t i = 0; i < m_currentExtensions.GetCount(); ++i )
-    {
-        if ( ext == m_currentExtensions[i] )
-            return true;
-    }
-    return false;
 }
 
 void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
@@ -559,8 +425,6 @@ int wxFileDialog::ShowModal()
         }
     }
 
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-
     OSXBeginModalDialog();
 
     if ( HasFlag(wxFD_SAVE) )
@@ -597,7 +461,14 @@ int wxFileDialog::ShowModal()
             DoOnFilterSelected(m_firstFileTypeFilter);
         }
 
-        returnCode = [sPanel runModalForDirectory: m_dir.IsEmpty() ? nil : dir.AsNSString() file:file.AsNSString() ];
+        if ( !m_dir.IsEmpty() )
+            [sPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString()
+                                               isDirectory:YES]];
+
+        if ( !m_fileName.IsEmpty() )
+            [sPanel setNameFieldStringValue: file.AsNSString()];
+
+        returnCode = [sPanel runModal];
         ModalFinishedCallback(sPanel, returnCode);
     }
     else
@@ -624,7 +495,7 @@ int wxFileDialog::ShowModal()
         }
         else
         {
-            [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
+            [oPanel setAllowedFileTypes: types];
         }
         if ( !m_dir.IsEmpty() )
             [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
@@ -637,24 +508,21 @@ int wxFileDialog::ShowModal()
     OSXEndModalDialog();
 
 
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
-
     return GetReturnCode();
 }
 
 void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-
     int result = wxID_CANCEL;
     if (HasFlag(wxFD_SAVE))
     {
-        if (returnCode == NSOKButton )
+        if (returnCode == NSModalResponseOK )
         {
             NSSavePanel* sPanel = (NSSavePanel*)panel;
             result = wxID_OK;
 
-            m_path = wxCFStringRef::AsStringWithNormalizationFormC([sPanel filename]);
+            NSString* unsafePath = [NSString stringWithUTF8String:[[sPanel URL] fileSystemRepresentation]];
+            m_path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
             if (m_filterChoice)
@@ -666,7 +534,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     else
     {
         NSOpenPanel* oPanel = (NSOpenPanel*)panel;
-        if (returnCode == NSOKButton )
+        if (returnCode == NSModalResponseOK )
         {
             panel = oPanel;
             result = wxID_OK;
@@ -676,38 +544,34 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
                 m_filterIndex = m_filterChoice->GetSelection();
             }
 
-            NSArray* filenames = [oPanel filenames];
-            for ( size_t i = 0 ; i < [filenames count] ; ++ i )
+            bool isFirst = true;
+            for (NSURL* filename in [oPanel URLs])
             {
-                wxString fnstr = wxCFStringRef::AsStringWithNormalizationFormC([filenames objectAtIndex:i]);
+                NSString* unsafePath = [NSString stringWithUTF8String:[filename fileSystemRepresentation]];
+                wxString fnstr = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
                 m_paths.Add( fnstr );
                 m_fileNames.Add( wxFileNameFromPath(fnstr) );
-                if ( i == 0 )
+                if ( isFirst )
                 {
                     m_path = fnstr;
                     m_fileName = wxFileNameFromPath(fnstr);
                     m_dir = wxPathOnly( fnstr );
+                    isFirst = false;
                 }
             }
-        }
-        if ( m_delegate )
-        {
-            [oPanel setDelegate:nil];
-            [m_delegate release];
-            m_delegate = nil;
         }
     }
     SetReturnCode(result);
     
+    // workaround for sandboxed app, see above, must be executed before window modal handler
+    // because there this instance will be deleted
+    if ( m_isNativeWindowWrapper )
+        UnsubclassWin();
+
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
     
-    // workaround for sandboxed app, see above
-    if ( m_isNativeWindowWrapper )
-        UnsubclassWin();
     [(NSSavePanel*) panel setAccessoryView:nil];
-
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 #endif // wxUSE_FILEDLG

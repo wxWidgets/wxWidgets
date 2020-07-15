@@ -225,16 +225,14 @@ bool wxApp::OSXOnShouldTerminate()
 
 #if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
 
-pascal static void
-wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
-                         UInt32 WXUNUSED(options),
+extern "C" void
+wxMacAssertOutputHandler(const char *WXUNUSED(componentName),
                          const char *assertionString,
                          const char *exceptionLabelString,
                          const char *errorString,
                          const char *fileName,
                          long lineNumber,
-                         void *value,
-                         ConstStr255Param WXUNUSED(outputMsg))
+                         int errorCode)
 {
     // flow into assert handling
     wxString fileNameStr ;
@@ -254,18 +252,18 @@ wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
     errorStr = (errorString!=0) ? errorString : "" ;
 #endif
 
-#if 1
-    // flow into log
-    wxLogDebug( wxT("AssertMacros: %s %s %s file: %s, line: %ld (value %p)\n"),
+    // turn this on, if you want the macOS asserts to flow into log, otherwise they are handled via wxOnAssert
+#if 0
+    wxLogDebug( wxT("AssertMacros: %s %s %s file: %s, line: %ld (error code %d)\n"),
         assertionStr.c_str() ,
         exceptionStr.c_str() ,
         errorStr.c_str(),
         fileNameStr.c_str(), lineNumber ,
-        value ) ;
+               errorCode ) ;
 #else
 
     wxOnAssert(fileNameStr, lineNumber , assertionStr ,
-        wxString::Format( wxT("%s %s value (%p)") , exceptionStr, errorStr , value ) ) ;
+        wxString::Format( wxT("%s %s value (%d)") , exceptionStr, errorStr , errorCode ) ) ;
 #endif
 }
 
@@ -273,12 +271,6 @@ wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
-    // Mac-specific
-
-#if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
-    InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
-#endif
-
     /*
      Cocoa supports -Key value options which set the user defaults key "Key"
      to the value "value"  Some of them are very handy for debugging like

@@ -3234,7 +3234,9 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(const wxString& varianttype,
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     cell = [[wxTextFieldCell alloc] init];
     [cell setFormatter:dateFormatter];
-    SetNativeData(new wxDataViewRendererNativeData(cell,[NSDate dateWithString:@"2000-12-30 20:00:00 +0000"]));
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDate* date = [calendar dateWithEra:1 year:2000 month:12 day:30 hour:20 minute:0 second:0 nanosecond:0];
+    SetNativeData(new wxDataViewRendererNativeData(cell,date));
     [cell          release];
     [dateFormatter release];
 }

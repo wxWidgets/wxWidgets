@@ -143,6 +143,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
     EVT_MENU(DIALOGS_MESSAGE_BOX_WINDOW_MODAL,      MyFrame::MessageBoxWindowModal)
     EVT_MENU(DIALOGS_MESSAGE_DIALOG,                MyFrame::MessageBoxDialog)
+    EVT_MENU(DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL,   MyFrame::MessageBoxDialogWindowModal)
     EVT_MENU(DIALOGS_MESSAGE_BOX_WXINFO,            MyFrame::MessageBoxInfo)
 #endif // wxUSE_MSGDLG
 #if wxUSE_RICHMSGDLG
@@ -194,7 +195,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
     EVT_MENU(DIALOGS_FILE_OPEN2,                    MyFrame::FileOpen2)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
+    EVT_MENU(DIALOGS_FILES_OPEN_WINDOW_MODAL,       MyFrame::FilesOpenWindowModal)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
+    EVT_MENU(DIALOGS_FILE_SAVE_WINDOW_MODAL,        MyFrame::FileSaveWindowModal)
 #endif // wxUSE_FILEDLG
 
 #if USE_FILEDLG_GENERIC
@@ -205,6 +208,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_DIRDLG
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_DIR_CHOOSE_WINDOW_MODAL,       MyFrame::DirChooseWindowModal)
     EVT_MENU(DIALOGS_DIRNEW_CHOOSE,                 MyFrame::DirChooseNew)
     EVT_MENU(DIALOGS_DIRMULTIPLE_CHOOSE,            MyFrame::DirChooseMultiple)
 #endif // wxUSE_DIRDLG
@@ -401,6 +405,7 @@ bool MyApp::OnInit()
     menuDlg->Append(DIALOGS_MESSAGE_BOX, "&Message box\tCtrl-M");
     menuDlg->Append(DIALOGS_MESSAGE_BOX_WINDOW_MODAL, "Window-Modal Message box ");
     menuDlg->Append(DIALOGS_MESSAGE_DIALOG, "Message dialog\tShift-Ctrl-M");
+    menuDlg->Append(DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL, "Window-Modal Message dialog");
 #if wxUSE_RICHMSGDLG
     menuDlg->Append(DIALOGS_RICH_MESSAGE_DIALOG, "Rich message dialog");
 #endif // wxUSE_RICHMSGDLG
@@ -479,7 +484,9 @@ bool MyApp::OnInit()
     filedlg_menu->Append(DIALOGS_FILE_OPEN,  "&Open file\tCtrl-O");
     filedlg_menu->Append(DIALOGS_FILE_OPEN2,  "&Second open file\tCtrl-2");
     filedlg_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tShift-Ctrl-O");
+    filedlg_menu->Append(DIALOGS_FILES_OPEN_WINDOW_MODAL, "Window-Modal Open files");
     filedlg_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
+    filedlg_menu->Append(DIALOGS_FILE_SAVE_WINDOW_MODAL,  "Window-Modal Save file");
 
 #if USE_FILEDLG_GENERIC
     filedlg_menu->AppendSeparator();
@@ -496,6 +503,7 @@ bool MyApp::OnInit()
     wxMenu *dir_menu = new wxMenu;
 
     dir_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
+    dir_menu->Append(DIALOGS_DIR_CHOOSE_WINDOW_MODAL,  "Choose a directory window-modally");
     dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  "Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D");
     dir_menu->Append(DIALOGS_DIRMULTIPLE_CHOOSE,  "Choose multiple and hidden directories\tAlt-Ctrl-D");
     menuDlg->Append(wxID_ANY,"&Directory operations",dir_menu);
@@ -1039,6 +1047,20 @@ void MyFrame::MessageBoxDialog(wxCommandEvent& WXUNUSED(event))
     dlg.Create();
     dlg.ShowModal();
 }
+
+void MyFrame::MessageBoxDialogWindowModal(wxCommandEvent& WXUNUSED(event))
+{
+    TestMessageBoxDialog* dlg = new TestMessageBoxDialog(this);
+    dlg->Create();
+    dlg->ShowWindowModal();
+}
+
+void MyFrame::MessageBoxDialogWindowModalClosed(wxWindowModalDialogEvent& event)
+{
+    TestMessageBoxDialog* dialog = dynamic_cast<TestMessageBoxDialog*>(event.GetDialog());
+    delete dialog;
+}
+
 
 void MyFrame::MessageBoxInfo(wxCommandEvent& WXUNUSED(event))
 {
@@ -1699,6 +1721,57 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::FilesOpenWindowModal(wxCommandEvent& WXUNUSED(event) )
+{
+    wxString wildcards =
+#ifdef __WXMOTIF__
+                    "C++ files (*.cpp)|*.cpp";
+#else
+                    wxString::Format
+                    (
+                        "All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h",
+                        wxFileSelectorDefaultWildcardStr,
+                        wxFileSelectorDefaultWildcardStr
+                    );
+#endif
+    wxFileDialog* dialog = new wxFileDialog(this, "Testing open multiple file dialog",
+                        wxEmptyString, wxEmptyString, wildcards,
+                        wxFD_OPEN|wxFD_MULTIPLE);
+
+    dialog->Bind(wxEVT_WINDOW_MODAL_DIALOG_CLOSED,
+                 &MyFrame::FilesOpenWindowModalClosed, this);
+
+    dialog->ShowWindowModal();
+}
+
+void MyFrame::FilesOpenWindowModalClosed(wxWindowModalDialogEvent& event)
+{
+    wxFileDialog* dialog = dynamic_cast<wxFileDialog*>(event.GetDialog());
+    if ( dialog->GetReturnCode() == wxID_OK)
+    {
+        wxArrayString paths, filenames;
+
+        dialog->GetPaths(paths);
+        dialog->GetFilenames(filenames);
+
+        wxString msg, s;
+        size_t count = paths.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            s.Printf("File %d: %s (%s)\n",
+                     (int)n, paths[n], filenames[n]);
+
+            msg += s;
+        }
+        s.Printf("Filter index: %d", dialog->GetFilterIndex());
+        msg += s;
+
+        wxMessageDialog dialog2(this, msg, "Selected files");
+        dialog2.ShowModal();
+    }
+    delete dialog;
+}
+
 void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog(this,
@@ -1716,6 +1789,35 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
                      dialog.GetPath(), dialog.GetFilterIndex());
     }
 }
+
+void MyFrame::FileSaveWindowModal(wxCommandEvent& WXUNUSED(event) )
+{
+    wxFileDialog* dialog = new wxFileDialog(this,
+                        "Testing save file dialog",
+                        wxEmptyString,
+                        "myletter.doc",
+                        "Text files (*.txt)|*.txt|Document files (*.doc;*.ods)|*.doc;*.ods",
+                        wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+
+    dialog->SetFilterIndex(1);
+
+    dialog->Bind(wxEVT_WINDOW_MODAL_DIALOG_CLOSED,
+                 &MyFrame::FileSaveWindowModalClosed, this);
+
+    dialog->ShowWindowModal();
+}
+
+void MyFrame::FileSaveWindowModalClosed(wxWindowModalDialogEvent& event)
+{
+    wxFileDialog* dialog = dynamic_cast<wxFileDialog*>(event.GetDialog());
+    if ( dialog->GetReturnCode() == wxID_OK)
+    {
+        wxLogMessage("%s, filter %d",
+                     dialog->GetPath(), dialog->GetFilterIndex());
+    }
+    delete dialog;
+}
+
 #endif // wxUSE_FILEDLG
 
 #if USE_FILEDLG_GENERIC
@@ -1850,6 +1952,30 @@ void MyFrame::DirChooseMultiple(wxCommandEvent& WXUNUSED(event))
         wxMessageDialog dialog2(this, msg, "Selected directories");
         dialog2.ShowModal();
     }
+}
+
+void MyFrame::DirChooseWindowModal(wxCommandEvent& WXUNUSED(event) )
+{
+    // pass some initial dir to wxDirDialog
+    wxString dirHome;
+    wxGetHomeDir(&dirHome);
+
+    wxDirDialog* dialog = new wxDirDialog(this, "Testing directory picker", dirHome, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
+
+    dialog->Bind(wxEVT_WINDOW_MODAL_DIALOG_CLOSED,
+                 &MyFrame::DirChooseWindowModalClosed, this);
+
+    dialog->ShowWindowModal();
+}
+
+void MyFrame::DirChooseWindowModalClosed(wxWindowModalDialogEvent& event)
+{
+    wxDirDialog* dialog = dynamic_cast<wxDirDialog*>(event.GetDialog());
+    if ( dialog->GetReturnCode() == wxID_OK)
+    {
+        wxLogMessage("Selected path: %s", dialog->GetPath());
+    }
+    delete dialog;
 }
 #endif // wxUSE_DIRDLG
 

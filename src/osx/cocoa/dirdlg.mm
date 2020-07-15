@@ -32,6 +32,7 @@
 #include "wx/filename.h"
 #include "wx/evtloop.h"
 #include "wx/modalhook.h"
+#include "wx/generic/dirctrlg.h" // for wxFileIconsTable
 
 #include "wx/osx/private.h"
 
@@ -39,7 +40,6 @@ wxIMPLEMENT_CLASS(wxDirDialog, wxDialog);
 
 void wxDirDialog::Init()
 {
-    m_sheetDelegate = nil;
 }
 
 void wxDirDialog::Create(wxWindow *parent, const wxString& message,
@@ -54,13 +54,10 @@ void wxDirDialog::Create(wxWindow *parent, const wxString& message,
     SetMessage( message );
     SetWindowStyle(style);
     SetPath(defaultPath);
-    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
-    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
 }
 
 wxDirDialog::~wxDirDialog()
 {
-    [m_sheetDelegate release];
 }
 
 WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
@@ -116,7 +113,7 @@ void wxDirDialog::ShowWindowModal()
 
     // Create the window and have it call the ModalFinishedCallback on completion
     [oPanel beginSheetModalForWindow: nativeParent completionHandler: ^(NSModalResponse returnCode){
-        [(ModalDialogDelegate*)m_sheetDelegate sheetDidEnd: oPanel returnCode: returnCode contextInfo: nil];
+        this->ModalFinishedCallback(oPanel, returnCode);
     }];
 }
 
@@ -128,14 +125,12 @@ int wxDirDialog::ShowModal()
 
     NSOpenPanel *oPanel = OSXCreatePanel();
 
-    int returnCode = -1;
-    
     OSXBeginModalDialog();
 
     // Display the panel and process the result on completion
-    returnCode = (NSInteger)[oPanel runModal];
+    int returnCode = (NSInteger)[oPanel runModal];
     ModalFinishedCallback(oPanel, returnCode);
-    
+
     OSXEndModalDialog();
 
 
@@ -146,7 +141,7 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
     int result = wxID_CANCEL;
 
-    if (returnCode == NSOKButton )
+    if (returnCode == NSModalResponseOK )
     {
         NSOpenPanel* oPanel = (NSOpenPanel*)panel;
 
@@ -154,7 +149,9 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
 
         for ( NSURL* url in selectedURL )
         {
-            m_paths.Add([url fileSystemRepresentation]);
+            NSString* unsafePath = [NSString stringWithUTF8String:[url fileSystemRepresentation]];
+            wxCFStringRef safePath([[unsafePath precomposedStringWithCanonicalMapping] retain]);
+            m_paths.Add(safePath.AsString());
         }
 
         if ( !HasFlag(wxDD_MULTIPLE) )
@@ -174,6 +171,37 @@ void wxDirDialog::SetTitle(const wxString &title)
 {
     m_title = title;
     wxDialog::SetTitle(title);
+}
+
+size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
+{
+    NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+    NSArray *volumes = [workspace mountedLocalVolumePaths];
+    NSFileManager *filemanager = [NSFileManager defaultManager];
+
+    for (NSString *path in volumes)
+    {
+        NSString *description, *type, *name;
+        BOOL removable, writable, unmountable;
+
+        if ( [workspace getFileSystemInfoForPath:path isRemovable:&removable isWritable:&writable
+                                   isUnmountable:&unmountable description:&description type:&type] )
+        {
+            if ( writable )
+                icon_ids.Add(wxFileIconsTable::drive);
+            else
+                icon_ids.Add(wxFileIconsTable::cdrom);
+
+            name = [filemanager displayNameAtPath:path];
+
+            paths.Add(wxCFStringRef(path).AsString());
+            names.Add(wxCFStringRef(name).AsString());
+        }
+    }
+
+    wxASSERT_MSG( (paths.GetCount() == names.GetCount()), wxT("The number of paths and their human readable names should be equal in number."));
+    wxASSERT_MSG( (paths.GetCount() == icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
+    return paths.GetCount();
 }
 
 #endif // wxUSE_DIRDLG

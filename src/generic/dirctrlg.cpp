@@ -98,6 +98,10 @@ wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 // wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
+// since the macOS implementation needs objective-C this is dirdlg.mm
+#ifdef __WXOSX__
+extern size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids);
+#else
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
 {
 #ifdef wxHAS_FILESYSTEM_VOLUMES
@@ -156,38 +160,6 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     }
 #endif // __WIN32__/!__WIN32__
 
-#elif defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
-
-    ItemCount volumeIndex = 1;
-    OSErr err = noErr ;
-
-    while( noErr == err )
-    {
-        HFSUniStr255 volumeName ;
-        FSRef fsRef ;
-        FSVolumeInfo volumeInfo ;
-        err = FSGetVolumeInfo(0, volumeIndex, NULL, kFSVolInfoFlags , &volumeInfo , &volumeName, &fsRef);
-        if( noErr == err )
-        {
-            wxString path = wxMacFSRefToPath( &fsRef ) ;
-            wxString name = wxMacHFSUniStrToString( &volumeName ) ;
-
-            if ( (volumeInfo.flags & kFSVolFlagSoftwareLockedMask) || (volumeInfo.flags & kFSVolFlagHardwareLockedMask) )
-            {
-                icon_ids.Add(wxFileIconsTable::cdrom);
-            }
-            else
-            {
-                icon_ids.Add(wxFileIconsTable::drive);
-            }
-            // todo other removable
-
-            paths.Add(path);
-            names.Add(name);
-            volumeIndex++ ;
-        }
-    }
-
 #elif defined(__UNIX__)
     paths.Add(wxT("/"));
     names.Add(wxT("/"));
@@ -199,6 +171,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     wxASSERT_MSG( (paths.GetCount() == icon_ids.GetCount()), wxT("Wrong number of icons for available drives."));
     return paths.GetCount();
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxIsDriveAvailable
