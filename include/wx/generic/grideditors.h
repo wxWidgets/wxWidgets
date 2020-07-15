@@ -27,6 +27,8 @@ public:
     {
     }
 
+    void DismissEditor();
+
     void OnKillFocus(wxFocusEvent& event);
     void OnKeyDown(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
@@ -334,6 +336,8 @@ public:
 
 protected:
     wxComboBox *Combo() const { return (wxComboBox *)m_control; }
+
+    void OnComboCloseUp(wxCommandEvent& evt);
 
     wxString        m_value;
     wxArrayString   m_choices;
