@@ -37,10 +37,11 @@
 
     #if wxUSE_GUI
         #include "wx/window.h"
+        #include "wx/combobox.h"
         #include "wx/control.h"
         #include "wx/dc.h"
         #include "wx/spinbutt.h"
-        #include "wx/textentry.h"
+        #include "wx/textctrl.h"
         #include "wx/validate.h"
     #endif // wxUSE_GUI
 #endif
@@ -442,36 +443,25 @@ wxString wxCommandEvent::GetString() const
 {
     // This is part of the hack retrieving the event string from the control
     // itself only when/if it's really needed to avoid copying potentially huge
-    // strings coming from multiline text controls.
+    // strings coming from multiline text controls. For consistency we also do
+    // it for combo boxes, even though there are no real performance advantages
+    // in doing this for them.
     if (m_eventType == wxEVT_TEXT && m_eventObject)
     {
-        // Only windows generate wxEVT_TEXT events, so this cast should really
-        // succeed, but err on the side of caution just in case somebody
-        // created a bogus event of this type.
-        if ( wxWindow* const w = wxDynamicCast(m_eventObject, wxWindow) )
-        {
-            if ( const wxTextEntry* const entry = w->WXGetTextEntry() )
-                return entry->GetValue();
-        }
+#if wxUSE_TEXTCTRL
+        wxTextCtrl *txt = wxDynamicCast(m_eventObject, wxTextCtrl);
+        if ( txt )
+            return txt->GetValue();
+#endif // wxUSE_TEXTCTRL
+
+#if wxUSE_COMBOBOX
+        wxComboBox* combo = wxDynamicCast(m_eventObject, wxComboBox);
+        if ( combo )
+            return combo->GetValue();
+#endif // wxUSE_COMBOBOX
     }
 
     return m_cmdString;
-}
-
-// ----------------------------------------------------------------------------
-// wxPaintEvent and wxNcPaintEvent
-// ----------------------------------------------------------------------------
-
-wxPaintEvent::wxPaintEvent(wxWindowBase* window)
-    : wxEvent(window ? window->GetId() : 0, wxEVT_PAINT)
-{
-    SetEventObject(window);
-}
-
-wxNcPaintEvent::wxNcPaintEvent(wxWindowBase* window)
-    : wxEvent(window ? window->GetId() : 0, wxEVT_NC_PAINT)
-{
-    SetEventObject(window);
 }
 
 // ----------------------------------------------------------------------------
@@ -1198,8 +1188,11 @@ wxEvtHandler::~wxEvtHandler()
     DeletePendingEvents();
 
     // we only delete object data, not untyped
-    if ( m_clientDataType == wxClientData_Object )
-        delete m_clientObject;
+    if (m_clientDataType == wxClientData_Object) {
+        if (m_clientObject) {
+            delete m_clientObject;
+        }
+    }
 }
 
 void wxEvtHandler::Unlink()
@@ -1935,7 +1928,8 @@ void wxEvtHandler::DoSetClientObject( wxClientData *data )
     wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("can't have both object and void client data") );
 
-    delete m_clientObject;
+    if ( m_clientObject )
+        delete m_clientObject;
 
     m_clientObject = data;
     m_clientDataType = wxClientData_Object;
