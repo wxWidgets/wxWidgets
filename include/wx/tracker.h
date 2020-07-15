@@ -80,7 +80,9 @@ protected:
         {
             wxTrackerNode * const first = m_first;
             m_first = first->m_nxt;
-            first->OnObjectDestroy();
+            if (first) {
+                first->OnObjectDestroy();
+            }
         }
     }
 
