@@ -33,6 +33,8 @@
 #include "wx/dcps.h"
 #include "wx/metafile.h"
 
+#include "asserthelper.h"
+
 // ----------------------------------------------------------------------------
 // helper for XXXTextExtent() methods
 // ----------------------------------------------------------------------------
@@ -52,6 +54,9 @@ struct GetTextExtentTester
         wxSize size = obj.GetTextExtent("Hello");
         CHECK( size.x > 1 );
         CHECK( size.y == y );
+
+        // Test that getting text extent of an empty string returns (0, 0).
+        CHECK( obj.GetTextExtent(wxString()) == wxSize() );
     }
 };
 

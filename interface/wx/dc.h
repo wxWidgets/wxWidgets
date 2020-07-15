@@ -954,6 +954,8 @@ public:
         used for the text extent calculation. Otherwise the currently selected
         font is.
 
+        If @a string is empty, its extent is 0 in both directions, as expected.
+
         @note This function only works with single-line strings.
 
         @beginWxPerlOnly
