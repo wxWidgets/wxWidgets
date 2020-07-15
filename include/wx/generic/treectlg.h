@@ -13,8 +13,9 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/scrolwin.h"
+#include "wx/brush.h"
 #include "wx/pen.h"
+#include "wx/scrolwin.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -243,8 +244,8 @@ protected:
     unsigned short       m_indent;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
-    wxBrush             *m_hilightBrush,
-                        *m_hilightUnfocusedBrush;
+    wxBrush              m_hilightBrush,
+                         m_hilightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
     bool                 m_ownsImageListButtons;
@@ -351,9 +352,14 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 private:
-    bool m_hasExplicitFont;
+    void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+    {
+        InitVisualAttributes();
+    }
 
-    void OnSysColourChanged(wxSysColourChangedEvent&);
+    // (Re)initialize colours, fonts, pens, brushes used by the control using
+    // the current system colours and font.
+    void InitVisualAttributes();
 
     // Reset the state of the last find (i.e. keyboard incremental search)
     // operation.

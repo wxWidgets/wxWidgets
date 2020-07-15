@@ -937,8 +937,6 @@ void wxGenericTreeCtrl::Init()
     m_indent = 15;
     m_spacing = 18;
 
-    m_hilightBrush = NULL;
-    m_hilightUnfocusedBrush = NULL;
     m_imageListButtons = NULL;
     m_ownsImageListButtons = false;
 
@@ -984,9 +982,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
         m_spacing = 10;
     }
 
-    m_hasExplicitFont = m_hasFont;
-    wxSysColourChangedEvent evt;
-    OnSysColourChanged(evt);
+    InitVisualAttributes();
 
     SetInitialSize(size);
 
@@ -995,9 +991,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 
 wxGenericTreeCtrl::~wxGenericTreeCtrl()
 {
-    delete m_hilightBrush;
-    delete m_hilightUnfocusedBrush;
-
     DeleteAllItems();
 
     delete m_renameTimer;
@@ -1012,18 +1005,35 @@ void wxGenericTreeCtrl::EnableBellOnNoMatch( bool on )
     m_findBell = on;
 }
 
-void wxGenericTreeCtrl::OnSysColourChanged(wxSysColourChangedEvent&)
+void wxGenericTreeCtrl::InitVisualAttributes()
 {
+    // We want to use the default system colours/fonts here unless the user
+    // explicitly configured something different. We also need to reset the
+    // various m_hasXXX variables to false to prevent them from being left set
+    // to "true", as otherwise we wouldn't update the colours/fonts the next
+    // time the system colours change.
     const wxVisualAttributes attr(GetDefaultAttributes());
-    SetOwnForegroundColour(attr.colFg);
-    SetOwnBackgroundColour(attr.colBg);
-    if (!m_hasExplicitFont)
-        SetOwnFont(attr.font);
+    if ( !m_hasFgCol )
+    {
+        SetOwnForegroundColour(attr.colFg);
+        m_hasFgCol = false;
+    }
 
-    delete m_hilightBrush;
-    m_hilightBrush = new wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    delete m_hilightUnfocusedBrush;
-    m_hilightUnfocusedBrush = new wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+    if ( !m_hasBgCol )
+    {
+        SetOwnBackgroundColour(attr.colBg);
+        m_hasBgCol = false;
+    }
+
+    if ( !m_hasFont )
+    {
+        SetOwnFont(attr.font);
+        m_hasFont = false;
+    }
+
+
+    m_hilightBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_hilightUnfocusedBrush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 
     m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT), 1, wxPENSTYLE_DOT);
 
@@ -2544,7 +2554,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( item->IsSelected() )
     {
-        dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
+        dc.SetBrush(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush);
         drawItemBackground = true;
     }
     else
