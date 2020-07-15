@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 18 December 2019                                                   *
+ * Date : 15 July 2020                                                       *
  *                                                                           *
  *****************************************************************************/
 
@@ -65,13 +65,13 @@
 #undef WORDS_BIGENDIAN
 
 /* Define this if you want to use GPE features */
-/* #undef __WXGPE__ */
+#undef __WXGPE__
 
 /* Define this if your version of Motif is greater than 2.0 */
-/* #undef __WXMOTIF20__ */
+#undef __WXMOTIF20__
 
 /* Define this if you are using Lesstif */
-/* #undef __WXLESSTIF__ */
+#undef __WXLESSTIF__
 
 #ifdef __WXGTK__
 
@@ -100,6 +100,12 @@
 
 /* Define this if your version of GTK+ is greater than 2.20 */
 #undef __WXGTK220__
+
+/* Define this if your version of GTK+ is >= 3.0 */
+#undef __WXGTK3__
+
+/* Define this if your version of GTK+ is >= 3.90.0 */
+#undef __WXGTK4__
 
 #include <types.h>
 typedef pid_t GPid;
@@ -400,11 +406,7 @@ typedef pid_t GPid;
 
 #define wxUSE_MARKUP       1
 
-#ifdef __WXMOTIF__
-#define wxUSE_POPUPWIN 0
-#else
 #define wxUSE_POPUPWIN 1
-#endif
 
 #define wxUSE_PREFERENCES_EDITOR 1
 
@@ -517,6 +519,8 @@ typedef pid_t GPid;
 #define wxUSE_INFOBAR 1
 
 #define wxUSE_MENUS         1
+
+#define wxUSE_MENUBAR  1
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
