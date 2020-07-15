@@ -400,7 +400,9 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
 // ----------------------------------------------------------------------------
 
 MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxString &title)
-             : wxDialog(parent, wxID_ANY, wxString(title))
+             : wxDialog(parent, wxID_ANY, wxString(title),
+                        wxDefaultPosition, wxDefaultSize,
+                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     // Begin with first hierarchy: a notebook at the top and
     // and OK button at the bottom.
