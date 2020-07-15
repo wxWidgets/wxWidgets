@@ -1234,7 +1234,10 @@ void wxGCDCImpl::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *
         m_graphicContext->SetFont( *theFont, m_textForegroundColour );
     }
 
-    wxDouble h , d , e , w;
+    wxDouble w wxDUMMY_INITIALIZE(0),
+             h wxDUMMY_INITIALIZE(0),
+             d wxDUMMY_INITIALIZE(0),
+             e wxDUMMY_INITIALIZE(0);
 
     // Don't pass non-NULL pointers for the parts we don't need, this could
     // result in doing extra unnecessary work inside GetTextExtent().
