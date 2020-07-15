@@ -1220,10 +1220,20 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "test wxTE_AUTO_URL: \"http://www.wxwidgets.org\"",
                                 wxPoint(450, 10), wxSize(200, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL);
-    m_textrich->SetStyle(0, 10, *wxRED);
-    m_textrich->SetStyle(10, 20, *wxBLUE);
-    m_textrich->SetStyle(30, 40,
-                         wxTextAttr(*wxGREEN, wxNullColour, *wxITALIC_FONT));
+    if (wxSystemSettings::GetAppearance().IsUsingDarkBackground())
+    {
+        m_textrich->SetStyle(0, 10, wxColour(255, 95, 82));
+        m_textrich->SetStyle(10, 20, wxColour(94, 146, 243));
+        m_textrich->SetStyle(30, 40,
+                             wxTextAttr(wxColour(96, 173, 94), wxNullColour, *wxITALIC_FONT));
+    }
+    else
+    {
+        m_textrich->SetStyle(0, 10, *wxRED);
+        m_textrich->SetStyle(10, 20, *wxBLUE);
+        m_textrich->SetStyle(30, 40,
+                             wxTextAttr(*wxGREEN, wxNullColour, *wxITALIC_FONT));
+    }
     m_textrich->SetDefaultStyle(wxTextAttr());
     m_textrich->AppendText("\n\nFirst 10 characters should be in red\n");
     m_textrich->AppendText("Next 10 characters should be in blue\n");
