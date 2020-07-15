@@ -1007,7 +1007,8 @@ if test "$wxUSE_MSW" = 1 ; then
     DEFAULT_wxUSE_ACCESSIBILITY=yes
 fi
 
-WX_ARG_FEATURE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
+WX_ARG_FEATURE(menus,       [  --enable-menus          use wxMenu and wxMenuItem classes], wxUSE_MENUS)
+WX_ARG_FEATURE(menubar,     [  --enable-menubar        use wxMenuBar class], wxUSE_MENUBAR)
 WX_ARG_FEATURE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_FEATURE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
 WX_ARG_FEATURE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
@@ -7314,7 +7315,12 @@ fi
 
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+    if test "$wxUSE_MENUBAR" = "yes"; then
+        AC_DEFINE(wxUSE_MENUBAR)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+    fi
+elif test "$wxUSE_MENUBAR" = "yes"; then
+    AC_MSG_WARN([wxMenuBar can't be used without wxMenu and will be disabled])
 fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then

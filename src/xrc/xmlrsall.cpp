@@ -140,7 +140,9 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_MENUS
     AddHandler(new wxMenuXmlHandler);
+#if wxUSE_MENUBAR
     AddHandler(new wxMenuBarXmlHandler);
+#endif
 #endif
 #if wxUSE_NOTEBOOK
     AddHandler(new wxNotebookXmlHandler);

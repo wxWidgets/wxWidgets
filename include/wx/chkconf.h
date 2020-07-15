@@ -927,6 +927,14 @@
 #   endif
 #endif /* !defined(wxUSE_MDI_ARCHITECTURE) */
 
+#ifndef wxUSE_MENUBAR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MENUBAR must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_MENUBAR 0
+#   endif
+#endif /* !defined(wxUSE_MENUBAR) */
+
 #ifndef wxUSE_MENUS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MENUS must be defined, please read comment near the top of this file."
@@ -2261,14 +2269,25 @@
 #   endif
 #endif /* wxUSE_SVG */
 
-#if wxUSE_TASKBARICON && !wxUSE_MENUS
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TASKBARICON requires wxUSE_MENUS"
-#   else
-#       undef wxUSE_TASKBARICON
-#       define wxUSE_TASKBARICON 0
-#   endif
-#endif /* wxUSE_TASKBARICON */
+#if !wxUSE_MENUS
+#   if wxUSE_MENUBAR
+#      ifdef wxABORT_ON_CONFIG_ERROR
+#          error "wxUSE_MENUBAR requires wxUSE_MENUS"
+#      else
+#          undef wxUSE_MENUBAR
+#          define wxUSE_MENUBAR 0
+#      endif
+#   endif /* wxUSE_MENUBAR */
+
+#   if wxUSE_TASKBARICON
+#      ifdef wxABORT_ON_CONFIG_ERROR
+#          error "wxUSE_TASKBARICON requires wxUSE_MENUS"
+#      else
+#          undef wxUSE_TASKBARICON
+#          define wxUSE_TASKBARICON 0
+#      endif
+#   endif /* wxUSE_TASKBARICON */
+#endif /* !wxUSE_MENUS */
 
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL

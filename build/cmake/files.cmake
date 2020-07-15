@@ -2565,6 +2565,8 @@ set(OSX_IPHONE_SRC
     src/osx/sound_osx.cpp
     src/osx/core/sound.cpp
     src/osx/iphone/statbmp.mm
+    src/osx/iphone/menuitem.mm
+    src/osx/iphone/menu.mm
 )
 
 set(OSX_IPHONE_HDR

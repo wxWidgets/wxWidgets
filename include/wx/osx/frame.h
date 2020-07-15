@@ -90,7 +90,7 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
     virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     virtual void DetachMenuBar() wxOVERRIDE;
     virtual void AttachMenuBar(wxMenuBar *menubar) wxOVERRIDE;
 #endif

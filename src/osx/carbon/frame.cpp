@@ -84,7 +84,7 @@ bool wxFrame::Enable(bool enable)
     if ( !wxWindow::Enable(enable) )
         return false;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     // we should always enable/disable the menubar, even if we are not current, otherwise
     // we might miss some state change later (happened eg in the docview sample after PrintPreview)
     if ( m_frameMenuBar /*&& m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar()*/)
@@ -156,7 +156,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
     else
     {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
         if (m_frameMenuBar != NULL)
         {
             m_frameMenuBar->MacInstallMenuBar();
@@ -180,7 +180,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 #endif
 }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
 void wxFrame::DetachMenuBar()
 {
     wxFrameBase::DetachMenuBar();
@@ -210,7 +210,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
             m_frameMenuBar->MacInstallMenuBar();
     }
 }
-#endif
+#endif // wxUSE_MENUBAR
 
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
@@ -391,7 +391,7 @@ bool wxFrame::Show(bool show)
 {
     if ( !show )
     {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
         if (m_frameMenuBar != NULL)
         {
           m_frameMenuBar->MacUninstallMenuBar();

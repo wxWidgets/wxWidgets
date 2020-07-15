@@ -23,7 +23,9 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxToolBarNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
+#if wxUSE_MENUBAR
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+#endif
 class WXDLLIMPEXP_FWD_CORE wxMenuItem;
 class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 class WXDLLIMPEXP_FWD_CORE wxToolBar;
@@ -78,6 +80,7 @@ public:
     // ------------------
 
 #if wxUSE_MENUS
+#if wxUSE_MENUBAR
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
 
@@ -85,7 +88,7 @@ public:
     // and exists mainly in order to be overridden in the MDI parent frame
     // which also looks at its active child menu bar
     virtual wxMenuItem *FindItemInMenuBar(int menuId) const;
-
+#endif
     // generate menu command corresponding to the given menu item
     //
     // returns true if processed
@@ -192,7 +195,7 @@ protected:
     // test whether this window makes part of the frame
     virtual bool IsOneOfBars(const wxWindow *win) const wxOVERRIDE;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     // override to update menu bar position when the frame size changes
     virtual void PositionMenuBar() { }
 
@@ -203,13 +206,15 @@ protected:
     // override to do something special when the menu bar is attached to the
     // frame
     virtual void AttachMenuBar(wxMenuBar *menubar);
+#endif // wxUSE_MENUBAR
 
     // Return true if we should update the menu item state from idle event
     // handler or false if we should delay it until the menu is opened.
     static bool ShouldUpdateMenuFromIdle();
 
+#if wxUSE_MENUBAR
     wxMenuBar *m_frameMenuBar;
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUBAR
 
 #if wxUSE_STATUSBAR && (wxUSE_MENUS || wxUSE_TOOLBAR)
     // the saved status bar text overwritten by DoGiveHelp()
