@@ -1,0 +1,1 @@
+wxOSX: Stop including SDK headers from public wx headers (Lauri Nurmi).
