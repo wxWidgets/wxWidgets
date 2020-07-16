@@ -68,6 +68,9 @@ Changes in behaviour not resulting in compilation errors
 - wxGTK wxTextCtrl doesn't generate any wxEVT_TEXT when it's created with
   non-empty value, for consistency with the other ports.
 
+- wxDC::GetTextExtent() returns height of 0 for empty string in wxGTK and wxOSX
+  too now, for consistency with wxMSW and other kinds of wxDC.
+
 - wxMSW wxToolBar height now adapts to the height of embedded controls, making
   the toolbar taller if necessary, rather than making the controls smaller. To
   return to the previous behaviour, you need to explicitly create controls of

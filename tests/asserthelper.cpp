@@ -49,7 +49,7 @@ std::ostream& operator<<(std::ostream& os, const wxColour& c)
 
 std::ostream& operator<<(std::ostream& os, const wxSize& s)
 {
-    os << s.x << "x" << s.y;
+    os << s.x << "*" << s.y;
 
     return os;
 }
