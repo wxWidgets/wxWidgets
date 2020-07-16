@@ -640,7 +640,13 @@ int wxRichTextObject::ConvertTenthsMMToPixels(wxDC& dc, int units) const
     double scale = 1.0;
     if (GetBuffer())
         scale = GetBuffer()->GetScale() / GetBuffer()->GetDimensionScale();
-    int p = ConvertTenthsMMToPixels(dc.GetPPI().x, units, scale);
+    
+#if __WXOSX__
+    int dpi = 72;
+#else
+    int dpi = dc.GetPPI().x;
+#endif
+    int p = ConvertTenthsMMToPixels(dpi, units, scale);
 
     return p;
 }
@@ -671,7 +677,13 @@ int wxRichTextObject::ConvertPixelsToTenthsMM(wxDC& dc, int pixels) const
     if (GetBuffer())
         scale = GetBuffer()->GetScale();
 
-    return ConvertPixelsToTenthsMM(dc.GetPPI().x, p, scale);
+#if __WXOSX__
+    int dpi = 72;
+#else
+    int dpi = dc.GetPPI().x;
+#endif
+
+    return ConvertPixelsToTenthsMM(dpi, p, scale);
 }
 
 int wxRichTextObject::ConvertPixelsToTenthsMM(int ppi, int pixels, double scale)
@@ -14320,7 +14332,12 @@ void wxTextAttrDimension::CollectCommonAttributes(const wxTextAttrDimension& att
 wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(wxDC& dc, double scale, const wxSize& parentSize)
     : m_parentSize(parentSize)
 {
-    m_ppi = dc.GetPPI().x; m_scale = scale;
+#ifdef __WXOSX__
+    m_ppi = 72;
+#else
+    m_ppi = dc.GetPPI().x;
+#endif
+    m_scale = scale;
 }
 
 wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(int ppi, double scale, const wxSize& parentSize)
