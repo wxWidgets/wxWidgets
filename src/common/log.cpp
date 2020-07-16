@@ -58,6 +58,10 @@
     #include "wx/msw/private.h" // includes windows.h
 #endif
 
+#if defined(__WXOSX__)
+    #include "wx/osx/private.h" // for GetMacOSStatusErrorString
+#endif
+
 #undef wxLOG_COMPONENT
 const char *wxLOG_COMPONENT = "";
 
@@ -1121,6 +1125,12 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
         errorMsg = strerror_r((int)nErrCode, buffer, sizeof(buffer));
 #elif defined( __VMS )
         errorMsg = strerror((int)nErrCode);
+#elif defined(__WXOSX_COCOA__)
+        int iErrorCode = (int)nErrCode;
+        if ( iErrorCode < 0 )
+            strncpy(buffer,GetMacOSStatusErrorString(iErrorCode), sizeof(buffer));
+        else
+            strerror_r(iErrorCode, buffer, sizeof(buffer));
 #else // XSI-compliant strerror_r
         strerror_r((int)nErrCode, buffer, sizeof(buffer));
 #endif
