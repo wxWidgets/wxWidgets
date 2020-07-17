@@ -39,6 +39,90 @@
 // implementation
 // ============================================================================
 
+@interface wxOSXOverlayView : NSView
+{
+}
+
+- (instancetype)initWithFrame:(NSRect)frameRect;
+- (void)drawRect:(NSRect)dirtyRect;
+
+@property (retain) NSBitmapImageRep *bitmapImageRep;
+
+@end
+
+@interface wxOSXOverlayWindow : NSWindow
+{
+}
+- (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag;
+
+@property (retain) wxOSXOverlayView *overlayView;
+
+@end
+
+
+@implementation wxOSXOverlayWindow
+
+- (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag
+{
+    self = [super initWithContentRect:contentRect styleMask:style backing:backingStoreType defer:flag];
+    if ( self )
+    {
+        self.overlayView = [[wxOSXOverlayView alloc] initWithFrame:contentRect];
+        [self setContentView:self.overlayView];
+
+        [self setOpaque:NO];
+        [self setIgnoresMouseEvents:YES];
+        [self setBackgroundColor:[NSColor clearColor]];
+        [self setAlphaValue:1.0];
+    }
+    return self;
+}
+
+@end
+
+@implementation wxOSXOverlayView
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [self.bitmapImageRep drawInRect:[self  bounds]];
+}
+
+// from https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/CapturingScreenContents/CapturingScreenContents.html
+
+- (instancetype)initWithFrame:(NSRect)frameRect
+{
+    self = [super initWithFrame:frameRect];
+    if ( self )
+    {
+        NSRect bounds = [self bounds];
+        NSRect backingBounds = [self convertRectToBacking:bounds];
+
+        NSBitmapImageRep* bmp = [[NSBitmapImageRep alloc]
+                         initWithBitmapDataPlanes:NULL
+                         pixelsWide:backingBounds.size.width
+                         pixelsHigh:backingBounds.size.height
+                         bitsPerSample:8
+                         samplesPerPixel:4
+                         hasAlpha:YES
+                         isPlanar:NO
+                         colorSpaceName:NSCalibratedRGBColorSpace
+                         bitmapFormat:NSAlphaFirstBitmapFormat
+                         bytesPerRow:0
+                         bitsPerPixel:0
+                         ];
+
+        // There isn't a colorspace name constant for sRGB so retag
+        // using the sRGBColorSpace method
+        self.bitmapImageRep = [bmp bitmapImageRepByRetaggingWithColorSpace:
+                         [NSColorSpace sRGBColorSpace]];
+        [bmp release];
+        // Setting the user size communicates the dpi
+        [self.bitmapImageRep setSize:bounds.size];
+    }
+    return self;
+}
+@end
+
 wxOverlayImpl::wxOverlayImpl()
 {
     m_window = NULL ;
@@ -73,7 +157,7 @@ void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
         NSRect overlayRect = wxToNSRect(NULL, wxRect(origin, size));
         overlayRect = [NSWindow contentRectForFrameRect:overlayRect styleMask:NSBorderlessWindowMask];
 
-        m_overlayWindow = [[NSWindow alloc] initWithContentRect:overlayRect
+        m_overlayWindow = [[wxOSXOverlayWindow alloc] initWithContentRect:overlayRect
                                                       styleMask:NSBorderlessWindowMask
                                                         backing:NSBackingStoreBuffered
                                                           defer:YES];
@@ -85,18 +169,13 @@ void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
         CGRect cgbounds;
         cgbounds = CGDisplayBounds(CGMainDisplayID());
 
-        m_overlayWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(cgbounds.origin.x, cgbounds.origin.y,
+        m_overlayWindow = [[wxOSXOverlayWindow alloc] initWithContentRect:NSMakeRect(cgbounds.origin.x, cgbounds.origin.y,
                                                                     cgbounds.size.width,
                                                                     cgbounds.size.height)
                                                       styleMask:NSBorderlessWindowMask
                                                         backing:NSBackingStoreBuffered
                                                           defer:YES];
     }
-    [m_overlayWindow setOpaque:NO];
-    [m_overlayWindow setIgnoresMouseEvents:YES];
-    [m_overlayWindow setBackgroundColor:[NSColor clearColor]];
-    [m_overlayWindow setAlphaValue:1.0];
-
     [m_overlayWindow orderFront:nil];
 }
 
@@ -112,9 +191,6 @@ void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
 
     CreateOverlayWindow(dc);
     wxASSERT_MSG(m_overlayWindow != NULL, _("Couldn't create the overlay window"));
-    m_overlayContext = [[m_overlayWindow graphicsContext] CGContext];
-    wxASSERT_MSG(  m_overlayContext != NULL , _("Couldn't init the context on the overlay window") );
-    [(id)m_overlayContext retain];
 }
 
 void wxOverlayImpl::BeginDrawing( wxDC* dc)
@@ -134,6 +210,11 @@ void wxOverlayImpl::BeginDrawing( wxDC* dc)
             cgbounds = CGDisplayBounds(CGMainDisplayID());
             ySize = cgbounds.size.height;
         }
+
+        wxOSXOverlayWindow* wxoverlay = (wxOSXOverlayWindow*) m_overlayWindow;
+        NSBitmapImageRep* rep = wxoverlay.overlayView.bitmapImageRep;
+        m_overlayContext = [[NSGraphicsContext graphicsContextWithBitmapImageRep:rep] CGContext];
+        wxASSERT_MSG(  m_overlayContext != NULL , _("Couldn't init the context on the overlay window") );
 
         wxGraphicsContext* ctx = wxGraphicsContext::CreateFromNative( m_overlayContext );
         ctx->Translate(0, ySize);
@@ -155,6 +236,9 @@ void wxOverlayImpl::EndDrawing( wxDC* dc)
         win_impl->SetGraphicsContext(NULL);
 
     CGContextFlush( m_overlayContext );
+    m_overlayContext = NULL;
+    wxOSXOverlayWindow* wxoverlay = (wxOSXOverlayWindow*) m_overlayWindow;
+    [wxoverlay.overlayView setNeedsDisplay:YES];
 }
 
 void wxOverlayImpl::Clear(wxDC* dc)
