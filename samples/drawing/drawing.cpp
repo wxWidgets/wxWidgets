@@ -2108,7 +2108,7 @@ void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
 
 
 #if wxUSE_DC_TRANSFORM_MATRIX
-#include <wx/valnum.h>
+#include "wx/valnum.h"
 
 class TransformDataDialog : public wxDialog
 {
