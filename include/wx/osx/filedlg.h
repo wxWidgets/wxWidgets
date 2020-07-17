@@ -86,6 +86,7 @@ protected:
     virtual wxWindow* CreateFilterPanel(wxWindow *extracontrol);
     void DoOnFilterSelected(int index);
     virtual void OnFilterSelected(wxCommandEvent &event);
+    int GetMatchingFilterExtension(const wxString& filename);
 
     wxArrayString m_filterExtensions;
     wxArrayString m_filterNames;
