@@ -109,11 +109,6 @@ NSArray* GetTypesFromExtension( const wxString extensiongroup, wxArrayString& ex
         extensions.Add(extension.Lower());
         wxCFStringRef cfext(extension);
         [types addObject: (NSString*)cfext.AsNSString()  ];
-#if 0
-        // add support for classic fileType / creator here
-        wxUint32 fileType, creator;
-        // extension -> mactypes
-#endif
     }
     [types autorelease];
     return types;
@@ -349,6 +344,36 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     }
 }
 
+int wxFileDialog::GetMatchingFilterExtension(const wxString& filename)
+{
+    int index = -1;
+    for ( size_t i = 0; i < m_filterExtensions.GetCount(); ++i )
+    {
+        NSArray* types = GetTypesFromExtension(m_filterExtensions[i], m_currentExtensions);
+        wxUnusedVar(types);
+        if ( m_currentExtensions.GetCount() == 0 )
+        {
+            index = i;
+            break;
+        }
+
+        for ( size_t j = 0; j < m_currentExtensions.GetCount(); ++j )
+        {
+            if ( filename.EndsWith(m_currentExtensions[j]) )
+            {
+                index = i;
+                break;
+            }
+        }
+        if ( index >= 0 )
+            break;
+    }
+    if ( index == -1 )
+        index = 0;
+
+    return index;
+}
+
 int wxFileDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -379,6 +404,12 @@ int wxFileDialog::ShowModal()
 
     m_useFileTypeFilter = m_filterExtensions.GetCount() > 1;
 
+    // native behaviour on macos is to enable just every file type
+    // in a file open dialog that could be handled, without a file
+    // filter choice control
+    // wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES allows to override
+    // that and get the same behaviour as other platforms have ...
+
     if( HasFlag(wxFD_OPEN) )
     {
         if ( !(wxSystemOptions::HasOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES ) && (wxSystemOptions::GetOptionInt( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES ) == 1)) )
@@ -394,35 +425,8 @@ int wxFileDialog::ShowModal()
     }
     else if ( m_useFileTypeFilter )
     {
-        types = nil;
-        bool useDefault = true;
-        for ( size_t i = 0; i < m_filterExtensions.GetCount(); ++i )
-        {
-            types = GetTypesFromExtension(m_filterExtensions[i], m_currentExtensions);
-            if ( m_currentExtensions.GetCount() == 0 )
-            {
-                useDefault = false;
-                m_firstFileTypeFilter = i;
-                break;
-            }
-            
-            for ( size_t j = 0; j < m_currentExtensions.GetCount(); ++j )
-            {
-                if ( m_fileName.EndsWith(m_currentExtensions[j]) )
-                {
-                    m_firstFileTypeFilter = i;
-                    useDefault = false;
-                    break;
-                }
-            }
-            if ( !useDefault )
-                break;
-        }
-        if ( useDefault )
-        {
-            types = GetTypesFromExtension(m_filterExtensions[0], m_currentExtensions);
-            m_firstFileTypeFilter = 0;
-        }
+        m_firstFileTypeFilter = GetMatchingFilterExtension(m_fileName);
+        types = GetTypesFromExtension(m_filterExtensions[m_firstFileTypeFilter], m_currentExtensions);
     }
 
     OSXBeginModalDialog();
@@ -526,9 +530,9 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
             if (m_filterChoice)
-            {
                 m_filterIndex = m_filterChoice->GetSelection();
-            }
+            else
+                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
     }
     else
@@ -538,11 +542,6 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
         {
             panel = oPanel;
             result = wxID_OK;
-
-            if (m_filterChoice)
-            {
-                m_filterIndex = m_filterChoice->GetSelection();
-            }
 
             bool isFirst = true;
             for (NSURL* filename in [oPanel URLs])
@@ -559,6 +558,11 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
                     isFirst = false;
                 }
             }
+
+            if (m_filterChoice)
+                 m_filterIndex = m_filterChoice->GetSelection();
+            else
+                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
     }
     SetReturnCode(result);
