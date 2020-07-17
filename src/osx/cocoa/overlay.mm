@@ -55,7 +55,7 @@
 {
     
 }
-- (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag;
+- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag;
 
 @property (retain) wxOSXOverlayView *overlayView;
 
@@ -64,7 +64,7 @@
 
 @implementation wxOSXOverlayWindow
 
-- (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag
+- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag
 {
     self = [super initWithContentRect:contentRect styleMask:style backing:backingStoreType defer:flag];
     if ( self )
