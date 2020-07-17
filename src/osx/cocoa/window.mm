@@ -901,6 +901,8 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
 }
 
+#if 0
+
 - (NSTrackingRectTag)addTrackingRect:(NSRect)rect owner:(id)owner userData:(void *)data assumeInside:(BOOL)assumeInside
 {
     NSTrackingRectTag tag = [super addTrackingRect:rect owner:owner userData:data assumeInside:assumeInside];
@@ -923,6 +925,8 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
     [super removeTrackingRect:tag];
 }
+
+#endif
 
 #if wxOSX_USE_NATIVE_FLIPPED
 - (BOOL)isFlipped
