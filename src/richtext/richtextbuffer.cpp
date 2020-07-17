@@ -641,7 +641,7 @@ int wxRichTextObject::ConvertTenthsMMToPixels(wxDC& dc, int units) const
     if (GetBuffer())
         scale = GetBuffer()->GetScale() / GetBuffer()->GetDimensionScale();
     
-#if __WXOSX__
+#ifdef __WXOSX__
     int dpi = 72;
 #else
     int dpi = dc.GetPPI().x;
@@ -677,7 +677,7 @@ int wxRichTextObject::ConvertPixelsToTenthsMM(wxDC& dc, int pixels) const
     if (GetBuffer())
         scale = GetBuffer()->GetScale();
 
-#if __WXOSX__
+#ifdef __WXOSX__
     int dpi = 72;
 #else
     int dpi = dc.GetPPI().x;
