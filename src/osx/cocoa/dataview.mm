@@ -2399,9 +2399,20 @@ bool wxCocoaDataViewControl::Update(const wxDataViewColumn *columnPtr)
     return false;
 }
 
-bool wxCocoaDataViewControl::Update(const wxDataViewItem& WXUNUSED(parent), const wxDataViewItem& item)
+bool wxCocoaDataViewControl::Update(const wxDataViewItem& parent, const wxDataViewItem& item)
 {
-    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    if (GetSortingColumn())
+    {
+        if (parent.IsOk())
+            [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
+        else
+            [m_OutlineView reloadData];
+    }
+    else
+    {
+        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    }
+
     return true;
 }
 
