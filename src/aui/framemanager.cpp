@@ -633,6 +633,8 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 
 wxAuiManager::~wxAuiManager()
 {
+    UnInit();
+
     // NOTE: It's possible that the windows have already been destroyed by the
     // time this dtor is called, so this loop can result in memory access via
     // invalid pointers, resulting in a crash.  So it will be disabled while
@@ -953,9 +955,10 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
 }
 
 
-// UnInit() must be called, usually in the destructor
-// of the frame class.   If it is not called, usually this
-// will result in a crash upon program exit
+// UnInit() is called automatically by wxAuiManager itself when either the
+// manager itself or its associated frame is destroyed, but can also be called
+// explicitly, so make it safe to call it multiple times and just do nothing
+// during any calls but the first one.
 void wxAuiManager::UnInit()
 {
     if (m_frame)
