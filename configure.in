@@ -2818,13 +2818,15 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             AC_MSG_RESULT([yes])
         fi
 
-        dnl Disable the use of lzma, webp and zstd in built-in libtiff explicitly, as
-        dnl otherwise we'd depend on the system libraries, which is typically
-        dnl undesirable when using builtin libraries. If we use lzma ourselves, keep it
-        dnl enabled.
-        ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
+        dnl Disable the use of lzma, jbig, webp and zstd in built-in libtiff
+        dnl explicitly, as otherwise we'd depend on the system libraries, which
+        dnl is typically undesirable when using builtin libraries. If we use
+        dnl lzma ourselves, keep it enabled (note that we must still define the
+        dnl variable used below).
         if test "$wxUSE_LIBLZMA" = "no"; then
-            ac_configure_args="$ac_configure_args --disable-lzma"
+            tiff_lzma_option=--disable-lzma
+        else
+            tiff_lzma_option=--enable-lzma
         fi
         if test "$wxUSE_LIBJPEG" = "no"; then
             dnl we have to prevent the builtin libtiff configure from building the
@@ -2833,12 +2835,17 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl (which will be passed to it anyhow as configure passes arguments to
             dnl the top-level script to all the other ones called recursively), so
             dnl we need to hack around this
-            ac_configure_args="$ac_configure_args --disable-jpeg"
+            tiff_jpeg_option=--disable-jpeg
+        else
+            tiff_jpeg_option=--enable-jpeg
         fi
-        dnl We don't provide a built-in version of the libjbig library, so
-        dnl disable it for the builtin libtiff.
-        ac_configure_args="$ac_configure_args --disable-jbig"
-        AC_CONFIG_SUBDIRS([src/tiff])
+
+        AX_SUBDIRS_CONFIGURE([src/tiff],
+            [[--disable-jbig],
+             [--disable-webp],
+             [--disable-zstd],
+             [$tiff_lzma_option],
+             [$tiff_jpeg_option]])
     fi
 fi
 
