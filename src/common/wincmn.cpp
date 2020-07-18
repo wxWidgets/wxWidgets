@@ -101,9 +101,12 @@ bool IsInCaptureStack(wxWindowBase* win);
 
 } // wxMouseCapture
 
-// We consider 96 DPI to be the standard value, this is correct at least for
-// MSW, but could conceivably need adjustment for the other platforms.
+// Most platforms use 96 DPI by default, but Mac traditionally uses 72.
+#ifdef __WXOSX__
+static const int BASELINE_DPI = 72;
+#else
 static const int BASELINE_DPI = 96;
+#endif
 
 // ----------------------------------------------------------------------------
 // static data
@@ -808,6 +811,11 @@ static wxSize GetDPIHelper(const wxWindowBase* w)
 }
 
 double wxWindowBase::GetContentScaleFactor() const
+{
+    return GetDPIScaleFactor();
+}
+
+double wxWindowBase::GetDPIScaleFactor() const
 {
     const wxSize dpi = GetDPIHelper(this);
 

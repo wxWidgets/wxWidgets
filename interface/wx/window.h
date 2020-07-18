@@ -1034,7 +1034,7 @@ public:
 
         A DPI-independent pixel is just a pixel at the standard 96 DPI
         resolution. To keep the same physical size at higher resolution, the
-        physical pixel value must be scaled by GetContentScaleFactor() but this
+        physical pixel value must be scaled by GetDPIScaleFactor() but this
         scaling may be already done by the underlying toolkit (GTK+, Cocoa,
         ...) automatically. This method performs the conversion only if it is
         not already done by the lower level toolkit and so by using it with
@@ -1110,7 +1110,7 @@ public:
 
     A DPI-independent pixel is just a pixel at the standard 96 DPI
     resolution. To keep the same physical size at higher resolution, the
-    physical pixel value must be scaled by GetContentScaleFactor() but this
+    physical pixel value must be scaled by GetDPIScaleFactor() but this
     scaling may be already done by the underlying toolkit (GTK+, Cocoa,
     ...) automatically. This method performs the conversion only if it is
     not already done by the lower level toolkit, For example, you may
@@ -1379,8 +1379,20 @@ public:
        Returns the magnification of the backing store of this window, eg 2.0
        for a window on a retina screen.
 
-       This factor should be used to determine the size of bitmaps and similar
-       "content-containing" windows appropriate for the current resolution.
+       @since 2.9.5
+    */
+    double GetContentScaleFactor() const;
+
+    /**
+       Returns the ratio of the DPI used by this window to the standard DPI.
+
+       The returned value is 1 for standard DPI screens or 2 for "200%
+       scaling".
+
+       This factor should be used to increase the size of icons and similar
+       windows whose best size is not based on text metrics when using DPI
+       scaling.
+
        E.g. the program may load a 32px bitmap if the content scale factor is
        1.0 or 64px version of the same bitmap if it is 2.0 or bigger.
 
@@ -1388,9 +1400,9 @@ public:
        are already scaled by this factor by the underlying toolkit under some
        platforms. Use FromDIP() for anything window-related instead.
 
-       @since 2.9.5
-    */
-    double GetContentScaleFactor() const;
+        @since 3.1.4
+     */
+    double GetDPIScaleFactor() const;
 
     /**
         Returns the size of the left/right and top/bottom borders of this window in x

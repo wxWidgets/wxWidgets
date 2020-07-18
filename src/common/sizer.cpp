@@ -111,7 +111,7 @@ float wxSizerFlags::DoGetDefaultBorderInPx()
     if ( s_defaultBorderInPx.HasChanged(win) )
     {
         s_defaultBorderInPx.SetAtNewDPI(
-            (float)(5 * (win ? win->GetContentScaleFactor() : 1)));
+            (float)(5 * (win ? win->GetDPIScaleFactor() : 1.0)));
     }
     return s_defaultBorderInPx.Get();
 }

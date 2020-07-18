@@ -578,7 +578,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
             bmp = m_activeCloseBmp;
         }
 
-        wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+        wxAuiScaleBitmap(bmp, wnd->GetDPIScaleFactor());
 
         int offsetY = tab_y-1;
         if (m_flags & wxAUI_NB_BOTTOM)
@@ -755,7 +755,7 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
-    wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+    wxAuiScaleBitmap(bmp, wnd->GetDPIScaleFactor());
 
     rect = in_rect;
 
@@ -1125,7 +1125,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
         else
             bmp = m_disabledCloseBmp;
 
-        wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+        wxAuiScaleBitmap(bmp, wnd->GetDPIScaleFactor());
 
         wxRect rect(tab_x + tab_width - bmp.GetScaledWidth() - 1,
                     tab_y + (tab_height/2) - (bmp.GetScaledHeight()/2) + 1,
@@ -1273,7 +1273,7 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
-    wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
+    wxAuiScaleBitmap(bmp, wnd->GetDPIScaleFactor());
 
     rect = in_rect;
 

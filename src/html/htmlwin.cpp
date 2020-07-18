@@ -493,7 +493,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
 
     double pixelScale = 1.0;
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
-    pixelScale = GetContentScaleFactor();
+    pixelScale = GetDPIScaleFactor();
 #endif
 
     m_Parser->SetDC(&dc, pixelScale, 1.0);
