@@ -529,8 +529,10 @@ public:
         return wxSize( wxMax( client.x, best.x ), wxMax( client.y, best.y ) );
     }
 
-    // returns the magnification of the content of this window
-    // e.g. 2.0 for a window on a retina screen
+    // Return the magnification of the content of this window for the platforms
+    // using logical pixels different from physical ones, i.e. those for which
+    // wxHAVE_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
+    // returns 1, regardless of DPI scale factor returned by the function below.
     virtual double GetContentScaleFactor() const;
 
     // Return the ratio of the DPI used by this window to the standard DPI,

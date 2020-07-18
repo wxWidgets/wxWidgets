@@ -812,7 +812,12 @@ static wxSize GetDPIHelper(const wxWindowBase* w)
 
 double wxWindowBase::GetContentScaleFactor() const
 {
-    return GetDPIScaleFactor();
+    // By default, we assume that there is no mapping between logical and
+    // physical pixels and so the content scale factor is just 1. Only the
+    // platforms that do perform such mapping (currently ports for Apple
+    // platforms and GTK 3) override this function to return something
+    // different.
+    return 1.0;
 }
 
 double wxWindowBase::GetDPIScaleFactor() const
