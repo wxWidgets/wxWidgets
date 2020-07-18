@@ -18656,6 +18656,8 @@ fi
 fi
 
 
+export_compiler_flags=no
+
 if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
@@ -18708,6 +18710,8 @@ $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary
     OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
     OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
+
+    export_compiler_flags=yes
 fi
 
 if test "$wxUSE_MAC" = 1; then
@@ -18893,6 +18897,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+                    export_compiler_flags=yes
 fi
 
 fi
@@ -19095,7 +19101,15 @@ if test "$USE_UNIX" = 1 ; then
 
 fi
 
-export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+if test "$export_compiler_flags" = "yes"; then
+    export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+
+    if test "$cache_file" != "/dev/null"; then
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling caching due to a change in compiler options." >&5
+$as_echo "$as_me: WARNING: Disabling caching due to a change in compiler options." >&2;}
+        cache_file="/dev/null"
+    fi
+fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
