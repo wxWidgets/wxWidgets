@@ -224,6 +224,9 @@ bool wxBitmapRefData::Create( WXImage image )
     wxMacCocoaRetain(image);
 
     m_scaleFactor = wxOSXGetImageScaleFactor(image);
+    
+    // there are mult-resolution images which don't return proper pixel dimension
+    // so we cannot assert here
 
     return true;
 }
@@ -236,6 +239,11 @@ bool wxBitmapRefData::Create(CGImageRef image, double scale)
     {
         size_t width = CGImageGetWidth(image);
         size_t height = CGImageGetHeight(image);
+
+        wxASSERT_MSG(
+                     (int)((int)(width/scale)*scale)==width &&
+                     (int)((int)(height/scale)*scale)==height
+                     , "only scalefactors leading to integral dimensions are supported");
 
         m_hBitmap = NULL;
         m_scaleFactor = scale;
@@ -279,6 +287,12 @@ bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
     size_t height = wxMax(1, h);
 
     m_scaleFactor = logicalscale;
+
+    wxASSERT_MSG(
+                 (int)((int)(width/logicalscale)*logicalscale)==width &&
+                 (int)((int)(height/logicalscale)*logicalscale)==height
+                 , "only scalefactors leading to integral dimensions are supported");
+    
     m_hBitmap = NULL;
 
     size_t bytesPerRow = GetBestBytesPerRow(width * 4);
@@ -1062,16 +1076,19 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
 
         if  ( type == wxBITMAP_TYPE_PNG )
         {
-            if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
+            int contentScaleFactor = int(wxOSXGetMainScreenContentScaleFactor() + 0.5 );
+            if ( contentScaleFactor > 1 )
             {
+                wxString specialName = wxString::Format("@%dx",contentScaleFactor);
+
                 wxFileName fn(filename);
                 fn.MakeAbsolute();
-                fn.SetName(fn.GetName()+"@2x");
+                fn.SetName(fn.GetName()+specialName);
 
                 if ( fn.Exists() )
                 {
                     fname = fn.GetFullPath();
-                    scale = 2.0;
+                    scale = contentScaleFactor;
                 }
             }
         }
@@ -1896,21 +1913,23 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                      int WXUNUSED(desiredHeight))
 {
     wxString ext = GetExtension().Lower();
-    wxCFStringRef resname(name);
-    wxCFStringRef resname2x(name+"@2x");
     wxCFStringRef restype(ext);
     double scale = 1.0;
     
     wxCFRef<CFURLRef> imageURL;
     
-    if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
+    int contentScaleFactor = int(wxOSXGetMainScreenContentScaleFactor() + 0.5 );
+    if ( contentScaleFactor > 1 )
     {
-        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname2x, restype, NULL));
-        scale = 2.0;
+        wxString specialName = wxString::Format("%s@%dx",name.c_str(),contentScaleFactor);
+        wxCFStringRef cfSpecialName(specialName);
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), cfSpecialName, restype, NULL));
+        scale = contentScaleFactor;
     }
     
     if ( imageURL.get() == NULL )
     {
+        wxCFStringRef resname(name);
         imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
         scale = 1.0;
     }
