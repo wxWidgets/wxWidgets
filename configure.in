@@ -5604,11 +5604,13 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
                 wx_cv_inotify_usable,
                 AC_LINK_IFELSE(
                     [AC_LANG_SOURCE([int main() { return inotify_init(); }])],
-                    [wx_cv_inotify_usable=yes; AC_DEFINE(wxHAS_INOTIFY) ],
+                    [wx_cv_inotify_usable=yes],
                     [wx_cv_inotify_usable=no]
                 )
             )
-            if test "$wx_cv_inotify_usable" = "no"; then
+            if test "$wx_cv_inotify_usable" = "yes"; then
+                AC_DEFINE(wxHAS_INOTIFY)
+            else
                 AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
                 if test "$ac_cv_header_sys_event_h" = "yes"; then
                     AC_DEFINE(wxHAS_KQUEUE)

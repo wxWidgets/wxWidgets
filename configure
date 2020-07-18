@@ -33166,8 +33166,7 @@ else
 int main() { return inotify_init(); }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  wx_cv_inotify_usable=yes; $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
-
+  wx_cv_inotify_usable=yes
 else
   wx_cv_inotify_usable=no
 
@@ -33178,7 +33177,10 @@ rm -f core conftest.err conftest.$ac_objext \
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_inotify_usable" >&5
 $as_echo "$wx_cv_inotify_usable" >&6; }
-            if test "$wx_cv_inotify_usable" = "no"; then
+            if test "$wx_cv_inotify_usable" = "yes"; then
+                $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
+
+            else
                 for ac_header in sys/event.h
 do :
   ac_fn_c_check_header_compile "$LINENO" "sys/event.h" "ac_cv_header_sys_event_h" "$ac_includes_default
