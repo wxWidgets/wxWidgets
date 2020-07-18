@@ -271,13 +271,4 @@ void wxGLCanvas::GTKInitImplicitContext()
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
-double wxGLCanvas::GetOpenGLScaleFactor() const
-{
-#ifdef __WXGTK3__
-    return GetContentScaleFactor();
-#else
-    return 1.0;
-#endif
-}
-
 #endif // wxUSE_GLCANVAS

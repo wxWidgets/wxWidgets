@@ -258,11 +258,6 @@ public:
     // as a parameter
     wxGLContextAttrs& GetGLCTXAttrs() { return m_GLCTXAttrs; }
 
-    // Return the factor to apply to transform window coordinates (e.g. sizes)
-    // to OpenGL coordinates: it can be different from 1 on the platforms where
-    // logical pixels are different from physical ones (i.e. wxGTK3 and wxOSX).
-    virtual double GetOpenGLScaleFactor() const;
-
     // deprecated methods using the implicit wxGLContext
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( wxGLContext* GetContext() const );

@@ -306,7 +306,7 @@ void TestGLCanvas::ResetProjectionMode()
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);
 
-    const wxSize ClientSize = GetClientSize() * GetOpenGLScaleFactor();
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     // It's up to the application code to update the OpenGL viewport settings.
     // In order to avoid extensive context switching, consider doing this in

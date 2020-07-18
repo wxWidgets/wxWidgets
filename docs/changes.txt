@@ -86,7 +86,7 @@ Changes in behaviour not resulting in compilation errors
 
 - wxGLCanvas now uses physical pixels on high DPI displays under platforms
   where they're different from logical ones (wxGTK3, wxOSX). Multiply logical
-  coordinates, e.g. returned by wxWindow::GetSize() by GetOpenGLScaleFactor()
+  coordinates, e.g. returned by wxWindow::GetSize() by GetContentScaleFactor()
   before using them with OpenGL functions.
 
 - wxGTK now uses wxID_NONE item ID for wxEVT_MENU_HIGHLIGHT events sent when
