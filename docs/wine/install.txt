@@ -367,7 +367,7 @@ configure --disable-static --enable-shared --enable-gui \
  --with-libjpeg --enable-debug_cntxt
 
 Compiling a sample won't work yet because 'winebuild' needs
-to be called, and the resuling C file compiled and linked.
+to be called, and the resulting C file compiled and linked.
 Plus, Windows DLLs need to be imported.
 
 Note that the documentation on the WINE web site on using
