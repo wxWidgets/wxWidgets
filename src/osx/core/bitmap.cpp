@@ -238,6 +238,11 @@ bool wxBitmapRefData::Create(CGImageRef image, double scale)
         size_t width = CGImageGetWidth(image);
         size_t height = CGImageGetHeight(image);
 
+        wxASSERT_MSG(
+                     (int)((int)(width/scale)*scale)==width &&
+                     (int)((int)(height/scale)*scale)==height
+                     , "only scalefactors leading to integral dimensions are supported");
+
         m_hBitmap = NULL;
         m_scaleFactor = scale;
 
@@ -280,6 +285,12 @@ bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
     size_t height = wxMax(1, h);
 
     m_scaleFactor = logicalscale;
+
+    wxASSERT_MSG(
+                 (int)((int)(width/logicalscale)*logicalscale)==width &&
+                 (int)((int)(height/logicalscale)*logicalscale)==height
+                 , "only scalefactors leading to integral dimensions are supported");
+
     m_hBitmap = NULL;
 
     size_t bytesPerRow = GetBestBytesPerRow(width * 4);
