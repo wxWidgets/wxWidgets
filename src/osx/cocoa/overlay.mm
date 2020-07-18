@@ -181,7 +181,7 @@ void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
 
 void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
 {
-    wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
+    wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
 
     m_window = dc->GetWindow();
     m_x = x ;
@@ -190,7 +190,7 @@ void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
     m_height = height ;
 
     CreateOverlayWindow(dc);
-    wxASSERT_MSG(m_overlayWindow != NULL, _("Couldn't create the overlay window"));
+    wxASSERT_MSG(m_overlayWindow != NULL, "Couldn't create the overlay window");
 }
 
 void wxOverlayImpl::BeginDrawing( wxDC* dc)
@@ -214,7 +214,7 @@ void wxOverlayImpl::BeginDrawing( wxDC* dc)
         wxOSXOverlayWindow* wxoverlay = (wxOSXOverlayWindow*) m_overlayWindow;
         NSBitmapImageRep* rep = wxoverlay.overlayView.bitmapImageRep;
         m_overlayContext = [[NSGraphicsContext graphicsContextWithBitmapImageRep:rep] CGContext];
-        wxASSERT_MSG(  m_overlayContext != NULL , _("Couldn't init the context on the overlay window") );
+        wxASSERT_MSG(  m_overlayContext != NULL , "Couldn't init the context on the overlay window" );
 
         wxGraphicsContext* ctx = wxGraphicsContext::CreateFromNative( m_overlayContext );
         ctx->Translate(0, ySize);
@@ -243,7 +243,7 @@ void wxOverlayImpl::EndDrawing( wxDC* dc)
 
 void wxOverlayImpl::Clear(wxDC* dc)
 {
-    wxASSERT_MSG( IsOk() , _("You cannot Clear an overlay that is not inited") );
+    wxASSERT_MSG( IsOk() , "You cannot Clear an overlay that is not inited" );
 
     dc->GetGraphicsContext()->ClearRectangle(m_x - 1, m_y - 1, m_width + 2, m_height + 2);
 }
