@@ -17,6 +17,7 @@
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/metafile.h"
@@ -1076,14 +1077,12 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
 
         if  ( type == wxBITMAP_TYPE_PNG )
         {
-            int contentScaleFactor = int(wxOSXGetMainScreenContentScaleFactor() + 0.5 );
+            const int contentScaleFactor = wxRound(wxOSXGetMainScreenContentScaleFactor());
             if ( contentScaleFactor > 1 )
             {
-                wxString specialName = wxString::Format("@%dx",contentScaleFactor);
-
                 wxFileName fn(filename);
                 fn.MakeAbsolute();
-                fn.SetName(fn.GetName()+specialName);
+                fn.SetName(fn.GetName()+wxString::Format("@%dx",contentScaleFactor));
 
                 if ( fn.Exists() )
                 {
@@ -1918,12 +1917,11 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
     
     wxCFRef<CFURLRef> imageURL;
     
-    int contentScaleFactor = int(wxOSXGetMainScreenContentScaleFactor() + 0.5 );
+    const int contentScaleFactor = wxRound(wxOSXGetMainScreenContentScaleFactor());
     if ( contentScaleFactor > 1 )
     {
-        wxString specialName = wxString::Format("%s@%dx",name.c_str(),contentScaleFactor);
-        wxCFStringRef cfSpecialName(specialName);
-        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), cfSpecialName, restype, NULL));
+        wxCFStringRef resname(wxString::Format("%s@%dx", name, contentScaleFactor));
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
         scale = contentScaleFactor;
     }
     

@@ -624,7 +624,8 @@ ac_includes_default="\
 
 enable_option_checking=no
 enable_option_checking=fatal
-ac_subst_vars='LTLIBOBJS
+ac_subst_vars='subdirs_extra
+LTLIBOBJS
 LIBOBJS
 RESCOMP
 DLLTOOL
@@ -978,8 +979,8 @@ DIRECTFB_CFLAGS
 GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
-wxCFLAGS_C99
 subdirs
+wxCFLAGS_C99
 LIBTIFF_LIBS
 LIBTIFF_CFLAGS
 PKG_CONFIG
@@ -1418,8 +1419,7 @@ CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
 GST_LIBS'
-ac_subdirs_all='src/tiff
-src/expat/expat'
+ac_subdirs_all='src/expat/expat'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -18656,6 +18656,8 @@ fi
 fi
 
 
+export_compiler_flags=no
+
 if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
@@ -18708,6 +18710,8 @@ $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary
     OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
     OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
+
+    export_compiler_flags=yes
 fi
 
 if test "$wxUSE_MAC" = 1; then
@@ -18893,6 +18897,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+                    export_compiler_flags=yes
 fi
 
 fi
@@ -19095,7 +19101,15 @@ if test "$USE_UNIX" = 1 ; then
 
 fi
 
-export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+if test "$export_compiler_flags" = "yes"; then
+    export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+
+    if test "$cache_file" != "/dev/null"; then
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling caching due to a change in compiler options." >&5
+$as_echo "$as_me: WARNING: Disabling caching due to a change in compiler options." >&2;}
+        cache_file="/dev/null"
+    fi
+fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
@@ -22286,17 +22300,135 @@ $as_echo "no" >&6; }
 $as_echo "yes" >&6; }
         fi
 
-                                        ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
-        if test "$wxUSE_LIBLZMA" = "no"; then
-            ac_configure_args="$ac_configure_args --disable-lzma"
+                                                if test "$wxUSE_LIBLZMA" = "no"; then
+            tiff_lzma_option=--disable-lzma
+        else
+            tiff_lzma_option=--enable-lzma
         fi
         if test "$wxUSE_LIBJPEG" = "no"; then
-                                                                                    ac_configure_args="$ac_configure_args --disable-jpeg"
+                                                                                    tiff_jpeg_option=--disable-jpeg
+        else
+            tiff_jpeg_option=--enable-jpeg
         fi
-                        ac_configure_args="$ac_configure_args --disable-jbig"
 
 
-subdirs="$subdirs src/tiff"
+
+
+
+  # Various preliminary checks.
+
+
+
+
+
+    ax_dir="src/tiff"
+
+                    # Do not complain, so a configure script can configure whichever parts of a
+    # large source tree are present.
+    if test -d "$srcdir/$ax_dir"; then
+      ac_builddir=.
+
+case "$ax_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ax_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+      # Remove --cache-file, --srcdir, and --disable-option-checking arguments
+      # so they do not pile up.
+      ax_args=
+      ax_prev=
+      eval "set x $ac_configure_args"
+      shift
+      for ax_arg; do
+        if test -n "$ax_prev"; then
+          ax_prev=
+          continue
+        fi
+        case $ax_arg in
+          -cache-file | --cache-file | --cache-fil | --cache-fi | --cache-f \
+          | --cache- | --cache | --cach | --cac | --ca | --c)
+            ax_prev=cache_file ;;
+          -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+          | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
+          | --c=*)
+            ;;
+          --config-cache | -C)
+            ;;
+          -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+            ax_prev=srcdir ;;
+          -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+            ;;
+          -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+            ax_prev=prefix ;;
+          -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* \
+          | --p=*)
+            ;;
+          --disable-option-checking)
+            ;;
+          *) case $ax_arg in
+              *\'*) ax_arg=$($as_echo "$ax_arg" | sed "s/'/'\\\\\\\\''/g");;
+            esac
+            as_fn_append ax_args " '$ax_arg'" ;;
+        esac
+      done
+      # Always prepend --disable-option-checking to silence warnings, since
+      # different subdirs can have different --enable and --with options.
+      ax_args="--disable-option-checking $ax_args"
+      # Options that must be added as they are provided.
+      as_fn_append ax_args " '--disable-jbig'"
+      as_fn_append ax_args " '--disable-webp'"
+      as_fn_append ax_args " '--disable-zstd'"
+      as_fn_append ax_args " '$tiff_lzma_option'"
+      as_fn_append ax_args " '$tiff_jpeg_option'"
+
+      # New options that may need to be merged with existing options.
+
+      # New options that must replace existing options.
+
+      # Options that must be removed.
+
+      as_fn_append ax_args " '--srcdir=$ac_srcdir'"
+
+      # Add the subdirectory to the list of target subdirectories.
+      ax_subconfigures="$ax_subconfigures $ax_dir"
+      # Save the argument list for this subdirectory.
+                              ax_var=$(printf "$ax_dir" | tr -c "0-9a-zA-Z_" "_")
+      eval "ax_sub_configure_args_$ax_var=\"$ax_args\""
+      eval "ax_sub_configure_$ax_var=\"yes\""
+    else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: could not find source tree for $ax_dir" >&5
+$as_echo "$as_me: WARNING: could not find source tree for $ax_dir" >&2;}
+    fi
+
+
+
 
     fi
 fi
@@ -33034,8 +33166,7 @@ else
 int main() { return inotify_init(); }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  wx_cv_inotify_usable=yes; $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
-
+  wx_cv_inotify_usable=yes
 else
   wx_cv_inotify_usable=no
 
@@ -33046,7 +33177,10 @@ rm -f core conftest.err conftest.$ac_objext \
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_inotify_usable" >&5
 $as_echo "$wx_cv_inotify_usable" >&6; }
-            if test "$wx_cv_inotify_usable" = "no"; then
+            if test "$wx_cv_inotify_usable" = "yes"; then
+                $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
+
+            else
                 for ac_header in sys/event.h
 do :
   ac_fn_c_check_header_compile "$LINENO" "sys/event.h" "ac_cv_header_sys_event_h" "$ac_includes_default
@@ -40802,6 +40936,101 @@ LIBOBJS=$ac_libobjs
 
 LTLIBOBJS=$ac_ltlibobjs
 
+
+      ax_dir="src/tiff"
+
+      # Convert the path to the subdirectory into a shell variable name.
+      ax_var=$(printf "$ax_dir" | tr -c "0-9a-zA-Z_" "_")
+      ax_configure_ax_var=$(eval "echo \"\$ax_sub_configure_$ax_var\"")
+      if test "$no_recursion" != "yes" -a "x$ax_configure_ax_var" = "xyes"; then
+        subdirs_extra="$subdirs_extra $ax_dir"
+
+        ax_msg="=== configuring in $ax_dir ($(pwd)/$ax_dir)"
+        $as_echo "$as_me:${as_lineno-$LINENO}: $ax_msg" >&5
+        $as_echo "$ax_msg" >&6
+        as_dir="$ax_dir"; as_fn_mkdir_p
+        ac_builddir=.
+
+case "$ax_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ax_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+
+        ax_popdir=$(pwd)
+        cd "$ax_dir"
+
+        # Check for guested configure; otherwise get Cygnus style configure.
+        if test -f "$ac_srcdir/configure.gnu"; then
+          ax_sub_configure=$ac_srcdir/configure.gnu
+        elif test -f "$ac_srcdir/configure"; then
+          ax_sub_configure=$ac_srcdir/configure
+        elif test -f "$ac_srcdir/configure.in"; then
+          # This should be Cygnus configure.
+          ax_sub_configure=$ac_aux_dir/configure
+        else
+          { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: no configuration information is in $ax_dir" >&5
+$as_echo "$as_me: WARNING: no configuration information is in $ax_dir" >&2;}
+          ax_sub_configure=
+        fi
+
+        if test -n "$ax_sub_configure"; then
+          # Get the configure arguments for the current configure.
+          eval "ax_sub_configure_args=\"\$ax_sub_configure_args_${ax_var}\""
+
+          # Always prepend --prefix to ensure using the same prefix
+          # in subdir configurations.
+          ax_arg="--prefix=$prefix"
+          case $ax_arg in
+            *\'*) ax_arg=$($as_echo "$ax_arg" | sed "s/'/'\\\\\\\\''/g");;
+          esac
+          ax_sub_configure_args="'$ax_arg' $ax_sub_configure_args"
+          if test "$silent" = yes; then
+            ax_sub_configure_args="--silent $ax_sub_configure_args"
+          fi
+          # Make the cache file name correct relative to the subdirectory.
+          case $cache_file in
+            [\\/]* | ?:[\\/]* )
+              ax_sub_cache_file=$cache_file ;;
+            *) # Relative name.
+              ax_sub_cache_file=$ac_top_build_prefix$cache_file ;;
+          esac
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file" >&5
+$as_echo "$as_me: running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file" >&6;}
+          eval "\$SHELL \"$ax_sub_configure\" $ax_sub_configure_args --cache-file=\"$ax_sub_cache_file\"" \
+              || as_fn_error $? "$ax_sub_configure failed for $ax_dir" "$LINENO" 5
+        fi
+
+        cd "$ax_popdir"
+      fi
 
 
 : "${CONFIG_STATUS=./config.status}"

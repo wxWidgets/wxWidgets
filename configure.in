@@ -1177,6 +1177,11 @@ dnl ---------------------------------------------------------------------------
 dnl Mac-specific SDK/architectures checks
 dnl ---------------------------------------------------------------------------
 
+dnl If we modify compiler or compiler flags variables in non-trivial way (e.g.
+dnl by specifying the non-default architecture to use), we need to export them
+dnl after doing it, so that sub-configure scripts use the same values too.
+export_compiler_flags=no
+
 dnl Note that some checks here are OS-specific, and need to be done for any
 dnl port, while others are wxOSX-specific and are performed only for it inside
 dnl another test below.
@@ -1250,6 +1255,8 @@ if test "x$OSX_ARCH_OPTS" != "x"; then
     OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
     OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
+
+    export_compiler_flags=yes
 fi
 
 if test "$wxUSE_MAC" = 1; then
@@ -1384,6 +1391,12 @@ version or omitting it entirely."
         [AC_MSG_FAILURE([$error_message])]
     )
     AC_LANG_POP()
+
+    dnl If we are here, we must have set retest_macosx_linking to yes above,
+    dnl i.e. we must have modified compiler/linker variables to set
+    dnl SDK/availability options, and so we must export them to build any
+    dnl bundled third party libraries with them too.
+    export_compiler_flags=yes
 fi
 
 fi dnl USE_DARWIN
@@ -1541,8 +1554,20 @@ if test "$USE_UNIX" = 1 ; then
 fi
 
 dnl Values of these variables shouldn't change any longer from now on, we
-dnl export them to ensure they're picked up by sub-configure scripts.
-export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+dnl export them to ensure they're picked up by sub-configure scripts if they
+dnl were modified above.
+if test "$export_compiler_flags" = "yes"; then
+    export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+
+    if test "$cache_file" != "/dev/null"; then
+        dnl We must do this to avoid fatal errors due to inconsistent build
+        dnl environment from sub-configure scripts. We could do it just before
+        dnl actually running them, but doing it here is simpler and more robust
+        dnl (e.g. in case we add other sub-configure scripts later).
+        AC_MSG_WARN([Disabling caching due to a change in compiler options.])
+        cache_file="/dev/null"
+    fi
+fi
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -2793,13 +2818,15 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             AC_MSG_RESULT([yes])
         fi
 
-        dnl Disable the use of lzma, webp and zstd in built-in libtiff explicitly, as
-        dnl otherwise we'd depend on the system libraries, which is typically
-        dnl undesirable when using builtin libraries. If we use lzma ourselves, keep it
-        dnl enabled.
-        ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
+        dnl Disable the use of lzma, jbig, webp and zstd in built-in libtiff
+        dnl explicitly, as otherwise we'd depend on the system libraries, which
+        dnl is typically undesirable when using builtin libraries. If we use
+        dnl lzma ourselves, keep it enabled (note that we must still define the
+        dnl variable used below).
         if test "$wxUSE_LIBLZMA" = "no"; then
-            ac_configure_args="$ac_configure_args --disable-lzma"
+            tiff_lzma_option=--disable-lzma
+        else
+            tiff_lzma_option=--enable-lzma
         fi
         if test "$wxUSE_LIBJPEG" = "no"; then
             dnl we have to prevent the builtin libtiff configure from building the
@@ -2808,12 +2835,17 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl (which will be passed to it anyhow as configure passes arguments to
             dnl the top-level script to all the other ones called recursively), so
             dnl we need to hack around this
-            ac_configure_args="$ac_configure_args --disable-jpeg"
+            tiff_jpeg_option=--disable-jpeg
+        else
+            tiff_jpeg_option=--enable-jpeg
         fi
-        dnl We don't provide a built-in version of the libjbig library, so
-        dnl disable it for the builtin libtiff.
-        ac_configure_args="$ac_configure_args --disable-jbig"
-        AC_CONFIG_SUBDIRS([src/tiff])
+
+        AX_SUBDIRS_CONFIGURE([src/tiff],
+            [[--disable-jbig],
+             [--disable-webp],
+             [--disable-zstd],
+             [$tiff_lzma_option],
+             [$tiff_jpeg_option]])
     fi
 fi
 
@@ -5572,11 +5604,13 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
                 wx_cv_inotify_usable,
                 AC_LINK_IFELSE(
                     [AC_LANG_SOURCE([int main() { return inotify_init(); }])],
-                    [wx_cv_inotify_usable=yes; AC_DEFINE(wxHAS_INOTIFY) ],
+                    [wx_cv_inotify_usable=yes],
                     [wx_cv_inotify_usable=no]
                 )
             )
-            if test "$wx_cv_inotify_usable" = "no"; then
+            if test "$wx_cv_inotify_usable" = "yes"; then
+                AC_DEFINE(wxHAS_INOTIFY)
+            else
                 AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
                 if test "$ac_cv_header_sys_event_h" = "yes"; then
                     AC_DEFINE(wxHAS_KQUEUE)

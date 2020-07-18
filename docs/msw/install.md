@@ -301,7 +301,7 @@ debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 Using the Debugger and IDE in BDS or Turbo Explorer
 ---------------------------------------------------
 
-Doubleclick / open \%WXWIN\%\samples\minimal\borland.bdsproj. The current version
+Double-click / open \%WXWIN\%\samples\minimal\borland.bdsproj. The current version
 is to be used with a dynamic build of wxWidgets-made by running
 make -f Makefile.bcc -DBUILD=debug -DSHARED=1
 in wxWidgets\build\msw. You also need the `wxWidgets\lib\bcc_dll`
