@@ -39,5 +39,7 @@ jobs:
           pip3 install --no-warn-script-location codespell==1.17.1
 
       - name: Run codespell
+        env:
+          CODESPELL: $HOME/.local/bin/codespell
         run: |
-          $HOME/.local/bin/codespell -I misc/suppressions/codespell-words -x misc/suppressions/codespell-lines -S 'docs/changes.txt,docs/changes_30.txt,*.png,*.ico,*.bmp,*.cur,docs/doxygen/images' README.md docs include interface
+          ./misc/scripts/spellcheck
