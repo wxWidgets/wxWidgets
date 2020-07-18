@@ -2189,8 +2189,8 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
         void UpdateWithRow(int row)
         {
-            NSCell *cell = [m_view preparedCellAtColumn:m_column row:row];
-            unsigned cellWidth = [cell cellSize].width + 1/*round the float up*/;
+            NSSize size = [m_view viewAtColumn:m_column row:row makeIfNecessary:NO].frame.size;
+            unsigned cellWidth = size.width + 1;
 
             if ( m_indent )
                 cellWidth += m_indent * ([m_view levelForRow:row] + 1);
