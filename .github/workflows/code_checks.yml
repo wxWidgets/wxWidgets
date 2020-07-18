@@ -39,7 +39,5 @@ jobs:
           pip3 install --no-warn-script-location codespell==1.17.1
 
       - name: Run codespell
-        env:
-          CODESPELL: $HOME/.local/bin/codespell
         run: |
-          ./misc/scripts/spellcheck
+          CODESPELL=$HOME/.local/bin/codespell ./misc/scripts/spellcheck
