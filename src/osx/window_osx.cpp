@@ -2599,6 +2599,19 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     return handled ;
 }
 
+wxSize wxWindowMac::GetDPI() const
+{
+    wxNonOwnedWindow* tlw = MacGetTopLevelWindow() ;
+
+    double scaleFactor;
+    if ( tlw )
+        scaleFactor = tlw->GetContentScaleFactor();
+    else
+        scaleFactor = wxOSXGetMainScreenContentScaleFactor();
+
+    return wxSize(wxRound(scaleFactor*72.0),wxRound(scaleFactor*72.0));
+}
+
 //
 // wxWidgetImpl
 //
