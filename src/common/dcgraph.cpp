@@ -1045,7 +1045,9 @@ bool wxGCDCImpl::DoStretchBlit(
     wxCompositionMode mode = TranslateRasterOp(logical_func);
     if ( mode == wxCOMPOSITION_INVALID )
     {
-        wxFAIL_MSG( wxT("Blitting is not supported with this logical operation.") );
+        // Do *not* assert here, this function is often call from wxEVT_PAINT
+        // handler and asserting will just result in a reentrant call to the
+        // same handler and a crash.
         return false;
     }
 
