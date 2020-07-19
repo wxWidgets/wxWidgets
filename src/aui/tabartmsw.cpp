@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/aui/tabart.h"
@@ -213,6 +214,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         textRect.width -= m_closeBtnSize.x + wnd->FromDIP(3);
 
     dc.SetFont(wnd->GetFont());
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     dc.DrawLabel(page.caption, page.bitmap, textRect, wxALIGN_CENTRE);
 
     // draw focus rectangle
