@@ -34,6 +34,7 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
     SetGraphicsContext( wxGraphicsContext::Create() );
     m_ok = true ;
 #endif
+    m_contentScaleFactor = wxOSXGetMainScreenContentScaleFactor();
 }
 
 wxScreenDCImpl::~wxScreenDCImpl()
