@@ -1892,7 +1892,8 @@ HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
     // redirected.
     pInfo->dwFlags |= DOCHOSTUIFLAG_NO3DBORDER |
                       DOCHOSTUIFLAG_THEME |
-                      DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION;
+                      DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION |
+                      DOCHOSTUIFLAG_DPI_AWARE;
     return S_OK;
 }
 
