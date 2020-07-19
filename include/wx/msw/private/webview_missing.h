@@ -136,6 +136,38 @@ public:
             DWORD dwReserved) = 0;
 };
 
+class wxIInternetProtocolInfo : public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE ParseUrl(LPCWSTR pwzUrl,
+        PARSEACTION ParseAction,
+        DWORD dwParseFlags,
+        LPWSTR pwzResult,
+        DWORD cchResult,
+        DWORD *pcchResult,
+        DWORD dwReserved) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CombineUrl(LPCWSTR pwzBaseUrl,
+        LPCWSTR pwzRelativeUrl,
+        DWORD dwCombineFlags,
+        LPWSTR pwzResult,
+        DWORD cchResult,
+        DWORD *pcchResult,
+        DWORD dwReserved) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CompareUrl(LPCWSTR pwzUrl1,
+        LPCWSTR pwzUrl2,
+        DWORD dwCompareFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE QueryInfo(LPCWSTR pwzUrl,
+        QUERYOPTION OueryOption,
+        DWORD dwQueryFlags,
+        LPVOID pBuffer,
+        DWORD cbBuffer,
+        DWORD *pcbBuf,
+        DWORD dwReserved) = 0;
+};
+
 /* end of urlmon.h */
 
 /* mshtmhst.h */

@@ -40,6 +40,7 @@ namespace {
 
 DEFINE_GUID(wxIID_IInternetProtocolRoot,0x79eac9e3,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
 DEFINE_GUID(wxIID_IInternetProtocol,0x79eac9e4,0xbaf9,0x11ce,0x8c,0x82,0,0xaa,0,0x4b,0xa9,0xb);
+DEFINE_GUID(wxIID_IInternetProtocolInfo,0x79eac9ec,0xbaf9,0x11ce,0x8c, 0x82,0,0xaa,0,0x4b,0xa9,0x0b);
 DEFINE_GUID(wxIID_IDocHostUIHandler, 0xbd3f23c0, 0xd43e, 0x11cf, 0x89, 0x3b, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x1a);
 DEFINE_GUID(wxIID_IHTMLElement2,0x3050f434,0x98b5,0x11cf,0xbb,0x82,0,0xaa,0,0xbd,0xce,0x0b);
 DEFINE_GUID(wxIID_IMarkupServices,0x3050f4a0,0x98b5,0x11cf,0xbb,0x82,0,0xaa,0,0xbd,0xce,0x0b);
@@ -1621,7 +1622,61 @@ BEGIN_IID_TABLE(VirtualProtocol)
     ADD_RAW_IID(wxIID_IInternetProtocol)
 END_IID_TABLE;
 
-IMPLEMENT_IUNKNOWN_METHODS(VirtualProtocol)
+STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
+{
+    wxLogQueryInterface(wxT("VirtualProtocol"), riid);
+
+    if(riid == IID_IUnknown)
+    {
+        wxIInternetProtocolRoot *InternetProtocolRoot = this;
+        IUnknown *Unknown = InternetProtocolRoot;
+        *ppv = Unknown;
+        AddRef();
+        return S_OK;
+    }
+    if(riid == wxIID_IInternetProtocolRoot)
+    {
+        wxIInternetProtocolRoot *InternetProtocolRoot = this;
+        *ppv = InternetProtocolRoot;
+        AddRef();
+        return S_OK;
+    }
+    if(riid == wxIID_IInternetProtocol)
+    {
+        wxIInternetProtocol *InternetProtocol = this;
+        *ppv = InternetProtocol;
+        AddRef();
+        return S_OK;
+    }
+    if(riid == wxIID_IInternetProtocolInfo)
+    {
+        wxIInternetProtocolInfo *InternetProtocolInfo = this;
+        *ppv = InternetProtocolInfo;
+        AddRef();
+        return S_OK;
+    }
+
+    *ppv = NULL;
+    return (HRESULT) E_NOINTERFACE;
+}
+
+STDMETHODIMP_(ULONG) VirtualProtocol::AddRef()
+{
+    wxLogAddRef(wxT("VirtualProtocol"), m_cRef);
+    return ++m_cRef;
+}
+
+STDMETHODIMP_(ULONG) VirtualProtocol::Release()
+{
+    wxLogRelease(wxT("VirtualProtocol"), m_cRef);
+    if( --m_cRef == wxAutoULong(0))
+    {
+        delete this;
+        return 0;
+    }
+    else
+        return m_cRef;
+}
 
 HRESULT STDMETHODCALLTYPE VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProtocolSink *pOIProtSink,
                                wxIInternetBindInfo *pOIBindInfo, DWORD grfPI,
@@ -1687,6 +1742,84 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRe
         wxFAIL;
         return INET_E_DOWNLOAD_FAILURE;
     }
+}
+
+HRESULT STDMETHODCALLTYPE VirtualProtocol::CombineUrl(
+        LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
+        DWORD dwCombineFlags, LPWSTR pwzResult,
+        DWORD cchResult, DWORD *pcchResult,
+        DWORD dwReserved)
+{
+    wxUnusedVar(pwzBaseUrl);
+    wxUnusedVar(pwzRelativeUrl);
+    wxUnusedVar(dwCombineFlags);
+    wxUnusedVar(pwzResult);
+    wxUnusedVar(cchResult);
+    wxUnusedVar(pcchResult);
+    wxUnusedVar(dwReserved);
+
+    return INET_E_DEFAULT_ACTION;
+}
+
+HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
+        LPCWSTR pwzUrl, PARSEACTION ParseAction,
+        DWORD dwParseFlags, LPWSTR pwzResult,
+        DWORD cchResult, DWORD *pcchResult,
+        DWORD dwReserved)
+{
+    wxUnusedVar(pwzUrl);
+    wxUnusedVar(ParseAction);
+    wxUnusedVar(dwParseFlags);
+    wxUnusedVar(pwzResult);
+    wxUnusedVar(cchResult);
+    wxUnusedVar(pcchResult);
+    wxUnusedVar(dwReserved);
+
+    switch (ParseAction)
+    {
+        case PARSE_SECURITY_URL:
+        case PARSE_SECURITY_DOMAIN:
+        {
+            LPWSTR Result = L"http://localhost";
+            size_t Len = wcslen(Result);
+            if(cchResult <= Len)
+                return S_FALSE;
+            wcscpy(pwzResult, Result);
+            *pcchResult = Len;
+            return S_OK;
+        }
+    }
+
+    return INET_E_DEFAULT_ACTION;
+}
+
+HRESULT STDMETHODCALLTYPE VirtualProtocol::CompareUrl(
+        LPCWSTR pwzUrl1,
+        LPCWSTR pwzUrl2,
+        DWORD dwCompareFlags)
+{
+    wxUnusedVar(pwzUrl1);
+    wxUnusedVar(pwzUrl2);
+    wxUnusedVar(dwCompareFlags);
+
+    return INET_E_DEFAULT_ACTION;
+}
+
+HRESULT STDMETHODCALLTYPE VirtualProtocol::QueryInfo(
+        LPCWSTR pwzUrl, QUERYOPTION OueryOption,
+        DWORD dwQueryFlags, LPVOID pBuffer,
+        DWORD cbBuffer, DWORD *pcbBuf,
+        DWORD dwReserved)
+{
+    wxUnusedVar(pwzUrl);
+    wxUnusedVar(OueryOption);
+    wxUnusedVar(dwQueryFlags);
+    wxUnusedVar(pBuffer);
+    wxUnusedVar(cbBuffer);
+    wxUnusedVar(pcbBuf);
+    wxUnusedVar(dwReserved);
+
+    return INET_E_DEFAULT_ACTION;
 }
 
 BEGIN_IID_TABLE(ClassFactory)
