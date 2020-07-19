@@ -64,7 +64,7 @@ or specified via the -D command line option when running the cmake command.
 
 Option Name               | Type   | Default | Description
 ------------------------- | -----  | ------- | ----------------------------
-wxBUILD_SHARED            | BOOL   | ON      | Build shared libraries
+wxBUILD_SHARED            | BOOL   | ON      | Build shared or static libraries
 wxBUILD_TESTS             | STRING | OFF     | CONSOLE_ONLY, ALL or OFF
 wxBUILD_SAMPLES           | STRING | OFF     | SOME, ALL or OFF
 wxBUILD_DEMOS             | BOOL   | OFF     | Build demo applications
@@ -122,5 +122,5 @@ Your *CMakeLists.txt* would look like this:
 ...
 add_subdirectory(libs/wxWidgets)
 add_executable(myapp myapp.cpp)
-target_link_libraries(myapp net core base)
+target_link_libraries(myapp wx::net wx::core wx::base)
 ~~~
