@@ -2322,8 +2322,11 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 #if wxOSX_USE_COCOA
     if (EnsureIsValid())
     {
+        double scale = wxOSXGetMainScreenContentScaleFactor();
+        wxBitmap best = bmp.GetBestRepresentation( wxSize( w * scale,
+                                                  h * scale) );
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetImage());
+        wxOSXDrawNSImage( m_cgContext, &r, best.GetImage());
     }
 #else
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
