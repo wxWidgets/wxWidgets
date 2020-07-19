@@ -17,6 +17,7 @@
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/metafile.h"
@@ -1150,6 +1151,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
         {
             wxFileName fn(filename);
             fn.MakeAbsolute();
+            // TODO determine which resolutions should be loaded at all
             fn.SetName(fn.GetName()+"@2x");
 
             if ( fn.Exists() )
@@ -1982,21 +1984,22 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                      int WXUNUSED(desiredHeight))
 {
     wxString ext = GetExtension().Lower();
-    wxCFStringRef resname(name);
-    wxCFStringRef resname2x(name+"@2x");
     wxCFStringRef restype(ext);
     double scale = 1.0;
     
     wxCFRef<CFURLRef> imageURL;
     
-    if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
+    const int contentScaleFactor = wxRound(wxOSXGetMainScreenContentScaleFactor());
+    if ( contentScaleFactor > 1 )
     {
-        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname2x, restype, NULL));
-        scale = 2.0;
+        wxCFStringRef resname(wxString::Format("%s@%dx", name, contentScaleFactor));
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+        scale = contentScaleFactor;
     }
     
     if ( imageURL.get() == NULL )
     {
+        wxCFStringRef resname(name);
         imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
         scale = 1.0;
     }
