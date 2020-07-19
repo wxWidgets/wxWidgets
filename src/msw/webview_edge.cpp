@@ -325,6 +325,9 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
 
 ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
 {
+    if (!m_webView)
+        return NULL;
+
     ICoreWebView2Settings* settings;
     HRESULT hr = m_webView->get_Settings(&settings);
     if (FAILED(hr))
