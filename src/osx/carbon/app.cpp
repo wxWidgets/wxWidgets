@@ -325,6 +325,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
+#ifdef __WXOSX_COCOA__
 void wxCGDisplayReconfigurationCallBack(CGDirectDisplayID WXUNUSED(display), CGDisplayChangeSummaryFlags WXUNUSED(flags),
                                         void* WXUNUSED(userInfo))
 {
@@ -332,6 +333,7 @@ void wxCGDisplayReconfigurationCallBack(CGDirectDisplayID WXUNUSED(display), CGD
     // but for invalidating the cache these things don't matter yet
     wxDisplay::InvalidateCache();
 }
+#endif
 
 bool wxApp::OnInitGui()
 {
@@ -341,8 +343,10 @@ bool wxApp::OnInitGui()
     if ( !DoInitGui() )
         return false;
     
+#ifdef __WXOSX_COCOA__
     CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, NULL);
-
+#endif
+    
     return true ;
 }
 
