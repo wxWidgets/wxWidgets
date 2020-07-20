@@ -1,0 +1,1 @@
+All: Optionally forbid implicit wxString/char* conversions (Arrigo Marchiori).
