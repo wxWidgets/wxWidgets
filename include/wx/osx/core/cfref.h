@@ -68,8 +68,8 @@ template <class Type>
 inline Type* wxCFAutorelease(Type *r)
 {
     if ( r != NULL )
-        return (Type*)::CFAutorelease((CFTypeRef)r);
-    return NULL;
+        r = const_cast<Type*>(static_cast<const Type*>(::CFAutorelease(static_cast<CFTypeRef>(r))));
+    return r;
 }
 
 /*! @function   wxCFRetain
