@@ -154,7 +154,7 @@ public:
 
     void SetMin(ValueType min)
     {
-        this->DoSetMin(min);
+        this->DoSetMin(static_cast<LongestValueType>(min));
     }
 
     ValueType GetMin() const
@@ -164,7 +164,7 @@ public:
 
     void SetMax(ValueType max)
     {
-        this->DoSetMax(max);
+        this->DoSetMax(static_cast<LongestValueType>(max));
     }
 
     ValueType GetMax() const
@@ -192,7 +192,7 @@ public:
             if ( !control )
                 return false;
 
-            control->SetValue(NormalizeValue(*m_value));
+            control->SetValue(NormalizeValue(static_cast<LongestValueType>(*m_value)));
         }
 
         return true;
@@ -470,13 +470,15 @@ public:
     }
 
 private:
+    typedef typename Base::LongestValueType LongestValueType;
+
     void DoSetMinMax()
     {
         // NB: Do not use min(), it's not the smallest representable value for
         //     the floating point types but rather the smallest representable
         //     positive value.
-        this->DoSetMin(-std::numeric_limits<ValueType>::max());
-        this->DoSetMax( std::numeric_limits<ValueType>::max());
+        this->DoSetMin(static_cast<LongestValueType>(-std::numeric_limits<ValueType>::max()));
+        this->DoSetMax(static_cast<LongestValueType>( std::numeric_limits<ValueType>::max()));
     }
 };
 

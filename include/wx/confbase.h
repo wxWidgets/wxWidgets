@@ -305,7 +305,7 @@ public:
     { return DoWriteLong(key, value); }
 
   bool Write(const wxString& key, float value)
-    { return DoWriteDouble(key, value); }
+    { return DoWriteDouble(key, double(value)); }
 
   // Causes ambiguities in under OpenVMS
 #if !defined( __VMS )

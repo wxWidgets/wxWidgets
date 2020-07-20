@@ -279,7 +279,7 @@ class wxGraphicsGradientStop
 {
 public:
     wxGraphicsGradientStop(wxColour col = wxTransparentColour,
-                           float pos = 0.)
+                           float pos = 0.0f)
         : m_col(col),
           m_pos(pos)
     {
