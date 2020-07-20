@@ -459,7 +459,7 @@ void wxFsEventsFileSystemWatcher::PostChange(const wxFileName& oldFileName,
         wxFSW_EVENT_ATTRIB
     };
 
-    for ( int i = 0; i < WXSIZEOF(allEvents); i++ )
+    for ( unsigned i = 0; i < WXSIZEOF(allEvents); i++ )
     {
         if ( event & allEvents[i] )
         {
