@@ -1265,7 +1265,7 @@ wxImage wxBitmap::ConvertToImage() const
 #endif
             if ( hasMask )
             {
-                if ( *maskp++ == 0xFF )
+                if ( *maskp++ == 0x00 )
                 {
                     r = MASK_RED ;
                     g = MASK_GREEN ;
