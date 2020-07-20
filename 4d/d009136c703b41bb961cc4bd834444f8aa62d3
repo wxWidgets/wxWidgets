@@ -1,0 +1,1 @@
+All (GUI): Call wxAuiManager::UnInit() automatically now.
