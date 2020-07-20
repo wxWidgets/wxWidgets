@@ -802,7 +802,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             break;
     }
 
-    wxAuiScaleBitmap(bmp, window->GetContentScaleFactor());
+    wxAuiScaleBitmap(bmp, window->GetDPIScaleFactor());
 
     wxRect rect = _rect;
 

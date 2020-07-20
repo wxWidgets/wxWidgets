@@ -529,9 +529,15 @@ public:
         return wxSize( wxMax( client.x, best.x ), wxMax( client.y, best.y ) );
     }
 
-    // returns the magnification of the content of this window
-    // e.g. 2.0 for a window on a retina screen
+    // Return the magnification of the content of this window for the platforms
+    // using logical pixels different from physical ones, i.e. those for which
+    // wxHAVE_DPI_INDEPENDENT_PIXELS is defined. For the other ones, always
+    // returns 1, regardless of DPI scale factor returned by the function below.
     virtual double GetContentScaleFactor() const;
+
+    // Return the ratio of the DPI used by this window to the standard DPI,
+    // e.g. 1 for standard DPI screens and 2 for "200% scaling".
+    double GetDPIScaleFactor() const;
 
     // return the size of the left/right and top/bottom borders in x and y
     // components of the result respectively
@@ -961,7 +967,7 @@ public:
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by
-        // GetContentScaleFactor()) if necessary for the current platform.
+        // GetDPIScaleFactor()) if necessary for the current platform.
         //
         // To support monitor-specific resolutions, prefer using the non-static
         // member functions or use a valid (non-null) window pointer.

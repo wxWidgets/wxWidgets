@@ -60,8 +60,6 @@ public:
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
 
-    virtual double GetOpenGLScaleFactor() const wxOVERRIDE;
-
     // implement wxGLCanvasX11 methods
     // --------------------------------
 

@@ -376,11 +376,6 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
     return true;
 }
 
-double wxGLCanvasBase::GetOpenGLScaleFactor() const
-{
-    return 1.0;
-}
-
 // ============================================================================
 // compatibility layer for OpenGL 3 and OpenGL ES
 // ============================================================================

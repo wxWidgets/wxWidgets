@@ -358,7 +358,13 @@ wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
 
 void SetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
 {
-    const double scale = sDC.GetContentScaleFactor();
+    // When using DPI-independent pixels, the results of GetTextExtent() and
+    // similar don't depend on DPI anyhow.
+#ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+    static const int SVG_DPI = 96;
+
+    const double screenDPI = sDC.GetPPI().y;
+    const double scale = screenDPI / SVG_DPI;
     if ( scale > 1 )
     {
         // wxScreenDC uses the DPI of the main screen to determine the text
@@ -373,6 +379,7 @@ void SetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
         sDC.SetFont(scaledFont);
     }
     else
+#endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
     {
         sDC.SetFont(font);
     }

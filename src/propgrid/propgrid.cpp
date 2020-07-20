@@ -4610,7 +4610,7 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
 
     if ( !HasExtraStyle(wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
-        double scaleFactor = GetContentScaleFactor();
+        double scaleFactor = GetDPIScaleFactor();
         int dblh = (m_lineHeight*2);
         if ( !m_doubleBuffer )
         {

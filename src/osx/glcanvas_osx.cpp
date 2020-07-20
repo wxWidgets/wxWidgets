@@ -562,11 +562,6 @@ bool wxGLCanvas::IsAGLMultiSampleAvailable()
     return s_isMultiSampleAvailable != 0;
 }
 
-double wxGLCanvas::GetOpenGLScaleFactor() const
-{
-    return GetContentScaleFactor();
-}
-
 /* static */
 bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
 {
