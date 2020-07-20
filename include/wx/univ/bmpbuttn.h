@@ -23,7 +23,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxButtonNameStr)
+                   const wxString& name = wxASCII_STR(wxButtonNameStr))
     {
         Create(parent, id, bitmap, pos, size, style, validator, name);
     }
@@ -35,7 +35,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxASCII_STR(wxButtonNameStr));
 
     virtual void SetMargins(int x, int y) wxOVERRIDE
     {

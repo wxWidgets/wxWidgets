@@ -37,7 +37,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxWebKitCtrlNameStr)
+                    const wxString& name = wxASCII_STR(wxWebKitCtrlNameStr))
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
     }
@@ -47,7 +47,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxWebKitCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxWebKitCtrlNameStr));
     virtual ~wxWebKitCtrl();
 
     void LoadURL(const wxString &url);

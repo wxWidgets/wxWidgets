@@ -29,7 +29,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxFONTBTN_DEFAULT_STYLE,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxFontPickerWidgetNameStr)
+                 const wxString& name = wxASCII_STR(wxFontPickerWidgetNameStr))
     {
         Init();
 
@@ -43,7 +43,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFONTBTN_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFontPickerWidgetNameStr);
+                const wxString& name = wxASCII_STR(wxFontPickerWidgetNameStr));
 
     virtual wxColour GetSelectedColour() const wxOVERRIDE
         { return m_selectedColour; }

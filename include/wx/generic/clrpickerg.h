@@ -33,7 +33,7 @@ public:
                           const wxSize& size = wxDefaultSize,
                           long style = wxCLRBTN_DEFAULT_STYLE,
                           const wxValidator& validator = wxDefaultValidator,
-                          const wxString& name = wxColourPickerWidgetNameStr)
+                          const wxString& name = wxASCII_STR(wxColourPickerWidgetNameStr))
     {
         Create(parent, id, col, pos, size, style, validator, name);
     }
@@ -59,7 +59,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCLRBTN_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxColourPickerWidgetNameStr);
+                const wxString& name = wxASCII_STR(wxColourPickerWidgetNameStr));
 
     void OnButtonClick(wxCommandEvent &);
 

@@ -51,7 +51,7 @@ public:
                 if ( !expanded.empty() )
                     expanded += wxPERSIST_TREEBOOK_EXPANDED_SEP;
 
-                expanded += wxString::Format("%u", static_cast<unsigned>(n));
+                expanded += wxString::Format(wxASCII_STR("%u"), static_cast<unsigned>(n));
             }
         }
 

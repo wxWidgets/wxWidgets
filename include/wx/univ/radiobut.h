@@ -30,7 +30,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxRadioButtonNameStr)
+                  const wxString& name = wxASCII_STR(wxRadioButtonNameStr))
     {
         Init();
 
@@ -44,7 +44,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRadioButtonNameStr);
+                const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
     // override some base class methods
     virtual void ChangeValue(bool value) wxOVERRIDE;

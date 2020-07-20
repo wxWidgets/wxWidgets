@@ -38,7 +38,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
     {
         Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
     }
@@ -52,7 +52,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
     {
         Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
     }
@@ -67,7 +67,7 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -77,7 +77,7 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     virtual ~wxRadioBox();
 

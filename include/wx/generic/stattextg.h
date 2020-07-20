@@ -29,7 +29,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxStaticTextNameStr)
+                 const wxString& name = wxASCII_STR(wxStaticTextNameStr))
     {
         Init();
 
@@ -42,7 +42,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticTextNameStr);
+                const wxString& name = wxASCII_STR(wxStaticTextNameStr));
 
     virtual ~wxGenericStaticText();
 

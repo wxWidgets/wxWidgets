@@ -26,7 +26,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxRadioButtonNameStr)
+                  const wxString& name = wxASCII_STR(wxRadioButtonNameStr))
     {
         Init();
 
@@ -40,7 +40,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRadioButtonNameStr);
+                const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
     // implement the radio button interface
     virtual void SetValue(bool value);

@@ -184,7 +184,7 @@ public:
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxPGMAN_DEFAULT_STYLE,
-                           const wxString& name = wxPropertyGridManagerNameStr );
+                           const wxString& name = wxASCII_STR(wxPropertyGridManagerNameStr) );
 
     // Destructor.
     virtual ~wxPropertyGridManager();
@@ -228,7 +228,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
-                 const wxString& name = wxPropertyGridManagerNameStr );
+                 const wxString& name = wxASCII_STR(wxPropertyGridManagerNameStr) );
 
     // Enables or disables (shows/hides) categories according to parameter
     // enable.

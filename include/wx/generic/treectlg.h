@@ -48,7 +48,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
         : wxTreeCtrlBase(),
           wxScrollHelper(this)
     {
@@ -63,7 +63,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_DEFAULT_STYLE,
                 const wxValidator &validator = wxDefaultValidator,
-                const wxString& name = wxTreeCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -390,7 +390,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
     : wxGenericTreeCtrl(parent, id, pos, size, style, validator, name)
     {
     }

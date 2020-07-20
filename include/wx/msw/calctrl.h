@@ -19,7 +19,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS,
-                   const wxString& name = wxCalendarNameStr)
+                   const wxString& name = wxASCII_STR(wxCalendarNameStr))
     {
         Init();
 
@@ -32,7 +32,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCAL_SHOW_HOLIDAYS,
-                const wxString& name = wxCalendarNameStr);
+                const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
     virtual bool SetDate(const wxDateTime& date) wxOVERRIDE;
     virtual wxDateTime GetDate() const wxOVERRIDE;

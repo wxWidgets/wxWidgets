@@ -44,7 +44,7 @@ public:
 
     wxTextEntryDialog(wxWindow *parent,
                       const wxString& message,
-                      const wxString& caption = wxGetTextFromUserPromptStr,
+                      const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition)
@@ -54,7 +54,7 @@ public:
 
     bool Create(wxWindow *parent,
                 const wxString& message,
-                const wxString& caption = wxGetTextFromUserPromptStr,
+                const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                 const wxString& value = wxEmptyString,
                 long style = wxTextEntryDialogStyle,
                 const wxPoint& pos = wxDefaultPosition);
@@ -102,7 +102,7 @@ public:
     wxPasswordEntryDialog() { }
     wxPasswordEntryDialog(wxWindow *parent,
                       const wxString& message,
-                      const wxString& caption = wxGetPasswordFromUserPromptStr,
+                      const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition)
@@ -112,7 +112,7 @@ public:
 
     bool Create(wxWindow *parent,
                 const wxString& message,
-                const wxString& caption = wxGetPasswordFromUserPromptStr,
+                const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                 const wxString& value = wxEmptyString,
                 long style = wxTextEntryDialogStyle,
                 const wxPoint& pos = wxDefaultPosition);
@@ -129,7 +129,7 @@ private:
 
 WXDLLIMPEXP_CORE wxString
     wxGetTextFromUser(const wxString& message,
-                    const wxString& caption = wxGetTextFromUserPromptStr,
+                    const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                     const wxString& default_value = wxEmptyString,
                     wxWindow *parent = NULL,
                     wxCoord x = wxDefaultCoord,
@@ -138,7 +138,7 @@ WXDLLIMPEXP_CORE wxString
 
 WXDLLIMPEXP_CORE wxString
     wxGetPasswordFromUser(const wxString& message,
-                        const wxString& caption = wxGetPasswordFromUserPromptStr,
+                        const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                         const wxString& default_value = wxEmptyString,
                         wxWindow *parent = NULL,
                         wxCoord x = wxDefaultCoord,

@@ -32,7 +32,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
-                 const wxString &name = wxStaticLineNameStr )
+                 const wxString &name = wxASCII_STR(wxStaticLineNameStr) )
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -42,7 +42,7 @@ public:
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = wxLI_HORIZONTAL,
-                const wxString &name = wxStaticLineNameStr );
+                const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
 protected:
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;

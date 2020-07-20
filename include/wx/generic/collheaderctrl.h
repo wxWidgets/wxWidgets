@@ -23,7 +23,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxBORDER_NONE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxCollapsibleHeaderCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxCollapsibleHeaderCtrlNameStr))
     {
         Init();
 
@@ -37,7 +37,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxBORDER_NONE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxCollapsibleHeaderCtrlNameStr);
+        const wxString& name = wxASCII_STR(wxCollapsibleHeaderCtrlNameStr));
 
     virtual void SetCollapsed(bool collapsed = true) wxOVERRIDE;
 

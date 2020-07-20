@@ -186,7 +186,7 @@ private:
 class WXDLLIMPEXP_BASE wxFFileInputStream : public wxInputStream
 {
 public:
-    wxFFileInputStream(const wxString& fileName, const wxString& mode = "rb");
+    wxFFileInputStream(const wxString& fileName, const wxString& mode = wxASCII_STR("rb"));
     wxFFileInputStream(wxFFile& file);
     wxFFileInputStream(FILE *file);
     virtual ~wxFFileInputStream();
@@ -216,7 +216,7 @@ protected:
 class WXDLLIMPEXP_BASE wxFFileOutputStream : public wxOutputStream
 {
 public:
-    wxFFileOutputStream(const wxString& fileName, const wxString& mode = "wb");
+    wxFFileOutputStream(const wxString& fileName, const wxString& mode = wxASCII_STR("wb"));
     wxFFileOutputStream(wxFFile& file);
     wxFFileOutputStream(FILE *file);
     virtual ~wxFFileOutputStream();
@@ -249,7 +249,7 @@ class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
                                        public wxFFileOutputStream
 {
 public:
-    wxFFileStream(const wxString& fileName, const wxString& mode = "w+b");
+    wxFFileStream(const wxString& fileName, const wxString& mode = wxASCII_STR("w+b"));
 
     // override some virtual functions to resolve ambiguities, just as in
     // wxFileStream

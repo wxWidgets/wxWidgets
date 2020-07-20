@@ -30,7 +30,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxCLRBTN_DEFAULT_STYLE,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxColourPickerWidgetNameStr);
+                   const wxString& name = wxASCII_STR(wxColourPickerWidgetNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -39,7 +39,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCLRBTN_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxColourPickerWidgetNameStr);
+                const wxString& name = wxASCII_STR(wxColourPickerWidgetNameStr));
 
 protected:
     virtual void UpdateColour() wxOVERRIDE;

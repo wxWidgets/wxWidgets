@@ -55,7 +55,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxWebViewNameStr)
+           const wxString& name = wxASCII_STR(wxWebViewNameStr))
    {
        Create(parent, id, url, pos, size, style, name);
    }
@@ -68,7 +68,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxWebViewNameStr) wxOVERRIDE;
+           const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE;
 
     virtual void LoadURL(const wxString& url) wxOVERRIDE;
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) wxOVERRIDE;
@@ -190,7 +190,7 @@ public:
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
-                              const wxString& name = wxWebViewNameStr) wxOVERRIDE
+                              const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
     { return new wxWebViewIE(parent, id, url, pos, size, style, name); }
 };
 

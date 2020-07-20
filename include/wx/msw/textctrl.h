@@ -24,7 +24,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxTextCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTextCtrlNameStr))
     {
         Init();
 
@@ -38,7 +38,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxTextCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTextCtrlNameStr));
 
     // overridden wxTextEntry methods
     // ------------------------------

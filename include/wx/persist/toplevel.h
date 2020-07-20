@@ -51,7 +51,7 @@ public:
         return tlw->RestoreToGeometry(*this);
     }
 
-    virtual wxString GetKind() const wxOVERRIDE { return wxPERSIST_TLW_KIND; }
+    virtual wxString GetKind() const wxOVERRIDE { return wxASCII_STR(wxPERSIST_TLW_KIND); }
 
 private:
     virtual bool SaveField(const wxString& name, int value) const wxOVERRIDE
