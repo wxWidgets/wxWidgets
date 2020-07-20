@@ -45,6 +45,7 @@
 
 // mac
 #include "wx/osx/private.h"
+#include "wx/display.h"
 
 #if defined(WXMAKINGDLL_CORE)
 #   include <mach-o/dyld.h>
@@ -324,6 +325,14 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
+void wxCGDisplayReconfigurationCallBack(CGDirectDisplayID WXUNUSED(display), CGDisplayChangeSummaryFlags WXUNUSED(flags),
+                                        void* WXUNUSED(userInfo))
+{
+    // flags could be tested to know about removal, addition etc. right now this is called multiple times for a change
+    // but for invalidating the cache these things don't matter yet
+    wxDisplay::InvalidateCache();
+}
+
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
@@ -331,6 +340,8 @@ bool wxApp::OnInitGui()
 
     if ( !DoInitGui() )
         return false;
+    
+    CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, NULL);
 
     return true ;
 }
