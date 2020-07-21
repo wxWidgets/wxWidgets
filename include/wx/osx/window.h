@@ -120,6 +120,8 @@ public:
     virtual bool UnregisterHotKey(int hotkeyId) wxOVERRIDE;
 #endif // wxUSE_HOTKEY
 
+    virtual wxSize GetDPI() const wxOVERRIDE;
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
 
@@ -149,6 +151,7 @@ public:
     // --------------
 
     void OnMouseEvent( wxMouseEvent &event );
+    void OnDPIChanged( wxDPIChangedEvent& event );
 
     void MacOnScroll( wxScrollEvent&event );
 
@@ -290,6 +293,9 @@ public:
 
     // internal response to size events
     virtual void MacOnInternalSize() {}
+
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize       OSXMakeDPIFromScaleFactor(double scaleFactor);
 
 protected:
     // For controls like radio buttons which are genuinely composite

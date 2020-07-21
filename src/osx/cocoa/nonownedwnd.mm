@@ -321,6 +321,7 @@ static void *EffectiveAppearanceContext = &EffectiveAppearanceContext;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 - (void)windowWillEnterFullScreen:(NSNotification *)notification;
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification;
 
 @end
 
@@ -612,7 +613,43 @@ extern int wxOSXGetIdFromSelector(SEL action );
         [view setFrameSize: expectedframerect.size];
     }
 }
- 
+
+// from https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/CapturingScreenContents/CapturingScreenContents.html
+
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification
+{
+    NSWindow* theWindow = (NSWindow*)[notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [theWindow WX_implementation];
+    wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : NULL;
+    if (wxpeer)
+    {
+        CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
+        CGFloat oldBackingScaleFactor = [[[notification userInfo]
+                                          objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+                                         doubleValue];
+        if (newBackingScaleFactor != oldBackingScaleFactor)
+        {
+            const wxSize oldDPI = wxWindow::OSXMakeDPIFromScaleFactor(oldBackingScaleFactor);
+            const wxSize newDPI = wxWindow::OSXMakeDPIFromScaleFactor(newBackingScaleFactor);
+
+            wxDPIChangedEvent event(oldDPI, newDPI);
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+
+        }
+
+        NSColorSpace *newColorSpace = [theWindow colorSpace];
+        NSColorSpace *oldColorSpace = [[notification userInfo]
+                                       objectForKey:@"NSBackingPropertyOldColorSpaceKey"];
+        if (![newColorSpace isEqual:oldColorSpace])
+        {
+            wxSysColourChangedEvent event;
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+        }
+    }
+}
+
 - (void)addObservers:(NSWindow*)win
 {
     [win addObserver:self forKeyPath:@"effectiveAppearance"
