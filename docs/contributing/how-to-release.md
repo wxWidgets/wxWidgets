@@ -47,44 +47,34 @@ and then run it using the new DLLs.
 
 ## Pre-Release Steps
 
-1. Perform the following steps. You can run `build/tools/pre-release.sh` to do
-   the straightforward changes like updating the dates and checksums
-   automatically, but please also review and update the contents of the README
-   and announcement text.
+Perform the following steps. You can run `build/tools/pre-release.sh` to do
+the straightforward changes like updating the dates and checksums
+automatically, but please also review and update the contents of the README
+and announcement text.
 
-   The Post-Release step of the previous release will have updated
-   the micro version of this release. If this release represents a major
-   or minor release, these changes will have to be performed manually at
-   this point.
+The Post-Release step of the previous release will have updated
+the micro version of this release. If this release represents a major
+or minor release, these changes will have to be performed manually at
+this point.
 
-   Note that the best order depends on the release being prepared: for a
-   development release, `docs/publicity/announce.txt` contains the list of the
-   major changes since the last stable release and should be updated first, as
-   this part of it can then be copied verbatim to the corresponding section of
-   the README file. For the stable releases, it's probably more convenient to
-   update the README with the details of the changes first.
+Note that the best order depends on the release being prepared: for a
+development release, `docs/publicity/announce.txt` contains the list of the
+major changes since the last stable release and should be updated first, as
+this part of it can then be copied verbatim to the corresponding section of
+the README file. For the stable releases, it's probably more convenient to
+update the README with the details of the changes first.
 
-   Here is the list of the files, for reference:
-    * Update `docs/readme.txt`: version needs to be changed, content updated.
-    * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
-    * Put a date on the release line in `docs/changes.txt`.
-    * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
-    * Update the release announcement post in `docs/publicity/announce.txt`.
-    * Update `docs/msw/binaries.md`: at least the version, but possibly also
-      the list of supported compilers.
+Here is the list of the files, for reference:
+* Update `docs/readme.txt`: version needs to be changed, content updated.
+* Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
+* Update `docs/changes.txt`: put the date on the release line and copy the
+  actual changes from Git notes as instructed in the file.
+* Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
+* Update the release announcement post in `docs/publicity/announce.txt`.
+* Update `docs/msw/binaries.md`: at least the version, but possibly also
+  the list of supported compilers.
 
-2. For micro releases, review the changelog to determine if any ABI changes
-   have been made. If so, or if this is a major or minor release, update
-   the C:R:A settings in `build/tools/version.bkl`. Then from the
-   `build/bakesfiles` directory run
-
-        bakefile_gen
-
-   and from the root directory run
-
-        autoconf -B build/autoconf_prepend-include
-
-3. Commit the changes and tag the release using your GPG key:
+Commit the changes and tag the release using your GPG key:
 
     git tag -s -m 'Tag X.Y.Z release' vX.Y.Z
 
@@ -223,6 +213,10 @@ Then from the build/bakesfiles directory run
 and from the root directory run
 
         autoconf -B build/autoconf_prepend-include
+
+* Restore the description of the Git notes use and create a skeleton section
+  for the next release in `docs/changes.txt`.
+
 
 ## MSW Visual Studio Official Builds
 
