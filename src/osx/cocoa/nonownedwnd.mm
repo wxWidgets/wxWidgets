@@ -997,6 +997,13 @@ void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width,
 
 bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
 {
+    // macOS caches the contour of the drawn area, so when the region is changed and the content view redrawn
+    // the shape of the tlw does not change, this is a workaround I found that leads to a contour-refresh ...
+    NSRect formerFrame = [m_macWindow frame];
+    NSSize formerSize = [NSWindow contentRectForFrameRect:formerFrame styleMask:[m_macWindow styleMask]].size;
+    [m_macWindow setContentSize:NSMakeSize(10,10)];
+    [m_macWindow setContentSize:formerSize];
+
     [m_macWindow setOpaque:NO];
     [m_macWindow setBackgroundColor:[NSColor clearColor]];
 
