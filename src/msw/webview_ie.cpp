@@ -1762,7 +1762,7 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::CombineUrl(
 }
 
 HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
-        LPCWSTR pwzUrl, PARSEACTION ParseAction,
+        LPCWSTR pwzUrl, wxPARSEACTION ParseAction,
         DWORD dwParseFlags, LPWSTR pwzResult,
         DWORD cchResult, DWORD *pcchResult,
         DWORD dwReserved)
@@ -1777,8 +1777,8 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
 
     switch (ParseAction)
     {
-        case PARSE_SECURITY_URL:
-        case PARSE_SECURITY_DOMAIN:
+        case wxPARSE_SECURITY_URL:
+        case wxPARSE_SECURITY_DOMAIN:
         {
             LPWSTR Result = L"http://localhost";
             size_t Len = wcslen(Result);
@@ -1806,7 +1806,7 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::CompareUrl(
 }
 
 HRESULT STDMETHODCALLTYPE VirtualProtocol::QueryInfo(
-        LPCWSTR pwzUrl, QUERYOPTION OueryOption,
+        LPCWSTR pwzUrl, wxQUERYOPTION OueryOption,
         DWORD dwQueryFlags, LPVOID pBuffer,
         DWORD cbBuffer, DWORD *pcbBuf,
         DWORD dwReserved)

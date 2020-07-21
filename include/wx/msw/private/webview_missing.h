@@ -27,6 +27,10 @@ struct IHTMLDocument2;
 #define REFRESH_COMPLETELY 3
 #endif
 
+#ifndef INET_E_DEFAULT_ACTION
+#define INET_E_DEFAULT_ACTION ((HRESULT)0x800C0011L)
+#endif
+
 typedef enum __wxMIDL_IBindStatusCallback_0006
 {
     wxBSCF_FIRSTDATANOTIFICATION = 0x1,
@@ -136,11 +140,26 @@ public:
             DWORD dwReserved) = 0;
 };
 
+// This interface uses a couple of enums which are not defined in old MinGW
+// SDK headers, but we don't have any reliable way to test if they're actually
+// defined, so define our own enums, containing just the values we need: this
+// compiles everywhere and is ABI-compatible with the real enums.
+enum wxPARSEACTION
+{
+    wxPARSE_SECURITY_URL = 3,
+    wxPARSE_SECURITY_DOMAIN = 17
+};
+
+enum wxQUERYOPTION
+{
+    // We don't actually need any values in this one.
+};
+
 class wxIInternetProtocolInfo : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE ParseUrl(LPCWSTR pwzUrl,
-        PARSEACTION ParseAction,
+        wxPARSEACTION ParseAction,
         DWORD dwParseFlags,
         LPWSTR pwzResult,
         DWORD cchResult,
@@ -160,7 +179,7 @@ public:
         DWORD dwCompareFlags) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE QueryInfo(LPCWSTR pwzUrl,
-        QUERYOPTION OueryOption,
+        wxQUERYOPTION OueryOption,
         DWORD dwQueryFlags,
         LPVOID pBuffer,
         DWORD cbBuffer,

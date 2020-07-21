@@ -122,7 +122,7 @@ public:
             DWORD cchResult, DWORD *pcchResult,
             DWORD dwReserved) wxOVERRIDE;
     HRESULT STDMETHODCALLTYPE ParseUrl(
-            LPCWSTR pwzUrl, PARSEACTION ParseAction,
+            LPCWSTR pwzUrl, wxPARSEACTION ParseAction,
             DWORD dwParseFlags, LPWSTR pwzResult,
             DWORD cchResult, DWORD *pcchResult,
             DWORD dwReserved) wxOVERRIDE;
@@ -131,7 +131,7 @@ public:
             LPCWSTR pwzUrl2,
             DWORD dwCompareFlags) wxOVERRIDE;
     HRESULT STDMETHODCALLTYPE QueryInfo(
-            LPCWSTR pwzUrl, QUERYOPTION OueryOption,
+            LPCWSTR pwzUrl, wxQUERYOPTION OueryOption,
             DWORD dwQueryFlags, LPVOID pBuffer,
             DWORD cbBuffer, DWORD *pcbBuf,
             DWORD dwReserved) wxOVERRIDE;
