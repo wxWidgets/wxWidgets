@@ -1,0 +1,1 @@
+wxiOS: Fix bundled libpng to not crash on iOS < 10.13 (maccy2).
