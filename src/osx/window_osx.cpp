@@ -2621,10 +2621,8 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 
 wxSize wxWindowMac::GetDPI() const
 {
-    wxNonOwnedWindow* tlw = MacGetTopLevelWindow() ;
-
     double scaleFactor;
-    if ( tlw )
+    if ( wxNonOwnedWindow* tlw = MacGetTopLevelWindow() )
         scaleFactor = tlw->GetContentScaleFactor();
     else
         scaleFactor = wxOSXGetMainScreenContentScaleFactor();
