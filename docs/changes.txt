@@ -173,17 +173,8 @@ Changes in behaviour which may result in build errors
   to change your code and XRC definitions accordingly.
 
 
-3.1.4: (released ????-??-??)
+3.1.4: (released 2020-07-22)
 ----------------------------
-
-NOTE: This file is updated only before the release, please use
-
-    $ git log --notes=changelog --format='%N' v3.1.3..|grep .
-
-      to see all the change log entries since the last release and use
-
-    $ git notes --ref=changelog add -m 'wxPort: description.' to update it.
-
 
 INCOMPATIBLE CHANGES SINCE 3.1.3:
 
@@ -194,6 +185,92 @@ INCOMPATIBLE CHANGES SINCE 3.1.3:
 - Building on ARM Apple platforms using configure now targets macOS by
   default, and not iOS. Please use --with-osx_iphone explicitly if you need
   the latter.
+
+
+All:
+
+- Add natural sort functions (Hugo Elias, PB).
+- Add wxTempFFile class (Dummy).
+- Fix bug with multiple leading ".." in wxFileName::Normalize() (Fabian Cenedese).
+- Improve brush transparency support in wxSVGFileDC (Maarten Bent).
+- Optionally forbid implicit wxString/char* conversions (Arrigo Marchiori).
+- Add --disable-tests configure option (Hertatijanto Hartono).
+
+All (GUI):
+
+- Many wxGrid improvements:
+  - Live-resize wxGrid columns/rows, making it work with wxGTK3 and wxOSX too.
+  - Add activatable editors support, use it for boolean cells.
+  - Add support for copying selected cells to clipboard (Kvaz1r).
+  - Many bug fixes and usability improvements to selection.
+  - Improve wxGridCellChoiceEditor usability (Ian McInerney).
+  - Significantly optimize wxGrid::AutoSizeColumns() for big grids.
+  - Add ellipsization support.
+- Add support for wxGenericAnimationCtrl to XRC (Ilya Sinitsin).
+- Add wxDD_SHOW_HIDDEN and wxDD_MULTIPLE wxDirDialog flags (Ian McInerney, PB).
+- Add wxWebView::SetZoomFactor(float) (Hertatijanto Hartono).
+- Add wxWindow::DisableFocusFromKeyboard() (Tomay).
+- Allow overriding wxDataViewModal::HasValue() (Jorge Moraleda).
+- Call wxAuiManager::UnInit() automatically now.
+- Fix crash and layout problem in wxGenericDirCtrl (Maarten Bent).
+- Improve AUI appearance in dark mode (Daniel Kulp, Michel Le Bihan).
+- Upgrade libjpeg to 9d.
+- Enable SIMD use in builtin PNG library (Maarten Bent).
+
+wxGTK:
+
+- Add native wxSearchCtrl implementation (AliKet).
+- Several bug fixes and improvements in wxSpinCtrl.
+- Implement wxBU_EXACTFIT support in wxButton (Artur Wieczorek).
+- Allow using generic wxAnimationCtrl if wanted.
+- Fix a regression with crashes when using wxBufferedPaintDC.
+- Fix drawing bitmaps with masks using wxGraphicsContext under GTK2.
+- Fix position of popup menus on non-primary display.
+- Make wxUIActionSimulator much more reliable (AliKet).
+- Fix caret colour in wxTextCtrl with custom colours.
+
+wxMSW:
+
+- Add Edge-based wxWebView backend (Tobias Taschner).
+- Add wxUSE_DPI_AWARE_MANIFEST option (Maarten Bent).
+- Add support for private fonts to Direct2D renderer (Artur Wieczorek).
+- Adjust sizer borders on DPI change too (Maarten Bent).
+- Allow showing only scalable fonts in wxFontDialog (Gilbert Pelletier).
+- Fix building with gcc 10.1 in C++20 mode (PB).
+- Fix flicker when resizing MDI frames (Richard Reznicek).
+- Fix position of IME in wxSTC (wangqr).
+- Fix wxWindow::Reparent() for TLWs (Danail Stoychev).
+- Improve TAB handling in wxListBox (Artur Sochirca).
+- Make CMake build using MinGW consistent with configure (Maarten Bent).
+- Make wxDC::GetExtent() much faster (and a bit less precise).
+
+wxOSX:
+
+- Add support for macOS 11.
+- Make wxOverlay work under macOS Mojave and later.
+- Allow disabling automatic tabbing (Ian McInerney).
+- Avoid duplicate key down events for Ctrl-O.
+- Fix event generation, notably for mouse clicks, on wxStaticBitmap.
+- Make shaped windows work again.
+- Fix bugs in client size computation for some controls.
+- Invalidate display cache when system configuration changes.
+- Fix not showing more than 13 combobox items under 10.13+ (Dan Korn).
+- Fix regression with child process IO redirection in 3.1.3.
+- Fix regression with copying to clipboard in 3.1.3.
+- Fix wxMediaCtrl::Seek() for sub-second resolution (Scott Talbert).
+- Improve wxTextCtrl and wxSpinCtrl sizing (wangqr).
+- Send EVT_MENU_HIGHLIGHT when menu items are unhighlighted (Ian McInerney).
+- Stop including SDK headers from public wx headers (Lauri Nurmi).
+- Support background colour in wxDataViewCtrl attributes (Ian McInerney).
+
+wxiOS:
+
+- Fix bundled libpng to not crash on iOS < 10.13 (maccy2).
+- Implement wxMenu.
+
+wxQt:
+
+- Fix build with Qt 5.15 (Stefan Brüns).
 
 
 3.1.3: (released 2019-10-28)
