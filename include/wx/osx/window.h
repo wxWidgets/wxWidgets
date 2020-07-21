@@ -294,6 +294,9 @@ public:
     // internal response to size events
     virtual void MacOnInternalSize() {}
 
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize       OSXMakeDPIFromScaleFactor(double scaleFactor);
+
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;

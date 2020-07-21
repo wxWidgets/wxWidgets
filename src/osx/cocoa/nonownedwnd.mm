@@ -629,8 +629,8 @@ extern int wxOSXGetIdFromSelector(SEL action );
                                          doubleValue];
         if (newBackingScaleFactor != oldBackingScaleFactor)
         {
-            wxSize oldDPI((int)(oldBackingScaleFactor*72.0),(int)(oldBackingScaleFactor*72.0));
-            wxSize newDPI((int)(newBackingScaleFactor*72.0),(int)(newBackingScaleFactor*72.0));
+            const wxSize oldDPI = wxWindow::OSXMakeDPIFromScaleFactor(oldBackingScaleFactor);
+            const wxSize newDPI = wxWindow::OSXMakeDPIFromScaleFactor(newBackingScaleFactor);
 
             wxDPIChangedEvent event(oldDPI, newDPI);
             event.SetEventObject(wxpeer);

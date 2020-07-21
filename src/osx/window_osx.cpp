@@ -2620,6 +2620,14 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     return handled ;
 }
 
+/* static */
+wxSize wxWindowMac::OSXMakeDPIFromScaleFactor(double scaleFactor)
+{
+    const int dpi = wxRound(scaleFactor*72.0);
+
+    return wxSize(dpi, dpi);
+}
+
 wxSize wxWindowMac::GetDPI() const
 {
     double scaleFactor;
@@ -2628,7 +2636,7 @@ wxSize wxWindowMac::GetDPI() const
     else
         scaleFactor = wxOSXGetMainScreenContentScaleFactor();
 
-    return wxSize(wxRound(scaleFactor*72.0),wxRound(scaleFactor*72.0));
+    return OSXMakeDPIFromScaleFactor(scaleFactor);
 }
 
 //
