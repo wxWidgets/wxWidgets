@@ -398,6 +398,8 @@ extern void WXDLLIMPEXP_BASE wxAbort();
 //     to begin with...)
 #define wxCHECK_RET(cond, msg)       wxCHECK2_MSG(cond, return, msg)
 
+#if wxDEBUG_LEVEL && wxUSE_UNICODE
+
 // This macro checks if the evaluation of cond, having a return value of
 // OS Error type, is zero, ie no error occurred, and calls the assert handler
 // with the provided message if it isn't and finally traps if the special flag
@@ -416,6 +418,15 @@ extern void WXDLLIMPEXP_BASE wxAbort();
             wxTrap();                                                     \
         }                                                                 \
     wxSTATEMENT_MACRO_END
+
+#else
+
+#define wxVERIFY_NOERR_MSG_AT(cond, msg, file, line, func)                \
+    wxSTATEMENT_MACRO_BEGIN                                               \
+        cond;                                                             \
+    wxSTATEMENT_MACRO_END
+
+#endif
 
 // A version asserting at the current location.
 #define wxVERIFY_NOERR_MSG(cond, msg) \
