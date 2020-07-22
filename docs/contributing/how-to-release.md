@@ -142,7 +142,7 @@ any links, such as `3.1` to point to `x.y.z` by doing
     $ cd ~/public_html
     $ ln -sfn 3.y.z 3.y
 
-and edit `~/public_html/index.md` to add the link to the new release to it.
+and edit `~/public_html/index.html` to add the link to the new release to it.
 
 If the docs must be generated from the tag itself, and not from master, note
 that you need to apply the special commit which is always the tip of master
@@ -163,6 +163,10 @@ E.g. to create documentation for `v3.0.z` release:
     $ git reset --hard master
     $ git checkout master
     $ git branch -d my-tmp-branch
+
+Note that the docs web site currently uses Cloudflare for caching, which means
+that it won't update for several hours after the change, unless you purge the
+cache manually in the Cloudflare console (which requires an account).
 
 ## Announcement
 
