@@ -617,7 +617,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
 bool wxListBox::MSWSetTabStops(const wxVector<int>& tabStops)
 {
     return SendMessage(GetHwnd(), LB_SETTABSTOPS, (WPARAM)tabStops.size(),
-                       tabStops.empty() ? NULL : (LPARAM)&tabStops[0]) == TRUE;
+                       (LPARAM)(tabStops.empty() ? NULL : &tabStops[0])) == TRUE;
 }
 
 wxSize wxListBox::DoGetBestClientSize() const
