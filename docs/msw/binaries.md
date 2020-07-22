@@ -10,6 +10,7 @@ We provide pre-built binary files for the following compilers:
 * Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2
   (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
+* [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 9.2.0.
 
 Getting the files
 -----------------
