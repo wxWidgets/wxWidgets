@@ -9707,8 +9707,12 @@ void wxGrid::DoSetRowSize( int row, int height )
             void operator()(wxWindow* w) const
             {
                 wxSize size = w->GetClientSize();
-                size.y -= m_top;
-                w->RefreshRect(wxRect(wxPoint(0, m_top), size));
+                if ( size.y > m_top )
+                {
+                    size.y -= m_top;
+                    w->RefreshRect(wxRect(wxPoint(0, m_top), size));
+                }
+                //else: the area to refresh is not in view anyhow
             }
 
         private:
@@ -9890,8 +9894,11 @@ void wxGrid::DoSetColSize( int col, int width )
             void operator()(wxWindow* w) const
             {
                 wxSize size = w->GetClientSize();
-                size.x -= m_left;
-                w->RefreshRect(wxRect(wxPoint(m_left, 0), size));
+                if ( size.x > m_left )
+                {
+                    size.x -= m_left;
+                    w->RefreshRect(wxRect(wxPoint(m_left, 0), size));
+                }
             }
 
         private:
