@@ -1780,7 +1780,7 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
         case wxPARSE_SECURITY_URL:
         case wxPARSE_SECURITY_DOMAIN:
         {
-            LPWSTR Result = L"http://localhost";
+            const wchar_t Result[] = L"http://localhost";
             size_t Len = wcslen(Result);
             if(cchResult <= Len)
                 return S_FALSE;
