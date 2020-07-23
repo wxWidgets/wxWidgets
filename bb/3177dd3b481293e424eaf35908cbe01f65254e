@@ -1,0 +1,1 @@
+wxMSW: Add infinite repaint loop in wxListCtrl with wxLC_HRULES.
