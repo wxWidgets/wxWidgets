@@ -1,0 +1,32 @@
+#!/bin/sh
+CODESPELL=${CODESPELL-codespell}
+
+# Make sure we run codespell from the top wx directory.
+cd `dirname "$0"`/../..
+
+if ! command -v $CODESPELL > /dev/null; then
+    echo "ERROR: codespell not available." >&2
+    exit 127
+fi
+
+$CODESPELL \
+  -I misc/suppressions/codespell-words \
+  -x misc/suppressions/codespell-lines \
+  -S 'docs/changes.txt,docs/changes_30.txt,*.png,*.ico,*.bmp,*.cur,docs/doxygen/images' \
+  README.md docs include interface
+
+rc=$?
+
+if [ $rc != 0 ]; then
+    cat <<EOF
+
+=================================== ERROR ===================================
+Spell check failed, please correct the spelling mistakes at the locations
+listed above. If any of the reported mistakes are false positives, please add
+the lines provoking them to misc/suppressions/codespell-lines file or, if
+there are many occurrences of the same word, add this word to codespell-words
+file in the same directory.
+EOF
+>& 2
+    exit $rc
+fi

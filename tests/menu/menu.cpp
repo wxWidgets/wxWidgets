@@ -12,7 +12,7 @@
 
 #include "testprec.h"
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -584,10 +584,6 @@ void MenuTestCase::Events()
     // Invoke the accelerator.
     m_frame->Show();
     m_frame->SetFocus();
-#ifdef __WXGTK__
-    // Without this, test fails when run with other tests under Xvfb.
-    m_frame->Raise();
-#endif
     wxYield();
 
     wxUIActionSimulator sim;

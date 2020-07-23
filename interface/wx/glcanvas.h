@@ -752,7 +752,7 @@ enum
     platforms where wxWindow uses logical pixels, affected by the coordinate
     scaling, on high DPI displays. Thus, if you want to set the OpenGL view
     port to the size of entire window, you must multiply the result returned by
-    wxWindow::GetClientSize() by wxWindow::GetContentScaleFactor() before
+    wxWindow::GetClientSize() by wxGLCanvas::GetContentScaleFactor() before
     passing it to @c glViewport(). Same considerations apply to other OpenGL
     functions and other coordinates, notably those retrieved from wxMouseEvent
     in the event handlers.

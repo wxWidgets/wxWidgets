@@ -33,19 +33,19 @@ public:
     wxWebViewWebKit() {}
     wxWebViewWebKit(wxWindow *parent,
                     wxWindowID winID = wxID_ANY,
-                    const wxString& strURL = wxWebViewDefaultURLStr,
+                    const wxString& strURL = wxASCII_STR(wxWebViewDefaultURLStr),
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
-                    const wxString& name = wxWebViewNameStr)
+                    const wxString& name = wxASCII_STR(wxWebViewNameStr))
     {
         Create(parent, winID, strURL, pos, size, style, name);
     }
     bool Create(wxWindow *parent,
                 wxWindowID winID = wxID_ANY,
-                const wxString& strURL = wxWebViewDefaultURLStr,
+                const wxString& strURL = wxASCII_STR(wxWebViewDefaultURLStr),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
-                const wxString& name = wxWebViewNameStr) wxOVERRIDE;
+                const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE;
     virtual ~wxWebViewWebKit();
 
     virtual bool CanGoBack() const wxOVERRIDE;
@@ -181,7 +181,7 @@ public:
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
-                              const wxString& name = wxWebViewNameStr)
+                              const wxString& name = wxASCII_STR(wxWebViewNameStr))
     { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
 };
 

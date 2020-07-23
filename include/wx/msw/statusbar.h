@@ -26,7 +26,7 @@ public:
     wxStatusBar(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr)
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr))
     {
         m_pDC = NULL;
         (void)Create(parent, id, style, name);
@@ -35,7 +35,7 @@ public:
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     virtual ~wxStatusBar();
 

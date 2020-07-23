@@ -62,14 +62,14 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHD_DEFAULT_STYLE,
-                 const wxString& name = wxHeaderCtrlNameStr);
+                 const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHD_DEFAULT_STYLE,
-                const wxString& name = wxHeaderCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
      */
 
     // column-related methods
@@ -273,7 +273,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxHD_DEFAULT_STYLE,
-                       const wxString& name = wxHeaderCtrlNameStr)
+                       const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr))
     {
         Init();
 

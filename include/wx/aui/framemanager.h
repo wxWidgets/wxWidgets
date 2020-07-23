@@ -555,6 +555,7 @@ public:
 protected:
 
     // protected events
+    void OnDestroy(wxWindowDestroyEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnSize(wxSizeEvent& evt);

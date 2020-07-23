@@ -855,10 +855,10 @@ struct wxPrintfConvSpecParser
                         wxFAIL_MSG
                         (
                             wxString::Format
-                            (
+                            (wxASCII_STR(
                                 "Format string \"%s\" uses both positional "
                                 "parameters and '*' but this is not currently "
-                                "supported by this implementation, sorry.",
+                                "supported by this implementation, sorry."),
                                 fmt
                             )
                         );
@@ -929,11 +929,11 @@ struct wxPrintfConvSpecParser
             wxFAIL_MSG
             (
                 wxString::Format
-                (
+                (wxASCII_STR(
                     "wxVsnprintf() currently supports only %d arguments, "
                     "but format string \"%s\" defines more of them.\n"
                     "You need to change wxMAX_SVNPRINTF_ARGUMENTS and "
-                    "recompile if more are really needed.",
+                    "recompile if more are really needed."),
                     fmt, wxMAX_SVNPRINTF_ARGUMENTS
                 )
             );

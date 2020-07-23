@@ -282,6 +282,7 @@ public:
     // handler to use for these events, but this should never be needed.
     void UpdateUI(wxEvtHandler* source = NULL);
 
+#if wxUSE_MENUBAR
     // get the menu bar this menu is attached to (may be NULL, always NULL for
     // popup menus).  Traverse up the menu hierarchy to find it.
     wxMenuBar *GetMenuBar() const;
@@ -292,6 +293,7 @@ public:
 
     // is the menu attached to a menu bar (or is it a popup one)?
     bool IsAttached() const { return GetMenuBar() != NULL; }
+#endif
 
     // set/get the parent of this menu
     void SetParent(wxMenu *parent) { m_menuParent = parent; }
@@ -443,6 +445,8 @@ WX_DECLARE_EXPORTED_LIST(wxMenuInfoHelper, wxMenuInfoHelperList );
 // wxMenuBar
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MENUBAR
+
 class WXDLLIMPEXP_CORE wxMenuBarBase : public wxWindow
 {
 public:
@@ -584,6 +588,7 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxMenuBarBase);
 };
+#endif
 
 // ----------------------------------------------------------------------------
 // include the real class declaration

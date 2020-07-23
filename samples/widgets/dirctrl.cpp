@@ -118,7 +118,7 @@ protected:
     void Reset();
 
     // (re)create the m_dirCtrl
-    void CreateDirCtrl();
+    void CreateDirCtrl(bool defaultPath = false);
 
     // the controls
     // ------------
@@ -231,18 +231,32 @@ void DirCtrlWidgetsPage::CreateContent()
     sizerTop->Add(m_radioStdPath, 0, wxGROW | wxALL , 10);
     sizerTop->Add(m_dirCtrl, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
+    SetSizer(sizerTop);
+
     // final initializations
     Reset();
-
-    SetSizer(sizerTop);
 }
 
 void DirCtrlWidgetsPage::Reset()
 {
-    m_path->SetValue(m_dirCtrl->GetPath());
+    m_path->Clear();
+
+    m_chkDirOnly->SetValue(false);
+    m_chk3D->SetValue(false);
+    m_chkFirst->SetValue(false);
+    m_chkFilters->SetValue(false);
+    m_chkLabels->SetValue(false);
+    m_chkMulti->SetValue(false);
+
+    m_radioStdPath->SetSelection(0);
+
+    for ( size_t i = 0; i < WXSIZEOF(m_fltr); ++i )
+        m_fltr[i]->SetValue(false);
+
+    CreateDirCtrl(true);
 }
 
-void DirCtrlWidgetsPage::CreateDirCtrl()
+void DirCtrlWidgetsPage::CreateDirCtrl(bool defaultPath)
 {
     wxWindowUpdateLocker noUpdates(this);
 
@@ -260,10 +274,11 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
     if ( m_chkMulti->IsChecked() )
         style |= wxDIRCTRL_MULTIPLE;
 
+
     wxGenericDirCtrl *dirCtrl = new wxGenericDirCtrl(
         this,
         DirCtrlPage_Ctrl,
-        wxDirDialogDefaultFolderStr,
+        defaultPath ? wxDirDialogDefaultFolderStr : m_dirCtrl->GetPath(),
         wxDefaultPosition,
         wxDefaultSize,
         style

@@ -892,6 +892,12 @@ public:
         used for the text extent calculation, otherwise the currently selected
         font is used.
 
+        If @a string is empty, its horizontal extent is 0 but, for convenience
+        when using this function for allocating enough space for a possibly
+        multi-line string, its vertical extent is the same as the height of an
+        empty line of text. Please note that this behaviour differs from that
+        of GetTextExtent().
+
         @note This function works with both single-line and multi-line strings.
 
         @beginWxPerlOnly
@@ -953,6 +959,8 @@ public:
         If the optional parameter @a font is specified and valid, then it is
         used for the text extent calculation. Otherwise the currently selected
         font is.
+
+        If @a string is empty, its extent is 0 in both directions, as expected.
 
         @note This function only works with single-line strings.
 

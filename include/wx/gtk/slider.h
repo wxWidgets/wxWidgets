@@ -24,7 +24,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxSliderNameStr)
+             const wxString& name = wxASCII_STR(wxSliderNameStr))
     {
         Create( parent, id, value, minValue, maxValue,
                 pos, size, style, validator, name );
@@ -38,7 +38,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSL_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSliderNameStr);
+                const wxString& name = wxASCII_STR(wxSliderNameStr));
 
     // implement the base class pure virtuals
     virtual int GetValue() const wxOVERRIDE;

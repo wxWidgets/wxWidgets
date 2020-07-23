@@ -101,9 +101,12 @@ bool IsInCaptureStack(wxWindowBase* win);
 
 } // wxMouseCapture
 
-// We consider 96 DPI to be the standard value, this is correct at least for
-// MSW, but could conceivably need adjustment for the other platforms.
+// Most platforms use 96 DPI by default, but Mac traditionally uses 72.
+#ifdef __WXOSX__
+static const int BASELINE_DPI = 72;
+#else
 static const int BASELINE_DPI = 96;
+#endif
 
 // ----------------------------------------------------------------------------
 // static data
@@ -319,6 +322,8 @@ wxWindowBase::wxWindowBase()
     m_windowSizer = NULL;
     m_containingSizer = NULL;
     m_autoLayout = false;
+
+    m_disableFocusFromKbd = false;
 
 #if wxUSE_DRAG_AND_DROP
     m_dropTarget = NULL;
@@ -808,6 +813,16 @@ static wxSize GetDPIHelper(const wxWindowBase* w)
 }
 
 double wxWindowBase::GetContentScaleFactor() const
+{
+    // By default, we assume that there is no mapping between logical and
+    // physical pixels and so the content scale factor is just 1. Only the
+    // platforms that do perform such mapping (currently ports for Apple
+    // platforms and GTK 3) override this function to return something
+    // different.
+    return 1.0;
+}
+
+double wxWindowBase::GetDPIScaleFactor() const
 {
     const wxSize dpi = GetDPIHelper(this);
 

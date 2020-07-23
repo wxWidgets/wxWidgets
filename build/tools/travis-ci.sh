@@ -115,7 +115,9 @@ case $wxTOOLSET in
 
         echo 'travis_fold:start:testing'
         echo 'Testing...'
-        pushd tests && ./test && popd
+        pushd tests
+        ./test
+        popd
         echo 'travis_fold:end:testing'
 
         if [ "$wxSKIP_GUI" = 1 ]; then
@@ -126,7 +128,9 @@ case $wxTOOLSET in
         if [ "$wxUSE_XVFB" = 1 ]; then
             echo 'travis_fold:start:testing_gui'
             echo 'Testing GUI using Xvfb...'
-            pushd tests && xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui && popd
+            pushd tests
+            xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
+            popd
             echo 'travis_fold:end:testing_gui'
         fi
 

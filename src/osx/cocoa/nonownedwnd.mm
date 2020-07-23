@@ -321,6 +321,7 @@ static void *EffectiveAppearanceContext = &EffectiveAppearanceContext;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 - (void)windowWillEnterFullScreen:(NSNotification *)notification;
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification;
 
 @end
 
@@ -612,7 +613,43 @@ extern int wxOSXGetIdFromSelector(SEL action );
         [view setFrameSize: expectedframerect.size];
     }
 }
- 
+
+// from https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/CapturingScreenContents/CapturingScreenContents.html
+
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification
+{
+    NSWindow* theWindow = (NSWindow*)[notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [theWindow WX_implementation];
+    wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : NULL;
+    if (wxpeer)
+    {
+        CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
+        CGFloat oldBackingScaleFactor = [[[notification userInfo]
+                                          objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+                                         doubleValue];
+        if (newBackingScaleFactor != oldBackingScaleFactor)
+        {
+            const wxSize oldDPI = wxWindow::OSXMakeDPIFromScaleFactor(oldBackingScaleFactor);
+            const wxSize newDPI = wxWindow::OSXMakeDPIFromScaleFactor(newBackingScaleFactor);
+
+            wxDPIChangedEvent event(oldDPI, newDPI);
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+
+        }
+
+        NSColorSpace *newColorSpace = [theWindow colorSpace];
+        NSColorSpace *oldColorSpace = [[notification userInfo]
+                                       objectForKey:@"NSBackingPropertyOldColorSpaceKey"];
+        if (![newColorSpace isEqual:oldColorSpace])
+        {
+            wxSysColourChangedEvent event;
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+        }
+    }
+}
+
 - (void)addObservers:(NSWindow*)win
 {
     [win addObserver:self forKeyPath:@"effectiveAppearance"
@@ -997,6 +1034,13 @@ void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width,
 
 bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
 {
+    // macOS caches the contour of the drawn area, so when the region is changed and the content view redrawn
+    // the shape of the tlw does not change, this is a workaround I found that leads to a contour-refresh ...
+    NSRect formerFrame = [m_macWindow frame];
+    NSSize formerSize = [NSWindow contentRectForFrameRect:formerFrame styleMask:[m_macWindow styleMask]].size;
+    [m_macWindow setContentSize:NSMakeSize(10,10)];
+    [m_macWindow setContentSize:formerSize];
+
     [m_macWindow setOpaque:NO];
     [m_macWindow setBackgroundColor:[NSColor clearColor]];
 

@@ -406,7 +406,7 @@ public:
         //    fn.ReplaceEnvVariable("OPENWINHOME");
         //         // now fn.GetFullPath() == "$OPENWINHOME/lib/someFile"
     bool ReplaceEnvVariable(const wxString& envname,
-                            const wxString& replacementFmtString = "$%s",
+                            const wxString& replacementFmtString = wxS("$%s"),
                             wxPathFormat format = wxPATH_NATIVE);
 
         // replaces, if present in the path, the home directory for the given user
@@ -575,12 +575,12 @@ public:
 
         // returns the size in a human readable form
     wxString
-    GetHumanReadableSize(const wxString& nullsize = wxGetTranslation("Not available"),
+    GetHumanReadableSize(const wxString& nullsize = wxGetTranslation(wxASCII_STR("Not available")),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL) const;
     static wxString
     GetHumanReadableSize(const wxULongLong& sz,
-                         const wxString& nullsize = wxGetTranslation("Not available"),
+                         const wxString& nullsize = wxGetTranslation(wxASCII_STR("Not available")),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
 #endif // wxUSE_LONGLONG

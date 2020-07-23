@@ -4642,13 +4642,12 @@ void wxWindowGTK::SetFocus()
     if (gs_currentFocus != this)
         gs_pendingFocus = this;
 
-    // We can't do this under GTK 2 as it breaks the GUI tests suite, but GTK 3
-    // tests are robust enough to pass even if we do this.
-#ifdef __WXGTK3__
-    wxWindow* tlw = wxGetTopLevelParent(static_cast<wxWindow*>(this));
-    if (tlw && tlw->m_widget && !gtk_window_is_active(GTK_WINDOW(tlw->m_widget)))
-        tlw->Raise();
-#endif // __WXGTK3__
+    // Toplevel must be active for child to actually receive focus.
+    // But avoid activating if tlw is not yet shown, as that will
+    // cause it to be immediately shown.
+    GtkWidget* tlw = gtk_widget_get_ancestor(m_widget, GTK_TYPE_WINDOW);
+    if (tlw && gtk_widget_get_visible(tlw) && !gtk_window_is_active(GTK_WINDOW(tlw)))
+        gtk_window_present(GTK_WINDOW(tlw));
 
     GtkWidget *widget = m_wxwindow ? m_wxwindow : m_focusWidget;
 

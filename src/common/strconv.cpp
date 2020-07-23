@@ -3307,7 +3307,7 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = wxGet_wxConvLocalPtr();
 // It is important to use this conversion object under Darwin as it ensures
 // that Unicode strings are (re)composed correctly even though xnu kernel uses
 // decomposed form internally (at least for the file names).
-static wxMBConv_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
+static wxMBConvD_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
 #endif
 
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =

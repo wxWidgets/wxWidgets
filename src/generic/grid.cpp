@@ -2519,7 +2519,6 @@ wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
-    EVT_COMMAND(wxID_ANY, wxEVT_GRID_HIDE_EDITOR, wxGrid::OnHideEditor )
 wxEND_EVENT_TABLE()
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
@@ -7541,11 +7540,6 @@ void wxGrid::DoSaveEditControlValue()
                 SetCellValue(row, col, oldval);
             }
         }
-}
-
-void wxGrid::OnHideEditor(wxCommandEvent& WXUNUSED(event))
-{
-    DisableCellEditControl();
 }
 
 //

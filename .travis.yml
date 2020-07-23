@@ -89,6 +89,10 @@ jobs:
     # reasons that have nothing to do with the build itself.
     allow_failures:
         - os: linux
+          arch: arm64
+          env: wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
+          name: wxGTK ARM64
+        - os: linux
           arch: ppc64le
           env: wxCONFIGURE_FLAGS="--disable-sys-libs --disable-gui" wxLXC=1 wxSKIP_GUI=1
           name: wxBase PowerPC64

@@ -47,7 +47,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize, long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxControlNameStr)
+              const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Init();
 
@@ -59,7 +59,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxControlNameStr);
+                const wxString& name = wxASCII_STR(wxControlNameStr));
 
     // this function will filter out '&' characters and will put the
     // accelerator char (the one immediately after '&') into m_chAccel

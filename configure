@@ -624,7 +624,8 @@ ac_includes_default="\
 
 enable_option_checking=no
 enable_option_checking=fatal
-ac_subst_vars='LTLIBOBJS
+ac_subst_vars='subdirs_extra
+LTLIBOBJS
 LIBOBJS
 RESCOMP
 DLLTOOL
@@ -978,8 +979,8 @@ DIRECTFB_CFLAGS
 GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
-wxCFLAGS_C99
 subdirs
+wxCFLAGS_C99
 LIBTIFF_LIBS
 LIBTIFF_CFLAGS
 PKG_CONFIG
@@ -1028,6 +1029,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1059,6 +1061,7 @@ enable_official_build
 enable_vendor
 enable_all_features
 enable_sys_libs
+enable_tests
 with_dpi
 enable_universal
 with_themes
@@ -1317,6 +1320,7 @@ enable_tipdlg
 enable_progressdlg
 enable_wizarddlg
 enable_menus
+enable_menubar
 enable_miniframe
 enable_tooltips
 enable_splines
@@ -1415,8 +1419,7 @@ CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
 GST_LIBS'
-ac_subdirs_all='src/tiff
-src/expat/expat'
+ac_subdirs_all='src/expat/expat'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1454,6 +1457,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1706,6 +1710,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1843,7 +1856,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1996,6 +2009,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2040,6 +2054,7 @@ Optional Features:
   --enable-vendor=VENDOR  vendor name (win32 DLL only)
   --disable-all-features  disable all optional features to build minimal library
   --disable-sys-libs      disable all use of system libraries, use only built-in ones
+  --disable-tests         disable building tests
   --enable-universal      use wxWidgets GUI controls instead of native ones
   --enable-nanox          use NanoX
   --enable-gpe            use GNOME PDA Environment features if possible
@@ -2260,7 +2275,8 @@ Optional Features:
   --enable-tipdlg         use startup tips
   --enable-progressdlg    use wxProgressDialog
   --enable-wizarddlg      use wxWizard
-  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes
+  --enable-menus          use wxMenu and wxMenuItem classes
+  --enable-menubar        use wxMenuBar class
   --enable-miniframe      use wxMiniFrame class
   --enable-tooltips       use wxToolTip class
   --enable-splines        use spline drawing code
@@ -4290,6 +4306,35 @@ fi
 
 
           eval "$wx_cv_use_sys_libs"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-tests was given.
+if test "${enable_tests+set}" = set; then :
+  enableval=$enable_tests;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_tests='wxUSE_TESTS_SUBDIR=yes'
+                          else
+                            wx_cv_use_tests='wxUSE_TESTS_SUBDIR=no'
+                          fi
+
+else
+
+                          wx_cv_use_tests='wxUSE_TESTS_SUBDIR=${'DEFAULT_wxUSE_TESTS_SUBDIR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_tests"
 
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
@@ -11695,6 +11740,35 @@ fi
               fi
           fi
 
+          # Check whether --enable-menubar was given.
+if test "${enable_menubar+set}" = set; then :
+  enableval=$enable_menubar;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_menubar='wxUSE_MENUBAR=yes'
+                          else
+                            wx_cv_use_menubar='wxUSE_MENUBAR=no'
+                          fi
+
+else
+
+                          wx_cv_use_menubar='wxUSE_MENUBAR=${'DEFAULT_wxUSE_MENUBAR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_menubar"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
           # Check whether --enable-miniframe was given.
 if test "${enable_miniframe+set}" = set; then :
   enableval=$enable_miniframe;
@@ -18462,7 +18536,7 @@ $as_echo "#define HAVE_CXX17 1" >>confdefs.h
             ;;
 
         *)
-            as_fn_error $? "Invalid --with-cxx=\"$wxWITH_CXX\" option value, only 11, 14 or 17 supported" "$LINENO" 5
+            as_fn_error $? "Invalid --with-cxx=$wxWITH_CXX option value, only 11, 14 or 17 supported" "$LINENO" 5
     esac
 
     if test "$HAVE_CXX11" = "1" ; then
@@ -18582,6 +18656,8 @@ fi
 fi
 
 
+export_compiler_flags=no
+
 if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
@@ -18634,6 +18710,8 @@ $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary
     OBJCXXFLAGS="$OSX_ARCH_OPTS $OBJCXXFLAGS"
     OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
+
+    export_compiler_flags=yes
 fi
 
 if test "$wxUSE_MAC" = 1; then
@@ -18819,6 +18897,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+                    export_compiler_flags=yes
 fi
 
 fi
@@ -19021,7 +19101,15 @@ if test "$USE_UNIX" = 1 ; then
 
 fi
 
-export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+if test "$export_compiler_flags" = "yes"; then
+    export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
+
+    if test "$cache_file" != "/dev/null"; then
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling caching due to a change in compiler options." >&5
+$as_echo "$as_me: WARNING: Disabling caching due to a change in compiler options." >&2;}
+        cache_file="/dev/null"
+    fi
+fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
@@ -21525,6 +21613,26 @@ $as_echo "$as_me: WARNING: zlib library not found or too old, will use built-in 
                         wxUSE_ZLIB=sys
         fi
     fi
+
+                if test "$wxUSE_ZLIB" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether zlib.h file exists" >&5
+$as_echo_n "checking whether zlib.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/zlib/zlib.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in zlib library, but the required file
+    $ac_confdir/src/zlib/zlib.h couldn't be found.
+    You might need to run
+
+        git submodule update --init src/zlib
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+    fi
 fi
 
 
@@ -21639,6 +21747,26 @@ $as_echo "$as_me: WARNING: system png library not found or too old, will use bui
             fi
         else
                         wxUSE_LIBPNG=sys
+        fi
+    fi
+
+                if test "$wxUSE_LIBPNG" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether png.c file exists" >&5
+$as_echo_n "checking whether png.c file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/png/png.c" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in png library, but the required file
+    $ac_confdir/src/png/png.c couldn't be found.
+    You might need to run
+
+        git submodule update --init src/png
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
         fi
     fi
 fi
@@ -21794,6 +21922,26 @@ _ACEOF
 fi
 
             fi
+        fi
+    fi
+
+                if test "$wxUSE_LIBJPEG" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether jpeglib.h file exists" >&5
+$as_echo_n "checking whether jpeglib.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/jpeg/jpeglib.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in jpeg library, but the required file
+    $ac_confdir/src/jpeg/jpeglib.h couldn't be found.
+    You might need to run
+
+        git submodule update --init src/jpeg
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
         fi
     fi
 fi
@@ -22134,17 +22282,153 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
         fi
     fi
     if test "$wxUSE_LIBTIFF" = "builtin" ; then
-                                        ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
-        if test "$wxUSE_LIBLZMA" = "no"; then
-            ac_configure_args="$ac_configure_args --disable-lzma"
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether tiff.h file exists" >&5
+$as_echo_n "checking whether tiff.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/tiff/libtiff/tiff.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in tiff library, but the required file
+    $ac_confdir/src/tiff/libtiff/tiff.h couldn't be found.
+    You might need to run:
+
+        git submodule update --init src/tiff
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+
+                                                if test "$wxUSE_LIBLZMA" = "no"; then
+            tiff_lzma_option=--disable-lzma
+        else
+            tiff_lzma_option=--enable-lzma
         fi
         if test "$wxUSE_LIBJPEG" = "no"; then
-                                                                                    ac_configure_args="$ac_configure_args --disable-jpeg"
+                                                                                    tiff_jpeg_option=--disable-jpeg
+        else
+            tiff_jpeg_option=--enable-jpeg
         fi
-                        ac_configure_args="$ac_configure_args --disable-jbig"
 
 
-subdirs="$subdirs src/tiff"
+
+
+
+  # Various preliminary checks.
+
+
+
+
+
+    ax_dir="src/tiff"
+
+                    # Do not complain, so a configure script can configure whichever parts of a
+    # large source tree are present.
+    if test -d "$srcdir/$ax_dir"; then
+      ac_builddir=.
+
+case "$ax_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ax_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+      # Remove --cache-file, --srcdir, and --disable-option-checking arguments
+      # so they do not pile up.
+      ax_args=
+      ax_prev=
+      eval "set x $ac_configure_args"
+      shift
+      for ax_arg; do
+        if test -n "$ax_prev"; then
+          ax_prev=
+          continue
+        fi
+        case $ax_arg in
+          -cache-file | --cache-file | --cache-fil | --cache-fi | --cache-f \
+          | --cache- | --cache | --cach | --cac | --ca | --c)
+            ax_prev=cache_file ;;
+          -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+          | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
+          | --c=*)
+            ;;
+          --config-cache | -C)
+            ;;
+          -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+            ax_prev=srcdir ;;
+          -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+            ;;
+          -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+            ax_prev=prefix ;;
+          -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* \
+          | --p=*)
+            ;;
+          --disable-option-checking)
+            ;;
+          *) case $ax_arg in
+              *\'*) ax_arg=$($as_echo "$ax_arg" | sed "s/'/'\\\\\\\\''/g");;
+            esac
+            as_fn_append ax_args " '$ax_arg'" ;;
+        esac
+      done
+      # Always prepend --disable-option-checking to silence warnings, since
+      # different subdirs can have different --enable and --with options.
+      ax_args="--disable-option-checking $ax_args"
+      # Options that must be added as they are provided.
+      as_fn_append ax_args " '--disable-jbig'"
+      as_fn_append ax_args " '--disable-webp'"
+      as_fn_append ax_args " '--disable-zstd'"
+      as_fn_append ax_args " '$tiff_lzma_option'"
+      as_fn_append ax_args " '$tiff_jpeg_option'"
+
+      # New options that may need to be merged with existing options.
+
+      # New options that must replace existing options.
+
+      # Options that must be removed.
+
+      as_fn_append ax_args " '--srcdir=$ac_srcdir'"
+
+      # Add the subdirectory to the list of target subdirectories.
+      ax_subconfigures="$ax_subconfigures $ax_dir"
+      # Save the argument list for this subdirectory.
+                              ax_var=$(printf "$ax_dir" | tr -c "0-9a-zA-Z_" "_")
+      eval "ax_sub_configure_args_$ax_var=\"$ax_args\""
+      eval "ax_sub_configure_$ax_var=\"yes\""
+    else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: could not find source tree for $ax_dir" >&5
+$as_echo "$as_me: WARNING: could not find source tree for $ax_dir" >&2;}
+    fi
+
+
+
 
     fi
 fi
@@ -22263,6 +22547,24 @@ $as_echo "$as_me: WARNING: system expat library not found, will use built-in ins
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether expat.h file exists" >&5
+$as_echo_n "checking whether expat.h file exists... " >&6; }
+        if ! test -f "$ac_confdir/src/expat/expat/lib/expat.h" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in expat library, but the required file
+    $ac_confdir/src/expat/expat/lib/expat.h couldn't be found.
+    You might need to run:
+
+        git submodule update --init src/expat
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+
                         save_CC="$CC"
            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to accept ISO C99" >&5
 $as_echo_n "checking for $CC option to accept ISO C99... " >&6; }
@@ -32864,8 +33166,7 @@ else
 int main() { return inotify_init(); }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  wx_cv_inotify_usable=yes; $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
-
+  wx_cv_inotify_usable=yes
 else
   wx_cv_inotify_usable=no
 
@@ -32876,7 +33177,10 @@ rm -f core conftest.err conftest.$ac_objext \
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_inotify_usable" >&5
 $as_echo "$wx_cv_inotify_usable" >&6; }
-            if test "$wx_cv_inotify_usable" = "no"; then
+            if test "$wx_cv_inotify_usable" = "yes"; then
+                $as_echo "#define wxHAS_INOTIFY 1" >>confdefs.h
+
+            else
                 for ac_header in sys/event.h
 do :
   ac_fn_c_check_header_compile "$LINENO" "sys/event.h" "ac_cv_header_sys_event_h" "$ac_includes_default
@@ -36420,7 +36724,14 @@ fi
 if test "$wxUSE_MENUS" = "yes"; then
     $as_echo "#define wxUSE_MENUS 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+    if test "$wxUSE_MENUBAR" = "yes"; then
+        $as_echo "#define wxUSE_MENUBAR 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
+    fi
+elif test "$wxUSE_MENUBAR" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxMenuBar can't be used without wxMenu and will be disabled" >&5
+$as_echo "$as_me: WARNING: wxMenuBar can't be used without wxMenu and will be disabled" >&2;}
 fi
 
 if test "$wxUSE_MIMETYPE" = "yes"; then
@@ -37683,7 +37994,7 @@ CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $CXXWARNINGS $C_AND_CXX_FLAGS $CXXFLAGS `
 OBJCFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $OBJCFLAGS `
 OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 
-if test "SHARED" = 1; then
+if test "$SHARED" = 1; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DWXUSINGDLL"
 fi
 
@@ -40448,7 +40759,29 @@ if test "$wxUSE_GUI" = "yes"; then
 else
             SUBDIRS="samples utils"
 fi
-SUBDIRS="$SUBDIRS tests"
+
+if test "$wxUSE_TESTS_SUBDIR" != "no"; then
+        SUBDIRS="$SUBDIRS tests"
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch.hpp file exists" >&5
+$as_echo_n "checking whether catch.hpp file exists... " >&6; }
+    if ! test -f "$ac_confdir/3rdparty/catch/include/catch.hpp" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+        as_fn_error $? "
+    CATCH (C++ Automated Test Cases in Headers) is required, the required file
+    $ac_confdir/3rdparty/catch/include/catch.hpp couldn't be found.
+
+    You might need to run
+
+        git submodule update --init 3rdparty/catch
+
+    to fix this." "$LINENO" 5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    fi
+fi
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
@@ -40603,6 +40936,101 @@ LIBOBJS=$ac_libobjs
 
 LTLIBOBJS=$ac_ltlibobjs
 
+
+      ax_dir="src/tiff"
+
+      # Convert the path to the subdirectory into a shell variable name.
+      ax_var=$(printf "$ax_dir" | tr -c "0-9a-zA-Z_" "_")
+      ax_configure_ax_var=$(eval "echo \"\$ax_sub_configure_$ax_var\"")
+      if test "$no_recursion" != "yes" -a "x$ax_configure_ax_var" = "xyes"; then
+        subdirs_extra="$subdirs_extra $ax_dir"
+
+        ax_msg="=== configuring in $ax_dir ($(pwd)/$ax_dir)"
+        $as_echo "$as_me:${as_lineno-$LINENO}: $ax_msg" >&5
+        $as_echo "$ax_msg" >&6
+        as_dir="$ax_dir"; as_fn_mkdir_p
+        ac_builddir=.
+
+case "$ax_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ax_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+
+        ax_popdir=$(pwd)
+        cd "$ax_dir"
+
+        # Check for guested configure; otherwise get Cygnus style configure.
+        if test -f "$ac_srcdir/configure.gnu"; then
+          ax_sub_configure=$ac_srcdir/configure.gnu
+        elif test -f "$ac_srcdir/configure"; then
+          ax_sub_configure=$ac_srcdir/configure
+        elif test -f "$ac_srcdir/configure.in"; then
+          # This should be Cygnus configure.
+          ax_sub_configure=$ac_aux_dir/configure
+        else
+          { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: no configuration information is in $ax_dir" >&5
+$as_echo "$as_me: WARNING: no configuration information is in $ax_dir" >&2;}
+          ax_sub_configure=
+        fi
+
+        if test -n "$ax_sub_configure"; then
+          # Get the configure arguments for the current configure.
+          eval "ax_sub_configure_args=\"\$ax_sub_configure_args_${ax_var}\""
+
+          # Always prepend --prefix to ensure using the same prefix
+          # in subdir configurations.
+          ax_arg="--prefix=$prefix"
+          case $ax_arg in
+            *\'*) ax_arg=$($as_echo "$ax_arg" | sed "s/'/'\\\\\\\\''/g");;
+          esac
+          ax_sub_configure_args="'$ax_arg' $ax_sub_configure_args"
+          if test "$silent" = yes; then
+            ax_sub_configure_args="--silent $ax_sub_configure_args"
+          fi
+          # Make the cache file name correct relative to the subdirectory.
+          case $cache_file in
+            [\\/]* | ?:[\\/]* )
+              ax_sub_cache_file=$cache_file ;;
+            *) # Relative name.
+              ax_sub_cache_file=$ac_top_build_prefix$cache_file ;;
+          esac
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file" >&5
+$as_echo "$as_me: running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file" >&6;}
+          eval "\$SHELL \"$ax_sub_configure\" $ax_sub_configure_args --cache-file=\"$ax_sub_cache_file\"" \
+              || as_fn_error $? "$ax_sub_configure failed for $ax_dir" "$LINENO" 5
+        fi
+
+        cd "$ax_popdir"
+      fi
 
 
 : "${CONFIG_STATUS=./config.status}"

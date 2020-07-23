@@ -58,9 +58,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// // the height of the header window (FIXME: should depend on its font!)
-// static const int HEADER_HEIGHT = 23;
-
 static const int SCROLL_UNIT_X = 15;
 
 // the spacing between the lines (in report mode)
@@ -1223,7 +1220,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     // we want to work with logical coords
     int x;
     parent->CalcUnscrolledPosition(event.GetX(), 0, &x, NULL);
-    int y = event.GetY();
 
     if (m_isDragging)
     {
@@ -1276,7 +1272,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             xpos += m_owner->GetColumnWidth( col );
             m_column = col;
 
-            if ( (abs(x-xpos) < 3) && (y < 22) )
+            if ( abs(x-xpos) < 3 )
             {
                 // near the column border
                 hit_border = true;

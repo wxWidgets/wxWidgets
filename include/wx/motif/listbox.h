@@ -30,7 +30,7 @@ public:
         int n = 0, const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr)
+        const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
@@ -41,7 +41,7 @@ public:
         const wxArrayString& choices,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr)
+        const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Create(parent, id, pos, size, choices, style, validator, name);
     }
@@ -52,7 +52,7 @@ public:
         int n = 0, const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr);
+        const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
@@ -60,7 +60,7 @@ public:
         const wxArrayString& choices,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr);
+        const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     // implementation of wxControlWithItems
     virtual unsigned int GetCount() const;

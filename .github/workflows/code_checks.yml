@@ -1,0 +1,43 @@
+# This workflow does some quick checks.
+name: Code Checks
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/code_checks.yml'
+      - 'docs/**'
+      - 'include/**'
+      - 'interface/**'
+      - 'misc/suppressions/**'
+      - '**/*.md'
+      - '!docs/changes*txt'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/code_checks.yml'
+      - 'docs/**'
+      - 'include/**'
+      - 'interface/**'
+      - 'misc/suppressions/**'
+      - '**/*.md'
+      - '!docs/changes*txt'
+
+jobs:
+  check-unix:
+    runs-on: ubuntu-20.04
+    name: Check Spelling
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install codespell
+        run: |
+          pip3 install --no-warn-script-location codespell==1.17.1
+
+      - name: Run codespell
+        run: |
+          CODESPELL=$HOME/.local/bin/codespell ./misc/scripts/spellcheck

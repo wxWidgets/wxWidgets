@@ -1149,6 +1149,8 @@ wxString wxTextEntry::GetHint() const
 bool wxTextEntry::ClickDefaultButtonIfPossible()
 {
     GtkWidget* const widget = GTK_WIDGET(GetEntry());
+    if (widget == NULL)
+        return false;
 
     // This does the same thing as gtk_entry_real_activate() in GTK itself.
     //

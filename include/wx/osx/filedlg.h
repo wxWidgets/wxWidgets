@@ -32,14 +32,14 @@ protected:
 public:
     wxFileDialog() { Init(); }
     wxFileDialog(wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
                  const wxString& defaultDir = wxEmptyString,
                  const wxString& defaultFile = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 const wxString& wildCard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
-                 const wxString& name = wxFileDialogNameStr)
+                 const wxString& name = wxASCII_STR(wxFileDialogNameStr))
     {
         Init();
 
@@ -47,14 +47,14 @@ public:
     }
 
     void Create(wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
                  const wxString& defaultDir = wxEmptyString,
                  const wxString& defaultFile = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 const wxString& wildCard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
-                 const wxString& name = wxFileDialogNameStr);
+                 const wxString& name = wxASCII_STR(wxFileDialogNameStr));
 
 #if wxOSX_USE_COCOA
     ~wxFileDialog();
@@ -74,11 +74,6 @@ public:
 
     // implementation only
 
-#if wxOSX_USE_COCOA
-    // returns true if the file can be shown as active
-    bool CheckFile( const wxString& filename );
-#endif
-
 protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -91,6 +86,7 @@ protected:
     virtual wxWindow* CreateFilterPanel(wxWindow *extracontrol);
     void DoOnFilterSelected(int index);
     virtual void OnFilterSelected(wxCommandEvent &event);
+    int GetMatchingFilterExtension(const wxString& filename);
 
     wxArrayString m_filterExtensions;
     wxArrayString m_filterNames;
@@ -99,8 +95,6 @@ protected:
     bool m_useFileTypeFilter;
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
-    WX_NSObject m_delegate;
-    WX_NSObject m_sheetDelegate;
 #endif
 
 private:

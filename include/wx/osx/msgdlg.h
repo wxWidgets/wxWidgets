@@ -17,13 +17,9 @@ class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 public:
     wxMessageDialog(wxWindow *parent,
                     const wxString& message,
-                    const wxString& caption = wxMessageBoxCaptionStr,
+                    const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
-
-#if wxOSX_USE_COCOA
-    ~wxMessageDialog();
-#endif
 
     virtual int ShowModal() wxOVERRIDE;
 
@@ -45,9 +41,6 @@ protected:
     int m_buttonId[4];
     int m_buttonCount;
 
-#if wxOSX_USE_COCOA
-    WX_NSObject m_sheetDelegate;
-#endif
     wxDECLARE_DYNAMIC_CLASS(wxMessageDialog);
 };
 

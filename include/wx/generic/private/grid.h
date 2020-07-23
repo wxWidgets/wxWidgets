@@ -17,10 +17,6 @@
 
 #include "wx/headerctrl.h"
 
-// Internally used (and hence intentionally not exported) event telling wxGrid
-// to hide the currently shown editor.
-wxDECLARE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
-
 // ----------------------------------------------------------------------------
 // array classes
 // ----------------------------------------------------------------------------
@@ -315,7 +311,7 @@ class WXDLLIMPEXP_ADV wxGridSubwindow : public wxWindow
 public:
     wxGridSubwindow(wxGrid *owner,
                     int additionalStyle = 0,
-                    const wxString& name = wxPanelNameStr)
+                    const wxString& name = wxASCII_STR(wxPanelNameStr))
         : wxWindow(owner, wxID_ANY,
                    wxDefaultPosition, wxDefaultSize,
                    wxBORDER_NONE | additionalStyle,

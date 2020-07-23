@@ -481,10 +481,9 @@ typedef short int WXTYPE;
 
 #ifndef HAVE_WOSTREAM
     /*
-        Mingw <= 3.4 and all versions of Cygwin don't have std::wostream
+        Cygwin is the only platform which doesn't have std::wostream
      */
-    #if (!defined(__MINGW32__) || wxCHECK_GCC_VERSION(4, 0)) && \
-        !defined(__CYGWIN__)
+    #if !defined(__CYGWIN__)
         #define HAVE_WOSTREAM
     #endif
 #endif /* HAVE_WOSTREAM */
@@ -622,15 +621,11 @@ typedef short int WXTYPE;
  */
 #define wxDEPRECATED(x) wxDEPRECATED_DECL x
 
-#if defined(__GNUC__) && !wxCHECK_GCC_VERSION(3, 4)
-    /*
-        We need to add dummy "inline" to allow gcc < 3.4 to handle the
-        deprecation attribute on the constructors.
-    */
-    #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED( inline x)
-#else
-    #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED(x)
-#endif
+/*
+    This macro used to be defined differently for gcc < 3.4, but we don't
+    support it any more, so it's just the same thing as wxDEPRECATED now.
+ */
+#define wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED(x)
 
 /*
    Macro which marks the function as being deprecated but also defines it
@@ -2777,6 +2772,8 @@ typedef WX_NSPasteboard OSXPasteboard;
 
 #elif wxOSX_USE_IPHONE
 
+DECLARE_WXCOCOA_OBJC_CLASS(UIMenu);
+DECLARE_WXCOCOA_OBJC_CLASS(UIMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(UImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIView);
@@ -2791,6 +2788,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
 typedef WX_UIImage WXImage;
+typedef WX_UIMenu WXHMENU;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;

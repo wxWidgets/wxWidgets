@@ -2866,7 +2866,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             fe.height = fe.ascent + fe.descent;
         }
 
-        if (height)
+        if (height && !str.empty())
             *height = fe.height;
         if ( descent )
             *descent = fe.descent;

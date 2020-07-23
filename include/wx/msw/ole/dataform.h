@@ -27,7 +27,9 @@ public:
     // wxString don't apply when we already rely on implicit conversion of a,
     // for example, "char *" string to wxDataFormat, and existing code does it
     wxDataFormat(const wxString& format) { SetId(format); }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxDataFormat(const char *format) { SetId(format); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     wxDataFormat(const wchar_t *format) { SetId(format); }
     wxDataFormat(const wxCStrData& format) { SetId(format); }
 
@@ -41,6 +43,8 @@ public:
     bool operator!=(wxDataFormatId format) const;
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
+    bool operator==(NativeFormat format) const;
+    bool operator!=(NativeFormat format) const;
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the

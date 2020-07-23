@@ -694,7 +694,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = 0,
-                      const wxString& name = wxPanelNameStr)
+                      const wxString& name = wxASCII_STR(wxPanelNameStr))
     : wxVarVScrollLegacyAdaptor(this)
     {
         (void)Create(parent, id, pos, size, style, name);
@@ -709,7 +709,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr)
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         return wxPanel::Create(parent, id, pos, size, style | wxVSCROLL, name);
     }
@@ -770,7 +770,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = 0,
-                      const wxString& name = wxPanelNameStr)
+                      const wxString& name = wxASCII_STR(wxPanelNameStr))
         : wxVarHScrollHelper(this)
     {
         (void)Create(parent, id, pos, size, style, name);
@@ -785,7 +785,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr)
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         return wxPanel::Create(parent, id, pos, size, style | wxHSCROLL, name);
     }
@@ -833,7 +833,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = 0,
-                       const wxString& name = wxPanelNameStr)
+                       const wxString& name = wxASCII_STR(wxPanelNameStr))
         : wxPanel(),
           wxVarHVScrollHelper(this)
     {
@@ -849,7 +849,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr)
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         return wxPanel::Create(parent, id, pos, size,
                                style | wxVSCROLL | wxHSCROLL, name);

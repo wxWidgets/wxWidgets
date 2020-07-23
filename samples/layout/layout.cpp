@@ -207,7 +207,7 @@ void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 {
-    MySizerDialog dialog( this, "Notebook Sizer Test Dialog" );
+    MyNotebookWithSizerDialog dialog( this, "Notebook Sizer Test Dialog" );
 
     dialog.ShowModal();
 }
@@ -396,11 +396,13 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
 }
 
 // ----------------------------------------------------------------------------
-// MySizerDialog
+// MyNotebookWithSizerDialog
 // ----------------------------------------------------------------------------
 
-MySizerDialog::MySizerDialog(wxWindow *parent, const wxString &title)
-             : wxDialog(parent, wxID_ANY, wxString(title))
+MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxString &title)
+             : wxDialog(parent, wxID_ANY, wxString(title),
+                        wxDefaultPosition, wxDefaultSize,
+                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     // Begin with first hierarchy: a notebook at the top and
     // and OK button at the bottom.

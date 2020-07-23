@@ -319,13 +319,13 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
 void wxNSComboBoxControl::Popup()
 {
     id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
-    [ax accessibilitySetValue: [NSNumber numberWithBool: YES] forAttribute: NSAccessibilityExpandedAttribute];
+    [ax setAccessibilityExpanded: YES];
 }
 
 void wxNSComboBoxControl::Dismiss()
 {
     id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
-    [ax accessibilitySetValue: [NSNumber numberWithBool: NO] forAttribute: NSAccessibilityExpandedAttribute];
+    [ax setAccessibilityExpanded: NO];
 }
 
 void wxNSComboBoxControl::SetEditable(bool editable)

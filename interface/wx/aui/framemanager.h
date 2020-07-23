@@ -484,11 +484,12 @@ public:
     void StartPaneDrag(wxWindow* paneWindow, const wxPoint& offset);
 
     /**
-        Uninitializes the framework and should be called before a managed frame or
-        window is destroyed. UnInit() is usually called in the managed wxFrame's
-        destructor.  It is necessary to call this function before the managed frame
-        or window is destroyed, otherwise the manager cannot remove its custom event
-        handlers from a window.
+        Dissociate the managed window from the manager.
+
+        This function may be called before the managed frame or window is
+        destroyed, but, since wxWidgets 3.1.4, it's unnecessary to call it
+        explicitly, as it will be called automatically when this window is
+        destroyed, as well as when the manager itself is.
     */
     void UnInit();
 

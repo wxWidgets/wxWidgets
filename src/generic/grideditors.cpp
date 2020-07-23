@@ -66,11 +66,18 @@
 // implementation
 // ============================================================================
 
-wxDEFINE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
-
 // ----------------------------------------------------------------------------
 // wxGridCellEditorEvtHandler
 // ----------------------------------------------------------------------------
+
+void wxGridCellEditorEvtHandler::DismissEditor()
+{
+    // Tell the grid to dismiss the control but don't do it immediately as it
+    // could result in the editor being destroyed right now and a crash in the
+    // code searching for the next event handler, so tell the grid to close it
+    // after this event is processed.
+    m_grid->CallAfter(&wxGrid::DisableCellEditControl);
+}
 
 void wxGridCellEditorEvtHandler::OnKillFocus(wxFocusEvent& event)
 {
@@ -82,16 +89,7 @@ void wxGridCellEditorEvtHandler::OnKillFocus(wxFocusEvent& event)
     if (m_inSetFocus)
         return;
 
-    // Tell the grid to dismiss the control but don't do it immediately as it
-    // could result in the editor being destroyed right now and a crash in the
-    // code searching for the next event handler, so post an event asking the
-    // grid to do it slightly later instead.
-
-    // FIXME-VC6: Once we drop support for VC6, we should use a simpler
-    //            m_grid->CallAfter(&wxGrid::DisableCellEditControl) and get
-    //            rid of wxEVT_GRID_HIDE_EDITOR entirely.
-    m_grid->GetEventHandler()->
-        AddPendingEvent(wxCommandEvent(wxEVT_GRID_HIDE_EDITOR));
+    DismissEditor();
 }
 
 void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
@@ -100,7 +98,7 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
     {
         case WXK_ESCAPE:
             m_editor->Reset();
-            m_grid->DisableCellEditControl();
+            DismissEditor();
             break;
 
         case WXK_TAB:
@@ -1580,7 +1578,11 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     wxGridCellEditorEvtHandler* evtHandler = NULL;
     if (m_control)
+    {
+        // This event handler is needed to properly dismiss the editor when the popup is closed
+        m_control->Bind(wxEVT_COMBOBOX_CLOSEUP, &wxGridCellChoiceEditor::OnComboCloseUp, this);
         evtHandler = wxDynamicCast(m_control->GetEventHandler(), wxGridCellEditorEvtHandler);
+    }
 
     // Don't immediately end if we get a kill focus event within BeginEdit
     if (evtHandler)
@@ -1677,6 +1679,19 @@ void wxGridCellChoiceEditor::SetParameters(const wxString& params)
 wxString wxGridCellChoiceEditor::GetValue() const
 {
   return Combo()->GetValue();
+}
+
+void wxGridCellChoiceEditor::OnComboCloseUp(wxCommandEvent& WXUNUSED(evt))
+{
+    wxGridCellEditorEvtHandler* evtHandler = wxDynamicCast(m_control->GetEventHandler(),
+                                                           wxGridCellEditorEvtHandler);
+
+    if ( !evtHandler )
+        return;
+
+    // Close the grid editor when the combobox closes, otherwise it leaves the
+    // dropdown arrow visible in the cell.
+    evtHandler->DismissEditor();
 }
 
 #endif // wxUSE_COMBOBOX
@@ -1830,7 +1845,7 @@ struct wxGridCellDateEditorKeyHandler
 
             case WXK_RETURN:
             case WXK_NUMPAD_ENTER:
-                wxPostEvent(m_handler, wxCommandEvent(wxEVT_GRID_HIDE_EDITOR));
+                m_handler->DismissEditor();
                 event.Skip();
                 break;
 

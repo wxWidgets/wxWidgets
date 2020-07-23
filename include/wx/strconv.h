@@ -719,5 +719,19 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
     #define wxSafeConvertWX2MB(s) (s)
 #endif // Unicode/ANSI
 
+// Macro that indicates the default encoding for converting C strings
+// to wxString. It provides a default value for a const wxMBConv&
+// parameter (i.e. wxConvLibc) unless wxNO_IMPLICIT_WXSTRING_ENCODING
+// is defined.
+//
+// Intended use:
+// wxString(const char *data, ...,
+//          const wxMBConv &conv wxSTRING_DEFAULT_CONV_ARG);
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+#define wxSTRING_DEFAULT_CONV_ARG = wxConvLibc
+#else
+#define wxSTRING_DEFAULT_CONV_ARG
+#endif
+
 #endif // _WX_STRCONV_H_
 

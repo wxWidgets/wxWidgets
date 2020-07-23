@@ -12687,11 +12687,8 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, w
         else
         {
             double scaleFactor = 1.0;
-            // Scaled bitmaps only work on Mac currently
-#ifdef __WXOSX_COCOA__
             if (context.GetBuffer() && context.GetBuffer()->GetRichTextCtrl())
                 scaleFactor = context.GetBuffer()->GetRichTextCtrl()->GetContentScaleFactor();
-#endif
 
             // If the original width and height is small, e.g. 400 or below,
             // scale up and then down to improve image quality. This can make

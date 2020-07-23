@@ -21,11 +21,11 @@ public:
     wxStatusBar();
     wxStatusBar(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     virtual bool GetFieldRect(int i, wxRect& rect) const wxOVERRIDE;
     virtual void SetMinHeight(int height) wxOVERRIDE;

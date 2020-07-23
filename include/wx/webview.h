@@ -110,11 +110,11 @@ public:
     virtual wxWebView* Create() = 0;
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
-                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
-                              const wxString& name = wxWebViewNameStr) = 0;
+                              const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
@@ -132,23 +132,23 @@ public:
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
+           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxWebViewNameStr) = 0;
+           const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
 
     // Factory methods allowing the use of custom factories registered with
     // RegisterFactory
-    static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
+    static wxWebView* New(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
     static wxWebView* New(wxWindow* parent,
                           wxWindowID id,
-                          const wxString& url = wxWebViewDefaultURLStr,
+                          const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
-                          const wxString& backend = wxWebViewBackendDefault,
+                          const wxString& backend = wxASCII_STR(wxWebViewBackendDefault),
                           long style = 0,
-                          const wxString& name = wxWebViewNameStr);
+                          const wxString& name = wxASCII_STR(wxWebViewNameStr));
 
     static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);

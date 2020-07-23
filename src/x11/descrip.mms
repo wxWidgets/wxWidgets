@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 March 2020                                                        *
+# Date : 20 July 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -111,7 +111,12 @@ pen.obj : pen.cpp
 region.obj : region.cpp
 utilsx.obj : utilsx.cpp
 dc.obj : dc.cpp
+.ifdef __WXX11__
 dcclient.obj : dcclient.cpp
+	cxx$(CXXFLAGS)$(CXX_DEFINE)/warn=(disable=WARDIR) dcclient.cpp
+.else
+dcclient.obj : dcclient.cpp
+.endif
 dcmemory.obj : dcmemory.cpp
 dcscreen.obj : dcscreen.cpp
 evtloop.obj : evtloop.cpp

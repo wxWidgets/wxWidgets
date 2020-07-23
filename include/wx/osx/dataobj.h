@@ -33,7 +33,7 @@ public:
 
 #if wxOSX_USE_COCOA
     // adds all the native formats (in descending order of preference) this data object supports
-    virtual void AddSupportedTypes( CFMutableArrayRef cfarray) const;
+    virtual void AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir ) const;
 #endif
 };
 

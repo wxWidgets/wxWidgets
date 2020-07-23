@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 March 2020                                                        *
+# Date : 20 July 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -315,5 +315,10 @@ statbmpg.obj : statbmpg.cpp
 textmeasure.obj : textmeasure.cpp
 editlbox.obj : editlbox.cpp
 collheaderctrlg.obj : collheaderctrlg.cpp
+.ifdef __WXX11__
 graphicc.obj : graphicc.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(WARDIR) graphicc.cpp
+.else
+graphicc.obj : graphicc.cpp
+.endif
 rowheightcache.obj : rowheightcache.cpp

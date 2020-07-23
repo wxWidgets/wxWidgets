@@ -49,7 +49,7 @@ public:
         int n = 0, const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr)
+        const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Create(parent, winid, pos, size, n, choices, style, validator, name);
     }
@@ -62,7 +62,7 @@ public:
         const wxArrayString& choices,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr)
+        const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Create(parent, winid, pos, size, choices, style, validator, name);
     }
@@ -76,7 +76,7 @@ public:
         const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr);
+        const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     bool Create(
         wxWindow *parent,
@@ -86,7 +86,7 @@ public:
         const wxArrayString& choices,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr);
+        const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     virtual ~wxListBox();
 

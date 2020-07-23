@@ -38,7 +38,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr);
+                const wxString& name = wxASCII_STR(wxScrollBarNameStr));
     */
 
     // accessors

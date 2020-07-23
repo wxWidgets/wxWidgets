@@ -424,7 +424,7 @@ private:
     void Init()
     {
         m_digits = 0;
-        m_format = "%0.0f";
+        m_format = wxASCII_STR("%0.0f");
     }
 
     wxString m_format;

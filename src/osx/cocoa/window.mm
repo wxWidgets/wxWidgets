@@ -3083,6 +3083,13 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     {
         left = top = 0;
         GetSize( width, height );
+
+        int leftinset, topinset, rightinset, bottominset;
+        GetLayoutInset( leftinset, topinset, rightinset, bottominset);
+        left += leftinset;
+        top += topinset;
+        width -= leftinset + rightinset;
+        height -= topinset + bottominset;
     }
 }
 
@@ -3215,7 +3222,7 @@ void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
     if (dobj)
     {
         wxCFMutableArrayRef<CFStringRef> typesarray;
-        dobj->AddSupportedTypes(typesarray);
+        dobj->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
         NSView* targetView = m_osxView;
         if ([m_osxView isKindOfClass:[NSScrollView class]])
             targetView = [(NSScrollView*)m_osxView documentView];

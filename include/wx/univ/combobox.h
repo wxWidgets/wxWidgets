@@ -49,7 +49,7 @@ public:
                const wxString choices[] = (const wxString *) NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr)
+               const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Init();
 
@@ -64,7 +64,7 @@ public:
                const wxArrayString& choices,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxComboBoxNameStr);
+               const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -75,7 +75,7 @@ public:
                 const wxString choices[] = (const wxString *) NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& value,
@@ -84,7 +84,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     virtual ~wxComboBox();
 

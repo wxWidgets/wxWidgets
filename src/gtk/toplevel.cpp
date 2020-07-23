@@ -843,7 +843,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_widget_set_size_request(m_widget, w, h);
     }
 
-    g_signal_connect(gtk_settings_get_default(), "notify::gtk-theme-name",
+    // Note that we need to connect after this signal in order to let the
+    // normal g_signal_connect() in wxSystemSettings code to run before our
+    // handler: this ensures that system settings cache is cleared before the
+    // user-defined wxSysColourChangedEvent handlers using wxSystemSettings
+    // methods are executed, which is important as otherwise they would use the
+    // old colours etc.
+    g_signal_connect_after(gtk_settings_get_default(), "notify::gtk-theme-name",
         G_CALLBACK(notify_gtk_theme_name), this);
 
     return true;

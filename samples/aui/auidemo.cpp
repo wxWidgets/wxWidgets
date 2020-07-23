@@ -116,8 +116,6 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER);
 
-    ~MyFrame();
-
     wxAuiDockArt* GetDockArt();
     void DoUpdate();
 
@@ -1014,11 +1012,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // "commit" all changes made to wxAuiManager
     m_mgr.Update();
-}
-
-MyFrame::~MyFrame()
-{
-    m_mgr.UnInit();
 }
 
 wxAuiDockArt* MyFrame::GetDockArt()

@@ -113,10 +113,11 @@ public:
         @c wxC2S_HTML_SYNTAX, to obtain the colour as "#" followed by 6
         hexadecimal digits (e.g. wxColour(255,0,0) == "#FF0000").
 
-        This function never fails and always returns a non-empty string but
-        asserts if the colour has alpha channel (i.e. is non opaque) but
-        @c wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
-        specified in flags.
+        This function returns empty string if the colour is not initialized
+        (see IsOk()). Otherwise, the returned string is always non-empty, but
+        the function asserts if the colour has alpha channel (i.e. is non
+        opaque) but @c wxC2S_CSS_SYNTAX (which is the only one supporting
+        alpha) is not specified in @a flags.
 
         @note For non-solid (i.e. non-RGB) colour this function returns
         "rgb(??, ?? ??)" or "#??????".

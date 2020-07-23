@@ -369,6 +369,16 @@ bool wxDataFormat::operator!=(const wxDataFormat& format) const
     return !(*this == format);
 }
 
+bool wxDataFormat::operator==(NativeFormat format) const
+{
+    return HtmlFormatFixup(*this).m_format == format;
+}
+
+bool wxDataFormat::operator!=(NativeFormat format) const
+{
+    return !(*this == format);
+}
+
 void wxDataFormat::SetId(const wxString& format)
 {
     m_format = (wxDataFormat::NativeFormat)::RegisterClipboardFormat(format.t_str());

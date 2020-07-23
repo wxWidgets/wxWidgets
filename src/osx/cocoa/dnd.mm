@@ -50,14 +50,14 @@ wxOSXDataSourceItem::~wxOSXDataSourceItem()
 bool wxOSXDataSource::IsSupported(const wxDataFormat &dataFormat)
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    dataFormat.AddSupportedTypes(typesarray);
+    dataFormat.AddSupportedTypesForSetting(typesarray);
     return HasData(typesarray);
 }
 
 bool wxOSXDataSource::IsSupported(const wxDataObject &dataobj)
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    dataobj.AddSupportedTypes(typesarray);
+    dataobj.AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
     return HasData(typesarray);
 }
 
@@ -431,6 +431,10 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return gCurrentSource;
 }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+typedef NSString* NSPasteboardType;
+#endif
+
 @interface wxPasteBoardWriter : NSObject<NSPasteboardWriting>
 {
     wxDataObject* m_data;
@@ -447,24 +451,29 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return self;
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
-typedef NSString* NSPasteboardType;
-#endif
-
+- (void) clearDataObject
+{
+    m_data = NULL;
+}
 - (nullable id)pasteboardPropertyListForType:(nonnull NSPasteboardType)type
 {
-    wxDataFormat format((wxDataFormat::NativeFormat) type);
-    size_t size = m_data->GetDataSize(format);
-    CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
-    m_data->GetDataHere(format, CFDataGetMutableBytePtr(data));
-    CFDataSetLength(data, size);
-    return (id) data;
+    if ( m_data )
+    {
+        wxDataFormat format((wxDataFormat::NativeFormat) type);
+        size_t size = m_data->GetDataSize(format);
+        CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
+        m_data->GetDataHere(format, CFDataGetMutableBytePtr(data));
+        CFDataSetLength(data, size);
+        return (id) data;
+    }
+    return nil;
 }
 
 - (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
 {
     wxCFMutableArrayRef<CFStringRef> typesarray;
-    m_data->AddSupportedTypes(typesarray);
+    if ( m_data )
+        m_data->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
     return (NSArray<NSPasteboardType>*) typesarray.autorelease();
 }
 
@@ -521,6 +530,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         result = NSDragOperationToWxDragResult([delegate code]);
         [delegate release];
         [image release];
+        [writer clearDataObject];
+        [writer release];
 
         wxWindow* mouseUpTarget = wxWindow::GetCapture();
 

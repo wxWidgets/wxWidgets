@@ -217,8 +217,8 @@ protected:
 class WXDLLIMPEXP_ADV wxGridCellDateTimeRenderer : public wxGridCellDateRenderer
 {
 public:
-    wxGridCellDateTimeRenderer(const wxString& outformat = wxDefaultDateTimeFormat,
-                               const wxString& informat = wxDefaultDateTimeFormat);
+    wxGridCellDateTimeRenderer(const wxString& outformat = wxASCII_STR(wxDefaultDateTimeFormat),
+                               const wxString& informat = wxASCII_STR(wxDefaultDateTimeFormat));
 
     wxGridCellDateTimeRenderer(const wxGridCellDateTimeRenderer& other)
         : wxGridCellDateRenderer(other),

@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxGenericRichMessageDialog
 public:
     wxGenericRichMessageDialog(wxWindow *parent,
                                const wxString& message,
-                               const wxString& caption = wxMessageBoxCaptionStr,
+                               const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                                long style = wxOK | wxCENTRE)
         : wxRichMessageDialogBase( parent, message, caption, style ),
           m_checkBox(NULL),

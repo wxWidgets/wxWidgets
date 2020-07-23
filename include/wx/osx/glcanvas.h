@@ -101,7 +101,6 @@ public:
     // implement wxGLCanvasBase methods
     virtual bool SwapBuffers() wxOVERRIDE;
 
-
     // Mac-specific functions
     // ----------------------
 

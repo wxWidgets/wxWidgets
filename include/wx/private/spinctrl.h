@@ -26,6 +26,8 @@ extern int GetMaxValueLength(int minVal, int maxVal, int base);
 // of wxSpinCtrl is derived from wxSpinButton but uses the same algorithm.
 extern wxSize GetBestSize(const wxControl* spin, int minVal, int maxVal, int base);
 
+// Helper function to check if given combination of range and base is valid.
+extern bool IsBaseCompatibleWithRange(int minVal, int maxVal, int base);
 } // namespace wxSpinCtrlImpl
 
 #endif // _WX_PRIVATE_SPINCTRL_H_

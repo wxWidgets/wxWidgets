@@ -1,0 +1,26 @@
+wxMessageBox(L"Salut \u00E0 toi!"); // U+00E0 is "Latin Small Letter a with Grave"
+wxMessageBox("Salut à toi!");
+wxMessageBox(wxString::FromUTF8("Salut \xC3\xA0 toi!"));
+<tt>(week|wee)(night|knights)</tt> matches all ten characters of "weeknights",
+expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
+@row2col{ <tt>b</tt> , Rest of RE is a BRE. }
+    the ARE <tt>(?:</tt> or the BRE <tt>\(</tt>.
+        return wxPrivate::wxAnyAsImpl<T>::DoAs(*this);
+    static T DoAs(const wxAny& any)
+    static wxString DoAs(const wxAny& any)
+        removeable,
+    virtual void HandleLineEvent( unsigned int n, bool doubleClick );
+        sequence of labels is A, B, ..., Z, AA, AB, ..., AZ, BA, ..., ..., ZZ,
+             wxEdge otherE,
+    void swap(wxScopedPtr<T>& ot);
+    SEH (structured exception handling) which currently means only Microsoft
+    void Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val = 0, int marg = wxLAYOUT_DEFAULT_MARGIN);
+// Copyright:   (c) 2009 Marcin Malich <me@malcom.pl>
+ * All of the settings below require SEH support (__try/__catch) and can't work
+  the version check in `include/wx/msw/seh.h` to suppress this warning for the
+#endif /* compiler doesn't support SEH */
+// Name:        wx/msw/seh.h
+// Purpose:     declarations for SEH (structured exceptions handling) support
+    // 2019), i.e. SEH translator seems to work just fine without /EHa too, so
+// Purpose:     helpers for the structured exception handling (SEH) under Win32
+* MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
