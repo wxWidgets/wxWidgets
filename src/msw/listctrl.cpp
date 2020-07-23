@@ -3278,7 +3278,13 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
-    wxSize clientSize = GetClientSize();
+    // Find the coordinate of the right most visible point: this is not the
+    // same as GetClientSize().x because the window might not be fully visible,
+    // it could be clipped by its parent.
+    const wxSize size = GetSize();
+    const int availableWidth = GetParent()->GetClientSize().x - GetPosition().x;
+    int visibleWidth = wxMin(GetClientSize().x,
+                             availableWidth - GetWindowBorderSize().x);
 
     const int countPerPage = GetCountPerPage();
     if (countPerPage < 0)
@@ -3312,10 +3318,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             list control. In that case we request for the part to the right of
             the rightmost column to be drawn as well.
         */
-        if ( clipRect.GetRight() != clientSize.x - 1 && clipRect.width )
+        if ( clipRect.GetRight() < visibleWidth - 1 && clipRect.width )
         {
             RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
-                               clientSize.x - clipRect.width, clipRect.height),
+                               visibleWidth - clipRect.width, clipRect.height),
                         false /* don't erase background */);
         }
     }
@@ -3359,7 +3365,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
 
                 dc.DrawRectangle(0, topItemRect.GetY() - gap,
-                                 clientSize.GetWidth(), gap);
+                                 visibleWidth, gap);
             }
 
             const int numCols = GetColumnCount();
