@@ -1,0 +1,1 @@
+All (Unix): Fix wrong FIFO/sockets detection in wxFileName (atbara46).
