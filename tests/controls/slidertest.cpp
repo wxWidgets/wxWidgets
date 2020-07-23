@@ -188,7 +188,7 @@ void SliderTestCase::Range()
 
 void SliderTestCase::Thumb()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     EventCounter track(m_slider, wxEVT_SCROLL_THUMBTRACK);
     EventCounter release(m_slider, wxEVT_SCROLL_THUMBRELEASE);
     EventCounter changed(m_slider, wxEVT_SCROLL_CHANGED);
@@ -197,12 +197,14 @@ void SliderTestCase::Thumb()
 
     m_slider->SetValue(0);
 
-    sim.MouseDragDrop(m_slider->ClientToScreen(wxPoint(10, 10)),m_slider->ClientToScreen(wxPoint(50, 10)));
+    // use the slider real position for dragging the mouse.
+    const int ypos = m_slider->GetSize().y / 2;
+    sim.MouseDragDrop(m_slider->ClientToScreen(wxPoint(10, ypos)),m_slider->ClientToScreen(wxPoint(50, ypos)));
     wxYield();
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
     CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__)
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif
