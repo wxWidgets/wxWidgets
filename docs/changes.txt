@@ -173,6 +173,18 @@ Changes in behaviour which may result in build errors
   to change your code and XRC definitions accordingly.
 
 
+3.1.5: (released 2020-10-??)
+----------------------------
+
+NOTE: This file is updated only before the release, please use
+
+    $ git log --notes=changelog --format='%N' v3.1.4..|grep .
+
+      to see all the change log entries since the last release and use
+
+    $ git notes --ref=changelog add -m 'wxPort: description.' to update it.
+
+
 3.1.4: (released 2020-07-22)
 ----------------------------
 
