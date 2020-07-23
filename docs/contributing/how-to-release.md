@@ -205,7 +205,7 @@ least mention the new release there.
 * Run `misc/scripts/inc_release` to increment micro version,
 i.e. replace x.y.z with x.y.z+1.
 
-* Update the C:R:A settings in build/tools/version.bkl to C:R+1:A.
+* Update the C:R:A settings in `build/bakefiles/version.bkl` to C:R+1:A.
 Then from the build/bakesfiles directory run
 
         bakefile_gen
