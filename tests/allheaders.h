@@ -5,13 +5,17 @@
     Excluded headers:
 
     #include <wx/catch_cppunit.h>
+    #include <wx/dvrenderers.h>
     #include <wx/fmappriv.h>
     #include <wx/setup_inc.h>
     #include <wx/setup_redirect.h>
     #include <wx/variantbase.h>
-    #include <wx/xpmhand.h>
     #include <wx/vms_x_fix.h>
+    #include <wx/xpmhand.h>
 */
+
+#include <wx/beforestd.h>
+#include <wx/afterstd.h>
 
 #include <wx/aboutdlg.h>
 #include <wx/accel.h>
@@ -20,7 +24,6 @@
 #include <wx/addremovectrl.h>
 #include <wx/affinematrix2dbase.h>
 #include <wx/affinematrix2d.h>
-#include <wx/afterstd.h>
 #include <wx/anidecod.h>
 #include <wx/animate.h>
 #include <wx/animdecod.h>
@@ -36,7 +39,6 @@
 #include <wx/atomic.h>
 #include <wx/bannerwindow.h>
 #include <wx/base64.h>
-#include <wx/beforestd.h>
 #include <wx/bitmap.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bmpcbox.h>
