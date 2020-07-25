@@ -219,8 +219,23 @@ void wxDataFormat::SetId( NativeFormat format )
 void wxDataFormat::SetId( const wxString& zId )
 {
     m_type = wxDF_PRIVATE;
-    // since it is private, no need to conform to anything ...
-    m_format = wxCFStringRef(zId);
+
+    // adapt to UTI rules
+    // first filter characters
+    wxString utiString = zId;
+    wxString::iterator it;
+    for (it = utiString.begin(); it != utiString.end(); ++it)
+    {
+        wxUniChar c = *it;
+        if ( !( c >= 'A' && c <='Z') && !( c >= 'a' && c <='z') && !( c >= '0' && c <='9') &&
+            c != '.' && c !='-' )
+            *it= '-';
+    }
+
+    // if not having a '.' we add our own reverse-DNS
+    if ( utiString.Index('.') == wxNOT_FOUND)
+        utiString = "org.wxwidgets."+utiString;
+    m_format = wxCFStringRef(utiString);
 }
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const
