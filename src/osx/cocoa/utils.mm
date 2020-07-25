@@ -324,17 +324,6 @@ void wxBell()
 
 #endif
 
-// here we subclass NSApplication, for the purpose of being able to override sendEvent.
-@interface wxNSApplication : NSApplication
-{
-}
-
-- (id)init;
-
-- (void)sendEvent:(NSEvent *)anEvent;
-
-@end
-
 @implementation wxNSApplication
 
 - (id)init

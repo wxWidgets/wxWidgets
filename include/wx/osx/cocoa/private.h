@@ -516,6 +516,16 @@ public:
 
     @end
 
+    // we subclass NSApplication, for the purpose of being able to override sendEvent and move it to front
+    @interface wxNSApplication : NSApplication
+    {
+    }
+
+    - (id)init;
+    - (void)sendEvent:(NSEvent *)anEvent;
+    - (void) transformToForegroundApplication;
+    @end
+
 #endif // __OBJC__
 
 // NSCursor
