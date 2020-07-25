@@ -207,7 +207,8 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), wxEmptyString, wxT("wxChoice::GetString(): invalid index") );
+    if (!IsValid(n))
+        return wxEmptyString;
 
     return m_strings[n] ;
 }
