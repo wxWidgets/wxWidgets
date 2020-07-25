@@ -273,7 +273,7 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
     CHECK(updatedText.GetCount() == 0);
 }
 
-TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Base`", "[spinctrl]")
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Base", "[spinctrl]")
 {
     CHECK(m_spin->GetMin() == 0);
     CHECK(m_spin->GetMax() == 100);
