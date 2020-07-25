@@ -338,6 +338,8 @@ TEST_CASE_METHOD(SpinCtrlTestCase3, "SpinCtrl::SetValueInsideEventHandler", "[sp
 
         CHECK(m_spin->GetValue() == 32);
     }
+
+    delete text;
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
