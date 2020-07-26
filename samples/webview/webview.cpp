@@ -1019,6 +1019,7 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
     }
     else if (evt.GetId() == m_tools_custom->GetId())
     {
+        m_zoomFactor = m_browser->GetZoomFactor() * 100;
         OnZoomCustom(evt);
     }
     else
