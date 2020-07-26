@@ -1455,7 +1455,7 @@ void wxNSTextViewControl::SetStyle(long start,
                     [storage addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:underlineStyle] range:range];
                     wxColour colour = style.GetUnderlineColour();
                     if ( colour.IsOk() )
-                      [storage addAttribute:NSUnderlineStyleAttributeName value:colour.OSXGetNSColor() range:range];
+                      [storage addAttribute:NSUnderlineColorAttributeName value:colour.OSXGetNSColor() range:range];
                 }
                 if ( style.HasFontStrikethrough() )
                     [storage addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:strikeThroughStyle] range:range];
