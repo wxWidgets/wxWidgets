@@ -709,6 +709,28 @@ typedef short int WXTYPE;
 #endif
 
 /*
+    Specific macro for disabling warnings related to not using override: this
+    has to be done differently for gcc and clang and is only supported since
+    gcc 5.1.
+ */
+#if defined(__clang__)
+#   define wxWARNING_SUPPRESS_MISSING_OVERRIDE() \
+        wxCLANG_WARNING_SUPPRESS(suggest-override) \
+        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
+#   define wxWARNING_RESTORE_MISSING_OVERRIDE() \
+        wxCLANG_WARNING_RESTORE(inconsistent-missing-override) \
+        wxCLANG_WARNING_RESTORE(suggest-override)
+#elif wxCHECK_GCC_VERSION(5, 1)
+#   define wxWARNING_SUPPRESS_MISSING_OVERRIDE() \
+        wxGCC_WARNING_SUPPRESS(suggest-override)
+#   define wxWARNING_RESTORE_MISSING_OVERRIDE() \
+        wxGCC_WARNING_RESTORE(suggest-override)
+#else
+#   define wxWARNING_SUPPRESS_MISSING_OVERRIDE()
+#   define wxWARNING_RESTORE_MISSING_OVERRIDE()
+#endif
+
+/*
     Combination of the two variants above: should be used for deprecated
     functions which are defined inline and are used by wxWidgets itself.
  */
