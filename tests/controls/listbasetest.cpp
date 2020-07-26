@@ -191,6 +191,16 @@ void ListBaseTestCase::ItemClick()
 
     wxListCtrl* const list = GetList();
 
+    if ( IsRunningUnderXVFB() )
+    {
+        if ( wxDynamicCast(list, wxListView) )
+        {
+            // ListViewTestCase mysteriously affects wxSTC test
+            // under Xvfb causing it to fail.
+            return;
+        }
+    }
+
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
     list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
     list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 40);
