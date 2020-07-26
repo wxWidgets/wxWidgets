@@ -194,8 +194,8 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 
             name = [filemanager displayNameAtPath:path];
 
-            paths.Add(wxCFStringRef(path).AsString());
-            names.Add(wxCFStringRef(name).AsString());
+            paths.Add(wxCFStringRefFromGet(path).AsString());
+            names.Add(wxCFStringRefFromGet(name).AsString());
         }
     }
 
