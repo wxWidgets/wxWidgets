@@ -6346,12 +6346,19 @@ public:
     @class wxGridRangeSelectEvent
 
     @beginEventTable{wxGridRangeSelectEvent}
-    @event{EVT_GRID_RANGE_SELECT(func)}
+    @event{EVT_GRID_RANGE_SELECTING(func)}
+        The user is selecting a group of contiguous cells. Processes a
+        @c wxEVT_GRID_RANGE_SELECTING event type.
+        This event is available in wxWidgets 3.1.5 and later only.
+    @event{EVT_GRID_CMD_RANGE_SELECTING(id, func)}
+        The user is selecting a group of contiguous cells; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_RANGE_SELECTING event type.
+    @event{EVT_GRID_RANGE_SELECTED(func)}
         The user selected a group of contiguous cells. Processes a
-        @c wxEVT_GRID_RANGE_SELECT event type.
-    @event{EVT_GRID_CMD_RANGE_SELECT(id, func)}
+        @c wxEVT_GRID_RANGE_SELECTED event type.
+    @event{EVT_GRID_CMD_RANGE_SELECTED(id, func)}
         The user selected a group of contiguous cells; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_RANGE_SELECT event type.
+        identifier. Processes a @c wxEVT_GRID_RANGE_SELECTED event type.
     @endEventTable
 
     @library{wxcore}
@@ -6526,7 +6533,8 @@ wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
 wxEventType wxEVT_GRID_ROW_SIZE;
 wxEventType wxEVT_GRID_COL_SIZE;
 wxEventType wxEVT_GRID_COL_AUTO_SIZE;
-wxEventType wxEVT_GRID_RANGE_SELECT;
+wxEventType wxEVT_GRID_RANGE_SELECTING;
+wxEventType wxEVT_GRID_RANGE_SELECTED;
 wxEventType wxEVT_GRID_CELL_CHANGING;
 wxEventType wxEVT_GRID_CELL_CHANGED;
 wxEventType wxEVT_GRID_SELECT_CELL;
@@ -6537,4 +6545,3 @@ wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
 wxEventType wxEVT_GRID_COL_MOVE;
 wxEventType wxEVT_GRID_COL_SORT;
 wxEventType wxEVT_GRID_TABBING;
-

@@ -48,12 +48,54 @@ wxGridSelection::wxGridSelection( wxGrid * grid,
 {
     m_grid = grid;
     m_selectionMode = sel;
+    m_isSelecting = false;
 }
 
 bool wxGridSelection::IsSelection()
 {
     return !m_selection.empty();
 }
+
+
+void wxGridSelection::StartSelecting()
+{
+    m_isSelecting = true;
+}
+void wxGridSelection::EndSelecting()
+{
+    m_isSelecting = false;
+    //send the RANGE_SELECTED events
+    if (IsSelection())
+    {
+        size_t n;
+        wxRect r;
+        wxGridCellCoords coords1, coords2;
+
+        // Send selection events for all the selected blocks.
+        const size_t count = m_selection.size();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            const wxGridBlockCoords& block = m_selection[n];
+            coords1 = block.GetTopLeft();
+            coords2 = block.GetBottomRight();
+            if ( !m_grid->GetBatchCount() )
+            {
+                wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                                                wxEVT_GRID_RANGE_SELECTED,
+                                                m_grid,
+                                                coords1,
+                                                coords2,
+                                                true );
+                m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+            }
+        }
+    }
+    else
+    {
+        ClearSelection();
+    }
+}
+
 
 bool wxGridSelection::IsInSelection( int row, int col ) const
 {
@@ -344,7 +386,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
         if ( sendEvent )
         {
             wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                           wxEVT_GRID_RANGE_SELECT,
+                                           m_isSelecting ? wxEVT_GRID_RANGE_SELECTING : wxEVT_GRID_RANGE_SELECTED,
                                            m_grid,
                                            refBlock.GetTopLeft(),
                                            refBlock.GetBottomRight(),
@@ -383,7 +425,7 @@ void wxGridSelection::ClearSelection()
     // (No finer grained events for each of the smaller regions
     //  deselected above!)
     wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-                                    wxEVT_GRID_RANGE_SELECT,
+                                    m_isSelecting ? wxEVT_GRID_RANGE_SELECTING : wxEVT_GRID_RANGE_SELECTED,
                                     m_grid,
                                     wxGridCellCoords( 0, 0 ),
                                     wxGridCellCoords(
@@ -641,7 +683,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
 
     // Send Event.
     wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                    wxEVT_GRID_RANGE_SELECT,
+                                    m_isSelecting ? wxEVT_GRID_RANGE_SELECTING : wxEVT_GRID_RANGE_SELECTED,
                                     m_grid,
                                     newBlock.GetTopLeft(),
                                     newBlock.GetBottomRight(),
@@ -814,7 +856,7 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     if ( sendEvent )
     {
         wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-            wxEVT_GRID_RANGE_SELECT,
+            m_isSelecting ? wxEVT_GRID_RANGE_SELECTING : wxEVT_GRID_RANGE_SELECTED,
             m_grid,
             block.GetTopLeft(),
             block.GetBottomRight(),

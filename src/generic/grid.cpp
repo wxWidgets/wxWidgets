@@ -147,7 +147,8 @@ wxDEFINE_EVENT( wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SORT, wxGridEvent );
-wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEvent );
+wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECTING, wxGridRangeSelectEvent );
+wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECTED, wxGridRangeSelectEvent );
 wxDEFINE_EVENT( wxEVT_GRID_CELL_CHANGING, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_CELL_CHANGED, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_SELECT_CELL, wxGridEvent );
@@ -4383,6 +4384,8 @@ void wxGrid::DoAfterDraggingEnd()
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
     m_winCapture = NULL;
+    
+    m_selection->EndSelecting();
 }
 
 void wxGrid::EndDraggingIfNecessary()
@@ -4510,7 +4513,13 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
     // Ctrl later can't change the dragging behaviour. Only the initial state
     // of the modifier keys matters.
     if ( m_selection )
+    {
+        if (isFirstDrag)
+        {
+            m_selection->StartSelecting();
+        }
         m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
+    }
 
     return true;
 }
@@ -4814,6 +4823,7 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             m_winCapture->CaptureMouse();
 
             m_isDragging = true;
+            m_selection->StartSelecting();
         }
 
         return;
