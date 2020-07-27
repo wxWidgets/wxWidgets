@@ -103,6 +103,9 @@ public:
 
     wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
 
+    
+    void StartSelecting();
+    void EndSelecting();
 private:
     void SelectBlockNoEvent(const wxGridBlockCoords& block)
     {
@@ -138,6 +141,7 @@ private:
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
+    bool                                m_isSelecting;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };
