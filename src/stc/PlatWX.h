@@ -48,7 +48,6 @@ public:
     virtual void ClearRegisteredImages() override;
     virtual void SetDelegate(IListBoxDelegate *lbDelegate) override;
     virtual void SetList(const char* list, char separator, char typesep) override;
-            void SetListInfo(int*, int*, int*);
 };
 
 

@@ -5866,7 +5866,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
@@ -5914,7 +5913,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
@@ -5930,13 +5928,18 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_AUTOCOMP_COMPLETED);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
     case SCN_MARGINRIGHTCLICK:
         evt.SetEventType(wxEVT_STC_MARGIN_RIGHT_CLICK);
         evt.SetMargin(scn.margin);
+        break;
+
+    case SCN_AUTOCSELECTIONCHANGE:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION_CHANGE);
+        evt.SetListType(scn.listType);
+        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     default:

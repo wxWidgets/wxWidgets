@@ -2291,12 +2291,6 @@ public:
     const wxColour& GetCurrentBgColour() const;
     const wxColour& GetCurrentTextColour() const;
 
-    // Data needed for SELECTION_CHANGE event
-    void SetSciListData(int*, int*, int*);
-    int GetListType() const;
-    int GetPosStart() const;
-    int GetStartLen() const;
-
 private:
     WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, ImgList);
 
@@ -2319,10 +2313,6 @@ private:
     wxColour m_currentTextColour;
     bool     m_useDefaultCurrentBgColour;
     bool     m_useDefaultCurrentTextColour;
-
-    int*     m_listType;
-    int*     m_posStart;
-    int*     m_startLen;
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
@@ -2332,8 +2322,7 @@ wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
                         m_useDefaultHighlightTextColour(true),
                         m_hasListCtrlAppearance(true),
                         m_useDefaultCurrentBgColour(true),
-                        m_useDefaultCurrentTextColour(true),
-                        m_listType(nullptr), m_posStart(nullptr), m_startLen(nullptr)
+                        m_useDefaultCurrentTextColour(true)
 {
     ComputeColours();
 }
@@ -2566,28 +2555,6 @@ const wxColour& wxSTCListBoxVisualData::GetCurrentTextColour() const
     return m_currentTextColour;
 }
 
-void wxSTCListBoxVisualData::SetSciListData(int* type, int* pos, int* len)
-{
-    m_listType = type;
-    m_posStart = pos;
-    m_startLen = len;
-}
-
-int wxSTCListBoxVisualData::GetListType() const
-{
-    return (m_listType?*m_listType:0);
-}
-
-int wxSTCListBoxVisualData::GetPosStart() const
-{
-    return (m_posStart?*m_posStart:0);
-}
-
-int wxSTCListBoxVisualData::GetStartLen() const
-{
-    return (m_startLen?*m_startLen:0);
-}
-
 // The class is intended to look like a standard listbox (with an optional
 // icon). However, it needs to look like it has focus even when it doesn't.
 class wxSTCListBox : public wxSystemThemedControl<wxVListBox>
@@ -2618,7 +2585,6 @@ public:
 protected:
     // Helpers
     void AppendHelper(const wxString& text, int type);
-    void SelectHelper(int i);
     void RecalculateItemHeight();
     int TextBoxFromClientEdge() const;
     virtual void OnDrawItemText(wxDC&, const wxRect&,
@@ -2788,7 +2754,9 @@ int wxSTCListBox::Length() const
 void wxSTCListBox::Select(int n)
 {
     SetSelection(n);
-    SelectHelper(n);
+
+    wxCommandEvent e;
+    OnSelection(e);
 }
 
 void wxSTCListBox::GetValue(int n, char *value, int len) const
@@ -2829,37 +2797,6 @@ void wxSTCListBox::AppendHelper(const wxString& text, int type)
     SetItemCount(m_labels.size());
 }
 
-void wxSTCListBox::SelectHelper(int i)
-{
-    // This method is used to trigger the wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
-    // event. This event is generated directly here since the version of
-    // Scintilla currently used does not support it.
-
-    //If the Scintilla component is updated, it should be sufficient to:
-    // 1) Change this method to use a callback to let Scintilla generate the
-    //    event.
-    // 2) Remove the SELECTION_CHANGE event data from the wxSTCListBoxVisualData
-    //    class and the SetListInfo method from the ListBoxImpl class since they
-    //    will no longer be needed.
-
-    wxStyledTextCtrl* stc = wxDynamicCast(GetGrandParent(), wxStyledTextCtrl);
-
-    if ( stc )
-    {
-        wxStyledTextEvent evt(wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,stc->GetId());
-        evt.SetEventObject(stc);
-        evt.SetListType(m_visualData->GetListType());
-
-        evt.SetPosition(m_visualData->GetPosStart() -
-                            m_visualData->GetStartLen());
-
-        if ( 0 <= i && i < static_cast<int>(m_labels.size()) )
-            evt.SetString(m_labels[i]);
-
-        stc->ProcessWindowEvent(evt);
-    }
-}
-
 void wxSTCListBox::RecalculateItemHeight()
 {
     m_itemHeight = wxMax(m_textHeight + 2 * m_textExtraVerticalPadding,
@@ -2873,9 +2810,13 @@ int wxSTCListBox::TextBoxFromClientEdge() const
     return (width == 0 ? 0 : width + 2 * m_imagePadding);
 }
 
-void wxSTCListBox::OnSelection(wxCommandEvent& event)
+void wxSTCListBox::OnSelection(wxCommandEvent& WXUNUSED(event))
 {
-    SelectHelper(event.GetSelection());
+    if ( m_lbDelegate )
+    {
+        ListBoxEvent lbe(ListBoxEvent::EventType::selectionChange);
+        m_lbDelegate->ListNotify(&lbe);
+    }
 }
 
 void wxSTCListBox::OnDClick(wxCommandEvent& WXUNUSED(event))
@@ -3339,11 +3280,6 @@ void ListBoxImpl::ClearRegisteredImages() {
 
 void ListBoxImpl::SetDelegate(IListBoxDelegate* lbDelegate) {
     m_listBox->SetDelegate(lbDelegate);
-}
-
-void ListBoxImpl::SetListInfo(int* listType, int* posStart, int* startLen)
-{
-    m_visualData->SetSciListData(listType,posStart,startLen);
 }
 
 
