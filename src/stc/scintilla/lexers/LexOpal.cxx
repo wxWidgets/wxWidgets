@@ -22,9 +22,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 inline static void getRange( Sci_PositionU start, Sci_PositionU end, Accessor & styler, char * s, Sci_PositionU len )
 {

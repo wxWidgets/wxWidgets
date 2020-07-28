@@ -1,4 +1,5 @@
 // Scintilla Lexer for EDIFACT
+// @file LexEDIFACT.cxx
 // Written by Iain Clarke, IMCSoft & Inobiz AB.
 // EDIFACT documented here: https://www.unece.org/cefact/edifact/welcome.html
 // and more readably here: https://en.wikipedia.org/wiki/EDIFACT
@@ -12,18 +13,19 @@
 #include <cstring>
 #include <cctype>
 
+#include <string>
+
 #include "ILexer.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
 
 #include "LexAccessor.h"
 #include "LexerModule.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
-class LexerEDIFACT : public ILexer
+class LexerEDIFACT : public DefaultLexer
 {
 public:
 	LexerEDIFACT();
@@ -33,48 +35,72 @@ public:
 		return new LexerEDIFACT;
 	}
 
-	virtual int SCI_METHOD Version() const
+	int SCI_METHOD Version() const override
 	{
-		return lvOriginal;
+		return lvIdentity;
 	}
-	virtual void SCI_METHOD Release()
+	void SCI_METHOD Release() override
 	{
 		delete this;
 	}
 
-	const char * SCI_METHOD PropertyNames()
+	const char * SCI_METHOD PropertyNames() override
 	{
-		return "fold";
+		return "fold\nlexer.edifact.highlight.un.all";
 	}
-	int SCI_METHOD PropertyType(const char *)
+	int SCI_METHOD PropertyType(const char *) override
 	{
 		return SC_TYPE_BOOLEAN; // Only one property!
 	}
-	const char * SCI_METHOD DescribeProperty(const char *name)
+	const char * SCI_METHOD DescribeProperty(const char *name) override
 	{
-		if (strcmp(name, "fold"))
-			return NULL;
-		return "Whether to apply folding to document or not";
+		if (!strcmp(name, "fold"))
+			return "Whether to apply folding to document or not";
+		if (!strcmp(name, "lexer.edifact.highlight.un.all"))
+			return "Whether to apply UN* highlighting to all UN segments, or just to UNH";
+		return NULL;
 	}
 
-	virtual Sci_Position SCI_METHOD PropertySet(const char *key, const char *val)
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override
 	{
-		if (strcmp(key, "fold"))
-			return -1;
-		m_bFold = strcmp(val, "0") ? true : false;
-		return 0;
+		if (!strcmp(key, "fold"))
+		{
+			m_bFold = strcmp(val, "0") ? true : false;
+			return 0;
+		}
+		if (!strcmp(key, "lexer.edifact.highlight.un.all"))	// GetProperty
+		{
+			m_bHighlightAllUN = strcmp(val, "0") ? true : false;
+			return 0;
+		}
+		return -1;
 	}
-	const char * SCI_METHOD DescribeWordListSets()
+
+	const char * SCI_METHOD PropertyGet(const char *key) override
+	{
+		m_lastPropertyValue = "";
+		if (!strcmp(key, "fold"))
+		{
+			m_lastPropertyValue = m_bFold ? "1" : "0";
+		}
+		if (!strcmp(key, "lexer.edifact.highlight.un.all"))	// GetProperty
+		{
+			m_lastPropertyValue = m_bHighlightAllUN ? "1" : "0";
+		}
+		return m_lastPropertyValue.c_str();
+	}
+
+	const char * SCI_METHOD DescribeWordListSets() override
 	{
 		return NULL;
 	}
-	virtual Sci_Position SCI_METHOD WordListSet(int, const char *)
+	Sci_Position SCI_METHOD WordListSet(int, const char *) override
 	{
 		return -1;
 	}
-	virtual void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-	virtual void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-	virtual void * SCI_METHOD PrivateCall(int, void *)
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void * SCI_METHOD PrivateCall(int, void *) override
 	{
 		return NULL;
 	}
@@ -86,11 +112,18 @@ protected:
 	int DetectSegmentHeader(char SegmentHeader[3]) const;
 
 	bool m_bFold;
+
+	// property lexer.edifact.highlight.un.all
+	//	Set to 0 to highlight only UNA segments, or 1 to highlight all UNx segments.
+	bool m_bHighlightAllUN;
+
 	char m_chComponent;
 	char m_chData;
 	char m_chDecimal;
 	char m_chRelease;
 	char m_chSegment;
+
+	std::string m_lastPropertyValue;
 };
 
 LexerModule lmEDIFACT(SCLEX_EDIFACT, LexerEDIFACT::Factory, "edifact");
@@ -101,9 +134,10 @@ LexerModule lmEDIFACT(SCLEX_EDIFACT, LexerEDIFACT::Factory, "edifact");
 
 ///////////////////////////////////////////////////////////////////////////////
 
-LexerEDIFACT::LexerEDIFACT()
+LexerEDIFACT::LexerEDIFACT() : DefaultLexer("edifact", SCLEX_EDIFACT)
 {
 	m_bFold = false;
+	m_bHighlightAllUN = false;
 	m_chComponent = ':';
 	m_chData = '+';
 	m_chDecimal = '.';
@@ -111,9 +145,9 @@ LexerEDIFACT::LexerEDIFACT()
 	m_chSegment = '\'';
 }
 
-void LexerEDIFACT::Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int, IDocument *pAccess)
+void LexerEDIFACT::Lex(Sci_PositionU startPos, Sci_Position length, int, IDocument *pAccess)
 {
-	Sci_PositionU posFinish = startPos + lengthDoc;
+	Sci_PositionU posFinish = startPos + length;
 	InitialiseFromUNA(pAccess, posFinish);
 
 	// Look backwards for a ' or a document beginning
@@ -191,40 +225,85 @@ void LexerEDIFACT::Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int, IDoc
 	pAccess->SetStyleFor(posFinish - posSegmentStart, SCE_EDI_BADSEGMENT);
 }
 
-void LexerEDIFACT::Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int, IDocument *pAccess)
+void LexerEDIFACT::Fold(Sci_PositionU startPos, Sci_Position length, int, IDocument *pAccess)
 {
 	if (!m_bFold)
 		return;
 
-	// Fold at UNx lines. ie, UNx segments = 0, other segments = 1.
-	// There's no sub folding, so we can be quite simple.
-	Sci_Position endPos = startPos + lengthDoc;
+	Sci_PositionU endPos = startPos + length;
+	startPos = FindPreviousEnd(pAccess, startPos);
+	char c;
 	char SegmentHeader[4] = { 0 };
 
-	int iIndentPrevious = 0;
-	Sci_Position lineLast = pAccess->LineFromPosition(endPos);
+	bool AwaitingSegment = true;
+	Sci_PositionU currLine = pAccess->LineFromPosition(startPos);
+	int levelCurrentStyle = SC_FOLDLEVELBASE;
+	if (currLine > 0)
+		levelCurrentStyle = pAccess->GetLevel(currLine - 1); // bottom 12 bits are level
+	int indentCurrent = levelCurrentStyle & SC_FOLDLEVELNUMBERMASK;
+	int indentNext = indentCurrent;
 
-	for (Sci_Position lineCurrent = pAccess->LineFromPosition(startPos); lineCurrent <= lineLast; lineCurrent++)
+	while (startPos < endPos)
 	{
-		Sci_Position posLineStart = pAccess->LineStart(lineCurrent);
-		posLineStart = ForwardPastWhitespace(pAccess, posLineStart, endPos);
-		Sci_Position lineDataStart = pAccess->LineFromPosition(posLineStart);
-		// Fill in whitespace lines?
-		for (; lineCurrent < lineDataStart; lineCurrent++)
-			pAccess->SetLevel(lineCurrent, SC_FOLDLEVELBASE | SC_FOLDLEVELWHITEFLAG | iIndentPrevious);
-		pAccess->GetCharRange(SegmentHeader, posLineStart, 3);
-		//if (DetectSegmentHeader(SegmentHeader) == SCE_EDI_BADSEGMENT) // Abort if this is not a proper segment header
+		pAccess->GetCharRange(&c, startPos, 1);
+		switch (c)
+		{
+		case '\t':
+		case '\r':
+		case ' ':
+			startPos++;
+			continue;
+		case '\n':
+			currLine = pAccess->LineFromPosition(startPos);
+			pAccess->SetLevel(currLine, levelCurrentStyle | indentCurrent);
+			startPos++;
+			levelCurrentStyle = SC_FOLDLEVELBASE;
+			indentCurrent = indentNext;
+			continue;
+		}
+		if (c == m_chRelease)
+		{
+			startPos += 2;
+			continue;
+		}
+		if (c == m_chSegment)
+		{
+			AwaitingSegment = true;
+			startPos++;
+			continue;
+		}
 
-		int level = 0;
-		if (memcmp(SegmentHeader, "UNH", 3) == 0) // UNH starts blocks
-			level = SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG;
-		// Check for UNA,B and Z. All others are inside messages
-		else if (!memcmp(SegmentHeader, "UNA", 3) || !memcmp(SegmentHeader, "UNB", 3) || !memcmp(SegmentHeader, "UNZ", 3))
-			level = SC_FOLDLEVELBASE;
-		else
-			level = SC_FOLDLEVELBASE | 1;
-		pAccess->SetLevel(lineCurrent, level);
-		iIndentPrevious = level & SC_FOLDLEVELNUMBERMASK;
+		if (!AwaitingSegment)
+		{
+			startPos++;
+			continue;
+		}
+		
+		// Segment!
+		pAccess->GetCharRange(SegmentHeader, startPos, 3);
+		if (SegmentHeader[0] != 'U' || SegmentHeader[1] != 'N')
+		{
+			startPos++;
+			continue;
+		}
+
+		AwaitingSegment = false;
+		switch (SegmentHeader[2])
+		{
+		case 'H':
+		case 'G':
+			indentNext++;
+			levelCurrentStyle = SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG;
+			break;
+
+		case 'T':
+		case 'E':
+			if (indentNext > 0)
+				indentNext--;
+			break;
+		}
+
+		startPos += 3;
 	}
 }
 
@@ -295,9 +374,14 @@ int LexerEDIFACT::DetectSegmentHeader(char SegmentHeader[3]) const
 		SegmentHeader[2] < 'A' || SegmentHeader[2] > 'Z')
 		return SCE_EDI_BADSEGMENT;
 
-	if (memcmp(SegmentHeader, "UNA", 3) == 0)
+	if (!memcmp(SegmentHeader, "UNA", 3))
 		return SCE_EDI_UNA;
-	if (memcmp(SegmentHeader, "UNH", 3) == 0)
+
+	if (m_bHighlightAllUN && !memcmp(SegmentHeader, "UN", 2))
+		return SCE_EDI_UNH;
+	else if (!memcmp(SegmentHeader, "UNH", 3))
+		return SCE_EDI_UNH;
+	else if (!memcmp(SegmentHeader, "UNG", 3))
 		return SCE_EDI_UNH;
 
 	return SCE_EDI_SEGMENTSTART;
@@ -315,3 +399,5 @@ Sci_Position LexerEDIFACT::FindPreviousEnd(IDocument *pAccess, Sci_Position star
 	// We didn't find a ', so just go with the beginning
 	return 0;
 }
+
+

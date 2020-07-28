@@ -1,5 +1,5 @@
 // Scintilla source code edit control
-/** @file LexClw.cxx
+/** @file LexCLW.cxx
  ** Lexer for Clarion.
  ** 2004/12/17 Updated Lexer
  **/
@@ -24,9 +24,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 // Is an end of line character
 inline bool IsEOL(const int ch) {

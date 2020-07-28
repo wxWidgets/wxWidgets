@@ -8,9 +8,7 @@
 #ifndef VIEWSTYLE_H
 #define VIEWSTYLE_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 /**
  */
@@ -22,31 +20,22 @@ public:
 	int mask;
 	bool sensitive;
 	int cursor;
-	MarginStyle();
+	MarginStyle(int style_= SC_MARGIN_SYMBOL, int width_=0, int mask_=0) noexcept;
 };
 
 /**
  */
-class FontNames {
-private:
-	std::vector<char *> names;
 
-	// Private so FontNames objects can not be copied
-	FontNames(const FontNames &);
-public:
-	FontNames();
-	~FontNames();
-	void Clear();
-	const char *Save(const char *name);
-};
 
 class FontRealised : public FontMeasurements {
-	// Private so FontRealised objects can not be copied
-	FontRealised(const FontRealised &);
-	FontRealised &operator=(const FontRealised &);
 public:
 	Font font;
-	FontRealised();
+	FontRealised() noexcept;
+	// FontRealised objects can not be copied.
+	FontRealised(const FontRealised &) = delete;
+	FontRealised(FontRealised &&) = delete;
+	FontRealised &operator=(const FontRealised &) = delete;
+	FontRealised &operator=(FontRealised &&) = delete;
 	virtual ~FontRealised();
 	void Realise(Surface &surface, int zoomLevel, int technology, const FontSpecification &fs);
 };
@@ -57,16 +46,16 @@ enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterInden
 
 enum TabDrawMode {tdLongArrow=0, tdStrikeOut=1};
 
-typedef std::map<FontSpecification, FontRealised *> FontMap;
+typedef std::map<FontSpecification, std::unique_ptr<FontRealised>> FontMap;
 
-enum WrapMode { eWrapNone, eWrapWord, eWrapChar, eWrapWhitespace };
+enum class WrapMode { none, word, character, whitespace };
 
 class ColourOptional : public ColourDesired {
 public:
 	bool isSet;
-	ColourOptional(ColourDesired colour_=ColourDesired(0,0,0), bool isSet_=false) : ColourDesired(colour_), isSet(isSet_) {
+	ColourOptional(ColourDesired colour_=ColourDesired(0,0,0), bool isSet_=false) noexcept : ColourDesired(colour_), isSet(isSet_) {
 	}
-	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(static_cast<long>(lParam)), isSet(wParam != 0) {
+	ColourOptional(uptr_t wParam, sptr_t lParam) noexcept : ColourDesired(static_cast<int>(lParam)), isSet(wParam != 0) {
 	}
 };
 
@@ -78,27 +67,27 @@ struct ForeBackColours {
 struct EdgeProperties {
 	int column;
 	ColourDesired colour;
-	EdgeProperties(int column_ = 0, ColourDesired colour_ = ColourDesired(0)) :
+	EdgeProperties(int column_ = 0, ColourDesired colour_ = ColourDesired(0)) noexcept :
 		column(column_), colour(colour_) {
 	}
-	EdgeProperties(uptr_t wParam, sptr_t lParam) :
-		column(static_cast<int>(wParam)), colour(static_cast<long>(lParam)) {
+	EdgeProperties(uptr_t wParam, sptr_t lParam) noexcept :
+		column(static_cast<int>(wParam)), colour(static_cast<int>(lParam)) {
 	}
 };
 
 /**
  */
 class ViewStyle {
-	FontNames fontNames;
+	UniqueStringSet fontNames;
 	FontMap fonts;
 public:
 	std::vector<Style> styles;
-	size_t nextExtendedStyle;
-	LineMarker markers[MARKER_MAX + 1];
+	int nextExtendedStyle;
+	std::vector<LineMarker> markers;
 	int largestMarkerHeight;
-	Indicator indicators[INDIC_MAX + 1];
-	unsigned int indicatorsDynamic;
-	unsigned int indicatorsSetFore;
+	std::vector<Indicator> indicators;
+	bool indicatorsDynamic;
+	bool indicatorsSetFore;
 	int technology;
 	int lineHeight;
 	int lineOverlap;
@@ -141,6 +130,7 @@ public:
 	bool viewEOL;
 	ColourDesired caretcolour;
 	ColourDesired additionalCaretColour;
+	int caretLineFrame;
 	bool showCaretLineBackground;
 	bool alwaysShowCaretLineBackground;
 	ColourDesired caretLineBackground;
@@ -155,6 +145,8 @@ public:
 	int marginStyleOffset;
 	int annotationVisible;
 	int annotationStyleOffset;
+	int eolAnnotationVisible;
+	int eolAnnotationStyleOffset;
 	bool braceHighlightIndicatorSet;
 	int braceHighlightIndicator;
 	bool braceBadLightIndicatorSet;
@@ -175,45 +167,55 @@ public:
 
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
+	ViewStyle(ViewStyle &&) = delete;
+	// Can only be copied through copy constructor which ensures font names initialised correctly
+	ViewStyle &operator=(const ViewStyle &) = delete;
+	ViewStyle &operator=(ViewStyle &&) = delete;
 	~ViewStyle();
-	void CalculateMarginWidthAndMask();
+	void CalculateMarginWidthAndMask() noexcept;
 	void Init(size_t stylesSize_=256);
 	void Refresh(Surface &surface, int tabInChars);
-	void ReleaseAllExtendedStyles();
+	void ReleaseAllExtendedStyles() noexcept;
 	int AllocateExtendedStyles(int numberStyles);
 	void EnsureStyle(size_t index);
 	void ResetDefaultStyle();
 	void ClearStyles();
 	void SetStyleFontName(int styleIndex, const char *name);
-	bool ProtectionActive() const;
-	int ExternalMarginWidth() const;
-	int MarginFromLocation(Point pt) const;
-	bool ValidStyle(size_t styleIndex) const;
-	void CalcLargestMarkerHeight();
-	ColourOptional Background(int marksOfLine, bool caretActive, bool lineContainsCaret) const;
-	bool SelectionBackgroundDrawn() const;
-	bool WhitespaceBackgroundDrawn() const;
-	ColourDesired WrapColour() const;
+	bool ProtectionActive() const noexcept;
+	int ExternalMarginWidth() const noexcept;
+	int MarginFromLocation(Point pt) const noexcept;
+	bool ValidStyle(size_t styleIndex) const noexcept;
+	void CalcLargestMarkerHeight() noexcept;
+	int GetFrameWidth() const noexcept;
+	bool IsLineFrameOpaque(bool caretActive, bool lineContainsCaret) const noexcept;
+	ColourOptional Background(int marksOfLine, bool caretActive, bool lineContainsCaret) const noexcept;
+	bool SelectionBackgroundDrawn() const noexcept;
+	bool WhitespaceBackgroundDrawn() const noexcept;
+	ColourDesired WrapColour() const noexcept;
 
-	bool SetWrapState(int wrapState_);
-	bool SetWrapVisualFlags(int wrapVisualFlags_);
-	bool SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation_);
-	bool SetWrapVisualStartIndent(int wrapVisualStartIndent_);
-	bool SetWrapIndentMode(int wrapIndentMode_);
+	void AddMultiEdge(uptr_t wParam, sptr_t lParam);
 
-	bool WhiteSpaceVisible(bool inIndent) const;
+	bool SetWrapState(int wrapState_) noexcept;
+	bool SetWrapVisualFlags(int wrapVisualFlags_) noexcept;
+	bool SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation_) noexcept;
+	bool SetWrapVisualStartIndent(int wrapVisualStartIndent_) noexcept;
+	bool SetWrapIndentMode(int wrapIndentMode_) noexcept;
+
+	bool WhiteSpaceVisible(bool inIndent) const noexcept;
+
+	enum class CaretShape { invisible, line, block, bar };
+	bool IsBlockCaretStyle() const noexcept;
+	bool IsCaretVisible() const noexcept;
+	bool DrawCaretInsideSelection(bool inOverstrike, bool imeCaretBlockOverride) const noexcept;
+	CaretShape CaretShapeForMode(bool inOverstrike) const noexcept;
 
 private:
 	void AllocStyles(size_t sizeNew);
 	void CreateAndAddFont(const FontSpecification &fs);
 	FontRealised *Find(const FontSpecification &fs);
 	void FindMaxAscentDescent();
-	// Private so can only be copied through copy constructor which ensures font names initialised correctly
-	ViewStyle &operator=(const ViewStyle &);
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

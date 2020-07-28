@@ -26,9 +26,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 
 /* KVIrc Script syntactic rules: http://www.kvirc.net/doc/doc_syntactic_rules.html */
