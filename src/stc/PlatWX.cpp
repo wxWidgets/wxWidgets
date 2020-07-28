@@ -39,6 +39,7 @@
 #endif
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/dcgraph.h"
+#include "wx/graphics.h"
 #endif
 
 #include "PlatWX.h"
@@ -73,17 +74,16 @@ PRectangle PRectangleFromwxRect(wxRect rc) {
                       rc.GetRight()+1, rc.GetBottom()+1);
 }
 
-wxColour wxColourFromCD(ColourDesired& cd) {
-    return wxColour((unsigned char)cd.GetRed(),
-                    (unsigned char)cd.GetGreen(),
-                    (unsigned char)cd.GetBlue());
+wxColour wxColourFromCD(ColourDesired const& cd) {
+    return wxColour(cd.GetRed(), cd.GetGreen(), cd.GetBlue());
 }
 
-wxColour wxColourFromCDandAlpha(ColourDesired& cd, int alpha) {
-    return wxColour((unsigned char)cd.GetRed(),
-                    (unsigned char)cd.GetGreen(),
-                    (unsigned char)cd.GetBlue(),
-                    (unsigned char)alpha);
+wxColour wxColourFromCDandAlpha(ColourDesired const& cd, int alpha) {
+    return wxColour(cd.GetRed(), cd.GetGreen(), cd.GetBlue(), alpha);
+}
+
+wxColour wxColourFromCA(ColourAlpha const& cd) {
+    return wxColour(cd.GetRed(), cd.GetGreen(), cd.GetBlue(), cd.GetAlpha());
 }
 
 //----------------------------------------------------------------------
@@ -483,10 +483,57 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
 #endif
 }
 
-void SurfaceImpl::GradientRectangle(PRectangle WXUNUSED(rc),
-                                    const std::vector<ColourStop> &WXUNUSED(stops),
-                                    GradientOptions WXUNUSED(options))
+void SurfaceImpl::GradientRectangle(PRectangle rc,
+                                    const std::vector<ColourStop>& stops,
+                                    GradientOptions options)
 {
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsGradientStops gradientStops;
+    for ( size_t i = 0; i < stops.size(); ++i )
+    {
+        if ( i == 0 )
+            gradientStops.SetStartColour(wxColourFromCA(stops[i].colour));
+        else if ( i == stops.size() - 1 )
+            gradientStops.SetEndColour(wxColourFromCA(stops[i].colour));
+        else
+            gradientStops.Add(wxColourFromCA(stops[i].colour), stops[i].position);
+    }
+
+    wxPoint ep;
+    switch ( options )
+    {
+        case GradientOptions::leftToRight:
+            ep = wxPoint(rc.right, rc.top);
+            break;
+        case GradientOptions::topToBottom:
+        default:
+            ep = wxPoint(rc.left, rc.bottom);
+            break;
+    }
+
+    wxGCDC dc(*(wxMemoryDC*)hdc);
+    wxGraphicsContext* gc = dc.GetGraphicsContext();
+    gc->SetBrush(gc->CreateLinearGradientBrush(rc.left, rc.top, ep.x, ep.y, gradientStops));
+    gc->DrawRectangle(rc.left, rc.top, rc.Width(), rc.Height());
+#else
+    // limited implementation that only uses the first and last stop
+    wxDirection dir;
+    switch ( options )
+    {
+        case GradientOptions::leftToRight:
+            dir = wxEAST;
+            break;
+        case GradientOptions::topToBottom:
+        default:
+            dir = wxSOUTH;
+            break;
+    }
+
+    hdc->GradientFillLinear(wxRectFromPRectangle(rc),
+                            wxColourFromCA(stops[0].colour),
+                            wxColourFromCA(stops[stops.size() - 1].colour),
+                            dir);
+#endif
 }
 
 #ifdef wxHAS_RAW_BITMAP
@@ -1368,10 +1415,60 @@ void SurfaceD2D::AlphaRectangle(PRectangle rc, int cornerSize,
     }
 }
 
-void SurfaceD2D::GradientRectangle(PRectangle WXUNUSED(rc),
-                                   const std::vector<ColourStop> &WXUNUSED(stops),
-                                   GradientOptions WXUNUSED(options))
+namespace {
+
+D2D_COLOR_F ColorFromColourAlpha(ColourAlpha colour) noexcept {
+    D2D_COLOR_F col;
+    col.r = colour.GetRedComponent();
+    col.g = colour.GetGreenComponent();
+    col.b = colour.GetBlueComponent();
+    col.a = colour.GetAlphaComponent();
+    return col;
+}
+
+}
+
+void SurfaceD2D::GradientRectangle(PRectangle rc,
+                                   const std::vector<ColourStop>& stops,
+                                   GradientOptions options)
 {
+    wxCHECK(Initialised(), void());
+
+    D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES lgbp;
+    lgbp.startPoint = D2D1::Point2F(rc.left, rc.top);
+    switch ( options )
+    {
+        case GradientOptions::leftToRight:
+            lgbp.endPoint = D2D1::Point2F(rc.right, rc.top);
+            break;
+        case GradientOptions::topToBottom:
+        default:
+            lgbp.endPoint = D2D1::Point2F(rc.left, rc.bottom);
+            break;
+    }
+
+    std::vector<D2D1_GRADIENT_STOP> gradientStops;
+    for ( const ColourStop &stop : stops )
+    {
+        gradientStops.push_back({ stop.position, ColorFromColourAlpha(stop.colour) });
+    }
+    ID2D1GradientStopCollection *pGradientStops = nullptr;
+    HRESULT hr = m_pRenderTarget->CreateGradientStopCollection(
+        gradientStops.data(), static_cast<UINT32>(gradientStops.size()), &pGradientStops);
+    if ( FAILED(hr) || !pGradientStops )
+    {
+        return;
+    }
+    ID2D1LinearGradientBrush *pBrushLinear = nullptr;
+    hr = m_pRenderTarget->CreateLinearGradientBrush(
+        lgbp, pGradientStops, &pBrushLinear);
+    if ( SUCCEEDED(hr) && pBrushLinear )
+    {
+        const D2D1_RECT_F rectangle = D2D1::RectF(round(rc.left), rc.top, round(rc.right), rc.bottom);
+        m_pRenderTarget->FillRectangle(&rectangle, pBrushLinear);
+        pBrushLinear->Release();
+    }
+    pGradientStops->Release();
 }
 
 void SurfaceD2D::DrawRGBAImage(PRectangle rc, int width, int height,
