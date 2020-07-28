@@ -1077,7 +1077,7 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         HRESULT res = (*pfnCoInternetGetSession)(0, &session, 0);
         if(FAILED(res))
         {
-            wxFAIL_MSG("Could not retrive internet session");
+            wxFAIL_MSG("Could not retrieve internet session");
         }
 
         HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol,
