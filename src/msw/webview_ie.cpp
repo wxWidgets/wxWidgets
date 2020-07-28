@@ -1762,25 +1762,23 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
         DWORD dwReserved)
 {
     wxUnusedVar(pwzUrl);
-    wxUnusedVar(ParseAction);
     wxUnusedVar(dwParseFlags);
-    wxUnusedVar(pwzResult);
-    wxUnusedVar(cchResult);
-    wxUnusedVar(pcchResult);
     wxUnusedVar(dwReserved);
 
-    switch (ParseAction)
+    const size_t secLen = m_handler->GetSecurityURL().length();
+    if ( secLen > 0 )
     {
-        case wxPARSE_SECURITY_URL:
-        case wxPARSE_SECURITY_DOMAIN:
+        switch ( ParseAction )
         {
-            const wchar_t Result[] = L"http://localhost";
-            size_t Len = wcslen(Result);
-            if(cchResult <= Len)
-                return S_FALSE;
-            wcscpy(pwzResult, Result);
-            *pcchResult = Len;
-            return S_OK;
+            case wxPARSE_SECURITY_URL:
+            case wxPARSE_SECURITY_DOMAIN:
+            {
+                if ( cchResult <= secLen )
+                    return S_FALSE;
+                wcscpy(pwzResult, m_handler->GetSecurityURL().wc_str());
+                *pcchResult = secLen;
+                return S_OK;
+            }
         }
     }
 
