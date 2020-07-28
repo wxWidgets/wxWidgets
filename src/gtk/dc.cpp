@@ -189,9 +189,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     source->GetUserScale(&sx, &sy);
 
     const wxBitmap& bitmap = source->GetImpl()->GetSelectedBitmap();
-    double bmpScale = bitmap.IsOk() ? bitmap.GetScaleFactor() : 1.0;
-    if (GetSelectedBitmap().IsOk())
-        bmpScale /= m_contentScaleFactor;
+    const double bmpScale = bitmap.IsOk() ? bitmap.GetScaleFactor() : 1.0;
 
     cairo_scale(cr, dstWidth / (sx * srcWidth * bmpScale), dstHeight / (sy * srcHeight * bmpScale));
     cairo_set_source_surface(cr, surfaceSrc, -xsrc_dev, -ysrc_dev);
