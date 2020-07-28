@@ -5,7 +5,7 @@ directory above this one.
 
 The current version of the Scintilla code is 3.7.2
 
-These are the basic steps needed to update the version of Scintilla used by wxSTC.  
+These are the basic steps needed to update the version of Scintilla used by wxSTC.
 
 1. Copy include, lexers, lexlib and src folders to src/stc/scintilla
 
@@ -15,9 +15,9 @@ new method names or constants because some of them may need to be
 tweaked to conform to similar naming patterns already used.  (See step
 #6 below.)
 
-3. Identify new source files and update build/bakefiles/scintilla.bkl
-accordingly so the new files will get built.  Use bakefile to
-regenerate the makefiles and project files.
+3. Identify new source files and update build/bakefiles/scintilla.bkl and
+build/cmake/lib/stc/CMakeLists.txt accordingly so the new files will get
+built. Use bakefile to regenerate the makefiles and project files.
 
 4. Examine changes in src/stc/scintilla/include/Platform.h and
 identify new or changed APIs that the wx "platform" will need to
