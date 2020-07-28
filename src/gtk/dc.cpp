@@ -187,7 +187,13 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     cairo_rectangle(cr, 0, 0, dstWidth, dstHeight);
     double sx, sy;
     source->GetUserScale(&sx, &sy);
-    cairo_scale(cr, dstWidth / (sx * srcWidth), dstHeight / (sy * srcHeight));
+
+    const wxBitmap& bitmap = source->GetImpl()->GetSelectedBitmap();
+    double bmpScale = bitmap.IsOk() ? bitmap.GetScaleFactor() : 1.0;
+    if (GetSelectedBitmap().IsOk())
+        bmpScale /= m_contentScaleFactor;
+
+    cairo_scale(cr, dstWidth / (sx * srcWidth * bmpScale), dstHeight / (sy * srcHeight * bmpScale));
     cairo_set_source_surface(cr, surfaceSrc, -xsrc_dev, -ysrc_dev);
     const wxRasterOperationMode rop_save = m_logicalFunction;
     SetLogicalFunction(rop);
@@ -195,7 +201,6 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     cairo_surface_t* maskSurf = NULL;
     if (useMask)
     {
-        const wxBitmap& bitmap = source->GetImpl()->GetSelectedBitmap();
         if (bitmap.IsOk())
         {
             wxMask* mask = bitmap.GetMask();
