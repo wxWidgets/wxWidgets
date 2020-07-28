@@ -1616,12 +1616,6 @@ VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
     m_handler = handler;
 }
 
-BEGIN_IID_TABLE(VirtualProtocol)
-    ADD_IID(Unknown)
-    ADD_RAW_IID(wxIID_IInternetProtocolRoot)
-    ADD_RAW_IID(wxIID_IInternetProtocol)
-END_IID_TABLE;
-
 STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
 {
     wxLogQueryInterface(wxT("VirtualProtocol"), riid);
