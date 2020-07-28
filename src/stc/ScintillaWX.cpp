@@ -982,25 +982,25 @@ void ScintillaWX::DoInvalidateStyleData() {
     InvalidateStyleData();
 }
 
-void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
-    ButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
+void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta) {
+    ButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt, meta));
 }
 
-void ScintillaWX::DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
+void ScintillaWX::DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta) {
     if (!PointInSelection(pt)) {
         CancelModes();
         SetEmptySelection(PositionFromLocation(pt));
     }
 
-    RightButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
+    RightButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt, meta));
 }
 
-void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
-    ButtonUpWithModifiers(pt, curTime, ModifierFlags(false, ctrl, false));
+void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta) {
+    ButtonUpWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt, meta));
 }
 
-void ScintillaWX::DoLeftButtonMove(Point pt) {
-    ButtonMoveWithModifiers(pt, 0, 0);
+void ScintillaWX::DoLeftButtonMove(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta) {
+    ButtonMoveWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt, meta));
 }
 
 #ifdef __WXGTK__

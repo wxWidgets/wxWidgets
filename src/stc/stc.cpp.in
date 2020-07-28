@@ -750,27 +750,28 @@ void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
     SetFocus();
     wxPoint pt = evt.GetPosition();
     m_swx->DoLeftButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
-                      evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+                            evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
 }
 
 void wxStyledTextCtrl::OnMouseRightDown(wxMouseEvent& evt) {
     SetFocus();
     wxPoint pt = evt.GetPosition();
     m_swx->DoRightButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
-                      evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+                             evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
     // We need to call evt.Skip() to allow generating EVT_CONTEXT_MENU
     evt.Skip();
 }
 
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
-    m_swx->DoLeftButtonMove(Point(pt.x, pt.y));
+    m_swx->DoLeftButtonMove(Point(pt.x, pt.y), m_stopWatch.Time(),
+                            evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
 }
 
 void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoLeftButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
-                      evt.ControlDown());
+                          evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
 }
 
 void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {

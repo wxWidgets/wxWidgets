@@ -160,10 +160,10 @@ public:
     void DoLoseFocus();
     void DoGainFocus();
     void DoInvalidateStyleData();
-    void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
-    void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
-    void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
-    void DoLeftButtonMove(Point pt);
+    void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
+    void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
+    void DoLeftButtonUp(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
+    void DoLeftButtonMove(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
     void DoMiddleButtonUp(Point pt);
     void DoMouseWheel(wxMouseWheelAxis axis, int rotation, int delta,
                       int linesPerAction, int columnsPerAction,
