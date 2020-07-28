@@ -38,11 +38,8 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#include <ctype.h>
-
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
-#include "wx/image.h"
 #include "wx/vlbox.h"
 #include "wx/stack.h"
 #if wxUSE_FFILE

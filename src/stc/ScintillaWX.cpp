@@ -41,15 +41,12 @@
 #endif
 
 #include "ScintillaWX.h"
-#include "ExternalLexer.h"
-#include "UniConversion.h"
 #include "wx/stc/stc.h"
 #include "wx/stc/private.h"
 #include "PlatWX.h"
 
 #ifdef __WXMSW__
-    // GetHwndOf()
-    #include "wx/msw/private.h"
+    #include "wx/msw/private.h" // GetHwndOf()
 #endif
 #ifdef __WXGTK__
     #include <gdk/gdk.h>
@@ -293,8 +290,8 @@ void ScintillaWX::Initialise() {
     kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL, SCI_DOCUMENTEND);
 #endif // __WXMAC__
 
-    ListBoxImpl* autoCompleteLB = static_cast<ListBoxImpl*>( ac.lb );
-    autoCompleteLB->SetListInfo( &listType, &(ac.posStart), &(ac.startLen) );
+    ListBoxImpl* autoCompleteLB = static_cast<ListBoxImpl*>( ac.lb.get() );
+    autoCompleteLB->SetListInfo( &listType, &((int)ac.posStart), &((int)ac.startLen) );
 }
 
 
@@ -331,7 +328,7 @@ void ScintillaWX::StartDrag() {
         if (result == wxDragMove && dropWentOutside)
             ClearSelection();
         inDragDrop = ddNone;
-        SetDragPosition(SelectionPosition(invalidPosition));
+        SetDragPosition(SelectionPosition(Sci::invalidPosition));
     }
 #endif // wxUSE_DRAG_AND_DROP
 }
@@ -366,7 +363,7 @@ bool ScintillaWX::HaveMouseCapture() {
 }
 
 
-void ScintillaWX::ScrollText(int linesToMove) {
+void ScintillaWX::ScrollText(Sci::Line linesToMove) {
     int dy = vs.lineHeight * (linesToMove);
     stc->ScrollWindow(0, dy);
 }
@@ -392,7 +389,7 @@ void ScintillaWX::SetHorizontalScrollPos() {
 
 const int H_SCROLL_STEP = 20;
 
-bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
+bool ScintillaWX::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
     bool modified = false;
 
     int vertEnd = nMax+1;
@@ -718,10 +715,6 @@ bool ScintillaWX::DestroySystemCaret() {
 #endif
 }
 
-bool ScintillaWX::FineTickerAvailable() {
-    return true;
-}
-
 bool ScintillaWX::FineTickerRunning(TickReason reason) {
     bool running = false;
     TimersHash::iterator i = timers.find(reason);
@@ -757,51 +750,7 @@ sptr_t ScintillaWX::DefWndProc(unsigned int /*iMessage*/, uptr_t /*wParam*/, spt
 }
 
 sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-      switch (iMessage) {
-#if 0  // TODO: check this
-
-      case SCI_CALLTIPSHOW: {
-          // NOTE: This is copied here from scintilla/src/ScintillaBase.cxx
-          // because of the little tweak that needs done below for wxGTK.
-          // When updating new versions double check that this is still
-          // needed, and that any new code there is copied here too.
-          Point pt = LocationFromPosition(wParam);
-          char* defn = reinterpret_cast<char *>(lParam);
-          AutoCompleteCancel();
-          pt.y += vs.lineHeight;
-          int ctStyle = ct.UseStyleCallTip() ? STYLE_CALLTIP : STYLE_DEFAULT;
-          if (ct.UseStyleCallTip())
-          {
-              ct.SetForeBack(vs.styles[STYLE_CALLTIP].fore, vs.styles[STYLE_CALLTIP].back);
-          }
-          int caretMain = sel.MainCaret();
-          PRectangle rc = ct.CallTipStart(caretMain, pt,
-                                          defn,
-                                          vs.styles[ctStyle].fontName,
-                                          vs.styles[ctStyle].sizeZoomed,
-                                          CodePage(),
-                                          vs.styles[ctStyle].characterSet,
-                                          wMain);
-          // If the call-tip window would be out of the client
-          // space, adjust so it displays above the text.
-          PRectangle rcClient = GetClientRectangle();
-          if (rc.bottom > rcClient.bottom) {
-#ifdef __WXGTK__
-              int offset = int(vs.lineHeight * 1.25)  + rc.Height();
-#else
-              int offset = vs.lineHeight + rc.Height();
-#endif
-              rc.top -= offset;
-              rc.bottom -= offset;
-          }
-          // Now display the window.
-          CreateCallTipWindow(rc);
-          ct.wCallTip.SetPositionRelative(rc, wMain);
-          ct.wCallTip.Show();
-          break;
-      }
-#endif
-
+    switch (iMessage) {
 #if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
         case SCI_SETTECHNOLOGY:
             if ((wParam == SC_TECHNOLOGY_DEFAULT) || (wParam == SC_TECHNOLOGY_DIRECTWRITE)) {
@@ -832,11 +781,6 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             break;
 #endif
 
-#ifdef SCI_LEXER
-      case SCI_LOADLEXERLIBRARY:
-            LexerManager::GetInstance()->Load((const char*)lParam);
-            break;
-#endif
       case SCI_GETDIRECTFUNCTION:
             return reinterpret_cast<sptr_t>(DirectFunction);
 
@@ -1042,7 +986,7 @@ void ScintillaWX::DoInvalidateStyleData() {
 }
 
 void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
-    ButtonDown(pt, curTime, shift, ctrl, alt);
+    ButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
 }
 
 void ScintillaWX::DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
@@ -1055,11 +999,11 @@ void ScintillaWX::DoRightButtonDown(Point pt, unsigned int curTime, bool shift, 
 }
 
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
-    ButtonUp(pt, curTime, ctrl);
+    ButtonUpWithModifiers(pt, curTime, ModifierFlags(false, ctrl, false));
 }
 
 void ScintillaWX::DoLeftButtonMove(Point pt) {
-    ButtonMove(pt);
+    ButtonMoveWithModifiers(pt, 0, 0);
 }
 
 #ifdef __WXGTK__
@@ -1274,7 +1218,7 @@ void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
 
 #if wxUSE_DRAG_AND_DROP
 bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
-    SetDragPosition(SelectionPosition(invalidPosition));
+    SetDragPosition(SelectionPosition(Sci::invalidPosition));
 
     wxString text = wxTextBuffer::Translate(data,
                                             wxConvertEOLMode(pdoc->eolMode));
@@ -1325,7 +1269,7 @@ wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
 
 
 void ScintillaWX::DoDragLeave() {
-    SetDragPosition(SelectionPosition(invalidPosition));
+    SetDragPosition(SelectionPosition(Sci::invalidPosition));
 }
 #endif // wxUSE_DRAG_AND_DROP
 //----------------------------------------------------------------------
@@ -1417,7 +1361,7 @@ void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
 }
 
 void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
-    static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
+    static_cast<ListBoxImpl*>(ac.lb.get())->RegisterImageHelper(type, bmp);
 }
 
 sptr_t ScintillaWX::DirectFunction(

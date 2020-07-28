@@ -5858,7 +5858,6 @@ protected:
     bool                m_lastKeyDownConsumed;
 
     friend class ScintillaWX;
-    friend class Platform;
 #endif // !SWIG
 };
 
