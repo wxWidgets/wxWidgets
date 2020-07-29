@@ -126,6 +126,11 @@ public:
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
+#if wxOSX_USE_COCOA
+    // Convert from wxCursor
+    wxBitmap(const wxCursor &cursor);
+#endif
+
     virtual ~wxBitmap() {}
 
     wxImage ConvertToImage() const wxOVERRIDE;

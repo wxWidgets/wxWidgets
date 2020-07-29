@@ -359,9 +359,6 @@ public:
         This can be useful to display a cursor as it cannot be drawn directly
         on a window.
 
-        This constructor only exists in wxMSW and wxGTK (where it is
-        implemented for GTK+ 2.8 or later) only.
-
         @param cursor A valid wxCursor.
 
         @since 3.1.0
