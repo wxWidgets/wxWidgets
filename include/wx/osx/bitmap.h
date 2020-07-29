@@ -123,9 +123,6 @@ public:
     // Convert from wxImage:
     wxBitmap(const wxImage& image, int depth = -1, double scale = 1.0);
 
-    // Convert from wxCursor
-    wxBitmap(const wxCursor &cursor);
-
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
@@ -207,6 +204,9 @@ public:
     // returns an autoreleased version of the image
     WX_NSImage GetNSImage() const
         { return GetImage(); }
+
+    // Convert from wxCursor
+    wxBitmap(const wxCursor &cursor);
 #endif
 #if wxOSX_USE_IPHONE
     // returns an autoreleased version of the image
