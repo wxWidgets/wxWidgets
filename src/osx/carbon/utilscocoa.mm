@@ -577,6 +577,11 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
     return cursor;
 }
 
+WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromNSCursor(const WXHCURSOR cursor)
+{
+    return [(NSCursor *)cursor image];
+}
+
 //  C-based style wrapper routines around NSCursor
 WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hotSpotX, float hotSpotY )
 {

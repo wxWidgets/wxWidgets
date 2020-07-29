@@ -903,6 +903,11 @@ wxBitmap::wxBitmap(WXImage image)
     (void)Create(image);
 }
 
+wxBitmap::wxBitmap(const wxCursor &cursor)
+{
+    m_refData = new wxBitmapRefData( wxOSXGetNSImageFromNSCursor( cursor.GetHCURSOR() ) );
+}
+
 bool wxBitmap::Create(WXImage image)
 {
     UnRef();
