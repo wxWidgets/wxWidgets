@@ -3010,6 +3010,10 @@ void wxGenericTreeCtrl::OnSize( wxSizeEvent &event )
 void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
+    #ifdef __WXOSX__
+    // at least on OSX otherwise the non-painted area remains transparent
+    dc.Clear();
+    #endif
     PrepareDC( dc );
 
     if ( !m_anchor)
