@@ -664,6 +664,7 @@ public:
     virtual int             ListGetCountPerPage() const = 0;
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) = 0;
     virtual void            UpdateLineToEnd( unsigned int n) = 0;
+    virtual void            Layout() {};
 
     // accessing content
 

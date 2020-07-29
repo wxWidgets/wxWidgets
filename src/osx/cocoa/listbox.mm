@@ -145,6 +145,8 @@ public :
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) wxOVERRIDE ;
     virtual void            UpdateLineToEnd( unsigned int n) wxOVERRIDE;
 
+    virtual void            Layout() wxOVERRIDE;
+
     virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
 
 
@@ -346,6 +348,10 @@ unsigned int wxListWidgetCocoaImpl::ListGetCount() const
     return lb->GetCount();
 }
 
+void wxListWidgetCocoaImpl::Layout()
+{
+    [m_tableView sizeToFit];
+}
 //
 // columns
 //
@@ -375,7 +381,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
         [col1 setMinWidth:10];
         // temporary hack, because I cannot get the automatic column resizing
         // to work properly
-        [col1 setWidth:1000];
+        // [col1 setWidth:1000];
     }
     [col1 setResizingMask: NSTableColumnAutoresizingMask];
 

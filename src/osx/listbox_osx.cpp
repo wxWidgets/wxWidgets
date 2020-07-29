@@ -98,6 +98,8 @@ bool wxListBox::Create(
    // Needed because it is a wxControlWithItems
     SetInitialSize( size );
 
+    GetListPeer()->Layout();
+
     return true;
 }
 
@@ -376,6 +378,8 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     SetFirstItem(startpos);
 
     InvalidateBestSize();
+
+    GetListPeer()->Layout();
 
     UpdateOldSelections();
 
