@@ -49,6 +49,7 @@ public:
     // Internal functions
     void OnMouseEvent(wxMouseEvent& event);
     void OnPaint(wxPaintEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     void OnCustomColourMouseClick(wxMouseEvent& event);
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
