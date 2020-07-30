@@ -122,11 +122,6 @@ protected:
     wxStaticBitmap *m_customColoursBmp[16];
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
-    int m_buttonY;
-
-    int m_okButtonX;
-    int m_customButtonX;
-
     //  static bool colourDialogCancelled;
 
     wxDECLARE_EVENT_TABLE();

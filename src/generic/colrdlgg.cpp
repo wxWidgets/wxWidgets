@@ -263,10 +263,6 @@ void wxGenericColourDialog::CalculateMeasurements()
     m_singleCustomColourRect.x = m_customColoursRect.width + m_customColoursRect.x + m_sectionSpacing;
     m_singleCustomColourRect.y = 80;
     m_singleCustomColourRect.SetSize(customRectangleSize);
-
-    m_okButtonX = 10;
-    m_customButtonX = m_singleCustomColourRect.x ;
-    m_buttonY = m_customColoursRect.y + m_customColoursRect.height + 10;
 }
 
 void wxGenericColourDialog::CreateWidgets()
