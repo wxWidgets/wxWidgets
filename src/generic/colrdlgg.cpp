@@ -162,6 +162,12 @@ bool wxGenericColourDialog::Create(wxWindow *parent, const wxColourData *data)
     if (data)
         m_colourData = *data;
 
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    m_customColourBmp = NULL;
+    for ( unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++ )
+        m_customColoursBmp[i] = NULL;
+#endif
+
     InitializeColours();
     CalculateMeasurements();
     CreateWidgets();
@@ -225,6 +231,34 @@ void wxGenericColourDialog::OnCustomColourMouseClick(wxMouseEvent& event)
 
     event.Skip();
 }
+
+void wxGenericColourDialog::CreateCustomBitmaps()
+{
+    // Bitmap to preview selected colour (with alpha channel)
+    wxBitmap customColourBmp(m_singleCustomColourRect.GetSize(), 32);
+    customColourBmp.UseAlpha();
+    DoPreviewBitmap(customColourBmp, m_colourData.GetColour());
+    m_customColourBmp = new wxStaticBitmap(this, wxID_ANY, customColourBmp,
+                                           m_singleCustomColourRect.GetLeftTop(),
+                                           m_singleCustomColourRect.GetSize(),
+                                           wxBORDER_SUNKEN);
+
+    // 16 bitmaps to preview custom colours (with alpha channel)
+    for ( unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++ )
+    {
+        int x = ((i % 8) * (m_smallRectangleSize.x + m_gridSpacing)) + m_customColoursRect.x;
+        int y = ((i / 8) * (m_smallRectangleSize.y + m_gridSpacing)) + m_customColoursRect.y;
+
+        wxBitmap bmp(m_smallRectangleSize, 32);
+        bmp.UseAlpha();
+        DoPreviewBitmap(bmp, m_customColours[i]);
+        m_customColoursBmp[i] = new wxStaticBitmap(this, wxID_ANY, bmp,
+                                                   wxPoint(x, y), m_smallRectangleSize);
+        m_customColoursBmp[i]->Bind(wxEVT_LEFT_DOWN,
+                                    &wxGenericColourDialog::OnCustomColourMouseClick, this);
+
+    }
+}
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -270,31 +304,8 @@ void wxGenericColourDialog::CreateWidgets()
     wxBeginBusyCursor();
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
-    // Bitmap to preview selected colour (with alpha channel)
-    wxBitmap customColourBmp(m_singleCustomColourRect.GetSize(), 32);
-    customColourBmp.UseAlpha();
-    DoPreviewBitmap(customColourBmp, m_colourData.GetColour());
-    m_customColourBmp = new wxStaticBitmap(this, wxID_ANY, customColourBmp,
-                                           m_singleCustomColourRect.GetLeftTop(),
-                                           m_singleCustomColourRect.GetSize(),
-                                           wxBORDER_SUNKEN);
-
-    // 16 bitmaps to preview custom colours (with alpha channel)
-    for (unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
-    {
-        int x = ((i % 8)*(m_smallRectangleSize.x+m_gridSpacing)) + m_customColoursRect.x;
-        int y = ((i / 8)*(m_smallRectangleSize.y+m_gridSpacing)) + m_customColoursRect.y;
-
-        wxBitmap bmp(m_smallRectangleSize, 32);
-        bmp.UseAlpha();
-        DoPreviewBitmap(bmp, m_customColours[i]);
-        m_customColoursBmp[i] = new wxStaticBitmap(this, wxID_ANY, bmp,
-                                                   wxPoint(x, y), m_smallRectangleSize);
-        m_customColoursBmp[i]->Bind(wxEVT_LEFT_DOWN,
-                                    &wxGenericColourDialog::OnCustomColourMouseClick, this);
-
-    }
-#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    CreateCustomBitmaps();
+#endif
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 

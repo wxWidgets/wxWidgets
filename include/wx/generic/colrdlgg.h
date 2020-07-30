@@ -79,6 +79,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    virtual void CreateCustomBitmaps();
     void DoPreviewBitmap(wxBitmap& bmp, const wxColour& colour);
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
