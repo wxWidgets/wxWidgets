@@ -190,7 +190,7 @@ WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
                              wxImageHistogramBase);
 
-class WXDLLIMPEXP_CORE wxImageHistogram : public wxImageHistogramBase
+class wxImageHistogram : public wxImageHistogramBase
 {
 public:
     wxImageHistogram() : wxImageHistogramBase(256) { }
@@ -211,9 +211,43 @@ public:
     bool FindFirstUnusedColour(unsigned char *r,
                                unsigned char *g,
                                unsigned char *b,
-                               unsigned char startR = 1,
-                               unsigned char startG = 0,
-                               unsigned char startB = 0 ) const;
+                               unsigned char r2 = 1,
+                               unsigned char g2 = 0,
+                               unsigned char b2 = 0 ) const
+    {
+        unsigned long key = MakeKey(r2, g2, b2);
+
+        while ( find(key) != end() )
+        {
+            // color already used
+            r2++;
+            if ( r2 >= 255 )
+            {
+                r2 = 0;
+                g2++;
+                if ( g2 >= 255 )
+                {
+                    g2 = 0;
+                    b2++;
+                    if ( b2 >= 255 )
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            key = MakeKey(r2, g2, b2);
+        }
+
+        if ( r )
+            *r = r2;
+        if ( g )
+            *g = g2;
+        if ( b )
+            *b = b2;
+
+        return true;
+    }
 };
 
 //-----------------------------------------------------------------------------

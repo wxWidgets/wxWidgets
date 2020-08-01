@@ -3382,49 +3382,6 @@ wxImageHandler::GetResolutionFromOptions(const wxImage& image, int *x, int *y)
 // ----------------------------------------------------------------------------
 
 bool
-wxImageHistogram::FindFirstUnusedColour(unsigned char *r,
-                                        unsigned char *g,
-                                        unsigned char *b,
-                                        unsigned char r2,
-                                        unsigned char g2,
-                                        unsigned char b2) const
-{
-    unsigned long key = MakeKey(r2, g2, b2);
-
-    while ( find(key) != end() )
-    {
-        // color already used
-        r2++;
-        if ( r2 >= 255 )
-        {
-            r2 = 0;
-            g2++;
-            if ( g2 >= 255 )
-            {
-                g2 = 0;
-                b2++;
-                if ( b2 >= 255 )
-                {
-                    wxLogError(_("No unused colour in image.") );
-                    return false;
-                }
-            }
-        }
-
-        key = MakeKey(r2, g2, b2);
-    }
-
-    if ( r )
-        *r = r2;
-    if ( g )
-        *g = g2;
-    if ( b )
-        *b = b2;
-
-    return true;
-}
-
-bool
 wxImage::FindFirstUnusedColour(unsigned char *r,
                                unsigned char *g,
                                unsigned char *b,
