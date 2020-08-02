@@ -49,6 +49,7 @@ public:
     // Internal functions
     void OnMouseEvent(wxMouseEvent& event);
     void OnPaint(wxPaintEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     void OnCustomColourMouseClick(wxMouseEvent& event);
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
@@ -79,6 +80,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    virtual void CreateCustomBitmaps();
     void DoPreviewBitmap(wxBitmap& bmp, const wxColour& colour);
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
@@ -121,11 +123,6 @@ protected:
     // Bitmaps to preview custom colours (with alpha channel)
     wxStaticBitmap *m_customColoursBmp[16];
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
-
-    int m_buttonY;
-
-    int m_okButtonX;
-    int m_customButtonX;
 
     //  static bool colourDialogCancelled;
 

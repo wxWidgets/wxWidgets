@@ -71,6 +71,8 @@ protected:
 
     void UpdateColour() wxOVERRIDE;
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // the colour data shown in wxColourPickerCtrlGeneric
     // controls. This member is static so that all colour pickers
     // in the program share the same set of custom colours.
