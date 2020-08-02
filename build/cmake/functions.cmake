@@ -340,7 +340,7 @@ macro(wx_add_library name)
         add_library(${name} ${wxBUILD_LIB_TYPE} ${src_files})
         add_library(wx::${name_short} ALIAS ${name})
         wx_set_target_properties(${name} ${wxADD_LIBRARY_IS_BASE})
-        set_property(TARGET ${name} PROPERTY PROJECT_LABEL ${name_short})
+        set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
         wx_install(TARGETS ${name}
@@ -517,7 +517,7 @@ function(wx_add_builtin_library name)
     add_library(${name} STATIC ${src_list})
     add_library(wx::${name_short} ALIAS ${name})
     wx_set_builtin_target_properties(${name})
-    set_property(TARGET ${name} PROPERTY PROJECT_LABEL ${name_short})
+    set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
     if(wxBUILD_SHARED)
         set_target_properties(${name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     endif()
