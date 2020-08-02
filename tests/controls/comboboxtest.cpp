@@ -150,8 +150,9 @@ void ComboBoxTestCase::PopDismiss()
     // Under wxGTK2, the event is sent only during idle time and not
     // immediately, so we need this yield to get it.
     wxYield();
-    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
 #endif // wxGTK2
+
+    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
 #endif
 }
 
