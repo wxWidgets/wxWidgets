@@ -265,7 +265,7 @@ clean:
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
 	$(foreach f,$(subst \,/,$(BENCH_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
-	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG)  -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
+	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
 
 data: 
@@ -276,7 +276,7 @@ ifeq ($(USE_GUI),1)
 $(OBJS)\bench_gui.exe: $(BENCH_GUI_OBJECTS) $(OBJS)\bench_gui_sample_rc.o
 	$(foreach f,$(subst \,/,$(BENCH_GUI_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
-	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG)  -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
+	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
 endif
 
@@ -284,7 +284,7 @@ ifeq ($(USE_GUI),1)
 $(OBJS)\bench_graphics.exe: $(BENCH_GRAPHICS_OBJECTS) $(OBJS)\bench_graphics_sample_rc.o
 	$(foreach f,$(subst \,/,$(BENCH_GRAPHICS_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
-	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG)  -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl -lopengl32 -lglu32 $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
+	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl -lopengl32 -lglu32 $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
 endif
 
@@ -323,7 +323,7 @@ $(OBJS)\bench_printfbench.o: ./printfbench.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_gui_sample_rc.o: ./../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\bench_gui_bench.o: ./bench.cpp
 	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
@@ -335,7 +335,7 @@ $(OBJS)\bench_gui_image.o: ./image.cpp
 	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_graphics_sample_rc.o: ./../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\bench_graphics_graphics.o: ./graphics.cpp
 	$(CXX) -c -o $@ $(BENCH_GRAPHICS_CXXFLAGS) $(CPPDEPS) $<

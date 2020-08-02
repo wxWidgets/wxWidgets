@@ -532,34 +532,34 @@ clean:
 	-if exist $(OBJS)\test_allheaders.ils del $(OBJS)\test_allheaders.ils
 
 $(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
 	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,,
 |
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_drawing.exe: $(OBJS)\test_drawing_dummy.obj  $(TEST_DRAWING_OBJECTS)
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
 	c0x32.obj $(TEST_DRAWING_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,,
 |
 !endif
 
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
-	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
 	c0d32.obj $(TEST_DRAWINGPLUGIN_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,,
 |
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\test_gui_sample.res
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME)  -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
 	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_STC_p) $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,, $(OBJS)\test_gui_sample.res
 |
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_allheaders.exe: $(OBJS)\test_allheaders_dummy.obj  $(TEST_ALLHEADERS_OBJECTS)  $(OBJS)\test_allheaders_sample.res
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME)  -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
 	c0x32.obj $(TEST_ALLHEADERS_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_STC_p) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,, $(OBJS)\test_allheaders_sample.res
 |
 !endif
@@ -860,7 +860,7 @@ $(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) .\drawing\pluginsample.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H .\dummy.cpp
@@ -1163,7 +1163,7 @@ $(OBJS)\test_gui_xrctest.obj: .\xml\xrctest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\xml\xrctest.cpp
 
 $(OBJS)\test_allheaders_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
 
 $(OBJS)\test_allheaders_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_ALLHEADERS_CXXFLAGS) -H .\dummy.cpp
