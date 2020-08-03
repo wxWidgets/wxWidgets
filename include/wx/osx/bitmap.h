@@ -127,11 +127,15 @@ public:
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
     virtual ~wxBitmap() {}
+    
+    void AddRepresentations( const wxBitmap& other);
 
     wxImage ConvertToImage() const wxOVERRIDE;
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const wxOVERRIDE;
+    
+    const wxBitmap GetBestRepresentation( const wxSize& dimensions) const;
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
