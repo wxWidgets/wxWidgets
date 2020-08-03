@@ -135,7 +135,7 @@ private :
 };
 
 typedef wxObjectDataPtr<wxBitmapRepresentationData> wxBitmapRepresentationDataPtr;
-WX_DEFINE_TYPEARRAY( wxObjectDataPtr<wxBitmapRepresentationData>, wxBitmapRepresentationArray, dummy );
+typedef wxVector<wxBitmapRepresentationDataPtr> wxBitmapRepresentationArray;
 
 class WXDLLEXPORT wxBitmapRefData : public wxGDIRefData
 {
@@ -170,9 +170,12 @@ public:
         }
     }
 
-    wxBitmapRepresentationData* GetDefaultRepresentation()
+    wxBitmapRepresentationData* GetDefaultRepresentation() const
     {
-        return m_representations.at(0).get();
+        if ( m_representations.empty() )
+            return NULL;
+
+        return m_representations[0].get();
     }
     
     wxBitmapRepresentationData* GetBestRepresentation( const wxSize& dimensions) const
@@ -183,14 +186,9 @@ public:
             if ( rep->GetWidth() == dimensions.x && rep->GetHeight() == dimensions.y )
                 return rep;
         }
-        return m_representations.at(0).get();
+        return GetDefaultRepresentation();
     }
-    
-    const wxBitmapRepresentationData* GetDefaultRepresentation() const
-    {
-        return m_representations.at(0).get();
-    }
-    
+
 private:
     wxBitmapRepresentationArray m_representations;
 };
