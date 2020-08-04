@@ -1965,6 +1965,7 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
         {
             bitmap->Create(image,scale);
             CGImageRelease(image);
+            return true;
         }
     }
         
