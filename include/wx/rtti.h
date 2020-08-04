@@ -141,9 +141,9 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
     public:                                                                   \
         static wxClassInfo ms_classInfo;                                      \
         wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)               \
-        wxGCC_WARNING_SUPPRESS(suggest-override)                              \
+        wxWARNING_SUPPRESS_MISSING_OVERRIDE()                                 \
         virtual wxClassInfo *GetClassInfo() const;                            \
-        wxGCC_WARNING_RESTORE(suggest-override)                               \
+        wxWARNING_RESTORE_MISSING_OVERRIDE()                                  \
         wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
 
 #define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)                               \
