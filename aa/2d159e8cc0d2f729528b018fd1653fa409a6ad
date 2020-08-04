@@ -1,0 +1,1 @@
+wxGTK: Return more reasonable value from wxSlider::GetBetSize().
