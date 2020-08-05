@@ -4273,12 +4273,10 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
     private:                                                            \
         static const wxEventTableEntry sm_eventTableEntries[];          \
     protected:                                                          \
-        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)         \
         wxWARNING_SUPPRESS_MISSING_OVERRIDE()                           \
         const wxEventTable* GetEventTable() const;                      \
         wxEventHashTable& GetEventHashTable() const;                    \
         wxWARNING_RESTORE_MISSING_OVERRIDE()                            \
-        wxCLANG_WARNING_RESTORE(inconsistent-missing-override)          \
         static const wxEventTable        sm_eventTable;                 \
         static wxEventHashTable          sm_eventHashTable
 

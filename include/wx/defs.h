@@ -710,8 +710,12 @@ typedef short int WXTYPE;
 
 /* Specific maros for -Wsuggest-override warning, new in gcc 5. */
 #if defined(__clang__)
-#   define wxWARNING_SUPPRESS_MISSING_OVERRIDE() wxCLANG_WARNING_SUPPRESS(suggest-override)
-#   define wxWARNING_RESTORE_MISSING_OVERRIDE() wxCLANG_WARNING_RESTORE(suggest-override)
+#   define wxWARNING_SUPPRESS_MISSING_OVERRIDE() \
+        wxCLANG_WARNING_SUPPRESS(suggest-override) \
+        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
+#   define wxWARNING_RESTORE_MISSING_OVERRIDE() \
+        wxCLANG_WARNING_RESTORE(inconsistent-missing-override) \
+        wxCLANG_WARNING_RESTORE(suggest-override)
 #elif wxCHECK_GCC_VERSION(5, 0)
 #   define wxWARNING_SUPPRESS_MISSING_OVERRIDE() wxGCC_WARNING_SUPPRESS(suggest-override)
 #   define wxWARNING_RESTORE_MISSING_OVERRIDE() wxGCC_WARNING_RESTORE(suggest-override)
