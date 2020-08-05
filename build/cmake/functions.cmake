@@ -83,6 +83,10 @@ function(wx_set_common_target_properties target_name)
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         )
 
+    if(wxBUILD_PIC)
+        set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+    endif()
+
     if(MSVC)
         if(wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
             set(MSVC_WARNING_LEVEL "/W3")
@@ -498,6 +502,10 @@ function(wx_set_builtin_target_properties target_name)
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
 
+    if(wxBUILD_SHARED OR wxBUILD_PIC)
+        set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+    endif()
+
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
         wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}")
@@ -518,9 +526,6 @@ function(wx_add_builtin_library name)
     add_library(wx::${name_short} ALIAS ${name})
     wx_set_builtin_target_properties(${name})
     set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
-    if(wxBUILD_SHARED)
-        set_target_properties(${name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-    endif()
 endfunction()
 
 # List of third party libraries added via wx_add_thirdparty_library()
