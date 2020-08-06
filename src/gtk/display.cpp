@@ -350,7 +350,17 @@ double wxDisplayImplGTK::GetScaleFactor() const
 
     return 1.0;
 }
-#endif // GTK+ 3.10
+
+wxSize wxDisplayImplGTK::GetPPI() const
+{
+    // The useful value of PPI is the scaled value of the default PPI and not
+    // the actual PPI computed by dividing the number of pixels by the physical
+    // screen size: this is what everyone else uses, and so we should do it
+    // too.
+    return wxDisplay::GetStdPPI()*GetScaleFactor();
+}
+
+#else // GTK+ < 3.10
 
 wxSize wxDisplayImplGTK::GetPPI() const
 {
@@ -369,6 +379,8 @@ wxSize wxDisplayImplGTK::GetPPI() const
 
     return ppi;
 }
+
+#endif // GTK+ 3.10
 
 wxSize wxDisplayImplGTK::GetSizeMM() const
 {
