@@ -87,6 +87,21 @@ public:
     // get the resolution of this monitor in pixels per inch
     wxSize GetPPI() const;
 
+    // get the default resolution for displays on this platform
+    static int GetStdPPIValue()
+    {
+#ifdef __WXOSX__
+        return 72;
+#else
+        return 96;
+#endif
+    }
+
+    static wxSize GetStdPPI()
+    {
+        return wxSize(GetStdPPIValue(), GetStdPPIValue());
+    }
+
     // name may be empty
     wxString GetName() const;
 
