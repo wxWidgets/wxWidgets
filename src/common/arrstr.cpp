@@ -759,7 +759,11 @@ wxStringFragment GetFragment(wxString& text)
     if ( text.empty() )
         return wxStringFragment();
 
-    wxStringFragment   fragment;
+    // the maximum length of a sequence of digits that
+    // can fit into wxUint64 when converted to a number
+    static const size_t maxDigitSequenceLength = 19;
+
+    wxStringFragment         fragment;
     wxString::const_iterator it;
 
     for ( it = text.begin(); it != text.end(); ++it )
@@ -783,9 +787,10 @@ wxStringFragment GetFragment(wxString& text)
 
         // stop processing when the current character has a different
         // string fragment type than the previously processed characters had
-        // or when there is a sequence of digits too long to fit in wxUint64
-        if ( fragment.type != chType ||
-             (fragment.type == wxStringFragment::Digit && it - text.begin() == 20) )
+        // or a sequence of digits is too long
+        if ( fragment.type != chType
+             || (fragment.type == wxStringFragment::Digit
+                 && it - text.begin() > maxDigitSequenceLength) )
         {
             break;
         }
