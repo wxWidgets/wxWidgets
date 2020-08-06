@@ -52,13 +52,22 @@ protected:
 namespace
 {
 
+wxString wxArtIDToStock(const wxArtID& id)
+{
+    struct wxArtStockMapping
+    {
+	wxArtID artId;
+	wxString stockId;
+    };
+
 #ifdef __WXGTK3__
-    #define ART(wxId, unused, themeId) wxId, themeId,
+    #define ART(wxId, unused, themeId) wxArtStockMapping{wxId, themeId},
 #else
-    #define ART(wxId, stockId, unused) wxId, stockId,
+    #define ART(wxId, stockId, unused) wxArtStockMapping{wxId, stockId},
 #endif
 
-const wxString wxId2Gtk[] = {
+  static const wxArtStockMapping wxId2GtkMap[] =
+  {
     ART(wxART_ERROR,            GTK_STOCK_DIALOG_ERROR, "dialog-error")
     ART(wxART_INFORMATION,      GTK_STOCK_DIALOG_INFO, "dialog-information")
     ART(wxART_WARNING,          GTK_STOCK_DIALOG_WARNING, "dialog-warning")
@@ -122,26 +131,21 @@ const wxString wxId2Gtk[] = {
     ART(wxART_FIND_AND_REPLACE, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace")
     ART(wxART_FULL_SCREEN,      GTK_STOCK_FULLSCREEN, "view-fullscreen")
     ART(wxART_EDIT,             "accessories-text-editor", "accessories-text-editor")
-};
-
+  };
 #undef ART
 
-wxString wxArtIDToStock(const wxArtID& id)
-{
     // allow passing GTK+ stock IDs to wxArtProvider -- if a recognized wx
     // ID wasn't found, pass it to GTK+ in the hope it is a GTK+ or theme
     // icon name:
-    wxString ret(id);
 
-    for (unsigned i = 0; i < WXSIZEOF(wxId2Gtk); i += 2)
+    for (unsigned i = 0; i < WXSIZEOF(wxId2GtkMap); i++)
     {
-        if (id == wxId2Gtk[i])
+        if (id == wxId2GtkMap[i].artId)
         {
-            ret = wxId2Gtk[i + 1];
-            break;
+            return wxId2GtkMap[i].stockId;
         }
     }
-    return ret;
+    return id;
 }
 
 GtkIconSize ArtClientToIconSize(const wxArtClient& client)
