@@ -760,11 +760,11 @@ wxStringFragment GetFragment(wxString& text)
         return wxStringFragment();
 
     wxStringFragment   fragment;
-    wxString::iterator it;
+    wxString::const_iterator it;
 
     for ( it = text.begin(); it != text.end(); ++it )
     {
-        const wxChar           ch = *it;
+        const wxUniChar        ch = *it;
         wxStringFragment::Type chType = wxStringFragment::Empty;
 
         if ( wxIsspace(ch) || wxIspunct(ch) )
@@ -785,8 +785,7 @@ wxStringFragment GetFragment(wxString& text)
         // string fragment type than the previously processed characters had
         // or when there is a sequence of digits too long to fit in wxUint64
         if ( fragment.type != chType ||
-              ( fragment.type == wxStringFragment::Digit
-                 && it - text.begin() == 19) )
+             (fragment.type == wxStringFragment::Digit && it - text.begin() == 20) )
         {
             break;
         }
@@ -796,7 +795,7 @@ wxStringFragment GetFragment(wxString& text)
     if ( fragment.type == wxStringFragment::Digit )
         fragment.text.ToULongLong(&fragment.value);
 
-    text.erase(text.begin(), it);
+    text.erase(0, it - text.begin());
 
     return fragment;
 }
