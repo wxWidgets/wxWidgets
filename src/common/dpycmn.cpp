@@ -149,6 +149,25 @@ wxSize wxDisplay::GetPPI() const
     return m_impl->GetPPI();
 }
 
+double wxDisplay::GetScaleFactor() const
+{
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
+
+#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
+    // Use wxDisplayImpl::GetScaleFactor() directly, it should be implemented
+    // correctly for the platforms doing pixel scaling and using it simpler and
+    // more efficient than using GetPPI().
+    return m_impl->GetScaleFactor();
+#else
+    // Under the other platforms, we just compute the DPI ratio ourselves.
+    //
+    // We use just the vertical component of the DPI because it's the one
+    // that counts most and, in practice, it's equal to the horizontal one
+    // anyhow.
+    return m_impl->GetPPI().y / (double)GetStdPPIValue();
+#endif
+}
+
 int wxDisplay::GetDepth() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );

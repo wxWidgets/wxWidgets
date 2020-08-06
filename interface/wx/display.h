@@ -144,6 +144,19 @@ public:
     wxSize GetPPI() const;
 
     /**
+        Returns scaling factor used by this display.
+
+        The scaling factor is the ratio between GetPPI() and GetStdPPI()
+        (it is implicitly assumed that this ratio is the same for both
+        horizontal and vertical components).
+
+        @see wxWindow::GetContentScaleFactor(), wxWindow::GetDPIScaleFactor()
+
+        @since 3.1.5
+     */
+    double GetScaleFactor() const;
+
+    /**
         Returns default display resolution for the current platform in pixels
         per inch.
 

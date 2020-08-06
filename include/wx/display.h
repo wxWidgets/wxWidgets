@@ -102,6 +102,9 @@ public:
         return wxSize(GetStdPPIValue(), GetStdPPIValue());
     }
 
+    // get the scaling used by this display
+    double GetScaleFactor() const;
+
     // name may be empty
     wxString GetName() const;
 
