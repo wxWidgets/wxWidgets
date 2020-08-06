@@ -786,25 +786,6 @@ wxSize wxWindowBase::DoGetBestSize() const
     return best;
 }
 
-namespace
-{
-
-static wxSize GetDPIHelper(const wxWindowBase* w)
-{
-    wxSize dpi;
-
-    if ( w )
-        dpi = w->GetDPI();
-    if ( !dpi.x || !dpi.y )
-        dpi = wxScreenDC().GetPPI();
-    if ( !dpi.x || !dpi.y )
-        dpi = wxDisplay::GetStdPPI();
-
-    return dpi;
-}
-
-}
-
 double wxWindowBase::GetContentScaleFactor() const
 {
     // By default, we assume that there is no mapping between logical and
@@ -817,12 +798,7 @@ double wxWindowBase::GetContentScaleFactor() const
 
 double wxWindowBase::GetDPIScaleFactor() const
 {
-    const wxSize dpi = GetDPIHelper(this);
-
-    // We use just the vertical component of the DPI because it's the one
-    // that counts most and, in practice, it's equal to the horizontal one
-    // anyhow.
-    return dpi.y / (double)wxDisplay::GetStdPPIValue();
+    return wxDisplay(static_cast<const wxWindow*>(this)).GetScaleFactor();
 }
 
 // helper of GetWindowBorderSize(): as many ports don't implement support for
@@ -2886,6 +2862,25 @@ wxSize wxWindowBase::GetDPI() const
 }
 
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+
+namespace
+{
+
+static wxSize GetDPIHelper(const wxWindowBase* w)
+{
+    wxSize dpi;
+
+    if ( w )
+        dpi = w->GetDPI();
+    if ( !dpi.x || !dpi.y )
+        dpi = wxScreenDC().GetPPI();
+    if ( !dpi.x || !dpi.y )
+        dpi = wxDisplay::GetStdPPI();
+
+    return dpi;
+}
+
+}
 
 /* static */
 wxSize
