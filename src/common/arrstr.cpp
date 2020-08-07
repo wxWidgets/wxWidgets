@@ -761,14 +761,14 @@ wxStringFragment GetFragment(wxString& text)
 
     // the maximum length of a sequence of digits that
     // can fit into wxUint64 when converted to a number
-    static const size_t maxDigitSequenceLength = 19;
+    static const ptrdiff_t maxDigitSequenceLength = 19;
 
     wxStringFragment         fragment;
     wxString::const_iterator it;
 
-    for ( it = text.begin(); it != text.end(); ++it )
+    for ( it = text.cbegin(); it != text.cend(); ++it )
     {
-        const wxUniChar        ch = *it;
+        const wxUniChar&       ch = *it;
         wxStringFragment::Type chType = wxStringFragment::Empty;
 
         if ( wxIsspace(ch) || wxIspunct(ch) )
@@ -790,17 +790,17 @@ wxStringFragment GetFragment(wxString& text)
         // or a sequence of digits is too long
         if ( fragment.type != chType
              || (fragment.type == wxStringFragment::Digit
-                 && it - text.begin() > maxDigitSequenceLength) )
+                 && it - text.cbegin() > maxDigitSequenceLength) )
         {
             break;
         }
     }
 
-    fragment.text.assign(text.begin(), it);
+    fragment.text.assign(text.cbegin(), it);
     if ( fragment.type == wxStringFragment::Digit )
         fragment.text.ToULongLong(&fragment.value);
 
-    text.erase(0, it - text.begin());
+    text.erase(0, it - text.cbegin());
 
     return fragment;
 }
