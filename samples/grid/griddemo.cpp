@@ -366,7 +366,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
     EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
-    EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
+    EVT_GRID_RANGE_SELECTING( GridFrame::OnRangeSelecting )
+    EVT_GRID_RANGE_SELECTED( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGING( GridFrame::OnCellValueChanging )
     EVT_GRID_CELL_CHANGED( GridFrame::OnCellValueChanged )
     EVT_GRID_CELL_BEGIN_DRAG( GridFrame::OnCellBeginDrag )
@@ -1644,6 +1645,25 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
         logBuf << "Selected ";
     else
         logBuf << "Deselected ";
+    logBuf << "cells from row " << ev.GetTopRow()
+           << " col " << ev.GetLeftCol()
+           << " to row " << ev.GetBottomRow()
+           << " col " << ev.GetRightCol()
+           << " ( ControlDown: "<< (ev.ControlDown() ? 'T':'F')
+           << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
+           << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
+           << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
+    wxLogMessage( "%s", logBuf );
+
+    ev.Skip();
+}
+void GridFrame::OnRangeSelecting( wxGridRangeSelectEvent& ev )
+{
+    wxString logBuf;
+    if ( ev.Selecting() )
+        logBuf << "Selecting ";
+    else
+        logBuf << "Deselecting ";
     logBuf << "cells from row " << ev.GetTopRow()
            << " col " << ev.GetLeftCol()
            << " to row " << ev.GetBottomRow()

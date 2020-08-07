@@ -67,7 +67,6 @@ void wxGridSelection::EndSelecting()
     //send the RANGE_SELECTED events
     if (IsSelection())
     {
-        size_t n;
         wxRect r;
         wxGridCellCoords coords1, coords2;
 
