@@ -104,6 +104,7 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetSizeMM() const wxOVERRIDE;
+    virtual double GetScaleFactor() const wxOVERRIDE;
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
@@ -268,6 +269,14 @@ int wxDisplayImplMacOSX::GetDepth() const
 wxSize wxDisplayImplMacOSX::GetSizeMM() const
 {
     return wxGetDisplaySizeMM(m_id);
+}
+
+double wxDisplayImplMacOSX::GetScaleFactor() const
+{
+    wxCFRef<CGDisplayModeRef> mode = CGDisplayCopyDisplayMode(m_id);
+    size_t width = CGDisplayModeGetWidth(mode);
+    size_t pixelsw = CGDisplayModeGetPixelWidth(mode);
+    return (double)pixelsw / width;
 }
 
 static int wxOSXCGDisplayModeGetBitsPerPixel( CGDisplayModeRef theValue )
