@@ -40,6 +40,7 @@
 
 // This one is defined in Objective C++ code.
 extern wxRect wxOSXGetMainDisplayClientArea();
+extern wxRect wxOSXGetDisplayClientArea(CGDirectDisplayID id);
 
 namespace
 {
@@ -297,13 +298,7 @@ wxRect wxDisplayImplMacOSX::GetGeometry() const
 
 wxRect wxDisplayImplMacOSX::GetClientArea() const
 {
-    // VZ: I don't know how to get client area for arbitrary display but
-    //     wxGetClientDisplayRect() does work correctly for at least the main
-    //     one (TODO: do it correctly for the other displays too)
-    if ( IsPrimary() )
-        return wxOSXGetMainDisplayClientArea();
-
-    return wxDisplayImpl::GetClientArea();
+    return wxOSXGetDisplayClientArea(m_id);
 }
 
 int wxDisplayImplMacOSX::GetDepth() const
