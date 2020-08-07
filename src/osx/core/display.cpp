@@ -29,6 +29,7 @@
     #include "wx/log.h"
     #include "wx/string.h"
     #include "wx/gdicmn.h"
+    #include "wx/nonownedwnd.h"
 #endif
 
 #include "wx/osx/private.h"
@@ -126,6 +127,7 @@ public:
     virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE;
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMacOSX);
@@ -178,29 +180,14 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
     return error;
 }
 
-unsigned wxDisplayFactoryMacOSX::GetCount()
+static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
 {
-    CGDisplayCount count;
-    CGDisplayErr err = wxOSXGetDisplayList(0, NULL, &count);
-
-    wxCHECK_MSG( err == CGDisplayNoErr, 0, "wxOSXGetDisplayList() failed" );
-
-    return count;
-}
-
-int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
-{
-    CGPoint thePoint = {(float)p.x, (float)p.y};
-    CGDirectDisplayID theID;
-    CGDisplayCount theCount;
-    CGDisplayErr err = CGGetDisplaysWithPoint(thePoint, 1, &theID, &theCount);
-    wxASSERT(err == CGDisplayNoErr);
-
     int nWhich = wxNOT_FOUND;
+    CGDisplayCount theCount;
+    CGDisplayErr err = wxOSXGetDisplayList(0, NULL, &theCount);
 
-    if (theCount)
+    if (err == CGDisplayNoErr && theCount > 0 )
     {
-        theCount = GetCount();
         CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
         err = wxOSXGetDisplayList(theCount, theIDs, &theCount);
         wxASSERT(err == CGDisplayNoErr);
@@ -221,6 +208,64 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
     }
 
     return nWhich;
+}
+
+unsigned wxDisplayFactoryMacOSX::GetCount()
+{
+    CGDisplayCount count;
+    CGDisplayErr err = wxOSXGetDisplayList(0, NULL, &count);
+
+    wxCHECK_MSG( err == CGDisplayNoErr, 0, "wxOSXGetDisplayList() failed" );
+
+    return count;
+}
+
+int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
+{
+    CGPoint thePoint = {(float)p.x, (float)p.y};
+    CGDirectDisplayID theID;
+    CGDisplayCount theCount;
+    CGDisplayErr err = CGGetDisplaysWithPoint(thePoint, 1, &theID, &theCount);
+    wxASSERT(err == CGDisplayNoErr);
+
+    if (theCount)
+        return wxOSXGetDisplayFromID(theID);
+
+    return wxNOT_FOUND;
+}
+
+int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
+{
+    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
+
+    wxNonOwnedWindow* const tlw = window->MacGetTopLevelWindow();
+    int x,y,w,h;
+
+    tlw->GetPosition(&x, &y);
+    tlw->GetSize(&w, &h);
+
+    CGRect r = CGRectMake(x, y, w, h);
+    CGDisplayCount theCount;
+    CGDisplayErr err = CGGetDisplaysWithRect(r, 0, NULL, &theCount);
+    wxASSERT(err == CGDisplayNoErr);
+
+    wxScopedArray<CGDirectDisplayID> theIDs(theCount);
+    err = CGGetDisplaysWithRect(r, theCount, theIDs.get(), &theCount);
+    wxASSERT(err == CGDisplayNoErr);
+
+    for ( int i = 0 ; i < theCount; ++i )
+    {
+        // find a screen intersecting having the same contentScale as the window itself
+        wxCFRef<CGDisplayModeRef> mode = CGDisplayCopyDisplayMode(theIDs[i]);
+        size_t width = CGDisplayModeGetWidth(mode);
+        size_t pixelsw = CGDisplayModeGetPixelWidth(mode);
+        if ( fabs( (double)pixelsw / width - tlw->GetContentScaleFactor() ) < 0.01 )
+        {
+            return wxOSXGetDisplayFromID(theIDs[i]);
+        }
+    }
+
+    return wxNOT_FOUND;
 }
 
 wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
