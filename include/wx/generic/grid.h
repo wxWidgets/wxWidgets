@@ -3509,6 +3509,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
     #define EVT_GRID_CELL_CHANGE EVT_GRID_CELL_CHANGED
 #endif // WXWIN_COMPATIBILITY_2_8
 
+// same as above: RANGE_SELECT was split in RANGE_SELECTING and SELECTED in 3.2,
+// but we keep the old name for compatibility
 #if WXWIN_COMPATIBILITY_3_0
     #define wxEVT_GRID_RANGE_SELECT wxEVT_GRID_RANGE_SELECTED
 
