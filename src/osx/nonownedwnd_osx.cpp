@@ -549,6 +549,7 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 
         wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
         context->SetBrush(*wxWHITE);
+        context->SetAntialiasMode(wxANTIALIAS_NONE);
         context->FillPath(path);
     }
 
