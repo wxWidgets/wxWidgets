@@ -8,13 +8,8 @@
 #############################################################################
 
 if(wxUSE_LIBTIFF STREQUAL "builtin")
-    # TODO: implement building libtiff via ExternalProject_Add()
-    if(UNIX AND NOT APPLE)
-        message(WARNING "Builtin libtiff on unix is currently not supported")
-        wx_option_force_value(wxUSE_LIBTIFF OFF)
-        return()
-    endif()
-
+    # TODO: implement building libtiff via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     if(WIN32)
         set(TIFF_PLATFORM_SRC src/tiff/libtiff/tif_win32.c)
     elseif(UNIX)

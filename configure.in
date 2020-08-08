@@ -678,6 +678,7 @@ WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)]
 WX_ARG_DISABLE(optimise,   [  --disable-optimise      compile without optimisations], wxUSE_OPTIMISE)
 
 WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
+WX_ARG_DISABLE(pic,          [  --disable-pic           don't use position independent code when building static libraries (shared libraries always use PIC)], wxUSE_PIC)
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
@@ -3610,8 +3611,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
                 if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                     dnl build with position independent code if Qt needs it
-                    SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
+                    wxUSE_PIC=yes
                 fi
                 ],
                 [
@@ -5584,6 +5584,10 @@ if test "$wxUSE_PLUGINS" = "yes" ; then
     if test "$wxUSE_PLUGINS" = "yes" ; then
         AC_DEFINE(wxUSE_PLUGINS)
     fi
+fi
+
+if test "$wxUSE_PIC" = "no" -a "$wxUSE_SHARED" = "yes"; then
+    AC_MSG_WARN([position independent code (PIC) can not be disabled for shared libraries])
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -8269,7 +8273,6 @@ AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(DYLIB_RPATH_INSTALL)
 AC_SUBST(DYLIB_RPATH_POSTLINK)
 AC_SUBST(SAMPLES_RPATH_FLAG)
-AC_SUBST(SAMPLES_CXXFLAGS)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
 AC_SUBST(USE_DPI_AWARE_MANIFEST)
@@ -8357,6 +8360,15 @@ then
     CXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
     # When Bakefile can do multi-language PCH (e.g. C++ and Objective-C++) enable this:
     #OBJCXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
+fi
+
+dnl cc/cxx option for position independent code
+if test "$wxUSE_PIC" = "yes" ; then
+    if test "$wxUSE_SHARED" = "no" ; then
+        CFLAGS="$CFLAGS $PIC_FLAG"
+        CXXFLAGS="$CXXFLAGS $PIC_FLAG"
+    fi
+    SAMPLES_CXXFLAGS="$SAMPLES_CXXFLAGS $PIC_FLAG"
 fi
 
 dnl HACK ALERT!!
@@ -8501,6 +8513,7 @@ AC_SUBST(DISTDIR)
 
 dnl additional subdirectories where we will build
 AC_SUBST(SAMPLES_SUBDIRS)
+AC_SUBST(SAMPLES_CXXFLAGS)
 
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS_GL)

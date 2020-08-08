@@ -622,7 +622,7 @@ void wxStyledTextCtrl::MarkerSetBackgroundSelected(int markerNumber, const wxCol
     SendMsg(SCI_MARKERSETBACKSELECTED, markerNumber, wxColourAsLong(back));
 }
 
-// Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+// Enable/disable highlight for current folding block (smallest one that contains the caret)
 void wxStyledTextCtrl::MarkerEnableHighlight(bool enabled)
 {
     SendMsg(SCI_MARKERENABLEHIGHLIGHT, enabled, 0);

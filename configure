@@ -634,6 +634,7 @@ WX_VERSION_TAG
 DMALLOC_LIBS
 OPENGL_LIBS
 LDFLAGS_GL
+SAMPLES_CXXFLAGS
 SAMPLES_SUBDIRS
 DISTDIR
 GUIDIST
@@ -889,7 +890,6 @@ RANLIB
 USE_DPI_AWARE_MANIFEST
 HOST_SUFFIX
 HEADER_PAD_OPTION
-SAMPLES_CXXFLAGS
 SAMPLES_RPATH_FLAG
 DYLIB_RPATH_POSTLINK
 DYLIB_RPATH_INSTALL
@@ -1123,6 +1123,7 @@ enable_utf8only
 enable_extended_rtti
 enable_optimise
 enable_profile
+enable_pic
 enable_no_rtti
 enable_no_exceptions
 enable_permissive
@@ -2079,6 +2080,7 @@ Optional Features:
   --enable-extended_rtti  use extended RTTI (XTI)
   --disable-optimise      compile without optimisations
   --enable-profile        create code with profiling information
+  --disable-pic           don't use position independent code when building static libraries (shared libraries always use PIC)
   --enable-no_rtti        create code without RTTI information
   --enable-no_exceptions  create code without C++ exceptions handling
   --enable-permissive     compile code disregarding strict ANSI
@@ -5937,6 +5939,35 @@ fi
 
 
           eval "$wx_cv_use_profile"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-pic was given.
+if test "${enable_pic+set}" = set; then :
+  enableval=$enable_pic;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_pic='wxUSE_PIC=yes'
+                          else
+                            wx_cv_use_pic='wxUSE_PIC=no'
+                          fi
+
+else
+
+                          wx_cv_use_pic='wxUSE_PIC=${'DEFAULT_wxUSE_PIC":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_pic"
 
 
           enablestring=
@@ -26276,8 +26307,7 @@ $as_echo "yes" >&6; }
                 TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
                 GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
                 if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
-                                        SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
+                                        wxUSE_PIC=yes
                 fi
 
 fi
@@ -33152,6 +33182,11 @@ $as_echo "$as_me: WARNING: plugins require wxDynamicLibrary, disabling" >&2;}
     fi
 fi
 
+if test "$wxUSE_PIC" = "no" -a "$wxUSE_SHARED" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: position independent code (PIC) can not be disabled for shared libraries" >&5
+$as_echo "$as_me: WARNING: position independent code (PIC) can not be disabled for shared libraries" >&2;}
+fi
+
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
                 if test "$USE_WIN32" != 1; then
@@ -38157,7 +38192,6 @@ TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
 
 
 
-
 case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
@@ -40592,6 +40626,14 @@ then
     #OBJCXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
 fi
 
+if test "$wxUSE_PIC" = "yes" ; then
+    if test "$wxUSE_SHARED" = "no" ; then
+        CFLAGS="$CFLAGS $PIC_FLAG"
+        CXXFLAGS="$CXXFLAGS $PIC_FLAG"
+    fi
+    SAMPLES_CXXFLAGS="$SAMPLES_CXXFLAGS $PIC_FLAG"
+fi
+
 
 if test "$DEPS_TRACKING" = 1 -a "$wxUSE_MAC" = 1 ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
@@ -40642,6 +40684,7 @@ OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
+
 
 
 

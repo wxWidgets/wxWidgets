@@ -3281,7 +3281,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     // Find the coordinate of the right most visible point: this is not the
     // same as GetClientSize().x because the window might not be fully visible,
     // it could be clipped by its parent.
-    const wxSize size = GetSize();
     const int availableWidth = GetParent()->GetClientSize().x - GetPosition().x;
     int visibleWidth = wxMin(GetClientSize().x,
                              availableWidth - GetWindowBorderSize().x);
