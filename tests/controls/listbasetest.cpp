@@ -236,16 +236,9 @@ void ListBaseTestCase::ItemClick()
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
-
-    // FIXME: This test fail under wxGTK & wxOSX because we get 3 FOCUSED events and
-    //        2 SELECTED ones instead of the one of each we expect for some
-    //        reason, this needs to be debugged as it may indicate a bug in the
-    //        generic wxListCtrl implementation.
-#ifndef _WX_GENERIC_LISTCTRL_H_
     CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, deselected.GetCount());
-#endif
     CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
 #endif // wxUSE_UIACTIONSIMULATOR
