@@ -544,11 +544,11 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 
     {
         wxMemoryDC dc(bmp);
-        dc.SetBackground(*wxBLACK);
+        dc.SetBackground(*wxBLACK_BRUSH);
         dc.Clear();
 
         wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
-        context->SetBrush(*wxWHITE);
+        context->SetBrush(*wxWHITE_BRUSH);
         context->SetAntialiasMode(wxANTIALIAS_NONE);
         context->FillPath(path);
     }
