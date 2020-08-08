@@ -82,6 +82,7 @@ private:
         CPPUNIT_TEST( DibPadding );
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
+    CPPUNIT_TEST( CreateBitmapFromCursor );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -102,6 +103,7 @@ private:
     void DibPadding();
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
+    void CreateBitmapFromCursor();
 
     wxDECLARE_NO_COPY_CLASS(ImageTestCase);
 };
@@ -1449,6 +1451,14 @@ void ImageTestCase::ScaleCompare()
                                "image/cross_box_average_256x256.png");
     ASSERT_IMAGE_EQUAL_TO_FILE(imgCross.Scale(256, 256, wxIMAGE_QUALITY_NEAREST),
                                "image/cross_nearest_neighb_256x256.png");
+}
+
+void ImageTestCase::CreateBitmapFromCursor()
+{
+    wxImage image( "toucan_resized.png" );
+    wxCursor cursor( image );
+    wxBitmap bitmap( cursor );
+    CHECK_THAT( image,  RGBSameAs( bitmap.ConvertToImage() ) );
 }
 
 #endif //wxUSE_IMAGE
