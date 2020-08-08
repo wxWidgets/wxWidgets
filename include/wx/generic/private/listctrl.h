@@ -18,7 +18,6 @@
 #include "wx/selstore.h"
 #include "wx/timer.h"
 #include "wx/settings.h"
-
 // ============================================================================
 // private classes
 // ============================================================================
@@ -518,6 +517,9 @@ public:
     void HighlightAll( bool on );
 
     // all these functions only do something if the line is currently visible
+
+    // Make sure that "line" is the only one highlighted.
+    bool HighlightOnly( size_t line );
 
     // change the line "selected" state, return true if it really changed
     bool HighlightLine( size_t line, bool highlight = true);

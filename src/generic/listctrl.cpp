@@ -1851,6 +1851,9 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
 
 bool wxListMainWindow::IsHighlighted(size_t line) const
 {
+    if ( line == (size_t)-1 )
+        return false;
+
     if ( IsVirtual() )
     {
         return m_selStore.IsSelected(line);
@@ -1931,6 +1934,9 @@ void wxListMainWindow::RefreshLine( size_t line )
         if ( line < visibleFrom || line > visibleTo )
             return;
     }
+
+    if ( line == (size_t)-1 )
+        return;
 
     wxRect rect = GetLineRect(line);
 
@@ -2197,6 +2203,23 @@ void wxListMainWindow::HighlightAll( bool on )
     }
 }
 
+bool wxListMainWindow::HighlightOnly( size_t line )
+{
+    if ( IsEmpty() || line == (size_t)-1 )
+        return false;
+
+    for ( size_t l = 0; l <= GetItemCount() - 1; l++ )
+    {
+        if ( l != line && HighlightLine(l, false) )
+            RefreshLine(l);
+    }
+
+    if ( HighlightLine(line, true) )
+        RefreshLine(line);
+
+    return true;
+}
+
 void wxListMainWindow::OnChildFocus(wxChildFocusEvent& WXUNUSED(event))
 {
     // Do nothing here.  This prevents the default handler in wxScrolledWindow
@@ -2230,7 +2253,7 @@ void wxListMainWindow::SendNotify( size_t line,
     // what we're trying to avoid
     if ( !IsVirtual() )
     {
-        if ( line != (size_t)-1 )
+        if ( !IsEmpty() && line != (size_t)-1 )
         {
             GetLine(line)->GetItem( 0, le.m_item );
         }
@@ -2243,6 +2266,11 @@ void wxListMainWindow::SendNotify( size_t line,
 
 void wxListMainWindow::ChangeCurrent(size_t current)
 {
+    if ( (current == m_current) && IsHighlighted(current) )
+    {
+        return; // Nothing changed!
+    }
+
     m_current = current;
 
     // as the current item changed, we shouldn't start editing it when the
@@ -2396,7 +2424,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             evtCtx.SetEventObject(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
-        return;
+
+        if ( IsEmpty() )
+            return;
+
+        // Continue processing...
     }
 
     if (m_dirty)
@@ -2521,8 +2553,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (m_lineSelectSingleOnUp != (size_t)-1)
         {
             // select single line
-            HighlightAll( false );
-            ReverseHighlight(m_lineSelectSingleOnUp);
+            HighlightOnly(m_lineSelectSingleOnUp);
         }
 
         if (m_lastOnSame)
@@ -2561,9 +2592,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         // Multi-selections should not be cleared if a selected item is clicked.
         if (!IsHighlighted(current))
         {
-            HighlightAll(false);
             ChangeCurrent(current);
-            ReverseHighlight(m_current);
+            HighlightOnly(m_current);
         }
 
         SendNotify( current, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
@@ -2592,11 +2622,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
             else if (IsSingleSel() || !IsHighlighted(current))
             {
-                HighlightAll(false);
-
                 ChangeCurrent(current);
-
-                ReverseHighlight(m_current);
+                HighlightOnly(m_current);
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -2766,19 +2793,16 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     }
     else // !shift
     {
-        // all previously selected items are unselected unless ctrl is held
-        // in a multiselection control
-        if ( !event.ControlDown() || IsSingleSel() )
-            HighlightAll(false);
-
         ChangeCurrent(newCurrent);
 
         // refresh the old focus to remove it
         RefreshLine( oldCurrent );
 
-        // in single selection mode we must always have a selected item
+        // all previously selected items are unselected unless ctrl is held in
+        // a multi-selection control. in single selection mode we must always
+        // have a selected item.
         if ( !event.ControlDown() || IsSingleSel() )
-            HighlightLine( m_current, true );
+            HighlightOnly(m_current);
     }
 
     RefreshLine( m_current );
@@ -4036,9 +4060,6 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
 
     if ( !noRefresh )
     {
-        // FIXME: why should we call it from here?
-        UpdateCurrent();
-
         RefreshAll();
     }
 }
