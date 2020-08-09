@@ -48,19 +48,11 @@ private:
     CPPUNIT_TEST_SUITE( ListCtrlTestCase );
         wxLIST_BASE_TESTS();
         CPPUNIT_TEST( EditLabel );
-        WXUISIM_TEST( ColumnClick );
-        WXUISIM_TEST( ColumnDrag );
         CPPUNIT_TEST( SubitemRect );
     CPPUNIT_TEST_SUITE_END();
 
     void EditLabel();
     void SubitemRect();
-#if wxUSE_UIACTIONSIMULATOR
-    // Column events are only supported in wxListCtrl currently so we test them
-    // here rather than in ListBaseTest
-    void ColumnClick();
-    void ColumnDrag();
-#endif // wxUSE_UIACTIONSIMULATOR
 
     wxListCtrl *m_list;
 
@@ -141,65 +133,5 @@ void ListCtrlTestCase::SubitemRect()
     CHECK(rectLabel.GetLeft() >= rectItem.GetLeft());
     CHECK(rectLabel.GetRight() == rectItem.GetRight());
 }
-
-#if wxUSE_UIACTIONSIMULATOR
-void ListCtrlTestCase::ColumnDrag()
-{
-    EventCounter begindrag(m_list, wxEVT_LIST_COL_BEGIN_DRAG);
-    EventCounter dragging(m_list, wxEVT_LIST_COL_DRAGGING);
-    EventCounter enddrag(m_list, wxEVT_LIST_COL_END_DRAG);
-
-    m_list->InsertColumn(0, "Column 0");
-    m_list->InsertColumn(1, "Column 1");
-    m_list->InsertColumn(2, "Column 2");
-    m_list->Update();
-    m_list->SetFocus();
-
-    wxUIActionSimulator sim;
-
-    wxPoint pt = m_list->ClientToScreen(wxPoint(m_list->GetColumnWidth(0), 5));
-
-    sim.MouseMove(pt);
-    wxYield();
-
-    sim.MouseDown();
-    wxYield();
-
-    sim.MouseMove(pt.x + 50, pt.y);
-    wxYield();
-
-    sim.MouseUp();
-    wxYield();
-
-    CPPUNIT_ASSERT_EQUAL(1, begindrag.GetCount());
-    CPPUNIT_ASSERT(dragging.GetCount() > 0);
-    CPPUNIT_ASSERT_EQUAL(1, enddrag.GetCount());
-
-    m_list->ClearAll();
-}
-
-void ListCtrlTestCase::ColumnClick()
-{
-    EventCounter colclick(m_list, wxEVT_LIST_COL_CLICK);
-    EventCounter colrclick(m_list, wxEVT_LIST_COL_RIGHT_CLICK);
-
-
-    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
-
-    wxUIActionSimulator sim;
-
-    sim.MouseMove(m_list->ClientToScreen(wxPoint(4, 4)));
-    wxYield();
-
-    sim.MouseClick();
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
-
-    CPPUNIT_ASSERT_EQUAL(1, colclick.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, colrclick.GetCount());
-
-    m_list->ClearAll();
-}
-#endif // wxUSE_UIACTIONSIMULATOR
 
 #endif // wxUSE_LISTCTRL

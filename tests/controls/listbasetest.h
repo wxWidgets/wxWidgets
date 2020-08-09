@@ -34,7 +34,9 @@ protected:
         WXUISIM_TEST( EditLabel ); \
         CPPUNIT_TEST( ImageList ); \
         CPPUNIT_TEST( HitTest ); \
-        CPPUNIT_TEST( Sort )
+        CPPUNIT_TEST( Sort ); \
+        WXUISIM_TEST( ColumnClick ); \
+        WXUISIM_TEST( ColumnDrag )
 
     void ColumnsOrder();
     void ItemRect();
@@ -51,6 +53,8 @@ protected:
     void ImageList();
     void HitTest();
     void Sort();
+    void ColumnClick();
+    void ColumnDrag();
 
     wxDECLARE_NO_COPY_CLASS(ListBaseTestCase);
 };

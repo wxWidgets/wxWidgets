@@ -526,4 +526,70 @@ void ListBaseTestCase::Sort()
     CPPUNIT_ASSERT_EQUAL("Item 0", list->GetItemText(1));
 }
 
+void ListBaseTestCase::ColumnDrag()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxListCtrl* const list = GetList();
+
+    EventCounter begindrag(list, wxEVT_LIST_COL_BEGIN_DRAG);
+    EventCounter dragging(list, wxEVT_LIST_COL_DRAGGING);
+    EventCounter enddrag(list, wxEVT_LIST_COL_END_DRAG);
+
+    list->InsertColumn(0, "Column 0");
+    list->InsertColumn(1, "Column 1");
+    list->InsertColumn(2, "Column 2");
+    list->Update();
+    list->SetFocus();
+
+    wxUIActionSimulator sim;
+
+    wxPoint pt = list->ClientToScreen(wxPoint(list->GetColumnWidth(0), 5));
+
+    sim.MouseMove(pt);
+    wxYield();
+
+    sim.MouseDown();
+    wxYield();
+
+    sim.MouseMove(pt.x + 50, pt.y);
+    wxYield();
+
+    sim.MouseUp();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, begindrag.GetCount());
+    CPPUNIT_ASSERT(dragging.GetCount() > 0);
+    CPPUNIT_ASSERT_EQUAL(1, enddrag.GetCount());
+
+    list->ClearAll();
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+void ListBaseTestCase::ColumnClick()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxListCtrl* const list = GetList();
+
+    EventCounter colclick(list, wxEVT_LIST_COL_CLICK);
+    EventCounter colrclick(list, wxEVT_LIST_COL_RIGHT_CLICK);
+
+
+    list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+
+    wxUIActionSimulator sim;
+
+    sim.MouseMove(list->ClientToScreen(wxPoint(4, 4)));
+    wxYield();
+
+    sim.MouseClick();
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, colclick.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, colrclick.GetCount());
+
+    list->ClearAll();
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 #endif //wxUSE_LISTCTRL
