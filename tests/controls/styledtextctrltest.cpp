@@ -75,26 +75,12 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
     m_stc->AutoCompShow(0,"ability able about above abroad absence absent");
 
 #if wxUSE_UIACTIONSIMULATOR
-    // Pressing the tab key should cause the current entry in the list to be
-    // entered into the styled text control. However with GTK+, characters sent
-    // with the UI simulator seem to arrive too late, so select the current
-    // entry with a double click instead.
 
     wxUIActionSimulator sim;
 
-#ifdef __WXGTK__
-    wxPoint zeroPosition = m_stc->PointFromPosition(0);
-    int textHt = m_stc->TextHeight(0);
-    int textWd = m_stc->TextWidth(0,"ability");
-    wxPoint autoCompPoint(zeroPosition.x + textWd/2,
-                            zeroPosition.y + textHt + textHt/2);
-    wxPoint scrnPoint = m_stc->ClientToScreen(autoCompPoint);
-    sim.MouseMove(scrnPoint);
-    sim.MouseDblClick();
-#else
     sim.Char(WXK_TAB);
-#endif // __WXGTK__
-    ::wxYield();
+    wxYield();
+
     CHECK( m_stc->GetText() == "ability" );
 #endif //wxUSE_UIACTIONSIMULATOR
 
@@ -102,13 +88,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
         m_stc->AutoCompCancel();
 
     CHECK_FOCUS_IS( m_stc );
-
-    // Unfortunately under GTK we do get focus loss events, at least sometimes
-    // (and actually more often than not, especially with GTK2, but this
-    // happens with GTK3 too).
-#ifndef __WXGTK__
     CHECK( m_focusAlwaysRetained );
-#endif // !__WXGTK__
 }
 
 // This test is used to verify that a call tip receives mouse clicks. However
@@ -142,7 +122,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
     wxPoint scrnPoint = m_stc->ClientToScreen(calltipMidPoint);
     sim.MouseMove(scrnPoint);
     sim.MouseClick();
-    ::wxYield();
+    wxYield();
 
     CHECK( m_calltipClickReceived );
 #endif // wxUSE_UIACTIONSIMULATOR
@@ -151,16 +131,8 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
         m_stc->CallTipCancel();
 
     // Verify that clicking the call tip did not take focus from the STC.
-    //
-    // Unfortunately this test fails for unknown reasons under Xvfb (but only
-    // there).
-    if ( !IsRunningUnderXVFB() )
-        CHECK_FOCUS_IS( m_stc );
-
-    // With wxGTK there is the same problem here as in the test above.
-#ifndef __WXGTK__
+    CHECK_FOCUS_IS( m_stc );
     CHECK( m_focusAlwaysRetained );
-#endif // !__WXGTK__
 }
 
 #endif // !defined(__WXOSX_COCOA__)
