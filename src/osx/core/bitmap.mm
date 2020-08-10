@@ -160,8 +160,8 @@ WXImage wxBitmapRefData::GetImage() const
     if ( rep == NULL )
         rep = m_representations[0].get();
 
-    wxCFRef<CGImageRef> image = rep->CreateCGImage();
-    image = [[UIImage alloc] initWithCGImage:image scale:rep->GetScaleFactor() orientation:UIImageOrientationUp];
+    wxCFRef<CGImageRef> cgimage = rep->CreateCGImage();
+    image = [[UIImage alloc] initWithCGImage:cgimage scale:rep->GetScaleFactor() orientation:UIImageOrientationUp];
 #endif
     return image;
 
