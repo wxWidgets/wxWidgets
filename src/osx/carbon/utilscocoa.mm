@@ -218,81 +218,6 @@ WXImage  wxOSXGetImageFromCGImage( CGImageRef image, double scaleFactor, bool is
 #endif
 }
 
-#if wxOSX_USE_COCOA
-WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref )
-{
-    NSImage  *newImage = [[NSImage alloc] initWithIconRef:iconref];
-    [newImage autorelease];
-    return( newImage );
-}
-
-WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCFURL( CFURLRef urlref )
-{
-    NSImage  *newImage = [[NSImage alloc] initWithContentsOfURL:(NSURL*)urlref];
-    [newImage autorelease];
-    return( newImage );
-}
-#endif
-
-CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg)
-{
-#if wxOSX_USE_COCOA
-    NSRect nsRect = NSRectFromCGRect(*r);
-    return [nsimage CGImageForProposedRect:&nsRect
-                               context:[NSGraphicsContext graphicsContextWithCGContext:cg flipped:YES]
-                                        hints:nil];
-#else
-    return [nsimage CGImage];
-#endif
-}
-
-wxBitmap WXDLLIMPEXP_CORE wxOSXCreateBitmapFromImage( WXImage nsimage )
-{
-    wxBitmap bmp;
-
-    #if wxOSX_USE_COCOA
-    for ( NSImageRep* rep in [nsimage representations] )
-    {
-        double scale = [rep pixelsWide] / [rep size].width;
-        bmp.AddRepresentation(new wxBitmapRep( [rep CGImageForProposedRect:NULL context:NULL hints:NULL], wxBitmapScale::FromContentScale(scale)));
-    }
-    #endif
-    
-    return bmp;
-}
-
-CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate)
-{
-    // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
-
-    CGContextRef hbitmap = NULL;
-    if (nsimage != nil)
-    {
-        double scale = wxOSXGetMainScreenContentScaleFactor();
-
-        CGSize imageSize = wxOSXGetImageSize(nsimage);
-
-        hbitmap = CGBitmapContextCreate(NULL, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
-        CGContextScaleCTM( hbitmap, scale, scale );
-        CGContextClearRect(hbitmap,CGRectMake(0, 0, imageSize.width, imageSize.height));
-
-#if wxOSX_USE_COCOA
-        NSGraphicsContext *previousContext = [NSGraphicsContext currentContext];
-        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithCGContext:hbitmap flipped:NO];
-        [NSGraphicsContext setCurrentContext:nsGraphicsContext];
-        [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-        [NSGraphicsContext setCurrentContext:previousContext];
-
-        if (isTemplate)
-            *isTemplate = [nsimage isTemplate];
-#else
-        wxUnusedVar(isTemplate);
-        CGContextDrawImage(hbitmap,CGRectMake(0, 0, imageSize.width, imageSize.height),[nsimage CGImage]);
-#endif
-    }
-    return hbitmap;
-}
-
 void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
                                           CGContextRef    inContext,
                                           const CGRect *  inBounds,
@@ -369,23 +294,6 @@ CGSize wxOSXGetImageSize(WXImage image)
     return [image size];
 #endif
 }
-
-CGImageRef wxOSXCreateCGImageFromImage( WXImage nsimage, double *scaleptr )
-{
-    CGImageRef image = NULL;
-    if (nsimage != nil)
-    {
-#if wxOSX_USE_COCOA
-        image = [nsimage CGImageForProposedRect:nil context:nil hints:nil];
-#else
-        image = [nsimage CGImage];
-#endif
-        CFRetain(image);
-        if ( scaleptr )
-            *scaleptr = CGImageGetWidth(image)/[nsimage size].width;
-    }
-    return image;
- }
 
 // ----------------------------------------------------------------------------
 // NSCursor Utils
