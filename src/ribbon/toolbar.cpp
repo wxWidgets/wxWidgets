@@ -514,7 +514,7 @@ bool wxRibbonToolBar::GetToolState(int tool_id)const
 wxBitmap wxRibbonToolBar::MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
-    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
+    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScale());
 }
 
 void wxRibbonToolBar::AppendGroup()

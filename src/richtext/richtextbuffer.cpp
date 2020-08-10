@@ -12705,7 +12705,7 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, w
 
             // On Mac, this will create a bitmap that is twice as big as the required dimensions,
             // with a scale factor that indicates that the extra detail should be used on HiDPI displays.
-            m_imageCache = wxBitmap(img, wxBITMAP_SCREEN_DEPTH, scaleFactor);
+            m_imageCache = wxBitmap(img, wxBITMAP_SCREEN_DEPTH, wxBitmapScale::FromContentScale(scaleFactor));
         }
     }
 

@@ -1574,7 +1574,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
             if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
             {
                 img.Rescale(2*size, 2*size, wxIMAGE_QUALITY_HIGH);
-                bmp2 = wxBitmap(img, -1, 2.0);
+                bmp2 = wxBitmap(img, -1, wxBitmapScale::FromContentScale(2.0));
             }
             else
 #endif

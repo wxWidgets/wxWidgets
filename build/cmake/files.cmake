@@ -2277,7 +2277,7 @@ set(OSX_LOWLEVEL_SRC
     src/osx/uiaction_osx.cpp
     src/osx/utils_osx.cpp
     src/osx/window_osx.cpp
-    src/osx/core/bitmap.cpp
+    src/osx/core/bitmap.mm
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
     src/osx/core/fontenum.cpp

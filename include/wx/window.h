@@ -73,6 +73,16 @@ class WXDLLIMPEXP_FWD_CORE wxAccessible;
 // helper stuff used by wxWindow
 // ----------------------------------------------------------------------------
 
+/*
+* The 'traditional' DPI resolution.
+* Most platforms use 96 DPI by default, but Mac traditionally uses 72.
+*/
+#ifdef __WXOSX__
+const int wxBASELINE_DPI = 72;
+#else
+const int wxBASELINE_DPI = 96;
+#endif
+
 // struct containing all the visual attributes of a control
 struct WXDLLIMPEXP_CORE wxVisualAttributes
 {

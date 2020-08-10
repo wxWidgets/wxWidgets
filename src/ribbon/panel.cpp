@@ -704,7 +704,7 @@ bool wxRibbonPanel::Realize()
 
             wxImage img(m_minimised_icon.ConvertToImage());
             img.Rescale(scale * bitmap_size.GetWidth(), scale * bitmap_size.GetHeight(), wxIMAGE_QUALITY_HIGH);
-            m_minimised_icon_resized = wxBitmap(img, -1, scale);
+            m_minimised_icon_resized = wxBitmap(img, -1, wxBitmapScale::FromContentScale(scale));
         }
         else
         {

@@ -246,6 +246,18 @@ CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r
 #endif
 }
 
+wxBitmap WXDLLIMPEXP_CORE wxOSXCreateBitmapFromImage( WXImage nsimage )
+{
+    wxBitmap bmp;
+
+    for ( NSImageRep* rep in [nsimage representations] )
+    {
+        double scale = [rep pixelsWide] / [rep size].width;
+        bmp.AddRepresentation(new wxBitmapRep( [rep CGImageForProposedRect:NULL context:NULL hints:NULL], wxBitmapScale::FromContentScale(scale)));
+    }
+    return bmp;
+}
+
 CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate)
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html

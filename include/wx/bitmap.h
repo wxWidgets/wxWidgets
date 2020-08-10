@@ -149,6 +149,39 @@ private:
     wxDECLARE_ABSTRACT_CLASS(wxBitmapHandler);
 };
 
+// This class represents the scale at which a bitmap is supposed to be
+// used, e.g. it would be "2" for a bitmap loaded from "@2x" file.
+
+class wxBitmapScale
+{
+public:
+    // Default ctor uses scale of 1.
+    wxBitmapScale() : m_scale(1.0) {}
+
+    // Implicit ctor from scale factor for compatibility.
+    wxDEPRECATED( wxBitmapScale(double scaleFactor) ) : m_scale(scaleFactor ) {}
+
+    // Pseudo-ctor from DPI: scale is DPI divided by baseline DPI.
+    static wxBitmapScale FromDPI(int dpi);
+
+    // Pseudo-ctor from contentScale, preferred over implicit
+    static wxBitmapScale FromContentScale(double contentScale);
+
+    // Pseudo-ctor using the DPI of the given window.
+    static wxBitmapScale FromWindow(wxWindow* win);
+
+    double GetScaleFactor() const { return m_scale; }
+private:
+    // Prevent accidentally constructing scale from integer DPI.
+    wxBitmapScale(int dpi) wxMEMBER_DELETE;
+
+    void SetScaleFactor(double scaleFactor) { m_scale = scaleFactor; }
+
+    double m_scale;
+ };
+
+extern WXDLLIMPEXP_DATA_CORE(const wxBitmapScale) wxDefaultBitmapScale;
+
 // ----------------------------------------------------------------------------
 // wxBitmap: class which represents platform-dependent bitmap (unlike wxImage)
 // ----------------------------------------------------------------------------
@@ -185,7 +218,8 @@ public:
         { return wxSize(GetWidth(), GetHeight()); }
 
     // support for scaled bitmaps
-    virtual double GetScaleFactor() const { return 1.0; }
+    virtual const wxBitmapScale& GetScale() const { return wxDefaultBitmapScale; }
+    virtual double GetScaleFactor() const { return wxDefaultBitmapScale.GetScaleFactor(); }
     virtual double GetScaledWidth() const { return GetWidth() / GetScaleFactor(); }
     virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
     virtual wxSize GetScaledSize() const
@@ -306,7 +340,7 @@ wxBitmap::
 ConvertToDisabled(unsigned char brightness) const
 {
     const wxImage imgDisabled = ConvertToImage().ConvertToDisabled(brightness);
-    return wxBitmap(imgDisabled, -1, GetScaleFactor());
+    return wxBitmap(imgDisabled, -1, GetScale());
 }
 #endif // wxUSE_IMAGE
 

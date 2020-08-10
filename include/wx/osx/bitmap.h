@@ -87,6 +87,144 @@ private:
 
 };
 
+class WXDLLEXPORT wxBitmapRep: public wxGDIRefData
+{
+    friend class WXDLLIMPEXP_FWD_CORE wxIcon;
+    friend class WXDLLIMPEXP_FWD_CORE wxCursor;
+public:
+    wxBitmapRep();
+    wxBitmapRep(int width , int height , int depth, wxBitmapScale scale = wxBitmapScale() );
+    wxBitmapRep(CGContextRef context, wxBitmapScale scale = wxBitmapScale() );
+    wxBitmapRep(CGImageRef image, wxBitmapScale scale = wxBitmapScale() );
+    wxBitmapRep(WXImage image);
+    wxBitmapRep(const wxBitmapRep &tocopy);
+    wxBitmapRep(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, wxBitmapScale scale = wxBitmapScale());
+
+    virtual ~wxBitmapRep();
+
+    bool IsOk() const wxOVERRIDE;
+
+    void Free();
+
+    int GetWidth() const;
+    int GetHeight() const;
+    int GetDepth() const;
+    int GetBytesPerRow() const;
+    bool HasAlpha() const;
+    wxImage ConvertToImage() const;
+
+    void SetScale(const wxBitmapScale& scale) { m_scale = scale; }
+    const wxBitmapScale& GetScale() const { return m_scale; }
+    double GetScaleFactor() const { return m_scale.GetScaleFactor(); }
+
+    const void *GetRawAccess() const;
+    void *GetRawAccess();
+    void *BeginRawAccess();
+    void EndRawAccess();
+
+    void UseAlpha(bool use = true);
+
+public:
+#if wxUSE_PALETTE
+    wxPalette     m_bitmapPalette;
+#endif // wxUSE_PALETTE
+
+    wxMask*       GetMask() { return m_bitmapMask; }
+    const wxMask* GetMask() const { return m_bitmapMask; }
+    void          SetMask(wxMask* mask) { m_bitmapMask = mask; }
+
+    wxMask *      m_bitmapMask; // Optional mask
+    CGImageRef    CreateCGImage() const;
+
+    // returns true if the bitmap has a size that
+    // can be natively transferred into a true icon
+    // if no is returned GetIconRef will still produce
+    // an icon but it will be generated via a PICT and
+    // rescaled to 16 x 16
+    bool          HasNativeSize();
+
+#if wxOSX_USE_ICONREF
+    // caller should increase ref count if needed longer
+    // than the bitmap exists
+    IconRef       GetIconRef() const;
+#endif
+
+    CGContextRef  GetBitmapContext() const;
+
+    void SetSelectedInto(wxDC *dc);
+    wxDC *GetSelectedInto() const;
+
+private :
+    WXImage m_nsImage;
+    bool Create(int width , int height , int depth, wxBitmapScale scale);
+    bool Create(CGImageRef image, wxBitmapScale scale = wxBitmapScale() );
+    bool Create(CGContextRef bitmapcontext, wxBitmapScale scale = wxBitmapScale() );
+    bool Create(WXImage image);
+    void Init();
+
+    void EnsureBitmapExists() const;
+
+    void FreeDerivedRepresentations();
+
+    int           m_rawAccessCount;
+    mutable CGImageRef    m_cgImageRef;
+    bool          m_isTemplate;
+    wxBitmapScale m_scale;
+
+#if wxOSX_USE_ICONREF
+    mutable IconRef       m_iconRef;
+#endif
+
+    wxCFRef<CGContextRef>  m_hBitmap;
+    wxDC*         m_selectedInto;
+};
+
+typedef wxObjectDataPtr<wxBitmapRep> wxBitmapRepPtr;
+typedef wxVector<wxBitmapRepPtr> wxBitmapRepresentationArray;
+
+/*
+ * wxBitmapRef data contains either multiple representations via wxBitmapRep
+ * or is generated from a NSImage, which always gets precedence over potentially
+ * stored wxBitmapReps because it contains other OS-private hints eg about
+ * the corresponding appearance etc, so we always leave the selection for the best
+ * rendering to the OS in this case
+ */
+
+class WXDLLEXPORT wxBitmapRefData : public wxGDIRefData
+{
+public:
+    wxBitmapRefData();
+
+    wxBitmapRefData(WXImage image);
+
+    wxBitmapRefData(const wxBitmapRefData &tocopy);
+
+    ~wxBitmapRefData();
+
+    virtual bool IsOk() const;
+
+    wxBitmapRepresentationArray& GetRepresentations() {return m_representations; }
+
+    const wxBitmapRepresentationArray& GetRepresentations() const {return m_representations; }
+
+    WXImage GetImage() const;
+
+    // was this bitmap created from a NSImage
+    bool IsNativeImage() const { return m_nsImageIsPrimary; }
+
+    const wxBitmapScale& GetNativeImageScale() const { return m_nsScale; }
+private:
+    void Init();
+
+    wxBitmapRepresentationArray m_representations;
+
+    bool                        m_nsImageIsPrimary;
+    wxBitmapScale               m_nsScale;
+    WXImage                     m_nsImage;
+
+    bool                        m_isTemplate;
+};
+
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxBitmap);
@@ -94,10 +232,11 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
     friend class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 
 public:
-    wxBitmap() {} // Platform-specific
+    // Initialize with an empty array of wxBitmapReps
+    wxBitmap();
 
     // Initialize with raw data.
-    wxBitmap(const char bits[], int width, int height, int depth = 1);
+    wxBitmap(const char bits[], int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     // Initialize with XPM data
     wxBitmap(const char* const* bits);
@@ -106,10 +245,10 @@ public:
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     // Constructor for generalised creation from data
-    wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
+    wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     // creates an bitmap from the native image format
-    wxBitmap(CGImageRef image, double scale = 1.0);
+    wxBitmap(CGImageRef image);
     wxBitmap(WXImage image);
     wxBitmap(CGContextRef bitmapcontext);
 
@@ -117,32 +256,37 @@ public:
     wxBitmap(int width, int height, const wxDC& dc);
 
     // If depth is omitted, will create a bitmap compatible with the display
-    wxBitmap(int width, int height, int depth = -1) { (void)Create(width, height, depth); }
-    wxBitmap(const wxSize& sz, int depth = -1) { (void)Create(sz, depth); }
+    wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH, wxBitmapScale scale = wxBitmapScale()) { (void)Create(width, height, depth, scale); }
+    wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH, wxBitmapScale scale = wxBitmapScale()) { (void)Create(sz.GetWidth(), sz.GetHeight(), depth, scale); }
 
     // Convert from wxImage:
-    wxBitmap(const wxImage& image, int depth = -1, double scale = 1.0);
+    wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, wxBitmapScale scale = wxBitmapScale());
 
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
     virtual ~wxBitmap() {}
     
-    void AddRepresentations( const wxBitmap& other);
+    void AddRepresentation( wxBitmapRep* other);
 
     wxImage ConvertToImage() const wxOVERRIDE;
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const wxOVERRIDE;
     
-    const wxBitmap GetBestRepresentation( const wxSize& dimensions) const;
+    const wxBitmapRep* GetBestRepresentation( const wxSize& dimensions) const;
+    wxBitmapRep* GetBestRepresentation( const wxSize& dimensions);
+    const wxBitmapRep* GetDefaultRepresentation() const;
+    wxBitmapRep* GetDefaultRepresentation();
 
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
+    virtual bool Create(int width, int height, int depth, wxBitmapScale scale);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
+        { return Create(width, height, depth, wxBitmapScale()); }
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    bool Create( CGImageRef image, double scale = 1.0 );
+    bool Create( CGImageRef image );
     bool Create( WXImage image );
     bool Create( CGContextRef bitmapcontext);
 
@@ -151,6 +295,7 @@ public:
 
     // Create a bitmap with a scale factor, width and height are multiplied with that factor
     bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale) wxOVERRIDE;
+    // bool CreateWithDPI(int w, int h, int d, wxBitmapScale scale = wxBitmapScale()) wxOVERRIDE;
 
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
@@ -201,7 +346,11 @@ public:
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
 
     // returns a CGImageRef which must released after usage with CGImageRelease
-    CGImageRef CreateCGImage() const ;
+    CGImageRef CreateCGImage() const;
+
+    // is this wxBitmap generated from an NSImage, then this is preferred for drawing
+    // over individual wxBitmapRepresentations
+    bool IsNativeImage() const;
 
     WXImage GetImage() const;
 #if wxOSX_USE_COCOA
@@ -237,10 +386,17 @@ public:
     void EndRawAccess();
 #endif
 
-    double GetScaleFactor() const wxOVERRIDE;
+    void SetScale( const wxBitmapScale &scale);
+    const wxBitmapScale& GetScale() const wxOVERRIDE;
+
+    double GetScaleFactor() const wxOVERRIDE { return GetScale().GetScaleFactor(); }
 
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;
+
+    wxBitmapRepresentationArray& GetRepresentations();
+
+    const wxBitmapRepresentationArray& GetRepresentations() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;

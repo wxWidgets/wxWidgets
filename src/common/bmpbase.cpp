@@ -43,6 +43,31 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxIcon,WXDLLEXPORT)
 #endif
 
 // ----------------------------------------------------------------------------
+// wxBitmapScale
+// ----------------------------------------------------------------------------
+
+const wxBitmapScale wxDefaultBitmapScale;
+
+wxBitmapScale wxBitmapScale::FromContentScale(double contentScale)
+{
+    wxBitmapScale scale;
+    scale.SetScaleFactor(contentScale);
+    return scale;
+}
+
+wxBitmapScale wxBitmapScale::FromDPI(int dpi)
+{
+    wxBitmapScale scale;
+    scale.SetScaleFactor((double)dpi/wxBASELINE_DPI);
+    return scale;
+}
+
+wxBitmapScale wxBitmapScale::FromWindow(wxWindow* win)
+{
+    return FromDPI(win->GetDPI().x);
+}
+
+// ----------------------------------------------------------------------------
 // wxBitmapHelpers
 // ----------------------------------------------------------------------------
 

@@ -475,7 +475,7 @@ void wxHtmlImageCell::SetImage(const wxImage& img, double scaleHDPI)
 
         // On a Mac retina screen, we might have found a @2x version of the image,
         // so specify this scale factor.
-        m_bitmap = new wxBitmap(img, -1, scaleHDPI);
+        m_bitmap = new wxBitmap(img, -1, wxBitmapScale::FromContentScale(scaleHDPI));
     }
 #endif
 }
