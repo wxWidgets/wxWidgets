@@ -293,7 +293,7 @@ public:
 
     // Create a bitmap compatible with the given DC, applying its contentScale factor to the coordinates to
     // calculate the true pixel dimensions
-    bool CreateFromDCCoords(int widthInDCCoords, int heightInDCCoords, const wxDC& dc) wxOVERRIDE;
+    bool CreateFromDCCoords(int widthInDCCoords, int heightInDCCoords, const wxDC& dc);
 
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
