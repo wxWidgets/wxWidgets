@@ -20,6 +20,7 @@
     #include "wx/colour.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/window.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG && wxUSE_STREAMS

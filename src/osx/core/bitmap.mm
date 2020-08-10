@@ -1745,7 +1745,7 @@ public:
 
         iconURL.reset(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, filePath, kCFURLPOSIXPathStyle, false));
 
-        WXImage img = wxOSXGetNSImageFromCFURL(iconURL);
+        WXImage img = [[[NSImage alloc] initWithContentsOfURL:(NSURL*)iconURL.get()] autorelease];
 
         if ( img )
         {

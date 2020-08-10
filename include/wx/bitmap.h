@@ -26,6 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
 // wxVariant support
@@ -152,7 +153,7 @@ private:
 // This class represents the scale at which a bitmap is supposed to be
 // used, e.g. it would be "2" for a bitmap loaded from "@2x" file.
 
-class wxBitmapScale
+class WXDLLIMPEXP_CORE wxBitmapScale
 {
 public:
     // Default ctor uses scale of 1.
