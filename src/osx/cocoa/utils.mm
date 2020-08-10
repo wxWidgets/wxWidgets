@@ -583,7 +583,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     const wxSize bitmapSize(subrect ? subrect->GetSize() : m_window->GetSize());
     wxBitmap bitmap;
-    bitmap.CreateScaled(bitmapSize.x, bitmapSize.y, -1, m_contentScaleFactor);
+    bitmap.CreateFromDCCoords(bitmapSize.x, bitmapSize.y, *GetOwner());
 
     NSView* view = (NSView*) m_window->GetHandle();
     if ( [view isHiddenOrHasHiddenAncestor] == NO )
@@ -615,7 +615,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
         CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
 
-        // The bitmap created by wxBitmap::CreateScaled() above is scaled,
+        // The bitmap created by wxBitmap::CreateFromDCCoords() above is scaled,
         // so we need to adjust the coordinates for it.
         r.size.width /= m_contentScaleFactor;
         r.size.height /= m_contentScaleFactor;

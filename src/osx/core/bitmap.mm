@@ -921,7 +921,7 @@ wxBitmap::wxBitmap(const void* data, wxBitmapType type, int width, int height, i
 
 wxBitmap::wxBitmap(int width, int height, const wxDC& dc)
 {
-    (void)Create(width, height, dc);
+    (void)CreateFromDCCoords(width, height, dc);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
@@ -929,9 +929,9 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(CGImageRef image)
+wxBitmap::wxBitmap(CGImageRef image, wxBitmapScale scale)
 {
-    (void) Create(image);
+    (void) Create(image, scale);
 }
 
 wxBitmap::wxBitmap(const wxImage& image, int depth, wxBitmapScale scale)
@@ -1112,46 +1112,27 @@ bool wxBitmap::Create(int w, int h, int d, wxBitmapScale scale)
 }
 
 
-bool wxBitmap::Create(int w, int h, const wxDC& dc)
-{
-    double contentScale = dc.GetContentScaleFactor();
-    return Create(w*contentScale,h*contentScale,wxBITMAP_SCREEN_DEPTH, wxBitmapScale::FromContentScale(contentScale));
-}
-/*
-bool wxBitmap::CreateWithDPI(int w, int h, int d, wxBitmapScale scale)
+bool wxBitmap::CreateFromDCCoords(int w, int h, const wxDC& dc)
 {
     UnRef();
 
-     if ( d < 0 )
-         d = wxDisplayDepth() ;
-
-    double logicalScale = dpi / wxBASELINE_DPI;
-     m_refData = new wxBitmapRefData(newwxBitmapRepRefData( w*logicalScale , h*logicalScale , d, dpi ) );
-
-     return GetDefaultRepresentation()->IsOk() ;
+    double contentScale = dc.GetContentScaleFactor();
+    return Create(w*contentScale,h*contentScale,wxBITMAP_SCREEN_DEPTH, wxBitmapScale::FromContentScale(contentScale));
 }
-*/
 
 bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
 {
     UnRef();
 
-    if ( d < 0 )
-        d = wxDisplayDepth() ;
-
-    m_refData = CreateGDIRefData();
-    wxBitmapRep* rep = new wxBitmapRep( w*logicalScale , h*logicalScale , d, wxBitmapScale::FromContentScale(logicalScale));
-    AddRepresentation(rep);
-
-    return rep->IsOk();
+    return Create(w*logicalScale,h*logicalScale,wxBITMAP_SCREEN_DEPTH, wxBitmapScale::FromContentScale(logicalScale));
 }
 
-bool wxBitmap::Create(CGImageRef image)
+bool wxBitmap::Create(CGImageRef image, wxBitmapScale scale)
 {
     UnRef();
 
-    m_refData = CreateGDIRefData();
-    wxBitmapRep* rep = new wxBitmapRep(image);
+    m_refData = new wxBitmapRefData;
+    wxBitmapRep* rep = new wxBitmapRep(image, scale);
     AddRepresentation(rep);
 
     return rep->IsOk();

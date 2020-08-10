@@ -241,11 +241,11 @@ public:
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     // creates an bitmap from the native image format
-    wxBitmap(CGImageRef image);
+    wxBitmap(CGImageRef image, wxBitmapScale scale = wxBitmapScale());
     wxBitmap(WXImage image);
-    // wxBitmap(CGContextRef bitmapcontext);
 
     // Create a bitmap compatible with the given DC
+    wxDEPRECATED_MSG("You should create an empty bitmap and then call CreateFromDCCoords")
     wxBitmap(int width, int height, const wxDC& dc);
 
     // If depth is omitted, will create a bitmap compatible with the display
@@ -279,16 +279,21 @@ public:
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    bool Create( CGImageRef image );
-    bool Create( WXImage image );
-    // bool Create( CGContextRef bitmapcontext);
+    bool Create(CGImageRef image, wxBitmapScale scale = wxBitmapScale());
+    bool Create(WXImage image );
 
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
-    bool Create(int width, int height, const wxDC& dc);
+    wxDEPRECATED_MSG("You should use CreateFromDCCoords")
+    bool Create(int width, int height, const wxDC& dc)
+        { return CreateFromDCCoords(width, height, dc); }
 
     // Create a bitmap with a scale factor, width and height are multiplied with that factor
+    wxDEPRECATED_MSG("You should use Create methods with pixel dimenisions, or call a CreateForXXX method")
     bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale) wxOVERRIDE;
-    // bool CreateWithDPI(int w, int h, int d, wxBitmapScale scale = wxBitmapScale()) wxOVERRIDE;
+
+    // Create a bitmap compatible with the given DC, applying its contentScale factor to the coordinates to
+    // calculate the true pixel dimensions
+    bool CreateFromDCCoords(int widthInDCCoords, int heightInDCCoords, const wxDC& dc) wxOVERRIDE;
 
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
