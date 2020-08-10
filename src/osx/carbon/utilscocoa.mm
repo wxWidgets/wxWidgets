@@ -250,11 +250,14 @@ wxBitmap WXDLLIMPEXP_CORE wxOSXCreateBitmapFromImage( WXImage nsimage )
 {
     wxBitmap bmp;
 
+    #if wxOSX_USE_COCOA
     for ( NSImageRep* rep in [nsimage representations] )
     {
         double scale = [rep pixelsWide] / [rep size].width;
         bmp.AddRepresentation(new wxBitmapRep( [rep CGImageForProposedRect:NULL context:NULL hints:NULL], wxBitmapScale::FromContentScale(scale)));
     }
+    #endif
+    
     return bmp;
 }
 
