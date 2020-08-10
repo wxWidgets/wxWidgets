@@ -116,6 +116,57 @@ bool wxBitmapRefData::IsOk() const
     return m_nsImageIsPrimary || m_representations.size();
 }
 
+WXImage wxBitmapRefData::GetImage() const
+{
+    if ( m_nsImageIsPrimary )
+        return m_nsImage;
+
+    wxCHECK_MSG(m_representations.size() >0, NULL, "Empty Bitmap");
+
+    WXImage image;
+#if wxOSX_USE_COCOA
+    const wxBitmapRep* defaultrep = m_representations[0].get();
+    double scale = defaultrep->GetScaleFactor();
+    NSSize sz = NSMakeSize( defaultrep->GetWidth()*scale, defaultrep->GetHeight()*scale);
+
+    image = [[NSImage alloc] initWithSize:sz];
+    for( auto& r : GetRepresentations() )
+    {
+        const wxBitmapRep* rep = r.get();
+        wxCFRef<CGImageRef> cgimage = rep->CreateCGImage();
+        NSImageRep* nsrep = [[NSBitmapImageRep alloc] initWithCGImage:cgimage];
+        [image addRepresentation:nsrep];
+        [nsrep release];
+    }
+#else
+    // UIImage just can carry one representation, try to pick the best
+    const wxBitmapRep* rep = NULL;
+    for( auto& r : GetRepresentations() )
+    {
+        const wxBitmapRep* testrep = r.get();
+        // best match
+        if ( abs( testrep->GetScaleFactor() - wxOSXGetMainScreenContentScaleFactor() ) < 0.01 )
+        {
+            rep = testrep;
+            break;
+        }
+        // scale 1.0 fallback
+        if ( abs( testrep->GetScaleFactor() - 1.0 ) < 0.01 )
+        {
+            rep = testrep;
+        }
+    }
+    // if no good match, just pick one
+    if ( rep == NULL )
+        rep = m_representations[0].get();
+
+    wxCFRef<CGImageRef> image = rep->CreateCGImage();
+    image = [[UIImage alloc] initWithCGImage:image scale:rep->GetScaleFactor() orientation:UIImageOrientationUp];
+#endif
+    return image;
+
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmapRep
 // ----------------------------------------------------------------------------
@@ -1018,7 +1069,7 @@ bool wxBitmap::Create(WXImage image)
 
 WXImage wxBitmap::GetImage() const
 {
-    return nil; // GetDefaultRepresentation()->GetImage();
+    return GetBitmapData()->GetImage();
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
