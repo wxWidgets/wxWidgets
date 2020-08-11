@@ -819,6 +819,19 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
 
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(m_postScriptName);
+    AdjustPostScriptName();
+}
+
+void wxNativeFontInfo::AdjustPostScriptName()
+{
+    if ( wxCheckOsVersion( 10, 16) )
+    {
+        // the PostScript names reported in macOS start with a dot for System Fonts, this has to be corrected
+        // otherwise round-trips are not possible, resulting in a Times Fallback, therefore we replace these with
+        // their official PostScript Name
+        if ( m_postScriptName.StartsWith(".SFNS") )
+            m_postScriptName.Replace(".SFNS","SFProDisplay");
+    }
 }
 
 void wxNativeFontInfo::Free()
@@ -877,6 +890,7 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(m_postScriptName);
+    AdjustPostScriptName();
 
 #if wxDEBUG_LEVEL >= 2
     // for debugging: show all different font names
