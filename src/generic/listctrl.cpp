@@ -3102,6 +3102,7 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
     {
         m_hasFocus = true;
 
+        UpdateCurrent();
         RefreshSelected();
     }
 }
@@ -4080,7 +4081,14 @@ void wxListMainWindow::RefreshAll()
 void wxListMainWindow::UpdateCurrent()
 {
     if ( !HasCurrent() && !IsEmpty() )
+    {
+        // Initialise m_current to the first item without sending any
+        // wxEVT_LIST_ITEM_FOCUSED event (typicaly when the control gains focus)
+        // and this is to allow changing the focused item using the arrow keys.
+        // which is the behaviour found in the wxMSW port.
+        wxEventBlocker block(GetParent(), wxEVT_LIST_ITEM_FOCUSED);
         ChangeCurrent(0);
+    }
 }
 
 long wxListMainWindow::GetNextItem( long item,
