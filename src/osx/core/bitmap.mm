@@ -163,6 +163,7 @@ WXImage wxBitmapRefData::GetImage() const
     wxCFRef<CGImageRef> cgimage = rep->CreateCGImage();
     image = [[UIImage alloc] initWithCGImage:cgimage scale:rep->GetScaleFactor() orientation:UIImageOrientationUp];
 #endif
+    [image autorelease];
     return image;
 
 }
