@@ -64,7 +64,7 @@
     self = [super initWithContentRect:contentRect styleMask:style backing:backingStoreType defer:flag];
     if ( self )
     {
-        self.overlayView = [[wxOSXOverlayView alloc] initWithFrame:contentRect];
+        self.overlayView = [[[wxOSXOverlayView alloc] initWithFrame:contentRect] autorelease];
         [self setContentView:self.overlayView];
 
         [self setOpaque:NO];
@@ -75,6 +75,10 @@
     return self;
 }
 
+- (void)dealloc
+{
+   [super dealloc];
+}
 @end
 
 @implementation wxOSXOverlayView
