@@ -168,29 +168,35 @@ public:
 protected:
 
     /**
-        This method is called by the library when the user requests popup menu
-        (on Windows and Unix platforms, this is when the user right-clicks the icon).
+        Called by the library when the user requests popup menu if
+        GetPopupMenu() is not overridden.
 
-        Override this function in order to provide popup menu associated with the icon.
-        If CreatePopupMenu() returns @NULL (this happens by default), no menu is shown,
-        otherwise the menu is displayed and then deleted by the library as soon as the
-        user dismisses it. If you don't want the menu to get destroyed when it is dismissed,
-        override GetPopupMenu() instead.
+        Override this function in order to provide popup menu associated with
+        the icon if you don't want to override GetPopupMenu(), i.e. if you
+        prefer creating a new menu every time instead of reusing the same menu.
 
-        The events can be handled by a class derived from wxTaskBarIcon.
+        If CreatePopupMenu() returns @NULL (this happens by default), no menu
+        is shown, otherwise the menu is displayed and then deleted by the
+        library as soon as the user dismisses it. If you don't want the menu to
+        be destroyed when it is dismissed, override GetPopupMenu() instead.
     */
     virtual wxMenu* CreatePopupMenu();
 
     /**
-        This method is called by the library when the user requests popup menu
-        (on Windows and Unix platforms, this is when the user right-clicks the icon).
+        Called by the library when the user requests popup menu.
 
-        Override this function in order to provide popup menu associated with the icon.
-        If GetPopupMenu() returns @NULL (this happens by default), no menu is shown,
-        otherwise the menu is displayed. In contrast to CreatePopupMenu(), GetPopupMenu()
-        won't destroy the menu once the user dismisses it.
+        On Windows and Unix platforms this happens when the user right-clicks
+        the icon, so overriding this method is the simplest way to implement
+        the standard behaviour of showing a menu when the taskbar icon is
+        clicked.
 
-        The events can be handled by a class derived from wxTaskBarIcon.
+        If GetPopupMenu() returns @NULL (this happens by default),
+        CreatePopupMenu() is called next and its menu is used (if non-@NULL).
+        Otherwise the menu returned by GetPopupMenu() is shown and, contrary to
+        CreatePopupMenu(), not destroyed when the user dismisses it, allowing
+        to reuse the same menu pointer multiple times.
+
+        @since 3.1.5
     */
     virtual wxMenu* GetPopupMenu();
 };
