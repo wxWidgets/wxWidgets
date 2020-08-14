@@ -560,15 +560,18 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(m_grid->IsInSelection(9, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
 
-    m_grid->SelectRow(4);
+    m_grid->SelectRow(4, true /* add to selection */);
 
     CHECK(m_grid->IsInSelection(4, 0));
     CHECK(m_grid->IsInSelection(4, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
 
+    // Check that deselecting a row does deselect the cells in it, but leaves
+    // the other ones selected.
     m_grid->DeselectRow(4);
     CHECK(!m_grid->IsInSelection(4, 0));
     CHECK(!m_grid->IsInSelection(4, 1));
+    CHECK(m_grid->IsInSelection(0, 1));
 
     m_grid->DeselectCol(1);
     CHECK(!m_grid->IsInSelection(0, 1));
