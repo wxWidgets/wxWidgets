@@ -255,11 +255,12 @@ int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
     err = CGGetDisplaysWithRect(r, theCount, theIDs.get(), &theCount);
     wxASSERT(err == CGDisplayNoErr);
 
+    const double scaleWindow = tlw->GetContentScaleFactor();
     for ( int i = 0 ; i < theCount; ++i )
     {
         // find a screen intersecting having the same contentScale as the window itself
         double scale = wxGetScaleFactor(theIDs[i]);
-        if ( fabs(scale - tlw->GetContentScaleFactor() ) < 0.01 )
+        if ( fabs(scale - scaleWindow) < 0.01 )
         {
             return wxOSXGetDisplayFromID(theIDs[i]);
         }
