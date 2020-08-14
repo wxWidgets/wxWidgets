@@ -162,6 +162,8 @@ public:
     {
         wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
 
+        SetTextColoursAndFont(grid, attr, dc, isSelected);
+
         grid.DrawTextRectangle(dc, GetStarString(GetStarValue(grid, row, col)),
                                rect, attr);
     }
