@@ -19,6 +19,7 @@
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/scopedptr.h"
 #include "wx/taskbar.h"
 
 #include "wx/osx/private.h"
@@ -102,7 +103,7 @@ protected:
 private:
     wxTaskBarIconDockImpl();
     wxMenu             *m_pMenu;
-    bool m_keepMenu;
+    wxScopedPtr<wxMenu> m_menuDeleter;
 };
 
 class wxTaskBarIconCustomStatusItemImpl;
@@ -231,7 +232,6 @@ wxTaskBarIconDockImpl::wxTaskBarIconDockImpl(wxTaskBarIcon *taskBarIcon)
     wxASSERT_MSG(!sm_dockIcon, wxT("You should never have more than one dock icon!"));
     sm_dockIcon = this;
     m_pMenu = NULL;
-    m_keepMenu = false;
 }
 
 wxTaskBarIconDockImpl::~wxTaskBarIconDockImpl()
@@ -250,28 +250,21 @@ WX_NSMenu wxTaskBarIconDockImpl::OSXGetDockHMenu()
 
 WX_NSMenu wxTaskBarIconDockImpl::OSXDoGetDockHMenu()
 {
-    wxMenu *dockMenu = CreatePopupMenu();
-    bool keepMenu;
+    m_menuDeleter.reset();
+
+    wxMenu *dockMenu = GetPopupMenu();
 
     if(!dockMenu)
     {
-        dockMenu = GetPopupMenu();
+        dockMenu = CreatePopupMenu();
 
         if(!dockMenu)
             return nil;
-    
-        keepMenu = true;
-    }
-    else
-    {
-        keepMenu = false;
-    }
 
-    if(!m_keepMenu)
-        wxDELETE(m_pMenu);
+        m_menuDeleter.reset(dockMenu);
+    }
 
     m_pMenu = dockMenu;
-    m_keepMenu = keepMenu;
     
     m_pMenu->SetInvokingWindow(m_eventWindow);
     
@@ -289,8 +282,7 @@ bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED
 
 bool wxTaskBarIconDockImpl::RemoveIcon()
 {
-    if(!m_keepMenu)
-        wxDELETE(m_pMenu);
+    m_menuDeleter.reset();
 
     m_icon = wxBitmap();
     [[NSApplication sharedApplication] setApplicationIconImage:nil];
