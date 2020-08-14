@@ -45,6 +45,14 @@ extern wxRect wxOSXGetDisplayClientArea(CGDirectDisplayID id);
 namespace
 {
 
+double wxGetScaleFactor( CGDirectDisplayID ID)
+{
+    wxCFRef<CGDisplayModeRef> mode = CGDisplayCopyDisplayMode(ID);
+    size_t width = CGDisplayModeGetWidth(mode);
+    size_t pixelsw = CGDisplayModeGetPixelWidth(mode);
+    return (double)pixelsw/width;
+}
+
 wxRect wxGetDisplayGeometry(CGDirectDisplayID id)
 {
     CGRect theRect = CGDisplayBounds(id);
@@ -257,10 +265,8 @@ int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
     for ( int i = 0 ; i < theCount; ++i )
     {
         // find a screen intersecting having the same contentScale as the window itself
-        wxCFRef<CGDisplayModeRef> mode = CGDisplayCopyDisplayMode(theIDs[i]);
-        size_t width = CGDisplayModeGetWidth(mode);
-        size_t pixelsw = CGDisplayModeGetPixelWidth(mode);
-        if ( fabs( (double)pixelsw / width - tlw->GetContentScaleFactor() ) < 0.01 )
+        double scale = wxGetScaleFactor(theIDs[i]);
+        if ( fabs(scale - tlw->GetContentScaleFactor() ) < 0.01 )
         {
             return wxOSXGetDisplayFromID(theIDs[i]);
         }
@@ -313,10 +319,7 @@ wxSize wxDisplayImplMacOSX::GetSizeMM() const
 
 double wxDisplayImplMacOSX::GetScaleFactor() const
 {
-    wxCFRef<CGDisplayModeRef> mode = CGDisplayCopyDisplayMode(m_id);
-    size_t width = CGDisplayModeGetWidth(mode);
-    size_t pixelsw = CGDisplayModeGetPixelWidth(mode);
-    return (double)pixelsw / width;
+    return wxGetScaleFactor(m_id);
 }
 
 static int wxOSXCGDisplayModeGetBitsPerPixel( CGDisplayModeRef theValue )
