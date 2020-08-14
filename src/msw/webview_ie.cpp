@@ -1077,7 +1077,7 @@ void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         HRESULT res = (*pfnCoInternetGetSession)(0, &session, 0);
         if(FAILED(res))
         {
-            wxFAIL_MSG("Could not retrive internet session");
+            wxFAIL_MSG("Could not retrieve internet session");
         }
 
         HRESULT hr = session->RegisterNameSpace(cf, CLSID_FileProtocol,
@@ -1616,12 +1616,6 @@ VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
     m_handler = handler;
 }
 
-BEGIN_IID_TABLE(VirtualProtocol)
-    ADD_IID(Unknown)
-    ADD_RAW_IID(wxIID_IInternetProtocolRoot)
-    ADD_RAW_IID(wxIID_IInternetProtocol)
-END_IID_TABLE;
-
 STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
 {
     wxLogQueryInterface(wxT("VirtualProtocol"), riid);
@@ -1768,25 +1762,23 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
         DWORD dwReserved)
 {
     wxUnusedVar(pwzUrl);
-    wxUnusedVar(ParseAction);
     wxUnusedVar(dwParseFlags);
-    wxUnusedVar(pwzResult);
-    wxUnusedVar(cchResult);
-    wxUnusedVar(pcchResult);
     wxUnusedVar(dwReserved);
 
-    switch (ParseAction)
+    const size_t secLen = m_handler->GetSecurityURL().length();
+    if ( secLen > 0 )
     {
-        case wxPARSE_SECURITY_URL:
-        case wxPARSE_SECURITY_DOMAIN:
+        switch ( ParseAction )
         {
-            const wchar_t Result[] = L"http://localhost";
-            size_t Len = wcslen(Result);
-            if(cchResult <= Len)
-                return S_FALSE;
-            wcscpy(pwzResult, Result);
-            *pcchResult = Len;
-            return S_OK;
+            case wxPARSE_SECURITY_URL:
+            case wxPARSE_SECURITY_DOMAIN:
+            {
+                if ( cchResult < secLen )
+                    return S_FALSE;
+                wcscpy(pwzResult, m_handler->GetSecurityURL().wc_str());
+                *pcchResult = secLen;
+                return S_OK;
+            }
         }
     }
 
