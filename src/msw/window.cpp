@@ -105,6 +105,7 @@
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 #include "wx/dynlib.h"
+#include "wx/display.h"
 
 #include <string.h>
 
@@ -4856,6 +4857,11 @@ wxSize wxWindowMSW::GetDPI() const
     }
 
     return dpi;
+}
+
+double wxWindowMSW::GetDPIScaleFactor() const
+{
+    return GetDPI().y / (double)wxDisplay::GetStdPPIValue();
 }
 
 void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
