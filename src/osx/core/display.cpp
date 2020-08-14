@@ -85,12 +85,6 @@ int wxGetDisplayDepth(CGDirectDisplayID id)
     return theDepth;
 }
 
-wxSize wxGetDisplaySizeMM(CGDirectDisplayID id)
-{
-    const CGSize size = CGDisplayScreenSize(id);
-    return wxSize(wxRound(size.width), wxRound(size.height));
-}
-
 } // anonymous namespace
 
 #if wxUSE_DISPLAY
@@ -113,7 +107,6 @@ public:
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
-    virtual wxSize GetSizeMM() const wxOVERRIDE;
     virtual double GetScaleFactor() const wxOVERRIDE;
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
@@ -312,11 +305,6 @@ int wxDisplayImplMacOSX::GetDepth() const
     return wxGetDisplayDepth(m_id);
 }
 
-wxSize wxDisplayImplMacOSX::GetSizeMM() const
-{
-    return wxGetDisplaySizeMM(m_id);
-}
-
 double wxDisplayImplMacOSX::GetScaleFactor() const
 {
     return wxGetScaleFactor(m_id);
@@ -436,11 +424,6 @@ public:
     virtual int GetDepth() const wxOVERRIDE
     {
         return wxGetDisplayDepth(CGMainDisplayID());
-    }
-
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        return wxGetDisplaySizeMM(CGMainDisplayID());
     }
 };
 

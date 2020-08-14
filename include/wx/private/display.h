@@ -119,9 +119,6 @@ public:
     // but can be also overridden directly, as is done in wxMSW
     virtual wxSize GetPPI() const { return wxDisplay::GetStdPPI()*GetScaleFactor(); }
 
-    // return the physical size of the display or (0, 0) if unknown
-    virtual wxSize GetSizeMM() const { return wxSize(0, 0); }
-
     // return the name (may be empty)
     virtual wxString GetName() const { return wxString(); }
 

@@ -67,13 +67,6 @@ public:
     {
         return wxGetHDCDepth(ScreenHDC());
     }
-
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        ScreenHDC dc;
-
-        return wxSize(::GetDeviceCaps(dc, HORZSIZE), ::GetDeviceCaps(dc, VERTSIZE));
-    }
 };
 
 class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
