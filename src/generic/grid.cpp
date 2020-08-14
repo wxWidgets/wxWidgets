@@ -4551,91 +4551,98 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         return;
     }
 
-    if ( event.ShiftDown() && !event.CmdDown() )
+    // Process the mouse down event depending on the current cursor mode. Note
+    // that this assumes m_cursorMode was set in the mouse move event hendler.
+    switch ( m_cursorMode )
     {
-        if ( m_selection )
-        {
-            m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
-            MakeCellVisible(coords);
-        }
-    }
-    else
-    {
-        // Clicking on (or very near) the separating lines shouldn't change the
-        // selection when it's used for resizing -- but should still do it if
-        // resizing is disabled (notice that we intentionally don't check for
-        // it being disabled for a particular row/column as it would be
-        // surprising to have different mouse behaviour in different parts of
-        // the same grid, so we only check for it being globally disabled).
-        int dragRowOrCol = wxNOT_FOUND;
-        if ( CanDragGridColEdges() )
-            dragRowOrCol = XToEdgeOfCol(pos.x);
-
-        if ( dragRowOrCol == wxNOT_FOUND && CanDragGridRowEdges() )
-            dragRowOrCol = YToEdgeOfRow(pos.y);
-
-        if ( dragRowOrCol != wxNOT_FOUND )
-        {
-            DoStartResizeRowOrCol(dragRowOrCol);
-            return;
-        }
-
-        DisableCellEditControl();
-        MakeCellVisible( coords );
-
-        if ( event.CmdDown() && !event.ShiftDown() )
-        {
-            if ( m_selection )
+        case WXGRID_CURSOR_RESIZE_ROW:
+        case WXGRID_CURSOR_RESIZE_COL:
             {
-                if ( !m_selection->IsInSelection(coords) )
+                int dragRowOrCol = wxNOT_FOUND;
+                if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+                    dragRowOrCol = XToEdgeOfCol(pos.x);
+                else
+                    dragRowOrCol = YToEdgeOfRow(pos.y);
+                wxCHECK_RET( dragRowOrCol != -1, "Can't determine row or column in resizing mode" );
+
+                DoStartResizeRowOrCol(dragRowOrCol);
+            }
+            break;
+
+        case WXGRID_CURSOR_SELECT_CELL:
+        case WXGRID_CURSOR_SELECT_ROW:
+        case WXGRID_CURSOR_SELECT_COL:
+            DisableCellEditControl();
+            MakeCellVisible(coords);
+
+            if (event.ShiftDown() && !event.CmdDown())
+            {
+                if (m_selection)
                 {
-                    // If the cell is not selected, select it.
-                    m_selection->SelectBlock(coords.GetRow(), coords.GetCol(),
-                                             coords.GetRow(), coords.GetCol(),
-                                             event);
+                    m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
+                }
+            }
+            else
+            {
+                if ( event.CmdDown() && !event.ShiftDown() )
+                {
+                    if ( m_selection )
+                    {
+                        if ( !m_selection->IsInSelection(coords) )
+                        {
+                            // If the cell is not selected, select it.
+                            m_selection->SelectBlock(coords.GetRow(), coords.GetCol(),
+                                                     coords.GetRow(), coords.GetCol(),
+                                                     event);
+                        }
+                        else
+                        {
+                            // Otherwise deselect it.
+                            m_selection->DeselectBlock(
+                                wxGridBlockCoords(coords.GetRow(), coords.GetCol(),
+                                                  coords.GetRow(), coords.GetCol()),
+                                                  event);
+                        }
+                    }
                 }
                 else
                 {
-                    // Otherwise deselect it.
-                    m_selection->DeselectBlock(
-                        wxGridBlockCoords(coords.GetRow(), coords.GetCol(),
-                                          coords.GetRow(), coords.GetCol()),
-                                          event);
+                    ClearSelection();
+
+                    if ( m_selection )
+                    {
+                        // In row or column selection mode just clicking on the cell
+                        // should select the row or column containing it: this is more
+                        // convenient for the kinds of controls that use such selection
+                        // mode and is compatible with 2.8 behaviour (see #12062).
+                        switch ( m_selection->GetSelectionMode() )
+                        {
+                            case wxGridSelectCells:
+                            case wxGridSelectRowsOrColumns:
+                                // nothing to do in these cases
+                                break;
+
+                            case wxGridSelectRows:
+                                m_selection->SelectRow(coords.GetRow());
+                                break;
+
+                            case wxGridSelectColumns:
+                                m_selection->SelectCol(coords.GetCol());
+                                break;
+                        }
+                    }
+
+                    m_waitForSlowClick = m_currentCellCoords == coords &&
+                                         coords != wxGridNoCellCoords;
                 }
+
+                SetCurrentCell(coords);
             }
-        }
-        else
-        {
-            ClearSelection();
+            break;
 
-            if ( m_selection )
-            {
-                // In row or column selection mode just clicking on the cell
-                // should select the row or column containing it: this is more
-                // convenient for the kinds of controls that use such selection
-                // mode and is compatible with 2.8 behaviour (see #12062).
-                switch ( m_selection->GetSelectionMode() )
-                {
-                    case wxGridSelectCells:
-                    case wxGridSelectRowsOrColumns:
-                        // nothing to do in these cases
-                        break;
-
-                    case wxGridSelectRows:
-                        m_selection->SelectRow(coords.GetRow());
-                        break;
-
-                    case wxGridSelectColumns:
-                        m_selection->SelectCol(coords.GetCol());
-                        break;
-                }
-            }
-
-            m_waitForSlowClick = m_currentCellCoords == coords &&
-                                        coords != wxGridNoCellCoords;
-        }
-
-        SetCurrentCell(coords);
+        case WXGRID_CURSOR_MOVE_COL:
+            // Nothing to do here for this case.
+            break;
     }
 }
 
