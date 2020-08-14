@@ -252,25 +252,23 @@ WX_NSMenu wxTaskBarIconDockImpl::OSXDoGetDockHMenu()
 {
     m_menuDeleter.reset();
 
-    wxMenu *dockMenu = GetPopupMenu();
+    m_pMenu = GetPopupMenu();
 
-    if(!dockMenu)
+    if (!m_pMenu)
     {
-        dockMenu = CreatePopupMenu();
+        m_pMenu = CreatePopupMenu();
 
-        if(!dockMenu)
+        if (!m_pMenu)
             return nil;
 
-        m_menuDeleter.reset(dockMenu);
+        m_menuDeleter.reset(m_pMenu);
     }
 
-    m_pMenu = dockMenu;
-    
     m_pMenu->SetInvokingWindow(m_eventWindow);
     
     m_pMenu->UpdateUI();
     
-    return (WX_NSMenu)dockMenu->GetHMenu();
+    return (WX_NSMenu)m_pMenu->GetHMenu();
 }
 
 bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(tooltip))
