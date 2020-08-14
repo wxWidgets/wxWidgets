@@ -62,6 +62,9 @@ protected:
     // creates menu to be displayed when user clicks on the icon
     virtual wxMenu *CreatePopupMenu() { return NULL; }
 
+    // same as CreatePopupMenu but won't destroy the menu
+    virtual wxMenu *GetPopupMenu() { return NULL; }
+
 private:
     // default events handling, calls CreatePopupMenu:
     void OnRightButtonDown(wxTaskBarIconEvent& event);

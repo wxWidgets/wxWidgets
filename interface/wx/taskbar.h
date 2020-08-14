@@ -62,8 +62,9 @@ public:
 
     @beginEventEmissionTable{wxTaskBarIconEvent}
     Note that not all ports are required to send these events and so it's better
-    to override wxTaskBarIcon::CreatePopupMenu() if all that the application does
-    is that it shows a popup menu in reaction to mouse click.
+    to override wxTaskBarIcon::CreatePopupMenu() or wxTaskBarIcon::GetPopupMenu()
+    if all that the application does is that it shows a popup menu in reaction to
+    mouse click.
     @event{EVT_TASKBAR_MOVE(func)}
         Process a @c wxEVT_TASKBAR_MOVE event.
     @event{EVT_TASKBAR_LEFT_DOWN(func)}
@@ -123,9 +124,10 @@ public:
         The events can be handled by a class derived from wxTaskBarIcon.
 
         @note
-        It is recommended to override CreatePopupMenu() callback instead of
-        calling this method from event handler, because some ports (e.g. wxCocoa)
-        may not implement PopupMenu() and mouse click events at all.
+        It is recommended to override the CreatePopupMenu() or GetPopupMenu()
+        callback instead of calling this method from event handler, because some
+        ports (e.g. wxCocoa) may not implement PopupMenu() and mouse click events
+        at all.
     */
     virtual bool PopupMenu(wxMenu* menu);
 
@@ -172,11 +174,25 @@ protected:
         Override this function in order to provide popup menu associated with the icon.
         If CreatePopupMenu() returns @NULL (this happens by default), no menu is shown,
         otherwise the menu is displayed and then deleted by the library as soon as the
-        user dismisses it.
+        user dismisses it. If you don't want the menu to get destroyed when it is dismissed,
+        override GetPopupMenu() instead.
 
         The events can be handled by a class derived from wxTaskBarIcon.
     */
     virtual wxMenu* CreatePopupMenu();
+
+    /**
+        This method is called by the library when the user requests popup menu
+        (on Windows and Unix platforms, this is when the user right-clicks the icon).
+
+        Override this function in order to provide popup menu associated with the icon.
+        If GetPopupMenu() returns @NULL (this happens by default), no menu is shown,
+        otherwise the menu is displayed. In contrast to CreatePopupMenu(), GetPopupMenu()
+        won't destroy the menu once the user dismisses it.
+
+        The events can be handled by a class derived from wxTaskBarIcon.
+    */
+    virtual wxMenu* GetPopupMenu();
 };
 
 

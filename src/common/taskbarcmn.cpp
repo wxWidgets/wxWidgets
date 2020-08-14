@@ -53,6 +53,13 @@ void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
         PopupMenu(menu);
         delete menu;
     }
+    else
+    {
+        menu = GetPopupMenu();
+
+        if (menu)
+            PopupMenu(menu);
+    }
 }
 
 void wxTaskBarIconBase::Destroy()
