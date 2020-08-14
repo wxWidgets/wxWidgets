@@ -565,6 +565,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(m_grid->IsInSelection(4, 0));
     CHECK(m_grid->IsInSelection(4, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
+
+    m_grid->DeselectRow(4);
+    CHECK(!m_grid->IsInSelection(4, 0));
+    CHECK(!m_grid->IsInSelection(4, 1));
+
+    m_grid->DeselectCol(1);
+    CHECK(!m_grid->IsInSelection(0, 1));
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
