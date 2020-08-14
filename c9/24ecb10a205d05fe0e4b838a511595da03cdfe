@@ -1,0 +1,1 @@
+All: Avoid gcc -Wsuggest-override inside wx macros (Teodor Petrov).
