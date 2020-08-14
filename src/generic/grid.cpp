@@ -10515,7 +10515,7 @@ void wxGrid::DeselectRow(int row)
     wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
 
     if ( m_selection )
-        m_selection->DeselectBlock(wxGridBlockCoords(row, 0, row, m_numRows - 1));
+        m_selection->DeselectBlock(wxGridBlockCoords(row, 0, row, m_numCols - 1));
 }
 
 void wxGrid::DeselectCol(int col)
@@ -10523,7 +10523,7 @@ void wxGrid::DeselectCol(int col)
     wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
 
     if ( m_selection )
-        m_selection->DeselectBlock(wxGridBlockCoords(0, col, m_numCols - 1, col));
+        m_selection->DeselectBlock(wxGridBlockCoords(0, col, m_numRows - 1, col));
 }
 
 void wxGrid::DeselectCell( int row, int col )
