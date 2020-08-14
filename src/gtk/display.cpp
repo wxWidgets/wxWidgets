@@ -255,7 +255,6 @@ public:
 #if GTK_CHECK_VERSION(3,10,0)
     virtual double GetScaleFactor() const wxOVERRIDE;
 #endif // GTK+ 3.10
-    virtual wxSize GetPPI() const wxOVERRIDE;
     virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
@@ -350,36 +349,6 @@ double wxDisplayImplGTK::GetScaleFactor() const
 
     return 1.0;
 }
-
-wxSize wxDisplayImplGTK::GetPPI() const
-{
-    // The useful value of PPI is the scaled value of the default PPI and not
-    // the actual PPI computed by dividing the number of pixels by the physical
-    // screen size: this is what everyone else uses, and so we should do it
-    // too.
-    return wxDisplay::GetStdPPI()*GetScaleFactor();
-}
-
-#else // GTK+ < 3.10
-
-wxSize wxDisplayImplGTK::GetPPI() const
-{
-    // Try the base class version which uses our GetSizeMM() and returns
-    // per-display PPI value if it works.
-    wxSize ppi = wxDisplayImpl::GetPPI();
-
-    if ( !ppi.x || !ppi.y )
-    {
-        // But if it didn't work, fall back to the global DPI value common to
-        // all displays -- this is still better than nothing and more
-        // compatible with the previous wxWidgets versions.
-        ppi = ComputePPI(gdk_screen_width(), gdk_screen_height(),
-                         gdk_screen_width_mm(), gdk_screen_height_mm());
-    }
-
-    return ppi;
-}
-
 #endif // GTK+ 3.10
 
 wxSize wxDisplayImplGTK::GetSizeMM() const
@@ -403,9 +372,9 @@ wxSize wxDisplayImplGTK::GetSizeMM() const
     // When we have only a single display, we can use global GTK+ functions.
     // Note that at least in some configurations, these functions return valid
     // values when gdk_screen_get_monitor_xxx_mm() only return -1, so it's
-    // always worth fallng back on them, but we can't do it when using
+    // always worth falling back on them, but we can't do it when using
     // multiple displays because they combine the sizes of all displays in this
-    // case, which would result in a completely wrong value for GetPPI().
+    // case, which would result in a completely wrong value.
     if ( !(sizeMM.x && sizeMM.y) && gdk_screen_get_n_monitors(m_screen) == 1 )
     {
         sizeMM.x = gdk_screen_width_mm();

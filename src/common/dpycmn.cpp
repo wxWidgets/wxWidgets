@@ -153,19 +153,7 @@ double wxDisplay::GetScaleFactor() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
 
-#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
-    // Use wxDisplayImpl::GetScaleFactor() directly, it should be implemented
-    // correctly for the platforms doing pixel scaling and using it simpler and
-    // more efficient than using GetPPI().
     return m_impl->GetScaleFactor();
-#else
-    // Under the other platforms, we just compute the DPI ratio ourselves.
-    //
-    // We use just the vertical component of the DPI because it's the one
-    // that counts most and, in practice, it's equal to the horizontal one
-    // anyhow.
-    return m_impl->GetPPI().y / (double)GetStdPPIValue();
-#endif
 }
 
 int wxDisplay::GetDepth() const
@@ -224,35 +212,6 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     }
 
     return *gs_factory;
-}
-
-// ============================================================================
-// wxDisplayImpl implementation
-// ============================================================================
-
-/* static */
-wxSize wxDisplayImpl::ComputePPI(int pxX, int pxY, int mmX, int mmY)
-{
-    if ( !mmX || !mmY )
-    {
-        // Physical size is unknown, return a special value indicating that we
-        // can't compute the resolution -- what else can we do?
-        return wxSize(0, 0);
-    }
-
-    return wxSize(wxRound((pxX * inches2mm) / mmX),
-                  wxRound((pxY * inches2mm) / mmY));
-}
-
-wxSize wxDisplayImpl::GetPPI() const
-{
-    const wxSize mm = GetSizeMM();
-
-    // We need physical pixels here, not logical ones returned by
-    // GetGeometry(), to compute the real DPI.
-    const wxSize pixels = GetGeometry().GetSize()*GetScaleFactor();
-
-    return ComputePPI(pixels.x, pixels.y, mm.x, mm.y);
 }
 
 // ============================================================================
