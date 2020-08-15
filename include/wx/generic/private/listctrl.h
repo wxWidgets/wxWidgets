@@ -861,6 +861,10 @@ private:
     // initialize the current item if needed
     void UpdateCurrent();
 
+    // change the current (== focused) item, without sending any event
+    // return true if m_current really changed.
+    bool ChangeCurrentWithoutEvent(size_t current);
+
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
 

@@ -2258,11 +2258,11 @@ void wxListMainWindow::SendNotify( size_t line,
     GetParent()->GetEventHandler()->ProcessEvent( le );
 }
 
-void wxListMainWindow::ChangeCurrent(size_t current)
+bool wxListMainWindow::ChangeCurrentWithoutEvent(size_t current)
 {
     if ( (current == m_current) && IsHighlighted(current) )
     {
-        return; // Nothing changed!
+        return false; // Nothing changed!
     }
 
     m_current = current;
@@ -2272,7 +2272,13 @@ void wxListMainWindow::ChangeCurrent(size_t current)
     if ( m_renameTimer->IsRunning() )
         m_renameTimer->Stop();
 
-    SendNotify(current, wxEVT_LIST_ITEM_FOCUSED);
+    return true;
+}
+
+void wxListMainWindow::ChangeCurrent(size_t current)
+{
+    if ( ChangeCurrentWithoutEvent(current) )
+        SendNotify(current, wxEVT_LIST_ITEM_FOCUSED);
 }
 
 wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass)
@@ -4080,8 +4086,7 @@ void wxListMainWindow::UpdateCurrent()
         // wxEVT_LIST_ITEM_FOCUSED event (typicaly when the control gains focus)
         // and this is to allow changing the focused item using the arrow keys.
         // which is the behaviour found in the wxMSW port.
-        wxEventBlocker block(GetParent(), wxEVT_LIST_ITEM_FOCUSED);
-        ChangeCurrent(0);
+        ChangeCurrentWithoutEvent(0);
     }
 }
 
