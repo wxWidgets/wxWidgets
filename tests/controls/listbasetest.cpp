@@ -241,6 +241,27 @@ void ListBaseTestCase::ItemClick()
     CPPUNIT_ASSERT_EQUAL(1, deselected.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+
+    // For some unfathomable reason this test case prevents wxSTC test
+    // from running properly under Xvfb when we run the whole test suite.
+    // Adding this ugly workaround to make the wxSTC test pass successfully
+    // is better than disabling some tests there.
+    if ( IsRunningUnderXVFB() )
+    {
+        list->Hide();
+
+        // N.B. Give the wxTextCtrl focus by mouse click. just calling SetFocus()
+        // doesn't work!
+
+        wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY));
+
+        const wxPoint pt = text->ClientToScreen(wxPoint(5, 5));
+        sim.MouseMove(pt);
+        wxYield();
+
+        sim.MouseClick();
+        wxYield();
+    }
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
