@@ -2643,7 +2643,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             {
                 ChangeCurrent(current);
 
-                size_t lineFrom = oldCurrent,
+                // Start selection from 0 if oldCurrent is invalid.
+                // i.e. Multi-sel started with no previous selection.
+                size_t lineFrom = oldCurrent != (size_t)-1 ? oldCurrent : 0,
                        lineTo = current;
 
                 if ( lineTo < lineFrom )
