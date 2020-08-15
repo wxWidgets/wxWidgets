@@ -2260,7 +2260,7 @@ void wxListMainWindow::SendNotify( size_t line,
 
 bool wxListMainWindow::ChangeCurrentWithoutEvent(size_t current)
 {
-    if ( (current == m_current) && IsHighlighted(current) )
+    if ( current == m_current )
     {
         return false; // Nothing changed!
     }
