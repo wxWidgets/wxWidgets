@@ -1932,9 +1932,6 @@ void wxListMainWindow::RefreshLine( size_t line )
             return;
     }
 
-    if ( line == (size_t)-1 )
-        return;
-
     wxRect rect = GetLineRect(line);
 
     GetListCtrl()->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
@@ -2250,7 +2247,7 @@ void wxListMainWindow::SendNotify( size_t line,
     // what we're trying to avoid
     if ( !IsVirtual() )
     {
-        if ( !IsEmpty() && line != (size_t)-1 )
+        if ( line != (size_t)-1 )
         {
             GetLine(line)->GetItem( 0, le.m_item );
         }
@@ -2658,7 +2655,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
         }
 
-        if (m_current != oldCurrent)
+        if (m_current != oldCurrent && oldCurrent != (size_t)-1)
             RefreshLine( oldCurrent );
 
         // Set the flag telling us whether the next click on this item should
