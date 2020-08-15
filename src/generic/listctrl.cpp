@@ -1851,9 +1851,6 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
 
 bool wxListMainWindow::IsHighlighted(size_t line) const
 {
-    if ( line == (size_t)-1 )
-        return false;
-
     if ( IsVirtual() )
     {
         return m_selStore.IsSelected(line);
@@ -2611,7 +2608,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_lineLastClicked = current;
 
         size_t oldCurrent = m_current;
-        bool oldWasSelected = IsHighlighted(m_current);
+        bool oldWasSelected = HasCurrent() && IsHighlighted(m_current);
 
         bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
