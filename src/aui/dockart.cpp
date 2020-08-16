@@ -252,6 +252,11 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     InitBitmaps();
 }
 
+wxAuiDockArt* wxAuiDefaultDockArt::Clone()
+{
+    return new wxAuiDefaultDockArt(*this);
+}
+
 void
 wxAuiDefaultDockArt::InitBitmaps ()
 {
