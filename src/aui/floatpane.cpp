@@ -56,6 +56,7 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 {
     m_moving = false;
     m_mgr.SetManagedWindow(this);
+    m_mgr.SetArtProvider(owner_mgr->GetArtProvider()->Clone());
     m_solidDrag = true;
 
     // find out if the system supports solid window drag.
