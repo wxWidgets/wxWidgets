@@ -20,6 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/anidecod.h" // wxImageArray
+#include "wx/bitmap.h"
 #include "wx/palette.h"
 #include "wx/url.h"
 #include "wx/log.h"
