@@ -2,7 +2,6 @@
 // Name:        wx/artids.h
 // Purpose:     wxArtProvider client and art IDs
 // Author:      Stefan Brüns
-// Modified by:
 // Created:     2020-07-31 (extracted from artprov.h)
 // Copyright:   (c) Stefan Brüns
 // Licence:     wxWindows licence
