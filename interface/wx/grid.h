@@ -6353,12 +6353,17 @@ public:
     @event{EVT_GRID_CMD_RANGE_SELECTING(id, func)}
         The user is selecting a group of contiguous cells; variant taking a window
         identifier. Processes a @c wxEVT_GRID_RANGE_SELECTING event type.
+        This event is available in wxWidgets 3.1.5 and later only.
     @event{EVT_GRID_RANGE_SELECTED(func)}
         The user selected a group of contiguous cells. Processes a
         @c wxEVT_GRID_RANGE_SELECTED event type.
+        This event is available in wxWidgets 3.1.5 and later only and was
+        called @c wxEVT_GRID_RANGE_SELECT in the previous versions.
     @event{EVT_GRID_CMD_RANGE_SELECTED(id, func)}
         The user selected a group of contiguous cells; variant taking a window
         identifier. Processes a @c wxEVT_GRID_RANGE_SELECTED event type.
+        This event is available in wxWidgets 3.1.5 and later only and was
+        called @c wxEVT_GRID_RANGE_SELECT in the previous versions.
     @endEventTable
 
     @library{wxcore}
