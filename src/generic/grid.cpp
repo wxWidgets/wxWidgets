@@ -4714,14 +4714,14 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
     // cell corner, as this is a more common operation.
     if ( dragCol >= 0 && CanDragGridColEdges() && CanDragColSize(dragCol) )
     {
-        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+        if ( m_cursorMode != WXGRID_CURSOR_RESIZE_COL )
         {
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, gridWindow, false);
         }
     }
     else if ( dragRow >= 0 && CanDragGridRowEdges() && CanDragRowSize(dragRow) )
     {
-        if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+        if ( m_cursorMode != WXGRID_CURSOR_RESIZE_ROW)
         {
             ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
         }
