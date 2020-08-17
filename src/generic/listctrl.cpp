@@ -2199,9 +2199,6 @@ void wxListMainWindow::HighlightAll( bool on )
 
 bool wxListMainWindow::HighlightOnly( size_t line )
 {
-    if ( IsEmpty() || line == (size_t)-1 )
-        return false;
-
     for ( size_t l = 0; l <= GetItemCount() - 1; l++ )
     {
         if ( l != line && HighlightLine(l, false) )
