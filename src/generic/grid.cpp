@@ -4384,7 +4384,7 @@ void wxGrid::DoAfterDraggingEnd()
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
     m_winCapture = NULL;
-    
+
     m_selection->EndSelecting();
 }
 
@@ -4514,11 +4514,10 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
     // of the modifier keys matters.
     if ( m_selection )
     {
-        if (isFirstDrag)
-        {
-            m_selection->StartSelecting();
-        }
-        m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
+        m_selection->ExtendCurrentBlock(m_currentCellCoords,
+                                        coords,
+                                        event,
+                                        wxEVT_GRID_RANGE_SELECTING);
     }
 
     return true;
@@ -4823,7 +4822,6 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             m_winCapture->CaptureMouse();
 
             m_isDragging = true;
-            m_selection->StartSelecting();
         }
 
         return;
