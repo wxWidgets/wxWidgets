@@ -4378,14 +4378,20 @@ void wxGrid::CancelMouseCapture()
 
 void wxGrid::DoAfterDraggingEnd()
 {
+    if ( m_isDragging &&
+         (m_cursorMode == WXGRID_CURSOR_SELECT_CELL ||
+          m_cursorMode == WXGRID_CURSOR_SELECT_ROW ||
+          m_cursorMode == WXGRID_CURSOR_SELECT_COL) )
+    {
+        m_selection->EndSelecting();
+    }
+
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
 
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
     m_winCapture = NULL;
-
-    m_selection->EndSelecting();
 }
 
 void wxGrid::EndDraggingIfNecessary()
