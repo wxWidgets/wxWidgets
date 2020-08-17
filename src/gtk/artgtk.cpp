@@ -56,14 +56,19 @@ wxString wxArtIDToStock(const wxArtID& id)
 {
     struct wxArtStockMapping
     {
-	wxArtID artId;
-	wxString stockId;
+        wxArtStockMapping(const wxArtID& artId, const wxString& stockId)
+            : m_artId(artId), m_stockId(stockId)
+        {
+        }
+
+        wxArtID m_artId;
+        wxString m_stockId;
     };
 
 #ifdef __WXGTK3__
-    #define ART(wxId, unused, themeId) wxArtStockMapping{wxId, themeId},
+    #define ART(wxId, unused, themeId) wxArtStockMapping(wxId, themeId),
 #else
-    #define ART(wxId, stockId, unused) wxArtStockMapping{wxId, stockId},
+    #define ART(wxId, stockId, unused) wxArtStockMapping(wxId, stockId),
 #endif
 
   static const wxArtStockMapping wxId2GtkMap[] =
@@ -140,9 +145,9 @@ wxString wxArtIDToStock(const wxArtID& id)
 
     for (unsigned i = 0; i < WXSIZEOF(wxId2GtkMap); i++)
     {
-        if (id == wxId2GtkMap[i].artId)
+        if (id == wxId2GtkMap[i].m_artId)
         {
-            return wxId2GtkMap[i].stockId;
+            return wxId2GtkMap[i].m_stockId;
         }
     }
     return id;
