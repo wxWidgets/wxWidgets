@@ -936,6 +936,7 @@ GUI_CMN_HDR =
     wx/animdecod.h
     wx/anybutton.h
     wx/appprogress.h
+    wx/artids.h
     wx/artprov.h
     wx/bannerwindow.h
     wx/bitmap.h

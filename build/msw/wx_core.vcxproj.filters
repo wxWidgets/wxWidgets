@@ -1108,6 +1108,9 @@
     <ClInclude Include="..\..\include\wx\appprogress.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\artids.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\artprov.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
