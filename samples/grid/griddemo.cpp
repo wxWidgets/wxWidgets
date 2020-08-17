@@ -1638,14 +1638,19 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
     ev.Skip();
 }
 
-void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
+namespace
+{
+
+void
+LogRangeSelectEvent(wxGridRangeSelectEvent& ev, const char* suffix)
 {
     wxString logBuf;
     if ( ev.Selecting() )
-        logBuf << "Selected ";
+        logBuf << "Select";
     else
-        logBuf << "Deselected ";
-    logBuf << "cells from row " << ev.GetTopRow()
+        logBuf << "Deselect";
+    logBuf << suffix
+           << " cells from row " << ev.GetTopRow()
            << " col " << ev.GetLeftCol()
            << " to row " << ev.GetBottomRow()
            << " col " << ev.GetRightCol()
@@ -1657,24 +1662,17 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
 
     ev.Skip();
 }
+
+} // anonymous namespace
+
+void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
+{
+    LogRangeSelectEvent(ev, "ed");
+}
+
 void GridFrame::OnRangeSelecting( wxGridRangeSelectEvent& ev )
 {
-    wxString logBuf;
-    if ( ev.Selecting() )
-        logBuf << "Selecting ";
-    else
-        logBuf << "Deselecting ";
-    logBuf << "cells from row " << ev.GetTopRow()
-           << " col " << ev.GetLeftCol()
-           << " to row " << ev.GetBottomRow()
-           << " col " << ev.GetRightCol()
-           << " ( ControlDown: "<< (ev.ControlDown() ? 'T':'F')
-           << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
-           << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
-           << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
-    wxLogMessage( "%s", logBuf );
-
-    ev.Skip();
+    LogRangeSelectEvent(ev, "ing");
 }
 
 void GridFrame::OnCellValueChanging( wxGridEvent& ev )
