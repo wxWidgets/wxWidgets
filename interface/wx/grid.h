@@ -6345,6 +6345,22 @@ public:
 /**
     @class wxGridRangeSelectEvent
 
+    Events of this class notify about a range of cells being selected.
+
+    When the user uses the mouse for selection, one or more @c SELECTING events
+    are generated first, with @c SELECTED event generated at the end, when
+    selection is final. This allows the application to handle either the @c
+    SELECTING events if it needs to update its state in real-time, as the
+    selection changes, or just the final @c SELECTED event, if updating its
+    state on every selection change would be too time-consuming.
+
+    Note that if the user performs the selection from keyboard, @c SELECTING
+    events are not generated at all, so @c SELECTED event still must be
+    handled.
+
+    Finally, contrary to most of the other events with the name ending in
+    "ing", @c SELECTING event can @e not be vetoed.
+
     @beginEventTable{wxGridRangeSelectEvent}
     @event{EVT_GRID_RANGE_SELECTING(func)}
         The user is selecting a group of contiguous cells. Processes a
