@@ -4452,11 +4452,16 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
             break;
     }
 
-    // we need to capture mouse when resizing
-    bool resize = m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
-                  m_cursorMode == WXGRID_CURSOR_RESIZE_COL;
+    // We need to capture mouse when resizing or selecting rows/cols.
+    // Mouse capturing for WXGRID_CURSOR_SELECT_CELL mode handled in
+    // DoGridCellDrag().
+    bool resizeOrSelectRowsCols =
+        m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
+        m_cursorMode == WXGRID_CURSOR_RESIZE_COL ||
+        m_cursorMode == WXGRID_CURSOR_SELECT_ROW ||
+        m_cursorMode == WXGRID_CURSOR_SELECT_COL;
 
-    if ( captureMouse && resize )
+    if ( captureMouse && resizeOrSelectRowsCols )
     {
         win->CaptureMouse();
         m_winCapture = win;
