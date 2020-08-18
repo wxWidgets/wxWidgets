@@ -147,6 +147,9 @@ private:
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
 
+    // Whether SELECTING event was sent during mouse drag.
+    bool                                m_isSelecting;
+
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };
 

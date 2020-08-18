@@ -48,6 +48,7 @@ wxGridSelection::wxGridSelection( wxGrid * grid,
 {
     m_grid = grid;
     m_selectionMode = sel;
+    m_isSelecting = false;
 }
 
 bool wxGridSelection::IsSelection()
@@ -57,19 +58,23 @@ bool wxGridSelection::IsSelection()
 
 void wxGridSelection::EndSelecting()
 {
-    // At the end of selecting should be at last one selected block.
-    wxASSERT(IsSelection());
+    // If SELECTING event was sent and we have any selection. Note that
+    // selecting can be canceled by "slow click" and the selection will be
+    // cleared in this case. See wxGrid::DoGridCellLeftUp().
+    if ( m_isSelecting && IsSelection() )
+    {
+        // Send RANGE_SELECTED event for the last modified block.
+        const wxGridBlockCoords& block = m_selection.back();
+        wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
+                                       wxEVT_GRID_RANGE_SELECTED,
+                                       m_grid,
+                                       block.GetTopLeft(),
+                                       block.GetBottomRight(),
+                                       true);
 
-    // Send RANGE_SELECTED event for the last modified block.
-    const wxGridBlockCoords& block = m_selection.back();
-    wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                   wxEVT_GRID_RANGE_SELECTED,
-                                   m_grid,
-                                   block.GetTopLeft(),
-                                   block.GetBottomRight(),
-                                   true);
-
-    m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+        m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+    }
+    m_isSelecting = false;
 }
 
 bool wxGridSelection::IsInSelection( int row, int col ) const
@@ -656,6 +661,9 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
 
     // Update the current block in place.
     *m_selection.rbegin() = newBlock;
+
+    if ( eventType == wxEVT_GRID_RANGE_SELECTING )
+        m_isSelecting = true;
 
     // Send Event.
     wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
