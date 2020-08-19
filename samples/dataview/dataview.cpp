@@ -262,7 +262,7 @@ public:
 
     virtual wxSize GetSize() const wxOVERRIDE
     {
-        return wxSize(60,20);
+        return GetView()->FromDIP(wxSize(60, 20));
     }
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE
