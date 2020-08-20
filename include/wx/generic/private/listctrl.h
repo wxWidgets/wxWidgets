@@ -520,7 +520,9 @@ public:
     // all these functions only do something if the line is currently visible
 
     // Make sure that "line" is the only one highlighted.
-    bool HighlightOnly( size_t line );
+    // Notice that in single selection mode we pass the old current as _oldLine_
+    // to be deselected, which is more efficient.
+    bool HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
 
     // change the line "selected" state, return true if it really changed
     bool HighlightLine( size_t line, bool highlight = true);

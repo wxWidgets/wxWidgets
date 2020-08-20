@@ -2231,7 +2231,7 @@ void wxListMainWindow::HighlightAll( bool on )
     }
 }
 
-bool wxListMainWindow::HighlightOnly( size_t line )
+bool wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
 {
     const unsigned selCount = GetSelectedItemCount();
 
@@ -2240,11 +2240,16 @@ bool wxListMainWindow::HighlightOnly( size_t line )
         return true; // Nothing changed.
     }
 
-    if ( selCount != 0 )
+    if ( !IsSingleSel() && selCount != 0 )
     {
         wxListCtrlEventBlocker block(this, wxEVT_LIST_ITEM_DESELECTED);
 
         HighlightLines(0, GetItemCount() - 1, false);
+    }
+    else if ( oldLine != (size_t)-1 )
+    {
+        IsHighlighted(oldLine) ? ReverseHighlight(oldLine)
+                               : RefreshLine(oldLine); // refresh the old focus to remove it
     }
 
     // _line_ should be the only selected item.
@@ -2663,7 +2668,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             else if (IsSingleSel() || !IsHighlighted(current))
             {
                 ChangeCurrent(current);
-                HighlightOnly(m_current);
+                HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -2837,17 +2842,12 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     {
         ChangeCurrent(newCurrent);
 
-        // refresh the old focus to remove it
-        RefreshLine( oldCurrent );
-
         // all previously selected items are unselected unless ctrl is held in
         // a multi-selection control. in single selection mode we must always
         // have a selected item.
         if ( !event.ControlDown() || IsSingleSel() )
-            HighlightOnly(m_current);
+            HighlightOnly(m_current, oldCurrent);
     }
-
-    RefreshLine( m_current );
 
     MoveToFocus();
 }
