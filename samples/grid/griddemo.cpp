@@ -326,6 +326,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
     EVT_MENU( wxID_ABOUT, GridFrame::OnAbout )
+    EVT_MENU( wxID_CLEAR, GridFrame::OnClear )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
@@ -419,6 +420,11 @@ GridFrame::GridFrame()
     fileMenu->AppendSubMenu( setupMenu, "Render setup" );
     fileMenu->Append( wxID_PRINT, "Render" );
     fileMenu->Append( ID_RENDER_COORDS, "Render G5:P30" );
+
+#if wxUSE_LOG
+    fileMenu->AppendSeparator();
+    fileMenu->Append( wxID_CLEAR, "Clear &log\tCtrl-L" );
+#endif // wxUSE_LOG
 
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
@@ -1766,6 +1772,13 @@ void GridFrame::OnAbout(  wxCommandEvent& WXUNUSED(ev) )
     wxAboutBox(aboutInfo, this);
 }
 
+
+void GridFrame::OnClear( wxCommandEvent& WXUNUSED(ev) )
+{
+#if wxUSE_LOG
+    logWin->Clear();
+#endif // wxUSE_LOG
+}
 
 void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 {
