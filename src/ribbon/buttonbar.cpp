@@ -905,6 +905,7 @@ void wxRibbonButtonBar::UpdateWindowUI(long flags)
 
         wxUpdateUIEvent event(id);
         event.SetEventObject(this);
+        event.SetIsCheckable(true);
 
         if ( ProcessWindowEvent(event) )
         {

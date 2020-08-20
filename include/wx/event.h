@@ -2891,10 +2891,12 @@ public:
         m_setEnabled =
         m_setShown =
         m_setText =
-        m_setChecked = false;
+        m_setChecked =
+        m_isCheckable = false;
     }
     wxUpdateUIEvent(const wxUpdateUIEvent& event)
         : wxCommandEvent(event),
+          m_isCheckable(event.m_isCheckable),
           m_checked(event.m_checked),
           m_enabled(event.m_enabled),
           m_shown(event.m_shown),
@@ -2918,6 +2920,10 @@ public:
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = true; }
     void Show(bool show) { m_shown = show; m_setShown = true; }
     void SetText(const wxString& text) { m_text = text; m_setText = true; }
+
+    // Set a flag saying if the object being updated supports the check action
+    bool IsCheckable() const { return m_isCheckable; }
+    void SetIsCheckable(bool aCheckable) { m_isCheckable = aCheckable; }
 
     // Sets the interval between updates in milliseconds.
     // Set to -1 to disable updates, or to 0 to update as frequently as possible.
@@ -2944,6 +2950,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxUpdateUIEvent(*this); }
 
 protected:
+    bool          m_isCheckable;
     bool          m_checked;
     bool          m_enabled;
     bool          m_shown;

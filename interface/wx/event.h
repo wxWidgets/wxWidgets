@@ -2375,6 +2375,13 @@ public:
     bool GetEnabled() const;
 
     /**
+        Returns @true if the UI element can be checked.
+
+        @since 3.1.5
+    */
+    bool IsCheckable() const;
+
+    /**
         Static function returning a value specifying how wxWidgets will send update
         events: to all windows, or only to those which specify that they will process
         the events.

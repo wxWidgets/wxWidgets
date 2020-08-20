@@ -2817,6 +2817,7 @@ void wxWindowBase::UpdateWindowUI(long flags)
 {
     wxUpdateUIEvent event(GetId());
     event.SetEventObject(this);
+    event.SetIsCheckable(true);
 
     if ( GetEventHandler()->ProcessEvent(event) )
     {

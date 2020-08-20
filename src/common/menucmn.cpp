@@ -616,6 +616,7 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
             wxWindowID itemid = item->GetId();
             wxUpdateUIEvent event(itemid);
             event.SetEventObject( this );
+            event.SetIsCheckable(item->IsCheckable());
 
             if ( source->ProcessEvent(event) )
             {
