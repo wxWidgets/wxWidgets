@@ -325,7 +325,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
-    EVT_MENU( wxID_ABOUT, GridFrame::About )
+    EVT_MENU( wxID_ABOUT, GridFrame::OnAbout )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
@@ -1747,7 +1747,7 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
     ev.Skip();
 }
 
-void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::OnAbout(  wxCommandEvent& WXUNUSED(ev) )
 {
     wxAboutDialogInfo aboutInfo;
     aboutInfo.SetName("wxGrid demo");

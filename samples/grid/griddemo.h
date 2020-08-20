@@ -130,7 +130,7 @@ public:
     ~GridFrame();
 
     void OnQuit( wxCommandEvent& );
-    void About( wxCommandEvent& );
+    void OnAbout( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
     void OnTabularTable( wxCommandEvent& );
