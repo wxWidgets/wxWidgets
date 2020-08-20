@@ -1632,7 +1632,8 @@ void wxListMainWindow::Init()
     m_current =
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
-    m_lineBeforeLastClicked = (size_t)-1;
+    m_lineBeforeLastClicked =
+    m_lineMultiSelectPivot  = (size_t)-1;
 
     m_hasCheckBoxes = false;
 }
@@ -2667,11 +2668,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
             else if (IsSingleSel() || !IsHighlighted(current))
             {
+                m_lineMultiSelectPivot = current;
                 ChangeCurrent(current);
                 HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
             }
             else // multi sel & current is highlighted & no mod keys
             {
+                m_lineMultiSelectPivot =
                 m_lineSelectSingleOnUp = current;
                 ChangeCurrent(current); // change focus
             }
@@ -2688,16 +2691,33 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             {
                 ChangeCurrent(current);
 
-                size_t lineFrom = oldCurrent,
-                       lineTo = current;
-
-                if ( lineTo < lineFrom )
+                if ( oldCurrent == (size_t)-1 )
                 {
-                    lineTo = lineFrom;
-                    lineFrom = m_current;
+                    // Highlight m_current only if there is no previous selection.
+                    HighlightLine(m_current);
                 }
+                else if ( oldCurrent != current )
+                {
+                    // We deselect everything between oldCurrent and current (inclusive)
+                    // and reselect lines between pivot and current (inclusive) which is
+                    // the behaviour under wxMSW.
 
-                HighlightLines(lineFrom, lineTo);
+                    size_t lineFrom = oldCurrent,
+                           lineTo = current;
+
+                    if ( lineTo < lineFrom )
+                        wxSwap(lineTo, lineFrom);
+
+                    HighlightLines(lineFrom, lineTo, false);
+
+                    lineFrom = m_lineMultiSelectPivot;
+                    lineTo = current;
+
+                    if ( lineTo < lineFrom )
+                        wxSwap(lineTo, lineFrom);
+
+                    HighlightLines(lineFrom, lineTo);
+                }
             }
             else // !ctrl, !shift
             {

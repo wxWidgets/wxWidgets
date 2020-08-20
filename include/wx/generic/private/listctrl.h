@@ -808,6 +808,9 @@ protected:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
+    // for multi-selection logic
+    size_t m_lineMultiSelectPivot;
+
     bool m_hasCheckBoxes;
 
 protected:
