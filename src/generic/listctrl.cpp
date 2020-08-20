@@ -2864,11 +2864,12 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
         return;
 
     // send a list event
+    const size_t current = GetCurrentForEvent();
     wxListEvent le( wxEVT_LIST_KEY_DOWN, parent->GetId() );
     le.m_item.m_itemId =
-    le.m_itemIndex = m_current;
-    if (HasCurrent())
-        GetLine(m_current)->GetItem( 0, le.m_item );
+    le.m_itemIndex = current;
+    if ( current != (size_t)-1 )
+        GetLine(current)->GetItem( 0, le.m_item );
     le.m_code = event.GetKeyCode();
     le.SetEventObject( parent );
     if (parent->GetEventHandler()->ProcessEvent( le ))
@@ -3024,7 +3025,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 }
                 else // normal space press
                 {
-                    SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
+                    if ( GetCurrentForEvent() != (size_t)-1 )
+                        SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
                 }
             }
             else // multiple selection
@@ -3041,7 +3043,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 break;
             }
 
-            SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
+            if ( GetCurrentForEvent() != (size_t)-1 )
+                SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
             break;
 
         default:

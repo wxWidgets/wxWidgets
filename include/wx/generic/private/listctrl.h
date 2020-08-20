@@ -865,6 +865,18 @@ private:
     // return true if m_current really changed.
     bool ChangeCurrentWithoutEvent(size_t current);
 
+    // Trying to activate the current item from keyboard is only possible
+    // if it is actually selected. we don't send wxEVT_LIST_ITEM_ACTIVATED
+    // event if it is not, and wxEVT_LIST_KEY_DOWN event should carry -1
+    // in this case.
+    size_t GetCurrentForEvent() const
+    {
+        if ( HasCurrent() && IsHighlighted(m_current) )
+            return m_current;
+
+        return (size_t)-1;
+    }
+
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
 
