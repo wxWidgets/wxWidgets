@@ -233,8 +233,8 @@ void wxDataFormat::SetId( const wxString& zId )
     }
 
     // if not having a '.' we add our own reverse-DNS
-    if ( utiString.Index('.') == wxNOT_FOUND)
-        utiString = "org.wxwidgets."+utiString;
+    if ( utiString.find('.') == wxString::npos )
+        utiString.insert(0, "org.wxwidgets.");
     m_format = wxCFStringRef(utiString);
 }
 
