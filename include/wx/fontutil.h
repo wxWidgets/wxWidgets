@@ -181,7 +181,7 @@ public:
 private:
     // the PostScript names reported in macOS start with a dot for System Fonts, this has to be corrected
     // otherwise round-trips are not possible, resulting in a Times Fallback
-    void AdjustPostScriptName();
+    void OSXAdjustPostScriptName();
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
     CGFloat       m_ctWeight;
