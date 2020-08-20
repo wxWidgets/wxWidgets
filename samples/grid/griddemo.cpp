@@ -766,14 +766,10 @@ GridFrame::GridFrame()
     grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( grid,
-                   1,
-                   wxEXPAND );
+    topSizer->Add(grid, wxSizerFlags(2).Expand());
 
 #if wxUSE_LOG
-    topSizer->Add( logWin,
-                   0,
-                   wxEXPAND );
+    topSizer->Add(logWin, wxSizerFlags(1).Expand());
 #endif // wxUSE_LOG
 
     SetSizerAndFit( topSizer );
