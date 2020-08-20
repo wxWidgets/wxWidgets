@@ -829,8 +829,9 @@ void wxNativeFontInfo::AdjustPostScriptName()
         // the PostScript names reported in macOS start with a dot for System Fonts, this has to be corrected
         // otherwise round-trips are not possible, resulting in a Times Fallback, therefore we replace these with
         // their official PostScript Name
-        if ( m_postScriptName.StartsWith(".SFNS") )
-            m_postScriptName.Replace(".SFNS","SFProDisplay");
+        wxString rest;
+        if ( m_postScriptName.StartsWith(".SFNS", &rest) )
+            m_postScriptName = "SFProDisplay" + rest;
     }
 }
 
