@@ -124,6 +124,40 @@ WX_DEFINE_LIST(wxListHeaderDataList)
 
 
 // ----------------------------------------------------------------------------
+// wxListCtrlEventBlocker
+// ----------------------------------------------------------------------------
+// Helper class to disable the generation of wxEVT_LIST_ITEM_{DE}SELECTED events.
+// For performance reasons, we don't send multiple events when (de)selecting
+// multiple items at once, but only one to notify the application of the event.
+
+class wxListCtrlEventBlocker
+{
+public:
+    wxListCtrlEventBlocker(wxListMainWindow* listmain, wxEventType type)
+        : m_listmain(listmain), m_evtType(type)
+    {
+        ms_blocked = true;
+    }
+
+    ~wxListCtrlEventBlocker()
+    {
+        ms_blocked = false;
+
+        // Send a notification for the event!
+        m_listmain->SendNotify((size_t)-1, m_evtType);
+    }
+
+    static bool IsBlocked() { return ms_blocked; }
+
+private:
+    wxListMainWindow* const m_listmain;
+    wxEventType             m_evtType;
+    static bool             ms_blocked;
+};
+
+bool wxListCtrlEventBlocker::ms_blocked;
+
+// ----------------------------------------------------------------------------
 // wxListItemData
 // ----------------------------------------------------------------------------
 
@@ -1912,7 +1946,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
         changed = ld->Highlight(highlight);
     }
 
-    if ( changed )
+    if ( changed && !wxListCtrlEventBlocker::IsBlocked() )
     {
         SendNotify( line, highlight ? wxEVT_LIST_ITEM_SELECTED
                                     : wxEVT_LIST_ITEM_DESELECTED );
@@ -2199,13 +2233,22 @@ void wxListMainWindow::HighlightAll( bool on )
 
 bool wxListMainWindow::HighlightOnly( size_t line )
 {
-    for ( size_t l = 0; l <= GetItemCount() - 1; l++ )
+    const unsigned selCount = GetSelectedItemCount();
+
+    if ( selCount == 1 && IsHighlighted(line) )
     {
-        if ( l != line && HighlightLine(l, false) )
-            RefreshLine(l);
+        return true; // Nothing changed.
     }
 
-    if ( HighlightLine(line, true) )
+    if ( selCount != 0 )
+    {
+        wxListCtrlEventBlocker block(this, wxEVT_LIST_ITEM_DESELECTED);
+
+        HighlightLines(0, GetItemCount() - 1, false);
+    }
+
+    // _line_ should be the only selected item.
+    if ( HighlightLine(line) )
         RefreshLine(line);
 
     return true;

@@ -900,6 +900,7 @@ private:
     wxDECLARE_EVENT_TABLE();
 
     friend class wxGenericListCtrl;
+    friend class wxListCtrlEventBlocker;
     friend class wxListCtrlMaxWidthCalculator;
 };
 
