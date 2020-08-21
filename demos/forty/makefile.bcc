@@ -242,7 +242,7 @@ clean:
 	-if exist $(OBJS)\forty.ils del $(OBJS)\forty.ils
 
 $(OBJS)\forty.exe: $(FORTY_OBJECTS)  $(OBJS)\forty_forty.res
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -aa $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @&&|
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME)  -aa $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @&&|
 	c0w32.obj $(FORTY_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_XML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\forty_forty.res
 |
 
@@ -275,5 +275,5 @@ $(OBJS)\forty_scorefil.obj: .\scorefil.cpp
 	$(CXX) -q -c -P -o$@ $(FORTY_CXXFLAGS) .\scorefil.cpp
 
 $(OBJS)\forty_forty.res: .\forty.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\forty.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\forty.rc
 

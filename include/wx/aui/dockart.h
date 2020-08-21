@@ -35,6 +35,7 @@ public:
     wxAuiDockArt() { }
     virtual ~wxAuiDockArt() { }
 
+    virtual wxAuiDockArt* Clone() = 0;
     virtual int GetMetric(int id) = 0;
     virtual void SetMetric(int id, int newVal) = 0;
     virtual void SetFont(int id, const wxFont& font) = 0;
@@ -92,6 +93,7 @@ public:
 
     wxAuiDefaultDockArt();
 
+    wxAuiDockArt* Clone() wxOVERRIDE;
     int GetMetric(int metricId) wxOVERRIDE;
     void SetMetric(int metricId, int newVal) wxOVERRIDE;
     wxColour GetColour(int id) wxOVERRIDE;

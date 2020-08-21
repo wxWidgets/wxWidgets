@@ -434,12 +434,15 @@
             the LIBDIRNAME and not any wx libraries installed system-wide.
         -->
         <ldlibs cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldlibs>
-        <res-define>$(WIN32_DPI_MANIFEST)</res-define>
-        <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
             <define>$(TARGET_CPU_COMPFLAG)</define>
         </if>
+    </template>
+
+    <template id="wx_dpi">
+        <res-define>$(WIN32_DPI_MANIFEST)</res-define>
+        <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
     </template>
 
     <template id="anylib">

@@ -8,6 +8,8 @@
 #############################################################################
 
 if(wxUSE_LIBPNG STREQUAL "builtin")
+    # TODO: implement building libpng via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     if(NOT MSVC)
         set(PNG_EXTRA_SOURCES
             src/png/mips/filter_msa_intrinsics.c

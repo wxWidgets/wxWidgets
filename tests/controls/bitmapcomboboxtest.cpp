@@ -59,19 +59,6 @@ private:
 
     void Bitmap();
 
-#if defined(__WXGTK__) && wxUSE_UIACTIONSIMULATOR
-    virtual void SimSelect() wxOVERRIDE
-    {
-        // There is an inexplicable and locally irreproducible failure in this
-        // test for wxBitmapComboBox when it runs on the Linux buildbot slaves:
-        // wxUIActionSimulator::Select() fails there for some reason, so skip
-        // the test. If you ever manage to reproduce this locally, please try
-        // to debug it to understand what goes on!
-        if ( !IsAutomaticTest() )
-            ItemContainerTestCase::SimSelect();
-    }
-#endif // __WXGTK__
-
     wxBitmapComboBox *m_combo;
 
     wxDECLARE_NO_COPY_CLASS(BitmapComboBoxTestCase);

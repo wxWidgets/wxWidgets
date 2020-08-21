@@ -252,6 +252,20 @@ public:
         @return The name of the scheme, as passed to the constructor.
     */
     virtual wxString GetName() const;
+
+    /**
+        Sets a custom security URL. Only used by wxWebViewIE.
+
+        @since 3.1.5
+    */
+    virtual void SetSecurityURL(const wxString& url);
+
+    /**
+        @return The custom security URL. Only used by wxWebViewIE.
+
+        @since 3.1.5
+    */
+    virtual wxString GetSecurityURL() const;
 };
 
 /**

@@ -227,8 +227,8 @@ int          g_lastButtonNumber = 0;
 
 #ifdef __WXGTK3__
 static GList* gs_sizeRevalidateList;
-static bool gs_inSizeAllocate;
 #endif
+bool g_inSizeAllocate;
 
 #if GTK_CHECK_VERSION(3,14,0)
     #define wxGTK_HAS_GESTURES_SUPPORT
@@ -2282,9 +2282,12 @@ size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindo
         win->m_width  = a.width;
         win->m_height = a.height;
         {
+            const bool save_inSizeAllocate = g_inSizeAllocate;
+            g_inSizeAllocate = true;
             wxSizeEvent event(win->GetSize(), win->GetId());
             event.SetEventObject(win);
             win->GTKProcessEvent(event);
+            g_inSizeAllocate = save_inSizeAllocate;
         }
     }
 }
@@ -2327,22 +2330,6 @@ static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
     win->GTKSizeRevalidate();
 }
 #endif // GTK_CHECK_VERSION(3,8,0)
-
-#ifdef __WXGTK3__
-//-----------------------------------------------------------------------------
-// "check-resize"
-//-----------------------------------------------------------------------------
-
-static void check_resize(GtkContainer*, wxWindow*)
-{
-    gs_inSizeAllocate = true;
-}
-
-static void check_resize_after(GtkContainer*, wxWindow*)
-{
-    gs_inSizeAllocate = false;
-}
-#endif // __WXGTK3__
 
 } // extern "C"
 
@@ -2908,13 +2895,6 @@ void wxWindowGTK::PostCreation()
         g_signal_connect(m_wxwindow ? m_wxwindow : m_widget, "size_allocate",
             G_CALLBACK(size_allocate), this);
     }
-#ifdef __WXGTK3__
-    else
-    {
-        g_signal_connect(m_widget, "check-resize", G_CALLBACK(check_resize), this);
-        g_signal_connect_after(m_widget, "check-resize", G_CALLBACK(check_resize_after), this);
-    }
-#endif
 
 #if GTK_CHECK_VERSION(2, 8, 0)
     if ( wx_is_at_least_gtk2(8) )
@@ -3795,7 +3775,7 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
         pizza->move(m_widget, x, y, width, height);
         if (
 #ifdef __WXGTK3__
-            !gs_inSizeAllocate &&
+            !g_inSizeAllocate &&
 #endif
             gtk_widget_get_visible(m_widget))
         {
@@ -3812,7 +3792,7 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
     // size-allocate can generate wxSizeEvent and size event handlers often
     // call SetSize(), directly or indirectly. It should be fine to call
     // gtk_widget_size_allocate() immediately in this case.
-    if (gs_inSizeAllocate && gtk_widget_get_visible(m_widget) && width > 0 && height > 0)
+    if (g_inSizeAllocate && gtk_widget_get_visible(m_widget) && width > 0 && height > 0)
     {
         // obligatory size request before size allocate to avoid GTK3 warnings
         GtkRequisition req;

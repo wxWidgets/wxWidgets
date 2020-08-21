@@ -587,14 +587,11 @@ foreach(func
 endforeach()
 
 # Check various functions
-foreach(func
-    fsync
-    snprintf vsnprintf strnlen strtoull
-    setpriority
-    )
-    string(TOUPPER ${func} func_upper)
-    check_function_exists(${func} HAVE_${func_upper})
-endforeach()
+wx_check_funcs(fsync
+               snprintf vsnprintf strnlen strtoull
+               setpriority
+               gettimeofday
+               )
 
 if(MSVC)
     check_symbol_exists(vsscanf stdio.h HAVE_VSSCANF)
@@ -643,7 +640,6 @@ cmake_pop_check_state()
 if(HAVE_DLOPEN)
     check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
 endif()
-check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
 
 if(APPLE)
     set(wxUSE_EPOLL_DISPATCHER OFF)

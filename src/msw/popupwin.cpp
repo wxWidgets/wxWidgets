@@ -59,6 +59,14 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
                                 flags);
 }
 
+wxPopupWindow::~wxPopupWindow()
+{
+    // If the popup is destroyed without being hidden first, ensure that we are
+    // not left with a dangling pointer.
+    if ( wxCurrentPopupWindow == this )
+        wxCurrentPopupWindow = NULL;
+}
+
 WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
 {
     // we only honour the border flags, the others don't make sense for us

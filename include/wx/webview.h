@@ -89,12 +89,16 @@ enum wxWebViewNavigationActionFlags
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
 public:
-    wxWebViewHandler(const wxString& scheme) : m_scheme(scheme) {}
+    wxWebViewHandler(const wxString& scheme)
+        : m_scheme(scheme), m_securityURL() {}
     virtual ~wxWebViewHandler() {}
     virtual wxString GetName() const { return m_scheme; }
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
+    virtual void SetSecurityURL(const wxString& url) { m_securityURL = url; }
+    virtual wxString GetSecurityURL() const { return m_securityURL; }
 private:
     wxString m_scheme;
+    wxString m_securityURL;
 };
 
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];

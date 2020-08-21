@@ -27,6 +27,10 @@ struct IHTMLDocument2;
 #define REFRESH_COMPLETELY 3
 #endif
 
+#ifndef INET_E_DEFAULT_ACTION
+#define INET_E_DEFAULT_ACTION ((HRESULT)0x800C0011L)
+#endif
+
 typedef enum __wxMIDL_IBindStatusCallback_0006
 {
     wxBSCF_FIRSTDATANOTIFICATION = 0x1,
@@ -136,6 +140,53 @@ public:
             DWORD dwReserved) = 0;
 };
 
+// This interface uses a couple of enums which are not defined in old MinGW
+// SDK headers, but we don't have any reliable way to test if they're actually
+// defined, so define our own enums, containing just the values we need: this
+// compiles everywhere and is ABI-compatible with the real enums.
+enum wxPARSEACTION
+{
+    wxPARSE_SECURITY_URL = 3,
+    wxPARSE_SECURITY_DOMAIN = 17
+};
+
+enum wxQUERYOPTION
+{
+    // We don't actually need any values in this one.
+};
+
+class wxIInternetProtocolInfo : public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE ParseUrl(LPCWSTR pwzUrl,
+        wxPARSEACTION ParseAction,
+        DWORD dwParseFlags,
+        LPWSTR pwzResult,
+        DWORD cchResult,
+        DWORD *pcchResult,
+        DWORD dwReserved) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CombineUrl(LPCWSTR pwzBaseUrl,
+        LPCWSTR pwzRelativeUrl,
+        DWORD dwCombineFlags,
+        LPWSTR pwzResult,
+        DWORD cchResult,
+        DWORD *pcchResult,
+        DWORD dwReserved) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CompareUrl(LPCWSTR pwzUrl1,
+        LPCWSTR pwzUrl2,
+        DWORD dwCompareFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE QueryInfo(LPCWSTR pwzUrl,
+        wxQUERYOPTION OueryOption,
+        DWORD dwQueryFlags,
+        LPVOID pBuffer,
+        DWORD cbBuffer,
+        DWORD *pcbBuf,
+        DWORD dwReserved) = 0;
+};
+
 /* end of urlmon.h */
 
 /* mshtmhst.h */
@@ -166,7 +217,8 @@ typedef enum _tagwxDOCHOSTUIFLAG
     DOCHOSTUIFLAG_DISABLE_EDIT_NS_FIXUP = 0x400000,
     DOCHOSTUIFLAG_LOCAL_MACHINE_ACCESS_CHECK = 0x800000,
     DOCHOSTUIFLAG_DISABLE_UNTRUSTEDPROTOCOL = 0x1000000,
-    DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION = 0x4000000
+    DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION = 0x4000000,
+    DOCHOSTUIFLAG_DPI_AWARE = 0x40000000
 } DOCHOSTUIFLAG;
 
 typedef struct _tagwxDOCHOSTUIINFO

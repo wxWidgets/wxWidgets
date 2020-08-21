@@ -9707,8 +9707,12 @@ void wxGrid::DoSetRowSize( int row, int height )
             void operator()(wxWindow* w) const
             {
                 wxSize size = w->GetClientSize();
-                size.y -= m_top;
-                w->RefreshRect(wxRect(wxPoint(0, m_top), size));
+                if ( size.y > m_top )
+                {
+                    size.y -= m_top;
+                    w->RefreshRect(wxRect(wxPoint(0, m_top), size));
+                }
+                //else: the area to refresh is not in view anyhow
             }
 
         private:
@@ -9890,8 +9894,11 @@ void wxGrid::DoSetColSize( int col, int width )
             void operator()(wxWindow* w) const
             {
                 wxSize size = w->GetClientSize();
-                size.x -= m_left;
-                w->RefreshRect(wxRect(wxPoint(m_left, 0), size));
+                if ( size.x > m_left )
+                {
+                    size.x -= m_left;
+                    w->RefreshRect(wxRect(wxPoint(m_left, 0), size));
+                }
             }
 
         private:
@@ -10508,7 +10515,7 @@ void wxGrid::DeselectRow(int row)
     wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
 
     if ( m_selection )
-        m_selection->DeselectBlock(wxGridBlockCoords(row, 0, row, m_numRows - 1));
+        m_selection->DeselectBlock(wxGridBlockCoords(row, 0, row, m_numCols - 1));
 }
 
 void wxGrid::DeselectCol(int col)
@@ -10516,7 +10523,7 @@ void wxGrid::DeselectCol(int col)
     wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
 
     if ( m_selection )
-        m_selection->DeselectBlock(wxGridBlockCoords(0, col, m_numCols - 1, col));
+        m_selection->DeselectBlock(wxGridBlockCoords(0, col, m_numRows - 1, col));
 }
 
 void wxGrid::DeselectCell( int row, int col )

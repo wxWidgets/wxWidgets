@@ -62,13 +62,19 @@ public:
                                     "expected 0x%06x",
                                     x, y, *d2, *d1
                                );
-                    break;
+
+                    // Don't show all mismatches, there may be too many of them.
+                    return false;
                 }
 
                 ++d1;
                 ++d2;
             }
         }
+
+        // We should never get here as we know that the images are different
+        // and so should have returned from inside the loop above.
+        wxFAIL_MSG("unreachable");
 
         return false;
     }

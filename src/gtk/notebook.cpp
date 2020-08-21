@@ -25,6 +25,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/stylecontext.h"
 
 //-----------------------------------------------------------------------------
 // wxGtkNotebookPage
@@ -320,20 +321,68 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
         sizeTabMax.IncTo(wxSize(req.width, req.height));
     }
 
-    // Unfortunately this doesn't account for the real tab size and I don't
-    // know how to find it, e.g. where do the margins below come from.
-    const int PAGE_MARGIN = 3;
-    const int TAB_MARGIN = 4;
-
-    sizeTabMax.IncBy(3*TAB_MARGIN);
-
     wxSize sizeFull(sizePage);
+#ifdef __WXGTK3__
+    GtkBorder b;
+    if (gtk_check_version(3,20,0) == NULL)
+    {
+        wxGtkStyleContext sc;
+        sc.Add(GTK_TYPE_NOTEBOOK, "notebook", "notebook", "frame", NULL);
+        gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeFull.IncBy(b.left + b.right, b.top + b.bottom);
+
+        sc.Add(G_TYPE_NONE, "header", IsVertical() ? "top" : "left", NULL);
+        sc.Add(G_TYPE_NONE, "tabs", NULL);
+        sc.Add(G_TYPE_NONE, "tab", NULL);
+
+        wxSize tabMin;
+        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
+            "min-width", &tabMin.x, "min-height", &tabMin.y, NULL);
+        sizeTabMax.IncTo(tabMin);
+
+        gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+        gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+        gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+    }
+    else
+    {
+        // Size of tab labels may be reported as zero if we're called too early.
+        // 17 is observed value for text-only label with default Adwaita theme.
+        sizeTabMax.IncTo(wxSize(17, 17));
+
+        GtkStyleContext* sc = gtk_widget_get_style_context(m_widget);
+        gtk_style_context_save(sc);
+        gtk_style_context_add_region(sc, "tab", GtkRegionFlags(0));
+        gtk_style_context_add_class(sc, "top");
+        gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &b);
+        sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);
+        gtk_style_context_restore(sc);
+
+        sizeFull.IncBy(2 * gtk_container_get_border_width(GTK_CONTAINER(m_widget)));
+    }
+#else // !__WXGTK3__
+    // Size of tab labels may be reported as zero if we're called too early.
+    // 21 is observed value for text-only label with default Adwaita theme.
+    sizeTabMax.IncTo(wxSize(21, 21));
+
+    int tab_hborder, tab_vborder, focus_width;
+    g_object_get(G_OBJECT(m_widget),
+        "tab-hborder", &tab_hborder, "tab-vborder", &tab_vborder, NULL);
+    gtk_widget_style_get(m_widget, "focus-line-width", &focus_width, NULL);
+    sizeTabMax.x += 2 * (tab_hborder + focus_width + m_widget->style->xthickness);
+    sizeTabMax.y += 2 * (tab_vborder + focus_width + m_widget->style->ythickness);
+
+    sizeFull.x += 2 * m_widget->style->xthickness;
+    sizeFull.y += 2 * m_widget->style->ythickness;
+#endif // !__WXGTK3__
+
     if ( IsVertical() )
         sizeFull.y += sizeTabMax.y;
     else
         sizeFull.x += sizeTabMax.x;
-
-    sizeFull.IncBy(2*PAGE_MARGIN);
 
     return sizeFull;
 }

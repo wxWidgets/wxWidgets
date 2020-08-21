@@ -123,6 +123,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->CanGoForward());
     }
 
+#if !wxUSE_WEBVIEW_WEBKIT2
     SECTION("HistoryEnable")
     {
         LoadUrl();
@@ -136,7 +137,9 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(!m_browser->CanGoForward());
         CHECK(!m_browser->CanGoBack());
     }
+#endif
 
+#if !wxUSE_WEBVIEW_WEBKIT2
     SECTION("HistoryClear")
     {
         LoadUrl(2);
@@ -153,6 +156,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(!m_browser->CanGoForward());
         CHECK(!m_browser->CanGoBack());
     }
+#endif
 
     SECTION("HistoryList")
     {
