@@ -324,10 +324,8 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
     wxUpdateUIEvent event(menuid);
     event.SetEventObject( this );
 
-    if ( item )
-        event.SetIsCheckable(item->IsCheckable());
-    else
-        event.SetIsCheckable(true);
+    if ( !item || !item->IsCheckable() )
+        event.DisallowCheck();
 
     bool processed = DoProcessEvent(this, event, GetWindow());
 

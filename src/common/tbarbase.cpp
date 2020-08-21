@@ -738,7 +738,9 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 
         wxUpdateUIEvent event(toolid);
         event.SetEventObject(this);
-        event.SetIsCheckable(tool->CanBeToggled());
+
+        if ( !tool->CanBeToggled() )
+            event.DisallowCheck();
 
         if ( evtHandler->ProcessEvent(event) )
         {

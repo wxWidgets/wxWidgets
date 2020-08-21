@@ -2200,8 +2200,8 @@ void wxAuiToolBar::DoIdleUpdate()
         wxUpdateUIEvent evt(item.m_toolId);
         evt.SetEventObject(this);
 
-        if ( item.m_kind == wxITEM_CHECK || item.m_kind == wxITEM_RADIO )
-            evt.SetIsCheckable(true);
+        if ( !item.CanBeToggled() )
+            evt.DisallowCheck();
 
         if (handler->ProcessEvent(evt))
         {
