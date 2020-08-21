@@ -21,6 +21,8 @@
 
 typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
 
+// Note: for all eventType arguments of the methods of this class wxEVT_NULL
+//       may be passed to forbid events generation completely.
 class WXDLLIMPEXP_CORE wxGridSelection
 {
 public:
@@ -41,15 +43,15 @@ public:
     void SelectBlock(int topRow, int leftCol,
                      int bottomRow, int rightCol,
                      const wxKeyboardState& kbd = wxKeyboardState(),
-                     bool sendEvent = true );
+                     wxEventType eventType = wxEVT_GRID_RANGE_SELECTED);
     void SelectBlock(const wxGridCellCoords& topLeft,
                      const wxGridCellCoords& bottomRight,
                      const wxKeyboardState& kbd = wxKeyboardState(),
-                     bool sendEvent = true )
+                     wxEventType eventType = wxEVT_GRID_RANGE_SELECTED)
     {
         SelectBlock(topLeft.GetRow(), topLeft.GetCol(),
                     bottomRight.GetRow(), bottomRight.GetCol(),
-                    kbd, sendEvent);
+                    kbd, eventType);
     }
 
     // This function replaces all the existing selected blocks (which become
@@ -58,7 +60,7 @@ public:
 
     void DeselectBlock(const wxGridBlockCoords& block,
                        const wxKeyboardState& kbd = wxKeyboardState(),
-                       bool sendEvent = true );
+                       wxEventType eventType = wxEVT_GRID_RANGE_SELECTED);
 
     // Note that this method refreshes the previously selected blocks and sends
     // an event about the selection change.
@@ -121,7 +123,8 @@ private:
 
     // Really select the block and don't check for the current selection mode.
     void Select(const wxGridBlockCoords& block,
-                const wxKeyboardState& kbd, bool sendEvent);
+                const wxKeyboardState& kbd,
+                wxEventType eventType);
 
     // Ensure that the new "block" becomes part of "blocks", adding it to them
     // if necessary and, if we do it, also removing any existing elements of

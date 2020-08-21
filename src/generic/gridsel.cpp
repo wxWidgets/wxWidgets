@@ -182,7 +182,7 @@ void wxGridSelection::SelectCol(int col, const wxKeyboardState& kbd)
 void wxGridSelection::SelectBlock( int topRow, int leftCol,
                                    int bottomRow, int rightCol,
                                    const wxKeyboardState& kbd,
-                                   bool sendEvent )
+                                   wxEventType eventType )
 {
     // Fix the coordinates of the block if needed.
     int allowed = -1;
@@ -224,7 +224,7 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
         return;
 
     Select(wxGridBlockCoords(topRow, leftCol, bottomRow, rightCol).Canonicalize(),
-           kbd, sendEvent);
+           kbd, eventType);
 }
 
 void
@@ -247,7 +247,7 @@ wxGridSelection::SelectAll()
 void
 wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                const wxKeyboardState& kbd,
-                               bool sendEvent)
+                               wxEventType eventType)
 {
     const wxGridBlockCoords canonicalizedBlock = block.Canonicalize();
 
@@ -361,10 +361,10 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                  refBlock.GetBottomRow(), refBlock.GetRightCol());
         }
 
-        if ( sendEvent )
+        if ( eventType != wxEVT_NULL )
         {
             wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                           wxEVT_GRID_RANGE_SELECTED,
+                                           eventType,
                                            m_grid,
                                            refBlock.GetTopLeft(),
                                            refBlock.GetBottomRight(),
@@ -818,7 +818,8 @@ wxArrayInt wxGridSelection::GetColSelection() const
 
 void
 wxGridSelection::Select(const wxGridBlockCoords& block,
-                        const wxKeyboardState& kbd, bool sendEvent)
+                        const wxKeyboardState& kbd,
+                        wxEventType eventType)
 {
     if (m_grid->GetNumberRows() == 0 || m_grid->GetNumberCols() == 0)
         return;
@@ -832,10 +833,10 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     }
 
     // Send Event, if not disabled.
-    if ( sendEvent )
+    if ( eventType != wxEVT_NULL )
     {
         wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-            wxEVT_GRID_RANGE_SELECTED,
+            eventType,
             m_grid,
             block.GetTopLeft(),
             block.GetBottomRight(),
