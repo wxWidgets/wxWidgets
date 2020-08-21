@@ -30,6 +30,7 @@ public:
 
         By default, no modifiers are active.
      */
+    explicit
     wxKeyboardState(bool controlDown = false,
                     bool shiftDown = false,
                     bool altDown = false,
