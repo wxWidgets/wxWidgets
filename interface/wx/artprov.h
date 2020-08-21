@@ -16,80 +16,80 @@ typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
 
-wxArtClient wxART_TOOLBAR;
-wxArtClient wxART_MENU;
-wxArtClient wxART_FRAME_ICON;
+const wxArtClient wxART_TOOLBAR;
+const wxArtClient wxART_MENU;
+const wxArtClient wxART_FRAME_ICON;
 
-wxArtClient wxART_CMN_DIALOG;
-wxArtClient wxART_HELP_BROWSER;
-wxArtClient wxART_MESSAGE_BOX;
-wxArtClient wxART_BUTTON;
-wxArtClient wxART_LIST;
+const wxArtClient wxART_CMN_DIALOG;
+const wxArtClient wxART_HELP_BROWSER;
+const wxArtClient wxART_MESSAGE_BOX;
+const wxArtClient wxART_BUTTON;
+const wxArtClient wxART_LIST;
 
-wxArtClient wxART_OTHER;
+const wxArtClient wxART_OTHER;
 
 
-wxArtID wxART_ADD_BOOKMARK;
-wxArtID wxART_DEL_BOOKMARK;
-wxArtID wxART_HELP_SIDE_PANEL;
-wxArtID wxART_HELP_SETTINGS;
-wxArtID wxART_HELP_BOOK;
-wxArtID wxART_HELP_FOLDER;
-wxArtID wxART_HELP_PAGE;
-wxArtID wxART_GO_BACK;
-wxArtID wxART_GO_FORWARD;
-wxArtID wxART_GO_UP;
-wxArtID wxART_GO_DOWN;
-wxArtID wxART_GO_TO_PARENT;
-wxArtID wxART_GO_HOME;
-wxArtID wxART_GOTO_FIRST;
-wxArtID wxART_GOTO_LAST;
-wxArtID wxART_FILE_OPEN;
-wxArtID wxART_FILE_SAVE;
-wxArtID wxART_FILE_SAVE_AS;
-wxArtID wxART_PRINT;
-wxArtID wxART_HELP;
-wxArtID wxART_TIP;
-wxArtID wxART_REPORT_VIEW;
-wxArtID wxART_LIST_VIEW;
-wxArtID wxART_NEW_DIR;
-wxArtID wxART_HARDDISK;
-wxArtID wxART_FLOPPY;
-wxArtID wxART_CDROM;
-wxArtID wxART_REMOVABLE;
-wxArtID wxART_FOLDER;
-wxArtID wxART_FOLDER_OPEN;
-wxArtID wxART_GO_DIR_UP;
-wxArtID wxART_EXECUTABLE_FILE;
-wxArtID wxART_NORMAL_FILE;
-wxArtID wxART_TICK_MARK;
-wxArtID wxART_CROSS_MARK;
-wxArtID wxART_ERROR;
-wxArtID wxART_QUESTION;
-wxArtID wxART_WARNING;
-wxArtID wxART_INFORMATION;
-wxArtID wxART_MISSING_IMAGE;
+const wxArtID wxART_ADD_BOOKMARK;
+const wxArtID wxART_DEL_BOOKMARK;
+const wxArtID wxART_HELP_SIDE_PANEL;
+const wxArtID wxART_HELP_SETTINGS;
+const wxArtID wxART_HELP_BOOK;
+const wxArtID wxART_HELP_FOLDER;
+const wxArtID wxART_HELP_PAGE;
+const wxArtID wxART_GO_BACK;
+const wxArtID wxART_GO_FORWARD;
+const wxArtID wxART_GO_UP;
+const wxArtID wxART_GO_DOWN;
+const wxArtID wxART_GO_TO_PARENT;
+const wxArtID wxART_GO_HOME;
+const wxArtID wxART_GOTO_FIRST;
+const wxArtID wxART_GOTO_LAST;
+const wxArtID wxART_FILE_OPEN;
+const wxArtID wxART_FILE_SAVE;
+const wxArtID wxART_FILE_SAVE_AS;
+const wxArtID wxART_PRINT;
+const wxArtID wxART_HELP;
+const wxArtID wxART_TIP;
+const wxArtID wxART_REPORT_VIEW;
+const wxArtID wxART_LIST_VIEW;
+const wxArtID wxART_NEW_DIR;
+const wxArtID wxART_HARDDISK;
+const wxArtID wxART_FLOPPY;
+const wxArtID wxART_CDROM;
+const wxArtID wxART_REMOVABLE;
+const wxArtID wxART_FOLDER;
+const wxArtID wxART_FOLDER_OPEN;
+const wxArtID wxART_GO_DIR_UP;
+const wxArtID wxART_EXECUTABLE_FILE;
+const wxArtID wxART_NORMAL_FILE;
+const wxArtID wxART_TICK_MARK;
+const wxArtID wxART_CROSS_MARK;
+const wxArtID wxART_ERROR;
+const wxArtID wxART_QUESTION;
+const wxArtID wxART_WARNING;
+const wxArtID wxART_INFORMATION;
+const wxArtID wxART_MISSING_IMAGE;
 
-wxArtID wxART_COPY;
-wxArtID wxART_CUT;
-wxArtID wxART_PASTE;
-wxArtID wxART_DELETE;
-wxArtID wxART_NEW;
+const wxArtID wxART_COPY;
+const wxArtID wxART_CUT;
+const wxArtID wxART_PASTE;
+const wxArtID wxART_DELETE;
+const wxArtID wxART_NEW;
 
-wxArtID wxART_UNDO;
-wxArtID wxART_REDO;
+const wxArtID wxART_UNDO;
+const wxArtID wxART_REDO;
 
-wxArtID wxART_PLUS;
-wxArtID wxART_MINUS;
+const wxArtID wxART_PLUS;
+const wxArtID wxART_MINUS;
 
-wxArtID wxART_CLOSE;
-wxArtID wxART_QUIT;
+const wxArtID wxART_CLOSE;
+const wxArtID wxART_QUIT;
 
-wxArtID wxART_FIND;
-wxArtID wxART_FIND_AND_REPLACE;
+const wxArtID wxART_FIND;
+const wxArtID wxART_FIND_AND_REPLACE;
 
-wxArtID wxART_FULL_SCREEN;
-wxArtID wxART_EDIT;
+const wxArtID wxART_FULL_SCREEN;
+const wxArtID wxART_EDIT;
 
 
 /**
