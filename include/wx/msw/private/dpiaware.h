@@ -22,13 +22,14 @@ namespace wxMSWImpl
 {
 
 // ----------------------------------------------------------------------------
-// Temporarily change the DPI Awareness context to System
+// Temporarily change the DPI Awareness context to GDIScaled or System
 // ----------------------------------------------------------------------------
 
 class AutoSystemDpiAware
 {
-    #define WXDPI_AWARENESS_CONTEXT_UNAWARE      ((WXDPI_AWARENESS_CONTEXT)-1)
-    #define WXDPI_AWARENESS_CONTEXT_SYSTEM_AWARE ((WXDPI_AWARENESS_CONTEXT)-2)
+    #define WXDPI_AWARENESS_CONTEXT_UNAWARE           ((WXDPI_AWARENESS_CONTEXT)-1)
+    #define WXDPI_AWARENESS_CONTEXT_SYSTEM_AWARE      ((WXDPI_AWARENESS_CONTEXT)-2)
+    #define WXDPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED ((WXDPI_AWARENESS_CONTEXT)-5)
     typedef WXDPI_AWARENESS_CONTEXT
             (WINAPI *SetThreadDpiAwarenessContext_t)(WXDPI_AWARENESS_CONTEXT);
 
@@ -46,7 +47,12 @@ public:
         if ( m_pfnSetThreadDpiAwarenessContext )
         {
             m_prevContext = m_pfnSetThreadDpiAwarenessContext(
-                                WXDPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+                                    WXDPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED);
+            if ( !m_prevContext )
+            {
+                m_prevContext = m_pfnSetThreadDpiAwarenessContext(
+                                    WXDPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+            }
         }
 
     }
