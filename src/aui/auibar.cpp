@@ -1546,7 +1546,7 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 {
     wxAuiToolBarItem* tool = FindTool(tool_id);
 
-    if (tool && (tool->m_kind == wxITEM_CHECK || tool->m_kind == wxITEM_RADIO))
+    if ( tool && tool->CanBeToggled() )
     {
         if (tool->m_kind == wxITEM_RADIO)
         {
@@ -1587,13 +1587,8 @@ bool wxAuiToolBar::GetToolToggled(int tool_id) const
 {
     wxAuiToolBarItem* tool = FindTool(tool_id);
 
-    if (tool)
-    {
-        if ( (tool->m_kind != wxITEM_CHECK) && (tool->m_kind != wxITEM_RADIO) )
-            return false;
-
+    if ( tool && tool->CanBeToggled() )
         return (tool->m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
-    }
 
     return false;
 }
