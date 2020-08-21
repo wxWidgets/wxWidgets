@@ -526,7 +526,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     // block to non-selected current cell.
     if ( !IsInSelection(m_grid->GetGridCursorCoords()) )
     {
-        SelectBlock(blockStart, blockEnd);
+        SelectBlock(blockStart, blockEnd, kbd, eventType);
         return true;
     }
 
