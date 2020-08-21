@@ -984,6 +984,7 @@ bool wxListLineData::Highlight( bool on )
         return false;
 
     m_highlighted = on;
+    m_owner->UpdateSelectionCount(on);
 
     return true;
 }
@@ -1605,6 +1606,7 @@ wxEND_EVENT_TABLE()
 void wxListMainWindow::Init()
 {
     m_dirty = true;
+    m_selCount =
     m_countVirt = 0;
     m_lineFrom =
     m_lineTo = (size_t)-1;
@@ -3709,17 +3711,7 @@ int wxListMainWindow::GetSelectedItemCount() const
     if ( IsVirtual() )
         return m_selStore.GetSelectedCount();
 
-    // TODO: we probably should maintain the number of items selected even for
-    //       non virtual controls as enumerating all lines is really slow...
-    size_t countSel = 0;
-    size_t count = GetItemCount();
-    for ( size_t line = 0; line < count; line++ )
-    {
-        if ( GetLine(line)->IsHighlighted() )
-            countSel++;
-    }
-
-    return countSel;
+    return m_selCount;
 }
 
 // ----------------------------------------------------------------------------
@@ -4338,6 +4330,10 @@ void wxListMainWindow::DoDeleteAllItems()
     {
         m_countVirt = 0;
         m_selStore.Clear();
+    }
+    else
+    {
+        m_selCount = 0;
     }
 
     if ( InReportView() )

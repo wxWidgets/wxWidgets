@@ -758,6 +758,15 @@ public:
         return m_hasFocus;
     }
 
+    void UpdateSelectionCount(bool selected)
+    {
+        wxASSERT_MSG( !IsVirtual(), "Can be called for non virtual lists only" );
+
+        if ( IsSingleSel() ) return;
+
+        selected ? ++m_selCount : --m_selCount;
+    }
+
 protected:
     // the array of all line objects for a non virtual list control (for the
     // virtual list control we only ever use m_lines[0])
@@ -815,6 +824,9 @@ protected:
 
 protected:
     wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
+
+    // the total count of items selected in a non virtual list control
+    size_t m_selCount;
 
     // the total count of items in a virtual list control
     size_t m_countVirt;
