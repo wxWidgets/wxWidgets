@@ -1095,6 +1095,11 @@ void MyListCtrl::OnColClick(wxListEvent& event)
 {
     int col = event.GetColumn();
 
+    if ( col == -1 )
+    {
+        return; // clicked outside any column.
+    }
+
     // set or unset image
     static bool x = false;
     x = !x;
@@ -1277,12 +1282,7 @@ void MyListCtrl::OnUnChecked(wxListEvent& event)
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     long item;
-
-    if ( !wxGetKeyState(WXK_SHIFT) )
-    {
-        LogEvent(event, "OnListKeyDown");
-        event.Skip();
-    }
+    bool isEventLogged = false;
 
     switch ( event.GetKeyCode() )
     {
@@ -1434,6 +1434,15 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             LogEvent(event, "OnListKeyDown");
 
             event.Skip();
+
+            isEventLogged = true;
+    }
+
+    // Don't log the event twice!
+    if ( !isEventLogged && !wxGetKeyState(WXK_SHIFT) )
+    {
+        LogEvent(event, "OnListKeyDown");
+        event.Skip();
     }
 }
 
