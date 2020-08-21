@@ -3678,7 +3678,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                         m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
                             wxGridCellCoords(row, GetNumberCols() - 1),
-                            event);
+                            event,
+                            wxEVT_GRID_RANGE_SELECTING);
                     }
                 }
                 break;
@@ -3694,9 +3695,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
     if ( m_isDragging && (event.Entering() || event.Leaving()) )
         return;
-
-    if (m_isDragging)
-        m_isDragging = false;
 
     // ------------ Entering or leaving the window
     //
@@ -3811,6 +3809,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, rowLabelWin);
         m_dragLastPos = -1;
+        m_isDragging = false;
     }
 
     // ------------ Right button down
@@ -4021,7 +4020,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                         m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(0, m_currentCellCoords.GetCol()),
                             wxGridCellCoords(GetNumberRows() - 1, col),
-                            event);
+                            event,
+                            wxEVT_GRID_RANGE_SELECTING);
                     }
                 }
                 break;
@@ -4091,9 +4091,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
     if ( m_isDragging && (event.Entering() || event.Leaving()) )
         return;
-
-    if (m_isDragging)
-        m_isDragging = false;
 
     // ------------ Entering or leaving the window
     //
@@ -4264,6 +4261,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
         m_dragLastPos = -1;
+        m_isDragging = false;
     }
 
     // ------------ Right button down
