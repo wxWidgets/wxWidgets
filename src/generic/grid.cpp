@@ -4453,19 +4453,24 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
             break;
 
         case WXGRID_CURSOR_MOVE_COL:
+            // Currently we don't capture mouse when moving columns, which is
+            // almost certainly wrong.
+            captureMouse = false;
             win->SetCursor( wxCursor(wxCURSOR_HAND) );
             break;
 
-        default:
+        case WXGRID_CURSOR_SELECT_CELL:
+            // Mouse is captured in ProcessGridCellMouseEvent() in this mode.
+            captureMouse = false;
+            wxFALLTHROUGH;
+
+        case WXGRID_CURSOR_SELECT_ROW:
+        case WXGRID_CURSOR_SELECT_COL:
             win->SetCursor( *wxSTANDARD_CURSOR );
             break;
     }
 
-    // we need to capture mouse when resizing
-    bool resize = m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
-                  m_cursorMode == WXGRID_CURSOR_RESIZE_COL;
-
-    if ( captureMouse && resize )
+    if ( captureMouse )
     {
         win->CaptureMouse();
         m_winCapture = win;
