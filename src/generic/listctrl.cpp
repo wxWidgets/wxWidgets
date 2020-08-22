@@ -136,7 +136,8 @@ public:
     wxListCtrlEventBlocker(wxListMainWindow* listmain, wxEventType type)
         : m_listmain(listmain), m_evtType(type)
     {
-        ms_blocked = true;
+        if ( m_evtType != wxEVT_NULL )
+            ms_blocked = true;
     }
 
     ~wxListCtrlEventBlocker()
@@ -144,7 +145,8 @@ public:
         ms_blocked = false;
 
         // Send a notification for the event!
-        m_listmain->SendNotify((size_t)-1, m_evtType);
+        if ( m_evtType != wxEVT_NULL )
+            m_listmain->SendNotify((size_t)-1, m_evtType);
     }
 
     static bool IsBlocked() { return ms_blocked; }
@@ -2245,7 +2247,16 @@ bool wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
 
     if ( !IsSingleSel() && selCount != 0 )
     {
-        wxListCtrlEventBlocker block(this, wxEVT_LIST_ITEM_DESELECTED);
+        // Deselecting many items at once will generate wxEVT_XXX_DESELECTED event
+        // for each one of them. although this may be inefficient if the number of
+        // deselected items is too much, we keep doing this (for non-virtual list
+        // controls) for backward compatibility concerns.
+
+        const wxEventType evtType =
+            IsVirtual() ? static_cast<wxEventType>(wxEVT_LIST_ITEM_DESELECTED)
+                        : wxEVT_NULL;
+
+        wxListCtrlEventBlocker block(this, evtType);
 
         HighlightLines(0, GetItemCount() - 1, false);
     }
@@ -2621,6 +2632,14 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             m_lastOnSame = false;
         }
 
+        if ( GetSelectedItemCount() == 1 || event.CmdDown() )
+        {
+            // The only selected item in a multi-selection mode is the _Pivot_
+            // Notice that under wxMSW the pivot can be changed to current if
+            // Ctrl is down.
+            m_lineMultiSelectPivot = m_current;
+        }
+
         m_lineSelectSingleOnUp = (size_t)-1;
     }
     else
@@ -2670,13 +2689,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
             else if (IsSingleSel() || !IsHighlighted(current))
             {
-                m_lineMultiSelectPivot = current;
                 ChangeCurrent(current);
                 HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
             }
             else // multi sel & current is highlighted & no mod keys
             {
-                m_lineMultiSelectPivot =
                 m_lineSelectSingleOnUp = current;
                 ChangeCurrent(current); // change focus
             }
@@ -2698,27 +2715,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     // Highlight m_current only if there is no previous selection.
                     HighlightLine(m_current);
                 }
-                else if ( oldCurrent != current )
+                else if ( oldCurrent != current && m_lineMultiSelectPivot != (size_t)-1 )
                 {
-                    // We deselect everything between oldCurrent and current (inclusive)
-                    // and reselect lines between pivot and current (inclusive) which is
-                    // the behaviour under wxMSW.
-
-                    size_t lineFrom = oldCurrent,
-                           lineTo = current;
-
-                    if ( lineTo < lineFrom )
-                        wxSwap(lineTo, lineFrom);
-
-                    HighlightLines(lineFrom, lineTo, false);
-
-                    lineFrom = m_lineMultiSelectPivot;
-                    lineTo = current;
-
-                    if ( lineTo < lineFrom )
-                        wxSwap(lineTo, lineFrom);
-
-                    HighlightLines(lineFrom, lineTo);
+                    ChangeHighlightedLines(oldCurrent, current);
                 }
             }
             else // !ctrl, !shift
@@ -2833,6 +2832,88 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
 // keyboard handling
 // ----------------------------------------------------------------------------
 
+// Helper function which handles items selection correctly and efficiently. and
+// simply, mimic the wxMSW behaviour. And The benefit of this function is that it
+// ensures that wxEVT_LIST_ITEM_{DE}SELECTED events are only generated for items
+// freshly (de)selected (i.e. items that have really changed state). Useful for
+// multi-selection mode when selecting using mouse or arrows with Shift key down.
+
+void wxListMainWindow::ChangeHighlightedLines(size_t oldCurrent, size_t newCurrent)
+{
+    // Refresh the old/new focus to remove/add it
+    RefreshLine(oldCurrent);
+    RefreshLine(newCurrent);
+
+    // [Case 1] oldCurrent between pivot and newCurrent:
+    // - Highlight everything between pivot and newCurrent (inclusive).
+
+    size_t lineFrom = m_lineMultiSelectPivot,
+           lineTo   = newCurrent;
+
+    if ( lineTo < lineFrom )
+        wxSwap(lineTo, lineFrom);
+
+    if ( oldCurrent >= lineFrom && oldCurrent <= lineTo )
+    {
+        HighlightLines(lineFrom, lineTo);
+
+        return;
+    }
+
+    // [Case 2] newCurrent between pivot and oldCurrent:
+    // - Unhighlight everything between oldCurrent and newCurrent.
+
+    lineFrom = m_lineMultiSelectPivot;
+    lineTo   = oldCurrent;
+
+    if ( lineTo < lineFrom )
+        wxSwap(lineTo, lineFrom);
+
+    if ( newCurrent >= lineFrom && newCurrent <= lineTo )
+    {
+        if ( newCurrent < oldCurrent )
+        {
+            // Exclude newCurrent from being deselected
+            lineFrom = newCurrent + 1;
+        }
+        else
+        {
+            lineFrom = oldCurrent;
+
+            // Exclude newCurrent from being deselected
+            lineTo   = newCurrent - 1;
+        }
+
+        HighlightLines(lineFrom, lineTo, false);
+
+        return;
+    }
+
+    // [Case 3] pivot between oldCurrent and newCurrent:
+    // - Highlight everything between pivot and newCurrent (inclusive).
+    // - Unhighlight everything between pivot and oldCurrent.
+
+    lineFrom = oldCurrent;
+    lineTo   = newCurrent;
+
+    if ( lineTo < lineFrom )
+        wxSwap(lineTo, lineFrom);
+
+    if ( m_lineMultiSelectPivot >= lineFrom && m_lineMultiSelectPivot <= lineTo )
+    {
+        if ( m_lineMultiSelectPivot > oldCurrent )
+        {
+            HighlightLines(oldCurrent, m_lineMultiSelectPivot - 1, false);
+            HighlightLines(m_lineMultiSelectPivot, newCurrent);
+        }
+        else
+        {
+            HighlightLines(m_lineMultiSelectPivot + 1, oldCurrent, false);
+            HighlightLines(newCurrent, m_lineMultiSelectPivot);
+        }
+    }
+}
+
 void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 {
     wxCHECK_RET( newCurrent < (size_t)GetItemCount(),
@@ -2840,33 +2921,32 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 
     size_t oldCurrent = m_current;
 
+    ChangeCurrent(newCurrent);
+
     // in single selection we just ignore Shift as we can't select several
     // items anyhow
     if ( event.ShiftDown() && !IsSingleSel() )
     {
-        ChangeCurrent(newCurrent);
-
-        // refresh the old focus to remove it
-        RefreshLine( oldCurrent );
-
-        // select all the items between the old and the new one
-        if ( oldCurrent > newCurrent )
-        {
-            newCurrent = oldCurrent;
-            oldCurrent = m_current;
-        }
-
-        HighlightLines(oldCurrent, newCurrent);
+        ChangeHighlightedLines(oldCurrent, newCurrent);
     }
     else // !shift
     {
-        ChangeCurrent(newCurrent);
-
         // all previously selected items are unselected unless ctrl is held in
         // a multi-selection control. in single selection mode we must always
         // have a selected item.
         if ( !event.ControlDown() || IsSingleSel() )
+        {
             HighlightOnly(m_current, oldCurrent);
+
+            // Update pivot
+            m_lineMultiSelectPivot = m_current;
+        }
+        else
+        {
+            // refresh the old focus to remove it
+            RefreshLine(oldCurrent);
+            RefreshLine(m_current);
+        }
     }
 
     MoveToFocus();

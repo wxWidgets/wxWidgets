@@ -894,6 +894,11 @@ private:
         return (size_t)-1;
     }
 
+    // For multi-selection mode, change the selected range from [m_lineMultiSelectPivot,
+    // oldCurrent] to [m_lineMultiSelectPivot, newCurrent] without generating unnecessary
+    // wxEVT_LIST_ITEM_{DE}SELECTED events.
+    void ChangeHighlightedLines(size_t oldCurrent, size_t newCurrent);
+
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
 
