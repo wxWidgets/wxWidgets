@@ -975,14 +975,10 @@ const void *wxDataObject::GetSizeFromBuffer(const void *buffer,
                                             size_t *size,
                                             const wxDataFormat& WXUNUSED(format))
 {
-    // hack: the third parameter is declared non-const in Wine's headers so
-    // cast away the const
-    const size_t realsz = ::HeapSize(::GetProcessHeap(), 0,
-                                     const_cast<void*>(buffer));
-    if ( realsz == (size_t)-1 )
+    const size_t realsz = ::GlobalSize(::GlobalHandle(buffer));
+    if ( !realsz )
     {
-        // note that HeapSize() does not set last error
-        wxLogApiError(wxT("HeapSize"), 0);
+        wxLogLastError(wxT("GlobalSize"));
         return NULL;
     }
 
