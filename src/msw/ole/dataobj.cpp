@@ -95,16 +95,15 @@ HGLOBAL wxGlobalClone(HGLOBAL hglobIn)
 {
     HGLOBAL hglobOut = NULL;
 
-    LPVOID pvIn = GlobalLock(hglobIn);
-    if (pvIn)
+    GlobalPtrLock ptrIn(hglobIn);
+    if (ptrIn)
     {
-        SIZE_T cb = GlobalSize(hglobIn);
+        SIZE_T cb = ptrIn.GetSize();
         hglobOut = GlobalAlloc(GMEM_FIXED, cb);
         if (hglobOut)
         {
-            CopyMemory(hglobOut, pvIn, cb);
+            CopyMemory(hglobOut, ptrIn, cb);
         }
-        GlobalUnlock(hglobIn);
     }
 
     return hglobOut;
@@ -637,27 +636,18 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
         case TYMED_HGLOBAL:
             {
                 // copy data
-                HGLOBAL hGlobal = pmedium->hGlobal;
-                void *pBuf = GlobalLock(hGlobal);
-                if ( pBuf == NULL ) {
-                    wxLogLastError(wxT("GlobalLock"));
+                GlobalPtrLock ptr(pmedium->hGlobal);
+                if ( !ptr )
                     return E_OUTOFMEMORY;
-                }
 
                 wxDataFormat format = pformatetc->cfFormat;
 
                 // possibly put the size in the beginning of the buffer
-                pBuf = m_pDataObject->SetSizeInBuffer
-                                      (
-                                        pBuf,
-                                        ::GlobalSize(hGlobal),
-                                        format
-                                      );
+                void* const pBuf =
+                    m_pDataObject->SetSizeInBuffer(ptr, ptr.GetSize(), format);
 
                 if ( !m_pDataObject->GetDataHere(format, pBuf) )
                     return E_UNEXPECTED;
-
-                GlobalUnlock(hGlobal);
             }
             break;
 

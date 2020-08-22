@@ -245,9 +245,12 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                                                                    abs(ds.dsBmih.biHeight);
                         HANDLE hMem;
                         hMem = ::GlobalAlloc(GHND, ds.dsBmih.biSize + numColors*sizeof(RGBQUAD) + bmpSize);
-                        if ( hMem )
+                        if ( !hMem )
+                            break;
+
                         {
-                            char* pDst = (char*)::GlobalLock(hMem);
+                            GlobalPtrLock ptr(hMem);
+                            char* pDst = (char*)ptr.Get();
                             memcpy(pDst, &ds.dsBmih, ds.dsBmih.biSize);
                             pDst += ds.dsBmih.biSize;
                             if ( numColors > 0 )
@@ -259,9 +262,9 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                                 pDst += numColors*sizeof(RGBQUAD);
                             }
                             memcpy(pDst, dib.GetData(), bmpSize);
-                            ::GlobalUnlock(hMem);
-                            handle = ::SetClipboardData(CF_DIB, hMem);
-                        }
+                        } // unlock hMem
+
+                        handle = ::SetClipboardData(CF_DIB, hMem);
                     }
                 }
                 break;
@@ -276,14 +279,16 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             {
                 wxMetafile *wxMF = (wxMetafile *)data;
                 HANDLE data = GlobalAlloc(GHND, sizeof(METAFILEPICT) + 1);
-                METAFILEPICT *mf = (METAFILEPICT *)GlobalLock(data);
+                {
+                    GlobalPtrLock ptr(data);
+                    METAFILEPICT *mf = (METAFILEPICT *)data.Get();
 
-                mf->mm = wxMF->GetWindowsMappingMode();
-                mf->xExt = width;
-                mf->yExt = height;
-                mf->hMF = (HMETAFILE) wxMF->GetHMETAFILE();
-                GlobalUnlock(data);
-                wxMF->SetHMETAFILE((WXHANDLE) NULL);
+                    mf->mm = wxMF->GetWindowsMappingMode();
+                    mf->xExt = width;
+                    mf->yExt = height;
+                    mf->hMF = (HMETAFILE) wxMF->GetHMETAFILE();
+                    wxMF->SetHMETAFILE((WXHANDLE) NULL);
+                } // unlock data
 
                 handle = SetClipboardData(CF_METAFILEPICT, data);
                 break;
@@ -326,11 +331,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 HANDLE hGlobalMemory = GlobalAlloc(GHND, l);
                 if ( hGlobalMemory )
                 {
-                    LPSTR lpGlobalMemory = (LPSTR)GlobalLock(hGlobalMemory);
-
-                    memcpy(lpGlobalMemory, s, l);
-
-                    GlobalUnlock(hGlobalMemory);
+                    memcpy(GlobalPtrLock(hGlobalMemory), s, l);
                 }
 
                 handle = SetClipboardData(dataFormat, hGlobalMemory);
@@ -344,9 +345,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 HANDLE hGlobalMemory = ::GlobalAlloc(GHND, size);
                 if ( hGlobalMemory )
                 {
-                    LPWSTR lpGlobalMemory = (LPWSTR)::GlobalLock(hGlobalMemory);
-                    memcpy(lpGlobalMemory, s, size);
-                    ::GlobalUnlock(hGlobalMemory);
+                    memcpy(GlobalPtrLock(hGlobalMemory), s, size);
                 }
 
                 handle = ::SetClipboardData(CF_UNICODETEXT, hGlobalMemory);
@@ -407,9 +406,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 HGLOBAL hText = GlobalAlloc(GMEM_MOVEABLE |GMEM_DDESHARE, strlen(buf)+4);
 
                 // Put your string in the global memory...
-                ptr = (char *)GlobalLock(hText);
-                strcpy(ptr, buf);
-                GlobalUnlock(hText);
+                strcpy((char*)GlobalPtrLock(hText).Get(), buf);
 
                 handle = ::SetClipboardData(gs_htmlcfid, hText);
 
@@ -861,11 +858,9 @@ bool wxClipboard::GetData( wxDataObject& data )
                 if ( hMem )
                 {
                     wxTextDataObject& textDataObject = (wxTextDataObject &)data;
-                    const void* buf = ::GlobalLock(hMem);
-                    DWORD size = ::GlobalSize(hMem);
-                    bool ok = textDataObject.SetData(size, buf);
-                    ::GlobalUnlock(hMem);
-                    return ok;
+
+                    GlobalPtrLock ptr(hMem);
+                    return textDataObject.SetData(ptr.GetSize(), ptr);
                 }
             }
             break;
@@ -885,11 +880,9 @@ bool wxClipboard::GetData( wxDataObject& data )
                 if ( hMem )
                 {
                     wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
-                    const void* buf = ::GlobalLock(hMem);
-                    DWORD size = ::GlobalSize(hMem);
-                    bool ok = bitmapDataObject.SetData(size, buf);
-                    ::GlobalUnlock(hMem);
-                    return ok;
+
+                    GlobalPtrLock ptr(hMem);
+                    return bitmapDataObject.SetData(ptr.GetSize(), ptr);
                 }
             }
             break;
@@ -901,11 +894,9 @@ bool wxClipboard::GetData( wxDataObject& data )
                 if ( hMem )
                 {
                     wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
-                    const void* buf = ::GlobalLock(hMem);
-                    DWORD size = ::GlobalSize(hMem);
-                    bool ok = metaFileDataObject.SetData(wxDF_METAFILE, size, buf);
-                    ::GlobalUnlock(hMem);
-                    return ok;
+
+                    GlobalPtrLock ptr(hMem);
+                    return metaFileDataObject.SetData(wxDF_METAFILE, ptr.GetSize(), ptr);
                 }
             }
             break;
