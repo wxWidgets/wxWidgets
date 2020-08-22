@@ -713,12 +713,9 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 }
 
                 // copy data
-                const void *pBuf = GlobalLock(pmedium->hGlobal);
-                if ( pBuf == NULL ) {
-                    wxLogLastError(wxT("GlobalLock"));
-
+                GlobalPtrLock ptr(pmedium->hGlobal);
+                if ( !ptr )
                     return E_OUTOFMEMORY;
-                }
 
                 // we've got a problem with SetData() here because the base
                 // class version requires the size parameter which we don't
@@ -731,14 +728,14 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case wxDF_HTML:
                     case CF_TEXT:
                     case CF_OEMTEXT:
-                        size = strlen((const char *)pBuf);
+                        size = strlen((const char *)ptr.Get());
                         break;
 #if !(defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
 #if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) )
-                        size = std::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
+                        size = std::wcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
 #else
-                        size = wxWcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
+                        size = wxWcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
 #endif
                         break;
 #endif
@@ -759,18 +756,12 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         size = sizeof(METAFILEPICT);
                         break;
                     default:
-                        pBuf = m_pDataObject->
-                                    GetSizeFromBuffer(pBuf, &size, format);
+                        size = ptr.GetSize();
                         size -= m_pDataObject->GetBufferOffset(format);
                 }
 
-                bool ok = m_pDataObject->SetData(format, size, pBuf);
-
-                GlobalUnlock(pmedium->hGlobal);
-
-                if ( !ok ) {
+                if ( !m_pDataObject->SetData(format, size, ptr.Get()) )
                     return E_UNEXPECTED;
-                }
             }
             break;
 
