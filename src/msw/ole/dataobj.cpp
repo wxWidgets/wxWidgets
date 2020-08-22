@@ -745,9 +745,20 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case CF_METAFILEPICT:
                         size = sizeof(METAFILEPICT);
                         break;
+
                     default:
                         size = ptr.GetSize();
-                        size -= m_pDataObject->GetBufferOffset(format);
+
+                        // Account for the possible offset.
+                        const size_t
+                            ofs = m_pDataObject->GetBufferOffset(format);
+
+                        // Check that it has a reasonable value to avoid
+                        // overflow.
+                        if ( ofs > size )
+                            return E_UNEXPECTED;
+
+                        size -= ofs;
                 }
 
                 if ( !m_pDataObject->SetData(format, size, ptr.Get()) )
