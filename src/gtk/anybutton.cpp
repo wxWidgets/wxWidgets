@@ -367,6 +367,12 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 
     m_bitmaps[which] = bitmap;
 
+#if GTK_CHECK_VERSION(3,6,0) && !defined(__WXGTK4__)
+    // Allow explicitly set bitmaps to be shown regardless of theme setting
+    if (gtk_check_version(3,6,0) == NULL && bitmap.IsOk())
+        gtk_button_set_always_show_image(GTK_BUTTON(m_widget), true);
+#endif
+
     // update the bitmap immediately if necessary, otherwise it will be done
     // when the bitmap for the corresponding state is needed the next time by
     // GTKUpdateBitmap()
