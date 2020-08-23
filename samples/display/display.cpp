@@ -292,6 +292,11 @@ void MyFrame::PopuplateWithDisplayInfo()
         sizer->Add(new wxStaticText(page, wxID_ANY,
                                     wxString::Format("%d", display.GetDepth())));
 
+        sizer->Add(new wxStaticText(page, wxID_ANY, "Scaling: "));
+        sizer->Add(new wxStaticText(page, wxID_ANY,
+                                    wxString::Format("%.2f",
+                                                     display.GetScaleFactor())));
+
         sizer->Add(new wxStaticText(page, wxID_ANY, "Name: "));
         sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));
 

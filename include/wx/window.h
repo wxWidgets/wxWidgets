@@ -537,7 +537,7 @@ public:
 
     // Return the ratio of the DPI used by this window to the standard DPI,
     // e.g. 1 for standard DPI screens and 2 for "200% scaling".
-    double GetDPIScaleFactor() const;
+    virtual double GetDPIScaleFactor() const;
 
     // return the size of the left/right and top/bottom borders in x and y
     // components of the result respectively

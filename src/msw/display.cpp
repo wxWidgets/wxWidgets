@@ -67,13 +67,6 @@ public:
     {
         return wxGetHDCDepth(ScreenHDC());
     }
-
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        ScreenHDC dc;
-
-        return wxSize(::GetDeviceCaps(dc, HORZSIZE), ::GetDeviceCaps(dc, VERTSIZE));
-    }
 };
 
 class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
@@ -141,6 +134,7 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual double GetScaleFactor() const wxOVERRIDE;
 
     virtual wxString GetName() const wxOVERRIDE;
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -330,6 +324,12 @@ wxSize wxDisplayMSW::GetPPI() const
     }
 
     return IsPrimary() ? wxDisplayImplSingleMSW().GetPPI() : wxSize(0, 0);
+}
+
+double wxDisplayMSW::GetScaleFactor() const
+{
+    const int ppi = GetPPI().y;
+    return ppi ? ppi / (double)wxDisplay::GetStdPPIValue() : 1.0;
 }
 
 wxString wxDisplayMSW::GetName() const

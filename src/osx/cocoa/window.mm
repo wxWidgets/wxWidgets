@@ -2648,7 +2648,10 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
 {
     NSWindow* tlw = [m_osxView window];
-    return [tlw backingScaleFactor];
+    if ( tlw )
+        return [tlw backingScaleFactor];
+    else
+        return wxOSXGetMainScreenContentScaleFactor();
 }
 
 // ----------------------------------------------------------------------------

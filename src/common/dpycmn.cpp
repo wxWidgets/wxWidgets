@@ -149,6 +149,13 @@ wxSize wxDisplay::GetPPI() const
     return m_impl->GetPPI();
 }
 
+double wxDisplay::GetScaleFactor() const
+{
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
+
+    return m_impl->GetScaleFactor();
+}
+
 int wxDisplay::GetDepth() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
@@ -205,35 +212,6 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     }
 
     return *gs_factory;
-}
-
-// ============================================================================
-// wxDisplayImpl implementation
-// ============================================================================
-
-/* static */
-wxSize wxDisplayImpl::ComputePPI(int pxX, int pxY, int mmX, int mmY)
-{
-    if ( !mmX || !mmY )
-    {
-        // Physical size is unknown, return a special value indicating that we
-        // can't compute the resolution -- what else can we do?
-        return wxSize(0, 0);
-    }
-
-    return wxSize(wxRound((pxX * inches2mm) / mmX),
-                  wxRound((pxY * inches2mm) / mmY));
-}
-
-wxSize wxDisplayImpl::GetPPI() const
-{
-    const wxSize mm = GetSizeMM();
-
-    // We need physical pixels here, not logical ones returned by
-    // GetGeometry(), to compute the real DPI.
-    const wxSize pixels = GetGeometry().GetSize()*GetScaleFactor();
-
-    return ComputePPI(pixels.x, pixels.y, mm.x, mm.y);
 }
 
 // ============================================================================

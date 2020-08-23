@@ -101,13 +101,6 @@ bool IsInCaptureStack(wxWindowBase* win);
 
 } // wxMouseCapture
 
-// Most platforms use 96 DPI by default, but Mac traditionally uses 72.
-#ifdef __WXOSX__
-static const int BASELINE_DPI = 72;
-#else
-static const int BASELINE_DPI = 96;
-#endif
-
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------
@@ -793,25 +786,6 @@ wxSize wxWindowBase::DoGetBestSize() const
     return best;
 }
 
-namespace
-{
-
-static wxSize GetDPIHelper(const wxWindowBase* w)
-{
-    wxSize dpi;
-
-    if ( w )
-        dpi = w->GetDPI();
-    if ( !dpi.x || !dpi.y )
-        dpi = wxScreenDC().GetPPI();
-    if ( !dpi.x || !dpi.y )
-        dpi = wxSize(BASELINE_DPI, BASELINE_DPI);
-
-    return dpi;
-}
-
-}
-
 double wxWindowBase::GetContentScaleFactor() const
 {
     // By default, we assume that there is no mapping between logical and
@@ -824,12 +798,7 @@ double wxWindowBase::GetContentScaleFactor() const
 
 double wxWindowBase::GetDPIScaleFactor() const
 {
-    const wxSize dpi = GetDPIHelper(this);
-
-    // We use just the vertical component of the DPI because it's the one
-    // that counts most and, in practice, it's equal to the horizontal one
-    // anyhow.
-    return dpi.y / (double)BASELINE_DPI;
+    return wxDisplay(static_cast<const wxWindow*>(this)).GetScaleFactor();
 }
 
 // helper of GetWindowBorderSize(): as many ports don't implement support for
@@ -2894,16 +2863,37 @@ wxSize wxWindowBase::GetDPI() const
 
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
 
+namespace
+{
+
+static wxSize GetDPIHelper(const wxWindowBase* w)
+{
+    wxSize dpi;
+
+    if ( w )
+        dpi = w->GetDPI();
+    if ( !dpi.x || !dpi.y )
+        dpi = wxScreenDC().GetPPI();
+    if ( !dpi.x || !dpi.y )
+        dpi = wxDisplay::GetStdPPI();
+
+    return dpi;
+}
+
+}
+
 /* static */
 wxSize
 wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
+    const int baseline = wxDisplay::GetStdPPIValue();
+
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, dpi.x, BASELINE_DPI),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, dpi.y, BASELINE_DPI));
+    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, dpi.x, baseline),
+                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, dpi.y, baseline));
 }
 
 /* static */
@@ -2912,10 +2902,12 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 {
     const wxSize dpi = GetDPIHelper(w);
 
+    const int baseline = wxDisplay::GetStdPPIValue();
+
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.
-    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, BASELINE_DPI, dpi.x),
-                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, BASELINE_DPI, dpi.y));
+    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, baseline, dpi.x),
+                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, baseline, dpi.y));
 }
 
 #endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
