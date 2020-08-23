@@ -3820,7 +3820,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/anidecod.h \
 	wx/animdecod.h \
 	wx/appprogress.h \
-	wx/artids.h \
 	wx/artprov.h \
 	wx/bitmap.h \
 	wx/bookctrl.h \

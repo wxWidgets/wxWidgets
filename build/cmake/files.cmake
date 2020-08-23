@@ -1039,7 +1039,6 @@ set(GUI_CMN_HDR
     wx/anidecod.h
     wx/animdecod.h
     wx/appprogress.h
-    wx/artids.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h

@@ -3277,10 +3277,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\artids.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\artprov.h"
 				>
 			</File>
