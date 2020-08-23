@@ -719,7 +719,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
         {
             for ( int x = 0; x < w; x++ )
             {
-                if (bpp != 1)
+                if ( bpp != 1 )
                 {
                     *dst++ = src[2];
                     *dst++ = src[1];
@@ -793,7 +793,7 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
         const unsigned char *src = srcLineStart;
         for ( int x = 0; x < w; x++ )
         {
-            if (bpp != 1)
+            if ( bpp != 1 )
             {
                 dst[2] = *src++;
                 dst[1] = *src++;
