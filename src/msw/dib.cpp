@@ -40,6 +40,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/file.h"
+#include "wx/quantize.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,6 +72,23 @@ static inline bool GetDIBSection(HBITMAP hbmp, DIBSECTION *ds)
                 ds->dsBm.bmBits;
 }
 
+// for monochrome bitmaps, need bit twiddling functions to get at pixels
+static inline bool MonochromeLineReadBit(const unsigned char* srcLineStart, int index)
+{
+    const unsigned char* byte = srcLineStart + (index >> 3);
+    int bit = 7 - (index & 7);
+    unsigned char mask = 1 << bit;
+    return *byte & mask;
+}
+static inline void MonochromeLineWriteBit(unsigned char* dstLineStart, int index, bool value)
+{
+    unsigned char* byte = dstLineStart + (index >> 3);
+    int bit = 7 - (index & 7);
+    unsigned char mask = ~(1 << bit);
+    unsigned char newValue = value << bit;
+    (*byte &= mask) |= newValue;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -84,7 +102,7 @@ bool wxDIB::Create(int width, int height, int depth)
     // we don't support formats using palettes right now so we only create
     // either 24bpp (RGB) or 32bpp (RGBA) bitmaps
     wxASSERT_MSG( depth, wxT("invalid image depth in wxDIB::Create()") );
-    if ( depth < 24 )
+    if ( depth != 1 && depth < 24 )
         depth = 24;
 
     // allocate memory for bitmap structures
@@ -394,8 +412,11 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, const void *bits
 
     HBITMAP hbmp = ::CreateDIBitmap
                      (
-                        hdc ? hdc           // create bitmap compatible
-                            : (HDC) ScreenHDC(),  //  with this DC
+                        hdc
+                            ? hdc           // create bitmap compatible
+                            : pbmih->biBitCount == 1
+                                ? (HDC) MemoryHDC()
+                                : (HDC) ScreenHDC(),  //  with this DC
                         pbmih,              // used to get size &c
                         CBM_INIT,           // initialize bitmap bits too
                         bits,               // ... using this data
@@ -589,7 +610,7 @@ wxPalette *wxDIB::CreatePalette() const
 
 #if wxUSE_IMAGE
 
-bool wxDIB::Create(const wxImage& image, PixelFormat pf)
+bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
 {
     wxCHECK_MSG( image.IsOk(), false, wxT("invalid wxImage in wxDIB ctor") );
 
@@ -598,17 +619,59 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf)
 
     // if we have alpha channel, we need to create a 32bpp RGBA DIB, otherwise
     // a 24bpp RGB is sufficient
+    // but use monochrome if requested (to support wxMask)
     const bool hasAlpha = image.HasAlpha();
-    const int bpp = hasAlpha ? 32 : 24;
+    // monochrome DIBs can't express alpha
+    if ( hasAlpha && depth == 1 ) {
+        wxLogError( _("can't convert image with alpha to monochrome") );
+        return false;
+    }
+    const int bpp = depth != -1 ? depth : hasAlpha ? 32 : 24;
 
     if ( !Create(w, h, bpp) )
         return false;
 
+    // convert wxImage's content to monochrome
+    // KLUDGE:  wxScopedPtr doesn't handle T[]
+    unsigned char* eightBitData = nullptr;
+    class Cleaner
+    {
+    public:
+        Cleaner(unsigned char*& p_) :
+            p(p_)
+        {
+        }
+        ~Cleaner()
+        {
+            delete[] p;
+        }
+    private:
+        unsigned char*& p;
+    } cleaner(eightBitData);
+    if ( bpp == 1 )
+    {
+        wxImage quantized;
+        // KLUDGE:  leaving out wxQUANTIZE_FILL_DESTINATION_IMAGE
+        // requires using overload that receives palette
+        wxPalette* palette;
+        if ( !wxQuantize::Quantize(
+            image,
+            quantized,
+            &palette,
+            2,
+            &eightBitData,
+            wxQUANTIZE_RETURN_8BIT_DATA) )
+        {
+            return false;
+        }
+        delete palette;
+    }
+
     // DIBs are stored in bottom to top order (see also the comment above in
     // Create()) so we need to copy bits line by line and starting from the end
-    const int srcBytesPerLine = w * 3;
+    const int srcBytesPerLine = depth != 1 ? w * 3 : w;
     const int dstBytesPerLine = GetLineSize(w, bpp);
-    const unsigned char *src = image.GetData() + ((h - 1) * srcBytesPerLine);
+    const unsigned char *src = (depth != 1 ? image.GetData() : eightBitData) + ((h - 1) * srcBytesPerLine);
     const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w
                                           : NULL;
     unsigned char *dstLineStart = (unsigned char *)m_data;
@@ -656,10 +719,19 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf)
         {
             for ( int x = 0; x < w; x++ )
             {
-                *dst++ = src[2];
-                *dst++ = src[1];
-                *dst++ = src[0];
-                src += 3;
+                if (bpp != 1)
+                {
+                    *dst++ = src[2];
+                    *dst++ = src[1];
+                    *dst++ = src[0];
+                    src += 3;
+                }
+                else
+                {
+                    wxASSERT(src[0] == 0 || src[0] == 1);
+                    MonochromeLineWriteBit(dstLineStart, x, src[0]);
+                    ++src;
+                }
             }
         }
 
@@ -721,43 +793,55 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
         const unsigned char *src = srcLineStart;
         for ( int x = 0; x < w; x++ )
         {
-            dst[2] = *src++;
-            dst[1] = *src++;
-            dst[0] = *src++;
-
-            if ( bpp == 32 )
+            if (bpp != 1)
             {
-                // wxImage uses non premultiplied alpha so undo
-                // premultiplication done in Create() above
-                const unsigned char a = *src;
-                *alpha++ = a;
+                dst[2] = *src++;
+                dst[1] = *src++;
+                dst[0] = *src++;
 
-                // Check what kind of alpha do we have.
-                switch ( a )
+                if ( bpp == 32 )
                 {
-                    case 0:
-                        hasTransparent = true;
-                        break;
+                    // wxImage uses non premultiplied alpha so undo
+                    // premultiplication done in Create() above
+                    const unsigned char a = *src;
+                    *alpha++ = a;
 
-                    default:
-                        // Anything in between means we have real transparency
-                        // and must use alpha channel.
-                        hasAlpha = true;
-                        break;
+                    // Check what kind of alpha do we have.
+                    switch ( a )
+                    {
+                        case 0:
+                            hasTransparent = true;
+                            break;
 
-                    case 255:
-                        hasOpaque = true;
-                        break;
+                        default:
+                            // Anything in between means we have real transparency
+                            // and must use alpha channel.
+                            hasAlpha = true;
+                            break;
+
+                        case 255:
+                            hasOpaque = true;
+                            break;
+                    }
+
+                    if ( a > 0 )
+                    {
+                        dst[0] = (dst[0] * 255) / a;
+                        dst[1] = (dst[1] * 255) / a;
+                        dst[2] = (dst[2] * 255) / a;
+                    }
+
+                    src++;
                 }
-
-                if ( a > 0 )
-                {
-                    dst[0] = (dst[0] * 255) / a;
-                    dst[1] = (dst[1] * 255) / a;
-                    dst[2] = (dst[2] * 255) / a;
-                }
-
-                src++;
+            }
+            else
+            {
+                unsigned char value = MonochromeLineReadBit(srcLineStart, x)
+                                        ? 255
+                                        : 0;
+                dst[2] = value;
+                dst[1] = value;
+                dst[0] = value;
             }
 
             dst += 3;

@@ -154,14 +154,14 @@ public:
     // can be used with ::AlphaBlend() but it is also possible to disable
     // pre-multiplication for the DIB to be usable with ImageList_Draw() which
     // does pre-multiplication internally.
-    wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied)
+    wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1)
     {
         Init();
-        (void)Create(image, pf);
+        (void)Create(image, pf, depth);
     }
 
     // same as the above ctor but with the return code
-    bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied);
+    bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1);
 
     // create wxImage having the same data as this DIB
 

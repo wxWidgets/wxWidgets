@@ -848,7 +848,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     const int h = image.GetHeight();
     const int w = image.GetWidth();
 
-    wxDIB dib(image);
+    wxDIB dib(image, wxDIB::PixelFormat_PreMultiplied, depth);
     if ( !dib.IsOk() )
         return false;
 
