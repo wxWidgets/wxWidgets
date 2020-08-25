@@ -10,11 +10,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// Avoid pre-compiled headers at all
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #include "wx/setup.h"
 
 #if !wxUSE_UTF8_LOCALE_ONLY
