@@ -267,15 +267,34 @@ bool wxDIB::Save(const wxString& filename)
             const size_t sizeHdr = ds.dsBmih.biSize;
             const size_t sizeImage = ds.dsBmih.biSizeImage;
 
+            // provide extra space so we can verify that DIB's
+            // color table is size 2
+            RGBQUAD monoBmiColors[3];
+            if ( ds.dsBmih.biBitCount == 1 )
+            {
+                memset(monoBmiColors, 128, sizeof(monoBmiColors));
+                MemoryHDC dc;
+                SelectInHDC(dc, m_handle);
+                UINT rc = GetDIBColorTable(dc, 0, WXSIZEOF(monoBmiColors), monoBmiColors);
+                if ( rc != 2 )
+                {
+                    wxLogLastError(wxT("GetDIBColorTable"));
+                    return false;
+                }
+            }
+
             bmpHdr.bfType = 0x4d42;    // 'BM' in little endian
-            bmpHdr.bfOffBits = sizeof(BITMAPFILEHEADER) + ds.dsBmih.biSize;
+            bmpHdr.bfOffBits = sizeof(BITMAPFILEHEADER);
+            bmpHdr.bfOffBits += ds.dsBmih.biSize;
+            bmpHdr.bfOffBits += (ds.dsBmih.biBitCount == 1 ? sizeof(monoBmiColors) : 0);
             bmpHdr.bfSize = bmpHdr.bfOffBits + sizeImage;
 
             // first write the file header, then the bitmap header and finally the
             // bitmap data itself
             ok = file.Write(&bmpHdr, sizeof(bmpHdr)) == sizeof(bmpHdr) &&
                     file.Write(&ds.dsBmih, sizeHdr) == sizeHdr &&
-                        file.Write(ds.dsBm.bmBits, sizeImage) == sizeImage;
+                        (ds.dsBmih.biBitCount != 1 || file.Write(monoBmiColors, sizeof(monoBmiColors)) == sizeof(monoBmiColors)) &&
+                            file.Write(ds.dsBm.bmBits, sizeImage) == sizeImage;
         }
     }
 #else // !wxUSE_FILE
