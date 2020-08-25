@@ -24,6 +24,7 @@
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
+#include "wx/quantize.h"
 
 #include "testimage.h"
 
@@ -56,6 +57,23 @@ typedef wxNativePixelData wxNative32PixelData;
 // ----------------------------------------------------------------------------
 // tests
 // ----------------------------------------------------------------------------
+
+TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
+{
+    wxBitmap color;
+    color.LoadFile("horse.bmp", wxBITMAP_TYPE_BMP);
+    REQUIRE(color.IsOk());
+    REQUIRE(color.GetDepth() == 32);
+
+    wxImage imgQuant = color.ConvertToImage();
+    wxBitmap bmpQuant(imgQuant, 1);
+    bmpQuant.SaveFile("quantize.bmp", wxBITMAP_TYPE_BMP);
+
+    wxBitmap mono;
+    mono.LoadFile("quantize.bmp", wxBITMAP_TYPE_BMP);
+    REQUIRE(mono.IsOk());
+    REQUIRE(mono.GetDepth() == 1);
+}
 
 TEST_CASE("BitmapTestCase::Mask", "[bitmap][mask]")
 {
