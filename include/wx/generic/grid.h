@@ -1140,9 +1140,9 @@ private:
     {
     }
 
-    wxGridBlocks(iterator_impl begin, iterator_impl end) :
-        m_begin(begin),
-        m_end(end)
+    wxGridBlocks(iterator_impl ibegin, iterator_impl iend) :
+        m_begin(ibegin),
+        m_end(iend)
     {
     }
 
