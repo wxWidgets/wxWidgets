@@ -670,20 +670,44 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
     if ( bpp == 1 )
     {
         wxImage quantized;
-        // KLUDGE:  leaving out wxQUANTIZE_FILL_DESTINATION_IMAGE
-        // requires using overload that receives palette
-        wxPalette* palette;
+        wxPalette* tempPalette;
         if ( !wxQuantize::Quantize(
             image,
             quantized,
-            &palette,
+            &tempPalette,
             2,
             &eightBitData,
             wxQUANTIZE_RETURN_8BIT_DATA) )
         {
             return false;
         }
-        delete palette;
+        wxScopedPtr<wxPalette> palette(tempPalette);
+
+        // try to use palette's colors in result bitmap
+        MemoryHDC hDC;
+        SelectInHDC(hDC, m_handle);
+        RGBQUAD colorTable[256];
+        UINT colors = GetDIBColorTable(hDC, 0, 256, colorTable);
+        for ( UINT i = 0; i < colors; ++i )
+        {
+            if ( !palette->GetRGB(i,
+                                    &colorTable[i].rgbRed,
+                                    &colorTable[i].rgbGreen,
+                                    &colorTable[i].rgbBlue) )
+            {
+                return false;
+            }
+            colorTable[i].rgbReserved = 0;
+        }
+        UINT rc = SetDIBColorTable(hDC, 0, colors, colorTable);
+        if ( rc != colors )
+        {
+            wxLogLastError(wxT("SetDIBColorTable"));
+#if 0   // KLUDGE:  SetDIBColorTable always fails for me,
+        // so allow bitmap to stay black/white
+            return false;
+#endif
+        }
     }
 
     // DIBs are stored in bottom to top order (see also the comment above in
