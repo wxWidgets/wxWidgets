@@ -646,11 +646,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
     // a 24bpp RGB is sufficient
     // but use monochrome if requested (to support wxMask)
     const bool hasAlpha = image.HasAlpha();
-    // monochrome DIBs can't express alpha
-    if ( hasAlpha && depth == 1 ) {
-        wxLogError( _("can't convert image with alpha to monochrome") );
-        return false;
-    }
+    wxCHECK_MSG(!hasAlpha || depth != 1, false, "alpha not supported in monochrome bitmaps");
     const int bpp = depth != -1 ? depth : hasAlpha ? 32 : 24;
 
     if ( !Create(w, h, bpp) )
