@@ -276,9 +276,9 @@ bool wxDIB::Save(const wxString& filename)
             if ( ds.dsBmih.biBitCount == 1 )
             {
                 memset(monoBmiColors, 128, sizeof(monoBmiColors));
-                MemoryHDC dc;
-                SelectInHDC(dc, m_handle);
-                UINT rc = GetDIBColorTable(dc, 0, WXSIZEOF(monoBmiColors), monoBmiColors);
+                MemoryHDC hDC;
+                SelectInHDC sDC(hDC, m_handle);
+                UINT rc = GetDIBColorTable(hDC, 0, WXSIZEOF(monoBmiColors), monoBmiColors);
                 if ( rc != 2 )
                 {
                     wxLogLastError(wxT("GetDIBColorTable"));
@@ -688,7 +688,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
 
         // try to use palette's colors in result bitmap
         MemoryHDC hDC;
-        SelectInHDC(hDC, m_handle);
+        SelectInHDC sDC(hDC, m_handle);
         RGBQUAD colorTable[256];
         UINT colors = GetDIBColorTable(hDC, 0, 256, colorTable);
         for ( UINT i = 0; i < colors; ++i )
