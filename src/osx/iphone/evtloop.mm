@@ -90,7 +90,7 @@ void wxGUIEventLoop::OSXDoRun()
     {
         wxMacAutoreleasePool pool;
         const char* appname = "app";
-        UIApplicationMain( 1, (char**) &appname, nil, @"wxAppDelegate" );
+        UIApplicationMain( 1, (char**) &appname, @"UIApplication", @"wxAppDelegate" );
     }
     else 
     {
