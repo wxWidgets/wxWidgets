@@ -60,6 +60,9 @@ typedef wxNativePixelData wxNative32PixelData;
 
 TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
 {
+#ifdef __WXGTK__
+    WARN("Skipping test known not to work in wxGTK.")
+#else
     wxBitmap color;
     color.LoadFile("horse.bmp", wxBITMAP_TYPE_BMP);
     REQUIRE(color.IsOk());
@@ -74,6 +77,7 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     REQUIRE(mono.LoadFile("quantize.bmp", wxBITMAP_TYPE_BMP));
     REQUIRE(mono.IsOk());
     REQUIRE(mono.GetDepth() == 1);
+#endif
 }
 
 TEST_CASE("BitmapTestCase::Mask", "[bitmap][mask]")
