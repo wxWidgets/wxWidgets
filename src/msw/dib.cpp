@@ -270,33 +270,36 @@ bool wxDIB::Save(const wxString& filename)
             const size_t sizeHdr = ds.dsBmih.biSize;
             const size_t sizeImage = ds.dsBmih.biSizeImage;
 
-            // provide extra space so we can verify that DIB's
-            // color table is size 2
+            // provide extra space so we can verify that
+            // monochrome DIB's color table is size 2
             RGBQUAD monoBmiColors[3];
+            UINT nColors = 0;
             if ( ds.dsBmih.biBitCount == 1 )
             {
-                memset(monoBmiColors, 128, sizeof(monoBmiColors));
                 MemoryHDC hDC;
                 SelectInHDC sDC(hDC, m_handle);
-                UINT rc = GetDIBColorTable(hDC, 0, WXSIZEOF(monoBmiColors), monoBmiColors);
-                if ( rc != 2 )
+                nColors = GetDIBColorTable(hDC, 0, WXSIZEOF(monoBmiColors), monoBmiColors);
+                if ( nColors != 2 )
                 {
                     wxLogLastError(wxT("GetDIBColorTable"));
                     return false;
                 }
             }
+            const size_t colorTableSize = ds.dsBmih.biBitCount == 1
+                                            ? nColors * sizeof(monoBmiColors[0])
+                                            : 0;
 
             bmpHdr.bfType = 0x4d42;    // 'BM' in little endian
             bmpHdr.bfOffBits = sizeof(BITMAPFILEHEADER);
             bmpHdr.bfOffBits += ds.dsBmih.biSize;
-            bmpHdr.bfOffBits += (ds.dsBmih.biBitCount == 1 ? sizeof(monoBmiColors) : 0);
+            bmpHdr.bfOffBits += colorTableSize;
             bmpHdr.bfSize = bmpHdr.bfOffBits + sizeImage;
 
             // first write the file header, then the bitmap header and finally the
             // bitmap data itself
             ok = file.Write(&bmpHdr, sizeof(bmpHdr)) == sizeof(bmpHdr) &&
                     file.Write(&ds.dsBmih, sizeHdr) == sizeHdr &&
-                        (ds.dsBmih.biBitCount != 1 || file.Write(monoBmiColors, sizeof(monoBmiColors)) == sizeof(monoBmiColors)) &&
+                        (!colorTableSize || file.Write(monoBmiColors, colorTableSize)) &&
                             file.Write(ds.dsBm.bmBits, sizeImage) == sizeImage;
         }
     }
