@@ -67,10 +67,11 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
 
     wxImage imgQuant = color.ConvertToImage();
     wxBitmap bmpQuant(imgQuant, 1);
-    bmpQuant.SaveFile("quantize.bmp", wxBITMAP_TYPE_BMP);
+    REQUIRE(bmpQuant.GetDepth() == 1);
+    REQUIRE(bmpQuant.SaveFile("quantize.bmp", wxBITMAP_TYPE_BMP));
 
     wxBitmap mono;
-    mono.LoadFile("quantize.bmp", wxBITMAP_TYPE_BMP);
+    REQUIRE(mono.LoadFile("quantize.bmp", wxBITMAP_TYPE_BMP));
     REQUIRE(mono.IsOk());
     REQUIRE(mono.GetDepth() == 1);
 }
