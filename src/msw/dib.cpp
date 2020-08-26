@@ -53,9 +53,11 @@
 // private functions
 // ----------------------------------------------------------------------------
 
+namespace {
+
 // calculate the number of palette entries needed for the bitmap with this
 // number of bits per pixel
-static inline WORD GetNumberOfColours(WORD bitsPerPixel)
+inline WORD GetNumberOfColours(WORD bitsPerPixel)
 {
     // only 1, 4 and 8bpp bitmaps use palettes (well, they could be used with
     // 24bpp ones too but we don't support this as I think it's quite uncommon)
@@ -63,7 +65,7 @@ static inline WORD GetNumberOfColours(WORD bitsPerPixel)
 }
 
 // wrapper around ::GetObject() for DIB sections
-static inline bool GetDIBSection(HBITMAP hbmp, DIBSECTION *ds)
+inline bool GetDIBSection(HBITMAP hbmp, DIBSECTION *ds)
 {
     // note that GetObject() may return sizeof(DIBSECTION) for a bitmap
     // which is *not* a DIB section and the way to check for it is
@@ -73,14 +75,14 @@ static inline bool GetDIBSection(HBITMAP hbmp, DIBSECTION *ds)
 }
 
 // for monochrome bitmaps, need bit twiddling functions to get at pixels
-static inline bool MonochromeLineReadBit(const unsigned char* srcLineStart, int index)
+inline bool MonochromeLineReadBit(const unsigned char* srcLineStart, int index)
 {
     const unsigned char* byte = srcLineStart + (index >> 3);
     int bit = 7 - (index & 7);
     unsigned char mask = 1 << bit;
-    return *byte & mask;
+    return (*byte & mask) != 0;
 }
-static inline void MonochromeLineWriteBit(unsigned char* dstLineStart, int index, bool value)
+inline void MonochromeLineWriteBit(unsigned char* dstLineStart, int index, bool value)
 {
     unsigned char* byte = dstLineStart + (index >> 3);
     int bit = 7 - (index & 7);
@@ -89,6 +91,7 @@ static inline void MonochromeLineWriteBit(unsigned char* dstLineStart, int index
     (*byte &= mask) |= newValue;
 }
 
+}
 // ============================================================================
 // implementation
 // ============================================================================
