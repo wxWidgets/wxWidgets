@@ -42,6 +42,19 @@
 
 wxBitmap wxStockPreferencesPage::GetLargeIcon() const
 {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        switch ( m_kind )
+        {
+            case Kind_General:
+                return wxBitmap([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
+            case Kind_Advanced:
+                return wxBitmap([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
+        }
+    }
+#endif
+
     switch ( m_kind )
     {
         case Kind_General:
@@ -49,6 +62,7 @@ wxBitmap wxStockPreferencesPage::GetLargeIcon() const
         case Kind_Advanced:
             return wxBitmap([NSImage imageNamed:NSImageNameAdvanced]);
     }
+
     return wxBitmap(); // silence compiler warning
 }
 
