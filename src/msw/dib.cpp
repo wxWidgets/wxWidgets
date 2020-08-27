@@ -750,19 +750,22 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
         }
         else // no alpha channel
         {
-            for ( int x = 0; x < w; x++ )
+            if ( bpp != 1 )
             {
-                if ( bpp != 1 )
+                for ( int x = 0; x < w; x++ )
                 {
                     *dst++ = src[2];
                     *dst++ = src[1];
                     *dst++ = src[0];
                     src += 3;
                 }
-                else
+            }
+            else
+            {
+                for ( int x = 0; x < w; x++ )
                 {
                     wxASSERT(src[0] == 0 || src[0] == 1);
-                    MonochromeLineWriteBit(dstLineStart, x, src[0]);
+                    MonochromeLineWriteBit(dstLineStart, x, src[0] != 0);
                     ++src;
                 }
             }
