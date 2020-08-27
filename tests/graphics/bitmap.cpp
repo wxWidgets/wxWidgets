@@ -24,7 +24,6 @@
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
-#include "wx/quantize.h"
 
 #include "testimage.h"
 
