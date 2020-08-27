@@ -1062,6 +1062,17 @@ wxString wxNativeFontInfo::GetPostScriptName() const
     // if not explicitly set, obtain it from the font descriptor
     wxString ps;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(GetCTFontDescriptor(), kCTFontNameAttribute)).GetValue(ps);
+
+    if ( WX_IS_MACOS_AVAILABLE(10, 16) )
+    {
+        // the PostScript names reported in macOS start with a dot for System Fonts, this has to be corrected
+        // otherwise round-trips are not possible, resulting in a Times Fallback, therefore we replace these with
+        // their official PostScript Name
+        wxString rest;
+        if ( ps.StartsWith(".SFNS", &rest) )
+            return "SFPro" + rest;
+    }
+
     return ps;
 }
 
