@@ -4363,6 +4363,13 @@ double wxWindowGTK::GetContentScaleFactor() const
     return scaleFactor;
 }
 
+double wxWindowGTK::GetDPIScaleFactor() const
+{
+    // Under GTK 3 DPI scale factor is the same as content scale factor, while
+    // under GTK 2 both are always 1, so they're still the same.
+    return GetContentScaleFactor();
+}
+
 void wxWindowGTK::GTKDisableFocusOutEvent()
 {
     g_signal_handlers_block_by_func( m_focusWidget,

@@ -76,11 +76,6 @@ public:
     {
         return wxGetMainScreenDepth();
     }
-
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        return wxGetMainScreenSizeMM();
-    }
 };
 
 class wxDisplayFactorySingleX11 : public wxDisplayFactorySingle
@@ -158,11 +153,6 @@ public:
             return mode.bpp;
 
         return wxGetMainScreenDepth();
-    }
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        // TODO: how to get physical size or resolution of the other monitors?
-        return IsPrimary() ? wxGetMainScreenSizeMM() : wxSize(0, 0);
     }
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;

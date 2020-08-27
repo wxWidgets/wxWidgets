@@ -25,6 +25,8 @@
     #include "wx/menu.h"
 #endif
 
+#include "wx/scopedptr.h"
+
 extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
 
 // DLL options compatibility check:
@@ -47,12 +49,18 @@ wxEND_EVENT_TABLE()
 
 void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
 {
-    wxMenu *menu = CreatePopupMenu();
-    if (menu)
+    wxScopedPtr<wxMenu> menuDeleter;
+    wxMenu *menu = GetPopupMenu();
+    if ( !menu )
     {
-        PopupMenu(menu);
-        delete menu;
+        menu = CreatePopupMenu();
+        if ( !menu )
+            return;
+
+        menuDeleter.reset(menu);
     }
+
+    PopupMenu(menu);
 }
 
 void wxTaskBarIconBase::Destroy()

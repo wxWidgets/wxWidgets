@@ -95,16 +95,15 @@ HGLOBAL wxGlobalClone(HGLOBAL hglobIn)
 {
     HGLOBAL hglobOut = NULL;
 
-    LPVOID pvIn = GlobalLock(hglobIn);
-    if (pvIn)
+    GlobalPtrLock ptrIn(hglobIn);
+    if (ptrIn)
     {
-        SIZE_T cb = GlobalSize(hglobIn);
+        SIZE_T cb = ptrIn.GetSize();
         hglobOut = GlobalAlloc(GMEM_FIXED, cb);
         if (hglobOut)
         {
-            CopyMemory(hglobOut, pvIn, cb);
+            CopyMemory(hglobOut, ptrIn, cb);
         }
-        GlobalUnlock(hglobIn);
     }
 
     return hglobOut;
@@ -637,27 +636,18 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
         case TYMED_HGLOBAL:
             {
                 // copy data
-                HGLOBAL hGlobal = pmedium->hGlobal;
-                void *pBuf = GlobalLock(hGlobal);
-                if ( pBuf == NULL ) {
-                    wxLogLastError(wxT("GlobalLock"));
+                GlobalPtrLock ptr(pmedium->hGlobal);
+                if ( !ptr )
                     return E_OUTOFMEMORY;
-                }
 
                 wxDataFormat format = pformatetc->cfFormat;
 
                 // possibly put the size in the beginning of the buffer
-                pBuf = m_pDataObject->SetSizeInBuffer
-                                      (
-                                        pBuf,
-                                        ::GlobalSize(hGlobal),
-                                        format
-                                      );
+                void* const pBuf =
+                    m_pDataObject->SetSizeInBuffer(ptr, ptr.GetSize(), format);
 
                 if ( !m_pDataObject->GetDataHere(format, pBuf) )
                     return E_UNEXPECTED;
-
-                GlobalUnlock(hGlobal);
             }
             break;
 
@@ -713,12 +703,9 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 }
 
                 // copy data
-                const void *pBuf = GlobalLock(pmedium->hGlobal);
-                if ( pBuf == NULL ) {
-                    wxLogLastError(wxT("GlobalLock"));
-
+                GlobalPtrLock ptr(pmedium->hGlobal);
+                if ( !ptr )
                     return E_OUTOFMEMORY;
-                }
 
                 // we've got a problem with SetData() here because the base
                 // class version requires the size parameter which we don't
@@ -731,14 +718,14 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case wxDF_HTML:
                     case CF_TEXT:
                     case CF_OEMTEXT:
-                        size = strlen((const char *)pBuf);
+                        size = strlen((const char *)ptr.Get());
                         break;
 #if !(defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
 #if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) )
-                        size = std::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
+                        size = std::wcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
 #else
-                        size = wxWcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
+                        size = wxWcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
 #endif
                         break;
 #endif
@@ -758,19 +745,24 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case CF_METAFILEPICT:
                         size = sizeof(METAFILEPICT);
                         break;
+
                     default:
-                        pBuf = m_pDataObject->
-                                    GetSizeFromBuffer(pBuf, &size, format);
-                        size -= m_pDataObject->GetBufferOffset(format);
+                        size = ptr.GetSize();
+
+                        // Account for the possible offset.
+                        const size_t
+                            ofs = m_pDataObject->GetBufferOffset(format);
+
+                        // Check that it has a reasonable value to avoid
+                        // overflow.
+                        if ( ofs > size )
+                            return E_UNEXPECTED;
+
+                        size -= ofs;
                 }
 
-                bool ok = m_pDataObject->SetData(format, size, pBuf);
-
-                GlobalUnlock(pmedium->hGlobal);
-
-                if ( !ok ) {
+                if ( !m_pDataObject->SetData(format, size, ptr.Get()) )
                     return E_UNEXPECTED;
-                }
             }
             break;
 
@@ -975,14 +967,10 @@ const void *wxDataObject::GetSizeFromBuffer(const void *buffer,
                                             size_t *size,
                                             const wxDataFormat& WXUNUSED(format))
 {
-    // hack: the third parameter is declared non-const in Wine's headers so
-    // cast away the const
-    const size_t realsz = ::HeapSize(::GetProcessHeap(), 0,
-                                     const_cast<void*>(buffer));
-    if ( realsz == (size_t)-1 )
+    const size_t realsz = ::GlobalSize(::GlobalHandle(buffer));
+    if ( !realsz )
     {
-        // note that HeapSize() does not set last error
-        wxLogApiError(wxT("HeapSize"), 0);
+        wxLogLastError(wxT("GlobalSize"));
         return NULL;
     }
 

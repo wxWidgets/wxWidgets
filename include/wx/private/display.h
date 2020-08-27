@@ -115,14 +115,9 @@ public:
     // return the scale factor used to convert logical pixels to physical ones
     virtual double GetScaleFactor() const { return 1.0; }
 
-    // return the resolution of the display, uses GetSize(), GetScaleFactor()
-    // and GetSizeMM() by default but can be also overridden directly
-    virtual wxSize GetPPI() const;
-
-    // return the physical size of the display or (0, 0) if unknown: this is
-    // only used by GetPPI() implementation in the base class, so if GetPPI()
-    // is overridden, this one doesn't have to be implemented
-    virtual wxSize GetSizeMM() const { return wxSize(0, 0); }
+    // return the resolution of the display, by default uses GetScaleFactor(),
+    // but can be also overridden directly, as is done in wxMSW
+    virtual wxSize GetPPI() const { return wxDisplay::GetStdPPI()*GetScaleFactor(); }
 
     // return the name (may be empty)
     virtual wxString GetName() const { return wxString(); }
@@ -148,11 +143,6 @@ public:
 protected:
     // create the object providing access to the display with the given index
     wxDisplayImpl(unsigned n) : m_index(n) { }
-
-    // Compute PPI from the sizes in pixels and mm.
-    //
-    // Return (0, 0) if physical size (in mm) is not known, i.e. 0.
-    static wxSize ComputePPI(int pxX, int pxY, int mmX, int mmY);
 
 
     // the index of this display (0 is always the primary one)

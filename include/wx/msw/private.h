@@ -773,6 +773,15 @@ public:
     void *Get() const { return m_ptr; }
     operator void *() const { return m_ptr; }
 
+    size_t GetSize() const
+    {
+        const size_t size = ::GlobalSize(m_hGlobal);
+        if ( !size )
+            wxLogLastError(wxT("GlobalSize"));
+
+        return size;
+    }
+
 private:
     HGLOBAL m_hGlobal;
     void *m_ptr;

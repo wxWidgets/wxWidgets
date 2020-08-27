@@ -183,19 +183,13 @@ void wxAnyButton::GTKUpdateBitmap()
 
 void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 {
-    wxASSERT_MSG( bitmap.IsOk(), "invalid bitmap" );
+    wxCHECK_RET(bitmap.IsOk(), "invalid bitmap");
 
-    GtkWidget *image;
-    if ( DontShowLabel() )
-    {
+    GtkWidget* image = gtk_button_get_image(GTK_BUTTON(m_widget));
+    if (image == NULL)
         image = gtk_bin_get_child(GTK_BIN(m_widget));
-    }
-    else // have both label and bitmap
-    {
-        image = gtk_button_get_image(GTK_BUTTON(m_widget));
-    }
 
-    wxCHECK_RET( image && GTK_IS_IMAGE(image), "must have image widget" );
+    wxCHECK_RET(GTK_IS_IMAGE(image), "must have image widget");
 
     gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
 }
@@ -372,6 +366,12 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     }
 
     m_bitmaps[which] = bitmap;
+
+#if GTK_CHECK_VERSION(3,6,0) && !defined(__WXGTK4__)
+    // Allow explicitly set bitmaps to be shown regardless of theme setting
+    if (gtk_check_version(3,6,0) == NULL && bitmap.IsOk())
+        gtk_button_set_always_show_image(GTK_BUTTON(m_widget), true);
+#endif
 
     // update the bitmap immediately if necessary, otherwise it will be done
     // when the bitmap for the corresponding state is needed the next time by

@@ -121,6 +121,7 @@ public:
 #endif // wxUSE_HOTKEY
 
     virtual wxSize GetDPI() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;

@@ -96,7 +96,7 @@ inline wxCFStringRef wxCFStringRefFromGet(CFStringRef p)
 */
 inline wxCFStringRef wxCFStringRefFromGet(NSString *p)
 {
-    return wxCFStringRefFromGet((CFStringRef)p);
+    return wxCFStringRefFromGet((WX_OSX_BRIDGE CFStringRef)p);
 }
 #endif
 

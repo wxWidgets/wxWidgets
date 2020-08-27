@@ -429,17 +429,6 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     wxListCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
 
-    for ( int i = 0; i < GetItemCount(); i++ )
-    {
-        wxMSWListItemData *data = MSWGetItemData(i);
-        if ( data && data->attr && data->attr->HasFont() )
-        {
-            wxFont f = data->attr->GetFont();
-            f.WXAdjustToPPI(newDPI);
-            SetItemFont(i, f);
-        }
-    }
-
     if ( m_headerCustomDraw && m_headerCustomDraw->m_attr.HasFont() )
     {
         wxItemAttr item(m_headerCustomDraw->m_attr);
@@ -1014,13 +1003,6 @@ bool wxListCtrl::SetItem(wxListItem& info)
                 data->attr->AssignFrom(attrNew);
             else
                 data->attr = new wxItemAttr(attrNew);
-
-            if ( data->attr->HasFont() )
-            {
-                wxFont f = data->attr->GetFont();
-                f.WXAdjustToPPI(GetDPI());
-                data->attr->SetFont(f);
-            }
         }
     }
 
@@ -3182,6 +3164,7 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
     if ( attr->HasFont() )
     {
         wxFont font = attr->GetFont();
+        font.WXAdjustToPPI(listctrl->GetDPI());
         if ( font.GetEncoding() != wxFONTENCODING_SYSTEM )
         {
             // the standard control ignores the font encoding/charset, at least

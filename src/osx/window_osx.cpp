@@ -2630,14 +2630,15 @@ wxSize wxWindowMac::OSXMakeDPIFromScaleFactor(double scaleFactor)
 
 wxSize wxWindowMac::GetDPI() const
 {
-    double scaleFactor;
-    if ( wxNonOwnedWindow* tlw = MacGetTopLevelWindow() )
-        scaleFactor = tlw->GetContentScaleFactor();
-    else
-        scaleFactor = wxOSXGetMainScreenContentScaleFactor();
-
-    return OSXMakeDPIFromScaleFactor(scaleFactor);
+    return OSXMakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
+
+// on mac ContentScale and DPIScale are identical
+double wxWindowMac::GetDPIScaleFactor() const
+{
+    return GetContentScaleFactor();
+}
+
 
 //
 // wxWidgetImpl
