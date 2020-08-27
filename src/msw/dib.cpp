@@ -41,6 +41,7 @@
 
 #include "wx/file.h"
 #include "wx/quantize.h"
+#include "wx/scopedarray.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -653,37 +654,24 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
         return false;
 
     // convert wxImage's content to monochrome
-    // KLUDGE:  wxScopedPtr doesn't handle T[]
-    unsigned char* eightBitData = nullptr;
-    class Cleaner
-    {
-    public:
-        Cleaner(unsigned char*& p_) :
-            p(p_)
-        {
-        }
-        ~Cleaner()
-        {
-            delete[] p;
-        }
-    private:
-        unsigned char*& p;
-    } cleaner(eightBitData);
+    wxScopedArray<unsigned char> eightBitData;
     if ( bpp == 1 )
     {
         wxImage quantized;
         wxPalette* tempPalette;
+        unsigned char* tempEightBitData;
         if ( !wxQuantize::Quantize(
             image,
             quantized,
             &tempPalette,
             2,
-            &eightBitData,
+            &tempEightBitData,
             wxQUANTIZE_RETURN_8BIT_DATA) )
         {
             return false;
         }
         wxScopedPtr<wxPalette> palette(tempPalette);
+        eightBitData.reset(tempEightBitData);
 
         // try to use palette's colors in result bitmap
         MemoryHDC hDC;
@@ -716,7 +704,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
     // Create()) so we need to copy bits line by line and starting from the end
     const int srcBytesPerLine = depth != 1 ? w * 3 : w;
     const int dstBytesPerLine = GetLineSize(w, bpp);
-    const unsigned char *src = (depth != 1 ? image.GetData() : eightBitData) + ((h - 1) * srcBytesPerLine);
+    const unsigned char *src = (depth != 1 ? image.GetData() : eightBitData.get()) + ((h - 1) * srcBytesPerLine);
     const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w
                                           : NULL;
     unsigned char *dstLineStart = (unsigned char *)m_data;
