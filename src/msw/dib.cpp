@@ -823,9 +823,9 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
     {
         // copy one DIB line
         const unsigned char *src = srcLineStart;
-        for ( int x = 0; x < w; x++ )
+        if ( bpp != 1 )
         {
-            if ( bpp != 1 )
+            for ( int x = 0; x < w; x++ )
             {
                 dst[2] = *src++;
                 dst[1] = *src++;
@@ -865,8 +865,13 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
 
                     src++;
                 }
+
+                dst += 3;
             }
-            else
+        }
+        else
+        {
+            for ( int x = 0; x < w; x++ )
             {
                 unsigned char value = MonochromeLineReadBit(srcLineStart, x)
                                         ? 255
@@ -875,8 +880,6 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
                 dst[1] = value;
                 dst[0] = value;
             }
-
-            dst += 3;
         }
 
         // pass to the previous line in the image
