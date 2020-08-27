@@ -4864,6 +4864,11 @@ double wxWindowMSW::GetDPIScaleFactor() const
     return GetDPI().y / (double)wxDisplay::GetStdPPIValue();
 }
 
+void wxWindowMSW::WXAdjustFontToOwnPPI(wxFont& font) const
+{
+    font.WXAdjustToPPI(GetDPI());
+}
+
 void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     if ( m_font.IsOk() )
