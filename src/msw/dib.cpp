@@ -673,12 +673,11 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
         wxScopedPtr<wxPalette> palette(tempPalette);
         eightBitData.reset(tempEightBitData);
 
-        // try to use palette's colors in result bitmap
+        // use palette's colors in result bitmap
         MemoryHDC hDC;
         SelectInHDC sDC(hDC, m_handle);
-        RGBQUAD colorTable[256];
-        UINT colors = GetDIBColorTable(hDC, 0, 256, colorTable);
-        for ( UINT i = 0; i < colors; ++i )
+        RGBQUAD colorTable[2];
+        for ( UINT i = 0; i < WXSIZEOF(colorTable); ++i )
         {
             if ( !palette->GetRGB(i,
                                     &colorTable[i].rgbRed,
@@ -689,14 +688,11 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
             }
             colorTable[i].rgbReserved = 0;
         }
-        UINT rc = SetDIBColorTable(hDC, 0, colors, colorTable);
-        if ( rc != colors )
+        UINT rc = SetDIBColorTable(hDC, 0, WXSIZEOF(colorTable), colorTable);
+        if ( rc != WXSIZEOF(colorTable))
         {
             wxLogLastError(wxT("SetDIBColorTable"));
-#if 0   // KLUDGE:  SetDIBColorTable always fails for me,
-        // so allow bitmap to stay black/white
             return false;
-#endif
         }
     }
 
