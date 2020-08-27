@@ -35,6 +35,7 @@
 #include "wx/weakref.h"
 #include "wx/windowid.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #import <AppKit/NSWindow.h>
 
@@ -62,6 +63,13 @@ public:
           m_toolbarRealized(false),
           m_visiblePage(NULL)
     {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+        if ( WX_IS_MACOS_AVAILABLE(11,0) )
+        {
+            NSWindow *win = GetWXWindow();
+            [win setToolbarStyle:NSWindowToolbarStylePreference];
+        }
+#endif
         m_toolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                   wxTB_FLAT | wxTB_TEXT);
         m_toolbar->SetToolBitmapSize(wxSize(32,32));
