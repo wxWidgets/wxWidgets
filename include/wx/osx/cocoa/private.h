@@ -111,6 +111,8 @@ public :
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) wxOVERRIDE;
     virtual bool        GetNeedsDisplay() const wxOVERRIDE;
 
+    virtual void        EnableFocusRing(bool enabled) wxOVERRIDE;
+
     virtual void        SetDrawingEnabled(bool enabled) wxOVERRIDE;
 
     virtual bool        CanFocus() const wxOVERRIDE;
