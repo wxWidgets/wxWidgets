@@ -25,6 +25,7 @@
 #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+#include "testfile.h"
 #include "testimage.h"
 
 #define ASSERT_EQUAL_RGB(c, r, g, b) \
@@ -70,10 +71,11 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     wxImage imgQuant = color.ConvertToImage();
     wxBitmap bmpQuant(imgQuant, 1);
     REQUIRE(bmpQuant.GetDepth() == 1);
-    REQUIRE(bmpQuant.SaveFile("quantize.bmp", wxBITMAP_TYPE_BMP));
+    TempFile mono_horse("mono_horse.bmp");
+    REQUIRE(bmpQuant.SaveFile(mono_horse.GetName(), wxBITMAP_TYPE_BMP));
 
     wxBitmap mono;
-    REQUIRE(mono.LoadFile("quantize.bmp", wxBITMAP_TYPE_BMP));
+    REQUIRE(mono.LoadFile(mono_horse.GetName(), wxBITMAP_TYPE_BMP));
     REQUIRE(mono.IsOk());
     REQUIRE(mono.GetDepth() == 1);
 #endif
