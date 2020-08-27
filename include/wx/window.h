@@ -964,6 +964,13 @@ public:
         // Get the DPI used by the given window or wxSize(0, 0) if unknown.
     virtual wxSize GetDPI() const;
 
+    // Some ports need to modify the font object when the DPI of the window it
+    // is used with changes, this function can be used to do it.
+    //
+    // Currently it is only used in wxMSW and is not considered to be part of
+    // wxWidgets public API.
+    virtual void WXAdjustFontToOwnPPI(wxFont& WXUNUSED(font)) const { }
+
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by

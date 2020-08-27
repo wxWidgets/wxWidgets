@@ -599,6 +599,8 @@ public:
     void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
 
 protected:
+    virtual void WXAdjustFontToOwnPPI(wxFont& font) const wxOVERRIDE;
+
     // Called from MSWUpdateOnDPIChange() specifically to update the control
     // font, as this may need to be done differently for some specific native
     // controls. The default version updates m_font of this window.
