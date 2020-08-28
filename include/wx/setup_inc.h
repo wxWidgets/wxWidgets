@@ -1384,7 +1384,8 @@
 #define wxUSE_GLCANVAS       1
 
 // Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
-// automatically enabled if EGL support is detected.
+// automatically enabled if EGL support is detected.  EGL support is only
+// available under Unix platforms.
 //
 // Default is 0.
 //

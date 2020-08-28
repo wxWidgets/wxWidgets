@@ -352,41 +352,48 @@ wxGLCanvasEGL::wxGLCanvasEGL()
     m_config = NULL;
     m_display = NULL;
     m_surface = EGL_NO_SURFACE;
-    m_wl_compositor = NULL;
-    m_wl_subcompositor = NULL;
-    m_wl_frame_callback_handler = NULL;
-    m_wl_egl_window = NULL;
-    m_wl_surface = NULL;
-    m_wl_region = NULL;
-    m_wl_subsurface = NULL;
-    m_ready_to_draw = false;
+    m_wlCompositor = NULL;
+    m_wlSubcompositor = NULL;
+    m_wlFrameCallbackHandler = NULL;
+    m_wlEGLWindow = NULL;
+    m_wlSurface = NULL;
+    m_wlRegion = NULL;
+    m_wlSubsurface = NULL;
+    m_readyToDraw = false;
 }
 
 bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
 {
-    bool ret = InitConfig(dispAttrs, &m_config);
-    if ( !ret )
+    m_config = InitConfig(dispAttrs);
+    if ( !m_config )
     {
         wxFAIL_MSG("Failed to get an EGLConfig for the requested attributes.");
     }
-    return ret;
+    return m_config != NULL;
 }
 
 /* static */
 EGLDisplay wxGLCanvasEGL::GetDisplay()
 {
-    wxDisplayType type = wxDisplayNone;
-    void *display = wxGetDisplayAndType(&type);
+    wxDisplayInfo info = wxGetDisplayInfo();
     EGLenum platform;
-    if (type == wxDisplayX11)
-        platform = EGL_PLATFORM_X11_EXT;
-    else if (type == wxDisplayWayland)
-        platform = EGL_PLATFORM_WAYLAND_EXT;
-    else
-        return EGL_NO_DISPLAY;
+    switch ( info.type )
+    {
+        case wxDisplayX11:
+            platform = EGL_PLATFORM_X11_EXT;
+            break;
+        case wxDisplayWayland:
+            platform = EGL_PLATFORM_WAYLAND_EXT;
+            break;
+        default:
+            return EGL_NO_DISPLAY;
+    }
 
-    return eglGetPlatformDisplay(platform, display, NULL);
+    return eglGetPlatformDisplay(platform, info.dpy, NULL);
 }
+
+extern "C"
+{
 
 static void wl_global (void *data,
                        struct wl_registry *wl_registry,
@@ -394,12 +401,12 @@ static void wl_global (void *data,
                        const char *interface,
                        uint32_t)
 {
-    wxGLCanvasEGL *glc = (wxGLCanvasEGL *) data;
+    wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
 
-    if (!strcmp (interface, "wl_compositor"))
-        glc->m_wl_compositor = (struct wl_compositor *) wl_registry_bind (wl_registry, name, &wl_compositor_interface, 3);
-    else if (!strcmp (interface, "wl_subcompositor"))
-        glc->m_wl_subcompositor = (struct wl_subcompositor *) wl_registry_bind (wl_registry, name, &wl_subcompositor_interface, 1);
+    if ( !strcmp (interface, "wl_compositor") )
+        glc->m_wlCompositor = (struct wl_compositor *) wl_registry_bind (wl_registry, name, &wl_compositor_interface, 3);
+    else if ( !strcmp (interface, "wl_subcompositor") )
+        glc->m_wlSubcompositor = (struct wl_subcompositor *) wl_registry_bind (wl_registry, name, &wl_subcompositor_interface, 1);
 }
 
 static void wl_global_remove (void *,
@@ -417,9 +424,9 @@ static void wl_frame_callback_handler(void* data,
                                       struct wl_callback *,
                                       uint32_t)
 {
-    wxGLCanvasEGL *glc = (wxGLCanvasEGL *) data;
-    glc->m_ready_to_draw = true;
-    g_clear_pointer(&glc->m_wl_frame_callback_handler, wl_callback_destroy);
+    wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
+    glc->m_readyToDraw = true;
+    g_clear_pointer(&glc->m_wlFrameCallbackHandler, wl_callback_destroy);
     glc->SendSizeEvent();
     gtk_widget_queue_draw(glc->m_wxwindow);
 }
@@ -433,29 +440,34 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
                                        wxGLCanvasEGL *win)
 {
     int scale = gtk_widget_get_scale_factor(widget);
-    wl_egl_window_resize(win->m_wl_egl_window, win->m_width * scale,
+    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
                          win->m_height * scale, 0, 0);
 }
+
+} // extern "C"
 
 bool wxGLCanvasEGL::CreateSurface()
 {
     m_display = GetDisplay();
-    if ( m_display == EGL_NO_DISPLAY ) {
+    if ( m_display == EGL_NO_DISPLAY )
+    {
         wxFAIL_MSG("Unable to get EGL Display");
         return false;
     }
 
     GdkWindow *window = GTKGetDrawingWindow();
 #ifdef GDK_WINDOWING_X11
-    if ( GDK_IS_X11_WINDOW(window) ) {
+    if ( GDK_IS_X11_WINDOW(window) )
+    {
         m_xwindow = GDK_WINDOW_XID(window);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
                                                    &m_xwindow, NULL);
-        m_ready_to_draw = true;
+        m_readyToDraw = true;
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-    if ( GDK_IS_WAYLAND_WINDOW(window) ) {
+    if ( GDK_IS_WAYLAND_WINDOW(window) )
+    {
         int x, y;
         gdk_window_get_origin(window, &x, &y);
         int w = gdk_window_get_width(window);
@@ -465,26 +477,27 @@ bool wxGLCanvasEGL::CreateSurface()
         struct wl_registry *registry = wl_display_get_registry(display);
         wl_registry_add_listener(registry, &wl_registry_listener, this);
         wl_display_roundtrip(display);
-        if ( !m_wl_compositor || !m_wl_subcompositor ) {
+        if ( !m_wlCompositor || !m_wlSubcompositor )
+	{
             wxFAIL_MSG("Invalid Wayland compositor or subcompositor");
             return false;
         }
-        m_wl_surface = wl_compositor_create_surface(m_wl_compositor);
-        m_wl_region = wl_compositor_create_region(m_wl_compositor);
-        m_wl_subsurface = wl_subcompositor_get_subsurface(m_wl_subcompositor,
-                                                          m_wl_surface,
-                                                          surface);
-        wl_surface_set_input_region(m_wl_surface, m_wl_region);
-        wl_subsurface_set_desync(m_wl_subsurface);
-        wl_subsurface_set_position(m_wl_subsurface, x, y);
+        m_wlSurface = wl_compositor_create_surface(m_wlCompositor);
+        m_wlRegion = wl_compositor_create_region(m_wlCompositor);
+        m_wlSubsurface = wl_subcompositor_get_subsurface(m_wlSubcompositor,
+                                                         m_wlSurface,
+                                                         surface);
+        wl_surface_set_input_region(m_wlSurface, m_wlRegion);
+        wl_subsurface_set_desync(m_wlSubsurface);
+        wl_subsurface_set_position(m_wlSubsurface, x, y);
         int scale = gdk_window_get_scale_factor(window);
-        wl_surface_set_buffer_scale(m_wl_surface, scale);
-        m_wl_egl_window = wl_egl_window_create(m_wl_surface, w * scale,
-                                               h * scale);
+        wl_surface_set_buffer_scale(m_wlSurface, scale);
+        m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
+                                             h * scale);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
-                                                   m_wl_egl_window, NULL);
-        m_wl_frame_callback_handler = wl_surface_frame(surface);
-        wl_callback_add_listener(m_wl_frame_callback_handler,
+                                                   m_wlEGLWindow, NULL);
+        m_wlFrameCallbackHandler = wl_surface_frame(surface);
+        wl_callback_add_listener(m_wlFrameCallbackHandler,
                                  &wl_frame_listener, this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
@@ -506,10 +519,10 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
         delete m_config;
     if ( m_surface )
         eglDestroySurface(m_display, m_surface);
-    g_clear_pointer(&m_wl_egl_window, wl_egl_window_destroy);
-    g_clear_pointer(&m_wl_subsurface, wl_subsurface_destroy);
-    g_clear_pointer(&m_wl_surface, wl_surface_destroy);
-    g_clear_pointer(&m_wl_frame_callback_handler, wl_callback_destroy);
+    g_clear_pointer(&m_wlEGLWindow, wl_egl_window_destroy);
+    g_clear_pointer(&m_wlSubsurface, wl_subsurface_destroy);
+    g_clear_pointer(&m_wlSurface, wl_surface_destroy);
+    g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
 }
 
 // ----------------------------------------------------------------------------
@@ -526,29 +539,28 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
 
 
 /* static */
-bool wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs,
-                               EGLConfig** pEGLC)
+EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
 {
     const int* attrsList = dispAttrs.GetGLAttrs();
     if ( !attrsList )
     {
         wxFAIL_MSG("wxGLAttributes object is empty.");
-        return false;
+        return NULL;
     }
 
     EGLDisplay dpy = GetDisplay();
     if ( dpy == EGL_NO_DISPLAY ) {
         wxFAIL_MSG("Unable to get EGL Display");
-        return false;
+        return NULL;
     }
     if ( !eglInitialize(dpy, NULL, NULL) )
     {
         wxFAIL_MSG("eglInitialize failed");
-        return false;
+        return NULL;
     }
     if ( !eglBindAPI(EGL_OPENGL_API) ) {
         wxFAIL_MSG("eglBindAPI failed");
-        return false;
+        return NULL;
     }
 
     EGLConfig *config = new EGLConfig;
@@ -556,28 +568,21 @@ bool wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs,
     // Use the first good match
     if ( eglChooseConfig(dpy, attrsList, config, 1, &returned) && returned == 1 )
     {
-        *pEGLC = config;
+        return config;
     }
     else
     {
         wxFAIL_MSG("eglChooseConfig failed");
         delete config;
+        return NULL;
     }
-
-    return *pEGLC != NULL;
 }
 
 /* static */
 bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
 {
-    EGLConfig *config = NULL;
-
-    bool isSupported = wxGLCanvasEGL::InitConfig(dispAttrs, &config);
-
-    if ( config )
-        delete config;
-
-    return isSupported;
+    wxScopedPtr<EGLConfig> config(wxGLCanvasEGL::InitConfig(dispAttrs));
+    return config != NULL;
 }
 
 /* static */
@@ -602,7 +607,8 @@ bool wxGLCanvasEGL::InitDefaultConfig(const int *attribList)
     wxGLAttributes dispAttrs;
     ParseAttribList(attribList, dispAttrs);
 
-    return InitConfig(dispAttrs, &ms_glEGLConfig);
+    ms_glEGLConfig = InitConfig(dispAttrs);
+    return ms_glEGLConfig != NULL;
 }
 
 /* static */
@@ -624,7 +630,7 @@ bool wxGLCanvasEGL::SwapBuffers()
     // Under Wayland, if eglSwapBuffers() is called before the wl_surface has
     // been realized, it will deadlock.  Thus, we need to avoid swapping before
     // this has happened.
-    if (!m_ready_to_draw)
+    if ( !m_readyToDraw )
         return false;
 
     return eglSwapBuffers(m_display, m_surface);
@@ -632,14 +638,16 @@ bool wxGLCanvasEGL::SwapBuffers()
 
 bool wxGLCanvasEGL::IsShownOnScreen() const
 {
-    wxDisplayType type = wxDisplayNone;
-    wxGetDisplayAndType(&type);
-    if (type == wxDisplayX11) {
-        return GetXWindow() && wxGLCanvasBase::IsShownOnScreen();
-    } else if (type == wxDisplayWayland) {
-        return m_ready_to_draw && wxGLCanvasBase::IsShownOnScreen();
+    wxDisplayInfo info = wxGetDisplayInfo();
+    switch ( info.type )
+    {
+        case wxDisplayX11:
+            return GetXWindow() && wxGLCanvasBase::IsShownOnScreen();
+        case wxDisplayWayland:
+            return m_readyToDraw && wxGLCanvasBase::IsShownOnScreen();
+        default:
+            return false;
     }
-    return false;
 }
 
 #endif // wxUSE_GLCANVAS && wxUSE_GLCANVAS_EGL

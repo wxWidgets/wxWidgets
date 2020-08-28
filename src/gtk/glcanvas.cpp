@@ -167,15 +167,24 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 static bool IsAvailable()
 {
-#if defined(GDK_WINDOWING_WAYLAND) && wxUSE_GLCANVAS_EGL
+#ifdef GDK_WINDOWING_WAYLAND
     if ( GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()) )
+    {
+#if wxUSE_GLCANVAS_EGL
         return true;
-#endif
+#else
+        wxSafeShowMessage(_("Fatal Error"), _("This program wasn't compiled with EGL support required under Wayland, either\ninstall EGL libraries and rebuild or run it under X11 backend by setting\nenvironment variable GDK_BACKEND=x11 before starting your program."));
+        return false;
+#endif // wxUSE_GLCANVAS_EGL
+    }
+#endif // GDK_WINDOWING_WAYLAND
+
 #ifdef GDK_WINDOWING_X11
     if ( GDK_IS_X11_DISPLAY(gdk_display_get_default()) )
         return true;
 #endif
-    wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on Wayland (when using EGL backend) and X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before starting\nyour program."));
+
+    wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on Wayland and X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before\nstarting your program."));
     return false;
 }
 

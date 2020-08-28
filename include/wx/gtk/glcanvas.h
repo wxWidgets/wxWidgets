@@ -14,11 +14,11 @@
 #include "wx/setup.h"
 
 #if wxUSE_GLCANVAS_EGL
-#include "wx/unix/glegl.h"
-#define wxGLCanvasImpl wxGLCanvasEGL
+    #include "wx/unix/glegl.h"
+    typedef wxGLCanvasEGL wxGLCanvasImpl;
 #else
-#include "wx/unix/glx11.h"
-#define wxGLCanvasImpl wxGLCanvasX11
+    #include "wx/unix/glx11.h"
+    typedef wxGLCanvasX11 wxGLCanvasImpl;
 #endif
 
 //---------------------------------------------------------------------------

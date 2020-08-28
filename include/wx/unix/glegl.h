@@ -12,7 +12,14 @@
 
 #include <GL/gl.h>
 
-// This is to avoid including EGL headers here to pollute namespace
+// This is to avoid including Wayland & EGL headers here to pollute namespace
+struct wl_compositor;
+struct wl_subcompositor;
+struct wl_callback;
+struct wl_egl_window;
+struct wl_surface;
+struct wl_region;
+struct wl_subsurface;
 typedef void *EGLDisplay;
 typedef void *EGLConfig;
 typedef void *EGLSurface;
@@ -106,15 +113,15 @@ public:
 
     // initializes EGLConfig
     //
-    // returns false if EGLConfig couldn't be initialized, otherwise caller
-    // is responsible for freeing the pointers
-    static bool InitConfig(const wxGLAttributes& dispAttrs, EGLConfig **pEGLC);
+    // returns NULL if EGLConfig couldn't be initialized, otherwise caller
+    // is responsible for freeing the pointer
+    static EGLConfig *InitConfig(const wxGLAttributes& dispAttrs);
 
-    bool m_ready_to_draw;
-    struct wl_compositor *m_wl_compositor;
-    struct wl_subcompositor *m_wl_subcompositor;
-    struct wl_callback *m_wl_frame_callback_handler;
-    struct wl_egl_window *m_wl_egl_window;
+    bool m_readyToDraw;
+    wl_compositor *m_wlCompositor;
+    wl_subcompositor *m_wlSubcompositor;
+    wl_callback *m_wlFrameCallbackHandler;
+    wl_egl_window *m_wlEGLWindow;
 
 private:
 
@@ -123,9 +130,9 @@ private:
     EGLSurface m_surface;
 
     unsigned long m_xwindow;
-    struct wl_surface *m_wl_surface;
-    struct wl_region *m_wl_region;
-    struct wl_subsurface *m_wl_subsurface;
+    wl_surface *m_wlSurface;
+    wl_region *m_wlRegion;
+    wl_subsurface *m_wlSubsurface;
 
     // the global/default versions of the above
     static EGLConfig *ms_glEGLConfig;

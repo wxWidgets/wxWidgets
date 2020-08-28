@@ -74,27 +74,28 @@ void wxBell()
 
 void *wxGetDisplay()
 {
-    return wxGetDisplayAndType(NULL);
+    return wxGetDisplayInfo().dpy;
 }
 
-void *wxGetDisplayAndType(wxDisplayType *type)
+wxDisplayInfo wxGetDisplayInfo()
 {
+    wxDisplayInfo info = { NULL, wxDisplayNone };
     GdkDisplay *display = gdk_window_get_display(wxGetTopLevelGDK());
 #ifdef GDK_WINDOWING_X11
     if (GDK_IS_X11_DISPLAY(display)) {
-        if (type)
-            *type = wxDisplayX11;
-        return GDK_DISPLAY_XDISPLAY(display);
+        info.dpy = GDK_DISPLAY_XDISPLAY(display);
+        info.type = wxDisplayX11;
+        return info;
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
     if (GDK_IS_WAYLAND_DISPLAY(display)) {
-        if (type)
-            *type = wxDisplayWayland;
-        return gdk_wayland_display_get_wl_display(display);
+        info.dpy = gdk_wayland_display_get_wl_display(display);
+        info.type = wxDisplayWayland;
+        return info;
     }
 #endif
-    return NULL;
+    return info;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
