@@ -549,6 +549,8 @@
 
 #define wxUSE_GLCANVAS       0
 
+#define wxUSE_GLCANVAS_EGL   0
+
 #define wxUSE_RICHTEXT       0
 
 

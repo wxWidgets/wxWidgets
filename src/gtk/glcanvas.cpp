@@ -16,7 +16,12 @@
 #include "wx/glcanvas.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 #ifdef __WXGTK3__
 extern "C" {
@@ -43,6 +48,7 @@ static gboolean draw(GtkWidget* widget, cairo_t* cr, wxGLCanvas* win)
 // emission hook for "parent-set"
 //-----------------------------------------------------------------------------
 
+#if !wxUSE_GLCANVAS_EGL
 extern "C" {
 static gboolean
 parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void* data)
@@ -70,6 +76,7 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
     return true;
 }
 }
+#endif
 
 //---------------------------------------------------------------------------
 // wxGlCanvas
@@ -160,15 +167,16 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 static bool IsAvailable()
 {
-#ifdef GDK_WINDOWING_X11
-    if ( !GDK_IS_X11_DISPLAY(gdk_display_get_default()) )
+#if defined(GDK_WINDOWING_WAYLAND) && wxUSE_GLCANVAS_EGL
+    if ( GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()) )
+        return true;
 #endif
-    {
-        wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before starting\nyour program."));
-        return false;
-    }
-
-    return true;
+#ifdef GDK_WINDOWING_X11
+    if ( GDK_IS_X11_DISPLAY(gdk_display_get_default()) )
+        return true;
+#endif
+    wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on Wayland (when using EGL backend) and X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before starting\nyour program."));
+    return false;
 }
 
 bool wxGLCanvas::Create(wxWindow *parent,
@@ -221,8 +229,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
     // watch for the "parent-set" signal on m_wxwindow so we can set colormap
     // before m_wxwindow is realized (which will occur before
     // wxWindow::Create() returns if parent is already visible)
+#if !wxUSE_GLCANVAS_EGL
     unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
     g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
+#endif
 
     wxWindow::Create( parent, id, pos, size, style, name );
 #ifdef __WXGTK3__
@@ -251,6 +261,9 @@ void wxGLCanvas::GTKHandleRealized()
 
 #if WXWIN_COMPATIBILITY_2_8
     GTKInitImplicitContext();
+#endif
+#if wxUSE_GLCANVAS_EGL
+    CreateSurface();
 #endif
     SendSizeEvent();
 }

@@ -549,6 +549,8 @@
 
 #cmakedefine01 wxUSE_GLCANVAS
 
+#cmakedefine01 wxUSE_GLCANVAS_EGL
+
 #cmakedefine01 wxUSE_RICHTEXT
 
 
