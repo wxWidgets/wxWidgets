@@ -881,6 +881,8 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
                 dst[2] = value;
                 dst[1] = value;
                 dst[0] = value;
+
+                dst += 3;
             }
         }
 
