@@ -636,7 +636,7 @@ wxPalette *wxDIB::CreatePalette() const
 
 #if wxUSE_IMAGE
 
-bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
+bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
 {
     wxCHECK_MSG( image.IsOk(), false, wxT("invalid wxImage in wxDIB ctor") );
 
@@ -647,15 +647,16 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
     // a 24bpp RGB is sufficient
     // but use monochrome if requested (to support wxMask)
     const bool hasAlpha = image.HasAlpha();
-    wxCHECK_MSG(!hasAlpha || depth != 1, false, "alpha not supported in monochrome bitmaps");
-    const int bpp = depth != -1 ? depth : hasAlpha ? 32 : 24;
+    wxCHECK_MSG(!hasAlpha || dstDepth != 1, false, "alpha not supported in monochrome bitmaps");
+    const int srcBpp = hasAlpha ? 32 : 24;
+    dstDepth = dstDepth != -1 ? dstDepth : srcBpp;
 
-    if ( !Create(w, h, bpp) )
+    if ( !Create(w, h, dstDepth) )
         return false;
 
-    // convert wxImage's content to monochrome
+    // if requested, convert wxImage's content to monochrome
     wxScopedArray<unsigned char> eightBitData;
-    if ( bpp == 1 )
+    if ( dstDepth == 1 )
     {
         wxImage quantized;
         wxPalette* tempPalette;
@@ -698,9 +699,10 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
 
     // DIBs are stored in bottom to top order (see also the comment above in
     // Create()) so we need to copy bits line by line and starting from the end
-    const int srcBytesPerLine = depth != 1 ? w * 3 : w;
-    const int dstBytesPerLine = GetLineSize(w, bpp);
-    const unsigned char *src = (depth != 1 ? image.GetData() : eightBitData.get()) + ((h - 1) * srcBytesPerLine);
+    // N.B.:  srcBytesPerLine varies with dstDepth because dstDepth == 1 uses quantized input
+    const int srcBytesPerLine = dstDepth != 1 ? w * 3 : w;
+    const int dstBytesPerLine = GetLineSize(w, dstDepth);
+    const unsigned char *src = (dstDepth != 1 ? image.GetData() : eightBitData.get()) + ((h - 1) * srcBytesPerLine);
     const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w
                                           : NULL;
     unsigned char *dstLineStart = (unsigned char *)m_data;
@@ -746,7 +748,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int depth)
         }
         else // no alpha channel
         {
-            if ( bpp != 1 )
+            if ( dstDepth != 1 )
             {
                 for ( int x = 0; x < w; x++ )
                 {
