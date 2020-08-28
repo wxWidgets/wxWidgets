@@ -2973,10 +2973,12 @@ OPENGL_MSW_SRC =
 
 OPENGL_GTK_HDR =
     wx/gtk/glcanvas.h
+    wx/unix/glegl.h
     wx/unix/glx11.h
 
 OPENGL_GTK_SRC =
     src/gtk/glcanvas.cpp
+    src/unix/glegl.cpp
     src/unix/glx11.cpp
 
 OPENGL_MSW_HDR =

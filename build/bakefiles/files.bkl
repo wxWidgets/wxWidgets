@@ -3191,10 +3191,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='OSX_IPHONE'">src/osx/iphone/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4' and PLATFORM_WIN32=='0'">
+        src/unix/glegl.cpp
         src/unix/glx11.cpp
         src/gtk/glcanvas.cpp
     </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3' and PLATFORM_WIN32=='0'">
+        src/unix/glegl.cpp
         src/unix/glx11.cpp
         src/gtk/glcanvas.cpp
     </if>
@@ -3222,10 +3224,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">
         wx/gtk/glcanvas.h
+        wx/unix/glegl.h
         wx/unix/glx11.h
     </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">
         wx/gtk/glcanvas.h
+        wx/unix/glegl.h
         wx/unix/glx11.h
     </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">

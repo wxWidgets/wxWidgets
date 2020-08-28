@@ -3036,11 +3036,13 @@ set(OPENGL_MSW_HDR
 set(OPENGL_GTK_SRC
     src/gtk/glcanvas.cpp
     src/unix/glx11.cpp
+    src/unix/glegl.cpp
 )
 
 set(OPENGL_GTK_HDR
     wx/gtk/glcanvas.h
     wx/unix/glx11.h
+    wx/unix/glegl.h
 )
 
 set(OPENGL_OSX_COCOA_SRC

@@ -11,15 +11,23 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include "wx/unix/glx11.h"
+#include "wx/setup.h"
+
+#if wxUSE_GLCANVAS_EGL
+    #include "wx/unix/glegl.h"
+    typedef wxGLCanvasEGL wxGLCanvasImpl;
+#else
+    #include "wx/unix/glx11.h"
+    typedef wxGLCanvasX11 wxGLCanvasImpl;
+#endif
 
 //---------------------------------------------------------------------------
 // wxGLCanvas
 //---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
+class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasImpl
 {
-    typedef wxGLCanvasX11 BaseType;
+    typedef wxGLCanvasImpl BaseType;
 public:
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
@@ -64,7 +72,7 @@ public:
     // --------------------------------
 
     virtual unsigned long GetXWindow() const wxOVERRIDE;
-
+    void* GetNativeWindow() const;
 
     // deprecated methods
     // ------------------
