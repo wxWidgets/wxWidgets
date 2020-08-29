@@ -143,19 +143,66 @@ protected:
 
 
 private:
+    struct PageInfo : public wxObject
+    {
+        PageInfo(wxPreferencesPage *p) : page(p), win(NULL) {}
+
+        wxSharedPtr<wxPreferencesPage> page;
+        wxWindow *win;
+    };
+
+    typedef wxVector< wxSharedPtr<PageInfo> > Pages;
+
+    wxWindow *GetPageWindow(PageInfo& info)
+    {
+        if ( !info.win )
+        {
+            info.win = info.page->CreateWindow(this);
+            info.win->Hide();
+            // fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
+            info.win->InitDialog();
+        }
+
+        return info.win;
+    }
+
+    int GetBiggestPageWidth()
+    {
+        int width = -1;
+        for ( Pages::const_iterator p = m_pages.begin(); p != m_pages.end(); ++p )
+        {
+            wxWindow *win = GetPageWindow(**p);
+            width = wxMax(width, win->GetBestSize().x);
+        }
+
+        return width;
+    }
+
+    void FitPageWindow(wxWindow *win)
+    {
+        // On macOS 11, preferences are resizable only vertically, because the
+        // icons are centered and horizontal resizing would move them around.
+        if ( WX_IS_MACOS_AVAILABLE(11,0) )
+        {
+            int width = GetBiggestPageWidth();
+            if (width > win->GetBestSize().x)
+            {
+                wxSize minsize = win->GetMinSize();
+                minsize.x = width;
+                win->SetMinSize(minsize);
+            }
+        }
+
+        win->Fit();
+    }
+
     void OnSelectPageForTool(const wxToolBarToolBase *tool)
     {
         PageInfo *info = static_cast<PageInfo*>(tool->GetClientData());
         wxCHECK_RET( info, "toolbar item lacks client data" );
 
-        if ( !info->win )
-        {
-            info->win = info->page->CreateWindow(this);
-            info->win->Hide();
-            info->win->Fit();
-            // fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
-            info->win->InitDialog();
-        }
+        wxWindow *win = GetPageWindow(*info);
+        FitPageWindow(win);
 
         // When the page changes in a native preferences dialog, the sequence
         // of events is thus:
@@ -163,19 +210,19 @@ private:
         // 1. the old page is hidden, only gray background remains
         if ( m_visiblePage )
             m_visiblePage->Hide();
-        m_visiblePage = info->win;
+        m_visiblePage = win;
 
         //   2. window is resized to fix the new page, with animation
         //      (in our case, using overriden DoMoveWindow())
-        SetClientSize(info->win->GetSize());
+        SetClientSize(win->GetSize());
 
         //   3. new page is shown and the title updated.
-        info->win->Show();
+        win->Show();
         SetTitle(info->page->GetName());
 
         // Refresh the page to ensure everything is drawn in 10.14's dark mode;
         // without it, generic controls aren't shown at all
-        info->win->Refresh();
+        win->Refresh();
 
         // TODO: Preferences window may have some pages resizeable and some
         //       non-resizable on OS X; the whole window is or is not resizable
@@ -200,15 +247,8 @@ private:
     }
 
 private:
-    struct PageInfo : public wxObject
-    {
-        PageInfo(wxPreferencesPage *p) : page(p), win(NULL) {}
-
-        wxSharedPtr<wxPreferencesPage> page;
-        wxWindow *win;
-    };
     // All pages. Use shared pointer to be able to get pointers to PageInfo structs
-    wxVector< wxSharedPtr<PageInfo> > m_pages;
+    Pages m_pages;
 
     wxToolBar *m_toolbar;
     bool       m_toolbarRealized;
