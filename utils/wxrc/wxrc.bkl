@@ -17,7 +17,7 @@
              symlink pointing to it, so that users can use wxrc from different
              versions. -->
 
-        <set var="versioned_name">wxrc-$(WX_RELEASE)$(WX_FLAVOUR)</set>
+        <set var="versioned_name">wxrc-$(WX_RELEASE)$(WX_FLAVOUR)$(EXEEXT)</set>
         <modify-target target="install_wxrc">
             <command>
                 rm -f $(DESTDIR)$(BINDIR)/wxrc$(EXEEXT) $(DESTDIR)$(BINDIR)/$(versioned_name)
