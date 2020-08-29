@@ -61,7 +61,7 @@ typedef wxNativePixelData wxNative32PixelData;
 TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
 {
 #ifdef __WXGTK__
-    WARN("Skipping test known not to work in wxGTK.")
+    WARN("Skipping test known not to work in wxGTK.");
 #else
     wxBitmap color;
     color.LoadFile("horse.bmp", wxBITMAP_TYPE_BMP);
