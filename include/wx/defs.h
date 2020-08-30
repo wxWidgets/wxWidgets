@@ -542,12 +542,14 @@ typedef short int WXTYPE;
 /*  ---------------------------------------------------------------------------- */
 
 /*  Printf-like attribute definitions to obtain warnings with GNU C/C++ */
+#if defined(__GNUC__) && !wxUSE_UNICODE
+#    define WX_ATTRIBUTE_FORMAT(like, m, n) __attribute__ ((__format__ (like, m, n)))
+#else
+#    define WX_ATTRIBUTE_FORMAT(like, m, n)
+#endif
+
 #ifndef WX_ATTRIBUTE_PRINTF
-#   if defined(__GNUC__) && !wxUSE_UNICODE
-#       define WX_ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
-#   else
-#       define WX_ATTRIBUTE_PRINTF(m, n)
-#   endif
+#   define WX_ATTRIBUTE_PRINTF(m, n) WX_ATTRIBUTE_FORMAT(__printf__, m, n)
 
 #   define WX_ATTRIBUTE_PRINTF_1 WX_ATTRIBUTE_PRINTF(1, 2)
 #   define WX_ATTRIBUTE_PRINTF_2 WX_ATTRIBUTE_PRINTF(2, 3)
