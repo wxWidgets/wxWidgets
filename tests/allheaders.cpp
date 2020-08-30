@@ -84,6 +84,10 @@
 
 #include "catch.hpp"
 
+#if defined(__WXQT__)
+    #include <QtGui/QFont>
+#endif
+
 #ifdef GCC_TURN_OFF
     #pragma GCC diagnostic pop
 #endif
