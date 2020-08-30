@@ -1590,7 +1590,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
         wxNSTextViewControl* t = new wxNSTextViewControl( wxpeer, v, style );
         c = t;
-        c->EnableFocusRing( true );
 
         t->SetStringValue(str);
     }
