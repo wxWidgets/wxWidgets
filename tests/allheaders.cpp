@@ -368,6 +368,13 @@
     GCC_TURN_OFF(zero-as-null-pointer-constant)
 #endif
 
+    // These ones could be useful to explore, but for now we don't use "final"
+    // at all anywhere.
+#if CHECK_GCC_VERSION(5,1)
+    GCC_TURN_OFF(suggest-final-methods)
+    GCC_TURN_OFF(suggest-final-types)
+#endif // 5.1
+
     // wxWARNING_SUPPRESS_MISSING_OVERRIDE() inside wxRTTI macros is just
     // ignored by gcc up to 9.x for some reason, so we have no choice but to
     // disable it.
