@@ -52,7 +52,7 @@ public:
     wxIcon GetIcon() const
     {
         // don't use wxDynamicCast, icons and bitmaps are really the same thing
-        return *(wxIcon*)&m_messageBitmap;
+        return *(const wxIcon*)&m_messageBitmap;
     }
 
     // for compatibility with wxMSW
