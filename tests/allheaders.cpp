@@ -379,6 +379,10 @@
     GCC_TURN_OFF(abi-tag)
 #endif // 4.8
 
+    // This can be used to ask the compiler to explain why some function is not
+    // inlined, but it's perfectly normal for some functions not to be inlined.
+    GCC_TURN_OFF(inline)
+
     // All those are about using perfectly normal C++ features that are
     // actually used in our code.
     GCC_TURN_OFF(aggregate-return)
