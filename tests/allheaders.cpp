@@ -42,6 +42,7 @@
 
     GCC_TURN_OFF(aggregate-return)
     GCC_TURN_OFF(conversion)
+    GCC_TURN_OFF(format)
     GCC_TURN_OFF(padded)
     GCC_TURN_OFF(parentheses)
     GCC_TURN_OFF(sign-compare)
