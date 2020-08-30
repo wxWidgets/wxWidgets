@@ -84,7 +84,9 @@
 
 #include "catch.hpp"
 
-#if defined(__WXQT__)
+#if defined(__WXMSW__)
+    #include <windows.h>
+#elif defined(__WXQT__)
     #include <QtGui/QFont>
 #endif
 
