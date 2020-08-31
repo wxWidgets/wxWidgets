@@ -45,7 +45,7 @@ void wxQtPushButton::clicked(bool checked)
     wxAnyButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( handler->GetEventType(), handler->GetId() );
+        wxCommandEvent event( handler->QtGetEventType(), handler->GetId() );
         if ( isCheckable() ) // toggle buttons
         {
             event.SetInt(checked);

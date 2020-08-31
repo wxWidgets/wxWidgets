@@ -2940,7 +2940,9 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
     {
         if ( !colText )
             colText = data->GetOriginalTextColour();
-        [(id)cell setTextColor:colText];
+
+        if ( colText )
+            [(id)cell setTextColor:colText];
     }
 
     if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )

@@ -16,80 +16,80 @@ typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
 
-const wxArtClient wxART_TOOLBAR;
-const wxArtClient wxART_MENU;
-const wxArtClient wxART_FRAME_ICON;
+const char* wxART_TOOLBAR;
+const char* wxART_MENU;
+const char* wxART_FRAME_ICON;
 
-const wxArtClient wxART_CMN_DIALOG;
-const wxArtClient wxART_HELP_BROWSER;
-const wxArtClient wxART_MESSAGE_BOX;
-const wxArtClient wxART_BUTTON;
-const wxArtClient wxART_LIST;
+const char* wxART_CMN_DIALOG;
+const char* wxART_HELP_BROWSER;
+const char* wxART_MESSAGE_BOX;
+const char* wxART_BUTTON;
+const char* wxART_LIST;
 
-const wxArtClient wxART_OTHER;
+const char* wxART_OTHER;
 
 
-const wxArtID wxART_ADD_BOOKMARK;
-const wxArtID wxART_DEL_BOOKMARK;
-const wxArtID wxART_HELP_SIDE_PANEL;
-const wxArtID wxART_HELP_SETTINGS;
-const wxArtID wxART_HELP_BOOK;
-const wxArtID wxART_HELP_FOLDER;
-const wxArtID wxART_HELP_PAGE;
-const wxArtID wxART_GO_BACK;
-const wxArtID wxART_GO_FORWARD;
-const wxArtID wxART_GO_UP;
-const wxArtID wxART_GO_DOWN;
-const wxArtID wxART_GO_TO_PARENT;
-const wxArtID wxART_GO_HOME;
-const wxArtID wxART_GOTO_FIRST;
-const wxArtID wxART_GOTO_LAST;
-const wxArtID wxART_FILE_OPEN;
-const wxArtID wxART_FILE_SAVE;
-const wxArtID wxART_FILE_SAVE_AS;
-const wxArtID wxART_PRINT;
-const wxArtID wxART_HELP;
-const wxArtID wxART_TIP;
-const wxArtID wxART_REPORT_VIEW;
-const wxArtID wxART_LIST_VIEW;
-const wxArtID wxART_NEW_DIR;
-const wxArtID wxART_HARDDISK;
-const wxArtID wxART_FLOPPY;
-const wxArtID wxART_CDROM;
-const wxArtID wxART_REMOVABLE;
-const wxArtID wxART_FOLDER;
-const wxArtID wxART_FOLDER_OPEN;
-const wxArtID wxART_GO_DIR_UP;
-const wxArtID wxART_EXECUTABLE_FILE;
-const wxArtID wxART_NORMAL_FILE;
-const wxArtID wxART_TICK_MARK;
-const wxArtID wxART_CROSS_MARK;
-const wxArtID wxART_ERROR;
-const wxArtID wxART_QUESTION;
-const wxArtID wxART_WARNING;
-const wxArtID wxART_INFORMATION;
-const wxArtID wxART_MISSING_IMAGE;
+const char* wxART_ADD_BOOKMARK;
+const char* wxART_DEL_BOOKMARK;
+const char* wxART_HELP_SIDE_PANEL;
+const char* wxART_HELP_SETTINGS;
+const char* wxART_HELP_BOOK;
+const char* wxART_HELP_FOLDER;
+const char* wxART_HELP_PAGE;
+const char* wxART_GO_BACK;
+const char* wxART_GO_FORWARD;
+const char* wxART_GO_UP;
+const char* wxART_GO_DOWN;
+const char* wxART_GO_TO_PARENT;
+const char* wxART_GO_HOME;
+const char* wxART_GOTO_FIRST;
+const char* wxART_GOTO_LAST;
+const char* wxART_FILE_OPEN;
+const char* wxART_FILE_SAVE;
+const char* wxART_FILE_SAVE_AS;
+const char* wxART_PRINT;
+const char* wxART_HELP;
+const char* wxART_TIP;
+const char* wxART_REPORT_VIEW;
+const char* wxART_LIST_VIEW;
+const char* wxART_NEW_DIR;
+const char* wxART_HARDDISK;
+const char* wxART_FLOPPY;
+const char* wxART_CDROM;
+const char* wxART_REMOVABLE;
+const char* wxART_FOLDER;
+const char* wxART_FOLDER_OPEN;
+const char* wxART_GO_DIR_UP;
+const char* wxART_EXECUTABLE_FILE;
+const char* wxART_NORMAL_FILE;
+const char* wxART_TICK_MARK;
+const char* wxART_CROSS_MARK;
+const char* wxART_ERROR;
+const char* wxART_QUESTION;
+const char* wxART_WARNING;
+const char* wxART_INFORMATION;
+const char* wxART_MISSING_IMAGE;
 
-const wxArtID wxART_COPY;
-const wxArtID wxART_CUT;
-const wxArtID wxART_PASTE;
-const wxArtID wxART_DELETE;
-const wxArtID wxART_NEW;
+const char* wxART_COPY;
+const char* wxART_CUT;
+const char* wxART_PASTE;
+const char* wxART_DELETE;
+const char* wxART_NEW;
 
-const wxArtID wxART_UNDO;
-const wxArtID wxART_REDO;
+const char* wxART_UNDO;
+const char* wxART_REDO;
 
-const wxArtID wxART_PLUS;
-const wxArtID wxART_MINUS;
+const char* wxART_PLUS;
+const char* wxART_MINUS;
 
-const wxArtID wxART_CLOSE;
-const wxArtID wxART_QUIT;
+const char* wxART_CLOSE;
+const char* wxART_QUIT;
 
-const wxArtID wxART_FIND;
-const wxArtID wxART_FIND_AND_REPLACE;
+const char* wxART_FIND;
+const char* wxART_FIND_AND_REPLACE;
 
-const wxArtID wxART_FULL_SCREEN;
-const wxArtID wxART_EDIT;
+const char* wxART_FULL_SCREEN;
+const char* wxART_EDIT;
 
 
 /**
@@ -199,6 +199,10 @@ const wxArtID wxART_EDIT;
      @li @c wxART_REMOVABLE
     </td></tr>
     </table>
+
+    @note When building with @c wxNO_IMPLICIT_WXSTRING_ENCODING defined (see
+          @ref overview_string for more details), you need to explicitly use
+          wxASCII_STR() around these constants.
 
     Additionally, any string recognized by custom art providers registered using
     wxArtProvider::Push may be used.

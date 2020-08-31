@@ -55,6 +55,26 @@ bool wxGridSelection::IsSelection()
     return !m_selection.empty();
 }
 
+void wxGridSelection::EndSelecting()
+{
+    // It's possible that nothing was selected finally, e.g. the mouse could
+    // have been dragged around only to return to the starting cell, just don't
+    // do anything in this case.
+    if ( !IsSelection() )
+        return;
+
+    // Send RANGE_SELECTED event for the last modified block.
+    const wxGridBlockCoords& block = m_selection.back();
+    wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
+                                   wxEVT_GRID_RANGE_SELECTED,
+                                   m_grid,
+                                   block.GetTopLeft(),
+                                   block.GetBottomRight(),
+                                   true);
+
+    m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+}
+
 bool wxGridSelection::IsInSelection( int row, int col ) const
 {
     // Check whether the given cell is contained in one of the selected blocks.
@@ -162,7 +182,7 @@ void wxGridSelection::SelectCol(int col, const wxKeyboardState& kbd)
 void wxGridSelection::SelectBlock( int topRow, int leftCol,
                                    int bottomRow, int rightCol,
                                    const wxKeyboardState& kbd,
-                                   bool sendEvent )
+                                   wxEventType eventType )
 {
     // Fix the coordinates of the block if needed.
     int allowed = -1;
@@ -204,7 +224,7 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
         return;
 
     Select(wxGridBlockCoords(topRow, leftCol, bottomRow, rightCol).Canonicalize(),
-           kbd, sendEvent);
+           kbd, eventType);
 }
 
 void
@@ -227,7 +247,7 @@ wxGridSelection::SelectAll()
 void
 wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                const wxKeyboardState& kbd,
-                               bool sendEvent)
+                               wxEventType eventType)
 {
     const wxGridBlockCoords canonicalizedBlock = block.Canonicalize();
 
@@ -341,10 +361,10 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                  refBlock.GetBottomRow(), refBlock.GetRightCol());
         }
 
-        if ( sendEvent )
+        if ( eventType != wxEVT_NULL )
         {
             wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                           wxEVT_GRID_RANGE_SELECT,
+                                           eventType,
                                            m_grid,
                                            refBlock.GetTopLeft(),
                                            refBlock.GetBottomRight(),
@@ -383,7 +403,7 @@ void wxGridSelection::ClearSelection()
     // (No finer grained events for each of the smaller regions
     //  deselected above!)
     wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-                                    wxEVT_GRID_RANGE_SELECT,
+                                    wxEVT_GRID_RANGE_SELECTED,
                                     m_grid,
                                     wxGridCellCoords( 0, 0 ),
                                     wxGridCellCoords(
@@ -494,7 +514,8 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
 
 bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
                                          const wxGridCellCoords& blockEnd,
-                                         const wxKeyboardState& kbd)
+                                         const wxKeyboardState& kbd,
+                                         wxEventType eventType)
 {
     wxASSERT( blockStart.GetRow() != -1 && blockStart.GetCol() != -1 &&
               blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1 );
@@ -505,7 +526,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     // block to non-selected current cell.
     if ( !IsInSelection(m_grid->GetGridCursorCoords()) )
     {
-        SelectBlock(blockStart, blockEnd);
+        SelectBlock(blockStart, blockEnd, kbd, eventType);
         return true;
     }
 
@@ -641,7 +662,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
 
     // Send Event.
     wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
-                                    wxEVT_GRID_RANGE_SELECT,
+                                    eventType,
                                     m_grid,
                                     newBlock.GetTopLeft(),
                                     newBlock.GetBottomRight(),
@@ -797,7 +818,8 @@ wxArrayInt wxGridSelection::GetColSelection() const
 
 void
 wxGridSelection::Select(const wxGridBlockCoords& block,
-                        const wxKeyboardState& kbd, bool sendEvent)
+                        const wxKeyboardState& kbd,
+                        wxEventType eventType)
 {
     if (m_grid->GetNumberRows() == 0 || m_grid->GetNumberCols() == 0)
         return;
@@ -811,10 +833,10 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     }
 
     // Send Event, if not disabled.
-    if ( sendEvent )
+    if ( eventType != wxEVT_NULL )
     {
         wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-            wxEVT_GRID_RANGE_SELECT,
+            eventType,
             m_grid,
             block.GetTopLeft(),
             block.GetBottomRight(),

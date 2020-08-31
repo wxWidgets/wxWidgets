@@ -1131,7 +1131,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/anidecod.h
     wx/animdecod.h
     wx/appprogress.h
-    wx/artids.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h

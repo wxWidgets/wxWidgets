@@ -1710,7 +1710,7 @@ wxFont wxWindowBase::GetFont() const
         if ( !font.IsOk() )
             font = GetClassDefaultAttributes().font;
 
-        font.WXAdjustToPPI(GetDPI());
+        WXAdjustFontToOwnPPI(font);
 
         return font;
     }
@@ -1731,7 +1731,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     m_inheritFont = m_hasFont;
 
     if ( m_hasFont )
-        m_font.WXAdjustToPPI(GetDPI());
+        WXAdjustFontToOwnPPI(m_font);
 
     InvalidateBestSize();
 

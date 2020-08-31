@@ -36,7 +36,7 @@ public:
     virtual bool IsChecked() const wxOVERRIDE;
 
     virtual void SetBitmap(const wxBitmap& bitmap);
-    virtual const wxBitmap& GetBitmap() const { return m_bitmap; };
+    virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
     virtual QAction *GetHandle() const;
 

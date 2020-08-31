@@ -120,7 +120,11 @@ public:
 
     virtual bool IsFixedWidth() const wxOVERRIDE;
 
-    virtual void WXAdjustToPPI(const wxSize& ppi) wxOVERRIDE;
+    // MSW needs to modify the font object when the DPI of the window it
+    // is used with changes, this function can be used to do it.
+    //
+    // This method is not considered to be part of wxWidgets public API.
+    void WXAdjustToPPI(const wxSize& ppi);
 
     wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants ie: wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD")
     wxFont(int size,

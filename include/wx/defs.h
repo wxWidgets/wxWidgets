@@ -542,12 +542,14 @@ typedef short int WXTYPE;
 /*  ---------------------------------------------------------------------------- */
 
 /*  Printf-like attribute definitions to obtain warnings with GNU C/C++ */
+#if defined(__GNUC__) && !wxUSE_UNICODE
+#    define WX_ATTRIBUTE_FORMAT(like, m, n) __attribute__ ((__format__ (like, m, n)))
+#else
+#    define WX_ATTRIBUTE_FORMAT(like, m, n)
+#endif
+
 #ifndef WX_ATTRIBUTE_PRINTF
-#   if defined(__GNUC__) && !wxUSE_UNICODE
-#       define WX_ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
-#   else
-#       define WX_ATTRIBUTE_PRINTF(m, n)
-#   endif
+#   define WX_ATTRIBUTE_PRINTF(m, n) WX_ATTRIBUTE_FORMAT(__printf__, m, n)
 
 #   define WX_ATTRIBUTE_PRINTF_1 WX_ATTRIBUTE_PRINTF(1, 2)
 #   define WX_ATTRIBUTE_PRINTF_2 WX_ATTRIBUTE_PRINTF(2, 3)
@@ -662,6 +664,9 @@ typedef short int WXTYPE;
         wxGCC_WARNING_SUPPRESS(float-equal)
         inline bool wxIsSameDouble(double x, double y) { return x == y; }
         wxGCC_WARNING_RESTORE(float-equal)
+
+   Note that these macros apply to both gcc and clang, even though they only
+   have "GCC" in their names.
  */
 #if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
 #   define wxGCC_WARNING_SUPPRESS(x) \
@@ -672,6 +677,17 @@ typedef short int WXTYPE;
 #else /* gcc < 4.6 or not gcc and not clang at all */
 #   define wxGCC_WARNING_SUPPRESS(x)
 #   define wxGCC_WARNING_RESTORE(x)
+#endif
+
+/*
+    Similar macros but for gcc-specific warnings.
+ */
+#ifdef __GNUC__
+#   define wxGCC_ONLY_WARNING_SUPPRESS(x) wxGCC_WARNING_SUPPRESS(x)
+#   define wxGCC_ONLY_WARNING_RESTORE(x) wxGCC_WARNING_RESTORE(x)
+#else
+#   define wxGCC_ONLY_WARNING_SUPPRESS(x)
+#   define wxGCC_ONLY_WARNING_RESTORE(x)
 #endif
 
 /* Specific macros for -Wcast-function-type warning new in gcc 8. */

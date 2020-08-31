@@ -174,11 +174,6 @@ wxBitmap::wxBitmap(QPixmap pix)
     m_refData = new wxBitmapRefData(pix);
 }
 
-wxBitmap::wxBitmap(const wxBitmap& bmp)
-{
-    Ref(bmp);
-}
-
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth )
 {
     wxASSERT(depth == 1);
