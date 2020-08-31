@@ -2171,6 +2171,11 @@ bool wxWindowMac::AcceptsFocus() const
         return GetPeer()->CanFocus();
 }
 
+void wxWindowMac::EnableVisibleFocus(bool enabled)
+{
+    GetPeer()->EnableFocusRing(enabled);
+}
+
 void wxWindowMac::MacSuperChangedPosition()
 {
     // only window-absolute structures have to be moved i.e. controls

@@ -157,6 +157,7 @@ public:
     void MacOnScroll( wxScrollEvent&event );
 
     virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual void EnableVisibleFocus(bool enabled) wxOVERRIDE;
 
     virtual bool IsDoubleBuffered() const wxOVERRIDE { return true; }
 
