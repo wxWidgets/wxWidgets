@@ -86,6 +86,14 @@
 
 #if defined(__WXMSW__)
     #include <windows.h>
+
+    // Avoid warnings about redeclaring standard functions such as chmod() in
+    // various standard headers when using MinGW/Cygwin.
+    #if defined(__MINGW32__) || defined(__CYGWIN__)
+        #include <stdio.h>
+        #include <unistd.h>
+        #include <sys/stat.h>
+    #endif
 #elif defined(__WXQT__)
     #include <QtGui/QFont>
 #endif
