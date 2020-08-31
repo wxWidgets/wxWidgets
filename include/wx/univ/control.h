@@ -79,7 +79,10 @@ public:
         return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
     }
 
-    virtual wxWindow *GetInputWindow() const wxOVERRIDE { return (wxWindow*)this; }
+    virtual wxWindow *GetInputWindow() const wxOVERRIDE
+    {
+        return const_cast<wxControl*>(this);
+    }
 
 protected:
     // common part of all ctors

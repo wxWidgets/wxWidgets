@@ -22,7 +22,6 @@ class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 public:
     wxBitmap();
     wxBitmap(QPixmap pix);
-    wxBitmap(const wxBitmap& bmp);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
