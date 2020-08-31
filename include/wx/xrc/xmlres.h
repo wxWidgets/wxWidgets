@@ -565,27 +565,27 @@ public:
 
     // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets a bitmap from an XmlNode.
     wxBitmap GetBitmap(const wxXmlNode* node,
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon.
     wxIcon GetIcon(const wxString& param = wxT("icon"),
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon from an XmlNode.
     wxIcon GetIcon(const wxXmlNode* node,
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon bundle.
     wxIconBundle GetIconBundle(const wxString& param,
-                               const wxArtClient& defaultArtClient = wxART_OTHER) wxOVERRIDE;
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER)) wxOVERRIDE;
 
     // Gets an image list.
     wxImageList *GetImageList(const wxString& param = wxT("imagelist")) wxOVERRIDE;

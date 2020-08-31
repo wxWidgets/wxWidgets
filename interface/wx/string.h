@@ -1776,6 +1776,12 @@ public:
     /**
         Converts the string or character from an ASCII, 7-bit form
         to the native wxString representation.
+
+        Input must consist only of 7-bit (i.e. less than 128) ASCII characters,
+        the behaviour in presence of non-ASCII characters is undefined but will
+        result in assert failures.
+
+        @see wxASCII_STR()
     */
     static wxString FromAscii(const char* s);
     static wxString FromAscii(const unsigned char* s);
@@ -2068,5 +2074,15 @@ public:
 */
 template<bool (T)(const wxUniChar& c)>
     inline bool wxStringCheck(const wxString& val);
+
+/**
+    Convenience macro for explicitly constructing wxString from ASCII strings.
+
+    This macro simply expands to a call to wxString::FromAscii() but is
+    slightly shorter.
+
+    @since 3.1.4
+ */
+wxString wxASCII_STR(const char* s);
 
 //@}
