@@ -147,7 +147,8 @@ wxDEFINE_EVENT( wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SORT, wxGridEvent );
-wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEvent );
+wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECTING, wxGridRangeSelectEvent );
+wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECTED, wxGridRangeSelectEvent );
 wxDEFINE_EVENT( wxEVT_GRID_CELL_CHANGING, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_CELL_CHANGED, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_SELECT_CELL, wxGridEvent );
@@ -3677,7 +3678,8 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
                         m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(m_currentCellCoords.GetRow(), 0),
                             wxGridCellCoords(row, GetNumberCols() - 1),
-                            event);
+                            event,
+                            wxEVT_GRID_RANGE_SELECTING);
                     }
                 }
                 break;
@@ -3693,9 +3695,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
     if ( m_isDragging && (event.Entering() || event.Leaving()) )
         return;
-
-    if (m_isDragging)
-        m_isDragging = false;
 
     // ------------ Entering or leaving the window
     //
@@ -3810,6 +3809,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, rowLabelWin);
         m_dragLastPos = -1;
+        m_isDragging = false;
     }
 
     // ------------ Right button down
@@ -4020,7 +4020,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
                         m_selection->ExtendCurrentBlock(
                             wxGridCellCoords(0, m_currentCellCoords.GetCol()),
                             wxGridCellCoords(GetNumberRows() - 1, col),
-                            event);
+                            event,
+                            wxEVT_GRID_RANGE_SELECTING);
                     }
                 }
                 break;
@@ -4090,9 +4091,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
     if ( m_isDragging && (event.Entering() || event.Leaving()) )
         return;
-
-    if (m_isDragging)
-        m_isDragging = false;
 
     // ------------ Entering or leaving the window
     //
@@ -4263,6 +4261,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
         m_dragLastPos = -1;
+        m_isDragging = false;
     }
 
     // ------------ Right button down
@@ -4377,6 +4376,14 @@ void wxGrid::CancelMouseCapture()
 
 void wxGrid::DoAfterDraggingEnd()
 {
+    if ( m_isDragging &&
+         (m_cursorMode == WXGRID_CURSOR_SELECT_CELL ||
+          m_cursorMode == WXGRID_CURSOR_SELECT_ROW ||
+          m_cursorMode == WXGRID_CURSOR_SELECT_COL) )
+    {
+        m_selection->EndSelecting();
+    }
+
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
 
@@ -4444,19 +4451,24 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
             break;
 
         case WXGRID_CURSOR_MOVE_COL:
+            // Currently we don't capture mouse when moving columns, which is
+            // almost certainly wrong.
+            captureMouse = false;
             win->SetCursor( wxCursor(wxCURSOR_HAND) );
             break;
 
-        default:
+        case WXGRID_CURSOR_SELECT_CELL:
+            // Mouse is captured in ProcessGridCellMouseEvent() in this mode.
+            captureMouse = false;
+            wxFALLTHROUGH;
+
+        case WXGRID_CURSOR_SELECT_ROW:
+        case WXGRID_CURSOR_SELECT_COL:
             win->SetCursor( *wxSTANDARD_CURSOR );
             break;
     }
 
-    // we need to capture mouse when resizing
-    bool resize = m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
-                  m_cursorMode == WXGRID_CURSOR_RESIZE_COL;
-
-    if ( captureMouse && resize )
+    if ( captureMouse )
     {
         win->CaptureMouse();
         m_winCapture = win;
@@ -4510,7 +4522,12 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
     // Ctrl later can't change the dragging behaviour. Only the initial state
     // of the modifier keys matters.
     if ( m_selection )
-        m_selection->ExtendCurrentBlock(m_currentCellCoords, coords, event);
+    {
+        m_selection->ExtendCurrentBlock(m_currentCellCoords,
+                                        coords,
+                                        event,
+                                        wxEVT_GRID_RANGE_SELECTING);
+    }
 
     return true;
 }
