@@ -3849,10 +3849,6 @@ void wxWidgetCocoaImpl::DoNotifyFocusLost()
 void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)
 {
     wxWindow* thisWindow = GetWXPeer();
-    if ( thisWindow->MacGetTopLevelWindow() && NeedsFocusRect() )
-    {
-        thisWindow->MacInvalidateBorders();
-    }
 
     if ( receivedFocus )
     {
@@ -3924,6 +3920,11 @@ void wxWidgetCocoaImpl::SetFlipped(bool flipped)
 }
 
 #endif
+
+void wxWidgetCocoaImpl::EnableFocusRing(bool enabled)
+{
+    [m_osxView setFocusRingType:enabled ? NSFocusRingTypeExterior : NSFocusRingTypeNone];
+}
 
 void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
 {

@@ -767,6 +767,9 @@ public:
         // call this when the return value of AcceptsFocus() changes
     virtual void SetCanFocus(bool WXUNUSED(canFocus)) { }
 
+        // call to customize visible focus indicator if possible in the port
+    virtual void EnableVisibleFocus(bool WXUNUSED(enabled)) { }
+
         // navigates inside this window
     bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward)
         { return DoNavigateIn(flags); }

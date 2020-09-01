@@ -541,6 +541,22 @@ public:
     virtual void SetCanFocus(bool canFocus);
 
     /**
+        Enables or disables visible indication of keyboard focus.
+
+        By default, controls behave in platform-appropriate way and show focus
+        in the same way native applications do. In some very rare circumstances
+        it may be desirable to change the default (notably multiline text
+        controls don't normally have a focus indicator on Mac), which this
+        method allows. It should only be used if you have a good understanding
+        of the native platform's guidelines and user expectations.
+
+        This method is only implemented on Mac.
+
+        @since 3.1.5
+    */
+    virtual void EnableVisibleFocus(bool enable);
+
+    /**
         This sets the window to receive keyboard input.
 
         @see HasFocus(), wxFocusEvent, wxPanel::SetFocus,

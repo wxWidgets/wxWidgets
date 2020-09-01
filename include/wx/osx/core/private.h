@@ -301,8 +301,7 @@ public :
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
 
-    virtual bool        NeedsFocusRect() const;
-    virtual void        SetNeedsFocusRect( bool needs );
+    virtual void        EnableFocusRing(bool WXUNUSED(enabled)) {}
 
     virtual bool        NeedsFrame() const;
     virtual void        SetNeedsFrame( bool needs );
@@ -598,7 +597,6 @@ protected :
     bool                m_wantsUserKey;
     bool                m_wantsUserMouse;
     wxWindowMac*        m_wxPeer;
-    bool                m_needsFocusRect;
     bool                m_needsFrame;
     bool                m_shouldSendEvents;
 
