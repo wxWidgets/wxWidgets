@@ -20,16 +20,15 @@
 
 #if wxUSE_GLCANVAS && wxUSE_GLCANVAS_EGL
 
+#include "wx/glcanvas.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
-#include "wx/glcanvas.h"
-
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/gdkwayland.h>
-#include <wayland-client.h>
 #include <wayland-egl.h>
 #endif
 #ifdef GDK_WINDOWING_X11
@@ -392,6 +391,7 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
     return eglGetPlatformDisplay(platform, info.dpy, NULL);
 }
 
+#ifdef GDK_WINDOWING_WAYLAND
 extern "C"
 {
 
@@ -445,6 +445,7 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
 }
 
 } // extern "C"
+#endif // GDK_WINDOWING_WAYLAND
 
 bool wxGLCanvasEGL::CreateSurface()
 {
@@ -519,10 +520,12 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
         delete m_config;
     if ( m_surface )
         eglDestroySurface(m_display, m_surface);
+#ifdef GDK_WINDOWING_WAYLAND
     g_clear_pointer(&m_wlEGLWindow, wl_egl_window_destroy);
     g_clear_pointer(&m_wlSubsurface, wl_subsurface_destroy);
     g_clear_pointer(&m_wlSurface, wl_surface_destroy);
     g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
+#endif
 }
 
 // ----------------------------------------------------------------------------
