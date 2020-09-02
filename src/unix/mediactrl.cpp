@@ -149,7 +149,12 @@ public:
     void HandleStateChange(GstState oldstate, GstState newstate);
     bool QueryVideoSizeFromElement(GstElement* element);
     bool QueryVideoSizeFromPad(GstPad* caps);
+
+    // SetupXOverlay() can only be called from the main thread, use
+    // CallSetupXOverlay() to call it from another thread.
     void SetupXOverlay();
+    void CallSetupXOverlay();
+
     bool SyncStateChange(GstElement* element, GstState state,
                          gint64 llTimeout = wxGSTREAMER_TIMEOUT);
     bool TryAudioSink(GstElement* audiosink);
@@ -210,6 +215,7 @@ class wxGStreamerMediaEventHandler : public wxEvtHandler
 
     void OnMediaFinish(wxMediaEvent& event);
     void NotifyMovieSizeChanged();
+    void NotifySetupXOverlay() { return m_be->SetupXOverlay(); }
 
     wxGStreamerMediaBackend* m_be;
 };
@@ -478,7 +484,7 @@ static GstBusSyncReply gst_bus_sync_callback(GstBus* bus,
     }
 
     wxLogTrace(wxTRACE_GStreamer, wxT("Got prepare-xwindow-id"));
-    be->SetupXOverlay();
+    be->CallSetupXOverlay();
     return GST_BUS_DROP; // We handled this message - drop from the queue
 }
 }
@@ -654,6 +660,8 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromPad(GstPad* pad)
 //-----------------------------------------------------------------------------
 void wxGStreamerMediaBackend::SetupXOverlay()
 {
+    wxASSERT( wxIsMainThread() );
+
     // Use the xoverlay extension to tell gstreamer to play in our window
 #ifdef __WXGTK__
     if (!gtk_widget_get_realized(m_ctrl->m_wxwindow))
@@ -691,6 +699,11 @@ void wxGStreamerMediaBackend::SetupXOverlay()
 #endif
     } // end if GtkPizza realized
 #endif
+}
+
+void wxGStreamerMediaBackend::CallSetupXOverlay()
+{
+    m_eventHandler->CallAfter(&wxGStreamerMediaEventHandler::NotifySetupXOverlay);
 }
 
 //-----------------------------------------------------------------------------
