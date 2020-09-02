@@ -2377,6 +2377,19 @@ public:
     /**
         Returns @true if the UI element can be checked.
 
+        For the event handlers that can be used for multiple items, not all of
+        which can be checked, this method can be useful to determine whether
+        to call Check() on the event object or not, i.e. the main use case for
+        this method is:
+        @code
+        void MyWindow::OnUpdateUI(wxUpdateUIEvent& event)
+        {
+            ....
+            if ( event.IsCheckable() )
+                event.Check(...some condition...);
+        }
+        @endcode
+
         @since 3.1.5
     */
     bool IsCheckable() const;
