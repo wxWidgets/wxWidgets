@@ -617,6 +617,9 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
             wxUpdateUIEvent event(itemid);
             event.SetEventObject( this );
 
+            if ( !item->IsCheckable() )
+                event.DisallowCheck();
+
             if ( source->ProcessEvent(event) )
             {
                 // if anything changed, update the changed attribute

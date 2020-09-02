@@ -2892,6 +2892,7 @@ public:
         m_setShown =
         m_setText =
         m_setChecked = false;
+        m_isCheckable = true;
     }
     wxUpdateUIEvent(const wxUpdateUIEvent& event)
         : wxCommandEvent(event),
@@ -2902,6 +2903,7 @@ public:
           m_setShown(event.m_setShown),
           m_setText(event.m_setText),
           m_setChecked(event.m_setChecked),
+          m_isCheckable(event.m_isCheckable),
           m_text(event.m_text)
     { }
 
@@ -2918,6 +2920,10 @@ public:
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = true; }
     void Show(bool show) { m_shown = show; m_setShown = true; }
     void SetText(const wxString& text) { m_text = text; m_setText = true; }
+
+    // A flag saying if the item can be checked. True by default.
+    bool IsCheckable() const { return m_isCheckable; }
+    void DisallowCheck() { m_isCheckable = false; }
 
     // Sets the interval between updates in milliseconds.
     // Set to -1 to disable updates, or to 0 to update as frequently as possible.
@@ -2951,6 +2957,7 @@ protected:
     bool          m_setShown;
     bool          m_setText;
     bool          m_setChecked;
+    bool          m_isCheckable;
     wxString      m_text;
 #if wxUSE_LONGLONG
     static wxLongLong       sm_lastUpdate;
