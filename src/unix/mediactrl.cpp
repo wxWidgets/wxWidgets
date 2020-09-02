@@ -209,6 +209,7 @@ class wxGStreamerMediaEventHandler : public wxEvtHandler
     }
 
     void OnMediaFinish(wxMediaEvent& event);
+    void NotifyMovieSizeChanged();
 
     wxGStreamerMediaBackend* m_be;
 };
@@ -633,14 +634,14 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromPad(GstPad* pad)
         gst_caps_unref (caps);
 #endif
 
-        NotifyMovieSizeChanged ();
+        m_eventHandler->CallAfter(&wxGStreamerMediaEventHandler::NotifyMovieSizeChanged);
 
         return true;
     } // end if caps
 
     m_videoSize = wxSize(0,0);
 
-    NotifyMovieSizeChanged ();
+    m_eventHandler->CallAfter(&wxGStreamerMediaEventHandler::NotifyMovieSizeChanged);
 
     return false; // not ready/massive failure
 }
@@ -893,6 +894,11 @@ void wxGStreamerMediaEventHandler::OnMediaFinish(wxMediaEvent& WXUNUSED(event))
         // Finally, queue the finish event
         m_be->QueueFinishEvent();
     }
+}
+
+void wxGStreamerMediaEventHandler::NotifyMovieSizeChanged()
+{
+    m_be->NotifyMovieSizeChanged();
 }
 
 //-----------------------------------------------------------------------------
