@@ -124,42 +124,6 @@ WX_DEFINE_LIST(wxListHeaderDataList)
 
 
 // ----------------------------------------------------------------------------
-// wxListCtrlEventBlocker
-// ----------------------------------------------------------------------------
-// Helper class to disable the generation of wxEVT_LIST_ITEM_{DE}SELECTED events.
-// For performance reasons, we don't send multiple events when (de)selecting
-// multiple items at once, but only one to notify the application of the event.
-
-class wxListCtrlEventBlocker
-{
-public:
-    wxListCtrlEventBlocker(wxListMainWindow* listmain, wxEventType type)
-        : m_listmain(listmain), m_evtType(type)
-    {
-        if ( m_evtType != wxEVT_NULL )
-            ms_blocked = true;
-    }
-
-    ~wxListCtrlEventBlocker()
-    {
-        ms_blocked = false;
-
-        // Send a notification for the event!
-        if ( m_evtType != wxEVT_NULL )
-            m_listmain->SendNotify((size_t)-1, m_evtType);
-    }
-
-    static bool IsBlocked() { return ms_blocked; }
-
-private:
-    wxListMainWindow* const m_listmain;
-    wxEventType             m_evtType;
-    static bool             ms_blocked;
-};
-
-bool wxListCtrlEventBlocker::ms_blocked;
-
-// ----------------------------------------------------------------------------
 // wxListItemData
 // ----------------------------------------------------------------------------
 
@@ -1637,7 +1601,7 @@ void wxListMainWindow::Init()
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked =
-    m_lineMultiSelectPivot  = (size_t)-1;
+    m_anchor  = (size_t)-1;
 
     m_hasCheckBoxes = false;
 }
@@ -1905,8 +1869,13 @@ bool wxListMainWindow::IsHighlighted(size_t line) const
 
 void wxListMainWindow::HighlightLines( size_t lineFrom,
                                        size_t lineTo,
-                                       bool highlight )
+                                       bool highlight,
+                                       SendEvent sendEvent )
 {
+    // It is safe to swap the bounds here if they are not in order.
+    if ( lineFrom > lineTo )
+        wxSwap(lineFrom, lineTo);
+
     if ( IsVirtual() )
     {
         wxArrayInt linesChanged;
@@ -1929,13 +1898,13 @@ void wxListMainWindow::HighlightLines( size_t lineFrom,
     {
         for ( size_t line = lineFrom; line <= lineTo; line++ )
         {
-            if ( HighlightLine(line, highlight) )
+            if ( HighlightLine(line, highlight, sendEvent) )
                 RefreshLine(line);
         }
     }
 }
 
-bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
+bool wxListMainWindow::HighlightLine( size_t line, bool highlight, SendEvent sendEvent )
 {
     bool changed;
 
@@ -1951,7 +1920,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
         changed = ld->Highlight(highlight);
     }
 
-    if ( changed && !wxListCtrlEventBlocker::IsBlocked() )
+    if ( changed && sendEvent )
     {
         SendNotify( line, highlight ? wxEVT_LIST_ITEM_SELECTED
                                     : wxEVT_LIST_ITEM_DESELECTED );
@@ -2236,41 +2205,55 @@ void wxListMainWindow::HighlightAll( bool on )
     }
 }
 
-bool wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
+void wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
 {
     const unsigned selCount = GetSelectedItemCount();
 
     if ( selCount == 1 && IsHighlighted(line) )
     {
-        return true; // Nothing changed.
+        return; // Nothing changed.
     }
 
-    if ( !IsSingleSel() && selCount != 0 )
-    {
-        // Deselecting many items at once will generate wxEVT_XXX_DESELECTED event
-        // for each one of them. although this may be inefficient if the number of
-        // deselected items is too much, we keep doing this (for non-virtual list
-        // controls) for backward compatibility concerns.
-
-        const wxEventType evtType =
-            IsVirtual() ? static_cast<wxEventType>(wxEVT_LIST_ITEM_DESELECTED)
-                        : wxEVT_NULL;
-
-        wxListCtrlEventBlocker block(this, evtType);
-
-        HighlightLines(0, GetItemCount() - 1, false);
-    }
-    else if ( oldLine != (size_t)-1 )
+    if ( oldLine != (size_t)-1 )
     {
         IsHighlighted(oldLine) ? ReverseHighlight(oldLine)
                                : RefreshLine(oldLine); // refresh the old focus to remove it
     }
 
-    // _line_ should be the only selected item.
-    if ( HighlightLine(line) )
-        RefreshLine(line);
+    if ( selCount > 1 ) // multiple-selection only
+    {
+        // Deselecting many items at once will generate wxEVT_XXX_DESELECTED event
+        // for each one of them. although this may be inefficient if the number of
+        // deselected items is too much, we keep doing this (for non-virtual list
+        // controls) for backward compatibility concerns. For virtual listctrl (in
+        // multi-selection mode), wxMSW sends only a notification to indicate that
+        // something has been deselected. Notice that to be fully compatible with
+        // wxMSW behaviour, _line_ shouldn't be deselected if it was selected.
 
-    return true;
+        const SendEvent sendEvent = IsVirtual() ? SendEvent_None : SendEvent_Normal;
+
+        size_t lineFrom = 0,
+               lineTo   = GetItemCount() - 1;
+
+        if ( line > lineFrom && line < lineTo )
+        {
+            HighlightLines(lineFrom, line - 1, false, sendEvent);
+            HighlightLines(line + 1, lineTo, false, sendEvent);
+        }
+        else // _line_ is equal to lineFrom or lineTo
+        {
+            line == lineFrom ? ++lineFrom : --lineTo;
+            HighlightLines(lineFrom, lineTo, false, sendEvent);
+        }
+
+        if ( IsVirtual() )
+            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+    }
+
+    // _line_ should be the only selected item.
+    HighlightLine(line);
+    // refresh the new focus to add it.
+    RefreshLine(line);
 }
 
 void wxListMainWindow::OnChildFocus(wxChildFocusEvent& WXUNUSED(event))
@@ -2634,10 +2617,10 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         if ( GetSelectedItemCount() == 1 || event.CmdDown() )
         {
-            // The only selected item in a multi-selection mode is the _Pivot_
-            // Notice that under wxMSW the pivot can be changed to current if
-            // Ctrl is down.
-            m_lineMultiSelectPivot = m_current;
+            // In a multi-selection mode, the anchor is set to the first selected
+            // item or can be changed to m_current if Ctrl key is down, as is the
+            // case under wxMSW.
+            m_anchor = m_current;
         }
 
         m_lineSelectSingleOnUp = (size_t)-1;
@@ -2715,9 +2698,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     // Highlight m_current only if there is no previous selection.
                     HighlightLine(m_current);
                 }
-                else if ( oldCurrent != current && m_lineMultiSelectPivot != (size_t)-1 )
+                else if ( oldCurrent != current && m_anchor != (size_t)-1 )
                 {
-                    ChangeHighlightedLines(oldCurrent, current);
+                    ExtendSelection(oldCurrent, current);
                 }
             }
             else // !ctrl, !shift
@@ -2837,80 +2820,73 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
 // ensures that wxEVT_LIST_ITEM_{DE}SELECTED events are only generated for items
 // freshly (de)selected (i.e. items that have really changed state). Useful for
 // multi-selection mode when selecting using mouse or arrows with Shift key down.
-
-void wxListMainWindow::ChangeHighlightedLines(size_t oldCurrent, size_t newCurrent)
+void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
 {
     // Refresh the old/new focus to remove/add it
     RefreshLine(oldCurrent);
     RefreshLine(newCurrent);
 
-    // [Case 1] oldCurrent between pivot and newCurrent:
-    // - Highlight everything between pivot and newCurrent (inclusive).
+    // Given a selection [anchor, old], to change/extend it to new (i.e. the
+    // selection becomes [anchor, new]) we discriminate three possible cases:
+    //
+    // Case 1) new < old <= anchor || anchor <= old < new
+    // i.e. oldCurrent between anchor and newCurrent, in which case we:
+    // - Highlight everything between anchor and newCurrent (inclusive).
+    //
+    // Case 2) old < new <= anchor || anchor <= new < old
+    // i.e. newCurrent between anchor and oldCurrent, in which case we:
+    // - Unhighlight everything between oldCurrent and newCurrent (exclusive).
+    //
+    // Case 3) old < anchor < new || new < anchor < old
+    // i.e. anchor between oldCurrent and newCurrent, in which case we
+    // - Highlight everything between anchor and newCurrent (inclusive).
+    // - Unhighlight everything between anchor (exclusive) and oldCurrent.
 
-    size_t lineFrom = m_lineMultiSelectPivot,
-           lineTo   = newCurrent;
+    size_t lineFrom, lineTo;
 
-    if ( lineTo < lineFrom )
-        wxSwap(lineTo, lineFrom);
-
-    if ( oldCurrent >= lineFrom && oldCurrent <= lineTo )
+    if ( (newCurrent < oldCurrent && oldCurrent <= m_anchor) ||
+         (newCurrent > oldCurrent && oldCurrent >= m_anchor) )
     {
+        lineFrom = m_anchor;
+        lineTo   = newCurrent;
+
         HighlightLines(lineFrom, lineTo);
-
-        return;
     }
-
-    // [Case 2] newCurrent between pivot and oldCurrent:
-    // - Unhighlight everything between oldCurrent and newCurrent.
-
-    lineFrom = m_lineMultiSelectPivot;
-    lineTo   = oldCurrent;
-
-    if ( lineTo < lineFrom )
-        wxSwap(lineTo, lineFrom);
-
-    if ( newCurrent >= lineFrom && newCurrent <= lineTo )
+    else if ( (oldCurrent < newCurrent && newCurrent <= m_anchor) ||
+              (oldCurrent > newCurrent && newCurrent >= m_anchor) )
     {
-        if ( newCurrent < oldCurrent )
-        {
-            // Exclude newCurrent from being deselected
-            lineFrom = newCurrent + 1;
-        }
-        else
-        {
-            lineFrom = oldCurrent;
+        lineFrom = oldCurrent;
+        lineTo   = newCurrent;
 
-            // Exclude newCurrent from being deselected
-            lineTo   = newCurrent - 1;
-        }
+        // Exclude newCurrent from being deselected
+        (lineTo < lineFrom) ? ++lineTo : --lineTo;
 
         HighlightLines(lineFrom, lineTo, false);
 
-        return;
+        // For virtual listctrl (in multi-selection mode), wxMSW sends only
+        // a notification to indicate that something has been deselected.
+        if ( IsVirtual() )
+            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
     }
-
-    // [Case 3] pivot between oldCurrent and newCurrent:
-    // - Highlight everything between pivot and newCurrent (inclusive).
-    // - Unhighlight everything between pivot and oldCurrent.
-
-    lineFrom = oldCurrent;
-    lineTo   = newCurrent;
-
-    if ( lineTo < lineFrom )
-        wxSwap(lineTo, lineFrom);
-
-    if ( m_lineMultiSelectPivot >= lineFrom && m_lineMultiSelectPivot <= lineTo )
+    else if ( (oldCurrent < m_anchor && m_anchor < newCurrent) ||
+              (newCurrent < m_anchor && m_anchor < oldCurrent) )
     {
-        if ( m_lineMultiSelectPivot > oldCurrent )
-        {
-            HighlightLines(oldCurrent, m_lineMultiSelectPivot - 1, false);
-            HighlightLines(m_lineMultiSelectPivot, newCurrent);
-        }
-        else
-        {
-            HighlightLines(m_lineMultiSelectPivot + 1, oldCurrent, false);
-            HighlightLines(newCurrent, m_lineMultiSelectPivot);
-        }
+        lineFrom = m_anchor;
+        lineTo   = oldCurrent;
+
+        // Exclude anchor from being deselected
+        (lineTo < lineFrom) ? --lineFrom : ++lineFrom;
+
+        HighlightLines(lineFrom, lineTo, false);
+
+        // See above.
+        if ( IsVirtual() )
+            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+
+        lineFrom = m_anchor;
+        lineTo   = newCurrent;
+
+        HighlightLines(lineFrom, lineTo);
     }
 }
 
@@ -2927,7 +2903,7 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     // items anyhow
     if ( event.ShiftDown() && !IsSingleSel() )
     {
-        ChangeHighlightedLines(oldCurrent, newCurrent);
+        ExtendSelection(oldCurrent, newCurrent);
     }
     else // !shift
     {
@@ -2938,8 +2914,8 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
         {
             HighlightOnly(m_current, oldCurrent);
 
-            // Update pivot
-            m_lineMultiSelectPivot = m_current;
+            // Update anchor
+            m_anchor = m_current;
         }
         else
         {
@@ -2964,8 +2940,8 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
         return;
 
     // send a list event
-    const size_t current = GetCurrentForEvent();
     wxListEvent le( wxEVT_LIST_KEY_DOWN, parent->GetId() );
+    const size_t current = ShouldSendEventForCurrent() ? m_current : (size_t)-1;
     le.m_item.m_itemId =
     le.m_itemIndex = current;
     if ( current != (size_t)-1 )
@@ -3123,10 +3099,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 {
                     ReverseHighlight(m_current);
                 }
-                else // normal space press
+                else if ( ShouldSendEventForCurrent() ) // normal space press
                 {
-                    if ( GetCurrentForEvent() != (size_t)-1 )
-                        SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
+                    SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
                 }
             }
             else // multiple selection
@@ -3137,14 +3112,13 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_RETURN:
         case WXK_EXECUTE:
-            if ( event.HasModifiers() )
+            if ( event.HasModifiers() || !ShouldSendEventForCurrent() )
             {
                 event.Skip();
                 break;
             }
 
-            if ( GetCurrentForEvent() != (size_t)-1 )
-                SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
+            SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
             break;
 
         default:

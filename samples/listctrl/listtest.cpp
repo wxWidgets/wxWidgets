@@ -1281,8 +1281,13 @@ void MyListCtrl::OnUnChecked(wxListEvent& event)
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
+    if ( !wxGetKeyState(WXK_SHIFT) )
+    {
+        LogEvent(event, "OnListKeyDown");
+        event.Skip();
+    }
+
     long item;
-    bool isEventLogged = false;
 
     switch ( event.GetKeyCode() )
     {
@@ -1431,18 +1436,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             wxFALLTHROUGH;
 
         default:
-            LogEvent(event, "OnListKeyDown");
-
             event.Skip();
-
-            isEventLogged = true;
-    }
-
-    // Don't log the event twice!
-    if ( !isEventLogged && !wxGetKeyState(WXK_SHIFT) )
-    {
-        LogEvent(event, "OnListKeyDown");
-        event.Skip();
     }
 }
 

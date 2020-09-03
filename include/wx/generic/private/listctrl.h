@@ -519,19 +519,22 @@ public:
 
     // all these functions only do something if the line is currently visible
 
-    // Make sure that "line" is the only one highlighted.
-    // Notice that in single selection mode we pass the old current as _oldLine_
-    // to be deselected, which is more efficient.
-    bool HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
+    // Make sure that "line" is the only item highlighted in the control.
+    // _oldLine_ is the old focused item.
+    void HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
+
+    enum SendEvent { SendEvent_None, SendEvent_Normal };
 
     // change the line "selected" state, return true if it really changed
-    bool HighlightLine( size_t line, bool highlight = true);
+    bool HighlightLine( size_t line, bool highlight = true,
+                        SendEvent sendEvent = SendEvent_Normal );
 
     // as HighlightLine() but do it for the range of lines: this is incredibly
     // more efficient for virtual list controls!
     //
     // NB: unlike HighlightLine() this one does refresh the lines on screen
-    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true );
+    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
+                         SendEvent sendEvent = SendEvent_Normal );
 
     // toggle the line state and refresh it
     void ReverseHighlight( size_t line )
@@ -817,15 +820,16 @@ protected:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
-    // for multi-selection logic
-    size_t m_lineMultiSelectPivot;
+    // Multiple selection extends from the anchor. Not used in single-selection mode.
+    size_t m_anchor;
 
     bool m_hasCheckBoxes;
 
 protected:
     wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
 
-    // the total count of items selected in a non virtual list control
+    // the total count of items selected in a non virtual list control with
+    // multiple selections (always 0 otherwise)
     size_t m_selCount;
 
     // the total count of items in a virtual list control
@@ -883,21 +887,18 @@ private:
     bool ChangeCurrentWithoutEvent(size_t current);
 
     // Trying to activate the current item from keyboard is only possible
-    // if it is actually selected. we don't send wxEVT_LIST_ITEM_ACTIVATED
+    // if it is actually selected. We don't send wxEVT_LIST_ITEM_ACTIVATED
     // event if it is not, and wxEVT_LIST_KEY_DOWN event should carry -1
     // in this case.
-    size_t GetCurrentForEvent() const
+    bool ShouldSendEventForCurrent() const
     {
-        if ( HasCurrent() && IsHighlighted(m_current) )
-            return m_current;
-
-        return (size_t)-1;
+        return HasCurrent() && IsHighlighted(m_current);
     }
 
-    // For multi-selection mode, change the selected range from [m_lineMultiSelectPivot,
-    // oldCurrent] to [m_lineMultiSelectPivot, newCurrent] without generating unnecessary
+    // For multi-selection mode, change the selected range from [m_anchor,
+    // oldCurrent] to [m_anchor, newCurrent] without generating unnecessary
     // wxEVT_LIST_ITEM_{DE}SELECTED events.
-    void ChangeHighlightedLines(size_t oldCurrent, size_t newCurrent);
+    void ExtendSelection(size_t oldCurrent, size_t newCurrent);
 
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
@@ -934,7 +935,6 @@ private:
     wxDECLARE_EVENT_TABLE();
 
     friend class wxGenericListCtrl;
-    friend class wxListCtrlEventBlocker;
     friend class wxListCtrlMaxWidthCalculator;
 };
 
