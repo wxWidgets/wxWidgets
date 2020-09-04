@@ -1694,7 +1694,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
         (gs_currentFocus != win) && win->IsFocusable())
     {
-        win->SetFocus();
+        win->GetMainWindowOfCompositeControl()->SetFocus();
     }
 
     if (event_type == wxEVT_RIGHT_DOWN)
