@@ -52,27 +52,13 @@ protected:
 namespace
 {
 
-wxString wxArtIDToStock(const wxArtID& id)
-{
-    struct wxArtStockMapping
-    {
-        wxArtStockMapping(const wxArtID& artId, const wxString& stockId)
-            : m_artId(artId), m_stockId(stockId)
-        {
-        }
-
-        wxArtID m_artId;
-        wxString m_stockId;
-    };
-
 #ifdef __WXGTK3__
-    #define ART(wxId, unused, themeId) wxArtStockMapping(wxId, themeId),
+    #define ART(wxId, unused, themeId) wxId, themeId,
 #else
-    #define ART(wxId, stockId, unused) wxArtStockMapping(wxId, stockId),
+    #define ART(wxId, stockId, unused) wxId, stockId,
 #endif
 
-  static const wxArtStockMapping wxId2GtkMap[] =
-  {
+const wxString wxId2Gtk[] = {
     ART(wxART_ERROR,            GTK_STOCK_DIALOG_ERROR, "dialog-error")
     ART(wxART_INFORMATION,      GTK_STOCK_DIALOG_INFO, "dialog-information")
     ART(wxART_WARNING,          GTK_STOCK_DIALOG_WARNING, "dialog-warning")
@@ -136,21 +122,26 @@ wxString wxArtIDToStock(const wxArtID& id)
     ART(wxART_FIND_AND_REPLACE, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace")
     ART(wxART_FULL_SCREEN,      GTK_STOCK_FULLSCREEN, "view-fullscreen")
     ART(wxART_EDIT,             "accessories-text-editor", "accessories-text-editor")
-  };
+};
+
 #undef ART
 
+wxString wxArtIDToStock(const wxArtID& id)
+{
     // allow passing GTK+ stock IDs to wxArtProvider -- if a recognized wx
     // ID wasn't found, pass it to GTK+ in the hope it is a GTK+ or theme
     // icon name:
+    wxString ret(id);
 
-    for (unsigned i = 0; i < WXSIZEOF(wxId2GtkMap); i++)
+    for (unsigned i = 0; i < WXSIZEOF(wxId2Gtk); i += 2)
     {
-        if (id == wxId2GtkMap[i].m_artId)
+        if (id == wxId2Gtk[i])
         {
-            return wxId2GtkMap[i].m_stockId;
+            ret = wxId2Gtk[i + 1];
+            break;
         }
     }
-    return id;
+    return ret;
 }
 
 GtkIconSize ArtClientToIconSize(const wxArtClient& client)

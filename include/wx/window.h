@@ -539,7 +539,7 @@ public:
 
     // Return the ratio of the DPI used by this window to the standard DPI,
     // e.g. 1 for standard DPI screens and 2 for "200% scaling".
-    double GetDPIScaleFactor() const;
+    virtual double GetDPIScaleFactor() const;
 
     // return the size of the left/right and top/bottom borders in x and y
     // components of the result respectively
@@ -769,6 +769,9 @@ public:
         // call this when the return value of AcceptsFocus() changes
     virtual void SetCanFocus(bool WXUNUSED(canFocus)) { }
 
+        // call to customize visible focus indicator if possible in the port
+    virtual void EnableVisibleFocus(bool WXUNUSED(enabled)) { }
+
         // navigates inside this window
     bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward)
         { return DoNavigateIn(flags); }
@@ -965,6 +968,13 @@ public:
 
         // Get the DPI used by the given window or wxSize(0, 0) if unknown.
     virtual wxSize GetDPI() const;
+
+    // Some ports need to modify the font object when the DPI of the window it
+    // is used with changes, this function can be used to do it.
+    //
+    // Currently it is only used in wxMSW and is not considered to be part of
+    // wxWidgets public API.
+    virtual void WXAdjustFontToOwnPPI(wxFont& WXUNUSED(font)) const { }
 
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into

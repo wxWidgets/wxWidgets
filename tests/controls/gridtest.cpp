@@ -434,7 +434,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECT);
+    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECTED);
 
     wxUIActionSimulator sim;
 

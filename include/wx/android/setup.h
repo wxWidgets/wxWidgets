@@ -1386,6 +1386,13 @@
 // otherwise.
 #define wxUSE_GLCANVAS       1
 
+// Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
+// automatically enabled if EGL support is detected.
+//
+// Default is 0.
+//
+#define wxUSE_GLCANVAS_EGL   0
+
 // wxRichTextCtrl allows editing of styled text.
 //
 // Default is 1.

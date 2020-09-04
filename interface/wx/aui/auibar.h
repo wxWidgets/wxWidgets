@@ -407,6 +407,13 @@ public:
 
     */
     int GetAlignment() const;
+
+    /**
+        Returns whether the toolbar item can be toggled.
+
+        @since 3.1.5
+     */
+    bool CanBeToggled() const;
 };
 
 /**

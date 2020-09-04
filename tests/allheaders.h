@@ -397,6 +397,7 @@
 #include <wx/wxprec.h>
 #include <wx/xlocale.h>
 #include <wx/xpmdecod.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/xti2.h>
 #include <wx/xtictor.h>
 #include <wx/xti.h>

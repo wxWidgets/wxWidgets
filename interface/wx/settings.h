@@ -68,7 +68,7 @@ enum wxSystemColour
     wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading colour on push buttons.
     wxSYS_COLOUR_GRAYTEXT,            //!< Colour of greyed (disabled) text.
     wxSYS_COLOUR_BTNTEXT,             //!< Colour of the text on push buttons.
-    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in active captions.
+    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in inactive captions.
     wxSYS_COLOUR_BTNHIGHLIGHT,        //!< Highlight colour for buttons.
     wxSYS_COLOUR_3DDKSHADOW,          //!< Dark shadow colour for three-dimensional display elements.
     wxSYS_COLOUR_3DLIGHT,             //!< Light colour for three-dimensional display elements.

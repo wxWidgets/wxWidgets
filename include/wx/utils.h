@@ -780,6 +780,18 @@ void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 
 #ifdef __WXGTK__
     WXDLLIMPEXP_CORE void *wxGetDisplay();
+    enum wxDisplayType
+    {
+        wxDisplayNone,
+        wxDisplayX11,
+        wxDisplayWayland
+    };
+    struct wxDisplayInfo
+    {
+        void* dpy;
+        wxDisplayType type;
+    };
+    WXDLLIMPEXP_CORE wxDisplayInfo wxGetDisplayInfo();
 #endif
 
 #ifdef __X__

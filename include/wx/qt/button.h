@@ -32,7 +32,7 @@ public:
    virtual wxWindow *SetDefault() wxOVERRIDE;
 
     // implementation only
-    virtual int GetEventType() const wxOVERRIDE { return wxEVT_BUTTON; }
+    virtual int QtGetEventType() const wxOVERRIDE { return wxEVT_BUTTON; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);

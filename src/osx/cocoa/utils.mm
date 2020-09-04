@@ -485,6 +485,24 @@ wxRect wxOSXGetMainDisplayClientArea()
     return wxFromNSRect( NULL, displayRect );
 }
 
+static NSScreen* wxOSXGetScreenFromDisplay( CGDirectDisplayID ID)
+{
+    for (NSScreen* screen in [NSScreen screens])
+    {
+        CGDirectDisplayID displayID = [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] intValue];
+        if ( displayID == ID )
+            return screen;
+    }
+    return NULL;
+}
+
+extern // used from src/osx/core/display.cpp
+wxRect wxOSXGetDisplayClientArea(CGDirectDisplayID ID)
+{
+    NSRect displayRect = [wxOSXGetScreenFromDisplay(ID) visibleFrame];
+    return wxFromNSRect( NULL, displayRect );
+}
+
 void wxGetMousePosition( int* x, int* y )
 {
     wxPoint pt = wxFromNSPoint(NULL, [NSEvent mouseLocation]);

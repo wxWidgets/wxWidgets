@@ -36,7 +36,7 @@ public:
     virtual bool GetValue() const wxOVERRIDE;
 
     // implementation only
-    virtual int GetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }
+    virtual int QtGetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);

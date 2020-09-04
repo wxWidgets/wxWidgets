@@ -452,6 +452,20 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
         MSWSetPadding(m_toolPacking);
     }
 
+#if wxUSE_TOOLTIPS
+    // MSW "helpfully" handles ampersands as mnemonics in the tooltips
+    // (officially in order to allow using the same string as the menu item and
+    // a toolbar item tip), but we don't want this, so force TTS_NOPREFIX to be
+    // on to preserve all ampersands.
+    HWND hwndTTip = (HWND)::SendMessage(GetHwnd(), TB_GETTOOLTIPS, 0, 0);
+    if ( hwndTTip )
+    {
+        long styleTTip = ::GetWindowLong(hwndTTip, GWL_STYLE);
+        styleTTip |= TTS_NOPREFIX;
+        ::SetWindowLong(hwndTTip, GWL_STYLE, styleTTip);
+    }
+#endif // wxUSE_TOOLTIPS
+
     return true;
 }
 

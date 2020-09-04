@@ -554,12 +554,20 @@ private:
       if ( cacheBegin == NULL )
         return NULL;
 #endif
+
+      // gcc 7 warns about not being able to optimize this loop because of
+      // possible loop variable overflow, really not sure what to do about
+      // this, so just disable this warnings for now
+      wxGCC_ONLY_WARNING_SUPPRESS(unsafe-loop-optimizations)
+
       Cache::Element * const cacheEnd = GetCacheEnd();
       for ( Cache::Element *c = cacheBegin; c != cacheEnd; c++ )
       {
           if ( c->str == this )
               return c;
       }
+
+      wxGCC_ONLY_WARNING_RESTORE(unsafe-loop-optimizations)
 
       return NULL;
   }
@@ -569,6 +577,12 @@ private:
   // its corresponding index in the byte string or not
   Cache::Element *GetCacheElement() const
   {
+      // gcc warns about cacheBegin and c inside the loop being possibly null,
+      // but this shouldn't actually be the case
+#if wxCHECK_GCC_VERSION(6,1)
+      wxGCC_ONLY_WARNING_SUPPRESS(null-dereference)
+#endif
+
       Cache::Element * const cacheBegin = GetCacheBegin();
       Cache::Element * const cacheEnd = GetCacheEnd();
       Cache::Element * const cacheStart = cacheBegin + LastUsedCacheElement();
@@ -598,6 +612,10 @@ private:
       }
 
       return c;
+
+#if wxCHECK_GCC_VERSION(6,1)
+      wxGCC_ONLY_WARNING_RESTORE(null-dereference)
+#endif
   }
 
   size_t DoPosToImpl(size_t pos) const

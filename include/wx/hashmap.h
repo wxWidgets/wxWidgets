@@ -497,15 +497,15 @@ private:
 
 public:
     wxIntegerHash() { }
-    size_t operator()( long x ) const { return longHash( x ); }
-    size_t operator()( unsigned long x ) const { return ulongHash( x ); }
-    size_t operator()( int x ) const { return intHash( x ); }
-    size_t operator()( unsigned int x ) const { return uintHash( x ); }
-    size_t operator()( short x ) const { return shortHash( x ); }
-    size_t operator()( unsigned short x ) const { return ushortHash( x ); }
+    size_t operator()( long x ) const wxNOEXCEPT { return longHash( x ); }
+    size_t operator()( unsigned long x ) const wxNOEXCEPT { return ulongHash( x ); }
+    size_t operator()( int x ) const wxNOEXCEPT { return intHash( x ); }
+    size_t operator()( unsigned int x ) const wxNOEXCEPT { return uintHash( x ); }
+    size_t operator()( short x ) const wxNOEXCEPT { return shortHash( x ); }
+    size_t operator()( unsigned short x ) const wxNOEXCEPT { return ushortHash( x ); }
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    size_t operator()( wxLongLong_t x ) const { return longlongHash(x); }
-    size_t operator()( wxULongLong_t x ) const { return longlongHash(x); }
+    size_t operator()( wxLongLong_t x ) const wxNOEXCEPT { return longlongHash(x); }
+    size_t operator()( wxULongLong_t x ) const wxNOEXCEPT { return longlongHash(x); }
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
@@ -517,15 +517,15 @@ public:
 struct WXDLLIMPEXP_BASE wxIntegerHash
 {
     wxIntegerHash() { }
-    unsigned long operator()( long x ) const { return (unsigned long)x; }
-    unsigned long operator()( unsigned long x ) const { return x; }
-    unsigned long operator()( int x ) const { return (unsigned long)x; }
-    unsigned long operator()( unsigned int x ) const { return x; }
-    unsigned long operator()( short x ) const { return (unsigned long)x; }
-    unsigned long operator()( unsigned short x ) const { return x; }
+    unsigned long operator()( long x ) const wxNOEXCEPT { return (unsigned long)x; }
+    unsigned long operator()( unsigned long x ) const wxNOEXCEPT { return x; }
+    unsigned long operator()( int x ) const wxNOEXCEPT { return (unsigned long)x; }
+    unsigned long operator()( unsigned int x ) const wxNOEXCEPT { return x; }
+    unsigned long operator()( short x ) const wxNOEXCEPT { return (unsigned long)x; }
+    unsigned long operator()( unsigned short x ) const wxNOEXCEPT { return x; }
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    wxULongLong_t operator()( wxLongLong_t x ) const { return static_cast<wxULongLong_t>(x); }
-    wxULongLong_t operator()( wxULongLong_t x ) const { return x; }
+    wxULongLong_t operator()( wxLongLong_t x ) const wxNOEXCEPT { return static_cast<wxULongLong_t>(x); }
+    wxULongLong_t operator()( wxULongLong_t x ) const wxNOEXCEPT { return x; }
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 };
 
@@ -552,27 +552,27 @@ struct WXDLLIMPEXP_BASE wxPointerHash
     wxPointerHash() { }
 
 #ifdef wxNEEDS_WX_HASH_MAP
-    wxUIntPtr operator()( const void* k ) const { return wxPtrToUInt(k); }
+    wxUIntPtr operator()( const void* k ) const wxNOEXCEPT { return wxPtrToUInt(k); }
 #else
-    size_t operator()( const void* k ) const { return (size_t)k; }
+    size_t operator()( const void* k ) const wxNOEXCEPT { return (size_t)k; }
 #endif
 };
 
 struct WXDLLIMPEXP_BASE wxPointerEqual
 {
     wxPointerEqual() { }
-    bool operator()( const void* a, const void* b ) const { return a == b; }
+    bool operator()( const void* a, const void* b ) const wxNOEXCEPT { return a == b; }
 };
 
 // wxString, char*, wchar_t*
 struct WXDLLIMPEXP_BASE wxStringHash
 {
     wxStringHash() {}
-    unsigned long operator()( const wxString& x ) const
+    unsigned long operator()( const wxString& x ) const wxNOEXCEPT
         { return stringHash( x.wx_str() ); }
-    unsigned long operator()( const wchar_t* x ) const
+    unsigned long operator()( const wchar_t* x ) const wxNOEXCEPT
         { return stringHash( x ); }
-    unsigned long operator()( const char* x ) const
+    unsigned long operator()( const char* x ) const wxNOEXCEPT
         { return stringHash( x ); }
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -591,12 +591,12 @@ struct WXDLLIMPEXP_BASE wxStringHash
 struct WXDLLIMPEXP_BASE wxStringEqual
 {
     wxStringEqual() {}
-    bool operator()( const wxString& a, const wxString& b ) const
+    bool operator()( const wxString& a, const wxString& b ) const wxNOEXCEPT
         { return a == b; }
-    bool operator()( const wxChar* a, const wxChar* b ) const
+    bool operator()( const wxChar* a, const wxChar* b ) const wxNOEXCEPT
         { return wxStrcmp( a, b ) == 0; }
 #if wxUSE_UNICODE
-    bool operator()( const char* a, const char* b ) const
+    bool operator()( const char* a, const char* b ) const wxNOEXCEPT
         { return strcmp( a, b ) == 0; }
 #endif // wxUSE_UNICODE
 };

@@ -211,6 +211,11 @@ public:
     void SetAlignment(int l) { m_alignment = l; }
     int GetAlignment() const { return m_alignment; }
 
+    bool CanBeToggled() const
+    {
+        return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO;
+    }
+
 private:
 
     wxWindow* m_window;          // item's associated window
