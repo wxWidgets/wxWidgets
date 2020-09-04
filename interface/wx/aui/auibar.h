@@ -259,15 +259,22 @@ public:
 
     /**
       Returns the toolbar item kind.
+
+      @return one of @c wxITEM_NORMAL, @c wxITEM_CHECK or @c wxITEM_RADIO,
+      @c wxITEM_SEPARATOR, @c wxITEM_CONTROL, @c wxITEM_SPACER, @c wxITEM_LABEL,
     */
     int GetKind() const;
 
     /**
+      Set the current state of the toolbar item.
 
+      @param new_state is an or'd combination of flags from wxAuiPaneButtonState
     */
     void SetState(int new_state);
     /**
+      Gets the current state of the toolbar item.
 
+      @return an or'd combination of flags from wxAuiPaneButtonState representing the current state
     */
     int GetState() const;
 
