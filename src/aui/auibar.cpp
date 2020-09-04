@@ -2876,7 +2876,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         // tooltips handling
         wxAuiToolBarItem* packingHitItem;
         packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
-        if (packingHitItem)
+        if ( !HasFlag(wxAUI_TB_NO_TOOLTIPS) && packingHitItem )
         {
             if (packingHitItem != m_tipItem)
             {
