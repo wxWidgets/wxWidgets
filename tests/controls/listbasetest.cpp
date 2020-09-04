@@ -177,6 +177,104 @@ void ListBaseTestCase::ChangeMode()
     CPPUNIT_ASSERT_EQUAL( "First", list->GetItemText(0) );
 }
 
+void ListBaseTestCase::MultiSelect()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxListCtrl* const list = GetList();
+    list->ClearAll();
+
+    EventCounter focused(list, wxEVT_LIST_ITEM_FOCUSED);
+    EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
+    EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);
+
+    list->InsertColumn(0, "Column 0");
+
+    for ( int i = 0; i < 10; ++i )
+        list->InsertItem(i, wxString::Format("Item %d", i));
+
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    list->GetItemRect(2, pos); // Choose the third item as anchor
+
+    // We move in slightly so we are not on the edge
+    wxPoint point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 10);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick(); // select the anchor
+    wxYield();
+
+    sim.KeyDown(WXK_SHIFT);
+    wxYield();
+
+    list->GetItemRect(5, pos);
+    point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 10);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    // when the first item was selected the focus changes to it, but not
+    // on subsequent clicks
+    CPPUNIT_ASSERT_EQUAL(4, list->GetSelectedItemCount()); // item 2 to 5 (inclusive) are selected
+    CPPUNIT_ASSERT_EQUAL(2, focused.GetCount()); // count the focus which was on the anchor
+    CPPUNIT_ASSERT_EQUAL(4, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, deselected.GetCount());
+
+    focused.Clear();
+    selected.Clear();
+    deselected.Clear();
+
+    sim.Char(WXK_END); // extend the selection to the last item
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(8, list->GetSelectedItemCount()); // item 2 to 9 (inclusive) are selected
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
+    CPPUNIT_ASSERT_EQUAL(4, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, deselected.GetCount());
+
+    focused.Clear();
+    selected.Clear();
+    deselected.Clear();
+
+    sim.Char(WXK_HOME);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(3, list->GetSelectedItemCount()); // item 0 to 2 (inclusive) are selected
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, selected.GetCount()); // events are only generated for item 0 and 1
+    CPPUNIT_ASSERT_EQUAL(7, deselected.GetCount()); // item 2 (exclusive) to 9 are deselected
+
+    focused.Clear();
+    selected.Clear();
+    deselected.Clear();
+
+    sim.KeyUp(WXK_SHIFT);
+    wxYield();
+
+    list->EnsureVisible(0);
+    wxYield();
+
+    list->GetItemRect(2, pos);
+    point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 10);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, list->GetSelectedItemCount()); // anchor is the only selected item
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // because the focus was on the item 0
+    CPPUNIT_ASSERT_EQUAL(0, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, deselected.GetCount());
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 void ListBaseTestCase::ItemClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
