@@ -133,6 +133,7 @@ const char wxFileSelectorDefaultWildcardStr[];
     @style{wxFD_OVERWRITE_PROMPT}
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
+           This style is always enabled on wxOSX and cannot be disabled.
     @style{wxFD_NO_FOLLOW}
            Directs the dialog to return the path and file name of the selected
            shortcut file, not its target as it does by default. Currently this
