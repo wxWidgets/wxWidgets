@@ -564,6 +564,15 @@ void MyFrame::InitWithReportItems()
     itemCol.SetAlign(wxLIST_FORMAT_RIGHT);
     m_listCtrl->InsertColumn(2, itemCol);
 
+    if ( m_numListItems <= 0 )
+    {
+        m_listCtrl->SetColumnWidth( 0, 100 );
+        m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+        m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE_USEHEADER );
+
+        return;
+    }
+
     // to speed up inserting we hide the control temporarily
     m_listCtrl->Hide();
 
@@ -584,25 +593,38 @@ void MyFrame::InitWithReportItems()
     item.SetTextColour(*wxRED);
     m_listCtrl->SetItem( item );
 
-    item.m_itemId = 2;
-    item.SetTextColour(*wxGREEN);
-    m_listCtrl->SetItem( item );
-    item.m_itemId = 4;
-    item.SetTextColour(*wxLIGHT_GREY);
-    item.SetFont(*wxITALIC_FONT);
-    item.SetBackgroundColour(*wxRED);
-    m_listCtrl->SetItem( item );
+    if ( m_numListItems > 2 )
+    {
+        item.m_itemId = 2;
+        item.SetTextColour(*wxGREEN);
+        m_listCtrl->SetItem( item );
+    }
+
+    if ( m_numListItems > 4 )
+    {
+        item.m_itemId = 4;
+        item.SetTextColour(*wxLIGHT_GREY);
+        item.SetFont(*wxITALIC_FONT);
+        item.SetBackgroundColour(*wxRED);
+        m_listCtrl->SetItem( item );
+    }
 
     m_listCtrl->SetTextColour(*wxBLUE);
 
-    // Set images in columns
-    m_listCtrl->SetItemColumnImage(1, 1, 0);
+    if ( m_numListItems > 1 )
+    {
+        // Set images in columns
+        m_listCtrl->SetItemColumnImage(1, 1, 0);
+    }
 
-    wxListItem info;
-    info.SetImage(0);
-    info.SetId(3);
-    info.SetColumn(2);
-    m_listCtrl->SetItem(info);
+    if ( m_numListItems > 3 )
+    {
+        wxListItem info;
+        info.SetImage(0);
+        info.SetId(3);
+        info.SetColumn(2);
+        m_listCtrl->SetItem(info);
+    }
 
     // test SetItemFont too
     m_listCtrl->SetItemFont(0, *wxITALIC_FONT);
@@ -1073,6 +1095,11 @@ void MyListCtrl::OnColClick(wxListEvent& event)
 {
     int col = event.GetColumn();
 
+    if ( col == -1 )
+    {
+        return; // clicked outside any column.
+    }
+
     // set or unset image
     static bool x = false;
     x = !x;
@@ -1409,8 +1436,6 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             wxFALLTHROUGH;
 
         default:
-            LogEvent(event, "OnListKeyDown");
-
             event.Skip();
     }
 }
