@@ -699,6 +699,7 @@ struct wxPixelDataOut<wxBitmap>
         }
     };
 
+#if defined(__WXMSW__)
     template <>
     class wxPixelDataIn<wxNativeMonoPixelFormat> : public wxPixelDataBase
     {
@@ -910,6 +911,7 @@ struct wxPixelDataOut<wxBitmap>
             m_height = sz.y;
         }
     };
+#endif
 };
 
 #endif //wxUSE_GUI
