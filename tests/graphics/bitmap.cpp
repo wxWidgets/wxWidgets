@@ -78,6 +78,26 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     REQUIRE(mono.LoadFile(mono_horse.GetName(), wxBITMAP_TYPE_BMP));
     REQUIRE(mono.IsOk());
     REQUIRE(mono.GetDepth() == 1);
+
+    // draw lines on top and left, but leaving blank top and left lines
+    {
+        wxNativeMonoPixelData data(mono);
+        wxNativeMonoPixelData::Iterator p(data);
+        p.OffsetY(data, 1);
+        for ( int i = 0; i < data.GetWidth() - 2; ++i )
+        {
+            ++p;
+            p.Pixel() = 0;
+        }
+        p.MoveTo(data, 1, 1);
+        for ( int i = 0; i < data.GetHeight() - 3; ++i )
+        {
+            p.OffsetY(data, 1);
+            p.Pixel() = 1;
+        }
+    }
+    TempFile mono_lines_horse("mono_lines_horse.bmp");
+    REQUIRE(mono.SaveFile(mono_lines_horse.GetName(), wxBITMAP_TYPE_BMP));
 #endif
 }
 
@@ -747,32 +767,32 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     }
 
     // Check sub bitmap mask
-    wxColour maskClrTopLeft;
-    wxColour maskClrTopRight;
-    wxColour maskClrBottomLeft;
-    wxColour maskClrBottomRight;
+    bool maskValueTopLeft;
+    bool maskValueTopRight;
+    bool maskValueBottomLeft;
+    bool maskValueBottomRight;
     // Fetch sample original mask pixels
     {
-        wxNativePixelData data(bmpMask);
+        wxNativeMonoPixelData data(bmpMask);
         REQUIRE(data);
-        wxNativePixelData::Iterator p(data);
+        wxNativeMonoPixelData::Iterator p(data);
         p.OffsetY(data, h / 4);
-        wxNativePixelData::Iterator rowStart = p;
+        wxNativeMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w / 4); // top-left point
-        maskClrTopLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueTopLeft = p.Pixel();
         p.OffsetX(data, w / 2); // top-right point
-        maskClrTopRight = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueTopRight = p.Pixel();
         p = rowStart;
         p.OffsetY(data, h / 2);
         p.OffsetX(data, w / 4); // bottom-left point
-        maskClrBottomLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueBottomLeft = p.Pixel();
         p.OffsetX(data, w / 2); // bottom-right point
-        maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueBottomRight = p.Pixel();
     }
-    CHECK(maskClrTopLeft == *wxWHITE);
-    CHECK(maskClrTopRight == *wxWHITE);
-    CHECK(maskClrBottomLeft == *wxBLACK);
-    CHECK(maskClrBottomRight == *wxBLACK);
+    CHECK(maskValueTopLeft == true);
+    CHECK(maskValueTopRight == true);
+    CHECK(maskValueBottomLeft == false);
+    CHECK(maskValueBottomRight == false);
 
     wxBitmap subBmpMask = subBmp.GetMask()->GetBitmap();
     // Check sub bitmap mask attributes
@@ -785,21 +805,21 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     REQUIRE_FALSE(subBmpMask.GetMask());
     // Check sub bitmap mask pixels
     {
-        wxNativePixelData data(subBmpMask);
+        wxNativeMonoPixelData data(subBmpMask);
         REQUIRE(data);
-        wxNativePixelData::Iterator p(data);
+        wxNativeMonoPixelData::Iterator p(data);
         p.OffsetY(data, h2 / 4);
-        wxNativePixelData::Iterator rowStart = p;
+        wxNativeMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w2 / 4); // top-left point
-        ASSERT_EQUAL_COLOUR_RGB(p, maskClrTopLeft);
+        CHECK(p.Pixel() == maskValueTopLeft);
         p.OffsetX(data, w2 / 2); // top-right point
-        ASSERT_EQUAL_COLOUR_RGB(p, maskClrTopRight);
+        CHECK(p.Pixel() == maskValueTopRight);
         p = rowStart;
         p.OffsetY(data, h2 / 2);
         p.OffsetX(data, w2 / 4); // bottom-left point
-        ASSERT_EQUAL_COLOUR_RGB(p, maskClrBottomLeft);
+        CHECK(p.Pixel() == maskValueBottomLeft);
         p.OffsetX(data, w2 / 2); // bottom-right point
-        ASSERT_EQUAL_COLOUR_RGB(p, maskClrBottomRight);
+        CHECK(p.Pixel() == maskValueBottomRight);
     }
 }
 
@@ -891,32 +911,32 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     }
 
     // Check sub bitmap mask
-    wxColour maskClrTopLeft;
-    wxColour maskClrTopRight;
-    wxColour maskClrBottomLeft;
-    wxColour maskClrBottomRight;
+    bool maskValueTopLeft;
+    bool maskValueTopRight;
+    bool maskValueBottomLeft;
+    bool maskValueBottomRight;
     // Fetch sample original mask pixels
     {
-        wxNativePixelData data(bmpMask);
+        wxNativeMonoPixelData data(bmpMask);
         REQUIRE(data);
-        wxNativePixelData::Iterator p(data);
+        wxNativeMonoPixelData::Iterator p(data);
         p.OffsetY(data, h / 4);
-        wxNativePixelData::Iterator rowStart = p;
+        wxNativeMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w / 4); // top-left point
-        maskClrTopLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueTopLeft = p.Pixel();
         p.OffsetX(data, w / 2); // top-right point
-        maskClrTopRight = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueTopRight = p.Pixel();
         p = rowStart;
         p.OffsetY(data, h / 2);
         p.OffsetX(data, w / 4); // bottom-left point
-        maskClrBottomLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueBottomLeft = p.Pixel();
         p.OffsetX(data, w / 2); // bottom-right point
-        maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
+        maskValueBottomRight = p.Pixel();
     }
-    CHECK(maskClrTopLeft == *wxWHITE);
-    CHECK(maskClrTopRight == *wxWHITE);
-    CHECK(maskClrBottomLeft == *wxBLACK);
-    CHECK(maskClrBottomRight == *wxBLACK);
+    CHECK(maskValueTopLeft == true);
+    CHECK(maskValueTopRight == true);
+    CHECK(maskValueBottomLeft == false);
+    CHECK(maskValueBottomRight == false);
 
     wxBitmap subBmpMask = subBmp.GetMask()->GetBitmap();
     // Check sub bitmap mask attributes
@@ -929,21 +949,21 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     REQUIRE_FALSE(subBmpMask.GetMask());
     // Check sub bitmap mask pixels
     {
-        wxNativePixelData data(subBmpMask);
+        wxNativeMonoPixelData data(subBmpMask);
         REQUIRE(data);
-        wxNativePixelData::Iterator p(data);
+        wxNativeMonoPixelData::Iterator p(data);
         p.OffsetY(data, h2 / 4);
-        wxNativePixelData::Iterator rowStart = p;
+        wxNativeMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w2 / 4); // top-left point
-        ASSERT_EQUAL_RGB(p, maskClrTopLeft.Red(), maskClrTopLeft.Green(), maskClrTopLeft.Blue());
+        CHECK(p.Pixel() == maskValueTopLeft);
         p.OffsetX(data, w2 / 2); // top-right point
-        ASSERT_EQUAL_RGB(p, maskClrTopRight.Red(), maskClrTopRight.Green(), maskClrTopRight.Blue());
+        CHECK(p.Pixel() == maskValueTopRight);
         p = rowStart;
         p.OffsetY(data, h2 / 2);
         p.OffsetX(data, w2 / 4); // bottom-left point
-        ASSERT_EQUAL_RGB(p, maskClrBottomLeft.Red(), maskClrBottomLeft.Green(), maskClrBottomLeft.Blue());
+        CHECK(p.Pixel() == maskValueBottomLeft);
         p.OffsetX(data, w2 / 2); // bottom-right point
-        ASSERT_EQUAL_RGB(p, maskClrBottomRight.Red(), maskClrBottomRight.Green(), maskClrBottomRight.Blue());
+        CHECK(p.Pixel() == maskValueBottomRight);
     }
 }
 

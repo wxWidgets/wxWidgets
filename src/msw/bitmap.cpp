@@ -1272,7 +1272,7 @@ void wxBitmap::MSWBlendMaskWithAlpha()
 
     {
         wxBitmap bmpMask = GetMask()->GetBitmap();
-        wxNativePixelData maskData(bmpMask);
+        wxNativeMonoPixelData maskData(bmpMask);
         wxCHECK_RET(maskData, "No access to bitmap mask data");
 
         wxAlphaPixelData bmpData(*this);
@@ -1281,17 +1281,17 @@ void wxBitmap::MSWBlendMaskWithAlpha()
         const int w = GetWidth();
         const int h = GetHeight();
 
-        wxNativePixelData::Iterator maskRowStart(maskData);
+        wxNativeMonoPixelData::Iterator maskRowStart(maskData);
         wxAlphaPixelData::Iterator bmpRowStart(bmpData);
         for ( int y = 0; y < h; y++ )
         {
-            wxNativePixelData::Iterator pMask = maskRowStart;
+            wxNativeMonoPixelData::Iterator pMask = maskRowStart;
             wxAlphaPixelData::Iterator pBmp = bmpRowStart;
             for ( int x = 0; x < w; x++, ++pBmp, ++pMask )
             {
                 // Masked pixel is not drawn i.e. is transparent,
                 // non-masked pixel is untouched.
-                if ( pMask.Red() == 0 )
+                if ( pMask.Pixel() == 0 )
                 {
                     pBmp.Red() = pBmp.Green() = pBmp.Blue() = 0; // pre-multiplied
                     pBmp.Alpha() = wxALPHA_TRANSPARENT;
