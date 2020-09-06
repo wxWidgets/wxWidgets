@@ -79,6 +79,9 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     REQUIRE(mono.IsOk());
     REQUIRE(mono.GetDepth() == 1);
 
+#if !defined(__WXMSW__)
+    WARN("wxNativeMonoPixelData only exists in wxMSW")
+#else
     // draw lines on top and left, but leaving blank top and left lines
     {
         wxNativeMonoPixelData data(mono);
@@ -98,7 +101,8 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     }
     TempFile mono_lines_horse("mono_lines_horse.bmp");
     REQUIRE(mono.SaveFile(mono_lines_horse.GetName(), wxBITMAP_TYPE_BMP));
-#endif
+#endif      // __WXMSW__
+#endif      // !__WXGTK__
 }
 
 TEST_CASE("BitmapTestCase::Mask", "[bitmap][mask]")
