@@ -1073,13 +1073,12 @@ wxString wxNativeFontInfo::ToString() const
             if ( xml.StartsWith(s_plistPrefix ))
                 xml = xml.Mid(s_plistPrefix.length());
 
-            s.Printf(wxT("%d;%d;%d;%d;"),
+            s.Printf("%d;%d;%d;%d;%s",
                  2, // version
                  GetUnderlined(),
                  GetStrikethrough(),
-                 (int)GetEncoding());
-
-            s += xml;
+                 (int)GetEncoding(),
+                 xml);
         }
     }
 
