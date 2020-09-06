@@ -746,6 +746,7 @@ void wxNativeFontInfo::Init()
     m_encoding = wxFONTENCODING_UTF8;
 
     m_ctWeight = 0.0;
+    m_ctWidth = 0.0;
     m_style = wxFONTSTYLE_NORMAL;
     m_ctSize = 0.0;
     m_family = wxFONTFAMILY_DEFAULT;
@@ -765,6 +766,7 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     m_encoding = info.m_encoding;
 
     m_ctWeight = info.m_ctWeight;
+    m_ctWidth = info.m_ctWidth;
     m_style = info.m_style;
     m_ctSize = info.m_ctSize;
     m_family = info.m_family;
@@ -787,6 +789,7 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     m_descriptor.reset(wxCFRetain(desc));
 
     m_ctWeight = GetCTWeight(desc);
+    m_ctWidth = GetCTwidth(desc);
     m_style = GetCTSlant(desc) > 0.01 ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontSizeAttribute)).GetValue(m_ctSize, CGFloat(0.0));
 
@@ -861,6 +864,7 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
         traits.SetValue(kCTFontSymbolicTrait, kCTFontItalicTrait);
 
     traits.SetValue(kCTFontWeightTrait,m_ctWeight);
+    traits.SetValue(kCTFontWidthTrait,m_ctWidth);
 
     attributes.SetValue(kCTFontTraitsAttribute,traits.get());
     attributes.SetValue(kCTFontSizeAttribute, m_ctSize);
@@ -922,6 +926,15 @@ CGFloat wxNativeFontInfo::GetCTWeight(CTFontDescriptorRef descr)
     CFTypeRef fonttraitstype = CTFontDescriptorCopyAttribute(descr, kCTFontTraitsAttribute);
     wxCFDictionaryRef traits((CFDictionaryRef)fonttraitstype);
     traits.GetValue(kCTFontWeightTrait).GetValue(&weight, CGFloat(0.0));
+    return weight;
+}
+
+CGFloat wxNativeFontInfo::GetCTwidth(CTFontDescriptorRef descr)
+{
+    CGFloat weight;
+    CFTypeRef fonttraitstype = CTFontDescriptorCopyAttribute(descr, kCTFontTraitsAttribute);
+    wxCFDictionaryRef traits((CFDictionaryRef)fonttraitstype);
+    traits.GetValue(kCTFontWidthTrait).GetValue(&weight, CGFloat(0.0));
     return weight;
 }
 
