@@ -771,6 +771,34 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     }
 
     // Check sub bitmap mask
+#if !defined(__WXMSW__)
+    wxColour maskClrTopLeft;
+    wxColour maskClrTopRight;
+    wxColour maskClrBottomLeft;
+    wxColour maskClrBottomRight;
+    // Fetch sample original mask pixels
+    {
+        wxNativePixelData data(bmpMask);
+        REQUIRE(data);
+        wxNativePixelData::Iterator p(data);
+        p.OffsetY(data, h / 4);
+        wxNativePixelData::Iterator rowStart = p;
+        p.OffsetX(data, w / 4); // top-left point
+        maskClrTopLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        p.OffsetX(data, w / 2); // top-right point
+        maskClrTopRight = wxColour(p.Red(), p.Green(), p.Blue());
+        p = rowStart;
+        p.OffsetY(data, h / 2);
+        p.OffsetX(data, w / 4); // bottom-left point
+        maskClrBottomLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        p.OffsetX(data, w / 2); // bottom-right point
+        maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
+    }
+    CHECK(maskClrTopLeft == *wxWHITE);
+    CHECK(maskClrTopRight == *wxWHITE);
+    CHECK(maskClrBottomLeft == *wxBLACK);
+    CHECK(maskClrBottomRight == *wxBLACK);
+#else
     bool maskValueTopLeft;
     bool maskValueTopRight;
     bool maskValueBottomLeft;
@@ -797,6 +825,7 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     CHECK(maskValueTopRight == true);
     CHECK(maskValueBottomLeft == false);
     CHECK(maskValueBottomRight == false);
+#endif
 
     wxBitmap subBmpMask = subBmp.GetMask()->GetBitmap();
     // Check sub bitmap mask attributes
@@ -808,6 +837,25 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     REQUIRE_FALSE(subBmpMask.HasAlpha());
     REQUIRE_FALSE(subBmpMask.GetMask());
     // Check sub bitmap mask pixels
+#if !defined(__WXMSW__)
+    {
+        wxNativePixelData data(subBmpMask);
+        REQUIRE(data);
+        wxNativePixelData::Iterator p(data);
+        p.OffsetY(data, h2 / 4);
+        wxNativePixelData::Iterator rowStart = p;
+        p.OffsetX(data, w2 / 4); // top-left point
+        ASSERT_EQUAL_COLOUR_RGB(p, maskClrTopLeft);
+        p.OffsetX(data, w2 / 2); // top-right point
+        ASSERT_EQUAL_COLOUR_RGB(p, maskClrTopRight);
+        p = rowStart;
+        p.OffsetY(data, h2 / 2);
+        p.OffsetX(data, w2 / 4); // bottom-left point
+        ASSERT_EQUAL_COLOUR_RGB(p, maskClrBottomLeft);
+        p.OffsetX(data, w2 / 2); // bottom-right point
+        ASSERT_EQUAL_COLOUR_RGB(p, maskClrBottomRight);
+    }
+#else
     {
         wxNativeMonoPixelData data(subBmpMask);
         REQUIRE(data);
@@ -825,6 +873,7 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         p.OffsetX(data, w2 / 2); // bottom-right point
         CHECK(p.Pixel() == maskValueBottomRight);
     }
+#endif
 }
 
 TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][withmask]")
@@ -915,6 +964,34 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     }
 
     // Check sub bitmap mask
+#if !defined(__WXMSW__)
+    wxColour maskClrTopLeft;
+    wxColour maskClrTopRight;
+    wxColour maskClrBottomLeft;
+    wxColour maskClrBottomRight;
+    // Fetch sample original mask pixels
+    {
+        wxNativePixelData data(bmpMask);
+        REQUIRE(data);
+        wxNativePixelData::Iterator p(data);
+        p.OffsetY(data, h / 4);
+        wxNativePixelData::Iterator rowStart = p;
+        p.OffsetX(data, w / 4); // top-left point
+        maskClrTopLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        p.OffsetX(data, w / 2); // top-right point
+        maskClrTopRight = wxColour(p.Red(), p.Green(), p.Blue());
+        p = rowStart;
+        p.OffsetY(data, h / 2);
+        p.OffsetX(data, w / 4); // bottom-left point
+        maskClrBottomLeft = wxColour(p.Red(), p.Green(), p.Blue());
+        p.OffsetX(data, w / 2); // bottom-right point
+        maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
+    }
+    CHECK(maskClrTopLeft == *wxWHITE);
+    CHECK(maskClrTopRight == *wxWHITE);
+    CHECK(maskClrBottomLeft == *wxBLACK);
+    CHECK(maskClrBottomRight == *wxBLACK);
+#else
     bool maskValueTopLeft;
     bool maskValueTopRight;
     bool maskValueBottomLeft;
@@ -941,6 +1018,7 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     CHECK(maskValueTopRight == true);
     CHECK(maskValueBottomLeft == false);
     CHECK(maskValueBottomRight == false);
+#endif
 
     wxBitmap subBmpMask = subBmp.GetMask()->GetBitmap();
     // Check sub bitmap mask attributes
@@ -952,6 +1030,25 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     REQUIRE_FALSE(subBmpMask.HasAlpha());
     REQUIRE_FALSE(subBmpMask.GetMask());
     // Check sub bitmap mask pixels
+#if !defined(__WXMSW__)
+    {
+        wxNativePixelData data(subBmpMask);
+        REQUIRE(data);
+        wxNativePixelData::Iterator p(data);
+        p.OffsetY(data, h2 / 4);
+        wxNativePixelData::Iterator rowStart = p;
+        p.OffsetX(data, w2 / 4); // top-left point
+        ASSERT_EQUAL_RGB(p, maskClrTopLeft.Red(), maskClrTopLeft.Green(), maskClrTopLeft.Blue());
+        p.OffsetX(data, w2 / 2); // top-right point
+        ASSERT_EQUAL_RGB(p, maskClrTopRight.Red(), maskClrTopRight.Green(), maskClrTopRight.Blue());
+        p = rowStart;
+        p.OffsetY(data, h2 / 2);
+        p.OffsetX(data, w2 / 4); // bottom-left point
+        ASSERT_EQUAL_RGB(p, maskClrBottomLeft.Red(), maskClrBottomLeft.Green(), maskClrBottomLeft.Blue());
+        p.OffsetX(data, w2 / 2); // bottom-right point
+        ASSERT_EQUAL_RGB(p, maskClrBottomRight.Red(), maskClrBottomRight.Green(), maskClrBottomRight.Blue());
+    }
+#else
     {
         wxNativeMonoPixelData data(subBmpMask);
         REQUIRE(data);
@@ -969,6 +1066,7 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         p.OffsetX(data, w2 / 2); // bottom-right point
         CHECK(p.Pixel() == maskValueBottomRight);
     }
+#endif
 }
 
 namespace Catch
