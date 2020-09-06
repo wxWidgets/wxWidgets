@@ -1070,8 +1070,7 @@ wxString wxNativeFontInfo::ToString() const
             wxCFStringRef cfString( CFStringCreateFromExternalRepresentation( kCFAllocatorDefault, listData, kCFStringEncodingUTF8) );
             wxString xml = cfString.AsString();
             xml.Replace("\r",wxEmptyString,true);
-            if ( xml.StartsWith(s_plistPrefix ))
-                xml = xml.Mid(s_plistPrefix.length());
+            xml.StartsWith(s_plistPrefix, &xml);
 
             s.Printf("%d;%d;%d;%d;%s",
                  2, // version
