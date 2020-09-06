@@ -934,8 +934,10 @@ CGFloat wxNativeFontInfo::GetCTSlant(CTFontDescriptorRef descr)
     return slant;
 }
 
+// common prefix of plist serializiation, gets removed and readded
+static const wxString s_plistPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC "
+    "\"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">";
 
-//
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     double d;
@@ -1029,7 +1031,10 @@ bool wxNativeFontInfo::FromString(const wxString& s)
             return false;
         wxFontEncoding encoding = (wxFontEncoding)l;
 
-        wxCFStringRef plist(tokenizer.GetString());
+        wxString xml = tokenizer.GetString();
+        if ( !xml.StartsWith("<?xml"))
+            xml+=s_plistPrefix;
+        wxCFStringRef plist(xml);
         wxCFDataRef listData(CFStringCreateExternalRepresentation(kCFAllocatorDefault,plist,kCFStringEncodingUTF8,0));
         wxCFDictionaryRef attributes((CFDictionaryRef) CFPropertyListCreateWithData(kCFAllocatorDefault, listData, 0, NULL, NULL));
         CTFontDescriptorRef descriptor = NULL;
@@ -1063,14 +1068,18 @@ wxString wxNativeFontInfo::ToString() const
         {
             wxCFDataRef listData(CFPropertyListCreateData(kCFAllocatorDefault, attributes, format, 0, NULL));
             wxCFStringRef cfString( CFStringCreateFromExternalRepresentation( kCFAllocatorDefault, listData, kCFStringEncodingUTF8) );
+            wxString xml = cfString.AsString();
+            xml.Replace("\r",wxEmptyString,true);
+            if ( xml.StartsWith(s_plistPrefix ))
+                xml = xml.Mid(s_plistPrefix.length());
+
             s.Printf(wxT("%d;%d;%d;%d;"),
                  2, // version
                  GetUnderlined(),
                  GetStrikethrough(),
                  (int)GetEncoding());
 
-            s += cfString.AsString();
-            s.Replace("\r",wxEmptyString,true);
+            s += xml;
         }
     }
 
