@@ -949,86 +949,146 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
     version = l;
-    //
-    //  Ignore the version for now
-    //
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToCDouble(&d) )
-        return false;
-    if ( d < 0 || d > FLT_MAX )
-        return false;
+    if ( version == 0 || version == 1 )
+    {
+        token = tokenizer.GetNextToken();
+        if ( !token.ToCDouble(&d) )
+            return false;
+        if ( d < 0 || d > FLT_MAX )
+            return false;
 #ifdef __LP64__
-    // CGFloat is just double in this case.
-    m_ctSize = d;
+        // CGFloat is just double in this case.
+        m_ctSize = d;
 #else // !__LP64__
-    m_ctSize = static_cast<CGFloat>(d);
+        m_ctSize = static_cast<CGFloat>(d);
 #endif // __LP64__/!__LP64__
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_family = (wxFontFamily)l;
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_family = (wxFontFamily)l;
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_style = (wxFontStyle)l;
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_style = (wxFontStyle)l;
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_ctWeight = WXWeightToCT(wxFont::ConvertFromLegacyWeightIfNecessary(l));
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_ctWeight = WXWeightToCT(wxFont::ConvertFromLegacyWeightIfNecessary(l));
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_underlined = l != 0;
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_underlined = l != 0;
 
-    if ( version == 0L )
-    {
-        m_strikethrough = false;
+        if ( version == 0L )
+        {
+            m_strikethrough = false;
+        }
+        else
+        {
+            token = tokenizer.GetNextToken();
+            if ( !token.ToLong(&l) )
+                return false;
+            m_strikethrough = l != 0;
+        }
+
+        // this works correctly via fallback even if this is (backwards compatibility) a font family name
+        SetPostScriptName( tokenizer.GetNextToken() );
+
+        RealizeResource();
+
+#ifndef __WXMAC__
+        if( !m_familyName )
+            return false;
+#endif
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_encoding = (wxFontEncoding)l;
+        return true;
     }
-    else
+    else if ( version == 2 )
     {
         token = tokenizer.GetNextToken();
         if ( !token.ToLong(&l) )
             return false;
-        m_strikethrough = l != 0;
+        bool underlined = l != 0;
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        bool strikethrough = l != 0;
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        wxFontEncoding encoding = (wxFontEncoding)l;
+
+        wxCFStringRef plist(tokenizer.GetString());
+        wxCFDataRef listData(CFStringCreateExternalRepresentation(kCFAllocatorDefault,plist,kCFStringEncodingUTF8,0));
+        wxCFDictionaryRef attributes((CFDictionaryRef) CFPropertyListCreateWithData(kCFAllocatorDefault, listData, 0, NULL, NULL));
+        CTFontDescriptorRef descriptor = NULL;
+        if (attributes != NULL)
+            descriptor = CTFontDescriptorCreateWithAttributes(attributes);
+        if (descriptor != NULL)
+        {
+            InitFromFontDescriptor(descriptor);
+            m_underlined = underlined;
+            m_strikethrough = strikethrough;
+            m_encoding = encoding;
+            return true;
+        }
     }
 
-    // this works correctly via fallback even if this is (backwards compatibility) a font family name
-    SetPostScriptName( tokenizer.GetNextToken() );
-    
-    RealizeResource();
-
-#ifndef __WXMAC__
-    if( !m_familyName )
-        return false;
-#endif
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_encoding = (wxFontEncoding)l;
-
-    return true;
+    return false;
 }
 
 wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
-        1, // version
-        wxString::FromCDouble(GetFractionalPointSize()),
-        GetFamily(),
-        (int)GetStyle(),
-        GetNumericWeight(),
-        GetUnderlined(),
-        GetStrikethrough(),
-        GetPostScriptName().GetData(),
-        (int)GetEncoding());
+    // version 2 is a streamed property list of the font descriptor as recommended by Apple
+    // prefixed by the attributes that are non-native to the native font ref like underline, strikethrough etc.
+    wxCFDictionaryRef attributes(CTFontDescriptorCopyAttributes(GetCTFontDescriptor()));
+
+    if (attributes != NULL)
+    {
+        CFPropertyListFormat format = kCFPropertyListXMLFormat_v1_0;
+        if (CFPropertyListIsValid(attributes, format))
+        {
+            wxCFDataRef listData(CFPropertyListCreateData(kCFAllocatorDefault, attributes, format, 0, NULL));
+            wxCFStringRef cfString( CFStringCreateFromExternalRepresentation( kCFAllocatorDefault, listData, kCFStringEncodingUTF8) );
+            s.Printf(wxT("%d;%d;%d;%d;"),
+                 2, // version
+                 GetUnderlined(),
+                 GetStrikethrough(),
+                 (int)GetEncoding());
+
+            s += cfString.AsString();
+            s.Replace("\r",wxEmptyString,true);
+        }
+    }
+
+    if ( s.empty() )
+    {
+        // fallback to version 1
+        s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
+                 1, // version
+                 wxString::FromCDouble(GetFractionalPointSize()),
+                 GetFamily(),
+                 (int)GetStyle(),
+                 GetNumericWeight(),
+                 GetUnderlined(),
+                 GetStrikethrough(),
+                 GetPostScriptName().GetData(),
+                 (int)GetEncoding());
+
+    }
 
     return s;
 }
