@@ -80,7 +80,7 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     REQUIRE(mono.GetDepth() == 1);
 
 #if !defined(__WXMSW__)
-    WARN("wxNativeMonoPixelData only exists in wxMSW")
+    WARN("wxNativeMonoPixelData only exists in wxMSW");
 #else
     // draw lines on top and left, but leaving blank top and left lines
     {
