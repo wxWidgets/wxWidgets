@@ -735,7 +735,7 @@ struct wxPixelDataOut<wxBitmap>
 
                 wxByte* m_ptr;
                 wxInt8 m_bit;
-                friend Iterator;
+                friend class Iterator;
             };
 
             class Iterator
