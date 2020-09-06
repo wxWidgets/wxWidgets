@@ -890,6 +890,15 @@ private:
     // return true if m_current really changed.
     bool ChangeCurrentWithoutEvent(size_t current);
 
+    // Trying to activate the current item from keyboard is only possible
+    // if it is actually selected. We don't send wxEVT_LIST_ITEM_ACTIVATED
+    // event if it is not, and wxEVT_LIST_KEY_DOWN event should carry -1
+    // in this case, as the wxMSW implementation does.
+    bool ShouldSendEventForCurrent() const
+    {
+        return HasCurrent() && IsHighlighted(m_current);
+    }
+
     // For multiple selection mode.
     // Change the selected range from [anchor, oldCurrent] to [anchor, newCurrent]
     // without generating unnecessary wxEVT_LIST_ITEM_{DE}SELECTED events.

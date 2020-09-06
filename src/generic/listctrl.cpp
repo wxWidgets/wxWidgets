@@ -2942,10 +2942,11 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
 
     // send a list event
     wxListEvent le( wxEVT_LIST_KEY_DOWN, parent->GetId() );
+    const size_t current = ShouldSendEventForCurrent() ? m_current : (size_t)-1;
     le.m_item.m_itemId =
-    le.m_itemIndex = m_current;
-    if (HasCurrent())
-        GetLine(m_current)->GetItem( 0, le.m_item );
+    le.m_itemIndex = current;
+    if ( current != (size_t)-1 )
+        GetLine(current)->GetItem( 0, le.m_item );
     le.m_code = event.GetKeyCode();
     le.SetEventObject( parent );
     if (parent->GetEventHandler()->ProcessEvent( le ))
@@ -3099,7 +3100,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 {
                     ReverseHighlight(m_current);
                 }
-                else // normal space press
+                else if ( ShouldSendEventForCurrent() ) // normal space press
                 {
                     SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
                 }
@@ -3112,7 +3113,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_RETURN:
         case WXK_EXECUTE:
-            if ( event.HasModifiers() )
+            if ( event.HasModifiers() || !ShouldSendEventForCurrent() )
             {
                 event.Skip();
                 break;
