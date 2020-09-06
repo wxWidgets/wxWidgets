@@ -1194,7 +1194,13 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style_)
 
     if (formerIsItalic != newIsItalic)
     {
-        Free();
+        if ( m_descriptor )
+        {
+            if ( m_style != wxFONTSTYLE_NORMAL )
+                m_descriptor = CTFontDescriptorCreateCopyWithSymbolicTraits(m_descriptor, kCTFontItalicTrait, kCTFontItalicTrait);
+            else
+                m_descriptor = CTFontDescriptorCreateCopyWithSymbolicTraits(m_descriptor, 0, kCTFontItalicTrait);
+        }
     }
 }
 
