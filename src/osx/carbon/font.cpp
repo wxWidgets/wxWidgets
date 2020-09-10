@@ -170,15 +170,15 @@ namespace
     const int kCTWeightsCount = 12;
     static CGFloat gCTWeights[kCTWeightsCount] = {
         -1.000, // 0
-        -0.800, // 100
-        -0.600, // 200
-        -0.400, // 300
-        0.000, // 400
-        0.230, // 500
-        0.300, // 600
-        0.400, // 700
-        0.560, // 800
-        0.620, // 900
+        -0.800, // 100, NSFontWeightUltraLight
+        -0.600, // 200, NSFontWeightThin
+        -0.400, // 300, NSFontWeightLight
+        0.000, // 400, NSFontWeightRegular
+        0.230, // 500, NSFontWeightMedium
+        0.300, // 600, NSFontWeightSemibold
+        0.400, // 700, NSFontWeightBold
+        0.560, // 800, NSFontWeightHeavy
+        0.620, // 900, NSFontWeightBlack
         0.750, // 1000
     };
 
@@ -947,6 +947,9 @@ CGFloat wxNativeFontInfo::GetCTSlant(CTFontDescriptorRef descr)
     return slant;
 }
 
+// recipe taken from
+// https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/CoreText_Programming/FontOperations/FontOperations.html
+
 // common prefix of plist serializiation, gets removed and readded
 
 static const wxString& GetPListPrefix()
@@ -1050,7 +1053,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         wxFontEncoding encoding = (wxFontEncoding)l;
 
         wxString xml = tokenizer.GetString();
-        xml+=GetPListPrefix();
+        xml = GetPListPrefix()+xml;
         wxCFStringRef plist(xml);
         wxCFDataRef listData(CFStringCreateExternalRepresentation(kCFAllocatorDefault,plist,kCFStringEncodingUTF8,0));
         wxCFDictionaryRef attributes((CFDictionaryRef) CFPropertyListCreateWithData(kCFAllocatorDefault, listData, 0, NULL, NULL));
