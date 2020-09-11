@@ -5002,7 +5002,6 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
     int splitterHit;
     int splitterHitOffset;
     int columnHit = state->HitTestH( x, &splitterHit, &splitterHitOffset );
-    int splitterX = x - splitterHitOffset;
 
     m_colHover = columnHit;
 
@@ -5012,6 +5011,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
              x < (m_pState->GetVirtualWidth() - wxPG_DRAG_MARGIN) )
         {
 
+            int splitterX = x - splitterHitOffset;
             int newSplitterX = x - m_dragOffset;
 
             // Splitter redraw required?
@@ -5098,13 +5098,13 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         if ( m_mouseSide == 1 )
                         {
                             tipString = m_propHover->GetLabel();
-                            space = splitterX-m_marginWidth-3;
+                            space = m_pState->GetColumnWidth(0)-3;
                         }
                         else if ( m_mouseSide == 2 )
                         {
                             tipString = m_propHover->GetDisplayedString();
 
-                            space = m_width - splitterX;
+                            space = m_pState->GetColumnWidth(1);
                             if ( m_propHover->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
                                 space -= wxPG_CUSTOM_IMAGE_WIDTH +
                                          wxCC_CUSTOM_IMAGE_MARGIN1 +
