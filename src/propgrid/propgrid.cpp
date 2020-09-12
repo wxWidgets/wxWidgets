@@ -5099,6 +5099,8 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         {
                             tipString = m_propHover->GetLabel();
                             space = m_pState->GetColumnWidth(0)-3;
+                            if ( !(m_windowStyle & wxPG_HIDE_CATEGORIES) || m_propHover->GetParent() != m_pState->DoGetRoot() )
+                                space -= (m_propHover->GetDepth()-1)*m_subgroup_extramargin;
                         }
                         else if ( m_mouseSide == 2 )
                         {
