@@ -1024,6 +1024,7 @@ WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility sup
 WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
 WX_ARG_FEATURE(dctransform,  [  --enable-dctransform    use wxDC::SetTransformMatrix and related], wxUSE_DC_TRANSFORM_MATRIX)
 WX_ARG_FEATURE(webviewwebkit,[  --enable-webviewwebkit  use wxWebView WebKit backend], wxUSE_WEBVIEW_WEBKIT)
+WX_ARG_FEATURE(glcanvasegl,  [  --disable-glcanvasegl   disable wxGLCanvas EGL backend], wxUSE_GLCANVAS_EGL)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -3215,6 +3216,23 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
+        AC_CACHE_CHECK([for GDK Wayland backend], wx_cv_gdk_wayland, [
+            save_CFLAGS=$CFLAGS
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            AC_TRY_COMPILE([
+                            #include <gdk/gdk.h>
+                           ],
+                           [
+                            #ifndef GDK_WINDOWING_WAYLAND
+                            Not GDK Windowing Wayland
+                            #endif
+                           ],
+                           wx_cv_gdk_wayland=yes,
+                           wx_cv_gdk_wayland=no
+                           )
+            CFLAGS=$save_CFLAGS
+        ])
+
         dnl test for external libxpm if we're configured to use it
         if test "$wxUSE_GPE" = "yes"; then
             AC_MSG_CHECKING(for gpewidget library)
@@ -3795,15 +3813,29 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                         OPENGL_LIBS="-lGL -lGLU"
 
                         if test "$WXGTK3" = 1; then
-                            PKG_CHECK_MODULES(EGL, [egl >= 1.5],
-                                [
-                                    OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                    AC_DEFINE(wxUSE_GLCANVAS_EGL)
-                                ],
-                                [
-                                    AC_MSG_NOTICE([EGL 1.5+ not available. Will use GLX.])
-                                ]
-                            )
+                            if test "$wxUSE_GLCANVAS_EGL" != "no"; then
+                                PKG_CHECK_MODULES(EGL, [egl >= 1.5],
+                                    [
+                                        OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
+                                        AC_DEFINE(wxUSE_GLCANVAS_EGL)
+                                        PKG_CHECK_MODULES(WAYLAND_EGL, [wayland-egl],
+                                            [
+                                                if test $wx_cv_gdk_wayland = "yes"; then
+                                                    OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
+                                                    have_wayland=1
+                                                fi
+                                            ],
+                                            [:]
+                                        )
+                                    ],
+                                    [
+                                        AC_MSG_NOTICE([EGL 1.5+ not available. Will use GLX.])
+                                    ]
+                                )
+                                if test "$have_wayland" != 1; then
+                                    AC_MSG_NOTICE([wxGLCanvas will not have Wayland support])
+                                fi
+                            fi
                         fi
                     fi
                 fi
