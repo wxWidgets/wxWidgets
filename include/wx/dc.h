@@ -323,6 +323,10 @@ public:
     // flushing the content of this dc immediately eg onto screen
     virtual void Flush() { }
 
+    // coordinates conversions and transforms
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+
     // bounding box
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)

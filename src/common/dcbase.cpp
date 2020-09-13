@@ -502,6 +502,16 @@ wxCoord wxDCImpl::LogicalToDeviceYRel(wxCoord y) const
     return wxRound((double)(y) * m_scaleY);
 }
 
+wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    return wxPoint(DeviceToLogicalX(x), DeviceToLogicalY(y));
+}
+
+wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+}
+
 void wxDCImpl::ComputeScaleAndOrigin()
 {
     m_scaleX = m_logicalScaleX * m_userScaleX;

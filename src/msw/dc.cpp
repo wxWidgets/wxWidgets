@@ -2100,6 +2100,24 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
     m_isClipBoxValid = false;
 }
 
+wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    POINT p[1];
+    p[0].x = x;
+    p[0].y = y;
+    ::DPtoLP(GetHdc(), p, WXSIZEOF(p));
+    return wxPoint(p[0].x, p[0].y);
+}
+
+wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    POINT p[1];
+    p[0].x = x;
+    p[0].y = y;
+    ::LPtoDP(GetHdc(), p, WXSIZEOF(p));
+    return wxPoint(p[0].x, p[0].y);
+}
+
 // ----------------------------------------------------------------------------
 // Transform matrix
 // ----------------------------------------------------------------------------
