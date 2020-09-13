@@ -5098,7 +5098,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         if ( m_mouseSide == 1 )
                         {
                             tipString = m_propHover->GetLabel();
-                            space = m_pState->GetColumnWidth(0)-3;
+                            space = m_pState->GetColumnWidth(0);
                             if ( !(m_windowStyle & wxPG_HIDE_CATEGORIES) || m_propHover->GetParent() != m_pState->DoGetRoot() )
                                 space -= (m_propHover->GetDepth()-1)*m_subgroup_extramargin;
                         }
@@ -5115,6 +5115,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
                         if ( space )
                         {
+                            space -= (wxPG_XBEFORETEXT + 1);
                             int tw, th;
                             GetTextExtent( tipString, &tw, &th, 0, 0 );
                             if ( tw > space )
