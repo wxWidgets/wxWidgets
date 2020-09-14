@@ -1263,7 +1263,6 @@ void wxOnAssert(const char *file,
 {
     wxTheAssertHandler(file, line, func, cond, msg);
 }
-
 #endif // wxUSE_UNICODE
 
 #endif // wxDEBUG_LEVEL
