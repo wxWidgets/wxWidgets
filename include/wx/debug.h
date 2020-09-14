@@ -186,13 +186,6 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         const char *cond,
                                         const char *msg);
 
-extern WXDLLIMPEXP_BASE void wxOnAssertWithErrorCode(const char *file,
-                                        int line,
-                                        const char *func,
-                                        unsigned long errorCode,
-                                        const char *cond,
-                                        const char *msg);
-
 extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
@@ -335,7 +328,6 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
 
     #define wxASSERT(cond)
     #define wxASSERT_MSG(cond, msg)
-
     #define wxFAIL
     #define wxFAIL_MSG(msg)
     #define wxFAIL_COND_MSG(cond, msg)
@@ -398,43 +390,32 @@ extern void WXDLLIMPEXP_BASE wxAbort();
 //     to begin with...)
 #define wxCHECK_RET(cond, msg)       wxCHECK2_MSG(cond, return, msg)
 
-#if wxDEBUG_LEVEL && wxUSE_UNICODE
+#if wxDEBUG_LEVEL
 
 // This macro checks if the evaluation of cond, having a return value of
 // OS Error type, is zero, ie no error occurred, and calls the assert handler
 // with the provided message if it isn't and finally traps if the special flag
 // indicating that it should do it was set by the handler.
-#define wxVERIFY_NOERR_MSG_AT(cond, msg, file, line, func)                \
+#define wxVERIFY_NOERR(cond)                \
     wxSTATEMENT_MACRO_BEGIN                                               \
         unsigned long evalOnceErrorCode = (cond);                         \
         if ( evalOnceErrorCode == 0 )                                     \
         {                                                                 \
         }                                                                 \
-        else if ( wxTheAssertHandler &&                                   \
-                (wxOnAssertWithErrorCode(file, line, func,                \
-                 evalOnceErrorCode, #cond, msg), wxTrapInAssert) )        \
+        else                                                              \
         {                                                                 \
-            wxTrapInAssert = false;                                       \
-            wxTrap();                                                     \
+            wxFAIL_COND_MSG(#cond, wxSysErrorMsgStr(cond));               \
         }                                                                 \
     wxSTATEMENT_MACRO_END
 
 #else
 
-#define wxVERIFY_NOERR_MSG_AT(cond, msg, file, line, func)                \
+#define wxVERIFY_NOERR(cond)                                              \
     wxSTATEMENT_MACRO_BEGIN                                               \
         cond;                                                             \
     wxSTATEMENT_MACRO_END
 
 #endif
-
-// A version asserting at the current location.
-#define wxVERIFY_NOERR_MSG(cond, msg) \
-    wxVERIFY_NOERR_MSG_AT(cond, msg, __FILE__, __LINE__, __WXFUNCTION__)
-
-// a version without any additional message, don't use unless condition
-// itself is fully self-explanatory
-#define wxVERIFY_NOERR(cond) wxVERIFY_NOERR_MSG(cond, (const char*)NULL)
 
 // ----------------------------------------------------------------------------
 // Compile time asserts

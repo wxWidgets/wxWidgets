@@ -1264,30 +1264,6 @@ void wxOnAssert(const char *file,
     wxTheAssertHandler(file, line, func, cond, msg);
 }
 
-void wxOnAssertWithErrorCode(const char *file,
-                int line,
-                const char *func,
-                unsigned long errorCode,
-                const char *cond,
-                const char *msg)
-{
-    wxString message;
-    if ( msg && *msg )
-        message = wxString::Format("%s ", msg);
-    wxString osError = wxSysErrorMsgStr(errorCode);
-#if defined(__WXMSW__)
-    // native error code type is unsigned 32 on msw, but signed on others
-    message += wxString::Format("(Error %lu", errorCode);
-#else
-    message += wxString::Format("(Error %ld", static_cast<long>(errorCode));
-#endif
-    if ( !osError.IsEmpty() )
-        message += wxString::Format(", %s", osError);
-    message += ")";
-
-    wxTheAssertHandler(file, line, func, cond, message);
-}
-
 #endif // wxUSE_UNICODE
 
 #endif // wxDEBUG_LEVEL
