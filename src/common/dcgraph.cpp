@@ -487,6 +487,8 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
         m_matrixCurrent.Concat(mtxExt);
 #endif // wxUSE_DC_TRANSFORM_MATRIX
         m_graphicContext->ConcatTransform( m_matrixCurrent );
+        m_matrixCurrentInv = m_matrixCurrent;
+        m_matrixCurrentInv.Invert();
         m_isClipBoxValid = false;
     }
 }
@@ -593,6 +595,23 @@ void wxGCDCImpl::ResetTransformMatrix()
 }
 
 #endif // wxUSE_DC_TRANSFORM_MATRIX
+
+// coordinates conversions and transforms
+wxPoint wxGCDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    wxDouble px = x;
+    wxDouble py = y;
+    m_matrixCurrentInv.TransformPoint(&px, &py);
+    return wxPoint(wxRound(px), wxRound(py));
+}
+
+wxPoint wxGCDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    wxDouble px = x;
+    wxDouble py = y;
+    m_matrixCurrent.TransformPoint(&px, &py);
+    return wxPoint(wxRound(px), wxRound(py));
+}
 
 bool wxGCDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                              const wxColour& WXUNUSED(col),

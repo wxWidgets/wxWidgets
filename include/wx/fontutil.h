@@ -173,6 +173,7 @@ public:
 
     static CGFloat GetCTWeight( CTFontRef font );
     static CGFloat GetCTWeight( CTFontDescriptorRef font );
+    static CGFloat GetCTwidth( CTFontDescriptorRef font );
     static CGFloat GetCTSlant( CTFontDescriptorRef font );
 
     CTFontDescriptorRef GetCTFontDescriptor() const;
@@ -182,6 +183,7 @@ private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
     CGFloat       m_ctWeight;
+    CGFloat       m_ctWidth;
     wxFontStyle   m_style;
     CGFloat       m_ctSize;
     wxFontFamily  m_family;

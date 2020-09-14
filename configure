@@ -953,6 +953,8 @@ CXXFLAGS_VISIBILITY
 CFLAGS_VISIBILITY
 MesaGL_LIBS
 MesaGL_CFLAGS
+WAYLAND_EGL_LIBS
+WAYLAND_EGL_CFLAGS
 EGL_LIBS
 EGL_CFLAGS
 GLU_LIBS
@@ -1337,6 +1339,7 @@ enable_accessibility
 enable_uiactionsim
 enable_dctransform
 enable_webviewwebkit
+enable_glcanvasegl
 enable_palette
 enable_image
 enable_gif
@@ -1401,6 +1404,8 @@ GLU_CFLAGS
 GLU_LIBS
 EGL_CFLAGS
 EGL_LIBS
+WAYLAND_EGL_CFLAGS
+WAYLAND_EGL_LIBS
 MesaGL_CFLAGS
 MesaGL_LIBS
 LIBSECRET_CFLAGS
@@ -2285,6 +2290,7 @@ Optional Features:
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
   --enable-dctransform    use wxDC::SetTransformMatrix and related
   --enable-webviewwebkit  use wxWebView WebKit backend
+  --disable-glcanvasegl   disable wxGLCanvas EGL backend
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -2407,6 +2413,10 @@ Some influential environment variables:
   GLU_LIBS    linker flags for GLU, overriding pkg-config
   EGL_CFLAGS  C compiler flags for EGL, overriding pkg-config
   EGL_LIBS    linker flags for EGL, overriding pkg-config
+  WAYLAND_EGL_CFLAGS
+              C compiler flags for WAYLAND_EGL, overriding pkg-config
+  WAYLAND_EGL_LIBS
+              linker flags for WAYLAND_EGL, overriding pkg-config
   MesaGL_CFLAGS
               C compiler flags for MesaGL, overriding pkg-config
   MesaGL_LIBS linker flags for MesaGL, overriding pkg-config
@@ -12188,6 +12198,35 @@ fi
 
 
           eval "$wx_cv_use_webviewwebkit"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-glcanvasegl was given.
+if test "${enable_glcanvasegl+set}" = set; then :
+  enableval=$enable_glcanvasegl;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_glcanvasegl='wxUSE_GLCANVAS_EGL=yes'
+                          else
+                            wx_cv_use_glcanvasegl='wxUSE_GLCANVAS_EGL=no'
+                          fi
+
+else
+
+                          wx_cv_use_glcanvasegl='wxUSE_GLCANVAS_EGL=${'DEFAULT_wxUSE_GLCANVAS_EGL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_glcanvasegl"
 
 
 
@@ -24667,6 +24706,44 @@ done
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GDK Wayland backend" >&5
+$as_echo_n "checking for GDK Wayland backend... " >&6; }
+if ${wx_cv_gdk_wayland+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+            save_CFLAGS=$CFLAGS
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+                            #include <gdk/gdk.h>
+
+int
+main ()
+{
+
+                            #ifndef GDK_WINDOWING_WAYLAND
+                            Not GDK Windowing Wayland
+                            #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  wx_cv_gdk_wayland=yes
+else
+  wx_cv_gdk_wayland=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            CFLAGS=$save_CFLAGS
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gdk_wayland" >&5
+$as_echo "$wx_cv_gdk_wayland" >&6; }
+
                 if test "$wxUSE_GPE" = "yes"; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gpewidget library" >&5
 $as_echo_n "checking for gpewidget library... " >&6; }
@@ -28265,6 +28342,7 @@ fi
                         OPENGL_LIBS="-lGL -lGLU"
 
                         if test "$WXGTK3" = 1; then
+                            if test "$wxUSE_GLCANVAS_EGL" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for EGL" >&5
@@ -28325,13 +28403,13 @@ fi
 	echo "$EGL_PKG_ERRORS" >&5
 
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
 
 
 elif test $pkg_failed = untried; then
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
 
 
@@ -28341,11 +28419,92 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                    OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                    $as_echo "#define wxUSE_GLCANVAS_EGL 1" >>confdefs.h
+                                        OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
+                                        $as_echo "#define wxUSE_GLCANVAS_EGL 1" >>confdefs.h
 
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WAYLAND_EGL" >&5
+$as_echo_n "checking for WAYLAND_EGL... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WAYLAND_EGL_CFLAGS"; then
+        pkg_cv_WAYLAND_EGL_CFLAGS="$WAYLAND_EGL_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"wayland-egl\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "wayland-egl") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WAYLAND_EGL_CFLAGS=`$PKG_CONFIG --cflags "wayland-egl" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WAYLAND_EGL_LIBS"; then
+        pkg_cv_WAYLAND_EGL_LIBS="$WAYLAND_EGL_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"wayland-egl\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "wayland-egl") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WAYLAND_EGL_LIBS=`$PKG_CONFIG --libs "wayland-egl" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        WAYLAND_EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "wayland-egl"`
+        else
+	        WAYLAND_EGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "wayland-egl"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$WAYLAND_EGL_PKG_ERRORS" >&5
+
+	:
+
+elif test $pkg_failed = untried; then
+	:
+
+else
+	WAYLAND_EGL_CFLAGS=$pkg_cv_WAYLAND_EGL_CFLAGS
+	WAYLAND_EGL_LIBS=$pkg_cv_WAYLAND_EGL_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                                if test $wx_cv_gdk_wayland = "yes"; then
+                                                    OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
+                                                    have_wayland=1
+                                                fi
 
 fi
+
+fi
+                                if test "$have_wayland" != 1; then
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: wxGLCanvas will not have Wayland support" >&5
+$as_echo "$as_me: wxGLCanvas will not have Wayland support" >&6;}
+                                fi
+                            fi
                         fi
                     fi
                 fi

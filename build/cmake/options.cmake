@@ -109,6 +109,7 @@ if(UNIX)
     wx_option(wxUSE_XTEST "use XTest extension")
     wx_option(wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
     wx_option(wxUSE_LIBGNOMEVFS "use GNOME VFS for associating MIME types")
+    wx_option(wxUSE_GLCANVAS_EGL "use EGL backend for wxGLCanvas")
 
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL for audio on Unix")
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")

@@ -323,13 +323,18 @@ public:
     // flushing the content of this dc immediately eg onto screen
     virtual void Flush() { }
 
+    // coordinates conversions and transforms
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+
     // bounding box
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
       // Bounding box is internally stored in device units.
-      x = LogicalToDeviceX(x);
-      y = LogicalToDeviceY(y);
+      wxPoint ptDev = LogicalToDevice(x, y);
+      x = ptDev.x;
+      y = ptDev.y;
       if ( m_isBBoxValid )
       {
          if ( x < m_minX ) m_minX = x;
@@ -355,10 +360,10 @@ public:
     }
 
     // Get bounding box in logical units.
-    wxCoord MinX() const { return m_isBBoxValid ? DeviceToLogicalX(m_minX) : 0; }
-    wxCoord MaxX() const { return m_isBBoxValid ? DeviceToLogicalX(m_maxX) : 0; }
-    wxCoord MinY() const { return m_isBBoxValid ? DeviceToLogicalY(m_minY) : 0; }
-    wxCoord MaxY() const { return m_isBBoxValid ? DeviceToLogicalY(m_maxY) : 0; }
+    wxCoord MinX() const { return m_isBBoxValid ? DeviceToLogical(m_minX, m_minY).x : 0; }
+    wxCoord MaxX() const { return m_isBBoxValid ? DeviceToLogical(m_maxX, m_maxY).x : 0; }
+    wxCoord MinY() const { return m_isBBoxValid ? DeviceToLogical(m_minX, m_minY).y : 0; }
+    wxCoord MaxY() const { return m_isBBoxValid ? DeviceToLogical(m_maxX, m_maxY).y : 0; }
 
     // setters and getters
 

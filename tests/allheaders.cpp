@@ -93,6 +93,7 @@
         #include <stdio.h>
         #include <unistd.h>
         #include <sys/stat.h>
+        #include <io.h>
     #endif
 #elif defined(__WXQT__)
     #include <QtGui/QFont>
