@@ -617,26 +617,34 @@ public:
 
     @beginStyleTable
     @style{wxAUI_TB_TEXT}
+        Display the label strings on the toolbar buttons.
     @style{wxAUI_TB_NO_TOOLTIPS}
+        Do not show tooltips for the toolbar items.
     @style{wxAUI_TB_NO_AUTORESIZE}
+        Do not automatically resize the toolbar when new tools are added.
     @style{wxAUI_TB_GRIPPER}
+        Show the toolbar's gripper control. If the toolbar is added to
+        an AUI pane that contains a gripper, this style will be automatically
+        set.
     @style{wxAUI_TB_OVERFLOW}
+        Show an overflow menu containing toolbar items that can't fit on the
+        toolbar if it is too small.
     @style{wxAUI_TB_VERTICAL}
-        using this style forces the toolbar to be vertical and
+        Using this style forces the toolbar to be vertical and
         be only dockable to the left or right sides of the window
         whereas by default it can be horizontal or vertical and
-        be docked anywhere
+        be docked anywhere.
     @style{wxAUI_TB_HORZ_LAYOUT}
     @style{wxAUI_TB_HORIZONTAL}
-        analogous to wxAUI_TB_VERTICAL, but forces the toolbar
-        to be horizontal
+        Analogous to wxAUI_TB_VERTICAL, but forces the toolbar
+        to be horizontal.
     @style{wxAUI_TB_PLAIN_BACKGROUND}
         Draw a plain background (based on parent) instead of the
         default gradient background.
     @style{wxAUI_TB_HORZ_TEXT}
         Equivalent to wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT
     @style{wxAUI_TB_DEFAULT_STYLE}
-        The default is to have no styles
+        The default is to have no styles.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiToolBarEvent}
@@ -861,6 +869,18 @@ public:
     wxString GetToolLongHelp(int toolId) const;
     void SetToolLongHelp(int toolId, const wxString& help_string);
 
+    /**
+      Add toolbar items that are always displayed in the overflow menu.
+
+      If there are custom items set, then the overflow menu will be
+      displayed even if there are no items from the main toolbar that
+      overflow.
+
+      @param prepend are the items to show before any overflow items
+      @param append are the items to show after any overflow items
+
+      @note The toolbar must have the @c wxAUI_TB_OVERFLOW style.
+     */
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);
 
