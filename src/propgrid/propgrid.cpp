@@ -5088,19 +5088,29 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         m_propHover->GetDisplayInfo(m_colHover, -1, 0, &tipString, (wxPGCell*)NULL);
                         int space = m_pState->GetColumnWidth(m_colHover);
 
+                        int imageWidth = 0;
+                        const wxBitmap& bmp = m_propHover->GetCell(m_colHover).GetBitmap();
+                        if ( bmp.IsOk() )
+                        {
+                            imageWidth = bmp.GetWidth();
+                            int hMax = m_lineHeight - wxPG_CUSTOM_IMAGE_SPACINGY - 1;
+                            if ( bmp.GetHeight() > hMax )
+                                imageWidth *= (double)hMax / bmp.GetHeight();
+                        }
+
                         if ( m_colHover == 0 )
                         {
                             if ( !(m_windowStyle & wxPG_HIDE_CATEGORIES) || m_propHover->GetParent() != m_pState->DoGetRoot() )
                                 space -= (m_propHover->GetDepth()-1)*m_subgroup_extramargin;
                         }
-                        else if ( m_colHover == 1 )
+                        else if ( m_colHover == 1 && !m_propHover->IsValueUnspecified())
                         {
-                            if ( m_propHover->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
-                                space -= wxPG_CUSTOM_IMAGE_WIDTH +
-                                         wxCC_CUSTOM_IMAGE_MARGIN1 +
-                                         wxCC_CUSTOM_IMAGE_MARGIN2;
+                            wxSize imageSize = GetImageSize(m_propHover, -1);
+                            if ( imageSize.x > 0 )
+                                imageWidth = imageSize.x;
                         }
 
+                        space -= m_propHover->GetImageOffset(imageWidth);
                         space -= (wxPG_XBEFORETEXT + 1);
                         int tw, th;
                         GetTextExtent( tipString, &tw, &th, 0, 0 );
