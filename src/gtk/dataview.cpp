@@ -35,6 +35,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gdkconv.h"
+#include "wx/gtk/private/image.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/treeview.h"
 using namespace wxGTKImpl;
@@ -3202,7 +3203,7 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     GtkWidget* box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_widget_show( box );
     // gtk_container_set_border_width((GtkContainer*)box, 2);
-    m_image = gtk_image_new();
+    m_image = wxGtkImage::New();
     gtk_box_pack_start(GTK_BOX(box), m_image, FALSE, FALSE, 1);
     m_label = gtk_label_new("");
     gtk_box_pack_end( GTK_BOX(box), GTK_WIDGET(m_label), FALSE, FALSE, 1 );
@@ -3273,9 +3274,7 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
 
     if (bitmap.IsOk())
     {
-        GtkImage *gtk_image = GTK_IMAGE(m_image);
-
-        gtk_image_set_from_pixbuf(GTK_IMAGE(gtk_image), bitmap.GetPixbuf());
+        WX_GTK_IMAGE(m_image)->Set(bitmap);
         gtk_widget_show( m_image );
     }
     else

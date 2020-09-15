@@ -4995,6 +4995,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_filectrl.o \
 	monodll_filehistory.o \
 	monodll_gtk_font.o \
+	monodll_image_gtk.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_nonownedwnd.o \
@@ -5035,6 +5036,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_filectrl.o \
 	monodll_filehistory.o \
 	monodll_gtk_font.o \
+	monodll_image_gtk.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_nonownedwnd.o \
@@ -5072,6 +5074,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_filectrl.o \
 	monodll_filehistory.o \
 	monodll_gtk_font.o \
+	monodll_image_gtk.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_nonownedwnd.o \
@@ -5899,6 +5902,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_filectrl.o \
 	monodll_filehistory.o \
 	monodll_gtk_font.o \
+	monodll_image_gtk.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_nonownedwnd.o \
@@ -5939,6 +5943,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_filectrl.o \
 	monodll_filehistory.o \
 	monodll_gtk_font.o \
+	monodll_image_gtk.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_nonownedwnd.o \
@@ -5976,6 +5981,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_filectrl.o \
 	monodll_filehistory.o \
 	monodll_gtk_font.o \
+	monodll_image_gtk.o \
 	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_nonownedwnd.o \
@@ -6976,6 +6982,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_filectrl.o \
 	monolib_filehistory.o \
 	monolib_gtk_font.o \
+	monolib_image_gtk.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_nonownedwnd.o \
@@ -7016,6 +7023,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_filectrl.o \
 	monolib_filehistory.o \
 	monolib_gtk_font.o \
+	monolib_image_gtk.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_nonownedwnd.o \
@@ -7053,6 +7061,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_filectrl.o \
 	monolib_filehistory.o \
 	monolib_gtk_font.o \
+	monolib_image_gtk.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_nonownedwnd.o \
@@ -7880,6 +7889,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_filectrl.o \
 	monolib_filehistory.o \
 	monolib_gtk_font.o \
+	monolib_image_gtk.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_nonownedwnd.o \
@@ -7920,6 +7930,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_filectrl.o \
 	monolib_filehistory.o \
 	monolib_gtk_font.o \
+	monolib_image_gtk.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_nonownedwnd.o \
@@ -7957,6 +7968,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_filectrl.o \
 	monolib_filehistory.o \
 	monolib_gtk_font.o \
+	monolib_image_gtk.o \
 	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_nonownedwnd.o \
@@ -9103,6 +9115,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_filectrl.o \
 	coredll_filehistory.o \
 	coredll_gtk_font.o \
+	coredll_image_gtk.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_nonownedwnd.o \
@@ -9143,6 +9156,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_filectrl.o \
 	coredll_filehistory.o \
 	coredll_gtk_font.o \
+	coredll_image_gtk.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_nonownedwnd.o \
@@ -9180,6 +9194,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_filectrl.o \
 	coredll_filehistory.o \
 	coredll_gtk_font.o \
+	coredll_image_gtk.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_nonownedwnd.o \
@@ -10007,6 +10022,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_filectrl.o \
 	coredll_filehistory.o \
 	coredll_gtk_font.o \
+	coredll_image_gtk.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_nonownedwnd.o \
@@ -10047,6 +10063,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_filectrl.o \
 	coredll_filehistory.o \
 	coredll_gtk_font.o \
+	coredll_image_gtk.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_nonownedwnd.o \
@@ -10084,6 +10101,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_filectrl.o \
 	coredll_filehistory.o \
 	coredll_gtk_font.o \
+	coredll_image_gtk.o \
 	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_nonownedwnd.o \
@@ -10820,6 +10838,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_filectrl.o \
 	corelib_filehistory.o \
 	corelib_gtk_font.o \
+	corelib_image_gtk.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_nonownedwnd.o \
@@ -10860,6 +10879,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_filectrl.o \
 	corelib_filehistory.o \
 	corelib_gtk_font.o \
+	corelib_image_gtk.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_nonownedwnd.o \
@@ -10897,6 +10917,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_filectrl.o \
 	corelib_filehistory.o \
 	corelib_gtk_font.o \
+	corelib_image_gtk.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_nonownedwnd.o \
@@ -11724,6 +11745,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_filectrl.o \
 	corelib_filehistory.o \
 	corelib_gtk_font.o \
+	corelib_image_gtk.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_nonownedwnd.o \
@@ -11764,6 +11786,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_filectrl.o \
 	corelib_filehistory.o \
 	corelib_gtk_font.o \
+	corelib_image_gtk.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_nonownedwnd.o \
@@ -11801,6 +11824,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_filectrl.o \
 	corelib_filehistory.o \
 	corelib_gtk_font.o \
+	corelib_image_gtk.o \
 	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_nonownedwnd.o \
@@ -18333,6 +18357,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
 
@@ -23591,6 +23624,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
@@ -28932,6 +28974,15 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
 
@@ -33179,6 +33230,15 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_image_gtk.o: $(srcdir)/src/gtk/image_gtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/image_gtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp

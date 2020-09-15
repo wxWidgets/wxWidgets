@@ -25,6 +25,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/image.h"
 #include "wx/gtk/private/stylecontext.h"
 
 //-----------------------------------------------------------------------------
@@ -285,23 +286,18 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     if (image >= 0)
     {
         wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
-        const wxBitmap bitmap = GetImageList()->GetBitmap(image);
-        if (pageData->m_image)
+        if (pageData->m_image == NULL)
         {
-            gtk_image_set_from_pixbuf(
-                GTK_IMAGE(pageData->m_image), bitmap.GetPixbuf());
-        }
-        else
-        {
-            pageData->m_image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
+            pageData->m_image = wxGtkImage::New();
             gtk_widget_show(pageData->m_image);
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
         }
+        WX_GTK_IMAGE(pageData->m_image)->Set(GetImageList()->GetBitmap(image));
     }
     else if (pageData->m_image)
     {
-        gtk_widget_destroy(pageData->m_image);
+        gtk_container_remove(GTK_CONTAINER(pageData->m_box), pageData->m_image);
         pageData->m_image = NULL;
     }
     pageData->m_imageIndex = image;
@@ -491,7 +487,8 @@ bool wxNotebook::InsertPage( size_t position,
         if (HasImageList())
         {
             const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-            pageData->m_image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
+            pageData->m_image = wxGtkImage::New();
+            WX_GTK_IMAGE(pageData->m_image)->Set(bitmap);
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
         }

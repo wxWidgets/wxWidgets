@@ -19,6 +19,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/list.h"
+#include "wx/gtk/private/image.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -98,7 +99,7 @@ bool wxButton::Create(wxWindow *parent,
     {
         m_widget = gtk_button_new();
 
-        GtkWidget *image = gtk_image_new();
+        GtkWidget* image = wxGtkImage::New(this);
         gtk_widget_show(image);
         gtk_container_add(GTK_CONTAINER(m_widget), image);
     }
