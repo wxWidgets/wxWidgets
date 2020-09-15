@@ -355,7 +355,6 @@ void wxPropertyGrid::Init1()
     m_inOnValidationFailure = false;
     m_permanentValidationFailureBehavior = wxPG_VFB_DEFAULT;
     m_dragStatus = 0;
-    m_mouseSide = 16;
     m_editorFocused = false;
 
     // Set up default unspecified value 'colour'
@@ -5003,6 +5002,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
     int splitterHitOffset;
     int columnHit = state->HitTestH( x, &splitterHit, &splitterHitOffset );
 
+    #if wxUSE_TOOLTIPS
+        wxPGProperty* prevHover = m_propHover;
+        int prevCol = m_colHover;
+    #endif
     m_colHover = columnHit;
 
     if ( m_dragStatus > 0 )
@@ -5042,10 +5045,6 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         int ih = m_lineHeight;
         int sy = y;
 
-    #if wxUSE_TOOLTIPS
-        wxPGProperty* prevHover = m_propHover;
-        unsigned char prevSide = m_mouseSide;
-    #endif
         int curPropHoverY = y - (y % ih);
 
         // On which item it hovers
@@ -5064,20 +5063,13 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         }
 
 #if wxUSE_TOOLTIPS
-        // Store which side we are on
-        m_mouseSide = 0;
-        if ( columnHit == 1 )
-            m_mouseSide = 2;
-        else if ( columnHit == 0 )
-            m_mouseSide = 1;
-
         //
         // If tooltips are enabled, show label or value as a tip
         // in case it doesn't otherwise show in full length.
         //
         if ( m_windowStyle & wxPG_TOOLTIPS )
         {
-            if ( m_propHover != prevHover || prevSide != m_mouseSide )
+            if ( m_propHover != prevHover || prevCol != m_colHover )
             {
                 if ( m_propHover && !m_propHover->IsCategory() )
                 {
@@ -5089,43 +5081,35 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
                         SetToolTip(tipString);
                     }
-                    else
+                    else if ( m_colHover >= 0 && m_colHover < (int)m_pState->GetColumnCount())
                     {
                         // Show cropped value string as a tooltip
                         wxString tipString;
-                        int space = 0;
+                        m_propHover->GetDisplayInfo(m_colHover, -1, 0, &tipString, (wxPGCell*)NULL);
+                        int space = m_pState->GetColumnWidth(m_colHover);
 
-                        if ( m_mouseSide == 1 )
+                        if ( m_colHover == 0 )
                         {
-                            tipString = m_propHover->GetLabel();
-                            space = m_pState->GetColumnWidth(0);
                             if ( !(m_windowStyle & wxPG_HIDE_CATEGORIES) || m_propHover->GetParent() != m_pState->DoGetRoot() )
                                 space -= (m_propHover->GetDepth()-1)*m_subgroup_extramargin;
                         }
-                        else if ( m_mouseSide == 2 )
+                        else if ( m_colHover == 1 )
                         {
-                            tipString = m_propHover->GetDisplayedString();
-
-                            space = m_pState->GetColumnWidth(1);
                             if ( m_propHover->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
                                 space -= wxPG_CUSTOM_IMAGE_WIDTH +
                                          wxCC_CUSTOM_IMAGE_MARGIN1 +
                                          wxCC_CUSTOM_IMAGE_MARGIN2;
                         }
 
-                        if ( space )
-                        {
-                            space -= (wxPG_XBEFORETEXT + 1);
-                            int tw, th;
-                            GetTextExtent( tipString, &tw, &th, 0, 0 );
-                            if ( tw > space )
-                                SetToolTip( tipString );
-                        }
-                        else
-                        {
-                            SetToolTip(wxEmptyString);
-                        }
-
+                        space -= (wxPG_XBEFORETEXT + 1);
+                        int tw, th;
+                        GetTextExtent( tipString, &tw, &th, 0, 0 );
+                        if ( tw > space )
+                            SetToolTip( tipString );
+                    }
+                    else
+                    {
+                        SetToolTip(wxEmptyString);
                     }
                 }
                 else
