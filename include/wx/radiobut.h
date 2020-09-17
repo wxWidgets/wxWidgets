@@ -47,22 +47,22 @@ public:
 
     wxRadioButtonBase() { }
 
-    wxRadioButton* GetFirstInGroup() const
+    wxRadioButton* GetFirstInGroup()
     {
         return wxGetFirstButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
-    wxRadioButton* GetLastInGroup() const
+    wxRadioButton* GetLastInGroup()
     {
         return wxGetLastButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
-    wxRadioButton* GetPreviousInGroup() const
+    wxRadioButton* GetPreviousInGroup()
     {
         return wxGetPreviousButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
-    wxRadioButton* GetNextInGroup() const
+    wxRadioButton* GetNextInGroup() 
     {
         return wxGetNextButtonInGroup( static_cast<wxRadioButton*>(this));
     }
