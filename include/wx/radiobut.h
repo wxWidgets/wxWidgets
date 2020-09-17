@@ -32,6 +32,45 @@
 
 #include "wx/control.h"
 
+class WXDLLIMPEXP_FWD_CORE wxRadioButton;
+
+wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn);
+wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn);
+wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn);
+wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn);
+
+template <class W>
+class WXDLLIMPEXP_CORE wxRadioButtonBase : public W
+{
+public:
+    typedef W BaseWindowClass;
+
+    wxRadioButtonBase() { }
+
+    wxRadioButton* GetFirstInGroup() const
+    {
+        return wxGetFirstButtonInGroup( static_cast<wxRadioButton*>(this));
+    }
+
+    wxRadioButton* GetLastInGroup() const
+    {
+        return wxGetLastButtonInGroup( static_cast<wxRadioButton*>(this));
+    }
+
+    wxRadioButton* GetPreviousInGroup() const
+    {
+        return wxGetPreviousButtonInGroup( static_cast<wxRadioButton*>(this));
+    }
+
+    wxRadioButton* GetNextInGroup() const
+    {
+        return wxGetNextButtonInGroup( static_cast<wxRadioButton*>(this));
+    }
+
+private:
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxRadioButtonBase, W);
+};
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxRadioButtonNameStr[];
 
 #if defined(__WXUNIVERSAL__)

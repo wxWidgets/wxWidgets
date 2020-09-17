@@ -13,7 +13,7 @@
 
 #include "wx/msw/ownerdrawnbutton.h"
 
-class WXDLLIMPEXP_CORE wxRadioButton : public wxMSWOwnerDrawnButton<wxControl>
+class WXDLLIMPEXP_CORE wxRadioButton : public public wxRadioButtonBase<wxMSWOwnerDrawnButton<wxControl>>
 {
 public:
     // ctors and creation functions
