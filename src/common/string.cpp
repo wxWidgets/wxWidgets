@@ -2081,10 +2081,14 @@ static int DoStringPrintfV(wxString& str,
             // If errno was set to one of the two well-known hard errors
             // then fail immediately to avoid an infinite loop.
                 return -1;
-            else
-            // still not enough, as we don't know how much we need, double the
-            // current size of the buffer
-                size *= 2;
+            else {
+                // still not enough, as we don't know how much we
+                // need, double the current size of the buffer
+                int newSize = size * 2;
+                if (newSize < size) // Overflow
+                    return -1;
+                size = newSize;
+            }
 #endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
         else if ( len >= size )
@@ -2093,7 +2097,11 @@ static int DoStringPrintfV(wxString& str,
             // we know that our own implementation of wxVsnprintf() returns
             // size+1 when there's not enough space but that's not the size
             // of the required buffer!
-            size *= 2;      // so we just double the current size of the buffer
+            // So we just double the current size of the buffer
+            int newSize = size * 2;
+            if (newSize < size)
+                return -1; // Overflow
+            size = newSize;
 #else
             // some vsnprintf() implementations NUL-terminate the buffer and
             // some don't in len == size case, to be safe always add 1
