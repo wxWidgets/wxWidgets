@@ -240,6 +240,9 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 
 #if wxUSE_RADIOBTN
 
+namespace wxPrivate
+{
+
 wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
 {
     if ( btn->HasFlag(wxRB_GROUP) || btn->HasFlag(wxRB_SINGLE) )
@@ -347,6 +350,8 @@ wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
 
     return NULL;
 }
+
+} // namespace wxPrivate
 
 #endif // wxUSE_RADIOBTN
 
@@ -468,7 +473,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // If we are in a radio button group, start from the first item in the
             // group
             if ( event.IsFromTab() && wxIsKindOf(winFocus, wxRadioButton ) )
-                winFocus = wxGetFirstButtonInGroup((wxRadioButton*)winFocus);
+                winFocus = wxPrivate::wxGetFirstButtonInGroup((wxRadioButton*)winFocus);
 #endif // USE_RADIOBTN_NAV
             // ok, we found the focus - now is it our child?
             start_node = children.Find( winFocus );
@@ -564,7 +569,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
                 if ( child->HasFlag(wxRB_GROUP) )
                 {
                     // need to tab into the active button within a group
-                    wxRadioButton *rb = wxGetSelectedButtonInGroup((wxRadioButton*)child);
+                    wxRadioButton *rb = wxPrivate::wxGetSelectedButtonInGroup((wxRadioButton*)child);
                     if ( rb )
                         child = rb;
                 }
@@ -586,20 +591,20 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // find the correct radio button to focus
             if ( forward )
             {
-                child = wxGetNextButtonInGroup(lastBtn);
+                child = wxPrivate::wxGetNextButtonInGroup(lastBtn);
                 if ( !child )
                 {
                     // no next button in group, set it to the first button
-                    child = wxGetFirstButtonInGroup(lastBtn);
+                    child = wxPrivate::wxGetFirstButtonInGroup(lastBtn);
                 }
             }
             else
             {
-                child = wxGetPreviousButtonInGroup(lastBtn);
+                child = wxPrivate::wxGetPreviousButtonInGroup(lastBtn);
                 if ( !child )
                 {
                     // no previous button in group, set it to the last button
-                    child = wxGetLastButtonInGroup(lastBtn);
+                    child = wxPrivate::wxGetLastButtonInGroup(lastBtn);
                 }
             }
 
@@ -764,7 +769,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
             wxRadioButton* btn = wxDynamicCast(child, wxRadioButton);
             if (btn)
             {
-                wxRadioButton* selected = wxGetSelectedButtonInGroup(btn);
+                wxRadioButton* selected = wxPrivate::wxGetSelectedButtonInGroup(btn);
                 if (selected)
                     child = selected;
             }

@@ -34,10 +34,13 @@
 
 class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 
-wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn);
-wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn);
-wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn);
-wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn);
+namespace wxPrivate
+{
+    WXDLLIMPEXP_CORE wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn);
+    WXDLLIMPEXP_CORE wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn);
+    WXDLLIMPEXP_CORE wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn);
+    WXDLLIMPEXP_CORE wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn);
+} // namespace wxPrivate
 
 template <class W>
 class WXDLLIMPEXP_CORE wxRadioButtonBase : public W
@@ -49,22 +52,22 @@ public:
 
     wxRadioButton* GetFirstInGroup()
     {
-        return wxGetFirstButtonInGroup( static_cast<wxRadioButton*>(this));
+        return wxPrivate::wxGetFirstButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
     wxRadioButton* GetLastInGroup()
     {
-        return wxGetLastButtonInGroup( static_cast<wxRadioButton*>(this));
+        return wxPrivate::wxGetLastButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
     wxRadioButton* GetPreviousInGroup()
     {
-        return wxGetPreviousButtonInGroup( static_cast<wxRadioButton*>(this));
+        return wxPrivate::wxGetPreviousButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
     wxRadioButton* GetNextInGroup() 
     {
-        return wxGetNextButtonInGroup( static_cast<wxRadioButton*>(this));
+        return wxPrivate::wxGetNextButtonInGroup( static_cast<wxRadioButton*>(this));
     }
 
 private:
