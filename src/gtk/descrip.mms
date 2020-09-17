@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 March 2020                                                        *
+# Date : 17 September 2020                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -101,7 +101,7 @@ OBJECTS0= \
 	treeentry_gtk.obj,textentry.obj,filectrl.obj,print.obj,win_gtk.obj,\
 	mnemonics.obj,private.obj,assertdlg_gtk.obj,infobar.obj,anybutton.obj,\
 	nonownedwnd.obj,textmeasure.obj,display.obj,activityindicator.obj,\
-	mimetype_gtk.obj
+	mimetype_gtk.obj,image_gtk.obj
 
 SOURCES =\
 	animate.cpp,\
@@ -168,7 +168,7 @@ SOURCES =\
 	window.cpp,\
 	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp,win_gtk.cpp,\
 	mnemonics.cpp,private.cpp,assertdlg_gtk.cpp,infobar.cpp,anybutton.cpp,\
-	nonownedwnd.cpp,textmeasure.cpp,display.cpp,mimetype.cpp
+	nonownedwnd.cpp,textmeasure.cpp,display.cpp,mimetype.cpp,image_gtk.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -273,3 +273,4 @@ mimetype_gtk.obj : mimetype.cpp
 	copy mimetype.cpp mimetype_gtk.cpp
 	cxx$(CXX_DEFINE)/obj=mimetype_gtk.obj mimetype_gtk.cpp
 	delete mimetype_gtk.cpp;*
+image_gtk.obj : image_gtk.cpp
