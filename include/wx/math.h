@@ -62,6 +62,14 @@
 
     #define wxFinite(x) std::isfinite(x)
     #define wxIsNaN(x) std::isnan(x)
+
+    inline int wxRound(double x)
+    {
+        wxASSERT_MSG(x > (double)INT_MIN - 0.5 && x < (double)INT_MAX + 0.5,
+            wxT("argument out of supported range"));
+
+        return std::lround(x);
+    }
 #else /* C++98 */
 
 #if defined(__VISUALC__) || defined(__BORLANDC__)
@@ -104,6 +112,18 @@
     #define wxIsNaN(x) ((x) != (x))
 #endif
 
+    inline int wxRound(double x)
+    {
+        wxASSERT_MSG(x > (double)INT_MIN - 0.5 && x < (double)INT_MAX + 0.5,
+            wxT("argument out of supported range"));
+
+#if defined(HAVE_ROUND)
+        return int(round(x));
+#else
+        return (int)(x < 0 ? x - 0.5 : x + 0.5);
+#endif
+    }
+
 #endif /* C++11/C++98 */
 
 #ifdef __INTELC__
@@ -133,18 +153,6 @@
 #endif /* __INTELC__/!__INTELC__ */
 
 inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
-
-inline int wxRound(double x)
-{
-    wxASSERT_MSG( x > (double)INT_MIN - 0.5 && x < (double)INT_MAX + 0.5,
-                  wxT("argument out of supported range") );
-
-    #if defined(HAVE_ROUND)
-        return int(round(x));
-    #else
-        return (int)(x < 0 ? x - 0.5 : x + 0.5);
-    #endif
-}
 
 // Convert between degrees and radians.
 inline double wxDegToRad(double deg) { return (deg * M_PI) / 180.0; }
