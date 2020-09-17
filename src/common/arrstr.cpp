@@ -912,7 +912,7 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 //
 // If a native version of Natural sort is available, then use that, otherwise
 // use the generic version.
-inline int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
 #if defined( __WINDOWS__ )
     return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
