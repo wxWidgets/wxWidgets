@@ -292,7 +292,6 @@ public:
     void GetSize(int *width, int *height) const
     {
         DoGetSize(width, height);
-        return ;
     }
 
     wxSize GetSize() const
