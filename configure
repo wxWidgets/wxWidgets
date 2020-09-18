@@ -33302,7 +33302,7 @@ if test "x$ac_cv_lib_dl_dlopen" = xyes; then :
                                 $as_echo "#define HAVE_DLOPEN 1" >>confdefs.h
 
                                 HAVE_DL_FUNCS=1
-                                DL_LINK="-ldl $DL_LINK"
+                                DL_LINK="-ldl"
 
 fi
 
@@ -33360,7 +33360,10 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dl_dladdr" >&5
 $as_echo "$ac_cv_lib_dl_dladdr" >&6; }
 if test "x$ac_cv_lib_dl_dladdr" = xyes; then :
-  $as_echo "#define HAVE_DLADDR 1" >>confdefs.h
+
+                                $as_echo "#define HAVE_DLADDR 1" >>confdefs.h
+
+                                DL_LINK="-ldl"
 
 fi
 

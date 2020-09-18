@@ -5565,7 +5565,7 @@ if test "$TOOLKIT" != "MSW"; then
                             [
                                 AC_DEFINE(HAVE_DLOPEN)
                                 HAVE_DL_FUNCS=1
-                                DL_LINK="-ldl $DL_LINK"
+                                DL_LINK="-ldl"
                             ])
             ])
 
@@ -5574,7 +5574,11 @@ if test "$TOOLKIT" != "MSW"; then
                 AC_CHECK_FUNCS(dladdr,
                     AC_DEFINE(HAVE_DLADDR),
                     [
-                        AC_CHECK_LIB(dl, dladdr, AC_DEFINE(HAVE_DLADDR))
+                        AC_CHECK_LIB(dl, dladdr,
+                            [
+                                AC_DEFINE(HAVE_DLADDR)
+                                DL_LINK="-ldl"
+                            ])
                     ]
                 )
             fi
