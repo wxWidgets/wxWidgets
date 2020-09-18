@@ -991,8 +991,8 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     {
         // Drawing full circle fails with default arc. Draw two half arcs instead.
         fArc = 1;
-        arcPath = wxString::Format(wxS("  <path d=\"M%s %s a%s %s 0 %d %d %s 0 a%s %s 0 %d %d %s 0"),
-            NumStr(x), NumStr(y + ry),
+        arcPath = wxString::Format(wxS("  <path d=\"M%d %s a%s %s 0 %d %d %s 0 a%s %s 0 %d %d %s 0"),
+            x, NumStr(y + ry),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2));
     }
@@ -1258,12 +1258,12 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
 {
     wxString s;
 
-    s = wxString::Format(wxS("<g style=\"%s %s %s\" transform=\"translate(%s %s) scale(%s %s)\">\n"),
+    s = wxString::Format(wxS("<g style=\"%s %s %s\" transform=\"translate(%d %d) scale(%s %s)\">\n"),
         GetPenStyle(m_pen),
         GetBrushFill(m_brush.GetColour(), m_brush.GetStyle()),
         GetPenStroke(m_pen.GetColour(), m_pen.GetStyle()),
-        NumStr((m_deviceOriginX - m_logicalOriginX) * m_signX),
-        NumStr((m_deviceOriginY - m_logicalOriginY) * m_signY),
+        (m_deviceOriginX - m_logicalOriginX) * m_signX,
+        (m_deviceOriginY - m_logicalOriginY) * m_signY,
         NumStr(m_scaleX * m_signX),
         NumStr(m_scaleY * m_signY));
 
