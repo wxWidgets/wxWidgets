@@ -5085,11 +5085,13 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                     {
                         // Show cropped value string as a tooltip
                         wxString tipString;
-                        m_propHover->GetDisplayInfo(m_colHover, -1, 0, &tipString, (wxPGCell*)NULL);
+                        wxPGCell cell;
+                        int item = ( m_colHover == 1 ? m_propHover->GetChoiceSelection() : -1 );
+                        m_propHover->GetDisplayInfo(m_colHover, item, 0, &tipString, &cell);
                         int space = m_pState->GetColumnWidth(m_colHover);
 
                         int imageWidth = 0;
-                        const wxBitmap& bmp = m_propHover->GetCell(m_colHover).GetBitmap();
+                        const wxBitmap& bmp = cell.GetBitmap();
                         if ( bmp.IsOk() )
                         {
                             imageWidth = bmp.GetWidth();
@@ -5108,6 +5110,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             wxSize imageSize = GetImageSize(m_propHover, -1);
                             if ( imageSize.x > 0 )
                                 imageWidth = imageSize.x;
+                            tipString = m_propHover->GetValueAsString();
                         }
 
                         space -= m_propHover->GetImageOffset(imageWidth);
