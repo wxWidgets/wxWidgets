@@ -5111,6 +5111,12 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             if ( imageSize.x > 0 )
                                 imageWidth = imageSize.x;
                             tipString = m_propHover->GetValueAsString();
+                            if ( GetColumnCount() <= 2 )
+                            {
+                                wxString unitsString = m_propHover->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
+                                if ( !unitsString.empty() )
+                                    tipString = wxString::Format(wxS("%s %s"), tipString, unitsString );
+                            }
                         }
 
                         space -= m_propHover->GetImageOffset(imageWidth);
