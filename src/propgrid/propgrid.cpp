@@ -5122,9 +5122,11 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         space -= m_propHover->GetImageOffset(imageWidth);
                         space -= (wxPG_XBEFORETEXT + 1);
                         int tw, th;
-                        wxFont* font = NULL;
+                        const wxFont* font = NULL;
                         if ( (m_windowStyle & wxPG_BOLD_MODIFIED) && m_propHover->HasFlag(wxPG_PROP_MODIFIED) )
                             font = &m_captionFont;
+                        if ( cell.GetFont().IsOk() )
+                            font = &cell.GetFont();
                         GetTextExtent( tipString, &tw, &th, 0, 0, font );
                         if ( tw > space )
                             SetToolTip( tipString );
