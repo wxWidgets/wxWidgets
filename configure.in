@@ -3778,7 +3778,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-            CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+            CPPFLAGS="$CPPFLAGS $ac_path_to_include"
         else
             AC_MSG_RESULT([not found])
         fi
@@ -3924,7 +3924,7 @@ if test "$wxUSE_SHARED" = "yes"; then
 
         dnl newer versions of gcc need -isystem to compile X headers on
         dnl Solaris (which use old style C syntax)
-        CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
 
         dnl gcc may use Sun's ld, in which case -rpath gives a confusing
         dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
@@ -8144,10 +8144,12 @@ dnl
 dnl note that the order is somewhat important: wxWidgets headers should
 dnl come first and the one with setup.h should be before $(top_srcdir)/include
 dnl in case the latter contains setup.h used by non-autoconf makefiles
-CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
+CPPFLAGS=`echo \
  -I\\${wx_top_builddir}/lib/wx/include/${TOOLCHAIN_FULLNAME} \
- -I\\${top_srcdir}/include $TOOLKIT_INCLUDE \
- $CPPFLAGS `
+ -I\\${top_srcdir}/include \
+ $CPPFLAGS \
+ $WXCONFIG_CPPFLAGS \
+ $TOOLKIT_INCLUDE`
 
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `
