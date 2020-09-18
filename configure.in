@@ -7462,7 +7462,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                   [webkit2gtk-4.0],
                                   [
                                     USE_WEBVIEW_WEBKIT2=1
-                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                                   ],
                                   [
@@ -7478,7 +7478,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                   [$webkitgtk >= 1.3.1],
                                   [
                                     USE_WEBVIEW_WEBKIT=1
-                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                                   ],
                                   [
@@ -7748,7 +7748,7 @@ if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
             dnl We don't need to do this for wxGTK as we already get Cairo
             dnl flags as part of GTK+ ones.
             if test "$wxUSE_GTK" != 1; then
-                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                CXXFLAGS="$CXXFLAGS $CAIRO_CFLAGS"
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
             fi
         fi
@@ -7853,7 +7853,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         fi
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
-            CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
+            CXXFLAGS="$CXXFLAGS $GST_CFLAGS"
             EXTRALIBS_MEDIA="$GST_LIBS"
 
             AC_DEFINE(wxUSE_GSTREAMER)
