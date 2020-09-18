@@ -325,8 +325,8 @@ void wxPostScriptPrintPreview::DetermineScaling()
         m_previewPrintout->SetPPIPrinter( logPPIPrinterX, logPPIPrinterY );
 
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
-        sizeDevUnits.x = (wxCoord)((float)sizeDevUnits.x * resolution / 72.0);
-        sizeDevUnits.y = (wxCoord)((float)sizeDevUnits.y * resolution / 72.0);
+        sizeDevUnits.x = sizeDevUnits.x * resolution / 72;
+        sizeDevUnits.y = sizeDevUnits.y * resolution / 72;
         wxSize sizeTenthsMM(paper->GetSize());
         wxSize sizeMM(sizeTenthsMM.x / 10, sizeTenthsMM.y / 10);
 
