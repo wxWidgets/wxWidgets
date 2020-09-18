@@ -911,10 +911,10 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     if (x1 == x2 && y1 == y2)
     {
         // drawing full circle fails with default arc. Draw two half arcs instead.
-        s = wxString::Format(wxS("  <path d=\"M%d %d a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+        s = wxString::Format(wxS("  <path d=\"M%d %d a%s %s 0 %d %d %s 0 a%s %s 0 %d %d %s 0"),
             x1, y1,
-            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr( r1 * 2), NumStr(0),
-            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr(-r1 * 2), NumStr(0));
+            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr( r1 * 2),
+            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr(-r1 * 2));
     }
     else
     {
@@ -991,10 +991,10 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     {
         // Drawing full circle fails with default arc. Draw two half arcs instead.
         fArc = 1;
-        arcPath = wxString::Format(wxS("  <path d=\"M%s %s a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+        arcPath = wxString::Format(wxS("  <path d=\"M%s %s a%s %s 0 %d %d %s 0 a%s %s 0 %d %d %s 0"),
             NumStr(x), NumStr(y + ry),
-            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2), NumStr(0),
-            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2), NumStr(0));
+            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2),
+            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2));
     }
     else
     {
