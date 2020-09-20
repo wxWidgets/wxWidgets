@@ -14,7 +14,9 @@
 
     You can create a group of mutually-exclusive radio buttons by specifying
     @c wxRB_GROUP for the first in the group. The group ends when another
-    radio button group is created, or there are no more radio buttons.
+    radio button group is created, or there are no more radio buttons. You can navigate
+    among the items in a group with @see GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
+
 
     @beginStyleTable
     @style{wxRB_GROUP}
@@ -119,5 +121,33 @@ public:
             @true to check, @false to uncheck.
     */
     virtual void SetValue(bool value);
+
+   /**
+        Returns the first radio button of the @c wxRB_GROUP this instance is in.
+
+        @see GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
+    */
+    wxRadioButton* GetFirstInGroup();
+
+   /**
+        Returns the last radio button of the @c wxRB_GROUP this instance is in.
+
+        @see GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup()
+    */
+    wxRadioButton* GetLastInGroup();
+
+   /**
+        Returns the previous radio button of the @c wxRB_GROUP this instance is in.
+
+        @see GetFirstInGroup(), GetNextInGroup(), GetLastInGroup()
+    */
+    wxRadioButton* GetPreviousInGroup();
+
+   /**
+        Returns the next radio button of the @c wxRB_GROUP this instance is in.
+
+        @see GetFirstInGroup(), GetPreviousInGroup(), GetLastInGroup()
+    */
+    wxRadioButton* GetNextInGroup();
 };
 
