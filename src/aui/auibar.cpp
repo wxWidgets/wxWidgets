@@ -2874,24 +2874,27 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         SetHoverItem(hitItem);
 
         // tooltips handling
-        wxAuiToolBarItem* packingHitItem;
-        packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
-        if (packingHitItem)
+        if ( !HasFlag(wxAUI_TB_NO_TOOLTIPS) )
         {
-            if (packingHitItem != m_tipItem)
+            wxAuiToolBarItem* packingHitItem;
+            packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
+            if ( packingHitItem )
             {
-                m_tipItem = packingHitItem;
+                if (packingHitItem != m_tipItem)
+                {
+                    m_tipItem = packingHitItem;
 
-                if ( !packingHitItem->m_shortHelp.empty() )
-                    SetToolTip(packingHitItem->m_shortHelp);
-                else
-                    UnsetToolTip();
+                    if ( !packingHitItem->m_shortHelp.empty() )
+                        SetToolTip(packingHitItem->m_shortHelp);
+                    else
+                        UnsetToolTip();
+                }
             }
-        }
-        else
-        {
-            UnsetToolTip();
-            m_tipItem = NULL;
+            else
+            {
+                UnsetToolTip();
+                m_tipItem = NULL;
+            }
         }
 
         // figure out the dropdown button state (are we hovering or pressing it?)
