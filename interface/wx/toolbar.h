@@ -221,8 +221,7 @@ public:
     @style{wxTB_RIGHT}
         Align the toolbar at the right side of parent window.
     @style{wxTB_DEFAULT_STYLE}
-        Combination of @c wxTB_HORIZONTAL and @c wxTB_FLAT. This style is new
-        since wxWidgets 2.9.5.
+        The @c wxTB_HORIZONTAL style. This style is new since wxWidgets 2.9.5.
     @endStyleTable
 
     See also @ref overview_windowstyles. Note that the wxMSW native toolbar
