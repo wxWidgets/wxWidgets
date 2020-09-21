@@ -12,20 +12,28 @@
     mutually exclusive options. It has a text label next to a (usually) round
     button.
 
-    You can create a group of mutually-exclusive radio buttons by specifying
-    @c wxRB_GROUP for the first in the group. The group ends when another
-    radio button group is created, or there are no more radio buttons. You can navigate
-    among the items in a group with @see GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
+    Radio buttons are typically used in groups of mutually-exclusive buttons,
+    i.e. exactly one of the buttons in the group is checked, and the other ones
+    are unchecked automatically. Such groups are created implicitly, but can
+    also be started explicitly by using @c wxRB_GROUP style: a button with this
+    style starts a new group and will become the initial selection in this
+    group. Alternatively, a radio button may be excluded from the group that it
+    would otherwise belong to by using @c wxRB_SINGLE style.
+
+    To find the other elements of the same radio button group, you can use
+    GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup() and
+    GetLastInGroup() functions.
 
 
     @beginStyleTable
     @style{wxRB_GROUP}
            Marks the beginning of a new group of radio buttons.
     @style{wxRB_SINGLE}
-           In some circumstances, radio buttons that are not consecutive
-           siblings trigger a hang bug in Windows (only). If this happens, add
-           this style to mark the button as not belonging to a group, and
-           implement the mutually-exclusive group behaviour yourself.
+           Creates a radio button which is not part of any radio button group.
+           When this style is used, no other radio buttons will be turned off
+           automatically when this button is turned on and such behaviour will
+           need to be implemented manually, in the event handler for this
+           button.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
