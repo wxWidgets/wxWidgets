@@ -233,9 +233,12 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
     }
 }
 
+#endif // !wxHAS_NATIVE_TAB_TRAVERSAL
+
 // --------------------------------------------------------------------
 // The following four functions are used to find other radio buttons
-// within the same group. Used by wxSetFocusToChild
+// within the same group. Used by wxSetFocusToChild() and to implement
+// wxRadioButtonBase public API.
 // --------------------------------------------------------------------
 
 #if wxUSE_RADIOBTN
@@ -356,6 +359,8 @@ wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
 using namespace wxPrivate;
 
 #endif // wxUSE_RADIOBTN
+
+#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
 
 // ----------------------------------------------------------------------------
 // Keyboard handling - this is the place where the TAB traversal logic is
