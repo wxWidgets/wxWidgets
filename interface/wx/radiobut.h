@@ -131,9 +131,16 @@ public:
     virtual void SetValue(bool value);
 
    /**
-        Returns the first radio button of the @c wxRB_GROUP this instance is in.
+        Returns the first button of the radio button group this button belongs
+        to.
 
-        The return value is NULL if this button has the style @c wxRB_SINGLE.
+        For a radio button with @c wxRB_SINGLE style, this function returns this
+        button itself, as it is the only member of its group. Otherwise, the
+        function returns the closest previous radio button with @c wxRB_GROUP
+        style (which could still be this button itself) or the first radio
+        button in the same window.
+
+        The returned value is never @NULL.
 
         @see GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
 
@@ -142,21 +149,27 @@ public:
     wxRadioButton* GetFirstInGroup() const;
 
    /**
-        Returns the last radio button of the @c wxRB_GROUP this instance is in.
+        Returns the last button of the radio button group this button belongs
+        to.
 
-        The return value is NULL if this button has the style @c wxRB_SINGLE.
+        Similarly to GetFirstInGroup(), this function returns this button
+        itself if it has @c wxRB_SINGLE style. Otherwise, the function returns
+        the last button before the next button with @c wxRB_GROUP style or the
+        last radio button in the same window.
 
-        @see GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup()
+        The returned value is never @NULL.
+
+        @see GetPreviousInGroup(), GetNextInGroup()
 
         @since 3.1.5
     */
     wxRadioButton* GetLastInGroup() const;
 
    /**
-        Returns the previous radio button of the @c wxRB_GROUP this instance is in.
+        Returns the previous radio button in the same group.
 
-        The return value is NULL if there is no predecessor or this button has
-        the style @c wxRB_SINGLE.
+        The return value is @NULL if there is no predecessor or if this button
+        has @c wxRB_SINGLE style.
 
         @see GetFirstInGroup(), GetNextInGroup(), GetLastInGroup()
 
@@ -165,10 +178,10 @@ public:
     wxRadioButton* GetPreviousInGroup() const;
 
    /**
-        Returns the next radio button of the @c wxRB_GROUP this instance is in.
+        Returns the next radio button in the same group.
 
-        The return value is NULL if there is no successor or this button has
-        the style @c wxRB_SINGLE.
+        The return value is @NULL if there is no successor or if this button
+        has @c wxRB_SINGLE style.
 
         @see GetFirstInGroup(), GetPreviousInGroup(), GetLastInGroup()
 
