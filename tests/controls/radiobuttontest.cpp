@@ -23,6 +23,7 @@
     #include "wx/stattext.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 #include "testableframe.h"
 #include "testwindow.h"
@@ -92,22 +93,22 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
     // Create two different radio groups.
-    wxRadioButton* g1radio0 = new wxRadioButton(parent, wxID_ANY, "radio 1.0",
+    wxScopedPtr<wxRadioButton> g1radio0(new wxRadioButton(parent, wxID_ANY, "radio 1.0",
                                                 wxDefaultPosition, wxDefaultSize,
-                                                wxRB_GROUP);
+                                                wxRB_GROUP));
 
-    wxRadioButton* g1radio1 = new wxRadioButton(parent, wxID_ANY, "radio 1.1");
+    wxScopedPtr<wxRadioButton> g1radio1(new wxRadioButton(parent, wxID_ANY, "radio 1.1"));
 
-    wxRadioButton* g2radio0 = new wxRadioButton(parent, wxID_ANY, "radio 2.0",
+    wxScopedPtr<wxRadioButton> g2radio0(new wxRadioButton(parent, wxID_ANY, "radio 2.0",
                                                 wxDefaultPosition, wxDefaultSize,
-                                                wxRB_GROUP);
+                                                wxRB_GROUP));
 
-    wxRadioButton* g2radio1 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
+    wxScopedPtr<wxRadioButton> g2radio1(new wxRadioButton(parent, wxID_ANY, "radio 2.1"));
 
     // Check that having another control between radio buttons doesn't break
     // grouping.
-    wxStaticText* text = new wxStaticText(parent, wxID_ANY, "Label");
-    wxRadioButton* g2radio2 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
+    wxScopedPtr<wxStaticText> text(new wxStaticText(parent, wxID_ANY, "Label"));
+    wxScopedPtr<wxRadioButton> g2radio2(new wxRadioButton(parent, wxID_ANY, "radio 2.1"));
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
@@ -137,13 +138,6 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
     CHECK(!g1radio1->GetValue());
     CHECK(g2radio0->GetValue());
     CHECK(!g2radio1->GetValue());
-
-    wxDELETE(g1radio0);
-    wxDELETE(g1radio1);
-    wxDELETE(g2radio0);
-    wxDELETE(g2radio1);
-    wxDELETE(g2radio2);
-    wxDELETE(text);
 }
 
 TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
