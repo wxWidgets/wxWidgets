@@ -125,12 +125,16 @@ public:
    /**
         Returns the first radio button of the @c wxRB_GROUP this instance is in.
 
+        The return value is NULL if this button has the style @c wxRB_SINGLE.
+
         @see GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
     */
     wxRadioButton* GetFirstInGroup();
 
    /**
         Returns the last radio button of the @c wxRB_GROUP this instance is in.
+
+        The return value is NULL if this button has the style @c wxRB_SINGLE.
 
         @see GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup()
     */
@@ -139,12 +143,18 @@ public:
    /**
         Returns the previous radio button of the @c wxRB_GROUP this instance is in.
 
+        The return value is NULL if there is no predecessor or this button has
+        the style @c wxRB_SINGLE.
+
         @see GetFirstInGroup(), GetNextInGroup(), GetLastInGroup()
     */
     wxRadioButton* GetPreviousInGroup();
 
    /**
         Returns the next radio button of the @c wxRB_GROUP this instance is in.
+
+        The return value is NULL if there is no successor or this button has
+        the style @c wxRB_SINGLE.
 
         @see GetFirstInGroup(), GetPreviousInGroup(), GetLastInGroup()
     */
