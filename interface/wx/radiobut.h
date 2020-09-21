@@ -139,7 +139,7 @@ public:
 
         @since 3.1.5
     */
-    wxRadioButton* GetFirstInGroup();
+    wxRadioButton* GetFirstInGroup() const;
 
    /**
         Returns the last radio button of the @c wxRB_GROUP this instance is in.
@@ -150,7 +150,7 @@ public:
 
         @since 3.1.5
     */
-    wxRadioButton* GetLastInGroup();
+    wxRadioButton* GetLastInGroup() const;
 
    /**
         Returns the previous radio button of the @c wxRB_GROUP this instance is in.
@@ -162,7 +162,7 @@ public:
 
         @since 3.1.5
     */
-    wxRadioButton* GetPreviousInGroup();
+    wxRadioButton* GetPreviousInGroup() const;
 
    /**
         Returns the next radio button of the @c wxRB_GROUP this instance is in.
@@ -174,6 +174,6 @@ public:
 
         @since 3.1.5
     */
-    wxRadioButton* GetNextInGroup();
+    wxRadioButton* GetNextInGroup() const;
 };
 

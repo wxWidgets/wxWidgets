@@ -246,7 +246,7 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 namespace wxPrivate
 {
 
-wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetPreviousButtonInGroup(const wxRadioButton *btn)
 {
     if ( btn->HasFlag(wxRB_GROUP) || btn->HasFlag(wxRB_SINGLE) )
         return NULL;
@@ -276,7 +276,7 @@ wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
     return prevBtn;
 }
 
-wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetNextButtonInGroup(const wxRadioButton *btn)
 {
     if (btn->HasFlag(wxRB_SINGLE))
         return NULL;
@@ -306,35 +306,35 @@ wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
     return nextBtn;
 }
 
-wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetFirstButtonInGroup(const wxRadioButton *btn)
 {
     while (true)
     {
         wxRadioButton* prevBtn = wxGetPreviousButtonInGroup(btn);
         if (!prevBtn)
-            return btn;
+            return const_cast<wxRadioButton*>(btn);
 
         btn = prevBtn;
     }
 }
 
-wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetLastButtonInGroup(const wxRadioButton *btn)
 {
     while (true)
     {
         wxRadioButton* nextBtn = wxGetNextButtonInGroup(btn);
         if (!nextBtn)
-            return btn;
+            return const_cast<wxRadioButton*>(btn);
 
         btn = nextBtn;
     }
 }
 
-wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetSelectedButtonInGroup(const wxRadioButton *btn)
 {
     // Find currently selected button
     if (btn->GetValue())
-        return btn;
+        return const_cast<wxRadioButton*>(btn);
 
     if (btn->HasFlag(wxRB_SINGLE))
         return NULL;
