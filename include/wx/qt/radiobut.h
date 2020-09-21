@@ -10,7 +10,7 @@
 
 class QRadioButton;
 
-class WXDLLIMPEXP_CORE wxRadioButton : public wxRadioButtonBase<wxControl>
+class WXDLLIMPEXP_CORE wxRadioButton : public wxRadioButtonBase
 {
 public:
     wxRadioButton();

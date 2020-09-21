@@ -27,14 +27,21 @@ namespace wxPrivate
     WXDLLIMPEXP_CORE wxRadioButton* wxGetLastButtonInGroup(const wxRadioButton *btn);
 } // namespace wxPrivate
 
-// Unlike most of the other wxXXXBase classes, this one needs to be a template
-// as wxRadioButton derives from different classes in different ports.
-template <class W>
-class wxRadioButtonBase : public W
+// TODO: In wxUniv, wxRadioButton must derive from wxCheckBox as it reuses
+// much of its code. This should be fixed by refactoring wxCheckBox to allow
+// this class to reuse its functionality without inheriting from it, but for
+// now use this hack to allow the existing code to compile.
+#ifdef __WXUNIVERSAL__
+    #include "wx/checkbox.h"
+
+    typedef wxCheckBox wxRadioButtonBaseBase;
+#else
+    typedef wxControl wxRadioButtonBaseBase;
+#endif
+
+class WXDLLIMPEXP_CORE wxRadioButtonBase : public wxRadioButtonBaseBase
 {
 public:
-    typedef W BaseWindowClass;
-
     wxRadioButtonBase() { }
 
     // Methods to be implemented by the derived classes:
@@ -64,7 +71,7 @@ public:
     }
 
 private:
-    wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxRadioButtonBase, W);
+    wxDECLARE_NO_COPY_CLASS(wxRadioButtonBase);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxRadioButtonNameStr[];

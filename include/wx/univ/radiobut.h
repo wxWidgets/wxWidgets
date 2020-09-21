@@ -11,13 +11,11 @@
 #ifndef _WX_UNIV_RADIOBUT_H_
 #define _WX_UNIV_RADIOBUT_H_
 
-#include "wx/checkbox.h"
-
 // ----------------------------------------------------------------------------
 // wxRadioButton
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRadioButton : public wxRadioButtonBase<wxCheckBox>
+class WXDLLIMPEXP_CORE wxRadioButton : public wxRadioButtonBase
 {
 public:
     // constructors
