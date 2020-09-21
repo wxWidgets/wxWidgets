@@ -15,21 +15,6 @@
 
 #if wxUSE_RADIOBTN
 
-/*
-   There is no wxRadioButtonBase class as wxRadioButton interface is the same
-   as wxCheckBox(Base), but under some platforms wxRadioButton really
-   derives from wxCheckBox and on the others it doesn't.
-
-   The pseudo-declaration of wxRadioButtonBase would look like this:
-
-   class wxRadioButtonBase : public ...
-   {
-   public:
-        virtual void SetValue(bool value);
-        virtual bool GetValue() const;
-   };
- */
-
 #include "wx/control.h"
 
 class WXDLLIMPEXP_FWD_CORE wxRadioButton;
@@ -42,6 +27,8 @@ namespace wxPrivate
     WXDLLIMPEXP_CORE wxRadioButton* wxGetLastButtonInGroup(const wxRadioButton *btn);
 } // namespace wxPrivate
 
+// Unlike most of the other wxXXXBase classes, this one needs to be a template
+// as wxRadioButton derives from different classes in different ports.
 template <class W>
 class wxRadioButtonBase : public W
 {
@@ -50,6 +37,12 @@ public:
 
     wxRadioButtonBase() { }
 
+    // Methods to be implemented by the derived classes:
+    virtual void SetValue(bool value) = 0;
+    virtual bool GetValue() const = 0;
+
+
+    // Methods implemented by this class itself.
     wxRadioButton* GetFirstInGroup() const
     {
         return wxPrivate::wxGetFirstButtonInGroup(static_cast<const wxRadioButton*>(this));

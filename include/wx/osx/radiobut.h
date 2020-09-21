@@ -35,8 +35,8 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
-    virtual void SetValue(bool val);
-    virtual bool GetValue() const ;
+    virtual void SetValue(bool val) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
     // implementation
 
