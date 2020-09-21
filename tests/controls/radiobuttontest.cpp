@@ -23,7 +23,6 @@
     #include "wx/stattext.h"
 #endif // WX_PRECOMP
 
-#include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 #include "testableframe.h"
 #include "testwindow.h"
@@ -108,7 +107,7 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
     // Check that having another control between radio buttons doesn't break
     // grouping.
     wxScopedPtr<wxStaticText> text(new wxStaticText(parent, wxID_ANY, "Label"));
-    wxScopedPtr<wxRadioButton> g2radio2(new wxRadioButton(parent, wxID_ANY, "radio 2.1"));
+    wxScopedPtr<wxRadioButton> g2radio2(new wxRadioButton(parent, wxID_ANY, "radio 2.2"));
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
@@ -138,6 +137,41 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
     CHECK(!g1radio1->GetValue());
     CHECK(g2radio0->GetValue());
     CHECK(!g2radio1->GetValue());
+
+
+    // Check that group navigation functions behave as expected.
+
+    // GetFirstInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetFirstInGroup(), g1radio0);
+    CHECK_SAME_WINDOW(g1radio1->GetFirstInGroup(), g1radio0);
+
+    CHECK_SAME_WINDOW(g2radio0->GetFirstInGroup(), g2radio0);
+    CHECK_SAME_WINDOW(g2radio1->GetFirstInGroup(), g2radio0);
+    CHECK_SAME_WINDOW(g2radio2->GetFirstInGroup(), g2radio0);
+
+    // GetLastInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetLastInGroup(), g1radio1);
+    CHECK_SAME_WINDOW(g1radio1->GetLastInGroup(), g1radio1);
+
+    CHECK_SAME_WINDOW(g2radio0->GetLastInGroup(), g2radio2);
+    CHECK_SAME_WINDOW(g2radio1->GetLastInGroup(), g2radio2);
+    CHECK_SAME_WINDOW(g2radio2->GetLastInGroup(), g2radio2);
+
+    // GetNextInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetNextInGroup(), g1radio1);
+    CHECK_SAME_WINDOW(g1radio1->GetNextInGroup(), NULL);
+
+    CHECK_SAME_WINDOW(g2radio0->GetNextInGroup(), g2radio1);
+    CHECK_SAME_WINDOW(g2radio1->GetNextInGroup(), g2radio2);
+    CHECK_SAME_WINDOW(g2radio2->GetNextInGroup(), NULL);
+
+    // GetPreviousInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(g1radio1->GetPreviousInGroup(), g1radio0);
+
+    CHECK_SAME_WINDOW(g2radio0->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(g2radio1->GetPreviousInGroup(), g2radio0);
+    CHECK_SAME_WINDOW(g2radio2->GetPreviousInGroup(), g2radio1);
 }
 
 TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
@@ -170,6 +204,12 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
 
     CHECK(gradio1->GetValue());
     CHECK(ngradio->GetValue());
+
+    // Also check that navigation works as expected with "single" buttons.
+    CHECK_SAME_WINDOW(sradio->GetFirstInGroup(), sradio);
+    CHECK_SAME_WINDOW(sradio->GetLastInGroup(), sradio);
+    CHECK_SAME_WINDOW(sradio->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(sradio->GetNextInGroup(), NULL);
 }
 
 TEST_CASE("RadioButton::Focus", "[radiobutton][focus]")
