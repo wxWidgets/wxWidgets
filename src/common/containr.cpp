@@ -237,7 +237,7 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 // The following functions is used by wxSetFocusToChild()
 // --------------------------------------------------------------------
 
-#if wxUSE_RADIOBTN
+#if defined(USE_RADIOBTN_NAV)
 
 namespace
 {
@@ -268,7 +268,7 @@ wxRadioButton* wxGetSelectedButtonInGroup(const wxRadioButton *btn)
 
 } // anonymous namespace
 
-#endif // wxUSE_RADIOBTN
+#endif // USE_RADIOBTN_NAV
 
 // ----------------------------------------------------------------------------
 // Keyboard handling - this is the place where the TAB traversal logic is
