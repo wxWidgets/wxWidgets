@@ -2,29 +2,35 @@ High DPI Support in wxWidgets       {#overview_high_dpi}
 =============================
 [TOC]
 
-[comment]: # (Not sure if the first 2 sections are really worth keeping)
+Introduction
+============
 
-Terms and Definitions
-=====================
+Many modern displays have way more pixels on the same surface than used to be
+the norm, resulting in much higher values of DPI (dots, i.e. pixels, per inch)
+than the traditionally used values. This allows to render texts, or geometric
+shapes in general much more smoothly.
 
-Many modern displays have much higher pixel density than used to be the norm,
-resulting in much higher values of DPI (dots, i.e. pixels, per inch) than the
-traditionally used values. While the DPI reported by the system is not exactly
-the same as the actual pixel density, i.e. it doesn't exactly correspond to the
-number of pixels on the screen divided by the screen physical dimension in
-inches, it still needs to change to roughly correspond to it.
+As an illustration here are two scaled up views of the same text in 11 pt
+Helvetica using up the same space on screen. First on an original Mac display
+at 72 dpi, then on a High DPI Display, called "Retina" by Apple with twice as
+many pixels in both dimensions (144 dpi), thus 4 times the number of pixels on
+the same surface. Using these the contours are much more detailed.
 
-This system DPI value is typically expressed using a scaling factor, by which
-the baseline DPI value is multiplied. For example, MSW systems may use 125% or
-150% scaling, meaning that they use DPI of 120 or 144 respectively, as baseline
-DPI value is 96. Similarly, Linux systems may use "2x" scaling, resulting in
-DPI value of 192. Macs are slightly different, as even they also may use "2x"
-scaling, the effective DPI corresponding to it is 144, as the baseline value on
-this platform is 72.
+![11 pt Helvetica at 72 DPI](overview_highdpi_text_72.png)
+
+![11 pt Helvetica at 144 DPI](overview_highdpi_text_144.png)
+
+To the user the DPI is typically expressed using a scaling factor, by which the
+baseline DPI value is multiplied. For example, MSW systems may use 125% or 150%
+scaling, meaning that they use DPI of 120 or 144 respectively, as baseline DPI
+value is 96. Similarly, Linux systems may use "2x" scaling, resulting in DPI
+value of 192. Macs are slightly different, as even they also may use "2x"
+scaling, as in the example above, the effective DPI corresponding to it is 144,
+as the baseline value on this platform is 72.
 
 
 The Problem with High DPI Displays
-==================================
+----------------------------------
 
 If high DPI displays were treated in the same way as normal ones, existing
 applications would look tiny of them. For example, a square window 500 pixels
@@ -44,13 +50,20 @@ the full display resolution, so a better solution is needed.
 Pixel Values in High DPI
 ========================
 
-Some systems automatically scale all the coordinates by the DPI scaling factor,
-however not all systems supported by wxWidgets do it -- notably, MSW does not.
-This means that "logical pixels", in which all coordinates and sizes are
-expressed in wxWidgets API, do _not_ have the same meaning on all platforms
-when using high DPI displays. To hide this difference from the application,
-wxWidgets provides "device-independent pixels", abbreviated as "DIP", that are
-always of the same size on all displays and all platforms.
+Logical and Device-Independent Pixels
+-------------------------------------
+
+Some systems like eg Apple's OSes automatically scale all the coordinates by
+the DPI scaling factor, however not all systems supported by wxWidgets do it --
+notably, MSW does not. This means that **logical pixels**, in which all
+coordinates and sizes are expressed in wxWidgets API, do _not_ have the same
+meaning on all platforms when using high DPI displays. So while on macOS you
+can always pass in a size of (500,500) to create the window from the previous
+paragraph, whatever the resolution of the display is, you would have to
+increase this to (1000,1000) on MSW when working on a 200% display. To hide
+this difference from the application, wxWidgets provides **device-independent
+pixels**, abbreviated as "DIP", that are always of the same size on all
+displays and all platforms.
 
 Thus, the first thing do when preparing your application for high DPI support
 is to stop using raw pixel values. Actually, using any pixel values is not
@@ -69,9 +82,8 @@ you can just replace it with
 myFrame->SetClientSize(myFrame->FromDIP(wxSize(400, 300)));
 ```
 
-
 Physical Pixels
-===============
+---------------
 
 In addition to (logical) pixels and DIPs discussed above, you may also need to
 work in physical pixel coordinates, corresponding to the actual display pixels.
@@ -87,6 +99,8 @@ the value in physical pixels.
 For example, in a wxGLCanvas created with the size of 100 (logical) pixels, the
 rightmost physical pixel coordinate will be `100*GetContentScaleFactor()`.
 
+
+[comment]: # (TODO: High-Resolution Images and Artwork)
 
 
 Platform-Specific Build Issues
@@ -104,12 +118,12 @@ MSW
 The behaviour of the application when running on a high-DPI display depends on
 the values in its [manifest][1]. If your application include `wx/msw/wx.rc`
 from its resource file, you need to predefine `wxUSE_DPI_AWARE_MANIFEST` to
-opt-in into high DPI support: define it as `1` for minimal DPI awareness and
+opt-in into [high DPI support][2]: define it as `1` for minimal DPI awareness and
 `2` for full, per-monitor DPI awareness supported by Windows 10 version 1703 or
 later.
 
 [1]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
-
+[2]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
 macOS
 -----
