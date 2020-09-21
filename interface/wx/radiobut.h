@@ -136,6 +136,8 @@ public:
         The return value is NULL if this button has the style @c wxRB_SINGLE.
 
         @see GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
+
+        @since 3.1.5
     */
     wxRadioButton* GetFirstInGroup();
 
@@ -145,6 +147,8 @@ public:
         The return value is NULL if this button has the style @c wxRB_SINGLE.
 
         @see GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup()
+
+        @since 3.1.5
     */
     wxRadioButton* GetLastInGroup();
 
@@ -155,6 +159,8 @@ public:
         the style @c wxRB_SINGLE.
 
         @see GetFirstInGroup(), GetNextInGroup(), GetLastInGroup()
+
+        @since 3.1.5
     */
     wxRadioButton* GetPreviousInGroup();
 
@@ -165,6 +171,8 @@ public:
         the style @c wxRB_SINGLE.
 
         @see GetFirstInGroup(), GetPreviousInGroup(), GetLastInGroup()
+
+        @since 3.1.5
     */
     wxRadioButton* GetNextInGroup();
 };
