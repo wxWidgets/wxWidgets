@@ -27,40 +27,19 @@
 #include "testableframe.h"
 #include "testwindow.h"
 
-class RadioButtonTestCase : public CppUnit::TestCase
+class RadioButtonTestCase
 {
 public:
-    RadioButtonTestCase() { }
+    RadioButtonTestCase();
+    ~RadioButtonTestCase();
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( RadioButtonTestCase );
-        WXUISIM_TEST( Click );
-        CPPUNIT_TEST( Value );
-        CPPUNIT_TEST( Group );
-        CPPUNIT_TEST( Single );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Click();
-    void Value();
-    void Group();
-    void Single();
-
+protected:
     wxRadioButton* m_radio;
 
     wxDECLARE_NO_COPY_CLASS(RadioButtonTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RadioButtonTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RadioButtonTestCase,
-                                      "RadioButtonTestCase" );
-
-void RadioButtonTestCase::setUp()
+RadioButtonTestCase::RadioButtonTestCase()
 {
     m_radio = new wxRadioButton(wxTheApp->GetTopWindow(), wxID_ANY,
                                 "wxRadioButton");
@@ -68,12 +47,12 @@ void RadioButtonTestCase::setUp()
     m_radio->Refresh();
 }
 
-void RadioButtonTestCase::tearDown()
+RadioButtonTestCase::~RadioButtonTestCase()
 {
-    wxDELETE(m_radio);
+    delete m_radio;
 }
 
-void RadioButtonTestCase::Click()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Click", "[radiobutton]")
 {
     // OS X doesn't support selecting a single radio button
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
@@ -87,28 +66,28 @@ void RadioButtonTestCase::Click()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 1, selected.GetCount() );
+    CHECK(selected.GetCount() == 1);
 #endif
 }
 
-void RadioButtonTestCase::Value()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Value", "[radiobutton]")
 {
 #ifndef __WXGTK__
     EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     m_radio->SetValue(true);
 
-    CPPUNIT_ASSERT(m_radio->GetValue());
+    CHECK(m_radio->GetValue());
 
     m_radio->SetValue(false);
 
-    CPPUNIT_ASSERT(!m_radio->GetValue());
+    CHECK(!m_radio->GetValue());
 
-    CPPUNIT_ASSERT_EQUAL(0, selected.GetCount());
+    CHECK(selected.GetCount() == 0);
 #endif
 }
 
-void RadioButtonTestCase::Group()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
@@ -133,31 +112,31 @@ void RadioButtonTestCase::Group()
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
-    CPPUNIT_ASSERT(g1radio0->GetValue());
-    CPPUNIT_ASSERT(!g1radio1->GetValue());
-    CPPUNIT_ASSERT(g2radio0->GetValue());
-    CPPUNIT_ASSERT(!g2radio1->GetValue());
+    CHECK(g1radio0->GetValue());
+    CHECK(!g1radio1->GetValue());
+    CHECK(g2radio0->GetValue());
+    CHECK(!g2radio1->GetValue());
 
     g1radio1->SetValue(true);
     g2radio1->SetValue(true);
 
-    CPPUNIT_ASSERT(!g1radio0->GetValue());
-    CPPUNIT_ASSERT(g1radio1->GetValue());
-    CPPUNIT_ASSERT(!g2radio0->GetValue());
-    CPPUNIT_ASSERT(g2radio1->GetValue());
+    CHECK(!g1radio0->GetValue());
+    CHECK(g1radio1->GetValue());
+    CHECK(!g2radio0->GetValue());
+    CHECK(g2radio1->GetValue());
 
     g2radio2->SetValue(true);
-    CPPUNIT_ASSERT(!g2radio0->GetValue());
-    CPPUNIT_ASSERT(!g2radio1->GetValue());
-    CPPUNIT_ASSERT(g2radio2->GetValue());
+    CHECK(!g2radio0->GetValue());
+    CHECK(!g2radio1->GetValue());
+    CHECK(g2radio2->GetValue());
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
-    CPPUNIT_ASSERT(g1radio0->GetValue());
-    CPPUNIT_ASSERT(!g1radio1->GetValue());
-    CPPUNIT_ASSERT(g2radio0->GetValue());
-    CPPUNIT_ASSERT(!g2radio1->GetValue());
+    CHECK(g1radio0->GetValue());
+    CHECK(!g1radio1->GetValue());
+    CHECK(g2radio0->GetValue());
+    CHECK(!g2radio1->GetValue());
 
     wxDELETE(g1radio0);
     wxDELETE(g1radio1);
@@ -167,7 +146,7 @@ void RadioButtonTestCase::Group()
     wxDELETE(text);
 }
 
-void RadioButtonTestCase::Single()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
 {
     //Create a group of 2 buttons, having second button selected
     wxScopedPtr<wxRadioButton> gradio0(new wxRadioButton(wxTheApp->GetTopWindow(),
@@ -199,7 +178,7 @@ void RadioButtonTestCase::Single()
     CHECK(ngradio->GetValue());
 }
 
-TEST_CASE("wxRadioButton::Focus", "[radiobutton][focus]")
+TEST_CASE("RadioButton::Focus", "[radiobutton][focus]")
 {
     // Create a container panel just to be able to destroy all the windows
     // created here at once by simply destroying it.
