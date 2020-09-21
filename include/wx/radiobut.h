@@ -19,14 +19,6 @@
 
 class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 
-namespace wxPrivate
-{
-    WXDLLIMPEXP_CORE wxRadioButton* wxGetNextButtonInGroup(const wxRadioButton *btn);
-    WXDLLIMPEXP_CORE wxRadioButton* wxGetPreviousButtonInGroup(const wxRadioButton *btn);
-    WXDLLIMPEXP_CORE wxRadioButton* wxGetFirstButtonInGroup(const wxRadioButton *btn);
-    WXDLLIMPEXP_CORE wxRadioButton* wxGetLastButtonInGroup(const wxRadioButton *btn);
-} // namespace wxPrivate
-
 // TODO: In wxUniv, wxRadioButton must derive from wxCheckBox as it reuses
 // much of its code. This should be fixed by refactoring wxCheckBox to allow
 // this class to reuse its functionality without inheriting from it, but for
@@ -50,25 +42,10 @@ public:
 
 
     // Methods implemented by this class itself.
-    wxRadioButton* GetFirstInGroup() const
-    {
-        return wxPrivate::wxGetFirstButtonInGroup(static_cast<const wxRadioButton*>(this));
-    }
-
-    wxRadioButton* GetLastInGroup() const
-    {
-        return wxPrivate::wxGetLastButtonInGroup(static_cast<const wxRadioButton*>(this));
-    }
-
-    wxRadioButton* GetPreviousInGroup() const
-    {
-        return wxPrivate::wxGetPreviousButtonInGroup(static_cast<const wxRadioButton*>(this));
-    }
-
-    wxRadioButton* GetNextInGroup() const
-    {
-        return wxPrivate::wxGetNextButtonInGroup(static_cast<const wxRadioButton*>(this));
-    }
+    wxRadioButton* GetFirstInGroup() const;
+    wxRadioButton* GetLastInGroup() const;
+    wxRadioButton* GetPreviousInGroup() const;
+    wxRadioButton* GetNextInGroup() const;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxRadioButtonBase);
