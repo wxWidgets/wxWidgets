@@ -43,7 +43,7 @@ namespace wxPrivate
 } // namespace wxPrivate
 
 template <class W>
-class WXDLLIMPEXP_CORE wxRadioButtonBase : public W
+class wxRadioButtonBase : public W
 {
 public:
     typedef W BaseWindowClass;
