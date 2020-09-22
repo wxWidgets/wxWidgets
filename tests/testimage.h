@@ -100,4 +100,53 @@ inline ImageRGBMatcher RGBSameAs(const wxImage& image)
     return ImageRGBMatcher(image);
 }
 
+
+class ImageAlphaMatcher : public Catch::MatcherBase<wxImage>
+{
+public:
+    ImageAlphaMatcher(unsigned char alpha)
+        : m_alpha(alpha)
+    {
+    }
+
+    bool match(const wxImage& other) const wxOVERRIDE
+    {
+        if (!other.HasAlpha())
+        {
+            m_diffDesc = "no alpha data";
+            return false;
+        }
+
+        unsigned char center_alpha = 
+            *(other.GetAlpha() + (other.GetWidth() / 2) + (other.GetHeight() / 2 * other.GetWidth()));
+
+        if (m_alpha != center_alpha)
+        {
+            m_diffDesc.Printf("got alpha %u", center_alpha);
+            return false;
+        }
+
+        return true;
+    }
+
+    std::string describe() const wxOVERRIDE
+    {
+        std::string desc;
+
+        if (!m_diffDesc.empty())
+            desc = m_diffDesc.ToStdString(wxConvUTF8);
+
+        return desc;
+    }
+
+private:
+    const unsigned char m_alpha;
+    mutable wxString m_diffDesc;
+};
+
+inline ImageAlphaMatcher CenterAlphaPixelEquals(unsigned char alpha)
+{
+    return ImageAlphaMatcher(alpha);
+}
+
 #endif // _WX_TESTS_TESTIMAGE_H_
