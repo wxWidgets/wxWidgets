@@ -351,3 +351,34 @@ wxConvAuto::FromWChar(char *dst, size_t dstLen,
 
     return m_conv->FromWChar(dst, dstLen, src, srcLen);
 }
+
+wxFontEncoding wxConvAuto::GetEncoding() const
+{
+    switch ( m_bomType )
+    {
+        case wxBOM_UTF32BE:
+            return wxFONTENCODING_UTF32BE;
+        case wxBOM_UTF32LE:
+            return wxFONTENCODING_UTF32LE;
+        case wxBOM_UTF16BE:
+            return wxFONTENCODING_UTF16BE;
+        case wxBOM_UTF16LE:
+            return wxFONTENCODING_UTF16LE;
+        case wxBOM_UTF8:
+            return wxFONTENCODING_UTF8;
+
+        case wxBOM_Unknown:
+        case wxBOM_None:
+            if ( !m_conv )
+                return wxFONTENCODING_MAX;
+            else if ( !m_ownsConv )
+                return wxFONTENCODING_UTF8;
+            else if ( m_encDefault != wxFONTENCODING_DEFAULT )
+                return m_encDefault;
+            else
+                return GetFallbackEncoding();
+    }
+
+    wxFAIL_MSG( "unknown BOM type" );
+    return wxFONTENCODING_MAX;
+}

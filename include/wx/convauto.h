@@ -93,6 +93,8 @@ public:
         return m_bomType;
     }
 
+    wxFontEncoding GetEncoding() const;
+
     // Return true if the fall-back encoding is used
     bool IsFallbackEncoding() const
     {
