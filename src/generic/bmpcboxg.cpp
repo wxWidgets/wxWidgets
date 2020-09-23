@@ -135,6 +135,11 @@ wxBitmapComboBox::~wxBitmapComboBox()
     DoClear();
 }
 
+wxString wxBitmapComboBox::GetStringSelection()
+{
+    return dynamic_cast<wxItemContainerImmutable *>( this )->GetStringSelection();
+}
+
 // ----------------------------------------------------------------------------
 // Item manipulation
 // ----------------------------------------------------------------------------

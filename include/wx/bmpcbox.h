@@ -44,6 +44,7 @@ public:
 
     // Sets the image for the given item.
     virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap) = 0;
+    virtual wxString GetStringSelection() = 0;
 
 #if !defined(wxBITMAPCOMBOBOX_OWNERDRAWN_BASED)
 
