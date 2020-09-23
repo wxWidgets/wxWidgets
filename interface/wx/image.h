@@ -60,6 +60,21 @@ enum wxImageResizeQuality
     wxIMAGE_QUALITY_HIGH
 };
 
+
+/**
+    Constants for wxImage::Paste() for specifying alpha blending option.
+
+    @since 3.2.0
+*/
+enum wxImageAlphaBlendMode
+{
+    /// Overwrite the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_OVER = 0,
+
+    /// Compose the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_COMPOSE = 1
+};
+
 /**
     Possible values for PNG image type option.
 
@@ -803,8 +818,17 @@ public:
 
     /**
         Copy the data of the given @a image to the specified position in this image.
+
+        Takes care of the mask colour and out of bounds problems.
+
+        @param alphaBlend
+            This parameter (new in wx 3.2.0) determines whether the alpha values
+            of the original image replace (default) or are composed with the
+            alpha channel of this image. Notice that alpha blending overrides
+            the mask handling.
     */
-    void Paste(const wxImage& image, int x, int y);
+    void Paste(const wxImage& image, int x, int y,
+               wxImageAlphaBlendMode alphaBlend = wxIMAGE_ALPHA_BLEND_OVER);
 
     /**
         Replaces the colour specified by @e r1,g1,b1 by the colour @e r2,g2,b2.
