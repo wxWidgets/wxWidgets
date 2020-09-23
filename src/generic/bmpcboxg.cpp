@@ -135,6 +135,11 @@ wxBitmapComboBox::~wxBitmapComboBox()
     DoClear();
 }
 
+wxString wxBitmapComboBox::GetStringSelection() const
+{
+    return wxItemContainer::GetStringSelection();
+}
+
 // ----------------------------------------------------------------------------
 // Item manipulation
 // ----------------------------------------------------------------------------

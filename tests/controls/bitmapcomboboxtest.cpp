@@ -24,9 +24,6 @@
 #include "itemcontainertest.h"
 #include "asserthelper.h"
 
-//Test only if we are based off of wxComboBox
-#ifndef wxGENERIC_BITMAPCOMBOBOX
-
 class BitmapComboBoxTestCase : public TextEntryTestCase,
                                public ItemContainerTestCase,
                                public CppUnit::TestCase
@@ -82,9 +79,9 @@ void BitmapComboBoxTestCase::Bitmap()
     wxArrayString items;
     items.push_back("item 0");
     items.push_back("item 1");
-
-    //We need this otherwise MSVC complains as it cannot find a suitable append
-    static_cast<wxComboBox*>(m_combo)->Append(items);
+    // TODO: Add wxBitmapComboBoxBase::Append(wxArrayString )
+    for( unsigned int i = 0; i < items.size(); ++i )
+        m_combo->Append(items[i]);
 
     CPPUNIT_ASSERT(!m_combo->GetItemBitmap(0).IsOk());
 
@@ -104,8 +101,10 @@ void BitmapComboBoxTestCase::Bitmap()
     CPPUNIT_ASSERT(m_combo->GetItemBitmap(0).IsOk());
 
     CPPUNIT_ASSERT_EQUAL(wxSize(16, 16), m_combo->GetBitmapSize());
-}
 
-#endif //wxGENERIC_BITMAPCOMBOBOX
+    m_combo->SetSelection( 1 );
+
+    CPPUNIT_ASSERT_EQUAL( m_combo->GetStringSelection(), "item with bitmap" );
+}
 
 #endif //wxUSE_BITMAPCOMBOBOX
