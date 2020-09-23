@@ -50,12 +50,33 @@ private:
         CPPUNIT_TEST( StreamUTF32BE );
     CPPUNIT_TEST_SUITE_END();
 
+    // expected converter state, UTF-8 without BOM by default
+    struct ConvState
+    {
+        ConvState( wxBOM bom = wxBOM_None,
+                   wxFontEncoding enc = wxFONTENCODING_UTF8,
+                   bool fallback = false )
+            : m_bom(bom), m_enc(enc), m_fallback(fallback) {}
+
+        void Check(const wxConvAuto& conv) const
+        {
+            CPPUNIT_ASSERT( conv.GetBOM() == m_bom );
+            CPPUNIT_ASSERT( conv.GetEncoding() == m_enc );
+            CPPUNIT_ASSERT( conv.IsFallbackEncoding() == m_fallback );
+            CPPUNIT_ASSERT( conv.IsUTF8() == (m_enc == wxFONTENCODING_UTF8) );
+        }
+
+        wxBOM m_bom;
+        wxFontEncoding m_enc;
+        bool m_fallback;
+    };
+
     // real test function: check that converting the src multibyte string to
     // wide char using wxConvAuto yields wch as the first result
     //
     // the length of the string may need to be passed explicitly if it has
     // embedded NULs, otherwise it's not necessary
-    void TestFirstChar(const char *src, wchar_t wch, size_t len = wxNO_LEN);
+    void TestFirstChar(const char *src, wchar_t wch, size_t len = wxNO_LEN, ConvState st = ConvState());
 
     void Empty();
     void Short();
@@ -90,16 +111,20 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConvAutoTestCase, "ConvAutoTestCase");
 // tests
 // ----------------------------------------------------------------------------
 
-void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch, size_t len)
+void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch, size_t len, ConvState st)
 {
-    wxWCharBuffer wbuf = wxConvAuto().cMB2WC(src, len, NULL);
+    wxConvAuto conv;
+    wxWCharBuffer wbuf = conv.cMB2WC(src, len, NULL);
     CPPUNIT_ASSERT( wbuf );
     CPPUNIT_ASSERT_EQUAL( wch, *wbuf );
+    st.Check(conv);
 }
 
 void ConvAutoTestCase::Empty()
 {
-    CPPUNIT_ASSERT( !wxConvAuto().cMB2WC("") );
+    wxConvAuto conv;
+    CPPUNIT_ASSERT( !conv.cMB2WC("") );
+    ConvState(wxBOM_Unknown, wxFONTENCODING_MAX).Check(conv);
 }
 
 void ConvAutoTestCase::Short()
@@ -114,28 +139,28 @@ void ConvAutoTestCase::None()
 
 void ConvAutoTestCase::UTF32LE()
 {
-    TestFirstChar("\xff\xfe\0\0A\0\0\0", wxT('A'), 8);
+    TestFirstChar("\xff\xfe\0\0A\0\0\0", wxT('A'), 8, ConvState(wxBOM_UTF32LE, wxFONTENCODING_UTF32LE));
 }
 
 void ConvAutoTestCase::UTF32BE()
 {
-    TestFirstChar("\0\0\xfe\xff\0\0\0B", wxT('B'), 8);
+    TestFirstChar("\0\0\xfe\xff\0\0\0B", wxT('B'), 8, ConvState(wxBOM_UTF32BE, wxFONTENCODING_UTF32BE));
 }
 
 void ConvAutoTestCase::UTF16LE()
 {
-    TestFirstChar("\xff\xfeZ\0", wxT('Z'), 4);
+    TestFirstChar("\xff\xfeZ\0", wxT('Z'), 4, ConvState(wxBOM_UTF16LE, wxFONTENCODING_UTF16LE));
 }
 
 void ConvAutoTestCase::UTF16BE()
 {
-    TestFirstChar("\xfe\xff\0Y", wxT('Y'), 4);
+    TestFirstChar("\xfe\xff\0Y", wxT('Y'), 4, ConvState(wxBOM_UTF16BE, wxFONTENCODING_UTF16BE));
 }
 
 void ConvAutoTestCase::UTF8()
 {
 #ifdef wxHAVE_U_ESCAPE
-    TestFirstChar("\xef\xbb\xbf\xd0\x9f", L'\u041f');
+    TestFirstChar("\xef\xbb\xbf\xd0\x9f", L'\u041f', wxNO_LEN, ConvState(wxBOM_UTF8, wxFONTENCODING_UTF8));
 #endif
 }
 
