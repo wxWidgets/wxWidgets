@@ -1713,7 +1713,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         actual.InitAlpha();
         actual.Paste(background, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(background));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste fully transparent image")
     {
@@ -1723,40 +1723,39 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         memset(transparent.GetAlpha(), 0, transparent.GetWidth() * transparent.GetHeight());
         actual.Paste(transparent, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(background));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste image with transparent region")
     {
         wxImage actual = background.Copy();
         actual.Paste(opaque_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_overlay_transparent_border_opaque_square.png")));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste image with semi transparent region")
     {
         wxImage actual = background.Copy();
         actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png")));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste two semi transparent images on top of background")
     {
         wxImage actual = background.Copy();
         actual.Paste(transparent_circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
-        CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_circle_plus_square.png")));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_background_plus_circle_plus_square.png"), 1));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste two semi transparent images together first, then on top of background")
     {
         wxImage circle = transparent_circle.Copy();
         wxImage actual = background.Copy();
-        // This should actually be the same as paste_result_background_plus_circle_plus_square
-        // (only the composition order differs), but intermediate rounding causes a diff of 1.
         circle.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         actual.Paste(circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
-        CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_square_over_circle_then_over_background.png")));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        // When applied in this order, two times a rounding difference is triggered.
+        CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_background_plus_circle_plus_square.png"), 2));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste semitransparent image over transparent image")
     {
@@ -1766,8 +1765,8 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         actual.Paste(transparent_circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, CenterAlphaPixelEquals(192));
         actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
-        CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_no_background_square_over_circle.png")));
-        CHECK_THAT(actual, CenterAlphaPixelEquals(223));
+        CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_no_background_square_over_circle.png"), 1));
+        CHECK_THAT(actual, CenterAlphaPixelEquals(224));
     }
 }
 

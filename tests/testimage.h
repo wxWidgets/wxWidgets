@@ -30,8 +30,9 @@ namespace Catch
 class ImageRGBMatcher : public Catch::MatcherBase<wxImage>
 {
 public:
-    ImageRGBMatcher(const wxImage& image)
+    ImageRGBMatcher(const wxImage& image, int tolerance)
         : m_image(image)
+        , m_tolerance(tolerance)
     {
     }
 
@@ -53,7 +54,8 @@ public:
         {
             for ( int y = 0; y < m_image.GetHeight(); ++y )
             {
-                if ( *d1 != *d2 )
+                const unsigned char diff = *d1 > * d2 ? *d1 - *d2 : *d2 - *d1;
+                if (diff > m_tolerance)
                 {
                     m_diffDesc.Printf
                                (
@@ -72,11 +74,11 @@ public:
             }
         }
 
-        // We should never get here as we know that the images are different
-        // and so should have returned from inside the loop above.
-        wxFAIL_MSG("unreachable");
+        // We can only get here when the images are different AND we've not exited the
+        // method from the loop. That implies the tolerance must have caused this.
+        wxASSERT_MSG(m_tolerance > 0, "Unreachable without tolerance");
 
-        return false;
+        return true;
     }
 
     std::string describe() const wxOVERRIDE
@@ -92,14 +94,20 @@ public:
 
 private:
     const wxImage m_image;
+    const int m_tolerance;
     mutable wxString m_diffDesc;
 };
 
 inline ImageRGBMatcher RGBSameAs(const wxImage& image)
 {
-    return ImageRGBMatcher(image);
+    return ImageRGBMatcher(image, 0);
 }
 
+// Allows small differences (within given tolerance) for r, g, and b values.
+inline ImageRGBMatcher RGBSimilarTo(const wxImage& image, int tolerance)
+{
+    return ImageRGBMatcher(image, tolerance);
+}
 
 class ImageAlphaMatcher : public Catch::MatcherBase<wxImage>
 {
