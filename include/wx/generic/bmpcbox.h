@@ -83,7 +83,7 @@ public:
                 const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     virtual ~wxBitmapComboBox();
-    virtual wxString GetStringSelection() wxOVERRIDE;
+    virtual wxString GetStringSelection() const wxOVERRIDE;
     // Adds item with image to the end of the combo box.
     int Append(const wxString& item, const wxBitmap& bitmap = wxNullBitmap);
     int Append(const wxString& item, const wxBitmap& bitmap, void *clientData);
