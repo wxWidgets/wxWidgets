@@ -64,7 +64,7 @@ enum wxImageResizeQuality
 /**
     Constants for wxImage::Paste() for specifying alpha blending option.
 
-    @since 3.2.0
+    @since 3.1.5
 */
 enum wxImageAlphaBlendMode
 {
@@ -822,7 +822,7 @@ public:
         Takes care of the mask colour and out of bounds problems.
 
         @param alphaBlend
-            This parameter (new in wx 3.2.0) determines whether the alpha values
+            This parameter (new in wx 3.1.5) determines whether the alpha values
             of the original image replace (default) or are composed with the
             alpha channel of this image. Notice that alpha blending overrides
             the mask handling.
