@@ -73,6 +73,16 @@ enum wxImageResizeQuality
     wxIMAGE_QUALITY_HIGH = 4
 };
 
+// Constants for wxImage::Paste() for specifying alpha blending option.
+enum wxImageAlphaBlendMode
+{
+    // Overwrite the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_OVER = 0,
+
+    // Compose the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_COMPOSE = 1
+};
+
 // alpha channel values: fully transparent, default threshold separating
 // transparent pixels from opaque for a few functions dealing with alpha and
 // fully opaque
@@ -348,9 +358,12 @@ public:
     wxImage Size( const wxSize& size, const wxPoint& pos,
                   int r = -1, int g = -1, int b = -1 ) const;
 
-    // pastes image into this instance and takes care of
-    // the mask colour and out of bounds problems
-    void Paste( const wxImage &image, int x, int y );
+    // Copy the data of the given image to the specified position of this one
+    // taking care of the out of bounds problems. Mask is respected, but alpha
+    // is simply replaced by default, use wxIMAGE_ALPHA_BLEND_COMPOSE to
+    // combine it with the original image alpha values if needed.
+    void Paste(const wxImage& image, int x, int y,
+               wxImageAlphaBlendMode alphaBlend = wxIMAGE_ALPHA_BLEND_OVER);
 
     // return the new image with size width*height
     wxImage Scale( int width, int height,
