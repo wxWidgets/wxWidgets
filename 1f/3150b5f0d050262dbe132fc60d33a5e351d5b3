@@ -1,1 +1,1 @@
-All: Add alpha blending support to wxImage::Paste() ().
+All: Add alpha blending support to wxImage::Paste() (Rachel Mark, Eric Raijmakers).
