@@ -83,7 +83,7 @@ void BitmapComboBoxTestCase::Bitmap()
     //We need this otherwise MSVC complains as it cannot find a suitable append
     static_cast<wxComboBox*>(m_combo)->Append(items);
 #else
-    for( int i = 0; i < items.size(); ++i )
+    for( unsigned int i = 0; i < items.size(); ++i )
         m_combo->Append(items[i]);
 #endif
 
