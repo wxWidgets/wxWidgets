@@ -79,7 +79,7 @@ void BitmapComboBoxTestCase::Bitmap()
     wxArrayString items;
     items.push_back("item 0");
     items.push_back("item 1");
-#ifdef __WXMSW__
+#if defined __WXMSW__ || defined __WXGTK__
     //We need this otherwise MSVC complains as it cannot find a suitable append
     static_cast<wxComboBox*>(m_combo)->Append(items);
 #else
