@@ -206,52 +206,80 @@ public:
     /**
         Convert @e device X coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
         Convert @e device X coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
         Converts @e device Y coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
         Convert @e device Y coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
         Converts logical X coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceX(wxCoord x) const;
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceXRel(wxCoord x) const;
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceY(wxCoord y) const;
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceYRel(wxCoord y) const;
 

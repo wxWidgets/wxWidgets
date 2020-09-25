@@ -547,6 +547,7 @@
     <ClCompile Include="graphics\bitmap.cpp" />
     <ClCompile Include="graphics\boundingbox.cpp" />
     <ClCompile Include="graphics\clippingbox.cpp" />
+    <ClCompile Include="graphics\coords.cpp" />
     <ClCompile Include="graphics\graphmatrix.cpp" />
     <ClCompile Include="graphics\graphpath.cpp" />
     <ClCompile Include="graphics\colour.cpp" />

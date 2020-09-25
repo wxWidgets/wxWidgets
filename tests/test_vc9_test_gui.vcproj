@@ -887,6 +887,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\coords.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\persistence\dataview.cpp"
 				>
 			</File>

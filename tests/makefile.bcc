@@ -168,6 +168,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_affinematrix.obj \
 	$(OBJS)\test_gui_boundingbox.obj \
 	$(OBJS)\test_gui_clippingbox.obj \
+	$(OBJS)\test_gui_coords.obj \
 	$(OBJS)\test_gui_graphmatrix.obj \
 	$(OBJS)\test_gui_graphpath.obj \
 	$(OBJS)\test_gui_config.obj \
@@ -906,6 +907,9 @@ $(OBJS)\test_gui_boundingbox.obj: .\graphics\boundingbox.cpp
 
 $(OBJS)\test_gui_clippingbox.obj: .\graphics\clippingbox.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\clippingbox.cpp
+
+$(OBJS)\test_gui_coords.obj: .\graphics\coords.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\coords.cpp
 
 $(OBJS)\test_gui_graphmatrix.obj: .\graphics\graphmatrix.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\graphmatrix.cpp
