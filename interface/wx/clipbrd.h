@@ -57,7 +57,7 @@
           the end-user's machine. In order for the clipboard data to persist after
           the window closes, a clipboard manager must be installed. Some clipboard
           managers will automatically flush the clipboard after each new piece of
-          data is added, while others will not. The @Flush() function will force
+          data is added, while others will not. The Flush() function will force
           the clipboard manager to flush the data.
 
     @library{wxcore}
