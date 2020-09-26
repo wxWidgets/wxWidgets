@@ -904,11 +904,17 @@ void TextWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 
 void TextWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->WriteText("Is there anybody going to listen to my story");
+    wxString str = "Is there anybody going to listen to my story";
+
     if ( m_text->GetWindowStyle() & wxTE_MULTILINE )
     {
-        m_text->WriteText("\nall about the girl who came to stay");
+        str += "\nall about the girl who came to stay";
+
+        for ( int i = 0; i < 5; i++ )
+            str += str;
     }
+
+    m_text->WriteText(str);
 }
 
 void TextWidgetsPage::OnButtonClear(wxCommandEvent& WXUNUSED(event))
