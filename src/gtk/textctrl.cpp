@@ -1102,6 +1102,27 @@ bool wxTextCtrl::IsEmpty() const
     return wxTextEntry::IsEmpty();
 }
 
+namespace
+{
+
+struct wxGtkTextViewScrollToCursor
+{
+    wxGtkTextViewScrollToCursor(GtkWidget* const text, GtkTextBuffer* const buffer)
+        : textView(GTK_TEXT_VIEW(text)),
+          cursorPos(gtk_text_buffer_get_insert(buffer))
+    { }
+
+    void operator()() const
+    {
+        gtk_text_view_scroll_mark_onscreen(textView, cursorPos);
+    }
+
+    GtkTextView* const textView;
+    GtkTextMark* const cursorPos;
+};
+
+} // anonymous namespace
+
 void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
@@ -1179,8 +1200,9 @@ void wxTextCtrl::WriteText( const wxString &text )
         const double page_size = gtk_adjustment_get_page_size(adj);
         if (wxIsSameDouble(value, upper - page_size))
         {
-            gtk_text_view_scroll_to_mark(GTK_TEXT_VIEW(m_text),
-                gtk_text_buffer_get_insert(m_buffer), 0, false, 0, 1);
+            const wxGtkTextViewScrollToCursor scrollToCursor(m_text, m_buffer);
+
+            CallAfter( scrollToCursor );
         }
     }
 }
