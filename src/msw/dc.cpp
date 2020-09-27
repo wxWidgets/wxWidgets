@@ -2118,6 +2118,28 @@ wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
     return wxPoint(p[0].x, p[0].y);
 }
 
+wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    POINT p[2];
+    p[0].x = 0;
+    p[0].y = 0;
+    p[1].x = x;
+    p[1].y = y;
+    ::DPtoLP(GetHdc(), p, WXSIZEOF(p));
+    return wxSize(p[1].x-p[0].x, p[1].y-p[0].y);
+}
+
+wxSize wxMSWDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    POINT p[2];
+    p[0].x = 0;
+    p[0].y = 0;
+    p[1].x = x;
+    p[1].y = y;
+    ::LPtoDP(GetHdc(), p, WXSIZEOF(p));
+    return wxSize(p[1].x-p[0].x, p[1].y-p[0].y);
+}
+
 // ----------------------------------------------------------------------------
 // Transform matrix
 // ----------------------------------------------------------------------------

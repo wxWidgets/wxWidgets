@@ -325,6 +325,8 @@ public:
     // coordinates conversions and transforms
     virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
     virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const;
 
     // bounding box
 
