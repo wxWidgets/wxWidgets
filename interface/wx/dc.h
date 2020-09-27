@@ -283,6 +283,74 @@ public:
     */
     wxCoord LogicalToDeviceYRel(wxCoord y) const;
 
+    /**
+        Converts device (@a x, @a y) coordinates to logical coordinates
+        taking into account all apllied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(const wxPoint& pt) const;
+
+    /**
+        Converts device @a x, @a y coordinates to relative logical coordinates
+        taking into account all apllied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(const wxSize& dim) const;
+
+    /**
+        Converts logical (@a x, @a y) coordinates to device coordinates
+        taking into account all apllied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(const wxPoint& pt) const;
+
+    /**
+        Converts logical @a x, @a y coordinates to relative device coordinates
+        taking into account all apllied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(const wxSize& dim) const;
+
     //@}
 
 

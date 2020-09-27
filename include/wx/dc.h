@@ -1014,6 +1014,14 @@ public:
         { return m_pimpl->DeviceToLogicalXRel(x); }
     wxCoord DeviceToLogicalYRel(wxCoord y) const
         { return m_pimpl->DeviceToLogicalYRel(y); }
+    wxPoint DeviceToLogical(const wxPoint& pt) const
+        { return m_pimpl->DeviceToLogical(pt.x, pt.y); }
+    wxPoint DeviceToLogical(wxCoord x, wxCoord y) const
+        { return m_pimpl->DeviceToLogical(x, y); }
+    wxSize DeviceToLogicalRel(const wxSize& dim) const
+        { return m_pimpl->DeviceToLogicalRel(dim.x, dim.y); }
+    wxSize DeviceToLogicalRel(int x, int y) const
+        { return m_pimpl->DeviceToLogicalRel(x, y); }
     wxCoord LogicalToDeviceX(wxCoord x) const
         { return m_pimpl->LogicalToDeviceX(x); }
     wxCoord LogicalToDeviceY(wxCoord y) const
@@ -1022,6 +1030,14 @@ public:
         { return m_pimpl->LogicalToDeviceXRel(x); }
     wxCoord LogicalToDeviceYRel(wxCoord y) const
         { return m_pimpl->LogicalToDeviceYRel(y); }
+    wxPoint LogicalToDevice(const wxPoint& pt) const
+        { return m_pimpl->LogicalToDevice(pt.x, pt.y); }
+    wxPoint LogicalToDevice(wxCoord x, wxCoord y) const
+        { return m_pimpl->LogicalToDevice(x, y); }
+    wxSize LogicalToDeviceRel(const wxSize& dim) const
+        { return m_pimpl->LogicalToDeviceRel(dim.x, dim.y); }
+    wxSize LogicalToDeviceRel(int x, int y) const
+        { return m_pimpl->LogicalToDeviceRel(x, y); }
 
     void SetMapMode(wxMappingMode mode)
         { m_pimpl->SetMapMode(mode); }
