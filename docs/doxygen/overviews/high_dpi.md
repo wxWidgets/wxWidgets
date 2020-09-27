@@ -44,11 +44,14 @@ would become 1000 when automatic scaling is in effect.
 Automatic scaling is convenient, but doesn't really allow the application to
 use the extra pixels available on the display. Visually, this means that the
 scaled application appears blurry, in contrast to sharper applications using
-the full display resolution, so a better solution is needed.
+the full display resolution, so a better solution for interpreting pixel values
+on high DPI displays is needed: one which allows to scale some pixel values
+(e.g. the total window size), but not some other ones (e.g. those used for
+drawing, which should remain unscaled to use the full available resolution).
 
 
-Pixel Values in High DPI
-========================
+Pixel Values in wxWidgets
+=========================
 
 Logical and Device-Independent Pixels
 -------------------------------------
