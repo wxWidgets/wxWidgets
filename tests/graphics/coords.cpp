@@ -166,6 +166,33 @@ static void NoTransform(wxDC *dc)
     CHECK(dimDev.y == s_dimDev.y);
 }
 
+static void NoTransformEx(wxDC * dc)
+{
+    // No transformations
+
+    // First convert from device to logical coordinates
+    wxPoint posLog;
+    posLog = dc->DeviceToLogical(s_posDev);
+    CHECK(posLog.x == s_posDev.x);
+    CHECK(posLog.y == s_posDev.y);
+
+    wxSize dimLog;
+    dimLog = dc->DeviceToLogicalRel(s_dimDev);
+    CHECK(dimLog.x == s_dimDev.x);
+    CHECK(dimLog.y == s_dimDev.y);
+
+    // And next back from logical to device coordinates
+    wxPoint posDev;
+    posDev = dc->LogicalToDevice(posLog);
+    CHECK(posDev.x == s_posDev.x);
+    CHECK(posDev.y == s_posDev.y);
+
+    wxSize dimDev;
+    dimDev = dc->LogicalToDeviceRel(dimLog);
+    CHECK(dimDev.x == s_dimDev.x);
+    CHECK(dimDev.y == s_dimDev.y);
+}
+
 static void DeviceOriginChanged(wxDC* dc)
 {
     // Only device origin is changed
@@ -196,6 +223,36 @@ static void DeviceOriginChanged(wxDC* dc)
     wxSize dimDev;
     dimDev.x = dc->LogicalToDeviceXRel(dimLog.x);
     dimDev.y = dc->LogicalToDeviceYRel(dimLog.y);
+    CHECK(dimDev.x == s_dimDev.x);
+    CHECK(dimDev.y == s_dimDev.y);
+}
+
+static void DeviceOriginChangedEx(wxDC * dc)
+{
+    // Only device origin is changed
+    const wxCoord dx = 10;
+    const wxCoord dy = 15;
+    dc->SetDeviceOrigin(dx, dy);
+
+    // First convert from device to logical coordinates
+    wxPoint posLog;
+    posLog = dc->DeviceToLogical(s_posDev);
+    CHECK(posLog.x == s_posDev.x - dx);
+    CHECK(posLog.y == s_posDev.y - dy);
+
+    wxSize dimLog;
+    dimLog = dc->DeviceToLogicalRel(s_dimDev);
+    CHECK(dimLog.x == s_dimDev.x);
+    CHECK(dimLog.y == s_dimDev.y);
+
+    // And next back from logical to device coordinates
+    wxPoint posDev;
+    posDev = dc->LogicalToDevice(posLog);
+    CHECK(posDev.x == s_posDev.x);
+    CHECK(posDev.y == s_posDev.y);
+
+    wxSize dimDev;
+    dimDev = dc->LogicalToDeviceRel(dimLog);
     CHECK(dimDev.x == s_dimDev.x);
     CHECK(dimDev.y == s_dimDev.y);
 }
@@ -234,6 +291,36 @@ static void LogicalOriginChanged(wxDC* dc)
     CHECK(dimDev.y == s_dimDev.y);
 }
 
+static void LogicalOriginChangedEx(wxDC * dc)
+{
+    // Only logical origin is changed
+    const wxCoord dx = -15;
+    const wxCoord dy = -20;
+    dc->SetLogicalOrigin(dx, dy);
+
+    // First convert from device to logical coordinates
+    wxPoint posLog;
+    posLog = dc->DeviceToLogical(s_posDev);
+    CHECK(posLog.x == s_posDev.x + dx);
+    CHECK(posLog.y == s_posDev.y + dy);
+
+    wxSize dimLog;
+    dimLog = dc->DeviceToLogicalRel(s_dimDev);
+    CHECK(dimLog.x == s_dimDev.x);
+    CHECK(dimLog.y == s_dimDev.y);
+
+    // And next back from logical to device coordinates
+    wxPoint posDev;
+    posDev = dc->LogicalToDevice(posLog);
+    CHECK(posDev.x == s_posDev.x);
+    CHECK(posDev.y == s_posDev.y);
+
+    wxSize dimDev;
+    dimDev = dc->LogicalToDeviceRel(dimLog);
+    CHECK(dimDev.x == s_dimDev.x);
+    CHECK(dimDev.y == s_dimDev.y);
+}
+
 static void UserScaleChanged(wxDC* dc)
 {
     // Only user scale is changed
@@ -264,6 +351,36 @@ static void UserScaleChanged(wxDC* dc)
     wxSize dimDev;
     dimDev.x = dc->LogicalToDeviceXRel(dimLog.x);
     dimDev.y = dc->LogicalToDeviceYRel(dimLog.y);
+    CHECK(dimDev.x == s_dimDev.x);
+    CHECK(dimDev.y == s_dimDev.y);
+}
+
+static void UserScaleChangedEx(wxDC * dc)
+{
+    // Only user scale is changed
+    const double sx = 2.0;
+    const double sy = 3.0;
+    dc->SetUserScale(sx, sy);
+
+    // First convert from device to logical coordinates
+    wxPoint posLog;
+    posLog = dc->DeviceToLogical(s_posDev);
+    CHECK(posLog.x == wxRound(s_posDev.x / sx));
+    CHECK(posLog.y == wxRound(s_posDev.y / sy));
+
+    wxSize dimLog;
+    dimLog = dc->DeviceToLogicalRel(s_dimDev);
+    CHECK(dimLog.x == wxRound(s_dimDev.x / sx));
+    CHECK(dimLog.y == wxRound(s_dimDev.y / sy));
+
+    // And next back from logical to device coordinates
+    wxPoint posDev;
+    posDev = dc->LogicalToDevice(posLog);
+    CHECK(posDev.x == s_posDev.x);
+    CHECK(posDev.y == s_posDev.y);
+
+    wxSize dimDev;
+    dimDev = dc->LogicalToDeviceRel(dimLog);
     CHECK(dimDev.x == s_dimDev.x);
     CHECK(dimDev.y == s_dimDev.y);
 }
@@ -302,6 +419,36 @@ static void LogicalScaleChanged(wxDC* dc)
     CHECK(dimDev.y == s_dimDev.y);
 }
 
+static void LogicalScaleChangedEx(wxDC * dc)
+{
+    // Only logical scale is changed
+    const double sx = 2.0;
+    const double sy = 3.0;
+    dc->SetLogicalScale(sx, sy);
+
+    // First convert from device to logical coordinates
+    wxPoint posLog;
+    posLog = dc->DeviceToLogical(s_posDev);
+    CHECK(posLog.x == wxRound(s_posDev.x / sx));
+    CHECK(posLog.y == wxRound(s_posDev.y / sy));
+
+    wxSize dimLog;
+    dimLog = dc->DeviceToLogicalRel(s_dimDev);
+    CHECK(dimLog.x == wxRound(s_dimDev.x / sx));
+    CHECK(dimLog.y == wxRound(s_dimDev.y / sy));
+
+    // And next back from logical to device coordinates
+    wxPoint posDev;
+    posDev = dc->LogicalToDevice(posLog);
+    CHECK(posDev.x == s_posDev.x);
+    CHECK(posDev.y == s_posDev.y);
+
+    wxSize dimDev;
+    dimDev = dc->LogicalToDeviceRel(dimLog);
+    CHECK(dimDev.x == s_dimDev.x);
+    CHECK(dimDev.y == s_dimDev.y);
+}
+
 static void TransformedStd(wxDC* dc)
 {
     // Apply all standardd transformations
@@ -333,6 +480,37 @@ static void TransformedStd(wxDC* dc)
     wxSize dimDev;
     dimDev.x = dc->LogicalToDeviceXRel(dimLog.x);
     dimDev.y = dc->LogicalToDeviceYRel(dimLog.y);
+    CHECK(dimDev.x == s_dimDev.x);
+    CHECK(dimDev.y == s_dimDev.y);
+}
+
+static void TransformedStdEx(wxDC * dc)
+{
+    // Apply all standardd transformations
+    dc->SetDeviceOrigin(10, 15);
+    dc->SetUserScale(0.5, 2.0);
+    dc->SetLogicalScale(4.0, 1.5);
+    dc->SetLogicalOrigin(-15, -20);
+
+    // First convert from device to logical coordinates
+    wxPoint posLog;
+    posLog = dc->DeviceToLogical(s_posDev);
+    CHECK(posLog.x == -8);
+    CHECK(posLog.y == -6);
+
+    wxSize dimLog;
+    dimLog = dc->DeviceToLogicalRel(s_dimDev);
+    CHECK(dimLog.x == 20);
+    CHECK(dimLog.y == 5);
+
+    // And next back from logical to device coordinates
+    wxPoint posDev;
+    posDev = dc->LogicalToDevice(posLog);
+    CHECK(posDev.x == s_posDev.x);
+    CHECK(posDev.y == s_posDev.y);
+
+    wxSize dimDev;
+    dimDev = dc->LogicalToDeviceRel(dimLog);
     CHECK(dimDev.x == s_dimDev.x);
     CHECK(dimDev.y == s_dimDev.y);
 }
@@ -384,6 +562,46 @@ static void TransformedWithMatrix(wxDC* dc)
         CHECK(dimDev.x == s_dimDev.x);
         CHECK(dimDev.y == s_dimDev.y);
     }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+}
+
+static void TransformedWithMatrixEx(wxDC * dc)
+{
+    // Apply transformation matrix only
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( dc->CanUseTransformMatrix() )
+    {
+        // Apply translation and scaling only
+        wxAffineMatrix2D m = dc->GetTransformMatrix();
+        m.Translate(10, 15);
+        m.Scale(2.0, 3.0);
+        dc->SetTransformMatrix(m);
+
+        // First convert from device to logical coordinates
+        m.Invert();
+        wxPoint2DDouble posLogRef = m.TransformPoint(wxPoint2DDouble(s_posDev));
+        wxPoint posLog;
+        posLog = dc->DeviceToLogical(s_posDev);
+        CHECK(posLog.x == wxRound(posLogRef.m_x));
+        CHECK(posLog.y == wxRound(posLogRef.m_y));
+
+        wxPoint2DDouble dimLogRef = m.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
+        wxSize dimLog;
+        dimLog = dc->DeviceToLogicalRel(s_dimDev);
+        CHECK(dimLog.x == wxRound(dimLogRef.m_x));
+        CHECK(dimLog.y == wxRound(dimLogRef.m_y));
+
+        // And next back from logical to device coordinates
+        wxPoint posDev;
+        posDev = dc->LogicalToDevice(posLog);
+        CHECK(posDev.x == s_posDev.x);
+        CHECK(posDev.y == s_posDev.y);
+
+        wxSize dimDev;
+        dimDev = dc->LogicalToDeviceRel(dimLog);
+        CHECK(dimDev.x == s_dimDev.x);
+        CHECK(dimDev.y == s_dimDev.y);
+     }
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
@@ -443,6 +661,56 @@ static void TransformedWithMatrixAndStd(wxDC* dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
+static void TransformedWithMatrixAndStdEx(wxDC * dc)
+{
+    // Apply combination of standard and matrix transformations
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( dc->CanUseTransformMatrix() )
+    {
+        dc->SetDeviceOrigin(10, 15);
+
+        dc->SetUserScale(0.5, 1.5);
+        dc->SetLogicalScale(4.0, 2.0);
+        dc->SetLogicalOrigin(-15, -20);
+
+        wxAffineMatrix2D m = dc->GetTransformMatrix();
+        m.Translate(10, 18);
+        m.Scale(2.0, 0.5);
+        dc->SetTransformMatrix(m);
+
+        // First convert from device to logical coordinates
+        wxAffineMatrix2D m1;
+        m1.Translate(10 - (-15) * (0.5 * 4.0), 15 - (-20) * (1.5 * 2.0));
+        m1.Scale(0.5 * 4.0, 1.5 * 2.0);
+        m1.Concat(m);
+        m1.Invert();
+
+        wxPoint2DDouble posLogRef = m1.TransformPoint(wxPoint2DDouble(s_posDev));
+        wxPoint posLog;
+        posLog = dc->DeviceToLogical(s_posDev);
+        CHECK(posLog.x == wxRound(posLogRef.m_x));
+        CHECK(posLog.y == wxRound(posLogRef.m_y));
+
+        wxPoint2DDouble dimLogRef = m1.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
+        wxSize dimLog;
+        dimLog = dc->DeviceToLogicalRel(s_dimDev);
+        CHECK(dimLog.x == wxRound(dimLogRef.m_x));
+        CHECK(dimLog.y == wxRound(dimLogRef.m_y));
+
+        // And next back from logical to device coordinates
+        wxPoint posDev;
+        posDev = dc->LogicalToDevice(posLog);
+        CHECK(posDev.x == s_posDev.x);
+        CHECK(posDev.y == s_posDev.y);
+
+        wxSize dimDev;
+        dimDev = dc->LogicalToDeviceRel(dimLog);
+        CHECK(dimDev.x == s_dimDev.x);
+        CHECK(dimDev.y == s_dimDev.y);
+    }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+}
+
 static void RotatedWithMatrix(wxDC* dc)
 {
     // Apply matrix transformations with rotation component
@@ -493,6 +761,46 @@ static void RotatedWithMatrix(wxDC* dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
+static void RotatedWithMatrixEx(wxDC * dc)
+{
+    // Apply matrix transformations with rotation component
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( dc->CanUseTransformMatrix() )
+    {
+        wxAffineMatrix2D m = dc->GetTransformMatrix();
+        m.Rotate(6 * M_PI / 180.0);
+        m.Translate(10, 15);
+        m.Scale(2.0, 3.0);
+        dc->SetTransformMatrix(m);
+
+        // First convert from device to logical coordinates
+        m.Invert();
+        wxPoint2DDouble posLogRef = m.TransformPoint(wxPoint2DDouble(s_posDev));
+        wxPoint posLog;
+        posLog = dc->DeviceToLogical(s_posDev);
+        CHECK(posLog.x == wxRound(posLogRef.m_x));
+        CHECK(posLog.y == wxRound(posLogRef.m_y));
+
+        wxPoint2DDouble dimLogRef = m.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
+        wxSize dimLog;
+        dimLog = dc->DeviceToLogicalRel(s_dimDev);
+        CHECK(dimLog.x == wxRound(dimLogRef.m_x));
+        CHECK(dimLog.y == wxRound(dimLogRef.m_y));
+
+        // And next back from logical to device coordinates
+        wxPoint posDev;
+        posDev = dc->LogicalToDevice(posLog);
+        CHECK(Approx(posDev.x).margin(1) == s_posDev.x);
+        CHECK(Approx(posDev.y).margin(1) == s_posDev.y);
+
+        wxSize dimDev;
+        dimDev = dc->LogicalToDeviceRel(dimLog);
+        CHECK(Approx(dimDev.x).margin(1) == s_dimDev.x);
+        CHECK(Approx(dimDev.y).margin(1) == s_dimDev.y);
+    }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+}
+
 // For GTK+ 3 and OSX wxDC is equivalent to wxGCDC
 // so it doesn't need to be tested individually.
 #if !defined(__WXGTK3__) && !defined(__WXOSX__)
@@ -508,10 +816,22 @@ TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::NoTransform", "[coordina
     NoTransform(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::NoTransformEx", "[coordinates]")
+{
+    // No transformations
+    NoTransformEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::DeviceOriginChanged", "[coordinates]")
 {
     // Only device origin is changed
     DeviceOriginChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::DeviceOriginChangedEx", "[coordinates]")
+{
+    // Only device origin is changed
+    DeviceOriginChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::LogicalOriginChanged", "[coordinates]")
@@ -520,10 +840,22 @@ TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::LogicalOriginChanged", "
     LogicalOriginChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::LogicalOriginChangedEx", "[coordinates]")
+{
+    // Only logical origin is changed
+    LogicalOriginChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::UserScaleChanged", "[coordinates]")
 {
     // Only user scale is changed
     UserScaleChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::UserScaleChangedEx", "[coordinates]")
+{
+    // Only user scale is changed
+    UserScaleChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::LogicalScaleChanged", "[coordinates]")
@@ -532,10 +864,22 @@ TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::LogicalScaleChanged", "[
     LogicalScaleChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::LogicalScaleChangedEx", "[coordinates]")
+{
+    // Only logical scale is changed
+    LogicalScaleChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedStd", "[coordinates]")
 {
     // Apply all standardd transformations
     TransformedStd(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedStdEx", "[coordinates]")
+{
+    // Apply all standardd transformations
+    TransformedStdEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedWithMatrix", "[coordinates]")
@@ -544,16 +888,34 @@ TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedWithMatrix", 
     TransformedWithMatrix(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedWithMatrixEx", "[coordinates]")
+{
+    // Apply transformation matrix only
+    TransformedWithMatrixEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedWithMatrixAndStd", "[coordinates]")
 {
     // Apply combination of standard and matrix transformations
     TransformedWithMatrixAndStd(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::TransformedWithMatrixAndStdEx", "[coordinates]")
+{
+    // Apply combination of standard and matrix transformations
+    TransformedWithMatrixAndStdEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::RotatedWithMatrix", "[coordinates]")
 {
     // Apply matrix transformations with rotation component
     RotatedWithMatrix(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesDCTestCase, "CoordinatesDC::RotatedWithMatrixEx", "[coordinates]")
+{
+    // Apply matrix transformations with rotation component
+    RotatedWithMatrixEx(m_dc);
 }
 #endif // !__WXGTK3__ && !_WXOSX__
 
@@ -573,10 +935,22 @@ TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::NoTransform", "[coor
     NoTransform(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::NoTransformEx", "[coordinates]")
+{
+    // No transformations
+    NoTransformEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::DeviceOriginChanged", "[coordinates]")
 {
     // Only device origin is changed
     DeviceOriginChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::DeviceOriginChangedEx", "[coordinates]")
+{
+    // Only device origin is changed
+    DeviceOriginChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::LogicalOriginChanged", "[coordinates]")
@@ -585,10 +959,22 @@ TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::LogicalOriginChanged
     LogicalOriginChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::LogicalOriginChangedEx", "[coordinates]")
+{
+    // Only logical origin is changed
+    LogicalOriginChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::UserScaleChanged", "[coordinates]")
 {
     // Only user scale is changed
     UserScaleChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::UserScaleChangedEx", "[coordinates]")
+{
+    // Only user scale is changed
+    UserScaleChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::LogicalScaleChanged", "[coordinates]")
@@ -597,10 +983,22 @@ TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::LogicalScaleChanged"
     LogicalScaleChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::LogicalScaleChangedEx", "[coordinates]")
+{
+    // Only logical scale is changed
+    LogicalScaleChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedStd", "[coordinates]")
 {
     // Apply all standardd transformations
     TransformedStd(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedStdEx", "[coordinates]")
+{
+    // Apply all standardd transformations
+    TransformedStdEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedWithMatrix", "[coordinates]")
@@ -609,16 +1007,34 @@ TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedWithMatri
     TransformedWithMatrix(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedWithMatrixEx", "[coordinates]")
+{
+    // Apply transformation matrix only
+    TransformedWithMatrixEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedWithMatrixAndStd", "[coordinates]")
 {
     // Apply combination of standard and matrix transformations
     TransformedWithMatrixAndStd(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::TransformedWithMatrixAndStdEx", "[coordinates]")
+{
+    // Apply combination of standard and matrix transformations
+    TransformedWithMatrixAndStdEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::RotatedWithMatrix", "[coordinates]")
 {
     // Apply matrix transformations with rotation component
     RotatedWithMatrix(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCTestCase, "CoordinatesGCDC::RotatedWithMatrixEx", "[coordinates]")
+{
+    // Apply matrix transformations with rotation component
+    RotatedWithMatrixEx(m_dc);
 }
 #else// GDI+ and Direct2D are available only under MSW.
 #if wxUSE_GRAPHICS_GDIPLUS
@@ -648,10 +1064,22 @@ TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::NoTran
     NoTransform(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::NoTransformEx", "[coordinates]")
+{
+    // No transformations
+    NoTransformEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::DeviceOriginChanged", "[coordinates]")
 {
     // Only device origin is changed
     DeviceOriginChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::DeviceOriginChangedEx", "[coordinates]")
+{
+    // Only device origin is changed
+    DeviceOriginChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::LogicalOriginChanged", "[coordinates]")
@@ -660,10 +1088,22 @@ TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::Logica
     LogicalOriginChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::LogicalOriginChangedEx", "[coordinates]")
+{
+    // Only logical origin is changed
+    LogicalOriginChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::UserScaleChanged", "[coordinates]")
 {
     // Only user scale is changed
     UserScaleChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::UserScaleChangedEx", "[coordinates]")
+{
+    // Only user scale is changed
+    UserScaleChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::LogicalScaleChanged", "[coordinates]")
@@ -672,10 +1112,22 @@ TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::Logica
     LogicalScaleChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::LogicalScaleChangedex", "[coordinates]")
+{
+    // Only logical scale is changed
+    LogicalScaleChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::TransformedStd", "[coordinates]")
 {
     // Apply all standardd transformations
     TransformedStd(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::TransformedStdEx", "[coordinates]")
+{
+    // Apply all standardd transformations
+    TransformedStdEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::TransformedWithMatrix", "[coordinates]")
@@ -684,16 +1136,34 @@ TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::Transf
     TransformedWithMatrix(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::TransformedWithMatrixEx", "[coordinates]")
+{
+    // Apply transformation matrix only
+    TransformedWithMatrixEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::TransformedWithMatrixAndStd", "[coordinates]")
 {
     // Apply combination of standard and matrix transformations
     TransformedWithMatrixAndStd(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::TransformedWithMatrixAndStdEx", "[coordinates]")
+{
+    // Apply combination of standard and matrix transformations
+    TransformedWithMatrixAndStdEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::RotatedWithMatrix", "[coordinates]")
 {
     // Apply matrix transformations with rotation component
     RotatedWithMatrix(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCGDIPlusTestCase, "CoordinatesGCDCGDIPlus::RotatedWithMatrixEx", "[coordinates]")
+{
+    // Apply matrix transformations with rotation component
+    RotatedWithMatrixEx(m_dc);
 }
 #endif // wxUSE_GRAPHICS_GDIPLUS
 
@@ -724,10 +1194,22 @@ TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::NoTr
     NoTransform(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::NoTransformEx", "[coordinates]")
+{
+    // No transformations
+    NoTransformEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::DeviceOriginChanged", "[coordinates]")
 {
     // Only device origin is changed
     DeviceOriginChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::DeviceOriginChangedEx", "[coordinates]")
+{
+    // Only device origin is changed
+    DeviceOriginChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::LogicalOriginChanged", "[coordinates]")
@@ -736,10 +1218,22 @@ TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::Logi
     LogicalOriginChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::LogicalOriginChangedEx", "[coordinates]")
+{
+    // Only logical origin is changed
+    LogicalOriginChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::UserScaleChanged", "[coordinates]")
 {
     // Only user scale is changed
     UserScaleChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::UserScaleChangedEx", "[coordinates]")
+{
+    // Only user scale is changed
+    UserScaleChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::LogicalScaleChanged", "[coordinates]")
@@ -748,10 +1242,22 @@ TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::Logi
     LogicalScaleChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::LogicalScaleChangedEx", "[coordinates]")
+{
+    // Only logical scale is changed
+    LogicalScaleChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::TransformedStd", "[coordinates]")
 {
     // Apply all standardd transformations
     TransformedStd(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::TransformedStdEx", "[coordinates]")
+{
+    // Apply all standardd transformations
+    TransformedStdEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::TransformedWithMatrix", "[coordinates]")
@@ -760,16 +1266,34 @@ TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::Tran
     TransformedWithMatrix(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::TransformedWithMatrixEx", "[coordinates]")
+{
+    // Apply transformation matrix only
+    TransformedWithMatrixEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::TransformedWithMatrixAndStd", "[coordinates]")
 {
     // Apply combination of standard and matrix transformations
     TransformedWithMatrixAndStd(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::TransformedWithMatrixAndStdEx", "[coordinates]")
+{
+    // Apply combination of standard and matrix transformations
+    TransformedWithMatrixAndStdEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::RotatedWithMatrix", "[coordinates]")
 {
     // Apply matrix transformations with rotation component
     RotatedWithMatrix(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCDirect2DTestCase, "CoordinatesGCDCDirect2D::RotatedWithMatrixEx", "[coordinates]")
+{
+    // Apply matrix transformations with rotation component
+    RotatedWithMatrixEx(m_dc);
 }
 #endif // wxUSE_GRAPHICS_DIRECT2D
 #endif // __WXMSW__/!__WXMSW__
@@ -801,10 +1325,22 @@ TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::NoTransfor
     NoTransform(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::NoTransformEx", "[coordinates]")
+{
+    // No transformations
+    NoTransformEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::DeviceOriginChanged", "[coordinates]")
 {
     // Only device origin is changed
     DeviceOriginChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::DeviceOriginChangedEx", "[coordinates]")
+{
+    // Only device origin is changed
+    DeviceOriginChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::LogicalOriginChanged", "[coordinates]")
@@ -813,10 +1349,22 @@ TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::LogicalOri
     LogicalOriginChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::LogicalOriginChangedEx", "[coordinates]")
+{
+    // Only logical origin is changed
+    LogicalOriginChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::UserScaleChanged", "[coordinates]")
 {
     // Only user scale is changed
     UserScaleChanged(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::UserScaleChangedEx", "[coordinates]")
+{
+    // Only user scale is changed
+    UserScaleChangedEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::LogicalScaleChanged", "[coordinates]")
@@ -825,10 +1373,22 @@ TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::LogicalSca
     LogicalScaleChanged(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::LogicalScaleChangedEx", "[coordinates]")
+{
+    // Only logical scale is changed
+    LogicalScaleChangedEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::TransformedStd", "[coordinates]")
 {
     // Apply all standardd transformations
     TransformedStd(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::TransformedStdEx", "[coordinates]")
+{
+    // Apply all standardd transformations
+    TransformedStdEx(m_dc);
 }
 
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::TransformedWithMatrix", "[coordinates]")
@@ -837,16 +1397,34 @@ TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::Transforme
     TransformedWithMatrix(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::TransformedWithMatrixEx", "[coordinates]")
+{
+    // Apply transformation matrix only
+    TransformedWithMatrixEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::TransformedWithMatrixAndStd", "[coordinates]")
 {
     // Apply combination of standard and matrix transformations
     TransformedWithMatrixAndStd(m_dc);
 }
 
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::TransformedWithMatrixAndStdEx", "[coordinates]")
+{
+    // Apply combination of standard and matrix transformations
+    TransformedWithMatrixAndStdEx(m_dc);
+}
+
 TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::RotatedWithMatrix", "[coordinates]")
 {
     // Apply matrix transformations with rotation component
     RotatedWithMatrix(m_dc);
+}
+
+TEST_CASE_METHOD(CoordinatesGCDCCairoTestCase, "CoordinatesGCDCCairo::RotatedWithMatrixEx", "[coordinates]")
+{
+    // Apply matrix transformations with rotation component
+    RotatedWithMatrixEx(m_dc);
 }
 #endif // wxUSE_CAIRO
 #endif // wxUSE_GRAPHICS_CONTEXT
