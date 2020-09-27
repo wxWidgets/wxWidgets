@@ -285,7 +285,7 @@ public:
 
     /**
         Converts device (@a x, @a y) coordinates to logical coordinates
-        taking into account all apllied transformations like the current
+        taking into account all applied transformations like the current
         mapping mode, scale factors, device origin, axes orientation,
         affine transformation.
 
@@ -302,7 +302,7 @@ public:
 
     /**
         Converts device @a x, @a y coordinates to relative logical coordinates
-        taking into account all apllied transformations like the current
+        taking into account all applied transformations like the current
         mapping mode, scale factors, affine transformation.
         Use this for converting distances like e.g. width and height.
 
@@ -319,7 +319,7 @@ public:
 
     /**
         Converts logical (@a x, @a y) coordinates to device coordinates
-        taking into account all apllied transformations like the current
+        taking into account all applied transformations like the current
         mapping mode, scale factors, device origin, axes orientation,
         affine transformation.
 
@@ -336,7 +336,7 @@ public:
 
     /**
         Converts logical @a x, @a y coordinates to relative device coordinates
-        taking into account all apllied transformations like the current
+        taking into account all applied transformations like the current
         mapping mode, scale factors, affine transformation.
         Use this for converting distances like e.g. width and height.
 
