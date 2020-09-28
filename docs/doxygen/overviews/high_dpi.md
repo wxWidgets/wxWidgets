@@ -103,8 +103,19 @@ For example, in a wxGLCanvas created with the size of 100 (logical) pixels, the
 rightmost physical pixel coordinate will be `100*GetContentScaleFactor()`.
 
 
-[comment]: # (TODO: High-Resolution Images and Artwork)
+High-Resolution Images and Artwork
+==================================
 
+In order to benefit from the increased detail on High DPI devices you might want
+to provide the images or artwork your application uses in higher resolutions as
+well. Note that it is not recommended to just provide a high-resolution version
+and let the system scale that down on 1x displays. Apart from performance
+consideration also the quality might suffer, contours become more blurry.
+
+You can use vector based graphics like SVG or you can add the same image at different
+sizes / resolutions.
+
+[comment]: # (TODO: API and Use Cases)
 
 Platform-Specific Build Issues
 ==============================
