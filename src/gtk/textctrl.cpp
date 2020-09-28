@@ -1105,16 +1105,38 @@ bool wxTextCtrl::IsEmpty() const
 namespace
 {
 
+// The functor bellow is called by WriteText() to scroll the GtkTextView to the
+// cursor position. Notice that despite the GtkTextView installs a high-priority
+// idle which should complete its duty so that immediat scrolling would possible,
+// but it's not, unfortunately. WriteText() has to delay scrolling (using CallAfter())
+// to the next event loop iteration.
+// The shortcoming of this delay is any positioning that is done following the WriteText()
+// could be overriden by the time the functor is executed. we gaurd this from happening by
+// canceling the pending scrolling by calling this helper function wxGtkTextViewScrollMarkOnScreen()
+// instead of the direct call of the corresponding GTK function.
+
+static bool gs_cancelPendingScrolling;
+
+inline void
+wxGtkTextViewScrollMarkOnScreen(GtkTextView* const view, GtkTextMark* const mark)
+{
+    gs_cancelPendingScrolling = true;
+    gtk_text_view_scroll_mark_onscreen(view, mark);
+}
+
 struct wxGtkTextViewScrollToCursor
 {
     wxGtkTextViewScrollToCursor(GtkWidget* const text, GtkTextBuffer* const buffer)
         : textView(GTK_TEXT_VIEW(text)),
           cursorPos(gtk_text_buffer_get_insert(buffer))
-    { }
+    {
+        gs_cancelPendingScrolling = false;
+    }
 
     void operator()() const
     {
-        gtk_text_view_scroll_mark_onscreen(textView, cursorPos);
+        if ( !gs_cancelPendingScrolling )
+          wxGtkTextViewScrollMarkOnScreen(textView, cursorPos);
     }
 
     GtkTextView* const textView;
@@ -1387,7 +1409,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
             // defer until Thaw, text view is not using m_buffer now
             m_showPositionOnThaw = mark;
         else
-            gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
+            wxGtkTextViewScrollMarkOnScreen(GTK_TEXT_VIEW(m_text), mark);
     }
     else // single line
     {
@@ -1504,7 +1526,7 @@ void wxTextCtrl::ShowPosition( long pos )
             // defer until Thaw, text view is not using m_buffer now
             m_showPositionOnThaw = mark;
         else
-            gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
+            wxGtkTextViewScrollMarkOnScreen(GTK_TEXT_VIEW(m_text), mark);
     }
     else // single line
     {   // This function not only shows character at required position
@@ -2160,7 +2182,7 @@ void wxTextCtrl::DoThaw()
 
         if (m_showPositionOnThaw != NULL)
         {
-            gtk_text_view_scroll_mark_onscreen(
+            wxGtkTextViewScrollMarkOnScreen(
                 GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
             m_showPositionOnThaw = NULL;
         }
