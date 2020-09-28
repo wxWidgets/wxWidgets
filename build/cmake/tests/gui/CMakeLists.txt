@@ -22,9 +22,11 @@ set(TEST_GUI_SRC
     graphics/affinematrix.cpp
     graphics/boundingbox.cpp
     graphics/clippingbox.cpp
+    graphics/coords.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
     config/config.cpp
+    controls/auitest.cpp
     controls/bitmapcomboboxtest.cpp
     controls/bitmaptogglebuttontest.cpp
     controls/bookctrlbasetest.cpp
@@ -102,11 +104,13 @@ set(TEST_GUI_SRC
     net/socket.cpp
     persistence/tlw.cpp
     persistence/dataview.cpp
+    rowheightcache/rowheightcachetest.cpp
     sizers/boxsizer.cpp
     sizers/gridsizer.cpp
     sizers/wrapsizer.cpp
     toplevel/toplevel.cpp
     validators/valnum.cpp
+    validators/valtext.cpp
     window/clientsize.cpp
     window/setsize.cpp
     xml/xrctest.cpp
@@ -169,6 +173,9 @@ wx_add_test(test_gui ${TEST_GUI_SRC}
     RES ../samples/sample.rc
     )
 wx_exe_link_libraries(test_gui wxcore)
+if(wxUSE_AUI)
+    wx_exe_link_libraries(test_gui wxaui)
+endif()
 if(wxUSE_RICHTEXT)
     wx_exe_link_libraries(test_gui wxrichtext)
 endif()
