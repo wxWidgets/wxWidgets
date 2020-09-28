@@ -626,7 +626,12 @@ extern "C" {
 static void mark_set(GtkTextBuffer*, GtkTextIter*, GtkTextMark* mark, GSList** markList)
 {
     if (gtk_text_mark_get_name(mark) == NULL)
+    {
         *markList = g_slist_prepend(*markList, mark);
+        wxLogDebug("m_anonymousMarkList size: %lu", g_slist_length(*markList));
+    }
+
+    wxLogDebug("Inside mark_set() handler");
 }
 }
 
