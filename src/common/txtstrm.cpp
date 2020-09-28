@@ -134,12 +134,13 @@ wxChar wxTextInputStream::GetChar()
                 // one extra byte, the only explanation is that we were using a
                 // wxConvAuto conversion recognizing the initial BOM and that
                 // it couldn't detect the presence or absence of BOM so far,
-                // but now finally has enough data to see that there is none.
-                // As we must have fallen back to Latin-1 in this case, return
-                // just the first byte and keep the other ones for the next
-                // time.
-                m_validBegin = 1;
-                return wbuf[0];
+                // but now finally has enough data to see that there is none, or
+                // it was trying to decode the data as UTF-8 sequence, but now
+                // recognized that it's not valid UTF-8 and switched to fallback.
+                // We don't know how long is the first character or if it's decoded
+                // as 1 or 2 wchar_t characters, so we need to start with 1 byte again.
+                inlen = -1;
+                break;
 
 #if SIZEOF_WCHAR_T == 2
             case 2:
