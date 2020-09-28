@@ -744,13 +744,12 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (multi_line)
     {
         m_buffer = gtk_text_buffer_new(NULL);
-        gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         // Create view
         m_text = gtk_text_view_new_with_buffer(m_buffer);
+        g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         GTKConnectFreezeWidget(m_text);
         // gtk_text_view_set_buffer adds its own reference
         g_object_unref(m_buffer);
-        g_signal_handler_disconnect(m_buffer, sig_id);
 
         // create "ShowPosition" marker
         GtkTextIter iter;
@@ -2109,6 +2108,9 @@ void wxTextCtrl::DoFreeze()
     {
         // removing buffer dramatically speeds up insertion:
         g_object_ref(m_buffer);
+        // gtk_text_view_set_buffer bellow won't disconnect our handler for us
+        g_signal_handlers_disconnect_by_func(m_buffer, (void*)mark_set, &m_anonymousMarkList);
+
         GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
         // gtk_text_view_set_buffer adds its own reference
@@ -2136,10 +2138,10 @@ void wxTextCtrl::DoThaw()
     if ( HasFlag(wxTE_MULTILINE) )
     {
         // reattach buffer:
-        gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
+        g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
+        // gtk_text_view_set_buffer adds its own reference
         g_object_unref(m_buffer);
-        g_signal_handler_disconnect(m_buffer, sig_id);
 
         if (m_showPositionOnThaw != NULL)
         {
