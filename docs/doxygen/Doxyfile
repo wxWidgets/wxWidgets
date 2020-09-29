@@ -384,6 +384,7 @@ GENERATE_CHI           = NO
 CHM_INDEX_ENCODING     =
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
+TOC_INCLUDE_HEADINGS   = 3
 
 
 #---------------------------------------------------------------------------
