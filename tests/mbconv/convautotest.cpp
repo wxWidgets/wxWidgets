@@ -288,9 +288,8 @@ void ConvAutoTestCase::StreamUTF32BE()
 
 void ConvAutoTestCase::StreamFallback()
 {
-    // this only works if there are at least 3 bytes after the first non-ASCII character
-    TestTextStream("\x61\xbf\x0A\xe0\x7a",
-                   5, wxString::FromUTF8("a\xd0\x9f"), wxString::FromUTF8("\xd1\x80z"),
+    TestTextStream("\x61\xbf\x0A\xe0",
+                   4, wxString::FromUTF8("a\xd0\x9f"), wxString::FromUTF8("\xd1\x80"),
                    wxFONTENCODING_ISO8859_5);
 }
 

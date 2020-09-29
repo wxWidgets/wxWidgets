@@ -387,6 +387,8 @@ private:
     int m_options;
 };
 
+bool wxIsUTF8Prefix(const char *src, size_t len);
+
 // ----------------------------------------------------------------------------
 // wxMBConvUTF16Base: for both LE and BE variants
 // ----------------------------------------------------------------------------
