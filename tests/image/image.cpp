@@ -1456,10 +1456,12 @@ void ImageTestCase::ScaleCompare()
 
 void ImageTestCase::CreateBitmapFromCursor()
 {
+#ifndef __WXOSX_IPHONE__
     wxImage image( "toucan_resized.png" );
     wxCursor cursor( image );
     wxBitmap bitmap( cursor );
     CHECK_THAT( image,  RGBSameAs( bitmap.ConvertToImage() ) );
+#endif
 }
 
 #endif //wxUSE_IMAGE
