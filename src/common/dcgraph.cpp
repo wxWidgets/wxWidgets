@@ -613,6 +613,22 @@ wxPoint wxGCDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
     return wxPoint(wxRound(px), wxRound(py));
 }
 
+wxSize wxGCDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    wxDouble dx = x;
+    wxDouble dy = y;
+    m_matrixCurrentInv.TransformDistance(&dx, &dy);
+    return wxSize(wxRound(dx), wxRound(dy));
+}
+
+wxSize wxGCDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    wxDouble dx = x;
+    wxDouble dy = y;
+    m_matrixCurrent.TransformDistance(&dx, &dy);
+    return wxSize(wxRound(dx), wxRound(dy));
+}
+
 bool wxGCDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                              const wxColour& WXUNUSED(col),
                              wxFloodFillStyle WXUNUSED(style))

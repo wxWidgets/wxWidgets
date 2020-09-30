@@ -12,6 +12,7 @@ skip_commits:
     - misc/
     - include/wx/osx/
     - src/osx/
+    - .github/workflows/
     - .travis.yml
     - build/tools/travis-ci.sh
     - build/tools/before_install.sh

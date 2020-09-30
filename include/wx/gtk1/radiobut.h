@@ -13,7 +13,7 @@
 // wxRadioButton
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
 {
 public:
     wxRadioButton() { }

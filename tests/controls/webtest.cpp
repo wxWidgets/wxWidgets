@@ -24,6 +24,9 @@
 #if wxUSE_WEBVIEW_IE
     #include "wx/msw/webview_ie.h"
 #endif
+#if wxUSE_WEBVIEW_WEBKIT2
+    #include "wx/stopwatch.h"
+#endif
 
 //Convenience macro
 #define ENSURE_LOADED CHECK( m_loaded->WaitEvent() )
@@ -194,6 +197,15 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(!m_browser->HasSelection());
 
         m_browser->SelectAll();
+
+#if wxUSE_WEBVIEW_WEBKIT2
+        // With WebKit SelectAll() sends a request to perform the selection to
+        // another process via proxy and there doesn't seem to be any way to
+        // wait until this request is actually handled, so loop here for some a
+        // bit before giving up.
+        for ( wxStopWatch sw; !m_browser->HasSelection() && sw.Time() < 50; )
+            wxMilliSleep(1);
+#endif // wxUSE_WEBVIEW_WEBKIT2
 
         CHECK(m_browser->HasSelection());
         CHECK(m_browser->GetSelectedText() == "Some strong text");

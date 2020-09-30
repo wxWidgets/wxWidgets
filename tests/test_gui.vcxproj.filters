@@ -293,6 +293,9 @@
     <ClCompile Include="graphics\clippingbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\coords.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="graphics\graphmatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

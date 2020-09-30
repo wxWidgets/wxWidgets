@@ -125,7 +125,7 @@ public:
             return false;
         }
 
-        unsigned char center_alpha = 
+        unsigned char center_alpha =
             *(other.GetAlpha() + (other.GetWidth() / 2) + (other.GetHeight() / 2 * other.GetWidth()));
 
         if (m_alpha != center_alpha)

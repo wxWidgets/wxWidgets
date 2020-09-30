@@ -41,3 +41,22 @@ jobs:
       - name: Run codespell
         run: |
           CODESPELL=$HOME/.local/bin/codespell ./misc/scripts/spellcheck
+
+
+  check-whitespace:
+    runs-on: ubuntu-20.04
+    name: Check Whitespace
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check for trailing whitespace and TABs
+        run: |
+            git fetch --depth=1 origin master
+            git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol,tab-in-indent \
+                diff --check origin/master '*' \
+                '!**/*akefile*' \
+                '!**/*.sln' \
+                '!**/*.vcproj' \
+                '!**/*.xpm'
