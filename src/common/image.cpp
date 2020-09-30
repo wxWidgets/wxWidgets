@@ -1739,29 +1739,61 @@ wxImage::Paste(const wxImage & image, int x, int y,
     // being pasted into account.
     if (!copiedPixels)
     {
-        unsigned char r = image.GetMaskRed();
-        unsigned char g = image.GetMaskGreen();
-        unsigned char b = image.GetMaskBlue();
+        const unsigned char* source_data = image.GetData() + 3 * (xx + yy * image.GetWidth());
+        int source_step = image.GetWidth() * 3;
 
-        const unsigned char* source_data = image.GetData() + 3*(xx + yy*image.GetWidth());
-        int source_step = image.GetWidth()*3;
+        unsigned char* target_data = GetData() + 3 * ((x + xx) + (y + yy) * M_IMGDATA->m_width);
+        int target_step = M_IMGDATA->m_width * 3;
 
-        unsigned char* target_data = GetData() + 3*((x+xx) + (y+yy)*M_IMGDATA->m_width);
-        int target_step = M_IMGDATA->m_width*3;
-
-        for (int j = 0; j < height; j++)
+        unsigned char* alpha_target_data = NULL;
+        const int target_alpha_step = M_IMGDATA->m_width;
+        if (HasAlpha())
         {
-            for (int i = 0; i < width*3; i+=3)
+            alpha_target_data = GetAlpha() + (x + xx) + (y + yy) * M_IMGDATA->m_width;
+        }
+
+        // The mask colours should only be taken into account if the mask is actually enabled
+        if (!image.HasMask())
+        {
+            // Copy all pixels
+            for (int j = 0; j < height; j++)
             {
-                if ((source_data[i]   != r) ||
-                    (source_data[i+1] != g) ||
-                    (source_data[i+2] != b))
+                memcpy(target_data, source_data, width * 3);
+                source_data += source_step;
+                target_data += target_step;
+                // Make all the copied pixels fully opaque
+                if (alpha_target_data != NULL)
                 {
-                    memcpy( target_data+i, source_data+i, 3 );
+                    memset(alpha_target_data, wxALPHA_OPAQUE, target_alpha_step);
+                    alpha_target_data += target_alpha_step;
                 }
             }
-            source_data += source_step;
-            target_data += target_step;
+        }
+        else
+        {
+            // Copy all 'non masked' pixels
+            unsigned char r = image.GetMaskRed();
+            unsigned char g = image.GetMaskGreen();
+            unsigned char b = image.GetMaskBlue();
+
+            for (int j = 0; j < height; j++)
+            {
+                for (int i = 0; i < width * 3; i += 3)
+                {
+                    if ((source_data[i] != r) ||
+                        (source_data[i + 1] != g) ||
+                        (source_data[i + 2] != b))
+                    {
+                        // Copy the non masked pixel
+                        memcpy(target_data + i, source_data + i, 3);
+                        // Make the copied pixel fully opaque
+                        alpha_target_data[i / 3] = wxALPHA_OPAQUE;
+                    }
+                }
+                source_data += source_step;
+                target_data += target_step;
+                alpha_target_data += target_alpha_step;
+            }
         }
     }
 }
