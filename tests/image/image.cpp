@@ -1460,7 +1460,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     {
         "9 9 7 1",
         "   c None",
-        "y  c #FF0000",
+        "y  c #FFFF00",
         "r  c #FF0000",
         "g  c #00FF00",
         "b  c #0000FF",
@@ -1481,7 +1481,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     {
         "9 9 2 1",
         "   c None",
-        "y  c #FF0000",
+        "y  c #FFFF00",
         "y y y y y",
         " y y y y ",
         "y y y y y",
@@ -1508,7 +1508,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         {
             "13 13 2 1",
             "   c None",
-            "y  c #FF0000",
+            "y  c #FFFF00",
             "y y y y y y y",
             " y y y y y y ",
             "y y y y y y y",
@@ -1537,7 +1537,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         {
             "5 5 2 1",
             "   c None",
-            "y  c #FF0000",
+            "y  c #FFFF00",
             "y y y",
             " y y ",
             "y y y",
@@ -1549,7 +1549,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         {
             "9 9 7 1",
             "   c None",
-            "y  c #FF0000",
+            "y  c #FFFF00",
             "r  c #FF0000",
             "g  c #00FF00",
             "b  c #0000FF",
@@ -1579,7 +1579,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         {
             "9 9 7 1",
             "   c None",
-            "y  c #FF0000",
+            "y  c #FFFF00",
             "r  c #FF0000",
             "g  c #00FF00",
             "b  c #0000FF",
@@ -1609,7 +1609,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         {
             "9 9 7 1",
             "   c None",
-            "y  c #FF0000",
+            "y  c #FFFF00",
             "r  c #FF0000",
             "g  c #00FF00",
             "b  c #0000FF",
@@ -1667,7 +1667,7 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         {
             "9 9 7 1",
             "   c None",
-            "y  c #FF0000",
+            "y  c #FFFF00",
             "r  c #FF0000",
             "g  c #00FF00",
             "b  c #0000FF",
@@ -1767,6 +1767,77 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_no_background_square_over_circle.png"), 1));
         CHECK_THAT(actual, CenterAlphaPixelEquals(224));
+    }
+    SECTION("Paste fully transparent (masked) image over light image") // todo make test case for 'blend with mask'
+    {
+        const static char* transparent_image_xpm[] =
+        {
+            "5 5 2 1",
+            "   c None", // Mask
+            "y  c #FFFF00",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+        };
+        const static char* light_image_xpm[] =
+        {
+            "5 5 2 1",
+            "   c None",
+            "y  c #FFFF00",
+            "yyyyy",
+            "yyyyy",
+            "yyyyy",
+            "yyyyy",
+            "yyyyy",
+        };
+        wxImage actual(light_image_xpm);
+        actual.InitAlpha();
+        wxImage paste(transparent_image_xpm);
+        wxImage expected(light_image_xpm);
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+    SECTION("Paste fully black (masked) image over light image") // todo make test case for 'blend with mask'
+    {
+        const static char* black_image_xpm[] =
+        {
+            "5 5 2 1",
+            "   c #000000",
+            "y  c None", // Mask
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+            "     ",
+        };
+        const static char* light_image_xpm[] =
+        {
+            "5 5 2 1",
+            "   c None",
+            "y  c #FFFF00",
+            "yyyyy",
+            "yyyyy",
+            "yyyyy",
+            "yyyyy",
+            "yyyyy",
+        };
+        wxImage actual(light_image_xpm);
+        actual.InitAlpha();
+        wxImage paste(black_image_xpm);
+        wxImage expected(black_image_xpm);
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(expected));
+    }
+    SECTION("Paste dark image over light image")
+    {
+        wxImage black("image/paste_input_black.png");
+        wxImage actual("image/paste_input_background.png");
+        actual.InitAlpha();
+        actual.Paste(black, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, CenterAlphaPixelEquals(255));
+        CHECK_THAT(actual, RGBSameAs(black));
     }
 }
 
