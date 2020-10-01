@@ -1251,6 +1251,12 @@ public:
                         wxRect* normal_region,
                         wxRect* dropdown_region);
 
+    wxCoord GetButtonBarButtonTextWidth(
+                        wxDC& dc,
+                        const wxString& label,
+                        wxRibbonButtonKind kind,
+                        wxRibbonButtonBarButtonState size);
+
     wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
