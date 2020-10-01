@@ -83,7 +83,7 @@ private:
         CPPUNIT_TEST( DibPadding );
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
-    CPPUNIT_TEST( CreateBitmapFromCursor );
+        CPPUNIT_TEST( CreateBitmapFromCursor );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
