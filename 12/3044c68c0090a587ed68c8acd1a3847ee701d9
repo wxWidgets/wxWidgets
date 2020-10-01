@@ -1,0 +1,1 @@
+All: Fix wxCaret default ctor (Stefan Brüns).
