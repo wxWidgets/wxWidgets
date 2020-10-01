@@ -1839,6 +1839,21 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         CHECK_THAT(actual, CenterAlphaPixelEquals(255));
         CHECK_THAT(actual, RGBSameAs(black));
     }
+    SECTION("Paste large image with negative vertical offset")
+    {
+        wxImage target(442, 249);
+        wxImage to_be_pasted(345, 24900);
+        target.InitAlpha();
+        target.Paste(to_be_pasted, 48, -12325, wxIMAGE_ALPHA_BLEND_COMPOSE);
+    }
+    SECTION("Paste large image with negative horizontal offset")
+    {
+        wxImage target(249, 442);
+        wxImage to_be_pasted(24900, 345);
+        target.InitAlpha();
+        target.Paste(to_be_pasted, -12325, 48, wxIMAGE_ALPHA_BLEND_COMPOSE);
+    }
+
 }
 
 /*

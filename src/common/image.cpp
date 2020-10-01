@@ -1764,7 +1764,7 @@ wxImage::Paste(const wxImage & image, int x, int y,
                 // Make all the copied pixels fully opaque
                 if (alpha_target_data != NULL)
                 {
-                    memset(alpha_target_data, wxALPHA_OPAQUE, target_alpha_step);
+                    memset(alpha_target_data, wxALPHA_OPAQUE, width);
                     alpha_target_data += target_alpha_step;
                 }
             }
