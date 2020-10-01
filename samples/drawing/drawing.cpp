@@ -2013,11 +2013,9 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         PrepareDC(dc);
         m_owner->PrepareDC(dc);
 
-        wxPoint pos = event.GetPosition();
-        long x = dc.DeviceToLogicalX( pos.x );
-        long y = dc.DeviceToLogicalY( pos.y );
+        wxPoint pos = dc.DeviceToLogical(event.GetPosition());
         wxString str;
-        str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
+        str.Printf( "Current mouse position: %d,%d", pos.x, pos.y );
         m_owner->SetStatusText( str );
     }
 
