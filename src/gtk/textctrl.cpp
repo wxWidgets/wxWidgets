@@ -684,8 +684,9 @@ void wxTextCtrl::Init()
 
     m_text = NULL;
     m_buffer = NULL;
-    m_showPositionOnThaw = NULL;
+    m_showPositionDefer = NULL;
     m_anonymousMarkList = NULL;
+    m_afterLayoutId = 0;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -702,6 +703,8 @@ wxTextCtrl::~wxTextCtrl()
 
     if (m_anonymousMarkList)
         g_slist_free(m_anonymousMarkList);
+    if (m_afterLayoutId)
+        g_source_remove(m_afterLayoutId);
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
@@ -1102,6 +1105,25 @@ bool wxTextCtrl::IsEmpty() const
     return wxTextEntry::IsEmpty();
 }
 
+void wxTextCtrl::GTKAfterLayout()
+{
+    m_afterLayoutId = 0;
+    if (m_showPositionDefer && !IsFrozen())
+    {
+        gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), m_showPositionDefer);
+        m_showPositionDefer = NULL;
+    }
+}
+
+extern "C" {
+static gboolean afterLayout(void* data)
+{
+    wxTextCtrl* win = static_cast<wxTextCtrl*>(data);
+    win->GTKAfterLayout();
+    return false;
+}
+}
+
 void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
@@ -1163,15 +1185,16 @@ void wxTextCtrl::WriteText( const wxString &text )
     gtk_text_buffer_delete_selection(m_buffer, false, true);
 
     // Insert the text
+    GtkTextMark* insertMark = gtk_text_buffer_get_insert(m_buffer);
     GtkTextIter iter;
-    gtk_text_buffer_get_iter_at_mark( m_buffer, &iter,
-                                      gtk_text_buffer_get_insert (m_buffer) );
+    gtk_text_buffer_get_iter_at_mark(m_buffer, &iter, insertMark);
+
+    const bool insertIsEnd = gtk_text_iter_is_end(&iter) != 0;
 
     gtk_text_buffer_insert( m_buffer, &iter, buffer, buffer.length() );
 
-    // Scroll to cursor, but only if scrollbar thumb is at the very bottom
-    // won't work when frozen, text view is not using m_buffer then
-    if (!IsFrozen())
+    // Scroll to cursor, if it is at the end and scrollbar thumb is at the bottom
+    if (insertIsEnd)
     {
         GtkAdjustment* adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_widget));
         const double value = gtk_adjustment_get_value(adj);
@@ -1179,9 +1202,18 @@ void wxTextCtrl::WriteText( const wxString &text )
         const double page_size = gtk_adjustment_get_page_size(adj);
         if (wxIsSameDouble(value, upper - page_size))
         {
-            gtk_text_view_scroll_to_mark(GTK_TEXT_VIEW(m_text),
-                gtk_text_buffer_get_insert(m_buffer), 0, false, 0, 1);
+            if (!IsFrozen())
+                gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), insertMark);
+
+            // GtkTextView's incremental background layout makes scrolling
+            // to end unreliable until the layout has been completed
+            m_showPositionDefer = insertMark;
         }
+    }
+    if (m_afterLayoutId == 0)
+    {
+        m_afterLayoutId =
+            g_idle_add_full(GTK_TEXT_VIEW_PRIORITY_VALIDATE + 1, afterLayout, this, NULL);
     }
 }
 
@@ -1363,7 +1395,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
         GtkTextMark* mark = gtk_text_buffer_get_insert(m_buffer);
         if (IsFrozen())
             // defer until Thaw, text view is not using m_buffer now
-            m_showPositionOnThaw = mark;
+            m_showPositionDefer = mark;
         else
             gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
     }
@@ -1480,7 +1512,7 @@ void wxTextCtrl::ShowPosition( long pos )
         gtk_text_buffer_move_mark(m_buffer, mark, &iter);
         if (IsFrozen())
             // defer until Thaw, text view is not using m_buffer now
-            m_showPositionOnThaw = mark;
+            m_showPositionDefer = mark;
         else
             gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
     }
@@ -2136,11 +2168,11 @@ void wxTextCtrl::DoThaw()
         g_object_unref(m_buffer);
         g_signal_handler_disconnect(m_buffer, sig_id);
 
-        if (m_showPositionOnThaw != NULL)
+        if (m_showPositionDefer)
         {
-            gtk_text_view_scroll_mark_onscreen(
-                GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
-            m_showPositionOnThaw = NULL;
+            gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), m_showPositionDefer);
+            if (m_afterLayoutId == 0)
+                m_showPositionDefer = NULL;
         }
     }
 
