@@ -1456,7 +1456,7 @@ void ImageTestCase::ScaleCompare()
 
 void ImageTestCase::CreateBitmapFromCursor()
 {
-#ifndef __WXOSX_IPHONE__
+#if !defined __WXOSX_IPHONE__ || !defined __WXDFB__ || !defined __WXMOTIF__ || !defined __WXX11__
     wxImage image( "toucan_resized.png" );
     wxCursor cursor( image );
     wxBitmap bitmap( cursor );
