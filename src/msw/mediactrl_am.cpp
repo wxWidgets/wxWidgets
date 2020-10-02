@@ -2179,7 +2179,9 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //---------------------------------------------------------------------------
 void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 {
-    switch(event.GetDispatchId())
+    // cast to unsigned long to fix narrowing error with case 0xfffffd9f
+    // when using clang or GCC
+    switch (static_cast<unsigned long>(event.GetDispatchId()))
     {
 #ifndef __WXWINCE__
     case 0x00000001: // statechange in IActiveMovie
