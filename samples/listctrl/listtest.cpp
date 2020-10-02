@@ -1442,7 +1442,6 @@ void MyListCtrl::OnRightClick(wxMouseEvent& event)
         case wxLIST_HITTEST_NOWHERE: where = "nowhere near"; break;
         case wxLIST_HITTEST_ONITEMICON: where = "on icon of"; break;
         case wxLIST_HITTEST_ONITEMLABEL: where = "on label of"; break;
-        case wxLIST_HITTEST_ONITEMRIGHT: where = "right on"; break;
         case wxLIST_HITTEST_TOLEFT: where = "to the left of"; break;
         case wxLIST_HITTEST_TORIGHT: where = "to the right of"; break;
         default: where = "not clear exactly where on"; break;
