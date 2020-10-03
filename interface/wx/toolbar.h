@@ -462,9 +462,9 @@ public:
             whenever another button in the group is checked. ::wxITEM_DROPDOWN
             specifies that a drop-down menu button will appear next to the
             tool button (only GTK+ and MSW). Call SetDropdownMenu() afterwards.
-        @param shortHelpString
+        @param shortHelp
             This string is used for the tools tooltip.
-        @param longHelpString
+        @param longHelp
             This string is shown in the statusbar (if any) of the parent frame
             when the mouse pointer is inside the tool.
         @param clientData
@@ -481,8 +481,8 @@ public:
                                const wxBitmap& bitmap,
                                const wxBitmap& bmpDisabled,
                                wxItemKind kind = wxITEM_NORMAL,
-                               const wxString& shortHelpString = wxEmptyString,
-                               const wxString& longHelpString = wxEmptyString,
+                               const wxString& shortHelp = wxEmptyString,
+                               const wxString& longHelp = wxEmptyString,
                                wxObject* clientData = NULL);
     //@}
 
