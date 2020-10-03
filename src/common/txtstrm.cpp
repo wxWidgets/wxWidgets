@@ -97,10 +97,11 @@ wxChar wxTextInputStream::GetChar()
         m_validEnd = 0;
     }
 
-    // We may need to decode up to 4 characters if we have input starting with
-    // 3 BOM-like bytes, but not actually containing a BOM, as decoding it will
-    // only succeed when 4 bytes are read -- and will yield 4 wide characters.
-    wxChar wbuf[4];
+    // We may need to decode up to 6 characters if we have input starting with
+    // 2 null bytes (like in UTF-32BE BOM), and then 3 bytes that look like
+    // the start of UTF-8 sequence, as decoding it will only succeed when
+    // 6 bytes are read -- and will yield 6 wide characters.
+    wxChar wbuf[6];
     for(size_t inlen = 0; inlen < sizeof(m_lastBytes); inlen++)
     {
         if ( inlen >= m_validEnd )
