@@ -1338,8 +1338,8 @@ void MyCanvas::DrawSplines(wxDC& dc)
     {
         angle += angles[ angle_pos ];
         int r = R * radii[ radius_pos ] / 100;
-        pts[ i ].x = center.x + (wxCoord)( r * cos( M_PI * angle / 180.0) );
-        pts[ i ].y = center.y + (wxCoord)( r * sin( M_PI * angle / 180.0) );
+        pts[ i ].x = center.x + (wxCoord)( r * cos(wxDegToRad(angle)) );
+        pts[ i ].y = center.y + (wxCoord)( r * sin(wxDegToRad(angle)) );
 
         angle_pos++;
         if ( angle_pos >= WXSIZEOF(angles) ) angle_pos = 0;

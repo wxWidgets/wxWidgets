@@ -176,8 +176,7 @@ wxDouble wxPoint2DInt::GetVectorAngle() const
             return 180;
     }
 
-    // casts needed for MIPSpro compiler under SGI
-    wxDouble deg = atan2( (double)m_y , (double)m_x ) * 180 / M_PI;
+    wxDouble deg = wxRadToDeg(atan2( (double)m_y , (double)m_x ));
     if ( deg < 0 )
     {
         deg += 360;
@@ -189,8 +188,9 @@ wxDouble wxPoint2DInt::GetVectorAngle() const
 void wxPoint2DInt::SetVectorAngle( wxDouble degrees )
 {
     wxDouble length = GetVectorLength();
-    m_x = (int)(length * cos( degrees / 180 * M_PI ));
-    m_y = (int)(length * sin( degrees / 180 * M_PI ));
+    double rad = wxDegToRad(degrees);
+    m_x = (int)(length * cos(rad));
+    m_y = (int)(length * sin(rad));
 }
 
 wxDouble wxPoint2DDouble::GetVectorAngle() const
@@ -209,7 +209,7 @@ wxDouble wxPoint2DDouble::GetVectorAngle() const
         else
             return 180;
     }
-    wxDouble deg = atan2( m_y , m_x ) * 180 / M_PI;
+    wxDouble deg = wxRadToDeg(atan2( m_y , m_x ));
     if ( deg < 0 )
     {
         deg += 360;
@@ -220,8 +220,9 @@ wxDouble wxPoint2DDouble::GetVectorAngle() const
 void wxPoint2DDouble::SetVectorAngle( wxDouble degrees )
 {
     wxDouble length = GetVectorLength();
-    m_x = length * cos( degrees / 180 * M_PI );
-    m_y = length * sin( degrees / 180 * M_PI );
+    double rad = wxDegToRad(degrees);
+    m_x = length * cos(rad);
+    m_y = length * sin(rad);
 }
 
 // wxRect2D
