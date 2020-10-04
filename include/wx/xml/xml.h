@@ -241,10 +241,12 @@ class WXDLLIMPEXP_XML wxXmlDoctype
 {
 public:
     explicit
-    wxXmlDoctype(const wxString& name = wxString(),
-                 const wxString& sysid = wxString(),
-                 const wxString& pubid = wxString())
-                 : m_rootName(name), m_systemId(sysid), m_publicId(pubid)
+    wxXmlDoctype(const wxString& rootName = wxString(),
+                 const wxString& systemId = wxString(),
+                 const wxString& publicId = wxString())
+                 : m_rootName(rootName),
+                   m_systemId(systemId),
+                   m_publicId(publicId)
                  {}
 
     // Default copy ctor and assignment operators are ok.

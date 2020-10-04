@@ -494,16 +494,16 @@ public:
     /**
         Creates and possible initializes the DOCTYPE.
 
-        @param name
+        @param rootName
             The root name.
-        @param sysid
+        @param systemId
             The system identifier.
-        @param pubid
+        @param publicId
             The public identifier.
     */
-    wxXmlDoctype(const wxString& name = wxString(),
-                 const wxString& sysid = wxString(),
-                 const wxString& pubid = wxString());
+    wxXmlDoctype(const wxString& rootName = wxString(),
+                 const wxString& systemId = wxString(),
+                 const wxString& publicId = wxString());
 
     /**
         Removes all the DOCTYPE values.
