@@ -4494,11 +4494,11 @@ void wxD2DContext::DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble 
 
     wxD2DBitmapData* bitmapData = wxGetD2DBitmapData(bmp);
     bitmapData->Bind(this);
-    D2D1_SIZE_F imgSize = bitmapData->GetD2DBitmap()->GetSize();
+    wxBitmap const& bitmap = static_cast<wxD2DBitmapData::NativeType*>(bitmapData->GetNativeBitmap())->GetSourceBitmap();
 
     m_renderTargetHolder->DrawBitmap(
         bitmapData->GetD2DBitmap(),
-        D2D1::RectF(0, 0, imgSize.width, imgSize.height),
+        D2D1::RectF(0, 0, bitmap.GetWidth(), bitmap.GetHeight()),
         D2D1::RectF(x, y, x + w, y + h),
         GetInterpolationQuality(),
         GetCompositionMode());
