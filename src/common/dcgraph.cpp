@@ -28,12 +28,6 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-static const double RAD2DEG = 180.0 / M_PI;
-
-//-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
 
@@ -686,11 +680,11 @@ void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
     double dy = y1 - yc;
     double radius = sqrt((double)(dx * dx + dy * dy));
     wxCoord rad = (wxCoord)radius;
-    double sa, ea;
+    double sa, ea; // In radians
     if (x1 == x2 && y1 == y2)
     {
         sa = 0.0;
-        ea = 360.0;
+        ea = 2.0 * M_PI;
     }
     else if (radius == 0.0)
     {
@@ -699,11 +693,11 @@ void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
     else
     {
         sa = (x1 - xc == 0) ?
-     (y1 - yc < 0) ? 90.0 : -90.0 :
-             -atan2(double(y1 - yc), double(x1 - xc)) * RAD2DEG;
+     (y1 - yc < 0) ? M_PI / 2.0 : -M_PI / 2.0 :
+             -atan2(double(y1 - yc), double(x1 - xc));
         ea = (x2 - xc == 0) ?
-     (y2 - yc < 0) ? 90.0 : -90.0 :
-             -atan2(double(y2 - yc), double(x2 - xc)) * RAD2DEG;
+     (y2 - yc < 0) ? M_PI / 2.0 : -M_PI / 2.0 :
+             -atan2(double(y2 - yc), double(x2 - xc));
     }
 
     bool fill = m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT;
@@ -713,7 +707,7 @@ void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
         path.MoveToPoint( xc, yc );
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
-    path.AddArc( xc, yc , rad, wxDegToRad(-sa), wxDegToRad(-ea), false );
+    path.AddArc( xc, yc , rad, -sa, -ea, false );
     if ( fill && ((x1!=x2)||(y1!=y2)) )
         path.AddLineToPoint( xc, yc );
     m_graphicContext->DrawPath(path);
