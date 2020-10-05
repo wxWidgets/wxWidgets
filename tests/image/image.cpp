@@ -1540,6 +1540,10 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         wxImage expected(toggle_equal_size_xpm);
         actual.Paste(paste, 0, 0);
         CHECK_THAT(actual, RGBSameAs(expected));
+
+        // Without alpha using "compose" doesn't change anything.
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
+        CHECK_THAT(actual, RGBSameAs(expected));
     }
 
     SECTION("Paste larger image")

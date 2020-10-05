@@ -1786,13 +1786,14 @@ wxImage::Paste(const wxImage & image, int x, int y,
                     {
                         // Copy the non masked pixel
                         memcpy(target_data + i, source_data + i, 3);
-                        // Make the copied pixel fully opaque
-                        alpha_target_data[i / 3] = wxALPHA_OPAQUE;
+                        if (alpha_target_data != NULL) // Make the copied pixel fully opaque
+                            alpha_target_data[i / 3] = wxALPHA_OPAQUE;
                     }
                 }
                 source_data += source_step;
                 target_data += target_step;
-                alpha_target_data += target_alpha_step;
+                if (alpha_target_data != NULL)
+                    alpha_target_data += target_alpha_step;
             }
         }
     }
