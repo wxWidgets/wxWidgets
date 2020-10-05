@@ -160,7 +160,7 @@ public:
 
         @since 3.1.5
     */
-    bool IsFallbackEncoding() const;
+    bool IsUsingFallbackEncoding() const;
 
     /**
         Return a pointer to the characters that makes up this BOM.

@@ -96,7 +96,7 @@ public:
     wxFontEncoding GetEncoding() const;
 
     // Return true if the fall-back encoding is used
-    bool IsFallbackEncoding() const
+    bool IsUsingFallbackEncoding() const
     {
         return m_ownsConv && m_bomType == wxBOM_None;
     }

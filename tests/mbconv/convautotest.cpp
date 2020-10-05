@@ -69,7 +69,7 @@ private:
         {
             CPPUNIT_ASSERT( conv.GetBOM() == m_bom );
             CPPUNIT_ASSERT( conv.GetEncoding() == m_enc );
-            CPPUNIT_ASSERT( conv.IsFallbackEncoding() == m_fallback );
+            CPPUNIT_ASSERT( conv.IsUsingFallbackEncoding() == m_fallback );
             CPPUNIT_ASSERT( conv.IsUTF8() == (m_enc == wxFONTENCODING_UTF8) );
         }
 
