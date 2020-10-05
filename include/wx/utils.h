@@ -162,7 +162,7 @@ WXDLLIMPEXP_BASE wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
 WXDLLIMPEXP_BASE wxString wxNow();
 
 // Return path where wxWidgets is installed (mostly useful in Unices)
-WXDLLIMPEXP_BASE const wxChar *wxGetInstallPrefix();
+WXDLLIMPEXP_BASE wxString wxGetInstallPrefix();
 // Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
 WXDLLIMPEXP_BASE wxString wxGetDataDir();
 

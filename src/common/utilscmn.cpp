@@ -182,12 +182,12 @@ void wxUsleep(unsigned long milliseconds)
 }
 #endif
 
-const wxChar *wxGetInstallPrefix()
+wxString wxGetInstallPrefix()
 {
     wxString prefix;
 
     if ( wxGetEnv(wxT("WXPREFIX"), &prefix) )
-        return prefix.c_str();
+        return prefix;
 
 #ifdef wxINSTALL_PREFIX
     return wxT(wxINSTALL_PREFIX);
