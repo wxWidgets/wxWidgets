@@ -28,7 +28,6 @@
     <dll id="monodll" template="wx_dll,wx_monolib_or_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
         <define>WXMAKINGDLL</define>
-        <define>$(webviewdll_ext_dir_define)</define>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
         <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
@@ -40,7 +39,6 @@
 
     <lib id="monolib" template="wx_lib,wx_monolib_or_dll"
          cond="SHARED=='0' and MONOLITHIC=='1'">
-        <define>$(webviewdll_ext_dir_define)</define>
         <if cond="FORMAT=='watcom'">
             <set var="LIB_PAGESIZE" overwrite="1">8192</set>
         </if>

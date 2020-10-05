@@ -369,7 +369,7 @@ wxgtk_webview_webkit_counted_matches(WebKitFindController *,
 }
 
 // This function checks if the specified directory contains our web extension.
-static bool CheckDirectoryForWebExt(const char* dirname)
+static bool CheckDirectoryForWebExt(const wxString& dirname)
 {
     wxDir dir;
     if ( !wxDir::Exists(dirname) || !dir.Open(dirname) )
@@ -409,33 +409,38 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     // The first value is the location in which the extension is supposed to be
     // normally installed, while the other three are used as fallbacks to allow
     // running the tests and sample using wxWebView before installing it.
-    const char* const directories[] =
+
+    wxString normalLocation = wxDynamicLibrary::GetPluginsDirectory();
+    if ( !normalLocation.empty() )
+        normalLocation += "/web-extensions";
+
+    wxString const directories[] =
     {
-        WX_WEB_EXTENSIONS_DIRECTORY,
+        normalLocation,
         "..",
         "../..",
         "lib",
     };
 
-    const char* dir = NULL;
+    wxString dir;
     for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
     {
-        if ( CheckDirectoryForWebExt(directories[n]) )
+        if ( !directories[n].empty() && CheckDirectoryForWebExt(directories[n]) )
         {
             dir = directories[n];
             break;
         }
     }
 
-    if ( dir )
+    if ( !dir.empty() )
     {
-        webkit_web_context_set_web_extensions_directory(context, dir);
+        webkit_web_context_set_web_extensions_directory(context, dir.utf8_str());
     }
     else
     {
         wxLogWarning(_("Web extension not found in \"%s\", "
                        "some wxWebView functionality will be not available"),
-                     WX_WEB_EXTENSIONS_DIRECTORY);
+                     directories[0]);
     }
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
