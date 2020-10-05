@@ -313,6 +313,8 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
         // to the fall-back conversion in this case as it would prevent us from
         // decoding UTF-8 input when fed it byte by byte, as done by
         // wxTextInputStream, for example
+        // 2 extra bytes are needed for inputs that start with 1 or 2 null bytes
+        // that look like the start of UTF-32BE BOM, but can be in UTF-8 too
         if ( srcLen < 2 + m_conv->GetMaxCharLen() && wxIsUTF8Prefix(src, srcLen) )
             return wxCONV_FAILED;
 
