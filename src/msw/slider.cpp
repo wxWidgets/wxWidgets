@@ -313,15 +313,28 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     SetValue(newPos);
 
     wxScrollEvent event(scrollEvent, m_windowId);
+    bool          result = false;
+
     event.SetPosition(newPos);
     event.SetEventObject( this );
-    HandleWindowEvent(event);
+    result = HandleWindowEvent(event);
 
-    wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
-    cevent.SetInt( newPos );
-    cevent.SetEventObject( this );
+    // Do not generate wxEVT_SLIDER when the scroll event
+    // is wxEVT_SCROLL_CHANGED. wxEVT_SCROLL_CHANGED always
+    // follows only after another scroll event which already changed
+    // the value. Therefore, sending wxEVT_SLIDER after wxEVT_SCROLL_CHANGED
+    // would result into two wxEVT_SLIDER events with the same value.
+    if ( scrollEvent != wxEVT_SCROLL_CHANGED )
+    {
+        wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
 
-    return HandleWindowEvent( cevent );
+        cevent.SetInt( newPos );
+        cevent.SetEventObject( this );
+
+        result = HandleWindowEvent( cevent );
+    }
+
+    return result;
 }
 
 void wxSlider::Command (wxCommandEvent & event)
