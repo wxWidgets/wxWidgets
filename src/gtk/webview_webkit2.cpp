@@ -399,6 +399,14 @@ static bool CheckDirectoryForWebExt(const wxString& dirname)
     return false;
 }
 
+static wxString GetStandardWebExtensionsDir()
+{
+    wxString dir = wxDynamicLibrary::GetPluginsDirectory();
+    if ( !dir.empty() )
+        dir += "/web-extensions";
+    return dir;
+}
+
 static void
 wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
@@ -409,38 +417,21 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     // The first value is the location in which the extension is supposed to be
     // normally installed, while the other three are used as fallbacks to allow
     // running the tests and sample using wxWebView before installing it.
-
-    wxString normalLocation = wxDynamicLibrary::GetPluginsDirectory();
-    if ( !normalLocation.empty() )
-        normalLocation += "/web-extensions";
-
     wxString const directories[] =
     {
-        normalLocation,
+        GetStandardWebExtensionsDir(),
         "..",
         "../..",
         "lib",
     };
 
-    wxString dir;
     for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
     {
         if ( !directories[n].empty() && CheckDirectoryForWebExt(directories[n]) )
         {
-            dir = directories[n];
+            webkit_web_context_set_web_extensions_directory(context, directories[n].utf8_str());
             break;
         }
-    }
-
-    if ( !dir.empty() )
-    {
-        webkit_web_context_set_web_extensions_directory(context, dir.utf8_str());
-    }
-    else
-    {
-        wxLogWarning(_("Web extension not found in \"%s\", "
-                       "some wxWebView functionality will be not available"),
-                     directories[0]);
     }
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
@@ -1025,10 +1016,11 @@ bool wxWebViewWebKit::IsEditable() const
 
 void wxWebViewWebKit::DeleteSelection()
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "DeleteSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1042,10 +1034,11 @@ void wxWebViewWebKit::DeleteSelection()
 
 bool wxWebViewWebKit::HasSelection() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "HasSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1069,10 +1062,11 @@ void wxWebViewWebKit::SelectAll()
 
 wxString wxWebViewWebKit::GetSelectedText() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1090,10 +1084,11 @@ wxString wxWebViewWebKit::GetSelectedText() const
 
 wxString wxWebViewWebKit::GetSelectedSource() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedSource",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1111,10 +1106,11 @@ wxString wxWebViewWebKit::GetSelectedSource() const
 
 void wxWebViewWebKit::ClearSelection()
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "ClearSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1128,10 +1124,11 @@ void wxWebViewWebKit::ClearSelection()
 
 wxString wxWebViewWebKit::GetPageText() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "GetPageText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1413,6 +1410,17 @@ void wxWebViewWebKit::SetupWebExtensionServer()
     g_free(address);
     g_free(guid);
     g_object_unref(observer);
+}
+
+GDBusProxy *wxWebViewWebKit::GetExtensionProxy() const
+{
+    if (!m_extension)
+    {
+        g_warning("Web extension not found in \"%s\", "
+                  "some wxWebView functionality will be not available",
+                  (const char*)GetStandardWebExtensionsDir().utf8_str());
+    }
+    return m_extension;
 }
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT2
