@@ -320,11 +320,11 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
 
         // if the conversion failed but we didn't really detect anything and
         // simply tried UTF-8 by default, retry it using the fall-back
+        if ( m_encDefault == wxFONTENCODING_DEFAULT )
+            self->m_encDefault = GetFallbackEncoding();
         if ( m_encDefault != wxFONTENCODING_MAX )
         {
-            self->m_conv = new wxCSConv(m_encDefault == wxFONTENCODING_DEFAULT
-                                            ? GetFallbackEncoding()
-                                            : m_encDefault);
+            self->m_conv = new wxCSConv(m_encDefault);
             self->m_ownsConv = true;
 
             rc = m_conv->ToWChar(dst, dstLen, src, srcLen);
@@ -372,10 +372,8 @@ wxFontEncoding wxConvAuto::GetEncoding() const
                 return wxFONTENCODING_MAX;
             else if ( !m_ownsConv )
                 return wxFONTENCODING_UTF8;
-            else if ( m_encDefault != wxFONTENCODING_DEFAULT )
-                return m_encDefault;
             else
-                return GetFallbackEncoding();
+                return m_encDefault;
     }
 
     wxFAIL_MSG( "unknown BOM type" );
