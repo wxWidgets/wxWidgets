@@ -1884,6 +1884,62 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
 
 }
 
+TEST_CASE("wxImage::RGBtoHSV", "[image][rgb][hsv]")
+{
+    SECTION("RGB(0,0,0) (Black) to HSV")
+    {
+       wxImage::RGBValue rgbBlack(0, 0, 0);
+       wxImage::HSVValue hsvBlack = wxImage::RGBtoHSV(rgbBlack);
+
+       CHECK(hsvBlack.value == Approx(0.0));
+       // saturation and hue are undefined
+    }
+    SECTION("RGB(255,255,255) (White) to HSV")
+    {
+       wxImage::RGBValue rgbWhite(255, 255, 255);
+       wxImage::HSVValue hsvWhite = wxImage::RGBtoHSV(rgbWhite);
+
+       CHECK(hsvWhite.saturation == Approx(0.0));
+       CHECK(hsvWhite.value == Approx(1.0));
+       // hue is undefined
+    }
+    SECTION("RGB(0,255,0) (Green) to HSV")
+    {
+       wxImage::RGBValue rgbGreen(0, 255, 0);
+       wxImage::HSVValue hsvGreen = wxImage::RGBtoHSV(rgbGreen);
+
+       CHECK(hsvGreen.hue == Approx(1.0/3.0));
+       CHECK(hsvGreen.saturation == Approx(1.0));
+       CHECK(hsvGreen.value == Approx(1.0));
+    }
+
+    SECTION("RGB to HSV to RGB")
+    {
+        const wxImage::RGBValue rgbValues[] =
+        {
+            wxImage::RGBValue(   0,   0,   0 ),
+            wxImage::RGBValue(  10,  10,  10 ),
+            wxImage::RGBValue( 255, 255, 255 ),
+            wxImage::RGBValue( 255,   0,   0 ),
+            wxImage::RGBValue(   0, 255,   0 ),
+            wxImage::RGBValue(   0,   0, 255 ),
+            wxImage::RGBValue(   1,   2,   3 ),
+            wxImage::RGBValue(  10,  20,  30 ),
+        };
+
+        for (int i = 0; i < WXSIZEOF(rgbValues); i++)
+        {
+            wxImage::RGBValue rgbValue = rgbValues[i];
+            wxImage::HSVValue hsvValue = wxImage::RGBtoHSV(rgbValue);
+            wxImage::RGBValue rgbRoundtrip = wxImage::HSVtoRGB(hsvValue);
+
+            CHECK(rgbRoundtrip.red == rgbValue.red);
+            CHECK(rgbRoundtrip.green == rgbValue.green);
+            CHECK(rgbRoundtrip.blue == rgbValue.blue);
+        }
+    }
+}
+
 /*
     TODO: add lots of more tests to wxImage functions
 */
