@@ -3312,9 +3312,9 @@ wxImage::RGBValue wxImage::HSVtoRGB(const HSVValue& hsv)
         }
     }
 
-    return RGBValue((unsigned char)(red * 255.0),
-                    (unsigned char)(green * 255.0),
-                    (unsigned char)(blue * 255.0));
+    return RGBValue((unsigned char)wxRound(red * 255.0),
+                    (unsigned char)wxRound(green * 255.0),
+                    (unsigned char)wxRound(blue * 255.0));
 }
 
 /*
