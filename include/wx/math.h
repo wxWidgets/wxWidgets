@@ -68,7 +68,7 @@
         wxASSERT_MSG(x > (double)INT_MIN - 0.5 && x < (double)INT_MAX + 0.5,
             wxT("argument out of supported range"));
 
-        return std::lround(x);
+        return (int)std::lround(x);
     }
 #else /* C++98 */
 
