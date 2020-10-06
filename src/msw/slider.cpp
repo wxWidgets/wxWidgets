@@ -323,7 +323,7 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     // parameter is SB_ENDSCROLL, which always follows only after
     // another scroll message which already changed the slider value.
     // Therefore, sending wxEVT_SLIDER after SB_ENDSCROLL
-    // would result into two wxEVT_SLIDER events with the same value.
+    // would result in two wxEVT_SLIDER events with the same value.
     if ( wParam != SB_ENDSCROLL )
     {
         wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
