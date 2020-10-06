@@ -46,6 +46,7 @@
 
 #include "wx/encconv.h"
 #include "wx/fontmap.h"
+#include "wx/private/unicode.h"
 
 #ifdef __DARWIN__
 #include "wx/osx/core/private/strconv_cf.h"
@@ -921,7 +922,7 @@ const wxUint32 wxUnicodePUA = 0x100000;
 const wxUint32 wxUnicodePUAEnd = wxUnicodePUA + 256;
 
 // this table gives the length of the UTF-8 encoding from its first character:
-const unsigned char tableUtf8Lengths[256] = {
+extern const unsigned char tableUtf8Lengths[256] = {
     // single-byte sequences (ASCII):
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 00..0F
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 10..1F
