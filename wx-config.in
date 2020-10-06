@@ -1311,12 +1311,12 @@ if [ -n "$output_option_libs" ]; then
         _ldflags="-L$libdir"
 
     if [ -n "$MAC_FRAMEWORK" ]; then
-	wx_libs="-framework $MAC_FRAMEWORK"
-	if [ -n "$MAC_FRAMEWORK_PREFIX" ]; then
-	    _ldflags="-F$MAC_FRAMEWORK_PREFIX"
-	else
-	    _ldflags=""
-	fi
+        wx_libs="-framework $MAC_FRAMEWORK"
+        if [ -n "$MAC_FRAMEWORK_PREFIX" ]; then
+            _ldflags="-F$MAC_FRAMEWORK_PREFIX"
+        else
+            _ldflags=""
+        fi
     fi
 
     is_installed || [ -n "$flag_option_no_rpath" ] || _rpath="@WXCONFIG_RPATH@"
