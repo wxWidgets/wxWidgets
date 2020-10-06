@@ -514,7 +514,6 @@
 		99E7A46106C03484BA70D29E /* tif_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F8259CC99380CB8217DEF /* tif_unix.c */; };
 		99F7D7BFBB543A04AB728375 /* m_hline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECA4A44BEC2F3AED8CF0C911 /* m_hline.cpp */; };
 		9A178ED42D96329D8CBF9B89 /* tif_predict.c in Sources */ = {isa = PBXBuildFile; fileRef = 2FA01C426EAF38D3B9ED35AC /* tif_predict.c */; };
-		9A83D365AD1F37FA9C7030C2 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF330EAACFA53877BE289896 /* matrix.cpp */; };
 		9B3F9D04FB533D99B58BD519 /* jfdctfst.c in Sources */ = {isa = PBXBuildFile; fileRef = 029486D6A2EC3DE0902A6A24 /* jfdctfst.c */; };
 		9B6A35E706543CDAA6A5014A /* LexGui4Cli.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FFB767BD2C7235F293F45796 /* LexGui4Cli.cxx */; };
 		9B8E5690A6103FC1BDC6C47E /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 29D6506AEA5A323B8735F126 /* pngread.c */; };
@@ -1664,7 +1663,6 @@
 		EEADAA811BBF3CBBB9E254FD /* xh_split.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_split.cpp; path = ../../src/xrc/xh_split.cpp; sourceTree = "<group>"; };
 		EED7C691150139EFA35E8EBD /* utils_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils_osx.cpp; path = ../../src/osx/utils_osx.cpp; sourceTree = "<group>"; };
 		EEE82083BFA430D5B58F8A04 /* regfree.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = regfree.c; path = ../../src/regex/regfree.c; sourceTree = "<group>"; };
-		EF330EAACFA53877BE289896 /* matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = matrix.cpp; path = ../../src/common/matrix.cpp; sourceTree = "<group>"; };
 		F01DDE448E4C3983ACCE67FD /* appcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appcmn.cpp; path = ../../src/common/appcmn.cpp; sourceTree = "<group>"; };
 		F0905A1EBD653F6D82395602 /* xh_combo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_combo.cpp; path = ../../src/xrc/xh_combo.cpp; sourceTree = "<group>"; };
 		F175D6E8E5723FC797701275 /* menucmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = menucmn.cpp; path = ../../src/common/menucmn.cpp; sourceTree = "<group>"; };
@@ -2121,7 +2119,6 @@
 				9660AE8FEB7B3EDB857B9238 /* lboxcmn.cpp */,
 				E1B1FBB2BCC43BA7A45E9438 /* listctrlcmn.cpp */,
 				DA7F7633279936EFA0B9C5CF /* markupparser.cpp */,
-				EF330EAACFA53877BE289896 /* matrix.cpp */,
 				F175D6E8E5723FC797701275 /* menucmn.cpp */,
 				58E7C516E2453A269280A404 /* modalhook.cpp */,
 				D037EA567C253DEEA17E822B /* mousemanager.cpp */,
@@ -3172,7 +3169,6 @@
 				CFF73578F04D357E83D1D830 /* lboxcmn.cpp in Sources */,
 				164010B26D363F5FA09785B6 /* listctrlcmn.cpp in Sources */,
 				2F7F5B9BBCD83D90B237A1A0 /* markupparser.cpp in Sources */,
-				9A83D365AD1F37FA9C7030C2 /* matrix.cpp in Sources */,
 				E3A4615870B139D29FE727C1 /* menucmn.cpp in Sources */,
 				171F09F8DD553FA5B4B3FAE2 /* modalhook.cpp in Sources */,
 				BD49EC50CB363642BDBF25C8 /* mousemanager.cpp in Sources */,

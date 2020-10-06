@@ -541,7 +541,6 @@
     <ClCompile Include="..\..\src\common\lboxcmn.cpp" />
     <ClCompile Include="..\..\src\common\listctrlcmn.cpp" />
     <ClCompile Include="..\..\src\common\markupparser.cpp" />
-    <ClCompile Include="..\..\src\common\matrix.cpp" />
     <ClCompile Include="..\..\src\common\menucmn.cpp" />
     <ClCompile Include="..\..\src\common\modalhook.cpp" />
     <ClCompile Include="..\..\src\common\mousemanager.cpp" />
@@ -1338,7 +1337,6 @@
     <ClInclude Include="..\..\include\wx\listbook.h" />
     <ClInclude Include="..\..\include\wx\listbox.h" />
     <ClInclude Include="..\..\include\wx\listctrl.h" />
-    <ClInclude Include="..\..\include\wx\matrix.h" />
     <ClInclude Include="..\..\include\wx\mdi.h" />
     <ClInclude Include="..\..\include\wx\menu.h" />
     <ClInclude Include="..\..\include\wx\menuitem.h" />
