@@ -294,9 +294,6 @@
     <ClCompile Include="..\..\src\common\markupparser.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\matrix.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\common\menucmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -1616,9 +1613,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\listctrl.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\matrix.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\mdi.h">
