@@ -23,6 +23,7 @@
 #endif
 
 #include "wx/convauto.h"
+#include "wx/private/unicode.h"
 
 // we use latin1 by default as it seems the least bad choice: the files we need
 // to detect input of don't always come from the user system (they are often
@@ -263,6 +264,26 @@ bool wxConvAuto::InitFromInput(const char *src, size_t len)
 
     InitFromBOM(m_bomType);
 
+    return true;
+}
+
+// checks if the input can be the beginning of a valid UTF-8 string
+static bool wxIsUTF8Prefix(const char *src, size_t len)
+{
+    unsigned char l;
+    for ( size_t i = 0; i < len; ++i )
+    {
+        l = tableUtf8Lengths[(unsigned char)src[i]];
+        if ( !l )
+            return false; // invalid leading byte
+        while ( --l )
+        {
+            if ( ++i == len )
+                return true; // truncated sequence
+            if ( (src[i] & 0xC0) != 0x80 )
+                return false; // invalid continuation byte
+        }
+    }
     return true;
 }
 

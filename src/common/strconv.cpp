@@ -1447,26 +1447,6 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
     return len;
 }
 
-// checks if the input can be the beginning of a valid UTF-8 string
-bool wxIsUTF8Prefix(const char *src, size_t len)
-{
-    unsigned char l;
-    for ( size_t i = 0; i < len; ++i )
-    {
-        l = tableUtf8Lengths[(unsigned char)src[i]];
-        if ( !l )
-            return false; // invalid leading byte
-        while ( --l )
-        {
-            if ( ++i == len )
-                return true; // truncated sequence
-            if ( (src[i] & 0xC0) != 0x80 )
-                return false; // invalid continuation byte
-        }
-    }
-    return true;
-}
-
 // ============================================================================
 // UTF-16
 // ============================================================================
