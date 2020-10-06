@@ -55,8 +55,14 @@ jobs:
         run: |
             git fetch --depth=1 origin master
             git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol,tab-in-indent \
-                diff --check origin/master '*' \
-                '!**/*akefile*' \
-                '!**/*.sln' \
-                '!**/*.vcproj' \
-                '!**/*.xpm'
+                diff --check origin/master \
+                ':!Makefile.in' \
+                ':!config.guess' \
+                ':!config.sub' \
+                ':!configure' \
+                ':!descrip.mms' \
+                ':!install-sh' \
+                ':!**/*akefile*' \
+                ':!**/*.sln' \
+                ':!**/*.vcproj' \
+                ':!**/*.xpm'
