@@ -313,11 +313,11 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     SetValue(newPos);
 
     wxScrollEvent event(scrollEvent, m_windowId);
-    bool          result = false;
+    bool          processed = false;
 
     event.SetPosition(newPos);
     event.SetEventObject( this );
-    result = HandleWindowEvent(event);
+    processed = HandleWindowEvent(event);
 
     // Do not generate wxEVT_SLIDER when the native scroll message
     // parameter is SB_ENDSCROLL, which always follows only after
@@ -331,10 +331,10 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
         cevent.SetInt( newPos );
         cevent.SetEventObject( this );
 
-        result = HandleWindowEvent( cevent );
+        processed = HandleWindowEvent( cevent );
     }
 
-    return result;
+    return processed;
 }
 
 void wxSlider::Command (wxCommandEvent & event)
