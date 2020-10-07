@@ -267,24 +267,21 @@ bool wxConvAuto::InitFromInput(const char *src, size_t len)
     return true;
 }
 
-// checks if the input can be the beginning of a valid UTF-8 string
-static bool wxIsUTF8Prefix(const char *src, size_t len)
+// checks if the input can be the beginning of a valid UTF-8 sequence
+static bool wxCanBeUTF8SequencePrefix(const char *src, size_t len)
 {
-    unsigned char l;
-    for ( size_t i = 0; i < len; ++i )
+    size_t i = 0;
+    unsigned char l = tableUtf8Lengths[(unsigned char)src[i]];
+    if ( !l )
+        return false; // invalid leading byte
+    while ( --l )
     {
-        l = tableUtf8Lengths[(unsigned char)src[i]];
-        if ( !l )
-            return false; // invalid leading byte
-        while ( --l )
-        {
-            if ( ++i == len )
-                return true; // truncated sequence
-            if ( (src[i] & 0xC0) != 0x80 )
-                return false; // invalid continuation byte
-        }
+        if ( ++i == len )
+            return true; // truncated sequence
+        if ( (src[i] & 0xC0) != 0x80 )
+            return false; // invalid continuation byte
     }
-    return true;
+    return false; // complete sequence
 }
 
 size_t
@@ -339,7 +336,8 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
         size_t nNull = 0;
         if ( srcLen != wxNO_LEN && srcLen >= 2 && !src[0] )
             nNull = ( src[1]? 1 : 2 );
-        if ( srcLen < nNull + m_conv->GetMaxCharLen() && wxIsUTF8Prefix(src, srcLen) )
+        if ( srcLen < nNull + m_conv->GetMaxCharLen() &&
+             wxCanBeUTF8SequencePrefix(src + nNull, srcLen - nNull) )
             return wxCONV_FAILED;
 
         // if the conversion failed but we didn't really detect anything and

@@ -226,7 +226,7 @@ void ConvAutoTestCase::FallbackMultibyte()
 
 void ConvAutoTestCase::FallbackShort()
 {
-    TestFirstChar("\x61\x61\x61\xc4", 'a', 4,
+    TestFirstChar("\x61\xc4", 'a', 2,
                   ConvState(wxBOM_None, wxFONTENCODING_ISO8859_5, true),
                   wxFONTENCODING_ISO8859_5);
 }
