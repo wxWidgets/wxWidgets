@@ -47,6 +47,7 @@ private:
         CPPUNIT_TEST( UTF8NoBom );
         CPPUNIT_TEST( Fallback );
         CPPUNIT_TEST( FallbackMultibyte );
+        CPPUNIT_TEST( FallbackShort );
         CPPUNIT_TEST( StreamUTF8NoBOM );
         CPPUNIT_TEST( StreamUTF8 );
         CPPUNIT_TEST( StreamUTF16LE );
@@ -100,6 +101,7 @@ private:
     void UTF8NoBom();
     void Fallback();
     void FallbackMultibyte();
+    void FallbackShort();
 
     // test whether two lines of text are converted properly from a stream
     void TestTextStream(const char *src,
@@ -220,6 +222,13 @@ void ConvAutoTestCase::FallbackMultibyte()
                   ConvState(wxBOM_None, wxFONTENCODING_CP932, true),
                   wxFONTENCODING_CP932);
 #endif
+}
+
+void ConvAutoTestCase::FallbackShort()
+{
+    TestFirstChar("\x61\x61\x61\xc4", 'a', 4,
+                  ConvState(wxBOM_None, wxFONTENCODING_ISO8859_5, true),
+                  wxFONTENCODING_ISO8859_5);
 }
 
 void ConvAutoTestCase::TestTextStream(const char *src,
