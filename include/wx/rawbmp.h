@@ -170,7 +170,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
         // doesn't cover the case of wxImage which stores alpha separately)
         enum { HasAlpha = false };
     };
-    typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxNativeMonoPixelFormat;
+    typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
 #elif defined(__WXMAC__)
     // under Mac, first component is unused but still present, hence we use
     // 32bpp, not 24
@@ -702,7 +702,7 @@ struct wxPixelDataOut<wxBitmap>
 
     #if defined(__WXMSW__)
         template <>
-        struct wxPixelDataOut<wxBitmap>::wxPixelDataIn<wxNativeMonoPixelFormat> : public wxPixelDataBase
+        struct wxPixelDataOut<wxBitmap>::wxPixelDataIn<wxMonoPixelFormat> : public wxPixelDataBase
         {
         public:
             // the type of the class we're working with
@@ -742,7 +742,7 @@ struct wxPixelDataOut<wxBitmap>
             {
             public:
                 // emulate unspecialized template
-                typedef wxNativeMonoPixelFormat Format;
+                typedef wxMonoPixelFormat Format;
 
                 // the pixel format we use
                 typedef Format PixelFormat;
@@ -945,7 +945,7 @@ typedef wxPixelData<wxBitmap, wxNativePixelFormat> wxNativePixelData;
 typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> wxAlphaPixelData;
 
 #if defined(__WXMSW__)
-typedef wxPixelData<wxBitmap, wxNativeMonoPixelFormat> wxNativeMonoPixelData;
+typedef wxPixelData<wxBitmap, wxMonoPixelFormat> wxMonoPixelData;
 #endif
 
 #endif //wxUSE_GUI

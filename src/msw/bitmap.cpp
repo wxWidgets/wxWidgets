@@ -1272,7 +1272,7 @@ void wxBitmap::MSWBlendMaskWithAlpha()
 
     {
         wxBitmap bmpMask = GetMask()->GetBitmap();
-        wxNativeMonoPixelData maskData(bmpMask);
+        wxMonoPixelData maskData(bmpMask);
         wxCHECK_RET(maskData, "No access to bitmap mask data");
 
         wxAlphaPixelData bmpData(*this);
@@ -1281,11 +1281,11 @@ void wxBitmap::MSWBlendMaskWithAlpha()
         const int w = GetWidth();
         const int h = GetHeight();
 
-        wxNativeMonoPixelData::Iterator maskRowStart(maskData);
+        wxMonoPixelData::Iterator maskRowStart(maskData);
         wxAlphaPixelData::Iterator bmpRowStart(bmpData);
         for ( int y = 0; y < h; y++ )
         {
-            wxNativeMonoPixelData::Iterator pMask = maskRowStart;
+            wxMonoPixelData::Iterator pMask = maskRowStart;
             wxAlphaPixelData::Iterator pBmp = bmpRowStart;
             for ( int x = 0; x < w; x++, ++pBmp, ++pMask )
             {

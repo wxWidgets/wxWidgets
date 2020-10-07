@@ -80,12 +80,12 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     REQUIRE(mono.GetDepth() == 1);
 
 #if !defined(__WXMSW__)
-    WARN("wxNativeMonoPixelData only exists in wxMSW");
+    WARN("wxMonoPixelData only exists in wxMSW");
 #else
     // draw lines on top and left, but leaving blank top and left lines
     {
-        wxNativeMonoPixelData data(mono);
-        wxNativeMonoPixelData::Iterator p(data);
+        wxMonoPixelData data(mono);
+        wxMonoPixelData::Iterator p(data);
         p.OffsetY(data, 1);
         for ( int i = 0; i < data.GetWidth() - 2; ++i )
         {
@@ -805,11 +805,11 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     bool maskValueBottomRight;
     // Fetch sample original mask pixels
     {
-        wxNativeMonoPixelData data(bmpMask);
+        wxMonoPixelData data(bmpMask);
         REQUIRE(data);
-        wxNativeMonoPixelData::Iterator p(data);
+        wxMonoPixelData::Iterator p(data);
         p.OffsetY(data, h / 4);
-        wxNativeMonoPixelData::Iterator rowStart = p;
+        wxMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w / 4); // top-left point
         maskValueTopLeft = p.Pixel();
         p.OffsetX(data, w / 2); // top-right point
@@ -857,11 +857,11 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     }
 #else
     {
-        wxNativeMonoPixelData data(subBmpMask);
+        wxMonoPixelData data(subBmpMask);
         REQUIRE(data);
-        wxNativeMonoPixelData::Iterator p(data);
+        wxMonoPixelData::Iterator p(data);
         p.OffsetY(data, h2 / 4);
-        wxNativeMonoPixelData::Iterator rowStart = p;
+        wxMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w2 / 4); // top-left point
         CHECK(p.Pixel() == maskValueTopLeft);
         p.OffsetX(data, w2 / 2); // top-right point
@@ -998,11 +998,11 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     bool maskValueBottomRight;
     // Fetch sample original mask pixels
     {
-        wxNativeMonoPixelData data(bmpMask);
+        wxMonoPixelData data(bmpMask);
         REQUIRE(data);
-        wxNativeMonoPixelData::Iterator p(data);
+        wxMonoPixelData::Iterator p(data);
         p.OffsetY(data, h / 4);
-        wxNativeMonoPixelData::Iterator rowStart = p;
+        wxMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w / 4); // top-left point
         maskValueTopLeft = p.Pixel();
         p.OffsetX(data, w / 2); // top-right point
@@ -1050,11 +1050,11 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     }
 #else
     {
-        wxNativeMonoPixelData data(subBmpMask);
+        wxMonoPixelData data(subBmpMask);
         REQUIRE(data);
-        wxNativeMonoPixelData::Iterator p(data);
+        wxMonoPixelData::Iterator p(data);
         p.OffsetY(data, h2 / 4);
-        wxNativeMonoPixelData::Iterator rowStart = p;
+        wxMonoPixelData::Iterator rowStart = p;
         p.OffsetX(data, w2 / 4); // top-left point
         CHECK(p.Pixel() == maskValueTopLeft);
         p.OffsetX(data, w2 / 2); // top-right point
