@@ -120,6 +120,7 @@ protected:
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
     void OnSlider(wxScrollEvent& event);
+    void OnSlider(wxCommandEvent& event);
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
@@ -230,6 +231,7 @@ wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(SliderPage_CurValueText, SliderWidgetsPage::OnUpdateUICurValueText)
 
     EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSlider)
+    EVT_SLIDER(SliderPage_Slider, SliderWidgetsPage::OnSlider)
 
     EVT_CHECKBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
@@ -843,6 +845,14 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
                  eventNames[index],
                  event.GetPosition(),
                  event.GetInt());
+}
+
+void SliderWidgetsPage::OnSlider(wxCommandEvent& event)
+{
+    static int s_numSliderEvents = 0;
+
+    wxLogMessage("Slider event #%d: wxEVT_SLIDER (value = %d)",
+                 s_numSliderEvents++, event.GetInt());
 }
 
 #endif // wxUSE_SLIDER
