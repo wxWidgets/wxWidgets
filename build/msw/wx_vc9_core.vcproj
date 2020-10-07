@@ -1158,6 +1158,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\matrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\menucmn.cpp"
 				>
 			</File>
@@ -3794,6 +3798,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\propgrid\manager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\matrix.h"
 				>
 			</File>
 			<File

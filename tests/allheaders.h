@@ -217,6 +217,7 @@
 #include <wx/longlong.h>
 #include <wx/lzmastream.h>
 #include <wx/math.h>
+#include <wx/matrix.h>
 #include <wx/mdi.h>
 #include <wx/mediactrl.h>
 #include <wx/memconf.h>

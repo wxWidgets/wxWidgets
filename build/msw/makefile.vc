@@ -2365,6 +2365,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_lboxcmn.obj \
 	$(OBJS)\monodll_listctrlcmn.obj \
 	$(OBJS)\monodll_markupparser.obj \
+	$(OBJS)\monodll_matrix.obj \
 	$(OBJS)\monodll_menucmn.obj \
 	$(OBJS)\monodll_modalhook.obj \
 	$(OBJS)\monodll_mousemanager.obj \
@@ -2691,6 +2692,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_lboxcmn.obj \
 	$(OBJS)\monodll_listctrlcmn.obj \
 	$(OBJS)\monodll_markupparser.obj \
+	$(OBJS)\monodll_matrix.obj \
 	$(OBJS)\monodll_menucmn.obj \
 	$(OBJS)\monodll_modalhook.obj \
 	$(OBJS)\monodll_mousemanager.obj \
@@ -3203,6 +3205,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_lboxcmn.obj \
 	$(OBJS)\monolib_listctrlcmn.obj \
 	$(OBJS)\monolib_markupparser.obj \
+	$(OBJS)\monolib_matrix.obj \
 	$(OBJS)\monolib_menucmn.obj \
 	$(OBJS)\monolib_modalhook.obj \
 	$(OBJS)\monolib_mousemanager.obj \
@@ -3529,6 +3532,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_lboxcmn.obj \
 	$(OBJS)\monolib_listctrlcmn.obj \
 	$(OBJS)\monolib_markupparser.obj \
+	$(OBJS)\monolib_matrix.obj \
 	$(OBJS)\monolib_menucmn.obj \
 	$(OBJS)\monolib_modalhook.obj \
 	$(OBJS)\monolib_mousemanager.obj \
@@ -3974,6 +3978,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_lboxcmn.obj \
 	$(OBJS)\coredll_listctrlcmn.obj \
 	$(OBJS)\coredll_markupparser.obj \
+	$(OBJS)\coredll_matrix.obj \
 	$(OBJS)\coredll_menucmn.obj \
 	$(OBJS)\coredll_modalhook.obj \
 	$(OBJS)\coredll_mousemanager.obj \
@@ -4300,6 +4305,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_lboxcmn.obj \
 	$(OBJS)\coredll_listctrlcmn.obj \
 	$(OBJS)\coredll_markupparser.obj \
+	$(OBJS)\coredll_matrix.obj \
 	$(OBJS)\coredll_menucmn.obj \
 	$(OBJS)\coredll_modalhook.obj \
 	$(OBJS)\coredll_mousemanager.obj \
@@ -4651,6 +4657,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_lboxcmn.obj \
 	$(OBJS)\corelib_listctrlcmn.obj \
 	$(OBJS)\corelib_markupparser.obj \
+	$(OBJS)\corelib_matrix.obj \
 	$(OBJS)\corelib_menucmn.obj \
 	$(OBJS)\corelib_modalhook.obj \
 	$(OBJS)\corelib_mousemanager.obj \
@@ -4977,6 +4984,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_lboxcmn.obj \
 	$(OBJS)\corelib_listctrlcmn.obj \
 	$(OBJS)\corelib_markupparser.obj \
+	$(OBJS)\corelib_matrix.obj \
 	$(OBJS)\corelib_menucmn.obj \
 	$(OBJS)\corelib_modalhook.obj \
 	$(OBJS)\corelib_mousemanager.obj \
@@ -9131,6 +9139,11 @@ $(OBJS)\monodll_markupparser.obj: ..\..\src\common\markupparser.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_matrix.obj: ..\..\src\common\matrix.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\matrix.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_menucmn.obj: ..\..\src\common\menucmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\menucmn.cpp
 !endif
@@ -11680,6 +11693,11 @@ $(OBJS)\monolib_markupparser.obj: ..\..\src\common\markupparser.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_matrix.obj: ..\..\src\common\matrix.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\matrix.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_menucmn.obj: ..\..\src\common\menucmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\menucmn.cpp
 !endif
@@ -14187,6 +14205,11 @@ $(OBJS)\coredll_markupparser.obj: ..\..\src\common\markupparser.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_matrix.obj: ..\..\src\common\matrix.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\matrix.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_menucmn.obj: ..\..\src\common\menucmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\menucmn.cpp
 !endif
@@ -15914,6 +15937,11 @@ $(OBJS)\corelib_listctrlcmn.obj: ..\..\src\common\listctrlcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_markupparser.obj: ..\..\src\common\markupparser.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\markupparser.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_matrix.obj: ..\..\src\common\matrix.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\matrix.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

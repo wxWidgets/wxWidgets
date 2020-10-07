@@ -787,6 +787,7 @@ set(GUI_CMN_SRC
     src/common/lboxcmn.cpp
     src/common/listctrlcmn.cpp
     src/common/markupparser.cpp
+    src/common/matrix.cpp
     src/common/menucmn.cpp
     src/common/modalhook.cpp
     src/common/mousemanager.cpp
@@ -1096,6 +1097,7 @@ set(GUI_CMN_HDR
     wx/listbase.h
     wx/listbook.h
     wx/listctrl.h
+    wx/matrix.h
     wx/menuitem.h
     wx/metafile.h
     wx/minifram.h

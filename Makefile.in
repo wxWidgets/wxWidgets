@@ -3879,6 +3879,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/listbase.h \
 	wx/listbook.h \
 	wx/listctrl.h \
+	wx/matrix.h \
 	wx/menuitem.h \
 	wx/metafile.h \
 	wx/minifram.h \
@@ -4515,6 +4516,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_lboxcmn.o \
 	monodll_listctrlcmn.o \
 	monodll_markupparser.o \
+	monodll_matrix.o \
 	monodll_menucmn.o \
 	monodll_modalhook.o \
 	monodll_mousemanager.o \
@@ -4775,6 +4777,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_lboxcmn.o \
 	monodll_listctrlcmn.o \
 	monodll_markupparser.o \
+	monodll_matrix.o \
 	monodll_menucmn.o \
 	monodll_modalhook.o \
 	monodll_mousemanager.o \
@@ -6500,6 +6503,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_lboxcmn.o \
 	monolib_listctrlcmn.o \
 	monolib_markupparser.o \
+	monolib_matrix.o \
 	monolib_menucmn.o \
 	monolib_modalhook.o \
 	monolib_mousemanager.o \
@@ -6760,6 +6764,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_lboxcmn.o \
 	monolib_listctrlcmn.o \
 	monolib_markupparser.o \
+	monolib_matrix.o \
 	monolib_menucmn.o \
 	monolib_modalhook.o \
 	monolib_mousemanager.o \
@@ -8631,6 +8636,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_lboxcmn.o \
 	coredll_listctrlcmn.o \
 	coredll_markupparser.o \
+	coredll_matrix.o \
 	coredll_menucmn.o \
 	coredll_modalhook.o \
 	coredll_mousemanager.o \
@@ -8891,6 +8897,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_lboxcmn.o \
 	coredll_listctrlcmn.o \
 	coredll_markupparser.o \
+	coredll_matrix.o \
 	coredll_menucmn.o \
 	coredll_modalhook.o \
 	coredll_mousemanager.o \
@@ -10352,6 +10359,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_lboxcmn.o \
 	corelib_listctrlcmn.o \
 	corelib_markupparser.o \
+	corelib_matrix.o \
 	corelib_menucmn.o \
 	corelib_modalhook.o \
 	corelib_mousemanager.o \
@@ -10612,6 +10620,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_lboxcmn.o \
 	corelib_listctrlcmn.o \
 	corelib_markupparser.o \
+	corelib_matrix.o \
 	corelib_menucmn.o \
 	corelib_modalhook.o \
 	corelib_mousemanager.o \
@@ -20463,6 +20472,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_markupparser.o: $(srcdir)/src/common/markupparser.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/markupparser.cpp
 
+@COND_USE_GUI_1@monodll_matrix.o: $(srcdir)/src/common/matrix.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
+
 @COND_USE_GUI_1@monodll_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
 
@@ -25727,6 +25739,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_markupparser.o: $(srcdir)/src/common/markupparser.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/markupparser.cpp
+
+@COND_USE_GUI_1@monolib_matrix.o: $(srcdir)/src/common/matrix.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
 
 @COND_USE_GUI_1@monolib_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
@@ -31074,6 +31089,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_markupparser.o: $(srcdir)/src/common/markupparser.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/markupparser.cpp
 
+@COND_USE_GUI_1@coredll_matrix.o: $(srcdir)/src/common/matrix.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
+
 @COND_USE_GUI_1@coredll_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
 
@@ -35327,6 +35345,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_markupparser.o: $(srcdir)/src/common/markupparser.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/markupparser.cpp
+
+@COND_USE_GUI_1@corelib_matrix.o: $(srcdir)/src/common/matrix.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/matrix.cpp
 
 @COND_USE_GUI_1@corelib_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp

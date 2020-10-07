@@ -806,6 +806,7 @@ GUI_CMN_SRC =
     src/common/lboxcmn.cpp
     src/common/listctrlcmn.cpp
     src/common/markupparser.cpp
+    src/common/matrix.cpp
     src/common/menucmn.cpp
     src/common/modalhook.cpp
     src/common/mousemanager.cpp
@@ -1100,6 +1101,7 @@ GUI_CMN_HDR =
     wx/listbook.h
     wx/listbox.h
     wx/listctrl.h
+    wx/matrix.h
     wx/mdi.h
     wx/menu.h
     wx/menuitem.h
