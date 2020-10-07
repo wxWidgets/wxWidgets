@@ -99,7 +99,7 @@ wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& 
 // UTF-8 sequences lengths
 // ---------------------------------------------------------------------------
 
-static unsigned char wxStringOperationsUtf8::GetUTF8IterOffset(unsigned char c)
+unsigned char wxStringOperationsUtf8::GetUTF8IterOffset(unsigned char c)
 {
     unsigned char l = tableUtf8Lengths[c];
     if ( !l ) //skip over invalid characters
