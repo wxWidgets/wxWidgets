@@ -14,6 +14,7 @@
 #include "wx/dir.h"
 #include "wx/dynlib.h"
 #include "wx/filename.h"
+#include "wx/stdpaths.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
@@ -399,6 +400,15 @@ static bool CheckDirectoryForWebExt(const wxString& dirname)
     return false;
 }
 
+static bool TrySetWebExtensionsDirectory(WebKitWebContext *context, const wxString& dir)
+{
+    if (dir.empty() || !CheckDirectoryForWebExt(dir))
+        return false;
+
+    webkit_web_context_set_web_extensions_directory(context, dir.utf8_str());
+    return true;
+}
+
 static wxString GetStandardWebExtensionsDir()
 {
     wxString dir = wxDynamicLibrary::GetPluginsDirectory();
@@ -414,23 +424,27 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     const char *address = g_dbus_server_get_client_address(dbusServer);
     GVariant *user_data = g_variant_new("(s)", address);
 
-    // The first value is the location in which the extension is supposed to be
-    // normally installed, while the other three are used as fallbacks to allow
-    // running the tests and sample using wxWebView before installing it.
-    wxString const directories[] =
+    // Try to setup extension loading from the location it is supposed to be
+    // normally installed in.
+    if ( !TrySetWebExtensionsDirectory(context, GetStandardWebExtensionsDir()) )
     {
-        GetStandardWebExtensionsDir(),
-        "..",
-        "../..",
-        "lib",
-    };
-
-    for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
-    {
-        if ( !directories[n].empty() && CheckDirectoryForWebExt(directories[n]) )
+        // These relative locations are used as fallbacks to allow running
+        // the tests and sample using wxWebView before installing it.
+        wxString exepath = wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPath();
+        if ( !exepath.empty() )
         {
-            webkit_web_context_set_web_extensions_directory(context, directories[n].utf8_str());
-            break;
+            wxString const directories[] =
+            {
+                exepath + "/..",
+                exepath + "/../..",
+                exepath + "/lib",
+            };
+
+            for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
+            {
+                if ( !TrySetWebExtensionsDirectory(context, directories[n]) )
+                    break;
+            }
         }
     }
 
