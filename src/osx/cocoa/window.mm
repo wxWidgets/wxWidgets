@@ -518,7 +518,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
         }
     }
 
-    if ( !keyval )
+    if ( !keyval && aunichar < 256 ) // only for ASCII characters
     {
         if ( wxevent.GetEventType() == wxEVT_KEY_UP || wxevent.GetEventType() == wxEVT_KEY_DOWN )
             keyval = wxToupper( aunichar ) ;
