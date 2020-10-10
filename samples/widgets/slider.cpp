@@ -119,7 +119,7 @@ protected:
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
-    void OnSlider(wxScrollEvent& event);
+    void OnSliderScroll(wxScrollEvent& event);
     void OnSlider(wxCommandEvent& event);
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
@@ -234,7 +234,7 @@ wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_UPDATE_UI(SliderPage_CurValueText, SliderWidgetsPage::OnUpdateUICurValueText)
 
-    EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSlider)
+    EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSliderScroll)
     EVT_SLIDER(SliderPage_Slider, SliderWidgetsPage::OnSlider)
 
     EVT_CHECKBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
@@ -807,7 +807,7 @@ void SliderWidgetsPage::OnUpdateUISelectRange(wxUpdateUIEvent& event)
 #endif // defined(__WXMSW__)
 }
 
-void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
+void SliderWidgetsPage::OnSliderScroll(wxScrollEvent& event)
 {
     wxASSERT_MSG( event.GetInt() == m_slider->GetValue(),
                   "slider value should be the same" );
