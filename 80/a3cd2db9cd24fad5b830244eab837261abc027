@@ -1,0 +1,1 @@
+wxOSX: Fix key events codes for non-ASCII characters (Artur Sochirca)
