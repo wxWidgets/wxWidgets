@@ -105,6 +105,8 @@ Changes in behaviour not resulting in compilation errors
 - wxFileDialog::GetPath() and wxFileDialog::GetFilename() now assert and return
   an empty string if called on dialogs with the wxFD_MULTIPLE style.
 
+- wxGetInstallPrefix() now returns wxString.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
