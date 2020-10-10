@@ -1493,12 +1493,56 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         "y y y y y",
     };
 
+    const static char* transparent_image_xpm[] =
+    {
+        "5 5 2 1",
+        "   c None", // Mask
+        "y  c #FFFF00",
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+    };
+
+    const static char* light_image_xpm[] =
+    {
+        "5 5 2 1",
+        "   c None",
+        "y  c #FFFF00",
+        "yyyyy",
+        "yyyyy",
+        "yyyyy",
+        "yyyyy",
+        "yyyyy",
+    };
+
+    const static char* black_image_xpm[] =
+    {
+        "5 5 2 1",
+        "   c #000000",
+        "y  c None", // Mask
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+        "     ",
+    };
+
+    // Execute AddHandler() just once.
+    static const bool
+        registeredHandler = (wxImage::AddHandler(new wxPNGHandler()), true);
+
     SECTION("Paste same size image")
     {
         wxImage actual(squares_xpm);
         wxImage paste(toggle_equal_size_xpm);
         wxImage expected(toggle_equal_size_xpm);
         actual.Paste(paste, 0, 0);
+        CHECK_THAT(actual, RGBSameAs(expected));
+
+        // Without alpha using "compose" doesn't change anything.
+        actual.Paste(paste, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(expected));
     }
 
@@ -1690,18 +1734,11 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
         CHECK_THAT(actual, RGBSameAs(expected));
     }
 
-    wxImage::AddHandler(new wxPNGHandler());
-    wxImage background("image/paste_input_background.png");
-    CHECK(background.IsOk());
-    wxImage opaque_square("image/paste_input_overlay_transparent_border_opaque_square.png");
-    CHECK(opaque_square.IsOk());
-    wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
-    CHECK(transparent_square.IsOk());
-    wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
-    CHECK(transparent_circle.IsOk());
-
     SECTION("Paste fully opaque image onto blank image without alpha")
     {
+        const wxImage background("image/paste_input_background.png");
+        REQUIRE(background.IsOk());
+
         wxImage actual(background.GetSize());
         actual.Paste(background, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(background));
@@ -1709,6 +1746,9 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste fully opaque image onto blank image with alpha")
     {
+        const wxImage background("image/paste_input_background.png");
+        REQUIRE(background.IsOk());
+
         wxImage actual(background.GetSize());
         actual.InitAlpha();
         actual.Paste(background, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
@@ -1717,6 +1757,9 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste fully transparent image")
     {
+        const wxImage background("image/paste_input_background.png");
+        REQUIRE(background.IsOk());
+
         wxImage actual = background.Copy();
         wxImage transparent(actual.GetSize());
         transparent.InitAlpha();
@@ -1727,21 +1770,39 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste image with transparent region")
     {
-        wxImage actual = background.Copy();
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage opaque_square("image/paste_input_overlay_transparent_border_opaque_square.png");
+        REQUIRE(opaque_square.IsOk());
+
         actual.Paste(opaque_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_overlay_transparent_border_opaque_square.png")));
         CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste image with semi transparent region")
     {
-        wxImage actual = background.Copy();
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
         actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSameAs(wxImage("image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png")));
         CHECK_THAT(actual, CenterAlphaPixelEquals(wxALPHA_OPAQUE));
     }
     SECTION("Paste two semi transparent images on top of background")
     {
-        wxImage actual = background.Copy();
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        const wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
+        REQUIRE(transparent_circle.IsOk());
+
         actual.Paste(transparent_circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         actual.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         CHECK_THAT(actual, RGBSimilarTo(wxImage("image/paste_result_background_plus_circle_plus_square.png"), 1));
@@ -1749,8 +1810,16 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste two semi transparent images together first, then on top of background")
     {
+        wxImage actual("image/paste_input_background.png");
+        REQUIRE(actual.IsOk());
+
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        const wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
+        REQUIRE(transparent_circle.IsOk());
+
         wxImage circle = transparent_circle.Copy();
-        wxImage actual = background.Copy();
         circle.Paste(transparent_square, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         actual.Paste(circle, 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE);
         // When applied in this order, two times a rounding difference is triggered.
@@ -1759,6 +1828,12 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste semitransparent image over transparent image")
     {
+        const wxImage transparent_square("image/paste_input_overlay_transparent_border_semitransparent_square.png");
+        REQUIRE(transparent_square.IsOk());
+
+        const wxImage transparent_circle("image/paste_input_overlay_transparent_border_semitransparent_circle.png");
+        REQUIRE(transparent_circle.IsOk());
+
         wxImage actual(transparent_circle.GetSize());
         actual.InitAlpha();
         memset(actual.GetAlpha(), 0, actual.GetWidth() * actual.GetHeight());
@@ -1770,28 +1845,6 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste fully transparent (masked) image over light image") // todo make test case for 'blend with mask'
     {
-        const static char* transparent_image_xpm[] =
-        {
-            "5 5 2 1",
-            "   c None", // Mask
-            "y  c #FFFF00",
-            "     ",
-            "     ",
-            "     ",
-            "     ",
-            "     ",
-        };
-        const static char* light_image_xpm[] =
-        {
-            "5 5 2 1",
-            "   c None",
-            "y  c #FFFF00",
-            "yyyyy",
-            "yyyyy",
-            "yyyyy",
-            "yyyyy",
-            "yyyyy",
-        };
         wxImage actual(light_image_xpm);
         actual.InitAlpha();
         wxImage paste(transparent_image_xpm);
@@ -1801,28 +1854,6 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     }
     SECTION("Paste fully black (masked) image over light image") // todo make test case for 'blend with mask'
     {
-        const static char* black_image_xpm[] =
-        {
-            "5 5 2 1",
-            "   c #000000",
-            "y  c None", // Mask
-            "     ",
-            "     ",
-            "     ",
-            "     ",
-            "     ",
-        };
-        const static char* light_image_xpm[] =
-        {
-            "5 5 2 1",
-            "   c None",
-            "y  c #FFFF00",
-            "yyyyy",
-            "yyyyy",
-            "yyyyy",
-            "yyyyy",
-            "yyyyy",
-        };
         wxImage actual(light_image_xpm);
         actual.InitAlpha();
         wxImage paste(black_image_xpm);
