@@ -162,6 +162,8 @@ protected:
     bool IsValidValue(int val) const
         { return (val >= m_min) && (val <= m_max); }
 
+    static int ms_numSliderEvents;
+
     // the slider range
     int m_min, m_max;
 
@@ -200,6 +202,8 @@ private:
     wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(SliderWidgetsPage)
 };
+
+int SliderWidgetsPage::ms_numSliderEvents = 0;
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -837,11 +841,8 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
     wxASSERT_MSG(index >= 0 && (size_t)index < WXSIZEOF(eventNames),
                  "Unknown slider event" );
 
-
-    static int s_numSliderEvents = 0;
-
     wxLogMessage("Slider event #%d: %s (pos = %d, int value = %d)",
-                 s_numSliderEvents++,
+                 ms_numSliderEvents++,
                  eventNames[index],
                  event.GetPosition(),
                  event.GetInt());
@@ -849,10 +850,8 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 
 void SliderWidgetsPage::OnSlider(wxCommandEvent& event)
 {
-    static int s_numSliderEvents = 0;
-
     wxLogMessage("Slider event #%d: wxEVT_SLIDER (value = %d)",
-                 s_numSliderEvents++, event.GetInt());
+                 ms_numSliderEvents++, event.GetInt());
 }
 
 #endif // wxUSE_SLIDER
