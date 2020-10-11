@@ -2023,7 +2023,7 @@ template<typename BufferType>
 static int DoStringPrintfV(wxString& str,
                            const wxString& format, va_list argptr)
 {
-    int size = 1024;
+    size_t size = 1024;
 
     for ( ;; )
     {
@@ -2084,21 +2084,21 @@ static int DoStringPrintfV(wxString& str,
             else {
                 // still not enough, as we don't know how much we
                 // need, double the current size of the buffer
-                int newSize = size * 2;
+                size_t newSize = size * 2;
                 if (newSize < size) // Overflow
                     return -1;
                 size = newSize;
             }
 #endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
-        else if ( len >= size )
+        else if ( static_cast<size_t>(len) >= size )
         {
 #if wxUSE_WXVSNPRINTF
             // we know that our own implementation of wxVsnprintf() returns
             // size+1 when there's not enough space but that's not the size
             // of the required buffer!
             // So we just double the current size of the buffer
-            int newSize = size * 2;
+            size_t newSize = size * 2;
             if (newSize < size)
                 return -1; // Overflow
             size = newSize;
