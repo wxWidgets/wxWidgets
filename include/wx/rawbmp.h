@@ -715,14 +715,14 @@ struct wxPixelDataOut<wxBitmap>
             public:
                 Reference& operator=(bool b)
                 {
-                    wxByte mask = 1 << m_bit;
-                    wxByte value = b << m_bit;
+                    wxByte mask = static_cast<wxByte>(1 << m_bit);
+                    wxByte value = static_cast<wxByte>(b << m_bit);
                     (*m_ptr &= ~mask) |= value;
                     return *this;
                 }
                 operator bool() const
                 {
-                    wxByte mask = 1 << m_bit;
+                    wxByte mask = static_cast<wxByte>(1 << m_bit);
                     return (*m_ptr & mask) != 0;
                 }
 
