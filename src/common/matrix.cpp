@@ -15,6 +15,8 @@
 #include "wx/wxprec.h"
 
 
+#if WXWIN_COMPATIBILITY_3_0
+
 #include "wx/matrix.h"
 
 #ifndef WX_PRECOMP
@@ -595,3 +597,5 @@ void wxTransformMatrix::SetRotation(double rotation)
     Rotate(-GetRotation(), x, y);
     Rotate(rotation, x, y);
 }
+
+#endif // WXWIN_COMPATIBILITY_3_0
