@@ -2508,6 +2508,20 @@ void wxCocoaDataViewControl::Select(const wxDataViewItem& item)
             byExtendingSelection:GetDataViewCtrl()->HasFlag(wxDV_MULTIPLE) ? YES : NO];
 }
 
+void wxCocoaDataViewControl::Select(const wxDataViewItemArray& items)
+{
+    NSMutableIndexSet *selection = [[NSMutableIndexSet alloc] init];
+
+    for ( const auto& i: items )
+    {
+        if ( i.IsOk() )
+            [selection addIndex:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:i]]];
+    }
+
+    [m_OutlineView selectRowIndexes:selection byExtendingSelection:NO];
+    [selection release];
+}
+
 void wxCocoaDataViewControl::SelectAll()
 {
     [m_OutlineView selectAll:m_OutlineView];

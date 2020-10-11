@@ -514,6 +514,7 @@ public:
     virtual int  GetSelections(wxDataViewItemArray& sel)   const;
     virtual bool IsSelected(const wxDataViewItem& item) const;
     virtual void Select(const wxDataViewItem& item);
+    virtual void Select(const wxDataViewItemArray& items);
     virtual void SelectAll();
     virtual void Unselect(const wxDataViewItem& item);
     virtual void UnselectAll();
