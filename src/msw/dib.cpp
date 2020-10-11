@@ -151,7 +151,7 @@ bool wxDIB::Create(int width, int height, int depth)
     return true;
 }
 
-bool wxDIB::Create(HBITMAP hbmp)
+bool wxDIB::Create(HBITMAP hbmp, int depth /* = -1 */)
 {
     wxCHECK_MSG( hbmp, false, wxT("wxDIB::Create(): invalid bitmap") );
 
@@ -183,7 +183,7 @@ bool wxDIB::Create(HBITMAP hbmp)
             return false;
         }
 
-        int d = bm.bmBitsPixel;
+        int d = depth >= 1 ? depth : bm.bmBitsPixel;
         if ( d <= 0 )
             d = wxDisplayDepth();
 

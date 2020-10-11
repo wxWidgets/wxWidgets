@@ -79,9 +79,8 @@ TEST_CASE("BitmapTestCase::Monochrome", "[bitmap][monochrome]")
     REQUIRE(mono.IsOk());
     REQUIRE(mono.GetDepth() == 1);
 
-#if !defined(__WXMSW__)
-    WARN("wxMonoPixelData only exists in wxMSW");
-#else
+    // wxMonoPixelData only exists in wxMSW
+#if defined(__WXMSW__)
     // draw lines on top and left, but leaving blank top and left lines
     {
         wxMonoPixelData data(mono);
@@ -771,13 +770,13 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     }
 
     // Check sub bitmap mask
-#if !defined(__WXMSW__)
     wxColour maskClrTopLeft;
     wxColour maskClrTopRight;
     wxColour maskClrBottomLeft;
     wxColour maskClrBottomRight;
     // Fetch sample original mask pixels
     {
+        REQUIRE(bmpMask.GetDepth() == 1);
         wxNativePixelData data(bmpMask);
         REQUIRE(data);
         wxNativePixelData::Iterator p(data);
@@ -794,17 +793,21 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         p.OffsetX(data, w / 2); // bottom-right point
         maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
     }
+    REQUIRE(bmpMask.GetDepth() == 1);
     CHECK(maskClrTopLeft == *wxWHITE);
     CHECK(maskClrTopRight == *wxWHITE);
     CHECK(maskClrBottomLeft == *wxBLACK);
     CHECK(maskClrBottomRight == *wxBLACK);
-#else
+
+    // wxMonoPixelData only exists in wxMSW
+#if defined(__WXMSW__)
     bool maskValueTopLeft;
     bool maskValueTopRight;
     bool maskValueBottomLeft;
     bool maskValueBottomRight;
     // Fetch sample original mask pixels
     {
+        REQUIRE(bmpMask.GetDepth() == 1);
         wxMonoPixelData data(bmpMask);
         REQUIRE(data);
         wxMonoPixelData::Iterator p(data);
@@ -821,11 +824,12 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         p.OffsetX(data, w / 2); // bottom-right point
         maskValueBottomRight = p.Pixel();
     }
+    REQUIRE(bmpMask.GetDepth() == 1);
     CHECK(maskValueTopLeft == true);
     CHECK(maskValueTopRight == true);
     CHECK(maskValueBottomLeft == false);
     CHECK(maskValueBottomRight == false);
-#endif
+#endif      // __WXMSW__
 
     wxBitmap subBmpMask = subBmp.GetMask()->GetBitmap();
     // Check sub bitmap mask attributes
@@ -837,8 +841,8 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     REQUIRE_FALSE(subBmpMask.HasAlpha());
     REQUIRE_FALSE(subBmpMask.GetMask());
     // Check sub bitmap mask pixels
-#if !defined(__WXMSW__)
     {
+        REQUIRE(subBmpMask.GetDepth() == 1);
         wxNativePixelData data(subBmpMask);
         REQUIRE(data);
         wxNativePixelData::Iterator p(data);
@@ -855,8 +859,12 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         p.OffsetX(data, w2 / 2); // bottom-right point
         ASSERT_EQUAL_COLOUR_RGB(p, maskClrBottomRight);
     }
-#else
+    REQUIRE(subBmpMask.GetDepth() == 1);
+
+    // wxMonoPixelData only exists in wxMSW
+#if defined(__WXMSW__)
     {
+        REQUIRE(subBmpMask.GetDepth() == 1);
         wxMonoPixelData data(subBmpMask);
         REQUIRE(data);
         wxMonoPixelData::Iterator p(data);
@@ -873,7 +881,8 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         p.OffsetX(data, w2 / 2); // bottom-right point
         CHECK(p.Pixel() == maskValueBottomRight);
     }
-#endif
+    REQUIRE(subBmpMask.GetDepth() == 1);
+#endif      // __WXMSW__
 }
 
 TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][withmask]")
@@ -964,13 +973,13 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     }
 
     // Check sub bitmap mask
-#if !defined(__WXMSW__)
     wxColour maskClrTopLeft;
     wxColour maskClrTopRight;
     wxColour maskClrBottomLeft;
     wxColour maskClrBottomRight;
     // Fetch sample original mask pixels
     {
+        REQUIRE(bmpMask.GetDepth() == 1);
         wxNativePixelData data(bmpMask);
         REQUIRE(data);
         wxNativePixelData::Iterator p(data);
@@ -987,17 +996,21 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         p.OffsetX(data, w / 2); // bottom-right point
         maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
     }
+    REQUIRE(bmpMask.GetDepth() == 1);
     CHECK(maskClrTopLeft == *wxWHITE);
     CHECK(maskClrTopRight == *wxWHITE);
     CHECK(maskClrBottomLeft == *wxBLACK);
     CHECK(maskClrBottomRight == *wxBLACK);
-#else
+
+    // wxMonoPixelData only exists in wxMSW
+#if defined(__WXMSW__)
     bool maskValueTopLeft;
     bool maskValueTopRight;
     bool maskValueBottomLeft;
     bool maskValueBottomRight;
     // Fetch sample original mask pixels
     {
+        REQUIRE(bmpMask.GetDepth() == 1);
         wxMonoPixelData data(bmpMask);
         REQUIRE(data);
         wxMonoPixelData::Iterator p(data);
@@ -1014,11 +1027,12 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         p.OffsetX(data, w / 2); // bottom-right point
         maskValueBottomRight = p.Pixel();
     }
+    REQUIRE(bmpMask.GetDepth() == 1);
     CHECK(maskValueTopLeft == true);
     CHECK(maskValueTopRight == true);
     CHECK(maskValueBottomLeft == false);
     CHECK(maskValueBottomRight == false);
-#endif
+#endif      // __WXMSW__
 
     wxBitmap subBmpMask = subBmp.GetMask()->GetBitmap();
     // Check sub bitmap mask attributes
@@ -1030,8 +1044,8 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     REQUIRE_FALSE(subBmpMask.HasAlpha());
     REQUIRE_FALSE(subBmpMask.GetMask());
     // Check sub bitmap mask pixels
-#if !defined(__WXMSW__)
     {
+        REQUIRE(subBmpMask.GetDepth() == 1);
         wxNativePixelData data(subBmpMask);
         REQUIRE(data);
         wxNativePixelData::Iterator p(data);
@@ -1048,8 +1062,12 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         p.OffsetX(data, w2 / 2); // bottom-right point
         ASSERT_EQUAL_RGB(p, maskClrBottomRight.Red(), maskClrBottomRight.Green(), maskClrBottomRight.Blue());
     }
-#else
+    REQUIRE(subBmpMask.GetDepth() == 1);
+
+    // wxMonoPixelData only exists in wxMSW
+#if defined(__WXMSW__)
     {
+        REQUIRE(subBmpMask.GetDepth() == 1);
         wxMonoPixelData data(subBmpMask);
         REQUIRE(data);
         wxMonoPixelData::Iterator p(data);
@@ -1066,7 +1084,8 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         p.OffsetX(data, w2 / 2); // bottom-right point
         CHECK(p.Pixel() == maskValueBottomRight);
     }
-#endif
+    REQUIRE(subBmpMask.GetDepth() == 1);
+#endif      // __WXMSW__
 }
 
 namespace Catch

@@ -73,7 +73,7 @@ public:
 
 #if wxUSE_WXDIB
     // Creates a new bitmap (DDB or DIB) from the contents of the given DIB.
-    void CopyFromDIB(const wxDIB& dib);
+    void CopyFromDIB(const wxDIB& dib, int depth = -1);
 
     // Takes ownership of the given DIB.
     bool AssignDIB(wxDIB& dib);
@@ -321,14 +321,15 @@ void wxBitmapRefData::InitFromDIB(const wxDIB& dib, HBITMAP hbitmap)
     m_hBitmap = (WXHBITMAP)hbitmap;
 }
 
-void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
+void wxBitmapRefData::CopyFromDIB(const wxDIB& dib, int depth /* = -1 */)
 {
     wxCHECK_RET( !IsOk(), "bitmap already initialized" );
     wxCHECK_RET( dib.IsOk(), wxT("invalid DIB in CopyFromDIB") );
 
     HBITMAP hbitmap;
 #ifdef SOMETIMES_USE_DIB
-    hbitmap = dib.CreateDDB();
+    // MemoryHDC defaults to monochrome
+    hbitmap = dib.CreateDDB(depth == 1 ? HDC(MemoryHDC()) : NULL);
 #else // ALWAYS_USE_DIB
     hbitmap = NULL;
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
@@ -1381,6 +1382,12 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
         // no bitmap, no data (raw or otherwise)
         return NULL;
     }
+    if ( bpp == 1 && GetDepth() != 1 )
+    {
+        wxFAIL_MSG( wxT("use wxQuantize if you want to convert color wxBitmap to mono") );
+
+        return NULL;
+    }
 
     // if we're already a DIB we can access our data directly, but if not we
     // need to convert this DDB to a DIB section and use it for raw access and
@@ -1391,7 +1398,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
         wxCHECK_MSG( !GetBitmapData()->m_dib, NULL,
                         wxT("GetRawData() may be called only once") );
 
-        wxDIB *dib = new wxDIB(*this);
+        wxDIB *dib = new wxDIB(*this, bpp);
         if ( !dib->IsOk() )
         {
             delete dib;
@@ -1465,7 +1472,8 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
         GetBitmapData()->m_dib = NULL;
 
         GetBitmapData()->Free();
-        GetBitmapData()->CopyFromDIB(*dib);
+        int depth = GetDepth() == 1 && dib->GetDepth() != GetDepth() ? 1 : -1;
+        GetBitmapData()->CopyFromDIB(*dib, depth);
 
         delete dib;
     }
