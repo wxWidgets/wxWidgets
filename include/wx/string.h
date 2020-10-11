@@ -3894,7 +3894,7 @@ public:
 
         size_t len;
         const wxCharTypeBuffer<CharType> buf(str.tchar_str<CharType>(&len));
-        if ( buf )
+        if ( buf && m_buf.data() )
         {
             if ( len > lenWanted )
             {
