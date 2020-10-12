@@ -8,10 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_BUSYINFO
 
 // for all others, include the necessary headers

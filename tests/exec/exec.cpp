@@ -15,9 +15,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/utils.h"
 #include "wx/process.h"

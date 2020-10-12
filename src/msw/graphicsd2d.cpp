@@ -54,10 +54,6 @@
     #pragma warning(pop)
 #endif
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #include <float.h> // for FLT_MAX, FLT_MIN
 
 #ifndef WX_PRECOMP

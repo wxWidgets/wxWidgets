@@ -11,9 +11,6 @@
 #include "wx/html/htmltag.h"
 #include "wx/html/styleparams.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML
 

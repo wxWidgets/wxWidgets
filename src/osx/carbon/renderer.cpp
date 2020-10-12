@@ -13,9 +13,6 @@
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"

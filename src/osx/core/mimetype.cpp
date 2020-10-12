@@ -11,10 +11,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
 #endif
