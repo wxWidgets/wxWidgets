@@ -673,7 +673,35 @@ wxSizer::~wxSizer()
 
 wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
 {
-    m_children.Insert( index, item );
+    // The helper class that solves two problems when
+    // wxWindowBase::SetContainingSizer() throws:
+    // 1. Avoid leaking memory using the scoped pointer to the sizer item.
+    // 2. Disassociate the window from the sizer item to not reset the
+    //    containing sizer for the window in the items destructor.
+    class ContainingSizerGuard
+    {
+    public:
+        explicit ContainingSizerGuard( wxSizerItem *item )
+            : m_item(item)
+        {
+        }
+
+        ~ContainingSizerGuard()
+        {
+            if ( m_item )
+                m_item->DetachWindow();
+        }
+
+        wxSizerItem* Release()
+        {
+            return m_item.release();
+        }
+
+    private:
+        wxScopedPtr<wxSizerItem> m_item;
+    };
+
+    ContainingSizerGuard guard( item );
 
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
@@ -681,7 +709,9 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
     if ( item->GetSizer() )
         item->GetSizer()->SetContainingWindow( m_containingWindow );
 
-    return item;
+    m_children.Insert( index, item );
+
+    return guard.Release();
 }
 
 void wxSizer::SetContainingWindow(wxWindow *win)
