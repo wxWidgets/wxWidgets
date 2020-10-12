@@ -804,8 +804,8 @@ public:
         @param y
             The y coordinate position to draw the text at.
         @param angle
-            The angle relative to the (default) horizontal direction to draw
-            the string.
+            The angle, in radians, relative to the (default) horizontal
+            direction to draw the string.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y, wxDouble angle);
 
@@ -833,8 +833,8 @@ public:
         @param y
             The y coordinate position to draw the text at.
         @param angle
-            The angle relative to the (default) horizontal direction to draw
-            the string.
+            The angle, in radians, relative to the (default) horizontal
+            direction to draw the string.
         @param backgroundBrush
             Brush to fill the text with.
     */
