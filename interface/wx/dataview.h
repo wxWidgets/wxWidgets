@@ -1675,6 +1675,9 @@ public:
 
     /**
         Sets the selection to the array of wxDataViewItems.
+
+        Note that if @a sel contains any invalid items, they are simply
+        ignored.
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
 
