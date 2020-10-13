@@ -42,6 +42,24 @@ case $(uname -s) in
             done
 
             $SUDO apt-get install -y $libtoolkit_dev $pkg_install
+
+            if [ "$wxUSE_ASAN" = 1 ]; then
+                codename=$(lsb_release --codename --short)
+                # Enable the `-dbgsym` repositories.
+                echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
+                deb http://ddebs.ubuntu.com ${codename}-updates main restricted universe multiverse
+                deb http://ddebs.ubuntu.com ${codename}-proposed main restricted universe multiverse" | \
+                $SUDO tee --append /etc/apt/sources.list.d/ddebs.list
+
+                # Import the debug symbol archive signing key from the Ubuntu server.
+                # Note that this command works only on Ubuntu 18.04 LTS and newer.
+                $SUDO apt-get install -y ubuntu-dbgsym-keyring
+
+                $SUDO apt-get update
+
+                # Install the symbols to allow LSAN suppression list to work.
+                $SUDO apt-get install -y libfontconfig1-dbgsym
+            fi
         fi
         ;;
 
