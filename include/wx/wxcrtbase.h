@@ -231,11 +231,7 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
 #endif
 
 /* define wxCRT_StricmpA/W and wxCRT_StrnicmpA/W for various compilers */
-
-#if defined(__BORLANDC__)
-    #define wxCRT_StricmpA stricmp
-    #define wxCRT_StrnicmpA strnicmp
-#elif defined(__VISUALC__) || defined(__MINGW32__)
+#if defined(__VISUALC__) || defined(__MINGW32__)
     /*
         Due to MinGW 5.3 bug (https://sourceforge.net/p/mingw/bugs/2322/),
         _stricmp() and _strnicmp() are not declared in its standard headers

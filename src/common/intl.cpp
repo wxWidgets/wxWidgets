@@ -985,11 +985,7 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     for ( size_t i = 0; i < count; i++ )
     {
         if ( ms_languagesDB->Item(i).Language == lang )
-        {
-            // We need to create a temporary here in order to make this work with BCC in final build mode
-            wxLanguageInfo *ptr = &ms_languagesDB->Item(i);
-            return ptr;
-        }
+            return &ms_languagesDB->Item(i);
     }
 
     return NULL;

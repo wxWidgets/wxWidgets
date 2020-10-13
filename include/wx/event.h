@@ -4287,10 +4287,6 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
         static const wxEventTable        sm_eventTable;                 \
         static wxEventHashTable          sm_eventHashTable
 
-// N.B.: when building DLL with Borland C++ 5.5 compiler, you must initialize
-//       sm_eventTable before using it in GetEventTable() or the compiler gives
-//       E2233 (see http://groups.google.com/groups?selm=397dcc8a%241_2%40dnews)
-
 #define wxBEGIN_EVENT_TABLE(theClass, baseClass) \
     const wxEventTable theClass::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \

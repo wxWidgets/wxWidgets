@@ -321,11 +321,6 @@ public:
 #endif // wxUSE_STREAMS
 
     bool Create( const char* const* xpmData );
-#ifdef __BORLANDC__
-    // needed for Borland 5.5
-    wxImage( char** xpmData ) { Create(const_cast<const char* const*>(xpmData)); }
-    bool Create( char** xpmData ) { return Create(const_cast<const char* const*>(xpmData)); }
-#endif
 
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = false );

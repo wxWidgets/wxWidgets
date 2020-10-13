@@ -43,22 +43,9 @@
     #define _MT
 #endif
 
-#if defined(__BORLANDC__)
-    #if !defined(__MT__)
-        // I can't set -tWM in the IDE (anyone?) so have to do this
-        #define __MT__
-    #endif
-
-    #if !defined(__MFC_COMPAT__)
-        // Needed to know about _beginthreadex etc..
-        #define __MFC_COMPAT__
-    #endif
-#endif // BC++
-
 // define wxUSE_BEGIN_THREAD if the compiler has _beginthreadex() function
 // which should be used instead of Win32 ::CreateThread() if possible
 #if defined(__VISUALC__) || \
-    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
     (defined(__GNUG__) && defined(__MSVCRT__))
 
     #undef wxUSE_BEGIN_THREAD

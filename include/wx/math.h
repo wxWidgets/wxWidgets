@@ -72,7 +72,7 @@
     }
 #else /* C++98 */
 
-#if defined(__VISUALC__) || defined(__BORLANDC__)
+#if defined(__VISUALC__)
     #include <float.h>
     #define wxFinite(x) _finite(x)
 #elif defined(__MINGW64_TOOLCHAIN__) || defined(__clang__)
@@ -102,7 +102,7 @@
 #endif
 
 
-#if defined(__VISUALC__)||defined(__BORLAND__)
+#if defined(__VISUALC__)
     #define wxIsNaN(x) _isnan(x)
 #elif defined(__GNUG__)||defined(__GNUWIN32__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \

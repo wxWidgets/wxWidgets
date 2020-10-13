@@ -12,12 +12,6 @@
 #include "wx/wxprec.h"
 
 
-// With Borland C++, all samples crash if this is compiled in.
-#if (defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) || defined(__CYGWIN10__)
-    #undef wxUSE_OLE_AUTOMATION
-    #define wxUSE_OLE_AUTOMATION 0
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/math.h"

@@ -40,12 +40,6 @@
     #include "wx/msw/crashrpt.h"
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#ifdef __BORLANDC__
-    // BC++ has to be special: its run-time expects the DLL entry point to be
-    // named DllEntryPoint instead of the (more) standard DllMain
-    #define DllMain DllEntryPoint
-#endif // __BORLANDC__
-
 // defined in common/init.cpp
 extern int wxEntryReal(int& argc, wxChar **argv);
 extern int wxEntryCleanupReal(int& argc, wxChar **argv);

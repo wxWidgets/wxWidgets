@@ -43,10 +43,8 @@
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
 wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
-// Doesn't yet compile under BC++
 // Wine: no wininet.h
-#if (!defined(__BORLANDC__) || (__BORLANDC__>=0x550)) && \
-    !defined(__WINE__)
+#if !defined(__WINE__)
 
 #include <ras.h>
 #include <raserror.h>
@@ -1294,6 +1292,6 @@ static void WINAPI wxRasDialFunc(UINT WXUNUSED(unMsg),
                 rasconnstate, dwError);
 }
 
-#endif // __BORLANDC__
+#endif // #if !defined(__WINE__)
 
 #endif // wxUSE_DIALUP_MANAGER

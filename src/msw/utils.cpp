@@ -68,12 +68,6 @@
     #include <cygwin/version.h>
 #endif  //GNUWIN32
 
-#ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
-                    // this (3.1 I believe) and how to test for it.
-                    // If this works for Borland 4.0 as well, then no worries.
-    #include <dir.h>
-#endif
-
 // VZ: there is some code using NetXXX() functions to get the full user name:
 //     I don't think it's a good idea because they don't work under Win95 and
 //     seem to return the same as wxGetUserId() under NT. If you really want
@@ -445,13 +439,8 @@ bool wxGetDiskSpace(const wxString& path,
     }
 
     // ULARGE_INTEGER is a union of a 64 bit value and a struct containing
-    // two 32 bit fields which may be or may be not named - try to make it
-    // compile in all cases
-#if defined(__BORLANDC__) && !defined(_ANONYMOUS_STRUCT)
-    #define UL(ul) ul.u
-#else // anon union
+    // two 32 bit fields which may be or may be not named
     #define UL(ul) ul
-#endif
     if ( pTotal )
     {
 #if wxUSE_LONGLONG

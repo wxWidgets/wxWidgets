@@ -25,11 +25,6 @@
 
 #include <mmsystem.h>
 
-// Why doesn't BC++ have joyGetPosEx?
-#if defined(__BORLANDC__)
-#define NO_JOYGETPOSEX
-#endif
-
 #include "wx/msw/registry.h"
 
 #include <regstr.h>

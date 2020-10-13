@@ -60,8 +60,6 @@
 #   pragma message("Please update wx/compiler.h to recognize this VC++ version")
 #endif
 
-#elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
-#   define __BORLANDC__
 #elif defined(__SUNPRO_CC)
 #   ifndef __SUNCC__
 #       define __SUNCC__ __SUNPRO_CC

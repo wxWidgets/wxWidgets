@@ -272,8 +272,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "vc";
 #elif defined(__GNUG__)
     compilerPrefix = "gcc";
-#elif defined(__BORLANDC__)
-    compilerPrefix = "bcc";
 #else
     return;
 #endif

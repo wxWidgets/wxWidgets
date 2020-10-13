@@ -132,8 +132,7 @@
        is a wrapper around it as explained below
      */
 
-    #if defined(__VISUALC__) || \
-            (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+    #if defined(__VISUALC__)
         #define wxCRT_VsnprintfA    _vsnprintf
         #define wxCRT_VsnprintfW    _vsnwprintf
     #else
