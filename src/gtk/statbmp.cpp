@@ -56,11 +56,17 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
 void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 {
+    const wxSize sizeOld(m_bitmap.IsOk() ? m_bitmap.GetSize() : wxSize());
+    const wxSize sizeNew(bitmap.IsOk() ? bitmap.GetSize() : wxSize());
+
     m_bitmap = bitmap;
     WX_GTK_IMAGE(m_widget)->Set(bitmap);
 
-    InvalidateBestSize();
-    SetSize(GetBestSize());
+    if (sizeNew != sizeOld)
+    {
+        InvalidateBestSize();
+        SetSize(GetBestSize());
+    }
 }
 
 // static
