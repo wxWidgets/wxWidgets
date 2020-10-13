@@ -910,6 +910,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     if (show == m_fsIsShowing)
         return false; // return what?
 
+    // documented behaviour is to show the window if it's still hidden when
+    // showing it full screen
+    if (show)
+        Show();
+
     m_fsIsShowing = show;
 
 #if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
@@ -991,11 +996,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
         }
     }
 #endif // GDK_WINDOWING_X11
-
-    // documented behaviour is to show the window if it's still hidden when
-    // showing it full screen
-    if (show)
-        Show();
 
     return true;
 }
