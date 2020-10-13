@@ -1,0 +1,1 @@
+wxOSX: Significantly speed up wxDataViewCtrl::SetSelections().
