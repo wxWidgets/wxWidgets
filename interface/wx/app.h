@@ -1181,7 +1181,7 @@ wxAppDerivedClass& wxGetApp();
     Notice that this function is only available if @c wxUSE_ON_FATAL_EXCEPTION
     is 1 and under Windows platform this requires a compiler with support for
     SEH (structured exception handling) which currently means only Microsoft
-    Visual C++ or a recent Borland C++ version.
+    Visual C++.
 
     @header{wx/app.h}
 */

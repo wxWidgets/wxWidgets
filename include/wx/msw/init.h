@@ -50,16 +50,12 @@ extern WXDLLIMPEXP_CORE int
 #define wxIMPLEMENT_WXWIN_MAIN                                              \
     extern "C" int WINAPI WinMain(HINSTANCE hInstance,                      \
                                   HINSTANCE hPrevInstance,                  \
-                                  wxCmdLineArgType WXUNUSED(lpCmdLine),     \
+                                  wxCmdLineArgType lpCmdLine,               \
                                   int nCmdShow)                             \
     {                                                                       \
         wxDISABLE_DEBUG_SUPPORT();                                          \
                                                                             \
-        /* NB: We pass NULL in place of lpCmdLine to behave the same as  */ \
-        /*     Borland-specific wWinMain() above. If it becomes needed   */ \
-        /*     to pass lpCmdLine to wxEntry() here, you'll have to fix   */ \
-        /*     wWinMain() above too.                                     */ \
-        return wxEntry(hInstance, hPrevInstance, NULL, nCmdShow);           \
+        return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);      \
     }
 
 #endif // wxUSE_GUI
