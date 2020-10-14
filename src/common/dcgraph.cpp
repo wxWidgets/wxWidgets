@@ -1210,6 +1210,11 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 {
+    wxCHECK_RET( IsOk(), "wxGCDC::DoDrawText - invalid DC" );
+
+    if ( str.empty() )
+        return;
+
     // For compatibility with other ports (notably wxGTK) and because it's
     // genuinely useful, we allow passing multiline strings to DrawText().
     // However there is no native OSX function to draw them directly so we
@@ -1221,11 +1226,6 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
         GetOwner()->DrawLabel(str, wxRect(x, y, 0, 0));
         return;
     }
-
-    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawText - invalid DC") );
-
-    if ( str.empty() )
-        return;
 
     // Text drawing shouldn't be affected by the raster operation
     // mode set by SetLogicalFunction() and should be always done
@@ -1368,6 +1368,9 @@ void wxGCDCImpl::DoGradientFillLinear(const wxRect& rect,
                                   const wxColour& destColour,
                                   wxDirection nDirection )
 {
+    if (rect.width == 0 || rect.height == 0)
+        return;
+
     wxPoint start;
     wxPoint end;
     switch( nDirection)
@@ -1395,9 +1398,6 @@ void wxGCDCImpl::DoGradientFillLinear(const wxRect& rect,
     default :
         break;
     }
-
-    if (rect.width == 0 || rect.height == 0)
-        return;
 
     m_graphicContext->SetBrush( m_graphicContext->CreateLinearGradientBrush(
         start.x,start.y,end.x,end.y, initialColour, destColour));
