@@ -118,7 +118,7 @@
             wxT("argument out of supported range"));
 
 #if defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(14)
-        return int(round(x));
+        return int(lround(x));
 #else
         return (int)(x < 0 ? x - 0.5 : x + 0.5);
 #endif
