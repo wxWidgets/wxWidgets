@@ -53,13 +53,13 @@
 
 #ifdef __cplusplus
 
+#include <cmath>
+
 /*
     Things are simple with C++11: we have everything we need in std.
     Eventually we will only have this section and not the legacy stuff below.
  */
 #if __cplusplus >= 201103
-    #include <cmath>
-
     #define wxFinite(x) std::isfinite(x)
     #define wxIsNaN(x) std::isnan(x)
 #else /* C++98 */
