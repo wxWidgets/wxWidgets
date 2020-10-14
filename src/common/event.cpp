@@ -596,7 +596,9 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
 {
     wxEvent::operator=(event);
 
-    *this = event;
+    // Borland C++ 5.82 doesn't compile an explicit call to an implicitly
+    // defined operator=() so need to do it this way:
+    *static_cast<wxMouseState *>(this) = event;
 
     m_x = event.m_x;
     m_y = event.m_y;
@@ -803,7 +805,9 @@ wxKeyEvent& wxKeyEvent::operator=(const wxKeyEvent& evt)
     {
         wxEvent::operator=(evt);
 
-        *this = evt;
+        // Borland C++ 5.82 doesn't compile an explicit call to an
+        // implicitly defined operator=() so need to do it this way:
+        *static_cast<wxKeyboardState *>(this) = evt;
 
         DoAssignMembers(evt);
     }
