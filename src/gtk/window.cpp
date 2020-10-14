@@ -309,6 +309,7 @@ static wxPoint gs_lastGesturePoint;
 // the trace mask used for the focus debugging messages
 #define TRACE_FOCUS wxT("focus")
 
+#if wxUSE_LOG_TRACE
 // Function used to dump a brief description of a window.
 static
 wxString wxDumpWindow(wxWindowGTK* win)
@@ -326,6 +327,7 @@ wxString wxDumpWindow(wxWindowGTK* win)
 
     return s;
 }
+#endif // wxUSE_LOG_TRACE
 
 // A handy function to run from under gdb to show information about the given
 // GtkWidget. Right now it only shows its type, we could enhance it to show
