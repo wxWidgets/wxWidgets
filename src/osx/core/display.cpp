@@ -256,7 +256,7 @@ int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
     wxASSERT(err == CGDisplayNoErr);
 
     const double scaleWindow = tlw->GetContentScaleFactor();
-    for ( int i = 0 ; i < theCount; ++i )
+    for ( unsigned i = 0; i < theCount; ++i )
     {
         // find a screen intersecting having the same contentScale as the window itself
         double scale = wxGetScaleFactor(theIDs[i]);
