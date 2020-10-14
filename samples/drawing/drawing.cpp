@@ -1205,7 +1205,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     {
         gc->PushState(); // save this new current state so we can
         //  pop back to it at the end of the loop
-        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(float(angle)/360, 1, 1));
+        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(angle / 360.0, 1, 1));
         gc->SetBrush(wxBrush(wxColour(val.red, val.green, val.blue, 64)));
         gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
 

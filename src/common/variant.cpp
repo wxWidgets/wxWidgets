@@ -476,7 +476,7 @@ bool wxVariantDoubleData::Write(wxOutputStream& str) const
 bool wxVariantDoubleData::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
-    m_value = (float)s.ReadDouble();
+    m_value = s.ReadDouble();
     return true;
 }
 #endif // wxUSE_STREAMS

@@ -2120,11 +2120,11 @@ void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 
     // horizontal alignment:
 
-    gfloat xalign = 0.0;
+    float xalign = 0;
     if (align & wxALIGN_RIGHT)
-        xalign = 1.0;
+        xalign = 1;
     else if (align & wxALIGN_CENTER_HORIZONTAL)
-        xalign = 0.5;
+        xalign = 0.5f;
 
     GValue gvalue = G_VALUE_INIT;
     g_value_init( &gvalue, G_TYPE_FLOAT );
@@ -2134,11 +2134,11 @@ void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 
     // vertical alignment:
 
-    gfloat yalign = 0.0;
+    float yalign = 0;
     if (align & wxALIGN_BOTTOM)
-        yalign = 1.0;
+        yalign = 1;
     else if (align & wxALIGN_CENTER_VERTICAL)
-        yalign = 0.5;
+        yalign = 0.5f;
 
     GValue gvalue2 = G_VALUE_INIT;
     g_value_init( &gvalue2, G_TYPE_FLOAT );
@@ -3392,12 +3392,12 @@ void wxDataViewColumn::SetAlignment( wxAlignment align )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
-    gfloat xalign = 0.0;
+    float xalign = 0;
     if (align == wxALIGN_RIGHT)
-        xalign = 1.0;
+        xalign = 1;
     if (align == wxALIGN_CENTER_HORIZONTAL ||
         align == wxALIGN_CENTER)
-        xalign = 0.5;
+        xalign = 0.5f;
 
     gtk_tree_view_column_set_alignment( column, xalign );
 
@@ -3409,9 +3409,9 @@ wxAlignment wxDataViewColumn::GetAlignment() const
 {
     gfloat xalign = gtk_tree_view_column_get_alignment( GTK_TREE_VIEW_COLUMN(m_column) );
 
-    if (xalign == 1.0)
+    if (xalign == 1)
         return wxALIGN_RIGHT;
-    if (xalign == 0.5)
+    if (xalign == 0.5f)
         return wxALIGN_CENTER_HORIZONTAL;
 
     return wxALIGN_LEFT;

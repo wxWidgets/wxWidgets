@@ -775,7 +775,7 @@ void wxCairoPenBrushBaseData::AddGradientStops(const wxGraphicsGradientStops& st
         cairo_pattern_add_color_stop_rgba
         (
             m_pattern,
-            stop.GetPosition(),
+            double(stop.GetPosition()),
             col.Red()/255.0,
             col.Green()/255.0,
             col.Blue()/255.0,
@@ -3015,7 +3015,7 @@ void wxCairoContext::EndLayer()
     float opacity = m_layerOpacities.back();
     m_layerOpacities.pop_back();
     cairo_pop_group_to_source(m_context);
-    cairo_paint_with_alpha(m_context,opacity);
+    cairo_paint_with_alpha(m_context, double(opacity));
 }
 
 //-----------------------------------------------------------------------------

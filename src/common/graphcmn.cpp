@@ -544,7 +544,7 @@ void wxGraphicsGradientStops::Add(const wxGraphicsGradientStop& stop)
         }
     }
 
-    if ( stop.GetPosition() == 1. )
+    if ( stop.GetPosition() == 1 )
     {
         m_stops.insert(m_stops.end() - 1, stop);
     }

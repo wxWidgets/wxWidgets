@@ -712,7 +712,7 @@ wxGDIPlusPenBrushBaseData::SetGradientStops(T *brush,
             wxGraphicsGradientStop stop = stops.Item(numStops - i - 1);
 
             colors[i] = wxColourToColor(stop.GetColour());
-            positions[i] = 1.0 - stop.GetPosition();
+            positions[i] = 1 - stop.GetPosition();
         }
     }
     else
@@ -1147,7 +1147,7 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
 
     REAL fontSize = !dpi.y
         ? REAL(font.GetPixelSize().GetHeight())
-        : REAL(font.GetFractionalPointSize()) * dpi.y / 72.0f;
+        : REAL(font.GetFractionalPointSize() * dpi.y / 72);
 
     Init(font.GetFaceName(), fontSize, style, col);
 }
@@ -2433,7 +2433,7 @@ wxGDIPlusPrintingContext::wxGDIPlusPrintingContext( wxGraphicsRenderer* renderer
     // instead. Note that calling SetPageScale() does not have effect on
     // non-printing DCs (that is, any other than wxPrinterDC or
     // wxEnhMetaFileDC).
-    REAL dpiRatio = 100.0 / context->GetDpiY();
+    REAL dpiRatio = 100 / context->GetDpiY();
     context->SetPageScale(dpiRatio);
 }
 

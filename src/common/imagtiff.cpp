@@ -643,8 +643,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if ( tiffRes != RESUNIT_NONE )
     {
         TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, tiffRes);
-        TIFFSetField(tif, TIFFTAG_XRESOLUTION, (float)xres);
-        TIFFSetField(tif, TIFFTAG_YRESOLUTION, (float)yres);
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION, xres);
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION, yres);
     }
 
 

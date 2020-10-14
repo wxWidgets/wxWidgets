@@ -3114,7 +3114,7 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
 
     FLOAT fontSize = !dpi.y
         ? FLOAT(font.GetPixelSize().GetHeight())
-        : FLOAT(font.GetFractionalPointSize()) * dpi.y / 72.0f;
+        : FLOAT(font.GetFractionalPointSize() * dpi.y / 72);
 
     hr = wxDWriteFactory()->CreateTextFormat(
         name,

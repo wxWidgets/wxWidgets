@@ -224,7 +224,7 @@ unsigned wxDisplayFactoryMacOSX::GetCount()
 
 int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
 {
-    CGPoint thePoint = {(float)p.x, (float)p.y};
+    CGPoint thePoint = { CGFloat(p.x), CGFloat(p.y) };
     CGDirectDisplayID theID;
     CGDisplayCount theCount;
     CGDisplayErr err = CGGetDisplaysWithPoint(thePoint, 1, &theID, &theCount);

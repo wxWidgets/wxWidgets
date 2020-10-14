@@ -106,17 +106,17 @@ bool wxButton::Create(wxWindow *parent,
 
     g_object_ref(m_widget);
 
-    float x_alignment = 0.5;
+    float x_alignment = 0.5f;
     if (HasFlag(wxBU_LEFT))
-        x_alignment = 0.0;
+        x_alignment = 0;
     else if (HasFlag(wxBU_RIGHT))
-        x_alignment = 1.0;
+        x_alignment = 1;
 
-    float y_alignment = 0.5;
+    float y_alignment = 0.5f;
     if (HasFlag(wxBU_TOP))
-        y_alignment = 0.0;
+        y_alignment = 0;
     else if (HasFlag(wxBU_BOTTOM))
-        y_alignment = 1.0;
+        y_alignment = 1;
 
 #ifdef __WXGTK4__
     if (useLabel)

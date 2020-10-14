@@ -1634,7 +1634,7 @@ float wxXmlResourceHandlerImpl::GetFloat(const wxString& param, float defaultv)
     // strings in XRC always use C locale so make sure to use the
     // locale-independent wxString::ToCDouble() and not ToDouble() which uses
     // the current locale with a potentially different decimal point character
-    double value = defaultv;
+    double value = double(defaultv);
     if (!str.empty())
     {
         if (!str.ToCDouble(&value))
@@ -2461,7 +2461,7 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     {
         if (pointSize > 0)
         {
-            font.SetFractionalPointSize(pointSize);
+            font.SetFractionalPointSize(double(pointSize));
             if (HasParam(wxT("relativesize")))
             {
                 ReportParamError
@@ -2492,7 +2492,7 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
     else // not based on system font
     {
-        font = wxFontInfo(pointSize)
+        font = wxFontInfo(double(pointSize))
                 .FaceName(facename)
                 .Family(ifamily)
                 .Style(istyle)

@@ -626,17 +626,17 @@ wxWebViewWebKit::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 void wxWebViewWebKit::ZoomIn()
 {
-    SetWebkitZoom(GetWebkitZoom() + 0.1);
+    SetWebkitZoom(GetWebkitZoom() + 0.1f);
 }
 
 void wxWebViewWebKit::ZoomOut()
 {
-    SetWebkitZoom(GetWebkitZoom() - 0.1);
+    SetWebkitZoom(GetWebkitZoom() - 0.1f);
 }
 
 void wxWebViewWebKit::SetWebkitZoom(float level)
 {
-    webkit_web_view_set_zoom_level(m_web_view, level);
+    webkit_web_view_set_zoom_level(m_web_view, double(level));
 }
 
 float wxWebViewWebKit::GetWebkitZoom() const
@@ -904,19 +904,19 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     float zoom = GetWebkitZoom();
 
     // arbitrary way to map float zoom to our common zoom enum
-    if (zoom <= 0.65)
+    if (zoom <= 0.65f)
     {
         return wxWEBVIEW_ZOOM_TINY;
     }
-    if (zoom <= 0.90)
+    if (zoom <= 0.90f)
     {
         return wxWEBVIEW_ZOOM_SMALL;
     }
-    if (zoom <= 1.15)
+    if (zoom <= 1.15f)
     {
         return wxWEBVIEW_ZOOM_MEDIUM;
     }
-    if (zoom <= 1.45)
+    if (zoom <= 1.45f)
     {
         return wxWEBVIEW_ZOOM_LARGE;
     }

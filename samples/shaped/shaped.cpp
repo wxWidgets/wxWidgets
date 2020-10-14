@@ -499,15 +499,15 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
     int xcount = 8;
     int ycount = 8;
 
-    float xstep = 1. / xcount;
-    float ystep = 1. / ycount;
+    double xstep = 1.0 / xcount;
+    double ystep = 1.0 / ycount;
 
     int width = GetClientSize().GetWidth();
     int height = GetClientSize().GetHeight();
 
-    for ( float x = 0.; x < 1.; x += xstep )
+    for ( double x = 0; x < 1; x += xstep )
     {
-        for ( float y = 0.; y < 1.; y += ystep )
+        for ( double y = 0; y < 1; y += ystep )
         {
             wxImage::RGBValue v = wxImage::HSVtoRGB(wxImage::HSVValue(x, 1., 1.));
             dc.SetBrush(wxBrush(wxColour(v.red, v.green, v.blue,

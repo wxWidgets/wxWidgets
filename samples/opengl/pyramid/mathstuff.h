@@ -21,6 +21,7 @@ class myVec3
 public:
     myVec3() { x = y = z = 0.0 ;}
     myVec3(double xd, double yd, double zd) : x(xd), y(yd), z(zd) {}
+    myVec3(float xd, float yd, float zd) : x(double(xd)), y(double(yd)), z(double(zd)) {}
     ~myVec3() {}
 
     double x, y, z;

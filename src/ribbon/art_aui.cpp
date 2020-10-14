@@ -231,8 +231,8 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     wxRibbonHSLColour tertiary_hsl(tertiary);
 
     // Map primary & secondary luminance from [0, 1] to [0.15, 0.85]
-    primary_hsl.luminance = float(cos(primary_hsl.luminance * M_PI) * -0.35 + 0.5);
-    secondary_hsl.luminance = float(cos(secondary_hsl.luminance * M_PI) * -0.35 + 0.5);
+    primary_hsl.luminance   = std::cos(primary_hsl.luminance   * float(M_PI)) * -0.35f + 0.5f;
+    secondary_hsl.luminance = std::cos(secondary_hsl.luminance * float(M_PI)) * -0.35f + 0.5f;
 
     // TODO: Remove next line once this provider stops piggybacking MSW
     wxRibbonMSWArtProvider::SetColourScheme(primary, secondary, tertiary);

@@ -443,7 +443,8 @@ void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
 #if wxUSE_OPENGL_EMULATION
     ::glFrustumf(left, right, bottom, top, zNear, zFar);
 #else
-    ::glFrustum(left, right, bottom, top, zNear, zFar);
+    ::glFrustum(double(left), double(right),
+        double(bottom), double(top), double(zNear), double(zFar));
 #endif
 }
 

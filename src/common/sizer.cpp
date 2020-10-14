@@ -235,7 +235,7 @@ wxSizerItem::wxSizerItem(wxSizer *sizer,
              m_border(border),
              m_flag(flag),
              m_id(wxID_NONE),
-             m_ratio(0.0),
+             m_ratio(0),
              m_userData(userData)
 {
     ASSERT_VALID_SIZER_FLAGS( m_flag );
@@ -423,10 +423,10 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
         // the owned window (happens automatically).
         if( (m_flag & wxSHAPED) && (m_flag & wxEXPAND) && direction )
         {
-            if( !wxIsNullDouble(m_ratio) )
+            if ( m_ratio != 0 )
             {
                 wxCHECK_MSG( m_proportion==0, false, wxT("Shaped item, non-zero proportion in wxSizerItem::InformFirstDirection()") );
-                if( direction==wxHORIZONTAL && !wxIsNullDouble(m_ratio) )
+                if ( direction == wxHORIZONTAL )
                 {
                     // Clip size so that we don't take too much
                     if( availableOtherDir>=0 && int(size/m_ratio)-m_minSize.y>availableOtherDir )
@@ -456,7 +456,7 @@ wxSize wxSizerItem::CalcMin()
 
         // if we have to preserve aspect ratio _AND_ this is
         // the first-time calculation, consider ret to be initial size
-        if ( (m_flag & wxSHAPED) && wxIsNullDouble(m_ratio) )
+        if ( (m_flag & wxSHAPED) && m_ratio == 0 )
             SetRatio(m_minSize);
     }
     else if ( IsWindow() )
@@ -2542,7 +2542,7 @@ wxSize wxBoxSizer::CalcMin()
     // part, to respect the children proportion. To satisfy the latter
     // condition we must find the greatest min-size-to-proportion ratio for all
     // elements with non-zero proportion.
-    float maxMinSizeToProp = 0.;
+    float maxMinSizeToProp = 0;
     for ( wxSizerItemList::const_iterator i = m_children.begin();
           i != m_children.end();
           ++i )
