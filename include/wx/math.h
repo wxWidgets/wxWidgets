@@ -117,7 +117,7 @@
         wxASSERT_MSG(x > (double)INT_MIN - 0.5 && x < (double)INT_MAX + 0.5,
             wxT("argument out of supported range"));
 
-#if defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(14)
+#if defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(12)
         return int(lround(x));
 #else
         return (int)(x < 0 ? x - 0.5 : x + 0.5);
