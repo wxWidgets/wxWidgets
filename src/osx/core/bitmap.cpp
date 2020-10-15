@@ -1187,8 +1187,8 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 
             GetBitmapData()->EndRawAccess() ;
         }
-        if ( img.HasMask() )
-            SetMask(new wxMask(*this, wxColour(img.GetMaskRed(), img.GetMaskGreen(), img.GetMaskBlue())));
+        if ( image.HasMask() )
+            SetMask(new wxMask(*this, wxColour(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue())));
     }
 }
 
