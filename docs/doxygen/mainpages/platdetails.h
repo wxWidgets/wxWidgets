@@ -96,7 +96,7 @@ and candy of newer interfaces like GTK.
 wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later
 are supported). wxMSW provides native look and feel for each Windows version.
 This port can be compiled with several compilers including Microsoft Studio
-VC++ 2003 or later, MinGW32, Cygwin as well as cross-compilation with a 
+VC++ 2003 or later, MinGW32, Cygwin as well as cross-compilation with a
 Linux-hosted MinGW32 tool chain.
 
 @subpage plat_msw_install "Build and Install Instructions"

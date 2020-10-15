@@ -40,7 +40,7 @@ The file @c "wx/wxprec.h" includes @c "wx/wx.h". Although this incantation may
 seem quirky, it is in fact the end result of a lot of experimentation, and
 several Windows compilers to use precompilation which is largely automatic for
 compilers with necessary support. Currently it is used for Visual C++
-(including embedded Visual C++) and newer versions of GCC. Some compilers 
+(including embedded Visual C++) and newer versions of GCC. Some compilers
 might need extra work from the application developer to set the build
 environment up as necessary for the support.
 
@@ -106,7 +106,7 @@ and this must not be changed.
 On Microsoft Windows, wxWidgets has a different set of makefiles for each
 compiler, because each compiler's @c 'make' tool is slightly different. Popular
 Windows compilers that we cater for, and the corresponding makefile extensions,
-include: Microsoft Visual C++ (.vc) and MinGW/Cygwin (.gcc). Makefiles are 
+include: Microsoft Visual C++ (.vc) and MinGW/Cygwin (.gcc). Makefiles are
 provided for the wxWidgets library itself, samples, demos, and utilities.
 
 On Linux and macOS, you use the @c 'configure' command to generate the

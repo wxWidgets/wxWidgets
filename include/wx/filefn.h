@@ -186,7 +186,7 @@ enum wxPosixPermissions
         typedef off_t wxFileOffset;
     #endif
 
-    
+
     #define wxPOSIX_STRUCT(s) struct wxPOSIX_IDENT(s)
 
     #ifdef wxHAS_HUGE_FILES
