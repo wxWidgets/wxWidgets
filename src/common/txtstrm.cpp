@@ -140,7 +140,7 @@ wxChar wxTextInputStream::GetChar()
                 // recognized that it's not valid UTF-8 and switched to fallback.
                 // We don't know how long is the first character or if it's decoded
                 // as 1 or 2 wchar_t characters, so we need to start with 1 byte again.
-                inlen = -1;
+                inlen = static_cast<size_t>(-1);
                 break;
 
 #if SIZEOF_WCHAR_T == 2
