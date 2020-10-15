@@ -1807,6 +1807,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\srchctrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\statbmp.cpp"
 				>
 			</File>
@@ -2819,6 +2823,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\spinctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\srchctrl.h"
 				>
 			</File>
 			<File

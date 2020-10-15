@@ -16,7 +16,28 @@
 
 #include "wx/textctrl.h"
 
-#if (!defined(__WXMAC__) && !defined(__WXGTK20__)) || defined(__WXUNIVERSAL__)
+#ifndef __WXUNIVERSAL__
+    #if defined(__WXMAC__) || \
+        (defined(__WXMSW__) && wxUSE_GRAPHICS_CONTEXT)
+        // search control was introduced in Mac OS X 10.3 Panther
+        #define wxUSE_NATIVE_SEARCH_CONTROL 1
+
+        #define wxSearchCtrlBaseBaseClass wxTextCtrl
+    #elif defined(__WXGTK20__)
+        // Use GtkSearchEntry if available, construct a similar one using GtkEntry
+        // otherwise.
+        #define wxUSE_NATIVE_SEARCH_CONTROL 1
+
+        class WXDLLIMPEXP_CORE wxGTKSearchCtrlBase
+            : public wxControl, public wxTextEntry
+        {
+        };
+
+        #define wxSearchCtrlBaseBaseClass wxGTKSearchCtrlBase
+    #endif // __WXGTK20__
+#endif // __WXUNIVERSAL__
+
+#ifndef wxUSE_NATIVE_SEARCH_CONTROL
     // no native version, use the generic one
     #define wxUSE_NATIVE_SEARCH_CONTROL 0
 
@@ -28,23 +49,7 @@
           public wxTextCtrlIface
     {
     };
-#elif defined(__WXMAC__)
-    // search control was introduced in Mac OS X 10.3 Panther
-    #define wxUSE_NATIVE_SEARCH_CONTROL 1
-
-    #define wxSearchCtrlBaseBaseClass wxTextCtrl
-#elif defined(__WXGTK20__)
-    // Use GtkSearchEntry if available, construct a similar one using GtkEntry
-    // otherwise.
-    #define wxUSE_NATIVE_SEARCH_CONTROL 1
-
-    class WXDLLIMPEXP_CORE wxGTKSearchCtrlBase
-        : public wxControl, public wxTextEntry
-    {
-    };
-
-    #define wxSearchCtrlBaseBaseClass wxGTKSearchCtrlBase
-#endif
+#endif // !wxUSE_NATIVE_SEARCH_CONTROL
 
 // ----------------------------------------------------------------------------
 // constants
@@ -96,6 +101,8 @@ private:
 #if wxUSE_NATIVE_SEARCH_CONTROL
     #if defined(__WXMAC__)
         #include "wx/osx/srchctrl.h"
+    #elif defined(__WXMSW__)
+        #include "wx/msw/srchctrl.h"
     #elif defined(__WXGTK__)
         #include "wx/gtk/srchctrl.h"
     #endif
