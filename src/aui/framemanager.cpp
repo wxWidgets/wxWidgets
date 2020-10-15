@@ -3961,7 +3961,23 @@ void wxAuiManager::Repaint(wxDC* dc)
 void wxAuiManager::OnDestroy(wxWindowDestroyEvent& event)
 {
     if ( event.GetEventObject() == m_frame )
+    {
+        wxWindow* const frame = m_frame;
+
         UnInit();
+
+        // Just calling Skip() would be insufficient in this case, as by
+        // removing the event handler from the event handlers chain in UnInit()
+        // we'd still prevent the frame from getting this event, so we need to
+        // forward it to it manually. Note that this must be done after calling
+        // UnInit() to prevent infinite recursion.
+        if ( frame )
+            frame->ProcessWindowEventLocally(event);
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 void wxAuiManager::OnPaint(wxPaintEvent& WXUNUSED(event))
