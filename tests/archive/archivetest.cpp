@@ -8,10 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #   include "wx/wx.h"
 #endif
@@ -35,9 +31,6 @@ using std::string;
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined _MSC_VER && _MSC_VER >= 1310 && !defined __WIN64__
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined __BORLANDC__ && __BORLANDC__ >= 0x530
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined __HP_aCC && __HP_aCC > 33300
@@ -386,7 +379,7 @@ void TempDir::RemoveDir(wxString& path)
 #if defined __UNIX__ || defined __MINGW32__
 #   define WXARC_popen popen
 #   define WXARC_pclose pclose
-#elif defined _MSC_VER || defined __BORLANDC__
+#elif defined _MSC_VER
 #   define WXARC_popen _popen
 #   define WXARC_pclose _pclose
 #else

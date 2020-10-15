@@ -346,15 +346,8 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) WX_ATTRIBUT
 
 #define WXDEBUG_DUMPDELAYCOUNTER
 
-// Borland C++ Builder 6 seems to have troubles with inline functions (see bug
-// 819700)
-#if 0
-    inline void wxTrace(const wxChar *WXUNUSED(fmt)) {}
-    inline void wxTraceLevel(int WXUNUSED(level), const wxChar *WXUNUSED(fmt)) {}
-#else
-    #define wxTrace(fmt)
-    #define wxTraceLevel(l, fmt)
-#endif
+#define wxTrace(fmt)
+#define wxTraceLevel(l, fmt)
 
 #define WXTRACE true ? (void)0 : wxTrace
 #define WXTRACELEVEL true ? (void)0 : wxTraceLevel

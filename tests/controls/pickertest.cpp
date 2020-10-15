@@ -13,9 +13,6 @@
     wxUSE_FILEPICKERCTRL   || \
     wxUSE_FONTPICKERCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

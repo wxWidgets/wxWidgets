@@ -1408,14 +1408,7 @@ public:
 // functions if their parameters are complicated enough, but by defining them
 // as an empty inline function we ensure that even dumbest compilers optimise
 // them away
-#ifdef __BORLANDC__
-    // but Borland gives "W8019: Code has no effect" for wxLogNop() so we need
-    // to define it differently for it to avoid these warnings (same problem as
-    // with wxUnusedVar())
-    #define wxLogNop() { }
-#else
-    inline void wxLogNop() { }
-#endif
+inline void wxLogNop() { }
 
 #if wxUSE_LOG_DEBUG
     #define wxLogDebug wxDO_LOG_IF_ENABLED(Debug)

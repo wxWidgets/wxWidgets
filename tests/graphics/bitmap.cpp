@@ -14,9 +14,6 @@
 
 #ifdef wxHAS_RAW_BITMAP
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/bitmap.h"
 #include "wx/rawbmp.h"

@@ -15,10 +15,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif  //__BORLANDC__
-
 #ifndef wxUSE_CONFIG_NATIVE
     #define wxUSE_CONFIG_NATIVE 1
 #endif

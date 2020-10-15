@@ -31,9 +31,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_REGEX
 

@@ -11,9 +11,6 @@
 
 #if wxUSE_LISTCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

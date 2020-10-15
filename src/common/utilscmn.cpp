@@ -21,9 +21,6 @@
 
 #include "wx/debug.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // This is a needed to get the declaration of the global "environ" variable
 // from MinGW headers which don't declare it there when in strict ANSI mode. We

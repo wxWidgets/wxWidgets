@@ -59,14 +59,6 @@ b) Cygwin
 
 ** the instructions may be out of date as for wxWidgets 2.5.2+ **
 
-c) Other compilers
-   Borland:
-   in the wxwindows\src\msw directory run
-   'make -f makefile.b32 WXUSINGUNIV=1' to build the library and then run
-   'make -f makefile.b32 WXUSINGUNIV=1' in the sample directory  which you wish
-   to build using the wxUniversal widgets. Use 'SET WXTHEME=GTK' [or  WIN32 or METAL]
-   to test the existing themes
-
 Unfortunately we don't have makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the
 compiler you use.

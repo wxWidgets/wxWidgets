@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STDPATHS
 
@@ -275,8 +272,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "vc";
 #elif defined(__GNUG__)
     compilerPrefix = "gcc";
-#elif defined(__BORLANDC__)
-    compilerPrefix = "bcc";
 #else
     return;
 #endif

@@ -157,11 +157,6 @@
     #endif /* VC++ 8 */
 #endif /*  __VISUALC__ */
 
-/*  suppress some Borland C++ warnings */
-#ifdef __BORLANDC__
-#   pragma warn -inl                /*  Functions containing reserved words and certain constructs are not expanded inline */
-#endif /*  __BORLANDC__ */
-
 /*
    g++ gives a warning when a class has private dtor if it has no friends but
    this is a perfectly valid situation for a ref-counted class which destroys
@@ -497,7 +492,6 @@ typedef short int WXTYPE;
     #if defined(__GNUWIN32__)
         #define wxSTDCALL __attribute__((stdcall))
     #else
-        /*  both VC++ and Borland understand this */
         #define wxSTDCALL _stdcall
     #endif
 
@@ -880,12 +874,8 @@ typedef short int WXTYPE;
 /*  sometimes the value of a variable is *really* not used, to suppress  the */
 /*  resulting warning you may pass it to this function */
 #ifdef __cplusplus
-#   ifdef __BORLANDC__
-#       define wxUnusedVar(identifier) identifier
-#   else
-        template <class T>
-            inline void wxUnusedVar(const T& WXUNUSED(t)) { }
-#   endif
+    template <class T>
+        inline void wxUnusedVar(const T& WXUNUSED(t)) { }
 #endif
 
 /*  ---------------------------------------------------------------------------- */
