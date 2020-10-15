@@ -8,6 +8,10 @@ wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
 ((wxPROC_COUNT++))
 wxBUILD_ARGS="-j$wxPROC_COUNT"
 
+# Setting this variable suppresses "Error retrieving accessibility bus address"
+# messages from WebKit tests that we're not interested in.
+export NO_AT_BRIDGE=1
+
 case $wxTOOLSET in
     cmake)
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
