@@ -17,6 +17,7 @@
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
     #include "wx/radiobut.h"
+    #include "wx/statbox.h"
 #endif
 
 #ifdef __WXMAC__
@@ -3597,8 +3598,11 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
     else if ( [m_osxView isKindOfClass:[NSBox class] ] )
         targetView = [(NSBox*) m_osxView titleCell];
 
-    if ([targetView respondsToSelector:@selector(setFont:)])
-        [targetView setFont: font.OSXGetNSFont()];
+    if ( !wxDynamicCast( GetWXPeer(), wxStaticBox) ) // protect native font of box
+    {
+        if ([targetView respondsToSelector:@selector(setFont:)])
+            [targetView setFont: font.OSXGetNSFont()];
+    }
     if ([targetView respondsToSelector:@selector(setTextColor:)])
         [targetView setTextColor: col.OSXGetNSColor()];
     if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
