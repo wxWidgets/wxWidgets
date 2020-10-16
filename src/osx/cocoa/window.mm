@@ -3598,7 +3598,7 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
     else if ( [m_osxView isKindOfClass:[NSBox class] ] )
         targetView = [(NSBox*) m_osxView titleCell];
 
-    if ( !wxDynamicCast( GetWXPeer(), wxStaticBox) ) // protect native font of box
+    if ( !wxDynamicCast(GetWXPeer(), wxStaticBox) ) // protect native font of box
     {
         if ([targetView respondsToSelector:@selector(setFont:)])
             [targetView setFont: font.OSXGetNSFont()];
