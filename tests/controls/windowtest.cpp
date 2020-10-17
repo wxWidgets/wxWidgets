@@ -135,7 +135,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 #if wxUSE_CARET
     CHECK(!m_window->GetCaret());
 
-    wxCaret* caret;
+    wxCaret* caret = NULL;
 
     // Try creating the caret in two different, but normally equivalent, ways.
     SECTION("Caret 1-step")
