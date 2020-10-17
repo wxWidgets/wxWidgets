@@ -1052,7 +1052,10 @@ inline wchar_t* wxGetenv(const wxScopedWCharBuffer& name) { return wxCRT_GetenvW
 // ----------------------------------------------------------------------------
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+// suppressing warnings (errors) isn't possible with GCC <4.6, so don't cause warnings
+#if wxCHECK_GCC_VERSION(4, 6)
 WX_ATTRIBUTE_FORMAT(__strftime__, 3, 4)
+#endif
 inline size_t wxStrftime(char *s, size_t max,
                          const wxString& format, const struct tm *tm)
     {
