@@ -154,7 +154,7 @@ TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
     REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
 
     wxDataViewItemArray sel2;
-    CHECK( m_dvc->GetSelections(sel2) == sel.size() );
+    CHECK( m_dvc->GetSelections(sel2) == static_cast<int>(sel.size()) );
 
     CHECK( sel2 == sel );
 
