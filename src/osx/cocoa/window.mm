@@ -2443,7 +2443,10 @@ void wxWidgetCocoaImpl::controlTextDidChange()
         wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl );
         wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox );
         if ( tc )
+        {
+            tc->MarkDirty();
             tc->SendTextUpdatedEventIfAllowed();
+        }
         else if ( cb )
             cb->SendTextUpdatedEventIfAllowed();
         else 
