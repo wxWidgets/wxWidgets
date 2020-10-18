@@ -297,6 +297,12 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
         CHECK( rect1.y < rect2.y );
     }
 
+    // This forces generic implementation to add m_grandchild to the tree, as
+    // it does it only on demand. We want the item to really be there to check
+    // that GetItemRect() returns an empty rectangle for collapsed items.
+    m_dvc->Expand(m_child1);
+    m_dvc->Collapse(m_child1);
+
     const wxRect rectNotShown = m_dvc->GetItemRect(m_grandchild);
     CHECK( rectNotShown == wxRect() );
 
