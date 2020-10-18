@@ -447,7 +447,7 @@ if(wxUSE_GUI)
         endif()
     endif()
 
-    if(wxUSE_MEDIACTRL AND UNIX AND NOT APPLE AND NOT WIN32)
+    if(wxUSE_MEDIACTRL AND WXGTK AND NOT APPLE AND NOT WIN32)
         find_package(GSTREAMER 1.0 COMPONENTS video)
         if(NOT GSTREAMER_FOUND)
             find_package(GSTREAMER 0.10 COMPONENTS interfaces)
