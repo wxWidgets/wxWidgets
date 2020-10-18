@@ -34,6 +34,10 @@ jobs:
           compiler: gcc
           env: wxGTK_VERSION=3 wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
           name: wxGTK 3 CMake Ubuntu 18.04
+        - dist: focal
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--disable-compat30 --disable-optimise --disable-unicode"
+          name: wxGTK ANSI Ubuntu 20.04
         - os: osx
           osx_image: xcode7.3
           compiler: clang
