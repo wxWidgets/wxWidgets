@@ -2993,6 +2993,10 @@ void wxDataViewHeaderWindow::FinishEditing()
 //-----------------------------------------------------------------------------
 // Helper class for do operation on the tree node
 //-----------------------------------------------------------------------------
+
+namespace
+{
+
 class DoJob
 {
 public:
@@ -3039,6 +3043,8 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
     return false;
 }
+
+} // anonymous namespace
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
