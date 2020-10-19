@@ -26,8 +26,7 @@ using std::string;
 
 // Check whether member templates can be used
 //
-#if defined __GNUC__ && \
-    (__GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
+#if defined __GNUC__
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined _MSC_VER && _MSC_VER >= 1310 && !defined __WIN64__
