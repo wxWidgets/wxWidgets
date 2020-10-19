@@ -68,6 +68,10 @@ case $wxTOOLSET in
         echo 'Configuring...'
 
         wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+        if [ -n "$wxGTK_VERSION" ]; then
+            wxCONFIGURE_OPTIONS="--with-gtk=$wxGTK_VERSION $wxCONFIGURE_OPTIONS"
+        fi
+
         if [ "$wxUSE_ASAN" = 1 ]; then
             export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
 
