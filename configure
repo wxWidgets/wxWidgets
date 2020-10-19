@@ -19954,63 +19954,7 @@ $as_echo "$wx_cv_type_va_list_lvalue" >&6; }
     fi
 fi
 
-if test "$wxUSE_VARARG_MACROS" = "yes"; then
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the compiler supports variadic macros" >&5
-$as_echo_n "checking whether the compiler supports variadic macros... " >&6; }
-if ${wx_cv_have_variadic_macros+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-                        ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-                    #include <stdio.h>
-                    #define test(fmt, ...) printf(fmt, __VA_ARGS__)
-
-int
-main ()
-{
-
-                    test("%s %d %p", "test", 1, 0);
-
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_have_variadic_macros=yes
-else
-  wx_cv_have_variadic_macros=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-        ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_have_variadic_macros" >&5
-$as_echo "$wx_cv_have_variadic_macros" >&6; }
-
-if test $wx_cv_have_variadic_macros = "yes"; then
-    $as_echo "#define HAVE_VARIADIC_MACROS 1" >>confdefs.h
-
-fi
-
-else
+if test "$wxUSE_VARARG_MACROS" != "yes"; then
     $as_echo "#define wxNO_VARIADIC_MACROS 1" >>confdefs.h
 
 fi

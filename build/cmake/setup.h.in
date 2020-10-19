@@ -744,11 +744,6 @@
 #cmakedefine VA_LIST_IS_ARRAY 1
 
 /*
- * Define if the compiler supports variadic macros
- */
-#cmakedefine HAVE_VARIADIC_MACROS 1
-
-/*
  * Define if you don't want variadic macros to be used even if they are
  * supported by the compiler.
  */

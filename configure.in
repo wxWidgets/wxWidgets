@@ -1722,41 +1722,11 @@ else
     fi
 fi
 
-dnl don't check for vararg macros if they're explicitly disabled: this is
+dnl TODO-C++11: remove this, as it won't make sense when C++11 is required
+dnl don't use vararg macros if they're explicitly disabled: this is
 dnl useful if the user code using the library wants to limit itself to standard
 dnl C++ only (e.g. is compiled with g++ -std=c++98)
-if test "$wxUSE_VARARG_MACROS" = "yes"; then
-
-dnl Check if variadic macros (C99 feature) are supported:
-AC_CACHE_CHECK(
-    [whether the compiler supports variadic macros],
-    [wx_cv_have_variadic_macros],
-    [
-        dnl C compiler might support variadic macros when C++ one doesn't
-        dnl (happens with gcc/g++ 2.95.4), so must use C++ one explicitly
-        AC_LANG_PUSH(C++)
-        AC_COMPILE_IFELSE([
-            AC_LANG_PROGRAM(
-                [
-                    #include <stdio.h>
-                    #define test(fmt, ...) printf(fmt, __VA_ARGS__)
-                ],
-                [
-                    test("%s %d %p", "test", 1, 0);
-                ]
-            )],
-            [wx_cv_have_variadic_macros=yes],
-            [wx_cv_have_variadic_macros=no]
-            )
-        AC_LANG_POP()
-    ]
-)
-
-if test $wx_cv_have_variadic_macros = "yes"; then
-    AC_DEFINE(HAVE_VARIADIC_MACROS)
-fi
-
-else
+if test "$wxUSE_VARARG_MACROS" != "yes"; then
     AC_DEFINE(wxNO_VARIADIC_MACROS)
 fi dnl wxUSE_VARARG_MACROS == yes
 

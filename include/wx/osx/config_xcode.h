@@ -22,7 +22,6 @@
 #define wx_USE_NANOX 0
 
 #define HAVE_VA_COPY 1
-#define HAVE_VARIADIC_MACROS 1
 #define HAVE_STD_WSTRING 1
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
   #if !defined(__has_include)

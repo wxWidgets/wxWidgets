@@ -801,11 +801,6 @@ typedef pid_t GPid;
  */
 #undef VA_LIST_IS_ARRAY
 
-/*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
-
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
  * Define if your compiler has std::wstring
