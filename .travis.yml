@@ -36,7 +36,7 @@ jobs:
           name: wxGTK 3 CMake Ubuntu 18.04
         - dist: focal
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--disable-compat30 --disable-optimise --disable-unicode" wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--disable-compat30 --disable-unicode" wxSKIP_SAMPLES=1
           name: wxGTK ANSI Ubuntu 20.04
         - dist: focal
           compiler: gcc
