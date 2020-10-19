@@ -246,8 +246,8 @@ void TestGLCanvas::OnMouse(wxMouseEvent& event)
         trackball(spin_quat,
             (2 * m_gldata.beginx - sz.x) / sz.x,
             (sz.y - 2 * m_gldata.beginy) / sz.y,
-            (2 * event.GetX() - sz.x)    / sz.x,
-            (sz.y - 2 * event.GetY())    / sz.y);
+            float(2 * event.GetX() - sz.x) / sz.x,
+            float(sz.y - 2 * event.GetY()) / sz.y);
 
         add_quats(spin_quat, m_gldata.quat, m_gldata.quat);
 
