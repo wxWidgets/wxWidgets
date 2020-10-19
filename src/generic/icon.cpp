@@ -25,13 +25,6 @@ wxIcon::wxIcon(const char* const* bits) :
 {
 }
 
-#ifdef wxNEEDS_CHARPP
-wxIcon::wxIcon(char **bits) :
-    wxBitmap( bits )
-{
-}
-#endif
-
 wxIcon::wxIcon() :  wxBitmap()
 {
 }
