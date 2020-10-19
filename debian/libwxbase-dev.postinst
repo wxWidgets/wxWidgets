@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+update-alternatives --install /usr/bin/wx-config wx-config           \
+			      /usr/lib/=MA/wx/config/base-unicode-=V \
+			      $(( =PRIO * 10 + 6 ))
+
+#DEBHELPER#
