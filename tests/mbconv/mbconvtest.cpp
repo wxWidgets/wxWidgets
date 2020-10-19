@@ -1147,7 +1147,7 @@ void MBConvTestCase::TestDecoder(
     // make sure the correct output length was calculated
     WX_ASSERT_EQUAL_MESSAGE
     (
-        ("while converting \"%s\"", multiBuffer),
+        ("while converting \"%s\"", inputCopy),
         wideChars,
         outputWritten
     );
