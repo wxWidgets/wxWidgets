@@ -32,6 +32,7 @@
 #include "wx/vector.h"
 #include "wx/listimpl.cpp"
 #include "wx/private/window.h"
+#include "wx/scopedptr.h"
 
 
 //---------------------------------------------------------------------------
@@ -673,7 +674,35 @@ wxSizer::~wxSizer()
 
 wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
 {
-    m_children.Insert( index, item );
+    // The helper class that solves two problems when
+    // wxWindowBase::SetContainingSizer() throws:
+    // 1. Avoid leaking memory using the scoped pointer to the sizer item.
+    // 2. Disassociate the window from the sizer item to not reset the
+    //    containing sizer for the window in the items destructor.
+    class ContainingSizerGuard
+    {
+    public:
+        explicit ContainingSizerGuard( wxSizerItem *item )
+            : m_item(item)
+        {
+        }
+
+        ~ContainingSizerGuard()
+        {
+            if ( m_item )
+                m_item->DetachWindow();
+        }
+
+        wxSizerItem* Release()
+        {
+            return m_item.release();
+        }
+
+    private:
+        wxScopedPtr<wxSizerItem> m_item;
+    };
+
+    ContainingSizerGuard guard( item );
 
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
@@ -681,7 +710,9 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
     if ( item->GetSizer() )
         item->GetSizer()->SetContainingWindow( m_containingWindow );
 
-    return item;
+    m_children.Insert( index, item );
+
+    return guard.Release();
 }
 
 void wxSizer::SetContainingWindow(wxWindow *win)
@@ -1449,6 +1480,9 @@ wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
 
 wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
 {
+    // Ensure that the item will be deleted in case of exception.
+    wxScopedPtr<wxSizerItem> scopedItem( item );
+
     // if only the number of columns or the number of rows is specified for a
     // sizer, arbitrarily many items can be added to it but if both of them are
     // fixed, then the sizer can't have more than that many items -- check for
@@ -1489,7 +1523,7 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         );
     }
 
-    return wxSizer::DoInsert(index, item);
+    return wxSizer::DoInsert( index, scopedItem.release() );
 }
 
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const

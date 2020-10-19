@@ -321,6 +321,10 @@ public:
     // Enable deleting the SizerItem without destroying the contained sizer.
     void DetachSizer() { m_sizer = NULL; }
 
+    // Enable deleting the SizerItem without resetting the sizer in the
+    // contained window.
+    void DetachWindow() { m_window = NULL; m_kind = Item_None; }
+
     virtual wxSize GetSize() const;
     virtual wxSize CalcMin();
     virtual void SetDimension( const wxPoint& pos, const wxSize& size );

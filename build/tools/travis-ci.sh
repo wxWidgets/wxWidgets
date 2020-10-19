@@ -8,6 +8,10 @@ wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
 ((wxPROC_COUNT++))
 wxBUILD_ARGS="-j$wxPROC_COUNT"
 
+# Setting this variable suppresses "Error retrieving accessibility bus address"
+# messages from WebKit tests that we're not interested in.
+export NO_AT_BRIDGE=1
+
 case $wxTOOLSET in
     cmake)
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
@@ -16,6 +20,11 @@ case $wxTOOLSET in
             wxBUILD_ARGS="-jobs $wxPROC_COUNT -quiet"
         fi
         cmake --version
+
+        if [ "$wxUSE_ASAN" = 1 ]; then
+            echo "ASAN currently isn't supported in CMake builds"
+            exit 1
+        fi
 
         echo 'travis_fold:start:configure'
         echo 'Configuring...'
@@ -57,7 +66,24 @@ case $wxTOOLSET in
     *)
         echo 'travis_fold:start:configure'
         echo 'Configuring...'
-        ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
+
+        wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+        if [ -n "$wxGTK_VERSION" ]; then
+            wxCONFIGURE_OPTIONS="--with-gtk=$wxGTK_VERSION $wxCONFIGURE_OPTIONS"
+        fi
+
+        if [ "$wxUSE_ASAN" = 1 ]; then
+            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
+
+            wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+            wxASAN_CXXFLAGS=$wxASAN_CFLAGS
+            wxASAN_LDFLAGS="-fsanitize=address"
+
+            ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+        else
+            ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+        fi
+
         if [ -n "$rc" ]; then
             echo '*** Configuring failed, contents of config.log follows: ***'
             echo '-----------------------------------------------------------'
