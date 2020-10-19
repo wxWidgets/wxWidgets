@@ -22,8 +22,11 @@ case $(uname -s) in
                         3)  libtoolkit_dev=libgtk-3-dev
                             extra_deps='libwebkit2gtk-4.0-dev libwebkitgtk-3.0-dev'
                             ;;
-                        *)  libtoolkit_dev=libgtk2.0-dev
+                        2)  libtoolkit_dev=libgtk2.0-dev
                             extra_deps='libwebkitgtk-dev'
+                            ;;
+                        *)  echo 'Please specify wxGTK_VERSION explicitly.' >&2
+                            exit 1
                             ;;
                     esac
 
