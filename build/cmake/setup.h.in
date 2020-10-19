@@ -1201,9 +1201,6 @@
 /* Define if you have the <langinfo.h> header file.  */
 #cmakedefine HAVE_LANGINFO_H 1
 
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#cmakedefine HAVE_W32API_H 1
-
 /* Define if you have the <sys/soundcard.h> header file. */
 #cmakedefine HAVE_SYS_SOUNDCARD_H 1
 

@@ -1327,9 +1327,6 @@ typedef pid_t GPid;
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
 
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
-
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */
 
