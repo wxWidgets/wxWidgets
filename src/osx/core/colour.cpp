@@ -235,13 +235,6 @@ void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType
     m_refData = new wxCGColorRefData(components);
 }
 
-wxColour& wxColour::operator=(const wxColour& col)
-{
-    wxObject::operator=(col);
-
-    return *this;
-}
-
 bool wxColour::operator==(const wxColour& other) const
 {
     if (m_refData == other.m_refData)

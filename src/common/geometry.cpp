@@ -322,15 +322,6 @@ void wxRect2DInt::ConstrainTo( const wxRect2DInt &rect )
         SetTop( rect.GetTop() );
 }
 
-wxRect2DInt& wxRect2DInt::operator=( const wxRect2DInt &r )
-{
-    m_x = r.m_x;
-    m_y = r.m_y;
-    m_width = r.m_width;
-    m_height = r.m_height;
-    return *this;
-}
-
 #if wxUSE_STREAMS
 void wxRect2DInt::WriteTo( wxDataOutputStream &stream ) const
 {
