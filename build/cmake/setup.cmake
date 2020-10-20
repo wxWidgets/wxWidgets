@@ -132,13 +132,6 @@ if(NOT MSVC)
     endif()
 endif()
 
-wx_check_c_source_compiles(
-    "#define test(fmt, ...) printf(fmt, __VA_ARGS__)
-    test(\"%s %d %p\", \"test\", 1, 0);"
-    HAVE_VARIADIC_MACROS
-    stdio.h
-    )
-#TODO: wxNO_VARIADIC_MACROS
 if(wxUSE_STL AND CMAKE_CXX_STANDARD EQUAL 98)
     wx_check_cxx_source_compiles("
         std::vector<int> moo;
