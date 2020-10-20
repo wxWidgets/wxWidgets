@@ -73,9 +73,7 @@ case $wxTOOLSET in
         fi
 
         if [ "$wxUSE_ASAN" = 1 ]; then
-            # Increase verbosity in case something goes wrong and suppress the
-            # known leaks outside of wx itself that we can do nothing about.
-            export LSAN_OPTIONS=verbosity=1:log_threads=1:suppressions=$(pwd)/misc/suppressions/lsan
+            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
 
             wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
             wxASAN_CXXFLAGS=$wxASAN_CFLAGS
