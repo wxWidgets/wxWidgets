@@ -54,7 +54,8 @@
 // private functions
 // ----------------------------------------------------------------------------
 
-namespace {
+namespace
+{
 
 // calculate the number of palette entries needed for the bitmap with this
 // number of bits per pixel
@@ -83,6 +84,7 @@ inline bool MonochromeLineReadBit(const unsigned char* srcLineStart, int index)
     unsigned char mask = 1 << bit;
     return (*byte & mask) != 0;
 }
+
 inline void MonochromeLineWriteBit(unsigned char* dstLineStart, int index, bool value)
 {
     unsigned char* byte = dstLineStart + (index >> 3);
