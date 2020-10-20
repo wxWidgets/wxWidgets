@@ -241,7 +241,6 @@
     <template id="wx-lib">
         <!--                    MISCELLANEOUS                       -->
         <if cond="FORMAT=='mingw'">
-            <define>HAVE_W32API_H</define>
             <ldflags>-mthreads</ldflags>
         </if>
 

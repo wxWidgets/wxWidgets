@@ -801,11 +801,6 @@ typedef pid_t GPid;
  */
 #undef VA_LIST_IS_ARRAY
 
-/*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
-
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
  * Define if your compiler has std::wstring
@@ -1326,9 +1321,6 @@ typedef pid_t GPid;
 
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
-
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
 
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */

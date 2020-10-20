@@ -332,10 +332,6 @@
 #   include "wx/msw/libraries.h"
 #endif
 
-#if (defined(__GNUC__) && __GNUC__ < 3)
-#define wxNEEDS_CHARPP
-#endif
-
 /*
     Note that wx/msw/gccpriv.h must be included after defining UNICODE and
     _UNICODE macros as it includes _mingw.h which relies on them being set.

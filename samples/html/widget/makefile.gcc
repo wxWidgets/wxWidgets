@@ -22,21 +22,18 @@ LIBDIRNAME = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WIDGET_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
-	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) -W \
-	-Wall -I. $(__DLLFLAG_p) -I.\..\..\..\samples -DNOPCH $(__RTTIFLAG_5) \
-	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES_p) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\..\samples -DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 WIDGET_OBJECTS =  \
 	$(OBJS)\widget_sample_rc.o \
 	$(OBJS)\widget_widget.o
 
 ### Conditionally set variables: ###
 
-ifeq ($(GCC_VERSION),2.95)
-GCCFLAGS = -fvtable-thunks
-endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
 endif
