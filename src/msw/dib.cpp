@@ -764,7 +764,6 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
             {
                 for ( int x = 0; x < w; x++ )
                 {
-                    wxASSERT(src[0] == 0 || src[0] == 1);
                     MonochromeLineWriteBit(dstLineStart, x, src[0] != 0);
                     ++src;
                 }
