@@ -183,6 +183,8 @@ bool wxApp::DoIdle()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler);
 
+bool wxApp::m_gtkInitialized = false;
+
 wxApp::wxApp()
 {
     m_isInAssert = false;
@@ -375,6 +377,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #else
     init_result = gtk_init_check( &argcGTK, &argvGTK ) != 0;
 #endif
+    m_gtkInitialized = true;
 
     if ( argcGTK != argc_ )
     {
@@ -449,6 +452,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
 void wxApp::CleanUp()
 {
+    m_gtkInitialized = false;
+
     if (m_idleSourceId != 0)
         g_source_remove(m_idleSourceId);
 

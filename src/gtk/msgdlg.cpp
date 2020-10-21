@@ -20,6 +20,7 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/modalhook.h"
 
 #include "wx/gtk/private.h"
@@ -109,6 +110,11 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
 
 void wxMessageDialog::GTKCreateMsgDialog()
 {
+    // If gtk_init[_check]() was not called then gtk_message_dialog_new()
+    // will crash the app.
+    if ( !wxApp::GTKIsInitialized() )
+        return;
+
     GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
 
     GtkMessageType type = GTK_MESSAGE_ERROR;

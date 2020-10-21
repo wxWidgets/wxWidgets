@@ -58,6 +58,10 @@ public:
     // various bugs arising due to this.
     static bool GTKIsUsingGlobalMenu();
 
+    // Whether gtk_init[_check]() was already executed and GTK functionality
+    // can be used.
+    static bool GTKIsInitialized() { return m_gtkInitialized; }
+
     // implementation only from now on
     // -------------------------------
 
@@ -73,6 +77,8 @@ private:
     wxMutex m_idleMutex;
 #endif
     unsigned m_idleSourceId;
+
+    static bool m_gtkInitialized;
 
     wxDECLARE_DYNAMIC_CLASS(wxApp);
 };
