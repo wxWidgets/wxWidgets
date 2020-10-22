@@ -4631,6 +4631,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                         // mode and is compatible with 2.8 behaviour (see #12062).
                         switch ( m_selection->GetSelectionMode() )
                         {
+                            case wxGridSelectNone:
                             case wxGridSelectCells:
                             case wxGridSelectRowsOrColumns:
                                 // nothing to do in these cases
