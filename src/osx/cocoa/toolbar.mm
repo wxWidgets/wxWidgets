@@ -599,10 +599,11 @@ void wxToolBarTool::UpdateImages()
 
     if ( CanBeToggled() )
     {
-        int w = m_bmpNormal.GetScaledWidth();
-        int h = m_bmpNormal.GetScaledHeight();
-        m_alternateBitmap = wxBitmap();
-        m_alternateBitmap.CreateScaled(w, h, -1, m_bmpNormal.GetScaleFactor());
+        double scale = m_bmpNormal.GetScaleFactor();
+
+        int w = m_bmpNormal.GetWidth();
+        int h = m_bmpNormal.GetHeight();
+        m_alternateBitmap = wxBitmap(w,h, wxBITMAP_SCREEN_DEPTH, m_bmpNormal.GetScale());
         m_alternateBitmap.UseAlpha();
         wxMemoryDC dc;
 
@@ -614,7 +615,7 @@ void wxToolBarTool::UpdateImages()
         dc.Clear();
         dc.SetPen(grey);
         dc.SetBrush(grey);
-        dc.DrawRoundedRectangle( 0, 0, w, h, 3 );
+        dc.DrawRoundedRectangle( 0, 0, wxRound(w/scale), wxRound(h/scale), 3 );
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
 

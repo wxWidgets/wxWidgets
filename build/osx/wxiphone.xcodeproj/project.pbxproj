@@ -19,7 +19,7 @@
 		02BB539E2AD63C078DA776B0 /* uiaction_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6359B01A7B35F6B710ACF8 /* uiaction_osx.cpp */; };
 		02E8F1195B653D26AAA89462 /* listbkg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E7A77AA776B3B5CAEE3CC90 /* listbkg.cpp */; };
 		03035C5CE4BC3288A5A18424 /* choicdgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF23AF3EFC5731B2A5BCF4A3 /* choicdgg.cpp */; };
-		03BF1610E2FC3BD5ACB754F0 /* bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A53EC3A3463EFDB7614E93 /* bitmap.cpp */; };
+		15726AAFC2FD30018D4C4DA6 /* bitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5EEDF4F32FAF390E9FAA87F7 /* bitmap.mm */; };
 		048986FB629E313EA670CD0C /* webviewfshandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBDB327E4A236A3ABFA326F /* webviewfshandler.cpp */; };
 		05021BAB2C9B3C4CAD0A7C2C /* regfree.c in Sources */ = {isa = PBXBuildFile; fileRef = EEE82083BFA430D5B58F8A04 /* regfree.c */; };
 		052331773CF6362C9A6CF38E /* utils_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EED7C691150139EFA35E8EBD /* utils_osx.cpp */; };
@@ -1390,7 +1390,7 @@
 		A06AB1974DB93EE2999EC75C /* pngrio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngrio.c; path = ../../src/png/pngrio.c; sourceTree = "<group>"; };
 		A0DCC5EF59143640BE13AD73 /* jidctfst.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jidctfst.c; path = ../../src/jpeg/jidctfst.c; sourceTree = "<group>"; };
 		A1276C0E5D48337489DEE8DF /* LexErlang.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexErlang.cxx; path = ../../src/stc/scintilla/lexers/LexErlang.cxx; sourceTree = "<group>"; };
-		A1A53EC3A3463EFDB7614E93 /* bitmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cpp; path = ../../src/osx/core/bitmap.cpp; sourceTree = "<group>"; };
+		5EEDF4F32FAF390E9FAA87F7 /* bitmap.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = bitmap.mm; path = ../../src/osx/core/bitmap.mm; sourceTree = "<group>"; };
 		A1CB6A4171D4343BB0A9858A /* msgdlgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = msgdlgg.cpp; path = ../../src/generic/msgdlgg.cpp; sourceTree = "<group>"; };
 		A284E855892F3A9E9E19E854 /* LexTADS3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTADS3.cxx; path = ../../src/stc/scintilla/lexers/LexTADS3.cxx; sourceTree = "<group>"; };
 		A298576700C33F018616E7BD /* auibook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = auibook.cpp; path = ../../src/aui/auibook.cpp; sourceTree = "<group>"; };
@@ -1946,7 +1946,7 @@
 				AC6359B01A7B35F6B710ACF8 /* uiaction_osx.cpp */,
 				EED7C691150139EFA35E8EBD /* utils_osx.cpp */,
 				26D7C4995D7A35A1854B533F /* window_osx.cpp */,
-				A1A53EC3A3463EFDB7614E93 /* bitmap.cpp */,
+				5EEDF4F32FAF390E9FAA87F7 /* bitmap.mm */,
 				9D1F14339D1C331087650931 /* colour.cpp */,
 				343D4FDD5CC030618EF24729 /* dcmemory.cpp */,
 				36E1DBA275AD325DB759C180 /* fontenum.cpp */,
@@ -2998,7 +2998,7 @@
 				02BB539E2AD63C078DA776B0 /* uiaction_osx.cpp in Sources */,
 				052331773CF6362C9A6CF38E /* utils_osx.cpp in Sources */,
 				CB2E99E8FB7D3269A333A55E /* window_osx.cpp in Sources */,
-				03BF1610E2FC3BD5ACB754F0 /* bitmap.cpp in Sources */,
+				15726AAFC2FD30018D4C4DA6 /* bitmap.mm in Sources */,
 				FF50EC0EC5F23DF890C6E95F /* colour.cpp in Sources */,
 				BD2B17EB72E73A6EB6E0B26F /* dcmemory.cpp in Sources */,
 				371809DA4AD1382F8B532878 /* fontenum.cpp in Sources */,
