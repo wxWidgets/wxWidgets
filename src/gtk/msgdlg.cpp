@@ -110,9 +110,9 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
 
 void wxMessageDialog::GTKCreateMsgDialog()
 {
-    // If gtk_init[_check]() was not called then gtk_message_dialog_new()
-    // will crash the app.
-    if ( !wxApp::GTKIsInitialized() )
+    // If gtk_init[_check]() was not called in wxApp::Initialize() then
+    // gtk_message_dialog_new() will crash the app.
+    if ( wxTheApp != NULL )
         return;
 
     GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
