@@ -251,7 +251,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                                wxEventType eventType)
 {
     // If we are in wxGridSelectNone mode, all blocks should already be deselected
-    if (m_selectionMode == wxGridSelectNone)
+    if (m_selectionMode == wxGrid::wxGridSelectNone)
     {
         return;
     }
@@ -527,7 +527,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     wxASSERT( blockStart.GetRow() != -1 && blockStart.GetCol() != -1 &&
               blockEnd.GetRow() != -1 && blockEnd.GetCol() != -1 );
 
-    if (m_selectionMode == wxGridSelectNone)
+    if (m_selectionMode == wxGrid::wxGridSelectNone)
     {
         return false;
     }
