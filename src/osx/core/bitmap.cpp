@@ -1129,66 +1129,96 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 
     if ( bitmapRefData->IsOk())
     {
-        // Create picture
-        wxImage img;
-        if ( image.HasMask() && !image.HasAlpha() )
-        {
-            // takes precedence
-            // Since we already use 32 bpp bitmap here, we can use alpha channel
-            // directly and there is no reason to keep a separate mask.
-            img = image.Copy();
-            img.InitAlpha();
+        bool hasMask = image.HasMask();
+        bool hasAlpha = image.HasAlpha();
+        bool wantsAlpha = hasMask || hasAlpha ;
 
-            wxASSERT( !img.HasMask() );
-        }
-        else
-        {
-            img = image;
-        }
-        bool hasAlpha = img.HasAlpha() ;
+        // convert this bitmap to use its alpha channel
+        if ( wantsAlpha )
+            UseAlpha();
 
-        if ( hasAlpha )
-            UseAlpha() ;
+        const unsigned char *sourcePixels = image.GetData();
+        unsigned char* destinationPixels = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
 
-        unsigned char* destinationstart = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
-        const unsigned char* data = img.GetData();
-        if ( destinationstart != NULL && data != NULL )
+        if ( destinationPixels != NULL && sourcePixels != NULL )
         {
-            const unsigned char *alpha = hasAlpha ? img.GetAlpha() : NULL ;
-            for (int y = 0; y < height; destinationstart += GetBitmapData()->GetBytesPerRow(), y++)
+            const unsigned char *sourceAlpha = hasAlpha ? image.GetAlpha() : NULL ;
+
+            const unsigned char mr = hasMask ? image.GetMaskRed() : 0;
+            const unsigned char mg = hasMask ? image.GetMaskGreen() : 0;
+            const unsigned char mb = hasMask ? image.GetMaskBlue() : 0;
+
+            unsigned char* destinationRowStart = destinationPixels;
+
+            wxMemoryBuffer maskbuf ;
+            int maskRowBytes = GetBestBytesPerRow( width * kMaskBytesPerPixel );
+            size_t maskbufsize = maskRowBytes * height ;
+
+            unsigned char *destinationMask = NULL;
+            if ( hasMask )
+                destinationMask = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
+
+            unsigned char* destinationMaskRowStart = destinationMask;
+
+            for (int y = 0; y < height;
+                destinationRowStart += GetBitmapData()->GetBytesPerRow(),
+                destinationMaskRowStart += hasMask ? maskRowBytes : 0,
+                y++)
             {
-                unsigned char * destination = destinationstart;
+                unsigned char * destination = destinationRowStart;
+                unsigned char * destinationMask = destinationMaskRowStart;
                 for (int x = 0; x < width; x++)
                 {
-                    if ( hasAlpha )
-                    {
-                        const unsigned char a = *alpha++;
-                        *destination++ = a ;
+                    bool isMasked = false;
 
-    #if wxOSX_USE_PREMULTIPLIED_ALPHA
-                        *destination++ = ((*data++) * a + 127) / 255 ;
-                        *destination++ = ((*data++) * a + 127) / 255 ;
-                        *destination++ = ((*data++) * a + 127) / 255 ;
-    #else
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
-    #endif
+                    if ( hasMask )
+                    {
+                        if ( sourcePixels[0] == mr && sourcePixels[1] == mg && sourcePixels[2] == mb )
+                            isMasked = true;
+                        *destinationMask++ = isMasked ? wxIMAGE_ALPHA_TRANSPARENT : wxIMAGE_ALPHA_OPAQUE ;
+                    }
+
+                    if ( wantsAlpha )
+                    {
+                        unsigned char a;
+                        if ( hasAlpha )
+                            a = *sourceAlpha++;
+                        else
+                            a = isMasked ? wxIMAGE_ALPHA_TRANSPARENT : wxIMAGE_ALPHA_OPAQUE;
+
+                        *destination++ = a ;
+#if wxOSX_USE_PREMULTIPLIED_ALPHA
+                        *destination++ = ((*sourcePixels++) * a + 127) / 255 ;
+                        *destination++ = ((*sourcePixels++) * a + 127) / 255 ;
+                        *destination++ = ((*sourcePixels++) * a + 127) / 255 ;
+#else
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+#endif
                     }
                     else
                     {
-                        *destination++ = 0xFF ;
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
+                        *destination++ = wxIMAGE_ALPHA_OPAQUE ;
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+
                     }
                 }
             }
-
             GetBitmapData()->EndRawAccess() ;
+
+            if ( hasMask )
+            {
+                maskbuf.UngetWriteBuf( maskbufsize ) ;
+
+                wxMask* mask = new wxMask();
+                mask->OSXCreate(maskbuf, width , height , maskRowBytes ) ;
+
+                SetMask( mask );
+            }
         }
-        if ( img.HasMask() )
-            SetMask(new wxMask(*this, wxColour(img.GetMaskRed(), img.GetMaskGreen(), img.GetMaskBlue())));
     }
 }
 
