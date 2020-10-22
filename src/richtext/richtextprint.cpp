@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
@@ -331,7 +328,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
 
     // This scales the DC so that the printout roughly represents the
     // the screen scaling.
-    float scale = (float)((float)ppiPrinterX/(float)ppiScreenX);
+    const double scale = double(ppiPrinterX) / ppiScreenX;
 
     // Now we have to check in case our real page size is reduced
     // (e.g. because we're drawing to a print preview memory DC)
@@ -342,13 +339,13 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
 
     // If printer pageWidth == current DC width, then this doesn't
     // change. But w might be the preview bitmap width, so scale down.
-    float previewScale = (float)(w/(float)pageWidth);
-    float overallScale = scale * previewScale;
+    const double previewScale = double(w) / pageWidth;
+    const double overallScale = scale * previewScale;
 
     // The dimensions used for indentation etc. have to be unscaled
     // during printing to be correct when scaling is applied.
     // Also, correct the conversions in wxRTC using DC instead of print DC.
-    m_richTextBuffer->SetScale(scale * float(dc->GetPPI().x)/float(ppiPrinterX));
+    m_richTextBuffer->SetScale(scale * dc->GetPPI().x / ppiPrinterX);
 
     // Calculate margins
     int marginLeft = wxRichTextObject::ConvertTenthsMMToPixels(ppiPrinterX, m_marginLeft);

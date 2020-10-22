@@ -19,9 +19,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -2839,7 +2836,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
     const bool button_pressed = HasCapture();
 
     // start a drag event
-    if (!m_dragging && button_pressed &&
+    if (!m_dragging && button_pressed && m_actionItem &&
         abs(evt.GetX() - m_actionPos.x) + abs(evt.GetY() - m_actionPos.y) > 5)
     {
         // TODO: sending this event only makes sense if there is an 'END_DRAG'
@@ -2874,24 +2871,27 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         SetHoverItem(hitItem);
 
         // tooltips handling
-        wxAuiToolBarItem* packingHitItem;
-        packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
-        if (packingHitItem)
+        if ( !HasFlag(wxAUI_TB_NO_TOOLTIPS) )
         {
-            if (packingHitItem != m_tipItem)
+            wxAuiToolBarItem* packingHitItem;
+            packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
+            if ( packingHitItem )
             {
-                m_tipItem = packingHitItem;
+                if (packingHitItem != m_tipItem)
+                {
+                    m_tipItem = packingHitItem;
 
-                if ( !packingHitItem->m_shortHelp.empty() )
-                    SetToolTip(packingHitItem->m_shortHelp);
-                else
-                    UnsetToolTip();
+                    if ( !packingHitItem->m_shortHelp.empty() )
+                        SetToolTip(packingHitItem->m_shortHelp);
+                    else
+                        UnsetToolTip();
+                }
             }
-        }
-        else
-        {
-            UnsetToolTip();
-            m_tipItem = NULL;
+            else
+            {
+                UnsetToolTip();
+                m_tipItem = NULL;
+            }
         }
 
         // figure out the dropdown button state (are we hovering or pressing it?)

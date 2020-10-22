@@ -217,7 +217,9 @@
 #include <wx/longlong.h>
 #include <wx/lzmastream.h>
 #include <wx/math.h>
+/* Intentionally excluded to avoid deprecation warnings.
 #include <wx/matrix.h>
+*/
 #include <wx/mdi.h>
 #include <wx/mediactrl.h>
 #include <wx/memconf.h>

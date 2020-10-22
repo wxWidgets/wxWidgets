@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_JOYSTICK
 
@@ -27,11 +24,6 @@
 #include "wx/msw/private.h"
 
 #include <mmsystem.h>
-
-// Why doesn't BC++ have joyGetPosEx?
-#if defined(__BORLANDC__)
-#define NO_JOYGETPOSEX
-#endif
 
 #include "wx/msw/registry.h"
 

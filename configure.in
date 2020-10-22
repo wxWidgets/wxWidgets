@@ -1722,41 +1722,11 @@ else
     fi
 fi
 
-dnl don't check for vararg macros if they're explicitly disabled: this is
+dnl TODO-C++11: remove this, as it won't make sense when C++11 is required
+dnl don't use vararg macros if they're explicitly disabled: this is
 dnl useful if the user code using the library wants to limit itself to standard
 dnl C++ only (e.g. is compiled with g++ -std=c++98)
-if test "$wxUSE_VARARG_MACROS" = "yes"; then
-
-dnl Check if variadic macros (C99 feature) are supported:
-AC_CACHE_CHECK(
-    [whether the compiler supports variadic macros],
-    [wx_cv_have_variadic_macros],
-    [
-        dnl C compiler might support variadic macros when C++ one doesn't
-        dnl (happens with gcc/g++ 2.95.4), so must use C++ one explicitly
-        AC_LANG_PUSH(C++)
-        AC_COMPILE_IFELSE([
-            AC_LANG_PROGRAM(
-                [
-                    #include <stdio.h>
-                    #define test(fmt, ...) printf(fmt, __VA_ARGS__)
-                ],
-                [
-                    test("%s %d %p", "test", 1, 0);
-                ]
-            )],
-            [wx_cv_have_variadic_macros=yes],
-            [wx_cv_have_variadic_macros=no]
-            )
-        AC_LANG_POP()
-    ]
-)
-
-if test $wx_cv_have_variadic_macros = "yes"; then
-    AC_DEFINE(HAVE_VARIADIC_MACROS)
-fi
-
-else
+if test "$wxUSE_VARARG_MACROS" != "yes"; then
     AC_DEFINE(wxNO_VARIADIC_MACROS)
 fi dnl wxUSE_VARARG_MACROS == yes
 
@@ -2956,7 +2926,6 @@ WIDGET_SET=
 dnl are we building for a win32 target environment?
 dnl If so, setup common stuff needed for both GUI and Base libs.
 if test "$USE_WIN32" = 1 ; then
-    AC_CHECK_HEADERS(w32api.h,,, [ ])
     AC_CHECK_HEADER(windows.h,,
     [
         AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
@@ -3778,7 +3747,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
-            CPPFLAGS="$ac_path_to_include $CPPFLAGS"
+            CPPFLAGS="$CPPFLAGS $ac_path_to_include"
         else
             AC_MSG_RESULT([not found])
         fi
@@ -3924,7 +3893,7 @@ if test "$wxUSE_SHARED" = "yes"; then
 
         dnl newer versions of gcc need -isystem to compile X headers on
         dnl Solaris (which use old style C syntax)
-        CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
 
         dnl gcc may use Sun's ld, in which case -rpath gives a confusing
         dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
@@ -5565,7 +5534,7 @@ if test "$TOOLKIT" != "MSW"; then
                             [
                                 AC_DEFINE(HAVE_DLOPEN)
                                 HAVE_DL_FUNCS=1
-                                DL_LINK="-ldl $DL_LINK"
+                                DL_LINK="-ldl"
                             ])
             ])
 
@@ -5574,7 +5543,11 @@ if test "$TOOLKIT" != "MSW"; then
                 AC_CHECK_FUNCS(dladdr,
                     AC_DEFINE(HAVE_DLADDR),
                     [
-                        AC_CHECK_LIB(dl, dladdr, AC_DEFINE(HAVE_DLADDR))
+                        AC_CHECK_LIB(dl, dladdr,
+                            [
+                                AC_DEFINE(HAVE_DLADDR)
+                                DL_LINK="-ldl"
+                            ])
                     ]
                 )
             fi
@@ -7458,7 +7431,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                   [webkit2gtk-4.0],
                                   [
                                     USE_WEBVIEW_WEBKIT2=1
-                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                                   ],
                                   [
@@ -7474,7 +7447,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                   [$webkitgtk >= 1.3.1],
                                   [
                                     USE_WEBVIEW_WEBKIT=1
-                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                                   ],
                                   [
@@ -7744,7 +7717,7 @@ if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
             dnl We don't need to do this for wxGTK as we already get Cairo
             dnl flags as part of GTK+ ones.
             if test "$wxUSE_GTK" != 1; then
-                CPPFLAGS="$CAIRO_CFLAGS $CPPFLAGS"
+                CXXFLAGS="$CXXFLAGS $CAIRO_CFLAGS"
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
             fi
         fi
@@ -7849,7 +7822,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         fi
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
-            CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
+            CXXFLAGS="$CXXFLAGS $GST_CFLAGS"
             EXTRALIBS_MEDIA="$GST_LIBS"
 
             AC_DEFINE(wxUSE_GSTREAMER)
@@ -8140,10 +8113,12 @@ dnl
 dnl note that the order is somewhat important: wxWidgets headers should
 dnl come first and the one with setup.h should be before $(top_srcdir)/include
 dnl in case the latter contains setup.h used by non-autoconf makefiles
-CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
+CPPFLAGS=`echo \
  -I\\${wx_top_builddir}/lib/wx/include/${TOOLCHAIN_FULLNAME} \
- -I\\${top_srcdir}/include $TOOLKIT_INCLUDE \
- $CPPFLAGS `
+ -I\\${top_srcdir}/include \
+ $CPPFLAGS \
+ $WXCONFIG_CPPFLAGS \
+ $TOOLKIT_INCLUDE`
 
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `

@@ -844,7 +844,13 @@ bool wxNSTextViewControl::CanPaste() const
 void wxNSTextViewControl::SetEditable(bool editable)
 {
     if (m_textView)
+    {
         [m_textView setEditable: editable];
+
+        // When the field isn't editable, make sure it is still selectable so the text can be copied
+        if ( !editable )
+            [m_textView setSelectable:YES];
+    }
 }
 
 long wxNSTextViewControl::GetLastPosition() const
@@ -1374,6 +1380,10 @@ bool wxNSTextFieldControl::CanPaste() const
 void wxNSTextFieldControl::SetEditable(bool editable)
 {
     [m_textField setEditable:editable];
+
+    // When the field isn't editable, make sure it is still selectable so the text can be copied
+    if ( !editable )
+        [m_textField setSelectable:YES];
 }
 
 long wxNSTextFieldControl::GetLastPosition() const

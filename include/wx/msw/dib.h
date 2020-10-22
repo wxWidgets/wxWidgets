@@ -41,8 +41,8 @@ public:
 
 #ifdef __WXMSW__
     // create a DIB from the DDB
-    wxDIB(const wxBitmap& bmp)
-        { Init(); (void)Create(bmp); }
+    wxDIB(const wxBitmap& bmp, int depth = -1)
+        { Init(); (void)Create(bmp, depth); }
 #endif // __WXMSW__
 
     // create a DIB from the Windows DDB
@@ -58,9 +58,9 @@ public:
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
 #ifdef __WXMSW__
-    bool Create(const wxBitmap& bmp) { return Create(GetHbitmapOf(bmp)); }
+    bool Create(const wxBitmap& bmp, int depth = -1) { return Create(GetHbitmapOf(bmp), depth); }
 #endif
-    bool Create(HBITMAP hbmp);
+    bool Create(HBITMAP hbmp, int depth = -1);
     bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
@@ -154,14 +154,14 @@ public:
     // can be used with ::AlphaBlend() but it is also possible to disable
     // pre-multiplication for the DIB to be usable with ImageList_Draw() which
     // does pre-multiplication internally.
-    wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied)
+    wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1)
     {
         Init();
-        (void)Create(image, pf);
+        (void)Create(image, pf, depth);
     }
 
     // same as the above ctor but with the return code
-    bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied);
+    bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1);
 
     // create wxImage having the same data as this DIB
 

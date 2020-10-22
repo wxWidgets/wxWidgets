@@ -18,9 +18,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOCKETS
 

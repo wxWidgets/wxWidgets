@@ -120,7 +120,7 @@ compiler used.
 
 @beginDefList
 @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
-                        to the compiler version: 500 is 5.0.}
+                        to the compiler version: 500 is 5.0 (not used any more).}
 @itemdef{__DIGITALMARS__, Digital Mars (not used any more).}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}

@@ -12,18 +12,28 @@
     mutually exclusive options. It has a text label next to a (usually) round
     button.
 
-    You can create a group of mutually-exclusive radio buttons by specifying
-    @c wxRB_GROUP for the first in the group. The group ends when another
-    radio button group is created, or there are no more radio buttons.
+    Radio buttons are typically used in groups of mutually-exclusive buttons,
+    i.e. exactly one of the buttons in the group is checked, and the other ones
+    are unchecked automatically. Such groups are created implicitly, but can
+    also be started explicitly by using @c wxRB_GROUP style: a button with this
+    style starts a new group and will become the initial selection in this
+    group. Alternatively, a radio button may be excluded from the group that it
+    would otherwise belong to by using @c wxRB_SINGLE style.
+
+    To find the other elements of the same radio button group, you can use
+    GetFirstInGroup(), GetPreviousInGroup(), GetNextInGroup() and
+    GetLastInGroup() functions.
+
 
     @beginStyleTable
     @style{wxRB_GROUP}
            Marks the beginning of a new group of radio buttons.
     @style{wxRB_SINGLE}
-           In some circumstances, radio buttons that are not consecutive
-           siblings trigger a hang bug in Windows (only). If this happens, add
-           this style to mark the button as not belonging to a group, and
-           implement the mutually-exclusive group behaviour yourself.
+           Creates a radio button which is not part of any radio button group.
+           When this style is used, no other radio buttons will be turned off
+           automatically when this button is turned on and such behaviour will
+           need to be implemented manually, in the event handler for this
+           button.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
@@ -119,5 +129,64 @@ public:
             @true to check, @false to uncheck.
     */
     virtual void SetValue(bool value);
+
+   /**
+        Returns the first button of the radio button group this button belongs
+        to.
+
+        For a radio button with @c wxRB_SINGLE style, this function returns this
+        button itself, as it is the only member of its group. Otherwise, the
+        function returns the closest previous radio button with @c wxRB_GROUP
+        style (which could still be this button itself) or the first radio
+        button in the same window.
+
+        The returned value is never @NULL.
+
+        @see GetPreviousInGroup(), GetNextInGroup(), GetLastInGroup()
+
+        @since 3.1.5
+    */
+    wxRadioButton* GetFirstInGroup() const;
+
+   /**
+        Returns the last button of the radio button group this button belongs
+        to.
+
+        Similarly to GetFirstInGroup(), this function returns this button
+        itself if it has @c wxRB_SINGLE style. Otherwise, the function returns
+        the last button before the next button with @c wxRB_GROUP style or the
+        last radio button in the same window.
+
+        The returned value is never @NULL.
+
+        @see GetPreviousInGroup(), GetNextInGroup()
+
+        @since 3.1.5
+    */
+    wxRadioButton* GetLastInGroup() const;
+
+   /**
+        Returns the previous radio button in the same group.
+
+        The return value is @NULL if there is no predecessor or if this button
+        has @c wxRB_SINGLE style.
+
+        @see GetFirstInGroup(), GetNextInGroup(), GetLastInGroup()
+
+        @since 3.1.5
+    */
+    wxRadioButton* GetPreviousInGroup() const;
+
+   /**
+        Returns the next radio button in the same group.
+
+        The return value is @NULL if there is no successor or if this button
+        has @c wxRB_SINGLE style.
+
+        @see GetFirstInGroup(), GetPreviousInGroup(), GetLastInGroup()
+
+        @since 3.1.5
+    */
+    wxRadioButton* GetNextInGroup() const;
 };
 

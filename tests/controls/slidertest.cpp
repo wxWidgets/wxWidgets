@@ -10,9 +10,6 @@
 
 #if wxUSE_SLIDER
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -35,6 +32,7 @@ private:
 #ifndef __WXOSX__
         WXUISIM_TEST( PageUpDown );
         WXUISIM_TEST( LineUpDown );
+        WXUISIM_TEST( EvtSlider );
         WXUISIM_TEST( LinePageSize );
 #endif
         CPPUNIT_TEST( Value );
@@ -47,6 +45,7 @@ private:
 
     void PageUpDown();
     void LineUpDown();
+    void EvtSlider();
     void LinePageSize();
     void Value();
     void Range();
@@ -122,6 +121,24 @@ void SliderTestCase::LineUpDown()
 
     CPPUNIT_ASSERT_EQUAL(1, lineup.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, linedown.GetCount());
+#endif
+}
+
+void SliderTestCase::EvtSlider()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    EventCounter slider(m_slider, wxEVT_SLIDER);
+
+    wxUIActionSimulator sim;
+    wxYield();
+    m_slider->SetFocus();
+
+    sim.Char(WXK_UP);
+    sim.Char(WXK_DOWN);
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(2, slider.GetCount());
 #endif
 }
 

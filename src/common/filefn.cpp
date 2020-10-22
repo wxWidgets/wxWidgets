@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/filefn.h"
 
@@ -81,7 +78,6 @@
     #include <fab.h>
 #endif
 
-// TODO: Borland probably has _wgetcwd as well?
 #if defined(_MSC_VER) || defined(__MINGW32__)
     wxDECL_FOR_STRICT_MINGW32(wchar_t*, _wgetcwd, (wchar_t*, int))
 
@@ -109,48 +105,6 @@ static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wrappers around standard POSIX functions
-// ----------------------------------------------------------------------------
-
-#if wxUSE_UNICODE && defined __BORLANDC__ \
-    && __BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551
-
-// BCC 5.5 and 5.5.1 have a bug in _wopen where files are created read only
-// regardless of the mode parameter. This hack works around the problem by
-// setting the mode with _wchmod.
-//
-int wxCRT_OpenW(const wchar_t *pathname, int flags, mode_t mode)
-{
-    int moreflags = 0;
-
-    // we only want to fix the mode when the file is actually created, so
-    // when creating first try doing it O_EXCL so we can tell if the file
-    // was already there.
-    if ((flags & O_CREAT) && !(flags & O_EXCL) && (mode & wxS_IWUSR) != 0)
-        moreflags = O_EXCL;
-
-    int fd = _wopen(pathname, flags | moreflags, mode);
-
-    // the file was actually created and needs fixing
-    if (fd != -1 && (flags & O_CREAT) != 0 && (mode & wxS_IWUSR) != 0)
-    {
-        close(fd);
-        _wchmod(pathname, mode);
-        fd = _wopen(pathname, flags & ~(O_EXCL | O_CREAT));
-    }
-    // the open failed, but it may have been because the added O_EXCL stopped
-    // the opening of an existing file, so try again without.
-    else if (fd == -1 && moreflags != 0)
-    {
-        fd = _wopen(pathname, flags & ~O_CREAT);
-    }
-
-    return fd;
-}
-
-#endif
 
 // ----------------------------------------------------------------------------
 // wxPathList
@@ -1078,7 +1032,6 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) \
- || defined(__BORLANDC__) \
  || defined(__GNUWIN32__)
     int res = wxRemove(file);
 #elif defined(__WXMAC__)

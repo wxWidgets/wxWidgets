@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/variant.h"
 
@@ -476,7 +473,7 @@ bool wxVariantDoubleData::Write(wxOutputStream& str) const
 bool wxVariantDoubleData::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
-    m_value = (float)s.ReadDouble();
+    m_value = s.ReadDouble();
     return true;
 }
 #endif // wxUSE_STREAMS

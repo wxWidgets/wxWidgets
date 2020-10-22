@@ -14,9 +14,6 @@
 
 #if wxUSE_DATAVIEWCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "testpersistence.h"
 

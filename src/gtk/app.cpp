@@ -339,9 +339,10 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
 
     bool init_result;
-    int i;
 
 #if wxUSE_UNICODE
+    int i;
+
     // gtk_init() wants UTF-8, not wchar_t, so convert
     char **argvGTK = new char *[argc_ + 1];
     for ( i = 0; i < argc_; i++ )

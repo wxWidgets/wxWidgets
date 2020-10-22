@@ -26,10 +26,11 @@ endif()
 wx_add_library(wxwebview ${WEBVIEW_FILES})
 
 if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
-    set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}/web-extensions")
-    wx_lib_compile_definitions(wxwebview PRIVATE
-        -DWX_WEB_EXTENSIONS_DIRECTORY="${CMAKE_INSTALL_PREFIX}/${WX_WEB_EXTENSIONS_DIRECTORY}"
-        )
+    if(wxVERSION_IS_DEV)
+        set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER}/web-extensions")
+    else()
+        set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}/web-extensions")
+    endif()
 endif()
 
 if(APPLE)

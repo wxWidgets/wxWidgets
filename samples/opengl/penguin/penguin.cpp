@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -247,10 +244,10 @@ void TestGLCanvas::OnMouse(wxMouseEvent& event)
         /* drag in progress, simulate trackball */
         float spin_quat[4];
         trackball(spin_quat,
-            (2.0*m_gldata.beginx - sz.x) / sz.x,
-            (sz.y - 2.0*m_gldata.beginy) / sz.y,
-            (2.0*event.GetX() - sz.x)    / sz.x,
-            (sz.y - 2.0*event.GetY())    / sz.y);
+            (2 * m_gldata.beginx - sz.x) / sz.x,
+            (sz.y - 2 * m_gldata.beginy) / sz.y,
+            float(2 * event.GetX() - sz.x) / sz.x,
+            float(sz.y - 2 * event.GetY()) / sz.y);
 
         add_quats(spin_quat, m_gldata.quat, m_gldata.quat);
 
@@ -315,7 +312,7 @@ void TestGLCanvas::ResetProjectionMode()
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (GLfloat)ClientSize.x/ClientSize.y, 1.0, 100.0);
+    gluPerspective(45, double(ClientSize.x) / ClientSize.y, 1, 100);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

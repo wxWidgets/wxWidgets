@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATAOBJ
 
@@ -720,15 +717,9 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     case CF_OEMTEXT:
                         size = strlen((const char *)ptr.Get());
                         break;
-#if !(defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
                     case CF_UNICODETEXT:
-#if ( defined(__BORLANDC__) && (__BORLANDC__ > 0x530) )
-                        size = std::wcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
-#else
                         size = wxWcslen((const wchar_t *)ptr.Get()) * sizeof(wchar_t);
-#endif
                         break;
-#endif
                     case CF_BITMAP:
                     case CF_HDROP:
                         // these formats don't use size at all, anyhow (but

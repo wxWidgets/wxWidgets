@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -510,6 +507,16 @@ wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
     return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+}
+
+wxSize wxDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    return wxSize(DeviceToLogicalXRel(x), DeviceToLogicalYRel(y));
+}
+
+wxSize wxDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    return wxSize(LogicalToDeviceXRel(x), LogicalToDeviceYRel(y));
 }
 
 void wxDCImpl::ComputeScaleAndOrigin()

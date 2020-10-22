@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -1150,7 +1147,7 @@ void MBConvTestCase::TestDecoder(
     // make sure the correct output length was calculated
     WX_ASSERT_EQUAL_MESSAGE
     (
-        ("while converting \"%s\"", multiBuffer),
+        ("while converting \"%s\"", inputCopy),
         wideChars,
         outputWritten
     );

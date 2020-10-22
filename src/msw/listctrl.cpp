@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTCTRL
 
@@ -48,7 +45,7 @@
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.
 //
-#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(NMLVFINDITEM)
+#if defined(__VISUALC__) || defined(NMLVFINDITEM)
     #define HAVE_NMLVFINDITEM 1
 #elif defined(NM_FINDITEM)
     #define HAVE_NMLVFINDITEM 1
@@ -788,7 +785,15 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width == wxLIST_AUTOSIZE_USEHEADER)
         width = LVSCW_AUTOSIZE_USEHEADER;
 
-    return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
+    if ( !ListView_SetColumnWidth(GetHwnd(), col, width) )
+        return false;
+
+    // Failure to explicitly refresh the control with horizontal rules results
+    // in corrupted rules display.
+    if ( HasFlag(wxLC_HRULES) )
+        Refresh();
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -3261,12 +3266,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
-    // Find the coordinate of the right most visible point: this is not the
-    // same as GetClientSize().x because the window might not be fully visible,
-    // it could be clipped by its parent.
-    const int availableWidth = GetParent()->GetClientSize().x - GetPosition().x;
-    int visibleWidth = wxMin(GetClientSize().x,
-                             availableWidth - GetWindowBorderSize().x);
+    wxSize clientSize = GetClientSize();
 
     const int countPerPage = GetCountPerPage();
     if (countPerPage < 0)
@@ -3278,9 +3278,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
 
-    wxRect clipRect;
-    dc.GetClippingBox(clipRect);
-
     if (drawHRules)
     {
         wxRect itemRect;
@@ -3289,22 +3286,8 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             if (GetItemRect(i, itemRect))
             {
                 const int cy = itemRect.GetBottom();
-                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
+                dc.DrawLine(0, cy, clientSize.x, cy);
             }
-        }
-
-        /*
-            The drawing can be clipped horizontally to the rightmost column.
-            This happens when an item is added (and visible) and results in a
-            horizontal rule being clipped instead of drawn across the entire
-            list control. In that case we request for the part to the right of
-            the rightmost column to be drawn as well.
-        */
-        if ( clipRect.GetRight() < visibleWidth - 1 && clipRect.width )
-        {
-            RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
-                               visibleWidth - clipRect.width, clipRect.height),
-                        false /* don't erase background */);
         }
     }
 
@@ -3347,7 +3330,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
 
                 dc.DrawRectangle(0, topItemRect.GetY() - gap,
-                                 visibleWidth, gap);
+                                 clientSize.GetWidth(), gap);
             }
 
             const int numCols = GetColumnCount();

@@ -124,6 +124,8 @@ public:
     // coordinates conversions and transforms
     virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
     virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
 
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,

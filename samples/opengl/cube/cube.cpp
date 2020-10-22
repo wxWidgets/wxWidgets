@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -150,7 +147,7 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
     // set viewing projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 3.0f);
+    glFrustum(-0.5, 0.5, -0.5, 0.5, 1, 3);
 
     // create the textures to use for cube sides: they will be reused by all
     // canvases (which is probably not critical in the case of simple textures
@@ -362,13 +359,13 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
         glDrawBuffer( GL_BACK_LEFT );
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
+        glFrustum(-0.47, 0.53, -0.5, 0.5, 1, 3);
         canvas.DrawRotatedCube(m_xangle, m_yangle);
         CheckGLError();
         glDrawBuffer( GL_BACK_RIGHT );
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
+        glFrustum(-0.53, 0.47, -0.5, 0.5, 1, 3);
         canvas.DrawRotatedCube(m_xangle, m_yangle);
         CheckGLError();
     }

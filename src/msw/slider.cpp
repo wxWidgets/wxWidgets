@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SLIDER
 
@@ -313,15 +310,28 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     SetValue(newPos);
 
     wxScrollEvent event(scrollEvent, m_windowId);
+    bool          processed = false;
+
     event.SetPosition(newPos);
     event.SetEventObject( this );
-    HandleWindowEvent(event);
+    processed = HandleWindowEvent(event);
 
-    wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
-    cevent.SetInt( newPos );
-    cevent.SetEventObject( this );
+    // Do not generate wxEVT_SLIDER when the native scroll message
+    // parameter is SB_ENDSCROLL, which always follows only after
+    // another scroll message which already changed the slider value.
+    // Therefore, sending wxEVT_SLIDER after SB_ENDSCROLL
+    // would result in two wxEVT_SLIDER events with the same value.
+    if ( wParam != SB_ENDSCROLL )
+    {
+        wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
 
-    return HandleWindowEvent( cevent );
+        cevent.SetInt( newPos );
+        cevent.SetEventObject( this );
+
+        processed = HandleWindowEvent( cevent );
+    }
+
+    return processed;
 }
 
 void wxSlider::Command (wxCommandEvent & event)

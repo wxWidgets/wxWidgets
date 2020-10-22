@@ -93,9 +93,6 @@
 /* VC++ and BC++ starting with 5.2 have TCHAR support */
 #ifdef __VISUALC__
     #define wxHAVE_TCHAR_SUPPORT
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
-    #define wxHAVE_TCHAR_SUPPORT
-    #include <ctype.h>
 #elif defined(__MINGW32__)
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
@@ -199,11 +196,7 @@
             Notice that we use an intermediate macro to allow x to be expanded
             if it's a macro itself.
          */
-        #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-            #define wxT(x) wxCONCAT_HELPER(L, x)
-        #else
-            #define wxT(x) wxPREPEND_L(x)
-        #endif
+        #define wxT(x) wxCONCAT_HELPER(L, x)
     #endif /* ASCII/Unicode */
 #endif /* !defined(wxT) */
 
@@ -223,11 +216,7 @@
     /*
         As above with wxT(), wxS() argument is expanded if it's a macro.
      */
-    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-        #define wxS(x) wxCONCAT_HELPER(L, x)
-    #else
-        #define wxS(x) wxPREPEND_L(x)
-    #endif
+    #define wxS(x) wxCONCAT_HELPER(L, x)
 #else /* wxUSE_UNICODE_UTF8 || ANSI */
     #define wxS(x) x
 #endif

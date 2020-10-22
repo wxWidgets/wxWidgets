@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
@@ -2168,7 +2165,7 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
     // but in fact is too small for some reason. This is a detail that will
     // need to be addressed at some point but can be fudged for the
     // moment.
-    float scale = (float)((float)ppiPrinterX/(float)ppiScreenX);
+    double scale = double(ppiPrinterX) / ppiScreenX;
 
     // Now we have to check in case our real page size is reduced
     // (e.g. because we're drawing to a print preview memory DC)
@@ -2180,7 +2177,7 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
 
     // If printer pageWidth == current DC width, then this doesn't
     // change. But w might be the preview bitmap width, so scale down.
-    float overallScale = scale * (float)(w/(float)pageWidth);
+    double overallScale = scale * w / pageWidth;
     dc->SetUserScale(overallScale, overallScale);
 
     if (m_printoutView)

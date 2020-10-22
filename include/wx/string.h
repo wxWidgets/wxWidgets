@@ -1085,11 +1085,10 @@ public:
       reverse_iterator_impl operator--(int)
         { reverse_iterator_impl tmp = *this; ++m_cur; return tmp; }
 
-      // NB: explicit <T> in the functions below is to keep BCC 5.5 happy
       reverse_iterator_impl operator+(ptrdiff_t n) const
-        { return reverse_iterator_impl<T>(m_cur - n); }
+        { return reverse_iterator_impl(m_cur - n); }
       reverse_iterator_impl operator-(ptrdiff_t n) const
-        { return reverse_iterator_impl<T>(m_cur + n); }
+        { return reverse_iterator_impl(m_cur + n); }
       reverse_iterator_impl operator+=(ptrdiff_t n)
         { m_cur -= n; return *this; }
       reverse_iterator_impl operator-=(ptrdiff_t n)

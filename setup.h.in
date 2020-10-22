@@ -744,11 +744,6 @@
 #undef VA_LIST_IS_ARRAY
 
 /*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
-
-/*
  * Define if you don't want variadic macros to be used even if they are
  * supported by the compiler.
  */
@@ -1200,9 +1195,6 @@
 
 /* Define if you have the <langinfo.h> header file.  */
 #undef HAVE_LANGINFO_H
-
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
 
 /* Define if you have the <sys/soundcard.h> header file. */
 #undef HAVE_SYS_SOUNDCARD_H

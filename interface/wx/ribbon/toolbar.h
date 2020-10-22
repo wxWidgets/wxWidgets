@@ -130,7 +130,7 @@ public:
             The UI help string to associate with the new tool.
         @param kind
             The kind of tool to add.
-        @param client_data
+        @param clientData
             Client data to associate with the new tool.
 
         @return An opaque pointer which can be used only with other tool bar
@@ -144,7 +144,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Add a separator to the tool bar.
@@ -232,7 +232,7 @@ public:
             The UI help string to associate with the new tool.
         @param kind
             The kind of tool to add.
-        @param client_data
+        @param clientData
             Client data to associate with the new tool.
 
         @return An opaque pointer which can be used only with other tool bar
@@ -249,7 +249,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Insert a separator to the tool bar at the specified position.

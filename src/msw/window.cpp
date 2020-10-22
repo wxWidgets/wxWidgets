@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -4942,7 +4939,7 @@ static void ScaleCoordIfSet(int& coord, float scaleFactor)
     if ( coord != wxDefaultCoord )
     {
         const float coordScaled = coord * scaleFactor;
-        coord = scaleFactor > 1.0 ? ceil(coordScaled) : floor(coordScaled);
+        coord = int(scaleFactor > 1 ? std::ceil(coordScaled) : std::floor(coordScaled));
     }
 }
 

@@ -117,11 +117,6 @@ extern WXDLLIMPEXP_DATA_CORE(wxPenList*)   wxThePenList;
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
 
-// Unfortunately some compilers have ambiguity issues when enum comparisons are
-// overloaded so we have to disable the overloads in this case, see
-// wxCOMPILER_NO_OVERLOAD_ON_ENUM definition in wx/platform.h for more details.
-#ifndef wxCOMPILER_NO_OVERLOAD_ON_ENUM
-
 wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
 inline bool operator==(wxPenStyle s, wxDeprecatedGUIConstants t)
 {
@@ -133,7 +128,5 @@ inline bool operator!=(wxPenStyle s, wxDeprecatedGUIConstants t)
 {
     return static_cast<int>(s) != static_cast<int>(t);
 }
-
-#endif // wxCOMPILER_NO_OVERLOAD_ON_ENUM
 
 #endif // _WX_PEN_H_BASE_

@@ -11,7 +11,13 @@
 #ifndef _WX_MATRIXH__
 #define _WX_MATRIXH__
 
-//! headerfiles="matrix.h wx/object.h"
+#include "wx/defs.h"
+
+// Contents of this file is deprecated and shouldn't be used in the new code,
+// please see wxAffineMatrix2D instead.
+
+#if WXWIN_COMPATIBILITY_3_0
+
 #include "wx/object.h"
 #include "wx/math.h"
 
@@ -31,7 +37,11 @@
 //  at a certain coordinate and angle within another parent picture.
 //  At all times m_isIdentity is set if the matrix itself is an Identity matrix.
 //  It is used where possible to optimize calculations.
-class WXDLLIMPEXP_CORE wxTransformMatrix: public wxObject
+class
+#ifndef WXBUILDING
+wxDEPRECATED_MSG("use wxAffineMatrix2D instead")
+#endif
+WXDLLIMPEXP_CORE wxTransformMatrix: public wxObject
 {
 public:
     wxTransformMatrix();
@@ -226,9 +236,11 @@ inline bool wxTransformMatrix::IsIdentity1() const
 }
 
 // Calculates the determinant of a 2 x 2 matrix
-inline double wxCalculateDet(double a11, double a21, double a12, double a22)
-{
+wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+    inline double wxCalculateDet(double a11, double a21, double a12, double a22),
     return a11 * a22 - a12 * a21;
-}
+)
+
+#endif // WXWIN_COMPATIBILITY_3_0
 
 #endif // _WX_MATRIXH__

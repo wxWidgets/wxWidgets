@@ -13,9 +13,6 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -399,7 +396,7 @@ void wxOSXPrintData::TransferResolutionTo( wxPrintData &data )
             UInt32 i;
             for (i = 0; i < resCount; i++)
             {
-                if ((resolutions[i].hRes == res.hRes) && (resolutions[i].vRes = res.vRes))
+                if (resolutions[i].hRes == res.hRes && resolutions[i].vRes == res.vRes)
                     break;
             }
             if (i < resCount)

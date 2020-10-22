@@ -330,11 +330,11 @@ void wxNSComboBoxControl::Dismiss()
 
 void wxNSComboBoxControl::SetEditable(bool editable)
 {
-    // TODO: unfortunately this does not work, setEditable just means the same as CB_READONLY
-    // I don't see a way to access the text field directly
-    
-    // Behavior NONE <- SELECTECTABLE
     [m_comboBox setEditable:editable];
+
+    // When the combobox isn't editable, make sure it is still selectable so the text can be copied
+    if ( !editable )
+        [m_comboBox setSelectable:YES];
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
@@ -352,9 +352,12 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer,
         [v setNumberOfVisibleItems:999];
     else
         [v setNumberOfVisibleItems:13];
-    if (style & wxCB_READONLY)
-        [v setEditable:NO];
+
     wxNSComboBoxControl* c = new wxNSComboBoxControl( wxpeer, v );
+
+    if (style & wxCB_READONLY)
+        c->SetEditable(false);
+
     return c;
 }
 

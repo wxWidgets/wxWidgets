@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_SPLITTER
 
@@ -55,11 +52,11 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
 
     long sashpos = GetDimension(wxT("sashpos"), 0);
     long minpanesize = GetDimension(wxT("minsize"), -1);
-    float gravity = GetFloat(wxT("gravity"), 0.0);
+    float gravity = GetFloat(wxS("gravity"));
     if (minpanesize != -1)
         splitter->SetMinimumPaneSize(minpanesize);
-    if (gravity != 0.0)
-        splitter->SetSashGravity(gravity);
+    if (gravity != 0)
+        splitter->SetSashGravity(double(gravity));
 
     wxWindow *win1 = NULL, *win2 = NULL;
     wxXmlNode *n = m_node->GetChildren();

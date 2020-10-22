@@ -162,8 +162,7 @@
  * All of the settings below require SEH support (__try/__catch) and can't work
  * without it.
  */
-#if !defined(_MSC_VER) && \
-    (!defined(__BORLANDC__) || __BORLANDC__ < 0x0550)
+#if !defined(_MSC_VER)
 #    undef wxUSE_ON_FATAL_EXCEPTION
 #    define wxUSE_ON_FATAL_EXCEPTION 0
 
@@ -214,27 +213,6 @@
 #       define wxUSE_REARRANGECTRL 0
 #   endif
 #endif
-
-/*
-   Compiler-specific checks.
- */
-
-/* Borland */
-#ifdef __BORLANDC__
-
-#if __BORLANDC__ < 0x500
-    /* BC++ 4.0 can't compile JPEG library */
-#   undef wxUSE_LIBJPEG
-#   define wxUSE_LIBJPEG 0
-#endif
-
-/* wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode */
-#if defined(WXMAKINGDLL) || defined(WXUSINGDLL)
-#   undef wxUSE_DEBUG_NEW_ALWAYS
-#   define wxUSE_DEBUG_NEW_ALWAYS 0
-#endif
-
-#endif /* __BORLANDC__ */
 
 /*
    un/redefine the options which we can't compile (after checking that they're

@@ -19,6 +19,7 @@
 #include "wx/stockitem.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/image.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -191,7 +192,7 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 
     wxCHECK_RET(GTK_IS_IMAGE(image), "must have image widget");
 
-    gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+    WX_GTK_IMAGE(image)->Set(bitmap);
 }
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
@@ -222,7 +223,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
                 }
                 else if ( !image && bitmap.IsOk() )
                 {
-                    image = gtk_image_new();
+                    image = wxGtkImage::New(this);
                     gtk_button_set_image(GTK_BUTTON(m_widget), image);
 
                     // Setting the image recreates the label, so we need to

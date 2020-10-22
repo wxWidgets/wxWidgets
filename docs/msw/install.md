@@ -262,75 +262,6 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
 
 
 
-Borland C++ Compilation                {#msw_build_borland}
-----------------------------------------------------------------
-
-WARNING: Borland instructions are out of date, please send us your
-         corrections if you are using it with wxWidgets 3.0.
-
-The minimum version required is 5.5 (last version supported by BC++ 5.0 was
-2.4.2), which can be downloaded for free from:
-http://www.borland.com/products/downloads/download_cbuilder.html
-
-We have found that the free Turbo Explorer and commercial BDS work fine; the
-debugger is very good. To avoid linker errors you will need to add
--DSHARED=1 to the makefile line for the library
-
-The version 5.6 included in Borland C++ Builder 2006 works as well after the
-following small change: please remove the test for `__WINDOWS__` from line 88
-of the file `BCCDIR\include\stl\_threads.h`.
-
-Compiling using the makefiles:
-
-1. Change directory to build\msw. Type 'make -f makefile.bcc' to
-   make the wxWidgets core library. Ignore the compiler warnings.
-   This produces a couple of libraries in the `lib\bcc_lib` directory.
-
-2. Change directory to a sample or demo such as samples\minimal, and type
-   `make -f makefile.bcc`. This produces a windows exe file - by default
-   in the `bcc_mswd` subdirectory.
-
-Note (1): the wxWidgets makefiles assume dword structure alignment. Please
-make sure that your own project or makefile settings use the
-same alignment, or you could experience mysterious crashes. To
-change the alignment, change CPPFLAGS in build\msw\config.bcc.
-
-Note (2): If you wish debug messages to be sent to the console in
-debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
-
-Using the Debugger and IDE in BDS or Turbo Explorer
----------------------------------------------------
-
-Double-click / open \%WXWIN\%\samples\minimal\borland.bdsproj. The current version
-is to be used with a dynamic build of wxWidgets-made by running
-make -f Makefile.bcc -DBUILD=debug -DSHARED=1
-in wxWidgets\build\msw. You also need the `wxWidgets\lib\bcc_dll`
-directory in your PATH. The debugger tracks your source and also
-traces into the wxWidgets sources.
-
-To use this to debug other samples, copy the `borland_ide.cpp`
-and borland.bdsproj files, then replace all occurrences of
-"minimal" with the name of the new project files
-
-Compilation succeeds with CBuilderX personal edition and CBuilder6, but
-you may have to copy make.exe from the 5.5 download to the new bin directory.
-
-Compiling using the IDE files for Borland C++ 5.0 and using CBuilder IDE
-(v1-v6): not supported
-
-
-** REMEMBER **
-In all of your wxWidgets applications, your source code should include
-the following preprocessor directive:
-
-    #ifdef __BORLANDC__
-    #pragma hdrstop
-    #endif
-
-(check the samples -- e.g., \wx2\samples\minimal\minimal.cpp -- for
-more details)
-
-
 
 Installing and building wxWidgets using vcpkg         {#msw_install_and_build}
 =============================================
@@ -448,7 +379,7 @@ The full list of the build settings follows:
 
   Links static version of C and C++ runtime libraries into the executable, so
   that the program does not depend on DLLs provided with the compiler (e.g.
-  Visual C++'s msvcrt.dll or Borland's cc3250mt.dll).
+  Visual C++'s msvcrt.dll).
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
 
 * `DEBUG_FLAG=0`

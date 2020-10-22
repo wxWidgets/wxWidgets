@@ -36,8 +36,6 @@ public:
 
     virtual bool IsSolid() const wxOVERRIDE;
 
-    wxColour& operator=(const wxColour& col);
-
     // comparison
     bool operator == (const wxColour& colour) const;
     bool operator != (const wxColour& colour) const { return !(*this == colour); }

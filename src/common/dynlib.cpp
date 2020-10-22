@@ -22,9 +22,6 @@
 
 #include  "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DYNLIB_CLASS
 
@@ -214,8 +211,6 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         suffix << wxT("_gcc");
     #elif defined(__VISUALC__)
         suffix << wxT("_vc");
-    #elif defined(__BORLANDC__)
-        suffix << wxT("_bcc");
     #endif
 #endif
 
@@ -227,6 +222,8 @@ wxString wxDynamicLibrary::GetPluginsDirectory()
 {
 #ifdef __UNIX__
     wxString format = wxGetInstallPrefix();
+    if ( format.empty() )
+        return wxEmptyString;
     wxString dir;
     format << wxFILE_SEP_PATH
            << wxT("lib") << wxFILE_SEP_PATH

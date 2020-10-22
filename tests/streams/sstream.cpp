@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -134,7 +131,7 @@ TEST_CASE("wxStringOutputStream::Tell", "[stream]")
     wxString str(s);
     CHECK( wxStringOutputStream(&str).TellO() == len );
 
-
+#if wxUSE_UNICODE
     wxMBConvUTF16 convUTF16;
     wxStringOutputStream ss16(NULL, convUTF16);
     CHECK( ss16.TellO() == 0 );
@@ -147,4 +144,5 @@ TEST_CASE("wxStringOutputStream::Tell", "[stream]")
     // The U+2070D character is represented by a surrogate pair in UTF-16.
     wxString u2070D = wxString::FromUTF8("\xF0\xA0\x9C\x8D");
     CHECK( wxStringOutputStream(&u2070D, convUTF16).TellO() == 4 );
+#endif // wxUSE_UNICODE
 }

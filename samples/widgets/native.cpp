@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // this file is included from native.mm which ensures that it is compiled as
 // Objective C++, but it's also still compiled by the makefiles directly as C++

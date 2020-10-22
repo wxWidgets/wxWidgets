@@ -15,6 +15,7 @@
 #include "wx/toolbar.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/image.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
@@ -169,22 +170,28 @@ enter_notify_event(GtkWidget*, GdkEventCrossing* event, wxToolBarTool* tool)
 }
 
 //-----------------------------------------------------------------------------
-// "expose_event" from GtkImage inside m_item
-//-----------------------------------------------------------------------------
 
-extern "C" {
-static gboolean
-#ifdef __WXGTK3__
-image_draw(GtkWidget* widget, cairo_t* cr, wxToolBarTool* tool)
-#else
-image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
-#endif
+namespace
+{
+struct BitmapProvider: wxGtkImage::BitmapProvider
+{
+    BitmapProvider(wxToolBarTool* tool) : m_tool(tool) { }
+    virtual wxBitmap Get() const wxOVERRIDE;
+    wxToolBarTool* const m_tool;
+};
+
+wxBitmap BitmapProvider::Get() const
 {
 #ifdef __WXGTK3__
-    wxBitmap bitmap(tool->GetNormalBitmap());
-    if (!tool->IsEnabled())
+    wxBitmap bitmap(m_tool->GetNormalBitmap());
+    if (m_tool->IsEnabled())
     {
-        wxBitmap disabled(tool->GetDisabledBitmap());
+        if (bitmap.IsOk() && bitmap.GetScaleFactor() <= 1)
+            bitmap.UnRef();
+    }
+    else
+    {
+        wxBitmap disabled(m_tool->GetDisabledBitmap());
         // if no disabled bitmap and normal bitmap is scaled
         if (!disabled.IsOk() && bitmap.IsOk() && bitmap.GetScaleFactor() > 1)
         {
@@ -193,33 +200,14 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
         }
         bitmap = disabled;
     }
-    if (!bitmap.IsOk() || (tool->IsEnabled() && bitmap.GetScaleFactor() <= 1))
-        return false;
 #else
-    const wxBitmap& bitmap = tool->GetDisabledBitmap();
-    if (tool->IsEnabled() || !bitmap.IsOk())
-        return false;
+    wxBitmap bitmap;
+    if (!m_tool->IsEnabled())
+        bitmap = m_tool->GetDisabledBitmap();
 #endif
-
-    GtkAllocation alloc;
-    gtk_widget_get_allocation(widget, &alloc);
-    int x = (alloc.width - bitmap.GetScaledWidth()) / 2;
-    int y = (alloc.height - bitmap.GetScaledHeight()) / 2;
-#ifdef __WXGTK3__
-    gtk_render_background(gtk_widget_get_style_context(widget),
-        cr, 0, 0, alloc.width, alloc.height);
-    bitmap.Draw(cr, x, y);
-#else
-    x += alloc.x;
-    y += alloc.y;
-    gdk_draw_pixbuf(
-        gtk_widget_get_window(widget), gtk_widget_get_style(widget)->black_gc, bitmap.GetPixbuf(),
-        0, 0, x, y,
-        -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0);
-#endif
-    return true;
+    return bitmap;
 }
-}
+} // namespace
 
 //-----------------------------------------------------------------------------
 // "toggled" from dropdown menu button
@@ -281,26 +269,9 @@ void wxToolBar::AddChildGTK(wxWindowGTK* child)
 void wxToolBarTool::SetImage()
 {
     const wxBitmap& bitmap = GetNormalBitmap();
-    wxCHECK_RET(bitmap.IsOk(), "invalid bitmap for wxToolBar icon");
 
     GtkWidget* image = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(m_item));
-#ifdef __WXGTK3__
-    if (bitmap.GetScaleFactor() > 1)
-    {
-        // Use a placeholder pixbuf with the correct size.
-        // The original will be used by our "draw" signal handler.
-        GdkPixbuf* pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
-            bitmap.GetScaledWidth(), bitmap.GetScaledHeight());
-        gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
-        g_object_unref(pixbuf);
-    }
-    else
-#endif
-    {
-        // always use pixbuf, because pixmap mask does not
-        // work with disabled images in some themes
-        gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
-    }
+    WX_GTK_IMAGE(image)->Set(bitmap);
 }
 
 // helper to create a dropdown menu item
@@ -611,18 +582,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             }
             if (!HasFlag(wxTB_NOICONS))
             {
-                GtkWidget* image = gtk_image_new();
+                GtkWidget* image = wxGtkImage::New(new BitmapProvider(tool));
                 gtk_tool_button_set_icon_widget(
                     GTK_TOOL_BUTTON(tool->m_item), image);
                 tool->SetImage();
                 gtk_widget_show(image);
-#ifdef __WXGTK3__
-                g_signal_connect(image, "draw",
-                    G_CALLBACK(image_draw), tool);
-#else
-                g_signal_connect(image, "expose_event",
-                    G_CALLBACK(image_expose_event), tool);
-#endif
             }
             if (!tool->GetLabel().empty())
             {

@@ -162,6 +162,7 @@ private:
 #if wxUSE_WEBVIEW_WEBKIT2
     bool CanExecuteEditingCommand(const gchar* command) const;
     void SetupWebExtensionServer();
+    GDBusProxy *GetExtensionProxy() const;
     bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
 #endif
 

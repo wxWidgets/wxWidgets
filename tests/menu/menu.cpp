@@ -14,15 +14,13 @@
 
 #if wxUSE_MENUBAR
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
 #include "wx/menu.h"
+#include "wx/scopedptr.h"
 #include "wx/translation.h"
 #include "wx/uiaction.h"
 
@@ -627,7 +625,9 @@ namespace
 
 void VerifyAccelAssigned( wxString labelText, int keycode )
 {
-    wxAcceleratorEntry* entry = wxAcceleratorEntry::Create( labelText );
+    const wxScopedPtr<wxAcceleratorEntry> entry(
+        wxAcceleratorEntry::Create( labelText )
+    );
 
     CHECK( entry );
     CHECK( entry->GetKeyCode() == keycode );

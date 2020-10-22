@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATAVIEWCTRL
 
@@ -2080,7 +2077,11 @@ wxSize wxDataViewCheckIconTextRenderer::GetSize() const
 
     if ( m_value.GetIcon().IsOk() )
     {
+#ifdef __WXGTK3__
+        const wxSize sizeIcon = m_value.GetIcon().GetScaledSize();
+#else
         const wxSize sizeIcon = m_value.GetIcon().GetSize();
+#endif
         if ( sizeIcon.y > size.y )
             size.y = sizeIcon.y;
 
@@ -2137,7 +2138,11 @@ bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
     const wxIcon& icon = m_value.GetIcon();
     if ( icon.IsOk() )
     {
+#ifdef __WXGTK3__
+        const wxSize sizeIcon = icon.GetScaledSize();
+#else
         const wxSize sizeIcon = icon.GetSize();
+#endif
         wxRect rectIcon(cell.GetPosition(), sizeIcon);
         rectIcon.x += xoffset;
         rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);

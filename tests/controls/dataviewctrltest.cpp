@@ -14,9 +14,6 @@
 
 #if wxUSE_DATAVIEWCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/dataview.h"
@@ -145,6 +142,30 @@ MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
+                 "wxDVC::Selection",
+                 "[wxDataViewCtrl][select]")
+{
+    // Check selection round-trip.
+    wxDataViewItemArray sel;
+    sel.push_back(m_child1);
+    sel.push_back(m_grandchild);
+    REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
+
+    wxDataViewItemArray sel2;
+    CHECK( m_dvc->GetSelections(sel2) == static_cast<int>(sel.size()) );
+
+    CHECK( sel2 == sel );
+
+    // Invalid items in GetSelections() input are supposed to be just skipped.
+    sel.clear();
+    sel.push_back(wxDataViewItem());
+    REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
+
+    CHECK( m_dvc->GetSelections(sel2) == 0 );
+    CHECK( sel2.empty() );
+}
 
 TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
                  "wxDVC::DeleteSelected",

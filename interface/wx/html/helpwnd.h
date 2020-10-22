@@ -77,7 +77,7 @@ public:
         For the values of @a helpStyle, please see the documentation for
         wxHtmlHelpController.
     */
-    wxHtmlHelpWindow(wxWindow* parent, int wxWindowID,
+    wxHtmlHelpWindow(wxWindow* parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int style = wxTAB_TRAVERSAL|wxBORDER_NONE,

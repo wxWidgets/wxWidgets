@@ -8,9 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -136,10 +133,22 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     CHECK(m_window->GetCursor().IsOk());
 
 #if wxUSE_CARET
-    //A plain window doesn't have a caret
     CHECK(!m_window->GetCaret());
 
-    wxCaret* caret = new wxCaret(m_window, 16, 16);
+    wxCaret* caret = NULL;
+
+    // Try creating the caret in two different, but normally equivalent, ways.
+    SECTION("Caret 1-step")
+    {
+        caret = new wxCaret(m_window, 16, 16);
+    }
+
+    SECTION("Caret 2-step")
+    {
+        caret = new wxCaret();
+        caret->Create(m_window, 16, 16);
+    }
+
     m_window->SetCaret(caret);
 
     CHECK(m_window->GetCaret()->IsOk());

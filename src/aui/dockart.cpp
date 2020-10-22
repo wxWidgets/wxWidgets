@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -70,15 +67,16 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
 }
 
 inline float wxAuiGetSRGB(float r) {
-    return r <= 0.03928 ? r/12.92 : pow((r+0.055)/1.055, 2.4);
+    return r <= 0.03928f ? r / 12.92f : std::pow((r + 0.055f) / 1.055f, 2.4f);
 }
 
 float wxAuiGetRelativeLuminance(const wxColour& c)
 {
     // based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
-    return 0.2126 * wxAuiGetSRGB(c.Red()/255.0)
-        + 0.7152 * wxAuiGetSRGB(c.Green()/255.0)
-        + 0.0722 * wxAuiGetSRGB(c.Blue()/255.0);
+    return
+        0.2126f * wxAuiGetSRGB(c.Red()   / 255.0f) +
+        0.7152f * wxAuiGetSRGB(c.Green() / 255.0f) +
+        0.0722f * wxAuiGetSRGB(c.Blue()  / 255.0f);
 }
 
 float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
@@ -86,7 +84,7 @@ float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
     // based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html
     float L1 = wxAuiGetRelativeLuminance(c1);
     float L2 = wxAuiGetRelativeLuminance(c2);
-    return L1 > L2 ? (L1 + 0.05) / (L2 + 0.05) : (L2 + 0.05) / (L1 + 0.05);
+    return L1 > L2 ? (L1 + 0.05f) / (L2 + 0.05f) : (L2 + 0.05f) / (L1 + 0.05f);
 }
 
 // wxAuiBitmapFromBits() is a utility function that creates a

@@ -21,9 +21,6 @@
 
 #include "wx/debug.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // This is a needed to get the declaration of the global "environ" variable
 // from MinGW headers which don't declare it there when in strict ANSI mode. We
@@ -182,12 +179,12 @@ void wxUsleep(unsigned long milliseconds)
 }
 #endif
 
-const wxChar *wxGetInstallPrefix()
+wxString wxGetInstallPrefix()
 {
     wxString prefix;
 
     if ( wxGetEnv(wxT("WXPREFIX"), &prefix) )
-        return prefix.c_str();
+        return prefix;
 
 #ifdef wxINSTALL_PREFIX
     return wxT(wxINSTALL_PREFIX);

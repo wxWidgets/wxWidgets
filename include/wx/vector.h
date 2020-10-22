@@ -163,9 +163,8 @@ private:
     // This cryptic expression means "typedef Ops to wxVectorMemOpsMovable if
     // type T is movable type, otherwise to wxVectorMemOpsGeneric".
     //
-    // Note that bcc needs the extra parentheses for non-type template
-    // arguments to compile this expression.
-    typedef typename wxIf< (wxIsMovable<T>::value),
+
+    typedef typename wxIf< wxIsMovable<T>::value,
                            wxPrivate::wxVectorMemOpsMovable<T>,
                            wxPrivate::wxVectorMemOpsGeneric<T> >::value
             Ops;

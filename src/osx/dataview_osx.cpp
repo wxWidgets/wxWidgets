@@ -647,9 +647,8 @@ void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
         last_parent = parent;
     }
 
-   // finally select the items:
-    for (i=0; i<noOfSelections; ++i)
-      dataViewWidgetPtr->Select(sel[i]);
+    // finally select the items:
+    dataViewWidgetPtr->Select(sel);
 }
 
 void wxDataViewCtrl::Unselect(wxDataViewItem const& item)

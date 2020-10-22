@@ -138,11 +138,6 @@ CFG ?=
 # it if SHARED=1 unless you know what you are doing. [dynamic,static]
 RUNTIME_LIBS ?= dynamic
 
-# Set the version of your Mingw installation here.
-#     "3" ...... this is for Mingw 2.0 or newer (comes with gcc3)
-#     "2.95" ... for Mingw 1.1 or any of the older versions [3,2.95]
-GCC_VERSION ?= 3
-
 # Windows resource compiler to use, possibly including extra options.
 # For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build. 
 WINDRES ?= windres

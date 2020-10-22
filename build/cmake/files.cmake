@@ -1281,6 +1281,7 @@ set(GTK_LOWLEVEL_SRC
     src/gtk/filectrl.cpp
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
+    src/gtk/image_gtk.cpp
     src/gtk/sockgtk.cpp
     src/gtk/mimetype.cpp
     src/gtk/minifram.cpp

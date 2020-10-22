@@ -8,10 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #if wxUSE_ANY
 
 #include "wx/any.h"
@@ -656,6 +652,8 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(variant.GetCount() == 2);
     CPPUNIT_ASSERT(variant[0].GetLong() == 15);
     CPPUNIT_ASSERT(variant[1].GetString() == "abc");
+    // Avoid the memory leak.
+    WX_CLEAR_LIST(wxAnyList, anyList);
 
     any = wxAny(vCustomType);
     CPPUNIT_ASSERT(wxANY_CHECK_TYPE(any, wxVariantData*));

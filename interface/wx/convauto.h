@@ -147,6 +147,22 @@ public:
     wxBOM GetBOM() const;
 
     /**
+        Return the detected encoding
+
+        Returns @c wxFONTENCODING_MAX if called before the first use.
+
+        @since 3.1.5
+    */
+    wxBOM GetEncoding() const;
+
+    /**
+        Check if the fall-back encoding is used.
+
+        @since 3.1.5
+    */
+    bool IsUsingFallbackEncoding() const;
+
+    /**
         Return a pointer to the characters that makes up this BOM.
 
         The returned character count is 2, 3 or 4, or undefined if the return

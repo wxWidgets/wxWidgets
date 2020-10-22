@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // FIXME: this tests currently sometimes hangs in Connect() for unknown reason
 //        and this prevents buildbot builds from working so disabling it, but

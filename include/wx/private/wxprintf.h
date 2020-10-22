@@ -23,8 +23,7 @@
 #include <string.h>
 
 // prefer snprintf over sprintf
-#if defined(__VISUALC__) || \
-        (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+#if defined(__VISUALC__)
     #define system_sprintf(buff, max, flags, data)      \
         ::_snprintf(buff, max, flags, data)
 #elif defined(HAVE_SNPRINTF)
@@ -252,7 +251,7 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('.'):
                 // don't use CHECK_PREC here to avoid warning about the value
                 // assigned to prec_dot inside it being never used (because
-                // overwritten just below) from Borland in release build
+                // overwritten just below)
                 if (in_prec && !prec_dot)
                     m_szFlags[flagofs++] = '.';
                 in_prec = true;
