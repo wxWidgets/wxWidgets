@@ -184,7 +184,7 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
     // Fix the coordinates of the block if needed.
     int allowed = -1;
     switch ( m_selectionMode )
-    {       
+    {
         case wxGrid::wxGridSelectCells:
             // In this mode arbitrary blocks can be selected.
             allowed = 1;
@@ -214,7 +214,7 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
             else
                 allowed = 0;
             break;
-        
+
         case wxGrid::wxGridSelectNone:
             allowed = 0;
             break;
@@ -255,7 +255,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
     {
         return;
     }
-    
+
     const wxGridBlockCoords canonicalizedBlock = block.Canonicalize();
 
     size_t count, n;
@@ -531,12 +531,12 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     {
         return false;
     }
-    
+
     // If selection doesn't contain the current cell (which also covers the
     // special case of nothing being selected yet), we have to create a new
     // block containing it because it doesn't make sense to extend any existing
     // block to non-selected current cell.
-    
+
     if ( !IsInSelection(m_grid->GetGridCursorCoords()) )
     {
         SelectBlock(blockStart, blockEnd, kbd, eventType);
