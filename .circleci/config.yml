@@ -11,6 +11,7 @@ commands:
   git-checkout:
     steps:
       - run: git clone --recurse-submodules https://github.com/wxWidgets/wxWidgets.git
+      - -rn echo qq
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper
