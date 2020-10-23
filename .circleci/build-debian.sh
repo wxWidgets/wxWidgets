@@ -30,7 +30,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec cmake \
  gettext git-core libgtk-3-dev libgl1-mesa-dev libglu1-mesa-dev libgtk2.0-dev \
  zlib1g-dev libjpeg-dev libpng-dev libtiff5-dev libsm-dev autotools-dev autoconf libexpat1-dev libxt-dev \
- libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libwebkit2gtk-4.0-dev libnotify-dev wget
+ libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libwebkit2gtk-4.0-dev libnotify-dev wget doxygen graphviz
 
 GDK_PIX_VER="2.40.0+dfsg-5"
 PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
