@@ -10,10 +10,7 @@ executors:
 commands:
   git-checkout:
     steps:
-      - run:
-          environment:
-            - GIT_OPTIONS=--recurse-submodules https://github.com/wxWidgets/wxWidgets.git
-          command: git clone ${GIT_OPTIONS}
+      - run: git clone --recurse-submodules https://github.com/wxWidgets/wxWidgets.git
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper
