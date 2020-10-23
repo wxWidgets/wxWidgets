@@ -27,10 +27,76 @@ docker run --privileged -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IM
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec cmake \
- gettext git-core libgtk-3-dev libgl1-mesa-dev libglu1-mesa-dev libgtk2.0-dev \
- zlib1g-dev libjpeg-dev libpng-dev libtiff5-dev libsm-dev autotools-dev autoconf libexpat1-dev libxt-dev \
- libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libwebkit2gtk-4.0-dev libnotify-dev wget doxygen graphviz
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
+    libgtk-3-dev                           \
+    libgl1-mesa-dev                        \
+    libglu1-mesa-dev                       \
+    libgtk2.0-dev                          \
+    zlib1g-dev                             \
+    libjpeg-dev                            \
+    libpng-dev                             \
+    libtiff5-dev                           \
+    libsm-dev                              \
+    libexpat1-dev                          \
+    libxt-dev                              \
+    libgstreamer1.0-dev                    \
+    libgstreamer-plugins-base1.0-dev       \
+    libwebkit2gtk-4.0-dev                  \
+    libnotify-dev                          \
+    wget                                   \
+    doxygen                                \
+    graphviz                               \
+    meson                                  \
+    bc                                     \
+    bison                                  \
+    flex                                   \
+    at-spi2-core                           \
+    libglib2.0-doc                         \
+    libatk-bridge2.0-dev                   \
+    libatk1.0-dev                          \
+    libcairo2-dev                          \
+    libegl1-mesa-dev                       \
+    libepoxy-dev                           \
+    libfontconfig1-dev                     \
+    libfribidi-dev                         \
+    libharfbuzz-dev                        \
+    libpango1.0-dev                        \
+    libwayland-dev                         \
+    libxcomposite-dev                      \
+    libxcursor-dev                         \
+    libxdamage-dev                         \
+    libxext-dev                            \
+    libxfixes-dev                          \
+    libxi-dev                              \
+    libxinerama-dev                        \
+    libxkbcommon-dev                       \
+    libxml2-utils                          \
+    libxrandr-dev                          \
+    wayland-protocols                      \
+    libatk1.0-doc                          \
+    libpango1.0-doc                        \
+    adwaita-icon-theme                     \
+    dh-sequence-gir                        \
+    fonts-cantarell                        \
+    gnome-pkg-tools                        \
+    gobject-introspection                  \
+    gsettings-desktop-schemas              \
+    gtk-doc-tools                          \
+    libcolord-dev                          \
+    libcups2-dev                           \
+    libgdk-pixbuf2.0-dev                   \
+    libgirepository1.0-dev                 \
+    libjson-glib-dev                       \
+    librest-dev                            \
+    librsvg2-common                        \
+    libxkbfile-dev                         \
+    sassc                                  \
+    xauth                                  \
+    xvfb                                   \
+    docbook-xml                            \
+    docbook-xsl                            \
+    libcairo2-doc                          \
+    xsltproc
 
 GDK_PIX_VER="2.40.0+dfsg-5"
 GTK_VER="3.24.23-2"
