@@ -1,0 +1,3 @@
+shlibs:Depends=libc6 (>= 2.17), libgcc1 (>= 1:3.0), libglib2.0-0 (>= 2.26.0), libgtk-3-0 (>= 3.0.0), libjavascriptcoregtk-4.0-18, libstdc++6 (>= 5.2), libwebkit2gtk-4.0-37 (>= 2.15.1), libwxbase3.1-5v5 (>= 3.1.5a+dfsg), libwxgtk3.1-5v5 (>= 3.1.5a+dfsg)
+misc:Depends=
+misc:Pre-Depends=
