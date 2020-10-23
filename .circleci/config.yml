@@ -31,6 +31,7 @@ jobs:
       - CONTAINER_DISTRO=debian:buster
       - PKG_DISTRO=debian/buster
       - PKG_ARCH=arm64
+      - PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
       - EMU=on
     steps:
       - git-checkout
@@ -42,6 +43,7 @@ jobs:
       - CONTAINER_DISTRO=debian:buster
       - PKG_DISTRO=debian/buster
       - PKG_ARCH=armhf
+      - PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
       - EMU=on
     steps:
       - git-checkout
@@ -52,6 +54,7 @@ jobs:
       - DOCKER_IMAGE=amd64/debian:buster
       - CONTAINER_DISTRO=debian:buster
       - PKG_DISTRO=debian/buster
+      - PRG_REPO=bbn-projects/bbn-repo/deb/debian/pool/buster
       - PKG_ARCH=amd64
     steps:
       - git-checkout
