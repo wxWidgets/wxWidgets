@@ -96,6 +96,10 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     docbook-xml                            \
     docbook-xsl                            \
     libcairo2-doc                          \
+    libc6                                  \
+    libglib2.0-0                           \
+    libjson-glib-1.0-0                     \
+    libxcomposite1                         \
     xsltproc
 
 GDK_PIX_VER="2.40.0+dfsg-5"
