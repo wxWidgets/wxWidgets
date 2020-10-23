@@ -30,6 +30,7 @@ jobs:
       - DOCKER_IMAGE=arm64v8/debian:buster
       - CONTAINER_DISTRO=debian:buster
       - PKG_DISTRO=debian/buster
+      - PKG_ARCH=arm64
       - EMU=on
     steps:
       - git-checkout
@@ -40,6 +41,7 @@ jobs:
       - DOCKER_IMAGE=arm32v7/debian:buster
       - CONTAINER_DISTRO=debian:buster
       - PKG_DISTRO=debian/buster
+      - PKG_ARCH=armhf
       - EMU=on
     steps:
       - git-checkout
@@ -50,6 +52,7 @@ jobs:
       - DOCKER_IMAGE=amd64/debian:buster
       - CONTAINER_DISTRO=debian:buster
       - PKG_DISTRO=debian/buster
+      - PKG_ARCH=amd64
     steps:
       - git-checkout
       - build-n-publish-debian
