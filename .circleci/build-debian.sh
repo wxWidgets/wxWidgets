@@ -43,7 +43,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     wget ${PKG_SRC}/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-${GDK_PIX_VER}_all.deb;
+    dpkg -i libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
     dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb"
