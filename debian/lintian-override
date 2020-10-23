@@ -1,6 +1,0 @@
-libwxbase3.1-5v5: package-name-doesnt-match-sonames
-libwxgtk3.1-5v5: package-name-doesnt-match-sonames
-libwxgtk-media3.1-5v5: package-name-doesnt-match-sonames
-libwxgtk3.1-gtk3-5v5: package-name-doesnt-match-sonames
-libwxgtk-media3.1-gtk3-5v5: package-name-doesnt-match-sonames
-libwxgtk-webview3.1-gtk3-5v5: package-name-doesnt-match-sonames

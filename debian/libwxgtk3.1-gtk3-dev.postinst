@@ -1,8 +1,0 @@
-#!/bin/sh
-set -e
-
-update-alternatives --install /usr/bin/wx-config wx-config            \
-			      /usr/lib/aarch64-linux-gnu/wx/config/gtk3-unicode-3.1  \
-			      $(( 31 * 10 + 7 ))
-
-#DEBHELPER#
