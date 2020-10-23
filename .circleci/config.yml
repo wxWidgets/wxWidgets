@@ -1,0 +1,62 @@
+---
+version: 2.1
+orbs:
+  cloudsmith: cloudsmith/cloudsmith@1.0.4
+executors:
+  boot-linux:
+    machine:
+      enabled: true
+      image: ubuntu-2004:202010-01
+commands:
+  build-n-publish-debian:
+    steps:
+      - checkout
+      - run: sudo apt-get -y install debhelper
+      - run: chmod a+x .circleci/*.sh
+      - run:
+          command: |
+            .circleci/build-debian.sh
+          no_output_timeout: 30m
+      - cloudsmith/ensure-api-key
+      - cloudsmith/install-cli
+      - run: .circleci/publish-cloudsmith.sh ${PKG_TYPE} bbn-projects/bbn-repo ${PKG_DISTRO}
+jobs:
+  build-debian-buster-arm64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=arm64v8/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_TYPE=deb
+      - PKG_DISTRO=debian/buster
+      - PKG_ARCH=arm64
+      - EMU=on
+    steps:
+      - build-n-publish-debian
+  build-debian-buster-arm32:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=arm32v7/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_TYPE=deb
+      - PKG_DISTRO=debian/buster
+      - PKG_ARCH=armhf
+      - EMU=on
+    steps:
+      - build-n-publish-debian
+  build-debian-buster-amd64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=amd64/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_TYPE=deb
+      - PKG_DISTRO=debian/buster
+      - PKG_ARCH=amd64
+    steps:
+      - build-n-publish-debian
+workflows:
+  version: 2
+  build_all:
+    jobs:
+      - build-debian-buster-arm64
+      - build-debian-buster-arm32
+      - build-debian-buster-amd64
