@@ -98,6 +98,13 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
     if (selmode == m_selectionMode)
         return;
 
+    if (selmode == wxGrid::wxGridSelectNone)
+    {
+        ClearSelection();
+        m_selectionMode = selmode;
+        return;
+    }
+
     if ( m_selectionMode != wxGrid::wxGridSelectCells )
     {
         // if changing form row to column selection
@@ -127,6 +134,7 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
             switch ( selmode )
             {
                 case wxGrid::wxGridSelectCells:
+                case wxGrid::wxGridSelectNone:
                     wxFAIL_MSG("unreachable");
                     break;
 
@@ -321,6 +329,10 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
                 splitOrientation = wxHORIZONTAL;
             else
                 splitOrientation = wxVERTICAL;
+            break;
+
+        case wxGrid::wxGridSelectNone:
+            wxFAIL_MSG("unreachable");
             break;
         }
 
@@ -589,6 +601,10 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
                 canChangeRow =
                 canChangeCol = true;
             }
+            break;
+
+        case wxGrid::wxGridSelectNone:
+            wxFAIL_MSG("unreachable");
             break;
     }
 
