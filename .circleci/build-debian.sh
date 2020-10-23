@@ -100,6 +100,10 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     libglib2.0-0                           \
     libjson-glib-1.0-0                     \
     libxcomposite1                         \
+    libgcc-s1                              \
+    libcrypt1                              \
+    libnss-nis                             \
+    libnss-nisplus                         \
     xsltproc
 
 GDK_PIX_VER="2.40.0+dfsg-5"
