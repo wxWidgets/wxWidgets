@@ -125,7 +125,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     wget http://http.us.debian.org/debian/pool/main/g/glib2.0/libglib2.0-0_2.66.1-2_${PKG_ARCH}.deb;
     wget http://http.us.debian.org/debian/pool/main/j/json-glib/libjson-glib-1.0-0_1.6.0-1_${PKG_ARCH}.deb;
     wget http://http.us.debian.org/debian/pool/main/libx/libxcomposite/libxcomposite1_0.4.5-1_${PKG_ARCH}.deb;
-    dpkg -i libgcc-s1_10.2.0-15_${PKG_ARCH}.deb;
+    wget http://http.us.debian.org/debian/pool/main/g/gcc-10/gcc-10-base_10.2.0-15_${PKG_ARCH}.deb;
+    dpkg -i gcc-10-base_10.2.0-15_${PKG_ARCH}.deb libgcc-s1_10.2.0-15_${PKG_ARCH}.deb;
     dpkg -i libnss-nis_3.1-4_${PKG_ARCH}.deb;
     dpkg -i libnss-nisplus_1.3-4_${PKG_ARCH}.deb;
     dpkg -i libc6_2.31-4_${PKG_ARCH}.deb libcrypt1_4.4.17-1_${PKG_ARCH}.deb;
