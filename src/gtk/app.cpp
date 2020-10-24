@@ -101,7 +101,7 @@ static gboolean wxapp_idle_callback(gpointer)
 }
 
 // 0: no change, 1: focus in, 2: focus out
-static int gs_focusChange;
+static wxUIntPtr gs_focusChange;
 
 extern "C" {
 static gboolean
@@ -109,7 +109,7 @@ wx_focus_event_hook(GSignalInvocationHint*, unsigned, const GValue* param_values
 {
     // If focus change on TLW
     if (GTK_IS_WINDOW(g_value_peek_pointer(param_values)))
-        gs_focusChange = GPOINTER_TO_INT(data);
+        gs_focusChange = wxUIntPtr(data);
 
     return true;
 }
