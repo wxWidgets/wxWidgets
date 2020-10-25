@@ -1469,7 +1469,11 @@ const unsigned char toucan[] =
 void ImageTestCase::CreateBitmapFromCursor()
 {
 #if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
+#ifdef __WXMSW__
     wxImage image( 32, 32, toucan );
+#else
+    wxImage image( "../samples/image/toucan_resized.png" );
+#endif
     wxCursor cursor( image );
     wxBitmap bitmap( cursor );
     CHECK_THAT( image,  RGBSameAs( bitmap.ConvertToImage() ) );
