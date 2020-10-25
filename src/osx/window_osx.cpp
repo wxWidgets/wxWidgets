@@ -507,7 +507,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 void wxWindowMac::MacUpdateControlFont()
 {
     if ( GetPeer() )
-        GetPeer()->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
+        GetPeer()->SetFont(GetFont()) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
     if ( IsShownOnScreen() )

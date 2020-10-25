@@ -2719,9 +2719,9 @@ id wxCocoaDataViewControl::GetItemAtRow(int row) const
     return [m_OutlineView itemAtRow:row];
 }
 
-void wxCocoaDataViewControl::SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack)
+void wxCocoaDataViewControl::SetFont(const wxFont& font)
 {
-    wxWidgetCocoaImpl::SetFont(font, foreground, windowStyle, ignoreBlack);
+    wxWidgetCocoaImpl::SetFont(font);
     SetRowHeight(0/*will use default/minimum height*/);
 }
 

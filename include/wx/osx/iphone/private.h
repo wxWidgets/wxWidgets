@@ -102,7 +102,7 @@ public :
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
-    void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+    void                SetFont(const wxFont & font);
 
     void                InstallEventHandler( WXWidget control = NULL );
     bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }

@@ -150,7 +150,7 @@ public :
     void                PulseGauge() wxOVERRIDE;
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) wxOVERRIDE;
 
-    void                SetFont( const wxFont & font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true ) wxOVERRIDE;
+    void                SetFont(const wxFont & font) wxOVERRIDE;
     void                SetToolTip( wxToolTip* tooltip ) wxOVERRIDE;
 
     void                InstallEventHandler( WXWidget control = NULL ) wxOVERRIDE;

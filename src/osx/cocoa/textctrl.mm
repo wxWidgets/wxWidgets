@@ -1021,7 +1021,7 @@ void wxNSTextViewControl::DoUpdateTextStyle()
     }
 }
 
-void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )
+void wxNSTextViewControl::SetFont(const wxFont & font)
 {
     if ([m_textView respondsToSelector:@selector(setFont:)])
         [m_textView setFont: font.OSXGetNSFont()];
