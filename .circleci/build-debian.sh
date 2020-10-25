@@ -109,6 +109,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     libglib2.0-0                           \
     libjson-glib-1.0-0                     \
     libxcomposite1                         \
+    gir1.2-gtk-3.0                         \
+    gtk-update-icon-cache                  \
     xsltproc
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
