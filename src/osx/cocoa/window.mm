@@ -3225,7 +3225,11 @@ void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
     if (dobj)
     {
         wxCFMutableArrayRef<CFStringRef> typesarray;
-        dobj->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);
+        /*
+            In macOS the view controls the types we can drop onto it, so we have to collect
+            all formats that can be put into dataObject instead of only ones that can be get.
+        */
+        dobj->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Set);
         NSView* targetView = m_osxView;
         if ([m_osxView isKindOfClass:[NSScrollView class]])
             targetView = [(NSScrollView*)m_osxView documentView];
