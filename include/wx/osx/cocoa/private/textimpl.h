@@ -118,7 +118,7 @@ public:
     virtual long XYToPosition(long x, long y) const wxOVERRIDE;
     virtual void ShowPosition(long pos) wxOVERRIDE;
     virtual void WriteText(const wxString& str) wxOVERRIDE ;
-    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) wxOVERRIDE;
+    virtual void SetFont(const wxFont & font) wxOVERRIDE;
 
     virtual bool GetStyle(long position, wxTextAttr& style) wxOVERRIDE;
     virtual void SetStyle(long start, long end, const wxTextAttr& style) wxOVERRIDE;

@@ -348,7 +348,7 @@ public :
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 
-    virtual void        SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) = 0;
+    virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 

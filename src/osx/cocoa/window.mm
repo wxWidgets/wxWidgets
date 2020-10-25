@@ -3593,7 +3593,7 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
     }
 }
 
-void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bool)
+void wxWidgetCocoaImpl::SetFont(wxFont const& font)
 {
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
@@ -3604,7 +3604,10 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
     if ([targetView respondsToSelector:@selector(setTextColor:)])
+    {
+        wxColor col = GetWXPeer()->GetForegroundColour();
         [targetView setTextColor: col.OSXGetNSColor()];
+    }
     if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
         SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
 }
