@@ -26,7 +26,7 @@ WORK_DIR=$(pwd):/ci-source
 docker run --privileged --cap-add=ALL --security-opt="seccomp=unconfined" -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
-docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get update
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install apt-transport-https wget curl gnupg2
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
@@ -35,8 +35,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
   "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/setup/config.deb.txt?distro=debian&codename=buster' -O- | tee -a /etc/apt/sources.list"
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
-docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
     libgtk-3-dev                           \
     libgl1-mesa-dev                        \
     libglu1-mesa-dev                       \
@@ -111,7 +111,7 @@ docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get -y insta
     libxcomposite1                         \
     xsltproc
 
-docker exec --cap-add=ALL -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.\*$EXT
