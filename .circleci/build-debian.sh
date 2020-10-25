@@ -9,7 +9,7 @@ set -xe
 
 DOCKER_SOCK="unix:///var/run/docker.sock"
 
-echo "DOCKER_OPTS=\"-H tcp://127.0.0.1:2375 -H $DOCKER_SOCK -s devicemapper\"" | sudo tee /etc/default/docker > /dev/null
+echo "DOCKER_OPTS=\"-H tcp://127.0.0.1:2375 -H $DOCKER_SOCK -s overlay2\"" | sudo tee /etc/default/docker > /dev/null
 sudo service docker restart
 sleep 5;
 
@@ -17,17 +17,25 @@ if [ "$EMU" = "on" ]; then
   if [ "$CONTAINER_DISTRO" = "raspbian" ]; then
       docker run --rm --privileged multiarch/qemu-user-static:register --reset
   else
-      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      docker run --rm --privileged --cap-add=ALL --security-opt="seccomp=unconfined" multiarch/qemu-user-static --reset --credential yes --persistent yes
   fi
 fi
 
 WORK_DIR=$(pwd):/ci-source
 
-docker run --privileged -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
+docker run --privileged --cap-add=ALL --security-opt="seccomp=unconfined" -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
+docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get update
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install apt-transport-https wget curl gnupg2
+
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+  "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/gpg/gpg.070C975769B2A67A.key' -O- | apt-key add -"
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+  "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/setup/config.deb.txt?distro=debian&codename=buster' -O- | tee -a /etc/apt/sources.list"
+
+docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
+docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
     libgtk-3-dev                           \
     libgl1-mesa-dev                        \
     libglu1-mesa-dev                       \
@@ -102,49 +110,10 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     libxcomposite1                         \
     xsltproc
 
-GDK_PIX_VER="2.40.0+dfsg-5"
-GTK_VER="3.24.23-2"
-PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
-PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
+docker exec --cap-add=ALL -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-   "wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gtk+3.0/libgtk-3-common_${GTK_VER}_all.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gtk+3.0/libgtk-3-0_${GTK_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gtk+3.0/gir1.2-gtk-3.0_${GTK_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gtk+3.0/libgtk-3-dev_${GTK_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/glibc/libc6_2.31-4_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/libx/libxcrypt/libcrypt1_4.4.17-1_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gcc-10/libgcc-s1_10.2.0-15_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/libn/libnss-nis/libnss-nis_3.1-4_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/libn/libnss-nisplus/libnss-nisplus_1.3-4_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/glib2.0/libglib2.0-0_2.66.1-2_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/j/json-glib/libjson-glib-1.0-0_1.6.0-1_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/libx/libxcomposite/libxcomposite1_0.4.5-1_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gcc-10/gcc-10-base_10.2.0-15_${PKG_ARCH}.deb;
-    dpkg -i gcc-10-base_10.2.0-15_${PKG_ARCH}.deb libgcc-s1_10.2.0-15_${PKG_ARCH}.deb;
-    dpkg -i libc6_2.31-4_${PKG_ARCH}.deb libcrypt1_4.4.17-1_${PKG_ARCH}.deb libnss-nis_3.1-4_${PKG_ARCH}.deb libnss-nisplus_1.3-4_${PKG_ARCH}.deb;
-    dpkg -i libglib2.0-0_2.66.1-2_${PKG_ARCH}.deb;
-    dpkg -i libjson-glib-1.0-0_1.6.0-1_${PKG_ARCH}.deb;
-    dpkg -i libxcomposite1_0.4.5-1_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
-    dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgtk-3-common_${GTK_VER}_all.deb;
-    dpkg -i libgtk-3-0_${GTK_VER}_${PKG_ARCH}.deb;
-    dpkg -i gir1.2-gtk-3.0_${GTK_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgtk-3-dev_${GTK_VER}_${PKG_ARCH}.deb"
-
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
-
-find dist -name \*.deb
+find dist -name \*.\*$EXT
 
 echo "Stopping"
 docker ps -a
