@@ -62,7 +62,7 @@ public:
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to );
     virtual void WriteText(const wxString& str) ;
-    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+    virtual void SetFont(const wxFont & font);
 
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual void SetStyle(long start, long end, const wxTextAttr& style);

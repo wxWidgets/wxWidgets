@@ -622,7 +622,7 @@ double wxWidgetIPhoneImpl::GetContentScaleFactor() const
         return 1.0;
 }
 
-void wxWidgetIPhoneImpl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
+void wxWidgetIPhoneImpl::SetFont(const wxFont & font)
 {
 }
 
