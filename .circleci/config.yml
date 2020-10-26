@@ -6,7 +6,7 @@ executors:
   boot-linux:
     machine:
       enabled: true
-      image: ubuntu-2004:202010-01
+      image: ubuntu-1604:202010-01
 commands:
   git-checkout:
     steps:
@@ -22,43 +22,70 @@ commands:
           no_output_timeout: 30m
       - cloudsmith/ensure-api-key
       - cloudsmith/install-cli
-      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}
+      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
+  do-all:
+    steps:
+      - git-checkout
+      - build-n-publish-debian
 jobs:
   build-debian-buster-arm64:
     executor: boot-linux
     environment:
       - DOCKER_IMAGE=arm64v8/debian:buster
       - CONTAINER_DISTRO=debian:buster
-      - PKG_DISTRO=debian/buster
-      - PKG_ARCH=arm64
-      - PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=debian
       - EMU=on
     steps:
-      - git-checkout
-      - build-n-publish-debian
+      - do-all
   build-debian-buster-arm32:
     executor: boot-linux
     environment:
       - DOCKER_IMAGE=arm32v7/debian:buster
       - CONTAINER_DISTRO=debian:buster
-      - PKG_DISTRO=debian/buster
-      - PKG_ARCH=armhf
-      - PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=debian
       - EMU=on
     steps:
-      - git-checkout
-      - build-n-publish-debian
+      - do-all
   build-debian-buster-amd64:
     executor: boot-linux
     environment:
       - DOCKER_IMAGE=amd64/debian:buster
       - CONTAINER_DISTRO=debian:buster
-      - PKG_DISTRO=debian/buster
-      - PRG_REPO=bbn-projects/bbn-repo/deb/debian/pool/buster
-      - PKG_ARCH=amd64
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=debian
     steps:
-      - git-checkout
-      - build-n-publish-debian
+      - do-all
+  build-debian-bullseye-arm64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=arm64v8/debian:bullseye
+      - CONTAINER_DISTRO=debian:bullseye
+      - PKG_RELEASE=bullseye
+      - PKG_DISTRO=debian
+      - EMU=on
+    steps:
+      - do-all
+  build-debian-bullseye-arm32:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=arm32v7/debian:bullseye
+      - CONTAINER_DISTRO=debian:bullseye
+      - PKG_RELEASE=bullseye
+      - PKG_DISTRO=debian
+      - EMU=on
+    steps:
+      - do-all
+  build-debian-bullseye-amd64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=amd64/debian:bullseye
+      - CONTAINER_DISTRO=debian:bullseye
+      - PKG_RELEASE=bullseye
+      - PKG_DISTRO=debian
+    steps:
+      - do-all
 workflows:
   version: 2
   build_all:
@@ -66,3 +93,6 @@ workflows:
       - build-debian-buster-arm64
       - build-debian-buster-arm32
       - build-debian-buster-amd64
+      - build-debian-bullseye-arm64
+      - build-debian-bullseye-arm32
+      - build-debian-bullseye-amd64
