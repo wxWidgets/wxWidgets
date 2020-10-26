@@ -89,8 +89,18 @@ jobs:
   build-raspbian-buster-arm32:
     executor: boot-linux
     environment:
-      - DOCKER_IMAGE=jongough/raspbian-buster:plugin_build_tooling_current
-      - CONTAINER_DISTRO=raspbian-buster
+      - DOCKER_IMAGE=arm32v7/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_RELEASE=raspbian
+      - PKG_DISTRO=buster
+      - EMU=on
+    steps:
+      - do-all
+  build-raspbian-buster-arm64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=arm64v8/debian:buster
+      - CONTAINER_DISTRO=debian:buster
       - PKG_RELEASE=raspbian
       - PKG_DISTRO=buster
       - EMU=on
@@ -107,3 +117,4 @@ workflows:
       - build-debian-bullseye-arm32
       - build-debian-bullseye-amd64
       - build-raspbian-buster-arm32
+      - build-raspbian-buster-arm64
