@@ -1709,12 +1709,18 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
+// User can define behaviour for any key.
 // Default enter key behaviour is to begin cell editing. Subclass keyDown to
 // provide a keyboard wxEVT_DATAVIEW_ITEM_ACTIVATED event and allow the NSEvent
 // to pass if the wxEvent is not processed.
 - (void)keyDown:(NSEvent *)event
 {
-    if( [[event charactersIgnoringModifiers]
+    // Propagate key event to wxDVC
+    if (implementation->DoHandleKeyEvent(event))
+    {
+        // Nothing to do: user redefined default behaviour
+    }
+    else if( [[event charactersIgnoringModifiers]
          characterAtIndex: 0] == NSCarriageReturnCharacter )
     {
         wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
