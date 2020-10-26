@@ -40857,7 +40857,12 @@ case "${host}" in
         ;;
 esac
 
-dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '$0=="-arch" || $0=="-framework" || !seen[$0]++'; }
+dedup_flags()
+{
+    printf "%s " "$@" |
+        awk 'BEGIN { RS=" "; ORS=" " }
+            { if ($0=="-arch" || $0=="-framework" || !seen[$0]++) print }'
+}
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
 WX_CFLAGS=`dedup_flags "$CFLAGS"`

@@ -8448,7 +8448,12 @@ dnl Also get rid of duplicates in the flags, which results in dramatically
 dnl shorter build logs and so is well worth it (but preserve some special
 dnl flags which are explicitly allowed to occur multiple times, as all their
 dnl occurrences must be preserved).
-dedup_flags () { printf %s "$@" | awk -v RS=' +' -v ORS=' ' '$0=="-arch" || $0=="-framework" || !seen[[$0]]++'; }
+dedup_flags()
+{
+    printf "%s " "$@" |
+        awk 'BEGIN { RS=" "; ORS=" " }
+            { if ($0=="-arch" || $0=="-framework" || !seen[[$0]]++) print }'
+}
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
 WX_CFLAGS=`dedup_flags "$CFLAGS"`
