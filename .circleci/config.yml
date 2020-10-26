@@ -113,8 +113,8 @@ workflows:
       - build-debian-buster-arm64
       - build-debian-buster-arm32
       - build-debian-buster-amd64
-      - build-debian-bullseye-arm64
-      - build-debian-bullseye-arm32
-      - build-debian-bullseye-amd64
-      - build-raspbian-buster-arm32
-      - build-raspbian-buster-arm64
+#      - build-debian-bullseye-arm64
+#      - build-debian-bullseye-arm32
+#      - build-debian-bullseye-amd64
+#      - build-raspbian-buster-arm32
+#      - build-raspbian-buster-arm64
