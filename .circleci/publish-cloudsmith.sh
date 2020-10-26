@@ -8,6 +8,6 @@ for pkg_file in dist/*.$EXT; do
   cloudsmith push deb $REPO/$DISTRO $pkg_file
   RESULT=$?
   if [ $RESULT -eq 144 ]; then
-     echo " skipping already deployed $pkg_file"
+     echo "skipping already deployed $pkg_file"
   fi
 done
