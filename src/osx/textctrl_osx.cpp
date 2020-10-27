@@ -264,6 +264,16 @@ int wxTextCtrl::GetNumberOfLines() const
     return GetTextPeer()->GetNumberOfLines() ;
 }
 
+unsigned wxTextCtrl::GetPhysicalLineCount() const
+{
+    return GetTextPeer()->GetPhysicalLineCount();
+}
+
+unsigned wxTextCtrl::GetLogicalLineCount() const
+{
+    return GetTextPeer()->GetLogicalLineCount();
+}
+
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
     return GetTextPeer()->XYToPosition( x , y ) ;
@@ -720,6 +730,16 @@ int wxTextWidgetImpl::GetNumberOfLines() const
     }
 
     return lines ;
+}
+
+unsigned wxTextWidgetImpl::GetPhysicalLineCount() const
+{
+    return 0;
+}
+
+unsigned wxTextWidgetImpl::GetLogicalLineCount() const
+{
+    return 0;
 }
 
 wxString wxTextWidgetImpl::GetLineText(long lineNo) const
