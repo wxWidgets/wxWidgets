@@ -1244,11 +1244,6 @@ bool wxAuiManager::DetachPane(wxWindow* window)
                     p.frame->Show(false);
 
                 // reparent to m_frame and destroy the pane
-                if (m_actionWindow == p.frame)
-                {
-                    m_actionWindow = NULL;
-                }
-
                 p.window->Reparent(m_frame);
                 p.frame->SetSizer(NULL);
                 p.frame->Destroy();
