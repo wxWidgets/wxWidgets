@@ -111,8 +111,8 @@ workflows:
   build_all:
     jobs:
       - build-debian-buster-arm64
-      - build-debian-buster-arm32
-      - build-debian-buster-amd64
+#      - build-debian-buster-arm32
+#      - build-debian-buster-amd64
 #      - build-debian-bullseye-arm64
 #      - build-debian-bullseye-arm32
 #      - build-debian-bullseye-amd64
