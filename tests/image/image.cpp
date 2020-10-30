@@ -1925,9 +1925,11 @@ TEST_CASE("wxImage::RGBtoHSV", "[image][rgb][hsv]")
             wxImage::RGBValue(   0,   0, 255 ),
             wxImage::RGBValue(   1,   2,   3 ),
             wxImage::RGBValue(  10,  20,  30 ),
+            wxImage::RGBValue(   0,   1,   6 ),
+            wxImage::RGBValue(   9,   0,  99 ),
         };
 
-        for (int i = 0; i < WXSIZEOF(rgbValues); i++)
+        for (unsigned i = 0; i < WXSIZEOF(rgbValues); i++)
         {
             wxImage::RGBValue rgbValue = rgbValues[i];
             wxImage::HSVValue hsvValue = wxImage::RGBtoHSV(rgbValue);
