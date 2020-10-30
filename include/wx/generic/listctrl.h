@@ -208,6 +208,8 @@ public:
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
 
+    void SetListRulesAlternateColourOnBlank(bool state, const wxColour& colour);
+
 protected:
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;

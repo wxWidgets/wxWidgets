@@ -133,6 +133,9 @@ protected:
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
     void OnSetRowLines(wxCommandEvent& event);
+#if !defined(__WXMSW__)
+    void OnSetRowLinesOnBlank(wxCommandEvent& event);
+#endif
     void OnCustomHeaderAttr(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
@@ -223,6 +226,9 @@ enum
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
     LIST_ROW_LINES,
+#if !defined(__WXMSW__)
+    LIST_ROW_LINES_ON_BLANK,
+#endif
     LIST_CUSTOM_HEADER_ATTR,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_HEADER,

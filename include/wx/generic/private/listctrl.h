@@ -775,6 +775,17 @@ public:
         selected ? ++m_selCount : --m_selCount;
     }
 
+    void DrawInReportModeOnBlank ( wxDC *dc,
+                                   const wxRect& rect,
+                                   int lineNumber );
+
+    void SetListRulesAlternateColourOnBlank( const bool state,
+                                             const wxColour& colour)
+    {
+        m_listRulesAlternateColourOnBlank = state;
+        m_alternateColourOnBlank = colour;
+    }
+
 protected:
     // the array of all line objects for a non virtual list control (for the
     // virtual list control we only ever use m_lines[0])
@@ -941,6 +952,13 @@ private:
 
     friend class wxGenericListCtrl;
     friend class wxListCtrlMaxWidthCalculator;
+
+    // tells whether or not to paint empty rows with alternate colour and draw
+    // rulers on empty rows
+    bool m_listRulesAlternateColourOnBlank;
+
+    // colour to paint empty rows (zebra effect)
+    wxColour m_alternateColourOnBlank;
 };
 
 #endif // wxUSE_LISTCTRL
