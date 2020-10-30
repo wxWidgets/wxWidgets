@@ -797,7 +797,7 @@ void wxListMainWindow::DrawInReportModeOnBlank ( wxDC *dc,
                                                  const wxRect& rect,
                                                  int lineNumber )
 {
-    // Checks whether or not lineNumber is due to change on its background 
+    // Checks whether or not lineNumber is due to change on its background
     // colour and fills the row from beginning to end with the colour stored
     // in the m_AlternateColourOnBlank instance variable in case afirmative
     if ( lineNumber % 2 ) {
@@ -2093,7 +2093,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         size_t visibleEnd;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
 
-        visibleEnd = (m_listRulesAlternateColourOnBlank && 
+        visibleEnd = (m_listRulesAlternateColourOnBlank &&
                       m_linesPerPage > visibleTo ? m_linesPerPage : visibleTo);
 
         wxRect rectLine;
@@ -2161,8 +2161,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw vertical rules if required
-        if ( HasFlag(wxLC_VRULES) && (m_listRulesAlternateColourOnBlank || 
-                                      ( ! m_listRulesAlternateColourOnBlank 
+        if ( HasFlag(wxLC_VRULES) && (m_listRulesAlternateColourOnBlank ||
+                                      ( ! m_listRulesAlternateColourOnBlank
                                         && !IsEmpty() ) ) )
         {
             wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
@@ -2187,7 +2187,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 if (m_listRulesAlternateColourOnBlank) {
                     dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
                             x_pos, clientHeight);
-                } else { 
+                } else {
                     dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
                             x_pos, lastItemRect.GetBottom() + 1 - dev_y);
                 }
@@ -4984,9 +4984,9 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     return true;
 }
 
-void wxGenericListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour) 
+void wxGenericListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour)
 {
-    if (m_mainWin) m_mainWin->SetListRulesAlternateColourOnBlank(state, colour); 
+    if (m_mainWin) m_mainWin->SetListRulesAlternateColourOnBlank(state, colour);
 }
 
 wxBorder wxGenericListCtrl::GetDefaultBorder() const

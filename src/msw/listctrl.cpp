@@ -3280,7 +3280,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         return;
     }
 
-    int visibleEnd = countPerPage; 
+    int visibleEnd = countPerPage;
     visibleEnd -= 1;
 
     const long top = GetTopItem();
@@ -3300,23 +3300,23 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             rect.x = 0;
             rect.y = clipRect.y;
             rect.width = clipRect.width;
-            rect.height = itemRect.height; 
+            rect.height = itemRect.height;
             for ( long i = bottom+1; i <= visibleEnd + 1 ; i++ )
             {
                 if ( i % 2 ) {
-                    rect.y = iniy + (i * itemRect.height);	
+                    rect.y = iniy + (i * itemRect.height);
                     dc2.DrawRectangle(rect);
                 }
             }
-             
+
             // Need to include 4 lines below to update painting of
-            // Blank Lines (Unfortunately theres is some flickering 
+            // Blank Lines (Unfortunately theres is some flickering
             if ( iRefresh == 0 ) {
                 Refresh();
             }
             iRefresh = iRefresh == 5 ? 0 : iRefresh + 1;
-        }	    
-    }	
+        }
+    }
 
     if (drawHRules)
     {
@@ -3334,9 +3334,9 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         if ( m_listRulesAlternateColourOnBlank && visibleEnd > bottom ) {
             for ( long i = bottom+1; i <= visibleEnd ; i++ ) {
                 cy += itemRect.height;
-                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);	
+                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
             }
-        }	    
+        }
 
     }
 
@@ -3400,7 +3400,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 if ( m_listRulesAlternateColourOnBlank && visibleEnd > bottom ) {
                     dc.DrawLine(x-1, topItemRect.GetY() - gap,
                                 x-1, clientSize.GetHeight());
-                } else {    
+                } else {
                     dc.DrawLine(x-1, topItemRect.GetY() - gap,
                                 x-1, bottomItemRect.GetBottom());
                 }
@@ -3492,7 +3492,7 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 void wxListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour)
 {
     m_listRulesAlternateColourOnBlank = state;
-    m_alternateColourOnBlank = colour; 
+    m_alternateColourOnBlank = colour;
 }
 
 // ----------------------------------------------------------------------------

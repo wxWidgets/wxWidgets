@@ -1334,7 +1334,7 @@ public:
     void CheckItem(long item, bool check);
 
     /**
-        When the content of state is true, tells listctrl to draw  
+        When the content of state is true, tells listctrl to draw
         horizontal and vertical rulers on blank rows and also to
         paint the background of alternate rows on blank rows, using
         colour to paint the alternate blank(empty) rows' background.
@@ -1342,13 +1342,13 @@ public:
         As EnableAlternateRowColours(), this method can only be used with
         controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
 
-        @param state 
+        @param state
             if @true, draws horizontal rules and vertical rules on empty rows
-            and uses the colour parameter to paint the background of 
+            and uses the colour parameter to paint the background of
             alternate rows when those rows are blank, empty, with no data.
         @param colour
-            A valid row background colour to enable alternating rows on 
-            blank rows (rows with no data). 
+            A valid row background colour to enable alternating rows on
+            blank rows (rows with no data).
 
         @since 3.1.2
     */

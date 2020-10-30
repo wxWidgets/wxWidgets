@@ -953,7 +953,7 @@ private:
     friend class wxGenericListCtrl;
     friend class wxListCtrlMaxWidthCalculator;
 
-    // tells whether or not to paint empty rows with alternate colour and draw 
+    // tells whether or not to paint empty rows with alternate colour and draw
     // rulers on empty rows
     bool m_listRulesAlternateColourOnBlank;
 
