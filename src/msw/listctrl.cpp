@@ -288,6 +288,9 @@ void wxListCtrl::Init()
     m_hasAnyAttr = false;
 
     m_headerCustomDraw = NULL;
+
+    m_listRulesAlternateColourOnBlank = false;
+    m_alternateColourOnBlank = wxColour(176, 235, 212, 0xff);
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -3249,6 +3252,8 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const bool drawHRules = HasFlag(wxLC_HRULES);
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
+    static int iRefresh = 0;
+
     if (!InReportView() || !(drawHRules || drawVRules) || !itemCount)
     {
         event.Skip();
@@ -3275,20 +3280,64 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         return;
     }
 
+    int visibleEnd = countPerPage; 
+    visibleEnd -= 1;
+
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
+
+    wxRect clipRect;
+    dc.GetClippingBox(clipRect);
+
+    if (m_listRulesAlternateColourOnBlank && visibleEnd > bottom ) {
+        wxPaintDC dc2(this);
+        wxRect itemRect;
+        if (GetItemRect(0, itemRect)) {
+            dc2.SetBrush(m_alternateColourOnBlank);
+            dc2.SetPen(*wxTRANSPARENT_PEN);
+            wxRect rect;
+            int iniy = clipRect.y;
+            rect.x = 0;
+            rect.y = clipRect.y;
+            rect.width = clipRect.width;
+            rect.height = itemRect.height; 
+            for ( long i = bottom+1; i <= visibleEnd + 1 ; i++ )
+            {
+                if ( i % 2 ) {
+                    rect.y = iniy + (i * itemRect.height);	
+                    dc2.DrawRectangle(rect);
+                }
+            }
+             
+            // Need to include 4 lines below to update painting of
+            // Blank Lines (Unfortunately theres is some flickering 
+            if ( iRefresh == 0 ) {
+                Refresh();
+            }
+            iRefresh = iRefresh == 5 ? 0 : iRefresh + 1;
+        }	    
+    }	
 
     if (drawHRules)
     {
         wxRect itemRect;
+        int cy = 0;
         for ( long i = top; i <= bottom; i++ )
         {
             if (GetItemRect(i, itemRect))
             {
-                const int cy = itemRect.GetBottom();
-                dc.DrawLine(0, cy, clientSize.x, cy);
+                cy = itemRect.GetBottom();
+                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
             }
         }
+
+        if ( m_listRulesAlternateColourOnBlank && visibleEnd > bottom ) {
+            for ( long i = bottom+1; i <= visibleEnd ; i++ ) {
+                cy += itemRect.height;
+                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);	
+            }
+        }	    
+
     }
 
     if (drawVRules)
@@ -3348,8 +3397,13 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             {
                 int colWidth = GetColumnWidth(indexArray[col]);
                 x += colWidth ;
-                dc.DrawLine(x-1, topItemRect.GetY() - gap,
-                            x-1, bottomItemRect.GetBottom());
+                if ( m_listRulesAlternateColourOnBlank && visibleEnd > bottom ) {
+                    dc.DrawLine(x-1, topItemRect.GetY() - gap,
+                                x-1, clientSize.GetHeight());
+                } else {    
+                    dc.DrawLine(x-1, topItemRect.GetY() - gap,
+                                x-1, bottomItemRect.GetBottom());
+                }
             }
         }
     }
@@ -3433,6 +3487,12 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
     if ( !ListView_RedrawItems(GetHwnd(), itemFrom, itemTo) )
         wxLogLastError(wxS("ListView_RedrawItems"));
+}
+
+void wxListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour)
+{
+    m_listRulesAlternateColourOnBlank = state;
+    m_alternateColourOnBlank = colour; 
 }
 
 // ----------------------------------------------------------------------------

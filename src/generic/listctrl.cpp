@@ -793,6 +793,21 @@ void wxListLineData::Draw(wxDC *dc, bool current)
     }
 }
 
+void wxListMainWindow::DrawInReportModeOnBlank ( wxDC *dc,
+                                                 const wxRect& rect,
+                                                 int lineNumber )
+{
+    // Checks whether or not lineNumber is due to change on its background 
+    // colour and fills the row from beginning to end with the colour stored
+    // in the m_AlternateColourOnBlank instance variable in case afirmative
+    if ( lineNumber % 2 ) {
+        dc->SetBrush(m_alternateColourOnBlank);
+        dc->SetPen(*wxTRANSPARENT_PEN);
+        dc->DrawRectangle(rect);
+    }
+
+}
+
 void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rect,
                                        const wxRect& rectHL,
@@ -1601,6 +1616,9 @@ void wxListMainWindow::Init()
     m_anchor  = (size_t)-1;
 
     m_hasCheckBoxes = false;
+
+    m_listRulesAlternateColourOnBlank = false;
+    m_alternateColourOnBlank = wxColour(176, 235, 212, 0xff);;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -2072,7 +2090,11 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int lineHeight = GetLineHeight();
 
         size_t visibleFrom, visibleTo;
+        size_t visibleEnd;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+        visibleEnd = (m_listRulesAlternateColourOnBlank && 
+                      m_linesPerPage > visibleTo ? m_linesPerPage : visibleTo);
 
         wxRect rectLine;
         int xOrig = dc.LogicalToDeviceX( 0 );
@@ -2090,7 +2112,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetParent()->GetEventHandler()->ProcessEvent( evCache );
         }
 
-        for ( size_t line = visibleFrom; line <= visibleTo; line++ )
+        for ( size_t line = visibleFrom; line <= visibleEnd; line++ )
         {
             rectLine = GetLineRect(line);
 
@@ -2102,11 +2124,15 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 continue;
             }
 
-            GetLine(line)->DrawInReportMode( &dc,
-                                             rectLine,
-                                             GetLineHighlightRect(line),
-                                             IsHighlighted(line),
-                                             line == m_current );
+            if ( line <= visibleTo ) {
+                GetLine(line)->DrawInReportMode( &dc,
+                                                 rectLine,
+                                                 GetLineHighlightRect(line),
+                                                 IsHighlighted(line),
+                                                 line == m_current );
+            } else {
+                DrawInReportModeOnBlank( &dc, rectLine, line );
+            }
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2116,7 +2142,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             size_t i = visibleFrom;
             if (i == 0) i = 1; // Don't draw the first one
-            for ( ; i <= visibleTo; i++ )
+            for ( ; i <= visibleEnd; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2125,7 +2151,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
 
             // Draw last horizontal rule
-            if ( visibleTo == GetItemCount() - 1 )
+            if ( visibleEnd == GetItemCount() - 1 )
             {
                 dc.SetPen( pen );
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2135,7 +2161,9 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw vertical rules if required
-        if ( HasFlag(wxLC_VRULES) && !IsEmpty() )
+        if ( HasFlag(wxLC_VRULES) && (m_listRulesAlternateColourOnBlank || 
+                                      ( ! m_listRulesAlternateColourOnBlank 
+                                        && !IsEmpty() ) ) )
         {
             wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
             wxRect firstItemRect, lastItemRect;
@@ -2146,14 +2174,23 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
+            int clientHeight, clientWidth;
+            GetSize( &clientWidth, &clientHeight );
+
             for (int col = 0; col < GetColumnCount(); col++)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
                 int x_pos = x - dev_x;
                 if (col < GetColumnCount()-1) x_pos -= 2;
-                dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
+
+                if (m_listRulesAlternateColourOnBlank) {
+                    dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
+                            x_pos, clientHeight);
+                } else { 
+                    dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
                             x_pos, lastItemRect.GetBottom() + 1 - dev_y);
+                }
             }
         }
     }
@@ -4945,6 +4982,11 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
     return true;
+}
+
+void wxGenericListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour) 
+{
+    if (m_mainWin) m_mainWin->SetListRulesAlternateColourOnBlank(state, colour); 
 }
 
 wxBorder wxGenericListCtrl::GetDefaultBorder() const
