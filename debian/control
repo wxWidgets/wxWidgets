@@ -2,7 +2,7 @@ Source: wxwidgets3.1
 Section: libs
 Priority: optional
 Build-Depends-indep: doxygen, graphviz
-Build-Depends: debhelper (>= 9.20160114), gettext, libgtk2.0-dev,
+Build-Depends: debhelper (>= 9.20160114), gettext, libgtk3.0-dev,
  g++ (>= 4:5.2),
  zlib1g-dev, libjpeg-dev, libpng-dev, libtiff5-dev, libsm-dev,
  libgl1-mesa-dev | libgl-dev, libglu1-mesa-dev | libglu-dev,
