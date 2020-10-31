@@ -113,7 +113,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     xsltproc
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; DEB_BUILD_OPTIONS=\"noopts nodocs nocheck notest\" DEB_CXXFLAGS_SET=\"-g -O0\" DEB_CPPFLAGS_SET=\"-g -O0\" DEB_CFLAGS_SET=\"-g -O0\" dpkg-buildpackage -b -uc -us -j3; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
+    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; DEB_BUILD_OPTIONS=\"noopts nodocs nocheck notest\" DEB_CXXFLAGS_SET=\"-g -O0\" DEB_CPPFLAGS_SET=\"-g -O0\" DEB_CFLAGS_SET=\"-g -O0\" dpkg-buildpackage -b -uc -us -j2; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.\*$EXT
 
