@@ -300,7 +300,6 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         parent->AddChild(win);
         win->SubclassWin(hWnd);
         win->AdoptAttributesFromHWND();
-        win->SetupColours();
     }
 
     return win;

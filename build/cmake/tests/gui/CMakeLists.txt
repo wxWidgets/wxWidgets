@@ -164,6 +164,15 @@ set(TEST_GUI_DATA
     image/horse_box_average_100x100.png
     image/horse_box_average_150x150.png
     image/horse_box_average_300x300.png
+    image/paste_input_background.png
+    image/paste_input_black.png
+    image/paste_input_overlay_transparent_border_opaque_square.png
+    image/paste_input_overlay_transparent_border_semitransparent_circle.png
+    image/paste_input_overlay_transparent_border_semitransparent_square.png
+    image/paste_result_background_plus_circle_plus_square.png
+    image/paste_result_background_plus_overlay_transparent_border_opaque_square.png
+    image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
+    image/paste_result_no_background_square_over_circle.png
     intl/ja/internat.mo
     intl/ja/internat.po
     )

@@ -35,45 +35,45 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(void)
 {
-  if ( !wxApp::OnInit() )
-    return false;
+    if ( !wxApp::OnInit() )
+        return false;
 
-  // Create the main frame window
-  MyFrame   *frame = new MyFrame(NULL, wxID_ANY, "wxWidgets Native Dialog Sample", wxPoint(0, 0), wxSize(300, 250));
+    // Create the main frame window
+    MyFrame* frame = new MyFrame(NULL, wxID_ANY, "wxWidgets Native Dialog Sample", wxDefaultPosition, wxDefaultSize);
 
 #if wxUSE_STATUSBAR
-  // Give it a status line
-  frame->CreateStatusBar(2);
+    // Give it a status line
+    frame->CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
 
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+    // Make a menubar
+    wxMenu* file_menu = new wxMenu;
 
-  file_menu->Append(RESOURCE_TEST1, "&Dialog box test",                "Test dialog box resource");
-  file_menu->Append(RESOURCE_QUIT, "E&xit",                "Quit program");
+    file_menu->Append(RESOURCE_TEST1, "&Dialog box test", "Test dialog box resource");
+    file_menu->Append(RESOURCE_QUIT, "E&xit", "Quit program");
 
-  wxMenuBar *menu_bar = new wxMenuBar;
+    wxMenuBar* menu_bar = new wxMenuBar;
 
-  menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, "&File");
 
-  // Associate the menu bar with the frame
-  frame->SetMenuBar(menu_bar);
+    // Associate the menu bar with the frame
+    frame->SetMenuBar(menu_bar);
 
-  // Make a panel
-  frame->panel = new wxWindow(frame, wxID_ANY, wxPoint(0, 0), wxSize(400, 400), 0, "MyMainFrame");
-  frame->Show(true);
+    // Make a panel
+    frame->panel = new wxWindow(frame, wxID_ANY);
+    frame->Show(true);
 
-  return true;
+    return true;
 }
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
-    EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
+EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
+EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
 wxEND_EVENT_TABLE()
 
 // Define my frame constructor
-MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(parent, id, title, pos, size)
+MyFrame::MyFrame(wxWindow* parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size) :
+    wxFrame(parent, id, title, pos, size)
 {
     SetIcon(wxICON(sample));
 
@@ -82,19 +82,19 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-  Close(true);
+    Close(true);
 }
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     MyDialog dialog;
-    if (dialog.LoadNativeDialog(this, "dialog1"))
+    if ( dialog.LoadNativeDialog(this, "dialog1") )
     {
         dialog.ShowModal();
     }
 #else
-    wxMessageBox("No native dialog support","Platform limitation");
+    wxMessageBox("No native dialog support", "Platform limitation");
 #endif
 }
 
