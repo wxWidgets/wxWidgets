@@ -2945,7 +2945,16 @@ public:
 
             @since 2.9.1
          */
-        wxGridSelectRowsOrColumns
+        wxGridSelectRowsOrColumns,
+
+        /**
+            The selection mode allowing no selections to be made at all.
+
+            The user won't be able to select any cells in this mode.
+
+            @since 3.1.5
+         */
+        wxGridSelectNone
     };
 
     /**

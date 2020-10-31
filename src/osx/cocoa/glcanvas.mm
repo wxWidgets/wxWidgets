@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 

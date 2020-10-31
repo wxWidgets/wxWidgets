@@ -1457,7 +1457,8 @@ public:
         wxGridSelectCells         = 0,  // allow selecting anything
         wxGridSelectRows          = 1,  // allow selecting only entire rows
         wxGridSelectColumns       = 2,  // allow selecting only entire columns
-        wxGridSelectRowsOrColumns = wxGridSelectRows | wxGridSelectColumns
+        wxGridSelectRowsOrColumns = wxGridSelectRows | wxGridSelectColumns,
+        wxGridSelectNone          = 4   // disallow selecting anything
     };
 
     // Different behaviour of the TAB key when the end (or the beginning, for

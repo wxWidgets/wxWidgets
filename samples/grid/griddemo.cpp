@@ -316,6 +316,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
     EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
+    EVT_MENU( ID_SELNONE,  GridFrame::SelectNone )
 
     EVT_MENU( ID_FREEZE_OR_THAW,  GridFrame::FreezeOrThaw )
 
@@ -536,6 +537,7 @@ GridFrame::GridFrame()
     selectionMenu->Append( ID_SELROWS, "Select &rows" );
     selectionMenu->Append( ID_SELCOLS, "Select col&umns" );
     selectionMenu->Append( ID_SELROWSORCOLS, "Select rows &or columns" );
+    selectionMenu->Append( ID_SELNONE, "&Disallow selection" );
 
     wxMenu *autosizeMenu = new wxMenu;
     autosizeMenu->Append( ID_SIZE_ROW, "Selected &row data" );
@@ -1441,6 +1443,11 @@ void GridFrame::SelectCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
+}
+
+void GridFrame::SelectNone( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectNone );
 }
 
 void GridFrame::FreezeOrThaw(wxCommandEvent& ev)

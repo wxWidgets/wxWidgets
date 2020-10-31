@@ -74,6 +74,13 @@ static const int PADDING_RIGHTLEFT = 3;
 namespace
 {
 
+// Flags for Walker() function defined below.
+enum WalkFlags
+{
+    Walk_All,               // Visit all items.
+    Walk_ExpandedOnly       // Visit only expanded items.
+};
+
 // The column is either the index of the column to be used for sorting or one
 // of the special values in this enum:
 enum
@@ -854,7 +861,8 @@ public:
 
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
-    int GetRowByItem( const wxDataViewItem & item ) const;
+    int GetRowByItem( const wxDataViewItem & item,
+                      WalkFlags flags = Walk_All ) const;
 
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
     // We did not need this temporarily
@@ -2993,6 +3001,10 @@ void wxDataViewHeaderWindow::FinishEditing()
 //-----------------------------------------------------------------------------
 // Helper class for do operation on the tree node
 //-----------------------------------------------------------------------------
+
+namespace
+{
+
 class DoJob
 {
 public:
@@ -3010,7 +3022,8 @@ public:
     virtual int operator() ( wxDataViewTreeNode * node ) = 0;
 };
 
-bool Walker( wxDataViewTreeNode * node, DoJob & func )
+bool
+Walker(wxDataViewTreeNode * node, DoJob & func, WalkFlags flags = Walk_All)
 {
     wxCHECK_MSG( node, false, "can't walk NULL node" );
 
@@ -3024,7 +3037,7 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
             break;
     }
 
-    if ( node->HasChildren() )
+    if ( node->HasChildren() && (flags != Walk_ExpandedOnly || node->IsOpen()) )
     {
         const wxDataViewTreeNodes& nodes = node->GetChildNodes();
 
@@ -3032,13 +3045,15 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
               i != nodes.end();
               ++i )
         {
-            if ( Walker(*i, func) )
+            if ( Walker(*i, func, flags) )
                 return true;
         }
     }
 
     return false;
 }
+
+} // anonymous namespace
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
@@ -3059,14 +3074,6 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
             return false;
 
         parentNode->SetHasChildren(true);
-
-        // If the parent node isn't and hadn't been opened yet, we don't have
-        // anything to do here, all the items will be added to it when it's
-        // opened for the first time.
-        if ( !parentNode->IsOpen() && parentNode->GetChildNodes().empty() )
-        {
-            return true;
-        }
 
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
@@ -4137,7 +4144,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
         xpos = 0;
     }
 
-    const int row = GetRowByItem(item);
+    const int row = GetRowByItem(item, Walk_ExpandedOnly);
     if ( row == -1 )
     {
         // This means the row is currently not visible at all.
@@ -4238,7 +4245,9 @@ private:
 
 };
 
-int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
+int
+wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item,
+                                   WalkFlags flags) const
 {
     const wxDataViewModel * model = GetModel();
     if( model == NULL )
@@ -4268,7 +4277,7 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
         // the parent chain was created by adding the deepest parent first.
         // so if we want to start at the root node, we have to iterate backwards through the vector
         ItemToRowJob job( item, parentChain.rbegin() );
-        if ( !Walker( m_root, job ) )
+        if ( !Walker( m_root, job, flags ) )
             return -1;
 
         return job.GetResult();
