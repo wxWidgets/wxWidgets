@@ -40,7 +40,6 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-d
     libgtk-3-dev                           \
     libgl1-mesa-dev                        \
     libglu1-mesa-dev                       \
-    libgtk2.0-dev                          \
     zlib1g-dev                             \
     libjpeg-dev                            \
     libpng-dev                             \
