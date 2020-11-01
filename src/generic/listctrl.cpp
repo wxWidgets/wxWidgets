@@ -4987,7 +4987,8 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
 void wxGenericListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour)
 {
-    if (m_mainWin) m_mainWin->SetListRulesAlternateColourOnBlank(state, colour);
+    if (m_mainWin)
+        m_mainWin->SetListRulesAlternateColourOnBlank(state, colour);
 }
 
 wxBorder wxGenericListCtrl::GetDefaultBorder() const
