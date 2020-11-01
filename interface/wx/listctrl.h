@@ -1350,7 +1350,7 @@ public:
             A valid row background colour to enable alternating rows on
             blank rows (rows with no data).
 
-        @since 3.1.2
+        @since 3.1.5
     */
     void SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour);
 
@@ -1993,4 +1993,3 @@ public:
     */
     void SetWidth(int width);
 };
-
