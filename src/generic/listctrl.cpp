@@ -800,7 +800,8 @@ void wxListMainWindow::DrawInReportModeOnBlank ( wxDC *dc,
     // Checks whether or not lineNumber is due to change on its background
     // colour and fills the row from beginning to end with the colour stored
     // in the m_alternateColourOnBlank instance variable in affirmative case
-    if ( lineNumber % 2 ) {
+    if ( lineNumber % 2 )
+    {
         dc->SetBrush(m_alternateColourOnBlank);
         dc->SetPen(*wxTRANSPARENT_PEN);
         dc->DrawRectangle(rect);
