@@ -601,7 +601,7 @@ void wxFrame::PositionToolBar()
 
         int tx, ty, tw, th;
         toolbar->GetPosition( &tx, &ty );
-        toolbar->GetSize( &tw, &th );
+        toolbar->GetBestSize( &tw, &th );
 
         int x, y;
         if ( toolbar->HasFlag(wxTB_BOTTOM) )
