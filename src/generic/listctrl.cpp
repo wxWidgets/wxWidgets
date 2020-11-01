@@ -2092,10 +2092,11 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         size_t visibleFrom, visibleTo;
         size_t visibleEnd;
+        const size_t linesPerPage = (unsigned int) m_linesPerPage;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
 
         visibleEnd = (m_listRulesAlternateColourOnBlank &&
-                      m_linesPerPage > visibleTo ? m_linesPerPage : visibleTo);
+                      linesPerPage > visibleTo ? linesPerPage : visibleTo);
 
         wxRect rectLine;
         int xOrig = dc.LogicalToDeviceX( 0 );
