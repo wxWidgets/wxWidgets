@@ -208,7 +208,7 @@ public:
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
 
-    void SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour);
+    void SetListRulesAlternateColourOnBlank(bool state, const wxColour& colour);
 
 protected:
     // Implement base class pure virtual methods.
