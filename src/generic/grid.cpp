@@ -11240,7 +11240,7 @@ wxGetContentRect(wxSize contentSize,
     else if ( vAlign & wxALIGN_BOTTOM )
     {
         contentRect.SetY(cellRect.y + cellRect.height
-                          - contentRect.y - GRID_CELL_CHECKBOX_MARGIN);
+                          - contentSize.y - GRID_CELL_CHECKBOX_MARGIN);
     }
     else // wxALIGN_TOP
     {
