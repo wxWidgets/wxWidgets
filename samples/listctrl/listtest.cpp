@@ -948,8 +948,10 @@ void MyFrame::OnSetRowLinesOnBlank(wxCommandEvent& event)
 {
     wxColour color = wxGetColourFromUser(this);
     m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
-    if (event.IsChecked()) m_listCtrl->SetAlternateRowColour(color);
-    else m_listCtrl->EnableAlternateRowColours(event.IsChecked());
+    if (event.IsChecked())
+        m_listCtrl->SetAlternateRowColour(color);
+    else
+        m_listCtrl->EnableAlternateRowColours(event.IsChecked());
     m_listCtrl->SetListRulesAlternateColourOnBlank(event.IsChecked(), color);
     m_listCtrl->Refresh();
 }
