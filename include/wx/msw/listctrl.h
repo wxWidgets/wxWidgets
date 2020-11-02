@@ -384,16 +384,6 @@ public:
                                     WXWPARAM wParam,
                                     WXLPARAM lParam) wxOVERRIDE;
 
-    // set preferences for alternate colour on empty rows
-    void SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour);
-
-    // tells whether or not to paint empty rows with alternate colour and draw
-    // rules on empty rows
-    bool m_listRulesAlternateColourOnBlank;
-
-    // colour to paint empty rows (zebra effect)
-    wxColour m_alternateColourOnBlank;
-
 protected:
     // common part of all ctors
     void Init();

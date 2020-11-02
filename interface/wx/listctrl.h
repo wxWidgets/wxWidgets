@@ -1342,6 +1342,8 @@ public:
         As EnableAlternateRowColours(), this method can only be used with
         controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
 
+        This method is NOT available on Windows.
+
         @param state
             if @true, draws horizontal rules and vertical rules on empty rows
             and uses the colour parameter to paint the background of
@@ -1351,6 +1353,7 @@ public:
             blank rows (rows with no data).
 
         @since 3.1.5
+        @note This method is currently NOT implemented in the Windows version.
     */
     void SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour);
 
