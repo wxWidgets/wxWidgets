@@ -251,7 +251,55 @@ private:
         void GenCPPHeader();
 };
 
-wxIMPLEMENT_APP_CONSOLE(XmlResApp);
+wxIMPLEMENT_APP_NO_MAIN(XmlResApp);
+
+void BeforeEntry()
+{
+    wxMessageOutputBest(wxMSGOUT_PREFER_MSGBOX).Output("Before");
+}
+
+void AfterEntry()
+{
+    wxMessageOutputBest(wxMSGOUT_PREFER_MSGBOX).Output("After");
+}
+
+#if wxUSE_UNICODE && defined(__WINDOWS__)
+    #ifdef __VISUALC__
+        #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
+            int wmain(int argc, wchar_t **argv)
+            {
+                BeforeEntry();
+                wxDISABLE_DEBUG_SUPPORT();
+
+                auto const result = wxEntry(argc, argv);
+                AfterEntry();
+                return result;
+            }
+    #else // No wmain(), use main() but don't trust its arguments.
+        #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
+            int main(int, char **)
+            {
+                BeforeEntry();
+                wxDISABLE_DEBUG_SUPPORT();
+
+                auto const result = wxEntry();
+                AfterEntry();
+                return result;
+            }
+    #endif
+#else // Use standard main()
+    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
+        int main(int argc, char **argv)
+        {
+            BeforeEntry();
+            wxDISABLE_DEBUG_SUPPORT();
+
+            auto const result = wxEntry(argc, argv);
+            AfterEntry();
+            return result;
+        }
+#endif
+
 
 int XmlResApp::OnRun()
 {

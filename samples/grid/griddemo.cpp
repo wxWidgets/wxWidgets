@@ -251,7 +251,21 @@ private:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_APP(GridApp);
+wxIMPLEMENT_WX_THEME_SUPPORT
+wxIMPLEMENT_APP_NO_MAIN(GridApp);
+
+#include <wx/msgout.h>
+
+extern "C" int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, wxCmdLineArgType lpCmdLine, int nCmdShow)
+{
+    wxMessageOutputBest(wxMSGOUT_PREFER_MSGBOX).Output("Before");
+
+    wxDISABLE_DEBUG_SUPPORT();
+    auto const result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+
+    wxMessageOutputBest(wxMSGOUT_PREFER_MSGBOX).Output("After");
+    return result;
+}
 
 // ============================================================================
 // implementation
@@ -324,6 +338,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
     EVT_MENU( wxID_ABOUT, GridFrame::OnAbout )
+    EVT_MENU( ID_MESSAGE_OUTPUT_BEST, GridFrame::OnMessageOutputBest )
     EVT_MENU( wxID_CLEAR, GridFrame::OnClear )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
@@ -385,7 +400,7 @@ GridFrame::GridFrame()
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, "&Virtual table test\tCtrl-V");
-    fileMenu->Append( ID_BUGS_TABLE, "&Bugs table test\tCtrl-B");
+    fileMenu->Append( ID_BUGS_TABLE, "&Bugs table test\tCtrl-B"); 
     fileMenu->Append( ID_TABULAR_TABLE, "&Tabular table test\tCtrl-T");
     fileMenu->AppendSeparator();
 
@@ -550,6 +565,7 @@ GridFrame::GridFrame()
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append( wxID_ABOUT, "&About wxGrid demo" );
+    helpMenu->Append( ID_MESSAGE_OUTPUT_BEST, "&Message output best..." );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( fileMenu, "&File" );
@@ -1776,6 +1792,10 @@ void GridFrame::OnAbout(  wxCommandEvent& WXUNUSED(ev) )
     wxAboutBox(aboutInfo, this);
 }
 
+void GridFrame::OnMessageOutputBest( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxMessageOutputBest(wxMSGOUT_PREFER_MSGBOX).Output("Test");
+}
 
 void GridFrame::OnClear( wxCommandEvent& WXUNUSED(ev) )
 {

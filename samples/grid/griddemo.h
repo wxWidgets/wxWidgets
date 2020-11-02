@@ -133,6 +133,7 @@ public:
     void OnQuit( wxCommandEvent& );
     void OnClear( wxCommandEvent& );
     void OnAbout( wxCommandEvent& );
+    void OnMessageOutputBest( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
     void OnTabularTable( wxCommandEvent& );
@@ -233,6 +234,8 @@ public:
         ID_RENDER_ZOOM,
         ID_RENDER_MARGIN,
         ID_RENDER_DEFAULT_SIZE,
+
+        ID_MESSAGE_OUTPUT_BEST,
     };
 
 #if wxUSE_LOG
