@@ -565,6 +565,13 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
     return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
+bool wxGUIAppTraitsBase::ShowMessageBox(const wxString& msg,
+                                        const wxString& caption)
+{
+    wxMessageBox(msg, caption, wxOK | wxICON_EXCLAMATION);
+    return true;
+}
+
 bool wxGUIAppTraitsBase::HasStderr()
 {
     // we consider that under Unix stderr always goes somewhere, even if the

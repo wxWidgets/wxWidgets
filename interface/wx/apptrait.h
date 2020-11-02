@@ -133,5 +133,13 @@ public:
         Returns @true to suppress subsequent asserts, @false to continue as before.
     */
     virtual bool ShowAssertDialog(const wxString& msg) = 0;
+
+    /**
+        Shows the message with the specified message in GUI mode. Use internally
+        wxMessageBox() which is unavailable for the console application.
+        Returns @true if the message was showed, @false otherwise.
+    */
+    virtual bool ShowMessageBox(const wxString& msg,
+                                const wxString& caption) = 0;
 };
 

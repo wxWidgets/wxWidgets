@@ -88,6 +88,13 @@ public:
     // return true to suppress subsequent asserts, false to continue as before
     virtual bool ShowAssertDialog(const wxString& msg) = 0;
 
+    // Show the message box. Return false for non-GUI application (also return
+    // false under GTK when it's not initialized).
+    // The function added to use in wxMessageOutputBest::Output() because
+    // wxMessageBox() available only for GUI application.
+    virtual bool ShowMessageBox(const wxString& msg,
+                                const wxString& caption) = 0;
+
     // return true if fprintf(stderr) goes somewhere, false otherwise
     virtual bool HasStderr() = 0;
 
@@ -207,6 +214,8 @@ public:
     virtual wxRendererNative *CreateRenderer() wxOVERRIDE;
 
     virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
+    virtual bool ShowMessageBox(const wxString& msg,
+                                const wxString& caption) wxOVERRIDE;
     virtual bool HasStderr() wxOVERRIDE;
 
     // the GetToolkitVersion for console application is always the same
@@ -246,6 +255,8 @@ public:
     virtual wxRendererNative *CreateRenderer() wxOVERRIDE;
 
     virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
+    virtual bool ShowMessageBox(const wxString& msg,
+                                const wxString& caption) wxOVERRIDE;
     virtual bool HasStderr() wxOVERRIDE;
 
     virtual bool IsUsingUniversalWidgets() const wxOVERRIDE

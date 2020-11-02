@@ -412,6 +412,16 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
     return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
+bool wxGUIAppTraits::ShowMessageBox(const wxString& msg,
+                                    const wxString& caption)
+{
+    // Return false if GTK is not initialized.
+    if (g_type_class_peek(GDK_TYPE_DISPLAY) == NULL)
+        return;
+
+    return wxGUIAppTraitsBase::ShowMessageBox(msg, caption);
+}
+
 #endif // __UNIX__
 
 #if defined(__UNIX__)

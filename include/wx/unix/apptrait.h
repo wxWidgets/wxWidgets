@@ -70,6 +70,9 @@ public:
     virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
 #endif
 
+    virtual bool ShowMessageBox(const wxString& msg,
+                                const wxString& caption) wxOVERRIDE;
+
 #if wxUSE_SOCKETS
 
 #ifdef wxHAS_GUI_SOCKET_MANAGER

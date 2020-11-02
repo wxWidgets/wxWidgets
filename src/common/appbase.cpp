@@ -938,6 +938,12 @@ bool wxConsoleAppTraitsBase::ShowAssertDialog(const wxString& msg)
     return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
+bool wxConsoleAppTraitsBase::ShowMessageBox(const wxString& WXUNUSED(msg),
+                                            const wxString& WXUNUSED(caption))
+{
+    return false;
+}
+
 bool wxConsoleAppTraitsBase::HasStderr()
 {
     // console applications always have stderr, even under Mac/Windows
