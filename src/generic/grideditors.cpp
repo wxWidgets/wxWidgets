@@ -1861,6 +1861,19 @@ struct wxGridCellDateEditorKeyHandler
 };
 #endif // __WXGTK__
 
+wxGridCellDateEditor::wxGridCellDateEditor(const wxString& format)
+{
+    SetParameters(format);
+}
+
+void wxGridCellDateEditor::SetParameters(const wxString& params)
+{
+    if ( params.empty() )
+        m_format = "%x";
+    else
+        m_format = params;
+}
+
 void wxGridCellDateEditor::Create(wxWindow* parent, wxWindowID id,
                                   wxEvtHandler* evtHandler)
 {
@@ -1908,7 +1921,7 @@ void wxGridCellDateEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
 
     const wxString dateStr = grid->GetTable()->GetValue(row, col);
-    if ( !m_value.ParseDate(dateStr) )
+    if ( !wxGridPrivate::TryParseDate(m_value, dateStr, m_format) )
     {
         // Invalidate m_value, so that it always compares different
         // to any value returned from DatePicker()->GetValue().
@@ -1960,7 +1973,7 @@ void wxGridCellDateEditor::Reset()
 
 wxGridCellEditor *wxGridCellDateEditor::Clone() const
 {
-    return new wxGridCellDateEditor();
+    return new wxGridCellDateEditor(m_format);
 }
 
 wxString wxGridCellDateEditor::GetValue() const
