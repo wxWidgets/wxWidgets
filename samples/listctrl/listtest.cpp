@@ -529,7 +529,9 @@ void MyFrame::RecreateList(long flags, bool withText)
     }
 
     GetMenuBar()->Check(LIST_ROW_LINES, false);
+#if !defined(__WXMSW__)
     GetMenuBar()->Check(LIST_ROW_LINES_ON_BLANK, false);
+#endif
 
     m_logWindow->Clear();
 }
