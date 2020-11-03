@@ -248,16 +248,6 @@ public:
     */
     wxGridCellDateTimeRenderer(const wxString& outformat = wxDefaultDateTimeFormat,
                                const wxString& informat = wxDefaultDateTimeFormat);
-
-
-    /**
-        Sets the strptime()-like format string which will be used to parse
-        the date/time.
-
-        @param params
-            strptime()-like format string used to parse the date/time.
-    */
-    virtual void SetParameters(const wxString& params);
 };
 
 /**
