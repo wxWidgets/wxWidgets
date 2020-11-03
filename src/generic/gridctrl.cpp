@@ -208,7 +208,6 @@ void wxGridCellDateRenderer::SetParameters(const wxString& params)
 wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
     : wxGridCellDateRenderer(outformat)
     , m_iformat(informat)
-    , m_dateDef(wxDefaultDateTime)
 {
 }
 
@@ -219,7 +218,7 @@ wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
 
 bool wxGridCellDateTimeRenderer::Parse(const wxString& text, wxDateTime& result)
 {
-    const char * const end = result.ParseFormat(text, m_iformat, m_dateDef);
+    const char * const end = result.ParseFormat(text, m_iformat);
     return end && !*end;
 }
 

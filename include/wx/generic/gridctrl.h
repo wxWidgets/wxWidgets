@@ -222,8 +222,7 @@ public:
 
     wxGridCellDateTimeRenderer(const wxGridCellDateTimeRenderer& other)
         : wxGridCellDateRenderer(other),
-          m_iformat(other.m_iformat),
-          m_dateDef(other.m_dateDef)
+          m_iformat(other.m_iformat)
     {
     }
 
@@ -233,7 +232,6 @@ protected:
     virtual bool Parse(const wxString& text, wxDateTime& result) wxOVERRIDE;
 
     wxString m_iformat;
-    wxDateTime m_dateDef;
 };
 
 #endif // wxUSE_DATETIME
