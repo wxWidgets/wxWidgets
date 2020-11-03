@@ -132,6 +132,14 @@ wxString wxGridCellDateRenderer::GetString(const wxGrid& grid, int row, int col)
 bool wxGridCellDateRenderer::Parse(const wxString& text, wxDateTime& result)
 {
     wxString::const_iterator end;
+
+    // Try parsing using the same format we use for output first.
+    if ( result.ParseFormat(text, m_oformat, &end) && end == text.end() )
+        return true;
+
+    // But fall back to free-form parsing, which notably allows us to parse
+    // strings such as "today" or "tomorrow" which would be never accepted by
+    // ParseFormat().
     return result.ParseDate(text, &end) && end == text.end();
 }
 
