@@ -748,8 +748,7 @@ binary-cross: control-files-stamp $(install_all_cross)
 	binary-indep binary-arch binary binary-common			\
 	binary-wxbase binary-wxbase-dev		\
 	binary-cross						\
-	install install_arch install-gtk-lib install-gtk-dev		\
-	install-gtkmedia-lib install-gtkmedia-dev	\
+	install install_arch \
 	install-gtk3-lib install-gtk3-dev		\
 	install-gtk3media-lib install-gtk3media-dev	\
 	install-gtk3webview-lib install-gtk3webview-dev	\
