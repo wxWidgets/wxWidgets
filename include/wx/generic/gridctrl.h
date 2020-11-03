@@ -171,6 +171,8 @@ public:
 
 #include "wx/datetime.h"
 
+namespace wxGridPrivate { class DateParseParams; }
+
 // renderer for the cells containing dates only, without time component
 class WXDLLIMPEXP_ADV wxGridCellDateRenderer : public wxGridCellStringRenderer
 {
@@ -207,7 +209,11 @@ public:
 
 protected:
     wxString GetString(const wxGrid& grid, int row, int col);
-    virtual bool Parse(const wxString& text, wxDateTime& result);
+
+    // This is overridden in wxGridCellDateTimeRenderer which uses a separate
+    // input format and forbids fallback to ParseDate().
+    virtual void
+    GetDateParseParams(wxGridPrivate::DateParseParams& params) const;
 
     wxString m_oformat;
     wxDateTime::TimeZone m_tz;
@@ -229,7 +235,8 @@ public:
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE;
 
 protected:
-    virtual bool Parse(const wxString& text, wxDateTime& result) wxOVERRIDE;
+    virtual void
+    GetDateParseParams(wxGridPrivate::DateParseParams& params) const wxOVERRIDE;
 
     wxString m_iformat;
 };

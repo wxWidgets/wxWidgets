@@ -1920,8 +1920,10 @@ void wxGridCellDateEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
 
-    const wxString dateStr = grid->GetTable()->GetValue(row, col);
-    if ( !wxGridPrivate::TryParseDate(m_value, dateStr, m_format) )
+    using namespace wxGridPrivate;
+
+    if ( !TryGetValueAsDate(m_value, DateParseParams::WithFallback(m_format),
+                            *grid, row, col) )
     {
         // Invalidate m_value, so that it always compares different
         // to any value returned from DatePicker()->GetValue().
