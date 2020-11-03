@@ -98,8 +98,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
   gstreamer1.0-plugins-good,
   gstreamer1.0-x
 Multi-Arch: same
-Breaks: libwxgtk-media3.1-0
-Replaces: libwxgtk-media3.1-0
+Breaks: libwxgtk-media3.0-0
+Replaces: libwxgtk-media3.0-0
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ media library runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
