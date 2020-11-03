@@ -1084,5 +1084,20 @@ wxGetContentRect(wxSize contentSize,
                  int hAlign,
                  int vAlign);
 
+namespace wxGridPrivate
+{
+
+#if wxUSE_DATETIME
+
+// Helper function trying to parse the given string using the specified date
+// format and then using ParseDate() as a fallback if it failed. If this still
+// fails, returns false.
+bool
+TryParseDate(wxDateTime& result, const wxString& text, const wxString& format);
+
+#endif // wxUSE_DATETIME
+
+} // namespace wxGridPrivate
+
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_PRIVATE_H_
