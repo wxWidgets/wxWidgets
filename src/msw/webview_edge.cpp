@@ -76,6 +76,8 @@ bool wxWebViewEdgeImpl::Create()
 {
     m_initialized = false;
     m_isBusy = false;
+    m_pendingContextMenuEnabled = -1;
+    m_pendingAccessToDevToolsEnabled = -1;
 
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
@@ -309,6 +311,18 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2ContentLoadingEventHandler>(
             this, &wxWebViewEdgeImpl::OnContentLoading).Get(),
         &m_contentLoadingToken);
+
+    if (m_pendingContextMenuEnabled != -1)
+    {
+        m_ctrl->EnableContextMenu(m_pendingContextMenuEnabled == 1);
+        m_pendingContextMenuEnabled = -1;
+    }
+
+    if (m_pendingAccessToDevToolsEnabled != -1)
+    {
+        m_ctrl->EnableAccessToDevTools(m_pendingAccessToDevToolsEnabled == 1);
+        m_pendingContextMenuEnabled = -1;
+    }
 
     if (!m_pendingURL.empty())
     {
@@ -706,6 +720,8 @@ void wxWebViewEdge::EnableContextMenu(bool enable)
     wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
     if (settings)
         settings->put_AreDefaultContextMenusEnabled(enable);
+    else
+        m_impl->m_pendingContextMenuEnabled = enable ? 1 : 0;
 }
 
 bool wxWebViewEdge::IsContextMenuEnabled() const
@@ -727,6 +743,8 @@ void wxWebViewEdge::EnableAccessToDevTools(bool enable)
     wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
     if (settings)
         settings->put_AreDevToolsEnabled(enable);
+    else
+        m_impl->m_pendingAccessToDevToolsEnabled = enable ? 1 : 0;
 }
 
 bool wxWebViewEdge::IsAccessToDevToolsEnabled() const

@@ -36,6 +36,8 @@ public:
     bool m_initialized;
     bool m_isBusy;
     wxString m_pendingURL;
+    int m_pendingContextMenuEnabled;
+    int m_pendingAccessToDevToolsEnabled;
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
