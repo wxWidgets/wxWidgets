@@ -327,11 +327,19 @@ void DatePickerWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+// Helper function which has to be used here because the controls with
+// wxDP_ALLOWNONE style can have invalid date, both in the control itself and
+// in the event it generates.
+static wxString FormatPossiblyInvalidDate(const wxDateTime& dt)
+{
+    return dt.IsValid() ? dt.FormatISOCombined() : wxString("[none]");
+}
+
 void DatePickerWidgetsPage::OnDateChanged(wxDateEvent& event)
 {
     wxLogMessage("Date changed, now is %s (control value is %s).",
-                 event.GetDate().FormatISOCombined(),
-                 m_datePicker->GetValue().FormatISOCombined());
+                 FormatPossiblyInvalidDate(event.GetDate()),
+                 FormatPossiblyInvalidDate(m_datePicker->GetValue()));
 }
 
 #endif // wxUSE_DATEPICKCTRL
