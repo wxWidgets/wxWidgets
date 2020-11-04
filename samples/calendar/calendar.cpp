@@ -218,12 +218,24 @@ class MyTimeDialog : public wxDialog
 public:
     MyTimeDialog(wxWindow* parent);
 
-    wxDateTime GetTime() const { return m_timePicker->GetValue(); }
+    wxDateTime GetTime() const
+    {
+#if wxUSE_TIMEPICKCTRL_GENERIC
+        if ( m_timePickerGeneric )
+            return m_timePickerGeneric->GetValue();
+#endif // wxUSE_TIMEPICKCTRL_GENERIC
+
+        return m_timePicker->GetValue();
+    }
 
 private:
     void OnTimeChange(wxDateEvent& event);
 
-    wxTimePickerCtrlBase* m_timePicker;
+    wxTimePickerCtrl* m_timePicker;
+#if wxUSE_TIMEPICKCTRL_GENERIC
+    wxTimePickerCtrlGeneric* m_timePickerGeneric;
+#endif // wxUSE_TIMEPICKCTRL_GENERIC
+
     wxStaticText* m_timeText;
 
     wxDECLARE_EVENT_TABLE();
@@ -987,20 +999,31 @@ wxEND_EVENT_TABLE()
 MyTimeDialog::MyTimeDialog(wxWindow *parent)
         : wxDialog(parent, wxID_ANY, wxString("Calendar: Choose time"))
 {
+    wxWindow* timePickerWindow = NULL;
+
 #if wxUSE_TIMEPICKCTRL_GENERIC
+    m_timePickerGeneric = NULL;
+    m_timePicker = NULL;
+
     wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);
     if ( frame && frame->GetMenuBar()->IsChecked(Calendar_TimePicker_Generic) )
-        m_timePicker = new wxTimePickerCtrlGeneric(this, wxID_ANY);
+    {
+        m_timePickerGeneric = new wxTimePickerCtrlGeneric(this, wxID_ANY);
+        timePickerWindow = m_timePickerGeneric;
+    }
     else
 #endif // wxUSE_TIMEPICKCTRL_GENERIC
     m_timePicker = new wxTimePickerCtrl(this, wxID_ANY);
-    m_timeText = new wxStaticText(this, wxID_ANY,
-                                  m_timePicker->GetValue().FormatISOTime());
+
+    if ( !timePickerWindow )
+        timePickerWindow = m_timePicker;
+
+    m_timeText = new wxStaticText(this, wxID_ANY, GetTime().FormatISOTime());
 
     const wxSizerFlags flags = wxSizerFlags().Centre().Border();
     wxFlexGridSizer* const sizerMain = new wxFlexGridSizer(2);
     sizerMain->Add(new wxStaticText(this, wxID_ANY, "Enter &time:"), flags);
-    sizerMain->Add(m_timePicker, flags);
+    sizerMain->Add(timePickerWindow, flags);
 
     sizerMain->Add(new wxStaticText(this, wxID_ANY, "Time in ISO format:"),
                    flags);
