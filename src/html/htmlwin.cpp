@@ -627,6 +627,13 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             {
                 ScrollToAnchor(f->GetAnchor());
             }
+            else
+            {
+                // Without anchor, go to the top of the page, instead of
+                // possibly remaining at non-zero scroll position and scrolling
+                // the top out of view.
+                Scroll(0, 0);
+            }
 
             delete f;
 
