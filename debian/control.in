@@ -22,8 +22,8 @@ Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Multi-Arch: same
-Breaks: libwxbase3.0-0
-Replaces: libwxbase3.0-0
+Breaks: libwxbase3.0-0v5
+Replaces: libwxbase3.0-0v5
 Description: wxBase library (runtime) - non-GUI support classes of wxWidgets toolkit
  wxBase is a collection of C++ classes providing basic data structures
  (strings, lists, arrays), powerful wxDateTime class for date manipulations,
@@ -62,8 +62,8 @@ Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Multi-Arch: same
-Breaks: libwxgtk3.0-0
-Replaces: libwxgtk3.0-0
+Breaks: libwxgtk3.0-0v5
+Replaces: libwxgtk3.0-0v5
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -98,8 +98,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
   gstreamer1.0-plugins-good,
   gstreamer1.0-x
 Multi-Arch: same
-Breaks: libwxgtk-media3.0-0
-Replaces: libwxgtk-media3.0-0
+Breaks: libwxgtk-media3.0-0v5
+Replaces: libwxgtk-media3.0-0v5
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ media library runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
