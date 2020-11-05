@@ -390,7 +390,9 @@ public:
 class WXDLLIMPEXP_ADV wxGridCellDateEditor : public wxGridCellEditor
 {
 public:
-    wxGridCellDateEditor() { }
+    explicit wxGridCellDateEditor(const wxString& format = wxString());
+
+    virtual void SetParameters(const wxString& params) wxOVERRIDE;
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -414,6 +416,7 @@ protected:
 
 private:
     wxDateTime m_value;
+    wxString m_format;
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellDateEditor);
 };

@@ -248,16 +248,6 @@ public:
     */
     wxGridCellDateTimeRenderer(const wxString& outformat = wxDefaultDateTimeFormat,
                                const wxString& informat = wxDefaultDateTimeFormat);
-
-
-    /**
-        Sets the strptime()-like format string which will be used to parse
-        the date/time.
-
-        @param params
-            strptime()-like format string used to parse the date/time.
-    */
-    virtual void SetParameters(const wxString& params);
 };
 
 /**
@@ -1092,8 +1082,14 @@ class wxGridCellDateEditor : public wxGridCellEditor
 public:
     /**
         Date editor constructor.
+
+        @param format Optional format for the date displayed in the associated
+            cell. By default, the locale-specific date format ("%x") is assumed.
+            You would typically want to specify the same format as the one
+            used with the cell renderer, if a non-default one is used.
+            Note that this parameter is only available since wxWidgets 3.1.5.
     */
-    wxGridCellDateEditor();
+    explicit wxGridCellDateEditor(const wxString& format = wxString());
 };
 
 

@@ -76,6 +76,47 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 
 #if wxUSE_DATETIME
 
+bool
+wxGridPrivate::TryGetValueAsDate(wxDateTime& result,
+                                 const DateParseParams& params,
+                                 const wxGrid& grid,
+                                 int row, int col)
+{
+    wxGridTableBase *table = grid.GetTable();
+
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_DATETIME) )
+    {
+        void * tempval = table->GetValueAsCustom(row, col,wxGRID_VALUE_DATETIME);
+
+        if (tempval)
+        {
+            result = *((wxDateTime *)tempval);
+            delete (wxDateTime *)tempval;
+
+            return true;
+        }
+
+    }
+
+    const wxString text = table->GetValue(row, col);
+
+    wxString::const_iterator end;
+
+    if ( result.ParseFormat(text, params.format, &end) && end == text.end() )
+        return true;
+
+    // Check if we can fall back to free-form parsing, which notably allows us
+    // to parse strings such as "today" or "tomorrow" which would be never
+    // accepted by ParseFormat().
+    if ( params.fallbackParseDate &&
+            result.ParseDate(text, &end) && end == text.end() )
+        return true;
+
+    return false;
+}
+
+using namespace wxGridPrivate;
+
 // Enables a grid cell to display a formatted date
 
 wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
@@ -98,41 +139,23 @@ wxGridCellRenderer *wxGridCellDateRenderer::Clone() const
 
 wxString wxGridCellDateRenderer::GetString(const wxGrid& grid, int row, int col)
 {
-    wxGridTableBase *table = grid.GetTable();
-
-    bool hasDatetime = false;
-    wxDateTime val;
     wxString text;
-    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_DATETIME) )
-    {
-        void * tempval = table->GetValueAsCustom(row, col,wxGRID_VALUE_DATETIME);
 
-        if (tempval)
-        {
-            val = *((wxDateTime *)tempval);
-            hasDatetime = true;
-            delete (wxDateTime *)tempval;
-        }
+    DateParseParams params;
+    GetDateParseParams(params);
 
-    }
-
-    if (!hasDatetime )
-    {
-        text = table->GetValue(row, col);
-        hasDatetime = Parse(text, val);
-    }
-
-    if ( hasDatetime )
+    wxDateTime val;
+    if ( TryGetValueAsDate(val, params, grid, row, col) )
         text = val.Format(m_oformat, m_tz );
 
     // If we failed to parse string just show what we where given?
     return text;
 }
 
-bool wxGridCellDateRenderer::Parse(const wxString& text, wxDateTime& result)
+void
+wxGridCellDateRenderer::GetDateParseParams(DateParseParams& params) const
 {
-    wxString::const_iterator end;
-    return result.ParseDate(text, &end) && end == text.end();
+    params = DateParseParams::WithFallback(m_oformat);
 }
 
 void wxGridCellDateRenderer::Draw(wxGrid& grid,
@@ -192,7 +215,6 @@ void wxGridCellDateRenderer::SetParameters(const wxString& params)
 wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
     : wxGridCellDateRenderer(outformat)
     , m_iformat(informat)
-    , m_dateDef(wxDefaultDateTime)
 {
 }
 
@@ -201,10 +223,10 @@ wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
     return new wxGridCellDateTimeRenderer(*this);
 }
 
-bool wxGridCellDateTimeRenderer::Parse(const wxString& text, wxDateTime& result)
+void
+wxGridCellDateTimeRenderer::GetDateParseParams(DateParseParams& params) const
 {
-    const char * const end = result.ParseFormat(text, m_iformat, m_dateDef);
-    return end && !*end;
+    params = DateParseParams::WithoutFallback(m_iformat);
 }
 
 #endif // wxUSE_DATETIME
