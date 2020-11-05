@@ -99,12 +99,65 @@ void wxDateTimePickerCtrl::SetValue(const wxDateTime& dt)
         return;
     }
 
+    MSWUpdateFormatIfNeeded(dt.IsValid());
+
     m_date = dt;
 }
 
 wxDateTime wxDateTimePickerCtrl::GetValue() const
 {
     return m_date;
+}
+
+void wxDateTimePickerCtrl::MSWUpdateFormatIfNeeded(bool valid)
+{
+    if ( MSWAllowsNone() && !m_nullText.empty() && valid != m_date.IsValid() )
+        MSWUpdateFormat(valid);
+}
+
+void wxDateTimePickerCtrl::MSWUpdateFormat(bool valid)
+{
+    // We just use NULL to reset to the default format when the date is valid,
+    // as the control seems to remember whichever format was used when it was
+    // created, i.e. this works both with and without wxDP_SHOWCENTURY.
+
+    // Note: due to a bug in MinGW headers, with missing parentheses around the
+    // macro argument (corrected in or before 8.2, but still existing in 5.3),
+    // we have to use a temporary variable here.
+    const TCHAR* const format = valid ? NULL : m_nullText.t_str();
+    DateTime_SetFormat(GetHwnd(), format);
+}
+
+void wxDateTimePickerCtrl::SetNullText(const wxString& text)
+{
+    m_nullText = text;
+    if ( m_nullText.empty() )
+    {
+        // Using empty format doesn't work with the native control, it just
+        // uses the default short date format in this case, so set the format
+        // to the single space which is more or less guaranteed to work as it's
+        // the semi-official way to clear the control contents when it doesn't
+        // have any valid value, according to Microsoft's old KB document
+        // Q238077, which can still be found online by searching for its
+        // number, even if it's not available on Microsoft web site any more.
+        //
+        // Coincidentally, it's also convenient for us, as we can just check if
+        // null text is empty to see if we need to use it elsewhere in the code.
+        m_nullText = wxS(" ");
+    }
+    else
+    {
+        // We need to quote the text, as otherwise format specifiers (e.g.
+        // "d", "m" etc) would be interpreted specially by the control. To make
+        // things simple, we just quote it entirely and always.
+        m_nullText.Replace("'", "''");
+        m_nullText.insert(0, "'");
+        m_nullText.append("'");
+    }
+
+    // Apply it immediately if we don't have any value right now.
+    if ( !m_date.IsValid() )
+        MSWUpdateFormat(false);
 }
 
 wxSize wxDateTimePickerCtrl::DoGetBestSize() const
@@ -168,7 +221,12 @@ wxDateTimePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case DTN_DATETIMECHANGE:
-            if ( MSWOnDateTimeChange(*(NMDATETIMECHANGE*)(hdr)) )
+            const NMDATETIMECHANGE& dtch = *(NMDATETIMECHANGE*)(hdr);
+
+            // Update the format before showing the new date if necessary.
+            MSWUpdateFormatIfNeeded(dtch.dwFlags == GDT_VALID);
+
+            if ( MSWOnDateTimeChange(dtch) )
             {
                 *result = 0;
                 return true;

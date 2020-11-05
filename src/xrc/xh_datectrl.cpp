@@ -42,6 +42,10 @@ wxObject *wxDateCtrlXmlHandler::DoCreateResource()
 
     SetupWindow(picker);
 
+    // Note that we want to set this one even if it's empty.
+    if ( HasParam(wxS("null-text")) )
+        picker->SetNullText(GetText(wxS("null-text")));
+
     return picker;
 }
 
