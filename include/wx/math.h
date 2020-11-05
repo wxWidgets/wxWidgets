@@ -162,6 +162,11 @@ inline int wxRound(float x)
     #endif
 }
 
+inline int wxRound(long double x) { return wxRound(double(x)); }
+
+wxDEPRECATED_MSG("rounding an integer is useless")
+inline int wxRound(int x) { return x; }
+
 // Convert between degrees and radians.
 inline double wxDegToRad(double deg) { return (deg * M_PI) / 180.0; }
 inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
