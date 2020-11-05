@@ -169,6 +169,22 @@ public:
     virtual wxDateTime GetValue() const;
 
     /**
+        Set the text to show when there is no valid value.
+
+        For the controls with @c wxDP_ALLOWNONE style, set the string displayed
+        when the control doesn't have any valid value. Currently this is only
+        actually used under MSW, where it can be used to override the previous
+        value which is still displayed by the control in this case, and ignored
+        elsewhere.
+
+        Notably, @a text can be empty to completely hide the date if no valid
+        date is specified.
+
+        @since 3.1.5
+     */
+    void SetNullText(const wxString& text);
+
+    /**
         Sets the valid range for the date selection. If @a dt1 is valid, it
         becomes the earliest date (inclusive) accepted by the control. If
         @a dt2 is valid, it becomes the latest possible date.

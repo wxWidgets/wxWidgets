@@ -54,6 +54,7 @@ enum
     DatePickerPage_Reset = wxID_HIGHEST,
     DatePickerPage_Set,
     DatePickerPage_SetRange,
+    DatePickerPage_SetNullText,
     DatePickerPage_Picker
 };
 
@@ -78,6 +79,7 @@ protected:
 
     void OnButtonSet(wxCommandEvent& event);
     void OnButtonSetRange(wxCommandEvent& event);
+    void OnButtonSetNullText(wxCommandEvent& event);
     void OnButtonReset(wxCommandEvent& event);
 
     // reset the date picker parameters
@@ -96,6 +98,7 @@ protected:
     wxTextCtrl *m_textCur;
     wxTextCtrl *m_textMin;
     wxTextCtrl *m_textMax;
+    wxTextCtrl *m_textNull;
 
     wxRadioBox* m_radioKind;
     wxCheckBox* m_chkStyleCentury;
@@ -117,6 +120,7 @@ wxBEGIN_EVENT_TABLE(DatePickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(DatePickerPage_Reset, DatePickerWidgetsPage::OnButtonReset)
     EVT_BUTTON(DatePickerPage_Set, DatePickerWidgetsPage::OnButtonSet)
     EVT_BUTTON(DatePickerPage_SetRange, DatePickerWidgetsPage::OnButtonSetRange)
+    EVT_BUTTON(DatePickerPage_SetNullText, DatePickerWidgetsPage::OnButtonSetNullText)
 
     EVT_DATE_CHANGED(wxID_ANY, DatePickerWidgetsPage::OnDateChanged)
 wxEND_EVENT_TABLE()
@@ -195,6 +199,20 @@ void DatePickerWidgetsPage::CreateContent()
                      ),
                      wxSizerFlags().Expand().Border());
     sizerMiddle->Add(new wxButton(this, DatePickerPage_SetRange, "Set &range"),
+                     wxSizerFlags().Centre().Border());
+
+    sizerMiddle->AddSpacer(10);
+
+    sizerMiddle->Add(CreateSizerWithTextAndLabel
+                     (
+                        "&Null text",
+                        wxID_ANY,
+                        &m_textNull
+                     ),
+                     wxSizerFlags().Expand().Border());
+
+    sizerMiddle->Add(new wxButton(this, DatePickerPage_SetNullText,
+                                  "Set &null text"),
                      wxSizerFlags().Centre().Border());
 
 
@@ -325,6 +343,11 @@ void DatePickerWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
 
         wxLogMessage("Date picker range updated");
     }
+}
+
+void DatePickerWidgetsPage::OnButtonSetNullText(wxCommandEvent& WXUNUSED(event))
+{
+    m_datePicker->SetNullText(m_textNull->GetValue());
 }
 
 // Helper function which has to be used here because the controls with

@@ -26,6 +26,8 @@ public:
     virtual void SetValue(const wxDateTime& dt) wxOVERRIDE;
     virtual wxDateTime GetValue() const wxOVERRIDE;
 
+    virtual void SetNullText(const wxString& text) wxOVERRIDE;
+
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
@@ -61,6 +63,19 @@ protected:
 
     // the date currently shown by the control, may be invalid
     wxDateTime m_date;
+
+private:
+    // Helper setting the appropriate format depending on the passed in state.
+    void MSWUpdateFormat(bool valid);
+
+    // Same thing, but only doing if the validity differs from the date
+    // validity, i.e. avoiding useless work if nothing needs to be done.
+    void MSWUpdateFormatIfNeeded(bool valid);
+
+
+    // shown when there is no valid value (so only used with wxDP_ALLOWNONE),
+    // always non-empty if SetNullText() was called, see the comments there
+    wxString m_nullText;
 };
 
 #endif // _WX_MSW_DATETIMECTRL_H_
