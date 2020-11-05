@@ -141,7 +141,7 @@ public:
             if it is used by the current locale. May be @NULL if only the
             function return value is needed.
 
-        @since 3.1.4
+        @since 3.1.5
      */
     static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
 
@@ -168,7 +168,7 @@ public:
         @param grouping
             The string representing the thousands separator grouping format.
 
-        @since 3.1.4
+        @since 3.1.5
      */
     static void FormatNumber(wxString &s, wxChar thousandsSep, wxChar decSep,
                              wxString grouping);

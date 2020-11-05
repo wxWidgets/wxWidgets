@@ -362,7 +362,7 @@ private:
 
     // Converts a grouping format string returned by localeconv()
     // to the kind used on Windows platform
-    static wxString StandardizeGroupingString(wxString g);
+    static wxString StandardizeGroupingString(const wxString& g);
 
 
     wxString       m_strLocale,       // this locale name

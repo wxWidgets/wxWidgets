@@ -1794,16 +1794,20 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                     {
                         s += '0';
                         ss += '0';
-                        char gstr[] = {s, ';', ss, ';', '0', '\0'};
-                        cfstr = CFStringCreateWithCString(
-                            NULL, &gstr[0], kCFStringEncodingASCII);
-                    } else {
-                        s += '0';
-                        char gstr[] = {s, ';', '0', '\0'};
+                        const char gstr[] = {s, ';', ss, ';', '0', '\0'};
                         cfstr = CFStringCreateWithCString(
                             NULL, &gstr[0], kCFStringEncodingASCII);
                     }
-                } else {
+                    else
+                    {
+                        s += '0';
+                        const char gstr[] = {s, ';', '0', '\0'};
+                        cfstr = CFStringCreateWithCString(
+                            NULL, &gstr[0], kCFStringEncodingASCII);
+                    }
+                }
+                else
+                {
                     // No grouping
                     cfstr = CFStringCreateWithCString(NULL, "", kCFStringEncodingASCII);
                 }
@@ -1941,18 +1945,18 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
 } // anonymous namespace
 
 // Convert a grouping format string returned by localeconv() to
-// a standardized format. Our standard format is the one used on
+// a standardized format. Our standard format is the one used for
 // Windows SGROUPING. Here we convert char sized integers to ASCII
 // characters. That is, for example '\3' becomes '3'. We also add
-// the a ';' delimiter between each number. A '\0' or a CHAR_MAX
+// a ';' delimiter between each number. A '\0' or a CHAR_MAX
 // signifies the end of the argument string. If the argument string
-// ends with a '\0' then we insert a '0' to the return string.
+// ends with a '\0' then we insert a '0' into the return string.
 // The return string will be NULL terminated.
 
 /* static */
-wxString wxLocale::StandardizeGroupingString(wxString g)
+wxString wxLocale::StandardizeGroupingString(const wxString& g)
 {
-    wxString s = "";
+    wxString s;
     int i;
     for (i = 0; g[i] != '\0' && g[i] != CHAR_MAX; i++)
     {
