@@ -89,9 +89,18 @@ double wxRadToDeg(double rad);
 unsigned int wxCTZ(wxUint32 x);
 
 /**
-    Small wrapper around round().
+    Small wrapper around std::lround().
+
+    This function exists for compatibility, as it was more convenient than
+    std::round() before C++11. Use std::lround() in the new code.
+
+    It is defined for all floating point types @c T and can be also used with
+    integer types for compatibility, but such use is deprecated -- simply
+    remove the calls to wxRound() from your code if you're using it with
+    integer types, it is unnecessary in this case.
 */
-int wxRound(double x);
+template <typename T>
+int wxRound(T x);
 
 /**
    Returns true if both double values are identical. This is
