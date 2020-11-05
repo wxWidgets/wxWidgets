@@ -88,7 +88,10 @@ void wxWebView::RegisterFactory(const wxString& backend,
 bool wxWebView::IsBackendAvailable(const wxString& backend)
 {
     wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
-    return iter != m_factoryMap.end();
+    if (iter != m_factoryMap.end())
+        return iter->second->IsAvailable();
+    else
+        return false;
 }
 
 // static 
@@ -111,8 +114,7 @@ void wxWebView::InitFactoryMap()
 #endif
 
 #if wxUSE_WEBVIEW_EDGE
-    if (wxWebViewEdge::IsAvailable() &&
-        m_factoryMap.find(wxWebViewBackendEdge) == m_factoryMap.end())
+    if (m_factoryMap.find(wxWebViewBackendEdge) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendEdge, wxSharedPtr<wxWebViewFactory>
         (new wxWebViewFactoryEdge));
 #endif

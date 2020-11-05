@@ -51,7 +51,7 @@ typedef HRESULT(__stdcall *GetAvailableCoreWebView2BrowserVersionString_t)(
 CreateCoreWebView2EnvironmentWithOptions_t wxCreateCoreWebView2EnvironmentWithOptions = NULL;
 GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2BrowserVersionString = NULL;
 
-int wxWebViewEdgeImpl::ms_isAvailable = -1;
+bool wxWebViewEdgeImpl::ms_isInitialized = false;
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
@@ -113,6 +113,9 @@ HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
 
 bool wxWebViewEdgeImpl::Initialize()
 {
+    if (ms_isInitialized)
+        return true;
+
     if (!ms_loaderDll.Load("WebView2Loader.dll", wxDL_DEFAULT | wxDL_QUIET))
         return false;
 
@@ -126,7 +129,10 @@ bool wxWebViewEdgeImpl::Initialize()
     wxCoTaskMemPtr<wchar_t> versionStr;
     HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(NULL, &versionStr);
     if (SUCCEEDED(hr) && versionStr)
+    {
+        ms_isInitialized = true;
         return true;
+    }
     else
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
 
@@ -135,10 +141,10 @@ bool wxWebViewEdgeImpl::Initialize()
 
 void wxWebViewEdgeImpl::Uninitialize()
 {
-    if (ms_isAvailable == 1)
+    if (ms_isInitialized)
     {
         ms_loaderDll.Unload();
-        ms_isAvailable = -1;
+        ms_isInitialized = false;
     }
 }
 
@@ -349,19 +355,6 @@ ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
     return settings;
 }
 
-bool wxWebViewEdge::IsAvailable()
-{
-    if (wxWebViewEdgeImpl::ms_isAvailable == -1)
-    {
-        if (!wxWebViewEdgeImpl::Initialize())
-            wxWebViewEdgeImpl::ms_isAvailable = 0;
-        else
-            wxWebViewEdgeImpl::ms_isAvailable = 1;
-    }
-
-    return wxWebViewEdgeImpl::ms_isAvailable == 1;
-}
-
 wxWebViewEdge::~wxWebViewEdge()
 {
     Unbind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
@@ -376,7 +369,7 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     long style,
     const wxString& name)
 {
-    if (!IsAvailable())
+    if (!wxWebViewEdgeImpl::Initialize())
         return false;
 
     if (!wxControl::Create(parent, id, pos, size, style,
@@ -868,6 +861,14 @@ void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(bas
     if (m_impl->m_webView)
         m_impl->m_webView->NavigateToString(html.wc_str());
 }
+
+// wxWebViewFactoryEdge
+
+bool wxWebViewFactoryEdge::IsAvailable()
+{
+    return wxWebViewEdgeImpl::Initialize();
+}
+
 
 // ----------------------------------------------------------------------------
 // Module ensuring all global/singleton objects are destroyed on shutdown.

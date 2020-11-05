@@ -65,7 +65,7 @@ public:
 
     ICoreWebView2Settings* GetSettings();
 
-    static int ms_isAvailable;
+    static bool ms_isInitialized;
     static wxDynamicLibrary ms_loaderDll;
 
     static bool Initialize();
