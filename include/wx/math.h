@@ -164,8 +164,20 @@ inline int wxRound(float x)
 
 inline int wxRound(long double x) { return wxRound(double(x)); }
 
+// For compatibility purposes, define wxRound() overloads for integer types
+// too, as this used to compile with wx 3.0.
+#if WXWIN_COMPATIBILITY_3_0
+
 wxDEPRECATED_MSG("rounding an integer is useless")
 inline int wxRound(int x) { return x; }
+
+wxDEPRECATED_MSG("rounding an integer is useless")
+inline int wxRound(short x) { return x; }
+
+wxDEPRECATED_MSG("rounding an integer is useless")
+inline int wxRound(long x) { return static_cast<int>(x); }
+
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // Convert between degrees and radians.
 inline double wxDegToRad(double deg) { return (deg * M_PI) / 180.0; }
