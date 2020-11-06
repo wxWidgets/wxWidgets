@@ -220,6 +220,17 @@ public:
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
                               const wxString& name = wxWebViewNameStr) = 0;
+    /**
+        Function to check if the backend is available at runtime. The
+        wxWebView implementation can use this function to check all
+        runtime requirements without trying to create a wxWebView.
+
+        @return returns @true if the backend can be used or @false if it is
+            not available during runtime.
+
+        @since 3.1.5
+    */
+    virtual bool IsAvailable();
 };
 
 /**
