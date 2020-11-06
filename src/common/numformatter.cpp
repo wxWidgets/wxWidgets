@@ -185,10 +185,7 @@ bool wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxSt
         if ( s.length() == 1 )
         {
             s_thousandsSeparator = s[0];
-            const wxString
-                g = wxLocale::GetInfo(wxLOCALE_GROUPING, wxLOCALE_CAT_NUMBER);
-            if ( g[0] != '\0')
-                s_grouping = g;
+            s_grouping = wxLocale::GetInfo(wxLOCALE_GROUPING, wxLOCALE_CAT_NUMBER);
         }
         //else: Unlike above it's perfectly fine for the thousands separator to
         //      be empty if grouping is not used, so just leave it as 0.
