@@ -1435,7 +1435,10 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                 }
                 else // !virtual
                 {
-                    InsertItemInReportView(event.GetIndex());
+                    int idx = event.GetIndex();
+                    if ( idx == -1 )
+                        idx = 0;
+                    InsertItemInReportView(idx);
                 }
                 break;
             }
