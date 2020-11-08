@@ -134,9 +134,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
     EVT_MENU(LIST_ROW_LINES, MyFrame::OnSetRowLines)
-#if !defined(__WXMSW__)
     EVT_MENU(LIST_ROW_LINES_ON_BLANK, MyFrame::OnSetRowLinesOnBlank)
-#endif
     EVT_MENU(LIST_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
@@ -168,9 +166,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(LIST_TOGGLE_CHECKBOXES, MyFrame::OnUpdateToggleCheckBoxes)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
     EVT_UPDATE_UI(LIST_ROW_LINES, MyFrame::OnUpdateRowLines)
-#if !defined(__WXMSW__)
-    EVT_UPDATE_UI(LIST_ROW_LINES_ON_BLANK, MyFrame::OnUpdateRowLines)
-#endif
+    EVT_UPDATE_UI(LIST_ROW_LINES_ON_BLANK, MyFrame::OnUpdateUIEnableInReport)
 wxEND_EVENT_TABLE()
 
 // My frame constructor
@@ -283,9 +279,7 @@ MyFrame::MyFrame(const wxString& title)
     menuCol->Append(LIST_SET_FG_COL, "&Foreground colour...");
     menuCol->Append(LIST_SET_BG_COL, "&Background colour...");
     menuCol->AppendCheckItem(LIST_ROW_LINES, "Alternating colours");
-#if !defined(__WXMSW__)
-    menuCol->AppendCheckItem(LIST_ROW_LINES_ON_BLANK, "Alternating colours on Blank");
-#endif
+    menuCol->AppendCheckItem(LIST_ROW_LINES_ON_BLANK, "Extend to whole window");
     menuCol->AppendCheckItem(LIST_CUSTOM_HEADER_ATTR, "&Custom header attributes");
 
     wxMenuBar *menubar = new wxMenuBar;
@@ -529,9 +523,7 @@ void MyFrame::RecreateList(long flags, bool withText)
     }
 
     GetMenuBar()->Check(LIST_ROW_LINES, false);
-#if !defined(__WXMSW__)
     GetMenuBar()->Check(LIST_ROW_LINES_ON_BLANK, false);
-#endif
 
     m_logWindow->Clear();
 }
@@ -952,19 +944,10 @@ void MyFrame::OnSetRowLines(wxCommandEvent& event)
     m_listCtrl->Refresh();
 }
 
-#if !defined(__WXMSW__)
 void MyFrame::OnSetRowLinesOnBlank(wxCommandEvent& event)
 {
-    wxColour color = wxGetColourFromUser(this);
-    m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
-    if (event.IsChecked())
-        m_listCtrl->SetAlternateRowColour(color);
-    else
-        m_listCtrl->EnableAlternateRowColours(event.IsChecked());
-    m_listCtrl->SetListRulesAlternateColourOnBlank(event.IsChecked(), color);
-    m_listCtrl->Refresh();
+    m_listCtrl->ExtendRulesAndAlternateColour(event.IsChecked());
 }
-#endif
 
 void MyFrame::OnCustomHeaderAttr(wxCommandEvent& event)
 {

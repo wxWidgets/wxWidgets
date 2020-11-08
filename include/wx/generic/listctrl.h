@@ -189,6 +189,8 @@ public:
     virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
     virtual bool SetCursor( const wxCursor &cursor ) wxOVERRIDE;
 
+    virtual void ExtendRulesAndAlternateColour(bool extend = true) wxOVERRIDE;
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
     virtual wxDropTarget *GetDropTarget() const wxOVERRIDE;
@@ -207,8 +209,6 @@ public:
                          m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
-
-    void SetListRulesAlternateColourOnBlank(bool state, const wxColour& colour);
 
 protected:
     // Implement base class pure virtual methods.

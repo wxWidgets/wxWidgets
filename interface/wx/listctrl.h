@@ -1334,28 +1334,31 @@ public:
     void CheckItem(long item, bool check);
 
     /**
-        When the content of state is true, tells listctrl to draw
-        horizontal and vertical rulers on blank rows and also to
-        paint the background of alternate rows on blank rows, using
-        colour to paint the alternate blank(empty) rows' background.
+        Extend rules and alternate rows background to the entire client area.
 
-        As EnableAlternateRowColours(), this method can only be used with
-        controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+        Bu default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
+        and alternate row background (when EnableAlternateRowColours() was
+        called) are only shown in the part of the control occupied by the
+        items, which can be smaller than the entire window if there are few
+        items in the control.
 
-        This method is NOT available on Windows.
+        Calling this function extends the display of the rules and alternate
+        background rows to the entire client area.
 
-        @param state
+        Similarly to EnableAlternateRowColours(), this method can only be used
+        with controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        Note that this method is currently not implemented in the native MSW
+        version and does nothing there.
+
+        @param extend
             if @true, draws horizontal rules and vertical rules on empty rows
             and uses the colour parameter to paint the background of
             alternate rows when those rows are blank, empty, with no data.
-        @param colour
-            A valid row background colour to enable alternating rows on
-            blank rows (rows with no data).
 
         @since 3.1.5
-        @note This method is currently NOT implemented in the Windows version.
     */
-    void SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour);
+    void ExtendRulesAndAlternateColour(bool extend = true);
 
 protected:
 

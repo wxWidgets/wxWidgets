@@ -793,22 +793,6 @@ void wxListLineData::Draw(wxDC *dc, bool current)
     }
 }
 
-void wxListMainWindow::DrawInReportModeOnBlank ( wxDC *dc,
-                                                 const wxRect& rect,
-                                                 int lineNumber )
-{
-    // Checks whether or not lineNumber is due to change on its background
-    // colour and fills the row from beginning to end with the colour stored
-    // in the m_alternateColourOnBlank instance variable in affirmative case
-    if ( lineNumber % 2 )
-    {
-        dc->SetBrush(m_alternateColourOnBlank);
-        dc->SetPen(*wxTRANSPARENT_PEN);
-        dc->DrawRectangle(rect);
-    }
-
-}
-
 void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rect,
                                        const wxRect& rectHL,
@@ -1617,9 +1601,7 @@ void wxListMainWindow::Init()
     m_anchor  = (size_t)-1;
 
     m_hasCheckBoxes = false;
-
-    m_listRulesAlternateColourOnBlank = false;
-    m_alternateColourOnBlank = wxColour(176, 235, 212, 0xff);;
+    m_extendRulesAndAlternateColour = false;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -2091,12 +2073,22 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int lineHeight = GetLineHeight();
 
         size_t visibleFrom, visibleTo;
-        size_t visibleEnd;
         const size_t linesPerPage = (unsigned int) m_linesPerPage;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
 
-        visibleEnd = (m_listRulesAlternateColourOnBlank &&
-                      linesPerPage > visibleTo ? linesPerPage : visibleTo);
+        // We may need to iterate beyond visibleTo if we want to draw striped
+        // background across the entire window.
+        size_t visibleEnd;
+        wxColour colAlt;
+        if ( m_extendRulesAndAlternateColour )
+        {
+            colAlt = GetListCtrl()->GetAlternateRowColour();
+            visibleEnd = wxMax(linesPerPage, visibleTo);
+        }
+        else
+        {
+            visibleEnd = visibleTo;
+        }
 
         wxRect rectLine;
         int xOrig = dc.LogicalToDeviceX( 0 );
@@ -2126,15 +2118,26 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 continue;
             }
 
-            if ( line <= visibleTo ) {
-                GetLine(line)->DrawInReportMode( &dc,
-                                                 rectLine,
-                                                 GetLineHighlightRect(line),
-                                                 IsHighlighted(line),
-                                                 line == m_current );
-            } else {
-                DrawInReportModeOnBlank( &dc, rectLine, line );
+            if ( line > visibleTo )
+            {
+                // We only iterate beyond visibleTo when we have to draw the
+                // odd rows background, so do this if needed.
+                if ( line % 2 )
+                {
+                    dc.SetBrush(colAlt);
+                    dc.SetPen(*wxTRANSPARENT_PEN);
+                    dc.DrawRectangle(rectLine);
+                }
+
+                // But don't do anything else, as there is no valid item.
+                continue;
             }
+
+            GetLine(line)->DrawInReportMode( &dc,
+                                             rectLine,
+                                             GetLineHighlightRect(line),
+                                             IsHighlighted(line),
+                                             line == m_current );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2163,9 +2166,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw vertical rules if required
-        if ( HasFlag(wxLC_VRULES) && (m_listRulesAlternateColourOnBlank ||
-                                      ( ! m_listRulesAlternateColourOnBlank
-                                        && !IsEmpty() ) ) )
+        if ( HasFlag(wxLC_VRULES) &&
+                (m_extendRulesAndAlternateColour || !IsEmpty()) )
         {
             wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
             wxRect firstItemRect, lastItemRect;
@@ -2186,13 +2188,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 int x_pos = x - dev_x;
                 if (col < GetColumnCount()-1) x_pos -= 2;
 
-                if (m_listRulesAlternateColourOnBlank) {
-                    dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
-                            x_pos, clientHeight);
-                } else {
-                    dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
-                            x_pos, lastItemRect.GetBottom() + 1 - dev_y);
-                }
+                int ruleHeight = m_extendRulesAndAlternateColour
+                                    ? clientHeight
+                                    : lastItemRect.GetBottom() + 1 - dev_y;
+
+                dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
+                            x_pos, ruleHeight);
             }
         }
     }
@@ -4986,10 +4987,14 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     return true;
 }
 
-void wxGenericListCtrl::SetListRulesAlternateColourOnBlank(const bool state, const wxColour& colour)
+void wxGenericListCtrl::ExtendRulesAndAlternateColour(bool state)
 {
-    if (m_mainWin)
-        m_mainWin->SetListRulesAlternateColourOnBlank(state, colour);
+    wxCHECK_RET( m_mainWin, "can't be called before creation" );
+
+    wxASSERT_MSG( InReportView(), "can only be called in report mode" );
+
+    m_mainWin->ExtendRulesAndAlternateColour(state);
+    m_mainWin->Refresh();
 }
 
 wxBorder wxGenericListCtrl::GetDefaultBorder() const
