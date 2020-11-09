@@ -347,12 +347,13 @@ public:
     and under Fedora it is webkitgtk4-devel. All wxWEBVIEW_WEBKIT features are
     supported except for clearing and enabling / disabling the history.
 
-    @par wxWEBVIEW_WEBKIT (OSX)
+    @par wxWEBVIEW_WEBKIT (macOS)
 
     The macOS WebKit backend uses Apple's
-    <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
+    <a href="https://developer.apple.com/documentation/webkit/wkwebview">WKWebView</a>
     class. This backend has full support for custom schemes and virtual file
-    systems.
+    systems on macOS 10.13+. In order to use handlers two-step creation has to be used
+    and RegisterHandler() has to be called before Create().
 
     @section async Asynchronous Notifications
 
@@ -565,6 +566,9 @@ public:
     /**
         Registers a custom scheme handler.
         @param handler A shared pointer to a wxWebHandler.
+        @note On macOS in order to use handlers two-step creation has to be
+              used and RegisterHandler() has to be called before Create().
+              With the other backends it has to be called after Create().
     */
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
 

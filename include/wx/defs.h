@@ -2789,6 +2789,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSRotationGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPressGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTouch);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPasteboard);
+DECLARE_WXCOCOA_OBJC_CLASS(WKWebView);
 
 typedef WX_NSWindow WXWindow;
 typedef WX_NSView WXWidget;
@@ -2797,6 +2798,7 @@ typedef WX_NSMenu WXHMENU;
 typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
 typedef WX_NSOpenGLContext WXGLContext;
 typedef WX_NSPasteboard OSXPasteboard;
+typedef WX_WKWebView OSXWebViewPtr;
 
 #elif wxOSX_USE_IPHONE
 
@@ -2810,7 +2812,6 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIEvent);
 DECLARE_WXCOCOA_OBJC_CLASS(NSSet);
 DECLARE_WXCOCOA_OBJC_CLASS(EAGLContext);
-DECLARE_WXCOCOA_OBJC_CLASS(UIWebView);
 DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
 
 typedef WX_UIWindow WXWindow;
@@ -2819,15 +2820,10 @@ typedef WX_UIImage WXImage;
 typedef WX_UIMenu WXHMENU;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
-typedef WX_UIWebView OSXWebViewPtr;
 typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 
-#if wxOSX_USE_COCOA_OR_CARBON
-DECLARE_WXCOCOA_OBJC_CLASS(WebView);
-typedef WX_WebView OSXWebViewPtr;
-#endif
 
 
 #endif /* __WXMAC__ */
