@@ -174,6 +174,18 @@ public:
 
     virtual void SetSelection(int n);
 
+    /**
+        Returns the index of the selected item or @c wxNOT_FOUND if no item is
+        selected.
+
+        @return The position of the current selection.
+
+        @remarks This method can be used with single selection list boxes only,
+                 you must use wxListBox::GetSelections() for the list
+                 boxes with wxLB_MULTIPLE style.
+
+        @see SetSelection(), GetStringSelection()
+    */
     virtual int GetSelection() const;
 
     virtual bool SetStringSelection(const wxString& s, bool select);

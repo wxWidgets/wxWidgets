@@ -113,10 +113,6 @@ public:
 
         @return The position of the current selection.
 
-        @remarks This method can be used with single selection list boxes only,
-                 you should use wxListBox::GetSelections() for the list
-                 boxes with wxLB_MULTIPLE style.
-
         @see SetSelection(), GetStringSelection()
     */
     virtual int GetSelection() const = 0;
