@@ -500,7 +500,7 @@ WXDLLIMPEXP_BASE int wxCRT_FputcW(wchar_t wc, FILE *stream);
    ------------------------------------------------------------------------- */
 
 #define wxCRT_GetenvA           getenv
-#ifdef _tgetenv
+#ifdef wxHAVE_TCHAR_SUPPORT
     #define wxCRT_GetenvW       _wgetenv
 #endif
 
@@ -510,8 +510,7 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 
 
 #define wxCRT_SystemA               system
-/* mingw32 doesn't provide _tsystem() or _wsystem(): */
-#if defined(_tsystem)
+#ifdef wxHAVE_TCHAR_SUPPORT
     #define  wxCRT_SystemW          _wsystem
 #endif
 
