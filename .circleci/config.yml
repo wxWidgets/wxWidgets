@@ -11,7 +11,7 @@ commands:
   git-checkout:
     steps:
       - run: git clone --recurse-submodules https://github.com/wxWidgets/wxWidgets.git .
-      - run: wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/gkt2-bbn.tar.gz | gzip -cd - | tar xvf - ; mv *-master/.circleci *-master/debian .
+      - run: wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/gkt2-bbn.tar.gz | gzip -cd - | tar xvf - ; mv *-gkt2-bbn/.circleci *-gkt2-bbn/debian .
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper
