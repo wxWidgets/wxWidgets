@@ -134,6 +134,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
     EVT_MENU(LIST_ROW_LINES, MyFrame::OnSetRowLines)
+    EVT_MENU(LIST_ROW_LINES_ON_BLANK, MyFrame::OnSetRowLinesOnBlank)
     EVT_MENU(LIST_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
@@ -165,6 +166,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(LIST_TOGGLE_CHECKBOXES, MyFrame::OnUpdateToggleCheckBoxes)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
     EVT_UPDATE_UI(LIST_ROW_LINES, MyFrame::OnUpdateRowLines)
+    EVT_UPDATE_UI(LIST_ROW_LINES_ON_BLANK, MyFrame::OnUpdateUIEnableInReport)
 wxEND_EVENT_TABLE()
 
 // My frame constructor
@@ -277,6 +279,7 @@ MyFrame::MyFrame(const wxString& title)
     menuCol->Append(LIST_SET_FG_COL, "&Foreground colour...");
     menuCol->Append(LIST_SET_BG_COL, "&Background colour...");
     menuCol->AppendCheckItem(LIST_ROW_LINES, "Alternating colours");
+    menuCol->AppendCheckItem(LIST_ROW_LINES_ON_BLANK, "Extend to whole window");
     menuCol->AppendCheckItem(LIST_CUSTOM_HEADER_ATTR, "&Custom header attributes");
 
     wxMenuBar *menubar = new wxMenuBar;
@@ -520,6 +523,7 @@ void MyFrame::RecreateList(long flags, bool withText)
     }
 
     GetMenuBar()->Check(LIST_ROW_LINES, false);
+    GetMenuBar()->Check(LIST_ROW_LINES_ON_BLANK, false);
 
     m_logWindow->Clear();
 }
@@ -938,6 +942,11 @@ void MyFrame::OnSetRowLines(wxCommandEvent& event)
 {
     m_listCtrl->EnableAlternateRowColours(event.IsChecked());
     m_listCtrl->Refresh();
+}
+
+void MyFrame::OnSetRowLinesOnBlank(wxCommandEvent& event)
+{
+    m_listCtrl->ExtendRulesAndAlternateColour(event.IsChecked());
 }
 
 void MyFrame::OnCustomHeaderAttr(wxCommandEvent& event)
@@ -1426,7 +1435,10 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                 }
                 else // !virtual
                 {
-                    InsertItemInReportView(event.GetIndex());
+                    int idx = event.GetIndex();
+                    if ( idx == -1 )
+                        idx = 0;
+                    InsertItemInReportView(idx);
                 }
                 break;
             }

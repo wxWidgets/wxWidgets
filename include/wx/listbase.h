@@ -417,6 +417,8 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
+    virtual void ExtendRulesAndAlternateColour(bool WXUNUSED(extend) = true) { }
+
     // Header attributes support: only implemented in wxMSW currently.
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
 

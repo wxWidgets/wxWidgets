@@ -740,6 +740,12 @@ public:
         return true;
     }
 
+    void ExtendRulesAndAlternateColour(bool extend)
+    {
+        m_extendRulesAndAlternateColour = extend;
+    }
+
+
     // these are for wxListLineData usage only
 
     // get the backpointer to the list ctrl
@@ -774,6 +780,10 @@ public:
 
         selected ? ++m_selCount : --m_selCount;
     }
+
+    void DrawInReportModeOnBlank ( wxDC *dc,
+                                   const wxRect& rect,
+                                   int lineNumber );
 
 protected:
     // the array of all line objects for a non virtual list control (for the
@@ -936,6 +946,9 @@ private:
     // NULL if no item is being edited
     wxListTextCtrlWrapper *m_textctrlWrapper;
 
+    // tells whether or not to paint empty rows with alternate colour and draw
+    // rulers on empty rows
+    bool m_extendRulesAndAlternateColour;
 
     wxDECLARE_EVENT_TABLE();
 

@@ -1601,6 +1601,7 @@ void wxListMainWindow::Init()
     m_anchor  = (size_t)-1;
 
     m_hasCheckBoxes = false;
+    m_extendRulesAndAlternateColour = false;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -2072,7 +2073,22 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int lineHeight = GetLineHeight();
 
         size_t visibleFrom, visibleTo;
+        const size_t linesPerPage = (unsigned int) m_linesPerPage;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+        // We may need to iterate beyond visibleTo if we want to draw striped
+        // background across the entire window.
+        size_t visibleEnd;
+        wxColour colAlt;
+        if ( m_extendRulesAndAlternateColour )
+        {
+            colAlt = GetListCtrl()->GetAlternateRowColour();
+            visibleEnd = wxMax(linesPerPage, visibleTo);
+        }
+        else
+        {
+            visibleEnd = visibleTo;
+        }
 
         wxRect rectLine;
         int xOrig = dc.LogicalToDeviceX( 0 );
@@ -2090,7 +2106,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetParent()->GetEventHandler()->ProcessEvent( evCache );
         }
 
-        for ( size_t line = visibleFrom; line <= visibleTo; line++ )
+        for ( size_t line = visibleFrom; line <= visibleEnd; line++ )
         {
             rectLine = GetLineRect(line);
 
@@ -2099,6 +2115,21 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                             rectLine.width, rectLine.height) )
             {
                 // don't redraw unaffected lines to avoid flicker
+                continue;
+            }
+
+            if ( line > visibleTo )
+            {
+                // We only iterate beyond visibleTo when we have to draw the
+                // odd rows background, so do this if needed.
+                if ( line % 2 )
+                {
+                    dc.SetBrush(colAlt);
+                    dc.SetPen(*wxTRANSPARENT_PEN);
+                    dc.DrawRectangle(rectLine);
+                }
+
+                // But don't do anything else, as there is no valid item.
                 continue;
             }
 
@@ -2116,7 +2147,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             size_t i = visibleFrom;
             if (i == 0) i = 1; // Don't draw the first one
-            for ( ; i <= visibleTo; i++ )
+            for ( ; i <= visibleEnd; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2125,7 +2156,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
 
             // Draw last horizontal rule
-            if ( visibleTo == GetItemCount() - 1 )
+            if ( visibleEnd == GetItemCount() - 1 )
             {
                 dc.SetPen( pen );
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2135,7 +2166,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw vertical rules if required
-        if ( HasFlag(wxLC_VRULES) && !IsEmpty() )
+        if ( HasFlag(wxLC_VRULES) &&
+                (m_extendRulesAndAlternateColour || !IsEmpty()) )
         {
             wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
             wxRect firstItemRect, lastItemRect;
@@ -2146,14 +2178,22 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
+            int clientHeight, clientWidth;
+            GetSize( &clientWidth, &clientHeight );
+
             for (int col = 0; col < GetColumnCount(); col++)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
                 int x_pos = x - dev_x;
                 if (col < GetColumnCount()-1) x_pos -= 2;
+
+                int ruleHeight = m_extendRulesAndAlternateColour
+                                    ? clientHeight
+                                    : lastItemRect.GetBottom() + 1 - dev_y;
+
                 dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
-                            x_pos, lastItemRect.GetBottom() + 1 - dev_y);
+                            x_pos, ruleHeight);
             }
         }
     }
@@ -4945,6 +4985,16 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
     return true;
+}
+
+void wxGenericListCtrl::ExtendRulesAndAlternateColour(bool state)
+{
+    wxCHECK_RET( m_mainWin, "can't be called before creation" );
+
+    wxASSERT_MSG( InReportView(), "can only be called in report mode" );
+
+    m_mainWin->ExtendRulesAndAlternateColour(state);
+    m_mainWin->Refresh();
 }
 
 wxBorder wxGenericListCtrl::GetDefaultBorder() const
