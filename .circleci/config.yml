@@ -22,7 +22,7 @@ commands:
           no_output_timeout: 30m
       - cloudsmith/ensure-api-key
       - cloudsmith/install-cli
-      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-repo ${PKG_DISTRO}/${PKG_RELEASE}
+      - run: .circleci/publish-cloudsmith.sh deb bbn-projects/bbn-gtk2-repo ${PKG_DISTRO}/${PKG_RELEASE}
   do-all:
     steps:
       - git-checkout
