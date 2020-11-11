@@ -376,14 +376,17 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
         public:
             DropCleanup(wxCOMPtr<IDataObject>& pIDataObject,
                         wxDropTarget* pTarget,
-                        POINTL pt,
-                        DWORD* pdwEffect)
+                        POINTL pt)
                 : m_pIDataObject(pIDataObject),
                   m_pTarget(pTarget),
-                  m_pdwEffect(pdwEffect),
+                  m_dwEffect(DROPEFFECT_NONE),
                   m_pt(pt)
             {
             }
+
+            // This can be optionally called to use an effect different from
+            // DROPEFFECT_NONE in the dtor.
+            void UpdateEffect(DWORD dwEffect) { m_dwEffect = dwEffect; }
 
             ~DropCleanup()
             {
@@ -394,15 +397,15 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                 m_pTarget->MSWUpdateDragImageOnData
                            (
                                 m_pt.x, m_pt.y,
-                                ConvertDragEffectToResult(*m_pdwEffect)
+                                ConvertDragEffectToResult(m_dwEffect)
                            );
             }
         private:
             wxCOMPtr<IDataObject>& m_pIDataObject;
             wxDropTarget* m_pTarget;
-            DWORD* m_pdwEffect;
+            DWORD m_dwEffect;
             POINTL m_pt;
-        } dropCleanup(m_pIDataObject, m_pTarget, pt, pdwEffect);
+        } dropCleanup(m_pIDataObject, m_pTarget, pt);
 
         // first ask the drop target if it wants data
         if ( m_pTarget->OnDrop(pt.x, pt.y) ) {
@@ -416,6 +419,8 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
             if ( wxIsDragResultOk(rc) ) {
                 // operation succeeded
                 *pdwEffect = ConvertDragResultToEffect(rc);
+
+                dropCleanup.UpdateEffect(*pdwEffect);
             }
         }
 
