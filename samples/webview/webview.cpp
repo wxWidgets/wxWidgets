@@ -819,8 +819,6 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
     wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
     evt.GetTarget() + "')");
 
-    wxASSERT(m_browser->IsBusy());
-
     //If we don't want to handle navigation then veto the event and navigation
     //will not take place, we also need to stop the loading animation
     if(!m_tools_handle_navigation->IsChecked())
