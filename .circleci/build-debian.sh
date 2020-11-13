@@ -38,6 +38,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install autotools-dev autoconf dh-exec cmake gettext git-core \
     libgtk-3-dev                           \
+    libgtk2.0-dev                          \
     libgl1-mesa-dev                        \
     libglu1-mesa-dev                       \
     zlib1g-dev                             \
