@@ -1380,9 +1380,23 @@ public:
     virtual bool EnableDragSource( const wxDataFormat &format );
 
     /**
-       Enable drop operations using the given @a format.
+        Enable drop operations for each @a format from passed array.
+        Currently this is fully implemented in the generic and native macOS versions.
+        On GTK the only first element of array will be used.
+
+        @note Passing empty array disables drop operations at all.
+
+        @since 3.1.5
     */
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTarget(const wxDataFormatArray& formats);
+
+    /**
+        Enable drop operations using the given @a format.
+        Under the hood just calls overloaded EnableDropTarget() with an array holds single passed format.
+
+        @note Since 3.1.5 wxDF_INVALID can be passed to disable drop operations at all.
+    */
+    bool EnableDropTarget( const wxDataFormat &format );
 
     /**
         Call this to ensure that the given item is visible.
