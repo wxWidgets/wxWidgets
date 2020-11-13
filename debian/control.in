@@ -127,6 +127,8 @@ Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Multi-Arch: same
+Breaks: libwxgtk3.0-gtk3-0v5
+Replaces: libwxgtk3.0-gtk3-0v5
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ 3 runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -161,6 +163,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
   gstreamer1.0-plugins-good,
   gstreamer1.0-x
 Multi-Arch: same
+Breaks: libwxgtk-media3.0-gtk3-0v5
+Replaces: libwxgtk-media3.0-gtk3-0v5
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ 3 media library runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
@@ -188,6 +192,8 @@ Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends},
 Multi-Arch: same
+Breaks: libwxgtk-webview3.0-gtk3-0v5
+Replaces: libwxgtk-webview3.0-gtk3-0v5
 Description: wxWidgets Cross-platform C++ GUI toolkit (GTK+ 3 webview library runtime)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
  GUI components and other facilities on several popular platforms (and some
