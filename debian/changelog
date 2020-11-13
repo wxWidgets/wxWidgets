@@ -1,4 +1,4 @@
-wxwidgets3.1 (3.1.5a+dfsg-1) unstable; urgency=medium
+wxwidgets3.1 (3.1.5a+dfsg-2) unstable; urgency=medium
 
   * Implement multi-arch support for wx-common and -dev packages
     (Closes: #917022)
@@ -463,7 +463,7 @@ wxwidgets2.8 (2.8.12.1-11) unstable; urgency=low
 wxwidgets2.8 (2.8.12.1-10) unstable; urgency=low
 
   * Build-depends on libpng-dev instead of libpng12-dev.  (Closes: #662553)
-  * Add patch bp-menubar-fix.patch to fix sizing of new menubar.
+  * Add patch bp-menubar-fix.patch to fix sizing of new menubar.  
   * Drop build-dependency on quilt, no longer used since -9.
   * New patch desktop-files.patch which updates .desktop files to match the
     current specification.
@@ -489,7 +489,7 @@ wxwidgets2.8 (2.8.12.1-8) unstable; urgency=low
 
 wxwidgets2.8 (2.8.12.1-7) unstable; urgency=low
 
-  * Fix path to one of the bogus executable files in wx2.8-examples so it gets
+  * Fix path to one of the bogus executable files in wx2.8-examples so it gets 
     made non-executable as intended, really fixing the final lintian warning.
   * Add patch remove-refs-to-FPB_DEFAULT_STYLE.patch to fix warning upon
     refresh in XRCed.  (Closes: #654990)
@@ -890,7 +890,7 @@ wxwidgets2.6 (2.6.3.2.1.5ubuntu5) feisty; urgency=low
 
 wxwidgets2.6 (2.6.3.2.1.5ubuntu4) feisty; urgency=low
 
-  * wxPython/wx/py/introspect.py:
+  * wxPython/wx/py/introspect.py: 
     move "from __future__ import nested_scopes" to the begin of the file
 
  -- Michael Bienia <geser@ubuntu.com>  Mon, 15 Jan 2007 17:59:40 +0100

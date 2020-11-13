@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-update-alternatives --remove wx-config /usr/lib/wx/config/i586-mingw32msvc-msw-unicode-3.1
-
-#DEBHELPER#

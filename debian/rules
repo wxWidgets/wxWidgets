@@ -88,8 +88,7 @@ GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
     --enable-graphics_ctx \
     --enable-mediactrl \
     --enable-sound \
-    --enable-webview \
-    --with-gtk=2 \
+    --with-gtk \
     --with-libjpeg=sys \
     --with-libpng=sys \
     --with-libtiff=sys \
@@ -748,7 +747,7 @@ binary-cross: control-files-stamp $(install_all_cross)
 	binary-indep binary-arch binary binary-common			\
 	binary-wxbase binary-wxbase-dev		\
 	binary-cross						\
-        install install_arch install-gtk-lib install-gtk-dev		\
+	install install_arch install-gtk-lib install-gtk-dev		\
 	install-gtkmedia-lib install-gtkmedia-dev	\
 	install-gtk3-lib install-gtk3-dev		\
 	install-gtk3media-lib install-gtk3media-dev	\

@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-update-alternatives --remove wx-config /usr/lib/aarch64-linux-gnu/wx/config/base-unicode-3.1
-
-#DEBHELPER#
