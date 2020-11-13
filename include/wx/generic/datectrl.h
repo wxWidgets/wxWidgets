@@ -83,10 +83,6 @@ private:
     void OnText(wxCommandEvent &event);
     void OnSize(wxSizeEvent& event);
 
-#ifdef __WXOSX_COCOA__
-    virtual void OSXGenerateEvent(const wxDateTime& WXUNUSED(dt)) wxOVERRIDE { }
-#endif
-
     wxComboCtrl* m_combo;
     wxCalendarComboPopup* m_popup;
 
