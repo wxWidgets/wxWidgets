@@ -89,7 +89,7 @@ GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
     --enable-mediactrl \
     --enable-sound \
     --with-gtk \
-    --with-libjpeg=sys \
+    --with-libjpeg=builtin \
     --with-libpng=sys \
     --with-libtiff=sys \
     --with-opengl \
@@ -103,7 +103,7 @@ GTK3_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
     --enable-sound \
     --enable-webview \
     --with-gtk=3 \
-    --with-libjpeg=sys \
+    --with-libjpeg=builtin \
     --with-libpng=sys \
     --with-libtiff=sys \
     --with-opengl \
