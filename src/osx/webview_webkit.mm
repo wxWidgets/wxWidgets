@@ -29,6 +29,9 @@
 
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
+#include "wx/msgdlg.h"
+#include "wx/textdlg.h"
+#include "wx/filedlg.h"
 
 #include <WebKit/WebKit.h>
 #include <Foundation/NSURLError.h>
@@ -953,6 +956,65 @@ WX_API_AVAILABLE_MACOS(10, 13)
 
     return nil;
 }
+
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message
+    initiatedByFrame:(WKFrameInfo *)frame
+    completionHandler:(void (^)())completionHandler
+{
+    wxMessageDialog dlg(webKitWindow->GetParent(), wxCFStringRef::AsString(message));
+    dlg.ShowModal();
+    completionHandler();
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message
+    initiatedByFrame:(WKFrameInfo *)frame
+    completionHandler:(void (^)(BOOL))completionHandler
+{
+    wxMessageDialog dlg(webKitWindow->GetParent(), wxCFStringRef::AsString(message),
+                        wxMessageBoxCaptionStr, wxOK|wxCANCEL|wxCENTRE);
+    completionHandler(dlg.ShowModal() == wxID_OK);
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt
+    defaultText:(NSString *)defaultText
+    initiatedByFrame:(WKFrameInfo *)frame
+    completionHandler:(void (^)(NSString * _Nullable))completionHandler
+{
+    wxString resultText;
+    wxTextEntryDialog dlg(webKitWindow->GetParent(), wxCFStringRef::AsString(prompt),
+                          wxGetTextFromUserPromptStr, wxCFStringRef::AsString(defaultText));
+    if (dlg.ShowModal() == wxID_OK)
+        resultText = dlg.GetValue();
+
+    completionHandler(wxCFStringRef(resultText).AsNSString());
+}
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+- (void)webView:(WKWebView *)webView runOpenPanelWithParameters:(WKOpenPanelParameters *)parameters
+    initiatedByFrame:(WKFrameInfo *)frame
+    completionHandler:(void (^)(NSArray<NSURL *> * _Nullable))completionHandler
+WX_API_AVAILABLE_MACOS(10, 12)
+{
+    long style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+    if (parameters.allowsMultipleSelection)
+        style |= wxFD_MULTIPLE;
+
+    wxFileDialog dlg(webKitWindow->GetParent(), wxFileSelectorPromptStr, "", "",
+                     wxFileSelectorDefaultWildcardStr, style);
+    if (dlg.ShowModal() == wxID_OK)
+    {
+        wxArrayString filePaths;
+        dlg.GetPaths(filePaths);
+        NSMutableArray* urls = [[NSMutableArray alloc] init];
+        for (wxArrayString::iterator it = filePaths.begin(); it != filePaths.end(); it++)
+            [urls addObject:[NSURL fileURLWithPath:wxCFStringRef(*it).AsNSString()]];
+        completionHandler(urls);
+        [urls release];
+    }
+    else
+        completionHandler(nil);
+}
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED
 
 @end
 
