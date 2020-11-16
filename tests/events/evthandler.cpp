@@ -101,6 +101,9 @@ public:
     void OnEvent(wxEvent&) { g_called.method = true; }
     void OnAnotherEvent(AnotherEvent&);
     void OnIdle(wxIdleEvent&) { g_called.method = true; }
+
+    void OnOverloadedHandler(wxIdleEvent&) { }
+    void OnOverloadedHandler(wxThreadEvent&) { }
 };
 
 // we can also handle events in classes not deriving from wxEvtHandler
@@ -201,6 +204,14 @@ TEST_CASE("Event::LegacyConnect", "[event][connect]")
     handler.Disconnect( LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
     handler.Disconnect( 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
     handler.Disconnect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+}
+
+TEST_CASE("Event::ConnectOverloaded", "[event][connect]")
+{
+    MyHandler handler;
+
+    handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnOverloadedHandler));
+    handler.Connect(wxEVT_THREAD, wxThreadEventHandler(MyHandler::OnOverloadedHandler));
 }
 
 TEST_CASE("Event::DisconnectWildcard", "[event][connect][disconnect]")
