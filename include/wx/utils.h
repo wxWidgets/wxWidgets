@@ -25,6 +25,7 @@
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
     #include "wx/mousestate.h"
+    #include "wx/vector.h"
 #endif
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
@@ -51,7 +52,6 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class wxWindowList;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------
@@ -733,7 +733,7 @@ private:
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
     wxEventLoop* m_modalEventLoop;
 #endif
-    wxWindowList *m_winDisabled;
+    wxVector<wxWindow*> m_winDisabled;
     bool m_disabled;
 
     wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);

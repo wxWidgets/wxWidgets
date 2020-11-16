@@ -1530,8 +1530,6 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
 {
     // remember the top level windows which were already disabled, so that we
     // don't reenable them later
-    m_winDisabled = NULL;
-
     wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
@@ -1546,12 +1544,7 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
         }
         else
         {
-            if ( !m_winDisabled )
-            {
-                m_winDisabled = new wxWindowList;
-            }
-
-            m_winDisabled->Append(winTop);
+            m_winDisabled.push_back(winTop);
         }
     }
 }
@@ -1565,14 +1558,12 @@ wxWindowDisabler::~wxWindowDisabler()
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *winTop = node->GetData();
-        if ( !m_winDisabled || !m_winDisabled->Find(winTop) )
+        if ( !wxVectorContains(m_winDisabled, winTop) )
         {
             winTop->Enable();
         }
         //else: had been already disabled, don't reenable
     }
-
-    delete m_winDisabled;
 }
 
 #endif
