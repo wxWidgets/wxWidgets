@@ -810,7 +810,9 @@ wxCommandLinkButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element note  {_, t_text }*
+        [xrc:p="o"] element note {_, t_text }* &
+        [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element default {_, t_bool }*
     }
 
 

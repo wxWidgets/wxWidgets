@@ -957,6 +957,9 @@ The wxCommandLinkButton contains a main title-like @c label and an optional
 concatenated into a single string using a new line character between them
 (notice that the @c note part can have more new lines in it).
 
+Since wxWidgets 3.1.5 it also supports @c default and @c bitmap properties,
+just as @ref xrc_wxbutton wxButton.
+
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
@@ -964,6 +967,10 @@ concatenated into a single string using a new line character between them
     will be made when the button is pressed (default: empty). }
 @row3col{note, @ref overview_xrcformat_type_text,
     Second line of text describing the action performed when the button is pressed (default: none).  }
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to display in the button (optional).}
+@row3col{default, @ref overview_xrcformat_type_bool,
+    Should this button be the default button in dialog (default: 0)?}
 @endTable
 
 
