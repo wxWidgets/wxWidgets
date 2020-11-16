@@ -501,7 +501,7 @@ TEST_CASE("Event::UnbindFromHandler", "[event][bind][unbind]")
 // result in compilation errors.
 // Note that this test will work only on C++11 compilers, so we test this only
 // for such compilers.
-#if __cplusplus >= 201103
+#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(14)
 class HandlerNonPublic : protected wxEvtHandler
 {
 public:
