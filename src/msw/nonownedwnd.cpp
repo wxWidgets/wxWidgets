@@ -221,6 +221,21 @@ void wxNonOwnedWindow::InheritAttributes()
     wxNonOwnedWindowBase::InheritAttributes();
 }
 
+bool wxNonOwnedWindow::IsThisEnabled() const
+{
+    // Under MSW we use the actual window state rather than the value of
+    // m_isEnabled because the latter might be out of sync for TLWs disabled
+    // by a native modal dialog being shown, as native functions such as
+    // ::MessageBox() etc just call ::EnableWindow() on them without updating
+    // m_isEnabled and we have no way to be notified about this.
+    //
+    // But we can only do this if the window had been already created, so test
+    // for this in order to return correct result if it was disabled after
+    // using default ctor but before calling Create().
+    return m_hWnd ? !(::GetWindowLong(GetHwnd(), GWL_STYLE) & WS_DISABLED)
+                  : m_isEnabled;
+}
+
 WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;

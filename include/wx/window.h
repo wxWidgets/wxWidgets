@@ -655,7 +655,7 @@ public:
         // state, i.e. the state in which the window would be if all its
         // parents were enabled (use IsEnabled() above to get the effective
         // window state)
-    bool IsThisEnabled() const { return m_isEnabled; }
+    virtual bool IsThisEnabled() const { return m_isEnabled; }
 
     // returns true if the window is visible, i.e. IsShown() returns true
     // if called on it and all its parents up to the first TLW
