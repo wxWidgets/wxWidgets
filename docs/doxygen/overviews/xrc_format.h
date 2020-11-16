@@ -769,6 +769,11 @@ Refer to the section @ref xrc_wxtoolbar for more details.
 @hdr3col{property, type, description}
 @row3col{default, @ref overview_xrcformat_type_bool,
      Should this button be the default button in dialog (default: 0)?}
+@row3col{close, @ref overview_xrcformat_type_bool,
+     If set, this is a special "Close" button using system-defined appearance,
+     see wxBitmapButton::NewCloseButton(). If this property is set, @c bitmap
+     and @c style are ignored and shouldn't be used. Available since wxWidgets
+     3.1.5.}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap to show on the button (default: none).}
 @row3col{selected, @ref overview_xrcformat_type_bitmap,

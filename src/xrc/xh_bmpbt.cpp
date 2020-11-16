@@ -37,13 +37,23 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 {
     XRC_MAKE_INSTANCE(button, wxBitmapButton)
 
-    button->Create(m_parentAsWindow,
-                   GetID(),
-                   GetBitmap(wxT("bitmap"), wxART_BUTTON),
-                   GetPosition(), GetSize(),
-                   GetStyle(wxT("style")),
-                   wxDefaultValidator,
-                   GetName());
+    if ( GetBool("close", 0) )
+    {
+        button->CreateCloseButton(m_parentAsWindow,
+                                  GetID(),
+                                  GetName());
+    }
+    else
+    {
+        button->Create(m_parentAsWindow,
+                       GetID(),
+                       GetBitmap(wxT("bitmap"), wxART_BUTTON),
+                       GetPosition(), GetSize(),
+                       GetStyle(wxT("style")),
+                       wxDefaultValidator,
+                       GetName());
+    }
+
     if (GetBool(wxT("default"), 0))
         button->SetDefault();
     SetupWindow(button);
