@@ -4296,6 +4296,14 @@ bool wxWindowMSW::HandleActivate(int state,
         return false;
     }
 
+    if ( m_isBeingDeleted )
+    {
+        // Same goes for activation events sent to an already half-destroyed
+        // window: this doesn't happen always, but can happen for a TLW using a
+        // (still existent) hidden parent, see #18970.
+        return false;
+    }
+
     wxActivateEvent event(wxEVT_ACTIVATE,
                           (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),
                           m_windowId,
