@@ -288,6 +288,22 @@ TEST_CASE("wxVector::Sort", "[vector][sort]")
     }
 }
 
+TEST_CASE("wxVector::Contains", "[vector][contains]")
+{
+    wxVector<int> v;
+    CHECK( !wxVectorContains(v, 0) );
+
+    v.push_back(3);
+    CHECK( wxVectorContains(v, 3) );
+
+    v.push_back(2);
+    v.push_back(3);
+
+    CHECK( wxVectorContains(v, 2) );
+    CHECK( wxVectorContains(v, 3) );
+    CHECK( !wxVectorContains(v, 1) );
+}
+
 TEST_CASE("wxVector::operator==", "[vector][compare]")
 {
     wxVector<wxString> v1, v2;

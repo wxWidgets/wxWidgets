@@ -26,6 +26,12 @@ inline void wxVectorSort(wxVector<T>& v)
     std::sort(v.begin(), v.end());
 }
 
+template<typename T>
+inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
+{
+    return std::find(v.begin(), v.end(), obj) != v.end();
+}
+
 #else // !wxUSE_STD_CONTAINERS
 
 #include "wx/scopeguard.h"
@@ -688,7 +694,17 @@ void wxVectorSort(wxVector<T>& v)
             wxPrivate::wxVectorComparator<T>::Compare, NULL);
 }
 
+template<typename T>
+inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
+{
+    for ( size_t n = 0; n < v.size(); ++n )
+    {
+        if ( v[n] == obj )
+            return true;
+    }
 
+    return false;
+}
 
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
