@@ -114,11 +114,12 @@ GetCloseButtonBitmap(wxWindow *win,
 
 } // anonymous namespace
 
-/* static */
-wxBitmapButton*
-wxBitmapButtonBase::NewCloseButton(wxWindow* parent, wxWindowID winid)
+bool
+wxBitmapButton::CreateCloseButton(wxWindow* parent,
+                                  wxWindowID winid,
+                                  const wxString& name)
 {
-    wxCHECK_MSG( parent, NULL, wxS("Must have a valid parent") );
+    wxCHECK_MSG( parent, false, wxS("Must have a valid parent") );
 
     const wxColour colBg = parent->GetBackgroundColour();
 
@@ -129,26 +130,34 @@ wxBitmapButtonBase::NewCloseButton(wxWindow* parent, wxWindowID winid)
     wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CLOSE, wxART_BUTTON);
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
-    wxBitmapButton* const button = new wxBitmapButton
-                                       (
-                                        parent,
-                                        winid,
-                                        bmp,
-                                        wxDefaultPosition,
-                                        wxDefaultSize,
-                                        wxBORDER_NONE
-                                       );
+    if ( !Create(parent, winid, bmp,
+                 wxDefaultPosition, wxDefaultSize,
+                 wxBORDER_NONE, wxDefaultValidator, name) )
+        return false;
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-    button->SetBitmapPressed(
+    SetBitmapPressed(
         GetCloseButtonBitmap(parent, sizeBmp, colBg, wxCONTROL_PRESSED));
 
-    button->SetBitmapCurrent(
+    SetBitmapCurrent(
         GetCloseButtonBitmap(parent, sizeBmp, colBg, wxCONTROL_CURRENT));
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
     // The button should blend with its parent background.
-    button->SetBackgroundColour(colBg);
+    SetBackgroundColour(colBg);
+
+    return true;
+}
+
+/* static */
+wxBitmapButton*
+wxBitmapButtonBase::NewCloseButton(wxWindow* parent,
+                                   wxWindowID winid,
+                                   const wxString& name)
+{
+    wxBitmapButton* const button = new wxBitmapButton();
+
+    button->CreateCloseButton(parent, winid, name);
 
     return button;
 }
