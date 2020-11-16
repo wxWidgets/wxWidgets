@@ -1507,12 +1507,6 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
-
-// defined in evtloop.mm
-
-#else
-
 wxWindowDisabler::wxWindowDisabler(bool disable)
 {
     m_disabled = disable;
@@ -1547,12 +1541,20 @@ void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
             m_winDisabled.push_back(winTop);
         }
     }
+
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    AfterDisable(winToSkip);
+#endif
 }
 
 wxWindowDisabler::~wxWindowDisabler()
 {
     if ( !m_disabled )
         return;
+
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    BeforeEnable();
+#endif
 
     wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
@@ -1565,8 +1567,6 @@ wxWindowDisabler::~wxWindowDisabler()
         //else: had been already disabled, don't reenable
     }
 }
-
-#endif
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one

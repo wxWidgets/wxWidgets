@@ -731,7 +731,10 @@ private:
     void DoDisable(wxWindow *winToSkip = NULL);
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
-    wxEventLoop* m_modalEventLoop;
+    void AfterDisable(wxWindow* winToSkip);
+    void BeforeEnable();
+
+    wxEventLoop* m_modalEventLoop = NULL;
 #endif
     wxVector<wxWindow*> m_winDisabled;
     bool m_disabled;
