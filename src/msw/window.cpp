@@ -627,6 +627,16 @@ wxWindow *wxWindowBase::DoFindFocus()
     return NULL;
 }
 
+bool wxWindowMSW::IsThisEnabled() const
+{
+    // Under MSW we use the actual window state rather than the value of
+    // m_isEnabled because the latter might be out of sync, notably for TLWs
+    // disabled while showing a native modal dialog, as native code just calls
+    // ::EnableWindow() on them without updating m_isEnabled and we have no way
+    // to be notified about this.
+    return !(::GetWindowLong(GetHwnd(), GWL_STYLE) & WS_DISABLED);
+}
+
 void wxWindowMSW::DoEnable( bool enable )
 {
     MSWEnableHWND(GetHwnd(), enable);

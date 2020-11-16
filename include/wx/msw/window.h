@@ -94,6 +94,8 @@ public:
         return MSWShowWithEffect(false, effect, timeout);
     }
 
+    virtual bool IsThisEnabled() const wxOVERRIDE;
+
     virtual void SetFocus() wxOVERRIDE;
     virtual void SetFocusFromKbd() wxOVERRIDE;
 
