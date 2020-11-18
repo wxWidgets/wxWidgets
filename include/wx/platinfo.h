@@ -103,7 +103,6 @@ enum wxEndianness
 
     wxENDIAN_BIG,               // 4321
     wxENDIAN_LITTLE,            // 1234
-    wxENDIAN_PDP,               // 3412
 
     wxENDIAN_MAX
 };

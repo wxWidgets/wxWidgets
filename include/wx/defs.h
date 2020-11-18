@@ -1111,7 +1111,6 @@ typedef double wxDouble;
 
 #define  wxBIG_ENDIAN     4321
 #define  wxLITTLE_ENDIAN  1234
-#define  wxPDP_ENDIAN     3412
 
 #ifdef WORDS_BIGENDIAN
 #define  wxBYTE_ORDER  wxBIG_ENDIAN

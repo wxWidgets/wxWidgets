@@ -92,8 +92,7 @@ static const wxChar* const wxArchitectureNames[] =
 static const wxChar* const wxEndiannessNames[] =
 {
     wxT("Big endian"),
-    wxT("Little endian"),
-    wxT("PDP endian")
+    wxT("Little endian")
 };
 
 // ----------------------------------------------------------------------------
