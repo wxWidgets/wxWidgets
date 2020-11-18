@@ -992,6 +992,15 @@ bool wxIsPlatform64Bit();
 bool wxIsPlatformLittleEndian();
 
 /**
+    Returns the CPU architecture name. This can be, for example, "x86_64",
+    "arm64", or "i86pc". The name for the same CPU running on the same
+    hardware can vary across operating systems.
+
+    @since 3.1.5
+*/
+wxString wxGetCpuArchitectureName();
+
+/**
     Returns a structure containing information about the currently running
     Linux distribution.
 

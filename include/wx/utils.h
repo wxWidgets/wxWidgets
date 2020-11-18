@@ -153,6 +153,9 @@ WXDLLIMPEXP_BASE bool wxIsPlatformLittleEndian();
 // Get platform architecture
 WXDLLIMPEXP_BASE bool wxIsPlatform64Bit();
 
+// Get machine CPU architecture
+WXDLLIMPEXP_BASE wxString wxGetCpuArchitectureName();
+
 #ifdef __LINUX__
 // Get linux-distro information
 WXDLLIMPEXP_BASE wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
