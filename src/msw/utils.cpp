@@ -86,6 +86,10 @@
     #include <shellapi.h>
 #endif
 
+#ifndef PROCESSOR_ARCHITECTURE_ARM64
+#define PROCESSOR_ARCHITECTURE_ARM64 12
+#endif
+
 #include <errno.h>
 
 // For wxKillAllChildren
@@ -1267,6 +1271,34 @@ wxWinVersion wxGetWinVersion()
     }
 
     return wxWinVersion_Unknown;
+}
+
+wxString wxGetCpuArchitectureName()
+{
+    SYSTEM_INFO si;
+    GetNativeSystemInfo(&si);
+
+    switch (si.wProcessorArchitecture)
+    {
+    case PROCESSOR_ARCHITECTURE_AMD64:
+        return "x64";
+
+    case PROCESSOR_ARCHITECTURE_ARM:
+        return "ARM";
+
+    case PROCESSOR_ARCHITECTURE_ARM64:
+        return "ARM64";
+
+    case PROCESSOR_ARCHITECTURE_IA64:
+        return "Itanium";
+
+    case PROCESSOR_ARCHITECTURE_INTEL:
+        return "x86";
+
+    case PROCESSOR_ARCHITECTURE_UNKNOWN:
+    default:
+        return "Unknown";
+    }
 }
 
 // ----------------------------------------------------------------------------

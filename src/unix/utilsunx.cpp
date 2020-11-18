@@ -1079,13 +1079,18 @@ bool wxIsPlatform64Bit()
     (void)wxGetCommandOutput;
     return true;  // 64-bit programs run only on 64-bit platforms
 #else
-    const wxString machine = wxGetCommandOutput(wxT("uname -m"));
+    const wxString machine = wxGetCpuArchitectureName();
 
     // the test for "64" is obviously not 100% reliable but seems to work fine
     // in practice
     return machine.Contains(wxT("64")) ||
                 machine.Contains(wxT("alpha"));
 #endif
+}
+
+wxString wxGetCpuArchitectureName()
+{
+    return wxGetCommandOutput(wxT("uname -m"));
 }
 
 #ifdef __LINUX__
