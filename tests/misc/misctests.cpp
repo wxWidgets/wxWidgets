@@ -158,3 +158,32 @@ TEST_CASE("wxCTZ", "[math]")
 
     WX_ASSERT_FAILS_WITH_ASSERT( wxCTZ(0) );
 }
+
+TEST_CASE("wxRound", "[math]")
+{
+    CHECK( wxRound(2.3) == 2 );
+    CHECK( wxRound(3.7) == 4 );
+    CHECK( wxRound(-0.5f) == -1 );
+
+    WX_ASSERT_FAILS_WITH_ASSERT( wxRound(2.0*INT_MAX) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxRound(1.1*INT_MIN) );
+
+    // For compatibility reasons, we allow using wxRound() with integer types
+    // as well, even if this doesn't really make sense/
+#if WXWIN_COMPATIBILITY_3_0
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    CHECK( wxRound(-9) == -9 );
+    CHECK( wxRound((size_t)17) == 17 );
+    CHECK( wxRound((short)289) == 289 );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
+#endif // WXWIN_COMPATIBILITY_3_0
+}

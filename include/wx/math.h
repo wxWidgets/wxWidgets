@@ -164,18 +164,26 @@ inline int wxRound(float x)
 
 inline int wxRound(long double x) { return wxRound(double(x)); }
 
-// For compatibility purposes, define wxRound() overloads for integer types
-// too, as this used to compile with wx 3.0.
+// For compatibility purposes, make wxRound() work with integer types too, as
+// this used to compile with wx 3.0.
 #if WXWIN_COMPATIBILITY_3_0
 
+template <typename T>
 wxDEPRECATED_MSG("rounding an integer is useless")
-inline int wxRound(int x) { return x; }
+inline int wxRound(T x)
+{
+    // We have to disable this warning for the unsigned types. We do handle
+    // them correctly in this comparison due to "x > 0" below (removing it
+    // would make this fail for them!).
+    wxGCC_WARNING_SUPPRESS(sign-compare)
 
-wxDEPRECATED_MSG("rounding an integer is useless")
-inline int wxRound(short x) { return x; }
+    wxASSERT_MSG((x > 0 || x > INT_MIN) && x < INT_MAX,
+        "argument out of supported range");
 
-wxDEPRECATED_MSG("rounding an integer is useless")
-inline int wxRound(long x) { return static_cast<int>(x); }
+    wxGCC_WARNING_RESTORE(sign-compare)
+
+    return int(x);
+}
 
 #endif // WXWIN_COMPATIBILITY_3_0
 
