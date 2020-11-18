@@ -74,7 +74,7 @@ enum wxPortId
 
 
 /**
-    The architecture of the operating system
+    The architecture bitness of the operating system
     (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64Bit()
     documentation for more info).
 */
@@ -126,7 +126,7 @@ struct wxLinuxDistributionInfo
     @class wxPlatformInfo
 
     This class holds information about the operating system, the toolkit and the
-    basic architecture of the machine where the application is currently running.
+    basic architecture bitness of the machine where the application is currently running.
 
     This class does not only have @e getters for the information above, it also has
     @e setters. This allows you to e.g. save the current platform information in a
@@ -227,7 +227,7 @@ public:
 
     /**
         Converts the given string to a wxArchitecture enum value or to
-        @c wxARCH_INVALID if the given string is not a valid architecture string
+        @c wxARCH_INVALID if the given string is not a valid architecture bitness string
         (i.e. does not contain nor @c 32 nor @c 64 strings).
     */
     static wxArchitecture GetArch(const wxString& arch);
@@ -322,7 +322,7 @@ public:
     //@{
 
     /**
-        Returns the architecture ID of this wxPlatformInfo instance.
+        Returns the architecture bitness ID of this wxPlatformInfo instance.
     */
     wxArchitecture GetArchitecture() const;
 
@@ -440,7 +440,7 @@ public:
     //@{
 
     /**
-        Returns the name for the architecture of this wxPlatformInfo instance.
+        Returns the name for the architecture bitness of this wxPlatformInfo instance.
     */
     wxString GetArchName() const;
 
@@ -483,7 +483,7 @@ public:
     //@{
 
     /**
-        Sets the architecture enum value associated with this wxPlatformInfo instance.
+        Sets the architecture bitness enum value associated with this wxPlatformInfo instance.
     */
     void SetArchitecture(wxArchitecture n);
 

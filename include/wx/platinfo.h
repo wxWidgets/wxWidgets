@@ -82,7 +82,7 @@ enum wxPortId
     wxPORT_QT       = 1 << 10       // wxQT, using Qt 5+
 };
 
-// architecture of the operating system
+// architecture bitness of the operating system
 // (regardless of the build environment of wxWidgets library - see
 // wxIsPlatform64bit documentation for more info)
 enum wxArchitecture
@@ -134,7 +134,7 @@ struct wxLinuxDistributionInfo
 // ----------------------------------------------------------------------------
 
 // Information about the toolkit that the app is running under and some basic
-// platform and architecture info
+// platform and architecture bitness info
 class WXDLLIMPEXP_BASE wxPlatformInfo
 {
 public:
@@ -359,7 +359,7 @@ protected:
     // others
     // -----------------
 
-    // architecture of the OS/machine
+    // architecture bitness of the OS/machine
     wxArchitecture m_arch;
 
     // endianness of the machine
