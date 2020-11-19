@@ -12,6 +12,8 @@
 
 #include "wx/persist/window.h"
 
+#if wxUSE_BOOKCTRL
+
 #include "wx/bookctrl.h"
 
 // ----------------------------------------------------------------------------
@@ -62,5 +64,7 @@ inline wxPersistentObject *wxCreatePersistentObject(wxBookCtrlBase *book)
 {
     return new wxPersistentBookCtrl(book);
 }
+
+#endif // wxUSE_BOOKCTRL
 
 #endif // _WX_PERSIST_BOOKCTRL_H_

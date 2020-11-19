@@ -12,6 +12,8 @@
 
 #include "wx/persist/window.h"
 
+#if wxUSE_COMBOBOX
+
 #include "wx/combobox.h"
 
 #define wxPERSIST_COMBOBOX_KIND wxASCII_STR("Combobox")
@@ -95,5 +97,7 @@ inline wxPersistentObject *wxCreatePersistentObject(wxComboBox* combobox)
 {
     return new wxPersistentComboBox(combobox);
 }
+
+#endif // wxUSE_COMBOBOX
 
 #endif // _WX_PERSIST_COMBOBOX_H_

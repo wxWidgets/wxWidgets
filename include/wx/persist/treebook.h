@@ -12,6 +12,8 @@
 
 #include "wx/persist/bookctrl.h"
 
+#if wxUSE_TREEBOOK
+
 #include "wx/arrstr.h"
 #include "wx/treebook.h"
 
@@ -92,5 +94,7 @@ inline wxPersistentObject *wxCreatePersistentObject(wxTreebook *book)
 {
     return new wxPersistentTreeBookCtrl(book);
 }
+
+#endif // wxUSE_TREEBOOK
 
 #endif // _WX_PERSIST_TREEBOOK_H_
