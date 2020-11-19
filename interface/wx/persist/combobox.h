@@ -30,6 +30,8 @@
     combo->SetSelection(0);
 
     @endcode
+
+    @since 3.1.5
  */
 class wxPersistentComboBox : public wxPersistentWindow<wxComboBox>
 {
