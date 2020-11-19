@@ -254,6 +254,13 @@
 #include <wx/pen.h>
 #include <wx/peninfobase.h>
 #include <wx/persist.h>
+#include <wx/persist/bookctrl.h>
+#include <wx/persist/combobox.h>
+#include <wx/persist/dataview.h>
+#include <wx/persist/splitter.h>
+#include <wx/persist/toplevel.h>
+#include <wx/persist/treebook.h>
+#include <wx/persist/window.h>
 #include <wx/pickerbase.h>
 #include <wx/platform.h>
 #include <wx/platinfo.h>

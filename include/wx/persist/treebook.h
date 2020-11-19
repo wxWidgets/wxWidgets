@@ -12,6 +12,8 @@
 
 #include "wx/persist/bookctrl.h"
 
+#if wxUSE_TREEBOOK
+
 #include "wx/arrstr.h"
 #include "wx/treebook.h"
 
@@ -19,11 +21,11 @@
 // string constants used by wxPersistentTreeBookCtrl
 // ----------------------------------------------------------------------------
 
-#define wxPERSIST_TREEBOOK_KIND "TreeBook"
+#define wxPERSIST_TREEBOOK_KIND wxASCII_STR("TreeBook")
 
 // this key contains the indices of all expanded nodes in the tree book
 // separated by wxPERSIST_TREEBOOK_EXPANDED_SEP
-#define wxPERSIST_TREEBOOK_EXPANDED_BRANCHES "Expanded"
+#define wxPERSIST_TREEBOOK_EXPANDED_BRANCHES wxASCII_STR("Expanded")
 #define wxPERSIST_TREEBOOK_EXPANDED_SEP ','
 
 // ----------------------------------------------------------------------------
@@ -92,5 +94,7 @@ inline wxPersistentObject *wxCreatePersistentObject(wxTreebook *book)
 {
     return new wxPersistentTreeBookCtrl(book);
 }
+
+#endif // wxUSE_TREEBOOK
 
 #endif // _WX_PERSIST_TREEBOOK_H_
