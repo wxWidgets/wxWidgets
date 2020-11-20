@@ -1762,6 +1762,12 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 
         case wxLOCALE_DECIMAL_POINT:
+            // If user did not set specific locale all funcs work in standard C locale.
+            if (!wxGetLocale())
+                return wxString(".");
+
+            // This returns system specific separator for user's region, e.g. comma ',' for Russia,
+            // even if user did not specify locale and all funcs work with C locale...
             cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
             break;
 
