@@ -74,9 +74,25 @@ enum wxPortId
 
 
 /**
-    The architecture of the operating system
+    The architecture bitness of the operating system
     (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64Bit()
     documentation for more info).
+
+    @since 3.1.5
+*/
+enum wxBitness
+{
+    wxBITNESS_INVALID = -1,        //!< returned on error
+
+    wxBITNESS_32,                  //!< 32 bit
+    wxBITNESS_64,                  //!< 64 bit
+
+    wxBITNESS_MAX
+};
+
+
+/**
+    @deprecated Use wxBitness instead.
 */
 enum wxArchitecture
 {
@@ -126,7 +142,7 @@ struct wxLinuxDistributionInfo
     @class wxPlatformInfo
 
     This class holds information about the operating system, the toolkit and the
-    basic architecture of the machine where the application is currently running.
+    basic architecture bitness of the machine where the application is currently running.
 
     This class does not only have @e getters for the information above, it also has
     @e setters. This allows you to e.g. save the current platform information in a
@@ -172,7 +188,7 @@ public:
                    wxOperatingSystemId id = wxOS_UNKNOWN,
                    int osMajor = -1,
                    int osMinor = -1,
-                   wxArchitecture arch = wxARCH_INVALID,
+                   wxBitness bitness = wxBITNESS_INVALID,
                    wxEndianness endian = wxENDIAN_INVALID);
 
 
@@ -226,9 +242,16 @@ public:
     //@{
 
     /**
-        Converts the given string to a wxArchitecture enum value or to
-        @c wxARCH_INVALID if the given string is not a valid architecture string
+        Converts the given string to a wxBitness enum value or to
+        @c wxBITNESS_INVALID if the given string is not a valid architecture bitness string
         (i.e. does not contain nor @c 32 nor @c 64 strings).
+
+        @since 3.1.5
+    */
+    static wxBitness GetBitness(const wxString& bitness);
+
+    /**
+        @deprecated Use GetBitness() instead.
     */
     static wxArchitecture GetArch(const wxString& arch);
 
@@ -263,9 +286,16 @@ public:
     //@{
 
     /**
-        Returns the name for the given wxArchitecture enumeration value.
+        @deprecated Use GetBitnessName() instead.
     */
     static wxString GetArchName(wxArchitecture arch);
+
+    /**
+        Returns the name for the given wxBitness enumeration value.
+
+        @since 3.1.5
+    */
+    static wxString GetBitnessName(wxBitness bitness);
 
     /**
         Returns name for the given wxEndianness enumeration value.
@@ -322,9 +352,16 @@ public:
     //@{
 
     /**
-        Returns the architecture ID of this wxPlatformInfo instance.
+        @deprecated Use GetBitness() instead.
     */
     wxArchitecture GetArchitecture() const;
+
+    /**
+        Returns the architecture bitness ID of this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    wxBitness GetBitness() const;
 
     /**
         Returns the endianness ID of this wxPlatformInfo instance.
@@ -440,9 +477,16 @@ public:
     //@{
 
     /**
-        Returns the name for the architecture of this wxPlatformInfo instance.
+        @deprecated Use GetBitnessName() instead.
     */
     wxString GetArchName() const;
+
+    /**
+        Returns the name for the architecture bitness of this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    wxString GetBitnessName() const;
 
     /**
         Returns the name for the endianness of this wxPlatformInfo instance.
@@ -483,9 +527,16 @@ public:
     //@{
 
     /**
-        Sets the architecture enum value associated with this wxPlatformInfo instance.
+        @deprecated Use SetBitness() instead.
     */
     void SetArchitecture(wxArchitecture n);
+
+    /**
+        Sets the architecture bitness enum value associated with this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    void SetBitness(wxBitness n);
 
     /**
         Sets the endianness enum value associated with this wxPlatformInfo instance.
