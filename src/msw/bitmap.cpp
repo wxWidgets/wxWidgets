@@ -968,67 +968,58 @@ wxImage wxBitmap::ConvertToImage() const
         return wxNullImage;
     }
 
-    // now do the same for the mask, if we have any
-    HBITMAP hbmpMask = GetMask() ? (HBITMAP) GetMask()->GetMaskBitmap() : NULL;
-    if ( hbmpMask )
+    // now handle the mask, if we have any
+    if ( GetMask() )
     {
-        wxDIB dibMask(hbmpMask);
-        if ( dibMask.IsOk() )
+        // we hard code the mask colour for now but we could also make an
+        // effort (and waste time) to choose a colour not present in the
+        // image already to avoid having to fudge the pixels below --
+        // whether it's worth to do it is unclear however
+        static const int MASK_RED = 1;
+        static const int MASK_GREEN = 2;
+        static const int MASK_BLUE = 3;
+        static const int MASK_BLUE_REPLACEMENT = 2;
+
+        wxBitmap bmpMask(GetMask()->GetBitmap());
+        wxMonoPixelData dataMask(bmpMask);
+        const int h = dataMask.GetHeight();
+        const int w = dataMask.GetWidth();
+        unsigned char* data = image.GetData();
+
+        wxMonoPixelData::Iterator rowStart(dataMask);
+        for ( int y = 0; y < h; ++y )
         {
-            // TODO: use wxRawBitmap to iterate over DIB
-
-            // we hard code the mask colour for now but we could also make an
-            // effort (and waste time) to choose a colour not present in the
-            // image already to avoid having to fudge the pixels below --
-            // whether it's worth to do it is unclear however
-            static const int MASK_RED = 1;
-            static const int MASK_GREEN = 2;
-            static const int MASK_BLUE = 3;
-            static const int MASK_BLUE_REPLACEMENT = 2;
-
-            const int h = dibMask.GetHeight();
-            const int w = dibMask.GetWidth();
-            const int bpp = dibMask.GetDepth();
-            const int maskBytesPerPixel = bpp >> 3;
-            const int maskBytesPerLine = wxDIB::GetLineSize(w, bpp);
-            unsigned char *data = image.GetData();
-
-            // remember that DIBs are stored in bottom to top order
-            unsigned char *
-                maskLineStart = dibMask.GetData() + ((h - 1) * maskBytesPerLine);
-
-            for ( int y = 0; y < h; y++, maskLineStart -= maskBytesPerLine )
+            // traverse one mask line
+            wxMonoPixelData::Iterator p = rowStart;
+            for ( int x = 0; x < w; ++x )
             {
-                // traverse one mask DIB line
-                unsigned char *mask = maskLineStart;
-                for ( int x = 0; x < w; x++, mask += maskBytesPerPixel )
+                // should this pixel be transparent?
+                if ( p.Pixel() )
                 {
-                    // should this pixel be transparent?
-                    if ( *mask )
+                    // no, check that it isn't transparent by accident
+                    if ( (data[0] == MASK_RED) &&
+                            (data[1] == MASK_GREEN) &&
+                                (data[2] == MASK_BLUE) )
                     {
-                        // no, check that it isn't transparent by accident
-                        if ( (data[0] == MASK_RED) &&
-                                (data[1] == MASK_GREEN) &&
-                                    (data[2] == MASK_BLUE) )
-                        {
-                            // we have to fudge the colour a bit to prevent
-                            // this pixel from appearing transparent
-                            data[2] = MASK_BLUE_REPLACEMENT;
-                        }
+                        // we have to fudge the colour a bit to prevent
+                        // this pixel from appearing transparent
+                        data[2] = MASK_BLUE_REPLACEMENT;
+                    }
 
-                        data += 3;
-                    }
-                    else // yes, transparent pixel
-                    {
-                        *data++ = MASK_RED;
-                        *data++ = MASK_GREEN;
-                        *data++ = MASK_BLUE;
-                    }
+                    data += 3;
                 }
+                else // yes, transparent pixel
+                {
+                    *data++ = MASK_RED;
+                    *data++ = MASK_GREEN;
+                    *data++ = MASK_BLUE;
+                }
+                ++p;
             }
-
-            image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
+            rowStart.OffsetY(dataMask, 1);
         }
+
+        image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
     }
 
     return image;

@@ -126,6 +126,59 @@ TEST_CASE("BitmapTestCase::Mask", "[bitmap][mask]")
     REQUIRE(bmp.GetMask() == mask2);
 }
 
+TEST_CASE("BitmapTestCase::ConvertToImageWithMask", "[bitmap][image][mask]")
+{
+    wxBitmap color(32, 32, 24);
+    {
+        wxMemoryDC dc(color);
+        dc.SetPen(*wxYELLOW_PEN);
+        dc.SetBrush(*wxYELLOW_BRUSH);
+        dc.DrawRectangle(0, 0, color.GetWidth(), color.GetHeight());
+    }
+    {
+        wxBitmap bmask(color.GetWidth(), color.GetHeight(), 1);
+        {
+            wxMemoryDC dc(bmask);
+#if wxUSE_GRAPHICS_CONTEXT
+            wxGraphicsContext* gc = dc.GetGraphicsContext();
+            if (gc)
+            {
+                gc->SetAntialiasMode(wxANTIALIAS_NONE);
+            }
+#endif // wxUSE_GRAPHICS_CONTEXT
+            dc.SetBackground(*wxBLACK_BRUSH);
+            dc.Clear();
+            dc.SetPen(*wxWHITE_PEN);
+            dc.SetBrush(*wxWHITE_BRUSH);
+            dc.DrawRectangle(4, 4, 8, 8);
+        }
+        REQUIRE_FALSE(color.HasAlpha());
+        REQUIRE(color.GetMask() == NULL);
+        color.SetMask(new wxMask(bmask));
+        REQUIRE_FALSE(color.HasAlpha());
+        REQUIRE(color.GetMask() != NULL);
+    }
+    wxImage image = color.ConvertToImage();
+
+    wxNativePixelData dataColor(color);
+    wxNativePixelData::Iterator rowStartColor(dataColor);
+    wxBitmap mask = color.GetMask()->GetBitmap();
+    wxNativePixelData dataMask(mask);
+    wxNativePixelData::Iterator rowStartMask(dataMask);
+
+    for ( int y = 0; y < color.GetHeight(); ++y ) {
+        wxNativePixelData::Iterator iColor = rowStartColor;
+        wxNativePixelData::Iterator iMask = rowStartMask;
+        for ( int x = 0; x < color.GetWidth(); ++x, ++iColor, ++iMask ) {
+            CHECK((iMask.Red() == 255 && iMask.Green() == 255 && iMask.Blue() == 255 ? iColor.Red() : 1) == image.GetRed(x, y));
+            CHECK((iMask.Red() == 255 && iMask.Green() == 255 && iMask.Blue() == 255 ? iColor.Green() : 2) == image.GetGreen(x, y));
+            CHECK((iMask.Red() == 255 && iMask.Green() == 255 && iMask.Blue() == 255 ? iColor.Blue() : 3) == image.GetBlue(x, y));
+        }
+        rowStartColor.OffsetY(dataColor, 1);
+        rowStartMask.OffsetY(dataMask, 1);
+    }
+}
+
 TEST_CASE("BitmapTestCase::OverlappingBlit", "[bitmap][blit]")
 {
     wxBitmap bmp(10, 10);
