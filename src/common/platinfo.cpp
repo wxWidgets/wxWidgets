@@ -83,7 +83,7 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxQT")
 };
 
-static const wxChar* const wxArchitectureNames[] =
+static const wxChar* const wxBitnessNames[] =
 {
     wxT("32 bit"),
     wxT("64 bit")
@@ -130,7 +130,7 @@ wxPlatformInfo::wxPlatformInfo()
 
 wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
                                wxOperatingSystemId id, int osMajor, int osMinor,
-                               wxArchitecture arch,
+                               wxBitness bitness,
                                wxEndianness endian,
                                bool usingUniversal)
 {
@@ -148,7 +148,7 @@ wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
     m_osVersionMicro = -1;
 
     m_endian = endian;
-    m_arch = arch;
+    m_bitness = bitness;
 }
 
 bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
@@ -165,7 +165,7 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_desktopEnv == t.m_desktopEnv &&
            m_port == t.m_port &&
            m_usingUniversal == t.m_usingUniversal &&
-           m_arch == t.m_arch &&
+           m_bitness == t.m_bitness &&
            m_endian == t.m_endian;
 }
 
@@ -196,7 +196,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor, &m_osVersionMicro);
     m_osDesc = wxGetOsDescription();
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
-    m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
+    m_bitness = wxIsPlatform64Bit() ? wxBITNESS_64 : wxBITNESS_32;
 
 #ifdef __LINUX__
     m_ldi = wxGetLinuxDistributionInfo();
@@ -287,12 +287,12 @@ wxString wxPlatformInfo::GetPortIdShortName(wxPortId port, bool usingUniversal)
     return ret;
 }
 
-wxString wxPlatformInfo::GetArchName(wxArchitecture arch)
+wxString wxPlatformInfo::GetBitnessName(wxBitness bitness)
 {
-    wxCOMPILE_TIME_ASSERT( WXSIZEOF(wxArchitectureNames) == wxARCH_MAX,
-                           wxArchitectureNamesMismatch );
+    wxCOMPILE_TIME_ASSERT( WXSIZEOF(wxBitnessNames) == wxBITNESS_MAX,
+                           wxBitnessNamesMismatch );
 
-    return wxArchitectureNames[arch];
+    return wxBitnessNames[bitness];
 }
 
 wxString wxPlatformInfo::GetEndiannessName(wxEndianness end)
