@@ -449,6 +449,9 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
 
 #ifdef __WXGTK3__
     wxGtkStyleContext sc(dc.GetContentScaleFactor());
+    sc.AddWindow();
+    gtk_render_background(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
+
     sc.Add(GTK_TYPE_PANED, "paned", "pane-separator", NULL);
     if (gtk_check_version(3,20,0) == NULL)
         sc.Add("separator");
