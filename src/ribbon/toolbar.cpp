@@ -789,6 +789,8 @@ bool wxRibbonToolBar::Realize()
 
     for(nrows = m_nrows_min; nrows <= m_nrows_max; ++nrows)
     {
+        for(r = 0; r < nrows; ++r)
+            row_sizes[r] = wxSize(0, 0);
         for(g = 0; g < group_count; ++g)
         {
             wxRibbonToolBarToolGroup* group = m_groups.Item(g);
