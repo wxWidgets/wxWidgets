@@ -1795,6 +1795,9 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
     for ( ;; )
     {
         wxSetCursorEvent event(posClient.x, posClient.y);
+        event.SetId(win->GetId());
+        event.SetEventObject(win);
+
         if (w->GTKProcessEvent(event))
         {
             win->GTKUpdateCursor(false, false, &event.GetCursor());
