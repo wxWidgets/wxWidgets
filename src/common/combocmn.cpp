@@ -1457,7 +1457,7 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     fhei += 2 * FOCUS_RING;
 
     // Calculate width
-    int fwid = xlen + FOCUS_RING + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH;
+    int fwid = GetNativeTextIndent() + xlen + FOCUS_RING + COMBO_MARGIN + m_btnArea.width;
 
     // Add the margins we have previously set
     wxPoint marg( GetMargins() );
