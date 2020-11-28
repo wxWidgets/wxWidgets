@@ -1116,6 +1116,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc = &dcm;
     }
 
+    dc->GetImpl()->SetWindow(this);
     PrepareDC(*dc);
 
     // Erase the background: for compatibility, we must generate the event to

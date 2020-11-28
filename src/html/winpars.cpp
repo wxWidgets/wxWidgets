@@ -619,10 +619,6 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
         *encptr = m_OutputEnc;
 #endif
     }
-#ifdef __WXMSW__
-    if ( m_windowInterface && m_windowInterface->GetHTMLWindow() )
-        (*fontptr)->WXAdjustToPPI(m_windowInterface->GetHTMLWindow()->GetDPI());
-#endif
     m_DC->SetFont(**fontptr);
     return (*fontptr);
 }
