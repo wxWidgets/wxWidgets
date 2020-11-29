@@ -34,6 +34,8 @@
 
 static CFStringRef kUTTypeTraditionalMacText = CFSTR("com.apple.traditional-mac-plain-text");
 
+static wxString privateUTIPrefix = "org.wxwidgets.private.";
+
 // ----------------------------------------------------------------------------
 // wxDataFormat
 // ----------------------------------------------------------------------------
@@ -65,6 +67,7 @@ wxDataFormat::wxDataFormat(const wxDataFormat& rFormat)
 {
     m_format = rFormat.m_format;
     m_type = rFormat.m_type;
+    m_id = rFormat.m_id;
 }
 
 wxDataFormat::wxDataFormat(NativeFormat format)
@@ -80,6 +83,7 @@ wxDataFormat& wxDataFormat::operator=(const wxDataFormat& rFormat)
 {
     m_format = rFormat.m_format;
     m_type = rFormat.m_type;
+    m_id = rFormat.m_id;
     return *this;
 }
 
@@ -129,6 +133,7 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
 {
     m_type = dataType;
     m_format = GetFormatForType(dataType);
+    m_id = wxCFStringRef( m_format ).AsString();
 }
 
 void wxDataFormat::AddSupportedTypesForSetting(CFMutableArrayRef types) const
@@ -171,12 +176,16 @@ void wxDataFormat::DoAddSupportedTypes(CFMutableArrayRef cfarray, bool forSettin
 
 wxString wxDataFormat::GetId() const
 {
-    return wxCFStringRef(wxCFRetain((CFStringRef)m_format)).AsString();
+    return m_id;
 }
 
 void wxDataFormat::SetId( NativeFormat format )
 {
     m_format = format;
+    m_id = wxCFStringRef( m_format ).AsString();
+    if ( m_id.StartsWith(privateUTIPrefix) )
+        m_id = m_id.Mid(privateUTIPrefix.length());
+
     if ( UTTypeConformsTo( (CFStringRef)format, kUTTypeHTML ) )
     {
         m_type = wxDF_HTML;
@@ -219,8 +228,15 @@ void wxDataFormat::SetId( NativeFormat format )
 void wxDataFormat::SetId( const wxString& zId )
 {
     m_type = wxDF_PRIVATE;
-    // since it is private, no need to conform to anything ...
-    m_format = wxCFStringRef(zId);
+    m_id = zId;
+
+    // in newer macOS version this must conform to a UTI
+    // https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/UniformTypeIdentifier.html
+
+    if ( zId.Find('.') != wxNOT_FOUND )
+        m_format = wxCFStringRef(zId);
+    else
+        m_format = wxCFStringRef(privateUTIPrefix+zId);
 }
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const

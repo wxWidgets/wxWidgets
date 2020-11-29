@@ -72,6 +72,7 @@ private:
     void ClearNativeFormat();
 
     wxDataFormatId  m_type;
+    wxString        m_id;
     wxCFStringRef   m_format;
 };
 
