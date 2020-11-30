@@ -263,7 +263,8 @@ void wxSocketManagerMac::Install_Callback(wxSocketImpl *socket_,
 {
     wxSocketImplMac * const socket = static_cast<wxSocketImplMac *>(socket_);
 
-    CFSocketEnableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
+    if ( socket->GetSocket() )
+        CFSocketEnableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
 }
 
 void wxSocketManagerMac::Uninstall_Callback(wxSocketImpl *socket_,
@@ -271,7 +272,8 @@ void wxSocketManagerMac::Uninstall_Callback(wxSocketImpl *socket_,
 {
     wxSocketImplMac * const socket = static_cast<wxSocketImplMac *>(socket_);
 
-    CFSocketDisableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
+    if ( socket->GetSocket() )
+        CFSocketDisableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
 }
 
 // set the wxBase variable to point to CF wxSocketManager implementation so
