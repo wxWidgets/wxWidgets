@@ -46,8 +46,6 @@ starting with 3.1.4. Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 @subpage plat_gtk_install "Build and Install Instructions"
 
-@subpage plat_gtk_overview "wxWidgets on the GNOME Desktop"
-
 
 
 @section page_port_wxosx wxOSX/Cocoa
