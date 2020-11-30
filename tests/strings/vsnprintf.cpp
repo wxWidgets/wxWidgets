@@ -52,11 +52,10 @@ int r;
 // Another helper which takes the size explicitly instead of using MAX_TEST_LEN
 //
 // NOTE: this macro is used also with too-small buffers (see Miscellaneous())
-//       test function, thus the return value can be > size and thus we
+//       test function, thus the return value can be either -1 or > size and we
 //       cannot check if r == (int)wxStrlen(buf)
 #define CMPTOSIZE(buffer, size, failuremsg, expected, fmt, ...) \
     r=wxSnprintf(buffer, size, fmt, ##__VA_ARGS__);             \
-    CHECK( r > 0 );                                             \
     INFO(failuremsg);                                           \
     CHECK( buffer == wxString(expected).Left(size - 1) )
 
@@ -340,8 +339,10 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::WrongFormatStrings", "[vsnprintf
             wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3) );
 
     // positional and non-positionals in the same format string:
+    errno = 0;
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
     CHECK( r == -1 );
+    CHECK( errno == EINVAL );
 }
 
 // BigToSmallBuffer() test case helper:
@@ -392,7 +393,6 @@ void VsnprintfTestCase::DoBigToSmallBuffer(T *buffer, int size)
     wxString expected =
         wxString(wxT("unicode string/char: unicode/U -- ansi string/char: ansi/A")).Left(size - 1);
 
-    CHECK( r != -1 );
     CHECK( expected == buffer );
 }
 

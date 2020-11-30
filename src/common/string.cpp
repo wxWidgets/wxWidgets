@@ -2060,17 +2060,6 @@ static int DoStringPrintfV(wxString& str,
         // buffer were large enough (newer standards such as Unix98)
         if ( len < 0 )
         {
-            // NB: wxVsnprintf() may call either wxCRT_VsnprintfW or
-            //     wxCRT_VsnprintfA in UTF-8 build; wxUSE_WXVSNPRINTF
-            //     is true if *both* of them use our own implementation,
-            //     otherwise we can't be sure
-#if wxUSE_WXVSNPRINTF
-            // we know that our own implementation of wxVsnprintf() returns -1
-            // only for a format error - thus there's something wrong with
-            // the user's format string
-            buf[0] = '\0';
-            return -1;
-#else // possibly using system version
             // assume it only returns error if there is not enough space, but
             // as we don't know how much we need, double the current size of
             // the buffer
@@ -2082,16 +2071,9 @@ static int DoStringPrintfV(wxString& str,
             // still not enough, as we don't know how much we need, double the
             // current size of the buffer
                 size *= 2;
-#endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
         else if ( len >= size )
         {
-#if wxUSE_WXVSNPRINTF
-            // we know that our own implementation of wxVsnprintf() returns
-            // size+1 when there's not enough space but that's not the size
-            // of the required buffer!
-            size *= 2;      // so we just double the current size of the buffer
-#else
             // some vsnprintf() implementations NUL-terminate the buffer and
             // some don't in len == size case, to be safe always add 1
             // FIXME: I don't quite understand this comment.  The vsnprintf
@@ -2100,7 +2082,6 @@ static int DoStringPrintfV(wxString& str,
             // So OF COURSE you need to add 1 to get the right buffer size.
             // The following line is definitely correct, no question.
             size = len + 1;
-#endif
         }
         else // ok, there was enough space
         {
