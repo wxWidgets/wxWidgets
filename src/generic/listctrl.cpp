@@ -2188,7 +2188,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 int x_pos = x - dev_x;
                 if (col < GetColumnCount()-1) x_pos -= 2;
 
-                int ruleHeight = m_extendRulesAndAlternateColour
+                int ruleHeight = m_extendRulesAndAlternateColour && visibleEnd > visibleTo
                                     ? clientHeight
                                     : lastItemRect.GetBottom() + 1 - dev_y;
 
