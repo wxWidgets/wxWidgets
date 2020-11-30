@@ -105,91 +105,30 @@ wxUnsafeSnprintf(T *buf, size_t len, const wxChar *fmt, ...)
 }
 
 // ----------------------------------------------------------------------------
-// test class
+// test fixture
 // ----------------------------------------------------------------------------
 
-class VsnprintfTestCase : public CppUnit::TestCase
+// Explicitly set C locale to avoid check failures when running on machines
+// with a locale where the decimal point is not '.'
+class VsnprintfTestCase : CLocaleSetter
 {
 public:
-    VsnprintfTestCase() {}
+    VsnprintfTestCase() : CLocaleSetter() { }
 
-    virtual void setUp() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( VsnprintfTestCase );
-        CPPUNIT_TEST( C );
-        CPPUNIT_TEST( D );
-        CPPUNIT_TEST( X );
-        CPPUNIT_TEST( O );
-        CPPUNIT_TEST( P );
-        CPPUNIT_TEST( N );
-        CPPUNIT_TEST( E );
-        CPPUNIT_TEST( F );
-        CPPUNIT_TEST( G );
-        CPPUNIT_TEST( S );
-        CPPUNIT_TEST( Asterisk );
-        CPPUNIT_TEST( Percent );
-#ifdef wxLongLong_t
-        CPPUNIT_TEST( LongLong );
-#endif
-
-        CPPUNIT_TEST( BigToSmallBuffer );
-        CPPUNIT_TEST( WrongFormatStrings );
-        CPPUNIT_TEST( Miscellaneous );
-        CPPUNIT_TEST( GlibcMisc1 );
-        CPPUNIT_TEST( GlibcMisc2 );
-    CPPUNIT_TEST_SUITE_END();
-
-    void C();
-    void D();
-    void X();
-    void O();
-    void P();
-    void N();
-    void E();
-    void F();
-    void G();
-    void S();
-    void Asterisk();
-    void Percent();
-#ifdef wxLongLong_t
-    void LongLong();
-#endif
-    void Unicode();
-
+protected:
     template<typename T>
         void DoBigToSmallBuffer(T *buffer, int size);
-    void BigToSmallBuffer();
-
-    void WrongFormatStrings();
 
     // compares the expectedString and the result of wxVsnprintf() char by char
     // for all its length (not only for first expectedLen chars) and also
     // checks the return value
     void DoMisc(int expectedLen, const wxString& expectedString,
                 size_t max, const wxChar *format, ...);
-    void Miscellaneous();
-
-    void GlibcMisc1();
-    void GlibcMisc2();
 
     wxDECLARE_NO_COPY_CLASS(VsnprintfTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( VsnprintfTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VsnprintfTestCase, "VsnprintfTestCase" );
-
-void VsnprintfTestCase::setUp()
-{
-    // this call is required to avoid check failures when running on machines
-    // with a locale where the decimal point is not '.'
-    wxSetlocale(LC_ALL, "C");
-}
-
-void VsnprintfTestCase::C()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::C", "[vsnprintf]")
 {
     CMP5("hi!", "%c%c%c", wxT('h'), wxT('i'), wxT('!'));
 
@@ -201,7 +140,7 @@ void VsnprintfTestCase::C()
     DoMisc(14, wxT("Hello \0 World!"), 16, wxT("Hello %c World!"), wxT('\0'));
 }
 
-void VsnprintfTestCase::D()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::D", "[vsnprintf]")
 {
     CMP3("+123456", "%+d", 123456);
     CMP3("-123456", "%d", -123456);
@@ -211,20 +150,20 @@ void VsnprintfTestCase::D()
     CMP3("-123456   ", "%-10d", -123456);
 }
 
-void VsnprintfTestCase::X()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::X", "[vsnprintf]")
 {
     CMP3("ABCD", "%X", 0xABCD);
     CMP3("0XABCD", "%#X", 0xABCD);
     CMP3("0xabcd", "%#x", 0xABCD);
 }
 
-void VsnprintfTestCase::O()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::O", "[vsnprintf]")
 {
     CMP3("1234567", "%o", 01234567);
     CMP3("01234567", "%#o", 01234567);
 }
 
-void VsnprintfTestCase::P()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::P", "[vsnprintf]")
 {
     // The exact format used for "%p" is not specified by the standard and so
     // varies among different platforms, so we need to expect different results
@@ -257,7 +196,7 @@ void VsnprintfTestCase::P()
 #endif
 }
 
-void VsnprintfTestCase::N()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::N", "[vsnprintf]")
 {
     int nchar;
 
@@ -265,7 +204,7 @@ void VsnprintfTestCase::N()
     CPPUNIT_ASSERT_EQUAL( 7, nchar );
 }
 
-void VsnprintfTestCase::E()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::E", "[vsnprintf]")
 {
     // NB: Use at least three digits for the exponent to workaround
     //     differences between MSVC, MinGW and GNU libc.
@@ -288,7 +227,7 @@ void VsnprintfTestCase::E()
     CMP3("3.142e+103", "%010.3e", 3141.5e100);
 }
 
-void VsnprintfTestCase::F()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::F", "[vsnprintf]")
 {
     CMP3("3.300000", "%5f", 3.3);
     CMP3("3.000000", "%5f", 3.0);
@@ -297,7 +236,7 @@ void VsnprintfTestCase::F()
     CMP3("3333.000000", "%5f", 3333.0);
 }
 
-void VsnprintfTestCase::G()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::G", "[vsnprintf]")
 {
     // NOTE: the same about E() testcase applies here...
 
@@ -324,7 +263,7 @@ void VsnprintfTestCase::G()
     CMP3(" 0.01", "%5.2g", 0.01);
 }
 
-void VsnprintfTestCase::S()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::S", "[vsnprintf]")
 {
     CMP3("  abc", "%5s", wxT("abc"));
     CMP3("    a", "%5s", wxT("a"));
@@ -376,7 +315,7 @@ void VsnprintfTestCase::S()
     CMP3("   ab", "%5s", wxT("ab\0cdefghi"));
 }
 
-void VsnprintfTestCase::Asterisk()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::Asterisk", "[vsnprintf]")
 {
     CMP5("       0.1", "%*.*f", 10, 1, 0.123);
     CMP5("    0.1230", "%*.*f", 10, 4, 0.123);
@@ -389,7 +328,7 @@ void VsnprintfTestCase::Asterisk()
     CMP6("    four   four", "%*s %*s", 8, "four", 6, "four");
 }
 
-void VsnprintfTestCase::Percent()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::Percent", "[vsnprintf]")
 {
     // some tests without any argument passed through ...
     CMP2("%", "%%");
@@ -406,7 +345,7 @@ void VsnprintfTestCase::Percent()
 }
 
 #ifdef wxLongLong_t
-void VsnprintfTestCase::LongLong()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::LongLong", "[vsnprintf]")
 {
     CMP3("123456789", "%lld", (wxLongLong_t)123456789);
     CMP3("-123456789", "%lld", (wxLongLong_t)-123456789);
@@ -420,7 +359,7 @@ void VsnprintfTestCase::LongLong()
 }
 #endif
 
-void VsnprintfTestCase::WrongFormatStrings()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::WrongFormatStrings", "[vsnprintf]")
 {
     // test how wxVsnprintf() behaves with wrong format string:
 
@@ -488,7 +427,7 @@ void VsnprintfTestCase::DoBigToSmallBuffer(T *buffer, int size)
     );
 }
 
-void VsnprintfTestCase::BigToSmallBuffer()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::BigToSmallBuffer", "[vsnprintf]")
 {
 #if wxUSE_UNICODE
     wchar_t bufw[1024], bufw2[16], bufw3[4], bufw4;
@@ -552,7 +491,7 @@ void VsnprintfTestCase::DoMisc(
         CPPUNIT_ASSERT_MESSAGE(overflowMsg, buf[i] == '*');
 }
 
-void VsnprintfTestCase::Miscellaneous()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::Miscellaneous", "[vsnprintf]")
 {
     // expectedLen, expectedString, max, format, ...
     DoMisc(5,  wxT("-1234"),   8, wxT("%d"), -1234);
@@ -586,7 +525,7 @@ void VsnprintfTestCase::Miscellaneous()
 *        2. you leave this copyright notice intact.
 */
 
-void VsnprintfTestCase::GlibcMisc1()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::GlibcMisc1", "[vsnprintf]")
 {
     CMP3("     ",    "%5.s", "xyz");
     CMP3("   33",    "%5.f", 33.3);
@@ -603,7 +542,7 @@ void VsnprintfTestCase::GlibcMisc1()
 #endif
 }
 
-void VsnprintfTestCase::GlibcMisc2()
+TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::GlibcMisc2", "[vsnprintf]")
 {
     int prec;
     wxString test_format;
