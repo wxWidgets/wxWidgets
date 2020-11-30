@@ -40,29 +40,25 @@
 static wxChar buf[MAX_TEST_LEN];
 int r;
 
-// these macros makes it possible to write all tests without repeating a lot
-// of times the wxT() macro
-// NOTE: you should use expected strings with these macros which do not exceed
-//       MAX_TEST_LEN as these macro do check if the return value is == (int)wxStrlen(buf)
+// Helper macro verifying both the return value of wxSnprintf() and its output.
+//
+// NOTE: the expected string length with this macro must not exceed MAX_TEST_LEN
 
-#define ASSERT_STR_EQUAL( a, b ) \
-    CPPUNIT_ASSERT_EQUAL( wxString(a), wxString(b) );
+#define CMP(expected, fmt, ...)                          \
+    r=wxSnprintf(buf, MAX_TEST_LEN, fmt, ##__VA_ARGS__); \
+    CHECK( r == (int)wxStrlen(buf) );                    \
+    CHECK( buf == wxString(expected) )
 
-#define CMP(expected, fmt, ...)                    \
-    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), ##__VA_ARGS__); \
-    CPPUNIT_ASSERT_EQUAL( r, (int)wxStrlen(buf) );         \
-    ASSERT_STR_EQUAL( wxT(expected), buf );
-
+// Another helper which takes the size explicitly instead of using MAX_TEST_LEN
+//
 // NOTE: this macro is used also with too-small buffers (see Miscellaneous())
 //       test function, thus the return value can be > size and thus we
 //       cannot check if r == (int)wxStrlen(buf)
-#define CMPTOSIZE(buffer, size, failuremsg, expected, fmt, ...)         \
-    r=wxSnprintf(buffer, size, wxT(fmt), ##__VA_ARGS__);                  \
-    CPPUNIT_ASSERT( r > 0 );                                            \
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(                                       \
-        failuremsg,                                                     \
-        wxString(wxT(expected)).Left(size - 1),                         \
-        wxString(buffer))
+#define CMPTOSIZE(buffer, size, failuremsg, expected, fmt, ...) \
+    r=wxSnprintf(buffer, size, fmt, ##__VA_ARGS__);             \
+    CHECK( r > 0 );                                             \
+    INFO(failuremsg);                                           \
+    CHECK( buffer == wxString(expected).Left(size - 1) )
 
 // this is the same as wxSnprintf() but it passes the format string to
 // wxVsnprintf() without using WX_ATTRIBUTE_PRINTF and thus suppresses the gcc
@@ -181,7 +177,7 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::N", "[vsnprintf]")
     int nchar;
 
     wxSnprintf(buf, MAX_TEST_LEN, wxT("%d %s%n\n"), 3, wxT("bears"), &nchar);
-    CPPUNIT_ASSERT_EQUAL( 7, nchar );
+    CHECK( nchar == 7 );
 }
 
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::E", "[vsnprintf]")
@@ -271,16 +267,12 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::S", "[vsnprintf]")
     // the 'expected' and 'arg' parameters of this macro are supposed to be
     // UTF-8 strings
 #define CMP_UTF8(expected, fmt, arg)                                          \
-    CPPUNIT_ASSERT_EQUAL                                                      \
+    CHECK                                                                     \
     (                                                                         \
-        (int)wxString::FromUTF8(expected).length(),                           \
+        (int)wxString::FromUTF8(expected).length() ==                         \
         wxSnprintf(buf, MAX_TEST_LEN, fmt, wxString::FromUTF8(arg))           \
     );                                                                        \
-    CPPUNIT_ASSERT_EQUAL                                                      \
-    (                                                                         \
-        wxString::FromUTF8(expected),                                         \
-        buf                                                                   \
-    )
+    CHECK( wxString::FromUTF8(expected) == buf )
 
     CMP_UTF8("  " ABC,     "%5s",  ABC);
     CMP_UTF8("    " ALPHA, "%5s",  ALPHA);
@@ -349,7 +341,7 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::WrongFormatStrings", "[vsnprintf
 
     // positional and non-positionals in the same format string:
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
-    CPPUNIT_ASSERT_EQUAL(-1, r);
+    CHECK( r == -1 );
 }
 
 // BigToSmallBuffer() test case helper:
@@ -400,11 +392,8 @@ void VsnprintfTestCase::DoBigToSmallBuffer(T *buffer, int size)
     wxString expected =
         wxString(wxT("unicode string/char: unicode/U -- ansi string/char: ansi/A")).Left(size - 1);
 
-    CPPUNIT_ASSERT( r != -1 );
-    CPPUNIT_ASSERT_EQUAL(
-        expected,
-        wxString(buffer)
-    );
+    CHECK( r != -1 );
+    CHECK( expected == buffer );
 }
 
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::BigToSmallBuffer", "[vsnprintf]")
@@ -460,15 +449,19 @@ void VsnprintfTestCase::DoMisc(
     std::string errMsg(errStr.mb_str());
     std::string overflowMsg(overflowStr.mb_str());
 
+    INFO(errMsg);
     if ( size_t(n) < max )
-        CPPUNIT_ASSERT_MESSAGE(errMsg, expectedLen == n);
+        CHECK(expectedLen == n);
     else
-        CPPUNIT_ASSERT_MESSAGE(errMsg, expectedLen == -1);
+        CHECK(expectedLen == -1);
 
-    CPPUNIT_ASSERT_MESSAGE(errMsg, expectedString == buf);
+    CHECK(expectedString == buf);
 
     for (i = max; i < BUFSIZE; i++)
-        CPPUNIT_ASSERT_MESSAGE(overflowMsg, buf[i] == '*');
+    {
+        INFO(overflowMsg);
+        CHECK(buf[i] == '*');
+    }
 }
 
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::Miscellaneous", "[vsnprintf]")
