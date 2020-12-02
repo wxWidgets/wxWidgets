@@ -587,6 +587,8 @@ public:
         m_data(renderer, image)
     {
         Init(cairo_create(m_data.GetCairoSurface()));
+        m_width = image.GetWidth();
+        m_height = image.GetHeight();
     }
 
     virtual ~wxCairoImageContext()
