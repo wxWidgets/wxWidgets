@@ -148,6 +148,12 @@ minimize external dependencies.
     --without-liblzma       Disable LZMA compression support.
                             Don't use liblzma.
 
+    --without-opengl        Disable OpenGL integration with wxGLCanvas.
+                            Don't use OpenGL or EGL libraries.
+
+    --disable-glcanvasegl   Disable EGL support even if it is available
+                            (it would be used if it is, by default).
+
 Normally, you won't have to choose a toolkit, because configure
 defaults to wxGTK anyhow. However you need to use this option to
 explicitly specify the version of GTK to use, e.g.:
