@@ -423,9 +423,12 @@ void wxStatusBar::SetMinHeight(int height)
     // statbar sample gets truncated otherwise.
     height += 4*GetBorderY();
 
-    // We need to set the size and not the size to reflect the height because
-    // wxFrame uses our size and not the minimal size as it assumes that the
-    // size of a status bar never changes anyhow.
+    // Ensure that the min height is respected when the status bar is resized
+    // automatically, like the status bar managed by wxFrame.
+    SetMinSize(wxSize(m_minWidth, height));
+
+    // And also update the size immediately, which may be useful for the status
+    // bars not managed by wxFrame.
     SetSize(-1, height);
 
     SendMessage(GetHwnd(), SB_SETMINHEIGHT, height, 0);
