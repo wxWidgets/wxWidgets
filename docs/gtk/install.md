@@ -264,17 +264,19 @@ which may be combined into a single invocation:
         g++ myfoo.cpp `wx-config --cxxflags --libs` -o myfoo
 
 A simple makefile for a program using wxWidgets could be written
-in the following way:
+in the following way (note that if you are copying and pasting
+this into your makefile, the leading spaces must be replaced by a
+`TAB` character):
 
 ```make
 program: program.o
-	$(CXX) -o program program.o `wx-config --libs`
+    $(CXX) -o program program.o `wx-config --libs`
 
 program.o: program.cpp
-	$(CXX) `wx-config --cxxflags` -c program.cpp -o program.o
+    $(CXX) `wx-config --cxxflags` -c program.cpp -o program.o
 
 clean:
-	$(RM) program.o program
+    $(RM) program.o program
 .PHONY: clean
 ```
 
