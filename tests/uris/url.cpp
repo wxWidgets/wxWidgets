@@ -75,11 +75,11 @@ void URLTestCase::GetInputStream()
     wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
     if ( !in_stream && IsAutomaticTest() )
     {
-        // Sometimes the connection fails during CI runs, try to connect once
-        // again if this happens in the hope it was just a transient error.
-        wxSleep(3);
-        WARN("Connection to www.wxwidgets.org failed, retrying...");
-        in_stream.reset(url.GetInputStream());
+        // Sometimes the connection fails during CI runs, don't consider this
+        // as a fatal error because it happens from time to time and there is
+        // nothing we can do about it.
+        WARN("Connection to www.wxwidgets.org failed, skipping the test.");
+        return;
     }
 
     CPPUNIT_ASSERT(in_stream);
