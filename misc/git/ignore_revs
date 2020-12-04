@@ -10,6 +10,9 @@
 # Remove (most) occurrences of wxT() macro from the samples, 2018-09-23
 f58ea625968953ca93585ea7f93dcc07ad032d8f
 
+# Remove trailing whitespace from several files, 2018-04-11
+496da2e550ce1f562f727230babc363da190530e
+
 # Globally replace _T() with wxT()., 2009-07-23
 9a83f860948059b0273b5cc6d9e43fadad3ebfca
 
