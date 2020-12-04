@@ -1964,12 +1964,16 @@ int wxString::DoPrintfUtf8(const char *format, ...)
     the ISO C99 (and thus SUSv3) standard the return value for the case of
     an undersized buffer is inconsistent.  For conforming vsnprintf
     implementations the function must return the number of characters that
-    would have been printed had the buffer been large enough.  For conforming
-    vswprintf implementations the function must return a negative number
-    and set errno.
+    would have been printed had the buffer been large enough, which is useful.
+    Unfortunately, for conforming vswprintf implementations, the function must
+    just return a negative number and is not even required to set errno, which
+    makes the standard behaviour totally useless as there is no way to
+    determine if the error occurred due to a (fatal) problem with either the
+    format string or the arguments or to a (correctable) problem with the
+    buffer just not being big enough.
 
-    What vswprintf sets errno to is undefined but Darwin seems to set it to
-    EOVERFLOW.  The only expected errno are EILSEQ and EINVAL.  Both of
+    In practice some implementations (including our own implementation of
+    vsprintf(), if we use it) do set errno to EILSEQ or EINVAL.  Both of
     those are defined in the standard and backed up by several conformance
     statements.  Note that ENOMEM mentioned in the manual page does not
     apply to swprintf, only wprintf and fwprintf.
@@ -1981,34 +1985,14 @@ int wxString::DoPrintfUtf8(const char *format, ...)
     http://www.opengroup.org/csq/view.mhtml?RID=ibm%2FSD1%2F3
     http://www.theopengroup.org/csq/view.mhtml?norationale=1&noreferences=1&RID=Fujitsu%2FSE2%2F10
 
-    Since EILSEQ and EINVAL are rather common but EOVERFLOW is not and since
-    EILSEQ and EINVAL are specifically defined to mean the error is other than
-    an undersized buffer and no other errno are defined we treat those two
-    as meaning hard errors and everything else gets the old behaviour which
-    is to keep looping and increasing buffer size until the function succeeds.
-
-    In practice it's impossible to determine before compilation which behaviour
-    may be used.  The vswprintf function may have vsnprintf-like behaviour or
-    vice-versa.  Behaviour detected on one release can theoretically change
-    with an updated release.  Not to mention that configure testing for it
-    would require the test to be run on the host system, not the build system
-    which makes cross compilation difficult. Therefore, we make no assumptions
-    about behaviour and try our best to handle every known case, including the
-    case where wxVsnprintf returns a negative number and fails to set errno.
-
-    There is yet one more non-standard implementation and that is our own.
-    Fortunately, that can be detected at compile-time.
-
-    On top of all that, ISO C99 explicitly defines snprintf to write a null
-    character to the last position of the specified buffer.  That would be at
-    at the given buffer size minus 1.  It is supposed to do this even if it
-    turns out that the buffer is sized too small.
-
-    Darwin (tested on 10.5) follows the C99 behaviour exactly.
-
-    Glibc 2.6 almost follows the C99 behaviour except vswprintf never sets
-    errno even when it fails.  However, it only seems to ever fail due
-    to an undersized buffer.
+    So we can check for these specific errno values to detect invalid format
+    string or arguments. Unfortunately not all implementations set them and, in
+    particular, glibc, use under Linux, never sets errno at all. This means
+    that we have no choice but to try increasing the buffer size because we
+    can't distinguish between the unrecoverable errors and buffer just being too
+    small. Of course, continuing increasing the size forever will sooner or
+    later result in out of memory error and crashing, so we also have to impose
+    some arbitrary limit on it.
 */
 #if wxUSE_UNICODE_UTF8
 template<typename BufferType>
@@ -2020,7 +2004,7 @@ template<typename BufferType>
 static int DoStringPrintfV(wxString& str,
                            const wxString& format, va_list argptr)
 {
-    int size = 1024;
+    size_t size = 1024;
 
     for ( ;; )
     {
@@ -2055,52 +2039,43 @@ static int DoStringPrintfV(wxString& str,
         // bug except the code above allocates an extra character.
         buf[size] = wxT('\0');
 
-        // vsnprintf() may return either -1 (traditional Unix behaviour) or the
-        // total number of characters which would have been written if the
-        // buffer were large enough (newer standards such as Unix98)
+        // Handle all possible results that we can get depending on the build
+        // options.
         if ( len < 0 )
         {
-            // NB: wxVsnprintf() may call either wxCRT_VsnprintfW or
-            //     wxCRT_VsnprintfA in UTF-8 build; wxUSE_WXVSNPRINTF
-            //     is true if *both* of them use our own implementation,
-            //     otherwise we can't be sure
-#if wxUSE_WXVSNPRINTF
-            // we know that our own implementation of wxVsnprintf() returns -1
-            // only for a format error - thus there's something wrong with
-            // the user's format string
-            buf[0] = '\0';
-            return -1;
-#else // possibly using system version
             // assume it only returns error if there is not enough space, but
             // as we don't know how much we need, double the current size of
             // the buffer
             if( (errno == EILSEQ) || (errno == EINVAL) )
-            // If errno was set to one of the two well-known hard errors
-            // then fail immediately to avoid an infinite loop.
+            {
+                // If errno was set to one of the two well-known hard errors
+                // then fail immediately to avoid an infinite loop.
                 return -1;
-            else
+            }
+
             // still not enough, as we don't know how much we need, double the
-            // current size of the buffer
-                size *= 2;
-#endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
+            // current size of the buffer -- unless it's already too big, as we
+            // have to stop at some point to avoid running out of memory and
+            // crashing or worse (e.g. triggering OOM killer and accidentally
+            // killing some other innocent process)
+
+            // The limit is completely arbitrary, it's supposed to be big
+            // enough to never become a problem in practice, but not so big as
+            // to result in out of memory crashes.
+            static const size_t MAX_BUFFER_SIZE = 128*1024*1024;
+
+            if ( size >= MAX_BUFFER_SIZE )
+                return -1;
+
+            // Note that doubling the size here will never overflow for size
+            // less than the limit.
+            size *= 2;
         }
-        else if ( len >= size )
+        else if ( static_cast<size_t>(len) >= size )
         {
-#if wxUSE_WXVSNPRINTF
-            // we know that our own implementation of wxVsnprintf() returns
-            // size+1 when there's not enough space but that's not the size
-            // of the required buffer!
-            size *= 2;      // so we just double the current size of the buffer
-#else
-            // some vsnprintf() implementations NUL-terminate the buffer and
-            // some don't in len == size case, to be safe always add 1
-            // FIXME: I don't quite understand this comment.  The vsnprintf
-            // function is specifically defined to return the number of
-            // characters printed not including the null terminator.
-            // So OF COURSE you need to add 1 to get the right buffer size.
-            // The following line is definitely correct, no question.
+            // we got back the needed size, but it doesn't include space for
+            // NUL, so add it ourselves
             size = len + 1;
-#endif
         }
         else // ok, there was enough space
         {
