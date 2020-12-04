@@ -154,6 +154,13 @@ minimize external dependencies.
     --disable-glcanvasegl   Disable EGL support even if it is available
                             (it would be used if it is, by default).
 
+    --disable-mediactrl     Disable wxMediaCtrl.
+                            Don't use GStreamer libraries.
+
+    --disable-webview       Disable wxWebView.
+                            Don't use webkit2gtk and its multiple
+                            dependencies.
+
 Normally, you won't have to choose a toolkit, because configure
 defaults to wxGTK anyhow. However you need to use this option to
 explicitly specify the version of GTK to use, e.g.:
