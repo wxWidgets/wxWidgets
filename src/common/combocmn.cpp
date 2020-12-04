@@ -454,7 +454,8 @@ public:
     wxComboPopupWindow( wxComboCtrlBase *parent,
                         int style )
     #if USES_WXPOPUPWINDOW || USES_WXPOPUPTRANSIENTWINDOW
-                       : wxComboPopupWindowBase(parent,style)
+                       : wxComboPopupWindowBase(parent,
+                                                style | wxPU_CONTAINS_CONTROLS)
     #else
                        : wxComboPopupWindowBase(parent,
                                                 wxID_ANY,
