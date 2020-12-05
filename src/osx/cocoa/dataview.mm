@@ -2045,7 +2045,8 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init])
+      m_OutlineView([[wxCocoaOutlineView alloc] init]),
+      m_expanderWidth(0)
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2175,7 +2176,9 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
             : m_width(0),
               m_view(view),
               m_column(columnIndex),
-              m_indent(0)
+              m_indent(0),
+              m_expander(0),
+              m_tableColumn(column)
         {
             // account for indentation in the column with expander
             if ( column == [m_view outlineTableColumn] )
@@ -2193,18 +2196,27 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
             unsigned cellWidth = [cell cellSize].width + 1/*round the float up*/;
 
             if ( m_indent )
-                cellWidth += m_indent * ([m_view levelForRow:row] + 1);
+                cellWidth += m_indent * [m_view levelForRow:row];
+
+            if ( m_expander == 0 && m_tableColumn == [m_view outlineTableColumn] )
+            {
+                NSRect rc = [m_view frameOfOutlineCellAtRow:row];
+                m_expander = ceil(rc.origin.x + rc.size.width);
+            }
 
             m_width = wxMax(m_width, cellWidth);
         }
 
         int GetMaxWidth() const { return m_width; }
+        int GetExpanderWidth() const { return m_expander; }
 
     private:
         int m_width;
         wxCocoaOutlineView *m_view;
         unsigned m_column;
         int m_indent;
+        int m_expander;
+        NSTableColumn *m_tableColumn;
     };
 
     MaxWidthCalculator calculator(m_OutlineView, column, pos);
@@ -2275,7 +2287,12 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
                    count);
     }
 
-    [column setWidth:calculator.GetMaxWidth()];
+    // there might not necessarily be an expander in the rows we've examined above so let's
+    // globally store the expander width for re-use because it should always be the same
+    if ( m_expanderWidth == 0 )
+        m_expanderWidth = calculator.GetExpanderWidth();
+
+    [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
 }
 
 //
