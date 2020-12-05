@@ -159,6 +159,10 @@
             event.SetString( val );
             wxpeer->HandleWindowEvent( event );
 
+            wxCommandEvent eventText(wxEVT_TEXT, wxpeer->GetId());
+            eventText.SetEventObject( wxpeer );
+            eventText.SetString( val );
+            wxpeer->HandleWindowEvent( eventText );
         }
     }
 }
