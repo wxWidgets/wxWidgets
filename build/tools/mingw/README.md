@@ -10,7 +10,7 @@ Building a new release
 1) If needed, update the versions list in the 'buildall.bat' script (the first 'for' loop of this file)
 
 2) Update the 'parameters.bat" file to reflect your system and your installations of the differents MinGW versions. This script is first called without any parameter, to initialize generals values. It will then be called with the compiler version, and the number of bits of the architecture (32 or 64). Here are the lines that will probably need to be changed:
-  * `set /A JOBS=%NUMBER_OF_PROCESSORS%-1` : the value of this variable contains the number of processes that will be launched simultaneously. It is automatically calculated as "number of cores of your processor - 1" witch is the recommended value. It can be overriden by writing something like `set JOBS=3` to directly assign a numerical value to this variable
+  * `set /A JOBS=%NUMBER_OF_PROCESSORS%-1` : the value of this variable contains the number of processes that will be launched simultaneously. It is automatically calculated as "number of cores of your processor - 1" wich is the recommended value. It can be overridden by writing something like `set JOBS=3` to directly assign a numerical value to this variable.
 
   * `set CLEANBUILD=1` : setting this value to 0 will not remove old builds previously done. It is not recommended to modify it, unless you know what you're doing.
 
@@ -20,7 +20,7 @@ Building a new release
 
 3) Launch the builds by running the 'buildall.bat' script.
 
-4) Check if nothing went wrong: Have a look at the main log file (a file named `_wxWidgets-x.x.x.log` in the `logs` sub directory). It will contain the result of each runned command line. If a value is different than zero, there was a problem
+4) Check if nothing went wrong: Have a look at the main log file (a file named `_wxWidgets-x.x.x.log` in the `logs` sub directory). It will contain the result of each runned command line. If a value is different than zero, there was a problem.
 
 Current compilers versions
 --------------------------
@@ -33,6 +33,4 @@ The following versions of MinGW are actually used to create binaries (they all u
 
   * MinGW-TDM GCC-9.2.0 downloadable from [here](https://jmeubank.github.io/tdm-gcc/articles/2020-03/9.2.0-release "TDM GCC-9.2.0")
 
-  * MSYS2 MinGW GCC-10.2.0 witch is the last version installable using [MSYS2](https://www.msys2.org "www.msys2.org") package manager
-
-
+  * MSYS2 MinGW GCC-10.2.0 wich is the last version installable using [MSYS2](https://www.msys2.org "www.msys2.org") package manager
