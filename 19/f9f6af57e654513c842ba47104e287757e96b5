@@ -1,0 +1,1 @@
+wxOSX: Mark wxTextCtrl as dirty before calling the event handler (Hartwig Wiesmann).
