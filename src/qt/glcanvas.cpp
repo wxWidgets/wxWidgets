@@ -425,13 +425,25 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 {
     if (!wxattrs)
         return true;
-    return true;
+    //return true;
 
     // set default parameters to false
     format.setDoubleBuffer(false);
     format.setDepth(false);
     format.setAlpha(false);
     format.setStencil(false);
+
+    // Enable multisampling aka MSAA
+
+    format.setSampleBuffers( true );
+    format.setSamples( 4 );
+
+    //  We don't have the option of setting OpenGLES version defined in the
+    //  attribute list Enum.
+
+    // So, just force it here.
+    //format.setVersion ( 1,1 );
+   format.setVersion ( 2,0 );
 
     for ( int arg = 0; wxattrs[arg] != 0; arg++ )
     {
