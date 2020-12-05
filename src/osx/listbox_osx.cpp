@@ -191,6 +191,14 @@ void wxListBox::DoSetSelection(int n, bool select)
     wxCHECK_RET( n == wxNOT_FOUND || IsValid(n),
         wxT("invalid index in wxListBox::SetSelection") );
 
+    DoSetSelectionWithoutEnsureVisible(n, select);
+
+    if (select)
+        EnsureVisible(n);
+}
+
+void wxListBox::DoSetSelectionWithoutEnsureVisible(int n, bool select)
+{
     m_blockEvents = true;
 
     if ( n == wxNOT_FOUND )
@@ -201,9 +209,6 @@ void wxListBox::DoSetSelection(int n, bool select)
     m_blockEvents = false;
 
     UpdateOldSelections();
-
-    if (select)
-        EnsureVisible(n);
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -349,6 +354,23 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 {
     int idx = wxNOT_FOUND;
     unsigned int startpos = pos;
+    wxArrayInt selections;
+
+    if ( !IsSorted() )
+    {
+        if ( HasMultipleSelection() )
+        {
+            GetSelections(selections);
+        }
+        else
+        {
+            int sel = GetSelection();
+            if ( sel != wxNOT_FOUND )
+            {
+                selections.Add(sel);
+            }
+        }
+    }
 
     const unsigned int numItems = items.GetCount();
     for ( unsigned int i = 0; i < numItems; ++i )
@@ -366,6 +388,30 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     }
 
     GetListPeer()->UpdateLineToEnd(startpos);
+
+    const size_t numSelections = selections.size();
+    for ( size_t i = 0; i < numSelections; ++i )
+    {
+        if ( startpos <= selections[i] )
+        {
+            if ( HasMultipleSelection() )
+            {
+                size_t j;
+
+                // Do not deselect item if it is to be selected below
+                for ( j = 0; j < numSelections; ++j )
+                {
+                    if ( selections[i] == selections[j] + numItems )
+                        break;
+                }
+
+                if ( j == numSelections )
+                    Deselect(selections[i]);
+            }
+
+            DoSetSelectionWithoutEnsureVisible(selections[i] + numItems, true);
+        }
+    }
 
     InvalidateBestSize();
 
