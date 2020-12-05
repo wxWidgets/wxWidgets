@@ -139,22 +139,25 @@
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification
 {
     wxUnusedVar(notification);
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxNSComboBoxControl* const
+        impl = (wxNSComboBoxControl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl && impl->ShouldSendEvents())
     {
         wxComboBox* wxpeer = static_cast<wxComboBox*>(impl->GetWXPeer());
         if ( wxpeer ) {
             const int sel = wxpeer->GetSelection();
+            const wxString& val = wxpeer->GetString(sel);
+
+            // We need to manually set the new value because at this time it
+            // still contains the old value, but we want GetValue() to return
+            // the new one if it's called from an event handler invoked below.
+            impl->SetStringValue(val);
 
             wxCommandEvent event(wxEVT_COMBOBOX, wxpeer->GetId());
             event.SetEventObject( wxpeer );
             event.SetInt( sel );
-            event.SetString( wxpeer->GetString(sel) );
-            // For some reason, wxComboBox::GetValue will not return the newly selected item 
-            // while we're inside this callback, so use AddPendingEvent to make sure
-            // GetValue() returns the right value.
-
-            wxpeer->GetEventHandler()->AddPendingEvent( event );
+            event.SetString( val );
+            wxpeer->HandleWindowEvent( event );
 
         }
     }
