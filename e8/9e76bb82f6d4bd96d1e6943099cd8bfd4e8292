@@ -1,0 +1,1 @@
+wxOSX: Make wxCOL_WIDTH_AUTOSIZE work correctly in wxDataViewCtrl (Andreas Falkenhahn).
