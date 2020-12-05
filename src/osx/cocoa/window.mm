@@ -2440,14 +2440,12 @@ void wxWidgetCocoaImpl::controlTextDidChange()
     if ( wxpeer ) 
     {
         // since native rtti doesn't have to be enabled and wx' rtti is not aware of the mixin wxTextEntry, workaround is needed
-        wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl );
-        wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox );
-        if ( tc )
+        if ( wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl ) )
         {
             tc->MarkDirty();
             tc->SendTextUpdatedEventIfAllowed();
         }
-        else if ( cb )
+        else if ( wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox ) )
             cb->SendTextUpdatedEventIfAllowed();
         else 
         {
