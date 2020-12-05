@@ -367,14 +367,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
     GetListPeer()->UpdateLineToEnd(startpos);
 
-    // Inserting the items may scroll the listbox down to show the last
-    // selected one but we don't want to do it as it could result in e.g. the
-    // first items of a listbox be hidden immediately after its creation so
-    // show the first selected item instead. Ideal would probably be to
-    // preserve the old selection unchanged, in fact, but I don't know how to
-    // get the first visible item so for now do at least this.
-    SetFirstItem(startpos);
-
     InvalidateBestSize();
 
     UpdateOldSelections();
