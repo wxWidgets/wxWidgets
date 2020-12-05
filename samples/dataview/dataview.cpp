@@ -742,6 +742,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     mainSizer->Add( m_log, 0, wxGROW );
 
     SetSizerAndFit(mainSizer);
+
+    // Allow using the control from keyboard on startup.
+    m_ctrl[Page_Music]->SetFocus();
 }
 
 MyFrame::~MyFrame()
