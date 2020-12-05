@@ -131,7 +131,7 @@ public:
 protected:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
-    virtual void DoExpand( const wxDataViewItem & item );
+    virtual void DoExpand( const wxDataViewItem & item, bool expandChildren );
 
 private:
     virtual wxDataViewItem DoGetCurrentItem() const;

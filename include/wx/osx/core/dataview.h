@@ -105,7 +105,7 @@ public:
  // other methods
  //
   virtual void DoSetIndent (int indent)                                                                     = 0; // sets the indentation in the native control
-  virtual void DoExpand    (wxDataViewItem const& item)                                                     = 0; // expands the passed item in the native control
+  virtual void DoExpand    (wxDataViewItem const& item, bool expandChildren)                                = 0; // expands the passed item in the native control
 
   virtual void HitTest     (wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const = 0; // return the item and column pointer that contains with the passed point
   virtual void SetRowHeight(int height)                                                                     = 0; // sets the height of all rows

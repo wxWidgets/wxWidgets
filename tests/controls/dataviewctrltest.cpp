@@ -271,6 +271,19 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_grandchild) );
 #endif
     CHECK( !m_dvc->IsExpanded(m_child2) );
+
+    m_dvc->Collapse(m_root);
+    CHECK( !m_dvc->IsExpanded(m_root) );
+
+    m_dvc->ExpandChildren(m_root);
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Expanding an already expanded node must still expand all its children.
+    m_dvc->Collapse(m_child1);
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    m_dvc->ExpandChildren(m_root);
+    CHECK( m_dvc->IsExpanded(m_child1) );
 }
 
 TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,

@@ -530,7 +530,7 @@ public:
     //
     virtual void DoSetIndent(int indent);
 
-    virtual void DoExpand(const wxDataViewItem& item);
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren);
 
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
