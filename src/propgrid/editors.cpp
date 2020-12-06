@@ -2132,7 +2132,7 @@ wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
 void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
                                 const wxPoint& pos )
 {
-    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH);
+    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH, wxSIZE_ALLOW_MINUS_ONE);
 }
 
 int wxPGMultiButton::GenId( int itemid ) const
