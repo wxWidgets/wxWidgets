@@ -1950,9 +1950,10 @@ bool wxWindowMac::MacDoRedraw( long time )
                         break;
                 }
 
-                if ( UseBgCol() )
+                const wxColour colBg = GetBackgroundColour();
+                if ( colBg.IsOk() )
                 {
-                    dc.SetBackground(GetBackgroundColour());
+                    dc.SetBackground(colBg);
                     dc.Clear();
                 }
             }

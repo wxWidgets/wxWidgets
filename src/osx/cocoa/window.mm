@@ -1251,14 +1251,14 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
     {
         if ( impl->IsUserPane() )
         {
-            wxWindow* win = impl->GetWXPeer();
-            if ( win->UseBgCol() )
+            const wxColour colBg = impl->GetWXPeer()->GetBackgroundColour();
+            if ( colBg.IsOk() )
             {
                 
                 CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
                 CGContextSaveGState( context );
 
-                CGContextSetFillColorWithColor( context, win->GetBackgroundColour().GetCGColor());
+                CGContextSetFillColorWithColor( context, colBg.GetCGColor());
                 CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
                 CGContextFillRect( context, r );
 
