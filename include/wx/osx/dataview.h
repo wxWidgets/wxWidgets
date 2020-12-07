@@ -276,7 +276,7 @@ protected:
   virtual void DoSetExpanderColumn() wxOVERRIDE;
   virtual void DoSetIndent() wxOVERRIDE;
 
-  virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
+  virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
 
   virtual wxSize DoGetBestSize() const wxOVERRIDE;
 

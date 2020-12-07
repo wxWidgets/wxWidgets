@@ -2314,9 +2314,9 @@ void wxCocoaDataViewControl::EnsureVisible(const wxDataViewItem& item, const wxD
     }
 }
 
-void wxCocoaDataViewControl::DoExpand(const wxDataViewItem& item)
+void wxCocoaDataViewControl::DoExpand(const wxDataViewItem& item, bool expandChildren)
 {
-    [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item] expandChildren:expandChildren];
 }
 
 unsigned int wxCocoaDataViewControl::GetCount() const

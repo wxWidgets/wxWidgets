@@ -5068,12 +5068,13 @@ wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
     return m_internal->GetDataViewSortColumn();
 }
 
-void wxDataViewCtrl::DoExpand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren )
 {
     GtkTreeIter iter;
     iter.user_data = item.GetID();
     wxGtkTreePath path(m_internal->get_path( &iter ));
-    gtk_tree_view_expand_row( GTK_TREE_VIEW(m_treeview), path, false );
+    gtk_tree_view_expand_row( GTK_TREE_VIEW(m_treeview), path,
+                              expandChildren ? TRUE : FALSE );
 }
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )

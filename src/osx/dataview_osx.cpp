@@ -516,9 +516,9 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
   }
 }
 
-void wxDataViewCtrl::DoExpand(wxDataViewItem const& item)
+void wxDataViewCtrl::DoExpand(wxDataViewItem const& item, bool expandChildren)
 {
-  return GetDataViewPeer()->DoExpand(item);
+  return GetDataViewPeer()->DoExpand(item, expandChildren);
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const

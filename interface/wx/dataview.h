@@ -1403,6 +1403,16 @@ public:
     void ExpandAncestors( const wxDataViewItem & item );
 
     /**
+        Expand all all children of the given item recursively.
+
+        This is the same as calling Expand() on the @a item itself and then
+        calling it for all of its children, grandchildren etc recursively.
+
+        @since 3.1.5
+     */
+    void ExpandChildren( const wxDataViewItem & item );
+
+    /**
         Returns pointer to the column. @a pos refers to the position in the
         control which may change after reordering columns by the user.
     */
