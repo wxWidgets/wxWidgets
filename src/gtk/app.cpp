@@ -27,6 +27,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/fontmap.h"
+#include "wx/msgout.h"
 
 #include "wx/gtk/private.h"
 
@@ -337,6 +338,18 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     wxConvFileName = &fileconv;
 #endif // __UNIX__
 
+
+    // Using XIM results in many problems, so try to warn people about it.
+    wxString inputMethod;
+    if ( wxGetEnv("GTK_IM_MODULE", &inputMethod) && inputMethod == "xim" )
+    {
+        wxMessageOutputStderr().Output
+        (
+            _("WARNING: using XIM input method is unsupported and may result "
+              "in problems with input handling and flickering. Consider "
+              "unsetting GTK_IM_MODULE or setting to \"ibus\".")
+        );
+    }
 
     bool init_result;
 
