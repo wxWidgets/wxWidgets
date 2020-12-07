@@ -1243,23 +1243,23 @@ int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
 
 // On android, most wchar_t functions are broken, so instead we must
 // convert a byte at a time
-
+// It is also necessary to compute manually the end of the source string (*endptr)
 #ifdef __ANDROID__
 
 #define ANDROID_WCSTO_START \
+    wchar_t *endp = (wchar_t *)nptr; \
     int len = wcslen(nptr) + 1; \
     char dst[len]; \
-    for(int i=0; i<len; i++) \
+    for(int i=0; i<len; i++){ \
         dst[i] = wctob(nptr[i]); \
+        endp += 1; \
+    } \
+    endp -= 1; \
     char *dstendp;
 
 #define ANDROID_WCSTO_END \
-    if(endptr) { \
-        if(dstendp) \
-            *endptr = (wchar_t*)(nptr + (dstendp - dst) * sizeof(wchar_t)); \
-        else \
-            *endptr = NULL; \
-    } \
+    if(endptr) \
+      *endptr = endp; \
     return d;
 
 long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base)
