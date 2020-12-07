@@ -315,8 +315,15 @@ wxWindowQt::~wxWindowQt()
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(NULL);
 #endif
+     if (m_qtWindow)
+     {
+         QtStoreWindowPointer( GetHandle(), NULL );   //new
+         
+         // Delete QWidget when control return to event loop (safer)
+         m_qtWindow->deleteLater();
+         m_qtWindow = NULL;
 
-    delete m_qtWindow;
+    }
 }
 
 

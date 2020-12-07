@@ -57,6 +57,8 @@ public:
                const wxString& name = wxGLCanvasName,
                const wxPalette& palette = wxNullPalette);
 
+    ~wxGLCanvas();
+
     bool Create(wxWindow *parent,
                 const wxGLAttributes& dispAttrs,
                 wxWindowID id = wxID_ANY,
