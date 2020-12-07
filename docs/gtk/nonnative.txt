@@ -1,13 +1,7 @@
 List of classes which should use their native GTK+ equivalents but don't:
 
-- wxSearchCtrl
-    Should use GtkSearchEntry (GTK+ 3.6+)
-
 - wxStatusBar:
     Problem with multiple fields, GtkStatusbar only seems to support one pane
-
-- wxTreeCtrl
-    Ryan Norton has implemented this
 
 - wxListCtrl
     Could be reimplemeted in terms of wxDataViewCtrl?
@@ -18,10 +12,6 @@ List of classes which should use their native GTK+ equivalents but don't:
     (therefore their names) whereas wxSplitterWindow
     supports both and can even change orientation at
     runtime.
-
-- wxDatePickerCtrl
-- wxCalendarCtrl
-    Use GtkCalendar
 
 - wxWizard
     Can GtkAssistant be used?
