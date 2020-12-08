@@ -138,8 +138,8 @@ In such case (or when you want to e.g. write a port-specific patch) it can be
 necessary to use the underlying toolkit API directly:
 
 - wxMSW port uses Win32 API: see MSDN docs at https://docs.microsoft.com/en-us/windows/win32/controls/window-controls
-- wxGTK port uses GTK+ and other lower-level libraries; see
-  - GTK+ docs at https://developer.gnome.org/gtk/
+- wxGTK port uses GTK and other lower-level libraries; see
+  - GTK docs at https://developer.gnome.org/gtk/
   - GDK docs at https://library.gnome.org/devel/gdk/unstable/
   - GLib docs at https://library.gnome.org/devel/glib/unstable/
   - GObject docs at https://library.gnome.org/devel/gobject/unstable/
