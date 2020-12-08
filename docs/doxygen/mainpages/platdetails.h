@@ -52,7 +52,7 @@ Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 wxOSX/Cocoa is the port of wxWidgets for the macOS platform. It requires
 a minimum SDK 10.11, Xcode 7.2.1 or greater (runs under 10.10.5 and higher),
-and fully supports 64 bit builds and deploying under 10.10.
+and fully supports amd64 as well ARM builds and deploying under 10.10.
 
 @subpage plat_osx_install "Build and Install Instructions"
 
@@ -78,6 +78,7 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 @section page_port_wxmotif wxMotif
 
 wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
+It is no longer actively maintained and by now rather obsolete.
 
 @subpage plat_motif_install "Build Instructions"
 
@@ -113,45 +114,6 @@ avoid this, ensure that the icon which is meant to be used as the main
 application icon has a name preceding "wxICON" in alphabetical order.
 
 
-@subsection page_port_wxmsw_themedborders Themed Borders
-
-Starting with wxWidgets 2.8.5, you can specify the @c wxBORDER_THEME style to
-have wxWidgets use a themed border. Using the default XP theme, this is a thin
-1-pixel blue border, with an extra 1-pixel border in the window client
-background colour (usually white) to separate the client area's scrollbars from
-the border.
-
-If you don't specify a border style for a wxTextCtrl in rich edit mode,
-wxWidgets now gives the control themed borders automatically, where previously
-they would take the sunken border style. Other native controls such
-as wxTextCtrl in non-rich edit mode, and wxComboBox already paint themed
-borders where appropriate. To use themed borders on other windows, such as
-wxPanel, pass the @c wxBORDER_THEME style, or (apart from wxPanel) pass no
-border style.
-
-In general, specifying @c wxBORDER_THEME will cause a border of some kind to be
-used, chosen by the platform and control class. To leave the border decision
-entirely to wxWidgets, pass @c wxBORDER_DEFAULT. This is not to be confused
-with specifying @c wxBORDER_NONE, which says that there should definitely be
-@e no border.
-
-@subsubsection page_port_wxmsw_themedborders_details Internal Border Implementation
-
-The way that wxMSW decides whether to apply a themed border is as follows. The
-theming code calls wxWindow::GetBorder() to obtain a border. If no border style
-has been passed to the window constructor, GetBorder() calls GetDefaultBorder()
-for this window. If wxBORDER_THEME was passed to the window constructor,
-GetBorder() calls GetDefaultBorderForControl().
-
-The implementation of wxWindow::GetDefaultBorder() on wxMSW calls
-wxWindow::CanApplyThemeBorder() which is a virtual function that tells
-wxWidgets whether a control can have a theme applied explicitly (some native
-controls already paint a theme in which case we should not apply it ourselves).
-Note that wxPanel is an exception to this rule because in many cases we wish to
-create a window with no border (for example, notebook pages). So wxPanel
-overrides GetDefaultBorder() in order to call the generic
-wxWindowBase::GetDefaultBorder(), returning wxBORDER_NONE.
-
 @section page_port_wxQt wxQt
 
 wxQt is a port of wxWidgets using Qt libraries. It requires Qt 5 or later.
@@ -175,9 +137,9 @@ used by wxWidgets to e.g. use toolkit-specific features.
 In such case (or when you want to e.g. write a port-specific patch) it can be
 necessary to use the underlying toolkit API directly:
 
-- wxMSW port uses Win32 API: see MSDN docs at https://msdn2.microsoft.com/en-us/library/ms649779.aspx
+- wxMSW port uses Win32 API: see MSDN docs at https://docs.microsoft.com/en-us/windows/win32/controls/window-controls
 - wxGTK port uses GTK+ and other lower-level libraries; see
-  - GTK+ docs at https://library.gnome.org/devel/gtk/unstable/
+  - GTK+ docs at https://developer.gnome.org/gtk/
   - GDK docs at https://library.gnome.org/devel/gdk/unstable/
   - GLib docs at https://library.gnome.org/devel/glib/unstable/
   - GObject docs at https://library.gnome.org/devel/gobject/unstable/
