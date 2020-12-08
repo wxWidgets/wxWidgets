@@ -392,7 +392,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     const size_t numSelections = selections.size();
     for ( size_t i = 0; i < numSelections; ++i )
     {
-        if ( startpos <= selections[i] )
+        if ( int(startpos) <= selections[i] )
         {
             if ( HasMultipleSelection() )
             {
@@ -401,7 +401,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
                 // Do not deselect item if it is to be selected below
                 for ( j = 0; j < numSelections; ++j )
                 {
-                    if ( selections[i] == selections[j] + numItems )
+                    if ( selections[i] == selections[j] + int(numItems) )
                         break;
                 }
 
