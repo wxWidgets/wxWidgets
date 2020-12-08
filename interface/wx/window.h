@@ -3553,6 +3553,13 @@ public:
     */
     void SetAutoLayout(bool autoLayout);
 
+    /**
+        Returns true if Layout() is called automatically when the window is
+        resized.
+
+        This function is mostly useful for wxWidgets itself and is rarely
+        needed in the application code.
+     */
     bool GetAutoLayout() const;
 
     //@}
