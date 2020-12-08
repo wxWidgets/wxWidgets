@@ -353,9 +353,9 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
     HIRect splitterRect;
     if (orient == wxVERTICAL)
-        splitterRect = CGRectMake( position, borderAdjust, height, size.y - borderAdjust );
+        splitterRect = CGRectMake( position, borderAdjust, height, size.y - 2*borderAdjust );
     else
-        splitterRect = CGRectMake( borderAdjust, position, size.x - borderAdjust, height );
+        splitterRect = CGRectMake( borderAdjust, position, size.x - 2*borderAdjust, height );
 
     // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
     // strange redraw errors occur if we don't do this
