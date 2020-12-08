@@ -29,7 +29,7 @@ needed.
 
 You will need GTK 2.6 or higher which is available from:
 
-http://www.gtk.org
+https://www.gtk.org
 
 The newer version of GTK you use, the more native widgets and features will be
 utilized. We have gone to great lengths to allow compiling wxWidgets
@@ -41,8 +41,8 @@ In order to configure wxWidgets to compile wxGTK you will need to use the
 @c \--with-gtk argument to the @c configure script. This is the default for many
 systems.
 
-Support for GTK 3 is available starting with wxWidgets 2.9.4, and is the default
-starting with 3.1.4. Use @c configure option @c \--with-gtk=2 to use GTK 2.
+GTK 3 is the default starting with wxWidgets 3.1.4.
+Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 @subpage plat_gtk_install "Build and Install Instructions"
 
@@ -52,7 +52,7 @@ starting with 3.1.4. Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 wxOSX/Cocoa is the port of wxWidgets for the macOS platform. It requires
 a minimum SDK 10.11, Xcode 7.2.1 or greater (runs under 10.10.5 and higher),
-and fully supports 64 bit builds and deploying under 10.10.
+and fully supports amd64 as well ARM builds and deploying under 10.10.
 
 @subpage plat_osx_install "Build and Install Instructions"
 
@@ -73,16 +73,12 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 @subpage plat_x11_install "Build Instructions"
 
-There is also a page on the use of wxWidgets for embedded
-applications on the wxWidgets web site.
-
 
 
 @section page_port_wxmotif wxMotif
 
-wxMotif is a port of wxWidgets for X11 systems using Motif libraries. Motif
-libraries provide a clean and fast user interface at the expense of the beauty
-and candy of newer interfaces like GTK.
+wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
+It is no longer actively maintained and by now rather obsolete.
 
 @subpage plat_motif_install "Build Instructions"
 
@@ -93,9 +89,9 @@ and candy of newer interfaces like GTK.
 
 wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later
 are supported). wxMSW provides native look and feel for each Windows version.
-This port can be compiled with several compilers including Microsoft Studio
-VC++ 2003 or later, MinGW32, Cygwin as well as cross-compilation with a
-Linux-hosted MinGW32 tool chain.
+This port can be compiled with several compilers including Microsoft
+VC++ 2003 or later, MinGW, Cygwin as well as cross-compilation with a
+Linux-hosted MinGW tool chain.
 
 @subpage plat_msw_install "Build and Install Instructions"
 
@@ -117,45 +113,6 @@ application start with "x", "y" or "z", they won't be used by Explorer. To
 avoid this, ensure that the icon which is meant to be used as the main
 application icon has a name preceding "wxICON" in alphabetical order.
 
-
-@subsection page_port_wxmsw_themedborders Themed Borders
-
-Starting with wxWidgets 2.8.5, you can specify the @c wxBORDER_THEME style to
-have wxWidgets use a themed border. Using the default XP theme, this is a thin
-1-pixel blue border, with an extra 1-pixel border in the window client
-background colour (usually white) to separate the client area's scrollbars from
-the border.
-
-If you don't specify a border style for a wxTextCtrl in rich edit mode,
-wxWidgets now gives the control themed borders automatically, where previously
-they would take the sunken border style. Other native controls such
-as wxTextCtrl in non-rich edit mode, and wxComboBox already paint themed
-borders where appropriate. To use themed borders on other windows, such as
-wxPanel, pass the @c wxBORDER_THEME style, or (apart from wxPanel) pass no
-border style.
-
-In general, specifying @c wxBORDER_THEME will cause a border of some kind to be
-used, chosen by the platform and control class. To leave the border decision
-entirely to wxWidgets, pass @c wxBORDER_DEFAULT. This is not to be confused
-with specifying @c wxBORDER_NONE, which says that there should definitely be
-@e no border.
-
-@subsubsection page_port_wxmsw_themedborders_details Internal Border Implementation
-
-The way that wxMSW decides whether to apply a themed border is as follows. The
-theming code calls wxWindow::GetBorder() to obtain a border. If no border style
-has been passed to the window constructor, GetBorder() calls GetDefaultBorder()
-for this window. If wxBORDER_THEME was passed to the window constructor,
-GetBorder() calls GetDefaultBorderForControl().
-
-The implementation of wxWindow::GetDefaultBorder() on wxMSW calls
-wxWindow::CanApplyThemeBorder() which is a virtual function that tells
-wxWidgets whether a control can have a theme applied explicitly (some native
-controls already paint a theme in which case we should not apply it ourselves).
-Note that wxPanel is an exception to this rule because in many cases we wish to
-create a window with no border (for example, notebook pages). So wxPanel
-overrides GetDefaultBorder() in order to call the generic
-wxWindowBase::GetDefaultBorder(), returning wxBORDER_NONE.
 
 @section page_port_wxQt wxQt
 
@@ -180,13 +137,13 @@ used by wxWidgets to e.g. use toolkit-specific features.
 In such case (or when you want to e.g. write a port-specific patch) it can be
 necessary to use the underlying toolkit API directly:
 
-- wxMSW port uses win32 API: see MSDN docs at http://msdn2.microsoft.com/en-us/library/ms649779.aspx
-- wxGTK port uses GTK+ and other lower-level libraries; see
-  - GTK+ docs at http://library.gnome.org/devel/gtk/unstable/
-  - GDK docs at http://library.gnome.org/devel/gdk/unstable/
-  - GLib docs at http://library.gnome.org/devel/glib/unstable/
-  - GObject docs at http://library.gnome.org/devel/gobject/unstable/
-  - Pango docs at http://library.gnome.org/devel/pango/unstable/
-- wxOSX port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
+- wxMSW port uses Win32 API: see MSDN docs at https://docs.microsoft.com/en-us/windows/win32/controls/window-controls
+- wxGTK port uses GTK and other lower-level libraries; see
+  - GTK docs at https://developer.gnome.org/gtk/
+  - GDK docs at https://library.gnome.org/devel/gdk/
+  - GLib docs at https://library.gnome.org/devel/glib/
+  - GObject docs at https://library.gnome.org/devel/gobject/
+  - Pango docs at https://library.gnome.org/devel/pango/
+- wxOSX port uses the Cocoa API: see Cocoa docs at https://developer.apple.com/cocoa
 
 */
