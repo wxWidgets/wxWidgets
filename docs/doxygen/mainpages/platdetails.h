@@ -29,7 +29,7 @@ needed.
 
 You will need GTK 2.6 or higher which is available from:
 
-http://www.gtk.org
+https://www.gtk.org
 
 The newer version of GTK you use, the more native widgets and features will be
 utilized. We have gone to great lengths to allow compiling wxWidgets
@@ -41,8 +41,8 @@ In order to configure wxWidgets to compile wxGTK you will need to use the
 @c \--with-gtk argument to the @c configure script. This is the default for many
 systems.
 
-Support for GTK 3 is available starting with wxWidgets 2.9.4, and is the default
-starting with 3.1.4. Use @c configure option @c \--with-gtk=2 to use GTK 2.
+GTK 3 is the default starting with wxWidgets 3.1.4.
+Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 @subpage plat_gtk_install "Build and Install Instructions"
 
@@ -73,16 +73,11 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 @subpage plat_x11_install "Build Instructions"
 
-There is also a page on the use of wxWidgets for embedded
-applications on the wxWidgets web site.
-
 
 
 @section page_port_wxmotif wxMotif
 
-wxMotif is a port of wxWidgets for X11 systems using Motif libraries. Motif
-libraries provide a clean and fast user interface at the expense of the beauty
-and candy of newer interfaces like GTK.
+wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
 
 @subpage plat_motif_install "Build Instructions"
 
@@ -93,9 +88,9 @@ and candy of newer interfaces like GTK.
 
 wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later
 are supported). wxMSW provides native look and feel for each Windows version.
-This port can be compiled with several compilers including Microsoft Studio
-VC++ 2003 or later, MinGW32, Cygwin as well as cross-compilation with a
-Linux-hosted MinGW32 tool chain.
+This port can be compiled with several compilers including Microsoft
+VC++ 2003 or later, MinGW, Cygwin as well as cross-compilation with a
+Linux-hosted MinGW tool chain.
 
 @subpage plat_msw_install "Build and Install Instructions"
 
@@ -180,13 +175,13 @@ used by wxWidgets to e.g. use toolkit-specific features.
 In such case (or when you want to e.g. write a port-specific patch) it can be
 necessary to use the underlying toolkit API directly:
 
-- wxMSW port uses win32 API: see MSDN docs at http://msdn2.microsoft.com/en-us/library/ms649779.aspx
+- wxMSW port uses Win32 API: see MSDN docs at https://msdn2.microsoft.com/en-us/library/ms649779.aspx
 - wxGTK port uses GTK+ and other lower-level libraries; see
-  - GTK+ docs at http://library.gnome.org/devel/gtk/unstable/
-  - GDK docs at http://library.gnome.org/devel/gdk/unstable/
-  - GLib docs at http://library.gnome.org/devel/glib/unstable/
-  - GObject docs at http://library.gnome.org/devel/gobject/unstable/
-  - Pango docs at http://library.gnome.org/devel/pango/unstable/
-- wxOSX port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
+  - GTK+ docs at https://library.gnome.org/devel/gtk/unstable/
+  - GDK docs at https://library.gnome.org/devel/gdk/unstable/
+  - GLib docs at https://library.gnome.org/devel/glib/unstable/
+  - GObject docs at https://library.gnome.org/devel/gobject/unstable/
+  - Pango docs at https://library.gnome.org/devel/pango/unstable/
+- wxOSX port uses the Cocoa API: see Cocoa docs at https://developer.apple.com/cocoa
 
 */
