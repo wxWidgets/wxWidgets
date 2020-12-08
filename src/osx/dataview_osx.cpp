@@ -73,14 +73,15 @@ public:
   virtual bool Cleared() wxOVERRIDE;
   virtual void Resort() wxOVERRIDE;
 
+ // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
+  void AdjustAutosizedColumns();
+
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of
  // the passed item to the maximum value occupied by the item in all columns
   void AdjustRowHeight(wxDataViewItem const& item);
  // ... and the same method for a couple of items:
   void AdjustRowHeights(wxDataViewItemArray const& items);
- // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
-  void AdjustAutosizedColumns();
 
 private:
   wxDataViewCtrl* m_DataViewCtrlPtr;
@@ -505,6 +506,9 @@ int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
   GetDataViewPeer()->Collapse(item);
+
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
 }
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
@@ -518,7 +522,10 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
 
 void wxDataViewCtrl::DoExpand(wxDataViewItem const& item, bool expandChildren)
 {
-  return GetDataViewPeer()->DoExpand(item, expandChildren);
+  GetDataViewPeer()->DoExpand(item, expandChildren);
+
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const

@@ -169,15 +169,15 @@ void wxApp::MacReopenApp()
     while (node)
     {
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
-        if ( win->IsShown() )
-        {
-            // we do have a visible, non-iconized toplevelwindow -> do nothing
-            return;
-        }
-        else if ( win->IsIconized() )
+        if ( win->IsIconized() )
         {
             if ( firstIconized == NULL )
                 firstIconized = win;
+        }
+        else if ( win->IsShown() )
+        {
+            // we do have a visible, non-iconized toplevelwindow -> do nothing
+            return;
         }
 
         node = node->GetNext();

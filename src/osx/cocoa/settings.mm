@@ -128,6 +128,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
+    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     case wxSYS_COLOUR_LISTBOXTEXT:
         sysColor = [NSColor controlTextColor];
@@ -138,7 +139,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_BTNHIGHLIGHT:
         sysColor = [NSColor controlHighlightColor];
         break;
-    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_GRAYTEXT:
         sysColor = [NSColor disabledControlTextColor];
         break;

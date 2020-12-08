@@ -1470,6 +1470,26 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             return;
     }
 
+    // The Infinity IN-USB-2 V15 foot pedal on OS 11 produces spurious mouse
+    // button events with button number = 10.
+    // We cannot do anything useful with button numbers > 2, so throw them away.
+    switch ( [event type] )
+    {
+        case NSLeftMouseDown:
+        case NSRightMouseDown:
+        case NSOtherMouseDown:
+        case NSLeftMouseUp:
+        case NSRightMouseUp:
+        case NSOtherMouseUp:
+            if ( [event buttonNumber] > 2 )
+                return;
+            break;
+
+        default:
+            // Just to avoid -Wswitch.
+            break;
+    }
+
     if ( !DoHandleMouseEvent(event) )
     {
         // for plain NSView mouse events would propagate to parents otherwise
@@ -2420,11 +2440,12 @@ void wxWidgetCocoaImpl::controlTextDidChange()
     if ( wxpeer ) 
     {
         // since native rtti doesn't have to be enabled and wx' rtti is not aware of the mixin wxTextEntry, workaround is needed
-        wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl );
-        wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox );
-        if ( tc )
+        if ( wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl ) )
+        {
+            tc->MarkDirty();
             tc->SendTextUpdatedEventIfAllowed();
-        else if ( cb )
+        }
+        else if ( wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox ) )
             cb->SendTextUpdatedEventIfAllowed();
         else 
         {

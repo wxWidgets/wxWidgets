@@ -557,6 +557,9 @@ private:
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;
+
+    // Width of expander in pixels, computed on demand.
+    int m_expanderWidth;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_

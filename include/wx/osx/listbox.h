@@ -170,6 +170,8 @@ protected:
     wxArrayPtrVoid m_itemsClientData;
 
 private:
+    // Mostly the same as DoSetSelection() but doesn't call EnsureVisible().
+    void DoSetSelectionWithoutEnsureVisible(int n, bool select);
 
     wxDECLARE_DYNAMIC_CLASS(wxListBox);
     wxDECLARE_EVENT_TABLE();
