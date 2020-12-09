@@ -4807,7 +4807,12 @@ int wxGetSystemMetrics(int nIndex, const wxWindow* win)
 /*extern*/
 bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, const wxWindow* win)
 {
-#if wxUSE_DYNLIB_CLASS
+    // Note that we can't use SystemParametersInfoForDpi() in non-Unicode build
+    // because it always works with wide strings and we'd have to check for all
+    // uiAction values corresponding to strings and use a temporary wide buffer
+    // for them, and convert the returned value to ANSI after the call. Instead
+    // of doing all this, just don't use it at all in the deprecated ANSI build.
+#if wxUSE_DYNLIB_CLASS && wxUSE_UNICODE
     const wxWindow* window = (!win && wxTheApp) ? wxTheApp->GetTopWindow() : win;
 
     if ( window )
