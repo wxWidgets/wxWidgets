@@ -1403,7 +1403,7 @@ public:
                  accessible even after the associated property or
                  the property grid has been deleted.
     */
-    wxVariant GetPropertyValue() const
+    wxVariant GetPropertyValue() const;
 
     /**
         Returns value of the associated property.

@@ -1577,7 +1577,7 @@ typedef double wxDouble;
 
     @header{wx/defs.h}
 */
-template <typename T> wxDELETE(T*& ptr);
+template <typename T> void wxDELETE(T*& ptr);
 
 /**
     A function which deletes and nulls the pointer.
@@ -1597,7 +1597,7 @@ template <typename T> wxDELETE(T*& ptr);
 
     @header{wx/defs.h}
 */
-template <typename T> wxDELETEA(T*& array);
+template <typename T> void wxDELETEA(T*& array);
 
 /**
     Generate deprecation warning with the given message when a function is
@@ -1796,7 +1796,7 @@ template <typename T> wxDELETEA(T*& array);
         wxASSERT( x == 4 && y == 3 );
     @endcode
  */
-template <typename T> wxSwap(T& first, T& second);
+template <typename T> void wxSwap(T& first, T& second);
 
 /**
     This macro is the same as the standard C99 @c va_copy for the compilers
