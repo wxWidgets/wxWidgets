@@ -305,7 +305,7 @@ public:
 
         @since 2.9.4
     */
-    wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const
+    wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const;
 
     /**
         Returns the number of tools in the toolbar.

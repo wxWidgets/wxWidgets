@@ -251,7 +251,7 @@ public:
 class wxPGChoiceEditor : public wxPGEditor
 {
 public:
-    wxPGChoiceEditor()
+    wxPGChoiceEditor();
     virtual ~wxPGChoiceEditor();
 
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,

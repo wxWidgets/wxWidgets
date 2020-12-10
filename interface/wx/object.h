@@ -583,19 +583,19 @@ public:
         @a ptr is a pointer to the reference counted object to which this class points.
         If @a ptr is not NULL @b T::IncRef() will be called on the object.
     */
-    wxObjectDataPtr<T>(T* ptr = NULL);
+    wxObjectDataPtr(T* ptr = NULL);
 
     /**
         This copy constructor increases the count of the reference counted object to
         which @a tocopy points and then this class will point to, as well.
     */
-    wxObjectDataPtr<T>(const wxObjectDataPtr<T>& tocopy);
+    wxObjectDataPtr(const wxObjectDataPtr<T>& tocopy);
 
 
     /**
         Decreases the reference count of the object to which this class points.
     */
-    ~wxObjectDataPtr<T>();
+    ~wxObjectDataPtr();
 
     /**
         Gets a pointer to the reference counted object to which this class points.
