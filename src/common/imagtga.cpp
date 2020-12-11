@@ -193,6 +193,22 @@ void Palette_GetRGB(const unsigned char *palette, unsigned int paletteCount,
 }
 
 static
+void Palette_GetRGBA(const unsigned char *palette, unsigned int paletteCount,
+    unsigned int index,
+    unsigned char *red, unsigned char *green, unsigned char *blue, unsigned char* alpha)
+{
+    if (index >= paletteCount)
+    {
+        return;
+    }
+
+    *red   = palette[index];
+    *green = palette[(paletteCount * 1) + index];
+    *blue  = palette[(paletteCount * 2) + index];
+    *alpha = palette[(paletteCount * 3) + index];
+}
+
+static
 void Palette_SetRGB(unsigned char *palette, unsigned int paletteCount,
     unsigned int index,
     unsigned char red, unsigned char green, unsigned char blue)
@@ -200,6 +216,17 @@ void Palette_SetRGB(unsigned char *palette, unsigned int paletteCount,
     palette[index] = red;
     palette[(paletteCount * 1) + index] = green;
     palette[(paletteCount * 2) + index] = blue;
+}
+
+static
+void Palette_SetRGBA(unsigned char *palette, unsigned int paletteCount,
+    unsigned int index,
+    unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+{
+    palette[index] = red;
+    palette[(paletteCount * 1) + index] = green;
+    palette[(paletteCount * 2) + index] = blue;
+    palette[(paletteCount * 3) + index] = alpha;
 }
 
 static
@@ -214,6 +241,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     short imageType = hdr[HDR_IMAGETYPE];
     unsigned int paletteLength = hdr[HDR_PALETTELENGTH]
         + 256 * hdr[HDR_PALETTELENGTH + 1];
+    unsigned int paletteStart = hdr[HDR_PALETTESTART]
+        + 256 * hdr[HDR_PALETTESTART + 1];
     int width = (hdr[HDR_WIDTH] + 256 * hdr[HDR_WIDTH + 1]) -
                 (hdr[HDR_XORIGIN] + 256 * hdr[HDR_XORIGIN + 1]);
     int height = (hdr[HDR_HEIGHT] + 256 * hdr[HDR_HEIGHT + 1]) -
@@ -241,8 +270,15 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
     unsigned char *dst = image->GetData();
 
+    short palettebpp = hdr[HDR_PALETTEBITS];
+    if (colorType == wxTGA_MAPPED && !(palettebpp == 15 || palettebpp == 16 || palettebpp == 24 || palettebpp == 32))
+    {
+        return wxTGA_INVFORMAT;
+    }
+
     unsigned char* alpha = NULL;
-    if (bpp == 16 || bpp == 32)
+    if ((colorType != wxTGA_MAPPED && (bpp == 16 || bpp == 32)) ||
+        (colorType == wxTGA_MAPPED && (palettebpp == 16 || palettebpp == 32)))
     {
         image->SetAlpha();
 
@@ -253,22 +289,54 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     if (stream.SeekI(offset, wxFromStart) == wxInvalidOffset)
         return wxTGA_INVFORMAT;
 
+
     wxScopedArray<unsigned char> palette;
     // Load a palette if we have one.
     if (colorType == wxTGA_MAPPED)
     {
         {
-            wxScopedArray<unsigned char> paletteTmp(paletteLength*3);
+            int palEntrySize = (palettebpp == 15 || palettebpp == 24) ? 3 : 4;
+            wxScopedArray<unsigned char> paletteTmp(paletteLength*palEntrySize);
             palette.swap(paletteTmp);
         }
 
-        unsigned char buf[3];
-
         for (unsigned int i = 0; i < paletteLength; i++)
         {
-            stream.Read(buf, 3);
+            unsigned char buf[4];
+            stream.Read(buf, (palettebpp == 15) ? 2 : palettebpp/8);
 
-            Palette_SetRGB(palette.get(), paletteLength, i, buf[2], buf[1], buf[0]);
+            switch(palettebpp)
+            {
+                case 15:
+                    {
+                        unsigned char r = (buf[1] & 0x7C) << 1;
+                        r |= r >> 5;
+                        unsigned char g = ((buf[1] & 0x03) << 6) | ((buf[0] & 0xE0) >> 2);
+                        g |= g >> 5;
+                        unsigned char b = (buf[0] & 0x1F) << 3;
+                        b |= b >> 5;
+                        Palette_SetRGB(palette.get(), paletteLength, paletteStart+i, r, g, b);
+                    }
+                    break;
+                case 16:
+                    {
+                        unsigned char a = (buf[1] & 0x80) ? 0 : 255;
+                        unsigned char r = (buf[1] & 0x7C) << 1;
+                        r |= r >> 5;
+                        unsigned char g = ((buf[1] & 0x03) << 6) | ((buf[0] & 0xE0) >> 2);
+                        g |= g >> 5;
+                        unsigned char b = (buf[0] & 0x1F) << 3;
+                        b |= b >> 5;
+                        Palette_SetRGBA(palette.get(), paletteLength, paletteStart+i, r, g, b, a);
+                    }
+                    break;
+                case 24:
+                    Palette_SetRGB(palette.get(), paletteLength, paletteStart+i, buf[2], buf[1], buf[0]);
+                    break;
+                case 32:
+                    Palette_SetRGBA(palette.get(), paletteLength, paletteStart+i, buf[2], buf[1], buf[0], buf[3]);
+                    break;
+            }
         }
 
 #if wxUSE_PALETTE
@@ -313,12 +381,24 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                 {
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
-                        Palette_GetRGB(palette.get(), paletteLength,
-                            imageData[index], &r, &g, &b);
-
-                        *(dst++) = r;
-                        *(dst++) = g;
-                        *(dst++) = b;
+                        if ( alpha )
+                        {
+                            unsigned char a;
+                            Palette_GetRGBA(palette.get(), paletteLength,
+                                            imageData[index], &r, &g, &b, &a);
+                            *dst++ = r;
+                            *dst++ = g;
+                            *dst++ = b;
+                            *alpha++ = a;
+                        }
+                        else
+                        {
+                            Palette_GetRGB(palette.get(), paletteLength,
+                                           imageData[index], &r, &g, &b);
+                            *dst++ = r;
+                            *dst++ = g;
+                            *dst++ = b;
+                        }
                     }
                 }
                 break;
@@ -508,12 +588,24 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                 {
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
-                        Palette_GetRGB(palette.get(), paletteLength,
-                            imageData[index], &r, &g, &b);
-
-                        *(dst++) = r;
-                        *(dst++) = g;
-                        *(dst++) = b;
+                        if ( alpha )
+                        {
+                            unsigned char a;
+                            Palette_GetRGBA(palette.get(), paletteLength,
+                                            imageData[index], &r, &g, &b, &a);
+                            *dst++ = r;
+                            *dst++ = g;
+                            *dst++ = b;
+                            *alpha++ = a;
+                        }
+                        else
+                        {
+                            Palette_GetRGB(palette.get(), paletteLength,
+                                           imageData[index], &r, &g, &b);
+                            *dst++ = r;
+                            *dst++ = g;
+                            *dst++ = b;
+                        }
                     }
                 }
                 break;
