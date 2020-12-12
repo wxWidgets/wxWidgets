@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/webrequest_urlsession.h
+// Name:        src/osx/webrequest_urlsession.mm
 // Purpose:     wxWebRequest implementation using URLSession
 // Author:      Tobias Taschner
 // Created:     2018-10-25
@@ -109,7 +109,7 @@ void wxWebRequestURLSession::Start()
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:
                                 [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];
     if (m_method.empty())
-        req.HTTPMethod = (m_dataSize) ? @"POST" : @"GET";
+        req.HTTPMethod = m_dataSize ? @"POST" : @"GET";
     else
         req.HTTPMethod = wxCFStringRef(m_method).AsNSString();
 
@@ -126,7 +126,7 @@ void wxWebRequestURLSession::Start()
         wxMemoryBuffer memBuf;
         m_dataStream->Read(memBuf.GetWriteBuf(m_dataSize), m_dataSize);
 
-        // Create NSDAta from memory buffer
+        // Create NSData from memory buffer
         NSData* data = [NSData dataWithBytes:memBuf.GetData() length:m_dataSize];
         m_task = [[session.GetSession() uploadTaskWithRequest:req fromData:data] retain];
     }

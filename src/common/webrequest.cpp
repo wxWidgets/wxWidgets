@@ -151,10 +151,13 @@ void wxWebRequest::SplitParameters(const wxString& s, wxString& value,
     parameters.clear();
     wxString::const_iterator it = s.begin();
     wxString::const_iterator end = s.end();
-    while ( it != end && wxIsspace(*it) ) ++it;
-    while ( it != end && *it != ';' ) value += *it++;
+    while ( it != end && wxIsspace(*it) )
+        ++it;
+    while ( it != end && *it != ';' )
+        value += *it++;
     value.Trim();
-    if ( it != end ) ++it;
+    if ( it != end )
+        ++it;
     SplitParameters(it, end, parameters);
 }
 
@@ -170,11 +173,15 @@ void wxWebRequest::SplitParameters(const wxString::const_iterator& begin,
     {
         pname.clear();
         pvalue.clear();
-        while ( it != end && wxIsspace(*it) ) ++it;
-        while ( it != end && *it != '=' && *it != ';' ) pname += *it++;
+        while ( it != end && wxIsspace(*it) )
+            ++it;
+        while ( it != end && *it != '=' && *it != ';' )
+            pname += *it++;
         pname.Trim();
-        if ( it != end && *it != ';' ) ++it;
-        while ( it != end && wxIsspace(*it) ) ++it;
+        if ( it != end && *it != ';' )
+            ++it;
+        while ( it != end && wxIsspace(*it) )
+            ++it;
         while ( it != end && *it != ';' )
         {
             if ( *it == '"' )
@@ -185,28 +192,35 @@ void wxWebRequest::SplitParameters(const wxString::const_iterator& begin,
                     if ( *it == '\\' )
                     {
                         ++it;
-                        if ( it != end ) pvalue += *it++;
+                        if ( it != end )
+                            pvalue += *it++;
                     }
-                    else pvalue += *it++;
+                    else
+                        pvalue += *it++;
                 }
-                if ( it != end ) ++it;
+                if ( it != end )
+                    ++it;
             }
             else if ( *it == '\\' )
             {
                 ++it;
-                if ( it != end ) pvalue += *it++;
+                if ( it != end )
+                    pvalue += *it++;
             }
-            else pvalue += *it++;
+            else
+                pvalue += *it++;
         }
         pvalue.Trim();
-        if ( !pname.empty() ) parameters[pname] = pvalue;
-        if ( it != end ) ++it;
+        if ( !pname.empty() )
+            parameters[pname] = pvalue;
+        if ( it != end )
+            ++it;
     }
 }
 
 void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 {
-    if (!IsActiveState(state) && GetResponse())
+    if ( !IsActiveState(state) && GetResponse() )
         GetResponse()->Finalize();
 
     wxString responseFileName;
@@ -248,7 +262,7 @@ wxWebResponse::~wxWebResponse()
 
 bool wxWebResponse::Init()
 {
-    if (m_request.GetStorage() == wxWebRequest::Storage_File)
+    if ( m_request.GetStorage() == wxWebRequest::Storage_File )
     {
         wxFileName tmpPrefix;
         tmpPrefix.AssignDir(m_request.GetSession().GetTempDir());
@@ -357,7 +371,9 @@ void wxWebResponse::ReportDataReceived(size_t sizeReceived)
     m_request.ReportDataReceived(sizeReceived);
 
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
+    {
         m_file.Write(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
+    }
     else if ( m_request.GetStorage() == wxWebRequest::Storage_None )
     {
         wxWebRequestEvent evt(wxEVT_WEBREQUEST_DATA, m_request.GetId(), wxWebRequest::State_Active);

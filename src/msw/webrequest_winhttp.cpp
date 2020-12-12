@@ -31,7 +31,7 @@
 // For MSVC we can link in the required library explicitly, for the other
 // compilers (e.g. MinGW) this needs to be done at makefiles level.
 #ifdef __VISUALC__
-#pragma comment(lib, "Winhttp")
+#pragma comment(lib, "winhttp")
 #endif
 
 // Define constants potentially missing in old SDKs
@@ -99,8 +99,11 @@ static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel
     {
         wxWCharBuffer resBuf(bufferLen);
         if ( ::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName,
-            resBuf.data(), &bufferLen, WINHTTP_NO_HEADER_INDEX) )
+                                   resBuf.data(), &bufferLen,
+                                   WINHTTP_NO_HEADER_INDEX) )
+        {
             result.assign(resBuf);
+        }
     }
 
     return result;
@@ -257,7 +260,7 @@ void wxWebRequestWinHTTP::Start()
 
     int port;
     if ( !uri.HasPort() )
-        port = (isSecure) ? 443 : 80;
+        port = isSecure ? 443 : 80;
     else
         port = wxAtoi(uri.GetPort());
 

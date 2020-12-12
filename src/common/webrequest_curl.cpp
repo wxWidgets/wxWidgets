@@ -254,7 +254,7 @@ void wxWebRequestCURL::Cancel()
 
 void wxWebRequestCURL::HandleCompletion()
 {
-    int status = (m_response) ? m_response->GetStatus() : 0;
+    int status = m_response ? m_response->GetStatus() : 0;
 
     if ( status == 0)
         SetState(State_Failed, GetError());

@@ -19,7 +19,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegte);
 class wxWebSessionURLSession;
 class wxWebResponseURLSession;
 
-class WXDLLIMPEXP_NET wxWebResponseURLSession: public wxWebResponse
+class WXDLLIMPEXP_NET wxWebResponseURLSession : public wxWebResponse
 {
 public:
     wxWebResponseURLSession(wxWebRequest& request, WX_NSURLSessionTask task);
@@ -44,7 +44,7 @@ private:
     WX_NSURLSessionTask m_task;
 };
 
-class WXDLLIMPEXP_NET wxWebRequestURLSession: public wxWebRequest
+class WXDLLIMPEXP_NET wxWebRequestURLSession : public wxWebRequest
 {
 public:
     wxWebRequestURLSession(wxWebSessionURLSession& session, const wxString& url, int id);
@@ -78,7 +78,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebRequestURLSession);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionURLSession: public wxWebSession
+class WXDLLIMPEXP_NET wxWebSessionURLSession : public wxWebSession
 {
 public:
     wxWebSessionURLSession();
@@ -100,7 +100,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionFactoryURLSession: public wxWebSessionFactory
+class WXDLLIMPEXP_NET wxWebSessionFactoryURLSession : public wxWebSessionFactory
 {
 public:
     wxWebSession* Create() wxOVERRIDE

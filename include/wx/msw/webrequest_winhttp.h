@@ -106,7 +106,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebRequestWinHTTP);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionWinHTTP: public wxWebSession
+class WXDLLIMPEXP_NET wxWebSessionWinHTTP : public wxWebSession
 {
 public:
     wxWebSessionWinHTTP();
@@ -128,7 +128,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebSessionWinHTTP);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionFactoryWinHTTP: public wxWebSessionFactory
+class WXDLLIMPEXP_NET wxWebSessionFactoryWinHTTP : public wxWebSessionFactory
 {
 public:
     wxWebSession* Create() wxOVERRIDE

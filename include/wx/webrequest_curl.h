@@ -35,7 +35,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebAuthChallengeCURL);
 };
 
-class WXDLLIMPEXP_NET wxWebRequestCURL: public wxWebRequest
+class WXDLLIMPEXP_NET wxWebRequestCURL : public wxWebRequest
 {
 public:
     wxWebRequestCURL(wxWebSession& session, int id, const wxString& url);
@@ -107,7 +107,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebResponseCURL);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionCURL: public wxWebSession, private wxThreadHelper
+class WXDLLIMPEXP_NET wxWebSessionCURL : public wxWebSession, private wxThreadHelper
 {
 public:
     wxWebSessionCURL();
@@ -144,7 +144,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionFactoryCURL: public wxWebSessionFactory
+class WXDLLIMPEXP_NET wxWebSessionFactoryCURL : public wxWebSessionFactory
 {
 public:
     wxWebSession* Create() wxOVERRIDE
