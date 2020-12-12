@@ -46,7 +46,7 @@ private:
 class WXDLLIMPEXP_NET wxWebAuthChallengeWinHTTP : public wxWebAuthChallenge
 {
 public:
-    explicit wxWebAuthChallengeWinHTTP(Source source, wxWebRequestWinHTTP& request);
+    wxWebAuthChallengeWinHTTP(Source source, wxWebRequestWinHTTP& request);
 
     bool Init();
 

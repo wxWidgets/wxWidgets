@@ -23,7 +23,7 @@ class wxWebRequestCURL;
 class WXDLLIMPEXP_NET wxWebAuthChallengeCURL : public wxWebAuthChallenge
 {
 public:
-    explicit wxWebAuthChallengeCURL(Source source, wxWebRequestCURL& request);
+    wxWebAuthChallengeCURL(Source source, wxWebRequestCURL& request);
 
     bool Init();
 
