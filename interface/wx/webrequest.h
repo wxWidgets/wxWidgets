@@ -103,7 +103,7 @@
         A new block of data has been downloaded.
     @endEventTable
 
-    @since 3.1.3
+    @since 3.1.5
 
     @library{wxnet}
     @category{net}
@@ -397,7 +397,7 @@ public:
 /**
     A wxWebResponse allows access to the response sent by the server.
 
-    @since 3.1.2
+    @since 3.1.5
 
     @library{wxnet}
     @category{net}
@@ -472,7 +472,7 @@ public:
     cookies. Additionally, an underlying network connection might be kept
     alive to achieve faster additional responses.
 
-    @since 3.1.2
+    @since 3.1.5
 
     @library{wxnet}
     @category{net}
@@ -566,7 +566,7 @@ public:
 
     Each implementation of wxWebSession should have its own factory.
 
-    @since 3.1.2
+    @since 3.1.5
 
     @library{wxnet}
     @category{net}
@@ -587,7 +587,7 @@ public:
 
     A web request event sent during or after server communication.
 
-    @since 3.1.2
+    @since 3.1.5
 
     @library{wxnet}
     @category{net}

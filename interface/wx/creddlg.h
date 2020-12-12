@@ -15,7 +15,7 @@
     @note For secure saving and loading users and passwords, have a look at
         wxSecretStore.
 
-    @since 3.1.2
+    @since 3.1.5
 
     @library{wxcore}
     @category{cmndlg}
