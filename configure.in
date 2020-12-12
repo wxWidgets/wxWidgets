@@ -2924,20 +2924,27 @@ dnl ------------------------------------------------------------------------
 dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
-if test "$wxUSE_WEBREQUEST_CURL" != "no"; then
-    AC_CHECK_HEADER(curl/curl.h,,,[])
+if test "$wxUSE_WEBREQUEST_LIBCURL" != "no"; then
+    PKG_CHECK_MODULES(LIBCURL, [libcurl],
+        [
+            CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+            LIBS="$LIBCURL_LIBS $LIBS"
+            AC_DEFINE(wxUSE_WEBREQUEST_LIBCURL)
+        ],
+        [
+            wxUSE_WEBREQUEST_LIBCURL=no
+            AC_MSG_RESULT([not found])
+        ]
+    )
 
-    if test "$ac_cv_header_curl_curl_h" = "yes"; then
-        AC_CHECK_LIB(curl, curl_easy_init,
-            [
-                CURL_LINK="-lcurl"
-                LIBS="$CURL_LINK $LIBS"
-                AC_DEFINE(wxUSE_WEBREQUEST_CURL)
-            ])
-    fi
-
-    if test -z "$CURL_LINK"; then
-        wxUSE_WEBREQUEST_CURL=no
+    if test "$wxUSE_WEBREQUEST_LIBCURL" = "no"; then
+        dnl Under these platforms we have other, always available, backends for
+        dnl wxWebRequest, but under the others (i.e. generic Unix) libcurl is
+        dnl the only way to implement wxWebRequest.
+        if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
+            AC_MSG_WARN([libcurl not found, wxWebRequest won't be available])
+            wxUSE_WEBREQUEST=no
+        fi
     fi
 fi
 
