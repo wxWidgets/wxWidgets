@@ -90,6 +90,7 @@ library:
 @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}
 @itemdef{wxUSE_CONSTRAINTS, Use wxLayoutConstraints}
 @itemdef{wxUSE_CONTROLS, If set to 0, no classes deriving from wxControl can be used.}
+@itemdef{wxUSE_CREDENTIALDLG, If set to 0, disabled wxCredentialEntryDialog used by wxWebRequest.}
 @itemdef{wxUSE_DATAOBJ, Use wxDataObject and related classes.}
 @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
 @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
