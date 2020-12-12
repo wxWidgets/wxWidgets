@@ -576,8 +576,12 @@ WX_ARG_WITH(liblzma,       [  --with-liblzma          use LZMA compression)], wx
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
+WX_ARG_WITH(libcurl,       [  --with-libcurl          use libcurl-based wxWebRequest], wxUSE_LIBCURL)
 if test "$USE_WIN32" = 1; then
 WX_ARG_WITH(winhttp,       [  --with-winhttp          use WinHTTP-based wxWebRequest], wxUSE_WINHTTP)
+fi
+if test "$USE_DARWIN" = 1; then
+WX_ARG_WITH(urlsession,    [  --with-urlsession       use NSURLSession-based wxWebRequest], wxUSE_URLSESSION)
 fi
 
 if test "$USE_DARWIN" = 1; then
@@ -721,10 +725,6 @@ WX_ARG_FEATURE(ipv6,          [  --enable-ipv6           enable IPv6 support in 
 WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 WX_ARG_FEATURE(webrequest,    [  --enable-webrequest     use wxWebRequest], wxUSE_WEBREQUEST)
-WX_ARG_FEATURE(webrequestcurl, [  --enable-webrequest-curl use libcurl with wxWebRequest], wxUSE_WEBREQUEST_LIBCURL)
-if test "$USE_DARWIN" = 1; then
-WX_ARG_FEATURE(webrequesturlsession, [  --enable-webrequest-urlsession use NSURLSession with wxWebRequest], wxUSE_WEBREQUEST_URLSESSION)
-fi dnl USE_DARWIN
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
@@ -2928,7 +2928,7 @@ dnl ------------------------------------------------------------------------
 dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
-if test "$wxUSE_WEBREQUEST_LIBCURL" != "no"; then
+if test "$wxUSE_LIBCURL" != "no"; then
     PKG_CHECK_MODULES(LIBCURL, [libcurl],
         [
             CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
@@ -2936,12 +2936,12 @@ if test "$wxUSE_WEBREQUEST_LIBCURL" != "no"; then
             AC_DEFINE(wxUSE_WEBREQUEST_LIBCURL)
         ],
         [
-            wxUSE_WEBREQUEST_LIBCURL=no
+            wxUSE_LIBCURL=no
             AC_MSG_RESULT([not found])
         ]
     )
 
-    if test "$wxUSE_WEBREQUEST_LIBCURL" = "no"; then
+    if test "$wxUSE_LIBCURL" = "no"; then
         dnl Under these platforms we have other, always available, backends for
         dnl wxWebRequest, but under the others (i.e. generic Unix) libcurl is
         dnl the only way to implement wxWebRequest.
@@ -6595,7 +6595,11 @@ fi
 if test "$wxUSE_WEBREQUEST" = "yes"; then
     AC_DEFINE(wxUSE_WEBREQUEST)
 
-    if test "$wxUSE_WEBREQUEST_URLSESSION" = "yes"; then
+    if test "$wxUSE_LIBCURL" = "yes"; then
+        AC_DEFINE(wxUSE_WEBREQUEST_CURL)
+    fi
+
+    if test "$wxUSE_URLSESSION" = "yes"; then
         AC_DEFINE(wxUSE_WEBREQUEST_URLSESSION)
     fi
 

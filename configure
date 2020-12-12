@@ -1105,7 +1105,9 @@ with_regex
 with_liblzma
 with_zlib
 with_expat
+with_libcurl
 with_winhttp
+with_urlsession
 with_macosx_sdk
 with_macosx_version_min
 enable_debug
@@ -1156,8 +1158,6 @@ enable_ipv6
 enable_ole
 enable_dataobj
 enable_webrequest
-enable_webrequestcurl
-enable_webrequesturlsession
 enable_ipc
 enable_baseevtloop
 enable_epollloop
@@ -2124,8 +2124,6 @@ Optional Features:
   --enable-ole            use OLE classes (Win32 only)
   --enable-dataobj        use data object classes
   --enable-webrequest     use wxWebRequest
-  --enable-webrequest-curl use libcurl with wxWebRequest
-  --enable-webrequest-urlsession use NSURLSession with wxWebRequest
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-baseevtloop    use event loop in console programs too
   --enable-epollloop      use wxEpollDispatcher class (Linux only)
@@ -2381,7 +2379,9 @@ Optional Packages:
   --with-liblzma          use LZMA compression)
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
+  --with-libcurl          use libcurl-based wxWebRequest
   --with-winhttp          use WinHTTP-based wxWebRequest
+  --with-urlsession       use NSURLSession-based wxWebRequest
   --with-macosx-sdk=PATH  use macOS SDK at PATH
   --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)
   --with-cxx=11|14|17     use the given C++ dialect
@@ -5350,6 +5350,35 @@ fi
           eval "$wx_cv_use_expat"
 
 
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-libcurl was given.
+if test "${with_libcurl+set}" = set; then :
+  withval=$with_libcurl;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libcurl='wxUSE_LIBCURL=yes'
+                        else
+                          wx_cv_use_libcurl='wxUSE_LIBCURL=no'
+                        fi
+
+else
+
+                        wx_cv_use_libcurl='wxUSE_LIBCURL=${'DEFAULT_wxUSE_LIBCURL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_libcurl"
+
 if test "$USE_WIN32" = 1; then
 
           withstring=
@@ -5379,6 +5408,37 @@ fi
 
 
           eval "$wx_cv_use_winhttp"
+
+fi
+if test "$USE_DARWIN" = 1; then
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-urlsession was given.
+if test "${with_urlsession+set}" = set; then :
+  withval=$with_urlsession;
+                        if test "$withval" = yes; then
+                          wx_cv_use_urlsession='wxUSE_URLSESSION=yes'
+                        else
+                          wx_cv_use_urlsession='wxUSE_URLSESSION=no'
+                        fi
+
+else
+
+                        wx_cv_use_urlsession='wxUSE_URLSESSION=${'DEFAULT_wxUSE_URLSESSION":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_urlsession"
 
 fi
 
@@ -6744,65 +6804,6 @@ fi
           eval "$wx_cv_use_webrequest"
 
 
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-webrequestcurl was given.
-if test "${enable_webrequestcurl+set}" = set; then :
-  enableval=$enable_webrequestcurl;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_webrequestcurl='wxUSE_WEBREQUEST_LIBCURL=yes'
-                          else
-                            wx_cv_use_webrequestcurl='wxUSE_WEBREQUEST_LIBCURL=no'
-                          fi
-
-else
-
-                          wx_cv_use_webrequestcurl='wxUSE_WEBREQUEST_LIBCURL=${'DEFAULT_wxUSE_WEBREQUEST_LIBCURL":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_webrequestcurl"
-
-if test "$USE_DARWIN" = 1; then
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-webrequesturlsession was given.
-if test "${enable_webrequesturlsession+set}" = set; then :
-  enableval=$enable_webrequesturlsession;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_webrequesturlsession='wxUSE_WEBREQUEST_URLSESSION=yes'
-                          else
-                            wx_cv_use_webrequesturlsession='wxUSE_WEBREQUEST_URLSESSION=no'
-                          fi
-
-else
-
-                          wx_cv_use_webrequesturlsession='wxUSE_WEBREQUEST_URLSESSION=${'DEFAULT_wxUSE_WEBREQUEST_URLSESSION":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_webrequesturlsession"
-
-fi
 
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
@@ -23003,7 +23004,7 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 fi
 
 
-if test "$wxUSE_WEBREQUEST_LIBCURL" != "no"; then
+if test "$wxUSE_LIBCURL" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCURL" >&5
@@ -23064,14 +23065,14 @@ fi
 	echo "$LIBCURL_PKG_ERRORS" >&5
 
 
-            wxUSE_WEBREQUEST_LIBCURL=no
+            wxUSE_LIBCURL=no
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
 
 
 elif test $pkg_failed = untried; then
 
-            wxUSE_WEBREQUEST_LIBCURL=no
+            wxUSE_LIBCURL=no
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
 
@@ -23089,7 +23090,7 @@ $as_echo "yes" >&6; }
 
 fi
 
-    if test "$wxUSE_WEBREQUEST_LIBCURL" = "no"; then
+    if test "$wxUSE_LIBCURL" = "no"; then
                                 if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libcurl not found, wxWebRequest won't be available" >&5
 $as_echo "$as_me: WARNING: libcurl not found, wxWebRequest won't be available" >&2;}
@@ -36118,7 +36119,12 @@ if test "$wxUSE_WEBREQUEST" = "yes"; then
     $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
 
 
-    if test "$wxUSE_WEBREQUEST_URLSESSION" = "yes"; then
+    if test "$wxUSE_LIBCURL" = "yes"; then
+        $as_echo "#define wxUSE_WEBREQUEST_CURL 1" >>confdefs.h
+
+    fi
+
+    if test "$wxUSE_URLSESSION" = "yes"; then
         $as_echo "#define wxUSE_WEBREQUEST_URLSESSION 1" >>confdefs.h
 
     fi
