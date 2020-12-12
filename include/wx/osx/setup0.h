@@ -665,11 +665,12 @@
 #define wxUSE_WEBREQUEST_URLSESSION 0
 #endif
 
-// wxWebRequest backend based on NSURLSession
+// wxWebRequest backend based on libcurl, can be used under all platforms.
 //
 // Default is 1
 //
-// Recommended setting: 0 on Windows and macOS otherwise 1
+// Recommended setting: 0 on Windows and macOS, otherwise 1 as it is required
+// for wxWebRequest to be available at all.
 #if defined(__WINDOWS__) || defined(__APPLE__)
 #define wxUSE_WEBREQUEST_CURL 0
 #else
@@ -1444,7 +1445,8 @@
 #define wxUSE_GLCANVAS       1
 
 // Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
-// automatically enabled if EGL support is detected.
+// automatically enabled if EGL support is detected.  EGL support is only
+// available under Unix platforms.
 //
 // Default is 0.
 //
@@ -1685,6 +1687,13 @@
 // make sure we have the proper dispatcher for the console event loop
 #define wxUSE_SELECT_DISPATCHER 1
 #define wxUSE_EPOLL_DISPATCHER 0
+
+// set to 1 if you have older code that still needs icon refs
+#define wxOSX_USE_ICONREF 0
+
+// set to 0 if you have code that has problems with the new bitmap implementation
+#define wxOSX_BITMAP_NATIVE_ACCESS 1
+
 /* --- end OSX options --- */
 
 #endif

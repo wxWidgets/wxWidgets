@@ -658,11 +658,12 @@
 #define wxUSE_WEBREQUEST_URLSESSION 0
 #endif
 
-// wxWebRequest backend based on NSURLSession
+// wxWebRequest backend based on libcurl, can be used under all platforms.
 //
 // Default is 1
 //
-// Recommended setting: 0 on Windows and macOS otherwise 1
+// Recommended setting: 0 on Windows and macOS, otherwise 1 as it is required
+// for wxWebRequest to be available at all.
 #if defined(__WINDOWS__) || defined(__APPLE__)
 #define wxUSE_WEBREQUEST_CURL 0
 #else
@@ -1437,7 +1438,8 @@
 #define wxUSE_GLCANVAS       1
 
 // Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
-// automatically enabled if EGL support is detected.
+// automatically enabled if EGL support is detected.  EGL support is only
+// available under Unix platforms.
 //
 // Default is 0.
 //

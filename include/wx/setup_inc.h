@@ -655,11 +655,12 @@
 #define wxUSE_WEBREQUEST_URLSESSION 0
 #endif
 
-// wxWebRequest backend based on NSURLSession
+// wxWebRequest backend based on libcurl, can be used under all platforms.
 //
 // Default is 1
 //
-// Recommended setting: 0 on Windows and macOS otherwise 1
+// Recommended setting: 0 on Windows and macOS, otherwise 1 as it is required
+// for wxWebRequest to be available at all.
 #if defined(__WINDOWS__) || defined(__APPLE__)
 #define wxUSE_WEBREQUEST_CURL 0
 #else
