@@ -45,6 +45,8 @@ public:
         const wxString& password = "");
 
     /**
+        Create the dialog constructed using the default constructor.
+
         @param parent
             Parent window.
         @param message
@@ -68,6 +70,10 @@ public:
 
     /**
         Sets the current user name.
+
+        This function may be called before showing the dialog to provide the
+        default value for the user name, if it's different from the one given
+        at the creation time.
     */
     void SetUser(const wxString& user);
 
@@ -78,6 +84,9 @@ public:
 
     /**
         Sets the current password.
+
+        This function may be called before showing the dialog for the reasons
+        similar to SetUser().
     */
     void SetPassword(const wxString& password);
 };
