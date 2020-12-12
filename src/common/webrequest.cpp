@@ -431,7 +431,9 @@ wxWebSession* wxWebSession::New(const wxString& backend)
 }
 
 // static
-void wxWebSession::RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSessionFactory> factory)
+void
+wxWebSession::RegisterFactory(const wxString& backend,
+                              const wxSharedPtr<wxWebSessionFactory>& factory)
 {
     ms_factoryMap[backend] = factory;
 }

@@ -241,7 +241,8 @@ public:
 
     static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
 
-    static void RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSessionFactory> factory);
+    static void RegisterFactory(const wxString& backend,
+                                const wxSharedPtr<wxWebSessionFactory>& factory);
 
     static bool IsBackendAvailable(const wxString& backend);
 

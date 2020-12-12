@@ -544,7 +544,8 @@ public:
         @param backend The name for the new backend to be registered under
         @param factory A shared pointer to the factory which creates the appropriate backend.
     */
-    static void RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSessionFactory> factory);
+    static void RegisterFactory(const wxString& backend,
+                                const wxSharedPtr<wxWebSessionFactory>& factory);
 
     /**
         Allows to check if the specified backend is available at runtime.
