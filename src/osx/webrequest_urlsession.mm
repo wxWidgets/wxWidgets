@@ -77,7 +77,7 @@
 {
     wxWebRequestURLSession* request = [self requestForTask:task];
     if (error)
-        request->SetState(wxWebRequest::State_Failed, wxCFStringRef(error.localizedDescription).AsString());
+        request->SetState(wxWebRequest::State_Failed, wxCFStringRefFromGet(error.localizedDescription).AsString());
     else
         request->HandleCompletion();
 
@@ -212,7 +212,7 @@ wxInt64 wxWebResponseURLSession::GetContentLength() const
 
 wxString wxWebResponseURLSession::GetURL() const
 {
-    return wxCFStringRef(m_task.response.URL.absoluteString).AsString();
+    return wxCFStringRefFromGet(m_task.response.URL.absoluteString).AsString();
 }
 
 wxString wxWebResponseURLSession::GetHeader(const wxString& name) const
@@ -220,7 +220,7 @@ wxString wxWebResponseURLSession::GetHeader(const wxString& name) const
     NSHTTPURLResponse* httpResp = (NSHTTPURLResponse*) m_task.response;
     NSString* value = [httpResp.allHeaderFields objectForKey:wxCFStringRef(name).AsNSString()];
     if (value)
-        return wxCFStringRef(value).AsString();
+        return wxCFStringRefFromGet(value).AsString();
     else
         return wxString();
 }
@@ -233,12 +233,12 @@ int wxWebResponseURLSession::GetStatus() const
 
 wxString wxWebResponseURLSession::GetStatusText() const
 {
-    return wxCFStringRef([NSHTTPURLResponse localizedStringForStatusCode:GetStatus()]).AsString();
+    return wxCFStringRefFromGet([NSHTTPURLResponse localizedStringForStatusCode:GetStatus()]).AsString();
 }
 
 wxString wxWebResponseURLSession::GetSuggestedFileName() const
 {
-    return wxCFStringRef(m_task.response.suggestedFilename).AsString();
+    return wxCFStringRefFromGet(m_task.response.suggestedFilename).AsString();
 }
 
 //
