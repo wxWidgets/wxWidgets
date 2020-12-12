@@ -262,9 +262,11 @@ private:
 class WXDLLIMPEXP_NET wxWebRequestEvent : public wxEvent
 {
 public:
-    wxWebRequestEvent() {}
-    wxWebRequestEvent(wxEventType type, int id, wxWebRequest::State state,
-        wxWebResponse* response = NULL, const wxString& errorDesc = "")
+    wxWebRequestEvent(wxEventType type = wxEVT_NULL,
+                      int id = wxID_ANY,
+                      wxWebRequest::State state = wxWebRequest::State_Idle,
+                      wxWebResponse* response = NULL,
+                      const wxString& errorDesc = wxString())
         : wxEvent(id, type),
         m_state(state), m_response(response), m_data(NULL), m_dataSize(0),
         m_errorDescription(errorDesc)
@@ -291,7 +293,7 @@ public:
 
 private:
     wxWebRequest::State m_state;
-    wxWebResponse* m_response; // non-owning, may be NULL
+    wxWebResponse* const m_response; // non-owning, may be NULL
     wxString m_responseFileName;
     const void* m_data;
     size_t m_dataSize;
