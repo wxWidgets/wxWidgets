@@ -83,7 +83,7 @@ public:
     // temporarily suppress multiple notifications that would be generated for
     // them and generate a single one at the end using MSWNotifyShell()
     // explicitly.
-    void MSWSuppressNotifications(bool supress);
+    void MSWSuppressNotifications(bool suppress);
 
     wxString
     GetExpandedCommand(const wxString& verb,

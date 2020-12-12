@@ -13,8 +13,9 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/scrolwin.h"
+#include "wx/brush.h"
 #include "wx/pen.h"
+#include "wx/scrolwin.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -47,7 +48,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
         : wxTreeCtrlBase(),
           wxScrollHelper(this)
     {
@@ -62,7 +63,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_DEFAULT_STYLE,
                 const wxValidator &validator = wxDefaultValidator,
-                const wxString& name = wxTreeCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -243,8 +244,8 @@ protected:
     unsigned short       m_indent;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
-    wxBrush             *m_hilightBrush,
-                        *m_hilightUnfocusedBrush;
+    wxBrush              m_hilightBrush,
+                         m_hilightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
     bool                 m_ownsImageListButtons;
@@ -351,6 +352,15 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 private:
+    void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+    {
+        InitVisualAttributes();
+    }
+
+    // (Re)initialize colours, fonts, pens, brushes used by the control using
+    // the current system colours and font.
+    void InitVisualAttributes();
+
     // Reset the state of the last find (i.e. keyboard incremental search)
     // operation.
     void ResetFindState();
@@ -360,7 +370,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericTreeCtrl);
 };
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+// Also define wxTreeCtrl to be wxGenericTreeCtrl on all platforms without a
+// native version, i.e. all but MSW and Qt.
+#if !(defined(__WXMSW__) || defined(__WXQT__)) || defined(__WXUNIVERSAL__)
 /*
  * wxTreeCtrl has to be a real class or we have problems with
  * the run-time information.
@@ -378,12 +390,12 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
     : wxGenericTreeCtrl(parent, id, pos, size, style, validator, name)
     {
     }
 };
-#endif // !__WXMSW__ || __WXUNIVERSAL__
+#endif // !(__WXMSW__ || __WXQT__) || __WXUNIVERSAL__
 
 #endif // wxUSE_TREECTRL
 

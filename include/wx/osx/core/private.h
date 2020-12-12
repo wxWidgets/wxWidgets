@@ -59,6 +59,13 @@ WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 
 #endif
 
+// NSString<->wxString
+
+WXDLLIMPEXP_BASE wxString wxStringWithNSString(NSString *nsstring);
+WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
+
+WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
+
 #if wxUSE_GUI
 
 #if wxOSX_USE_IPHONE
@@ -108,7 +115,7 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRe
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 
-WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
@@ -168,7 +175,7 @@ public :
                        const wxString& strHelp,
                        wxItemKind kind,
                        wxMenu *pSubMenu );
-    
+
     // handle OS specific menu items if they weren't handled during normal processing
     virtual bool DoDefault() { return false; }
 protected :
@@ -197,7 +204,7 @@ public :
     wxMenu* GetWXPeer() { return m_peer ; }
 
     virtual void PopUp( wxWindow *win, int x, int y ) = 0;
-    
+
     virtual void GetMenuBarDimensions(int &x, int &y, int &width, int &height) const
     {
         x = y = width = height = -1;
@@ -216,15 +223,31 @@ protected :
 class WXDLLIMPEXP_CORE wxWidgetImpl : public wxObject
 {
 public :
-    wxWidgetImpl( wxWindowMac* peer , bool isRootControl = false, bool isUserPane = false );
+    enum WidgetFlags
+    {
+        Widget_IsRoot = 0x0001,
+        Widget_IsUserPane = 0x0002,
+        Widget_UserKeyEvents = 0x0004,
+        Widget_UserMouseEvents = 0x0008,
+    };
+
+    wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane, bool wantsUserKey );
+    wxWidgetImpl( wxWindowMac* peer , int flags = 0 );
     wxWidgetImpl();
     virtual ~wxWidgetImpl();
 
     void Init();
 
     bool                IsRootControl() const { return m_isRootControl; }
-    
+
+    // is a custom control that has all events handled in wx code, no built-ins
     bool                IsUserPane() const { return m_isUserPane; }
+
+    // we are doing keyboard handling in wx code, other events might be handled natively
+    virtual bool        HasUserKeyHandling() const { return m_wantsUserKey; }
+
+    // we are doing mouse handling in wx code, other events might be handled natively
+    virtual bool        HasUserMouseHandling() const { return m_wantsUserMouse; }
 
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
 
@@ -264,7 +287,7 @@ public :
     {
         return 1.0;
     }
-    
+
     // the native coordinates may have an 'aura' for shadows etc, if this is the case the layout
     // inset indicates on which insets the real control is drawn
     virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const
@@ -278,12 +301,11 @@ public :
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
 
-    virtual bool        NeedsFocusRect() const;
-    virtual void        SetNeedsFocusRect( bool needs );
+    virtual void        EnableFocusRing(bool WXUNUSED(enabled)) {}
 
     virtual bool        NeedsFrame() const;
     virtual void        SetNeedsFrame( bool needs );
-    
+
     virtual void        SetDrawingEnabled(bool enabled);
 
     virtual bool        CanFocus() const = 0;
@@ -306,7 +328,7 @@ public :
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
     virtual void        ReleaseMouse() = 0;
-    
+
     virtual void        SetDropTarget( wxDropTarget * WXUNUSED(dropTarget) ) {}
 
     virtual wxInt32     GetValue() const = 0;
@@ -326,7 +348,7 @@ public :
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 
-    virtual void        SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) = 0;
+    virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
@@ -355,7 +377,7 @@ public :
     // of a known control
     static wxWidgetImpl*
                         FindBestFromWXWidget(WXWidget control);
-    
+
     static void         RemoveAssociations( wxWidgetImpl* impl);
     static void         RemoveAssociation(WXWidget control);
 
@@ -572,8 +594,9 @@ public :
 protected :
     bool                m_isRootControl;
     bool                m_isUserPane;
+    bool                m_wantsUserKey;
+    bool                m_wantsUserMouse;
     wxWindowMac*        m_wxPeer;
-    bool                m_needsFocusRect;
     bool                m_needsFrame;
     bool                m_shouldSendEvents;
 
@@ -937,7 +960,7 @@ public :
     virtual void ScreenToWindow( int *x, int *y ) = 0;
 
     virtual void WindowToScreen( int *x, int *y ) = 0;
-    
+
     virtual bool IsActive() = 0;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
@@ -995,6 +1018,83 @@ void wxMacCocoaRelease( void* obj );
 void wxMacCocoaAutorelease( void* obj );
 void* wxMacCocoaRetain( void* obj );
 
+// shared_ptr like API for NSObject and subclasses
+template <class T>
+class wxNSObjRef
+{
+public:
+    typedef T element_type;
+
+    wxNSObjRef()
+        : m_ptr(NULL)
+    {
+    }
+
+    wxNSObjRef( T p )
+        : m_ptr(p)
+    {
+    }
+
+    wxNSObjRef( const wxNSObjRef& otherRef )
+        : m_ptr(wxMacCocoaRetain(otherRef.m_ptr))
+    {
+    }
+
+    wxNSObjRef& operator=( const wxNSObjRef& otherRef )
+    {
+        if (this != &otherRef)
+        {
+            wxMacCocoaRetain(otherRef.m_ptr);
+            wxMacCocoaRelease(m_ptr);
+            m_ptr = otherRef.m_ptr;
+        }
+        return *this;
+    }
+    
+    wxNSObjRef& operator=( T ptr )
+    {
+        if (get() != ptr)
+        {
+            wxMacCocoaRetain(ptr);
+            wxMacCocoaRelease(m_ptr);
+            m_ptr = ptr;
+        }
+        return *this;
+    }
+
+
+    T get() const
+    {
+        return m_ptr;
+    }
+
+    operator T() const
+    {
+        return m_ptr;
+    }
+
+    T operator->() const
+    {
+        return m_ptr;
+    }
+
+    void reset( T p = NULL )
+    {
+        wxMacCocoaRelease(m_ptr);
+        m_ptr = p; // Automatic conversion should occur
+    }
+
+    // Release the pointer, i.e. give up its ownership.
+    T release()
+    {
+        T p = m_ptr;
+        m_ptr = NULL;
+        return p;
+    }
+
+protected:
+    T m_ptr;
+};
 
 #endif
     // _WX_PRIVATE_CORE_H_

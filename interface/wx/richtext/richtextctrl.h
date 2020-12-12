@@ -595,7 +595,7 @@ public:
     */
     virtual void DiscardEdits();
 
-    
+
     void SetModified(bool modified);
 
     /**
@@ -1206,7 +1206,7 @@ public:
     bool EndParagraphSpacing();
 
     /**
-        Begins appling line spacing. @e spacing is a multiple, where 10 means
+        Begins applying line spacing. @e spacing is a multiple, where 10 means
         single-spacing, 15 means 1.5 spacing, and 20 means double spacing.
 
         The ::wxTextAttrLineSpacing constants are defined for convenience.
@@ -1236,7 +1236,7 @@ public:
         left of the actual paragraph is leftSubIndent.
     */
     bool BeginNumberedBullet(int bulletNumber, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD);
-    
+
     /**
         Ends application of a numbered bullet.
     */
@@ -1248,7 +1248,7 @@ public:
         to render the bulleted paragraph.
     */
     bool BeginSymbolBullet(const wxString& symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
-    
+
     /**
         Ends applying a symbol bullet.
     */
@@ -1503,7 +1503,7 @@ public:
         @a style must have flags indicating which attributes are of interest.
     */
     virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
-    
+
 
     /**
         Test if this whole range has paragraph attributes of the specified kind.
@@ -1512,7 +1512,7 @@ public:
         @a style must have flags indicating which attributes are of interest.
     */
     virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
-    
+
 
     /**
         Returns @true if all of the selection, or the content at the caret position, is bold.
@@ -2400,7 +2400,7 @@ public:
         Copy constructor.
     */
     wxRichTextEvent(const wxRichTextEvent& event);
-    
+
     /**
         Returns the buffer position at which the event occurred.
     */

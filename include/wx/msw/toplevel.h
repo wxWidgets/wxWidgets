@@ -29,7 +29,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = wxFrameNameStr)
+                        const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -42,7 +42,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxTopLevelWindowMSW();
 
@@ -55,6 +55,7 @@ public:
     virtual bool IsIconized() const wxOVERRIDE;
     virtual void SetIcons(const wxIconBundle& icons ) wxOVERRIDE;
     virtual void Restore() wxOVERRIDE;
+    virtual bool Destroy() wxOVERRIDE;
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
 
@@ -100,9 +101,12 @@ public:
     // event handlers
     void OnActivate(wxActivateEvent& event);
 
-    // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
-    wxWindow *GetLastFocus() const { return m_winLastFocused; }
+    // called from wxWidgets code itself only when the pending focus, i.e. the
+    // element which should get focus when this TLW is activated again, changes
+    virtual void WXSetPendingFocus(wxWindow* win) wxOVERRIDE
+    {
+        m_winLastFocused = win;
+    }
 
     // translate wxWidgets flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const wxOVERRIDE;
@@ -111,7 +115,7 @@ public:
     virtual WXHWND MSWGetParent() const wxOVERRIDE;
 
     // window proc for the frames
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
@@ -188,7 +192,6 @@ protected:
     wxWindowRef m_winLastFocused;
 
 private:
-
     // The system menu: initially NULL but can be set (once) by
     // MSWGetSystemMenu(). Owned by this window.
     wxMenu *m_menuSystem;

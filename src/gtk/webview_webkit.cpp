@@ -775,6 +775,12 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
 }
 
 
+float wxWebViewWebKit::GetZoomFactor() const
+{
+    return GetWebkitZoom();
+}
+
+
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
     // arbitrary way to map our common zoom enum to float zoom
@@ -803,6 +809,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
         default:
             wxFAIL;
     }
+}
+
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
 }
 
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)

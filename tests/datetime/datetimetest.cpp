@@ -3,7 +3,7 @@
 // Purpose:     wxDateTime unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-06-23 (extracted from samples/console/console.cpp)
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -12,14 +12,12 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATETIME
 
 #ifndef WX_PRECOMP
     #include "wx/time.h"    // wxGetTimeZone()
+    #include "wx/utils.h"   // wxMilliSleep()
 #endif // WX_PRECOMP
 
 #include "wx/wxcrt.h"       // for wxStrstr()
@@ -699,6 +697,8 @@ void DateTimeTestCase::TestTimeFormat()
         3*3600 + 30*60
     };
 
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const Date formatTestDates[] =
     {
         { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
@@ -716,6 +716,8 @@ void DateTimeTestCase::TestTimeFormat()
         { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay },
 #endif
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     for ( unsigned idxtz = 0; idxtz < WXSIZEOF(timeZonesOffsets); ++idxtz )
     {
@@ -863,10 +865,16 @@ void DateTimeTestCase::TestTimeFormat()
     CPPUNIT_ASSERT( dt.ParseFormat("12:23:45.000", "%H:%M:%S.%l") );
     CPPUNIT_ASSERT_EQUAL( 0, dt.GetMillisecond() );
 
+    // test another format modifier not testes above.
+    CPPUNIT_ASSERT( dt.ParseFormat("23", "%e") );
+    CPPUNIT_ASSERT_EQUAL( 23, dt.GetDay() );
+
     // test partially specified dates too
     wxDateTime dtDef(26, wxDateTime::Sep, 2008);
-    CPPUNIT_ASSERT( dt.ParseFormat("17", "%d") );
+    CPPUNIT_ASSERT( dt.ParseFormat("17", "%d", dtDef) );
     CPPUNIT_ASSERT_EQUAL( 17, dt.GetDay() );
+    CPPUNIT_ASSERT_EQUAL( wxDateTime::Sep, dt.GetMonth() );
+    CPPUNIT_ASSERT_EQUAL( 2008, dt.GetYear() );
 
     // test some degenerate cases
     CPPUNIT_ASSERT( !dt.ParseFormat("", "%z") );
@@ -917,6 +925,8 @@ void DateTimeTestCase::TestTimeParse()
 
 void DateTimeTestCase::TestTimeZoneParse()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct
     {
         const char *str;
@@ -964,6 +974,8 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "17:37+04:0" },
     };
 
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
+
     for ( size_t n = 0; n < WXSIZEOF(parseTestTimeZones); ++n )
     {
         wxDateTime dt;
@@ -986,6 +998,8 @@ void DateTimeTestCase::TestTimeZoneParse()
 
 void DateTimeTestCase::TestTimeSpanFormat()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct TimeSpanFormatTestData
     {
         long h, min, sec, msec;
@@ -1008,6 +1022,8 @@ void DateTimeTestCase::TestTimeSpanFormat()
         {    0, -1,  0,   0, "%H:%M:%S",      "-00:01:00"             },
         {    0,  0, -1,   0, "%H:%M:%S",      "-00:00:01"             },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )
     {
@@ -1037,6 +1053,8 @@ void DateTimeTestCase::TestTimeTicks()
 // test parsing dates in RFC822 format
 void DateTimeTestCase::TestParseRFC822()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct ParseTestData
     {
         const char *rfc822;
@@ -1081,6 +1099,8 @@ void DateTimeTestCase::TestParseRFC822()
         },
     };
 
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
+
     for ( unsigned n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
         const char * const datestr = parseTestDates[n].rfc822;
@@ -1109,6 +1129,8 @@ void DateTimeTestCase::TestParseRFC822()
 // test parsing dates in free format
 void DateTimeTestCase::TestDateParse()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct ParseTestData
     {
         const char *str;
@@ -1128,6 +1150,8 @@ void DateTimeTestCase::TestDateParse()
         { "bloordyblop" },
         { "2 .  .    " },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     // special cases
     wxDateTime dt;
@@ -1164,6 +1188,8 @@ void DateTimeTestCase::TestDateParse()
 
 void DateTimeTestCase::TestDateParseISO()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct
     {
         const char *str;
@@ -1198,6 +1224,8 @@ void DateTimeTestCase::TestDateParseISO()
         { "bloordyblop" },
         { "" },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
@@ -1238,6 +1266,8 @@ void DateTimeTestCase::TestDateParseISO()
 
 void DateTimeTestCase::TestDateTimeParse()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct ParseTestData
     {
         const char *str;
@@ -1269,6 +1299,8 @@ void DateTimeTestCase::TestDateTimeParse()
             false // ParseDateTime does know yet +0100
         },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     // the test strings here use "PM" which is not available in all locales so
     // we need to use "C" locale for them
@@ -1671,6 +1703,54 @@ TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
         CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 11:10:10" );
         CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 10:10:10" );
     }
+}
+
+TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
+{
+    // It's unlikely, but possible, that the consecutive functions are called
+    // on different sides of some second boundary, but it really shouldn't
+    // happen more than once in a row.
+    wxDateTime now, unow;
+    for ( int i = 0; i < 3; ++i )
+    {
+        now = wxDateTime::Now();
+        unow = wxDateTime::UNow();
+        if ( now.GetSecond() == unow.GetSecond() )
+            break;
+
+        WARN("wxDateTime::Now() and UNow() returned different "
+             "second values ("
+             << now.GetSecond() << " and " << unow.GetSecond() <<
+             "), retrying.");
+
+        wxMilliSleep(123);
+    }
+
+    CHECK( now.GetYear() == unow.GetYear() );
+    CHECK( now.GetMonth() == unow.GetMonth() );
+    CHECK( now.GetDay() == unow.GetDay() );
+    CHECK( now.GetHour() == unow.GetHour() );
+    CHECK( now.GetMinute() == unow.GetMinute() );
+    CHECK( now.GetSecond() == unow.GetSecond() );
+
+    CHECK( now.GetMillisecond() == 0 );
+
+    // Just checking unow.GetMillisecond() == 0 would fail once per 1000 test
+    // runs on average, which is certainly not a lot, but still try to avoid
+    // such spurious failures.
+    bool gotMS = false;
+    for ( int i = 0; i < 3; ++i )
+    {
+        if ( wxDateTime::UNow().GetMillisecond() != 0 )
+        {
+            gotMS = true;
+            break;
+        }
+
+        wxMilliSleep(123);
+    }
+
+    CHECK( gotMS );
 }
 
 #endif // wxUSE_DATETIME

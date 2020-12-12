@@ -235,7 +235,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
 #define wxSTC_FIND_POSIX 0x00400000
-#define wxSTC_FIND_CXX11REGEX 0x00800000
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -2528,6 +2527,14 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 #endif // WXWIN_COMPATIBILITY_3_0
 
+// wxSTC is currently built without c++11 regex support, but the search flag
+// wxSTC_FIND_CXX11REGEX was included with wxSTC any way. gen_iface.py has since
+// been changed so that this flag will no longer be generated or documented,
+// but the flag is preserved here so that any code using the flag before
+// gen_iface.py was changed will not be broken.
+
+#define wxSTC_FIND_CXX11REGEX 0x00800000
+
 //----------------------------------------------------------------------
 // Commands that can be bound to keystrokes section {{{
 
@@ -3067,7 +3074,7 @@ public:
     // Set the background colour used for a particular marker number when its folding block is selected.
     void MarkerSetBackgroundSelected(int markerNumber, const wxColour& back);
 
-    // Enable/disable highlight for current folding bloc (smallest one that contains the caret)
+    // Enable/disable highlight for current folding block (smallest one that contains the caret)
     void MarkerEnableHighlight(bool enabled);
 
     // Add a marker to a line, returning an ID which can be used to find or delete the marker.
@@ -3090,7 +3097,7 @@ public:
     int MarkerPrevious(int lineStart, int markerMask);
 
     // Define a marker from a bitmap
-    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+    void MarkerDefinePixmap(int markerNumber, const char* const* xpmData);
 
     // Add a set of markers to a line.
     void MarkerAddSet(int line, int markerSet);
@@ -3441,7 +3448,7 @@ public:
     bool AutoCompGetDropRestOfWord() const;
 
     // Register an image for use in autocompletion lists.
-    void RegisterImage(int type, const wxBitmap& bmp);
+    void RegisterImage(int type, const char* const* xpmData);
 
     // Clear all the registered images.
     void ClearRegisteredImages();
@@ -3883,19 +3890,19 @@ public:
     // Set the display mode of visual flags for wrapped lines.
     void SetWrapVisualFlags(int wrapVisualFlags);
 
-    // Retrive the display mode of visual flags for wrapped lines.
+    // Retrieve the display mode of visual flags for wrapped lines.
     int GetWrapVisualFlags() const;
 
     // Set the location of visual flags for wrapped lines.
     void SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation);
 
-    // Retrive the location of visual flags for wrapped lines.
+    // Retrieve the location of visual flags for wrapped lines.
     int GetWrapVisualFlagsLocation() const;
 
     // Set the start indent for wrapped lines.
     void SetWrapStartIndent(int indent);
 
-    // Retrive the start indent for wrapped lines.
+    // Retrieve the start indent for wrapped lines.
     int GetWrapStartIndent() const;
 
     // Sets how wrapped sublines are placed. Default is wxSTC_WRAPINDENT_FIXED.
@@ -5181,6 +5188,12 @@ public:
     // Clear annotations from the given line.
     void AnnotationClearLine(int line);
 
+    // Define a marker from a bitmap.
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+
+    // Register an image for use in autocompletion lists.
+    void RegisterImage(int type, const wxBitmap& bmp);
+
 
 
     // The following methods are nearly equivalent to their similarly named
@@ -5223,6 +5236,15 @@ public:
 
     // Append a string to the end of the document without changing the selection.
     void AppendTextRaw(const char* text, int length=-1);
+
+    // Replace the selected text with the argument text.
+    void ReplaceSelectionRaw(const char* text);
+
+    // Replace the target text with the argument text.
+    int ReplaceTargetRaw(const char* text, int length=-1);
+
+    // Replace the target text with the argument text after \d processing.
+    int ReplaceTargetRERaw(const char* text, int length=-1);
 
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
@@ -5317,7 +5339,14 @@ public:
     // implement wxTextAreaBase pure virtual methods
     // ---------------------------------------------
 
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE { return static_cast<int>(GetLineText(lineNo).length()); }
+    virtual int GetLineLength(long lineNo) const wxOVERRIDE
+    {
+        if ( lineNo < 0 || lineNo >= GetNumberOfLines() )
+            return -1;
+
+        return static_cast<int>(GetLineText(lineNo).length());
+    }
+
     virtual wxString GetLineText(long lineNo) const wxOVERRIDE
     {
         wxString text = GetLine(static_cast<int>(lineNo));
@@ -5360,6 +5389,12 @@ public:
     virtual long XYToPosition(long x, long y) const wxOVERRIDE
     {
         long pos = PositionFromLine((int)y);
+        if ( pos == -1 )
+            return -1;
+
+        if ( x >= LineLength(y) )
+            return -1;
+
         pos += x;
         return pos;
     }
@@ -5370,8 +5405,12 @@ public:
         if ( l == -1 )
             return false;
 
+        int lx = pos - PositionFromLine(l);
+        if ( lx >= LineLength(l) )
+            return false;
+
         if ( x )
-            *x = pos - PositionFromLine(l);
+            *x = lx;
 
         if ( y )
             *y = l;
@@ -5440,6 +5479,7 @@ protected:
     void OnKeyDown(wxKeyEvent& evt);
     void OnLoseFocus(wxFocusEvent& evt);
     void OnGainFocus(wxFocusEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMenu(wxCommandEvent& evt);
@@ -5452,6 +5492,10 @@ protected:
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
+
+#ifdef __WXMSW__
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+#endif // __WXMSW__
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -5639,6 +5683,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_CLIPBOARD_COPY, wxStyledTex
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_SELECTION_CHANGE, wxStyledTextEvent );
 
 #else
     enum {
@@ -5680,7 +5725,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyle
         wxEVT_STC_CLIPBOARD_COPY,
         wxEVT_STC_CLIPBOARD_PASTE,
         wxEVT_STC_AUTOCOMP_COMPLETED,
-        wxEVT_STC_MARGIN_RIGHT_CLICK
+        wxEVT_STC_MARGIN_RIGHT_CLICK,
+        wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
     };
 #endif
 
@@ -5727,7 +5773,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_CLIPBOARD_PASTE(id, fn)       wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_PASTE,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_COMPLETED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_COMPLETED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_MARGIN_RIGHT_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGIN_RIGHT_CLICK,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-
+#define EVT_STC_AUTOCOMP_SELECTION_CHANGE(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #endif
 
 #endif // wxUSE_STC

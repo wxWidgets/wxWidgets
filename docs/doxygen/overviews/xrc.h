@@ -196,10 +196,10 @@ void MyClass::ShowDialog()
     if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
         return;
 
-    XRCCTRL(dlg, "text", wxTextCtrl)->Bind(wxEVT_COMMAND_TEXT_UPDATED,
+    XRCCTRL(dlg, "text", wxTextCtrl)->Bind(wxEVT_TEXT,
         wxTextEventHandler(MyClass::OnTextEntered), this, XRCID("text"));
 
-    XRCCTRL(dlg, "clickme_btn", wxButton)->Bind(wxEVT_COMMAND_BUTTON_CLICKED,
+    XRCCTRL(dlg, "clickme_btn", wxButton)->Bind(wxEVT_BUTTON,
         wxCommandEventHandler(MyClass::OnClickme), this, XRCID("clickme_btn"));
 
     dlg.ShowModal();

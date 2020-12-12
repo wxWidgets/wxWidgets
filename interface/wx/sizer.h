@@ -83,12 +83,14 @@
              The item will be expanded as much as possible while also
              maintaining its aspect ratio.}
     @itemdef{wxFIXED_MINSIZE,
-             Normally wxSizers will use GetAdjustedBestSize() to determine what
-             the minimal size of window items should be, and will use that size
-             to calculate the layout. This allows layouts to adjust when an
-             item changes and its best size becomes different. If you would
-             rather have a window item stay the size it started with then use
-             @c wxFIXED_MINSIZE.}
+             Normally sizers use the "best", i.e. most appropriate, size of the
+             window to determine what the minimal size of window items should be.
+             This allows layouts to adjust correctly when the item contents,
+             and hence its best size, changes. If this behaviour is unwanted,
+             @c wxFIXED_MINSIZE can be used to fix minimal size of the window
+             to its initial value and not change it any more in the future.
+             Note that the same thing can be accomplished by calling
+             wxWindow::SetMinSize() explicitly as well.}
     @itemdef{wxRESERVE_SPACE_EVEN_IF_HIDDEN,
              Normally wxSizers don't allocate space for hidden windows or other
              items. This flag overrides this behaviour so that sufficient space
@@ -292,7 +294,7 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
-    
+
     /**
         Appends a spacer child to the sizer.
 
@@ -307,7 +309,7 @@ public:
     wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Add(wxSizerItem* item);
-    
+
     /**
         This base function adds non-stretchable space to both the horizontal
         and vertical orientation of the sizer.
@@ -437,7 +439,7 @@ public:
     */
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 
-    
+
     //@{
     /**
         Returns the list of the items in this sizer.
@@ -458,7 +460,7 @@ public:
        Set the window this sizer is used in.
     */
     void SetContainingWindow(wxWindow *window);
-    
+
     /**
        Returns the number of items in the sizer.
 
@@ -615,7 +617,7 @@ public:
                         const wxSizerFlags& flags);
 
     wxSizerItem* Insert(size_t index, wxSizerItem* item);
-    
+
     /**
         Inserts non-stretchable space to the sizer.
         More readable way of calling wxSizer::Insert(index, size, size).
@@ -711,7 +713,7 @@ public:
     wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Prepend(wxSizerItem* item);
-    
+
     /**
         Prepends non-stretchable space to the sizer.
         More readable way of calling wxSizer::Prepend(size, size, 0).
@@ -725,11 +727,20 @@ public:
     wxSizerItem* PrependStretchSpacer(int prop = 1);
 
     /**
-        This method is abstract and has to be overwritten by any derived class.
-        Here, the sizer will do the actual calculation of its children's
-        positions and sizes.
+        Method which must be overridden in the derived sizer classes.
+
+        The implementation should reposition the children using the current
+        total size available to the sizer (@c m_size) and the size computed by
+        the last call to CalcMin().
+
+        Note that you should never call this method directly, call Layout()
+        instead if you need to manually update the sizer elements positions.
+        This method is only called by wxWidgets itself.
+
+        @since 3.1.3, before this version RecalcSizes() method not taking any
+            arguments had to be overridden in the derived classes instead.
     */
-    virtual void RecalcSizes() = 0;
+    virtual void RepositionChildren(const wxSize& minSize) = 0;
 
     /**
         Removes a child window from the sizer, but does @b not destroy it
@@ -958,7 +969,7 @@ public:
     and ordering defined by the platform or toolkit's user interface guidelines
     (if such things exist). By using this class, you can ensure that all your
     standard dialogs look correct on all major platforms. Currently it conforms to
-    the Windows, GTK+ and OS X human interface guidelines.
+    the Windows, GTK+ and macOS human interface guidelines.
 
     When there aren't interface guidelines defined for a particular platform or
     toolkit, wxStdDialogButtonSizer reverts to the Windows implementation.
@@ -969,9 +980,9 @@ public:
     and then call Realize in order to create the actual button layout used.
     Other than these special operations, this sizer works like any other sizer.
 
-    If you add a button with wxID_SAVE, on OS X the button will be renamed to
+    If you add a button with wxID_SAVE, on macOS the button will be renamed to
     "Save" and the wxID_NO button will be renamed to "Don't Save" in accordance
-    with the OS X Human Interface Guidelines.
+    with the macOS Human Interface Guidelines.
 
     @library{wxcore}
     @category{winlayout}
@@ -1031,7 +1042,7 @@ public:
     */
     void SetNegativeButton(wxButton* button);
 
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
     virtual wxSize CalcMin();
 };
 
@@ -1087,7 +1098,19 @@ public:
     /**
         Set the window to be tracked by this item.
 
-        The old window isn't deleted as it is now owned by the sizer item.
+        @note This is a low-level method which is dangerous if used
+            incorrectly, avoid using it if possible, i.e. if higher level
+            methods such as wxSizer::Replace() can be used instead.
+
+        If the sizer item previously contained a window, it is dissociated from
+        the sizer containing this sizer item (if any), but this object doesn't
+        have the pointer to the containing sizer and so it's the caller's
+        responsibility to call wxWindow::SetContainingSizer() on @a window.
+        Failure to do this can result in memory corruption when the window is
+        destroyed later, so it is crucial to not forget to do it.
+
+        Also note that the previously contained window is @e not deleted, so
+        it's also the callers responsibility to do it, if necessary.
     */
     void AssignWindow(wxWindow *window);
 
@@ -1172,7 +1195,7 @@ public:
     int GetProportion() const;
 
     /**
-        Get the ration item attribute.
+        Get the ratio item attribute.
     */
     float GetRatio() const;
 
@@ -1257,7 +1280,10 @@ public:
     void SetId(int id);
 
     /**
-        @todo docme.
+        Sets the minimum size to be allocated for this item.
+
+        This is identical to SetMinSize(), prefer to use the other function, as
+        its name is more clear.
     */
     void SetInitSize(int x, int y);
 
@@ -1486,8 +1512,20 @@ public:
         This value is scaled appropriately for the current DPI on the systems
         where physical pixel values are used for the control positions and
         sizes, i.e. not with wxGTK or wxOSX.
+
+        @see GetDefaultBorderFractional()
     */
     static int GetDefaultBorder();
+
+    /**
+        Returns the border used by default, with fractional precision. For
+        example when the border is scaled to a non-integer DPI.
+
+        @see GetDefaultBorder()
+
+        @since 3.1.4
+    */
+    static float GetDefaultBorderFractional();
 
     /**
         Aligns the object to the left, similar for @c Align(wxALIGN_LEFT).
@@ -1706,9 +1744,9 @@ public:
     */
     const wxArrayInt& GetColWidths() const;
 
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
     virtual wxSize CalcMin();
-    
+
 };
 
 
@@ -1771,7 +1809,7 @@ public:
         number of columns or rows being currently used, see GetEffectiveColsCount()
     */
     int GetCols() const;
-    
+
     /**
         Returns the number of rows that has been specified for the
         sizer.
@@ -1791,7 +1829,7 @@ public:
         @since 2.9.1
     */
     int GetEffectiveColsCount() const;
-    
+
     /**
         Returns the number of rows currently used by the sizer.
 
@@ -1833,7 +1871,7 @@ public:
     void SetVGap(int gap);
 
     virtual wxSize CalcMin();
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 };
 
 
@@ -1896,7 +1934,7 @@ public:
     wxStaticBox* GetStaticBox() const;
 
     virtual wxSize CalcMin();
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 };
 
 
@@ -1961,12 +1999,15 @@ public:
     void SetOrientation(int orient);
 
     /**
-        Implements the calculation of a box sizer's dimensions and then sets
-        the size of its children (calling wxWindow::SetSize if the child is a window).
+        Method which must be overridden in the derived sizer classes.
 
-        It is used internally only and must not be called by the user
-        (call Layout() if you want to resize). Documented for information.
+        The implementation should reposition the children using the current
+        total size available to the sizer (@c m_size) and the size computed by
+        the last call to CalcMin().
+
+        @since 3.1.3, before this version RecalcSizes() method not taking any
+            arguments had to be overridden in the derived classes instead.
     */
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 };
 

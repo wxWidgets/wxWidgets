@@ -3,7 +3,7 @@
 // Purpose:     wxGLCanvasBase implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-04-09
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -45,7 +42,7 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
     // Search for searchVal
     wxVector<int>::iterator it = m_GLValues.begin();
     while ( it != m_GLValues.end() && *it != searchVal )
-        it++;
+        ++it;
     // Have we searchVal?
     if ( it != m_GLValues.end() )
     {
@@ -443,7 +440,8 @@ void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
 #if wxUSE_OPENGL_EMULATION
     ::glFrustumf(left, right, bottom, top, zNear, zFar);
 #else
-    ::glFrustum(left, right, bottom, top, zNear, zFar);
+    ::glFrustum(double(left), double(right),
+        double(bottom), double(top), double(zNear), double(zFar));
 #endif
 }
 

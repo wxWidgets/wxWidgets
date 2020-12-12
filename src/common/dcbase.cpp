@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -502,6 +499,26 @@ wxCoord wxDCImpl::LogicalToDeviceYRel(wxCoord y) const
     return wxRound((double)(y) * m_scaleY);
 }
 
+wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    return wxPoint(DeviceToLogicalX(x), DeviceToLogicalY(y));
+}
+
+wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+}
+
+wxSize wxDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    return wxSize(DeviceToLogicalXRel(x), DeviceToLogicalYRel(y));
+}
+
+wxSize wxDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    return wxSize(LogicalToDeviceXRel(x), LogicalToDeviceYRel(y));
+}
+
 void wxDCImpl::ComputeScaleAndOrigin()
 {
     m_scaleX = m_logicalScaleX * m_userScaleX;
@@ -792,13 +809,13 @@ static wxPointList wx_spline_point_list;
 void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, double b3, double a4,
                  double b4)
 {
-    double xmid, ymid;
     double x1, y1, x2, y2, x3, y3, x4, y4;
 
     wx_clear_stack();
     wx_spline_push(a1, b1, a2, b2, a3, b3, a4, b4);
 
     while (wx_spline_pop(&x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
+        double xmid, ymid;
         xmid = (double)half(x2, x3);
         ymid = (double)half(y2, y3);
         if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
@@ -888,7 +905,7 @@ void wxDCImpl::DoDrawSpline( const wxPointList *points )
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     const wxPoint *p;
-    double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
+    double cx1, cy1, cx2, cy2;
     double           x1, y1, x2, y2;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
@@ -919,6 +936,7 @@ void wxDCImpl::DoDrawSpline( const wxPointList *points )
 #endif // !wxUSE_STD_CONTAINERS
           )
     {
+        double cx3, cy3, cx4, cy4;
         p = node->GetData();
         x1 = x2;
         y1 = y2;
@@ -1451,7 +1469,7 @@ double wxDCImpl::GetMMToPXx() const
 
 double wxDCImpl::GetMMToPXy() const
 {
-    if ( wxIsNullDouble(m_mm_to_pix_x) )
+    if ( wxIsNullDouble(m_mm_to_pix_y) )
     {
         m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                         (double)wxGetDisplaySizeMM().GetHeight();

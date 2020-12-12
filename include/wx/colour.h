@@ -20,6 +20,12 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 //
 // It avoids the need to repeat these lines across all colour.h files, since
 // Set() is a virtual function and thus cannot be called by wxColourBase ctors
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+#define wxWXCOLOUR_CTOR_FROM_CHAR \
+    wxColour(const char *colourName) { Init(); Set(colourName); }
+#else // wxNO_IMPLICIT_WXSTRING_ENCODING
+#define wxWXCOLOUR_CTOR_FROM_CHAR
+#endif
 #define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                      \
     wxColour() { Init(); }                                                    \
     wxColour(ChannelType red,                                                 \
@@ -29,7 +35,7 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
         { Init(); Set(red, green, blue, alpha); }                             \
     wxColour(unsigned long colRGB) { Init(); Set(colRGB    ); }               \
     wxColour(const wxString& colourName) { Init(); Set(colourName); }         \
-    wxColour(const char *colourName) { Init(); Set(colourName); }             \
+    wxWXCOLOUR_CTOR_FROM_CHAR                                                 \
     wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
 
 
@@ -118,7 +124,7 @@ public:
     virtual ChannelType Blue() const = 0;
     virtual ChannelType Alpha() const
         { return wxALPHA_OPAQUE ; }
-    
+
     virtual bool IsSolid() const
         { return true; }
 
@@ -153,6 +159,10 @@ public:
     // because it's still widely used)
     bool Ok() const { return IsOk(); }
 #endif
+
+    // Return the perceived brightness of the colour, with 0 for black and 1
+    // for white.
+    double GetLuminance() const;
 
     // manipulation
     // ------------

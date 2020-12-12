@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -520,7 +517,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
         if ( !chunkWritten )
             break;
 
-        buffer = (char *)buffer + chunkWritten;
+        buffer = static_cast<const char*>(buffer) + chunkWritten;
         totalWritten += chunkWritten;
         len -= chunkWritten;
     }

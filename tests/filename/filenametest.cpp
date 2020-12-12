@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -355,6 +352,7 @@ void FileNameTestCase::TestNormalize()
         { "b/../bar", wxPATH_NORM_DOTS, "bar", wxPATH_UNIX },
         { "c/../../quux", wxPATH_NORM_DOTS, "../quux", wxPATH_UNIX },
         { "/c/../../quux", wxPATH_NORM_DOTS, "/quux", wxPATH_UNIX },
+        { "../../quux", wxPATH_NORM_DOTS, "../../quux", wxPATH_UNIX },
 
         // test wxPATH_NORM_TILDE: notice that ~ is only interpreted specially
         // when it is the first character in the file name
@@ -1059,8 +1057,9 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
     INFO( "size of /proc/kcore=" << size );
     CHECK( size > 0 );
 
-    // All files in /sys seem to have size of 4KiB currently.
-    CHECK( wxFileName::GetSize("/sys/power/state") == 4096 );
+    // All files in /sys are one page in size, irrespectively of the size of
+    // their actual contents.
+    CHECK( wxFileName::GetSize("/sys/power/state") == sysconf(_SC_PAGESIZE) );
 }
 
 #endif // __LINUX__

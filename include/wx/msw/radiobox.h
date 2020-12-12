@@ -33,7 +33,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
     {
         Init();
 
@@ -50,7 +50,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
     {
         Init();
 
@@ -69,7 +69,7 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -79,7 +79,7 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     // implement the radiobox interface
     virtual void SetSelection(int n) wxOVERRIDE;
@@ -161,6 +161,8 @@ protected:
 #endif
 
     virtual WXHRGN MSWGetRegionWithoutChildren() wxOVERRIDE;
+
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // resolve ambiguity in base classes
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }

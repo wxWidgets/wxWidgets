@@ -73,14 +73,15 @@ public:
   virtual bool Cleared() wxOVERRIDE;
   virtual void Resort() wxOVERRIDE;
 
+ // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
+  void AdjustAutosizedColumns();
+
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of
  // the passed item to the maximum value occupied by the item in all columns
   void AdjustRowHeight(wxDataViewItem const& item);
  // ... and the same method for a couple of items:
   void AdjustRowHeights(wxDataViewItemArray const& items);
- // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
-  void AdjustAutosizedColumns();
 
 private:
   wxDataViewCtrl* m_DataViewCtrlPtr;
@@ -104,6 +105,7 @@ bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataV
   wxCHECK_MSG(item.IsOk(),false,"Added item is invalid.");
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,item);
   AdjustRowHeight(item);
+  AdjustAutosizedColumns();
   return noFailureFlag;
 }
 
@@ -116,6 +118,7 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,items);
  // adjust row heights:
   AdjustRowHeights(items);
+  AdjustAutosizedColumns();
  // done:
   return noFailureFlag;
 }
@@ -170,7 +173,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
   m_DataViewCtrlPtr->SetDeleting(true);
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,item);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
 
@@ -179,7 +182,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
   return noFailureFlag;
 }
 
-bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items)
+bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(items))
 {
   bool noFailureFlag;
 
@@ -190,7 +193,7 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
  // has been started and that variables can currently not be updated even when requested by the system:
   m_DataViewCtrlPtr->SetDeleting(true);
  // delete all specified items:
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,items);
+  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
  // enable automatic updating again:
   m_DataViewCtrlPtr->SetDeleting(false);
 
@@ -365,6 +368,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
+  // Remove wxVSCROLL and wxHSCROLL from the style, since the dataview panel has scrollbars
+  // by default, and wxControl::Create trys to make some but crashes in the process
+  style &= ~(wxVSCROLL | wxHSCROLL);
+
   DontCreatePeer();
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
@@ -499,6 +506,9 @@ int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
   GetDataViewPeer()->Collapse(item);
+
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
 }
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
@@ -510,9 +520,12 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
   }
 }
 
-void wxDataViewCtrl::DoExpand(wxDataViewItem const& item)
+void wxDataViewCtrl::DoExpand(wxDataViewItem const& item, bool expandChildren)
 {
-  return GetDataViewPeer()->DoExpand(item);
+  GetDataViewPeer()->DoExpand(item, expandChildren);
+
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
@@ -641,9 +654,8 @@ void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
         last_parent = parent;
     }
 
-   // finally select the items:
-    for (i=0; i<noOfSelections; ++i)
-      dataViewWidgetPtr->Select(sel[i]);
+    // finally select the items:
+    dataViewWidgetPtr->Select(sel);
 }
 
 void wxDataViewCtrl::Unselect(wxDataViewItem const& item)
@@ -667,13 +679,10 @@ wxDataViewWidgetImpl* wxDataViewCtrl::GetDataViewPeer() const
 
 void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
 {
-  int noOfChildren;
-
   wxDataViewItemArray items;
 
-
   wxCHECK_RET(GetModel() != NULL,"Model pointer not initialized.");
-  noOfChildren = GetModel()->GetChildren(parentItem,items);
+  GetModel()->GetChildren(parentItem,items);
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
 

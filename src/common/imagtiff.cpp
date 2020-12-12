@@ -17,9 +17,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_LIBTIFF
 
@@ -643,8 +640,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if ( tiffRes != RESUNIT_NONE )
     {
         TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, tiffRes);
-        TIFFSetField(tif, TIFFTAG_XRESOLUTION, (float)xres);
-        TIFFSetField(tif, TIFFTAG_YRESOLUTION, (float)yres);
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION, xres);
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION, yres);
     }
 
 
@@ -804,8 +801,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                     if (hasAlpha)
                     {
                         value = image->GetAlpha(column, row);
-                        buf[column*bytesPerPixel+1]
-                            = minIsWhite ? 255 - value : value;
+                        buf[column*bytesPerPixel+1] = minIsWhite ? 255 - value
+                                                                 : value;
                     }
                 }
             }

@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -31,6 +28,7 @@
     #include "wx/bitmap.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/dcclient.h"
     #include "wx/radiobox.h"
     #include "wx/statbox.h"
     #include "wx/stattext.h"
@@ -39,7 +37,6 @@
 #endif
 
 #include "wx/sizer.h"
-#include "wx/ioswrap.h"
 
 #include "widgets.h"
 
@@ -986,19 +983,21 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
 }
 
-void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
+void TextWidgetsPage::OnText(wxCommandEvent& event)
 {
-    // small hack to suppress the very first message: by then the logging is
-    // not yet redirected and so initial setting of the text value results in
-    // an annoying message box
-    static bool s_firstTime = true;
-    if ( s_firstTime )
-    {
-        s_firstTime = false;
+    if ( !IsUsingLogWindow() )
         return;
-    }
 
-    wxLogMessage("Text ctrl value changed");
+    // Replace middle of long text with ellipsis just to avoid filling up the
+    // log control with too much unnecessary stuff.
+    wxLogMessage("Text control value changed (now '%s')",
+                 wxControl::Ellipsize
+                 (
+                    event.GetString(),
+                    wxClientDC(this),
+                    wxELLIPSIZE_MIDDLE,
+                    GetTextExtent('W').x*100
+                 ));
 }
 
 void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)

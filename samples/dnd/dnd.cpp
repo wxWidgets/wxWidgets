@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -2022,7 +2019,7 @@ void DnDShapeDataObject::CreateBitmap() const
     m_shape->Draw(dc);
     dc.SelectObject(wxNullBitmap);
 
-    DnDShapeDataObject *self = (DnDShapeDataObject *)this; // const_cast
+    DnDShapeDataObject* self = const_cast<DnDShapeDataObject*>(this);
     self->m_dobjBitmap.SetBitmap(bitmap);
     self->m_hasBitmap = true;
 }

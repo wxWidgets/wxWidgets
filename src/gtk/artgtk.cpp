@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/artprov.h"
 
@@ -58,7 +55,7 @@ namespace
     #define ART(wxId, stockId, unused) wxId, stockId,
 #endif
 
-const char* const wxId2Gtk[] = {
+const wxString wxId2Gtk[] = {
     ART(wxART_ERROR,            GTK_STOCK_DIALOG_ERROR, "dialog-error")
     ART(wxART_INFORMATION,      GTK_STOCK_DIALOG_INFO, "dialog-information")
     ART(wxART_WARNING,          GTK_STOCK_DIALOG_WARNING, "dialog-warning")
@@ -137,7 +134,7 @@ wxString wxArtIDToStock(const wxArtID& id)
     {
         if (id == wxId2Gtk[i])
         {
-            ret = wxString::FromAscii(wxId2Gtk[i + 1]);
+            ret = wxId2Gtk[i + 1];
             break;
         }
     }

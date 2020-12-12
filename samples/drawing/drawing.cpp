@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -123,11 +120,8 @@ public:
     {   if ( !m_renderer ) return false;
         return m_renderer == wxGraphicsRenderer::GetDefaultRenderer();
     }
-    bool IsRendererName(const wxString& name) const
-    {   if ( !m_renderer ) return name.empty();
-        return m_renderer->GetName() == name;
-    }
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
+    void EnableAntiAliasing(bool use) { m_useAntiAliasing = use; Refresh(); }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
     void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
@@ -143,6 +137,7 @@ protected:
     };
 
     void DrawTestLines( int x, int y, int width, wxDC &dc );
+    void DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc);
     void DrawTestPoly(wxDC& dc);
     void DrawTestBrushes(wxDC& dc);
     void DrawText(wxDC& dc);
@@ -176,6 +171,7 @@ private:
     wxPoint      m_currentpoint;
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsRenderer* m_renderer;
+    bool         m_useAntiAliasing;
 #endif
     bool         m_useBuffer;
     bool         m_showBBox;
@@ -204,30 +200,15 @@ public:
         m_canvas->UseGraphicRenderer(NULL);
     }
 
-    void OnGraphicContextNoneUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->IsRendererName(wxEmptyString));
-    }
-
     void OnGraphicContextDefault(wxCommandEvent& WXUNUSED(event))
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
-    }
-
-    void OnGraphicContextDefaultUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->IsDefaultRenderer());
     }
 
 #if wxUSE_CAIRO
     void OnGraphicContextCairo(wxCommandEvent& WXUNUSED(event))
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetCairoRenderer());
-    }
-
-    void OnGraphicContextCairoUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->IsRendererName("cairo"));
     }
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
@@ -236,24 +217,23 @@ public:
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetGDIPlusRenderer());
     }
-
-    void OnGraphicContextGDIPlusUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->IsRendererName("gdiplus"));
-    }
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
     void OnGraphicContextDirect2D(wxCommandEvent& WXUNUSED(event))
     {
         m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDirect2DRenderer());
     }
-
-    void OnGraphicContextDirect2DUpdateUI(wxUpdateUIEvent& event)
-    {
-        event.Check(m_canvas->IsRendererName("direct2d"));
-    }
 #endif
 #endif // __WXMSW__
+    void OnAntiAliasing(wxCommandEvent& event)
+    {
+        m_canvas->EnableAntiAliasing(event.IsChecked());
+    }
+
+    void OnAntiAliasingUpdateUI(wxUpdateUIEvent& event)
+    {
+        event.Enable(m_canvas->GetRenderer() != NULL);
+    }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     void OnBuffer(wxCommandEvent& event);
@@ -278,6 +258,13 @@ public:
     int         m_yLogicalOrigin;
     bool        m_xAxisReversed,
                 m_yAxisReversed;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxDouble    m_transform_dx;
+    wxDouble    m_transform_dy;
+    wxDouble    m_transform_scx;
+    wxDouble    m_transform_scy;
+    wxDouble    m_transform_rot;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     wxColour    m_colourForeground,    // these are _text_ colours
                 m_colourBackground;
     wxBrush     m_backgroundBrush;
@@ -339,6 +326,9 @@ enum
     File_BBox,
     File_Clip,
     File_Buffer,
+#if wxUSE_GRAPHICS_CONTEXT
+    File_AntiAliasing,
+#endif
     File_Copy,
     File_Save,
 
@@ -365,6 +355,11 @@ enum
     LogicalOrigin_MoveRight,
     LogicalOrigin_Set,
     LogicalOrigin_Restore,
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+    TransformMatrix_Set,
+    TransformMatrix_Reset,
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
 #if wxUSE_COLOURDLG
     Colour_TextForeground,
@@ -513,7 +508,7 @@ wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(MyFrame *parent)
         : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                           wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
+                           wxHSCROLL | wxVSCROLL)
 {
     m_owner = parent;
     m_show = File_ShowDefault;
@@ -523,6 +518,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_rubberBand = false;
 #if wxUSE_GRAPHICS_CONTEXT
     m_renderer = NULL;
+    m_useAntiAliasing = true;
 #endif
     m_useBuffer = false;
     m_showBBox = false;
@@ -615,7 +611,7 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( *wxBLACK, width ) );
-    dc.SetBrush( *wxRED_BRUSH );
+    dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawText(wxString::Format("Testing lines of width %d", width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
@@ -631,7 +627,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_DOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
-    dc.DrawText("Misc hatches", x + 150, y + 70);
+    dc.DrawText("Hatches", x + 150, y + 70);
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_BDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_CROSSDIAG_HATCH) );
@@ -669,6 +665,35 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     ud.SetDashes( 6, dash1 );
     dc.SetPen( ud );
     dc.DrawLine( x+20, y+170, 100, y+170 );
+
+    wxPen penWithCap(*wxBLACK, width);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Default cap", x+270, y+40);
+    dc.DrawLine( x+200, y+50, x+250, y+50);
+
+    penWithCap.SetCap(wxCAP_BUTT);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Butt ", x+270, y+60);
+    dc.DrawLine( x+200, y+70, x+250, y+70);
+
+    penWithCap.SetCap(wxCAP_ROUND);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Round cap", x+270, y+80);
+    dc.DrawLine( x+200, y+90, x+250, y+90);
+
+    penWithCap.SetCap(wxCAP_PROJECTING);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Projecting cap", x+270, y+100);
+    dc.DrawLine( x+200, y+110, x+250, y+110);
+}
+
+void MyCanvas::DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc)
+{
+    dc.DrawText("Cross hair", x + 10, y + 10);
+    dc.SetClippingRegion(x, y, width, heigth);
+    dc.SetPen(wxPen(*wxBLUE, 2));
+    dc.CrossHair(x + width / 2, y + heigth / 2);
+    dc.DestroyClippingRegion();
 }
 
 void MyCanvas::DrawDefault(wxDC& dc)
@@ -944,6 +969,11 @@ void MyCanvas::DrawText(wxDC& dc)
 
     dc.SetTextForeground(*wxBLUE);
     dc.DrawRotatedText("Rotated text\ncan have\nmultiple lines\nas well", 110, y, 15);
+
+    y += 7*height;
+    dc.SetFont(wxFontInfo(12).Family(wxFONTFAMILY_TELETYPE));
+    dc.SetTextForeground(wxColour(150, 75, 0));
+    dc.DrawText("And some text with tab characters:\n123456789012345678901234567890\n\taa\tbbb\tcccc", 10, y);
 }
 
 static const struct
@@ -1172,7 +1202,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     {
         gc->PushState(); // save this new current state so we can
         //  pop back to it at the end of the loop
-        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(float(angle)/360, 1, 1));
+        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(angle / 360.0, 1, 1));
         gc->SetBrush(wxBrush(wxColour(val.red, val.green, val.blue, 64)));
         gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
 
@@ -1305,8 +1335,8 @@ void MyCanvas::DrawSplines(wxDC& dc)
     {
         angle += angles[ angle_pos ];
         int r = R * radii[ radius_pos ] / 100;
-        pts[ i ].x = center.x + (wxCoord)( r * cos( M_PI * angle / 180.0) );
-        pts[ i ].y = center.y + (wxCoord)( r * sin( M_PI * angle / 180.0) );
+        pts[ i ].x = center.x + (wxCoord)( r * cos(wxDegToRad(angle)) );
+        pts[ i ].y = center.y + (wxCoord)( r * sin(wxDegToRad(angle)) );
 
         angle_pos++;
         if ( angle_pos >= WXSIZEOF(angles) ) angle_pos = 0;
@@ -1607,6 +1637,29 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
         dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText("Stroked path with a gradient pen", gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x + gfr.width/2, gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width, gfr.y + gfr.height/2);
+        pth.AddLineToPoint(gfr.x + gfr.width/2, gfr.y + gfr.height);
+        pth.AddLineToPoint(gfr.x, gfr.y + gfr.height/2);
+        pth.CloseSubpath();
+
+        stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
+        stops.Add(wxColour(255,255,0), 0.33f);
+        stops.Add(*wxGREEN, 0.67f);
+
+        wxGraphicsPen pen = gc->CreatePen(
+            wxGraphicsPenInfo(wxColour(0,0,0)).Width(6).Join(wxJOIN_BEVEL).LinearGradient(
+                gfr.x + gfr.width/2, gfr.y, 
+                gfr.x + gfr.width/2, gfr.y + gfr.height,
+                stops));
+        gc->SetPen(pen);
+        gc->StrokePath(pth);
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
@@ -1622,6 +1675,22 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
 
     int lineHeight = textSize.GetHeight();
     wxRect r(textSize.GetWidth() + 10, 10, 100, lineHeight);
+
+    wxString title = "System colours";
+
+    const wxSystemAppearance appearance = wxSystemSettings::GetAppearance();
+    const wxString appearanceName = appearance.GetName();
+    if ( !appearanceName.empty() )
+        title += wxString::Format(" for \"%s\"", appearanceName);
+    if ( appearance.IsDark() )
+        title += " (using dark system theme)";
+    dc.DrawText(title, 10, r.y);
+    r.y += 2*lineHeight;
+    dc.DrawText(wxString::Format("Window background is %s",
+                                 appearance.IsUsingDarkBackground() ? "dark"
+                                                                    : "light"),
+                10, r.y);
+    r.y += 3*lineHeight;
 
     dc.SetPen(*wxTRANSPARENT_PEN);
 
@@ -1790,6 +1859,8 @@ void MyCanvas::Draw(wxDC& pdc)
             return;
         }
 
+        context->SetAntialiasMode(m_useAntiAliasing ? wxANTIALIAS_DEFAULT : wxANTIALIAS_NONE);
+
         gdc.SetBackground(GetBackgroundColour());
         gdc.SetGraphicsContext(context);
     }
@@ -1861,6 +1932,7 @@ void MyCanvas::Draw(wxDC& pdc)
             DrawTestLines( 0, 320, 1, dc );
             DrawTestLines( 0, 540, 2, dc );
             DrawTestLines( 0, 760, 6, dc );
+            DrawCrossHair( 0, 0, 400, 90, dc);
             break;
 
         case File_ShowBrushes:
@@ -1938,11 +2010,9 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         PrepareDC(dc);
         m_owner->PrepareDC(dc);
 
-        wxPoint pos = event.GetPosition();
-        long x = dc.DeviceToLogicalX( pos.x );
-        long y = dc.DeviceToLogicalY( pos.y );
+        wxPoint pos = dc.DeviceToLogical(event.GetPosition());
         wxString str;
-        str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
+        str.Printf( "Current mouse position: %d,%d", pos.x, pos.y );
         m_owner->SetStatusText( str );
     }
 
@@ -2031,6 +2101,91 @@ void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
 }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+#include "wx/valnum.h"
+
+class TransformDataDialog : public wxDialog
+{
+public:
+    TransformDataDialog(wxWindow* parent, wxDouble dx, wxDouble dy, wxDouble scx, wxDouble scy, wxDouble rotAngle)
+        : wxDialog(parent, wxID_ANY, "Affine transformation parameters")
+        , m_dx(dx)
+        , m_dy(dy)
+        , m_scx(scx)
+        , m_scy(scy)
+        , m_rotAngle(rotAngle)
+    {
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+
+        const int border = wxSizerFlags::GetDefaultBorder();
+        wxFlexGridSizer* paramSizer = new wxFlexGridSizer(2, wxSize(border, border));
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Translation X:"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_dx(1, &m_dx, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_dx), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Translation Y:"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_dy(1, &m_dy, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_dy), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Scale X (0.2 - 5):"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_scx(2, &m_scx, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_scx), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Scale Y (0.2 - 5):"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_scy(2, &m_scy, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_scy), wxSizerFlags().CentreVertical());
+        paramSizer->Add(new wxStaticText(this, wxID_ANY, "Rotation angle (deg):"), wxSizerFlags().CentreVertical());
+        wxFloatingPointValidator<wxDouble> val_rot(1, &m_rotAngle, wxNUM_VAL_NO_TRAILING_ZEROES);
+        paramSizer->Add(new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, val_rot), wxSizerFlags().CentreVertical());
+        sizer->Add(paramSizer, wxSizerFlags().DoubleBorder());
+
+        wxSizer *btnSizer = CreateSeparatedButtonSizer(wxOK | wxCANCEL);
+        sizer->Add(btnSizer, wxSizerFlags().Expand().Border());
+
+        SetSizerAndFit(sizer);
+    }
+
+    virtual bool TransferDataFromWindow() wxOVERRIDE
+    {
+        if ( !wxDialog::TransferDataFromWindow() )
+            return false;
+
+        if ( m_scx < 0.2 || m_scx > 5.0 || m_scy < 0.2 || m_scy > 5.0 )
+        {
+            if ( !wxValidator::IsSilent() )
+                wxBell();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    void GetTransformationData(wxDouble* dx, wxDouble* dy, wxDouble* scx, wxDouble* scy, wxDouble* rotAngle) const
+    {
+        if ( dx )
+            *dx = m_dx;
+
+        if ( dy )
+            *dy = m_dy;
+
+        if ( scx )
+            *scx = m_scx;
+
+        if ( scy )
+            *scy = m_scy;
+
+        if ( rotAngle )
+            *rotAngle = m_rotAngle;
+    }
+
+private:
+    wxDouble m_dx;
+    wxDouble m_dy;
+    wxDouble m_scx;
+    wxDouble m_scy;
+    wxDouble m_rotAngle;
+};
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
 // ----------------------------------------------------------------------------
 // MyFrame
 // ----------------------------------------------------------------------------
@@ -2045,23 +2200,20 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_GRAPHICS_CONTEXT
     EVT_MENU      (File_GC_Default, MyFrame::OnGraphicContextDefault)
-    EVT_UPDATE_UI (File_GC_Default, MyFrame::OnGraphicContextDefaultUpdateUI)
     EVT_MENU      (File_DC,         MyFrame::OnGraphicContextNone)
-    EVT_UPDATE_UI (File_DC,         MyFrame::OnGraphicContextNoneUpdateUI)
 #if wxUSE_CAIRO
     EVT_MENU      (File_GC_Cairo, MyFrame::OnGraphicContextCairo)
-    EVT_UPDATE_UI (File_GC_Cairo, MyFrame::OnGraphicContextCairoUpdateUI)
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
     EVT_MENU      (File_GC_GDIPlus, MyFrame::OnGraphicContextGDIPlus)
-    EVT_UPDATE_UI (File_GC_GDIPlus, MyFrame::OnGraphicContextGDIPlusUpdateUI)
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
     EVT_MENU      (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2D)
-    EVT_UPDATE_UI (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2DUpdateUI)
 #endif
 #endif // __WXMSW__
+    EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
+    EVT_UPDATE_UI (File_AntiAliasing, MyFrame::OnAntiAliasingUpdateUI)
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
@@ -2077,8 +2229,7 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size,
-                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -2106,17 +2257,39 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
-    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\tCtrl-Y");
-    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\tShift-Ctrl-Y");
+    // Number the different renderer choices consecutively, starting from 0.
+    int accel = 0;
+    m_menuItemUseDC = menuFile->AppendRadioItem
+                      (
+                        File_DC,
+                        wxString::Format("Use wx&DC\t%d", accel++)
+                      );
+    menuFile->AppendRadioItem
+              (
+                File_GC_Default,
+                wxString::Format("Use default wx&GraphicContext\t%d", accel++)
+              );
 #if wxUSE_CAIRO
-    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\tCtrl-O");
+    menuFile->AppendRadioItem
+              (
+                File_GC_Cairo,
+                wxString::Format("Use &Cairo\t%d", accel++)
+              );
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\tCtrl-+");
+    menuFile->AppendRadioItem
+              (
+                File_GC_GDIPlus,
+                wxString::Format("Use &GDI+\t%d", accel++)
+              );
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
-    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\tCtrl-2");
+    menuFile->AppendRadioItem
+              (
+                File_GC_Direct2D,
+                wxString::Format("Use &Direct2D\t%d", accel++)
+              );
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
@@ -2125,6 +2298,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               "Show extents used in drawing operations");
     menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
     menuFile->AppendCheckItem(File_Buffer, "&Use wx&BufferedPaintDC\tCtrl-Z", "Buffer painting");
+#if wxUSE_GRAPHICS_CONTEXT
+    menuFile->AppendCheckItem(File_AntiAliasing,
+                              "&Anti-Aliasing in wxGraphicContext\tCtrl-Shift-A",
+                              "Enable Anti-Aliasing in wxGraphicContext")
+            ->Check();
+#endif
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");
@@ -2163,6 +2342,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuLogical->Append( LogicalOrigin_Set, "Set to (&100, 100)\tShift-Ctrl-1" );
     menuLogical->Append( LogicalOrigin_Restore, "&Restore to normal\tShift-Ctrl-0" );
 
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxMenu *menuTransformMatrix = new wxMenu;
+    menuTransformMatrix->Append(TransformMatrix_Set, "Set &transformation matrix");
+    menuTransformMatrix->AppendSeparator();
+    menuTransformMatrix->Append(TransformMatrix_Reset, "Restore to &normal");
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
     wxMenu *menuColour = new wxMenu;
 #if wxUSE_COLOURDLG
     menuColour->Append( Colour_TextForeground, "Text &foreground..." );
@@ -2180,6 +2366,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Append(menuUserScale, "&Scale");
     menuBar->Append(menuAxis, "&Axis");
     menuBar->Append(menuLogical, "&Origin");
+#if wxUSE_DC_TRANSFORM_MATRIX
+    menuBar->Append(menuTransformMatrix, "&Transformation");
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     menuBar->Append(menuColour, "&Colours");
 
     // ... and attach this menu bar to the frame
@@ -2197,6 +2386,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_yLogicalOrigin = 0;
     m_xAxisReversed =
     m_yAxisReversed = false;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    m_transform_dx = 0.0;
+    m_transform_dy = 0.0;
+    m_transform_scx = 1.0;
+    m_transform_scy = 1.0;
+    m_transform_rot = 0.0;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     m_backgroundMode = wxBRUSHSTYLE_SOLID;
     m_colourForeground = *wxBLACK;
     m_colourBackground = *wxLIGHT_GREY;
@@ -2444,6 +2640,27 @@ void MyFrame::OnOption(wxCommandEvent& event)
             m_xAxisReversed = !m_xAxisReversed;
             break;
 
+#if wxUSE_DC_TRANSFORM_MATRIX
+        case TransformMatrix_Set:
+            {
+                TransformDataDialog dlg(this, m_transform_dx, m_transform_dy,
+                    m_transform_scx, m_transform_scy, m_transform_rot);
+                if ( dlg.ShowModal() == wxID_OK )
+                {
+                    dlg.GetTransformationData(&m_transform_dx, &m_transform_dy,
+                        &m_transform_scx, &m_transform_scy, &m_transform_rot);
+                }
+            }
+            break;
+        case TransformMatrix_Reset:
+            m_transform_dx = 0.0;
+            m_transform_dy = 0.0;
+            m_transform_scx = 1.0;
+            m_transform_scy = 1.0;
+            m_transform_rot = 0.0;
+            break;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
 #if wxUSE_COLOURDLG
         case Colour_TextForeground:
             m_colourForeground = SelectColour();
@@ -2496,6 +2713,16 @@ void MyFrame::OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt)
 
 void MyFrame::PrepareDC(wxDC& dc)
 {
+#if wxUSE_DC_TRANSFORM_MATRIX
+    if ( dc.CanUseTransformMatrix() )
+    {
+        wxAffineMatrix2D mtx;
+        mtx.Translate(m_transform_dx, m_transform_dy);
+        mtx.Rotate(wxDegToRad(m_transform_rot));
+        mtx.Scale(m_transform_scx, m_transform_scy);
+        dc.SetTransformMatrix(mtx);
+    }
+#endif // wxUSE_DC_TRANSFORM_MATRIX
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
     dc.SetUserScale( m_xUserScale, m_yUserScale );

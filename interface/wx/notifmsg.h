@@ -8,9 +8,9 @@
 /**
     @class wxNotificationMessage
 
-    This class allows to show the user a message non intrusively.
+    This class allows showing the user a message non intrusively.
 
-    Currently it is implemented natively for Windows, OS X, GTK and uses
+    Currently it is implemented natively for Windows, macOS, GTK and uses
     generic toast notifications under the other platforms. It's not recommended
     but @c wxGenericNotificationMessage can be used instead of the native ones.
     This might make sense if your application requires features not available in
@@ -29,15 +29,15 @@
     Windows 10 and for toast notification support on Windows 8 it is
     recommended to call MSWUseToasts() before showing the first notification
     message.
-    
-    @par OS X
-    The OS X implementation uses Notification Center to display native notifications.
+
+    @par macOS
+    The macOS implementation uses Notification Center to display native notifications.
     In order to use actions your notifications must use the alert style. This can
     be enabled by the user in system settings or by setting the
     @c NSUserNotificationAlertStyle value in Info.plist to @c alert. Please note
     that the user always has the option to change the notification style.
-    
-    
+
+
     @beginEventEmissionTable{wxCommandEvent}
     @event{wxEVT_NOTIFICATION_MESSAGE_CLICK(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_CLICK event, when a notification
@@ -49,7 +49,7 @@
            Process a @c wxEVT_NOTIFICATION_MESSAGE_ACTION event, when the user
            selects on of the actions added by AddAction()
     @endEventTable
-    
+
     @since 2.9.0
     @library{wxcore}
     @category{misc}
@@ -93,11 +93,11 @@ public:
 
        @return @false if the current implementation or OS version
        does not support actions in notifications.
-       
+
        @since 3.1.0
     */
     bool AddAction(wxWindowID actionid, const wxString &label = wxString());
-    
+
     /**
         Hides the notification.
 
@@ -105,7 +105,7 @@ public:
         (e.g. on some systems automatically hidden notifications can't be
         hidden manually).
     */
-    virtual bool Close();
+    bool Close();
 
     /**
         This parameter can be currently used to specify the icon to show in the
@@ -114,22 +114,22 @@ public:
         Valid values are @c wxICON_INFORMATION, @c wxICON_WARNING and
         @c wxICON_ERROR (notice that @c wxICON_QUESTION is not allowed here).
         Some implementations of this class may not support the icons.
-        
+
         @see SetIcon()
     */
     void SetFlags(int flags);
 
     /**
         Specify a custom icon to be displayed in the notification.
-         
+
         Some implementations of this class may not support custom icons.
-        
+
         @see SetFlags()
-        
+
         @since 3.1.0
     */
     void SetIcon(const wxIcon& icon);
-    
+
     /**
         Set the main text of the notification.
 
@@ -167,48 +167,48 @@ public:
 
         @return @false if an error occurred.
     */
-    virtual bool Show(int timeout = Timeout_Auto);
+    bool Show(int timeout = Timeout_Auto);
 
     /**
         If the application already uses a wxTaskBarIcon, it should be connected
         to notifications by using this method. This has no effect if toast
         notifications are used.
-        
+
         @return the task bar icon which was used previously (may be @c NULL)
-        
+
         @onlyfor{wxmsw}
     */
     static wxTaskBarIcon *UseTaskBarIcon(wxTaskBarIcon *icon);
 
-    
+
     /**
         Enables toast notifications available since Windows 8 and suppresses
         the additional icon in the notification area on Windows 10.
-        
+
         Toast notifications @b require a shortcut to the application in the
-        start menu. The start menu shortcut needs to contain an Application 
+        start menu. The start menu shortcut needs to contain an Application
         User Model ID. It is recommended that the applications setup creates the
         shortcut and the application specifies the setup created shortcut in
         @c shortcutPath. A call to this method will verify (and if necessary
         modify) the shortcut before enabling toast notifications.
-        
+
         @param shortcutPath
-            Path to a shortcut file referencing the applications executable. If 
-            the string is empty the applications display name will be used. If 
-            not fully qualified, it will be used as a path relative to the 
+            Path to a shortcut file referencing the applications executable. If
+            the string is empty the applications display name will be used. If
+            not fully qualified, it will be used as a path relative to the
             users start menu directory. The file extension .lnk is optional.
         @param appId
             The applications <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd378459(vs.85).aspx">
             Application User Model ID</a>. If empty it will be extracted from
             the shortcut. If the shortcut does not contain an id an id will be
             automatically created from the applications vendor and app name.
-    
+
         @return @false if toast notifications could not be enabled.
-        
+
         @onlyfor{wxmsw}
-        
+
         @see wxAppConsole::SetAppName(), wxAppConsole::SetVendorName()
-        
+
         @since 3.1.0
     */
     static bool MSWUseToasts(

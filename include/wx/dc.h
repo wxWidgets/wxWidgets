@@ -269,6 +269,8 @@ public:
 
     wxWindow* GetWindow() const { return m_window; }
 
+    void SetWindow(wxWindow* w) { m_window = w; }
+
     virtual bool IsOk() const { return m_ok; }
 
     // query capabilities
@@ -283,14 +285,13 @@ public:
     }
 
     virtual void* GetHandle() const { return NULL; }
-    
+
     // query dimension, colour deps, resolution
 
     virtual void DoGetSize(int *width, int *height) const = 0;
     void GetSize(int *width, int *height) const
     {
         DoGetSize(width, height);
-        return ;
     }
 
     wxSize GetSize() const
@@ -321,13 +322,20 @@ public:
     // flushing the content of this dc immediately eg onto screen
     virtual void Flush() { }
 
+    // coordinates conversions and transforms
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const;
+
     // bounding box
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
       // Bounding box is internally stored in device units.
-      x = LogicalToDeviceX(x);
-      y = LogicalToDeviceY(y);
+      wxPoint ptDev = LogicalToDevice(x, y);
+      x = ptDev.x;
+      y = ptDev.y;
       if ( m_isBBoxValid )
       {
          if ( x < m_minX ) m_minX = x;
@@ -353,10 +361,10 @@ public:
     }
 
     // Get bounding box in logical units.
-    wxCoord MinX() const { return m_isBBoxValid ? DeviceToLogicalX(m_minX) : 0; }
-    wxCoord MaxX() const { return m_isBBoxValid ? DeviceToLogicalX(m_maxX) : 0; }
-    wxCoord MinY() const { return m_isBBoxValid ? DeviceToLogicalY(m_minY) : 0; }
-    wxCoord MaxY() const { return m_isBBoxValid ? DeviceToLogicalY(m_maxY) : 0; }
+    wxCoord MinX() const { return m_isBBoxValid ? DeviceToLogical(m_minX, m_minY).x : 0; }
+    wxCoord MaxX() const { return m_isBBoxValid ? DeviceToLogical(m_maxX, m_maxY).x : 0; }
+    wxCoord MinY() const { return m_isBBoxValid ? DeviceToLogical(m_minX, m_minY).y : 0; }
+    wxCoord MaxY() const { return m_isBBoxValid ? DeviceToLogical(m_maxX, m_maxY).y : 0; }
 
     // setters and getters
 
@@ -526,9 +534,9 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
-    // this needs to overidden if the axis is inverted
+    // this needs to overridden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    
+
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
 #ifdef __WXMSW__
@@ -722,7 +730,7 @@ protected:
     double m_scaleX, m_scaleY;  // calculated from logical scale and user scale
 
     int m_signX, m_signY;  // Used by SetAxisOrientation() to invert the axes
-    
+
     double m_contentScaleFactor; // used by high resolution displays (retina)
 
     // Pixel per mm in horizontal and vertical directions.
@@ -1006,6 +1014,14 @@ public:
         { return m_pimpl->DeviceToLogicalXRel(x); }
     wxCoord DeviceToLogicalYRel(wxCoord y) const
         { return m_pimpl->DeviceToLogicalYRel(y); }
+    wxPoint DeviceToLogical(const wxPoint& pt) const
+        { return m_pimpl->DeviceToLogical(pt.x, pt.y); }
+    wxPoint DeviceToLogical(wxCoord x, wxCoord y) const
+        { return m_pimpl->DeviceToLogical(x, y); }
+    wxSize DeviceToLogicalRel(const wxSize& dim) const
+        { return m_pimpl->DeviceToLogicalRel(dim.x, dim.y); }
+    wxSize DeviceToLogicalRel(int x, int y) const
+        { return m_pimpl->DeviceToLogicalRel(x, y); }
     wxCoord LogicalToDeviceX(wxCoord x) const
         { return m_pimpl->LogicalToDeviceX(x); }
     wxCoord LogicalToDeviceY(wxCoord y) const
@@ -1014,6 +1030,14 @@ public:
         { return m_pimpl->LogicalToDeviceXRel(x); }
     wxCoord LogicalToDeviceYRel(wxCoord y) const
         { return m_pimpl->LogicalToDeviceYRel(y); }
+    wxPoint LogicalToDevice(const wxPoint& pt) const
+        { return m_pimpl->LogicalToDevice(pt.x, pt.y); }
+    wxPoint LogicalToDevice(wxCoord x, wxCoord y) const
+        { return m_pimpl->LogicalToDevice(x, y); }
+    wxSize LogicalToDeviceRel(const wxSize& dim) const
+        { return m_pimpl->LogicalToDeviceRel(dim.x, dim.y); }
+    wxSize LogicalToDeviceRel(int x, int y) const
+        { return m_pimpl->LogicalToDeviceRel(x, y); }
 
     void SetMapMode(wxMappingMode mode)
         { m_pimpl->SetMapMode(mode); }
@@ -1325,7 +1349,7 @@ public:
             : m_dc(thdc.m_dc),
               m_hdc(thdc.m_hdc)
         {
-            const_cast<TempHDC&>(thdc).m_hdc = 0;
+            const_cast<TempHDC&>(thdc).m_hdc = NULL;
         }
 
         ~TempHDC()
@@ -1363,6 +1387,9 @@ protected:
     wxDC(wxDCImpl *pimpl) : m_pimpl(pimpl) { }
 
     wxDCImpl * const m_pimpl;
+
+    void SetWindow(wxWindow* w)
+        { return m_pimpl->SetWindow(w); }
 
 private:
     wxDECLARE_ABSTRACT_CLASS(wxDC);
@@ -1403,6 +1430,78 @@ private:
     wxColour m_colFgOld;
 
     wxDECLARE_NO_COPY_CLASS(wxDCTextColourChanger);
+};
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC text background colour and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCTextBgColourChanger
+{
+public:
+    wxDCTextBgColourChanger(wxDC& dc) : m_dc(dc) { }
+
+    wxDCTextBgColourChanger(wxDC& dc, const wxColour& col) : m_dc(dc)
+    {
+        Set(col);
+    }
+
+    ~wxDCTextBgColourChanger()
+    {
+        if ( m_colBgOld.IsOk() )
+            m_dc.SetTextBackground(m_colBgOld);
+    }
+
+    void Set(const wxColour& col)
+    {
+        if ( !m_colBgOld.IsOk() )
+            m_colBgOld = m_dc.GetTextBackground();
+        m_dc.SetTextBackground(col);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxColour m_colBgOld;
+
+    wxDECLARE_NO_COPY_CLASS(wxDCTextBgColourChanger);
+};
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC text background mode and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCTextBgModeChanger
+{
+public:
+    wxDCTextBgModeChanger(wxDC& dc) : m_dc(dc), m_modeOld(wxBRUSHSTYLE_INVALID) { }
+
+    wxDCTextBgModeChanger(wxDC& dc, int mode) : m_dc(dc)
+    {
+        Set(mode);
+    }
+
+    ~wxDCTextBgModeChanger()
+    {
+        if ( m_modeOld != wxBRUSHSTYLE_INVALID )
+            m_dc.SetBackgroundMode(m_modeOld);
+    }
+
+    void Set(int mode)
+    {
+        if ( m_modeOld == wxBRUSHSTYLE_INVALID )
+            m_modeOld = m_dc.GetBackgroundMode();
+        m_dc.SetBackgroundMode(mode);
+    }
+
+private:
+    wxDC& m_dc;
+
+    int m_modeOld;
+
+    wxDECLARE_NO_COPY_CLASS(wxDCTextBgModeChanger);
 };
 
 // ----------------------------------------------------------------------------

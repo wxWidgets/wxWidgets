@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -139,6 +136,13 @@ const wxChar *WidgetsCategories[MAX_PAGES] = {
 class WidgetsApp : public wxApp
 {
 public:
+    WidgetsApp()
+    {
+#if USE_LOG
+        m_logTarget = NULL;
+#endif // USE_LOG
+    }
+
     // override base class virtuals
     // ----------------------------
 
@@ -146,7 +150,19 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() wxOVERRIDE;
+
+    // real implementation of WidgetsPage method with the same name
+    bool IsUsingLogWindow() const;
+
+private:
+#if USE_LOG
+    wxLog* m_logTarget;
+#endif // USE_LOG
+
+    wxDECLARE_NO_COPY_CLASS(WidgetsApp);
 };
+
+wxDECLARE_APP(WidgetsApp); // This provides a convenient wxGetApp() accessor.
 
 // Define a new frame type: this is going to be our main frame
 class WidgetsFrame : public wxFrame
@@ -375,7 +391,20 @@ bool WidgetsApp::OnInit()
     wxFrame *frame = new WidgetsFrame(title + " widgets demo");
     frame->Show();
 
+#if USE_LOG
+    m_logTarget = wxLog::GetActiveTarget();
+#endif // USE_LOG
+
     return true;
+}
+
+bool WidgetsApp::IsUsingLogWindow() const
+{
+#if USE_LOG
+    return wxLog::GetActiveTarget() == m_logTarget;
+#else // !USE_LOG
+    return false;
+#endif // USE_LOG
 }
 
 // ----------------------------------------------------------------------------
@@ -492,7 +521,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
         wxVERTICAL);
 
     m_lboxLog = new wxListBox(m_panel, wxID_ANY);
-    sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
+    sizerDown->Add(m_lboxLog, wxSizerFlags(1).Expand().Border());
     sizerDown->SetMinSize(100, 150);
 #else
     wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
@@ -503,16 +532,16 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #if USE_LOG
     btn = new wxButton(m_panel, Widgets_ClearLog, "Clear &log");
     sizerBtns->Add(btn);
-    sizerBtns->Add(10, 0); // spacer
+    sizerBtns->AddSpacer(10);
 #endif // USE_LOG
     btn = new wxButton(m_panel, Widgets_Quit, "E&xit");
     sizerBtns->Add(btn);
-    sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
+    sizerDown->Add(sizerBtns, wxSizerFlags().Border().Right());
 
     // put everything together
-    sizerTop->Add(m_book, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
-    sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
-    sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
+    sizerTop->Add(m_book, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~(wxTOP | wxBOTTOM)));
+    sizerTop->AddSpacer(5);
+    sizerTop->Add(sizerDown, wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxTOP));
 
     m_panel->SetSizer(sizerTop);
 
@@ -639,7 +668,7 @@ void WidgetsFrame::InitBook()
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only so select the first page
     // with some contents
-    if ( !pageSet )
+    if ( !pageSet || !m_book->GetCurrentPage() )
         m_book->SetSelection(1);
 
     // but ensure that the top of the tree is shown nevertheless
@@ -648,7 +677,7 @@ void WidgetsFrame::InitBook()
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
 #else
-    if ( !pageSet )
+    if ( !pageSet || !m_book->GetCurrentPage() )
     {
         // for other books set selection twice to force connected event handler
         // to force lazy creation of initial visible content
@@ -960,8 +989,8 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    WidgetsPage::GetAttrs().m_cursor = *(event.IsChecked() ? wxHOURGLASS_CURSOR
-                                                          : wxSTANDARD_CURSOR);
+    WidgetsPage::GetAttrs().m_cursor = (event.IsChecked() ? *wxHOURGLASS_CURSOR
+                                                          : wxNullCursor);
 
     CurrentPage()->SetUpWidget();
 }
@@ -1200,8 +1229,14 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
 {
-    wxLogMessage("Widgets %s focus",
-                 event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
+    // Don't show annoying message boxes when starting or closing the sample,
+    // only log these events in our own logger.
+    if ( wxGetApp().IsUsingLogWindow() )
+    {
+        wxWindow* win = (wxWindow*)event.GetEventObject();
+        wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
+                     event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
+    }
 
     event.Skip();
 }
@@ -1274,7 +1309,6 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          const char *const icon[])
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
-                     wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
@@ -1322,10 +1356,7 @@ void WidgetsPage::SetUpWidget()
         (*it)->Enable(GetAttrs().m_enabled);
         (*it)->Show(GetAttrs().m_show);
 
-        if ( GetAttrs().m_cursor.IsOk() )
-        {
-            (*it)->SetCursor(GetAttrs().m_cursor);
-        }
+        (*it)->SetCursor(GetAttrs().m_cursor);
 
         (*it)->SetWindowVariant(GetAttrs().m_variant);
 
@@ -1347,8 +1378,8 @@ wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
     wxTextCtrl *text = new wxTextCtrl(this, id, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 
-    sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
-    sizerRow->Add(text, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
+    sizerRow->Add(control, wxSizerFlags(0).Border(wxRIGHT).CentreVertical());
+    sizerRow->Add(text, wxSizerFlags(1).Border(wxLEFT).CentreVertical());
 
     if ( ppText )
         *ppText = text;
@@ -1379,8 +1410,14 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                                      wxWindowID id)
 {
     wxCheckBox *checkbox = new wxCheckBox(this, id, label);
-    sizer->Add(checkbox, 0, wxLEFT | wxRIGHT, 5);
-    sizer->Add(0, 2, 0, wxGROW); // spacer
+    sizer->Add(checkbox, wxSizerFlags().HorzBorder());
+    sizer->AddSpacer(2);
 
     return checkbox;
+}
+
+/* static */
+bool WidgetsPage::IsUsingLogWindow()
+{
+    return wxGetApp().IsUsingLogWindow();
 }

@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -209,6 +206,21 @@ private:
                 if ( m_currentField != Field_AMPM )
                 {
                     AppendDigitToCurrentField(key - '0');
+                }
+                break;
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+                if ( m_currentField != Field_AMPM )
+                {
+                    AppendDigitToCurrentField(key - WXK_NUMPAD0);
                 }
                 break;
 

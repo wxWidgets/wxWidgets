@@ -235,13 +235,6 @@ public:
 
     explicit wxBaseSortedArray(SCMPFUNC fn) : m_fnCompare(fn) { }
 
-    wxBaseSortedArray& operator=(const wxBaseSortedArray& src)
-    {
-        wxBaseArray<T, Sorter>::operator=(src);
-        m_fnCompare = src.m_fnCompare;
-        return *this;
-    }
-
     size_t IndexForInsert(T item) const
     {
         return this->wxBaseArray<T, Sorter>::IndexForInsert(item, m_fnCompare);
@@ -398,7 +391,7 @@ public:
 
     void Insert(const T* pItem, size_t uiIndex)
     {
-        base::insert(this->begin() + uiIndex, (T*)pItem);
+        base::insert(this->begin() + uiIndex, const_cast<T*>(pItem));
     }
 
     void Empty() { DoEmpty(); base::clear(); }
@@ -656,9 +649,6 @@ private:
         wxBaseObjectArrayFor##name;                                           \
     classdecl name : public wxBaseObjectArrayFor##name                        \
     {                                                                         \
-    public:                                                                   \
-        name() : wxBaseObjectArrayFor##name() { }                             \
-        name(const name& src) : wxBaseObjectArrayFor##name(src) { }           \
     }
 
 #define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode) \

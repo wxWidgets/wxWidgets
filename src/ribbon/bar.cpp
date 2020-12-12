@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RIBBON
 
@@ -30,6 +27,7 @@
 #endif
 
 #include "wx/arrimpl.cpp"
+#include "wx/imaglist.h"
 
 WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray)
 
@@ -672,7 +670,7 @@ void wxRibbonBar::RecalculateTabSizes()
                         continue;
                     if(info->small_must_have_separator_width * (int)(numtabs - i) <= width)
                     {
-                        info->rect.width = info->small_must_have_separator_width;;
+                        info->rect.width = info->small_must_have_separator_width;
                     }
                     else
                     {
@@ -735,6 +733,7 @@ wxRibbonBar::wxRibbonBar()
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
     m_help_button_hovered = false;
+
 }
 
 wxRibbonBar::wxRibbonBar(wxWindow* parent,
@@ -750,6 +749,11 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 wxRibbonBar::~wxRibbonBar()
 {
     SetArtProvider(NULL);
+
+    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    {
+        delete m_image_lists[n];
+    }
 }
 
 bool wxRibbonBar::Create(wxWindow* parent,
@@ -798,6 +802,21 @@ void wxRibbonBar::CommonInit(long style)
     m_bar_hovered = false;
 
     m_ribbon_state = wxRIBBON_BAR_PINNED;
+}
+
+wxImageList* wxRibbonBar::GetButtonImageList(wxSize size)
+{
+    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    {
+        if ( m_image_lists[n]->GetSize() == size )
+            return m_image_lists[n];
+    }
+
+    wxImageList* const
+        il = new wxImageList(size.GetWidth(), size.GetHeight(), /*mask*/false);
+    m_image_lists.push_back(il);
+
+    return il;
 }
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
@@ -1258,7 +1277,7 @@ wxSize wxRibbonBar::DoGetBestSize() const
 
 void wxRibbonBar::HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag)
 {
-    bool hovered = false, toggle_button_hovered = false;
+    bool hovered = false;
     if(position.x >= 0 && position.y >= 0)
     {
         wxSize size = GetSize();
@@ -1269,6 +1288,7 @@ void wxRibbonBar::HitTestRibbonButton(const wxRect& rect, const wxPoint& positio
     }
     if(hovered)
     {
+        bool toggle_button_hovered;
         toggle_button_hovered = rect.Contains(position);
 
         if ( hovered != m_bar_hovered || toggle_button_hovered != hover_flag )

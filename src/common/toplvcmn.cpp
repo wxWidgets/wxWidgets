@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/toplevel.h"
 
@@ -411,20 +408,25 @@ bool wxTopLevelWindowBase::IsTopNavigationDomain(NavigationKind kind) const
 
 // default resizing behaviour - if only ONE subwindow, resize to fill the
 // whole client area
-void wxTopLevelWindowBase::DoLayout()
+bool wxTopLevelWindowBase::Layout()
 {
     // We are called during the window destruction several times, e.g. as
     // wxFrame tries to adjust to its tool/status bars disappearing. But
     // actually doing the layout is pretty useless in this case as the window
     // will disappear anyhow -- so just don't bother.
     if ( IsBeingDeleted() )
-        return;
+        return false;
 
 
-    // if we're using constraints or sizers - do use them
-    if ( GetAutoLayout() )
+    // if we're using sizers or constraints - do use them
+    if ( GetAutoLayout()
+            || GetSizer()
+#if wxUSE_CONSTRAINTS
+                    || GetConstraints()
+#endif
+                                        )
     {
-        Layout();
+        return wxNonOwnedWindow::Layout();
     }
     else
     {
@@ -443,7 +445,7 @@ void wxTopLevelWindowBase::DoLayout()
             {
                 if ( child )
                 {
-                    return;     // it's our second subwindow - nothing to do
+                    return false; // it's our second subwindow - nothing to do
                 }
 
                 child = win;
@@ -458,8 +460,12 @@ void wxTopLevelWindowBase::DoLayout()
             DoGetClientSize(&clientW, &clientH);
 
             child->SetSize(0, 0, clientW, clientH);
+
+            return true;
         }
     }
+
+    return false;
 }
 
 // The default implementation for the close window event.

@@ -12,6 +12,7 @@
 #include "wx/colour.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 class wxNSColorRefData : public wxColourRefData
 {
@@ -34,6 +35,7 @@ public:
     virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
     
     virtual WX_NSColor GetNSColor() const wxOVERRIDE;
+    virtual WX_NSImage GetNSPatternImage() const wxOVERRIDE;
 private:
     WX_NSColor m_nsColour;
     
@@ -103,86 +105,23 @@ bool wxNSColorRefData::IsSolid() const
 
 CGColorRef wxNSColorRefData::GetCGColor() const
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    if (wxPlatformInfo::Get().CheckOSVersion(10, 8)) {
-        wxOSXEffectiveAppearanceSetter helper;
-        return [m_nsColour CGColor];
-    }
-#endif
-    CGColorRef cgcolor = NULL;
+    wxOSXEffectiveAppearanceSetter helper;
+    return [m_nsColour CGColor];
+}
 
-    // Simplest case is when we can directly get the RGBA components:
-    if (NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace])
+WX_NSImage wxNSColorRefData::GetNSPatternImage() const
+{
+    NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace];
+    if ( colPat )
     {
-        CGFloat components[4];
-        [colRGBA getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]];
-
-        cgcolor = CGColorCreate(wxMacGetGenericRGBColorSpace(), components);
-    }
-    // Some colours use patterns, we can handle them with the help of CGColorRef
-    else if (NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace])
-    {
-        NSImage* const nsimage = [colPat patternImage];
-        if (nsimage)
+        NSImage* nsimage = [colPat patternImage];
+        if ( nsimage )
         {
-            NSSize size = [nsimage size];
-            NSRect r = NSMakeRect(0, 0, size.width, size.height);
-            CGImageRef cgimage = [nsimage CGImageForProposedRect:&r context:nil hints:nil];
-            if (cgimage)
-            {
-                // Callbacks for CGPatternCreate()
-                struct PatternCreateCallbacks
-                {
-                    static void Draw(void* info, CGContextRef ctx)
-                    {
-                        CGImageRef image = (CGImageRef)info;
-                        CGContextDrawImage(
-                            ctx,
-                            CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)),
-                            image);
-                    }
-
-                    static void Release(void* WXUNUSED(info))
-                    {
-                        // Do not release the image here, we don't own it as it
-                        // comes from NSImage.
-                    }
-                };
-
-                const CGPatternCallbacks callbacks = {
-                    /* version: */ 0,
-                    &PatternCreateCallbacks::Draw,
-                    &PatternCreateCallbacks::Release
-                };
-
-                CGPatternRef pattern = CGPatternCreate(
-                                            cgimage,
-                                            CGRectMake(0, 0, size.width, size.height),
-                                            CGAffineTransformMake(1, 0, 0, 1, 0, 0),
-                                            size.width,
-                                            size.height,
-                                            kCGPatternTilingConstantSpacing,
-                                            /* isColored: */ true,
-                                            &callbacks
-                                       );
-                CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
-                CGFloat components[1] = { 1.0 };
-                cgcolor = CGColorCreateWithPattern(space, pattern, components);
-                CGColorSpaceRelease(space);
-                CGPatternRelease(pattern);
-            }
+            return nsimage;
         }
     }
 
-    if (cgcolor == NULL)
-    {
-        // Don't assert here, this will more likely than not result in a crash as
-        // colours are often created in drawing code which will be called again
-        // when the assert dialog is shown, resulting in a recursive assertion
-        // failure and, hence, a crash.
-        NSLog(@"Failed to convert NSColor \"%@\" to CGColorRef.", m_nsColour);
-    }
-    return cgcolor;
+    return NULL;
 }
 
 WX_NSColor wxColourRefData::GetNSColor() const
@@ -191,9 +130,12 @@ WX_NSColor wxColourRefData::GetNSColor() const
     return [NSColor colorWithCalibratedRed:Red() green:Green() blue:Blue() alpha:Alpha() ];
 }
 
+WX_NSImage wxColourRefData::GetNSPatternImage() const
+{
+    return NULL;
+}
+
 wxColour::wxColour(WX_NSColor col)
 {
     m_refData = new wxNSColorRefData(col);
 }
-
-

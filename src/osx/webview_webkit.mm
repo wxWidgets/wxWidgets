@@ -33,20 +33,16 @@
 #include <UIKit/UIWebView.h>
 #else
 #include <WebKit/WebKit.h>
-#include <WebKit/HIWebView.h>
-#include <WebKit/CarbonUtils.h>
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_15
+  #include <WebKit/HIWebView.h>
+  #include <WebKit/CarbonUtils.h>
+#endif
 #endif
 #include <Foundation/NSURLError.h>
 
 // using native types to get compile errors and warnings
 
 #define DEBUG_WEBKIT_SIZING 0
-
-#if defined(MAC_OS_X_VERSION_10_11) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11)
-    #define wxWEBKIT_PROTOCOL_SINCE_10_11(proto) < proto >
-#else
-    #define wxWEBKIT_PROTOCOL_SINCE_10_11(proto)
-#endif
 
 // ----------------------------------------------------------------------------
 // macros
@@ -57,7 +53,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 wxBEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 wxEND_EVENT_TABLE()
 
-@interface WebViewLoadDelegate : NSObject wxWEBKIT_PROTOCOL_SINCE_10_11(WebFrameLoadDelegate)
+@interface WebViewLoadDelegate : NSObject<WebFrameLoadDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -66,7 +62,7 @@ wxEND_EVENT_TABLE()
 
 @end
 
-@interface WebViewPolicyDelegate : NSObject wxWEBKIT_PROTOCOL_SINCE_10_11(WebPolicyDelegate)
+@interface WebViewPolicyDelegate : NSObject<WebPolicyDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -75,7 +71,7 @@ wxEND_EVENT_TABLE()
 
 @end
 
-@interface WebViewUIDelegate : NSObject wxWEBKIT_PROTOCOL_SINCE_10_11(WebUIDelegate)
+@interface WebViewUIDelegate : NSObject<WebUIDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -137,17 +133,23 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[WebViewLoadDelegate alloc] initWithWxWindow: this];
 
     [m_webView setFrameLoadDelegate:loadDelegate];
+    
+    m_loadDelegate = loadDelegate;
 
     // this is used to veto page loads, etc.
     WebViewPolicyDelegate* policyDelegate =
             [[WebViewPolicyDelegate alloc] initWithWxWindow: this];
 
     [m_webView setPolicyDelegate:policyDelegate];
+    
+    m_policyDelegate = policyDelegate;
 
     WebViewUIDelegate* uiDelegate =
             [[WebViewUIDelegate alloc] initWithWxWindow: this];
 
     [m_webView setUIDelegate:uiDelegate];
+    
+    m_UIDelegate = uiDelegate;
 #endif
     //Register our own class for custom scheme handling
     [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
@@ -160,21 +162,13 @@ wxWebViewWebKit::~wxWebViewWebKit()
 {
 #if wxOSX_USE_IPHONE
 #else
-    WebViewLoadDelegate* loadDelegate = [m_webView frameLoadDelegate];
-    WebViewPolicyDelegate* policyDelegate = [m_webView policyDelegate];
-    WebViewUIDelegate* uiDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
     [m_webView setUIDelegate: nil];
 
-    if (loadDelegate)
-        [loadDelegate release];
-
-    if (policyDelegate)
-        [policyDelegate release];
-
-    if (uiDelegate)
-        [uiDelegate release];
+    [m_loadDelegate release];
+    [m_policyDelegate release];
+    [m_UIDelegate release];
 #endif
 }
 
@@ -520,6 +514,11 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     return wxWEBVIEW_ZOOM_MEDIUM;
 }
 
+float wxWebViewWebKit::GetZoomFactor() const
+{
+    return GetWebkitZoom();
+}
+
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
     // arbitrary way to map our common zoom enum to float zoom
@@ -549,6 +548,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
             wxASSERT(false);
     }
 
+}
+
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
 }
 
 void wxWebViewWebKit::DoSetPage(const wxString& src, const wxString& baseUrl)
@@ -1033,8 +1037,16 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     wxString wxpath = wxCFStringRef::AsString(path);
     wxString scheme = wxCFStringRef::AsString([[request URL] scheme]);
+    
+    // since canInitRequest has already checked whether this scheme is supported
+    // the hash map contains this entry, but to satisfy static code analysis
+    // suspecting nullptr dereference ...
+#ifndef __clang_analyzer__
     wxFSFile* file = g_stringHandlerMap[scheme]->GetFile(wxpath);
-
+#else
+    wxFSFile* file = NULL;
+#endif
+    
     if (!file)
     {
         NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
@@ -1042,6 +1054,8 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                             userInfo:nil];
 
         [client URLProtocol:self didFailWithError:error];
+        
+        [error release];
 
         return;
     }
@@ -1069,6 +1083,8 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     //Notify that we have finished
     [client URLProtocolDidFinishLoading:self];
 
+    [data release];
+    
     [response release];
 }
 

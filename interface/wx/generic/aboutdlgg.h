@@ -22,7 +22,7 @@
     To instantiate an object from your wxGenericAboutDialog-based class, you
     can use either the default constructor followed by a call to Create(), or
     directly using the alternate constructor. In either case, you have to
-    prepare a wxAboutDialogInfo containing standard informations to display in
+    prepare a wxAboutDialogInfo containing standard information to display in
     an about-box.
 
     Example of usage, MyAboutDlg being a class derived from wxGenericAboutDialog:
@@ -34,7 +34,7 @@
         aboutInfo.SetName("MyApp");
         aboutInfo.SetVersion(MY_APP_VERSION_STRING);
         aboutInfo.SetDescription(_("My wxWidgets-based application!"));
-        aboutInfo.SetCopyright("(C) 1992-2018");
+        aboutInfo.SetCopyright("(C) 1992-2020");
         aboutInfo.SetWebSite("http://myapp.org");
         aboutInfo.AddDeveloper("My Self");
 

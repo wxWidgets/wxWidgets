@@ -139,20 +139,22 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/evtloop_cf.cpp
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
-    src/osx/core/utilsexc_base.cpp
     src/osx/cocoa/utils_base.mm
 
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
-    wx/osx/core/cfdataref.h
     wx/osx/core/cfarray.h
+    wx/osx/core/cfdataref.h
     wx/osx/core/cfdictionary.h
-    wx/osx/core/cftype.h
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
+    wx/osx/core/cftype.h
     wx/osx/core/colour.h
-    wx/osx/core/hid.h
+    wx/osx/core/dataview.h
     wx/osx/core/evtloop.h
+    wx/osx/core/hid.h
+    wx/osx/core/joystick.h
+    wx/osx/core/mimetype.h
     wx/osx/core/objcid.h
     wx/osx/core/private.h
 
@@ -173,9 +175,6 @@ BASE_OSX_SHARED_HDR =
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
-
-BASE_AND_GUI_OSX_IPHONE_SRC =
-    src/osx/iphone/utils.mm
 
 # files used by non-wxMac OS X builds
 BASE_OSX_NOTWXMAC_SRC =
@@ -199,6 +198,7 @@ QT_WIN32_SRC=
     src/msw/dib.cpp
     src/msw/joystick.cpp
     src/msw/sound.cpp
+    src/qt/graphics.cpp
 
 QT_WIN32_HDR=
     wx/msw/ole/automtn.h
@@ -213,7 +213,6 @@ QT_WIN32_HDR=
 QT_HDR =
     $(QT_PLATFORM_HDR)
     wx/generic/activityindicator.h
-    wx/generic/animate.h
     wx/generic/caret.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
@@ -296,13 +295,13 @@ QT_HDR =
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
+    wx/qt/treectrl.h
     wx/qt/window.h
 
 QT_SRC=
     $(QT_PLATFORM_SRC)
     src/common/taskbarcmn.cpp
     src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -391,6 +390,7 @@ QT_SRC=
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
+    src/qt/treectrl.cpp
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
@@ -867,6 +867,7 @@ GUI_CMN_SRC =
     src/common/wrapsizer.cpp
     src/common/xpmdecod.cpp
     src/generic/aboutdlgg.cpp
+    src/generic/animateg.cpp
     src/generic/bannerwindow.cpp
     src/generic/bmpcboxg.cpp
     src/generic/busyinfo.cpp
@@ -909,6 +910,7 @@ GUI_CMN_SRC =
     src/generic/renderg.cpp
     src/generic/richmsgdlgg.cpp
     src/generic/richtooltipg.cpp
+    src/generic/rowheightcache.cpp
     src/generic/sashwin.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp
@@ -1025,6 +1027,7 @@ GUI_CMN_HDR =
     wx/gdicmn.h
     wx/gdiobj.h
     wx/generic/aboutdlgg.h
+    wx/generic/animate.h
     wx/generic/accel.h
     wx/generic/bmpcbox.h
     wx/generic/busyinfo.h
@@ -1302,6 +1305,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/filectrl.cpp
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
+    src/gtk/image_gtk.cpp
     src/gtk/sockgtk.cpp
     src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
@@ -1408,6 +1412,7 @@ GTK_SRC =
     src/gtk/slider.cpp
     src/gtk/spinbutt.cpp
     src/gtk/spinctrl.cpp
+    src/gtk/srchctrl.cpp
     src/gtk/statbmp.cpp
     src/gtk/statbox.cpp
     src/gtk/statline.cpp
@@ -1478,6 +1483,7 @@ GTK_HDR =
     wx/gtk/slider.h
     wx/gtk/spinbutt.h
     wx/gtk/spinctrl.h
+    wx/gtk/srchctrl.h
     wx/gtk/statbmp.h
     wx/gtk/statbox.h
     wx/gtk/statline.h
@@ -1561,7 +1567,6 @@ GTK1_SRC =
     # Generic implementations used by wxGTK1:
     src/generic/accel.cpp
     src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
@@ -1611,7 +1616,6 @@ GTK1_SRC =
 
 GTK1_HDR =
     wx/generic/activityindicator.h
-    wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/generic/colrdlgg.h
@@ -1733,7 +1737,6 @@ MOTIF_SRC =
     src/motif/xmcombo/xmcombo.c
     # Generic files used by wxMotif:
     src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
@@ -1751,8 +1754,6 @@ MOTIF_SRC =
     src/generic/tabg.cpp
 
 MOTIF_HDR =
-    wx/generic/animateanimate.h
-    wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/generic/colrdlgg.h
@@ -1931,6 +1932,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
     src/msw/notifmsg.cpp
+    src/msw/ole/access.cpp
     src/msw/ole/activex.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
@@ -1977,7 +1979,6 @@ MSW_LOWLEVEL_HDR =
 
 MSW_SRC =
     src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/filepickerg.cpp
@@ -2022,7 +2023,6 @@ MSW_SRC =
     src/msw/nativdlg.cpp
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
-    src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp
@@ -2048,7 +2048,6 @@ MSW_SRC =
 
 MSW_HDR =
     wx/generic/activityindicator.h
-    wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/generic/filepickerg.h
@@ -2203,7 +2202,6 @@ MSW_DESKTOP_HDR =
 
 DFB_LOWLEVEL_SRC =
     src/common/fontmgrcmn.cpp
-    src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -2232,7 +2230,6 @@ DFB_LOWLEVEL_SRC =
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
 DFB_LOWLEVEL_HDR =
-    wx/generic/animate.h
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
@@ -2406,7 +2403,6 @@ OSX_SHARED_HDR =
     wx/osx/frame.h
     wx/osx/gauge.h
     wx/osx/listbox.h
-    wx/osx/listctrl.h
     wx/osx/mdi.h
     wx/osx/menu.h
     wx/osx/menuitem.h
@@ -2465,7 +2461,6 @@ OSX_SHARED_HDR =
 OSX_COCOA_SRC =
     $(OSX_COMMON_SRC)
     src/common/taskbarcmn.cpp
-    src/generic/animateg.cpp
     src/osx/carbon/sound.cpp
     src/osx/cocoa/aboutdlg.mm
     src/osx/cocoa/activityindicator.mm
@@ -2521,7 +2516,6 @@ OSX_COCOA_SRC =
     src/osx/timectrl_osx.cpp
 
 OSX_COCOA_HDR =
-    wx/generic/animate.h
     wx/generic/region.h
     wx/osx/activityindicator.h
     wx/osx/cocoa/chkconf.h
@@ -2529,8 +2523,6 @@ OSX_COCOA_HDR =
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
     wx/osx/cocoa/stdpaths.h
-    wx/osx/core/joystick.h
-    wx/osx/core/joystick.h
     wx/osx/dataview.h
     wx/osx/datectrl.h
     wx/osx/datetimectrl.h
@@ -2546,7 +2538,6 @@ OSX_COCOA_HDR =
 
 OSX_IPHONE_SRC =
     $(OSX_COMMON_SRC)
-    src/generic/animateg.cpp
     src/generic/regiong.cpp
     src/osx/core/sound.cpp
     src/osx/iphone/anybutton.mm
@@ -2555,6 +2546,8 @@ OSX_IPHONE_SRC =
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
+    src/osx/iphone/menu.mm
+    src/osx/iphone/menuitem.mm
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/nonownedwnd.mm
     src/osx/iphone/scrolbar.mm
@@ -2569,10 +2562,8 @@ OSX_IPHONE_SRC =
     src/osx/sound_osx.cpp
 
 OSX_IPHONE_HDR =
-    wx/generic/animate.h
     wx/generic/region.h
     wx/osx/iphone/chkconf.h
-    wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/osx/sound.h
 
@@ -2585,7 +2576,6 @@ UNIV_THEMES_SRC =
     src/univ/themes/win32.cpp
 
 UNIV_SRC =
-    $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
     src/generic/activityindicator.cpp
     src/generic/clrpickerg.cpp
@@ -2638,10 +2628,8 @@ UNIV_SRC =
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
 UNIV_HDR =
-    $(UNIV_PLATFORM_HDR)
     wx/generic/accel.h
     wx/generic/activityindicator.h
-    wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/generic/ctrlsub.h
@@ -2796,6 +2784,7 @@ HTML_CMN_HDR =
 
 WEBVIEW_MSW_SRC =
     src/msw/webview_ie.cpp
+    src/msw/webview_edge.cpp
 WEBVIEW_CMN_SRC =
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
@@ -2804,7 +2793,7 @@ WEBVIEW_CMN_SRC =
 WEBVIEW_MSW_HDR =
     wx/msw/webviewhistoryitem_ie.h
     wx/msw/webview_ie.h
-    wx/msw/webview_missing.h
+    wx/msw/webview_edge.h
 WEBVIEW_CMN_HDR =
     wx/webview.h
     wx/webviewarchivehandler.h
@@ -2850,6 +2839,7 @@ XRC_SRC =
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_comboctrl.cpp
+    src/xrc/xh_dataview.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
@@ -2863,6 +2853,7 @@ XRC_SRC =
     src/xrc/xh_grid.cpp
     src/xrc/xh_html.cpp
     src/xrc/xh_hyperlink.cpp
+    src/xrc/xh_infobar.cpp
     src/xrc/xh_listb.cpp
     src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
@@ -2898,7 +2889,6 @@ XRC_SRC =
     src/xrc/xh_unkwn.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
-    src/xrc/xmladv.cpp
     src/xrc/xmlrsall.cpp
 XRC_HDR =
     wx/xrc/xh_activityindicator.h
@@ -2919,6 +2909,7 @@ XRC_HDR =
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_comboctrl.h
+    wx/xrc/xh_dataview.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
@@ -2933,6 +2924,7 @@ XRC_HDR =
     wx/xrc/xh_grid.h
     wx/xrc/xh_html.h
     wx/xrc/xh_hyperlink.h
+    wx/xrc/xh_infobar.h
     wx/xrc/xh_listb.h
     wx/xrc/xh_listbk.h
     wx/xrc/xh_listc.h
@@ -2994,17 +2986,23 @@ OPENGL_MSW_SRC =
 
 OPENGL_GTK_HDR =
     wx/gtk/glcanvas.h
+    wx/unix/glegl.h
     wx/unix/glx11.h
 
 OPENGL_GTK_SRC =
     src/gtk/glcanvas.cpp
+    src/unix/glegl.cpp
     src/unix/glx11.cpp
 
 OPENGL_MSW_HDR =
     wx/msw/glcanvas.h
 
-OPENGL_OSX_SHARED_SRC =
+OPENGL_OSX_COCOA_SRC =
     src/osx/cocoa/glcanvas.mm
+    src/osx/glcanvas_osx.cpp
+
+OPENGL_OSX_IPHONE_SRC =
+    src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
 
 # Misc plugin sources:
@@ -3139,10 +3137,15 @@ RICHTEXT_HDR =
 
 # wxSTC
 
-STC_SRC =
+STC_CMN_SRC =
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 
-STC_HDR =
+STC_CMN_HDR =
     wx/stc/stc.h
+
+STC_OSX_COCOA_SRC =
+    src/stc/PlatWXcocoa.mm
+STC_OSX_COCOA_HDR =
+

@@ -32,7 +32,7 @@ public:
     wxGCDC( const wxEnhMetaFileDC& dc );
 #endif
     wxGCDC(wxGraphicsContext* context);
-    
+
     wxGCDC();
     virtual ~wxGCDC();
 
@@ -120,6 +120,12 @@ public:
     virtual wxAffineMatrix2D GetTransformMatrix() const wxOVERRIDE;
     virtual void ResetTransformMatrix() wxOVERRIDE;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
+
+    // coordinates conversions and transforms
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
 
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -225,6 +231,7 @@ protected:
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;
+    wxGraphicsMatrix m_matrixCurrentInv;
 #if wxUSE_DC_TRANSFORM_MATRIX
     wxAffineMatrix2D m_matrixExtTransform;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
@@ -234,7 +241,17 @@ protected:
     bool m_isClipBoxValid;
 
 private:
+    // This method only initializes trivial fields.
+    void CommonInit();
+
+    // This method initializes all fields (including those initialized by
+    // CommonInit() as it calls it) and the given context, if non-null, which
+    // is assumed to be newly created.
     void Init(wxGraphicsContext*);
+
+    // This method initializes m_graphicContext, m_ok and m_matrixOriginal
+    // fields, returns true if the context was valid.
+    bool DoInitContext(wxGraphicsContext* ctx);
 
     wxDECLARE_CLASS(wxGCDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);

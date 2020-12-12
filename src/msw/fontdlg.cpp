@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FONTDLG
 
@@ -35,6 +32,9 @@
     #include "wx/log.h"
     #include "wx/math.h"
 #endif
+
+#include "wx/fontutil.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -118,7 +118,7 @@ int wxFontDialog::ShowModal()
     if ( m_fontData.m_initialFont.IsOk() )
     {
         flags |= CF_INITTOLOGFONTSTRUCT;
-        wxFillLogFont(&logFont, &m_fontData.m_initialFont);
+        logFont = m_fontData.m_initialFont.GetNativeFontInfo()->lf;
     }
 
     if ( m_fontData.m_fontColour.IsOk() )
@@ -137,6 +137,10 @@ int wxFontDialog::ShowModal()
       flags |= CF_EFFECTS;
     if ( m_fontData.GetShowHelp() )
       flags |= CF_SHOWHELP;
+    if ( m_fontData.GetRestrictSelection() & wxFONTRESTRICT_SCALABLE )
+      flags |= CF_SCALABLEONLY;
+    if ( m_fontData.GetRestrictSelection() & wxFONTRESTRICT_FIXEDPITCH )
+      flags |= CF_FIXEDPITCHONLY;
 
     if ( m_fontData.m_minSize != 0 || m_fontData.m_maxSize != 0 )
     {
@@ -147,10 +151,12 @@ int wxFontDialog::ShowModal()
 
     chooseFontStruct.Flags = flags;
 
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
+
     if ( ChooseFont(&chooseFontStruct) != 0 )
     {
         wxRGBToColour(m_fontData.m_fontColour, chooseFontStruct.rgbColors);
-        m_fontData.m_chosenFont = wxCreateFontFromLogFont(&logFont);
+        m_fontData.m_chosenFont = wxFont(wxNativeFontInfo(logFont, this));
         m_fontData.EncodingInfo().facename = logFont.lfFaceName;
         m_fontData.EncodingInfo().charset = logFont.lfCharSet;
 

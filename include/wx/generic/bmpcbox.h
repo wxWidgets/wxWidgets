@@ -41,7 +41,7 @@ public:
                      const wxString choices[] = NULL,
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxBitmapComboBoxNameStr)
+                     const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr))
         : wxOwnerDrawnComboBox(),
           wxBitmapComboBoxBase()
     {
@@ -59,7 +59,7 @@ public:
                      const wxArrayString& choices,
                      long style,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxBitmapComboBoxNameStr);
+                     const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -70,7 +70,7 @@ public:
                 const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxBitmapComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -80,9 +80,11 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxBitmapComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxBitmapComboBoxNameStr));
 
     virtual ~wxBitmapComboBox();
+
+    virtual wxString GetStringSelection() const wxOVERRIDE;
 
     // Adds item with image to the end of the combo box.
     int Append(const wxString& item, const wxBitmap& bitmap = wxNullBitmap);

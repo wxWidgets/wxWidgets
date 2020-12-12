@@ -51,6 +51,7 @@ struct GraphicsBenchmarkOptions
     {
         mapMode = 0;
         penWidth = 0;
+        penStyle = wxPENSTYLE_INVALID;
 
         width = 800;
         height = 600;
@@ -63,7 +64,10 @@ struct GraphicsBenchmarkOptions
         testRawBitmaps =
         testRectangles =
         testCircles =
-        testEllipses = false;
+        testEllipses =
+        testTextExtent =
+        testMultiLineTextExtent =
+        testPartialTextExtents = false;
 
         usePaint =
         useClient =
@@ -82,13 +86,18 @@ struct GraphicsBenchmarkOptions
          height,
          numIters;
 
+    wxPenStyle penStyle;
+
     bool testBitmaps,
          testImages,
          testLines,
          testRawBitmaps,
          testRectangles,
          testCircles,
-         testEllipses;
+         testEllipses,
+         testTextExtent,
+         testMultiLineTextExtent,
+         testPartialTextExtents;
 
     bool usePaint,
          useClient,
@@ -152,10 +161,25 @@ public:
         Connect(wxEVT_SIZE, wxSizeEventHandler(GraphicsBenchmarkFrame::OnSize));
 
         m_bitmapARGB.Create(64, 64, 32);
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXOSX__)
         m_bitmapARGB.UseAlpha(true);
-#endif // __WXMSW__
+#endif // __WXMSW__ || _WXOSX__
         m_bitmapRGB.Create(64, 64, 24);
+
+        wxBitmap bmpMask(64, 64, 1);
+        {
+            wxMemoryDC dc(bmpMask);
+            dc.SetBackground(*wxBLACK_BRUSH);
+            dc.Clear();
+        }
+        m_bitmapARGBwithMask.Create(64, 64, 32);
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        m_bitmapARGBwithMask.UseAlpha(true);
+#endif // __WXMSW__ || __WXOSX__
+        m_bitmapARGBwithMask.SetMask(new wxMask(bmpMask));
+
+        m_bitmapRGBwithMask.Create(64, 64, 24);
+        m_bitmapRGBwithMask.SetMask(new wxMask(bmpMask));
 
         m_renderer = NULL;
         if ( opts.useGC )
@@ -322,12 +346,9 @@ private:
                 BenchmarkDCAndGC("RGB memory", dc, gcdc);
             }
             {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXOSX__)
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(false);
-#else // !__WXMSW__
-                wxBitmap bmp(opts.width, opts.height, 24);
-#endif // __WXMSW__/!__WXMSW__
                 wxMemoryDC dc(bmp);
                 wxGCDC gcdc;
                 if ( m_renderer )
@@ -336,12 +357,13 @@ private:
                     gcdc.SetGraphicsContext(gc);
                 }
                 BenchmarkDCAndGC("0RGB memory", dc, gcdc);
+#endif // __WXMSW__ ||__WXOSX__
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXOSX__)
                 bmp.UseAlpha(true);
-#endif // __WXMSW__
+#endif // __WXMSW__ || __WXOSX__
                 wxMemoryDC dc(bmp);
                 wxGCDC gcdc;
                 if ( m_renderer )
@@ -380,6 +402,24 @@ private:
         BenchmarkRoundedRectangles(msg, dc);
         BenchmarkCircles(msg, dc);
         BenchmarkEllipses(msg, dc);
+        BenchmarkTextExtent(msg, dc);
+        BenchmarkPartialTextExtents(msg, dc);
+    }
+
+    void SetupDC(wxDC& dc)
+    {
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        if ( opts.penStyle != wxPENSTYLE_INVALID )
+        {
+            wxPen pen = dc.GetPen();
+            if ( !pen.IsOk() )
+                pen = wxPen(*wxWHITE, 1);
+            pen.SetStyle(opts.penStyle);
+            dc.SetPen(pen);
+        }
     }
 
     void BenchmarkLines(const wxString& msg, wxDC& dc)
@@ -387,32 +427,88 @@ private:
         if ( !opts.testLines )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         wxPrintf("Benchmarking %s: ", msg);
         fflush(stdout);
 
         wxStopWatch sw;
-        int x = 0,
-            y = 0;
+        int x0 = 0,
+            y0 = 0;
         for ( int n = 0; n < opts.numIters; n++ )
         {
             int x1 = rand() % opts.width,
                 y1 = rand() % opts.height;
 
-            dc.DrawLine(x, y, x1, y1);
+            dc.DrawLine(x0, y0, x1, y1);
 
-            x = x1;
-            y = y1;
+            x0 = x1;
+            y0 = y1;
         }
 
         const long t = sw.Time();
 
         wxPrintf("%ld lines done in %ldms = %gus/line\n",
                  opts.numIters, t, (1000. * t)/opts.numIters);
+
+        // Horizontal lines
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        x0 = 0;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x1 = rand() % opts.width;
+            int y = rand() % opts.height;
+
+            dc.DrawLine(x0, y, x1, y);
+
+            x0 = x1;
+        }
+
+        const long t2 = sw.Time();
+
+        wxPrintf("%ld horizontal lines done in %ldms = %gus/line\n",
+            opts.numIters, t2, (1000. * t2) / opts.numIters);
+
+        // Vertical lines
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        y0 = 0;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width;
+            int y1 = rand() % opts.height;
+
+            dc.DrawLine(x, y0, x, y1);
+
+            y0 = y1;
+        }
+
+        const long t3 = sw.Time();
+
+        wxPrintf("%ld vertical lines done in %ldms = %gus/line\n",
+            opts.numIters, t3, (1000. * t3) / opts.numIters);
+
+        // Cross hair
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            x0 = rand() % opts.width;
+            y0 = rand() % opts.height;
+
+            dc.CrossHair(x0, y0);
+        }
+        const long t4 = sw.Time();
+
+        wxPrintf("%ld cross hairs done in %ldms = %gus/line\n",
+            opts.numIters, t4, (1000. * t4) / (2*opts.numIters));
     }
 
 
@@ -421,10 +517,7 @@ private:
         if ( !opts.testRectangles )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxRED_BRUSH );
 
@@ -451,10 +544,7 @@ private:
         if ( !opts.testRectangles )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxCYAN_BRUSH );
 
@@ -481,10 +571,7 @@ private:
         if ( !opts.testCircles )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxGREEN_BRUSH );
 
@@ -511,10 +598,7 @@ private:
         if ( !opts.testEllipses )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxBLUE_BRUSH );
 
@@ -536,15 +620,69 @@ private:
                  opts.numIters, t, (1000. * t)/opts.numIters);
     }
 
+    void BenchmarkTextExtent(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testTextExtent )
+            return;
+
+        SetupDC(dc);
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        const wxString str("The quick brown fox jumps over the lazy dog");
+        wxSize size;
+
+        wxStopWatch sw;
+        for ( long n = 0; n < opts.numIters; n++ )
+        {
+            if ( opts.testMultiLineTextExtent )
+                size += dc.GetMultiLineTextExtent(str);
+            else
+                size += dc.GetTextExtent(str);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld text extent measures done in %ldms = %gus/call\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkPartialTextExtents(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testPartialTextExtents )
+            return;
+
+        SetupDC(dc);
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        const wxString str("The quick brown fox jumps over the lazy dog");
+        wxArrayInt widths;
+
+        wxStopWatch sw;
+        for ( long n = 0; n < opts.numIters; n++ )
+        {
+            if ( !dc.GetPartialTextExtents(str, widths) )
+            {
+                wxPrintf("ERROR: GetPartialTextExtents() failed\n");
+                return;
+            }
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld partial text extents measures done in %ldms = %gus/call\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
     void BenchmarkBitmaps(const wxString& msg, wxDC& dc)
     {
         if ( !opts.testBitmaps )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         wxPrintf("Benchmarking %s: ", msg);
         fflush(stdout);
@@ -579,6 +717,37 @@ private:
         wxPrintf("%ld RGB bitmaps done in %ldms = %gus/bitmap\n",
                  opts.numIters, t2, (1000. * t2)/opts.numIters);
 
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawBitmap(m_bitmapARGBwithMask, x, y, true);
+        }
+        const long t3 = sw.Time();
+
+        wxPrintf("%ld ARGB bitmaps with mask done in %ldms = %gus/bitmap\n",
+            opts.numIters, t3, (1000. * t3) / opts.numIters);
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawBitmap(m_bitmapRGBwithMask, x, y, true);
+        }
+        const long t4 = sw.Time();
+
+        wxPrintf("%ld RGB bitmaps with mask done in %ldms = %gus/bitmap\n",
+            opts.numIters, t4, (1000. * t4) / opts.numIters);
     }
 
     void BenchmarkImages(const wxString& msg, wxDC& dc)
@@ -659,6 +828,8 @@ private:
 
     wxBitmap m_bitmapARGB;
     wxBitmap m_bitmapRGB;
+    wxBitmap m_bitmapARGBwithMask;
+    wxBitmap m_bitmapRGBwithMask;
 #if wxUSE_GLCANVAS
     wxGLCanvas* m_glCanvas;
     wxGLContext* m_glContext;
@@ -680,6 +851,9 @@ public:
             { wxCMD_LINE_SWITCH, "",  "rectangles" },
             { wxCMD_LINE_SWITCH, "",  "circles" },
             { wxCMD_LINE_SWITCH, "",  "ellipses" },
+            { wxCMD_LINE_SWITCH, "",  "textextent" },
+            { wxCMD_LINE_SWITCH, "",  "multilinetextextent" },
+            { wxCMD_LINE_SWITCH, "",  "partialtextextents" },
             { wxCMD_LINE_SWITCH, "",  "paint" },
             { wxCMD_LINE_SWITCH, "",  "client" },
             { wxCMD_LINE_SWITCH, "",  "memory" },
@@ -690,6 +864,7 @@ public:
 #endif // wxUSE_GLCANVAS
             { wxCMD_LINE_OPTION, "m", "map-mode", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "p", "pen-width", "", wxCMD_LINE_VAL_NUMBER },
+            { wxCMD_LINE_OPTION, "s", "pen-style", "solid | dot | long_dash | short_dash", wxCMD_LINE_VAL_STRING },
             { wxCMD_LINE_OPTION, "w", "width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "h", "height", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "I", "images", "", wxCMD_LINE_VAL_NUMBER },
@@ -710,6 +885,34 @@ public:
             return false;
         if ( parser.Found("p", &opts.penWidth) && opts.penWidth < 1 )
             return false;
+        wxString penStyle;
+        if ( parser.Found("pen-style", &penStyle) )
+        {
+            if ( !penStyle.empty() )
+            {
+                if ( penStyle == wxS("solid") )
+                {
+                    opts.penStyle = wxPENSTYLE_SOLID;
+                }
+                else if ( penStyle == wxS("dot") )
+                {
+                    opts.penStyle = wxPENSTYLE_DOT;
+                }
+                else if ( penStyle == wxS("long_dash") )
+                {
+                    opts.penStyle = wxPENSTYLE_LONG_DASH;
+                }
+                else if ( penStyle == wxS("short_dash") )
+                {
+                    opts.penStyle = wxPENSTYLE_SHORT_DASH;
+                }
+                else
+                {
+                    wxLogError(wxS("Unsupported pen style."));
+                    return false;
+                }
+            }
+        }
         if ( parser.Found("w", &opts.width) && opts.width < 1 )
             return false;
         if ( parser.Found("h", &opts.height) && opts.height < 1 )
@@ -724,9 +927,13 @@ public:
         opts.testRectangles = parser.Found("rectangles");
         opts.testCircles = parser.Found("circles");
         opts.testEllipses = parser.Found("ellipses");
+        opts.testTextExtent = parser.Found("textextent");
+        opts.testMultiLineTextExtent = parser.Found("multilinetextextent");
+        opts.testPartialTextExtents = parser.Found("partialtextextents");
         if ( !(opts.testBitmaps || opts.testImages || opts.testLines
                     || opts.testRawBitmaps || opts.testRectangles
-                    || opts.testCircles || opts.testEllipses) )
+                    || opts.testCircles || opts.testEllipses
+                    || opts.testTextExtent || opts.testPartialTextExtents) )
         {
             // Do everything by default.
             opts.testBitmaps =
@@ -735,7 +942,9 @@ public:
             opts.testRawBitmaps =
             opts.testRectangles =
             opts.testCircles =
-            opts.testEllipses = true;
+            opts.testEllipses =
+            opts.testTextExtent =
+            opts.testPartialTextExtents = true;
         }
 
         opts.usePaint = parser.Found("paint");

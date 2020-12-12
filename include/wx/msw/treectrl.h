@@ -53,7 +53,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxTreeCtrlNameStr)
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -65,7 +65,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxTreeCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -261,6 +261,7 @@ protected:
     // return true if the key was processed, false otherwise
     bool MSWHandleSelectionKey(unsigned vkey);
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // data used only while editing the item label:
     wxTextCtrl  *m_textCtrl;        // text control in which it is edited
@@ -314,6 +315,9 @@ private:
 
     // Virtual root item, if wxTR_HIDE_ROOT is set.
     void* m_pVirtualRoot;
+
+    // Item to call EnsureVisible() on when the tree is thawed, if necessary.
+    wxTreeItemId m_htEnsureVisibleOnThaw;
 
     // the starting item for selection with Shift
     wxTreeItemId m_htSelStart, m_htClickedItem;

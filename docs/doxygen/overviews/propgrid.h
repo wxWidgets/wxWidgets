@@ -733,10 +733,10 @@ accomplish the task:
 @code
     // Have property editor focus on Enter
     propgrid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
-    
+
     // Have Enter work as action trigger even when editor is focused
     propgrid->DedicateKey( WXK_RETURN );
-    
+
     // Let Enter also navigate to the next property
     propgrid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
 
@@ -807,10 +807,9 @@ See wxPGMultiButton class reference.
 
 @subsection propgrid_customeventhandling Handling Events Passed from Properties
 
-<b>wxEVT_COMMAND_BUTTON_CLICKED </b>(corresponds to event table macro EVT_BUTTON):
-Occurs when editor button click is not handled by the property itself
-(as is the case, for example, if you set property's editor to TextCtrlAndButton
-from the original TextCtrl).
+@c wxEVT_BUTTON: Occurs when editor button click is not handled by the property
+itself (as is the case, for example, if you set property's editor
+to TextCtrlAndButton from the original TextCtrl).
 
 @subsection propgrid_attributes Property Attributes
 

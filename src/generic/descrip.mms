@@ -2,32 +2,32 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 June 2016                                                        *
+# Date : 20 July 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
+CC_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
+CC_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WX_GTK__=1,VMS_GTK2==1)/float=ieee\
+CC_DEFINE = /define=(__WX_GTK__=1,VMS_GTK2==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)
 .else
 CXX_DEFINE =
@@ -95,7 +95,8 @@ OBJECTS = \
 		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
 		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj,\
 		markuptext.obj,bannerwindow.obj,timectrlg.obj,richtooltipg.obj\
-		,statbmpg.obj,splash.obj,collheaderctrlg.obj,graphicc.obj
+		,statbmpg.obj,splash.obj,collheaderctrlg.obj,graphicc.obj,\
+		rowheightcache.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -168,7 +169,8 @@ SOURCES = \
 		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp,\
 		commandlinkbuttong.cpp,spinctlg.cpp markuptext.cpp \
 		bannerwindow.cpp timectrlg.cpp richtooltipg.cpp statbmpg.cpp \
-		textmeasure.cpp collheaderctrlg.cpp graphicc.cpp
+		textmeasure.cpp collheaderctrlg.cpp graphicc.cpp \
+		rowheightcache.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -313,4 +315,10 @@ statbmpg.obj : statbmpg.cpp
 textmeasure.obj : textmeasure.cpp
 editlbox.obj : editlbox.cpp
 collheaderctrlg.obj : collheaderctrlg.cpp
+.ifdef __WXX11__
 graphicc.obj : graphicc.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(WARDIR) graphicc.cpp
+.else
+graphicc.obj : graphicc.cpp
+.endif
+rowheightcache.obj : rowheightcache.cpp

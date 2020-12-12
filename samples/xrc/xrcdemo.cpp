@@ -13,9 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // For all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -89,6 +86,10 @@ bool MyApp::OnInit()
     // save some space to only initialize the ones you will be using. See
     // wxXRC docs for details.
     wxXmlResource::Get()->InitAllHandlers();
+
+    // Allow using environment variables in the file paths in the resources,
+    // while keeping the default wxXRC_USE_LOCALE flag.
+    wxXmlResource::Get()->SetFlags(wxXRC_USE_LOCALE | wxXRC_USE_ENVVARS);
 
 #if wxUSE_RIBBON
     wxXmlResource::Get()->AddHandler(new wxRibbonXmlHandler);

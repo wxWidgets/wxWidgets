@@ -8,7 +8,6 @@
 #############################################################################
 
 if(wxUSE_REGEX)
-    # TODO: Forcing builtin until sys is implemented
     set(wxUSE_REGEX builtin)
     wx_add_builtin_library(wxregex
         src/regex/regcomp.c
@@ -20,5 +19,3 @@ if(wxUSE_REGEX)
     set(REGEX_LIBRARIES wxregex)
     set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/src/regex)
 endif()
-
-#TODO: find external lib and include dir

@@ -182,9 +182,11 @@
             graphics/affinematrix.cpp
             graphics/boundingbox.cpp
             graphics/clippingbox.cpp
+            graphics/coords.cpp
             graphics/graphmatrix.cpp
             graphics/graphpath.cpp
             config/config.cpp
+            controls/auitest.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
             controls/bookctrlbasetest.cpp
@@ -223,6 +225,7 @@
             controls/slidertest.cpp
             controls/spinctrldbltest.cpp
             controls/spinctrltest.cpp
+            controls/styledtextctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/togglebuttontest.cpp
@@ -267,11 +270,13 @@
             net/socket.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
+            rowheightcache/rowheightcachetest.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp
             toplevel/toplevel.cpp
             validators/valnum.cpp
+            validators/valtext.cpp
             window/clientsize.cpp
             window/setsize.cpp
             xml/xrctest.cpp
@@ -280,9 +285,11 @@
             Can't use <wx-lib> here as it doesn't work with conditionally
             defined variables, so fall back <sys-lib> as we must not link with
             inexisting webview library to be able to run tests even if
-            wxWebView is not available.
+            wxWebView or wxSTC is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <sys-lib>$(WXLIB_STC)</sys-lib>
+        <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
@@ -293,12 +300,37 @@
         <wx-lib>base</wx-lib>
     </exe>
 
+    <exe id="test_allheaders" template="wx_sample,wx_test"
+                              template_append="wx_append"
+         cond="USE_GUI=='1'">
+        <!-- link against GUI libraries, but be a console app: -->
+        <app-type>console</app-type>
+
+        <sources>
+            asserthelper.cpp
+            test.cpp
+            allheaders.cpp
+            testableframe.cpp
+        </sources>
+        <!--
+            Can't use <wx-lib> here as it doesn't work with conditionally
+            defined variables, so fall back <sys-lib> as we must not link with
+            inexisting webview library to be able to run tests even if
+            wxWebView or wxSTC is not available.
+         -->
+        <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <sys-lib>$(WXLIB_STC)</sys-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
 
     <wx-data id="data">
         <files>testdata.fc</files>
-        
+
         <!-- test data for image/image.cpp test unit: -->
-        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 
@@ -329,6 +361,16 @@
             cross_bilinear_256x256.png
             cross_box_average_256x256.png
             cross_nearest_neighb_256x256.png
+
+            paste_input_background.png
+            paste_input_black.png
+            paste_input_overlay_transparent_border_opaque_square.png
+            paste_input_overlay_transparent_border_semitransparent_circle.png
+            paste_input_overlay_transparent_border_semitransparent_square.png
+            paste_result_background_plus_circle_plus_square.png
+            paste_result_background_plus_overlay_transparent_border_opaque_square.png
+            paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
+            paste_result_no_background_square_over_circle.png
         </files>
     </wx-data>
 
@@ -343,16 +385,11 @@
 
 
     <fragment format="autoconf">
-# notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
-# currently the value in the makefile would be ignored if we did, but
-# warnings don't matter when we expect compilation to fail anyhow so we can
-# use this variable to enable the compilation of code which is supposed to
-# fail
-failtest: failtest_combobox failtest_evthandler failtest_weakref
+failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
-	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&amp;2; \
 	    exit 1; \
 	fi; \
@@ -360,9 +397,9 @@ failtest_combobox:
 
 failtest_evthandler:
 	@$(RM) test_evthandler.o
-	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
-	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
-	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&amp;2; \
+	@for d in BIND_GLOBAL BIND_STATIC BIND_METHOD BIND_FUNCTOR BIND_NO_HANDLER BIND_DERIVED BIND_WRONG_CLASS EVENT_CREATION; do \
+	    if $(MAKE) CPPFLAGS=-DTEST_INVALID_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_$$d unexpectedly succeeded.">&amp;2; \
 	        exit 1; \
 	    fi; \
 	done; \
@@ -370,13 +407,21 @@ failtest_evthandler:
 
 failtest_weakref:
 	@$(RM) test_weakref.o
-	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_INVALID_INCOMPLETE_WEAKREF unexpectedly succeeded.">&amp;2; \
 	    exit 1; \
 	fi; \
 	exit 0
 
-.PHONY: failtest
+failtest_allheaders:
+	@$(RM) test_allheaders.o
+	if $(MAKE) CPPFLAGS=-DwxNO_IMPLICIT_WXSTRING_ENCODING -DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_IMPLICIT_WXSTRING_ENCODING unexpectedly succeeded.">&amp;2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
     </fragment>
 
 </makefile>

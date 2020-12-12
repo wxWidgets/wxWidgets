@@ -14,12 +14,12 @@
 
 #if wxUSE_DATAVIEWCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/dataview.h"
+#ifdef __WXGTK__
+    #include "wx/stopwatch.h"
+#endif // __WXGTK__
 
 #include "testableframe.h"
 #include "asserthelper.h"
@@ -67,6 +67,27 @@ public:
     }
 };
 
+class MultiColumnsDataViewCtrlTestCase
+{
+public:
+    MultiColumnsDataViewCtrlTestCase();
+    ~MultiColumnsDataViewCtrlTestCase();
+
+protected:
+    // the dataview control itself
+    wxDataViewListCtrl *m_dvc;
+
+    // constants
+    const wxSize m_size;
+    const int m_firstColumnWidth;
+
+    // and the columns
+    wxDataViewColumn* m_firstColumn;
+    wxDataViewColumn* m_lastColumn;
+
+    wxDECLARE_NO_COPY_CLASS(MultiColumnsDataViewCtrlTestCase);
+};
+
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
@@ -95,9 +116,56 @@ DataViewCtrlTestCase::~DataViewCtrlTestCase()
     delete m_dvc;
 }
 
+MultiColumnsDataViewCtrlTestCase::MultiColumnsDataViewCtrlTestCase()
+    : m_size(200, 100),
+      m_firstColumnWidth(50)
+{
+    m_dvc = new wxDataViewListCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    m_firstColumn =
+        m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT, m_firstColumnWidth);
+    m_lastColumn =
+        m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT);
+
+    // Set size after columns appending to extend size of the last column.
+    m_dvc->SetSize(m_size);
+    m_dvc->Layout();
+    m_dvc->Refresh();
+    m_dvc->Update();
+}
+
+MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
+{
+    delete m_dvc;
+}
+
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
+                 "wxDVC::Selection",
+                 "[wxDataViewCtrl][select]")
+{
+    // Check selection round-trip.
+    wxDataViewItemArray sel;
+    sel.push_back(m_child1);
+    sel.push_back(m_grandchild);
+    REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
+
+    wxDataViewItemArray sel2;
+    CHECK( m_dvc->GetSelections(sel2) == static_cast<int>(sel.size()) );
+
+    CHECK( sel2 == sel );
+
+    // Invalid items in GetSelections() input are supposed to be just skipped.
+    sel.clear();
+    sel.push_back(wxDataViewItem());
+    REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
+
+    CHECK( m_dvc->GetSelections(sel2) == 0 );
+    CHECK( sel2.empty() );
+}
 
 TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
                  "wxDVC::DeleteSelected",
@@ -203,6 +271,19 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_grandchild) );
 #endif
     CHECK( !m_dvc->IsExpanded(m_child2) );
+
+    m_dvc->Collapse(m_root);
+    CHECK( !m_dvc->IsExpanded(m_root) );
+
+    m_dvc->ExpandChildren(m_root);
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Expanding an already expanded node must still expand all its children.
+    m_dvc->Collapse(m_child1);
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    m_dvc->ExpandChildren(m_root);
+    CHECK( m_dvc->IsExpanded(m_child1) );
 }
 
 TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
@@ -228,6 +309,12 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
         INFO("First child: " << rect1 << ", second one: " << rect2);
         CHECK( rect1.y < rect2.y );
     }
+
+    // This forces generic implementation to add m_grandchild to the tree, as
+    // it does it only on demand. We want the item to really be there to check
+    // that GetItemRect() returns an empty rectangle for collapsed items.
+    m_dvc->Expand(m_child1);
+    m_dvc->Collapse(m_child1);
 
     const wxRect rectNotShown = m_dvc->GetItemRect(m_grandchild);
     CHECK( rectNotShown == wxRect() );
@@ -260,6 +347,51 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     // scrolled off).
     const wxRect rectRoot = m_dvc->GetItemRect(m_root);
     CHECK( rectRoot == wxRect() );
+}
+
+TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
+                 "wxDVC::DeleteAllItems",
+                 "[wxDataViewCtrl][delete]")
+{
+    // The invalid item corresponds to the root of tree store model, so it
+    // should have a single item (our m_root) initially.
+    CHECK( m_dvc->GetChildCount(wxDataViewItem()) == 1 );
+
+    m_dvc->DeleteAllItems();
+
+    // And none at all after deleting all the items.
+    CHECK( m_dvc->GetChildCount(wxDataViewItem()) == 0 );
+}
+
+TEST_CASE_METHOD(MultiColumnsDataViewCtrlTestCase,
+                 "wxDVC::AppendTextColumn",
+                 "[wxDataViewCtrl][column]")
+{
+#ifdef __WXGTK__
+    // Wait for the list control to be realized.
+    wxStopWatch sw;
+    while ( m_firstColumn->GetWidth() == 0 )
+    {
+        if ( sw.Time() > 500 )
+        {
+            WARN("Timed out waiting for wxDataViewListCtrl to be realized");
+            break;
+        }
+        wxYield();
+    }
+#endif
+
+    // Check the width of the first column.
+    CHECK( m_firstColumn->GetWidth() == m_firstColumnWidth );
+
+    // Check that the last column was extended to fit client area.
+    const int lastColumnMaxWidth =
+        m_dvc->GetClientSize().GetWidth() - m_firstColumnWidth;
+    // In GTK and under Mac the width of the last column is less then
+    // a remaining client area.
+    const int lastColumnMinWidth = lastColumnMaxWidth - 10;
+    CHECK( m_lastColumn->GetWidth() <= lastColumnMaxWidth );
+    CHECK( m_lastColumn->GetWidth() >= lastColumnMinWidth );
 }
 
 #endif //wxUSE_DATAVIEWCTRL

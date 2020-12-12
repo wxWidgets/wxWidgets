@@ -15,6 +15,15 @@
 
 #if wxUSE_POPUPWIN
 
+// ----------------------------------------------------------------------------
+// wxPopupWindow specific flags
+// ----------------------------------------------------------------------------
+
+// This flag can be used in MSW if some controls are not working with the
+// default popup style.
+#define wxPU_CONTAINS_CONTROLS     0x0001
+
+
 #include "wx/nonownedwnd.h"
 
 // ----------------------------------------------------------------------------
@@ -135,7 +144,12 @@ public:
                                   WXWPARAM wParam,
                                   WXLPARAM lParam) wxOVERRIDE;
 
+    // Override to dismiss the popup.
+    virtual void MSWDismissUnfocusedPopup() wxOVERRIDE;
+
 private:
+    void DismissOnDeactivate();
+
     wxDECLARE_DYNAMIC_CLASS(wxPopupTransientWindow);
     wxDECLARE_NO_COPY_CLASS(wxPopupTransientWindow);
 };
@@ -158,7 +172,7 @@ public:
     virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
     virtual void Dismiss() wxOVERRIDE;
 
-    // Overridden to grab the input on some plaforms
+    // Overridden to grab the input on some platforms
     virtual bool Show( bool show = true ) wxOVERRIDE;
 
 protected:

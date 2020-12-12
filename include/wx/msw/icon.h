@@ -48,9 +48,6 @@ public:
 
         // from XPM data
     wxIcon(const char* const* data) { CreateIconFromXpm(data); }
-#ifdef wxNEEDS_CHARPP
-    wxIcon(char **data) { CreateIconFromXpm(const_cast<const char* const*>(data)); }
-#endif
         // from resource/file
     wxIcon(const wxString& name,
            wxBitmapType type = wxICON_DEFAULT_TYPE,

@@ -12,9 +12,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -271,7 +268,7 @@ wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
 
 bool MyMusicTreeModel::IsContainer( const wxDataViewItem &item ) const
 {
-    // the invisble root node can have children
+    // the invisible root node can have children
     // (in our model always "MyMusic")
     if (!item.IsOk())
         return true;
@@ -292,7 +289,7 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
 
     if (node == m_classical)
     {
-        MyMusicTreeModel *model = (MyMusicTreeModel*)(const MyMusicTreeModel*) this;
+        MyMusicTreeModel* model = const_cast<MyMusicTreeModel*>(this);
         model->m_classicalMusicIsKnownToControl = true;
     }
 
@@ -311,6 +308,19 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
     return count;
 }
 
+
+// ----------------------------------------------------------------------------
+// MyLongMusicTreeModel
+// ----------------------------------------------------------------------------
+
+MyLongMusicTreeModel::MyLongMusicTreeModel() : MyMusicTreeModel()
+{
+    for (int i = 0; i < 50; i++)
+    {
+        AddToClassical("The Four Seasons", "Antonio Vivaldi", 1721);
+        AddToClassical("La costanza trionfante degl'amori e de gl'odii", "Antonio Vivaldi", 1716);
+    }
+}
 
 
 // ----------------------------------------------------------------------------
@@ -424,13 +434,6 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            if (row >= m_toggleColValues.size())
-                variant = false;
-            else
-                variant = m_toggleColValues[row];
-            break;
-
         case Col_EditableText:
             if (row >= m_textColValues.GetCount())
                 variant = wxString::Format( "virtual row %d", row );
@@ -438,15 +441,22 @@ void MyListModel::GetValueByRow( wxVariant &variant,
                 variant = m_textColValues[ row ];
             break;
 
-        case Col_IconText:
+        case Col_ToggleIconText:
             {
                 wxString text;
+                wxCheckBoxState state;
                 if ( row >= m_iconColValues.GetCount() )
+                {
                     text = "virtual icon";
+                    state = wxCHK_UNDETERMINED;
+                }
                 else
+                {
                     text = m_iconColValues[row];
+                    state = m_toggleColValues[row] ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+                }
 
-                variant << wxDataViewIconText(text, m_icon[row % 2]);
+                variant << wxDataViewCheckIconText(text, m_icon[row % 2], state);
             }
             break;
 
@@ -492,9 +502,6 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            return false;
-
         case Col_EditableText:
         case Col_Date:
             if (row < m_toggleColValues.size())
@@ -508,7 +515,7 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
             }
             return false;
 
-        case Col_IconText:
+        case Col_ToggleIconText:
             if ( !(row % 2) )
                 return false;
             attr.SetColour(*wxYELLOW);
@@ -565,20 +572,13 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            if (row >= m_toggleColValues.size())
-                return false;
-
-            m_toggleColValues[row] = variant.GetBool();
-            return true;
-
         case Col_EditableText:
-        case Col_IconText:
+        case Col_ToggleIconText:
             if (row >= m_textColValues.GetCount())
             {
                 // the item is not in the range of the items
                 // which we store... for simplicity, don't allow editing it
-                wxLogError( "Cannot edit rows with an index greater than %d",
+                wxLogError( "Cannot edit rows with an index greater than %zu",
                             m_textColValues.GetCount() );
                 return false;
             }
@@ -587,11 +587,13 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
             {
                 m_textColValues[row] = variant.GetString();
             }
-            else // col == Col_IconText
+            else // col == Col_ToggleIconText
             {
-                wxDataViewIconText iconText;
-                iconText << variant;
-                m_iconColValues[row] = iconText.GetText();
+                wxDataViewCheckIconText checkIconText;
+                checkIconText << variant;
+                m_toggleColValues[row] =
+                    checkIconText.GetCheckedState() == wxCHK_CHECKED;
+                m_iconColValues[row] = checkIconText.GetText();
             }
             return true;
 
@@ -620,4 +622,16 @@ bool MyListStoreDerivedModel::IsEnabledByRow(unsigned int row, unsigned int col)
 {
     // disabled the last two checkboxes
     return !(col == 0 && 8 <= row && row <= 9);
+}
+
+// ----------------------------------------------------------------------------
+// MyListStoreHasValueModel
+// ----------------------------------------------------------------------------
+
+bool MyListStoreHasValueModel::HasValue(const wxDataViewItem &item, unsigned int col) const
+{
+    unsigned int row = GetRow( item );
+    // the diagonal entries don't have values. This is just a silly example to demonstrate the
+    // usage of overriding HasValue to specify that some columns don't have values for some items
+    return row != col;
 }

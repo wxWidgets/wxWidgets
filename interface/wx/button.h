@@ -32,7 +32,7 @@
 
     A button may have either a single image for all states or different images
     for the following states (different images are not currently supported
-    under OS X where the normal image is used for all states):
+    under macOS where the normal image is used for all states):
     @li @b normal: the default state
     @li @b disabled: bitmap shown when the button is disabled.
     @li @b pressed: bitmap shown when the button is pushed (e.g. while the user
@@ -56,7 +56,7 @@
     The position of the image inside the button be configured using
     SetBitmapPosition(). By default the image is on the left of the text.
 
-    Please also notice that GTK+ uses a global setting called @c gtk-button-images 
+    Please also notice that GTK+ uses a global setting called @c gtk-button-images
     to determine if the images should be shown in the buttons
     at all. If it is off (which is the case in e.g. Gnome 2.28 by default), no
     images will be shown, consistently with the native behaviour.
@@ -115,7 +115,7 @@ public:
         @ref page_stockitems "this list", a standard label will be used. In
         other words, if you use a predefined @c wxID_XXX constant, just omit
         the label completely rather than specifying it. In particular, help
-        buttons (the ones with @a id of @c wxID_HELP) under OS X can't
+        buttons (the ones with @a id of @c wxID_HELP) under macOS can't
         display any label at all and while wxButton will detect if the standard
         "Help" label is used and ignore it, using any other label will prevent
         the button from correctly appearing as a help button and so should be
@@ -179,11 +179,15 @@ public:
 
 
     /**
-        Returns the default size for the buttons. It is advised to make all the dialog
-        buttons of the same size and this function allows to retrieve the (platform and
-        current font dependent size) which should be the best suited for this.
+        Returns the default size for the buttons. It is advised to make all the
+        dialog buttons of the same size and this function allows retrieving the
+        (platform, and current font dependent) size which should be the best
+        suited for this.
+
+        The optional @a win argument is new since wxWidgets 3.1.3 and allows to
+        get a per-monitor DPI specific size.
     */
-    static wxSize GetDefaultSize();
+    static wxSize GetDefaultSize(wxWindow* win = NULL);
 
     /**
         Returns the string label for the button.

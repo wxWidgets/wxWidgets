@@ -30,7 +30,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxPanelNameStr)
+             const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -43,7 +43,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // implement base class pure virtuals
     virtual void SetLabel(const wxString& label);
@@ -310,7 +310,7 @@ private:
 // undesired effects.
 //
 // Usage: create an instance of this class on the stack to disable the size
-// optimisation, it will be reenabled as soon as the object goes out
+// optimisation, it will be re-enabled as soon as the object goes out
 // from scope.
 // ----------------------------------------------------------------------------
 

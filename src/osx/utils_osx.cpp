@@ -65,9 +65,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(document)));
-    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    wxCFRef<CFURLRef> curl(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+    wxCFRef<CFURLRef> curl(wxOSXCreateURLFromFileSystemPath(document));
     OSStatus err = LSOpenCFURLRef( curl , NULL );
 
     if (err == noErr)
@@ -197,7 +195,7 @@ void wxMacStringToPascal( const wxString&from , unsigned char * to )
 
 wxString wxMacMakeStringFromPascal( const unsigned char * from )
 {
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
+    return wxString(&from[1], wxConvLocal, from[0]);
 }
 
 #endif // wxOSX_USE_COCOA_OR_CARBON

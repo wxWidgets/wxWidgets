@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTOOLTIP
 
@@ -667,9 +664,6 @@ void wxRichToolTipGenericImpl::SetTitleFont(const wxFont& font)
 
 void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
 {
-    // Set the focus to the window the tooltip refers to to make it look active.
-    win->SetFocus();
-
     wxRichToolTipPopup* const popup = new wxRichToolTipPopup
                                           (
                                             win,

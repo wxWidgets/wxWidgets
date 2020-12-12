@@ -36,11 +36,34 @@ class wxWindowUpdateLocker
 {
 public:
     /**
+        Default constructor doesn't do anything.
+
+        Prefer using the non-default constructor if possible, this constructor
+        is only useful if Lock() must be called conditionally, i.e. if it may
+        or not be called depending on some run-time condition.
+
+        @since 3.1.4
+     */
+    wxWindowUpdateLocker();
+
+    /**
         Creates an object preventing the updates of the specified @e win.
         The parameter must be non-@NULL and the window must exist for longer than
         wxWindowUpdateLocker object itself.
     */
-    wxWindowUpdateLocker(wxWindow* win);
+    explicit wxWindowUpdateLocker(wxWindow* win);
+
+    /**
+        Really lock window updates.
+
+        This method can only be called on an object initialized using the
+        default constructor.
+
+        @param win Non-@NULL window which must exist for longer than this object.
+
+        @since 3.1.4
+     */
+    void Lock(wxWindow *win);
 
     /**
         Destructor reenables updates for the window this object is associated with.

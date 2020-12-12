@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -684,8 +681,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     // only send wxNcPaintEvent if drawing at least part of nonclient area:
     if ( !clientRect.Contains(rect) )
     {
-        wxNcPaintEvent eventNc(GetId());
-        eventNc.SetEventObject(this);
+        wxNcPaintEvent eventNc(this);
         HandleWindowEvent(eventNc);
     }
     else
@@ -697,8 +693,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     // only send wxPaintEvent if drawing at least part of client area:
     if ( rect.Intersects(clientRect) )
     {
-        wxPaintEvent eventPt(GetId());
-        eventPt.SetEventObject(this);
+        wxPaintEvent eventPt(this);
         HandleWindowEvent(eventPt);
     }
     else

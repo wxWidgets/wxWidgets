@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LIBMSPACK
 
@@ -392,10 +389,6 @@ private:
     bool CreateFileStream(const wxString& pattern);
     // this void* is handle of archive . I'm sorry it is void and not proper
     // type but I don't want to make unzip.h header public.
-
-
-    // locates the file and returns a mspack_file *
-    mspack_file *LocateFile(wxString filename);
 
     // should store pointer to current file
     mspack_file *m_file;

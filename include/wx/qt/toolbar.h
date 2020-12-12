@@ -5,13 +5,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-class QToolBar;
 
 #ifndef _WX_QT_TOOLBAR_H_
 #define _WX_QT_TOOLBAR_H_
 
 class QActionGroup;
-class wxQtToolBar;
+class QToolBar;
 
 class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
@@ -23,7 +22,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxTB_DEFAULT_STYLE | wxNO_BORDER,
-              const wxString& name = wxToolBarNameStr)
+              const wxString& name = wxASCII_STR(wxToolBarNameStr))
     {
         Init();
 
@@ -37,10 +36,9 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTB_DEFAULT_STYLE | wxNO_BORDER,
-                const wxString& name = wxToolBarNameStr);
+                const wxString& name = wxASCII_STR(wxToolBarNameStr));
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const wxOVERRIDE;
-    virtual QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
@@ -62,6 +60,9 @@ public:
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) wxOVERRIDE;
     QWidget *GetHandle() const wxOVERRIDE;
+
+    // Private, only used by wxFrame.
+    QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
 protected:
     QActionGroup* GetActionGroup(size_t pos);

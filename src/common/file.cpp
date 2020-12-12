@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_FILE
 
@@ -479,7 +476,8 @@ wxFileOffset wxFile::Length() const
         wxFileOffset iLen = const_cast<wxFile *>(this)->SeekEnd();
         if ( iLen != wxInvalidOffset ) {
             // restore old position
-            if ( ((wxFile *)this)->Seek(iRc) == wxInvalidOffset ) {
+            if (const_cast<wxFile*>(this)->Seek(iRc) == wxInvalidOffset)
+            {
                 // error
                 iLen = wxInvalidOffset;
             }

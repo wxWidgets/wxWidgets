@@ -16,7 +16,16 @@
 #include "wx/osx/private.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/button.h"
+    #include "wx/toplevel.h"
 #endif
+
+typedef wxWindowWithItems<wxControl, wxComboBoxBase> RealwxComboBoxBase;
+
+wxBEGIN_EVENT_TABLE(wxComboBox, RealwxComboBoxBase)
+    EVT_CHAR(wxComboBox::OnChar)
+    EVT_KEY_DOWN(wxComboBox::OnKeyDown)
+wxEND_EVENT_TABLE()
 
 // work in progress
 
@@ -232,6 +241,81 @@ void wxComboBox::Popup()
 void wxComboBox::Dismiss()
 {
     GetComboPeer()->Dismiss();
+}
+
+void wxComboBox::OnChar(wxKeyEvent& event)
+{
+    const int key = event.GetKeyCode();
+    bool eat_key = false;
+
+    switch (key)
+    {
+        case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
+            if (m_windowStyle & wxTE_PROCESS_ENTER)
+            {
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
+                event.SetEventObject(this);
+                event.SetString(GetValue());
+                if (HandleWindowEvent(event))
+                    return;
+            }
+
+            {
+                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                if (tlw && tlw->GetDefaultItem())
+                {
+                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                    if (def && def->IsEnabled())
+                    {
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId());
+                        event.SetEventObject(def);
+                        def->Command(event);
+                        return;
+                    }
+                }
+
+                // this will make wxWidgets eat the ENTER key so that
+                // we actually prevent line wrapping in a single line text control
+                eat_key = true;
+            }
+            break;
+    }
+
+    if (!eat_key)
+    {
+        // perform keystroke handling
+        event.Skip(true);
+    }
+}
+
+void wxComboBox::OnKeyDown(wxKeyEvent& event)
+{
+    if (event.GetModifiers() == wxMOD_CONTROL)
+    {
+        switch(event.GetKeyCode())
+        {
+            case 'A':
+                SelectAll();
+                return;
+            case 'C':
+                if (CanCopy())
+                    Copy();
+                return;
+            case 'V':
+                if (CanPaste())
+                    Paste();
+                return;
+            case 'X':
+                if (CanCut())
+                    Cut();
+                return;
+            default:
+                break;
+        }
+    }
+    // no, we didn't process it
+    event.Skip();
 }
 
 #endif // wxUSE_COMBOBOX && wxOSX_USE_COCOA

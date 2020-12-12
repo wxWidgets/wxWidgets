@@ -12,8 +12,6 @@
 #ifndef __WX_CFSTRINGHOLDER_H__
 #define __WX_CFSTRINGHOLDER_H__
 
-#include <CoreFoundation/CFString.h>
-
 #include "wx/dlimpexp.h"
 #include "wx/fontenc.h"
 #include "wx/osx/core/cfref.h"
@@ -43,9 +41,9 @@ public:
     wxCFStringRef(const wxString &str,
                         wxFontEncoding encoding = wxFONTENCODING_DEFAULT) ;
 
-#ifdef __WXMAC__
-    wxCFStringRef(NSString* ref)
-        : wxCFRef< CFStringRef >((CFStringRef) ref)
+#ifdef __OBJC__
+    wxCFStringRef(WX_NSString ref)
+        : wxCFRef< CFStringRef >((WX_OSX_BRIDGE_RETAINED CFStringRef) ref)
     {
     }
 #endif
@@ -69,29 +67,37 @@ public:
     static wxString AsString( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
     static wxString AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
 #ifdef __WXMAC__
-    static wxString AsString( NSString* ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-    static wxString AsStringWithNormalizationFormC( NSString* ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-
-    NSString* AsNSString() const { return (NSString*)(CFStringRef) *this; }
+    static wxString AsString( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
+    static wxString AsStringWithNormalizationFormC( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
+#endif
+#ifdef __OBJC__
+    WX_NSString AsNSString() const { return (WX_OSX_BRIDGE WX_NSString)(CFStringRef) *this; }
 #endif
 private:
 } ;
 
-// corresponding class for holding UniChars (native unicode characters)
-
-class WXDLLIMPEXP_BASE wxMacUniCharBuffer
+/*! @function   wxCFStringRefFromGet
+    @abstract   Factory function to create wxCFStringRefRef from a CFStringRef obtained from a Get-rule function
+    @param  p           The CFStringRef to retain and create a wxCFStringRefRef from.  May be NULL.
+    @discussion Unlike the wxCFStringRef raw pointer constructor, this function explicitly retains its
+                argument.  This can be used for functions ) which return a temporary reference (Get-rule functions).
+*/
+inline wxCFStringRef wxCFStringRefFromGet(CFStringRef p)
 {
-public :
-    wxMacUniCharBuffer( const wxString &str ) ;
+    return wxCFStringRef(wxCFRetain(p));
+}
 
-    ~wxMacUniCharBuffer() ;
+#ifdef __WXMAC__
+/*! @function   wxCFStringRefFromGet
+    @abstract   Factory function to create wxCFStringRefRef from a NSString* obtained from a Get-rule function
+    @param  p           The NSString pointer to retain and create a wxCFStringRefRef from.  May be NULL.
+    @discussion Unlike the wxCFStringRef raw pointer constructor, this function explicitly retains its
+                argument.  This can be used for functions ) which return a temporary reference (Get-rule functions).
+*/
+inline wxCFStringRef wxCFStringRefFromGet(NSString *p)
+{
+    return wxCFStringRefFromGet((WX_OSX_BRIDGE CFStringRef)p);
+}
+#endif
 
-    UniCharPtr GetBuffer() ;
-
-    UniCharCount GetChars() ;
-
-private :
-    UniCharPtr m_ubuf ;
-    UniCharCount m_chars ;
-};
 #endif //__WXCFSTRINGHOLDER_H__

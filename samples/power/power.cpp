@@ -3,7 +3,7 @@
 // Purpose:     wxWidgets power management sample
 // Author:      Vadim Zeitlin
 // Created:     2006-05-27
-// Copyright:   (C) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (C) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

@@ -292,7 +292,7 @@ enum wxBorder
 
 /*  wxCommandEvents and the objects of the derived classes are forwarded to the */
 /*  parent window and so on recursively by default. Using this flag for the */
-/*  given window allows to block this propagation at this window, i.e. prevent */
+/*  given window allows blocking this propagation at this window, i.e. preventing */
 /*  the events from being propagated further upwards. The dialogs have this */
 /*  flag on by default. */
 #define wxWS_EX_BLOCK_EVENTS            0x00000002
@@ -379,9 +379,8 @@ enum wxBorder
 
 /*
  * wxRadioBox style flags
+ * These styles are not used in any port.
  */
-/*  should we number the items from left to right or from top to bottom in a 2d */
-/*  radiobox? */
 #define wxRA_LEFTTORIGHT    0x0001
 #define wxRA_TOPTOBOTTOM    0x0002
 
@@ -537,7 +536,7 @@ enum wxBackgroundStyle
         with this style.
      */
     wxBG_STYLE_PAINT,
-    
+
     /* this style is deprecated and doesn't do anything, don't use */
     wxBG_STYLE_COLOUR,
 
@@ -908,7 +907,7 @@ enum wxKeyCode
     WXK_CONTROL_X,
     WXK_CONTROL_Y,
     WXK_CONTROL_Z,
-    
+
     WXK_BACK    =    8,     //!< Backspace.
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
@@ -932,13 +931,13 @@ enum wxKeyCode
     WXK_CLEAR,
     WXK_SHIFT,
     WXK_ALT,
-    /** Note that under OS X, to improve compatibility with other
+    /** Note that under macOS, to improve compatibility with other
       * systems, 'WXK_CONTROL' represents the 'Command' key. Use this
       * constant to work with keyboard shortcuts. See 'WXK_RAW_CONTROL'
       * to get the state of the actual 'Control' key.
       */
     WXK_CONTROL,
-    /** Under OS X, where the 'Command' key is mapped to 'Control'
+    /** Under macOS, where the 'Command' key is mapped to 'Control'
       * to improve compatibility with other systems, WXK_RAW_CONTROL may
       * be used to obtain the state of the actual 'Control' key
       * ('WXK_CONTROL' would obtain the status of the 'Command' key).
@@ -1035,8 +1034,8 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
-    
-    /** This special key code was used to represent the key used for keyboard shortcuts. Under OS X,
+
+    /** This special key code was used to represent the key used for keyboard shortcuts. Under macOS,
       * this key maps to the 'Command' (aka logo or 'Apple') key, whereas on Linux/Windows/others
       * this is the Control key, with the new semantic of WXK_CONTROL, WXK_COMMAND is not needed anymore
       */
@@ -1090,17 +1089,17 @@ enum wxKeyModifier
 {
     wxMOD_NONE      = 0x0000,
     wxMOD_ALT       = 0x0001,
-    /** Ctlr Key, corresponds to Command key on OS X */
+    /** Ctlr Key, corresponds to Command key on macOS */
     wxMOD_CONTROL   = 0x0002,
     wxMOD_ALTGR     = wxMOD_ALT | wxMOD_CONTROL,
     wxMOD_SHIFT     = 0x0004,
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
-    
-    /** used to describe the true Ctrl Key under OS X,
+
+    /** used to describe the true Ctrl Key under macOS,
     identic to @c wxMOD_CONTROL on other platforms */
     wxMOD_RAW_CONTROL,
-    
+
     /** deprecated, identic to @c wxMOD_CONTROL on all platforms */
     wxMOD_CMD       = wxMOD_CONTROL,
     wxMOD_ALL       = 0xffff
@@ -1578,7 +1577,7 @@ typedef double wxDouble;
 
     @header{wx/defs.h}
 */
-template <typename T> wxDELETE(T*& ptr);
+template <typename T> void wxDELETE(T*& ptr);
 
 /**
     A function which deletes and nulls the pointer.
@@ -1598,7 +1597,7 @@ template <typename T> wxDELETE(T*& ptr);
 
     @header{wx/defs.h}
 */
-template <typename T> wxDELETEA(T*& array);
+template <typename T> void wxDELETEA(T*& array);
 
 /**
     Generate deprecation warning with the given message when a function is
@@ -1624,6 +1623,7 @@ template <typename T> wxDELETEA(T*& array);
 
     @header{wx/defs.h}
  */
+#define wxDEPRECATED_MSG(msg)
 
 /**
     This macro can be used around a function declaration to generate warnings
@@ -1796,7 +1796,7 @@ template <typename T> wxDELETEA(T*& array);
         wxASSERT( x == 4 && y == 3 );
     @endcode
  */
-template <typename T> wxSwap(T& first, T& second);
+template <typename T> void wxSwap(T& first, T& second);
 
 /**
     This macro is the same as the standard C99 @c va_copy for the compilers

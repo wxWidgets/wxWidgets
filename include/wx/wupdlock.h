@@ -3,7 +3,7 @@
 // Purpose:     wxWindowUpdateLocker prevents window redrawing
 // Author:      Vadim Zeitlin
 // Created:     2006-03-06
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,12 +19,29 @@
 class wxWindowUpdateLocker
 {
 public:
+    // Prefer using the ctor below if possible, this ctor is only useful if
+    // Lock() must be called only conditionally.
+    wxWindowUpdateLocker() : m_win(NULL) { }
+
     // create an object preventing updates of the given window (which must have
     // a lifetime at least as great as ours)
-    wxWindowUpdateLocker(wxWindow *win) : m_win(win) { win->Freeze(); }
+    explicit wxWindowUpdateLocker(wxWindow *win) : m_win(win) { win->Freeze(); }
+
+    // May be called only for the object constructed using the default ctor.
+    void Lock(wxWindow *win)
+    {
+        wxASSERT( !m_win );
+
+        m_win = win;
+        win->Freeze();
+    }
 
     // dtor thaws the window to permit updates again
-    ~wxWindowUpdateLocker() { m_win->Thaw(); }
+    ~wxWindowUpdateLocker()
+    {
+        if ( m_win )
+            m_win->Thaw();
+    }
 
 private:
     wxWindow *m_win;

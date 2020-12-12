@@ -172,7 +172,7 @@ public:
     class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
     for bitmaps with an additionally alpha channel).
 
-    Note that many wxBitmap functions take a @e type parameter, which is a 
+    Note that many wxBitmap functions take a @e type parameter, which is a
     value of the ::wxBitmapType enumeration.
     The validity of those values depends however on the platform where your program
     is running and from the wxWidgets configuration.
@@ -183,9 +183,9 @@ public:
     - wxX11 supports XPM files, XPM data, XBM data;
 
     In addition, wxBitmap can load and save all formats that wxImage can; see wxImage
-    for more info. Of course, you must have loaded the wxImage handlers 
+    for more info. Of course, you must have loaded the wxImage handlers
     (see ::wxInitAllImageHandlers() and wxImage::AddHandler).
-    Note that all available wxBitmapHandlers for a given wxWidgets port are 
+    Note that all available wxBitmapHandlers for a given wxWidgets port are
     automatically loaded at startup so you won't need to use wxBitmap::AddHandler.
 
     More on the difference between wxImage and wxBitmap: wxImage is just a
@@ -386,12 +386,12 @@ public:
         @param handler
             A new bitmap format handler object. There is usually only one instance
             of a given handler class in an application session.
-            
+
         Note that unlike wxImage::AddHandler, there's no documented list of
         the wxBitmapHandlers available in wxWidgets.
-        This is because they are platform-specific and most important, they are 
+        This is because they are platform-specific and most important, they are
         all automatically loaded at startup.
-        
+
         If you want to be sure that wxBitmap can load a certain type of image,
         you'd better use wxImage::AddHandler.
 
@@ -445,7 +445,7 @@ public:
         @param height
             The height of the bitmap in pixels, must be strictly positive.
         @param dc
-            DC from wich the scaling factor is inherited
+            DC from which the scaling factor is inherited
 
         @return @true if the creation was successful.
 
@@ -469,7 +469,7 @@ public:
 
         @since 3.1.0
     */
-    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
+    bool CreateScaled(int width, int height, int depth, double logicalScale);
 
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.
@@ -665,7 +665,7 @@ public:
         @endcode
         in your application startup code.
 
-        However under OS X this function uses native image loading and so
+        However under macOS this function uses native image loading and so
         doesn't require wxWidgets PNG support.
 
         @since 2.9.5
@@ -734,6 +734,10 @@ public:
 
         @remarks The bitmap object owns the mask once this has been called.
 
+        @note A mask can be set also for bitmap with an alpha channel but
+        doing so under wxMSW is not recommended because performance of drawing
+        such bitmap is not very good.
+
         @see GetMask(), wxMask
     */
     virtual void SetMask(wxMask* mask);
@@ -776,6 +780,10 @@ wxBitmap wxNullBitmap;
 
     When associated with a bitmap and drawn in a device context, the unmasked
     area of the bitmap will be drawn, and the masked area will not be drawn.
+
+    @note A mask can be associated also with a bitmap with an alpha channel
+    but drawing such bitmaps under wxMSW may be slow so using them should be
+    avoided if drawing performance is an important factor.
 
     @library{wxcore}
     @category{gdi}

@@ -14,7 +14,7 @@
     wxTreeItemId handles, which may be tested for validity by calling
     wxTreeItemId::IsOk().
 
-    A similar control with a fully native implementation for GTK+ and OS X
+    A similar control with a fully native implementation for GTK+ and macOS
     as well is wxDataViewTreeCtrl.
 
     To intercept events from a tree control, use the event table macros
@@ -185,7 +185,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the window is sized appropriately.
         @param style
             Window style. See wxTreeCtrl.
@@ -371,6 +371,9 @@ public:
 
     /**
         Scrolls and/or expands items to ensure that the given item is visible.
+
+        This method can be used, and will work, even while the window is frozen
+        (see wxWindow::Freeze()).
     */
     virtual void EnsureVisible(const wxTreeItemId& item);
 
@@ -470,7 +473,7 @@ public:
         Returns the item last clicked or otherwise selected.
         Unlike GetSelection(), it can be used whether or not
         the control has the @c wxTR_MULTIPLE style.
-        
+
         @since 2.9.1
     */
     virtual wxTreeItemId GetFocusedItem() const;
@@ -502,6 +505,12 @@ public:
         Returns the current tree control indentation.
     */
     virtual unsigned int GetIndent() const;
+
+    /**
+        Returns the current tree control spacing.  This is the number of
+        horizontal pixels between the buttons and the state images.
+    */
+    unsigned int GetSpacing() const;
 
     /**
         Returns the background colour of the item.
@@ -647,7 +656,7 @@ public:
     /**
         Returns the selection, or an invalid item if there is no selection. This
         function only works with the controls without @c wxTR_MULTIPLE style,
-        use GetSelections() for the controls which do have this style 
+        use GetSelections() for the controls which do have this style
         or, if a single item is wanted, use GetFocusedItem().
     */
     virtual wxTreeItemId GetSelection() const;
@@ -797,6 +806,11 @@ public:
 
     /**
         Scrolls the specified item into view.
+
+        Note that this method doesn't work while the window is frozen (See
+        wxWindow::Freeze()), at least under MSW.
+
+        @see EnsureVisible()
     */
     virtual void ScrollTo(const wxTreeItemId& item);
 
@@ -841,6 +855,13 @@ public:
         Sets the indentation for the tree control.
     */
     virtual void SetIndent(unsigned int indent);
+
+    /**
+        Sets the spacing for the tree control. Spacing is the number of
+        horizontal pixels between the buttons and the state images.
+        This has no effect under wxMSW.
+    */
+    void SetSpacing(unsigned int spacing);
 
     /**
         Sets the colour of the item's background.

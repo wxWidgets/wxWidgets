@@ -115,7 +115,7 @@ public:
             The footer text if empty no footer text will be used.
 
         @see SetFooterIcon(), GetFooterText()
-        
+
         @since 3.1.1
     */
     void SetFooterText(const wxString& footerText);

@@ -54,10 +54,6 @@
     #pragma warning(pop)
 #endif
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #include <float.h> // for FLT_MAX, FLT_MIN
 
 #ifndef WX_PRECOMP
@@ -72,6 +68,7 @@
 
 #include "wx/graphics.h"
 #include "wx/dynlib.h"
+#include "wx/msw/ole/comimpl.h"
 #include "wx/msw/private/comptr.h"
 #include "wx/private/graphics.h"
 #include "wx/stack.h"
@@ -272,6 +269,14 @@ DEFINE_GUID(CLSID_WICImagingFactory,
             0xcacaf262, 0x9370, 0x4615, 0xa1, 0x3b, 0x9f, 0x55, 0x39, 0xda, 0x4c, 0xa);
 #endif
 
+#if wxUSE_PRIVATE_FONTS
+DEFINE_GUID(wxIID_IDWriteFontFileEnumerator,
+            0x72755049, 0x5ff7, 0x435d, 0x83, 0x48, 0x4b, 0xe9, 0x7c, 0xfa, 0x6c, 0x7c);
+
+DEFINE_GUID(wxIID_IDWriteFontCollectionLoader,
+            0xcca920e4, 0x52f0, 0x492b, 0xbf, 0xa8, 0x29, 0xc7, 0x2e, 0xe0, 0xa4, 0x68);
+#endif // wxUSE_PRIVATE_FONTS
+
 // Implementation of the Direct2D functions
 HRESULT WINAPI wxD2D1CreateFactory(
     D2D1_FACTORY_TYPE factoryType,
@@ -360,6 +365,174 @@ HRESULT WINAPI wxD3D11CreateDevice(
 }
 #endif
 
+#if wxUSE_PRIVATE_FONTS
+
+// This function is defined in src/msw/font.cpp.
+extern const wxArrayString& wxGetPrivateFontFileNames();
+
+namespace
+{
+wxCOMPtr<IDWriteFontCollection> gs_pPrivateFontCollection;
+
+typedef unsigned int wxDirect2DFontKey;
+
+class wxDirect2DFontFileEnumerator : public IDWriteFontFileEnumerator
+{
+public:
+    wxDirect2DFontFileEnumerator(IDWriteFactory* pFactory, const wxArrayString& fontCollection)
+        : m_factory(pFactory)
+        , m_filePaths(fontCollection)
+        , m_nextIndex(0)
+    {
+    }
+
+    virtual ~wxDirect2DFontFileEnumerator()
+    {
+    }
+
+    // IDWriteFontFileEnumerator methods
+    virtual wxSTDMETHODIMP MoveNext(BOOL* pHasCurrentFile) wxOVERRIDE
+    {
+        HRESULT hr = S_OK;
+
+        *pHasCurrentFile = FALSE;
+        m_currentFile.reset();
+
+        if ( m_nextIndex < m_filePaths.size() )
+        {
+            hr = m_factory->CreateFontFileReference(m_filePaths[m_nextIndex].wc_str(), NULL, &m_currentFile);
+            if ( SUCCEEDED(hr) )
+            {
+                *pHasCurrentFile = TRUE;
+                ++m_nextIndex;
+            }
+        }
+
+        return hr;
+    }
+
+    virtual wxSTDMETHODIMP GetCurrentFontFile(IDWriteFontFile** ppFontFile) wxOVERRIDE
+    {
+        if ( m_currentFile )
+        {
+            m_currentFile.get()->AddRef();
+        }
+        *ppFontFile = m_currentFile;
+
+        return m_currentFile ? S_OK : E_FAIL;
+    }
+
+    // IUnknown methods
+    DECLARE_IUNKNOWN_METHODS;
+
+private:
+    wxCOMPtr<IDWriteFactory> m_factory;
+    wxCOMPtr<IDWriteFontFile> m_currentFile;
+    wxArrayString m_filePaths;
+    size_t m_nextIndex;
+
+    wxDECLARE_NO_COPY_CLASS(wxDirect2DFontFileEnumerator);
+};
+
+BEGIN_IID_TABLE(wxDirect2DFontFileEnumerator)
+ADD_IID(Unknown)
+ADD_RAW_IID(wxIID_IDWriteFontFileEnumerator)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxDirect2DFontFileEnumerator)
+
+class wxDirect2DFontCollectionLoader : public IDWriteFontCollectionLoader
+{
+public:
+    wxDirect2DFontCollectionLoader()
+    {
+        ms_isInitialized = true;
+    }
+
+    virtual ~wxDirect2DFontCollectionLoader()
+    {
+    }
+
+    // IDWriteFontCollectionLoader methods
+    virtual wxSTDMETHODIMP CreateEnumeratorFromKey(IDWriteFactory* pFactory,
+                                        void const* pCollectionKey, UINT32 collectionKeySize,
+                                        IDWriteFontFileEnumerator** pFontFileEnumerator) wxOVERRIDE
+    {
+        if ( !pFontFileEnumerator )
+            return E_INVALIDARG;
+
+        *pFontFileEnumerator = NULL;
+
+        if ( collectionKeySize != sizeof(wxDirect2DFontKey) )
+            return E_INVALIDARG;
+
+        wxDirect2DFontKey key = *static_cast<wxDirect2DFontKey const*>(pCollectionKey);
+        if ( key != ms_key )
+            return E_INVALIDARG;
+
+        if ( ms_fontList.empty() )
+            return E_INVALIDARG;
+
+        wxDirect2DFontFileEnumerator* pEnumerator = new wxDirect2DFontFileEnumerator(pFactory, ms_fontList);
+        if ( !pEnumerator )
+            return E_OUTOFMEMORY;
+
+        pEnumerator->AddRef();
+        *pFontFileEnumerator = pEnumerator;
+
+        return S_OK;
+    }
+
+    // Singleton loader instance
+    static IDWriteFontCollectionLoader* GetLoader()
+    {
+        static wxCOMPtr<wxDirect2DFontCollectionLoader> instance(new wxDirect2DFontCollectionLoader());
+
+        return instance;
+    }
+
+    static bool IsInitialized()
+    {
+        return ms_isInitialized;
+    }
+
+    static wxDirect2DFontKey SetFontList(const wxArrayString& list)
+    {
+        ms_fontList = list;
+        // Every time font collection is changed, generate unique key
+        return ++ms_key;
+    }
+
+    static const wxArrayString& GetFontList()
+    {
+        return ms_fontList;
+    }
+
+    // IUnknown methods
+    DECLARE_IUNKNOWN_METHODS;
+
+private:
+    static bool ms_isInitialized;
+    static wxArrayString ms_fontList;
+    static wxDirect2DFontKey ms_key;
+
+    wxDECLARE_NO_COPY_CLASS(wxDirect2DFontCollectionLoader);
+};
+
+BEGIN_IID_TABLE(wxDirect2DFontCollectionLoader)
+ADD_IID(Unknown)
+ADD_RAW_IID(wxIID_IDWriteFontCollectionLoader)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxDirect2DFontCollectionLoader)
+
+bool wxDirect2DFontCollectionLoader::ms_isInitialized(false);
+wxArrayString wxDirect2DFontCollectionLoader::ms_fontList;
+wxDirect2DFontKey wxDirect2DFontCollectionLoader::ms_key(0);
+} // anonymous namespace
+
+#endif // wxUSE_PRIVATE_FONTS
+
 static IWICImagingFactory* gs_WICImagingFactory = NULL;
 
 IWICImagingFactory* wxWICImagingFactory()
@@ -423,6 +596,14 @@ IDWriteFactory* wxDWriteFactory()
             wxIID_IDWriteFactory,
             reinterpret_cast<IUnknown**>(&gs_IDWriteFactory)
             );
+#if wxUSE_PRIVATE_FONTS
+        // Register our custom font loader
+        HRESULT hr = gs_IDWriteFactory->RegisterFontCollectionLoader(wxDirect2DFontCollectionLoader::GetLoader());
+        if ( FAILED(hr) )
+        {
+            wxLogError(_("Could not register custom DirectWrite font loader."));
+        }
+#endif // wxUSE_PRIVATE_FONTS
     }
     return gs_IDWriteFactory;
 }
@@ -1143,6 +1324,16 @@ public :
 
     ~wxD2DPathData();
 
+    void SetFillMode(D2D1_FILL_MODE fillMode)
+    {
+        m_fillMode = fillMode;
+    }
+
+    D2D1_FILL_MODE GetFillMode() const
+    {
+        return m_fillMode;
+    }
+
     ID2D1PathGeometry* GetPathGeometry();
 
     // This closes the geometry sink, ensuring all the figures are stored inside
@@ -1202,7 +1393,7 @@ private:
 
     void EndFigure(D2D1_FIGURE_END figureEnd);
 
-    ID2D1Geometry* GetFullGeometry() const;
+    ID2D1Geometry* GetFullGeometry(D2D1_FILL_MODE fillMode) const;
 
     bool IsEmpty() const;
     bool IsStateSafeForFlush() const;
@@ -1238,6 +1429,8 @@ private :
     D2D1_POINT_2F m_figureLogStart;
 
     bool m_geometryWritable;
+
+    D2D1_FILL_MODE m_fillMode;
 };
 
 //-----------------------------------------------------------------------------
@@ -1253,7 +1446,8 @@ wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     m_figureStart(D2D1::Point2F(0.0f, 0.0f)),
     m_figureLogStartSet(false),
     m_figureLogStart(D2D1::Point2F(0.0f, 0.0f)),
-    m_geometryWritable(true)
+    m_geometryWritable(true),
+    m_fillMode(D2D1_FILL_MODE_ALTERNATE)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
     // To properly initialize path geometry there is also
@@ -1419,7 +1613,7 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
     }
 }
 
-ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
+ID2D1Geometry* wxD2DPathData::GetFullGeometry(D2D1_FILL_MODE fillMode) const
 {
     // Our final path geometry is represented by geometry group
     // which contains all transformed geometries plus current geometry.
@@ -1435,7 +1629,7 @@ ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
 
     // And use this array as a source to create geometry group.
     m_combinedGeometry.reset();
-    HRESULT hr = m_direct2dfactory->CreateGeometryGroup(D2D1_FILL_MODE_ALTERNATE,
+    HRESULT hr = m_direct2dfactory->CreateGeometryGroup(fillMode,
                                   pGeometries, numGeometries+1, &m_combinedGeometry);
     wxFAILED_HRESULT_MSG(hr);
     delete []pGeometries;
@@ -1759,9 +1953,6 @@ void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
     GeometryStateData curStateSrc;
     pathSrc->SaveGeometryState(curStateSrc);
 
-    // Raise warning if appended path has an open non-empty sub-path.
-    wxASSERT_MSG( pathSrc->IsStateSafeForFlush(),
-        wxS("Sub-path in appended path should be closed prior to this operation") );
     // Close appended geometry.
     pathSrc->Flush();
 
@@ -1813,6 +2004,13 @@ void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 // closes the current sub-path
 void wxD2DPathData::CloseSubpath()
 {
+    // If we have a sub-path open by call to MoveToPoint(),
+    // which doesn't open a new figure by itself,
+    // we have to open a new figure now to get a required 1-point path.
+    if ( !m_figureOpened && m_currentPointSet )
+    {
+        EnsureFigureOpen(m_currentPoint);
+    }
     // Close sub-path and close the figure.
     if ( m_figureOpened )
     {
@@ -1823,7 +2021,7 @@ void wxD2DPathData::CloseSubpath()
 
 void* wxD2DPathData::GetNativePath() const
 {
-    return GetFullGeometry();
+    return GetFullGeometry(GetFillMode());
 }
 
 void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
@@ -1873,8 +2071,7 @@ void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
     // constraints this can be fully done only if open figure was empty.
     // So, Transform() can be safely called if path doesn't contain the open
     // sub-path or if open sub-path is empty.
-    wxASSERT_MSG( IsStateSafeForFlush(),
-            wxS("Consider closing sub-path before calling Transform()") );
+
     // Close current geometry.
     Flush();
 
@@ -1913,7 +2110,7 @@ void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
 void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) const
 {
     D2D1_RECT_F bounds;
-    ID2D1Geometry *curGeometry = GetFullGeometry();
+    ID2D1Geometry *curGeometry = GetFullGeometry(GetFillMode());
     HRESULT hr = curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
     wxCHECK_HRESULT_RET(hr);
     // Check if bounds are empty
@@ -1927,10 +2124,11 @@ void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) c
     if (h) *h = bounds.bottom - bounds.top;
 }
 
-bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle)) const
+bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode fillStyle) const
 {
     BOOL result;
-    ID2D1Geometry *curGeometry = GetFullGeometry();
+    D2D1_FILL_MODE fillMode = (fillStyle == wxODDEVEN_RULE) ? D2D1_FILL_MODE_ALTERNATE : D2D1_FILL_MODE_WINDING;
+    ID2D1Geometry *curGeometry = GetFullGeometry(fillMode);
     curGeometry->FillContainsPoint(D2D1::Point2F(x, y), D2D1::Matrix3x2F::Identity(), &result);
     return result != FALSE;
 }
@@ -2297,33 +2495,34 @@ wxD2DBitmapData* wxGetD2DBitmapData(const wxGraphicsBitmap& bitmap)
 }
 
 // Helper class used to create and safely release a ID2D1GradientStopCollection from wxGraphicsGradientStops
-class wxD2DGradientStopsHelper
+class wxD2DGradientStopsHelper : public wxD2DResourceHolder<ID2D1GradientStopCollection>
 {
 public:
-    wxD2DGradientStopsHelper(const wxGraphicsGradientStops& gradientStops, ID2D1RenderTarget* renderTarget)
+    wxD2DGradientStopsHelper(const wxGraphicsGradientStops& gradientStops)
     {
-        int stopCount = gradientStops.GetCount();
-
-        D2D1_GRADIENT_STOP* gradientStopArray = new D2D1_GRADIENT_STOP[stopCount];
-
-        for (int i = 0; i < stopCount; ++i)
+        const int stopCount = gradientStops.GetCount();
+        m_gradientStops.reserve(stopCount);
+        for ( int i = 0; i < stopCount; ++i )
         {
-            gradientStopArray[i].color = wxD2DConvertColour(gradientStops.Item(i).GetColour());
-            gradientStopArray[i].position = gradientStops.Item(i).GetPosition();
+            D2D1_GRADIENT_STOP stop;
+            stop.position = gradientStops.Item(i).GetPosition();
+            stop.color = wxD2DConvertColour(gradientStops.Item(i).GetColour());
+            m_gradientStops.push_back(stop);
         }
-
-        renderTarget->CreateGradientStopCollection(gradientStopArray, stopCount, D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &m_gradientStopCollection);
-
-        delete[] gradientStopArray;
     }
 
-    ID2D1GradientStopCollection* GetGradientStopCollection()
+protected:
+    void DoAcquireResource() wxOVERRIDE
     {
-        return m_gradientStopCollection;
+        wxCHECK_RET(!m_gradientStops.empty(), "No gradient stops provided");
+
+        HRESULT hr = GetContext()->CreateGradientStopCollection(&m_gradientStops[0],
+            m_gradientStops.size(), D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &m_nativeResource);
+        wxCHECK_HRESULT_RET(hr);
     }
 
 private:
-    wxCOMPtr<ID2D1GradientStopCollection> m_gradientStopCollection;
+    wxVector<D2D1_GRADIENT_STOP> m_gradientStops;
 };
 
 template <typename B>
@@ -2404,27 +2603,45 @@ class wxD2DLinearGradientBrushResourceHolder : public wxD2DResourceHolder<ID2D1L
 {
 public:
     struct LinearGradientInfo {
-        const wxRect direction;
+        const wxDouble x1;
+        const wxDouble y1;
+        const wxDouble x2;
+        const wxDouble y2;
         const wxGraphicsGradientStops stops;
-        LinearGradientInfo(wxDouble& x1, wxDouble& y1, wxDouble& x2, wxDouble& y2, const wxGraphicsGradientStops& stops_)
-            : direction(x1, y1, x2, y2), stops(stops_) {}
+        const wxGraphicsMatrix matrix;
+        LinearGradientInfo(wxDouble& x1_, wxDouble& y1_,
+                           wxDouble& x2_, wxDouble& y2_,
+                           const wxGraphicsGradientStops& stops_,
+                           const wxGraphicsMatrix& matrix_)
+            : x1(x1_), y1(y1_), x2(x2_), y2(y2_), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, wxDouble& x2, wxDouble& y2, const wxGraphicsGradientStops& stops)
-        : m_linearGradientInfo(x1, y1, x2, y2, stops) {}
+    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1,
+                                           wxDouble& x2, wxDouble& y2,
+                                           const wxGraphicsGradientStops& stops,
+                                           const wxGraphicsMatrix& matrix)
+        : m_linearGradientInfo(x1, y1, x2, y2, stops, matrix) {}
 
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops, GetContext());
+        wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops);
+        helper.Bind(GetManager());
 
         HRESULT hr = GetContext()->CreateLinearGradientBrush(
             D2D1::LinearGradientBrushProperties(
-            D2D1::Point2F(m_linearGradientInfo.direction.GetX(), m_linearGradientInfo.direction.GetY()),
-            D2D1::Point2F(m_linearGradientInfo.direction.GetWidth(), m_linearGradientInfo.direction.GetHeight())),
-            helper.GetGradientStopCollection(),
+                D2D1::Point2F(m_linearGradientInfo.x1, m_linearGradientInfo.y1),
+                D2D1::Point2F(m_linearGradientInfo.x2, m_linearGradientInfo.y2)),
+            helper.GetD2DResource(),
             &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
+
+        if (! m_linearGradientInfo.matrix.IsNull())
+        {
+            D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_linearGradientInfo.matrix)->GetMatrix3x2F();
+            matrix.Invert();
+            m_nativeResource->SetTransform(matrix);
+        }
     }
 private:
     const LinearGradientInfo m_linearGradientInfo;
@@ -2434,33 +2651,53 @@ class wxD2DRadialGradientBrushResourceHolder : public wxD2DResourceHolder<ID2D1R
 {
 public:
     struct RadialGradientInfo {
-        const wxRect direction;
+        const wxDouble x1;
+        const wxDouble y1;
+        const wxDouble x2;
+        const wxDouble y2;
         const wxDouble radius;
         const wxGraphicsGradientStops stops;
+        const wxGraphicsMatrix matrix;
 
-        RadialGradientInfo(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble r, const wxGraphicsGradientStops& stops_)
-            : direction(x1, y1, x2, y2), radius(r), stops(stops_) {}
+        RadialGradientInfo(wxDouble x1_, wxDouble y1_,
+                           wxDouble x2_, wxDouble y2_,
+                           wxDouble r,
+                           const wxGraphicsGradientStops& stops_,
+                           const wxGraphicsMatrix& matrix_)
+            : x1(x1_), y1(y1_), x2(x2_), y2(y2_), radius(r), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, wxDouble& x2, wxDouble& y2, wxDouble& r, const wxGraphicsGradientStops& stops)
-        : m_radialGradientInfo(x1, y1, x2, y2, r, stops) {}
+    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1,
+                                           wxDouble& x2, wxDouble& y2,
+                                           wxDouble& r,
+                                           const wxGraphicsGradientStops& stops,
+                                           const wxGraphicsMatrix& matrix)
+        : m_radialGradientInfo(x1, y1, x2, y2, r, stops, matrix) {}
 
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
+        wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops);
+        helper.Bind(GetManager());
 
-        int xo = m_radialGradientInfo.direction.GetLeft() - m_radialGradientInfo.direction.GetWidth();
-        int yo = m_radialGradientInfo.direction.GetTop() - m_radialGradientInfo.direction.GetHeight();
+        wxDouble xo = m_radialGradientInfo.x1 - m_radialGradientInfo.x2;
+        wxDouble yo = m_radialGradientInfo.y1 - m_radialGradientInfo.y2;
 
         HRESULT hr = GetContext()->CreateRadialGradientBrush(
             D2D1::RadialGradientBrushProperties(
-            D2D1::Point2F(m_radialGradientInfo.direction.GetLeft(), m_radialGradientInfo.direction.GetTop()),
-            D2D1::Point2F(xo, yo),
-            m_radialGradientInfo.radius, m_radialGradientInfo.radius),
-            helper.GetGradientStopCollection(),
+                D2D1::Point2F(m_radialGradientInfo.x1, m_radialGradientInfo.y1),
+                D2D1::Point2F(xo, yo),
+                m_radialGradientInfo.radius, m_radialGradientInfo.radius),
+            helper.GetD2DResource(),
             &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
+
+        if (! m_radialGradientInfo.matrix.IsNull())
+        {
+            D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_radialGradientInfo.matrix)->GetMatrix3x2F();
+            matrix.Invert();
+            m_nativeResource->SetTransform(matrix);
+        }
     }
 
 private:
@@ -2478,9 +2715,16 @@ public:
 
     wxD2DBrushData(wxGraphicsRenderer* renderer);
 
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxGraphicsGradientStops& stops);
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, const wxGraphicsGradientStops& stops);
+    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                   wxDouble endX, wxDouble endY,
+                                   wxDouble radius,
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
     ID2D1Brush* GetBrush() const
     {
@@ -2525,18 +2769,22 @@ wxD2DBrushData::wxD2DBrushData(wxGraphicsRenderer* renderer)
 void wxD2DBrushData::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
-    m_brushResourceHolder = new wxD2DLinearGradientBrushResourceHolder(x1, y1, x2, y2, stops);
+    m_brushResourceHolder = new wxD2DLinearGradientBrushResourceHolder(
+        x1, y1, x2, y2, stops, matrix);
 }
 
 void wxD2DBrushData::CreateRadialGradientBrush(
-    wxDouble xo, wxDouble yo,
-    wxDouble xc, wxDouble yc,
+    wxDouble startX, wxDouble startY,
+    wxDouble endX, wxDouble endY,
     wxDouble radius,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
-    m_brushResourceHolder = new wxD2DRadialGradientBrushResourceHolder(xo, yo, xc, yc, radius, stops);
+    m_brushResourceHolder = new wxD2DRadialGradientBrushResourceHolder(
+        startX, startY, endX, endY, radius, stops, matrix);
 }
 
 wxD2DBrushData* wxGetD2DBrushData(const wxGraphicsBrush& brush)
@@ -2644,8 +2892,33 @@ wxD2DPenData::wxD2DPenData(
         strokeBrush.SetStyle(wxBRUSHSTYLE_SOLID);
     }
 
-    m_stippleBrush = new wxD2DBrushData(renderer, strokeBrush);
+    switch ( m_penInfo.GetGradientType() )
+    {
+    case wxGRADIENT_NONE:
+        m_stippleBrush = new wxD2DBrushData(renderer, strokeBrush);
+        break;
+
+    case wxGRADIENT_LINEAR:
+        m_stippleBrush = new wxD2DBrushData(renderer);
+        m_stippleBrush->CreateLinearGradientBrush(
+                                m_penInfo.GetX1(), m_penInfo.GetY1(),
+                                m_penInfo.GetX2(), m_penInfo.GetY2(),
+                                m_penInfo.GetStops(),
+                                m_penInfo.GetMatrix());
+        break;
+
+    case wxGRADIENT_RADIAL:
+        m_stippleBrush = new wxD2DBrushData(renderer);
+        m_stippleBrush->CreateRadialGradientBrush(
+                                m_penInfo.GetStartX(), m_penInfo.GetStartY(),
+                                m_penInfo.GetEndX(), m_penInfo.GetEndY(),
+                                m_penInfo.GetRadius(),
+                                m_penInfo.GetStops(),
+                                m_penInfo.GetMatrix());
+        break;
+    }
 }
+
 
 void wxD2DPenData::CreateStrokeStyle(ID2D1Factory* const direct2dfactory)
 {
@@ -2699,7 +2972,7 @@ wxD2DPenData* wxGetD2DPenData(const wxGraphicsPen& pen)
 class wxD2DFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, const wxColor& color);
+    wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, const wxRealPoint& dpi, const wxColor& color);
 
     wxCOMPtr<IDWriteTextLayout> CreateTextLayout(const wxString& text) const;
 
@@ -2724,7 +2997,7 @@ private:
     bool m_strikethrough;
 };
 
-wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, const wxColor& color) :
+wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, const wxRealPoint& dpi, const wxColor& color) :
     wxGraphicsObjectRefData(renderer), m_brushData(renderer, wxBrush(color)),
     m_underlined(font.GetUnderlined()), m_strikethrough(font.GetStrikethrough())
 {
@@ -2751,19 +3024,77 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
         logfont.lfFaceName[name.Length()] = L'\0';
     }
 
+    wxCOMPtr<IDWriteFontFamily> fontFamily;
+    wxCOMPtr<IDWriteFontCollection> fontCollection; // NULL if font is taken from the system collection
+
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
     if ( hr == DWRITE_E_NOFONT )
     {
-        // It was attempted to create DirectWrite font from non-TrueType GDI font.
+        // It was attempted to create DirectWrite font from non-TrueType GDI font
+        // or from private GDI font.
+#if wxUSE_PRIVATE_FONTS
+        // Make private fonts available to D2D.
+        const wxArrayString& privateFonts = wxGetPrivateFontFileNames();
+        if ( privateFonts.empty() )
+        {
+            wxLogApiError(wxString::Format("IDWriteGdiInterop::CreateFontFromLOGFONT() for '%s'", logfont.lfFaceName), hr);
+            return;
+        }
+        // Update font collection if the list of private fonts has changed.
+        if ( privateFonts != wxDirect2DFontCollectionLoader::GetFontList() )
+        {
+            wxDirect2DFontKey collectionKey = wxDirect2DFontCollectionLoader::SetFontList(privateFonts);
+
+            gs_pPrivateFontCollection.reset();
+            hr = wxDWriteFactory()->CreateCustomFontCollection(
+                                        wxDirect2DFontCollectionLoader::GetLoader(),
+                                        &collectionKey, sizeof(collectionKey),
+                                        &gs_pPrivateFontCollection);
+            wxCHECK_HRESULT_RET(hr);
+        }
+        wxCHECK_RET(gs_pPrivateFontCollection != NULL, "No custom font collection created");
+
+        UINT32 fontIdx = ~0U;
+        BOOL fontFound = FALSE;
+        hr = gs_pPrivateFontCollection->FindFamilyName(logfont.lfFaceName, &fontIdx, &fontFound);
+        wxCHECK_HRESULT_RET(hr);
+        if ( !fontFound )
+        {
+            wxFAIL_MSG(wxString::Format("Couldn't find custom font family '%s'", logfont.lfFaceName));
+            return;
+        }
+        hr = gs_pPrivateFontCollection->GetFontFamily(fontIdx, &fontFamily);
+        wxCHECK_HRESULT_RET(hr);
+
+        // Even though DWRITE_FONT_WEIGHT is an enum, it's values are within the same range
+        // as font width values in LOGFONT (0-1000) so we can cast LONG to this enum.
+        DWRITE_FONT_WEIGHT fWeight = static_cast<DWRITE_FONT_WEIGHT>(logfont.lfWeight);
+
+        DWRITE_FONT_STYLE fStyle;
+        if ( logfont.lfItalic == TRUE )
+            fStyle = DWRITE_FONT_STYLE_ITALIC;
+        else
+            fStyle = DWRITE_FONT_STYLE_NORMAL;
+
+        DWRITE_FONT_STRETCH fStretch = DWRITE_FONT_STRETCH_NORMAL;
+
+        hr = fontFamily->GetFirstMatchingFont(fWeight, fStretch, fStyle, &m_font);
+        wxCHECK_RET(SUCCEEDED(hr),
+            wxString::Format("Failed to find custom font '%s' (HRESULT = %x)", logfont.lfFaceName, hr));
+
+        fontCollection = gs_pPrivateFontCollection;
+#else
         return;
+#endif // wxUSE_PRIVATE_FONTS
     }
+    else
+    {
+        wxCHECK_RET(SUCCEEDED(hr),
+            wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr));
 
-    wxCHECK_RET( SUCCEEDED(hr),
-                 wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr) );
-
-    wxCOMPtr<IDWriteFontFamily> fontFamily;
-    hr = m_font->GetFontFamily(&fontFamily);
-    wxCHECK_HRESULT_RET(hr);
+        hr = m_font->GetFontFamily(&fontFamily);
+        wxCHECK_HRESULT_RET(hr);
+    }
 
     wxCOMPtr<IDWriteLocalizedStrings> familyNames;
     hr = fontFamily->GetFamilyNames(&familyNames);
@@ -2777,15 +3108,17 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
     hr = familyNames->GetString(0, name, length+1);
     wxCHECK_HRESULT_RET(hr);
 
+    FLOAT fontSize = !dpi.y
+        ? FLOAT(font.GetPixelSize().GetHeight())
+        : FLOAT(font.GetFractionalPointSize() * dpi.y / 72);
+
     hr = wxDWriteFactory()->CreateTextFormat(
         name,
-        NULL,
+        fontCollection,
         m_font->GetWeight(),
         m_font->GetStyle(),
         m_font->GetStretch(),
-        // We need to use DIP units for the font size, with 1dip = 1/96in,
-        // while wxFont uses points with 1pt = 1/72in.
-        font.GetFractionalPointSize()*96/72,
+        fontSize,
         L"en-us",
         &m_textFormat);
 
@@ -2853,17 +3186,17 @@ public:
     // The default implementation works for all render targets, but the D2D 1.0
     // render target holders shouldn't need to override it, since none of the
     // 1.0 render targets offer a better version of this method.
-    virtual void DrawBitmap(ID2D1Bitmap* bitmap, D2D1_POINT_2F offset,
-        D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
+    virtual void DrawBitmap(ID2D1Bitmap* bitmap,
+        const D2D1_RECT_F& srcRect, const D2D1_RECT_F& destRect,
+        wxInterpolationQuality interpolationQuality,
         wxCompositionMode WXUNUSED(compositionMode))
     {
-        D2D1_RECT_F destinationRectangle = D2D1::RectF(offset.x, offset.y, offset.x + imageRectangle.right, offset.y + imageRectangle.bottom);
         m_nativeResource->DrawBitmap(
             bitmap,
-            destinationRectangle,
+            destRect,
             1.0f,
             wxD2DConvertBitmapInterpolationMode(interpolationQuality),
-            imageRectangle);
+            srcRect);
     }
 
     // We use this method instead of the one provided by the native render target
@@ -3148,13 +3481,15 @@ public:
         wxCHECK_HRESULT_RET(hr);
     }
 
-    void DrawBitmap(ID2D1Bitmap* image, D2D1_POINT_2F offset,
-        D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
+    void DrawBitmap(ID2D1Bitmap* bitmap,
+        const D2D1_RECT_F& srcRect, const D2D1_RECT_F& destRect,
+        wxInterpolationQuality interpolationQuality,
         wxCompositionMode compositionMode) wxOVERRIDE
     {
-        m_context->DrawImage(image,
+        D2D1_POINT_2F offset = D2D1::Point2(destRect.left, destRect.top);
+        m_context->DrawImage(bitmap,
             offset,
-            imageRectangle,
+            srcRect,
             wxD2DConvertInterpolationMode(interpolationQuality),
             wxD2DConvertCompositionMode(compositionMode));
     }
@@ -3553,7 +3888,7 @@ public:
 
     void Flush() wxOVERRIDE;
 
-    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) wxOVERRIDE;
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
 
     wxD2DContextSupplier::ContextType GetContext() wxOVERRIDE
     {
@@ -3932,7 +4267,7 @@ void wxD2DContext::StrokePath(const wxGraphicsPath& p)
     }
 }
 
-void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode WXUNUSED(fillStyle))
+void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode fillStyle)
 {
     if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -3941,6 +4276,7 @@ void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode WXUNUSED
     AdjustRenderTargetSize();
 
     wxD2DPathData* pathData = wxGetD2DPathData(p);
+    pathData->SetFillMode(fillStyle == wxODDEVEN_RULE ? D2D1_FILL_MODE_ALTERNATE : D2D1_FILL_MODE_WINDING);
     pathData->Flush();
 
     if (!m_brush.IsNull())
@@ -4154,11 +4490,12 @@ void wxD2DContext::DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble 
 
     wxD2DBitmapData* bitmapData = wxGetD2DBitmapData(bmp);
     bitmapData->Bind(this);
+    wxBitmap const& bitmap = static_cast<wxD2DBitmapData::NativeType*>(bitmapData->GetNativeBitmap())->GetSourceBitmap();
 
     m_renderTargetHolder->DrawBitmap(
         bitmapData->GetD2DBitmap(),
-        D2D1::Point2F(x, y),
-        D2D1::RectF(0, 0, w, h),
+        D2D1::RectF(0, 0, bitmap.GetWidth(), bitmap.GetHeight()),
+        D2D1::RectF(x, y, x + w, y + h),
         GetInterpolationQuality(),
         GetCompositionMode());
 }
@@ -4478,12 +4815,27 @@ void wxD2DContext::Flush()
     GetRenderTarget()->SetTransform(&currTransform);
 }
 
-void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY)
+void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
 {
-    FLOAT x, y;
-    GetRenderTarget()->GetDpi(&x, &y);
-    if (dpiX != NULL) *dpiX = x;
-    if (dpiY != NULL) *dpiY = y;
+    if ( GetWindow() )
+    {
+        const wxSize dpi = GetWindow()->GetDPI();
+
+        if ( dpiX )
+            *dpiX = dpi.x;
+        if ( dpiY )
+            *dpiY = dpi.y;
+    }
+    else
+    {
+        FLOAT x, y;
+        GetRenderTarget()->GetDpi(&x, &y);
+
+        if ( dpiX )
+            *dpiX = x;
+        if ( dpiY )
+            *dpiY = y;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -4536,13 +4888,15 @@ public :
     wxGraphicsBrush CreateLinearGradientBrush(
         wxDouble x1, wxDouble y1,
         wxDouble x2, wxDouble y2,
-        const wxGraphicsGradientStops& stops) wxOVERRIDE;
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     wxGraphicsBrush CreateRadialGradientBrush(
-        wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc,
+        wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY,
         wxDouble radius,
-        const wxGraphicsGradientStops& stops) wxOVERRIDE;
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     // create a native bitmap representation
     wxGraphicsBitmap CreateBitmap(const wxBitmap& bitmap) wxOVERRIDE;
@@ -4555,9 +4909,13 @@ public :
     wxGraphicsFont CreateFont(const wxFont& font, const wxColour& col) wxOVERRIDE;
 
     wxGraphicsFont CreateFont(
-        double size, const wxString& facename,
+        double sizeInPixels, const wxString& facename,
         int flags = wxFONTFLAG_DEFAULT,
         const wxColour& col = *wxBLACK) wxOVERRIDE;
+
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col) wxOVERRIDE;
 
     // create a graphics bitmap from a native bitmap
     wxGraphicsBitmap CreateBitmapFromNativeBitmap(void* bitmap) wxOVERRIDE;
@@ -4727,10 +5085,11 @@ wxGraphicsBrush wxD2DRenderer::CreateBrush(const wxBrush& brush)
 wxGraphicsBrush wxD2DRenderer::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
     wxD2DBrushData* brushData = new wxD2DBrushData(this);
-    brushData->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+    brushData->CreateLinearGradientBrush(x1, y1, x2, y2, stops, matrix);
 
     wxGraphicsBrush brush;
     brush.SetRefData(brushData);
@@ -4739,13 +5098,14 @@ wxGraphicsBrush wxD2DRenderer::CreateLinearGradientBrush(
 }
 
 wxGraphicsBrush wxD2DRenderer::CreateRadialGradientBrush(
-    wxDouble xo, wxDouble yo,
-    wxDouble xc, wxDouble yc,
+    wxDouble startX, wxDouble startY,
+    wxDouble endX, wxDouble endY,
     wxDouble radius,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
     wxD2DBrushData* brushData = new wxD2DBrushData(this);
-    brushData->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops);
+    brushData->CreateRadialGradientBrush(startX, startY, endX, endY, radius, stops, matrix);
 
     wxGraphicsBrush brush;
     brush.SetRefData(brushData);
@@ -4790,7 +5150,30 @@ wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 
 wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col)
 {
-    wxD2DFontData* fontData = new wxD2DFontData(this, font, col);
+    return CreateFontAtDPI(font, wxRealPoint(), col);
+}
+
+wxGraphicsFont wxD2DRenderer::CreateFont(
+    double sizeInPixels, const wxString& facename,
+    int flags,
+    const wxColour& col)
+{
+    // Use the same DPI as wxFont will use in SetPixelSize, so these cancel
+    // each other out and we are left with the actual pixel size.
+    ScreenHDC hdc;
+    wxRealPoint dpi(::GetDeviceCaps(hdc, LOGPIXELSX),
+                    ::GetDeviceCaps(hdc, LOGPIXELSY));
+
+    return CreateFontAtDPI(
+        wxFontInfo(wxSize(sizeInPixels, sizeInPixels)).AllFlags(flags).FaceName(facename),
+        dpi, col);
+}
+
+wxGraphicsFont wxD2DRenderer::CreateFontAtDPI(const wxFont& font,
+                                              const wxRealPoint& dpi,
+                                              const wxColour& col)
+{
+    wxD2DFontData* fontData = new wxD2DFontData(this, font, dpi, col);
     if ( !fontData->GetFont() )
     {
         // Apparently a non-TrueType font is given and hence
@@ -4803,16 +5186,6 @@ wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col
     graphicsFont.SetRefData(fontData);
 
     return graphicsFont;
-}
-
-wxGraphicsFont wxD2DRenderer::CreateFont(
-    double size, const wxString& facename,
-    int flags,
-    const wxColour& col)
-{
-    return CreateFont(
-        wxFontInfo(size).AllFlags(flags).FaceName(facename),
-        col);
 }
 
 // create a sub-image from a native image representation
@@ -4878,14 +5251,14 @@ class wxDirect2DModule : public wxModule
 public:
     wxDirect2DModule()
     {
+        // Using Direct2D requires OLE and, importantly, we must ensure our
+        // OnExit() runs before it is uninitialized.
+        AddDependency("wxOleInitModule");
     }
 
     virtual bool OnInit() wxOVERRIDE
     {
-        HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-        // RPC_E_CHANGED_MODE is not considered as an error
-        // - see remarks for wxOleInitialize().
-        return SUCCEEDED(hr) || hr == RPC_E_CHANGED_MODE;
+        return true;
     }
 
     virtual void OnExit() wxOVERRIDE
@@ -4898,6 +5271,13 @@ public:
 
         if ( gs_IDWriteFactory )
         {
+#if wxUSE_PRIVATE_FONTS
+            if ( wxDirect2DFontCollectionLoader::IsInitialized() )
+            {
+                gs_pPrivateFontCollection.reset();
+                gs_IDWriteFactory->UnregisterFontCollectionLoader(wxDirect2DFontCollectionLoader::GetLoader());
+            }
+#endif // wxUSE_PRIVATE_FONTS
             gs_IDWriteFactory->Release();
             gs_IDWriteFactory = NULL;
         }
@@ -4913,8 +5293,6 @@ public:
             gs_ID2D1Factory->Release();
             gs_ID2D1Factory = NULL;
         }
-
-        ::CoUninitialize();
     }
 
 private:

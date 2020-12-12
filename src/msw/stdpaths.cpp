@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-10-19
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STDPATHS
 
@@ -36,6 +33,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
+#include "wx/msw/private/cotaskmemptr.h"
 #include <initguid.h>
 
 // ----------------------------------------------------------------------------
@@ -171,12 +169,11 @@ wxString wxStandardPaths::DoGetKnownFolder(const GUID& rfid)
 
     if ( gs_shellFuncs.pSHGetKnownFolderPath )
     {
-        PWSTR pDir;
+        wxCoTaskMemPtr<wchar_t> pDir;
         HRESULT hr = gs_shellFuncs.pSHGetKnownFolderPath(rfid, 0, 0, &pDir);
         if ( SUCCEEDED(hr) )
         {
             dir = pDir;
-            CoTaskMemFree(pDir);
         }
     }
 
@@ -275,8 +272,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "vc";
 #elif defined(__GNUG__)
     compilerPrefix = "gcc";
-#elif defined(__BORLANDC__)
-    compilerPrefix = "bcc";
 #else
     return;
 #endif

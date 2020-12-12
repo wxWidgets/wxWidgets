@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
@@ -203,6 +200,8 @@ bool wxFilePickerCtrl::Create(wxWindow *parent,
 
 wxString wxFilePickerCtrl::GetTextCtrlValue() const
 {
+    wxCHECK_MSG( m_text, wxString(), "Can't be used if no text control" );
+
     // filter it through wxFileName to remove any spurious path separator
     return wxFileName(m_text->GetValue()).GetFullPath();
 }
@@ -241,6 +240,8 @@ bool wxDirPickerCtrl::Create(wxWindow *parent,
 
 wxString wxDirPickerCtrl::GetTextCtrlValue() const
 {
+    wxCHECK_MSG( m_text, wxString(), "Can't be used if no text control" );
+
     // filter it through wxFileName to remove any spurious path separator
     return wxFileName::DirName(m_text->GetValue()).GetPath();
 }

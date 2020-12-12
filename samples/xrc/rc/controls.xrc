@@ -68,7 +68,7 @@
                     <object class="wxPanel" name="animctrl">
                         <object class="wxFlexGridSizer">
                             <cols>2</cols>
-                            <rows>1</rows>
+                            <rows>2</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
                             <growablecols>0,1</growablecols>
@@ -86,6 +86,17 @@
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxAnimationCtrl" name="controls_animation_ctrl">
+                                    <animation>throbber.gif</animation>
+                                    <inactive-bitmap>stop.xpm</inactive-bitmap>
+                                </object>
+                            </object>
+
+                            <object class="spacer"/>
+
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxGenericAnimationCtrl" name="controls_generic_animation_ctrl">
                                     <animation>throbber.gif</animation>
                                     <inactive-bitmap>stop.xpm</inactive-bitmap>
                                 </object>
@@ -542,6 +553,39 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     &lt;p&gt;Horizontal rules to organize sections: &lt;hr&gt;
                                     &lt;p&gt;A wxImage is worth a thousand words and can be also used.
                                 </htmlcode>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="choicebookpage">
+                    <label>wxInfoBar</label>
+                    <object class="wxPanel" name="infobarctrl">
+                        <object class="wxBoxSizer">
+                            <orient>wxVERTICAL</orient>
+
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxButton" name="controls_infobar_button_message">
+                                    <label>Show Message</label>
+                                </object>
+                            </object>
+
+                            <object class="spacer">
+                                <option>1</option>
+                            </object>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND</flag>
+                                <object class="wxInfoBar" name="controls_infobar">
+                                    <effectduration>1000</effectduration>
+                                    <showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
+                                    <hideeffect>wxSHOW_EFFECT_SLIDE_TO_RIGHT</hideeffect>
+                                    <object class="button" name="wxID_UNDO"/>
+                                    <object class="button" name="wxID_REDO">
+                                        <label>Redo Custom Label</label>
+                                    </object>
                                 </object>
                             </object>
                         </object>

@@ -177,6 +177,9 @@ builtinWindowClasses =
     | wxColourPickerCtrl
     | wxComboBox
     | wxComboCtrl
+    | wxDataViewCtrl
+    | wxDataViewListCtrl
+    | wxDataViewTreeCtrl
     | wxDatePickerCtrl
     | wxDialog
     | wxDirPickerCtrl
@@ -186,10 +189,12 @@ builtinWindowClasses =
     | wxFontPickerCtrl
     | wxFrame
     | wxGauge
+    | wxGenericAnimationCtrl
     | wxGenericDirCtrl
     | wxGrid
     | wxHtmlWindow
     | wxHyperlinkCtrl
+    | wxInfoBar
     | wxListBox
     | wxListbook
     | wxListCtrl
@@ -274,6 +279,9 @@ builtinClassesNames =
     | "wxColourPickerCtrl"
     | "wxComboBox"
     | "wxComboCtrl"
+    | "wxDataViewCtrl"
+    | "wxDataViewListCtrl"
+    | "wxDataViewTreeCtrl"
     | "wxDatePickerCtrl"
     | "wxDialog"
     | "wxDirPickerCtrl"
@@ -283,10 +291,12 @@ builtinClassesNames =
     | "wxFontPickerCtrl"
     | "wxFrame"
     | "wxGauge"
+    | "wxGenericAnimationCtrl"
     | "wxGenericDirCtrl"
     | "wxGrid"
     | "wxHtmlWindow"
     | "wxHyperlinkCtrl"
+    | "wxInfoBar"
     | "wxListBox"
     | "wxListbook"
     | "wxListCtrl"
@@ -438,6 +448,12 @@ t_unsigned   = xsd:nonNegativeInteger
 t_float      = xsd:float
 t_direction  = "wxLEFT" | "wxRIGHT" | "wxTOP" | "wxBOTTOM"
 t_style      = xsd:string { pattern = "(wx[A-Z0-9_]+)( *\| *(wx[A-Z0-9_]+))*" }
+t_showeffect = "wxSHOW_EFFECT_NONE" | "wxSHOW_EFFECT_ROLL_TO_LEFT" |
+               "wxSHOW_EFFECT_ROLL_TO_RIGHT" | "wxSHOW_EFFECT_ROLL_TO_TOP" |
+               "wxSHOW_EFFECT_ROLL_TO_BOTTOM" | "wxSHOW_EFFECT_SLIDE_TO_LEFT" |
+               "wxSHOW_EFFECT_SLIDE_TO_RIGHT" | "wxSHOW_EFFECT_SLIDE_TO_TOP" |
+               "wxSHOW_EFFECT_SLIDE_TO_BOTTOM" | "wxSHOW_EFFECT_BLEND" |
+               "wxSHOW_EFFECT_EXPAND"
 
 t_url        = string
 t_colour     = xsd:string { pattern = "#[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]" } |
@@ -670,6 +686,7 @@ wxBitmapButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element default  {_, t_bool }* &
+        [xrc:p="o"] element close    {_, t_bool }* &
         [xrc:p="important"] element bitmap {_, t_bitmap }* &
         [xrc:p="o"] element selected {_, t_bitmap }* &
         [xrc:p="o"] element focus    {_, t_bitmap }* &
@@ -794,7 +811,9 @@ wxCommandLinkButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element note  {_, t_text }*
+        [xrc:p="o"] element note {_, t_text }* &
+        [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element default {_, t_bool }*
     }
 
 
@@ -849,11 +868,37 @@ wxComboCtrl =
     }
 
 
+wxDataViewCtrl =
+    element object {
+        attribute class { "wxDataViewCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties
+    }
+
+
+wxDataViewListCtrl =
+    element object {
+        attribute class { "wxDataViewListCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties
+    }
+
+
+wxDataViewTreeCtrl =
+    element object {
+        attribute class { "wxDataViewTreeCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element imagelist {_, t_imagelist }*
+    }
+
+
 wxDatePickerCtrl =
     element object {
         attribute class { "wxDatePickerCtrl" } &
         stdObjectNodeAttributes &
-        stdWindowProperties
+        stdWindowProperties &
+        [xrc:p="o"] element null-text {_, t_text }*
     }
 
 
@@ -947,6 +992,16 @@ wxGauge =
     }
 
 
+wxGenericAnimationCtrl =
+    element object {
+        attribute class { "wxGenericAnimationCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element animation       {_, t_url }* &
+        [xrc:p="o"] element inactive-bitmap {_, t_bitmap }*
+    }
+
+
 wxGenericDirCtrl =
     element object {
         attribute class { "wxGenericDirCtrl" } &
@@ -986,6 +1041,23 @@ wxHyperlinkCtrl =
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="important"] element url   {_, t_url }*
+    }
+
+
+wxInfoBar =
+    element object {
+        attribute class { "wxInfoBar" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element effectduration {_, t_integer }* &
+        [xrc:p="o"] element showeffect     {_, t_showeffect }* &
+        [xrc:p="o"] element hideeffect     {_, t_showeffect }* &
+        element object {
+            attribute class { "button" } &
+            attribute name  { t_identifier }? &
+            platform &
+            [xrc:p="o"] element label {_, t_text }*
+        }*
     }
 
 
@@ -1660,10 +1732,10 @@ wxWizardPage_any =
 
 t_sizer_flags_grow = xsd:string {
         pattern = "(wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1671,12 +1743,12 @@ t_sizer_flags_alignv = xsd:string {
         pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1684,12 +1756,12 @@ t_sizer_flags_alignh = xsd:string {
         pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1707,13 +1779,13 @@ t_sizer_flags_grow_alignv = xsd:string {
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1722,13 +1794,13 @@ t_sizer_flags_grow_alignh = xsd:string {
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxGROW|wxEXPAND" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1738,14 +1810,14 @@ t_sizer_flags_align = xsd:string {
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   "( *\| *" ~
                   "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
                   "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
                   "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
                   "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
                   "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
-                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
                   ")*"
     }
 
@@ -1847,7 +1919,7 @@ wxSizerGB_item =
         [xrc:p="o"] element cellspan {_, t_pair_ints }* &
         [xrc:p="o"] element flag     {_,
             xsd:string {
-                pattern = "(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN)( *\| *(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN))*"
+                pattern = "(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN)( *\| *(wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxALL|wxGROW|wxEXPAND|wxSHAPED|wxSTRETCH_NOT|wxALIGN_CENTER|wxALIGN_CENTRE|wxALIGN_LEFT|wxALIGN_RIGHT|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL|wxFIXED_MINSIZE|wxRESERVE_SPACE_EVEN_IF_HIDDEN))*"
             }
         }*
     }

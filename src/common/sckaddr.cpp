@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOCKETS
 
@@ -180,7 +177,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 namespace
 {
 
-#if defined(HAVE_GETHOSTBYNAME)
+#if defined(HAVE_GETHOSTBYNAME) && \
+    !defined(HAVE_FUNC_GETHOSTBYNAME_R_6) && \
+    !defined(HAVE_FUNC_GETHOSTBYNAME_R_5) && \
+    !defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+
 hostent *deepCopyHostent(hostent *h,
                          const hostent *he,
                          char *buffer,

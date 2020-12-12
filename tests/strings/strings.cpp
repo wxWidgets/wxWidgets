@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -263,7 +260,9 @@ void StringTestCase::StaticConstructors()
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello") );
 
+#if wxUSE_UNICODE
     CPPUNIT_ASSERT_EQUAL( 2, wxString::FromUTF8("h\xc3\xa9llo", 3).length() );
+#endif // wxUSE_UNICODE
 
 
     //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromUTF8("", 1).length() );
@@ -612,6 +611,8 @@ typedef wxLongLong_t TestValue_t;
 typedef long TestValue_t;
 #endif
 
+wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
 static const struct ToLongData
 {
     const wxChar *str;
@@ -666,6 +667,8 @@ static const struct ToLongData
     { wxT("0x11"),  0, Number_Invalid,  8 },
     { wxT("0x11"), 17, Number_Ok,      16 },
 };
+
+wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 void StringTestCase::ToLong()
 {

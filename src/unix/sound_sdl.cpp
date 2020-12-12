@@ -11,9 +11,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOUND && wxUSE_LIBSDL
 
@@ -215,7 +212,7 @@ bool wxSoundBackendSDL::OpenAudio()
 #if SDL_MAJOR_VERSION == 1
             SDL_AudioDriverName(driver, 256);
 #elif SDL_MAJOR_VERSION > 1            
-            strncpy(driver, SDL_GetCurrentAudioDriver(), 256);
+            wxStrlcpy(driver, SDL_GetCurrentAudioDriver(), 256);
 #endif
             wxLogTrace(wxT("sound"), wxT("opened audio, driver '%s'"),
                        wxString(driver, wxConvLocal).c_str());

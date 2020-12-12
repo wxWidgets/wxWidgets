@@ -14,6 +14,7 @@
 #include "wx/dir.h"
 #include "wx/dynlib.h"
 #include "wx/filename.h"
+#include "wx/stdpaths.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
@@ -369,7 +370,7 @@ wxgtk_webview_webkit_counted_matches(WebKitFindController *,
 }
 
 // This function checks if the specified directory contains our web extension.
-static bool CheckDirectoryForWebExt(const char* dirname)
+static bool CheckDirectoryForWebExt(const wxString& dirname)
 {
     wxDir dir;
     if ( !wxDir::Exists(dirname) || !dir.Open(dirname) )
@@ -399,6 +400,23 @@ static bool CheckDirectoryForWebExt(const char* dirname)
     return false;
 }
 
+static bool TrySetWebExtensionsDirectory(WebKitWebContext *context, const wxString& dir)
+{
+    if (dir.empty() || !CheckDirectoryForWebExt(dir))
+        return false;
+
+    webkit_web_context_set_web_extensions_directory(context, dir.utf8_str());
+    return true;
+}
+
+static wxString GetStandardWebExtensionsDir()
+{
+    wxString dir = wxDynamicLibrary::GetPluginsDirectory();
+    if ( !dir.empty() )
+        dir += "/web-extensions";
+    return dir;
+}
+
 static void
 wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
@@ -406,36 +424,28 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     const char *address = g_dbus_server_get_client_address(dbusServer);
     GVariant *user_data = g_variant_new("(s)", address);
 
-    // The first value is the location in which the extension is supposed to be
-    // normally installed, while the other three are used as fallbacks to allow
-    // running the tests and sample using wxWebView before installing it.
-    const char* const directories[] =
+    // Try to setup extension loading from the location it is supposed to be
+    // normally installed in.
+    if ( !TrySetWebExtensionsDirectory(context, GetStandardWebExtensionsDir()) )
     {
-        WX_WEB_EXTENSIONS_DIRECTORY,
-        "..",
-        "../..",
-        "lib",
-    };
-
-    const char* dir = NULL;
-    for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
-    {
-        if ( CheckDirectoryForWebExt(directories[n]) )
+        // These relative locations are used as fallbacks to allow running
+        // the tests and sample using wxWebView before installing it.
+        wxString exepath = wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPath();
+        if ( !exepath.empty() )
         {
-            dir = directories[n];
-            break;
-        }
-    }
+            wxString const directories[] =
+            {
+                exepath + "/..",
+                exepath + "/../..",
+                exepath + "/lib",
+            };
 
-    if ( dir )
-    {
-        webkit_web_context_set_web_extensions_directory(context, dir);
-    }
-    else
-    {
-        wxLogWarning(_("Web extension not found in \"%s\", "
-                       "some wxWebView functionality will be not available"),
-                     WX_WEB_EXTENSIONS_DIRECTORY);
+            for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
+            {
+                if ( !TrySetWebExtensionsDirectory(context, directories[n]) )
+                    break;
+            }
+        }
     }
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
@@ -616,17 +626,17 @@ wxWebViewWebKit::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 void wxWebViewWebKit::ZoomIn()
 {
-    SetWebkitZoom(GetWebkitZoom() + 0.1);
+    SetWebkitZoom(GetWebkitZoom() + 0.1f);
 }
 
 void wxWebViewWebKit::ZoomOut()
 {
-    SetWebkitZoom(GetWebkitZoom() - 0.1);
+    SetWebkitZoom(GetWebkitZoom() - 0.1f);
 }
 
 void wxWebViewWebKit::SetWebkitZoom(float level)
 {
-    webkit_web_view_set_zoom_level(m_web_view, level);
+    webkit_web_view_set_zoom_level(m_web_view, double(level));
 }
 
 float wxWebViewWebKit::GetWebkitZoom() const
@@ -894,25 +904,29 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     float zoom = GetWebkitZoom();
 
     // arbitrary way to map float zoom to our common zoom enum
-    if (zoom <= 0.65)
+    if (zoom <= 0.65f)
     {
         return wxWEBVIEW_ZOOM_TINY;
     }
-    if (zoom <= 0.90)
+    if (zoom <= 0.90f)
     {
         return wxWEBVIEW_ZOOM_SMALL;
     }
-    if (zoom <= 1.15)
+    if (zoom <= 1.15f)
     {
         return wxWEBVIEW_ZOOM_MEDIUM;
     }
-    if (zoom <= 1.45)
+    if (zoom <= 1.45f)
     {
         return wxWEBVIEW_ZOOM_LARGE;
     }
     return wxWEBVIEW_ZOOM_LARGEST;
 }
 
+float wxWebViewWebKit::GetZoomFactor() const
+{
+    return GetWebkitZoom();
+}
 
 void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 {
@@ -942,6 +956,11 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
         default:
             wxFAIL;
     }
+}
+
+void wxWebViewWebKit::SetZoomFactor(float zoom)
+{
+    SetWebkitZoom(zoom);
 }
 
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
@@ -1011,10 +1030,11 @@ bool wxWebViewWebKit::IsEditable() const
 
 void wxWebViewWebKit::DeleteSelection()
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "DeleteSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1028,10 +1048,11 @@ void wxWebViewWebKit::DeleteSelection()
 
 bool wxWebViewWebKit::HasSelection() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "HasSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1055,10 +1076,11 @@ void wxWebViewWebKit::SelectAll()
 
 wxString wxWebViewWebKit::GetSelectedText() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1076,10 +1098,11 @@ wxString wxWebViewWebKit::GetSelectedText() const
 
 wxString wxWebViewWebKit::GetSelectedSource() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedSource",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1097,10 +1120,11 @@ wxString wxWebViewWebKit::GetSelectedSource() const
 
 void wxWebViewWebKit::ClearSelection()
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "ClearSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1114,10 +1138,11 @@ void wxWebViewWebKit::ClearSelection()
 
 wxString wxWebViewWebKit::GetPageText() const
 {
-    if (m_extension)
+    GDBusProxy *extension = GetExtensionProxy();
+    if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(m_extension,
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
                                                   "GetPageText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
@@ -1399,6 +1424,17 @@ void wxWebViewWebKit::SetupWebExtensionServer()
     g_free(address);
     g_free(guid);
     g_object_unref(observer);
+}
+
+GDBusProxy *wxWebViewWebKit::GetExtensionProxy() const
+{
+    if (!m_extension)
+    {
+        g_warning("Web extension not found in \"%s\", "
+                  "some wxWebView functionality will be not available",
+                  (const char*)GetStandardWebExtensionsDir().utf8_str());
+    }
+    return m_extension;
 }
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT2

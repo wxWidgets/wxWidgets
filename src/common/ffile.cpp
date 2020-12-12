@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_FFILE
 
@@ -31,10 +28,11 @@
     #include "wx/crt.h"
 #endif
 
+#include "wx/filename.h"
 #include "wx/ffile.h"
 
 // ============================================================================
-// implementation
+// implementation of wxFFile
 // ============================================================================
 
 // ----------------------------------------------------------------------------
@@ -111,7 +109,8 @@ bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
         return false;
     }
 
-    buf.data()[length] = 0;
+    // shrink the buffer to possibly shorter data as explained above:
+    buf.shrink(length);
 
     wxString strTmp(buf, conv);
     str->swap(strTmp);
@@ -263,11 +262,11 @@ wxFileOffset wxFFile::Length() const
     wxCHECK_MSG( IsOpened(), wxInvalidOffset,
                  wxT("wxFFile::Length(): file is closed!") );
 
-    wxFFile& self = *const_cast<wxFFile *>(this);
-
     wxFileOffset posOld = Tell();
     if ( posOld != wxInvalidOffset )
     {
+        wxFFile& self = *const_cast<wxFFile*>(this);
+
         if ( self.SeekEnd() )
         {
             wxFileOffset len = Tell();
@@ -293,6 +292,107 @@ bool wxFFile::Error() const
     wxCHECK_MSG( IsOpened(), false,
                  wxT("wxFFile::Error(): file is closed!") );
     return ferror(m_fp) != 0;
+}
+
+// ============================================================================
+// implementation of wxTempFFile
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// construction
+// ----------------------------------------------------------------------------
+
+wxTempFFile::wxTempFFile(const wxString& strName)
+{
+    Open(strName);
+}
+
+bool wxTempFFile::Open(const wxString& strName)
+{
+    // we must have an absolute filename because otherwise CreateTempFileName()
+    // would create the temp file in $TMP (i.e. the system standard location
+    // for the temp files) which might be on another volume/drive/mount and
+    // wxRename()ing it later to m_strName from Commit() would then fail
+    //
+    // with the absolute filename, the temp file is created in the same
+    // directory as this one which ensures that wxRename() may work later
+    wxFileName fn(strName);
+    if ( !fn.IsAbsolute() )
+    {
+        fn.Normalize(wxPATH_NORM_ABSOLUTE);
+    }
+
+    m_strName = fn.GetFullPath();
+
+    m_strTemp = wxFileName::CreateTempFileName(m_strName, &m_file);
+
+    if ( m_strTemp.empty() )
+    {
+        // CreateTempFileName() failed
+        return false;
+    }
+
+#ifdef __UNIX__
+    // the temp file should have the same permissions as the original one
+    mode_t mode;
+
+    wxStructStat st;
+    if ( stat( (const char*) m_strName.fn_str(), &st) == 0 )
+    {
+        mode = st.st_mode;
+    }
+    else
+    {
+        // file probably didn't exist, just give it the default mode _using_
+        // user's umask (new files creation should respect umask)
+        mode_t mask = umask(0777);
+        mode = 0666 & ~mask;
+        umask(mask);
+    }
+
+    if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
+    {
+        wxLogSysError(_("Failed to set temporary file permissions"));
+    }
+#endif // Unix
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// destruction
+// ----------------------------------------------------------------------------
+
+wxTempFFile::~wxTempFFile()
+{
+    if ( IsOpened() )
+        Discard();
+}
+
+bool wxTempFFile::Commit()
+{
+    m_file.Close();
+
+    if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
+        wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
+        return false;
+    }
+
+    if ( !wxRenameFile(m_strTemp, m_strName)  ) {
+        wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
+        return false;
+    }
+
+    return true;
+}
+
+void wxTempFFile::Discard()
+{
+    m_file.Close();
+    if ( wxRemove(m_strTemp) != 0 )
+    {
+        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
+    }
 }
 
 #endif // wxUSE_FFILE

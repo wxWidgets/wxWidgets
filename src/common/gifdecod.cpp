@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS && wxUSE_GIF
 
@@ -376,7 +373,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     int pos;                        // index into decompresion stack
     unsigned int x, y;              // position in image buffer
 
-    int code, readcode, lastcode, abcabca;
+    int code, lastcode, abcabca;
 
     // these won't change
     ab_clr = (1 << bits);
@@ -399,6 +396,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     do
     {
         // get next code
+        int readcode;
         readcode = code = getcode(stream, ab_bits, ab_fin);
 
         // end of image?
@@ -887,7 +885,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         }
     }
 
-    if (m_nFrames <= 0)
+    if (m_nFrames == 0)
     {
         Destroy();
         return wxGIF_INVFORMAT;

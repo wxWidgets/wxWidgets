@@ -23,14 +23,6 @@ include(CheckTypeSize)
 include(CMakePushCheckState)
 include(TestBigEndian)
 
-if(
-    APPLE AND
-    CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
-    (CMAKE_CXX_STANDARD EQUAL 11 OR CMAKE_CXX_STANDARD EQUAL 14)
-  )
-    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-stdlib=libc++")
-endif()
-
 # Add a definition to setup.h and append it to a list of defines for
 # for compile checks
 macro(wx_setup_definition def)
@@ -65,10 +57,16 @@ endif()
 
 if(WXGTK)
     # Add GTK version definitions
-    foreach(gtk_version 1.2.7 2.0 2.10 2.18 2.20 3.0)
+    foreach(gtk_version 1.2.7 2.0 2.10 2.18 2.20 3.0 3.90.0)
         if(wxTOOLKIT_VERSION VERSION_GREATER gtk_version)
-            string(REPLACE . "" gtk_version_dotless ${gtk_version})
-            set(__WXGTK${gtk_version_dotless}__ ON)
+            if(gtk_version EQUAL 3.90.0)
+                set(__WXGTK4__ ON)
+            elseif(gtk_version EQUAL 3.0)
+                set(__WXGTK3__ ON)
+            else()
+                string(REPLACE . "" gtk_version_dotless ${gtk_version})
+                set(__WXGTK${gtk_version_dotless}__ ON)
+            endif()
         endif()
     endforeach()
 endif()
@@ -134,14 +132,7 @@ if(NOT MSVC)
     endif()
 endif()
 
-wx_check_c_source_compiles(
-    "#define test(fmt, ...) printf(fmt, __VA_ARGS__)
-    test(\"%s %d %p\", \"test\", 1, 0);"
-    HAVE_VARIADIC_MACROS
-    stdio.h
-    )
-#TODO: wxNO_VARIADIC_MACROS
-if(wxUSE_STL)
+if(wxUSE_STL AND CMAKE_CXX_STANDARD EQUAL 98)
     wx_check_cxx_source_compiles("
         std::vector<int> moo;
         std::list<int> foo;
@@ -154,19 +145,57 @@ if(wxUSE_STL)
     if(NOT wxTEST_STL)
         message(FATAL_ERROR "Can't use wxUSE_STL as basic STL functionality is missing")
     endif()
-
-    wx_check_cxx_source_compiles("
-        std::string foo, bar;
-        foo.compare(bar);
-        foo.compare(1, 1, bar);
-        foo.compare(1, 1, bar, 1, 1);
-        foo.compare(\"\");
-        foo.compare(1, 1, \"\");
-        foo.compare(1, 1, \"\", 2);"
-        HAVE_STD_STRING_COMPARE
-        string
-        )
 endif()
+
+wx_check_cxx_source_compiles("
+    std::string foo, bar;
+    foo.compare(bar);
+    foo.compare(1, 1, bar);
+    foo.compare(1, 1, bar, 1, 1);
+    foo.compare(\"\");
+    foo.compare(1, 1, \"\");
+    foo.compare(1, 1, \"\", 2);"
+    HAVE_STD_STRING_COMPARE
+    string
+    )
+
+wx_check_cxx_source_compiles(
+    "std::wstring s;"
+    HAVE_STD_WSTRING
+    string
+    )
+
+wx_check_cxx_source_compiles("
+    std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
+    std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;"
+    HAVE_HASH_MAP
+    hash_map hash_set
+    )
+set(HAVE_STD_HASH_MAP ${HAVE_HASH_MAP})
+
+wx_check_cxx_source_compiles("
+    __gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
+    __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;"
+    HAVE_EXT_HASH_MAP
+    ext/hash_map ext/hash_set
+    )
+set(HAVE_GNU_CXX_HASH_MAP ${HAVE_EXT_HASH_MAP})
+
+wx_check_cxx_source_compiles("
+    std::unordered_map<double*, char*> test1;
+    std::unordered_set<char*> test2;"
+    HAVE_STD_UNORDERED_MAP
+    unordered_map unordered_set
+    )
+set(HAVE_STD_UNORDERED_SET ${HAVE_STD_UNORDERED_MAP})
+
+wx_check_cxx_source_compiles("
+    std::tr1::unordered_map<double*, char*> test1;
+    std::tr1::unordered_set<char*> test2;"
+    HAVE_TR1_UNORDERED_MAP
+    tr1/unordered_map tr1/unordered_set
+    )
+set(HAVE_TR1_UNORDERED_SET ${HAVE_TR1_UNORDERED_MAP})
 
 # Check for availability of GCC's atomic operations builtins.
 wx_check_c_source_compiles("
@@ -217,9 +246,8 @@ macro(wx_get_socket_param_type name code)
 endmacro()
 
 # the following tests are for Unix(like) systems only
-if(NOT WIN32)
-    if(wxUSE_LIBICONV AND NOT APPLE)
-        find_package(Iconv REQUIRED)
+if(UNIX)
+    if(wxUSE_LIBICONV)
         set(HAVE_ICONV ON)
         set(ICONV_CONST " ")
         if(ICONV_SECOND_ARGUMENT_IS_CONST)
@@ -419,8 +447,8 @@ if(NOT WIN32)
         check_symbol_exists(getservbyname netdb.h HAVE_GETSERVBYNAME)
         check_symbol_exists(inet_aton arpa/inet.h HAVE_INET_ATON)
         check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
-    endif() # wxUSE_SOCKETS
-endif() # NOT WIN32
+    endif(wxUSE_SOCKETS)
+endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
     cmake_push_check_state(RESET)
@@ -537,8 +565,6 @@ check_struct_has_member("struct passwd" pw_gecos pwd.h HAVE_PW_GECOS)
 # Check for functions
 # ---------------------------------------------------------------------------
 
-# TODO: wcslen
-
 # Check various string symbols
 foreach(func
     ftime
@@ -547,20 +573,18 @@ foreach(func
     wcsdup wcsnlen wcscasecmp wcsncasecmp
     wcsrctombs
     wcstoull
+    wcslen
     )
     string(TOUPPER ${func} func_upper)
     check_symbol_exists(${func} wchar.h HAVE_${func_upper})
 endforeach()
 
 # Check various functions
-foreach(func
-    fsync
-    snprintf vsnprintf strnlen strtoull
-    setpriority
-    )
-    string(TOUPPER ${func} func_upper)
-    check_function_exists(${func} HAVE_${func_upper})
-endforeach()
+wx_check_funcs(fsync
+               snprintf vsnprintf strnlen strtoull
+               setpriority
+               gettimeofday
+               )
 
 if(MSVC)
     check_symbol_exists(vsscanf stdio.h HAVE_VSSCANF)
@@ -579,16 +603,8 @@ check_include_file(fcntl.h HAVE_FCNTL_H)
 check_include_file(langinfo.h HAVE_LANGINFO_H)
 check_include_file(sched.h HAVE_SCHED_H)
 check_include_file(unistd.h HAVE_UNISTD_H)
-check_include_file(w32api.h HAVE_W32API_H)
 check_include_file(wchar.h HAVE_WCHAR_H)
 check_include_file(wcstr.h HAVE_WCSTR_H)
-
-
-wx_check_cxx_source_compiles(
-    "std::wstring s;"
-    HAVE_STD_WSTRING
-    string
-    )
 
 if(wxUSE_DATETIME)
     # check for timezone variable
@@ -614,12 +630,8 @@ set(CMAKE_REQUIRED_LIBRARIES dl)
 check_symbol_exists(dlopen dlfcn.h HAVE_DLOPEN)
 cmake_pop_check_state()
 if(HAVE_DLOPEN)
-    check_symbol_exists(dlerror dlfcn.h HAVE_DLERROR)
     check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
-else()
-    check_symbol_exists(shl_load dl.h HAVE_SHL_LOAD)
 endif()
-check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
 
 if(APPLE)
     set(wxUSE_EPOLL_DISPATCHER OFF)
@@ -641,7 +653,10 @@ endif()
 
 if(wxUSE_XLOCALE)
     check_include_file(xlocale.h HAVE_XLOCALE_H)
-    set(CMAKE_EXTRA_INCLUDE_FILES xlocale.h locale.h)
+    set(CMAKE_EXTRA_INCLUDE_FILES locale.h)
+    if(HAVE_XLOCALE_H)
+        list(APPEND CMAKE_EXTRA_INCLUDE_FILES xlocale.h)
+    endif()
     check_type_size(locale_t LOCALE_T)
     set(CMAKE_EXTRA_INCLUDE_FILES)
 endif()

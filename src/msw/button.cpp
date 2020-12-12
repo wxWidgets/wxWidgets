@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BUTTON
 
@@ -160,14 +157,25 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
 {
-    static wxSize s_sizeBtn;
+    static wxPrivate::DpiDependentValue<wxSize> s_sizeBtn;
 
-    if ( s_sizeBtn.x == 0 )
+    if ( s_sizeBtn.HasChanged(win) )
     {
-        wxScreenDC dc;
-        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+        wxSize base;
+        if ( win )
+        {
+            wxClientDC dc(win);
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
+        else
+        {
+            wxScreenDC dc;
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
 
         // The size of a standard button in the dialog units is 50x14,
         // translate this to pixels.
@@ -180,12 +188,11 @@ wxSize wxButtonBase::GetDefaultSize()
         //
         // NB: wxMulDivInt32() is used, because it correctly rounds the result
 
-        const wxSize base = wxPrivate::GetAverageASCIILetterSize(dc);
-        s_sizeBtn.x = wxMulDivInt32(50, base.x, 4);
-        s_sizeBtn.y = wxMulDivInt32(14, base.y, 8);
+        s_sizeBtn.SetAtNewDPI(wxSize(wxMulDivInt32(50, base.x, 4),
+                                     wxMulDivInt32(14, base.y, 8)));
     }
 
-    return s_sizeBtn;
+    return s_sizeBtn.Get();
 }
 
 // ----------------------------------------------------------------------------
@@ -252,14 +259,26 @@ wxWindow *wxButton::SetDefault()
 // return NULL
 static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 {
-    wxWindow* const parent = wxGetTopLevelParent(win);
-    wxASSERT_MSG( parent, wxT("button without top level parent?") );
+    for ( ;; )
+    {
+        // IsTopLevel() will return false for a wxTLW being deleted, so we also
+        // need the parent test for this case
+        wxWindow * const parent = win->GetParent();
+        if ( !parent || win->IsTopLevel() )
+        {
+            if ( win->IsBeingDeleted() )
+                return NULL;
 
-    if ( parent->IsBeingDeleted() )
-        return NULL;
+            break;
+        }
+
+        win = parent;
+    }
+
+    wxASSERT_MSG( win, wxT("button without top level parent?") );
 
     // Note that this may still return null for a button inside wxPopupWindow.
-    return wxDynamicCast(parent, wxTopLevelWindow);
+    return wxDynamicCast(win, wxTopLevelWindow);
 }
 
 // set this button as being currently default

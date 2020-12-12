@@ -18,10 +18,10 @@ The documentation can then be added in form of Doxygen comments to
 the header file.
 
 You may also want to write a separate topic file,
-e.g. docs/doxygen/overviews/myclass.h, and add the entry to
-docs/doxygen/mainpages/topics.h.
+e.g. `docs/doxygen/overviews/myclass.h`, and add the entry to
+`docs/doxygen/mainpages/topics.h`.
 
-If applicable, also add an entry to one of the docs/doxygen/mainpages/cat_*.h
+If applicable, also add an entry to one of the `docs/doxygen/mainpages/cat_*.h`
 files.
 
 You can generate a first raw version of myclass.h simply taking its
@@ -33,8 +33,9 @@ which are implementation details.
 Running Doxygen
 ---------------
 
-First, make sure you have a recent version of Doxygen installed in your system
-(currently Doxygen 1.8.8 is used).
+First, make sure you have a recent version of Doxygen (currently Doxygen 1.8.8
+is used) and Graphviz installed in your system (under Windows Graphviz
+location should be in %PATH%).
 
 On Unix:
 
@@ -57,13 +58,17 @@ Important Dos and Don'ts
 
 DO:
 
+- use present tense verbs in 3rd person singular form to describe functions,
+  i.e. write "Returns the answer to life, universe and everything", rather than
+  the imperative mood used in Git commit message ("Return the answer ...").
+
 - Doxygen supports both commands in the form \command and @command;
   all wxWidgets documentation uses the @command form.
   Follow strictly this rule.
 
 - strive to use dedicated Doxygen commands for e.g. notes, lists,
   sections, etc. The "Special commands" page:
-    http://www.stack.nl/~dimitri/doxygen/commands.html
+    http://www.doxygen.org/manual/commands.html
   is your friend!
   It's also very important to make a consistent use of the ALIASES
   defined by wxWidgets' Doxyfile. Open that file for more info.
@@ -286,9 +291,9 @@ there is a corresponding link anchor.
 The following conventions are used in wxWidgets doxygen comments:
 
  1. all "main" pages of the manual (those which are placed in
-   docs/doxygen/mainpages) have link anchors which begin with "page_"
+   docs/doxygen/mainpages) have link anchors which begin with `page_`
  2. all topic overviews (those which are placed in docs/doxygen/overviews) have
-   link anchors which begin with "overview_"
+   link anchors which begin with `overview_`
  3. all @section, @subsection, @subsubsection tags should have as link anchor
    name the name of the parent section plus a specific word separated with an
    underscore; e.g.:

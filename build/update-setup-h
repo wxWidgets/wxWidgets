@@ -5,7 +5,7 @@
 #             having special comment markers in them will be update using
 #             include/wx/setup_inc.h contents
 # Created:    2005-01-15
-# Copyright:  (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+# Copyright:  (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 # Licence:    wxWindows licence
 ##############################################################################
 
@@ -65,15 +65,21 @@ update_single_setup_h()
     tmp=$i.$$.tmp
     sed -e "/^\/\* --- start $section options --- \*\/\$/q" $1 > $tmp &&
     cat_common_options_for $setup_inc $1 >> $tmp &&
-    sed -n -e "/^\/\* --- end $section options --- \*\/\$/,\$p" $1 >> $tmp &&
-    mv $tmp $1
+    sed -n -e "/^\/\* --- end $section options --- \*\/\$/,\$p" $1 >> $tmp
 
-    if [ $? -ne 0 ]; then
-        msg " FAILED"
-        error "$0: failed to update file $1"
-        rc=2
+    if cmp -s $1 $tmp; then
+        rm $tmp
+        msg " unchanged"
     else
-        msg " ok"
+        mv $tmp $1
+
+        if [ $? -ne 0 ]; then
+            msg " FAILED"
+            error "$0: failed to update file $1"
+            rc=2
+        else
+            msg " ok"
+        fi
     fi
 }
 

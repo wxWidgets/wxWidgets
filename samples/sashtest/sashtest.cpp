@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -46,7 +43,6 @@ bool MyApp::OnInit(void)
 
   frame = new MyFrame(NULL, wxID_ANY, "Sash Demo", wxPoint(0, 0), wxSize(500, 400),
                       wxDEFAULT_FRAME_STYLE |
-                      wxNO_FULL_REPAINT_ON_RESIZE |
                       wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
@@ -223,9 +219,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
 {
       // Make another frame, containing a canvas
       MyChild *subframe = new MyChild(frame, "Canvas Frame",
-                                      wxPoint(10, 10), wxSize(300, 300),
-                                      wxDEFAULT_FRAME_STYLE |
-                                      wxNO_FULL_REPAINT_ON_RESIZE);
+                                      wxPoint(10, 10), wxSize(300, 300));
 
       subframe->SetTitle(wxString::Format("Canvas Frame %d", winNumber));
       winNumber ++;
@@ -282,8 +276,7 @@ wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
-        : wxScrolledWindow(parent, wxID_ANY, pos, size,
-                           wxSUNKEN_BORDER | wxNO_FULL_REPAINT_ON_RESIZE)
+        : wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER)
 {
     SetBackgroundColour(* wxWHITE);
 }
@@ -350,9 +343,8 @@ wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
   EVT_MENU(SASHTEST_CHILD_QUIT, MyChild::OnQuit)
 wxEND_EVENT_TABLE()
 
-MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size,
-const long style):
-  wxMDIChildFrame(parent, wxID_ANY, title, pos, size, style)
+MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size):
+  wxMDIChildFrame(parent, wxID_ANY, title, pos, size)
 {
   canvas = NULL;
   my_children.Append(this);

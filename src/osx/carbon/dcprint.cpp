@@ -13,9 +13,6 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dcprint.h"
 
@@ -260,9 +257,9 @@ wxSize wxMacCarbonPrinterDC::GetPPI() const
 
 wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printdata )
    : wxGCDCImpl( owner )
+    , m_printData(printdata)
 {
     m_ok = false ;
-    m_printData = printdata ;
     m_printData.ConvertToNative() ;
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
     if ( m_nativePrinterDC )
@@ -320,7 +317,7 @@ bool wxPrinterDCImpl::StartDoc( const wxString& message )
     return m_ok ;
 }
 
-void wxPrinterDCImpl::EndDoc(void)
+void wxPrinterDCImpl::EndDoc()
 {
     if ( !m_ok )
         return ;

@@ -65,23 +65,26 @@ public:
 /** @class wxFontProperty
     @ingroup classes
     Property representing wxFont.
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the font dialog (since 3.1.3).
 */
-class wxFontProperty : public wxPGProperty
+class wxFontProperty : public wxEditorDialogProperty
 {
 public:
-
     wxFontProperty(const wxString& label = wxPG_LABEL,
                    const wxString& name = wxPG_LABEL,
                    const wxFont& value = wxFont());
     virtual ~wxFontProperty();
     virtual void OnSetValue();
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event );
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
                                     wxVariant& childValue ) const;
     virtual void RefreshChildren();
+
+protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 };
 
 
@@ -95,6 +98,9 @@ public:
     @ingroup classes
     Has dropdown list of wxWidgets system colours. Value used is
     of wxColourPropertyValue type.
+
+    <b>Supported special attributes:</b>
+    ::wxPG_COLOUR_ALLOW_CUSTOM, ::wxPG_COLOUR_HAS_ALPHA
 */
 class wxSystemColourProperty : public wxEnumProperty
 {
@@ -168,6 +174,14 @@ protected:
 
 
 
+/** @class wxColourProperty
+    @ingroup classes
+    Allows to select a colour from the list or with colour dialog. Value used
+    is of wxColourPropertyValue type.
+
+    <b>Supported special attributes:</b>
+    ::wxPG_COLOUR_ALLOW_CUSTOM, ::wxPG_COLOUR_HAS_ALPHA
+*/
 class wxColourProperty : public wxSystemColourProperty
 {
 public:
@@ -208,6 +222,17 @@ const wxString& wxPGGetDefaultImageWildcard();
 /** @class wxImageFileProperty
     @ingroup classes
     Property representing image file(name).
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog (since 3.1.3).
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
+    - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    files..." is default.
+    - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    (i.e. drive and directory are hidden).
+    - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+    given path string.
+    - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
 */
 class wxImageFileProperty : public wxFileProperty
 {
@@ -238,12 +263,13 @@ protected:
     calling wxMultiChoiceProperty::GetValueAsArrayInt().
 
     <b>Supported special attributes:</b>
-    - "UserStringMode": If > 0, allow user to manually enter strings that are
-      not in the list of choices. If this value is 1, user strings are
-      preferably placed in front of valid choices. If value is 2, then those
-      strings will placed behind valid choices.
+    - ::wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allow user to manually
+      enter strings that are not in the list of choices. If this value is 1,
+      user strings are preferably placed in front of valid choices. If value is
+      2, then those strings will placed behind valid choices.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog (since 3.1.3).
 */
-class wxMultiChoiceProperty : public wxPGProperty
+class wxMultiChoiceProperty : public wxEditorDialogProperty
 {
 public:
 
@@ -267,12 +293,11 @@ public:
     virtual bool StringToValue(wxVariant& variant,
                                const wxString& text,
                                int argFlags = 0) const;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event );
 
     wxArrayInt GetValueAsArrayInt() const;
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 
     void GenerateValueAsString( wxVariant& value, wxString* target ) const;
 
@@ -283,6 +308,8 @@ protected:
 
     // Cache displayed text since generating it is relatively complicated.
     wxString            m_display;
+    // How to handle user strings
+    int                 m_userStringMode;
 };
 
 
@@ -292,9 +319,9 @@ protected:
     Property representing wxDateTime.
 
     <b>Supported special attributes:</b>
-    - "DateFormat": Determines displayed date format.
-    - "PickerStyle": Determines window style used with wxDatePickerCtrl.
-       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE
+    - ::wxPG_DATE_FORMAT: Determines displayed date format.
+    - ::wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
+       Default is ::wxDP_DEFAULT | ::wxDP_SHOWCENTURY. Using ::wxDP_ALLOWNONE
        enables additional support for unspecified property value.
 */
 class wxDateProperty : public wxPGProperty

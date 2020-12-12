@@ -114,6 +114,31 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTempFileOutputStream);
 };
 
+class WXDLLIMPEXP_BASE wxTempFFileOutputStream : public wxOutputStream
+{
+public:
+    wxTempFFileOutputStream(const wxString& fileName);
+    virtual ~wxTempFFileOutputStream();
+
+    bool Close() wxOVERRIDE { return Commit(); }
+    WXDLLIMPEXP_INLINE_BASE virtual bool Commit() { return m_file->Commit(); }
+    WXDLLIMPEXP_INLINE_BASE virtual void Discard() { m_file->Discard(); }
+
+    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_file->Length(); }
+    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+
+protected:
+    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE
+        { return m_file->Seek(pos, mode); }
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_file->Tell(); }
+
+private:
+    wxTempFFile *m_file;
+
+    wxDECLARE_NO_COPY_CLASS(wxTempFFileOutputStream);
+};
+
 class WXDLLIMPEXP_BASE wxFileStream : public wxFileInputStream,
                                       public wxFileOutputStream
 {
@@ -161,7 +186,7 @@ private:
 class WXDLLIMPEXP_BASE wxFFileInputStream : public wxInputStream
 {
 public:
-    wxFFileInputStream(const wxString& fileName, const wxString& mode = "rb");
+    wxFFileInputStream(const wxString& fileName, const wxString& mode = wxASCII_STR("rb"));
     wxFFileInputStream(wxFFile& file);
     wxFFileInputStream(FILE *file);
     virtual ~wxFFileInputStream();
@@ -191,7 +216,7 @@ protected:
 class WXDLLIMPEXP_BASE wxFFileOutputStream : public wxOutputStream
 {
 public:
-    wxFFileOutputStream(const wxString& fileName, const wxString& mode = "wb");
+    wxFFileOutputStream(const wxString& fileName, const wxString& mode = wxASCII_STR("wb"));
     wxFFileOutputStream(wxFFile& file);
     wxFFileOutputStream(FILE *file);
     virtual ~wxFFileOutputStream();
@@ -224,7 +249,7 @@ class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
                                        public wxFFileOutputStream
 {
 public:
-    wxFFileStream(const wxString& fileName, const wxString& mode = "w+b");
+    wxFFileStream(const wxString& fileName, const wxString& mode = wxASCII_STR("w+b"));
 
     // override some virtual functions to resolve ambiguities, just as in
     // wxFileStream

@@ -15,7 +15,7 @@ excluded_classes = [
         "wxArchiveIterator",
         "wxArchiveNotifier",
         "wxArchiveOutputStream",
-        "wxArray< T >", 
+        "wxArray< T >",
         "wxArrayString",
         "wxAutomationObject",
         "wxBufferedInputStream",
@@ -160,5 +160,5 @@ def make_enums(aclass):
                 retval += ", "
             retval += "\n"
         retval += "};\n\n"
-    
+
     return retval

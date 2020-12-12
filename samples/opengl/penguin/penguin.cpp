@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -247,10 +244,10 @@ void TestGLCanvas::OnMouse(wxMouseEvent& event)
         /* drag in progress, simulate trackball */
         float spin_quat[4];
         trackball(spin_quat,
-            (2.0*m_gldata.beginx - sz.x) / sz.x,
-            (sz.y - 2.0*m_gldata.beginy) / sz.y,
-            (2.0*event.GetX() - sz.x)    / sz.x,
-            (sz.y - 2.0*event.GetY())    / sz.y);
+            (2 * m_gldata.beginx - sz.x) / sz.x,
+            (sz.y - 2 * m_gldata.beginy) / sz.y,
+            float(2 * event.GetX() - sz.x) / sz.x,
+            float(sz.y - 2 * event.GetY()) / sz.y);
 
         add_quats(spin_quat, m_gldata.quat, m_gldata.quat);
 
@@ -306,17 +303,16 @@ void TestGLCanvas::ResetProjectionMode()
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);
 
-    int w, h;
-    GetClientSize(&w, &h);
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     // It's up to the application code to update the OpenGL viewport settings.
     // In order to avoid extensive context switching, consider doing this in
     // OnPaint() rather than here, though.
-    glViewport(0, 0, (GLint) w, (GLint) h);
+    glViewport(0, 0, ClientSize.x, ClientSize.y);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (GLfloat)w/h, 1.0, 100.0);
+    gluPerspective(45, double(ClientSize.x) / ClientSize.y, 1, 100);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
@@ -1170,7 +1167,7 @@ void wxPostScriptDCImpl::SetPSFont()
     }
 
     // Select font
-    float size = (float)m_font.GetPointSize() * GetFontPointSizeAdjustment(DPI);
+    double size = m_font.GetPointSize() * double(GetFontPointSizeAdjustment(DPI));
     buffer.Printf( "%s findfont %f scalefont setfont\n", name.c_str(), size * m_scaleX );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
@@ -1471,7 +1468,7 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 
     // a and b are not used
     //double a, b;
-    double c, d, x1, y1, x2, y2, x3, y3;
+    double c, d, x1, y1, x3, y3;
     wxPoint *p, *q;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
@@ -1509,6 +1506,7 @@ void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
     node = node->GetNext();
     while (node)
     {
+        double x2, y2;
         q = node->GetData();
 
         x1 = x3;
@@ -1642,7 +1640,7 @@ void wxPostScriptDCImpl::DoGetSizeMM(int *width, int *height) const
 }
 
 // Resolution in pixels per logical inch
-wxSize wxPostScriptDCImpl::GetPPI(void) const
+wxSize wxPostScriptDCImpl::GetPPI() const
 {
     return wxSize( DPI, DPI );
 }
@@ -2252,13 +2250,8 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
         /* JC: calculate UnderlineThickness/UnderlinePosition */
 
-        // VS: dirty, but is there any better solution?
-        double *pt;
-        pt = (double*) &m_underlinePosition;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontSize)) / 1000.0f;
-        pt = (double*) &m_underlineThickness;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontSize)) / 1000.0f;
-
+        m_underlinePosition  = YLOG2DEVREL(int(UnderlinePosition  * double(fontSize))) / 1000.0;
+        m_underlineThickness = YLOG2DEVREL(int(UnderlineThickness * double(fontSize))) / 1000.0;
     }
 
 
@@ -2294,10 +2287,6 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
         }
     }
 
-    double widthSum = sum;
-    widthSum *= fontSize;
-    widthSum /= 1000.0F;
-
     /* add descender to height (it is usually a negative value) */
     //if (lastDescender != INT_MIN)
     //{
@@ -2308,7 +2297,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
     /* return size values */
     if ( x )
-        *x = (wxCoord)widthSum;
+        *x = int(sum * fontSize) / 1000;
     if ( y )
         *y = (wxCoord)height;
 

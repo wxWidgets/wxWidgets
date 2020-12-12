@@ -214,13 +214,11 @@
 /lib/bcc_lib
 /lib/cdef*.res
 /lib/dmc_lib
-/lib/evc_armv4_lib
-/lib/evc_emulator_lib
 /lib/expat*.lib
-/lib/gcc_dll
+/lib/gcc*_dll
 /lib/gcc_dll32
 /lib/gcc_dll64
-/lib/gcc_lib
+/lib/gcc*_lib
 /lib/gcc_lib32
 /lib/gcc_lib64
 /lib/jpeg*.lib
@@ -244,10 +242,6 @@
 /lib/univdlld
 /lib/vc*_dll
 /lib/vc*_lib
-/lib/vc*_x64_dll
-/lib/vc*_x64_lib
-/lib/vc*_arm64_dll
-/lib/vc*_arm64_lib
 /lib/wat_lib
 /lib/winmm32_sc.lib
 /lib/wsock32_sc.lib
@@ -474,4 +468,6 @@
 /utils/hhp2cached/*Carbon?Release*
 
 # /utils/wxrc/
-/utils/wxrc/*.sln
+/utils/wxrc/wxrc_vc[789].sln
+
+/3rdparty/webview2

@@ -12,9 +12,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -258,7 +255,9 @@ private:
                 wxBMP_8BPP,
                 wxBMP_8BPP_GREY,
                 wxBMP_8BPP_RED,
+#if wxUSE_PALETTE
                 wxBMP_8BPP_PALETTE,
+#endif // wxUSE_PALETTE
                 wxBMP_24BPP
             };
 
@@ -270,7 +269,9 @@ private:
                 "8 bpp color",
                 "8 bpp greyscale",
                 "8 bpp red",
+#if wxUSE_PALETTE
                 "8 bpp own palette",
+#endif // wxUSE_PALETTE
                 "24 bpp"
             };
 
@@ -283,7 +284,7 @@ private:
             {
                 int format = bppvalues[bppselection];
                 image.SetOption(wxIMAGE_OPTION_BMP_FORMAT, format);
-
+#if wxUSE_PALETTE
                 if ( format == wxBMP_8BPP_PALETTE )
                 {
                     unsigned char *cmap = new unsigned char [256];
@@ -293,6 +294,7 @@ private:
 
                     delete[] cmap;
                 }
+#endif // wxUSE_PALETTE
             }
         }
 #if wxUSE_LIBPNG

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -97,10 +94,11 @@ wxChar wxTextInputStream::GetChar()
         m_validEnd = 0;
     }
 
-    // We may need to decode up to 4 characters if we have input starting with
-    // 3 BOM-like bytes, but not actually containing a BOM, as decoding it will
-    // only succeed when 4 bytes are read -- and will yield 4 wide characters.
-    wxChar wbuf[4];
+    // We may need to decode up to 6 characters if we have input starting with
+    // 2 null bytes (like in UTF-32BE BOM), and then 3 bytes that look like
+    // the start of UTF-8 sequence, as decoding it will only succeed when
+    // 6 bytes are read -- and will yield 6 wide characters.
+    wxChar wbuf[6];
     for(size_t inlen = 0; inlen < sizeof(m_lastBytes); inlen++)
     {
         if ( inlen >= m_validEnd )
@@ -108,7 +106,7 @@ wxChar wxTextInputStream::GetChar()
             // actually read the next character
             m_lastBytes[inlen] = m_input.GetC();
 
-            if(m_input.LastRead() <= 0)
+            if (m_input.LastRead() == 0)
                 return 0;
 
             m_validEnd++;
@@ -134,12 +132,13 @@ wxChar wxTextInputStream::GetChar()
                 // one extra byte, the only explanation is that we were using a
                 // wxConvAuto conversion recognizing the initial BOM and that
                 // it couldn't detect the presence or absence of BOM so far,
-                // but now finally has enough data to see that there is none.
-                // As we must have fallen back to Latin-1 in this case, return
-                // just the first byte and keep the other ones for the next
-                // time.
-                m_validBegin = 1;
-                return wbuf[0];
+                // but now finally has enough data to see that there is none, or
+                // it was trying to decode the data as UTF-8 sequence, but now
+                // recognized that it's not valid UTF-8 and switched to fallback.
+                // We don't know how long is the first character or if it's decoded
+                // as 1 or 2 wchar_t characters, so we need to start with 1 byte again.
+                inlen = static_cast<size_t>(-1);
+                break;
 
 #if SIZEOF_WCHAR_T == 2
             case 2:
@@ -303,11 +302,23 @@ wxString wxTextInputStream::ReadLine()
 {
     wxString line;
 
-    while ( !m_input.Eof() )
+    for ( ;; )
     {
         wxChar c = GetChar();
-        if (!c)
+        if ( m_input.Eof() )
             break;
+
+        if (!c)
+        {
+            // If we failed to get a character and the stream is not at EOF, it
+            // can only mean that decoding the stream contents using our
+            // conversion object failed. In this case, we must signal an error
+            // at the stream level, as otherwise the code using this function
+            // would never know that something went wrong and would continue
+            // calling it again and again, resulting in an infinite loop.
+            m_input.Reset(wxSTREAM_READ_ERROR);
+            break;
+        }
 
         if (EatEOL(c))
             break;
@@ -358,7 +369,7 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
 wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
     c = m_input.GetC();
-    if(m_input.LastRead() <= 0) c = 0;
+    if (m_input.LastRead() == 0) c = 0;
 
     if (EatEOL(c))
         c = '\n';

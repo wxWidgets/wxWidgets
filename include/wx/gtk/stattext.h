@@ -23,7 +23,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticTextNameStr );
+                 const wxString &name = wxASCII_STR(wxStaticTextNameStr) );
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -31,7 +31,7 @@ public:
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
-                const wxString &name = wxStaticTextNameStr );
+                const wxString &name = wxASCII_STR(wxStaticTextNameStr) );
 
     void SetLabel( const wxString &label ) wxOVERRIDE;
 
@@ -49,8 +49,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const wxOVERRIDE;
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
 #if wxUSE_MARKUP
     virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP

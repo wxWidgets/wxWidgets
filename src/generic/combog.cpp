@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COMBOCTRL
 
@@ -457,6 +454,13 @@ bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 
     return false;
 }
+
+#if defined(__WXOSX__)
+wxTextWidgetImpl * wxGenericComboCtrl::GetTextPeer() const
+{
+    return m_text ? m_text->GetTextPeer() : NULL;
+}
+#endif
 
 #ifdef __WXUNIVERSAL__
 

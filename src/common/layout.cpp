@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONSTRAINTS
 
@@ -211,7 +208,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -286,7 +283,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) - margin);
+                        value = (edgePos * percent) / 100 - margin;
                         done = true;
                         return true;
                     }
@@ -364,7 +361,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -439,7 +436,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) - margin);
+                        value = (edgePos * percent) / 100 - margin;
                         done = true;
                         return true;
                     }
@@ -517,7 +514,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -585,7 +582,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -626,7 +623,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01));
+                        value = (edgePos * percent) / 100;
                         done = true;
                         return true;
                     }
@@ -684,7 +681,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01));
+                        value = (edgePos * percent) / 100;
                         done = true;
                         return true;
                     }

@@ -50,8 +50,10 @@ extern "C"
 static int wxCMPFUNC_CONV
 wxCompareFamilies (const void *a, const void *b)
 {
-  const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
-  const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
+    const PangoFontFamily* fam_a = *static_cast<PangoFontFamily* const*>(a);
+    const PangoFontFamily* fam_b = *static_cast<PangoFontFamily* const*>(b);
+    const char* a_name = pango_font_family_get_name(const_cast<PangoFontFamily*>(fam_a));
+    const char* b_name = pango_font_family_get_name(const_cast<PangoFontFamily*>(fam_b));
 
   return g_utf8_collate (a_name, b_name);
 }
@@ -60,6 +62,10 @@ wxCompareFamilies (const void *a, const void *b)
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+    // This parameter may be unused when pango_font_family_is_monospace() is
+    // not available, suppress the (unavoidable) warning in this case.
+    wxUnusedVar(fixedWidthOnly);
+
     if ( encoding != wxFONTENCODING_SYSTEM && encoding != wxFONTENCODING_UTF8 )
     {
         // Pango supports only UTF-8 encoding (and system means any, so we
@@ -276,7 +282,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 #else
     wxString pattern;
     pattern.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
-                   family.empty() ? wxT("*") : family.c_str());
+                   family.empty() ? wxString("*") : family);
 
     // get the list of all fonts
     int nFonts;

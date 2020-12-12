@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/bitmap.h"
 
@@ -73,7 +70,7 @@ public:
 
 #if wxUSE_WXDIB
     // Creates a new bitmap (DDB or DIB) from the contents of the given DIB.
-    void CopyFromDIB(const wxDIB& dib);
+    void CopyFromDIB(const wxDIB& dib, int depth = -1);
 
     // Takes ownership of the given DIB.
     bool AssignDIB(wxDIB& dib);
@@ -223,10 +220,6 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
 {
     Init();
 
-    // (deep) copy the mask if present
-    if (data.m_bitmapMask)
-        m_bitmapMask = new wxMask(*data.m_bitmapMask);
-
 #if wxUSE_WXDIB
     wxASSERT_MSG( !data.m_dib,
                     wxT("can't copy bitmap locked for raw access!") );
@@ -261,6 +254,11 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
         }
     }
 #endif // wxUSE_WXDIB
+
+    // Ensure this is done after the block above otherwise if the color depth didn't match we'll lose the mask
+    // (deep) copy the mask if present
+    if (data.m_bitmapMask)
+        m_bitmapMask = new wxMask(*data.m_bitmapMask);
 }
 
 void wxBitmapRefData::Free()
@@ -320,14 +318,15 @@ void wxBitmapRefData::InitFromDIB(const wxDIB& dib, HBITMAP hbitmap)
     m_hBitmap = (WXHBITMAP)hbitmap;
 }
 
-void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
+void wxBitmapRefData::CopyFromDIB(const wxDIB& dib, int depth /* = -1 */)
 {
     wxCHECK_RET( !IsOk(), "bitmap already initialized" );
     wxCHECK_RET( dib.IsOk(), wxT("invalid DIB in CopyFromDIB") );
 
     HBITMAP hbitmap;
 #ifdef SOMETIMES_USE_DIB
-    hbitmap = dib.CreateDDB();
+    // MemoryHDC defaults to monochrome
+    hbitmap = dib.CreateDDB(depth == 1 ? HDC(MemoryHDC()) : NULL);
 #else // ALWAYS_USE_DIB
     hbitmap = NULL;
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
@@ -847,7 +846,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     const int h = image.GetHeight();
     const int w = image.GetWidth();
 
-    wxDIB dib(image);
+    wxDIB dib(image, wxDIB::PixelFormat_PreMultiplied, depth);
     if ( !dib.IsOk() )
         return false;
 
@@ -969,67 +968,58 @@ wxImage wxBitmap::ConvertToImage() const
         return wxNullImage;
     }
 
-    // now do the same for the mask, if we have any
-    HBITMAP hbmpMask = GetMask() ? (HBITMAP) GetMask()->GetMaskBitmap() : NULL;
-    if ( hbmpMask )
+    // now handle the mask, if we have any
+    if ( GetMask() )
     {
-        wxDIB dibMask(hbmpMask);
-        if ( dibMask.IsOk() )
+        // we hard code the mask colour for now but we could also make an
+        // effort (and waste time) to choose a colour not present in the
+        // image already to avoid having to fudge the pixels below --
+        // whether it's worth to do it is unclear however
+        static const int MASK_RED = 1;
+        static const int MASK_GREEN = 2;
+        static const int MASK_BLUE = 3;
+        static const int MASK_BLUE_REPLACEMENT = 2;
+
+        wxBitmap bmpMask(GetMask()->GetBitmap());
+        wxMonoPixelData dataMask(bmpMask);
+        const int h = dataMask.GetHeight();
+        const int w = dataMask.GetWidth();
+        unsigned char* data = image.GetData();
+
+        wxMonoPixelData::Iterator rowStart(dataMask);
+        for ( int y = 0; y < h; ++y )
         {
-            // TODO: use wxRawBitmap to iterate over DIB
-
-            // we hard code the mask colour for now but we could also make an
-            // effort (and waste time) to choose a colour not present in the
-            // image already to avoid having to fudge the pixels below --
-            // whether it's worth to do it is unclear however
-            static const int MASK_RED = 1;
-            static const int MASK_GREEN = 2;
-            static const int MASK_BLUE = 3;
-            static const int MASK_BLUE_REPLACEMENT = 2;
-
-            const int h = dibMask.GetHeight();
-            const int w = dibMask.GetWidth();
-            const int bpp = dibMask.GetDepth();
-            const int maskBytesPerPixel = bpp >> 3;
-            const int maskBytesPerLine = wxDIB::GetLineSize(w, bpp);
-            unsigned char *data = image.GetData();
-
-            // remember that DIBs are stored in bottom to top order
-            unsigned char *
-                maskLineStart = dibMask.GetData() + ((h - 1) * maskBytesPerLine);
-
-            for ( int y = 0; y < h; y++, maskLineStart -= maskBytesPerLine )
+            // traverse one mask line
+            wxMonoPixelData::Iterator p = rowStart;
+            for ( int x = 0; x < w; ++x )
             {
-                // traverse one mask DIB line
-                unsigned char *mask = maskLineStart;
-                for ( int x = 0; x < w; x++, mask += maskBytesPerPixel )
+                // should this pixel be transparent?
+                if ( p.Pixel() )
                 {
-                    // should this pixel be transparent?
-                    if ( *mask )
+                    // no, check that it isn't transparent by accident
+                    if ( (data[0] == MASK_RED) &&
+                            (data[1] == MASK_GREEN) &&
+                                (data[2] == MASK_BLUE) )
                     {
-                        // no, check that it isn't transparent by accident
-                        if ( (data[0] == MASK_RED) &&
-                                (data[1] == MASK_GREEN) &&
-                                    (data[2] == MASK_BLUE) )
-                        {
-                            // we have to fudge the colour a bit to prevent
-                            // this pixel from appearing transparent
-                            data[2] = MASK_BLUE_REPLACEMENT;
-                        }
+                        // we have to fudge the colour a bit to prevent
+                        // this pixel from appearing transparent
+                        data[2] = MASK_BLUE_REPLACEMENT;
+                    }
 
-                        data += 3;
-                    }
-                    else // yes, transparent pixel
-                    {
-                        *data++ = MASK_RED;
-                        *data++ = MASK_GREEN;
-                        *data++ = MASK_BLUE;
-                    }
+                    data += 3;
                 }
+                else // yes, transparent pixel
+                {
+                    *data++ = MASK_RED;
+                    *data++ = MASK_GREEN;
+                    *data++ = MASK_BLUE;
+                }
+                ++p;
             }
-
-            image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
+            rowStart.OffsetY(dataMask, 1);
         }
+
+        image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
     }
 
     return image;
@@ -1259,6 +1249,53 @@ void wxBitmap::MSWUpdateAlpha()
 #endif // wxUSE_WXDIB/!wxUSE_WXDIB
 }
 
+void wxBitmap::MSWBlendMaskWithAlpha()
+{
+#if defined(wxHAS_RAW_BITMAP)
+    if ( !HasAlpha() || !GetMask() )
+        return;
+    // Update alpha channel by blending original alpha values with mask and then remove the mask.
+    // For non-masked pixels alpha channel values will remain intact and for masked pixels
+    // they will be set to the transparent value (0).
+    AllocExclusive();
+
+    {
+        wxBitmap bmpMask = GetMask()->GetBitmap();
+        wxMonoPixelData maskData(bmpMask);
+        wxCHECK_RET(maskData, "No access to bitmap mask data");
+
+        wxAlphaPixelData bmpData(*this);
+        wxCHECK_RET(bmpData, "No access to bitmap data");
+
+        const int w = GetWidth();
+        const int h = GetHeight();
+
+        wxMonoPixelData::Iterator maskRowStart(maskData);
+        wxAlphaPixelData::Iterator bmpRowStart(bmpData);
+        for ( int y = 0; y < h; y++ )
+        {
+            wxMonoPixelData::Iterator pMask = maskRowStart;
+            wxAlphaPixelData::Iterator pBmp = bmpRowStart;
+            for ( int x = 0; x < w; x++, ++pBmp, ++pMask )
+            {
+                // Masked pixel is not drawn i.e. is transparent,
+                // non-masked pixel is untouched.
+                if ( pMask.Pixel() == 0 )
+                {
+                    pBmp.Red() = pBmp.Green() = pBmp.Blue() = 0; // pre-multiplied
+                    pBmp.Alpha() = wxALPHA_TRANSPARENT;
+                }
+            }
+            maskRowStart.OffsetY(maskData, 1);
+            bmpRowStart.OffsetY(bmpData, 1);
+        }
+    }
+    GetBitmapData()->SetMask((wxMask*)NULL);
+    wxASSERT(HasAlpha());
+    wxASSERT(!GetMask());
+#endif // wxHAS_RAW_BITMAP
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmap setters
 // ----------------------------------------------------------------------------
@@ -1333,6 +1370,12 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
         // no bitmap, no data (raw or otherwise)
         return NULL;
     }
+    if ( bpp == 1 && GetDepth() != 1 )
+    {
+        wxFAIL_MSG( wxT("use wxQuantize if you want to convert color wxBitmap to mono") );
+
+        return NULL;
+    }
 
     // if we're already a DIB we can access our data directly, but if not we
     // need to convert this DDB to a DIB section and use it for raw access and
@@ -1343,7 +1386,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
         wxCHECK_MSG( !GetBitmapData()->m_dib, NULL,
                         wxT("GetRawData() may be called only once") );
 
-        wxDIB *dib = new wxDIB(*this);
+        wxDIB *dib = new wxDIB(*this, bpp);
         if ( !dib->IsOk() )
         {
             delete dib;
@@ -1417,7 +1460,8 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
         GetBitmapData()->m_dib = NULL;
 
         GetBitmapData()->Free();
-        GetBitmapData()->CopyFromDIB(*dib);
+        int depth = GetDepth() == 1 && dib->GetDepth() != GetDepth() ? 1 : -1;
+        GetBitmapData()->CopyFromDIB(*dib, depth);
 
         delete dib;
     }
@@ -1733,6 +1777,20 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
     if ( bmp.HasAlpha() )
     {
+        // Make a copy in case we would neeed to remove its mask.
+        // If this will not be necessary, the copy is cheap as bitmaps are reference-counted.
+        wxBitmap curBmp(bmp);
+
+        // For bitmap with both alpha channel and mask we have to apply mask on our own
+        // because 32 bpp icons don't work properly with mask bitmaps.
+        // To do so we will create a temporary bitmap with copy of RGB data and with alpha channel
+        // being a superposition of the original alpha values and the mask - for non-masked pixels
+        // alpha channel values will remain intact and for masked pixels they will be set to the transparent value.
+        if ( curBmp.GetMask() )
+        {
+            curBmp.MSWBlendMaskWithAlpha();
+        }
+
         HBITMAP hbmp;
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
@@ -1741,17 +1799,17 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         // a special DIB in such format to pass to it. This is inefficient but
         // better than creating an icon with wrong colours.
         AutoHBITMAP hbmpRelease;
-        hbmp = wxDIB(bmp.ConvertToImage(),
+        hbmp = wxDIB(curBmp.ConvertToImage(),
                      wxDIB::PixelFormat_NotPreMultiplied).Detach();
         hbmpRelease.Init(hbmp);
 #else // !(wxUSE_WXDIB && wxUSE_IMAGE)
-        hbmp = GetHbitmapOf(bmp);
+        hbmp = GetHbitmapOf(curBmp);
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
 
         // Create an empty mask bitmap.
         // it doesn't seem to work if we mess with the mask at all.
         AutoHBITMAP
-            hMonoBitmap(CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL));
+            hMonoBitmap(CreateBitmap(curBmp.GetWidth(),curBmp.GetHeight(),1,1,NULL));
 
         ICONINFO iconInfo;
         wxZeroMemory(iconInfo);

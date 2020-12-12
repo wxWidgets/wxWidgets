@@ -11,7 +11,7 @@
     the generic properties of the font without hardcoding in the sources a specific
     face name.
 
-    wxFontFamily thus allows to group the font face names of fonts with similar
+    wxFontFamily thus allows grouping the font face names of fonts with similar
     properties. Most wxWidgets ports use lists of fonts for each font family
     inspired by the data taken from http://www.codestyle.org/css/font-family.
 */
@@ -291,7 +291,7 @@ enum wxFontEncoding
     @class wxFontInfo
 
     This class is a helper used for wxFont creation using named parameter
-    idiom: it allows to specify various wxFont attributes using the chained
+    idiom: it allows specifying various wxFont attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxFont constructors.
 
@@ -322,16 +322,12 @@ public:
     /**
         Constructor setting the font size in points to use.
 
-        The canonical type of @a pointSize argument is @c float, however any
-        other integer type, as well as @c double, is also accepted for
-        compatibility.
-
-        Notice that until wxWidgets 3.1.2, the type could only be @c int.
+        Note that until wxWidgets 3.1.2 fractional point sizes were not
+        supported, and the type of @a pointSize was @c int.
 
         @see wxFont::SetPointSize()
      */
-    template <typename T>
-    explicit wxFontInfo(T pointSize);
+    explicit wxFontInfo(double pointSize);
 
     /**
         Constructor setting the font size in pixels to use.
@@ -743,7 +739,7 @@ public:
         This method can be used to allow this application to use the font from
         the given file even if it is not globally installed on the system.
 
-        Under OS X this method actually doesn't do anything other than check
+        Under macOS this method actually doesn't do anything other than check
         for the existence of the file in the "Fonts" subdirectory of the
         application bundle "Resources" directory. You are responsible for
         actually making the font file available in this directory and setting
@@ -786,7 +782,7 @@ public:
 
         @since 3.1.2
     */
-    virtual float  GetFractionalPointSize() const;
+    virtual double GetFractionalPointSize() const;
 
     /**
         Gets the pixel size.
@@ -1139,7 +1135,7 @@ public:
 
         @since 3.1.2
     */
-    virtual void SetFractionalPointSize(float pointSize);
+    virtual void SetFractionalPointSize(double pointSize);
 
     /**
         Sets the pixel size.
@@ -1169,7 +1165,7 @@ public:
     /**
         Sets the font size using a predefined symbolic size name.
 
-        This function allows to change font size to be (very) large or small
+        This function allows changing font size to be (very) large or small
         compared to the standard font size.
 
         @see SetSymbolicSizeRelativeTo().

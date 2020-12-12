@@ -280,7 +280,7 @@ public:
     @library{wxcore}
     @category{ctrl,ipc}
 
-    @see wxActiveXEvent, @ref page_samples_flash
+    @see wxActiveXEvent
 */
 class wxActiveXContainer : public wxControl
 {

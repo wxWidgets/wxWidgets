@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_NOTEBOOK
 
@@ -1225,7 +1222,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
 #if wxUSE_UXTHEME
     if (wxUxThemeIsActive())
     {
-        wxUxThemeHandle hTheme((wxNotebook*) this, L"TAB");
+        wxUxThemeHandle hTheme(this, L"TAB");
         if (hTheme)
         {
             // This is total guesswork.

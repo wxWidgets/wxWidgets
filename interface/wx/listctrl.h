@@ -127,7 +127,7 @@ enum
     A special case of report view quite different from the other modes of the list
     control is a virtual control in which the items data (including text, images
     and attributes) is managed by the main program and is requested by the control
-    itself only when needed which allows to have controls with millions of items
+    itself only when needed which allows having controls with millions of items
     without consuming much memory. To use virtual list control you must use
     wxListCtrl::SetItemCount first and override at least wxListCtrl::OnGetItemText
     (and optionally wxListCtrl::OnGetItemImage or wxListCtrl::OnGetItemColumnImage and
@@ -213,7 +213,9 @@ enum
            All items were deleted.
            Processes a @c wxEVT_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-           The item has been selected.
+           The item has been selected. Notice that the mouse is captured by the
+           control itself when this event is generated, see @ref
+           overview_events_with_mouse_capture "event handling overview".
            Processes a @c wxEVT_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
@@ -374,7 +376,7 @@ public:
        @return @true if all columns were successfully deleted, @false otherwise.
     */
     bool DeleteAllColumns();
-    
+
     /**
         Deletes all items in the list control.
 
@@ -453,7 +455,7 @@ public:
     /**
         Finish editing the label.
 
-        This method allows to programmatically end editing a list control item
+        This method allows one to programmatically end editing a list control item
         in place. Usually it will only be called when editing is in progress,
         i.e. if GetEditControl() returns non-NULL. In particular, do not call
         it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not
@@ -586,7 +588,7 @@ public:
         Returns @NULL if no label is being edited.
 
         @note It is currently only implemented for wxMSW and the generic version,
-              not for the native OS X version.
+              not for the native macOS version.
     */
     wxTextCtrl* GetEditControl() const;
 
@@ -756,6 +758,11 @@ public:
         @a code can be one of @c wxLIST_RECT_BOUNDS, @c wxLIST_RECT_ICON or
         @c wxLIST_RECT_LABEL.
 
+        Note that using @c wxLIST_RECT_ICON with any sub-item but the first one
+        isn't very useful as only the first sub-item can have an icon in
+        wxListCtrl. In this case, i.e. for @c subItem > 0, this function simply
+        returns an empty rectangle in @a rect.
+
         @since 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
@@ -849,8 +856,8 @@ public:
     /**
         For report view mode (only), inserts a column.
 
-        For more details, see SetItem(). Also see InsertColumn(long, const
-        wxString&, int, int) overload for a usually more convenient
+        For more details, see SetItem(). Also see InsertColumn(long, const wxString&, int, int)
+        overload for a usually more convenient
         alternative to this method and the description of how the item width
         is interpreted by this method.
     */
@@ -863,7 +870,7 @@ public:
         given position specifying its most common attributes.
 
         Notice that to set the image for the column you need to use
-        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        InsertColumn(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
         in the item mask.
 
         @param col
@@ -899,7 +906,7 @@ public:
     long InsertItem(wxListItem& info);
 
     /**
-        Insert an string item.
+        Insert a string item.
 
         @param index
             Index of the new item, supplied by the application
@@ -942,6 +949,16 @@ public:
     */
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
+
+    /**
+        Returns true if the control doesn't currently contain any items.
+
+        Note that the control with some columns is still considered to be empty
+        if it has no rows.
+
+        @since 3.1.3
+     */
+    bool IsEmpty() const;
 
     /**
         Returns true if the control is currently in virtual report view.
@@ -1087,6 +1104,16 @@ public:
         @see AssignImageList()
     */
     void SetImageList(wxImageList* imageList, int which);
+
+    /**
+        Check if the item is visible.
+
+        An item is considered visible if at least one pixel of it is present
+        on the screen.
+
+        @since 3.1.3
+    */
+    bool IsVisible(long item) const;
 
     /**
         Sets the data of an item.
@@ -1271,6 +1298,13 @@ public:
         @param enable If @true, enable checkboxes, otherwise disable checkboxes.
         @return @true if checkboxes are supported, @false otherwise.
 
+        In a list control with wxLC_VIRTUAL style you have to keep track of the
+        checkbox state. When a checkbox is clicked (EVT_LIST_ITEM_CHECKED
+        or EVT_LIST_ITEM_UNCHECKED) you have to update the state and refresh
+        the item yourself.
+
+        @see OnGetItemIsChecked() RefreshItem()
+
         @since 3.1.0
     */
     bool EnableCheckBoxes(bool enable = true);
@@ -1299,6 +1333,33 @@ public:
     */
     void CheckItem(long item, bool check);
 
+    /**
+        Extend rules and alternate rows background to the entire client area.
+
+        Bu default, the rules (when enabled with wxLC_HRULES and wxLC_VRULES)
+        and alternate row background (when EnableAlternateRowColours() was
+        called) are only shown in the part of the control occupied by the
+        items, which can be smaller than the entire window if there are few
+        items in the control.
+
+        Calling this function extends the display of the rules and alternate
+        background rows to the entire client area.
+
+        Similarly to EnableAlternateRowColours(), this method can only be used
+        with controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        Note that this method is currently not implemented in the native MSW
+        version and does nothing there.
+
+        @param extend
+            if @true, draws horizontal rules and vertical rules on empty rows
+            and uses the colour parameter to paint the background of
+            alternate rows when those rows are blank, empty, with no data.
+
+        @since 3.1.5
+    */
+    void ExtendRulesAndAlternateColour(bool extend = true);
+
 protected:
 
     /**
@@ -1312,7 +1373,7 @@ protected:
         The base class version always returns @NULL.
 
         @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText(),
-             OnGetItemColumnAttr()
+             OnGetItemColumnAttr(), OnGetItemIsChecked()
     */
     virtual wxItemAttr* OnGetItemAttr(long item) const;
 
@@ -1370,6 +1431,17 @@ protected:
         @see SetItemCount(), OnGetItemImage(), OnGetItemColumnImage(), OnGetItemAttr()
     */
     virtual wxString OnGetItemText(long item, long column) const;
+
+    /**
+        This function @b must be overridden in the derived class for a control with
+        @c wxLC_VIRTUAL style that uses checkboxes. It should return whether the
+        checkbox of the specified @c item is checked.
+
+        @see EnableCheckBoxes(), OnGetItemText()
+
+        @since 3.1.2
+    */
+    virtual bool OnGetItemIsChecked(long item) const;
 };
 
 
@@ -1393,9 +1465,11 @@ protected:
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
         Delete all items.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-        The item has been selected.
+        The item has been selected. Notice that the mouse is captured by the
+        control itself when this event is generated, see @ref
+        overview_events_with_mouse_capture "event handling overview".
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
-        The item has been deselected.
+        The item has been deselected. GetIndex() may be -1 with virtual lists.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
         The item has been activated (ENTER or double click).
     @event{EVT_LIST_ITEM_FOCUSED(id, func)}
@@ -1405,7 +1479,7 @@ protected:
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
         The right mouse button has been clicked on an item.
     @event{EVT_LIST_KEY_DOWN(id, func)}
-        A key has been pressed. GetIndex() may be -1 if no item is selected. 
+        A key has been pressed. GetIndex() may be -1 if no item is selected.
     @event{EVT_LIST_INSERT_ITEM(id, func)}
         An item has been inserted.
     @event{EVT_LIST_COL_CLICK(id, func)}
@@ -1516,7 +1590,7 @@ public:
     */
     bool IsEditCancelled() const;
 
-    
+
     /**
        @see GetKeyCode()
     */
@@ -1612,7 +1686,7 @@ public:
 
         @param parent
             Parent window. Must not be @NULL.
-        @param id
+        @param winid
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.
@@ -1736,7 +1810,7 @@ public:
       This is a bitlist of the following flags:
         - @c wxLIST_STATE_FOCUSED: The item has the focus.
         - @c wxLIST_STATE_SELECTED: The item is selected.
-        - @c wxLIST_STATE_DONTCARE: Don't care what the state is. Win32 only.
+        - @c wxLIST_STATE_DONTCARE: No special flags (the value of this constant is 0).
         - @c wxLIST_STATE_DROPHILITED: The item is highlighted to receive a drop event. Win32 only.
         - @c wxLIST_STATE_CUT: The item is in the cut state. Win32 only.
     - A mask indicating which state flags are valid; this is a bitlist of the
@@ -1828,7 +1902,7 @@ public:
         Returns a bit field representing the state of the item.
 
         Can be any combination of:
-        - wxLIST_STATE_DONTCARE: Don't care what the state is. Win32 only.
+        - wxLIST_STATE_DONTCARE: No special flags (the values of this constant is 0).
         - wxLIST_STATE_DROPHILITED: The item is highlighted to receive a drop event. Win32 only.
         - wxLIST_STATE_FOCUSED: The item has the focus.
         - wxLIST_STATE_SELECTED: The item is selected.

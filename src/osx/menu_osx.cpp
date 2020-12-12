@@ -64,15 +64,16 @@ void wxMenu::Init()
     m_noEventsMode = false;
     m_radioData = NULL;
 
-    m_peer = wxMenuImpl::Create( this, wxStripMenuCodes(m_title) );
+    m_peer = wxMenuImpl::Create( this, wxStripMenuCodes(m_title, wxStrip_Menu) );
 
-
-    // if we have a title, insert it in the beginning of the menu
+#if wxOSX_USE_COCOA
+    // under macOS there is no built-in title, so if we have a title, insert it in the beginning of the menu
     if ( !m_title.empty() )
     {
         Append(idMenuTitle, m_title) ;
         AppendSeparator() ;
     }
+#endif
 }
 
 wxMenu::~wxMenu()
@@ -86,11 +87,6 @@ WXHMENU wxMenu::GetHMenu() const
     if ( m_peer )
         return m_peer->GetHMenu();
     return NULL;
-}
-
-void wxMenu::Break()
-{
-    // not available on the mac platform
 }
 
 void wxMenu::SetAllowRearrange( bool allow )
@@ -156,9 +152,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *item, size_t pos)
         }
     }
 
+#if wxUSE_MENUBAR
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() && GetMenuBar()->IsAttached() )
         GetMenuBar()->Refresh();
+#endif // wxUSE_MENUBAR
 
     if ( check )
         item->Check(true);
@@ -221,7 +219,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 void wxMenu::SetTitle(const wxString& label)
 {
     m_title = label ;
-    GetPeer()->SetTitle( wxStripMenuCodes( label ) );
+    GetPeer()->SetTitle( wxStripMenuCodes( label, wxStrip_Menu ) );
 }
 
 bool wxMenu::ProcessCommand(wxCommandEvent & event)
@@ -326,23 +324,10 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
     wxUpdateUIEvent event(menuid);
     event.SetEventObject( this );
 
-    bool processed = false;
+    if ( !item || !item->IsCheckable() )
+        event.DisallowCheck();
 
-    // Try the menu's event handler
-    {
-        wxEvtHandler *handler = GetEventHandler();
-        if ( handler )
-            processed = handler->ProcessEvent(event);
-    }
-
-    // Try the window the menu was popped up from
-    // (and up through the hierarchy)
-    if ( !processed )
-    {
-        wxWindow *win = GetWindow();
-        if ( win )
-            processed = win->HandleWindowEvent(event);
-    }
+    bool processed = DoProcessEvent(this, event, GetWindow());
 
     if ( !processed && senderWindow != NULL)
     {
@@ -395,7 +380,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
 
 void wxMenu::HandleMenuItemHighlighted( wxMenuItem* item )
 {
-    int menuid = item ? item->GetId() : 0;
+    int menuid = item ? item->GetId() : wxID_NONE;
     wxMenuEvent wxevent(wxEVT_MENU_HIGHLIGHT, menuid, this);
     ProcessMenuEvent(this, wxevent, GetWindow());
 }
@@ -420,6 +405,8 @@ void wxMenu::HandleMenuClosed()
 {
     DoHandleMenuOpenedOrClosed(wxEVT_MENU_CLOSE);
 }
+
+#if wxUSE_MENUBAR
 
 // Menu Bar
 
@@ -699,16 +686,6 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     return true;
 }
 
-void wxMenuBar::Detach()
-{
-    wxMenuBarBase::Detach() ;
-}
-
-void wxMenuBar::Attach(wxFrame *frame)
-{
-    wxMenuBarBase::Attach( frame ) ;
-}
-
 void wxMenuBar::DoGetPosition(int *x, int *y) const
 {
     int _x,_y,_width,_height;
@@ -738,5 +715,6 @@ void wxMenuBar::DoGetClientSize(int *width, int *height) const
     DoGetSize(width, height);
 }
 
+#endif // wxUSE_MENUBAR
 
 #endif // wxUSE_MENUS

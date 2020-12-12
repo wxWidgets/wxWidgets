@@ -182,8 +182,6 @@
     #cmakedefine01 wxUSE_UNICODE
 #endif
 
-#cmakedefine01 wxUSE_WCHAR_T
-
 
 #cmakedefine01 wxUSE_EXCEPTIONS
 
@@ -221,9 +219,6 @@
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#cmakedefine01 wxUSE_IOSTREAMH
-
 
 
 #cmakedefine01 wxUSE_LONGLONG
@@ -367,6 +362,8 @@
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #endif
 
+#cmakedefine01 wxUSE_WEBVIEW_EDGE
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT
 #else
@@ -442,6 +439,8 @@
 #cmakedefine01 wxUSE_TREECTRL
 #cmakedefine01 wxUSE_TREELISTCTRL
 
+#cmakedefine01 wxUSE_NATIVE_DATAVIEWCTRL
+
 #cmakedefine01 wxUSE_STATUSBAR
 
 #cmakedefine01 wxUSE_NATIVE_STATUSBAR
@@ -495,6 +494,8 @@
 #cmakedefine01 wxUSE_INFOBAR
 
 #cmakedefine01 wxUSE_MENUS
+
+#cmakedefine01 wxUSE_MENUBAR
 
 #cmakedefine01 wxUSE_NOTIFICATION_MESSAGE
 
@@ -575,6 +576,8 @@
 #cmakedefine01 wxUSE_HTML
 
 #cmakedefine01 wxUSE_GLCANVAS
+
+#cmakedefine01 wxUSE_GLCANVAS_EGL
 
 #cmakedefine01 wxUSE_RICHTEXT
 
@@ -660,7 +663,6 @@
 #cmakedefine01 wxUSE_THEME_MONO
 #cmakedefine01 wxUSE_THEME_WIN32
 
-
 /* --- end common options --- */
 
 /*
@@ -742,6 +744,8 @@
 
 #cmakedefine01 wxUSE_INICONF
 
+#cmakedefine01 wxUSE_WINSOCK2
+
 
 #cmakedefine01 wxUSE_DATEPICKCTRL_GENERIC
 
@@ -766,11 +770,6 @@
  * Define if va_list type is an array
  */
 #cmakedefine VA_LIST_IS_ARRAY 1
-
-/*
- * Define if the compiler supports variadic macros
- */
-#cmakedefine HAVE_VARIADIC_MACROS 1
 
 /*
  * Define if you don't want variadic macros to be used even if they are
@@ -1012,9 +1011,6 @@
 /* Define if you have pthread_attr_setstacksize */
 #cmakedefine HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
-/* Define if you have shl_load() */
-#cmakedefine HAVE_SHL_LOAD 1
-
 /* Define if you have snprintf() */
 #cmakedefine HAVE_SNPRINTF 1
 
@@ -1116,9 +1112,6 @@
 
 /* Define if wchar_t is distinct type in your compiler. */
 #cmakedefine wxWCHAR_T_IS_REAL_TYPE 1
-
-/* Define if you have the dlerror function.  */
-#cmakedefine HAVE_DLERROR 1
 
 /* Define if you have the dladdr function.  */
 #cmakedefine HAVE_DLADDR 1
@@ -1230,9 +1223,6 @@
 
 /* Define if you have the <langinfo.h> header file.  */
 #cmakedefine HAVE_LANGINFO_H 1
-
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#cmakedefine HAVE_W32API_H 1
 
 /* Define if you have the <sys/soundcard.h> header file. */
 #cmakedefine HAVE_SYS_SOUNDCARD_H 1

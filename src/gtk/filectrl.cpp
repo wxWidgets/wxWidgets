@@ -9,10 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_FILECTRL && !defined(__WXUNIVERSAL__)
 
 #include "wx/filectrl.h"

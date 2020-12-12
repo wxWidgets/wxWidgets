@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -253,8 +250,8 @@ class wxHtmlImageMapCell : public wxHtmlCell
 
 
 wxHtmlImageMapCell::wxHtmlImageMapCell( wxString &name )
+    : m_Name(name)
 {
-    m_Name = name ;
 }
 
 wxHtmlLinkInfo *wxHtmlImageMapCell::GetLink( int x, int y ) const
@@ -269,7 +266,7 @@ const wxHtmlCell *wxHtmlImageMapCell::Find( int cond, const void *param ) const
 {
     if (cond == wxHTML_COND_ISIMAGEMAP)
     {
-        if (m_Name == *((wxString*)(param)))
+        if (m_Name == *static_cast<const wxString*>(param))
             return this;
     }
     return wxHtmlCell::Find(cond, param);
@@ -310,6 +307,12 @@ public:
 
     virtual void Layout(int w) wxOVERRIDE;
 
+    virtual wxString GetDescription() const wxOVERRIDE
+    {
+        return wxString::Format("wxHtmlImageCell with bitmap of size %d*%d",
+                                m_bmpW, m_bmpH);
+    }
+
 private:
     wxBitmap           *m_bitmap;
     int                 m_align;
@@ -325,8 +328,8 @@ private:
     size_t              m_nCurrFrame;
 #endif
     double              m_scale;
-    wxHtmlImageMapCell *m_imageMap;
-    wxString            m_mapName;
+    mutable const wxHtmlImageMapCell* m_imageMap;
+    mutable wxString    m_mapName;
     wxString            m_alt;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageCell);
@@ -359,6 +362,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                                  wxFSFile *input, double scaleHDPI,
                                  int w, bool wpercent, int h, bool hpresent, double scale, int align,
                                  const wxString& mapname) : wxHtmlCell()
+    , m_mapName(mapname)
 {
     m_windowIface = windowIface;
     m_scale = scale;
@@ -370,7 +374,6 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
     m_bmpWpercent = wpercent;
     m_bmpHpresent = hpresent;
     m_imageMap = NULL;
-    m_mapName = mapname;
     SetCanLiveOnPagebreak(false);
 #if wxUSE_GIF && wxUSE_TIMER
     m_gifDecoder = NULL;
@@ -649,18 +652,14 @@ wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
             p = p->GetParent();
         }
         p = op;
-        wxHtmlCell *cell = (wxHtmlCell*)p->Find(wxHTML_COND_ISIMAGEMAP,
+        const wxHtmlCell* cell = p->Find(wxHTML_COND_ISIMAGEMAP,
                                                 (const void*)(&m_mapName));
         if (!cell)
         {
-            ((wxString&)m_mapName).Clear();
+            m_mapName.Clear();
             return wxHtmlCell::GetLink( x, y );
         }
-        {   // dirty hack, ask Joel why he fills m_ImageMap in this place
-            // THE problem is that we're in const method and we can't modify m_ImageMap
-            wxHtmlImageMapCell **cx = (wxHtmlImageMapCell**)(&m_imageMap);
-            *cx = (wxHtmlImageMapCell*)cell;
-        }
+        m_imageMap = static_cast<const wxHtmlImageMapCell*>(cell);
     }
     return m_imageMap->GetLink(x, y);
 }
@@ -755,8 +754,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                 cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);
-                if (str)
-                    delete str;
+                delete str;
             }
         }
         if (tag.GetName() == wxT("MAP"))

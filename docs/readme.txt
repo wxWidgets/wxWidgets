@@ -1,4 +1,4 @@
-wxWidgets 3.1.3 Release Notes
+wxWidgets 3.1.5 Release Notes
 =============================
 
 Welcome to the latest development release of wxWidgets, a free and open source
@@ -16,22 +16,45 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.1.3/
+* https://docs.wxwidgets.org/3.1.5/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.3/
+* https://www.wxwidgets.org/downloads/
+
+or, for a more more permanent but less convenient to use link, from
+
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.5/
 
 
-Changes since 3.1.2
+Changes since 3.1.3
 -------------------
 
-TODO: Fill in
+In the nine months since the previous release, there have been almost 1700
+commits from 74 unique contributors (37 with multiple contributions), so it is
+impossible to summarize all the changes in this document without making it too
+long, please see the fuller changelog at
 
-Notice that this release is almost completely compatible with 3.1.2 at the API
-level, so upgrading to it if you're already using wxWidgets 3 should be
-straightforward.
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.5/docs/changes.txt
+
+for more (but still not all) details, but some of the most important changes are:
+
+- wxOSX port now supports the latest macOS 11 on ARM hardware.
+- wxMSW comes with a new Edge-based wxWebView implementation.
+- Better, although still not perfect, per-monitor DPI support in wxMSW.
+- wxGrid was has been significantly improved and is now much user friendlier.
+- AUI appearance enhancements for non-default GTK themes and macOS dark mode.
+- wxWidgets may now be built with C++20 compiler.
+- Improvements to CMake build system.
+- Allow optionally forbidding dangerous implicit wxString conversions.
+
+And, of course, there were many, many bug fixes in all ports, notably including
+fixing several long-standing problems in wxOSX.
+
+Notice that in spite of all the changes, this release remains almost completely
+compatible with 3.1.3 at the API level, so upgrading to it if you're already
+using wxWidgets 3 should be straightforward.
 
 
 Changes since 3.0
@@ -41,13 +64,16 @@ Compared to the stable 3.0.x series, this version brings too many
 improvements and even more bug fixes to list them all, but here is the
 maximally condensed summary:
 
-- Build system improvements: support for new compilers (MSVS 2017, g++ 8) and
-  OS versions as well as an entirely new CMake build system.
+- Build system improvements: support for new compilers (up to MSVS 2019, g++ 10)
+  with an even simpler way of using wxWidgets from MSVS, with wxwidgets.props
+  file, and OS versions as well as an entirely new CMake build system.
+- Support for native dark mode under macOS 10.14 Mojave and later.
 - New features: support for mouse gesture events (GSoC 2017 project);
   fractional pen widths in wxGraphicsContext; arbitrary label windows in
   wxStaticBox; markup in wxDataViewCtrl items text; better support for high DPI
   monitors; support for ZIP 64 files; much improved accessibility support under
-  MSW.
+  MSW; Support for non-integer font sizes and arbitrary font weights; LZMA
+  compression support (using liblzma).
 - New classes: wxActivityIndicator, wxAddRemoveCtrl,
   wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
   wxSecretStore.
@@ -73,7 +99,7 @@ This version of wxWidgets supports the following primary platforms:
 
 * Windows XP, Vista, 7, 8 and 10 (32/64 bits).
 * Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-* OS X (10.7 or newer) using Cocoa (32/64 bits)
+* macOS (10.10 or newer) using Cocoa (32/64 bits)
 
 There is some support for the following platforms:
 
@@ -82,8 +108,8 @@ There is some support for the following platforms:
 * Most Unix variants with GTK+ 1.2
 * Most Unix variants with Qt 5 or newer (experimental)
 
-Most popular C++ compilers are supported; see the install.txt file for each
-platform (following the links from docs/index.htm).
+All C++ compilers in common use are supported; see the install.txt file for
+each platform (following the links from docs/index.htm).
 
 
 Files
@@ -92,7 +118,7 @@ Files
 wxWidgets is distributed in source form in several archive formats. ZIP and 7z
 archives are for Microsoft Windows users and contain the files with DOS/Windows
 line endings while the compressed tar archives are for Unix systems (including
-OS X) and contain the files with Unix line endings. Please notice that some
+macOS) and contain the files with Unix line endings. Please notice that some
 Windows tools still don't accept files with Unix line endings and that compiling
 sources with DOS line endings under Unix will fail, so please choose the correct
 file for your system.
@@ -190,4 +216,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, December 2018
+The wxWidgets Team, July 2020

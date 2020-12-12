@@ -22,7 +22,6 @@
 #define wx_USE_NANOX 0
 
 #define HAVE_VA_COPY 1
-#define HAVE_VARIADIC_MACROS 1
 #define HAVE_STD_WSTRING 1
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
   #if !defined(__has_include)
@@ -87,7 +86,6 @@
 #define SIZEOF_LONG_LONG 8
 #define wxSIZE_T_IS_ULONG 1
 #define wxWCHAR_T_IS_REAL_TYPE 1
-#define HAVE_DLERROR 1
 #define HAVE_FCNTL 1
 #define HAVE_GETHOSTBYNAME 1
 #define HAVE_GETSERVBYNAME 1
@@ -126,9 +124,9 @@
 
 #define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
 #define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 3.1.3"
+#define PACKAGE_STRING "wxWidgets 3.1.5"
 #define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "3.1.3"
+#define PACKAGE_VERSION "3.1.5"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1

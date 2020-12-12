@@ -753,14 +753,8 @@ public:
     wxFileDataObject is a specialization of wxDataObject for file names. The
     program works with it just as if it were a list of absolute file names, but
     internally it uses the same format as Explorer and other compatible
-    programs under Windows or GNOME/KDE filemanager under Unix which makes it
+    programs under Windows or GNOME/KDE file manager under Unix which makes it
     possible to receive files from them using this class.
-
-    @warning Under all non-Windows platforms this class is currently
-             "input-only", i.e. you can receive the files from another
-             application, but copying (or dragging) file(s) from a wxWidgets
-             application is not currently supported. PS: GTK2 should work as
-             well.
 
     @library{wxcore}
     @category{dnd}
@@ -791,7 +785,7 @@ public:
     @class wxHTMLDataObject
 
     wxHTMLDataObject is used for working with HTML-formatted text.
-    
+
     @library{wxcore}
     @category{dnd}
 
@@ -809,7 +803,7 @@ public:
         Returns the HTML string.
     */
     virtual wxString GetHTML() const;
-    
+
     /**
         Sets the HTML string.
     */

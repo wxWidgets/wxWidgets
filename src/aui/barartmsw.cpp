@@ -9,10 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_AUI && wxUSE_UXTHEME
 
 #ifndef WX_PRECOMP
@@ -105,12 +101,6 @@ void wxAuiMSWToolBarArt::DrawLabel(
     wxAuiGenericToolBarArt::DrawLabel(dc, wnd, item, rect);
 }
 
-static const unsigned char
-DISABLED_TEXT_GREY_HUE = wxColour::AlphaBlend(0, 255, 0.4);
-const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
-    DISABLED_TEXT_GREY_HUE,
-    DISABLED_TEXT_GREY_HUE);
-
 void wxAuiMSWToolBarArt::DrawButton(
     wxDC& dc,
     wxWindow* wnd,
@@ -134,7 +124,7 @@ void wxAuiMSWToolBarArt::DrawButton(
             btnState = TS_HOTCHECKED;
         else if ( item.GetState() & wxAUI_BUTTON_STATE_CHECKED )
             btnState = TS_CHECKED;
-        else if ( item.GetState() & wxAUI_BUTTON_STATE_HOVER )
+        else if ( (item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky() )
             btnState = TS_HOT;
         else
             btnState = TS_NORMAL;
@@ -200,9 +190,10 @@ void wxAuiMSWToolBarArt::DrawButton(
             dc.DrawBitmap(bmp, bmpX, bmpY, true);
 
         // set the item's text color based on if it is disabled
-        dc.SetTextForeground(*wxBLACK);
         if ( item.GetState() & wxAUI_BUTTON_STATE_DISABLED )
-            dc.SetTextForeground(DISABLED_TEXT_COLOR);
+            dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+        else
+            dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
 
         if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
         {
@@ -259,7 +250,7 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
             btnState = TS_DISABLED;
         else if ( item.GetState() & wxAUI_BUTTON_STATE_PRESSED )
             btnState = TS_PRESSED;
-        else if ( item.GetState() & wxAUI_BUTTON_STATE_HOVER )
+        else if ( (item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky() )
             btnState = TS_HOT;
         else
             btnState = TS_NORMAL;
@@ -322,9 +313,10 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
         dc.DrawBitmap(bmp, bmpX, bmpY, true);
 
         // set the item's text color based on if it is disabled
-        dc.SetTextForeground(*wxBLACK);
         if ( item.GetState() & wxAUI_BUTTON_STATE_DISABLED )
-            dc.SetTextForeground(DISABLED_TEXT_COLOR);
+            dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+        else
+            dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
 
         if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
         {

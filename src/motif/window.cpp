@@ -1230,7 +1230,8 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
     Widget widget = (Widget) GetClientWidget();
     Dimension xx, yy;
     XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
-    if(x) *x = xx; if(y) *y = yy;
+    if(x) *x = xx;
+    if(y) *y = yy;
 }
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -1620,8 +1621,7 @@ void wxWindow::DoPaint()
         eraseEvent.SetEventObject(this);
         HandleWindowEvent(eraseEvent);
 
-        wxPaintEvent event(GetId());
-        event.SetEventObject(this);
+        wxPaintEvent event(this);
         HandleWindowEvent(event);
 
         m_needsRefresh = false;
@@ -2608,7 +2608,7 @@ void wxGetTextExtent(const wxWindow* window, const wxString& str,
     if (table == NULL)
         table = XmeGetDefaultRenderTable(w, XmTEXT_RENDER_TABLE);
 
-    rendition = XmRenderTableGetRendition( table, "" );
+    rendition = XmRenderTableGetRendition( table, (char*)"" );
     XtSetArg( args[count], XmNfont, 0 ); ++count;
     XtSetArg( args[count], XmNfontType, 0 ); ++count;
     XmRenditionRetrieve( rendition, args, count );

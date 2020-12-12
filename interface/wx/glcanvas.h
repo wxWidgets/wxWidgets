@@ -144,7 +144,7 @@ class wxGLAttributes : public wxGLAttribsBase
 public:
     /**
         Use true colour instead of colour index rendering for each pixel.
-        It makes no effect for OS X.
+        It makes no effect for macOS.
     */
     wxGLAttributes& RGBA();
 
@@ -158,7 +158,7 @@ public:
     wxGLAttributes& BufferSize(int val);
 
     /**
-        Specifies the framebuffer level. It makes no effect for OS X.
+        Specifies the framebuffer level. It makes no effect for macOS.
 
         @param val
         0 for main buffer, >0 for overlay, <0 for underlay.
@@ -246,7 +246,7 @@ public:
     wxGLAttributes& Samplers(int val);
 
     /**
-        Used to request a frame buffer sRGB capable. It makes no effect for OS X.
+        Used to request a frame buffer sRGB capable. It makes no effect for macOS.
     */
     wxGLAttributes& FrameBuffersRGB();
 
@@ -315,7 +315,7 @@ public:
         @param val
         The major version number requested.
 
-        It has no effect under OS X where specifying CoreProfile() will
+        It has no effect under macOS where specifying CoreProfile() will
         result in using OpenGL version at least 3.2.
     */
     wxGLContextAttrs& MajorVersion(int val);
@@ -326,7 +326,7 @@ public:
         @param val
         The minor version number requested, e.g. 2 if OpenGL 3.2 is requested.
 
-        It has no effect under OS X where specifying CoreProfile() will
+        It has no effect under macOS where specifying CoreProfile() will
         result in using OpenGL version at least 3.2.
     */
     wxGLContextAttrs& MinorVersion(int val);
@@ -340,7 +340,7 @@ public:
         @param vminor
         The minor version number requested, e.g. 5 if OpenGL 4.5 is requested.
 
-        It has no effect under OS X where specifying CoreProfile() will
+        It has no effect under macOS where specifying CoreProfile() will
         result in using OpenGL version at least 3.2.
     */
     wxGLContextAttrs& OGLVersion(int vmayor, int vminor);
@@ -358,7 +358,7 @@ public:
         later. They must not support functionality marked as deprecated or
         removed by the requested version of the OpenGL API.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& ForwardCompatible();
 
@@ -367,7 +367,7 @@ public:
         subsets of OpenGL, lacking some features of the full specification.
         Used mainly in embedded devices such as mobile phones.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& ES2();
 
@@ -376,7 +376,7 @@ public:
         some logs are enabled and also allows OGL to send debug messages through
         a callback function.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& DebugCtx();
 
@@ -384,14 +384,14 @@ public:
         Request robustness, or how OpenGL handles out-of-bounds buffer object
         accesses and graphics reset notification behaviours.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& Robust();
 
     /**
         With robustness enabled, never deliver notification of reset events.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& NoResetNotify();
 
@@ -399,7 +399,7 @@ public:
         With robustness enabled, if graphics reset happens, all context state is
         lost.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& LoseOnReset();
 
@@ -407,7 +407,7 @@ public:
         Request OpenGL to protect other applications or shared contexts from reset
         side-effects.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& ResetIsolation();
 
@@ -419,7 +419,7 @@ public:
         @param val
         0 for not flushing, 1 (wxWidgets default) for flushing pending commands.
 
-        It has no effect under OS X.
+        It has no effect under macOS.
     */
     wxGLContextAttrs& ReleaseFlush(int val = 1);
 
@@ -620,7 +620,7 @@ enum
         This attribute should be followed by the major version number
         requested.
 
-        It has no effect under OS X where specifying ::WX_GL_CORE_PROFILE will
+        It has no effect under macOS where specifying ::WX_GL_CORE_PROFILE will
         result in using OpenGL version at least 3.2 but can still be used
         there for portability.
 
@@ -748,6 +748,15 @@ enum
     context to the canvas, and then finally call SwapBuffers() to swap the
     buffers of the OpenGL canvas and thus show your current output.
 
+    Please note that wxGLContext always uses physical pixels, even on the
+    platforms where wxWindow uses logical pixels, affected by the coordinate
+    scaling, on high DPI displays. Thus, if you want to set the OpenGL view
+    port to the size of entire window, you must multiply the result returned by
+    wxWindow::GetClientSize() by wxGLCanvas::GetContentScaleFactor() before
+    passing it to @c glViewport(). Same considerations apply to other OpenGL
+    functions and other coordinates, notably those retrieved from wxMouseEvent
+    in the event handlers.
+
     Notice that versions of wxWidgets previous to 2.9 used to implicitly create a
     wxGLContext inside wxGLCanvas itself. This is still supported in the
     current version but is deprecated now and will be removed in the future,
@@ -760,7 +769,7 @@ enum
     parameter) but it's discouraged.
 
     @note
-        On those platforms which use a configure script (e.g. Linux and OS X)
+        On those platforms which use a configure script (e.g. Linux and macOS)
         OpenGL support is automatically enabled if the relative headers and
         libraries are found.
         To switch it on under the other platforms (e.g. Windows), you need to edit
@@ -823,6 +832,10 @@ public:
         If @a attribList is not specified, wxGLAttributes::PlatformDefaults()
         is used, plus some other attributes (see below).
 
+        @param parent
+            Pointer to a parent window.
+        @param id
+            Window identifier. If -1, will automatically create an identifier.
         @param attribList
             Array of integers. With this parameter you can set the device
             context attributes associated to this window. This array is
@@ -841,6 +854,22 @@ public:
             WX_GL_DOUBLEBUFFER are used. But notice that if you do specify some
             attributes you also need to explicitly include these two default
             attributes in the list if you need them.
+        @param pos
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
+            wxWidgets should generate a default position for the window.
+        @param size
+            Window size. wxDefaultSize is (-1, -1) which indicates that
+            wxWidgets should generate a default size for the window. If no
+            suitable size can be found, the window will be sized to 20x20
+            pixels so that the window is visible but obviously not correctly
+            sized.
+        @param style
+            Window style.
+        @param name
+            Window name.
+        @param palette
+            Palette for indexed colour (i.e. non WX_GL_RGBA) mode. Ignored
+            under most platforms.
     */
     wxGLCanvas(wxWindow* parent, wxWindowID id = wxID_ANY,
                const int* attribList = NULL,

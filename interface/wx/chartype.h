@@ -125,7 +125,7 @@ typedef wxUSE_UNICODE_dependent wxUChar;
     \- @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt> and <tt>wxUSE_UNICODE==1</tt>
 
     The @c wxUSE_UNICODE_WCHAR symbol is defined to @c 1 when building on
-    Windows while it's defined to @c 0 when building on Unix, Linux or OS X.
+    Windows while it's defined to @c 0 when building on Unix, Linux or macOS.
     (Note that @c wxUSE_UNICODE_UTF8 symbol is defined as the opposite of
     @c wxUSE_UNICODE_WCHAR.)
 

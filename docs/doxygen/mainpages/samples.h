@@ -307,23 +307,6 @@ wxProcess::Exists().
 
 @sampledir{exec}
 
-@section page_samples_flash Flash Sample
-
-The flash sample demonstrates embedding of Adobe Flash into a wxWidgets
-program. Currently it only works under Windows as it uses the Flash ActiveX
-control to achieve this but we hope to be able to extend it to also work under
-other platforms in the future. The sample also currently requires Microsoft
-Visual C++ compiler as it uses COM support extensions specific to this
-compiler.
-
-The sample comes with 2 Flash files (SWF), showing a simple Flash animation
-which can be controlled using the "Play", "Stop" and "Back"/"Forward" buttons
-in the sample as well as a Flash form which shows how Flash and wxWidgets
-program can exchange data: calling "GetText" function without arguments returns
-the text of the text control defined inside Flash and calling "SetText" with an
-argument sets the control contents to the given string. Finally clicking on the
-button generates an event which is caught by the C++ program.
-
 @section page_samples_font Font Sample
 
 The font sample demonstrates wxFont,
@@ -669,7 +652,7 @@ first argument of @c save, @c load or @c delete, followed by the "service" and
 "user" arguments as used by wxSecretStore methods. After storing some password,
 you can check that it can be retrieved later and also that it can be seen in
 the OS-provided password manager (e.g. credential manager under MSW or keychain
-utility under OS X).
+utility under macOS).
 
 @sampledir{secretstore}
 
@@ -914,7 +897,7 @@ control.
 
 The wxWebView sample demonstarates the various capabilities of the wxWebView
 control. It is set up as a simple single window web browser, but with support
-for many of the more complex wxWebView features, including browsing through 
+for many of the more complex wxWebView features, including browsing through
 archives.
 
 @sampledir{webview}

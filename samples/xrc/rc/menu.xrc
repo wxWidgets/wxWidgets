@@ -29,7 +29,7 @@
             <label>_Non-Derived Dialog Example</label>
             <bitmap>basicdlg.xpm</bitmap>
             <help>The basic instance of wxDialog loaded via XRC</help>
-        </object>  
+        </object>
         <object class="wxMenuItem" name="derived_tool_or_menuitem">
             <label>_Derived Dialog Example</label>
             <bitmap>derivdlg.xpm</bitmap>
@@ -39,13 +39,13 @@
             <label>_Controls Example</label>
             <bitmap>controls.xpm</bitmap>
             <help>A notebook displaying all the wxWidgets controls</help>
-        </object>        
+        </object>
         <object class="wxMenuItem" name="uncentered_tool_or_menuitem">
             <label>_Uncentered Example</label>
             <bitmap>uncenter.xpm</bitmap>
             <help>Disable autocentering of a dialog on its parent</help>
-        </object>  
-    </object>        
+        </object>
+    </object>
     <object class="wxMenu" name="advanced_demos_menu">
         <label>_Advanced</label>
         <help>Advanced techniques with XRC</help>
@@ -63,7 +63,7 @@
             <label>_Custom Class Example</label>
             <bitmap>custclas.xpm</bitmap>
             <help>Embed your own custom classes into an XRC</help>
-        </object>  
+        </object>
         <object class="wxMenuItem" name="platform_property_tool_or_menuitem">
             <label>_Platform Specific Example</label>
             <bitmap>platform.xpm</bitmap>
@@ -78,7 +78,7 @@
             <label>_Variable Expansion Example</label>
             <bitmap>variable.xpm</bitmap>
             <help>Replace variables in the XRC file at runtime</help>
-        </object>        
+        </object>
         <object class="wxMenuItem" name="variants">
             <label>_Variants</label>
             <bitmap>variants.xpm</bitmap>
@@ -88,7 +88,7 @@
             <label>_Recursive Load</label>
             <help>Show how an individual control can be loaded</help>
         </object>
-    </object>    
+    </object>
     <object class="wxMenu" name="help_menu">
         <label>_Help</label>
 

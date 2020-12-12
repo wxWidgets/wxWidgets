@@ -31,8 +31,10 @@
         A menu has been just closed.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT(id, func)}
-        The menu item with the specified id has been highlighted: used to show
-        help prompts in the status bar by wxFrame
+        The menu item with the specified id has been highlighted. If the id is
+        ::wxID_NONE, highlighting has been removed from the previously
+        highlighted menu item and there is no highlighted item any more.
+        This is used by wxFrame to show help prompts in the status bar.
         This type of event is sent as wxMenuEvent.
     @event{EVT_MENU_HIGHLIGHT_ALL(func)}
         A menu item has been highlighted, i.e. the currently selected menu item has changed.
@@ -144,37 +146,37 @@ public:
         @see GetItemLabelText(), GetItemLabel()
     */
     static wxString GetLabelText(const wxString& text);
-    
-    
+
+
     /**
         @name Getters
     */
     //@{
-    
+
     /**
         Returns the background colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     wxColour& GetBackgroundColour() const;
 
     /**
         Returns the checked or unchecked bitmap.
-        
+
         @onlyfor{wxmsw}
     */
     virtual const wxBitmap& GetBitmap(bool checked = true) const;
 
     /**
         Returns the bitmap to be used for disabled items.
-        
+
         @onlyfor{wxmsw}
     */
     virtual const wxBitmap& GetDisabledBitmap() const;
-    
+
     /**
         Returns the font associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     wxFont& GetFont() const;
@@ -223,7 +225,7 @@ public:
 
     /**
         Gets the width of the menu item checkmark bitmap.
-        
+
         @onlyfor{wxmsw}
     */
     int GetMarginWidth() const;
@@ -238,7 +240,7 @@ public:
         Returns the text associated with the menu item.
 
         @deprecated This function is deprecated. Please use GetItemLabel() or GetItemLabelText() instead.
-        
+
         @see GetItemLabel(), GetItemLabelText()
     */
     wxString GetName() const;
@@ -260,11 +262,11 @@ public:
 
     /**
         Returns the text colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     wxColour& GetTextColour() const;
-    
+
     /**
        Extract the accelerator from the given menu string, return NULL if none
        found.
@@ -277,9 +279,9 @@ public:
     virtual wxAcceleratorEntry *GetAccel() const;
 
     //@}
-    
-    
-    
+
+
+
     /**
         @name Checkers
     */
@@ -329,11 +331,11 @@ public:
         Returns @true if the item is a submenu.
     */
     bool IsSubMenu() const;
-    
+
     //@}
-    
-    
-    
+
+
+
     /**
         @name Setters
     */
@@ -341,7 +343,7 @@ public:
 
     /**
         Sets the background colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     void SetBackgroundColour(const wxColour& colour);
@@ -349,7 +351,7 @@ public:
     /**
         Sets the bitmap for the menu item.
 
-        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if 
+        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if
         @a checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
         otherwise.
 
@@ -386,7 +388,7 @@ public:
 
     /**
         Sets the font associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     void SetFont(const wxFont& font);
@@ -398,25 +400,25 @@ public:
 
     /**
         Sets the label associated with the menu item.
-        
-        Note that if the ID of this menu item corresponds to a stock ID, then it is 
+
+        Note that if the ID of this menu item corresponds to a stock ID, then it is
         not necessary to specify a label: wxWidgets will automatically use the stock
         item label associated with that ID. See the @ref wxMenuItem::wxMenuItem "constructor"
         for more info.
-        
-        The label string for the normal menu items (not separators) may include the 
+
+        The label string for the normal menu items (not separators) may include the
         accelerator which can be used to activate the menu item from keyboard.
-        An accelerator key can be specified using the ampersand <tt>&</tt> character. 
-        In order to embed an ampersand character in the menu item text, the ampersand 
+        An accelerator key can be specified using the ampersand <tt>&</tt> character.
+        In order to embed an ampersand character in the menu item text, the ampersand
         must be doubled.
-        
-        Optionally you can specify also an accelerator string appending a tab character 
+
+        Optionally you can specify also an accelerator string appending a tab character
         <tt>\\t</tt> followed by a valid key combination (e.g. <tt>CTRL+V</tt>).
         Its general syntax is any combination of @c "CTRL", @c "RAWCTRL",  @c
         "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
         @c '-' or @c '+' characters and followed by the accelerator itself.
         Notice that @c CTRL corresponds to the "Ctrl" key on most platforms but
-        not under OS X where it is mapped to "Cmd" key on Mac keyboard.
+        not under macOS where it is mapped to "Cmd" key on Mac keyboard.
         Usually this is exactly what you want in portable code but if you
         really need to use the (rarely used for this purpose) "Ctrl" key even
         under Mac, you may use @c RAWCTRL to prevent this mapping. Under the
@@ -501,13 +503,34 @@ public:
         @c Shift+/ do not, so avoid using accelerators of this form in portable
         code.
 
+        @note In wxGTk, the left/right/up/down arrow keys do not work as
+        accelerator keys for a menu item unless a modifier key is used.
+        Additionally, the following keycodes are not supported as menu
+        accelerator keys:
+        - WXK_COMMAND/WXK_CONTROL
+        - WXK_SHIFT
+        - WXK_ALT
+        - WXK_SCROLL
+        - WXK_CAPITAL
+        - WXK_NUMLOCK
+        - WXK_NUMPAD_TAB
+        - WXK_TAB
+        - WXK_WINDOWS_LEFT
+        - WXK_WINDOWS_RIGHT
+        - WXK_ADD
+        - WXK_SEPARATOR
+        - WXK_SUBTRACT
+        - WXK_DECIMAL
+        - WXK_DIVIDE
+        - WXK_SNAPSHOT
+
         @see GetItemLabel(), GetItemLabelText()
     */
     virtual void SetItemLabel(const wxString& label);
 
     /**
         Sets the width of the menu item checkmark bitmap.
-        
+
         @onlyfor{wxmsw}
     */
     void SetMarginWidth(int width);
@@ -526,18 +549,18 @@ public:
         Sets the text associated with the menu item.
 
         @deprecated This function is deprecated in favour of SetItemLabel().
-        
+
         @see SetItemLabel().
     */
     virtual void SetText(const wxString& text);
 
     /**
         Sets the text colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     void SetTextColour(const wxColour& colour);
-    
+
     /**
        Set the accel for this item - this may also be done indirectly with
        SetText()

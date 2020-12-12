@@ -184,6 +184,7 @@ TEST_GUI_OBJECTS2=test_gui_richtextctrltest.obj,\
 	test_gui_slidertest.obj,\
 	test_gui_spinctrldbltest.obj,\
 	test_gui_spinctrltest.obj,\
+	test_gui_styledtextctrltest.obj,\
 	test_gui_textctrltest.obj,\
 	test_gui_textentrytest.obj,\
 	test_gui_togglebuttontest.obj,\
@@ -616,6 +617,9 @@ test_gui_spinctrldbltest.obj : [.controls]spinctrldbltest.cpp
 
 test_gui_spinctrltest.obj : [.controls]spinctrltest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]spinctrltest.cpp
+
+test_gui_styledtextctrltest.obj : [.controls]styledtextctrltest.cpp 
+	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]styledtextctrltest.cpp
 
 test_gui_textctrltest.obj : [.controls]textctrltest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]textctrltest.cpp

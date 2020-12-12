@@ -39,9 +39,9 @@ Notice that for compatibility reasons, this symbol is defined for console
 applications under Windows as well, but it should only be used in the GUI code
 while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{__WXOSX__, OS X GUI using any Apple widget framework (AppKit or UIKit)}
-@itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
-@itemdef{__WXOSX_COCOA__, OS X using Cocoa (AppKit)}
-@itemdef{__WXOSX_MAC__, OS X (Cocoa)}
+@itemdef{__WXOSX_IPHONE__, iPhone (UIKit)}
+@itemdef{__WXOSX_COCOA__, macOS using Cocoa (AppKit)}
+@itemdef{__WXOSX_MAC__, macOS (Cocoa)}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
@@ -59,7 +59,7 @@ versions: Cocoa for the desktop and a very early iPhone port. To summarize:
     <tt>__WXOSX_MAC__</tt>.
 @li If you want to test for wxOSX on the iPhone, use
     <tt>__WXOSX_IPHONE__</tt>.
-@li If you want to test for any port under OS X, including, for
+@li If you want to test for any port under macOS, including, for
     example, wxGTK and also wxBase, use <tt>__DARWIN__</tt> (see below).
 
 The convention is to use the <tt>__WX</tt> prefix for these
@@ -120,7 +120,7 @@ compiler used.
 
 @beginDefList
 @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
-                        to the compiler version: 500 is 5.0.}
+                        to the compiler version: 500 is 5.0 (not used any more).}
 @itemdef{__DIGITALMARS__, Digital Mars (not used any more).}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
@@ -171,6 +171,8 @@ Currently the following symbols exist:
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
+@itemdef{wxHAS_MEMBER_DEFAULT, Defined if the currently used compiler supports
+    C++11 @c =default.}
 @itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in
     size (notice that you must include @c wx/filefn.h before testing for this
     symbol).}
@@ -185,7 +187,11 @@ Currently the following symbols exist:
     decide whether some function should be overloaded for both
     <code>long</code> and <code>long long</code> types.}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
+@itemdef{wxHAS_NATIVE_ANIMATIONCTRL, Defined if native wxAnimationCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
+@itemdef{wxHAS_NATIVE_DATAVIEWCTRL, Defined if native wxDataViewCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
 @itemdef{wxHAS_NATIVE_WINDOW, Defined if wxNativeWindow class is available.}
+@itemdef{wxHAS_NOEXCEPT, Defined if the currently used compiler supports C++11 @c noexcept. @c wxNOEXCEPT is defined as this keyword in this case, and as nothing otherwise.}
+@itemdef{wxHAS_NULLPTR_T, Defined if the currently used compiler supports C++11 @c nullptr.}
 @itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
     Windows resource files</a> or OS/2 resource files are available on the current platform.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
@@ -208,16 +214,47 @@ Currently the following symbols exist:
 
 
 
-@section page_cppconst_msvc_setup_h Library Selection for MSVC
+@section page_cppconst_msvc_setup_h MSVC-specific Symbols
 
 Microsoft Visual C++ users may use the special @c wx/setup.h file for this
 compiler in @c include/msvc subdirectory. This file implicitly links in all the
 wxWidgets libraries using MSVC-specific pragmas which usually is much more
 convenient than manually specifying the libraries list in all of the project
-configurations. However sometimes linking with all the libraries is not
-desirable, for example because some of them were not built and this is where
-the symbols in this section can be helpful: defining them allows to not link
-with the corresponding library. The following symbols are honoured:
+configurations.
+
+By default, the pragmas used in this file to actually link with wxWidgets
+libraries suppose that the libraries are located in @c vc_lib or @c vc_dll
+directory which is used by default. However when using multiple MSVC versions,
+or when using the @ref plat_msw_binaries "official binaries", the libraries are
+in a directory containing the compiler version number, e.g. @c vc140_dll. To
+make linking work in this case, you must predefine @c wxMSVC_VERSION as @c
+vc140 <em>before</em> include @c wx/setup.h file, i.e. typically in the MSVS
+project options. Alternatively, you can predefine @c wxMSVC_VERSION_AUTO symbol
+(without any value), which means that the appropriate compiler version should
+be used automatically, e.g. "vc100" for VC 10 (MSVS 2010), "vc140" for VC 14
+(MSVS 2015) etc. Additionally, VC 14 is a special case as it has 3 minor
+versions: VC 14.0, 14.1 and 14.2, corresponding to MSVS 2015, 2017 and 2019;
+that are ABI-compatible with each other. Due to this, it can also be useful to
+reuse the single build of wxWidgets with all versions of the compiler and this
+is supported if @c wxMSVC_VERSION_ABI_COMPAT is defined: the compiler prefix
+"vc14x" is used in this case.
+
+If the makefiles have been used to build the libraries from source and the @c CFG
+variable has been set to specify a different output path for that particular
+configuration of build then the @c wxCFG preprocessor symbol should be set in
+the project that uses wxWidgets to the same value as the @c CFG variable in
+order for the correct @c wx/setup.h file to automatically be included for that
+configuration.
+
+
+@subsection page_cppconst_msvc_setup_h_no_libs Library Selection for MSVC
+
+As explained above, MSVC users don't need to explicitly specify wxWidgets
+libraries to link with, as this is done by @c wx/setup.h. However sometimes
+linking with all the libraries, as is done by default, is not desirable, for
+example because some of them were not built and this is where the symbols in
+this section can be helpful: defining them allows to not link with the
+corresponding library. The following symbols are honoured:
 
     - wxNO_AUI_LIB
     - wxNO_HTML_LIB
@@ -237,13 +274,6 @@ with the corresponding library. The following symbols are honoured:
 
 Notice that the base library is always included and the core is always included
 for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
-
-If the makefiles have been used to build the libraries from source and the @c CFG
-variable has been set to specify a different output path for that particular
-configuration of build then the @c wxCFG preprocessor symbol should be set in
-the project that uses wxWidgets to the same value as the @c CFG variable in
-order for the correct @c wx/setup.h file to automatically be included for that
-configuration.
 
 
 @section page_cppconst_compatibility Compatibility Macros
@@ -345,6 +375,11 @@ more details.
         set to 1 for compatibility reasons as @c -DwxNO_UNSAFE_WXSTRING_CONV
         can be used only compiling the application code, without rebuilding the
         library. Support for this option appeared in wxWidgets 3.1.1.}
+@itemdef{wxNO_IMPLICIT_WXSTRING_ENCODING,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to disable implicit
+        conversions from and to <tt>const char*</tt> in wxString class.
+        Support for this option appeared in wxWidgets 3.1.4.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
         library @c XXX as a DLL; when a monolithic wxWidgets build is used only a

@@ -19,6 +19,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/list.h"
+#include "wx/gtk/private/image.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -98,24 +99,24 @@ bool wxButton::Create(wxWindow *parent,
     {
         m_widget = gtk_button_new();
 
-        GtkWidget *image = gtk_image_new();
+        GtkWidget* image = wxGtkImage::New(this);
         gtk_widget_show(image);
         gtk_container_add(GTK_CONTAINER(m_widget), image);
     }
 
     g_object_ref(m_widget);
 
-    float x_alignment = 0.5;
+    float x_alignment = 0.5f;
     if (HasFlag(wxBU_LEFT))
-        x_alignment = 0.0;
+        x_alignment = 0;
     else if (HasFlag(wxBU_RIGHT))
-        x_alignment = 1.0;
+        x_alignment = 1;
 
-    float y_alignment = 0.5;
+    float y_alignment = 0.5f;
     if (HasFlag(wxBU_TOP))
-        y_alignment = 0.0;
+        y_alignment = 0;
     else if (HasFlag(wxBU_BOTTOM))
-        y_alignment = 1.0;
+        y_alignment = 1;
 
 #ifdef __WXGTK4__
     if (useLabel)
@@ -134,6 +135,15 @@ bool wxButton::Create(wxWindow *parent,
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
+
+    if ( useLabel && (style & wxBU_EXACTFIT) )
+    {
+#ifdef __WXGTK3__
+        GTKApplyCssStyle("* { padding:0 }");
+#else
+        GTKApplyWidgetStyle(true); // To enforce call to DoApplyWidgetStyle()
+#endif // __WXGTK3__ / !__WXGTK3__
+    }
 
     g_signal_connect_after (m_widget, "clicked",
                             G_CALLBACK (wxgtk_button_clicked_callback),
@@ -165,7 +175,7 @@ wxWindow *wxButton::SetDefault()
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     static wxSize size = wxDefaultSize;
     if (size == wxDefaultSize)
@@ -184,7 +194,7 @@ wxSize wxButtonBase::GetDefaultSize()
         GtkWidget *btn = gtk_button_new_with_mnemonic(labelGTK.utf8_str());
 #else
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+        GtkWidget* btn = gtk_button_new_from_stock("gtk-cancel");
         wxGCC_WARNING_RESTORE()
 #endif
         gtk_container_add(GTK_CONTAINER(box), btn);
@@ -260,7 +270,7 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
     if ( stripped.empty() && !markup.empty() )
         return false;
 
-    wxControl::SetLabel(stripped);
+    SetLabel(stripped);
 
     GtkLabel * const label = GTKGetLabel();
     wxCHECK_MSG( label, false, "no label in this button?" );
@@ -302,6 +312,11 @@ GtkLabel *wxButton::GTKGetLabel() const
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
+    if ( style && HasFlag(wxBU_EXACTFIT) )
+    {
+        style->xthickness = 0;
+        style->ythickness = 0;
+    }
     GTKApplyStyle(m_widget, style);
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     GTKApplyStyle(child, style);
@@ -365,5 +380,4 @@ wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_button_new());
 }
-
 #endif // wxUSE_BUTTON

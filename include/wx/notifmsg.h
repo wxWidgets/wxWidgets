@@ -3,7 +3,7 @@
 // Purpose:     class allowing to show notification messages to the user
 // Author:      Vadim Zeitlin
 // Created:     2007-11-19
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -123,7 +123,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTIFICATION_MESSAGE_ACTION, w
 
 #if (defined(__WXGTK__) && wxUSE_LIBNOTIFY) || \
     (defined(__WXMSW__) && wxUSE_TASKBARICON && wxUSE_TASKBARICON_BALLOONS) || \
-    (defined(__WXOSX_COCOA__) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8))
+    (defined(__WXOSX_COCOA__) && (__MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8))
     #define wxHAS_NATIVE_NOTIFICATION_MESSAGE
 #endif
 

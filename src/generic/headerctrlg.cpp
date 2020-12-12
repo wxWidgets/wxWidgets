@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HEADERCTRL
 
@@ -58,6 +55,7 @@ void wxHeaderCtrl::Init()
     m_colBeingReordered = COL_NONE;
     m_dragOffset = 0;
     m_scrollOffset = 0;
+    m_wasSeparatorDClick = false;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -611,6 +609,9 @@ void wxHeaderCtrl::OnKeyDown(wxKeyEvent& event)
 
 void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 {
+    const bool wasSeparatorDClick = m_wasSeparatorDClick;
+    m_wasSeparatorDClick = false;
+
     // do this in advance to allow simply returning if we're not interested,
     // we'll undo it if we do handle the event below
     mevent.Skip();
@@ -686,8 +687,11 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
             wxASSERT_MSG( !IsResizing(), "reentering column resize mode?" );
             StartOrContinueResizing(col, xPhysical);
         }
-        else // on column itself
+        // on column itself - both header and column must have the appropriate
+        // flags to allow dragging the column
+        else if ( HasFlag(wxHD_ALLOW_REORDER) && GetColumn(col).IsReorderable() )
         {
+
             // start dragging the column
             wxASSERT_MSG( !IsReordering(), "reentering column move mode?" );
 
@@ -710,8 +714,9 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
                 if ( onSeparator && dblclk )
                 {
                     evtType = wxEVT_HEADER_SEPARATOR_DCLICK;
+                    m_wasSeparatorDClick = true;
                 }
-                else // not double click on separator
+                else if (!wasSeparatorDClick)
                 {
                     evtType = click ? wxEVT_HEADER_CLICK
                                     : wxEVT_HEADER_DCLICK;

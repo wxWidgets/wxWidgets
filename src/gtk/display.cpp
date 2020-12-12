@@ -9,6 +9,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/private/display.h"
+#if wxUSE_DISPLAY
+    #include "wx/window.h"
+#endif
 
 #include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
@@ -47,7 +50,6 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
     virtual double GetScaleFactor() const wxOVERRIDE;
-    virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -67,6 +69,7 @@ public:
     virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE;
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow* win) wxOVERRIDE;
 };
 
 wxDisplayImpl* wxDisplayFactoryGTK::CreateDisplay(unsigned n)
@@ -87,6 +90,26 @@ int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
     gdk_monitor_get_geometry(monitor, &rect);
     if (wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
     {
+        for (unsigned i = gdk_display_get_n_monitors(display); i--;)
+        {
+            if (gdk_display_get_monitor(display, i) == monitor)
+                return i;
+        }
+    }
+    return wxNOT_FOUND;
+}
+
+int wxDisplayFactoryGTK::GetFromWindow(const wxWindow* win)
+{
+    if (win && win->m_widget)
+    {
+        GdkDisplay* display = gtk_widget_get_display(win->m_widget);
+        GdkMonitor* monitor;
+        if (GdkWindow* window = gtk_widget_get_window(win->m_widget))
+            monitor = gdk_display_get_monitor_at_window(display, window);
+        else
+            monitor = gdk_display_get_primary_monitor(display);
+
         for (unsigned i = gdk_display_get_n_monitors(display); i--;)
         {
             if (gdk_display_get_monitor(display, i) == monitor)
@@ -125,15 +148,6 @@ int wxDisplayImplGTK::GetDepth() const
 double wxDisplayImplGTK::GetScaleFactor() const
 {
     return gdk_monitor_get_scale_factor(m_monitor);
-}
-
-wxSize wxDisplayImplGTK::GetSizeMM() const
-{
-    return wxSize
-           (
-                gdk_monitor_get_width_mm(m_monitor),
-                gdk_monitor_get_height_mm(m_monitor)
-           );
 }
 
 #if wxUSE_DISPLAY
@@ -231,8 +245,6 @@ public:
 #if GTK_CHECK_VERSION(3,10,0)
     virtual double GetScaleFactor() const wxOVERRIDE;
 #endif // GTK+ 3.10
-    virtual wxSize GetPPI() const wxOVERRIDE;
-    virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -251,6 +263,7 @@ public:
     virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE;
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow* win) wxOVERRIDE;
 };
 
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
@@ -273,6 +286,20 @@ int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
     gdk_screen_get_monitor_geometry(screen, monitor, &rect);
     if (!wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
         monitor = wxNOT_FOUND;
+    return monitor;
+}
+
+int wxDisplayFactoryGTK::GetFromWindow(const wxWindow* win)
+{
+    int monitor = wxNOT_FOUND;
+    if (win && win->m_widget)
+    {
+        GdkScreen* screen = gtk_widget_get_screen(win->m_widget);
+        if (GdkWindow* window = gtk_widget_get_window(win->m_widget))
+            monitor = gdk_screen_get_monitor_at_window(screen, window);
+        else
+            monitor = gdk_screen_get_primary_monitor(screen);
+    }
     return monitor;
 }
 #endif // wxUSE_DISPLAY
@@ -312,57 +339,6 @@ double wxDisplayImplGTK::GetScaleFactor() const
     return 1.0;
 }
 #endif // GTK+ 3.10
-
-wxSize wxDisplayImplGTK::GetPPI() const
-{
-    // Try the base class version which uses our GetSizeMM() and returns
-    // per-display PPI value if it works.
-    wxSize ppi = wxDisplayImpl::GetPPI();
-
-    if ( !ppi.x || !ppi.y )
-    {
-        // But if it didn't work, fall back to the global DPI value common to
-        // all displays -- this is still better than nothing and more
-        // compatible with the previous wxWidgets versions.
-        ppi = ComputePPI(gdk_screen_width(), gdk_screen_height(),
-                         gdk_screen_width_mm(), gdk_screen_height_mm());
-    }
-
-    return ppi;
-}
-
-wxSize wxDisplayImplGTK::GetSizeMM() const
-{
-    wxSize sizeMM;
-#if GTK_CHECK_VERSION(2,14,0)
-    if ( wx_is_at_least_gtk2(14) )
-    {
-        // Take care not to return (-1, -1) from here, the caller expects us to
-        // return (0, 0) if we can't retrieve this information.
-        int rc = gdk_screen_get_monitor_width_mm(m_screen, m_index);
-        if ( rc != -1 )
-            sizeMM.x = rc;
-
-        rc = gdk_screen_get_monitor_height_mm(m_screen, m_index);
-        if ( rc != -1 )
-            sizeMM.y = rc;
-    }
-#endif // GTK+ 2.14
-
-    // When we have only a single display, we can use global GTK+ functions.
-    // Note that at least in some configurations, these functions return valid
-    // values when gdk_screen_get_monitor_xxx_mm() only return -1, so it's
-    // always worth fallng back on them, but we can't do it when using
-    // multiple displays because they combine the sizes of all displays in this
-    // case, which would result in a completely wrong value for GetPPI().
-    if ( !(sizeMM.x && sizeMM.y) && gdk_screen_get_n_monitors(m_screen) == 1 )
-    {
-        sizeMM.x = gdk_screen_width_mm();
-        sizeMM.y = gdk_screen_height_mm();
-    }
-
-    return sizeMM;
-}
 
 #if wxUSE_DISPLAY
 bool wxDisplayImplGTK::IsPrimary() const

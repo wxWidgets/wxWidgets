@@ -66,7 +66,7 @@ public:
         if ( !BaseApp::InitInstance() )
             return FALSE;
 
-        if ( !wxEntryStart(m_hInstance) )
+        if ( !wxEntryStart(BaseApp::m_hInstance) )
             return FALSE;
 
         if ( !wxTheApp || !wxTheApp->CallOnInit() )
@@ -80,8 +80,8 @@ public:
 
     int ExitInstance() wxOVERRIDE
     {
-        delete m_pMainWnd;
-        m_pMainWnd = NULL;
+        delete BaseApp::m_pMainWnd;
+        BaseApp::m_pMainWnd = NULL;
 
         if ( wxTheApp )
             wxTheApp->OnExit();
@@ -137,7 +137,7 @@ protected:
 
         // We need to initialize the main window to let the program continue
         // running.
-        m_pMainWnd = new wxMFCWnd(w);
+        BaseApp::m_pMainWnd = new wxMFCWnd(w);
 
         // We also need to reset m_pMainWnd when this window will be destroyed
         // to prevent MFC from using an invalid HWND, which is probably not
@@ -157,8 +157,8 @@ private:
     {
         event.Skip();
 
-        delete m_pMainWnd;
-        m_pMainWnd = NULL;
+        delete BaseApp::m_pMainWnd;
+        BaseApp::m_pMainWnd = NULL;
     }
 };
 

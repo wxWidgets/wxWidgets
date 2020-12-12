@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/hashmap.h"
-#include <wx/vector.h>
+#include "wx/vector.h"
 
 WX_DECLARE_HASH_MAP(unsigned, wxString, wxIntegerHash, wxIntegerEqual,
                     IntToStringMap);
@@ -189,6 +189,17 @@ private:
 
 
 // ----------------------------------------------------------------------------
+// MyLongMusicTreeModel
+// ----------------------------------------------------------------------------
+
+class MyLongMusicTreeModel : public MyMusicTreeModel
+{
+public:
+    MyLongMusicTreeModel();
+};
+
+
+// ----------------------------------------------------------------------------
 // MyListModel
 // ----------------------------------------------------------------------------
 
@@ -197,9 +208,8 @@ class MyListModel: public wxDataViewVirtualListModel
 public:
     enum
     {
-        Col_Toggle,
+        Col_ToggleIconText,
         Col_EditableText,
-        Col_IconText,
         Col_Date,
         Col_TextWithAttr,
         Col_Custom,
@@ -225,11 +235,8 @@ public:
 
     virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE
     {
-        if (col == Col_Toggle)
-            return "bool";
-
-        if (col == Col_IconText)
-            return "wxDataViewIconText";
+        if (col == Col_ToggleIconText)
+            return wxDataViewCheckIconTextRenderer::GetDefaultType();
 
         return "string";
     }
@@ -257,4 +264,49 @@ class MyListStoreDerivedModel : public wxDataViewListStore
 {
 public:
     virtual bool IsEnabledByRow(unsigned int row, unsigned int col) const wxOVERRIDE;
+};
+
+// ----------------------------------------------------------------------------
+// MyListStoreHasValueModel
+// ----------------------------------------------------------------------------
+
+class MyListStoreHasValueModel : public MyListStoreDerivedModel
+{
+public:
+    virtual bool HasValue(const wxDataViewItem &item, unsigned int col) const wxOVERRIDE;
+};
+
+// ----------------------------------------------------------------------------
+// MyIndexListModel
+// ----------------------------------------------------------------------------
+
+class MyIndexListModel : public wxDataViewIndexListModel
+{
+public:
+    MyIndexListModel() { }
+
+    void Fill(const wxArrayString& strings)
+    {
+        m_strings = strings;
+
+        Reset(m_strings.size());
+    }
+
+    // Implement base class pure virtual methods.
+    unsigned GetColumnCount() const wxOVERRIDE { return 1; }
+    wxString GetColumnType(unsigned) const wxOVERRIDE { return "string"; }
+    unsigned GetCount() const wxOVERRIDE { return m_strings.size(); }
+    void GetValueByRow(wxVariant& val, unsigned row, unsigned) const wxOVERRIDE
+    {
+        val = m_strings[row];
+    }
+    bool SetValueByRow(const wxVariant&, unsigned, unsigned) wxOVERRIDE
+    {
+        return false;
+    }
+
+private:
+    wxArrayString m_strings;
+
+    wxDECLARE_NO_COPY_CLASS(MyIndexListModel);
 };

@@ -20,7 +20,7 @@
     RunScript return a value, which is a very critical feature in many web
     embedding scenarios.
 
-    This class is only available on OS X.
+    This class is only available on macOS.
 **/
 
 class wxWebKitCtrl : public wxControl
@@ -35,7 +35,7 @@ public:
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxWebKitCtrlNameStr);
-    
+
     bool Create(wxWindow *parent,
                 wxWindowID winid,
                 const wxString& strURL,

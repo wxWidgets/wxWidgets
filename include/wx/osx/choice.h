@@ -36,7 +36,7 @@ public:
              int n = 0, const wxString choices[] = NULL,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxChoiceNameStr)
+             const wxString& name = wxASCII_STR(wxChoiceNameStr))
     {
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
@@ -46,7 +46,7 @@ public:
              const wxArrayString& choices,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxChoiceNameStr)
+             const wxString& name = wxASCII_STR(wxChoiceNameStr))
     {
         Create(parent, id, pos, size, choices, style, validator, name);
     }
@@ -57,37 +57,37 @@ public:
                 int n = 0, const wxString choices[] = NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxChoiceNameStr);
+                const wxString& name = wxASCII_STR(wxChoiceNameStr));
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxChoiceNameStr);
+                const wxString& name = wxASCII_STR(wxChoiceNameStr));
 
-    virtual unsigned int GetCount() const ;
-    virtual int GetSelection() const ;
-    virtual void SetSelection(int n);
+    virtual unsigned int GetCount() const wxOVERRIDE;
+    virtual int GetSelection() const wxOVERRIDE;
+    virtual void SetSelection(int n) wxOVERRIDE;
 
-    virtual int FindString(const wxString& s, bool bCase = false) const;
-    virtual wxString GetString(unsigned int n) const ;
-    virtual void SetString(unsigned int pos, const wxString& s);
+    virtual int FindString(const wxString& s, bool bCase = false) const wxOVERRIDE;
+    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
+    virtual void SetString(unsigned int pos, const wxString& s) wxOVERRIDE;
     // osx specific event handling common for all osx-ports
 
-    virtual bool        OSXHandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked(double timestampsec) wxOVERRIDE;
 
 protected:
-    virtual void DoDeleteOneItem(unsigned int n);
-    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
+    virtual void DoClear() wxOVERRIDE;
 
-    virtual wxSize DoGetBestSize() const ;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
-                              void **clientData, wxClientDataType type);
+                              void **clientData, wxClientDataType type) wxOVERRIDE;
 
-    virtual void DoSetItemClientData(unsigned int n, void* clientData);
-    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData) wxOVERRIDE;
+    virtual void* DoGetItemClientData(unsigned int n) const wxOVERRIDE;
 
     wxArrayString m_strings;
     wxChoiceDataArray m_datas ;

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -118,11 +115,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
         { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
         WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
         WX_GL_DOUBLEBUFFER,
-#  if defined(__WXMAC__)  || defined(__WXQT__)
-        GL_NONE };
-#  else
-        None };
-#  endif
+        0 };
 #endif
 
     if (!g_doubleBuffer)
@@ -130,7 +123,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
         wxLogWarning("Disabling double buffering");
 
 #ifdef __WXGTK__
-        gl_attrib[9] = None;
+        gl_attrib[9] = 0;
 #endif
         g_doubleBuffer = GL_FALSE;
     }
@@ -284,7 +277,8 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     // This is OK here only because there is only one canvas that uses the
     // context. See the cube sample for that case that multiple canvases are
     // made current with one context.
-    glViewport(0, 0, event.GetSize().x, event.GetSize().y);
+    const wxSize size = event.GetSize() * GetContentScaleFactor();
+    glViewport(0, 0, size.x, size.y);
 }
 
 void TestGLCanvas::OnChar(wxKeyEvent& event)
@@ -296,19 +290,19 @@ void TestGLCanvas::OnChar(wxKeyEvent& event)
         return;
 
     case WXK_LEFT:
-        m_yrot -= 15.0;
+        m_yrot -= 15;
         break;
 
     case WXK_RIGHT:
-        m_yrot += 15.0;
+        m_yrot += 15;
         break;
 
     case WXK_UP:
-        m_xrot += 15.0;
+        m_xrot += 15;
         break;
 
     case WXK_DOWN:
-        m_xrot -= 15.0;
+        m_xrot -= 15;
         break;
 
     case 's': case 'S':
@@ -352,8 +346,8 @@ void TestGLCanvas::OnMouseEvent(wxMouseEvent& event)
         }
         else
         {
-            m_yrot += (event.GetX() - last_x)*1.0;
-            m_xrot += (event.GetY() - last_y)*1.0;
+            m_yrot += event.GetX() - last_x;
+            m_xrot += event.GetY() - last_y;
             Refresh(false);
         }
         last_x = event.GetX();

@@ -16,6 +16,9 @@
 #if wxUSE_PROPGRID
 
 #include "wx/propgrid/propgriddefs.h"
+#include "wx/bitmap.h"
+#include "wx/font.h"
+#include "wx/validate.h"
 
 // -----------------------------------------------------------------------
 
@@ -291,7 +294,10 @@ class WXDLLIMPEXP_PROPGRID wxPGAttributeStorage
 {
 public:
     wxPGAttributeStorage();
+    wxPGAttributeStorage(const wxPGAttributeStorage& other);
     ~wxPGAttributeStorage();
+
+    wxPGAttributeStorage& operator=(const wxPGAttributeStorage& rhs);
 
     void Set( const wxString& name, const wxVariant& value );
     unsigned int GetCount() const { return (unsigned int) m_map.size(); }
@@ -414,16 +420,16 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 // See wxPGProperty::SetAutoUnspecified().
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
-// Indicates the bit useable by derived properties.
+// Indicates the bit usable by derived properties.
 wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
 
-// Indicates the bit useable by derived properties.
+// Indicates the bit usable by derived properties.
 wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
 
 // Indicates that the property is being deleted and should be ignored.
 wxPG_PROP_BEING_DELETED             = 0x00200000,
 
-// Indicates the bit useable by derived properties.
+// Indicates the bit usable by derived properties.
 wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
 };
@@ -444,6 +450,19 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     (wxPG_PROP_DISABLED|wxPG_PROP_HIDDEN|wxPG_PROP_NOEDITOR|wxPG_PROP_COLLAPSED)
 
 // -----------------------------------------------------------------------
+
+// Helpers to mark macros as deprecated
+#if (defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)) && !defined(WXBUILDING)
+#define wxPG_STRINGIFY(X) #X
+#define wxPG_DEPRECATED_MACRO_VALUE(value, msg) \
+        _Pragma(wxPG_STRINGIFY(GCC warning msg)) value
+#else
+#define wxPG_DEPRECATED_MACRO_VALUE(value, msg) value
+#endif // clang || GCC
+
+#if wxCHECK_VISUALC_VERSION(10) && !defined(WXBUILDING)
+#define wxPG_MUST_DEPRECATE_MACRO_NAME
+#endif
 
 // wxPGProperty::SetAttribute() and
 // wxPropertyGridInterface::SetPropertyAttribute() accept one of these as
@@ -515,6 +534,10 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 // Only wxPG_PREFIX_NONE works with Decimal and Octal numbers.
 #define wxPG_UINT_PREFIX                    wxS("Prefix")
 
+// Specific to wxEditorDialogProperty and derivatives, wxString, default is empty.
+// Sets a specific title for the editor dialog.
+#define wxPG_DIALOG_TITLE                   wxS("DialogTitle")
+
 // wxFileProperty/wxImageFileProperty specific, wxChar*, default is
 // detected/varies.
 // Sets the wildcard used in the triggered wxFileDialog. Format is the same.
@@ -533,17 +556,29 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 // Sets the initial path of where to look for files.
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
+#if WXWIN_COMPATIBILITY_3_0
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_FILE_DIALOG_TITLE)
+#endif
 // Specific to wxFileProperty and derivatives, wxString, default is empty.
 // Sets a specific title for the dir dialog.
-#define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
+#define wxPG_FILE_DIALOG_TITLE wxPG_DEPRECATED_MACRO_VALUE(wxS("DialogTitle"),\
+    "wxPG_FILE_DIALOG_TITLE is deprecated. Use wxPG_DIALOG_TITLE instead.")
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // Specific to wxFileProperty and derivatives, long, default is 0.
 // Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
+#if WXWIN_COMPATIBILITY_3_0
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_DIR_DIALOG_MESSAGE)
+#endif
 // Specific to wxDirProperty, wxString, default is empty.
 // Sets a specific message for the dir dialog.
-#define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
+#define wxPG_DIR_DIALOG_MESSAGE wxPG_DEPRECATED_MACRO_VALUE(wxS("DialogMessage"),\
+    "wxPG_DIR_DIALOG_MESSAGE is deprecated. Use wxPG_DIALOG_TITLE instead.")
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // wxArrayStringProperty's string delimiter character. If this is
 // a quotation mark or hyphen, then strings will be quoted instead
@@ -971,19 +1006,10 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridPopulator;
-    friend class wxStringProperty;  // Proper "<composed>" support requires this
 
     wxDECLARE_ABSTRACT_CLASS(wxPGProperty);
 public:
     typedef wxUint32 FlagType;
-
-    // Default constructor.
-    wxPGProperty();
-
-    // Constructor.
-    // All non-abstract property classes should have a constructor with
-    // the same first two arguments as this one.
-    wxPGProperty( const wxString& label, const wxString& name );
 
     // Virtual destructor.
     // It is customary for derived properties to implement this.
@@ -1011,7 +1037,7 @@ public:
                                 wxPGValidationInfo& validationInfo ) const;
 
     // Converts text into wxVariant value appropriate for this property.
-    // Prameters:
+    // Parameters:
     // variant - On function entry this is the old value (should not be
     //   wxNullVariant in normal cases). Translated value must be assigned
     //   back to it.
@@ -1252,8 +1278,7 @@ public:
     // Common values are disabled by the default for all properties.
     void EnableCommonValue( bool enable = true )
     {
-        if ( enable ) SetFlag( wxPG_PROP_USES_COMMON_VALUE );
-        else ClearFlag( wxPG_PROP_USES_COMMON_VALUE );
+        ChangeFlag(wxPG_PROP_USES_COMMON_VALUE, enable);
     }
 
     // Composes text from values of child properties.
@@ -1354,7 +1379,7 @@ public:
     }
 
     // Returns property's hint text (shown in empty value cell).
-    inline wxString GetHintText() const;
+    wxString GetHintText() const;
 
     // Returns property grid where property lies.
     wxPropertyGrid* GetGrid() const;
@@ -1475,7 +1500,7 @@ public:
     // Returns true if this is a sub-property.
     bool IsSubProperty() const
     {
-        wxPGProperty* parent = (wxPGProperty*)m_parent;
+        wxPGProperty* parent = m_parent;
         if ( parent && !parent->IsCategory() )
             return true;
         return false;
@@ -1489,10 +1514,11 @@ public:
     // this function usually returns Null variant.
     wxVariant GetDefaultValue() const;
 
-    // Returns maximum allowed length of property's text value.
+    // Returns maximum allowed length of the text the user can enter in
+    // the property text editor.
     int GetMaxLength() const
     {
-        return (int) m_maxLen;
+        return m_maxLen;
     }
 
     // Determines, recursively, if all children are not unspecified.
@@ -1627,7 +1653,7 @@ public:
     }
 
     // Sets editor for a property, , by editor name.
-    inline void SetEditor( const wxString& editorName );
+    void SetEditor( const wxString& editorName );
 
     // Sets cell information for given column.
     void SetCell( int column, const wxPGCell& cell );
@@ -1679,8 +1705,7 @@ public:
 
     void SetExpanded( bool expanded )
     {
-        if ( !expanded ) m_flags |= wxPG_PROP_COLLAPSED;
-        else m_flags &= ~wxPG_PROP_COLLAPSED;
+        ChangeFlag(wxPG_PROP_COLLAPSED, !expanded);
     }
 
     // Sets or clears given property flag. Mainly for internal use.
@@ -1736,7 +1761,7 @@ public:
 
     // Helper function (for wxPython bindings and such) for settings protected
     // m_value.
-    void SetValuePlain( wxVariant value )
+    void SetValuePlain( const wxVariant& value )
     {
         m_value = value;
     }
@@ -1786,7 +1811,7 @@ public:
     bool SetChoices( const wxPGChoices& choices );
 
     // Set max length of text in text editor.
-    inline bool SetMaxLength( int maxLen );
+    bool SetMaxLength( int maxLen );
 
     // Call with 'false' in OnSetValue to cancel value changes after all
     // (i.e. cancel 'true' returned by StringToValue() or IntToValue()).
@@ -1895,6 +1920,13 @@ public:
     void*                       m_clientData;
 
 protected:
+
+    // Ctors are ptotected because wxPGProperty is only a base class
+    // for all property classes and shouldn't be instantiated directly.
+    wxPGProperty();
+    // All non-abstract property classes should have a constructor with
+    // the same first two arguments as this one.
+    wxPGProperty(const wxString& label, const wxString& name);
 
     // Sets property cell in fashion that reduces number of exclusive
     // copies of cell data. Used when setting, for instance, same
@@ -2038,11 +2070,10 @@ protected:
 
     FlagType                    m_flags;
 
-    // Maximum length (mainly for string properties). Could be in some sort of
+    // Maximum length (for string properties). Could be in some sort of
     // wxBaseStringProperty, but currently, for maximum flexibility and
-    // compatibility, we'll stick it here. Anyway, we had 3 excess bytes to use
-    // so short int will fit in just fine.
-    short                       m_maxLen;
+    // compatibility, we'll stick it here.
+    int                         m_maxLen;
 
     // Root has 0, categories etc. at that level 1, etc.
     unsigned char               m_depth;

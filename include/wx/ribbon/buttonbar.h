@@ -190,13 +190,6 @@ protected:
     void TryCollapseLayout(wxRibbonButtonBarLayout* original,
                      size_t first_btn, size_t* last_button,
                      wxRibbonButtonBarButtonState target_size);
-    void MakeBitmaps(wxRibbonButtonBarButtonBase* base,
-                     const wxBitmap& bitmap_large,
-                     const wxBitmap& bitmap_large_disabled,
-                     const wxBitmap& bitmap_small,
-                     const wxBitmap& bitmap_small_disabled);
-    static wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size);
-    static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxDC& dc);
     virtual void UpdateWindowUI(long flags) wxOVERRIDE;
@@ -231,13 +224,6 @@ public:
         , m_bar(bar), m_button(button)
     {
     }
-#ifndef SWIG
-    wxRibbonButtonBarEvent(const wxRibbonButtonBarEvent& e) : wxCommandEvent(e)
-    {
-        m_bar = e.m_bar;
-        m_button = e.m_button;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxRibbonButtonBarEvent(*this); }
 
     wxRibbonButtonBar* GetBar() {return m_bar;}

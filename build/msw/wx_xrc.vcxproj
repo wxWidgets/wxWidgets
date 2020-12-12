@@ -486,6 +486,7 @@
     <ClCompile Include="..\..\src\xrc\xh_html.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_htmllbox.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_hyperlink.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_infobar.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_listb.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_listbk.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_listc.cpp" />
@@ -519,10 +520,10 @@
     <ClCompile Include="..\..\src\xrc\xh_treebk.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_unkwn.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_wizrd.cpp" />
-    <ClCompile Include="..\..\src\xrc\xmladv.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlres.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlrsall.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_activityindicator.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_dataview.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -584,6 +585,7 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_html.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_htmllbox.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_hyperlink.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_infobar.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_listb.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_listbk.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_listc.h" />
@@ -619,6 +621,7 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_wizrd.h" />
     <ClInclude Include="..\..\include\wx\xrc\xmlres.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_activityindicator.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_dataview.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

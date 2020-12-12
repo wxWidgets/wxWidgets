@@ -13,15 +13,12 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE
+#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE && !wxUSE_WEBVIEW_EDGE
 #error "A wxWebView backend is required by this sample"
 #endif
 
@@ -35,6 +32,7 @@
 #endif
 #include "wx/webviewarchivehandler.h"
 #include "wx/webviewfshandler.h"
+#include "wx/numdlg.h"
 #include "wx/infobar.h"
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
@@ -132,6 +130,7 @@ public:
     void OnRedo(wxCommandEvent& evt);
     void OnMode(wxCommandEvent& evt);
     void OnZoomLayout(wxCommandEvent& evt);
+    void OnZoomCustom(wxCommandEvent& evt);
     void OnHistory(wxCommandEvent& evt);
     void OnScrollLineUp(wxCommandEvent&) { m_browser->LineUp(); }
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
@@ -164,6 +163,7 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
+    void OnEnableDevTools(wxCommandEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -193,6 +193,7 @@ private:
     wxMenuItem* m_tools_medium;
     wxMenuItem* m_tools_large;
     wxMenuItem* m_tools_largest;
+    wxMenuItem* m_tools_custom;
     wxMenuItem* m_tools_handle_navigation;
     wxMenuItem* m_tools_handle_new_window;
     wxMenuItem* m_tools_enable_history;
@@ -226,6 +227,7 @@ private:
     wxMenuItem* m_selection_delete;
     wxMenuItem* m_find;
     wxMenuItem* m_context_menu;
+    wxMenuItem* m_dev_tools;
 
     wxInfoBar *m_info;
     wxStaticText* m_info_text;
@@ -235,6 +237,7 @@ private:
     wxMenuHistoryMap m_histMenuItems;
     wxString m_findText;
     int m_findFlags, m_findCount;
+    long m_zoomFactor;
 
     // Last executed JavaScript snippet, for convenience.
     wxString m_javascript;
@@ -322,7 +325,6 @@ WebFrame::WebFrame(const wxString& url) :
 
     // Set find values.
     m_findFlags = wxWEBVIEW_FIND_DEFAULT;
-    m_findText = wxEmptyString;
     m_findCount = 0;
 
     // Create panel for find toolbar.
@@ -365,8 +367,23 @@ WebFrame::WebFrame(const wxString& url) :
     m_info = new wxInfoBar(this);
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
+    // Create a log window
+    new wxLogWindow(this, _("Logging"), true, false);
+
     // Create the webview
-    m_browser = wxWebView::New(this, wxID_ANY, url);
+    wxString backend = wxWebViewBackendDefault;
+#ifdef __WXMSW__
+    if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        wxLogMessage("Using Edge backend");
+        backend = wxWebViewBackendEdge;
+    }
+    else
+    {
+        wxLogMessage("Edge backend not available");
+    }
+#endif
+    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize, backend);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the wxfs:// protocol for testing purposes
@@ -379,9 +396,6 @@ WebFrame::WebFrame(const wxString& url) :
     //Set a more sensible size for web browsing
     SetSize(wxSize(800, 600));
 
-    // Create a log window
-    new wxLogWindow(this, _("Logging"), true, false);
-
     // Create the Tools menu
     m_tools_menu = new wxMenu();
     wxMenuItem* print = m_tools_menu->Append(wxID_ANY , _("Print"));
@@ -389,12 +403,13 @@ WebFrame::WebFrame(const wxString& url) :
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
     wxMenuItem* viewText = m_tools_menu->Append(wxID_ANY, _("View Text"));
     m_tools_menu->AppendSeparator();
-    m_tools_layout = m_tools_menu->AppendCheckItem(wxID_ANY, _("Use Layout Zoom"));
-    m_tools_tiny = m_tools_menu->AppendCheckItem(wxID_ANY, _("Tiny"));
-    m_tools_small = m_tools_menu->AppendCheckItem(wxID_ANY, _("Small"));
-    m_tools_medium = m_tools_menu->AppendCheckItem(wxID_ANY, _("Medium"));
-    m_tools_large = m_tools_menu->AppendCheckItem(wxID_ANY, _("Large"));
-    m_tools_largest = m_tools_menu->AppendCheckItem(wxID_ANY, _("Largest"));
+    m_tools_layout = m_tools_menu->AppendRadioItem(wxID_ANY, _("Use Layout Zoom"));
+    m_tools_tiny = m_tools_menu->AppendRadioItem(wxID_ANY, _("Tiny"));
+    m_tools_small = m_tools_menu->AppendRadioItem(wxID_ANY, _("Small"));
+    m_tools_medium = m_tools_menu->AppendRadioItem(wxID_ANY, _("Medium"));
+    m_tools_large = m_tools_menu->AppendRadioItem(wxID_ANY, _("Large"));
+    m_tools_largest = m_tools_menu->AppendRadioItem(wxID_ANY, _("Largest"));
+    m_tools_custom = m_tools_menu->AppendRadioItem(wxID_ANY, _("Custom Size"));
     m_tools_menu->AppendSeparator();
     m_tools_handle_navigation = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle Navigation"));
     m_tools_handle_new_window = m_tools_menu->AppendCheckItem(wxID_ANY, _("Handle New Windows"));
@@ -445,9 +460,12 @@ WebFrame::WebFrame(const wxString& url) :
     m_script_null = script_menu->Append(wxID_ANY, "Return null");
     m_script_date = script_menu->Append(wxID_ANY, "Return Date");
 #if wxUSE_WEBVIEW_IE
-    m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
-    m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
-    m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+    if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
+        m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
+        m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+    }
 #endif
     m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
@@ -464,14 +482,19 @@ WebFrame::WebFrame(const wxString& url) :
     wxMenuItem* usememoryfs =  m_tools_menu->Append(wxID_ANY, _("Memory File System Example"));
 
     m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
+    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
     m_tools_enable_history->Check();
+
+    //Zoom
+    m_zoomFactor = 100;
+    m_tools_medium->Check();
+
     if(!m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
         m_tools_layout->Enable(false);
-
 
     // Connect the toolbar events
     Bind(wxEVT_TOOL, &WebFrame::OnBack, this, m_toolbar_back->GetId());
@@ -510,6 +533,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_medium->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_large->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_largest->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_custom->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearHistory, this, clearhist->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableHistory, this, m_tools_enable_history->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnCut, this, m_edit_cut->GetId());
@@ -533,9 +557,12 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptNull, this, m_script_null->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptDate, this, m_script_date->GetId());
 #if wxUSE_WEBVIEW_IE
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
-    Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
+    if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    {
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
+        Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
+    }
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
@@ -545,6 +572,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_MENU, &WebFrame::OnUseMemoryFS, this, usememoryfs->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnFind, this, m_find->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableContextMenu, this, m_context_menu->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnEnableDevTools, this, m_dev_tools->GetId());
 
     //Connect the idle events
     Bind(wxEVT_IDLE, &WebFrame::OnIdle, this);
@@ -704,6 +732,11 @@ void WebFrame::OnUseMemoryFS(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
 {
     m_browser->EnableContextMenu(evt.IsChecked());
+}
+
+void WebFrame::OnEnableDevTools(wxCommandEvent& evt)
+{
+    m_browser->EnableAccessToDevTools(evt.IsChecked());
 }
 
 void WebFrame::OnFind(wxCommandEvent& WXUNUSED(evt))
@@ -902,32 +935,6 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     if(m_browser->GetCurrentURL() == "")
         return;
 
-    m_tools_tiny->Check(false);
-    m_tools_small->Check(false);
-    m_tools_medium->Check(false);
-    m_tools_large->Check(false);
-    m_tools_largest->Check(false);
-
-    wxWebViewZoom zoom = m_browser->GetZoom();
-    switch (zoom)
-    {
-    case wxWEBVIEW_ZOOM_TINY:
-        m_tools_tiny->Check();
-        break;
-    case wxWEBVIEW_ZOOM_SMALL:
-        m_tools_small->Check();
-        break;
-    case wxWEBVIEW_ZOOM_MEDIUM:
-        m_tools_medium->Check();
-        break;
-    case wxWEBVIEW_ZOOM_LARGE:
-        m_tools_large->Check();
-        break;
-    case wxWEBVIEW_ZOOM_LARGEST:
-        m_tools_largest->Check();
-        break;
-    }
-
     m_edit_cut->Enable(m_browser->CanCut());
     m_edit_copy->Enable(m_browser->CanCopy());
     m_edit_paste->Enable(m_browser->CanPaste());
@@ -939,6 +946,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     m_selection_delete->Enable(m_browser->HasSelection());
 
     m_context_menu->Check(m_browser->IsContextMenuEnabled());
+    m_dev_tools->Check(m_browser->IsAccessToDevToolsEnabled());
 
     //Firstly we clear the existing menu items, then we add the current ones
     wxMenuHistoryMap::const_iterator it;
@@ -1006,6 +1014,11 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
     {
         m_browser->SetZoom(wxWEBVIEW_ZOOM_LARGEST);
     }
+    else if (evt.GetId() == m_tools_custom->GetId())
+    {
+        m_zoomFactor = m_browser->GetZoomFactor() * 100;
+        OnZoomCustom(evt);
+    }
     else
     {
         wxFAIL;
@@ -1018,6 +1031,24 @@ void WebFrame::OnZoomLayout(wxCommandEvent& WXUNUSED(evt))
         m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
     else
         m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
+}
+
+void WebFrame::OnZoomCustom(wxCommandEvent& WXUNUSED(evt))
+{
+    wxNumberEntryDialog dialog
+                      (
+                        this,
+                        "Enter zoom factor as a percentage (10-10000)%",
+                        "Zoom Factor:",
+                        "Change Zoom Factor",
+                        m_zoomFactor,
+                        10, 10000
+                      );
+    if( dialog.ShowModal() != wxID_OK )
+        return;
+
+    m_zoomFactor = dialog.GetValue();
+    m_browser->SetZoomFactor((float)m_zoomFactor/100);
 }
 
 void WebFrame::OnHistory(wxCommandEvent& evt)

@@ -150,7 +150,7 @@ name##PluginSentinel  m_pluginsentinel
 // The 'this' pointer is always true, so use this version
 // to cast the this pointer and avoid compiler warnings.
 #define wxDynamicCastThis(className) \
-     (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
+     (IsKindOf(&className::ms_classInfo) ? (className*)this : NULL)
 
 template <class T>
 inline T *wxCheckCast(const void *ptr)
@@ -311,6 +311,13 @@ public:
         if (m_ptr)
             m_ptr->DecRef();
         m_ptr = ptr;
+    }
+
+    T* release()
+    {
+        T* const ptr = m_ptr;
+        m_ptr = NULL;
+        return ptr;
     }
 
     wxObjectDataPtr& operator=(const wxObjectDataPtr &tocopy)

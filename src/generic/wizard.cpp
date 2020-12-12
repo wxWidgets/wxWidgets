@@ -23,9 +23,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_WIZARDDLG
 
@@ -433,12 +430,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     m_finishLabel = _("&Finish");
 
     m_btnNext = new wxButton(this, wxID_FORWARD, m_nextLabel);
-    // Avoid Cmd+C closing dialog on Mac.
-    wxString cancelLabel(_("&Cancel"));
-#ifdef __WXMAC__
-    cancelLabel.Replace("&",wxEmptyString);
-#endif
-    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, cancelLabel, wxDefaultPosition, wxDefaultSize, buttonStyle);
+    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, buttonStyle);
 #ifndef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
         btnHelp=new wxButton(this, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, buttonStyle);
@@ -719,8 +711,8 @@ wxSize wxWizard::GetPageSize() const
     if ( wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA )
     {
         // Make the default page size small enough to fit on screen
-        DEFAULT_PAGE_WIDTH = wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 2;
-        DEFAULT_PAGE_HEIGHT = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 2;
+        DEFAULT_PAGE_WIDTH = wxSystemSettings::GetMetric(wxSYS_SCREEN_X, m_parent) / 2;
+        DEFAULT_PAGE_HEIGHT = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y, m_parent) / 2;
     }
     else // !PDA
     {
@@ -934,7 +926,7 @@ bool wxWizard::DoLayoutAdaptation()
     wxStandardDialogLayoutAdapter::DoFitWithScrolling(this, windows);
 
     // Size event doesn't get sent soon enough on wxGTK
-    DoLayout();
+    Layout();
 
     SetLayoutAdaptationDone(true);
 

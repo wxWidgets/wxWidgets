@@ -33,7 +33,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxCP_DEFAULT_STYLE,
                         const wxValidator& val = wxDefaultValidator,
-                        const wxString& name = wxCollapsiblePaneNameStr)
+                        const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr))
     {
         Init();
 
@@ -49,7 +49,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCP_DEFAULT_STYLE,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxCollapsiblePaneNameStr);
+                const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr));
 
     // public wxCollapsiblePane API
     virtual void Collapse(bool collapse = true) wxOVERRIDE;
@@ -73,7 +73,7 @@ public:
 
 protected:
     // overridden methods
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     int GetBorder() const;
 

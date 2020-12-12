@@ -154,18 +154,34 @@ public:
 
     void SetMin(ValueType min)
     {
-        this->DoSetMin(min);
+        this->DoSetMin(static_cast<LongestValueType>(min));
+    }
+
+    ValueType GetMin() const
+    {
+        return static_cast<ValueType>(this->DoGetMin());
     }
 
     void SetMax(ValueType max)
     {
-        this->DoSetMax(max);
+        this->DoSetMax(static_cast<LongestValueType>(max));
+    }
+
+    ValueType GetMax() const
+    {
+        return static_cast<ValueType>(this->DoGetMax());
     }
 
     void SetRange(ValueType min, ValueType max)
     {
         SetMin(min);
         SetMax(max);
+    }
+
+    void GetRange(ValueType& min, ValueType& max) const
+    {
+        min = GetMin();
+        max = GetMax();
     }
 
     virtual bool TransferToWindow()  wxOVERRIDE
@@ -176,7 +192,7 @@ public:
             if ( !control )
                 return false;
 
-            control->SetValue(NormalizeValue(*m_value));
+            control->SetValue(NormalizeValue(static_cast<LongestValueType>(*m_value)));
         }
 
         return true;
@@ -288,7 +304,9 @@ protected:
     static bool FromString(const wxString& s, LongestValueType *value);
 
     void DoSetMin(LongestValueType min) { m_min = min; }
+    LongestValueType DoGetMin() const { return m_min; }
     void DoSetMax(LongestValueType max) { m_max = max; }
+    LongestValueType DoGetMax() const { return m_max; }
 
     bool IsInRange(LongestValueType value) const
     {
@@ -390,7 +408,9 @@ protected:
     bool FromString(const wxString& s, LongestValueType *value) const;
 
     void DoSetMin(LongestValueType min) { m_min = min; }
+    LongestValueType DoGetMin() const { return m_min; }
     void DoSetMax(LongestValueType max) { m_max = max; }
+    LongestValueType DoGetMax() const { return m_max; }
 
     bool IsInRange(LongestValueType value) const
     {
@@ -450,13 +470,15 @@ public:
     }
 
 private:
+    typedef typename Base::LongestValueType LongestValueType;
+
     void DoSetMinMax()
     {
         // NB: Do not use min(), it's not the smallest representable value for
         //     the floating point types but rather the smallest representable
         //     positive value.
-        this->DoSetMin(-std::numeric_limits<ValueType>::max());
-        this->DoSetMax( std::numeric_limits<ValueType>::max());
+        this->DoSetMin(static_cast<LongestValueType>(-std::numeric_limits<ValueType>::max()));
+        this->DoSetMax(static_cast<LongestValueType>( std::numeric_limits<ValueType>::max()));
     }
 };
 

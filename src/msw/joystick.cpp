@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_JOYSTICK
 
@@ -27,11 +24,6 @@
 #include "wx/msw/private.h"
 
 #include <mmsystem.h>
-
-// Why doesn't BC++ have joyGetPosEx?
-#if defined(__BORLANDC__)
-#define NO_JOYGETPOSEX
-#endif
 
 #include "wx/msw/registry.h"
 
@@ -116,7 +108,7 @@ void* wxJoystickThread::Entry()
         joyGetPos(m_joystick, &m_joyInfo);
         m_buttons = m_joyInfo.wButtons;
         UINT delta = m_buttons ^ m_lastJoyInfo.wButtons;
-        UINT deltaUp = delta & !m_buttons;
+        UINT deltaUp = delta & ~m_buttons;
         UINT deltaDown = delta & m_buttons;
 
         // Use count trailing zeros to determine which button changed.
@@ -157,6 +149,7 @@ wxJoystick::wxJoystick(int joystick)
     JOYINFO joyInfo;
     int i, maxsticks;
 
+    m_thread = NULL;
     maxsticks = joyGetNumDevs();
     for( i=0; i<maxsticks; i++ )
     {
@@ -261,7 +254,7 @@ int wxJoystick::GetButtonState() const
 
 bool wxJoystick::GetButtonState(unsigned id) const
 {
-    if (id > sizeof(int) * 8)
+    if (id >= sizeof(int) * 8)
         return false;
 
     return (GetButtonState() & (1 << id)) != 0;

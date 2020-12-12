@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATEPICKCTRL
 
@@ -262,9 +259,7 @@ private:
 
         if ( m_combo )
         {
-            wxArrayString allowedChars;
-            for ( wxChar c = wxT('0'); c <= wxT('9'); c++ )
-                allowedChars.Add(wxString(c, 1));
+            wxString allowedChars = wxS("0123456789");
 
             const wxChar *p2 = m_format.c_str();
             while ( *p2 )
@@ -272,12 +267,12 @@ private:
                 if ( *p2 == '%')
                     p2 += 2;
                 else
-                    allowedChars.Add(wxString(*p2++, 1));
+                    allowedChars << (*p2++); // append char
             }
 
     #if wxUSE_VALIDATORS
             wxTextValidator tv(wxFILTER_INCLUDE_CHAR_LIST);
-            tv.SetIncludes(allowedChars);
+            tv.SetCharIncludes(allowedChars);
             m_combo->SetValidator(tv);
     #endif
 

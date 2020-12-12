@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin, Stefan Csomor
 // Modified by:
 // Created:     2006-01-12
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 
@@ -90,7 +87,7 @@ void wxGUIEventLoop::OSXDoRun()
     {
         wxMacAutoreleasePool pool;
         const char* appname = "app";
-        UIApplicationMain( 1, (char**) &appname, nil, @"wxAppDelegate" );
+        UIApplicationMain( 1, (char**) &appname, @"UIApplication", @"wxAppDelegate" );
     }
     else 
     {

@@ -40,7 +40,6 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
 
 wxMemoryDCImpl::~wxMemoryDCImpl()
 {
-    g_object_unref(m_context);
 }
 
 void wxMemoryDCImpl::Init()

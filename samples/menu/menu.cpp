@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -592,7 +589,15 @@ MyFrame::MyFrame()
                      "Enable or disable the last menu item", true);
     menuMenu->Append(Menu_Menu_Check, "&Check menu item\tAlt-C",
                      "Check or uncheck the last menu item", true);
+
+    // Show the effect of Break(). As wxMSW is the only port in which calling
+    // it actually does something, insert a separator under the other platforms.
+#ifdef __WXMSW__
+    menuMenu->Break();
+#else
     menuMenu->AppendSeparator();
+#endif
+
     menuMenu->Append(Menu_Menu_GetInfo, "Get menu item in&fo\tAlt-F",
                      "Show the state of the last menu item");
 #if wxUSE_TEXTDLG
@@ -1235,19 +1240,21 @@ void MyFrame::LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxStri
 
     if ( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
     {
-        msg << " (id=" << event.GetId() << ")";
+        msg << " (id=" << event.GetId() << " in ";
     }
-    else // wxEVT_MENU_{OPEN,CLOSE}
+    else
     {
-        wxMenu* const menu = event.GetMenu();
-        if ( menu )
-        {
-            msg << " (menu with title \"" << menu->GetTitle() << "\")";
-        }
-        else
-        {
-            msg << " (no menu)";
-        }
+        msg << " (";
+    }
+
+    wxMenu* const menu = event.GetMenu();
+    if ( menu )
+    {
+        msg << "menu with title \"" << menu->GetTitle() << "\")";
+    }
+    else
+    {
+        msg << "no menu provided)";
     }
 
     msg << ".";

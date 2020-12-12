@@ -19,11 +19,11 @@
 #include "wx/log.h"
 #include "wx/utils.h"
 
+#include <limits.h>
 #include <string.h>
 
 // prefer snprintf over sprintf
-#if defined(__VISUALC__) || \
-        (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+#if defined(__VISUALC__)
     #define system_sprintf(buff, max, flags, data)      \
         ::_snprintf(buff, max, flags, data)
 #elif defined(HAVE_SNPRINTF)
@@ -189,7 +189,7 @@ template<typename CharType>
 void wxPrintfConvSpec<CharType>::Init()
 {
     m_nMinWidth = 0;
-    m_nMaxWidth = 0xFFFF;
+    m_nMaxWidth = INT_MAX;
     m_pos = 0;
     m_bAlignLeft = false;
     m_pArgPos = m_pArgEnd = NULL;
@@ -251,7 +251,7 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('.'):
                 // don't use CHECK_PREC here to avoid warning about the value
                 // assigned to prec_dot inside it being never used (because
-                // overwritten just below) from Borland in release build
+                // overwritten just below)
                 if (in_prec && !prec_dot)
                     m_szFlags[flagofs++] = '.';
                 in_prec = true;
@@ -854,10 +854,10 @@ struct wxPrintfConvSpecParser
                         wxFAIL_MSG
                         (
                             wxString::Format
-                            (
+                            (wxASCII_STR(
                                 "Format string \"%s\" uses both positional "
                                 "parameters and '*' but this is not currently "
-                                "supported by this implementation, sorry.",
+                                "supported by this implementation, sorry."),
                                 fmt
                             )
                         );
@@ -928,11 +928,11 @@ struct wxPrintfConvSpecParser
             wxFAIL_MSG
             (
                 wxString::Format
-                (
+                (wxASCII_STR(
                     "wxVsnprintf() currently supports only %d arguments, "
                     "but format string \"%s\" defines more of them.\n"
                     "You need to change wxMAX_SVNPRINTF_ARGUMENTS and "
-                    "recompile if more are really needed.",
+                    "recompile if more are really needed."),
                     fmt, wxMAX_SVNPRINTF_ARGUMENTS
                 )
             );

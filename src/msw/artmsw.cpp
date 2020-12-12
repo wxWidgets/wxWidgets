@@ -15,11 +15,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/artprov.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/image.h"
 #include "wx/dynlib.h"
 #include "wx/volume.h"
@@ -136,6 +138,21 @@ MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
 
     return wxBitmap(icon);
 }
+
+#if !wxUSE_UNICODE
+
+// SHSTOCKICONINFO always uses WCHAR, even in ANSI build, so we need to convert
+// it to TCHAR, which is just CHAR in this case, used by the other functions.
+// Provide an overload doing it as this keeps the code in the main function
+// clean and this entire block (inside !wxUSE_UNICODE check) can be just
+// removed when support for ANSI build is finally dropped.
+wxBitmap
+MSWGetBitmapFromIconLocation(const WCHAR* path, int index, const wxSize& size)
+{
+    return MSWGetBitmapFromIconLocation(wxString(path).mb_str(), index, size);
+}
+
+#endif // !wxUSE_UNICODE
 
 wxBitmap
 MSWGetBitmapForPath(const wxString& path, const wxSize& size, DWORD uFlags = 0)
@@ -309,32 +326,33 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 /*static*/
 wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
 {
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
     if ( client == wxART_TOOLBAR )
     {
-        return wxWindow::FromDIP(wxSize(24, 24), NULL);
+        return wxWindow::FromDIP(wxSize(24, 24), win);
     }
     else if ( client == wxART_MENU )
     {
-        return wxWindow::FromDIP(wxSize(16, 16), NULL);
+        return wxWindow::FromDIP(wxSize(16, 16), win);
     }
     else if ( client == wxART_FRAME_ICON )
     {
-        return wxSize(::GetSystemMetrics(SM_CXSMICON),
-                      ::GetSystemMetrics(SM_CYSMICON));
+        return wxSize(wxGetSystemMetrics(SM_CXSMICON, win),
+                      wxGetSystemMetrics(SM_CYSMICON, win));
     }
     else if ( client == wxART_CMN_DIALOG ||
               client == wxART_MESSAGE_BOX )
     {
-        return wxSize(::GetSystemMetrics(SM_CXICON),
-                      ::GetSystemMetrics(SM_CYICON));
+        return wxSize(wxGetSystemMetrics(SM_CXICON, win),
+                      wxGetSystemMetrics(SM_CYICON, win));
     }
     else if (client == wxART_BUTTON)
     {
-        return wxWindow::FromDIP(wxSize(16, 16), NULL);
+        return wxWindow::FromDIP(wxSize(16, 16), win);
     }
     else if (client == wxART_LIST)
     {
-        return wxWindow::FromDIP(wxSize(16, 16), NULL);
+        return wxWindow::FromDIP(wxSize(16, 16), win);
     }
 
     return wxDefaultSize;

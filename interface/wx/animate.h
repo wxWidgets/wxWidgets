@@ -39,6 +39,10 @@ enum wxAnimationType
 
     It is only available if @c wxUSE_ANIMATIONCTRL is set to 1 (the default).
 
+    For the platforms where this control has a native implementation, it may
+    have only limited support for the animation types, see @c
+    wxGenericAnimationCtrl if you need to support all of them.
+
     @beginStyleTable
     @style{wxAC_DEFAULT_STYLE}
            The default style: wxBORDER_NONE.
@@ -102,6 +106,28 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
                 const wxString& name = wxAnimationCtrlNameStr);
+
+    /**
+        Create a new animation object compatible with this control.
+
+        A wxAnimation object created using this function is always compatible
+        with controls of this type, see wxAnimation::IsCompatibleWith().
+
+        @see CreateCompatibleAnimation()
+
+        @since 3.1.4
+     */
+    wxAnimation CreateAnimation() const;
+
+    /**
+        Create a new animation object compatible with this control.
+
+        This method does the same thing as CreateAnimation() but is static,
+        i.e. can be called without creating any wxAnimationCtrl objects.
+
+        @since 3.1.4
+     */
+    static wxAnimation CreateCompatibleAnimation();
 
     /**
         Returns the animation associated with this control.
@@ -177,22 +203,109 @@ public:
 };
 
 
-
 /**
-    @class wxAnimation
+    @class wxGenericAnimationCtrl
 
-    This class encapsulates the concept of a platform-dependent animation.
-    An animation is a sequence of frames of the same size.
-    Sound is not supported by wxAnimation.
+    Generic implementation of wxAnimationCtrl interface.
 
-    Note that on wxGTK wxAnimation is capable of loading the formats supported
-    by the internally-used @c gdk-pixbuf library (typically this means only
-    @c wxANIMATION_TYPE_GIF).
-    On other platforms wxAnimation is always capable of loading both GIF and ANI
-    formats (i.e. both @c wxANIMATION_TYPE_GIF and @c wxANIMATION_TYPE_ANI).
+    If the platform supports a native animation control (currently just wxGTK)
+    then this class implements the same interface internally in wxWidgets.
+    One advantage of using this class instead of the native version is that
+    this version of the control is capable of using animations in other formats
+    than the ones supported by the @c gdk-pixbuf library used by wxGTK, which
+    typically only supports @c wxANIMATION_TYPE_GIF.
+
+    Note that to use this class you need to explicitly include the generic
+    header after including the main one before using it, i.e.
+    @code
+    #include <wx/animate.h>
+    #include <wx/generic/animate.h>
+    @endcode
 
     @library{wxcore}
     @category{gdi}
+*/
+
+class wxGenericAnimationCtrl : public wxAnimationCtrl
+{
+public:
+    /**
+        Initializes the object and calls Create() with
+        all the parameters.
+    */
+    wxGenericAnimationCtrl(wxWindow* parent, wxWindowID id,
+                    const wxAnimation& anim = wxNullAnimation,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxAC_DEFAULT_STYLE,
+                    const wxString& name = wxAnimationCtrlNameStr);
+
+    /**
+        Creates the control with the given @a anim animation.
+
+        After control creation you must explicitly call Play() to start to play
+        the animation. Until that function won't be called, the first frame
+        of the animation is displayed.
+
+        @param parent
+            Parent window, must be non-@NULL.
+        @param id
+            The identifier for the control.
+        @param anim
+            The initial animation shown in the control.
+        @param pos
+            Initial position.
+        @param size
+            Initial size.
+        @param style
+            The window style, see wxAC_* flags.
+        @param name
+            Control name.
+
+        @return @true if the control was successfully created or @false if
+                creation failed.
+    */
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxAnimation& anim = wxNullAnimation,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxAC_DEFAULT_STYLE,
+                const wxString& name = wxAnimationCtrlNameStr);
+
+    /**
+       Draw the current frame of the animation into given DC.
+       This is fast as current frame is always cached.
+    */
+    void DrawCurrentFrame(wxDC& dc);
+
+    /**
+       Returns a wxBitmap with the current frame drawn in it.
+    */
+    wxBitmap& GetBackingStore();
+
+    /**
+       This overload of Play() lets you specify if the animation must loop or not
+    */
+    bool Play(bool looped);
+
+    /**
+       Specify whether the animation's background colour is to be shown (the default),
+       or whether the window background should show through
+    */
+    void SetUseWindowBackgroundColour(bool useWinBackground = true);
+
+    /**
+       Returns @c true if the window's background colour is being used.
+    */
+    bool IsUsingWindowBackgroundColour() const;
+};
+
+
+/**
+   @class wxAnimation
+
+   The @c wxAnimation class handles the interface between the animation
+   control and the details of the animation image or data.
 
     @stdobjects
     ::wxNullAnimation
@@ -203,45 +316,56 @@ class wxAnimation : public wxObject
 {
 public:
     /**
-       Default ctor.
-    */
+       Constructs a new empty animation object.
+
+       Call Load() to initialize it.
+
+       @see wxAnimationCtrl::CreateAnimation()
+     */
     wxAnimation();
-    
-    /**
-        Copy ctor.
-    */
-    wxAnimation(const wxAnimation& anim);
 
     /**
-        Loads an animation from a file.
+       Constructs a new animation object and load the animation data from the
+       given filename.
 
         @param name
-            The name of the file to load.
+            A filename.
         @param type
-            See LoadFile() for more info.
-    */
-    wxAnimation(const wxString& name,
-                wxAnimationType type = wxANIMATION_TYPE_ANY);
+            One of the ::wxAnimationType values; wxANIMATION_TYPE_ANY
+            means that the function should try to autodetect the filetype.
+
+        @see wxAnimationCtrl::CreateAnimation()
+     */
+    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
-        Destructor.
-        See @ref overview_refcount_destruct for more info.
+       Copy constructor.
     */
-    virtual ~wxAnimation();
+    wxAnimation(const wxAnimation& other);
+
+    /**
+        Returns @true if animation data is present.
+    */
+    bool IsOk() const;
+
+    /**
+        Returns @true if animation can be used with controls of the given type.
+
+        This function checks if this animation object can be used with
+        wxAnimationCtrl of particular type. This will be always the case for
+        the platforms where only a single wxAnimationCtrl implementation is
+        available, but not necessarily under e.g. wxGTK where both native (but
+        limited) GTK implementation and generic implementation can be used.
+
+        @since 3.1.4
+     */
+    bool IsCompatibleWith(wxClassInfo* ci) const;
 
     /**
         Returns the delay for the i-th frame in milliseconds.
         If @c -1 is returned the frame is to be displayed forever.
     */
-    virtual int GetDelay(unsigned int i) const;
-
-    /**
-        Returns the i-th frame as a wxImage.
-
-        This method is not implemented in the native wxGTK implementation of
-        this class and always returns an invalid image there.
-    */
-    virtual wxImage GetFrame(unsigned int i) const;
+    int GetDelay(unsigned int frame) const;
 
     /**
         Returns the number of frames for this animation.
@@ -249,17 +373,33 @@ public:
         This method is not implemented in the native wxGTK implementation of
         this class and always returns 0 there.
     */
-    virtual unsigned int GetFrameCount() const;
+    unsigned int GetFrameCount() const;
 
     /**
-        Returns the size of the animation.
+        Returns the i-th frame as a wxImage.
+
+        This method is not implemented in the native wxGTK implementation of
+        this class and always returns an invalid image there.
     */
-    virtual wxSize GetSize() const;
+    wxImage GetFrame(unsigned int frame) const;
 
     /**
-        Returns @true if animation data is present.
+       Returns the size of the animation.
     */
-    virtual bool IsOk() const;
+    wxSize GetSize() const;
+
+    /**
+        Loads an animation from a file.
+
+        @param name
+            A filename.
+        @param type
+            One of the ::wxAnimationType values; wxANIMATION_TYPE_ANY
+            means that the function should try to autodetect the filetype.
+
+        @return @true if the operation succeeded, @false otherwise.
+    */
+    bool LoadFile(const wxString& name, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
         Loads an animation from the given stream.
@@ -273,28 +413,43 @@ public:
 
         @return @true if the operation succeeded, @false otherwise.
     */
-    virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY);
+    bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
+
 
     /**
-        Loads an animation from a file.
-
-        @param name
-            A filename.
-        @param type
-            One of the ::wxAnimationType values; wxANIMATION_TYPE_ANY
-            means that the function should try to autodetect the filetype.
-
-        @return @true if the operation succeeded, @false otherwise.
-    */
-    virtual bool LoadFile(const wxString& name,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY);
+       Returns the list of animation decoders used by the generic animation
+       and @c wxGenericAnimationCtrl.
+     */
+    static inline wxAnimationDecoderList& GetHandlers();
 
     /**
-        Assignment operator, using @ref overview_refcount "reference counting".
+       Add a new decoder to the list of animation decoders.
+     */
+    static void AddHandler(wxAnimationDecoder *handler);
+
+    /**
+       Insert a new decoder to the front of the list of animation decoders.
+     */
+    static void InsertHandler(wxAnimationDecoder *handler);
+
+    /**
+       Search for an animation decoder by type.
+     */
+    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
+
+    /**
+       Load the stock animation decoders (currently GIF and ANI) into the list
+       of decoders. This is called automatically at program startup.
     */
-    wxAnimation& operator =(const wxAnimation& brush);
+    static void InitStandardHandlers();
+
+    /**
+       Clear out the animation decoder list. This is called automatically at
+       program shutdown.
+     */
+    static void CleanUpHandlers();
 };
+
 
 
 // ============================================================================
@@ -305,4 +460,3 @@ public:
     An empty animation object.
 */
 wxAnimation wxNullAnimation;
-

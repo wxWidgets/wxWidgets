@@ -52,6 +52,10 @@
     - wxDataViewModel::ItemsDeleted,
     - wxDataViewModel::ItemsChanged.
 
+    Note that Cleared() can be called for all changes involving many, or all,
+    of the model items and not only for deleting all of them (i.e. clearing the
+    model).
+
     This class maintains a list of wxDataViewModelNotifier which link this class
     to the specific implementations on the supported platforms so that e.g. calling
     wxDataViewModel::ValueChanged on this model will just call
@@ -69,22 +73,22 @@
     associating the model with a control like this:
 
     @code
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
         wxDataViewModel *musicModel = new MyMusicModel;
-        m_musicCtrl->AssociateModel( musicModel );
+
+        musicCtrl->AssociateModel(musicModel);
         musicModel->DecRef();  // avoid memory leak !!
 
         // add columns now
     @endcode
 
     A potentially better way to avoid memory leaks is to use wxObjectDataPtr
-    
+
     @code
-        wxObjectDataPtr<MyMusicModel> musicModel;
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
+        wxObjectDataPtr<wxDataViewModel> musicModel(new MyMusicModel);
         
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
-        musicModel = new MyMusicModel;
-        m_musicCtrl->AssociateModel( musicModel.get() );
+        musicCtrl->AssociateModel(musicModel.get());
 
         // add columns now
     @endcode
@@ -129,8 +133,16 @@ public:
                      unsigned int col);
 
     /**
-        Called to inform the model that all data has been cleared.
-        The control will reread the data from the model again.
+        Called to inform the model that all of its data has been changed.
+
+        This method should be called if so many of the model items have
+        changed, that the control should just reread all of them, repopulating
+        itself entirely.
+
+        Note that, contrary to the name of the method, it doesn't necessarily
+        indicate that model has become empty -- although this is the right
+        method to call, rather than ItemsDeleted(), if it was indeed cleared,
+        which explains the origin of its name.
     */
     bool Cleared();
 
@@ -292,14 +304,18 @@ public:
 
         All normal items have values in all columns but the container items
         only show their label in the first column (@a col == 0) by default (but
-        see HasContainerColumns()). So this function always returns true for
+        see HasContainerColumns()). So this function by default returns true for
         the first column while for the other ones it returns true only if the
         item is not a container or HasContainerColumns() was overridden to
         return true for it.
 
+        Since wxWidgets 3.1.4, this method is virtual and can be overridden to
+        explicitly specify for which columns a given item has, and doesn't
+        have, values.
+
         @since 2.9.1
      */
-    bool HasValue(const wxDataViewItem& item, unsigned col) const;
+    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const;
 
     /**
         Override this to indicate of @a item is a container, i.e.\ if
@@ -382,7 +398,7 @@ public:
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
-    
+
     virtual bool IsListModel() const;
     virtual bool IsVirtualListModel() const;
 
@@ -527,7 +543,7 @@ public:
     have other reason to use a virtual control.
 
     @see wxDataViewListModel for the API.
-    
+
     @library{wxcore}
     @category{dvc}
 */
@@ -597,9 +613,9 @@ public:
     wxDataViewVirtualListModel is a specialized data model which lets you address
     an item by its position (row) rather than its wxDataViewItem and as such offers
     the exact same interface as wxDataViewIndexListModel.
-    The important difference is that under platforms other than OS X, using this
+    The important difference is that under platforms other than macOS, using this
     model will result in a truly virtual control able to handle millions of items
-    as the control doesn't store any item (a feature not supported by OS X).
+    as the control doesn't store any item (a feature not supported by macOS).
 
     @see wxDataViewListModel for the API.
 
@@ -701,10 +717,9 @@ public:
     /**
         Call this to set the background colour to use.
 
-        Currently this attribute is only supported in the generic version of
-        wxDataViewCtrl and ignored by the native GTK+ and OS X implementations.
-
-        @since 2.9.4
+        @since 2.9.4 - Generic
+        @since 3.1.1 - wxGTK
+        @since 3.1.4 - wxOSX
     */
     void SetBackgroundColour(const wxColour& colour);
 
@@ -718,7 +733,7 @@ public:
         text.
 
         Currently this attribute is only supported in the generic version of
-        wxDataViewCtrl and GTK and ignored by the native OS X implementations.
+        wxDataViewCtrl and GTK and ignored by the native macOS implementations.
 
         @since 3.1.2
     */
@@ -966,14 +981,17 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK event.
-           Notice that currently this event is not generated in the native OS X
+           Notice that currently this event is not generated in the native macOS
            versions of the control.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -1385,6 +1403,16 @@ public:
     void ExpandAncestors( const wxDataViewItem & item );
 
     /**
+        Expand all all children of the given item recursively.
+
+        This is the same as calling Expand() on the @a item itself and then
+        calling it for all of its children, grandchildren etc recursively.
+
+        @since 3.1.5
+     */
+    void ExpandChildren( const wxDataViewItem & item );
+
+    /**
         Returns pointer to the column. @a pos refers to the position in the
         control which may change after reordering columns by the user.
     */
@@ -1415,8 +1443,8 @@ public:
         style as in the case of single selection it returns the same thing as
         GetSelection().
 
-        Notice that under all platforms except OS X the currently focused
-        item may be selected or not but under OS X the current item is always
+        Notice that under all platforms except macOS the currently focused
+        item may be selected or not but under macOS the current item is always
         selected.
 
         @see SetCurrentItem(), GetCurrentColumn()
@@ -1621,7 +1649,7 @@ public:
         In single selection mode, calling this method is the same as calling
         Select() and is thus not very useful. In multiple selection mode this
         method only moves the current item however without changing the
-        selection except under OS X where the current item is always selected,
+        selection except under macOS where the current item is always selected,
         so calling SetCurrentItem() selects @a item if it hadn't been selected
         before.
 
@@ -1634,7 +1662,7 @@ public:
     /**
         Set custom colours and/or font to use for the header.
 
-        This method allows to customize the display of the control header (it
+        This method allows customizing the display of the control header (it
         does nothing if @c wxDV_NO_HEADER style is used).
 
         Currently it is only implemented in the generic version and just
@@ -1657,6 +1685,9 @@ public:
 
     /**
         Sets the selection to the array of wxDataViewItems.
+
+        Note that if @a sel contains any invalid items, they are simply
+        ignored.
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
 
@@ -1677,7 +1708,7 @@ public:
         This function can only be used when all rows have the same height, i.e.
         when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
 
-        Currently this is implemented in the generic and native GTK and OS X
+        Currently this is implemented in the generic and native GTK and macOS
         (since 3.1.1) versions.
 
         Also notice that this method can only be used to increase the row
@@ -2012,7 +2043,7 @@ public:
         The default value of @c wxDVR_DEFAULT_ALIGNMENT indicates that the content
         should have the same alignment as the column header.
 
-        The method is not implemented under OS X and the renderer always aligns
+        The method is not implemented under macOS and the renderer always aligns
         its contents as the column header on that platform. The other platforms
         support both vertical and horizontal alignment.
     */
@@ -2064,7 +2095,7 @@ public:
     */
     virtual bool Validate(wxVariant& value);
 
-    
+
     virtual bool HasEditorCtrl() const;
     virtual wxWindow* CreateEditorCtrl(wxWindow * parent,
                                        wxRect labelRect,
@@ -2208,7 +2239,7 @@ public:
 class wxDataViewCheckIconTextRenderer : public wxDataViewRenderer
 {
 public:
-    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+    static wxString GetDefaultType();
 
     /**
         Create a new renderer.
@@ -2501,10 +2532,6 @@ public:
             corresponding event. Is @NULL otherwise (for keyboard activation).
             Mouse coordinates are adjusted to be relative to the cell.
 
-        @note Currently support for this method is not implemented in the
-            native macOS version of the control, i.e. it will be never called
-            there.
-
         @since 2.9.3
 
         @note Do not confuse this method with item activation in wxDataViewCtrl
@@ -2550,6 +2577,10 @@ public:
                         labelRect.GetTopLeft(), labelRect.GetSize(), 0, 0, 100, l );
         }
         @endcode
+
+        @note Currently support for this method is not implemented in the
+            native macOS version of the control, i.e. it will be never called
+            there.
 
         @see ActivateCell()
     */
@@ -2702,6 +2733,12 @@ enum wxDataViewColumnFlags
     wxDataViewCtrl has been associated.
 
     An instance of wxDataViewRenderer is used by this class to render its data.
+
+    @note In wxGTK, setting the width of the column doesn't happen immediately
+        when SetWidth() is called, but only slightly later and GetWidth() will
+        return the old width (0 initially) until this happens. If the column
+        widths are set before wxDataViewCtrl is initially shown, they will only
+        be effectively set when it becomes visible.
 
     @library{wxcore}
     @category{dvc}
@@ -3280,7 +3317,7 @@ public:
         Returns true if item is a container.
     */
     bool IsContainer( const wxDataViewItem& item );
-    
+
     /**
         Calls the same method from wxDataViewTreeStore but uses
         an index position in the image list instead of a wxIcon.
@@ -3710,7 +3747,10 @@ public:
            Currently this event is not generated when using the native GTK+
            version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -3795,7 +3835,7 @@ public:
 
         Currently support for setting this field and for vetoing the change is
         only available in the generic version of wxDataViewCtrl, i.e. under MSW
-        but not GTK nor OS X.
+        but not GTK nor macOS.
 
         @since 2.9.3
      */
@@ -3823,6 +3863,12 @@ public:
 
     /**
         Set wxDataObject for data transfer within a drag operation.
+
+        This method must be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        handler to associate the data object to be dragged with the item.
+
+        Note that the control takes ownership of the data object, i.e. @a obj
+        must be heap-allocated and will be deleted by wxDataViewCtrl itself.
     */
     void SetDataObject( wxDataObject *obj );
 
@@ -3844,13 +3890,13 @@ public:
     /**
         Specify the kind of the drag operation to perform.
 
-        This method can be used inside a wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        This method can be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
         handler in order to configure the drag operation. Valid values are
         ::wxDrag_CopyOnly (default), ::wxDrag_AllowMove (allow the data to be
         moved) and ::wxDrag_DefaultMove.
 
         Currently it is only honoured by the generic version of wxDataViewCtrl
-        (used e.g. under MSW) and not supported by the native GTK and OS X
+        (used e.g. under MSW) and not supported by the native GTK and macOS
         versions.
 
         @see GetDropEffect()
@@ -3870,7 +3916,7 @@ public:
 
         Currently this is only available when using the generic version of
         wxDataViewCtrl (used e.g. under MSW) and always returns ::wxDragNone in
-        the GTK and OS X native versions.
+        the GTK and macOS native versions.
 
         @since 2.9.4
     */
@@ -3886,6 +3932,19 @@ public:
     */
     int GetCacheTo() const;
 
+    /**
+        Returns the index of the child item at which an item currently being
+        dragged would be dropped.
+
+        This function can be used from wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE
+        handlers to determine the exact position of the item being dropped.
+
+        Note that it currently always returns wxNOT_FOUND when using native GTK
+        implementation of this control.
+
+        @since 3.1.2
+     */
+    int GetProposedDropIndex() const;
 
     /**
         Returns the item affected by the event.

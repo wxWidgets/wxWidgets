@@ -63,8 +63,13 @@ public:
 
 class wxPaintDCImpl: public wxGTKCairoDCImpl
 {
+    typedef wxGTKCairoDCImpl BaseType;
 public:
     wxPaintDCImpl(wxPaintDC* owner, wxWindow* window);
+    virtual void DestroyClippingRegion() wxOVERRIDE;
+
+private:
+    const wxRegion& m_clip;
 
     wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
 };
@@ -136,7 +141,7 @@ public:
 
     virtual GdkWindow* GetGDKWindow() const { return NULL; }
     virtual void* GetHandle() const wxOVERRIDE { return GetGDKWindow(); }
-    
+
     // base class pure virtuals implemented here
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoGetSizeMM(int* width, int* height) const wxOVERRIDE;

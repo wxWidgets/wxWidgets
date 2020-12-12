@@ -238,7 +238,7 @@ public:
             direction, @false if it did not scroll.
     */
     virtual bool ScrollLines(int lines);
-    
+
     /**
         Scroll the gallery contents by some fine-grained amount.
 

@@ -28,7 +28,9 @@
 #include "wx/x11/dcclient.h"
 #include "wx/x11/dcmemory.h"
 
+#if wxUSE_CAIRO
 #include "cairo-xlib.h"
+#endif
 
 #if wxUSE_UNICODE
 #include "glib.h"
@@ -201,8 +203,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC* owner, wxWindow *window )
 
     SetUpDC();
 
-    /* this must be done after SetUpDC, bacause SetUpDC calls the
-       repective SetBrush, SetPen, SetBackground etc functions
+    /* this must be done after SetUpDC, because SetUpDC calls the
+       respective SetBrush, SetPen, SetBackground etc functions
        to set up the DC. SetBackground call m_window->SetBackground
        and this might not be desired as the standard dc background
        is white whereas a window might assume gray to be the
@@ -345,6 +347,7 @@ void wxWindowDCImpl::SetUpDC()
     }
 }
 
+#if wxUSE_CAIRO
 void* wxWindowDCImpl::GetCairoContext() const
 {
     int width, height;
@@ -355,6 +358,7 @@ void* wxWindowDCImpl::GetCairoContext() const
     cairo_t *cr = cairo_create(surface);
     return cr;
 }
+#endif
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
@@ -1664,6 +1668,7 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
                                    wxCoord x, wxCoord y,
                                    double angle)
 {
+#if wxUSE_CAIRO
     // use cairo to draw rotated text
     cairo_surface_t *surface = cairo_xlib_surface_create((Display*) m_display,
                                                          (Drawable) m_x11window,
@@ -1682,6 +1687,9 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
     cairo_show_text(cr, text.utf8_str());
     cairo_restore(cr);
     cairo_destroy(cr);
+#else
+    #warning "Drawing rotated text is not implemented without Cairo"
+#endif    
 }
 
 void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
@@ -1956,6 +1964,10 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             break;
         }
     }
+
+    wxUnusedVar(req_dash);
+    wxUnusedVar(req_nb_dash);
+    #warning "TODO: support for dashed lines in wxX11"
 
     int capStyle = CapRound;
     switch (m_pen.GetCap())

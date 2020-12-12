@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -247,6 +244,12 @@ private:
                               wxRect(wxPoint(x2, y), sizeCheck), m_flags);
         y += lineHeight + sizeCheck.y;
 
+        dc.DrawText("DrawCheckMark()", x1, y);
+        const wxSize sizeMark = renderer.GetCheckMarkSize(this);
+        renderer.DrawCheckMark(this, dc,
+                               wxRect(wxPoint(x2, y), sizeMark), m_flags);
+        y += lineHeight + sizeMark.y;
+
         dc.DrawText("DrawRadioBitmap()", x1, y);
         renderer.DrawRadioBitmap(this, dc,
                                  wxRect(wxPoint(x2, y), sizeCheck), m_flags);
@@ -259,9 +262,10 @@ private:
         y += lineHeight + sizeCollapse.y;
 
         dc.DrawText("DrawTreeItemButton()", x1, y);
+        const wxSize sizeExpand = renderer.GetExpanderSize(this);
         renderer.DrawTreeItemButton(this, dc,
-                                    wxRect(x2, y, 20, 20), m_flags);
-        y += lineHeight + 20;
+                                    wxRect(wxPoint(x2, y), sizeExpand), m_flags);
+        y += lineHeight + sizeExpand.y;
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
         dc.DrawText("DrawTitleBarBitmap()", x1, y);
@@ -308,7 +312,12 @@ private:
         renderer.DrawItemText(this, dc, "DrawItemText()",
             wxRect(x2, y, widthListItem, heightListItem).Inflate(-2, -2), m_align, m_flags | wxCONTROL_SELECTED);
 
-        y += lineHeight + heightListItem;
+        y += heightListItem;
+
+        dc.DrawText("DrawChoice()", x1, y + 20);
+        renderer.DrawChoice(this, dc, wxRect(x2, y, 80, 50), m_flags);
+        y += 50;
+
     }
 
     int m_flags;

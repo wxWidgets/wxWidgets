@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcctl.h"
@@ -144,6 +141,33 @@ wxVector<ClassRegInfo> gs_regClassesInfo;
 // ----------------------------------------------------------------------------
 
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
+
+// ----------------------------------------------------------------------------
+// Module for OLE initialization and cleanup
+// ----------------------------------------------------------------------------
+
+class wxOleInitModule : public wxModule
+{
+public:
+    wxOleInitModule()
+    {
+    }
+
+    virtual bool OnInit() wxOVERRIDE
+    {
+        return wxOleInitialize();
+    }
+
+    virtual void OnExit() wxOVERRIDE
+    {
+        wxOleUninitialize();
+    }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxOleInitModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxOleInitModule, wxModule);
 
 // ===========================================================================
 // wxGUIAppTraits implementation
@@ -622,8 +646,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     InitCommonControls();
 
-    wxOleInitialize();
-
     wxSetKeyboardHook(true);
 
     callBaseCleanup.Dismiss();
@@ -739,8 +761,6 @@ void wxApp::CleanUp()
 
     wxSetKeyboardHook(false);
 
-    wxOleUninitialize();
-
     // for an EXE the classes are unregistered when it terminates but DLL may
     // be loaded several times (load/unload/load) into the same process in
     // which case the registration will fail after the first time if we don't
@@ -794,8 +814,8 @@ void wxApp::MSWProcessPendingEventsIfNeeded()
 {
     // The cast below is safe as wxEventLoop derives from wxMSWEventLoopBase in
     // both console and GUI applications.
-    wxMSWEventLoopBase * const evtLoop
-        = static_cast<wxMSWEventLoopBase *>(wxEventLoop::GetActive());
+    wxMSWEventLoopBase * const evtLoop =
+        static_cast<wxMSWEventLoopBase *>(wxEventLoop::GetActive());
     if ( evtLoop && evtLoop->MSWIsWakeUpRequested() )
         ProcessPendingEvents();
 }

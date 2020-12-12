@@ -13,9 +13,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOCKETS
 
@@ -310,7 +307,7 @@ void wxSocketImplMSW::DoClose()
 {
     wxSocketManager::Get()->Uninstall_Callback(this);
 
-    closesocket(m_fd);
+    wxCloseSocket(m_fd);
 }
 
 wxSocketError wxSocketImplMSW::GetLastError() const

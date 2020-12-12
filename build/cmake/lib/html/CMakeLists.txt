@@ -11,10 +11,15 @@ include(../../source_groups.cmake)
 
 wx_append_sources(HTML_FILES HTML_CMN)
 
-if(WIN32)
+if(WIN32 OR wxUSE_LIBMSPACK)
     wx_append_sources(HTML_FILES HTML_MSW)
 endif()
 
-wx_add_library(html ${HTML_FILES})
+wx_add_library(wxhtml ${HTML_FILES})
 
-wx_finalize_lib(html)
+if(wxUSE_LIBMSPACK)
+    wx_lib_include_directories(wxhtml PRIVATE ${MSPACK_INCLUDE_DIRS})
+    wx_lib_link_libraries(wxhtml PRIVATE ${MSPACK_LIBRARIES})
+endif()
+
+wx_finalize_lib(wxhtml)

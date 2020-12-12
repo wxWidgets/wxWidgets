@@ -494,11 +494,11 @@ public:
     /**
         Creates and possible initializes the DOCTYPE.
 
-        @param name
+        @param rootName
             The root name.
-        @param sysid
+        @param systemId
             The system identifier.
-        @param pubid
+        @param publicId
             The public identifier.
     */
     wxXmlDoctype(const wxString& rootName = wxString(),
@@ -715,7 +715,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().
@@ -886,7 +886,7 @@ public:
     void SetEncoding(const wxString& enc);
 
     /**
-        Sets the enconding of the file which will be used to save the document.
+        Sets the encoding of the file which will be used to save the document.
     */
     void SetFileEncoding(const wxString& encoding);
 

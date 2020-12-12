@@ -8,10 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #   include "wx/wx.h"
 #endif
@@ -334,5 +330,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(wxRegExTestSuite);
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(wxRegExTestSuite, "wxRegExTestSuite");
 
+TEST_CASE("wxRegEx::QuoteMeta", "[regex][meta]")
+{
+    CHECK( wxRegEx::QuoteMeta("") == "" );
+    CHECK( wxRegEx::QuoteMeta("a") == "a" );
+    CHECK( wxRegEx::QuoteMeta("?") == "\\?" );
+    CHECK( wxRegEx::QuoteMeta("\\") == "\\\\" );
+    CHECK( wxRegEx::QuoteMeta("\\?!") == "\\\\\\?!" );
+    CHECK( wxRegEx::QuoteMeta(":foo.*bar") == ":foo\\.\\*bar" );
+}
 
 #endif // wxUSE_REGEX

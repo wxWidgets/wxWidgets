@@ -12,7 +12,6 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#include "wx/list.h"
 #include "wx/control.h"
 #include "wx/scrolwin.h"
 #include "wx/icon.h"
@@ -70,10 +69,14 @@ public:
 
     virtual void SetWidth(int width) wxOVERRIDE
     {
-        // As a small optimization, use this method to avoid calling
-        // UpdateWidth() if the width didn't really change, even if we don't
-        // care about its return value.
-        (void)WXUpdateWidth(width);
+        // Call the actual update method, used for both automatic and "manual"
+        // width changes.
+        WXUpdateWidth(width);
+
+        // Do remember the last explicitly set width: this is used to prevent
+        // UpdateColumnSizes() from resizing the last column to be smaller than
+        // this size.
+        m_manuallySetWidth = width;
     }
     virtual int GetWidth() const wxOVERRIDE;
 
@@ -129,16 +132,20 @@ public:
 
     // This method is specific to the generic implementation and is used only
     // by wxWidgets itself.
-    bool WXUpdateWidth(int width)
+    void WXUpdateWidth(int width)
     {
         if ( width == m_width )
-            return false;
+            return;
 
         m_width = width;
         UpdateWidth();
-
-        return true;
     }
+
+    // This method is also internal and called when the column is resized by
+    // user interactively.
+    void WXOnResize(int width);
+
+    virtual int WXGetSpecifiedWidth() const wxOVERRIDE;
 
 private:
     // common part of all ctors
@@ -150,8 +157,14 @@ private:
     void UpdateDisplay();
     void UpdateWidth();
 
+    // Return the effective value corresponding to the given width, handling
+    // its negative values such as wxCOL_WIDTH_DEFAULT.
+    int DoGetEffectiveWidth(int width) const;
+
+
     wxString m_title;
     int m_width,
+        m_manuallySetWidth,
         m_minWidth;
     wxAlignment m_align;
     int m_flags;
@@ -166,9 +179,6 @@ private:
 // ---------------------------------------------------------
 // wxDataViewCtrl
 // ---------------------------------------------------------
-
-WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
-                          class WXDLLIMPEXP_CORE);
 
 class WXDLLIMPEXP_CORE wxDataViewCtrl : public wxDataViewCtrlBase,
                                        public wxScrollHelper
@@ -192,7 +202,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxDataViewCtrlNameStr )
+           const wxString& name = wxASCII_STR(wxDataViewCtrlNameStr) )
              : wxScrollHelper(this)
     {
         Create(parent, id, pos, size, style, validator, name);
@@ -206,7 +216,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxDataViewCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxDataViewCtrlNameStr));
 
     virtual bool AssociateModel( wxDataViewModel *model ) wxOVERRIDE;
 
@@ -308,6 +318,8 @@ protected:
 
     virtual void DoEnableSystemTheme(bool enable, wxWindow* window) wxOVERRIDE;
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
 public:     // utility functions not part of the API
 
     // returns the "best" width for the idx-th column
@@ -319,7 +331,11 @@ public:     // utility functions not part of the API
     // update the display after a change to an individual column
     void OnColumnChange(unsigned int idx);
 
-    // update after the column width changes, also calls OnColumnChange()
+    // update after the column width changes due to interactive resizing
+    void OnColumnResized();
+
+    // update after the column width changes because of e.g. title or bitmap
+    // change, invalidates the column best width and calls OnColumnChange()
     void OnColumnWidthChange(unsigned int idx);
 
     // update after a change to the number of columns
@@ -348,13 +364,15 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const wxOVERRIDE;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) wxOVERRIDE;
 
-    virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
 
     void InvalidateColBestWidths();
     void InvalidateColBestWidth(int idx);
     void UpdateColWidths();
 
-    wxDataViewColumnList      m_cols;
+    void DoClearColumns();
+
+    wxVector<wxDataViewColumn*> m_cols;
     // cached column best widths information, values are for
     // respective columns from m_cols and the arrays have same size
     struct CachedColWidthInfo

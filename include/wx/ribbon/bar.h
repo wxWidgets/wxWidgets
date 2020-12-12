@@ -15,8 +15,12 @@
 
 #if wxUSE_RIBBON
 
+class WXDLLIMPEXP_FWD_CORE wxImageList;
+
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/page.h"
+
+#include "wx/vector.h"
 
 enum wxRibbonBarOption
 {
@@ -59,12 +63,6 @@ public:
         , m_page(page)
     {
     }
-#ifndef SWIG
-    wxRibbonBarEvent(const wxRibbonBarEvent& c) : wxNotifyEvent(c)
-    {
-        m_page = c.m_page;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxRibbonBarEvent(*this); }
 
     wxRibbonPage* GetPage() {return m_page;}
@@ -158,6 +156,10 @@ public:
 
     void HideIfExpanded();
 
+    // Return the image list containing images of the given size, creating it
+    // if necessary.
+    wxImageList* GetButtonImageList(wxSize size);
+
 protected:
     friend class wxRibbonPage;
 
@@ -213,6 +215,8 @@ protected:
     bool m_help_button_hovered;
 
     wxRibbonDisplayMode m_ribbon_state;
+
+    wxVector<wxImageList*> m_image_lists;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonBar);

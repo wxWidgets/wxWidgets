@@ -239,6 +239,9 @@
     <ClCompile Include="controls\spinctrltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controls\styledtextctrltest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -290,6 +293,9 @@
     <ClCompile Include="graphics\clippingbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\coords.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="graphics\graphmatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -297,6 +303,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="html\htmprint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\auitest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

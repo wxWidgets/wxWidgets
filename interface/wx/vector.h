@@ -307,3 +307,13 @@ public:
 */
 template<typename T>
 void wxVectorSort(wxVector<T>& v);
+
+/**
+    Returns true if the vector contains the given value.
+
+    This is just a trivial wrapper around std::find().
+
+    @since 3.1.5
+ */
+template<typename T>
+bool wxVectorContains(const wxVector<T>& v, const T& value);

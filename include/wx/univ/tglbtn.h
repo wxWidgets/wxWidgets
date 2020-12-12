@@ -27,7 +27,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxCheckBoxNameStr);
+             const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     // Create the control
     bool Create(wxWindow *parent,
@@ -37,7 +37,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     virtual bool IsPressed() const wxOVERRIDE { return m_isPressed || m_value; }
 

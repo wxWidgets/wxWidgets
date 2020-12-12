@@ -48,7 +48,7 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = 0,
                        const wxValidator& validator = wxDefaultValidator,
-                       const wxString& name = wxComboBoxNameStr)
+                       const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Init();
 
@@ -62,7 +62,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr);
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     virtual ~wxGenericComboCtrl();
 
@@ -91,8 +91,8 @@ protected:
     virtual GtkEditable *GetEditable() const wxOVERRIDE { return NULL; }
     virtual GtkEntry *GetEntry() const wxOVERRIDE { return NULL; }
 #endif
-#elif defined(__WXMAC__)
-    // Looks like there's nothing we need to override here
+#elif defined(__WXOSX__)
+    virtual wxTextWidgetImpl * GetTextPeer() const wxOVERRIDE;
 #endif
 
     // For better transparent background rendering
@@ -131,7 +131,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxComboBoxNameStr)
+                const wxString& name = wxASCII_STR(wxComboBoxNameStr))
         : wxGenericComboCtrl()
     {
         (void)Create(parent, id, value, pos, size, style, validator, name);

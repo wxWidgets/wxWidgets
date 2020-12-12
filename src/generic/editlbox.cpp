@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_EDITABLELISTBOX
 
@@ -58,9 +55,9 @@ public:
     {
          int w = GetSize().x;
 #ifdef __WXMSW__
-         w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X) + 6;
+         w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this) + 6;
 #else
-         w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+         w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this);
 #endif
          if (w < 0) w = 0;
          SetColumnWidth(0, w);

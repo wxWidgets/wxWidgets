@@ -15,7 +15,7 @@ Sizers, as represented by the wxSizer class and its descendants in the
 wxWidgets class hierarchy, have become the method of choice to define the
 layout of controls in dialogs in wxWidgets because of their ability to create
 visually appealing dialogs independent of the platform, taking into account
-the differences in size and style of the individual controls. 
+the differences in size and style of the individual controls.
 
 The next section describes and shows what can be done with sizers. The
 following sections briefly describe how to program with individual sizer
@@ -211,7 +211,7 @@ window will preserve it is original size, @c wxGROW flag (same as @c wxEXPAND) f
 the window to grow with the sizer, and @c wxSHAPED flag tells the window to change
 it is size proportionally, preserving original aspect ratio.  When @c wxGROW flag
 is not used, the item can be aligned within available space.  @c wxALIGN_LEFT,
-@c wxALIGN_TOP, @c wxALIGN_RIGHT, @c wxALIGN_BOTTOM, @c wxALIGN_CENTER_HORIZONTAL 
+@c wxALIGN_TOP, @c wxALIGN_RIGHT, @c wxALIGN_BOTTOM, @c wxALIGN_CENTER_HORIZONTAL
 and @c wxALIGN_CENTER_VERTICAL do what they say. @c wxALIGN_CENTRE (same as
 @c wxALIGN_CENTER) is defined as (<tt>wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL</tt>).
  Default alignment is <tt>wxALIGN_LEFT | wxALIGN_TOP</tt>.
@@ -267,7 +267,7 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
 }
 @endcode
 
-Note that the recommended way of specifying flags to wxSizer is via wxSizerFlags. 
+Note that the recommended way of specifying flags to wxSizer is via wxSizerFlags.
 This class greatly eases the burden of passing flags to a wxSizer.
 
 Here's how you'd do the previous example with wxSizerFlags:
@@ -313,18 +313,18 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
 
 @section overview_sizer_types Other Types of Sizers
 
-wxStdDialogButtonSizer is a sizer that creates button layouts in dialogs 
-which conform to the standard button spacing and ordering defined by 
+wxStdDialogButtonSizer is a sizer that creates button layouts in dialogs
+which conform to the standard button spacing and ordering defined by
 the platform or toolkit's user interface guidelines (if such things exist).
 As a convenience, wxDialog::CreateButtonSizer() can be used to create this sizer.
 
-wxWrapSizer is a sizer that lays out its items in a single line, like a box 
-sizer -- as long as there is space available in that direction. Once all available 
-space in the primary direction has been used, a new line is added and items 
-are added there. 
+wxWrapSizer is a sizer that lays out its items in a single line, like a box
+sizer -- as long as there is space available in that direction. Once all available
+space in the primary direction has been used, a new line is added and items
+are added there.
 
 wxGridBagSizer is a rather special kind of sizer which, unlike the other
 classes, allows to directly put the elements at the given position in the
-sizer. 
+sizer.
 
 */

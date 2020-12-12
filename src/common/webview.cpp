@@ -11,9 +11,6 @@
 
 #if wxUSE_WEBVIEW
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/webview.h"
 
@@ -23,6 +20,7 @@
 #include "wx/gtk/webview_webkit.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/webview_ie.h"
+#include "wx/msw/webview_edge.h"
 #endif
 
 // DLL options compatibility check:
@@ -32,6 +30,7 @@ WX_CHECK_BUILD_OPTIONS("wxWEBVIEW")
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[] = "about:blank";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[] = "wxWebViewIE";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[] = "wxWebViewEdge";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[] = "wxWebViewWebKit";
 
 #ifdef __WXMSW__
@@ -86,6 +85,16 @@ void wxWebView::RegisterFactory(const wxString& backend,
 }
 
 // static
+bool wxWebView::IsBackendAvailable(const wxString& backend)
+{
+    wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
+    if (iter != m_factoryMap.end())
+        return iter->second->IsAvailable();
+    else
+        return false;
+}
+
+// static 
 wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backend)
 {
     // Initialise the map, it checks internally for existing factories
@@ -98,9 +107,18 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
 void wxWebView::InitFactoryMap()
 {
 #ifdef __WXMSW__
+#if wxUSE_WEBVIEW_IE
     if(m_factoryMap.find(wxWebViewBackendIE) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
                                                    (new wxWebViewFactoryIE));
+#endif
+
+#if wxUSE_WEBVIEW_EDGE
+    if (m_factoryMap.find(wxWebViewBackendEdge) == m_factoryMap.end())
+        RegisterFactory(wxWebViewBackendEdge, wxSharedPtr<wxWebViewFactory>
+        (new wxWebViewFactoryEdge));
+#endif
+
 #else
     if(m_factoryMap.find(wxWebViewBackendWebKit) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>

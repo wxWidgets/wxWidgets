@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 #include "wx/evtloopsrc.h"
@@ -380,7 +377,10 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     gdk_event_handler_set(wxgtk_main_do_event, this, NULL);
     while (Pending())   // avoid false positives from our idle source
         gtk_main_iteration();
+
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
     gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 

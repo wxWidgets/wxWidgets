@@ -18,10 +18,10 @@
 // string constants used by wxPersistentSplitter
 // ----------------------------------------------------------------------------
 
-#define wxPERSIST_SPLITTER_KIND "Splitter"
+#define wxPERSIST_SPLITTER_KIND wxASCII_STR("Splitter")
 
 // Special position value of -1 means the splitter is not split at all.
-#define wxPERSIST_SPLITTER_POSITION "Position"
+#define wxPERSIST_SPLITTER_POSITION wxASCII_STR("Position")
 
 // ----------------------------------------------------------------------------
 // wxPersistentSplitter: supports saving/restoring splitter position

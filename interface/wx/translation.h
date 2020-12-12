@@ -7,7 +7,7 @@
 
 
 /**
-    This class allows to get translations for strings.
+    This class allows getting translations for strings.
 
     In wxWidgets this class manages message catalogs which contain the
     translations of the strings used to the current language. Unlike wxLocale,
@@ -96,7 +96,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -119,7 +119,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -137,34 +137,6 @@ public:
                                 const wxString& msgIdLanguage = "en");
 
     /**
-        Returns the languages of all translations that can be used for the @a
-        domain.
-
-        This is a more general version of GetBestTranslation(), which returns
-        the whole list of preferred UI languages for which a translation for
-        the @a domain was found instead of just the first, i.e. the most
-        preferred, element of this list.
-
-        @param domain
-            The catalog domain to look for.
-
-        @param msgIdLanguage
-            Specifies the language of "msgid" strings in source code (i.e.
-            arguments to GetString(), wxGetTranslation() and the _() macro).
-
-        @return An array of language codes if any suitable matches were found,
-            empty array otherwise.
-
-        @since 3.1.2
-     */
-    wxArrayString GetAcceptableTranslations(const wxString& domain,
-                                            wxLanguage msgIdLanguage);
-
-    /// @overload
-    wxArrayString GetAcceptableTranslations(const wxString& domain,
-                                            const wxString& msgIdLanguage = "en");
-
-        /**
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific
         catalogs).
 
@@ -175,10 +147,9 @@ public:
     bool AddStdCatalog();
 
     /**
-        Add a catalog for the preferred UI language. In case of multiple
-        preferences, add catalog for each language, if available.
+        Add a catalog for use with the current locale.
 
-        By default, the catalog is searched for in standard places (see
+        By default, it is searched for in standard places (see
         wxFileTranslationsLoader), but you may also prepend additional
         directories to the search path with
         wxFileTranslationsLoader::AddCatalogLookupPathPrefix().
@@ -202,9 +173,8 @@ public:
             code are used instead.
 
         @return
-            @true if catalog in the most preferred language was successfully loaded,
-            @false otherwise (which might mean that the catalog is not found or that
-            it isn't in the correct format).
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
@@ -230,9 +200,8 @@ public:
             in case they use 8-bit characters (e.g. German or French strings).
 
         @return
-            @true if catalog in the most preferred language was successfully loaded,
-            @false otherwise (which might mean that the catalog is not found or that
-            it isn't in the correct format).
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage,
@@ -364,7 +333,7 @@ public:
 
     Catalogs are searched for in standard places (system locales directory,
     `LC_PATH` on Unix systems, Resources subdirectory of the application bundle
-    on OS X, executable's directory on Windows), but you may also prepend
+    on macOS, executable's directory on Windows), but you may also prepend
     additional directories to the search path with
     AddCatalogLookupPathPrefix().
 
@@ -570,7 +539,7 @@ public:
 
     If @a context is not empty (notice that this argument is only available
     starting from wxWidgets 3.1.1), item translation is looked up in the
-    specified context. This allows to have different translations for the same
+    specified context. This allows having different translations for the same
     string appearing in different contexts, e.g. it may be necessary to
     translate the same English "Open" verb differently depending on the object
     it applies to. To do this, you need to use @c msgctxt in the source message

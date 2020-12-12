@@ -97,7 +97,7 @@ struct WidgetAttributes
         m_show = true;
         m_dir = wxLayout_LeftToRight;
         m_variant = wxWINDOW_VARIANT_NORMAL;
-        m_cursor = *wxSTANDARD_CURSOR;
+        m_cursor = wxNullCursor;
         m_defaultFlags = wxBORDER_DEFAULT;
     }
 
@@ -154,6 +154,10 @@ public:
 
     // the default attributes for the widget
     static WidgetAttributes& GetAttrs();
+
+    // return true if we're showing logs in the log window (always the case
+    // except during startup and shutdown)
+    static bool IsUsingLogWindow();
 
 protected:
     // several helper functions for page creation

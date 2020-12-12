@@ -224,7 +224,7 @@ enum wxEllipsizeMode
 #endif // platform
 
 /* Another macro: this one is for portable creation of bitmaps. We assume that
-   under Unix bitmaps live in XPMs and under Windows they're in ressources.
+   under Unix bitmaps live in XPMs and under Windows they're in resources.
  */
 
 #if defined(__WINDOWS__) && wxUSE_WXDIB

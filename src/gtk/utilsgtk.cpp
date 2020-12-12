@@ -26,6 +26,9 @@
 #include "wx/evtloop.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
 #ifdef GDK_WINDOWING_WIN32
 #include <gdk/gdkwin32.h>
 #endif
@@ -69,12 +72,31 @@ void wxBell()
 // display characteristics
 // ----------------------------------------------------------------------------
 
-#ifdef GDK_WINDOWING_X11
 void *wxGetDisplay()
 {
-    return GDK_DISPLAY_XDISPLAY(gdk_window_get_display(wxGetTopLevelGDK()));
+    return wxGetDisplayInfo().dpy;
 }
+
+wxDisplayInfo wxGetDisplayInfo()
+{
+    wxDisplayInfo info = { NULL, wxDisplayNone };
+    GdkDisplay *display = gdk_window_get_display(wxGetTopLevelGDK());
+#ifdef GDK_WINDOWING_X11
+    if (GDK_IS_X11_DISPLAY(display)) {
+        info.dpy = GDK_DISPLAY_XDISPLAY(display);
+        info.type = wxDisplayX11;
+        return info;
+    }
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+    if (GDK_IS_WAYLAND_DISPLAY(display)) {
+        info.dpy = gdk_wayland_display_get_wl_display(display);
+        info.type = wxDisplayWayland;
+        return info;
+    }
+#endif
+    return info;
+}
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
@@ -86,6 +108,9 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 WXDLLIMPEXP_CORE wxCharBuffer
 wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
+    if (s.empty())
+        return wxCharBuffer("");
+
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
@@ -96,7 +121,7 @@ wxConvertToGTK(const wxString& s, wxFontEncoding enc)
         wbuf = wxCSConv(enc).cMB2WC(s.c_str());
     }
 
-    if ( !wbuf && !s.empty() )
+    if (wbuf.length() == 0)
     {
         // conversion failed, but we still want to show something to the user
         // even if it's going to be wrong it is better than nothing

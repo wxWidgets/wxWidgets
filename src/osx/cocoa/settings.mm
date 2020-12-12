@@ -19,6 +19,7 @@
 
 #include "wx/osx/core/private.h"
 #include "wx/osx/cocoa/private.h"
+#include "wx/osx/private/available.h"
 
 #import <AppKit/NSColor.h>
 #import <Foundation/Foundation.h>
@@ -41,6 +42,39 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
     return [setting intValue];
 }
 
+// ----------------------------------------------------------------------------
+// wxSystemAppearance
+// ----------------------------------------------------------------------------
+
+wxString wxSystemAppearance::GetName() const
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        return wxStringWithNSString([[NSApp effectiveAppearance] name]);
+    }
+#endif
+
+    return wxString();
+}
+
+bool wxSystemAppearance::IsDark() const
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        const NSAppearanceName
+            appearanceName = [[NSApp effectiveAppearance]
+                                bestMatchFromAppearancesWithNames:
+                                @[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+
+        return [appearanceName isEqualToString:NSAppearanceNameDarkAqua];
+    }
+#endif
+
+    // Fall back on the generic method when not running under 10.14.
+    return IsUsingDarkBackground();
+}
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -79,7 +113,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor controlBackgroundColor];
         break;
     case wxSYS_COLOUR_BTNFACE:
-        if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
             sysColor = [NSColor windowBackgroundColor];
         else
             sysColor = [NSColor controlColor];
@@ -94,6 +128,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
+    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     case wxSYS_COLOUR_LISTBOXTEXT:
         sysColor = [NSColor controlTextColor];
@@ -104,7 +139,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_BTNHIGHLIGHT:
         sysColor = [NSColor controlHighlightColor];
         break;
-    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_GRAYTEXT:
         sysColor = [NSColor disabledControlTextColor];
         break;
@@ -129,8 +163,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowBackgroundColor];
         break;
     case wxSYS_COLOUR_HOTLIGHT:
-        // OSX doesn't change color on mouse hover
-        sysColor = [NSColor controlTextColor];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+        {
+            sysColor = [NSColor linkColor];
+        }
+        else
+#endif
+        {
+            // OSX doesn't change color on mouse hover
+            sysColor = [NSColor controlTextColor];
+        }
         break;
     case wxSYS_COLOUR_MENUHILIGHT:
         sysColor = [NSColor selectedMenuItemColor];
@@ -162,7 +205,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEVICE_DEFAULT_FONT :
         case wxSYS_DEFAULT_GUI_FONT :
             {
-                return *wxSMALL_FONT ;
+                return wxFont(wxOSX_SYSTEM_FONT_SMALL) ;
             } ;
             break ;
         case wxSYS_OEM_FIXED_FONT :
@@ -170,7 +213,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_SYSTEM_FIXED_FONT :
         default :
             {
-                return *wxNORMAL_FONT ;
+                return wxFont(wxOSX_SYSTEM_FONT_FIXED) ;
             } ;
             break ;
 
@@ -183,7 +226,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // ----------------------------------------------------------------------------
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUNUSED(win))
 {
     int value;
 

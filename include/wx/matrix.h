@@ -11,7 +11,13 @@
 #ifndef _WX_MATRIXH__
 #define _WX_MATRIXH__
 
-//! headerfiles="matrix.h wx/object.h"
+#include "wx/defs.h"
+
+// Contents of this file is deprecated and shouldn't be used in the new code,
+// please see wxAffineMatrix2D instead.
+
+#if WXWIN_COMPATIBILITY_3_0
+
 #include "wx/object.h"
 #include "wx/math.h"
 
@@ -31,10 +37,14 @@
 //  at a certain coordinate and angle within another parent picture.
 //  At all times m_isIdentity is set if the matrix itself is an Identity matrix.
 //  It is used where possible to optimize calculations.
-class WXDLLIMPEXP_CORE wxTransformMatrix: public wxObject
+class
+#ifndef WXBUILDING
+wxDEPRECATED_MSG("use wxAffineMatrix2D instead")
+#endif
+WXDLLIMPEXP_CORE wxTransformMatrix: public wxObject
 {
 public:
-    wxTransformMatrix(void);
+    wxTransformMatrix();
     wxTransformMatrix(const wxTransformMatrix& mat);
 
     //get the value in the matrix at col,row
@@ -85,18 +95,18 @@ public:
     double operator()(int col, int row) const;
 
     // Invert matrix
-    bool Invert(void);
+    bool Invert();
 
     // Make into identity matrix
-    bool Identity(void);
+    bool Identity();
 
     // Is the matrix the identity matrix?
     // Only returns a flag, which is set whenever an operation
     // is done.
-    inline bool IsIdentity(void) const { return m_isIdentity; }
+    inline bool IsIdentity() const { return m_isIdentity; }
 
     // This does an actual check.
-    inline bool IsIdentity1(void) const ;
+    inline bool IsIdentity1() const ;
 
     //Scale by scale (isotropic scaling i.e. the same in x and y):
     //!ex:
@@ -211,7 +221,7 @@ inline double wxTransformMatrix::TransformY(double y) const
 
 // Is the matrix the identity matrix?
 // Each operation checks whether the result is still the identity matrix and sets a flag.
-inline bool wxTransformMatrix::IsIdentity1(void) const
+inline bool wxTransformMatrix::IsIdentity1() const
 {
     return
     ( wxIsSameDouble(m_matrix[0][0], 1.0) &&
@@ -226,9 +236,11 @@ inline bool wxTransformMatrix::IsIdentity1(void) const
 }
 
 // Calculates the determinant of a 2 x 2 matrix
-inline double wxCalculateDet(double a11, double a21, double a12, double a22)
-{
+wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+    inline double wxCalculateDet(double a11, double a21, double a12, double a22),
     return a11 * a22 - a12 * a21;
-}
+)
+
+#endif // WXWIN_COMPATIBILITY_3_0
 
 #endif // _WX_MATRIXH__

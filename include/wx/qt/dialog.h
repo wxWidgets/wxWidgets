@@ -20,20 +20,21 @@ public:
             const wxPoint &pos = wxDefaultPosition,
             const wxSize &size = wxDefaultSize,
             long style = wxDEFAULT_DIALOG_STYLE,
-            const wxString &name = wxDialogNameStr );
+            const wxString &name = wxASCII_STR(wxDialogNameStr) );
 
     virtual ~wxDialog();
-    
+
     bool Create( wxWindow *parent, wxWindowID id,
             const wxString &title,
             const wxPoint &pos = wxDefaultPosition,
             const wxSize &size = wxDefaultSize,
             long style = wxDEFAULT_DIALOG_STYLE,
-            const wxString &name = wxDialogNameStr );
+            const wxString &name = wxASCII_STR(wxDialogNameStr) );
 
-    virtual int ShowModal();
-    virtual void EndModal(int retCode);
-    virtual bool IsModal() const;
+    virtual int ShowModal() wxOVERRIDE;
+    virtual void EndModal(int retCode) wxOVERRIDE;
+    virtual bool IsModal() const wxOVERRIDE;
+    virtual bool Show(bool show = true) wxOVERRIDE;
 
     QDialog *GetDialogHandle() const;
 

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MSGDLG
 
@@ -136,7 +133,7 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
         wnd->m_hook = NULL;
         HookMap().erase(tid);
 
-        wnd->SetHWND((HWND)wParam);
+        TempHWNDSetter set(wnd, (WXHWND)wParam);
 
         // replace the static text with an edit control if the message box is
         // too big to fit the display
@@ -151,9 +148,6 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
         if ( wnd->GetMessageDialogStyle() & wxCENTER )
             wnd->Center(); // center on parent
         //else: default behaviour, center on screen
-
-        // there seems to be no reason to leave it set
-        wnd->SetHWND(NULL);
     }
 
     return rc;
@@ -196,8 +190,8 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // some space above and below it
     const int hText = (7*rectDisplay.height)/8 -
                       (
-                         2*::GetSystemMetrics(SM_CYFIXEDFRAME) +
-                         ::GetSystemMetrics(SM_CYCAPTION) +
+                         2*wxGetSystemMetrics(SM_CYFIXEDFRAME, this) +
+                         wxGetSystemMetrics(SM_CYCAPTION, this) +
                          5*GetCharHeight() // buttons + margins
                       );
     const int dh = (rc.bottom - rc.top) - hText; // vertical space we save
@@ -210,8 +204,8 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // NB: you would have thought that 2*SM_CXEDGE would be enough but it
     //     isn't, somehow, and the text control breaks lines differently from
     //     the static one so fudge by adding some extra space
-    const int dw = ::GetSystemMetrics(SM_CXVSCROLL) +
-                        4*::GetSystemMetrics(SM_CXEDGE);
+    const int dw = wxGetSystemMetrics(SM_CXVSCROLL, this) +
+                        4*wxGetSystemMetrics(SM_CXEDGE, this);
     rc.right += dw;
 
 
@@ -399,8 +393,11 @@ void wxMessageDialog::AdjustButtonLabels()
 /* static */
 wxFont wxMessageDialog::GetMessageFont()
 {
-    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics();
-    return wxNativeFontInfo(ncm.lfMessageFont);
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const wxNativeFontInfo
+        info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
+
+    return info;
 }
 
 int wxMessageDialog::ShowMessageBox()

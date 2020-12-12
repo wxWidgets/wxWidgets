@@ -17,9 +17,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG
 
@@ -41,9 +38,6 @@
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
-
-// init the alpha channel for the image and fill it with 1s up to (x, y)
-static unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y);
 
 // is the pixel with this value of alpha a fully opaque one?
 static inline
@@ -110,35 +104,42 @@ struct wxPNGImageData
     wxPNGImageData()
     {
         lines = NULL;
-        numLines = 0;
+        m_buf = NULL;
         info_ptr = (png_infop) NULL;
         png_ptr = (png_structp) NULL;
         ok = false;
     }
 
-    bool Alloc(png_uint_32 width, png_uint_32 height)
+    bool Alloc(png_uint_32 width, png_uint_32 height, unsigned char* buf)
     {
         lines = (unsigned char **)malloc(height * sizeof(unsigned char *));
         if ( !lines )
             return false;
 
-        for ( png_uint_32 n = 0; n < height; n++ )
+        size_t w = width;
+        // if RGB data will be written directly to wxImage buffer
+        if (buf)
+            w *= 3;
+        else
         {
-            lines[n] = (unsigned char *)malloc( (size_t)(width * 4));
-            if ( lines[n] )
-                ++numLines;
-            else
+            // allocate intermediate RGBA buffer
+            w *= 4;
+            buf =
+            m_buf = static_cast<unsigned char*>(malloc(w * height));
+            if (!m_buf)
                 return false;
         }
+
+        lines[0] = buf;
+        for (png_uint_32 i = 1; i < height; i++)
+            lines[i] = lines[i - 1] + w;
 
         return true;
     }
 
     ~wxPNGImageData()
     {
-        for ( unsigned int n = 0; n < numLines; n++ )
-            free( lines[n] );
-
+        free(m_buf);
         free( lines );
 
         if ( png_ptr )
@@ -153,7 +154,7 @@ struct wxPNGImageData
     void DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo);
 
     unsigned char** lines;
-    png_uint_32 numLines;
+    unsigned char* m_buf;
     png_infop info_ptr;
     png_structp png_ptr;
     bool ok;
@@ -209,6 +210,8 @@ PNGLINKAGEMODE wx_PNG_error(png_structp png_ptr, png_const_charp message)
 // LoadFile() helpers
 // ----------------------------------------------------------------------------
 
+// init the alpha channel for the image and fill it with 1s up to (x, y)
+static
 unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
 {
     // create alpha channel
@@ -218,13 +221,10 @@ unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
 
     // set alpha for the pixels we had so far
     png_uint_32 end = y * image->GetWidth() + x;
-    for ( png_uint_32 i = 0; i < end; i++ )
-    {
-        // all the previous pixels were opaque
-        *alpha++ = 0xff;
-    }
+    // all the previous pixels were opaque
+    memset(alpha, 0xff, end);
 
-    return alpha;
+    return alpha + end;
 }
 
 // ----------------------------------------------------------------------------
@@ -246,39 +246,12 @@ static
 void CopyDataFromPNG(wxImage *image,
                      unsigned char **lines,
                      png_uint_32 width,
-                     png_uint_32 height,
-                     int color_type)
+                     png_uint_32 height)
 {
     // allocated on demand if we have any non-opaque pixels
     unsigned char *alpha = NULL;
 
     unsigned char *ptrDst = image->GetData();
-    if ( !(color_type & PNG_COLOR_MASK_COLOR) )
-    {
-        // grey image: GAGAGA... where G == grey component and A == alpha
-        for ( png_uint_32 y = 0; y < height; y++ )
-        {
-            const unsigned char *ptrSrc = lines[y];
-            for ( png_uint_32 x = 0; x < width; x++ )
-            {
-                unsigned char g = *ptrSrc++;
-                unsigned char a = *ptrSrc++;
-
-                // the first time we encounter a transparent pixel we must
-                // allocate alpha channel for the image
-                if ( !IsOpaque(a) && !alpha )
-                    alpha = InitAlpha(image, x, y);
-
-                if ( alpha )
-                    *alpha++ = a;
-
-                *ptrDst++ = g;
-                *ptrDst++ = g;
-                *ptrDst++ = g;
-            }
-        }
-    }
-    else // colour image: RGBRGB...
     {
         for ( png_uint_32 y = 0; y < height; y++ )
         {
@@ -290,7 +263,8 @@ void CopyDataFromPNG(wxImage *image,
                 unsigned char b = *ptrSrc++;
                 unsigned char a = *ptrSrc++;
 
-                // the logic here is the same as for the grey case
+                // the first time we encounter a transparent pixel we must
+                // allocate alpha channel for the image
                 if ( !IsOpaque(a) && !alpha )
                     alpha = InitAlpha(image, x, y);
 
@@ -320,7 +294,7 @@ void
 wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 {
     png_uint_32 width, height = 0;
-    int bit_depth, color_type, interlace_type;
+    int bit_depth, color_type;
 
     image->Destroy();
 
@@ -346,27 +320,23 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
         return;
 
     png_read_info( png_ptr, info_ptr );
-    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL );
+    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, NULL, NULL, NULL );
 
-    if (color_type == PNG_COLOR_TYPE_PALETTE)
-        png_set_expand( png_ptr );
-
-    // Fix for Bug [ 439207 ] Monochrome PNG images come up black
-    if (bit_depth < 8)
-        png_set_expand( png_ptr );
-
+    png_set_expand(png_ptr);
+    png_set_gray_to_rgb(png_ptr);
     png_set_strip_16( png_ptr );
     png_set_packing( png_ptr );
-    if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS))
-        png_set_expand( png_ptr );
-    png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
 
     image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
     if (!image->IsOk())
         return;
 
-    if ( !Alloc(width, height) )
+    const bool needCopy =
+        (color_type & PNG_COLOR_MASK_ALPHA) ||
+        png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS);
+
+    if (!Alloc(width, height, needCopy ? NULL : image->GetData()))
         return;
 
     png_read_image( png_ptr, lines );
@@ -440,7 +410,8 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
 
     // loaded successfully, now init wxImage with this data
-    CopyDataFromPNG(image, lines, width, height, color_type);
+    if (needCopy)
+        CopyDataFromPNG(image, lines, width, height);
 
     // This will indicate to the caller that loading succeeded.
     ok = true;
@@ -570,10 +541,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     const int iHeight = image->GetHeight();
     const int iWidth = image->GetWidth();
 
-    const bool bHasPngFormatOption
-        = image->HasOption(wxIMAGE_OPTION_PNG_FORMAT);
+    const bool hasPngFormatOption = image->HasOption(wxIMAGE_OPTION_PNG_FORMAT);
 
-    int iColorType = bHasPngFormatOption
+    int iColorType = hasPngFormatOption
                             ? image->GetOptionInt(wxIMAGE_OPTION_PNG_FORMAT)
                             : wxPNG_TYPE_COLOUR;
 
@@ -582,7 +552,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
     bool bUsePalette = iColorType == wxPNG_TYPE_PALETTE
 #if wxUSE_PALETTE
-        || (!bHasPngFormatOption && image->HasPalette() )
+        || (!hasPngFormatOption && image->HasPalette() )
 #endif
     ;
 

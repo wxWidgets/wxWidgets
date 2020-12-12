@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtGui/QCursor>
 #include <QtWidgets/QApplication>
@@ -34,7 +31,7 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 {
     // Make it look similar to the assert messages:
 
-    fprintf( stderr, "%s(%d): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
+    fprintf( stderr, "%s(%u): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
 }
 
 void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
@@ -85,7 +82,7 @@ wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
 wxWindow *wxFindWindowAtPointer(wxPoint& pt)
 {
     pt = wxQtConvertPoint( QCursor::pos() );
-    
+
     return wxFindWindowAtPoint( pt );
 }
 
@@ -125,7 +122,7 @@ wxWindow *wxGetActiveWindow()
         wxWindow* win = node->GetData();
         if ( win->GetHandle() == w )
             return win;
-        
+
         node = node->GetPrevious();
     }
 

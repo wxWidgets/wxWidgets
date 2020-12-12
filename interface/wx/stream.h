@@ -662,7 +662,7 @@ public:
     /**
         Changes the stream current position.
 
-        This operation in general is possible only for seekable streams 
+        This operation in general is possible only for seekable streams
         (see wxStreamBase::IsSeekable()); non-seekable streams support only
         seeking positive amounts in mode @c wxFromCurrent (this is implemented
         by reading data and simply discarding it).

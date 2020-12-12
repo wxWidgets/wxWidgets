@@ -164,7 +164,7 @@ public:
     };
 
     /**
-        Date calculations often depend on the country and wxDateTime allows to set
+        Date calculations often depend on the country and wxDateTime allows setting
         the country whose conventions should be used using SetCountry(). It takes
         one of the following values as parameter.
     */
@@ -274,7 +274,7 @@ public:
 
         This struct is analogous to standard C <code>struct tm</code> and uses
         the same, not always immediately obvious, conventions for its members:
-        notably its mon and mday fields count from 0 while yday counts from 1.
+        notably its mon and yday fields count from 0 while mday counts from 1.
      */
     struct Tm
     {
@@ -325,7 +325,7 @@ public:
        Copy constructor.
     */
     wxDateTime(const wxDateTime& date);
-    
+
     /**
         Same as Set().
     */
@@ -387,7 +387,7 @@ public:
        @a wxDateTime::Tm structure.
     */
     wxDateTime& Set(const Tm& tm);
-    
+
     /**
         Sets the date from the so-called Julian Day Number.
 
@@ -489,7 +489,7 @@ public:
 
         Here are the trivial accessors. Other functions, which might have to
         perform some more complicated calculations to find the answer are under
-        the "Date Arithmetics" section.
+        the "Date Arithmetic" section.
     */
     //@{
 
@@ -738,10 +738,10 @@ public:
 
 
     /**
-        @name Date Arithmetics
+        @name Date Arithmetic
 
         These functions carry out
-        @ref overview_datetime_arithmetics "arithmetics" on the wxDateTime
+        @ref overview_datetime_arithmetics "arithmetic" on the wxDateTime
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan
         may be added to wxDateTime, hence all functions are overloaded to
         accept both arguments.
@@ -795,7 +795,7 @@ public:
     /**
        Returns the difference between this object and @a dt as a wxDateSpan.
 
-       This method allows to find the number of entire years, months, weeks and
+       This method allows finding the number of entire years, months, weeks and
        days between @a dt and this date.
 
        @since 2.9.5
@@ -1161,10 +1161,14 @@ public:
         @a n may be either positive (counting from the beginning of the month)
         or negative (counting from the end of it).
 
-        For example, SetToWeekDay(2, wxDateTime::Wed) will set the date to the
+        For example, SetToWeekDay(wxDateTime::Wed, 2) will set the date to the
         second Wednesday in the current month and
-        SetToWeekDay(-1, wxDateTime::Sun) will set the date to the last Sunday
+        SetToWeekDay(wxDateTime::Sun, -1) will set the date to the last Sunday
         in the current month.
+
+        Note that leaving the month or year parameters as their default values
+        will result in the current month or year being substituted, overwriting
+        any previous values in the wxDateTime object.
 
         @return @true if the date was modified successfully, @false otherwise
                  meaning that the specified date doesn't exist.
@@ -1523,7 +1527,7 @@ public:
     static bool IsWestEuropeanCountry(Country country = Country_Default);
 
     /**
-        Returns the object corresponding to the current time.
+        Returns the object corresponding to the current time in local time zone.
 
         Example:
 
@@ -1568,11 +1572,11 @@ public:
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current UTC time including the
+        Returns the object corresponding to the current time including the
         milliseconds.
 
-        Notice that unlike Now(), this method creates a wxDateTime object
-        corresponding to UTC, not local, time.
+        Like Now(), this method creates the wxDateTime object corresponding to
+        the current moment in local time.
 
         @see Now(), wxGetUTCTimeMillis()
     */

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -108,7 +105,9 @@ wxBEGIN_EVENT_TABLE(SimpleTransientPopup,wxPopupTransientWindow)
 wxEND_EVENT_TABLE()
 
 SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
-                     :wxPopupTransientWindow( parent )
+                     :wxPopupTransientWindow( parent,
+                                              wxBORDER_NONE |
+                                              wxPU_CONTAINS_CONTROLS )
 {
     m_panel = new wxScrolledWindow( this, wxID_ANY );
     m_panel->SetBackgroundColour( *wxLIGHT_GREY );

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -343,13 +340,12 @@ public:
         wxSize clientSize = GetClientSize();
 
         wxCoord y = 0;
-        wxCoord x = 0;
         for ( size_t row = rowFirst; row < rowLast; row++ )
         {
             wxCoord rowHeight = OnGetRowHeight(row);
             dc.DrawLine(0, y, clientSize.GetWidth(), y);
 
-            x = 0;
+            wxCoord x = 0;
             for ( size_t col = columnFirst; col < columnLast; col++ )
             {
                 wxCoord colWidth = OnGetColumnWidth(col);

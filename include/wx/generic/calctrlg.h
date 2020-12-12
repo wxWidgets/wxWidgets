@@ -34,7 +34,7 @@ public:
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
                           long style = wxCAL_SHOW_HOLIDAYS,
-                          const wxString& name = wxCalendarNameStr);
+                          const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -42,7 +42,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCAL_SHOW_HOLIDAYS,
-                const wxString& name = wxCalendarNameStr);
+                const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
     virtual ~wxGenericCalendarCtrl();
 

@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/combo.h"
 
@@ -457,7 +454,8 @@ public:
     wxComboPopupWindow( wxComboCtrlBase *parent,
                         int style )
     #if USES_WXPOPUPWINDOW || USES_WXPOPUPTRANSIENTWINDOW
-                       : wxComboPopupWindowBase(parent,style)
+                       : wxComboPopupWindowBase(parent,
+                                                style | wxPU_CONTAINS_CONTROLS)
     #else
                        : wxComboPopupWindowBase(parent,
                                                 wxID_ANY,
@@ -549,6 +547,9 @@ public:
 #endif
 
 private:
+#if USES_GENERICTLW
+    void HideOnDeactivate();
+#endif // USES_GENERICTLW
     wxComboCtrlBase*    m_combo;
 
     wxDECLARE_EVENT_TABLE();
@@ -586,10 +587,22 @@ void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
     if ( !event.GetActive() )
     {
         // Tell combo control that we are dismissed.
-        m_combo->HidePopup(true);
-
+#ifdef __WXMSW__
+        // We need to hide the popup but calling ::ShowWindow() directly from WM_ACTIVATE
+        // event handler causes some side effects like calling this handler again (Win 7)
+        // or setting the focus improperly (Win 10), so postpone it slightly.
+        // See wxPopupTransientWindow::MSWHandleMessage().
+        CallAfter(&wxComboPopupWindowEvtHandler::HideOnDeactivate);
+#else // !__WXMSW__
+        HideOnDeactivate();
+#endif // __WXMSW__ / !__WXMSW__
         event.Skip();
     }
+}
+
+void wxComboPopupWindowEvtHandler::HideOnDeactivate()
+{
+    m_combo->HidePopup(true);
 }
 #endif
 
@@ -1359,7 +1372,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
 
 wxSize wxComboCtrlBase::DoGetBestSize() const
 {
-    int width = m_text ? m_text->GetBestSize().x : 80;
+    int width = m_text ? m_text->GetBestSize().x : FromDIP(80);
 
     return GetSizeFromTextSize(width);
 }
@@ -1445,7 +1458,7 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     fhei += 2 * FOCUS_RING;
 
     // Calculate width
-    int fwid = xlen + FOCUS_RING + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH;
+    int fwid = GetNativeTextIndent() + xlen + FOCUS_RING + COMBO_MARGIN + m_btnArea.width;
 
     // Add the margins we have previously set
     wxPoint marg( GetMargins() );
@@ -2071,6 +2084,9 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
+    // Always let default handling of focus events to take place.
+    event.Skip();
+
     // On Mac, setting focus here led to infinite recursion so
     // m_resetFocus is used as a guard
 
@@ -2276,7 +2292,7 @@ void wxComboCtrlBase::ShowPopup()
     int maxHeightPopup;
     wxSize ctrlSz = GetSize();
 
-    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y, this );
     scrPos = GetScreenPosition();
 
     spaceAbove = scrPos.y;
@@ -2354,7 +2370,7 @@ void wxComboCtrlBase::ShowPopup()
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
         leftX -= ctrlSz.x;
 
-    int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X );
+    int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X, this );
 
     // If there is not enough horizontal space, anchor on the other side.
     // If there is no space even then, place the popup at x 0.

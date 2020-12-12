@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -259,7 +256,7 @@ void MBConvTestCase::WC2CP1250()
 //     it's very useful when debugging a failed test.
 wxString CByteArrayFormat( const void* data, size_t len, const wxChar* name )
 {
-    const unsigned char* bytes = (unsigned char*)data;
+    const unsigned char* bytes = static_cast<const unsigned char*>(data);
     wxString result;
 
     result.Printf( wxT("static const unsigned char %s[%i] = \n{"), name, (int)len );
@@ -1150,7 +1147,7 @@ void MBConvTestCase::TestDecoder(
     // make sure the correct output length was calculated
     WX_ASSERT_EQUAL_MESSAGE
     (
-        ("while converting \"%s\"", multiBuffer),
+        ("while converting \"%s\"", inputCopy),
         wideChars,
         outputWritten
     );

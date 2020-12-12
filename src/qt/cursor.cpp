@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QBitmap>
@@ -108,7 +105,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
         GetHandle() = QBitmap();
         return;
     }
-//    case wxCURSOR_ARROW: 
+//    case wxCURSOR_ARROW:
     case wxCURSOR_DEFAULT:     qt_cur = Qt::ArrowCursor;    break;
 //    case wxCURSOR_RIGHT_ARROW:
     case wxCURSOR_HAND:        qt_cur = Qt::OpenHandCursor; break;
@@ -129,7 +126,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
 /*  case wxCURSOR_PAINT_BRUSH:
     case wxCURSOR_MAGNIFIER:
     case wxCURSOR_CHAR:
-    case wxCURSOR_LEFT_BUTTON: 
+    case wxCURSOR_LEFT_BUTTON:
     case wxCURSOR_MIDDLE_BUTTON:
     case wxCURSOR_RIGHT_BUTTON:
     case wxCURSOR_BULLSEYE:
@@ -142,7 +139,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
 */
     default:
         wxFAIL_MSG(wxT("unsupported cursor type"));
-        // will use the standard one
+        qt_cur = Qt::ArrowCursor;
         break;
     }
 
@@ -154,7 +151,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
 void wxCursor::InitFromImage( const wxImage & image )
 {
     AllocExclusive();
-    GetHandle() = QCursor(*wxBitmap(image).GetHandle(), 
+    GetHandle() = QCursor(*wxBitmap(image).GetHandle(),
                            image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) ?
                            image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) : -1,
                            image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ?

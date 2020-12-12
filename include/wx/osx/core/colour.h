@@ -36,8 +36,6 @@ public:
 
     virtual bool IsSolid() const wxOVERRIDE;
 
-    wxColour& operator=(const wxColour& col);
-
     // comparison
     bool operator == (const wxColour& colour) const;
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
@@ -47,10 +45,10 @@ public:
 
     // This ctor does take ownership of the color.
     wxColour( CGColorRef col );
-    
+
     // don't take ownership of the returned value
     CGColorRef GetCGColor() const;
-    
+
     // do take ownership of the returned value
     CGColorRef CreateCGColor() const { return wxCFRetain(GetCGColor()); }
 
@@ -68,8 +66,9 @@ public:
     // This ctor does not take ownership of the color.
     explicit wxColour(WX_NSColor color);
     WX_NSColor OSXGetNSColor() const;
+    WX_NSImage OSXGetNSPatternImage() const;
 #endif
- 
+
 protected :
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) wxOVERRIDE;
@@ -87,21 +86,22 @@ class wxColourRefData : public wxGDIRefData
 public:
     wxColourRefData() {}
     virtual ~wxColourRefData() {}
-    
+
     virtual CGFloat Red() const = 0;
     virtual CGFloat Green() const = 0;
     virtual CGFloat Blue() const = 0;
     virtual CGFloat Alpha() const = 0;
- 
+
     virtual bool IsSolid() const
         { return true; }
 
     virtual CGColorRef GetCGColor() const = 0;
-    
+
     virtual wxColourRefData* Clone() const = 0;
-    
+
 #if wxOSX_USE_COCOA
     virtual WX_NSColor GetNSColor() const;
+    virtual WX_NSImage GetNSPatternImage() const;
 #endif
 };
 

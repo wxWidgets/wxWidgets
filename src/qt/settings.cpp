@@ -144,9 +144,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_OEM_FIXED_FONT:
         case wxSYS_ANSI_FIXED_FONT:
         case wxSYS_SYSTEM_FIXED_FONT:
-            // let Qt font matching algorithm to select the font
             font.SetFamily(wxFONTFAMILY_TELETYPE);
-            font.SetFaceName("monospace");
             break;
 
         case wxSYS_ANSI_VAR_FONT:
@@ -154,9 +152,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_DEFAULT_GUI_FONT:
         default:
-            // let Qt font matching algorithm to select the font
-            font.SetFamily(wxFONTFAMILY_DEFAULT);
-            font.SetFaceName("");
+            // Let Qt select any sans serif font.
+            font.SetFamily(wxFONTFAMILY_SWISS);
             break;
     }
 
@@ -166,7 +163,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 
 }
 
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow * WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUNUSED(win))
 {
     switch (index)
     {

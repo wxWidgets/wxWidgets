@@ -34,7 +34,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxSearchCtrlNameStr);
+               const wxString& name = wxASCII_STR(wxSearchCtrlNameStr));
 
     virtual ~wxSearchCtrl();
 
@@ -44,7 +44,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSearchCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxSearchCtrlNameStr));
 
 #if wxUSE_MENUS
     // get/set search button menu
@@ -205,6 +205,8 @@ protected:
     void OnCancelButton( wxCommandEvent& event );
 
     void OnSize( wxSizeEvent& event );
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     bool HasMenu() const
     {

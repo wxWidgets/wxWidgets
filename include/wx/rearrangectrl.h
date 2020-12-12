@@ -60,7 +60,7 @@ public:
                     const wxArrayString& items,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxRearrangeListNameStr)
+                    const wxString& name = wxASCII_STR(wxRearrangeListNameStr))
     {
         Create(parent, id, pos, size, order, items, style, validator, name);
     }
@@ -75,7 +75,7 @@ public:
                 const wxArrayString& items,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRearrangeListNameStr);
+                const wxString& name = wxASCII_STR(wxRearrangeListNameStr));
 
 
     // items order
@@ -141,7 +141,7 @@ public:
                     const wxArrayString& items,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxRearrangeListNameStr)
+                    const wxString& name = wxASCII_STR(wxRearrangeListNameStr))
     {
         Init();
 
@@ -156,7 +156,7 @@ public:
                 const wxArrayString& items,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRearrangeListNameStr);
+                const wxString& name = wxASCII_STR(wxRearrangeListNameStr));
 
     // get the underlying listbox
     wxRearrangeList *GetList() const { return m_list; }
@@ -195,7 +195,7 @@ public:
                       const wxArrayInt& order,
                       const wxArrayString& items,
                       const wxPoint& pos = wxDefaultPosition,
-                      const wxString& name = wxRearrangeDialogNameStr)
+                      const wxString& name = wxASCII_STR(wxRearrangeDialogNameStr))
     {
         Init();
 
@@ -208,7 +208,7 @@ public:
                 const wxArrayInt& order,
                 const wxArrayString& items,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxString& name = wxRearrangeDialogNameStr);
+                const wxString& name = wxASCII_STR(wxRearrangeDialogNameStr));
 
 
     // methods for the dialog customization

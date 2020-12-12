@@ -34,6 +34,8 @@
     #define wxIoctlSocketArg_t u_long
 #endif
 
+#define wxCloseSocket closesocket
+
 // ----------------------------------------------------------------------------
 // MSW-specific socket implementation
 // ----------------------------------------------------------------------------
@@ -55,10 +57,7 @@ public:
         // anything here
     }
 
-private:
-    virtual void DoClose() wxOVERRIDE;
-
-    virtual void UnblockAndRegisterWithEventLoop() wxOVERRIDE
+    virtual void UpdateBlockingState() wxOVERRIDE
     {
         if ( GetSocketFlags() & wxSOCKET_BLOCK )
         {
@@ -72,6 +71,9 @@ private:
             // would result in data races and other unpleasantness.
             wxIoctlSocketArg_t trueArg = 1;
             ioctlsocket(m_fd, FIONBIO, &trueArg);
+
+            // Uninstall it in case it was installed before.
+            wxSocketManager::Get()->Uninstall_Callback(this);
         }
         else
         {
@@ -80,6 +82,9 @@ private:
             wxSocketManager::Get()->Install_Callback(this);
         }
     }
+
+private:
+    virtual void DoClose() wxOVERRIDE;
 
     int m_msgnumber;
 

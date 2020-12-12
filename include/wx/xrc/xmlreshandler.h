@@ -22,6 +22,7 @@
 #include "wx/window.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimationCtrlBase;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XML wxXmlResource;
@@ -84,27 +85,29 @@ public:
     virtual wxSize GetPairInts(const wxString& param) = 0;
     virtual wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT) = 0;
     virtual wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                               const wxArtClient& defaultArtClient = wxART_OTHER,
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                                wxSize size = wxDefaultSize) = 0;
     virtual wxBitmap GetBitmap(const wxXmlNode* node,
-                               const wxArtClient& defaultArtClient = wxART_OTHER,
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                                wxSize size = wxDefaultSize) = 0;
     virtual wxIcon GetIcon(const wxString& param = wxT("icon"),
-                           const wxArtClient& defaultArtClient = wxART_OTHER,
+                           const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                            wxSize size = wxDefaultSize) = 0;
     virtual wxIcon GetIcon(const wxXmlNode* node,
-                           const wxArtClient& defaultArtClient = wxART_OTHER,
+                           const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                            wxSize size = wxDefaultSize) = 0;
     virtual wxIconBundle GetIconBundle(const wxString& param,
-                                       const wxArtClient& defaultArtClient = wxART_OTHER) = 0;
+                                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER)) = 0;
     virtual wxImageList *GetImageList(const wxString& param = wxT("imagelist")) = 0;
 
 #if wxUSE_ANIMATIONCTRL
-    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation")) = 0;
+    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                                      wxAnimationCtrlBase* ctrl = NULL) = 0;
 #endif
 
     virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL) = 0;
     virtual bool GetBoolAttr(const wxString& attr, bool defaultv) = 0;
+    virtual wxString GetFilePath(const wxXmlNode* node) = 0;
     virtual void SetupWindow(wxWindow *wnd) = 0;
     virtual void CreateChildren(wxObject *parent, bool this_hnd_only = false) = 0;
     virtual void CreateChildrenPrivately(wxObject *parent,
@@ -318,31 +321,31 @@ protected:
         return GetImpl()->GetDirection(param, dir);
     }
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetBitmap(param, defaultArtClient, size);
     }
     wxBitmap GetBitmap(const wxXmlNode* node,
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetBitmap(node, defaultArtClient, size);
     }
     wxIcon GetIcon(const wxString& param = wxT("icon"),
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetIcon(param, defaultArtClient, size);
     }
     wxIcon GetIcon(const wxXmlNode* node,
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetIcon(node, defaultArtClient, size);
     }
     wxIconBundle GetIconBundle(const wxString& param,
-                               const wxArtClient& defaultArtClient = wxART_OTHER)
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER))
     {
         return GetImpl()->GetIconBundle(param, defaultArtClient);
     }
@@ -352,9 +355,10 @@ protected:
     }
 
 #if wxUSE_ANIMATIONCTRL
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation"))
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL)
     {
-        return GetImpl()->GetAnimation(param);
+        return GetImpl()->GetAnimation(param, ctrl);
     }
 #endif
 
@@ -366,6 +370,10 @@ protected:
     bool GetBoolAttr(const wxString& attr, bool defaultv)
     {
         return GetImpl()->GetBoolAttr(attr, defaultv);
+    }
+    wxString GetFilePath(const wxXmlNode* node)
+    {
+        return GetImpl()->GetFilePath(node);
     }
     void SetupWindow(wxWindow *wnd)
     {

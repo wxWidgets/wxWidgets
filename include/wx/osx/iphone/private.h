@@ -37,7 +37,7 @@ wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxSt
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false, bool isUserPane = false ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0 ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
@@ -63,7 +63,7 @@ public :
     virtual void        GetSize( int &width, int &height ) const;
     virtual void        SetControlSize( wxWindowVariant variant );
     virtual double      GetContentScaleFactor() const ;
-    
+
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
 
@@ -102,7 +102,7 @@ public :
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
-    void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+    void                SetFont(const wxFont & font);
 
     void                InstallEventHandler( WXWidget control = NULL );
     bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }
@@ -176,7 +176,7 @@ public :
     virtual bool IsFullScreen() const;
 
     virtual bool EnableFullScreenView(bool enable);
-    
+
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void RequestUserAttention(int flags);

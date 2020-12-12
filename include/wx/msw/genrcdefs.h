@@ -23,11 +23,11 @@ EMIT(#define wxUSE_RC_MANIFEST 1)
 EMIT(#define WX_CPU_AMD64)
 #endif
 
-#ifdef _M_ARM
+#if defined _M_ARM || defined __arm__
 EMIT(#define WX_CPU_ARM)
 #endif
 
-#ifdef _M_ARM64
+#if defined _M_ARM64 || defined __aarch64__
 EMIT(#define WX_CPU_ARM64)
 #endif
 

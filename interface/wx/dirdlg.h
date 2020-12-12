@@ -5,8 +5,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
 #define wxDD_CHANGE_DIR         0x0100
 #define wxDD_DIR_MUST_EXIST     0x0200
+#define wxDD_MULTIPLE           0x0400
+#define wxDD_SHOW_HIDDEN        0x0001
+
 #define wxDD_NEW_DIR_BUTTON     0 // deprecated, on by default now,
 
 #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
@@ -43,6 +47,13 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
     @style{wxDD_CHANGE_DIR}
            Change the current working directory to the directory chosen by the
            user.
+           @note This flag cannot be used with the @c wxDD_MULTIPLE style.
+    @style{wxDD_MULTIPLE}
+           Allow the user to select multiple directories.
+           This flag is only available since wxWidgets 3.1.4
+    @style{wxDD_SHOW_HIDDEN}
+           Show hidden and system folders.
+           This flag is only available since wxWidgets 3.1.4
     @endStyleTable
 
     Notice that @c wxRESIZE_BORDER has special side effect under Windows
@@ -59,6 +70,11 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
     @endcode
     instead of just using @c wxDD_DIR_MUST_EXIST style alone.
+
+    @remarks MacOS 10.11+ does not display a title bar on the dialog. Use SetMessage()
+             to change the string displayed to the user at the top of the dialog after creation.
+             The SetTitle() method is provided for compatibility with pre-10.11 MacOS versions
+             that do still support displaying the title bar.
 
     @library{wxcore}
     @category{cmndlg}
@@ -106,8 +122,21 @@ public:
 
     /**
         Returns the default or user-selected path.
+
+        @note This function can't be used with dialogs which have the @c wxDD_MULTIPLE style,
+              use GetPaths() instead.
     */
     virtual wxString GetPath() const;
+
+    /**
+        Fills the array @a paths with the full paths of the chosen directories.
+
+        @note This function should only be used with the dialogs which have @c wxDD_MULTIPLE style,
+              use GetPath() for the others.
+
+        @since 3.1.4
+    */
+    virtual void GetPaths(wxArrayString& paths) const;
 
     /**
         Sets the message that will be displayed on the dialog.

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
@@ -150,8 +147,8 @@ wxSize wxSpinButton::DoGetBestSize() const
 {
     const bool vert = HasFlag(wxSP_VERTICAL);
 
-    wxSize bestSize(::GetSystemMetrics(vert ? SM_CXVSCROLL : SM_CXHSCROLL),
-                    ::GetSystemMetrics(vert ? SM_CYVSCROLL : SM_CYHSCROLL));
+    wxSize bestSize(wxGetSystemMetrics(vert ? SM_CXVSCROLL : SM_CXHSCROLL, m_parent),
+                    wxGetSystemMetrics(vert ? SM_CYVSCROLL : SM_CYHSCROLL, m_parent));
 
     if ( vert )
         bestSize.y *= 2;

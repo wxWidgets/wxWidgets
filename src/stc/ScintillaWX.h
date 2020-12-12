@@ -161,7 +161,7 @@ public:
     void DoSize(int width, int height);
     void DoLoseFocus();
     void DoGainFocus();
-    void DoSysColourChange();
+    void DoInvalidateStyleData();
     void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
@@ -199,6 +199,8 @@ public:
     bool GetUseAntiAliasing();
     SurfaceData* GetSurfaceData() const {return m_surfaceData;}
     void SetPaintAbandoned(){paintState = paintAbandoned;}
+    void DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+    void DoRegisterImage(int type, const wxBitmap& bmp);
 
 private:
     bool                capturedMouse;
@@ -234,6 +236,15 @@ private:
     // The presence of this format on the clipboard indicates that the text is
     // a rectangular (and not the default linear) selection.
     wxDataFormat m_clipRectTextFormat;
+#endif
+
+#ifdef __WXMSW__
+    // ScintillaWin
+    HWND MainHWND() const wxNOEXCEPT;
+
+    // DBCS
+    void ImeStartComposition();
+    void ImeEndComposition();
 #endif
 
     friend class wxSTCCallTip;

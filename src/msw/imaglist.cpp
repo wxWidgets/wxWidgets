@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -70,7 +67,6 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
 wxImageList::wxImageList()
 {
     m_hImageList = 0;
-    m_size = wxSize(0,0);
 }
 
 // Creates an image list
@@ -412,7 +408,7 @@ wxBitmap wxImageList::GetBitmap(int index) const
     if ( ii.hbmMask )
     {
         // draw it the first time to find a suitable mask colour
-        ((wxImageList*)this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
+        const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
         dc.SelectObject(wxNullBitmap);
 
         // find the suitable mask colour
@@ -427,7 +423,7 @@ wxBitmap wxImageList::GetBitmap(int index) const
 
         // redraw icon over the mask colour to actually draw it
         dc.SelectObject(bitmap);
-        ((wxImageList*)this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
+        const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
         dc.SelectObject(wxNullBitmap);
 
         // get the image, set the mask colour and convert back to get transparent bitmap
@@ -438,7 +434,7 @@ wxBitmap wxImageList::GetBitmap(int index) const
     else // no mask
     {
         // Just draw it normally.
-        ((wxImageList*)this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL);
+        const_cast<wxImageList*>(this)->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL);
         dc.SelectObject(wxNullBitmap);
 
         // And adjust its alpha flag as the destination bitmap would get it if

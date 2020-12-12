@@ -126,7 +126,7 @@ Controls that are not static can have wxValidator associated with them.
     mode
 @li wxNotebook: A notebook class
 @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
-@li wxPropertyGrid: A complex control to display hierachical, editable information
+@li wxPropertyGrid: A complex control to display hierarchical, editable information
 @li wxRadioBox: A group of radio buttons
 @li wxRadioButton: A round button to be used with others in a mutually
     exclusive way
@@ -667,6 +667,7 @@ Related overview: @ref overview_file
 @li wxFile: Low-level file input/output class.
 @li wxFFile: Another low-level file input/output class.
 @li wxTempFile: Class to safely replace an existing file
+@li wxTempFFile: Another class to safely replace an existing file
 @li wxTextFile: Class for working with text files as with arrays of lines
 @li wxStandardPaths: Paths for standard directories
 @li wxPathList: A class to help search multiple paths
@@ -702,6 +703,7 @@ Related overview: @ref overview_stream
 @li wxFFileInputStream: Another file input stream class
 @li wxFFileOutputStream: Another file output stream class
 @li wxTempFileOutputStream: Stream to safely replace an existing file
+@li wxTempFFileOutputStream: Another stream to safely replace an existing file
 @li wxStringInputStream: String input stream class
 @li wxStringOutputStream: String output stream class
 @li wxLZMAInputStream: LZMA decompression stream class

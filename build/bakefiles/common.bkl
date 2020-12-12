@@ -43,6 +43,8 @@
         <if cond="TARGET_CPU=='IA64'">_ia64</if>
         <if cond="TARGET_CPU=='x64'">_x64</if>
         <if cond="TARGET_CPU=='X64'">_x64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">_x64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">_x64</if>
     </set>
 
     <!-- ================================================================== -->
@@ -180,7 +182,7 @@
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('richtext')))</if>
     </set>
     <set var="WXLIB_STC">
-        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
+        <if cond="MONOLITHIC=='0' and USE_STC=='1'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
     </set>
 
     <set var="WXLIB_WEBVIEW">
@@ -303,6 +305,10 @@
         <if cond="FORMAT=='dmars' or FORMAT=='dmars_smake'">_WIN32_WINNT=0x0400</if>
     </set>
 
+    <set var="WIN32_DPI_MANIFEST">
+        <if cond="PLATFORM_WIN32=='1' and IS_MSVC=='0'">wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)</if>
+    </set>
+
     <set var="CAIRO_LIB">
         <if cond="USE_CAIRO=='1'">cairo</if>
     </set>
@@ -322,7 +328,82 @@
         <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
         <if cond="TARGET_CPU=='x64'">/MACHINE:X64</if>
         <if cond="TARGET_CPU=='X64'">/MACHINE:X64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MACHINE:X64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MACHINE:X64</if>
     </set>
+
+    <set var="WIN32_DPI_LINKFLAG"></set>
+    <if cond="IS_MSVC_PRJ">
+        <set var="WIN32_DPI_LINKFLAG">
+            <!-- 32-bit system dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and MSVS_PLATFORM=='win32'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <!-- 64-bit system dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and MSVS_PLATFORM=='win64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <!-- 32-bit per-monitor dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and MSVS_PLATFORM=='win32'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <!-- 64-bit per-monitor dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and MSVS_PLATFORM=='win64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+        </set>
+    </if>
+    <if cond="FORMAT=='msvc'">
+        <set var="WIN32_DPI_LINKFLAG">
+            <!-- 32-bit system dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <!-- 64-bit system dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware.manifest</if>
+            <!-- 32-bit per-monitor dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU==''">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <!-- 64-bit per-monitor dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='amd64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='AMD64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/amd64_dpi_aware_pmv2.manifest</if>
+        </set>
+    </if>
+
+    <set var="TARGET_CPU_COMPFLAG"></set>
+    <if cond="FORMAT=='msvc'">
+        <set var="TARGET_CPU_COMPFLAG">
+            <if cond="TARGET_CPU==''">TARGET_CPU_COMPFLAG=0</if>
+            <if cond="TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'"></if>
+            <if cond="TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'"></if>
+        </set>
+    </if>
 
     <template id="common_settings">
         <debug-info>$(DEBUGINFO)</debug-info>
@@ -343,9 +424,25 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
+        <cppflags cond="FORMAT=='autoconf'">$(WX_CPPFLAGS)</cppflags>
+        <cflags cond="FORMAT=='autoconf'">$(WX_CFLAGS)</cflags>
+        <cxxflags cond="FORMAT=='autoconf'">$(WX_CXXFLAGS)</cxxflags>
+        <!--
+            Surprisingly, WX_LDFLAGS doesn't go into ldflags, but into ldlibs,
+            because we need it to come after <lib-path> contents, which is
+            appended to ldflags, because we want to link with wx libraries in
+            the LIBDIRNAME and not any wx libraries installed system-wide.
+        -->
+        <ldlibs cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldlibs>
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
+            <define>$(TARGET_CPU_COMPFLAG)</define>
         </if>
+    </template>
+
+    <template id="wx_dpi">
+        <res-define>$(WIN32_DPI_MANIFEST)</res-define>
+        <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
     </template>
 
     <template id="anylib">
@@ -519,7 +616,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <lib-path>$(LIBDIRNAME)</lib-path>
 
         <warnings>max</warnings>
-        <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
             -wcd=656 <!-- define this function inside its class definition (may improve code quality) -->
@@ -689,46 +785,46 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>
 
-    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">
+    <template id="wx_3rdparty_dependencies_base">
+        <depends>wxexpat</depends>
+        <depends>wxzlib</depends>
+        <depends>wxregex</depends>
+    </template>
+
+    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'"
+              template="wx_3rdparty_dependencies_base">
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
         <depends>wxscintilla</depends>
     </template>
 
-    <template id="wx_3rdparty_dependencies"
-              template="wx_3rdparty_dependencies_gui">
-        <depends>wxexpat</depends>
-        <depends>wxzlib</depends>
-        <depends>wxregex</depends>
+    <template id="wx_3rdparty_includes_base">
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_REGEX)</include>
+        <include>$(INC_EXPAT)</include>
     </template>
 
-    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">
+    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'"
+              template_append="wx_3rdparty_includes_base">
         <include>$(INC_TIFF_BUILD)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>
     </template>
 
-    <template id="wx_3rdparty_includes"
-              template="wx_3rdparty_includes_gui">
-        <include>$(INC_ZLIB)</include>
-        <include>$(INC_REGEX)</include>
-        <include>$(INC_EXPAT)</include>
-    </template>
-
     <template id="wx_lib"
-              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h"/>
+              template="wx_3rdparty_includes_gui,wx_lib_b,msvc_setup_h"/>
     <template id="wx_base_lib"
-              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h">
+              template="wx_3rdparty_includes_base,wx_lib_b,msvc_setup_h">
         <define>wxUSE_GUI=0</define>
     </template>
 
     <template id="wx_dll"
-              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template="wx_3rdparty_includes_gui,wx_dll_b,wx_3rdparty_dependencies_gui"
               template_append="msvc_setup_h,wx_append_nomono"/>
     <template id="wx_base_dll"
-              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template="wx_3rdparty_includes_base,wx_dll_b,wx_3rdparty_dependencies_base"
               template_append="msvc_setup_h,wx_append_base_nomono">
         <define>wxUSE_GUI=0</define>
     </template>
@@ -760,7 +856,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     </set>
 
     <define-rule name="wx-base-plugin" extends="module">
-        <template>
+        <template template="common_settings">
             <dllname>
                 $(id)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
@@ -799,11 +895,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
          {top_srcdir} from configure, poor bakefile can't know that
          and won't output top_srcdir = @top_srcdir@ line): -->
     <set var="VARS_DONT_ELIMINATE" append="1">top_srcdir</set>
-
-
-    <set var="webviewdll_ext_dir_define">
-        <if cond="FORMAT=='autoconf' and USE_WEBVIEW_WEBKIT2=='1'">WX_WEB_EXTENSIONS_DIRECTORY=\"$(PLUGINS_INST_DIR)/web-extensions\"</if>
-    </set>
 
 
 </makefile>

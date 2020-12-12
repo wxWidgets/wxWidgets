@@ -36,8 +36,8 @@ public:
     WXHCURSOR GetHCURSOR() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
     void InitFromStock(wxStockCursor);
@@ -46,7 +46,5 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };
-
-extern WXDLLIMPEXP_CORE void wxSetCursor(const wxCursor& cursor);
 
 #endif // _WX_CURSOR_H_

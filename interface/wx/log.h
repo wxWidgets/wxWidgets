@@ -507,7 +507,7 @@ public:
 
     /**
         Show all pending output and clear the buffer.
-        
+
         Some of wxLog implementations, most notably the standard wxLogGui class,
         buffer the messages (for example, to avoid showing the user a zillion of modal
         message boxes one after another -- which would be really annoying).
@@ -668,7 +668,7 @@ public:
         By default, the log messages are passed to the previously active log target.
         Calling this function with @false parameter disables this behaviour
         (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
-        it can be reenabled by calling it again with @a passMessages set to @true.
+        it can be re-enabled by calling it again with @a passMessages set to @true.
     */
     void PassMessages(bool passMessages);
 
@@ -801,7 +801,7 @@ public:
         The messages will be written in the encoding specified by the
         given @c wxMBConv.
 
-		The @a conv argument is only available in wxWidgets 3.1.1 and later.
+        The @a conv argument is only available in wxWidgets 3.1.1 and later.
 
         @note
             In practice, it is only advisable to specify @c wxConvUTF8 as
@@ -1398,8 +1398,8 @@ void wxVLogError(const char* formatString, va_list argPtr);
     make sense to separate them from other debug messages.
 
     Trace messages can be separated into different categories; these functions in facts
-    only log the message if the given @a mask is currently enabled in wxLog. 
-    This lets you selectively trace only some operations and not others by enabling the 
+    only log the message if the given @a mask is currently enabled in wxLog.
+    This lets you selectively trace only some operations and not others by enabling the
     desired trace masks with wxLog::AddTraceMask() or by setting the
     @ref overview_envvars "@c WXTRACE environment variable".
 

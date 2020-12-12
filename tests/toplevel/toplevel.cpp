@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -23,6 +20,27 @@
     #include "wx/textctrl.h"
     #include "wx/toplevel.h"
 #endif // WX_PRECOMP
+
+#include "testableframe.h"
+
+class DestroyOnScopeExit
+{
+public:
+    explicit DestroyOnScopeExit(wxTopLevelWindow* tlw)
+        : m_tlw(tlw)
+    {
+    }
+
+    ~DestroyOnScopeExit()
+    {
+        m_tlw->Destroy();
+    }
+
+private:
+    wxTopLevelWindow* const m_tlw;
+
+    wxDECLARE_NO_COPY_CLASS(DestroyOnScopeExit);
+};
 
 static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 {
@@ -43,20 +61,26 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     CHECK(!tlw->IsActive());
 #endif
 
-    tlw->Show(true);
+    // Note that at least under MSW, ShowWithoutActivating() still generates
+    // wxActivateEvent, so we must only start counting these events after the
+    // end of the tests above.
+    EventCounter countActivate(tlw, wxEVT_ACTIVATE);
 
-    // wxGTK needs many event loop iterations before the TLW becomes active and
-    // this doesn't happen in this test, so avoid checking for it.
-#ifndef __WXGTK__
-    CHECK(tlw->IsActive());
-#endif
+    tlw->Show(true);
+    countActivate.WaitEvent();
+
+    // TLWs never become active when running under Xvfb, presumably because
+    // there is no WM there.
+    if ( !IsRunningUnderXVFB() )
+        CHECK(tlw->IsActive());
+
     CHECK(tlw->IsShown());
 
     tlw->Hide();
     CHECK(!tlw->IsShown());
-#ifndef __WXGTK__
+
+    countActivate.WaitEvent();
     CHECK(!tlw->IsActive());
-#endif
 }
 
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
@@ -64,14 +88,30 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
     SECTION("Dialog")
     {
         wxDialog* dialog = new wxDialog(NULL, -1, "Dialog Test");
+        DestroyOnScopeExit destroy(dialog);
+
         TopLevelWindowShowTest(dialog);
-        dialog->Destroy();
     }
 
     SECTION("Frame")
     {
         wxFrame* frame = new wxFrame(NULL, -1, "Frame test");
+        DestroyOnScopeExit destroy(frame);
+
         TopLevelWindowShowTest(frame);
-        frame->Destroy();
     }
+}
+
+// Check that we receive the expected event when showing the TLW.
+TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
+{
+    wxFrame* const frame = new wxFrame(NULL, wxID_ANY, "Maximized frame");
+    DestroyOnScopeExit destroy(frame);
+
+    EventCounter countShow(frame, wxEVT_SHOW);
+
+    frame->Maximize();
+    frame->Show();
+
+    CHECK( countShow.WaitEvent() );
 }

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
@@ -371,6 +368,45 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
             wxLogLastError(wxT("ScreenToClient"));
         }
 
+        // Create a guard that will clean things up in case of exception: we
+        // must perform it in any case, as if we don't update the drag image it
+        // would remain on screen under Windows 10, see #18499.
+        class DropCleanup
+        {
+        public:
+            DropCleanup(wxCOMPtr<IDataObject>& pIDataObject,
+                        wxDropTarget* pTarget,
+                        POINTL pt)
+                : m_pIDataObject(pIDataObject),
+                  m_pTarget(pTarget),
+                  m_dwEffect(DROPEFFECT_NONE),
+                  m_pt(pt)
+            {
+            }
+
+            // This can be optionally called to use an effect different from
+            // DROPEFFECT_NONE in the dtor.
+            void UpdateEffect(DWORD dwEffect) { m_dwEffect = dwEffect; }
+
+            ~DropCleanup()
+            {
+                // release the held object
+                m_pIDataObject.reset();
+
+                // update drag image
+                m_pTarget->MSWUpdateDragImageOnData
+                           (
+                                m_pt.x, m_pt.y,
+                                ConvertDragEffectToResult(m_dwEffect)
+                           );
+            }
+        private:
+            wxCOMPtr<IDataObject>& m_pIDataObject;
+            wxDropTarget* m_pTarget;
+            DWORD m_dwEffect;
+            POINTL m_pt;
+        } dropCleanup(m_pIDataObject, m_pTarget, pt);
+
         // first ask the drop target if it wants data
         if ( m_pTarget->OnDrop(pt.x, pt.y) ) {
             // it does, so give it the data source
@@ -383,22 +419,10 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
             if ( wxIsDragResultOk(rc) ) {
                 // operation succeeded
                 *pdwEffect = ConvertDragResultToEffect(rc);
-            }
-            else {
-                *pdwEffect = DROPEFFECT_NONE;
+
+                dropCleanup.UpdateEffect(*pdwEffect);
             }
         }
-        else {
-            // OnDrop() returned false, no need to copy data
-            *pdwEffect = DROPEFFECT_NONE;
-        }
-
-        // release the held object
-        m_pIDataObject.reset();
-
-        // update drag image
-        m_pTarget->MSWUpdateDragImageOnData(pt.x, pt.y,
-                                            ConvertDragEffectToResult(*pdwEffect));
 
         return S_OK;
     }

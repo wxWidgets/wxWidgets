@@ -401,6 +401,12 @@ public:
         Called from OnInit() and may be used to initialize the parser with the
         command line options for this application. The base class versions adds
         support for a few standard options only.
+
+        Note that this method should just configure @a parser to accept the
+        desired command line options by calling wxCmdLineParser::AddOption(),
+        wxCmdLineParser::AddSwitch() and similar methods, but should @e not
+        call wxCmdLineParser::Parse() as this will be done by wxWidgets itself
+        slightly later.
     */
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
@@ -749,8 +755,7 @@ public:
             std::locale::global(std::locale(""));
         @endcode
         but be warned that locale support in C++ standard library can be poor
-        or worse under some platforms, e.g. the above line results in an
-        immediate crash under OS X up to the version 10.8.2.
+        or worse under some platforms.
 
         @since 2.9.5
      */
@@ -766,7 +771,7 @@ public:
 
         Under Windows and Linux/Unix, you should parse the command line
         arguments and check for files to be opened when starting your
-        application. Under OS X, you need to override MacOpenFiles()
+        application. Under macOS, you need to override MacOpenFiles()
         since command line arguments are used differently there.
 
         You may use the wxCmdLineParser to parse command line arguments.
@@ -1049,7 +1054,7 @@ public:
 
     /**
         May be overridden to indicate that the application is not a foreground
-        GUI application under OS X.
+        GUI application under macOS.
 
         This method is called during the application startup and returns @true
         by default. In this case, wxWidgets ensures that the application is ran
@@ -1063,10 +1068,25 @@ public:
         is specified in the @c Info.plist file.
 
         @onlyfor{wxosx}
-        
+
         @since 3.0.1
     */
     virtual bool OSXIsGUIApplication();
+
+    /**
+        Enable the automatic tabbing features of macOS.
+
+        This feature is native to the operating system. When it is enabled, macOS
+        will automatically place windows inside tabs and show a tab bar in the
+        application. Entries are also added to the View menu to show/hide the tab bar.
+
+        @onlyfor{wxosx}
+
+        @remarks Requires macOS 10.12+, does nothing under earlier OS versions.
+
+        @since 3.1.4
+    */
+    void OSXEnableAutomaticTabbing(bool enable);
 
     //@}
 
@@ -1161,7 +1181,7 @@ wxAppDerivedClass& wxGetApp();
     Notice that this function is only available if @c wxUSE_ON_FATAL_EXCEPTION
     is 1 and under Windows platform this requires a compiler with support for
     SEH (structured exception handling) which currently means only Microsoft
-    Visual C++ or a recent Borland C++ version.
+    Visual C++.
 
     @header{wx/app.h}
 */

@@ -1313,11 +1313,6 @@ public:
     wxTextBoxAttr() { Init(); }
 
     /**
-        Copy constructor.
-    */
-    wxTextBoxAttr(const wxTextBoxAttr& attr) { Init(); (*this) = attr; }
-
-    /**
         Initialises this object.
     */
     void Init() { Reset(); }
@@ -3905,7 +3900,7 @@ protected:
     covers common needs especially for simple, static fields using text or a bitmap.
 
     Register field types on application initialisation with the static function
-    wxRichTextBuffer::AddFieldType. They will be deleted automatically on 
+    wxRichTextBuffer::AddFieldType. They will be deleted automatically on
     application exit.
 
     An application can write a field to a control with wxRichTextCtrl::WriteField,
@@ -6122,7 +6117,7 @@ public:
 
     /**
         Returns the coordinates of the cell with keyboard focus, or (-1,-1) if none.
-    */    
+    */
     virtual wxPosition GetFocusedCell() const;
 
 // Operations
@@ -6206,7 +6201,7 @@ public:
     wxRichTextTableBlock(const wxRichTextTableBlock& block) { Copy(block); }
 
     void Init() { m_colStart = 0; m_colEnd = 0; m_rowStart = 0; m_rowEnd = 0; }
-    
+
     void Copy(const wxRichTextTableBlock& block)
     {
         m_colStart = block.m_colStart; m_colEnd = block.m_colEnd; m_rowStart = block.m_rowStart; m_rowEnd = block.m_rowEnd;

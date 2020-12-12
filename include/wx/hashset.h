@@ -75,13 +75,13 @@ public:                                                                       \
 // the names of the hasher and comparator classes are interpreted as naming
 // the base class which is inaccessible.
 // The workaround is to prefix the class names with 'struct'; however, don't
-// do this on MSVC because it causes a warning there if the class was
-// declared as a 'class' rather than a 'struct' (and MSVC's std::unordered_set
-// implementation does not suffer from the access problem).
-#ifdef _MSC_VER
-#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) STRUCTNAME
-#else
+// do this unconditionally, as with other compilers (both MSVC and clang)
+// doing it causes a warning if the class was declared as a 'class' rather than
+// a 'struct'.
+#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ == 7)
 #define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) struct STRUCTNAME
+#else
+#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) STRUCTNAME
 #endif
 
 #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )   \
@@ -106,11 +106,6 @@ public:                                                                      \
     CLASSNAME() { }                                                          \
     const_key_reference operator()( const_key_reference key ) const          \
         { return key; }                                                      \
-                                                                             \
-    /* the dummy assignment operator is needed to suppress compiler */       \
-    /* warnings from hash table class' operator=(): gcc complains about */   \
-    /* "statement with no effect" without it */                              \
-    CLASSNAME& operator=(const CLASSNAME&) { return *this; }                 \
 };
 
 #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )\
@@ -164,8 +159,9 @@ public:                                                                      \
 
 // and these do exactly the same thing but should be used inside the
 // library
+// note: DECL is not used since the class is inline
 #define WX_DECLARE_HASH_SET_WITH_DECL( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, DECL) \
-    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NORMAL, CLASSNAME, DECL )
+    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NORMAL, CLASSNAME, class )
 
 #define WX_DECLARE_EXPORTED_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \
     WX_DECLARE_HASH_SET_WITH_DECL( KEY_T, HASH_T, KEY_EQ_T, \
@@ -178,8 +174,9 @@ public:                                                                      \
 // common compilers (notably Sun CC).
 #define WX_DECLARE_HASH_SET_PTR( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \
     _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NOP, CLASSNAME, class )
+// note: DECL is not used since the class is inline
 #define WX_DECLARE_HASH_SET_WITH_DECL_PTR( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, DECL) \
-    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NOP, CLASSNAME, DECL )
+    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NOP, CLASSNAME, class )
 
 // delete all hash elements
 //

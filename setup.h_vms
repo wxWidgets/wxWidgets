@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 30 August 2018                                                     *
+ * Date : 2 September 2020                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -65,13 +65,13 @@
 #undef WORDS_BIGENDIAN
 
 /* Define this if you want to use GPE features */
-/* #undef __WXGPE__ */
+#undef __WXGPE__
 
 /* Define this if your version of Motif is greater than 2.0 */
-/* #undef __WXMOTIF20__ */
+#undef __WXMOTIF20__
 
 /* Define this if you are using Lesstif */
-/* #undef __WXLESSTIF__ */
+#undef __WXLESSTIF__
 
 #ifdef __WXGTK__
 
@@ -101,6 +101,12 @@
 /* Define this if your version of GTK+ is greater than 2.20 */
 #undef __WXGTK220__
 
+/* Define this if your version of GTK+ is >= 3.0 */
+#undef __WXGTK3__
+
+/* Define this if your version of GTK+ is >= 3.90.0 */
+#undef __WXGTK4__
+
 #include <types.h>
 typedef pid_t GPid;
 
@@ -109,7 +115,7 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#ifdef VMS_GTK2
+#if defined( VMS_GTK2 ) || defined( __WXX11__ ) 
 #define wxUSE_CAIRO 1
 #else
 #define wxUSE_CAIRO 0
@@ -218,8 +224,6 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#define wxUSE_WCHAR_T 1
-
 
 #define wxUSE_EXCEPTIONS 1
 
@@ -259,8 +263,6 @@ typedef pid_t GPid;
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#define wxUSE_IOSTREAMH     1
 
 #define wxUSE_LONGLONG      1
 
@@ -404,11 +406,7 @@ typedef pid_t GPid;
 
 #define wxUSE_MARKUP       1
 
-#ifdef __WXMOTIF__
-#define wxUSE_POPUPWIN 0
-#else
 #define wxUSE_POPUPWIN 1
-#endif
 
 #define wxUSE_PREFERENCES_EDITOR 1
 
@@ -467,6 +465,8 @@ typedef pid_t GPid;
 #define wxUSE_TREECTRL     1
 #define wxUSE_TREELISTCTRL  1
 
+#define wxUSE_NATIVE_DATAVIEWCTRL 0
+
 #define wxUSE_STATUSBAR    1
 
 #define wxUSE_NATIVE_STATUSBAR        0
@@ -519,6 +519,8 @@ typedef pid_t GPid;
 #define wxUSE_INFOBAR 1
 
 #define wxUSE_MENUS         1
+
+#define wxUSE_MENUBAR  1
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
@@ -607,6 +609,8 @@ typedef pid_t GPid;
 #define wxUSE_HTML          1
 
 #define wxUSE_GLCANVAS       1
+
+#define wxUSE_GLCANVAS_EGL   0
 
 #define wxUSE_RICHTEXT       1
 
@@ -770,6 +774,9 @@ typedef pid_t GPid;
 
 #define wxUSE_INICONF 0
 
+#define wxUSE_WINSOCK2 0
+
+
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
 #define wxUSE_TIMEPICKCTRL_GENERIC 0
@@ -793,11 +800,6 @@ typedef pid_t GPid;
  * Define if va_list type is an array
  */
 #undef VA_LIST_IS_ARRAY
-
-/*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
 
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
@@ -1075,9 +1077,6 @@ typedef pid_t GPid;
 #undef HAVE_SETENV
 #endif
 
-/* Define if you have shl_load() */
-#undef HAVE_SHL_LOAD
-
 #if __CRTL_VER >= 70312000
 /* Define if you have snprintf() */
 #define HAVE_SNPRINTF 1
@@ -1195,9 +1194,6 @@ typedef pid_t GPid;
 
 /* Define if wchar_t is distinct type in your compiler. */
 #define wxWCHAR_T_IS_REAL_TYPE 1
-
-/* Define if you have the dlerror function.  */
-#define HAVE_DLERROR 1
 
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
@@ -1325,9 +1321,6 @@ typedef pid_t GPid;
 
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
-
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
 
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */

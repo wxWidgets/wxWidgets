@@ -18,15 +18,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL && defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/hyperlink.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
 #endif
 
 #include "wx/gtk/private.h"
@@ -127,14 +125,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         g_object_ref(m_widget);
 
         // alignment
-        float x_alignment = 0.5;
+        float x_alignment = 0.5f;
         if (HasFlag(wxHL_ALIGN_LEFT))
-            x_alignment = 0.0;
+            x_alignment = 0;
         else if (HasFlag(wxHL_ALIGN_RIGHT))
-            x_alignment = 1.0;
+            x_alignment = 1;
 
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5);
+        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5f);
         wxGCC_WARNING_RESTORE()
 
         // set to non empty strings both the url and the label
@@ -220,28 +218,9 @@ void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
-    wxColour ret;
-    if ( UseNative() )
-    {
-        GdkColor* link_color;
-        GdkColor color = { 0, 0, 0, 0xeeee };
-
-        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_widget_ensure_style(widget);
-        gtk_widget_style_get(widget, "link-color", &link_color, NULL);
-        if (link_color)
-        {
-            color = *link_color;
-            gdk_color_free(link_color);
-        }
-        wxGCC_WARNING_RESTORE()
-        ret = wxColour(color);
-    }
-    else
-        ret = wxGenericHyperlinkCtrl::GetNormalColour();
-
-    return ret;
+    return UseNative()
+        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT)
+        : wxGenericHyperlinkCtrl::GetNormalColour();
 }
 
 void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)

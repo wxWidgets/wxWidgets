@@ -102,6 +102,9 @@ bool wxRadioBox::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, val, name ) )
         return false;
 
+    // The radio box itself never accepts focus, only its child buttons do.
+    m_container.DisableSelfFocus();
+
     // during construction we must keep this at 0, otherwise GetBestSize fails
     m_noItems = 0;
     m_noRowsOrCols = majorDim;
@@ -193,13 +196,6 @@ bool wxRadioBox::IsItemEnabled(unsigned int item) const
     return current->IsEnabled();
 }
 
-// Returns the radiobox label
-//
-wxString wxRadioBox::GetLabel() const
-{
-    return wxControl::GetLabel();
-}
-
 // Returns the label for the given button
 //
 wxString wxRadioBox::GetString(unsigned int item) const
@@ -236,13 +232,6 @@ int wxRadioBox::GetSelection() const
     }
 
     return i;
-}
-
-// Sets the radiobox label
-//
-void wxRadioBox::SetLabel(const wxString& label)
-{
-    return wxControl::SetLabel( label );
 }
 
 // Sets the label of a given button
@@ -368,7 +357,6 @@ void wxRadioBox::SetFocus()
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    int i;
     wxRadioButton *current;
 
     // define the position
@@ -470,6 +458,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     y_offset = y_start;
 
     current = m_radioButtonCycle;
+    int i;
     for (i = 0 ; i < (int)m_noItems; i++)
     {
         // not to do for the zero button!

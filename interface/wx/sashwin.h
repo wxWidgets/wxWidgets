@@ -275,7 +275,7 @@ public:
     */
     wxSashEdgePosition GetEdge() const;
 
-    
+
     void SetEdge(wxSashEdgePosition edge);
     void SetDragRect(const wxRect& rect);
     void SetDragStatus(wxSashDragStatus status);

@@ -31,7 +31,7 @@ namespace
 {
     NSAlertStyle GetAlertStyleFromWXStyle( long style )
     {
-        if (style & wxICON_WARNING)
+        if (style & (wxICON_WARNING | wxICON_ERROR))
         {
             // NSCriticalAlertStyle should only be used for questions where
             // caution is needed per the OS X HIG. wxICON_WARNING alone doesn't
@@ -42,8 +42,6 @@ namespace
             else
                 return NSWarningAlertStyle;
         }
-        else if (style & wxICON_ERROR)
-            return NSWarningAlertStyle;
         else
             return NSInformationalAlertStyle;
     }
@@ -56,13 +54,6 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxPoint& WXUNUSED(pos))
                : wxMessageDialogBase(parent, message, caption, style)
 {
-    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
-    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
-}
-
-wxMessageDialog::~wxMessageDialog()
-{
-    [m_sheetDelegate release];
 }
 
 int wxMessageDialog::ShowModal()
@@ -198,9 +189,11 @@ void wxMessageDialog::ShowWindowModal()
         NSAlert* alert = (NSAlert*)ConstructNSAlert();
         
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        [alert beginSheetModalForWindow: nativeParent modalDelegate: m_sheetDelegate
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
+        [alert beginSheetModalForWindow:nativeParent  completionHandler:
+         ^(NSModalResponse returnCode)
+        {
+            this->ModalFinishedCallback(alert, returnCode);
+        }];
     }
 }
 

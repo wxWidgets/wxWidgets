@@ -18,13 +18,13 @@ public:
     wxStatusBarMac();
     wxStatusBarMac(wxWindow *parent, wxWindowID id = wxID_ANY,
            long style = wxSTB_DEFAULT_STYLE,
-           const wxString& name = wxStatusBarNameStr);
+           const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     virtual ~wxStatusBarMac();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
               long style = wxSTB_DEFAULT_STYLE,
-              const wxString& name = wxStatusBarNameStr);
+              const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     // Implementation
     virtual void MacHiliteChanged() wxOVERRIDE;

@@ -105,7 +105,7 @@ enum wxPenCap
     @class wxPenInfo
 
     This class is a helper used for wxPen creation using named parameter
-    idiom: it allows to specify various wxPen attributes using the chained
+    idiom: it allows specifying various wxPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxPen constructors.
 
@@ -137,6 +137,17 @@ public:
     wxPenInfo& Join(wxPenJoin join);
 
     wxPenInfo& Cap(wxPenCap cap);
+
+    wxColour GetColour() const;
+    wxBitmap GetStipple() const;
+    wxPenStyle GetStyle() const;
+    wxPenJoin GetJoin() const;
+    wxPenCap GetCap() const;
+    int GetDashes(wxDash **ptr);
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    bool IsTransparent() const;    
+    int GetWidth() const;
 };
 
 

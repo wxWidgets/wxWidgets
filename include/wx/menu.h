@@ -282,6 +282,7 @@ public:
     // handler to use for these events, but this should never be needed.
     void UpdateUI(wxEvtHandler* source = NULL);
 
+#if wxUSE_MENUBAR
     // get the menu bar this menu is attached to (may be NULL, always NULL for
     // popup menus).  Traverse up the menu hierarchy to find it.
     wxMenuBar *GetMenuBar() const;
@@ -292,6 +293,7 @@ public:
 
     // is the menu attached to a menu bar (or is it a popup one)?
     bool IsAttached() const { return GetMenuBar() != NULL; }
+#endif
 
     // set/get the parent of this menu
     void SetParent(wxMenu *parent) { m_menuParent = parent; }
@@ -398,7 +400,7 @@ protected:
     static bool      ms_locked;
 
 
-private:
+protected:
     // Common part of SendEvent() and ProcessMenuEvent(): sends the event to
     // its intended recipients, returns true if it was processed.
     static bool DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win);
@@ -406,7 +408,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxMenuBase);
 };
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
 
 // ----------------------------------------------------------------------------
 // XTI accessor
@@ -417,17 +419,17 @@ class WXDLLEXPORT wxMenuInfoHelper : public wxObject
 public:
     wxMenuInfoHelper() { m_menu = NULL; }
     virtual ~wxMenuInfoHelper() { }
-    
+
     bool Create( wxMenu *menu, const wxString &title )
-    { 
-        m_menu = menu; 
-        m_title = title; 
+    {
+        m_menu = menu;
+        m_title = title;
         return true;
     }
-    
+
     wxMenu* GetMenu() const { return m_menu; }
     wxString GetTitle() const { return m_title; }
-    
+
 private:
     wxMenu *m_menu;
     wxString m_title;
@@ -442,6 +444,8 @@ WX_DECLARE_EXPORTED_LIST(wxMenuInfoHelper, wxMenuInfoHelperList );
 // ----------------------------------------------------------------------------
 // wxMenuBar
 // ----------------------------------------------------------------------------
+
+#if wxUSE_MENUBAR
 
 class WXDLLIMPEXP_CORE wxMenuBarBase : public wxWindow
 {
@@ -555,13 +559,13 @@ public:
 
     virtual bool CanBeOutsideClientArea() const wxOVERRIDE { return true; }
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
     // XTI helpers:
     bool AppendMenuInfo( const wxMenuInfoHelper *info )
     { return Append( info->GetMenu(), info->GetTitle() ); }
     const wxMenuInfoHelperList& GetMenuInfos() const;
 #endif
-    
+
 #if WXWIN_COMPATIBILITY_2_8
     // get or change the label of the menu at given position
     // Deprecated in favour of SetMenuLabel
@@ -574,16 +578,17 @@ protected:
     // the list of all our menus
     wxMenuList m_menus;
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
     // used by XTI
     wxMenuInfoHelperList m_menuInfos;
 #endif
-    
+
     // the frame we are attached to (may be NULL)
     wxFrame *m_menuBarFrame;
 
     wxDECLARE_NO_COPY_CLASS(wxMenuBarBase);
 };
+#endif
 
 // ----------------------------------------------------------------------------
 // include the real class declaration

@@ -27,7 +27,6 @@ Here is the list of files that need to be updated:
 	include/wx/osx/config_xcode.h
 	samples/docview/Info.plist
 	samples/minimal/Info_cocoa.plist
-	samples/minimal/borland_ide.cpp              [not-micro]
 
 Do not forget to rebake everything after updating version.bkl!
 

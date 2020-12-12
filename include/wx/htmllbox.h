@@ -11,6 +11,10 @@
 #ifndef _WX_HTMLLBOX_H_
 #define _WX_HTMLLBOX_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_HTML
+
 #include "wx/vlbox.h"               // base class
 #include "wx/html/htmlwin.h"
 #include "wx/ctrlsub.h"
@@ -49,7 +53,7 @@ public:
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
-                  const wxString& name = wxHtmlListBoxNameStr);
+                  const wxString& name = wxASCII_STR(wxHtmlListBoxNameStr));
 
     // really creates the control and sets the initial number of items in it
     // (which may be changed later with SetItemCount())
@@ -62,7 +66,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxHtmlListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxHtmlListBoxNameStr));
 
     // destructor cleans up whatever resources we use
     virtual ~wxHtmlListBox();
@@ -215,7 +219,7 @@ public:
                         int n = 0, const wxString choices[] = NULL,
                         long style = wxHLB_DEFAULT_STYLE,
                         const wxValidator& validator = wxDefaultValidator,
-                        const wxString& name = wxSimpleHtmlListBoxNameStr)
+                        const wxString& name = wxASCII_STR(wxSimpleHtmlListBoxNameStr))
     {
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
@@ -227,7 +231,7 @@ public:
                         const wxArrayString& choices,
                         long style = wxHLB_DEFAULT_STYLE,
                         const wxValidator& validator = wxDefaultValidator,
-                        const wxString& name = wxSimpleHtmlListBoxNameStr)
+                        const wxString& name = wxASCII_STR(wxSimpleHtmlListBoxNameStr))
     {
         Create(parent, id, pos, size, choices, style, validator, name);
     }
@@ -238,14 +242,14 @@ public:
                 int n = 0, const wxString choices[] = NULL,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSimpleHtmlListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxSimpleHtmlListBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSimpleHtmlListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxSimpleHtmlListBoxNameStr));
 
     virtual ~wxSimpleHtmlListBox();
 
@@ -319,6 +323,8 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxSimpleHtmlListBox);
 };
+
+#endif // wxUSE_HTML
 
 #endif // _WX_HTMLLBOX_H_
 

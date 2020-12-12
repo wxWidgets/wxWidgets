@@ -37,7 +37,7 @@ public:
            const wxString& url = wxWebViewDefaultURLStr,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxString& name = wxWebViewNameStr)
+           const wxString& name = wxASCII_STR(wxWebViewNameStr))
     {
         Create(parent, id, url, pos, size, style, name);
     }
@@ -47,7 +47,7 @@ public:
            const wxString& url = wxWebViewDefaultURLStr,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxString& name = wxWebViewNameStr) wxOVERRIDE;
+           const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE;
 
     virtual ~wxWebViewWebKit();
 
@@ -83,7 +83,9 @@ public:
     wxWebViewZoomType GetZoomType() const wxOVERRIDE;
     bool CanSetZoomType(wxWebViewZoomType) const wxOVERRIDE;
     virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
+    virtual float GetZoomFactor() const wxOVERRIDE;
     virtual void SetZoom(wxWebViewZoom) wxOVERRIDE;
+    virtual void SetZoomFactor(float) wxOVERRIDE;
 
     //Clipboard functions
     virtual bool CanCut() const wxOVERRIDE;
@@ -160,6 +162,7 @@ private:
 #if wxUSE_WEBVIEW_WEBKIT2
     bool CanExecuteEditingCommand(const gchar* command) const;
     void SetupWebExtensionServer();
+    GDBusProxy *GetExtensionProxy() const;
     bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
 #endif
 
@@ -193,7 +196,7 @@ public:
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
-                              const wxString& name = wxWebViewNameStr) wxOVERRIDE
+                              const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
     { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
 };
 

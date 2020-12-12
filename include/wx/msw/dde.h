@@ -70,7 +70,6 @@ public:
   WXHCONV       m_hConv;
   const void*   m_sendingData;
   int           m_dataSize;
-  wxIPCFormat   m_dataType;
 
   wxDECLARE_NO_COPY_CLASS(wxDDEConnection);
   wxDECLARE_DYNAMIC_CLASS(wxDDEConnection);
@@ -88,10 +87,11 @@ public:
     // Find/delete wxDDEConnection corresponding to the HCONV
     wxDDEConnection *FindConnection(WXHCONV conv);
     bool DeleteConnection(WXHCONV conv);
-    wxString& GetServiceName() const { return (wxString&) m_serviceName; }
+    wxString& GetServiceName() { return m_serviceName; }
+    const wxString& GetServiceName() const { return m_serviceName; }
 
-    wxDDEConnectionList& GetConnections() const
-        { return (wxDDEConnectionList&) m_connections; }
+    wxDDEConnectionList& GetConnections() { return m_connections; }
+    const wxDDEConnectionList& GetConnections() const { return m_connections; }
 
 protected:
     int       m_lastError;
@@ -121,8 +121,8 @@ public:
     wxDDEConnection *FindConnection(WXHCONV conv);
     bool DeleteConnection(WXHCONV conv);
 
-    wxDDEConnectionList& GetConnections() const
-        { return (wxDDEConnectionList&) m_connections; }
+    wxDDEConnectionList& GetConnections() { return m_connections; }
+    const wxDDEConnectionList& GetConnections() const { return m_connections; }
 
 protected:
     int       m_lastError;

@@ -583,19 +583,19 @@ public:
         @a ptr is a pointer to the reference counted object to which this class points.
         If @a ptr is not NULL @b T::IncRef() will be called on the object.
     */
-    wxObjectDataPtr<T>(T* ptr = NULL);
+    wxObjectDataPtr(T* ptr = NULL);
 
     /**
         This copy constructor increases the count of the reference counted object to
         which @a tocopy points and then this class will point to, as well.
     */
-    wxObjectDataPtr<T>(const wxObjectDataPtr<T>& tocopy);
+    wxObjectDataPtr(const wxObjectDataPtr<T>& tocopy);
 
 
     /**
         Decreases the reference count of the object to which this class points.
     */
-    ~wxObjectDataPtr<T>();
+    ~wxObjectDataPtr();
 
     /**
         Gets a pointer to the reference counted object to which this class points.
@@ -609,8 +609,23 @@ public:
     void reset(T *ptr);
 
     /**
+        Release the owned pointer, making caller responsible for decrementing
+        its reference count.
+
+        This method should be used only for interoperating with the existing
+        code working with raw pointers, typically when returning a raw pointer
+        from a function.
+
+        After calling this function, this object becomes invalid, i.e. it
+        doesn't hold any valid pointer value any more.
+
+        @since 3.1.4
+    */
+    T* release();
+
+    /**
         Conversion to a boolean expression (in a variant which is not
-        convertable to anything but a boolean expression).
+        convertible to anything but a boolean expression).
 
         If this class contains a valid pointer it will return @true, if it contains
         a @NULL pointer it will return @false.
@@ -718,7 +733,7 @@ public:
 /**
     Used in a C++ implementation file to complete the declaration of a class
     that has run-time type information.
-    
+
     @header{wx/object.h}
 
     Example:
@@ -726,7 +741,7 @@ public:
     @code
     wxIMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject);
 
-    wxCommand::wxCommand(void)
+    wxCommand::wxCommand()
     {
         ...
     }
@@ -736,7 +751,7 @@ public:
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
-    that has run-time type information and two base classes. 
+    that has run-time type information and two base classes.
 
     @header{wx/object.h}
 */
@@ -754,7 +769,7 @@ public:
     @code
     wxIMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow);
 
-    wxFrame::wxFrame(void)
+    wxFrame::wxFrame()
     {
         ...
     }

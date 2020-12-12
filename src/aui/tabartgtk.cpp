@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -308,9 +305,9 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
 
     wxCoord textX = tab_rect.x + padding + style_notebook->xthickness;
 
-    int bitmap_offset = 0;
     if (page.bitmap.IsOk())
     {
+        int bitmap_offset;
         bitmap_offset = textX;
 
         // draw bitmap

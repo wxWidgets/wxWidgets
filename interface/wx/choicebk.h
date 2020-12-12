@@ -88,7 +88,7 @@ public:
                 long style = 0,
                 const wxString& name = wxEmptyString);
 
-    
+
     /**
         Returns the wxChoice associated with the control.
     */

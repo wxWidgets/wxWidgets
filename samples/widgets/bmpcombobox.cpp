@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BITMAPCOMBOBOX
 
@@ -554,10 +551,6 @@ void BitmapComboBoxWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
         m_textInsert->SetValue(wxString::Format("test item %u", ++s_item));
     }
 
-    int sel = m_combobox->GetSelection();
-    if ( sel == wxNOT_FOUND )
-        sel = m_combobox->GetCount();
-
     m_combobox->Insert(s, wxNullBitmap, m_combobox->GetSelection());
 }
 
@@ -718,7 +711,7 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
             wxBitmap bmp(image);
             wxASSERT( bmp.IsOk() );
 #else
-            wxBitmap bmp(wxNullBitmap);
+            wxBitmap bmp;
 #endif
             images->Add(bmp);
             (*strings)[i] = name;

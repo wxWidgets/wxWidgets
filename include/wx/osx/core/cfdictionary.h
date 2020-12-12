@@ -56,10 +56,7 @@ public:
      @discussion Ownership will be shared by the original ref and the newly created ref. That is,
      the object will be explicitly retained by this new ref.
      */
-    wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon& otherRef)
-        : super_type(otherRef)
-    {
-    }
+    wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon&) = default;
 
     wxCFTypeRef GetValue(const void* key)
     {
@@ -119,7 +116,7 @@ public:
     {
         SetValue(key, wxCFNumberRef(v));
     }
-    
+
     CFMutableDictionaryRef CreateCopy() const
     {
         return CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, this->m_ptr);

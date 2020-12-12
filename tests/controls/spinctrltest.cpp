@@ -10,9 +10,6 @@
 
 #if wxUSE_SPINCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -21,108 +18,128 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 #include "wx/spinctrl.h"
+#include "wx/textctrl.h"
 
-class SpinCtrlTestCase : public CppUnit::TestCase
+class SpinCtrlTestCase1
 {
 public:
-    SpinCtrlTestCase() { }
+    SpinCtrlTestCase1()
+        : m_spin(new wxSpinCtrl())
+    {
+    }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    ~SpinCtrlTestCase1()
+    {
+        delete m_spin;
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( SpinCtrlTestCase );
-        CPPUNIT_TEST( Initial );
-        CPPUNIT_TEST( NoEventsInCtor );
-        WXUISIM_TEST( Arrows );
-        WXUISIM_TEST( Wrap );
-        CPPUNIT_TEST( Range );
-        CPPUNIT_TEST( Value );
-        WXUISIM_TEST( SetValueInsideEventHandler );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Initial();
-    void NoEventsInCtor();
-    void Arrows();
-    void Wrap();
-    void Range();
-    void Value();
-    void SetValueInsideEventHandler();
-
-    // Helper event handler for SetValueInsideEventHandler() test.
-    void OnSpinSetValue(wxSpinEvent &e);
-
+protected:
     wxSpinCtrl* m_spin;
-
-    wxDECLARE_NO_COPY_CLASS(SpinCtrlTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( SpinCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SpinCtrlTestCase, "SpinCtrlTestCase" );
-
-void SpinCtrlTestCase::setUp()
+class SpinCtrlTestCase2
 {
-    m_spin = new wxSpinCtrl(wxTheApp->GetTopWindow());
-}
+public:
+    SpinCtrlTestCase2()
+        : m_spin(new wxSpinCtrl(wxTheApp->GetTopWindow()))
+    {
+    }
 
-void SpinCtrlTestCase::tearDown()
+    ~SpinCtrlTestCase2()
+    {
+        delete m_spin;
+    }
+
+protected:
+    wxSpinCtrl* m_spin;
+};
+
+class SpinCtrlTestCase3
 {
-    wxDELETE(m_spin);
-}
+public:
+    SpinCtrlTestCase3()
+        : m_spin(new wxSpinCtrl(wxTheApp->GetTopWindow()))
+    {
+        m_spin->Bind(wxEVT_SPINCTRL, &SpinCtrlTestCase3::OnSpinSetValue, this);
+    }
 
-void SpinCtrlTestCase::Initial()
+    ~SpinCtrlTestCase3()
+    {
+        delete m_spin;
+    }
+
+private:
+    void OnSpinSetValue(wxSpinEvent &e)
+    {
+        // Constrain the value to be in the 1..16 range or 32.
+        int newVal = e.GetValue();
+
+        if ( newVal == 31 )
+            m_spin->SetValue(16);
+        else if ( newVal > 16 )
+            m_spin->SetValue(32);
+    }
+
+protected:
+    wxSpinCtrl* m_spin;
+};
+
+
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Init", "[spinctrl]")
 {
     // Initial value is defined by "initial" argument which is 0 by default.
-    CPPUNIT_ASSERT_EQUAL( 0, m_spin->GetValue() );
-
-    wxWindow* const parent = m_spin->GetParent();
-
-    // Recreate the control with another "initial" to check this.
-    delete m_spin;
-    m_spin = new wxSpinCtrl(parent, wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize, 0,
-                            0, 100, 17);
-    CPPUNIT_ASSERT_EQUAL( 17, m_spin->GetValue() );
-
-    // Recreate the control with another "initial" outside of standard spin
-    // ctrl range.
-    delete m_spin;
-    m_spin = new wxSpinCtrl(parent, wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize, 0,
-                            0, 200, 150);
-    CPPUNIT_ASSERT_EQUAL( 150, m_spin->GetValue() );
-
-    // But if the text string is specified, it takes precedence.
-    delete m_spin;
-    m_spin = new wxSpinCtrl(parent, wxID_ANY, "99",
-                            wxDefaultPosition, wxDefaultSize, 0,
-                            0, 100, 17);
-    CPPUNIT_ASSERT_EQUAL( 99, m_spin->GetValue() );
+    CHECK(m_spin->GetValue() == 0);
 }
 
-void SpinCtrlTestCase::NoEventsInCtor()
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Init2", "[spinctrl]")
 {
-    // Verify that creating the control does not generate any events. This is
-    // unexpected and shouldn't happen.
-    wxWindow* const parent = m_spin->GetParent();
-    delete m_spin;
-    m_spin = new wxSpinCtrl;
-
-    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
-    EventCounter updatedText(m_spin, wxEVT_TEXT);
-
-    m_spin->Create(parent, wxID_ANY, "",
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
                    0, 100, 17);
 
-    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+    // Recreate the control with another "initial" to check this.
+    CHECK(m_spin->GetValue() == 17);
 }
 
-void SpinCtrlTestCase::Arrows()
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Init3", "[spinctrl]")
+{
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                   wxDefaultPosition, wxDefaultSize, 0,
+                   0, 200, 150);
+
+    // Recreate the control with another "initial" outside of standard spin
+    // ctrl range.
+    CHECK(m_spin->GetValue() == 150);
+}
+
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Init4", "[spinctrl]")
+{
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "99",
+                   wxDefaultPosition, wxDefaultSize, 0,
+                   0, 100, 17);
+
+    // Recreate the control with another "initial" outside of standard spin
+    // ctrl range.
+    // But if the text string is specified, it takes precedence.
+    CHECK(m_spin->GetValue() == 99);
+}
+
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::NoEventsInCtor", "[spinctrl]")
+{
+    // Verify that creating the control does not generate any events. This is
+    // unexpected and shouldn't happen.
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
+
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                   wxDefaultPosition, wxDefaultSize, 0,
+                   0, 100, 17);
+
+    CHECK(updatedSpin.GetCount() == 0);
+    CHECK(updatedText.GetCount() == 0);
+}
+
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Arrows", "[spinctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
     EventCounter updated(m_spin, wxEVT_SPINCTRL);
@@ -136,26 +153,25 @@ void SpinCtrlTestCase::Arrows()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, m_spin->GetValue());
+    CHECK(updated.GetCount() == 1);
+    CHECK(m_spin->GetValue() == 1);
     updated.Clear();
 
     sim.Char(WXK_DOWN);
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+    CHECK(updated.GetCount() == 1);
+    CHECK(m_spin->GetValue() == 0);
 #endif
 }
 
-void SpinCtrlTestCase::Wrap()
+TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Wrap", "[spinctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxDELETE(m_spin);
-    m_spin = new wxSpinCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxDefaultSize,
-                            wxSP_ARROW_KEYS | wxSP_WRAP);
+    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                   wxDefaultPosition, wxDefaultSize,
+                   wxSP_ARROW_KEYS | wxSP_WRAP);
 
     wxUIActionSimulator sim;
 
@@ -166,20 +182,21 @@ void SpinCtrlTestCase::Wrap()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(100, m_spin->GetValue());
+    CHECK(m_spin->GetValue() == 100);
 
     sim.Char(WXK_UP);
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+    CHECK(m_spin->GetValue() == 0);
 #endif
 }
 
-void SpinCtrlTestCase::Range()
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Range", "[spinctrl]")
 {
-    CPPUNIT_ASSERT_EQUAL(0, m_spin->GetMin());
-    CPPUNIT_ASSERT_EQUAL(100, m_spin->GetMax());
+    CHECK(m_spin->GetMin() == 0);
+    CHECK(m_spin->GetMax() == 100);
+    CHECK(m_spin->GetBase() == 10);
 
     // Test that the value is adjusted to be inside the new valid range but
     // that this doesn't result in any events (as this is not something done by
@@ -189,61 +206,116 @@ void SpinCtrlTestCase::Range()
         EventCounter updatedText(m_spin, wxEVT_TEXT);
 
         m_spin->SetRange(1, 10);
-        CPPUNIT_ASSERT_EQUAL(1, m_spin->GetValue());
+        CHECK(m_spin->GetValue() == 1);
 
-        CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
-        CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+        CHECK(updatedSpin.GetCount() == 0);
+        CHECK(updatedText.GetCount() == 0);
     }
 
-    //Test negative ranges
+    // Test negative ranges
     m_spin->SetRange(-10, 10);
 
-    CPPUNIT_ASSERT_EQUAL(-10, m_spin->GetMin());
-    CPPUNIT_ASSERT_EQUAL(10, m_spin->GetMax());
+    CHECK(m_spin->GetMin() == -10);
+    CHECK(m_spin->GetMax() == 10);
+
+    // With base 16 only ranges including values >= 0 are allowed
+    m_spin->SetRange(0, 10);
+    int oldMinVal = m_spin->GetMin();
+    int oldMaxVal = m_spin->GetMax();
+    CHECK(oldMinVal == 0);
+    CHECK(oldMaxVal == 10);
+
+    CHECK(m_spin->SetBase(16) == true);
+    CHECK(m_spin->GetBase() == 16);
+
+    // New range should be silently ignored
+    m_spin->SetRange(-20, 20);
+    CHECK(m_spin->GetMin() == oldMinVal);
+    CHECK(m_spin->GetMax() == oldMaxVal);
+
+    // This range should be accepted
+    m_spin->SetRange(2, 8);
+    CHECK(m_spin->GetMin() == 2);
+    CHECK(m_spin->GetMax() == 8);
+
+    CHECK(m_spin->SetBase(10) == true);
+
+    CHECK(m_spin->GetBase() == 10);
 
     //Test backwards ranges
     m_spin->SetRange(75, 50);
 
-    CPPUNIT_ASSERT_EQUAL(75, m_spin->GetMin());
-    CPPUNIT_ASSERT_EQUAL(50, m_spin->GetMax());
+    CHECK(m_spin->GetMin() == 75);
+    CHECK(m_spin->GetMax() == 50);
 }
 
-void SpinCtrlTestCase::Value()
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
 {
     EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
     EventCounter updatedText(m_spin, wxEVT_TEXT);
 
-    CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+    CHECK(m_spin->GetValue() == 0);
 
     m_spin->SetValue(50);
-    CPPUNIT_ASSERT_EQUAL(50, m_spin->GetValue());
+    CHECK(m_spin->GetValue() == 50);
 
     m_spin->SetValue(-10);
-    CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+    CHECK(m_spin->GetValue() == 0);
 
     m_spin->SetValue(110);
-    CPPUNIT_ASSERT_EQUAL(100, m_spin->GetValue());
+    CHECK(m_spin->GetValue() == 100);
 
     // Calling SetValue() shouldn't have generated any events.
-    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+    CHECK(updatedSpin.GetCount() == 0);
+    CHECK(updatedText.GetCount() == 0);
 }
 
-void SpinCtrlTestCase::OnSpinSetValue(wxSpinEvent &e)
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Base", "[spinctrl]")
 {
-    // Constrain the value to be in the 1..16 range or 32.
-    int newVal = e.GetValue();
+    CHECK(m_spin->GetMin() == 0);
+    CHECK(m_spin->GetMax() == 100);
+    CHECK(m_spin->GetBase() == 10);
 
-    if ( newVal == 31 )
-        m_spin->SetValue(16);
-    else if ( newVal > 16 )
-        m_spin->SetValue(32);
+    // Only 10 and 16 bases are allowed
+    CHECK(m_spin->SetBase(10) == true);
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(8));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(2));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK(m_spin->SetBase(16) == true);
+    CHECK(m_spin->GetBase() == 16);
+
+    CHECK(m_spin->SetBase(10) == true);
+    CHECK(m_spin->GetBase() == 10);
+
+    // When range contains negative values only base 10 is allowed
+    m_spin->SetRange(-10, 10);
+    CHECK(m_spin->GetMin() == -10);
+    CHECK(m_spin->GetMax() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(8));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(2));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK_FALSE(m_spin->SetBase(16));
+    CHECK(m_spin->GetBase() == 10);
+
+    CHECK(m_spin->SetBase(10) == true);
+    CHECK(m_spin->GetBase() == 10);
 }
 
-void SpinCtrlTestCase::SetValueInsideEventHandler()
+TEST_CASE_METHOD(SpinCtrlTestCase3, "SpinCtrl::SetValueInsideEventHandler", "[spinctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    m_spin->Bind(wxEVT_SPINCTRL, &SpinCtrlTestCase::OnSpinSetValue, this);
+    // A dummy control with which we change the focus.
+    wxTextCtrl* text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+    text->Move(m_spin->GetSize().x, m_spin->GetSize().y * 3);
 
     wxUIActionSimulator sim;
 
@@ -258,11 +330,13 @@ void SpinCtrlTestCase::SetValueInsideEventHandler()
         sim.Text("20");
         wxYield();
 
-        wxTheApp->GetTopWindow()->SetFocus();
+        text->SetFocus();
         wxYield();
 
-        CPPUNIT_ASSERT_EQUAL(32, m_spin->GetValue());
+        CHECK(m_spin->GetValue() == 32);
     }
+
+    delete text;
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 

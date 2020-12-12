@@ -40,7 +40,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr );
+                const wxString& name = wxASCII_STR(wxPanelNameStr) );
 
     virtual ~wxWindowMac();
 
@@ -49,10 +49,10 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr );
+                const wxString& name = wxASCII_STR(wxPanelNameStr) );
 
     virtual void SendSizeEvent(int flags = 0) wxOVERRIDE;
-    
+
     // implement base class pure virtuals
     virtual void SetLabel( const wxString& label ) wxOVERRIDE;
     virtual wxString GetLabel() const wxOVERRIDE;
@@ -72,8 +72,6 @@ public:
         return OSXShowWithEffect(false, effect, timeout);
     }
 
-    virtual bool IsShownOnScreen() const wxOVERRIDE;
-
     virtual void SetFocus() wxOVERRIDE;
 
     virtual void WarpPointer( int x, int y ) wxOVERRIDE;
@@ -92,10 +90,10 @@ public:
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
     virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const wxOVERRIDE;
-    
+
     virtual int GetCharHeight() const wxOVERRIDE;
     virtual int GetCharWidth() const wxOVERRIDE;
-    
+
 public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true ) wxOVERRIDE;
@@ -117,16 +115,17 @@ public:
 #if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
     // hot keys (system wide accelerators)
     // -----------------------------------
-    
+
     virtual bool RegisterHotKey(int hotkeyId, int modifiers, int keycode) wxOVERRIDE;
     virtual bool UnregisterHotKey(int hotkeyId) wxOVERRIDE;
 #endif // wxUSE_HOTKEY
-    
+
+    virtual wxSize GetDPI() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
 
-    // Accept files for dragging
-    virtual void DragAcceptFiles( bool accept ) wxOVERRIDE;
 #endif
 
     // implementation from now on
@@ -153,10 +152,12 @@ public:
     // --------------
 
     void OnMouseEvent( wxMouseEvent &event );
+    void OnDPIChanged( wxDPIChangedEvent& event );
 
     void MacOnScroll( wxScrollEvent&event );
 
     virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual void EnableVisibleFocus(bool enabled) wxOVERRIDE;
 
     virtual bool IsDoubleBuffered() const wxOVERRIDE { return true; }
 
@@ -255,7 +256,7 @@ public:
 
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*    GetPeer() const;
-    
+
     // optimization to avoid creating a user pane in wxWindow::Create if we already know
     // we will replace it with our own peer
     void                DontCreatePeer();
@@ -263,10 +264,10 @@ public:
     // return true unless DontCreatePeer() had been called
     bool                ShouldCreatePeer() const;
 
-    // sets the native implementation wrapper, can replace an existing peer, use peer = NULL to 
+    // sets the native implementation wrapper, can replace an existing peer, use peer = NULL to
     // release existing peer
     void                SetPeer(wxOSXWidgetImpl* peer);
-    
+
     // wraps the already existing peer with the wrapper
     void                SetWrappingPeer(wxOSXWidgetImpl* wrapper);
 
@@ -289,11 +290,14 @@ public:
     virtual void        OSXSimulateFocusEvents();
 
     bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }
-    
+
     double              GetContentScaleFactor() const wxOVERRIDE;
-    
+
     // internal response to size events
     virtual void MacOnInternalSize() {}
+
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize       OSXMakeDPIFromScaleFactor(double scaleFactor);
 
 protected:
     // For controls like radio buttons which are genuinely composite

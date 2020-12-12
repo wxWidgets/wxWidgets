@@ -21,21 +21,21 @@ if(UNIX AND NOT WIN32)
     wx_append_sources(NET_FILES NET_UNIX)
 endif()
 
-wx_add_library(net IS_BASE ${NET_FILES})
+wx_add_library(wxnet IS_BASE ${NET_FILES})
 
 if(WIN32)
-    wx_lib_link_libraries(net PRIVATE ws2_32)
+    wx_lib_link_libraries(wxnet PRIVATE ws2_32)
 
     if(wxUSE_WEBREQUEST_WINHTTP)
-        wx_lib_link_libraries(net PRIVATE Winhttp)
+        wx_lib_link_libraries(wxnet PRIVATE Winhttp)
     endif()
 endif()
 
 if (wxUSE_WEBREQUEST_CURL)
     find_package(CURL REQUIRED)
 
-    target_include_directories(net PRIVATE ${CURL_INCLUDE_DIRS})
-    wx_lib_link_libraries(net PRIVATE ${CURL_LIBRARIES})
+    target_include_directories(wxnet PRIVATE ${CURL_INCLUDE_DIRS})
+    wx_lib_link_libraries(wxnet PRIVATE ${CURL_LIBRARIES})
 endif()
 
-wx_finalize_lib(net)
+wx_finalize_lib(wxnet)

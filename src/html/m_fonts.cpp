@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -86,10 +83,10 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
                 m_Faces = wxFontEnumerator::GetFacenames();
 
             wxStringTokenizer tk(faces, wxT(","));
-            int index;
 
             while (tk.HasMoreTokens())
             {
+                int index;
                 if ((index = m_Faces.Index(tk.GetNextToken(), false)) != wxNOT_FOUND)
                 {
                     m_WParser->SetFontFace(m_Faces[index]);

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT
 
@@ -120,13 +117,9 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
 
-    int resizeBorder = wxRESIZE_BORDER;
-
     GetFormattingDialogFactory()->SetSheetStyle(this);
 
-    wxPropertySheetDialog::Create(parent, id, title, pos, sz,
-        style | (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
-    );
+    wxPropertySheetDialog::Create(parent, id, title, pos, sz, style | wxRESIZE_BORDER);
 
     GetFormattingDialogFactory()->CreateButtons(this);
     GetFormattingDialogFactory()->CreatePages(flags, this);
@@ -619,7 +612,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
         {
             unitsIdx = 1; // By default, the 2nd in the list.
-            float value = dim.GetValue() / 100.0f;
+            double value = dim.GetValue() / 100.0;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
@@ -630,7 +623,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
         {
             unitsIdx = 3; // By default, the 4th in the list.
-            float value = dim.GetValue() / 100.0f;
+            double value = dim.GetValue() / 100.0;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
@@ -695,11 +688,11 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     }
     else if (unit == wxTEXT_ATTR_UNITS_TENTHS_MM)
     {
-        float value = 0.0;
+        float value = 0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
         // Convert from cm
         // Do this in two steps, since using one step causes strange rounding error for VS 2010 at least.
-        float v = (value * 100.0);
+        float v = value * 100;
         ret = (int) (v);
         return true;
     }
@@ -710,9 +703,9 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     }
     else if (unit == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
     {
-        float value = 0.0;
+        float value = 0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
-        float v = (value * 100.0);
+        float v = value * 100;
         ret = (int) (v);
     }
     else if (unit == wxTEXT_ATTR_UNITS_POINTS)
@@ -878,7 +871,7 @@ wxString wxRichTextFontListBox::CreateHTML(const wxString& facename) const
 {
     wxString str = wxT("<font");
 
-    str << wxT(" size=\"+2\"");;
+    str << wxT(" size=\"+2\"");
 
     if (!facename.IsEmpty() && facename != _("(none)"))
         str << wxT(" face=\"") << facename << wxT("\"");

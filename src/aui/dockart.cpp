@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -55,15 +52,8 @@
 #endif
 #endif
 
+#include <math.h>
 
-// -- wxAuiDefaultDockArt class implementation --
-
-// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
-// wxAuiManager.  This allows the library caller to customize the dock art
-// (probably by deriving from this class), or to completely replace all drawing
-// with custom dock art (probably by writing a new stand-alone class derived
-// from the wxAuiDockArt base class). The active dock art class can be set via
-// wxAuiManager::SetDockArt()
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
     int amount = 120;
@@ -76,18 +66,87 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
     return c.ChangeLightness(amount);
 }
 
+inline float wxAuiGetSRGB(float r) {
+    return r <= 0.03928f ? r / 12.92f : std::pow((r + 0.055f) / 1.055f, 2.4f);
+}
+
+float wxAuiGetRelativeLuminance(const wxColour& c)
+{
+    // based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+    return
+        0.2126f * wxAuiGetSRGB(c.Red()   / 255.0f) +
+        0.7152f * wxAuiGetSRGB(c.Green() / 255.0f) +
+        0.0722f * wxAuiGetSRGB(c.Blue()  / 255.0f);
+}
+
+float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
+{
+    // based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html
+    float L1 = wxAuiGetRelativeLuminance(c1);
+    float L2 = wxAuiGetRelativeLuminance(c2);
+    return L1 > L2 ? (L1 + 0.05f) / (L2 + 0.05f) : (L2 + 0.05f) / (L1 + 0.05f);
+}
+
 // wxAuiBitmapFromBits() is a utility function that creates a
 // masked bitmap from raw bits (XBM format)
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color)
 {
     wxImage img = wxBitmap((const char*)bits, w, h).ConvertToImage();
-    img.Replace(0,0,0,123,123,123);
-    img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
-    img.SetMaskColour(123,123,123);
+    if (color.Alpha() == wxALPHA_OPAQUE)
+    {
+        img.Replace(0,0,0,123,123,123);
+        img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
+        img.SetMaskColour(123,123,123);
+    }
+    else
+    {
+        img.InitAlpha();
+        const int newr = color.Red();
+        const int newg = color.Green();
+        const int newb = color.Blue();
+        const int newa = color.Alpha();
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
+            {
+                int r = img.GetRed(x, y);
+                int g = img.GetGreen(x, y);
+                int b = img.GetBlue(x, y);
+                if (r == 0 && g == 0 && b == 0)
+                {
+                    img.SetAlpha(x, y, wxALPHA_TRANSPARENT);
+                }
+                else
+                {
+                    img.SetRGB(x, y, newr, newg, newb);
+                    img.SetAlpha(x, y, newa);
+                }
+            }
+        }
+    }
     return wxBitmap(img);
 }
 
+// A utility function to scales a bitmap in place for use at the given scale
+// factor.
+void wxAuiScaleBitmap(wxBitmap& bmp, double scale)
+{
+#if wxUSE_IMAGE && !defined(__WXGTK3__) && !defined(__WXMAC__)
+    // scale to a close round number to improve quality
+    scale = floor(scale + 0.25);
+    if (scale > 1.0 && !(bmp.GetScaleFactor() > 1.0))
+    {
+        wxImage img = bmp.ConvertToImage();
+        img.Rescale(bmp.GetWidth()*scale, bmp.GetHeight()*scale,
+            wxIMAGE_QUALITY_BOX_AVERAGE);
+        bmp = wxBitmap(img);
+    }
+#else
+    wxUnusedVar(bmp);
+    wxUnusedVar(scale);
+#endif // wxUSE_IMAGE
+}
 
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
@@ -154,6 +213,14 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
     return ret;
 }
 
+// -- wxAuiDefaultDockArt class implementation --
+
+// wxAuiDefaultDockArt is an art provider class which does all of the drawing for
+// wxAuiManager.  This allows the library caller to customize the dock art
+// (probably by deriving from this class), or to completely replace all drawing
+// with custom dock art (probably by writing a new stand-alone class derived
+// from the wxAuiDockArt base class). The active dock art class can be set via
+// wxAuiManager::SetDockArt()
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
     UpdateColoursFromSystem();
@@ -181,6 +248,11 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_gradientType = wxAUI_GRADIENT_VERTICAL;
 
     InitBitmaps();
+}
+
+wxAuiDockArt* wxAuiDefaultDockArt::Clone()
+{
+    return new wxAuiDefaultDockArt(*this);
 }
 
 void
@@ -228,40 +300,29 @@ wxAuiDefaultDockArt::InitBitmaps ()
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 
 #ifdef __WXMAC__
-    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, *wxWHITE);
-    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, *wxWHITE );
+    const wxColour inactive = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
+    const wxColour active = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
 #else
-    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, m_activeCaptionTextColour);
+    const wxColor inactive = m_inactiveCaptionTextColour;
+    const wxColor active = m_activeCaptionTextColour;
 #endif
 
-#ifdef __WXMAC__
-    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, *wxWHITE);
-    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, *wxWHITE );
-#else
-    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, m_activeCaptionTextColour);
-#endif
+    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, inactive);
+    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, active);
 
-#ifdef __WXMAC__
-    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, *wxWHITE);
-    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, *wxWHITE );
-#else
-    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, m_activeCaptionTextColour);
-#endif
+    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, inactive);
+    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, active);
 
-    m_inactivePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_inactiveCaptionTextColour);
-    m_activePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_activeCaptionTextColour);
+    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, inactive);
+    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, active);
+
+    m_inactivePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, inactive);
+    m_activePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, active);
 }
 
 void wxAuiDefaultDockArt::UpdateColoursFromSystem()
 {
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -284,11 +345,7 @@ void wxAuiDefaultDockArt::UpdateColoursFromSystem()
     m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactiveCaptionColour = darker1Colour;
     m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
-#ifdef __WXMAC__
     m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-#else
-    m_inactiveCaptionTextColour = *wxBLACK;
-#endif
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
@@ -510,7 +567,7 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
     {
         for (i = 0; i < border_width; ++i)
         {
-            dc.SetPen(*wxWHITE_PEN);
+            dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
             dc.DrawLine(rect.x, rect.y, rect.x+rect.width, rect.y);
             dc.DrawLine(rect.x, rect.y, rect.x, rect.y+rect.height);
             dc.SetPen(m_borderPen);
@@ -748,13 +805,11 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             break;
     }
 
+    wxAuiScaleBitmap(bmp, window->GetDPIScaleFactor());
 
     wxRect rect = _rect;
 
-    int old_y = rect.y;
     rect.y = rect.y + (rect.height/2) - (bmp.GetScaledHeight()/2);
-    rect.height = old_y + rect.height - rect.y - 1;
-
 
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
@@ -777,9 +832,10 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
         }
 
         // draw the background behind the button
-        dc.DrawRectangle(rect.x, rect.y, 16-window->FromDIP(1), 16-window->FromDIP(1));
+        dc.DrawRectangle(rect.x, rect.y,
+            bmp.GetScaledWidth() - window->FromDIP(1),
+            bmp.GetScaledHeight() - window->FromDIP(1));
     }
-
 
     // draw the button itself
     dc.DrawBitmap(bmp, rect.x, rect.y, true);

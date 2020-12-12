@@ -74,20 +74,25 @@ public:
 
     void OnRightClick(wxMouseEvent& event);
 
+    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+    virtual bool IsItemChecked(long item) const wxOVERRIDE;
+
 private:
-    void ShowContextMenu(const wxPoint& pos);
-    wxLog *m_logOld;
+    void ShowContextMenu(const wxPoint& pos, long item);
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxString& eventName);
     void LogColEvent(const wxListEvent& event, const wxString& eventName);
 
     virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
+    virtual bool OnGetItemIsChecked(long item) const wxOVERRIDE;
     virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
     virtual wxItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
 
     long m_updated;
 
+    // checked boxes in virtual list
+    wxSelectionStore m_checked;
 
     wxDECLARE_NO_COPY_CLASS(MyListCtrl);
     wxDECLARE_EVENT_TABLE();
@@ -111,7 +116,7 @@ protected:
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
-
+    void OnCheckVisibility(wxCommandEvent& event);
     void OnSetItemsCount(wxCommandEvent& event);
 
 
@@ -128,6 +133,7 @@ protected:
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
     void OnSetRowLines(wxCommandEvent& event);
+    void OnSetRowLinesOnBlank(wxCommandEvent& event);
     void OnCustomHeaderAttr(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
@@ -218,6 +224,7 @@ enum
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
     LIST_ROW_LINES,
+    LIST_ROW_LINES_ON_BLANK,
     LIST_CUSTOM_HEADER_ATTR,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_HEADER,
@@ -241,6 +248,6 @@ enum
 #ifdef __WXOSX__
     LIST_MAC_USE_GENERIC,
 #endif
-
+    LIST_CHECKVISIBILITY,
     LIST_CTRL                   = 1000
 };

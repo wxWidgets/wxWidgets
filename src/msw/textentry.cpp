@@ -3,7 +3,7 @@
 // Purpose:     wxTextEntry implementation for wxMSW
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/arrstr.h"
@@ -37,6 +34,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/winstyle.h"
+#include "wx/msw/private/cotaskmemptr.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -160,9 +158,12 @@ public:
         m_completer = completer;
     }
 
-    void UpdatePrefix(const wxString& prefix)
+    bool UpdatePrefix(const wxString& prefix)
     {
         CSLock lock(m_csRestart);
+
+        if ( prefix == m_prefix )
+            return false;
 
         // We simply store the prefix here and will really update during the
         // next call to our Next() method as we want to call Start() from the
@@ -170,6 +171,8 @@ public:
         // completions are generated.
         m_prefix = prefix;
         m_restart = TRUE;
+
+        return true;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
@@ -202,13 +205,13 @@ public:
 
             const wxWX2WCbuf wcbuf = s.wc_str();
             const size_t size = (wcslen(wcbuf) + 1)*sizeof(wchar_t);
-            void *olestr = CoTaskMemAlloc(size);
+            wxCoTaskMemPtr<wchar_t> olestr(size);
+
             if ( !olestr )
                 return E_OUTOFMEMORY;
 
             memcpy(olestr, wcbuf, size);
-
-            *rgelt++ = static_cast<LPOLESTR>(olestr);
+            *rgelt++ = olestr.release();
 
             ++(*pceltFetched);
         }
@@ -557,18 +560,16 @@ private:
 
         const wxString prefix = m_entry->GetRange(0, from);
 
-        m_enumStrings->UpdatePrefix(prefix);
-
-        DoRefresh();
+        if ( m_enumStrings->UpdatePrefix(prefix) )
+            DoRefresh();
     }
 
     void OnAfterChar(wxKeyEvent& event)
     {
-        // Notice that we must not refresh the completions when the user
-        // presses Backspace as this would result in adding back the just
-        // erased character(s) because of ACO_AUTOAPPEND option we use.
-        if ( m_customCompleter && event.GetKeyCode() != WXK_BACK )
+        if ( m_customCompleter )
+        {
             UpdateStringsFromCustomCompleter();
+        }
 
         event.Skip();
     }
@@ -580,6 +581,7 @@ private:
         switch ( event.GetKeyCode() )
         {
             case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
                 if ( m_win->HasFlag(wxTE_PROCESS_ENTER) )
                     specialKey = true;
                 break;
@@ -1034,6 +1036,17 @@ wxPoint wxTextEntry::DoGetMargins() const
     int left = LOWORD(lResult);
     int top = -1;
     return wxPoint(left, top);
+}
+
+// ----------------------------------------------------------------------------
+// input handling
+// ----------------------------------------------------------------------------
+
+bool wxTextEntry::ClickDefaultButtonIfPossible()
+{
+    return !wxIsAnyModifierDown() &&
+                wxWindow::MSWClickButtonIfPossible(
+                    wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

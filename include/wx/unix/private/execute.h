@@ -27,17 +27,17 @@ class wxExecuteData
 public:
     wxExecuteData()
     {
-        flags =
-        pid = 0;
-        exitcode = -1;
+        m_flags =
+        m_pid = 0;
+        m_exitcode = -1;
 
-        process = NULL;
+        m_process = NULL;
 
-        syncEventLoop = NULL;
+        m_syncEventLoop = NULL;
 
 #if wxUSE_STREAMS
-        fdOut =
-        fdErr = wxPipe::INVALID_FD;
+        m_fdOut =
+        m_fdErr = wxPipe::INVALID_FD;
 #endif // wxUSE_STREAMS
     }
 
@@ -51,36 +51,36 @@ public:
     void OnExit(int exitcode);
 
     // Return true if we should (or already did) redirect the child IO.
-    bool IsRedirected() const { return process && process->IsRedirected(); }
+    bool IsRedirected() const { return m_process && m_process->IsRedirected(); }
 
 
     // wxExecute() flags
-    int flags;
+    int m_flags;
 
     // the pid of the child process
-    int pid;
+    int m_pid;
 
     // The exit code of the process, set once the child terminates.
-    int exitcode;
+    int m_exitcode;
 
     // the associated process object or NULL
-    wxProcess *process;
+    wxProcess *m_process;
 
     // Local event loop used to wait for the child process termination in
     // synchronous execution case. We can't create it ourselves as its exact
     // type depends on the application kind (console/GUI), so we rely on
     // wxAppTraits setting up this pointer to point to the appropriate object.
-    wxEventLoopBase *syncEventLoop;
+    wxEventLoopBase *m_syncEventLoop;
 
 #if wxUSE_STREAMS
     // the input buffer bufOut is connected to stdout, this is why it is
     // called bufOut and not bufIn
-    wxStreamTempInputBuffer bufOut,
-                            bufErr;
+    wxStreamTempInputBuffer m_bufOut,
+                            m_bufErr;
 
     // the corresponding FDs, -1 if not redirected
-    int fdOut,
-        fdErr;
+    int m_fdOut,
+        m_fdErr;
 #endif // wxUSE_STREAMS
 
 

@@ -132,6 +132,18 @@ Accepted values: IA64, X64, ARM64
 (AMD64 accepted as synonym for X64 but should not be used any more).
             </description>
         </option>
+        <option name="VISUALSTUDIOVERSION">
+            <default-value>$(DOLLAR)(VISUALSTUDIOVERSION)</default-value>
+            <description>
+                Visual Studio version set by the VS command prompt.
+            </description>
+        </option>
+        <option name="VISUALSTUDIOPLATFORM">
+            <default-value>$(DOLLAR)(PLATFORM)</default-value>
+            <description>
+                Platform architecture set by the VS command prompt.
+            </description>
+        </option>
     </if>
     <if cond="FORMAT!='msvc'">
         <set var="TARGET_CPU"/>
@@ -327,6 +339,14 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_DPI_AWARE_MANIFEST">
+        <values>0,1,2</values>
+        <default-value>2</default-value>
+        <description>
+            Set DPI Awareness (win32) to none, system or per-monitor.
+        </description>
+    </option>
+
     <option name="USE_THREADS">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -391,8 +411,12 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
+        <option name="EXTRALIBS_STC"/>
         <option name="EXTRALIBS_WEBVIEW"/>
-        <option name="CXXWARNINGS"/>
+        <option name="WX_CPPFLAGS"/>
+        <option name="WX_CFLAGS"/>
+        <option name="WX_CXXFLAGS"/>
+        <option name="WX_LDFLAGS"/>
         <option name="HOST_SUFFIX"/>
         <option name="DYLIB_RPATH_INSTALL"/>
         <option name="DYLIB_RPATH_POSTLINK"/>
@@ -465,10 +489,15 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
             <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib glu32.lib</if>
-            <if cond="COMPILER in ['vc','evc']">opengl32.lib glu32.lib</if>
+            <if cond="COMPILER=='vc'">opengl32.lib glu32.lib</if>
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
+        <set var="EXTRALIBS_STC">
+            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">imm32.lib</if>
+            <if cond="COMPILER=='vc' and TOOLKIT=='MSW'">imm32.lib</if>
+            <if cond="COMPILER=='gcc' and TOOLKIT=='MSW'">-limm32</if>
+        </set>
         <set var="EXTRALIBS_WEBVIEW"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
@@ -480,26 +509,13 @@ it if SHARED=1 unless you know what you are doing.
     </if>
 
     <if cond="FORMAT=='mingw'">
-        <option name="GCC_VERSION">
-            <values>3,2.95</values>
-            <default-value>3</default-value>
-            <description>
-Set the version of your Mingw installation here.
-    "3" ...... this is for Mingw 2.0 or newer (comes with gcc3)
-    "2.95" ... for Mingw 1.1 or any of the older versions
-            </description>
-        </option>
         <option name="WINDRES">
-            <default-value>windres --use-temp-file</default-value>
+            <default-value>windres</default-value>
             <description>
 Windows resource compiler to use, possibly including extra options.
 For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
             </description>
         </option>
-        <set var="GCCFLAGS">
-            <if cond="GCC_VERSION=='2.95'">-fvtable-thunks</if>
-        </set>
-        <set var="EXTRACFLAGS">$(GCCFLAGS) -DHAVE_W32API_H</set>
     </if>
 
 
@@ -525,6 +541,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_GUI">1</set>
         <set var="USE_EXCEPTIONS">1</set>
         <set var="USE_RTTI">1</set>
+        <set var="USE_DPI_AWARE_MANIFEST">0</set>
         <set var="USE_THREADS">1</set>
         <set var="USE_CAIRO">0</set>
         <set var="DEBUG_INFO">$(DEBUG_INFO_DEFAULT)</set>

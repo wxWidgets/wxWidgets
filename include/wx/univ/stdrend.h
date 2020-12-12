@@ -3,7 +3,7 @@
 // Purpose:     wxStdRenderer class declaration
 // Author:      Vadim Zeitlin
 // Created:     2006-09-18
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -269,7 +269,7 @@ protected:
         // draw complete rectangle
     void DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen);
 
-        // draw the rectange using the first pen for the left and top sides
+        // draw the rectangle using the first pen for the left and top sides
         // and the second one for the bottom and right ones
     void DrawShadedRect(wxDC& dc, wxRect *rect,
                         const wxPen& pen1, const wxPen& pen2);

@@ -306,6 +306,19 @@ enum wxCompositionMode
 };
 
 /**
+   Used to indicate what kind of gradient is set in a wxGraphicsPenInfo
+   object.
+
+   @since 3.1.3
+ */
+enum wxGradientType {
+    wxGRADIENT_NONE,
+    wxGRADIENT_LINEAR,
+    wxGRADIENT_RADIAL
+};
+
+
+/**
     Represents a bitmap.
 
     The objects of this class are not created directly but only via
@@ -321,7 +334,7 @@ public:
     /**
         Default constructor creates an invalid bitmap.
      */
-    wxGraphicsBitmap() {}
+    wxGraphicsBitmap();
 
     /**
         Return the contents of this bitmap as wxImage.
@@ -455,6 +468,8 @@ public:
         This method is only useful as a helper in generic code that operates
         with wxDC and doesn't known its exact type. Use Create() instead if
         you know that the DC is e.g. wxWindowDC.
+
+        @see wxGraphicsRenderer::CreateContextFromUnknownDC()
 
         @since 3.1.1
      */
@@ -631,11 +646,14 @@ public:
         of gradient @a stops can be specified.
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
+
+        The @a matrix parameter was added in wxWidgets 3.1.3
     */
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxColour& c1, const wxColour& c2) const;
+                              const wxColour& c1, const wxColour& c2,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     /**
         @overload
@@ -643,34 +661,39 @@ public:
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) const;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     /**
         Creates a native brush with a radial gradient.
 
-        The brush originates at (@a xo, @a yc) and ends on a circle around
-        (@a xc, @a yc) with the given @a radius.
+        The brush originates at (@a startX, @a startY) and ends on a circle around
+        (@a endX, @a endY) with the given @a radius.
 
         The gradient may be specified either by its start and end colours @a
         oColor and @a cColor or by a full set of gradient @a stops.
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
+
+        The ability to apply a transformation matrix to the gradient was added in 3.1.3
     */
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxColour& oColor,
-                              const wxColour& cColor) const;
+                              const wxColour& cColor,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     /**
         @overload
     */
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) = 0;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     /**
         Sets the brush for filling paths.
@@ -781,8 +804,8 @@ public:
         @param y
             The y coordinate position to draw the text at.
         @param angle
-            The angle relative to the (default) horizontal direction to draw
-            the string.
+            The angle, in radians, relative to the (default) horizontal
+            direction to draw the string.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y, wxDouble angle);
 
@@ -810,8 +833,8 @@ public:
         @param y
             The y coordinate position to draw the text at.
         @param angle
-            The angle relative to the (default) horizontal direction to draw
-            the string.
+            The angle, in radians, relative to the (default) horizontal
+            direction to draw the string.
         @param backgroundBrush
             Brush to fill the text with.
     */
@@ -1093,7 +1116,7 @@ public:
     /**
        Returns the resolution of the graphics context in device points per inch.
     */
-    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY) const;
 
     /**
         Returns the associated window if any.
@@ -1304,7 +1327,7 @@ public:
         Creates wxGraphicsBitmap from a native bitmap handle.
 
         @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c
-        Bitmap pointer under MSW, @c CGImage pointer under OS X or a @c
+        Bitmap pointer under MSW, @c CGImage pointer under macOS or a @c
         cairo_surface_t pointer when using Cairo under any platform.
 
         Notice that this method takes ownership of @a bitmap, i.e. it will be
@@ -1340,6 +1363,24 @@ public:
         under MSW (but not for Direct2D renderer).
     */
     virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& metaFileDC) = 0;
+
+    /**
+        Creates a wxGraphicsContext from a DC of unknown specific type.
+
+        Creates a wxGraphicsContext if @a dc is a supported type (i.e. has a
+        corresponding CreateContext() method, e.g. wxWindowDC or wxMemoryDC).
+        Returns @NULL if the DC is unsupported.
+
+        This method is only useful as a helper in generic code that operates
+        with wxDC and doesn't known its exact type. Use the appropriate
+        CreateContext() overload instead if you know that the DC is e.g.
+        wxWindowDC.
+
+        @see wxGraphicsContext::CreateFromUnknownDC()
+
+        @since 3.1.3
+     */
+     wxGraphicsContext* CreateContextFromUnknownDC(wxDC& dc);
 
     /**
         Creates a wxGraphicsContext associated with a wxImage.
@@ -1418,18 +1459,33 @@ public:
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) = 0;
 
+    /**
+        Creates a native graphics font from a wxFont and a text colour.
+
+        The specified DPI is used to convert the (fractional) wxFont point-size
+        to a fractional pixel-size.
+
+        @since 3.1.3
+    */
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col = *wxBLACK) = 0;
 
     /**
         Creates a native brush with a linear gradient.
 
         Stops support is new since wxWidgets 2.9.1, previously only the start
         and end colours could be specified.
+
+        The ability to apply a transformation matrix to the gradient was added in 3.1.3
+
     */
     virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
                                                       wxDouble y1,
                                                       wxDouble x2,
                                                       wxDouble y2,
-                                                      const wxGraphicsGradientStops& stops) = 0;
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     /**
         Creates a native affine transformation matrix from the passed in
@@ -1457,11 +1513,14 @@ public:
 
         Stops support is new since wxWidgets 2.9.1, previously only the start
         and end colours could be specified.
+
+        The ability to apply a transformation matrix to the gradient was added in 3.1.3
     */
-    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                                      wxDouble xc, wxDouble yc,
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                                      wxDouble endX, wxDouble endY,
                                                       wxDouble radius,
-                                                      const wxGraphicsGradientStops& stops) = 0;
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
@@ -1475,7 +1534,7 @@ public:
 
         Currently this function returns "gdiplus" for Windows GDI+
         implementation, "direct2d" for Windows Direct2D implementation,
-        "cairo" for Cairo implementation and "cg" for OS X CoreGraphics
+        "cairo" for Cairo implementation and "cg" for macOS CoreGraphics
         implementation.
 
         @remarks The string returned by this method is not user-readable and is
@@ -1500,7 +1559,7 @@ public:
     virtual void GetVersion(int* major, int* minor = NULL, int* micro=NULL) const = 0;
 
     /**
-        Returns the default renderer on this platform. On OS X this is the Core
+        Returns the default renderer on this platform. On macOS this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
         on GTK we currently default to the Cairo renderer.
     */
@@ -1565,7 +1624,7 @@ public:
     @class wxGraphicsPenInfo
 
     This class is a helper used for wxGraphicsPen creation using named parameter
-    idiom: it allows to specify various wxGraphicsPen attributes using the chained
+    idiom: it allows specifying various wxGraphicsPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxGraphicsPen constructors.
 
@@ -1600,6 +1659,50 @@ public:
     wxGraphicsPenInfo& Join(wxPenJoin join);
 
     wxGraphicsPenInfo& Cap(wxPenCap cap);
+
+    wxGraphicsPenInfo&
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxColour& c1, const wxColour& c2,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxGraphicsPenInfo&
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxGraphicsPenInfo&
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, wxDouble radius,
+                   const wxColour& oColor, const wxColour& cColor,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxGraphicsPenInfo&
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY,
+                   wxDouble radius, const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxColour GetColour() const;
+    wxBitmap GetStipple() const;
+    wxPenStyle GetStyle() const;
+    wxPenJoin GetJoin() const;
+    wxPenCap GetCap() const;
+    int GetDashes(wxDash **ptr);
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    bool IsTransparent() const;
+    wxDouble GetWidth() const;
+    wxGradientType GetGradientType() const;
+    wxDouble GetX1() const;
+    wxDouble GetY1() const;
+    wxDouble GetX2() const;
+    wxDouble GetY2() const;
+    wxDouble GetStartX() const;
+    wxDouble GetStartY() const;
+    wxDouble GetEndX() const;
+    wxDouble GetEndY() const;
+    wxDouble GetRadius() const;
+    const wxGraphicsGradientStops& GetStops() const;
 };
 
 

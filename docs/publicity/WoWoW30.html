@@ -75,7 +75,7 @@ documentation had to be corrected by hand making this effort one of
 the biggest in the development cycle leading up wxWidgets 3.0.
 Additionally, tools were written to automatically compare the
 signature of the many class methods to the documentation. The result
-is more correct documentation with better formating and built-in
+is more correct documentation with better formatting and built-in
 searching and screenshots of many controls. Since Doxygen is a
 wide-spread format and easy to learn, the new documentation is much
 easier to edit, correct and read. See the <A HREF="https://docs.wxwidgets.org/trunk/index.html">wxWidgets
@@ -147,10 +147,10 @@ see <A HREF="https://docs.wxwidgets.org/trunk/classwx_d_c.html">wxDC</A>,
 <A HREF="https://docs.wxwidgets.org/trunk/classwx_brush.html">wxBrush</A>),
 it has not changed much since its initial inception and so the code
 was completely reorganized using a single set of frontend classes and
-different backends which will make maintainance much easier without
+different backends which will make maintenance much easier without
 having to care for binary backwards compatibility and it also helped
 isolate a number of subtle platform differences. The old drawing API
-is good enough for many tasks and reflects the drawing capabilites of
+is good enough for many tasks and reflects the drawing capabilities of
 the 1990's but it didn't make use of advanced features such as
 transparency, anti-aliasing and free matrix transforms of modern 2D
 graphics systems such as GDI+ on Windows, Cairo on Linux (and
@@ -165,12 +165,12 @@ wxBRUSHSTYLE_SOLID etc. and the reference counting system was
 streamlined and made identical on all platforms.</P>
 <H3 CLASS="western">Changes to wxBase</H3>
 <P ALIGN=JUSTIFY>wxBase is the name of the non-GUI part of wxWidgets
-libary which provides basic class such as the aforementioned wxString
+library which provides basic class such as the aforementioned wxString
 class, container classes, as well as classes for threading,
 networking, XML parsing, path and configuration management, logging,
 debugging etc. These functions and classes have been separated into
 their own library both for being able to write non-GUI apps as well
-as to make maintainance easier through reduced interdependence. 
+as to make maintenance easier through reduced interdependence.
 </P>
 <P ALIGN=JUSTIFY>Many of the changes to wxString and the container
 classes are located in wxBase, but on top of that support to wxBase
@@ -186,7 +186,7 @@ change. Rather, this paragraph summarizes the most relevant changes
 to the GUI classes of wxWidgets. Given wxWidgets' nature as a GUI
 library, these changes are also most likely to be visible to the user
 and may thus be the most important changes from a user's perspective
-(although not necessarily from a developer's perspective): 
+(although not necessarily from a developer's perspective):
 </P>
 <UL>
 	<LI><P ALIGN=JUSTIFY>wxDataViewCtrl and wxDataViewTreeCtrl: this
@@ -310,7 +310,7 @@ cases, supporting an old version of GTK+ hinders development so we
 decided to declare GTK+ 2.6 the minimum toolkit version that is
 supported. As an example, this made it possible to always use the
 GTK+ file dialog instead of the old generic file dialog which had to
-be used when GTK+ didn't have a usable file dialog. 
+be used when GTK+ didn't have a usable file dialog.
 </P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm">Other parts of wxGTK that
 were rewritten or which underwent a major update include, but are not

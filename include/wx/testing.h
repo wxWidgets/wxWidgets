@@ -39,10 +39,10 @@ class WXDLLIMPEXP_FWD_CORE wxFileDialogBase;
 class wxTestingModalHook;
 
 // This helper is used to construct the best possible name for the dialog of
-// the given type using wxRTTI for this type, if any, and the C++ RTTI for
-// either the type T statically or the dynamic type of "dlg" if it's non-null.
-template <class T>
-wxString wxGetDialogClassDescription(const wxClassInfo *ci, T* dlg = NULL)
+// the given type using either wxRTTI or C++ RTTI.
+inline
+wxString
+wxGetDialogClassDescription(const wxClassInfo *ci, const std::type_info& ti)
 {
     // We prefer to use the name from wxRTTI as it's guaranteed to be readable,
     // unlike the name returned by type_info::name() which may need to be
@@ -51,8 +51,8 @@ wxString wxGetDialogClassDescription(const wxClassInfo *ci, T* dlg = NULL)
     // than a readable but useless "wxDialog".
     if ( ci == wxCLASSINFO(wxDialog) )
     {
-        return wxString::Format("dialog of type \"%s\"",
-                                (dlg ? typeid(*dlg) : typeid(T)).name());
+        return wxString::Format(wxASCII_STR("dialog of type \"%s\""),
+                                wxASCII_STR(ti.name()));
     }
 
     // We consider that an unmangled name is clear enough to be used on its own.
@@ -175,7 +175,7 @@ protected:
     /// Returns description of the expected dialog (by default, its class).
     virtual wxString GetDefaultDescription() const wxOVERRIDE
     {
-        return wxGetDialogClassDescription<T>(wxCLASSINFO(T));
+        return wxGetDialogClassDescription(wxCLASSINFO(T), typeid(T));
     }
 
     /**
@@ -248,23 +248,23 @@ protected:
         {
             case wxID_YES:
             case wxID_NO:
-                details = "wxYES_NO style";
+                details = wxASCII_STR("wxYES_NO style");
                 break;
 
             case wxID_CANCEL:
-                details = "wxCANCEL style";
+                details = wxASCII_STR("wxCANCEL style");
                 break;
 
             case wxID_OK:
-                details = "wxOK style";
+                details = wxASCII_STR("wxOK style");
                 break;
 
             default:
-                details.Printf("a button with ID=%d", m_id);
+                details.Printf(wxASCII_STR("a button with ID=%d"), m_id);
                 break;
         }
 
-        return "wxMessageDialog with " + details;
+        return wxASCII_STR("wxMessageDialog with ") + details;
     }
 };
 
@@ -321,7 +321,7 @@ public:
 
     // Called to verify that all expectations were met. This cannot be done in
     // the destructor, because ReportFailure() may throw (either because it's
-    // overriden or because wx's assertions handling is, globally). And
+    // overridden or because wx's assertions handling is, globally). And
     // throwing from the destructor would introduce all sort of problems,
     // including messing up the order of errors in some cases.
     void CheckUnmetExpectations()
@@ -337,7 +337,7 @@ public:
             (
                 wxString::Format
                 (
-                    "Expected %s was not shown.",
+                    wxASCII_STR("Expected %s was not shown."),
                     expect->GetDescription()
                 )
             );
@@ -370,7 +370,7 @@ protected:
                 (
                     wxString::Format
                     (
-                        "%s was shown unexpectedly, expected %s.",
+                        wxASCII_STR("%s was shown unexpectedly, expected %s."),
                         DescribeUnexpectedDialog(dlg),
                         expect->GetDescription()
                     )
@@ -384,7 +384,7 @@ protected:
         (
             wxString::Format
             (
-                "%s was shown unexpectedly.",
+                wxASCII_STR("%s was shown unexpectedly."),
                 DescribeUnexpectedDialog(dlg)
             )
         );
@@ -403,15 +403,15 @@ protected:
         {
             return wxString::Format
                    (
-                        "A message box \"%s\"",
+                        wxASCII_STR("A message box \"%s\""),
                         msgdlg->GetMessage()
                    );
         }
 
         return wxString::Format
                (
-                    "A %s with title \"%s\"",
-                    wxGetDialogClassDescription(dlg->GetClassInfo(), dlg),
+                    wxASCII_STR("A %s with title \"%s\""),
+                    wxGetDialogClassDescription(dlg->GetClassInfo(), typeid(*dlg)),
                     dlg->GetTitle()
                );
     }
@@ -502,11 +502,6 @@ private:
           method.
  */
 #ifdef HAVE_VARIADIC_MACROS
-
-// See wx/cpp.h for the explanations of this hack.
-#if defined(__GNUC__) && __GNUC__ == 3
-    #pragma GCC system_header
-#endif /* gcc-3.x */
 
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
     {                                                                          \

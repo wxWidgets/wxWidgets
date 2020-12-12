@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 3.1.3
+PROJECT_NUMBER         = 3.1.5
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -214,7 +214,7 @@ ALIASES += rightCurly="}"
 # For indicating a sample location
 ALIASES += sampledir{1}="@e Location: @c samples/\1 subdirectory of your wxWidgets installation or https://github.com/wxWidgets/wxWidgets/tree/master/samples/\1"
 
-# For refering to the corresponding sample in a class document or a overview
+# For referring to the corresponding sample in a class document or a overview
 # Usually placed in the queue of @see
 ALIASES += sample{1}="\ref page_samples_\1"
 
@@ -384,6 +384,7 @@ GENERATE_CHI           = NO
 CHM_INDEX_ENCODING     =
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
+TOC_INCLUDE_HEADINGS   = 3
 
 
 #---------------------------------------------------------------------------
@@ -534,7 +535,7 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 
 TAGFILES               =
-GENERATE_TAGFILE       =
+GENERATE_TAGFILE       = $(GENERATE_TAGFILE)
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 EXTERNAL_PAGES         = YES

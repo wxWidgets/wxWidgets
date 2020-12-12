@@ -184,16 +184,13 @@
 // Unicode support
 // ----------------------------------------------------------------------------
 
-// These settings are obsolete: the library is always built in Unicode mode
+// This option is deprecated: the library should be always built in Unicode mode
 // now, only set wxUSE_UNICODE to 0 to compile legacy code in ANSI mode if
 // absolutely necessary -- updating it is strongly recommended as the ANSI mode
 // will disappear completely in future wxWidgets releases.
 #ifndef wxUSE_UNICODE
     #define wxUSE_UNICODE 1
 #endif
-
-// wxUSE_WCHAR_T is required by wxWidgets now, don't change.
-#define wxUSE_WCHAR_T 1
 
 // ----------------------------------------------------------------------------
 // global features
@@ -391,18 +388,6 @@
 // Recommended setting: 0 to remain compatible with the official builds of
 // wxWidgets.
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-// VC++ 4.2 and above allows <iostream> and <iostream.h> but you can't mix
-// them. Set this option to 1 to use <iostream.h>, 0 to use <iostream>.
-//
-// Note that newer compilers (including VC++ 7.1 and later) don't support
-// wxUSE_IOSTREAMH == 1 and so <iostream> will be used anyhow.
-//
-// Default is 0.
-//
-// Recommended setting: 0, only set to 1 if you use a really old compiler
-#define wxUSE_IOSTREAMH     0
-
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
@@ -822,6 +807,13 @@
 #define wxUSE_WEBVIEW_IE 0
 #endif
 
+// Use the Edge (Chromium) wxWebView backend (Requires WebView2 SDK)
+//
+// Default is 0 because WebView2 is not always available, set it to 1 if you do have it.
+//
+// Recommended setting: 1 when building for Windows with WebView2 SDK
+#define wxUSE_WEBVIEW_EDGE 0
+
 // Use the WebKit wxWebView backend
 //
 // Default is 1 on GTK and OSX
@@ -969,6 +961,14 @@
 #define wxUSE_TOGGLEBTN     1   // requires wxButton
 #define wxUSE_TREECTRL      1   // wxTreeCtrl
 #define wxUSE_TREELISTCTRL  1   // wxTreeListCtrl
+
+// Use generic version of wxDataViewCtrl even if a native one is available?
+//
+// Default is 1.
+//
+// Recommended setting: 1, but can be set to 0 if your program is affected by
+// the native control limitations.
+#define wxUSE_NATIVE_DATAVIEWCTRL 1
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.
@@ -1177,12 +1177,19 @@
 // depends on it)
 #define wxUSE_INFOBAR       1
 
-// Use wxMenu, wxMenuBar, wxMenuItem.
+// Use wxMenu, wxMenuItem.
 //
 // Default is 1.
 //
 // Recommended setting: 1 (can't be disabled under MSW)
 #define wxUSE_MENUS         1
+
+// Use wxMenuBar.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (can't be disabled under MSW)
+#define wxUSE_MENUBAR       1
 
 // Use wxNotificationMessage.
 //
@@ -1430,6 +1437,13 @@
 // otherwise.
 #define wxUSE_GLCANVAS       1
 
+// Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
+// automatically enabled if EGL support is detected.
+//
+// Default is 0.
+//
+#define wxUSE_GLCANVAS_EGL   0
+
 // wxRichTextCtrl allows editing of styled text.
 //
 // Default is 1.
@@ -1609,7 +1623,6 @@
 #define wxUSE_THEME_METAL   0
 #define wxUSE_THEME_MONO    0
 #define wxUSE_THEME_WIN32   0
-
 
 /* --- end common options --- */
 

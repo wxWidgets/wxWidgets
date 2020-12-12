@@ -166,7 +166,7 @@ wxWindow *wxButton::SetDefault()
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     return wxSize(80,26);
 }

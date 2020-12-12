@@ -37,7 +37,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxWebKitCtrlNameStr)
+                    const wxString& name = wxASCII_STR(wxWebKitCtrlNameStr))
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
     }
@@ -47,7 +47,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxWebKitCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxWebKitCtrlNameStr));
     virtual ~wxWebKitCtrl();
 
     void LoadURL(const wxString &url);
@@ -107,11 +107,11 @@ private:
     wxString m_pageTitle;
 
     OSXWebViewPtr m_webView;
-    
+
     WX_NSObject m_frameLoadMonitor;
     WX_NSObject m_policyDelegate;
     WX_NSObject m_UIDelegate;
-    
+
     // we may use this later to setup our own mouse events,
     // so leave it in for now.
     void* m_webKitCtrlEventHandler;

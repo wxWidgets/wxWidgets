@@ -33,7 +33,7 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 // void wxGUIAppTraits::MutexGuiEnter()
 // {
 // }
-// 
+//
 // void wxGUIAppTraits::MutexGuiLeave()
 // {
 // }
@@ -53,17 +53,3 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer,
 
     return wxPORT_QT;
 }
-
-//#############################################################################
-
-// this one fails to link under Windows; why is src/msw/basemsw.cpp picked up???
-#if wxUSE_CONSOLE_EVENTLOOP && !defined(__WINDOWS__)
-
-wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
-{
-    return new wxEventLoop();
-}
-
-#endif
-
-//#############################################################################

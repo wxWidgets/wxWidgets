@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifdef wxHAS_ANY_BUTTON
 
@@ -399,12 +396,11 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
     else
     {
         sizeBtn.x += 3*win->GetCharWidth();
-        sizeBtn.y += win->GetCharHeight()/2;
     }
 
     // account for the shield UAC icon if we have it
     if ( flags & Size_AuthNeeded )
-        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X, win);
 
     return sizeBtn;
 }
@@ -426,25 +422,28 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
     // By default all buttons have at least the standard size.
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        // The 50x14 button size is documented in the "Recommended sizing and
-        // spacing" section of MSDN layout article.
+        // The "Recommended sizing and spacing" section of MSDN layout article
+        // documents the default button size as being 50*14 dialog units or
+        // 75*23 relative pixels (what we call DIPs). As dialog units don't
+        // scale well in high DPI because of rounding errors, just DIPs here.
         //
-        // Note that we intentionally don't use GetDefaultSize() here, because
-        // it's inexact -- dialog units depend on this dialog's font.
-        const wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
+        // Moreover, it looks like the extra 2px borders around the visible
+        // part of the button are not scaled correctly in higher than normal
+        // DPI, so add them without scaling.
+        const wxSize sizeDef = btn->FromDIP(wxSize(73, 21)) + wxSize(2, 2);
 
         sizeBtn.IncTo(sizeDef);
     }
-    else // wxBU_EXACTFIT case
-    {
-        // Such buttons are typically used alongside a text control or similar,
-        // so make them as high as it.
-        int yText;
-        wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
-        yText = wxGetEditHeightFromCharHeight(yText, btn);
 
-        sizeBtn.IncTo(wxSize(-1, yText));
-    }
+    // wxBU_EXACTFIT is typically used alongside a text control or similar,
+    // so make them as high as it.
+    // The standard height is generally higher than this, but if not (e.g. when
+    // using a larger font) increase the button height as well.
+    int yText;
+    wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
+    yText = wxGetEditHeightFromCharHeight(yText, btn);
+
+    sizeBtn.IncTo(wxSize(-1, yText));
 
     btn->CacheBestSize(sizeBtn);
 
@@ -1012,12 +1011,12 @@ void DrawButtonText(HDC hdc,
     }
 }
 
-void DrawRect(HDC hdc, const RECT& r)
+void DrawRect(HDC hdc, const RECT& r, COLORREF color)
 {
-    wxDrawLine(hdc, r.left, r.top, r.right, r.top);
-    wxDrawLine(hdc, r.right, r.top, r.right, r.bottom);
-    wxDrawLine(hdc, r.right, r.bottom, r.left, r.bottom);
-    wxDrawLine(hdc, r.left, r.bottom, r.left, r.top);
+    wxDrawHVLine(hdc, r.left, r.top, r.right, r.top, color, 1);
+    wxDrawHVLine(hdc, r.right, r.top, r.right, r.bottom, color, 1);
+    wxDrawHVLine(hdc, r.right, r.bottom, r.left, r.bottom, color, 1);
+    wxDrawHVLine(hdc, r.left, r.bottom, r.left, r.top, color, 1);
 }
 
 /*
@@ -1059,50 +1058,44 @@ void DrawButtonFrame(HDC hdc, RECT& rectBtn,
                      bool selected, bool pushed)
 {
     RECT r;
-    CopyRect(&r, &rectBtn);
+    ::CopyRect(&r, &rectBtn);
 
-    AutoHPEN hpenBlack(GetSysColor(COLOR_3DDKSHADOW)),
-             hpenGrey(GetSysColor(COLOR_3DSHADOW)),
-             hpenLightGr(GetSysColor(COLOR_3DLIGHT)),
-             hpenWhite(GetSysColor(COLOR_3DHILIGHT));
-
-    SelectInHDC selectPen(hdc, hpenBlack);
+    COLORREF clrBlack = ::GetSysColor(COLOR_3DDKSHADOW),
+             clrGrey = ::GetSysColor(COLOR_3DSHADOW),
+             clrLightGr = ::GetSysColor(COLOR_3DLIGHT),
+             clrWhite = ::GetSysColor(COLOR_3DHILIGHT);
 
     r.right--;
     r.bottom--;
 
     if ( pushed )
     {
-        DrawRect(hdc, r);
+        DrawRect(hdc, r, clrBlack);
 
-        (void)SelectObject(hdc, hpenGrey);
         ::InflateRect(&r, -1, -1);
 
-        DrawRect(hdc, r);
+        DrawRect(hdc, r, clrGrey);
     }
     else // !pushed
     {
         if ( selected )
         {
-            DrawRect(hdc, r);
+            DrawRect(hdc, r, clrBlack);
 
             ::InflateRect(&r, -1, -1);
         }
 
-        wxDrawLine(hdc, r.left, r.bottom, r.right, r.bottom);
-        wxDrawLine(hdc, r.right, r.bottom, r.right, r.top - 1);
+        wxDrawHVLine(hdc, r.left, r.bottom, r.right, r.bottom, clrBlack, 1);
+        wxDrawHVLine(hdc, r.right, r.bottom, r.right, r.top - 1, clrBlack, 1);
 
-        (void)SelectObject(hdc, hpenWhite);
-        wxDrawLine(hdc, r.left, r.bottom - 1, r.left, r.top);
-        wxDrawLine(hdc, r.left, r.top, r.right, r.top);
+        wxDrawHVLine(hdc, r.left, r.bottom - 1, r.left, r.top, clrWhite, 1);
+        wxDrawHVLine(hdc, r.left, r.top, r.right, r.top, clrWhite, 1);
 
-        (void)SelectObject(hdc, hpenLightGr);
-        wxDrawLine(hdc, r.left + 1, r.bottom - 2, r.left + 1, r.top + 1);
-        wxDrawLine(hdc, r.left + 1, r.top + 1, r.right - 1, r.top + 1);
+        wxDrawHVLine(hdc, r.left + 1, r.bottom - 2, r.left + 1, r.top + 1, clrLightGr, 1);
+        wxDrawHVLine(hdc, r.left + 1, r.top + 1, r.right - 1, r.top + 1, clrLightGr, 1);
 
-        (void)SelectObject(hdc, hpenGrey);
-        wxDrawLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1);
-        wxDrawLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top);
+        wxDrawHVLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1, clrGrey, 1);
+        wxDrawHVLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top, clrGrey, 1);
     }
 
     InflateRect(&rectBtn, -OD_BUTTON_MARGIN, -OD_BUTTON_MARGIN);
@@ -1156,31 +1149,16 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     ::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
-    ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 
     if ( button->UseBgCol() && iState != PBS_HOT )
     {
         COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
         AutoHBRUSH hbrushBackground(colBg);
 
-        // don't overwrite the focus rect
-        RECT rectClient;
-        ::CopyRect(&rectClient, &rectBtn);
-        ::InflateRect(&rectClient, -1, -1);
-
-        if ( wxGetWinVersion() >= wxWinVersion_10 )
-        {
-            // buttons have flat appearance so we can fully color them
-            // even outside the "safe" rectangle
-            SelectInHDC brush(hdc, hbrushBackground);
-            COLORREF colTheme = GetPixel(hdc, rectClient.left, rectClient.top);
-            ExtFloodFill(hdc, rectClient.left, rectClient.top, colTheme, FLOODFILLSURFACE);
-        }
-        else
-        {
-            FillRect(hdc, &rectClient, hbrushBackground);
-        }
+        FillRect(hdc, &rectBtn, hbrushBackground);
     }
+
+    ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 }
 #endif // wxUSE_UXTHEME
 
@@ -1240,10 +1218,29 @@ bool wxAnyButton::MSWIsPushed() const
     return (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
 }
 
+#ifdef __WXDEBUG__
+static inline bool IsNonTransformedDC(HDC hdc)
+{
+    if ( ::GetGraphicsMode(hdc) == GM_ADVANCED )
+        return false;
+
+    SIZE devExt;
+    ::GetViewportExtEx(hdc, &devExt);
+    SIZE logExt;
+    ::GetWindowExtEx(hdc, &logExt);
+    return (devExt.cx == logExt.cx && devExt.cy == logExt.cy);
+}
+#endif // __WXDEBUG__
+
 bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 {
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
     HDC hdc = lpDIS->hDC;
+    // We expect here a DC with default settings (in GM_COMPATIBLE mode
+    // with non-scaled coordinates system) but will check this because
+    // our line drawing function wxDrawHVLine() works effectively only
+    // on a non-transformed DC.
+    wxASSERT(IsNonTransformedDC(hdc));
 
     UINT state = lpDIS->itemState;
     switch ( GetButtonState(this, state) )

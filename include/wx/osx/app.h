@@ -77,12 +77,12 @@ public:
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 
     // adding a CFType object to be released only at the end of the current event cycle (increases the
-    // refcount of the object passed), needed in case we are in the middle of an event concering an object
+    // refcount of the object passed), needed in case we are in the middle of an event concerning an object
     // we want to delete and cannot do it immediately
     // TODO change semantics to be in line with cocoa (make autrelease NOT increase the count)
     void                  MacAddToAutorelease( void* cfrefobj );
     void                  MacReleaseAutoreleasePool();
-    
+
 public:
     static wxWindow*      s_captureWindow ;
     static long           s_lastModifiers ;
@@ -95,7 +95,7 @@ protected:
     // override for support of custom app controllers
     virtual WX_NSObject   OSXCreateAppController();
 #endif
-    
+
 private:
     virtual bool        DoInitGui();
     virtual void        DoCleanUp();
@@ -139,6 +139,9 @@ public:
     // override this to return false from a non-bundled console app in order to stay in background ...
     virtual bool         OSXIsGUIApplication() { return true; }
 
+    // Allow the user to disable the tab bar support in the application
+    void                 OSXEnableAutomaticTabbing(bool enable);
+
 #if wxOSX_USE_COCOA_OR_IPHONE
     // immediately before the native event loop launches
     virtual void         OSXOnWillFinishLaunching();
@@ -155,14 +158,14 @@ private:
     wxArrayString       m_openFiles;
     wxArrayString       m_printFiles;
     wxString            m_getURL;
-    
+
 public:
     bool                OSXInitWasCalled() { return m_inited; }
     void                OSXStoreOpenFiles(const wxArrayString &files ) { m_openFiles = files ; }
     void                OSXStorePrintFiles(const wxArrayString &files ) { m_printFiles = files ; }
     void                OSXStoreOpenURL(const wxString &url ) { m_getURL = url ; }
 #endif
-    
+
     // Hide the application windows the same as the system hide command would do it.
     void MacHideApp();
 

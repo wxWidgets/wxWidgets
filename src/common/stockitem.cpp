@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/stockitem.h"
 
@@ -212,7 +209,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         default:
             wxFAIL_MSG( wxT("invalid stock item ID") );
             break;
-    };
+    }
 
     #undef STOCKITEM
 
@@ -314,7 +311,7 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
             // there's no stock accelerator for that.
             ret.Set(0, 0, id);
             break;
-    };
+    }
 
     #undef STOCKITEM
 

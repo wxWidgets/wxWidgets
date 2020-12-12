@@ -19,9 +19,9 @@ as well as several standard implementations of it and a family of functions to
 use with them.
 
 First of all, no knowledge of wxLog classes is needed to use them. For this,
-you should only know about @ref group_funcmacro_log "wxLogXXX() functions". 
-All of them have the same syntax as @e printf() or @e vprintf() , i.e. they 
-take the format string as the first argument and respectively a variable number 
+you should only know about @ref group_funcmacro_log "wxLogXXX() functions".
+All of them have the same syntax as @e printf() or @e vprintf() , i.e. they
+take the format string as the first argument and respectively a variable number
 of arguments or a variable argument list pointer. Here are all of them:
 
 @li wxLogFatalError() which is like wxLogError(), but also terminates the program
@@ -161,8 +161,8 @@ works.
 wxWidgets has the notion of a <em>log target</em>: it is just a class deriving
 from wxLog. As such, it implements the virtual functions of the base class
 which are called when a message is logged. Only one log target is @e active at
-any moment, this is the one used by @ref group_funcmacro_log "wxLogXXX() functions". 
-The normal usage of a log object (i.e. object of a class derived from wxLog) is 
+any moment, this is the one used by @ref group_funcmacro_log "wxLogXXX() functions".
+The normal usage of a log object (i.e. object of a class derived from wxLog) is
 to install it as the active target with a call to @e SetActiveTarget() and it
 will be used automatically by all subsequent calls to
 @ref group_funcmacro_log "wxLogXXX() functions".
@@ -263,7 +263,7 @@ GUI is (already/still) available when your log target as used as wxWidgets
 automatically switches to using wxLogStderr if it isn't.
 
 There are several methods which may be overridden in the derived class to
-customize log messages handling: wxLog::DoLogRecord(), wxLog::DoLogTextAtLevel() 
+customize log messages handling: wxLog::DoLogRecord(), wxLog::DoLogTextAtLevel()
 and wxLog::DoLogText().
 
 The last method is the simplest one: you should override it if you simply

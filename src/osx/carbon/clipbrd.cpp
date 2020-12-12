@@ -25,8 +25,10 @@
 #endif
 
 #include "wx/metafile.h"
+#include "wx/scopedarray.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/datatransfer.h"
 
 #define wxUSE_DATAOBJ 1
 
@@ -43,18 +45,10 @@ wxClipboard::wxClipboard()
 {
     m_open = false;
     m_data = NULL ;
-    PasteboardRef clipboard = 0;
-    OSStatus err = PasteboardCreate( kPasteboardClipboard, &clipboard );
-    if (err != noErr)
-    {
-        wxLogSysError( wxT("Failed to create the clipboard.") );
-    }
-    m_pasteboard.reset(clipboard);
 }
 
 wxClipboard::~wxClipboard()
 {
-    m_pasteboard.reset((PasteboardRef)0);
     delete m_data;
 }
 
@@ -62,18 +56,16 @@ void wxClipboard::Clear()
 {
     wxDELETE(m_data);
 
-    wxCHECK_RET( m_pasteboard, "Clipboard creation failed." );
-
-    OSStatus err = PasteboardClear( m_pasteboard );
-    if (err != noErr)
-    {
-        wxLogSysError( wxT("Failed to empty the clipboard.") );
-    }
+    wxOSXPasteboard::GetGeneralClipboard()->Clear();
 }
 
 bool wxClipboard::Flush()
 {
-    return false;
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
+
+    wxOSXPasteboard::GetGeneralClipboard()->Flush();
+
+    return true;
 }
 
 bool wxClipboard::Open()
@@ -116,13 +108,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     // we can only store one wxDataObject
     Clear();
 
-    PasteboardSyncFlags syncFlags = PasteboardSynchronize( m_pasteboard );
-    wxCHECK_MSG( !(syncFlags&kPasteboardModified), false, wxT("clipboard modified after clear") );
-    wxCHECK_MSG( (syncFlags&kPasteboardClientIsOwner), false, wxT("client couldn't own clipboard") );
+    data->WriteToSink(wxOSXPasteboard::GetGeneralClipboard());
+
+    Flush();
 
     m_data = data;
-
-    data->AddToPasteboard( m_pasteboard, 1 );
 
     return true;
 }
@@ -139,14 +129,15 @@ void wxClipboard::Close()
     wxDELETE(m_data);
 }
 
-bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
+bool wxClipboard::IsSupported(const wxDataFormat &dataFormat)
 {
     wxLogTrace(TRACE_CLIPBOARD, wxT("Checking if format %s is available"),
                dataFormat.GetId().c_str());
 
     if ( m_data )
         return m_data->IsSupported( dataFormat );
-    return wxDataObject::IsFormatInPasteboard( m_pasteboard, dataFormat );
+
+    return wxOSXPasteboard::GetGeneralClipboard()->IsSupported(dataFormat);
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
@@ -156,10 +147,9 @@ bool wxClipboard::GetData( wxDataObject& data )
 
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    size_t formatcount = data.GetFormatCount(wxDataObject::Set) + 1;
-    wxDataFormat *array = new wxDataFormat[ formatcount ];
-    array[0] = data.GetPreferredFormat(wxDataObject::Set);
-    data.GetAllFormats( &array[1], wxDataObject::Set );
+    size_t formatcount = data.GetFormatCount(wxDataObject::Set);
+    wxScopedArray<wxDataFormat> array(formatcount);
+    data.GetAllFormats( array.get(), wxDataObject::Set );
 
     bool transferred = false;
 
@@ -179,10 +169,11 @@ bool wxClipboard::GetData( wxDataObject& data )
                 }
                 else
                 {
-                    char *d = new char[ dataSize ];
-                    m_data->GetDataHere( format, (void*)d );
+                    wxMemoryBuffer mem(dataSize);
+                    void *d = mem.GetWriteBuf(dataSize);
+                    m_data->GetDataHere( format, d );
                     data.SetData( format, dataSize, d );
-                    delete [] d;
+                    mem.UngetWriteBuf(dataSize);
                 }
             }
         }
@@ -191,10 +182,8 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get formats from wxDataObjects
     if ( !transferred )
     {
-        transferred = data.GetFromPasteboard( m_pasteboard ) ;
+        transferred = data.ReadFromSource(wxOSXPasteboard::GetGeneralClipboard());
     }
-
-    delete [] array;
 
     return transferred;
 }

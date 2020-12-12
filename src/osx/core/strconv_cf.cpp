@@ -89,13 +89,16 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
         if ( theString == NULL )
             return wxCONV_FAILED;
 
-        // Ensure that the string is in canonical composed form (NFC): this is
-        // important because Darwin uses decomposed form (NFD) for e.g. file
-        // names but we want to use NFC internally.
-        wxCFRef<CFMutableStringRef>
+        if ( m_normalization & ToWChar_C )
+        {
+            // Ensure that the string is in canonical composed form (NFC): this is
+            // important because Darwin uses decomposed form (NFD) for e.g. file
+            // names but we want to use NFC internally.
+            wxCFRef<CFMutableStringRef>
             cfMutableString(CFStringCreateMutableCopy(NULL, 0, theString));
-        CFStringNormalize(cfMutableString, kCFStringNormalizationFormC);
-        theString = cfMutableString;
+            CFStringNormalize(cfMutableString, kCFStringNormalizationFormC);
+            theString = cfMutableString;
+        }
 
         /* NOTE: The string content includes the NULL element if the source string did
          * That means we have to do nothing special because the destination will have
@@ -103,13 +106,6 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
          * in the count iff it was included in the source count.
          */
 
-
-/* If we're compiling against Tiger headers we can support direct conversion
- * to UTF32.  If we are then run against a pre-Tiger system, the encoding
- * won't be available so we'll defer to the string->UTF-16->UTF-32 conversion.
- */
-        if(CFStringIsEncodingAvailable(wxCFStringEncodingWcharT))
-        {
             CFRange fullStringRange = CFRangeMake(0, CFStringGetLength(theString));
             CFIndex usedBufLen;
 
@@ -135,34 +131,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
             // CFStringGetBytes does exactly the right thing when buffer
             // pointer is NULL and returns the number of bytes required
             return usedBufLen / sizeof(wchar_t);
-        }
-        else
-        {
-            // NOTE: Includes NULL iff source did
-            /* NOTE: This is an approximation.  The eventual UTF-32 will
-             * possibly have less elements but certainly not more.
-             */
-            size_t returnSize = CFStringGetLength(theString);
 
-            if (dstSize == 0 || dst == NULL)
-            {
-                return returnSize;
-            }
-
-            // Convert the entire string.. too hard to figure out how many UTF-16 we'd need
-            // for an undersized UTF-32 destination buffer.
-            CFRange fullStringRange = CFRangeMake(0, CFStringGetLength(theString));
-            UniChar *szUniCharBuffer = new UniChar[fullStringRange.length];
-
-            CFStringGetCharacters(theString, fullStringRange, szUniCharBuffer);
-
-            wxMBConvUTF16 converter;
-            returnSize = converter.ToWChar( dst, dstSize, (const char*)szUniCharBuffer, fullStringRange.length );
-            delete [] szUniCharBuffer;
-
-            return returnSize;
-        }
-        // NOTREACHED
     }
 
     size_t wxMBConv_cf::FromWChar(char *dst, size_t dstSize, const wchar_t *src, size_t srcSize) const
@@ -175,44 +144,23 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
         // Temporary CFString
         wxCFRef<CFStringRef> theString;
 
-/* If we're compiling against Tiger headers we can support direct conversion
- * from UTF32.  If we are then run against a pre-Tiger system, the encoding
- * won't be available so we'll defer to the UTF-32->UTF-16->string conversion.
- */
-        if(CFStringIsEncodingAvailable(wxCFStringEncodingWcharT))
-        {
             theString = wxCFRef<CFStringRef>(CFStringCreateWithBytes(
                     kCFAllocatorDefault,
-                    (UInt8*)src,
+                    reinterpret_cast<const UInt8*>(src),
                     srcSize * sizeof(wchar_t),
                     wxCFStringEncodingWcharT,
                     false));
-        }
-        else
-        {
-            wxMBConvUTF16 converter;
-            size_t cbUniBuffer = converter.FromWChar( NULL, 0, src, srcSize );
-            wxASSERT(cbUniBuffer % sizeof(UniChar));
-
-            // Will be free'd by kCFAllocatorMalloc when CFString is released
-            UniChar *tmpUniBuffer = (UniChar*)malloc(cbUniBuffer);
-
-            cbUniBuffer = converter.FromWChar( (char*) tmpUniBuffer, cbUniBuffer, src, srcSize );
-            wxASSERT(cbUniBuffer % sizeof(UniChar));
-
-            theString = wxCFRef<CFStringRef>(CFStringCreateWithCharactersNoCopy(
-                        kCFAllocatorDefault,
-                        tmpUniBuffer,
-                        cbUniBuffer / sizeof(UniChar),
-                        kCFAllocatorMalloc
-                    ));
-
-        }
 
         wxCHECK(theString != NULL, wxCONV_FAILED);
 
-        CFIndex usedBufLen;
+        if ( m_normalization & FromWChar_D )
+        {
+            wxCFRef<CFMutableStringRef> normalizedFormD = CFStringCreateMutableCopy(kCFAllocatorDefault,0,theString);
+            CFStringNormalize(normalizedFormD, kCFStringNormalizationFormD);
+            theString = normalizedFormD;
+        }
 
+        CFIndex usedBufLen;
         CFIndex charsConverted = CFStringGetBytes(
                 theString,
                 CFRangeMake(0, CFStringGetLength(theString)),
@@ -232,6 +180,41 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
 
         return usedBufLen;
     }
+
+//
+// wxMacUniCharBuffer
+//
+
+wxMacUniCharBuffer::wxMacUniCharBuffer( const wxString &str )
+{
+    wxMBConvUTF16 converter ;
+#if wxUSE_UNICODE
+    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+    m_ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) m_ubuf , str.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
+    m_ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) m_ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    m_chars = unicharlen / 2 ;
+}
+
+wxMacUniCharBuffer::~wxMacUniCharBuffer()
+{
+    free( m_ubuf ) ;
+}
+
+UniCharPtr wxMacUniCharBuffer::GetBuffer()
+{
+    return m_ubuf ;
+}
+
+UniCharCount wxMacUniCharBuffer::GetChars()
+{
+    return m_chars ;
+}
 
 #endif // __DARWIN__
 

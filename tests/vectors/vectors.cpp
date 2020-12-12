@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -58,7 +55,7 @@ class SelfPointingObject
 public:
     SelfPointingObject() { m_self = this; }
     SelfPointingObject(const SelfPointingObject&) { m_self = this; }
-    ~SelfPointingObject() { CPPUNIT_ASSERT( this == m_self ); }
+    ~SelfPointingObject() { CHECK( this == m_self ); }
 
     // the assignment operator should not modify our "this" pointer so
     // implement it just to prevent the default version from doing it
@@ -72,100 +69,63 @@ private:
 // test class
 // ----------------------------------------------------------------------------
 
-class VectorsTestCase : public CppUnit::TestCase
-{
-public:
-    VectorsTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( VectorsTestCase );
-        CPPUNIT_TEST( PushPopTest );
-        CPPUNIT_TEST( Insert );
-        CPPUNIT_TEST( Erase );
-        CPPUNIT_TEST( Iterators );
-        CPPUNIT_TEST( Objects );
-        CPPUNIT_TEST( NonPODs );
-        CPPUNIT_TEST( Resize );
-        CPPUNIT_TEST( Swap );
-        CPPUNIT_TEST( Sort );
-    CPPUNIT_TEST_SUITE_END();
-
-    void PushPopTest();
-    void Insert();
-    void Erase();
-    void Iterators();
-    void Objects();
-    void NonPODs();
-    void Resize();
-    void Swap();
-    void Sort();
-
-    wxDECLARE_NO_COPY_CLASS(VectorsTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( VectorsTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VectorsTestCase, "VectorsTestCase" );
-
-void VectorsTestCase::PushPopTest()
+TEST_CASE("wxVector::Push/Pop", "[vector][push_back][pop_back]")
 {
     wxVector<int> v;
 
-    CPPUNIT_ASSERT( v.size() == 0 );
+    CHECK( v.size() == 0 );
     v.push_back(1);
-    CPPUNIT_ASSERT( v.size() == 1 );
+    CHECK( v.size() == 1 );
     v.push_back(2);
-    CPPUNIT_ASSERT( v.size() == 2 );
+    CHECK( v.size() == 2 );
     v.push_back(42);
-    CPPUNIT_ASSERT( v.size() == 3 );
+    CHECK( v.size() == 3 );
 
-    CPPUNIT_ASSERT( v[0] == 1 );
-    CPPUNIT_ASSERT( v[1] == 2 );
-    CPPUNIT_ASSERT( v[2] == 42 );
-
-    v.pop_back();
-    CPPUNIT_ASSERT( v.size() == 2 );
-    CPPUNIT_ASSERT( v[0] == 1 );
-    CPPUNIT_ASSERT( v[1] == 2 );
+    CHECK( v[0] == 1 );
+    CHECK( v[1] == 2 );
+    CHECK( v[2] == 42 );
 
     v.pop_back();
-    CPPUNIT_ASSERT( v.size() == 1 );
-    CPPUNIT_ASSERT( v[0] == 1 );
+    CHECK( v.size() == 2 );
+    CHECK( v[0] == 1 );
+    CHECK( v[1] == 2 );
 
     v.pop_back();
-    CPPUNIT_ASSERT( v.size() == 0 );
-    CPPUNIT_ASSERT( v.empty() );
+    CHECK( v.size() == 1 );
+    CHECK( v[0] == 1 );
+
+    v.pop_back();
+    CHECK( v.size() == 0 );
+    CHECK( v.empty() );
 
     wxVector<char> vEmpty;
 }
 
-void VectorsTestCase::Insert()
+TEST_CASE("wxVector::Insert", "[vector][insert]")
 {
     wxVector<char> v;
 
     v.insert(v.end(), 'a');
-    CPPUNIT_ASSERT( v.size() == 1 );
-    CPPUNIT_ASSERT( v[0] == 'a' );
+    CHECK( v.size() == 1 );
+    CHECK( v[0] == 'a' );
 
     v.insert(v.end(), 'b');
-    CPPUNIT_ASSERT( v.size() == 2 );
-    CPPUNIT_ASSERT( v[0] == 'a' );
-    CPPUNIT_ASSERT( v[1] == 'b' );
+    CHECK( v.size() == 2 );
+    CHECK( v[0] == 'a' );
+    CHECK( v[1] == 'b' );
 
     v.insert(v.begin(), '0');
-    CPPUNIT_ASSERT( v.size() == 3 );
-    CPPUNIT_ASSERT( v[0] == '0' );
-    CPPUNIT_ASSERT( v[1] == 'a' );
-    CPPUNIT_ASSERT( v[2] == 'b' );
+    CHECK( v.size() == 3 );
+    CHECK( v[0] == '0' );
+    CHECK( v[1] == 'a' );
+    CHECK( v[2] == 'b' );
 
     v.insert(v.begin() + 2, 'X');
-    CPPUNIT_ASSERT( v.size() == 4 );
-    CPPUNIT_ASSERT( v[0] == '0' );
-    CPPUNIT_ASSERT( v[1] == 'a' );
-    CPPUNIT_ASSERT( v[2] == 'X' );
-    CPPUNIT_ASSERT( v[3] == 'b' );
+    CHECK( v.size() == 4 );
+    CHECK( v[0] == '0' );
+    CHECK( v[1] == 'a' );
+    CHECK( v[2] == 'X' );
+    CHECK( v[3] == 'b' );
 
     v.insert(v.begin() + 3, 3, 'Z');
     REQUIRE( v.size() == 7 );
@@ -178,7 +138,7 @@ void VectorsTestCase::Insert()
     CHECK( v[6] == 'b' );
 }
 
-void VectorsTestCase::Erase()
+TEST_CASE("wxVector::Erase", "[vector][erase]")
 {
     wxVector<int> v;
 
@@ -186,27 +146,27 @@ void VectorsTestCase::Erase()
     v.push_back(2);
     v.push_back(3);
     v.push_back(4);
-    CPPUNIT_ASSERT( v.size() == 4 );
+    CHECK( v.size() == 4 );
 
     v.erase(v.begin(), v.end()-1);
-    CPPUNIT_ASSERT( v.size() == 1 );
-    CPPUNIT_ASSERT( v[0] == 4 );
+    CHECK( v.size() == 1 );
+    CHECK( v[0] == 4 );
 
     v.clear();
     v.push_back(1);
     v.push_back(2);
     v.push_back(3);
     v.push_back(4);
-    CPPUNIT_ASSERT( v.size() == 4 );
+    CHECK( v.size() == 4 );
 
     v.erase(v.begin());
-    CPPUNIT_ASSERT( v.size() == 3 );
-    CPPUNIT_ASSERT( v[0] == 2 );
-    CPPUNIT_ASSERT( v[1] == 3 );
-    CPPUNIT_ASSERT( v[2] == 4 );
+    CHECK( v.size() == 3 );
+    CHECK( v[0] == 2 );
+    CHECK( v[1] == 3 );
+    CHECK( v[2] == 4 );
 }
 
-void VectorsTestCase::Iterators()
+TEST_CASE("wxVector::Iterators", "[vector][iterator]")
 {
     wxVector<int> v;
     v.push_back(1);
@@ -217,11 +177,11 @@ void VectorsTestCase::Iterators()
     int value = 1;
     for ( wxVector<int>::iterator i = v.begin(); i != v.end(); ++i, ++value )
     {
-        CPPUNIT_ASSERT_EQUAL( value, *i );
+        CHECK( *i == value );
     }
 }
 
-void VectorsTestCase::Objects()
+TEST_CASE("wxVector::Objects", "[vector]")
 {
     wxVector<CountedObject> v;
     v.push_back(CountedObject(1));
@@ -229,14 +189,14 @@ void VectorsTestCase::Objects()
     v.push_back(CountedObject(3));
 
     v.erase(v.begin());
-    CPPUNIT_ASSERT_EQUAL( 2, v.size() );
-    CPPUNIT_ASSERT_EQUAL( 2, CountedObject::GetCount() );
+    CHECK( v.size() == 2 );
+    CHECK( CountedObject::GetCount() == 2 );
 
     v.clear();
-    CPPUNIT_ASSERT_EQUAL( 0, CountedObject::GetCount() );
+    CHECK( CountedObject::GetCount() == 0 );
 }
 
-void VectorsTestCase::NonPODs()
+TEST_CASE("wxVector::NonPODs", "[vector]")
 {
     wxVector<SelfPointingObject> v;
     v.push_back(SelfPointingObject());
@@ -259,53 +219,52 @@ void VectorsTestCase::NonPODs()
     vs.clear();
 }
 
-void VectorsTestCase::Resize()
+TEST_CASE("wxVector::Resize", "[vector][resize]")
 {
     wxVector<CountedObject> v;
     v.resize(3);
 
-    CPPUNIT_ASSERT_EQUAL( 3, v.size() );
-    CPPUNIT_ASSERT_EQUAL( 3, CountedObject::GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 0, v[0].GetValue() );
-    CPPUNIT_ASSERT_EQUAL( 0, v[1].GetValue() );
-    CPPUNIT_ASSERT_EQUAL( 0, v[2].GetValue() );
+    CHECK( v.size() == 3 );
+    CHECK( CountedObject::GetCount() == 3 );
+    CHECK( v[0].GetValue() == 0 );
+    CHECK( v[1].GetValue() == 0 );
+    CHECK( v[2].GetValue() == 0 );
 
     v.resize(1);
-    CPPUNIT_ASSERT_EQUAL( 1, v.size() );
-    CPPUNIT_ASSERT_EQUAL( 1, CountedObject::GetCount() );
+    CHECK( v.size() == 1 );
+    CHECK( CountedObject::GetCount() == 1 );
 
     v.resize(4, CountedObject(17));
-    CPPUNIT_ASSERT_EQUAL( 4, v.size() );
-    CPPUNIT_ASSERT_EQUAL( 4, CountedObject::GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 0, v[0].GetValue() );
-    CPPUNIT_ASSERT_EQUAL( 17, v[1].GetValue() );
-    CPPUNIT_ASSERT_EQUAL( 17, v[2].GetValue() );
-    CPPUNIT_ASSERT_EQUAL( 17, v[3].GetValue() );
+    CHECK( v.size() == 4 );
+    CHECK( CountedObject::GetCount() == 4 );
+    CHECK( v[0].GetValue() == 0 );
+    CHECK( v[1].GetValue() == 17 );
+    CHECK( v[2].GetValue() == 17 );
+    CHECK( v[3].GetValue() == 17 );
 }
 
-void VectorsTestCase::Swap()
+TEST_CASE("wxVector::Swap", "[vector][swap]")
 {
     wxVector<int> v1, v2;
     v1.push_back(17);
     v1.swap(v2);
-    CPPUNIT_ASSERT( v1.empty() );
-    CPPUNIT_ASSERT_EQUAL( 1, v2.size() );
-    CPPUNIT_ASSERT_EQUAL( 17, v2[0] );
+    CHECK( v1.empty() );
+    CHECK( v2.size() == 1 );
+    CHECK( v2[0] == 17 );
 
     v1.push_back(9);
     v2.swap(v1);
-    CPPUNIT_ASSERT_EQUAL( 1, v1.size() );
-    CPPUNIT_ASSERT_EQUAL( 17, v1[0] );
-    CPPUNIT_ASSERT_EQUAL( 1, v2.size() );
-    CPPUNIT_ASSERT_EQUAL( 9, v2[0] );
+    CHECK( v1.size() == 1 );
+    CHECK( v1[0] == 17 );
+    CHECK( v2.size() == 1 );
+    CHECK( v2[0] == 9 );
 
     v2.clear();
     v1.swap(v2);
-    CPPUNIT_ASSERT( v1.empty() );
+    CHECK( v1.empty() );
 }
 
-
-void VectorsTestCase::Sort()
+TEST_CASE("wxVector::Sort", "[vector][sort]")
 {
     size_t  idx;
     wxVector<int> v;
@@ -325,8 +284,24 @@ void VectorsTestCase::Sort()
 
     for (idx=1; idx<v.size(); idx++)
     {
-        CPPUNIT_ASSERT( v[idx-1] <= v[idx] );
+        CHECK( v[idx-1] <= v[idx] );
     }
+}
+
+TEST_CASE("wxVector::Contains", "[vector][contains]")
+{
+    wxVector<int> v;
+    CHECK( !wxVectorContains(v, 0) );
+
+    v.push_back(3);
+    CHECK( wxVectorContains(v, 3) );
+
+    v.push_back(2);
+    v.push_back(3);
+
+    CHECK( wxVectorContains(v, 2) );
+    CHECK( wxVectorContains(v, 3) );
+    CHECK( !wxVectorContains(v, 1) );
 }
 
 TEST_CASE("wxVector::operator==", "[vector][compare]")
@@ -371,6 +346,10 @@ TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
     CHECK( ri >= ri );
     CHECK( ri < re );
     CHECK( ri <= re );
+
+    CHECK( rb.base() == v.end() );
+    CHECK( re.base() == v.begin() );
+    CHECK( *ri.base() == 9 );
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
     std::vector<int> stdvec(rb, re);

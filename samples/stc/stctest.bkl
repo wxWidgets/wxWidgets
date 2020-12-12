@@ -3,7 +3,14 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="stctest" template="wx_sample" template_append="wx_append">
+    <template id="stc_append" template="wx_append">
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+            <sys-lib>$(LIB_SCINTILLA)</sys-lib>
+            <ldlibs>$(EXTRALIBS_STC)</ldlibs>
+        </if>
+    </template>
+
+    <exe id="stctest" template="wx_sample" template_append="stc_append">
         <sources>
             stctest.cpp
             edit.cpp
@@ -17,10 +24,6 @@
         <wx-lib>stc</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-
-        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
-            <sys-lib>$(LIB_SCINTILLA)</sys-lib>
-        </if>
     </exe>
 
     <wx-data id="data">

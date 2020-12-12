@@ -125,10 +125,8 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 {
     if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
-    if (g_blockEventsOnDrag) return TRUE;
-    if (g_blockEventsOnScroll) return TRUE;
-
-    if (win->m_isDragging) return TRUE;
+    if (win->m_isDragMove || g_blockEventsOnDrag || g_blockEventsOnScroll)
+        return true;
 
     int style = win->GetWindowStyle();
 
@@ -138,20 +136,11 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
     if ((style & wxRESIZE_BORDER) &&
         (x > win->m_width-14) && (y > win->m_height-14))
     {
-        GtkWidget *ancestor = gtk_widget_get_toplevel( widget );
-
-        GdkWindow *source = gtk_widget_get_window(widget);
-
-        int org_x = 0;
-        int org_y = 0;
-        gdk_window_get_origin( source, &org_x, &org_y );
-
-        gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
-                                  GDK_WINDOW_EDGE_SOUTH_EAST,
-                                  1,
-                                  org_x + x,
-                                  org_y + y,
-                                  0);
+        gtk_window_begin_resize_drag(GTK_WINDOW(win->m_widget),
+            GDK_WINDOW_EDGE_SOUTH_EAST,
+            gdk_event->button,
+            int(gdk_event->x_root), int(gdk_event->y_root),
+            gdk_event->time);
 
         return TRUE;
     }
@@ -170,18 +159,26 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 
     gdk_window_raise(gtk_widget_get_window(win->m_widget));
 
-#ifdef __WXGTK4__
-    gdk_seat_grab(
-        gdk_event_get_seat((GdkEvent*)gdk_event), gdk_event_get_window((GdkEvent*)gdk_event),
-        GDK_SEAT_CAPABILITY_POINTER, false, NULL, (GdkEvent*)gdk_event, NULL, 0);
-#else
+#ifdef __WXGTK3__
+#ifndef __WXGTK4__
+    GdkDisplay* display = gdk_window_get_display(gdk_event->window);
+    if (strcmp("GdkWaylandDisplay", g_type_name(G_TYPE_FROM_INSTANCE(display))) == 0)
+#endif
+    {
+        gtk_window_begin_move_drag(GTK_WINDOW(win->m_widget),
+            gdk_event->button,
+            int(gdk_event->x_root), int(gdk_event->y_root),
+            gdk_event->time);
+
+        return true;
+    }
+#endif
+#ifndef __WXGTK4__
     const GdkEventMask mask = GdkEventMask(
         GDK_BUTTON_PRESS_MASK |
         GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK |
-        GDK_POINTER_MOTION_HINT_MASK |
-        GDK_BUTTON_MOTION_MASK |
-        GDK_BUTTON1_MOTION_MASK);
+        GDK_BUTTON_MOTION_MASK);
 #ifdef __WXGTK3__
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gdk_device_grab(
@@ -191,57 +188,43 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 #else
     gdk_pointer_grab(gdk_event->window, false, mask, NULL, NULL, gdk_event->time);
 #endif
-#endif // !__WXGTK4__
 
-    win->m_diffX = x;
-    win->m_diffY = y;
-    win->m_oldX = 0;
-    win->m_oldY = 0;
-
-    win->m_isDragging = true;
+    win->m_dragOffset.Set(int(gdk_event->x), int(gdk_event->y));
+    win->m_isDragMove = true;
 
     return TRUE;
+#endif // !__WXGTK4__
 }
 }
 
+#ifndef __WXGTK4__
 //-----------------------------------------------------------------------------
-// "button_release_event" of m_mainWidget
+// "button-release-event"
 //-----------------------------------------------------------------------------
 
 extern "C" {
 static gboolean
-gtk_window_button_release_callback(GtkWidget* widget, GdkEventButton* gdk_event, wxMiniFrame* win)
+button_release_event(GtkWidget* widget, GdkEventButton* gdk_event, wxMiniFrame* win)
 {
     if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
-    if (g_blockEventsOnDrag) return TRUE;
-    if (g_blockEventsOnScroll) return TRUE;
-    if (!win->m_isDragging) return TRUE;
+    if (!win->m_isDragMove || g_blockEventsOnDrag || g_blockEventsOnScroll)
+        return true;
 
-    win->m_isDragging = false;
+    win->m_isDragMove = false;
 
-    int x = (int)gdk_event->x;
-    int y = (int)gdk_event->y;
-
-#ifdef __WXGTK4__
-    gdk_seat_ungrab(gdk_event_get_seat((GdkEvent*)gdk_event));
-#elif defined(__WXGTK3__)
+#ifdef __WXGTK3__
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gdk_device_ungrab(gdk_event->device, gdk_event->time);
     wxGCC_WARNING_RESTORE()
 #else
     gdk_pointer_ungrab(gdk_event->time);
 #endif
-    int org_x = 0;
-    int org_y = 0;
-    gdk_window_get_origin(gtk_widget_get_window(widget), &org_x, &org_y);
-    x += org_x - win->m_diffX;
-    y += org_y - win->m_diffY;
-    gtk_window_move( GTK_WINDOW(win->m_widget), x, y );
 
-    return TRUE;
+    return true;
 }
 }
+#endif // !__WXGTK4__
 
 //-----------------------------------------------------------------------------
 // "leave_notify_event" of m_mainWidget
@@ -276,22 +259,22 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
-    int x = int(gdk_event->x);
-    int y = int(gdk_event->y);
-
-    if (gdk_event->is_hint)
+#ifndef __WXGTK4__
+    if (win->m_isDragMove)
     {
-#ifdef __WXGTK3__
-       gdk_window_get_device_position(gdk_event->window, gdk_event->device, &x, &y, NULL);
-#else
-       gdk_window_get_pointer(gdk_event->window, &x, &y, NULL);
-#endif
-    }
+        gtk_window_move(GTK_WINDOW(win->m_widget),
+            int(gdk_event->x_root) - win->m_dragOffset.x,
+            int(gdk_event->y_root) - win->m_dragOffset.y);
 
-    if (!win->m_isDragging)
+        return true;
+    }
+#endif
     {
         if (win->GetWindowStyle() & wxRESIZE_BORDER)
         {
+            const int x = int(gdk_event->x);
+            const int y = int(gdk_event->y);
+
             GdkCursor* cursor = NULL;
             GdkWindow* window = gtk_widget_get_window(widget);
             if ((x > win->m_width-14) && (y > win->m_height-14))
@@ -309,18 +292,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
 #endif
             }
         }
-        return TRUE;
     }
-
-    win->m_oldX = x - win->m_diffX;
-    win->m_oldY = y - win->m_diffY;
-
-    int org_x = 0;
-    int org_y = 0;
-    gdk_window_get_origin(gtk_widget_get_window(widget), &org_x, &org_y);
-    x += org_x - win->m_diffX;
-    y += org_y - win->m_diffY;
-    gtk_window_move( GTK_WINDOW(win->m_widget), x, y );
 
     return TRUE;
 }
@@ -351,6 +323,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
+    m_isDragMove = false;
     m_miniTitle = 0;
     if (style & wxCAPTION)
         m_miniTitle = 16;
@@ -359,11 +332,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         m_miniEdge = 4;
     else
         m_miniEdge = 3;
-    m_isDragging = false;
-    m_oldX = -1;
-    m_oldY = -1;
-    m_diffX = 0;
-    m_diffY = 0;
 
     // don't allow sizing smaller than decorations
     int minWidth = 2 * m_miniEdge;
@@ -378,9 +346,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     // Use a GtkEventBox for the title and borders. Using m_widget for this
     // almost works, except that setting the resize cursor has no effect.
     GtkWidget* eventbox = gtk_event_box_new();
-    gtk_widget_add_events(eventbox,
-        GDK_POINTER_MOTION_MASK |
-        GDK_POINTER_MOTION_HINT_MASK);
+    gtk_widget_add_events(eventbox, GDK_POINTER_MOTION_MASK);
     gtk_widget_show(eventbox);
 #ifdef __WXGTK3__
     g_object_ref(m_mainWidget);
@@ -406,11 +372,13 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     m_gdkDecor = 0;
     gtk_window_set_decorated(GTK_WINDOW(m_widget), false);
-    m_gdkFunc = 0;
+    m_gdkFunc = GDK_FUNC_MOVE;
     if (style & wxRESIZE_BORDER)
-       m_gdkFunc = GDK_FUNC_RESIZE;
+       m_gdkFunc |= GDK_FUNC_RESIZE;
     gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
-    memset(&m_decorSize, 0, sizeof(m_decorSize));
+
+    // Reset m_decorSize, wxMiniFrame manages its own decorations
+    m_decorSize = DecorSize();
     m_deferShow = false;
 
     if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
@@ -434,8 +402,10 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     /* these are required for dragging the mini frame around */
     g_signal_connect (eventbox, "button_press_event",
                       G_CALLBACK (gtk_window_button_press_callback), this);
-    g_signal_connect (eventbox, "button_release_event",
-                      G_CALLBACK (gtk_window_button_release_callback), this);
+#ifndef __WXGTK4__
+    g_signal_connect(eventbox, "button-release-event",
+        G_CALLBACK(button_release_event), this);
+#endif
     g_signal_connect (eventbox, "motion_notify_event",
                       G_CALLBACK (gtk_window_motion_notify_callback), this);
     g_signal_connect (eventbox, "leave_notify_event",

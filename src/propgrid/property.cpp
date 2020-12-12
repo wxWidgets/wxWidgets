@@ -11,31 +11,13 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/math.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
     #include "wx/dc.h"
-    #include "wx/dcmemory.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/settings.h"
-    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/image.h"
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
@@ -43,6 +25,7 @@
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/props.h"
+#include "wx/propgrid/editors.h"
 
 #if wxPG_USE_RENDERER_NATIVE
 #include "wx/renderer.h"
@@ -62,46 +45,23 @@ const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 // -----------------------------------------------------------------------
 
-// In 3.0 comaptibilty mode we always need to use custom renderer because
-// native renderer for this port requires a reference to the valid window
-// to be drawn which is not passed to DrawCaptionSelectionRect function.
-#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
- #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 1
-#else
- #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 0
-#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
-
 static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
                               int x, int y, int w, int h)
 {
     wxRect rect(x, y+((h-dc.GetCharHeight())/2), w, h);
-#if wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+    // In 3.0 comaptibilty mode we always need to use custom renderer because
+    // native renderer for this port requires a reference to the valid window
+    // to be drawn which is not passed to DrawCaptionSelectionRect function.
+#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
     wxASSERT_MSG( win, wxS("Invalid window to be drawn") );
     wxRendererNative::Get().DrawFocusRect(win, dc, rect);
 #else
     wxUnusedVar(win);
-#ifdef __WXMSW__
-    dc.SetLogicalFunction(wxINVERT);
-
-    wxPen pen(*wxBLACK,1,wxPENSTYLE_DOT);
-    pen.SetCap(wxCAP_BUTT);
-    dc.SetPen(pen);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#else
-    dc.SetLogicalFunction(wxINVERT);
 
     dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
     dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#endif // __WXMSW__/!__WXMSW__
-#endif // wxPG_USE_NATIVE_FOCUS_RECT_RENDERER/!wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
 }
 
 // -----------------------------------------------------------------------
@@ -187,16 +147,28 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
         dc.SetFont(font);
 
     const wxBitmap& bmp = cell.GetBitmap();
-    if ( bmp.IsOk() &&
-        // Do not draw oversized bitmap outside choice popup
-         ((flags & ChoicePopup) || bmp.GetHeight() < rect.height )
-        )
+    if ( bmp.IsOk() )
     {
-        dc.DrawBitmap( bmp,
+        int hMax = rect.height - wxPG_CUSTOM_IMAGE_SPACINGY;
+        wxBitmap scaledBmp;
+        int yOfs;
+        if ( bmp.GetHeight() <= hMax )
+        {
+            scaledBmp = bmp;
+            yOfs = (hMax - bmp.GetHeight()) / 2;
+        }
+        else
+        {
+            double scale = (double)hMax / bmp.GetHeight();
+            scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
+            yOfs = 0;
+        }
+
+        dc.DrawBitmap( scaledBmp,
                        rect.x + wxPG_CONTROL_MARGIN + wxCC_CUSTOM_IMAGE_MARGIN1,
-                       rect.y + wxPG_CUSTOM_IMAGE_SPACINGY,
+                       rect.y + wxPG_CUSTOM_IMAGE_SPACINGY + yOfs,
                        true );
-        imageWidth = bmp.GetWidth();
+        imageWidth = scaledBmp.GetWidth();
     }
 
     return imageWidth;
@@ -254,6 +226,10 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     wxPGCell cell;
 
     property->GetDisplayInfo(column, selItem, flags, &text, &cell);
+
+    // Property image takes precedence over cell image
+    if ( column == 1 && !isUnspecified && property->GetValueImage() )
+        cell.SetBitmap(wxNullBitmap);
 
     imageWidth = PreDrawCell( dc, rect, cell, preDrawFlags );
 
@@ -546,10 +522,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         wxPGCell& cell = m_cells[i];
         if ( cell.IsInvalid() )
         {
-            if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                cell = propgrid->GetPropertyDefaultCell();
-            else
-                cell = propgrid->GetCategoryDefaultCell();
+            cell = IsCategory() ? propgrid->GetCategoryDefaultCell()
+                                : propgrid->GetPropertyDefaultCell();
         }
     }
 
@@ -774,9 +748,7 @@ wxString wxPGProperty::GetName() const
 
 wxPropertyGrid* wxPGProperty::GetGrid() const
 {
-    if ( !m_parentState )
-        return NULL;
-    return m_parentState->GetGrid();
+    return m_parentState ? m_parentState->GetGrid() : NULL;
 }
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
@@ -1067,12 +1039,8 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
     }
 #endif
     wxPropertyGrid* pg = GetGrid();
-    wxASSERT_MSG( pg,
-                  wxS("Cannot get valid value for detached property") );
-    if ( !pg )
-    {
-        return wxEmptyString;
-    }
+    wxCHECK_MSG( pg, wxEmptyString,
+                 wxS("Cannot get valid value for detached property") );
 
     if ( IsValueUnspecified() )
         return pg->GetUnspecifiedValueText(argFlags);
@@ -1346,7 +1314,20 @@ bool wxPGProperty::SetValueFromInt( long number, int argFlags )
 wxSize wxPGProperty::OnMeasureImage( int WXUNUSED(item) ) const
 {
     if ( m_valueBitmap )
-        return wxSize(m_valueBitmap->GetWidth(), wxDefaultCoord);
+    {
+        wxPropertyGrid* pg = GetGrid();
+        double scale = 1.0;
+        if ( pg )
+        {
+            int hMax = pg->GetImageSize().GetHeight();
+            if ( m_valueBitmap->GetHeight() > hMax )
+            {
+                scale = (double)hMax / m_valueBitmap->GetHeight();
+            }
+        }
+
+        return wxSize(wxRound(scale*m_valueBitmap->GetWidth()), wxDefaultCoord);
+    }
 
     return wxSize(0,0);
 }
@@ -1376,13 +1357,23 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
                                   const wxRect& rect,
                                   wxPGPaintData& )
 {
-    wxBitmap* bmp = m_valueBitmap;
+    wxCHECK_RET( m_valueBitmap && m_valueBitmap->IsOk(), wxS("invalid bitmap") );
 
-    wxCHECK_RET( bmp && bmp->IsOk(), wxS("invalid bitmap") );
+    wxBitmap scaledBmp;
+    int yOfs;
+    if ( m_valueBitmap->GetHeight() <= rect.height )
+    {
+        scaledBmp = *m_valueBitmap;
+        yOfs = (rect.height - m_valueBitmap->GetHeight()) / 2;
+    }
+    else
+    {
+        double scale = (double)rect.height / m_valueBitmap->GetHeight();
+        scaledBmp = wxPropertyGrid::RescaleBitmap(*m_valueBitmap, scale, scale);
+        yOfs = 0;
+    }
 
-    wxCHECK_RET( rect.x >= 0, wxS("unexpected measure call") );
-
-    dc.DrawBitmap(*bmp,rect.x,rect.y);
+    dc.DrawBitmap(scaledBmp,rect.x, rect.y + yOfs);
 }
 
 const wxPGEditor* wxPGProperty::DoGetEditorClass() const
@@ -1450,7 +1441,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             // GetPropertyByNameWH(). This optimizes for full list parsing.
             for ( node = list.begin(); node != list.end(); ++node )
             {
-                wxVariant& childValue = *((wxVariant*)*node);
+                wxVariant& childValue = *const_cast<wxVariant*>(*node);
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {
@@ -1594,9 +1585,9 @@ wxVariant wxPGProperty::GetDefaultValue() const
             return wxVariant(wxArrayString());
 #if wxUSE_LONGLONG
         if ( valueType == wxPG_VARIANT_TYPE_LONGLONG )
-            return WXVARIANT(wxLongLong(0));
+            return wxVariant(wxLongLong(0));
         if ( valueType == wxPG_VARIANT_TYPE_ULONGLONG )
-            return WXVARIANT(wxULongLong(0));
+            return wxVariant(wxULongLong(0));
 #endif
         if ( valueType == wxS("wxColour") )
             return WXVARIANT(*wxBLACK);
@@ -1629,10 +1620,7 @@ void wxPGProperty::Enable( bool enable )
 
 void wxPGProperty::DoEnable( bool enable )
 {
-    if ( enable )
-        ClearFlag(wxPG_PROP_DISABLED);
-    else
-        SetFlag(wxPG_PROP_DISABLED);
+    ChangeFlag(wxPG_PROP_DISABLED, !enable);
 
     // Apply same to sub-properties as well
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
@@ -1649,10 +1637,8 @@ void wxPGProperty::EnsureCells( unsigned int column )
 
         if ( pg )
         {
-            if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                defaultCell = pg->GetPropertyDefaultCell();
-            else
-                defaultCell = pg->GetCategoryDefaultCell();
+            defaultCell = IsCategory() ? pg->GetCategoryDefaultCell()
+                                       : pg->GetPropertyDefaultCell();
         }
 
         // Alloc new default cells.
@@ -1739,11 +1725,14 @@ const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
     wxPropertyGrid* pg = GetGrid();
     wxASSERT_MSG( pg,
                   wxS("Cannot get cell for detached property") );
+    if ( !pg )
+    {
+        static const wxPGCell invalidCell;
+        return invalidCell;
+    }
 
-    if ( IsCategory() )
-        return pg->GetCategoryDefaultCell();
-
-    return pg->GetPropertyDefaultCell();
+    return IsCategory() ? pg->GetCategoryDefaultCell()
+                        : pg->GetPropertyDefaultCell();
 }
 
 wxPGCell& wxPGProperty::GetOrCreateCell( unsigned int column )
@@ -1857,14 +1846,19 @@ bool wxPGProperty::DoSetAttribute( const wxString& WXUNUSED(name), wxVariant& WX
 
 void wxPGProperty::SetAttribute( const wxString& name, wxVariant value )
 {
-    if ( DoSetAttribute( name, value ) )
+    if ( !DoSetAttribute(name, value) || !wxPGGlobalVars->HasExtraStyle(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES) )
     {
-        // Support working without grid, when possible
-        if ( wxPGGlobalVars->HasExtraStyle( wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES ) )
-            return;
+        m_attributes.Set(name, value);
     }
-
-    m_attributes.Set( name, value );
+    // Because changing some attributes (like wxPG_FLOAT_PRECISION, wxPG_UINT_BASE,
+    // wxPG_UINT_PREFIX, wxPG_ATTR_UNITS) affect displayed form of the property value
+    // so we have to redraw property to be sure that displayed value is in sync
+    // with current attributes.
+    wxPropertyGrid* pg = GetGridIfDisplayed();
+    if ( pg )
+    {
+        pg->RefreshProperty(this);
+    }
 }
 
 void wxPGProperty::SetAttributes( const wxPGAttributeStorage& attributes )
@@ -2094,19 +2088,30 @@ bool wxPGProperty::SetChoices( const wxPGChoices& choices )
     // Property must be de-selected first (otherwise choices in
     // the control would be de-synced with true choices)
     wxPropertyGrid* pg = GetGrid();
-    if ( pg && pg->GetSelection() == this )
+    bool isSelected = pg && pg->GetSelection() == this;
+    if ( isSelected )
+    {
         pg->ClearSelection();
+    }
 
     m_choices.Assign(choices);
-
+    if ( isSelected )
     {
-        // This may be needed to trigger some initialization
-        // (but don't do it if property is somewhat uninitialized)
-        wxVariant defVal = GetDefaultValue();
-        if ( defVal.IsNull() )
-            return false;
+        wxWindow* ctrl = pg->GetEditorControl();
+        if ( ctrl )
+            GetEditorClass()->SetItems(ctrl, m_choices.GetLabels());
+    }
 
+    // This may be needed to trigger some initialization
+    // (but don't do it if property is somewhat uninitialized)
+    wxVariant defVal = GetDefaultValue();
+    if ( !defVal.IsNull() )
         SetValue(defVal);
+
+    if ( isSelected )
+    {
+        // Recreate editor
+        pg->DoSelectProperty(this, wxPG_SEL_FORCE);
     }
 
     return true;
@@ -2115,16 +2120,8 @@ bool wxPGProperty::SetChoices( const wxPGChoices& choices )
 
 const wxPGEditor* wxPGProperty::GetEditorClass() const
 {
-    const wxPGEditor* editor;
+    const wxPGEditor* editor = m_customEditor ? m_customEditor : DoGetEditorClass();
 
-    if ( !m_customEditor )
-    {
-        editor = DoGetEditorClass();
-    }
-    else
-        editor = m_customEditor;
-
-    //
     // Maybe override editor if common value specified
     if ( GetDisplayedCommonValueCount() )
     {
@@ -2151,10 +2148,7 @@ bool wxPGProperty::Hide( bool hide, int flags )
 
 bool wxPGProperty::DoHide( bool hide, int flags )
 {
-    if ( !hide )
-        ClearFlag( wxPG_PROP_HIDDEN );
-    else
-        SetFlag( wxPG_PROP_HIDDEN );
+    ChangeFlag(wxPG_PROP_HIDDEN, hide);
 
     if ( flags & wxPG_RECURSE )
     {
@@ -2195,7 +2189,6 @@ bool wxPGProperty::RecreateEditor()
 
 void wxPGProperty::SetValueImage( wxBitmap& bmp )
 {
-    // We need PG to obtain default image size
     wxCHECK_RET( GetGrid(),
                  wxS("Cannot set image for detached property") );
 
@@ -2203,42 +2196,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
     if ( bmp.IsOk() )
     {
-        // Resize the image
-        wxSize maxSz = GetGrid()->GetImageSize();
-        wxSize imSz = bmp.GetSize();
-
-        if ( imSz.y != maxSz.y )
-        {
-#if wxUSE_IMAGE
-            // Here we use high-quality wxImage scaling functions available
-            wxImage img = bmp.ConvertToImage();
-            double scaleY = (double)maxSz.y / (double)imSz.y;
-            img.Rescale(wxRound(bmp.GetWidth()*scaleY),
-                        wxRound(bmp.GetHeight()*scaleY),
-                        wxIMAGE_QUALITY_HIGH);
-            wxBitmap* bmpNew = new wxBitmap(img);
-#else // !wxUSE_IMAGE
-            // This is the old, deprecated method of scaling the image
-            wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-            // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-            bmpNew->UseAlpha(bmp.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
-            {
-                wxMemoryDC dc(*bmpNew);
-                double scaleY = (double)maxSz.y / (double)imSz.y;
-                dc.SetUserScale(scaleY, scaleY);
-                dc.DrawBitmap(bmp, 0, 0);
-            }
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
-
-            m_valueBitmap = bmpNew;
-        }
-        else
-        {
-            m_valueBitmap = new wxBitmap(bmp);
-        }
-
+        m_valueBitmap = new wxBitmap(bmp);
         m_flags |= wxPG_PROP_CUSTOMIMAGE;
     }
     else
@@ -2251,8 +2209,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
 wxPGProperty* wxPGProperty::GetMainParent() const
 {
-    const wxPGProperty* curChild = this;
-    const wxPGProperty* curParent = m_parent;
+    wxPGProperty* curChild = const_cast<wxPGProperty*>(this);
+    wxPGProperty* curParent = m_parent;
 
     while ( !curParent->IsRoot() && !curParent->IsCategory() )
     {
@@ -2260,7 +2218,7 @@ wxPGProperty* wxPGProperty::GetMainParent() const
         curParent = curParent->m_parent;
     }
 
-    return (wxPGProperty*) curChild;
+    return curChild;
 }
 
 
@@ -2328,9 +2286,9 @@ int wxPGProperty::GetY2( int lh ) const
 int wxPGProperty::GetY() const
 {
     wxPropertyGrid *pg = GetGrid();
-    wxASSERT_MSG( pg,
-        wxS("Cannot obtain coordinates of detached property") );
-    return pg ? GetY2(pg->GetRowHeight()) : 0;
+    wxCHECK_MSG( pg, 0,
+                 wxS("Cannot obtain coordinates of detached property") );
+    return GetY2(pg->GetRowHeight());
 }
 
 // This is used by Insert etc.
@@ -2451,7 +2409,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     else
         allChildrenSpecified = true;
 
-    unsigned int n = 0;
+    size_t n = 0;
     wxVariant childValue = list[n];
 
     //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName());
@@ -2477,7 +2435,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
             }
 
             n++;
-            if ( n == (unsigned int)list.GetCount() )
+            if ( n == list.GetCount() )
                 break;
             childValue = list[n];
         }
@@ -2539,7 +2497,7 @@ wxPGProperty* wxPGProperty::GetPropertyByNameWH( const wxString& name, unsigned 
         i++;
         if ( i == GetChildCount() )
             i = 0;
-    };
+    }
 
     return NULL;
 }
@@ -2551,7 +2509,6 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     //
     // iMax is used when finding property y-positions.
     //
-    unsigned int i = 0;
     int h = 0;
 
     if ( iMax_ == -1 )
@@ -2564,9 +2521,9 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     if ( !IsExpanded() && GetParent() )
         return 0;
 
-    while ( i < iMax )
+    for ( unsigned int i = 0; i < iMax; i++ )
     {
-        wxPGProperty* pwc = (wxPGProperty*) Item(i);
+        wxPGProperty* pwc = Item(i);
 
         if ( !pwc->HasFlag(wxPG_PROP_HIDDEN) )
         {
@@ -2576,8 +2533,6 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
             else
                 h += pwc->GetChildrenHeight(lh) + lh;
         }
-
-        i++;
     }
 
     return h;
@@ -2595,10 +2550,8 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     wxPGProperty* result = NULL;
     wxPGProperty* current = NULL;
     unsigned int iy = *nextItemY;
-    unsigned int i = 0;
-    unsigned int iMax = GetChildCount();
 
-    while ( i < iMax )
+    for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
         wxPGProperty* pwc = Item(i);
 
@@ -2616,15 +2569,13 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
             if ( pwc->IsExpanded() &&
                  pwc->GetChildCount() > 0 )
             {
-                result = (wxPGProperty*) pwc->GetItemAtY( y, lh, &iy );
+                result = pwc->GetItemAtY( y, lh, &iy );
                 if ( result )
                     break;
             }
 
             current = pwc;
         }
-
-        i++;
     }
 
     // Found?
@@ -2644,7 +2595,7 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     }
     */
 
-    return (wxPGProperty*) result;
+    return result;
 }
 
 void wxPGProperty::Empty()
@@ -2663,12 +2614,8 @@ void wxPGProperty::Empty()
 wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
 {
     wxPropertyGrid *pg = GetGrid();
-    wxASSERT_MSG( pg,
-                  wxS("Cannot obtain property item for detached property") );
-    if( !pg )
-    {
-        return NULL;
-    }
+    wxCHECK_MSG( pg, NULL,
+                 wxS("Cannot obtain property item for detached property") );
 
     unsigned int nextItem = 0;
     return GetItemAtY(y, pg->GetRowHeight(), &nextItem);
@@ -2739,7 +2686,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
 
             for ( ; node != pList->end(); ++node )
             {
-                const wxVariant& item = *((const wxVariant*)*node);
+                const wxVariant& item = **node;
                 if ( item.GetName() == childName )
                 {
                     listValue = &item;
@@ -2763,7 +2710,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
             if ( listValue && listValue->IsType(wxPG_VARIANT_TYPE_LIST) )
                 childList = listValue;
 
-            if ( !child->AreAllChildrenSpecified((wxVariant*)childList) )
+            if ( !child->AreAllChildrenSpecified(const_cast<wxVariant*>(childList)) )
                 return false;
         }
     }
@@ -2832,6 +2779,54 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
     {
         grid->GetPanel()->Refresh();
     }
+}
+
+wxString wxPGProperty::GetHintText() const
+{
+    wxVariant vHintText = GetAttribute(wxPG_ATTR_HINT);
+
+#if wxPG_COMPATIBILITY_1_4
+    // Try the old, deprecated "InlineHelp"
+    if ( vHintText.IsNull() )
+        vHintText = GetAttribute(wxPG_ATTR_INLINE_HELP);
+#endif
+
+    if ( !vHintText.IsNull() )
+        return vHintText.GetString();
+
+    return wxEmptyString;
+}
+
+int wxPGProperty::GetDisplayedCommonValueCount() const
+{
+    if ( HasFlag(wxPG_PROP_USES_COMMON_VALUE) )
+    {
+        wxPropertyGrid* pg = GetGrid();
+        if ( pg )
+            return (int)pg->GetCommonValueCount();
+    }
+    return 0;
+}
+
+void wxPGProperty::SetDefaultValue(wxVariant& value)
+{
+    SetAttribute(wxPG_ATTR_DEFAULT_VALUE, value);
+}
+
+void wxPGProperty::SetEditor(const wxString& editorName)
+{
+    m_customEditor = wxPropertyGridInterface::GetEditorByName(editorName);
+}
+
+bool wxPGProperty::SetMaxLength(int maxLen)
+{
+    const wxPGEditor* editorClass = GetEditorClass();
+    if ( editorClass != wxPGEditor_TextCtrl &&
+         editorClass != wxPGEditor_TextCtrlAndButton )
+        return false;
+
+    m_maxLen = wxMax(maxLen, 0); // shouldn't be a nagative value
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3205,19 +3200,48 @@ void wxPGChoices::Free()
 // wxPGAttributeStorage
 // -----------------------------------------------------------------------
 
+static inline void IncDataRef(wxPGHashMapS2P& map)
+{
+    wxPGHashMapS2P::iterator it;
+    for ( it = map.begin(); it != map.end(); ++it )
+    {
+        static_cast<wxVariantData*>(it->second)->IncRef();
+    }
+}
+
+static inline void DecDataRef(wxPGHashMapS2P& map)
+{
+    wxPGHashMapS2P::iterator it;
+    for ( it = map.begin(); it != map.end(); ++it )
+    {
+        static_cast<wxVariantData*>(it->second)->DecRef();
+    }
+}
+
 wxPGAttributeStorage::wxPGAttributeStorage()
 {
 }
 
+wxPGAttributeStorage::wxPGAttributeStorage(const wxPGAttributeStorage& other)
+{
+    m_map = other.m_map;
+    IncDataRef(m_map);
+}
+
 wxPGAttributeStorage::~wxPGAttributeStorage()
 {
-    wxPGHashMapS2P::iterator it;
+    DecDataRef(m_map);
+}
 
-    for ( it = m_map.begin(); it != m_map.end(); ++it )
+wxPGAttributeStorage& wxPGAttributeStorage::operator=(const wxPGAttributeStorage& rhs)
+{
+    if ( this != &rhs )
     {
-        wxVariantData* data = (wxVariantData*) it->second;
-        data->DecRef();
+        DecDataRef(m_map);
+        m_map = rhs.m_map;
+        IncDataRef(m_map);
     }
+    return *this;
 }
 
 void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )

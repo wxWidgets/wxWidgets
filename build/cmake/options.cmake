@@ -23,29 +23,54 @@ wx_option(wxBUILD_COMPATIBILITY
 set(wxBUILD_CUSTOM_SETUP_HEADER_PATH "" CACHE PATH "Include path containing custom wx/setup.h")
 mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 
+if(WIN32)
+    wx_option(wxUSE_DPI_AWARE_MANIFEST "DPI Awareness" "per-monitor" STRINGS "none" "system" "per-monitor")
+endif()
+
 wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
 mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 
-if(MSVC)
+if(NOT APPLE)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
+endif()
+
+if(MSVC)
     wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
-else()
-    # Other compilers support setting the C++ standard, present it an option to the user
+endif()
+
+if(NOT MSVC OR MSVC_VERSION GREATER 1800)
+    # support setting the C++ standard, present it an option to the user
     if(DEFINED CMAKE_CXX_STANDARD)
         set(wxCXX_STANDARD_DEFAULT ${CMAKE_CXX_STANDARD})
     else()
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
     wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17)
+              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17 20)
 endif()
 
 if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
+set(wxBUILD_FLAVOUR "" CACHE STRING "Specify a name to identify the build")
+mark_as_advanced(wxBUILD_FLAVOUR)
+
+wx_option(wxBUILD_OPTIMISE "use speed-optimised C/C++ compiler flags for release build" OFF)
+mark_as_advanced(wxBUILD_OPTIMISE)
+if(MSVC)
+    set(wxBUILD_STRIPPED_RELEASE_DEFAULT OFF)
+else()
+    set(wxBUILD_STRIPPED_RELEASE_DEFAULT ON)
+endif()
+wx_option(wxBUILD_STRIPPED_RELEASE "remove debug symbols in release build" ${wxBUILD_STRIPPED_RELEASE_DEFAULT})
+mark_as_advanced(wxBUILD_STRIPPED_RELEASE)
+wx_option(wxBUILD_PIC "Enable position independent code (PIC)." ON)
+mark_as_advanced(wxBUILD_PIC)
+wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
+set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
 wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)
 
 wx_option(wxUSE_UNICODE "compile with Unicode support (NOT RECOMMENDED to be turned off)")
@@ -55,7 +80,9 @@ if(NOT WIN32)
 endif()
 
 wx_option(wxUSE_COMPILER_TLS "enable use of compiler TLS support")
-wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
+if(NOT WIN32)
+    wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
+endif()
 wx_option(wxUSE_UNSAFE_WXSTRING_CONV "provide unsafe implicit conversions in wxString to const char* or std::string")
 wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
 
@@ -74,10 +101,18 @@ wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")
 
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
-wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
 
-if(NOT WIN32)
+if(UNIX)
+    wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
     wx_option(wxUSE_LIBICONV "use libiconv (character conversion)")
+    wx_option(wxUSE_LIBNOTIFY "use libnotify for notifications")
+    wx_option(wxUSE_XTEST "use XTest extension")
+    wx_option(wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
+    wx_option(wxUSE_LIBGNOMEVFS "use GNOME VFS for associating MIME types")
+    wx_option(wxUSE_GLCANVAS_EGL "use EGL backend for wxGLCanvas")
+
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL for audio on Unix")
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
 endif()
 
 # ---------------------------------------------------------------------------
@@ -182,6 +217,7 @@ if(WIN32)
     endif()
     wx_option(wxUSE_DBGHELP "use dbghelp.dll API" ${wxUSE_DBGHELP_DEFAULT})
     wx_option(wxUSE_INICONF "use wxIniConfig")
+    wx_option(wxUSE_WINSOCK2 "include <winsock2.h> rather than <winsock.h>" OFF)
     wx_option(wxUSE_REGKEY "use wxRegKey class")
 endif()
 
@@ -277,8 +313,9 @@ wx_option(wxUSE_COMBOBOX "use wxComboBox class")
 wx_option(wxUSE_COMBOCTRL "use wxComboCtrl class")
 wx_option(wxUSE_COMMANDLINKBUTTON "use wxCommmandLinkButton class")
 wx_option(wxUSE_DATAVIEWCTRL "use wxDataViewCtrl class")
+wx_option(wxUSE_NATIVE_DATAVIEWCTRL "use the native wxDataViewCtrl if available")
 wx_option(wxUSE_DATEPICKCTRL "use wxDatePickerCtrl class")
-wx_option(wxUSE_DETECT_SM "_sm      use code to detect X11 session manager")
+wx_option(wxUSE_DETECT_SM "use code to detect X11 session manager" OFF)
 wx_option(wxUSE_DIRPICKERCTRL "use wxDirPickerCtrl class")
 wx_option(wxUSE_DISPLAY "use wxDisplay class")
 wx_option(wxUSE_EDITABLELISTBOX "use wxEditableListBox class")
@@ -360,7 +397,8 @@ wx_option(wxUSE_WIZARDDLG "use wxWizard")
 # misc GUI options
 # ---------------------------------------------------------------------------
 
-wx_option(wxUSE_MENUS "use wxMenu/wxMenuBar/wxMenuItem classes")
+wx_option(wxUSE_MENUS "use wxMenu and wxMenuItem classes")
+wx_option(wxUSE_MENUBAR "use wxMenuBar class")
 wx_option(wxUSE_MINIFRAME "use wxMiniFrame class")
 wx_option(wxUSE_TOOLTIPS "use wxToolTip class")
 wx_option(wxUSE_SPLINES "use spline drawing code")
@@ -410,6 +448,7 @@ if(WIN32)
     wx_option(wxUSE_TASKBARICON_BALLOONS "enable wxTaskBarIcon::ShowBalloon() method (Win32 only)")
     wx_option(wxUSE_UXTHEME "enable support for Windows XP themed look (Win32 only)")
     wx_option(wxUSE_WEBVIEW_IE "use wxWebView IE backend (Win32 only)")
+    wx_option(wxUSE_WEBVIEW_EDGE "use wxWebView Edge (Chromium) backend (Windows 7+ only)" OFF)
     wx_option(wxUSE_WXDIB "use wxDIB class (Win32 only)")
     if(MSVC_VERSION GREATER 1600 AND NOT CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$")
         set(wxUSE_WINRT_DEFAULT ON)

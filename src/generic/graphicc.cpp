@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GRAPHICS_CONTEXT
 
@@ -20,9 +17,11 @@
 
 #if wxUSE_CAIRO
 
+#ifndef __WXGTK20__
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
 #define cairo_public
+#endif
 
 #include <cairo.h>
 #include <float.h>
@@ -63,7 +62,6 @@ using namespace std;
 // wxGraphicsPath implementation
 //-----------------------------------------------------------------------------
 
-#include <cairo.h>
 #ifdef __WXMSW__
 // TODO remove this dependency (gdiplus needs the macros)
 
@@ -260,6 +258,15 @@ public:
 
     virtual void Apply( wxGraphicsContext* context );
 
+    void CreateLinearGradientPattern(wxDouble x1, wxDouble y1,
+                                     wxDouble x2, wxDouble y2,
+                                     const wxGraphicsGradientStops& stops,
+                                     const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+    void CreateRadialGradientPattern(wxDouble startX, wxDouble startY,
+                                     wxDouble endX, wxDouble endY, wxDouble radius,
+                                     const wxGraphicsGradientStops& stops,
+                                     const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
 protected:
     // Call this to use the given bitmap as stipple. Bitmap must be non-null
     // and valid.
@@ -268,6 +275,8 @@ protected:
     // Call this to use the given hatch style. Hatch style must be valid.
     void InitHatch(wxHatchStyle hatchStyle);
 
+    // common part of Create{Linear,Radial}GradientPattern()
+    void AddGradientStops(const wxGraphicsGradientStops& stops);
 
     double m_red;
     double m_green;
@@ -316,18 +325,8 @@ public:
     wxCairoBrushData( wxGraphicsRenderer* renderer );
     wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
 
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                   wxDouble x2, wxDouble y2,
-                                   const wxGraphicsGradientStops& stops);
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                   wxDouble xc, wxDouble yc, wxDouble radius,
-                                   const wxGraphicsGradientStops& stops);
-
 protected:
     void Init();
-
-    // common part of Create{Linear,Radial}GradientBrush()
-    void AddGradientStops(const wxGraphicsGradientStops& stops);
 };
 
 class wxCairoFontData : public wxGraphicsObjectRefData
@@ -525,6 +524,45 @@ protected:
     WindowHDC m_mswWindowHDC;
     int m_mswStateSavedDC;
 #endif
+#ifdef __WXGTK__
+    // Tiny helper actually applying the font. It's convenient because it can
+    // be called with a temporary wxFont, as we're going to make a copy of its
+    // Pango font description inside this function before the font object is
+    // destroyed.
+    //
+    // It's also all we need for GTK < 3.
+    static void DoApplyFont(PangoLayout* layout, const wxFont& font)
+    {
+        pango_layout_set_font_description
+        (
+            layout,
+            font.GetNativeFontInfo()->description
+        );
+    }
+
+#ifdef __WXGTK3__
+    // This factor must be applied to the font before actually using it, for
+    // consistency with the text drawn by GTK itself.
+    float m_fontScalingFactor;
+
+    // Function applying the Pango font description for the given font scaled by
+    // the font scaling factor if necessary to the specified layout.
+    void ApplyFont(PangoLayout* layout, const wxFont& font) const
+    {
+        // Only scale the font if we really need to do it.
+        DoApplyFont(layout, m_fontScalingFactor == 1.0f
+                                ? font
+                                : font.Scaled(m_fontScalingFactor));
+    }
+#else // GTK < 3
+    // Provide the same function even if it does nothing in this case to keep
+    // the same code for all GTK versions.
+    void ApplyFont(PangoLayout* layout, const wxFont& font) const
+    {
+        DoApplyFont(layout, font);
+    }
+#endif // __WXGTK3__
+#endif // __WXGTK__
 
 private:
     cairo_t* m_context;
@@ -549,6 +587,8 @@ public:
         m_data(renderer, image)
     {
         Init(cairo_create(m_data.GetCairoSurface()));
+        m_width = image.GetWidth();
+        m_height = image.GetHeight();
     }
 
     virtual ~wxCairoImageContext()
@@ -601,7 +641,7 @@ wxCairoPenBrushBaseData::wxCairoPenBrushBaseData(wxGraphicsRenderer* renderer,
     m_pattern = NULL;
     m_bmpdata = NULL;
 
-    if ( isTransparent )
+    if ( isTransparent || !col.IsOk() )
     {
         m_red =
         m_green =
@@ -721,6 +761,66 @@ void wxCairoPenBrushBaseData::Apply( wxGraphicsContext* context )
         cairo_set_source_rgba(ctext, m_red, m_green, m_blue, m_alpha);
 }
 
+void wxCairoPenBrushBaseData::AddGradientStops(const wxGraphicsGradientStops& stops)
+{
+    // loop over all the stops, they include the beginning and ending ones
+    const unsigned numStops = stops.GetCount();
+    for ( unsigned n = 0; n < numStops; n++ )
+    {
+        const wxGraphicsGradientStop stop = stops.Item(n);
+
+        const wxColour col = stop.GetColour();
+
+        cairo_pattern_add_color_stop_rgba
+        (
+            m_pattern,
+            double(stop.GetPosition()),
+            col.Red()/255.0,
+            col.Green()/255.0,
+            col.Blue()/255.0,
+            col.Alpha()/255.0
+        );
+    }
+
+    wxASSERT_MSG(cairo_pattern_status(m_pattern) == CAIRO_STATUS_SUCCESS,
+                 wxT("Couldn't create cairo pattern"));
+}
+
+void
+wxCairoPenBrushBaseData::CreateLinearGradientPattern(wxDouble x1, wxDouble y1,
+                                                     wxDouble x2, wxDouble y2,
+                                                     const wxGraphicsGradientStops& stops,
+                                                     const wxGraphicsMatrix& matrix)
+{
+    m_pattern = cairo_pattern_create_linear(x1,y1,x2,y2);
+
+    if ( !matrix.IsNull() )
+    {
+        cairo_matrix_t m = *((cairo_matrix_t*) matrix.GetNativeMatrix());
+        cairo_pattern_set_matrix(m_pattern, &m);
+    }
+
+    AddGradientStops(stops);
+}
+
+void
+wxCairoPenBrushBaseData::CreateRadialGradientPattern(wxDouble startX, wxDouble startY,
+                                                     wxDouble endX, wxDouble endY,
+                                                     wxDouble radius,
+                                                     const wxGraphicsGradientStops& stops,
+                                                     const wxGraphicsMatrix& matrix)
+{
+    m_pattern = cairo_pattern_create_radial(startX,startY,0.0,endX,endY,radius);
+
+    if ( !matrix.IsNull() )
+    {
+        cairo_matrix_t m = *((cairo_matrix_t*) matrix.GetNativeMatrix());
+        cairo_pattern_set_matrix(m_pattern, &m);
+    }
+
+    AddGradientStops(stops);
+}
+
 //-----------------------------------------------------------------------------
 // wxCairoPenData implementation
 //-----------------------------------------------------------------------------
@@ -732,6 +832,7 @@ wxCairoPenData::~wxCairoPenData()
 
 void wxCairoPenData::Init()
 {
+    m_pattern = NULL;
     m_lengths = NULL;
     m_userLengths = NULL;
     m_width = 0;
@@ -805,6 +906,25 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
     switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
+        // Non-RGB colours, which may e.g. appear under wxOSX for wxColours
+        // with NSColor backend, are not supported by Cairo and have to be
+        // handled in a special way.
+        if ( !info.GetColour().IsSolid() )
+        {
+#if defined(__WXOSX_COCOA__)
+            // Under wxOSX, non-solid NSColors are actually represented
+            // by pattern images and therefore a wxPen with non-solid
+            // colour and wxPENSTYLE_SOLID style can be converted
+            // to a stiple (a surface pattern).
+
+            // Create a stiple bitmap from NSColor's pattern image
+            wxBitmap bmp(info.GetColour().OSXGetNSPatternImage());
+            InitStipple(&bmp);
+#else
+            wxFAIL_MSG( "Pen with non-solid colour is not supported." );
+#endif
+        }
+
         break;
 
     case wxPENSTYLE_DOT :
@@ -863,8 +983,31 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH
             && info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
+            wxASSERT_MSG( info.GetColour().IsSolid(),
+                          "Pen with non-solid colour is not supported." );
             InitHatch(static_cast<wxHatchStyle>(info.GetStyle()));
         }
+        break;
+    }
+
+    switch ( info.GetGradientType() )
+    {
+    case wxGRADIENT_NONE:
+        break;
+
+    case wxGRADIENT_LINEAR:
+        CreateLinearGradientPattern(info.GetX1(), info.GetY1(),
+                                    info.GetX2(), info.GetY2(),
+                                    info.GetStops(),
+                                    info.GetMatrix());
+        break;
+
+    case wxGRADIENT_RADIAL:
+        CreateRadialGradientPattern(info.GetStartX(), info.GetStartY(),
+                                    info.GetEndX(), info.GetEndY(),
+                                    info.GetRadius(),
+                                    info.GetStops(),
+                                    info.GetMatrix());
         break;
     }
 }
@@ -877,7 +1020,7 @@ void wxCairoPenData::Apply( wxGraphicsContext* context )
     cairo_set_line_width(ctext,m_width);
     cairo_set_line_cap(ctext,m_cap);
     cairo_set_line_join(ctext,m_join);
-    cairo_set_dash(ctext,(double*)m_lengths,m_count,0.0);
+    cairo_set_dash(ctext, m_lengths, m_count, 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -904,57 +1047,36 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer,
             InitStipple(brush.GetStipple());
             break;
 
+        case wxBRUSHSTYLE_SOLID:
+            // Non-RGB colours, which may e.g. appear under wxOSX for wxColours
+            // with NSColor backend, are not supported by Cairo and have to be
+            // handled in a special way.
+            if ( !brush.GetColour().IsSolid() )
+            {
+#if defined(__WXOSX_COCOA__)
+                // Under wxOSX, non-solid NSColors are actually represented
+                // by pattern images and therefore a wxBrush with non-solid
+                // colour and wxBRUSHSTYLE_SOLID style can be converted
+                // to a stiple (a surface pattern).
+
+                // Create a stiple bitmap from NSColor's pattern image
+                wxBitmap bmp(brush.GetColour().OSXGetNSPatternImage());
+                InitStipple(&bmp);
+#else
+                wxFAIL_MSG( "Brush with non-solid colour is not supported." );
+#endif
+            }
+            break;
+
         default:
             if ( brush.IsHatch() )
+            {
+                wxASSERT_MSG( brush.GetColour().IsSolid(),
+                              "Brush with non-solid colour is not supported." );
                 InitHatch(static_cast<wxHatchStyle>(brush.GetStyle()));
+            }
             break;
     }
-}
-
-void wxCairoBrushData::AddGradientStops(const wxGraphicsGradientStops& stops)
-{
-    // loop over all the stops, they include the beginning and ending ones
-    const unsigned numStops = stops.GetCount();
-    for ( unsigned n = 0; n < numStops; n++ )
-    {
-        const wxGraphicsGradientStop stop = stops.Item(n);
-
-        const wxColour col = stop.GetColour();
-
-        cairo_pattern_add_color_stop_rgba
-        (
-            m_pattern,
-            stop.GetPosition(),
-            col.Red()/255.0,
-            col.Green()/255.0,
-            col.Blue()/255.0,
-            col.Alpha()/255.0
-        );
-    }
-
-    wxASSERT_MSG(cairo_pattern_status(m_pattern) == CAIRO_STATUS_SUCCESS,
-                 wxT("Couldn't create cairo pattern"));
-}
-
-void
-wxCairoBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                            wxDouble x2, wxDouble y2,
-                                            const wxGraphicsGradientStops& stops)
-{
-    m_pattern = cairo_pattern_create_linear(x1,y1,x2,y2);
-
-    AddGradientStops(stops);
-}
-
-void
-wxCairoBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                            wxDouble xc, wxDouble yc,
-                                            wxDouble radius,
-                                            const wxGraphicsGradientStops& stops)
-{
-    m_pattern = cairo_pattern_create_radial(xo,yo,0.0,xc,yc,radius);
-
-    AddGradientStops(stops);
 }
 
 void wxCairoBrushData::Init()
@@ -1382,7 +1504,7 @@ void wxCairoMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
 // returns the native representation
 void * wxCairoMatrixData::GetNativeMatrix() const
 {
-    return (void*) &m_matrix;
+    return const_cast<cairo_matrix_t*>(&m_matrix);
 }
 
 // ----------------------------------------------------------------------------
@@ -1452,22 +1574,19 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    const bool isSrcBpp32 =
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-            bmp.GetDepth() == 32 || bmp.GetMask() != NULL;
-#else
-            bmp.GetDepth() == 32;
+    const bool isSrcBpp32 = bmp.GetDepth() == 32;
+
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+    const bool hasAlpha = bmp.HasAlpha();
 #endif
 
     cairo_format_t bufferFormat =
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-        isSrcBpp32
-#elif defined(__WXGTK3__)
-        isSrcBpp32 || bmp.GetMask() != NULL
-#elif defined(__WXMSW__) || defined(__WXOSX__)
-        (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
+    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        (isSrcBpp32 && hasAlpha) || bmp.GetMask() != NULL
 #else
-        isSrcBpp32
+        isSrcBpp32 || bmp.GetMask() != NULL
 #endif
         ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24;
 
@@ -1478,13 +1597,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     if ( isSrcBpp32 )
     {
-        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
-        // "has alpha" flag but we want to leave it unchanged, so we need
-        // to save its current value now and restore it afterwards.
-#if defined(__WXMSW__) || defined(__WXOSX__)
-        const bool hasAlpha = bmpSource.HasAlpha();
-#endif // __WXMSW__ || __WXOSX__
-
         {
             // use the bitmap's alpha
             wxAlphaPixelData pixData(bmpSource);
@@ -1501,19 +1613,21 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-                    unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32) ? p.Alpha() : 255;
-#ifdef __WXMSW__
-                    // MSW bitmap pixel bits are already premultiplied.
+#if defined (__WXMSW__) || defined(__WXOSX__)
+                    unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
+                    // MSW and OSX bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__
-                    if (alpha == 0)
+#else // !__WXMSW__ , !__WXOSX__
+                    // We always have alpha, but we need to premultiply it.
+                    unsigned char alpha = p.Alpha();
+                    if (alpha == wxALPHA_TRANSPARENT)
                         *data = 0;
                     else
                         *data = (alpha << 24
                             | Premultiply(alpha, p.Red()) << 16
                             | Premultiply(alpha, p.Green()) << 8
                             | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__ / !__WXMSW__
+#endif // __WXMSW__, __WXOSX__ / !__WXMSW__, !__WXOSX__
                     ++data;
                     ++p;
                 }
@@ -1525,7 +1639,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
 
 #if defined(__WXMSW__) || defined(__WXOSX__)
-        // Reset "has alpha" flag back.
+        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
+        // "has alpha" flag but we want to leave it unchanged, so we need
+        // to reset "has alpha" flag back.
         // (wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.)
         bmpSource.UseAlpha(hasAlpha);
 #endif // __WXMSW__ || __WXOSX__
@@ -1557,14 +1673,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
     // if there is a mask, set the alpha bytes in the target buffer to
-    // fully transparent or fully opaque
-#if defined(__WXMSW__)
-    if (bmp.GetMask() != NULL && !bmp.HasAlpha())
-#else // __WXGTK3__
+    // fully transparent or retain original value
     if (bmp.GetMask() != NULL)
-#endif // __WXMSW__ / __WXGTK3__
     {
         wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
         data = (wxUint32*)m_buffer;
@@ -1578,15 +1689,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
-                // contrary to the others OSX has natively its masked out pixels as white
-#ifdef __WXOSX__
-                if (p.Red() == 0xFF && p.Green() == 0xFF && p.Blue() == 0xFF )
-#else
                 if (p.Red()+p.Green()+p.Blue() == 0)
-#endif
                     *data = 0;
-                else
-                    *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
+
                 ++data;
                 ++p;
             }
@@ -1596,7 +1701,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
-#endif // __WXMSW__ || __WXGTK3__
 
     InitSurface(bufferFormat, stride);
 #endif // wxHAS_RAW_BITMAP
@@ -1812,9 +1916,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     // Since we switched from MM_ANISOTROPIC to MM_TEXT mapping mode
     // we have to apply rescaled DC's device origin to Cairo context.
     ApplyTransformFromDC(dc, Apply_scaled_dev_origin);
-#endif //  __WXMSW__
-
-#ifdef __WXGTK20__
+#elif defined(__WXGTK20__)
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* cr = static_cast<cairo_t*>(impl->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
@@ -1825,6 +1927,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 
     // Transfer transformation settings from source DC to Cairo context.
     ApplyTransformFromDC(dc);
+#else
+    #warning "Constructing wxCairoContext from wxPrinterDC not implemented."
+    wxUnusedVar(dc);
 #endif
 }
 #endif
@@ -1850,7 +1955,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
 #elif defined __WXGTK20__
-    wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
+    const wxGTKDCImpl* impldc = static_cast<const wxGTKDCImpl*>(dc.GetImpl());
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
     // Transfer transformation settings from source DC to Cairo context on our own.
@@ -1869,7 +1974,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #endif
 
 #ifdef __WXQT__
-    m_qtPainter = (QPainter*) dc.GetHandle();
+    m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
     m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
@@ -2063,7 +2168,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
 #elif defined __WXGTK20__
-    wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
+    const wxGTKDCImpl* impldc = static_cast<const wxGTKDCImpl*>(dc.GetImpl());
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
     // Transfer transformation settings from source DC to Cairo context on our own.
@@ -2084,7 +2189,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXQT__
-    m_qtPainter = NULL;
+    m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
     m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
@@ -2234,6 +2339,11 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd)
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
+#ifdef __WXQT__
+    m_qtPainter = NULL;
+    m_qtImage = NULL;
+    m_qtSurface = NULL;
+#endif
 #ifdef __WXMSW__
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
@@ -2288,6 +2398,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     wxGraphicsContext(renderer)
 {
+#ifdef __WXQT__
+    m_qtPainter = NULL;
+    m_qtImage = NULL;
+    m_qtSurface = NULL;
+#endif
 #ifdef __WXMSW__
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
@@ -2331,6 +2446,14 @@ wxCairoContext::~wxCairoContext()
 
 void wxCairoContext::Init(cairo_t *context)
 {
+#ifdef __WXGTK3__
+    // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling
+    // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
+    // GDK_DPI_SCALE environment variable).
+    GdkScreen* screen = gdk_screen_get_default();
+    m_fontScalingFactor = screen ? gdk_screen_get_resolution(screen) / 96.0 : 1.0;
+#endif
+
     m_context = context;
     if ( m_context )
     {
@@ -2566,6 +2689,7 @@ void wxCairoContext::Flush()
     if ( m_qtSurface )
     {
         cairo_surface_flush(m_qtSurface);
+        m_qtPainter->drawImage( 0,0, *m_qtImage );
     }
 #endif
 }
@@ -2634,8 +2758,11 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( font.IsOk() )
     {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+        ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
+
+        // Note that Pango attributes don't depend on font size, so we don't
+        // need to use the scaled font here.
         font.GTKSetPangoAttrs(layout);
 
         cairo_move_to(m_context, x, y);
@@ -2689,7 +2816,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
         int w, h;
 
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+        ApplyFont(layout, font);
         const wxCharBuffer data = str.utf8_str();
         if ( !data )
         {
@@ -2738,7 +2865,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             fe.height = fe.ascent + fe.descent;
         }
 
-        if (height)
+        if (height && !str.empty())
             *height = fe.height;
         if ( descent )
             *descent = fe.descent;
@@ -2758,7 +2885,8 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout(m_context));
         const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
-        pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
+
+        ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
         PangoLayoutIter* iter = pango_layout_get_iter(layout);
         PangoRectangle rect;
@@ -2886,7 +3014,7 @@ void wxCairoContext::EndLayer()
     float opacity = m_layerOpacities.back();
     m_layerOpacities.pop_back();
     cairo_pop_group_to_source(m_context);
-    cairo_paint_with_alpha(m_context,opacity);
+    cairo_paint_with_alpha(m_context, double(opacity));
 }
 
 //-----------------------------------------------------------------------------
@@ -2945,13 +3073,15 @@ public :
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;
@@ -2959,6 +3089,9 @@ public :
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) wxOVERRIDE;
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col) wxOVERRIDE;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE;
@@ -3139,28 +3272,31 @@ wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush )
 wxGraphicsBrush
 wxCairoRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                            wxDouble x2, wxDouble y2,
-                                           const wxGraphicsGradientStops& stops)
+                                           const wxGraphicsGradientStops& stops,
+                                           const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     ENSURE_LOADED_OR_RETURN(p);
     wxCairoBrushData* d = new wxCairoBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+    d->CreateLinearGradientPattern(x1, y1, x2, y2, stops, matrix);
     p.SetRefData(d);
     return p;
 }
 
 wxGraphicsBrush
-wxCairoRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                           wxDouble xc, wxDouble yc, wxDouble r,
-                                           const wxGraphicsGradientStops& stops)
+wxCairoRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                           wxDouble endX, wxDouble endY, wxDouble r,
+                                           const wxGraphicsGradientStops& stops,
+                                           const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     ENSURE_LOADED_OR_RETURN(p);
     wxCairoBrushData* d = new wxCairoBrushData( this );
-    d->CreateRadialGradientBrush(xo, yo, xc, yc, r, stops);
+    d->CreateRadialGradientPattern(startX, startY, endX, endY, r, stops, matrix);
     p.SetRefData(d);
     return p;
 }
+
 
 wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
@@ -3183,6 +3319,14 @@ wxCairoRenderer::CreateFont(double sizeInPixels,
     ENSURE_LOADED_OR_RETURN(font);
     font.SetRefData(new wxCairoFontData(this, sizeInPixels, facename, flags, col));
     return font;
+}
+
+wxGraphicsFont
+wxCairoRenderer::CreateFontAtDPI(const wxFont& font,
+                                 const wxRealPoint& WXUNUSED(dpi),
+                                 const wxColour& col)
+{
+    return CreateFont(font, col);
 }
 
 wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
@@ -3319,13 +3463,13 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 
 #endif  // wxUSE_CAIRO/!wxUSE_CAIRO
 
-// MSW and OS X have their own native default renderers, but the other ports
-// use Cairo by default
-#if !(defined(__WXMSW__) || defined(__WXOSX__))
+// MSW and OS X and Qt on Windows have their own native default renderers, but the other ports
+// use Cairo by default.
+#if !(defined(__WXMSW__) || defined(__WXOSX__) || (defined(__WXQT__) && defined(__WIN32__)))
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 {
     return GetCairoRenderer();
 }
-#endif // !(__WXMSW__ || __WXOSX__)
+#endif // !(__WXMSW__ || __WXOSX__ || (defined(__WXQT__) && defined(__WIN32__)))
 
 #endif // wxUSE_GRAPHICS_CONTEXT

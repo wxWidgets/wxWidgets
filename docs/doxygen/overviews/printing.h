@@ -84,7 +84,7 @@ The scaling of the drawn image typically differs from the screen to the preview
 and printed images. This class provides a set of routines named
 FitThisSizeToXXX(), MapScreenSizeToXXX(), and GetLogicalXXXRect, which can be
 used to set the user scale and origin of the wxPrintout's DC so that your class
-can easily map your image to the printout withough getting into the details of
+can easily map your image to the printout without getting into the details of
 screen and printer PPI and scaling. See the printing sample for examples of how
 these routines are used.
 

@@ -70,12 +70,29 @@ rem Package the 64 bit files
 REM Copy wxrc.exe to the dll folder.
 copy utils\wxrc\%VCver%_mswudll_x64\wxrc.exe lib\%VCver%_x64_dll
 
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z lib\%VCver%_x64_dll\mswud lib\%VCver%_x64_dll\mswu lib\%VCver%_x64_dll\wxMSW%wxDllVers%ud_*.pdb lib\%VCver%_x64_dll\wxbase%wxDllVers%ud_*.pdb lib\%VCver%_x64_dll\wxMSW%wxDllVers%ud_*.dll lib\%VCver%_x64_dll\wxbase%wxDllVers%ud_*.dll lib\%VCver%_x64_dll\*.lib  lib\%VCver%_x64_dll\wxrc.exe
+7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z lib\%VCver%_x64_dll\mswud lib\%VCver%_x64_dll\mswu lib\%VCver%_x64_dll\wxMSW%wxDllVers%ud_*.pdb lib\%VCver%_x64_dll\wxbase%wxDllVers%ud_*.pdb lib\%VCver%_x64_dll\wxMSW%wxDllVers%ud_*.dll lib\%VCver%_x64_dll\wxbase%wxDllVers%u*.dll lib\%VCver%_x64_dll\*.lib  lib\%VCver%_x64_dll\wxrc.exe
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z lib\%VCver%_x64_dll\wxMSW%wxDllVers%u_*.dll lib\%VCver%_x64_dll\wxbase%wxDllVers%u_*.dll
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleasePDB.7z lib\%VCver%_x64_dll\wxMSW%wxDllVers%u_*.pdb lib\%VCver%_x64_dll\wxbase%wxDllVers%u_*.pdb
 
-del %packagePath%\%VCver%\sha1.txt
-fciv %packagePath%\%VCver% -type *.7z -sha1 -wp >> %packagePath%\%VCver%\sha1.txt
+rem Include the props files: we need wxwidgets.props itself and wx_setup.props
+rem included from it.
+7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z build\msw\wx_setup.props
+7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z build\msw\wx_setup.props
+
+copy wxwidgets.props %packagePath%\%VCver%\wxwidgets.props
+
+rem Change to the directory containing wxwidgets.props in order to include it
+rem into the archive without any path.
+cd %packagePath%\%VCver%
+
+7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z wxwidgets.props
+7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z wxwidgets.props
+
+del wxwidgets.props
+
+del sha1.txt
+rem fciv requies a complete path to files
+fciv %cd%\. -type *.7z -sha1 -wp >> sha1.txt
 
 
 goto End

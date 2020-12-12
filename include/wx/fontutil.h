@@ -34,6 +34,7 @@
 #endif
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 struct WXDLLIMPEXP_FWD_CORE wxNativeEncodingInfo;
 
 #if defined(_WX_X_FONTLIKE)
@@ -118,18 +119,35 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
-    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_), pointSize(0.0f) { }
+    // Preserve compatibility in the semi-public (i.e. private, but still
+    // unfortunately used by some existing code outside of the library) API
+    // by allowing to create wxNativeFontInfo from just LOGFONT, but ensure
+    // that we always specify the window, to use the correct DPI, when creating
+    // fonts inside the library itself.
+    wxNativeFontInfo(const LOGFONT& lf_, const wxWindow* win
+#ifndef WXBUILDING
+        = NULL
+#endif
+    );
+
+    // MSW-specific: get point size from LOGFONT height using specified DPI,
+    // or screen DPI when 0.
+    static double GetPointSizeAtPPI(int lfHeight, int ppi = 0);
+
+    // MSW-specific: get the height value in pixels using LOGFONT convention
+    // (i.e. negative) corresponding to the given size in points and DPI.
+    static int GetLogFontHeightAtPPI(double size, int ppi);
 
     LOGFONT      lf;
 
     // MSW only has limited support for fractional point sizes and we need to
     // store the fractional point size separately if it was initially specified
     // as we can't losslessly recover it from LOGFONT later.
-    float        pointSize;
+    double       pointSize;
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
- 
+
     ~wxNativeFontInfo() { Free(); }
 
     wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
@@ -147,29 +165,31 @@ public:
     void Init(const wxNativeFontInfo& info);
 
     void Free();
-    
-    wxString GetFamilyName() const;
-    wxString GetStyleName() const;
 
-    static void UpdateNamesMap(const wxString& familyname, CTFontDescriptorRef descr);
-    static void UpdateNamesMap(const wxString& familyname, CTFontRef font);
+    // not all style attributes like condensed etc, are exposed in the public API methods
+    // for best fidelity PostScript names are useful, they are also used in the toString/fromString methods
+    wxString GetPostScriptName() const;
+    bool SetPostScriptName(const wxString& postScriptName);
 
     static CGFloat GetCTWeight( CTFontRef font );
     static CGFloat GetCTWeight( CTFontDescriptorRef font );
+    static CGFloat GetCTwidth( CTFontDescriptorRef font );
     static CGFloat GetCTSlant( CTFontDescriptorRef font );
-    
-    
+
     CTFontDescriptorRef GetCTFontDescriptor() const;
+    
+    void RealizeResource() const;
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
     CGFloat       m_ctWeight;
+    CGFloat       m_ctWidth;
     wxFontStyle   m_style;
     CGFloat       m_ctSize;
     wxFontFamily  m_family;
-    
-    wxString      m_styleName;
+
     wxString      m_familyName;
+    wxString      m_postScriptName;
 
     // native font description
     wxCFRef<CTFontDescriptorRef> m_descriptor;
@@ -190,7 +210,7 @@ public :
     //
     #define wxNO_NATIVE_FONTINFO
 
-    float         pointSize;
+    double        pointSize;
     wxFontFamily  family;
     wxFontStyle   style;
     int           weight;
@@ -262,7 +282,7 @@ public:
 
     // accessors and modifiers for the font elements
     int GetPointSize() const;
-    float GetFractionalPointSize() const;
+    double GetFractionalPointSize() const;
     wxSize GetPixelSize() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
@@ -274,7 +294,7 @@ public:
     wxFontEncoding GetEncoding() const;
 
     void SetPointSize(int pointsize);
-    void SetFractionalPointSize(float pointsize);
+    void SetFractionalPointSize(double pointsize);
     void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);
@@ -287,7 +307,7 @@ public:
 
     // Helper used in many ports: use the normal font size if the input is
     // negative, as we handle -1 as meaning this for compatibility.
-    void SetSizeOrDefault(float size)
+    void SetSizeOrDefault(double size)
     {
         SetFractionalPointSize
         (

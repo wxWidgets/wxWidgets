@@ -489,9 +489,9 @@ static void gtk_assert_dialog_class_init(gpointer g_class, void*)
                                     "<property name='visible'>True</property>"
                                     "<property name='can_focus'>True</property>"
                                     "<property name='shadow_type'>etched-in</property>"
+                                    "<property name='min-content-height'>180</property>"
                                     "<child>"
                                       "<object class='GtkTreeView' id='treeview'>"
-                                        "<property name='height_request'>180</property>"
                                         "<property name='visible'>True</property>"
                                         "<property name='can_focus'>True</property>"
                                         "<property name='model'>backtrace_list_store</property>"
@@ -711,7 +711,7 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
 
             /* icon */
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+            image = gtk_image_new_from_stock("gtk-dialog-error", GTK_ICON_SIZE_DIALOG);
             wxGCC_WARNING_RESTORE()
             gtk_box_pack_start (GTK_BOX(hbox), image, FALSE, FALSE, 12);
 
@@ -755,11 +755,11 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
             gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
             gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC,
                                             GTK_POLICY_AUTOMATIC);
+            gtk_widget_set_size_request(GTK_WIDGET(sw), -1, 180);
             gtk_box_pack_start (GTK_BOX(vbox), sw, TRUE, TRUE, 8);
 
             /* add the treeview to the scrollable window */
             dlg->treeview = gtk_assert_dialog_create_backtrace_list_model ();
-            gtk_widget_set_size_request (GTK_WIDGET(dlg->treeview), -1, 180);
             gtk_container_add (GTK_CONTAINER (sw), dlg->treeview);
 
             /* create button's hbox */
@@ -768,15 +768,11 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
             gtk_button_box_set_layout (GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
 
             /* add the buttons */
-            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file", GTK_STOCK_SAVE);
-            wxGCC_WARNING_RESTORE()
+            button = gtk_assert_dialog_add_button_to(GTK_BOX(hbox), "Save to _file", "gtk-save");
             g_signal_connect (button, "clicked",
                                 G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
 
-            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Copy to clip_board", GTK_STOCK_COPY);
-            wxGCC_WARNING_RESTORE()
+            button = gtk_assert_dialog_add_button_to(GTK_BOX(hbox), "Copy to clip_board", "gtk-copy");
             g_signal_connect (button, "clicked", G_CALLBACK(gtk_assert_dialog_copy_callback), dlg);
         }
 #endif // wxUSE_STACKWALKER
@@ -789,14 +785,10 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
         wxGCC_WARNING_RESTORE()
 
         /* add the stop button */
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_assert_dialog_add_button (dlg, "_Stop", GTK_STOCK_QUIT, GTK_ASSERT_DIALOG_STOP);
-        wxGCC_WARNING_RESTORE()
+        gtk_assert_dialog_add_button(dlg, "_Stop", "gtk-quit", GTK_ASSERT_DIALOG_STOP);
 
         /* add the continue button */
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue", GTK_STOCK_YES, GTK_ASSERT_DIALOG_CONTINUE);
-        wxGCC_WARNING_RESTORE()
+        continuebtn = gtk_assert_dialog_add_button(dlg, "_Continue", "gtk-yes", GTK_ASSERT_DIALOG_CONTINUE);
         gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_ASSERT_DIALOG_CONTINUE);
         g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
 
@@ -841,12 +833,12 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 
     g_return_val_if_fail (GTK_IS_ASSERT_DIALOG (dlg), NULL);
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(dlg->treeview));
-    string = g_string_new("");
 
     /* iterate over the list */
     if (!gtk_tree_model_get_iter_first (model, &iter))
         return NULL;
 
+    string = g_string_new("");
     do
     {
         /* append this stack frame's info to the string */
@@ -879,13 +871,13 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 
 void gtk_assert_dialog_set_message(GtkAssertDialog *dlg, const gchar *msg)
 {
+    g_return_if_fail (GTK_IS_ASSERT_DIALOG (dlg));
     /* prepend and append the <b> tag
        NOTE: g_markup_printf_escaped() is not used because it's available
              only for glib >= 2.4 */
     gchar *escaped_msg = g_markup_escape_text (msg, -1);
     gchar *decorated_msg = g_strdup_printf ("<b>%s</b>", escaped_msg);
 
-    g_return_if_fail (GTK_IS_ASSERT_DIALOG (dlg));
     gtk_label_set_markup (GTK_LABEL(dlg->message), decorated_msg);
 
     g_free (decorated_msg);

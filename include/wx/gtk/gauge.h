@@ -25,7 +25,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxGA_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxGaugeNameStr )
+             const wxString& name = wxASCII_STR(wxGaugeNameStr) )
     {
         Init();
 
@@ -38,7 +38,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxGA_HORIZONTAL,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxGaugeNameStr );
+                 const wxString& name = wxASCII_STR(wxGaugeNameStr) );
 
     // implement base class virtual methods
     void SetRange(int range) wxOVERRIDE;
@@ -64,8 +64,6 @@ public:
 protected:
     // set the gauge value to the value of m_gaugePos
     void DoSetGauge();
-
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 private:
     void Init() { m_rangeMax = m_gaugePos = 0; }

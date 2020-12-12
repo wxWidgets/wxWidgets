@@ -81,7 +81,7 @@ public:
        Returns if the error sound is currently disabled.
     */
     static bool IsSilent();
-    
+
     /**
         Associates a window with the validator.
 

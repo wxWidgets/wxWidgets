@@ -11,7 +11,7 @@
 
 @section section_copyright wxWidgets Copyrights and Licenses
 
-Copyright (c) 1992-2018 Julian Smart, Vadim Zeitlin, Stefan Csomor, Robert
+Copyright (c) 1992-2020 Julian Smart, Vadim Zeitlin, Stefan Csomor, Robert
 Roebling, and other members of the wxWidgets team, please see the
 acknowledgements section below.
 
@@ -103,7 +103,7 @@ without express or implied warranty.
 @verbinclude "lgpl.txt"
 
 @page page_copyright_xserver The Open Group and DEC License
- 
+
 @verbinclude "xserver.txt"
 
 */

@@ -19,6 +19,7 @@
 #include "wx/toolbar.h"
 #include "wx/app.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 #include "wx/geometry.h"
 #include "wx/sysopt.h"
 
@@ -244,8 +245,6 @@ public:
 #if wxOSX_USE_NATIVE_TOOLBAR
     void SetToolbarItemRef( NSToolbarItem* ref )
     {
-        if ( m_controlHandle )
-            [m_controlHandle setHidden:YES];
         if ( m_toolbarItem )
             [m_toolbarItem release];
 
@@ -604,12 +603,15 @@ void wxToolBarTool::UpdateImages()
         int h = m_bmpNormal.GetScaledHeight();
         m_alternateBitmap = wxBitmap();
         m_alternateBitmap.CreateScaled(w, h, -1, m_bmpNormal.GetScaleFactor());
+        m_alternateBitmap.UseAlpha();
         wxMemoryDC dc;
 
         dc.SelectObject(m_alternateBitmap);
         // This color corresponds to OS X Yosemite's rendering of selected toolbar items
         // See also https://trac.wxwidgets.org/ticket/16645
         wxColour grey(0xB9, 0xB9, 0xB9);
+        dc.SetBackground(*wxTRANSPARENT_BRUSH);
+        dc.Clear();
         dc.SetPen(grey);
         dc.SetBrush(grey);
         dc.DrawRoundedRectangle( 0, 0, w, h, 3 );
@@ -1666,6 +1668,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     else
 #endif
     {
+        const int direction = GetDirection();
         int w, h;
         GetSize( &w, &h );
 
@@ -1674,17 +1677,24 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         wxRect rect(0,0,w,h);
         
         //  TODO determine whether to use flat appearance in earlier system
-        if ( !wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
+        {
+            // No gradient.
+        }
+        else
+        {
             dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
+        }
         
         dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
-        if ( HasFlag(wxTB_LEFT) )
-            dc.DrawLine(w-1, 0, w-1, h);
-        else if ( HasFlag(wxTB_RIGHT) )
+
+        if ( direction == wxTB_RIGHT )
             dc.DrawLine(0, 0, 0, h);
-        else if ( HasFlag(wxTB_BOTTOM) )
+        else if ( direction == wxTB_LEFT )
+            dc.DrawLine(w-1, 0, w-1, h);
+        else if ( direction == wxTB_BOTTOM )
             dc.DrawLine(0, 0, w, 0);
-        else if ( HasFlag(wxTB_TOP) )
+        else if ( direction == wxTB_TOP )
             dc.DrawLine(0, h-1, w, h-1);
     }
     event.Skip();

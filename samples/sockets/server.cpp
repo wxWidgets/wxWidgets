@@ -19,10 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
@@ -305,7 +301,7 @@ void MyFrame::OnWaitForAccept(wxCommandEvent& WXUNUSED(event))
 {
     TestLogger logtest("WaitForAccept() test");
 
-    wxBusyInfo("Waiting for connection for 10 seconds...", this);
+    wxBusyInfo info("Waiting for connection for 10 seconds...", this);
     if ( m_server->WaitForAccept(10) )
         wxLogMessage("Accepted client connection.");
     else

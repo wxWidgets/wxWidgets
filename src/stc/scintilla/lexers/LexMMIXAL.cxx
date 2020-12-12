@@ -103,7 +103,7 @@ static void ColouriseMMIXALDoc(Sci_PositionU startPos, Sci_Position length, int 
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (*s == ':') {	// ignore base prefix for match
-					for (size_t i = 0; i != sizeof(s); ++i) {
+					for (size_t i = 0; i != sizeof(s)-1; ++i) {
 						*(s+i) = *(s+i+1);
 					}
 				}

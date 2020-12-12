@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -199,8 +196,8 @@ void UnicodeTestCase::ConstructorsWithConversion()
     // the string "Déjà" in UTF-8 and wchar_t:
     const unsigned char utf8Buf[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
     const unsigned char utf8subBuf[] = {0x44,0xC3,0xA9,0x6A,0}; // just "Déj"
-    const char *utf8 = (char *)utf8Buf;
-    const char *utf8sub = (char *)utf8subBuf;
+    const char* utf8 = reinterpret_cast<const char*>(utf8Buf);
+    const char* utf8sub = reinterpret_cast<const char*>(utf8subBuf);
 
     wxString s1(utf8, wxConvUTF8);
 

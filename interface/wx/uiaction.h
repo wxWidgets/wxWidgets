@@ -109,7 +109,7 @@ public:
         Press a key.
 
         If you are using modifiers then it needs to be paired with an identical
-        KeyUp or the modifiers will not be released (MSW and OS X).
+        KeyUp or the modifiers will not be released (MSW and macOS).
 
         @param keycode
             Key to operate on, as an integer. It is interpreted as a wxKeyCode.
@@ -176,8 +176,8 @@ public:
         keyboard layout but may not work with other layouts.
 
         @param text
-            The string to type.
+            The string, containing only US ASCII characters, to type.
     */
-    bool Text(const wxString& text);
+    bool Text(const char* text);
 };
 

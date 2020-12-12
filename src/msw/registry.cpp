@@ -14,9 +14,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include  "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_REGKEY
 
@@ -87,11 +84,7 @@ aStdKeys[] =
 // macros
 // ----------------------------------------------------------------------------
 
-// const_cast<> is not yet supported by all compilers
-#define CONST_CAST    ((wxRegKey *)this)->
-
-// and neither is mutable which m_dwLastError should be
-#define m_dwLastError   CONST_CAST m_dwLastError
+#define CONST_CAST const_cast<wxRegKey*>(this)->
 
 // ----------------------------------------------------------------------------
 // non member functions
@@ -1071,7 +1064,7 @@ bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey,
                                     RegValueStr(szValue),
                                     (DWORD) RESERVED, REG_SZ,
-                                    (RegString)wxMSW_CONV_LPCTSTR(strValue),
+                                    reinterpret_cast<const BYTE*>(wxMSW_CONV_LPCTSTR(strValue)),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return true;
@@ -1233,7 +1226,7 @@ static inline bool WriteAsciiString(wxOutputStream& ostr, const wxString& s)
 
 bool wxRegKey::Export(const wxString& filename) const
 {
-#if wxUSE_FFILE && wxUSE_STREAMS
+#if wxUSE_FILE && wxUSE_FFILE && wxUSE_STREAMS
     if ( wxFile::Exists(filename) )
     {
         wxLogError(_("Exporting registry key: file \"%s\" already exists and won't be overwritten."),

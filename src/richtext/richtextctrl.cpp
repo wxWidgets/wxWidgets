@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT
 
@@ -343,7 +340,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(new wxRichTextDropTarget(this));
 #endif
-
+    SetModified( false );
     return true;
 }
 
@@ -1874,7 +1871,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     if (GetWindowStyle() & wxRE_CENTRE_CARET)
     {
         int y = rect.y - GetClientSize().y/2;
-        int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+        int yUnits = (y + ppuY - 1) / ppuY;
         if (y >= 0 && (y + clientSize.y) < (int) (0.5 + GetBuffer().GetCachedSize().y * GetScale()))
         {
             if (startYUnits != yUnits)
@@ -1902,7 +1899,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the bottom
             // of the window
             int y = rect.y - (clientSize.y - rect.height);
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             // If we're still off the screen, scroll another line down
             if ((rect.y + rect.height) > (clientSize.y + (yUnits*ppuY)))
@@ -1919,7 +1916,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the top
             // of the window
             int y = rect.y - (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             if (startYUnits != yUnits)
             {
@@ -1939,7 +1936,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the top
             // of the window
             int y = rect.y - (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             if (startYUnits != yUnits)
             {
@@ -1952,7 +1949,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the bottom
             // of the window
             int y = rect.y - (clientSize.y - rect.height);
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             // If we're still off the screen, scroll another line down
             if ((rect.y + rect.height) > (clientSize.y + (yUnits*ppuY)))
@@ -2737,7 +2734,7 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
 
             if (text.empty()) // End of paragraph, or maybe an image
                 return wxMax(-1, i - 1);
-            else if (wxRichTextCtrlIsWhitespace(text) || text.empty())
+            else if (wxRichTextCtrlIsWhitespace(text))
                 i += direction;
             else
             {
@@ -2955,14 +2952,14 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop, bool fromOnPaint)
     int maxHeight = (int) (0.5 + GetScale() * (GetBuffer().GetCachedSize().y + GetBuffer().GetTopMargin()));
 
     // Round up so we have at least maxHeight pixels
-    int unitsY = (int) (((float)maxHeight/(float)pixelsPerUnit) + 0.5);
+    int unitsY = (maxHeight + pixelsPerUnit - 1) / pixelsPerUnit;
 
     int startX = 0, startY = 0;
     if (!atTop)
         GetViewStart(& startX, & startY);
 
     int maxPositionX = 0;
-    int maxPositionY = (int) ((((float)(wxMax((unitsY*pixelsPerUnit) - clientSize.y, 0)))/((float)pixelsPerUnit)) + 0.5);
+    int maxPositionY = (wxMax(unitsY * pixelsPerUnit - clientSize.y, 0) + pixelsPerUnit - 1) / pixelsPerUnit;
 
     int newStartX = wxMin(maxPositionX, startX);
     int newStartY = wxMin(maxPositionY, startY);
@@ -3239,8 +3236,8 @@ wxTextCtrlHitTestResult
 wxRichTextCtrl::HitTest(const wxPoint& pt,
                         long * pos) const
 {
-    wxClientDC dc((wxRichTextCtrl*) this);
-    ((wxRichTextCtrl*)this)->PrepareDC(dc);
+    wxClientDC dc(const_cast<wxRichTextCtrl*>(this));
+    const_cast<wxRichTextCtrl*>(this)->PrepareDC(dc);
 
     // Buffer uses logical position (relative to start of buffer)
     // so convert
@@ -3248,8 +3245,8 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 
     wxRichTextObject* hitObj = NULL;
     wxRichTextObject* contextObj = NULL;
-    wxRichTextDrawingContext context((wxRichTextBuffer*) & GetBuffer());
-    int hit = ((wxRichTextCtrl*)this)->GetFocusObject()->HitTest(dc, context, pt2, *pos, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
+    wxRichTextDrawingContext context(const_cast<wxRichTextBuffer*>(&GetBuffer()));
+    int hit = const_cast<wxRichTextCtrl*>(this)->GetFocusObject()->HitTest(dc, context, pt2, *pos, &hitObj, &contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
 
     if ((hit & wxRICHTEXT_HITTEST_BEFORE) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
         return wxTE_HT_BEFORE;
@@ -3808,7 +3805,7 @@ void wxRichTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 wxSize wxRichTextCtrl::DoGetBestSize() const
 {
-    return wxSize(10, 10);
+    return FromDIP(wxSize(10, 10));
 }
 
 // ----------------------------------------------------------------------------
@@ -5407,10 +5404,7 @@ void wxRichTextCaret::DoSize()
     {
         m_countVisible = 0;
         DoHide();
-    }
 
-    if (countVisible > 0)
-    {
         m_countVisible = countVisible;
         DoShow();
     }

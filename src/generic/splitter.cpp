@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SPLITTER
 
@@ -120,7 +117,6 @@ void wxSplitterWindow::Init()
     m_sashPosition = 0;
     m_requestedSashPosition = INT_MAX;
     m_sashGravity = 0.0;
-    m_lastSize = wxSize(0,0);
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = wxCursor(wxCURSOR_SIZENS);

@@ -100,7 +100,7 @@ class wxHyperlinkCtrl : public wxControl
 {
 public:
     wxHyperlinkCtrl();
-    
+
     /**
         Constructor. See Create() for more info.
     */

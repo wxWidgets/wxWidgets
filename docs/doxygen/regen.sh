@@ -6,7 +6,7 @@
 # readable.
 #
 # Usage:
-#    ./regen.sh [html|chm|xml|latex|all]
+#    ./regen.sh [html|chm|xml|latex|docset|all]
 #
 # Pass "x" to regen only the X output format and "all" to regen them all.
 # If no arguments are passed, HTML is regenerated (just like passing "html").
@@ -17,6 +17,8 @@
 me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 cd "$path"
+SCRIPTS_DIR="$(pwd)/scripts"
+
 if [[ -z "$WXWIDGETS" ]]; then
     # Notice the use of -P to ensure we get the canonical path even if there
     # are symlinks in the current path. This is important because Doxygen
@@ -80,6 +82,7 @@ case "$1" in
     docset)
         export GENERATE_DOCSET="YES"
         export GENERATE_HTML="YES"
+        export GENERATE_TAGFILE="$path/out/wxWidgets.tag"
         ;;
     latex)
         export GENERATE_LATEX="YES"
@@ -166,7 +169,11 @@ if [[ "$1" = "docset" ]]; then
     ATOMDIR="https://docs.wxwidgets.org/docsets"
     XAR="$BASENAME.xar"
     XARDIR="https://docs.wxwidgets.org/docsets"
-    XCODE_INSTALL=`xcode-select -print-path`
+
+    # See if xcode is installed
+    if [ -x "$(command -v xcode-select)" ]; then
+        XCODE_INSTALL=`xcode-select -print-path`
+    fi
 
     cd out/html
     DESTINATIONDIR=`pwd`/../docset
@@ -177,19 +184,38 @@ if [[ "$1" = "docset" ]]; then
 
     make DOCSET_NAME=$DESTINATIONDIR/$DOCSETNAME
 
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL https://docs.wxwidgets.org
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2018 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
+    # Choose which plist modification utility to use
+    if [ -x "$(command -v defaults)" ]; then
+        PLIST_WRITE_CMD="defaults write"
+    else
+        PLIST_WRITE_CMD="python $SCRIPTS_DIR/write_info_tag.py"
+    fi
 
-    $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
+    # Modify the Info.plist file
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL https://docs.wxwidgets.org
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2020 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
 
+    echo "Creating docset database"
+    if ! [ -z "$XCODE_INSTALL" ]; then
+        # Use xcode to create the docset if it is installed
+        $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
+    else
+        # Use doxytag2zealdb to create the database
+        # This requires the python package doxytag2zealdb installed
+        python -m doxytag2zealdb --tag $DESTINATIONDIR/../wxWidgets.tag --db $DESTINATIONDIR/$DOCSETNAME/Contents/Resources/docSet.dsidx --include-parent-scopes --include-function-signatures
+    fi
+
+    # Copy the icon
+    cp $SCRIPTS_DIR/../../../art/wxwin16x16.png $DESTINATIONDIR/$DOCSETNAME/icon.png
+    cp $SCRIPTS_DIR/../../../art/wxwin32x32.png $DESTINATIONDIR/$DOCSETNAME/icon@2x.png
     cd ../..
 fi
 

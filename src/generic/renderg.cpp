@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/renderer.h"
 
@@ -106,7 +103,16 @@ public:
                               const wxRect& rect,
                               int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) wxOVERRIDE;
+
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
+
+    virtual wxSize GetCheckMarkSize(wxWindow *win) wxOVERRIDE;
+
+    virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -712,7 +718,29 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
     }
 }
 
-wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
+void
+wxRendererGeneric::DrawCheckMark(wxWindow *WXUNUSED(win),
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
+{
+    dc.SetPen(*(flags & wxCONTROL_DISABLED ? wxGREY_PEN : wxBLACK_PEN));
+    dc.DrawCheckMark(rect);
+}
+
+wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win, int WXUNUSED(flags))
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    return win->FromDIP(wxSize(16, 16));
+}
+
+wxSize wxRendererGeneric::GetCheckMarkSize(wxWindow *win)
+{
+    return GetCheckBoxSize(win, wxCONTROL_CELL);
+}
+
+wxSize wxRendererGeneric::GetExpanderSize(wxWindow *win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 

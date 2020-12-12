@@ -226,7 +226,7 @@ public:
 
     virtual void* GetCairoContext() const wxOVERRIDE;
     virtual void* GetHandle() const wxOVERRIDE;
-    
+
     bool CanDrawBitmap() const wxOVERRIDE { return true; }
     void Clear() wxOVERRIDE;
     void SetFont( const wxFont& font ) wxOVERRIDE;

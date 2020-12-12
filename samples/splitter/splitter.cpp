@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -214,8 +211,7 @@ wxEND_EVENT_TABLE()
 // My frame constructor
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxSplitterWindow sample",
-                 wxDefaultPosition, wxSize(420, 300),
-                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+                 wxDefaultPosition, wxSize(420, 300))
 {
     SetIcon(wxICON(sample));
 
@@ -322,7 +318,8 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
-    if (m_replacewindow) {
+    if ( m_replacewindow )
+    {
         m_replacewindow->Destroy();
     }
 }
@@ -447,11 +444,17 @@ void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
 {
-    if (m_replacewindow == NULL) {
+    if ( !m_replacewindow )
+    {
         m_replacewindow = m_splitter->GetWindow2();
-        m_splitter->ReplaceWindow(m_replacewindow, new wxPanel(m_splitter, wxID_ANY));
-        m_replacewindow->Hide();
-    } else {
+        if ( m_replacewindow )
+        {
+            m_splitter->ReplaceWindow(m_replacewindow, new wxPanel(m_splitter, wxID_ANY));
+            m_replacewindow->Hide();
+        }
+    }
+    else
+    {
         wxWindow *empty = m_splitter->GetWindow2();
         wxASSERT(empty != m_replacewindow);
         m_splitter->ReplaceWindow(empty, m_replacewindow);
@@ -551,7 +554,7 @@ void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 
 MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
         : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                           wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
+                           wxHSCROLL | wxVSCROLL)
 {
     m_mirror = mirror;
     SetScrollbars(20, 20, 5, 5);

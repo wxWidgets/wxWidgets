@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -273,7 +270,7 @@ public:
 // wxListView Custom popup interface
 // ----------------------------------------------------------------------------
 
-#include <wx/listctrl.h>
+#include "wx/listctrl.h"
 
 class ListViewComboPopup : public wxListView, public wxComboPopup
 {
@@ -367,7 +364,7 @@ wxEND_EVENT_TABLE()
 // wxTreeCtrl Custom popup interface
 // ----------------------------------------------------------------------------
 
-#include <wx/treectrl.h>
+#include "wx/treectrl.h"
 
 class TreeCtrlComboPopup : public wxTreeCtrl, public wxComboPopup
 {

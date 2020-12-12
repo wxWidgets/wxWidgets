@@ -218,7 +218,7 @@ public:
 
     const wxNativeFontInfo *GetNativeFontInfo() const { return &m_info; }
 
-    float GetFractionalPointSize() const { return m_info.pointSize; }
+    double GetFractionalPointSize() const { return m_info.pointSize; }
     wxString GetFaceName() const { return m_info.faceName; }
     wxFontFamily GetFamily() const { return m_info.family; }
     wxFontStyle GetStyle() const { return m_info.style; }
@@ -226,7 +226,7 @@ public:
     bool GetUnderlined() const { return m_info.underlined; }
     wxFontEncoding GetEncoding() const { return m_info.encoding; }
 
-    void SetFractionalPointSize(float pointSize);
+    void SetFractionalPointSize(double pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);

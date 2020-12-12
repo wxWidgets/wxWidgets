@@ -32,11 +32,11 @@ class WXDLLIMPEXP_HTML wxHtmlBookRecord
 public:
     wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath,
                      const wxString& title, const wxString& start)
+        : m_BookFile(bookfile)
+        , m_BasePath(basepath)
+        , m_Title(title)
+        , m_Start(start)
     {
-        m_BookFile = bookfile;
-        m_BasePath = basepath;
-        m_Title = title;
-        m_Start = start;
         // for debugging, give the contents index obvious default values
         m_ContentsStart = m_ContentsEnd = -1;
     }
@@ -203,7 +203,7 @@ protected:
     wxHtmlBookRecArray m_bookRecords;
 
     wxHtmlHelpDataItems m_contents; // list of all available books and pages
-    wxHtmlHelpDataItems m_index; // list of index itesm
+    wxHtmlHelpDataItems m_index; // list of index items
 
 protected:
     // Imports .hhp files (MS HTML Help Workshop)

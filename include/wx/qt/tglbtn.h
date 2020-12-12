@@ -10,40 +10,6 @@
 
 #include "wx/tglbtn.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
-
-class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButtonBase
-{
-public:
-    wxBitmapToggleButton();
-    wxBitmapToggleButton(wxWindow *parent,
-                   wxWindowID id,
-                   const wxBitmap& label,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr);
-
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxBitmap& label,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize, long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
-
-    virtual void SetValue(bool state);
-    virtual bool GetValue() const;
-
-    virtual QWidget *GetHandle() const;
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
-
-};
-
-
 
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
 {
@@ -56,7 +22,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr);
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -64,14 +30,45 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
-    virtual void SetValue(bool state);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool state) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    // implementation only
+    virtual int QtGetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }
 
 private:
+    wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
+
+};
+
+
+
+class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButton
+{
+public:
+    wxBitmapToggleButton();
+    wxBitmapToggleButton(wxWindow *parent,
+                   wxWindowID id,
+                   const wxBitmap& label,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxBitmap& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
+
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
 
 };
 

@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     21.06.2003 (extracted from common/fontmap.cpp)
-// Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FONTMAP
 
@@ -407,8 +404,7 @@ wxFontMapperBase::wxFontMapperBase()
 wxFontMapperBase::~wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    if ( m_configDummy )
-        delete m_configDummy;
+    delete m_configDummy;
 #endif // wxUSE_CONFIG
 }
 

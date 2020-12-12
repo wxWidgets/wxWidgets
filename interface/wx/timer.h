@@ -154,7 +154,7 @@ public:
    @class wxTimerRunner
 
    Starts the timer in its ctor, stops in the dtor.
-*/ 
+*/
 class wxTimerRunner
 {
 public:
@@ -208,7 +208,6 @@ public:
 class wxTimerEvent : public wxEvent
 {
 public:
-    wxTimerEvent();
     wxTimerEvent(wxTimer& timer);
 
     /**

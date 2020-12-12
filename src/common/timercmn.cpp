@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMER
 
@@ -38,7 +35,9 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent);
+// This class is not really abstract, but this macro has to be used because it
+// doesn't have a default ctor.
+wxIMPLEMENT_ABSTRACT_CLASS(wxTimerEvent, wxEvent);
 
 wxDEFINE_EVENT(wxEVT_TIMER, wxTimerEvent);
 
