@@ -177,6 +177,9 @@ public:
 
         Before sending a request or after a failed request this will return
         @c NULL.
+
+        Note that this pointer remains owned by wxWebRequest object and must
+        not be freed.
     */
     wxWebResponse* GetResponse() const;
 

@@ -291,7 +291,7 @@ public:
 
 private:
     wxWebRequest::State m_state;
-    wxWebResponse* m_response;
+    wxWebResponse* m_response; // non-owning, may be NULL
     wxString m_responseFileName;
     const void* m_data;
     size_t m_dataSize;
