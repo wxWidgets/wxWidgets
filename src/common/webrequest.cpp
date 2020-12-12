@@ -83,8 +83,11 @@ void wxWebRequest::SetData(const wxString& text, const wxString& contentType, co
     SetData(wxSharedPtr<wxInputStream>(new wxMemoryInputStream(m_dataText, m_dataText.length())), contentType);
 }
 
-void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize)
+bool wxWebRequest::SetData(const wxSharedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize)
 {
+    if ( !dataStream->IsOk() )
+        return false;
+
     m_dataStream = dataStream;
     if ( m_dataStream.get() )
     {
@@ -92,6 +95,9 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
         {
             // Determine data size
             m_dataSize = m_dataStream->SeekI(0, wxFromEnd);
+            if ( m_dataSize == wxInvalidOffset )
+                return false;
+
             m_dataStream->SeekI(0);
         }
         else
@@ -101,6 +107,8 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
         m_dataSize = 0;
 
     SetHeader("Content-Type", contentType);
+
+    return true;
 }
 
 wxFileOffset wxWebRequest::GetBytesReceived() const

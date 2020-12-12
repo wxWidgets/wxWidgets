@@ -245,7 +245,9 @@ public:
         this request.
 
         @param dataStream
-            The data in this stream will be posted as the request body
+            The data in this stream will be posted as the request body. The
+            stream may be empty, which will result in sending 0 bytes of data,
+            but if not empty, should be valid.
         @param contentType
             The value of HTTP "Content-Type" header, e.g.
             "application/octet-stream".
@@ -253,8 +255,11 @@ public:
             Amount of data which is sent to the server. If set to
             @c wxInvalidOffset all stream data is sent.
 
+        @return @false if @a dataStream is not-empty but invalid or if @a
+            dataSize is not specified and the attempt to determine stream size
+            failed; @true in all the other cases.
     */
-    void SetData(wxSharedPtr<wxInputStream> dataStream,
+    bool SetData(const wxSharedPtr<wxInputStream>& dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     /**
