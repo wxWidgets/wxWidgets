@@ -260,6 +260,8 @@ public:
         { return GetBitnessName(); }
     wxString GetEndiannessName() const
         { return GetEndiannessName(m_endian); }
+    wxString GetCpuArchitectureName() const
+        { return m_cpuArch; }
     wxString GetOperatingSystemDescription() const
         { return m_osDesc; }
     wxString GetDesktopEnvironment() const
@@ -301,6 +303,8 @@ public:
         { SetBitness(n); }
     void SetEndianness(wxEndianness n)
         { m_endian = n; }
+    void SetCpuArchitectureName(const wxString& cpuArch)
+        { m_cpuArch = cpuArch; }
 
     void SetDesktopEnvironment(const wxString& de)
         { m_desktopEnv = de; }
@@ -386,6 +390,9 @@ protected:
 
     // endianness of the machine
     wxEndianness m_endian;
+
+    // CPU architecture family name, possibly empty if unknown
+    wxString m_cpuArch;
 };
 
 
