@@ -995,6 +995,9 @@ bool wxIsPlatformLittleEndian();
     "arm64", or "i86pc". The name for the same CPU running on the same
     hardware can vary across operating systems.
 
+    The returned string may be empty if the CPU architecture couldn't be
+    recognized.
+
     @since 3.1.5
 */
 wxString wxGetCpuArchitectureName();

@@ -1297,7 +1297,7 @@ wxString wxGetCpuArchitectureName()
 
     case PROCESSOR_ARCHITECTURE_UNKNOWN:
     default:
-        return "Unknown";
+        return wxString();
     }
 }
 
