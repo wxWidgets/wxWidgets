@@ -1105,6 +1105,7 @@ with_regex
 with_liblzma
 with_zlib
 with_expat
+with_winhttp
 with_macosx_sdk
 with_macosx_version_min
 enable_debug
@@ -2380,6 +2381,7 @@ Optional Packages:
   --with-liblzma          use LZMA compression)
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
+  --with-winhttp          use WinHTTP-based wxWebRequest
   --with-macosx-sdk=PATH  use macOS SDK at PATH
   --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)
   --with-cxx=11|14|17     use the given C++ dialect
@@ -5347,6 +5349,38 @@ fi
 
           eval "$wx_cv_use_expat"
 
+
+if test "$USE_WIN32" = 1; then
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-winhttp was given.
+if test "${with_winhttp+set}" = set; then :
+  withval=$with_winhttp;
+                        if test "$withval" = yes; then
+                          wx_cv_use_winhttp='wxUSE_WINHTTP=yes'
+                        else
+                          wx_cv_use_winhttp='wxUSE_WINHTTP=no'
+                        fi
+
+else
+
+                        wx_cv_use_winhttp='wxUSE_WINHTTP=${'DEFAULT_wxUSE_WINHTTP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_winhttp"
+
+fi
 
 if test "$USE_DARWIN" = 1; then
 
@@ -23091,8 +23125,19 @@ fi
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
     fi
-    if test "$wxUSE_WEBREQUEST" = "yes" ; then
-        LIBS="$LIBS -lwinhttp"
+    if test "$wxUSE_WINHTTP" = "yes" ; then
+        ac_fn_c_check_header_mongrel "$LINENO" "winhttp.h" "ac_cv_header_winhttp_h" "$ac_includes_default"
+if test "x$ac_cv_header_winhttp_h" = xyes; then :
+
+else
+   wxUSE_WINHTTP=no
+fi
+
+
+
+        if test "$wxUSE_WINHTTP" = "yes" ; then
+            LIBS="$LIBS -lwinhttp"
+        fi
     fi
 
     case "${host}" in
@@ -36078,8 +36123,8 @@ if test "$wxUSE_WEBREQUEST" = "yes"; then
 
     fi
 
-    if test "$wxUSE_MSW" = 1; then
-                $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
+    if test "$wxUSE_WINHTTP" = "yes"; then
+        $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
 
     fi
 

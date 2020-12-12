@@ -576,6 +576,10 @@ WX_ARG_WITH(liblzma,       [  --with-liblzma          use LZMA compression)], wx
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
+if test "$USE_WIN32" = 1; then
+WX_ARG_WITH(winhttp,       [  --with-winhttp          use WinHTTP-based wxWebRequest], wxUSE_WINHTTP)
+fi
+
 if test "$USE_DARWIN" = 1; then
 
 AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use macOS SDK at PATH], [
@@ -2977,8 +2981,12 @@ if test "$USE_WIN32" = 1 ; then
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
     fi
-    if test "$wxUSE_WEBREQUEST" = "yes" ; then
-        LIBS="$LIBS -lwinhttp"
+    if test "$wxUSE_WINHTTP" = "yes" ; then
+        AC_CHECK_HEADER(winhttp.h,,[ wxUSE_WINHTTP=no ])
+
+        if test "$wxUSE_WINHTTP" = "yes" ; then
+            LIBS="$LIBS -lwinhttp"
+        fi
     fi
 
     case "${host}" in
@@ -6591,8 +6599,7 @@ if test "$wxUSE_WEBREQUEST" = "yes"; then
         AC_DEFINE(wxUSE_WEBREQUEST_URLSESSION)
     fi
 
-    if test "$wxUSE_MSW" = 1; then
-        dnl TODO: Check for the required headers/libraries under Windows
+    if test "$wxUSE_WINHTTP" = "yes"; then
         AC_DEFINE(wxUSE_WEBREQUEST_WINHTTP)
     fi
 
