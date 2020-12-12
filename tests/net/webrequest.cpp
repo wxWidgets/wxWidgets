@@ -75,6 +75,10 @@ public:
         case wxWebRequest::State_Cancelled:
             loop.Exit();
             break;
+
+        case wxWebRequest::State_Idle:
+        case wxWebRequest::State_Active:
+            break;
         }
     }
 
