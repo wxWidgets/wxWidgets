@@ -311,7 +311,7 @@ public:
     /// Returns the number of bytes sent to the server.
     wxFileOffset GetBytesSent() const;
 
-    /// Returns the number of bytes expected to be send to the server.
+    /// Returns the number of bytes expected to be sent to the server.
     wxFileOffset GetBytesExpectedToSend() const;
 
     /// Returns the number of bytes received from the server.
