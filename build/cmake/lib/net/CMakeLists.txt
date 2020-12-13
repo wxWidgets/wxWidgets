@@ -32,8 +32,6 @@ if(WIN32)
 endif()
 
 if (wxUSE_WEBREQUEST_CURL)
-    find_package(CURL REQUIRED)
-
     target_include_directories(wxnet PRIVATE ${CURL_INCLUDE_DIRS})
     wx_lib_link_libraries(wxnet PRIVATE ${CURL_LIBRARIES})
 endif()

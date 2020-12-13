@@ -308,6 +308,18 @@ if(wxUSE_LIBLZMA)
     endif()
 endif()
 
+if(wxUSE_WEBREQUEST_CURL)
+    find_package(CURL)
+    if(NOT CURL_FOUND)
+        message(WARNING "CURL not found, wxWebSessionBackendCURL won't be available")
+        wx_option_force_value(wxUSE_WEBREQUEST_CURL OFF)
+    endif()
+endif()
+if (wxUSE_WEBREQUEST AND NOT (wxUSE_WEBREQUEST_WINHTTP OR wxUSE_WEBREQUEST_URLSESSION OR wxUSE_WEBREQUEST_CURL))
+    message(WARNING "wxUSE_WEBREQUEST requires at least one backend, it won't be available")
+    wx_option_force_value(wxUSE_WEBREQUEST OFF)
+endif()
+
 if(UNIX)
     if(wxUSE_SECRETSTORE AND NOT APPLE)
         # The required APIs are always available under MSW and OS X but we must
