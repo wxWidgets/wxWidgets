@@ -336,7 +336,7 @@ public:
     {
         if ( !m_currentRequest || m_currentRequest->GetBytesExpectedToReceive() <= 0 )
             return;
-        
+
         m_downloadGauge->SetValue((m_currentRequest->GetBytesReceived() * 100) /
             m_currentRequest->GetBytesExpectedToReceive());
 
@@ -404,7 +404,7 @@ public:
     {
         if ( !wxApp::OnInit() )
             return false;
-        
+
         wxInitAllImageHandlers();
 
         // create the main application window
