@@ -89,14 +89,10 @@ size_t wxWebResponseCURL::AddHeaderData(const char * buffer, size_t size)
     }
     else if ( !hdr.empty() )
     {
-        wxArrayString hdrArr = wxSplit(hdr, ':');
-        wxString hdrName;
         wxString hdrValue;
-        if ( hdrArr.size() > 0 )
-            hdrName = hdrArr[0].Trim().MakeUpper();
-        if ( hdrArr.size() > 1 )
-            hdrValue = hdrArr[1].Trim(false);
-        m_headers[hdrName] = hdrValue;
+        wxString hdrName = hdr.BeforeFirst(':', &hdrValue).Strip(wxString::trailing);
+        hdrName.MakeUpper();
+        m_headers[hdrName] = hdrValue.Strip(wxString::leading);
     }
 
     return size;
