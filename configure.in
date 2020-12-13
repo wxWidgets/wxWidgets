@@ -2928,6 +2928,11 @@ dnl ------------------------------------------------------------------------
 dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
+dnl Using libcurl on iOS doesn't make much sense and currently breaks the
+dnl build, probably because it finds a wrong (native) libcurl.pc file, so just
+dnl disable it for now.
+if test "$wxUSE_OSX_IPHONE" != 1; then
+
 if test "$wxUSE_LIBCURL" != "no"; then
     PKG_CHECK_MODULES(LIBCURL, [libcurl],
         [
@@ -2951,6 +2956,8 @@ if test "$wxUSE_LIBCURL" != "no"; then
         fi
     fi
 fi
+
+fi dnl wxUSE_OSX_IPHONE != 1
 
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)

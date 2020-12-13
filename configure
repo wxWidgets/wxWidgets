@@ -23004,6 +23004,8 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 fi
 
 
+if test "$wxUSE_OSX_IPHONE" != 1; then
+
 if test "$wxUSE_LIBCURL" != "no"; then
 
 pkg_failed=no
@@ -23099,6 +23101,7 @@ $as_echo "$as_me: WARNING: libcurl not found, wxWebRequest won't be available" >
     fi
 fi
 
+fi
 
 TOOLKIT=
 TOOLKIT_INCLUDE=
