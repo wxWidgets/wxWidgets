@@ -346,7 +346,10 @@ wxWebSessionCURL::wxWebSessionCURL() :
 {
     // Initialize CURL globally if no sessions are active
     if ( ms_activeSessions == 0 )
-        InitializeCURL();
+    {
+        if ( curl_global_init(CURL_GLOBAL_ALL) )
+            wxLogError("libcurl could not be initialized");
+    }
 
     ms_activeSessions++;
 }
@@ -370,7 +373,7 @@ wxWebSessionCURL::~wxWebSessionCURL()
     // Global CURL cleanup if this is the last session
     --ms_activeSessions;
     if ( ms_activeSessions == 0 )
-        CleanupCURL();
+        curl_global_cleanup();
 }
 
 void wxWebSessionCURL::Initialize()
@@ -532,20 +535,6 @@ wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
         vi->version_num >> 8 & 0xff,
         vi->version_num & 0xff,
         desc);
-}
-
-// static
-void wxWebSessionCURL::InitializeCURL()
-{
-    if ( curl_global_init(CURL_GLOBAL_ALL) )
-        wxLogError("libcurl could not be initialized");
-}
-
-// static
-void wxWebSessionCURL::CleanupCURL()
-{
-    if ( ms_activeSessions == 0 )
-        curl_global_cleanup();
 }
 
 #endif // wxUSE_WEBREQUEST_CURL

@@ -137,10 +137,6 @@ private:
 
     static int ms_activeSessions;
 
-    static void InitializeCURL();
-
-    static void CleanupCURL();
-
     wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
 };
 
