@@ -21642,6 +21642,15 @@ $as_echo "no" >&6; }
 
 fi
 
+if test "$build" != "$host"; then
+
+
+                if test -z "$PKG_CONFIG_LIBDIR"; then
+        PKG_CONFIG_LIBDIR=/dev/null
+        export PKG_CONFIG_LIBDIR
+    fi
+fi
+
 
 
 if test "$wxUSE_REGEX" != "no"; then
@@ -23004,8 +23013,6 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 fi
 
 
-if test "$wxUSE_OSX_IPHONE" != 1; then
-
 if test "$wxUSE_LIBCURL" != "no"; then
 
 pkg_failed=no
@@ -23101,7 +23108,6 @@ $as_echo "$as_me: WARNING: libcurl not found, wxWebRequest won't be available" >
     fi
 fi
 
-fi
 
 TOOLKIT=
 TOOLKIT_INCLUDE=

@@ -2383,6 +2383,23 @@ fi dnl End of pre-C++11 only checks section
 dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
 PKG_PROG_PKG_CONFIG
 
+dnl When cross-compiling, don't use .pc files on the build system, they are at
+dnl best useless and can be harmful (e.g. they may define options inappropriate
+dnl for the cross-build, resulting in the failure of all the subsequent tests).
+if test "$build" != "$host"; then
+    dnl pkg.m4 forbids the use of PKG_XXX, so undo it here to avoid autoconf
+    dnl errors.
+    m4_pattern_allow([PKG_CONFIG_LIBDIR])
+
+    dnl If pkg-config libdir is already defined, we suppose that they know what
+    dnl they're doing and leave it alone, but if not, set it to a path in which
+    dnl no .pc files will be found.
+    if test -z "$PKG_CONFIG_LIBDIR"; then
+        PKG_CONFIG_LIBDIR=/dev/null
+        export PKG_CONFIG_LIBDIR
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl
@@ -2928,11 +2945,6 @@ dnl ------------------------------------------------------------------------
 dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
-dnl Using libcurl on iOS doesn't make much sense and currently breaks the
-dnl build, probably because it finds a wrong (native) libcurl.pc file, so just
-dnl disable it for now.
-if test "$wxUSE_OSX_IPHONE" != 1; then
-
 if test "$wxUSE_LIBCURL" != "no"; then
     PKG_CHECK_MODULES(LIBCURL, [libcurl],
         [
@@ -2956,8 +2968,6 @@ if test "$wxUSE_LIBCURL" != "no"; then
         fi
     fi
 fi
-
-fi dnl wxUSE_OSX_IPHONE != 1
 
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
