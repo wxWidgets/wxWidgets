@@ -203,6 +203,12 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
     }
 }
 
+namespace wxPrivate
+{
+WXDLLIMPEXP_NET wxString
+SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters);
+}
+
 TEST_CASE("WebRequestUtils", "[net]")
 {
     wxString value;
@@ -210,7 +216,7 @@ TEST_CASE("WebRequestUtils", "[net]")
 
     wxString header = "multipart/mixed; boundary=\"MIME_boundary_01234567\"";
 
-    wxWebRequest::SplitParameters(header, value, params);
+    value = wxPrivate::SplitParameters(header, params);
     REQUIRE( value == "multipart/mixed" );
     REQUIRE( params.size() == 1 );
     REQUIRE( params["boundary"] == "MIME_boundary_01234567" );

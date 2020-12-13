@@ -144,11 +144,15 @@ void wxWebRequest::ReportDataReceived(size_t sizeReceived)
 // The SplitParamaters implementation is adapted to wxWidgets
 // from Poco::Net::MessageHeader::splitParameters
 
-void wxWebRequest::SplitParameters(const wxString& s, wxString& value,
-    wxWebRequestHeaderMap& parameters)
+// This function is used in a unit test, so define it inside wxPrivate
+// namespace and an anonymous one.
+namespace wxPrivate
 {
-    value.clear();
-    parameters.clear();
+
+WXDLLIMPEXP_NET wxString
+SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters)
+{
+    wxString value;
     wxString::const_iterator it = s.begin();
     wxString::const_iterator end = s.end();
     while ( it != end && wxIsspace(*it) )
@@ -158,17 +162,12 @@ void wxWebRequest::SplitParameters(const wxString& s, wxString& value,
     value.Trim();
     if ( it != end )
         ++it;
-    SplitParameters(it, end, parameters);
-}
 
-void wxWebRequest::SplitParameters(const wxString::const_iterator& begin,
-    const wxString::const_iterator& end, wxWebRequestHeaderMap& parameters)
-{
+    parameters.clear();
     wxString pname;
     wxString pvalue;
     pname.reserve(32);
     pvalue.reserve(64);
-    wxString::const_iterator it = begin;
     while ( it != end )
     {
         pname.clear();
@@ -216,7 +215,11 @@ void wxWebRequest::SplitParameters(const wxString::const_iterator& begin,
         if ( it != end )
             ++it;
     }
+
+    return value;
 }
+
+} // namespace wxPrivate
 
 void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 {
@@ -318,9 +321,8 @@ wxString wxWebResponse::GetSuggestedFileName() const
 
     // Try to determine from Content-Disposition header
     wxString contentDisp = GetHeader("Content-Disposition");
-    wxString disp;
     wxWebRequestHeaderMap params;
-    wxWebRequest::SplitParameters(contentDisp, disp, params);
+    const wxString disp = wxPrivate::SplitParameters(contentDisp, params);
     if ( disp == "attachment" )
     {
         // Parse as filename to filter potential path names
