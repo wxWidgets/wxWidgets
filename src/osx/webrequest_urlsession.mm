@@ -94,7 +94,6 @@ wxWebRequestURLSession::wxWebRequestURLSession(wxWebSessionURLSession& session, 
     wxWebRequest(session, id),
     m_url(url)
 {
-    m_headers = session.GetHeaders();
 }
 
 wxWebRequestURLSession::~wxWebRequestURLSession()

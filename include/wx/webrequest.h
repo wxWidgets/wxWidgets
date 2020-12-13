@@ -100,14 +100,7 @@ protected:
     wxFileOffset m_dataSize;
     wxSharedPtr<wxInputStream> m_dataStream;
 
-    wxWebRequest(wxWebSession& session, int id):
-        m_storage(Storage_Memory),
-        m_dataSize(0),
-        m_session(session),
-        m_id(id),
-        m_state(State_Idle),
-        m_ignoreServerErrorStatus(false),
-        m_bytesReceived(0) { }
+    wxWebRequest(wxWebSession& session, int id);
 
     bool CheckServerStatus();
 
@@ -227,8 +220,6 @@ public:
     virtual void SetHeader(const wxString& name, const wxString& value)
     { m_headers[name] = value; }
 
-    const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
-
     void SetTempDir(const wxString& dir) { m_tempDir = dir; }
 
     wxString GetTempDir() const;
@@ -245,7 +236,12 @@ public:
 protected:
     wxWebSession();
 
+    const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
+
 private:
+    // Make it a friend to allow accessing our m_headers.
+    friend class wxWebRequest;
+
     wxWebRequestHeaderMap m_headers;
     wxString m_tempDir;
 

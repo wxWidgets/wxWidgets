@@ -59,6 +59,18 @@ wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
 //
 // wxWebRequest
 //
+wxWebRequest::wxWebRequest(wxWebSession& session, int id)
+    : m_storage(Storage_Memory),
+      m_headers(session.m_headers),
+      m_dataSize(0),
+      m_session(session),
+      m_id(id),
+      m_state(State_Idle),
+      m_ignoreServerErrorStatus(false),
+      m_bytesReceived(0)
+{
+}
+
 bool wxWebRequest::CheckServerStatus()
 {
     const wxWebResponse* resp = GetResponse();

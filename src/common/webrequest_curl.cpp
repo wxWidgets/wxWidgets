@@ -149,7 +149,6 @@ static size_t wxCURLRead(char *buffer, size_t size, size_t nitems, void *userdat
 wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session, int id, const wxString & url):
     wxWebRequest(session, id)
 {
-    m_headers = session.GetHeaders();
     m_headerList = NULL;
 
     m_handle = curl_easy_init();

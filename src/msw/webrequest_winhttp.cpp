@@ -152,7 +152,6 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(int id, wxWebSessionWinHTTP& session, c
     m_request(NULL),
     m_dataWritten(0)
 {
-    m_headers = session.GetHeaders();
 }
 
 wxWebRequestWinHTTP::~wxWebRequestWinHTTP()
