@@ -121,7 +121,7 @@ bool wxWebRequest::SetData(const wxSharedPtr<wxInputStream>& dataStream, const w
 
 wxFileOffset wxWebRequest::GetBytesReceived() const
 {
-    return m_bytesReceived;;
+    return m_bytesReceived;
 }
 
 wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
