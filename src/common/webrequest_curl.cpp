@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/translation.h"
     #include "wx/utils.h"
 #endif
 
@@ -348,7 +349,7 @@ wxWebSessionCURL::wxWebSessionCURL() :
     if ( ms_activeSessions == 0 )
     {
         if ( curl_global_init(CURL_GLOBAL_ALL) )
-            wxLogError("libcurl could not be initialized");
+            wxLogError(_("libcurl could not be initialized"));
     }
 
     ms_activeSessions++;
