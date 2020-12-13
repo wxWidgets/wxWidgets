@@ -377,15 +377,18 @@ wxWebSessionCURL::~wxWebSessionCURL()
         curl_global_cleanup();
 }
 
-void wxWebSessionCURL::Initialize()
-{
-    m_handle = curl_multi_init();
-}
-
 wxWebRequest* wxWebSessionCURL::CreateRequest(const wxString& url, int id)
 {
+    // Allocate our handle on demand.
     if ( !m_handle )
-        Initialize();
+    {
+        m_handle = curl_multi_init();
+        if ( !m_handle )
+        {
+            wxLogDebug("curl_multi_init() failed");
+            return NULL;
+        }
+    }
 
     return new wxWebRequestCURL(*this, id, url);
 }

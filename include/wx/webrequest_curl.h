@@ -133,8 +133,6 @@ private:
     wxMutex m_cancelledMutex;
     wxVector< wxObjectDataPtr<wxWebRequestCURL> > m_cancelledRequests;
 
-    void Initialize();
-
     static int ms_activeSessions;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
