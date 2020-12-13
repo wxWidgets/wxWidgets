@@ -16,6 +16,7 @@
 
 #include "wx/event.h"
 #include "wx/ffile.h"
+#include "wx/hashmap.h"
 #include "wx/object.h"
 #include "wx/scopedptr.h"
 #include "wx/sharedptr.h"
