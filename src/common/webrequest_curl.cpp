@@ -537,11 +537,7 @@ wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
 // static
 void wxWebSessionCURL::InitializeCURL()
 {
-    long initFlags = CURL_GLOBAL_SSL;
-#ifdef WIN32
-    initFlags |= CURL_GLOBAL_WIN32;
-#endif // WIN32
-    if ( curl_global_init(initFlags) )
+    if ( curl_global_init(CURL_GLOBAL_ALL) )
         wxLogError("libcurl could not be initialized");
 }
 
