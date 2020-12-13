@@ -369,6 +369,15 @@ public:
     wxEndianness GetEndianness() const;
 
     /**
+        Returns the CPU architecture name, if available.
+
+        @see wxGetCpuArchitectureName()
+
+        @since 3.1.5
+     */
+    wxString GetCpuArchitectureName() const;
+
+    /**
         Returns the run-time major version of the OS associated with this
         wxPlatformInfo instance.
 
