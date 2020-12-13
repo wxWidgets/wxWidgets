@@ -5379,7 +5379,6 @@ fi
 
           eval "$wx_cv_use_libcurl"
 
-if test "$USE_WIN32" = 1; then
 
           withstring=
           defaultval=$wxUSE_ALL_FEATURES
@@ -5409,7 +5408,6 @@ fi
 
           eval "$wx_cv_use_winhttp"
 
-fi
 if test "$USE_DARWIN" = 1; then
 
           withstring=
@@ -23136,11 +23134,12 @@ fi
         LIBS="$LIBS -loleacc"
     fi
     if test "$wxUSE_WINHTTP" = "yes" ; then
-        ac_fn_c_check_header_mongrel "$LINENO" "winhttp.h" "ac_cv_header_winhttp_h" "$ac_includes_default"
+        ac_fn_c_check_header_compile "$LINENO" "winhttp.h" "ac_cv_header_winhttp_h" "#include <windows.h>
+"
 if test "x$ac_cv_header_winhttp_h" = xyes; then :
 
 else
-   wxUSE_WINHTTP=no
+  wxUSE_WINHTTP=no
 fi
 
 
