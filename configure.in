@@ -2945,28 +2945,17 @@ dnl ------------------------------------------------------------------------
 dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
-if test "$wxUSE_LIBCURL" != "no"; then
+if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
     PKG_CHECK_MODULES(LIBCURL, [libcurl],
         [
             CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
             LIBS="$LIBCURL_LIBS $LIBS"
-            AC_DEFINE(wxUSE_WEBREQUEST_LIBCURL)
         ],
         [
             wxUSE_LIBCURL=no
             AC_MSG_RESULT([not found])
         ]
     )
-
-    if test "$wxUSE_LIBCURL" = "no"; then
-        dnl Under these platforms we have other, always available, backends for
-        dnl wxWebRequest, but under the others (i.e. generic Unix) libcurl is
-        dnl the only way to implement wxWebRequest.
-        if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
-            AC_MSG_WARN([libcurl not found, wxWebRequest won't be available])
-            wxUSE_WEBREQUEST=no
-        fi
-    fi
 fi
 
 dnl ----------------------------------------------------------------
@@ -6610,21 +6599,27 @@ if test "$wxUSE_FS_INET" = "yes"; then
 fi
 
 if test "$wxUSE_WEBREQUEST" = "yes"; then
-    AC_DEFINE(wxUSE_WEBREQUEST)
-
     if test "$wxUSE_LIBCURL" = "yes"; then
         AC_DEFINE(wxUSE_WEBREQUEST_CURL)
+        have_webrequest_backend=1
     fi
 
-    if test "$wxUSE_URLSESSION" = "yes"; then
+    if test "$USE_DARWIN" = 1 -a "$wxUSE_URLSESSION" = "yes"; then
         AC_DEFINE(wxUSE_WEBREQUEST_URLSESSION)
+        have_webrequest_backend=1
     fi
 
-    if test "$wxUSE_WINHTTP" = "yes"; then
+    if test "$USE_WIN32" = 1 -a "$wxUSE_WINHTTP" = "yes"; then
         AC_DEFINE(wxUSE_WEBREQUEST_WINHTTP)
+        have_webrequest_backend=1
     fi
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
+    if test "$have_webrequest_backend" = 1; then
+        AC_DEFINE(wxUSE_WEBREQUEST)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
+    else
+        AC_MSG_WARN([Disabling wxWebRequest because no backends are available])
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------

@@ -23011,7 +23011,7 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 fi
 
 
-if test "$wxUSE_LIBCURL" != "no"; then
+if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCURL" >&5
@@ -23092,18 +23092,8 @@ $as_echo "yes" >&6; }
 
             CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
             LIBS="$LIBCURL_LIBS $LIBS"
-            $as_echo "#define wxUSE_WEBREQUEST_LIBCURL 1" >>confdefs.h
-
 
 fi
-
-    if test "$wxUSE_LIBCURL" = "no"; then
-                                if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libcurl not found, wxWebRequest won't be available" >&5
-$as_echo "$as_me: WARNING: libcurl not found, wxWebRequest won't be available" >&2;}
-            wxUSE_WEBREQUEST=no
-        fi
-    fi
 fi
 
 
@@ -36124,25 +36114,32 @@ if test "$wxUSE_FS_INET" = "yes"; then
 fi
 
 if test "$wxUSE_WEBREQUEST" = "yes"; then
-    $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
-
-
     if test "$wxUSE_LIBCURL" = "yes"; then
         $as_echo "#define wxUSE_WEBREQUEST_CURL 1" >>confdefs.h
 
+        have_webrequest_backend=1
     fi
 
-    if test "$wxUSE_URLSESSION" = "yes"; then
+    if test "$USE_DARWIN" = 1 -a "$wxUSE_URLSESSION" = "yes"; then
         $as_echo "#define wxUSE_WEBREQUEST_URLSESSION 1" >>confdefs.h
 
+        have_webrequest_backend=1
     fi
 
-    if test "$wxUSE_WINHTTP" = "yes"; then
+    if test "$USE_WIN32" = 1 -a "$wxUSE_WINHTTP" = "yes"; then
         $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
 
+        have_webrequest_backend=1
     fi
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
+    if test "$have_webrequest_backend" = 1; then
+        $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling wxWebRequest because no backends are available" >&5
+$as_echo "$as_me: WARNING: Disabling wxWebRequest because no backends are available" >&2;}
+    fi
 fi
 
 
