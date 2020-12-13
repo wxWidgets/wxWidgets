@@ -63,6 +63,8 @@ wxWebResponseCURL::wxWebResponseCURL(wxWebRequest& request) :
 {
     curl_easy_setopt(GetHandle(), CURLOPT_WRITEDATA, static_cast<void*>(this));
     curl_easy_setopt(GetHandle(), CURLOPT_HEADERDATA, static_cast<void*>(this));
+
+    Init();
 }
 
 size_t wxWebResponseCURL::WriteData(void* buffer, size_t size)
@@ -192,7 +194,6 @@ void wxWebRequestCURL::Start()
         return;
 
     m_response.reset(new wxWebResponseCURL(*this));
-    m_response->Init();
 
     if ( m_dataSize )
     {

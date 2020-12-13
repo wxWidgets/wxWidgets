@@ -140,7 +140,6 @@ void wxWebRequestURLSession::Start()
     [session.GetDelegate() registerRequest:this task:m_task];
 
     m_response.reset(new wxWebResponseURLSession(*this, m_task));
-    m_response->Init();
 
     SetState(State_Active);
     [m_task resume];
@@ -191,6 +190,8 @@ wxWebResponseURLSession::wxWebResponseURLSession(wxWebRequest& request, WX_NSURL
     wxWebResponse(request)
 {
     m_task = [task retain];
+
+    Init();
 }
 
 wxWebResponseURLSession::~wxWebResponseURLSession()

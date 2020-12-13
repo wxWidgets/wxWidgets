@@ -260,7 +260,7 @@ wxWebResponse::~wxWebResponse()
         wxRemoveFile(m_file.GetName());
 }
 
-bool wxWebResponse::Init()
+void wxWebResponse::Init()
 {
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
     {
@@ -274,15 +274,13 @@ bool wxWebResponse::Init()
                 GetContentLength() > freeSpace )
             {
                 m_request.SetState(wxWebRequest::State_Failed, _("Not enough free disk space for download."));
-                return false;
+                return;
             }
         }
 
         tmpPrefix.SetName("wxd");
         wxFileName::CreateTempFileName(tmpPrefix.GetFullPath(), &m_file);
     }
-
-    return true;
 }
 
 wxString wxWebResponse::GetMimeType() const

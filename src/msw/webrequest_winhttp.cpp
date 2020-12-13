@@ -220,8 +220,11 @@ void wxWebRequestWinHTTP::CreateResponse()
     if ( ::WinHttpReceiveResponse(m_request, NULL) )
     {
         m_response.reset(new wxWebResponseWinHTTP(*this));
-        if ( !m_response->Init() )
+        // wxWebResponseWinHTTP ctor could have changed the state if its
+        // initialization failed, so check for this.
+        if ( GetState() == State_Failed )
             return;
+
         int status = m_response->GetStatus();
         if ( status == 401 || status == 407)
         {
@@ -364,6 +367,8 @@ wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
     if ( contentLengthStr.empty() ||
         !contentLengthStr.ToLongLong(&m_contentLength) )
         m_contentLength = -1;
+
+    Init();
 }
 
 wxString wxWebResponseWinHTTP::GetURL() const

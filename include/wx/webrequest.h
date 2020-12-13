@@ -154,10 +154,6 @@ public:
 
     wxString AsString() const;
 
-    bool Init();
-
-    void Finalize();
-
     virtual wxString GetFileName() const;
 
 protected:
@@ -166,14 +162,23 @@ protected:
 
     wxWebResponse(wxWebRequest& request);
 
+    // Called from derived class ctor to finish initialization which can't be
+    // performed in ctor itself as it needs to use pure virtual method.
+    void Init();
+
     void* GetDataBuffer(size_t sizeNeeded);
 
     void ReportDataReceived(size_t sizeReceived);
 
 private:
+    // Called by wxWebRequest only.
+    void Finalize();
+
     wxMemoryBuffer m_readBuffer;
     mutable wxFFile m_file;
     mutable wxScopedPtr<wxInputStream> m_stream;
+
+    friend class wxWebRequest;
 
     wxDECLARE_NO_COPY_CLASS(wxWebResponse);
 };
