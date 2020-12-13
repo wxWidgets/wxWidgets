@@ -14,7 +14,7 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSession);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
-DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegte);
+DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegate);
 
 class wxWebSessionURLSession;
 class wxWebResponseURLSession;
@@ -91,11 +91,11 @@ public:
 
     WX_NSURLSession GetSession() { return m_session; }
 
-    WX_wxWebSessionDelegte GetDelegate() { return m_delegate; }
+    WX_wxWebSessionDelegate GetDelegate() { return m_delegate; }
 
 private:
     WX_NSURLSession m_session;
-    WX_wxWebSessionDelegte m_delegate;
+    WX_wxWebSessionDelegate m_delegate;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);
 };

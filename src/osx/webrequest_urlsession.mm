@@ -24,7 +24,7 @@
     #include "wx/utils.h"
 #endif
 
-@interface wxWebSessionDelegte : NSObject <NSURLSessionDataDelegate>
+@interface wxWebSessionDelegate : NSObject <NSURLSessionDataDelegate>
 {
     wxWebSessionURLSession* m_session;
     NSMapTable* m_requests;
@@ -32,7 +32,7 @@
 
 @end
 
-@implementation wxWebSessionDelegte
+@implementation wxWebSessionDelegate
 
 - initWithSession:(wxWebSessionURLSession*)session
 {
@@ -243,7 +243,7 @@ wxString wxWebResponseURLSession::GetSuggestedFileName() const
 
 wxWebSessionURLSession::wxWebSessionURLSession()
 {
-    m_delegate = [[wxWebSessionDelegte alloc] initWithSession:this];
+    m_delegate = [[wxWebSessionDelegate alloc] initWithSession:this];
 
     m_session = [[NSURLSession sessionWithConfiguration:
                   [NSURLSessionConfiguration defaultSessionConfiguration]
