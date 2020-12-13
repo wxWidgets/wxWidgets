@@ -215,8 +215,6 @@ public:
     virtual ~wxWebSessionFactory() { }
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebSessionFactory>, wxStringWebSessionFactoryMap);
-
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
@@ -242,8 +240,6 @@ public:
 
     static wxWebSession& GetDefault();
 
-    static void DestroyDefault();
-
     static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
 
     static void RegisterFactory(const wxString& backend,
@@ -257,9 +253,6 @@ protected:
 private:
     wxWebRequestHeaderMap m_headers;
     wxString m_tempDir;
-
-    static wxScopedPtr<wxWebSession> ms_defaultSession;
-    static wxStringWebSessionFactoryMap ms_factoryMap;
 
     static void InitFactoryMap();
 };

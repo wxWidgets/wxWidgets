@@ -395,8 +395,15 @@ void wxWebResponse::Finalize()
 // wxWebSession
 //
 
-wxScopedPtr<wxWebSession> wxWebSession::ms_defaultSession;
-wxStringWebSessionFactoryMap wxWebSession::ms_factoryMap;
+WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebSessionFactory>, wxStringWebSessionFactoryMap);
+
+namespace
+{
+
+wxScopedPtr<wxWebSession> gs_defaultSession;
+wxStringWebSessionFactoryMap gs_factoryMap;
+
+} // anonymous namespace
 
 wxWebSession::wxWebSession()
 {
@@ -417,25 +424,20 @@ wxString wxWebSession::GetTempDir() const
 // static
 wxWebSession& wxWebSession::GetDefault()
 {
-    if ( ms_defaultSession == NULL )
-        ms_defaultSession.reset(wxWebSession::New());
+    if ( gs_defaultSession == NULL )
+        gs_defaultSession.reset(wxWebSession::New());
 
-    return *ms_defaultSession;
-}
-
-void wxWebSession::DestroyDefault()
-{
-    ms_defaultSession.reset();
+    return *gs_defaultSession;
 }
 
 // static
 wxWebSession* wxWebSession::New(const wxString& backend)
 {
-    if ( ms_factoryMap.empty() )
+    if ( gs_factoryMap.empty() )
         InitFactoryMap();
 
-    wxStringWebSessionFactoryMap::iterator factory = ms_factoryMap.find(backend);
-    if ( factory != ms_factoryMap.end() )
+    wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);
+    if ( factory != gs_factoryMap.end() )
         return factory->second->Create();
     else
         return NULL;
@@ -446,7 +448,7 @@ void
 wxWebSession::RegisterFactory(const wxString& backend,
                               const wxSharedPtr<wxWebSessionFactory>& factory)
 {
-    ms_factoryMap[backend] = factory;
+    gs_factoryMap[backend] = factory;
 }
 
 // static
@@ -469,11 +471,11 @@ void wxWebSession::InitFactoryMap()
 // static
 bool wxWebSession::IsBackendAvailable(const wxString& backend)
 {
-    if ( ms_factoryMap.empty() )
+    if ( gs_factoryMap.empty() )
         InitFactoryMap();
 
-    wxStringWebSessionFactoryMap::iterator factory = ms_factoryMap.find(backend);
-    return factory != ms_factoryMap.end();
+    wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);
+    return factory != gs_factoryMap.end();
 }
 
 // ----------------------------------------------------------------------------
@@ -494,7 +496,8 @@ public:
 
     virtual void OnExit() wxOVERRIDE
     {
-        wxWebSession::DestroyDefault();
+        gs_factoryMap.clear();
+        gs_defaultSession.reset();
     }
 
 private:
