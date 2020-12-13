@@ -10,10 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-#pragma hdrstop
-#endif
-
 #include "wx/webrequest.h"
 
 #if wxUSE_WEBREQUEST_CURL
