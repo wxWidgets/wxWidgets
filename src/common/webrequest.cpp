@@ -345,16 +345,13 @@ wxString wxWebResponse::GetSuggestedFileName() const
     return suggestedFilename;
 }
 
-wxString wxWebResponse::AsString(wxMBConv * conv) const
+wxString wxWebResponse::AsString() const
 {
-    // TODO: try to determine encoding type from content-type header
-    if ( !conv )
-        conv = &wxConvUTF8;
-
     if ( m_request.GetStorage() == wxWebRequest::Storage_Memory )
     {
+        // TODO: try to determine encoding type from content-type header
         size_t outLen = 0;
-        return conv->cMB2WC((const char*)m_readBuffer.GetData(), m_readBuffer.GetDataLen(), &outLen);
+        return wxConvWhateverWorks.cMB2WC((const char*)m_readBuffer.GetData(), m_readBuffer.GetDataLen(), &outLen);
     }
     else
         return wxString();

@@ -152,7 +152,7 @@ public:
 
     virtual wxString GetSuggestedFileName() const;
 
-    wxString AsString(wxMBConv* conv = NULL) const;
+    wxString AsString() const;
 
     bool Init();
 

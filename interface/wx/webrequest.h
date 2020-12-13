@@ -450,11 +450,9 @@ public:
     /**
         Returns all response data as a string.
 
-        @param conv wxMBConv used to convert the response to a string.
-                    If @c NULL, the conversion will be determined by
-                    response headers. The default is UTF-8.
+        This is mostly useful for debugging or diagnostics.
     */
-    wxString AsString(wxMBConv* conv = NULL) const;
+    wxString AsString() const;
 };
 
 /**
