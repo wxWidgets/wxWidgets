@@ -265,5 +265,8 @@
     <ClCompile Include="streams\lzmastream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\webrequest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
