@@ -1680,7 +1680,17 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
     wxDataViewModel * const model = dvc->GetModel();
 
-    const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
+    const NSInteger row = [self clickedRow];
+    if ( row == -1 )
+    {
+        // We can be called even when there is no item under mouse, e.g. when
+        // clicking on empty space under the items. Just ignore such clicks as
+        // we're not supposed to generate any events in this case (and calling
+        // itemAtRow: below would result in errors when the row is invalid).
+        return;
+    }
+
+    const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:row]);
 
     const NSInteger col = [self clickedColumn];
     wxDataViewColumn* const dvCol = implementation->GetColumn(col);
