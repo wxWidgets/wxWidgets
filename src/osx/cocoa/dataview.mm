@@ -573,7 +573,7 @@ outlineView:(NSOutlineView*)outlineView
         // Note that returning "NO" here would result in currently expanded
         // branches not being expanded any more, while returning "YES" doesn't
         // seem to have any ill effects, even though this is clearly bogus.
-        return YES;
+        // return YES;
     }
 
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
