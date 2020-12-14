@@ -643,6 +643,8 @@ public:
         Set the editable property of the web control. Enabling allows the user
         to edit the page even if the @c contenteditable attribute is not set.
         The exact capabilities vary with the backend being used.
+
+        @note This is not implemented on macOS.
     */
     virtual void SetEditable(bool enable = true) = 0;
 
@@ -773,14 +775,14 @@ public:
     /**
         Clear the history, this will also remove the visible page.
 
-        @note This is not implemented on the WebKit2GTK+ backend.
+        @note This is not implemented on the WebKit2GTK+ backend and macOS.
     */
     virtual void ClearHistory() = 0;
 
     /**
         Enable or disable the history. This will also clear the history.
 
-        @note This is not implemented on the WebKit2GTK+ backend.
+        @note This is not implemented on the WebKit2GTK+ backend and macOS.
     */
     virtual void EnableHistory(bool enable = true) = 0;
 
