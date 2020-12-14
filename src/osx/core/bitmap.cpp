@@ -1304,12 +1304,13 @@ wxImage wxBitmap::ConvertToImage() const
                 else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                     b = MASK_BLUE_REPLACEMENT ;
             }
-            else if ( hasAlpha )
+
+            if ( hasAlpha )
             {
                 *alpha++ = a ;
 #if wxOSX_USE_PREMULTIPLIED_ALPHA
                 // this must be non-premultiplied data
-                if ( a != 0xFF && a!= 0 )
+                if ( !hasMask && a != 0xFF && a!= 0 )
                 {
                     r = r * 255 / a;
                     g = g * 255 / a;
