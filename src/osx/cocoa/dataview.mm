@@ -1679,6 +1679,9 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
     wxDataViewModel * const model = dvc->GetModel();
 
+    if ( self.clickedRow == -1 )
+        return;
+
     const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
 
     const NSInteger col = [self clickedColumn];
