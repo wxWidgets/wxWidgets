@@ -782,7 +782,12 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
         if ( item )
         {
             if ( item->IsRadio() && item->IsChecked() )
+            {
+                if ( IsSendCommandEvenIfChecked() )
+                    item->GetMenu()->SendEvent(id, 1);
+
                 return true;
+            }
 
             if ( item->IsCheckable() )
             {

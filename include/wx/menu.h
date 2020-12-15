@@ -360,6 +360,17 @@ public:
         Insert(0u, itemid, text, help, isCheckable);
     }
 
+    // Sets if the wxEVT_MENU command event should be sent even when IsChecked() returns true (e.g for Radio). False by default.
+    void SendCommandEvenIfChecked(bool sendAlways = true)
+    {
+        m_isSendCommandEvenIfChecked = sendAlways;
+    }
+
+    bool IsSendCommandEvenIfChecked() const
+    {
+        return m_isSendCommandEvenIfChecked;
+    }
+
     static void LockAccels(bool locked)
     {
         ms_locked = locked;
@@ -399,6 +410,7 @@ protected:
 
     static bool      ms_locked;
 
+    bool          m_isSendCommandEvenIfChecked; // if wxEVT_MENU should be sent even if IsChecked() returns true
 
 protected:
     // Common part of SendEvent() and ProcessMenuEvent(): sends the event to

@@ -298,6 +298,11 @@ public:
     bool IsEnabled(int id) const;
 
     /**
+        Returns @true if wxEVT_MENU command events should be sent even when IsChecked() returns @true.
+    */
+    bool IsSendCommandEvenIfChecked() const;
+
+    /**
         Redraw the menu bar
     */
     virtual void Refresh(bool eraseBackground = true, const wxRect* rect = NULL);
@@ -327,6 +332,11 @@ public:
         @see Insert(), Remove()
     */
     virtual wxMenu* Replace(size_t pos, wxMenu* menu, const wxString& title);
+
+    /**
+        Sets if the wxEVT_MENU command event should be sent even when IsChecked() returns @true (e.g for Radio). @false by default.
+    */
+    void SendCommandEvenIfChecked(bool sendAlways = true);
 
     /**
         Sets the help string associated with a menu item.
