@@ -788,7 +788,6 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     Init();
 
     m_descriptor.reset(wxCFRetain(desc));
-    int count = CFGetRetainCount(desc);
 
     m_ctWeight = GetCTWeight(desc);
     m_ctWidth = GetCTwidth(desc);
