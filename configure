@@ -21547,13 +21547,13 @@ else
                     int main()
                     {
                         FILE *f=fopen("conftestval", "w");
-                        if (!f) exit(1);
+                        if (!f) return 1;
                         fprintf(f, "%s",
                                 ZLIB_VERSION[0] == '1' &&
                                 (ZLIB_VERSION[2] > '1' ||
                                 (ZLIB_VERSION[2] == '1' &&
                                  ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
-                        exit(0);
+                        return 0;
                     }
 
 _ACEOF
@@ -21686,10 +21686,10 @@ else
                     int main()
                     {
                         FILE *f=fopen("conftestval", "w");
-                        if (!f) exit(1);
+                        if (!f) return 1;
                         fprintf(f, "%s",
                                  PNG_LIBPNG_VER > 90 ? "yes" : "no");
-                        exit(0);
+                        return 0;
                     }
 
 _ACEOF
