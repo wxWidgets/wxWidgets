@@ -420,6 +420,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     m_qtWindow = new wxQtGLWidget(parent, this, format);
 
+    QGestureRecognizer* pPanRecognizer = new PanGestureRecognizer();
+    QGestureRecognizer::registerRecognizer(pPanRecognizer);
+
+
     return wxWindow::Create( parent, id, pos, size, style, name );
 }
 
@@ -578,6 +582,129 @@ bool wxGLApp::InitGLVisual(const int *attribList)
 {
     wxLogError("Missing implementation of " + wxString(__FUNCTION__));
     return false;
+}
+
+
+// -----------------------------------------------------------------------------------------
+//  We want a private pan gesture recognizer for GL canvas,
+//  since the Qt standard recognizers do not function well for this window.
+// -----------------------------------------------------------------------------------------
+
+
+bool
+PanGestureRecognizer::IsValidMove(int dx, int dy)
+{
+   // The moved distance is to small to count as not just a glitch.
+   if ((qAbs(dx) < MINIMUM_DISTANCE) && (qAbs(dy) < MINIMUM_DISTANCE)) {
+      return false;
+   }
+
+   return true;
+}
+
+
+// virtual
+QGesture*
+PanGestureRecognizer::create(QObject* pTarget)
+{
+   QGesture *pGesture = new QPanGesture(pTarget);
+   return pGesture;
+}
+
+
+// virtual
+QGestureRecognizer::Result
+PanGestureRecognizer::recognize(QGesture* pGesture, QObject *pWatched, QEvent *pEvent)
+{
+  wxUnusedVar(pWatched);
+   QGestureRecognizer::Result result = QGestureRecognizer::Ignore;
+   QPanGesture *pPan = static_cast<QPanGesture*>(pGesture);
+
+   const QTouchEvent *ev = static_cast<const QTouchEvent *>(pEvent);
+
+   switch(pEvent->type()) {
+      case QEvent::TouchBegin: {
+          if(1/*!m_started*/){
+            QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
+            m_startPoint = p1.startScreenPos().toPoint();
+            m_lastPoint = m_startPoint;
+
+            pPan->setLastOffset(QPointF(0,0));
+            pPan->setOffset(QPointF(0,0));
+
+            result = QGestureRecognizer::MayBeGesture;
+            m_started = 1;
+          }
+      }
+      break;
+      case QEvent::TouchEnd: {
+
+         QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
+         QPointF endPoint = p1.screenPos().toPoint();
+
+         pPan->setLastOffset(pPan->offset());
+         pPan->setOffset(QPointF(p1.pos().x() - p1.startPos().x(), p1.pos().y() - p1.startPos().y()));
+
+         pPan->setHotSpot(p1.startScreenPos());
+
+         // process distance and direction
+         int dx = endPoint.x() - m_startPoint.x();
+         int dy = endPoint.y() - m_startPoint.y();
+
+
+         if (!IsValidMove(dx, dy)) {
+            // Just a click, so no gesture.
+            result = QGestureRecognizer::Ignore;
+         } else {
+            result = QGestureRecognizer::FinishGesture;
+         }
+         m_started = 0;
+
+      }
+      break;
+
+     case QEvent::TouchUpdate: {
+
+        QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
+        QPointF upPoint = p1.screenPos().toPoint();
+
+        pPan->setLastOffset(pPan->offset());
+        pPan->setOffset(QPointF(p1.pos().x() - p1.startPos().x(), p1.pos().y() - p1.startPos().y()));
+
+        pPan->setHotSpot(p1.startScreenPos());
+
+        int dx = upPoint.x() - m_lastPoint.x();
+        int dy = upPoint.y() - m_lastPoint.y();
+
+
+        if( (dx > 2) || (dx < -2) || (dy > 2) || (dy < -2)){
+           result = QGestureRecognizer::TriggerGesture;
+
+        } else {
+           result = QGestureRecognizer::Ignore;
+        }
+
+        m_lastPoint = upPoint;
+
+        break;
+    }
+
+
+
+      default:
+        break;
+   }
+
+   return result;
+}
+
+void
+PanGestureRecognizer::reset(QGesture *pGesture)
+{
+   pGesture->setProperty("startPoint", QVariant(QVariant::Invalid));
+   m_started = 0;
+//   qDebug("Swipe recognize reset");
+   parent::reset(pGesture);
 }
 
 #endif // wxUSE_GLCANVAS
