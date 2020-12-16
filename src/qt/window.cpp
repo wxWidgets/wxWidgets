@@ -88,6 +88,31 @@ bool wxQtScrollArea::event(QEvent *e)
                 break;
         }
     }
+
+    //  QGesture events arrive without mouse capture
+    else if( handler )
+    {
+        switch ( e->type() )
+        {
+             case QEvent::Gesture:
+             {
+                 QScrollArea::event(e);
+
+                 QScrollBar *vBar = verticalScrollBar();
+                 if(vBar)
+                    vBar->triggerAction( QAbstractSlider::SliderMove );
+                 QScrollBar *hBar = horizontalScrollBar();
+                 if(hBar)
+                    hBar->triggerAction( QAbstractSlider::SliderMove );
+
+                 return true;
+                 break;
+             }
+            default:
+              break;
+        }
+    }
+      
     return QScrollArea::event(e);
 }
 
@@ -345,6 +370,11 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
                 QtSetScrollBar( wxHORIZONTAL );
             if ( style & wxVSCROLL )
                 QtSetScrollBar( wxVERTICAL );
+
+            //  Allow processing of QGesture events, if generated upstream.
+            m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents);
+            m_qtWindow->grabGesture(Qt::PanGesture);
+
         }
         else
             m_qtWindow = new wxQtWidget( parent, this );
@@ -1689,4 +1719,32 @@ void wxWindowQt::QtSetPicture( QPicture* pict )
 QPainter *wxWindowQt::QtGetPainter()
 {
     return m_qtPainter.get();
+}
+
+bool wxWindowQt::EnableTouchEvents(int eventsMask)
+{
+    if(GetHandle()){
+      if(eventsMask == wxTOUCH_NONE){
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, false);
+        return true;
+      }
+
+      if(eventsMask & wxTOUCH_PRESS_GESTURES){
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        m_qtWindow->grabGesture(Qt::TapAndHoldGesture);
+        QTapAndHoldGesture::setTimeout ( 1000 );
+      }
+      if(eventsMask & wxTOUCH_PAN_GESTURES){
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        m_qtWindow->grabGesture(Qt::PanGesture);
+      }
+      if(eventsMask & wxTOUCH_ZOOM_GESTURE){
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        m_qtWindow->grabGesture(Qt::PinchGesture);
+      }
+
+      return true;
+    }
+    else
+      return false;
 }
