@@ -535,6 +535,10 @@ private:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP
+WX_DEFINE_ARRAY(wxDataFormat,wxDataFormatArray);
+#endif
+
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
 
@@ -760,8 +764,21 @@ public:
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
-    virtual bool EnableDropTarget(const wxDataFormat& WXUNUSED(format))
-        { return false; }
+
+    bool EnableDropTarget(const wxDataFormatArray& formats)
+        { return DoEnableDropTarget(formats); }
+
+    bool EnableDropTarget(const wxDataFormat& format)
+    {
+        wxDataFormatArray formats;
+        if (format.GetType() != wxDF_INVALID)
+        {
+            formats.Add(format);
+        }
+
+        return EnableDropTarget(formats);
+    }
+
 #endif // wxUSE_DRAG_AND_DROP
 
     // define control visual attributes
@@ -791,6 +808,14 @@ public:
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
     virtual void DoSetIndent() = 0;
+
+#if wxUSE_DRAG_AND_DROP
+    virtual wxDataObject* CreateDataObject(const wxDataFormatArray& formats);
+
+    virtual bool DoEnableDropTarget(const wxDataFormatArray& WXUNUSED(formats))
+        { return false; }
+
+#endif // wxUSE_DRAG_AND_DROP
 
     // Just expand this item assuming it is already shown, i.e. its parent has
     // been already expanded using ExpandAncestors().

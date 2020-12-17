@@ -907,7 +907,6 @@ public:
     };
 
     bool EnableDragSource( const wxDataFormat &format );
-    bool EnableDropTarget( const wxDataFormat &format );
 
     void RefreshDropHint();
     void RemoveDropHint();
@@ -1017,8 +1016,6 @@ private:
     bool                        m_dragEnabled;
     wxDataFormat                m_dragFormat;
 
-    bool                        m_dropEnabled;
-    wxDataFormat                m_dropFormat;
     DropItemInfo                m_dropItemInfo;
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -2060,7 +2057,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_dragStart = wxPoint(0,0);
 
     m_dragEnabled = false;
-    m_dropEnabled = false;
     m_dropItemInfo = DropItemInfo();
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -2112,17 +2108,6 @@ bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
 {
     m_dragFormat = format;
     m_dragEnabled = format != wxDF_INVALID;
-
-    return true;
-}
-
-bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
-{
-    m_dropFormat = format;
-    m_dropEnabled = format != wxDF_INVALID;
-
-    if (m_dropEnabled)
-        SetDropTarget( new wxDataViewDropTarget( new wxCustomDataObject( format ), this ) );
 
     return true;
 }
@@ -2378,13 +2363,13 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
 {
     DropItemInfo dropItemInfo = GetDropItemInfo(x, y);
 
-    wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
+    wxDataObjectComposite *obj = static_cast<wxDataObjectComposite*>(GetDropTarget()->GetDataObject());
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, dropItemInfo.m_item);
     event.SetProposedDropIndex(dropItemInfo.m_proposedDropIndex);
     event.SetDataFormat( format );
-    event.SetDataSize( obj->GetSize() );
-    event.SetDataBuffer( obj->GetData() );
+    event.SetDataSize(obj->GetDataSize(format));
+    event.SetDataObject(obj->GetObject(format));
     event.SetDropEffect( def );
     if ( !m_owner->HandleWindowEvent( event ) || !event.IsAllowed() )
         return wxDragNone;
@@ -5771,9 +5756,17 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return m_clientArea->EnableDragSource( format );
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxDataFormatArray &formats )
 {
-    return m_clientArea->EnableDropTarget( format );
+    wxDataViewDropTarget* dt = NULL;
+    if (wxDataObject* dataObject = CreateDataObject(formats))
+    {
+        dt = new wxDataViewDropTarget(dataObject, m_clientArea);
+    }
+
+    m_clientArea->SetDropTarget(dt);
+
+    return true;
 }
 
 #endif // wxUSE_DRAG_AND_DROP
