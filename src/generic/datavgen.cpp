@@ -5950,9 +5950,15 @@ public:
         {
             item = m_clientArea->GetItemByRow(row);
         }
-
-        m_renderer->PrepareForItem(m_model, item, GetColumn());
-        UpdateWithWidth(m_renderer->GetSize().x + indent);
+        if ( m_model->HasValue(item, GetColumn()) )
+        {
+            m_renderer->PrepareForItem(m_model, item, GetColumn());
+            UpdateWithWidth(m_renderer->GetSize().x + indent);
+        }
+        else
+        {
+        	UpdateWithWidth(indent);
+        }
     }
 
 private:
