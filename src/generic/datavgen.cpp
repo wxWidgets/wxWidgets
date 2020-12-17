@@ -5937,22 +5937,27 @@ public:
 
     virtual void UpdateWithRow(int row) wxOVERRIDE
     {
-        int indent = 0;
+        int width = 0;
         wxDataViewItem item;
 
         if ( m_isExpanderCol )
         {
             wxDataViewTreeNode *node = m_clientArea->GetTreeNodeByRow(row);
             item = node->GetItem();
-            indent = m_dvc->GetIndent() * node->GetIndentLevel() + m_expanderSize;
+            width = m_dvc->GetIndent() * node->GetIndentLevel() + m_expanderSize;
         }
         else
         {
             item = m_clientArea->GetItemByRow(row);
         }
 
-        m_renderer->PrepareForItem(m_model, item, GetColumn());
-        UpdateWithWidth(m_renderer->GetSize().x + indent);
+        if ( m_model->HasValue(item, GetColumn()) )
+        {
+            m_renderer->PrepareForItem(m_model, item, GetColumn());
+            width += m_renderer->GetSize().x;
+        }
+
+        UpdateWithWidth(width);
     }
 
 private:
