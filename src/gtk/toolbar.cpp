@@ -572,7 +572,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     break;
                 default:
                     wxFAIL_MSG("unknown toolbar child type");
-                    // fall through
+                    wxFALLTHROUGH;
                 case wxITEM_DROPDOWN:
                 case wxITEM_NORMAL:
                     tool->m_item = gtk_tool_button_new(NULL, "");

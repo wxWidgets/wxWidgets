@@ -288,7 +288,7 @@ private:
             case wxTE_HT_BELOW:
                 // This shouldn't happen for single line control.
                 wxFAIL_MSG( "Unreachable" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTE_HT_BEYOND:
                 // Select the last field.

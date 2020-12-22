@@ -472,6 +472,7 @@ wxFont::wxFont(wxOSXSystemFont font)
             break;
         case wxOSX_SYSTEM_FONT_FIXED:
             uifont = kCTFontUIFontUserFixedPitch;
+            break;
         default:
             break;
     }
