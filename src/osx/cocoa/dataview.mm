@@ -1643,6 +1643,7 @@ outlineView:(NSOutlineView*)outlineView
         currentlyEditedColumn =
             currentlyEditedRow = -1;
 
+        [self setAutoresizesOutlineColumn:NO];
         [self registerForDraggedTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]];
         [self setDelegate:self];
         [self setDoubleAction:@selector(actionDoubleClick:)];
@@ -1900,6 +1901,8 @@ outlineView:(NSOutlineView*)outlineView
                     [[notification userInfo] objectForKey:@"NSObject"]);
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
+
+    dvc->AdjustAutosizedColumns();
 }
 
 -(void) outlineViewItemDidExpand:(NSNotification*)notification
@@ -1910,6 +1913,8 @@ outlineView:(NSOutlineView*)outlineView
                     [[notification userInfo] objectForKey:@"NSObject"]);
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
+
+    dvc->AdjustAutosizedColumns();
 }
 
 -(void) outlineViewSelectionDidChange:(NSNotification*)notification
