@@ -437,9 +437,9 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
     }
 
     return ret;
-#endif
-
+#else
     return DoX11MouseMove(x, y);
+#endif
 }
 
 bool wxUIActionSimulatorX11Impl::MouseUp(int button)

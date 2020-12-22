@@ -2727,7 +2727,6 @@ wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObj
                     return NULL;
                 }
             }
-            break;
         default:
             return NULL;
     }

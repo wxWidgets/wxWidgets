@@ -249,10 +249,8 @@ int wxCFEventLoop::DoDispatchTimeout(unsigned long timeout)
             break;
         case kCFRunLoopRunStopped:
             return 0;
-            break;
         case kCFRunLoopRunTimedOut:
             return -1;
-            break;
         case kCFRunLoopRunHandledSource:
         default:
             break;
