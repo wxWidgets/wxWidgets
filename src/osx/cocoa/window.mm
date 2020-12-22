@@ -2025,7 +2025,7 @@ void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
 
     // Iterate through all moving touches to check if the touch corresponding to "press"
     // in Press and Tap event is moving.
-    for ( int i = 0; i < [array count]; ++i )
+    for ( unsigned i = 0; i < [array count]; ++i )
     {
         NSTouch* touch = [array objectAtIndex:i];
 
@@ -2108,7 +2108,7 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
         bool isPressTouch = false;
 
         // Iterate through all ended touches
-        for( int i = 0; i < [array count]; ++i )
+        for( unsigned i = 0; i < [array count]; ++i )
         {
             NSTouch* touch = [array objectAtIndex:i];
 

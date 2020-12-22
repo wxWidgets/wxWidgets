@@ -168,7 +168,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
     if ( maxLength > 0 )
     {
-        if ( [*partialStringPtr length] > maxLength )
+        if ( [*partialStringPtr length] > (unsigned)maxLength )
         {
             field->SendMaxLenEvent();
             return NO;
@@ -909,7 +909,7 @@ bool wxNSTextViewControl::PositionToXY(long pos, long *x, long *y) const
     wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
 
     NSString* txt = [m_textView string];
-    if ( pos > [txt length] )
+    if ( (unsigned)pos > [txt length] )
         return false;
 
     // Last valid position is past the last character
@@ -987,7 +987,7 @@ long wxNSTextViewControl::XYToPosition(long x, long y) const
 
     // Return error if given x position
     // is past the line.
-    if ( x >= lineRng.length )
+    if ( (unsigned)x >= lineRng.length )
         return  -1;
 
     return lineRng.location + x;
@@ -1452,7 +1452,7 @@ bool wxNSTextFieldControl::PositionToXY(long pos, long *x, long *y) const
 {
     wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
 
-    if ( pos > [[m_textField stringValue] length] )
+    if ( (unsigned)pos > [[m_textField stringValue] length] )
         return false;
 
     if ( y )
@@ -1469,7 +1469,7 @@ long wxNSTextFieldControl::XYToPosition(long x, long y) const
     wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
 
     // Last valid position is after the last character.
-    if ( y != 0 || x > [[m_textField stringValue] length] )
+    if ( y != 0 || (unsigned)x > [[m_textField stringValue] length] )
         return -1;
 
     return x;
