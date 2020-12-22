@@ -1004,8 +1004,8 @@ void wxGTKRenderer::DrawRadioButtonBitmap(wxDC& dc,
 
     dc.SetPen(m_penDarkGrey);
     dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT)); 
-	// draw the normal border
-	dc.DrawCircle(xRight/2,yBottom/2,yMid);
+    // draw the normal border
+    dc.DrawCircle(xRight/2,yBottom/2,yMid);
 
     wxColor checkedCol, uncheckedCol;
     checkedCol = wxSCHEME_COLOUR(m_scheme, SHADOW_DARK);

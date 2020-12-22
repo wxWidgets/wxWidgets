@@ -116,16 +116,16 @@ public:
     }
 
     size_t GetNumberOfItems() const wxOVERRIDE
-	{
+    {
         return m_popUpMenu->GetMenuItemCount();
-	}
+    }
 
     void RemoveItem( size_t pos ) wxOVERRIDE
     {
         m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( pos ) );
     }
 
-	void SetItem(int pos, const wxString& s) wxOVERRIDE
+    void SetItem(int pos, const wxString& s) wxOVERRIDE
     {
         m_popUpMenu->FindItemByPosition( pos )->SetItemLabel( s ) ;
     }

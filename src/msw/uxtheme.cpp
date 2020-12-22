@@ -34,11 +34,11 @@
 
 bool wxUxThemeIsActive()
 {
-	return ::IsAppThemed() && ::IsThemeActive();
+    return ::IsAppThemed() && ::IsThemeActive();
 }
 #else
 bool wxUxThemeIsActive()
 {
-	return false;
+    return false;
 }
 #endif // wxUSE_UXTHEME

@@ -1,9 +1,9 @@
 #include "../sample.rc"
 
-app_icon 	ICON "registry.ico"
-icon_key1 	ICON "key1.ico"
-icon_key2 	ICON "key2.ico"
-icon_key3 	ICON "key3.ico"
-icon_value1 	ICON "value1.ico"
-icon_value2 	ICON "value2.ico"
+app_icon    ICON "registry.ico"
+icon_key1   ICON "key1.ico"
+icon_key2   ICON "key2.ico"
+icon_key3   ICON "key3.ico"
+icon_value1 ICON "value1.ico"
+icon_value2 ICON "value2.ico"
 

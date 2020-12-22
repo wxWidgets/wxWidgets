@@ -69,7 +69,7 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
     if ( cat | wxEVT_CATEGORY_USER_INPUT )
     {
         mask |=
-            NSLeftMouseDownMask	|
+            NSLeftMouseDownMask |
             NSLeftMouseUpMask |
             NSRightMouseDownMask |
             NSRightMouseUpMask |

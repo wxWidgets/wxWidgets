@@ -222,16 +222,16 @@ bool wxMask::Create( const wxBitmap& bitmap )
 
 wxBitmap wxMask::GetBitmap() const
 {
-   wxBitmap bitmap;
+    wxBitmap bitmap;
 
-   if (m_bitmap)
-     {
-	bitmap.SetBitmap( m_bitmap );
-	bitmap.SetWidth( m_width );
-	bitmap.SetHeight( m_height );
-     }
+    if (m_bitmap)
+    {
+        bitmap.SetBitmap( m_bitmap );
+        bitmap.SetWidth( m_width );
+        bitmap.SetHeight( m_height );
+    }
 
-   return bitmap;
+    return bitmap;
 }
 
 

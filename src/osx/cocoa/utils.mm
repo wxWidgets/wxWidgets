@@ -364,7 +364,7 @@ void wxBell()
 
 
 /* This is needed because otherwise we don't receive any key-up events for command-key
- combinations (an AppKit bug, apparently)			*/
+ combinations (an AppKit bug, apparently) */
 - (void)sendEvent:(NSEvent *)anEvent
 {
     if ([anEvent type] == NSKeyUp && ([anEvent modifierFlags] & NSCommandKeyMask))

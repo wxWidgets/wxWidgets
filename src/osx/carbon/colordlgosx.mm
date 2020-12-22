@@ -138,7 +138,7 @@ int wxColourDialog::ShowModal()
     [theColorPanel setDelegate:theCPDelegate];
 
             //
-            //	Start the color panel modal loop
+            // Start the color panel modal loop
             //
             OSXBeginModalDialog();
             NSModalSession session = [NSApp beginModalSessionForWindow:theColorPanel];

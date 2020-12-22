@@ -342,7 +342,7 @@ void TextCtrlTestCase::Redirector()
 void TextCtrlTestCase::HitTestSingleLine()
 {
 #ifdef __WXQT__
-	WARN("Does not work under WxQt");
+    WARN("Does not work under WxQt");
 #else
     m_text->ChangeValue("Hit me");
 
@@ -513,7 +513,7 @@ void TextCtrlTestCase::Style()
     CHECK( style.GetTextColour() == *wxRED );
     CHECK( style.GetBackgroundColour() == *wxWHITE );
 #else
-	WARN("Does not work under WxQt or OSX");
+    WARN("Does not work under WxQt or OSX");
 #endif
 }
 
