@@ -2168,16 +2168,16 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     return true;
 }
 
-void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
+void wxCocoaDataViewControl::FitColumnToContent(unsigned int pos)
 {
     const int count = GetCount();
     NSTableColumn *column = GetColumn(pos)->GetNativeData()->GetNativeColumnPtr();
 
-    class MaxWidthCalculator
+    class MaxSizeCalculator
     {
     public:
-        MaxWidthCalculator(wxCocoaOutlineView *view,
-                           NSTableColumn *column, unsigned columnIndex)
+        MaxSizeCalculator(wxCocoaOutlineView *view,
+                          NSTableColumn *column, unsigned columnIndex)
             : m_width(0),
               m_height(0),
               m_view(view),
@@ -2229,7 +2229,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         NSTableColumn *m_tableColumn;
     };
 
-    MaxWidthCalculator calculator(m_OutlineView, column, pos);
+    MaxSizeCalculator calculator(m_OutlineView, column, pos);
 
     if ( [column headerCell] )
     {
@@ -3847,7 +3847,7 @@ void wxDataViewColumn::SetWidth(int width)
         case wxCOL_WIDTH_AUTOSIZE:
             {
                 wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl*>(GetOwner()->GetPeer());
-                peer->FitColumnWidthToContent(GetOwner()->GetColumnPosition(this));
+                peer->FitColumnToContent(GetOwner()->GetColumnPosition(this));
                 break;
             }
 
