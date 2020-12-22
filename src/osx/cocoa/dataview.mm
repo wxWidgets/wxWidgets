@@ -2198,7 +2198,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         void UpdateWithRow(int row)
         {
             NSCell *cell = [m_view preparedCellAtColumn:m_column row:row];
-            unsigned cellWidth = [cell cellSize].width + 1/*round the float up*/;
+            unsigned cellWidth = ceil([cell cellSize].width);
 
             if ( m_indent )
                 cellWidth += m_indent * [m_view levelForRow:row];
@@ -2228,7 +2228,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
     if ( [column headerCell] )
     {
-        calculator.UpdateWithWidth([[column headerCell] cellSize].width + 1/*round the float up*/);
+        calculator.UpdateWithWidth(ceil([[column headerCell] cellSize].width));
     }
 
     // The code below deserves some explanation. For very large controls, we
