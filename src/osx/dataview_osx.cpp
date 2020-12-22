@@ -506,9 +506,7 @@ int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
   GetDataViewPeer()->Collapse(item);
-
-  if ( m_ModelNotifier )
-    m_ModelNotifier->AdjustAutosizedColumns();
+  AdjustAutosizedColumns();
 }
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
@@ -523,9 +521,7 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
 void wxDataViewCtrl::DoExpand(wxDataViewItem const& item, bool expandChildren)
 {
   GetDataViewPeer()->DoExpand(item, expandChildren);
-
-  if ( m_ModelNotifier )
-    m_ModelNotifier->AdjustAutosizedColumns();
+  AdjustAutosizedColumns();
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
@@ -699,6 +695,12 @@ void wxDataViewCtrl::FinishCustomItemEditing()
     SetCustomRendererItem(wxDataViewItem());
     SetCustomRendererPtr (NULL);
   }
+}
+
+void wxDataViewCtrl::AdjustAutosizedColumns() const
+{
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
 }
 
 /*static*/

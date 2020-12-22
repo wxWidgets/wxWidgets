@@ -261,6 +261,8 @@ public:
     m_Deleting = deleting;
   }
 
+  void AdjustAutosizedColumns() const;
+
   virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
 
   virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
