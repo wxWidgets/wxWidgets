@@ -1924,6 +1924,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) textShouldBeginEditing:(NSText*)textEditor
 {
+    wxUnusedVar(textEditor);
+
     currentlyEditedColumn = [self editedColumn];
     currentlyEditedRow = [self editedRow];
 
@@ -3408,7 +3410,7 @@ wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
 wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
     (
         wxDataViewCellMode mode,
-        int align
+        int WXUNUSED(align)
     )
     : wxDataViewRenderer(GetDefaultType(), mode,mode)
 {

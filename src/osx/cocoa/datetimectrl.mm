@@ -164,7 +164,7 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
                                            const wxDateTime& dt,
                                            const wxPoint& pos,
                                            const wxSize& size,
-                                           long style,
+                                           long WXUNUSED(style),
                                            wxDateTimeWidgetKind kind)
 {
     NSRect r = wxOSXGetFrameForControl(wxpeer, pos, size);

@@ -153,6 +153,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString  **)error
 {
+    wxUnusedVar(error);
     *obj = [NSString stringWithString:string];
     return YES;
 }
@@ -160,6 +161,11 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr
               originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
 {
+    wxUnusedVar(proposedSelRangePtr);
+    wxUnusedVar(origString);
+    wxUnusedVar(origSelRange);
+    wxUnusedVar(error);
+
     if ( maxLength > 0 )
     {
         if ( [*partialStringPtr length] > maxLength )
@@ -431,6 +437,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (void)changeColor:(id)sender
 {
+    wxUnusedVar(sender);
    // Define this just to block the color change messages - these are sent from
    // the shared color/font panel resulting in unwanted changes of color when
    // shared color panel is used (as when using wxColourPickerCtrl for example).
@@ -475,6 +482,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 -(BOOL)textView:(NSTextView *)aTextView clickedOnLink:(id)link atIndex:(NSUInteger)charIndex
 {
+    wxUnusedVar(link);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( aTextView );
     if ( impl  )
     {
@@ -592,6 +600,10 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
+    wxUnusedVar(control);
+    wxUnusedVar(words);
+    wxUnusedVar(index);
+
     NSMutableArray* matches = [NSMutableArray array];
 
     wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );

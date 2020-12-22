@@ -854,7 +854,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 /**
  * Doku see wxFileSystemHandler
  */
-wxString wxChmFSHandler::FindFirst(const wxString& spec, int flags)
+wxString wxChmFSHandler::FindFirst(const wxString& spec, int WXUNUSED(flags))
 {
     wxString right = GetRightLocation(spec);
     wxString left = GetLeftLocation(spec);

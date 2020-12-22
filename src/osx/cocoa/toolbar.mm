@@ -416,6 +416,7 @@ private:
 
 - (void)setSelectable:(bool) value
 {
+    wxUnusedVar(value);
     m_isSelectable = true;
 }
 

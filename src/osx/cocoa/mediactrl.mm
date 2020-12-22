@@ -209,6 +209,7 @@ private:
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification
 {
+    wxUnusedVar(notification);
     if ( m_backend )
     {
         if ( m_backend->SendStopEvent() )
@@ -538,7 +539,7 @@ wxSize wxAVMediaBackend::GetVideoSize() const
     return m_bestSize;
 }
 
-void wxAVMediaBackend::Move(int x, int y, int w, int h)
+void wxAVMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(w), int WXUNUSED(h))
 {
     // as we have a native player, no need to move the video area
 }

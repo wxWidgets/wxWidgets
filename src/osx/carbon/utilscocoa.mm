@@ -197,7 +197,7 @@ WXImage wxOSXGetSystemImage(const wxString& name)
     return nsimage;
 }
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& sizeHint)
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(sizeHint))
 {
     NSImage* nsimage = wxOSXGetSystemImage(name);
     if ( nsimage )

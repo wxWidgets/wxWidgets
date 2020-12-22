@@ -236,7 +236,7 @@ private:
         OnSelectPageForTool(tool);
     }
 
-    void OnClose(wxCloseEvent& e)
+    void OnClose(wxCloseEvent& WXUNUSED(e))
     {
         // Instead of destroying the window, just hide it, it could be
         // reused again by another invocation of the editor.

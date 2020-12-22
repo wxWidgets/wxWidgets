@@ -980,6 +980,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
+    wxUnusedVar(replacementRange);
     wxOSX_insertText(self, @selector(insertText:), aString);
 }
 
@@ -992,6 +993,9 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
+    wxUnusedVar(aString);
+    wxUnusedVar(selectedRange);
+    wxUnusedVar(replacementRange);
 }
 
 - (void)unmarkText
@@ -1015,6 +1019,8 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
     return nil;
 }
 
@@ -1025,10 +1031,13 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
     return NSMakeRect(0, 0, 0, 0);
 }
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
 {
+    wxUnusedVar(aPoint);
     return NSNotFound;
 }
 
@@ -1128,7 +1137,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
     impl->insertText(text, self, _cmd);
 }
 
-void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
+void wxOSX_panGestureEvent(NSView* self, SEL WXUNUSED(_cmd), NSPanGestureRecognizer* panGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == NULL )
@@ -1137,7 +1146,7 @@ void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGe
     impl->PanGestureEvent(panGestureRecognizer);
 }
 
-void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
+void wxOSX_zoomGestureEvent(NSView* self, SEL WXUNUSED(_cmd), NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == NULL )
@@ -1146,7 +1155,7 @@ void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecogn
     impl->ZoomGestureEvent(magnificationGestureRecognizer);
 }
 
-void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
+void wxOSX_rotateGestureEvent(NSView* self, SEL WXUNUSED(_cmd), NSRotationGestureRecognizer* rotationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == NULL )
@@ -1155,7 +1164,7 @@ void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognize
     impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
-void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pressGestureRecognizer)
+void wxOSX_longPressEvent(NSView* self, SEL WXUNUSED(_cmd), NSPressGestureRecognizer* pressGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl ==NULL )
@@ -1164,7 +1173,7 @@ void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pres
     impl->LongPressEvent(pressGestureRecognizer);
 }
 
-void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
+void wxOSX_touchesBegan(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == NULL )
@@ -1173,7 +1182,7 @@ void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesBegan(event);
 }
 
-void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
+void wxOSX_touchesMoved(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == NULL )
@@ -1182,7 +1191,7 @@ void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesMoved(event);
 }
 
-void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
+void wxOSX_touchesEnded(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == NULL )
@@ -2189,7 +2198,7 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
     }
 }
 
-void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
+void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* WXUNUSED(_cmd))
 {
     wxLogTrace(TRACE_KEYS, "Selector %s for %s",
                wxDumpSelector((SEL)sel), wxDumpNSView(slf));

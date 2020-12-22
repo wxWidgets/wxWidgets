@@ -137,7 +137,7 @@ private:
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    wxMenu* menu,
+                                    wxMenu* WXUNUSED(menu),
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long WXUNUSED(style),

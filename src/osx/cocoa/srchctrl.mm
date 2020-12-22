@@ -71,6 +71,10 @@
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
 {
+    wxUnusedVar(control);
+    wxUnusedVar(words);
+    wxUnusedVar(index);
+
     NSMutableArray* matches = NULL;
     NSString*       partialString;
     
