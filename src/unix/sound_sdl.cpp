@@ -69,18 +69,18 @@ public:
           m_data(NULL), m_evtHandler(NULL) {}
     virtual ~wxSoundBackendSDL();
 
-    wxString GetName() const { return wxT("Simple DirectMedia Layer"); }
-    int GetPriority() const { return 9; }
-    bool IsAvailable() const;
-    bool HasNativeAsyncPlayback() const { return true; }
+    wxString GetName() const wxOVERRIDE { return wxT("Simple DirectMedia Layer"); }
+    int GetPriority() const wxOVERRIDE { return 9; }
+    bool IsAvailable() const wxOVERRIDE;
+    bool HasNativeAsyncPlayback() const wxOVERRIDE { return true; }
     bool Play(wxSoundData *data, unsigned flags,
-              volatile wxSoundPlaybackStatus *status);
+              volatile wxSoundPlaybackStatus *status) wxOVERRIDE;
 
     void FillAudioBuffer(Uint8 *stream, int len);
     void FinishedPlayback();
 
-    void Stop();
-    bool IsPlaying() const { return m_playing; }
+    void Stop() wxOVERRIDE;
+    bool IsPlaying() const wxOVERRIDE { return m_playing; }
 
 private:
     bool OpenAudio();
