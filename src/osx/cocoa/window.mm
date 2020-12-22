@@ -939,7 +939,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     return NO;
 }
 
-- (NSView *)hitTest:(NSPoint)aPoint;
+- (NSView *)hitTest:(NSPoint)aPoint
 {
     wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( viewimpl && viewimpl->GetWXPeer() && !viewimpl->GetWXPeer()->IsEnabled() )

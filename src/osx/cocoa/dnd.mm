@@ -89,7 +89,7 @@ public:
         [m_item setData:(NSData*) data forType:(NSString*) format];
     }
 
-    NSPasteboardItem* GetNative() { return m_item; };
+    NSPasteboardItem* GetNative() { return m_item; }
 private:
     NSPasteboardItem* m_item;
 };
@@ -157,7 +157,7 @@ public:
         return (CFDataRef) [m_item dataForType:(NSString*) type];
     }
 
-    NSPasteboardItem* GetNative() { return m_item; };
+    NSPasteboardItem* GetNative() { return m_item; }
 private:
     NSPasteboardItem* m_item;
     NSPasteboard* m_pasteboard;
