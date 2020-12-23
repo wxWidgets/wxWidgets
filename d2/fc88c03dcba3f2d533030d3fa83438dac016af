@@ -1,0 +1,1 @@
+wxOSX: Fix truncation of images in wxDataViewCtrl (Andreas Falkenhahn).
