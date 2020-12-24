@@ -450,7 +450,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     return true;
 }
 
-void wxWebViewWebKit::OnSize(wxSizeEvent &event)
+void wxWebViewWebKit::OnSize(wxSizeEvent &WXUNUSED(event))
 {
 }
 
@@ -743,6 +743,8 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 - (void)webView:(WebView *)sender
     didStartProvisionalLoadForFrame:(WebFrame *)frame
 {
+    wxUnusedVar(sender);
+    wxUnusedVar(frame);
     webKitWindow->m_busy = true;
 }
 
@@ -906,6 +908,8 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title
                                          forFrame:(WebFrame *)frame
 {
+    wxUnusedVar(sender);
+
     wxString target = wxCFStringRef::AsString([frame name]);
     wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
                          webKitWindow->GetId(),
@@ -936,6 +940,8 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                                   frame:(WebFrame *)frame
                        decisionListener:(id<WebPolicyDecisionListener>)listener
 {
+    wxUnusedVar(sender);
+    wxUnusedVar(actionInformation);
     wxUnusedVar(frame);
 
     NSString *url = [[request URL] absoluteString];
@@ -983,6 +989,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                         newFrameName:(NSString *)frameName
                     decisionListener:(id < WebPolicyDecisionListener >)listener
 {
+    wxUnusedVar(sender);
+    wxUnusedVar(frameName);
+
     NSString *url = [[request URL] absoluteString];
 
     wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_USER;
@@ -1112,6 +1121,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     // This method is called when window.open() is used in javascript with a target != _self
     // request is always nil, so it can't be used for event generation
     // Mark the next navigation as "new window"
+    wxUnusedVar(request);
     webKitWindow->m_nextNavigationIsNewWindow = true;
     return sender;
 }
@@ -1127,6 +1137,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element
                                                  defaultMenuItems:(NSArray *) defaultMenuItems
 {
+    wxUnusedVar(sender);
+    wxUnusedVar(element);
+
     if(webKitWindow->IsContextMenuEnabled())
         return defaultMenuItems;
     else

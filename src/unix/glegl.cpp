@@ -479,7 +479,7 @@ bool wxGLCanvasEGL::CreateSurface()
         wl_registry_add_listener(registry, &wl_registry_listener, this);
         wl_display_roundtrip(display);
         if ( !m_wlCompositor || !m_wlSubcompositor )
-	{
+        {
             wxFAIL_MSG("Invalid Wayland compositor or subcompositor");
             return false;
         }

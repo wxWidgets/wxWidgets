@@ -419,7 +419,7 @@ int wxFileDialog::ShowModal()
     m_firstFileTypeFilter = -1;
 
     if ( m_useFileTypeFilter
-        && m_filterIndex >= 0 && m_filterIndex < m_filterExtensions.GetCount() )
+        && m_filterIndex >= 0 && (size_t)m_filterIndex < m_filterExtensions.GetCount() )
     {
         m_firstFileTypeFilter = m_filterIndex;
     }

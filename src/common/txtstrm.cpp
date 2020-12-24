@@ -148,8 +148,8 @@ wxChar wxTextInputStream::GetChar()
                 // remember the second one for the next call, as there is no
                 // way to fit both of them into a single wxChar in this case.
                 m_lastWChar = wbuf[1];
-#endif // SIZEOF_WCHAR_T == 2
                 wxFALLTHROUGH;
+#endif // SIZEOF_WCHAR_T == 2
 
             case 1:
                 m_validBegin = inlen + 1;

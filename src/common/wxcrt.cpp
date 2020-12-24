@@ -716,7 +716,7 @@ size_t wxStrlen(const wxChar16 *s )
 {
     if (!s) return 0;
     size_t i=0;
-    while (*s!=0) { ++i; ++s; };
+    while (*s!=0) { ++i; ++s; }
     return i;
 }
 

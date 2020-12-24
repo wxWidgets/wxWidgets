@@ -404,7 +404,7 @@ void wxGtkStyleContext::Bg(wxColour& color, int state) const
                 const int i = stride * (cairo_image_surface_get_height(surf) / 2);
                 const unsigned* p = reinterpret_cast<const unsigned*>(data + i);
                 const unsigned pixel = *p;
-                guchar r, g, b, a = 0xff;
+                guchar r = 0, g = 0, b = 0, a = 0xff;
                 switch (cairo_image_surface_get_format(surf))
                 {
                 case CAIRO_FORMAT_ARGB32:

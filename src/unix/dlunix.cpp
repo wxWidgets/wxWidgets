@@ -252,6 +252,9 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
         *path = di.dli_fname;
 
     return di.dli_fbase;
+#else
+    wxUnusedVar(addr);
+    wxUnusedVar(path);
 #endif // HAVE_DLADDR
 
     return NULL;

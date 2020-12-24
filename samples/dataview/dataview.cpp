@@ -1281,7 +1281,7 @@ void MyFrame::OnDropPossible( wxDataViewEvent &event )
     if (event.GetDataFormat() != wxDF_UNICODETEXT)
         event.Veto();
     else
-        event.SetDropEffect(wxDragMove);	// check 'move' drop effect
+        event.SetDropEffect(wxDragMove); // check 'move' drop effect
 }
 
 void MyFrame::OnDrop( wxDataViewEvent &event )

@@ -206,16 +206,14 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT :
             {
                 return wxFont(wxOSX_SYSTEM_FONT_SMALL) ;
-            } ;
-            break ;
+            }
         case wxSYS_OEM_FIXED_FONT :
         case wxSYS_ANSI_FIXED_FONT :
         case wxSYS_SYSTEM_FIXED_FONT :
         default :
             {
                 return wxFont(wxOSX_SYSTEM_FONT_FIXED) ;
-            } ;
-            break ;
+            }
 
     }
     return *wxNORMAL_FONT;

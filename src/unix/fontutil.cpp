@@ -229,7 +229,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
             break;
         default:
             wxFAIL_MSG( "unknown font style" );
-            // fall through
+            wxFALLTHROUGH;
         case wxFONTSTYLE_NORMAL:
             pango_font_description_set_style( description, PANGO_STYLE_NORMAL );
             break;

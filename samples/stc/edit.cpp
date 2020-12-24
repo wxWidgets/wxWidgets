@@ -52,8 +52,8 @@ const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 // A small image of a hashtag symbol used in the autocompletion window.
 const char* hashtag_xpm[] = {
 "10 10 2 1",
-" 	c None",
-".	c #BD08F9",
+"  c None",
+". c #BD08F9",
 "  ..  ..  ",
 "  ..  ..  ",
 "..........",

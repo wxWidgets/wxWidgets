@@ -72,7 +72,7 @@
 #endif
 
 "</string>
-    <string name="cpp_function_declaration_comment">"	/// %BODY%
+    <string name="cpp_function_declaration_comment">" /// %BODY%
 "</string>
     <string name="cpp_function_implementation_comment">"
 /*!

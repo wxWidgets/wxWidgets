@@ -464,14 +464,14 @@ bool wxChmInputStream::Eof() const
     return (m_content==NULL ||
             m_contentStream==NULL ||
             m_contentStream->Eof() ||
-            m_pos>m_size);
+            (size_t)m_pos>m_size);
 }
 
 
 
 size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    if ( m_pos >= m_size )
+    if ( (size_t)m_pos >= m_size )
     {
         m_lasterror = wxSTREAM_EOF;
         return 0;
@@ -854,7 +854,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 /**
  * Doku see wxFileSystemHandler
  */
-wxString wxChmFSHandler::FindFirst(const wxString& spec, int flags)
+wxString wxChmFSHandler::FindFirst(const wxString& spec, int WXUNUSED(flags))
 {
     wxString right = GetRightLocation(spec);
     wxString left = GetLeftLocation(spec);

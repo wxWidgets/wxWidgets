@@ -87,7 +87,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     if ( GLAttrs && n1 > 1 )
     {
         n1--; // skip the ending '0'
-        while ( p < n1 )
+        while ( p < (unsigned)n1 )
         {
             data[p] = (NSOpenGLPixelFormatAttribute) GLAttrs[p];
             p++;
@@ -98,7 +98,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     {
         n2--; // skip the ending '0'
         unsigned p2 = 0;
-        while ( p2 < n2 )
+        while ( p2 < (unsigned)n2 )
             data[p++] = (NSOpenGLPixelFormatAttribute) ctxAttrs[p2++];
     }
 

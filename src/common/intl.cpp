@@ -1799,7 +1799,6 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                 format.Replace("%y","%Y");
                 return format;
             }
-            break;
 
         default:
             wxFAIL_MSG( "Unknown locale info" );

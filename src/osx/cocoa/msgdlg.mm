@@ -316,7 +316,7 @@ void* wxMessageDialog::ConstructNSAlert()
         m_buttonId[ m_buttonCount++ ] = wxID_HELP;
     }
 
-    wxASSERT_MSG( m_buttonCount <= WXSIZEOF(m_buttonId), "Too many buttons" );
+    wxASSERT_MSG( m_buttonCount <= (int)WXSIZEOF(m_buttonId), "Too many buttons" );
 
     return alert;
 }

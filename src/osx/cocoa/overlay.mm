@@ -81,6 +81,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    wxUnusedVar(dirtyRect);
     [self.bitmapImageRep drawInRect:[self  bounds]];
 }
 
