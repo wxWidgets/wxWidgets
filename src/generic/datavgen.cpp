@@ -110,6 +110,8 @@ public:
 
     bool IsNone() const { return m_column == SortColumn_None; }
 
+    bool UsesColumn() const { return m_column >= 0; }
+
     int GetColumn() const { return m_column; }
     bool IsAscending() const { return m_ascending; }
 
@@ -1888,9 +1890,10 @@ void wxDataViewTreeNode::Resort(wxDataViewMainWindow* window)
     {
         wxDataViewTreeNodes& nodes = m_branchData->children;
 
-        // Only sort the children if they aren't already sorted by the wanted
-        // criteria.
-        if ( m_branchData->sortOrder != sortOrder )
+        // When sorting by column value, we can skip resorting entirely if the
+        // same sort order was used previously. However we can't do this when
+        // using model-specific sort order, which can change at any time.
+        if ( m_branchData->sortOrder != sortOrder || !sortOrder.UsesColumn() )
         {
             std::sort(m_branchData->children.begin(),
                       m_branchData->children.end(),
