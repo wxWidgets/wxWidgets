@@ -110,6 +110,8 @@ public:
 
     bool IsNone() const { return m_column == SortColumn_None; }
 
+    bool IsDefault() const { return m_column == SortColumn_Default; }
+
     int GetColumn() const { return m_column; }
     bool IsAscending() const { return m_ascending; }
 
@@ -1889,8 +1891,8 @@ void wxDataViewTreeNode::Resort(wxDataViewMainWindow* window)
         wxDataViewTreeNodes& nodes = m_branchData->children;
 
         // Only sort the children if they aren't already sorted by the wanted
-        // criteria.
-        if ( m_branchData->sortOrder != sortOrder )
+        // criterion. Or if the wanted criterion is default (a user custom order)
+        if ( m_branchData->sortOrder != sortOrder || sortOrder.IsDefault() )
         {
             std::sort(m_branchData->children.begin(),
                       m_branchData->children.end(),
