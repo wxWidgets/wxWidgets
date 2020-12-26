@@ -27,14 +27,11 @@
 #include "wx/filename.h"
 #include "wx/wfstream.h"
 
-// This test requires the URL to an httpbin instance.
-// httpbin is a HTTP Request & Response Service available at:
-// https://httpbin.org
-// It can also be run locally via a simple docker run
-//
-// For this test to run the the base URL has to be specified with
-// an environment variable, e.g.:
-//   WX_TEST_WEBREQUEST_URL=https://httpbin.org
+// This test uses https://httpbin.org by default, but this can be overridden by
+// setting WX_TEST_WEBREQUEST_URL, e.g. when running httpbin locally in a
+// docker container. This variable can also be set to a special value "0" to
+// disable running the test entirely.
+static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://httpbin.org";
 
 class RequestFixture
 {
@@ -45,10 +42,16 @@ public:
         dataSize = 0;
     }
 
+    bool InitBaseURL()
+    {
+        if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
+            baseURL = WX_TEST_WEBREQUEST_URL_DEFAULT;
+
+        return baseURL != "0";
+    }
+
     void Create(const wxString& subURL)
     {
-        wxString baseURL;
-        wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL);
         CreateAbs(baseURL + subURL);
     }
 
@@ -99,21 +102,18 @@ public:
             REQUIRE( request->GetResponse()->GetStatus() == requiredStatus );
     }
 
+    wxString baseURL;
     wxEventLoop loop;
     wxObjectDataPtr<wxWebRequest> request;
     wxInt64 expectedFileSize;
     wxInt64 dataSize;
 };
 
-TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
+TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 {
-    wxString baseURL;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
-    {
-        WARN("Skipping WebRequest test because required WX_TEST_WEBREQUEST_URL"
-            " environment variable is not defined.");
+    // Skip the test entirely if disabled.
+    if ( !InitBaseURL() )
         return;
-    }
 
     SECTION("GET 64kb to memory")
     {
@@ -209,7 +209,7 @@ WXDLLIMPEXP_NET wxString
 SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters);
 }
 
-TEST_CASE("WebRequestUtils", "[net]")
+TEST_CASE("WebRequestUtils", "[net][webrequest]")
 {
     wxString value;
     wxWebRequestHeaderMap params;
