@@ -21,6 +21,8 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_WEBREQUEST
+
 #include "wx/webrequest.h"
 #include "wx/filename.h"
 #include "wx/wfstream.h"
@@ -33,8 +35,6 @@
 // For this test to run the the base URL has to be specified with
 // an environment variable, e.g.:
 //   WX_TEST_WEBREQUEST_URL=https://httpbin.org
-
-#if wxUSE_WEBREQUEST
 
 class RequestFixture
 {
