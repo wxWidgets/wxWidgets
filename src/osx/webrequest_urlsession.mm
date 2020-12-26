@@ -34,7 +34,7 @@
 
 @implementation wxWebSessionDelegate
 
-- initWithSession:(wxWebSessionURLSession*)session
+- (id)initWithSession:(wxWebSessionURLSession*)session
 {
     m_session = session;
     m_requests = [[NSMapTable weakToStrongObjectsMapTable] retain];
