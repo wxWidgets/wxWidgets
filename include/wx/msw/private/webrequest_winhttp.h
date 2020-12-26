@@ -10,6 +10,8 @@
 #ifndef _WX_MSW_WEBREQUEST_WINHTTP_H
 #define _WX_MSW_WEBREQUEST_WINHTTP_H
 
+#include "wx/private/webrequest.h"
+
 #include "wx/msw/wrapwin.h"
 #include <winhttp.h>
 #include "wx/buffer.h"

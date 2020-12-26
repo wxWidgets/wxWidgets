@@ -12,6 +12,8 @@
 
 #if wxUSE_WEBREQUEST_CURL
 
+#include "wx/private/webrequest.h"
+
 #include "wx/thread.h"
 #include "wx/vector.h"
 

@@ -508,46 +508,12 @@ public:
     static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
 
     /**
-        Allows the registering of new backend for wxWebSession.
-
-        backend can be used as an argument to New().
-
-        @param backend The name for the new backend to be registered under
-        @param factory A shared pointer to the factory which creates the appropriate backend.
-    */
-    static void RegisterFactory(const wxString& backend,
-                                const wxSharedPtr<wxWebSessionFactory>& factory);
-
-    /**
         Allows to check if the specified backend is available at runtime.
 
         Usually the default backend should always be available, but e.g. macOS
         before 10.9 does not have the @c NSURLSession implementation available.
     */
     static bool IsBackendAvailable(const wxString& backend);
-};
-
-/**
-    @class wxWebSessionFactory
-
-    An abstract factory class for creation wxWebSession backends.
-
-    Each implementation of wxWebSession should have its own factory.
-
-    @since 3.1.5
-
-    @library{wxnet}
-    @category{net}
-
-    @see wxWebSession
-*/
-class wxWebSessionFactory
-{
-public:
-    /**
-        Creates a new web session object.
-    */
-    virtual wxWebSession* Create();
 };
 
 /**

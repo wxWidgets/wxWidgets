@@ -12,6 +12,8 @@
 
 #if wxUSE_WEBREQUEST_URLSESSION
 
+#include "wx/private/webrequest.h"
+
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSession);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
 DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegate);

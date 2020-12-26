@@ -26,6 +26,7 @@
 
 class wxWebResponse;
 class wxWebSession;
+class wxWebSessionFactory;
 class wxWebAuthChallenge;
 
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
@@ -195,14 +196,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebAuthChallenge);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionFactory
-{
-public:
-    virtual wxWebSession* Create() = 0;
-
-    virtual ~wxWebSessionFactory() { }
-};
-
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
@@ -228,9 +221,6 @@ public:
 
     static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
 
-    static void RegisterFactory(const wxString& backend,
-                                const wxSharedPtr<wxWebSessionFactory>& factory);
-
     static bool IsBackendAvailable(const wxString& backend);
 
 protected:
@@ -239,6 +229,9 @@ protected:
     const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
 
 private:
+    static void RegisterFactory(const wxString& backend,
+                                const wxSharedPtr<wxWebSessionFactory>& factory);
+
     // Make it a friend to allow accessing our m_headers.
     friend class wxWebRequest;
 

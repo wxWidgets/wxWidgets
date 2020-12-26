@@ -27,6 +27,8 @@
     #include "wx/utils.h"
 #endif
 
+#include "wx/private/webrequest.h"
+
 #if wxUSE_WEBREQUEST_WINHTTP
 #include "wx/msw/private/webrequest_winhttp.h"
 #endif
