@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-#include "wx/osx/webrequest_urlsession.h"
+#include "wx/osx/private/webrequest_urlsession.h"
 #include "wx/osx/private.h"
 
 #ifndef WX_PRECOMP

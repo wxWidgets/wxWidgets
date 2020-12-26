@@ -513,8 +513,6 @@
     <ClInclude Include="..\..\include\wx\socket.h" />
     <ClInclude Include="..\..\include\wx\url.h" />
     <ClInclude Include="..\..\include\wx\webrequest.h" />
-    <ClInclude Include="..\..\include\wx\msw\webrequest_winhttp.h" />
-    <ClInclude Include="..\..\include\wx\webrequest_curl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

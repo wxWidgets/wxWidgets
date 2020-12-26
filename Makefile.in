@@ -567,7 +567,6 @@ ALL_BASE_HEADERS =  \
 	wx/socket.h \
 	wx/url.h \
 	wx/webrequest.h \
-	wx/webrequest_curl.h \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_HEADERS =  \
@@ -788,7 +787,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/socket.h \
 	wx/url.h \
 	wx/webrequest.h \
-	wx/webrequest_curl.h \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_BASE_SOURCES =  \

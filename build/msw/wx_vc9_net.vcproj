@@ -1161,10 +1161,6 @@
 				RelativePath="..\..\include\wx\webrequest.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\webrequest_curl.h"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

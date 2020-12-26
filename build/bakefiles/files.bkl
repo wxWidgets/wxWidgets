@@ -789,7 +789,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/socket.h
     wx/url.h
     wx/webrequest.h
-    wx/webrequest_curl.h
 </set>
 
 <!-- ====================================================================== -->

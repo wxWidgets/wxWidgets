@@ -705,7 +705,6 @@ set(NET_CMN_HDR
     wx/socket.h
     wx/url.h
     wx/webrequest.h
-    wx/webrequest_curl.h
 )
 
 set(QA_SRC

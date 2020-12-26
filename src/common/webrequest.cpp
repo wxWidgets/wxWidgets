@@ -28,13 +28,13 @@
 #endif
 
 #if wxUSE_WEBREQUEST_WINHTTP
-#include "wx/msw/webrequest_winhttp.h"
+#include "wx/msw/private/webrequest_winhttp.h"
 #endif
 #if wxUSE_WEBREQUEST_URLSESSION
-#include "wx/osx/webrequest_urlsession.h"
+#include "wx/osx/private/webrequest_urlsession.h"
 #endif
 #if wxUSE_WEBREQUEST_CURL
-#include "wx/webrequest_curl.h"
+#include "wx/private/webrequest_curl.h"
 #endif
 
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[] = "wxWebSessionBackendWinHTTP";

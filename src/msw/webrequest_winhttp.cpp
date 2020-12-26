@@ -16,7 +16,7 @@
 
 #include "wx/mstream.h"
 #include "wx/uri.h"
-#include "wx/msw/webrequest_winhttp.h"
+#include "wx/msw/private/webrequest_winhttp.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"

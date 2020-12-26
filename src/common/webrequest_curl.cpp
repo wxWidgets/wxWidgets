@@ -14,7 +14,7 @@
 
 #if wxUSE_WEBREQUEST_CURL
 
-#include "wx/webrequest_curl.h"
+#include "wx/private/webrequest_curl.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"

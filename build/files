@@ -679,15 +679,11 @@ NET_UNIX_SRC =
 NET_OSX_SRC =
     src/osx/core/sockosx.cpp
     src/osx/webrequest_urlsession.mm
-NET_OSX_HDR =
-    wx/osx/webrequest_urlsession.h
 
 NET_WIN32_SRC =
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
     src/msw/webrequest_winhttp.cpp
-NET_WIN32_HDR =
-    wx/msw/webrequest_winhttp.h
 
 NET_CMN_SRC =
     src/common/fs_inet.cpp
@@ -715,7 +711,6 @@ NET_CMN_HDR =
     wx/socket.h
     wx/url.h
     wx/webrequest.h
-    wx/webrequest_curl.h
 
 # wxQA (non GUI library)
 
