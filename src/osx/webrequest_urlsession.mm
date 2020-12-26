@@ -64,6 +64,8 @@
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
+    wxUnusedVar(session);
+
     wxWebRequestURLSession* request = [self requestForTask:dataTask];
     if (request)
         static_cast<wxWebResponseURLSession*>(request->GetResponse())->HandleData(data);
@@ -71,6 +73,8 @@
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
+    wxUnusedVar(session);
+
     wxWebRequestURLSession* request = [self requestForTask:task];
     if (error)
         request->SetState(wxWebRequest::State_Failed, wxCFStringRefFromGet(error.localizedDescription).AsString());
