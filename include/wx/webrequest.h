@@ -204,6 +204,16 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
 class WXDLLIMPEXP_NET wxWebSession
 {
 public:
+    // Objects of this class can't be created directly, use the following
+    // factory functions to get access to them.
+    static wxWebSession& GetDefault();
+
+    static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
+
+    // Can be used to check if the given backend is available without actually
+    // creating a session using it.
+    static bool IsBackendAvailable(const wxString& backend);
+
     virtual ~wxWebSession() { }
 
     virtual wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) = 0;
@@ -216,12 +226,6 @@ public:
     void SetTempDir(const wxString& dir) { m_tempDir = dir; }
 
     wxString GetTempDir() const;
-
-    static wxWebSession& GetDefault();
-
-    static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
-
-    static bool IsBackendAvailable(const wxString& backend);
 
 protected:
     wxWebSession();
