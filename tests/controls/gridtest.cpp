@@ -1405,6 +1405,22 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         // so just calculate the maximum width.
         CheckFirstColAutoSize( wxMax(labelWidth, cellWidth) );
     }
+
+    SECTION("Column with auto wrapping contents taller than row")
+    {
+        // Verify row height remains unchanged with an auto-wrapping multi-line
+        // cell.
+        // Also shouldn't continuously try to fit the multi-line content into
+        // a single line, which is not possible. See
+        // https://trac.wxwidgets.org/ticket/15943 .
+
+        m_grid->SetCellValue(0, 0, multilineStr);
+        m_grid->SetCellRenderer(0 , 0, new wxGridCellAutoWrapStringRenderer);
+        m_grid->AutoSizeColumn(0);
+
+        wxYield();
+        CHECK( m_grid->GetRowSize(0) == m_grid->GetDefaultRowSize() );
+    }
 }
 
 // Test wxGridBlockCoords here because it'a a part of grid sources.
