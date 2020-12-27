@@ -546,10 +546,16 @@ wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
 {
     const int lineHeight = dc.GetCharHeight();
 
-    // Maximal number of lines that fully fit but at least 1.
-    const size_t maxLines = height - AUTOWRAP_Y_MARGIN < lineHeight
-                                ? 1
-                                : (height - AUTOWRAP_Y_MARGIN)/lineHeight;
+    // Base the maximal number of lines either on how many fit or how many
+    // (new)lines the cell's text contains, whichever results in the most lines.
+    //
+    // It's important to take the newlines into account as GetTextLines() splits
+    // based on them and the number of lines returned can never drop below that,
+    // resulting in the while loop below never exiting if there are already more
+    // lines in the text than can fit in the available height.
+    const size_t maxLines = wxMax(
+                              (height - AUTOWRAP_Y_MARGIN)/lineHeight,
+                              1 + grid.GetCellValue(row, col).Freq(wxS('\n')));
 
     // Increase width until all the text fits.
     //
