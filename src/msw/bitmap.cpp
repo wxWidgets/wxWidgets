@@ -1352,6 +1352,7 @@ bool wxBitmap::InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth)
     GetBitmapData()->m_width = width;
     GetBitmapData()->m_height = height;
     GetBitmapData()->m_depth = depth;
+    GetBitmapData()->m_hasAlpha = (depth == 32) && CheckAlpha(bmp);
 
     return IsOk();
 }
