@@ -330,6 +330,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         m_pendingContextMenuEnabled = -1;
     }
 
+    wxCOMPtr<ICoreWebView2Settings> settings(GetSettings());
+    if (settings)
+        settings->put_IsStatusBarEnabled(false);
+
     if (!m_pendingURL.empty())
     {
         m_ctrl->LoadURL(m_pendingURL);
