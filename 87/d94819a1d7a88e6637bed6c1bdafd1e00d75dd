@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxRibbonToolBar GetToolByPos() and GetToolRect() (Gary Allen).
