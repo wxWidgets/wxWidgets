@@ -429,6 +429,26 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(size_t pos)const
     return NULL;
 }
 
+wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(wxCoord x, wxCoord y)const
+{
+    size_t group_count = m_groups.GetCount();
+    for ( size_t g = 0; g < group_count; ++g )
+    {
+        wxRibbonToolBarToolGroup* group = m_groups.Item(g);
+        size_t tool_count = group->tools.GetCount();
+        for ( size_t t = 0; t < tool_count; ++t )
+        {
+            wxRibbonToolBarToolBase* tool = group->tools.Item(t);
+            wxRect rect(tool->position, tool->size);
+            if(rect.Contains(x, y))
+            {
+                return tool;
+            }
+        }
+    }
+    return NULL;
+}
+
 size_t wxRibbonToolBar::GetToolCount() const
 {
     size_t count = 0;
@@ -499,6 +519,30 @@ int wxRibbonToolBar::GetToolPos(int tool_id)const
         ++pos; // Increment pos for group separator.
     }
     return wxNOT_FOUND;
+}
+
+wxRect wxRibbonToolBar::GetToolRect(int tool_id)const
+{
+    size_t group_count = m_groups.GetCount();
+    size_t g, t;
+    int pos = 0;
+    for(g = 0; g < group_count; ++g)
+    {
+        wxRibbonToolBarToolGroup* group = m_groups.Item(g);
+        size_t tool_count = group->tools.GetCount();
+        for(t = 0; t < tool_count; ++t)
+        {
+            wxRibbonToolBarToolBase* tool = group->tools.Item(t);
+            if (tool->id == tool_id)
+            {
+                wxRect rect(tool->position.x, tool->position.y, tool->size.GetWidth(), tool->size.GetHeight());
+                return rect;
+            }
+            ++pos;
+        }
+        ++pos; // Increment pos for group separator.
+    }
+    return wxRect();
 }
 
 bool wxRibbonToolBar::GetToolState(int tool_id)const
