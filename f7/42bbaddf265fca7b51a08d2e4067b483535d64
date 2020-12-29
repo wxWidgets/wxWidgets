@@ -1,0 +1,1 @@
+wxAll (GUI): Fix infinite loop with auto-wrapped multi-line cells in wxGrid (Dimitri Schoolwerth).
