@@ -312,7 +312,7 @@ public:
 
     @return an opaque pointer, NULL if is not found.
 
-    @since 2.9.4
+    @since 3.1.5
     */
     virtual wxRibbonToolBarToolBase* GetToolByPos(wxCoord x, wxCoord y)const;
 

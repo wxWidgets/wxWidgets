@@ -432,15 +432,14 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(size_t pos)const
 wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(wxCoord x, wxCoord y)const
 {
     size_t group_count = m_groups.GetCount();
-    size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( size_t g = 0; g < group_count; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
         size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        for ( size_t t = 0; t < tool_count; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            wxRect rect(tool->position.x, tool->position.y, tool->size.GetWidth(), tool->size.GetHeight());
+            wxRect rect(tool->position, tool->size);
             if(rect.Contains(x, y))
             {
                 return tool;
