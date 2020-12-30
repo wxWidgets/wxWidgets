@@ -42,6 +42,12 @@ public:
         dataSize = 0;
     }
 
+    static bool UsingNSURLSession()
+    {
+        return wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
+                == "URLSession";
+    }
+
     bool InitBaseURL()
     {
         if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
@@ -182,6 +188,12 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 
     SECTION("Server auth BASIC")
     {
+        if ( UsingNSURLSession() )
+        {
+            WARN("NSURLSession backend doesn't support authentication, skipping.");
+            return;
+        }
+
         Create("/digest-auth/auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
         REQUIRE( request.GetAuthChallenge().IsOk() );
@@ -193,6 +205,12 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 
     SECTION("Server auth DIGEST")
     {
+        if ( UsingNSURLSession() )
+        {
+            WARN("NSURLSession backend doesn't support authentication, skipping.");
+            return;
+        }
+
         Create("/digest-auth/auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
         REQUIRE( request.GetAuthChallenge().IsOk() );
