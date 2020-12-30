@@ -15,23 +15,93 @@
 #if wxUSE_WEBREQUEST
 
 #include "wx/event.h"
-#include "wx/ffile.h"
-#include "wx/hashmap.h"
 #include "wx/object.h"
-#include "wx/scopedptr.h"
 #include "wx/sharedptr.h"
 #include "wx/stream.h"
-#include "wx/vector.h"
 #include "wx/versioninfo.h"
 
 class wxWebResponse;
 class wxWebSession;
 class wxWebSessionFactory;
-class wxWebAuthChallenge;
 
-WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
+class wxWebAuthChallengeImpl;
+class wxWebRequestImpl;
+class wxWebResponseImpl;
+class wxWebSessionImpl;
 
-class WXDLLIMPEXP_NET wxWebRequest : public wxEvtHandler, public wxRefCounter
+typedef wxObjectDataPtr<wxWebAuthChallengeImpl> wxWebAuthChallengeImplPtr;
+typedef wxObjectDataPtr<wxWebRequestImpl> wxWebRequestImplPtr;
+typedef wxObjectDataPtr<wxWebResponseImpl> wxWebResponseImplPtr;
+typedef wxObjectDataPtr<wxWebSessionImpl> wxWebSessionImplPtr;
+
+class WXDLLIMPEXP_NET wxWebAuthChallenge
+{
+public:
+    enum Source
+    {
+        Source_Server,
+        Source_Proxy
+    };
+
+    wxWebAuthChallenge();
+    wxWebAuthChallenge(const wxWebAuthChallenge& other);
+    wxWebAuthChallenge& operator=(const wxWebAuthChallenge& other);
+    ~wxWebAuthChallenge();
+
+    bool IsOk() const { return m_impl.get() != NULL; }
+
+    Source GetSource() const;
+
+    void SetCredentials(const wxString& user, const wxString& password);
+
+private:
+    // Ctor is used by wxWebRequest only.
+    friend class wxWebRequest;
+    explicit wxWebAuthChallenge(const wxWebAuthChallengeImplPtr& impl);
+
+    wxWebAuthChallengeImplPtr m_impl;
+};
+
+class WXDLLIMPEXP_NET wxWebResponse
+{
+public:
+    wxWebResponse();
+    wxWebResponse(const wxWebResponse& other);
+    wxWebResponse& operator=(const wxWebResponse& other);
+    ~wxWebResponse();
+
+    bool IsOk() const { return m_impl.get() != NULL; }
+
+    wxInt64 GetContentLength() const;
+
+    wxString GetURL() const;
+
+    wxString GetHeader(const wxString& name) const;
+
+    wxString GetMimeType() const;
+
+    int GetStatus() const;
+
+    wxString GetStatusText() const;
+
+    wxInputStream* GetStream() const;
+
+    wxString GetSuggestedFileName() const;
+
+    wxString AsString() const;
+
+    wxString GetFileName() const;
+
+protected:
+    // Ctor is used by wxWebRequest and wxWebRequestImpl.
+    friend class wxWebRequest;
+    friend class wxWebRequestImpl;
+    explicit wxWebResponse(const wxWebResponseImplPtr& impl);
+
+    wxWebResponseImplPtr m_impl;
+};
+
+class WXDLLIMPEXP_NET wxWebRequest
 {
 public:
     enum State
@@ -51,149 +121,55 @@ public:
         Storage_None
     };
 
-    virtual ~wxWebRequest() { }
+    wxWebRequest();
+    wxWebRequest(const wxWebRequest& other);
+    wxWebRequest& operator=(const wxWebRequest& other);
+    ~wxWebRequest();
 
-    virtual void SetHeader(const wxString& name, const wxString& value)
-    { m_headers[name] = value; }
+    bool IsOk() const { return m_impl.get() != NULL; }
 
-    virtual void SetMethod(const wxString& method) { m_method = method; }
+    void SetHeader(const wxString& name, const wxString& value);
+
+    void SetMethod(const wxString& method);
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
     bool SetData(const wxSharedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
-    void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
+    void SetIgnoreServerErrorStatus(bool ignore);
 
-    virtual void SetStorage(Storage storage) { m_storage = storage; }
+    void SetStorage(Storage storage);
 
-    Storage GetStorage() const { return m_storage; }
+    Storage GetStorage() const;
 
-    virtual void Start() = 0;
+    void Start();
 
-    virtual void Cancel() = 0;
+    void Cancel();
 
-    virtual wxWebResponse* GetResponse() const = 0;
+    wxWebResponse GetResponse() const;
 
-    virtual wxWebAuthChallenge* GetAuthChallenge() const = 0;
+    wxWebAuthChallenge GetAuthChallenge() const;
 
-    int GetId() const { return m_id; }
+    int GetId() const;
 
-    wxWebSession& GetSession() const { return m_session; }
+    wxWebSession& GetSession() const;
 
-    State GetState() const { return m_state; }
+    State GetState() const;
 
-    virtual wxFileOffset GetBytesSent() const = 0;
+    wxFileOffset GetBytesSent() const;
 
-    virtual wxFileOffset GetBytesExpectedToSend() const = 0;
+    wxFileOffset GetBytesExpectedToSend() const;
 
-    virtual wxFileOffset GetBytesReceived() const;
+    wxFileOffset GetBytesReceived() const;
 
-    virtual wxFileOffset GetBytesExpectedToReceive() const;
-
-    void SetState(State state, const wxString& failMsg = "");
-
-    void ReportDataReceived(size_t sizeReceived);
-
-protected:
-    wxString m_method;
-    Storage m_storage;
-    wxWebRequestHeaderMap m_headers;
-    wxFileOffset m_dataSize;
-    wxSharedPtr<wxInputStream> m_dataStream;
-
-    wxWebRequest(wxWebSession& session, int id);
-
-    bool CheckServerStatus();
-
-    static bool IsActiveState(State state);
+    wxFileOffset GetBytesExpectedToReceive() const;
 
 private:
-    wxWebSession& m_session;
-    int m_id;
-    State m_state;
-    bool m_ignoreServerErrorStatus;
-    wxFileOffset m_bytesReceived;
-    wxCharBuffer m_dataText;
+    // Ctor is only used by wxWebSession.
+    friend class wxWebSession;
+    explicit wxWebRequest(const wxWebRequestImplPtr& impl);
 
-    void ProcessStateEvent(State state, const wxString& failMsg);
-
-    wxDECLARE_NO_COPY_CLASS(wxWebRequest);
-};
-
-class WXDLLIMPEXP_NET wxWebResponse
-{
-public:
-    virtual ~wxWebResponse();
-
-    virtual wxInt64 GetContentLength() const = 0;
-
-    virtual wxString GetURL() const = 0;
-
-    virtual wxString GetHeader(const wxString& name) const = 0;
-
-    virtual wxString GetMimeType() const;
-
-    virtual int GetStatus() const = 0;
-
-    virtual wxString GetStatusText() const = 0;
-
-    virtual wxInputStream* GetStream() const;
-
-    virtual wxString GetSuggestedFileName() const;
-
-    wxString AsString() const;
-
-    virtual wxString GetFileName() const;
-
-protected:
-    wxWebRequest& m_request;
-    size_t m_readSize;
-
-    wxWebResponse(wxWebRequest& request);
-
-    // Called from derived class ctor to finish initialization which can't be
-    // performed in ctor itself as it needs to use pure virtual method.
-    void Init();
-
-    void* GetDataBuffer(size_t sizeNeeded);
-
-    void ReportDataReceived(size_t sizeReceived);
-
-private:
-    // Called by wxWebRequest only.
-    void Finalize();
-
-    wxMemoryBuffer m_readBuffer;
-    mutable wxFFile m_file;
-    mutable wxScopedPtr<wxInputStream> m_stream;
-
-    friend class wxWebRequest;
-
-    wxDECLARE_NO_COPY_CLASS(wxWebResponse);
-};
-
-class WXDLLIMPEXP_NET wxWebAuthChallenge
-{
-public:
-    enum Source
-    {
-        Source_Server,
-        Source_Proxy
-    };
-
-    virtual ~wxWebAuthChallenge() { }
-
-    Source GetSource() const { return m_source; }
-
-    virtual void SetCredentials(const wxString& user, const wxString& password) = 0;
-
-protected:
-    wxWebAuthChallenge(Source source): m_source(source) { }
-
-private:
-    Source m_source;
-
-    wxDECLARE_NO_COPY_CLASS(wxWebAuthChallenge);
+    wxWebRequestImplPtr m_impl;
 };
 
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[];
@@ -204,45 +180,49 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
 class WXDLLIMPEXP_NET wxWebSession
 {
 public:
+    // Default ctor creates an invalid session object, only IsOpened() can be
+    // called on it.
+    wxWebSession();
+
+    wxWebSession(const wxWebSession& other);
+    wxWebSession& operator=(const wxWebSession& other);
+    ~wxWebSession();
+
     // Objects of this class can't be created directly, use the following
     // factory functions to get access to them.
     static wxWebSession& GetDefault();
 
-    static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
+    static wxWebSession New(const wxString& backend = wxWebSessionBackendDefault);
 
     // Can be used to check if the given backend is available without actually
     // creating a session using it.
     static bool IsBackendAvailable(const wxString& backend);
 
-    virtual ~wxWebSession() { }
+    wxWebRequest
+    CreateRequest(wxEvtHandler* handler, const wxString& url, int id = wxID_ANY);
 
-    virtual wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) = 0;
+    wxVersionInfo GetLibraryVersionInfo();
 
-    virtual wxVersionInfo GetLibraryVersionInfo() = 0;
+    void SetHeader(const wxString& name, const wxString& value);
 
-    virtual void SetHeader(const wxString& name, const wxString& value)
-    { m_headers[name] = value; }
-
-    void SetTempDir(const wxString& dir) { m_tempDir = dir; }
-
+    void SetTempDir(const wxString& dir);
     wxString GetTempDir() const;
 
-protected:
-    wxWebSession();
+    bool IsOpened() const;
 
-    const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
+    void Close();
+
+    wxWebSessionImpl* GetImpl() const { return m_impl.get(); }
 
 private:
     static void RegisterFactory(const wxString& backend,
                                 const wxSharedPtr<wxWebSessionFactory>& factory);
 
-    // Make it a friend to allow accessing our m_headers.
-    friend class wxWebRequest;
-
-    wxWebRequestHeaderMap m_headers;
-    wxString m_tempDir;
-
     static void InitFactoryMap();
+
+    explicit wxWebSession(const wxWebSessionImplPtr& impl);
+
+    wxWebSessionImplPtr m_impl;
 };
 
 class WXDLLIMPEXP_NET wxWebRequestEvent : public wxEvent
@@ -251,7 +231,7 @@ public:
     wxWebRequestEvent(wxEventType type = wxEVT_NULL,
                       int id = wxID_ANY,
                       wxWebRequest::State state = wxWebRequest::State_Idle,
-                      wxWebResponse* response = NULL,
+                      const wxWebResponse& response = wxWebResponse(),
                       const wxString& errorDesc = wxString())
         : wxEvent(id, type),
         m_state(state), m_response(response), m_data(NULL), m_dataSize(0),
@@ -260,7 +240,7 @@ public:
 
     wxWebRequest::State GetState() const { return m_state; }
 
-    wxWebResponse* GetResponse() const { return m_response; }
+    const wxWebResponse& GetResponse() const { return m_response; }
 
     const wxString& GetErrorDescription() const { return m_errorDescription; }
 
@@ -279,7 +259,7 @@ public:
 
 private:
     wxWebRequest::State m_state;
-    wxWebResponse* const m_response; // non-owning, may be NULL
+    const wxWebResponse m_response; // may be invalid
     wxString m_responseFileName;
     const void* m_data;
     size_t m_dataSize;

@@ -141,8 +141,13 @@ static void CALLBACK wxRequestStatusCallback(
 // wxWebRequestWinHTTP
 //
 
-wxWebRequestWinHTTP::wxWebRequestWinHTTP(int id, wxWebSessionWinHTTP& session, const wxString& url):
-    wxWebRequest(session, id),
+wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSession& session,
+                                         wxWebSessionWinHTTP& sessionWinHTTP,
+                                         wxEvtHandler* handler,
+                                         const wxString& url,
+                                         int id):
+    wxWebRequestImpl(session, handler, id),
+    m_sessionWinHTTP(sessionWinHTTP),
     m_url(url),
     m_connect(NULL),
     m_request(NULL),
@@ -173,11 +178,11 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             if ( dwStatusInformationLength > 0 )
             {
                 if ( !m_response->ReportAvailableData(dwStatusInformationLength) &&
-                    GetState() != State_Cancelled )
+                    GetState() != wxWebRequest::State_Cancelled )
                     SetFailedWithLastError();
             }
             else
-                SetState(State_Completed);
+                SetState(wxWebRequest::State_Completed);
             break;
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
             WriteData();
@@ -185,7 +190,7 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
         case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
         {
             LPWINHTTP_ASYNC_RESULT asyncResult = reinterpret_cast<LPWINHTTP_ASYNC_RESULT>(lpvStatusInformation);
-            SetState(State_Failed, wxWinHTTPErrorToString(asyncResult->dwError));
+            SetState(wxWebRequest::State_Failed, wxWinHTTPErrorToString(asyncResult->dwError));
             break;
         }
     }
@@ -217,7 +222,7 @@ void wxWebRequestWinHTTP::CreateResponse()
         m_response.reset(new wxWebResponseWinHTTP(*this));
         // wxWebResponseWinHTTP ctor could have changed the state if its
         // initialization failed, so check for this.
-        if ( GetState() == State_Failed )
+        if ( GetState() == wxWebRequest::State_Failed )
             return;
 
         int status = m_response->GetStatus();
@@ -226,7 +231,7 @@ void wxWebRequestWinHTTP::CreateResponse()
             m_authChallenge.reset(new wxWebAuthChallengeWinHTTP(
                 (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
             if ( m_authChallenge->Init() )
-                SetState(State_Unauthorized, m_response->GetStatusText());
+                SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
             else
                 SetFailedWithLastError();
         }
@@ -244,12 +249,12 @@ void wxWebRequestWinHTTP::CreateResponse()
 void wxWebRequestWinHTTP::SetFailedWithLastError()
 {
     wxString failMessage = wxWinHTTPErrorToString(::GetLastError());
-    SetState(State_Failed, failMessage);
+    SetState(wxWebRequest::State_Failed, failMessage);
 }
 
 void wxWebRequestWinHTTP::Start()
 {
-    if ( GetState() != State_Idle ) // Completed requests can not be restarted
+    if ( GetState() != wxWebRequest::State_Idle ) // Completed requests can not be restarted
         return;
 
     // Parse the URL
@@ -264,7 +269,7 @@ void wxWebRequestWinHTTP::Start()
 
     // Open a connection
     m_connect = ::WinHttpConnect(
-        static_cast<wxWebSessionWinHTTP&>(GetSession()).GetHandle(),
+        m_sessionWinHTTP.GetHandle(),
         uri.GetServer().wc_str(), port, 0);
     if ( m_connect == NULL )
     {
@@ -328,7 +333,7 @@ void wxWebRequestWinHTTP::SendRequest()
         NULL, 0, m_dataSize,
         (DWORD_PTR)this) )
     {
-        SetState(State_Active);
+        SetState(wxWebRequest::State_Active);
     }
     else
         SetFailedWithLastError();
@@ -336,7 +341,7 @@ void wxWebRequestWinHTTP::SendRequest()
 
 void wxWebRequestWinHTTP::Cancel()
 {
-    SetState(State_Cancelled);
+    SetState(wxWebRequest::State_Cancelled);
     if ( m_request != NULL )
     {
         ::WinHttpCloseHandle(m_request);
@@ -344,17 +349,12 @@ void wxWebRequestWinHTTP::Cancel()
     }
 }
 
-wxWebResponse* wxWebRequestWinHTTP::GetResponse() const
-{
-    return m_response.get();
-}
-
 //
 // wxWebResponseWinHTTP
 //
 
 wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
-    wxWebResponse(request),
+    wxWebResponseImpl(request),
     m_requestHandle(request.GetHandle())
 {
     wxString contentLengthStr = wxWinHTTPQueryHeaderString(m_requestHandle,
@@ -415,8 +415,9 @@ bool wxWebResponseWinHTTP::ReportAvailableData(DWORD dataLen)
 //
 // wxWebAuthChallengeWinHTTP
 //
-wxWebAuthChallengeWinHTTP::wxWebAuthChallengeWinHTTP(Source source, wxWebRequestWinHTTP & request):
-    wxWebAuthChallenge(source),
+wxWebAuthChallengeWinHTTP::wxWebAuthChallengeWinHTTP(wxWebAuthChallenge::Source source,
+                                                     wxWebRequestWinHTTP & request):
+    wxWebAuthChallengeImpl(source),
     m_request(request),
     m_target(0),
     m_selectedScheme(0)
@@ -519,12 +520,17 @@ void wxWebSessionWinHTTP::Init()
     m_initialized = true;
 }
 
-wxWebRequest* wxWebSessionWinHTTP::CreateRequest(const wxString& url, int id)
+wxWebRequestImplPtr
+wxWebSessionWinHTTP::CreateRequest(wxWebSession& session,
+                                   wxEvtHandler* handler,
+                                   const wxString& url,
+                                   int id)
 {
     if ( !m_initialized )
         Init();
 
-    return new wxWebRequestWinHTTP(id, *this, url);
+    return wxWebRequestImplPtr(
+        new wxWebRequestWinHTTP(session, *this, handler, url, id));
 }
 
 wxVersionInfo wxWebSessionWinHTTP::GetLibraryVersionInfo()

@@ -68,7 +68,7 @@
 
     wxWebRequestURLSession* request = [self requestForTask:dataTask];
     if (request)
-        static_cast<wxWebResponseURLSession*>(request->GetResponse())->HandleData(data);
+        request->GetResponseImplPtr()->HandleData(data);
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
@@ -90,8 +90,13 @@
 //
 // wxWebRequestURLSession
 //
-wxWebRequestURLSession::wxWebRequestURLSession(wxWebSessionURLSession& session, const wxString& url, int id):
-    wxWebRequest(session, id),
+wxWebRequestURLSession::wxWebRequestURLSession(wxWebSession& session,
+                                               wxWebSessionURLSession& sessionImpl,
+                                               wxEvtHandler* handler,
+                                               const wxString& url,
+                                               int winid):
+    wxWebRequestImpl(session, handler, winid),
+    m_sessionImpl(sessionImpl),
     m_url(url)
 {
 }
@@ -103,8 +108,6 @@ wxWebRequestURLSession::~wxWebRequestURLSession()
 
 void wxWebRequestURLSession::Start()
 {
-    wxWebSessionURLSession& session = static_cast<wxWebSessionURLSession&>(GetSession());
-
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:
                                 [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];
     if (m_method.empty())
@@ -127,20 +130,20 @@ void wxWebRequestURLSession::Start()
 
         // Create NSData from memory buffer
         NSData* data = [NSData dataWithBytes:memBuf.GetData() length:m_dataSize];
-        m_task = [[session.GetSession() uploadTaskWithRequest:req fromData:data] retain];
+        m_task = [[m_sessionImpl.GetSession() uploadTaskWithRequest:req fromData:data] retain];
     }
     else
     {
         // Create data task
-        m_task = [[session.GetSession() dataTaskWithRequest:req] retain];
+        m_task = [[m_sessionImpl.GetSession() dataTaskWithRequest:req] retain];
     }
 
     // The session delegate needs to know which task is wrapped in which request
-    [session.GetDelegate() registerRequest:this task:m_task];
+    [m_sessionImpl.GetDelegate() registerRequest:this task:m_task];
 
     m_response.reset(new wxWebResponseURLSession(*this, m_task));
 
-    SetState(State_Active);
+    SetState(wxWebRequest::State_Active);
     [m_task resume];
 }
 
@@ -152,13 +155,13 @@ void wxWebRequestURLSession::Cancel()
 void wxWebRequestURLSession::HandleCompletion()
 {
     if ( CheckServerStatus() )
-        SetState(State_Completed);
+        SetState(wxWebRequest::State_Completed);
 }
 
-wxWebAuthChallenge* wxWebRequestURLSession::GetAuthChallenge() const
+wxWebAuthChallengeImplPtr wxWebRequestURLSession::GetAuthChallenge() const
 {
     wxFAIL_MSG("not implemented");
-    return NULL;
+    return wxWebAuthChallengeImplPtr();
 }
 
 wxFileOffset wxWebRequestURLSession::GetBytesSent() const
@@ -185,8 +188,9 @@ wxFileOffset wxWebRequestURLSession::GetBytesExpectedToReceive() const
 // wxWebResponseURLSession
 //
 
-wxWebResponseURLSession::wxWebResponseURLSession(wxWebRequest& request, WX_NSURLSessionTask task):
-    wxWebResponse(request)
+wxWebResponseURLSession::wxWebResponseURLSession(wxWebRequestURLSession& request,
+                                                 WX_NSURLSessionTask task):
+    wxWebResponseImpl(request)
 {
     m_task = [task retain];
 
@@ -260,9 +264,13 @@ wxWebSessionURLSession::~wxWebSessionURLSession()
     [m_delegate release];
 }
 
-wxWebRequest* wxWebSessionURLSession::CreateRequest(const wxString& url, int id)
+wxWebRequestImplPtr
+wxWebSessionURLSession::CreateRequest(wxWebSession& session,
+                                      wxEvtHandler* handler,
+                                      const wxString& url,
+                                      int winid)
 {
-    return new wxWebRequestURLSession(*this, url, id);
+    return wxWebRequestImplPtr(new wxWebRequestURLSession(session, *this, handler, url, winid));
 }
 
 wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()

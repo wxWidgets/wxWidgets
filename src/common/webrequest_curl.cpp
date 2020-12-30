@@ -55,8 +55,8 @@ static size_t wxCURLHeader(char *buffer, size_t size, size_t nitems, void *userd
         return 0;
 }
 
-wxWebResponseCURL::wxWebResponseCURL(wxWebRequest& request) :
-    wxWebResponse(request)
+wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
+    wxWebResponseImpl(request)
 {
     curl_easy_setopt(GetHandle(), CURLOPT_WRITEDATA, static_cast<void*>(this));
     curl_easy_setopt(GetHandle(), CURLOPT_HEADERDATA, static_cast<void*>(this));
@@ -143,8 +143,13 @@ static size_t wxCURLRead(char *buffer, size_t size, size_t nitems, void *userdat
         return 0;
 }
 
-wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session, int id, const wxString & url):
-    wxWebRequest(session, id)
+wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
+                                   wxWebSessionCURL& sessionImpl,
+                                   wxEvtHandler* handler,
+                                   const wxString & url,
+                                   int id):
+    wxWebRequestImpl(session, handler, id),
+    m_sessionImpl(sessionImpl)
 {
     m_headerList = NULL;
 
@@ -182,7 +187,7 @@ wxWebRequestCURL::~wxWebRequestCURL()
 
 void wxWebRequestCURL::Start()
 {
-    if ( GetState() != State_Idle )
+    if ( GetState() != wxWebRequest::State_Idle )
         return;
 
     m_response.reset(new wxWebResponseCURL(*this));
@@ -228,21 +233,21 @@ bool wxWebRequestCURL::StartRequest()
 {
     m_bytesSent = 0;
 
-    if ( static_cast<wxWebSessionCURL&>(GetSession()).StartRequest(*this) )
+    if ( m_sessionImpl.StartRequest(*this) )
     {
-        SetState(State_Active);
+        SetState(wxWebRequest::State_Active);
         return true;
     }
     else
     {
-        SetState(State_Failed);
+        SetState(wxWebRequest::State_Failed);
         return false;
     }
 }
 
 void wxWebRequestCURL::Cancel()
 {
-    static_cast<wxWebSessionCURL&>(GetSession()).CancelRequest(this);
+    m_sessionImpl.CancelRequest(this);
 }
 
 void wxWebRequestCURL::HandleCompletion()
@@ -250,15 +255,15 @@ void wxWebRequestCURL::HandleCompletion()
     int status = m_response ? m_response->GetStatus() : 0;
 
     if ( status == 0)
-        SetState(State_Failed, GetError());
+        SetState(wxWebRequest::State_Failed, GetError());
     else if ( status == 401 || status == 407 )
     {
         m_authChallenge.reset(new wxWebAuthChallengeCURL(
             (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
         if ( m_authChallenge->Init() )
-            SetState(State_Unauthorized, m_response->GetStatusText());
+            SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
         else
-            SetState(State_Failed);
+            SetState(wxWebRequest::State_Failed);
     }
     else if ( CheckServerStatus() )
         SetState(wxWebRequest::State_Completed);
@@ -291,11 +296,6 @@ void wxWebRequestCURL::DestroyHeaderList()
     }
 }
 
-wxWebResponse* wxWebRequestCURL::GetResponse() const
-{
-    return m_response.get();
-}
-
 wxFileOffset wxWebRequestCURL::GetBytesSent() const
 {
     return m_bytesSent;
@@ -310,8 +310,9 @@ wxFileOffset wxWebRequestCURL::GetBytesExpectedToSend() const
 // wxWebAuthChallengeCURL
 //
 
-wxWebAuthChallengeCURL::wxWebAuthChallengeCURL(Source source, wxWebRequestCURL& request) :
-    wxWebAuthChallenge(source),
+wxWebAuthChallengeCURL::wxWebAuthChallengeCURL(wxWebAuthChallenge::Source source,
+                                               wxWebRequestCURL& request) :
+    wxWebAuthChallengeImpl(source),
     m_request(request)
 {
 }
@@ -325,7 +326,7 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxString& user, const wxString
 {
     wxString authStr = wxString::Format("%s:%s", user, password);
     curl_easy_setopt(m_request.GetHandle(),
-        (GetSource() == Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
+        (GetSource() == wxWebAuthChallenge::Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
         static_cast<const char*>(authStr.mb_str()));
     m_request.StartRequest();
 }
@@ -373,7 +374,11 @@ wxWebSessionCURL::~wxWebSessionCURL()
         curl_global_cleanup();
 }
 
-wxWebRequest* wxWebSessionCURL::CreateRequest(const wxString& url, int id)
+wxWebRequestImplPtr
+wxWebSessionCURL::CreateRequest(wxWebSession& session,
+                                wxEvtHandler* handler,
+                                const wxString& url,
+                                int id)
 {
     // Allocate our handle on demand.
     if ( !m_handle )
@@ -382,11 +387,11 @@ wxWebRequest* wxWebSessionCURL::CreateRequest(const wxString& url, int id)
         if ( !m_handle )
         {
             wxLogDebug("curl_multi_init() failed");
-            return NULL;
+            return wxWebRequestImplPtr();
         }
     }
 
-    return new wxWebRequestCURL(*this, id, url);
+    return wxWebRequestImplPtr(new wxWebRequestCURL(session, *this, handler, url, id));
 }
 
 static CURLMcode wx_curl_multi_wait(CURLM *multi_handle, int timeout_ms,

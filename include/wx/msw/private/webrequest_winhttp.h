@@ -19,7 +19,7 @@
 class wxWebSessionWinHTTP;
 class wxWebRequestWinHTTP;
 
-class WXDLLIMPEXP_NET wxWebResponseWinHTTP : public wxWebResponse
+class wxWebResponseWinHTTP : public wxWebResponseImpl
 {
 public:
     wxWebResponseWinHTTP(wxWebRequestWinHTTP& request);
@@ -45,10 +45,11 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebResponseWinHTTP);
 };
 
-class WXDLLIMPEXP_NET wxWebAuthChallengeWinHTTP : public wxWebAuthChallenge
+class wxWebAuthChallengeWinHTTP : public wxWebAuthChallengeImpl
 {
 public:
-    wxWebAuthChallengeWinHTTP(Source source, wxWebRequestWinHTTP& request);
+    wxWebAuthChallengeWinHTTP(wxWebAuthChallenge::Source source,
+                              wxWebRequestWinHTTP& request);
 
     bool Init();
 
@@ -62,10 +63,14 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebAuthChallengeWinHTTP);
 };
 
-class WXDLLIMPEXP_NET wxWebRequestWinHTTP : public wxWebRequest
+class wxWebRequestWinHTTP : public wxWebRequestImpl
 {
 public:
-    wxWebRequestWinHTTP(int id, wxWebSessionWinHTTP& session, const wxString& url);
+    wxWebRequestWinHTTP(wxWebSession& session,
+                        wxWebSessionWinHTTP& sessionWinHTTP,
+                        wxEvtHandler* handler,
+                        const wxString& url,
+                        int id);
 
     ~wxWebRequestWinHTTP();
 
@@ -73,9 +78,11 @@ public:
 
     void Cancel() wxOVERRIDE;
 
-    wxWebResponse* GetResponse() const wxOVERRIDE;
+    wxWebResponseImplPtr GetResponse() const wxOVERRIDE
+        { return m_response; }
 
-    wxWebAuthChallenge* GetAuthChallenge() const wxOVERRIDE { return m_authChallenge.get(); }
+    wxWebAuthChallengeImplPtr GetAuthChallenge() const wxOVERRIDE
+        { return m_authChallenge; }
 
     wxFileOffset GetBytesSent() const wxOVERRIDE { return m_dataWritten; }
 
@@ -87,11 +94,12 @@ public:
     HINTERNET GetHandle() const { return m_request; }
 
 private:
+    wxWebSessionWinHTTP& m_sessionWinHTTP;
     wxString m_url;
     HINTERNET m_connect;
     HINTERNET m_request;
-    wxScopedPtr<wxWebResponseWinHTTP> m_response;
-    wxScopedPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
+    wxObjectDataPtr<wxWebResponseWinHTTP> m_response;
+    wxObjectDataPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten;
 
@@ -108,14 +116,18 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebRequestWinHTTP);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionWinHTTP : public wxWebSession
+class wxWebSessionWinHTTP : public wxWebSessionImpl
 {
 public:
     wxWebSessionWinHTTP();
 
     ~wxWebSessionWinHTTP();
 
-    wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) wxOVERRIDE;
+    wxWebRequestImplPtr
+    CreateRequest(wxWebSession& session,
+                  wxEvtHandler* handler,
+                  const wxString& url,
+                  int id) wxOVERRIDE;
 
     wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
 
@@ -130,10 +142,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebSessionWinHTTP);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionFactoryWinHTTP : public wxWebSessionFactory
+class wxWebSessionFactoryWinHTTP : public wxWebSessionFactory
 {
 public:
-    wxWebSession* Create() wxOVERRIDE
+    wxWebSessionImpl* Create() wxOVERRIDE
         { return new wxWebSessionWinHTTP(); }
 };
 

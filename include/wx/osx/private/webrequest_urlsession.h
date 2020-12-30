@@ -19,12 +19,13 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
 DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegate);
 
 class wxWebSessionURLSession;
+class wxWebRequestURLSession;
 class wxWebResponseURLSession;
 
-class WXDLLIMPEXP_NET wxWebResponseURLSession : public wxWebResponse
+class wxWebResponseURLSession : public wxWebResponseImpl
 {
 public:
-    wxWebResponseURLSession(wxWebRequest& request, WX_NSURLSessionTask task);
+    wxWebResponseURLSession(wxWebRequestURLSession& request, WX_NSURLSessionTask task);
 
     ~wxWebResponseURLSession();
 
@@ -44,12 +45,18 @@ public:
 
 private:
     WX_NSURLSessionTask m_task;
+
+    wxDECLARE_NO_COPY_CLASS(wxWebResponseURLSession);
 };
 
-class WXDLLIMPEXP_NET wxWebRequestURLSession : public wxWebRequest
+class wxWebRequestURLSession : public wxWebRequestImpl
 {
 public:
-    wxWebRequestURLSession(wxWebSessionURLSession& session, const wxString& url, int id);
+    wxWebRequestURLSession(wxWebSession& session,
+                           wxWebSessionURLSession& sessionImpl,
+                           wxEvtHandler* handler,
+                           const wxString& url,
+                           int winid);
 
     ~wxWebRequestURLSession();
 
@@ -57,10 +64,10 @@ public:
 
     void Cancel() wxOVERRIDE;
 
-    wxWebResponse* GetResponse() const wxOVERRIDE
-    { return m_response.get(); }
+    wxWebResponseImplPtr GetResponse() const wxOVERRIDE
+        { return m_response; }
 
-    wxWebAuthChallenge* GetAuthChallenge() const wxOVERRIDE;
+    wxWebAuthChallengeImplPtr GetAuthChallenge() const wxOVERRIDE;
 
     wxFileOffset GetBytesSent() const wxOVERRIDE;
 
@@ -72,22 +79,30 @@ public:
 
     void HandleCompletion();
 
+    wxWebResponseURLSession* GetResponseImplPtr() const
+        { return m_response.get(); }
+
 private:
+    wxWebSessionURLSession& m_sessionImpl;
     wxString m_url;
     WX_NSURLSessionTask m_task;
-    wxScopedPtr<wxWebResponseURLSession> m_response;
+    wxObjectDataPtr<wxWebResponseURLSession> m_response;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestURLSession);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionURLSession : public wxWebSession
+class wxWebSessionURLSession : public wxWebSessionImpl
 {
 public:
     wxWebSessionURLSession();
 
     ~wxWebSessionURLSession();
 
-    wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) wxOVERRIDE;
+    wxWebRequestImplPtr
+    CreateRequest(wxWebSession& session,
+                  wxEvtHandler* handler,
+                  const wxString& url,
+                  int winid = wxID_ANY) wxOVERRIDE;
 
     wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
 
@@ -102,10 +117,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);
 };
 
-class WXDLLIMPEXP_NET wxWebSessionFactoryURLSession : public wxWebSessionFactory
+class wxWebSessionFactoryURLSession : public wxWebSessionFactory
 {
 public:
-    wxWebSession* Create() wxOVERRIDE
+    wxWebSessionImpl* Create() wxOVERRIDE
     { return new wxWebSessionURLSession(); }
 };
 

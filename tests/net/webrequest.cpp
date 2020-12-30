@@ -33,7 +33,7 @@
 // disable running the test entirely.
 static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://httpbin.org";
 
-class RequestFixture
+class RequestFixture : public wxEvtHandler
 {
 public:
     RequestFixture()
@@ -57,9 +57,9 @@ public:
 
     void CreateAbs(const wxString& url)
     {
-        request.reset(wxWebSession::GetDefault().CreateRequest(url));
-        request->Bind(wxEVT_WEBREQUEST_STATE, &RequestFixture::OnRequestState, this);
-        request->Bind(wxEVT_WEBREQUEST_DATA, &RequestFixture::OnData, this);
+        request = wxWebSession::GetDefault().CreateRequest(this, url);
+        Bind(wxEVT_WEBREQUEST_STATE, &RequestFixture::OnRequestState, this);
+        Bind(wxEVT_WEBREQUEST_DATA, &RequestFixture::OnData, this);
     }
 
     void OnRequestState(wxWebRequestEvent& evt)
@@ -68,7 +68,7 @@ public:
         {
         case wxWebRequest::State_Unauthorized:
         case wxWebRequest::State_Completed:
-            if ( request->GetStorage() == wxWebRequest::Storage_File )
+            if ( request.GetStorage() == wxWebRequest::Storage_File )
             {
                 wxFileName fn(evt.GetResponseFileName());
                 REQUIRE( fn.GetSize() == expectedFileSize );
@@ -94,17 +94,17 @@ public:
     void Run(wxWebRequest::State requiredState = wxWebRequest::State_Completed,
         int requiredStatus = 200)
     {
-        REQUIRE( request->GetState() == wxWebRequest::State_Idle );
-        request->Start();
+        REQUIRE( request.GetState() == wxWebRequest::State_Idle );
+        request.Start();
         loop.Run();
-        REQUIRE( request->GetState() == requiredState );
+        REQUIRE( request.GetState() == requiredState );
         if (requiredStatus)
-            REQUIRE( request->GetResponse()->GetStatus() == requiredStatus );
+            REQUIRE( request.GetResponse().GetStatus() == requiredStatus );
     }
 
     wxString baseURL;
     wxEventLoop loop;
-    wxObjectDataPtr<wxWebRequest> request;
+    wxWebRequest request;
     wxInt64 expectedFileSize;
     wxInt64 dataSize;
 };
@@ -119,9 +119,9 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
     {
         Create("/bytes/65536");
         Run();
-        REQUIRE( request->GetResponse()->GetContentLength() == 65536 );
-        REQUIRE( request->GetBytesExpectedToReceive() == 65536 );
-        REQUIRE( request->GetBytesReceived() == 65536 );
+        REQUIRE( request.GetResponse().GetContentLength() == 65536 );
+        REQUIRE( request.GetBytesExpectedToReceive() == 65536 );
+        REQUIRE( request.GetBytesReceived() == 65536 );
     }
 
     SECTION("GET 404 error")
@@ -139,7 +139,7 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
     SECTION("POST form data")
     {
         Create("/post");
-        request->SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
+        request.SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
         Run();
     }
 
@@ -147,25 +147,25 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
     {
         Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
         Run();
-        REQUIRE( request->GetResponse()->AsString() == "The quick brown fox jumps over the lazy dog" );
+        REQUIRE( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
     }
 
     SECTION("GET 99KB to file")
     {
         expectedFileSize = 99 * 1024;
         Create(wxString::Format("/bytes/%lld", expectedFileSize));
-        request->SetStorage(wxWebRequest::Storage_File);
+        request.SetStorage(wxWebRequest::Storage_File);
         Run();
-        REQUIRE( request->GetBytesReceived() == expectedFileSize );
+        REQUIRE( request.GetBytesReceived() == expectedFileSize );
     }
 
     SECTION("Process 99KB data")
     {
         int processingSize = 99 * 1024;
         Create(wxString::Format("/bytes/%d", processingSize));
-        request->SetStorage(wxWebRequest::Storage_None);
+        request.SetStorage(wxWebRequest::Storage_None);
         Run();
-        REQUIRE( request->GetBytesReceived() == processingSize );
+        REQUIRE( request.GetBytesReceived() == processingSize );
         REQUIRE( dataSize == processingSize );
     }
 
@@ -175,8 +175,8 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
         wxSharedPtr<wxInputStream> is(new wxFileInputStream("horse.png"));
         REQUIRE( is->IsOk() );
 
-        request->SetData(is, "image/png");
-        request->SetMethod("PUT");
+        request.SetData(is, "image/png");
+        request.SetMethod("PUT");
         Run();
     }
 
@@ -184,24 +184,26 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
     {
         Create("/digest-auth/auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
-        REQUIRE( request->GetAuthChallenge() != NULL );
-        request->GetAuthChallenge()->SetCredentials("wxtest", "wxwidgets");
+        REQUIRE( request.GetAuthChallenge().IsOk() );
+        request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
         loop.Run();
-        REQUIRE( request->GetResponse()->GetStatus() == 200 );
-        REQUIRE( request->GetState() == wxWebRequest::State_Completed );
+        REQUIRE( request.GetResponse().GetStatus() == 200 );
+        REQUIRE( request.GetState() == wxWebRequest::State_Completed );
     }
 
     SECTION("Server auth DIGEST")
     {
         Create("/digest-auth/auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
-        REQUIRE( request->GetAuthChallenge() != NULL );
-        request->GetAuthChallenge()->SetCredentials("wxtest", "wxwidgets");
+        REQUIRE( request.GetAuthChallenge().IsOk() );
+        request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
         loop.Run();
-        REQUIRE( request->GetResponse()->GetStatus() == 200 );
-        REQUIRE( request->GetState() == wxWebRequest::State_Completed );
+        REQUIRE( request.GetResponse().GetStatus() == 200 );
+        REQUIRE( request.GetState() == wxWebRequest::State_Completed );
     }
 }
+
+WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
 
 namespace wxPrivate
 {

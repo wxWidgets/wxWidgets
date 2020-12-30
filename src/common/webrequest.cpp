@@ -54,27 +54,34 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSes
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
 
+static const wxStringCharType* wxNO_IMPL_MSG
+    = wxS("can't be used with an invalid/uninitialized object");
+
+#define wxCHECK_IMPL(rc) wxCHECK_MSG( m_impl, (rc), wxNO_IMPL_MSG )
+#define wxCHECK_IMPL_VOID() wxCHECK_RET( m_impl, wxNO_IMPL_MSG )
+
 //
-// wxWebRequest
+// wxWebRequestImpl
 //
-wxWebRequest::wxWebRequest(wxWebSession& session, int id)
-    : m_storage(Storage_Memory),
-      m_headers(session.m_headers),
+wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session, wxEvtHandler* handler, int id)
+    : m_storage(wxWebRequest::Storage_Memory),
+      m_headers(session.GetImpl()->GetHeaders()),
       m_dataSize(0),
       m_session(session),
+      m_handler(handler),
       m_id(id),
-      m_state(State_Idle),
+      m_state(wxWebRequest::State_Idle),
       m_ignoreServerErrorStatus(false),
       m_bytesReceived(0)
 {
 }
 
-bool wxWebRequest::CheckServerStatus()
+bool wxWebRequestImpl::CheckServerStatus()
 {
-    const wxWebResponse* resp = GetResponse();
+    const wxWebResponseImplPtr& resp = GetResponse();
     if ( resp && resp->GetStatus() >= 400 && !m_ignoreServerErrorStatus )
     {
-        SetState(State_Failed, wxString::Format(_("Error: %s (%d)"),
+        SetState(wxWebRequest::State_Failed, wxString::Format(_("Error: %s (%d)"),
             resp->GetStatusText(), resp->GetStatus()));
         return false;
     }
@@ -82,18 +89,18 @@ bool wxWebRequest::CheckServerStatus()
         return true;
 }
 
-bool wxWebRequest::IsActiveState(State state)
+bool wxWebRequestImpl::IsActiveState(wxWebRequest::State state)
 {
-    return (state == State_Active || state == State_Unauthorized);
+    return (state == wxWebRequest::State_Active || state == wxWebRequest::State_Unauthorized);
 }
 
-void wxWebRequest::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
+void wxWebRequestImpl::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
 {
     m_dataText = text.mb_str(conv);
     SetData(wxSharedPtr<wxInputStream>(new wxMemoryInputStream(m_dataText, m_dataText.length())), contentType);
 }
 
-bool wxWebRequest::SetData(const wxSharedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize)
+bool wxWebRequestImpl::SetData(const wxSharedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize)
 {
     if ( !dataStream->IsOk() )
         return false;
@@ -121,12 +128,12 @@ bool wxWebRequest::SetData(const wxSharedPtr<wxInputStream>& dataStream, const w
     return true;
 }
 
-wxFileOffset wxWebRequest::GetBytesReceived() const
+wxFileOffset wxWebRequestImpl::GetBytesReceived() const
 {
     return m_bytesReceived;
 }
 
-wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
+wxFileOffset wxWebRequestImpl::GetBytesExpectedToReceive() const
 {
     if ( GetResponse() )
         return GetResponse()->GetContentLength();
@@ -134,7 +141,34 @@ wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
         return -1;
 }
 
-void wxWebRequest::SetState(State state, const wxString & failMsg)
+namespace
+{
+
+// Functor used with CallAfter() below.
+//
+// TODO-C++11: Replace with a lambda.
+struct StateEventProcessor
+{
+    StateEventProcessor(wxWebRequestImpl& request,
+                        wxWebRequest::State state,
+                        const wxString& failMsg)
+        : m_request(request), m_state(state), m_failMsg(failMsg)
+    {
+    }
+
+    void operator()()
+    {
+        m_request.ProcessStateEvent(m_state, m_failMsg);
+    }
+
+    wxWebRequestImpl& m_request;
+    const wxWebRequest::State m_state;
+    const wxString m_failMsg;
+};
+
+} // anonymous namespace
+
+void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & failMsg)
 {
     // Add a reference while the request is active
     if ( IsActiveState(state) && !IsActiveState(m_state) )
@@ -143,10 +177,10 @@ void wxWebRequest::SetState(State state, const wxString & failMsg)
     m_state = state;
 
     // Trigger the event in the main thread
-    CallAfter(&wxWebRequest::ProcessStateEvent, state, failMsg);
+    m_handler->CallAfter(StateEventProcessor(*this, state, failMsg));
 }
 
-void wxWebRequest::ReportDataReceived(size_t sizeReceived)
+void wxWebRequestImpl::ReportDataReceived(size_t sizeReceived)
 {
     m_bytesReceived += sizeReceived;
 }
@@ -231,7 +265,7 @@ SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters)
 
 } // namespace wxPrivate
 
-void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
+void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxString& failMsg)
 {
     if ( !IsActiveState(state) && GetResponse() )
         GetResponse()->Finalize();
@@ -239,17 +273,17 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
     wxString responseFileName;
 
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
-        GetResponse(), failMsg);
-    if ( state == State_Completed && m_storage == Storage_File )
+        wxWebResponse(GetResponse()), failMsg);
+    if ( state == wxWebRequest::State_Completed && m_storage == wxWebRequest::Storage_File )
     {
         responseFileName = GetResponse()->GetFileName();
         evt.SetResponseFileName(responseFileName);
     }
 
-    ProcessEvent(evt);
+    m_handler->ProcessEvent(evt);
 
     // Remove temporary file if it still exists
-    if ( state == State_Completed && m_storage == Storage_File &&
+    if ( state == wxWebRequest::State_Completed && m_storage == wxWebRequest::Storage_File &&
         wxFileExists(responseFileName) )
         wxRemoveFile(responseFileName);
 
@@ -259,21 +293,224 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 }
 
 //
-// wxWebResponse
+// wxWebRequest
 //
-wxWebResponse::wxWebResponse(wxWebRequest& request) :
+
+wxWebRequest::wxWebRequest()
+{
+}
+
+wxWebRequest::wxWebRequest(const wxWebRequestImplPtr& impl)
+    : m_impl(impl)
+{
+}
+
+wxWebRequest::wxWebRequest(const wxWebRequest& other)
+    : m_impl(other.m_impl)
+{
+}
+
+wxWebRequest& wxWebRequest::operator=(const wxWebRequest& other)
+{
+    m_impl = other.m_impl;
+    return *this;
+}
+
+wxWebRequest::~wxWebRequest()
+{
+}
+
+void wxWebRequest::SetHeader(const wxString& name, const wxString& value)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetHeader(name, value);
+}
+
+void wxWebRequest::SetMethod(const wxString& method)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetMethod(method);
+}
+
+void wxWebRequest::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetData(text, contentType, conv);
+}
+
+bool
+wxWebRequest::SetData(const wxSharedPtr<wxInputStream>& dataStream,
+                      const wxString& contentType,
+                      wxFileOffset dataSize)
+{
+    wxCHECK_IMPL( false );
+
+    return m_impl->SetData(dataStream, contentType, dataSize);
+}
+
+void wxWebRequest::SetIgnoreServerErrorStatus(bool ignore)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetIgnoreServerErrorStatus(ignore);
+}
+
+void wxWebRequest::SetStorage(Storage storage)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetStorage(storage);
+}
+
+wxWebRequest::Storage wxWebRequest::GetStorage() const
+{
+    wxCHECK_IMPL( Storage_None );
+
+    return m_impl->GetStorage();
+}
+
+void wxWebRequest::Start()
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->Start();
+}
+
+void wxWebRequest::Cancel()
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->Cancel();
+}
+
+wxWebResponse wxWebRequest::GetResponse() const
+{
+    wxCHECK_IMPL( wxWebResponse() );
+
+    return wxWebResponse(m_impl->GetResponse());
+}
+
+wxWebAuthChallenge wxWebRequest::GetAuthChallenge() const
+{
+    wxCHECK_IMPL( wxWebAuthChallenge() );
+
+    return wxWebAuthChallenge(m_impl->GetAuthChallenge());
+}
+
+int wxWebRequest::GetId() const
+{
+    wxCHECK_IMPL( wxID_ANY );
+
+    return m_impl->GetId();
+}
+
+wxWebSession& wxWebRequest::GetSession() const
+{
+    wxCHECK_IMPL( wxWebSession::GetDefault() );
+
+    return m_impl->GetSession();
+}
+
+wxWebRequest::State wxWebRequest::GetState() const
+{
+    wxCHECK_IMPL( State_Failed );
+
+    return m_impl->GetState();
+}
+
+wxFileOffset wxWebRequest::GetBytesSent() const
+{
+    wxCHECK_IMPL( wxInvalidOffset );
+
+    return m_impl->GetBytesSent();
+}
+
+wxFileOffset wxWebRequest::GetBytesExpectedToSend() const
+{
+    wxCHECK_IMPL( wxInvalidOffset );
+
+    return m_impl->GetBytesExpectedToSend();
+}
+
+wxFileOffset wxWebRequest::GetBytesReceived() const
+{
+    wxCHECK_IMPL( wxInvalidOffset );
+
+    return m_impl->GetBytesReceived();
+}
+
+wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
+{
+    wxCHECK_IMPL( wxInvalidOffset );
+
+    return m_impl->GetBytesExpectedToReceive();
+}
+
+
+//
+// wxWebAuthChallenge
+//
+
+wxWebAuthChallenge::wxWebAuthChallenge()
+{
+}
+
+wxWebAuthChallenge::wxWebAuthChallenge(const wxWebAuthChallengeImplPtr& impl)
+    : m_impl(impl)
+{
+}
+
+wxWebAuthChallenge::wxWebAuthChallenge(const wxWebAuthChallenge& other)
+    : m_impl(other.m_impl)
+{
+}
+
+wxWebAuthChallenge& wxWebAuthChallenge::operator=(const wxWebAuthChallenge& other)
+{
+    m_impl = other.m_impl;
+    return *this;
+}
+
+wxWebAuthChallenge::~wxWebAuthChallenge()
+{
+}
+
+wxWebAuthChallenge::Source wxWebAuthChallenge::GetSource() const
+{
+    wxCHECK_IMPL( Source_Server );
+
+    return m_impl->GetSource();
+}
+
+void
+wxWebAuthChallenge::SetCredentials(const wxString& user,
+                                   const wxString& password)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetCredentials(user, password);
+}
+
+//
+// wxWebResponseImpl
+//
+
+wxWebResponseImpl::wxWebResponseImpl(wxWebRequestImpl& request) :
     m_request(request),
     m_readSize(8 * 1024)
 {
 }
 
-wxWebResponse::~wxWebResponse()
+wxWebResponseImpl::~wxWebResponseImpl()
 {
     if ( wxFileExists(m_file.GetName()) )
         wxRemoveFile(m_file.GetName());
 }
 
-void wxWebResponse::Init()
+void wxWebResponseImpl::Init()
 {
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
     {
@@ -296,12 +533,12 @@ void wxWebResponse::Init()
     }
 }
 
-wxString wxWebResponse::GetMimeType() const
+wxString wxWebResponseImpl::GetMimeType() const
 {
     return GetHeader("Mime-Type");
 }
 
-wxInputStream * wxWebResponse::GetStream() const
+wxInputStream * wxWebResponseImpl::GetStream() const
 {
     if ( !m_stream.get() )
     {
@@ -325,7 +562,7 @@ wxInputStream * wxWebResponse::GetStream() const
     return m_stream.get();
 }
 
-wxString wxWebResponse::GetSuggestedFileName() const
+wxString wxWebResponseImpl::GetSuggestedFileName() const
 {
     wxString suggestedFilename;
 
@@ -355,7 +592,7 @@ wxString wxWebResponse::GetSuggestedFileName() const
     return suggestedFilename;
 }
 
-wxString wxWebResponse::AsString() const
+wxString wxWebResponseImpl::AsString() const
 {
     if ( m_request.GetStorage() == wxWebRequest::Storage_Memory )
     {
@@ -367,12 +604,12 @@ wxString wxWebResponse::AsString() const
         return wxString();
 }
 
-void* wxWebResponse::GetDataBuffer(size_t sizeNeeded)
+void* wxWebResponseImpl::GetDataBuffer(size_t sizeNeeded)
 {
     return m_readBuffer.GetAppendBuf(sizeNeeded);
 }
 
-void wxWebResponse::ReportDataReceived(size_t sizeReceived)
+void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
 {
     m_readBuffer.UngetAppendBuf(sizeReceived);
     m_request.ReportDataReceived(sizeReceived);
@@ -385,26 +622,125 @@ void wxWebResponse::ReportDataReceived(size_t sizeReceived)
     {
         wxWebRequestEvent evt(wxEVT_WEBREQUEST_DATA, m_request.GetId(), wxWebRequest::State_Active);
         evt.SetDataBuffer(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
-        m_request.ProcessEvent(evt);
+        m_request.GetHandler()->ProcessEvent(evt);
     }
 
     if ( m_request.GetStorage() != wxWebRequest::Storage_Memory )
         m_readBuffer.Clear();
 }
 
-wxString wxWebResponse::GetFileName() const
+wxString wxWebResponseImpl::GetFileName() const
 {
     return m_file.GetName();
 }
 
-void wxWebResponse::Finalize()
+void wxWebResponseImpl::Finalize()
 {
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
         m_file.Close();
 }
 
 //
-// wxWebSession
+// wxWebResponse
+//
+
+wxWebResponse::wxWebResponse()
+{
+}
+
+wxWebResponse::wxWebResponse(const wxWebResponseImplPtr& impl)
+    : m_impl(impl)
+{
+}
+
+wxWebResponse::wxWebResponse(const wxWebResponse& other)
+    : m_impl(other.m_impl)
+{
+}
+
+wxWebResponse& wxWebResponse::operator=(const wxWebResponse& other)
+{
+    m_impl = other.m_impl;
+    return *this;
+}
+
+wxWebResponse::~wxWebResponse()
+{
+}
+
+wxInt64 wxWebResponse::GetContentLength() const
+{
+    wxCHECK_IMPL( -1 );
+
+    return m_impl->GetContentLength();
+}
+
+wxString wxWebResponse::GetURL() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetURL();
+}
+
+wxString wxWebResponse::GetHeader(const wxString& name) const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetHeader(name);
+}
+
+wxString wxWebResponse::GetMimeType() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetMimeType();
+}
+
+int wxWebResponse::GetStatus() const
+{
+    wxCHECK_IMPL( -1 );
+
+    return m_impl->GetStatus();
+}
+
+wxString wxWebResponse::GetStatusText() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetStatusText();
+}
+
+wxInputStream* wxWebResponse::GetStream() const
+{
+    wxCHECK_IMPL( NULL );
+
+    return m_impl->GetStream();
+}
+
+wxString wxWebResponse::GetSuggestedFileName() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetSuggestedFileName();
+}
+
+wxString wxWebResponse::AsString() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->AsString();
+}
+
+wxString wxWebResponse::GetFileName() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetFileName();
+}
+
+
+//
+// wxWebSessionImpl
 //
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebSessionFactory>, wxStringWebSessionFactoryMap);
@@ -412,12 +748,12 @@ WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebSessionFactory>, wxStringWebSessionF
 namespace
 {
 
-wxScopedPtr<wxWebSession> gs_defaultSession;
+wxWebSession gs_defaultSession;
 wxStringWebSessionFactoryMap gs_factoryMap;
 
 } // anonymous namespace
 
-wxWebSession::wxWebSession()
+wxWebSessionImpl::wxWebSessionImpl()
 {
     // Initialize the user-Agent header with a reasonable default
     SetHeader("User-Agent", wxString::Format("%s/1 wxWidgets/%d.%d.%d",
@@ -425,7 +761,7 @@ wxWebSession::wxWebSession()
         wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER));
 }
 
-wxString wxWebSession::GetTempDir() const
+wxString wxWebSessionImpl::GetTempDir() const
 {
     if ( m_tempDir.empty() )
         return wxStandardPaths::Get().GetTempDir();
@@ -433,26 +769,56 @@ wxString wxWebSession::GetTempDir() const
         return m_tempDir;
 }
 
-// static
-wxWebSession& wxWebSession::GetDefault()
-{
-    if ( gs_defaultSession == NULL )
-        gs_defaultSession.reset(wxWebSession::New());
+//
+// wxWebSession
+//
 
-    return *gs_defaultSession;
+wxWebSession::wxWebSession()
+{
+}
+
+wxWebSession::wxWebSession(const wxWebSessionImplPtr& impl)
+    : m_impl(impl)
+{
+}
+
+wxWebSession::wxWebSession(const wxWebSession& other)
+    : m_impl(other.m_impl)
+{
+}
+
+wxWebSession& wxWebSession::operator=(const wxWebSession& other)
+{
+    m_impl = other.m_impl;
+    return *this;
+}
+
+wxWebSession::~wxWebSession()
+{
 }
 
 // static
-wxWebSession* wxWebSession::New(const wxString& backend)
+wxWebSession& wxWebSession::GetDefault()
+{
+    if ( !gs_defaultSession.IsOpened() )
+        gs_defaultSession = wxWebSession::New();
+
+    return gs_defaultSession;
+}
+
+// static
+wxWebSession wxWebSession::New(const wxString& backend)
 {
     if ( gs_factoryMap.empty() )
         InitFactoryMap();
 
     wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);
+
+    wxWebSessionImplPtr impl;
     if ( factory != gs_factoryMap.end() )
-        return factory->second->Create();
-    else
-        return NULL;
+        impl = factory->second->Create();
+
+    return wxWebSession(impl);
 }
 
 // static
@@ -490,6 +856,52 @@ bool wxWebSession::IsBackendAvailable(const wxString& backend)
     return factory != gs_factoryMap.end();
 }
 
+wxWebRequest
+wxWebSession::CreateRequest(wxEvtHandler* handler, const wxString& url, int id)
+{
+    wxCHECK_IMPL( wxWebRequest() );
+
+    return wxWebRequest(m_impl->CreateRequest(*this, handler, url, id));
+}
+
+wxVersionInfo wxWebSession::GetLibraryVersionInfo()
+{
+    wxCHECK_IMPL( wxVersionInfo() );
+
+    return m_impl->GetLibraryVersionInfo();
+}
+
+void wxWebSession::SetHeader(const wxString& name, const wxString& value)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetHeader(name, value);
+}
+
+void wxWebSession::SetTempDir(const wxString& dir)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetTempDir(dir);
+}
+
+wxString wxWebSession::GetTempDir() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetTempDir();
+}
+
+bool wxWebSession::IsOpened() const
+{
+    return m_impl.get() != NULL;
+}
+
+void wxWebSession::Close()
+{
+    m_impl.reset(NULL);
+}
+
 // ----------------------------------------------------------------------------
 // Module ensuring all global/singleton objects are destroyed on shutdown.
 // ----------------------------------------------------------------------------
@@ -509,7 +921,7 @@ public:
     virtual void OnExit() wxOVERRIDE
     {
         gs_factoryMap.clear();
-        gs_defaultSession.reset();
+        gs_defaultSession.Close();
     }
 
 private:

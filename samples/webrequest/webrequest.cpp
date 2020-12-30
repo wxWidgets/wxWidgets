@@ -169,8 +169,6 @@ public:
 
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
-
-        m_currentRequest = NULL;
     }
 
     void OnStartButton(wxCommandEvent& WXUNUSED(evt))
@@ -178,12 +176,11 @@ public:
         GetStatusBar()->SetStatusText("Started request...");
 
         // Create request for the specified URL from the default session
-        wxObjectDataPtr<wxWebRequest> request(wxWebSession::GetDefault().CreateRequest(
-            m_urlTextCtrl->GetValue()));
-        m_currentRequest = request.get();
+        m_currentRequest = wxWebSession::GetDefault().CreateRequest(this,
+            m_urlTextCtrl->GetValue());
 
         // Bind event for state change
-        request->Bind(wxEVT_WEBREQUEST_STATE, &WebRequestFrame::OnWebRequestState, this);
+        Bind(wxEVT_WEBREQUEST_STATE, &WebRequestFrame::OnWebRequestState, this);
 
         // Prepare request based on selected action
         switch (m_notebook->GetSelection())
@@ -199,12 +196,12 @@ public:
                 // Set postdata if checked
                 if ( m_postCheckBox->IsChecked() )
                 {
-                    request->SetData(m_postRequestTextCtrl->GetValue(),
+                    m_currentRequest.SetData(m_postRequestTextCtrl->GetValue(),
                         m_postContentTypeTextCtrl->GetValue());
                 }
                 break;
             case Page_Download:
-                request->SetStorage(wxWebRequest::Storage_File);
+                m_currentRequest.SetStorage(wxWebRequest::Storage_File);
                 m_downloadGauge->SetValue(0);
                 m_downloadGauge->Pulse();
                 m_downloadStaticText->SetLabel("");
@@ -212,8 +209,8 @@ public:
                 GetStatusBar()->SetStatusText("");
                 break;
             case Page_Advanced:
-                request->SetStorage(wxWebRequest::Storage_None);
-                request->Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
+                m_currentRequest.SetStorage(wxWebRequest::Storage_None);
+                Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
 
                 GetStatusBar()->SetStatusText("Counting...");
                 m_advCount = 0;
@@ -224,13 +221,13 @@ public:
         m_startButton->Disable();
 
         // Start the request (events will be sent on success or failure)
-        request->Start();
+        m_currentRequest.Start();
     }
 
     void OnCancelButton(wxCommandEvent& WXUNUSED(evt))
     {
-        if ( m_currentRequest )
-            m_currentRequest->Cancel();
+        if ( m_currentRequest.IsOk() )
+            m_currentRequest.Cancel();
     }
 
     void OnWebRequestState(wxWebRequestEvent& evt)
@@ -240,7 +237,7 @@ public:
 
         if ( evt.GetState() != wxWebRequest::State_Active )
         {
-            m_currentRequest = NULL;
+            m_currentRequest = wxWebRequest();
             m_downloadProgressTimer.Stop();
         }
 
@@ -251,18 +248,18 @@ public:
                 {
                     case Page_Image:
                     {
-                        wxImage img(*evt.GetResponse()->GetStream());
+                        wxImage img(*evt.GetResponse().GetStream());
                         m_imageStaticBitmap->SetBitmap(img);
                         m_notebook->GetPage(Page_Image)->Layout();
-                        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
+                        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse().GetContentLength()));
                         break;
                     }
                     case Page_Text:
-                        m_textResponseTextCtrl->SetValue(evt.GetResponse()->AsString());
+                        m_textResponseTextCtrl->SetValue(evt.GetResponse().AsString());
                         GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
-                            evt.GetResponse()->GetContentLength(),
-                            evt.GetResponse()->GetStatus(),
-                            evt.GetResponse()->GetStatusText()));
+                            evt.GetResponse().GetContentLength(),
+                            evt.GetResponse().GetStatus(),
+                            evt.GetResponse().GetStatusText()));
                         break;
                     case Page_Download:
                     {
@@ -273,7 +270,7 @@ public:
 
                         // Ask the user where to save the file
                         wxFileDialog fileDlg(this, "Save download", "",
-                            evt.GetResponse()->GetSuggestedFileName(), "*.*",
+                            evt.GetResponse().GetSuggestedFileName(), "*.*",
                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
                         if ( fileDlg.ShowModal() == wxID_OK )
                         {
@@ -334,14 +331,14 @@ public:
 
     void OnProgressTimer(wxTimerEvent& WXUNUSED(evt))
     {
-        if ( !m_currentRequest || m_currentRequest->GetBytesExpectedToReceive() <= 0 )
+        if ( !m_currentRequest.IsOk() || m_currentRequest.GetBytesExpectedToReceive() <= 0 )
             return;
 
-        m_downloadGauge->SetValue((m_currentRequest->GetBytesReceived() * 100) /
-            m_currentRequest->GetBytesExpectedToReceive());
+        m_downloadGauge->SetValue((m_currentRequest.GetBytesReceived() * 100) /
+            m_currentRequest.GetBytesExpectedToReceive());
 
         m_downloadStaticText->SetLabelText(wxString::Format("%lld/%lld",
-            m_currentRequest->GetBytesReceived(), m_currentRequest->GetBytesExpectedToReceive()));
+            m_currentRequest.GetBytesReceived(), m_currentRequest.GetBytesExpectedToReceive()));
     }
 
     void OnPostCheckBox(wxCommandEvent& WXUNUSED(evt))
@@ -382,7 +379,7 @@ private:
     wxButton* m_startButton;
     wxButton* m_cancelButton;
     wxStaticBitmap* m_imageStaticBitmap;
-    wxWebRequest* m_currentRequest;
+    wxWebRequest m_currentRequest;
 
     wxCheckBox* m_postCheckBox;
     wxTextCtrl* m_postContentTypeTextCtrl;

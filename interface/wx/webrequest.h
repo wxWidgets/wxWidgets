@@ -23,21 +23,28 @@
     communicate the request status. The response data may be stored in
     memory, to a file or processed directly, see SetStorage() for details.
 
-    Example usage:
+    Example usage in an event handler function of some window (i.e. @c this in
+    the example below is a wxWindow pointer):
 
     @code
         // Create the request object
-        wxObjectDataPtr<wxWebRequest> request(
-            wxWebSession::GetDefault().CreateRequest("https://www.wxwidgets.org/downloads/logos/blocks.png"));
+        wxWebRequest request = wxWebSession::GetDefault().CreateRequest(
+            this,
+            "https://www.wxwidgets.org/downloads/logos/blocks.png"
+        );
+
+        if ( !request.IsOk() ) {
+            // This is not expected, but handle the error somehow.
+        }
 
         // Bind state event
-        request->Bind(wxEVT_WEBREQUEST_STATE, [](wxWebRequestEvent& evt) {
+        Bind(wxEVT_WEBREQUEST_STATE, [](wxWebRequestEvent& evt) {
             switch (evt.GetState())
             {
                 // Request completed
                 case wxWebRequest::State_Completed:
                 {
-                    wxImage logoImage(*evt->GetResponse()->GetStream());
+                    wxImage logoImage(*evt.GetResponse().GetStream());
                     if (logoImage.IsOK())
                         wxLogInfo("Image loaded");
                     break;
@@ -51,7 +58,7 @@
         });
 
         // Start the request
-        request->Start();
+        request.Start();
     @endcode
 
     @section descriptions Implementation Descriptions
@@ -110,7 +117,7 @@
 
     @see wxWebResponse, wxWebSession
 */
-class wxWebRequest: public wxEvtHandler, public wxRefCounter
+class wxWebRequest
 {
 public:
     /**
@@ -159,6 +166,23 @@ public:
     };
 
     /**
+        Default constructor creates an invalid object.
+
+        Initialize it by assigning wxWebSession::CreateRequest() to it before
+        using it.
+
+        @see IsOk()
+    */
+    wxWebRequest();
+
+    /**
+        Check if the object is valid.
+
+        No other methods can be used if this function returns @false.
+    */
+    bool IsOk() const;
+
+    /**
         Send the request to the server asynchronously.
 
         Events will be triggered on success or failure.
@@ -176,18 +200,16 @@ public:
         Returns a response object after a successful request.
 
         Before sending a request or after a failed request this will return
-        @c NULL.
-
-        Note that this pointer remains owned by wxWebRequest object and must
-        not be freed.
+        an invalid response object, i.e. such that wxWebResponse::IsOk()
+        returns @NULL.
     */
-    wxWebResponse* GetResponse() const;
+    wxWebResponse GetResponse() const;
 
     /**
         Returns the current authentication challenge object while the request
         is in @c State_Unauthorized.
     */
-    wxWebAuthChallenge* GetAuthChallenge() const;
+    wxWebAuthChallenge GetAuthChallenge() const;
 
     /**
         Returns the id specified while creating this request.
@@ -378,6 +400,23 @@ class wxWebResponse
 {
 public:
     /**
+        Default constructor creates an invalid object.
+
+        Initialize it by assigning wxWebRequest::GetResponse() to it before
+        using it.
+
+        @see IsOk()
+    */
+    wxWebResponse();
+
+    /**
+        Check if the object is valid.
+
+        No other methods can be used if this function returns @false.
+    */
+    bool IsOk() const;
+
+    /**
         Returns the final URL.
         This URL might be different than the request URL when a redirection
         occurred.
@@ -428,7 +467,10 @@ public:
 /**
     @class wxWebSession
 
-    This class handles session-wide parameters and data used by wxWebRequest
+    Session allows creating wxWebRequest objects used for the actual HTTP
+    requests.
+
+    It also handles session-wide parameters and data used by wxWebRequest
     instances.
 
     Usually the default session available via wxWebSession::GetDefault()
@@ -451,14 +493,27 @@ class wxWebSession
 {
 public:
     /**
-        Create a new request for the specified URL
+        Create a new request for the specified URL.
 
+        The specified objects will be notified via wxWebRequestEvent objects
+        when the request state changes, e.g. when it is completed. It must be
+        specified and its lifetime must be long enough to last until the
+        request is completed. In particular, if the handler is a top-level
+        window, the request must be cancelled before the window can be closed
+        and destroyed.
+
+        @param handler
+            The handler object to notify, must be non-@NULL.
         @param url
             The URL of the HTTP resource for this request
         @param id
             Optional id sent with events
+        @return
+            The new request object, use wxWebRequest::IsOk() to check if its
+            creation has succeeded.
     */
-    wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY);
+    wxWebRequest
+    CreateRequest(wxEvtHandler* handler, const wxString& url, int id = wxID_ANY);
 
     /**
         Retrieve the version information about the implementation library used
@@ -499,13 +554,15 @@ public:
     /**
         Creates a new wxWebSession object.
 
+        Use IsOpened() to check if the session creation succeeded.
+
         @param backend
             The backend web session implementation to use.
 
         @return
             The created wxWebSession
     */
-    static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
+    static wxWebSession New(const wxString& backend = wxWebSessionBackendDefault);
 
     /**
         Allows to check if the specified backend is available at runtime.
@@ -514,6 +571,20 @@ public:
         before 10.9 does not have the @c NSURLSession implementation available.
     */
     static bool IsBackendAvailable(const wxString& backend);
+
+    /**
+        Return true if the session was successfully opened and can be used.
+    */
+    bool IsOpened() const;
+
+    /**
+        Close the session.
+
+        This frees any resources associated with the session and puts it in an
+        invalid state. Another session object can be assigned to it later to
+        allow using this object again.
+     */
+    void Close();
 };
 
 /**
@@ -531,20 +602,16 @@ public:
 class wxWebRequestEvent : public wxEvent
 {
 public:
-    wxWebRequestEvent();
-    wxWebRequestEvent(wxEventType type, int id, wxWebRequest::State state,
-        wxWebResponse* response = NULL, const wxString& errorDesc = "");
-
     /**
         Return the current state of the request
     */
     wxWebRequest::State GetState() const;
 
     /**
-        The response with the state set to @c State_Complete or @c NULL for other
-        events.
+        The response with the state set to @c State_Complete or empty response
+        object for other events.
     */
-    wxWebResponse* GetResponse() const;
+    const wxWebResponse& GetResponse() const;
 
     /**
         A textual error description for a client side error
@@ -562,8 +629,6 @@ public:
     */
     const wxString& GetResponseFileName() const;
 
-    void SetResponseFileName(const wxString& filename);
-
     /**
         Only for @c wxEVT_WEBREQUEST_DATA events. The buffer is only valid
         inside the event handler.
@@ -573,9 +638,6 @@ public:
 
     size_t GetDataSize() const;
     ///@}
-
-    void SetDataBuffer(const void* buffer, size_t size);
-
 };
 
 wxEventType wxEVT_WEBREQUEST_STATE;
