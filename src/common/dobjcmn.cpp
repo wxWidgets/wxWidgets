@@ -20,6 +20,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/mstream.h"
 #include "wx/textbuf.h"
 
 // ----------------------------------------------------------------------------
@@ -618,6 +619,59 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
     memcpy( m_data, buf, m_size );
 
     return true;
+}
+
+// ----------------------------------------------------------------------------
+// wxImageDataObject
+// ----------------------------------------------------------------------------
+
+#if defined(__WXMSW__)
+#define wxIMAGE_FORMAT_DATA wxDF_PNG
+#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_PNG
+#define wxIMAGE_FORMAT_NAME "PNG"
+#elif defined(__WXGTK__)
+#define wxIMAGE_FORMAT_DATA wxDF_BITMAP
+#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_PNG
+#define wxIMAGE_FORMAT_NAME "PNG"
+#elif defined(__WXOSX__)
+#define wxIMAGE_FORMAT_DATA wxDF_BITMAP
+#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_TIFF
+#define wxIMAGE_FORMAT_NAME "TIFF"
+#else
+#define wxIMAGE_FORMAT_DATA wxDF_BITMAP
+#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_PNG
+#define wxIMAGE_FORMAT_NAME "PNG"
+#endif
+
+wxImageDataObject::wxImageDataObject(const wxImage& image)
+    : wxCustomDataObject(wxIMAGE_FORMAT_DATA)
+{
+    if ( image.IsOk() )
+    {
+        SetImage(image);
+    }
+}
+
+void wxImageDataObject::SetImage(const wxImage& image)
+{
+    wxCHECK_RET(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != NULL,
+        wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
+
+    wxMemoryOutputStream mem;
+    image.SaveFile(mem, wxIMAGE_FORMAT_BITMAP_TYPE);
+
+    SetData(mem.GetLength(), mem.GetOutputStreamBuffer()->GetBufferStart());
+}
+
+wxImage wxImageDataObject::GetImage() const
+{
+    wxCHECK_MSG(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != NULL, wxNullImage,
+        wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
+
+    wxMemoryInputStream mem(GetData(), GetSize());
+    wxImage image;
+    image.LoadFile(mem, wxIMAGE_FORMAT_BITMAP_TYPE);
+    return image;
 }
 
 // ============================================================================

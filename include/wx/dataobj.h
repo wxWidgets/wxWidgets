@@ -36,7 +36,9 @@
    wxTextDataObject    |     wxBitmapDataObject
                        |
                wxCustomDataObject
-
+                       |
+                       |
+               wxImageDataObject
 */
 // ============================================================================
 
@@ -543,6 +545,22 @@ private:
     void  *m_data;
 
     wxDECLARE_NO_COPY_CLASS(wxCustomDataObject);
+};
+
+// ----------------------------------------------------------------------------
+// wxImageDataObject - data object for wxImage
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxImageDataObject : public wxCustomDataObject
+{
+public:
+    explicit wxImageDataObject(const wxImage& image = wxNullImage);
+
+    void SetImage(const wxImage& image);
+    wxImage GetImage() const;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxImageDataObject);
 };
 
 // ----------------------------------------------------------------------------
