@@ -454,9 +454,6 @@
 						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswu\wx\msw&quot;"/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\webrequest_winhttp.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Common Headers"

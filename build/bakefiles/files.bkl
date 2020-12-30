@@ -757,9 +757,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/urlmsw.cpp
     src/msw/webrequest_winhttp.cpp
 </set>
-<set var="NET_WIN32_HDR" hints="files">
-    wx/msw/webrequest_winhttp.h
-</set>
 
 
 <set var="NET_CMN_SRC" hints="files">
@@ -3522,9 +3519,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC) $(NET_OSX_SRC)</if>
-    </set>
-    <set var="NET_PLATFORM_HDR" hints="files">
-        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR)</if>
     </set>
 
     <set var="NET_SRC" hints="files">

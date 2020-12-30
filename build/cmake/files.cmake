@@ -663,18 +663,10 @@ set(NET_OSX_SRC
     src/osx/webrequest_urlsession.mm
 )
 
-set(NET_OSX_HDR
-    wx/osx/webrequest_urlsession.h
-)
-
 set(NET_WIN32_SRC
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
     src/msw/webrequest_winhttp.cpp
-)
-
-set(NET_WIN32_HDR
-    wx/msw/webrequest_winhttp.h
 )
 
 set(NET_CMN_SRC

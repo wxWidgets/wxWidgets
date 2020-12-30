@@ -1108,10 +1108,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\webrequest_winhttp.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Common Headers"
