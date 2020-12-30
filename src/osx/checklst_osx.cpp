@@ -83,7 +83,13 @@ bool wxCheckListBox::IsChecked(unsigned int n) const
     wxCHECK_MSG( IsValid(n), false,
                  wxT("invalid index in wxCheckListBox::IsChecked") );
 
-    return m_checks[n] != 0;
+    // It's possible that m_checks has not yet been expanded to match the
+    // wxCheckListBox::GetCount() value (for example while in the midst of
+    // appending a new item) so double-check that we don't read beyond the end
+    // of the array.
+    if (n < m_checks.size())
+        return m_checks[n] != 0;
+    return false;
 }
 
 void wxCheckListBox::Check(unsigned int n, bool check)
