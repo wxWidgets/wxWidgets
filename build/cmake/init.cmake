@@ -317,6 +317,7 @@ if (wxUSE_WEBREQUEST)
         endif()
     endif()
 
+    include(CheckCSourceCompiles)
     if(wxUSE_WEBREQUEST_WINHTTP)
         check_c_source_compiles("#include <windows.h>
                                  #include <winhttp.h>
