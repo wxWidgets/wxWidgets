@@ -2790,6 +2790,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxDataViewTreeNode *node = NULL;
             wxDataViewItem dataitem;
             const int line_height = GetLineHeight(item);
+            bool hasValue = true;
 
             if (!IsVirtualList())
             {
@@ -2802,12 +2803,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 dataitem = node->GetItem();
 
-                // Skip al columns  that do not have values
                 if ( !model->HasValue(dataitem, col->GetModelColumn()) )
-                {
-                    cell_rect.y += line_height;
-                    continue;
-                }
+                    hasValue = false;
+
             }
             else
             {
@@ -2824,7 +2822,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             cell->SetState(state);
-            cell->PrepareForItem(model, dataitem, col->GetModelColumn());
+            if (hasValue)
+                cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
             if ( !selected )
@@ -2905,7 +2904,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             //       make its own renderer and thus we cannot be sure of that.
             wxDCClipper clip(dc, item_rect);
 
-            cell->WXCallRender(item_rect, &dc, state);
+            if (hasValue)
+                cell->WXCallRender(item_rect, &dc, state);
 
             cell_rect.y += line_height;
         }
