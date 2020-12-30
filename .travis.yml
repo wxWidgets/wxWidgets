@@ -40,8 +40,8 @@ jobs:
           name: wxGTK ANSI Ubuntu 20.04
         - dist: focal
           compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--disable-compat30 --disable-sys-libs" wxSKIP_SAMPLES=1 wxUSE_ASAN=1
-          name: wxGTK Ubuntu 20.04 with ASAN
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--disable-compat30 --disable-sys-libs" wxSKIP_SAMPLES=1
+          name: wxGTK Ubuntu 20.04
         - os: osx
           osx_image: xcode7.3
           compiler: clang

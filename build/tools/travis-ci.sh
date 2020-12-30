@@ -21,11 +21,6 @@ case $wxTOOLSET in
         fi
         cmake --version
 
-        if [ "$wxUSE_ASAN" = 1 ]; then
-            echo "ASAN currently isn't supported in CMake builds"
-            exit 1
-        fi
-
         echo 'travis_fold:start:configure'
         echo 'Configuring...'
         mkdir build_cmake
@@ -72,17 +67,7 @@ case $wxTOOLSET in
             wxCONFIGURE_OPTIONS="--with-gtk=$wxGTK_VERSION $wxCONFIGURE_OPTIONS"
         fi
 
-        if [ "$wxUSE_ASAN" = 1 ]; then
-            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
-
-            wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
-            wxASAN_CXXFLAGS=$wxASAN_CFLAGS
-            wxASAN_LDFLAGS="-fsanitize=address"
-
-            ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
-        else
-            ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
-        fi
+        ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
 
         if [ -n "$rc" ]; then
             echo '*** Configuring failed, contents of config.log follows: ***'
