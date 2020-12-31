@@ -34,6 +34,8 @@
              A list of filenames.}
     @itemdef{wxDF_HTML,
              An HTML string. This is currently only valid on Mac and MSW.}
+    @itemdef{wxDF_PNG,
+             A PNG file. This is valid only on MSW.}
     @endDefList
 
     As mentioned above, these standard formats may be passed to any function

@@ -73,6 +73,7 @@
 
 static bool gs_wxClipboardIsOpen = false;
 static int gs_htmlcfid = 0;
+static int gs_pngcfid = 0;
 
 bool wxOpenClipboard()
 {
@@ -136,6 +137,8 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
     wxDataFormat::NativeFormat cf = dataFormat.GetFormatId();
     if (cf == wxDF_HTML)
         cf = gs_htmlcfid;
+    else if ( cf == wxDF_PNG )
+        cf = gs_pngcfid;
 
     if ( ::IsClipboardFormatAvailable(cf) )
     {
@@ -162,6 +165,15 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 
 
 #if !wxUSE_OLE_CLIPBOARD
+namespace
+{
+struct wxRawImageData
+{
+    size_t m_size;
+    void* m_data;
+};
+}
+
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
                         int width, int height)
@@ -414,6 +426,16 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 delete [] buf;
                 break;
             }
+
+            case wxDF_PNG:
+            {
+                const wxRawImageData* imgData = reinterpret_cast<const wxRawImageData*>(data);
+
+                GlobalPtr hImage(imgData->m_size, GMEM_MOVEABLE | GMEM_DDESHARE);
+                memcpy(GlobalPtrLock(hImage).Get(), imgData->m_data, imgData->m_size);
+                handle = ::SetClipboardData(gs_pngcfid, hImage);
+                break;
+            }
     }
 
     if ( handle == 0 )
@@ -515,9 +537,11 @@ bool wxClipboard::Flush()
 
 bool wxClipboard::Open()
 {
-    // Get clipboard id for HTML format...
+    // Get clipboard id for HTML and PNG formats...
     if(!gs_htmlcfid)
         gs_htmlcfid = RegisterClipboardFormat(wxT("HTML Format"));
+    if ( !gs_pngcfid )
+        gs_pngcfid = ::RegisterClipboardFormat(wxT("PNG"));
 
     // OLE opens clipboard for us
     m_isOpened = true;
@@ -633,6 +657,16 @@ bool wxClipboard::AddData( wxDataObject *data )
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
             bRet = wxSetClipboardData(format, &bitmap);
+        }
+        break;
+
+        case wxDF_PNG:
+        {
+            wxCustomDataObject* imageDataObject = reinterpret_cast<wxCustomDataObject*>(data);
+            wxRawImageData imgData;
+            imgData.m_size = imageDataObject->GetDataSize();
+            imgData.m_data = imageDataObject->GetData();
+            bRet = wxSetClipboardData(format, &imgData);
         }
         break;
 
@@ -768,6 +802,8 @@ bool wxClipboard::GetData( wxDataObject& data )
 
         if (cf == wxDF_HTML)
             cf = gs_htmlcfid;
+        else if ( cf == wxDF_PNG )
+            cf = gs_pngcfid;
         // if the format is not available, try the next one
         // this test includes implicit / sythetic formats
         if ( !::IsClipboardFormatAvailable(cf) )
