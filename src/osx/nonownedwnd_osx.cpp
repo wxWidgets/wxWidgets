@@ -152,8 +152,6 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 
-    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ));
-
     if ( parent )
         parent->AddChild(this);
 
