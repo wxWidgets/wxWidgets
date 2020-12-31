@@ -112,6 +112,12 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     return statusBar;
 }
 
+void wxFrame::SetStatusBar(wxStatusBar *statbar)
+{
+    wxFrameBase::SetStatusBar(statbar);
+    m_nowpeer->SetBottomBorderThickness(statbar ? WX_MAC_STATUSBAR_HEIGHT : 0);
+}
+
 void wxFrame::PositionStatusBar()
 {
     if (m_frameStatusBar && m_frameStatusBar->IsShown() )

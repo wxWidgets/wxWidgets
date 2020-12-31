@@ -1288,6 +1288,12 @@ void wxNonOwnedWindowCocoaImpl::SetRepresentedFilename(const wxString& filename)
     [m_macWindow setRepresentedFilename:wxCFStringRef(filename).AsNSString()];
 }
 
+void wxNonOwnedWindowCocoaImpl::SetBottomBorderThickness(int thickness)
+{
+    [m_macWindow setAutorecalculatesContentBorderThickness:(thickness ? NO : YES) forEdge:NSMinYEdge];
+    [m_macWindow setContentBorderThickness:thickness forEdge:NSMinYEdge];
+}
+
 void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()
 {
     if ( [m_macWindow level] != m_macWindowLevel )

@@ -71,6 +71,8 @@ public:
                                            long style = wxSTB_DEFAULT_STYLE,
                                            wxWindowID id = 0,
                                            const wxString& name = wxASCII_STR(wxStatusLineNameStr)) wxOVERRIDE;
+
+    virtual void SetStatusBar(wxStatusBar *statbar) wxOVERRIDE;
 #endif // wxUSE_STATUSBAR
 
     void PositionBars();
