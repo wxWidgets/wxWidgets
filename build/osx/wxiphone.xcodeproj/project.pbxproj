@@ -3731,7 +3731,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					"wxUSE_BASE=1",
@@ -3751,7 +3750,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					"wxUSE_BASE=1",
