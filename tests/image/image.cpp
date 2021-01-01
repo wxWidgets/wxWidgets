@@ -26,6 +26,8 @@
 #include "wx/mstream.h"
 #include "wx/zstream.h"
 #include "wx/wfstream.h"
+#include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 
 #include "testimage.h"
 
@@ -1940,6 +1942,32 @@ TEST_CASE("wxImage::RGBtoHSV", "[image][rgb][hsv]")
             CHECK(rgbRoundtrip.blue == rgbValue.blue);
         }
     }
+}
+
+TEST_CASE("wxImage::Clipboard", "[image][clipboard]")
+{
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+    wxInitAllImageHandlers();
+
+    wxImage imgOriginal;
+    REQUIRE(imgOriginal.LoadFile("horse.png") == true);
+
+    wxImageDataObject* dobj1 = new wxImageDataObject(imgOriginal);
+    {
+        wxClipboardLocker lockClip;
+        REQUIRE(wxTheClipboard->SetData(dobj1) == true);
+    }
+
+    wxImageDataObject dobj2;
+    {
+        wxClipboardLocker lockClip;
+        REQUIRE(wxTheClipboard->GetData(dobj2) == true);
+    }
+    wxImage imgRetrieved = dobj2.GetImage();
+    REQUIRE(imgRetrieved.IsOk());
+
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG), imgRetrieved, 0, &imgOriginal);
+#endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ
 }
 
 /*
