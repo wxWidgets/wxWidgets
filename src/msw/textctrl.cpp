@@ -690,7 +690,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
 
-#if wxUSE_RICHEDIT && defined(wxHAS_TOM_H)
+#if wxUSE_RICHEDIT && wxUSE_OLE && defined(wxHAS_TOM_H)
     // For RichEdit >= 4, SetFont(), called above from MSWCreateControl(), uses
     // EM_SETCHARFORMAT which affects the undo buffer, meaning that CanUndo()
     // for a newly created control returns true, which is unexpected. To avoid
