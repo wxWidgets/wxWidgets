@@ -261,11 +261,19 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // We don't check the value against the range here (but in IsValid())
-    // as doing so might prevent us from entering any (or some) value at all
-    // if the lower bound value is greater than the typed-in number.
+    LongestValueType value;
+    const wxString newval = GetValueAfterInsertingChar(val, pos, ch);
 
-    return true;
+    if ( DoGetMin() > 0 && FromString(newval, &value) && value < DoGetMax() )
+    {
+        // Allow values less than m_min if we are still typing in the control.
+        // Values greater than m_max are (always) rejected immediately.
+        // See ticket: https://trac.wxwidgets.org/ticket/12968.
+        return true;
+    }
+
+    const wxString& errormsg = IsValid(newval);
+    return errormsg.empty();
 }
 
 wxString
@@ -347,11 +355,19 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // We don't check the value against the range here (but in IsValid())
-    // as doing so might prevent us from entering any (or some) value at all
-    // if the lower bound value is greater than the typed-in number.
+    LongestValueType value;
+    const wxString newval = GetValueAfterInsertingChar(val, pos, ch);
 
-    return true;
+    if ( DoGetMin() > 0 && FromString(newval, &value) && value < DoGetMax() )
+    {
+        // Allow values less than m_min if we are still typing in the control.
+        // Values greater than m_max are (always) rejected immediately.
+        // See ticket: https://trac.wxwidgets.org/ticket/12968.
+        return true;
+    }
+
+    const wxString& errormsg = IsValid(newval);
+    return errormsg.empty();
 }
 
 wxString
