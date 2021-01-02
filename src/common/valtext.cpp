@@ -224,7 +224,7 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
 
 // Called when the value in the window must be validated.
 // This function can pop up an error message.
-bool wxTextValidator::Validate(wxWindow *parent)
+bool wxTextValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     // If window is disabled, simply return
     if ( !m_validatorWindow->IsEnabled() )

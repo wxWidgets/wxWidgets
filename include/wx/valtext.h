@@ -141,7 +141,7 @@ public:
     // --------------------
 
     // returns the error message if the contents of 'str' are invalid
-    virtual wxString IsValid(const wxString& str) const;
+    virtual wxString IsValid(const wxString& str) const wxOVERRIDE;
 
 protected:
 
