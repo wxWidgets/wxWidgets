@@ -92,12 +92,12 @@ ALIASES += endFlagTable="</div>\n"
 # creates appearance section: this should be used for all main GUI controls
 # that look different in different ports. genericAppearance can be used for the
 # controls that always look the same.
-ALIASES += appearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table><tr><td>\endhtmlonly\n\image html appear-\1-msw.png \"wxMSW Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-gtk.png \"wxGTK Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-mac.png \"wxOSX Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
-ALIASES += genericAppearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table class='appearance'><tr><td>\endhtmlonly\n\image html generic/\1.png \"Generic Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += appearance{1}="\htmlonly<div class='appearance'><span class='appearance'>Appearance:</span><table><tr><td>\endhtmlonly\n\image html appear-\1-msw.png \"wxMSW Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-gtk.png \"wxGTK Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-mac.png \"wxOSX Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += genericAppearance{1}="\htmlonly<div class='appearance'><span class='appearance'>Appearance:</span><table class='appearance'><tr><td>\endhtmlonly\n\image html generic/\1.png \"Generic Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # these compact versions are only used on the screenshots page
-ALIASES += appearance_brief{2}="\htmlonly<div class="appearance_brief"><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-msw.png\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-gtk.png\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-mac.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
-ALIASES += genericAppearance_brief{2}="\htmlonly<div class="appearance_brief"><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html generic/\2.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += appearance_brief{2}="\htmlonly<div class='appearance_brief'><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-msw.png\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-gtk.png\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-mac.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += genericAppearance_brief{2}="\htmlonly<div class='appearance_brief'><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html generic/\2.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # aliases for the creation of "named member groups"
 # USAGE: the first argument must not contain spaces and be a unique identifier
