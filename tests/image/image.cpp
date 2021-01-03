@@ -1472,12 +1472,12 @@ void ImageTestCase::CreateBitmapFromCursor()
 #ifdef __WXMSW__
     wxImage image( 32, 32, toucan );
 #else
-    wxImage image( "../samples/image/toucan_resized.png" );
+    wxImage image( "../../samples/image/toucan.png" );
 #endif
     wxCursor cursor( image );
     wxBitmap bitmap( cursor );
     if( bitmap.IsOk() )
-        CHECK_THAT( image,  RGBSameAs( bitmap.ConvertToImage() ) );
+        CHECK_THAT( image,  RGBSimilarTo( bitmap.ConvertToImage(), 2 ) );
 #endif
 }
 
