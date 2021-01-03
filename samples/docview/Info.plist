@@ -51,7 +51,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleGetInfoString</key>
-	<string>$(PRODUCT_NAME) version 3.1.5, (c) 2005-2020 wxWidgets</string>
+	<string>$(PRODUCT_NAME) version 3.1.5, (c) 2005-2021 wxWidgets</string>
 	<key>CFBundleIconFile</key>
 	<string>doc</string>
 	<key>CFBundleIdentifier</key>
@@ -66,7 +66,7 @@
 		<string>it</string>
 	</array>
 	<key>CFBundleLongVersionString</key>
-	<string>3.1.5, (c) 2005-2020 wxWidgets</string>
+	<string>3.1.5, (c) 2005-2021 wxWidgets</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -82,6 +82,6 @@
 	<key>LSRequiresCarbon</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2005-2020 wxWidgets</string>
+	<string>Copyright 2005-2021 wxWidgets</string>
 </dict>
 </plist>

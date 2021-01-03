@@ -1429,7 +1429,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1995-2020 wxWidgets team"));
+                         wxS("Copyright (c) 1995-2021 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)
