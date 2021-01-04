@@ -190,7 +190,13 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
         case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
         {
             LPWINHTTP_ASYNC_RESULT asyncResult = reinterpret_cast<LPWINHTTP_ASYNC_RESULT>(lpvStatusInformation);
-            SetState(wxWebRequest::State_Failed, wxWinHTTPErrorToString(asyncResult->dwError));
+            // "Failing" with "cancelled" error is not actually an error if
+            // we're expecting it, i.e. if our Cancel() had been called.
+            if ( asyncResult->dwError == ERROR_WINHTTP_OPERATION_CANCELLED &&
+                    GetState() == wxWebRequest::State_Cancelled )
+                SetState(wxWebRequest::State_Cancelled);
+            else
+                SetState(wxWebRequest::State_Failed, wxWinHTTPErrorToString(asyncResult->dwError));
             break;
         }
     }
