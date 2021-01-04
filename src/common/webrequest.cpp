@@ -160,11 +160,25 @@ struct StateEventProcessor
                         const wxString& failMsg)
         : m_request(request), m_state(state), m_failMsg(failMsg)
     {
+        // Ensure that the request object stays alive until this event is
+        // processed.
+        m_request.IncRef();
+    }
+
+    StateEventProcessor(const StateEventProcessor& other)
+        : m_request(other.m_request), m_state(other.m_state), m_failMsg(other.m_failMsg)
+    {
+        m_request.IncRef();
     }
 
     void operator()()
     {
         m_request.ProcessStateEvent(m_state, m_failMsg);
+    }
+
+    ~StateEventProcessor()
+    {
+        m_request.DecRef();
     }
 
     wxWebRequestImpl& m_request;
@@ -176,10 +190,6 @@ struct StateEventProcessor
 
 void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & failMsg)
 {
-    // Add a reference while the request is active
-    if ( IsActiveState(state) && !IsActiveState(m_state) )
-        IncRef();
-
     m_state = state;
 
     // Trigger the event in the main thread
@@ -292,10 +302,6 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
     if ( state == wxWebRequest::State_Completed && m_storage == wxWebRequest::Storage_File &&
         wxFileExists(responseFileName) )
         wxRemoveFile(responseFileName);
-
-    // Remove reference after the request is no longer active
-    if ( !IsActiveState(state) )
-        DecRef();
 }
 
 //
