@@ -752,7 +752,7 @@ wxString wxWebResponse::GetFileName() const
 // wxWebSessionImpl
 //
 
-WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebSessionFactory>, wxStringWebSessionFactoryMap);
+WX_DECLARE_STRING_HASH_MAP(wxWebSessionFactory*, wxStringWebSessionFactoryMap);
 
 namespace
 {
@@ -833,8 +833,12 @@ wxWebSession wxWebSession::New(const wxString& backend)
 // static
 void
 wxWebSession::RegisterFactory(const wxString& backend,
-                              const wxSharedPtr<wxWebSessionFactory>& factory)
+                              wxWebSessionFactory* factory)
 {
+    // Note that we don't have to check here that there is no registered
+    // backend with the same name yet because we're only called from
+    // InitFactoryMap() below. If this function becomes public, we'd need to
+    // free the previous pointer stored for this backend first here.
     gs_factoryMap[backend] = factory;
 }
 
@@ -842,16 +846,13 @@ wxWebSession::RegisterFactory(const wxString& backend,
 void wxWebSession::InitFactoryMap()
 {
 #if wxUSE_WEBREQUEST_WINHTTP
-    RegisterFactory(wxWebSessionBackendWinHTTP,
-                    wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryWinHTTP()));
+    RegisterFactory(wxWebSessionBackendWinHTTP, new wxWebSessionFactoryWinHTTP());
 #endif
 #if wxUSE_WEBREQUEST_URLSESSION
-    RegisterFactory(wxWebSessionBackendURLSession,
-                    wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryURLSession()));
+    RegisterFactory(wxWebSessionBackendURLSession, new wxWebSessionFactoryURLSession());
 #endif
 #if wxUSE_WEBREQUEST_CURL
-    RegisterFactory(wxWebSessionBackendCURL,
-                    wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryCURL()));
+    RegisterFactory(wxWebSessionBackendCURL, new wxWebSessionFactoryCURL());
 #endif
 }
 
@@ -929,6 +930,13 @@ public:
 
     virtual void OnExit() wxOVERRIDE
     {
+        for ( wxStringWebSessionFactoryMap::iterator it = gs_factoryMap.begin();
+              it != gs_factoryMap.end();
+              ++it )
+        {
+            delete it->second;
+        }
+
         gs_factoryMap.clear();
         gs_defaultSession.Close();
     }

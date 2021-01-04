@@ -16,7 +16,6 @@
 
 #include "wx/event.h"
 #include "wx/object.h"
-#include "wx/sharedptr.h"
 #include "wx/stream.h"
 #include "wx/versioninfo.h"
 
@@ -216,7 +215,7 @@ public:
 
 private:
     static void RegisterFactory(const wxString& backend,
-                                const wxSharedPtr<wxWebSessionFactory>& factory);
+                                wxWebSessionFactory* factory);
 
     static void InitFactoryMap();
 
