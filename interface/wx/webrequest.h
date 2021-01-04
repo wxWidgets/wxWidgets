@@ -269,10 +269,23 @@ public:
         @c GET and the given @a dataStream will be posted as the body of
         this request.
 
+        Example of use:
+        @code
+        std::unique_ptr<wxInputStream> stream(new wxFileInputStream("some_file.dat"));
+        if ( !stream->IsOk() ) {
+            // Handle error (due to e.g. file not found) here.
+            ...
+            return;
+        }
+        request.SetData(stream.release(), "application/octet-stream")
+        @endcode
+
         @param dataStream
             The data in this stream will be posted as the request body. The
-            stream may be empty, which will result in sending 0 bytes of data,
-            but if not empty, should be valid.
+            pointer may be @NULL, which will result in sending 0 bytes of data,
+            but if not empty, should be valid, i.e. wxInputStream::IsOk() must
+            return @true. This object takes ownership of the passed in pointer
+            and will delete it, i.e. the pointer must be heap-allocated.
         @param contentType
             The value of HTTP "Content-Type" header, e.g.
             "application/octet-stream".
@@ -284,7 +297,7 @@ public:
             dataSize is not specified and the attempt to determine stream size
             failed; @true in all the other cases.
     */
-    bool SetData(const wxSharedPtr<wxInputStream>& dataStream,
+    bool SetData(wxInputStream* dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     /**

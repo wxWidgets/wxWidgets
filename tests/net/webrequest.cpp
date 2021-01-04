@@ -178,10 +178,10 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
     SECTION("PUT file data")
     {
         Create("/put");
-        wxSharedPtr<wxInputStream> is(new wxFileInputStream("horse.png"));
+        wxScopedPtr<wxInputStream> is(new wxFileInputStream("horse.png"));
         REQUIRE( is->IsOk() );
 
-        request.SetData(is, "image/png");
+        request.SetData(is.release(), "image/png");
         request.SetMethod("PUT");
         Run();
     }

@@ -97,17 +97,23 @@ bool wxWebRequestImpl::IsActiveState(wxWebRequest::State state)
 void wxWebRequestImpl::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
 {
     m_dataText = text.mb_str(conv);
-    SetData(wxSharedPtr<wxInputStream>(new wxMemoryInputStream(m_dataText, m_dataText.length())), contentType);
+
+    wxScopedPtr<wxInputStream>
+        stream(new wxMemoryInputStream(m_dataText, m_dataText.length()));
+    SetData(stream, contentType);
 }
 
-bool wxWebRequestImpl::SetData(const wxSharedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize)
+bool
+wxWebRequestImpl::SetData(wxScopedPtr<wxInputStream>& dataStream,
+                          const wxString& contentType,
+                          wxFileOffset dataSize)
 {
-    if ( !dataStream->IsOk() )
-        return false;
+    m_dataStream.reset(dataStream.release());
 
-    m_dataStream = dataStream;
-    if ( m_dataStream.get() )
+    if ( m_dataStream )
     {
+        wxCHECK_MSG( m_dataStream->IsOk(), false, "can't use invalid stream" );
+
         if ( dataSize == wxInvalidOffset )
         {
             // Determine data size
@@ -342,13 +348,16 @@ void wxWebRequest::SetData(const wxString& text, const wxString& contentType, co
 }
 
 bool
-wxWebRequest::SetData(const wxSharedPtr<wxInputStream>& dataStream,
+wxWebRequest::SetData(wxInputStream* dataStream,
                       const wxString& contentType,
                       wxFileOffset dataSize)
 {
+    // Ensure that the stream is destroyed even we return below.
+    wxScopedPtr<wxInputStream> streamPtr(dataStream);
+
     wxCHECK_IMPL( false );
 
-    return m_impl->SetData(dataStream, contentType, dataSize);
+    return m_impl->SetData(streamPtr, contentType, dataSize);
 }
 
 void wxWebRequest::SetIgnoreServerErrorStatus(bool ignore)

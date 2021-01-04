@@ -56,7 +56,7 @@ public:
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    bool SetData(const wxSharedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+    bool SetData(wxScopedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
 
@@ -99,7 +99,7 @@ protected:
     wxWebRequest::Storage m_storage;
     wxWebRequestHeaderMap m_headers;
     wxFileOffset m_dataSize;
-    wxSharedPtr<wxInputStream> m_dataStream;
+    wxScopedPtr<wxInputStream> m_dataStream;
 
     wxWebRequestImpl(wxWebSession& session, wxEvtHandler* handler, int id);
 
