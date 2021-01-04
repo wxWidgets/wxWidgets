@@ -51,9 +51,12 @@ public:
         mainSizer->Add(new wxStaticText(this, wxID_ANY, "Request URL:"),
             wxSizerFlags().Border());
         m_urlTextCtrl = new wxTextCtrl(this, wxID_ANY,
-            "https://www.wxwidgets.org/downloads/logos/blocks.png");
+            "https://www.wxwidgets.org/downloads/logos/blocks.png",
+            wxDefaultPosition, wxDefaultSize,
+            wxTE_PROCESS_ENTER);
         mainSizer->Add(m_urlTextCtrl,
             wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
+        m_urlTextCtrl->Bind(wxEVT_TEXT_ENTER, &WebRequestFrame::OnStartButton, this);
 
         m_notebook = new wxNotebook(this, wxID_ANY);
         m_notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &WebRequestFrame::OnNotebookPageChanged, this);
