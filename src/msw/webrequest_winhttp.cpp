@@ -196,7 +196,7 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     GetState() == wxWebRequest::State_Cancelled )
                 SetState(wxWebRequest::State_Cancelled);
             else
-                SetState(wxWebRequest::State_Failed, wxWinHTTPErrorToString(asyncResult->dwError));
+                SetFailed(asyncResult->dwError);
             break;
         }
     }
@@ -252,9 +252,9 @@ void wxWebRequestWinHTTP::CreateResponse()
         SetFailedWithLastError();
 }
 
-void wxWebRequestWinHTTP::SetFailedWithLastError()
+void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
 {
-    wxString failMessage = wxWinHTTPErrorToString(::GetLastError());
+    wxString failMessage = wxWinHTTPErrorToString(errorCode);
     SetState(wxWebRequest::State_Failed, failMessage);
 }
 

@@ -109,7 +109,11 @@ private:
 
     void CreateResponse();
 
-    void SetFailedWithLastError();
+    // Retrieve the error message corresponding to the given error and set the
+    // state to failed with this message as error string.
+    void SetFailed(DWORD errorCode);
+
+    void SetFailedWithLastError() { SetFailed(::GetLastError()); }
 
     friend class wxWebAuthChallengeWinHTTP;
 
