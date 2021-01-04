@@ -33,7 +33,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
     void OnToggleBell(wxCommandEvent& event);
-    void OnToggleInteractive(wxCommandEvent& event);
+    void OnValidationMode(wxCommandEvent& event);
 
 private:
     wxListBox *m_listbox;
@@ -168,7 +168,7 @@ public:
     int m_radiobox_choice;
 };
 
-class MyComboBoxValidator : public wxValidator
+class MyComboBoxValidator : public wxTextEntryValidator
 {
 public:
     MyComboBoxValidator(wxString* var) { m_var=var; }
@@ -182,6 +182,9 @@ public:
     // Called to transfer data from the window
     virtual bool TransferFromWindow() wxOVERRIDE;
 
+    // Override base class method
+    virtual wxString IsValid(const wxString& str) const wxOVERRIDE;
+
 protected:
     wxString* m_var;
 };
@@ -192,7 +195,10 @@ enum
 
     VALIDATE_TEST_DIALOG,
     VALIDATE_TOGGLE_BELL,
-    VALIDATE_TOGGLE_INTERACTIVE,
+
+    VALIDATE_MODE_DEFAULT,
+    VALIDATE_MODE_INTERACTIVE,
+    VALIDATE_MODE_ON_FOCUS_LOST,
 
     VALIDATE_TEXT,
     VALIDATE_TEXT2,

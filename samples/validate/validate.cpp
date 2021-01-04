@@ -70,18 +70,25 @@ MyData::MyData()
 // MyComboBoxValidator
 // ----------------------------------------------------------------------------
 
+wxString MyComboBoxValidator::IsValid(const wxString& str) const
+{
+    // we accept any string != g_combobox_choices[1|2] !
+    if ( str == g_combobox_choices[1] ||
+         str == g_combobox_choices[2] )
+        return wxString("Invalid combo box text!");
+
+    return wxString();
+}
+
 bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     wxASSERT(GetWindow()->IsKindOf(CLASSINFO(wxComboBox)));
 
     wxComboBox* cb = (wxComboBox*)GetWindow();
-    if (cb->GetValue() == g_combobox_choices[1] ||
-        cb->GetValue() == g_combobox_choices[2])
+    const wxString errmsg = IsValid(cb->GetValue());
+    if ( !errmsg.empty() )
     {
-        // we accept any string != g_combobox_choices[1|2] !
-
-        // N.B. SendErrorEvent() could be used here instead of wxLogError()
-        wxLogError("Invalid combo box text!");
+        SendErrorEvent(errmsg);
         return false;
     }
 
@@ -150,7 +157,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
-    EVT_MENU(VALIDATE_TOGGLE_INTERACTIVE, MyFrame::OnToggleInteractive)
+    EVT_MENU(VALIDATE_MODE_DEFAULT, MyFrame::OnValidationMode)
+    EVT_MENU(VALIDATE_MODE_INTERACTIVE, MyFrame::OnValidationMode)
+    EVT_MENU(VALIDATE_MODE_ON_FOCUS_LOST, MyFrame::OnValidationMode)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -167,7 +176,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     file_menu->Append(VALIDATE_TEST_DIALOG, "&Test dialog...\tCtrl-T", "Demonstrate validators");
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error");
-    file_menu->AppendCheckItem(VALIDATE_TOGGLE_INTERACTIVE, "&Interactive", "Validate interactively");
+
+    wxMenu* valmodeMenu = new wxMenu;
+
+    file_menu->Append(wxID_ANY, "Validation mode", valmodeMenu, "Change validation mode");
+
+    valmodeMenu->AppendRadioItem(VALIDATE_MODE_DEFAULT, "&Default", "Reset validate mode");
+    valmodeMenu->AppendRadioItem(VALIDATE_MODE_INTERACTIVE, "&Interactive", "Validate interactively");
+    valmodeMenu->AppendRadioItem(VALIDATE_MODE_ON_FOCUS_LOST, "On &focus lost", "Validate on focus lost");
+
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, "E&xit");
 
@@ -234,20 +251,22 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
     event.Skip();
 }
 
-void MyFrame::OnToggleInteractive(wxCommandEvent& event)
+void MyFrame::OnValidationMode(wxCommandEvent& event)
 {
-    if ( wxValidator::IsInteractive() )
+    switch ( event.GetId() )
     {
-        wxValidator::ValidateOnFocusLost();
-        wxLogMessage("Validate on focus lost.");
-    }
-    else
-    {
+    case VALIDATE_MODE_INTERACTIVE:
         wxValidator::ValidateInteractively();
-        wxLogMessage("Validate interactively.");
-    }
+        break;
 
-    event.Skip();
+    case VALIDATE_MODE_ON_FOCUS_LOST:
+        wxValidator::ValidateOnFocusLost();
+        break;
+
+    case VALIDATE_MODE_DEFAULT:
+    default:
+        wxValidator::ResetValidationMethod();
+    }
 }
 
 // ----------------------------------------------------------------------------
