@@ -45,6 +45,7 @@
     #include "wx/sizer.h"
     #include "wx/menu.h"
     #include "wx/button.h"
+    #include "wx/valtext.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_DRAG_AND_DROP
@@ -74,6 +75,7 @@
 #include "wx/display.h"
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
+#include "wx/scopeguard.h"
 #include "wx/private/window.h"
 
 #ifdef __WINDOWS__
@@ -2196,6 +2198,13 @@ bool wxWindowBase::TransferDataFromWindow()
 
 void wxWindowBase::InitDialog()
 {
+#if wxUSE_VALIDATORS
+    // We don't want the wxEVT_TEXT event to be generated while the dialog
+    // or panel is proccessing the wxInitDialogEvent event.
+    wxON_BLOCK_EXIT_SET(wxTextEntryValidator::ms_skipTextEvent, true);
+    wxTextEntryValidator::ms_skipTextEvent = false;
+#endif // wxUSE_VALIDATORS
+
     wxInitDialogEvent event(GetId());
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event);

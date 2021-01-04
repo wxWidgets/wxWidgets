@@ -54,6 +54,8 @@ static bool wxIsNumeric(const wxString& val)
 // ----------------------------------------------------------------------------
 // wxTextEntryValidator
 // ----------------------------------------------------------------------------
+/*static*/
+bool wxTextEntryValidator::ms_skipTextEvent = true;
 
 void wxTextEntryValidator::SetWindow(wxWindow *win)
 {
@@ -61,7 +63,7 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
-        Bind(wxEVT_TEXT, &wxTextValidator::OnText, this);
+        Bind(wxEVT_TEXT, &wxTextEntryValidator::OnText, this);
         Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPasteText, this);
         Bind(wxEVT_VALIDATE_ERROR, &wxTextEntryValidator::OnValidate, this);
 
@@ -74,7 +76,7 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
     else
     {
         wxFAIL_MSG(
-            "wxTextValidator can only be used with wxTextCtrl, wxComboBox "
+            "wxTextEntryValidator can only be used with wxTextCtrl, wxComboBox "
             "or wxComboCtrl"
         );
     }
@@ -118,7 +120,7 @@ void wxTextEntryValidator::OnText(wxCommandEvent& event)
         DoValidate(NULL, wxVALIDATOR_NO_POPUP);
     }
 
-    event.Skip();
+    event.Skip(ms_skipTextEvent);
 }
 
 void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
