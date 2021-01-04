@@ -165,7 +165,7 @@ public:
 
         CreateStatusBar();
 
-        GetStatusBar()->SetStatusText(wxWebSession::GetDefault().GetLibraryVersionInfo().ToString());
+        wxLogStatus(this, "%s", wxWebSession::GetDefault().GetLibraryVersionInfo().ToString());
 
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
@@ -173,7 +173,7 @@ public:
 
     void OnStartButton(wxCommandEvent& WXUNUSED(evt))
     {
-        GetStatusBar()->SetStatusText("Started request...");
+        wxLogStatus(this, "Started request...");
 
         // Create request for the specified URL from the default session
         m_currentRequest = wxWebSession::GetDefault().CreateRequest(this,
@@ -206,13 +206,13 @@ public:
                 m_downloadGauge->Pulse();
                 m_downloadStaticText->SetLabel("");
                 m_downloadProgressTimer.Start(500);
-                GetStatusBar()->SetStatusText("");
+                SetStatusText("");
                 break;
             case Page_Advanced:
                 m_currentRequest.SetStorage(wxWebRequest::Storage_None);
                 Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
 
-                GetStatusBar()->SetStatusText("Counting...");
+                wxLogStatus(this, "Counting...");
                 m_advCount = 0;
                 m_advCountStaticText->SetLabel("0");
                 break;
@@ -251,22 +251,22 @@ public:
                         wxImage img(*evt.GetResponse().GetStream());
                         m_imageStaticBitmap->SetBitmap(img);
                         m_notebook->GetPage(Page_Image)->Layout();
-                        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse().GetContentLength()));
+                        wxLogStatus(this, "Loaded %lld bytes image data", evt.GetResponse().GetContentLength());
                         break;
                     }
                     case Page_Text:
                         m_textResponseTextCtrl->SetValue(evt.GetResponse().AsString());
-                        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
+                        wxLogStatus(this, "Loaded %lld bytes text data (Status: %d %s)",
                             evt.GetResponse().GetContentLength(),
                             evt.GetResponse().GetStatus(),
-                            evt.GetResponse().GetStatusText()));
+                            evt.GetResponse().GetStatusText());
                         break;
                     case Page_Download:
                     {
                         m_downloadGauge->SetValue(100);
                         m_downloadStaticText->SetLabel("");
 
-                        GetStatusBar()->SetStatusText("Download completed");
+                        wxLogStatus(this, "Download completed");
 
                         // Ask the user where to save the file
                         wxFileDialog fileDlg(this, "Save download", "",
@@ -282,20 +282,20 @@ public:
                     }
                     case Page_Advanced:
                         UpdateAdvCount();
-                        GetStatusBar()->SetStatusText("");
+                        SetStatusText("");
                         break;
                 }
                 break;
 
             case wxWebRequest::State_Failed:
                 wxLogError("Web Request failed: %s", evt.GetErrorDescription());
-                GetStatusBar()->SetStatusText("");
+                SetStatusText("");
                 break;
 
             case wxWebRequest::State_Cancelled:
                 m_downloadGauge->SetValue(0);
                 m_downloadStaticText->SetLabel("");
-                GetStatusBar()->SetStatusText("Cancelled");
+                wxLogStatus(this, "Cancelled");
                 break;
 
             default:
