@@ -45,6 +45,8 @@ public:
         // set the frame icon
         SetIcon(wxICON(sample));
 
+        Bind(wxEVT_CLOSE_WINDOW, &WebRequestFrame::OnClose, this);
+
         // Prepare UI controls
         wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -172,6 +174,18 @@ public:
 
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
+    }
+
+    virtual ~WebRequestFrame()
+    {
+        // We have to block until the web request completes, but we need to
+        // process events while doing it.
+        Hide();
+
+        while ( m_currentRequest.IsOk() )
+        {
+            wxYield();
+        }
     }
 
     void OnStartButton(wxCommandEvent& WXUNUSED(evt))
@@ -374,6 +388,35 @@ public:
             break;
         }
         m_urlTextCtrl->SetValue(defaultURL);
+    }
+
+    void OnClose(wxCloseEvent& event)
+    {
+        if ( m_currentRequest.IsOk() )
+        {
+            if ( event.CanVeto() )
+            {
+                wxMessageDialog dialog
+                    (
+                        this,
+                        "A web request is in progress, "
+                        "closing the window will cancel it.",
+                        "Please confirm",
+                        wxYES_NO
+                    );
+                dialog.SetYesNoLabels("Cancel and close", "Don't close");
+
+                if ( dialog.ShowModal() != wxID_YES )
+                {
+                    event.Veto();
+                    return;
+                }
+            }
+
+            m_currentRequest.Cancel();
+        }
+
+        event.Skip();
     }
 
 private:
