@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 30 November 2017                                                    *
+# Date : 6 January 2021                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -280,7 +280,16 @@ test_datetimetest.obj : [.datetime]datetimetest.cpp
 	[.datetime]datetimetest.cpp
 
 test_evthandler.obj : [.events]evthandler.cpp 
+.ifdef ALPHA
+	pipe gsed\
+	-e "s/handler.Connect(wxEVT_THREAD, wxThreadEventHandler(MyHandler::OnOverloadedHandler));//"\
+	-e "s/handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnOverloadedHandler));//" \
+	< [.events]evthandler.cpp > [.events]evthandler.cpp_
+	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.events]evthandler.cpp_
+	delete [.events]evthandler.cpp_;*
+.else
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.events]evthandler.cpp
+.endif
 
 test_evtsource.obj : [.events]evtsource.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.events]evtsource.cpp
