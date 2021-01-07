@@ -3,7 +3,7 @@
 // Purpose:     wxNativeWindow implementation
 // Author:      Vadim Zeitlin
 // Created:     2008-03-05
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,17 +18,13 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
 #include "wx/nativewin.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
@@ -83,7 +79,8 @@ void wxNativeWindow::DoDisown()
 // TODO: we probably need equivalent code for other GDK platforms
 #ifdef GDK_WINDOWING_X11
 
-extern "C" GdkFilterReturn
+extern "C" {
+static GdkFilterReturn
 wxNativeContainerWindowFilter(GdkXEvent *gdkxevent,
                               GdkEvent *event,
                               gpointer data)
@@ -101,6 +98,7 @@ wxNativeContainerWindowFilter(GdkXEvent *gdkxevent,
 
     return GDK_FILTER_CONTINUE;
 }
+}
 
 #endif // GDK_WINDOWING_X11
 
@@ -108,7 +106,7 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 {
     wxCHECK( win, false );
 
-    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, "") )
+    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, wxString()) )
         return false;
 
     // we need to realize the window first before reparenting it

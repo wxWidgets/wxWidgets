@@ -38,12 +38,15 @@
            allows the user to choose from the list of options but doesn't allow
            to enter a value not present in the list.
     @style{wxCB_SORT}
-           Sorts the entries in the list alphabetically. Notice that this style
-           is not currently implemented in wxOSX.
+           Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_TEXT_ENTER
-           (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls).
+           The control will generate the event @c wxEVT_TEXT_ENTER that can be
+           handled by the program. Otherwise, i.e. either if this style not
+           specified at all, or it is used, but there is no event handler for
+           this event or the event handler called wxEvent::Skip() to avoid
+           overriding the default handling, pressing Enter key is either
+           processed internally by the control or used to activate the default
+           button of the dialog, if any.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
@@ -101,7 +104,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the window is sized appropriately.
         @param n
             Number of strings with which to initialise the control.
@@ -253,12 +256,15 @@ public:
     /**
         Sets the text for the combobox text field.
 
-        Notice that this method will generate a @c wxEVT_TEXT
-        event, use wxTextEntry::ChangeValue() if this is undesirable.
+        For normal, editable comboboxes with a text entry field calling this
+        method will generate a @c wxEVT_TEXT event, consistently with
+        wxTextEntry::SetValue() behaviour, use wxTextEntry::ChangeValue() if
+        this is undesirable.
 
-        @note For a combobox with @c wxCB_READONLY style the string must be in
-              the combobox choices list, otherwise the call to SetValue() is
-              ignored. This is case insensitive.
+        For controls with @c wxCB_READONLY style the method behaves somewhat
+        differently: the string must be in the combobox choices list (the check
+        for this is case-insensitive) and @c wxEVT_TEXT is @e not generated in
+        this case.
 
         @param text
             The text to set.

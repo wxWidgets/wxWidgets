@@ -33,36 +33,36 @@ class wxStaticBitmap : public wxControl
 public:
     /**
         Specify how the bitmap should be scaled in the control.
-        
+
         @see SetScaleMode(), GetScaleMode()
     */
     enum ScaleMode
     {
-        /** 
+        /**
             The bitmap is displayed in original size. Portions larger then the
             control will be cut off.
         */
         Scale_None,
-        
+
         /**
             Scale the bitmap to fit the size of the control by changing the
             aspect ratio of the bitmap if necessary.
         */
         Scale_Fill,
-        
+
         /**
             Scale the bitmap to fit the size of the control by maintaining the
             aspect ratio. Any remaining area of the control will use the background.
         */
         Scale_AspectFit,
-        
+
         /**
             Scale the bitmap to fill the size of the control. Some portion of
             the bitmap may be clipped to fill the control.
         */
         Scale_AspectFill
     };
-    
+
     /**
       Default constructor
     */
@@ -138,31 +138,31 @@ public:
             The new icon.
     */
     virtual void SetIcon(const wxIcon& label);
-    
+
     /**
         Sets the scale mode.
-    
+
         @param scaleMode
             Controls how the bitmap is scaled inside the control.
-        
+
         @note Currently only the generic implementation supports all scaling modes.
             You may use generic implementation wxGenericStaticBitmap declared in
             \<wx/generic/statbmpg.h\> in all ports.
-        
+
         @see GetScaleMode()
-        
+
         @since 3.1.0
     */
     virtual void SetScaleMode(ScaleMode scaleMode);
-    
+
     /**
         Returns the scale mode currently used in the control.
-        
+
         @see SetScaleMode()
-        
+
         @since 3.1.0
     */
     virtual ScaleMode GetScaleMode() const;
-    
+
 };
 

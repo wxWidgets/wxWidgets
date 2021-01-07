@@ -95,7 +95,7 @@
             <command>
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
-                $(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
+                $(INSTALL_SCRIPT) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
                 (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
@@ -150,29 +150,6 @@
             <linguas>it</linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>
-
-
-        <!-- Mac OS X resources: -->
-        <set var="MACOS_R">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r</set>
-        <set var="MACOS_RSRC">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).rsrc</set>
-        <action id="cocoa-res" cond="TOOLKIT=='COCOA'">
-            <dependency-of>all</dependency-of>
-            <set var="__targetname">$(MACOS_R)</set>
-            <command>
-                $(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o $(MACOS_RSRC)
-                $(DEREZ) $(MACOS_RSRC) -useDF >$(MACOS_R)
-            </command>
-            <clean-files>$(MACOS_RSRC) $(MACOS_R)</clean-files>
-        </action>
-        <action id="cocoa-res-install" cond="TOOLKIT=='COCOA'">
-            <dependency-of>install</dependency-of>
-            <depends>cocoa-res</depends>
-            <command>
-                $(INSTALL_DATA) $(MACOS_R) $(LIBDIR)
-                $(INSTALL_DATA) $(MACOS_RSRC) $(LIBDIR)
-            </command>
-        </action>
-
     </if>
 
 
@@ -228,7 +205,7 @@
             <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
 
             <command>
-                $(DOLLAR)(CPP) "$(nativePaths(SRCDIR))\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+                $(DOLLAR)(CPP) $(DOLLAR)(CPPFLAGS) "$(nativePaths(SRCDIR))\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
             </command>
 
         </action>

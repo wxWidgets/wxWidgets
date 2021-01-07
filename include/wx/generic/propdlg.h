@@ -83,7 +83,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& sz = wxDefaultSize,
                        long style = wxDEFAULT_DIALOG_STYLE,
-                       const wxString& name = wxDialogNameStr)
+                       const wxString& name = wxASCII_STR(wxDialogNameStr))
     {
         Init();
         Create(parent, id, title, pos, sz, style, name);
@@ -94,7 +94,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& sz = wxDefaultSize,
                        long style = wxDEFAULT_DIALOG_STYLE,
-                       const wxString& name = wxDialogNameStr);
+                       const wxString& name = wxASCII_STR(wxDialogNameStr));
 
 //// Accessors
 
@@ -106,7 +106,7 @@ public:
     virtual wxWindow* GetContentWindow() const wxOVERRIDE;
 
     // Set and get the inner sizer
-    void SetInnerSize(wxSizer* sizer) { m_innerSizer = sizer; }
+    void SetInnerSizer(wxSizer* sizer) { m_innerSizer = sizer; }
     wxSizer* GetInnerSizer() const { return m_innerSizer ; }
 
     // Set and get the book style

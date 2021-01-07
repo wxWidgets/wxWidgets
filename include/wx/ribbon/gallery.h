@@ -179,10 +179,13 @@ typedef void (wxEvtHandler::*wxRibbonGalleryEventFunction)(wxRibbonGalleryEvent&
 // wxpython/swig event work
 %constant wxEventType wxEVT_RIBBONGALLERY_HOVER_CHANGED;
 %constant wxEventType wxEVT_RIBBONGALLERY_SELECTED;
+%constant wxEventType wxEVT_RIBBONGALLERY_CLICKED;
+
 
 %pythoncode {
     EVT_RIBBONGALLERY_HOVER_CHANGED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_HOVER_CHANGED, 1 )
     EVT_RIBBONGALLERY_SELECTED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_SELECTED, 1 )
+    EVT_RIBBONGALLERY_CLICKED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_CLICKED, 1 )
 }
 #endif // SWIG
 

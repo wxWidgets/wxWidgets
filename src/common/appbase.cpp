@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.06.2003 (extracted from common/appcmn.cpp)
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #ifdef __WINDOWS__
@@ -173,7 +170,7 @@ wxAppConsoleBase::wxAppConsoleBase()
     m_mainLoop = NULL;
     m_bDoPendingEventProcessing = true;
 
-    ms_appInstance = static_cast<wxAppConsole *>(this);
+    ms_appInstance = reinterpret_cast<wxAppConsole *>(this);
 
 #ifdef __WXDEBUG__
     SetTraceMasks();
@@ -302,7 +299,7 @@ int wxAppConsoleBase::OnRun()
 }
 
 void wxAppConsoleBase::OnLaunched()
-{    
+{
 }
 
 int wxAppConsoleBase::OnExit()
@@ -376,7 +373,7 @@ int wxAppConsoleBase::MainLoop()
 
     if (wxTheApp)
         wxTheApp->OnLaunched();
-    
+
     return m_mainLoop ? m_mainLoop->Run() : -1;
 }
 
@@ -673,7 +670,6 @@ void wxAppConsoleBase::CallEventHandler(wxEvtHandler *handler,
 
 void wxAppConsoleBase::OnUnhandledException()
 {
-#ifdef __WXDEBUG__
     // we're called from an exception handler so we can re-throw the exception
     // to recover its type
     wxString what;
@@ -684,8 +680,12 @@ void wxAppConsoleBase::OnUnhandledException()
 #if wxUSE_STL
     catch ( std::exception& e )
     {
-        what.Printf("std::exception of type \"%s\", what() = \"%s\"",
+#ifdef wxNO_RTTI
+        what.Printf("standard exception with message \"%s\"", e.what());
+#else
+        what.Printf("standard exception of type \"%s\" with message \"%s\"",
                     typeid(e).name(), e.what());
+#endif
     }
 #endif // wxUSE_STL
     catch ( ... )
@@ -694,9 +694,10 @@ void wxAppConsoleBase::OnUnhandledException()
     }
 
     wxMessageOutputBest().Printf(
-        "*** Caught unhandled %s; terminating\n", what
+        "Unhandled %s; terminating %s.\n",
+        what,
+        wxIsMainThread() ? "the application" : "the thread in which it happened"
     );
-#endif // __WXDEBUG__
 }
 
 // ----------------------------------------------------------------------------
@@ -1303,7 +1304,7 @@ bool DoShowAssertDialog(const wxString& msg)
               wxT("further warnings.");
 
     switch ( ::MessageBox(NULL, msgDlg.t_str(), wxT("wxWidgets Debug Alert"),
-                          MB_YESNOCANCEL | MB_ICONSTOP ) )
+                          MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP ) )
     {
         case IDYES:
             // If we called wxTrap() directly from here, the programmer would

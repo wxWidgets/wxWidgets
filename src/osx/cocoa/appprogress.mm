@@ -26,12 +26,13 @@
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
+    if (self = [super init])
+    {
         m_dockTile = [NSApplication sharedApplication].dockTile;
         NSImageView* iv = [[NSImageView alloc] init];
         [iv setImage:[NSApplication sharedApplication].applicationIconImage];
         [m_dockTile setContentView:iv];
+        [iv release];
         
         m_progIndicator = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(0.0f, 16.0f, m_dockTile.size.width, 24.)];
         m_progIndicator.style = NSProgressIndicatorBarStyle;
@@ -41,15 +42,21 @@
         [m_progIndicator setBezeled:YES];
         [m_progIndicator setMinValue:0];
         [m_progIndicator setMaxValue:1];
-        [m_progIndicator release];
         [self setProgress:0.0];
     }
     return self;
 }
 
+- (void)dealloc
+{
+    [m_progIndicator release];
+    [super dealloc];
+}
+
 - (void)setProgress: (double)value
 {
     [m_progIndicator setHidden:NO];
+    [m_progIndicator setIndeterminate:NO];
     [m_progIndicator setDoubleValue:value];
     
     [m_dockTile display];
@@ -57,6 +64,7 @@
 
 - (void)setIndeterminate: (bool)indeterminate
 {
+    [m_progIndicator setHidden:NO];
     [m_progIndicator setIndeterminate:indeterminate];
 
     [m_dockTile display];
@@ -64,7 +72,9 @@
 
 - (void)reset
 {
-    [m_dockTile setContentView:nil];
+    [m_progIndicator setHidden:YES];
+
+    [m_dockTile display];
 }
 
 @end
@@ -72,7 +82,7 @@
 wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* WXUNUSED(parent), int maxValue ):
     m_maxValue(maxValue)
 {
-    wxAppProgressDockIcon* dockIcon = [[[wxAppProgressDockIcon alloc] init] retain];
+    wxAppProgressDockIcon* dockIcon = [[wxAppProgressDockIcon alloc] init];
     
     m_dockIcon = dockIcon;
 }

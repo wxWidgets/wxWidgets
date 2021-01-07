@@ -31,7 +31,7 @@ namespace
 {
     NSAlertStyle GetAlertStyleFromWXStyle( long style )
     {
-        if (style & wxICON_WARNING)
+        if (style & (wxICON_WARNING | wxICON_ERROR))
         {
             // NSCriticalAlertStyle should only be used for questions where
             // caution is needed per the OS X HIG. wxICON_WARNING alone doesn't
@@ -42,8 +42,6 @@ namespace
             else
                 return NSWarningAlertStyle;
         }
-        else if (style & wxICON_ERROR)
-            return NSWarningAlertStyle;
         else
             return NSInformationalAlertStyle;
     }
@@ -56,13 +54,6 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxPoint& WXUNUSED(pos))
                : wxMessageDialogBase(parent, message, caption, style)
 {
-    m_sheetDelegate = [[ModalDialogDelegate alloc] init];
-    [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
-}
-
-wxMessageDialog::~wxMessageDialog()
-{
-    [m_sheetDelegate release];
 }
 
 int wxMessageDialog::ShowModal()
@@ -71,8 +62,6 @@ int wxMessageDialog::ShowModal()
 
     wxCFEventLoopPauseIdleEvents pause;
     
-    int resultbutton = wxID_CANCEL;
-
     const long style = GetMessageDialogStyle();
 
     wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
@@ -102,13 +91,19 @@ int wxMessageDialog::ShowModal()
         CFStringRef alternateButtonTitle = NULL;
         CFStringRef otherButtonTitle = NULL;
 
-        wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
-        wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
+#if wxUSE_UNICODE
+        wxFontEncoding encoding = wxFONTENCODING_DEFAULT;
+#else
+        wxFontEncoding encoding = GetFont().GetEncoding();
+#endif
 
-        wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), GetFont().GetEncoding() );
-        wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), GetFont().GetEncoding() );
-        wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), GetFont().GetEncoding()) ;
-        wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), GetFont().GetEncoding() );
+        wxCFStringRef cfTitle( msgtitle, encoding );
+        wxCFStringRef cfText( msgtext, encoding );
+
+        wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), encoding );
+        wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), encoding );
+        wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), encoding) ;
+        wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), encoding );
 
         NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
                 
@@ -156,16 +151,23 @@ int wxMessageDialog::ShowModal()
             0, alertType, NULL, NULL, NULL, cfTitle, cfText,
             defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
         if (err == noErr)
-            resultbutton = m_buttonId[exitButton];
+            SetReturnCode( m_buttonId[exitButton] );
+        else
+            SetReturnCode( wxID_CANCEL );
     }
     else
     {
         NSAlert* alert = (NSAlert*)ConstructNSAlert();
 
+        OSXBeginModalDialog();
+
         int button = -1;
         button = [alert runModal];
-        [alert release];
+        
+        OSXEndModalDialog();
+
         ModalFinishedCallback(alert, button);
+        [alert release];
     }
 
     return GetReturnCode();
@@ -173,8 +175,6 @@ int wxMessageDialog::ShowModal()
 
 void wxMessageDialog::ShowWindowModal()
 {
-    NSAlert* alert = (NSAlert*)ConstructNSAlert();
-
     wxNonOwnedWindow* parentWindow = NULL;
 
     m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
@@ -186,10 +186,14 @@ void wxMessageDialog::ShowWindowModal()
 
     if (parentWindow)
     {
+        NSAlert* alert = (NSAlert*)ConstructNSAlert();
+        
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        [alert beginSheetModalForWindow: nativeParent modalDelegate: m_sheetDelegate
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-            contextInfo: nil];
+        [alert beginSheetModalForWindow:nativeParent  completionHandler:
+         ^(NSModalResponse returnCode)
+        {
+            this->ModalFinishedCallback(alert, returnCode);
+        }];
     }
 }
 
@@ -238,13 +242,19 @@ void* wxMessageDialog::ConstructNSAlert()
     NSAlert* alert = [[NSAlert alloc] init];
     NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
 
-    wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), GetFont().GetEncoding() );
-    wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), GetFont().GetEncoding() );
-    wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), GetFont().GetEncoding() );
-    wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), GetFont().GetEncoding() );
+#if wxUSE_UNICODE
+    wxFontEncoding encoding = wxFONTENCODING_DEFAULT;
+#else
+    wxFontEncoding encoding = GetFont().GetEncoding();
+#endif
+    
+    wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), encoding );
+    wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), encoding );
+    wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), encoding );
+    wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), encoding );
 
-    wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
-    wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
+    wxCFStringRef cfTitle( msgtitle, encoding );
+    wxCFStringRef cfText( msgtext, encoding );
 
     [alert setMessageText:cfTitle.AsNSString()];
     [alert setInformativeText:cfText.AsNSString()];
@@ -301,12 +311,12 @@ void* wxMessageDialog::ConstructNSAlert()
 
     if ( style & wxHELP )
     {
-        wxCFStringRef cfHelpString( GetHelpLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfHelpString( GetHelpLabel(), encoding );
         [alert addButtonWithTitle:cfHelpString.AsNSString()];
         m_buttonId[ m_buttonCount++ ] = wxID_HELP;
     }
 
-    wxASSERT_MSG( m_buttonCount <= WXSIZEOF(m_buttonId), "Too many buttons" );
+    wxASSERT_MSG( m_buttonCount <= (int)WXSIZEOF(m_buttonId), "Too many buttons" );
 
     return alert;
 }

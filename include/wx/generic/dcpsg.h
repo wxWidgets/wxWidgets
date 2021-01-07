@@ -79,7 +79,9 @@ public:
     virtual void ComputeScaleAndOrigin() wxOVERRIDE;
 
     void SetBackgroundMode(int WXUNUSED(mode)) wxOVERRIDE { }
+#if wxUSE_PALETTE
     void SetPalette(const wxPalette& WXUNUSED(palette)) wxOVERRIDE { }
+#endif
 
     void SetPrintData(const wxPrintData& data);
     wxPrintData& GetPrintData() { return m_printData; }
@@ -88,13 +90,13 @@ public:
 
     void PsPrint( const wxString& psdata );
 
-    // Overrridden for wxPrinterDC Impl
+    // Overridden for wxPrinterDC Impl
 
     virtual int GetResolution() const wxOVERRIDE;
     virtual wxRect GetPaperRect() const wxOVERRIDE;
 
     virtual void* GetHandle() const wxOVERRIDE { return NULL; }
-    
+
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
                      wxFloodFillStyle style = wxFLOOD_SURFACE) wxOVERRIDE;
@@ -137,16 +139,25 @@ protected:
     void DoGetSize(int* width, int* height) const wxOVERRIDE;
     void DoGetSizeMM(int *width, int *height) const wxOVERRIDE;
 
+    // Common part of DoDrawText() and DoDrawRotatedText()
+    void DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord testDescent, double lineHeight);
+    // Actually set PostScript font
+    void SetPSFont();
+    // Set PostScript color
+    void SetPSColour(const wxColour& col);
+
     FILE*             m_pstream;    // PostScript output stream
     unsigned char     m_currentRed;
     unsigned char     m_currentGreen;
     unsigned char     m_currentBlue;
     int               m_pageNumber;
     bool              m_clipping;
-    double            m_underlinePosition;
-    double            m_underlineThickness;
+    mutable double    m_underlinePosition;
+    mutable double    m_underlineThickness;
     wxPrintData       m_printData;
     double            m_pageHeight;
+    wxArrayString     m_definedPSFonts;
+    bool              m_isFontChanged;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPostScriptDCImpl);

@@ -49,13 +49,13 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
     virtual ~wxWindowGTK();
 
     // implement base class (pure) virtual methods
@@ -77,6 +77,9 @@ public:
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
+#ifdef __WXGTK3__
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
+#endif // __WXGTK3__
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
@@ -94,6 +97,7 @@ public:
     virtual int GetCharHeight() const wxOVERRIDE;
     virtual int GetCharWidth() const wxOVERRIDE;
     virtual double GetContentScaleFactor() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true ) wxOVERRIDE;
@@ -122,8 +126,7 @@ public:
     virtual bool DoIsExposed( int x, int y ) const wxOVERRIDE;
     virtual bool DoIsExposed( int x, int y, int w, int h ) const wxOVERRIDE;
 
-    // currently wxGTK2-only
-    void SetDoubleBuffered(bool on);
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
     virtual bool IsDoubleBuffered() const wxOVERRIDE;
 
     // SetLabel(), which does nothing in wxWindow
@@ -195,14 +198,23 @@ public:
     GdkWindow* GTKGetDrawingWindow() const;
 
     bool GTKHandleFocusIn();
-    bool GTKHandleFocusOut();
+    virtual bool GTKHandleFocusOut();
     void GTKHandleFocusOutNoDeferring();
-    static void GTKHandleDeferredFocusOut();
+    void GTKHandleDeferredFocusOut();
 
     // Called when m_widget becomes realized. Derived classes must call the
     // base class method if they override it.
     virtual void GTKHandleRealized();
     void GTKHandleUnrealize();
+
+    // Apply the widget style to the given window. Should normally only be
+    // called from the overridden DoApplyWidgetStyle() implementation in
+    // another window and exists solely to provide access to protected
+    // DoApplyWidgetStyle() when it's really needed.
+    static void GTKDoApplyWidgetStyle(wxWindowGTK* win, GtkRcStyle *style)
+    {
+        win->DoApplyWidgetStyle(style);
+    }
 
 protected:
     // for controls composed of multiple GTK widgets, return true to eliminate
@@ -413,7 +425,8 @@ protected:
 #ifdef __WXGTK3__
     // Use the given CSS string for styling the widget. The provider must be
     // allocated, and remains owned, by the caller.
-    void ApplyCssStyle(GtkCssProvider* provider, const char* style);
+    void GTKApplyCssStyle(GtkCssProvider* provider, const char* style);
+    void GTKApplyCssStyle(const char* style);
 #else // GTK+ < 3
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
@@ -423,8 +436,11 @@ protected:
 
     void GTKApplyWidgetStyle(bool forceStyle = false);
 
-    // helper function to ease native widgets wrapping, called by
-    // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
+    // Helper function to ease native widgets wrapping, called by
+    // GTKApplyWidgetStyle() and supposed to be overridden, not called.
+    //
+    // And if you actually need to call it, e.g. to propagate style change to a
+    // composite control, use public static GTKDoApplyWidgetStyle().
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
     void GTKApplyStyle(GtkWidget* widget, GtkRcStyle* style);
@@ -443,6 +459,8 @@ protected:
 #ifdef __WXGTK3__
     static GdkWindow* GTKFindWindow(GtkWidget* widget);
     static void GTKFindWindow(GtkWidget* widget, wxArrayGdkWindows& windows);
+
+    bool m_needSizeEvent;
 #endif
 
 private:

@@ -134,7 +134,7 @@ private:
     int m_style;
 
     wxSize m_area;
-    
+
     wxDECLARE_DYNAMIC_CLASS(wxBufferedDC);
     wxDECLARE_NO_COPY_CLASS(wxBufferedDC);
 };
@@ -153,6 +153,8 @@ public:
     wxBufferedPaintDC(wxWindow *window, wxBitmap& buffer, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
+        SetWindow(window);
+
         // If we're buffering the virtual window, scale the paint DC as well
         if (style & wxBUFFER_VIRTUAL_AREA)
             window->PrepareDC( m_paintdc );
@@ -167,6 +169,8 @@ public:
     wxBufferedPaintDC(wxWindow *window, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
+        SetWindow(window);
+
         // If we're using the virtual window, scale the paint DC as well
         if (style & wxBUFFER_VIRTUAL_AREA)
             window->PrepareDC( m_paintdc );

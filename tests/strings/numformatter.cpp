@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/numformatter.h"
 #include "wx/intl.h"
@@ -28,7 +25,7 @@ class NumFormatterTestCase : public CppUnit::TestCase
 public:
     NumFormatterTestCase() { m_locale = NULL; }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         // We need to use a locale with known decimal point and which uses the
         // thousands separator for the tests to make sense.
@@ -38,7 +35,7 @@ public:
             tearDown();
     }
 
-    virtual void tearDown()
+    virtual void tearDown() wxOVERRIDE
     {
         delete m_locale;
         m_locale = NULL;

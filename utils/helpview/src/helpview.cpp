@@ -12,10 +12,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
@@ -119,15 +115,15 @@ bool hvApp::OnInit()
         }
         else if ( argStr.Find( wxT("--Style") )  >= 0 )
         {
-            long i;
+            long style;
             wxString numb = argStr.AfterLast(wxT('e'));
-            if ( !(numb.ToLong(&i) ) )
+            if ( !(numb.ToLong(&style) ) )
             {
                 wxLogError( wxT("Integer conversion failed for --Style") );
             }
             else
             {
-                istyle = i;
+                istyle = style;
             }
         }
         else

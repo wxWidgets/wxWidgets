@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-09
-// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -43,22 +43,22 @@ public:
                 const wxString& name = wxDatePickerCtrlNameStr);
 
     // Override this one to add date-specific (and time-ignoring) checks.
-    virtual void SetValue(const wxDateTime& dt);
-    virtual wxDateTime GetValue() const;
+    virtual void SetValue(const wxDateTime& dt) wxOVERRIDE;
+    virtual wxDateTime GetValue() const wxOVERRIDE;
 
     // Implement the base class pure virtuals.
-    virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
-    virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const;
+    virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) wxOVERRIDE;
+    virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const wxOVERRIDE;
 
     // Override MSW-specific functions used during control creation.
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
 
 protected:
 #if wxUSE_INTL
-    virtual wxLocaleInfo MSWGetFormat() const;
+    virtual wxLocaleInfo MSWGetFormat() const wxOVERRIDE;
 #endif // wxUSE_INTL
-    virtual bool MSWAllowsNone() const { return HasFlag(wxDP_ALLOWNONE); }
-    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch);
+    virtual bool MSWAllowsNone() const wxOVERRIDE { return HasFlag(wxDP_ALLOWNONE); }
+    virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch) wxOVERRIDE;
 
 private:
     wxDateTime MSWGetControlValue() const;

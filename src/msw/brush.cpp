@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/brush.h"
 
@@ -186,7 +183,7 @@ HBRUSH wxBrushRefData::GetHBRUSH()
 
                 default:
                     wxFAIL_MSG( wxT("unknown brush style") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxBRUSHSTYLE_SOLID:
                     m_hBrush = ::CreateSolidBrush(m_colour.GetPixel());

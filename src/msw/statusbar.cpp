@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
 
@@ -166,7 +163,8 @@ bool wxStatusBar::SetFont(const wxFont& font)
     if (!wxWindow::SetFont(font))
         return false;
 
-    if (m_pDC) m_pDC->SetFont(font);
+    if ( m_pDC )
+        m_pDC->SetFont(m_font);
     return true;
 }
 
@@ -256,6 +254,14 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     delete [] pWidths;
 }
 
+void wxStatusBar::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxStatusBarBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_pDC && m_font.IsOk() )
+        m_pDC->SetFont(m_font);
+}
+
 void wxStatusBar::DoUpdateStatusText(int nField)
 {
     if (!m_pDC)
@@ -287,12 +293,12 @@ void wxStatusBar::DoUpdateStatusText(int nField)
     wxString text = GetStatusText(nField);
 
     // do we need to ellipsize this string?
-    wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
+    wxEllipsizeMode ellmode = wxELLIPSIZE_NONE;
     if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
     else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
     else if (HasFlag(wxSTB_ELLIPSIZE_END)) ellmode = wxELLIPSIZE_END;
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
     {
         // if we have the wxSTB_SHOW_TIPS we must set the ellipsized flag even if
         // we don't ellipsize the text but just truncate it
@@ -393,7 +399,7 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
         // pane. Notice that it's not the value returned by SB_GETBORDERS
         // which, at least on this Windows 2003 system, returns {0, 2, 2}
 #if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
+        if ( wxUxThemeIsActive() )
         {
             s_metrics.gripWidth = 20;
             s_metrics.textMargin = 8;
@@ -417,9 +423,12 @@ void wxStatusBar::SetMinHeight(int height)
     // statbar sample gets truncated otherwise.
     height += 4*GetBorderY();
 
-    // We need to set the size and not the size to reflect the height because
-    // wxFrame uses our size and not the minimal size as it assumes that the
-    // size of a status bar never changes anyhow.
+    // Ensure that the min height is respected when the status bar is resized
+    // automatically, like the status bar managed by wxFrame.
+    SetMinSize(wxSize(m_minWidth, height));
+
+    // And also update the size immediately, which may be useful for the status
+    // bars not managed by wxFrame.
     SetSize(-1, height);
 
     SendMessage(GetHwnd(), SB_SETMINHEIGHT, height, 0);
@@ -450,7 +459,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
             r.left -= 2;
         }
 
-        wxUxThemeEngine::Get()->GetThemeBackgroundContentRect(theme, NULL,
+        ::GetThemeBackgroundContentRect(theme, NULL,
                                                               1 /* SP_PANE */, 0,
                                                               &r, &r);
     }

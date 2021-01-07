@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTextEntry
 // Author:      Vadim Zeitlin
 // Created:     2009-03-01 (extracted from wx/textctrl.h)
-// Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -52,10 +52,6 @@ public:
         Call this function to enable auto-completion of the text typed in a
         single-line text control using the given @a choices.
 
-        Notice that currently this function is only implemented in wxGTK2,
-        wxMSW and wxOSX/Cocoa (for wxTextCtrl only, but not for wxComboBox)
-        ports and does nothing under the other platforms.
-
         @since 2.9.0
 
         @return
@@ -72,7 +68,7 @@ public:
 
         This method should be used instead of AutoComplete() overload taking
         the array of possible completions if the total number of strings is too
-        big as it allows to return the completions dynamically, depending on
+        big as it allows returning the completions dynamically, depending on
         the text already entered by user and so is more efficient.
 
         The specified @a completer object will be used to retrieve the list of
@@ -81,9 +77,6 @@ public:
 
         Notice that you need to include @c wx/textcompleter.h in order to
         define your class inheriting from wxTextCompleter.
-
-        Currently this method is only implemented in wxMSW and wxOSX/Cocoa (for
-        wxTextCtrl only, but not for wxComboBox).
 
         @since 2.9.2
 
@@ -406,7 +399,7 @@ public:
         This function sets the maximum number of characters the user can enter
         into the control.
 
-        In other words, it allows to limit the text value length to @a len not
+        In other words, it allows limiting the text value length to @a len not
         counting the terminating @c NUL character.
 
         If @a len is 0, the previously set max length limit, if any, is discarded
@@ -468,10 +461,10 @@ public:
         controls which are initially empty.
 
         Notice that hints are known as <em>cue banners</em> under MSW or
-        <em>placeholder strings</em> under OS X.
+        <em>placeholder strings</em> under macOS.
 
         @remarks Currently implemented natively on Windows (Vista and later
-            only), OS X and GTK+ (3.2 and later).
+            only), macOS and GTK+ (3.2 and later).
 
             For the platforms without native hints support, the implementation
             has several known limitations. Notably, the hint display will not
@@ -483,6 +476,9 @@ public:
             hints and the text control is empty. If you bind to the control's
             focus and wxEVT_TEXT events, you must call wxEvent::Skip() on them
             so that the generic implementation works correctly.
+
+            Another limitation is that hints are ignored for the controls with
+            @c wxTE_PASSWORD style.
 
         @remarks Hints can be used for single line text controls under all
             platforms, but only MSW and GTK+ 2 support them for multi-line text
@@ -537,7 +533,8 @@ public:
         would return @false immediately after the call to SetValue().
 
         The insertion point is set to the start of the control (i.e. position
-        0) by this function.
+        0) by this function unless the control value doesn't change at all, in
+        which case the insertion point is left at its original position.
 
         Note that, unlike most other functions changing the controls values,
         this function generates a @c wxEVT_TEXT event. To avoid

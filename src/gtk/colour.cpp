@@ -13,6 +13,7 @@
 
 #include <gdk/gdk.h>
 #include "wx/gtk/private.h"
+#include "wx/math.h"
 
 //-----------------------------------------------------------------------------
 // wxColour
@@ -25,10 +26,10 @@ public:
     wxColourRefData(const GdkRGBA& gdkRGBA)
         : m_gdkRGBA(gdkRGBA)
     {
-        m_gdkColor.red = guint16(gdkRGBA.red * 65535);
-        m_gdkColor.green = guint16(gdkRGBA.green * 65535);
-        m_gdkColor.blue = guint16(gdkRGBA.blue * 65535);
-        m_alpha = wxByte(gdkRGBA.alpha * 255 + 0.5);
+        m_gdkColor.red   = guint16(wxRound(gdkRGBA.red   * 65535));
+        m_gdkColor.green = guint16(wxRound(gdkRGBA.green * 65535));
+        m_gdkColor.blue  = guint16(wxRound(gdkRGBA.blue  * 65535));
+        m_alpha = wxByte(wxRound(gdkRGBA.alpha * 255));
     }
     wxColourRefData(const GdkColor& gdkColor)
         : m_gdkColor(gdkColor)

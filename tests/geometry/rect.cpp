@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
@@ -22,18 +19,7 @@
 
 #include "wx/iosfwrap.h"
 
-// ----------------------------------------------------------------------------
-// helper functions
-// ----------------------------------------------------------------------------
-
-// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxRects
-std::ostream& operator<<(std::ostream& os, const wxRect& r)
-{
-    os << "{"
-        << r.x << ", " << r.y << ", " << r.width << ", " << r.height
-       << "}";
-    return os;
-}
+#include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
 // test class

@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/filehistory.h"
 
@@ -237,7 +234,7 @@ void wxFileHistoryBase::Load(const wxConfigBase& config)
         m_fileHistory.Add(historyFile);
 
         buf.Printf(wxT("file%d"), (int)m_fileHistory.GetCount()+1);
-        historyFile = wxEmptyString;
+        historyFile.clear();
     }
 
     AddFilesToMenu();

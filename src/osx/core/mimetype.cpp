@@ -11,10 +11,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
 #endif
@@ -133,15 +129,13 @@ bool CheckDocTypeMatchesExt( CFDictionaryRef docType, CFStringRef requiredExt )
 // if a match is found, or null otherwise
 CFDictionaryRef GetDocTypeForExt( CFTypeRef docTypeData, CFStringRef requiredExt )
 {
-    CFDictionaryRef docType;
-    CFArrayRef docTypes;
-    CFTypeRef item;
-
     if( !docTypeData )
         return NULL;
 
     if( CFGetTypeID( docTypeData ) == CFArrayGetTypeID() )
     {
+        CFTypeRef item;
+        CFArrayRef docTypes;
         docTypes = reinterpret_cast< CFArrayRef >( docTypeData );
 
         for( CFIndex i = 0, n = CFArrayGetCount( docTypes ); i < n; i++ )
@@ -150,6 +144,7 @@ CFDictionaryRef GetDocTypeForExt( CFTypeRef docTypeData, CFStringRef requiredExt
 
             if( CFGetTypeID( item ) == CFDictionaryGetTypeID() )
             {
+                CFDictionaryRef docType;
                 docType = reinterpret_cast< CFDictionaryRef >( item );
 
                 if( CheckDocTypeMatchesExt( docType, requiredExt ) )
@@ -427,16 +422,14 @@ void wxMimeTypesManagerImpl::LoadDisplayDataForUti(const wxString& uti)
     const static wxCFStringRef descKey( "CFBundleTypeName" );
     const static wxCFStringRef iconKey( "CFBundleTypeIconFile" );
 
-    // The call for finding the preferred application for a UTI is LSCopyDefaultRoleHandlerForContentType
-    // This returns an empty string on OS X 10.5
-    // Instead it is necessary to get the primary extension and use LSGetApplicationForInfo
-    wxCFStringRef ext = UTTypeCopyPreferredTagWithClass( wxCFStringRef( uti ), kUTTagClassFilenameExtension );
+    wxCFStringRef cfuti(uti);
+
+    wxCFStringRef ext = UTTypeCopyPreferredTagWithClass( cfuti, kUTTagClassFilenameExtension );
 
     // Look up the preferred application
-    CFURLRef appUrl;
-    OSStatus status = LSGetApplicationForInfo( kLSUnknownType, kLSUnknownCreator, ext, kLSRolesAll, NULL, &appUrl );
+    wxCFRef<CFURLRef> appUrl = LSCopyDefaultApplicationURLForContentType( cfuti, kLSRolesAll, NULL);
 
-    if( status != noErr )
+    if( !appUrl )
         return;
 
     // Create a bundle object for that application
@@ -540,7 +533,7 @@ bool wxMimeTypesManagerImpl::GetMimeType(const wxString& uti, wxString *mimeType
 
     if( itr == m_utiMap.end() || itr->second.mimeTypes.GetCount() < 1 )
     {
-        *mimeType = wxEmptyString;
+        mimeType->clear();
         return false;
     }
 
@@ -582,7 +575,7 @@ bool wxMimeTypesManagerImpl::GetDescription(const wxString& uti, wxString *desc)
 
     if( itr == m_utiMap.end() || itr->second.description.empty() )
     {
-        *desc = wxEmptyString;
+        desc->clear();
         return false;
     }
 

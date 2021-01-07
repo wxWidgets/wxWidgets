@@ -21,11 +21,8 @@
 #define __DARWIN__ 1
 #define wx_USE_NANOX 0
 
-#define HAVE_EXPLICIT 1
 #define HAVE_VA_COPY 1
-#define HAVE_VARIADIC_MACROS 1
 #define HAVE_STD_WSTRING 1
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
   #if !defined(__has_include)
     #define HAVE_TR1_UNORDERED_MAP 1
@@ -33,7 +30,6 @@
     #define HAVE_TR1_TYPE_TRAITS 1
   #endif
   #define HAVE_GCC_ATOMIC_BUILTINS 1
-#endif
 #endif
 #define HAVE_VISIBILITY 1
 #define wxHAVE_PTHREAD_CLEANUP 1
@@ -60,6 +56,7 @@
 #define HAVE_UNIX98_PRINTF 1
 #define HAVE_STATFS 1
 #define HAVE_STATFS_DECL 1
+#define HAVE_STRNLEN 1
 #define HAVE_STRPTIME 1
 #define HAVE_STRPTIME_DECL 1
 #define HAVE_STRTOULL 1
@@ -69,7 +66,11 @@
 #define HAVE_VSSCANF 1
 #define HAVE_VSSCANF_DECL 1
 #define HAVE_USLEEP 1
+#define HAVE_WCSCASECMP 1
+#define HAVE_WCSDUP 1
 #define HAVE_WCSLEN 1
+#define HAVE_WCSNCASECMP 1
+#define HAVE_WCSNLEN 1
 #define SIZEOF_WCHAR_T 4
 #define SIZEOF_SHORT 2
 #define SIZEOF_INT 4
@@ -85,7 +86,6 @@
 #define SIZEOF_LONG_LONG 8
 #define wxSIZE_T_IS_ULONG 1
 #define wxWCHAR_T_IS_REAL_TYPE 1
-#define HAVE_DLERROR 1
 #define HAVE_FCNTL 1
 #define HAVE_GETHOSTBYNAME 1
 #define HAVE_GETSERVBYNAME 1
@@ -119,13 +119,14 @@
 #define HAVE_GETPWUID_R 1
 #define HAVE_GETGRGID_R 1
 #define HAVE_LOCALE_T 1
+#define HAVE_XLOCALE_H 1
 #define wxHAS_KQUEUE 1
 
 #define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
 #define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 3.1.1"
+#define PACKAGE_STRING "wxWidgets 3.1.5"
 #define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "3.1.1"
+#define PACKAGE_VERSION "3.1.5"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1

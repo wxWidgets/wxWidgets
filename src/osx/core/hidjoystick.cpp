@@ -235,7 +235,7 @@ int wxJoystick::GetButtonState() const
 
 bool wxJoystick::GetButtonState(unsigned int id) const
 {
-    if (id > sizeof(int) * 8)
+    if (id >= sizeof(int) * 8)
         return false;
 
     return (GetButtonState() & (1 << id)) != 0;
@@ -808,6 +808,21 @@ void* wxJoystickThread::Entry()
 // 5) Sends the event to the polling window (if any)
 // 6) Gets the next event and goes back to (1)
 //---------------------------------------------------------------------------
+
+// from https://developer.apple.com/documentation/apple_silicon/addressing_architectural_differences_in_your_macos_code
+
+uint64_t MachTimeToNanoseconds(uint64_t machTime)
+{
+    uint64_t nanoseconds = 0;
+    static mach_timebase_info_data_t sTimebase;
+    if (sTimebase.denom == 0)
+        (void)mach_timebase_info(&sTimebase);
+
+    nanoseconds = ((machTime * sTimebase.numer) / sTimebase.denom);
+
+    return nanoseconds;
+}
+
 /*static*/ void wxJoystickThread::HIDCallback(void* WXUNUSED(target),
                                               IOReturn WXUNUSED(res),
                                               void* context,
@@ -859,20 +874,20 @@ void* wxJoystickThread::Entry()
 #endif
 
         //is the cookie a button?
-        if (nIndex < 40)
+        if (nIndex < 32)
         {
             if (hidevent.value)
             {
-                pThis->m_buttons |= (1 << nIndex);
+                pThis->m_buttons |= (1u << nIndex);
                 wxevent.SetEventType(wxEVT_JOY_BUTTON_DOWN);
             }
             else
             {
-                pThis->m_buttons &= ~(1 << nIndex);
+                pThis->m_buttons &= ~(1u << nIndex);
                 wxevent.SetEventType(wxEVT_JOY_BUTTON_UP);
             }
 
-            wxevent.SetButtonChange(nIndex+1);
+            wxevent.SetButtonChange(1u << nIndex);
         }
         else if (nIndex == wxJS_AXIS_X)
         {
@@ -894,9 +909,9 @@ void* wxJoystickThread::Entry()
         else
             wxevent.SetEventType(wxEVT_JOY_MOVE);
 
-        Nanoseconds timestamp = AbsoluteToNanoseconds(hidevent.timestamp);
+        uint64_t timestamp = MachTimeToNanoseconds(*((uint64_t*) &hidevent.timestamp));
 
-        wxULongLong llTime(timestamp.hi, timestamp.lo);
+        wxULongLong llTime(timestamp);
 
         llTime /= 1000000;
 

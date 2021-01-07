@@ -455,7 +455,7 @@ public:
     enum
     {
         Hidden       = 0,
-        //Closing      = 1,
+        Closing      = 1,
         Animating    = 2,
         Visible      = 3
     };
@@ -482,8 +482,8 @@ protected:
     {
         return ( !m_text &&
                  !(flags & wxCONTROL_ISSUBMENU) &&
-                 !m_valueString.length() &&
-                 m_hintText.length() &&
+                 m_valueString.empty() &&
+                 !m_hintText.empty() &&
                  !ShouldDrawFocus() );
     }
 

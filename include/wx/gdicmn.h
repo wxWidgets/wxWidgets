@@ -183,7 +183,7 @@ enum wxEllipsizeMode
 // macros
 // ---------------------------------------------------------------------------
 
-#if defined(__WINDOWS__)
+#if defined(__WINDOWS__) && wxUSE_WXDIB
     #define wxHAS_IMAGES_IN_RESOURCES
 #endif
 
@@ -197,7 +197,7 @@ enum wxEllipsizeMode
     wxIcon *icon = new wxIcon(sample_xpm);    // On wxGTK/Linux
  */
 
-#ifdef __WINDOWS__
+#ifdef wxHAS_IMAGES_IN_RESOURCES
     // Load from a resource
     #define wxICON(X) wxIcon(wxT(#X))
 #elif defined(__WXDFB__)
@@ -224,10 +224,10 @@ enum wxEllipsizeMode
 #endif // platform
 
 /* Another macro: this one is for portable creation of bitmaps. We assume that
-   under Unix bitmaps live in XPMs and under Windows they're in ressources.
+   under Unix bitmaps live in XPMs and under Windows they're in resources.
  */
 
-#if defined(__WINDOWS__)
+#if defined(__WINDOWS__) && wxUSE_WXDIB
     #define wxBITMAP(name) wxBitmap(wxT(#name), wxBITMAP_TYPE_BMP_RESOURCE)
 #elif defined(__WXGTK__)   || \
       defined(__WXMOTIF__) || \
@@ -256,7 +256,7 @@ enum wxEllipsizeMode
 // resource type and under OS X the PNG file with the specified name must be
 // available in the resource subdirectory of the bundle. Elsewhere, this is
 // exactly the same thing as wxBITMAP_PNG_FROM_DATA() described above.
-#if defined(__WINDOWS__) || defined(__WXOSX__)
+#if (defined(__WINDOWS__) && wxUSE_WXDIB) || defined(__WXOSX__)
     #define wxBITMAP_PNG(name) wxBitmap(wxS(#name), wxBITMAP_TYPE_PNG_RESOURCE)
 #else
     #define wxBITMAP_PNG(name) wxBITMAP_PNG_FROM_DATA(name)
@@ -292,8 +292,8 @@ public:
     wxSize& operator*=(long i) { x *= i; y *= i; return *this; }
     wxSize& operator/=(unsigned long i) { x /= i; y /= i; return *this; }
     wxSize& operator*=(unsigned long i) { x *= i; y *= i; return *this; }
-    wxSize& operator/=(double i) { x = int(x/i); y = int(y/i); return *this; }
-    wxSize& operator*=(double i) { x = int(x*i); y = int(y*i); return *this; }
+    wxSize& operator/=(double i) { x = wxRound(x/i); y = wxRound(y/i); return *this; }
+    wxSize& operator*=(double i) { x = wxRound(x*i); y = wxRound(y*i); return *this; }
 
     void IncTo(const wxSize& sz)
         { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
@@ -318,8 +318,8 @@ public:
     void DecBy(int d) { DecBy(d, d); }
 
 
-    wxSize& Scale(float xscale, float yscale)
-        { x = (int)(x*xscale); y = (int)(y*yscale); return *this; }
+    wxSize& Scale(double xscale, double yscale)
+        { x = wxRound(x*xscale); y = wxRound(y*yscale); return *this; }
 
     // accessors
     void Set(int xx, int yy) { x = xx; y = yy; }
@@ -428,12 +428,12 @@ inline wxSize operator*(unsigned long i, const wxSize& s)
 
 inline wxSize operator*(const wxSize& s, double i)
 {
-    return wxSize(int(s.x * i), int(s.y * i));
+    return wxSize(wxRound(s.x * i), wxRound(s.y * i));
 }
 
 inline wxSize operator*(double i, const wxSize& s)
 {
-    return wxSize(int(s.x * i), int(s.y * i));
+    return wxSize(wxRound(s.x * i), wxRound(s.y * i));
 }
 
 
@@ -547,12 +547,12 @@ inline wxRealPoint operator*(unsigned long i, const wxRealPoint& s)
 
 inline wxRealPoint operator*(const wxRealPoint& s, double i)
 {
-    return wxRealPoint(int(s.x * i), int(s.y * i));
+    return wxRealPoint(s.x * i, s.y * i);
 }
 
 inline wxRealPoint operator*(double i, const wxRealPoint& s)
 {
-    return wxRealPoint(int(s.x * i), int(s.y * i));
+    return wxRealPoint(s.x * i, s.y * i);
 }
 
 
@@ -567,7 +567,7 @@ public:
 
     wxPoint() : x(0), y(0) { }
     wxPoint(int xx, int yy) : x(xx), y(yy) { }
-    wxPoint(const wxRealPoint& pt) : x(int(pt.x)), y(int(pt.y)) { }
+    wxPoint(const wxRealPoint& pt) : x(wxRound(pt.x)), y(wxRound(pt.y)) { }
 
     // no copy ctor or assignment operator - the defaults are ok
 
@@ -1079,6 +1079,9 @@ extern WXDLLIMPEXP_DATA_CORE(const wxPoint) wxDefaultPosition;
 // resource management
 extern void WXDLLIMPEXP_CORE wxInitializeStockLists();
 extern void WXDLLIMPEXP_CORE wxDeleteStockLists();
+
+// Note: all the display-related functions here exist for compatibility only,
+// please use wxDisplay class in the new code
 
 // is the display colour (or monochrome)?
 extern bool WXDLLIMPEXP_CORE wxColourDisplay();

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
@@ -50,16 +47,15 @@ wxPrintPaperType::wxPrintPaperType()
 {
     m_paperId = wxPAPER_NONE;
     m_platformId = 0;
-    m_paperName = wxEmptyString;
     m_width = 0;
     m_height = 0;
 }
 
 wxPrintPaperType::wxPrintPaperType(wxPaperSize paperId, int platformId, const wxString& name, int w, int h)
+    : m_paperName(name)
 {
     m_paperId = paperId;
     m_platformId = platformId;
-    m_paperName = name;
     m_width = w;
     m_height = h;
 }

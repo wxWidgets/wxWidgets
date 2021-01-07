@@ -16,7 +16,7 @@ class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 public:
     wxMessageDialog(wxWindow *parent,
                     const wxString& message,
-                    const wxString& caption = wxMessageBoxCaptionStr,
+                    const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                     long style = wxOK|wxCENTRE,
                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
         : wxMessageDialogBase(parent, message, caption, style)
@@ -24,9 +24,9 @@ public:
         m_hook = NULL;
     }
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
-    virtual long GetEffectiveIcon() const;
+    virtual long GetEffectiveIcon() const wxOVERRIDE;
 
     // implementation-specific
 
@@ -35,7 +35,7 @@ public:
 
 protected:
     // Override this as task dialogs are always centered on parent.
-    virtual void DoCentre(int dir);
+    virtual void DoCentre(int dir) wxOVERRIDE;
 
 private:
     // hook procedure used to adjust the message box beyond what the standard

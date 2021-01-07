@@ -12,7 +12,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode,
@@ -256,6 +256,6 @@ void wxDataViewChoiceRenderer::SetAlignment( int align )
 
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

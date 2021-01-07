@@ -15,6 +15,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QAction>
+#include <QtWidgets/QMenuBar>
 
 class wxQtAction : public QAction, public wxQtSignalHandler< wxMenuItem >
 {
@@ -22,6 +24,10 @@ class wxQtAction : public QAction, public wxQtSignalHandler< wxMenuItem >
 public:
     wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
         wxItemKind kind, wxMenu *subMenu, wxMenuItem *handler );
+
+    // Set the action shortcut to correspond to the accelerator specified by
+    // the given label.
+    void UpdateShortcutsFromLabel(const wxString& text);
 
 private:
     void onActionTriggered( bool checked );
@@ -48,6 +54,8 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
 void wxMenuItem::SetItemLabel( const wxString &label )
 {
     wxMenuItemBase::SetItemLabel( label );
+
+    m_qtAction->UpdateShortcutsFromLabel( label );
 
     m_qtAction->setText( wxQtConvertString( label ));
 }
@@ -104,18 +112,20 @@ bool wxMenuItem::IsChecked() const
 }
 
 
-void wxMenuItem::SetBitmap(const wxBitmap& WXUNUSED(bitmap))
+void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
 {
-    wxMISSING_FUNCTION();
-}
-
-const wxBitmap &wxMenuItem::GetBitmap() const
-{
-    wxMISSING_FUNCTION();
-
-    static wxBitmap s_bitmap;
-
-    return s_bitmap;
+    if ( m_kind == wxITEM_NORMAL )
+    {
+        m_bitmap = bitmap;
+        if ( !m_bitmap.IsNull() )
+        {
+            m_qtAction->setIcon( QIcon(*m_bitmap.GetHandle()) );
+        }
+    }
+    else
+    {
+        wxFAIL_MSG("only normal menu items can have bitmaps");
+    }
 }
 
 QAction *wxMenuItem::GetHandle() const
@@ -157,12 +167,26 @@ wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxSt
     }
 
     connect( this, &QAction::triggered, this, &wxQtAction::onActionTriggered );
+
+    UpdateShortcutsFromLabel( text );
 }
- 
+
+void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
+{
+#if wxUSE_ACCEL
+    const wxString accelStr = text.AfterFirst('\t');
+    if ( !accelStr.empty() )
+    {
+        setShortcut(  QKeySequence( wxQtConvertString(accelStr) ) );
+    }
+#endif // wxUSE_ACCEL
+}
 
 void wxQtAction::onActionTriggered( bool checked )
 {
     wxMenuItem *handler = GetHandler();
     wxMenu *menu = handler->GetMenu();
+    if ( handler->IsCheckable() )
+        handler->Check(checked);
     menu->SendEvent( handler->GetId(), handler->IsCheckable() ? checked : -1 );
 }

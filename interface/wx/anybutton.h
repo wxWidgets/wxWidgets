@@ -13,7 +13,7 @@
 
 #define wxBU_EXACTFIT        0x0001
 #define wxBU_NOTEXT          0x0002
-#define wxBU_AUTODRAW        0x0004
+#define wxBU_AUTODRAW        0x0004 ///< Obsolete, has no effect.
 
 
 /**
@@ -91,7 +91,7 @@ public:
     */
     wxBitmap GetBitmapPressed() const;
 
-    
+
     /**
         Sets the bitmap to display in the button.
 
@@ -177,7 +177,7 @@ public:
             previous versions)
     */
     void SetBitmapPressed(const wxBitmap& bitmap);
-    
+
 
     /**
         Get the margins between the bitmap and the text of the button.

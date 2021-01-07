@@ -30,7 +30,7 @@
 
     This class is fully implemented only under the platforms where xlocale POSIX
     API or equivalent is available. Currently the xlocale API is available under
-    most of the recent Unix systems (including Linux, various BSD and OS X) and
+    most of the recent Unix systems (including Linux, various BSD and macOS) and
     Microsoft Visual C++ standard library provides a similar API starting from
     version 8 (Visual Studio 2005).
 
@@ -49,7 +49,7 @@
 
     @stdobjects
     @li ::wxNullXLocale
-    
+
     @see wxLocale
 */
 class wxXLocale
@@ -85,7 +85,7 @@ public:
         or @false otherwise.
     */
     bool IsOk() const;
-    
+
     /**
         Comparison operator.
     */

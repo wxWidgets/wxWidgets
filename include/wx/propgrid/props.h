@@ -17,15 +17,13 @@
 
 // -----------------------------------------------------------------------
 
-class wxPGArrayEditorDialog;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGArrayEditorDialog;
 
-#include "wx/propgrid/editors.h"
+#include "wx/propgrid/property.h"
 
 #include "wx/filename.h"
 #include "wx/dialog.h"
 #include "wx/textctrl.h"
-#include "wx/button.h"
-#include "wx/listbox.h"
 #include "wx/valtext.h"
 
 // -----------------------------------------------------------------------
@@ -61,11 +59,8 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
 
 // -----------------------------------------------------------------------
 
-/** @class wxPGInDialogValidator
-    @ingroup classes
-    Creates and manages a temporary wxTextCtrl for validation purposes.
-    Uses wxPropertyGrid's current editor, if available.
-*/
+// Creates and manages a temporary wxTextCtrl for validation purposes.
+// Uses wxPropertyGrid's current editor, if available.
 class WXDLLIMPEXP_PROPGRID wxPGInDialogValidator
 {
 public:
@@ -95,17 +90,9 @@ private:
 
 #define wxPG_PROP_PASSWORD  wxPG_PROP_CLASS_SPECIFIC_2
 
-/** @class wxStringProperty
-    @ingroup classes
-    Basic property with string value.
-
-    <b>Supported special attributes:</b>
-    - "Password": set to 1 in order to enable wxTE_PASSWORD on the editor.
-
-    @remarks
-    - If value "<composed>" is set, then actual value is formed (or composed)
-      from values of child properties.
-*/
+// Basic property with string value.
+// If value "<composed>" is set, then actual value is formed (or composed)
+// from values of child properties.
 class WXDLLIMPEXP_PROPGRID wxStringProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxStringProperty)
@@ -122,8 +109,7 @@ public:
 
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
-    /** This is updated so "<composed>" special value can be handled.
-    */
+    // This is updated so "<composed>" special value can be handled.
     virtual void OnSetValue() wxOVERRIDE;
 
 protected:
@@ -131,20 +117,16 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** Constants used with NumericValidation<>().
-*/
+// Constants used with NumericValidation<>().
 enum wxPGNumericValidationConstants
 {
-    /** Instead of modifying the value, show an error message.
-    */
+    // Instead of modifying the value, show an error message.
     wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE      = 0,
 
-    /** Modify value, but stick with the limitations.
-    */
+    // Modify value, but stick with the limitations.
     wxPG_PROPERTY_VALIDATION_SATURATE           = 1,
 
-    /** Modify value, wrap around on overflow.
-    */
+    // Modify value, wrap around on overflow.
     wxPG_PROPERTY_VALIDATION_WRAP               = 2
 };
 
@@ -152,9 +134,7 @@ enum wxPGNumericValidationConstants
 
 #if wxUSE_VALIDATORS
 
-/**
-    A more comprehensive numeric validator class.
-*/
+// A more comprehensive numeric validator class.
 class WXDLLIMPEXP_PROPGRID wxNumericPropertyValidator : public wxTextValidator
 {
 public:
@@ -172,49 +152,38 @@ public:
 
 #endif // wxUSE_VALIDATORS
 
+// Base class for numeric properties.
+// Cannot be instantiated directly.
+class WXDLLIMPEXP_PROPGRID wxNumericProperty : public wxPGProperty
+{
+    wxDECLARE_ABSTRACT_CLASS(wxNumericProperty);
+public:
+    virtual ~wxNumericProperty();
 
-/** @class wxIntProperty
-    @ingroup classes
-    Basic property with integer value.
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
 
-    Seamlessly supports 64-bit integer (wxLongLong) on overflow.
+    virtual wxVariant AddSpinStepValue(long stepScale) const = 0;
 
-    <b>Example how to use seamless 64-bit integer support</b>
+    bool UseSpinMotion() const { return m_spinMotion; }
 
-      Getting value:
+    // Common validation code - for internal use.
+    template<typename T>
+    bool DoNumericValidation(T& value, wxPGValidationInfo* pValidationInfo,
+                             int mode, T defMin, T defMax) const;
 
-      @code
-          wxLongLong_t value = pg->GetPropertyValueAsLongLong();
-      @endcode
+protected:
+    wxNumericProperty(const wxString& label, const wxString& name);
 
-         or
+    wxVariant m_minVal;
+    wxVariant m_maxVal;
+    bool      m_spinMotion;
+    wxVariant m_spinStep;
+    bool      m_spinWrap;
+};
 
-      @code
-          wxLongLong value;
-          wxVariant variant = property->GetValue();
-          if ( variant.IsType("longlong") )
-              value = variant.GetLongLong();
-          else
-              value = variant.GetLong();
-      @endcode
-
-      Setting value:
-
-       @code
-          pg->SetPropertyValue(longLongVal);
-      @endcode
-
-         or
-
-      @code
-          property->SetValue(WXVARIANT(longLongVal));
-      @endcode
-
-
-    <b>Supported special attributes:</b>
-    - "Min", "Max": Specify acceptable value range.
-*/
-class WXDLLIMPEXP_PROPGRID wxIntProperty : public wxPGProperty
+// Basic property with integer value.
+// Seamlessly supports 64-bit integer (wxLongLong) on overflow.
+class WXDLLIMPEXP_PROPGRID wxIntProperty : public wxNumericProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxIntProperty)
 public:
@@ -239,46 +208,37 @@ public:
                              int argFlags = 0 ) const wxOVERRIDE;
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
+    virtual wxVariant AddSpinStepValue(long stepScale) const wxOVERRIDE;
 
-    /** Validation helpers.
-    */
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
-    static bool DoValidation( const wxPGProperty* property,
+private:
+    // Validation helpers.
+#if wxUSE_LONGLONG
+    static bool DoValidation( const wxNumericProperty* property,
+                              wxLongLong& value,
+                              wxPGValidationInfo* pValidationInfo,
+                              int mode =
+                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
+
+#if defined(wxLongLong_t)
+    static bool DoValidation( const wxNumericProperty* property,
                               wxLongLong_t& value,
                               wxPGValidationInfo* pValidationInfo,
                               int mode =
                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
-#endif
-    static bool DoValidation(const wxPGProperty* property,
+#endif // wxLongLong_t
+#endif // wxUSE_LONGLONG
+    static bool DoValidation(const wxNumericProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
                              int mode =
                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
-
-protected:
 };
 
 // -----------------------------------------------------------------------
 
-/** @class wxUIntProperty
-    @ingroup classes
-    Basic property with unsigned integer value.
-    Seamlessly supports 64-bit integer (wxULongLong) on overflow.
-
-    <b>Supported special attributes:</b>
-    - "Min", "Max": Specify acceptable value range.
-    - "Base": Define base. Valid constants are wxPG_BASE_OCT, wxPG_BASE_DEC,
-    wxPG_BASE_HEX and wxPG_BASE_HEXL (lowercase characters). Arbitrary bases
-    are <b>not</b> supported.
-    - "Prefix": Possible values are wxPG_PREFIX_NONE, wxPG_PREFIX_0x, and
-    wxPG_PREFIX_DOLLAR_SIGN. Only wxPG_PREFIX_NONE works with Decimal and Octal
-    numbers.
-
-    @remarks
-    - For example how to use seamless 64-bit integer support, see wxIntProperty
-    documentation (just use wxULongLong instead of wxLongLong).
-*/
-class WXDLLIMPEXP_PROPGRID wxUIntProperty : public wxPGProperty
+// Basic property with unsigned integer value.
+// Seamlessly supports 64-bit integer (wxULongLong) on overflow.
+class WXDLLIMPEXP_PROPGRID wxUIntProperty : public wxNumericProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxUIntProperty)
 public:
@@ -302,6 +262,7 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number,
                              int argFlags = 0 ) const wxOVERRIDE;
+    virtual wxVariant AddSpinStepValue(long stepScale) const wxOVERRIDE;
 
 protected:
     wxByte      m_base;
@@ -311,13 +272,19 @@ private:
     void Init();
 
     // Validation helpers.
-#if defined(wxULongLong_t) && wxUSE_LONGLONG
-    static bool DoValidation(const wxPGProperty* property,
+#if wxUSE_LONGLONG
+    static bool DoValidation(const wxNumericProperty* property,
+                             wxULongLong& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+#if defined(wxULongLong_t)
+    static bool DoValidation(const wxNumericProperty* property,
                              wxULongLong_t& value,
                              wxPGValidationInfo* pValidationInfo,
                              int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
-#endif
-    static bool DoValidation(const wxPGProperty* property,
+#endif // wxULongLong_t
+#endif // wxUSE_LONGLONG
+    static bool DoValidation(const wxNumericProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
                              int mode = wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
@@ -325,15 +292,8 @@ private:
 
 // -----------------------------------------------------------------------
 
-/** @class wxFloatProperty
-    @ingroup classes
-    Basic property with double-precision floating point value.
-
-    <b>Supported special attributes:</b>
-    - "Precision": Sets the (max) precision used when floating point value is
-    rendered as text. The default -1 means infinite precision.
-*/
-class WXDLLIMPEXP_PROPGRID wxFloatProperty : public wxPGProperty
+// Basic property with double-precision floating point value.
+class WXDLLIMPEXP_PROPGRID wxFloatProperty : public wxNumericProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxFloatProperty)
 public:
@@ -347,35 +307,28 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
-    virtual wxVariant DoGetAttribute( const wxString& name ) const wxOVERRIDE;
 
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const wxOVERRIDE;
 
-    /** Validation helper.
-    */
-    static bool DoValidation( const wxPGProperty* property,
-                              double& value,
-                              wxPGValidationInfo* pValidationInfo,
-                              int mode =
-                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator () const wxOVERRIDE;
+    virtual wxVariant AddSpinStepValue(long stepScale) const wxOVERRIDE;
 
 protected:
     int m_precision;
+
+private:
+    // Validation helper.
+    static bool DoValidation(const wxNumericProperty* property,
+                             double& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode = wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
 };
 
 // -----------------------------------------------------------------------
 
-/** @class wxBoolProperty
-    @ingroup classes
-    Basic property with boolean value.
-
-    <b>Supported special attributes:</b>
-    - "UseCheckbox": Set to 1 to use check box editor instead of combo box.
-    - "UseDClickCycling": Set to 1 to cycle combo box instead showing the list.
-*/
+// Basic property with boolean value.
 class WXDLLIMPEXP_PROPGRID wxBoolProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxBoolProperty)
@@ -392,7 +345,6 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number, int argFlags = 0 ) const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
-    virtual wxVariant DoGetAttribute( const wxString& name ) const wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -401,17 +353,12 @@ public:
 // changed (i.e. returns NULL in GetPropertyChoices).
 #define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
 
-/** @class wxEnumProperty
-    @ingroup classes
-    You can derive custom properties with choices from this class. See
-    wxBaseEnumProperty for remarks.
-
-    @remarks
-    - Updating private index is important. You can do this either by calling
-    SetIndex() in IntToValue, and then letting wxBaseEnumProperty::OnSetValue
-    be called (by not implementing it, or by calling super class function in
-    it) -OR- you can just call SetIndex in OnSetValue.
-*/
+// Represents a single selection from a list of choices
+// You can derive custom properties with choices from this class.
+// Updating private index is important. You can do this either by calling
+// SetIndex() in IntToValue, and then letting wxBaseEnumProperty::OnSetValue
+// be called (by not implementing it, or by calling super class function in
+// it) -OR- you can just call SetIndex in OnSetValue.
 class WXDLLIMPEXP_PROPGRID wxEnumProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxEnumProperty)
@@ -478,8 +425,6 @@ public:
     // this take advantage of it.
     virtual int GetChoiceSelection() const wxOVERRIDE { return m_index; }
 
-    virtual void OnValidationFailure( wxVariant& pendingValue ) wxOVERRIDE;
-
 protected:
 
     int GetIndex() const;
@@ -517,14 +462,9 @@ private:
 
 // -----------------------------------------------------------------------
 
-/** @class wxEditEnumProperty
-    @ingroup classes
-    wxEnumProperty with wxString value and writable combo box editor.
-
-    @remarks
-    Uses int value, similar to wxEnumProperty, unless text entered by user is
-    is not in choices (in which case string value is used).
-*/
+// wxEnumProperty with wxString value and writable combo box editor.
+// Uses int value, similar to wxEnumProperty, unless text entered by user is
+// is not in choices (in which case string value is used).
 class WXDLLIMPEXP_PROPGRID wxEditEnumProperty : public wxEnumProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxEditEnumProperty)
@@ -567,16 +507,13 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** @class wxFlagsProperty
-    @ingroup classes
-    Represents a bit set that fits in a long integer. wxBoolProperty
-    sub-properties are created for editing individual bits. Textctrl is created
-    to manually edit the flags as a text; a continuous sequence of spaces,
-    commas and semicolons is considered as a flag id separator.
-    <b>Note:</b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
-    you will need to use SetPropertyChoices - otherwise they will not get
-    updated properly.
-*/
+// Represents a bit set that fits in a long integer. wxBoolProperty
+// sub-properties are created for editing individual bits. Textctrl is created
+// to manually edit the flags as a text; a continuous sequence of spaces,
+// commas and semicolons is considered as a flag id separator.
+// Note: When changing "choices" (ie. flag labels) of wxFlagsProperty,
+// you will need to use SetPropertyChoices - otherwise they will not get
+//    updated properly.
 class WXDLLIMPEXP_PROPGRID wxFlagsProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxFlagsProperty)
@@ -635,40 +572,34 @@ protected:
 };
 
 // -----------------------------------------------------------------------
-
-/** @class wxPGFileDialogAdapter
-    @ingroup classes
-*/
-class WXDLLIMPEXP_PROPGRID
-    wxPGFileDialogAdapter : public wxPGEditorDialogAdapter
+class WXDLLIMPEXP_PROPGRID wxEditorDialogProperty : public wxPGProperty
 {
+    friend class wxPGDialogAdapter;
+    wxDECLARE_ABSTRACT_CLASS(wxEditorDialogProperty);
+
 public:
-    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
-                               wxPGProperty* property ) wxOVERRIDE;
+    virtual ~wxEditorDialogProperty();
+
+    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE;
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
+
+protected:
+    wxEditorDialogProperty(const wxString& label, const wxString& name);
+
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) = 0;
+
+    wxString  m_dlgTitle;  // Title for a dialog
+    long      m_dlgStyle;  // Dialog style
 };
 
 // -----------------------------------------------------------------------
 
-// Indicates first bit useable by derived properties.
+// Indicates first bit usable by derived properties.
 #define wxPG_PROP_SHOW_FULL_FILENAME  wxPG_PROP_CLASS_SPECIFIC_1
 
-/** @class wxFileProperty
-    @ingroup classes
-    Like wxLongStringProperty, but the button triggers file selector instead.
-
-    <b>Supported special attributes:</b>
-    - "Wildcard": Sets wildcard (see wxFileDialog for format details), "All
-    files..." is default.
-    - "ShowFullPath": Default 1. When 0, only the file name is shown (i.e. drive
-      and directory are hidden).
-    - "ShowRelativePath": If set, then the filename is shown relative to the
-    given path string.
-    - "InitialPath": Sets the initial path of where to look for files.
-    - "DialogTitle": Sets a specific title for the dir dialog.
-*/
-class WXDLLIMPEXP_PROPGRID wxFileProperty : public wxPGProperty
+// Like wxLongStringProperty, but the button triggers file selector instead.
+class WXDLLIMPEXP_PROPGRID wxFileProperty : public wxEditorDialogProperty
 {
-    friend class wxPGFileDialogAdapter;
     WX_PG_DECLARE_PROPERTY_CLASS(wxFileProperty)
 public:
 
@@ -682,51 +613,32 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
 
-    /**
-        Returns filename to file represented by current value.
-    */
+    // Returns filename to file represented by current value.
     wxFileName GetFileName() const;
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
+
     wxString    m_wildcard;
     wxString    m_basePath; // If set, then show path relative to it
     wxString    m_initialPath; // If set, start the file dialog here
-    wxString    m_dlgTitle; // If set, used as title for file dialog
     int         m_indFilter; // index to the selected filter
 };
 
 // -----------------------------------------------------------------------
 
-#define wxPG_PROP_NO_ESCAPE     wxPG_PROP_CLASS_SPECIFIC_1
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_3
+#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_1
 
-
-/** @class wxPGLongStringDialogAdapter
-    @ingroup classes
-*/
-class WXDLLIMPEXP_PROPGRID
-    wxPGLongStringDialogAdapter : public wxPGEditorDialogAdapter
-{
-public:
-    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
-                               wxPGProperty* property ) wxOVERRIDE;
-};
-
-
-/** @class wxLongStringProperty
-    @ingroup classes
-    Like wxStringProperty, but has a button that triggers a small text
-    editor dialog.
-*/
-class WXDLLIMPEXP_PROPGRID wxLongStringProperty : public wxPGProperty
+// Like wxStringProperty, but has a button that triggers a small text
+// editor dialog.
+class WXDLLIMPEXP_PROPGRID wxLongStringProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxLongStringProperty)
 public:
@@ -740,52 +652,39 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE;
-
-    // Shows string editor dialog. Value to be edited should be read from
-    // value, and if dialog is not cancelled, it should be stored back and true
-    // should be returned if that was the case.
-    virtual bool OnButtonClick( wxPropertyGrid* propgrid, wxString& value );
-
-    static bool DisplayEditorDialog( wxPGProperty* prop,
-                                     wxPropertyGrid* propGrid,
-                                     wxString& value );
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
 
 
-/** @class wxDirProperty
-    @ingroup classes
-    Like wxLongStringProperty, but the button triggers dir selector instead.
-
-    <b>Supported special attributes:</b>
-    - "DialogMessage": Sets specific message in the dir selector.
-*/
-class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxLongStringProperty
+// Like wxLongStringProperty, but the button triggers dir selector instead.
+class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxEditorDialogProperty
 {
-    wxDECLARE_DYNAMIC_CLASS(wxDirProperty);
+    WX_PG_DECLARE_PROPERTY_CLASS(wxDirProperty)
 public:
-    wxDirProperty( const wxString& name = wxPG_LABEL,
-                   const wxString& label = wxPG_LABEL,
+    wxDirProperty( const wxString& label = wxPG_LABEL,
+                   const wxString& name = wxPG_LABEL,
                    const wxString& value = wxEmptyString );
     virtual ~wxDirProperty();
 
-    virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
+    virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const wxOVERRIDE;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               int argFlags = 0) const wxOVERRIDE;
+#if WXWIN_COMPATIBILITY_3_0
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
+#endif // WXWIN_COMPATIBILITY_3_0
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
 
-    virtual bool OnButtonClick ( wxPropertyGrid* propGrid, wxString& value ) wxOVERRIDE;
-
 protected:
-    wxString    m_dlgMessage;
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
 
-// wxBoolProperty specific flags
+// wxBoolProperty, wxFlagsProperty specific flags
 #define wxPG_PROP_USE_CHECKBOX      wxPG_PROP_CLASS_SPECIFIC_1
 // DCC = Double Click Cycles
 #define wxPG_PROP_USE_DCC           wxPG_PROP_CLASS_SPECIFIC_2
@@ -793,11 +692,8 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** @class wxArrayStringProperty
-    @ingroup classes
-    Property that manages a list of strings.
-*/
-class WXDLLIMPEXP_PROPGRID wxArrayStringProperty : public wxPGProperty
+// Property that manages a list of strings.
+class WXDLLIMPEXP_PROPGRID wxArrayStringProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxArrayStringProperty)
 public:
@@ -811,8 +707,6 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     // Implement in derived class for custom array-to-string conversion.
@@ -825,10 +719,13 @@ public:
     // should be returned if that was the case.
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value );
 
+#if WXWIN_COMPATIBILITY_3_0
     // Helper.
+    wxDEPRECATED_MSG("OnButtonClick() function is no longer used")
     virtual bool OnButtonClick( wxPropertyGrid* propgrid,
                                 wxWindow* primary,
                                 const wxChar* cbt );
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // Creates wxPGArrayEditorDialog for string editing. Called in OnButtonClick.
     virtual wxPGArrayEditorDialog* CreateEditorDialog();
@@ -839,14 +736,14 @@ public:
         QuoteStrings    = 0x02
     };
 
-    /**
-        Generates contents for string dst based on the contents of
-        wxArrayString src.
-    */
+    // Generates contents for string dst based on the contents of
+    // wxArrayString src.
     static void ArrayStringToString( wxString& dst, const wxArrayString& src,
                                      wxUniChar delimiter, int flags );
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
+
     // Previously this was to be implemented in derived class for array-to-
     // string conversion. Now you should implement ConvertValueToString()
     // instead.
@@ -854,6 +751,7 @@ protected:
 
     wxString        m_display; // Cache for displayed text.
     wxUniChar       m_delimiter;
+    wxString        m_customBtnText;
 };
 
 // -----------------------------------------------------------------------
@@ -868,10 +766,8 @@ public: \
               const wxString& name = wxPG_LABEL, \
               const wxArrayString& value = wxArrayString() ); \
     ~PROPNAME(); \
-    virtual bool OnEvent( wxPropertyGrid* propgrid, \
-                          wxWindow* primary, wxEvent& event ); \
-    virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ); \
-    virtual wxValidator* DoGetValidator() const; \
+    virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ) wxOVERRIDE; \
+    virtual wxValidator* DoGetValidator() const wxOVERRIDE; \
 };
 
 #define WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAM) \
@@ -889,15 +785,9 @@ PROPNAME::PROPNAME( const wxString& label, \
 { \
     PROPNAME::GenerateValueAsString(); \
     m_delimiter = DELIMCHAR; \
+    m_customBtnText = CUSTBUTTXT; \
 } \
-PROPNAME::~PROPNAME() { } \
-bool PROPNAME::OnEvent( wxPropertyGrid* propgrid, \
-                        wxWindow* primary, wxEvent& event ) \
-{ \
-    if ( event.GetEventType() == wxEVT_BUTTON ) \
-        return OnButtonClick(propgrid,primary,(const wxChar*) CUSTBUTTXT); \
-    return false; \
-}
+PROPNAME::~PROPNAME() { }
 
 #define WX_PG_DECLARE_ARRAYSTRING_PROPERTY(PROPNAME) \
 WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME)
@@ -919,8 +809,8 @@ wxValidator* PROPNAME::DoGetValidator () const \
 
 #if wxUSE_EDITABLELISTBOX
 
-class WXDLLIMPEXP_FWD_ADV wxEditableListBox;
-class WXDLLIMPEXP_FWD_CORE wxListEvent;
+#include "wx/bmpbuttn.h"
+#include "wx/editlbox.h"
 
 #define wxAEDIALOG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
@@ -932,13 +822,6 @@ public:
     virtual ~wxPGArrayEditorDialog() { }
 
     void Init();
-
-    wxPGArrayEditorDialog( wxWindow *parent,
-                         const wxString& message,
-                         const wxString& caption,
-                         long style = wxAEDIALOG_STYLE,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& sz = wxDefaultSize );
 
     bool Create( wxWindow *parent,
                  const wxString& message,
@@ -952,29 +835,33 @@ public:
         m_hasCustomNewAction = true;
     }
 
-    /** Set value modified by dialog.
-    */
+    void SetNewButtonText(const wxString& text)
+    {
+        m_customNewButtonText = text;
+        if ( m_elb && m_elb->GetNewButton() )
+        {
+            m_elb->GetNewButton()->SetToolTip(text);
+        }
+    }
+
+    // Set value modified by dialog.
     virtual void SetDialogValue( const wxVariant& WXUNUSED(value) )
     {
         wxFAIL_MSG(wxS("re-implement this member function in derived class"));
     }
 
-    /** Return value modified by dialog.
-    */
+    // Return value modified by dialog.
     virtual wxVariant GetDialogValue() const
     {
         wxFAIL_MSG(wxS("re-implement this member function in derived class"));
         return wxVariant();
     }
 
-    /** Override to return wxValidator to be used with the wxTextCtrl
-        in dialog. Note that the validator is used in the standard
-        wx way, i.e. it immediately prevents user from entering invalid
-        input.
-
-        @remarks
-        Dialog frees the validator.
-    */
+    // Override to return wxValidator to be used with the wxTextCtrl
+    // in dialog. Note that the validator is used in the standard
+    // wx way, i.e. it immediately prevents user from entering invalid
+    // input.
+    // Note: Dialog frees the validator.
     virtual wxValidator* GetTextCtrlValidator() const
     {
         return NULL;
@@ -1008,6 +895,7 @@ protected:
 
     bool            m_modified;
     bool            m_hasCustomNewAction;
+    wxString        m_customNewButtonText;
 
     // These must be overridden - must return true on success.
     virtual wxString ArrayGet( size_t index ) = 0;
@@ -1057,6 +945,7 @@ public:
         if ( !custBtText.empty() )
         {
             EnableCustomNewAction();
+            SetNewButtonText(custBtText);
             m_pCallingClass = pcc;
         }
     }

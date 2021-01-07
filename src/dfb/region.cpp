@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/region.h"
 
@@ -72,6 +69,12 @@ wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 wxRegion::wxRegion(const wxRect& r)
 {
     m_refData = new wxRegionRefData(r);
+}
+
+wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
+{
+#warning "implement this"
+    m_refData = NULL;
 }
 
 wxRegion::~wxRegion()

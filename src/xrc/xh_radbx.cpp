@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_RADIOBOX
 
@@ -107,30 +104,21 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         // we handle handle <item>Label</item> constructs here, and the item
         // tag can have tooltip, helptext, enabled and hidden attributes
 
-        wxString label = GetNodeContent(m_node);
-
-        wxString tooltip;
-        m_node->GetAttribute(wxT("tooltip"), &tooltip);
-
-        wxString helptext;
-        bool hasHelptext = m_node->GetAttribute(wxT("helptext"), &helptext);
-
-        if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
-        {
-            label = wxGetTranslation(label, m_resource->GetDomain());
-            if ( !tooltip.empty() )
-                tooltip = wxGetTranslation(tooltip, m_resource->GetDomain());
-            if ( hasHelptext )
-                helptext = wxGetTranslation(helptext, m_resource->GetDomain());
-        }
-
-        m_labels.push_back(label);
+        // For compatibility, labels are not escaped in XRC by default and
+        // label="1" attribute needs to be explicitly specified to handle them
+        // consistently with the other labels.
+        m_labels.push_back(GetNodeText(m_node,
+                                       GetBoolAttr("label", 0)
+                                        ? 0
+                                        : wxXRC_TEXT_NO_ESCAPE));
 #if wxUSE_TOOLTIPS
-        m_tooltips.push_back(tooltip);
+        m_tooltips.push_back(GetNodeText(GetParamNode(wxT("tooltip")),
+                                         wxXRC_TEXT_NO_ESCAPE));
 #endif // wxUSE_TOOLTIPS
 #if wxUSE_HELP
-        m_helptexts.push_back(helptext);
-        m_helptextSpecified.push_back(hasHelptext);
+        const wxXmlNode* const nodeHelp = GetParamNode(wxT("helptext"));
+        m_helptexts.push_back(GetNodeText(nodeHelp, wxXRC_TEXT_NO_ESCAPE));
+        m_helptextSpecified.push_back(nodeHelp != NULL);
 #endif // wxUSE_HELP
         m_isEnabled.push_back(GetBoolAttr("enabled", 1));
         m_isShown.push_back(!GetBoolAttr("hidden", 0));

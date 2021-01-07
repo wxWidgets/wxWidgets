@@ -24,7 +24,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxControlNameStr)
+             const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
@@ -33,10 +33,10 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
    // Simulates an event
-   virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
+   virtual void Command(wxCommandEvent& event) wxOVERRIDE { ProcessCommand(event); }
 
    // implementation from now on
    // --------------------------

@@ -99,18 +99,18 @@ public:
     /**
         Default constructor.
     */
-    wxList<T>();
+    wxList();
 
     /**
         Constructor which initialized the list with an array of @a count elements.
     */
-    wxList<T>(size_t count, T* elements[]);
+    wxList(size_t count, T* elements[]);
 
     /**
         Destroys the list, but does not delete the objects stored in the list
         unless you called DeleteContents(@true ).
     */
-    ~wxList<T>();
+    ~wxList();
 
     /**
         Appends the pointer to @a object to the list.

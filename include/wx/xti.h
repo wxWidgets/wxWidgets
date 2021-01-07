@@ -195,9 +195,9 @@ public:
 
     virtual ~wxClassInfo();
 
-    // allocates an instance of this class, this object does not have to be 
+    // allocates an instance of this class, this object does not have to be
     // initialized or fully constructed as this call will be followed by a call to Create
-    virtual wxObject *AllocateObject() const 
+    virtual wxObject *AllocateObject() const
         { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
     // 'old naming' for AllocateObject staying here for backward compatibility
@@ -207,8 +207,8 @@ public:
     wxObject *ConstructObject(int ParamCount, wxAny *Params) const;
 
     bool NeedsDirectConstruction() const;
-    
-    const wxChar       *GetClassName() const 
+
+    const wxChar       *GetClassName() const
         { return m_className; }
     const wxChar       *GetBaseClassName1() const
         { return m_parents[0] ? m_parents[0]->GetClassName() : NULL; }
@@ -220,25 +220,25 @@ public:
     const wxClassInfo  *GetBaseClass2() const
         { return m_parents[0] ? m_parents[1] : NULL; }
 
-    const wxChar       *GetIncludeName() const 
+    const wxChar       *GetIncludeName() const
         { return m_unitName; }
-    const wxClassInfo **GetParents() const 
+    const wxClassInfo **GetParents() const
         { return m_parents; }
-    int                 GetSize() const 
+    int                 GetSize() const
         { return m_objectSize; }
-    bool                IsDynamic() const 
+    bool                IsDynamic() const
         { return (NULL != m_objectConstructor); }
 
-    wxObjectConstructorFn      GetConstructor() const 
+    wxObjectConstructorFn      GetConstructor() const
         { return m_objectConstructor; }
-    const wxClassInfo         *GetNext() const 
+    const wxClassInfo         *GetNext() const
         { return m_next; }
 
     // statics:
 
     static void                CleanUp();
     static wxClassInfo        *FindClass(const wxString& className);
-    static const wxClassInfo  *GetFirst() 
+    static const wxClassInfo  *GetFirst()
         { return sm_first; }
 
 
@@ -254,18 +254,18 @@ public:
     // this object by returning false, if this class has not registered a
     // callback, the search will go up the inheritance tree if no callback has
     // been registered true will be returned by default
-    bool BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer, 
+    bool BeforeWriteObject( const wxObject *obj, wxObjectWriter *streamer,
                             wxObjectWriterCallback *writercallback, const wxStringToAnyHashMap &metadata) const;
 
     // gets the streaming callback from this class or any superclass
     wxObjectStreamingCallback GetStreamingCallback() const;
 
     // returns the first property
-    wxPropertyInfo* GetFirstProperty() const 
+    wxPropertyInfo* GetFirstProperty() const
         { EnsureInfosInited(); return m_firstProperty; }
 
     // returns the first handler
-    wxHandlerInfo* GetFirstHandler() const 
+    wxHandlerInfo* GetFirstHandler() const
         { EnsureInfosInited(); return m_firstHandler; }
 
     // Call the Create upon an instance of the class, in the end the object is fully
@@ -273,26 +273,26 @@ public:
     virtual bool Create (wxObject *object, int ParamCount, wxAny *Params) const;
 
     // get number of parameters for constructor
-    virtual int GetCreateParamCount() const 
+    virtual int GetCreateParamCount() const
         { return m_constructorPropertiesCount; }
 
     // get n-th constructor parameter
-    virtual const wxChar* GetCreateParamName(int n) const 
+    virtual const wxChar* GetCreateParamName(int n) const
         { return m_constructorProperties[n]; }
 
-    // Runtime access to objects for simple properties (get/set) by property 
+    // Runtime access to objects for simple properties (get/set) by property
     // name and variant data
-    virtual void SetProperty (wxObject *object, const wxChar *propertyName, 
+    virtual void SetProperty (wxObject *object, const wxChar *propertyName,
                               const wxAny &value) const;
     virtual wxAny GetProperty (wxObject *object, const wxChar *propertyName) const;
 
     // Runtime access to objects for collection properties by property name
-    virtual wxAnyList GetPropertyCollection(wxObject *object, 
+    virtual wxAnyList GetPropertyCollection(wxObject *object,
                                                   const wxChar *propertyName) const;
-    virtual void AddToPropertyCollection(wxObject *object, const wxChar *propertyName, 
+    virtual void AddToPropertyCollection(wxObject *object, const wxChar *propertyName,
                                          const wxAny& value) const;
 
-    // we must be able to cast variants to wxObject pointers, templates seem 
+    // we must be able to cast variants to wxObject pointers, templates seem
     // not to be suitable
     void CallOnAny( const wxAny &data, wxObjectFunctor* functor ) const;
 
@@ -312,7 +312,7 @@ public:
     // find handler by name
     virtual wxHandlerInfo *FindHandlerInfoInThisClass (const wxChar *handlerName) const;
 
-    // puts all the properties of this class and its superclasses in the map, 
+    // puts all the properties of this class and its superclasses in the map,
     // as long as there is not yet an entry with the same name (overriding mechanism)
     void GetProperties( wxPropertyInfoMap &map ) const;
 
@@ -385,7 +385,7 @@ class WXDLLIMPEXP_BASE wxDynamicClassInfo : public wxClassInfo
     friend class WXDLLIMPEXP_BASE wxDynamicObject;
 
 public:
-    wxDynamicClassInfo( const wxChar *_UnitName, const wxChar *_ClassName, 
+    wxDynamicClassInfo( const wxChar *_UnitName, const wxChar *_ClassName,
                         const wxClassInfo* superClass );
     virtual ~wxDynamicClassInfo();
 
@@ -402,7 +402,7 @@ public:
     virtual const wxChar* GetCreateParamName(int i) const;
 
     // Runtime access to objects by property name, and variant data
-    virtual void SetProperty (wxObject *object, const wxChar *PropertyName, 
+    virtual void SetProperty (wxObject *object, const wxChar *PropertyName,
                               const wxAny &Value) const;
     virtual wxAny GetProperty (wxObject *object, const wxChar *PropertyName) const;
 
@@ -416,7 +416,7 @@ public:
     void RenameProperty( const wxChar *oldPropertyName, const wxChar *newPropertyName );
 
     // as a handler to this class at runtime
-    void AddHandler( const wxChar *handlerName, wxObjectEventFunction address, 
+    void AddHandler( const wxChar *handlerName, wxObjectEventFunction address,
                      const wxClassInfo* eventClassInfo );
 
     // removes an existing runtime-handler

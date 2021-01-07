@@ -59,17 +59,31 @@ public:
         // And we also use wxBU_EXACTFIT to avoid being resized up to the
         // standard button size as this doesn't make sense for bitmap buttons
         // which are not standard anyhow and should fit their bitmap size.
-        return wxButton::Create(parent, winid, "",
+        return wxButton::Create(parent, winid, wxString(),
                                 pos, size,
                                 style | wxBU_NOTEXT | wxBU_EXACTFIT,
                                 validator, name);
     }
 
+    /*
+        Derived classes also need to declare, but not define, as it's done in
+        common code in bmpbtncmn.cpp, the following function:
+
+    bool CreateCloseButton(wxWindow* parent,
+                           wxWindowID winid,
+                           const wxString& name = wxString());
+
+        which is used used by NewCloseButton(), and, as Create(), must be
+        called on default-constructed wxBitmapButton object.
+    */
+
     // Special creation function for a standard "Close" bitmap. It allows to
     // simply create a close button with the image appropriate for the current
     // platform.
-    static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
-
+    static wxBitmapButton*
+    NewCloseButton(wxWindow* parent,
+                   wxWindowID winid,
+                   const wxString& name = wxString());
 
     // set/get the margins around the button
     virtual void SetMargins(int x, int y)

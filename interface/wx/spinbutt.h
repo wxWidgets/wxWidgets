@@ -78,11 +78,13 @@ public:
 
     @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPIN(id, func)}
-        Generated whenever an arrow is pressed.
+        Generated whenever pressing an arrow changed the spin button value.
     @event{EVT_SPIN_UP(id, func)}
-        Generated when left/up arrow is pressed.
+        Generated whenever pressing left/up arrow changed the spin button
+        value.
     @event{EVT_SPIN_DOWN(id, func)}
-        Generated when right/down arrow is pressed.
+        Generated whenever pressing right/down arrow changed the spin
+        button value.
     @endEventTable
 
     Note that if you handle both SPIN and UP or DOWN events, you will be notified

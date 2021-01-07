@@ -18,10 +18,10 @@
 
     @beginEventTable{wxHyperlinkEvent}
     @event{EVT_HYPERLINK(id, func)}
-        User clicked on an hyperlink.
+        User clicked on a hyperlink.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 */
 class wxHyperlinkEvent : public wxCommandEvent
@@ -90,7 +90,7 @@ wxEventType wxEVT_HYPERLINK;
     Currently this class is implemented using native support in wxGTK and wxMSW
     and a generic version is used by the other ports.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{hyperlinkctrl}
 
@@ -100,7 +100,7 @@ class wxHyperlinkCtrl : public wxControl
 {
 public:
     wxHyperlinkCtrl();
-    
+
     /**
         Constructor. See Create() for more info.
     */

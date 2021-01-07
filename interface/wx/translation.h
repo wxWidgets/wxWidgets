@@ -7,7 +7,7 @@
 
 
 /**
-    This class allows to get translations for strings.
+    This class allows getting translations for strings.
 
     In wxWidgets this class manages message catalogs which contain the
     translations of the strings used to the current language. Unlike wxLocale,
@@ -96,7 +96,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -119,7 +119,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -157,20 +157,10 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
-        In this overload, @c msgid strings are assumed
+        Bu default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
         If you have to deal with non-English strings or 8-bit characters in the
         source code, see the instructions in @ref overview_nonenglish.
-
-        @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
-     */
-    bool AddCatalog(const wxString& domain);
-
-    /**
-        Same as AddCatalog(const wxString&), but takes an additional argument,
-        @a msgIdLanguage.
 
         @param domain
             The catalog domain to add.
@@ -186,7 +176,8 @@ public:
             @true if catalog was successfully loaded, @false otherwise (which might
             mean that the catalog is not found or that it isn't in the correct format).
      */
-    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     /**
         Same as AddCatalog(const wxString&, wxLanguage), but takes two
@@ -342,7 +333,7 @@ public:
 
     Catalogs are searched for in standard places (system locales directory,
     `LC_PATH` on Unix systems, Resources subdirectory of the application bundle
-    on OS X, executable's directory on Windows), but you may also prepend
+    on macOS, executable's directory on Windows), but you may also prepend
     additional directories to the search path with
     AddCatalogLookupPathPrefix().
 
@@ -464,6 +455,28 @@ public:
 #define wxPLURAL(string, plural, n)
 
 /**
+    Similar to _() but translates the string in the given context.
+
+    See the description of @c context argument of wxGetTranslation().
+
+    @see wxGETTEXT_IN_CONTEXT_PLURAL()
+
+    @since 3.1.1
+ */
+#define wxGETTEXT_IN_CONTEXT(context, string)
+
+/**
+    Similar to wxPLURAL() but translates the string in the given context.
+
+    See the description of @c context argument of wxGetTranslation().
+
+    @see wxGETTEXT_IN_CONTEXT()
+
+    @since 3.1.1
+ */
+#define wxGETTEXT_IN_CONTEXT_PLURAL(context, string, plural, n)
+
+/**
     This macro doesn't do anything in the program code -- it simply expands to
     the value of its argument.
 
@@ -475,30 +488,32 @@ public:
     initialization.
 
     Here is an example which should make it more clear: suppose that you have a
-    static array of strings containing the weekday names and which have to be
-    translated (note that it is a bad example, really, as wxDateTime already
-    can be used to get the localized week day names already). If you write:
+    static array of strings containing the names of chemical elements, which
+    have to be translated. If you write:
 
     @code
-    static const char * const weekdays[] = { _("Mon"), ..., _("Sun") };
+    static const char * const elements[] = { _("Hydrogen"), _("Helium"), ... };
     ...
-    // use weekdays[n] as usual
+    // use elements[n] as usual
     @endcode
 
-    The code wouldn't compile because the function calls are forbidden in the
-    array initializer. So instead you should do this:
+    The code would compile and run, but there would be no translations for the
+    strings because static variables are initialized at a very early stage of
+    program execution; that is, before the locale and paths to message catalog
+    files have been set up.
+    So instead you should do this:
 
     @code
-    static const char * const weekdays[] = { wxTRANSLATE("Mon"), ...,
-    wxTRANSLATE("Sun") };
+    static const char * const elements[] = { wxTRANSLATE("Hydrogen"),
+    wxTRANSLATE("Helium"), ... };
     ...
-    // use wxGetTranslation(weekdays[n])
+    // use wxGetTranslation(elements[n])
     @endcode
 
-    Note that although the code @b would compile if you simply omit
-    wxTRANSLATE() in the above, it wouldn't work as expected because there
-    would be no translations for the weekday names in the program message
-    catalog and wxGetTranslation() wouldn't find them.
+    Note that if you simply omit wxTRANSLATE() above, those strings would not
+    be marked for translation, and would therefore not be included in the
+    message catalog. Consequently, wxGetTranslation() would not find
+    translations for them.
 
     @return A const wxChar*.
 
@@ -522,6 +537,16 @@ public:
     also common in Unix world) syntax is provided: the _() macro is defined to
     do the same thing as wxGetTranslation().
 
+    If @a context is not empty (notice that this argument is only available
+    starting from wxWidgets 3.1.1), item translation is looked up in the
+    specified context. This allows having different translations for the same
+    string appearing in different contexts, e.g. it may be necessary to
+    translate the same English "Open" verb differently depending on the object
+    it applies to. To do this, you need to use @c msgctxt in the source message
+    catalog and specify different contexts for the different occurrences of the
+    string and then use the same contexts in the calls to this function (or
+    wxGETTEXT_IN_CONTEXT() or wxGETTEXT_IN_CONTEXT_PLURAL() macros).
+
     This function is thread-safe.
 
     @note This function is not suitable for literal strings using wxT() macro
@@ -534,7 +559,8 @@ public:
     @header{wx/intl.h}
 */
 const wxString& wxGetTranslation(const wxString& string,
-                                 const wxString& domain = wxEmptyString);
+                                 const wxString& domain = wxEmptyString,
+                                 const wxString& context = wxEmptyString);
 
 /**
     This is an overloaded version of
@@ -560,7 +586,8 @@ const wxString& wxGetTranslation(const wxString& string,
 */
 const wxString& wxGetTranslation(const wxString& string,
                                  const wxString& plural, unsigned n,
-                                 const wxString& domain = wxEmptyString);
+                                 const wxString& domain = wxEmptyString,
+                                 const wxString& context = wxEmptyString);
 
 /**
     Macro to be used around all literal strings that should be translated.

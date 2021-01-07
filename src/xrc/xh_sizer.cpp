@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC
 
@@ -320,14 +317,63 @@ wxSizer*  wxSizerXmlHandler::Handle_wxBoxSizer()
 #if wxUSE_STATBOX
 wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
 {
-    return new wxStaticBoxSizer(
-            new wxStaticBox(m_parentAsWindow,
-                            GetID(),
-                            GetText(wxT("label")),
-                            wxDefaultPosition, wxDefaultSize,
-                            0/*style*/,
-                            GetName()),
-            GetStyle(wxT("orient"), wxHORIZONTAL));
+    wxXmlNode* nodeWindowLabel = GetParamNode(wxS("windowlabel"));
+    wxString const& labelText = GetText(wxS("label"));
+
+    wxStaticBox* box = NULL;
+    if ( nodeWindowLabel )
+    {
+        if ( !labelText.empty() )
+        {
+            ReportError("Either label or windowlabel can be used, but not both");
+            return NULL;
+        }
+
+#ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+        wxXmlNode* n = nodeWindowLabel->GetChildren();
+        if ( !n )
+        {
+            ReportError("windowlabel must have a window child");
+            return NULL;
+        }
+
+        if ( n->GetNext() )
+        {
+            ReportError("windowlabel can only have a single child");
+            return NULL;
+        }
+
+        wxObject* const item = CreateResFromNode(n, m_parent, NULL);
+        wxWindow* const wndLabel = wxDynamicCast(item, wxWindow);
+        if ( !wndLabel )
+        {
+            ReportError(n, "windowlabel child must be a window");
+            return NULL;
+        }
+
+        box = new wxStaticBox(m_parentAsWindow,
+                              GetID(),
+                              wndLabel,
+                              wxDefaultPosition, wxDefaultSize,
+                              0/*style*/,
+                              GetName());
+#else // !wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+        ReportError("Support for using windows as wxStaticBox labels is "
+                    "missing in this build of wxWidgets.");
+        return NULL;
+#endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX/!wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+    }
+    else // Using plain text label.
+    {
+        box = new wxStaticBox(m_parentAsWindow,
+                              GetID(),
+                              labelText,
+                              wxDefaultPosition, wxDefaultSize,
+                              0/*style*/,
+                              GetName());
+    }
+
+    return new wxStaticBoxSizer(box, GetStyle(wxS("orient"), wxHORIZONTAL));
 }
 #endif // wxUSE_STATBOX
 
@@ -512,17 +558,17 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
 }
 
 
-wxGBPosition wxSizerXmlHandler::GetGBPos(const wxString& param)
+wxGBPosition wxSizerXmlHandler::GetGBPos()
 {
-    wxSize sz = GetSize(param);
+    wxSize sz = GetPairInts(wxS("cellpos"));
     if (sz.x < 0) sz.x = 0;
     if (sz.y < 0) sz.y = 0;
     return wxGBPosition(sz.x, sz.y);
 }
 
-wxGBSpan wxSizerXmlHandler::GetGBSpan(const wxString& param)
+wxGBSpan wxSizerXmlHandler::GetGBSpan()
 {
-    wxSize sz = GetSize(param);
+    wxSize sz = GetPairInts(wxS("cellspan"));
     if (sz.x < 1) sz.x = 1;
     if (sz.y < 1) sz.y = 1;
     return wxGBSpan(sz.x, sz.y);
@@ -856,15 +902,15 @@ void wxSizerXmlHandler::SetSizerItemAttributes(wxSizerItem* sitem)
     wxSize sz = GetSize(wxT("minsize"));
     if (!(sz == wxDefaultSize))
         sitem->SetMinSize(sz);
-    sz = GetSize(wxT("ratio"));
+    sz = GetPairInts(wxT("ratio"));
     if (!(sz == wxDefaultSize))
         sitem->SetRatio(sz);
 
     if (m_isGBS)
     {
         wxGBSizerItem* gbsitem = (wxGBSizerItem*)sitem;
-        gbsitem->SetPos(GetGBPos(wxT("cellpos")));
-        gbsitem->SetSpan(GetGBSpan(wxT("cellspan")));
+        gbsitem->SetPos(GetGBPos());
+        gbsitem->SetSpan(GetGBSpan());
     }
 
     // record the id of the item, if any, for use by XRCSIZERITEM()

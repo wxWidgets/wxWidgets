@@ -17,9 +17,9 @@
 class wxTextMeasure : public wxTextMeasureBase
 {
 public:
-    wxEXPLICIT wxTextMeasure(const wxDC *dc, const wxFont *font = NULL)
+    explicit wxTextMeasure(const wxDC *dc, const wxFont *font = NULL)
         : wxTextMeasureBase(dc, font) {}
-    wxEXPLICIT wxTextMeasure(const wxWindow *win, const wxFont *font = NULL)
+    explicit wxTextMeasure(const wxWindow *win, const wxFont *font = NULL)
         : wxTextMeasureBase(win, font) {}
 
 protected:
@@ -27,11 +27,11 @@ protected:
                                wxCoord *width,
                                wxCoord *height,
                                wxCoord *descent = NULL,
-                               wxCoord *externalLeading = NULL);
+                               wxCoord *externalLeading = NULL) wxOVERRIDE;
 
     virtual bool DoGetPartialTextExtents(const wxString& text,
                                          wxArrayInt& widths,
-                                         double scaleX);
+                                         double scaleX) wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(wxTextMeasure);
 };

@@ -69,6 +69,19 @@ public:
     wxIconBundle(const wxIcon& icon);
 
     /**
+        Initializes the bundle with all sizes of a group icon with @a
+        resourceName stored as an MS Windows resource in @a module.
+
+        When @a module is 0, the current instance is used.
+
+        @see AddIcon(const wxString&, WXHINSTANCE)
+
+        @onlyfor{wxmsw}
+        @since 3.1.1
+    */
+    wxIconBundle(const wxString& resourceName, WXHINSTANCE module);
+
+    /**
         Copy constructor.
     */
     wxIconBundle(const wxIconBundle& ic);
@@ -99,6 +112,17 @@ public:
     void AddIcon(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
 
     /**
+        Loads all sizes of a group icon with @a resourceName stored as an MS
+        Windows resource in @a module.
+
+        When @a module is 0, the current instance is used.
+
+        @onlyfor{wxmsw}
+        @since 3.1.1
+    */
+    void AddIcon(const wxString& resourceName, WXHINSTANCE module);
+
+    /**
         Adds the icon to the collection; if the collection already
         contains an icon with the same width and height, it is
         replaced by the new one.
@@ -116,10 +140,10 @@ public:
         always returned. Otherwise, the behaviour depends on the flags. If only
         wxIconBundle::FALLBACK_NONE is given, the function returns an invalid
         icon. If wxIconBundle::FALLBACK_SYSTEM is given, it tries to find the
-        icon of standard system size, regardless of the size passed as 
+        icon of standard system size, regardless of the size passed as
         parameter. Otherwise, or if the icon system size is not found neither,
         but wxIconBundle::FALLBACK_NEAREST_LARGER flag is specified, the
-        function returns the smallest icon of the size larger than the 
+        function returns the smallest icon of the size larger than the
         requested one or, if this fails too, just the icon closest to the
         specified size.
 

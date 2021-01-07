@@ -26,6 +26,7 @@ protected:
         CPPUNIT_TEST( ChangeMode ); \
         WXUISIM_TEST( ItemClick ); \
         WXUISIM_TEST( KeyDown ); \
+        WXUISIM_TEST( MultiSelect ); \
         CPPUNIT_TEST( DeleteItems ); \
         CPPUNIT_TEST( InsertItem ); \
         CPPUNIT_TEST( Find ); \
@@ -33,12 +34,14 @@ protected:
         CPPUNIT_TEST( ItemFormatting ); \
         WXUISIM_TEST( EditLabel ); \
         CPPUNIT_TEST( ImageList ); \
+        CPPUNIT_TEST( HitTest ); \
         CPPUNIT_TEST( Sort )
 
     void ColumnsOrder();
     void ItemRect();
     void ItemText();
     void ChangeMode();
+    void MultiSelect();
     void ItemClick();
     void KeyDown();
     void DeleteItems();
@@ -48,6 +51,7 @@ protected:
     void ItemFormatting();
     void EditLabel();
     void ImageList();
+    void HitTest();
     void Sort();
 
     wxDECLARE_NO_COPY_CLASS(ListBaseTestCase);

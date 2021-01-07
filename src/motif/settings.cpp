@@ -179,7 +179,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
     {
         case wxSYS_SYSTEM_FIXED_FONT:
         {
-            font = wxFont(pointSize, wxMODERN, wxNORMAL, wxNORMAL, false);
+            font = wxFont(pointSize, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false);
             break;
         }
         case wxSYS_DEVICE_DEFAULT_FONT:
@@ -187,7 +187,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT:
         default:
         {
-            font = wxFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL, false);
+            font = wxFont(pointSize, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false);
             break;
         }
     }
@@ -196,7 +196,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 }
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUNUSED(win))
 {
     int return_value = 0;
 

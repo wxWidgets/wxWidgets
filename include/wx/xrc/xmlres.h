@@ -76,7 +76,8 @@ enum wxXmlResourceFlags
 {
     wxXRC_USE_LOCALE     = 1,
     wxXRC_NO_SUBCLASSING = 2,
-    wxXRC_NO_RELOADING   = 4
+    wxXRC_NO_RELOADING   = 4,
+    wxXRC_USE_ENVVARS    = 8
 };
 
 // This class holds XML resources from one or more .xml files
@@ -95,6 +96,9 @@ public:
     //        wxXRC_NO_RELOADING
     //              don't check the modification time of the XRC files and
     //              reload them if they have changed on disk
+    //        wxXRC_USE_ENVVARS
+    //              expand environment variables for paths
+    //              (such as bitmaps or icons).
     wxXmlResource(int flags = wxXRC_USE_LOCALE,
                   const wxString& domain = wxEmptyString);
 
@@ -105,6 +109,12 @@ public:
     //        wxXRC_NO_SUBCLASSING
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
+    //        wxXRC_NO_RELOADING
+    //              don't check the modification time of the XRC files and
+    //              reload them if they have changed on disk
+    //        wxXRC_USE_ENVVARS
+    //              expand environment variables for paths
+    //              (such as bitmaps or icons).
     wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE,
                   const wxString& domain = wxEmptyString);
 
@@ -240,7 +250,7 @@ public:
     // wxWindow::NewControlId(). Otherwise value_if_not_found is used.
     // Macro XRCID(name) is provided for convenient use in event tables.
     static int GetXRCID(const wxString& str_id, int value_if_not_found = wxID_NONE)
-        { return DoGetXRCID(str_id.mb_str(), value_if_not_found); }
+        { return DoGetXRCID(str_id.utf8_str(), value_if_not_found); }
 
     // version for internal use only
     static int DoGetXRCID(const char *str_id, int value_if_not_found = wxID_NONE);
@@ -279,7 +289,7 @@ public:
     // Sets the global resources object and returns a pointer to the previous one (may be NULL).
     static wxXmlResource *Set(wxXmlResource *res);
 
-    // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
+    // Returns flags, which is a bitlist of wxXmlResourceFlags.
     int GetFlags() const { return m_flags; }
     // Set flags after construction.
     void SetFlags(int flags) { m_flags = flags; }
@@ -513,7 +523,10 @@ public:
     // - replaces \n, \r, \t by respective chars (according to C syntax)
     // - replaces _ by & and __ by _ (needed for _File => &File because of XML)
     // - calls wxGetTranslations (unless disabled in wxXmlResource)
-    wxString GetText(const wxString& param, bool translate = true) wxOVERRIDE;
+    //
+    // The first two conversions can be disabled by using wxXRC_TEXT_NO_ESCAPE
+    // in flags and the last one -- by using wxXRC_TEXT_NO_TRANSLATE.
+    wxString GetNodeText(const wxXmlNode *node, int flags = 0) wxOVERRIDE;
 
     // Returns the XRCID.
     int GetID() wxOVERRIDE;
@@ -544,39 +557,44 @@ public:
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                          wxWindow *windowToUse = NULL) wxOVERRIDE;
 
+    // Gets a size which is not expressed in pixels, so not in dialog units.
+    wxSize GetPairInts(const wxString& param) wxOVERRIDE;
+
     // Gets a direction, complains if the value is invalid.
     wxDirection GetDirection(const wxString& param, wxDirection dirDefault = wxLEFT) wxOVERRIDE;
 
     // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets a bitmap from an XmlNode.
     wxBitmap GetBitmap(const wxXmlNode* node,
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon.
     wxIcon GetIcon(const wxString& param = wxT("icon"),
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon from an XmlNode.
     wxIcon GetIcon(const wxXmlNode* node,
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize) wxOVERRIDE;
 
     // Gets an icon bundle.
     wxIconBundle GetIconBundle(const wxString& param,
-                               const wxArtClient& defaultArtClient = wxART_OTHER) wxOVERRIDE;
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER)) wxOVERRIDE;
 
     // Gets an image list.
     wxImageList *GetImageList(const wxString& param = wxT("imagelist")) wxOVERRIDE;
 
 #if wxUSE_ANIMATIONCTRL
-    // Gets an animation.
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation")) wxOVERRIDE;
+    // Gets an animation creating it using the provided control (so that it
+    // will be compatible with it) if any.
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL) wxOVERRIDE;
 #endif
 
     // Gets a font.
@@ -584,6 +602,10 @@ public:
 
     // Gets the value of a boolean attribute (only "0" and "1" are valid values)
     bool GetBoolAttr(const wxString& attr, bool defaultv) wxOVERRIDE;
+
+    // Gets a file path from the given node, expanding environment variables in
+    // it if wxXRC_USE_ENVVARS is in use.
+    wxString GetFilePath(const wxXmlNode* node) wxOVERRIDE;
 
     // Returns the window associated with the handler (may be NULL).
     wxWindow* GetParentAsWindow() const { return m_handler->GetParentAsWindow(); }

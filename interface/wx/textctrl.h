@@ -220,6 +220,19 @@ enum wxTextAttrLineSpacing
 
 
 /**
+    Underline types that can be used in wxTextAttr::SetFontUnderline().
+
+    @since 3.1.3
+*/
+enum wxTextAttrUnderlineType
+{
+     wxTEXT_ATTR_UNDERLINE_NONE,
+     wxTEXT_ATTR_UNDERLINE_SOLID,
+     wxTEXT_ATTR_UNDERLINE_DOUBLE,
+     wxTEXT_ATTR_UNDERLINE_SPECIAL
+};
+
+/**
     Describes the possible return values of wxTextCtrl::HitTest().
 
     The element names correspond to the relationship between the point asked
@@ -421,6 +434,20 @@ public:
         Returns @true if the font is underlined.
     */
     bool GetFontUnderlined() const;
+
+    /**
+        Returns the underline type, which is one of the wxTextAttrUnderlineType values.
+
+        @since 3.1.3
+    */
+    wxTextAttrUnderlineType GetUnderlineType() const;
+
+    /**
+        Returns the underline color used. wxNullColour when the text colour is used.
+
+        @since 3.1.3
+    */
+    const wxColour& GetUnderlineColour() const;
 
     /**
         Returns the font weight.
@@ -803,9 +830,33 @@ public:
     void SetFontStyle(wxFontStyle fontStyle);
 
     /**
-        Sets the font underlining.
+        Sets the font underlining (solid line, text colour).
     */
     void SetFontUnderlined(bool underlined);
+
+    /**
+        Sets the font underlining.
+
+        @param type Type of underline.
+
+        @param colour Colour to use for underlining, text colour is used by
+        default.
+
+        @note On wxMSW, wxTEXT_ATTR_UNDERLINE_DOUBLE is shown as
+        wxTEXT_ATTR_UNDERLINE_SOLID. There is only a limited number of colours
+        supported, the RGB values are listed
+        <a href="https://docs.microsoft.com/en-us/windows/win32/api/tom/nf-tom-itextdocument2-geteffectcolor">here</a>.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line.
+
+        @note On wxGTK, underline colour is only supported by wxGTK3.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line. GTK might
+        overrule the colour of wxTEXT_ATTR_UNDERLINE_SPECIAL.
+
+        @note On wxOSX, wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a dotted line.
+
+        @since 3.1.3
+    */
+    void SetFontUnderlined(wxTextAttrUnderlineType type, const wxColour& colour = wxNullColour);
 
     /**
         Sets the font weight.
@@ -941,14 +992,20 @@ public:
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_TEXT_ENTER
-           (otherwise pressing Enter key is either processed internally by the
-           control or used to activate the default button of the dialog, if any).
+           The control will generate the event @c wxEVT_TEXT_ENTER that can be
+           handled by the program. Otherwise, i.e. either if this style not
+           specified at all, or it is used, but there is no event handler for
+           this event or the event handler called wxEvent::Skip() to avoid
+           overriding the default handling, pressing Enter key is either
+           processed internally by the control or used to activate the default
+           button of the dialog, if any.
     @style{wxTE_PROCESS_TAB}
-           The control will receive @c wxEVT_CHAR events for TAB pressed -
-           normally, TAB is used for passing to the next control in a dialog
-           instead. For the control created with this style, you can still use
-           Ctrl-Enter to pass to the next control from the keyboard.
+           Normally, TAB key is used for keyboard navigation and pressing it in
+           a control switches focus to the next one. With this style, this
+           won't happen and if the TAB is not otherwise processed (e.g. by @c
+           wxEVT_CHAR event handler), a literal TAB character is inserted into
+           the control. Notice that this style has no effect for single-line
+           text controls when using wxGTK.
     @style{wxTE_MULTILINE}
            The text control allows multiple lines. If this style is not
            specified, line break characters should not be used in the controls
@@ -958,7 +1015,7 @@ public:
     @style{wxTE_READONLY}
            The text will not be user-editable.
     @style{wxTE_RICH}
-           Use rich text control under MSW, this allows to have more than 64KB
+           Use rich text control under MSW, this allows having more than 64KB
            of text in the control. This style is ignored under other platforms.
     @style{wxTE_RICH2}
            Use rich text control version 2.0 or higher under MSW, this style is
@@ -976,37 +1033,38 @@ public:
     @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
-           the control to what can be displayed in it under MSW but not under
-           GTK2. Currently not implemented for the other platforms.
+           the control to what can be displayed in it under wxMSW but not under
+           wxGTK or wxOSX. Currently not implemented for the other platforms.
     @style{wxTE_LEFT}
            The text in the control will be left-justified (default).
     @style{wxTE_CENTRE}
-           The text in the control will be centered (currently wxMSW and
-           wxGTK2 only).
+           The text in the control will be centered (wxMSW, wxGTK, wxOSX).
     @style{wxTE_RIGHT}
-           The text in the control will be right-justified (currently wxMSW
-           and wxGTK2 only).
+           The text in the control will be right-justified (wxMSW, wxGTK,
+           wxOSX).
     @style{wxTE_DONTWRAP}
            Same as wxHSCROLL style: don't wrap at all, show horizontal
            scrollbar instead.
     @style{wxTE_CHARWRAP}
-           Wrap the lines too long to be shown entirely at any position
-           (wxUniv and wxGTK2 only).
+           For multiline controls only: wrap the lines too long to be shown
+           entirely at any position (wxUniv, wxGTK, wxOSX).
     @style{wxTE_WORDWRAP}
-           Wrap the lines too long to be shown entirely at word boundaries
-           (wxUniv and wxGTK2 only).
+           For multiline controls only: wrap the lines too long to be shown
+           entirely at word boundaries (wxUniv, wxMSW, wxGTK, wxOSX).
     @style{wxTE_BESTWRAP}
-           Wrap the lines at word boundaries or at any other character if
-           there are words longer than the window width (this is the default).
+           For multiline controls only: wrap the lines at word boundaries
+           or at any other character if there are words longer than the window
+           width (this is the default).
     @style{wxTE_CAPITALIZE}
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable
 
     Note that alignment styles (wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT) can be
-    changed dynamically after control creation on wxMSW and wxGTK. wxTE_READONLY,
-    wxTE_PASSWORD and wrapping styles can be dynamically changed under wxGTK but
-    not wxMSW. The other styles can be only set during control creation.
+    changed dynamically after control creation on wxMSW, wxGTK and wxOSX.
+    wxTE_READONLY, wxTE_PASSWORD and wrapping styles can be dynamically changed
+    under wxGTK but not wxMSW. The other styles can be only set during control
+    creation.
 
 
     @section textctrl_text_format wxTextCtrl Text Format
@@ -1030,6 +1088,31 @@ public:
     back to the other wxTextCtrl methods. This problem doesn't arise for
     single-line platforms however where the indices in the control do
     correspond to the positions in the value string.
+
+
+    @section textctrl_positions_xy wxTextCtrl Positions and Coordinates
+
+    It is possible to use either linear positions, i.e. roughly (but @e not
+    always exactly, as explained in the previous section) the index of the
+    character in the text contained in the control or X-Y coordinates, i.e.
+    column and line of the character when working with this class and it
+    provides the functions PositionToXY() and XYToPosition() to convert between
+    the two.
+
+    Additionally, a position in the control can be converted to its coordinates
+    in pixels using PositionToCoords() which can be useful to e.g. show a popup
+    menu near the given character. And, in the other direction, HitTest() can
+    be used to find the character under, or near, the given pixel coordinates.
+
+    To be more precise, positions actually refer to the gaps between characters
+    and not the characters themselves. Thus, position 0 is the one before the
+    very first character in the control and so is a valid position even when
+    the control is empty. And if the control contains a single character, it
+    has two valid positions: 0 before this character and 1 -- after it. This,
+    when the documentation of various functions mentions "invalid position", it
+    doesn't consider the position just after the last character of the line to
+    be invalid, only the positions beyond that one (e.g. 2 and greater in the
+    single character example) are actually invalid.
 
 
     @section textctrl_styles wxTextCtrl Styles.
@@ -1304,21 +1387,23 @@ public:
     /**
         Finds the position of the character at the specified point.
 
-        If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
-        character closest to this position are returned, otherwise the output
-        parameters are not modified.
+        If the return code is not @c wxTE_HT_UNKNOWN the position of the
+        character closest to this position is returned, otherwise the output
+        parameter is not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
         In wxPerl this function takes only the @a pt argument and
-        returns a 3-element list (result, col, row).
+        returns a 2-element list (result, pos).
         @endWxPerlOnly
 
         @param pt
             The position of the point to check, in window device coordinates.
+            In wxGTK, and only there, the coordinates can be negative, but in
+            portable code only positive values should be used.
         @param pos
             Receives the position of the character at the given position. May
             be @NULL.
@@ -1335,7 +1420,7 @@ public:
         parameters are not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
@@ -1441,7 +1526,7 @@ public:
     /**
         Converts given text position to client coordinates in pixels.
 
-        This function allows to find where is the character at the given
+        This function allows finding where is the character at the given
         position displayed in the text control.
 
         @onlyfor{wxmsw,wxgtk}. Additionally, wxGTK only implements this method
@@ -1476,7 +1561,10 @@ public:
 
     /**
         Changes the default style to use for the new text which is going to be
-        added to the control using WriteText() or AppendText().
+        added to the control.
+
+        This applies both to the text added programmatically using WriteText()
+        or AppendText() and to the text entered by the user interactively.
 
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
@@ -1610,7 +1698,7 @@ public:
         inheriting wxTextCtrl from @c std::streambuf in which case this class is
         not compiled in.
         You also must have @c wxUSE_STD_IOSTREAM option on (i.e. set to 1) in your
-        @c setup.h to be able to use it. Under Unix, specify @c --enable-std_iostreams
+        @c setup.h to be able to use it. Under Unix, specify @c \--enable-std_iostreams
         switch when running configure for this.
 
     Example of usage:

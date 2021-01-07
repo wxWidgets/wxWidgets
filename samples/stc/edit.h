@@ -101,18 +101,22 @@ public:
     void OnMultipleSelections(wxCommandEvent& event);
     void OnMultiPaste(wxCommandEvent& event);
     void OnMultipleSelectionsTyping(wxCommandEvent& event);
+    void OnCustomPopup(wxCommandEvent& evt);
+    void OnTechnology(wxCommandEvent& event);
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
-    void OnKey  (wxStyledTextEvent &event);
+    void OnCallTipClick(wxStyledTextEvent &event);
 
     void OnKeyDown(wxKeyEvent &event);
+
+    // call tips
+    void ShowCallTipAt(int position);
 
     //! language/lexer
     wxString DeterminePrefs (const wxString &filename);
     bool InitializePrefs (const wxString &filename);
-    bool UserSettings (const wxString &filename);
-    LanguageInfo const* GetLanguageInfo () {return m_language;};
+    LanguageInfo const* GetLanguageInfo () {return m_language;}
 
     //! load/save file
     bool LoadFile ();
@@ -120,8 +124,8 @@ public:
     bool SaveFile ();
     bool SaveFile (const wxString &filename);
     bool Modified ();
-    wxString GetFilename () {return m_filename;};
-    void SetFilename (const wxString &filename) {m_filename = filename;};
+    wxString GetFilename () {return m_filename;}
+    void SetFilename (const wxString &filename) {m_filename = filename;}
 
 private:
     // file
@@ -136,6 +140,9 @@ private:
     int m_FoldingID;
     int m_FoldingMargin;
     int m_DividerID;
+
+    // call tip data
+    int m_calltipNo;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -162,19 +169,19 @@ class EditPrint: public wxPrintout {
 public:
 
     //! constructor
-    EditPrint (Edit *edit, const wxChar *title = wxT(""));
+    EditPrint (Edit *edit, const wxString& title = "");
 
     //! event handlers
-    bool OnPrintPage (int page);
-    bool OnBeginDocument (int startPage, int endPage);
+    bool OnPrintPage (int page) wxOVERRIDE;
+    bool OnBeginDocument (int startPage, int endPage) wxOVERRIDE;
 
     //! print functions
-    bool HasPage (int page);
-    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
+    bool HasPage (int page) wxOVERRIDE;
+    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
 
 private:
     Edit *m_edit;
-    int m_printed;
+    wxArrayInt m_pageEnds;
     wxRect m_pageRect;
     wxRect m_printRect;
 

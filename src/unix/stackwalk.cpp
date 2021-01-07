@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-18
-// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STACKWALKER
 
@@ -286,18 +283,18 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
         //      func(args) (in module) (file:line)
         //
         // or just the same address back if it couldn't be resolved.
-        const size_t posIn = buffer.find("(in ");
+        const size_t posIn = buffer.find(" (in ");
         if ( posIn != wxString::npos )
         {
             name.assign(buffer, 0, posIn);
 
-            size_t posAt = buffer.find(") (", posIn + 3);
+            size_t posAt = buffer.find(") (", posIn + 5); // Skip " (in "
             if ( posAt != wxString::npos )
             {
                 posAt += 3; // Skip ") ("
 
-                // Discard the two last characters which are ")\n"
-                wxString location(buffer, posAt, buffer.length() - posAt - 2);
+                // Discard the last character which is ")"
+                wxString location(buffer, posAt, buffer.length() - posAt - 1);
 
                 wxString linenum;
                 filename = location.BeforeFirst(':', &linenum);

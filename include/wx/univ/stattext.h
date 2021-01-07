@@ -24,7 +24,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize)
     {
-        Create(parent, wxID_ANY, label, pos, size, 0, wxStaticTextNameStr);
+        Create(parent, wxID_ANY, label, pos, size, 0, wxASCII_STR(wxStaticTextNameStr));
     }
 
     // full form
@@ -34,7 +34,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticTextNameStr)
+                 const wxString &name = wxASCII_STR(wxStaticTextNameStr))
     {
         Create(parent, id, label, pos, size, style, name);
     }
@@ -46,7 +46,7 @@ public:
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
-                const wxString &name = wxStaticTextNameStr);
+                const wxString &name = wxASCII_STR(wxStaticTextNameStr));
 
     // implementation only from now on
 
@@ -58,8 +58,8 @@ protected:
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
-    virtual wxString DoGetLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };

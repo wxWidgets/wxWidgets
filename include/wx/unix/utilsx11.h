@@ -30,13 +30,9 @@ typedef unsigned long WXKeySym;
 
 int wxCharCodeXToWX(WXKeySym keySym);
 WXKeySym wxCharCodeWXToX(int id);
+#ifdef __WXX11__
 int wxUnicodeCharXToWX(WXKeySym keySym);
-
-// Xlib keysym-unicode charactor pair
-struct CodePair {
-    unsigned int keySym;
-    int uniChar;
-};
+#endif
 
 class wxIconBundle;
 
@@ -66,6 +62,13 @@ class wxX11Display
 public:
     wxX11Display() { m_dpy = XOpenDisplay(NULL); }
     ~wxX11Display() { if ( m_dpy ) XCloseDisplay(m_dpy); }
+
+    // Pseudo move ctor: steals the open display from the other object.
+    explicit wxX11Display(wxX11Display& display)
+    {
+        m_dpy = display.m_dpy;
+        display.m_dpy = NULL;
+    }
 
     operator Display *() const { return m_dpy; }
 

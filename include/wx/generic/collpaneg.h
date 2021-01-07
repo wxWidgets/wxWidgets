@@ -13,7 +13,6 @@
 
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxCollapsibleHeaderCtrl;
-class WXDLLIMPEXP_FWD_CORE wxStaticLine;
 
 #include "wx/containr.h"
 
@@ -34,7 +33,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxCP_DEFAULT_STYLE,
                         const wxValidator& val = wxDefaultValidator,
-                        const wxString& name = wxCollapsiblePaneNameStr)
+                        const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr))
     {
         Init();
 
@@ -50,7 +49,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCP_DEFAULT_STYLE,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxCollapsiblePaneNameStr);
+                const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr));
 
     // public wxCollapsiblePane API
     virtual void Collapse(bool collapse = true) wxOVERRIDE;
@@ -74,13 +73,12 @@ public:
 
 protected:
     // overridden methods
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     int GetBorder() const;
 
     // child controls
     wxCollapsibleHeaderCtrl *m_pButton;
-    wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
     wxSizer *m_sz;
 

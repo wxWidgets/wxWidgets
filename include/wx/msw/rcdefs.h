@@ -31,6 +31,14 @@
         #ifndef WX_CPU_IA64
             #define WX_CPU_IA64
         #endif
+    #elif defined __arm__
+        #ifndef WX_CPU_ARM
+            #define WX_CPU_ARM
+        #endif
+    #elif defined __aarch64__
+        #ifndef WX_CPU_ARM64
+            #define WX_CPU_ARM64
+        #endif
     #endif
 #endif
 

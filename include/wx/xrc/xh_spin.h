@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_spin.h
-// Purpose:     XML resource handler for wxSpinButton and wxSpinCtrl
+// Purpose:     XML resource handler for wxSpinButton, wxSpinCtrl, wxSpinCtrlDouble
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
@@ -28,7 +28,6 @@ public:
 
 #endif // wxUSE_SPINBTN
 
-
 #if wxUSE_SPINCTRL
 
 class WXDLLIMPEXP_XRC wxSpinCtrlXmlHandler : public wxXmlResourceHandler
@@ -39,6 +38,16 @@ public:
     virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler);
+};
+
+class WXDLLIMPEXP_XRC wxSpinCtrlDoubleXmlHandler : public wxXmlResourceHandler
+{
+public:
+    wxSpinCtrlDoubleXmlHandler();
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDoubleXmlHandler);
 };
 
 #endif // wxUSE_SPINCTRL

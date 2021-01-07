@@ -135,7 +135,7 @@ to buffer overflows. At last, C++ has a standard string class (@c std::string). 
 why the need for wxString? There are several advantages:
 
 @li <b>Efficiency:</b> Since wxWidgets 3.0 wxString uses @c std::string (in UTF8
-    mode under Linux, Unix and OS X) or @c std::wstring (in UTF16 mode under Windows)
+    mode under Linux, Unix and macOS) or @c std::wstring (in UTF16 mode under Windows)
     internally by default to store its contents. wxString will therefore inherit the
     performance characteristics from @c std::string.
 @li <b>Compatibility:</b> This class tries to combine almost full compatibility
@@ -178,10 +178,22 @@ which are deprecated and may disappear in future versions.
 
 @subsection overview_string_implicitconv Implicit conversions
 
-Probably the main trap with using this class is the implicit conversion
-operator to <tt>const char*</tt>. It is advised that you use wxString::c_str()
-instead to clearly indicate when the conversion is done. Specifically, the
-danger of this implicit conversion may be seen in the following code fragment:
+The default behaviour, which can't be changed to avoid breaking compatibility
+with the existing code, is to provide implicit conversions of wxString to
+C-style strings, i.e. <tt>const char*</tt> and/or <tt>const wchar_t*</tt>. As
+explained below, these conversions are dangerous and it is @e strongly
+recommended to predefine @c wxNO_UNSAFE_WXSTRING_CONV for all new projects
+using wxWidgets to disable them. Notice that this preprocessor symbol is
+different from the more usual @c wxUSE_XXX build options, as it only needs to
+be defined when building the application and doesn't require rebuilding the
+library (and so can be used with e.g. system-provided libraries from Linux
+system packages).
+
+If you can't disable the implicit conversions, it is still advised to use
+wxString::c_str() instead of relying on them to clearly indicate when the
+conversion is done as implicit conversions may result in difficult to find
+bugs. For example, some of the dangers of this implicit conversion may be seen
+in the following code fragment:
 
 @code
 // this function converts the input string to uppercase,
@@ -224,12 +236,40 @@ arguments should take <tt>const wxString&</tt> (this makes assignment to the
 strings inside the function faster) and all functions returning strings
 should return wxString - this makes it safe to return local variables.
 
-Finally note that wxString uses the current locale encoding to convert any C string
+Note that wxString uses by default the current locale encoding to convert any C string
 literal to Unicode. The same is done for converting to and from @c std::string
 and for the return value of c_str().
 For this conversion, the @a wxConvLibc class instance is used.
 See wxCSConv and wxMBConv.
 
+It is also possible to disable any automatic conversions from C
+strings to Unicode. This can be useful when the @a wxConvLibc encoding
+is not appropriate for the current software and platform. The macro @c
+wxNO_IMPLICIT_WXSTRING_ENCODING disables all implicit conversions, and
+forces the code to explicitly indicate the encoding of all C strings.
+
+Finally note that encodings, either implicitly or explicitly selected,
+may not be able to represent all the string's characters. The result
+in this case is undefined: the string may be empty, or the
+unrepresentable characters may be missing or wrong.
+
+@code
+wxString s;
+// s = "world"; does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+s = wxString::FromAscii("world"); // Always compiles
+s = wxASCII_STR("world"); // shorthand for the above
+s = wxString::FromUTF8("world"); // Always compiles
+s = wxString("world", wxConvLibc); // Always compiles, explicit encoding
+s = wxASCII_STR("Grüße"); // Always compiles but encoding fails
+
+const char *c;
+// c = s.c_str();  does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+// c = s.mb_str(); does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+c = s.ToAscii(); // Always compiles, encoding may fail
+c = s.ToUTF8(); // Always compiles, encoding never fails
+c = s.utf8_str(); // Alias for the above
+c = s.mb_str(wxConvLibc); // Always compiles, explicit encoding
+@endcode
 
 @subsection overview_string_iterating Iterating wxString Characters
 
@@ -373,6 +413,14 @@ to use UTF-8 internally. wxString still provides the same API in this case, but
 using UTF-8 has performance implications as explained in @ref
 overview_unicode_performance, so it probably shouldn't be enabled for legacy
 code which might contain a lot of index-using loops.
+
+As mentioned in @ref overview_string_implicitconv, @c wxNO_UNSAFE_WXSTRING_CONV
+should be defined by all code using this class to opt-in safer, but not
+backwards-compatible, behaviour of @e not providing dangerous implicit
+conversions to C-style strings. This option is convenient when using standard
+build of the library as it doesn't require rebuilding it, but for custom builds
+it is also possible to set @c wxUSE_UNSAFE_WXSTRING_CONV to 0 in order to
+disable the implicit conversions for all applications using it.
 
 See also @ref page_wxusedef_important for a few other options affecting wxString.
 

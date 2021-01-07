@@ -29,7 +29,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxHL_DEFAULT_STYLE,
-                    const wxString& name = wxHyperlinkCtrlNameStr)
+                    const wxString& name = wxASCII_STR(wxHyperlinkCtrlNameStr))
     {
         (void)Create(parent, id, label, url, pos, size, style, name);
     }
@@ -41,22 +41,22 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHL_DEFAULT_STYLE,
-                const wxString& name = wxHyperlinkCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxHyperlinkCtrlNameStr));
 
 
     // overridden base class methods
     // -----------------------------
 
-    virtual void SetURL(const wxString &url);
+    virtual void SetURL(const wxString &url) wxOVERRIDE;
 
-    virtual void SetLabel(const wxString &label);
+    virtual void SetLabel(const wxString &label) wxOVERRIDE;
 
 protected:
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-    virtual wxSize DoGetBestClientSize() const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
 private:
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS( wxHyperlinkCtrl );
 };

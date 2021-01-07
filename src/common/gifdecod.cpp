@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS && wxUSE_GIF
 
@@ -130,8 +127,10 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
     unsigned long i;
     int      transparent;
 
-    // just in case...
-    image->Destroy();
+    // Store the original value of the transparency option, before it is reset
+    // by Create().
+    const wxString&
+        transparency = image->GetOption(wxIMAGE_OPTION_GIF_TRANSPARENCY);
 
     // create the image
     wxSize sz = GetFrameSize(frame);
@@ -149,24 +148,58 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
     // set transparent colour mask
     if (transparent != -1)
     {
-        for (i = 0; i < GetNcolours(frame); i++)
+        if ( transparency.empty() ||
+                transparency == wxIMAGE_OPTION_GIF_TRANSPARENCY_HIGHLIGHT )
         {
-            if ((pal[3 * i + 0] == 255) &&
-                (pal[3 * i + 1] == 0) &&
-                (pal[3 * i + 2] == 255))
+            // By default, we assign bright pink to transparent pixels to make
+            // them perfectly noticeable if someone accidentally draws the
+            // image without taking transparency into account. Due to this use
+            // of pink, we need to change any existing image pixels with this
+            // colour to use something different.
+            for (i = 0; i < GetNcolours(frame); i++)
             {
-                pal[3 * i + 2] = 254;
+                if ((pal[3 * i + 0] == 255) &&
+                    (pal[3 * i + 1] == 0) &&
+                    (pal[3 * i + 2] == 255))
+                {
+                    pal[3 * i + 2] = 254;
+                }
             }
+
+            pal[3 * transparent + 0] = 255;
+            pal[3 * transparent + 1] = 0;
+            pal[3 * transparent + 2] = 255;
+
+            image->SetMaskColour(255, 0, 255);
         }
+        else if ( transparency == wxIMAGE_OPTION_GIF_TRANSPARENCY_UNCHANGED )
+        {
+            // Leave the GIF exactly as it was, just adjust (in the least
+            // noticeable way, by just flipping a single bit) non-transparent
+            // pixels colour,
+            for (i = 0; i < GetNcolours(frame); i++)
+            {
+                if ((pal[3 * i + 0] == pal[3 * transparent + 0]) &&
+                    (pal[3 * i + 1] == pal[3 * transparent + 1]) &&
+                    (pal[3 * i + 2] == pal[3 * transparent + 2]))
+                {
+                    pal[3 * i + 2] ^= 1;
+                }
+            }
 
-        pal[3 * transparent + 0] = 255,
-        pal[3 * transparent + 1] = 0,
-        pal[3 * transparent + 2] = 255;
-
-        image->SetMaskColour(255, 0, 255);
+            image->SetMaskColour(pal[3 * transparent + 0],
+                                 pal[3 * transparent + 1],
+                                 pal[3 * transparent + 2]);
+        }
+        else
+        {
+            wxFAIL_MSG( wxS("Unknown wxIMAGE_OPTION_GIF_TRANSPARENCY value") );
+        }
     }
     else
+    {
         image->SetMask(false);
+    }
 
 #if wxUSE_PALETTE
     unsigned char r[256];
@@ -340,7 +373,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     int pos;                        // index into decompresion stack
     unsigned int x, y;              // position in image buffer
 
-    int code, readcode, lastcode, abcabca;
+    int code, lastcode, abcabca;
 
     // these won't change
     ab_clr = (1 << bits);
@@ -363,6 +396,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     do
     {
         // get next code
+        int readcode;
         readcode = code = getcode(stream, ab_bits, ab_fin);
 
         // end of image?
@@ -851,7 +885,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         }
     }
 
-    if (m_nFrames <= 0)
+    if (m_nFrames == 0)
     {
         Destroy();
         return wxGIF_INVFORMAT;

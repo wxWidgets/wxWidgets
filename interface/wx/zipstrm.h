@@ -80,6 +80,19 @@ enum wxZipFlags
     wxZIP_RESERVED          = 0xF000
 };
 
+/**
+    Zip archive format
+
+    @since 3.1.1
+*/
+enum wxZipArchiveFormat
+{
+    /// Default zip format: use ZIP64 if it is determined to be necessary.
+    wxZIP_FORMAT_DEFAULT,
+    /// ZIP64 format: force the use of ZIP64 format.
+    wxZIP_FORMAT_ZIP64
+};
+
 
 /**
     @class wxZipNotifier
@@ -119,13 +132,13 @@ public:
 
     @section zipentry_avail Field availability
 
-    When reading a zip from a stream that is seekable, wxZipEntry::GetNextEntry()
+    When reading a zip from a stream that is seekable, wxZipInputStream::GetNextEntry()
     returns a fully populated wxZipEntry object except for wxZipEntry::GetLocalExtra().
     wxZipEntry::GetLocalExtra() becomes available when the entry is opened, either by
     calling wxZipInputStream::OpenEntry() or by making an attempt to read the entry's data.
 
     For zips on non-seekable streams, the following fields are always available
-    when wxZipEntry::GetNextEntry() returns:
+    when wxZipInputStream::GetNextEntry() returns:
     - wxZipEntry::GetDateTime
     - wxZipEntry::GetInternalFormat
     - wxZipEntry::GetInternalName
@@ -288,7 +301,6 @@ public:
     */
     int GetFlags() const;
 
-    //@{
     /**
         A static member that translates a filename into the internal format used
         within the archive. If the third parameter is provided, the bool pointed
@@ -297,9 +309,9 @@ public:
 
         @see @ref overview_archive_byname
     */
-    wxString GetInternalName(const wxString& name,
-                            wxPathFormat format = wxPATH_NATIVE,
-                            bool* pIsDir = NULL);
+    static wxString GetInternalName(const wxString& name,
+                                    wxPathFormat format = wxPATH_NATIVE,
+                                    bool* pIsDir = NULL);
     /**
         Returns the entry's filename in the internal format used within the archive.
         The name can include directory components, i.e. it can be a full path.
@@ -308,7 +320,6 @@ public:
         This gives a canonical name that can be used in comparisons.
     */
     wxString GetInternalName() const;
-    //@}
 
     /**
         Returns @true if GetSystemMadeBy() is a flavour of unix.
@@ -479,11 +490,18 @@ public:
         In a Unicode build the third parameter @a conv is used to translate
         the filename and comment fields to an 8-bit encoding.
         It has no effect on the stream's data.
+
+        Since version 3.1.1, filenames in the generated archive will be encoded
+        using UTF-8 and marked according to ZIP specification. To get the
+        previous behaviour wxConvLocal may be provided as the conv object.
+        Please note that not all unzip applications are fully ZIP spec
+        compatible and may not correctly decode UTF-8 characters. For the best
+        interoperability using only ASCII characters is the safest option.
     */
     wxZipOutputStream(wxOutputStream& stream, int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     wxZipOutputStream(wxOutputStream* stream, int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     //@}
 
     /**
@@ -551,11 +569,17 @@ public:
     //@{
     /**
         Takes ownership of @a entry and uses it to create a new entry in the zip.
+
+        If you do not specify a size and plan to put more than 4GB data into the
+        entry see SetFormat()
     */
     bool PutNextEntry(wxZipEntry* entry);
 
     /**
         Create a new entry with the given name, timestamp and size.
+
+        If you do not specify a size and plan to put more than 4GB data into the
+        entry see SetFormat()
     */
     bool PutNextEntry(const wxString& name,
                       const wxDateTime& dt = wxDateTime::Now(),
@@ -567,5 +591,33 @@ public:
         It is written at the end of the zip.
     */
     void SetComment(const wxString& comment);
+
+    /**
+        Set the format of the archive.
+
+        The normal zip format is limited to single files and the complete
+        archive smaller than 4GB with less than 65k files. If any of these
+        limits are exceeded, this class will automatically create a ZIP64 file,
+        so in most situations calling SetFormat() is not necessary.
+
+        However, to support single entries with more than 4GB of data
+        (compressed or original) whose sizes are unknown when adding the
+        entry with PutNextEntry(), the format has to be set to
+        wxZIP_FORMAT_ZIP64 before adding such entries.
+
+        @since 3.1.1
+    */
+    void SetFormat(wxZipArchiveFormat format);
+
+    /**
+        Get the format of the archive.
+
+        This returns the value passed to SetFormat() and not necessarily the
+        actual archive format (e.g. this method could return
+        wxZIP_FORMAT_DEFAULT even if a ZIP64 will end up being created).
+
+        @since 3.1.1
+    */
+    wxZipArchiveFormat GetFormat() const;
 };
 

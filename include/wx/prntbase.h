@@ -281,6 +281,10 @@ public:
 
     virtual wxString GetTitle() const { return m_printoutTitle; }
 
+    // Port-specific code should call this function to initialize this object
+    // with everything it needs, instead of using individual accessors below.
+    bool SetUp(wxDC& dc);
+
     wxDC *GetDC() const { return m_printoutDC; }
     void SetDC(wxDC *dc) { m_printoutDC = dc; }
 
@@ -396,11 +400,11 @@ class WXDLLIMPEXP_CORE wxPreviewFrame: public wxFrame
 public:
     wxPreviewFrame(wxPrintPreviewBase *preview,
                    wxWindow *parent,
-                   const wxString& title = wxGetTranslation("Print Preview"),
+                   const wxString& title = wxGetTranslation(wxASCII_STR("Print Preview")),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
-                   const wxString& name = wxFrameNameStr);
+                   const wxString& name = wxASCII_STR(wxFrameNameStr));
     virtual ~wxPreviewFrame();
 
     // Either Initialize() or InitializeWithModality() must be called before

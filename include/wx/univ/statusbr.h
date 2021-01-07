@@ -26,7 +26,7 @@ public:
     wxStatusBarUniv(wxWindow *parent,
                     wxWindowID id = wxID_ANY,
                     long style = wxSTB_DEFAULT_STYLE,
-                    const wxString& name = wxPanelNameStr)
+                    const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         Init();
 
@@ -36,7 +36,7 @@ public:
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // implement base class methods
     virtual void SetFieldsCount(int number = 1, const int *widths = NULL) wxOVERRIDE;

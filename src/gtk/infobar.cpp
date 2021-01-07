@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/infobar.h"
 
@@ -34,6 +31,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
+#include "wx/gtk/private/mnemonics.h"
 
 // ----------------------------------------------------------------------------
 // local classes
@@ -81,12 +79,8 @@ namespace
 
 inline bool UseNative()
 {
-#ifdef __WXGTK3__
-    return true;
-#else
     // native GtkInfoBar widget is only available in GTK+ 2.18 and later
-    return gtk_check_version(2, 18, 0) == 0;
-#endif
+    return wx_is_at_least_gtk2(18);
 }
 
 } // anonymous namespace
@@ -147,6 +141,31 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     GTKConnectWidget("response", G_CALLBACK(wxgtk_infobar_response));
     GTKConnectWidget("close", G_CALLBACK(wxgtk_infobar_close));
 
+    // Work around GTK+ bug https://bugzilla.gnome.org/show_bug.cgi?id=710888
+    // by disabling the transition when showing it: without this, it's not
+    // shown at all.
+    //
+    // Compile-time check is needed because GtkRevealer is new in 3.10.
+#if GTK_CHECK_VERSION(3, 10, 0)
+    // Run-time check is needed because the bug was introduced in 3.10 and
+    // fixed in 3.22.29 (see 6b4d95e86dabfcdaa805fbf068a99e19736a39a4 and a
+    // couple of previous commits in GTK+ repository).
+    if ( gtk_check_version(3, 10, 0) == NULL &&
+            gtk_check_version(3, 22, 29) != NULL )
+    {
+        GObject* const
+            revealer = gtk_widget_get_template_child(GTK_WIDGET(m_widget),
+                                                     GTK_TYPE_INFO_BAR,
+                                                     "revealer");
+        if ( revealer )
+        {
+            gtk_revealer_set_transition_type(GTK_REVEALER (revealer),
+                                             GTK_REVEALER_TRANSITION_TYPE_NONE);
+            gtk_revealer_set_transition_duration(GTK_REVEALER (revealer), 0);
+        }
+    }
+#endif // GTK+ >= 3.10
+
     return true;
 }
 
@@ -174,7 +193,11 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     if ( wxGTKImpl::ConvertMessageTypeFromWX(flags, &type) )
         gtk_info_bar_set_message_type(GTK_INFO_BAR(m_widget), type);
     gtk_label_set_text(GTK_LABEL(m_impl->m_label), wxGTK_CONV(msg));
-
+    gtk_label_set_line_wrap(GTK_LABEL(m_impl->m_label), TRUE );
+#if GTK_CHECK_VERSION(2,10,0)
+    if( wx_is_at_least_gtk2( 10 ) )
+        gtk_label_set_line_wrap_mode(GTK_LABEL(m_impl->m_label), PANGO_WRAP_WORD);
+#endif
     if ( !IsShown() )
         Show();
 
@@ -209,14 +232,13 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
     // our best size (at least in vertical direction)
     InvalidateBestSize();
 
-    GtkWidget *button = gtk_info_bar_add_button
-                        (
-                            GTK_INFO_BAR(m_widget),
-                            (label.empty()
-                                ? GTKConvertMnemonics(wxGetStockGtkID(btnid))
-                                : label).utf8_str(),
-                            btnid
-                        );
+    GtkWidget* button = gtk_info_bar_add_button(GTK_INFO_BAR(m_widget),
+#ifdef __WXGTK4__
+        wxGTK_CONV(label.empty() ? wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)) : label),
+#else
+        label.empty() ? wxGetStockGtkID(btnid) : static_cast<const char*>(wxGTK_CONV(label)),
+#endif
+        btnid);
 
     wxASSERT_MSG( button, "unexpectedly failed to add button to info bar" );
 
@@ -298,7 +320,7 @@ void wxInfoBar::RemoveButton(wxWindowID btnid)
         if (i->id == btnid)
         {
             gtk_widget_destroy(i->button);
-            buttons.erase(i.base());
+            buttons.erase(i.base() - 1);
 
             // see comment in GTKAddButton()
             InvalidateBestSize();

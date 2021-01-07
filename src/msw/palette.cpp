@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PALETTE
 
@@ -78,7 +75,7 @@ public:
             ::DeleteObject(m_hPalette);
     }
 
-    virtual bool IsOk() const { return m_hPalette != 0; }
+    virtual bool IsOk() const wxOVERRIDE { return m_hPalette != 0; }
 
     UINT GetEntries() const
     {

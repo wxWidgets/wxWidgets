@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -204,9 +201,9 @@ private:
 // ----------------------------------------------------------------------------
 
 wxDirData::wxDirData(const wxString& dirname)
-         : m_dirname(dirname)
+    : m_finddata(InitFindData())
+    , m_dirname(dirname)
 {
-    m_finddata = InitFindData();
 }
 
 wxDirData::~wxDirData()

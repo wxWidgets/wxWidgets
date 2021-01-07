@@ -24,13 +24,13 @@ protected:
     {
         wxString s;
         if (topic.IsEmpty() && item.IsEmpty())
-            s.Printf("%s(", command.c_str());
+            s.Printf("%s(", command);
         else if (topic.IsEmpty())
-            s.Printf("%s(item=\"%s\",", command.c_str(), item.c_str());
+            s.Printf("%s(item=\"%s\",", command, item);
         else if (item.IsEmpty())
-            s.Printf("%s(topic=\"%s\",", command.c_str(), topic.c_str());
+            s.Printf("%s(topic=\"%s\",", command, topic);
         else
-            s.Printf("%s(topic=\"%s\",item=\"%s\",", command.c_str(), topic.c_str(), item.c_str());
+            s.Printf("%s(topic=\"%s\",item=\"%s\",", command, topic, item);
 
         switch (format)
         {

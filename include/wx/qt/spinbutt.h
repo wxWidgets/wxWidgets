@@ -9,7 +9,7 @@
 #define _WX_QT_SPINBUTT_H_
 
 #include "wx/spinbutt.h"
-#include <QtWidgets/QSpinBox>
+class QSpinBox;
 
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
@@ -29,10 +29,11 @@ public:
                 long style = wxSP_VERTICAL,
                 const wxString& name = wxSPIN_BUTTON_NAME);
 
-    virtual int GetValue() const;
-    virtual void SetValue(int val);
+    virtual int GetValue() const wxOVERRIDE;
+    virtual void SetValue(int val) wxOVERRIDE;
+    virtual void SetRange(int min, int max) wxOVERRIDE;
 
-    virtual QSpinBox *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 private:
     QSpinBox *m_qtSpinBox;

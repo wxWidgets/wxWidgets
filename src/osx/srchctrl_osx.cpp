@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SEARCHCTRL
 
@@ -209,7 +206,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
 bool wxSearchCtrl::HandleSearchFieldSearchHit()
 {
-    wxCommandEvent event(wxEVT_SEARCHCTRL_SEARCH_BTN, m_windowId );
+    wxCommandEvent event(wxEVT_SEARCH, m_windowId );
     event.SetEventObject(this);
 
     // provide the string to search for directly in the event, this is more
@@ -221,7 +218,7 @@ bool wxSearchCtrl::HandleSearchFieldSearchHit()
 
 bool wxSearchCtrl::HandleSearchFieldCancelHit()
 {
-    wxCommandEvent event(wxEVT_SEARCHCTRL_CANCEL_BTN, m_windowId );
+    wxCommandEvent event(wxEVT_SEARCH_CANCEL, m_windowId );
     event.SetEventObject(this);
     return ProcessCommand(event);
 }

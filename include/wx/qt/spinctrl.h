@@ -8,8 +8,8 @@
 #ifndef _WX_QT_SPINCTRL_H_
 #define _WX_QT_SPINCTRL_H_
 
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QDoubleSpinBox>
+class QSpinBox;
+class QDoubleSpinBox;
 
 // Take advantage of the Qt compile time polymorphy and use a template to avoid
 // copy&paste code for the usage of QSpinBox/QDoubleSpinBox.
@@ -29,12 +29,12 @@ public:
         T min, T max, T initial, T inc,
         const wxString& name );
 
-    virtual void SetValue(const wxString&) {}
+    virtual void SetValue(const wxString&) wxOVERRIDE {}
 
-    virtual void SetSnapToTicks(bool snap_to_ticks);
-    virtual bool GetSnapToTicks() const;
+    virtual void SetSnapToTicks(bool snap_to_ticks) wxOVERRIDE;
+    virtual bool GetSnapToTicks() const wxOVERRIDE;
 
-    virtual void SetSelection(long from, long to);
+    virtual void SetSelection(long from, long to) wxOVERRIDE;
 
     virtual void SetValue(T val);
     void SetRange(T minVal, T maxVal);
@@ -45,7 +45,7 @@ public:
     T GetMax() const;
     T GetIncrement() const;
 
-    virtual Widget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
     Widget *m_qtSpinBox;
@@ -61,7 +61,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+               long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxT("wxSpinCtrl"));
 
@@ -70,13 +70,13 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
-    virtual void SetValue(const wxString & val);
-    virtual void SetValue(int val) { wxSpinCtrlQt::SetValue(val); }
+    virtual void SetValue(const wxString & val) wxOVERRIDE;
+    virtual void SetValue(int val) wxOVERRIDE { wxSpinCtrlQt<int,QSpinBox>::SetValue(val); }
 
 private:
     // Common part of all ctors.
@@ -97,7 +97,7 @@ public:
                      const wxString& value = wxEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                     long style = wxSP_ARROW_KEYS,
                      double min = 0, double max = 100, double initial = 0,
                      double inc = 1,
                      const wxString& name = wxT("wxSpinCtrlDouble"));
@@ -107,7 +107,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrlDouble"));
@@ -117,8 +117,8 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
-    virtual void SetValue(const wxString & val);
-    virtual void SetValue(double val) { wxSpinCtrlQt::SetValue(val); }
+    virtual void SetValue(const wxString & val) wxOVERRIDE;
+    virtual void SetValue(double val) wxOVERRIDE { wxSpinCtrlQt<double,QDoubleSpinBox>::SetValue(val); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );

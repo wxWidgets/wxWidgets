@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dialog.h"
 
@@ -44,9 +41,7 @@
 #include "wx/textwrapper.h"
 #include "wx/modalhook.h"
 
-#if wxUSE_DISPLAY
 #include "wx/display.h"
-#endif
 
 extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[] = "dialog";
 
@@ -196,23 +191,23 @@ wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
 
 #if wxUSE_STATTEXT
 
-wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
+wxSizer *wxDialogBase::CreateTextSizer(const wxString& message, int widthMax)
 {
     wxTextSizerWrapper wrapper(this);
 
-    return CreateTextSizer(message, wrapper);
+    return CreateTextSizer(message, wrapper, widthMax);
 }
 
 wxSizer *wxDialogBase::CreateTextSizer(const wxString& message,
-                                       wxTextSizerWrapper& wrapper)
+                                       wxTextSizerWrapper& wrapper,
+                                       int widthMax)
 {
     // I admit that this is complete bogus, but it makes
     // message boxes work for pda screens temporarily..
-    int widthMax = -1;
     const bool is_pda = wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA;
     if (is_pda)
     {
-        widthMax = wxSystemSettings::GetMetric( wxSYS_SCREEN_X ) - 25;
+        widthMax = wxSystemSettings::GetMetric( wxSYS_SCREEN_X, this ) - 25;
     }
 
     return wrapper.CreateSizer(message, widthMax);
@@ -868,11 +863,7 @@ int wxStandardDialogLayoutAdapter::DoMustScroll(wxDialog* dialog, wxSize& window
     wxSize minWindowSize = dialog->GetSizer()->GetMinSize();
     windowSize = dialog->GetSize();
     windowSize = wxSize(wxMax(windowSize.x, minWindowSize.x), wxMax(windowSize.y, minWindowSize.y));
-#if wxUSE_DISPLAY
-    displaySize = wxDisplay(wxDisplay::GetFromWindow(dialog)).GetClientArea().GetSize();
-#else
-    displaySize = wxGetClientDisplayRect().GetSize();
-#endif
+    displaySize = wxDisplay(dialog).GetClientArea().GetSize();
 
     int flags = 0;
 
@@ -917,7 +908,6 @@ bool wxStandardDialogLayoutAdapter::DoFitWithScrolling(wxDialog* dialog, wxWindo
 
     wxSize windowSize, displaySize;
     int scrollFlags = DoMustScroll(dialog, windowSize, displaySize);
-    int scrollBarSize = 20;
 
     if (scrollFlags)
     {
@@ -928,6 +918,7 @@ bool wxStandardDialogLayoutAdapter::DoFitWithScrolling(wxDialog* dialog, wxWindo
         if (windows.GetCount() != 0)
         {
             // Allow extra for a scrollbar, assuming we resizing in one direction only.
+            int scrollBarSize = 20;
             if ((resizeVertically && !resizeHorizontally) && (windowSize.x < (displaySize.x - scrollBarSize)))
                 scrollBarExtraX = scrollBarSize;
             if ((resizeHorizontally && !resizeVertically) && (windowSize.y < (displaySize.y - scrollBarSize)))

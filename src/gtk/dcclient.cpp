@@ -269,6 +269,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner ) :
     m_context = NULL;
     m_layout = NULL;
     m_fontdesc = NULL;
+    m_isClipBoxValid = false;
 }
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
@@ -284,6 +285,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     m_cmap = NULL;
     m_isScreenDC = false;
     m_font = window->GetFont();
+    m_isClipBoxValid = false;
 
     GtkWidget *widget = window->m_wxwindow;
     m_gdkwindow = window->GTKGetDrawingWindow();
@@ -302,6 +304,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     }
 
     m_context = window->GTKGetPangoDefaultContext();
+    g_object_ref(m_context);
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
@@ -311,6 +314,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
          // Don't report problems as per MSW.
          m_ok = true;
 
+         m_window = window;
+
          return;
     }
 
@@ -318,8 +323,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 
     SetUpDC();
 
-    /* this must be done after SetUpDC, bacause SetUpDC calls the
-       repective SetBrush, SetPen, SetBackground etc functions
+    /* this must be done after SetUpDC, because SetUpDC calls the
+       respective SetBrush, SetPen, SetBackground etc functions
        to set up the DC. SetBackground call m_owner->SetBackground
        and this might not be desired as the standard dc background
        is white whereas a window might assume gray to be the
@@ -342,6 +347,8 @@ wxWindowDCImpl::~wxWindowDCImpl()
 {
     Destroy();
 
+    if (m_context)
+        g_object_unref(m_context);
     if (m_layout)
         g_object_unref (m_layout);
     if (m_fontdesc)
@@ -380,7 +387,7 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
 #if GTK_CHECK_VERSION(2,12,0)
         // gdk_screen_get_rgba_colormap was added in 2.8, but this code is for
         // compositing which requires 2.12
-        else if (gtk_check_version(2,12,0) == NULL &&
+        else if (wx_is_at_least_gtk2(12) &&
             m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR_ALPHA );
@@ -485,7 +492,7 @@ bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     }
     if (image == NULL)
     {
-        *col = wxColour();
+        col->UnRef();
         return false;
     }
     GdkColormap* colormap = gdk_image_get_colormap(image);
@@ -496,7 +503,7 @@ bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     {
         GdkColor c;
         gdk_colormap_query_color(colormap, pixel, &c);
-        col->Set(c.red >> 8, c.green >> 8, c.blue >> 8);
+        *col = wxColour(c);
     }
     g_object_unref(image);
     return true;
@@ -738,7 +745,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     }
 
     if (m_gdkwindow)
-        gdk_draw_lines( m_gdkwindow, m_penGC, (GdkPoint*) gpts, n);
+        gdk_draw_lines(m_gdkwindow, m_penGC, const_cast<GdkPoint*>(gpts), n);
 
     delete[] gpts_alloc;
 }
@@ -784,7 +791,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             bool originChanged;
             DrawingSetup(gc, originChanged);
 
-            gdk_draw_polygon(m_gdkwindow, gc, true, (GdkPoint*) gdkpoints, n);
+            gdk_draw_polygon(m_gdkwindow, gc, true, const_cast<GdkPoint*>(gdkpoints), n);
 
             if (originChanged)
                 gdk_gc_set_ts_origin(gc, 0, 0);
@@ -802,7 +809,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                gdkpoints[(i+1)%n].y);
             }
 */
-            gdk_draw_polygon( m_gdkwindow, m_penGC, FALSE, (GdkPoint*) gdkpoints, n );
+            gdk_draw_polygon(m_gdkwindow, m_penGC, false, const_cast<GdkPoint*>(gdkpoints), n);
 
         }
     }
@@ -1153,7 +1160,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         }
     }
     else if (hasAlpha || pixmap == NULL)
-        pixbuf = bitmap.GetPixbuf();
+        pixbuf = useMask ? bitmap.GetPixbuf() : bitmap.GetPixbufNoMask();
 
     if (isScaled)
     {
@@ -1506,6 +1513,9 @@ void wxWindowDCImpl::Clear()
 
     if (!m_gdkwindow) return;
 
+    if (m_backgroundBrush.IsTransparent())
+        return;
+
     int width,height;
     DoGetSize( &width, &height );
     gdk_draw_rectangle( m_gdkwindow, m_bgGC, TRUE, 0, 0, width, height );
@@ -1534,6 +1544,10 @@ void wxWindowDCImpl::SetFont( const wxFont &font )
             // at least, and it doesn't hurt to do it.
             if (oldContext != m_context)
             {
+                g_object_ref(m_context);
+                if (oldContext)
+                    g_object_unref(oldContext);
+
                 if (m_layout)
                     g_object_unref (m_layout);
 
@@ -1549,7 +1563,8 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (m_pen == pen) return;
+    if (m_pen == pen && (!pen.IsOk() || pen.GetStyle() != wxPENSTYLE_USER_DASH))
+        return;
 
     m_pen = pen;
 
@@ -1579,22 +1594,22 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         }
     }
 
-    static const wxGTKDash dotted[] = {1, 1};
-    static const wxGTKDash short_dashed[] = {2, 2};
-    static const wxGTKDash wxCoord_dashed[] = {2, 4};
-    static const wxGTKDash dotted_dashed[] = {3, 3, 1, 3};
+    static const wxDash dotted[] = {1, 1};
+    static const wxDash short_dashed[] = {2, 2};
+    static const wxDash wxCoord_dashed[] = {2, 4};
+    static const wxDash dotted_dashed[] = {3, 3, 1, 3};
 
     // We express dash pattern in pen width unit, so we are
     // independent of zoom factor and so on...
     int req_nb_dash;
-    const wxGTKDash *req_dash;
+    const wxDash* req_dash;
 
     GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
     switch (m_pen.GetStyle())
     {
         case wxPENSTYLE_USER_DASH:
             req_nb_dash = m_pen.GetDashCount();
-            req_dash = (wxGTKDash*)m_pen.GetDash();
+            req_dash = m_pen.GetDash();
             break;
         case wxPENSTYLE_DOT:
             req_nb_dash = 2;
@@ -1626,7 +1641,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
     if (req_dash && req_nb_dash)
     {
-        wxGTKDash *real_req_dash = new wxGTKDash[req_nb_dash];
+        wxDash* real_req_dash = new wxDash[req_nb_dash];
         if (real_req_dash)
         {
             for (int i = 0; i < req_nb_dash; i++)
@@ -1637,7 +1652,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         else
         {
             // No Memory. We use non-scaled dash pattern...
-            gdk_gc_set_dashes( m_penGC, 0, (wxGTKDash*)req_dash, req_nb_dash );
+            gdk_gc_set_dashes(m_penGC, 0, const_cast<wxDash*>(req_dash), req_nb_dash);
         }
     }
 
@@ -1732,7 +1747,8 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     m_backgroundBrush = brush;
 
-    if (!m_backgroundBrush.IsOk()) return;
+    if (!m_backgroundBrush.IsOk())
+        m_backgroundBrush = *wxWHITE_BRUSH;
 
     if (!m_gdkwindow) return;
 
@@ -1860,9 +1876,72 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     m_backgroundMode = mode;
 }
 
+#if wxUSE_PALETTE
 void wxWindowDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
     wxFAIL_MSG( wxT("wxWindowDCImpl::SetPalette not implemented") );
+}
+#endif
+
+void wxWindowDCImpl::UpdateClipBox()
+{
+    int dcWidth, dcHeight;
+    DoGetSize(&dcWidth, &dcHeight);
+    wxRect dcRect(0, 0, dcWidth, dcHeight);
+
+    wxRect r;
+    if ( m_clipping )
+    {
+        if ( !m_currentClippingRegion.IsEmpty() )
+        {
+            r = m_currentClippingRegion.GetBox();
+            // Effective clipping box is an intersection
+            // of current clipping box and DC surface.
+            r.Intersect(dcRect);
+        }
+        else
+        {
+            r = wxRect(0, 0, 0, 0);
+        }
+    }
+    else
+    {
+        if ( m_currentClippingRegion.IsEmpty() )
+        {
+            // Clipping box is just a DC surface.
+            r = dcRect;
+        }
+    }
+
+    if ( r.IsEmpty() )
+    {
+        m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0;
+    }
+    else
+    {
+        m_clipX1 = DeviceToLogicalX(r.GetLeft());
+        m_clipY1 = DeviceToLogicalY(r.GetTop());
+        m_clipX2 = m_clipX1 + DeviceToLogicalXRel(r.GetWidth());
+        m_clipY2 = m_clipY1 + DeviceToLogicalYRel(r.GetHeight());
+    }
+    m_isClipBoxValid = true;
+}
+
+bool wxWindowDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+    wxCHECK_MSG( IsOk(), false, wxS("invalid window dc") );
+
+    // Check if we should try to retrieve the clipping region possibly not set
+    // by our SetClippingRegion() but preset or modified by application: this
+    // can happen when wxDC logical coordinates are transformed with
+    // SetDeviceOrigin(), SetLogicalOrigin(), SetUserScale(), SetLogicalScale().
+    if ( !m_isClipBoxValid )
+    {
+        wxWindowDCImpl *self = wxConstCast(this, wxWindowDCImpl);
+        self->UpdateClipBox();
+    }
+
+    return wxGTKDCImpl::DoGetClippingRect(rect);
 }
 
 void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1870,6 +1949,20 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     if (!m_gdkwindow) return;
+
+    // For internal calculations we need to have box definition
+    // in the canonical form, with (x,y) pointing to the top-left
+    // corner of the box and with non-negative width and height.
+    if ( width < 0 )
+    {
+        width = -width;
+        x -= (width - 1);
+    }
+    if ( height < 0 )
+    {
+        height = -height;
+        y -= (height - 1);
+    }
 
     wxRect rect;
     rect.x = XLOG2DEV(x);
@@ -1890,12 +1983,6 @@ void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion &region  )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (region.Empty())
-    {
-        DestroyClippingRegion();
-        return;
-    }
-
     if (!m_gdkwindow) return;
 
     if (!m_currentClippingRegion.IsNull())
@@ -1907,10 +1994,8 @@ void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion &region  )
     if (!m_paintClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
-
-    wxCoord xx, yy, ww, hh;
-    m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-    wxGTKDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
+    m_clipping = true;
+    UpdateClipBox();
 
     GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
     gdk_gc_set_clip_region(m_penGC,   gdkRegion);
@@ -1942,6 +2027,8 @@ void wxWindowDCImpl::DestroyClippingRegion()
     gdk_gc_set_clip_region(m_brushGC, gdkRegion);
     gdk_gc_set_clip_region(m_textGC,  gdkRegion);
     gdk_gc_set_clip_region(m_bgGC,    gdkRegion);
+
+    m_isClipBoxValid = false;
 }
 
 void wxWindowDCImpl::Destroy()
@@ -1988,15 +2075,17 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
         // this is a bit artificial, but we need to force wxDC to think the pen
         // has changed
         wxPen pen = m_pen;
-        m_pen = wxNullPen;
+        m_pen.UnRef();
         SetPen( pen );
     }
+
+    m_isClipBoxValid = false;
 }
 
 // Resolution in pixels per logical inch
 wxSize wxWindowDCImpl::GetPPI() const
 {
-    return wxSize( (int) (m_mm_to_pix_x * 25.4 + 0.5), (int) (m_mm_to_pix_y * 25.4 + 0.5));
+    return wxSize( (int) (GetMMToPXx() * 25.4 + 0.5), (int) (GetMMToPXy() * 25.4 + 0.5));
 }
 
 int wxWindowDCImpl::GetDepth() const

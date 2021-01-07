@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_NOTEBOOK
 
@@ -80,7 +77,6 @@ wxFLAGS_MEMBER(wxBK_LEFT)
 wxFLAGS_MEMBER(wxBK_RIGHT)
 wxFLAGS_MEMBER(wxBK_BOTTOM)
 wxFLAGS_MEMBER(wxNB_NOPAGETHEME)
-wxFLAGS_MEMBER(wxNB_FLAT)
 wxEND_FLAGS( wxNotebookStyle )
 
 #if wxUSE_EXTENDED_RTTI

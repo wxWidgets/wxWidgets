@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/toolbar.h
-// Purpose:     wxToolBar (Windows 95 toolbar) class
+// Purpose:     wxToolBar class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -27,7 +27,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTB_DEFAULT_STYLE,
-                const wxString& name = wxToolBarNameStr)
+                const wxString& name = wxASCII_STR(wxToolBarNameStr))
     {
         Init();
 
@@ -39,52 +39,52 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTB_DEFAULT_STYLE,
-                const wxString& name = wxToolBarNameStr);
+                const wxString& name = wxASCII_STR(wxToolBarNameStr));
 
     virtual ~wxToolBar();
 
     // override/implement base class virtuals
-    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const wxOVERRIDE;
 
-    virtual bool Realize();
+    virtual bool Realize() wxOVERRIDE;
 
-    virtual void SetToolBitmapSize(const wxSize& size);
-    virtual wxSize GetToolSize() const;
+    virtual void SetToolBitmapSize(const wxSize& size) wxOVERRIDE;
+    virtual wxSize GetToolSize() const wxOVERRIDE;
 
-    virtual void SetRows(int nRows);
+    virtual void SetRows(int nRows) wxOVERRIDE;
 
-    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
-    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
 
-    virtual void SetToolPacking(int packing);
+    virtual void SetToolPacking(int packing) wxOVERRIDE;
 
     // implementation only from now on
     // -------------------------------
 
-    virtual void SetWindowStyleFlag(long style);
+    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
 
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
 
     void OnMouseEvent(wxMouseEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
 
-    void SetFocus() {}
+    void SetFocus() wxOVERRIDE {}
 
     static WXHBITMAP MapBitmap(WXHBITMAP bitmap, int width, int height);
 
     // override WndProc mainly to process WM_SIZE
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const { return false; }
+    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
-    virtual bool MSWEraseBgHook(WXHDC hDC);
-    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child);
+    virtual bool MSWEraseBgHook(WXHDC hDC) wxOVERRIDE;
+    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child) wxOVERRIDE;
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
     virtual wxToolBarToolBase *CreateTool(int id,
@@ -94,10 +94,10 @@ public:
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = NULL,
                                           const wxString& shortHelp = wxEmptyString,
-                                          const wxString& longHelp = wxEmptyString);
+                                          const wxString& longHelp = wxEmptyString) wxOVERRIDE;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
-                                          const wxString& label);
+                                          const wxString& label) wxOVERRIDE;
 protected:
     // common part of all ctors
     void Init();
@@ -109,15 +109,15 @@ protected:
     void Recreate();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
 
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) wxOVERRIDE;
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
 
     // return the appropriate size and flags for the toolbar control
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
     // handlers for various events
     bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);
@@ -138,6 +138,9 @@ protected:
 
     // set native toolbar padding
     void MSWSetPadding(WXWORD padding);
+
+    void RealizeHelper();
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
@@ -173,6 +176,20 @@ private:
     // return the brush to use for erasing the toolbar background
     WXHBRUSH MSWGetToolbarBgBrush();
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
+    // Return true if we're showing the labels for the embedded controls: we
+    // only do it if text is enabled and, somewhat less expectedly, if icons
+    // are enabled too because showing both the control and its label when only
+    // text is shown for the other buttons is too inconsistent to be useful.
+    bool AreControlLabelsShown() const
+    {
+        return HasFlag(wxTB_TEXT) && !HasFlag(wxTB_NOICONS);
+    }
+
+    // Return the size required to accommodate the given tool which must be of
+    // "control" type.
+    wxSize MSWGetFittingtSizeForControl(class wxToolBarTool* tool) const;
+
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);

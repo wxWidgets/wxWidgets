@@ -45,7 +45,7 @@ public:
            int n = 0, const wxString choices[] = (const wxString *) NULL,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr)
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
@@ -56,7 +56,7 @@ public:
            const wxArrayString& choices,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr)
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr))
     {
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
@@ -70,7 +70,7 @@ public:
            int n = 0, const wxString choices[] = (const wxString *) NULL,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr);
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
            const wxPoint& pos,
@@ -78,7 +78,7 @@ public:
            const wxArrayString& choices,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxComboBoxNameStr);
+           const wxString& name = wxASCII_STR(wxComboBoxNameStr));
 
     void DoClear();
     void DoDeleteOneItem(unsigned int n);
@@ -156,6 +156,8 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    virtual const wxTextEntry* WXGetTextEntry() const { return this; }
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,

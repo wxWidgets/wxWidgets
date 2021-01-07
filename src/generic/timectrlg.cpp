@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -86,48 +83,18 @@ public:
         // nice to add support to "%k" and "%l" (hours with leading blanks
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
-#if wxUSE_XLOCALE
+#if wxUSE_INTL
         m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
 #endif
 
-        m_text->Connect
-                (
-                    wxEVT_SET_FOCUS,
-                    wxFocusEventHandler(wxTimePickerGenericImpl::OnTextSetFocus),
-                    NULL,
-                    this
-                );
-        m_text->Connect
-                (
-                    wxEVT_KEY_DOWN,
-                    wxKeyEventHandler(wxTimePickerGenericImpl::OnTextKeyDown),
-                    NULL,
-                    this
-                );
-        m_text->Connect
-                (
-                    wxEVT_LEFT_DOWN,
-                    wxMouseEventHandler(wxTimePickerGenericImpl::OnTextClick),
-                    NULL,
-                    this
-                );
+        m_text->Bind(wxEVT_SET_FOCUS, &wxTimePickerGenericImpl::OnTextSetFocus, this);
+        m_text->Bind(wxEVT_KEY_DOWN, &wxTimePickerGenericImpl::OnTextKeyDown, this);
+        m_text->Bind(wxEVT_LEFT_DOWN, &wxTimePickerGenericImpl::OnTextClick, this);
 
-        m_btn->Connect
-               (
-                    wxEVT_SPIN_UP,
-                    wxSpinEventHandler(wxTimePickerGenericImpl::OnArrowUp),
-                    NULL,
-                    this
-               );
-        m_btn->Connect
-               (
-                    wxEVT_SPIN_DOWN,
-                    wxSpinEventHandler(wxTimePickerGenericImpl::OnArrowDown),
-                    NULL,
-                    this
-               );
+        m_btn->Bind(wxEVT_SPIN_UP, &wxTimePickerGenericImpl::OnArrowUp, this);
+        m_btn->Bind(wxEVT_SPIN_DOWN, &wxTimePickerGenericImpl::OnArrowDown, this);
     }
 
     // Set the new value.
@@ -241,6 +208,21 @@ private:
                     AppendDigitToCurrentField(key - '0');
                 }
                 break;
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+                if ( m_currentField != Field_AMPM )
+                {
+                    AppendDigitToCurrentField(key - WXK_NUMPAD0);
+                }
+                break;
 
             case 'A':
             case 'P':
@@ -306,7 +288,7 @@ private:
             case wxTE_HT_BELOW:
                 // This shouldn't happen for single line control.
                 wxFAIL_MSG( "Unreachable" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTE_HT_BEYOND:
                 // Select the last field.
@@ -446,6 +428,7 @@ private:
 
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         UpdateText();
@@ -491,7 +474,7 @@ private:
             // Check if the new value is acceptable. If not, we just handle
             // this digit as if it were the first one.
             int newValue = currentValue*10 + n;
-            if ( newValue < maxValue )
+            if ( newValue <= maxValue )
             {
                 n = newValue;
 
@@ -531,6 +514,7 @@ private:
             case Field_AMPM:
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         if ( moveToNextField && m_currentField < Field_Sec )

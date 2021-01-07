@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FSWATCHER
 
@@ -61,7 +58,7 @@ public:
         delete m_handler;
     }
 
-    bool Init()
+    bool Init() wxOVERRIDE
     {
         wxCHECK_MSG( !IsOk(), false, "Inotify already initialized" );
 
@@ -75,7 +72,7 @@ public:
             return false;
         }
 
-        m_source = loop->AddSourceForFD
+        m_source = wxEventLoopBase::AddSourceForFD
                          (
                           m_ifd,
                           m_handler,
@@ -98,7 +95,7 @@ public:
         }
     }
 
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -121,7 +118,7 @@ public:
         return true;
     }
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -129,8 +126,20 @@ public:
         int ret = DoRemoveInotify(watch.get());
         if (ret == -1)
         {
-            wxLogSysError( _("Unable to remove inotify watch") );
-            return false;
+            // Failures can happen if a dir is deleted just before we try to
+            // remove the watch. I think there's a race between calling this
+            // code and IN_DELETE_SELF arriving. So just warn.
+            wxFileSystemWatcherEvent
+                event
+                (
+                    wxFSW_EVENT_WARNING, wxFSW_WARNING_GENERAL,
+                    wxString::Format
+                    (
+                     _("Unable to remove inotify watch %i"),
+                     watch->GetWatchDescriptor()
+                    )
+                );
+            SendEvent(event);
         }
 
         if (m_watchMap.erase(watch->GetWatchDescriptor()) != 1)
@@ -145,7 +154,7 @@ public:
         return true;
     }
 
-    virtual bool RemoveAll()
+    virtual bool RemoveAll() wxOVERRIDE
     {
         wxFSWatchEntries::iterator it = m_watches.begin();
         for ( ; it != m_watches.end(); ++it )
@@ -373,6 +382,7 @@ protected:
             // if the wd isn't found: repeated IN_DELETE_SELFs can occur
             wxFileName fn = GetEventPath(watch, inevt);
             wxString path(fn.GetPathWithSep());
+            const wxString filespec(watch.GetFilespec());
 
             if (m_watchMap.erase(inevt.wd) == 1)
             {
@@ -394,7 +404,7 @@ protected:
 
             // Tell the owner, in case it's interested
             // If there's a filespec, assume he's not
-            if (watch.GetFilespec().empty())
+            if (filespec.empty())
             {
                 wxFileSystemWatcherEvent event(flags, fn, fn);
                 SendEvent(event);
@@ -419,7 +429,7 @@ protected:
             if ( it2 == m_cookies.end() )
             {
                 int size = sizeof(inevt) + inevt.len;
-                inotify_event* e = (inotify_event*) operator new (size);
+                inotify_event* e = (inotify_event*)new char[size];
                 memcpy(e, &inevt, size);
 
                 wxInotifyCookies::value_type val(e->cookie, e);
@@ -468,7 +478,7 @@ protected:
                 }
 
                 m_cookies.erase(it2);
-                delete &oldinevt;
+                delete[] (char*)&oldinevt;
             }
         }
         // every other kind of event
@@ -520,7 +530,7 @@ protected:
             }
 
             m_cookies.erase(it);
-            delete &inevt;
+            delete[] (char*)&inevt;
             it = m_cookies.begin();
         }
     }
@@ -690,8 +700,7 @@ wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher(const wxFileName& path,
 {
     if (!Init())
     {
-        if (m_service)
-            delete m_service;
+        delete m_service;
         return;
     }
 

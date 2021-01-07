@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -24,6 +21,8 @@
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/encinfo.h"
+#include "wx/filename.h"
+#include "wx/stdpaths.h"
 #include "wx/tokenzr.h"
 
 
@@ -41,8 +40,7 @@ bool wxNativeEncodingInfo::FromString( const wxString& s )
     wxString tmp = tokenizer.GetNextToken();
     if ( !tmp )
     {
-        // default charset (don't use DEFAULT_CHARSET though because of subtle
-        // Windows 9x/NT differences in handling it)
+        // default charset
         charset = 0;
     }
     else
@@ -63,6 +61,40 @@ wxString wxNativeEncodingInfo::ToString() const
 
     return s;
 }
+
+// ----------------------------------------------------------------------------
+// Private Fonts
+// ----------------------------------------------------------------------------
+
+#if wxUSE_PRIVATE_FONTS
+
+// On OSX one can provide private fonts simply by putting the font files in
+// with the resources in your application bundle. So the API for adding fonts
+// does not do anything except checking that the file you pass to it actually
+// does exist and is in the correct directory.
+
+bool wxFontBase::AddPrivateFont(const wxString& filename)
+{
+    wxFileName fn(filename);
+    if ( !fn.FileExists() )
+    {
+        wxLogError(_("Font file \"%s\" doesn't exist."), filename);
+        return false;
+    }
+
+    wxString fontsDir;
+    fontsDir << wxStandardPaths::Get().GetResourcesDir() << "/Fonts";
+    if ( fn.GetPath() != fontsDir )
+    {
+        wxLogError(_("Font file \"%s\" cannot be used as it is not inside "
+                     "the font directory \"%s\"."), filename, fontsDir);
+        return false;
+    }
+
+    return true;
+}
+
+#endif // wxUSE_PRIVATE_FONTS
 
 // ----------------------------------------------------------------------------
 // helper functions

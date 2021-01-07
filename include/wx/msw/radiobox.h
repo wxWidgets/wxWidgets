@@ -33,7 +33,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
     {
         Init();
 
@@ -50,7 +50,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr)
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
     {
         Init();
 
@@ -69,7 +69,7 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -79,44 +79,44 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     // implement the radiobox interface
-    virtual void SetSelection(int n);
-    virtual int GetSelection() const { return m_selectedButton; }
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& label);
-    virtual bool Enable(unsigned int n, bool enable = true);
-    virtual bool Show(unsigned int n, bool show = true);
-    virtual bool IsItemEnabled(unsigned int n) const;
-    virtual bool IsItemShown(unsigned int n) const;
-    virtual int GetItemFromPoint(const wxPoint& pt) const;
+    virtual void SetSelection(int n) wxOVERRIDE;
+    virtual int GetSelection() const wxOVERRIDE { return m_selectedButton; }
+    virtual unsigned int GetCount() const wxOVERRIDE;
+    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
+    virtual void SetString(unsigned int n, const wxString& label) wxOVERRIDE;
+    virtual bool Enable(unsigned int n, bool enable = true) wxOVERRIDE;
+    virtual bool Show(unsigned int n, bool show = true) wxOVERRIDE;
+    virtual bool IsItemEnabled(unsigned int n) const wxOVERRIDE;
+    virtual bool IsItemShown(unsigned int n) const wxOVERRIDE;
+    virtual int GetItemFromPoint(const wxPoint& pt) const wxOVERRIDE;
 
     // override some base class methods
-    virtual bool Show(bool show = true);
-    virtual bool Enable(bool enable = true);
-    virtual bool CanBeFocused() const;
-    virtual void SetFocus();
-    virtual bool SetFont(const wxFont& font);
-    virtual bool ContainsHWND(WXHWND hWnd) const;
-    virtual bool SetForegroundColour(const wxColour& colour);
-    virtual bool SetBackgroundColour(const wxColour& colour);
+    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool CanBeFocused() const wxOVERRIDE;
+    virtual void SetFocus() wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool ContainsHWND(WXHWND hWnd) const wxOVERRIDE;
+    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
 #if wxUSE_TOOLTIPS
-    virtual bool HasToolTips() const;
+    virtual bool HasToolTips() const wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
 #if wxUSE_HELP
     // override virtual function with a platform-independent implementation
-    virtual wxString GetHelpTextAtPoint(const wxPoint & pt, wxHelpEvent::Origin origin) const
+    virtual wxString GetHelpTextAtPoint(const wxPoint & pt, wxHelpEvent::Origin origin) const wxOVERRIDE
     {
         return wxRadioBoxBase::DoGetHelpTextAtPoint( this, pt, origin );
     }
 #endif // wxUSE_HELP
 
-    virtual bool Reparent(wxWindowBase *newParent);
+    virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const { return false; }
+    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
@@ -129,8 +129,8 @@ public:
     // belongs to one of our radio boxes. If it doesn't, NULL is returned.
     static wxRadioBox *GetFromRadioButtonHWND(WXHWND hwnd);
 
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    void Command(wxCommandEvent& event);
+    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
+    void Command(wxCommandEvent& event) wxOVERRIDE;
 
     void SendNotificationEvent();
 
@@ -152,18 +152,20 @@ protected:
 
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-    virtual wxSize DoGetBestSize() const;
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 #if wxUSE_TOOLTIPS
-    virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip);
+    virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip) wxOVERRIDE;
 #endif
 
-    virtual WXHRGN MSWGetRegionWithoutChildren();
+    virtual WXHRGN MSWGetRegionWithoutChildren() wxOVERRIDE;
+
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // resolve ambiguity in base classes
-    virtual wxBorder GetDefaultBorder() const { return wxRadioBoxBase::GetDefaultBorder(); }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
 
     // the buttons we contain
     wxSubwindows *m_radioButtons;
@@ -171,11 +173,6 @@ protected:
     // and the special dummy button used only as a tab group boundary
     WXHWND m_dummyHwnd;
     wxWindowIDRef m_dummyId;
-
-    // array of widths and heights of the buttons, may be wxDefaultCoord if the
-    // corresponding quantity should be computed
-    int *m_radioWidth;
-    int *m_radioHeight;
 
     // currently selected button or wxNOT_FOUND if none
     int m_selectedButton;

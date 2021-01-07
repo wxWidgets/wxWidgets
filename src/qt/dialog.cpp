@@ -8,10 +8,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/modalhook.h"
 #include "wx/dialog.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QDialog>
 
 class wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
 {
@@ -57,33 +59,76 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
     // all dialogs should have tab traversal enabled
     style |= wxTAB_TRAVERSAL;
 
-    m_qtWindow = new wxQtDialog( parent, this );
+    m_qtWindow = new wxQtDialog(parent, this);
+
+    // Qt adds the context help button by default and we need to explicitly
+    // remove it to avoid having it if it's not explicitly requested.
+    if ( !HasExtraStyle(wxDIALOG_EX_CONTEXTHELP) )
+    {
+        Qt::WindowFlags qtFlags = m_qtWindow->windowFlags();
+        qtFlags &= ~Qt::WindowContextHelpButtonHint;
+        m_qtWindow->setWindowFlags(qtFlags);
+    }
+
+    if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
+        return false;
+
     PostCreation();
-    return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
+
+    return true;
 }
 
 int wxDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
-    
-    return GetHandle()->exec() ? wxID_OK : wxID_CANCEL;
+
+    QDialog *qDialog = GetDialogHandle();
+    qDialog->setModal(true);
+
+    Show(true);
+
+    bool ret = qDialog->exec();
+    if ( GetReturnCode() == 0 )
+        return ret ? wxID_OK : wxID_CANCEL;
+    return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-    wxCHECK_RET( GetHandle() != NULL, "Invalid dialog" );
-    
-    GetHandle()->done( retCode );
+    wxCHECK_RET( GetDialogHandle() != NULL, "Invalid dialog" );
+
+    SetReturnCode(retCode);
+    GetDialogHandle()->done( QDialog::Accepted );
 }
 
 bool wxDialog::IsModal() const
 {
-    wxCHECK_MSG( GetHandle() != NULL, false, "Invalid dialog" );
+    wxCHECK_MSG( GetDialogHandle() != NULL, false, "Invalid dialog" );
 
-    return GetHandle()->isModal();
+    return GetDialogHandle()->isModal();
 }
 
-QDialog *wxDialog::GetHandle() const
+bool wxDialog::Show(bool show)
+{
+    if ( show == IsShown() )
+        return false;
+
+    if ( !show && IsModal() )
+        EndModal(wxID_CANCEL);
+
+    if ( show && CanDoLayoutAdaptation() )
+        DoLayoutAdaptation();
+
+    const bool ret = wxDialogBase::Show(show);
+
+    if (show)
+        InitDialog();
+
+    return ret;
+}
+
+QDialog *wxDialog::GetDialogHandle() const
 {
     return static_cast<QDialog*>(m_qtWindow);
 }

@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTOOLTIP
 
@@ -47,13 +44,10 @@
 #include "wx/textwrapper.h"
 
 #ifdef __WXMSW__
-    #include "wx/msw/uxtheme.h"
-
-    static const int TTP_BALLOONTITLE = 4;
-
-    static const int TMT_TEXTCOLOR = 3803;
-    static const int TMT_GRADIENTCOLOR1 = 3810;
-    static const int TMT_GRADIENTCOLOR2 = 3811;
+    #if wxUSE_UXTHEME
+        #include "wx/msw/uxtheme.h"
+        #define HAVE_MSW_THEME
+    #endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -83,7 +77,7 @@ public:
         }
         //else: Simply don't show any icon.
 
-        wxStaticText* const labelTitle = new wxStaticText(this, wxID_ANY, "");
+        wxStaticText* const labelTitle = new wxStaticText(this, wxID_ANY, wxString());
         labelTitle->SetLabelText(title);
 
         wxFont titleFont(titleFont_);
@@ -92,16 +86,15 @@ public:
             // Determine the appropriate title font for the current platform.
             titleFont = labelTitle->GetFont();
 
-#ifdef __WXMSW__
+#ifdef HAVE_MSW_THEME
             // When using themes MSW tooltips use larger bluish version of the
             // normal font.
-            wxUxThemeEngine* const theme = GetTooltipTheme();
-            if ( theme )
+            if ( UseTooltipTheme() )
             {
                 titleFont.MakeLarger();
 
                 COLORREF c;
-                if ( FAILED(theme->GetThemeColor
+                if ( FAILED(::GetThemeColor
                                    (
                                         wxUxThemeHandle(parent, L"TOOLTIP"),
                                         TTP_BALLOONTITLE,
@@ -117,7 +110,7 @@ public:
                 labelTitle->SetForegroundColour(wxRGBToColour(c));
             }
             else
-#endif // __WXMSW__
+#endif // HAVE_MSW_THEME
             {
                 // Everything else, including "classic" MSW look uses just the
                 // bold version of the base font.
@@ -139,8 +132,8 @@ public:
         wxTextSizerWrapper wrapper(this);
         wxSizer* sizerText = wrapper.CreateSizer(message, -1 /* No wrapping */);
 
-#ifdef __WXMSW__
-        if ( icon.IsOk() && GetTooltipTheme() )
+#ifdef HAVE_MSW_THEME
+        if ( icon.IsOk() && UseTooltipTheme() )
         {
             // Themed tooltips under MSW align the text with the title, not
             // with the icon, so use a helper horizontal sizer in this case.
@@ -151,7 +144,7 @@ public:
 
             sizerText = sizerTextIndent;
         }
-#endif // !__WXMSW__
+#endif // HAVE_MSW_THEME
         sizerTop->Add(sizerText,
                         wxSizerFlags().DoubleBorder(wxLEFT|wxRIGHT|wxBOTTOM)
                                       .Centre());
@@ -174,14 +167,13 @@ public:
         if ( !colStart.IsOk() )
         {
             // Determine the best colour(s) to use on our own.
-#ifdef __WXMSW__
-            wxUxThemeEngine* const theme = GetTooltipTheme();
-            if ( theme )
+#ifdef HAVE_MSW_THEME
+            if ( UseTooltipTheme() )
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
 
                 COLORREF c1, c2;
-                if ( FAILED(theme->GetThemeColor
+                if ( FAILED(::GetThemeColor
                                    (
                                         hTheme,
                                         TTP_BALLOONTITLE,
@@ -189,7 +181,7 @@ public:
                                         TMT_GRADIENTCOLOR1,
                                         &c1
                                     )) ||
-                    FAILED(theme->GetThemeColor
+                    FAILED(::GetThemeColor
                                   (
                                         hTheme,
                                         TTP_BALLOONTITLE,
@@ -206,7 +198,7 @@ public:
                 colEnd = wxRGBToColour(c2);
             }
             else
-#endif // __WXMSW__
+#endif // HAVE_MSW_THEME
             {
                 colStart = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
             }
@@ -260,7 +252,7 @@ public:
             return;
         }
 
-        Connect(wxEVT_TIMER, wxTimerEventHandler(wxRichToolTipPopup::OnTimer));
+        Bind(wxEVT_TIMER, &wxRichToolTipPopup::OnTimer, this);
 
         m_timeout = timeout; // set for use in OnTimer if we have a delay
         m_delayShow = delay != 0;
@@ -278,26 +270,26 @@ protected:
     }
 
 private:
-#ifdef __WXMSW__
+#ifdef HAVE_MSW_THEME
     // Returns non-NULL theme only if we're using Win7-style tooltips.
-    static wxUxThemeEngine* GetTooltipTheme()
+    static bool UseTooltipTheme()
     {
         // Even themed applications under XP still use "classic" tooltips.
         if ( wxGetWinVersion() <= wxWinVersion_XP )
-            return NULL;
-
-        return wxUxThemeEngine::GetIfActive();
+            return false;
+        else
+            return wxUxThemeIsActive();
     }
-#endif // __WXMSW__
+#endif // HAVE_MSW_THEME
 
     // For now we just hard code the tip height, would be nice to do something
     // smarter in the future.
     static int GetTipHeight()
     {
-#ifdef __WXMSW__
-        if ( GetTooltipTheme() )
+#ifdef HAVE_MSW_THEME
+        if ( UseTooltipTheme() )
             return 20;
-#endif // __WXMSW__
+#endif // HAVE_MSW_THEME
 
         return 15;
     }
@@ -326,11 +318,7 @@ private:
 
         // Use GetFromWindow() and not GetFromPoint() here to try to get the
         // correct display even if the tip point itself is not visible.
-        int dpy = wxDisplay::GetFromWindow(GetParent());
-        if ( dpy == wxNOT_FOUND )
-            dpy = 0; // What else can we do?
-
-        const wxRect rectDpy = wxDisplay(dpy).GetClientArea();
+        const wxRect rectDpy = wxDisplay(GetParent()).GetClientArea();
 
 #ifdef __WXMAC__
         return pos.y > rectDpy.height/2 ? wxTipKind_Bottom : wxTipKind_Top;
@@ -676,9 +664,6 @@ void wxRichToolTipGenericImpl::SetTitleFont(const wxFont& font)
 
 void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
 {
-    // Set the focus to the window the tooltip refers to to make it look active.
-    win->SetFocus();
-
     wxRichToolTipPopup* const popup = new wxRichToolTipPopup
                                           (
                                             win,

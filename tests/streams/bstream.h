@@ -9,8 +9,6 @@
 #ifndef _WX_TESTBSTREAM_H__
 #define _WX_TESTBSTREAM_H__
 
-#include "wx/cppunit.h"
-
 ///////////////////////////////////////////////////////////////////////////////
 // Some macros preventing us from typing too much ;-)
 //
@@ -18,14 +16,8 @@
 #define STREAM_TEST_NAME "Streams"
 #define COMPOSE_TEST_NAME(Name) \
     STREAM_TEST_NAME "." #Name
-#define STREAM_REGISTER_SUB_SUITE(Name) \
-    extern CppUnit::Test* Get##Name##Suite(); \
-    suite->addTest(Get##Name##Suite())
-#define STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE(Name) \
-    CppUnit::Test* Get##Name##Suite() { return Name::suite(); }
 #define STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(Name) \
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, COMPOSE_TEST_NAME(Name) ); \
-    STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE( Name )
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, COMPOSE_TEST_NAME(Name) );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Template class that implements a test for all base stream functions.
@@ -81,9 +73,16 @@ protected:
         CPPUNIT_ASSERT(!stream_in.Eof());
 
         // Size should be greater than zero.
-        // Note: streams not supporting this should register this test
-        //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
         CPPUNIT_ASSERT(stream_in.GetSize() != 0);
+    }
+
+    // The variant for non-seekable streams.
+    void Input_GetSizeFail()
+    {
+        CleanupHelper cleanup(this);
+        const TStreamIn &stream_in = CreateInStream();
+
+        CPPUNIT_ASSERT(stream_in.GetSize() == 0);
     }
 
     // Just try to perform a GetC() on the input stream.
@@ -199,8 +198,6 @@ protected:
         CPPUNIT_ASSERT(!stream_in.Eof());
 
         // Try to Seek in the stream...
-        // Note: streams not supporting this should register this test
-        //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
         CPPUNIT_ASSERT_EQUAL(2, stream_in.SeekI(2, wxFromStart));
         CPPUNIT_ASSERT_EQUAL(4, stream_in.SeekI(2, wxFromCurrent));
         // Not sure the following line is correct, so test it differently.
@@ -208,6 +205,14 @@ protected:
         CPPUNIT_ASSERT(stream_in.SeekI(-2, wxFromEnd) != wxInvalidOffset);
         // Go beyond the stream size.
         CPPUNIT_ASSERT((stream_in.SeekI(10, wxFromCurrent) == wxInvalidOffset) == m_bSeekInvalidBeyondEnd);
+    }
+
+    void Input_SeekIFail()
+    {
+        CleanupHelper cleanup(this);
+        TStreamIn &stream_in = CreateInStream();
+
+        CPPUNIT_ASSERT( !stream_in.IsSeekable() );
     }
 
     // Just try to perform a TellI() on the input stream.
@@ -340,8 +345,6 @@ protected:
         (void)stream_out.Write(buf, 10);
 
         // Try to Seek in the stream...
-        // Note: streams not supporting this should register this test
-        //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
         CPPUNIT_ASSERT_EQUAL(2, stream_out.SeekO(2, wxFromStart));
         CPPUNIT_ASSERT_EQUAL(4, stream_out.SeekO(2, wxFromCurrent));
         // Not sure the following line is correct, so test it differently.
@@ -349,6 +352,14 @@ protected:
         CPPUNIT_ASSERT(stream_out.SeekO(-2, wxFromEnd) != wxInvalidOffset);
         // Go beyond the stream size.
         CPPUNIT_ASSERT((stream_out.SeekO(10, wxFromCurrent) == wxInvalidOffset) == m_bSeekInvalidBeyondEnd);
+    }
+
+    void Output_SeekOFail()
+    {
+        CleanupHelper cleanup(this);
+        TStreamOut &stream_out = CreateOutStream();
+
+        CPPUNIT_ASSERT( !stream_out.IsSeekable() );
     }
 
     // Just try to perform a TellO() on the output stream.

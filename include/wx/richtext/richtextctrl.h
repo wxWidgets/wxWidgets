@@ -251,7 +251,7 @@ public:
         @see Create(), wxValidator
     */
     wxRichTextCtrl( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr);
+        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxASCII_STR(wxTextCtrlNameStr));
 
     /**
         Destructor.
@@ -264,7 +264,7 @@ public:
         Creates the underlying window.
     */
     bool Create( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr );
+        long style = wxRE_MULTILINE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxASCII_STR(wxTextCtrlNameStr) );
 
     /**
         Initialises the members of the control.
@@ -1247,7 +1247,7 @@ public:
     bool EndParagraphSpacing() { return GetBuffer().EndParagraphSpacing(); }
 
     /**
-        Begins appling line spacing. @e spacing is a multiple, where 10 means
+        Begins applying line spacing. @e spacing is a multiple, where 10 means
         single-spacing, 15 means 1.5 spacing, and 20 means double spacing.
 
         The ::wxTextAttrLineSpacing constants are defined for convenience.
@@ -1497,7 +1497,7 @@ public:
     virtual bool WordLeft(int noPages = 1, int flags = 0);
 
     /**
-        Move a nuber of words to the right.
+        Move a number of words to the right.
     */
     virtual bool WordRight(int noPages = 1, int flags = 0);
 

@@ -345,7 +345,7 @@ enum wxTaskBarJumpListItemType
     wxTASKBAR_JUMP_LIST_TASK,
 
     /** Item acts as a link to a file that the application can open. */
-    wxTASKBAR_JUMP_LIST_DESTIONATION
+    wxTASKBAR_JUMP_LIST_DESTINATION
 };
 
 /**
@@ -374,7 +374,7 @@ public:
             The title of this item.
         @param filePath
             The filePath of this item, the meaning of which depends on the type
-            of this item: If the item type is wxTASKBAR_JUMP_LIST_DESTIONATION,
+            of this item: If the item type is wxTASKBAR_JUMP_LIST_DESTINATION,
             filePath is the path to a file that can be opened by an application.
             If the item type is wxTASKBAR_JUMP_LIST_TASK, filePath is the path
             to an executable that is executed when this item is clicked by the

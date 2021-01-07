@@ -279,6 +279,14 @@ private:
 
 
 wxDialUpManagerImpl::wxDialUpManagerImpl()
+   : m_BeaconHost(WXDIALUP_MANAGER_DEFAULT_BEACONHOST)
+#ifdef __SGI__
+   , m_ConnectCommand("/usr/etc/ppp")
+#elif defined(__LINUX__)
+   // default values for Debian/GNU linux
+   , m_ConnectCommand("pon")
+   , m_HangUpCommand("poff")
+#endif
 {
    m_IsOnline =
    m_connCard = Net_Unknown;
@@ -286,16 +294,7 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
    m_timer = NULL;
    m_CanUseIfconfig = -1; // unknown
    m_CanUsePing = -1; // unknown
-   m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
    m_BeaconPort = 80;
-
-#ifdef __SGI__
-   m_ConnectCommand = wxT("/usr/etc/ppp");
-#elif defined(__LINUX__)
-   // default values for Debian/GNU linux
-   m_ConnectCommand = wxT("pon");
-   m_HangUpCommand = wxT("poff");
-#endif
 
    wxChar * dial = wxGetenv(wxT("WXDIALUP_DIALCMD"));
    wxChar * hup = wxGetenv(wxT("WXDIALUP_HUPCMD"));
@@ -305,7 +304,7 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
 {
-   if(m_timer) delete m_timer;
+   delete m_timer;
    if(m_DialProcess)
    {
       m_DialProcess->Disconnect();
@@ -421,7 +420,7 @@ void wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
     // which is OS - specific and then sends the events.
 
     NetConnection oldIsOnline = m_IsOnline;
-    ( /* non-const */ (wxDialUpManagerImpl *)this)->CheckStatusInternal();
+    const_cast<wxDialUpManagerImpl*>(this)->CheckStatusInternal();
 
     // now send the events as appropriate: i.e. if the status changed and
     // if we're in defined state
@@ -550,7 +549,6 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnectAndPing()
 wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnect()
 {
    // second method: try to connect to a well known host:
-   // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
 
@@ -560,6 +558,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnect()
    serv_addr.sin_family = hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
    serv_addr.sin_port = htons(m_BeaconPort);
+   memset(&serv_addr.sin_zero, 0, sizeof(serv_addr.sin_zero));
 
    int sockfd;
    if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
@@ -722,11 +721,12 @@ wxDialUpManagerImpl::CheckIfconfig()
                     hasModem = strstr(output.fn_str(),"ipdptp") != NULL;
                     hasLAN = strstr(output.fn_str(), "hme") != NULL;
 #elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__) || \
-      defined(__OPENBSD__)
+      defined(__OPENBSD__) || defined(__DARWIN__)
                     hasModem = strstr(output.fn_str(),"ppp")    // ppp
                         || strstr(output.fn_str(),"sl")  // slip
                         || strstr(output.fn_str(),"pl"); // plip
-                    hasLAN = strstr(output.fn_str(), "eth") != NULL;
+                    hasLAN = strstr(output.fn_str(), "eth") != NULL
+                        || strstr(output.fn_str(),"en") != NULL; // en0, en1 osx
 #elif defined(__SGI__)  // IRIX
                     hasModem = strstr(output.fn_str(), "ppp") != NULL; // PPP
 #elif defined(__HPUX__)

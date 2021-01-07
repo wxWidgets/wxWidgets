@@ -23,9 +23,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -94,7 +91,16 @@ enum
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
     INTERNAT_TEST_3,
-    INTERNAT_TEST_MSGBOX
+    INTERNAT_TEST_MSGBOX,
+    INTERNAT_MACRO_1,
+    INTERNAT_MACRO_2,
+    INTERNAT_MACRO_3,
+    INTERNAT_MACRO_4,
+    INTERNAT_MACRO_5,
+    INTERNAT_MACRO_6,
+    INTERNAT_MACRO_7,
+    INTERNAT_MACRO_8,
+    INTERNAT_MACRO_9
 };
 
 // language data
@@ -308,9 +314,23 @@ MyFrame::MyFrame(wxLocale& locale)
     test_menu->Append(INTERNAT_TEST_MSGBOX, _("&Message box test"),
                       _("Tests message box buttons labels translation"));
 
+    // Note that all these strings are currently "translated" only in French
+    // catalog, so you need to use French locale to see them in action.
+    wxMenu *macro_menu = new wxMenu;
+    macro_menu->Append(INTERNAT_MACRO_1, _("item"));
+    macro_menu->Append(INTERNAT_MACRO_2, wxGETTEXT_IN_CONTEXT("context_1", "item"));
+    macro_menu->Append(INTERNAT_MACRO_3, wxGETTEXT_IN_CONTEXT("context_2", "item"));
+    macro_menu->Append(INTERNAT_MACRO_4, wxPLURAL("sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_5, wxPLURAL("sing", "plur", 2));
+    macro_menu->Append(INTERNAT_MACRO_6, wxGETTEXT_IN_CONTEXT_PLURAL("context_1", "sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_7, wxGETTEXT_IN_CONTEXT_PLURAL("context_1", "sing", "plur", 2));
+    macro_menu->Append(INTERNAT_MACRO_8, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_9, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 2));
+
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _("&File"));
     menu_bar->Append(test_menu, _("&Test"));
+    menu_bar->Append(macro_menu, _("&Macro"));
     SetMenuBar(menu_bar);
 
     // this demonstrates RTL support in wxStatusBar:
@@ -338,7 +358,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString canname = m_locale.GetCanonicalName();
 
     localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
-                      locale.c_str(), sysname.c_str(), canname.c_str() );
+                      locale, sysname, canname );
 
     wxMessageDialog dlg(
                         this,
@@ -374,9 +394,9 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else if ( num == 9 )
     {
-        // this message is not translated (not in catalog) because we used wxT()
-        // and not _() around it
-        str = wxT("You've found a bug in this program!");
+        // this message is not translated (not in catalog) because we
+        // did not put _() around it
+        str = "You've found a bug in this program!";
     }
     else if ( num == 17 )
     {
@@ -422,17 +442,17 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
     const wxLanguageInfo * const info = wxLocale::FindLanguageInfo(s_locale);
     if ( !info )
     {
-        wxLogError(_("Locale \"%s\" is unknown."), s_locale.c_str());
+        wxLogError(_("Locale \"%s\" is unknown."), s_locale);
         return;
     }
 
     if ( wxLocale::IsAvailable(info->Language) )
     {
-        wxLogMessage(_("Locale \"%s\" is available."), s_locale.c_str());
+        wxLogMessage(_("Locale \"%s\" is available."), s_locale);
     }
     else
     {
-        wxLogWarning(_("Locale \"%s\" is not available."), s_locale.c_str());
+        wxLogWarning(_("Locale \"%s\" is not available."), s_locale);
     }
 }
 

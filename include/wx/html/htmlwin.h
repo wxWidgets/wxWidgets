@@ -146,7 +146,7 @@ protected:
     /**
         Virtual dtor.
 
-        It is not really needed in this case but at leats it prevents gcc from
+        It is not really needed in this case, but at least it prevents gcc from
         complaining about its absence.
      */
     virtual ~wxHtmlWindowMouseHelper() { }
@@ -260,7 +260,7 @@ public:
 
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
-    // specify document location, use LoadPage() istead
+    // specify document location, use LoadPage() instead
     // Return value : false if an error occurred, true otherwise
     virtual bool SetPage(const wxString& source);
 
@@ -405,9 +405,11 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnSize(wxSizeEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
+    void OnFocusEvent(wxFocusEvent& event);
 #if wxUSE_CLIPBOARD
     void OnKeyUp(wxKeyEvent& event);
     void OnDoubleClick(wxMouseEvent& event);
@@ -502,8 +504,8 @@ protected:
     bool m_makingSelection;
 
 #if wxUSE_CLIPBOARD
-    // time of the last doubleclick event, used to detect tripleclicks
-    // (tripleclicks are used to select whole line):
+    // time of the last double-click event, used to detect triple clicks
+    // (triple clicks are used to select whole line):
     wxMilliClock_t m_lastDoubleClick;
 
     // helper class to automatically scroll the window if the user is selecting
@@ -578,10 +580,10 @@ public:
                     wxHtmlCell *cell, const wxPoint &pt,
                     const wxMouseEvent &ev)
         : wxCommandEvent(commandType, id)
+        , m_mouseEvent(ev)
+        , m_pt(pt)
     {
         m_cell = cell;
-        m_pt = pt;
-        m_mouseEvent = ev;
         m_bLinkWasClicked = false;
     }
 
@@ -617,8 +619,8 @@ public:
     wxHtmlLinkEvent() {}
     wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo)
         : wxCommandEvent(wxEVT_HTML_LINK_CLICKED, id)
+        , m_linkInfo(linkinfo)
     {
-        m_linkInfo = linkinfo;
     }
 
     const wxHtmlLinkInfo &GetLinkInfo() const { return m_linkInfo; }

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-  #pragma hdrstop
-#endif
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
@@ -49,8 +46,8 @@ public:
   virtual ~wxIDropSource() { }
 
   // IDropSource
-  STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
-  STDMETHODIMP GiveFeedback(DWORD dwEffect);
+  STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState) wxOVERRIDE;
+  STDMETHODIMP GiveFeedback(DWORD dwEffect) wxOVERRIDE;
 
     DECLARE_IUNKNOWN_METHODS;
 

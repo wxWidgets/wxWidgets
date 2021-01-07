@@ -3,7 +3,7 @@
 // Purpose:     wxTextEntryBase implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,15 +18,13 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dataobj.h"
+    #include "wx/textctrl.h"            // Only needed for wxTE_PASSWORD.
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
@@ -37,7 +35,7 @@
 // wxTextEntryHintData
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextEntryHintData
+class WXDLLIMPEXP_CORE wxTextEntryHintData : public wxEvtHandler
 {
 public:
     wxTextEntryHintData(wxTextEntryBase *entry, wxWindow *win)
@@ -45,12 +43,27 @@ public:
           m_win(win),
           m_text(m_entry->GetValue())
     {
-        win->Bind(wxEVT_SET_FOCUS, &wxTextEntryHintData::OnSetFocus, this);
-        win->Bind(wxEVT_KILL_FOCUS, &wxTextEntryHintData::OnKillFocus, this);
-        win->Bind(wxEVT_TEXT, &wxTextEntryHintData::OnTextChanged, this);
+        // We push ourselves as the event handler because this allows us to
+        // handle events before the user-defined handlers and notably process
+        // wxEVT_TEXT even if the user code already handles it, which is vital
+        // as if we don't get this event, we would always set the control text
+        // to the hint when losing focus, instead of preserving the text
+        // entered by user. Of course, the same problem could still happen if
+        // the user code pushed their own event handler before this one and
+        // didn't skip wxEVT_TEXT in it, but there doesn't seem anything we can
+        // do about this anyhow and this at least takes care of the much more
+        // common case.
+        m_win->PushEventHandler(this);
+
+        Bind(wxEVT_SET_FOCUS, &wxTextEntryHintData::OnSetFocus, this);
+        Bind(wxEVT_KILL_FOCUS, &wxTextEntryHintData::OnKillFocus, this);
+        Bind(wxEVT_TEXT, &wxTextEntryHintData::OnTextChanged, this);
     }
 
-    // default dtor is ok
+    ~wxTextEntryHintData()
+    {
+        m_win->PopEventHandler();
+    }
 
     // Get the real text of the control such as it was before we replaced it
     // with the hint.
@@ -96,8 +109,11 @@ private:
 
         // Save the old text colour and set a more inconspicuous one for the
         // hint.
-        m_colFg = m_win->GetForegroundColour();
-        m_win->SetForegroundColour(*wxLIGHT_GREY);
+        if (!m_colFg.IsOk())
+        {
+            m_colFg = m_win->GetForegroundColour();
+            m_win->SetForegroundColour(*wxLIGHT_GREY);
+        }
 
         m_entry->DoSetValue(m_hint, wxTextEntryBase::SetValue_NoEvent);
     }
@@ -322,7 +338,9 @@ namespace
 // Poor man's lambda: helper for binding ConvertToUpperCase() to the event
 struct ForceUpperFunctor
 {
-    explicit ForceUpperFunctor(wxTextEntryBase* entry)
+    // This class must have default ctor in wxNO_RTTI case, so allow creating
+    // it with null entry even if this never actually happens in practice.
+    explicit ForceUpperFunctor(wxTextEntryBase* entry = NULL)
         : m_entry(entry)
     {
     }
@@ -376,6 +394,11 @@ void wxTextEntryBase::ForceUpper()
 
 bool wxTextEntryBase::SetHint(const wxString& hint)
 {
+    // Hint contents would be shown hidden in a password text entry anyhow, so
+    // we just can't support hints in this case.
+    if ( GetEditableWindow()->HasFlag(wxTE_PASSWORD) )
+        return false;
+
     if ( !hint.empty() )
     {
         if ( !m_hintData )

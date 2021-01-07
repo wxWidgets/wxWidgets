@@ -7,7 +7,7 @@ tn0001.txt -> docs/contributing/how-to-add-new-sample.md
 tn0002.txt -> docs/contributing/translators-guide.md
 tn0003.txt -> docs/contributing/how-to-add-class-documentation.md
 tn0004.htm -> *** REMOVED *** (obsoleted by Bakefile changes)
-tn0005.txt -> *** REMOVED *** (obsoleted by http://wiki.wxwidgets.org/Development:_How_To_Contribute)
+tn0005.txt -> *** REMOVED *** (obsoleted by https://wiki.wxwidgets.org/Development:_How_To_Contribute)
 tn0006.txt -> *** REMOVED *** (obsoleted by tn0013.txt)
 tn0007.txt -> *** REMOVED *** (obsoleted by Bakefile changes)
 tn0008.htm -> *** REMOVED *** (included in the manual now)

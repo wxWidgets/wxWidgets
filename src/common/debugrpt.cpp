@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -28,6 +25,8 @@
     #include "wx/intl.h"
     #include "wx/utils.h"
 #endif // WX_PRECOMP
+
+WX_CHECK_BUILD_OPTIONS("wxQA")
 
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 
@@ -56,8 +55,6 @@
     #include "wx/wfstream.h"
     #include "wx/zipstrm.h"
 #endif // wxUSE_ZIPSTREAM
-
-WX_CHECK_BUILD_OPTIONS("wxQA")
 
 // ----------------------------------------------------------------------------
 // XmlStackWalker: stack walker specialization which dumps stack in XML
@@ -88,9 +85,9 @@ protected:
 // ----------------------------------------------------------------------------
 
 static inline void
-HexProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
+HexProperty(wxXmlNode *node, const wxChar *name, wxUIntPtr value)
 {
-    node->AddAttribute(name, wxString::Format(wxT("%08lx"), value));
+    node->AddAttribute(name, wxString::Format(wxT("%#zx"), value));
 }
 
 static inline void
@@ -131,10 +128,14 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
     NumProperty(nodeFrame, wxT("level"), frame.GetLevel());
     wxString func = frame.GetName();
     if ( !func.empty() )
-    {
         nodeFrame->AddAttribute(wxT("function"), func);
-        HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
-    }
+
+    HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
+    HexProperty(nodeFrame, wxT("address"), wxPtrToUInt(frame.GetAddress()));
+
+    wxString module = frame.GetModule();
+    if ( !module.empty() )
+        nodeFrame->AddAttribute(wxT("module"), module);
 
     if ( frame.HasSourceLocation() )
     {
@@ -234,7 +235,7 @@ wxDebugReport::~wxDebugReport()
 
     if ( !m_dir.empty() )
     {
-        if ( wxRmDir(m_dir.fn_str()) != 0 )
+        if ( wxRmDir(m_dir) != 0 )
         {
             wxLogSysError(_("Failed to clean up debug report directory \"%s\""),
                           m_dir.c_str());
@@ -594,6 +595,13 @@ bool wxDebugReport::DoProcess()
     return true;
 }
 
+wxFileName wxDebugReport::GetSaveLocation() const
+{
+    wxFileName fn;
+    fn.SetPath(GetDirectory());
+    return fn;
+}
+
 // ============================================================================
 // wxDebugReport-derived classes
 // ============================================================================
@@ -618,6 +626,19 @@ void wxDebugReportCompress::SetCompressedFileBaseName(const wxString& name)
     m_zipName = name;
 }
 
+wxFileName wxDebugReportCompress::GetSaveLocation() const
+{
+    // Use the default directory as a basis for the save location, e.g.
+    // %temp%/someName becomes %temp%/someName.zip.
+    wxFileName fn(GetDirectory());
+    if ( !m_zipDir.empty() )
+        fn.SetPath(m_zipDir);
+    if ( !m_zipName.empty() )
+        fn.SetName(m_zipName);
+    fn.SetExt("zip");
+    return fn;
+}
+
 bool wxDebugReportCompress::DoProcess()
 {
 #define HAS_FILE_STREAMS (wxUSE_STREAMS && (wxUSE_FILE || wxUSE_FFILE))
@@ -626,19 +647,8 @@ bool wxDebugReportCompress::DoProcess()
     if ( !count )
         return false;
 
-    // create the compressed report file outside of the directory with the
-    // report files as it will be deleted by wxDebugReport dtor but we want to
-    // keep this one: for this we simply treat the directory name as the name
-    // of the file so that its last component becomes our base name
-    wxFileName fn(GetDirectory());
-    if ( !m_zipDir.empty() )
-        fn.SetPath(m_zipDir);
-    if ( !m_zipName.empty() )
-        fn.SetName(m_zipName);
-    fn.SetExt("zip");
-
     // create the streams
-    const wxString ofullPath = fn.GetFullPath();
+    const wxString ofullPath = GetSaveLocation().GetFullPath();
 #if wxUSE_FFILE
     wxFFileOutputStream os(ofullPath, wxT("wb"));
 #elif wxUSE_FILE

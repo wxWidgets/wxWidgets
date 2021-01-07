@@ -98,7 +98,7 @@
     (In all these cases the EVT_SCROLL_THUMBRELEASE event does not happen).
 
     In short, the EVT_SCROLL_CHANGED event is triggered when scrolling/moving has
-    finished independently of the way it had started. Please see the widgets sample
+    finished independently of the way it had started. Please see the @ref page_samples_widgets
     ("Slider" page) to see the difference between EVT_SCROLL_THUMBRELEASE and
     EVT_SCROLL_CHANGED in action.
 
@@ -124,10 +124,10 @@ public:
         @param id
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-            Window position. 
+            Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxScrollBar.

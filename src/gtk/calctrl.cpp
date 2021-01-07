@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CALENDARCTRL
 
@@ -19,7 +16,7 @@
 
 #include "wx/calctrl.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 extern "C" {
 
@@ -198,7 +195,9 @@ bool wxGtkCalendarCtrl::EnableMonthChange(bool enable)
 
 bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 {
-    if ( date.IsValid() && !IsInValidRange(date) )
+    wxCHECK_MSG( date.IsValid(), false, "invalid date" );
+
+    if ( !IsInValidRange(date) )
         return false;
 
     g_signal_handlers_block_by_func(m_widget,

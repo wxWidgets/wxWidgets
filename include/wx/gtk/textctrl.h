@@ -27,7 +27,7 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxTextCtrlNameStr);
+               const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     virtual ~wxTextCtrl();
 
@@ -38,7 +38,7 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxTextCtrlNameStr);
+                const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -95,7 +95,6 @@ public:
 
     // Overridden wxWindow methods
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
-    virtual bool Enable( bool enable = true ) wxOVERRIDE;
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
@@ -143,6 +142,9 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    void GTKOnTextChanged() wxOVERRIDE;
+    void GTKAfterLayout();
+
 protected:
     // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
@@ -154,11 +156,12 @@ protected:
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
+    virtual void DoEnable(bool enable) wxOVERRIDE;
+
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
 
-    virtual void DoSetValue(const wxString &value, int flags = 0) wxOVERRIDE;
     virtual wxString DoGetValue() const wxOVERRIDE;
 
     // Override this to use either GtkEntry or GtkTextView IME depending on the
@@ -182,7 +185,6 @@ private:
     // overridden wxTextEntry virtual methods
     virtual GtkEditable *GetEditable() const wxOVERRIDE;
     virtual GtkEntry *GetEntry() const wxOVERRIDE;
-    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
 
     // change the font for everything in this control
     void ChangeFontGlobally();
@@ -196,7 +198,7 @@ private:
     // returns either m_text or m_buffer depending on whether the control is
     // single- or multi-line; convenient for the GTK+ functions which work with
     // both
-    void *GetTextObject() const
+    void *GetTextObject() const wxOVERRIDE
     {
         return IsMultiLine() ? static_cast<void *>(m_buffer)
                              : static_cast<void *>(m_text);
@@ -206,8 +208,8 @@ private:
     // the widget used for single line controls
     GtkWidget  *m_text;
 
-    bool        m_modified:1;
-    bool        m_dontMarkDirty:1;
+    bool m_modified;
+    bool m_dontMarkDirty;
 
     int         m_countUpdatesToIgnore;
 
@@ -215,8 +217,9 @@ private:
     // a dummy one when frozen
     GtkTextBuffer *m_buffer;
 
-    GtkTextMark* m_showPositionOnThaw;
+    GtkTextMark* m_showPositionDefer;
     GSList* m_anonymousMarkList;
+    unsigned m_afterLayoutId;
 
     // For wxTE_AUTO_URL
     void OnUrlMouseEvent(wxMouseEvent&);

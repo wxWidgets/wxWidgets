@@ -29,7 +29,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxStaticTextNameStr)
+                 const wxString& name = wxASCII_STR(wxStaticTextNameStr))
     {
         Init();
 
@@ -42,7 +42,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticTextNameStr);
+                const wxString& name = wxASCII_STR(wxStaticTextNameStr));
 
     virtual ~wxGenericStaticText();
 
@@ -54,8 +54,8 @@ public:
 protected:
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const wxOVERRIDE { return m_label; }
-    virtual void DoSetLabel(const wxString& label) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE { return m_label; }
+    virtual void WXSetVisibleLabel(const wxString& label) wxOVERRIDE;
 
     void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
 

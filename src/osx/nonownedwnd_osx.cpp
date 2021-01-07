@@ -36,8 +36,6 @@
 // trace mask for activation tracing messages
 #define TRACE_ACTIVATE "activation"
 
-wxWindow* g_MacLastWindow = NULL ;
-
 clock_t wxNonOwnedWindow::s_lastFlush = 0;
 
 // unified title and toolbar constant - not in Tiger headers, so we duplicate it here
@@ -99,6 +97,7 @@ void wxNonOwnedWindow::Init()
 {
     m_nowpeer = NULL;
     m_isNativeWindowWrapper = false;
+    m_ignoreResizing = false;
 }
 
 bool wxNonOwnedWindow::Create(wxWindow *parent,
@@ -153,7 +152,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 
-    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ));
+    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ));
 
     if ( parent )
         parent->AddChild(this);
@@ -257,8 +256,11 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
 {
     if ( !wxWindow::SetBackgroundColour(c) && m_hasBgCol )
         return false ;
-
-    if ( GetBackgroundStyle() != wxBG_STYLE_CUSTOM )
+    
+    // only set the native background color if the toplevel window's
+    // background is not supposed to be transparent, otherwise the
+    // transparency is lost
+    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT)
     {
         if ( m_nowpeer )
             return m_nowpeer->SetBackgroundColour(c);
@@ -308,6 +310,9 @@ void wxNonOwnedWindow::HandleResized( double WXUNUSED(timestampsec) )
 
 void wxNonOwnedWindow::HandleResizing( double WXUNUSED(timestampsec), wxRect* rect )
 {
+    if ( m_ignoreResizing )
+        return;
+
     wxRect r = *rect ;
 
     // this is a EVT_SIZING not a EVT_SIZE type !
@@ -476,6 +481,9 @@ void wxNonOwnedWindow::WindowWasPainted()
 
 void wxNonOwnedWindow::Update()
 {
+    if ( m_nowpeer == NULL )
+        return;
+
     if ( clock() - s_lastFlush > CLOCKS_PER_SEC / 30 )
     {
         s_lastFlush = clock();
@@ -502,6 +510,7 @@ void *wxNonOwnedWindow::OSXGetViewOrWindow() const
 bool wxNonOwnedWindow::DoClearShape()
 {
     m_shape.Clear();
+    m_shapePath = wxGraphicsPath();
 
     wxSize sz = GetClientSize();
     wxRegion region(0, 0, sz.x, sz.y);
@@ -511,7 +520,13 @@ bool wxNonOwnedWindow::DoClearShape()
 
 bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
+    m_shapePath = wxGraphicsPath();
     m_shape = region;
+
+    // set the native content view to transparency, this is an implementation detail
+    // no reflected in the wx BackgroundStyle
+    GetPeer()->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+    GetPeer()->SetNeedsDisplay();
 
     return m_nowpeer->SetShape(region);
 }
@@ -522,8 +537,6 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 
 bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 {
-    m_shapePath = path;
-
     // Convert the path to wxRegion by rendering the path on a window-sized
     // bitmap, creating a mask from it and finally creating the region from
     // this mask.
@@ -531,17 +544,24 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 
     {
         wxMemoryDC dc(bmp);
-        dc.SetBackground(*wxBLACK);
+        dc.SetBackground(*wxBLACK_BRUSH);
         dc.Clear();
 
         wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
-        context->SetBrush(*wxWHITE);
-        context->FillPath(m_shapePath);
+        context->SetBrush(*wxWHITE_BRUSH);
+        context->SetAntialiasMode(wxANTIALIAS_NONE);
+        context->FillPath(path);
     }
 
     bmp.SetMask(new wxMask(bmp, *wxBLACK));
 
-    return DoSetRegionShape(wxRegion(bmp));
+    // the shape path has to be set AFTER the region is set, because that method
+    // clears any former path
+    bool success = DoSetRegionShape(wxRegion(bmp));
+    if ( success )
+        m_shapePath = path;
+
+    return success;
 }
 
 void

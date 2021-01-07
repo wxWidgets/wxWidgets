@@ -24,7 +24,7 @@ enum
         Don't show the column headers.
 
         By default this control shows the column headers, using this class
-        allows to avoid this and show only the data.
+        allows avoiding this and showing only the data.
 
         @since 2.9.5
      */
@@ -41,7 +41,7 @@ enum
 
 /**
     @class wxTreeListItem
-   
+
     Unique identifier of an item in wxTreeListCtrl.
 
     This is an opaque class which can't be used by the application in any other
@@ -50,7 +50,7 @@ enum
 
     @see wxTreeListCtrl
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -74,12 +74,12 @@ public:
 
 /**
     @class wxTreeListItemComparator
-   
+
     Class defining sort order for the items in wxTreeListCtrl.
 
     @see wxTreeListCtrl
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -90,7 +90,7 @@ public:
     /**
         Default constructor.
 
-        Notice that this class is not copyable, comparators are not passed by
+        Notice that this class is not copiable, comparators are not passed by
         value.
      */
     wxTreeListItemComparator();
@@ -212,6 +212,9 @@ extern const wxTreeListItem wxTLI_LAST;
     @style{wxTL_USER_3STATE}
         Same as wxTL_3STATE but the user can also set the checkboxes to the
         undetermined state. Implies wxTL_3STATE.
+    @style{wxTL_NO_HEADER}
+        Don't show the column headers, that are shown by default. Notice that
+        this style is only available since wxWidgets 2.9.5.
     @style{wxTL_DEFAULT_STYLE}
         Style used by the control by default, just wxTL_SINGLE currently.
     @endStyleTable
@@ -252,7 +255,7 @@ extern const wxTreeListItem wxTLI_LAST;
         if you need to know it.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -361,7 +364,7 @@ public:
         @param width
             The width of the column in pixels or the special
             wxCOL_WIDTH_AUTOSIZE value indicating that the column should adjust
-            to its contents. Notice that the first column is special and will
+            to its contents. Notice that the last column is special and will
             be always resized to fill all the space not taken by the other
             columns, i.e. the width specified here is ignored for it.
         @param align
@@ -405,7 +408,7 @@ public:
         Set column width to either the given value in pixels or to the value
         large enough to fit all of the items if width is wxCOL_WIDTH_AUTOSIZE.
 
-        Notice that setting the width of the first column is ignored as this
+        Notice that setting the width of the last column is ignored as this
         column is always resized to fill the space left by the other columns.
      */
     void SetColumnWidth(unsigned col, int width);

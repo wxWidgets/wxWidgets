@@ -18,7 +18,14 @@ enum wxXmlResourceFlags
 
     /** Prevent the XRC files from being reloaded from disk in case they have been modified there
         since being last loaded (may slightly speed up loading them). */
-    wxXRC_NO_RELOADING   = 4
+    wxXRC_NO_RELOADING   = 4,
+
+    /**
+        Expand environment variables for paths in XRC (such as bitmaps or icons).
+
+        @since 3.1.3
+    */
+    wxXRC_USE_ENVVARS    = 8
 };
 
 
@@ -93,7 +100,7 @@ public:
      */
     void InsertHandler(wxXmlResourceHandler *handler);
 
-    
+
     /**
         Attaches an unknown control to the given panel/window/dialog.
         Unknown controls are used in conjunction with \<object class="unknown"\>.
@@ -115,7 +122,7 @@ public:
     */
     static void AddSubclassFactory(wxXmlSubclassFactory *factory);
 
-    
+
     /**
         Compares the XRC version to the argument.
 
@@ -535,8 +542,15 @@ protected:
 
     /**
         Creates an animation (see wxAnimation) from the filename specified in @a param.
+
+        It is recommended to provide @a ctrl argument to this function (which
+        is only available in wxWidgets 3.1.4 or later) to make sure that the
+        created animation is compatible with the specified control, otherwise a
+        wxAnimation object compatible with the default wxAnimationCtrl
+        implementation is created.
     */
-    wxAnimation* GetAnimation(const wxString& param = "animation");
+    wxAnimation* GetAnimation(const wxString& param = "animation",
+                              wxAnimationCtrlBase* ctrl = NULL);
 
     /**
         Gets a bitmap.
@@ -738,6 +752,16 @@ protected:
     wxString GetText(const wxString& param, bool translate = true);
 
     /**
+        Gets a file path from the given node.
+
+        This function expands environment variables in the path if
+        wxXRC_USE_ENVVARS is used.
+
+        @since 3.1.3
+    */
+    wxString GetFilePath(const wxXmlNode* node);
+
+    /**
         Check to see if a parameter exists.
     */
     bool HasParam(const wxString& param);
@@ -785,7 +809,7 @@ protected:
     /**
        After CreateResource has been called this will return the current
        wxXmlResource object.
-       
+
        @since 2.9.5
     */
     wxXmlResource* GetResource() const;
@@ -829,6 +853,6 @@ protected:
 
        @since 2.9.5
     */
-    wxWindow* GetParentAsWindow() const;    
+    wxWindow* GetParentAsWindow() const;
 };
 

@@ -14,7 +14,12 @@
 #include "wx/chartype.h"
 #include "wx/stringimpl.h"
 
-#include <algorithm>        // only for std::swap specialization below
+// We need to get std::swap() declaration in order to specialize it below and
+// it is declared in different headers for C++98 and C++11. Instead of testing
+// which one is being used, just include both of them as it's simpler and less
+// error-prone.
+#include <algorithm>        // std::swap() for C++98
+#include <utility>          // std::swap() for C++11
 
 class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
 class WXDLLIMPEXP_FWD_BASE wxString;
@@ -83,8 +88,40 @@ public:
         return true;
     }
 
+    // Returns true if the character is a BMP character:
+    static bool IsBMP(wxUint32 value) { return value < 0x10000; }
+
+    // Returns true if the character is a supplementary character:
+    static bool IsSupplementary(wxUint32 value) { return 0x10000 <= value && value < 0x110000; }
+
+    // Returns the high surrogate code unit for the supplementary character
+    static wxUint16 HighSurrogate(wxUint32 value)
+    {
+        wxASSERT_MSG(IsSupplementary(value), "wxUniChar::HighSurrogate() must be called on a supplementary character");
+        return static_cast<wxUint16>(0xD800 | ((value - 0x10000) >> 10));
+    }
+
+    // Returns the low surrogate code unit for the supplementary character
+    static wxUint16 LowSurrogate(wxUint32 value)
+    {
+        wxASSERT_MSG(IsSupplementary(value), "wxUniChar::LowSurrogate() must be called on a supplementary character");
+        return static_cast<wxUint16>(0xDC00 | ((value - 0x10000) & 0x03FF));
+    }
+
+    // Returns true if the character is a BMP character:
+    bool IsBMP() const { return IsBMP(m_value); }
+
+    // Returns true if the character is a supplementary character:
+    bool IsSupplementary() const { return IsSupplementary(m_value); }
+
+    // Returns the high surrogate code unit for the supplementary character
+    wxUint16 HighSurrogate() const { return HighSurrogate(m_value); }
+
+    // Returns the low surrogate code unit for the supplementary character
+    wxUint16 LowSurrogate() const { return LowSurrogate(m_value); }
+
     // Conversions to char and wchar_t types: all of those are needed to be
-    // able to pass wxUniChars to verious standard narrow and wide character
+    // able to pass wxUniChars to various standard narrow and wide character
     // functions
     operator char() const { return To8bit(m_value); }
     operator unsigned char() const { return (unsigned char)To8bit(m_value); }
@@ -107,7 +144,6 @@ public:
     bool operator&&(bool v) const { return (bool)*this && v; }
 
     // Assignment operators:
-    wxUniChar& operator=(const wxUniChar& c) { if (&c != this) m_value = c.m_value; return *this; }
     wxUniChar& operator=(const wxUniCharRef& c);
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
@@ -216,6 +252,11 @@ public:
     bool IsAscii() const { return UniChar().IsAscii(); }
     bool GetAsChar(char *c) const { return UniChar().GetAsChar(c); }
 
+    bool IsBMP() const { return UniChar().IsBMP(); }
+    bool IsSupplementary() const { return UniChar().IsSupplementary(); }
+    wxUint16 HighSurrogate() const { return UniChar().HighSurrogate(); }
+    wxUint16 LowSurrogate() const { return UniChar().LowSurrogate(); }
+
     // Assignment operators:
 #if wxUSE_UNICODE_UTF8
     wxUniCharRef& operator=(const wxUniChar& c);
@@ -225,6 +266,10 @@ public:
 
     wxUniCharRef& operator=(const wxUniCharRef& c)
         { if (&c != this) *this = c.UniChar(); return *this; }
+
+#ifdef wxHAS_MEMBER_DEFAULT
+    wxUniCharRef(const wxUniCharRef&) = default;
+#endif
 
 #define wxUNICHAR_REF_DEFINE_OPERATOR_EQUAL(type) \
     wxUniCharRef& operator=(type c) { return *this = wxUniChar(c); }
@@ -317,6 +362,23 @@ void swap<wxUniCharRef>(wxUniCharRef& lhs, wxUniCharRef& rhs)
 }
 
 } // namespace std
+
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+
+// For std::iter_swap() to work with wxString::iterator, which uses
+// wxUniCharRef as its reference type, we need to ensure that swap() works with
+// wxUniCharRef objects by defining this overload.
+//
+// See https://bugs.llvm.org/show_bug.cgi?id=28559#c9
+inline
+void swap(wxUniCharRef&& lhs, wxUniCharRef&& rhs)
+{
+    wxUniChar tmp = lhs;
+    lhs = rhs;
+    rhs = tmp;
+}
+
+#endif // C++11
 
 
 // Comparison operators for the case when wxUniChar(Ref) is the second operand

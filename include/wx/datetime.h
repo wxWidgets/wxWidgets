@@ -277,6 +277,15 @@ public:
         Sunday_First     // week starts with a Sunday
     };
 
+    // Currently we assume that DST is always shifted by 1 hour, this seems to
+    // be always true in practice. If this ever needs to change, search for all
+    // places using DST_OFFSET and update them.
+    enum
+    {
+        DST_OFFSET = 3600
+    };
+
+
     // helper classes
     // ------------------------------------------------------------------------
 
@@ -297,7 +306,9 @@ public:
             return tz;
         }
 
-        long GetOffset() const { return m_offset; }
+        bool IsLocal() const { return m_offset == -1; }
+
+        long GetOffset() const;
 
     private:
         // offset for this timezone from GMT in seconds
@@ -383,6 +394,9 @@ public:
         // returns true if the given year is a leap year in the given calendar
     static bool IsLeapYear(int year = Inv_Year, Calendar cal = Gregorian);
 
+        // acquires the first day of week based on locale and/or OS settings
+    static bool GetFirstWeekDay(WeekDay *firstDay);
+
         // get the century (19 for 1999, 20 for 2000 and -5 for 492 BC)
     static int GetCentury(int year);
 
@@ -450,7 +464,7 @@ public:
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
-    wxDateTime() { m_time = wxINT64_MIN; }
+    wxDateTime() : m_time(wxINT64_MIN) { }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
     inline wxDateTime(time_t timet);
@@ -709,7 +723,7 @@ public:
         // get the broken down date/time representation in the given timezone
         //
         // If you wish to get several time components (day, month and year),
-        // consider getting the whole Tm strcuture first and retrieving the
+        // consider getting the whole Tm structure first and retrieving the
         // value from it - this is much more efficient
     Tm GetTm(const TimeZone& tz = Local) const;
 
@@ -847,7 +861,7 @@ public:
         return m_time != dt.m_time;
     }
 
-    // arithmetics with dates (see also below for more operators)
+    // arithmetic with dates (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of the date with a time span (positive or negative)
@@ -941,7 +955,7 @@ public:
     bool ParseFormat(const wxString& date,
                      wxString::const_iterator *end)
     {
-        return ParseFormat(date, wxDefaultDateTimeFormat, wxDefaultDateTime, end);
+        return ParseFormat(date, wxASCII_STR(wxDefaultDateTimeFormat), wxDefaultDateTime, end);
     }
 
         // parse a string containing date, time or both in ISO 8601 format
@@ -986,7 +1000,7 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxString& format = wxDefaultDateTimeFormat,
+    wxString Format(const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                     const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
     wxString FormatDate() const { return Format(wxS("%x")); }
@@ -1021,7 +1035,7 @@ public:
     }
 
     wxAnyStrPtr ParseFormat(const wxString& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                             const wxDateTime& dateDef = wxDefaultDateTime)
     {
         wxString::const_iterator end;
@@ -1070,14 +1084,14 @@ public:
     const wchar_t* ParseRfc822Date(const wchar_t* date);
 
     void ParseFormat(const wxCStrData& date,
-                     const wxString& format = wxDefaultDateTimeFormat,
+                     const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                      const wxDateTime& dateDef = wxDefaultDateTime)
         { ParseFormat(wxString(date), format, dateDef); }
     const char* ParseFormat(const char* date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                             const wxDateTime& dateDef = wxDefaultDateTime);
     const wchar_t* ParseFormat(const wchar_t* date,
-                               const wxString& format = wxDefaultDateTimeFormat,
+                               const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                                const wxDateTime& dateDef = wxDefaultDateTime);
 
     void ParseDateTime(const wxCStrData& datetime)
@@ -1100,7 +1114,7 @@ public:
     // ------------------------------------------------------------------------
 
         // construct from internal representation
-    wxDateTime(const wxLongLong& time) { m_time = time; }
+    wxDateTime(const wxLongLong& time) : m_time(time) { }
 
         // get the internal representation
     inline wxLongLong GetValue() const;
@@ -1132,6 +1146,9 @@ private:
     // returns true if we fall in range in which we can use standard ANSI C
     // functions
     inline bool IsInStdRange() const;
+
+    // assign the preferred first day of a week to flags, if necessary
+    void UseEffectiveWeekDayFlags(WeekFlags &flags) const;
 
     // the internal representation of the time is the amount of milliseconds
     // elapsed since the origin which is set by convention to the UNIX/C epoch
@@ -1190,7 +1207,7 @@ public:
 
         // no dtor
 
-    // arithmetics with time spans (see also below for more operators)
+    // arithmetic with time spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of two timespans
@@ -1210,7 +1227,7 @@ public:
     inline wxTimeSpan& Subtract(const wxTimeSpan& diff);
         // subtract another timespan
     wxTimeSpan& operator-=(const wxTimeSpan& diff) { return Subtract(diff); }
-    inline wxTimeSpan operator-(const wxTimeSpan& ts)
+    inline wxTimeSpan operator-(const wxTimeSpan& ts) const
     {
         return wxTimeSpan(GetValue() - ts.GetValue());
     }
@@ -1320,13 +1337,13 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxASCII_STR(wxDefaultTimeSpanFormat)) const;
 
     // implementation
     // ------------------------------------------------------------------------
 
         // construct from internal representation
-    wxTimeSpan(const wxLongLong& diff) { m_diff = diff; }
+    wxTimeSpan(const wxLongLong& diff) : m_diff(diff) { }
 
         // get the internal representation
     wxLongLong GetValue() const { return m_diff; }
@@ -1431,7 +1448,7 @@ public:
         // returns 7*GetWeeks() + GetDays()
     int GetTotalDays() const { return 7*m_weeks + m_days; }
 
-    // arithmetics with date spans (see also below for more operators)
+    // arithmetic with date spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return sum of two date spans
@@ -1831,7 +1848,7 @@ inline bool wxDateTime::IsEqualUpTo(const wxDateTime& dt,
 }
 
 // ----------------------------------------------------------------------------
-// wxDateTime arithmetics
+// wxDateTime arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxDateTime wxDateTime::Add(const wxTimeSpan& diff) const
@@ -1980,7 +1997,7 @@ inline int wxTimeSpan::GetWeeks() const
 }
 
 // ----------------------------------------------------------------------------
-// wxTimeSpan arithmetics
+// wxTimeSpan arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxTimeSpan wxTimeSpan::Add(const wxTimeSpan& diff) const

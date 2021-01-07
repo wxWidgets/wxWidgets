@@ -30,19 +30,42 @@
 class wxMarkupParserAttrOutput : public wxMarkupParserOutput
 {
 public:
-    // A simple container of font and colours.
+    // A container of font and colours with inheritance support. It holds two
+    // sets of attributes:
+    // 1. The currently specified ones from parsed tags that contain
+    //    information on on what should change in the output; some of them
+    //    may be invalid if only the others are affected by a change.
+    // 2. The _effective_ attributes that are always valid and accumulate
+    //    all past changes as the markup is being parser; these are used
+    //    to restore state when unwinding nested attributes.
     struct Attr
     {
-        Attr(const wxFont& font_,
+        Attr(const Attr *attrInEffect,
+             const wxFont& font_,
              const wxColour& foreground_ = wxColour(),
              const wxColour& background_ = wxColour())
             : font(font_), foreground(foreground_), background(background_)
         {
+            if (attrInEffect)
+            {
+                effectiveFont = font.IsOk() ? font : attrInEffect->effectiveFont;
+                effectiveForeground = foreground_.IsOk() ? foreground_ : attrInEffect->effectiveForeground;
+                effectiveBackground = background.IsOk() ? background : attrInEffect->effectiveBackground;
+            }
+            else
+            {
+                effectiveFont = font;
+                effectiveForeground = foreground;
+                effectiveBackground = background;
+            }
         }
 
         wxFont font;
         wxColour foreground,
                  background;
+        wxFont   effectiveFont;
+        wxColour effectiveForeground,
+                 effectiveBackground;
     };
 
 
@@ -52,7 +75,7 @@ public:
                              const wxColour& foreground,
                              const wxColour& background)
     {
-        m_attrs.push(Attr(font, foreground, background));
+        m_attrs.push(Attr(NULL, font, foreground, background));
     }
 
     // Indicates the change of the font and/or colours used. Any of the
@@ -112,7 +135,9 @@ public:
                              font, &wxFont::SetUnderlined,
                              false, true);
 
-        // TODO: No support for strike-through yet.
+        FontModifier<bool>()(spanAttr.m_isStrikethrough,
+                             font, &wxFont::SetStrikethrough,
+                             false, true);
 
         switch ( spanAttr.m_sizeKind )
         {
@@ -136,12 +161,12 @@ public:
                 break;
 
             case wxMarkupSpanAttributes::Size_PointParts:
-                font.SetPointSize((spanAttr.m_fontSize + 1023)/1024);
+                font.SetFractionalPointSize(spanAttr.m_fontSize/1024.);
                 break;
         }
 
 
-        const Attr attr(font, spanAttr.m_fgCol, spanAttr.m_bgCol);
+        const Attr attr(&m_attrs.top(), font, spanAttr.m_fgCol, spanAttr.m_bgCol);
         OnAttrStart(attr);
 
         m_attrs.push(attr);
@@ -171,7 +196,7 @@ private:
     // about the change and update the attributes stack.
     void DoSetFont(const wxFont& font)
     {
-        const Attr attr(font);
+        const Attr attr(&m_attrs.top(), font);
 
         OnAttrStart(attr);
 

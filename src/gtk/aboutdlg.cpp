@@ -3,7 +3,7 @@
 // Purpose:     native GTK+ wxAboutBox() implementation
 // Author:      Vadim Zeitlin
 // Created:     2006-10-08
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -26,9 +26,7 @@
     #include "wx/window.h"
 #endif //WX_PRECOMP
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // GtkArray: temporary array of GTK strings

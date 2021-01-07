@@ -23,7 +23,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxStaticBoxNameStr)
+        const wxString& name = wxASCII_STR(wxStaticBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, name);
     }
@@ -35,7 +35,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxStaticBoxNameStr);
+        const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {

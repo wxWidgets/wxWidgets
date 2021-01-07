@@ -669,9 +669,12 @@ private:
 // wxMDIParentFrame.
 // ----------------------------------------------------------------------------
 
+// Note that we intentionally do not use WXDLLIMPEXP_CORE for this class as it
+// has only inline methods.
+
 template <class ChildFrame, class ParentFrame>
-class WXDLLIMPEXP_CORE wxDocChildFrameAny : public ChildFrame,
-                                            public wxDocChildFrameAnyBase
+class wxDocChildFrameAny : public ChildFrame,
+                           public wxDocChildFrameAnyBase
 {
 public:
     typedef ChildFrame BaseClass;
@@ -688,7 +691,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxDEFAULT_FRAME_STYLE,
-                       const wxString& name = wxFrameNameStr)
+                       const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Create(doc, view, parent, id, title, pos, size, style, name);
     }
@@ -701,7 +704,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr)
+                const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         if ( !wxDocChildFrameAnyBase::Create(doc, view, this) )
             return false;
@@ -709,25 +712,15 @@ public:
         if ( !BaseClass::Create(parent, id, title, pos, size, style, name) )
             return false;
 
-        this->Connect(wxEVT_ACTIVATE,
-                      wxActivateEventHandler(wxDocChildFrameAny::OnActivate));
-        this->Connect(wxEVT_CLOSE_WINDOW,
-                      wxCloseEventHandler(wxDocChildFrameAny::OnCloseWindow));
+        this->Bind(wxEVT_ACTIVATE, &wxDocChildFrameAny::OnActivate, this);
+        this->Bind(wxEVT_CLOSE_WINDOW, &wxDocChildFrameAny::OnCloseWindow, this);
 
         return true;
     }
 
-    virtual bool Destroy()
-    {
-        // FIXME: why exactly do we do this? to avoid activation events during
-        //        destructions maybe?
-        m_childView = NULL;
-        return BaseClass::Destroy();
-    }
-
 protected:
     // hook the child view into event handlers chain here
-    virtual bool TryBefore(wxEvent& event)
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE
     {
         return TryProcessEvent(event) || BaseClass::TryBefore(event);
     }
@@ -744,7 +737,7 @@ private:
     void OnCloseWindow(wxCloseEvent& event)
     {
         if ( CloseView(event) )
-            Destroy();
+            this->Destroy();
         //else: vetoed
     }
 
@@ -774,7 +767,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr)
+                    const wxString& name = wxASCII_STR(wxFrameNameStr))
         : wxDocChildFrameBase(doc, view,
                               parent, id, title, pos, size, style, name)
     {
@@ -788,7 +781,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr)
+                const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         return wxDocChildFrameBase::Create
                (
@@ -840,8 +833,8 @@ protected:
 // This is similar to wxDocChildFrameAny and is used to provide common
 // implementation for both wxDocParentFrame and wxDocMDIParentFrame
 template <class BaseFrame>
-class WXDLLIMPEXP_CORE wxDocParentFrameAny : public BaseFrame,
-                                             public wxDocParentFrameAnyBase
+class wxDocParentFrameAny : public BaseFrame,
+                            public wxDocParentFrameAnyBase
 {
 public:
     wxDocParentFrameAny() : wxDocParentFrameAnyBase(this) { }
@@ -852,7 +845,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = wxFrameNameStr)
+                        const wxString& name = wxASCII_STR(wxFrameNameStr))
         : wxDocParentFrameAnyBase(this)
     {
         Create(manager, frame, id, title, pos, size, style, name);
@@ -865,24 +858,22 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr)
+                const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         m_docManager = manager;
 
         if ( !BaseFrame::Create(frame, id, title, pos, size, style, name) )
             return false;
 
-        this->Connect(wxID_EXIT, wxEVT_MENU,
-                      wxCommandEventHandler(wxDocParentFrameAny::OnExit));
-        this->Connect(wxEVT_CLOSE_WINDOW,
-                      wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
+        this->Bind(wxEVT_MENU, &wxDocParentFrameAny::OnExit, this, wxID_EXIT);
+        this->Bind(wxEVT_CLOSE_WINDOW, &wxDocParentFrameAny::OnCloseWindow, this);
 
         return true;
     }
 
 protected:
     // hook the document manager into event handling chain here
-    virtual bool TryBefore(wxEvent& event)
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE
     {
         // It is important to send the event to the base class first as
         // wxMDIParentFrame overrides its TryBefore() to send the menu events
@@ -929,7 +920,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr)
+                     const wxString& name = wxASCII_STR(wxFrameNameStr))
         : wxDocParentFrameBase(manager,
                                parent, id, title, pos, size, style, name)
     {
@@ -942,7 +933,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr)
+                const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         return wxDocParentFrameBase::Create(manager,
                                             parent, id, title,

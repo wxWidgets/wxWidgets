@@ -32,12 +32,6 @@
 #endif // __WINDOWS__
 #endif // native Win compiler
 
-#ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
-                    // this (3.1 I believe) and how to test for it.
-                    // If this works for Borland 4.0 as well, then no worries.
-    #include <dir.h>
-#endif
-
 #include  <fcntl.h>       // O_RDONLY &c
 
 // ----------------------------------------------------------------------------
@@ -127,9 +121,7 @@ enum wxPosixPermissions
       ( \
         defined(__VISUALC__) || \
         defined(__MINGW64_TOOLCHAIN__) || \
-        (defined(__MINGW32__) && !defined(__WINE__) && \
-                                wxCHECK_W32API_VERSION(0, 5)) || \
-        defined(__BORLANDC__) \
+        (defined(__MINGW32__) && !defined(__WINE__)) \
       )
 
     // temporary defines just used immediately below
@@ -163,15 +155,27 @@ enum wxPosixPermissions
             inline long long wxFtell(FILE* fp)
             {
                 fpos_t pos;
-                return fgetpos(fp, &pos) == 0 ? pos : -1LL;
+                if ( fgetpos(fp, &pos) != 0 )
+                    return -1LL;
+
+                // Unfortunately our interface assumes that the file position
+                // is representable as "long long", so we have to get it from
+                // fpos_t, even though it's an opaque type. And its exact
+                // representation has changed in MinGW, so we have to test for
+                // mingwrt version.
+                #if wxCHECK_MINGW32_VERSION(5, 2)
+                    // In 5.2.2 it's a union with a __value field.
+                    return pos.__value;
+                #else
+                    // Up to 5.1.1 it was a simple typedef.
+                    return pos;
+                #endif
             }
         #else
             #define wxFtell ftello64
         #endif
     #endif
 
-    // other Windows compilers (Borland) don't have huge file support (or at
-    // least not all functions needed for it by wx) currently
 
     // types
 
@@ -182,33 +186,14 @@ enum wxPosixPermissions
         typedef off_t wxFileOffset;
     #endif
 
-    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
-    // resolution operator present in wxPOSIX_IDENT for it
-    #ifdef __BORLANDC__
-        #define wxPOSIX_STRUCT(s)    struct s
-    #else
-        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
-    #endif
 
-    // Borland is special in that it uses _stat with Unicode functions (for
-    // MSVC compatibility?) but stat with ANSI ones
-    #ifdef __BORLANDC__
-        #if wxHAS_HUGE_FILES
-            #define wxStructStat struct stati64
-        #else
-            #if wxUSE_UNICODE
-                #define wxStructStat struct _stat
-            #else
-                #define wxStructStat struct stat
-            #endif
-        #endif
-    #else // !__BORLANDC__
-        #ifdef wxHAS_HUGE_FILES
-            #define wxStructStat struct _stati64
-        #else
-            #define wxStructStat struct _stat
-        #endif
-    #endif // __BORLANDC__/!__BORLANDC__
+    #define wxPOSIX_STRUCT(s) struct wxPOSIX_IDENT(s)
+
+    #ifdef wxHAS_HUGE_FILES
+        #define wxStructStat struct _stati64
+    #else
+        #define wxStructStat struct _stat
+    #endif
 
 
     // functions
@@ -219,7 +204,7 @@ enum wxPosixPermissions
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__) || defined(__MINGW64_TOOLCHAIN__)
+    #if defined(__MINGW64_TOOLCHAIN__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
@@ -250,15 +235,13 @@ enum wxPosixPermissions
         #define   wxTell       wxPOSIX_IDENT(tell)
     #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
 
-     #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x540)
-         // NB: this one is not POSIX and always has the underscore
-         #define   wxFsync      _commit
 
-         // could be already defined by configure (Cygwin)
-         #ifndef HAVE_FSYNC
-             #define HAVE_FSYNC
-         #endif
-    #endif // BORLANDC
+     #define   wxFsync      _commit
+
+     // could be already defined by configure (Cygwin)
+     #ifndef HAVE_FSYNC
+         #define HAVE_FSYNC
+     #endif
 
     #define   wxEof        wxPOSIX_IDENT(eof)
 
@@ -284,17 +267,15 @@ enum wxPosixPermissions
 
     // then wide char ones
     #if wxUSE_UNICODE
-        // special workaround for buggy wopen() in bcc 5.5
-        #if defined(__BORLANDC__) && \
-            (__BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551)
-                WXDLLIMPEXP_BASE int wxCRT_OpenW(const wxChar *pathname,
-                                                 int flags, mode_t mode);
-        #else
-            #define wxCRT_OpenW       _wopen
-        #endif
 
+        #define wxCRT_OpenW         _wopen
+
+        wxDECL_FOR_STRICT_MINGW32(int, _wopen, (const wchar_t*, int, ...))
+        wxDECL_FOR_STRICT_MINGW32(int, _waccess, (const wchar_t*, int))
+        wxDECL_FOR_STRICT_MINGW32(int, _wchmod, (const wchar_t*, int))
         wxDECL_FOR_STRICT_MINGW32(int, _wmkdir, (const wchar_t*))
         wxDECL_FOR_STRICT_MINGW32(int, _wrmdir, (const wchar_t*))
+        wxDECL_FOR_STRICT_MINGW32(int, _wstati64, (const wchar_t*, struct _stati64*))
 
         #define   wxCRT_AccessW     _waccess
         #define   wxCRT_ChmodW      _wchmod
@@ -527,17 +508,17 @@ WXDLLIMPEXP_BASE bool wxIsWild(const wxString& pattern);
 WXDLLIMPEXP_BASE bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = true);
 
 // Concatenate two files to form third
-WXDLLIMPEXP_BASE bool wxConcatFiles(const wxString& file1, const wxString& file2, const wxString& file3);
+WXDLLIMPEXP_BASE bool wxConcatFiles(const wxString& src1, const wxString& src2, const wxString& dest);
 
-// Copy file1 to file2
-WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& file1, const wxString& file2,
+// Copy file
+WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& src, const wxString& dest,
                                  bool overwrite = true);
 
 // Remove file
 WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
 
 // Rename file
-WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite = true);
+WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& oldpath, const wxString& newpath, bool overwrite = true);
 
 // Get current working directory.
 WXDLLIMPEXP_BASE wxString wxGetCwd();
@@ -592,7 +573,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 #elif defined(__MAC__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_MAC
-#else   // Windows and OS/2
+#else   // Windows
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS
 #endif  // Unix/Windows
@@ -601,7 +582,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
 #if defined(__UNIX__) && !defined(__DARWIN__)
   #define wxARE_FILENAMES_CASE_SENSITIVE  true
-#else   // Windows, Mac OS and OS/2
+#else   // Windows and OSX
   #define wxARE_FILENAMES_CASE_SENSITIVE  false
 #endif  // Unix/Windows
 

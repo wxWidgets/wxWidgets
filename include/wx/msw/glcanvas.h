@@ -29,7 +29,7 @@ public:
                 const wxGLContextAttrs *ctxAttrs = NULL);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const;
+    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
     HGLRC GetGLRC() const { return m_glContext; }
 
@@ -47,7 +47,7 @@ private:
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
-    wxEXPLICIT // avoid implicitly converting a wxWindow* to wxGLCanvas
+    explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
                wxWindowID id = wxID_ANY,
@@ -57,7 +57,7 @@ public:
                const wxString& name = wxGLCanvasName,
                const wxPalette& palette = wxNullPalette);
 
-    wxEXPLICIT
+    explicit
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
                const int *attribList = NULL,
@@ -88,7 +88,7 @@ public:
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual bool SwapBuffers();
+    virtual bool SwapBuffers() wxOVERRIDE;
 
 
     // MSW-specific helpers
@@ -109,7 +109,7 @@ public:
 #if wxUSE_PALETTE
     // palette stuff
     bool SetupPalette(const wxPalette& palette);
-    virtual wxPalette CreateDefaultPalette();
+    virtual wxPalette CreateDefaultPalette() wxOVERRIDE;
     void OnQueryNewPalette(wxQueryNewPaletteEvent& event);
     void OnPaletteChanged(wxPaletteChangedEvent& event);
 #endif // wxUSE_PALETTE

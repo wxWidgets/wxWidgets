@@ -38,16 +38,8 @@ bool wxBitmapButton::Create( wxWindow *parent,
                                      validator, name) )
         return false;
 
-    if ( style & wxBU_AUTODRAW )
-    {
-        m_marginX =
-        m_marginY = wxDEFAULT_BUTTON_MARGIN;
-    }
-    else
-    {
-        m_marginX =
-        m_marginY = 0;
-    }
+    m_marginX =
+    m_marginY = wxDEFAULT_BUTTON_MARGIN;
 
     m_bitmaps[State_Normal] = bitmap;
 
@@ -66,7 +58,17 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
     if ( GetBitmapLabel().IsOk() )
     {
-        best += GetBitmapLabel().GetScaledSize();
+        const wxSize bitmapSize = GetBitmapLabel().GetScaledSize();
+        best += bitmapSize;
+
+        // The NSRoundedBezelStyle and NSTexturedRoundedBezelStyle used when
+        // the image is less than 20px tall have a small horizontal border,
+        // account for it here to prevent part of the image from being cut off.
+        //
+        // Note that the magic 20px comes from SetBezelStyleFromBorderFlags()
+        // defined in src/osx/cocoa/button.mm.
+        if ( bitmapSize.y < 20 )
+            best += wxSize(4,0);
     }
 
     return best;

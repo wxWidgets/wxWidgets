@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT && wxUSE_XML
 
@@ -839,8 +836,6 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
                 strData = wxString((const char*) data, wxConvUTF8, size);
                 delete[] data;
             }
-            else
-                strData = wxEmptyString;
         }
 
     }
@@ -1083,7 +1078,7 @@ void wxRichTextXMLHelper::Clear()
     m_convMem = NULL;
     m_deleteConvFile = false;
 #endif
-    m_fileEncoding = wxEmptyString;
+    m_fileEncoding.clear();
 }
 
 void wxRichTextXMLHelper::SetupForSaving(const wxString& enc)
@@ -2035,7 +2030,7 @@ void wxRichTextXMLHelper::AddAttribute(wxString& str, const wxString& name, cons
 
 void wxRichTextXMLHelper::AddAttribute(wxString& str, const wxString& name, const double& v)
 {
-    str << wxT(" ") << name << wxT("=\"") << wxString::Format(wxT("%.2f"), (float) v) << wxT("\"");
+    str << wxS(" ") << name << wxS("=\"") << wxString::Format(wxS("%.2f"), v) << wxS("\"");
 }
 
 void wxRichTextXMLHelper::AddAttribute(wxString& str, const wxString& name, const wxChar* s)

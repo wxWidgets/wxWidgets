@@ -27,9 +27,9 @@ const unsigned char wxALPHA_OPAQUE = 0xff;
     @class wxColour
 
     A colour is an object representing a combination of Red, Green, and Blue
-    (RGB) intensity values, and is used to determine drawing colours. See the
-    entry for wxColourDatabase for how a pointer to a predefined, named colour
-    may be returned instead of creating a new colour.
+    (RGB) intensity values and an Alpha value, and is used to determine
+    drawing colours. See the entry for wxColourDatabase for how a pointer to a predefined,
+    named colour may be returned instead of creating a new colour.
 
     Valid RGB values are in the range 0 to 255.
 
@@ -86,7 +86,7 @@ public:
             A packed RGB value.
     */
     wxColour(unsigned long colRGB);
-    
+
     /**
         Copy constructor.
     */
@@ -113,10 +113,14 @@ public:
         @c wxC2S_HTML_SYNTAX, to obtain the colour as "#" followed by 6
         hexadecimal digits (e.g. wxColour(255,0,0) == "#FF0000").
 
-        This function never fails and always returns a non-empty string but
-        asserts if the colour has alpha channel (i.e. is non opaque) but
-        @c wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
-        specified in flags.
+        This function returns empty string if the colour is not initialized
+        (see IsOk()). Otherwise, the returned string is always non-empty, but
+        the function asserts if the colour has alpha channel (i.e. is non
+        opaque) but @c wxC2S_CSS_SYNTAX (which is the only one supporting
+        alpha) is not specified in @a flags.
+
+        @note For non-solid (i.e. non-RGB) colour this function returns
+        "rgb(??, ?? ??)" or "#??????".
 
         @since 2.7.0
     */
@@ -128,7 +132,7 @@ public:
 
         The arguments @a colRGB and @a colRGBA should be of the form 0x00BBGGRR
         and 0xAABBGGRR respectively where @c 0xRR, @c 0xGG, @c 0xBB and @c 0xAA
-        are the values of the red, blue, green and alpha components.
+        are the values of the red, green, blue and alpha components.
 
         Notice the right-to-left order of components!
 
@@ -159,6 +163,19 @@ public:
     //@}
 
     /**
+        Return the perceived brightness of the colour.
+
+        This value is computed using the simple @code 0.299*R + 0.587*G + 0.114*B @endcode
+        formula with the coefficients taken from the RGB to
+        YIQ conversion formula and @c R, @c G and @c B being the values of the
+        corresponding colour channels normalized to 0..1 range, so that the
+        return value is 0 for black and 1 for white.
+
+        @since 3.1.3
+     */
+    double GetLuminance() const;
+
+    /**
         Returns a pixel value which is platform-dependent.
         On Windows, a COLORREF is returned.
         On X, an allocated pixel value is returned.
@@ -182,6 +199,11 @@ public:
     */
     virtual unsigned char Red() const;
 
+    /**
+        Returns @true if the color can be described using RGB values, i.e. is solid,
+        @false if it is a pattern (currently only possible on macOS)
+    */
+    virtual bool IsSolid() const;
     //@{
     /**
         Sets the RGB intensity values using the given values (first overload),
@@ -189,8 +211,8 @@ public:
         string (third overload).
 
         When using third form, Set() accepts: colour names (those listed in
-        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax 
-        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal 
+        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax
+        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal
         digits for red, green, blue components.
 
         Returns @true if the conversion was successful, @false otherwise.
@@ -206,12 +228,12 @@ public:
 
     /**
         Tests the inequality of two colours by comparing individual red, green, blue
-        colours and alpha values.
+        intensities and alpha values.
     */
     bool operator !=(const wxColour& colour) const;
 
     /**
-        Assignment operator, using a colour name to be found in the colour database.
+        Assignment operator.
 
         @see wxColourDatabase
     */
@@ -219,16 +241,16 @@ public:
 
     /**
         Tests the equality of two colours by comparing individual red, green, blue
-        colours and alpha values.
+        intensities and alpha values.
     */
     bool operator ==(const wxColour& colour) const;
 
     /**
-        Assign 0 or 255 to rgb out parameters.
+        Assigns the same value to @a r, @a g, @a b: 0 if @a on is @c false, 255 otherwise.
         @since 2.9.0
     */
     static void MakeMono(unsigned char* r, unsigned char* g, unsigned char* b, bool on);
-    
+
     /**
         Create a disabled (dimmed) colour from (in/out) rgb parameters.
         @since 2.9.0
@@ -249,7 +271,7 @@ public:
         @since 2.9.0
     */
     static void MakeGrey(unsigned char* r, unsigned char* g, unsigned char* b);
-    
+
     /**
         Create a grey colour from (in/out) rgb parameters using floating point arithmetic.
         Defaults to using the standard ITU-T BT.601 when converting to YUV, where every pixel equals
@@ -264,12 +286,11 @@ public:
         @since 2.9.0
     */
     static unsigned char AlphaBlend(unsigned char fg, unsigned char bg, double alpha);
-    
+
     /**
-        ChangeLightness() is a utility function that simply darkens
-        or lightens a color, based on the specified percentage
-        ialpha of 0 would be completely black, 200 completely white
-        an ialpha of 100 returns the same colour
+        Utility function that simply darkens or lightens a color, based on the specified 
+        percentage @a ialpha. @a ialpha of 0 would be make the color completely black, 
+        200 completely white and 100 would not change the color.
         @since 2.9.0
     */
     static void ChangeLightness(unsigned char* r, unsigned char* g, unsigned char* b, int ialpha);

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CHOICE
 
@@ -458,9 +455,18 @@ void wxChoice::MSWEndDeferWindowPos()
 
 void wxChoice::MSWUpdateDropDownHeight()
 {
+    int flags = wxSIZE_USE_EXISTING;
+    if ( wxApp::GetComCtl32Version() < 600 )
+    {
+        // Make sure our DoMoveWindow() will get called to update the dropdown
+        // height, this happens automatically with comctl32.dll v6, but not
+        // with earlier versions.
+        flags |= wxSIZE_FORCE;
+    }
+
     // be careful to not change the width here
     DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y,
-              wxSIZE_USE_EXISTING);
+              flags);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
@@ -478,7 +484,37 @@ void wxChoice::DoMoveWindow(int x, int y, int width, int height)
     if ( width < 0 )
         return;
 
-    wxControl::DoMoveWindow(x, y, width, height);
+    // the height which we must pass to Windows should be the total height of
+    // the control including the drop down list while the height given to us
+    // is, of course, just the height of the permanently visible part of it so
+    // add the drop down height to it
+
+    // don't make the drop down list too tall, arbitrarily limit it to 30
+    // items max and also don't make it too small if it's currently empty
+    size_t nItems = GetCount();
+    if (!HasFlag(wxCB_SIMPLE))
+    {
+        if (!nItems)
+            nItems = 9;
+        else if (nItems > 30)
+            nItems = 30;
+    }
+
+    int heightWithItems = 0;
+    if (!HasFlag(wxCB_SIMPLE))
+    {
+        // The extra item (" + 1") is required to prevent a vertical
+        // scrollbar from appearing with comctl32.dll versions earlier
+        // than 6.0 (such as found in Win2k).
+        const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
+        heightWithItems = height + hItem*(nItems + 1);
+    }
+    else
+    {
+        heightWithItems = SetHeightSimpleComboBox(nItems);
+    }
+
+    wxControl::DoMoveWindow(x, y, width, heightWithItems);
 }
 
 void wxChoice::DoGetSize(int *w, int *h) const
@@ -497,22 +533,13 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    // The height of the control itself, i.e. of its visible part.
-    int heightVisible = height;
-
-    // we need the real height below so get the current one if it's not given
-    if ( height == wxDefaultCoord )
-    {
-        // height not specified, use the same as before
-        DoGetSize(NULL, &heightVisible);
-    }
-    else if ( height == GetBestSize().y )
+    if ( height == GetBestSize().y )
     {
         // we don't need to manually manage our height, let the system use the
         // default one
         m_heightOwn = wxDefaultCoord;
     }
-    else // non-default height specified
+    else if ( height != wxDefaultCoord ) // non-default height specified
     {
         // set our new own height but be careful not to make it too big: the
         // native control apparently stores it as a single byte and so setting
@@ -527,36 +554,8 @@ void wxChoice::DoSetSize(int x, int y,
             m_heightOwn = COMBO_HEIGHT_ADJ;
     }
 
-
-    // the height which we must pass to Windows should be the total height of
-    // the control including the drop down list while the height given to us
-    // is, of course, just the height of the permanently visible part of it so
-    // add the drop down height to it
-
-    // don't make the drop down list too tall, arbitrarily limit it to 30
-    // items max and also don't make it too small if it's currently empty
-    size_t nItems = GetCount();
-    if (!HasFlag(wxCB_SIMPLE))
-    {
-        if ( !nItems )
-            nItems = 9;
-        else if ( nItems > 30 )
-            nItems = 30;
-    }
-
-    const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
-    int heightWithItems = 0;
-    if (!HasFlag(wxCB_SIMPLE))
-        // The extra item (" + 1") is required to prevent a vertical
-        // scrollbar from appearing with comctl32.dll versions earlier
-        // than 6.0 (such as found in Win2k).
-        heightWithItems = heightVisible + hItem*(nItems + 1);
-    else
-        heightWithItems = SetHeightSimpleComboBox(nItems);
-
-
     // do resize the native control
-    wxControl::DoSetSize(x, y, width, heightWithItems, sizeFlags);
+    wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
 
     // make the control itself of the requested height: notice that this

@@ -1,15 +1,15 @@
 How to add a new `wxUSE_XXX` preprocessor constant
 ================================================
 
-0. Purpose
-----------
+Purpose
+-------
 
 Detailed description of what needs to be done when you want to add a new
 `wxUSE_XXX` compilation flag. The text below assumes you need new `wxUSE_FOO`.
 
 
-1. Overview
------------
+Overview
+--------
 
 wxWidgets uses `wxUSE_XXX` macros for conditionally compiling in (or not)
 optional components. In general, whenever a new non critical (i.e. not
@@ -22,12 +22,12 @@ because then `wxUSE_FOO` would be not defined at all if the user directly
 includes wx/foo.h, include "wx/defs.h" before testing for `wxUSE_FOO`.
 
 
-2. Files to update
-------------------
+Files to update
+---------------
 
 The following files need to be modified when adding a new `wxUSE_FOO`:
 
-a) include/wx/setup_inc.h
+- `include/wx/setup_inc.h`
 
    This file contains all common `wxUSE_XXXs`, and is used to update wxMSW, wxMac
    setup.h and Unix setup.h.in using build/update-setup-h. Please try to add
@@ -39,39 +39,49 @@ a) include/wx/setup_inc.h
    After changing this file, run the update-setup-h script (this is probably
    better done on a Unix machine although it should work under Cygwin too).
 
-a') include/wx/msw/setup_inc.h for MSW-specific options
+- `include/wx/msw/setup_inc.h` for MSW-specific options
 
    This file contains MSW-specific options, so if the new option is only used
    under MSW, add it here instead of include/wx/setup_inc.h. The rest of the
    instructions is the same as above.
 
-b) include/wx/chkconf.h
+- `include/wx/chkconf.h`
 
    Add the check for `wxUSE_FOO` definedness in the corresponding (base or GUI)
    section. Please keep the alphabetic order.
 
    If there are any dependencies, i.e. `wxUSE_FOO` requires `wxUSE_BAR` and
-   `wxUSE_BAZ`, check for thme here too.
+   `wxUSE_BAZ`, check for them here too.
 
-b') include/wx/msw/chkconf.h for MSW-specific options
+- `include/wx/msw/chkconf.h` for MSW-specific options
 
    These options won't be defined for the other ports, so shouldn't be added to
-   the common include/wx/chkconf.h but to this file instead.
+   the common `include/wx/chkconf.h` but to this file instead.
 
-c) configure.in
+- `configure.in`
 
    Here you need to add `DEFAULT_wxUSE_FOO` define. It should be added in the
-   block beginning after WX_ARG_CACHE_INIT line and should default to "no" for
-   "if DEBUG_CONFIGURE = 1" branch (this is used for absolutely minimal builds)
-   and the same as default value in setup_inc.h in the "else" branch.
+   block beginning after `WX_ARG_CACHE_INIT` line and should default to "no" for
+   `if DEBUG_CONFIGURE = 1` branch (this is used for absolutely minimal builds)
+   and the same as default value in `setup_inc.h` in the "else" branch.
 
-   You also need to add a WX_ARG_ENABLE (or, if new functionality can be
-   reasonably described as support for a 3rd party library, WX_ARG_WITH)
-   line togetherw with all the existing WX_ARG_ENABLEs.
+   You also need to add a `WX_ARG_ENABLE` (or, if new functionality can be
+   reasonably described as support for a 3rd party library, `WX_ARG_WITH`)
+   line together with all the existing `WX_ARG_ENABLE`s.
 
    If you have a sample/foo which should be only built when `wxUSE_FOO==1`,
-   then only add it to the SAMPLES_SUBDIRS if `wxUSE_FOO=yes` in configure.
+   then only add it to the `SAMPLES_SUBDIRS` if `wxUSE_FOO=yes` in configure.
 
-d) docs/doxygen/mainpages/const_wxusedef.h
+- `build/cmake/options.cmake`
+
+   To include the option in CMake, add a new line in the appropriate
+   section of `options.cmake`.
+
+       wx_option(wxUSE_FOO "enable FOO")
+
+   As an optional third parameter you may specify `OFF` when the option
+   should be disabled by default.
+
+- `docs/doxygen/mainpages/const_wxusedef.h`
 
    Add a brief description of the new constant.

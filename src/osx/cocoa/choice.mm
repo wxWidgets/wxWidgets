@@ -55,12 +55,22 @@
 - (NSControlSize)controlSize;
 @end
 
-class wxChoiceCocoaImpl : public wxWidgetCocoaImpl
+class wxChoiceCocoaImpl : public wxWidgetCocoaImpl, public wxChoiceWidgetImpl
 {
 public:
     wxChoiceCocoaImpl(wxWindowMac *wxpeer, wxNSPopUpButton *v)
     : wxWidgetCocoaImpl(wxpeer, v)
     {
+        m_popUpMenu = new wxMenu();
+        m_popUpMenu->SetNoEventsMode(true);
+        [v setMenu: m_popUpMenu->GetHMenu()];
+        [v setAutoenablesItems:NO];
+
+    }
+
+    ~wxChoiceCocoaImpl()
+    {
+        delete m_popUpMenu;
     }
     
     void GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE
@@ -78,6 +88,9 @@ public:
         
         switch( size )
         {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            case NSControlSizeLarge:
+#endif
             case NSRegularControlSize:
                 left = right = 3;
                 top = 2;
@@ -96,12 +109,35 @@ public:
                 break;
         }
     }
+
+    void InsertItem( size_t pos, int itemid, const wxString& text) wxOVERRIDE
+    {
+        m_popUpMenu->Insert( pos, itemid, text );
+    }
+
+    size_t GetNumberOfItems() const wxOVERRIDE
+    {
+        return m_popUpMenu->GetMenuItemCount();
+    }
+
+    void RemoveItem( size_t pos ) wxOVERRIDE
+    {
+        m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( pos ) );
+    }
+
+    void SetItem(int pos, const wxString& s) wxOVERRIDE
+    {
+        m_popUpMenu->FindItemByPosition( pos )->SetItemLabel( s ) ;
+    }
+
+private:
+    wxMenu* m_popUpMenu;
 };
 
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    wxMenu* menu,
+                                    wxMenu* WXUNUSED(menu),
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long WXUNUSED(style),
@@ -109,8 +145,6 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
-    [v setMenu: menu->GetHMenu()];
-    [v setAutoenablesItems:NO];
     wxWidgetCocoaImpl* c = new wxChoiceCocoaImpl( wxpeer, v );
     return c;
 }

@@ -12,9 +12,10 @@
 #include "wx/stdpaths.h"
 #include "wx/evtloop.h"
 
-#include "wx/qt/timer.h"
+#include "wx/timer.h"
+#include "wx/qt/private/timer.h"
 
-#include <QtGlobal>
+#include <QtCore/QtGlobal>
 
 wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {
@@ -32,7 +33,7 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 // void wxGUIAppTraits::MutexGuiEnter()
 // {
 // }
-// 
+//
 // void wxGUIAppTraits::MutexGuiLeave()
 // {
 // }
@@ -52,16 +53,3 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer,
 
     return wxPORT_QT;
 }
-
-//#############################################################################
-
-#if wxUSE_CONSOLE_EVENTLOOP
-
-wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
-{
-    return new wxEventLoop();
-}
-
-#endif
-
-//#############################################################################

@@ -11,15 +11,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
 #if !defined(__UNIX__) && !defined(__WIN32__)
-#error wxGenericFileDialog currently only supports Unix, win32 and DOS
+#error wxGenericFileDialog currently only supports Unix and MSW
 #endif
 
 #ifndef WX_PRECOMP
@@ -187,7 +184,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     if ((len > 1) && (wxEndsWithPathSeparator(m_dir)))
         m_dir.Remove( len-1, 1 );
 
-    m_filterExtension = wxEmptyString;
+    m_filterExtension.clear();
 
     // layout
 

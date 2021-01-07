@@ -10,37 +10,35 @@
 #ifndef _WX_QT_COLOUR_H_
 #define _WX_QT_COLOUR_H_
 
-#include <QtGui/QColor>
+class QColor;
 
 class WXDLLIMPEXP_CORE wxColour : public wxColourBase
 {
 public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
-    wxColour(const QColor& color) : m_qtColor(color) {}
+    wxColour(const QColor& color);
 
-    virtual bool IsOk() const { return m_qtColor.isValid(); }
+    virtual bool IsOk() const wxOVERRIDE { return m_valid; }
 
-    unsigned char Red() const { return m_qtColor.red();   }
-    unsigned char Green() const { return m_qtColor.green(); }
-    unsigned char Blue()  const { return m_qtColor.blue();  }
-    unsigned char Alpha() const { return m_qtColor.alpha(); }
+    ChannelType Red()   const wxOVERRIDE { return m_red;   }
+    ChannelType Green() const wxOVERRIDE { return m_green; }
+    ChannelType Blue()  const wxOVERRIDE { return m_blue;  }
+    ChannelType Alpha() const wxOVERRIDE { return m_alpha; }
 
-    bool operator==(const wxColour& color) const
-        { return m_qtColor == color.m_qtColor; }
-    bool operator!=(const wxColour& color) const
-        { return m_qtColor != color.m_qtColor; }
+    bool operator==(const wxColour& color) const;
+    bool operator!=(const wxColour& color) const;
 
     int GetPixel() const;
 
-    QColor GetHandle() const { return m_qtColor; };
+    QColor GetQColor() const;
 
 protected:
-    virtual void
-    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
-        { m_qtColor.setRgb(r, g, b, a); }
+    void Init();
+    virtual void InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) wxOVERRIDE;
 
 private:
-    QColor m_qtColor;
+    ChannelType m_red, m_green, m_blue, m_alpha;
+    bool m_valid;
 
     wxDECLARE_DYNAMIC_CLASS(wxColour);
 };

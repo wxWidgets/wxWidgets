@@ -12,6 +12,7 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QSlider>
 
 class wxQtSlider : public wxQtEventSignalHandler< QSlider, wxSlider >
 {
@@ -45,7 +46,8 @@ void wxQtSlider::valueChanged(int position)
 }
 
 
-wxSlider::wxSlider()
+wxSlider::wxSlider() :
+    m_qtSlider(NULL)
 {
 }
 
@@ -78,6 +80,7 @@ bool wxSlider::Create(wxWindow *parent,
     m_qtSlider->blockSignals(true);
     SetRange( minValue, maxValue );
     m_qtSlider->blockSignals(false);
+    SetPageSize(wxMax(1, (maxValue - minValue) / 10));
 
 #if 0 // there are not normally ticks for a wxSlider
     // draw ticks marks (default bellow if horizontal, right if vertical):
@@ -163,7 +166,7 @@ int wxSlider::GetThumbLength() const
 }
 
 
-QSlider *wxSlider::GetHandle() const
+QWidget *wxSlider::GetHandle() const
 {
     return m_qtSlider;
 }

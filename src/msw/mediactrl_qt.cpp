@@ -21,9 +21,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MEDIACTRL
 
@@ -101,14 +98,10 @@ typedef struct ComponentInstanceRecord * ComponentInstance;
 #define MovieController ComponentInstance
 
 #ifndef URLDataHandlerSubType
-#if defined(__MINGW32__)
-// use magic numbers for compilers which complain about multicharacter integers
-const OSType URLDataHandlerSubType     = 1970433056;
-const OSType VisualMediaCharacteristic = 1702454643;
-#else
-const OSType URLDataHandlerSubType     = 'url ';
-const OSType VisualMediaCharacteristic = 'eyes';
-#endif
+// Under Mac this would be defined as 'url ' and 'eyes' multi-character
+// constants respectively (translate each byte to ASCII to see it), but this is
+// not accepted by non-Mac compilers, so use the numeric constants instead.
+const OSType URLDataHandlerSubType     = 0x75726c20;
 #endif
 
 struct FSSpec
@@ -162,6 +155,11 @@ enum
     mcNotVisible                = 8,
     mcWithFrame                 = 16
 };
+
+typedef void (*PPRMProcType)(Movie theMovie, OSErr theErr, void* theRefCon);
+typedef Boolean (*MCFilterProcType)(MovieController theController,
+                                    short action, void *params,
+                                    LONG_PTR refCon);
 
 //---------------------------------------------------------------------------
 //  QT Library
@@ -249,7 +247,7 @@ public:
     wxDL_VOIDMETHOD_DEFINE(DisposeMovieController, (ComponentInstance ci), (ci))
     wxDL_METHOD_DEFINE(int, MCSetVisible, (ComponentInstance m, int b), (m, b), 0)
 
-    wxDL_VOIDMETHOD_DEFINE(PrePrerollMovie, (Movie m, long t, Fixed r, WXFARPROC p1, void* p2), (m,t,r,p1,p2) )
+    wxDL_VOIDMETHOD_DEFINE(PrePrerollMovie, (Movie m, long t, Fixed r, PPRMProcType p1, void* p2), (m,t,r,p1,p2) )
     wxDL_VOIDMETHOD_DEFINE(PrerollMovie, (Movie m, long t, Fixed r), (m,t,r) )
     wxDL_METHOD_DEFINE(Fixed, GetMoviePreferredRate, (Movie m), (m), 0)
     wxDL_METHOD_DEFINE(long, GetMovieLoadState, (Movie m), (m), 0)
@@ -266,7 +264,7 @@ public:
     wxDL_VOIDMETHOD_DEFINE(MCPositionController,
         (ComponentInstance ci, Rect* r, void* junk, void* morejunk), (ci,r,junk,morejunk))
     wxDL_VOIDMETHOD_DEFINE(MCSetActionFilterWithRefCon,
-        (ComponentInstance ci, WXFARPROC cb, void* ref), (ci,cb,ref))
+        (ComponentInstance ci, MCFilterProcType cb, void* ref), (ci,cb,ref))
     wxDL_VOIDMETHOD_DEFINE(MCGetControllerInfo, (MovieController mc, long* flags), (mc,flags))
     wxDL_VOIDMETHOD_DEFINE(BeginUpdate, (CGrafPtr port), (port))
     wxDL_VOIDMETHOD_DEFINE(UpdateMovie, (Movie m), (m))
@@ -355,33 +353,33 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name);
+                                     const wxString& name) wxOVERRIDE;
 
-    virtual bool Play();
-    virtual bool Pause();
-    virtual bool Stop();
+    virtual bool Play() wxOVERRIDE;
+    virtual bool Pause() wxOVERRIDE;
+    virtual bool Stop() wxOVERRIDE;
 
     virtual bool Load(const wxURI& location,
-                      const wxURI& proxy)
+                      const wxURI& proxy) wxOVERRIDE
     { return wxMediaBackend::Load(location, proxy); }
 
-    virtual bool Load(const wxString& fileName);
-    virtual bool Load(const wxURI& location);
+    virtual bool Load(const wxString& fileName) wxOVERRIDE;
+    virtual bool Load(const wxURI& location) wxOVERRIDE;
 
-    virtual wxMediaState GetState();
+    virtual wxMediaState GetState() wxOVERRIDE;
 
-    virtual bool SetPosition(wxLongLong where);
-    virtual wxLongLong GetPosition();
-    virtual wxLongLong GetDuration();
+    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
+    virtual wxLongLong GetPosition() wxOVERRIDE;
+    virtual wxLongLong GetDuration() wxOVERRIDE;
 
-    virtual void Move(int x, int y, int w, int h);
-    wxSize GetVideoSize() const;
+    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
+    wxSize GetVideoSize() const wxOVERRIDE;
 
-    virtual double GetPlaybackRate();
-    virtual bool SetPlaybackRate(double dRate);
+    virtual double GetPlaybackRate() wxOVERRIDE;
+    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
 
-    virtual double GetVolume();
-    virtual bool SetVolume(double);
+    virtual double GetVolume() wxOVERRIDE;
+    virtual bool SetVolume(double) wxOVERRIDE;
 
     void Cleanup();
     void FinishLoad();
@@ -394,7 +392,7 @@ public:
 
     static LRESULT CALLBACK QTWndProc(HWND, UINT, WPARAM, LPARAM);
 
-    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags);
+    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
 
     wxSize m_bestSize;              // Original movie size
     Movie m_movie;    // QT Movie handle/instance
@@ -419,10 +417,9 @@ public:
         m_qtb = qtb;
         m_hwnd = hwnd;
 
-        m_qtb->m_ctrl->Connect(m_qtb->m_ctrl->GetId(),
+        m_qtb->m_ctrl->Bind(
             wxEVT_ERASE_BACKGROUND,
-            wxEraseEventHandler(wxQTMediaEvtHandler::OnEraseBackground),
-            NULL, this);
+            &wxQTMediaEvtHandler::OnEraseBackground, this);
     }
 
     void OnEraseBackground(wxEraseEvent& event);
@@ -469,7 +466,7 @@ public:
     wxQTLoadTimer(Movie movie, wxQTMediaBackend* parent, wxQuickTimeLibrary* pLib) :
       m_movie(movie), m_parent(parent), m_pLib(pLib) {}
 
-    void Notify()
+    void Notify() wxOVERRIDE
     {
         m_pLib->MoviesTask(m_movie, 0);
         // kMovieLoadStatePlayable
@@ -502,7 +499,7 @@ public:
                   wxQuickTimeLibrary* pLib) :
         m_movie(movie), m_parent(parent), m_pLib(pLib) {}
 
-    void Notify()
+    void Notify() wxOVERRIDE
     {
         //
         //  OK, a little explaining - basically originally
@@ -694,7 +691,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     FSSpec sfFile;
 
     OSErr err = m_lib.NativePathNameToFSSpec(
-        (char*) (const char*) fileName.mb_str(),
+        const_cast<char*>(static_cast<const char*>(fileName.mb_str())),
         &sfFile, 0);
     bool result = (err == noErr);
 
@@ -808,8 +805,8 @@ bool wxQTMediaBackend::Load(const wxURI& location)
         // which we don't by default.
         //
         m_lib.PrePrerollMovie(m_movie, timeNow, playRate,
-                              (WXFARPROC)wxQTMediaBackend::PPRMProc,
-                              (void*)this);
+                              wxQTMediaBackend::PPRMProc,
+                              this);
 
         return true;
     }
@@ -1123,7 +1120,7 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
                                                         mcWithFrame);
             m_lib.MCDoAction(m_pMC, 32, (void*)true); // mcActionSetKeysEnabled
             m_lib.MCSetActionFilterWithRefCon(m_pMC,
-                (WXFARPROC)wxQTMediaBackend::MCFilterProc, (void*)this);
+                wxQTMediaBackend::MCFilterProc, this);
             m_bestSize.y += 16; // movie controller height
 
             // By default the movie controller uses its own colour palette

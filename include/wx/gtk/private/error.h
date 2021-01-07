@@ -21,6 +21,7 @@ class wxGtkError
 {
 public:
     wxGtkError() { m_error = NULL; }
+    explicit wxGtkError(GError* error) { m_error = error; }
     ~wxGtkError() { if ( m_error ) g_error_free(m_error); }
 
     GError** Out()
@@ -29,6 +30,17 @@ public:
         wxASSERT_MSG( !m_error, wxS("Can't reuse the same object.") );
 
         return &m_error;
+    }
+
+    // Check if any error actually occurred.
+    operator bool() const
+    {
+        return m_error != NULL;
+    }
+
+    operator GError*() const
+    {
+        return m_error;
     }
 
     wxString GetMessage() const

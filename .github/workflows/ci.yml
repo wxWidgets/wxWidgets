@@ -1,0 +1,151 @@
+# Continuous integration workflow for wxWidgets.
+name: GitHub CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    name: ${{ matrix.name }}
+    strategy:
+      matrix:
+        include:
+          - name: wxGTK Ubuntu 20.04 with ASAN
+            runner: ubuntu-20.04
+            compiler: gcc
+            configure_flags: --disable-compat30 --disable-sys-libs
+            gtk_version: 3
+            skip_samples: true
+            use_asan: true
+    env:
+      wxGTK_VERSION: ${{ matrix.gtk_version }}
+      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
+      wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Set environment variables
+        run: |
+          echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
+
+          wxPROC_COUNT=`nproc`
+          ((wxPROC_COUNT++))
+          echo wxPROC_COUNT=$wxPROC_COUNT >> $GITHUB_ENV
+          echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
+
+          # Setting this variable suppresses "Error retrieving accessibility bus address"
+          # messages from WebKit tests that we're not interested in.
+          echo NO_AT_BRIDGE=1 >> $GITHUB_ENV
+
+          case "${{ matrix.compiler }}" in
+            clang)
+              echo CC=clang >> $GITHUB_ENV
+              echo CXX=clang++ >> $GITHUB_ENV
+              echo LD=clang++ >> $GITHUB_ENV
+
+              allow_warn_opt="-Wno-error=#warnings"
+              ;;
+
+            gcc)
+              echo CC=gcc >> $GITHUB_ENV
+              echo CXX=g++ >> $GITHUB_ENV
+              echo LD=g++ >> $GITHUB_ENV
+
+              allow_warn_opt="-Wno-error=cpp"
+              ;;
+
+            *)
+              echo "*** Unknown compiler: ${{ matrix.compiler }} ***"
+              ;;
+          esac
+
+          if [ ${{ matrix.allow_warnings }} ]; then
+            error_opts="-Werror $allow_warn_opt"
+            echo "wxMAKEFILE_ERROR_CXXFLAGS=$error_opts" >> $GITHUB_ENV
+            echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
+          fi
+
+          echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
+
+      - name: Before install
+        run: |
+          ./build/tools/before_install.sh
+
+      - name: Configuring
+        run: |
+          wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+          if [ -n "${{ matrix.gtk_version }}" ]; then
+            wxCONFIGURE_OPTIONS="--with-gtk=${{ matrix.gtk_version }} $wxCONFIGURE_OPTIONS"
+          fi
+
+          if [ ${{ matrix.use_asan }} ]; then
+            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
+
+            wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+            wxASAN_CXXFLAGS=$wxASAN_CFLAGS
+            wxASAN_LDFLAGS="-fsanitize=address"
+
+            ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+          else
+            ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+          fi
+
+          if [ -n "$rc" ]; then
+            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat config.log
+            echo '-----------------------------------------------------------'
+            exit $rc
+          fi
+
+      - name: Building
+        run: |
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
+
+      - name: Building tests
+        run: |
+          if [ !${{ matrix.skip_gui }} ]; then
+            make -C tests $wxBUILD_ARGS failtest
+          fi
+          make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Testing
+        if: matrix.skip_testing != true
+        run: |
+          echo 'Testing...'
+          pushd tests
+          ./test
+          popd
+
+      - name: Testing GUI using Xvfb
+        if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.use_xvfb
+        run: |
+          pushd tests
+          xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
+          popd
+
+      - name: Building samples
+        if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.skip_samples != true
+        run: |
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS" samples
+
+      - name: Installing
+        if: matrix.skip_testing != true
+        run: |
+          sudo make install
+
+      - name: Testing installation
+        if: matrix.skip_testing != true
+        run: |
+          make -C samples/minimal -f makefile.unx clean
+          make -C samples/minimal -f makefile.unx $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"

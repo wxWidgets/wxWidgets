@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SEARCHCTRL
 
@@ -30,6 +27,7 @@
 
 @interface wxNSSearchField : NSSearchField
 {
+    BOOL m_withinTextDidChange;
 }
 
 @end
@@ -48,10 +46,20 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
+    if ( self = [super initWithFrame:frame] )
+    {
+        m_withinTextDidChange = NO;
+    }
     return self;
 }
- 
+
+- (void)textDidChange:(NSNotification *)aNotification
+{
+    m_withinTextDidChange = YES;
+    [super textDidChange:aNotification];
+    m_withinTextDidChange = NO;
+}
+
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
@@ -63,6 +71,10 @@
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
 {
+    wxUnusedVar(control);
+    wxUnusedVar(words);
+    wxUnusedVar(index);
+
     NSMutableArray* matches = NULL;
     NSString*       partialString;
     
@@ -82,6 +94,11 @@
     
     
     return matches;
+}
+
+- (BOOL) isWithinTextDidChange
+{
+    return m_withinTextDidChange;
 }
 
 @end
@@ -157,7 +174,8 @@ public :
             NSString *searchString = [m_searchField stringValue];
             if ( searchString == nil || !searchString.length )
             {
-                wxpeer->HandleSearchFieldCancelHit();
+                if ( ![m_searchField isWithinTextDidChange])
+                   wxpeer->HandleSearchFieldCancelHit();
             }
             else
             {

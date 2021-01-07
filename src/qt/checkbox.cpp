@@ -13,6 +13,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QCheckBox>
+
 class wxQtCheckBox : public wxQtEventSignalHandler< QCheckBox, wxCheckBox >
 {
 public:
@@ -44,7 +46,8 @@ void wxQtCheckBox::clicked( bool checked )
 }
 
 
-wxCheckBox::wxCheckBox()
+wxCheckBox::wxCheckBox() :
+    m_qtCheckBox(NULL)
 {
 }
 
@@ -115,7 +118,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 
     case Qt::Checked:
         return wxCHK_CHECKED;
-        
+
     case Qt::PartiallyChecked:
         return wxCHK_UNDETERMINED;
     }
@@ -124,7 +127,18 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
     return wxCHK_UNDETERMINED;
 }
 
-QCheckBox *wxCheckBox::GetHandle() const
+QWidget *wxCheckBox::GetHandle() const
 {
     return m_qtCheckBox;
 }
+
+wxString wxCheckBox::GetLabel() const
+{
+    return wxQtConvertString( m_qtCheckBox->text() );
+}
+
+void wxCheckBox::SetLabel(const wxString& label)
+{
+    m_qtCheckBox->setText( wxQtConvertString(label) );
+}
+

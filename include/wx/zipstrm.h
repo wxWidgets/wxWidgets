@@ -110,6 +110,14 @@ enum wxZipFlags
     wxZIP_RESERVED          = 0xF000
 };
 
+enum wxZipArchiveFormat
+{
+    /// Default zip format
+    wxZIP_FORMAT_DEFAULT,
+    /// ZIP64 format
+    wxZIP_FORMAT_ZIP64
+};
+
 // Forward decls
 //
 class WXDLLIMPEXP_FWD_BASE wxZipEntry;
@@ -130,6 +138,8 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 // Zip Entry - holds the meta data for a file in the zip
+
+class wxDataOutputStream;
 
 class WXDLLIMPEXP_BASE wxZipEntry : public wxArchiveEntry
 {
@@ -225,7 +235,7 @@ private:
     wxArchiveEntry* DoClone() const wxOVERRIDE             { return ZipClone(); }
 
     size_t ReadLocal(wxInputStream& stream, wxMBConv& conv);
-    size_t WriteLocal(wxOutputStream& stream, wxMBConv& conv) const;
+    size_t WriteLocal(wxOutputStream& stream, wxMBConv& conv, wxZipArchiveFormat zipFormat);
 
     size_t ReadCentral(wxInputStream& stream, wxMBConv& conv);
     size_t WriteCentral(wxOutputStream& stream, wxMBConv& conv) const;
@@ -234,7 +244,12 @@ private:
     size_t WriteDescriptor(wxOutputStream& stream, wxUint32 crc,
                            wxFileOffset compressedSize, wxFileOffset size);
 
+    void WriteLocalFileSizes(wxDataOutputStream& ds) const;
+    void WriteLocalZip64ExtraInfo(wxOutputStream& stream) const;
+
     bool LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool localInfo);
+
+    wxUint16 GetInternalFlags(bool checkForUTF8) const;
 
     wxUint8      m_SystemMadeBy;       // one of enum wxZipSystem
     wxUint8      m_VersionMadeBy;      // major * 10 + minor
@@ -254,6 +269,7 @@ private:
     wxUint16     m_DiskStart;          // for multidisk archives, not unsupported
     wxUint16     m_InternalAttributes; // bit 0 set for text files
     wxUint32     m_ExternalAttributes; // system specific depends on SystemMadeBy
+    wxUint16     m_z64infoOffset;      // Offset of ZIP64 local extra data for file sizes
 
     class wxZipMemory *m_Extra;
     class wxZipMemory *m_LocalExtra;
@@ -278,10 +294,10 @@ class WXDLLIMPEXP_BASE wxZipOutputStream : public wxArchiveOutputStream
 public:
     wxZipOutputStream(wxOutputStream& stream,
                       int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     wxZipOutputStream(wxOutputStream *stream,
                       int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     virtual WXZIPFIX ~wxZipOutputStream();
 
     bool PutNextEntry(wxZipEntry *entry)        { return DoCreate(entry); }
@@ -304,6 +320,9 @@ public:
 
     int  GetLevel() const                       { return m_level; }
     void WXZIPFIX SetLevel(int level);
+
+    void SetFormat(wxZipArchiveFormat format)   { m_format = format; }
+    wxZipArchiveFormat GetFormat() const        { return m_format; }
 
 protected:
     virtual size_t WXZIPFIX OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
@@ -349,6 +368,7 @@ private:
     wxFileOffset m_offsetAdjustment;
     wxString m_Comment;
     bool m_endrecWritten;
+    wxZipArchiveFormat m_format;
 
     wxDECLARE_NO_COPY_CLASS(wxZipOutputStream);
 };
@@ -517,17 +537,37 @@ inline bool wxZipEntry::IsReadOnly() const
 
 inline bool wxZipEntry::IsMadeByUnix() const
 {
-    const int pattern =
-        (1 << wxZIP_SYSTEM_OPENVMS) |
-        (1 << wxZIP_SYSTEM_UNIX) |
-        (1 << wxZIP_SYSTEM_ATARI_ST) |
-        (1 << wxZIP_SYSTEM_ACORN_RISC) |
-        (1 << wxZIP_SYSTEM_BEOS) | (1 << wxZIP_SYSTEM_TANDEM);
+    switch ( m_SystemMadeBy )
+    {
+        case wxZIP_SYSTEM_MSDOS:
+            // note: some unix zippers put madeby = dos
+            return (m_ExternalAttributes & ~0xFFFF) != 0;
 
-    // note: some unix zippers put madeby = dos
-    return (m_SystemMadeBy == wxZIP_SYSTEM_MSDOS
-            && (m_ExternalAttributes & ~0xFFFF))
-        || ((pattern >> m_SystemMadeBy) & 1);
+        case wxZIP_SYSTEM_OPENVMS:
+        case wxZIP_SYSTEM_UNIX:
+        case wxZIP_SYSTEM_ATARI_ST:
+        case wxZIP_SYSTEM_ACORN_RISC:
+        case wxZIP_SYSTEM_BEOS:
+        case wxZIP_SYSTEM_TANDEM:
+            return true;
+
+        case wxZIP_SYSTEM_AMIGA:
+        case wxZIP_SYSTEM_VM_CMS:
+        case wxZIP_SYSTEM_OS2_HPFS:
+        case wxZIP_SYSTEM_MACINTOSH:
+        case wxZIP_SYSTEM_Z_SYSTEM:
+        case wxZIP_SYSTEM_CPM:
+        case wxZIP_SYSTEM_WINDOWS_NTFS:
+        case wxZIP_SYSTEM_MVS:
+        case wxZIP_SYSTEM_VSE:
+        case wxZIP_SYSTEM_VFAT:
+        case wxZIP_SYSTEM_ALTERNATE_MVS:
+        case wxZIP_SYSTEM_OS_400:
+            return false;
+    }
+
+    // Unknown system, assume not Unix.
+    return false;
 }
 
 inline void wxZipEntry::SetIsText(bool isText)

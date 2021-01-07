@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/defs.h"
 
@@ -32,7 +29,6 @@
     #include "wx/panel.h"
 #endif // !WX_PRECOMP
 
-#include "wx/statline.h"
 #include "wx/collheaderctrl.h"
 
 // ----------------------------------------------------------------------------
@@ -62,7 +58,6 @@ void wxGenericCollapsiblePane::Init()
 {
     m_pButton = NULL;
     m_pPane = NULL;
-    m_pStaticLine = NULL;
     m_sz = NULL;
 }
 
@@ -86,14 +81,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
     m_pButton = new wxCollapsibleHeaderCtrl(this, wxID_ANY, label, wxPoint(0, 0),
                              wxDefaultSize);
 
-    // on other platforms we put the static line and the button horizontally
-    m_sz->Add(m_pButton, 0, wxLEFT|wxTOP|wxBOTTOM, GetBorder());
-
-#if !defined( __WXMAC__ ) || defined(__WXUNIVERSAL__)
-    m_pStaticLine = new wxStaticLine(this, wxID_ANY);
-    m_sz->Add(m_pStaticLine, 0, wxEXPAND, GetBorder());
-    m_pStaticLine->Hide();
-#endif
+    m_sz->Add(m_pButton, wxSizerFlags().Border(wxALL, GetBorder()));
 
     // FIXME: at least under wxGTK1 the background is black if we don't do
     //        this, no idea why...
@@ -116,14 +104,11 @@ wxGenericCollapsiblePane::~wxGenericCollapsiblePane()
     if (m_pButton)
         m_pButton->SetContainingSizer(NULL);
 
-    if (m_pStaticLine)
-        m_pStaticLine->SetContainingSizer(NULL);
-
     // our sizer is not deleted automatically since we didn't use SetSizer()!
     wxDELETE(m_sz);
 }
 
-wxSize wxGenericCollapsiblePane::DoGetBestSize() const
+wxSize wxGenericCollapsiblePane::DoGetBestClientSize() const
 {
     // NB: do not use GetSize() but rather GetMinSize()
     wxSize sz = m_sz->GetMinSize();
@@ -182,9 +167,6 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     // update button
     // NB: this must be done after updating our "state"
     m_pButton->SetCollapsed(collapse);
-    if ( m_pStaticLine )
-        m_pStaticLine->Show(!collapse);
-
 
     OnStateChange(GetBestSize());
 }
@@ -204,13 +186,8 @@ wxString wxGenericCollapsiblePane::GetLabel() const
 
 bool wxGenericCollapsiblePane::Layout()
 {
-#ifdef __WXMAC__
     if (!m_pButton || !m_pPane || !m_sz)
         return false;     // we need to complete the creation first!
-#else
-    if (!m_pButton || !m_pStaticLine || !m_pPane || !m_sz)
-        return false;     // we need to complete the creation first!
-#endif
 
     wxSize oursz(GetSize());
 

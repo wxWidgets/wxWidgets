@@ -11,6 +11,8 @@
 
 #include "wx/datetime.h"
 
+#include <ostream>
+
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
 inline std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
 {
@@ -30,6 +32,16 @@ inline std::ostream& operator<<(std::ostream& ostr, const wxDateSpan& span)
     return ostr;
 }
 
-WX_CPPUNIT_ALLOW_EQUALS_TO_INT(wxDateTime::wxDateTime_t)
+inline std::ostream& operator<<(std::ostream& ostr, const wxTimeSpan& span)
+{
+    ostr << span.GetWeeks() << "W, "
+         << span.GetDays() << "D, "
+         << span.GetHours() << ":"
+         << span.GetMinutes() << ":"
+         << span.GetSeconds() << "."
+         << span.GetMilliseconds();
+
+    return ostr;
+}
 
 #endif // _WX_TESTS_TESTDATE_H_

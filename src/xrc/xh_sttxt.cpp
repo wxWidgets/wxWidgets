@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_STATTEXT
 
@@ -34,6 +31,9 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
     XRC_ADD_STYLE(wxALIGN_CENTRE);
     XRC_ADD_STYLE(wxALIGN_CENTER_HORIZONTAL);
     XRC_ADD_STYLE(wxALIGN_CENTRE_HORIZONTAL);
+    XRC_ADD_STYLE(wxST_ELLIPSIZE_START);
+    XRC_ADD_STYLE(wxST_ELLIPSIZE_MIDDLE);
+    XRC_ADD_STYLE(wxST_ELLIPSIZE_END);
     AddWindowStyles();
 }
 

@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_TARSTREAM
 
@@ -128,9 +125,9 @@ class wxTarHeaderBlock
 {
 public:
     wxTarHeaderBlock()
-        { memset(data, 0, sizeof(data)); }
-    wxTarHeaderBlock(const wxTarHeaderBlock& hb)
-        { memcpy(data, hb.data, sizeof(data)); }
+        { Clear(); }
+
+    void Clear(size_t len = 0) { memset(data, 0, len ? len : sizeof(data)); }
 
     bool Read(wxInputStream& in);
     bool Write(wxOutputStream& out);
@@ -154,8 +151,6 @@ private:
     static const wxTarField fields[];
     static void check();
 };
-
-wxDEFINE_SCOPED_PTR_TYPE(wxTarHeaderBlock)
 
 // A table giving the field names and offsets in a tar header block
 const wxTarField wxTarHeaderBlock::fields[] =
@@ -596,7 +591,7 @@ wxString wxTarEntry::GetInternalName(const wxString& name,
     while (!internal.empty() && internal.compare(0, 2, wxT("./")) == 0)
         internal.erase(0, 2);
     if (internal == wxT(".") || internal == wxT(".."))
-        internal = wxEmptyString;
+        internal.clear();
 
     return internal;
 }
@@ -641,8 +636,7 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
-wxDECLARE_SCOPED_PTR(wxTarEntry, wxTarEntryPtr_)
-wxDEFINE_SCOPED_PTR (wxTarEntry, wxTarEntryPtr_)
+wxDEFINE_SCOPED_PTR_TYPE(wxTarEntry)
 
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
@@ -685,7 +679,7 @@ wxTarEntry *wxTarInputStream::GetNextEntry()
     if (!IsOk())
         return NULL;
 
-    wxTarEntryPtr_ entry(new wxTarEntry);
+    wxTarEntryPtr entry(new wxTarEntry);
 
     entry->SetMode(GetHeaderNumber(TAR_MODE));
     entry->SetUserId(GetHeaderNumber(TAR_UID));
@@ -865,9 +859,9 @@ wxString wxTarInputStream::GetExtendedHeader(const wxString& key) const
 
 wxString wxTarInputStream::GetHeaderPath() const
 {
-    wxString path;
+    wxString path(GetExtendedHeader(wxS("path")));
 
-    if ((path = GetExtendedHeader(wxT("path"))) != wxEmptyString)
+    if (!path.empty())
         return path;
 
     path = wxString(m_hdr->Get(TAR_NAME), GetConv());
@@ -880,10 +874,10 @@ wxString wxTarInputStream::GetHeaderPath() const
 
 wxDateTime wxTarInputStream::GetHeaderDate(const wxString& key) const
 {
-    wxString value;
+    wxString value(GetExtendedHeader(key));
 
     // try extended header, stored as decimal seconds since the epoch
-    if ((value = GetExtendedHeader(key)) != wxEmptyString) {
+    if (!value.empty()) {
         wxLongLong ll;
         ll.Assign(wxAtof(value) * 1000.0);
         return ll;
@@ -897,13 +891,13 @@ wxDateTime wxTarInputStream::GetHeaderDate(const wxString& key) const
 
 wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
 {
-    wxString value;
+    wxString value(GetExtendedHeader(m_hdr->Name(id)));
 
-    if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString) {
+    if (!value.empty()) {
         wxTarNumber n = 0;
         wxString::const_iterator p = value.begin();
         while (p != value.end() && *p == ' ')
-            p++;
+            ++p;
         while (isdigit(*p))
             n = n * 10 + (*p++ - '0');
         return n;
@@ -914,12 +908,12 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
 
 wxString wxTarInputStream::GetHeaderString(int id) const
 {
-    wxString value;
+    wxString value(GetExtendedHeader(m_hdr->Name(id)));
 
-    if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString)
-        return value;
+    if (value.empty())
+        value = wxString(m_hdr->Get(id), GetConv());
 
-    return wxString(m_hdr->Get(id), GetConv());
+    return value;
 }
 
 // An extended header consists of one or more records, each constructed:
@@ -1101,7 +1095,7 @@ wxTarOutputStream::~wxTarOutputStream()
 
 bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 {
-    wxTarEntryPtr_ e(entry);
+    wxTarEntryPtr e(entry);
 
     if (!CloseEntry())
         return false;
@@ -1191,7 +1185,7 @@ bool wxTarOutputStream::CloseEntry()
     if (IsOk()) {
         wxFileOffset size = RoundUpSize(m_pos);
         if (size > m_pos) {
-            memset(m_hdr, 0, size - m_pos);
+            m_hdr->Clear(size - m_pos);
             m_parent_o_stream->Write(m_hdr, size - m_pos);
             m_lasterror = m_parent_o_stream->GetLastError();
         }
@@ -1215,7 +1209,7 @@ bool wxTarOutputStream::Close()
     if (!CloseEntry() || (m_tarsize == 0 && m_endrecWritten))
         return false;
 
-    memset(m_hdr, 0, sizeof(*m_hdr));
+    m_hdr->Clear();
     int count = (RoundUpSize(m_tarsize + 2 * TAR_BLOCKSIZE, m_BlockingFactor)
                     - m_tarsize) / TAR_BLOCKSIZE;
     while (count--)
@@ -1230,7 +1224,7 @@ bool wxTarOutputStream::Close()
 
 bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
 {
-    memset(m_hdr, 0, sizeof(*m_hdr));
+    m_hdr->Clear();
 
     SetHeaderPath(entry.GetName(wxPATH_UNIX));
 
@@ -1276,7 +1270,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
         // so prepare a regular header block for the pseudo-file.
         if (!m_hdr2)
             m_hdr2 = new wxTarHeaderBlock;
-        memset(m_hdr2, 0, sizeof(*m_hdr2));
+        m_hdr2->Clear();
 
         // an old tar that doesn't understand extended headers will
         // extract it as a file, so give these fields reasonable values
@@ -1341,9 +1335,9 @@ wxString wxTarOutputStream::PaxHeaderPath(const wxString& format,
     ret.reserve(format.length() + path.length() + 16);
 
     size_t begin = 0;
-    size_t end;
 
     for (;;) {
+        size_t end;
         end = format.find('%', begin);
         if (end == wxString::npos || end + 1 >= format.length())
             break;
@@ -1477,7 +1471,7 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
             m_extendedHdr = new char[m_extendedSize];
             if (oldHdr) {
                 strcpy(m_extendedHdr, oldHdr);
-                delete oldHdr;
+                delete [] oldHdr;
             } else {
                 *m_extendedHdr = 0;
             }

@@ -122,12 +122,12 @@ wxToolBarToolBase(
     
     if ( id == wxID_SEPARATOR )
     {
-        [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        bui = [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         bui.width = 25.0f;
     }
     else if ( bmpNormal.IsOk() )
     {
-        [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
+        bui = [bui initWithImage:bmpNormal.GetUIImage() style:UIBarButtonItemStylePlain target:toolbar
                       action:@selector(clickedAction:)];
     }
     else
@@ -137,7 +137,7 @@ wxToolBarToolBase(
         else
             style = UIBarButtonItemStyleBordered;
         
-        [bui initWithTitle:wxCFStringRef(label).AsNSString() style:style target:toolbar
+        bui = [bui initWithTitle:wxCFStringRef(label).AsNSString() style:style target:toolbar
                       action:@selector(clickedAction:)];
     }
 

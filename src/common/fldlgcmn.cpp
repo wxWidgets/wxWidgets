@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
@@ -46,6 +43,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog);
 void wxFileDialogBase::Init()
 {
     m_filterIndex = 0;
+    m_currentlySelectedFilterIndex = wxNOT_FOUND;
     m_windowStyle = 0;
     m_extraControl = NULL;
     m_extraControlCreator = NULL;
@@ -86,7 +84,6 @@ bool wxFileDialogBase::Create(wxWindow *parent,
 #endif
 
     m_windowStyle = style;
-    m_filterIndex = 0;
 
     if (!HasFdFlag(wxFD_OPEN) && !HasFdFlag(wxFD_SAVE))
         m_windowStyle |= wxFD_OPEN;     // wxFD_OPEN is the default
@@ -191,7 +188,7 @@ wxSize wxFileDialogBase::GetExtraControlSize()
     // create the extra control in an empty dialog just to find its size: this
     // is not terribly efficient but we do need to know the size before
     // creating the native dialog and this seems to be the only way
-    wxDialog dlg(NULL, wxID_ANY, "");
+    wxDialog dlg(NULL, wxID_ANY, wxString());
     return (*m_extraControlCreator)(&dlg)->GetSize();
 }
 

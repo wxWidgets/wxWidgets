@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -59,6 +56,7 @@
 // implementation
 // ============================================================================
 
+#if wxUSE_SCROLLBAR
 // ----------------------------------------------------------------------------
 // scrollbars class
 // ----------------------------------------------------------------------------
@@ -80,6 +78,7 @@ public:
 
     virtual bool CanBeOutsideClientArea() const { return true; }
 };
+#endif // wxUSE_SCROLLBAR
 
 
 // ----------------------------------------------------------------------------

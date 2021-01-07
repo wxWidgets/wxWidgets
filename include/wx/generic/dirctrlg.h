@@ -14,7 +14,7 @@
 #ifndef _WX_DIRCTRL_H_
 #define _WX_DIRCTRL_H_
 
-#if wxUSE_DIRDLG
+#if wxUSE_DIRDLG || wxUSE_FILEDLG
 
 #include "wx/treectrl.h"
 #include "wx/dialog.h"
@@ -27,6 +27,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_BASE wxHashTable;
+
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogDefaultFolderStr[];
 
 //-----------------------------------------------------------------------------
 // Extra styles for wxGenericDirCtrl
@@ -81,26 +83,26 @@ class WXDLLIMPEXP_CORE wxGenericDirCtrl: public wxControl
 public:
     wxGenericDirCtrl();
     wxGenericDirCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
-              const wxString &dir = wxDirDialogDefaultFolderStr,
+              const wxString &dir = wxASCII_STR(wxDirDialogDefaultFolderStr),
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxDIRCTRL_DEFAULT_STYLE,
               const wxString& filter = wxEmptyString,
               int defaultFilter = 0,
-              const wxString& name = wxTreeCtrlNameStr )
+              const wxString& name = wxASCII_STR(wxTreeCtrlNameStr) )
     {
         Init();
         Create(parent, id, dir, pos, size, style, filter, defaultFilter, name);
     }
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
-              const wxString &dir = wxDirDialogDefaultFolderStr,
+              const wxString &dir = wxASCII_STR(wxDirDialogDefaultFolderStr),
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxDIRCTRL_DEFAULT_STYLE,
               const wxString& filter = wxEmptyString,
               int defaultFilter = 0,
-              const wxString& name = wxTreeCtrlNameStr );
+              const wxString& name = wxASCII_STR(wxTreeCtrlNameStr) );
 
     virtual void Init();
 
@@ -302,7 +304,7 @@ public:
 
     const wxSize& GetSize() const { return m_size; }
     void SetSize(const wxSize& sz) { m_size = sz; }
-    
+
     bool IsOk() const { return m_smallImageList != NULL; }
 
 protected:

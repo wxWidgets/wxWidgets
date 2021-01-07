@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -113,7 +110,7 @@ private:
     static std::string
     Message(size_t n, const wxString& msg)
     {
-        return std::string(wxString::Format("#%lu: %s", (unsigned long)n, msg));
+        return wxString::Format("#%lu: %s", (unsigned long)n, msg).ToStdString();
     }
 
     template <typename T>
@@ -199,8 +196,8 @@ void UnicodeTestCase::ConstructorsWithConversion()
     // the string "Déjà" in UTF-8 and wchar_t:
     const unsigned char utf8Buf[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
     const unsigned char utf8subBuf[] = {0x44,0xC3,0xA9,0x6A,0}; // just "Déj"
-    const char *utf8 = (char *)utf8Buf;
-    const char *utf8sub = (char *)utf8subBuf;
+    const char* utf8 = reinterpret_cast<const char*>(utf8Buf);
+    const char* utf8sub = reinterpret_cast<const char*>(utf8subBuf);
 
     wxString s1(utf8, wxConvUTF8);
 
@@ -269,7 +266,7 @@ void UnicodeTestCase::ConversionWithNULs()
     static const size_t lenNulString = 10;
 
     wxString szTheString(L"The\0String", wxConvLibc, lenNulString);
-    wxCharBuffer theBuffer = szTheString.mb_str();
+    wxCharBuffer theBuffer = szTheString.mb_str(wxConvLibc);
 
     CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",
                     lenNulString + 1) == 0 );

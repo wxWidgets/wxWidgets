@@ -277,6 +277,14 @@
 #   endif
 #endif /* !defined(wxUSE_REGEX) */
 
+#ifndef wxUSE_SECRETSTORE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SECRETSTORE must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_SECRETSTORE 1
+#   endif
+#endif /* !defined(wxUSE_SECRETSTORE) */
+
 #ifndef wxUSE_STDPATHS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_STDPATHS must be defined, please read comment near the top of this file."
@@ -364,6 +372,14 @@
 #       define wxUSE_UNICODE 0
 #   endif
 #endif /* !defined(wxUSE_UNICODE) */
+
+#ifndef wxUSE_UNSAFE_WXSTRING_CONV
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_UNSAFE_WXSTRING_CONV must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_UNSAFE_WXSTRING_CONV 0
+#   endif
+#endif /* !defined(wxUSE_UNSAFE_WXSTRING_CONV) */
 
 #ifndef wxUSE_URL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -632,6 +648,14 @@
 #       define wxUSE_DATAVIEWCTRL 0
 #   endif
 #endif /* !defined(wxUSE_DATAVIEWCTRL) */
+
+#ifndef wxUSE_NATIVE_DATAVIEWCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_NATIVE_DATAVIEWCTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_NATIVE_DATAVIEWCTRL 1
+#   endif
+#endif /* !defined(wxUSE_NATIVE_DATAVIEWCTRL) */
 
 #ifndef wxUSE_DATEPICKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -903,6 +927,14 @@
 #   endif
 #endif /* !defined(wxUSE_MDI_ARCHITECTURE) */
 
+#ifndef wxUSE_MENUBAR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MENUBAR must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_MENUBAR 0
+#   endif
+#endif /* !defined(wxUSE_MENUBAR) */
+
 #ifndef wxUSE_MENUS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MENUS must be defined, please read comment near the top of this file."
@@ -966,6 +998,14 @@
 #       define wxUSE_PREFERENCES_EDITOR 0
 #   endif
 #endif /* !defined(wxUSE_PREFERENCES_EDITOR) */
+
+#ifndef wxUSE_PRIVATE_FONTS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PRIVATE_FONTS must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_PRIVATE_FONTS 0
+#   endif
+#endif /* !defined(wxUSE_PRIVATE_FONTS) */
 
 #ifndef wxUSE_PRINTING_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -1697,6 +1737,11 @@
 #   endif
 #endif
 
+#if wxUSE_ACTIVITYINDICATOR && !wxUSE_GRAPHICS_CONTEXT
+#   undef wxUSE_ACTIVITYINDICATOR
+#   define wxUSE_ACTIVITYINDICATOR 0
+#endif /* wxUSE_ACTIVITYINDICATOR */
+
 #if wxUSE_GRAPHICS_CONTEXT && !wxUSE_GEOMETRY
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_GRAPHICS_CONTEXT requires wxUSE_GEOMETRY"
@@ -1706,6 +1751,14 @@
 #   endif
 #endif /* wxUSE_GRAPHICS_CONTEXT */
 
+#if wxUSE_DC_TRANSFORM_MATRIX && !wxUSE_GEOMETRY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_GEOMETRY"
+#   else
+#       undef wxUSE_DC_TRANSFORM_MATRIX
+#       define wxUSE_DC_TRANSFORM_MATRIX 0
+#   endif
+#endif /* wxUSE_DC_TRANSFORM_MATRIX */
 
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
@@ -2216,14 +2269,25 @@
 #   endif
 #endif /* wxUSE_SVG */
 
-#if wxUSE_TASKBARICON && !wxUSE_MENUS
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TASKBARICON requires wxUSE_MENUS"
-#   else
-#       undef wxUSE_TASKBARICON
-#       define wxUSE_TASKBARICON 0
-#   endif
-#endif /* wxUSE_TASKBARICON */
+#if !wxUSE_MENUS
+#   if wxUSE_MENUBAR
+#      ifdef wxABORT_ON_CONFIG_ERROR
+#          error "wxUSE_MENUBAR requires wxUSE_MENUS"
+#      else
+#          undef wxUSE_MENUBAR
+#          define wxUSE_MENUBAR 0
+#      endif
+#   endif /* wxUSE_MENUBAR */
+
+#   if wxUSE_TASKBARICON
+#      ifdef wxABORT_ON_CONFIG_ERROR
+#          error "wxUSE_TASKBARICON requires wxUSE_MENUS"
+#      else
+#          undef wxUSE_TASKBARICON
+#          define wxUSE_TASKBARICON 0
+#      endif
+#   endif /* wxUSE_TASKBARICON */
+#endif /* !wxUSE_MENUS */
 
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL
@@ -2245,7 +2309,8 @@
 #   endif
 #endif /* wxUSE_TREELISTCTRL */
 
-#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || \
+                       wxUSE_WEBVIEW_IE || wxUSE_WEBVIEW_EDGE)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WEBVIEW requires at least one backend"
 #   else
@@ -2281,6 +2346,13 @@
 #   endif
 #endif /* wxUSE_PREFERENCES_EDITOR */
 
+#if wxUSE_PRIVATE_FONTS
+#   if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXOSX__)
+#       undef wxUSE_PRIVATE_FONTS
+#       define wxUSE_PRIVATE_FONTS 0
+#   endif
+#endif /* wxUSE_PRIVATE_FONTS */
+
 #if wxUSE_MEDIACTRL
 #   if !wxUSE_LONGLONG
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -2296,6 +2368,15 @@
 #   if !wxUSE_STOPWATCH
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxStyledTextCtrl requires wxUSE_STOPWATCH"
+#       else
+#           undef wxUSE_STC
+#           define wxUSE_STC 0
+#       endif
+#   endif
+
+#   if !wxUSE_SCROLLBAR
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxStyledTextCtrl requires wxUSE_SCROLLBAR"
 #       else
 #           undef wxUSE_STC
 #           define wxUSE_STC 0
@@ -2320,7 +2401,48 @@
 #           define wxUSE_LONLONG 1
 #       endif
 #   endif
+#   if !wxUSE_VARIANT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichTextCtrl requires wxUSE_VARIANT"
+#       else
+#           undef wxUSE_VARIANT
+#           define wxUSE_VARIANT 1
+#       endif
+#   endif
 #endif /* wxUSE_RICHTEXT */
+
+#if wxUSE_RICHTOOLTIP
+#   if !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichToolTip requires wxUSE_POPUPWIN"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+#endif /* wxUSE_RICHTOOLTIP */
+
+#if wxUSE_PROPGRID
+#   if !wxUSE_VARIANT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxPropertyGrid requires wxUSE_VARIANT"
+#       else
+#           undef wxUSE_VARIANT
+#           define wxUSE_VARIANT 1
+#       endif
+#   endif
+#endif /* wxUSE_PROPGRID */
+
+#if wxUSE_TIPWINDOW
+#   if !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxTipWindow requires wxUSE_POPUPWIN"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+#endif /* wxUSE_TIPWINDOW */
 
 #endif /* wxUSE_GUI */
 

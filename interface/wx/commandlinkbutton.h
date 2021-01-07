@@ -37,7 +37,7 @@
 
     @since 2.9.2
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{commandlinkbutton}
 

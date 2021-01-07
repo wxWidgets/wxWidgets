@@ -108,7 +108,7 @@ catalog, you may configure wxWidgets to use non-English msgids and translate to
 English using message catalogs:
 
 @li If you use the program @c xgettext to extract the strings from the source
-    code, specify the option <tt>--from-code=@<source code charset@></tt>.
+    code, specify the option <tt>\--from-code=@<source code charset@></tt>.
 @li Specify the source code language and charset as arguments to
     wxLocale::AddCatalog. For example:
     @code

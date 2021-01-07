@@ -386,13 +386,13 @@ public:
     wxString(const char *psz, const wxMBConv& conv);
 
     /**
-       Constructs a string from the first @a nLength character of the string literal @a psz using
+       Constructs a string from the first @a nLength bytes of the string literal @a psz using
        the current locale encoding to convert it to Unicode (wxConvLibc).
     */
     wxString(const char *psz, size_t nLength);
 
     /**
-       Constructs a string from the first @a nLength character of the string literal @a psz using
+       Constructs a string from the first @a nLength bytes of the string literal @a psz using
        @a conv to convert it Unicode.
     */
     wxString(const char *psz, const wxMBConv& conv, size_t nLength);
@@ -681,7 +681,7 @@ public:
 
     /**
         Converts the strings contents to the wide character representation
-        and returns it as a temporary wxWCharBuffer object (Unix and OS X)
+        and returns it as a temporary wxWCharBuffer object (Unix and macOS)
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
 
@@ -1428,8 +1428,12 @@ public:
     bool Alloc(size_t nLen);
 
     /**
-        Minimizes the string's memory. This can be useful after a call to
-        Alloc() if too much memory were preallocated.
+        Minimizes the string's memory.
+
+        This can be useful after a call to Alloc() if too much memory were
+        preallocated.
+
+        @return Always returns @true
     */
     bool Shrink();
 
@@ -1574,13 +1578,17 @@ public:
 
     const_iterator begin() const;
     iterator begin();
+    const_iterator cbegin() const;
     const_iterator end() const;
     iterator end();
+    const_iterator cend() const;
 
     const_reverse_iterator rbegin() const;
     reverse_iterator rbegin();
+    const_reverse_iterator crbegin() const;
     const_reverse_iterator rend() const;
     reverse_iterator rend();
+    const_reverse_iterator crend() const;
 
     //@}
 
@@ -1707,6 +1715,14 @@ public:
     wxString substr(size_t nStart = 0, size_t nLen = npos) const;
     void swap(wxString& str);
 
+    bool starts_with(const wxString &str) const;
+    bool starts_with(const char *sz) const;
+    bool starts_with(const wchar_t *sz) const;
+
+    bool ends_with(const wxString &str) const;
+    bool ends_with(const char *sz) const;
+    bool ends_with(const wchar_t *sz) const;
+
     //@}
 
 
@@ -1760,6 +1776,12 @@ public:
     /**
         Converts the string or character from an ASCII, 7-bit form
         to the native wxString representation.
+
+        Input must consist only of 7-bit (i.e. less than 128) ASCII characters,
+        the behaviour in presence of non-ASCII characters is undefined but will
+        result in assert failures.
+
+        @see wxASCII_STR()
     */
     static wxString FromAscii(const char* s);
     static wxString FromAscii(const unsigned char* s);
@@ -2034,7 +2056,7 @@ public:
 //@{
 
 /**
-    Allows to extend a function with the signature:
+    Allows extending a function with the signature:
     @code bool SomeFunc(const wxUniChar& c) @endcode
     which operates on a single character, to an entire wxString.
 
@@ -2052,5 +2074,15 @@ public:
 */
 template<bool (T)(const wxUniChar& c)>
     inline bool wxStringCheck(const wxString& val);
+
+/**
+    Convenience macro for explicitly constructing wxString from ASCII strings.
+
+    This macro simply expands to a call to wxString::FromAscii() but is
+    slightly shorter.
+
+    @since 3.1.4
+ */
+wxString wxASCII_STR(const char* s);
 
 //@}

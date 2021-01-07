@@ -25,6 +25,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/apptrait.h"
 #include "wx/thread.h"
 #include "wx/private/fdiodispatcher.h"
 #include "wx/dfb/private.h"
@@ -214,4 +215,9 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     OnNextIteration();
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
+}
+
+wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
+{
+    return wxAppTraits::GetEventLoopSourcesManager();
 }

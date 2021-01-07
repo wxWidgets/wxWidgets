@@ -22,9 +22,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -32,6 +29,7 @@
 #endif
 
 #include "wx/filename.h"
+#include "wx/scopedptr.h"
 #include "wx/wfstream.h"
 
 #ifdef __WINDOWS__
@@ -51,8 +49,6 @@
     #define fileno _fileno
 #endif
 
-using std::auto_ptr;
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Helpers
@@ -71,7 +67,7 @@ public:
     virtual ~LargeFileTest() { }
 
 protected:
-    void runTest();
+    void runTest() wxOVERRIDE;
 
     virtual wxInputStream *MakeInStream(const wxString& name) const = 0;
     virtual wxOutputStream *MakeOutStream(const wxString& name) const = 0;
@@ -120,7 +116,7 @@ void LargeFileTest::runTest()
 
     // write a large file
     {
-        auto_ptr<wxOutputStream> out(MakeOutStream(tmpfile.m_name));
+        wxScopedPtr<wxOutputStream> out(MakeOutStream(tmpfile.m_name));
 
         // write 'A's at [ 0x7fffffbf, 0x7fffffff [
         pos = 0x7fffffff - size;
@@ -154,7 +150,7 @@ void LargeFileTest::runTest()
 
     // read the large file back
     {
-        auto_ptr<wxInputStream> in(MakeInStream(tmpfile.m_name));
+        wxScopedPtr<wxInputStream> in(MakeInStream(tmpfile.m_name));
         char buf[size];
 
         if (haveLFS) {
@@ -211,14 +207,14 @@ public:
     LargeFileTest_wxFile() : LargeFileTest("wxFile streams") { }
 
 protected:
-    wxInputStream *MakeInStream(const wxString& name) const;
-    wxOutputStream *MakeOutStream(const wxString& name) const;
-    bool HasLFS() const { return (wxFileOffset)0xffffffff > 0; }
+    wxInputStream *MakeInStream(const wxString& name) const wxOVERRIDE;
+    wxOutputStream *MakeOutStream(const wxString& name) const wxOVERRIDE;
+    bool HasLFS() const wxOVERRIDE { return (wxFileOffset)0xffffffff > 0; }
 };
 
 wxInputStream *LargeFileTest_wxFile::MakeInStream(const wxString& name) const
 {
-    auto_ptr<wxFileInputStream> in(new wxFileInputStream(name));
+    wxScopedPtr<wxFileInputStream> in(new wxFileInputStream(name));
     CPPUNIT_ASSERT(in->IsOk());
     return in.release();
 }
@@ -243,14 +239,14 @@ public:
     LargeFileTest_wxFFile() : LargeFileTest("wxFFile streams") { }
 
 protected:
-    wxInputStream *MakeInStream(const wxString& name) const;
-    wxOutputStream *MakeOutStream(const wxString& name) const;
-    bool HasLFS() const;
+    wxInputStream *MakeInStream(const wxString& name) const wxOVERRIDE;
+    wxOutputStream *MakeOutStream(const wxString& name) const wxOVERRIDE;
+    bool HasLFS() const wxOVERRIDE;
 };
 
 wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const
 {
-    auto_ptr<wxFFileInputStream> in(new wxFFileInputStream(name));
+    wxScopedPtr<wxFFileInputStream> in(new wxFFileInputStream(name));
     CPPUNIT_ASSERT(in->IsOk());
     return in.release();
 }
@@ -437,5 +433,4 @@ CppUnit::Test* GetlargeFileSuite()
 
 #endif // __WINDOWS__
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "largeFile");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "Streams.largeFile");

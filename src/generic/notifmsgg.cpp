@@ -3,7 +3,7 @@
 // Purpose:     generic implementation of wxGenericNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-24
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_NOTIFICATION_MESSAGE
 
@@ -327,7 +324,7 @@ void wxNotificationMessageWindow::AddVisibleNotification(wxNotificationMessageWi
 {
     bool found = false;
     for ( wxVector<wxNotificationMessageWindow*>::iterator it = ms_visibleNotifications.begin();
-        it != ms_visibleNotifications.end(); it++ )
+        it != ms_visibleNotifications.end(); ++it )
     {
         if ( *it == notif )
         {
@@ -345,7 +342,7 @@ void wxNotificationMessageWindow::AddVisibleNotification(wxNotificationMessageWi
 void wxNotificationMessageWindow::RemoveVisibleNotification(wxNotificationMessageWindow* notif)
 {
     for ( wxVector<wxNotificationMessageWindow*>::iterator it = ms_visibleNotifications.begin();
-        it != ms_visibleNotifications.end(); it++ )
+        it != ms_visibleNotifications.end(); ++it )
     {
         if ( *it == notif )
         {

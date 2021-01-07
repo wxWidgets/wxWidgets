@@ -21,8 +21,10 @@
 #include "wx/osx/private.h"
 
 #include <WebKit/WebKit.h>
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_15
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
+#endif
 
 #include "wx/html/webkit.h"
 
@@ -87,30 +89,6 @@ wxWebKitNewWindowEvent::wxWebKitNewWindowEvent( wxWindow* win )
     }
 }
 
-
-
-//---------------------------------------------------------
-// helper functions for NSString<->wxString conversion
-//---------------------------------------------------------
-
-inline wxString wxStringWithNSString(NSString *nsstring)
-{
-#if wxUSE_UNICODE
-    return wxString([nsstring UTF8String], wxConvUTF8);
-#else
-    return wxString([nsstring lossyCString]);
-#endif // wxUSE_UNICODE
-}
-
-inline NSString* wxNSStringWithWxString(const wxString &wxstring)
-{
-#if wxUSE_UNICODE
-    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
-#else
-    return [NSString stringWithCString: wxstring.c_str() length:wxstring.Len()];
-#endif // wxUSE_UNICODE
-}
-
 inline int wxNavTypeFromWebNavType(int type){
     if (type == WebNavigationTypeLinkClicked)
         return wxWEBKIT_NAV_LINK_CLICKED;
@@ -130,7 +108,7 @@ inline int wxNavTypeFromWebNavType(int type){
     return wxWEBKIT_NAV_OTHER;
 }
 
-@interface MyFrameLoadMonitor : NSObject
+@interface MyFrameLoadMonitor : NSObject<WebFrameLoadDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -139,7 +117,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyPolicyDelegate : NSObject
+@interface MyPolicyDelegate : NSObject<WebPolicyDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -148,7 +126,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyUIDelegate : NSObject
+@interface MyUIDelegate : NSObject<WebUIDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -200,38 +178,39 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
 
     // Register event listener interfaces
+    
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
-
+    m_frameLoadMonitor = myFrameLoadMonitor;
+    
     // this is used to veto page loads, etc.
     MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
     [m_webView setPolicyDelegate:myPolicyDelegate];
+    m_policyDelegate = myPolicyDelegate;
 
     // this is used to provide printing support for JavaScript
     MyUIDelegate* myUIDelegate = [[MyUIDelegate alloc] initWithWxWindow: this];
     [m_webView setUIDelegate:myUIDelegate];
-
+    m_UIDelegate = myUIDelegate;
+    
     LoadURL(m_currentURL);
     return true;
 }
 
 wxWebKitCtrl::~wxWebKitCtrl()
 {
-    MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
-    MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
-    MyUIDelegate* myUIDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
     [m_webView setUIDelegate: nil];
     
-    if (myFrameLoadMonitor)
-        [myFrameLoadMonitor release];
+    if (m_frameLoadMonitor)
+        [m_frameLoadMonitor release];
         
-    if (myPolicyDelegate)
-        [myPolicyDelegate release];
+    if (m_policyDelegate)
+        [m_policyDelegate release];
 
-    if (myUIDelegate)
-        [myUIDelegate release];
+    if (m_UIDelegate)
+        [m_UIDelegate release];
 }
 
 // ----------------------------------------------------------------------------
@@ -454,8 +433,10 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    self = [super init];
-    webKitWindow = inWindow;    // non retained
+    if ( self = [super init] )
+    {
+        webKitWindow = inWindow;    // non retained
+    }
     return self;
 }
 
@@ -535,8 +516,10 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    self = [super init];
-    webKitWindow = inWindow;    // non retained
+    if ( self = [super init] )
+    {
+        webKitWindow = inWindow;    // non retained
+    }
     return self;
 }
 
@@ -586,8 +569,10 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    self = [super init];
-    webKitWindow = inWindow;    // non retained
+    if ( self = [super init] )
+    {
+        webKitWindow = inWindow;    // non retained
+    }
     return self;
 }
 

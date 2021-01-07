@@ -36,7 +36,9 @@
    wxTextDataObject    |     wxBitmapDataObject
                        |
                wxCustomDataObject
-
+                       |
+                       |
+               wxImageDataObject
 */
 // ============================================================================
 
@@ -290,10 +292,10 @@ public:
     virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf) wxOVERRIDE;
 #if defined(__WXMSW__)
     virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
-                                           const wxDataFormat& format );
+                                           const wxDataFormat& format ) wxOVERRIDE;
     virtual void* SetSizeInBuffer( void* buffer, size_t size,
-                                   const wxDataFormat& format );
-    virtual size_t GetBufferOffset( const wxDataFormat& format );
+                                   const wxDataFormat& format ) wxOVERRIDE;
+    virtual size_t GetBufferOffset( const wxDataFormat& format ) wxOVERRIDE;
 #endif
 
 private:
@@ -322,7 +324,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-    #if defined(__WXGTK20__) || defined(__WXX11__)
+    #if defined(__WXGTK20__) || defined(__WXX11__) || defined(__WXQT__)
         #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
     #elif defined(__WXMAC__)
         #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
@@ -345,11 +347,11 @@ public:
     virtual size_t GetLength() const { return m_html.Len() + 1; }
     virtual wxString GetHTML() const { return m_html; }
     virtual void SetHTML(const wxString& html) { m_html = html; }
-    
+
     virtual size_t GetDataSize() const wxOVERRIDE;
     virtual bool GetDataHere(void *buf) const wxOVERRIDE;
     virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
-    
+
     // Must provide overloads to avoid hiding them (and warnings about it)
     virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
@@ -408,25 +410,30 @@ public:
     bool GetDataHere(const wxDataFormat& format, void *pBuf) const wxOVERRIDE;
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf) wxOVERRIDE;
 #else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
+    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
     {
         return SetData(len, buf);
     }
 #endif // different wxTextDataObject implementations
 
 private:
+#if defined(__WXQT__)
+    // Overridden to set text directly instead of extracting byte array
+    void QtSetDataSingleFormat(const class QMimeData &mimeData, const wxDataFormat &format) wxOVERRIDE;
+#endif
+
     wxString m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
@@ -541,6 +548,22 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxImageDataObject - data object for wxImage
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxImageDataObject : public wxCustomDataObject
+{
+public:
+    explicit wxImageDataObject(const wxImage& image = wxNullImage);
+
+    void SetImage(const wxImage& image);
+    wxImage GetImage() const;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxImageDataObject);
+};
+
+// ----------------------------------------------------------------------------
 // include platform-specific declarations of wxXXXBase classes
 // ----------------------------------------------------------------------------
 
@@ -549,7 +572,7 @@ private:
     // wxURLDataObject defined in msw/ole/dataobj2.h
 #elif defined(__WXGTK20__)
     #include "wx/gtk/dataobj2.h"
-    // wxURLDataObject defined in msw/ole/dataobj2.h
+    // wxURLDataObject defined in gtk/dataobj2.h
 
 #else
     #if defined(__WXGTK__)

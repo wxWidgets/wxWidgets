@@ -13,9 +13,8 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+
+#if wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/bitmap.h"
 #include "wx/dcmemory.h"
@@ -23,7 +22,6 @@
 #include "wx/icon.h"
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
-
 
 // ----------------------------------------------------------------------------
 // test class
@@ -46,7 +44,7 @@ public:
         m_bmp = wxNullBitmap;
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_gcdc->ResetBoundingBox();
     }
@@ -54,6 +52,7 @@ public:
 private:
     wxBitmap m_bmp;
     wxMemoryDC m_dc;
+
     wxGCDC *m_gcdc;
 
     void AssertBox(int minX, int minY, int width, int height, int margin = 0)
@@ -100,7 +99,10 @@ private:
         CPPUNIT_TEST( DrawPolygon );
         CPPUNIT_TEST( DrawPolyPolygon );
         CPPUNIT_TEST( DrawRectangle );
+        CPPUNIT_TEST( DrawTwoRectangles );
+        CPPUNIT_TEST( DrawRectsOnTransformedDC );
         CPPUNIT_TEST( DrawRoundedRectangle );
+        CPPUNIT_TEST( DrawRectangleAndReset );
         CPPUNIT_TEST( DrawEllipse );
         CPPUNIT_TEST( Blit );
         CPPUNIT_TEST( StretchBlit );
@@ -125,7 +127,10 @@ private:
     void DrawPolygon();
     void DrawPolyPolygon();
     void DrawRectangle();
+    void DrawTwoRectangles();
+    void DrawRectsOnTransformedDC();
     void DrawRoundedRectangle();
+    void DrawRectangleAndReset();
     void DrawEllipse();
     void Blit();
     void StretchBlit();
@@ -195,7 +200,7 @@ void GCDCBoundingBoxTestCase::DrawEllipticArc()
 void GCDCBoundingBoxTestCase::DrawPoint()
 {
     m_gcdc->DrawPoint(20, 20);
-    AssertBox(20, 20, 1, 1);
+    AssertBox(20, 20, 0, 0);
 }
 
 void GCDCBoundingBoxTestCase::DrawLines()
@@ -332,3 +337,28 @@ void GCDCBoundingBoxTestCase::DrawCheckMark()
     m_gcdc->DrawCheckMark(32, 24, 16, 16);
     AssertBox(32, 24, 16, 16);
 }
+
+void GCDCBoundingBoxTestCase::DrawRectangleAndReset()
+{
+    m_gcdc->DrawRectangle(2, 2, 12, 12);
+    m_gcdc->ResetBoundingBox();
+    AssertBox(0, 0, 0, 0);
+}
+
+void GCDCBoundingBoxTestCase::DrawTwoRectangles()
+{
+    m_gcdc->DrawRectangle(10, 15, 50, 30);
+    m_gcdc->DrawRectangle(15, 20, 55, 35);
+    AssertBox(10, 15, 60, 40);
+}
+
+void GCDCBoundingBoxTestCase::DrawRectsOnTransformedDC()
+{
+    m_gcdc->DrawRectangle(10, 15, 50, 30);
+    m_gcdc->SetDeviceOrigin(15, 20);
+    m_gcdc->DrawRectangle(15, 20, 45, 35);
+    m_gcdc->SetDeviceOrigin(5, 10);
+    AssertBox(5, 5, 65, 60);
+}
+
+#endif // wxUSE_GRAPHICS_CONTEXT

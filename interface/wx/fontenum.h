@@ -74,6 +74,17 @@ public:
     static bool IsValidFacename(const wxString& facename);
 
     /**
+        Invalidate cache used by some of the methods of this class internally.
+
+        This method should be called if the list of the fonts available on the
+        system changes, for whatever reason. In particular, it is called
+        automatically by wxFont::AddPrivateFont().
+
+        @since 3.1.1
+     */
+    static void InvalidateCache();
+
+    /**
         Called by EnumerateFacenames() for each match.
 
         Return @true to continue enumeration or @false to stop it.

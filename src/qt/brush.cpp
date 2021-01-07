@@ -15,6 +15,7 @@
 
 #include <QtGui/QBrush>
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject);
 
 static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 {
@@ -44,7 +45,7 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
         case wxBRUSHSTYLE_VERTICAL_HATCH:
             return Qt::VerPattern;
-            
+
         case wxBRUSHSTYLE_STIPPLE:
         case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
         case wxBRUSHSTYLE_STIPPLE_MASK:
@@ -61,24 +62,25 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 class wxBrushRefData: public wxGDIRefData
 {
     public:
-        wxBrushRefData()
+        wxBrushRefData() :
+            m_style(wxBRUSHSTYLE_INVALID)
         {
         }
-        
+
         wxBrushRefData( const wxBrushRefData& data )
-        : wxGDIRefData()
+            : m_qtBrush(data.m_qtBrush)
         {
-            m_qtBrush = data.m_qtBrush;
+            m_style = data.m_style;
         }
-        
+
         bool operator == (const wxBrushRefData& data) const
         {
             return m_qtBrush == data.m_qtBrush;
         }
-        
+
         QBrush m_qtBrush;
 
-        // To keep if mask is stippled 
+        // To keep if mask is stippled
         wxBrushStyle m_style;
 };
 
@@ -95,7 +97,7 @@ wxBrush::wxBrush()
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setColor(col.GetQColor());
     M_BRUSHDATA.setStyle(ConvertBrushStyle(style));
     M_STYLEDATA = style;
 }
@@ -103,7 +105,7 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setColor(col.GetQColor());
     M_BRUSHDATA.setStyle(ConvertBrushStyle((wxBrushStyle)style));
     M_STYLEDATA = (wxBrushStyle)style;
 }
@@ -122,7 +124,7 @@ wxBrush::wxBrush(const wxBitmap& stipple)
 void wxBrush::SetColour(const wxColour& col)
 {
     AllocExclusive();
-    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setColor(col.GetQColor());
 }
 
 void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
@@ -153,9 +155,9 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
 bool wxBrush::operator==(const wxBrush& brush) const
 {
     if (m_refData == brush.m_refData) return true;
-    
+
     if (!m_refData || !brush.m_refData) return false;
-    
+
     return ( *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData );
 }
 

@@ -494,11 +494,11 @@ public:
     /**
         Creates and possible initializes the DOCTYPE.
 
-        @param name
+        @param rootName
             The root name.
-        @param sysid
+        @param systemId
             The system identifier.
-        @param pubid
+        @param publicId
             The public identifier.
     */
     wxXmlDoctype(const wxString& rootName = wxString(),
@@ -715,7 +715,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().
@@ -785,6 +785,22 @@ public:
         @since 3.1.0
     */
     const wxXmlDoctype& GetDoctype() const;
+
+    /**
+        Returns the output line ending format used for documents.
+
+        @since 3.1.1
+    */
+    wxTextFileType GetFileType() const;
+
+    /**
+        Returns the output line ending string used for documents.
+
+        This string is determined by the last call to SetFileType().
+
+        @since 3.1.1
+    */
+    wxString GetEOL() const;
 
     /**
         Returns the document node of the document.
@@ -870,7 +886,7 @@ public:
     void SetEncoding(const wxString& enc);
 
     /**
-        Sets the enconding of the file which will be used to save the document.
+        Sets the encoding of the file which will be used to save the document.
     */
     void SetFileEncoding(const wxString& encoding);
 
@@ -881,6 +897,16 @@ public:
         @since 3.1.0
     */
     void SetDoctype(const wxXmlDoctype& doctype);
+
+    /**
+        Sets the output line ending formats when the document is saved.
+
+        By default Unix file type is used, i.e. a single ASCII LF (10)
+        character is used at the end of lines.
+
+        @since 3.1.1
+    */
+    void SetFileType(wxTextFileType fileType);
 
     /**
         Sets the root element node of this document.

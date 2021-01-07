@@ -64,7 +64,7 @@ const char *GetSocketErrorMsg(int pSockError)
 //event sent by workers to server class
 //after client is served
 const wxEventType wxEVT_WORKER = wxNewEventType();
-#define EVT_WORKER(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
 
 class WorkerEvent : public wxEvent
 {
@@ -385,7 +385,7 @@ void Server::OnSocketEvent(wxSocketEvent& pEvent)
             {
                 wxLogError("Server: cannot get peer info");
             } else {
-                wxLogMessage("Got connection from %s:%d",addr.IPAddress().c_str(), addr.Service());
+                wxLogMessage("Got connection from %s:%d",addr.IPAddress(), addr.Service());
             }
             bool createThread;
 
@@ -408,7 +408,7 @@ void Server::OnSocketEvent(wxSocketEvent& pEvent)
                 else
                 {
                     wxLogError("Server: cannot create next thread (current threads: %d", m_threadWorkers.size());
-                };
+                }
             }
             else
             {

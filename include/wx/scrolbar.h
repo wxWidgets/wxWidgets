@@ -38,7 +38,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr);
+                const wxString& name = wxASCII_STR(wxScrollBarNameStr));
     */
 
     // accessors
@@ -53,7 +53,7 @@ public:
     virtual void SetThumbPosition(int viewStart) = 0;
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
-                              bool refresh = true) = 0;
+                              bool refresh = true) wxOVERRIDE = 0;
 
     // implementation-only
     bool IsNeeded() const { return GetRange() > GetThumbSize(); }

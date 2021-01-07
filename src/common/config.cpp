@@ -15,10 +15,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif  //__BORLANDC__
-
 #ifndef wxUSE_CONFIG_NATIVE
     #define wxUSE_CONFIG_NATIVE 1
 #endif
@@ -140,7 +136,7 @@ wxConfigBase *wxConfigBase::Create()
         {                                                                   \
             if ( IsRecordingDefaults() )                                    \
             {                                                               \
-                ((wxConfigBase *)this)->DoWrite##name(key, defVal);         \
+                const_cast<wxConfigBase*>(this)->DoWrite##name(key, defVal);\
             }                                                               \
                                                                             \
             *val = defVal;                                                  \
@@ -187,9 +183,9 @@ bool wxConfigBase::Read(const wxString& key, float* val) const
     if ( !Read(key, &temp) )
         return false;
 
-    wxCHECK_MSG( fabs(temp) <= FLT_MAX, false,
+    wxCHECK_MSG( fabs(temp) <= double(FLT_MAX), false,
                      wxT("float overflow in wxConfig::Read") );
-    wxCHECK_MSG( (temp == 0.0) || (fabs(temp) >= FLT_MIN), false,
+    wxCHECK_MSG( temp == 0.0 || fabs(temp) >= double(FLT_MIN), false,
                      wxT("float underflow in wxConfig::Read") );
 
     *val = static_cast<float>(temp);

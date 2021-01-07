@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -25,6 +22,8 @@
 #include "wx/datstrm.h"
 #include "wx/wfstream.h"
 #include "wx/math.h"
+
+#include "testfile.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -39,6 +38,7 @@ private:
     CPPUNIT_TEST_SUITE( DataStreamTestCase );
         CPPUNIT_TEST( FloatRW );
         CPPUNIT_TEST( DoubleRW );
+        CPPUNIT_TEST( StringRW );
 #if wxUSE_LONGLONG
         CPPUNIT_TEST( LongLongRW );
 #endif
@@ -66,6 +66,7 @@ private:
 
     void FloatRW();
     void DoubleRW();
+    void StringRW();
 #if wxUSE_LONGLONG
     void LongLongRW();
 #endif
@@ -105,8 +106,10 @@ DataStreamTestCase::DataStreamTestCase()
 
 wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
 {
+    TempFile f("mytext.dat");
+
     {
-        wxFileOutputStream pFileOutput( wxT("mytext.dat") );
+        wxFileOutputStream pFileOutput( f.GetName() );
         wxDataOutputStream pDataOutput( pFileOutput );
         if ( ms_useBigEndianFormat )
             pDataOutput.BigEndianOrdered(true);
@@ -119,7 +122,7 @@ wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
         pDataOutput << fValue;
     }
 
-    wxFileInputStream pFileInput( wxT("mytext.dat") );
+    wxFileInputStream pFileInput( f.GetName() );
     wxDataInputStream pDataInput( pFileInput );
     if ( ms_useBigEndianFormat )
         pDataInput.BigEndianOrdered(true);
@@ -154,15 +157,17 @@ private:
     {
         ValueArray InValues(Size);
 
+        TempFile f("mytext.dat");
+
         {
-            wxFileOutputStream FileOutput( wxT("mytext.dat") );
+            wxFileOutputStream FileOutput( f.GetName() );
             wxDataOutputStream DataOutput( FileOutput );
 
             (DataOutput.*pfnWriter)(Values, Size);
         }
 
         {
-            wxFileInputStream FileInput( wxT("mytext.dat") );
+            wxFileInputStream FileInput( f.GetName() );
             wxDataInputStream DataInput( FileInput );
 
             (DataInput.*pfnReader)(&*InValues.begin(), InValues.size());
@@ -205,15 +210,17 @@ T TestRW(const T &Value)
 {
     T InValue;
 
+    TempFile f("mytext.dat");
+
     {
-        wxFileOutputStream FileOutput( wxT("mytext.dat") );
+        wxFileOutputStream FileOutput( f.GetName() );
         wxDataOutputStream DataOutput( FileOutput );
 
         DataOutput << Value;
     }
 
     {
-        wxFileInputStream FileInput( wxT("mytext.dat") );
+        wxFileInputStream FileInput( f.GetName() );
         wxDataInputStream DataInput( FileInput );
 
         DataInput >> InValue;
@@ -234,6 +241,21 @@ void DataStreamTestCase::DoubleRW()
 {
     CPPUNIT_ASSERT( TestFloatRW(2132131.1232132) == 2132131.1232132 );
     CPPUNIT_ASSERT( TestFloatRW(21321343431.1232143432) == 21321343431.1232143432 );
+}
+
+void DataStreamTestCase::StringRW()
+{
+    wxString s(wxT("Test1"));
+    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+
+#if wxUSE_UNICODE
+    s.append(2, wxT('\0'));
+    s.append(wxT("Test2"));
+    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+#endif // wxUSE_UNICODE
+
+    s = wxString::FromUTF8("\xc3\xbc"); // U+00FC LATIN SMALL LETTER U WITH DIAERESIS
+    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
 }
 
 #if wxUSE_LONGLONG

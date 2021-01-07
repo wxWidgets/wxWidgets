@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_AUI
 
@@ -51,6 +48,7 @@ wxAuiXmlHandler::wxAuiXmlHandler()
     XRC_ADD_STYLE(wxAUI_NB_CLOSE_BUTTON);
     XRC_ADD_STYLE(wxAUI_NB_CLOSE_ON_ACTIVE_TAB);
     XRC_ADD_STYLE(wxAUI_NB_CLOSE_ON_ALL_TABS);
+    XRC_ADD_STYLE(wxAUI_NB_MIDDLE_CLICK_CLOSE);
     XRC_ADD_STYLE(wxAUI_NB_TOP);
     XRC_ADD_STYLE(wxAUI_NB_BOTTOM);
 

@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -49,7 +46,7 @@ public:
         SetVirtualSize( WIDTH, HEIGHT );
         SetBackgroundColour( *wxWHITE );
 
-        Connect(wxEVT_PAINT, wxPaintEventHandler(MySimpleCanvas::OnPaint));
+        Bind(wxEVT_PAINT, &MySimpleCanvas::OnPaint, this);
     }
 
 private:
@@ -125,10 +122,8 @@ public:
         mbar->Append(menuFile, "&File");
         SetMenuBar( mbar );
 
-        Connect(wxID_DELETE, wxEVT_MENU,
-                wxCommandEventHandler(MyCanvasFrame::OnDeleteAll));
-        Connect(wxID_NEW, wxEVT_MENU,
-                wxCommandEventHandler(MyCanvasFrame::OnInsertNew));
+        Bind(wxEVT_MENU, &MyCanvasFrame::OnDeleteAll, this, wxID_DELETE);
+        Bind(wxEVT_MENU, &MyCanvasFrame::OnInsertNew, this, wxID_NEW);
 
         Show();
     }
@@ -197,7 +192,7 @@ public:
     {
         m_owner = parent;
 
-        Connect(wxEVT_PAINT, wxPaintEventHandler(MySubColLabels::OnPaint));
+        Bind(wxEVT_PAINT, &MySubColLabels::OnPaint, this);
     }
 
 private:
@@ -232,7 +227,7 @@ public:
     {
         m_owner = parent;
 
-        Connect(wxEVT_PAINT, wxPaintEventHandler(MySubRowLabels::OnPaint));
+        Bind(wxEVT_PAINT, &MySubRowLabels::OnPaint, this);
     }
 
 private:
@@ -289,7 +284,7 @@ public:
 
         SetBackgroundColour("WHEAT");
 
-        Connect(wxEVT_PAINT, wxPaintEventHandler(MySubCanvas::OnPaint));
+        Bind(wxEVT_PAINT, &MySubCanvas::OnPaint, this);
     }
 
     // override the base class function so that when this window is scrolled,
@@ -396,7 +391,7 @@ public:
 
         SetScrollbars(10, 10, 50, 50);
 
-        Connect(wxEVT_SIZE, wxSizeEventHandler(MySubScrolledWindow::OnSize));
+        Bind(wxEVT_SIZE, &MySubScrolledWindow::OnSize, this);
     }
 
 protected:
@@ -710,9 +705,10 @@ void MyCanvas::OnMouseWheel( wxMouseEvent &event )
     int x,y;
     CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
     wxLogMessage( "Mouse wheel event at: %d %d, scrolled: %d %d\n"
-                  "Rotation: %d, delta = %d",
+                  "Rotation: %d, delta: %d, inverted: %d",
                   pt.x, pt.y, x, y,
-                  event.GetWheelRotation(), event.GetWheelDelta() );
+                  event.GetWheelRotation(), event.GetWheelDelta(),
+                  event.IsWheelInverted() );
 
     event.Skip();
 }
@@ -808,8 +804,8 @@ MySizerScrolledWindow::MySizerScrolledWindow(wxWindow *parent)
 
     SetSizer( sizer );
 
-    Connect(wxID_RESIZE_FRAME, wxEVT_BUTTON,
-            wxCommandEventHandler(MySizerScrolledWindow::OnResizeClick));
+    Bind(wxEVT_BUTTON, &MySizerScrolledWindow::OnResizeClick, this,
+         wxID_RESIZE_FRAME);
 }
 
 void MySizerScrolledWindow::OnResizeClick(wxCommandEvent &WXUNUSED(event))

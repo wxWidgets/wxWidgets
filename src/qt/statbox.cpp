@@ -23,7 +23,8 @@ public:
 };
 
 
-wxStaticBox::wxStaticBox()
+wxStaticBox::wxStaticBox() :
+    m_qtGroupBox(NULL)
 {
 }
 
@@ -50,9 +51,19 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
-QGroupBox *wxStaticBox::GetHandle() const
+QWidget *wxStaticBox::GetHandle() const
 {
     return m_qtGroupBox;
+}
+
+void wxStaticBox::SetLabel(const wxString& label)
+{
+    m_qtGroupBox->setTitle(wxQtConvertString(label));
+}
+
+wxString wxStaticBox::GetLabel() const
+{
+    return wxQtConvertString(m_qtGroupBox->title());
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const

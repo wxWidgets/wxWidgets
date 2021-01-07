@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-07-31
-// Copyright:   (c) 2003-2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003-2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,12 +51,12 @@ public:
     }
 
     // override/implement base class virtuals
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
+    virtual bool Dispatch() wxOVERRIDE;
+    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
 
 protected:
-    virtual void OnNextIteration();
-    virtual void DoYieldFor(long eventsToProcess);
+    virtual void OnNextIteration() wxOVERRIDE;
+    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 
 private:
     // check if the given window is a child of ms_winCritical (which must be

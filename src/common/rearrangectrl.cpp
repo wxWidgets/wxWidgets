@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_REARRANGECTRL
 
@@ -186,6 +183,51 @@ void wxRearrangeList::OnCheck(wxCommandEvent& event)
 
     if ( (m_order[n] >= 0) != IsChecked(n) )
         m_order[n] = ~m_order[n];
+}
+
+int wxRearrangeList::DoInsertItems(const wxArrayStringsAdapter& items, unsigned int pos,
+                                   void **clientData, wxClientDataType type)
+{
+    int ret = wxCheckListBox::DoInsertItems(items, pos, clientData, type);
+    const size_t numItems = items.GetCount();
+    for ( size_t i = 0; i < numItems; i++ )
+    {
+        // Item is not checked initially.
+        const int idx = ~m_order.size();
+        m_order.Insert(idx, pos+i);
+    }
+    return ret;
+}
+
+void wxRearrangeList::DoDeleteOneItem(unsigned int n)
+{
+    wxCheckListBox::DoDeleteOneItem(n);
+    int idxDeleted = m_order[n];
+    if ( idxDeleted < 0 )
+        idxDeleted = ~idxDeleted;
+    m_order.RemoveAt(n);
+    // Remaining items have to be reindexed.
+    for( size_t i = 0; i < m_order.size(); i++ )
+    {
+        int idx = m_order[i];
+        if ( idx < 0 )
+        {
+            idx = ~idx;
+            if ( idx > idxDeleted )
+                m_order[i] = ~(idx-1);
+        }
+        else
+        {
+            if ( idx > idxDeleted )
+                m_order[i] = idx-1;
+        }
+    }
+}
+
+void wxRearrangeList::DoClear()
+{
+    wxCheckListBox::DoClear();
+    m_order.Clear();
 }
 
 // ============================================================================

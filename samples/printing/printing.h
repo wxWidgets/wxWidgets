@@ -86,7 +86,7 @@ private:
 class MyPrintout: public wxPrintout
 {
 public:
-    MyPrintout(MyFrame* frame, const wxString &title = wxT("My printout"))
+    MyPrintout(MyFrame* frame, const wxString &title = "My printout")
         : wxPrintout(title) { m_frame=frame; }
 
     virtual bool OnPrintPage(int page) wxOVERRIDE;
@@ -98,7 +98,7 @@ public:
     void DrawPageTwo();
 
     // Writes a header on a page. Margin units are in millimetres.
-    bool WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString& text, float mmToLogical);
+    bool WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString& text, double mmToLogical);
 
 private:
     MyFrame *m_frame;

@@ -15,6 +15,8 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 #include "wx/arrstr.h"
 
+class wxMenuRadioItemsData;
+
 // ----------------------------------------------------------------------------
 // Menu
 // ----------------------------------------------------------------------------
@@ -32,9 +34,7 @@ public:
 
     virtual ~wxMenu();
 
-    virtual void Break();
-
-    virtual void SetTitle(const wxString& title);
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
     bool ProcessCommand(wxCommandEvent& event);
 
@@ -60,14 +60,20 @@ public:
     // we don't want native menu events being triggered
     void SetNoEventsMode( bool noEvents );
     bool GetNoEventsMode() const { return m_noEventsMode; }
+
+    // Returns the start and end position of the radio group to which the item
+    // at given position belongs. Return false if there is no radio group
+    // containing this position.
+    bool OSXGetRadioGroupRange(int pos, int *start, int *end) const;
+
 protected:
     // hide special menu items like exit, preferences etc
     // that are expected in the app menu
     void DoRearrange() ;
 
-    virtual wxMenuItem* DoAppend(wxMenuItem *item);
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
-    virtual wxMenuItem* DoRemove(wxMenuItem *item);
+    virtual wxMenuItem* DoAppend(wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem* DoRemove(wxMenuItem *item) wxOVERRIDE;
 
 private:
     // common part of all ctors
@@ -89,12 +95,14 @@ private:
     // don't trigger native events
     bool m_noEventsMode;
 
+    wxMenuRadioItemsData* m_radioData;
+
     wxMenuImpl* m_peer;
 
     wxDECLARE_DYNAMIC_CLASS(wxMenu);
 };
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxUSE_MENUBAR
 
 // the iphone only has popup-menus
 
@@ -115,16 +123,16 @@ public:
     virtual ~wxMenuBar();
 
     // menubar construction
-    virtual bool Append( wxMenu *menu, const wxString &title );
-    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
-    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
-    virtual wxMenu *Remove(size_t pos);
+    virtual bool Append( wxMenu *menu, const wxString &title ) wxOVERRIDE;
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
+    virtual wxMenu *Remove(size_t pos) wxOVERRIDE;
 
-    virtual void EnableTop( size_t pos, bool flag );
-    virtual bool IsEnabledTop(size_t pos) const;
-    virtual void SetMenuLabel( size_t pos, const wxString& label );
-    virtual wxString GetMenuLabel( size_t pos ) const;
-    virtual bool Enable( bool enable = true );
+    virtual void EnableTop( size_t pos, bool flag ) wxOVERRIDE;
+    virtual bool IsEnabledTop(size_t pos) const wxOVERRIDE;
+    virtual void SetMenuLabel( size_t pos, const wxString& label ) wxOVERRIDE;
+    virtual wxString GetMenuLabel( size_t pos ) const wxOVERRIDE;
+    virtual bool Enable( bool enable = true ) wxOVERRIDE;
     // for virtual function hiding
     virtual void Enable( int itemid, bool enable )
     {
@@ -132,18 +140,15 @@ public:
     }
 
     // implementation from now on
-    void Detach();
 
         // returns TRUE if we're attached to a frame
     bool IsAttached() const { return m_menuBarFrame != NULL; }
         // get the frame we live in
     wxFrame *GetFrame() const { return m_menuBarFrame; }
-        // attach to a frame
-    void Attach(wxFrame *frame);
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
-    void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
+    void Refresh(bool eraseBackground = true, const wxRect *rect = NULL) wxOVERRIDE;
 
 #if wxABI_VERSION >= 30001
     wxMenu *OSXGetAppleMenu() const { return m_appleMenu; }
@@ -160,10 +165,10 @@ public:
 
 
     static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
-    
-    virtual void DoGetPosition(int *x, int *y) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetClientSize(int *width, int *height) const;
+
+    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
 protected:
     // common part of all ctors

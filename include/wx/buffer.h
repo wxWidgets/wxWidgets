@@ -11,7 +11,7 @@
 #ifndef _WX_BUFFER_H
 #define _WX_BUFFER_H
 
-#include "wx/chartype.h"
+#include "wx/defs.h"
 #include "wx/wxcrtbase.h"
 
 #include <stdlib.h>             // malloc() and free()

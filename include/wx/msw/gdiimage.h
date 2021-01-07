@@ -36,7 +36,7 @@ public:
     {
         m_width = m_height = m_depth = 0;
 
-        m_handle = 0;
+        m_handle = NULL;
     }
 
     wxGDIImageRefData(const wxGDIImageRefData& data) : wxGDIRefData()
@@ -50,7 +50,7 @@ public:
     }
 
     // accessors
-    virtual bool IsOk() const { return m_handle != 0; }
+    virtual bool IsOk() const wxOVERRIDE { return m_handle != NULL; }
 
     void SetSize(int w, int h) { m_width = w; m_height = h; }
 
@@ -104,7 +104,7 @@ public:
 
     // accessors
     WXHANDLE GetHandle() const
-        { return IsNull() ? 0 : GetGDIImageData()->m_handle; }
+        { return IsNull() ? NULL : GetGDIImageData()->m_handle; }
     void SetHandle(WXHANDLE handle)
         { AllocExclusive(); GetGDIImageData()->m_handle = handle; }
 
@@ -118,31 +118,29 @@ public:
                wxSize(GetGDIImageData()->m_width, GetGDIImageData()->m_height);
     }
 
-    void SetWidth(int w) { AllocExclusive(); GetGDIImageData()->m_width = w; }
-    void SetHeight(int h) { AllocExclusive(); GetGDIImageData()->m_height = h; }
-    void SetDepth(int d) { AllocExclusive(); GetGDIImageData()->m_depth = d; }
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_INLINE(void SetWidth(int w), AllocExclusive(); GetGDIImageData()->m_width = w; )
+    wxDEPRECATED_INLINE(void SetHeight(int h), AllocExclusive(); GetGDIImageData()->m_height = h; )
+    wxDEPRECATED_INLINE(void SetDepth(int d), AllocExclusive(); GetGDIImageData()->m_depth = d; )
 
-    void SetSize(int w, int h)
-    {
-        AllocExclusive();
-        GetGDIImageData()->SetSize(w, h);
-    }
-    void SetSize(const wxSize& size) { SetSize(size.x, size.y); }
+    wxDEPRECATED_INLINE(void SetSize(int w, int h), AllocExclusive(); GetGDIImageData()->SetSize(w, h); )
+    wxDEPRECATED_INLINE(void SetSize(const wxSize& size), AllocExclusive(); GetGDIImageData()->SetSize(size.x, size.y); )
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // forward some of base class virtuals to wxGDIImageRefData
-    bool FreeResource(bool force = false);
-    virtual WXHANDLE GetResourceHandle() const;
+    bool FreeResource(bool force = false) wxOVERRIDE;
+    virtual WXHANDLE GetResourceHandle() const wxOVERRIDE;
 
 protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData *CreateData() const = 0;
 
     // implement the wxGDIObject method in terms of our, more specific, one
-    virtual wxGDIRefData *CreateGDIRefData() const { return CreateData(); }
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE { return CreateData(); }
 
     // we can't [efficiently] clone objects of this class
     virtual wxGDIRefData *
-    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const wxOVERRIDE
     {
         wxFAIL_MSG( wxT("must be implemented if used") );
 

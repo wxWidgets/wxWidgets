@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ARTPROVIDER_TANGO
 
@@ -129,7 +126,7 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
 
     static const struct BitmapEntry
     {
-        const char *id;
+        wxString id;
         const unsigned char *data16;
         size_t len16;
         const unsigned char *data24;

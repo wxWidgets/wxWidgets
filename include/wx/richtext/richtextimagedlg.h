@@ -44,7 +44,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
  */
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextObjectPropertiesDialog: public wxRichTextFormattingDialog
-{    
+{
     wxDECLARE_DYNAMIC_CLASS(wxRichTextObjectPropertiesDialog);
     wxDECLARE_EVENT_TABLE();
 

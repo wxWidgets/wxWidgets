@@ -14,9 +14,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all 'standard' wxWidgets headers)
@@ -32,6 +29,9 @@
 #include "wx/settings.h" // system settings
 #include "wx/string.h"   // strings support
 #include "wx/image.h"    // images support
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/paper.h"
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 //! application headers
 #include "defsext.h"     // Additional definitions
@@ -51,21 +51,15 @@
 // declarations
 //============================================================================
 
-#define APP_NAME wxT("STC-Test")
-#define APP_DESCR _("See http://wxguide.sourceforge.net/")
+#define APP_NAME "STC-Test"
+#define APP_DESCR "See http://wxguide.sourceforge.net/"
 
-#define APP_MAINT wxT("Otto Wyss")
-#define APP_VENDOR wxT("wxWidgets")
-#define APP_COPYRIGTH wxT("(C) 2003 Otto Wyss")
-#define APP_LICENCE wxT("wxWidgets")
+#define APP_MAINT "Otto Wyss"
+#define APP_VENDOR "wxWidgets"
+#define APP_COPYRIGTH "(C) 2003 Otto Wyss"
+#define APP_LICENCE "wxWidgets"
 
-#define APP_VERSION wxT("0.1.alpha")
-#define APP_BUILD __DATE__
-
-#define APP_WEBSITE wxT("http://www.wxWidgets.org")
-#define APP_MAIL wxT("mailto://???")
-
-#define NONAME _("<untitled>")
+#define APP_VERSION "0.1.alpha"
 
 class AppBook;
 
@@ -92,10 +86,10 @@ class App: public wxApp {
 
 public:
     //! the main function called during application start
-    virtual bool OnInit ();
+    virtual bool OnInit () wxOVERRIDE;
 
     //! application exit function
-    virtual int OnExit ();
+    virtual int OnExit () wxOVERRIDE;
 
 private:
     //! frame window
@@ -129,12 +123,8 @@ public:
     void OnClose (wxCloseEvent &event);
     void OnAbout (wxCommandEvent &event);
     void OnExit (wxCommandEvent &event);
-    void OnTimerEvent (wxTimerEvent &event);
     //! file
-    void OnFileNew (wxCommandEvent &event);
-    void OnFileNewFrame (wxCommandEvent &event);
     void OnFileOpen (wxCommandEvent &event);
-    void OnFileOpenFrame (wxCommandEvent &event);
     void OnFileSave (wxCommandEvent &event);
     void OnFileSaveAs (wxCommandEvent &event);
     void OnFileClose (wxCommandEvent &event);
@@ -146,6 +136,7 @@ public:
     void OnPrint (wxCommandEvent &event);
     //! edit events
     void OnEdit (wxCommandEvent &event);
+    void OnContextMenu(wxContextMenuEvent& evt);
 
 private:
     // edit object
@@ -210,13 +201,20 @@ bool App::OnInit () {
     SetVendorName (APP_VENDOR);
     g_appname = new wxString ();
     g_appname->Append (APP_VENDOR);
-    g_appname->Append (wxT("-"));
+    g_appname->Append ("-");
     g_appname->Append (APP_NAME);
 
 #if wxUSE_PRINTING_ARCHITECTURE
     // initialize print data and setup
     g_printData = new wxPrintData;
+    wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+    g_printData->SetPaperId(paper->GetId());
+    g_printData->SetPaperSize(paper->GetSize());
+    g_printData->SetOrientation(wxPORTRAIT);
+
     g_pageSetupData = new wxPageSetupDialogData;
+    // copy over initial paper size from print record
+    (*g_pageSetupData) = *g_printData;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
     // create application frame
@@ -276,11 +274,11 @@ wxBEGIN_EVENT_TABLE (AppFrame, wxFrame)
                                      AppFrame::OnEdit)
     // help
     EVT_MENU (wxID_ABOUT,            AppFrame::OnAbout)
+    EVT_CONTEXT_MENU(                AppFrame::OnContextMenu)
 wxEND_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
-        : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550),
-                    wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+        : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550))
 {
     SetIcon(wxICON(sample));
 
@@ -289,7 +287,7 @@ AppFrame::AppFrame (const wxString &title)
 
     // set icon and background
     SetTitle (*g_appname);
-    SetBackgroundColour (wxT("WHITE"));
+    SetBackgroundColour ("WHITE");
 
     // create menu
     m_menuBar = new wxMenuBar;
@@ -299,7 +297,7 @@ AppFrame::AppFrame (const wxString &title)
     m_edit = new Edit (this, wxID_ANY);
     m_edit->SetFocus();
 
-    FileOpen (wxT("stctest.cpp"));
+    FileOpen ("stctest.cpp");
 }
 
 AppFrame::~AppFrame () {
@@ -329,7 +327,7 @@ void AppFrame::OnFileOpen (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
 #if wxUSE_FILEDLG
     wxString fname;
-    wxFileDialog dlg (this, wxT("Open file"), wxEmptyString, wxEmptyString, wxT("Any file (*)|*"),
+    wxFileDialog dlg (this, "Open file", wxEmptyString, wxEmptyString, "Any file (*)|*",
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
     if (dlg.ShowModal() != wxID_OK) return;
     fname = dlg.GetPath ();
@@ -350,8 +348,8 @@ void AppFrame::OnFileSave (wxCommandEvent &WXUNUSED(event)) {
 void AppFrame::OnFileSaveAs (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
 #if wxUSE_FILEDLG
-    wxString filename = wxEmptyString;
-    wxFileDialog dlg (this, wxT("Save file"), wxEmptyString, wxEmptyString, wxT("Any file (*)|*"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    wxString filename;
+    wxFileDialog dlg (this, "Save file", wxEmptyString, wxEmptyString, "Any file (*)|*", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() != wxID_OK) return;
     filename = dlg.GetPath();
     m_edit->SaveFile (filename);
@@ -436,6 +434,27 @@ void AppFrame::OnPrint (wxCommandEvent &WXUNUSED(event)) {
 // edit events
 void AppFrame::OnEdit (wxCommandEvent &event) {
     if (m_edit) m_edit->GetEventHandler()->ProcessEvent (event);
+}
+
+void AppFrame::OnContextMenu(wxContextMenuEvent& evt)
+{
+    wxPoint point = evt.GetPosition();
+    // If from keyboard
+    if ( point.x == -1 && point.y == -1 )
+    {
+        wxSize size = GetSize();
+        point.x = size.x / 2;
+        point.y = size.y / 2;
+    }
+    else
+    {
+        point = ScreenToClient(point);
+    }
+
+    wxMenu menu;
+    menu.Append(wxID_ABOUT, "&About");
+    menu.Append(wxID_EXIT, "E&xit");
+    PopupMenu(&menu, point);
 }
 
 // private functions
@@ -549,11 +568,18 @@ void AppFrame::CreateMenu ()
     menuExtra->AppendCheckItem(myID_MULTIPLE_SELECTIONS, _("Toggle &multiple selections"));
     menuExtra->AppendCheckItem(myID_MULTI_PASTE, _("Toggle multi-&paste"));
     menuExtra->AppendCheckItem(myID_MULTIPLE_SELECTIONS_TYPING, _("Toggle t&yping on multiple selections"));
+    menuExtra->AppendSeparator();
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
+    wxMenu* menuTechnology = new wxMenu;
+    menuTechnology->AppendRadioItem(myID_TECHNOLOGY_DEFAULT, _("&Default"));
+    menuTechnology->AppendRadioItem(myID_TECHNOLOGY_DIRECTWRITE, _("Direct&Write"));
+    menuExtra->AppendSubMenu(menuTechnology, _("&Technology"));
+    menuExtra->AppendSeparator();
+#endif
+    menuExtra->AppendCheckItem (myID_CUSTOM_POPUP, _("C&ustom context menu"));
 
     // Window menu
     wxMenu *menuWindow = new wxMenu;
-    menuWindow->Append (myID_PAGEPREV, _("&Previous\tCtrl+Shift+Tab"));
-    menuWindow->Append (myID_PAGENEXT, _("&Next\tCtrl+Tab"));
     menuWindow->Append(myID_WINDOW_MINIMAL, _("&Minimal editor"));
 
     // Help menu
@@ -617,6 +643,9 @@ AppAbout::AppAbout (wxWindow *parent,
         m_timer->Start (milliseconds, wxTIMER_ONE_SHOT);
     }
 
+    // Get version of Scintilla
+    wxVersionInfo vi = wxStyledTextCtrl::GetLibraryVersionInfo();
+
     // sets the application title
     SetTitle (_("About .."));
 
@@ -628,7 +657,7 @@ AppAbout::AppAbout (wxWindow *parent,
                     1, wxEXPAND | wxALIGN_LEFT);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")),
                     0, wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_VERSION),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxString::Format("%s (%s)", APP_VERSION, vi.GetVersionString())),
                     1, wxEXPAND | wxALIGN_LEFT);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")),
                     0, wxALIGN_LEFT);
@@ -695,23 +724,23 @@ public:
     {
         SetLexerXml();
 
-        SetProperty(wxT("fold"), wxT("1"));
-        SetProperty(wxT("fold.comment"), wxT("1"));
-        SetProperty(wxT("fold.compact"), wxT("1"));
-        SetProperty(wxT("fold.preprocessor"), wxT("1"));
-        SetProperty(wxT("fold.html"), wxT("1"));
-        SetProperty(wxT("fold.html.preprocessor"), wxT("1"));
+        SetProperty("fold", "1");
+        SetProperty("fold.comment", "1");
+        SetProperty("fold.compact", "1");
+        SetProperty("fold.preprocessor", "1");
+        SetProperty("fold.html", "1");
+        SetProperty("fold.html.preprocessor", "1");
 
         SetMarginType(margin_id_lineno, wxSTC_MARGIN_NUMBER);
         SetMarginWidth(margin_id_lineno, 32);
 
-        MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS, wxT("WHITE"), wxT("BLACK"));
-        MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS,  wxT("WHITE"), wxT("BLACK"));
-        MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,     wxT("WHITE"), wxT("BLACK"));
-        MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED, wxT("WHITE"), wxT("BLACK"));
-        MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, wxT("WHITE"), wxT("BLACK"));
-        MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,     wxT("WHITE"), wxT("BLACK"));
-        MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,     wxT("WHITE"), wxT("BLACK"));
+        MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS, "WHITE", "BLACK");
+        MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS,  "WHITE", "BLACK");
+        MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,     "WHITE", "BLACK");
+        MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED, "WHITE", "BLACK");
+        MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, "WHITE", "BLACK");
+        MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,     "WHITE", "BLACK");
+        MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,     "WHITE", "BLACK");
 
         SetMarginMask(margin_id_fold, wxSTC_MASK_FOLDERS);
         SetMarginWidth(margin_id_fold, 32);
@@ -724,9 +753,9 @@ public:
         SetWrapMode(wxSTC_WRAP_WORD);
         SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
     }
-    virtual bool SetFont(const wxFont& font)
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE
     {
-        StyleSetFont(wxSTC_STYLE_DEFAULT, (wxFont&)font);
+        StyleSetFont(wxSTC_STYLE_DEFAULT, font);
         return wxStyledTextCtrl::SetFont(font);
     }
     void SetLexerXml()
@@ -742,7 +771,7 @@ public:
         StyleSetForeground(wxSTC_H_DOUBLESTRING, *wxBLACK);
         StyleSetForeground(wxSTC_H_SINGLESTRING, *wxBLACK);
         StyleSetForeground(wxSTC_H_OTHER, *wxBLUE);
-        StyleSetForeground(wxSTC_H_COMMENT, wxTheColourDatabase->Find(wxT("GREY")));
+        StyleSetForeground(wxSTC_H_COMMENT, wxColour("GREY"));
         StyleSetForeground(wxSTC_H_ENTITY, *wxRED);
         StyleSetBold(wxSTC_H_ENTITY, true);
         StyleSetForeground(wxSTC_H_TAGEND, *wxBLUE);
@@ -776,7 +805,7 @@ void MinimalEditor::OnMarginClick(wxStyledTextEvent &event)
 
 void MinimalEditor::OnText(wxStyledTextEvent& event)
 {
-    wxLogDebug(wxT("Modified"));
+    wxLogDebug("Modified");
     event.Skip();
 }
 
@@ -786,7 +815,7 @@ public:
     MinimalEditorFrame() : wxFrame(NULL, wxID_ANY, _("Minimal Editor"))
     {
         MinimalEditor* editor = new MinimalEditor(this);
-        editor->SetFont(wxSystemSettings::GetFont(wxSYS_ANSI_FIXED_FONT));
+        editor->SetFont(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
         wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
         sizer->Add(editor, 1, wxEXPAND);
         SetSizer(sizer);

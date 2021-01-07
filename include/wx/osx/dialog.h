@@ -30,7 +30,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr)
+             const wxString& name = wxASCII_STR(wxDialogNameStr))
     {
         Init();
         Create(parent, id, title, pos, size, style, name);
@@ -41,32 +41,37 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_DIALOG_STYLE,
-                const wxString& name = wxDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDialogNameStr));
 
     virtual ~wxDialog();
 
 //    virtual bool Destroy();
-    virtual bool Show(bool show = true);
+    virtual bool Show(bool show = true) wxOVERRIDE;
 
     // return true if we're showing the dialog modally
-    virtual bool IsModal() const;
+    virtual bool IsModal() const wxOVERRIDE;
 
     // show the dialog modally and return the value passed to EndModal()
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
-    virtual void ShowWindowModal();
+    virtual void ShowWindowModal() wxOVERRIDE;
 
     // may be called to terminate the dialog with the given return code
-    virtual void EndModal(int retCode);
+    virtual void EndModal(int retCode) wxOVERRIDE;
 
     static bool OSXHasModalDialogsOpen();
-    static void OSXBeginModalDialog();
-    static void OSXEndModalDialog();
+    void OSXBeginModalDialog();
+    void OSXEndModalDialog();
+
+#if wxOSX_USE_COCOA
+    bool OSXGetWorksWhenModal();
+    void OSXSetWorksWhenModal(bool worksWhenModal);
+#endif
 
     // implementation
     // --------------
 
-    wxDialogModality GetModality() const;
+    wxDialogModality GetModality() const wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
     virtual void ModalFinishedCallback(void* WXUNUSED(panel), int WXUNUSED(returnCode)) {}
@@ -80,7 +85,7 @@ protected:
     void EndWindowModal();
 
     // mac also takes command-period as cancel
-    virtual bool IsEscapeKey(const wxKeyEvent& event);
+    virtual bool IsEscapeKey(const wxKeyEvent& event) wxOVERRIDE;
 
 
     wxDialogModality m_modality;
@@ -89,6 +94,11 @@ protected:
 
 private:
     void Init();
+
+    static wxVector<wxDialog*> s_modalStack;
+#if wxOSX_USE_COCOA
+    static wxVector<bool> s_modalWorksStack;
+#endif
 };
 
 #endif

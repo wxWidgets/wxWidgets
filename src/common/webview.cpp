@@ -11,18 +11,16 @@
 
 #if wxUSE_WEBVIEW
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/webview.h"
 
-#if defined(__WXOSX__) 
+#if defined(__WXOSX__)
 #include "wx/osx/webview_webkit.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/webview_webkit.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/webview_ie.h"
+#include "wx/msw/webview_edge.h"
 #endif
 
 // DLL options compatibility check:
@@ -32,6 +30,7 @@ WX_CHECK_BUILD_OPTIONS("wxWEBVIEW")
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[] = "about:blank";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[] = "wxWebViewIE";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[] = "wxWebViewEdge";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[] = "wxWebViewWebKit";
 
 #ifdef __WXMSW__
@@ -65,8 +64,8 @@ wxWebView* wxWebView::New(const wxString& backend)
 
 // static
 wxWebView* wxWebView::New(wxWindow* parent, wxWindowID id, const wxString& url,
-                          const wxPoint& pos, const wxSize& size, 
-                          const wxString& backend, long style, 
+                          const wxPoint& pos, const wxSize& size,
+                          const wxString& backend, long style,
                           const wxString& name)
 {
     wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
@@ -79,10 +78,20 @@ wxWebView* wxWebView::New(wxWindow* parent, wxWindowID id, const wxString& url,
 }
 
 // static
-void wxWebView::RegisterFactory(const wxString& backend, 
+void wxWebView::RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory)
 {
     m_factoryMap[backend] = factory;
+}
+
+// static
+bool wxWebView::IsBackendAvailable(const wxString& backend)
+{
+    wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
+    if (iter != m_factoryMap.end())
+        return iter->second->IsAvailable();
+    else
+        return false;
 }
 
 // static 
@@ -93,14 +102,23 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
 
     return m_factoryMap.find(backend);
 }
- 
+
 // static
 void wxWebView::InitFactoryMap()
 {
 #ifdef __WXMSW__
+#if wxUSE_WEBVIEW_IE
     if(m_factoryMap.find(wxWebViewBackendIE) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
                                                    (new wxWebViewFactoryIE));
+#endif
+
+#if wxUSE_WEBVIEW_EDGE
+    if (m_factoryMap.find(wxWebViewBackendEdge) == m_factoryMap.end())
+        RegisterFactory(wxWebViewBackendEdge, wxSharedPtr<wxWebViewFactory>
+        (new wxWebViewFactoryEdge));
+#endif
+
 #else
     if(m_factoryMap.find(wxWebViewBackendWebKit) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>

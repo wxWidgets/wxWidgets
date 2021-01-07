@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTBOX
 
@@ -32,15 +29,6 @@
     #include "wx/arrstr.h"
     #include "wx/log.h"
     #include "wx/dcclient.h"
-#endif
-
-// the spacing between the lines (in report mode)
-static const int LINE_SPACING = 0;
-
-#ifdef __WXGTK__
-static const int EXTRA_HEIGHT = 6;
-#else
-static const int EXTRA_HEIGHT = 4;
 #endif
 
 extern WXDLLEXPORT_DATA(const char) wxListBoxNameStr[] = "listBox";
@@ -348,25 +336,5 @@ void wxListBoxBase::EnsureVisible(int WXUNUSED(n))
 {
     // the base class version does nothing (the only alternative would be to
     // call SetFirstItem() but this is probably even more stupid)
-}
-
-wxCoord wxListBoxBase::GetLineHeight() const
-{
-    wxListBoxBase *self = wxConstCast(this, wxListBoxBase);
-
-    wxClientDC dc( self );
-    dc.SetFont( GetFont() );
-
-    wxCoord y;
-    dc.GetTextExtent(wxT("H"), NULL, &y);
-
-    y += EXTRA_HEIGHT;
-
-    return y + LINE_SPACING;
-}
-
-int wxListBoxBase::GetCountPerPage() const
-{
-    return GetClientSize().y / GetLineHeight();
 }
 #endif // wxUSE_LISTBOX

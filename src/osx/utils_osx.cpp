@@ -53,56 +53,7 @@ bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
     return false;
 }
 
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    // always the case on OS X
-    return true;
-}
-
-
 #if wxOSX_USE_COCOA_OR_CARBON
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1070) && (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
-// bring back declaration so that we can support deployment targets < 10_6
-CG_EXTERN size_t CGDisplayBitsPerPixel(CGDirectDisplayID display)
-CG_AVAILABLE_BUT_DEPRECATED(__MAC_10_0, __MAC_10_6,
-                            __IPHONE_NA, __IPHONE_NA);
-#endif
-
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    int theDepth = 0;
-    
-    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
-    CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
-    
-    if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-        theDepth = 32;
-    else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-        theDepth = 16;
-    else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-        theDepth = 8;
-    else
-        theDepth = 32; // some reasonable default
-
-    CFRelease(encoding);
-    CGDisplayModeRelease(currentMode);
-
-    return theDepth;
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    // TODO adapt for multi-displays
-    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
-    if ( width )
-        *width = (int)bounds.size.width ;
-    if ( height )
-        *height = (int)bounds.size.height;
-}
 
 #if wxUSE_GUI
 
@@ -114,9 +65,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(document)));
-    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    wxCFRef<CFURLRef> curl(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+    wxCFRef<CFURLRef> curl(wxOSXCreateURLFromFileSystemPath(document));
     OSStatus err = LSOpenCFURLRef( curl , NULL );
 
     if (err == noErr)
@@ -154,20 +103,6 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 #endif // wxUSE_GUI
 
 #endif
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    wxDisplaySize(width, height);
-    // on mac 72 is fixed (at least now;-)
-    double cvPt2Mm = 25.4 / 72;
-
-    if (width != NULL)
-        *width = int( *width * cvPt2Mm );
-
-    if (height != NULL)
-        *height = int( *height * cvPt2Mm );
-}
-
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
                                            int *verMin,
@@ -210,7 +145,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 #if wxOSX_USE_IPHONE
         genericRGBColorSpace.reset( CGColorSpaceCreateDeviceRGB() );
 #else
-        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
+        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceSRGB ) );
 #endif
     }
 
@@ -260,7 +195,7 @@ void wxMacStringToPascal( const wxString&from , unsigned char * to )
 
 wxString wxMacMakeStringFromPascal( const unsigned char * from )
 {
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
+    return wxString(&from[1], wxConvLocal, from[0]);
 }
 
 #endif // wxOSX_USE_COCOA_OR_CARBON

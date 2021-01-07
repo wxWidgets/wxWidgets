@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
@@ -63,13 +60,9 @@
 #include "wx/except.h"
 
 #if wxUSE_STD_IOSTREAM
-    #include "wx/ioswrap.h"
     #include "wx/beforestd.h"
-    #if wxUSE_IOSTREAMH
-        #include <fstream.h>
-    #else
-        #include <fstream>
-    #endif
+    #include <fstream>
+    #include <iostream>
     #include "wx/afterstd.h"
 #else
     #include "wx/wfstream.h"
@@ -570,7 +563,9 @@ bool wxDocument::AddView(wxView *view)
 
 bool wxDocument::RemoveView(wxView *view)
 {
-    (void)m_documentViews.DeleteObject(view);
+    if ( !m_documentViews.DeleteObject(view) )
+        return false;
+
     OnChangedViewList();
     return true;
 }
@@ -822,15 +817,15 @@ wxDocTemplate::wxDocTemplate(wxDocManager *manager,
                              wxClassInfo *docClassInfo,
                              wxClassInfo *viewClassInfo,
                              long flags)
+    : m_fileFilter(filter)
+    , m_directory(dir)
+    , m_description(descr)
+    , m_defaultExt(ext)
+    , m_docTypeName(docTypeName)
+    , m_viewTypeName(viewTypeName)
 {
     m_documentManager = manager;
-    m_description = descr;
-    m_directory = dir;
-    m_defaultExt = ext;
-    m_fileFilter = filter;
     m_flags = flags;
-    m_docTypeName = docTypeName;
-    m_viewTypeName = viewTypeName;
     m_documentManager->AssociateTemplate(this);
 
     m_docClassInfo = docClassInfo;
@@ -1122,7 +1117,7 @@ void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument("") )
+    if ( !CreateDocument(wxString()) )
     {
         OnOpenFileFailure();
     }
@@ -1177,7 +1172,6 @@ void wxDocManager::DoOpenMRUFile(unsigned n)
     if ( filename.empty() )
         return;
 
-    wxString errMsg; // must contain exactly one "%s" if non-empty
     if ( wxFile::Exists(filename) )
     {
         // Try to open it but don't give an error if it failed: this could be
@@ -1792,7 +1786,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                          msgTitle,
                          wxOK | wxICON_EXCLAMATION | wxCENTRE);
 
-            path = wxEmptyString;
+            path.clear();
             return NULL;
         }
 
@@ -1803,7 +1797,18 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         // first choose the template using the extension, if this fails (i.e.
         // wxFileSelectorEx() didn't fill it), then use the path
         if ( FilterIndex != -1 )
+        {
             theTemplate = templates[FilterIndex];
+            if ( theTemplate )
+            {
+                // But don't use this template if it doesn't match the path as
+                // can happen if the user specified the extension explicitly
+                // but didn't bother changing the filter.
+                if ( !theTemplate->FileMatchesTemplate(path) )
+                    theTemplate = NULL;
+            }
+        }
+
         if ( !theTemplate )
             theTemplate = FindTemplateForPath(path);
         if ( !theTemplate )
@@ -2160,7 +2165,7 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
     // but in fact is too small for some reason. This is a detail that will
     // need to be addressed at some point but can be fudged for the
     // moment.
-    float scale = (float)((float)ppiPrinterX/(float)ppiScreenX);
+    double scale = double(ppiPrinterX) / ppiScreenX;
 
     // Now we have to check in case our real page size is reduced
     // (e.g. because we're drawing to a print preview memory DC)
@@ -2172,7 +2177,7 @@ bool wxDocPrintout::OnPrintPage(int WXUNUSED(page))
 
     // If printer pageWidth == current DC width, then this doesn't
     // change. But w might be the preview bitmap width, so scale down.
-    float overallScale = scale * (float)(w/(float)pageWidth);
+    double overallScale = scale * w / pageWidth;
     dc->SetUserScale(overallScale, overallScale);
 
     if (m_printoutView)
@@ -2223,11 +2228,10 @@ bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
     if ( !file.IsOpened() )
         return false;
 
-    char buf[4096];
-
-    size_t nRead;
     do
     {
+        char buf[4096];
+        size_t nRead;
         nRead = file.Read(buf, WXSIZEOF(buf));
         if ( file.Error() )
             return false;

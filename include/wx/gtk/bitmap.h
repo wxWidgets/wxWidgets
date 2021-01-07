@@ -72,17 +72,12 @@ public:
         { Create(sz, depth); }
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
-#ifdef wxNEEDS_CHARPP
-    // needed for old GCC
-    wxBitmap(char** data)
-        { *this = wxBitmap(const_cast<const char* const*>(data)); }
-#endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
 #if wxUSE_IMAGE
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
 #endif // wxUSE_IMAGE
     wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
-    wxEXPLICIT wxBitmap(const wxCursor& cursor);
+    explicit wxBitmap(const wxCursor& cursor);
     virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
@@ -126,21 +121,24 @@ public:
     // implementation
     // --------------
 
-    void SetHeight( int height ) wxOVERRIDE;
-    void SetWidth( int width ) wxOVERRIDE;
-    void SetDepth( int depth ) wxOVERRIDE;
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED(void SetHeight( int height ) wxOVERRIDE);
+    wxDEPRECATED(void SetWidth( int width ) wxOVERRIDE);
+    wxDEPRECATED(void SetDepth( int depth ) wxOVERRIDE);
+#endif
 
 #ifdef __WXGTK3__
-    GdkPixbuf* GetPixbufNoMask() const;
     cairo_t* CairoCreate() const;
     void Draw(cairo_t* cr, int x, int y, bool useMask = true, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
     void SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
+    wxBitmap CreateDisabled() const;
 #else
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;
     bool HasPixbuf() const;
     wxBitmap(GdkPixmap* pixmap);
 #endif
+    GdkPixbuf* GetPixbufNoMask() const;
     GdkPixbuf *GetPixbuf() const;
 
     // raw bitmap access support functions

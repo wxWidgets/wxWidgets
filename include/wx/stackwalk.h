@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-07
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -143,7 +143,7 @@ public:
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 protected:
-    // this function must be overrided to process the given frame
+    // this function must be overridden to process the given frame
     virtual void OnStackFrame(const wxStackFrame& frame) = 0;
 };
 

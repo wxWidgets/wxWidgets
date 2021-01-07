@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/frame.h"
 
@@ -261,7 +258,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 // generate an artificial resize event
 void wxFrame::SendSizeEvent(int flags)
 {
-    if ( !m_iconized )
+    if ( !MSWIsIconized() )
     {
         RECT r = wxGetWindowRect(GetHwnd());
 
@@ -315,25 +312,34 @@ void wxFrame::PositionStatusBar()
     int x = 0;
 #if wxUSE_TOOLBAR
     wxToolBar * const toolbar = GetToolBar();
-    if ( toolbar && !toolbar->HasFlag(wxTB_TOP) )
+    if ( toolbar )
     {
         const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
 
-        if ( toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT) )
+        if ( toolbar->IsVertical() )
         {
-            if ( toolbar->HasFlag(wxTB_LEFT) )
+            if ( directionTB == wxTB_LEFT )
                 x -= sizeTB.x;
 
             w += sizeTB.x;
         }
-        else // wxTB_BOTTOM
+        else if ( directionTB == wxTB_BOTTOM )
         {
             // we need to position the status bar below the toolbar
             h += sizeTB.y;
         }
+        //else: no adjustments necessary for the toolbar on top
     }
-    //else: no adjustments necessary for the toolbar on top
 #endif // wxUSE_TOOLBAR
+
+    // GetSize returns the height of the clientSize in which the statusbar
+    // height is subtracted (see wxFrame::DoGetClientSize). When the DPI of the
+    // window changes, the statusbar height will likely change so we need to
+    // account for this difference. If not, the statusbar will be positioned
+    // too high or low.
+    int shOld;
+    m_frameStatusBar->GetSize(NULL, &shOld);
 
     // Resize the status bar to its default height, as it could have been set
     // to a wrong value before by WM_SIZE sent during the frame creation and
@@ -342,8 +348,9 @@ void wxFrame::PositionStatusBar()
     // this here, the status bar would retain the possibly wrong current height.
     m_frameStatusBar->SetSize(x, h, w, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
 
-    int sw, sh;
-    m_frameStatusBar->GetSize(&sw, &sh);
+    int sh;
+    m_frameStatusBar->GetSize(NULL, &sh);
+    h += shOld - sh;
 
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
@@ -594,7 +601,7 @@ void wxFrame::PositionToolBar()
 
         int tx, ty, tw, th;
         toolbar->GetPosition( &tx, &ty );
-        toolbar->GetSize( &tw, &th );
+        toolbar->GetBestSize( &tw, &th );
 
         int x, y;
         if ( toolbar->HasFlag(wxTB_BOTTOM) )
@@ -667,7 +674,7 @@ void wxFrame::PositionToolBar()
 // on the desktop, but are iconized/restored with it
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
-    m_iconized = bIconize;
+    m_showCmd = bIconize ? SW_MINIMIZE : SW_RESTORE;
 
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
@@ -675,11 +682,10 @@ void wxFrame::IconizeChildFrames(bool bIconize)
     {
         wxWindow *win = node->GetData();
 
-        // iconizing the frames with this style under Win95 shell puts them at
-        // the bottom of the screen (as the MDI children) instead of making
-        // them appear in the taskbar because they are, by virtue of this
-        // style, not managed by the taskbar - instead leave Windows take care
-        // of them
+        // iconizing the frames with this style puts them at the bottom of
+        // the screen (as the MDI children) instead of making them appear
+        // in the taskbar because they are, by virtue of this style, not
+        // managed by the taskbar - instead leave Windows take care of them
         if ( win->GetWindowStyle() & wxFRAME_TOOL_WINDOW )
             continue;
 
@@ -733,6 +739,8 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
     wxMenuBar *menuBar = GetMenuBar();
     if ( menuBar && menuBar->GetAcceleratorTable()->Translate(frame, pMsg) )
         return true;
+#else
+    wxUnusedVar(frame);
 #endif // wxUSE_MENUS && wxUSE_ACCEL
 
     return false;
@@ -744,6 +752,13 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 
 bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
+    // We can get a WM_SIZE when restoring a hidden window using
+    // SetWindowPlacement(), don't do anything here in this case as our state
+    // will be really updated later, when (and if) we're shown. Still let the
+    // base class generate wxEVT_SIZE and perform the layout, however.
+    if ( !IsShown() )
+        return false;
+
     switch ( id )
     {
         case SIZE_RESTORED:
@@ -751,7 +766,7 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
             // only do it it if we were iconized before, otherwise resizing the
             // parent frame has a curious side effect of bringing it under it's
             // children
-            if ( !m_iconized )
+            if ( m_showCmd != SW_MINIMIZE )
                 break;
 
             // restore all child frames too
@@ -766,7 +781,7 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
             break;
     }
 
-    if ( !m_iconized )
+    if ( m_showCmd != SW_MINIMIZE )
     {
 #if wxUSE_STATUSBAR
         PositionStatusBar();
@@ -815,7 +830,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 #endif // wxUSE_TASKBARBUTTON
 
-    return wxFrameBase::HandleCommand(id, cmd, control);;
+    return wxFrameBase::HandleCommand(id, cmd, control);
 }
 
 // ---------------------------------------------------------------------------
@@ -915,12 +930,13 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     if ( toolbar && toolbar->IsShown() )
     {
         const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
 
-        if ( toolbar->HasFlag(wxTB_TOP) )
+        if ( directionTB == wxTB_TOP )
         {
             pt.y += sizeTB.y;
         }
-        else if ( toolbar->HasFlag(wxTB_LEFT) )
+        else if ( directionTB == wxTB_LEFT )
         {
             pt.x += sizeTB.x;
         }

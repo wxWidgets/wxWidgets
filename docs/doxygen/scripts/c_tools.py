@@ -16,14 +16,14 @@ class CBuilder:
         output_dir = os.path.abspath(os.path.join(self.output_dir, "c"))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-    
+
         for aclass in self.doxyparser.classes:
             # This bit doesn't work, because the aclass.name is not the same as
             # those listed in common
             if aclass.name in excluded_classes:
                 #print "Skipping %s" % aclass.name
                 continue
-                
+
             self.make_c_header(output_dir, aclass)
 
 
@@ -46,7 +46,7 @@ class CBuilder:
 
     def make_c_methods(self, aclass):
         retval = ""
-        
+
         wxc_classname = 'wxC' + aclass.name[2:].capitalize()
 
         for amethod in aclass.constructors:
@@ -59,13 +59,13 @@ class CBuilder:
             if amethod.name.startswith('m_'):
                 # for some reason, public members are listed as methods
                 continue
-        
+
             args = '(' + wxc_classname + '* obj'
             if amethod.argsstring.find('()') != -1:
                 args += ')'
-            else: 
+            else:
                 args += ', ' + amethod.argsstring[1:].strip()
-            
+
             retval += """
 // %s
 %s %s%s;\n

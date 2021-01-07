@@ -74,6 +74,11 @@ public:
     // in the user's system
     static bool IsValidFacename(const wxString &str);
 
+    // Invalidate cache used by some of the methods of this class internally.
+    // This should be called if the list of the fonts available on the system
+    // changes, for whatever reason.
+    static void InvalidateCache();
+
 private:
 #ifdef wxHAS_UTF8_FONTS
     // helper for ports that only use UTF-8 encoding natively

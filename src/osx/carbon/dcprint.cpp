@@ -13,9 +13,6 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dcprint.h"
 
@@ -149,7 +146,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
         if (m_err == noErr)
             useDefaultResolution = true;
     }
-    
+
     // Ignore errors which may occur while retrieving the resolution and just
     // use the default one.
     if ( useDefaultResolution )
@@ -260,9 +257,9 @@ wxSize wxMacCarbonPrinterDC::GetPPI() const
 
 wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printdata )
    : wxGCDCImpl( owner )
+    , m_printData(printdata)
 {
     m_ok = false ;
-    m_printData = printdata ;
     m_printData.ConvertToNative() ;
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
     if ( m_nativePrinterDC )
@@ -320,7 +317,7 @@ bool wxPrinterDCImpl::StartDoc( const wxString& message )
     return m_ok ;
 }
 
-void wxPrinterDCImpl::EndDoc(void)
+void wxPrinterDCImpl::EndDoc()
 {
     if ( !m_ok )
         return ;
@@ -366,7 +363,7 @@ void wxPrinterDCImpl::StartPage()
 
     m_logicalFunction = wxCOPY;
     //  m_textAlignment = wxALIGN_TOP_LEFT;
-    m_backgroundMode = wxTRANSPARENT;
+    m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
 
     m_textForegroundColour = *wxBLACK;
     m_textBackgroundColour = *wxWHITE;

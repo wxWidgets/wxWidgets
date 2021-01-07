@@ -270,6 +270,33 @@ void ItemContainerTestCase::SetString()
 #endif
 }
 
+void ItemContainerTestCase::SelectionAfterDelete()
+{
+    wxItemContainer * const container = GetContainer();
+
+    container->Append("item 0");
+    container->Append("item 1");
+    container->Append("item 2");
+    container->Append("item 3");
+
+    container->SetSelection(1);
+    CHECK( container->GetSelection() == 1 );
+
+    container->Delete(3);
+    CHECK( container->GetSelection() == 1 );
+
+    container->Delete(1);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+
+    container->SetSelection(1);
+    container->Delete(1);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+
+    container->SetSelection(0);
+    container->Delete(0);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+}
+
 void ItemContainerTestCase::SetSelection()
 {
     wxItemContainer * const container = GetContainer();
@@ -282,7 +309,7 @@ void ItemContainerTestCase::SetSelection()
     class CommandEventHandler : public wxEvtHandler
     {
     public:
-        virtual bool ProcessEvent(wxEvent& event)
+        virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
         {
             CPPUNIT_ASSERT_MESSAGE
             (

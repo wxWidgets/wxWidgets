@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
 
 #ifndef  WX_PRECOMP
 #   include "wx/wx.h"
@@ -218,8 +215,7 @@ BombsCanvas::BombsCanvas(wxFrame *parent, BombsGame *game)
     m_game = game;
     int sx, sy;
     wxClientDC dc(this);
-    wxFont font= BOMBS_FONT;
-    dc.SetFont(font);
+    dc.SetFont(BOMBS_FONT);
 
     wxCoord chw, chh;
     wxString buf = wxT("M");

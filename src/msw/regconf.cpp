@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONFIG && wxUSE_REGKEY
 
@@ -481,11 +478,11 @@ size_t wxRegConfig::GetNumberOfEntries(bool WXUNUSED(bRecursive)) const
   // dummy vars
   wxString str;
   long l;
-  bool bCont = ((wxRegConfig*)this)->GetFirstEntry(str, l);
+  bool bCont = GetFirstEntry(str, l);
   while ( bCont ) {
     nEntries++;
 
-    bCont = ((wxRegConfig*)this)->GetNextEntry(str, l);
+    bCont = GetNextEntry(str, l);
   }
 
   return nEntries;
@@ -498,11 +495,11 @@ size_t wxRegConfig::GetNumberOfGroups(bool WXUNUSED(bRecursive)) const
   // dummy vars
   wxString str;
   long l;
-  bool bCont = ((wxRegConfig*)this)->GetFirstGroup(str, l);
+  bool bCont = GetFirstGroup(str, l);
   while ( bCont ) {
     nGroups++;
 
-    bCont = ((wxRegConfig*)this)->GetNextGroup(str, l);
+    bCont = GetNextGroup(str, l);
   }
 
   return nGroups;
@@ -624,6 +621,7 @@ bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
   return false;
 }
 
+#if wxUSE_BASE64
 bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 {
     wxCHECK_MSG( buf, false, wxT("wxRegConfig::Read(): NULL param") );
@@ -657,6 +655,7 @@ bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 
   return false;
 }
+#endif // wxUSE_BASE64
 
 bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
@@ -682,6 +681,7 @@ bool wxRegConfig::DoWriteLong(const wxString& key, long lValue)
   return LocalKey().SetValue(path.Name(), lValue);
 }
 
+#if wxUSE_BASE64
 bool wxRegConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
 {
   wxConfigPathChanger path(this, key);
@@ -693,6 +693,7 @@ bool wxRegConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
 
   return LocalKey().SetValue(path.Name(), buf);
 }
+#endif // wxUSE_BASE64
 
 // ----------------------------------------------------------------------------
 // renaming

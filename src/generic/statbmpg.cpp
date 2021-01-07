@@ -35,7 +35,7 @@ bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
         return false;
     m_scaleMode = Scale_None;
     SetBitmap(bitmap);
-    Connect(wxEVT_PAINT, wxPaintEventHandler(wxGenericStaticBitmap::OnPaint));
+    Bind(wxEVT_PAINT, &wxGenericStaticBitmap::OnPaint, this);
     return true;
 }
 
@@ -46,6 +46,9 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc(this);
     const wxSize drawSize = GetClientSize();
+    if ( !drawSize.x || !drawSize.y )
+        return;
+
     const wxSize bmpSize = m_bitmap.GetSize();
     wxDouble w = 0;
     wxDouble h = 0;

@@ -1629,12 +1629,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         // (a) it's a command event and so is propagated to the parent
         // (b) under some ports it can be generated from kbd too
         // (c) it uses screen coords (because of (a))
-        wxContextMenuEvent evtCtx(
-            wxEVT_CONTEXT_MENU,
-            win->GetId(),
-            win->ClientToScreen(event.GetPosition()));
-        evtCtx.SetEventObject(win);
-        return win->HandleWindowEvent(evtCtx);
+        const wxPoint pos = win->ClientToScreen(event.GetPosition());
+        return win->WXSendContextMenuEvent(pos);
     }
 
     return FALSE;
@@ -2918,7 +2914,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 void wxWindowGTK::OnInternalIdle()
 {
     // Update style if the window was not yet realized
-    // and SetBackgroundStyle(wxBG_STYLE_CUSTOM) was called
+    // and SetBackgroundStyle(wxBG_STYLE_PAINT) was called
     if (m_needsStyleChange)
     {
         SetBackgroundStyle(GetBackgroundStyle());
@@ -3583,7 +3579,7 @@ void wxWindowGTK::GtkSendPaintEvents()
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
 
-        if (!HandleWindowEvent(erase_event) && GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
+        if (!HandleWindowEvent(erase_event) && GetBackgroundStyle() != wxBG_STYLE_PAINT)
         {
             if (!g_eraseGC)
             {
@@ -3603,12 +3599,10 @@ void wxWindowGTK::GtkSendPaintEvents()
         m_clearRegion.Clear();
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
+    wxNcPaintEvent nc_paint_event( this );
     HandleWindowEvent( nc_paint_event );
 
-    wxPaintEvent paint_event( GetId() );
-    paint_event.SetEventObject( this );
+    wxPaintEvent paint_event( this );
     HandleWindowEvent( paint_event );
 
     m_clipPaintRegion = false;
@@ -3705,7 +3699,7 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 
     // apply style change (forceStyle=true so that new style is applied
     // even if the bg colour changed from valid to wxNullColour)
-    if (GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
+    if (GetBackgroundStyle() != wxBG_STYLE_PAINT)
         ApplyWidgetStyle(true);
 
     return true;
@@ -3818,7 +3812,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 {
     wxWindowBase::SetBackgroundStyle(style);
 
-    if (style == wxBG_STYLE_CUSTOM)
+    if (style == wxBG_STYLE_PAINT)
     {
         GdkWindow *window = NULL;
         if (m_wxwindow)

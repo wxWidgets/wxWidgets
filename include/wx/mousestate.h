@@ -110,7 +110,7 @@ public:
     // these functions are mostly used by wxWidgets itself
     void SetX(wxCoord x) { m_x = x; }
     void SetY(wxCoord y) { m_y = y; }
-    void SetPosition(wxPoint pos) { m_x = pos.x, m_y = pos.y; }
+    void SetPosition(const wxPoint& pos) { m_x = pos.x; m_y = pos.y; }
 
     void SetLeftDown(bool down)   { m_leftDown = down; }
     void SetMiddleDown(bool down) { m_middleDown = down; }

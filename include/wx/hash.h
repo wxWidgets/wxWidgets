@@ -40,10 +40,13 @@ union wxHashKeyValue
 // enough, so provide a real forward declaration
 class WXDLLIMPEXP_FWD_BASE wxHashTableBase;
 
+// and clang doesn't like using WXDLLIMPEXP_FWD_BASE inside a typedef.
+class WXDLLIMPEXP_FWD_BASE wxHashTableBase_Node;
+
 class WXDLLIMPEXP_BASE wxHashTableBase_Node
 {
-    friend class WXDLLIMPEXP_FWD_BASE wxHashTableBase;
-    typedef class WXDLLIMPEXP_FWD_BASE wxHashTableBase_Node _Node;
+    friend class wxHashTableBase;
+    typedef class wxHashTableBase_Node _Node;
 public:
     wxHashTableBase_Node( long key, void* value,
                           wxHashTableBase* table );
@@ -116,7 +119,7 @@ private:
     void DoRemoveNode( wxHashTableBase_Node* node );
 
     // destroys data contained in the node if appropriate:
-    // deletes the key if it is a string and destrys
+    // deletes the key if it is a string and destroys
     // the value if m_deleteContents is true
     void DoDestroyNode( wxHashTableBase_Node* node );
 
@@ -272,7 +275,7 @@ private:
         eltype *Delete(long lhash, long key)                                  \
             { return (eltype*)DoDelete(key, lhash); }                         \
     private:                                                                  \
-        virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
+        virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE\
             { delete (eltype*)node->GetData(); }                              \
                                                                               \
         wxDECLARE_NO_COPY_CLASS(hashclass);                                   \

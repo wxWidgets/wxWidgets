@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STARTUP_TIPS
 
@@ -78,7 +75,7 @@ class WXDLLIMPEXP_ADV wxRegTipProvider : public wxTipProvider
 public:
     wxRegTipProvider(const wxString& keyname);
 
-    virtual wxString GetTip();
+    virtual wxString GetTip() wxOVERRIDE;
 };
 
 // Empty implementation for now to keep the linker happy
@@ -164,7 +161,7 @@ wxString wxFileTipProvider::GetTip()
 
         // Break if tip isn't a comment, and isn't an empty string
         // (or only stray space characters).
-        if ( !tip.StartsWith(wxT("#")) && (tip.Trim() != wxEmptyString) )
+        if ( !tip.StartsWith(wxT("#")) && !tip.Trim().empty() )
         {
             break;
         }
@@ -213,7 +210,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     if (!isPda)
     {
         wxFont font = text->GetFont();
-        font.SetPointSize(int(1.6 * font.GetPointSize()));
+        font.SetFractionalPointSize(1.6 * font.GetFractionalPointSize());
         font.SetWeight(wxFONTWEIGHT_BOLD);
         text->SetFont(font);
     }

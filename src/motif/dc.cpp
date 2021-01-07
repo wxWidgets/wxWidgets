@@ -29,7 +29,7 @@ wxMotifDCImpl::wxMotifDCImpl(wxDC *owner)
 {
     m_ok = false;
 
-    m_backgroundMode = wxTRANSPARENT;
+    m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
 }
 
 void wxMotifDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
@@ -87,9 +87,9 @@ void wxMotifDCImpl::DoGetSizeMM( int* width, int* height ) const
     GetSize( &w, &h );
 
     if ( width )
-        *width = int( double(w) / (m_scaleX*m_mm_to_pix_x) );
+        *width = int( double(w) / (m_scaleX*GetMMToPXx()) );
     if ( height )
-        *height = int( double(h) / (m_scaleY*m_mm_to_pix_y) );
+        *height = int( double(h) / (m_scaleY*GetMMToPXy()) );
 }
 
 // Resolution in pixels per logical inch

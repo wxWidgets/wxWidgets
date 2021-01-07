@@ -31,11 +31,11 @@ public:
     wxWindowsPrintNativeData();
     virtual ~wxWindowsPrintNativeData();
 
-    virtual bool TransferTo( wxPrintData &data );
-    virtual bool TransferFrom( const wxPrintData &data );
+    virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
+    virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const;
+    virtual bool Ok() const wxOVERRIDE { return IsOk(); }
+    virtual bool IsOk() const wxOVERRIDE;
 
     void InitializeDevMode(const wxString &printerName = wxEmptyString, WinPrinter* printer = NULL);
     void* GetDevMode() const { return m_devMode; }
@@ -65,12 +65,12 @@ public:
     virtual ~wxWindowsPrintDialog();
 
     bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
-    wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
-    wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
+    wxPrintDialogData& GetPrintDialogData() wxOVERRIDE { return m_printDialogData; }
+    wxPrintData& GetPrintData() wxOVERRIDE { return m_printDialogData.GetPrintData(); }
 
-    virtual wxDC *GetPrintDC();
+    virtual wxDC *GetPrintDC() wxOVERRIDE;
 
 private:
     wxPrintDialogData m_printDialogData;
@@ -102,11 +102,11 @@ public:
     virtual ~wxWindowsPageSetupDialog();
 
     bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
     bool ConvertToNative( wxPageSetupDialogData &data );
     bool ConvertFromNative( wxPageSetupDialogData &data );
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData() { return m_pageSetupData; }
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() wxOVERRIDE { return m_pageSetupData; }
 
 private:
     wxPageSetupDialogData   m_pageSetupData;

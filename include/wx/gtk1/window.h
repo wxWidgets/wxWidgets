@@ -37,13 +37,13 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxASCII_STR(wxPanelNameStr));
     virtual ~wxWindowGTK();
 
     // implement base class (pure) virtual methods
@@ -149,8 +149,8 @@ public:
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // Call after modifing the value of m_hAdjust or m_vAdjust to bring the
-    // scrolbar in sync (this does not generate any wx events)
+    // Call after modifying the value of m_hAdjust or m_vAdjust to bring the
+    // scrollbar in sync (this does not generate any wx events)
     void GtkUpdateScrollbar(int orient);
 
     // Called from GTK signal handlers. it indicates that
@@ -211,7 +211,7 @@ public:
     bool                 m_needsStyleChange:1;  // May not be able to change
                                                 // background style until OnIdle
 
-    // C++ has no virtual methods in the constrcutor of any class but we need
+    // C++ has no virtual methods in the constructor of any class but we need
     // different methods of inserting a child window into a wxFrame,
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
     wxInsertChildFunction  m_insertCallback;

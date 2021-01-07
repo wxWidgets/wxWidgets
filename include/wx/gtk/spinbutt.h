@@ -44,8 +44,6 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    virtual bool Enable( bool enable = true ) wxOVERRIDE;
-
     // implementation
     int m_pos;
 
@@ -55,6 +53,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
 private:
     typedef wxSpinButtonBase base_type;

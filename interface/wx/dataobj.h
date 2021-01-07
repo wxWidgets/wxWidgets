@@ -34,6 +34,9 @@
              A list of filenames.}
     @itemdef{wxDF_HTML,
              An HTML string. This is currently only valid on Mac and MSW.}
+    @itemdef{wxDF_PNG,
+             A PNG file. This is valid only on MSW. This constant is available
+             since wxWidgets 3.1.5.}
     @endDefList
 
     As mentioned above, these standard formats may be passed to any function
@@ -427,40 +430,39 @@ public:
     wxDragResult MyDropTarget::OnData(wxCoord x, wxCoord y,
                                       wxDragResult defaultDragResult)
     {
-        wxDragResult dragResult = wxDropTarget::OnData(x, y, defaultDragResult);
-        if ( dragResult == defaultDragResult )
+        if ( !GetData() )
+            return wxDragNone;
+
+        wxDataObjectComposite *
+            dataobjComp = static_cast<wxDataObjectComposite *>(GetDataObject());
+
+        wxDataFormat format = dataobjComp->GetReceivedFormat();
+        wxDataObject *dataobj = dataobjComp->GetObject(format);
+        switch ( format.GetType() )
         {
-            wxDataObjectComposite *
-                dataobjComp = static_cast<wxDataObjectComposite *>(GetDataObject());
+            case wxDF_BITMAP:
+                {
+                    wxBitmapDataObject *
+                        dataobjBitmap = static_cast<wxBitmapDataObject *>(dataobj);
 
-            wxDataFormat format = dataObjects->GetReceivedFormat();
-            wxDataObject *dataobj = dataobjComp->GetObject(format);
-            switch ( format.GetType() )
-            {
-                case wxDF_BITMAP:
-                    {
-                        wxBitmapDataObject *
-                            dataobjBitmap = static_cast<wxBitmapDataObject *>(dataobj);
+                    ... use dataobj->GetBitmap() ...
+                }
+                break;
 
-                        ... use dataobj->GetBitmap() ...
-                    }
-                    break;
+            case wxDF_FILENAME:
+                {
+                    wxFileDataObject *
+                        dataobjFile = static_cast<wxFileDataObject *>(dataobj);
 
-                case wxDF_FILENAME:
-                    {
-                        wxFileDataObject *
-                            dataobjFile = static_cast<wxFileDataObject *>(dataobj);
+                    ... use dataobj->GetFilenames() ...
+                }
+                break;
 
-                        ... use dataobj->GetFilenames() ...
-                    }
-                    break;
-
-                default:
-                    wxFAIL_MSG( "unexpected data object format" );
-            }
+            default:
+                wxFAIL_MSG( "unexpected data object format" );
         }
 
-        return dragResult;
+        return defaultDragResult;
     }
     @endcode
 
@@ -622,6 +624,42 @@ public:
 
 
 /**
+    @class wxImageDataObject
+
+    wxImageDataObject is a specialization of wxDataObject for image data.
+    It can be used e.g. when you need to put on and retrieve from the clipboard
+    a wxImage with its metadata (like image resolution).
+
+    @since 3.1.5
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see @ref overview_dnd, wxDataObject, wxCustomDataObject, wxBitmapDataObject
+*/
+class wxImageDataObject : public wxCustomDataObject
+{
+public:
+    /**
+        Constructor, optionally passing an image (otherwise use SetImage()
+        later).
+    */
+    explicit wxImageDataObject(const wxImage& image = wxNullImage);
+
+    /**
+        Returns the image associated with the data object.
+    */
+    wxImage GetImage() const;
+
+    /**
+        Sets the image stored by the data object.
+    */
+    void SetImage(const wxImage& image);
+};
+
+
+
+/**
     @class wxURLDataObject
 
     wxURLDataObject is a wxDataObject containing an URL and can be used e.g.
@@ -631,15 +669,17 @@ public:
     wxTheClipboard->SetData(new wxURLDataObject(url));
     @endcode
 
-    @note This class is derived from wxDataObjectComposite on Windows rather
-          than wxTextDataObject on all other platforms.
+    @note The actual base class of this class is not always wxDataObject
+        itself, but rather either wxDataObjectComposite in wxMSW and wxGTK or
+        wxTextDataObject in the other ports. Please don't rely on the exact
+        base class, it is not guaranteed that it won't change in the future.
 
     @library{wxcore}
     @category{dnd}
 
     @see @ref overview_dnd, wxDataObject
 */
-class wxURLDataObject: public wxTextDataObject
+class wxURLDataObject: public wxDataObject
 {
 public:
     /**
@@ -752,14 +792,8 @@ public:
     wxFileDataObject is a specialization of wxDataObject for file names. The
     program works with it just as if it were a list of absolute file names, but
     internally it uses the same format as Explorer and other compatible
-    programs under Windows or GNOME/KDE filemanager under Unix which makes it
+    programs under Windows or GNOME/KDE file manager under Unix which makes it
     possible to receive files from them using this class.
-
-    @warning Under all non-Windows platforms this class is currently
-             "input-only", i.e. you can receive the files from another
-             application, but copying (or dragging) file(s) from a wxWidgets
-             application is not currently supported. PS: GTK2 should work as
-             well.
 
     @library{wxcore}
     @category{dnd}
@@ -790,7 +824,7 @@ public:
     @class wxHTMLDataObject
 
     wxHTMLDataObject is used for working with HTML-formatted text.
-    
+
     @library{wxcore}
     @category{dnd}
 
@@ -808,7 +842,7 @@ public:
         Returns the HTML string.
     */
     virtual wxString GetHTML() const;
-    
+
     /**
         Sets the HTML string.
     */

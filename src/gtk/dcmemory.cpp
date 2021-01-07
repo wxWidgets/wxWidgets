@@ -11,7 +11,7 @@
 
 #include "wx/gtk/dcmemory.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // wxMemoryDCImpl
@@ -40,7 +40,6 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
 
 wxMemoryDCImpl::~wxMemoryDCImpl()
 {
-    g_object_unref(m_context);
 }
 
 void wxMemoryDCImpl::Init()

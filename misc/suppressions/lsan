@@ -1,0 +1,10 @@
+# Leak sanitizer suppressions for wx, use it by setting
+# LSAN_OPTIONS=suppressions=<path-to-this-file>
+
+# Known leaks in libfontconfig.so.1: note that you must have its debug symbols
+# installed for these suppressions to work.
+leak:FcConfigValues
+leak:FcLangSetCreate
+leak:FcPatternObjectInsertElt
+leak:FcValueListCreate
+leak:FcValueSave

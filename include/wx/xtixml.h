@@ -53,12 +53,12 @@ public:
     virtual void DoEndWriteTopLevelEntry( const wxString &name );
 
     // start of writing an object having the passed in ID
-    virtual void DoBeginWriteObject(const wxObject *object, 
+    virtual void DoBeginWriteObject(const wxObject *object,
         const wxClassInfo *classInfo, int objectID, const wxStringToAnyHashMap &metadata );
 
-    // end of writing an toplevel object name param is used for unique 
+    // end of writing an toplevel object name param is used for unique
     // identification within the container
-    virtual void DoEndWriteObject(const wxObject *object, 
+    virtual void DoEndWriteObject(const wxObject *object,
         const wxClassInfo *classInfo, int objectID );
 
     // writes a simple property in the stream format
@@ -80,9 +80,9 @@ public:
     virtual void DoWriteNullObject();
 
     // writes a delegate in the stream format
-    virtual void DoWriteDelegate( const wxObject *object,  
+    virtual void DoWriteDelegate( const wxObject *object,
         const wxClassInfo* classInfo, const wxPropertyInfo *propInfo,
-        const wxObject *eventSink, int sinkObjectID, 
+        const wxObject *eventSink, int sinkObjectID,
         const wxClassInfo* eventSinkClassInfo, const wxHandlerInfo* handlerIndo );
 
 private:

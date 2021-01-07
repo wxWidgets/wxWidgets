@@ -37,10 +37,10 @@ public:
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetItemLabel(const wxString& strName);
+    virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
 
-    virtual void Enable(bool bDoEnable = true);
-    virtual void Check(bool bDoCheck = true);
+    virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
+    virtual void Check(bool bDoCheck = true) wxOVERRIDE;
 
     virtual void SetBitmap(const wxBitmap& bitmap) ;
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
@@ -53,40 +53,9 @@ public:
     void UpdateItemText() ;
     void UpdateItemStatus() ;
 
-    // mark item as belonging to the given radio group
-    void SetAsRadioGroupStart(bool start = true);
-    void SetRadioGroupStart(int start);
-    void SetRadioGroupEnd(int end);
-
-    // return true if this is the starting item of a radio group
-    bool IsRadioGroupStart() const;
-
-    // get the start of the radio group this item belongs to: should not be
-    // called for the starting radio group item itself because it doesn't have
-    // this information
-    int GetRadioGroupStart() const;
-
-    // get the end of the radio group this item belongs to: should be only
-    // called for the starting radio group item, i.e. if IsRadioGroupStart() is
-    // true
-    int GetRadioGroupEnd() const;
-
     wxMenuItemImpl* GetPeer() { return m_peer; }
 private:
     void UncheckRadio() ;
-
-    // the positions of the first and last items of the radio group this item
-    // belongs to or -1: start is the radio group start and is valid for all
-    // but first radio group items (m_isRadioGroupStart == FALSE), end is valid
-    // only for the first one
-    union
-    {
-        int start;
-        int end;
-    } m_radioGroup;
-
-    // does this item start a radio group?
-    bool m_isRadioGroupStart;
 
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 

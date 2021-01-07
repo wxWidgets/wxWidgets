@@ -21,7 +21,8 @@
 #include "wx/imaglist.h"
 #include "wx/window.h"
 
-class WXDLLIMPEXP_FWD_ADV wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimationCtrlBase;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XML wxXmlResource;
@@ -31,6 +32,13 @@ class WXDLLIMPEXP_FWD_CORE wxXmlResourceHandler;
 // Helper macro used by the classes derived from wxXmlResourceHandler but also
 // by wxXmlResourceHandler implementation itself.
 #define XRC_ADD_STYLE(style) AddStyle(wxT(#style), style)
+
+// Flags for GetNodeText().
+enum
+{
+    wxXRC_TEXT_NO_TRANSLATE = 1,
+    wxXRC_TEXT_NO_ESCAPE    = 2
+};
 
 // Abstract base class for the implementation object used by
 // wxXmlResourceHandlerImpl. The real implementation is in
@@ -61,7 +69,7 @@ public:
     virtual wxString GetParamValue(const wxString& param) = 0;
     virtual wxString GetParamValue(const wxXmlNode* node) = 0;
     virtual int GetStyle(const wxString& param = wxT("style"), int defaults = 0) = 0;
-    virtual wxString GetText(const wxString& param, bool translate = true) = 0;
+    virtual wxString GetNodeText(const wxXmlNode *node, int flags = 0) = 0;
     virtual int GetID() = 0;
     virtual wxString GetName() = 0;
     virtual bool GetBool(const wxString& param, bool defaultv = false) = 0;
@@ -74,29 +82,32 @@ public:
     virtual wxPoint GetPosition(const wxString& param = wxT("pos")) = 0;
     virtual wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                                  wxWindow *windowToUse = NULL) = 0;
+    virtual wxSize GetPairInts(const wxString& param) = 0;
     virtual wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT) = 0;
     virtual wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                               const wxArtClient& defaultArtClient = wxART_OTHER,
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                                wxSize size = wxDefaultSize) = 0;
     virtual wxBitmap GetBitmap(const wxXmlNode* node,
-                               const wxArtClient& defaultArtClient = wxART_OTHER,
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                                wxSize size = wxDefaultSize) = 0;
     virtual wxIcon GetIcon(const wxString& param = wxT("icon"),
-                           const wxArtClient& defaultArtClient = wxART_OTHER,
+                           const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                            wxSize size = wxDefaultSize) = 0;
     virtual wxIcon GetIcon(const wxXmlNode* node,
-                           const wxArtClient& defaultArtClient = wxART_OTHER,
+                           const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                            wxSize size = wxDefaultSize) = 0;
     virtual wxIconBundle GetIconBundle(const wxString& param,
-                                       const wxArtClient& defaultArtClient = wxART_OTHER) = 0;
+                                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER)) = 0;
     virtual wxImageList *GetImageList(const wxString& param = wxT("imagelist")) = 0;
 
 #if wxUSE_ANIMATIONCTRL
-    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation")) = 0;
+    virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                                      wxAnimationCtrlBase* ctrl = NULL) = 0;
 #endif
 
     virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL) = 0;
     virtual bool GetBoolAttr(const wxString& attr, bool defaultv) = 0;
+    virtual wxString GetFilePath(const wxXmlNode* node) = 0;
     virtual void SetupWindow(wxWindow *wnd) = 0;
     virtual void CreateChildren(wxObject *parent, bool this_hnd_only = false) = 0;
     virtual void CreateChildrenPrivately(wxObject *parent,
@@ -253,9 +264,14 @@ protected:
     {
         return GetImpl()->GetStyle(param, defaults);
     }
+    wxString GetNodeText(const wxXmlNode *node, int flags = 0)
+    {
+        return GetImpl()->GetNodeText(node, flags);
+    }
     wxString GetText(const wxString& param, bool translate = true)
     {
-        return GetImpl()->GetText(param, translate);
+        return GetImpl()->GetNodeText(GetImpl()->GetParamNode(param),
+                                      translate ? 0 : wxXRC_TEXT_NO_TRANSLATE);
     }
     int GetID() const
     {
@@ -296,36 +312,40 @@ protected:
     {
         return GetImpl()->GetDimension(param, defaultv, windowToUse);
     }
+    wxSize GetPairInts(const wxString& param)
+    {
+        return GetImpl()->GetPairInts(param);
+    }
     wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT)
     {
         return GetImpl()->GetDirection(param, dir);
     }
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetBitmap(param, defaultArtClient, size);
     }
     wxBitmap GetBitmap(const wxXmlNode* node,
-                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                        wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetBitmap(node, defaultArtClient, size);
     }
     wxIcon GetIcon(const wxString& param = wxT("icon"),
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetIcon(param, defaultArtClient, size);
     }
     wxIcon GetIcon(const wxXmlNode* node,
-                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER),
                    wxSize size = wxDefaultSize)
     {
         return GetImpl()->GetIcon(node, defaultArtClient, size);
     }
     wxIconBundle GetIconBundle(const wxString& param,
-                               const wxArtClient& defaultArtClient = wxART_OTHER)
+                               const wxArtClient& defaultArtClient = wxASCII_STR(wxART_OTHER))
     {
         return GetImpl()->GetIconBundle(param, defaultArtClient);
     }
@@ -335,9 +355,10 @@ protected:
     }
 
 #if wxUSE_ANIMATIONCTRL
-    wxAnimation* GetAnimation(const wxString& param = wxT("animation"))
+    wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
+                              wxAnimationCtrlBase* ctrl = NULL)
     {
-        return GetImpl()->GetAnimation(param);
+        return GetImpl()->GetAnimation(param, ctrl);
     }
 #endif
 
@@ -349,6 +370,10 @@ protected:
     bool GetBoolAttr(const wxString& attr, bool defaultv)
     {
         return GetImpl()->GetBoolAttr(attr, defaultv);
+    }
+    wxString GetFilePath(const wxXmlNode* node)
+    {
+        return GetImpl()->GetFilePath(node);
     }
     void SetupWindow(wxWindow *wnd)
     {
@@ -390,7 +415,7 @@ protected:
     wxObject* GetInstance() const             { return m_instance; }
     wxWindow* GetParentAsWindow() const       { return m_parentAsWindow; }
 
-    
+
     wxArrayString m_styleNames;
     wxArrayInt m_styleValues;
 

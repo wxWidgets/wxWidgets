@@ -238,7 +238,7 @@ public:
             direction, @false if it did not scroll.
     */
     virtual bool ScrollLines(int lines);
-    
+
     /**
         Scroll the gallery contents by some fine-grained amount.
 
@@ -297,3 +297,9 @@ public:
     */
     void SetGalleryItem(wxRibbonGalleryItem* item);
 };
+
+
+wxEventType wxEVT_RIBBONGALLERY_HOVER_CHANGED;
+wxEventType wxEVT_RIBBONGALLERY_SELECTED;
+wxEventType wxEVT_RIBBONGALLERY_CLICKED;
+

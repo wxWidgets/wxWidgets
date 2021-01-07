@@ -46,22 +46,6 @@ or directory, font or colour, ...) directly from the window containing them:
 @appearance_brief{wxFontPickerCtrl,fontpickerctrl}
 
 
-@section page_screenshots_adv Advanced Controls
-
-These controls are considered to be less common and are defined in
-@ref page_libs_wxadv "adv" library:
-
-@appearance_brief{wxActivityIndicator,activityindicator}
-@appearance_brief{wxAnimationCtrl,animationctrl}
-@genericAppearance_brief{wxBannerWindow,bannerwindow}
-@appearance_brief{wxBitmapComboBox,bitmapcombobox}
-@appearance_brief{wxCalendarCtrl,calendarctrl}
-@appearance_brief{wxComboCtrl,comboctrl}
-@appearance_brief{wxCommandLinkButton,commandlinkbutton}
-@appearance_brief{wxHyperlinkCtrl,hyperlinkctrl}
-@appearance_brief{wxOwnerDrawnComboBox,ownerdrawncombobox}
-
-
 @section page_screenshots_book Book Controls
 
 Book controls contain several pages (also called tabs in wxNotebook case) and
@@ -86,9 +70,18 @@ column) list:
 
 @section page_screenshots_misc Miscellaneous Other Controls
 
+@appearance_brief{wxActivityIndicator,activityindicator}
+@appearance_brief{wxAnimationCtrl,animationctrl}
+@genericAppearance_brief{wxBannerWindow,bannerwindow}
+@appearance_brief{wxBitmapComboBox,bitmapcombobox}
+@appearance_brief{wxCalendarCtrl,calendarctrl}
 @appearance_brief{wxCollapsiblePane,collapsiblepane}
+@appearance_brief{wxComboCtrl,comboctrl}
+@appearance_brief{wxCommandLinkButton,commandlinkbutton}
 @appearance_brief{wxDirCtrl,genericdirctrl}
 @appearance_brief{wxFileCtrl,filectrl}
+@appearance_brief{wxHyperlinkCtrl,hyperlinkctrl}
+@appearance_brief{wxOwnerDrawnComboBox,ownerdrawncombobox}
 @appearance_brief{wxRichTextCtrl,richtextctrl}
 @appearance_brief{wxRichToolTip,richtooltip}
 

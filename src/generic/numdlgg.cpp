@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_NUMBERDLG
 
@@ -35,6 +32,7 @@
     #include "wx/textctrl.h"
     #include "wx/intl.h"
     #include "wx/sizer.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #if wxUSE_STATLINE

@@ -19,8 +19,62 @@
 
 #include "wx/osx/core/private.h"
 #include "wx/osx/cocoa/private.h"
+#include "wx/osx/private/available.h"
 
 #import <AppKit/NSColor.h>
+#import <Foundation/Foundation.h>
+
+
+static int wxOSXGetUserDefault(NSString* key, int defaultValue)
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    if (!defaults)
+    {
+        return defaultValue;
+    }
+
+    id setting = [defaults objectForKey: key];
+    if (!setting)
+    {
+        return defaultValue;
+    }
+
+    return [setting intValue];
+}
+
+// ----------------------------------------------------------------------------
+// wxSystemAppearance
+// ----------------------------------------------------------------------------
+
+wxString wxSystemAppearance::GetName() const
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        return wxStringWithNSString([[NSApp effectiveAppearance] name]);
+    }
+#endif
+
+    return wxString();
+}
+
+bool wxSystemAppearance::IsDark() const
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        const NSAppearanceName
+            appearanceName = [[NSApp effectiveAppearance]
+                                bestMatchFromAppearancesWithNames:
+                                @[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+
+        return [appearanceName isEqualToString:NSAppearanceNameDarkAqua];
+    }
+#endif
+
+    // Fall back on the generic method when not running under 10.14.
+    return IsUsingDarkBackground();
+}
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -32,6 +86,8 @@
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+    wxOSXEffectiveAppearanceSetter helper;
+    
     NSColor* sysColor = nil;
     switch( index )
     {
@@ -54,9 +110,14 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowFrameColor];
         break;
     case wxSYS_COLOUR_WINDOW:
-        return wxColour(wxMacCreateCGColorFromHITheme( 15 /* kThemeBrushDocumentWindowBackground */ )) ;
+        sysColor = [NSColor controlBackgroundColor];
+        break;
     case wxSYS_COLOUR_BTNFACE:
-        return wxColour(wxMacCreateCGColorFromHITheme( 3 /* kThemeBrushDialogBackgroundActive */));
+        if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
+            sysColor = [NSColor windowBackgroundColor];
+        else
+            sysColor = [NSColor controlColor];
+        break;
     case wxSYS_COLOUR_LISTBOX:
         sysColor = [NSColor controlBackgroundColor];
         break;
@@ -67,8 +128,8 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
-    case wxSYS_COLOUR_INFOTEXT:
     case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+    case wxSYS_COLOUR_INFOTEXT:
     case wxSYS_COLOUR_LISTBOXTEXT:
         sysColor = [NSColor controlTextColor];
         break;
@@ -102,8 +163,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowBackgroundColor];
         break;
     case wxSYS_COLOUR_HOTLIGHT:
-        // OSX doesn't change color on mouse hover
-        sysColor = [NSColor controlTextColor];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+        {
+            sysColor = [NSColor linkColor];
+        }
+        else
+#endif
+        {
+            // OSX doesn't change color on mouse hover
+            sysColor = [NSColor controlTextColor];
+        }
         break;
     case wxSYS_COLOUR_MENUHILIGHT:
         sysColor = [NSColor selectedMenuItemColor];
@@ -135,17 +205,15 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEVICE_DEFAULT_FONT :
         case wxSYS_DEFAULT_GUI_FONT :
             {
-                return *wxSMALL_FONT ;
-            } ;
-            break ;
+                return wxFont(wxOSX_SYSTEM_FONT_SMALL) ;
+            }
         case wxSYS_OEM_FIXED_FONT :
         case wxSYS_ANSI_FIXED_FONT :
         case wxSYS_SYSTEM_FIXED_FONT :
         default :
             {
-                return *wxNORMAL_FONT ;
-            } ;
-            break ;
+                return wxFont(wxOSX_SYSTEM_FONT_FIXED) ;
+            }
 
     }
     return *wxNORMAL_FONT;
@@ -156,7 +224,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // ----------------------------------------------------------------------------
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUNUSED(win))
 {
     int value;
 
@@ -230,6 +298,32 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(w
             // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway
             // but rather rely on the 'click-count' by the system delivered in a mouse event
             return 500;
+
+        case wxSYS_CARET_ON_MSEC:
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriodOn", -1);
+             if (value > 0)
+                 return value;
+
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriod", -1);
+             if (value > 0)
+                 return value / 2;
+
+             return -1;
+
+        case wxSYS_CARET_OFF_MSEC:
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriodOff", -1);
+             if (value > 0)
+                 return value;
+
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriod", -1);
+             if (value > 0)
+                 return value / 2;
+
+             return -1;
+
+        case wxSYS_CARET_TIMEOUT_MSEC:
+             // On MacOS X, carets don't stop blinking after user interactions.
+             return -1;
 
         default:
             return -1;  // unsupported metric

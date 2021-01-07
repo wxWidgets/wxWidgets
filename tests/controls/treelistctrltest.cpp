@@ -14,9 +14,6 @@
 
 #if wxUSE_TREELISTCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/treelist.h"
 
@@ -31,8 +28,8 @@ class TreeListCtrlTestCase : public CppUnit::TestCase
 public:
     TreeListCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( TreeListCtrlTestCase );

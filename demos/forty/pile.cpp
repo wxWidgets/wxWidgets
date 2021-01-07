@@ -17,10 +17,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -155,13 +151,14 @@ Card* Pile::RemoveTopCard()
 //+-------------------------------------------------------------+
 Card* Pile::RemoveTopCard(wxDC& dc, int xOffset, int yOffset)
 {
-    int topX, topY, x, y;
+    int topX, topY;
 
     GetTopCardPos(topX, topY);
     Card* card = RemoveTopCard();
 
     if (card)
     {
+        int x, y;
         card->Erase(dc, topX - xOffset, topY - yOffset);
         GetTopCardPos(x, y);
         if (m_topCard < 0)

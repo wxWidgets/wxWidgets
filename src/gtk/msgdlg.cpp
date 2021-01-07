@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MSGDLG && !defined(__WXGPE__)
 
@@ -25,7 +22,6 @@
 
 #include "wx/modalhook.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
 #include "wx/gtk/private/mnemonics.h"
@@ -50,27 +46,47 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 wxString wxMessageDialog::GetDefaultYesLabel() const
 {
-    return GTK_STOCK_YES;
+#ifdef __WXGTK4__
+    return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_YES));
+#else
+    return "gtk-yes";
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultNoLabel() const
 {
-    return GTK_STOCK_NO;
+#ifdef __WXGTK4__
+    return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_NO));
+#else
+    return "gtk-no";
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultOKLabel() const
 {
-    return GTK_STOCK_OK;
+#ifdef __WXGTK4__
+    return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OK));
+#else
+    return "gtk-ok";
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultCancelLabel() const
 {
-    return GTK_STOCK_CANCEL;
+#ifdef __WXGTK4__
+    return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL));
+#else
+    return "gtk-cancel";
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultHelpLabel() const
 {
-    return GTK_STOCK_HELP;
+#ifdef __WXGTK4__
+    return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_HELP));
+#else
+    return "gtk-help";
+#endif
 }
 
 void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
@@ -83,12 +99,20 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
     }
     else // stock label
     {
+#ifdef __WXGTK4__
+        var = wxConvertMnemonicsToGTK(wxGetStockLabel(stockId));
+#else
         var = wxGetStockGtkID(stockId);
+#endif
     }
 }
 
 void wxMessageDialog::GTKCreateMsgDialog()
 {
+    // Avoid crash if wxMessageBox() is called before GTK is initialized
+    if (g_type_class_peek(GDK_TYPE_DISPLAY) == NULL)
+        return;
+
     GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
 
     GtkMessageType type = GTK_MESSAGE_ERROR;
@@ -255,7 +279,7 @@ int wxMessageDialog::ShowModal()
     {
         default:
             wxFAIL_MSG(wxT("unexpected GtkMessageDialog return code"));
-            // fall through
+            wxFALLTHROUGH;
 
         case GTK_RESPONSE_CANCEL:
         case GTK_RESPONSE_DELETE_EVENT:

@@ -29,59 +29,80 @@ public:
     // default copy ctor and dtor are ok
 
     // accessors
-    virtual bool IsOk() const { return m_cgColour != NULL; }
+    virtual ChannelType Red() const wxOVERRIDE;
+    virtual ChannelType Green() const wxOVERRIDE;
+    virtual ChannelType Blue() const wxOVERRIDE;
+    virtual ChannelType Alpha() const wxOVERRIDE;
 
-    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Red() const { return m_red; }
-    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Green() const { return m_green; }
-    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Blue() const { return m_blue; }
-    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Alpha() const { return m_alpha; }
+    virtual bool IsSolid() const wxOVERRIDE;
 
     // comparison
     bool operator == (const wxColour& colour) const;
-
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
-    CGColorRef GetPixel() const { return m_cgColour; }
+    // CoreGraphics CGColor
+    // --------------------
 
-    CGColorRef GetCGColor() const { return m_cgColour; }
-    CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); }
+    // This ctor does take ownership of the color.
+    wxColour( CGColorRef col );
+
+    // don't take ownership of the returned value
+    CGColorRef GetCGColor() const;
+
+    // do take ownership of the returned value
+    CGColorRef CreateCGColor() const { return wxCFRetain(GetCGColor()); }
 
 #if wxOSX_USE_COCOA_OR_CARBON
+    // Quickdraw RGBColor
+    // ------------------
+    wxColour(const RGBColor& col);
     void GetRGBColor( RGBColor *col ) const;
 #endif
 
-    // Mac-specific ctor and assignment operator from the native colour
-    // assumes ownership of CGColorRef
-    wxColour( CGColorRef col );
-#if wxOSX_USE_COCOA_OR_CARBON
-    wxColour(const RGBColor& col);
-    wxColour& operator=(const RGBColor& col);
-#endif
 #if wxOSX_USE_COCOA
+    // NSColor Cocoa
+    // -------------
+
     // This ctor does not take ownership of the color.
     explicit wxColour(WX_NSColor color);
     WX_NSColor OSXGetNSColor() const;
+    WX_NSImage OSXGetNSPatternImage() const;
 #endif
-    wxColour& operator=(CGColorRef col);
-    wxColour& operator=(const wxColour& col);
 
 protected :
     virtual void
-    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a);
-#if wxOSX_USE_COCOA_OR_CARBON
-    void InitRGBColor( const RGBColor& col );
-#endif
-    void InitCGColorRef( CGColorRef col );
+    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) wxOVERRIDE;
+
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
-    wxCFRef<CGColorRef>     m_cgColour;
-
-    ChannelType             m_red;
-    ChannelType             m_blue;
-    ChannelType             m_green;
-    ChannelType             m_alpha;
 
     wxDECLARE_DYNAMIC_CLASS(wxColour);
+};
+
+class wxColourRefData : public wxGDIRefData
+{
+public:
+    wxColourRefData() {}
+    virtual ~wxColourRefData() {}
+
+    virtual CGFloat Red() const = 0;
+    virtual CGFloat Green() const = 0;
+    virtual CGFloat Blue() const = 0;
+    virtual CGFloat Alpha() const = 0;
+
+    virtual bool IsSolid() const
+        { return true; }
+
+    virtual CGColorRef GetCGColor() const = 0;
+
+    virtual wxColourRefData* Clone() const = 0;
+
+#if wxOSX_USE_COCOA
+    virtual WX_NSColor GetNSColor() const;
+    virtual WX_NSImage GetNSPatternImage() const;
+#endif
 };
 
 #endif

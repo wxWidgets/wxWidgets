@@ -11,28 +11,32 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/colordlg.h"
 
+#include <QtWidgets/QColorDialog>
+
 class wxQtColorDialog : public wxQtEventSignalHandler< QColorDialog, wxDialog >
 {
 public:
     wxQtColorDialog( wxWindow *parent, wxDialog *handler)
-        : wxQtEventSignalHandler(parent, handler)
+        : wxQtEventSignalHandler<QColorDialog,wxDialog>(parent, handler)
         { }
 };
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data )
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog,wxDialog)
+
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data )
 {
     m_qtWindow = new wxQtColorDialog( parent, this );
 
-    if(data)
+    if ( data )
         m_data = *data;
 
     if ( m_data.GetChooseFull() )
     {
         for (int i=0; i<wxColourData::NUM_CUSTOM; i++)
-            QColorDialog::setCustomColor(i, m_data.GetCustomColour(i).GetHandle());
+            QColorDialog::setCustomColor(i, m_data.GetCustomColour(i).GetQColor());
     }
 
-    GetHandle()->setCurrentColor(m_data.GetColour().GetHandle());
+    static_cast<QColorDialog*>(m_qtWindow)->setCurrentColor(m_data.GetColour().GetQColor());
 
     return wxTopLevelWindow::Create( parent, wxID_ANY, "");
 }
@@ -40,10 +44,14 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data )
 wxColourData &wxColourDialog::GetColourData()
 {
     for (int i=0; i<wxColourData::NUM_CUSTOM; i++)
-        m_data.SetCustomColour(i, GetHandle()->customColor(i));
-    
-    m_data.SetColour(GetHandle()->currentColor());
-    
+        m_data.SetCustomColour(i, GetQColorDialog()->customColor(i));
+
+    m_data.SetColour(GetQColorDialog()->currentColor());
+
     return m_data;
 }
 
+QColorDialog *wxColourDialog::GetQColorDialog() const
+{
+    return static_cast<QColorDialog *>(m_qtWindow);
+}

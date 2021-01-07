@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 
@@ -92,7 +89,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // update internal arg[cv] as DFB may have removed processed options:
     this->argc = argc;
+#if wxUSE_UNICODE
+    this->argv.Init(argc, argv);
+#else
     this->argv = argv;
+#endif
 
     if ( !wxIDirectFB::Get() )
         return false;

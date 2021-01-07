@@ -68,7 +68,7 @@ enum wxSystemColour
     wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading colour on push buttons.
     wxSYS_COLOUR_GRAYTEXT,            //!< Colour of greyed (disabled) text.
     wxSYS_COLOUR_BTNTEXT,             //!< Colour of the text on push buttons.
-    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in active captions.
+    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in inactive captions.
     wxSYS_COLOUR_BTNHIGHLIGHT,        //!< Highlight colour for buttons.
     wxSYS_COLOUR_3DDKSHADOW,          //!< Dark shadow colour for three-dimensional display elements.
     wxSYS_COLOUR_3DLIGHT,             //!< Light colour for three-dimensional display elements.
@@ -78,14 +78,14 @@ enum wxSystemColour
     wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
 
     /**
-        Right side colour in the color gradient of an active window's title bar.
-        @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an active window's title
+        bar. @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
 
     /**
-        Right side colour in the color gradient of an inactive window's title bar.
-        @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an inactive window's title
+        bar. @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
 
@@ -97,7 +97,7 @@ enum wxSystemColour
 
     /**
         The background colour for the menu bar when menus appear as flat menus.
-        However, @c wxSYS_COLOUR_MENU continues to specify the background color of the menu popup.
+        However, @c wxSYS_COLOUR_MENU continues to specify the background colour of the menu popup.
     */
     wxSYS_COLOUR_MENUBAR,
 
@@ -191,7 +191,43 @@ enum wxSystemMetric
                               //!< visually in situations where it would otherwise present the information
                               //!< only in audible form; zero otherwise.
     wxSYS_SWAP_BUTTONS,       //!< Non-zero if the meanings of the left and right mouse buttons are swapped; zero otherwise.
-    wxSYS_DCLICK_MSEC         //!< Maximal time, in milliseconds, which may pass between subsequent clicks for a double click to be generated.
+    wxSYS_DCLICK_MSEC,        //!< Maximal time, in milliseconds, which may pass between subsequent clicks for a double click to be generated.
+
+    /**
+        Time, in milliseconds, for how long a blinking caret should
+        stay visible during a single blink cycle before it disappears.
+
+        If this value is zero, caret should be visible all the time
+        instead of blinking.  If the value is negative, the platform
+        does not support the user setting.
+
+        @since 3.1.1
+    */
+    wxSYS_CARET_ON_MSEC,
+
+    /**
+        Time, in milliseconds, for how long a blinking caret should
+        stay invisible during a single blink cycle before it reappears.
+
+        If this value is zero, caret should be visible all the time
+        instead of blinking.  If the value is negative, the platform
+        does not support the user setting.
+
+        @since 3.1.1
+    */
+    wxSYS_CARET_OFF_MSEC,
+
+    /**
+        Time, in milliseconds, for how long a caret should blink after
+        a user interaction.  After this timeout has expired, the caret
+        should stay continuously visible until the user interacts with
+        the caret again (for example by entering, deleting or cutting
+        text).  If this value is negative, carets should blink forever;
+        if it is zero, carets should not blink at all.
+
+        @since 3.1.1
+    */
+    wxSYS_CARET_TIMEOUT_MSEC
 };
 
 /**
@@ -219,11 +255,60 @@ enum wxSystemScreenType
 
 
 /**
+    Provides information about the current system appearance.
+
+    An object of this class can be retrieved using
+    wxSystemSettings::GetAppearance() and can then be queried for some aspects
+    of the current system appearance, notably whether the system is using a
+    dark theme, i.e. a theme with predominantly dark background.
+
+    This is useful for custom controls that don't use the standard system
+    colours, as they need to adjust the colours used for drawing them to fit in
+    the system look.
+
+    @since 3.1.3
+ */
+class wxSystemAppearance
+{
+public:
+    /**
+        Return the name if available or empty string otherwise.
+
+        This is currently only implemented for macOS and returns
+        a not necessarily user-readable string such as "NSAppearanceNameAqua"
+        there and an empty string under all the other platforms.
+     */
+    wxString GetName() const;
+
+    /**
+        Return true if the current system there is explicitly recognized as
+        being a dark theme or if the default window background is dark.
+
+        This method should be used to check whether custom colours more
+        appropriate for the default (light) or dark appearance should be used.
+     */
+    bool IsDark() const;
+
+    /**
+        Return true if the default window background is significantly darker
+        than foreground.
+
+        This is used by IsDark() if there is no platform-specific way to
+        determine whether a dark mode is being used and is generally not very
+        useful to call directly.
+
+        @see wxColour::GetLuminance()
+     */
+    bool IsUsingDarkBackground() const;
+};
+
+
+/**
     @class wxSystemSettings
 
     wxSystemSettings allows the application to ask for details about the system.
 
-    This can include settings such as standard colours, fonts, and user interface 
+    This can include settings such as standard colours, fonts, and user interface
     element sizes.
 
     @library{wxcore}
@@ -231,7 +316,7 @@ enum wxSystemScreenType
 
     @see wxFont, wxColour, wxSystemOptions
 */
-class wxSystemSettings : public wxObject
+class wxSystemSettings
 {
 public:
     /**
@@ -245,9 +330,9 @@ public:
     /**
         Returns a system colour.
 
-        @param index 
+        @param index
             Can be one of the ::wxSystemColour enum values.
-            
+
         @return
             The returned colour is always valid.
     */
@@ -256,9 +341,9 @@ public:
     /**
         Returns a system font.
 
-        @param index 
+        @param index
             Can be one of the ::wxSystemFont enum values.
-            
+
         @return
             The returned font is always valid.
     */
@@ -290,6 +375,13 @@ public:
         The return value is one of the ::wxSystemScreenType enum values.
     */
     static wxSystemScreenType GetScreenType();
+
+    /**
+        Returns the object describing the current system appearance.
+
+        @since 3.1.3
+     */
+    static wxSystemAppearance GetAppearance();
 
     /**
         Returns @true if the port has certain feature.

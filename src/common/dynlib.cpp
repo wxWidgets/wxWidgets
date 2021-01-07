@@ -22,9 +22,6 @@
 
 #include  "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DYNLIB_CLASS
 
@@ -86,11 +83,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 
     if ( m_handle == 0 && !(flags & wxDL_QUIET) )
     {
-#ifdef wxHAVE_DYNLIB_ERROR
-        Error();
-#else
-        wxLogSysError(_("Failed to load shared library '%s'"), libname.c_str());
-#endif
+        ReportError(_("Failed to load shared library '%s'"), libname);
     }
 
     return IsLoaded();
@@ -114,12 +107,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
     void *symbol = DoGetSymbol(name, success);
     if ( !symbol )
     {
-#ifdef wxHAVE_DYNLIB_ERROR
-        Error();
-#else
-        wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
-                      name.c_str());
-#endif
+        ReportError(_("Couldn't find symbol '%s' in a dynamic library"), name);
     }
 
     return symbol;
@@ -223,8 +211,6 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         suffix << wxT("_gcc");
     #elif defined(__VISUALC__)
         suffix << wxT("_vc");
-    #elif defined(__BORLANDC__)
-        suffix << wxT("_bcc");
     #endif
 #endif
 
@@ -236,6 +222,8 @@ wxString wxDynamicLibrary::GetPluginsDirectory()
 {
 #ifdef __UNIX__
     wxString format = wxGetInstallPrefix();
+    if ( format.empty() )
+        return wxEmptyString;
     wxString dir;
     format << wxFILE_SEP_PATH
            << wxT("lib") << wxFILE_SEP_PATH

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/filefn.h"
 
@@ -81,8 +78,9 @@
     #include <fab.h>
 #endif
 
-// TODO: Borland probably has _wgetcwd as well?
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    wxDECL_FOR_STRICT_MINGW32(wchar_t*, _wgetcwd, (wchar_t*, int))
+
     #define HAVE_WGETCWD
 #endif
 
@@ -107,48 +105,6 @@ static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wrappers around standard POSIX functions
-// ----------------------------------------------------------------------------
-
-#if wxUSE_UNICODE && defined __BORLANDC__ \
-    && __BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551
-
-// BCC 5.5 and 5.5.1 have a bug in _wopen where files are created read only
-// regardless of the mode parameter. This hack works around the problem by
-// setting the mode with _wchmod.
-//
-int wxCRT_OpenW(const wchar_t *pathname, int flags, mode_t mode)
-{
-    int moreflags = 0;
-
-    // we only want to fix the mode when the file is actually created, so
-    // when creating first try doing it O_EXCL so we can tell if the file
-    // was already there.
-    if ((flags & O_CREAT) && !(flags & O_EXCL) && (mode & wxS_IWUSR) != 0)
-        moreflags = O_EXCL;
-
-    int fd = _wopen(pathname, flags | moreflags, mode);
-
-    // the file was actually created and needs fixing
-    if (fd != -1 && (flags & O_CREAT) != 0 && (mode & wxS_IWUSR) != 0)
-    {
-        close(fd);
-        _wchmod(pathname, mode);
-        fd = _wopen(pathname, flags & ~(O_EXCL | O_CREAT));
-    }
-    // the open failed, but it may have been because the added O_EXCL stopped
-    // the opening of an existing file, so try again without.
-    else if (fd == -1 && moreflags != 0)
-    {
-        fd = _wopen(pathname, flags & ~O_CREAT);
-    }
-
-    return fd;
-}
-
-#endif
 
 // ----------------------------------------------------------------------------
 // wxPathList
@@ -794,79 +750,14 @@ wxString wxPathOnly (const wxString& path)
 // and back again - or we get nasty problems with delimiters.
 // Also, convert to lower case, since case is significant in UNIX.
 
-#if defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
+#ifdef __WXOSX__
 
-#define kDefaultPathStyle kCFURLPOSIXPathStyle
-
-wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent )
+CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path)
 {
-    CFURLRef fullURLRef;
-    fullURLRef = CFURLCreateFromFSRef(NULL, fsRef);
-    if ( fullURLRef == NULL)
-        return wxEmptyString;
-    
-    if ( additionalPathComponent )
-    {
-        CFURLRef parentURLRef = fullURLRef ;
-        fullURLRef = CFURLCreateCopyAppendingPathComponent(NULL, parentURLRef,
-            additionalPathComponent,false);
-        CFRelease( parentURLRef ) ;
-    }
-    wxCFStringRef cfString( CFURLCopyFileSystemPath(fullURLRef, kDefaultPathStyle ));
-    CFRelease( fullURLRef ) ;
-
-    return wxCFStringRef::AsStringWithNormalizationFormC(cfString);
-}
-
-OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef )
-{
-    OSStatus err = noErr ;
-    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(path));
+    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(path)));
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kDefaultPathStyle, false);
-    CFRelease( cfMutableString );
-    if ( NULL != url )
-    {
-        if ( CFURLGetFSRef(url, fsRef) == false )
-            err = fnfErr ;
-        CFRelease( url ) ;
-    }
-    else
-    {
-        err = fnfErr ;
-    }
-    return err ;
+    return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false);
 }
-
-wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname )
-{
-    wxCFStringRef cfname( CFStringCreateWithCharacters( kCFAllocatorDefault,
-                                                      uniname->unicode,
-                                                      uniname->length ) );
-    return wxCFStringRef::AsStringWithNormalizationFormC(cfname);
-}
-
-#ifndef __LP64__
-
-wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
-{
-    FSRef fsRef ;
-    if ( FSpMakeFSRef( spec , &fsRef) == noErr )
-    {
-        return wxMacFSRefToPath( &fsRef ) ;
-    }
-    return wxEmptyString ;
-}
-
-void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
-{
-    OSStatus err = noErr;
-    FSRef fsRef;
-    wxMacPathToFSRef( path , &fsRef );
-    err = FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
-    verify_noerr( err );
-}
-#endif
 
 #endif // __WXMAC__
 
@@ -1042,7 +933,11 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 
-    wxDoCopyFile(fileIn, fbuf, file2, overwrite);
+    if ( !wxDoCopyFile(fileIn, fbuf, file2, overwrite) )
+    {
+        wxLogError(_("Error copying the file '%s' to '%s'."), file1, file2);
+        return false;
+    }
 
 #if defined(__WXMAC__)
     // copy the resource fork of the file too if it's present
@@ -1137,7 +1032,6 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) \
- || defined(__BORLANDC__) \
  || defined(__GNUWIN32__)
     int res = wxRemove(file);
 #elif defined(__WXMAC__)
@@ -1157,7 +1051,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #if defined(__WXMAC__) && !defined(__UNIX__)
     if ( mkdir(dir.fn_str(), 0) != 0 )
 
-    // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
+    // assume mkdir() has 2 args on all platforms
     // for the GNU compiler
 #elif (!defined(__WINDOWS__)) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
@@ -1169,7 +1063,7 @@ bool wxMkdir(const wxString& dir, int perm)
   #else
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
   #endif
-#else  // !MSW and !OS/2 VAC++
+#else  // MSW and VC++
     wxUnusedVar(perm);
     if ( wxMkDir(dir.fn_str()) != 0 )
 #endif // !MSW/MSW
@@ -1186,7 +1080,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
 #else
-    if ( wxRmDir(dir.fn_str()) != 0 )
+    if ( wxRmDir(dir) != 0 )
     {
         wxLogSysError(_("Directory '%s' couldn't be deleted"), dir);
         return false;
@@ -1593,8 +1487,7 @@ int WXDLLIMPEXP_BASE wxParseCommonDialogsFilter(const wxString& filterStr,
 static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 {
     // quoting the MSDN: "To obtain a handle to a directory, call the
-    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag", but this
-    // doesn't work under Win9x/ME but then it's not needed there anyhow
+    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag"
     const DWORD dwAttr = ::GetFileAttributes(path.t_str());
     if ( dwAttr == INVALID_FILE_ATTRIBUTES )
     {
@@ -1602,7 +1495,7 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
         return false;
     }
 
-    HANDLE h = ::CreateFile
+    const HANDLE h = ::CreateFile
                  (
                     path.t_str(),
                     access,

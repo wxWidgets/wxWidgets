@@ -28,18 +28,11 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/treeentry_gtk.h"
 #include "wx/gtk/private/treeview.h"
-
-#include <gdk/gdkkeysyms.h>
-#ifdef __WXGTK3__
-#include <gdk/gdkkeysyms-compat.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // data
@@ -133,9 +126,9 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
 {
-    if ((gdk_event->keyval == GDK_Return) ||
-        (gdk_event->keyval == GDK_ISO_Enter) ||
-        (gdk_event->keyval == GDK_KP_Enter))
+    if ((gdk_event->keyval == GDK_KEY_Return) ||
+        (gdk_event->keyval == GDK_KEY_ISO_Enter) ||
+        (gdk_event->keyval == GDK_KEY_KP_Enter))
     {
         int index = -1;
         if (!listbox->HasMultipleSelection())
@@ -275,16 +268,15 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_scrolled_window_new( NULL, NULL );
     g_object_ref(m_widget);
+
+    GtkPolicyType vPolicy = GTK_POLICY_AUTOMATIC;
     if (style & wxLB_ALWAYS_SB)
-    {
-      gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS );
-    }
-    else
-    {
-      gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-    }
+        vPolicy = GTK_POLICY_ALWAYS;
+    else if (style & wxLB_NO_SB)
+        vPolicy = GTK_POLICY_NEVER;
+
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_widget),
+        GTK_POLICY_AUTOMATIC, vPolicy);
 
 
     GTKScrolledWindowSetBorder(m_widget, style);
@@ -505,6 +497,25 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     // this returns false if iter is invalid (e.g. deleting item at end) but
     // since we don't use iter, we ignore the return value
     gtk_list_store_remove(m_liststore, &iter);
+
+#ifdef __WXGTK3__
+    // Invalidate selection in a single-selection control for consistency with
+    // MSW and GTK+ 2 where this happens automatically when deleting the
+    // selected item or any item before it.
+    if ( !HasMultipleSelection() )
+    {
+        const int sel = GetSelection();
+        if ( sel != wxNOT_FOUND && static_cast<unsigned>(sel) >= n )
+        {
+            // Don't call SetSelection() from here, it's not totally clear if
+            // it is safe to do, so just do this at GTK+ level.
+            gtk_tree_selection_unselect_all
+            (
+                gtk_tree_view_get_selection(m_treeview)
+            );
+        }
+    }
+#endif // __WXGTK3__
 }
 
 // ----------------------------------------------------------------------------
@@ -666,12 +677,12 @@ int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 
     aSelections.Empty();
 
-    int i = 0;
     GtkTreeIter iter;
     GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
 
     if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(m_liststore), &iter))
     { //gtk_tree_selection_get_selected_rows is GTK 2.2+ so iter instead
+        int i = 0;
         do
         {
             if (gtk_tree_selection_iter_is_selected(selection, &iter))
@@ -763,16 +774,51 @@ int wxListBox::GetTopItem() const
 {
     int idx = wxNOT_FOUND;
 
+#if GTK_CHECK_VERSION(2,8,0)
     wxGtkTreePath start;
-    if ( gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL) )
+    if (
+        wx_is_at_least_gtk2(8) &&
+        gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL))
     {
         gint *ptr = gtk_tree_path_get_indices(start);
 
         if ( ptr )
             idx = *ptr;
     }
+#endif
 
     return idx;
+}
+
+int wxListBox::GetCountPerPage() const
+{
+    wxGtkTreePath path;
+    GtkTreeViewColumn *column;
+
+    if ( !gtk_tree_view_get_path_at_pos
+          (
+            m_treeview,
+            0,
+            0,
+            path.ByRef(),
+            &column,
+            NULL,
+            NULL
+          ) )
+    {
+        return -1;
+    }
+
+    GdkRectangle rect;
+    gtk_tree_view_get_cell_area(m_treeview, path, column, &rect);
+
+    if ( !rect.height )
+        return -1;
+
+    GdkRectangle vis;
+    gtk_tree_view_get_visible_rect(m_treeview, &vis);
+
+    return vis.height / rect.height;
 }
 
 // ----------------------------------------------------------------------------

@@ -12,6 +12,13 @@
     can write PostScript files on any platform. See wxDC for descriptions of
     the member functions.
 
+    @section start_doc Starting a document
+
+    Document should be started with call to StartDoc() prior to calling any
+    function to execute a drawing operation.
+    However, some functions, like SetFont(), may be legitimately called even
+    before StartDoc().
+
     @library{wxbase}
     @category{dc}
 */

@@ -289,6 +289,12 @@ public:
     /**
         Constructor.
 
+        Notice that if the object is created from a worker thread or if it is
+        created from the main thread but the event loop is not running, @a
+        flags parameter @em must include ::wxSOCKET_BLOCK as non-blocking
+        sockets require dispatching events, which can only be done in the main
+        thread.
+
         @param flags
             Socket flags (See wxSocketBase::SetFlags())
     */
@@ -658,7 +664,7 @@ enum wxSocketEventFlags
     This option can have surprising platform dependent behaviour, so check the
     documentation for your platform's implementation of setsockopt().
 
-    Note that on BSD-based systems(e.g. OS X), use of
+    Note that on BSD-based systems(e.g. macOS), use of
     @b wxSOCKET_REUSEADDR implies @b SO_REUSEPORT in addition to
     @b SO_REUSEADDR to be consistent with Windows.
 

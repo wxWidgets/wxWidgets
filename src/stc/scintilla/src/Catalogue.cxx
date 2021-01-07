@@ -110,6 +110,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmDMAP);
 	LINK_LEXER(lmDMIS);
 	LINK_LEXER(lmECL);
+	LINK_LEXER(lmEDIFACT);
 	LINK_LEXER(lmEiffel);
 	LINK_LEXER(lmEiffelkw);
 	LINK_LEXER(lmErlang);
@@ -126,6 +127,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmHTML);
 	LINK_LEXER(lmIHex);
 	LINK_LEXER(lmInno);
+	LINK_LEXER(lmJSON);
 	LINK_LEXER(lmKix);
 	LINK_LEXER(lmKVIrc);
 	LINK_LEXER(lmLatex);

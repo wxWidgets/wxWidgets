@@ -104,7 +104,7 @@ public:
 
     // Called before the first events are handled, called from within MainLoop()
     virtual void OnLaunched();
-    
+
     // This is called by wxEventLoopBase::SetActive(): you should put the code
     // which needs an active event loop here.
     // Note that this function is called whenever an event loop is activated;
@@ -684,6 +684,10 @@ protected:
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits() wxOVERRIDE;
 
+    // Helper method deleting all existing top level windows: this is used
+    // during the application shutdown.
+    void DeleteAllTLWs();
+
 
     // the main top level window (may be NULL)
     wxWindow *m_topWindow;
@@ -798,17 +802,31 @@ public:
 // your compiler really, really wants main() to be in your main program (e.g.
 // hello.cpp). Now wxIMPLEMENT_APP should add this code if required.
 
-// For compilers that support it, prefer to use wmain() as this ensures any
-// Unicode strings can be passed as command line parameters and not just those
-// representable in the current locale.
-#if wxUSE_UNICODE && defined(__VISUALC__)
-    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
-        int wmain(int argc, wchar_t **argv)                                   \
-        {                                                                     \
-            wxDISABLE_DEBUG_SUPPORT();                                        \
+// For compilers that support it, prefer to use wmain() and let the CRT parse
+// the command line for us, for the others parse it ourselves under Windows to
+// ensure that wxWidgets console applications accept arbitrary Unicode strings
+// as command line parameters and not just those representable in the current
+// locale (under Unix UTF-8, capable of representing any Unicode string, is
+// almost always used and there is no way to retrieve the Unicode command line
+// anyhow).
+#if wxUSE_UNICODE && defined(__WINDOWS__)
+    #ifdef __VISUALC__
+        #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                \
+            int wmain(int argc, wchar_t **argv)                               \
+            {                                                                 \
+                wxDISABLE_DEBUG_SUPPORT();                                    \
                                                                               \
-            return wxEntry(argc, argv);                                       \
-        }
+                return wxEntry(argc, argv);                                   \
+            }
+    #else // No wmain(), use main() but don't trust its arguments.
+        #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                \
+            int main(int, char **)                                            \
+            {                                                                 \
+                wxDISABLE_DEBUG_SUPPORT();                                    \
+                                                                              \
+                return wxEntry();                                             \
+            }
+    #endif
 #else // Use standard main()
     #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
         int main(int argc, char **argv)                                       \

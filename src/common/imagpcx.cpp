@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_PCX
 
@@ -41,9 +38,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPCXHandler,wxImageHandler);
 // RLE encoding and decoding
 //-----------------------------------------------------------------------------
 
+static
 void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
 {
-    unsigned int data, last, cont;
+    unsigned int last, cont;
 
     // Write 'size' bytes. The PCX official specs say there will be
     // a decoding break at the end of each scanline, so in order to
@@ -56,6 +54,7 @@ void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
 
     while (size-- > 0)
     {
+        unsigned data;
         data = (unsigned char) *(p++);
 
         // Up to 63 bytes with the same value can be stored using
@@ -84,6 +83,7 @@ void RLEencode(unsigned char *p, unsigned int size, wxOutputStream& s)
     s.PutC((char) last);
 }
 
+static
 void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 {
     // Read 'size' bytes. The PCX official specs say there will be
@@ -156,6 +156,7 @@ enum {
 //  Returns wxPCX_OK on success, or an error code otherwise
 //  (see above for error codes)
 //
+static
 int ReadPCX(wxImage *image, wxInputStream& stream)
 {
     unsigned char hdr[128];         // PCX header
@@ -263,8 +264,6 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 
     if (format == wxPCX_8BIT)
     {
-        unsigned char index;
-
         if (stream.GetC() != 12)
             return wxPCX_INVFORMAT;
 
@@ -273,6 +272,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
         p = image->GetData();
         for (unsigned long k = height * width; k; k--)
         {
+            unsigned char index;
             index = *p;
             *(p++) = pal[3 * index];
             *(p++) = pal[3 * index + 1];
@@ -303,10 +303,10 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 //  PCX if possible, and then fall back to 24-bit if there
 //  are more than 256 different colours.
 //
+static
 int SavePCX(wxImage *image, wxOutputStream& stream)
 {
     unsigned char hdr[128];         // PCX header
-    unsigned char pal[768];         // palette for 8 bit images
     unsigned char *p;               // space to store one scanline
     unsigned char *src;             // pointer into wxImage data
     unsigned int width, height;     // size of the image
@@ -372,10 +372,9 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
         {
             case wxPCX_8BIT:
             {
-                unsigned char r, g, b;
-
                 for (i = 0; i < width; i++)
                 {
+                    unsigned char r, g, b;
                     r = *(src++);
                     g = *(src++);
                     b = *(src++);
@@ -405,15 +404,15 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     // For 8 bit images, build the palette and write it to the stream:
     if (format == wxPCX_8BIT)
     {
+        unsigned char pal[768];
         // zero unused colours
         memset(pal, 0, sizeof(pal));
-
-        unsigned long index;
 
         for (wxImageHistogram::iterator entry = histogram.begin();
              entry != histogram.end(); ++entry )
         {
             key = entry->first;
+            unsigned long index;
             index = entry->second.index;
             pal[3 * index]     = (unsigned char)(key >> 16);
             pal[3 * index + 1] = (unsigned char)(key >> 8);

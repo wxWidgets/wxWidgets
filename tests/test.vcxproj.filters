@@ -22,9 +22,6 @@
     <ClCompile Include="base64\base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="streams\bstream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cmdline\cmdlinetest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -244,6 +241,9 @@
     <ClCompile Include="strings\vsnprintf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="strings\hexconv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="weakref\weakref.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -260,6 +260,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="streams\zlibstream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="streams\lzmastream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

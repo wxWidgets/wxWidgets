@@ -262,7 +262,7 @@ public:
 
         @since 2.9.2
     */
-    virtual void InitializeWithModality(wxPreviewFrameModalityKind kind);
+    void InitializeWithModality(wxPreviewFrameModalityKind kind);
 
     /**
         Enables any disabled frames in the application, and deletes the print preview
@@ -290,7 +290,7 @@ public:
     created. In particular, printing code relying on wxDC::GetTextExtent()
     heavily (for example, wxHtmlEasyPrinting and other wxHTML classes do) is
     affected. It is recommended to use native preview functionality on
-    platforms that offer it (OS X, GTK+).
+    platforms that offer it (macOS, GTK+).
 
     @library{wxcore}
     @category{printing}
@@ -805,7 +805,7 @@ public:
         page rectangle, or page margins rectangle to perform your own scaling.
 
         @note
-        While the underlying drawing model of OS X is floating-point,
+        While the underlying drawing model of macOS is floating-point,
         wxWidgets's drawing model scales from integer coordinates.
     */
     void MapScreenSizeToDevice();

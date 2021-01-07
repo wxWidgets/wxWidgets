@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LIBMSPACK
 
@@ -201,7 +198,7 @@ bool wxChmTools::Contains(const wxString& pattern)
 /**
  * Find()
  *
- * Finds the next file descibed by a pattern in the archive, starting
+ * Finds the next file described by a pattern in the archive, starting
  * the file given by second parameter
  *
  * @param pattern   The file-pattern to search for. May contain '*' and/or '?'
@@ -366,19 +363,19 @@ public:
     virtual ~wxChmInputStream();
 
     /// Return the size of the accessed file in archive
-    virtual size_t GetSize() const { return m_size; }
+    virtual size_t GetSize() const wxOVERRIDE { return m_size; }
     /// End of Stream?
-    virtual bool Eof() const;
+    virtual bool Eof() const wxOVERRIDE;
     /// Set simulation-mode of HHP-File (if non is found)
     void SimulateHHP(bool sim) { m_simulateHHP = sim; }
 
 protected:
     /// See wxInputStream
-    virtual size_t OnSysRead(void *buffer, size_t bufsize);
+    virtual size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;
     /// See wxInputStream
-    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) wxOVERRIDE;
     /// See wxInputStream
-    virtual wxFileOffset OnSysTell() const { return m_pos; }
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
 
 private:
     size_t m_size;
@@ -393,10 +390,6 @@ private:
     // this void* is handle of archive . I'm sorry it is void and not proper
     // type but I don't want to make unzip.h header public.
 
-
-    // locates the file and returns a mspack_file *
-    mspack_file *LocateFile(wxString filename);
-
     // should store pointer to current file
     mspack_file *m_file;
 
@@ -410,7 +403,7 @@ private:
 /**
  * Constructor
  * @param archive  The name of the .chm archive. Remember that archive must
- *                 be local file accesible via fopen, fread functions!
+ *                 be local file accessible via fopen, fread functions!
  * @param filename The Name of the file to be extracted from archive
  * @param simulate if true than class should simulate .HHP-File based on #SYSTEM
  *                 if false than class does nothing if it doesn't find .hhp
@@ -471,14 +464,14 @@ bool wxChmInputStream::Eof() const
     return (m_content==NULL ||
             m_contentStream==NULL ||
             m_contentStream->Eof() ||
-            m_pos>m_size);
+            (size_t)m_pos>m_size);
 }
 
 
 
 size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    if ( m_pos >= m_size )
+    if ( (size_t)m_pos >= m_size )
     {
         m_lasterror = wxSTREAM_EOF;
         return 0;
@@ -516,7 +509,7 @@ size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
 
 wxFileOffset wxChmInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
-    wxString mode_str = wxEmptyString;
+    wxString mode_str;
 
     if ( !m_contentStream || m_contentStream->Eof() )
     {
@@ -553,8 +546,8 @@ wxFileOffset wxChmInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 
 /**
  * Help Browser tries to read the contents of the
- * file by interpreting a .hhp file in the Archiv.
- * For .chm doesn't include such a file, we need
+ * file by interpreting a .hhp file in the Archive.
+ * Because .chm doesn't include such a file, we need
  * to rebuild the information based on stored
  * system-files.
  */
@@ -761,16 +754,16 @@ class wxChmFSHandler : public wxFileSystemHandler
 public:
     /// Constructor and Destructor
     wxChmFSHandler();
-    virtual ~wxChmFSHandler();
+    virtual ~wxChmFSHandler() wxOVERRIDE;
 
     /// Is able to open location?
-    virtual bool CanOpen(const wxString& location);
+    virtual bool CanOpen(const wxString& location) wxOVERRIDE;
     /// Open a file
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
     /// Find first occurrence of spec
-    virtual wxString FindFirst(const wxString& spec, int flags = 0);
+    virtual wxString FindFirst(const wxString& spec, int flags = 0) wxOVERRIDE;
     /// Find next occurrence of spec
-    virtual wxString FindNext();
+    virtual wxString FindNext() wxOVERRIDE;
 
 private:
     int m_lasterror;
@@ -782,8 +775,6 @@ private:
 wxChmFSHandler::wxChmFSHandler() : wxFileSystemHandler()
 {
     m_lasterror=0;
-    m_pattern=wxEmptyString;
-    m_found=wxEmptyString;
     m_chm=NULL;
 }
 
@@ -863,7 +854,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 /**
  * Doku see wxFileSystemHandler
  */
-wxString wxChmFSHandler::FindFirst(const wxString& spec, int flags)
+wxString wxChmFSHandler::FindFirst(const wxString& spec, int WXUNUSED(flags))
 {
     wxString right = GetRightLocation(spec);
     wxString left = GetLeftLocation(spec);
@@ -912,12 +903,12 @@ class wxChmSupportModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxChmSupportModule);
 
 public:
-    virtual bool OnInit()
+    virtual bool OnInit() wxOVERRIDE
     {
         wxFileSystem::AddHandler(new wxChmFSHandler);
         return true;
     }
-    virtual void OnExit() {}
+    virtual void OnExit() wxOVERRIDE {}
 }
 ;
 

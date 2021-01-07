@@ -13,9 +13,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -377,14 +374,12 @@ void MakeKeyValuePair(size_t i, size_t count, T*& key, ValueT& value)
 // the test
 template <class HashMapT>
 void
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 // At least g++ 4.8.2 (included in Ubuntu 14.04) is known to miscompile the
 // code in this function and make all the loops below infinite when using -O2,
 // so we need to turn off optimizations for it to allow the tests to run at
 // all.
-#if __GNUC__ == 4 && __GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ < 3
 __attribute__((optimize("O0")))
-#endif // g++ 4.8.[012]
 #endif // g++
 HashMapTest()
 {

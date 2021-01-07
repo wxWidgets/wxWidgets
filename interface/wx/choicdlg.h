@@ -33,7 +33,7 @@
     @style{wxCANCEL}
         Show a Cancel button.
     @style{wxCENTRE}
-        Centre the message. Not Windows.
+        Centre the message.
     @endStyleTable
 
     @library{wxbase}
@@ -64,7 +64,7 @@ public:
             default value is equivalent to wxDEFAULT_DIALOG_STYLE |
             wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
-            Dialog position. Not Windows.
+            Dialog position.
 
         @remarks Use ShowModal() to show the dialog.
 
@@ -94,7 +94,7 @@ public:
             default value is equivalent to wxDEFAULT_DIALOG_STYLE |
             wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
-            Dialog position. Not Windows.
+            Dialog position.
 
         @remarks Use ShowModal() to show the dialog.
 
@@ -141,7 +141,7 @@ public:
     @style{wxCANCEL}
         Show a Cancel button.
     @style{wxCENTRE}
-        Centre the message. Not Windows.
+        Centre the message.
     @endStyleTable
 
     @library{wxbase}
@@ -176,7 +176,7 @@ public:
             default value is equivalent to wxDEFAULT_DIALOG_STYLE |
             wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
-            Dialog position. Not Windows.
+            Dialog position.
 
         @remarks Use ShowModal() to show the dialog.
 
@@ -211,7 +211,7 @@ public:
             default value is equivalent to wxDEFAULT_DIALOG_STYLE |
             wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
-            Dialog position. Not Windows.
+            Dialog position.
 
         @remarks Use ShowModal() to show the dialog.
 

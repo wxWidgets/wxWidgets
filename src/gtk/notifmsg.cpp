@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_NOTIFICATION_MESSAGE && wxUSE_LIBNOTIFY
 
@@ -87,13 +84,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxLibnotifyModule, wxModule);
 
 class wxLibNotifyMsgImpl;
 
+extern "C" {
+static
 void wxLibNotifyMsgImplActionCallback(NotifyNotification *notification,
                                                          char *action,
                                                          gpointer user_data);
 
-extern "C" {
-static gboolean closed_notification(NotifyNotification *notification,
-    const char* WXUNUSED(data), void* user_data);
+static void closed_notification(NotifyNotification* notification, void* user_data);
 }
 
 class wxLibNotifyMsgImpl : public wxNotificationMessageImpl
@@ -105,7 +102,7 @@ public:
         m_flags(wxICON_INFORMATION)
     {
         if ( !wxLibnotifyModule::Initialize() )
-            wxLogError(_("Could not initalize libnotify."));
+            wxLogDebug("Could not initialize libnotify");
 
     }
 
@@ -184,17 +181,17 @@ public:
             }
         }
 
+#ifdef __WXGTK3__
         // Explicitly specified icon name overrides the implicit one determined by
         // the flags.
         if ( m_icon.IsOk() )
         {
-#ifdef __WXGTK3__
             notify_notification_set_image_from_pixbuf(
                 m_notification,
                 m_icon.GetPixbufNoMask()
             );
-#endif
         }
+#endif
 
         return true;
     }
@@ -342,6 +339,8 @@ private:
     int m_flags;
 };
 
+extern "C" {
+static
 void wxLibNotifyMsgImplActionCallback(NotifyNotification *WXUNUSED(notification),
                                                          char *action,
                                                          gpointer user_data)
@@ -351,14 +350,11 @@ void wxLibNotifyMsgImplActionCallback(NotifyNotification *WXUNUSED(notification)
     impl->NotifyAction(wxAtoi(action));
 }
 
-extern "C" {
-static gboolean closed_notification(NotifyNotification *notification,
-    const char* WXUNUSED(data), void* user_data)
+static void closed_notification(NotifyNotification* notification, void* user_data)
 {
     wxLibNotifyMsgImpl* impl = (wxLibNotifyMsgImpl*) user_data;
     gint closeReason = notify_notification_get_closed_reason(notification);
     impl->NotifyClose(closeReason);
-    return true;
 }
 }
 

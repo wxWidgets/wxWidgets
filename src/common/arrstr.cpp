@@ -15,17 +15,32 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/arrstr.h"
 #include "wx/scopedarray.h"
+#include "wx/wxcrt.h"
 
 #include "wx/beforestd.h"
 #include <algorithm>
 #include <functional>
 #include "wx/afterstd.h"
+
+#if defined( __WINDOWS__ )
+    #include <shlwapi.h>
+
+    // In some distributions of MinGW32, this function is exported in the library,
+    // but not declared in shlwapi.h. Therefore we declare it here.
+    #if defined( __MINGW32_TOOLCHAIN__ )
+        extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
+    #endif
+
+    // For MSVC we can also link the library containing StrCmpLogicalW()
+    // directly from here, for the other compilers this needs to be done at
+    // makefiles level.
+    #ifdef __VISUALC__
+        #pragma comment(lib, "shlwapi")
+    #endif
+#endif
 
 // ============================================================================
 // ArrayString
@@ -36,8 +51,7 @@ wxArrayString::wxArrayString(size_t sz, const char** a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
@@ -45,8 +59,7 @@ wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wxString* a)
@@ -54,14 +67,156 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
-#if !wxUSE_STD_CONTAINERS
+#if wxUSE_STD_CONTAINERS
 
-// size increment = min(50% of current size, ARRAY_MAXSIZE_INCREMENT)
-#define   ARRAY_MAXSIZE_INCREMENT       4096
+#include "wx/arrstr.h"
+
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
+
+int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+{
+    int n = 0;
+    for ( const auto& s: *this )
+    {
+        if ( s.IsSameAs(str, bCase) )
+            return n;
+
+        ++n;
+    }
+
+    return wxNOT_FOUND;
+}
+
+#else // C++98 version
+
+#include "wx/beforestd.h"
+#include <functional>
+#include "wx/afterstd.h"
+
+// some compilers (Sun CC being the only known example) distinguish between
+// extern "C" functions and the functions with C++ linkage and ptr_fun and
+// wxStringCompareLess can't take wxStrcmp/wxStricmp directly as arguments in
+// this case, we need the wrappers below to make this work
+struct wxStringCmp
+{
+    typedef wxString first_argument_type;
+    typedef wxString second_argument_type;
+    typedef int result_type;
+
+    int operator()(const wxString& s1, const wxString& s2) const
+    {
+        return s1.compare(s2);
+    }
+};
+
+struct wxStringCmpNoCase
+{
+    typedef wxString first_argument_type;
+    typedef wxString second_argument_type;
+    typedef int result_type;
+
+    int operator()(const wxString& s1, const wxString& s2) const
+    {
+        return s1.CmpNoCase(s2);
+    }
+};
+
+int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+{
+    wxArrayString::const_iterator it;
+
+    if (bCase)
+    {
+        it = std::find_if(begin(), end(),
+                          std::not1(
+                              std::bind2nd(
+                                  wxStringCmp(), str)));
+    }
+    else // !bCase
+    {
+        it = std::find_if(begin(), end(),
+                          std::not1(
+                              std::bind2nd(
+                                  wxStringCmpNoCase(), str)));
+    }
+
+    return it == end() ? wxNOT_FOUND : it - begin();
+}
+
+template<class F>
+class wxStringCompareLess
+{
+public:
+    wxStringCompareLess(F f) : m_f(f) { }
+    bool operator()(const wxString& s1, const wxString& s2)
+        { return m_f(s1, s2) < 0; }
+private:
+    F m_f;
+};
+
+template<class F>
+wxStringCompareLess<F> wxStringCompare(F f)
+{
+    return wxStringCompareLess<F>(f);
+}
+
+#endif // C++11/C++98
+
+void wxArrayString::Sort(CompareFunction function)
+{
+    std::sort(begin(), end(),
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
+              [function](const wxString& s1, const wxString& s2)
+              {
+                  return function(s1, s2) < 0;
+              }
+#else // C++98 version
+              wxStringCompare(function)
+#endif // C++11/C++98
+             );
+}
+
+void wxArrayString::Sort(bool reverseOrder)
+{
+    if (reverseOrder)
+    {
+        std::sort(begin(), end(), std::greater<wxString>());
+    }
+    else
+    {
+        std::sort(begin(), end());
+    }
+}
+
+int wxSortedArrayString::Index(const wxString& str,
+                               bool WXUNUSED_UNLESS_DEBUG(bCase),
+                               bool WXUNUSED_UNLESS_DEBUG(bFromEnd)) const
+{
+    wxASSERT_MSG( bCase && !bFromEnd,
+                  "search parameters ignored for sorted array" );
+
+    wxSortedArrayString::const_iterator
+        it = std::lower_bound(begin(), end(), str,
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
+                              [](const wxString& s1, const wxString& s2)
+                              {
+                                  return s1 < s2;
+                              }
+#else // C++98 version
+                              wxStringCompare(wxStringCmp())
+#endif // C++11/C++98
+                              );
+
+    if ( it == end() || str.Cmp(*it) != 0 )
+        return wxNOT_FOUND;
+
+    return it - begin();
+}
+
+#else // !wxUSE_STD_CONTAINERS
 
 #ifndef   ARRAY_DEFAULT_INITIAL_SIZE    // also defined in dynarray.h
 #define   ARRAY_DEFAULT_INITIAL_SIZE    (16)
@@ -89,7 +244,14 @@ wxArrayString::wxArrayString(const wxArrayString& src)
 wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 {
   if ( m_nSize > 0 )
+  {
+    // Do this test here to avoid unnecessary overhead when assigning to an
+    // empty array, in that case there is no harm in self-assignment.
+    if ( &src == this )
+        return *this;
+
     Clear();
+  }
 
   Copy(src);
 
@@ -135,11 +297,8 @@ wxString *wxArrayString::Grow(size_t nIncrement)
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
       // and the array would never be expanded
-      // add 50% but not too much
       size_t ndefIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
-                          ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;
-      if ( ndefIncrement > ARRAY_MAXSIZE_INCREMENT )
-        ndefIncrement = ARRAY_MAXSIZE_INCREMENT;
+                          ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize;
       if ( nIncrement < ndefIncrement )
         nIncrement = ndefIncrement;
       m_nSize += nIncrement;
@@ -226,13 +385,14 @@ int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
     wxASSERT_MSG( bCase && !bFromEnd,
                   wxT("search parameters ignored for auto sorted array") );
 
-    size_t i,
+    size_t
            lo = 0,
            hi = m_nCount;
-    int res;
     while ( lo < hi ) {
+      size_t i;
       i = (lo + hi)/2;
 
+      int res;
       res = str.compare(m_pItems[i]);
       if ( res < 0 )
         hi = i;
@@ -272,13 +432,14 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
-    size_t i,
+    size_t
            lo = 0,
            hi = m_nCount;
-    int res;
     while ( lo < hi ) {
+      size_t i;
       i = (lo + hi)/2;
 
+      int res;
       res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
       if ( res < 0 )
         hi = i;
@@ -483,11 +644,11 @@ bool wxArrayString::operator==(const wxArrayString& a) const
 
 wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
 {
+    wxString str;
+
     size_t count = arr.size();
     if ( count == 0 )
-        return wxEmptyString;
-
-    wxString str;
+        return str;
 
     // pre-allocate memory using the estimation of the average length of the
     // strings in the given array: this is very imprecise, of course, but
@@ -575,3 +736,186 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 
     return ret;
 }
+
+namespace // helpers needed by wxCmpNaturalGeneric()
+{
+// Used for comparison of string parts
+struct wxStringFragment
+{
+    // Fragment types are generally sorted like this:
+    // Empty < SpaceOrPunct < Digit < LetterOrSymbol
+    // Fragments of the same type are compared as follows:
+    // SpaceOrPunct - collated, Digit - as numbers using value
+    // LetterOrSymbol - lower-cased and then collated
+    enum Type
+    {
+        Empty,
+        SpaceOrPunct,  // whitespace or punctuation
+        Digit,         // a sequence of decimal digits
+        LetterOrSymbol // letters and symbols, i.e., anything not covered by the above types
+    };
+
+    wxStringFragment() : type(Empty), value(0) {}
+
+    Type     type;
+    wxString text;
+    wxUint64 value; // used only for Digit type
+};
+
+
+wxStringFragment GetFragment(wxString& text)
+{
+    if ( text.empty() )
+        return wxStringFragment();
+
+    // the maximum length of a sequence of digits that
+    // can fit into wxUint64 when converted to a number
+    static const ptrdiff_t maxDigitSequenceLength = 19;
+
+    wxStringFragment         fragment;
+    wxString::const_iterator it;
+
+    for ( it = text.cbegin(); it != text.cend(); ++it )
+    {
+        const wxUniChar&       ch = *it;
+        wxStringFragment::Type chType = wxStringFragment::Empty;
+
+        if ( wxIsspace(ch) || wxIspunct(ch) )
+            chType = wxStringFragment::SpaceOrPunct;
+        else if ( wxIsdigit(ch) )
+            chType = wxStringFragment::Digit;
+        else
+            chType = wxStringFragment::LetterOrSymbol;
+
+        // check if evaluating the first character
+        if ( fragment.type == wxStringFragment::Empty )
+        {
+            fragment.type = chType;
+            continue;
+        }
+
+        // stop processing when the current character has a different
+        // string fragment type than the previously processed characters had
+        // or a sequence of digits is too long
+        if ( fragment.type != chType
+             || (fragment.type == wxStringFragment::Digit
+                 && it - text.cbegin() > maxDigitSequenceLength) )
+        {
+            break;
+        }
+    }
+
+    fragment.text.assign(text.cbegin(), it);
+    if ( fragment.type == wxStringFragment::Digit )
+        fragment.text.ToULongLong(&fragment.value);
+
+    text.erase(0, it - text.cbegin());
+
+    return fragment;
+}
+
+int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& rhs)
+{
+    switch ( lhs.type )
+    {
+        case wxStringFragment::Empty:
+            switch ( rhs.type )
+            {
+                case wxStringFragment::Empty:
+                    return 0;
+                case wxStringFragment::SpaceOrPunct:
+                case wxStringFragment::Digit:
+                case wxStringFragment::LetterOrSymbol:
+                    return -1;
+            }
+            break;
+
+        case wxStringFragment::SpaceOrPunct:
+            switch ( rhs.type )
+            {
+                case wxStringFragment::Empty:
+                    return 1;
+                case wxStringFragment::SpaceOrPunct:
+                    return wxStrcoll_String(lhs.text, rhs.text);
+                case wxStringFragment::Digit:
+                case wxStringFragment::LetterOrSymbol:
+                    return -1;
+            }
+            break;
+
+        case wxStringFragment::Digit:
+            switch ( rhs.type )
+            {
+                case wxStringFragment::Empty:
+                case wxStringFragment::SpaceOrPunct:
+                    return 1;
+                case wxStringFragment::Digit:
+                    if ( lhs.value >  rhs.value )
+                        return 1;
+                    else if ( lhs.value <  rhs.value )
+                        return -1;
+                    else
+                        return 0;
+                case wxStringFragment::LetterOrSymbol:
+                    return -1;
+            }
+            break;
+
+        case wxStringFragment::LetterOrSymbol:
+            switch ( rhs.type )
+            {
+                case wxStringFragment::Empty:
+                case wxStringFragment::SpaceOrPunct:
+                case wxStringFragment::Digit:
+                    return 1;
+                case wxStringFragment::LetterOrSymbol:
+                    return wxStrcoll_String(lhs.text.Lower(), rhs.text.Lower());
+            }
+            break;
+    }
+
+    // all possible cases should be covered by the switch above
+    // but return also from here to prevent the compiler warning
+    return 1;
+}
+
+} // unnamed namespace
+
+
+// ----------------------------------------------------------------------------
+// wxCmpNaturalGeneric
+// ----------------------------------------------------------------------------
+//
+int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
+{
+    wxString lhs(s1);
+    wxString rhs(s2);
+
+    int comparison = 0;
+
+    while ( (comparison == 0) && (!lhs.empty() || !rhs.empty()) )
+    {
+        const wxStringFragment fragmentLHS = GetFragment(lhs);
+        const wxStringFragment fragmentRHS = GetFragment(rhs);
+
+        comparison = CompareFragmentNatural(fragmentLHS, fragmentRHS);
+    }
+
+    return comparison;
+}
+
+// ----------------------------------------------------------------------------
+// wxCmpNatural
+// ----------------------------------------------------------------------------
+//
+// If a native version of Natural sort is available, then use that, otherwise
+// use the generic version.
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+{
+#if defined( __WINDOWS__ )
+    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
+#else
+    return wxCmpNaturalGeneric(s1, s2);
+#endif // #if defined( __WINDOWS__ )
+}
+

@@ -71,6 +71,7 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height ) wxOVERRIDE;
     virtual void DoSetDeviceClippingRegion( const wxRegion &region ) wxOVERRIDE;
+    virtual bool DoGetClippingRect(wxRect& rect) const wxOVERRIDE;
 
     virtual wxCoord GetCharWidth() const wxOVERRIDE;
     virtual wxCoord GetCharHeight() const wxOVERRIDE;
@@ -85,7 +86,10 @@ public:
     virtual void SetTextForeground( const wxColour &col ) wxOVERRIDE;
     virtual void SetTextBackground( const wxColour &col ) wxOVERRIDE;
     virtual void SetBackgroundMode( int mode ) wxOVERRIDE;
+
+#if wxUSE_PALETTE
     virtual void SetPalette( const wxPalette& palette ) wxOVERRIDE;
+#endif
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 
@@ -93,7 +97,7 @@ public:
     virtual wxSize GetPPI() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
 
-    // overrriden here for RTL
+    // overridden here for RTL
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y ) wxOVERRIDE;
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp ) wxOVERRIDE;
 
@@ -110,6 +114,7 @@ public:
     bool          m_isScreenDC;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
+    bool          m_isClipBoxValid;
 
     // PangoContext stuff for GTK 2.0
     PangoContext *m_context;
@@ -122,6 +127,9 @@ public:
     virtual void ComputeScaleAndOrigin() wxOVERRIDE;
 
     virtual GdkWindow *GetGDKWindow() const wxOVERRIDE { return m_gdkwindow; }
+
+    // Update the internal clip box variables
+    void UpdateClipBox();
 
 private:
     void DrawingSetup(GdkGC*& gc, bool& originChanged);

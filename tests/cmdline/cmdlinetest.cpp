@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -57,6 +54,23 @@ CPPUNIT_TEST_SUITE_REGISTRATION( CmdLineTestCase );
 
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CmdLineTestCase, "CmdLineTestCase" );
+
+// Use this macro to compare a wxArrayString with the pipe-separated elements
+// of the given string
+//
+// NB: it's a macro and not a function to have the correct line numbers in the
+//     test failure messages
+#define WX_ASSERT_STRARRAY_EQUAL(s, a)                                        \
+    {                                                                         \
+        wxArrayString expected(wxSplit(s, '|', '\0'));                        \
+                                                                              \
+        CPPUNIT_ASSERT_EQUAL( expected.size(), a.size() );                    \
+                                                                              \
+        for ( size_t n = 0; n < a.size(); n++ )                               \
+        {                                                                     \
+            CPPUNIT_ASSERT_EQUAL( expected[n], a[n] );                        \
+        }                                                                     \
+    }
 
 // ============================================================================
 // implementation
@@ -133,7 +147,7 @@ void CmdLineTestCase::ParseSwitches()
     class NoMessageOutput : public wxMessageOutput
     {
     public:
-        virtual void Output(const wxString& WXUNUSED(str)) { }
+        virtual void Output(const wxString& WXUNUSED(str)) wxOVERRIDE { }
     } noMessages;
 
     wxMessageOutput * const old = wxMessageOutput::Set(&noMessages);
@@ -282,6 +296,8 @@ void CmdLineTestCase::ArgumentsCollection()
 
 void CmdLineTestCase::Usage()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     // check that Usage() returns roughly what we expect (don't check all the
     // details, its format can change in the future)
     static const wxCmdLineEntryDesc desc[] =
@@ -301,6 +317,8 @@ void CmdLineTestCase::Usage()
         { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "\nEven more usage text" },
         { wxCMD_LINE_NONE }
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     wxCmdLineParser p(desc);
     const wxArrayString usageLines = wxSplit(p.GetUsageString(), '\n');
@@ -322,7 +340,7 @@ void CmdLineTestCase::Usage()
         Line_Max
     };
 
-    CPPUNIT_ASSERT_EQUAL(Line_Max, usageLines.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)Line_Max, usageLines.size());
     CPPUNIT_ASSERT_EQUAL("Verbosity options", usageLines[Line_Text_Verbosity]);
     CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Text_Dummy1]);
     CPPUNIT_ASSERT_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);
@@ -331,6 +349,8 @@ void CmdLineTestCase::Usage()
 
 void CmdLineTestCase::Found()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const wxCmdLineEntryDesc desc[] =
     {
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
@@ -341,6 +361,8 @@ void CmdLineTestCase::Found()
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file", },
         { wxCMD_LINE_NONE }
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     wxCmdLineParser p(desc);
     p.SetCmdLine ("-v --output hello -s 2 --date=2014-02-17 -f 0.2 input-file.txt");

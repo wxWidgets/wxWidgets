@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -21,38 +18,11 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
-class wxQtToggleButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
-{
+#include <QtWidgets/QPushButton>
 
-public:
-    wxQtToggleButton( wxWindow *parent, wxAnyButton *handler);
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
-private:
-    void clicked( bool checked );
-};
-
-wxQtToggleButton::wxQtToggleButton(wxWindow *parent, wxAnyButton *handler)
-    : wxQtEventSignalHandler< QPushButton, wxAnyButton >( parent, handler )
-{
-    setCheckable( true );
-    connect(this, &QPushButton::clicked, this, &wxQtToggleButton::clicked);
-}
-
-void wxQtToggleButton::clicked( bool checked )
-{
-    wxAnyButton *handler = GetHandler();
-    if ( handler )
-    {
-        // for toggle buttons, send the checked state in the wx event:
-        wxCommandEvent event( wxEVT_TOGGLEBUTTON, handler->GetId() );
-        event.SetInt( checked );
-        EmitEvent( event );
-    }
-}
-
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButtonBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButton);
 
 wxBitmapToggleButton::wxBitmapToggleButton()
 {
@@ -78,28 +48,27 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
+    if ( !wxToggleButton::Create(parent, id, wxString(), pos, size, style, validator, name) )
+    {
+        return false;
+    }
+
     // this button is toggleable and has a bitmap label:
-    QtSetBitmap( label );
+    if ( label.IsOk() )
+    {
+        SetBitmapLabel(label);
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
-}
+        // we need to adjust the size after setting the bitmap as it may be too
+        // big for the default button size
+        SetInitialSize(size);
+    }
 
-void wxBitmapToggleButton::SetValue(bool state)
-{
-    m_qtPushButton->setChecked( state );
-}
-
-bool wxBitmapToggleButton::GetValue() const
-{
-    return m_qtPushButton->isChecked();
-}
-
-QPushButton *wxBitmapToggleButton::GetHandle() const
-{
-    return m_qtPushButton;
+    return true;
 }
 
 //##############################################################################
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl);
 
 wxToggleButton::wxToggleButton()
 {
@@ -126,7 +95,8 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxString& name)
 {
     // create a checkable push button
-    m_qtPushButton = new wxQtToggleButton( parent, this );
+    QtCreate(parent);
+    m_qtPushButton->setCheckable(true);
 
     // this button is toggleable and has a text label
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
@@ -142,9 +112,4 @@ void wxToggleButton::SetValue(bool state)
 bool wxToggleButton::GetValue() const
 {
     return m_qtPushButton->isChecked();
-}
-
-QPushButton *wxToggleButton::GetHandle() const
-{
-    return m_qtPushButton;
 }

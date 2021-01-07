@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by: Ryan Norton (UTF8 UNICODE)
 // Created:     2004-09-19
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -127,6 +124,29 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 // ============================================================================
 // wxStringOutputStream implementation
 // ============================================================================
+
+wxStringOutputStream::wxStringOutputStream(wxString *pString, wxMBConv& conv)
+    : m_conv(conv)
+#if wxUSE_UNICODE
+    , m_unconv(0)
+#endif // wxUSE_UNICODE
+{
+    m_str = pString ? pString : &m_strInternal;
+
+#if wxUSE_UNICODE
+    // We can avoid doing the conversion in the common case of using UTF-8
+    // conversion in UTF-8 build, as it is exactly the same as the string
+    // length anyhow in this case.
+#if wxUSE_UNICODE_UTF8
+    if ( conv.IsUTF8() )
+        m_pos = m_str->utf8_length();
+    else
+#endif // wxUSE_UNICODE_UTF8
+        m_pos = m_conv.FromWChar(NULL, 0, m_str->wc_str(), m_str->length());
+#else // !wxUSE_UNICODE
+    m_pos = m_str->length();
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+}
 
 // ----------------------------------------------------------------------------
 // seek/tell

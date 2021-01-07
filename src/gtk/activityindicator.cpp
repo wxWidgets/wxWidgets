@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ACTIVITYINDICATOR && defined(__WXGTK220__)
 
@@ -28,14 +25,14 @@
 
 #include "wx/math.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // Macro return the specified expression only if GTK+ run time version is less
 // than 2.20 and compiling it only if it is less than 3.0 (which is why this
 // has to be a macro and not a function).
 #if defined(__WXGTK220__) && !defined(__WXGTK3__)
     #define RETURN_IF_NO_GTK_SPINNER(expr) \
-        if ( gtk_check_version(2, 20, 0) != 0 ) { return expr; }
+        if ( !wx_is_at_least_gtk2(20) ) { return expr; }
 #else
     #define RETURN_IF_NO_GTK_SPINNER(expr)
 #endif

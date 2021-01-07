@@ -8,7 +8,7 @@
 #ifndef _WX_QT_FONTDLG_H_
 #define _WX_QT_FONTDLG_H_
 
-#include <QtWidgets/QFontDialog>
+class QFontDialog;
 
 class WXDLLIMPEXP_CORE wxFontDialog : public wxFontDialogBase
 {
@@ -16,12 +16,10 @@ public:
     wxFontDialog() { }
     wxFontDialog(wxWindow *parent) { Create(parent); }
     wxFontDialog(wxWindow *parent, const wxFontData& data) { Create(parent, data); }
-    
-    virtual QFontDialog *GetHandle() const { return static_cast<QFontDialog *>(m_qtWindow); }
 
 protected:
-    bool DoCreate(wxWindow *parent);
-    
+    bool DoCreate(wxWindow *parent) wxOVERRIDE;
+
 private:
 
     wxFontData m_data;

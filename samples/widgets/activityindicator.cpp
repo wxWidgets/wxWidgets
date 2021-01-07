@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ACTIVITYINDICATOR
 
@@ -109,7 +106,7 @@ wxEND_EVENT_TABLE()
 // ============================================================================
 
 IMPLEMENT_WIDGETS_PAGE(ActivityIndicatorWidgetsPage,
-                       wxT("ActivityIndicator"), NATIVE_CTRLS);
+                       "ActivityIndicator", NATIVE_CTRLS);
 
 void ActivityIndicatorWidgetsPage::CreateContent()
 {

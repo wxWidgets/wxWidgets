@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BUTTON
 
@@ -160,14 +157,25 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
 {
-    static wxSize s_sizeBtn;
+    static wxPrivate::DpiDependentValue<wxSize> s_sizeBtn;
 
-    if ( s_sizeBtn.x == 0 )
+    if ( s_sizeBtn.HasChanged(win) )
     {
-        wxScreenDC dc;
-        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+        wxSize base;
+        if ( win )
+        {
+            wxClientDC dc(win);
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
+        else
+        {
+            wxScreenDC dc;
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
 
         // The size of a standard button in the dialog units is 50x14,
         // translate this to pixels.
@@ -180,12 +188,11 @@ wxSize wxButtonBase::GetDefaultSize()
         //
         // NB: wxMulDivInt32() is used, because it correctly rounds the result
 
-        const wxSize base = wxPrivate::GetAverageASCIILetterSize(dc);
-        s_sizeBtn.x = wxMulDivInt32(50, base.x, 4);
-        s_sizeBtn.y = wxMulDivInt32(14, base.y, 8);
+        s_sizeBtn.SetAtNewDPI(wxSize(wxMulDivInt32(50, base.x, 4),
+                                     wxMulDivInt32(14, base.y, 8)));
     }
 
-    return s_sizeBtn;
+    return s_sizeBtn.Get();
 }
 
 // ----------------------------------------------------------------------------
@@ -270,10 +277,8 @@ static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 
     wxASSERT_MSG( win, wxT("button without top level parent?") );
 
-    wxTopLevelWindow * const tlw = wxDynamicCast(win, wxTopLevelWindow);
-    wxASSERT_MSG( tlw, wxT("logic error in GetTLWParentIfNotBeingDeleted()") );
-
-    return tlw;
+    // Note that this may still return null for a button inside wxPopupWindow.
+    return wxDynamicCast(win, wxTopLevelWindow);
 }
 
 // set this button as being currently default
@@ -284,13 +289,19 @@ void wxButton::SetTmpDefault()
         return;
 
     wxWindow *winOldDefault = tlw->GetDefaultItem();
+
     tlw->SetTmpDefaultItem(this);
 
     // Notice that the order of these statements is important, the old button
     // is not reset if we do it the other way round, probably because of
     // something done by the default DM_SETDEFID handler.
     SetDefaultStyle(this, true);
-    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
+    if ( winOldDefault != this )
+    {
+        // But we mustn't reset the default style on this button itself if it
+        // had already been the default.
+        SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
+    }
 }
 
 // unset this button as currently default, it may still stay permanent default
@@ -306,7 +317,10 @@ void wxButton::UnsetTmpDefault()
 
     // Just as in SetTmpDefault() above, the order is important here.
     SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), true);
-    SetDefaultStyle(this, false);
+    if ( winOldDefault != this )
+    {
+        SetDefaultStyle(this, false);
+    }
 }
 
 /* static */
@@ -404,12 +418,8 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     bool processed = false;
     switch ( param )
     {
-        // NOTE: Apparently older versions (NT 4?) of the common controls send
-        //       BN_DOUBLECLICKED but not a second BN_CLICKED for owner-drawn
-        //       buttons, so in order to send two EVT_BUTTON events we should
-        //       catch both types.  Currently (Feb 2003) up-to-date versions of
-        //       win98, win2k and winXP all send two BN_CLICKED messages for
-        //       all button types, so we don't catch BN_DOUBLECLICKED anymore
+        // NOTE: Currently all versions of Windows send two BN_CLICKED messages
+        //       for all button types, so we don't catch BN_DOUBLECLICKED
         //       in order to not get 3 EVT_BUTTON events.  If this is a problem
         //       then we need to figure out which version of the comctl32 changed
         //       this behaviour and test for it.

@@ -47,7 +47,7 @@ public:
         if (it == m_methods.end())
             return false;
         wxShadowObjectMethod method = it->second;
-        int ret = (*method)(window, param);
+        const int ret = (*method)(window, param);
         if (returnValue)
             *returnValue = ret;
         return true;

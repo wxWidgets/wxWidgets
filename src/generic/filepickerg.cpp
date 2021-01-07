@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
@@ -80,9 +77,7 @@ bool wxGenericFileDirButton::Create(wxWindow *parent,
     }
 
     // and handle user clicks on it
-    Connect(GetId(), wxEVT_BUTTON,
-            wxCommandEventHandler(wxGenericFileDirButton::OnButtonClick),
-            NULL, this);
+    Bind(wxEVT_BUTTON, &wxGenericFileDirButton::OnButtonClick, this, GetId());
 
     // create the dialog associated with this button
     m_path = path;

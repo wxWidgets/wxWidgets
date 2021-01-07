@@ -38,13 +38,17 @@ struct _ScintillaObject {
 struct _ScintillaClass {
 	GtkContainerClass parent_class;
 
-	void (* command) (ScintillaObject *ttt);
-	void (* notify) (ScintillaObject *ttt);
+	void (* command) (ScintillaObject *sci, int cmd, GtkWidget *window);
+	void (* notify) (ScintillaObject *sci, int id, SCNotification *scn);
 };
 
 GType		scintilla_object_get_type		(void);
 GtkWidget*	scintilla_object_new			(void);
-long		scintilla_object_send_message	(ScintillaObject *sci, unsigned int iMessage, guintptr wParam, gintptr lParam);
+gintptr		scintilla_object_send_message	(ScintillaObject *sci, unsigned int iMessage, guintptr wParam, gintptr lParam);
+
+
+GType		scnotification_get_type			(void);
+#define SCINTILLA_TYPE_NOTIFICATION        (scnotification_get_type())
 
 #ifndef G_IR_SCANNING
 /* The legacy names confuse the g-ir-scanner program */

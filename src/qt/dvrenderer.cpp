@@ -12,7 +12,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 wxDataViewRenderer::wxDataViewRenderer( const wxString &variantType,
                     wxDataViewCellMode mode,
@@ -48,6 +48,6 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
     return wxEllipsizeMode();
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

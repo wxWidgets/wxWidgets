@@ -79,6 +79,20 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject);
 
 void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
+    // Rectangle needs to be defined in the canonical form,
+    // with (x,y) pointing to the top-left corner of the box
+    // and with non-negative width and height.
+    if ( w < 0 )
+    {
+        w = -w;
+        x -= (w - 1);
+    }
+    if ( h < 0 )
+    {
+        h = -h;
+        y -= (h - 1);
+    }
+
     GdkRectangle rect;
     rect.x = x;
     rect.y = y;

@@ -16,7 +16,7 @@
 #ifdef __WXMAC_XCODE__
 #    include <unistd.h>
 #    include <TargetConditionals.h>
-#    include <AvailabilityMacros.h>
+#    include <Availability.h>
 #    ifndef MAC_OS_X_VERSION_10_4
 #       define MAC_OS_X_VERSION_10_4 1040
 #    endif
@@ -38,7 +38,35 @@
 #    ifndef MAC_OS_X_VERSION_10_10
 #       define MAC_OS_X_VERSION_10_10 101000
 #    endif
-#    include "wx/osx/config_xcode.h"
+#    ifndef MAC_OS_X_VERSION_10_11
+#       define MAC_OS_X_VERSION_10_11 101100
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_12
+#       define MAC_OS_X_VERSION_10_12 101200
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_13
+#       define MAC_OS_X_VERSION_10_13 101300
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_14
+#       define MAC_OS_X_VERSION_10_14 101400
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_15
+#       define MAC_OS_X_VERSION_10_15 101500
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_16
+#       define MAC_OS_X_VERSION_10_16 101600
+#    endif
+#    ifndef MAC_OS_VERSION_11_0
+#       define MAC_OS_VERSION_11_0 110000
+#    endif
+#    if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#        ifndef NSAppKitVersionNumber10_10
+#            define NSAppKitVersionNumber10_10 1343
+#        endif
+#        ifndef NSAppKitVersionNumber10_11
+#            define NSAppKitVersionNumber10_11 1404
+#        endif
+#    endif
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
 #    endif
@@ -54,7 +82,6 @@
     define it ourselves if any of the following macros is defined:
 
     - MSVC _WIN32 (notice that this is also defined under Win64)
-    - Borland __WIN32__
     - Our __WXMSW__ which selects Windows as platform automatically
  */
 #if defined(_WIN32) || defined(__WIN32__) || defined(__WXMSW__)
@@ -65,12 +92,8 @@
 
 #if defined(__WINDOWS__)
     /* Select wxMSW under Windows if no other port is specified. */
-#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
+#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
 #       define __WXMSW__
-#   endif
-
-#   if !defined(__WINDOWS__)
-#       define __WINDOWS__
 #   endif
 
 #   ifndef _WIN32
@@ -110,13 +133,13 @@
 #   endif
 #endif
 
-#if defined(__WXGTK__) && defined(__WINDOWS__)
+#if (defined(__WXGTK__) || defined(__WXQT__)) && defined(__WINDOWS__)
 
 #   ifdef __WXMSW__
 #       undef __WXMSW__
 #   endif
 
-#endif /* __WXGTK__ && __WINDOWS__ */
+#endif /* (__WXGTK__ || __WXQT__) && __WINDOWS__ */
 
 #ifdef __ANDROID__
 #   define __WXANDROID__
@@ -200,42 +223,6 @@
 #endif /* wxUSE_UNICODE */
 
 
-/*
-   test for old versions of Borland C, normally need at least 5.82, Turbo
-   explorer, available for free at http://www.turboexplorer.com/downloads
-*/
-
-
-/*
-    Older versions of Borland C have some compiler bugs that need
-    workarounds. Mostly pertains to the free command line compiler 5.5.1.
-*/
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
-    /*
-        The Borland free compiler is unable to handle overloaded enum
-        comparisons under certain conditions e.g. when any class has a
-        conversion ctor for an integral type and there's an overload to
-        compare between an integral type and that class type.
-    */
-#   define wxCOMPILER_NO_OVERLOAD_ON_ENUM
-
-    /*
-        This is needed to overcome bugs in 5.5.1 STL, linking errors will
-        result if it is not defined.
-     */
-#   define _RWSTD_COMPILE_INSTANTIATE
-
-    /*
-        Preprocessor in older Borland compilers have major problems
-        concatenating with ##. Specifically, if the string operands being
-        concatenated have special meaning (e.g. L"str", 123i64 etc)
-        then ## will not concatenate the operands correctly.
-
-        As a workaround, define wxPREPEND* and wxAPPEND* without using
-        wxCONCAT_HELPER.
-    */
-#   define wxCOMPILER_BROKEN_CONCAT_OPER
-#endif /* __BORLANDC__ */
 
 /*
    OS: then test for generic Unix defines, then for particular flavours and
@@ -267,6 +254,11 @@
 
 #    if defined(__INNOTEK_LIBC__)
         /* Ensure visibility of strnlen declaration */
+#        define _GNU_SOURCE
+#    endif
+
+#    if defined(__CYGWIN__)
+        /* Ensure visibility of Dl_info and pthread_setconcurrency declarations */
 #        define _GNU_SOURCE
 #    endif
 
@@ -340,10 +332,6 @@
 #   include "wx/msw/libraries.h"
 #endif
 
-#if defined(__BORLANDC__) || (defined(__GNUC__) && __GNUC__ < 3)
-#define wxNEEDS_CHARPP
-#endif
-
 /*
     Note that wx/msw/gccpriv.h must be included after defining UNICODE and
     _UNICODE macros as it includes _mingw.h which relies on them being set.
@@ -358,6 +346,7 @@
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
 #    undef wxCHECK_MINGW32_VERSION
 #    define wxCHECK_MINGW32_VERSION( major, minor ) (0)
+#    define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
 #    define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 
@@ -443,7 +432,7 @@
 
 #ifdef __WXOSX_MAC__
 #    if defined(__MACH__)
-#        include <AvailabilityMacros.h>
+#        include <Availability.h>
 #        ifndef MAC_OS_X_VERSION_10_4
 #           define MAC_OS_X_VERSION_10_4 1040
 #        endif
@@ -465,6 +454,35 @@
 #        ifndef MAC_OS_X_VERSION_10_10
 #           define MAC_OS_X_VERSION_10_10 101000
 #        endif
+#        ifndef MAC_OS_X_VERSION_10_11
+#           define MAC_OS_X_VERSION_10_11 101100
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_12
+#           define MAC_OS_X_VERSION_10_12 101200
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_13
+#           define MAC_OS_X_VERSION_10_13 101300
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_14
+#           define MAC_OS_X_VERSION_10_14 101400
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_15
+#           define MAC_OS_X_VERSION_10_15 101500
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_16
+#           define MAC_OS_X_VERSION_10_16 101600
+#        endif
+#        ifndef MAC_OS_VERSION_11_0
+#           define MAC_OS_VERSION_11_0 110000
+#        endif
+#        if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#            ifndef NSAppKitVersionNumber10_10
+#                define NSAppKitVersionNumber10_10 1343
+#            endif
+#            ifndef NSAppKitVersionNumber10_11
+#                define NSAppKitVersionNumber10_11 1404
+#            endif
+#        endif
 #    else
 #        error "only mach-o configurations are supported"
 #    endif
@@ -485,32 +503,9 @@
 #include "wx/chkconf.h"
 
 
-/*
-   some compilers don't support iostream.h any longer, while some of theme
-   are not updated with <iostream> yet, so override the users setting here
-   in such case.
- */
-#if defined(_MSC_VER) && (_MSC_VER >= 1310)
-#    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 0
-#elif defined(__MINGW32__)
-#    undef wxUSE_IOSTREAMH
-#    define wxUSE_IOSTREAMH 0
-#endif /* compilers with/without iostream.h */
-
-/*
-   old C++ headers (like <iostream.h>) declare classes in the global namespace
-   while the new, standard ones (like <iostream>) do it in std:: namespace,
-   unless it's an old gcc version.
-
-   using this macro allows constuctions like "wxSTD iostream" to work in
-   either case
- */
-#if !wxUSE_IOSTREAMH && (!defined(__GNUC__) || ( __GNUC__ > 2 ) || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
-#    define wxSTD std::
-#else
-#    define wxSTD
-#endif
+/* These macros exist only for compatibility, don't use them in the new code */
+#define wxUSE_IOSTREAMH 0
+#define wxSTD std::
 
 /* On OpenVMS with the most recent HP C++ compiler some function (i.e. wscanf)
  * are only available in the std-namespace. (BUG???)
@@ -578,7 +573,11 @@
         Only 4.3 defines __GXX_RTTI by default so its absence is not an
         indication of disabled RTTI with the previous versions.
      */
-#   if wxCHECK_GCC_VERSION(4, 3)
+#   if defined(__clang__)
+#       if !__has_feature(cxx_rtti)
+#           define wxNO_RTTI
+#       endif
+#   elif wxCHECK_GCC_VERSION(4, 3)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif

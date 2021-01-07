@@ -80,6 +80,7 @@ public:
     virtual void   HandlePropertyChange(WXEvent *event);
 
     wxXVisualInfo* GetVisualInfo(WXDisplay* display);
+    virtual void* GetXVisualInfo() { return NULL; }
 
 private:
     // Motif-specific

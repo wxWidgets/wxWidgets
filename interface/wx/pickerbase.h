@@ -89,7 +89,7 @@ public:
                 // wxMSW is one of the platforms where the generic implementation
                 // of wxFilePickerCtrl is used...
 
-                wxButton *pButt = wx_static_cast(wxButton*, myFilePickerCtrl->GetPickerCtrl());
+                wxButton *pButt = static_cast<wxButton*>(myFilePickerCtrl->GetPickerCtrl());
                 if (pButt)
                     pButt->SetLabel("Custom browse string");
             #endif
@@ -163,7 +163,7 @@ public:
 
     virtual void UpdatePickerFromTextCtrl() = 0;
     virtual void UpdateTextCtrlFromPicker() = 0;
-    
+
 protected:
     virtual long GetTextCtrlStyle(long style) const;
     virtual long GetPickerStyle(long style) const;

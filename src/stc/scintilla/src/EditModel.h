@@ -45,6 +45,7 @@ public:
 	enum IMEInteraction { imeWindowed, imeInline } imeInteraction;
 
 	int foldFlags;
+	int foldDisplayTextStyle;
 	ContractionState cs;
 	// Hotspot support
 	Range hotspot;

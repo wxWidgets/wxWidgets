@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_TOOLBAR
 
@@ -36,7 +33,6 @@ wxToolBarXmlHandler::wxToolBarXmlHandler()
     XRC_ADD_STYLE(wxTB_DOCKABLE);
     XRC_ADD_STYLE(wxTB_VERTICAL);
     XRC_ADD_STYLE(wxTB_HORIZONTAL);
-    XRC_ADD_STYLE(wxTB_3DBUTTONS);
     XRC_ADD_STYLE(wxTB_TEXT);
     XRC_ADD_STYLE(wxTB_NOICONS);
     XRC_ADD_STYLE(wxTB_NODIVIDER);

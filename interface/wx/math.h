@@ -76,11 +76,33 @@ double wxDegToRad(double deg);
 double wxRadToDeg(double rad);
 
 /**
-    Small wrapper around round().
-*/
-int wxRound(double x);
+    Count the number of trailing zeros.
 
-/** 
+    This function returns the number of trailing zeros in the binary notation
+    of its argument @a x. E.g. for @a x equal to 4, or 0b100, the return value
+    is 2.
+
+    @param x Strictly positive, i.e. non-zero, 32 bit number.
+
+    @since 3.1.2
+ */
+unsigned int wxCTZ(wxUint32 x);
+
+/**
+    Small wrapper around std::lround().
+
+    This function exists for compatibility, as it was more convenient than
+    std::round() before C++11. Use std::lround() in the new code.
+
+    It is defined for all floating point types @c T and can be also used with
+    integer types for compatibility, but such use is deprecated -- simply
+    remove the calls to wxRound() from your code if you're using it with
+    integer types, it is unnecessary in this case.
+*/
+template <typename T>
+int wxRound(T x);
+
+/**
    Returns true if both double values are identical. This is
    only reliable if both values have been assigned the same
    value.

@@ -3,7 +3,7 @@
 // Purpose:     wxGLCanvasBase implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-04-09
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -45,7 +42,7 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
     // Search for searchVal
     wxVector<int>::iterator it = m_GLValues.begin();
     while ( it != m_GLValues.end() && *it != searchVal )
-        it++;
+        ++it;
     // Have we searchVal?
     if ( it != m_GLValues.end() )
     {
@@ -76,7 +73,7 @@ wxGLCanvasBase::wxGLCanvasBase()
 
     // we always paint background entirely ourselves so prevent wx from erasing
     // it to avoid flicker
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
@@ -187,8 +184,8 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
 
     if ( !attribList )
     {
-        // Set default attributes
-        dispAttrs.Defaults();
+        // Default visual attributes used in wx versions before wx3.1
+        dispAttrs.AddDefaultsForWXBefore31();
         dispAttrs.EndList();
         if ( ctxAttrs )
             ctxAttrs->EndList();
@@ -196,8 +193,8 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
     }
 
     int src = 0;
-    int minColo[4] = {0, 0, 0, 0};
-    int minAcum[4] = {0, 0, 0, 0};
+    int minColo[4] = {-1, -1, -1, -1};
+    int minAcum[4] = {-1, -1, -1, -1};
     int num = 0;
     while ( attribList[src] )
     {
@@ -363,9 +360,9 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
     }
 
     // Set color and accumulation
-    if ( minColo[0] || minColo[1] || minColo[2] || minColo[3] )
+    if ( minColo[0] >= 0 || minColo[1] >= 0 || minColo[2] >= 0 || minColo[3] >= 0 )
         dispAttrs.MinRGBA(minColo[0], minColo[1], minColo[2], minColo[3]);
-    if ( minAcum[0] || minAcum[1] || minAcum[2] || minAcum[3] )
+    if ( minAcum[0] >= 0 || minAcum[1] >= 0 || minAcum[2] >= 0 || minAcum[3] >= 0 )
         dispAttrs.MinAcumRGBA(minAcum[0], minAcum[1], minAcum[2], minAcum[3]);
 
     // The attributes lists must be zero-terminated
@@ -443,7 +440,8 @@ void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
 #if wxUSE_OPENGL_EMULATION
     ::glFrustumf(left, right, bottom, top, zNear, zFar);
 #else
-    ::glFrustum(left, right, bottom, top, zNear, zFar);
+    ::glFrustum(double(left), double(right),
+        double(bottom), double(top), double(zNear), double(zFar));
 #endif
 }
 

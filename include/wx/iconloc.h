@@ -21,7 +21,7 @@ class WXDLLIMPEXP_BASE wxIconLocationBase
 {
 public:
     // ctor takes the name of the file where the icon is
-    wxEXPLICIT wxIconLocationBase(const wxString& filename = wxEmptyString)
+    explicit wxIconLocationBase(const wxString& filename = wxEmptyString)
         : m_filename(filename) { }
 
     // default copy ctor, assignment operator and dtor are ok
@@ -47,7 +47,7 @@ class WXDLLIMPEXP_BASE wxIconLocation : public wxIconLocationBase
 public:
     // ctor takes the name of the file where the icon is and the icons index in
     // the file
-    wxEXPLICIT wxIconLocation(const wxString& file = wxEmptyString, int num = 0);
+    explicit wxIconLocation(const wxString& file = wxEmptyString, int num = 0);
 
     // set/get the icon index
     void SetIndex(int num) { m_index = num; }
@@ -70,7 +70,7 @@ wxIconLocation::wxIconLocation(const wxString& file, int num)
 class WXDLLIMPEXP_BASE wxIconLocation : public wxIconLocationBase
 {
 public:
-    wxEXPLICIT wxIconLocation(const wxString& filename = wxEmptyString)
+    explicit wxIconLocation(const wxString& filename = wxEmptyString)
         : wxIconLocationBase(filename) { }
 };
 

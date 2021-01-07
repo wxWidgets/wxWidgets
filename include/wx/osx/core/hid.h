@@ -104,7 +104,7 @@ public:
     static int GetCount();
     bool Create(int nDev = 1);
     void AddCookie(CFTypeRef Data, int i);
-    virtual void BuildCookies(CFArrayRef Array);
+    virtual void BuildCookies(CFArrayRef Array) wxOVERRIDE;
     void DoBuildCookies(CFArrayRef Array);
 };
 

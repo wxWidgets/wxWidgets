@@ -19,13 +19,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
@@ -34,10 +32,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
 #include "wx/msw/private/metrics.h"
-
-#ifndef SPI_GETFLATMENU
-#define SPI_GETFLATMENU                     0x1022
-#endif
 
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
@@ -51,8 +45,8 @@
 class wxSystemSettingsModule : public wxModule
 {
 public:
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
@@ -75,7 +69,7 @@ static wxFont *gs_fontDefault = NULL;
 // from GetSystemMetric, and should it? Perhaps call it GetSystemParameter
 // and pass an optional void* arg to get further info.
 // Should also have SetSystemParameter.
-// Also implement WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
+// Also implement WM_WININICHANGE
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsModule
@@ -153,8 +147,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info;
-            info.lf = lf;
+            wxNativeFontInfo info(lf, NULL);
             font.Create(info);
         }
         else
@@ -186,8 +179,10 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // for most (simple) controls, e.g. buttons and such but other
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
-            wxNativeFontInfo info;
-            info.lf = wxMSWImpl::GetNonClientMetrics().lfMessageFont;
+            const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+            const wxNativeFontInfo
+                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
+
             gs_fontDefault = new wxFont(info);
         }
 
@@ -223,88 +218,49 @@ static const int gs_metricsMap[] =
 
     SM_CXBORDER,
     SM_CYBORDER,
-#ifdef SM_CXCURSOR
     SM_CXCURSOR,
     SM_CYCURSOR,
-#else
-    -1, -1,
-#endif
     SM_CXDOUBLECLK,
     SM_CYDOUBLECLK,
-#if defined(SM_CXDRAG)
     SM_CXDRAG,
     SM_CYDRAG,
     SM_CXEDGE,
     SM_CYEDGE,
-#else
-    -1, -1, -1, -1,
-#endif
     SM_CXHSCROLL,
     SM_CYHSCROLL,
-#ifdef SM_CXHTHUMB
     SM_CXHTHUMB,
-#else
-    -1,
-#endif
     SM_CXICON,
     SM_CYICON,
     SM_CXICONSPACING,
     SM_CYICONSPACING,
-#ifdef SM_CXHTHUMB
     SM_CXMIN,
     SM_CYMIN,
-#else
-    -1, -1,
-#endif
     SM_CXSCREEN,
     SM_CYSCREEN,
 
-#if defined(SM_CXSIZEFRAME)
     SM_CXSIZEFRAME,
     SM_CYSIZEFRAME,
     SM_CXSMICON,
     SM_CYSMICON,
-#else
-    -1, -1, -1, -1,
-#endif
     SM_CYHSCROLL,
     SM_CXHSCROLL,
     SM_CXVSCROLL,
     SM_CYVSCROLL,
-#ifdef SM_CYVTHUMB
     SM_CYVTHUMB,
-#else
-    -1,
-#endif
     SM_CYCAPTION,
     SM_CYMENU,
-#if defined(SM_NETWORK)
     SM_NETWORK,
-#else
-    -1,
-#endif
-#ifdef SM_PENWINDOWS
     SM_PENWINDOWS,
-#else
-    -1,
-#endif
-#if defined(SM_SHOWSOUNDS)
     SM_SHOWSOUNDS,
-#else
-    -1,
-#endif
-    // SM_SWAPBUTTON is not available under CE and it doesn't make sense to ask
-    // for it there
-#ifdef SM_SWAPBUTTON
     SM_SWAPBUTTON,
-#else
-    -1,
-#endif
-    -1   // wxSYS_DCLICK_MSEC - not available as system metric
+    -1,   // wxSYS_DCLICK_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_ON_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_OFF_MSEC - not available as system metric
+    -1    // wxSYS_CARET_TIMEOUT_MSEC - not available as system metric
 };
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
 {
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
@@ -315,6 +271,25 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         return ::GetDoubleClickTime();
     }
 
+    // return the caret blink time for both
+    // wxSYS_CARET_ON_MSEC and wxSYS_CARET_OFF_MSEC
+    if ( index == wxSYS_CARET_ON_MSEC || index == wxSYS_CARET_OFF_MSEC )
+    {
+        const UINT blinkTime = ::GetCaretBlinkTime();
+
+        if ( blinkTime == 0 ) // error
+        {
+            return -1;
+        }
+        
+        if ( blinkTime == INFINITE ) // caret does not blink
+        {
+            return 0;
+        }
+
+        return blinkTime;
+    }
+
     int indexMSW = gs_metricsMap[index];
     if ( indexMSW == -1 )
     {
@@ -322,7 +297,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         return -1;
     }
 
-    int rc = ::GetSystemMetrics(indexMSW);
+    int rc = wxGetSystemMetrics(indexMSW, win);
     if ( index == wxSYS_NETWORK_PRESENT )
     {
         // only the last bit is significant according to the MSDN
@@ -362,15 +337,17 @@ extern wxFont wxGetCCDefaultFont()
     // font which is also used for the icon titles and not the stock default
     // GUI font
     LOGFONT lf;
-    if ( ::SystemParametersInfo
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    if ( wxSystemParametersInfo
            (
                 SPI_GETICONTITLELOGFONT,
                 sizeof(lf),
                 &lf,
-                0
+                0,
+                win
            ) )
     {
-        return wxFont(wxCreateFontFromLogFont(&lf));
+        return wxFont(wxNativeFontInfo(lf, win));
     }
     else
     {

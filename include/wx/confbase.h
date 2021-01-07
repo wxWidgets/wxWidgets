@@ -211,7 +211,7 @@ public:
       if ( !found )
       {
           if (IsRecordingDefaults())
-              ((wxConfigBase *)this)->Write(key, defVal);
+              const_cast<wxConfigBase*>(this)->Write(key, defVal);
           *value = defVal;
       }
       return found;
@@ -225,8 +225,10 @@ public:
 
   // we have to provide a separate version for C strings as otherwise the
   // template Read() would be used
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   wxString Read(const wxString& key, const char* defVal) const
     { return Read(key, wxString(defVal)); }
+#endif
   wxString Read(const wxString& key, const wchar_t* defVal) const
     { return Read(key, wxString(defVal)); }
 
@@ -268,10 +270,12 @@ public:
 
   // we have to provide a separate version for C strings as otherwise they
   // would be converted to bool and not to wxString as expected!
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   bool Write(const wxString& key, const char *value)
     { return Write(key, wxString(value)); }
   bool Write(const wxString& key, const unsigned char *value)
     { return Write(key, wxString(value)); }
+#endif
   bool Write(const wxString& key, const wchar_t *value)
     { return Write(key, wxString(value)); }
 
@@ -301,7 +305,7 @@ public:
     { return DoWriteLong(key, value); }
 
   bool Write(const wxString& key, float value)
-    { return DoWriteDouble(key, value); }
+    { return DoWriteDouble(key, double(value)); }
 
   // Causes ambiguities in under OpenVMS
 #if !defined( __VMS )

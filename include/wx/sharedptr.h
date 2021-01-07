@@ -23,7 +23,7 @@ class wxSharedPtr
 public:
     typedef T element_type;
 
-    wxEXPLICIT wxSharedPtr( T* ptr = NULL )
+    explicit wxSharedPtr( T* ptr = NULL )
         : m_ref(NULL)
     {
         if (ptr)
@@ -31,7 +31,7 @@ public:
     }
 
     template<typename Deleter>
-    wxEXPLICIT wxSharedPtr(T* ptr, Deleter d)
+    explicit wxSharedPtr(T* ptr, Deleter d)
         : m_ref(NULL)
     {
         if (ptr)
@@ -126,7 +126,7 @@ private:
     struct reftype_with_deleter : public reftype
     {
         reftype_with_deleter(T* ptr, Deleter d) : reftype(ptr), m_deleter(d) {}
-        virtual void delete_ptr() { m_deleter(this->m_ptr); }
+        virtual void delete_ptr() wxOVERRIDE { m_deleter(this->m_ptr); }
 
         Deleter m_deleter;
     };

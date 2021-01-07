@@ -160,6 +160,7 @@ public:
     void OnListDeleteAllItems( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
     void OnListColClick( wxListEvent &event );
+    void OnSize( wxSizeEvent &event );
 
     virtual void SortItems(wxFileData::fileListFieldType field, bool forward);
     bool GetSortDirection() const { return m_sort_forward; }
@@ -194,11 +195,11 @@ public:
                         wxWindowID id,
                         const wxString& defaultDirectory = wxEmptyString,
                         const wxString& defaultFilename = wxEmptyString,
-                        const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                        const wxString& wildCard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                         long style = wxFC_DEFAULT_STYLE,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        const wxString& name = wxFileCtrlNameStr )
+                        const wxString& name = wxASCII_STR(wxFileCtrlNameStr) )
     {
         m_ignoreChanges = false;
         Create(parent, id, defaultDirectory, defaultFilename, wildCard,
@@ -211,11 +212,11 @@ public:
                  wxWindowID id,
                  const wxString& defaultDirectory = wxEmptyString,
                  const wxString& defaultFileName = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 const wxString& wildCard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                  long style = wxFC_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 const wxString& name = wxFileCtrlNameStr );
+                 const wxString& name = wxASCII_STR(wxFileCtrlNameStr) );
 
     virtual void SetWildcard( const wxString& wildCard ) wxOVERRIDE;
     virtual void SetFilterIndex( int filterindex ) wxOVERRIDE;

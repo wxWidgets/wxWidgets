@@ -16,10 +16,27 @@
 #include "LexAccessor.h"
 #include "Accessor.h"
 #include "StyleContext.h"
+#include "CharacterSet.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
 #endif
+
+bool StyleContext::MatchIgnoreCase(const char *s) {
+	if (MakeLowerCase(ch) != static_cast<unsigned char>(*s))
+		return false;
+	s++;
+	if (MakeLowerCase(chNext) != static_cast<unsigned char>(*s))
+		return false;
+	s++;
+	for (int n = 2; *s; n++) {
+		if (static_cast<unsigned char>(*s) !=
+			MakeLowerCase(static_cast<unsigned char>(styler.SafeGetCharAt(currentPos + n, 0))))
+			return false;
+		s++;
+	}
+	return true;
+}
 
 static void getRange(Sci_PositionU start,
 		Sci_PositionU end,

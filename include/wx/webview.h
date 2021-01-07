@@ -78,22 +78,34 @@ enum wxWebViewFindFlags
     wxWEBVIEW_FIND_DEFAULT =          0
 };
 
+enum wxWebViewNavigationActionFlags
+{
+    wxWEBVIEW_NAV_ACTION_NONE,
+    wxWEBVIEW_NAV_ACTION_USER,
+    wxWEBVIEW_NAV_ACTION_OTHER
+};
+
 //Base class for custom scheme handlers
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
 public:
-    wxWebViewHandler(const wxString& scheme) : m_scheme(scheme) {}
+    wxWebViewHandler(const wxString& scheme)
+        : m_scheme(scheme), m_securityURL() {}
     virtual ~wxWebViewHandler() {}
     virtual wxString GetName() const { return m_scheme; }
     virtual wxFSFile* GetFile(const wxString &uri) = 0;
+    virtual void SetSecurityURL(const wxString& url) { m_securityURL = url; }
+    virtual wxString GetSecurityURL() const { return m_securityURL; }
 private:
     wxString m_scheme;
+    wxString m_securityURL;
 };
 
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[];
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactory : public wxObject
@@ -102,11 +114,12 @@ public:
     virtual wxWebView* Create() = 0;
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
-                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
-                              const wxString& name = wxWebViewNameStr) = 0;
+                              const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
+    virtual bool IsAvailable() { return true; }
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
@@ -117,38 +130,41 @@ public:
     wxWebView()
     {
         m_showMenu = true;
+        m_runScriptCount = 0;
     }
 
     virtual ~wxWebView() {}
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
+           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxWebViewNameStr) = 0;
+           const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
 
     // Factory methods allowing the use of custom factories registered with
     // RegisterFactory
-    static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
+    static wxWebView* New(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
     static wxWebView* New(wxWindow* parent,
                           wxWindowID id,
-                          const wxString& url = wxWebViewDefaultURLStr,
+                          const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
-                          const wxString& backend = wxWebViewBackendDefault,
+                          const wxString& backend = wxASCII_STR(wxWebViewBackendDefault),
                           long style = 0,
-                          const wxString& name = wxWebViewNameStr);
+                          const wxString& name = wxASCII_STR(wxWebViewNameStr));
 
-    static void RegisterFactory(const wxString& backend, 
+    static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
+    static bool IsBackendAvailable(const wxString& backend);
 
     // General methods
     virtual void EnableContextMenu(bool enable = true)
     {
         m_showMenu = enable;
     }
+    virtual void EnableAccessToDevTools(bool WXUNUSED(enable) = true) { }
     virtual wxString GetCurrentTitle() const = 0;
     virtual wxString GetCurrentURL() const = 0;
     // TODO: handle choosing a frame when calling GetPageSource()?
@@ -156,12 +172,13 @@ public:
     virtual wxString GetPageText() const = 0;
     virtual bool IsBusy() const = 0;
     virtual bool IsContextMenuEnabled() const { return m_showMenu; }
+    virtual bool IsAccessToDevToolsEnabled() const { return false; }
     virtual bool IsEditable() const = 0;
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
-    virtual void RunScript(const wxString& javascript) = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
@@ -189,8 +206,10 @@ public:
     //Zoom
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
     virtual wxWebViewZoom GetZoom() const = 0;
+    virtual float GetZoomFactor() const = 0;
     virtual wxWebViewZoomType GetZoomType() const = 0;
     virtual void SetZoom(wxWebViewZoom zoom) = 0;
+    virtual void SetZoomFactor(float zoom) = 0;
     virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
 
     //Selection
@@ -223,6 +242,10 @@ public:
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
+    // Count the number of calls to RunScript() in order to prevent
+    // the_same variable from being used twice in more than one call.
+    int m_runScriptCount;
+
 private:
     static void InitFactoryMap();
     static wxStringWebViewFactoryMap::iterator FindFactory(const wxString &backend);
@@ -238,18 +261,23 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 public:
     wxWebViewEvent() {}
     wxWebViewEvent(wxEventType type, int id, const wxString& url,
-                   const wxString& target)
-        : wxNotifyEvent(type, id), m_url(url), m_target(target)
+                   const wxString target,
+                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE)
+        : wxNotifyEvent(type, id), m_url(url), m_target(target),
+          m_actionFlags(flags)
     {}
 
 
     const wxString& GetURL() const { return m_url; }
     const wxString& GetTarget() const { return m_target; }
 
+    wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
+
     virtual wxEvent* Clone() const wxOVERRIDE { return new wxWebViewEvent(*this); }
 private:
     wxString m_url;
     wxString m_target;
+    wxWebViewNavigationActionFlags m_actionFlags;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };

@@ -13,10 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -112,7 +108,7 @@ const wxBrush& FortyApp::BackgroundBrush()
 {
     if (!m_backgroundBrush)
     {
-        m_backgroundBrush = new wxBrush(BackgroundColour(), wxSOLID);
+        m_backgroundBrush = new wxBrush(BackgroundColour());
     }
 
     return *m_backgroundBrush;

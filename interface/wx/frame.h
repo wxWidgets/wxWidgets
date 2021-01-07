@@ -119,7 +119,7 @@
            frames having this style (the dialogs don't have a minimize or a
            maximize box by default)
     @style{wxFRAME_EX_METAL}
-           On OS X, frames with this style will be shown with a metallic
+           On macOS, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endExtraStyleTable
 
@@ -427,7 +427,11 @@ public:
     void SetStatusBarPane(int n);
 
     /**
-        Sets the status bar text and redraws the status bar.
+        Sets the status bar text and updates the status bar display.
+
+        This is a simple wrapper for wxStatusBar::SetStatusText() which doesn't
+        do anything if the frame has no status bar, i.e. GetStatusBar() returns
+        @NULL.
 
         @param text
             The text for the status field.

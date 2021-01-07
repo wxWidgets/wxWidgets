@@ -23,6 +23,7 @@ class WXDLLEXPORT wxPenRefData : public wxGDIRefData
 public:
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);
+    wxPenRefData(const wxPenInfo& info);
     virtual ~wxPenRefData();
 
     wxPenRefData& operator=(const wxPenRefData& data);
@@ -69,6 +70,7 @@ wxPenRefData::wxPenRefData()
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
 : wxGDIRefData()
+    , m_colour(data.m_colour)
 {
     m_style = data.m_style;
     m_width = data.m_width;
@@ -76,7 +78,16 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
-    m_colour = data.m_colour;
+}
+
+wxPenRefData::wxPenRefData(const wxPenInfo& info)
+{
+    m_style = info.GetStyle();
+    m_width = info.GetWidth();
+    m_join = info.GetJoin();
+    m_cap = info.GetCap();
+    m_nbDash = info.GetDashes(&m_dash);
+    m_colour = info.GetColour();
 }
 
 wxPenRefData::~wxPenRefData()
@@ -98,45 +109,28 @@ wxPen::~wxPen()
 // Should implement Create
 wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
 {
-    m_refData = new wxPenRefData;
-
-    M_PENDATA->m_colour = col;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = Style;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    m_refData = new wxPenRefData(wxPenInfo(col, Width).Style(Style));
 
     RealizeResource();
 }
 
 wxPen::wxPen(const wxColour& col, int Width, int Style)
 {
-    m_refData = new wxPenRefData;
-
-    M_PENDATA->m_colour = col;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = (wxPenStyle)Style;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    m_refData = new wxPenRefData(wxPenInfo(col, Width).Style((wxPenStyle)Style));
 
     RealizeResource();
 }
 
-wxPen::wxPen(const wxBitmap& stipple, int Width)
+wxPen::wxPen(const wxBitmap& stipple, int width)
 {
-    m_refData = new wxPenRefData;
+    m_refData = new wxPenRefData(wxPenInfo().Stipple(stipple).Width(width));
 
-    M_PENDATA->m_stipple = stipple;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = wxPENSTYLE_STIPPLE;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    RealizeResource();
+}
+
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData(info);
 
     RealizeResource();
 }
@@ -280,7 +274,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
+    M_PENDATA->m_dash = const_cast<wxDash*>(Dash);
 
     RealizeResource();
 }

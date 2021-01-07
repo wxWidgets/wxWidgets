@@ -164,7 +164,7 @@ public:
     };
 
     /**
-        Date calculations often depend on the country and wxDateTime allows to set
+        Date calculations often depend on the country and wxDateTime allows setting
         the country whose conventions should be used using SetCountry(). It takes
         one of the following values as parameter.
     */
@@ -254,6 +254,17 @@ public:
         /// Create a time zone with the given offset in seconds.
         static TimeZone Make(long offset);
 
+        /**
+            Return true if this is the local time zone.
+
+            This method can be useful for distinguishing between UTC time zone
+            and local time zone in Great Britain, which use the same offset as
+            UTC (i.e. 0), but do use DST.
+
+            @since 3.1.1
+         */
+        bool IsLocal() const;
+
         /// Return the offset of this time zone from UTC, in seconds.
         long GetOffset() const;
     };
@@ -263,7 +274,7 @@ public:
 
         This struct is analogous to standard C <code>struct tm</code> and uses
         the same, not always immediately obvious, conventions for its members:
-        notably its mon and mday fields count from 0 while yday counts from 1.
+        notably its mon and yday fields count from 0 while mday counts from 1.
      */
     struct Tm
     {
@@ -314,7 +325,7 @@ public:
        Copy constructor.
     */
     wxDateTime(const wxDateTime& date);
-    
+
     /**
         Same as Set().
     */
@@ -376,7 +387,7 @@ public:
        @a wxDateTime::Tm structure.
     */
     wxDateTime& Set(const Tm& tm);
-    
+
     /**
         Sets the date from the so-called Julian Day Number.
 
@@ -478,7 +489,7 @@ public:
 
         Here are the trivial accessors. Other functions, which might have to
         perform some more complicated calculations to find the answer are under
-        the "Date Arithmetics" section.
+        the "Date Arithmetic" section.
     */
     //@{
 
@@ -561,10 +572,28 @@ public:
     /**
         Returns the number of seconds since Jan 1, 1970 UTC.
 
-        An assert failure will occur if the date is not in the range covered by
-        @c time_t type, use GetValue() if you work with dates outside of it.
+        This function is provided solely for interoperability with the standard
+        C library and other libraries using @c time_t values. If you just need
+        to get the value represented by this object as a number, use GetValue()
+        instead, which doesn't lose precision and covers the entire supported
+        range of dates, unlike this one which is limited to the range of
+        positive 32 bit values, i.e. from Jan 1, 1970 to around Jan 19, 2038
+        and returns @c -1 for the dates outside of it.
+
+        Additionally, this method must be called on an initialized date object
+        and an assertion failure occurs if it is called on an object for which
+        IsValid() is false.
     */
     time_t GetTicks() const;
+
+    /**
+        Returns the number of milliseconds since Jan 1, 1970 UTC.
+
+        Directly returns the internal representation of wxDateTime object as
+        the number of milliseconds (positive or negative) since the Unix/C
+        epoch.
+     */
+    wxLongLong GetValue() const;
 
     /**
         Returns broken down representation of the date and time.
@@ -709,10 +738,10 @@ public:
 
 
     /**
-        @name Date Arithmetics
+        @name Date Arithmetic
 
         These functions carry out
-        @ref overview_datetime_arithmetics "arithmetics" on the wxDateTime
+        @ref overview_datetime_arithmetics "arithmetic" on the wxDateTime
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan
         may be added to wxDateTime, hence all functions are overloaded to
         accept both arguments.
@@ -766,7 +795,7 @@ public:
     /**
        Returns the difference between this object and @a dt as a wxDateSpan.
 
-       This method allows to find the number of entire years, months, weeks and
+       This method allows finding the number of entire years, months, weeks and
        days between @a dt and this date.
 
        @since 2.9.5
@@ -1132,10 +1161,14 @@ public:
         @a n may be either positive (counting from the beginning of the month)
         or negative (counting from the end of it).
 
-        For example, SetToWeekDay(2, wxDateTime::Wed) will set the date to the
+        For example, SetToWeekDay(wxDateTime::Wed, 2) will set the date to the
         second Wednesday in the current month and
-        SetToWeekDay(-1, wxDateTime::Sun) will set the date to the last Sunday
+        SetToWeekDay(wxDateTime::Sun, -1) will set the date to the last Sunday
         in the current month.
+
+        Note that leaving the month or year parameters as their default values
+        will result in the current month or year being substituted, overwriting
+        any previous values in the wxDateTime object.
 
         @return @true if the date was modified successfully, @false otherwise
                  meaning that the specified date doesn't exist.
@@ -1223,15 +1256,23 @@ public:
         for more information about time zones. Normally, these functions should
         be rarely used.
 
+        Note that all functions in this section always use the current offset
+        for the specified time zone and don't take into account its possibly
+        different historical value at the given date.
+
         Related functions in other groups: GetBeginDST(), GetEndDST()
     */
     //@{
 
     /**
-        Transform the date from the given time zone to the local one. If
-        @a noDST is @true, no DST adjustments will be made.
+        Transform the date from the given time zone to the local one.
 
-        @return The date in the local time zone.
+        If @a noDST is @true, no DST adjustments will be made.
+
+        If @a tz parameter is wxDateTime::Local, no adjustment is performed.
+
+        @return The date adjusted by the different between the given and the
+        local time zones.
     */
     wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1249,7 +1290,9 @@ public:
 
     /**
         Modifies the object in place to represent the date in another time
-        zone. If @a noDST is @true, no DST adjustments will be made.
+        zone.
+
+        If @a noDST is @true, no DST adjustments will be made.
     */
     wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = false);
 
@@ -1259,10 +1302,14 @@ public:
     wxDateTime& MakeUTC(bool noDST = false);
 
     /**
-        Transform the date to the given time zone. If @a noDST is @true, no DST
-        adjustments will be made.
+        Transform the date to the given time zone.
 
-        @return The date in the new time zone.
+        If @a noDST is @true, no DST adjustments will be made.
+
+        If @a tz parameter is wxDateTime::Local, no adjustment is performed.
+
+        @return The date adjusted by the different between the local and the
+        given time zones.
     */
     wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1455,6 +1502,18 @@ public:
                                   Country country = Country_Default);
 
     /**
+         Acquires the first weekday of a week based on locale and/or OS settings.
+         If the information was not available, returns @c Sun.
+         @param firstDay
+             The address of a WeekDay variable to which the first weekday will be
+             assigned to.
+         @return If the first day could not be determined, returns false,
+             and @a firstDay is set to a fallback value.
+         @since 3.1.1
+    */
+    static bool GetFirstWeekDay(WeekDay *firstDay);
+
+    /**
         Returns @true if the @a year is a leap one in the specified calendar.
         This functions supports Gregorian and Julian calendars.
     */
@@ -1468,7 +1527,7 @@ public:
     static bool IsWestEuropeanCountry(Country country = Country_Default);
 
     /**
-        Returns the object corresponding to the current time.
+        Returns the object corresponding to the current time in local time zone.
 
         Example:
 
@@ -1513,11 +1572,11 @@ public:
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current UTC time including the
+        Returns the object corresponding to the current time including the
         milliseconds.
 
-        Notice that unlike Now(), this method creates a wxDateTime object
-        corresponding to UTC, not local, time.
+        Like Now(), this method creates the wxDateTime object corresponding to
+        the current moment in local time.
 
         @see Now(), wxGetUTCTimeMillis()
     */

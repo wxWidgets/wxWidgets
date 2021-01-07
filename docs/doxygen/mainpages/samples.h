@@ -76,6 +76,14 @@ in wxAnimation.
 
 @sampledir{animate}
 
+@section page_samples_archive Archive Sample
+
+This sample shows how you can use wxArchiveClassFactory, wxArchiveOutputStream
+and wxArchiveInputStream. This shows how to process ZIP and TAR archives using
+wxZipOutputStream and wxTarOutputStream
+
+@sampledir{archive}
+
 @section page_samples_artprov Art Provider Sample
 
 This sample shows how you can customize the look of standard
@@ -169,7 +177,7 @@ This sample shows how to use the common dialogs available from wxWidgets. These
 dialogs are described in detail in the @ref overview_cmndlg.
 
 In addition to the dialogs accessible from the sample menus, you can also run
-it with a <code>--progress=style</code> command line option to show a
+it with a <code>\--progress=style</code> command line option to show a
 wxProgressDialog with the given style (try 0 for the default style) on program
 startup, before the main window is shown.
 
@@ -266,7 +274,7 @@ wxDataObject to achieve this.
 
 This sample demonstrates various features of the wxWidgets events. It
 shows how to dynamic events and connecting/disconnecting the event handlers
-during run time by using wxEvtHandler::Connect() and wxEvtHandler::Disconnect(),
+during run time by using wxEvtHandler::Bind() and wxEvtHandler::Unbind(),
 and also how to use wxWindow::PushEventHandler() and wxWindow::PopEventHandler().
 
 @sampledir{event}
@@ -298,23 +306,6 @@ wxProcess::Kill() and test for their existence with
 wxProcess::Exists().
 
 @sampledir{exec}
-
-@section page_samples_flash Flash Sample
-
-The flash sample demonstrates embedding of Adobe Flash into a wxWidgets
-program. Currently it only works under Windows as it uses the Flash ActiveX
-control to achieve this but we hope to be able to extend it to also work under
-other platforms in the future. The sample also currently requires Microsoft
-Visual C++ compiler as it uses COM support extensions specific to this
-compiler.
-
-The sample comes with 2 Flash files (SWF), showing a simple Flash animation
-which can be controlled using the "Play", "Stop" and "Back"/"Forward" buttons
-in the sample as well as a Flash form which shows how Flash and wxWidgets
-program can exchange data: calling "GetText" function without arguments returns
-the text of the text control defined inside Flash and calling "SetText" with an
-argument sets the control contents to the given string. Finally clicking on the
-button generates an event which is caught by the C++ program.
 
 @section page_samples_font Font Sample
 
@@ -651,6 +642,20 @@ on screen.
 
 @sampledir{scroll}
 
+@section page_samples_secretstore Secret Store Sample
+
+@sampleabout{wxSecretStore}
+
+This console-mode sample shows the use of wxSecretStore class for remembering
+the user-entered passwords. It should be run from the command line with the
+first argument of @c save, @c load or @c delete, followed by the "service" and
+"user" arguments as used by wxSecretStore methods. After storing some password,
+you can check that it can be retrieved later and also that it can be seen in
+the OS-provided password manager (e.g. credential manager under MSW or keychain
+utility under macOS).
+
+@sampledir{secretstore}
+
 @section page_samples_shaped Shaped Window Sample
 
 @sampleabout{how to implement a shaped or transparent window\, and a window showing/hiding with effect}
@@ -892,7 +897,7 @@ control.
 
 The wxWebView sample demonstarates the various capabilities of the wxWebView
 control. It is set up as a simple single window web browser, but with support
-for many of the more complex wxWebView features, including browsing through 
+for many of the more complex wxWebView features, including browsing through
 archives.
 
 @sampledir{webview}

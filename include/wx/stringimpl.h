@@ -105,7 +105,8 @@ struct WXDLLIMPEXP_BASE wxStringData
           nAllocLength; // allocated memory size
 
   // mimics declaration 'wxStringCharType data[nAllocLength]'
-  wxStringCharType* data() const { return (wxStringCharType*)(this + 1); }
+  wxStringCharType* data() { return reinterpret_cast<wxStringCharType*>(this + 1); }
+  const wxStringCharType* data() const { return reinterpret_cast<const wxStringCharType*>(this + 1); }
 
   // empty string has a special ref count so it's never deleted
   bool  IsEmpty()   const { return (nRefs == -1); }
@@ -151,9 +152,9 @@ protected:
     // initializes the string to the empty value (must be called only from
     // ctors, use Reinit() otherwise)
 #if wxUSE_UNICODE_UTF8
-  void Init() { m_pchData = (wxStringCharType *)wxEmptyStringImpl; } // FIXME-UTF8
+  void Init() { m_pchData = const_cast<wxStringCharType*>(wxEmptyStringImpl); } // FIXME-UTF8
 #else
-  void Init() { m_pchData = (wxStringCharType *)wxEmptyString; }
+  void Init() { m_pchData = const_cast<wxStringCharType*>(wxEmptyString); }
 #endif
     // initializes the string with (a part of) C-string
   void InitWith(const wxStringCharType *psz, size_t nPos = 0, size_t nLen = npos);

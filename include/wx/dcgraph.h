@@ -32,15 +32,15 @@ public:
     wxGCDC( const wxEnhMetaFileDC& dc );
 #endif
     wxGCDC(wxGraphicsContext* context);
-    
+
     wxGCDC();
     virtual ~wxGCDC();
 
 #ifdef __WXMSW__
     // override wxDC virtual functions to provide access to HDC associated with
     // this Graphics object (implemented in src/msw/graphics.cpp)
-    virtual WXHDC AcquireHDC();
-    virtual void ReleaseHDC(WXHDC hdc);
+    virtual WXHDC AcquireHDC() wxOVERRIDE;
+    virtual void ReleaseHDC(WXHDC hdc) wxOVERRIDE;
 #endif // __WXMSW__
 
 private:
@@ -60,6 +60,10 @@ public:
 #if defined(__WXMSW__) && wxUSE_ENH_METAFILE
     wxGCDCImpl( wxDC *owner, const wxEnhMetaFileDC& dc );
 #endif
+
+    // Ctor using an existing graphics context given to wxGCDC ctor.
+    wxGCDCImpl(wxDC *owner, wxGraphicsContext* context);
+
     wxGCDCImpl( wxDC *owner );
 
     virtual ~wxGCDCImpl();
@@ -83,7 +87,10 @@ public:
     virtual void SetBrush(const wxBrush& brush) wxOVERRIDE;
     virtual void SetBackground(const wxBrush& brush) wxOVERRIDE;
     virtual void SetBackgroundMode(int mode) wxOVERRIDE;
+
+#if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette) wxOVERRIDE;
+#endif
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 
@@ -106,6 +113,19 @@ public:
     virtual void SetGraphicsContext( wxGraphicsContext* ctx ) wxOVERRIDE;
 
     virtual void* GetHandle() const wxOVERRIDE;
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+    virtual bool CanUseTransformMatrix() const wxOVERRIDE;
+    virtual bool SetTransformMatrix(const wxAffineMatrix2D& matrix) wxOVERRIDE;
+    virtual wxAffineMatrix2D GetTransformMatrix() const wxOVERRIDE;
+    virtual void ResetTransformMatrix() wxOVERRIDE;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
+    // coordinates conversions and transforms
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
 
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -185,6 +205,7 @@ public:
     virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height) wxOVERRIDE;
+    virtual bool DoGetClippingRect(wxRect& rect) const wxOVERRIDE;
 
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
@@ -195,8 +216,11 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
 
 #ifdef __WXMSW__
-    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const;
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const wxOVERRIDE;
 #endif // __WXMSW__
+
+    // update the internal clip box variables
+    void UpdateClipBox();
 
 protected:
     // unused int parameter distinguishes this version, which does not create a
@@ -207,13 +231,27 @@ protected:
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;
-
-    double m_formerScaleX, m_formerScaleY;
+    wxGraphicsMatrix m_matrixCurrentInv;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxAffineMatrix2D m_matrixExtTransform;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     wxGraphicsContext* m_graphicContext;
 
+    bool m_isClipBoxValid;
+
 private:
+    // This method only initializes trivial fields.
+    void CommonInit();
+
+    // This method initializes all fields (including those initialized by
+    // CommonInit() as it calls it) and the given context, if non-null, which
+    // is assumed to be newly created.
     void Init(wxGraphicsContext*);
+
+    // This method initializes m_graphicContext, m_ok and m_matrixOriginal
+    // fields, returns true if the context was valid.
+    bool DoInitContext(wxGraphicsContext* ctx);
 
     wxDECLARE_CLASS(wxGCDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);

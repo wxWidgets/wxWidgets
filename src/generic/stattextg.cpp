@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATTEXT
 
@@ -44,7 +41,7 @@ bool wxGenericStaticText::Create(wxWindow *parent,
 
     SetLabel(label);
     SetInitialSize(size);
-    Connect(wxEVT_PAINT, wxPaintEventHandler(wxGenericStaticText::OnPaint));
+    Bind(wxEVT_PAINT, &wxGenericStaticText::OnPaint, this);
     return true;
 }
 
@@ -100,12 +97,9 @@ wxSize wxGenericStaticText::DoGetBestClientSize() const
 void wxGenericStaticText::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
-    DoSetLabel(GetEllipsizedLabel());
+    WXSetVisibleLabel(GetEllipsizedLabel());
 
-    InvalidateBestSize();
-
-    if ( !IsEllipsized() )
-        AutoResizeIfNecessary();
+    AutoResizeIfNecessary();
 
 #if wxUSE_MARKUP
     if ( m_markupText )
@@ -118,7 +112,7 @@ void wxGenericStaticText::SetLabel(const wxString& label)
     Refresh();
 }
 
-void wxGenericStaticText::DoSetLabel(const wxString& label)
+void wxGenericStaticText::WXSetVisibleLabel(const wxString& label)
 {
     m_mnemonic = FindAccelIndex(label, &m_label);
 }

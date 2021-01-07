@@ -40,7 +40,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxTextCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxTextCtrlNameStr))
     {
         Init();
         Create(parent, id, value, pos, size, style, validator, name);
@@ -55,7 +55,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxTextCtrlNameStr);
+        const wxString& name = wxASCII_STR(wxTextCtrlNameStr));
 
     // accessors
     // ---------
@@ -99,7 +99,7 @@ public:
     // --------------
     virtual void Command(wxCommandEvent& event) wxOVERRIDE;
 
-    virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
 
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);
@@ -130,11 +130,16 @@ public:
     virtual void MacSuperChangedPosition() wxOVERRIDE;
     virtual void MacCheckSpelling(bool check);
 
+    void OSXEnableAutomaticQuoteSubstitution(bool enable);
+    void OSXEnableAutomaticDashSubstitution(bool enable);
+    void OSXDisableAllSmartSubstitutions();
+
 protected:
     // common part of all ctors
     void Init();
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen) const wxOVERRIDE;
 
     // flag is set to true when the user edits the controls contents
     bool m_dirty;

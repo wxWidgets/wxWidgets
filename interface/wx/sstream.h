@@ -62,7 +62,7 @@ public:
         with default value of this argument the data written to the stream must
         be valid UTF-8, pass @c wxConvISO8859_1 to deal with arbitrary 8 bit data.
     */
-    wxStringOutputStream(wxString* pString = 0, wxMBConv& conv = wxConvUTF8);
+    explicit wxStringOutputStream(wxString* pString = NULL, wxMBConv& conv = wxConvUTF8);
 
     /**
         Returns the string containing all the data written to the stream so far.

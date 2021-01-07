@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BITMAPCOMBOBOX
 
@@ -29,7 +26,6 @@
     #include "wx/log.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 // ============================================================================
@@ -128,6 +124,7 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
         m_widget = gtk_combo_box_entry_new_with_model( GTK_TREE_MODEL(store), m_stringCellIndex );
 #endif
         m_entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(m_widget)));
+        g_object_add_weak_pointer(G_OBJECT(m_entry), (void**)&m_entry);
         gtk_editable_set_editable(GTK_EDITABLE(m_entry), true);
     }
     g_object_ref(m_widget);

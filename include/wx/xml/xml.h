@@ -18,6 +18,7 @@
 #include "wx/string.h"
 #include "wx/object.h"
 #include "wx/list.h"
+#include "wx/textbuf.h"
 #include "wx/versioninfo.h"
 
 #ifdef WXMAKINGDLL_XML
@@ -170,7 +171,7 @@ public:
     void SetAttributes(wxXmlAttribute *attr) { m_attrs = attr; }
     virtual void AddAttribute(wxXmlAttribute *attr);
 
-    // If true, don't do encoding conversion to improve efficiency - node content is ACII text
+    // If true, don't do encoding conversion to improve efficiency - node content is ASCII text
     bool GetNoConversion() const { return m_noConversion; }
     void SetNoConversion(bool noconversion) { m_noConversion = noconversion; }
 
@@ -240,10 +241,12 @@ class WXDLLIMPEXP_XML wxXmlDoctype
 {
 public:
     explicit
-    wxXmlDoctype(const wxString& name = wxString(),
-                 const wxString& sysid = wxString(),
-                 const wxString& pubid = wxString())
-                 : m_rootName(name), m_systemId(sysid), m_publicId(pubid)
+    wxXmlDoctype(const wxString& rootName = wxString(),
+                 const wxString& systemId = wxString(),
+                 const wxString& publicId = wxString())
+                 : m_rootName(rootName),
+                   m_systemId(systemId),
+                   m_publicId(publicId)
                  {}
 
     // Default copy ctor and assignment operators are ok.
@@ -317,6 +320,9 @@ public:
     // encoding of in-memory representation!
     const wxString& GetFileEncoding() const { return m_fileEncoding; }
     const wxXmlDoctype& GetDoctype() const { return m_doctype; }
+    // Returns file type of document
+    wxTextFileType GetFileType() const { return m_fileType; }
+    wxString GetEOL() const { return m_eol; }
 
     // Write-access methods:
     wxXmlNode *DetachDocumentNode() { wxXmlNode *old=m_docNode; m_docNode=NULL; return old; }
@@ -326,6 +332,7 @@ public:
     void SetVersion(const wxString& version) { m_version = version; }
     void SetFileEncoding(const wxString& encoding) { m_fileEncoding = encoding; }
     void SetDoctype(const wxXmlDoctype& doctype) { m_doctype = doctype; }
+    void SetFileType(wxTextFileType fileType);
     void AppendToProlog(wxXmlNode *node);
 
 #if !wxUSE_UNICODE
@@ -346,6 +353,8 @@ private:
 #endif
     wxXmlDoctype m_doctype;
     wxXmlNode *m_docNode;
+    wxTextFileType m_fileType;
+    wxString m_eol;
 
     void DoCopy(const wxXmlDocument& doc);
 

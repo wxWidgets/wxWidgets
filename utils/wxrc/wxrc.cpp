@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -652,10 +649,6 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "//\n\n"
 "#include <wx/wxprec.h>\n"
 "\n"
-"#ifdef __BORLANDC__\n"
-"    #pragma hdrstop\n"
-"#endif\n"
-"\n"
 ""
 "#include <wx/filesys.h>\n"
 "#include <wx/fs_mem.h>\n"
@@ -949,6 +942,51 @@ static wxString ConvertText(const wxString& str)
 }
 
 
+enum ContentsKind
+{
+    Contents_NotTrans,  // Not a translatable text at all.
+    Contents_TransOnly, // Translatable but not escaped text.
+    Contents_Text       // Text, i.e. both translatable and escaped.
+};
+
+// Check if the given node contains translatable text and, if it does, whether
+// it's escaped (i.e. parsed using GetText()) or not.
+ContentsKind
+GetNodeContentsKind(wxXmlNode& node, const wxString& contents)
+{
+    if ( node.GetName() == wxT("label") ||
+         (node.GetName() == wxT("value") && !contents.IsNumber()) ||
+         node.GetName() == wxT("help") ||
+         node.GetName() == wxT("hint") ||
+         node.GetName() == wxT("longhelp") ||
+         node.GetName() == wxT("tooltip") ||
+         node.GetName() == wxT("htmlcode") ||
+         node.GetName() == wxT("title") ||
+         node.GetName() == wxT("message") ||
+         node.GetName() == wxT("note") ||
+         node.GetName() == wxT("defaultdirectory") ||
+         node.GetName() == wxT("defaultfilename") ||
+         node.GetName() == wxT("defaultfolder") ||
+         node.GetName() == wxT("filter") ||
+         node.GetName() == wxT("caption") )
+    {
+        return Contents_Text;
+    }
+
+    // This one is special: it is translated in XRC, but its contents is not
+    // escaped, except for the special case of wxRadioBox when it can be, if
+    // "label" attribute is supplied.
+    if ( node.GetName() == wxT("item") )
+    {
+        return node.GetAttribute(wxT("label"), wxT("0")) == wxT("1")
+                ? Contents_Text
+                : Contents_TransOnly;
+    }
+
+    return Contents_NotTrans;
+}
+
+
 ExtractedStrings
 XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
 {
@@ -963,40 +1001,26 @@ XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
         if ((node->GetType() == wxXML_ELEMENT_NODE) &&
             // parent is an element, i.e. has subnodes...
             (n->GetType() == wxXML_TEXT_NODE ||
-            n->GetType() == wxXML_CDATA_SECTION_NODE) &&
+            n->GetType() == wxXML_CDATA_SECTION_NODE))
             // ...it is textnode...
-            (
-                node/*not n!*/->GetName() == wxT("label") ||
-                (node/*not n!*/->GetName() == wxT("value") &&
-                               !n->GetContent().IsNumber()) ||
-                node/*not n!*/->GetName() == wxT("help") ||
-                node/*not n!*/->GetName() == wxT("longhelp") ||
-                node/*not n!*/->GetName() == wxT("tooltip") ||
-                node/*not n!*/->GetName() == wxT("htmlcode") ||
-                node/*not n!*/->GetName() == wxT("title") ||
-                node/*not n!*/->GetName() == wxT("item") ||
-                node/*not n!*/->GetName() == wxT("message") ||
-                node/*not n!*/->GetName() == wxT("note") ||
-                node/*not n!*/->GetName() == wxT("defaultdirectory") ||
-                node/*not n!*/->GetName() == wxT("defaultfilename") ||
-                node/*not n!*/->GetName() == wxT("defaultfolder") ||
-                node/*not n!*/->GetName() == wxT("filter") ||
-                node/*not n!*/->GetName() == wxT("caption")
-            ))
-            // ...and known to contain translatable string
         {
-            if (!flagGettext ||
-                node->GetAttribute(wxT("translate"), wxT("1")) != wxT("0"))
+            wxString s = n->GetContent();
+            switch ( GetNodeContentsKind(*node, s) )
             {
-                arr.push_back
-                    (
-                        ExtractedString
-                        (
-                            ConvertText(n->GetContent()),
-                            filename,
-                            n->GetLineNumber()
-                        )
-                    );
+                case Contents_NotTrans:
+                    break;
+
+                case Contents_Text:
+                    s = ConvertText(s);
+                    wxFALLTHROUGH;
+
+                case Contents_TransOnly:
+                    if (!flagGettext ||
+                        node->GetAttribute(wxT("translate"), wxT("1")) != wxT("0"))
+                    {
+                        arr.push_back(ExtractedString(s, filename, n->GetLineNumber()));
+                    }
+                    break;
             }
         }
 

@@ -44,8 +44,13 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        return DoCreate(size, wxDefaultSize, false, family, style,
-                        weight, underlined, face, encoding);
+        return DoCreate(InfoFromLegacyParams(size,
+                                             family,
+                                             style,
+                                             weight,
+                                             underlined,
+                                             face,
+                                             encoding));
     }
 
     wxFont(const wxSize& pixelSize,
@@ -60,7 +65,7 @@ public:
                      underlined, face, encoding);
     }
 
-    wxFont(const wxNativeFontInfo& info, WXHFONT hFont = 0)
+    wxFont(const wxNativeFontInfo& info, WXHFONT hFont = NULL)
     {
         Create(info, hFont);
     }
@@ -76,39 +81,50 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        return DoCreate(-1, pixelSize, true, family, style,
-                        weight, underlined, face, encoding);
+        return DoCreate(InfoFromLegacyParams(pixelSize,
+                                             family,
+                                             style,
+                                             weight,
+                                             underlined,
+                                             face,
+                                             encoding));
     }
 
-    bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
+    bool Create(const wxNativeFontInfo& info, WXHFONT hFont = NULL);
 
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual int GetPointSize() const;
-    virtual wxSize GetPixelSize() const;
-    virtual bool IsUsingSizeInPixels() const;
-    virtual wxFontStyle GetStyle() const;
-    virtual wxFontWeight GetWeight() const;
-    virtual bool GetUnderlined() const;
-    virtual bool GetStrikethrough() const;
-    virtual wxString GetFaceName() const;
-    virtual wxFontEncoding GetEncoding() const;
-    virtual const wxNativeFontInfo *GetNativeFontInfo() const;
+    virtual double GetFractionalPointSize() const wxOVERRIDE;
+    virtual wxSize GetPixelSize() const wxOVERRIDE;
+    virtual bool IsUsingSizeInPixels() const wxOVERRIDE;
+    virtual wxFontStyle GetStyle() const wxOVERRIDE;
+    virtual int GetNumericWeight() const wxOVERRIDE;
+    virtual bool GetUnderlined() const wxOVERRIDE;
+    virtual bool GetStrikethrough() const wxOVERRIDE;
+    virtual wxString GetFaceName() const wxOVERRIDE;
+    virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
+    virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
-    virtual void SetPointSize(int pointSize);
-    virtual void SetPixelSize(const wxSize& pixelSize);
-    virtual void SetFamily(wxFontFamily family);
-    virtual void SetStyle(wxFontStyle style);
-    virtual void SetWeight(wxFontWeight weight);
-    virtual bool SetFaceName(const wxString& faceName);
-    virtual void SetUnderlined(bool underlined);
-    virtual void SetStrikethrough(bool strikethrough);
-    virtual void SetEncoding(wxFontEncoding encoding);
+    virtual void SetFractionalPointSize(double pointSize) wxOVERRIDE;
+    virtual void SetPixelSize(const wxSize& pixelSize) wxOVERRIDE;
+    virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
+    virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
+    virtual void SetNumericWeight(int weight) wxOVERRIDE;
+    virtual bool SetFaceName(const wxString& faceName) wxOVERRIDE;
+    virtual void SetUnderlined(bool underlined) wxOVERRIDE;
+    virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
+    virtual void SetEncoding(wxFontEncoding encoding) wxOVERRIDE;
 
     wxDECLARE_COMMON_FONT_METHODS();
 
-    virtual bool IsFixedWidth() const;
+    virtual bool IsFixedWidth() const wxOVERRIDE;
+
+    // MSW needs to modify the font object when the DPI of the window it
+    // is used with changes, this function can be used to do it.
+    //
+    // This method is not considered to be part of wxWidgets public API.
+    void WXAdjustToPPI(const wxSize& ppi);
 
     wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants ie: wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD")
     wxFont(int size,
@@ -138,32 +154,24 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    virtual bool IsFree() const;
-    virtual bool RealizeResource();
-    virtual WXHANDLE GetResourceHandle() const;
-    virtual bool FreeResource(bool force = false);
+    virtual bool IsFree() const wxOVERRIDE;
+    virtual bool RealizeResource() wxOVERRIDE;
+    virtual WXHANDLE GetResourceHandle() const wxOVERRIDE;
+    virtual bool FreeResource(bool force = false) wxOVERRIDE;
 
     // for consistency with other wxMSW classes
     WXHFONT GetHFONT() const;
 
 protected:
-    // real font creation function, used in all cases
-    bool DoCreate(int size,
-                  const wxSize& pixelSize,
-                  bool sizeUsingPixels,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined = false,
-                  const wxString& face = wxEmptyString,
-                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    // Common helper of overloaded Create() methods.
+    bool DoCreate(const wxFontInfo& info);
 
-    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
-    virtual wxFontFamily DoGetFamily() const;
+    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info) wxOVERRIDE;
+    virtual wxFontFamily DoGetFamily() const wxOVERRIDE;
 
     // implement wxObject virtuals which are used by AllocExclusive()
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxFont);

@@ -30,10 +30,10 @@ enum wxOperatingSystemId
     wxOS_MAC_OSX_DARWIN = 1 << 1,     // Apple Mac OS X with Unix paths
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
-    wxOS_WINDOWS_9X     = 1 << 2,     // Windows 9x family (95/98/ME)
-    wxOS_WINDOWS_NT     = 1 << 3,     // Windows NT family (NT/2000/XP)
-    wxOS_WINDOWS_MICRO  = 1 << 4,     // MicroWindows
-    wxOS_WINDOWS_CE     = 1 << 5,     // Windows CE (Window Mobile)
+    wxOS_WINDOWS_9X     = 1 << 2,     // obsolete
+    wxOS_WINDOWS_NT     = 1 << 3,     // obsolete
+    wxOS_WINDOWS_MICRO  = 1 << 4,     // obsolete
+    wxOS_WINDOWS_CE     = 1 << 5,     // obsolete
     wxOS_WINDOWS = wxOS_WINDOWS_9X      |
                    wxOS_WINDOWS_NT      |
                    wxOS_WINDOWS_MICRO   |
@@ -56,8 +56,8 @@ enum wxOperatingSystemId
 
     // 1<<13 and 1<<14 available for other Unix flavours
 
-    wxOS_DOS            = 1 << 15,      // Microsoft DOS
-    wxOS_OS2            = 1 << 16       // OS/2
+    wxOS_DOS            = 1 << 15,      // obsolete
+    wxOS_OS2            = 1 << 16       // obsolete
 };
 
 // list of wxWidgets ports - some of them can be used with more than
@@ -70,30 +70,39 @@ enum wxPortId
 
     wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
     wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
-    wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
+    wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, 3.x
     wxPORT_DFB      = 1 << 4,       // wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
-    wxPORT_PM       = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
-    wxPORT_OS2      = wxPORT_PM,    // wxOS2, using OS/2 Presentation Manager
+    wxPORT_PM       = 1 << 6,       // obsolete
+    wxPORT_OS2      = wxPORT_PM,    // obsolete
     wxPORT_MAC      = 1 << 7,       // wxOSX (former wxMac), using Cocoa or iPhone API
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-    wxPORT_QT       = 1 << 10       // wxQT, using QT4
+    wxPORT_WINCE    = 1 << 9,       // obsolete
+    wxPORT_QT       = 1 << 10       // wxQT, using Qt 5+
 };
 
-// architecture of the operating system
+// architecture bitness of the operating system
 // (regardless of the build environment of wxWidgets library - see
 // wxIsPlatform64bit documentation for more info)
-enum wxArchitecture
+
+enum wxBitness
 {
-    wxARCH_INVALID = -1,        // returned on error
+    wxBITNESS_INVALID = -1,     // returned on error
 
-    wxARCH_32,                  // 32 bit
-    wxARCH_64,
+    wxBITNESS_32,
+    wxBITNESS_64,
 
-    wxARCH_MAX
+    wxBITNESS_MAX
 };
+
+typedef wxBitness wxArchitecture;
+
+const wxArchitecture
+    wxARCH_INVALID = wxBITNESS_INVALID,
+    wxARCH_32 = wxBITNESS_32,
+    wxARCH_64 = wxBITNESS_64,
+    wxARCH_MAX = wxBITNESS_MAX;
 
 
 // endian-ness of the machine
@@ -134,7 +143,7 @@ struct wxLinuxDistributionInfo
 // ----------------------------------------------------------------------------
 
 // Information about the toolkit that the app is running under and some basic
-// platform and architecture info
+// platform and architecture bitness info
 class WXDLLIMPEXP_BASE wxPlatformInfo
 {
 public:
@@ -143,7 +152,7 @@ public:
                    int tkMajor = -1, int tkMinor = -1,
                    wxOperatingSystemId id = wxOS_UNKNOWN,
                    int osMajor = -1, int osMinor = -1,
-                   wxArchitecture arch = wxARCH_INVALID,
+                   wxBitness bitness = wxBITNESS_INVALID,
                    wxEndianness endian = wxENDIAN_INVALID,
                    bool usingUniversal = false);
 
@@ -166,6 +175,8 @@ public:
     static wxOperatingSystemId GetOperatingSystemId(const wxString &name);
     static wxPortId GetPortId(const wxString &portname);
 
+    static wxBitness GetBitness(const wxString &bitness);
+    wxDEPRECATED_MSG("Use GetBitness() instead")
     static wxArchitecture GetArch(const wxString &arch);
     static wxEndianness GetEndianness(const wxString &end);
 
@@ -177,6 +188,8 @@ public:
     static wxString GetPortIdName(wxPortId port, bool usingUniversal);
     static wxString GetPortIdShortName(wxPortId port, bool usingUniversal);
 
+    static wxString GetBitnessName(wxBitness bitness);
+    wxDEPRECATED_MSG("Use GetBitnessName() instead")
     static wxString GetArchName(wxArchitecture arch);
     static wxString GetEndiannessName(wxEndianness end);
 
@@ -220,8 +233,11 @@ public:
         { return m_ldi; }
     wxPortId GetPortId() const
         { return m_port; }
+    wxBitness GetBitness() const
+        { return m_bitness; }
+    wxDEPRECATED_MSG("Use GetBitness() instead")
     wxArchitecture GetArchitecture() const
-        { return m_arch; }
+        { return GetBitness(); }
     wxEndianness GetEndianness() const
         { return m_endian; }
 
@@ -237,10 +253,15 @@ public:
         { return GetPortIdName(m_port, m_usingUniversal); }
     wxString GetPortIdShortName() const
         { return GetPortIdShortName(m_port, m_usingUniversal); }
+    wxString GetBitnessName() const
+        { return GetBitnessName(m_bitness); }
+    wxDEPRECATED_MSG("Use GetBitnessName() instead")
     wxString GetArchName() const
-        { return GetArchName(m_arch); }
+        { return GetBitnessName(); }
     wxString GetEndiannessName() const
         { return GetEndiannessName(m_endian); }
+    wxString GetCpuArchitectureName() const
+        { return m_cpuArch; }
     wxString GetOperatingSystemDescription() const
         { return m_osDesc; }
     wxString GetDesktopEnvironment() const
@@ -275,10 +296,15 @@ public:
         { m_osDesc = desc; }
     void SetPortId(wxPortId n)
         { m_port = n; }
-    void SetArchitecture(wxArchitecture n)
-        { m_arch = n; }
+    void SetBitness(wxBitness n)
+        { m_bitness = n; }
+    wxDEPRECATED_MSG("Use SetBitness() instead")
+    void SetArchitecture(wxBitness n)
+        { SetBitness(n); }
     void SetEndianness(wxEndianness n)
         { m_endian = n; }
+    void SetCpuArchitectureName(const wxString& cpuArch)
+        { m_cpuArch = cpuArch; }
 
     void SetDesktopEnvironment(const wxString& de)
         { m_desktopEnv = de; }
@@ -298,7 +324,7 @@ public:
                m_tkVersionMajor != -1 && m_tkVersionMinor != -1 &&
                m_tkVersionMicro != -1 &&
                m_port != wxPORT_UNKNOWN &&
-               m_arch != wxARCH_INVALID &&
+               m_bitness != wxBITNESS_INVALID &&
                m_endian != wxENDIAN_INVALID;
 
                // do not check linux-specific info; it's ok to have them empty
@@ -359,11 +385,14 @@ protected:
     // others
     // -----------------
 
-    // architecture of the OS/machine
-    wxArchitecture m_arch;
+    // architecture bitness of the OS/machine
+    wxBitness m_bitness;
 
     // endianness of the machine
     wxEndianness m_endian;
+
+    // CPU architecture family name, possibly empty if unknown
+    wxString m_cpuArch;
 };
 
 

@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 3.1.1
+PROJECT_NUMBER         = 3.1.5
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -19,7 +19,7 @@ ABBREVIATE_BRIEF       =
 ALWAYS_DETAILED_SEC    = YES # Default: NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = "$(WXWIDGETS)/"
+STRIP_FROM_PATH        = ../..
 STRIP_FROM_INC_PATH    = "$(WXWIDGETS)/include/" \
                          "$(WXWIDGETS)/interface/"
 SHORT_NAMES            = NO
@@ -100,7 +100,7 @@ ALIASES += appearance_brief{2}="\htmlonly<div class="appearance_brief"><table><t
 ALIASES += genericAppearance_brief{2}="\htmlonly<div class="appearance_brief"><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html generic/\2.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # aliases for the creation of "named member groups"
-# USAGE: the first argument must not contain spaces and be a unique identifier 
+# USAGE: the first argument must not contain spaces and be a unique identifier
 #        of the member group for the class being documented;
 #        the second argument is the member group name and can contain spaces
 #        See wxString as an usage example.
@@ -214,7 +214,7 @@ ALIASES += rightCurly="}"
 # For indicating a sample location
 ALIASES += sampledir{1}="@e Location: @c samples/\1 subdirectory of your wxWidgets installation or https://github.com/wxWidgets/wxWidgets/tree/master/samples/\1"
 
-# For refering to the corresponding sample in a class document or a overview
+# For referring to the corresponding sample in a class document or a overview
 # Usually placed in the queue of @see
 ALIASES += sample{1}="\ref page_samples_\1"
 
@@ -292,9 +292,16 @@ WARN_LOGFILE           = doxygen.log
 INPUT                  = mainpages \
                          groups \
                          overviews \
+                         ../gtk \
+                         ../ios \
+                         ../motif \
+                         ../msw \
+                         ../osx \
+                         ../qt \
+                         ../x11 \
                          ../../interface
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.h
+FILE_PATTERNS          = *.h *.md
 RECURSIVE              = YES # Default: NO
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
@@ -377,6 +384,7 @@ GENERATE_CHI           = NO
 CHM_INDEX_ENCODING     =
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
+TOC_INCLUDE_HEADINGS   = 3
 
 
 #---------------------------------------------------------------------------
@@ -527,7 +535,7 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 
 TAGFILES               =
-GENERATE_TAGFILE       =
+GENERATE_TAGFILE       = $(GENERATE_TAGFILE)
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 EXTERNAL_PAGES         = YES

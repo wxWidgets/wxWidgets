@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 31 March 2016                                                       *
+# Date : 4 March 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 
@@ -12,35 +12,35 @@
 .suffixes : .cpp
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,__USE_STD_IOSTREAM=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)\
 	   /include=([],[-.src],[-.include],[-.lexlib])\
 	   /warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1)/name=(as_is,short)\
+CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,__USE_STD_IOSTREAM=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)\
 	   /include=([],[-.src],[-.include],[-.lexlib])\
 	   /warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,__USE_STD_IOSTREAM=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)\
 	   /include=([],[-.src],[-.include],[-.lexlib])\
 	   /warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
+CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,WXBUILDING=1)/float=ieee/name=(as_is,short)\
 	/ieee=denorm/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,__USE_STD_IOSTREAM=1)/float=ieee\
+CXX_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,__USE_STD_IOSTREAM=1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)\
 	/include=([],[-.src],[-.include],[-.lexlib])\
 	/warn=disable=(INTSIGNCHANGE)
-CC_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/include=([],[-.src],[-.include],[-.lexlib])
 .else
 CXX_DEFINE =
@@ -79,7 +79,7 @@ OBJECTS1=LexMMIXAL.obj,LexModula.obj,LexMPT.obj,LexMSSQL.obj,LexMySQL.obj,\
 	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj,\
 	LexDMAP.obj,LexHex.obj,LexBibTeX.obj,LexDMIS.obj,LexRegistry.obj,\
 	LexBatch.obj,LexDiff.obj,LexErrorList.obj,LexMake.obj,LexNull.obj,\
-	LexProps.obj
+	LexProps.obj,LexJSON.obj,LexEDIFACT.obj
 
 SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexAsn1.cxx,LexASY.cxx,LexAU3.cxx,LexAVE.cxx,LexAVS.cxx,LexBaan.cxx,\
@@ -102,7 +102,7 @@ SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx,\
 	LexDMAP.cxx LexHex.cxx LexBibTeX.cxx LexDMIS.cxx LexRegistry.cxx \
 	LexBatch.cxx LexDiff.cxx LexErrorList.cxx LexMake.cxx LexNull.cxx \
-	LexProps.cxx
+	LexProps.cxx LexJSON.cxx LexEDIFACT.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -237,3 +237,5 @@ LexErrorList.obj : LexErrorList.cxx
 LexMake.obj : LexMake.cxx
 LexNull.obj : LexNull.cxx
 LexProps.obj : LexProps.cxx
+LexJSON.obj : LexJSON.cxx
+LexEDIFACT.obj : LexEDIFACT.cxx

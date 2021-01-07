@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CALENDARCTRL
 
@@ -22,7 +19,7 @@
 #include "wx/qt/private/winevent.h"
 
 #include <QtGui/QTextCharFormat>
-
+#include <QtWidgets/QCalendarWidget>
 
 class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
 {
@@ -107,9 +104,9 @@ void wxCalendarCtrl::UpdateStyle()
     if ( !m_qtCalendar )
         return;
 
-    if ( m_windowStyle & wxCAL_MONDAY_FIRST )
+    if ( WeekStartsOnMonday() )
         m_qtCalendar->setFirstDayOfWeek(Qt::Monday);
-    else // wxCAL_SUNDAY_FIRST
+    else
         m_qtCalendar->setFirstDayOfWeek(Qt::Sunday);
 
     if ( m_windowStyle & wxCAL_SHOW_WEEK_NUMBERS )
@@ -134,6 +131,10 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
 {
     wxCHECK_MSG( date.IsValid(), false, "invalid date" );
     if ( !m_qtCalendar )
+        return false;
+
+    if ( wxQtConvertDate( date ) > m_qtCalendar->maximumDate() ||
+            wxQtConvertDate( date ) < m_qtCalendar->minimumDate() )
         return false;
 
     m_qtCalendar->blockSignals(true);
@@ -171,12 +172,21 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
     if ( !m_qtCalendar )
         return false;
 
-    if (lowerdate)
-        *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
-    if (upperdate)
-        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+    bool status = false;
 
-    return true;
+    if ( lowerdate )
+    {
+        *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
+        status = true;
+    }
+
+    if ( upperdate )
+    {
+        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+        status = true;
+    }
+
+    return status;
 }
 
 // Copied from wxMSW
@@ -229,7 +239,7 @@ void wxCalendarCtrl::SetHoliday(size_t day)
     date.setDate(date.year(), date.month(), day);
 
     QTextCharFormat format = m_qtCalendar->dateTextFormat(date);
-    format.setForeground(m_colHolidayFg.GetHandle());
+    format.setForeground(m_colHolidayFg.GetQColor());
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
@@ -249,9 +259,9 @@ void wxCalendarCtrl::RefreshHolidays()
     if ( m_windowStyle & wxCAL_SHOW_HOLIDAYS )
     {
         if ( m_colHolidayFg.IsOk() )
-            format.setForeground(m_colHolidayFg.GetHandle());
+            format.setForeground(m_colHolidayFg.GetQColor());
         if ( m_colHolidayBg.IsOk() )
-            format.setBackground(m_colHolidayBg.GetHandle());
+            format.setBackground(m_colHolidayBg.GetQColor());
     }
     else
     {
@@ -278,9 +288,9 @@ void wxCalendarCtrl::SetHeaderColours(const wxColour& colFg, const wxColour& col
 
     QTextCharFormat format = m_qtCalendar->headerTextFormat();
     if ( m_colHeaderFg.IsOk() )
-        format.setForeground(m_colHeaderFg.GetHandle());
+        format.setForeground(m_colHeaderFg.GetQColor());
     if ( m_colHeaderBg.IsOk() )
-        format.setBackground(m_colHeaderBg.GetHandle());
+        format.setBackground(m_colHeaderBg.GetQColor());
     m_qtCalendar->setHeaderTextFormat(format);
 }
 
@@ -303,20 +313,20 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
 
     QTextCharFormat format = m_qtCalendar->dateTextFormat(date);
     if ( attr->HasTextColour() )
-        format.setForeground(attr->GetTextColour().GetHandle());
+        format.setForeground(attr->GetTextColour().GetQColor());
     if ( attr->HasBackgroundColour() )
-        format.setBackground(attr->GetBackgroundColour().GetHandle());
+        format.setBackground(attr->GetBackgroundColour().GetQColor());
 
     wxMISSING_IMPLEMENTATION( "Setting font" );
 
     // wxFont is not implemented yet
     //if ( attr->HasFont() )
     //    format.setFont(attr->GetFont().GetQFont());
-    
+
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
-QCalendarWidget *wxCalendarCtrl::GetHandle() const
+QWidget *wxCalendarCtrl::GetHandle() const
 {
     return m_qtCalendar;
 }
@@ -325,8 +335,8 @@ QCalendarWidget *wxCalendarCtrl::GetHandle() const
 
 wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler )
     : wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >( parent, handler )
+    , m_date(selectedDate())
 {
-    m_date = selectedDate();
     connect(this, &QCalendarWidget::selectionChanged, this, &wxQtCalendarWidget::selectionChanged);
     connect(this, &QCalendarWidget::activated, this, &wxQtCalendarWidget::activated);
 }

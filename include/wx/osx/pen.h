@@ -23,31 +23,34 @@ public:
     wxPen(const wxColour& col, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
 
     wxPen(const wxBitmap& stipple, int width);
+
+    wxPen(const wxPenInfo& info);
+
     virtual ~wxPen();
 
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 
     // Override in order to recreate the pen
-    void SetColour(const wxColour& col) ;
-    void SetColour(unsigned char r, unsigned char g, unsigned char b) ;
+    void SetColour(const wxColour& col) wxOVERRIDE;
+    void SetColour(unsigned char r, unsigned char g, unsigned char b) wxOVERRIDE;
 
-    void SetWidth(int width)  ;
-    void SetStyle(wxPenStyle style)  ;
-    void SetStipple(const wxBitmap& stipple)  ;
-    void SetDashes(int nb_dashes, const wxDash *dash)  ;
-    void SetJoin(wxPenJoin join)  ;
-    void SetCap(wxPenCap cap)  ;
+    void SetWidth(int width) wxOVERRIDE;
+    void SetStyle(wxPenStyle style) wxOVERRIDE;
+    void SetStipple(const wxBitmap& stipple)  wxOVERRIDE;
+    void SetDashes(int nb_dashes, const wxDash *dash) wxOVERRIDE;
+    void SetJoin(wxPenJoin join) wxOVERRIDE;
+    void SetCap(wxPenCap cap) wxOVERRIDE;
 
-    wxColour GetColour() const ;
-    int GetWidth() const;
-    wxPenStyle GetStyle() const;
-    wxPenJoin GetJoin() const;
-    wxPenCap GetCap() const;
-    int GetDashes(wxDash **ptr) const;
+    wxColour GetColour() const wxOVERRIDE;
+    int GetWidth() const wxOVERRIDE;
+    wxPenStyle GetStyle() const wxOVERRIDE;
+    wxPenJoin GetJoin() const wxOVERRIDE;
+    wxPenCap GetCap() const wxOVERRIDE;
+    int GetDashes(wxDash **ptr) const wxOVERRIDE;
     int GetDashCount() const;
 
-    wxBitmap *GetStipple() const ;
+    wxBitmap *GetStipple() const wxOVERRIDE;
 
 
     wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
@@ -62,8 +65,8 @@ public:
     bool RealizeResource();
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
     void Unshare();

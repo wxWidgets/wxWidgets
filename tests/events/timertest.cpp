@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -94,7 +91,7 @@ void TimerEventTestCase::OneShot()
         }
 
     private:
-        virtual void Tick() { m_loop.Exit(); }
+        virtual void Tick() wxOVERRIDE { m_loop.Exit(); }
 
         wxEventLoopBase& m_loop;
 

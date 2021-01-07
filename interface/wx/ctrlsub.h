@@ -113,10 +113,6 @@ public:
 
         @return The position of the current selection.
 
-        @remarks This method can be used with single selection list boxes only,
-                 you should use wxListBox::GetSelections() for the list
-                 boxes with wxLB_MULTIPLE style.
-
         @see SetSelection(), GetStringSelection()
     */
     virtual int GetSelection() const = 0;
@@ -259,14 +255,9 @@ public:
         This is the same as the overload taking wxArrayString, except that it
         works with the standard vector container.
 
-        The template argument @c T can be any type convertible to wxString,
-        including wxString itself but also @c std::string, @c char* or @c
-        wchar_t*.
-
         @since 3.1.0
      */
-    template <typename T>
-    int Append(const std::vector<T>& items);
+    int Append(const std::vector<wxString>& items);
 
     /**
         Appends several items at once into the control.
@@ -358,6 +349,12 @@ public:
         owned by the control.  Note that it is an error (signalled by an assert
         failure in debug builds) to remove an item with the index negative or
         greater or equal than the number of items in the control.
+
+        If there is a currently selected item below the item being deleted,
+        i.e. if GetSelection() returns a valid index greater than or equal to
+        @a n, the selection is invalidated when this function is called.
+        However if the selected item appears before the item being deleted, the
+        selection is preserved unchanged.
 
         @param n
             The zero-based item index.
@@ -541,14 +538,9 @@ public:
         This is the same as the overload taking wxArrayString, except that it
         works with the standard vector container.
 
-        The template argument @c T can be any type convertible to wxString,
-        including wxString itself but also @c std::string, @c char* or @c
-        wchar_t*.
-
         @since 3.1.0
      */
-    template <typename T>
-    int Insert(const std::vector<T>& items);
+    int Insert(const std::vector<wxString>& items);
 
     /**
         Inserts several items at once into the control.
@@ -669,14 +661,9 @@ public:
         This is the same as the overload taking wxArrayString, except that it
         works with the standard vector container.
 
-        The template argument @c T can be any type convertible to wxString,
-        including wxString itself but also @c std::string, @c char* or @c
-        wchar_t*.
-
         @since 3.1.0
      */
-    template <typename T>
-    void Set(const std::vector<T>& items);
+    void Set(const std::vector<wxString>& items);
 
     /**
         Replaces the current control contents with the given items.

@@ -40,8 +40,12 @@
         typedef _locale_t wxXLocale_t;
         #define wxXLOCALE_IDENT(name) _ ## name
     #elif defined(HAVE_LOCALE_T)
+        // Some systems (notably macOS) require including a separate header for
+        // locale_t and related functions.
+        #ifdef HAVE_XLOCALE_H
+            #include <xlocale.h>
+        #endif
         #include <locale.h>
-        #include <xlocale.h>
         #include <ctype.h>
         #include <stdlib.h>
 

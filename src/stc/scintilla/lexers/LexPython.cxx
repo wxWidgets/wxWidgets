@@ -117,6 +117,17 @@ inline bool IsAWordStart(int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
 
+static bool IsFirstNonWhitespace(Sci_Position pos, Accessor &styler) {
+	Sci_Position line = styler.GetLine(pos);
+	Sci_Position start_pos = styler.LineStart(line);
+	for (Sci_Position i = start_pos; i < pos; i++) {
+		char ch = styler[i];
+		if (!(ch == ' ' || ch == '\t'))
+			return false;
+	}
+	return true;
+}
+
 // Options used for LexerPython
 struct OptionsPython {
 	int whingeLevel;
@@ -560,7 +571,10 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 			} else if (sc.ch == '#') {
 				sc.SetState(sc.chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE);
 			} else if (sc.ch == '@') {
-				sc.SetState(SCE_P_DECORATOR);
+				if (IsFirstNonWhitespace(sc.currentPos, styler))
+					sc.SetState(SCE_P_DECORATOR);
+				else
+					sc.SetState(SCE_P_OPERATOR);
 			} else if (IsPyStringStart(sc.ch, sc.chNext, sc.GetRelative(2), allowedLiterals)) {
 				Sci_PositionU nextIndex = 0;
 				sc.SetState(GetPyStringState(styler, sc.currentPos, &nextIndex, allowedLiterals));

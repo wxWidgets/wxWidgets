@@ -44,7 +44,7 @@ public:
     MyCanvas *canvas;
     MyFrame(wxFrame *parent, const wxString& title,
         const wxPoint& pos, const wxSize& size, const long style);
-    ~MyFrame(){};
+    ~MyFrame(){}
     void OnActivate(wxActivateEvent& event);
     void OnQuit(wxCommandEvent& event);
 

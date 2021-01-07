@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
@@ -44,9 +41,11 @@
 
 #include "wx/dynlib.h"
 #include "wx/filename.h"
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+#include "wx/msw/private/dpiaware.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -82,11 +81,11 @@ namespace
 typedef BOOL (WINAPI *GetProcessUserModeExceptionPolicy_t)(LPDWORD);
 typedef BOOL (WINAPI *SetProcessUserModeExceptionPolicy_t)(DWORD);
 
-GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy
-    = (GetProcessUserModeExceptionPolicy_t) -1;
+GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy =
+    (GetProcessUserModeExceptionPolicy_t) -1;
 
-SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy
-    = (SetProcessUserModeExceptionPolicy_t) -1;
+SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy =
+    (SetProcessUserModeExceptionPolicy_t) -1;
 
 DWORD gs_oldExceptionPolicyFlags = 0;
 
@@ -184,6 +183,14 @@ wxFileDialogHookFunction(HWND      hDlg,
 
                         case CDN_SELCHANGE:
                             dialog->MSWOnSelChange((WXHWND)hDlg);
+                            break;
+
+                        case CDN_TYPECHANGE:
+                            dialog->MSWOnTypeChange
+                                    (
+                                        (WXHWND)hDlg,
+                                        pNotifyCode->lpOFN->nFilterIndex
+                                    );
                             break;
                     }
                 }
@@ -312,7 +319,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     HWND hFileDlg = ::GetParent((HWND)hDlg);
 
     // set HWND so that our DoMoveWindow() works correctly
-    SetHWND((WXHWND)hFileDlg);
+    TempHWNDSetter set(this, (WXHWND)hFileDlg);
 
     if ( m_centreDir )
     {
@@ -333,9 +340,6 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     // Call selection change handler so that update handler will be
     // called once with no selection.
     MSWOnSelChange(hDlg);
-
-    // we shouldn't destroy this HWND
-    SetHWND(NULL);
 }
 
 void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
@@ -353,12 +357,29 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
         m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
+void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
+{
+    // Filter indices are 1-based, while we want to use 0-based index, as
+    // usual. However the input index can apparently also be 0 in some
+    // circumstances, so take care before decrementing it.
+    m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
+
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
 // helper used below in ShowCommFileDialog(): style is used to determine
 // whether to show the "Save file" dialog (if it contains wxFD_SAVE bit) or
 // "Open file" one; returns true on success or false on failure in which case
 // err is filled with the CDERR_XXX constant
 static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
+    // Extra controls do not handle per-monitor DPI, fall back to system DPI
+    // so entire file-dialog is resized.
+    wxScopedPtr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
+    if ( of->Flags & OFN_ENABLEHOOK )
+        dpiAwareness.reset(new wxMSWImpl::AutoSystemDpiAware());
+
     if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
         return true;
 
@@ -370,62 +391,10 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
     return false;
 }
 
-// We want to use OPENFILENAME struct version 5 (Windows 2000/XP) but we don't
-// know if the OPENFILENAME declared in the currently used headers is a V5 or
-// V4 (smaller) one so we try to manually extend the struct in case it is the
-// old one.
-//
-// We don't do this under Win64, however, as there are no
-// compilers with old headers for these architectures
-#if defined(__WIN64__)
-    typedef OPENFILENAME wxOPENFILENAME;
-
-    static const DWORD gs_ofStructSize = sizeof(OPENFILENAME);
-#else // __WIN64__
-    #define wxTRY_SMALLER_OPENFILENAME
-
-    struct wxOPENFILENAME : public OPENFILENAME
-    {
-        // fields added in Windows 2000/XP comdlg32.dll version
-        void *pVoid;
-        DWORD dw1;
-        DWORD dw2;
-    };
-
-    // hardcoded sizeof(OPENFILENAME) in the Platform SDK: we have to do it
-    // because sizeof(OPENFILENAME) in the headers we use when compiling the
-    // library could be less if _WIN32_WINNT is not >= 0x500
-    static const DWORD wxOPENFILENAME_V5_SIZE = 88;
-
-    // this is hardcoded sizeof(OPENFILENAME_NT4) from Platform SDK
-    static const DWORD wxOPENFILENAME_V4_SIZE = 76;
-
-    // always try the new one first
-    static DWORD gs_ofStructSize = wxOPENFILENAME_V5_SIZE;
-#endif // __WIN64__/!...
-
 static bool ShowCommFileDialog(OPENFILENAME *of, long style)
 {
     DWORD errCode;
     bool success = DoShowCommFileDialog(of, style, &errCode);
-
-#ifdef wxTRY_SMALLER_OPENFILENAME
-    // the system might be too old to support the new version file dialog
-    // boxes, try with the old size
-    if ( !success && errCode == CDERR_STRUCTSIZE &&
-            of->lStructSize != wxOPENFILENAME_V4_SIZE )
-    {
-        of->lStructSize = wxOPENFILENAME_V4_SIZE;
-
-        success = DoShowCommFileDialog(of, style, &errCode);
-
-        if ( success || !errCode )
-        {
-            // use this struct size for subsequent dialogs
-            gs_ofStructSize = of->lStructSize;
-        }
-    }
-#endif // wxTRY_SMALLER_OPENFILENAME
 
     if ( !success &&
             errCode == FNERR_INVALIDFILENAME &&
@@ -454,11 +423,9 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
 
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
-   SetHWND(hwnd);
+    TempHWNDSetter set(this, hwnd);
 
-   CreateExtraControl();
-
-   SetHWND(NULL);
+    CreateExtraControl();
 }
 
 int wxFileDialog::ShowModal()
@@ -481,6 +448,9 @@ int wxFileDialog::ShowModal()
 
     if ( HasFdFlag(wxFD_FILE_MUST_EXIST) )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    if ( HasFlag(wxFD_SHOW_HIDDEN) )
+        msw_flags |= OFN_FORCESHOWHIDDEN;
     /*
         If the window has been moved the programmer is probably
         trying to center or position it.  Thus we set the callback
@@ -517,10 +487,10 @@ int wxFileDialog::ShowModal()
         msw_flags |= OFN_OVERWRITEPROMPT;
     }
 
-    wxOPENFILENAME of;
+    OPENFILENAME of;
     wxZeroMemory(of);
 
-    of.lStructSize       = gs_ofStructSize;
+    of.lStructSize       = sizeof(OPENFILENAME);
     of.hwndOwner         = hWndParent;
     of.lpstrTitle        = m_message.t_str();
     of.lpstrFileTitle    = titleBuffer;
@@ -569,8 +539,7 @@ int wxFileDialog::ShowModal()
             case wxT('/'):
                 // convert to backslash
                 ch = wxT('\\');
-
-                // fall through
+                wxFALLTHROUGH;
 
             case wxT('\\'):
                 while ( i < len - 1 )
@@ -585,7 +554,7 @@ int wxFileDialog::ShowModal()
                     else
                         break;
                 }
-                // fall through
+                wxFALLTHROUGH;
 
             default:
                 // normal char
@@ -624,6 +593,7 @@ int wxFileDialog::ShowModal()
 
     of.lpstrFilter  = filterBuffer.t_str();
     of.nFilterIndex = m_filterIndex + 1;
+    m_currentlySelectedFilterIndex = m_filterIndex;
 
     //=== Setting defaultFileName >>=========================================
 
@@ -666,11 +636,10 @@ int wxFileDialog::ShowModal()
         }
     } cwdOrig;
 
-    // GetOpenFileName will always change the current working directory on
-    // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag
-    // OFN_NOCHANGEDIR has no effect.  If the user did not specify
-    // wxFD_CHANGE_DIR let's restore the current working directory to what it
-    // was before the dialog was shown.
+    // GetOpenFileName will always change the current working directory
+    // (according to MSDN) because the flag OFN_NOCHANGEDIR has no effect.
+    // If the user did not specify wxFD_CHANGE_DIR let's restore the
+    // current working directory to what it was before the dialog was shown.
     if (msw_flags & OFN_NOCHANGEDIR)
         cwdOrig.value = wxGetCwd();
 
@@ -682,14 +651,9 @@ int wxFileDialog::ShowModal()
     m_fileNames.Empty();
 
     if ( ( HasFdFlag(wxFD_MULTIPLE) ) &&
-#if defined(OFN_EXPLORER)
          ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
-#else
-         ( fileNameBuffer[of.nFileOffset-1] == wxT(' ') )
-#endif // OFN_EXPLORER
        )
     {
-#if defined(OFN_EXPLORER)
         m_dir = fileNameBuffer;
         i = of.nFileOffset;
         m_fileName = &fileNameBuffer[i];
@@ -701,15 +665,6 @@ int wxFileDialog::ShowModal()
             m_fileNames.Add(&fileNameBuffer[i]);
             i += wxStrlen(&fileNameBuffer[i]) + 1;
         }
-#else
-        wxStringTokenizer toke(fileNameBuffer, wxT(" \t\r\n"));
-        m_dir = toke.GetNextToken();
-        m_fileName = toke.GetNextToken();
-        m_fileNames.Add(m_fileName);
-
-        while (toke.HasMoreTokens())
-            m_fileNames.Add(toke.GetNextToken());
-#endif // OFN_EXPLORER
 
         m_path = m_dir;
         if ( m_dir.Last() != wxT('\\') )
@@ -724,8 +679,7 @@ int wxFileDialog::ShowModal()
 
         m_filterIndex = (int)of.nFilterIndex - 1;
 
-        if ( !of.nFileExtension ||
-             (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
+        if ( !of.nFileExtension || fileNameBuffer[of.nFileExtension] == wxT('\0') )
         {
             // User has typed a filename without an extension:
             const wxChar* extension = filterBuffer.t_str();

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATBMP
 
@@ -36,6 +33,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
+#include "wx/msw/private/winstyle.h"
 
 #include "wx/sysopt.h"
 
@@ -103,9 +101,12 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // we may have either bitmap or icon: if a bitmap with mask is passed, we
     // will transform it to an icon ourselves because otherwise the mask will
     // be ignored by Windows
-    m_isIcon = bitmap.IsKindOf(wxCLASSINFO(wxIcon));
-
     wxGDIImage *image = ConvertImage( bitmap );
+
+    // Note that m_isIcon must be set before calling MSWCreateControl() so that
+    // it creates the control with the correct style, as returned by
+    // MSWGetStyle(), which uses m_isIcon to determine whether to use SS_ICON
+    // or SS_BITMAP.
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
 
     // create the native control
@@ -121,17 +122,13 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // GetBestSize will work properly now, so set the best size if needed
     SetInitialSize(size);
 
-    // painting manually is reported not to work under Windows CE (see #10093),
-    // so don't do it there even if this probably means that alpha is not
-    // supported there -- but at least bitmaps without alpha appear correctly
-    // Windows versions before XP (and even XP if the application has no
-    // manifest and so the old comctl32.dll is used) don't draw correctly the
-    // images with alpha channel so we need to draw them ourselves and it's
-    // easier to just always do it rather than check if we have an image with
-    // alpha or not
+    // if the application has no manifest and so the old comctl32.dll is
+    // used, the images with alpha channel are not correctly drawn so we need
+    // to draw them ourselves and it's easier to just always do it rather than
+    // check if we have an image with alpha or not
     if ( wxTheApp->GetComCtl32Version() < 600 )
     {
-        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
+        Bind(wxEVT_PAINT, &wxStaticBitmap::DoPaintManually, this);
     }
 
     return true;
@@ -281,17 +278,21 @@ void wxStaticBitmap::MSWReplaceImageHandle(WXLPARAM handle)
 
 void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 {
+    wxSize sizeOld;
+    if ( m_image )
+        sizeOld = m_image->GetSize();
+
+    wxSize sizeNew;
+    if ( image )
+        sizeNew = image->GetSize();
+
+    const bool wasIcon = m_isIcon;
+
     Free();
-    InvalidateBestSize();
 
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
     // the image has already been copied
     m_image = image;
-
-    int x, y;
-    int w, h;
-    GetPosition(&x, &y);
-    GetSize(&w, &h);
 
     // Normally we just use the handle of provided image but in some cases we
     // create our own temporary bitmap, so the actual handle may end up being
@@ -316,35 +317,26 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         }
     }
 #endif // wxUSE_WXDIB
-    LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
-    ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
-                     ( m_isIcon ? SS_ICON : SS_BITMAP ) );
+
+    if ( m_isIcon != wasIcon )
+    {
+        wxMSWWinStyleUpdater(GetHwnd())
+            .TurnOff(SS_BITMAP | SS_ICON)
+            .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
+    }
 
     MSWReplaceImageHandle((WXLPARAM)handle);
-
-    DeleteCurrentHandleIfNeeded();
 
     m_currentHandle = (WXHANDLE)handle;
     m_ownsCurrentHandle = handle != handleOrig;
 
-    if ( ImageIsOk() )
+    if ( sizeNew != sizeOld )
     {
-        int width = image->GetWidth(),
-            height = image->GetHeight();
-        if ( width && height )
-        {
-            w = width;
-            h = height;
-
-            ::MoveWindow(GetHwnd(), x, y, width, height, FALSE);
-        }
+        InvalidateBestSize();
+        SetSize(GetBestSize());
     }
 
-    RECT rect;
-    rect.left   = x;
-    rect.top    = y;
-    rect.right  = x + w;
-    rect.bottom = y + h;
+    RECT rect = wxGetWindowRect(GetHwnd());
     ::InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
 

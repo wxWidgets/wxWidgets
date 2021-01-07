@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -172,7 +169,7 @@ public:
 
         ShowWithEffect(m_effect, m_timeout);
 
-        Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(EffectFrame::OnClose));
+        Bind(wxEVT_CLOSE_WINDOW, &EffectFrame::OnClose, this);
     }
 
 private:
@@ -278,14 +275,17 @@ void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 {
-    if (IsTransparentBackgroundSupported())
+    wxString reason;
+    if (IsTransparentBackgroundSupported(&reason))
     {
         SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
         seeThroughFrame->Create();
         seeThroughFrame->Show(true);
     }
     else
-        wxMessageBox(wxS("transparent window requires a composited screen"));
+    {
+        wxLogError("%s, can't create transparent window.", reason);
+    }
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
@@ -387,9 +387,9 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
             )
 {
     m_shapeKind = Shape_Star;
-    m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
+    m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to close, double click to cycle shape"));
+    SetToolTip("Right-click to close, double click to cycle shape");
     SetWindowShape();
 }
 
@@ -496,15 +496,15 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
     int xcount = 8;
     int ycount = 8;
 
-    float xstep = 1. / xcount;
-    float ystep = 1. / ycount;
+    double xstep = 1.0 / xcount;
+    double ystep = 1.0 / ycount;
 
     int width = GetClientSize().GetWidth();
     int height = GetClientSize().GetHeight();
 
-    for ( float x = 0.; x < 1.; x += xstep )
+    for ( double x = 0; x < 1; x += xstep )
     {
-        for ( float y = 0.; y < 1.; y += ystep )
+        for ( double y = 0; y < 1; y += ystep )
         {
             wxImage::RGBValue v = wxImage::HSVtoRGB(wxImage::HSVValue(x, 1., 1.));
             dc.SetBrush(wxBrush(wxColour(v.red, v.green, v.blue,

@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/filehistory.h"
 
@@ -28,10 +25,8 @@
 
 #include "wx/filename.h"
 
-#include <glib.h>
-#include <gtk/gtk.h>
-#include "wx/gtk/private/string.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/string.h"
 
 // ============================================================================
 // implementation
@@ -43,9 +38,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
 
 #ifdef __WXGTK210__
     const wxString fullPath = wxFileName(file).GetFullPath();
-#ifndef __WXGTK3__
-    if ( !gtk_check_version(2,10,0) )
-#endif
+    if ( wx_is_at_least_gtk2(10) )
     {
         wxGtkString uri(g_filename_to_uri(wxGTK_CONV_FN(fullPath), NULL, NULL));
 

@@ -10,7 +10,7 @@
 
 #if wxUSE_TIMER
 
-#include "wx/qt/timer.h"
+#include "wx/qt/private/timer.h"
 #include <QtCore/QTimerEvent>
 
 wxQtTimerImpl::wxQtTimerImpl( wxTimer* timer )
@@ -28,7 +28,7 @@ bool wxQtTimerImpl::Start( int millisecs, bool oneShot )
         return false;
 
     m_timerId = startTimer( GetInterval() );
-    
+
     return m_timerId >= 0;
 }
 

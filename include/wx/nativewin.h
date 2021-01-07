@@ -3,7 +3,7 @@
 // Purpose:     classes allowing to wrap a native window handle
 // Author:      Vadim Zeitlin
 // Created:     2008-03-05
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -38,8 +38,6 @@
     typedef HWND wxNativeContainerWindowHandle;
     typedef HWND wxNativeWindowHandle;
 #elif defined(__WXGTK__)
-    #include <gtk/gtk.h>
-
     // GdkNativeWindow is guint32 under GDK/X11 and gpointer under GDK/WIN32
     #ifdef __UNIX__
         typedef unsigned long wxNativeContainerWindowId;
@@ -238,7 +236,7 @@ public:
 protected:
 #ifdef __WXMSW__
     virtual WXLRESULT
-    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 #endif // __WXMSW__
 
 private:

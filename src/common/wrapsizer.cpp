@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/wrapsizer.h"
 #include "wx/vector.h"
@@ -92,8 +89,8 @@ void wxWrapSizer::ClearRows()
 {
     // all elements of the row sizers are also elements of this one (we
     // directly add pointers to elements of our own m_children list to the row
-    // sizers in RecalcSizes()), so we need to detach them from the row sizer
-    // to avoid double deletion
+    // sizers in RepositionChildren()), so we need to detach them from the row
+    // sizer to avoid double deletion
     wxSizerItemList& rows = m_rows.GetChildren();
     for ( wxSizerItemList::iterator i = rows.begin(),
                                   end = rows.end();
@@ -465,7 +462,11 @@ void wxWrapSizer::CalcMinFromMinor(int totMinor)
 
         // No spill over?
         if ( !tailSize )
+        {
+            // Add minor size of the last line
+            sumMinor += maxMinor;
             break;
+        }
     }
 
     // Now have min size in the opposite direction
@@ -485,7 +486,7 @@ void wxWrapSizer::FinishRow(size_t n,
     AdjustLastRowItemProp(n, itemLast);
 }
 
-void wxWrapSizer::RecalcSizes()
+void wxWrapSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
 {
     // First restore any proportions we may have changed and remove the old rows
     ClearRows();

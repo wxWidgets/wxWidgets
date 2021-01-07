@@ -23,7 +23,18 @@
 
 #if defined(__CYGWIN__)
     #include <winsock.h>
+    #ifdef __LP64__
+        // We can't use long in this case because it is 64 bits with Cygwin, so
+        // use their special type used for working around this instead.
+        #define wxIoctlSocketArg_t __ms_u_long
+    #endif
 #endif
+
+#ifndef wxIoctlSocketArg_t
+    #define wxIoctlSocketArg_t u_long
+#endif
+
+#define wxCloseSocket closesocket
 
 // ----------------------------------------------------------------------------
 // MSW-specific socket implementation
@@ -36,9 +47,9 @@ public:
 
     virtual ~wxSocketImplMSW();
 
-    virtual wxSocketError GetLastError() const;
+    virtual wxSocketError GetLastError() const wxOVERRIDE;
 
-    virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags))
+    virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags)) wxOVERRIDE
     {
         // notifications are never disabled in this implementation, there is no
         // need for this as WSAAsyncSelect() only sends notification once when
@@ -46,15 +57,34 @@ public:
         // anything here
     }
 
-private:
-    virtual void DoClose();
-
-    virtual void UnblockAndRegisterWithEventLoop()
+    virtual void UpdateBlockingState() wxOVERRIDE
     {
-        // no need to make the socket non-blocking, Install_Callback() will do
-        // it
-        wxSocketManager::Get()->Install_Callback(this);
+        if ( GetSocketFlags() & wxSOCKET_BLOCK )
+        {
+            // Counter-intuitively, we make the socket non-blocking even in
+            // this case as it is necessary e.g. for Read() to return
+            // immediately if there is no data available. However we must not
+            // install a callback for it as blocking sockets don't use any
+            // events and generating them would actually be harmful (and not
+            // just useless) as they would be dispatched by the main thread
+            // while this blocking socket can be used from a worker one, so it
+            // would result in data races and other unpleasantness.
+            wxIoctlSocketArg_t trueArg = 1;
+            ioctlsocket(m_fd, FIONBIO, &trueArg);
+
+            // Uninstall it in case it was installed before.
+            wxSocketManager::Get()->Uninstall_Callback(this);
+        }
+        else
+        {
+            // No need to make the socket non-blocking, Install_Callback() will
+            // do it as a side effect of calling WSAAsyncSelect().
+            wxSocketManager::Get()->Install_Callback(this);
+        }
     }
+
+private:
+    virtual void DoClose() wxOVERRIDE;
 
     int m_msgnumber;
 

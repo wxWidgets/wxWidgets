@@ -12,13 +12,14 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QScrollBar>
 
 class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 {
-    
+
     public:
         wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
-                       
+
     private:
         void actionTriggered( int action );
         void sliderReleased();
@@ -26,7 +27,8 @@ class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 };
 
 
-wxScrollBar::wxScrollBar()
+wxScrollBar::wxScrollBar() :
+    m_qtScrollBar(NULL)
 {
 }
 
@@ -99,7 +101,9 @@ void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
     {
         m_qtScrollBar->setRange( 0, range - pageSize );
         m_qtScrollBar->setPageStep( pageSize );
+        m_qtScrollBar->blockSignals(true);
         m_qtScrollBar->setValue( position );
+        m_qtScrollBar->blockSignals(false);
         m_qtScrollBar->show();
     }
     else
@@ -109,7 +113,7 @@ void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
     }
 }
 
-QScrollBar *wxScrollBar::GetHandle() const
+QWidget *wxScrollBar::GetHandle() const
 {
     return m_qtScrollBar;
 }
@@ -156,7 +160,7 @@ void wxQtScrollBar::actionTriggered( int action )
         default:
             return;
     }
-    
+
     wxScrollBar *handler = GetHandler();
     if ( handler )
     {

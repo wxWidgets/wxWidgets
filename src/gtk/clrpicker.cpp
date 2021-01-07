@@ -20,7 +20,7 @@
 
 #include "wx/clrpicker.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // ============================================================================
 // implementation
@@ -36,17 +36,25 @@ static void gtk_clrbutton_setcolor_callback(GtkColorButton *widget,
 {
     // update the m_colour member of the wxColourButton
     wxASSERT(p);
-#ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkRGBA gdkColor;
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &gdkColor);
+#elif defined(__WXGTK3__)
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkRGBA gdkColor;
     gtk_color_button_get_rgba(widget, &gdkColor);
+    wxGCC_WARNING_RESTORE()
 #else
     GdkColor gdkColor;
     gtk_color_button_get_color(widget, &gdkColor);
 #endif
     p->GTKSetColour(gdkColor);
 
-    // fire the colour-changed event
-    wxColourPickerEvent event(p, p->GetId(), p->GetColour());
+    // Fire the corresponding event: note that we want it to appear as
+    // originating from our parent, which is the user-visible window, and not
+    // this button itself, which is just an implementation detail.
+    wxWindow* const parent = p->GetParent();
+    wxColourPickerEvent event(parent, parent->GetId(), p->GetColour());
     p->HandleWindowEvent(event);
 }
 }
@@ -100,8 +108,12 @@ wxColourButton::~wxColourButton()
 
 void wxColourButton::UpdateColour()
 {
-#ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(m_widget), m_colour);
+#elif defined(__WXGTK3__)
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_color_button_set_rgba(GTK_COLOR_BUTTON(m_widget), m_colour);
+    wxGCC_WARNING_RESTORE()
 #else
     gtk_color_button_set_color(GTK_COLOR_BUTTON(m_widget), m_colour.GetColor());
 #endif

@@ -4,13 +4,14 @@
 
 SAMPLES_SUBDIRS=@SAMPLES_SUBDIRS@
 
-all:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE)); done
+ALL_TARGETS := all clean distclean
 
-clean:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE) clean); done
+$(ALL_TARGETS): $(SAMPLES_SUBDIRS)
 
-distclean:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE) distclean); done
+# The use of both MAKECMDGOALS and .TARGETS here allows the same makefile to be
+# used both with GNU make and BSD make: only one of these variables will be
+# defined for the particular make program flavour.
+$(SAMPLES_SUBDIRS):
+	$(MAKE) -C $@ $(MAKECMDGOALS) $(.TARGETS)
 
-.PHONY: all clean distclean
+.PHONY: $(ALL_TARGETS) $(SAMPLES_SUBDIRS)

@@ -22,9 +22,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -101,9 +98,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
     return true;
 }
 
-Window wxGLCanvas::GetXWindow() const
+unsigned long wxGLCanvas::GetXWindow() const
 {
-    return (Window)
+    return (unsigned long)
 #ifdef __WXMOTIF__
         GetClientXWindow();
 #else

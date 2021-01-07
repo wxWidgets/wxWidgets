@@ -8,12 +8,13 @@
 #ifndef _WX_QT_TASKBAR_H_
 #define _WX_QT_TASKBAR_H_
 
-#include <QtWidgets/QSystemTrayIcon>
+class QSystemTrayIcon;
 
-class WXDLLIMPEXP_CORE wxTaskBarIcon : public wxTaskBarIconBase
+class WXDLLIMPEXP_ADV wxTaskBarIcon : public wxTaskBarIconBase
 {
 public:
     wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
+    virtual ~wxTaskBarIcon();
 
     // Accessors
     bool IsOk() const { return false; }
@@ -21,12 +22,12 @@ public:
 
     // Operations
     virtual bool SetIcon(const wxIcon& icon,
-                         const wxString& tooltip = wxEmptyString);
-    virtual bool RemoveIcon();
-    virtual bool PopupMenu(wxMenu *menu);
+                         const wxString& tooltip = wxEmptyString) wxOVERRIDE;
+    virtual bool RemoveIcon() wxOVERRIDE;
+    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
 
 private:
-    QSystemTrayIcon m_qtSystemTrayIcon;
+    QSystemTrayIcon *m_qtSystemTrayIcon;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon);
 };

@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -65,8 +62,8 @@
     COMPARE_VALUE( array , 9 , p9 )
 
 #define COMPARE_COUNT( array , n ) \
-    ( array.GetCount() == n ) && \
-    ( array.Last() == array.Item( n - 1 ) )
+    (( array.GetCount() == n ) && \
+     ( array.Last() == array.Item( n - 1 ) ))
 
 // ----------------------------------------------------------------------------
 // helpers for testing wxObjArray
@@ -94,6 +91,17 @@ size_t Bar::ms_bars = 0;
 WX_DECLARE_OBJARRAY(Bar, ArrayBars);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(ArrayBars)
+
+// ----------------------------------------------------------------------------
+// another object array test
+// ----------------------------------------------------------------------------
+
+// This code doesn't make any sense, as object arrays should be used with
+// objects, not pointers, but it used to work, so check that it continues to
+// compile.
+WX_DECLARE_OBJARRAY(Bar*, ArrayBarPtrs);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(ArrayBarPtrs)
 
 // ----------------------------------------------------------------------------
 // helpers for sorting arrays and comparing items
@@ -165,6 +173,7 @@ private:
         CPPUNIT_TEST( wxStringArraySplitJoinTest );
 
         CPPUNIT_TEST( wxObjArrayTest );
+        CPPUNIT_TEST( wxObjArrayPtrTest );
         CPPUNIT_TEST( wxArrayUShortTest );
         CPPUNIT_TEST( wxArrayIntTest );
         CPPUNIT_TEST( wxArrayCharTest );
@@ -181,6 +190,7 @@ private:
     void wxStringArrayJoinTest();
     void wxStringArraySplitJoinTest();
     void wxObjArrayTest();
+    void wxObjArrayPtrTest();
     void wxArrayUShortTest();
     void wxArrayIntTest();
     void wxArrayCharTest();
@@ -209,97 +219,97 @@ void ArraysTestCase::wxStringArrayTest()
     a1.Add(wxT("human"));
     a1.Add(wxT("alligator"));
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a1 , wxT("thermit") ,
+    CPPUNIT_ASSERT((COMPARE_8_VALUES( a1 , wxT("thermit") ,
                                            wxT("condor") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
                                            wxT("dog") ,
                                            wxT("human") ,
-                                           wxT("alligator") ) );
+                                           wxT("alligator") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 8 ) );
 
     wxArrayString a2(a1);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a2 , wxT("thermit") ,
+    CPPUNIT_ASSERT((COMPARE_8_VALUES( a2 , wxT("thermit") ,
                                            wxT("condor") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
                                            wxT("dog") ,
                                            wxT("human") ,
-                                           wxT("alligator") ) );
+                                           wxT("alligator") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a2 , 8 ) );
 
     wxSortedArrayString a3(a1);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a3 , wxT("alligator") ,
+    CPPUNIT_ASSERT((COMPARE_8_VALUES( a3 , wxT("alligator") ,
                                            wxT("condor") ,
                                            wxT("dog") ,
                                            wxT("human") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
-                                           wxT("thermit") ) );
+                                           wxT("thermit") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a3 , 8 ) );
 
     wxSortedArrayString a4;
     for (wxArrayString::iterator it = a1.begin(), en = a1.end(); it != en; ++it)
         a4.Add(*it);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a4 , wxT("alligator") ,
+    CPPUNIT_ASSERT((COMPARE_8_VALUES( a4 , wxT("alligator") ,
                                            wxT("condor") ,
                                            wxT("dog") ,
                                            wxT("human") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
                                            wxT("lion") ,
-                                           wxT("thermit") ) );
+                                           wxT("thermit") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a4 , 8 ) );
 
     a1.RemoveAt(2,3);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("thermit") ,
+    CPPUNIT_ASSERT((COMPARE_5_VALUES( a1 , wxT("thermit") ,
                                            wxT("condor") ,
                                            wxT("dog") ,
                                            wxT("human") ,
-                                           wxT("alligator") ) );
+                                           wxT("alligator") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
 
     a2 = a1;
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a2 , wxT("thermit") ,
+    CPPUNIT_ASSERT((COMPARE_5_VALUES( a2 , wxT("thermit") ,
                                            wxT("condor") ,
                                            wxT("dog") ,
                                            wxT("human") ,
-                                           wxT("alligator") ) );
+                                           wxT("alligator") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a2 , 5 ) );
 
     a1.Sort(false);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("alligator") ,
+    CPPUNIT_ASSERT((COMPARE_5_VALUES( a1 , wxT("alligator") ,
                                            wxT("condor") ,
                                            wxT("dog") ,
                                            wxT("human") ,
-                                           wxT("thermit") ) );
+                                           wxT("thermit") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
 
     a1.Sort(true);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("thermit") ,
+    CPPUNIT_ASSERT((COMPARE_5_VALUES( a1 , wxT("thermit") ,
                                            wxT("human") ,
                                            wxT("dog") ,
                                            wxT("condor") ,
-                                           wxT("alligator") ) );
+                                           wxT("alligator") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
 
     a1.Sort(&StringLenCompare);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("dog") ,
+    CPPUNIT_ASSERT((COMPARE_5_VALUES( a1 , wxT("dog") ,
                                            wxT("human") ,
                                            wxT("condor") ,
                                            wxT("thermit") ,
-                                           wxT("alligator") ) );
+                                           wxT("alligator") )));
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
     CPPUNIT_ASSERT( a1.Index( wxT("dog") ) == 0 );
     CPPUNIT_ASSERT( a1.Index( wxT("human") ) == 1 );
@@ -320,10 +330,10 @@ void ArraysTestCase::wxStringArrayTest()
     CPPUNIT_ASSERT( a5.Add( wxT("x"), 1 ) == 0 );
     CPPUNIT_ASSERT( a5.Add( wxT("a"), 3 ) == 1 );
 
-    CPPUNIT_ASSERT( COMPARE_4_VALUES( a5, wxT("x") ,
+    CPPUNIT_ASSERT((COMPARE_4_VALUES( a5, wxT("x") ,
                                           wxT("a") ,
                                           wxT("a") ,
-                                          wxT("a") ) );
+                                          wxT("a") )));
 
     a5.assign(a1.end(), a1.end());
     CPPUNIT_ASSERT( a5.empty() );
@@ -334,7 +344,7 @@ void ArraysTestCase::wxStringArrayTest()
     const wxString months[] = { "Jan", "Feb", "Mar" };
     a5.assign(months, months + WXSIZEOF(months));
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(months), a5.size() );
-    CPPUNIT_ASSERT( COMPARE_3_VALUES(a5, "Jan", "Feb", "Mar") );
+    CPPUNIT_ASSERT((COMPARE_3_VALUES(a5, "Jan", "Feb", "Mar")));
 
     a5.clear();
     CPPUNIT_ASSERT_EQUAL( 0, a5.size() );
@@ -350,6 +360,19 @@ void ArraysTestCase::wxStringArrayTest()
     wxArrayString a6;
     a6.Add("Foo");
     a6.Insert(a6[0], 1, 100);
+
+    // The whole point of this code is to test self-assignment, so suppress
+    // clang warning about it.
+    wxCLANG_WARNING_SUPPRESS(self-assign-overloaded)
+
+    wxArrayString a7;
+    a7 = a7;
+    CPPUNIT_ASSERT_EQUAL( 0, a7.size() );
+    a7.Add("Bar");
+    a7 = a7;
+    CPPUNIT_ASSERT_EQUAL( 1, a7.size() );
+
+    wxCLANG_WARNING_RESTORE(self-assign-overloaded)
 }
 
 void ArraysTestCase::SortedArray()
@@ -560,6 +583,13 @@ void ArraysTestCase::wxObjArrayTest()
     CPPUNIT_ASSERT_EQUAL( 0, Bar::GetNumber() );
 }
 
+void ArraysTestCase::wxObjArrayPtrTest()
+{
+    // Just check that instantiating this class compiles.
+    ArrayBarPtrs barptrs;
+    CPPUNIT_ASSERT_EQUAL( 0, barptrs.size() );
+}
+
 #define TestArrayOf(name)                                                     \
                                                                               \
 void ArraysTestCase::wxArray ## name ## Test()                                \
@@ -570,17 +600,17 @@ void ArraysTestCase::wxArray ## name ## Test()                                \
     a.Add(5,3);                                                               \
     a.Add(3,4);                                                               \
                                                                               \
-    CPPUNIT_ASSERT( COMPARE_10_VALUES(a,1,17,17,5,5,5,3,3,3,3) );             \
+    CPPUNIT_ASSERT((COMPARE_10_VALUES(a,1,17,17,5,5,5,3,3,3,3)));             \
     CPPUNIT_ASSERT( COMPARE_COUNT( a , 10 ) );                                \
                                                                               \
     a.Sort(name ## Compare);                                                  \
                                                                               \
-    CPPUNIT_ASSERT( COMPARE_10_VALUES(a,1,3,3,3,3,5,5,5,17,17) );             \
+    CPPUNIT_ASSERT((COMPARE_10_VALUES(a,1,3,3,3,3,5,5,5,17,17)));             \
     CPPUNIT_ASSERT( COMPARE_COUNT( a , 10 ) );                                \
                                                                               \
     a.Sort(name ## RevCompare);                                               \
                                                                               \
-    CPPUNIT_ASSERT( COMPARE_10_VALUES(a,17,17,5,5,5,3,3,3,3,1) );             \
+    CPPUNIT_ASSERT((COMPARE_10_VALUES(a,17,17,5,5,5,3,3,3,3,1)));             \
     CPPUNIT_ASSERT( COMPARE_COUNT( a , 10 ) );                                \
                                                                               \
     wxSortedArray##name b;                                                    \
@@ -590,7 +620,7 @@ void ArraysTestCase::wxArray ## name ## Test()                                \
     b.Add(5);                                                                 \
     b.Add(3);                                                                 \
                                                                               \
-    CPPUNIT_ASSERT( COMPARE_4_VALUES(b,1,3,5,17) );                           \
+    CPPUNIT_ASSERT((COMPARE_4_VALUES(b,1,3,5,17)));                           \
     CPPUNIT_ASSERT( COMPARE_COUNT( b , 4 ) );                                 \
     CPPUNIT_ASSERT( b.Index( 0 ) == wxNOT_FOUND );                            \
     CPPUNIT_ASSERT( b.Index( 1 ) == 0 );                                      \
@@ -644,7 +674,8 @@ void DoTestSwap(T v1, T v2, T v3)
 {
     A a1, a2;
     a1.swap(a2);
-    CPPUNIT_ASSERT( a1.empty() && a2.empty() );
+    CPPUNIT_ASSERT( a1.empty() );
+    CPPUNIT_ASSERT( a2.empty() );
 
     a1.push_back(v1);
     a1.swap(a2);
@@ -704,15 +735,16 @@ void ArraysTestCase::TestSTL()
 
     CPPUNIT_ASSERT_EQUAL( 0, i );
 
-    CPPUNIT_ASSERT( *list1.rbegin() == *(list1.end()-1) &&
-                    *list1.begin() == *(list1.rend()-1) );
+    CPPUNIT_ASSERT( *list1.rbegin() == *(list1.end()-1) );
+    CPPUNIT_ASSERT( *list1.begin() == *(list1.rend()-1) );
 
     it = list1.begin()+1;
     rit = list1.rbegin()+1;
-    CPPUNIT_ASSERT( *list1.begin() == *(it-1) &&
-                    *list1.rbegin() == *(rit-1) );
+    CPPUNIT_ASSERT( *list1.begin() == *(it-1) );
+    CPPUNIT_ASSERT( *list1.rbegin() == *(rit-1) );
 
-    CPPUNIT_ASSERT( ( list1.front() == 0 ) && ( list1.back() == COUNT - 1 ) );
+    CPPUNIT_ASSERT( list1.front() == 0 );
+    CPPUNIT_ASSERT( list1.back() == COUNT - 1 );
 
     list1.erase(list1.begin());
     list1.erase(list1.end()-1);
@@ -745,3 +777,80 @@ void ArraysTestCase::IndexFromEnd()
     CPPUNIT_ASSERT_EQUAL( 1, a.Index(1, /*bFromEnd=*/true) );
     CPPUNIT_ASSERT_EQUAL( 2, a.Index(42, /*bFromEnd=*/true) );
 }
+
+
+TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
+{
+    // simple string comparison
+    CHECK(wxCmpNaturalGeneric("a", "a") == 0);
+    CHECK(wxCmpNaturalGeneric("a", "z") < 0);
+    CHECK(wxCmpNaturalGeneric("z", "a") > 0);
+
+    // case insensitivity
+    CHECK(wxCmpNaturalGeneric("a", "A") == 0);
+    CHECK(wxCmpNaturalGeneric("A", "a") == 0);
+    CHECK(wxCmpNaturalGeneric("AB", "a") > 0);
+    CHECK(wxCmpNaturalGeneric("a", "AB") < 0);
+
+    // empty strings sort before whitespace and punctiation
+    CHECK(wxCmpNaturalGeneric("", " ") < 0);
+    CHECK(wxCmpNaturalGeneric(" ", "") > 0);
+    CHECK(wxCmpNaturalGeneric("", ",") < 0);
+    CHECK(wxCmpNaturalGeneric(",", "") > 0);
+
+    // empty strings sort before numbers
+    CHECK(wxCmpNaturalGeneric("", "0") < 0);
+    CHECK(wxCmpNaturalGeneric("0", "") > 0);
+
+    // empty strings sort before letters and symbols
+    CHECK(wxCmpNaturalGeneric("", "abc") < 0);
+    CHECK(wxCmpNaturalGeneric("abc", "") > 0);
+
+    // whitespace and punctiation sort before numbers
+    CHECK(wxCmpNaturalGeneric(" ", "1") < 0);
+    CHECK(wxCmpNaturalGeneric("1", " ") > 0);
+    CHECK(wxCmpNaturalGeneric(",", "1") < 0);
+    CHECK(wxCmpNaturalGeneric("1", ",") > 0);
+
+    // strings containing numbers sort before letters and symbols
+    CHECK(wxCmpNaturalGeneric("00", "a") < 0);
+    CHECK(wxCmpNaturalGeneric("a", "00") > 0);
+
+    // strings containing numbers are compared by their value
+    CHECK(wxCmpNaturalGeneric("01", "1") == 0);
+    CHECK(wxCmpNaturalGeneric("1", "01") == 0);
+    CHECK(wxCmpNaturalGeneric("1", "05") < 0);
+    CHECK(wxCmpNaturalGeneric("05", "1") > 0);
+    CHECK(wxCmpNaturalGeneric("10", "5") > 0);
+    CHECK(wxCmpNaturalGeneric("5", "10") < 0);
+    CHECK(wxCmpNaturalGeneric("1", "9999999999999999999") < 0);
+    CHECK(wxCmpNaturalGeneric("9999999999999999999", "1") > 0);
+
+    // comparing strings composed from whitespace,
+    //  punctuation, numbers, letters, and symbols
+    CHECK(wxCmpNaturalGeneric("1st", " 1st") > 0);
+    CHECK(wxCmpNaturalGeneric(" 1st", "1st") < 0);
+
+    CHECK(wxCmpNaturalGeneric("1st", ",1st") > 0);
+    CHECK(wxCmpNaturalGeneric(",1st", "1st") < 0);
+
+    CHECK(wxCmpNaturalGeneric("1st", "01st") == 0);
+    CHECK(wxCmpNaturalGeneric("01st", "1st") == 0);
+    CHECK(wxCmpNaturalGeneric("10th", "5th") > 0);
+    CHECK(wxCmpNaturalGeneric("5th", "10th") < 0);
+
+    CHECK(wxCmpNaturalGeneric("a1st", "a01st") == 0);
+    CHECK(wxCmpNaturalGeneric("a01st", "a1st") == 0);
+    CHECK(wxCmpNaturalGeneric("a10th", "a5th") > 0);
+    CHECK(wxCmpNaturalGeneric("a5th", "a10th") < 0);
+    CHECK(wxCmpNaturalGeneric("a 10th", "a5th") < 0);
+    CHECK(wxCmpNaturalGeneric("a5th", "a 10th") > 0);
+
+    CHECK(wxCmpNaturalGeneric("a1st1", "a01st01") == 0);
+    CHECK(wxCmpNaturalGeneric("a01st01", "a1st1") == 0);
+    CHECK(wxCmpNaturalGeneric("a10th10", "a5th5") > 0);
+    CHECK(wxCmpNaturalGeneric("a5th5", "a10th10") < 0);
+    CHECK(wxCmpNaturalGeneric("a 10th 10", "a5th 5") < 0);
+    CHECK(wxCmpNaturalGeneric("a5th 5", "a 10th 10") > 0);
+}
+

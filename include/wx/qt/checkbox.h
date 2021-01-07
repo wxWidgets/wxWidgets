@@ -8,7 +8,7 @@
 #ifndef _WX_QT_CHECKBOX_H_
 #define _WX_QT_CHECKBOX_H_
 
-#include <QtWidgets/QCheckBox>
+class QCheckBox;
 
 class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
@@ -18,7 +18,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr);
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -27,16 +27,19 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr );
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr) );
 
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool value) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
-    virtual QCheckBox *GetHandle() const;
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual wxString GetLabel() const wxOVERRIDE;
+
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
-    virtual void DoSet3StateValue(wxCheckBoxState state);
-    virtual wxCheckBoxState DoGet3StateValue() const;
+    virtual void DoSet3StateValue(wxCheckBoxState state) wxOVERRIDE;
+    virtual wxCheckBoxState DoGet3StateValue() const wxOVERRIDE;
 
 private:
     QCheckBox *m_qtCheckBox;

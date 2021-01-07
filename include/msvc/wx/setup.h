@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-12-12
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -44,12 +44,17 @@
 // COMPILER_PREFIX=vcXX and in this case you may want to either predefine
 // wxMSVC_VERSION as "XX" or define wxMSVC_VERSION_AUTO to use the appropriate
 // version depending on the compiler used
+//
+// There is an additional complication with MSVC 14.0, 14.1 and 14.2 versions
+// (a.k.a. MSVS 2015, 2017 and 2019): as they're all ABI-compatible with each
+// other, it is convenient to use the same "vc14x" compiler prefix for all of
+// them, but this is not how wxMSVC_VERSION_AUTO behaves by default, so you
+// need to additionally define wxMSVC_VERSION_ABI_COMPAT to opt in into using
+// this "vc14x" prefix.
 #ifdef wxMSVC_VERSION
     #define wxCOMPILER_PREFIX wxCONCAT(vc, wxMSVC_VERSION)
-#elif defined(wxMSVC_VERSION_AUTO)
-    #if _MSC_VER == 1200
-        #define wxCOMPILER_PREFIX vc60
-    #elif _MSC_VER == 1300
+#elif defined(wxMSVC_VERSION_AUTO) || defined(wxMSVC_VERSION_ABI_COMPAT)
+    #if _MSC_VER == 1300
         #define wxCOMPILER_PREFIX vc70
     #elif _MSC_VER == 1310
         #define wxCOMPILER_PREFIX vc71
@@ -63,8 +68,20 @@
         #define wxCOMPILER_PREFIX vc110
     #elif _MSC_VER == 1800
         #define wxCOMPILER_PREFIX vc120
-    #elif _MSC_VER == 1900
-        #define wxCOMPILER_PREFIX vc140
+    #elif _MSC_VER >= 1900 && _MSC_VER < 2000
+        #ifdef wxMSVC_VERSION_ABI_COMPAT
+            #define wxCOMPILER_PREFIX vc14x
+        #else
+            #if _MSC_VER < 1910
+                #define wxCOMPILER_PREFIX vc140
+            #elif _MSC_VER >= 1910 && _MSC_VER < 1920
+                #define wxCOMPILER_PREFIX vc141
+            #elif _MSC_VER >= 1920 && _MSC_VER < 2000
+                #define wxCOMPILER_PREFIX vc142
+            #else
+                #error "Unknown MSVC 14.x compiler version, please report to wx-dev."
+            #endif
+        #endif
     #else
         #error "Unknown MSVC compiler version, please report to wx-dev."
     #endif
@@ -75,6 +92,8 @@
 // architecture-specific part: not used (again, for compatibility), for x86
 #if defined(_M_X64)
     #define wxARCH_SUFFIX _x64
+#elif defined(_M_ARM64)
+    #define wxARCH_SUFFIX _arm64
 #elif defined(_M_IA64)
     #define wxARCH_SUFFIX _ia64
 #else // assume _M_IX86
@@ -147,80 +166,93 @@
 // special version for regex as it does have a Unicode version
 #define wx3RD_PARTY_LIB_NAME_U(name) "wx" name wxSUFFIX_STR
 
-#pragma comment(lib, wxWX_LIB_NAME("base", ""))
+#if defined(wxMONOLITHIC) && wxMONOLITHIC == 1
+    #pragma comment(lib, wxWX_LIB_NAME("msw", ""))
+#else
+    #pragma comment(lib, wxWX_LIB_NAME("base", ""))
 
-#ifndef wxNO_NET_LIB
-    #ifndef WXUSINGDLL
+    #ifndef wxNO_NET_LIB
+        #pragma comment(lib, wxBASE_LIB_NAME("net"))
+    #endif
+    #if wxUSE_XML && !defined(wxNO_XML_LIB)
+        #pragma comment(lib, wxBASE_LIB_NAME("xml"))
+    #endif
+#endif // defined(wxMONOLITHIC) && wxMONOLITHIC == 1
+
+#if !defined(WXUSINGDLL)
+    #if !defined(wxNO_NET_LIB)
         #pragma comment(lib, "wsock32")
     #endif
-    #pragma comment(lib, wxBASE_LIB_NAME("net"))
-#endif
-#if wxUSE_XML && !defined(wxNO_XML_LIB)
-    #pragma comment(lib, wxBASE_LIB_NAME("xml"))
-    #if !defined(wxNO_EXPAT_LIB) && !defined(WXUSINGDLL)
+
+    #if wxUSE_XML && !defined(wxNO_XML_LIB) && !defined(wxNO_EXPAT_LIB)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
     #endif
-#endif
-#if wxUSE_REGEX && !defined(wxNO_REGEX_LIB) && !defined(WXUSINGDLL)
-    #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
-#endif
-#if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB) && !defined(WXUSINGDLL)
-    #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
-#endif
+
+    #if wxUSE_REGEX && !defined(wxNO_REGEX_LIB)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
+    #endif
+    #if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
+    #endif
+#endif // !defined(WXUSINGDLL)
 
 #if wxUSE_GUI
-    #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
-    #endif
-    #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("png"))
-    #endif
-    #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
-    #endif
+    #if !defined(WXUSINGDLL)
+        #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
+        #endif
+        #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("png"))
+        #endif
+        #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
+        #endif
+        #if wxUSE_STC && !defined(wxNO_STC_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #endif
+    #endif // !defined(WXUSINGDLL)
 
-    #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
 
-    #ifndef wxNO_ADV_LIB
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("adv"))
-    #endif
+    #if !defined(wxMONOLITHIC) || wxMONOLITHIC == 0
 
-    #if wxUSE_HTML && !defined(wxNO_HTML_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("html"))
-    #endif
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
+
+        #if wxUSE_HTML && !defined(wxNO_HTML_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("html"))
+        #endif
+        #if wxUSE_DEBUGREPORT && !defined(wxNO_QA_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("qa"))
+        #endif
+        #if wxUSE_XRC && !defined(wxNO_XRC_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("xrc"))
+        #endif
+        #if wxUSE_AUI && !defined(wxNO_AUI_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("aui"))
+        #endif
+        #if wxUSE_PROPGRID && !defined(wxNO_PROPGRID_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("propgrid"))
+        #endif
+        #if wxUSE_RIBBON && !defined(wxNO_RIBBON_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("ribbon"))
+        #endif
+        #if wxUSE_RICHTEXT && !defined(wxNO_RICHTEXT_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("richtext"))
+        #endif
+        #if wxUSE_MEDIACTRL && !defined(wxNO_MEDIA_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("media"))
+        #endif
+        #if wxUSE_STC && !defined(wxNO_STC_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("stc"))
+        #endif
+        #if wxUSE_WEBVIEW && !defined(wxNO_WEBVIEW_LIB)
+            #pragma comment(lib, wxTOOLKIT_LIB_NAME("webview"))
+        #endif
+    #endif // !defined(wxMONOLITHIC) || wxMONOLITHIC == 0
+
     #if wxUSE_GLCANVAS && !defined(wxNO_GL_LIB)
         #pragma comment(lib, wxTOOLKIT_LIB_NAME("gl"))
     #endif
-    #if wxUSE_DEBUGREPORT && !defined(wxNO_QA_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("qa"))
-    #endif
-    #if wxUSE_XRC && !defined(wxNO_XRC_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("xrc"))
-    #endif
-    #if wxUSE_AUI && !defined(wxNO_AUI_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("aui"))
-    #endif
-    #if wxUSE_PROPGRID && !defined(wxNO_PROPGRID_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("propgrid"))
-    #endif
-    #if wxUSE_RIBBON && !defined(wxNO_RIBBON_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("ribbon"))
-    #endif
-    #if wxUSE_RICHTEXT && !defined(wxNO_RICHTEXT_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("richtext"))
-    #endif
-    #if wxUSE_MEDIACTRL && !defined(wxNO_MEDIA_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("media"))
-    #endif
-    #if wxUSE_STC && !defined(wxNO_STC_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("stc"))
-        #ifndef WXUSINGDLL
-            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
-        #endif
-    #endif
-    #if wxUSE_WEBVIEW && !defined(wxNO_WEBVIEW_LIB)
-        #pragma comment(lib, wxTOOLKIT_LIB_NAME("webview"))
-    #endif
+
 #endif // wxUSE_GUI
 
 

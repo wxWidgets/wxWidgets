@@ -8,10 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #   include "wx/wx.h"
 #endif
@@ -20,7 +16,6 @@
 
 #include "archivetest.h"
 #include "wx/dir.h"
-#include "wx/scopedptr.h"
 #include <string>
 #include <list>
 #include <map>
@@ -31,14 +26,10 @@ using std::string;
 
 // Check whether member templates can be used
 //
-#if defined __GNUC__ && \
-    (__GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
+#if defined __GNUC__
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined _MSC_VER && _MSC_VER >= 1310 && !defined __WIN64__
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined __BORLANDC__ && __BORLANDC__ >= 0x530
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined __HP_aCC && __HP_aCC > 33300
@@ -387,7 +378,7 @@ void TempDir::RemoveDir(wxString& path)
 #if defined __UNIX__ || defined __MINGW32__
 #   define WXARC_popen popen
 #   define WXARC_pclose pclose
-#elif defined _MSC_VER || defined __BORLANDC__
+#elif defined _MSC_VER
 #   define WXARC_popen _popen
 #   define WXARC_pclose _pclose
 #else
@@ -463,7 +454,13 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
     if (m_archiver.empty())
         CreateArchive(out);
     else
+    {
+#ifndef __WXOSX_IPHONE__
         CreateArchive(out, m_archiver);
+#else
+        CPPUNIT_FAIL("using external archivers is not supported on iOS");
+#endif
+    }
 
     // check archive could be created
     CPPUNIT_ASSERT(out.GetLength() > 0);
@@ -490,7 +487,13 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
     if (m_unarchiver.empty())
         ExtractArchive(in);
     else
+    {
+#ifndef __WXOSX_IPHONE__
         ExtractArchive(in, m_unarchiver);
+#else
+        CPPUNIT_FAIL("using external archivers is not supported on iOS");
+#endif
+    }
 
     // check that all the test entries were found in the archive
     CPPUNIT_ASSERT(m_testEntries.empty());
@@ -621,6 +624,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out)
 
 // Create an archive using an external archive program
 //
+#ifndef __WXOSX_IPHONE__
 template <class ClassFactoryT>
 void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
                                                    const wxString& archiver)
@@ -684,6 +688,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
             out.Write(in);
     }
 }
+#endif
 
 // Do a standard set of modification on an archive, delete an entry,
 // rename an entry and add an entry
@@ -808,8 +813,8 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
         // non-seekable entries are allowed to have GetSize == wxInvalidOffset
         // until the end of the entry's data has been read past
         CPPUNIT_ASSERT_MESSAGE("entry size check" + error_context,
-            testEntry.GetLength() == entry->GetSize() ||
-            ((m_options & PipeIn) != 0 && entry->GetSize() == wxInvalidOffset));
+            (testEntry.GetLength() == entry->GetSize() ||
+            ((m_options & PipeIn) != 0 && entry->GetSize() == wxInvalidOffset)));
         CPPUNIT_ASSERT_MESSAGE(
             "arc->GetLength() == entry->GetSize()" + error_context,
             arc->GetLength() == entry->GetSize());
@@ -865,6 +870,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
 
 // Extract an archive using an external unarchive program
 //
+#ifndef __WXOSX_IPHONE__
 template <class ClassFactoryT>
 void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
                                                     const wxString& unarchiver)
@@ -906,6 +912,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
     wxString dir = tmpdir.GetName();
     VerifyDir(dir);
 }
+#endif
 
 // Verifies the files produced by an external unarchiver are as expected
 //
@@ -1160,7 +1167,7 @@ template <class NotifierT, class EntryT>
 class ArchiveNotifier : public NotifierT
 {
 public:
-    void OnEntryUpdated(EntryT& WXUNUSED(entry)) { }
+    void OnEntryUpdated(EntryT& WXUNUSED(entry)) wxOVERRIDE { }
 };
 
 template <class ClassFactoryT>
@@ -1185,10 +1192,10 @@ public:
         m_options(options)
     { }
 
-protected:
     // the entry point for the test
-    void runTest();
+    void runTest() wxOVERRIDE;
 
+protected:
     void CreateArchive(wxOutputStream& out);
     void ExtractArchive(wxInputStream& in);
 
@@ -1299,9 +1306,9 @@ bool ArchiveTestSuite::IsInPath(const wxString& cmd)
     return !m_path.FindValidPath(c).empty();
 }
 
-// make the test suite
+// run all the tests in the test suite
 //
-ArchiveTestSuite *ArchiveTestSuite::makeSuite()
+void ArchiveTestSuite::DoRunTest()
 {
     typedef wxArrayString::iterator Iter;
 
@@ -1324,7 +1331,10 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                                                    generic != 0, *j, *i);
 
                     if (test)
-                        addTest(test);
+                    {
+                        test->runTest();
+                        delete test;
+                    }
                 }
 
     for (int options = 0; options <= PipeIn; options += PipeIn)
@@ -1340,11 +1350,10 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
             if (options)
                 descr += " (PipeIn)";
 
-            addTest(new CorruptionTestCase(descr, factory, options));
+            CorruptionTestCase test(descr, factory, options);
+            test.runTest();
         }
     }
-
-    return this;
 }
 
 CppUnit::Test *ArchiveTestSuite::makeTest(

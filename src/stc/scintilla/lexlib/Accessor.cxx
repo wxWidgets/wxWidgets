@@ -1,6 +1,6 @@
 // Scintilla source code edit control
-/** @file KeyWords.cxx
- ** Colourise for particular languages.
+/** @file Accessor.cxx
+ ** Interfaces between Scintilla and lexers.
  **/
 // Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.

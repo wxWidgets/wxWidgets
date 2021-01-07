@@ -34,7 +34,7 @@
         If set to non-zero value, abort the program if an assertion fails. The
         default behaviour in case of assertion failure depends on the build mode
         and can be changed by overriding wxApp::OnAssertFailure() but setting
-        this option allows to change it without modifying the program code and
+        this option allows changing it without modifying the program code and
         also applies to asserts which may happen before the wxApp object
         creation or after its destruction.
     @endFlagTable
@@ -66,9 +66,6 @@
         Setting this to 0 causes more flicker, but allows applications to paint
         graphics on the parent of a static box (the optimized refresh causes any
         such drawing to disappear).
-    @flag{msw.display.directdraw}
-        If set to 1, use DirectDraw-based implementation of wxDisplay.
-        By default the standard Win32 functions are used.
     @flag{msw.font.no-proof-quality}
         If set to 1, use default fonts quality instead of proof quality when
         creating fonts. With proof quality the fonts have slightly better
@@ -84,8 +81,8 @@
     @flag{gtk.tlw.can-set-transparent}
         wxTopLevelWindow::CanSetTransparent() method normally tries to detect
         automatically whether transparency for top level windows is currently
-        supported, however this may sometimes fail and this option allows to
-        override the automatic detection. Setting it to 1 makes the transparency
+        supported, however this may sometimes fail and this option allows
+        overriding the automatic detection. Setting it to 1 makes the transparency
         be always available (setting it can still fail, of course) and setting it
         to 0 makes it always unavailable.
     @flag{gtk.desktop}
@@ -114,8 +111,8 @@
     @flag{mac.textcontrol-use-spell-checker}
         If 1 activates the spell checking in wxTextCtrl.
     @flag{osx.openfiledialog.always-show-types}
-        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OS X but allows
-        the selection of files from any of the supported types. Setting this to 1 shows a wxChoice 
+        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on macOS but allows
+        the selection of files from any of the supported types. Setting this to 1 shows a wxChoice
         for selection (if there is more than one supported filetype).
     @endFlagTable
 

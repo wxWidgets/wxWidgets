@@ -8,14 +8,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TOOLBAR
 
-#include <QActionGroup>
+#include <QtWidgets/QActionGroup>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolBar>
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
@@ -24,6 +22,7 @@
 #include "wx/toolbar.h"
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/converter.h"
+
 
 class wxQtToolButton;
 class wxToolBarTool : public wxToolBarToolBase
@@ -44,8 +43,8 @@ public:
         m_qtToolButton = NULL;
     }
 
-    virtual void SetLabel( const wxString &label );
-    virtual void SetDropdownMenu(wxMenu* menu);
+    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
+    virtual void SetDropdownMenu(wxMenu* menu) wxOVERRIDE;
 
     void SetIcon();
     void ClearToolTip();
@@ -65,9 +64,9 @@ public:
     }
 
 private:
-    void mouseReleaseEvent( QMouseEvent *event );
-    void mousePressEvent( QMouseEvent *event );
-    void enterEvent( QEvent *event );
+    void mouseReleaseEvent( QMouseEvent *event ) wxOVERRIDE;
+    void mousePressEvent( QMouseEvent *event ) wxOVERRIDE;
+    void enterEvent( QEvent *event ) wxOVERRIDE;
 };
 
 void wxQtToolButton::mouseReleaseEvent( QMouseEvent *event )
@@ -144,7 +143,7 @@ wxQtToolbar::wxQtToolbar( wxWindow *parent, wxToolBar *handler )
 }
 
 
-QToolBar *wxToolBar::GetHandle() const
+QWidget *wxToolBar::GetHandle() const
 {
     return m_qtToolBar;
 }
@@ -183,6 +182,41 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
     return NULL;
 }
 
+void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
+{
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
+    if ( tool )
+    {
+        (void)tool->SetShortHelp(helpString);
+        //TODO - other qt actions for tool tip string
+//        if (tool->m_item)
+//        {}
+    }
+}
+
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+        tool->SetIcon();
+    }
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+    }
+}
+
 void wxToolBar::SetWindowStyleFlag( long style )
 {
     wxToolBarBase::SetWindowStyleFlag(style);
@@ -192,7 +226,7 @@ void wxToolBar::SetWindowStyleFlag( long style )
 
     m_qtToolBar->setOrientation( IsVertical() ? Qt::Vertical : Qt::Horizontal);
 
-    Qt::ToolButtonStyle buttonStyle = GetButtonStyle();
+    Qt::ToolButtonStyle buttonStyle = (Qt::ToolButtonStyle)GetButtonStyle();
 
     // bring the initial state of all the toolbar items in line with the
     for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
@@ -235,11 +269,11 @@ QActionGroup* wxToolBar::GetActionGroup(size_t pos)
 {
     QActionGroup *actionGroup = NULL;
     if (pos > 0)
-        actionGroup = GetHandle()->actions().at(pos-1)->actionGroup();
-    if (actionGroup == NULL && (int)pos < GetHandle()->actions().size() - 1)
-        actionGroup = GetHandle()->actions().at(pos+1)->actionGroup();
+        actionGroup = m_qtToolBar->actions().at(pos-1)->actionGroup();
+    if (actionGroup == NULL && (int)pos < m_qtToolBar->actions().size() - 1)
+        actionGroup = m_qtToolBar->actions().at(pos+1)->actionGroup();
     if (actionGroup == NULL)
-        actionGroup = new QActionGroup(GetHandle());
+        actionGroup = new QActionGroup(m_qtToolBar);
     return actionGroup;
 }
 
@@ -247,15 +281,15 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
     QAction *before = NULL;
-    if (pos >= 0 && pos < (size_t)GetHandle()->actions().size())
-        before = GetHandle()->actions().at(pos);
+    if (pos < (size_t)m_qtToolBar->actions().size())
+        before = m_qtToolBar->actions().at(pos);
 
     QAction *action;
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_BUTTON:
             tool->m_qtToolButton = new wxQtToolButton(this, tool);
-            tool->m_qtToolButton->setToolButtonStyle(GetButtonStyle());
+            tool->m_qtToolButton->setToolButtonStyle((Qt::ToolButtonStyle)GetButtonStyle());
             tool->SetLabel( tool->GetLabel() );
 
             if (!HasFlag(wxTB_NOICONS))
@@ -263,7 +297,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (!HasFlag(wxTB_NO_TOOLTIPS))
                 tool->SetToolTip();
 
-            action = GetHandle()->insertWidget(before, tool->m_qtToolButton);
+            action = m_qtToolBar->insertWidget(before, tool->m_qtToolButton);
 
             switch (tool->GetKind())
             {
@@ -285,14 +319,14 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (tool->IsStretchable()) {
                 QWidget* spacer = new QWidget();
                 spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                GetHandle()->insertWidget(before, spacer);
+                m_qtToolBar->insertWidget(before, spacer);
             } else
-                GetHandle()->insertSeparator(before);
+                m_qtToolBar->insertSeparator(before);
             break;
 
         case wxTOOL_STYLE_CONTROL:
             wxWindow* control = tool->GetControl();
-            GetHandle()->insertWidget(before, control->GetHandle());
+            m_qtToolBar->insertWidget(before, control->GetHandle());
             break;
     }
 
@@ -344,7 +378,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control,
     return new wxToolBarTool(this, control, label);
 }
 
-Qt::ToolButtonStyle wxToolBar::GetButtonStyle()
+long wxToolBar::GetButtonStyle()
 {
     if (!HasFlag(wxTB_NOICONS)) {
         if (HasFlag(wxTB_HORZ_LAYOUT))

@@ -16,7 +16,7 @@
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 #include "wx/gtk/private/win_gtk.h"
 
@@ -63,6 +63,7 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
 //-----------------------------------------------------------------------------
 
 extern "C" {
+static
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxPopupWindow *win )
 {
     if (win->IsEnabled())

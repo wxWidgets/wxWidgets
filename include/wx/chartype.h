@@ -13,29 +13,17 @@
 #ifndef _WX_WXCHARTYPE_H_
 #define _WX_WXCHARTYPE_H_
 
-/* defs.h indirectly includes this file, so don't include it here */
-#include "wx/platform.h"
+/*
+    wx/defs.h indirectly includes this file, so we can't include it here,
+    include just its subset which defines SIZEOF_WCHAR_T that is used here
+    (under Unix it's in configure-generated setup.h, so including wx/platform.h
+    would have been enough, but this is not the case under other platforms).
+ */
+#include "wx/types.h"
 
-/* check whether we have wchar_t and which size it is if we do */
-#if !defined(wxUSE_WCHAR_T)
-    #if defined(__UNIX__)
-        #if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
-            #define wxUSE_WCHAR_T 1
-        #else
-            #define wxUSE_WCHAR_T 0
-        #endif
-    #elif defined(__GNUWIN32__) && !defined(__MINGW32__)
-        #define wxUSE_WCHAR_T 0
-    #else
-        /* add additional compiler checks if this fails */
-        #define wxUSE_WCHAR_T 1
-    #endif
-#endif /* !defined(wxUSE_WCHAR_T) */
-
-/* Unicode support requires wchar_t */
-#if !wxUSE_WCHAR_T
-    #error "wchar_t must be available"
-#endif /* Unicode */
+/* This is kept only for backwards compatibility, in case some application code
+   checks for it. It's always 1 and can't be changed. */
+#define wxUSE_WCHAR_T 1
 
 /*
    non Unix compilers which do have wchar.h (but not tchar.h which is included
@@ -105,10 +93,7 @@
 /* VC++ and BC++ starting with 5.2 have TCHAR support */
 #ifdef __VISUALC__
     #define wxHAVE_TCHAR_SUPPORT
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
-    #define wxHAVE_TCHAR_SUPPORT
-    #include <ctype.h>
-#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
+#elif defined(__MINGW32__)
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
     #include <string.h>
@@ -118,11 +103,6 @@
 #ifdef wxHAVE_TCHAR_SUPPORT
     /* get TCHAR definition if we've got it */
     #include <tchar.h>
-
-    /* we surely do have wchar_t if we have TCHAR */
-    #ifndef wxUSE_WCHAR_T
-        #define wxUSE_WCHAR_T 1
-    #endif /* !defined(wxUSE_WCHAR_T) */
 #endif /* wxHAVE_TCHAR_SUPPORT */
 
 /* ------------------------------------------------------------------------- */
@@ -175,6 +155,16 @@
     #define wxUSE_UTF8_LOCALE_ONLY 0
 #endif
 
+#ifndef SIZEOF_WCHAR_T
+    #error "SIZEOF_WCHAR_T must be defined before including this file in wx/defs.h"
+#endif
+
+#if wxUSE_UNICODE_WCHAR && SIZEOF_WCHAR_T == 2
+    #define wxUSE_UNICODE_UTF16 1
+#else
+    #define wxUSE_UNICODE_UTF16 0
+#endif
+
 /* define char type used by wxString internal representation: */
 #if wxUSE_UNICODE_WCHAR
     typedef wchar_t wxStringCharType;
@@ -206,11 +196,7 @@
             Notice that we use an intermediate macro to allow x to be expanded
             if it's a macro itself.
          */
-        #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-            #define wxT(x) wxCONCAT_HELPER(L, x)
-        #else
-            #define wxT(x) wxPREPEND_L(x)
-        #endif
+        #define wxT(x) wxCONCAT_HELPER(L, x)
     #endif /* ASCII/Unicode */
 #endif /* !defined(wxT) */
 
@@ -230,11 +216,7 @@
     /*
         As above with wxT(), wxS() argument is expanded if it's a macro.
      */
-    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-        #define wxS(x) wxCONCAT_HELPER(L, x)
-    #else
-        #define wxS(x) wxPREPEND_L(x)
-    #endif
+    #define wxS(x) wxCONCAT_HELPER(L, x)
 #else /* wxUSE_UNICODE_UTF8 || ANSI */
     #define wxS(x) x
 #endif

@@ -90,11 +90,25 @@ public:
     void SetMin(ValueType min);
 
     /**
+        Gets the minimal value accepted by the validator.
+
+        @since 3.1.3
+     */
+    ValueType GetMin() const;
+
+    /**
         Sets the maximal value accepted by the validator.
 
         This value is inclusive, i.e. the value equal to @a max is accepted.
      */
     void SetMax(ValueType max);
+
+    /**
+        Gets the maximum value accepted by the validator.
+
+        @since 3.1.3
+     */
+    ValueType GetMax() const;
 
     /**
         Sets both minimal and maximal values accepted by the validator.
@@ -103,6 +117,12 @@ public:
      */
     void SetRange(ValueType min, ValueType max);
 
+    /**
+        Gets both minimal and maximal values accepted by the validator.
+
+        @since 3.1.3
+     */
+    void GetRange(ValueType& min, ValueType& max) const;
 
     /**
         Change the validator style.
@@ -346,12 +366,25 @@ public:
         constructor.
      */
     void SetPrecision(unsigned precision);
+
+    /**
+        Set factor used for displaying the value.
+
+        The value associated with the validator is multiplied by the factor
+        before displaying it and divided by it when retrieving its value from
+        the control. By default, the @a factor is 1, so the actual value is not
+        affected by it, but it can be set to, for example, 100, to display the
+        value in percents while still storing it as absolute value.
+
+        @since 3.1.1
+     */
+    void SetFactor(double factor);
 };
 
 /**
     Creates a wxFloatingPointValidator object with automatic type deduction.
 
-    Similarly to wxMakeIntegerValidator(), this function allows to avoid
+    Similarly to wxMakeIntegerValidator(), this function allows avoiding
     explicitly specifying the validator type.
 
     @since 2.9.2

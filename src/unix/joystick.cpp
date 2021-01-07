@@ -141,14 +141,6 @@ void* wxJoystickThread::Entry()
 
             if ((j_evt.type & JS_EVENT_AXIS) && (j_evt.number < wxJS_MAX_AXES))
             {
-                // Ignore invalid axis.
-                if ( j_evt.number >= wxJS_MAX_AXES )
-                {
-                    wxLogDebug(wxS("Invalid axis index %d in joystick message."),
-                               j_evt.number);
-                    continue;
-                }
-
                 if (   (m_axe[j_evt.number] + m_threshold < j_evt.value)
                     || (m_axe[j_evt.number] - m_threshold > j_evt.value) )
             {
@@ -181,12 +173,12 @@ void* wxJoystickThread::Entry()
                 if (j_evt.value)
                 {
                     m_buttons |= (1 << j_evt.number);
-                    SendEvent(wxEVT_JOY_BUTTON_DOWN, j_evt.time, j_evt.number);
+                    SendEvent(wxEVT_JOY_BUTTON_DOWN, j_evt.time, 1 << j_evt.number);
                 }
                 else
                 {
                     m_buttons &= ~(1 << j_evt.number);
-                    SendEvent(wxEVT_JOY_BUTTON_UP, j_evt.time, j_evt.number);
+                    SendEvent(wxEVT_JOY_BUTTON_UP, j_evt.time, 1 << j_evt.number);
                 }
             }
         }
@@ -270,7 +262,7 @@ int wxJoystick::GetButtonState() const
 bool wxJoystick::GetButtonState(unsigned id) const
 {
     if (m_thread && (id < wxJS_MAX_BUTTONS))
-        return (m_thread->m_buttons & (1 << id)) != 0;
+        return (m_thread->m_buttons & (1u << id)) != 0;
     return false;
 }
 

@@ -109,6 +109,9 @@ public:
                          wxWindow* wnd,
                          const wxAuiNotebookPageArray& pages,
                          const wxSize& requiredBmpSize) = 0;
+
+    // Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() {}
 };
 
 
@@ -184,6 +187,9 @@ public:
     int GetBestTabCtrlSize(wxWindow* wnd,
                  const wxAuiNotebookPageArray& pages,
                  const wxSize& requiredBmpSize) wxOVERRIDE;
+
+    // Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() wxOVERRIDE;
 
 protected:
 
@@ -289,8 +295,6 @@ protected:
     wxFont m_normalFont;
     wxFont m_selectedFont;
     wxFont m_measuringFont;
-    wxColour m_normalTextColour;
-    wxColour m_selectedTextColour;
     wxPen m_normalBkPen;
     wxPen m_selectedBkPen;
     wxBrush m_normalBkBrush;
@@ -314,7 +318,7 @@ protected:
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartgtk.h"
         #define wxAuiDefaultTabArt wxAuiGtkTabArt
-    #elif defined(__WXMSW__)
+    #elif defined(__WXMSW__) && wxUSE_UXTHEME
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartmsw.h"
         #define wxAuiDefaultTabArt wxAuiMSWTabArt

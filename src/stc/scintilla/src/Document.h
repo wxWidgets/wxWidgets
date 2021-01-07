@@ -171,6 +171,10 @@ public:
 
 class Document;
 
+inline int LevelNumber(int level) {
+	return level & SC_FOLDLEVELNUMBERMASK;
+}
+
 class LexInterface {
 protected:
 	Document *pdoc;
@@ -207,6 +211,9 @@ public:
 		bool operator==(const WatcherWithUserData &other) const {
 			return (watcher == other.watcher) && (userData == other.userData);
 		}
+		bool operator!=(const WatcherWithUserData &other) const {
+			return !((watcher == other.watcher) && (userData == other.userData));
+		}
 	};
 
 private:
@@ -233,6 +240,18 @@ private:
 	RegexSearchBase *regex;
 
 public:
+
+	struct CharacterExtracted {
+		unsigned int character;
+		unsigned int widthBytes;
+		CharacterExtracted(unsigned int character_, unsigned int widthBytes_) :
+			character(character_), widthBytes(widthBytes_) {
+		}
+		// For DBCS characters turn 2 bytes into an int
+		static CharacterExtracted DBCS(unsigned char lead, unsigned char trail) {
+			return CharacterExtracted((lead << 8) | trail, 2);
+		}
+	};
 
 	LexInterface *pli;
 
@@ -280,6 +299,8 @@ public:
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true) const;
 	int NextPosition(int pos, int moveDir) const;
 	bool NextCharacter(int &pos, int moveDir) const;	// Returns true if pos changed
+	Document::CharacterExtracted CharacterAfter(int position) const;
+	Document::CharacterExtracted CharacterBefore(int position) const;
 	Sci_Position SCI_METHOD GetRelativePosition(Sci_Position positionStart, Sci_Position characterOffset) const;
 	int GetRelativePositionUTF16(int positionStart, int characterOffset) const;
 	int SCI_METHOD GetCharacterAndWidth(Sci_Position position, Sci_Position *pWidth) const;
@@ -369,19 +390,12 @@ public:
 	void GetHighlightDelimiters(HighlightDelimiter &hDelimiter, int line, int lastLine);
 
 	void Indent(bool forwards);
-	int ExtendWordSelect(int pos, int delta, bool onlyWordCharacters=false);
-	int NextWordStart(int pos, int delta);
-	int NextWordEnd(int pos, int delta);
+	int ExtendWordSelect(int pos, int delta, bool onlyWordCharacters=false) const;
+	int NextWordStart(int pos, int delta) const;
+	int NextWordEnd(int pos, int delta) const;
 	Sci_Position SCI_METHOD Length() const { return cb.Length(); }
 	void Allocate(int newSize) { cb.Allocate(newSize); }
 
-	struct CharacterExtracted {
-		unsigned int character;
-		unsigned int widthBytes;
-		CharacterExtracted(unsigned int character_, unsigned int widthBytes_) :
-			character(character_), widthBytes(widthBytes_) {
-		}
-	};
 	CharacterExtracted ExtractCharacter(int position) const;
 
 	bool IsWordStartAt(int pos) const;
@@ -397,7 +411,7 @@ public:
 
 	void SetDefaultCharClasses(bool includeWordClass);
 	void SetCharClasses(const unsigned char *chars, CharClassify::cc newCharClass);
-	int GetCharsOfClass(CharClassify::cc characterClass, unsigned char *buffer);
+	int GetCharsOfClass(CharClassify::cc characterClass, unsigned char *buffer) const;
 	void SCI_METHOD StartStyling(Sci_Position position, char mask);
 	bool SCI_METHOD SetStyleFor(Sci_Position length, char style);
 	bool SCI_METHOD SetStyles(Sci_Position length, const char *styles);
@@ -433,10 +447,11 @@ public:
 	bool AddWatcher(DocWatcher *watcher, void *userData);
 	bool RemoveWatcher(DocWatcher *watcher, void *userData);
 
-	CharClassify::cc WordCharClass(unsigned char ch) const;
-	bool IsWordPartSeparator(char ch) const;
-	int WordPartLeft(int pos);
-	int WordPartRight(int pos);
+	bool IsASCIIWordByte(unsigned char ch) const;
+	CharClassify::cc WordCharacterClass(unsigned int ch) const;
+	bool IsWordPartSeparator(unsigned int ch) const;
+	int WordPartLeft(int pos) const;
+	int WordPartRight(int pos) const;
 	int ExtendStyleRange(int pos, int delta, bool singleLine = false);
 	bool IsWhiteLine(int line) const;
 	int ParaUp(int pos) const;

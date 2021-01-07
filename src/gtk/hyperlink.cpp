@@ -18,23 +18,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL && defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/hyperlink.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-
-#ifdef __WXGTK3__
-    #include "wx/gtk/private/object.h"
-#endif
 
 // ----------------------------------------------------------------------------
 // local functions
@@ -43,11 +36,7 @@
 static inline bool UseNative()
 {
     // native gtk_link_button widget is only available in GTK+ 2.10 and later
-#ifdef __WXGTK3__
-    return true;
-#else
-    return !gtk_check_version(2, 10, 0);
-#endif
+    return wx_is_at_least_gtk2(10);
 }
 
 // ============================================================================
@@ -88,23 +77,6 @@ static void clicked_hook(GtkLinkButton* button, const char*, void*)
 }
 }
 #endif
-
-#ifdef __WXGTK3__
-
-// Used to store GtkCssProviders we need to change the link colours with GTK+3.
-class wxHyperlinkCtrlColData
-{
-public:
-    wxHyperlinkCtrlColData() :
-        m_normalLinkCssProvider(gtk_css_provider_new()),
-        m_visitedLinkCssProvider(gtk_css_provider_new())
-    {}
-
-    wxGtkObject<GtkCssProvider> m_normalLinkCssProvider;
-    wxGtkObject<GtkCssProvider> m_visitedLinkCssProvider;
-};
-
-#endif // __WXGTK3__
 
 // ----------------------------------------------------------------------------
 // wxHyperlinkCtrl
@@ -153,14 +125,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         g_object_ref(m_widget);
 
         // alignment
-        float x_alignment = 0.5;
+        float x_alignment = 0.5f;
         if (HasFlag(wxHL_ALIGN_LEFT))
-            x_alignment = 0.0;
+            x_alignment = 0;
         else if (HasFlag(wxHL_ALIGN_RIGHT))
-            x_alignment = 1.0;
+            x_alignment = 1;
 
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5);
+        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5f);
         wxGCC_WARNING_RESTORE()
 
         // set to non empty strings both the url and the label
@@ -234,91 +206,28 @@ wxString wxHyperlinkCtrl::GetURL() const
     return wxGenericHyperlinkCtrl::GetURL();
 }
 
-void wxHyperlinkCtrl::DoSetLinkColour(LinkKind linkKind, const wxColour& colour)
-{
-#ifdef __WXGTK3__
-    if ( !m_colData )
-        m_colData.reset(new wxHyperlinkCtrlColData());
-
-    const char* cssProp = NULL;
-    GtkCssProvider* cssProvider = NULL;
-    switch ( linkKind )
-    {
-        case Link_Normal:
-            cssProp = "link-color";
-            cssProvider = m_colData->m_normalLinkCssProvider;
-            break;
-
-        case Link_Visited:
-            cssProp = "visited-link-color";
-            cssProvider = m_colData->m_visitedLinkCssProvider;
-            break;
-    }
-
-    wxCHECK_RET( cssProvider, wxS("unknown link kind") );
-
-    const GdkRGBA *col = colour;
-
-    wxGtkString
-        css(g_strdup_printf("* { %s: %s; }", cssProp, gdk_rgba_to_string(col)));
-    ApplyCssStyle(cssProvider, css);
-#else // !__WXGTK3__
-    // simply do nothing: GTK+ does not allow us to change it :(
-    wxUnusedVar(linkKind);
-    wxUnusedVar(colour);
-#endif
-}
-
 void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 {
     if ( UseNative() )
-        DoSetLinkColour(Link_Normal, colour);
+    {
+        // simply do nothing: GTK+ does not allow us to change it :(
+    }
     else
         wxGenericHyperlinkCtrl::SetNormalColour(colour);
 }
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
-    wxColour ret;
-    if ( UseNative() )
-    {
-#ifdef __WXGTK3__
-        GdkRGBA *link_color = NULL;
-        gtk_widget_style_get(m_widget, "link-color", &link_color, NULL);
-
-        if ( link_color )
-        {
-            ret = wxColour(*link_color);
-            gdk_rgba_free (link_color);
-        }
-#else // !__WXGTK3__
-        GdkColor* link_color;
-        GdkColor color = { 0, 0, 0, 0xeeee };
-
-        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_widget_ensure_style(widget);
-        gtk_widget_style_get(widget, "link-color", &link_color, NULL);
-        if (link_color)
-        {
-            color = *link_color;
-            gdk_color_free(link_color);
-        }
-        wxGCC_WARNING_RESTORE()
-        ret = wxColour(color);
-#endif // __WXGTK3__/!__WXGTK3__
-    }
-    else
-        ret = wxGenericHyperlinkCtrl::GetNormalColour();
-
-    return ret;
+    return UseNative()
+        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT)
+        : wxGenericHyperlinkCtrl::GetNormalColour();
 }
 
 void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
 {
     if ( UseNative() )
     {
-        DoSetLinkColour(Link_Visited, colour);
+        // simply do nothing: GTK+ does not allow us to change it :(
     }
     else
         wxGenericHyperlinkCtrl::SetVisitedColour(colour);
@@ -329,16 +238,6 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
     wxColour ret;
     if ( UseNative() )
     {
-#ifdef __WXGTK3__
-        GdkRGBA *link_color = NULL;
-        gtk_widget_style_get(m_widget, "visited-link-color", &link_color, NULL);
-
-        if ( link_color )
-        {
-            ret = wxColour(*link_color);
-            gdk_rgba_free (link_color);
-        }
-#else // !__WXGTK3__
         GdkColor* link_color;
         GdkColor color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
@@ -353,7 +252,6 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
         }
         wxGCC_WARNING_RESTORE()
         ret = wxColour(color);
-#endif // __WXGTK3__/!__WXGTK3__
     }
     else
         ret = base_type::GetVisitedColour();
@@ -365,9 +263,7 @@ void wxHyperlinkCtrl::SetVisited(bool visited)
 {
     base_type::SetVisited(visited);
 #if GTK_CHECK_VERSION(2,14,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(14))
     {
         gtk_link_button_set_visited(GTK_LINK_BUTTON(m_widget), visited);
     }
@@ -377,9 +273,7 @@ void wxHyperlinkCtrl::SetVisited(bool visited)
 bool wxHyperlinkCtrl::GetVisited() const
 {
 #if GTK_CHECK_VERSION(2,14,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(14))
     {
         return gtk_link_button_get_visited(GTK_LINK_BUTTON(m_widget)) != 0;
     }

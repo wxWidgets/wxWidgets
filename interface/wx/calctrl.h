@@ -8,7 +8,7 @@
 enum
 {
     // show Sunday as the first day of the week (default)
-    wxCAL_SUNDAY_FIRST               = 0x0000,
+    wxCAL_SUNDAY_FIRST               = 0x0080,
 
     // show Monday as the first day of the week
     wxCAL_MONDAY_FIRST               = 0x0001,
@@ -40,7 +40,7 @@ enum
 
     The wxCalendarEvent class is used together with wxCalendarCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 
     @see wxCalendarCtrl
@@ -90,7 +90,7 @@ enum wxCalendarDateBorder
     wxCalendarDateAttr is a custom attributes for a calendar date. The objects
     of this class are used with wxCalendarCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{data}
 
     @see wxCalendarCtrl
@@ -244,7 +244,7 @@ enum wxCalendarHitTestResult
 
     An item without custom attributes is drawn with the default colours and
     font and without border, but setting custom attributes with SetAttr()
-    allows to modify its appearance. Just create a custom attribute object and
+    allows modifying its appearance. Just create a custom attribute object and
     set it for the day you want to be displayed specially (note that the
     control will take ownership of the pointer, i.e. it will delete it itself).
     A day may be marked as being a holiday, even if it is not recognized as
@@ -253,6 +253,11 @@ enum wxCalendarHitTestResult
     As the attributes are specified for each day, they may change when the
     month is changed, so you will often want to update them in
     @c EVT_CALENDAR_PAGE_CHANGED event handler.
+
+    If neither the @c wxCAL_SUNDAY_FIRST or @c wxCAL_MONDAY_FIRST style is given,
+    the first day of the week is determined from operating system's settings,
+    if possible. The native wxGTK calendar chooses the first weekday based on
+    locale, and these styles have no effect on it.
 
     @beginStyleTable
     @style{wxCAL_SUNDAY_FIRST}
@@ -291,7 +296,7 @@ enum wxCalendarHitTestResult
     @note Changing the selected date will trigger an EVT_CALENDAR_DAY, MONTH or
           YEAR event as well as an EVT_CALENDAR_SEL_CHANGED event.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{calendarctrl}
 
@@ -464,7 +469,8 @@ public:
 
         The @a date parameter must be valid and in the currently valid range as
         set by SetDateRange(), otherwise the current date is not changed and
-        the function returns @false.
+        the function returns @false and, additionally, triggers an assertion
+        failure if the date is invalid.
     */
     virtual bool SetDate(const wxDateTime& date);
 

@@ -12,12 +12,10 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/filename.h"
 #include "wx/image.h"
+#include "wx/icon.h"
 #include "wx/animate.h"
 #include "wx/mstream.h"
 #include "wx/dynlib.h"
@@ -138,11 +136,12 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     ASSERT_FUNC_FAILS(icon.LoadFile, fullname);
     wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, icon.LoadFile, fullname);
 
+#if wxUSE_ANIMATIONCTRL
     // test wxAnimation
     wxAnimation anim;
     ASSERT_FUNC_FAILS(anim.LoadFile, fullname);
     wxFOR_ALL_VALID_ANIMATION_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, anim.LoadFile, fullname);
-
+#endif
 
     // test wxDynamicLibrary
     wxDynamicLibrary lib;
@@ -161,7 +160,9 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     delete htmlwin;
 */
     // test wxXmlResource
+#if wxUSE_XRC
     CPPUNIT_ASSERT( wxXmlResource::Get()->Load(fullname) == false );
+#endif
 }
 
 void GarbageTestCase::DoLoadStream(wxInputStream& stream)
@@ -174,11 +175,12 @@ void GarbageTestCase::DoLoadStream(wxInputStream& stream)
     ASSERT_FUNC_FAILS(img.LoadFile, stream);
     wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, img.LoadFile, stream);
 
+#if wxUSE_ANIMATIONCTRL
     // test wxAnimation
     wxAnimation anim;
     ASSERT_FUNC_FAILS(anim.Load, stream);
     wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, anim.Load, stream);
-
+#endif
 /*
     // test wxHtmlWindow
     wxHtmlWindow *htmlwin = new wxHtmlWindow(wxTheApp->GetTopWindow());

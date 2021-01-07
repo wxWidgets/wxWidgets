@@ -8,9 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/testing.h"
 
@@ -34,13 +31,17 @@ private:
 #if !defined (__WXX11__)
         CPPUNIT_TEST( MessageDialog );
 #endif
+#if wxUSE_FILEDLG
         CPPUNIT_TEST( FileDialog );
+#endif
         CPPUNIT_TEST( CustomDialog );
+        CPPUNIT_TEST( InitDialog );
     CPPUNIT_TEST_SUITE_END();
 
     void MessageDialog();
     void FileDialog();
     void CustomDialog();
+    void InitDialog();
 
     wxDECLARE_NO_COPY_CLASS(ModalDialogsTestCase);
 };
@@ -55,16 +56,24 @@ void ModalDialogsTestCase::MessageDialog()
 {
     int rc;
 
+#if wxUSE_FILEDLG
+    #define FILE_DIALOG_TEST ,\
+        wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt").Optional()
+#else
+    #define FILE_DIALOG_TEST
+#endif
+
     wxTEST_DIALOG
     (
         rc = wxMessageBox("Should I fail?", "Question", wxYES|wxNO),
-        wxExpectModal<wxMessageDialog>(wxNO),
-        wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt").Optional()
+        wxExpectModal<wxMessageDialog>(wxNO)
+        FILE_DIALOG_TEST
     );
 
     CPPUNIT_ASSERT_EQUAL(wxNO, rc);
 }
 
+#if wxUSE_FILEDLG
 void ModalDialogsTestCase::FileDialog()
 {
     wxFileDialog dlg(NULL);
@@ -87,7 +96,7 @@ void ModalDialogsTestCase::FileDialog()
     wxYield();
 #endif
 }
-
+#endif
 
 class MyDialog : public wxDialog
 {
@@ -109,7 +118,7 @@ public:
     wxExpectModal(int valueToSet) : m_valueToSet(valueToSet) {}
 
 protected:
-    virtual int OnInvoked(MyDialog *dlg) const
+    virtual int OnInvoked(MyDialog *dlg) const wxOVERRIDE
     {
         // Simulate the user entering the expected number:
         dlg->m_value = m_valueToSet;
@@ -130,6 +139,38 @@ void ModalDialogsTestCase::CustomDialog()
     );
 
     CPPUNIT_ASSERT_EQUAL( 42, dlg.m_value );
+}
+
+
+class MyModalDialog : public wxDialog
+{
+public:
+    MyModalDialog() : wxDialog (NULL, wxID_ANY, "Modal Dialog")
+    {
+        m_wasModal = false;
+        Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );
+    }
+
+    void OnInit(wxInitDialogEvent& WXUNUSED(event))
+    {
+        m_wasModal = IsModal();
+        CallAfter( &MyModalDialog::EndModal, wxID_OK );
+    }
+
+    bool WasModal() const
+    {
+        return m_wasModal;
+    }
+
+private:
+    bool m_wasModal;
+};
+
+void ModalDialogsTestCase::InitDialog()
+{
+    MyModalDialog dlg;
+    dlg.ShowModal();
+    CPPUNIT_ASSERT( dlg.WasModal() );
 }
 
 #endif // HAVE_VARIADIC_MACROS

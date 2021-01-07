@@ -2,11 +2,10 @@
 // Name:        wx/uiaction.h
 // Purpose:     wxUIActionSimulator interface
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
-// Modified by:
 // Created:     2010-03-06
-// Copyright:   (c) Kevin Ollivier
+// Copyright:   (c) 2010 Kevin Ollivier
 //              (c) 2010 Steven Lamerton
-//              (c) 2010 Vadim Zeitlin
+//              (c) 2010-2016 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,11 +21,8 @@
 class WXDLLIMPEXP_CORE wxUIActionSimulator
 {
 public:
-    wxUIActionSimulator() { }
-
-
-    // Default dtor, copy ctor and assignment operator are ok (even though the
-    // last two don't make much sense for this class).
+    wxUIActionSimulator();
+    ~wxUIActionSimulator();
 
 
     // Mouse simulation
@@ -82,10 +78,12 @@ private:
     void SimulateModifiers(int modifier, bool isDown);
 
 
-    // The low-level port-specific function which really generates the key
-    // presses. It should generate exactly one key event with the given
-    // parameters.
-    bool DoKey(int keycode, int modifiers, bool isDown);
+
+    // This pointer is allocated in the ctor and points to the
+    // platform-specific implementation.
+    class wxUIActionSimulatorImpl* const m_impl;
+
+    wxDECLARE_NO_COPY_CLASS(wxUIActionSimulator);
 };
 
 #endif // wxUSE_UIACTIONSIMULATOR

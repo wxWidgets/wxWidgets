@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
@@ -193,6 +190,27 @@ bool wxCalendarCtrlBase::SetHolidayAttrs()
     }
 
     return true;
+}
+
+bool wxCalendarCtrlBase::WeekStartsOnMonday() const
+{
+    if ( HasFlag(wxCAL_MONDAY_FIRST) )
+    {
+        return true;
+    }
+    else if ( HasFlag(wxCAL_SUNDAY_FIRST) )
+    {
+        return false;
+    }
+    else
+    {
+        // Neither flag was explicitly given, let's make a best guess
+        // based on locale and/or OS settings.
+
+        wxDateTime::WeekDay firstDay;
+        wxDateTime::GetFirstWeekDay(&firstDay);
+        return firstDay == wxDateTime::Mon;
+    }
 }
 
 #endif // wxUSE_CALENDARCTRL

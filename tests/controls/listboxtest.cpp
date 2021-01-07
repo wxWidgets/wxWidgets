@@ -10,9 +10,6 @@
 
 #if wxUSE_LISTBOX
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -28,12 +25,12 @@ class ListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 public:
     ListBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_list; }
-    virtual wxWindow *GetContainerWindow() const { return m_list; }
+    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_list; }
+    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_list; }
 
     CPPUNIT_TEST_SUITE( ListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
@@ -68,11 +65,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(ListBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ListBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ListBoxTestCase, "ListBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ListBoxTestCase,
+                               "[ListBoxTestCase][item-container]");
 
 //initialise the static variable
 bool ListBoxTestCase::ms_ownerdrawn = false;

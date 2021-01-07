@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_SEARCHCTRL
 
@@ -48,6 +45,10 @@ wxObject *wxSearchCtrlXmlHandler::DoCreateResource()
                  GetName());
 
     SetupWindow(ctrl);
+
+    const wxString& hint = GetText(wxS("hint"));
+    if ( !hint.empty() )
+        ctrl->SetDescriptiveText(hint);
 
     return ctrl;
 }

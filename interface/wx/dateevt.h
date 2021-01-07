@@ -12,7 +12,7 @@
     with wxDatePickerCtrl. It also serves as a base class
     for wxCalendarEvent.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 */
 class wxDateEvent : public wxCommandEvent

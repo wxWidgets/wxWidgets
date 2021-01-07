@@ -2,11 +2,10 @@
 // Name:        src/common/uiactioncmn.cpp
 // Purpose:     wxUIActionSimulator common implementation
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
-// Modified by:
 // Created:     2010-03-06
-// Copyright:   (c) Kevin Ollivier
+// Copyright:   (c) 2010 Kevin Ollivier
 //              (c) 2010 Steven Lamerton
-//              (c) 2010 Vadim Zeitlin
+//              (c) 2010-2016 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,39 +23,73 @@
     #include "wx/listbox.h"
 #endif // wxNO_RTTI
 
+#include "wx/private/uiaction.h"
+
+// ----------------------------------------------------------------------------
+// Methods forwarded to wxUIActionSimulatorImpl
+// ----------------------------------------------------------------------------
+
+bool wxUIActionSimulator::MouseMove(long x, long y)
+{
+    return m_impl->MouseMove(x, y);
+}
+
+bool wxUIActionSimulator::MouseDown(int button)
+{
+    return m_impl->MouseDown(button);
+}
+
+bool wxUIActionSimulator::MouseUp(int button)
+{
+    return m_impl->MouseUp(button);
+}
 
 bool wxUIActionSimulator::MouseClick(int button)
 {
-    MouseDown(button);
-    MouseUp(button);
-
-    return true;
+    return m_impl->MouseClick(button);
 }
-
-#ifndef __WXOSX__
 
 bool wxUIActionSimulator::MouseDblClick(int button)
 {
-    MouseDown(button);
-    MouseUp(button);
+    return m_impl->MouseDblClick(button);
+}
+
+bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
+                                        int button)
+{
+    return m_impl->MouseDragDrop(x1, y1, x2, y2, button);
+}
+
+// ----------------------------------------------------------------------------
+// Methods implemented in wxUIActionSimulatorImpl itself
+// ----------------------------------------------------------------------------
+
+bool wxUIActionSimulatorImpl::MouseClick(int button)
+{
     MouseDown(button);
     MouseUp(button);
 
     return true;
 }
 
-bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
+bool wxUIActionSimulatorImpl::MouseDblClick(int button)
+{
+    MouseClick(button);
+    MouseClick(button);
+
+    return true;
+}
+
+bool wxUIActionSimulatorImpl::MouseDragDrop(long x1, long y1, long x2, long y2,
                                    int button)
 {
     MouseMove(x1, y1);
     MouseDown(button);
     MouseMove(x2, y2);
     MouseUp(button);
-    
+
     return true;
 }
-
-#endif
 
 bool
 wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
@@ -69,7 +102,7 @@ wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
     if ( isDown )
         SimulateModifiers(modifiers, true);
 
-    bool rc = DoKey(keycode, modifiers, isDown);
+    bool rc = m_impl->DoKey(keycode, modifiers, isDown);
 
     if ( !isDown )
         SimulateModifiers(modifiers, false);
@@ -80,11 +113,11 @@ wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
 void wxUIActionSimulator::SimulateModifiers(int modifiers, bool isDown)
 {
     if ( modifiers & wxMOD_SHIFT )
-        DoKey(WXK_SHIFT, modifiers, isDown);
+        m_impl->DoKey(WXK_SHIFT, modifiers, isDown);
     if ( modifiers & wxMOD_ALT )
-        DoKey(WXK_ALT, modifiers, isDown);
+        m_impl->DoKey(WXK_ALT, modifiers, isDown);
     if ( modifiers & wxMOD_CONTROL )
-        DoKey(WXK_CONTROL, modifiers, isDown);
+        m_impl->DoKey(WXK_CONTROL, modifiers, isDown);
 }
 
 bool wxUIActionSimulator::Char(int keycode, int modifiers)

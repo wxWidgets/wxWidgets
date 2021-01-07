@@ -49,7 +49,7 @@ public:
         int n = 0, const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr)
+        const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Create(parent, winid, pos, size, n, choices, style, validator, name);
     }
@@ -62,7 +62,7 @@ public:
         const wxArrayString& choices,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr)
+        const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Create(parent, winid, pos, size, choices, style, validator, name);
     }
@@ -76,7 +76,7 @@ public:
         const wxString choices[] = NULL,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr);
+        const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     bool Create(
         wxWindow *parent,
@@ -86,13 +86,11 @@ public:
         const wxArrayString& choices,
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxListBoxNameStr);
+        const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     virtual ~wxListBox();
 
     // implement base class pure virtuals
-    virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL) wxOVERRIDE;
-
     virtual unsigned int GetCount() const wxOVERRIDE;
     virtual wxString GetString(unsigned int n) const wxOVERRIDE;
     virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
@@ -109,6 +107,7 @@ public:
     virtual void EnsureVisible(int n) wxOVERRIDE;
 
     virtual int GetTopItem() const wxOVERRIDE;
+    virtual int GetCountPerPage() const wxOVERRIDE;
 
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
@@ -121,9 +120,11 @@ public:
 
     wxListWidgetImpl* GetListPeer() const;
 
-    bool MacGetBlockEvents() const { return m_blockEvents; }
-
     virtual void HandleLineEvent( unsigned int n, bool doubleClick );
+
+    // This is called by wxNSTableView
+    void MacHandleSelectionChange(int row);
+
 protected:
     // callback for derived classes which may have to insert additional data
     // at a certain line - which cannot be predetermined for sorted list data
@@ -169,6 +170,8 @@ protected:
     wxArrayPtrVoid m_itemsClientData;
 
 private:
+    // Mostly the same as DoSetSelection() but doesn't call EnsureVisible().
+    void DoSetSelectionWithoutEnsureVisible(int n, bool select);
 
     wxDECLARE_DYNAMIC_CLASS(wxListBox);
     wxDECLARE_EVENT_TABLE();

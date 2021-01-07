@@ -26,7 +26,8 @@ enum wxOSXSystemFont
     wxOSX_SYSTEM_FONT_MINI,
     wxOSX_SYSTEM_FONT_MINI_BOLD,
     wxOSX_SYSTEM_FONT_LABELS,
-    wxOSX_SYSTEM_FONT_VIEWS
+    wxOSX_SYSTEM_FONT_VIEWS,
+    wxOSX_SYSTEM_FONT_FIXED
 };
 
 
@@ -36,21 +37,10 @@ public:
     // ctors and such
     wxFont() { }
 
-    wxFont(const wxFontInfo& info)
-    {
-        Create(info.GetPointSize(),
-               info.GetFamily(),
-               info.GetStyle(),
-               info.GetWeight(),
-               info.IsUnderlined(),
-               info.GetFaceName(),
-               info.GetEncoding());
-
-        if ( info.IsUsingSizeInPixels() )
-            SetPixelSize(info.GetPixelSize());
-    }
+    wxFont(const wxFontInfo& info);
 
     wxFont( wxOSXSystemFont systemFont );
+    wxFont(CTFontRef font);
 
 #if wxOSX_USE_COCOA
     wxFont(WX_NSFont nsfont);
@@ -99,26 +89,26 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual int GetPointSize() const;
-    virtual wxSize GetPixelSize() const;
-    virtual wxFontStyle GetStyle() const;
-    virtual wxFontWeight GetWeight() const;
-    virtual bool GetUnderlined() const;
-    virtual bool GetStrikethrough() const;
-    virtual wxString GetFaceName() const;
-    virtual wxFontEncoding GetEncoding() const;
-    virtual const wxNativeFontInfo *GetNativeFontInfo() const;
+    virtual double GetFractionalPointSize() const wxOVERRIDE;
+    virtual wxSize GetPixelSize() const wxOVERRIDE;
+    virtual wxFontStyle GetStyle() const wxOVERRIDE;
+    virtual int GetNumericWeight() const wxOVERRIDE;
+    virtual bool GetUnderlined() const wxOVERRIDE;
+    virtual bool GetStrikethrough() const wxOVERRIDE;
+    virtual wxString GetFaceName() const wxOVERRIDE;
+    virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
+    virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
-    virtual bool IsFixedWidth() const;
+    virtual bool IsFixedWidth() const wxOVERRIDE;
 
-    virtual void SetPointSize(int pointSize);
-    virtual void SetFamily(wxFontFamily family);
-    virtual void SetStyle(wxFontStyle style);
-    virtual void SetWeight(wxFontWeight weight);
-    virtual bool SetFaceName(const wxString& faceName);
-    virtual void SetUnderlined(bool underlined);
-    virtual void SetStrikethrough(bool strikethrough);
-    virtual void SetEncoding(wxFontEncoding encoding);
+    virtual void SetFractionalPointSize(double pointSize) wxOVERRIDE;
+    virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
+    virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
+    virtual void SetNumericWeight(int weight) wxOVERRIDE;
+    virtual bool SetFaceName(const wxString& faceName) wxOVERRIDE;
+    virtual void SetUnderlined(bool underlined) wxOVERRIDE;
+    virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
+    virtual void SetEncoding(wxFontEncoding encoding) wxOVERRIDE;
 
     wxDECLARE_COMMON_FONT_METHODS();
 
@@ -144,35 +134,22 @@ public:
 #endif
 
     CTFontRef OSXGetCTFont() const;
-
-#if wxOSX_USE_ATSU_TEXT
-    // Returns an ATSUStyle not ATSUStyle*
-    void* MacGetATSUStyle() const ;
-    void* OSXGetATSUStyle() const { return MacGetATSUStyle() ; }
-
-    wxDEPRECATED( wxUint32 MacGetATSUFontID() const );
-    wxDEPRECATED( wxUint32 MacGetATSUAdditionalQDStyles() const );
-#endif
+    CFDictionaryRef OSXGetCTFontAttributes() const;
 
 #if wxOSX_USE_COCOA
     WX_NSFont OSXGetNSFont() const;
-    static WX_NSFont OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);
-    static WX_NSFont OSXCreateNSFont(const wxNativeFontInfo* info);
-    static void SetNativeInfoFromNSFont(WX_NSFont nsfont, wxNativeFontInfo* info);
 #endif
 
 #if wxOSX_USE_IPHONE
     WX_UIFont OSXGetUIFont() const;
-    static WX_UIFont OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
-    static WX_UIFont OSXCreateUIFont(const wxNativeFontInfo* info);
 #endif
 
 protected:
-    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
-    virtual wxFontFamily DoGetFamily() const;
+    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info) wxOVERRIDE;
+    virtual wxFontFamily DoGetFamily() const wxOVERRIDE;
 
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
 

@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/renderer.h"
 
@@ -106,7 +103,16 @@ public:
                               const wxRect& rect,
                               int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) wxOVERRIDE;
+
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
+
+    virtual wxSize GetCheckMarkSize(wxWindow *win) wxOVERRIDE;
+
+    virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -194,7 +200,7 @@ static void DrawSelectedCellFocusRect(wxDC& dc, const wxRect& rect)
 {
     // (This code is based on wxRendererGeneric::DrawFocusRect and modified.)
 
-    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // draw the pixels manually because the "dots" in wxPen with wxPENSTYLE_DOT style
     // may be short traits and not really dots
     //
     // note that to behave in the same manner as DrawRect(), we must exclude
@@ -712,8 +718,32 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
     }
 }
 
-wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
+void
+wxRendererGeneric::DrawCheckMark(wxWindow *WXUNUSED(win),
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
 {
+    dc.SetPen(*(flags & wxCONTROL_DISABLED ? wxGREY_PEN : wxBLACK_PEN));
+    dc.DrawCheckMark(rect);
+}
+
+wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win, int WXUNUSED(flags))
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    return win->FromDIP(wxSize(16, 16));
+}
+
+wxSize wxRendererGeneric::GetCheckMarkSize(wxWindow *win)
+{
+    return GetCheckBoxSize(win, wxCONTROL_CELL);
+}
+
+wxSize wxRendererGeneric::GetExpanderSize(wxWindow *win)
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     return win->FromDIP(wxSize(16, 16));
 }
 
@@ -814,7 +844,7 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
 void
 wxRendererGeneric::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
 {
-    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // draw the pixels manually because the "dots" in wxPen with wxPENSTYLE_DOT style
     // may be short traits and not really dots
     //
     // note that to behave in the same manner as DrawRect(), we must exclude
@@ -910,17 +940,38 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
                                   const wxRect& rect,
                                   int value,
                                   int max,
-                                  int WXUNUSED(flags))
+                                  int flags)
 {
+    // This is a hack, but we want to allow customizing the colour used for the
+    // gauge body, as this is important for the generic wxDataViewCtrl
+    // implementation which uses this method. So we assume that if the caller
+    // had set up a brush using background colour different from the default,
+    // it should be used. Otherwise we use the default one.
+    const wxBrush& bg = dc.GetBackground();
+    wxColour colBar;
+    if ( bg.IsOk() && bg.GetColour() != win->GetBackgroundColour() )
+        colBar = bg.GetColour();
+    else
+        colBar = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+
     // Use same background as text controls.
     DrawTextCtrl(win, dc, rect);
 
     // Calculate the progress bar size.
     wxRect progRect(rect);
     progRect.Deflate(2);
-    progRect.width = wxMulDivInt32(progRect.width, value, max);
+    if ( flags & wxCONTROL_SPECIAL )
+    {
+        const int h = wxMulDivInt32(progRect.height, value, max);
+        progRect.y += progRect.height - h;
+        progRect.height = h;
+    }
+    else // Horizontal.
+    {
+        progRect.width = wxMulDivInt32(progRect.width, value, max);
+    }
 
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    dc.SetBrush(colBar);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(progRect);
 }
@@ -938,14 +989,7 @@ wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
     wxColour textColour;
     if ( flags & wxCONTROL_SELECTED )
     {
-        if ( flags & wxCONTROL_FOCUSED )
-        {
-            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-        }
-        else // !focused
-        {
-            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
-        }
+        textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     }
     else if ( flags & wxCONTROL_DISABLED )
     {

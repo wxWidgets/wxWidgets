@@ -45,6 +45,11 @@ enum wxDirTraverseResult
     wxDIR_CONTINUE          // continue into this directory
 };
 
+#if wxUSE_LONGLONG
+// error code of wxDir::GetTotalSize()
+extern WXDLLIMPEXP_DATA_BASE(const wxULongLong) wxInvalidSize;
+#endif // wxUSE_LONGLONG
+
 // ----------------------------------------------------------------------------
 // wxDirTraverser: helper class for wxDir::Traverse()
 // ----------------------------------------------------------------------------

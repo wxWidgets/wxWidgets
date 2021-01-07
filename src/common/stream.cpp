@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -511,7 +508,7 @@ size_t wxStreamBuffer::Write(const void *buffer, size_t size)
             {
                 PutToBuffer(buffer, left);
                 size -= left;
-                buffer = (char *)buffer + left;
+                buffer = static_cast<const char*>(buffer) + left;
 
                 if ( !FlushBuffer() )
                 {

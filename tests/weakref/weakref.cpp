@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -133,7 +130,9 @@ void WeakRefTestCase::DeclareTest()
         wxWeakRef<IncompleteClass> p;
 
         // Copying should be also OK
+        wxCLANG_WARNING_SUPPRESS(self-assign-overloaded)
         p = p;
+        wxCLANG_WARNING_RESTORE(self-assign-overloaded)
 
         // Assigning a raw pointer should cause compile error
 #ifdef TEST_INVALID_INCOMPLETE_WEAKREF

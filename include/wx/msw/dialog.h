@@ -29,7 +29,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr)
+             const wxString& name = wxASCII_STR(wxDialogNameStr))
     {
         Init();
 
@@ -41,29 +41,29 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_DIALOG_STYLE,
-                const wxString& name = wxDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDialogNameStr));
 
     virtual ~wxDialog();
 
     // return true if we're showing the dialog modally
-    virtual bool IsModal() const { return m_modalData != NULL; }
+    virtual bool IsModal() const wxOVERRIDE { return m_modalData != NULL; }
 
     // show the dialog modally and return the value passed to EndModal()
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
     // may be called to terminate the dialog with the given return code
-    virtual void EndModal(int retCode);
+    virtual void EndModal(int retCode) wxOVERRIDE;
 
 
     // implementation only from now on
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Show(bool show = true);
-    virtual void SetWindowStyleFlag(long style);
+    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
 
     // Windows callbacks
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 
 protected:
     // common part of all ctors

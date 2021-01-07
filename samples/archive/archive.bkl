@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="archive" template="wx_sample_console" template_append="wx_append">
+        <sources>archive.cpp</sources>
+        <wx-lib>base</wx-lib>
+        <uid type="creatorid">wx06</uid>
+    </exe>
+
+</makefile>

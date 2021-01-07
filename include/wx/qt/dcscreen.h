@@ -17,9 +17,9 @@ public:
 
     ~wxScreenDCImpl();
 
+protected:
     virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
-
-private:
+    virtual QPixmap *GetQPixmap() wxOVERRIDE;
 
     wxDECLARE_ABSTRACT_CLASS(wxScreenDCImpl);
 };

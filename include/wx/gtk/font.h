@@ -64,9 +64,9 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual int GetPointSize() const wxOVERRIDE;
+    virtual double GetFractionalPointSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
-    virtual wxFontWeight GetWeight() const wxOVERRIDE;
+    virtual int GetNumericWeight() const wxOVERRIDE;
     virtual wxString GetFaceName() const wxOVERRIDE;
     virtual bool GetUnderlined() const wxOVERRIDE;
     virtual bool GetStrikethrough() const wxOVERRIDE;
@@ -74,10 +74,10 @@ public:
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
     virtual bool IsFixedWidth() const wxOVERRIDE;
 
-    virtual void SetPointSize( int pointSize ) wxOVERRIDE;
+    virtual void SetFractionalPointSize(double pointSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
-    virtual void SetWeight(wxFontWeight weight) wxOVERRIDE;
+    virtual void SetNumericWeight(int weight) wxOVERRIDE;
     virtual bool SetFaceName( const wxString& faceName ) wxOVERRIDE;
     virtual void SetUnderlined( bool underlined ) wxOVERRIDE;
     virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
@@ -103,11 +103,6 @@ public:
     // If neither of them is specified, returns false, otherwise sets up the
     // attributes and returns true.
     bool GTKSetPangoAttrs(PangoLayout* layout) const;
-
-    // implementation from now on
-    void Unshare();
-
-    // no data :-)
 
 protected:
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info ) wxOVERRIDE;

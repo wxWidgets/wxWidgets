@@ -29,16 +29,12 @@ namespace wxTestPrivate
     std::ostream& operator<<(std::ostream& os, const ColourChannel& cc);
 } // wxTestPrivate namespace
 
-// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxColour objects
+// Operators used to show the values of the corresponding types when comparing
+// them in the unit tests fails.
 std::ostream& operator<<(std::ostream& os, const wxColour& c);
-
-// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxSize objects
 std::ostream& operator<<(std::ostream& os, const wxSize& s);
-
-// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxFont objects
 std::ostream& operator<<(std::ostream& os, const wxFont& f);
-
-// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxPoint objects
 std::ostream& operator<<(std::ostream& os, const wxPoint& p);
+std::ostream& operator<<(std::ostream& os, const wxRect& r);
 
 #endif

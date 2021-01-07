@@ -106,7 +106,7 @@ just @c wxDateTime::Now() + wxDateSpan::Month()).
 
 
 
-@section overview_datetime_arithmetics Date Arithmetics
+@section overview_datetime_arithmetics Date Arithmetic
 
 Many different operations may be performed with the dates, however not all of
 them make sense. For example, multiplying a date by a number is an invalid
@@ -175,8 +175,8 @@ I.e. you would just write
 
 @code
 wxDateTime dt(...whatever...);
-printf("The time is %s in local time zone", dt.FormatTime().c_str());
-printf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT).c_str());
+wxPrintf("The time is %s in local time zone", dt.FormatTime());
+wxPrintf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT));
 @endcode
 
 

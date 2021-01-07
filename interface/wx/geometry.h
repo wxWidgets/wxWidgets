@@ -279,7 +279,7 @@ public:
     void Inset( wxInt32 x , wxInt32 y );
     void Inset( wxInt32 left , wxInt32 top ,wxInt32 right , wxInt32 bottom  );
     void Offset( const wxPoint2DInt &pt );
-    void ConstrainTo( const wxRect2DInt &rect );    
+    void ConstrainTo( const wxRect2DInt &rect );
     wxPoint2DInt Interpolate( wxInt32 widthfactor , wxInt32 heightfactor );
 
     static void Intersect( const wxRect2DInt &src1 , const wxRect2DInt &src2 , wxRect2DInt *dest );

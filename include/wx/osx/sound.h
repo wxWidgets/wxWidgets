@@ -16,9 +16,9 @@
 
 #include "wx/object.h"
 
-class WXDLLIMPEXP_FWD_ADV wxSoundTimer;
+class WXDLLIMPEXP_FWD_CORE wxSoundTimer;
 
-class WXDLLIMPEXP_ADV wxSoundData
+class WXDLLIMPEXP_CORE wxSoundData
 {
 public :
     wxSoundData();
@@ -39,7 +39,7 @@ protected:
     bool m_markedForDeletion;
 } ;
 
-class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
+class WXDLLIMPEXP_CORE wxSound : public wxSoundBase
 {
 public:
     wxSound();
@@ -64,7 +64,7 @@ public:
     static void SoundStopped(const wxSoundData* data);
 
 protected:
-    bool    DoPlay(unsigned flags) const;
+    bool    DoPlay(unsigned flags) const wxOVERRIDE;
     void    Init();
 
 private:

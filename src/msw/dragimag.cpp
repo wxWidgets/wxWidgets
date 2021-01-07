@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DRAGIMAGE
 
@@ -334,14 +331,8 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 #else
         if (!m_hCursorImageList)
         {
-#ifndef SM_CXCURSOR
-            // Smartphone may not have these metric symbol
-            int cxCursor = 16;
-            int cyCursor = 16;
-#else
-            int cxCursor = ::GetSystemMetrics(SM_CXCURSOR);
-            int cyCursor = ::GetSystemMetrics(SM_CYCURSOR);
-#endif
+            int cxCursor = wxGetSystemMetrics(SM_CXCURSOR, window);
+            int cyCursor = wxGetSystemMetrics(SM_CYCURSOR, window);
             m_hCursorImageList = (WXHIMAGELIST) ImageList_Create(cxCursor, cyCursor, ILC_MASK, 1, 1);
         }
 

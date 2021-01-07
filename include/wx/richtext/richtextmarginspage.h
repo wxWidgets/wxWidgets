@@ -2,7 +2,7 @@
 // Name:        wx/richtext/richtextmarginspage.h
 // Purpose:     Declares the rich text formatting dialog margins page.
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     20/10/2010 10:27:34
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -70,11 +70,11 @@ public:
 
     /// Gets the attributes from the formatting dialog
     wxRichTextAttr* GetAttributes();
-    
+
     /// Data transfer
     virtual bool TransferDataToWindow() wxOVERRIDE;
     virtual bool TransferDataFromWindow() wxOVERRIDE;
-    
+
 ////@begin wxRichTextMarginsPage event handler declarations
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_LEFT_MARGIN

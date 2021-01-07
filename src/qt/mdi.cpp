@@ -14,7 +14,9 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
+
 #include <QtWidgets/QMdiArea>
+#include <QtWidgets/QMainWindow>
 
 // Main MDI window helper
 
@@ -69,7 +71,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     if ( !m_clientWindow->CreateClient(this, GetWindowStyleFlag()) )
         return false;
 
-    GetHandle()->setCentralWidget( client->GetHandle() );
+    GetQMainWindow()->setCentralWidget( client->GetHandle() );
 
     PostCreation();
 
@@ -85,6 +87,8 @@ void wxMDIParentFrame::ActivatePrevious()
 }
 
 //##############################################################################
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxMDIChildFrameBase)
 
 wxMDIChildFrame::wxMDIChildFrame()
 {
@@ -116,7 +120,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     if (ok)
     {
         // Add the window to the internal MDI client area:
-        static_cast<QMdiArea*>(parent->GetHandle()->centralWidget())->addSubWindow(GetHandle());
+        static_cast<QMdiArea*>(parent->GetQMainWindow()->centralWidget())->addSubWindow(GetHandle());
     }
     return ok;
 }
@@ -126,6 +130,8 @@ void wxMDIChildFrame::Activate()
 }
 
 //##############################################################################
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow,wxMDIClientWindowBase)
 
 wxMDIClientWindow::wxMDIClientWindow()
 {

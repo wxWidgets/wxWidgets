@@ -8,7 +8,7 @@
 #ifndef _WX_QT_STATLINE_H_
 #define _WX_QT_STATLINE_H_
 
-#include <QtWidgets/QFrame>
+class QFrame;
 
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
@@ -20,16 +20,16 @@ public:
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
-                  const wxString &name = wxStaticLineNameStr );
+                  const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
     bool Create( wxWindow *parent,
                  wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
-                 const wxString &name = wxStaticLineNameStr );
+                 const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
-    virtual QFrame *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 private:
     QFrame *m_qtFrame;

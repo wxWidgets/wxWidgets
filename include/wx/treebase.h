@@ -79,7 +79,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
 // this is a wrapper around the array class defined above which allow to wok
 // with values of natural wxTreeItemId type instead of using wxTreeItemIdValue
 // and does it without any loss of efficiency
-class WXDLLIMPEXP_CORE wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
+class wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {
 public:
     void Add(const wxTreeItemId& id)
@@ -229,9 +229,9 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-        // Set the tooltip for the item (for EVT\_TREE\_ITEM\_GETTOOLTIP events)
+        // Set the tooltip for the item (for EVT_TREE_ITEM_GETTOOLTIP events)
     void SetToolTip(const wxString& toolTip) { m_label = toolTip; }
-    wxString GetToolTip() { return m_label; }
+    wxString GetToolTip() const { return m_label; }
 
 private:
     // not all of the members are used (or initialized) for all events

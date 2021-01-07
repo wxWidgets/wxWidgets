@@ -153,6 +153,7 @@ protected:
         m_window = window;
         m_width = width;
         m_height = height;
+        DoSize();
 
         return true;
     }

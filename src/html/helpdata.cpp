@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -151,7 +148,6 @@ class HP_TagHandler : public wxHtmlTagHandler
         {
             m_data = NULL;
             m_book = b;
-            m_name = m_page = wxEmptyString;
             m_level = 0;
             m_id = wxID_ANY;
             m_count = 0;
@@ -186,7 +182,8 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     }
     else if (tag.GetName() == wxT("OBJECT"))
     {
-        m_name = m_page = wxEmptyString;
+        m_name.clear();
+        m_page.clear();
         ParseInner(tag);
 
 #if 0
@@ -502,16 +499,12 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
 {
-#if wxUSE_WCHAR_T
-        #if wxUSE_UNICODE
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).mb_str(wxConvISO8859_1), conv)
-        #else
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).wc_str(conv), wxConvLocal)
-        #endif
+#if wxUSE_UNICODE
+    #define CORRECT_STR(str, conv) \
+        str = wxString((str).mb_str(wxConvISO8859_1), conv)
 #else
-    #define CORRECT_STR(str, conv)
+    #define CORRECT_STR(str, conv) \
+        str = wxString((str).wc_str(conv), wxConvLocal)
 #endif
 
     wxFileSystem fsys;
@@ -656,10 +649,10 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
     wxString title = _("noname"),
              safetitle,
-             start = wxEmptyString,
-             contents = wxEmptyString,
-             index = wxEmptyString,
-             charset = wxEmptyString;
+             start,
+             contents,
+             index,
+             charset;
 
     fi = fsys.OpenFile(book);
     if (fi == NULL)
@@ -700,7 +693,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
 #if wxUSE_FONTMAP
-    if (charset != wxEmptyString)
+    if (!charset.empty())
         enc = wxFontMapper::Get()->CharsetToEncoding(charset);
 #endif
 
@@ -732,10 +725,10 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     if (!has_non_ascii)
     {
       wxFileSystem fsys;
-      wxFSFile *f;
       // 1. try to open given file:
       for (i = 0; i < cnt; i++)
       {
+        wxFSFile *f;
         f = fsys.OpenFile(m_bookRecords[i].GetFullPath(x));
         if (f)
         {
@@ -803,11 +796,11 @@ wxString wxHtmlHelpData::FindPageById(int id)
 wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& keyword,
                                        bool case_sensitive, bool whole_words_only,
                                        const wxString& book)
+    : m_Keyword(keyword)
 {
     m_Data = data;
-    m_Keyword = keyword;
     wxHtmlBookRecord* bookr = NULL;
-    if (book != wxEmptyString)
+    if (!book.empty())
     {
         // we have to search in a specific book. Find it first
         int i, cnt = data->m_bookRecords.GetCount();
@@ -846,7 +839,7 @@ bool wxHtmlSearchStatus::Search()
         return false;
     }
 
-    m_Name = wxEmptyString;
+    m_Name.clear();
     m_CurItem = NULL;
     thepage = m_Data->m_contents[i].page;
 

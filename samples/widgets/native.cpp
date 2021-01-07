@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // this file is included from native.mm which ensures that it is compiled as
 // Objective C++, but it's also still compiled by the makefiles directly as C++
@@ -67,6 +64,20 @@ void BuildTestMenu(wxMenu *menu)
     #define BS_SPLITBUTTON 0x000c
 #endif // BS_SPLITBUTTON
 
+#ifndef BCN_DROPDOWN
+    #define BCN_DROPDOWN (-1248)
+#endif // defined(BCN_DROPDOWN)
+
+// This duplicates the standard NMBCDROPDOWN struct which is not defined in
+// some old (up to at least 4.9.1) MinGW-w64 headers even though, annoyingly,
+// BCN_DROPDOWN is, so we can't even use as an indicator of whether the struct
+// is defined or not.
+struct wxNMBCDROPDOWN
+{
+    NMHDR hdr;
+    RECT rcButton;
+};
+
 class NativeWindow : public wxNativeWindow
 {
 public:
@@ -106,9 +117,6 @@ public:
     }
 
 protected:
-    // This code requires NMBCDROPDOWN to work, we don't really want to
-    // reproduce its definition here for very old compilers not having it.
-#ifdef BCN_DROPDOWN
     // Split buttons under MSW don't show the menu on their own, unlike their
     // equivalents under the other platforms, so do it manually here. This also
     // shows how to handle a native event in MSW (for the specific case of
@@ -120,7 +128,7 @@ protected:
         if ( hdr->code != BCN_DROPDOWN )
             return wxNativeWindow::MSWOnNotify(idCtrl, lParam, result);
 
-        const NMBCDROPDOWN* dd = reinterpret_cast<NMBCDROPDOWN*>(lParam);
+        const wxNMBCDROPDOWN* dd = reinterpret_cast<wxNMBCDROPDOWN*>(lParam);
 
         wxMenu menu;
         BuildTestMenu(&menu);
@@ -128,10 +136,16 @@ protected:
 
         return true;
     }
-#endif // defined(BCN_DROPDOWN)
 };
 
 #elif defined(__WXGTK__)
+
+// Avoid a bunch of warnings from gtk.h for some GTK+ versions.
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+wxGCC_WARNING_SUPPRESS(parentheses)
+#include <gtk/gtk.h>
+wxGCC_WARNING_RESTORE(parentheses)
+wxGCC_WARNING_RESTORE(deprecated-declarations)
 
 class NativeWindow : public wxNativeWindow
 {
@@ -257,7 +271,7 @@ private:
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, wxT("Native"), NATIVE_CTRLS);
+IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, "Native", NATIVE_CTRLS);
 
 NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
                  : WidgetsPage(book, imaglist, native_xpm)

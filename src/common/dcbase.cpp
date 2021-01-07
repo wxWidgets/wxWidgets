@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -318,7 +315,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
         : m_window(NULL)
-        , m_colour(wxColourDisplay())
+        , m_colour(true)
         , m_ok(true)
         , m_clipping(false)
         , m_isInteractive(0)
@@ -331,6 +328,7 @@ wxDCImpl::wxDCImpl( wxDC *owner )
         , m_scaleX(1.0), m_scaleY(1.0)
         , m_signX(1), m_signY(1)
         , m_contentScaleFactor(1)
+        , m_mm_to_pix_x(0.0), m_mm_to_pix_y(0.0)
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
         , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
         , m_logicalFunction(wxCOPY)
@@ -348,14 +346,6 @@ wxDCImpl::wxDCImpl( wxDC *owner )
 #endif // wxUSE_PALETTE
 {
     m_owner = owner;
-
-    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                    (double)wxGetDisplaySizeMM().GetWidth();
-    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                    (double)wxGetDisplaySizeMM().GetHeight();
-
-    ResetBoundingBox();
-    ResetClipping();
 }
 
 wxDCImpl::~wxDCImpl()
@@ -368,23 +358,102 @@ wxDCImpl::~wxDCImpl()
 
 void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
+    wxASSERT_MSG( w >= 0 && h >= 0,
+                  wxS("Clipping box size values cannot be negative") );
+
+    wxRect clipRegion(x, y, w, h);
+
     if ( m_clipping )
     {
-        m_clipX1 = wxMax( m_clipX1, x );
-        m_clipY1 = wxMax( m_clipY1, y );
-        m_clipX2 = wxMin( m_clipX2, (x + w) );
-        m_clipY2 = wxMin( m_clipY2, (y + h) );
+        // New clipping box is an intersection
+        // of required clipping box and the current one.
+        wxRect curRegion(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
+        clipRegion.Intersect(curRegion);
     }
     else
     {
-        m_clipping = true;
+        // Effective clipping box is an intersection
+        // of required clipping box and DC surface.
+        int dcWidth, dcHeight;
+        DoGetSize(&dcWidth, &dcHeight);
+        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
+                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
+        clipRegion.Intersect(dcRect);
 
-        m_clipX1 = x;
-        m_clipY1 = y;
-        m_clipX2 = x + w;
-        m_clipY2 = y + h;
+        m_clipping = true;
+    }
+
+    if ( clipRegion.IsEmpty() )
+    {
+        m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0;
+    }
+    else
+    {
+        m_clipX1 = clipRegion.GetLeft();
+        m_clipY1 = clipRegion.GetTop();
+        m_clipX2 = clipRegion.GetRight() + 1;
+        m_clipY2 = clipRegion.GetBottom() + 1;
     }
 }
+
+wxRect wxDCImpl::GetLogicalArea() const
+{
+    const wxSize size = GetSize();
+    return wxRect(DeviceToLogicalX(0),
+                  DeviceToLogicalY(0),
+                  DeviceToLogicalXRel(size.x),
+                  DeviceToLogicalYRel(size.y));
+}
+
+bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+#if WXWIN_COMPATIBILITY_3_0
+    // Call the old function for compatibility.
+    DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height);
+    if ( rect != wxRect(-1, -1, 0, 0) )
+    {
+        // Custom overridden version of DoGetClippingBox() was called, we need
+        // to check if there is an actual clipping region or not. Normally the
+        // function is supposed to return the whole DC area (in logical
+        // coordinates) in this case, but also check that the clipping region
+        // is not empty because some implementations seem to do this instead.
+        return !rect.IsEmpty() && rect != GetLogicalArea();
+    }
+#endif // WXWIN_COMPATIBILITY_3_0
+
+    if ( m_clipping )
+    {
+        rect = wxRect(m_clipX1,
+                      m_clipY1,
+                      m_clipX2 - m_clipX1,
+                      m_clipY2 - m_clipY1);
+
+        return true;
+    }
+    else // No active clipping region.
+    {
+        rect = GetLogicalArea();
+
+        return false;
+    }
+}
+
+#if WXWIN_COMPATIBILITY_3_0
+void wxDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                wxCoord *w, wxCoord *h) const
+{
+    // Dummy implementation just to allow DoGetClippingRect() above to
+    // determine if this version was called or not.
+    if ( x )
+        *x = -1;
+    if ( y )
+        *y = -1;
+    if ( w )
+        *w = 0;
+    if ( h )
+        *h = 0;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // ----------------------------------------------------------------------------
 // coordinate conversions and transforms
@@ -430,6 +499,26 @@ wxCoord wxDCImpl::LogicalToDeviceYRel(wxCoord y) const
     return wxRound((double)(y) * m_scaleY);
 }
 
+wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    return wxPoint(DeviceToLogicalX(x), DeviceToLogicalY(y));
+}
+
+wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+}
+
+wxSize wxDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    return wxSize(DeviceToLogicalXRel(x), DeviceToLogicalYRel(y));
+}
+
+wxSize wxDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    return wxSize(LogicalToDeviceXRel(x), LogicalToDeviceYRel(y));
+}
+
 void wxDCImpl::ComputeScaleAndOrigin()
 {
     m_scaleX = m_logicalScaleX * m_userScaleX;
@@ -441,16 +530,16 @@ void wxDCImpl::SetMapMode( wxMappingMode mode )
     switch (mode)
     {
         case wxMM_TWIPS:
-          SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
+          SetLogicalScale( twips2mm*GetMMToPXx(), twips2mm*GetMMToPXy() );
           break;
         case wxMM_POINTS:
-          SetLogicalScale( pt2mm*m_mm_to_pix_x, pt2mm*m_mm_to_pix_y );
+          SetLogicalScale( pt2mm*GetMMToPXx(), pt2mm*GetMMToPXy() );
           break;
         case wxMM_METRIC:
-          SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
+          SetLogicalScale( GetMMToPXx(), GetMMToPXy() );
           break;
         case wxMM_LOMETRIC:
-          SetLogicalScale( m_mm_to_pix_x/10.0, m_mm_to_pix_y/10.0 );
+          SetLogicalScale( GetMMToPXx()/10.0, GetMMToPXy()/10.0 );
           break;
         default:
         case wxMM_TEXT:
@@ -561,15 +650,34 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     double xscale = (double)srcWidth/dstWidth,
            yscale = (double)srcHeight/dstHeight;
 
+    // Shift origin to avoid imprecision of integer destination coordinates
+    const int deviceOriginX = m_deviceOriginX;
+    const int deviceOriginY = m_deviceOriginY;
+    const int deviceLocalOriginX = m_deviceLocalOriginX;
+    const int deviceLocalOriginY = m_deviceLocalOriginY;
+    const int logicalOriginX = m_logicalOriginX;
+    const int logicalOriginY = m_logicalOriginY;
+    m_deviceOriginX = LogicalToDeviceX(xdest);
+    m_deviceOriginY = LogicalToDeviceY(ydest);
+    m_deviceLocalOriginX = 0;
+    m_deviceLocalOriginY = 0;
+    m_logicalOriginX = 0;
+    m_logicalOriginY = 0;
+
     double xscaleOld, yscaleOld;
     GetUserScale(&xscaleOld, &yscaleOld);
     SetUserScale(xscaleOld/xscale, yscaleOld/yscale);
 
-    bool rc = DoBlit(wxCoord(xdest*xscale), wxCoord(ydest*yscale),
-                     wxCoord(dstWidth*xscale), wxCoord(dstHeight*yscale),
+    bool rc = DoBlit(0, 0, srcWidth, srcHeight,
                      source,
                      xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
 
+    m_deviceOriginX = deviceOriginX;
+    m_deviceOriginY = deviceOriginY;
+    m_deviceLocalOriginX = deviceLocalOriginX;
+    m_deviceLocalOriginY = deviceLocalOriginY;
+    m_logicalOriginX = logicalOriginX;
+    m_logicalOriginY = logicalOriginY;
     SetUserScale(xscaleOld, yscaleOld);
 
     return rc;
@@ -677,11 +785,15 @@ void wxDCImpl::DrawSpline(int n, const wxPoint points[])
 
 // ----------------------------------- spline code ----------------------------------------
 
+static
 void wx_quadratic_spline(double a1, double b1, double a2, double b2,
                          double a3, double b3, double a4, double b4);
+static
 void wx_clear_stack();
+static
 int wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
         double *y3, double *x4, double *y4);
+static
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3,
           double x4, double y4);
 static bool wx_spline_add_point(double x, double y);
@@ -697,13 +809,13 @@ static wxPointList wx_spline_point_list;
 void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, double b3, double a4,
                  double b4)
 {
-    double xmid, ymid;
     double x1, y1, x2, y2, x3, y3, x4, y4;
 
     wx_clear_stack();
     wx_spline_push(a1, b1, a2, b2, a3, b3, a4, b4);
 
     while (wx_spline_pop(&x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
+        double xmid, ymid;
         xmid = (double)half(x2, x3);
         ymid = (double)half(y2, y3);
         if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
@@ -793,7 +905,7 @@ void wxDCImpl::DoDrawSpline( const wxPointList *points )
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     const wxPoint *p;
-    double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
+    double cx1, cy1, cx2, cy2;
     double           x1, y1, x2, y2;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
@@ -824,6 +936,7 @@ void wxDCImpl::DoDrawSpline( const wxPointList *points )
 #endif // !wxUSE_STD_CONTAINERS
           )
     {
+        double cx3, cy3, cx4, cy4;
         p = node->GetData();
         x1 = x2;
         y1 = y2;
@@ -1275,12 +1388,12 @@ void wxDC::GetDeviceOrigin(long *x, long *y) const
 
 void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
     {
-        wxCoord xx,yy,ww,hh;
-        m_pimpl->DoGetClippingBox(&xx, &yy, &ww, &hh);
-        if (x) *x = xx;
-        if (y) *y = yy;
-        if (w) *w = ww;
-        if (h) *h = hh;
+        wxRect r;
+        m_pimpl->DoGetClippingRect(r);
+        if (x) *x = r.x;
+        if (y) *y = r.y;
+        if (w) *w = r.width;
+        if (h) *h = r.height;
     }
 
 void wxDC::DrawObject(wxDrawObject* drawobject)
@@ -1300,8 +1413,6 @@ It uses wxDCBase::CalculateEllipticPoints(...) and wxDCBase::Rotate(...),
 which are also new.
 
 All methods are generic, so they can be implemented in wxDCBase.
-DoDrawEllipticArcRot(...) is virtual, so it can be called from deeper
-methods like (WinCE) wxDC::DoDrawArc(...).
 
 CalculateEllipticPoints(...) fills a given list of wxPoints with some points
 of an elliptic arc. The algorithm is pixel-based: In every row (in flat
@@ -1343,4 +1454,26 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     // ports need to emulate this bug too:
     const wxSize screenPPI = wxGetDisplayPPI();
     return float(screenPPI.y) / dpi;
+}
+
+double wxDCImpl::GetMMToPXx() const
+{
+    if ( wxIsNullDouble(m_mm_to_pix_x) )
+    {
+        m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
+                        (double)wxGetDisplaySizeMM().GetWidth();
+    }
+
+    return m_mm_to_pix_x;
+}
+
+double wxDCImpl::GetMMToPXy() const
+{
+    if ( wxIsNullDouble(m_mm_to_pix_y) )
+    {
+        m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
+                        (double)wxGetDisplaySizeMM().GetHeight();
+    }
+
+    return m_mm_to_pix_y;
 }

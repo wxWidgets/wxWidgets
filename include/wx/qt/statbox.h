@@ -8,30 +8,33 @@
 #ifndef _WX_QT_STATBOX_H_
 #define _WX_QT_STATBOX_H_
 
-#include <QtWidgets/QGroupBox>
+class QGroupBox;
 
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
     wxStaticBox();
-    
+
     wxStaticBox(wxWindow *parent, wxWindowID id,
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr);
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr);
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;
 
-    virtual QGroupBox *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
+
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual wxString GetLabel() const wxOVERRIDE;
 
 protected:
 

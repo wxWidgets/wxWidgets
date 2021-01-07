@@ -106,6 +106,7 @@ public:
     bool IsStretchableSpace() const;
     int GetStyle() const;
     wxItemKind GetKind() const;
+    void MakeStretchable();
 
     bool IsEnabled() const;
     bool IsToggled() const;
@@ -122,9 +123,21 @@ public:
 
     wxObject *GetClientData() const;
 
-    virtual void Detach();
-    virtual void Attach(wxToolBarBase *tbar);
+    bool Enable(bool enable);
+    bool Toggle(bool toggle);
+    bool SetToggle(bool toggle);
+    bool SetShortHelp(const wxString& help);
+    bool SetLongHelp(const wxString& help);
+    void Toggle();
+    void SetNormalBitmap(const wxBitmap& bmp);
+    void SetDisabledBitmap(const wxBitmap& bmp);
+    void SetLabel(const wxString& label);
+    void SetClientData(wxObject *clientData);
 
+    void Detach();
+    void Attach(wxToolBarBase *tbar);
+
+    void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
 };
 
@@ -154,6 +167,9 @@ public:
     for example wxToolBar::EnableTool.
     Calls to @c wxToolBarToolBase methods (undocumented by purpose) will not change
     the visible state of the item within the tool bar.
+
+    After you have added all the tools you need, you must call Realize() to
+    effectively construct and display the toolbar.
 
     <b>wxMSW note</b>: Note that under wxMSW toolbar paints tools to reflect
     system-wide colours. If you use more than 16 colours in your tool bitmaps,
@@ -205,8 +221,7 @@ public:
     @style{wxTB_RIGHT}
         Align the toolbar at the right side of parent window.
     @style{wxTB_DEFAULT_STYLE}
-        Combination of @c wxTB_HORIZONTAL and @c wxTB_FLAT. This style is new
-        since wxWidgets 2.9.5.
+        The @c wxTB_HORIZONTAL style. This style is new since wxWidgets 2.9.5.
     @endStyleTable
 
     See also @ref overview_windowstyles. Note that the wxMSW native toolbar
@@ -316,10 +331,6 @@ public:
             The control to be added.
         @param label
             Text to be displayed near the control.
-
-        @remarks
-            wxMSW: the label is only displayed if there is enough space
-            available below the embedded control.
 
         @remarks
             wxMac: labels are only displayed if wxWidgets is built with @c
@@ -451,9 +462,9 @@ public:
             whenever another button in the group is checked. ::wxITEM_DROPDOWN
             specifies that a drop-down menu button will appear next to the
             tool button (only GTK+ and MSW). Call SetDropdownMenu() afterwards.
-        @param shortHelpString
+        @param shortHelp
             This string is used for the tools tooltip.
-        @param longHelpString
+        @param longHelp
             This string is shown in the statusbar (if any) of the parent frame
             when the mouse pointer is inside the tool.
         @param clientData
@@ -470,8 +481,8 @@ public:
                                const wxBitmap& bitmap,
                                const wxBitmap& bmpDisabled,
                                wxItemKind kind = wxITEM_NORMAL,
-                               const wxString& shortHelpString = wxEmptyString,
-                               const wxString& longHelpString = wxEmptyString,
+                               const wxString& shortHelp = wxEmptyString,
+                               const wxString& longHelp = wxEmptyString,
                                wxObject* clientData = NULL);
     //@}
 
@@ -578,6 +589,8 @@ public:
 
         @see GetToolsCount()
     */
+    wxToolBarToolBase *GetToolByPos(int pos);
+
     const wxToolBarToolBase *GetToolByPos(int pos) const;
 
     /**
@@ -791,7 +804,7 @@ public:
 
     /**
         Removes the given tool from the toolbar but doesn't delete it. This
-        allows to insert/add this tool back to this (or another) toolbar later.
+        allows inserting/adding this tool back to this (or another) toolbar later.
 
         @note It is unnecessary to call Realize() for the change to take place,
             it will happen immediately.
@@ -984,6 +997,6 @@ public:
     /**
        Factory function to create a new separator toolbar tool.
     */
-    wxToolBarToolBase *CreateSeparator()
+    wxToolBarToolBase *CreateSeparator();
 };
 

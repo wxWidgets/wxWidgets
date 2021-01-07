@@ -337,7 +337,7 @@ public:
     int GetWatchedPathsCount() const;
 
     /**
-     * Retrevies all watched paths and places them in wxArrayString. Returns
+     * Retrieves all watched paths and places them in wxArrayString. Returns
      * the number of paths.
      *
      * TODO think about API here: we need to return more information (like is
@@ -373,7 +373,7 @@ protected:
         wxFileName path_copy = wxFileName(path);
         if ( !path_copy.Normalize() )
         {
-            wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
+            wxFAIL_MSG(wxString::Format(wxASCII_STR("Unable to normalize path '%s'"),
                                          path.GetFullPath()));
             return wxEmptyString;
         }

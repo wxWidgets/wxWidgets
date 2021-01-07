@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -203,7 +200,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 
   wxColour col(m_view->GetTextColour());
   dc.SetTextForeground(col);
-  dc.SetBackgroundMode(wxTRANSPARENT);
+  dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
   wxCoord textWidth, textHeight;
   dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
 
@@ -474,7 +471,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 
     wxColour col(m_view->GetTextColour());
     dc.SetTextForeground(col);
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     long textWidth, textHeight;
     dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
 

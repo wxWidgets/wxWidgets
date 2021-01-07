@@ -19,7 +19,7 @@
     methods.
 
     In the description of the methods below, the example return values are given
-    for the Unix, Windows and OS X systems, however please note that these are
+    for the Unix, Windows and macOS systems, however please note that these are
     just the examples and the actual values may differ. For example, under Windows:
     the system administrator may change the standard directories locations, e.g.
     the Windows directory may be named @c "W:\Win2003" instead of
@@ -69,6 +69,16 @@ public:
     /// Possible values for userDir parameter of GetUserDir().
     enum Dir
     {
+        /**
+            Directory for caching files.
+
+            Example return values:
+            - Unix: @c ~/.cache
+            - Windows: @c "C:\Users\username\AppData\Local"
+            - Mac: @c ~/Library/Caches
+        */
+        Dir_Cache,
+
         /**
             Directory containing user documents.
 
@@ -123,6 +133,66 @@ public:
             - Mac: @c ~/Movies
         */
         Dir_Videos
+    };
+
+    /**
+        Possible values for SetFileLayout() argument.
+
+        The elements of this enum correspond to the different file layout
+        standards under Unix systems.
+
+        @since 3.1.1
+     */
+    enum FileLayout
+    {
+        /**
+            Use the classic file layout.
+
+            User configuration and data files are located directly in the home
+            directory.
+
+            This is the default behaviour for compatibility reasons.
+        */
+        FileLayout_Classic,
+
+        /**
+            Use a XDG styled file layout.
+
+            File layout follows the XDG Base Directory Specification (see
+            https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+
+            This is the recommended layout for new applications.
+        */
+        FileLayout_XDG
+    };
+
+    /**
+        Possible values for MakeConfigFileName() naming convention argument.
+
+        The values in this enum are only used under Unix and only when using
+        the classic Unix convention for file layout, in XDG mode, XDG naming
+        convention is used unconditionally.
+
+        @since 3.1.1
+     */
+    enum ConfigFileConv
+    {
+        /**
+            Use the class Unix dot-file convention.
+
+            Prepend the dot to the file base name.
+
+            This value is ignored when in XDG mode, where MakeConfigFileName()
+            always behaves as if ConfigFileConv_Ext was specified.
+        */
+        ConfigFileConv_Dot,
+
+        /**
+            Use @c .conf extension for the file names.
+
+            This convention is always used in XDG mode.
+         */
+        ConfigFileConv_Ext
     };
 
     /**
@@ -240,7 +310,7 @@ public:
         specified category for the given language.
 
         In general this is just the same as @a lang subdirectory of GetResourcesDir()
-        (or @c lang.lproj under OS X) but is something quite different for
+        (or @c lang.lproj under macOS) but is something quite different for
         message catalog category under Unix where it returns the standard
         @c prefix/share/locale/lang/LC_MESSAGES directory.
 
@@ -267,7 +337,7 @@ public:
         The resources are the auxiliary data files needed for the application to run
         and include, for example, image and sound files it might use.
 
-        This function is the same as GetDataDir() for all platforms except OS X.
+        This function is the same as GetDataDir() for all platforms except macOS.
         Example return values:
         - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located
@@ -290,8 +360,11 @@ public:
     virtual wxString GetTempDir() const;
 
     /**
-        Return the directory for the user config files:
-        - Unix: @c ~ (the home directory)
+        Return the directory for the user config files.
+
+        This directory is:
+        - Unix: @c ~ (the home directory) or @c XDG_CONFIG_HOME depending on
+            GetFileLayout() return value
         - Windows: @c "C:\Users\username\AppData\Roaming" or
                    @c "C:\Documents and Settings\username\Application Data"
         - Mac: @c ~/Library/Preferences
@@ -316,7 +389,9 @@ public:
 
         If the value could not be determined the users home directory is returned.
 
-        @note On Unix this supports the xdg user dirs specification.
+        @note On Unix this (newer) method always respects the XDG base
+        directory specification, even if SetFileLayout() with @c FileLayout_XDG
+        hadn't been called.
 
         @since 3.1.0
     */
@@ -433,6 +508,44 @@ public:
         @since 2.9.0
     */
     void UseAppInfo(int info);
+
+    /**
+        Sets the current file layout.
+
+        The default layout is @c FileLayout_Classic for compatibility, however
+        newer applications are encouraged to set it to @c FileLayout_XDG on
+        program startup.
+
+        @since 3.1.1
+    */
+    void SetFileLayout(FileLayout layout);
+
+    /**
+        Returns the current file layout.
+
+        @see SetFileLayout()
+
+        @since 3.1.1
+    */
+    FileLayout GetFileLayout() const;
+
+    /**
+        Return the file name which would be used by wxFileConfig if it were
+        constructed with @a basename.
+
+        @a conv is used to construct the name of the file under Unix and only
+        matters when using the class file layout, i.e. if SetFileLayout() had
+        @e not been called with @c FileLayout_XDG argument. In this case, this
+        argument is used to determine whether to use an extension or a leading
+        dot. When following XDG specification, the function always appends the
+        extension, regardless of @a conv value. Finally, this argument is not
+        used at all under non-Unix platforms.
+
+        @since 3.1.1
+    */
+    virtual wxString
+    MakeConfigFileName(const wxString& basename,
+                       ConfigFileConv conv = ConfigFileConv_Ext) const;
 
 protected:
     /**

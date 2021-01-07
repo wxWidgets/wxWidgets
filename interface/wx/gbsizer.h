@@ -82,7 +82,7 @@ public:
     //@{
     /**
         Adds the given item to the given position.
-        
+
         @return A valid pointer if the item was successfully placed at the
                  given position, or @NULL if something was already there.
     */
@@ -187,7 +187,7 @@ public:
         Called when the managed size of the sizer is needed or when layout
         needs done.
     */
-    void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 
     /**
         Set the size used for cells in the grid with no item.
@@ -299,7 +299,7 @@ public:
     */
     bool SetSpan(const wxGBSpan& span);
 
-    
+
     wxGridBagSizer* GetGBSizer() const;
     void SetGBSizer(wxGridBagSizer* sizer);
 };

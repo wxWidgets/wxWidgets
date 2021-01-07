@@ -18,21 +18,18 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/nonownedwnd.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/region.h"
+    #include "wx/scopedptr.h"
 #endif // WX_PRECOMP
 
 #include "wx/graphics.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // wxNonOwnedWindowShapeImpl: base class for region and path-based classes.
@@ -135,24 +132,12 @@ public:
         m_mask(CreateShapeBitmap(path), *wxBLACK)
     {
 
-        m_win->Connect
-               (
-                wxEVT_PAINT,
-                wxPaintEventHandler(wxNonOwnedWindowShapeImplPath::OnPaint),
-                NULL,
-                this
-               );
+        m_win->Bind(wxEVT_PAINT, &wxNonOwnedWindowShapeImplPath::OnPaint, this);
     }
 
     virtual ~wxNonOwnedWindowShapeImplPath()
     {
-        m_win->Disconnect
-               (
-                wxEVT_PAINT,
-                wxPaintEventHandler(wxNonOwnedWindowShapeImplPath::OnPaint),
-                NULL,
-                this
-               );
+        m_win->Unbind(wxEVT_PAINT, &wxNonOwnedWindowShapeImplPath::OnPaint, this);
     }
 
     // Currently we always return false from here, if drawing the border

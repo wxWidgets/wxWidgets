@@ -8,9 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -33,7 +30,7 @@ public:
     TestStream(const void *buf, size_t size)
         : wxMemoryInputStream(buf, size) { }
 
-    wxFileOffset GetLength() const { return wxInvalidOffset; }
+    wxFileOffset GetLength() const wxOVERRIDE { return wxInvalidOffset; }
 };
 
 

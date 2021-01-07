@@ -19,10 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
@@ -32,7 +28,7 @@
 #include "wx/url.h"
 #include "wx/sstream.h"
 #include "wx/thread.h"
-#include <memory>
+#include "wx/scopedptr.h"
 
 // --------------------------------------------------------------------------
 // resources
@@ -594,7 +590,7 @@ void DoDownload(const wxString& urlname)
 
     // Try to get the input stream (connects to the given URL)
     wxLogMessage("Establishing connection to \"%s\"...", urlname);
-    const std::auto_ptr<wxInputStream> data(url.GetInputStream());
+    const wxScopedPtr<wxInputStream> data(url.GetInputStream());
     if ( !data.get() )
     {
         wxLogError("Failed to retrieve URL \"%s\"", urlname);

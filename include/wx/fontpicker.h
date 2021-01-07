@@ -33,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxFontPickerCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxFontPickerWidgetBase
 {
 public:
-    wxFontPickerWidgetBase() { m_selectedFont = *wxNORMAL_FONT; }
+    wxFontPickerWidgetBase() : m_selectedFont(*wxNORMAL_FONT) { }
     virtual ~wxFontPickerWidgetBase() {}
 
     wxFont GetSelectedFont() const
@@ -88,7 +88,8 @@ protected:
 #define wxFNTP_USE_TEXTCTRL       (wxPB_USE_TEXTCTRL)
 #define wxFNTP_DEFAULT_STYLE      (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)
 
-// not a style but rather the default value of the maximum pointsize allowed
+// not a style but rather the default value of the minimum/maximum pointsize allowed
+#define wxFNTP_MINPOINT_SIZE      0
 #define wxFNTP_MAXPOINT_SIZE      100
 
 
@@ -101,8 +102,8 @@ protected:
 class WXDLLIMPEXP_CORE wxFontPickerCtrl : public wxPickerBase
 {
 public:
-    wxFontPickerCtrl()
-        : m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
+     wxFontPickerCtrl()
+        : m_nMinPointSize(wxFNTP_MINPOINT_SIZE), m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
     {
     }
 
@@ -116,8 +117,8 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxFNTP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxFontPickerCtrlNameStr)
-        : m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
+                     const wxString& name = wxASCII_STR(wxFontPickerCtrlNameStr))
+        : m_nMinPointSize(wxFNTP_MINPOINT_SIZE), m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
     {
         Create(parent, id, initial, pos, size, style, validator, name);
     }
@@ -129,7 +130,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFNTP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFontPickerCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxFontPickerCtrlNameStr));
 
 
 public:         // public API
@@ -149,9 +150,13 @@ public:         // public API
     void SetSelectedColour(const wxColour& colour)
         { GetPickerWidget()->SetSelectedColour(colour); }
 
+    // set/get the min point size
+    void SetMinPointSize(unsigned int min);
+    unsigned int GetMinPointSize() const
+        { return m_nMinPointSize; }
+
     // set/get the max point size
-    void SetMaxPointSize(unsigned int max)
-        { m_nMaxPointSize=max; }
+    void SetMaxPointSize(unsigned int max);
     unsigned int GetMaxPointSize() const
         { return m_nMaxPointSize; }
 
@@ -172,6 +177,9 @@ protected:
     // extracts the style for our picker from wxFontPickerCtrl's style
     long GetPickerStyle(long style) const wxOVERRIDE
         { return (style & (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)); }
+
+    // the minimum pointsize allowed to the user
+    unsigned int m_nMinPointSize;
 
     // the maximum pointsize allowed to the user
     unsigned int m_nMaxPointSize;

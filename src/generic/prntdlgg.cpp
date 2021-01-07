@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 
@@ -86,7 +83,6 @@ wxIMPLEMENT_CLASS(wxPostScriptPrintNativeData, wxPrintNativeDataBase);
 
 wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
 {
-    m_previewCommand = wxEmptyString;
 #ifdef __VMS__
     m_printerCommand = wxT("print");
     m_printerOptions = wxT("/nonotify/queue=psqueue");
@@ -95,14 +91,11 @@ wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
 
 #ifdef __WXMSW__
     m_printerCommand = wxT("print");
-    m_printerOptions = wxEmptyString;
     m_afmPath = wxT("c:\\windows\\system\\");
 #endif
 
 #if !defined(__VMS__) && !defined(__WXMSW__)
     m_printerCommand = wxT("lpr");
-    m_printerOptions = wxEmptyString;
-    m_afmPath = wxEmptyString;
 #endif
 
     m_printerScaleX = 1.0;
@@ -573,7 +566,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
                 wxStringTokenizer tok2( tmp, wxT(" ") );
                 tmp = tok2.GetNextToken();  // "printer"
                 tmp = tok2.GetNextToken();  // "hp_deskjet930c"
-                tmp = wxEmptyString;
+                tmp.clear();
                 while (tok2.HasMoreTokens())
                 {
                     tmp += tok2.GetNextToken();

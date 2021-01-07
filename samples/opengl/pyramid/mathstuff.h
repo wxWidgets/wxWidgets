@@ -21,6 +21,7 @@ class myVec3
 public:
     myVec3() { x = y = z = 0.0 ;}
     myVec3(double xd, double yd, double zd) : x(xd), y(yd), z(zd) {}
+    myVec3(float xd, float yd, float zd) : x(double(xd)), y(double(yd)), z(double(zd)) {}
     ~myVec3() {}
 
     double x, y, z;
@@ -56,7 +57,7 @@ myVec3 MyCross(const myVec3& v1, const myVec3& v2);
 double MyDistance(const myVec3& v1, const myVec3& v2);
 
 // Angle between two normalized vectors, in radians
-double AngleBetween(myVec3 v1, myVec3 v2);
+double AngleBetween(const myVec3& v1, const myVec3& v2);
 
 // Matrix 4x4 by 4x1 multiplication
 myVec4 MyMatMul4x1(const double *m1, const myVec4& v);

@@ -1,0 +1,16 @@
+# This is the EditorConfig (http://editorconfig.org/) coding style file for
+# wxWidgets.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[makefile.*]
+indent_style = tab
+indent_size = 8

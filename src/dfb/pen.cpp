@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/pen.h"
 
@@ -43,7 +40,7 @@ public:
     {
         if ( style != wxPENSTYLE_SOLID && style != wxPENSTYLE_TRANSPARENT )
         {
-            wxFAIL_MSG( "only wxSOLID and wxTRANSPARENT styles are supported" );
+            wxFAIL_MSG( "only wxPENSTYLE_SOLID and wxPENSTYLE_TRANSPARENT styles are supported" );
             style = wxPENSTYLE_SOLID;
         }
 
@@ -77,6 +74,11 @@ wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
     wxFAIL_MSG( "stipple pens not supported" );
 
     m_refData = new wxPenRefData();
+}
+
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData(info.GetColour(), info.GetStyle());
 }
 
 bool wxPen::operator==(const wxPen& pen) const

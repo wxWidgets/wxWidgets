@@ -52,7 +52,7 @@ enum
     @library{wxcore}
     @category{ctrl}
     @appearance{genericdirctrl}
-    
+
     @beginEventEmissionTable
     @event{EVT_DIRCTRL_SELECTIONCHANGED(id, func)}
           Selected directory has changed.
@@ -277,7 +277,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0);
 
-    virtual ~wxDirFilterListCtrl() {}
+    virtual ~wxDirFilterListCtrl();
 
     void Init();
 

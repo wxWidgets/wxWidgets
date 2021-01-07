@@ -17,7 +17,7 @@
     simple text file, you will want to derive a new class from wxTipProvider and
     use it instead of the one returned by wxCreateFileTipProvider().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{misc}
 
     @see @ref overview_tips, ::wxShowTip

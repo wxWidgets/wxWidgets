@@ -12,7 +12,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp(){};
+    MyApp(){}
     bool OnInit() wxOVERRIDE;
 };
 
@@ -64,11 +64,11 @@ private:
 };
 
 
-// a dialog using notebook sizer for layout
-class MySizerDialog : public wxDialog
+// a dialog using notebook and sizers for layout
+class MyNotebookWithSizerDialog : public wxDialog
 {
 public:
-    MySizerDialog(wxWindow *parent, const wxString &title );
+    MyNotebookWithSizerDialog(wxWindow *parent, const wxString &title );
 };
 
 

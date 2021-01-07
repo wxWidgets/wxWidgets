@@ -24,9 +24,9 @@ public:
     // class is supposed to create the buttons and layout everything.
     //
     // Takes ownership of the adaptor pointer.
-    wxEXPLICIT wxAddRemoveImplBase(wxAddRemoveAdaptor* adaptor,
-                                   wxAddRemoveCtrl* WXUNUSED(parent),
-                                   wxWindow* ctrlItems)
+    explicit wxAddRemoveImplBase(wxAddRemoveAdaptor* adaptor,
+                                 wxAddRemoveCtrl* WXUNUSED(parent),
+                                 wxWindow* ctrlItems)
         : m_adaptor(adaptor)
     {
         ctrlItems->Bind(wxEVT_CHAR, &wxAddRemoveImplBase::OnChar, this);
@@ -105,9 +105,9 @@ private:
 class wxAddRemoveImplWithButtons : public wxAddRemoveImplBase
 {
 public:
-    wxEXPLICIT wxAddRemoveImplWithButtons(wxAddRemoveAdaptor* adaptor,
-                                          wxAddRemoveCtrl* parent,
-                                          wxWindow* ctrlItems)
+    explicit wxAddRemoveImplWithButtons(wxAddRemoveAdaptor* adaptor,
+                                        wxAddRemoveCtrl* parent,
+                                        wxWindow* ctrlItems)
         : wxAddRemoveImplBase(adaptor, parent, ctrlItems)
     {
         m_btnAdd =
@@ -145,8 +145,10 @@ protected:
 
 #ifdef __WXOSX__
     #include "wx/osx/private/addremovectrl.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/private/addremovectrl.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/private/addremovectrl.h"
 #else
     #include "wx/generic/private/addremovectrl.h"
 #endif

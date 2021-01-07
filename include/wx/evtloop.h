@@ -63,11 +63,8 @@
 class WXDLLIMPEXP_BASE wxEventLoopBase
 {
 public:
-    // trivial, but needed (because of wxEventLoopBase) ctor
     wxEventLoopBase();
-
-    // dtor
-    virtual ~wxEventLoopBase() { }
+    virtual ~wxEventLoopBase();
 
     // use this to check whether the event loop was successfully created before
     // using it
@@ -128,8 +125,9 @@ public:
     // idle handling
     // -------------
 
-        // make sure that idle events are sent again
-    virtual void WakeUpIdle();
+        // make sure that idle events are sent again: this is just an obsolete
+        // synonym for WakeUp()
+    void WakeUpIdle() { WakeUp(); }
 
         // this virtual function is called  when the application
         // becomes idle and by default it forwards to wxApp::ProcessIdle() and
@@ -298,7 +296,7 @@ private:
     #include "wx/dfb/evtloop.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/evtloop.h"
-    #elif defined(__WXQT__)
+#elif defined(__WXQT__)
     #include "wx/qt/evtloop.h"
 #else // other platform
 

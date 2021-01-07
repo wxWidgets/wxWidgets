@@ -27,6 +27,9 @@ public:
 #if wxUSE_MDI_ARCHITECTURE
         Mode_MDI,   // MDI mode: multiple documents, single top level window
 #endif // wxUSE_MDI_ARCHITECTURE
+#if wxUSE_AUI
+        Mode_AUI,   // MDI AUI mode
+#endif // wxUSE_AUI
         Mode_SDI,   // SDI mode: multiple documents, multiple top level windows
         Mode_Single // single document mode (and hence single top level window)
     };

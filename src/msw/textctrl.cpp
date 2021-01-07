@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTCTRL
 
@@ -40,12 +37,14 @@
     #include "wx/wxcrtvararg.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/scopedptr.h"
 #include "wx/stack.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
+    #include "wx/dataobj.h"
 #endif
 
 #include "wx/textfile.h"
@@ -63,7 +62,21 @@
 #if wxUSE_RICHEDIT
     #include <richedit.h>
     #include <richole.h>
+
+    // MinGW32 doesn't have tom.h and doesn't define the interfaces and the
+    // constants we need, so we can't use ITextDocument::Undo() with it. All
+    // the other compilers do have this header.
+    #ifndef __MINGW32_TOOLCHAIN__
+        #define wxHAS_TOM_H
+    #endif
+
+    #ifdef wxHAS_TOM_H
+        #include <tom.h>
+    #endif
+
     #include "wx/msw/ole/oleutils.h"
+
+    #include "wx/msw/private/comptr.h"
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT
@@ -71,6 +84,35 @@
 #endif
 
 #include "wx/msw/missing.h"
+
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
+
+#ifndef CFE_AUTOBACKCOLOR
+    #define CFE_AUTOBACKCOLOR 0x04000000
+#endif
+
+// missing defines for MinGW build
+#ifndef CFM_UNDERLINETYPE
+    #define CFM_UNDERLINETYPE       0x00800000
+#endif
+
+#ifndef CFU_UNDERLINENONE
+    #define CFU_UNDERLINENONE       0
+#endif
+
+#ifndef CFU_UNDERLINE
+    #define CFU_UNDERLINE           1
+#endif
+
+#ifndef CFU_UNDERLINEDOUBLE
+    #define CFU_UNDERLINEDOUBLE     3
+#endif
+
+#ifndef CFU_UNDERLINEWAVE
+    #define CFU_UNDERLINEWAVE       8
+#endif
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
@@ -98,6 +140,17 @@ DEFINE_GUID(wxIID_IRichEditOleCallback,
     0x00020d03, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
 } // anonymous namespace
+
+#ifdef wxHAS_TOM_H
+
+// This one is not defined in the standard libraries at all and MSDN just says
+// to define it explicitly, so we do it for IID_XXX constant itself and not our
+// own wxIID_XXX.
+DEFINE_GUID(IID_ITextDocument,
+    0x8cc497c0, 0xa1df, 0x11ce, 0x80, 0x98, 0x00, 0xaa, 0x00, 0x47, 0xbe, 0x5d);
+
+#endif // wxHAS_TOM_H
+
 #endif // wxUSE_OLE
 
 // ----------------------------------------------------------------------------
@@ -118,8 +171,8 @@ public:
         Version_Max
     };
 
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
     // load the richedit DLL for the specified version of rich edit
     static bool Load(Version version);
@@ -160,17 +213,17 @@ public:
     wxTextCtrlOleCallback(wxTextCtrl *text) : m_textCtrl(text), m_menu(NULL) {}
     virtual ~wxTextCtrlOleCallback() { DeleteContextMenuObject(); }
 
-    STDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) { return E_NOTIMPL; }
-    STDMETHODIMP DeleteObject(LPOLEOBJECT WXUNUSED(oleobj)) { return E_NOTIMPL; }
-    STDMETHODIMP GetClipboardData(CHARRANGE* WXUNUSED(chrg), DWORD WXUNUSED(reco), LPDATAOBJECT* WXUNUSED(dataobj)) { return E_NOTIMPL; }
-    STDMETHODIMP GetDragDropEffect(BOOL WXUNUSED(drag), DWORD WXUNUSED(grfKeyState), LPDWORD WXUNUSED(effect)) { return E_NOTIMPL; }
-    STDMETHODIMP GetInPlaceContext(LPOLEINPLACEFRAME* WXUNUSED(frame), LPOLEINPLACEUIWINDOW* WXUNUSED(doc), LPOLEINPLACEFRAMEINFO WXUNUSED(frameInfo)) { return E_NOTIMPL; }
-    STDMETHODIMP GetNewStorage(LPSTORAGE *WXUNUSED(stg)) { return E_NOTIMPL; }
-    STDMETHODIMP QueryAcceptData(LPDATAOBJECT WXUNUSED(dataobj), CLIPFORMAT* WXUNUSED(format), DWORD WXUNUSED(reco), BOOL WXUNUSED(really), HGLOBAL WXUNUSED(hMetaPict)) { return E_NOTIMPL; }
-    STDMETHODIMP QueryInsertObject(LPCLSID WXUNUSED(clsid), LPSTORAGE WXUNUSED(stg), LONG WXUNUSED(cp)) { return E_NOTIMPL; }
-    STDMETHODIMP ShowContainerUI(BOOL WXUNUSED(show)) { return E_NOTIMPL; }
+    wxSTDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP DeleteObject(LPOLEOBJECT WXUNUSED(oleobj)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP GetClipboardData(CHARRANGE* WXUNUSED(chrg), DWORD WXUNUSED(reco), LPDATAOBJECT* WXUNUSED(dataobj)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP GetDragDropEffect(BOOL WXUNUSED(drag), DWORD WXUNUSED(grfKeyState), LPDWORD WXUNUSED(effect)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP GetInPlaceContext(LPOLEINPLACEFRAME* WXUNUSED(frame), LPOLEINPLACEUIWINDOW* WXUNUSED(doc), LPOLEINPLACEFRAMEINFO WXUNUSED(frameInfo)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP GetNewStorage(LPSTORAGE *WXUNUSED(stg)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP QueryAcceptData(LPDATAOBJECT WXUNUSED(dataobj), CLIPFORMAT* WXUNUSED(format), DWORD WXUNUSED(reco), BOOL WXUNUSED(really), HGLOBAL WXUNUSED(hMetaPict)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP QueryInsertObject(LPCLSID WXUNUSED(clsid), LPSTORAGE WXUNUSED(stg), LONG WXUNUSED(cp)) wxOVERRIDE { return E_NOTIMPL; }
+    wxSTDMETHODIMP ShowContainerUI(BOOL WXUNUSED(show)) wxOVERRIDE { return E_NOTIMPL; }
 
-    STDMETHODIMP GetContextMenu(WORD WXUNUSED(seltype), LPOLEOBJECT WXUNUSED(oleobj), CHARRANGE* WXUNUSED(chrg), HMENU *menu)
+    wxSTDMETHODIMP GetContextMenu(WORD WXUNUSED(seltype), LPOLEOBJECT WXUNUSED(oleobj), CHARRANGE* WXUNUSED(chrg), HMENU *menu) wxOVERRIDE
     {
         // 'menu' will be shown and destroyed by the caller. We need to keep
         // its wx counterpart, the wxMenu instance, around until it is
@@ -308,6 +361,7 @@ void wxTextCtrl::Init()
 {
 #if wxUSE_RICHEDIT
     m_verRichEdit = 0;
+    m_richDPIscale = 1;
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT && wxUSE_RICHEDIT
@@ -576,7 +630,14 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         }
 #endif
         if ( !contextMenuConnected )
-            Connect(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(wxTextCtrl::OnContextMenu));
+            Bind(wxEVT_CONTEXT_MENU, &wxTextCtrl::OnContextMenu, this);
+
+        // Determine the system DPI and the DPI of the display the rich control
+        // is shown on, and calculate and apply the scaling factor.
+        // When this control is created in a (wxFrame) constructor the zoom is
+        // not correctly applied, use CallAfter to delay setting the zoom.
+        m_richDPIscale = GetDPI().y / (float)::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+        CallAfter(&wxTextCtrl::MSWSetRichZoom);
     }
     else
 #endif // wxUSE_RICHEDIT
@@ -628,6 +689,34 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 
         ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
+
+#if wxUSE_RICHEDIT && wxUSE_OLE && defined(wxHAS_TOM_H)
+    // For RichEdit >= 4, SetFont(), called above from MSWCreateControl(), uses
+    // EM_SETCHARFORMAT which affects the undo buffer, meaning that CanUndo()
+    // for a newly created control returns true, which is unexpected. To avoid
+    // this, we explicitly use Undo(tomFalse) here to clear the undo buffer.
+    // And since Undo(tomFalse) also disables the undo buffer, we need to
+    // enable it again immediately after clearing by calling Undo(tomTrue).
+    if ( GetRichVersion() >= 4 )
+    {
+        wxCOMPtr<IRichEditOle> pRichEditOle;
+        if ( SendMessage(GetHwnd(), EM_GETOLEINTERFACE,
+                         0, (LPARAM)&pRichEditOle) && pRichEditOle )
+        {
+            wxCOMPtr<ITextDocument> pDoc;
+            HRESULT hr = pRichEditOle->QueryInterface
+                                       (
+                                        wxIID_PPV_ARGS(ITextDocument, &pDoc)
+                                       );
+            if ( SUCCEEDED(hr) )
+            {
+                hr = pDoc->Undo(tomFalse, NULL);
+                if ( SUCCEEDED(hr) )
+                    pDoc->Undo(tomTrue, NULL);
+            }
+        }
+    }
+#endif // wxUSE_RICHEDIT && wxHAS_TOM_H
 
     return true;
 }
@@ -1326,12 +1415,19 @@ wxTextPos wxTextCtrl::GetLastPosition() const
 {
     if ( IsMultiLine() )
     {
-        int numLines = GetNumberOfLines();
-        long posStartLastLine = XYToPosition(0, numLines - 1);
-
-        long lenLastLine = GetLengthOfLineContainingPos(posStartLastLine);
-
-        return posStartLastLine + lenLastLine;
+#if wxUSE_RICHEDIT
+        if ( IsRich() )
+        {
+            GETTEXTLENGTHEX gtl;
+            gtl.flags = GTL_NUMCHARS | GTL_PRECISE;
+            gtl.codepage = GetRichVersion() > 1 ? 1200 : CP_ACP;
+            return ::SendMessage(GetHwnd(), EM_GETTEXTLENGTHEX, (WPARAM)&gtl, 0);
+        }
+        else
+#endif // wxUSE_RICHEDIT
+        {
+            return ::GetWindowTextLength(GetHwnd());
+        }
     }
 
     return wxTextEntry::GetLastPosition();
@@ -1466,7 +1562,30 @@ int wxTextCtrl::GetNumberOfLines() const
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
     // This gets the char index for the _beginning_ of this line
-    long charIndex = ::SendMessage(GetHwnd(), EM_LINEINDEX, y, 0);
+    long charIndex;
+    if ( IsMultiLine() )
+    {
+        charIndex = ::SendMessage(GetHwnd(), EM_LINEINDEX, y, 0);
+        if ( charIndex == -1 )
+            return -1;
+    }
+    else
+    {
+        if ( y != 0 )
+            return -1;
+
+        charIndex = 0;
+    }
+
+    // Line is identified by a character position!
+    long lineLength = ::SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
+
+    // Notice that x == lineLength is still valid because it corresponds either
+    // to the position of the LF at the end of any line except the last one or
+    // to the last position, which is the position after the last character,
+    // for the last line.
+    if ( x > lineLength )
+        return -1;
 
     return charIndex + x;
 }
@@ -1501,9 +1620,53 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
         return false;
     }
 
-    // The X position must therefore be the different between pos and charIndex
+    // Line is identified by a character position!
+    // New lines characters are not included.
+    long lineLength = ::SendMessage(hWnd, EM_LINELENGTH, charIndex, 0);
+
+    // To simplify further calculations, make position relative
+    // to the beginning of the line.
+    pos -= charIndex;
+
+    // We need to apply different approach for the position referring
+    // to the last line so check if the next line exists.
+    long charIndexNextLn = IsMultiLine() ?
+                           ::SendMessage(hWnd, EM_LINEINDEX, lineNo + 1, 0)
+                           : -1;
+    if ( charIndexNextLn == -1 )
+    {
+        // No next line. Char position refers to the last line so
+        // the length of the line obtained with EM_LINELENGTH is
+        // correct because there are no new line characters at the end.
+        if ( pos > lineLength )
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // Next line found. Char position doesn't refer to the last line
+        // so we need to take into account new line characters which were
+        // not counted by EM_LINELENGTH.
+        long lineLengthFull = charIndexNextLn - charIndex;
+        // (lineLengthFull - lineLength) can be 0 (for wrapped line),
+        // 1 (for \r new line mark) or 2 (for \r\n new line mark).
+        if ( pos > lineLengthFull )
+        {
+            return false;
+        }
+        if ( pos > lineLength )
+        {
+            // Char position refers to the second character of the CR/LF mark
+            // and its physical X-Y position is the same as the position
+            // of the first one.
+            pos = lineLength;
+        }
+    }
+
+    // The X position is therefore a char position in the line.
     if ( x )
-        *x = pos - charIndex;
+        *x = pos;
     if ( y )
         *y = lineNo;
 
@@ -1721,6 +1884,9 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 {
     long pos = XYToPosition(0, lineNo);
 
+    if ( pos == -1 )
+        return -1;
+
     return GetLengthOfLineContainingPos(pos);
 }
 
@@ -1762,7 +1928,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
         // remove the '\n' at the end, if any (this is how this function is
         // supposed to work according to the docs)
-        if ( buf[len - 1] == wxT('\n') )
+        if ( len && buf[len - 1] == wxT('\n') )
         {
             len--;
         }
@@ -1915,7 +2081,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
             {
                 default:
                     wxFAIL_MSG( wxT("how many modifiers have we got?") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case 0:
                     switch ( vkey )
@@ -1924,14 +2090,14 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                             // This one is only special for multi line controls.
                             if ( !IsMultiLine() )
                                 break;
-                            // fall through
+                            wxFALLTHROUGH;
 
                         case VK_DELETE:
                         case VK_HOME:
                         case VK_END:
                             return false;
                     }
-                    // fall through
+                    wxFALLTHROUGH;
                 case 2:
                     break;
 
@@ -1941,6 +2107,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                     {
                         switch ( vkey )
                         {
+                            case 'A':
                             case 'C':
                             case 'V':
                             case 'X':
@@ -1968,14 +2135,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
+            // Single line controls only get this key code if they have
+            // wxTE_PROCESS_ENTER style, but multiline ones always get it
+            // because they need it for themselves. However we shouldn't
+            // generate wxEVT_TEXT_ENTER for the controls without this style,
+            // so test for it explicitly.
+            if ( HasFlag(wxTE_PROCESS_ENTER) )
             {
                 wxCommandEvent evt(wxEVT_TEXT_ENTER, m_windowId);
                 InitCommandEvent(evt);
                 evt.SetString(GetValue());
                 if ( HandleWindowEvent(evt) )
-                    if ( !HasFlag(wxTE_MULTILINE) )
-                        return;
-                    //else: multiline controls need Enter for themselves
+                    return;
             }
             break;
 
@@ -1996,9 +2168,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // forces at the moment unfortunately
             if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                if ( FindFocus() == this )
+                if ( ::GetFocus() == GetHwnd() )
                 {
-                    int flags = 0;
+                    int flags = wxNavigationKeyEvent::FromTab;
                     if (!event.ShiftDown())
                         flags |= wxNavigationKeyEvent::IsForward ;
                     if (event.ControlDown())
@@ -2021,6 +2193,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     event.Skip();
 }
 
+#if wxUSE_OLE
+
+void wxTextCtrl::MSWProcessSpecialKey(wxKeyEvent& event)
+{
+    // It is not a good idea, in general, to manually call another event
+    // handler, but here we need to do exactly the same thing as in OnChar()
+    // above, so it doesn't seem to make much sense to add another function to
+    // forward to when we can just call it directly.
+    OnChar(event);
+}
+
+#endif // wxUSE_OLE
+
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
     // richedit control doesn't send WM_PASTE, WM_CUT and WM_COPY messages
@@ -2028,34 +2213,81 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
     // from working. So we work around it by intercepting these shortcuts
     // ourselves and emitting clipboard events (which richedit will handle,
     // so everything works as before, including pasting of rich text):
-    if ( event.GetModifiers() == wxMOD_CONTROL && IsRich() )
+    if ( IsRich() )
     {
-        switch ( event.GetKeyCode() )
+        if ( event.GetModifiers() == wxMOD_CONTROL )
         {
-            case 'C':
-                Copy();
-                return;
-            case 'X':
-                Cut();
-                return;
-            case 'V':
-                Paste();
-                return;
-            default:
-                break;
+            switch ( event.GetKeyCode() )
+            {
+                case 'C':
+                case WXK_INSERT:
+                    Copy();
+                    return;
+                case 'X':
+                    Cut();
+                    return;
+                case 'V':
+                    Paste();
+                    return;
+                default:
+                    break;
+            }
+        }
+        else if ( event.GetModifiers() == wxMOD_SHIFT )
+        {
+            switch ( event.GetKeyCode() )
+            {
+                case WXK_INSERT:
+                    Paste();
+                    return;
+                case WXK_DELETE:
+                    Cut();
+                    return;
+            }
         }
     }
 
-    // Default window procedure of multiline edit controls posts WM_CLOSE to
-    // the parent window when it gets Escape key press for some reason, prevent
-    // it from doing this as this resulted in dialog boxes being closed on
-    // Escape even when they shouldn't be (we do handle Escape ourselves
-    // correctly in the situations when it should close them).
-    if ( event.GetKeyCode() == WXK_ESCAPE && IsMultiLine() )
-        return;
+    if ( IsMultiLine() )
+    {
+        // Default window procedure of multiline edit controls posts WM_CLOSE to
+        // the parent window when it gets Escape key press for some reason, prevent
+        // it from doing this as this resulted in dialog boxes being closed on
+        // Escape even when they shouldn't be (we do handle Escape ourselves
+        // correctly in the situations when it should close them).
+        if ( event.GetKeyCode() == WXK_ESCAPE )
+            return;
+
+        // We also handle Ctrl-A as the native EDIT control doesn't do it by
+        // default (but RICHEDIT one does, so there is no need to check for it
+        // in the switch above), however it's a de facto standard accelerator
+        // and people expect it to work.
+        if ( event.GetModifiers() == wxMOD_CONTROL && event.GetKeyCode() == 'A' )
+        {
+            SelectAll();
+            return;
+        }
+    }
 
     // no, we didn't process it
     event.Skip();
+}
+
+void wxTextCtrl::Paste()
+{
+    // Before pasting, check that the pasted text will fit, unless an explicit
+    // maximum length was set, to avoid only pasting some part of it.
+    //
+    // Note that rich text controls do not send WM_PASTE, so we can't do it in
+    // response to it, but we could handle EN_PROTECTED (after requesting it by
+    // specifying ENM_PROTECTED in EM_SETEVENTMASK argument) and check for the
+    // message being WM_PASTE there, but this doesn't seem to be better than
+    // the simpler approach used here.
+    if ( IsRich() )
+    {
+        AdjustMaxLengthBeforePaste();
+    }
+
+    wxTextCtrlBase::Paste();
 }
 
 bool
@@ -2066,29 +2298,26 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
 {
     bool processed = wxTextCtrlBase::MSWHandleMessage(rc, nMsg, wParam, lParam);
 
-    // Handle the special case of "Enter" key: the user code needs to specify
-    // wxTE_PROCESS_ENTER style to get it in the first place, but if this flag
-    // is used, then even if the wxEVT_TEXT_ENTER handler skips the event, the
-    // normal action of this key is not performed because IsDialogMessage() is
-    // not called and, also, an annoying beep is generated by EDIT default
-    // WndProc.
-    //
-    // Fix these problems by explicitly performing the default function of this
-    // key (which would be done by MSWProcessMessage() if we didn't have
-    // wxTE_PROCESS_ENTER) and preventing the default WndProc from getting it.
-    if ( nMsg == WM_CHAR &&
-            !processed &&
-            HasFlag(wxTE_PROCESS_ENTER) &&
-            wParam == VK_RETURN &&
-            !wxIsAnyModifierDown() )
-    {
-        MSWClickButtonIfPossible(MSWGetDefaultButtonFor(this));
-
-        processed = true;
-    }
-
     switch ( nMsg )
     {
+        case WM_CHAR:
+            // Handle the special case of "Enter" key: the user code needs to specify
+            // wxTE_PROCESS_ENTER style to get it in the first place, but if this flag
+            // is used, then even if the wxEVT_TEXT_ENTER handler skips the event, the
+            // normal action of this key is not performed because IsDialogMessage() is
+            // not called and, also, an annoying beep is generated by EDIT default
+            // WndProc.
+            //
+            // Fix these problems by explicitly performing the default function of this
+            // key (which would be done by MSWProcessMessage() if we didn't have
+            // wxTE_PROCESS_ENTER) and preventing the default WndProc from getting it.
+            if ( !processed && wParam == VK_RETURN && IsSingleLine() )
+            {
+                if ( ClickDefaultButtonIfPossible() )
+                    processed = true;
+            }
+            break;
+
         case WM_GETDLGCODE:
             {
                 // Ensure that the result value is initialized even if the base
@@ -2154,12 +2383,24 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             // for plain EDIT controls though), so explicitly work around this
             if ( IsRich() )
             {
+                // wxCurrentPopupMenu stores the popup menu that will receive
+                // WM_COMMAND, but it may be non-NULL even when the underlying
+                // native menu is no longer shown. Use ::IsMenu() to check whether
+                // the menu still exists.
                 extern wxMenu *wxCurrentPopupMenu;
                 if ( wxCurrentPopupMenu &&
-                        wxCurrentPopupMenu->GetInvokingWindow() == this )
+                        wxCurrentPopupMenu->GetInvokingWindow() == this &&
+                        ::IsMenu(GetHmenuOf(wxCurrentPopupMenu)) )
                     ::SetCursor(GetHcursorOf(*wxSTANDARD_CURSOR));
             }
+            break;
 #endif // wxUSE_MENUS
+
+        case WM_PASTE:
+            // Note that we get this message for plain EDIT controls only, rich
+            // controls are dealt with in our own Paste().
+            AdjustMaxLengthBeforePaste();
+            break;
     }
 
     return processed;
@@ -2184,7 +2425,7 @@ bool wxTextCtrl::SendUpdateEvent()
 
         default:
             wxFAIL_MSG( wxT("unexpected wxTextCtrl::m_updatesCount value") );
-            // fall through
+            wxFALLTHROUGH;
 
         case -1:
             // we hadn't updated the control ourselves, this event comes from
@@ -2298,6 +2539,48 @@ bool wxTextCtrl::AdjustSpaceLimit()
     return true;
 }
 
+void wxTextCtrl::AdjustMaxLengthBeforePaste()
+{
+#if wxUSE_CLIPBOARD
+    // We only need to do this for multi line controls, single lines should
+    // never receive more text than fits into them by default anyhow.
+    if ( IsSingleLine() )
+        return;
+
+    // Also don't override an explicitly set limit.
+    unsigned int limit;
+    if ( HasSpaceLimit(&limit) )
+        return;
+
+    // Otherwise check if we have enough space for clipboard data. We only do
+    // it for plain text because this is all we know how to handle here.
+    wxClipboardLocker lock;
+    wxTextDataObject textData;
+    if ( !wxTheClipboard->GetData(textData) )
+        return;
+
+    // Unfortunately we can't just get the length directly because we need to
+    // convert EOLs, otherwise our calculation of the required length could be
+    // way off when there are many lines.
+    const unsigned long lenPasted =
+         wxTextFile::Translate(textData.GetText(), wxTextFileType_Dos).length();
+
+    long from, to;
+    GetSelection(&from, &to);
+    const unsigned long lenSel = to - from;
+
+    const unsigned long lenCurrent = GetLastPosition();
+
+    // We need enough space for all the current text and all the new
+    // text, but the selection will be replaced.
+    const unsigned long lenNeeded = lenCurrent - lenSel + lenPasted;
+    if ( lenNeeded >= limit )
+    {
+        SetMaxLength(lenNeeded);
+    }
+#endif // wxUSE_CLIPBOARD
+}
+
 bool wxTextCtrl::AcceptsFocusFromKeyboard() const
 {
     // we don't want focus if we can't be edited unless we're a multiline
@@ -2313,10 +2596,12 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
+    int cy;
+    wxFont font = GetFont();
+    font.WXAdjustToPPI(GetDPI());
+    wxGetCharSize(GetHWND(), NULL, &cy, font);
 
-    DWORD wText = 1;
+    DWORD wText = FromDIP(1);
     ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
     wText += xlen;
 
@@ -2325,14 +2610,14 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     {
         // add space for vertical scrollbar
         if ( !(m_windowStyle & wxTE_NO_VSCROLL) )
-            wText += ::GetSystemMetrics(SM_CXVSCROLL);
+            wText += wxGetSystemMetrics(SM_CXVSCROLL, m_parent);
 
         if ( ylen <= 0 )
         {
             hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
             // add space for horizontal scrollbar
             if ( m_windowStyle & wxHSCROLL )
-                hText += ::GetSystemMetrics(SM_CYHSCROLL);
+                hText += wxGetSystemMetrics(SM_CYHSCROLL, m_parent);
         }
     }
     // for single line control cy (height + external leading) is ok
@@ -2351,7 +2636,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // stand out).
     if ( !HasFlag(wxBORDER_NONE) )
     {
-        wText += 9; // borders and inner margins
+        wText += FromDIP(9); // borders and inner margins
 
         // we have to add the adjustments for the control height only once, not
         // once per line, so do it after multiplication above
@@ -2459,6 +2744,7 @@ void wxTextCtrl::OnRightUp(wxMouseEvent& eventMouse)
     wxContextMenuEvent eventMenu(wxEVT_CONTEXT_MENU,
                                  GetId(),
                                  ClientToScreen(eventMouse.GetPosition()));
+    eventMenu.SetEventObject(this);
 
     if ( !ProcessWindowEvent(eventMenu) )
         eventMouse.Skip();
@@ -2490,6 +2776,51 @@ wxMenu *wxTextCtrl::MSWCreateContextMenu()
     m->AppendSeparator();
     m->Append(wxID_SELECTALL, _("Select &All"));
     return m;
+}
+
+void wxTextCtrl::MSWSetRichZoom()
+{
+    // nothing to scale
+    if ( m_richDPIscale == 1 )
+        return;
+
+    // get the current zoom ratio
+    UINT num = 1;
+    UINT denom = 1;
+    ::SendMessage(GetHWND(), EM_GETZOOM, (WPARAM)&num, (LPARAM)&denom);
+
+    // combine the zoom ratio with the DPI scale factor
+    float ratio = m_richDPIscale;
+    if ( denom > 0 )
+        ratio = ratio * (num / (float)denom);
+
+    // apply the new zoom ratio, Windows uses a default denominator of 100, so
+    // do it here as well
+    num = 100 * ratio;
+    denom = 100;
+    ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
+}
+
+void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    // Don't use MSWUpdateFontOnDPIChange for the rich edit controls, they
+    // (somehow?) update their appearance on their own and changing their
+    // HFONT, as the base class version does, would reset all the styles used
+    // by them when the DPI changes, which is unwanted.
+    if ( !IsRich() )
+    {
+        wxTextCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+    }
+    // If the rich control is created on a screen with non-system DPI, an
+    // initial zoom factor was applied. This needs to be reset after the first
+    // DPI change. First invert the scale, then set it to 1 so it is not
+    // applied again.
+    else if ( m_richDPIscale != 1 )
+    {
+        m_richDPIscale = 1 / m_richDPIscale;
+        MSWSetRichZoom();
+        m_richDPIscale = 1;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2654,7 +2985,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 {
     // Native text control sends EN_CHANGE when the font changes, producing
     // a wxEVT_TEXT event as if the user changed the value. This is not
-    // the case, so supress the event.
+    // the case, so suppress the event.
     wxEventBlocker block(this, wxEVT_TEXT);
 
     if ( !wxTextCtrlBase::SetFont(font) )
@@ -2677,6 +3008,30 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 // ----------------------------------------------------------------------------
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
+
+#if _RICHEDIT_VER >= 0x0800
+static const wxColour gs_underlineColourMap[] =
+{
+    // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
+    wxNullColour,            // text colour
+    wxColour(0,   0,   0  ), // black
+    wxColour(0,   0,   255), // blue
+    wxColour(0,   255, 255), // cyan
+    wxColour(0,   255, 0  ), // green
+    wxColour(255, 0,   255), // magenta
+    wxColour(255, 0,   0  ), // red
+    wxColour(255, 255, 0  ), // yellow
+    wxColour(255, 255, 255), // white
+    wxColour(0,   0,   128), // navy
+    wxColour(0,   128, 128), // teal
+    wxColour(0,   128, 0  ), // light green
+    wxColour(128, 0,   128), // purple
+    wxColour(128, 0,   0  ), // maroon
+    wxColour(128, 128, 0  ), // olive
+    wxColour(128, 128, 128), // grey
+    wxColour(192, 192, 192), // light grey
+};
+#endif
 
 bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 {
@@ -2713,15 +3068,14 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
                      CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
-        // the real height in twips and not the negative number which
-        // wxFillLogFont() returns (this is correct in general and works with
+        // the real height in twips and not the negative number used inside
+        // LOGFONT returns (this is correct in general and works with
         // the Windows font mapper, but not here)
 
         wxFont font(style.GetFont());
 
-        LOGFONT lf;
-        wxFillLogFont(&lf, &font);
-        cf.yHeight = 20*font.GetPointSize(); // 1 pt = 20 twips
+        LOGFONT lf = font.GetNativeFontInfo()->lf;
+        cf.yHeight = 20 * font.GetFractionalPointSize(); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
         wxStrlcpy(cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName));
@@ -2747,6 +3101,42 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         {
             cf.dwEffects |= CFE_STRIKEOUT;
         }
+    }
+
+    if ( style.HasFontUnderlined() )
+    {
+        cf.dwMask |= CFM_UNDERLINETYPE;
+        BYTE underlineType = CFU_UNDERLINENONE;
+        switch ( style.GetUnderlineType() )
+        {
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                underlineType = CFU_UNDERLINE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                underlineType = CFU_UNDERLINEDOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                underlineType = CFU_UNDERLINEWAVE;
+                break;
+            default:
+                underlineType = CFU_UNDERLINENONE;
+                break;
+        }
+        cf.bUnderlineType = underlineType;
+
+#if _RICHEDIT_VER >= 0x0800
+        BYTE colour = 0;
+        const wxColour& col = style.GetUnderlineColour();
+        for ( size_t c = 0; c < WXSIZEOF(gs_underlineColourMap); ++c )
+        {
+            if ( col == gs_underlineColourMap[c] )
+            {
+                colour = static_cast<BYTE>(c);
+                break;
+            }
+        }
+        cf.bUnderlineColor = colour;
+#endif
     }
 
     if ( style.HasTextColour() )
@@ -2912,7 +3302,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     // even try to do anything if it's the only thing we want to change
     if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
         !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
-        !style.HasTabs() )
+        !style.HasTabs() && !style.GetFontUnderlined() )
     {
         // nothing to do: return true if there was really nothing to do and
         // false if we failed to set bg colour
@@ -3008,10 +3398,6 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 
     LOGFONT lf;
-    // Convert the height from the units of 1/20th of the point in which
-    // CHARFORMAT stores it to pixel-based units used by LOGFONT.
-    const wxCoord ppi = wxClientDC(this).GetPPI().y;
-    lf.lfHeight = -MulDiv(cf.yHeight/20, ppi, 72);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;
@@ -3044,7 +3430,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else
         lf.lfWeight = FW_NORMAL;
 
-    wxFont font = wxCreateFontFromLogFont(& lf);
+    // Determine the pointSize that was used in SetStyle. Don't worry about
+    // lfHeight or PPI, style.SetFont() will lose this information anyway.
+    wxFont font(wxNativeFontInfo(lf, this));
+    font.SetFractionalPointSize(cf.yHeight / 20.0); // 1 pt = 20 twips
     if (font.IsOk())
     {
         style.SetFont(font);
@@ -3054,10 +3443,41 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 #if wxUSE_RICHEDIT2
     if ( m_verRichEdit != 1 )
     {
-        // cf.dwMask |= CFM_BACKCOLOR;
-        style.SetBackgroundColour(wxColour(cf.crBackColor));
+        // Notice that, surprisingly, CFM_BACKCOLOR is still set in the mask
+        // even when CFE_AUTOBACKCOLOR is set in the effects, indicating that
+        // the background colour is not used.
+        if ( !(cf.dwEffects & CFE_AUTOBACKCOLOR) && (cf.dwMask & CFM_BACKCOLOR) )
+        {
+            style.SetBackgroundColour(wxColour(cf.crBackColor));
+        }
     }
 #endif // wxUSE_RICHEDIT2
+
+    wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+    switch ( cf.bUnderlineType )
+    {
+        case CFU_UNDERLINE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+            break;
+        case CFU_UNDERLINEDOUBLE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+            break;
+        case CFU_UNDERLINEWAVE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+            break;
+        default:
+            underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+            break;
+    }
+
+    wxColour underlineColour;
+#if _RICHEDIT_VER >= 0x0800
+    if ( cf.bUnderlineColor < WXSIZEOF(gs_underlineColourMap) )
+        underlineColour = gs_underlineColourMap[cf.bUnderlineColor];
+#endif
+
+    if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+        style.SetFontUnderlined(underlineType, underlineColour);
 
     // now get the paragraph formatting
     PARAFORMAT2 pf;

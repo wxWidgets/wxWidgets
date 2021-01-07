@@ -30,7 +30,7 @@ public:
     wxStatusBarGeneric(wxWindow *parent,
                        wxWindowID winid = wxID_ANY,
                        long style = wxSTB_DEFAULT_STYLE,
-                       const wxString& name = wxStatusBarNameStr)
+                       const wxString& name = wxASCII_STR(wxStatusBarNameStr))
     {
         Init();
 
@@ -41,7 +41,7 @@ public:
 
     bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     // implement base class methods
     virtual void SetStatusWidths(int n, const int widths_field[]) wxOVERRIDE;
@@ -81,7 +81,7 @@ protected:
 
     // true if the status bar shows the size grip: for this it must have
     // wxSTB_SIZEGRIP style and the window it is attached to must be resizable
-    // and not maximized
+    // and not maximized (note that currently size grip is only used in wxGTK)
     bool ShowsSizeGrip() const;
 
     // returns the position and the size of the size grip

@@ -10,6 +10,8 @@
 
 #include "wx/object.h"
 
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
 public:
@@ -23,7 +25,7 @@ public:
     static void SetAutoPop(long milliseconds);
         // set the delay between subsequent tooltips to appear
     static void SetReshow(long milliseconds);
-    
+
     wxToolTip(const wxString &tip);
 
     void SetTip(const wxString& tip);

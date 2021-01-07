@@ -58,22 +58,51 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// implementation which sends output to stderr or specified file
+// helper mix-in for output targets that can use difference encodings
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
+class WXDLLIMPEXP_BASE wxMessageOutputWithConv
 {
-public:
-    wxMessageOutputStderr(FILE *fp = stderr) : m_fp(fp) { }
-
-    virtual void Output(const wxString& str) wxOVERRIDE;
-
 protected:
+    explicit wxMessageOutputWithConv(const wxMBConv& conv)
+        : m_conv(conv.Clone())
+    {
+    }
+
+    ~wxMessageOutputWithConv()
+    {
+        delete m_conv;
+    }
+
     // return the string with "\n" appended if it doesn't already terminate
     // with it (in which case it's returned unchanged)
     wxString AppendLineFeedIfNeeded(const wxString& str);
 
+    // Prepare the given string for output by appending a new line to it, if
+    // necessary, and converting it to a narrow string using our conversion
+    // object.
+    wxCharBuffer PrepareForOutput(const wxString& str);
+
+    const wxMBConv* const m_conv;
+};
+
+// ----------------------------------------------------------------------------
+// implementation which sends output to stderr or specified file
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput,
+                                               protected wxMessageOutputWithConv
+{
+public:
+    wxMessageOutputStderr(FILE *fp = stderr,
+                          const wxMBConv &conv = wxConvWhateverWorks);
+
+    virtual void Output(const wxString& str) wxOVERRIDE;
+
+protected:
     FILE *m_fp;
+
+    wxDECLARE_NO_COPY_CLASS(wxMessageOutputStderr);
 };
 
 // ----------------------------------------------------------------------------

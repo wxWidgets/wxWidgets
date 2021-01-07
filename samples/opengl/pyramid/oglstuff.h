@@ -109,10 +109,10 @@ public:
     void CleanUp();
 
     void AddCode(const GLchar* shaString, GLenum shaType);
-    void AddAttrib(std::string name);
-    void AddUnif(std::string name);
-    GLuint GetAttribLoc(std::string name);
-    GLuint GetUnifLoc(std::string name);
+    void AddAttrib(const std::string& name);
+    void AddUnif(const std::string& name);
+    GLuint GetAttribLoc(const std::string& name);
+    GLuint GetUnifLoc(const std::string& name);
     // Disable generic vertex attribute array
     void DisableGenericVAA();
 

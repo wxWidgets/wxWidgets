@@ -1,4 +1,4 @@
-aaaa ICON "wxpoem.ico"
+wxpoem ICON "wxpoem.ico"
 
 #include "wx/msw/wx.rc"
 

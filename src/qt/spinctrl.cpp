@@ -15,8 +15,11 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QSpinBox>
+
 template< typename T, typename Widget >
-wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
+wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt() :
+    m_qtSpinBox(NULL)
 {
 }
 
@@ -32,16 +35,21 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    if(!(style & wxSP_ARROW_KEYS))
+    if ( !(style & wxSP_ARROW_KEYS) )
         m_qtSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
 
-    if(style & wxSP_WRAP)
+    if ( style & wxSP_WRAP )
         m_qtSpinBox->setWrapping(true);
+
+    if ( style & wxALIGN_CENTRE_HORIZONTAL )
+        m_qtSpinBox->setAlignment(Qt::AlignHCenter);
+    else if ( style & wxALIGN_RIGHT )
+        m_qtSpinBox->setAlignment(Qt::AlignRight);
 
     m_qtSpinBox->setAccelerated(true); // to match gtk behavior
 
-    SetValue( initial );
     SetRange( min, max );
+    SetValue( initial );
     SetIncrement( inc );
 
     if ( !value.IsEmpty() )
@@ -117,7 +125,7 @@ void wxSpinCtrlQt< T, Widget >::SetSelection(long WXUNUSED(WXUNUSED(from)), long
 }
 
 template< typename T, typename Widget >
-Widget *wxSpinCtrlQt< T, Widget >::GetHandle() const
+QWidget *wxSpinCtrlQt< T, Widget >::GetHandle() const
 {
     return m_qtSpinBox;
 }
@@ -146,7 +154,15 @@ public:
                 this, &wxQtSpinBox::valueChanged);
     }
 private:
-    void valueChanged(int value);
+    void valueChanged(int value)
+    {
+        if ( wxControl *handler = GetHandler() )
+        {
+            wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
+            event.SetInt( value );
+            EmitEvent( event );
+        }
+    }
 };
 
 class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
@@ -154,7 +170,20 @@ class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
 public:
     wxQtDoubleSpinBox( wxWindow *parent, wxControl *handler )
         : wxQtSpinBoxBase< QDoubleSpinBox >( parent, handler )
-    { }
+    {
+        connect(this, static_cast<void (QDoubleSpinBox::*)(double value)>(&QDoubleSpinBox::valueChanged),
+                this, &wxQtDoubleSpinBox::valueChanged);
+    }
+private:
+    void valueChanged(double value)
+    {
+        if ( wxControl *handler = GetHandler() )
+        {
+            wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, handler->GetId() );
+            event.SetValue(value);
+            EmitEvent( event );
+        }
+    }
 };
 
 
@@ -164,7 +193,7 @@ template class wxSpinCtrlQt< int, QSpinBox >;
 
 wxSpinCtrl::wxSpinCtrl()
 {
-    Init(); 
+    Init();
 }
 
 wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
@@ -210,17 +239,6 @@ void wxSpinCtrl::SetValue( const wxString &value )
     wxQtSpinBox * qtSpinBox = dynamic_cast<wxQtSpinBox *> ((QSpinBox *) m_qtSpinBox);
     if (qtSpinBox != NULL)
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
-}
-
-void wxQtSpinBox::valueChanged(int value)
-{
-    wxControl *handler = GetHandler();
-    if ( handler )
-    {
-        wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
-        event.SetInt( value );
-        EmitEvent( event );
-    }
 }
 
 //##############################################################################

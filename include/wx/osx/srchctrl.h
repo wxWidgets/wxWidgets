@@ -27,7 +27,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxSearchCtrlNameStr);
+               const wxString& name = wxASCII_STR(wxSearchCtrlNameStr));
 
     virtual ~wxSearchCtrl();
 
@@ -37,7 +37,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSearchCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxSearchCtrlNameStr));
 
 #if wxUSE_MENUS
     // get/set search button menu
@@ -54,9 +54,8 @@ public:
     virtual void ShowCancelButton( bool show ) wxOVERRIDE;
     virtual bool IsCancelButtonVisible() const wxOVERRIDE;
 
-    // TODO: In 2.9 these should probably be virtual, and declared in the base class...
-    void        SetDescriptiveText(const wxString& text);
-    wxString    GetDescriptiveText() const;
+    virtual void SetDescriptiveText(const wxString& text) wxOVERRIDE;
+    virtual wxString GetDescriptiveText() const wxOVERRIDE;
 
     virtual bool    HandleSearchFieldSearchHit() ;
     virtual bool    HandleSearchFieldCancelHit() ;

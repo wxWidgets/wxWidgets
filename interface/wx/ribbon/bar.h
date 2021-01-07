@@ -6,6 +6,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
+enum wxRibbonBarOption
+{
+    wxRIBBON_BAR_SHOW_PAGE_LABELS,
+    wxRIBBON_BAR_SHOW_PAGE_ICONS,
+    wxRIBBON_BAR_FLOW_HORIZONTAL,
+    wxRIBBON_BAR_FLOW_VERTICAL,
+    wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS,
+    wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS,
+    wxRIBBON_BAR_ALWAYS_SHOW_TABS,
+    wxRIBBON_BAR_SHOW_TOGGLE_BUTTON,
+    wxRIBBON_BAR_SHOW_HELP_BUTTON,
+    wxRIBBON_BAR_DEFAULT_STYLE,
+    wxRIBBON_BAR_FOLDBAR_STYLE
+};
+
+
 /**
     The possible display modes of the panel area of a wxRibbonBar widget.
 
@@ -61,12 +77,41 @@ public:
         Returns the page being changed to, or being clicked on.
     */
     wxRibbonPage* GetPage();
-    
+
     /**
         Sets the page relating to this event.
     */
     void SetPage(wxRibbonPage* page);
 };
+
+
+wxEventType wxEVT_RIBBONBAR_PAGE_CHANGED;
+wxEventType wxEVT_RIBBONBAR_PAGE_CHANGING;
+wxEventType wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN;
+wxEventType wxEVT_RIBBONBAR_TAB_MIDDLE_UP;
+wxEventType wxEVT_RIBBONBAR_TAB_RIGHT_DOWN;
+wxEventType wxEVT_RIBBONBAR_TAB_RIGHT_UP;
+wxEventType wxEVT_RIBBONBAR_TAB_LEFT_DCLICK;
+wxEventType wxEVT_RIBBONBAR_TOGGLED;
+wxEventType wxEVT_RIBBONBAR_HELP_CLICK;
+
+
+class wxRibbonPageTabInfo
+{
+public:
+    wxRect rect;
+    wxRibbonPage *page;
+    int ideal_width;
+    int small_begin_need_separator_width;
+    int small_must_have_separator_width;
+    int minimum_width;
+    bool active;
+    bool hovered;
+    bool highlight;
+    bool shown;
+};
+
+
 
 /**
     @class wxRibbonBar
@@ -75,7 +120,7 @@ public:
     for wxRibbonPage - a ribbon user interface typically has a ribbon bar,
     which contains one or more wxRibbonPages, which in turn each contain one
     or more wxRibbonPanels, which in turn contain controls.
-    
+
     While a wxRibbonBar has tabs similar to a wxNotebook, it does not follow
     the same API for adding pages. Containers like wxNotebook can contain any
     type of window as a page, hence the normal procedure is to create the
@@ -83,13 +128,13 @@ public:
     have wxRibbonPage as children (and a wxRibbonPage can only have a
     wxRibbonBar as parent), when a page is created, it is automatically added
     to the bar - there is no AddPage equivalent to call.
-    
+
     After all pages have been created, and all controls and panels placed on
     those pages, Realize() must be called.
-    
+
     @sa wxRibbonPage
     @sa wxRibbonPanel
-    
+
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
         Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
@@ -168,7 +213,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxRIBBON_BAR_DEFAULT_STYLE);
-    
+
     /**
         Create a ribbon bar in two-step ribbon bar construction.
         Should only be called when the default constructor is used, and
@@ -190,7 +235,7 @@ public:
         tab bar region of the ribbon bar. These margins will be painted with
         the tab background, but tabs and scroll buttons will never be painted
         in the margins.
-        
+
         The left margin could be used for rendering something equivalent to the
         "Office Button", though this is not currently implemented. The right
         margin could be used for rendering a help button, and/or MDI buttons,
@@ -202,7 +247,7 @@ public:
         Set the art provider to be used be the ribbon bar. Also sets the art
         provider on all current wxRibbonPage children, and any wxRibbonPage
         children added in the future.
-        
+
         Note that unlike most other ribbon controls, the ribbon bar creates a
         default art provider when initialised, so an explicit call to
         SetArtProvider() is not required if the default art provider is
@@ -215,17 +260,17 @@ public:
 
     /**
         Set the active page by index, without triggering any events.
-        
+
         @param page
             The zero-based index of the page to activate.
         @return @true if the specified page is now active, @false if it could
             not be activated (for example because the page index is invalid).
     */
     bool SetActivePage(size_t page);
-    
+
     /**
         Set the active page, without triggering any events.
-        
+
         @param page
             The page to activate.
         @return @true if the specified page is now active, @false if it could
@@ -233,21 +278,21 @@ public:
             of the ribbon bar).
     */
     bool SetActivePage(wxRibbonPage* page);
-    
+
     /**
         Get the index of the active page.
-        
+
         In the rare case of no page being active, -1 is returned.
     */
     int GetActivePage() const;
-    
+
     /**
         Get a page by index.
-        
+
         NULL will be returned if the given index is out of range.
     */
     wxRibbonPage* GetPage(int n);
-    
+
     /**
         Get the number of pages in this bar.
 
@@ -257,7 +302,7 @@ public:
 
     /**
         Dismiss the expanded panel of the currently active page.
-        
+
         Calls and returns the value from wxRibbonPage::DismissExpandedPanel()
         for the currently active page, or @false if there is no active page.
     */
@@ -388,7 +433,7 @@ public:
         @since 2.9.2
     */
     bool ArePanelsShown() const;
-    
+
     /**
         Returns the current display mode of the panel area.
 
@@ -404,7 +449,7 @@ public:
         children. This must be called after all of the bar's children have been
         created (and their children created, etc.) - if it is not, then windows
         may not be laid out or sized correctly.
-        
+
         Also calls wxRibbonPage::Realize() on each child page.
     */
     virtual bool Realize();

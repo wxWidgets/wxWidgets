@@ -18,13 +18,13 @@ public:
     wxStatusBarMac();
     wxStatusBarMac(wxWindow *parent, wxWindowID id = wxID_ANY,
            long style = wxSTB_DEFAULT_STYLE,
-           const wxString& name = wxStatusBarNameStr);
+           const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     virtual ~wxStatusBarMac();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
               long style = wxSTB_DEFAULT_STYLE,
-              const wxString& name = wxStatusBarNameStr);
+              const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     // Implementation
     virtual void MacHiliteChanged() wxOVERRIDE;
@@ -34,6 +34,13 @@ protected:
     virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight) wxOVERRIDE;
     virtual void DrawField(wxDC& dc, int i, int textHeight) wxOVERRIDE;
     virtual void DoUpdateStatusText(int number = 0) wxOVERRIDE;
+
+    virtual void InitColours() wxOVERRIDE;
+
+private:
+    wxColour m_textActive, m_textInactive,
+             m_bgActiveFrom, m_bgActiveTo,
+             m_borderActive, m_borderInactive;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBarMac);
     wxDECLARE_EVENT_TABLE();

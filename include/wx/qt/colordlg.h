@@ -10,24 +10,25 @@
 
 #include "wx/dialog.h"
 
-#include <QtWidgets/QColorDialog>
+class QColorDialog;
 
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
 public:
     wxColourDialog() { }
     wxColourDialog(wxWindow *parent,
-                   wxColourData *data = NULL) { Create(parent, data); }
+                   const wxColourData *data = NULL) { Create(parent, data); }
 
-    bool Create(wxWindow *parent, wxColourData *data = NULL);
+    bool Create(wxWindow *parent, const wxColourData *data = NULL);
 
     wxColourData &GetColourData();
 
-    QColorDialog *GetHandle() const { return static_cast<QColorDialog *>(m_qtWindow); }
-
 private:
+    QColorDialog *GetQColorDialog() const;
 
     wxColourData m_data;
+
+    wxDECLARE_DYNAMIC_CLASS(wxColourDialog);
 };
 
 #endif // _WX_QT_COLORDLG_H_

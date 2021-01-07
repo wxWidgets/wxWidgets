@@ -30,16 +30,11 @@ wxBEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
-#define WX_MAC_STATUSBAR_HEIGHT 18
+#define WX_MAC_STATUSBAR_HEIGHT 24
 
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
-
-void wxFrame::Init()
-{
-    m_winLastFocused = NULL;
-}
 
 bool wxFrame::Create(wxWindow *parent,
            wxWindowID id,
@@ -64,14 +59,15 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
+        const int direction = toolbar->GetDirection();
         int w, h;
         toolbar->GetSize(&w, &h);
 
-        if ( toolbar->HasFlag(wxTB_LEFT) )
+        if ( direction == wxTB_LEFT )
         {
             pt.x += w;
         }
-        else if ( toolbar->HasFlag(wxTB_TOP) )
+        else if ( direction == wxTB_TOP )
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
             pt.y += h;
@@ -88,7 +84,7 @@ bool wxFrame::Enable(bool enable)
     if ( !wxWindow::Enable(enable) )
         return false;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
     // we should always enable/disable the menubar, even if we are not current, otherwise
     // we might miss some state change later (happened eg in the docview sample after PrintPreview)
     if ( m_frameMenuBar /*&& m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar()*/)
@@ -156,39 +152,11 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 {
     if ( !event.GetActive() )
     {
-       // remember the last focused child if it is our child
-        m_winLastFocused = FindFocus();
-
-        // so we NULL it out if it's a child from some other frame
-        wxWindow *win = m_winLastFocused;
-        while ( win )
-        {
-            if ( win->IsTopLevel() )
-            {
-                if ( win != this )
-                    m_winLastFocused = NULL;
-
-                break;
-            }
-
-            win = win->GetParent();
-        }
-
         event.Skip();
     }
     else
     {
-        // restore focus to the child which was last focused
-        wxWindow *parent = m_winLastFocused
-            ? m_winLastFocused->GetParent()
-            : NULL;
-
-        if (parent == NULL)
-            parent = this;
-
-        wxSetFocusToChild(parent, &m_winLastFocused);
-
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
         if (m_frameMenuBar != NULL)
         {
             m_frameMenuBar->MacInstallMenuBar();
@@ -205,9 +173,14 @@ void wxFrame::OnActivate(wxActivateEvent& event)
         }
 #endif
     }
+
+#if wxUSE_STATUSBAR
+    if ( GetStatusBar() && GetStatusBar()->IsShown() )
+        GetStatusBar()->Refresh();
+#endif
 }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
 void wxFrame::DetachMenuBar()
 {
     wxFrameBase::DetachMenuBar();
@@ -237,7 +210,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
             m_frameMenuBar->MacInstallMenuBar();
     }
 }
-#endif
+#endif // wxUSE_MENUBAR
 
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
@@ -366,18 +339,20 @@ void wxFrame::PositionToolBar()
 
     if (GetToolBar())
     {
+        const int direction = GetToolBar()->GetDirection();
         int tx, ty, tw, th;
 
         tx = ty = 0 ;
         GetToolBar()->GetSize(&tw, &th);
-        if (GetToolBar()->HasFlag(wxTB_LEFT))
+
+        if (direction == wxTB_LEFT)
         {
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
             // means, pretend we don't have toolbar/status bar, so we
             // have the original client size.
             GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
-        else if (GetToolBar()->HasFlag(wxTB_RIGHT))
+        else if (direction == wxTB_RIGHT)
         {
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
             // means, pretend we don't have toolbar/status bar, so we
@@ -385,7 +360,7 @@ void wxFrame::PositionToolBar()
             tx = cw - tw;
             GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
-        else if (GetToolBar()->HasFlag(wxTB_BOTTOM))
+        else if (direction == wxTB_BOTTOM)
         {
             tx = 0;
             ty = ch - th;
@@ -416,7 +391,7 @@ bool wxFrame::Show(bool show)
 {
     if ( !show )
     {
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
         if (m_frameMenuBar != NULL)
         {
           m_frameMenuBar->MacUninstallMenuBar();

@@ -46,13 +46,28 @@ static unsigned int SpaceCount(char* lineBuffer) {
 	while (*headBuffer == ' ')
 		headBuffer++;
 
-	return headBuffer - lineBuffer;
+	return static_cast<unsigned int>(headBuffer - lineBuffer);
 }
 
-#define YAML_STATE_BITSIZE 16
+static bool KeywordAtChar(char* lineBuffer, char* startComment, const WordList &keywords) {
+	if (lineBuffer == NULL || startComment <= lineBuffer)
+		return false;
+	char* endValue = startComment - 1;
+	while (endValue >= lineBuffer && *endValue == ' ')
+		endValue--;
+	Sci_PositionU len = static_cast<Sci_PositionU>(endValue - lineBuffer) + 1;
+	char s[100];
+	if (len > (sizeof(s) / sizeof(s[0]) - 1))
+		return false;
+	strncpy(s, lineBuffer, len);
+	s[len] = '\0';
+	return (keywords.InList(s));
+}
+
+#define YAML_STATE_BITSIZE		16
 #define YAML_STATE_MASK			(0xFFFF0000)
 #define YAML_STATE_DOCUMENT		(1 << YAML_STATE_BITSIZE)
-#define YAML_STATE_VALUE			(2 << YAML_STATE_BITSIZE)
+#define YAML_STATE_VALUE		(2 << YAML_STATE_BITSIZE)
 #define YAML_STATE_COMMENT		(3 << YAML_STATE_BITSIZE)
 #define YAML_STATE_TEXT_PARENT	(4 << YAML_STATE_BITSIZE)
 #define YAML_STATE_TEXT			(5 << YAML_STATE_BITSIZE)
@@ -139,27 +154,44 @@ static void ColouriseYAMLLine(
 				styler.ColourTo(endPos, SCE_YAML_COMMENT);
 				return;
 			}
+			Sci_PositionU startComment = i;
+			bInQuotes = false;
+			while (startComment < lengthLine) { // Comment must be space padded
+				if (lineBuffer[startComment] == '\'' || lineBuffer[startComment] == '\"')
+					bInQuotes = !bInQuotes;
+				if (lineBuffer[startComment] == '#' && isspacechar(lineBuffer[startComment - 1]) && !bInQuotes)
+					break;
+				startComment++;
+			}
 			styler.SetLineState(currentLine, YAML_STATE_VALUE);
 			if (lineBuffer[i] == '&' || lineBuffer[i] == '*') {
-				styler.ColourTo(endPos, SCE_YAML_REFERENCE);
+				styler.ColourTo(startLine + startComment - 1, SCE_YAML_REFERENCE);
+				if (startComment < lengthLine)
+					styler.ColourTo(endPos, SCE_YAML_COMMENT);
 				return;
 			}
-			if (keywords.InList(&lineBuffer[i])) { // Convertible value (true/false, etc.)
-				styler.ColourTo(endPos, SCE_YAML_KEYWORD);
+			if (KeywordAtChar(&lineBuffer[i], &lineBuffer[startComment], keywords)) { // Convertible value (true/false, etc.)
+				styler.ColourTo(startLine + startComment - 1, SCE_YAML_KEYWORD);
+				if (startComment < lengthLine)
+					styler.ColourTo(endPos, SCE_YAML_COMMENT);
 				return;
-			} else {
-				Sci_PositionU i2 = i;
-				while ((i < lengthLine) && lineBuffer[i]) {
-					if (!(IsASCII(lineBuffer[i]) && isdigit(lineBuffer[i])) && lineBuffer[i] != '-' && lineBuffer[i] != '.' && lineBuffer[i] != ',') {
-						styler.ColourTo(endPos, SCE_YAML_DEFAULT);
-						return;
-					}
-					i++;
-				}
-				if (i > i2) {
-					styler.ColourTo(endPos, SCE_YAML_NUMBER);
+			}
+			Sci_PositionU i2 = i;
+			while ((i < startComment) && lineBuffer[i]) {
+				if (!(IsASCII(lineBuffer[i]) && isdigit(lineBuffer[i])) && lineBuffer[i] != '-'
+				        && lineBuffer[i] != '.' && lineBuffer[i] != ',' && lineBuffer[i] != ' ') {
+					styler.ColourTo(startLine + startComment - 1, SCE_YAML_DEFAULT);
+					if (startComment < lengthLine)
+						styler.ColourTo(endPos, SCE_YAML_COMMENT);
 					return;
 				}
+				i++;
+			}
+			if (i > i2) {
+				styler.ColourTo(startLine + startComment - 1, SCE_YAML_NUMBER);
+				if (startComment < lengthLine)
+					styler.ColourTo(endPos, SCE_YAML_COMMENT);
+				return;
 			}
 			break; // shouldn't get here, but just in case, the rest of the line is coloured the default
 		}
@@ -241,7 +273,7 @@ static void FoldYAMLDoc(Sci_PositionU startPos, Sci_Position length, int /*initS
 		if (lineNext <= docLines) {
 			// Information about next line is only available if not at end of document
 			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
-	}
+		}
 		const int comment = foldComment && IsCommentLine(lineCurrent, styler);
 		const int comment_start = (comment && !prevComment && (lineNext <= docLines) &&
 		                           IsCommentLine(lineNext, styler) && (lev > SC_FOLDLEVELBASE));

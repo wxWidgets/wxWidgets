@@ -31,6 +31,10 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
 
+#if wxUSE_MARKUP
+    void EnableMarkup(bool enable = true);
+#endif // wxUSE_MARKUP
+
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE
     {
         return SetTextValue(value);
@@ -47,7 +51,7 @@ public:
         return true;
     }
 
-    virtual void SetAlignment( int align ) wxOVERRIDE;
+    virtual void GtkUpdateAlignment() wxOVERRIDE;
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
 
@@ -58,6 +62,14 @@ protected:
     bool SetTextValue(const wxString& str);
     bool GetTextValue(wxString& str) const;
 
+    // Return the name of the GtkCellRendererText property to use: "text" or
+    // "markup".
+    const char* GetTextPropertyName() const;
+
+#if wxUSE_MARKUP
+    // True if we should interpret markup in our text.
+    bool m_useMarkup;
+#endif // wxUSE_MARKUP
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };
@@ -94,6 +106,8 @@ public:
     wxDataViewToggleRenderer( const wxString &varianttype = GetDefaultType(),
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
+
+    void ShowAsRadio();
 
     bool SetValue( const wxVariant &value ) wxOVERRIDE;
     bool GetValue( wxVariant &value ) const wxOVERRIDE;
@@ -138,6 +152,8 @@ public:
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
     virtual GtkWidget* GtkGetEditorWidget() const wxOVERRIDE;
+
+    virtual void GtkUpdateAlignment() wxOVERRIDE;
 
 private:
     bool Init(wxDataViewCellMode mode, int align);
@@ -214,9 +230,7 @@ public:
     virtual void GtkPackIntoColumn(GtkTreeViewColumn *column) wxOVERRIDE;
 
 protected:
-    virtual void GtkOnCellChanged(const wxVariant& value,
-                                  const wxDataViewItem& item,
-                                  unsigned col) wxOVERRIDE;
+    virtual wxVariant GtkGetValueFromString(const wxString& str) const wxOVERRIDE;
 
 private:
     wxDataViewIconText   m_value;
@@ -242,7 +256,7 @@ public:
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
-    void SetAlignment( int align ) wxOVERRIDE;
+    virtual void GtkUpdateAlignment() wxOVERRIDE;
 
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
@@ -267,7 +281,7 @@ public:
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 private:
-    virtual void GtkOnTextEdited(const char *itempath, const wxString& str) wxOVERRIDE;
+    virtual wxVariant GtkGetValueFromString(const wxString& str) const wxOVERRIDE;
 };
 
 

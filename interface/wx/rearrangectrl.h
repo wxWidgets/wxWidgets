@@ -13,8 +13,8 @@
     A listbox-like control allowing the user to rearrange the items and to
     enable or disable them.
 
-    This class allows to change the order of the items shown in it as well as
-    to check or uncheck them individually. The data structure used to allow
+    This class allows changing the order of the items shown in it as well as
+    checking or unchecking them individually. The data structure used to allow
     this is the order array which contains the items indices indexed by their
     position with an added twist that the unchecked items are represented by
     the bitwise complement of the corresponding index (for any architecture
@@ -41,10 +41,17 @@
     is to use wxRearrangeCtrl which combines it with two standard buttons to
     move the current item up or down.
 
+    Note that while most of the methods for items manipulation such as
+    Append(), Insert() or Delete(), inherited from wxItemContainer work as
+    expected for this class, Set() somewhat unexpectedly resets the order of
+    the items as it clears the control first, also clearing the order as a side
+    effect, before adding the new items.
+
     @since 2.9.0
 
     @library{wxcore}
     @category{ctrl}
+    @genericAppearance{rearrangelist}
 */
 class wxRearrangeList : public wxCheckListBox
 {
@@ -178,6 +185,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
+    @genericAppearance{rearrangectrl}
  */
 class wxRearrangeCtrl : public wxPanel
 {
@@ -293,7 +301,7 @@ public:
 
     /**
         Effectively creates the dialog for an object created using the default
-        constructor. 
+        constructor.
 
         @param parent
             The dialog parent, possibly @NULL.

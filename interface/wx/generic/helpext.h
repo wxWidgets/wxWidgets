@@ -26,7 +26,7 @@
 
     Lines starting with ';' will be ignored.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{help}
 
     @see wxHelpController
@@ -111,9 +111,9 @@ public:
 
         @param k
             string to search for, empty string will list all entries
-        
-        @param mode    
-            optional parameter allows the search the index (wxHELP_SEARCH_INDEX) 
+
+        @param mode
+            optional parameter allows the search the index (wxHELP_SEARCH_INDEX)
             but this currently only supported by the wxHtmlHelpController.
 
         @return @true on success
