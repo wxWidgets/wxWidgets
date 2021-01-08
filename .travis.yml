@@ -62,7 +62,7 @@ jobs:
           name: wxOSX iOS Xcode 11.4
         - os: osx
           osx_image: xcode11.4
-          env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12" wxCMAKE_SAMPLES=OFF wxCMAKE_TESTS=OFF
+          env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO" wxCMAKE_SAMPLES=OFF wxCMAKE_TESTS=OFF
           name: wxOSX iOS CMake Xcode 11.4
         - dist: bionic
           compiler: gcc
