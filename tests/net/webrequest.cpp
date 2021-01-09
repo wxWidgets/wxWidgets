@@ -197,10 +197,22 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
         Create("/basic-auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
         REQUIRE( request.GetAuthChallenge().IsOk() );
-        request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
-        loop.Run();
-        REQUIRE( request.GetResponse().GetStatus() == 200 );
-        REQUIRE( request.GetState() == wxWebRequest::State_Completed );
+
+        SECTION("Good password")
+        {
+            request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
+            loop.Run();
+            CHECK( request.GetResponse().GetStatus() == 200 );
+            CHECK( request.GetState() == wxWebRequest::State_Completed );
+        }
+
+        SECTION("Bad password")
+        {
+            request.GetAuthChallenge().SetCredentials("wxtest", "foobar");
+            loop.Run();
+            CHECK( request.GetResponse().GetStatus() == 401 );
+            CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
+        }
     }
 
     SECTION("Server auth DIGEST")
@@ -214,10 +226,22 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
         Create("/digest-auth/auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
         REQUIRE( request.GetAuthChallenge().IsOk() );
-        request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
-        loop.Run();
-        REQUIRE( request.GetResponse().GetStatus() == 200 );
-        REQUIRE( request.GetState() == wxWebRequest::State_Completed );
+
+        SECTION("Good password")
+        {
+            request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
+            loop.Run();
+            CHECK( request.GetResponse().GetStatus() == 200 );
+            CHECK( request.GetState() == wxWebRequest::State_Completed );
+        }
+
+        SECTION("Bad password")
+        {
+            request.GetAuthChallenge().SetCredentials("foo", "bar");
+            loop.Run();
+            CHECK( request.GetResponse().GetStatus() == 401 );
+            CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
+        }
     }
 }
 
