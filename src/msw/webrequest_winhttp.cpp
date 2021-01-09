@@ -239,7 +239,7 @@ void wxWebRequestWinHTTP::Start()
 {
     // Parse the URL
     wxURI uri(m_url);
-    bool isSecure = uri.GetScheme().IsSameAs("HTTPS", false);
+    const bool isSecure = uri.GetScheme().CmpNoCase("HTTPS") == 0;
 
     int port;
     if ( !uri.HasPort() )
