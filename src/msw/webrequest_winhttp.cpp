@@ -16,6 +16,7 @@
 
 #include "wx/mstream.h"
 #include "wx/uri.h"
+#include "wx/msw/private.h"
 #include "wx/msw/private/webrequest_winhttp.h"
 
 #ifndef WX_PRECOMP
@@ -58,31 +59,6 @@
 #endif
 
 // Helper functions
-
-static wxString wxWinHTTPErrorToString(DWORD errorCode)
-{
-    wxString errorString;
-
-    LPVOID msgBuf;
-    if ( FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS |
-        FORMAT_MESSAGE_FROM_HMODULE,
-        GetModuleHandle(TEXT("WINHTTP")),
-        errorCode,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPWSTR)&msgBuf,
-        0, NULL) )
-    {
-        errorString.assign((LPWSTR)msgBuf);
-        LocalFree(msgBuf);
-        // Truncate trailing \n\r
-        if ( errorString.size() > 2 )
-            errorString.resize(errorString.size());
-    }
-    return errorString;
-}
 
 static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel,
     LPCWSTR pwszName = WINHTTP_HEADER_NAME_BY_INDEX)
@@ -254,7 +230,8 @@ void wxWebRequestWinHTTP::CreateResponse()
 
 void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
 {
-    wxString failMessage = wxWinHTTPErrorToString(errorCode);
+    wxString failMessage = wxMSWFormatMessage(errorCode,
+                                              GetModuleHandle(TEXT("WINHTTP")));
     SetState(wxWebRequest::State_Failed, failMessage);
 }
 

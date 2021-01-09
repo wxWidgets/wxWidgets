@@ -1056,19 +1056,22 @@ unsigned long wxSysErrorCode()
 #endif  //Win/Unix
 }
 
-wxString wxSysErrorMsgStr(unsigned long nErrCode)
-{
-    if ( nErrCode == 0 )
-        nErrCode = wxSysErrorCode();
-
 #if defined(__WINDOWS__)
+
+wxString wxMSWFormatMessage(DWORD nErrCode, HMODULE hModule)
+{
+    DWORD flags = FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                  FORMAT_MESSAGE_FROM_SYSTEM |
+                  FORMAT_MESSAGE_IGNORE_INSERTS;
+    if ( hModule )
+        flags |= FORMAT_MESSAGE_FROM_HMODULE;
+
     // get error message from system
     LPVOID lpMsgBuf;
     if ( ::FormatMessage
          (
-            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-            FORMAT_MESSAGE_IGNORE_INSERTS,
-            NULL,
+            flags,
+            hModule,
             nErrCode,
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             (LPTSTR)&lpMsgBuf,
@@ -1103,6 +1106,17 @@ wxString wxSysErrorMsgStr(unsigned long nErrCode)
     }
 
     return str;
+}
+
+#endif // __WINDOWS__
+
+wxString wxSysErrorMsgStr(unsigned long nErrCode)
+{
+    if ( nErrCode == 0 )
+        nErrCode = wxSysErrorCode();
+
+#if defined(__WINDOWS__)
+    return wxMSWFormatMessage(nErrCode);
 #else // !__WINDOWS__
         char buffer[1024];
         char *errorMsg = buffer;

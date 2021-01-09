@@ -972,6 +972,10 @@ enum wxWinVersion
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
 
+// This is similar to wxSysErrorMsgStr(), but takes an extra HMODULE parameter
+// specific to wxMSW.
+WXDLLIMPEXP_BASE wxString wxMSWFormatMessage(DWORD nErrCode, HMODULE hModule = 0);
+
 #if wxUSE_GUI && defined(__WXMSW__)
 
 // cursor stuff

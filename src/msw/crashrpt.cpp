@@ -28,6 +28,7 @@
 
 #include "wx/msw/debughlp.h"
 #include "wx/msw/crashrpt.h"
+#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // classes
@@ -356,20 +357,7 @@ wxString wxCrashContext::GetExceptionString() const
 
         default:
             // unknown exception, ask NTDLL for the name
-            if ( !::FormatMessage
-                    (
-                     FORMAT_MESSAGE_IGNORE_INSERTS |
-                     FORMAT_MESSAGE_FROM_HMODULE,
-                     ::GetModuleHandle(wxT("NTDLL.DLL")),
-                     code,
-                     0,
-                     wxStringBuffer(s, 1024),
-                     1024,
-                     0
-                    ) )
-            {
-                s.Printf(wxT("UNKNOWN_EXCEPTION(%d)"), code);
-            }
+            s = wxMSWFormatMessage(code, ::GetModuleHandle(wxT("NTDLL.DLL")));
     }
 
     #undef CASE_EXCEPTION
