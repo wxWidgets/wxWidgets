@@ -458,7 +458,7 @@ wxWebSessionWinHTTP::wxWebSessionWinHTTP():
 
 wxWebSessionWinHTTP::~wxWebSessionWinHTTP()
 {
-    if ( m_handle != INVALID_HANDLE_VALUE )
+    if ( m_handle )
         ::WinHttpCloseHandle(m_handle);
 }
 
