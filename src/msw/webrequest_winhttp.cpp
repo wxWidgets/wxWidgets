@@ -95,6 +95,12 @@ static wxString wxWinHTTPQueryOptionString(HINTERNET hInternet, DWORD dwOption)
     return result;
 }
 
+static inline
+void wxWinHTTPSetOption(HINTERNET hInternet, DWORD dwOption, DWORD dwValue)
+{
+    ::WinHttpSetOption(hInternet, dwOption, &dwValue, sizeof(dwValue));
+}
+
 static void CALLBACK wxRequestStatusCallback(
     HINTERNET WXUNUSED(hInternet),
     DWORD_PTR dwContext,
@@ -484,24 +490,21 @@ bool wxWebSessionWinHTTP::Open()
     }
 
     // Try to enable HTTP/2 (available since Win 10 1607)
-    DWORD protFlags = WINHTTP_PROTOCOL_FLAG_HTTP2;
-    ::WinHttpSetOption(m_handle, WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL,
-        &protFlags, sizeof(protFlags));
+    wxWinHTTPSetOption(m_handle, WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL,
+                       WINHTTP_PROTOCOL_FLAG_HTTP2);
 
     // Try to enable GZIP and DEFLATE (available since Win 8.1)
-    DWORD decompressFlags = WINHTTP_DECOMPRESSION_FLAG_ALL;
-    ::WinHttpSetOption(m_handle, WINHTTP_OPTION_DECOMPRESSION,
-        &decompressFlags, sizeof(decompressFlags));
+    wxWinHTTPSetOption(m_handle, WINHTTP_OPTION_DECOMPRESSION,
+                       WINHTTP_DECOMPRESSION_FLAG_ALL);
 
     // Try to enable modern TLS for older Windows versions
     if ( !wxCheckOsVersion(6, 3) )
     {
-        DWORD securityFlags = WINHTTP_FLAG_SECURE_PROTOCOL_SSL3 |
-            WINHTTP_FLAG_SECURE_PROTOCOL_TLS1 |
-            WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_1 |
-            WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2;
-        ::WinHttpSetOption(m_handle, WINHTTP_OPTION_SECURE_PROTOCOLS,
-            &securityFlags, sizeof(securityFlags));
+        wxWinHTTPSetOption(m_handle, WINHTTP_OPTION_SECURE_PROTOCOLS,
+                           WINHTTP_FLAG_SECURE_PROTOCOL_SSL3 |
+                           WINHTTP_FLAG_SECURE_PROTOCOL_TLS1 |
+                           WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_1 |
+                           WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2);
     }
 
     return true;
