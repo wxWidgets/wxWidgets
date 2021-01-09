@@ -144,8 +144,10 @@ wxWebRequestWinHTTP::~wxWebRequestWinHTTP()
         ::WinHttpCloseHandle(m_connect);
 }
 
-void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
-    LPVOID lpvStatusInformation, DWORD dwStatusInformationLength)
+void
+wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
+                                    LPVOID lpvStatusInformation,
+                                    DWORD dwStatusInformationLength)
 {
     switch ( dwInternetStatus )
     {
@@ -155,22 +157,29 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             else
                 CreateResponse();
             break;
+
         case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
             if ( dwStatusInformationLength > 0 )
             {
-                if ( !m_response->ReportAvailableData(dwStatusInformationLength) &&
-                    GetState() != wxWebRequest::State_Cancelled )
+                if ( !m_response->ReportAvailableData(dwStatusInformationLength)
+                        && GetState() != wxWebRequest::State_Cancelled )
                     SetFailedWithLastError();
             }
             else
+            {
                 SetState(wxWebRequest::State_Completed);
+            }
             break;
+
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
             WriteData();
             break;
+
         case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
         {
-            LPWINHTTP_ASYNC_RESULT asyncResult = reinterpret_cast<LPWINHTTP_ASYNC_RESULT>(lpvStatusInformation);
+            LPWINHTTP_ASYNC_RESULT
+                asyncResult = reinterpret_cast<LPWINHTTP_ASYNC_RESULT>(lpvStatusInformation);
+
             // "Failing" with "cancelled" error is not actually an error if
             // we're expecting it, i.e. if our Cancel() had been called.
             if ( asyncResult->dwError == ERROR_WINHTTP_OPERATION_CANCELLED &&
@@ -188,49 +197,67 @@ void wxWebRequestWinHTTP::WriteData()
     int dataWriteSize = 8 * 1024;
     if ( m_dataWritten + dataWriteSize > m_dataSize )
         dataWriteSize = m_dataSize - m_dataWritten;
-    if ( dataWriteSize )
+    if ( !dataWriteSize )
     {
-        m_dataWriteBuffer.Clear();
-        m_dataWriteBuffer.GetWriteBuf(dataWriteSize);
-        m_dataStream->Read(m_dataWriteBuffer.GetData(), dataWriteSize);
-
-        if ( !::WinHttpWriteData(m_request, m_dataWriteBuffer.GetData(), dataWriteSize, NULL) )
-            SetFailedWithLastError();
-        m_dataWritten += dataWriteSize;
-    }
-    else
         CreateResponse();
+        return;
+    }
+
+    m_dataWriteBuffer.Clear();
+    m_dataWriteBuffer.GetWriteBuf(dataWriteSize);
+    m_dataStream->Read(m_dataWriteBuffer.GetData(), dataWriteSize);
+
+    if ( !::WinHttpWriteData
+            (
+                m_request,
+                m_dataWriteBuffer.GetData(),
+                dataWriteSize,
+                NULL    // [out] bytes written, must be null in async mode
+            ) )
+    {
+        SetFailedWithLastError();
+        return;
+    }
+
+    m_dataWritten += dataWriteSize;
 }
 
 void wxWebRequestWinHTTP::CreateResponse()
 {
-    if ( ::WinHttpReceiveResponse(m_request, NULL) )
+    if ( !::WinHttpReceiveResponse(m_request, NULL) )
     {
-        m_response.reset(new wxWebResponseWinHTTP(*this));
-        // wxWebResponseWinHTTP ctor could have changed the state if its
-        // initialization failed, so check for this.
-        if ( GetState() == wxWebRequest::State_Failed )
-            return;
-
-        int status = m_response->GetStatus();
-        if ( status == HTTP_STATUS_DENIED || status == HTTP_STATUS_PROXY_AUTH_REQ )
-        {
-            m_authChallenge.reset(new wxWebAuthChallengeWinHTTP(
-                status == HTTP_STATUS_PROXY_AUTH_REQ ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
-            if ( m_authChallenge->Init() )
-                SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
-            else
-                SetFailedWithLastError();
-        }
-        else if ( CheckServerStatus() )
-        {
-            // Start reading the response
-            if ( !m_response->ReadData() )
-                SetFailedWithLastError();
-        }
-    }
-    else
         SetFailedWithLastError();
+        return;
+    }
+
+    m_response.reset(new wxWebResponseWinHTTP(*this));
+    // wxWebResponseWinHTTP ctor could have changed the state if its
+    // initialization failed, so check for this.
+    if ( GetState() == wxWebRequest::State_Failed )
+        return;
+
+    int status = m_response->GetStatus();
+    if ( status == HTTP_STATUS_DENIED || status == HTTP_STATUS_PROXY_AUTH_REQ )
+    {
+        m_authChallenge.reset(new wxWebAuthChallengeWinHTTP
+            (
+                status == HTTP_STATUS_PROXY_AUTH_REQ
+                    ? wxWebAuthChallenge::Source_Proxy
+                    : wxWebAuthChallenge::Source_Server,
+                *this
+            ));
+
+        if ( m_authChallenge->Init() )
+            SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
+        else
+            SetFailedWithLastError();
+    }
+    else if ( CheckServerStatus() )
+    {
+        // Start reading the response
+        if ( !m_response->ReadData() )
+            SetFailedWithLastError();
+    }
 }
 
 void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
@@ -284,11 +311,17 @@ void wxWebRequestWinHTTP::Start()
         objectName += "?" + wxString(urlComps.lpszExtraInfo, urlComps.dwExtraInfoLength);
 
     // Open a request
-    m_request = ::WinHttpOpenRequest(m_connect,
-        method.wc_str(), objectName.wc_str(),
-        NULL, WINHTTP_NO_REFERER,
-        WINHTTP_DEFAULT_ACCEPT_TYPES,
-        urlComps.nScheme == INTERNET_SCHEME_HTTPS ? WINHTTP_FLAG_SECURE : 0);
+    m_request = ::WinHttpOpenRequest
+                  (
+                    m_connect,
+                    method.wc_str(), objectName.wc_str(),
+                    NULL,   // protocol version: use default, i.e. HTTP/1.1
+                    WINHTTP_NO_REFERER,
+                    WINHTTP_DEFAULT_ACCEPT_TYPES,
+                    urlComps.nScheme == INTERNET_SCHEME_HTTPS
+                        ? WINHTTP_FLAG_SECURE
+                        : 0
+                  );
     if ( m_request == NULL )
     {
         SetFailedWithLastError();
@@ -296,13 +329,16 @@ void wxWebRequestWinHTTP::Start()
     }
 
     // Register callback
-    if ( ::WinHttpSetStatusCallback(m_request,
-        wxRequestStatusCallback,
-        WINHTTP_CALLBACK_FLAG_READ_COMPLETE |
-        WINHTTP_CALLBACK_FLAG_WRITE_COMPLETE |
-        WINHTTP_CALLBACK_FLAG_SENDREQUEST_COMPLETE |
-        WINHTTP_CALLBACK_FLAG_REQUEST_ERROR,
-        wxRESERVED_PARAM) == WINHTTP_INVALID_STATUS_CALLBACK )
+    if ( ::WinHttpSetStatusCallback
+           (
+                m_request,
+                wxRequestStatusCallback,
+                WINHTTP_CALLBACK_FLAG_READ_COMPLETE |
+                WINHTTP_CALLBACK_FLAG_WRITE_COMPLETE |
+                WINHTTP_CALLBACK_FLAG_SENDREQUEST_COMPLETE |
+                WINHTTP_CALLBACK_FLAG_REQUEST_ERROR,
+                wxRESERVED_PARAM
+            ) == WINHTTP_INVALID_STATUS_CALLBACK )
     {
         SetFailedWithLastError();
         return;
@@ -315,22 +351,31 @@ void wxWebRequestWinHTTP::SendRequest()
 {
     // Combine all headers to a string
     wxString allHeaders;
-    for ( wxWebRequestHeaderMap::const_iterator header = m_headers.begin(); header != m_headers.end(); ++header )
+    for ( wxWebRequestHeaderMap::const_iterator header = m_headers.begin();
+          header != m_headers.end();
+          ++header )
+    {
         allHeaders.append(wxString::Format("%s: %s\n", header->first, header->second));
+    }
 
     if ( m_dataSize )
         m_dataWritten = 0;
 
     // Send request
-    if ( ::WinHttpSendRequest(m_request,
-        allHeaders.wc_str(), allHeaders.length(),
-        NULL, 0, m_dataSize,
-        (DWORD_PTR)this) )
+    if ( !::WinHttpSendRequest
+            (
+                m_request,
+                allHeaders.wc_str(), allHeaders.length(),
+                NULL, 0,        // No extra optional data right now
+                m_dataSize,
+                (DWORD_PTR)this
+            ) )
     {
-        SetState(wxWebRequest::State_Active);
-    }
-    else
         SetFailedWithLastError();
+        return;
+    }
+
+    SetState(wxWebRequest::State_Active);
 }
 
 void wxWebRequestWinHTTP::Cancel()
@@ -351,10 +396,10 @@ wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
     wxWebResponseImpl(request),
     m_requestHandle(request.GetHandle())
 {
-    wxString contentLengthStr = wxWinHTTPQueryHeaderString(m_requestHandle,
-        WINHTTP_QUERY_CONTENT_LENGTH);
+    const wxString contentLengthStr =
+        wxWinHTTPQueryHeaderString(m_requestHandle, WINHTTP_QUERY_CONTENT_LENGTH);
     if ( contentLengthStr.empty() ||
-        !contentLengthStr.ToLongLong(&m_contentLength) )
+            !contentLengthStr.ToLongLong(&m_contentLength) )
         m_contentLength = -1;
 
     Init();
@@ -367,17 +412,23 @@ wxString wxWebResponseWinHTTP::GetURL() const
 
 wxString wxWebResponseWinHTTP::GetHeader(const wxString& name) const
 {
-    return wxWinHTTPQueryHeaderString(m_requestHandle,
-        WINHTTP_QUERY_CUSTOM, name.wc_str());
+    return wxWinHTTPQueryHeaderString(m_requestHandle, WINHTTP_QUERY_CUSTOM,
+                                      name.wc_str());
 }
 
 int wxWebResponseWinHTTP::GetStatus() const
 {
     DWORD status = 0;
     DWORD statusSize = sizeof(status);
-    if ( !::WinHttpQueryHeaders(m_requestHandle,
-        WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
-        WINHTTP_HEADER_NAME_BY_INDEX, &status, &statusSize, 0) )
+    if ( !::WinHttpQueryHeaders
+            (
+                m_requestHandle,
+                WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
+                WINHTTP_HEADER_NAME_BY_INDEX,
+                &status,
+                &statusSize,
+                0   // header index, unused with status code "header"
+            ) )
     {
         wxLogLastError("WinHttpQueryHeaders/status");
     }
@@ -392,11 +443,13 @@ wxString wxWebResponseWinHTTP::GetStatusText() const
 
 bool wxWebResponseWinHTTP::ReadData()
 {
-    if ( ::WinHttpReadData(m_requestHandle,
-        GetDataBuffer(m_readSize), m_readSize, NULL) )
-        return true;
-    else
-        return false;
+    return ::WinHttpReadData
+             (
+                m_requestHandle,
+                GetDataBuffer(m_readSize),
+                m_readSize,
+                NULL    // [out] bytes read, must be null in async mode
+             ) == TRUE;
 }
 
 bool wxWebResponseWinHTTP::ReportAvailableData(DWORD dataLen)
@@ -423,37 +476,53 @@ bool wxWebAuthChallengeWinHTTP::Init()
     DWORD supportedSchemes;
     DWORD firstScheme;
 
-    if ( ::WinHttpQueryAuthSchemes(m_request.GetHandle(),
-        &supportedSchemes, &firstScheme, &m_target) )
+    if ( !::WinHttpQueryAuthSchemes
+            (
+                m_request.GetHandle(),
+                &supportedSchemes,
+                &firstScheme,
+                &m_target
+            ) )
     {
-        if ( supportedSchemes & WINHTTP_AUTH_SCHEME_NEGOTIATE )
-            m_selectedScheme = WINHTTP_AUTH_SCHEME_NEGOTIATE;
-        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_NTLM )
-            m_selectedScheme = WINHTTP_AUTH_SCHEME_NTLM;
-        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_PASSPORT )
-            m_selectedScheme = WINHTTP_AUTH_SCHEME_PASSPORT;
-        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_DIGEST )
-            m_selectedScheme = WINHTTP_AUTH_SCHEME_DIGEST;
-        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_BASIC )
-            m_selectedScheme = WINHTTP_AUTH_SCHEME_BASIC;
-        else
-            m_selectedScheme = 0;
-
-        if ( m_selectedScheme )
-            return true;
+        wxLogLastError("WinHttpQueryAuthSchemes");
+        return false;
     }
 
-    return false;
+    if ( supportedSchemes & WINHTTP_AUTH_SCHEME_NEGOTIATE )
+        m_selectedScheme = WINHTTP_AUTH_SCHEME_NEGOTIATE;
+    else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_NTLM )
+        m_selectedScheme = WINHTTP_AUTH_SCHEME_NTLM;
+    else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_PASSPORT )
+        m_selectedScheme = WINHTTP_AUTH_SCHEME_PASSPORT;
+    else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_DIGEST )
+        m_selectedScheme = WINHTTP_AUTH_SCHEME_DIGEST;
+    else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_BASIC )
+        m_selectedScheme = WINHTTP_AUTH_SCHEME_BASIC;
+    else
+        m_selectedScheme = 0;
+
+    return m_selectedScheme != 0;
 }
 
-void wxWebAuthChallengeWinHTTP::SetCredentials(const wxString& user,
-    const wxString& password)
+void
+wxWebAuthChallengeWinHTTP::SetCredentials(const wxString& user,
+                                          const wxString& password)
 {
-    if ( ::WinHttpSetCredentials(m_request.GetHandle(), m_target, m_selectedScheme,
-        user.wc_str(), password.wc_str(), NULL) )
-        m_request.SendRequest();
-    else
+    if ( !::WinHttpSetCredentials
+            (
+                m_request.GetHandle(),
+                m_target,
+                m_selectedScheme,
+                user.wc_str(),
+                password.wc_str(),
+                wxRESERVED_PARAM
+            ) )
+    {
         m_request.SetFailedWithLastError();
+        return;
+    }
+
+    m_request.SendRequest();
 }
 
 
@@ -480,9 +549,14 @@ bool wxWebSessionWinHTTP::Open()
     else
         accessType = WINHTTP_ACCESS_TYPE_DEFAULT_PROXY;
 
-    m_handle = ::WinHttpOpen(GetHeaders().find("User-Agent")->second.wc_str(), accessType,
-        WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS,
-        WINHTTP_FLAG_ASYNC);
+    m_handle = ::WinHttpOpen
+                 (
+                    GetHeaders().find("User-Agent")->second.wc_str(),
+                    accessType,
+                    WINHTTP_NO_PROXY_NAME,
+                    WINHTTP_NO_PROXY_BYPASS,
+                    WINHTTP_FLAG_ASYNC
+                 );
     if ( !m_handle )
     {
         wxLogLastError("WinHttpOpen");
