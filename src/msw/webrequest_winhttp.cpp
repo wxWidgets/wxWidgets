@@ -15,7 +15,6 @@
 #if wxUSE_WEBREQUEST_WINHTTP
 
 #include "wx/mstream.h"
-#include "wx/uri.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/webrequest_winhttp.h"
 
@@ -238,19 +237,28 @@ void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
 void wxWebRequestWinHTTP::Start()
 {
     // Parse the URL
-    wxURI uri(m_url);
-    const bool isSecure = uri.GetScheme().CmpNoCase("HTTPS") == 0;
+    URL_COMPONENTS urlComps;
+    wxZeroMemory(urlComps);
+    urlComps.dwStructSize = sizeof(urlComps);
+    urlComps.dwSchemeLength =
+    urlComps.dwHostNameLength =
+    urlComps.dwUrlPathLength =
+    urlComps.dwExtraInfoLength = (DWORD)-1;
 
-    int port;
-    if ( !uri.HasPort() )
-        port = isSecure ? INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT;
-    else
-        port = wxAtoi(uri.GetPort());
+    if ( !::WinHttpCrackUrl(m_url.wc_str(), m_url.length(), 0, &urlComps) )
+    {
+        SetFailedWithLastError();
+        return;
+    }
 
     // Open a connection
-    m_connect = ::WinHttpConnect(
-        m_sessionWinHTTP.GetHandle(),
-        uri.GetServer().wc_str(), port, 0);
+    m_connect = ::WinHttpConnect
+                (
+                     m_sessionWinHTTP.GetHandle(),
+                     wxString(urlComps.lpszHostName, urlComps.dwHostNameLength),
+                     urlComps.nPort,
+                     0 // reserved
+                );
     if ( m_connect == NULL )
     {
         SetFailedWithLastError();
@@ -265,16 +273,16 @@ void wxWebRequestWinHTTP::Start()
     else
         method = "GET";
 
-    wxString objectName = uri.GetPath();
-    if ( uri.HasQuery() )
-        objectName += "?" + uri.GetQuery();
+    wxString objectName(urlComps.lpszUrlPath, urlComps.dwUrlPathLength);
+    if ( urlComps.dwExtraInfoLength )
+        objectName += "?" + wxString(urlComps.lpszExtraInfo, urlComps.dwExtraInfoLength);
 
     // Open a request
     m_request = ::WinHttpOpenRequest(m_connect,
         method.wc_str(), objectName.wc_str(),
         NULL, WINHTTP_NO_REFERER,
         WINHTTP_DEFAULT_ACCEPT_TYPES,
-        (isSecure) ? WINHTTP_FLAG_SECURE : 0);
+        urlComps.nScheme == INTERNET_SCHEME_HTTPS ? WINHTTP_FLAG_SECURE : 0);
     if ( m_request == NULL )
     {
         SetFailedWithLastError();
