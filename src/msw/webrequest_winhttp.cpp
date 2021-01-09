@@ -291,7 +291,7 @@ void wxWebRequestWinHTTP::Start()
 
     // Register callback
     if ( ::WinHttpSetStatusCallback(m_request,
-        (WINHTTP_STATUS_CALLBACK)wxRequestStatusCallback,
+        wxRequestStatusCallback,
         WINHTTP_CALLBACK_FLAG_READ_COMPLETE |
         WINHTTP_CALLBACK_FLAG_WRITE_COMPLETE |
         WINHTTP_CALLBACK_FLAG_SENDREQUEST_COMPLETE |
