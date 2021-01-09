@@ -764,6 +764,9 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
 
     <template id="wx_dll_b" template="wx_lib_b">
         <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
+        <if cond="FORMAT=='autoconf'">
+            <set var="__dllinstdir">$(DLLDIR)</set>
+        </if>
         <dllname>$(WXDLLNAME)</dllname>
         <version>$(WX_VERSION)</version>
         <so_version>$(WXSOVERSION)</so_version>
