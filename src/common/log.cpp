@@ -1056,7 +1056,7 @@ unsigned long wxSysErrorCode()
 #endif  //Win/Unix
 }
 
-static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long nErrCode)
+wxString wxSysErrorMsgStr(unsigned long nErrCode)
 {
     if ( nErrCode == 0 )
         nErrCode = wxSysErrorCode();
@@ -1080,33 +1080,29 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
 
         // if this happens, something is seriously wrong, so don't use _() here
         // for safety
-        wxSprintf(szBuf, wxS("unknown error 0x%lx"), nErrCode);
-        return szBuf;
+        return wxString::Format(wxS("unknown error 0x%lx"), nErrCode);
     }
 
+    wxString str;
 
     // copy it to our buffer and free memory
     // Crashes on SmartPhone (FIXME)
     if( lpMsgBuf != 0 )
     {
-        wxStrlcpy(szBuf, (const wxChar *)lpMsgBuf, sizeBuf);
+        str = static_cast<const wxChar *>(lpMsgBuf);
 
         LocalFree(lpMsgBuf);
 
         // returned string is ended with '\r\n' - bad
-        size_t len = wxStrlen(szBuf);
+        size_t len = str.length();
         if ( len >= 2 ) {
             // truncate string
-            if ( szBuf[len - 2] == wxS('\r') )
-                szBuf[len - 2] = wxS('\0');
+            if ( str[len - 2] == wxS('\r') )
+                str.Truncate(len - 2);
         }
     }
-    else
-    {
-        szBuf[0] = wxS('\0');
-    }
 
-    return szBuf;
+    return str;
 #else // !__WINDOWS__
         char buffer[1024];
         char *errorMsg = buffer;
@@ -1123,29 +1119,18 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
 #endif
 
         // at this point errorMsg might not point to buffer anymore
-        szBuf[0] = wxS('\0');
-    #if wxUSE_UNICODE
-        wxConvCurrent->MB2WC(szBuf, errorMsg, sizeBuf - 1);
-        szBuf[sizeBuf - 1] = wxS('\0');
-    #else
-        wxStrlcpy(szBuf, errorMsg, sizeBuf);
-    #endif
-        return szBuf;
+        return errorMsg;
 #endif  // __WINDOWS__/!__WINDOWS__
 }
 
-// get error message from system
+// get error message from system as a char pointer: this function has to use a
+// static buffer of fixed size, so should be avoided in favour of the function
+// returning wxString
 const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 {
     static wxChar s_szBuf[1024];
-    return GetSysErrorMsg(s_szBuf, WXSIZEOF(s_szBuf), nErrCode);
-}
-
-// get error message from system as wxString
-wxString wxSysErrorMsgStr(unsigned long nErrCode)
-{
-    wxChar szBuf[1024];
-    return GetSysErrorMsg(szBuf, WXSIZEOF(szBuf), nErrCode);
+    wxStrlcpy(s_szBuf, wxSysErrorMsgStr(nErrCode), WXSIZEOF(s_szBuf));
+    return s_szBuf;
 }
 
 #endif // wxUSE_LOG
