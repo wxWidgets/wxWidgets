@@ -776,29 +776,11 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     if (!m_logicalFunctionSupported)
         return;
 
-    wxPen pointPen(m_pen.GetColour());
-    wxDCPenChanger penChanger(*GetOwner(), pointPen);
+    wxDCBrushChanger brushChanger(*GetOwner(), wxBrush(m_pen.GetColour()));
+    wxDCPenChanger penChanger(*GetOwner(), *wxTRANSPARENT_PEN);
 
-#if defined(__WXMSW__) && wxUSE_GRAPHICS_GDIPLUS
-    // single point path does not work with GDI+
-    if (m_graphicContext->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer())
-    {
-        const double dx = 0.25 / m_scaleX;
-        const double dy = 0.25 / m_scaleY;
-        m_graphicContext->StrokeLine(x - dx, y - dy, x + dx, y + dy);
-    }
-    else
-#endif
-    {
-#ifdef __WXOSX__
-        m_graphicContext->StrokeLine(x, y, x, y);
-#else
-        wxGraphicsPath path(m_graphicContext->CreatePath());
-        path.MoveToPoint(x, y);
-        path.CloseSubpath();
-        m_graphicContext->StrokePath(path);
-#endif
-    }
+    // Raster-based DCs draw a single pixel regardless of scale
+    m_graphicContext->DrawRectangle(x, y, 1 / m_scaleX, 1 / m_scaleY);
 
     CalcBoundingBox(x, y);
 }
