@@ -194,7 +194,7 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
             return;
         }
 
-        Create("/digest-auth/auth/wxtest/wxwidgets");
+        Create("/basic-auth/wxtest/wxwidgets");
         Run(wxWebRequest::State_Unauthorized, 401);
         REQUIRE( request.GetAuthChallenge().IsOk() );
         request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
