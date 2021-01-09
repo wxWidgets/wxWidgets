@@ -1076,8 +1076,8 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
             NULL
          ) == 0 )
     {
-        wxLogDebug(wxS("FormatMessage failed with error 0x%lx in %s"),
-            GetLastError(), __WXFUNCTION__ ? __WXFUNCTION__ : "");
+        wxLogDebug(wxS("FormatMessage failed with error 0x%lx"), GetLastError());
+
         // if this happens, something is seriously wrong, so don't use _() here
         // for safety
         wxSprintf(szBuf, wxS("unknown error 0x%lx"), nErrCode);
