@@ -64,6 +64,7 @@ public:
 
     wxWebRequest::Storage GetStorage() const { return m_storage; }
 
+    // Precondition for this method checked by caller: current state is idle.
     virtual void Start() = 0;
 
     virtual void Cancel() = 0;

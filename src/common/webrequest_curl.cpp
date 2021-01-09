@@ -187,9 +187,6 @@ wxWebRequestCURL::~wxWebRequestCURL()
 
 void wxWebRequestCURL::Start()
 {
-    if ( GetState() != wxWebRequest::State_Idle )
-        return;
-
     m_response.reset(new wxWebResponseCURL(*this));
 
     if ( m_dataSize )

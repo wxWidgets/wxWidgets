@@ -391,6 +391,9 @@ void wxWebRequest::Start()
 {
     wxCHECK_IMPL_VOID();
 
+    wxCHECK_RET( m_impl->GetState() == wxWebRequest::State_Idle,
+                 "Completed requests can not be restarted" );
+
     m_impl->Start();
 }
 

@@ -187,6 +187,9 @@ public:
 
         Events will be triggered on success or failure.
 
+        The current state must be @c State_Idle, already started requests can't
+        be started again.
+
         @see Cancel()
     */
     void Start();

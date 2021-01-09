@@ -237,9 +237,6 @@ void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
 
 void wxWebRequestWinHTTP::Start()
 {
-    if ( GetState() != wxWebRequest::State_Idle ) // Completed requests can not be restarted
-        return;
-
     // Parse the URL
     wxURI uri(m_url);
     bool isSecure = uri.GetScheme().IsSameAs("HTTPS", false);
