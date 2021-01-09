@@ -368,7 +368,6 @@ int wxWebResponseWinHTTP::GetStatus() const
         WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
         WINHTTP_HEADER_NAME_BY_INDEX, &status, &statusSize, 0) )
     {
-        status = 0;
         wxLogLastError("WinHttpQueryHeaders/status");
     }
 
