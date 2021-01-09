@@ -208,10 +208,10 @@ void wxWebRequestWinHTTP::CreateResponse()
             return;
 
         int status = m_response->GetStatus();
-        if ( status == 401 || status == 407)
+        if ( status == HTTP_STATUS_DENIED || status == HTTP_STATUS_PROXY_AUTH_REQ )
         {
             m_authChallenge.reset(new wxWebAuthChallengeWinHTTP(
-                (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
+                status == HTTP_STATUS_PROXY_AUTH_REQ ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
             if ( m_authChallenge->Init() )
                 SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
             else
@@ -243,7 +243,7 @@ void wxWebRequestWinHTTP::Start()
 
     int port;
     if ( !uri.HasPort() )
-        port = isSecure ? 443 : 80;
+        port = isSecure ? INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT;
     else
         port = wxAtoi(uri.GetPort());
 
