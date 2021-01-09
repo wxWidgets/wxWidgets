@@ -132,7 +132,7 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
 void wxDataFormat::SetType( wxDataFormatId dataType )
 {
     m_type = dataType;
-    m_format = GetFormatForType(dataType);
+    m_format = wxCFRetain(GetFormatForType(dataType));
     m_id = wxCFStringRef( m_format ).AsString();
 }
 
@@ -181,7 +181,7 @@ wxString wxDataFormat::GetId() const
 
 void wxDataFormat::SetId( NativeFormat format )
 {
-    m_format = format;
+    m_format = wxCFRetain(format);
     m_id = wxCFStringRef( m_format ).AsString();
     if ( m_id.StartsWith(privateUTIPrefix) )
         m_id = m_id.Mid(privateUTIPrefix.length());
@@ -557,9 +557,9 @@ bool wxDataObject::CanReadFromSource( wxDataObject * source ) const
 
 void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir) const
 {
-    size_t nFormats = GetFormatCount(wxDataObject::Set);
-    wxScopedArray<wxDataFormat> array(GetFormatCount());
-    GetAllFormats(array.get(), wxDataObject::Set);
+    size_t nFormats = GetFormatCount(dir);
+    wxScopedArray<wxDataFormat> array(nFormats);
+    GetAllFormats(array.get(), dir);
 
     for (size_t i = 0; i < nFormats; i++)
     {
