@@ -138,10 +138,9 @@ public:
     HINTERNET GetHandle() const { return m_handle; }
 
 private:
-    bool m_initialized;
     HINTERNET m_handle;
 
-    void Init();
+    bool Open();
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionWinHTTP);
 };

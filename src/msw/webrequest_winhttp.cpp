@@ -475,7 +475,6 @@ void wxWebAuthChallengeWinHTTP::SetCredentials(const wxString& user,
 //
 
 wxWebSessionWinHTTP::wxWebSessionWinHTTP():
-    m_initialized(false),
     m_handle(NULL)
 {
 }
@@ -486,7 +485,7 @@ wxWebSessionWinHTTP::~wxWebSessionWinHTTP()
         ::WinHttpCloseHandle(m_handle);
 }
 
-void wxWebSessionWinHTTP::Init()
+bool wxWebSessionWinHTTP::Open()
 {
     DWORD accessType;
     if ( wxCheckOsVersion(6, 3) )
@@ -497,33 +496,34 @@ void wxWebSessionWinHTTP::Init()
     m_handle = ::WinHttpOpen(GetHeaders().find("User-Agent")->second.wc_str(), accessType,
         WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS,
         WINHTTP_FLAG_ASYNC);
-    if ( m_handle != NULL )
+    if ( !m_handle )
     {
-        // Try to enable HTTP/2 (available since Win 10 1607)
-        DWORD protFlags = WINHTTP_PROTOCOL_FLAG_HTTP2;
-        ::WinHttpSetOption(m_handle, WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL,
-            &protFlags, sizeof(protFlags));
-
-        // Try to enable GZIP and DEFLATE (available since Win 8.1)
-        DWORD decompressFlags = WINHTTP_DECOMPRESSION_FLAG_ALL;
-        ::WinHttpSetOption(m_handle, WINHTTP_OPTION_DECOMPRESSION,
-            &decompressFlags, sizeof(decompressFlags));
-
-        // Try to enable modern TLS for older Windows versions
-        if ( !wxCheckOsVersion(6, 3) )
-        {
-            DWORD securityFlags = WINHTTP_FLAG_SECURE_PROTOCOL_SSL3 |
-                WINHTTP_FLAG_SECURE_PROTOCOL_TLS1 |
-                WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_1 |
-                WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2;
-            ::WinHttpSetOption(m_handle, WINHTTP_OPTION_SECURE_PROTOCOLS,
-                &securityFlags, sizeof(securityFlags));
-        }
-    }
-    else
         wxLogLastError("WinHttpOpen");
+        return false;
+    }
 
-    m_initialized = true;
+    // Try to enable HTTP/2 (available since Win 10 1607)
+    DWORD protFlags = WINHTTP_PROTOCOL_FLAG_HTTP2;
+    ::WinHttpSetOption(m_handle, WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL,
+        &protFlags, sizeof(protFlags));
+
+    // Try to enable GZIP and DEFLATE (available since Win 8.1)
+    DWORD decompressFlags = WINHTTP_DECOMPRESSION_FLAG_ALL;
+    ::WinHttpSetOption(m_handle, WINHTTP_OPTION_DECOMPRESSION,
+        &decompressFlags, sizeof(decompressFlags));
+
+    // Try to enable modern TLS for older Windows versions
+    if ( !wxCheckOsVersion(6, 3) )
+    {
+        DWORD securityFlags = WINHTTP_FLAG_SECURE_PROTOCOL_SSL3 |
+            WINHTTP_FLAG_SECURE_PROTOCOL_TLS1 |
+            WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_1 |
+            WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2;
+        ::WinHttpSetOption(m_handle, WINHTTP_OPTION_SECURE_PROTOCOLS,
+            &securityFlags, sizeof(securityFlags));
+    }
+
+    return true;
 }
 
 wxWebRequestImplPtr
@@ -532,8 +532,11 @@ wxWebSessionWinHTTP::CreateRequest(wxWebSession& session,
                                    const wxString& url,
                                    int id)
 {
-    if ( !m_initialized )
-        Init();
+    if ( !m_handle )
+    {
+        if ( !Open() )
+            return wxWebRequestImplPtr();
+    }
 
     return wxWebRequestImplPtr(
         new wxWebRequestWinHTTP(session, *this, handler, url, id));
