@@ -454,7 +454,7 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
              (
                 GetName().t_str(),  // display name
                 pDevMode,           // dev mode or NULL to reset
-                NULL,               // reserved
+                wxRESERVED_PARAM,
                 flags,
                 NULL                // pointer to video parameters (not used)
              ) )

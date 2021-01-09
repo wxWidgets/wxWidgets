@@ -257,7 +257,7 @@ void wxWebRequestWinHTTP::Start()
                      m_sessionWinHTTP.GetHandle(),
                      wxString(urlComps.lpszHostName, urlComps.dwHostNameLength),
                      urlComps.nPort,
-                     0 // reserved
+                     wxRESERVED_PARAM
                 );
     if ( m_connect == NULL )
     {
@@ -296,7 +296,7 @@ void wxWebRequestWinHTTP::Start()
         WINHTTP_CALLBACK_FLAG_WRITE_COMPLETE |
         WINHTTP_CALLBACK_FLAG_SENDREQUEST_COMPLETE |
         WINHTTP_CALLBACK_FLAG_REQUEST_ERROR,
-        0) == WINHTTP_INVALID_STATUS_CALLBACK )
+        wxRESERVED_PARAM) == WINHTTP_INVALID_STATUS_CALLBACK )
     {
         SetFailedWithLastError();
         return;

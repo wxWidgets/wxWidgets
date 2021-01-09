@@ -997,7 +997,7 @@ bool wxWindowMSW::EnableTouchEvents(int eventsMask)
         if ( !GestureFuncs::SetGestureConfig()
              (
                 m_hWnd,
-                0,                      // Reserved, must be always 0.
+                wxRESERVED_PARAM,
                 numConfigs,             // Number of gesture configurations.
                 ptrConfigs,             // Pointer to the first one.
                 sizeof(GESTURECONFIG)   // Size of each configuration.

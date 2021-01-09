@@ -34,6 +34,10 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
     #define MAX_PATH  260
 #endif
 
+// Many MSW functions have parameters which are "reserved". Passing them this
+// constant is more clear than just using "0" or "NULL".
+#define wxRESERVED_PARAM    0
+
 // ---------------------------------------------------------------------------
 // standard icons from the resources
 // ---------------------------------------------------------------------------
