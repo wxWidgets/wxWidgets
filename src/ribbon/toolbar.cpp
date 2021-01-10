@@ -1078,7 +1078,9 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 #if wxUSE_TOOLTIPS
     if(new_hover)
     {
-        SetToolTip(new_hover->help_string);
+        if (new_hover != m_hover_tool &&
+                !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE))
+            SetToolTip(new_hover->help_string);
     }
     else if(GetToolTip())
     {
@@ -1088,10 +1090,10 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 
     if(new_hover && new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
     {
+        m_hover_tool = new_hover;
         new_hover = NULL; // A disabled tool can not be hilighted
     }
-
-    if(new_hover != m_hover_tool)
+    else if(new_hover != m_hover_tool)
     {
         if(m_hover_tool)
         {
@@ -1143,6 +1145,7 @@ void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
         m_active_tool = m_hover_tool;
         m_active_tool->state |=
             (m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_HOVER_MASK) << 2;
+        UnsetToolTip();
         Refresh(false);
     }
 }

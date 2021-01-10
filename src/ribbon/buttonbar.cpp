@@ -1298,7 +1298,9 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
     }
     if(tooltipButton)
     {
-        SetToolTip(tooltipButton->base->help_string);
+        if (tooltipButton != m_hovered_button &&
+                !(tooltipButton->size & wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE))
+            SetToolTip(tooltipButton->base->help_string);
     }
 #else
     wxUnusedVar(tooltipButton);
@@ -1372,9 +1374,14 @@ void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
                 cursor -= btn_rect.GetTopLeft();
                 long state = 0;
                 if(size.normal_region.Contains(cursor))
+                {
                     state = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
+                }
                 else if(size.dropdown_region.Contains(cursor))
+                {
                     state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+                    UnsetToolTip();
+                }
                 instance.base->state |= state;
                 Refresh(false);
                 break;
