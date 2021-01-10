@@ -348,11 +348,11 @@ DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 dnl automatic features
 DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
-DEFAULT_wxUSE_OPENGL=auto
-DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_HOTKEY=auto
+DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
+DEFAULT_wxUSE_OPENGL=auto
 
 dnl Mac/Cocoa users need to enable building universal binaries explicitly
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
