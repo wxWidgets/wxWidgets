@@ -383,7 +383,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                     {
                         if ( alpha )
                         {
-                            unsigned char a;
+                            unsigned char a = 0;
                             Palette_GetRGBA(palette.get(), paletteLength,
                                             imageData[index], &r, &g, &b, &a);
                             *dst++ = r;
@@ -590,7 +590,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                     {
                         if ( alpha )
                         {
-                            unsigned char a;
+                            unsigned char a = 0;
                             Palette_GetRGBA(palette.get(), paletteLength,
                                             imageData[index], &r, &g, &b, &a);
                             *dst++ = r;
