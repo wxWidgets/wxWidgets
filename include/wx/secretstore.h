@@ -230,4 +230,30 @@ private:
 
 #endif // wxUSE_SECRETSTORE/!wxUSE_SECRETSTORE
 
+// Helper class ensuring WipeString() is called.
+//
+// It should only be used as a local variable and never polymorphically.
+class wxSecretString : public wxString
+{
+public:
+    wxSecretString()
+    {
+    }
+
+    wxSecretString(const wxString& value)
+        : wxString(value)
+    {
+    }
+
+    explicit wxSecretString(const wxSecretValue& value)
+        : wxString(value.GetAsString())
+    {
+    }
+
+    ~wxSecretString()
+    {
+        wxSecretValue::WipeString(*this);
+    }
+};
+
 #endif // _WX_SECRETSTORE_H_
