@@ -48,6 +48,8 @@ public:
                 == "URLSession";
     }
 
+    // All tests should call this function first and skip the test entirely if
+    // it returns false, as this indicates that web requests tests are disabled.
     bool InitBaseURL()
     {
         if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
@@ -122,81 +124,105 @@ public:
     wxInt64 dataSize;
 };
 
-TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Get::Bytes", "[net][webrequest][get]")
 {
-    // Skip the test entirely if disabled.
     if ( !InitBaseURL() )
         return;
 
-    SECTION("GET 64kb to memory")
-    {
-        Create("/bytes/65536");
-        Run();
-        REQUIRE( request.GetResponse().GetContentLength() == 65536 );
-        REQUIRE( request.GetBytesExpectedToReceive() == 65536 );
-        REQUIRE( request.GetBytesReceived() == 65536 );
-    }
-
-    SECTION("GET 404 error")
-    {
-        Create("/status/404");
-        Run(wxWebRequest::State_Failed, 404);
-    }
-
-    SECTION("Connect to invalid host")
-    {
-        CreateAbs("http://127.0.0.1:51234");
-        Run(wxWebRequest::State_Failed, 0);
-    }
-
-    SECTION("POST form data")
-    {
-        Create("/post");
-        request.SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
-        Run();
-    }
-
-    SECTION("GET data as string")
-    {
-        Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
-        Run();
-        REQUIRE( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
-    }
-
-    SECTION("GET 99KB to file")
-    {
-        expectedFileSize = 99 * 1024;
-        Create(wxString::Format("/bytes/%lld", expectedFileSize));
-        request.SetStorage(wxWebRequest::Storage_File);
-        Run();
-        REQUIRE( request.GetBytesReceived() == expectedFileSize );
-    }
-
-    SECTION("Process 99KB data")
-    {
-        int processingSize = 99 * 1024;
-        Create(wxString::Format("/bytes/%d", processingSize));
-        request.SetStorage(wxWebRequest::Storage_None);
-        Run();
-        REQUIRE( request.GetBytesReceived() == processingSize );
-        REQUIRE( dataSize == processingSize );
-    }
-
-    SECTION("PUT file data")
-    {
-        Create("/put");
-        wxScopedPtr<wxInputStream> is(new wxFileInputStream("horse.png"));
-        REQUIRE( is->IsOk() );
-
-        request.SetData(is.release(), "image/png");
-        request.SetMethod("PUT");
-        Run();
-    }
+    Create("/bytes/65536");
+    Run();
+    REQUIRE( request.GetResponse().GetContentLength() == 65536 );
+    REQUIRE( request.GetBytesExpectedToReceive() == 65536 );
+    REQUIRE( request.GetBytesReceived() == 65536 );
 }
 
 TEST_CASE_METHOD(RequestFixture,
-                 "WebRequest::Auth::Basic",
-                 "[net][webrequest][auth]")
+                 "WebRequest::Get::String", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
+    Run();
+    REQUIRE( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Get::File", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    expectedFileSize = 99 * 1024;
+    Create(wxString::Format("/bytes/%lld", expectedFileSize));
+    request.SetStorage(wxWebRequest::Storage_File);
+    Run();
+    REQUIRE( request.GetBytesReceived() == expectedFileSize );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Get::None", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    int processingSize = 99 * 1024;
+    Create(wxString::Format("/bytes/%d", processingSize));
+    request.SetStorage(wxWebRequest::Storage_None);
+    Run();
+    REQUIRE( request.GetBytesReceived() == processingSize );
+    REQUIRE( dataSize == processingSize );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Error::HTTP", "[net][webrequest][error]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/status/404");
+    Run(wxWebRequest::State_Failed, 404);
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Error::Connect", "[net][webrequest][error]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    CreateAbs("http://127.0.0.1:51234");
+    Run(wxWebRequest::State_Failed, 0);
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Post", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/post");
+    request.SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
+    Run();
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Put", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/put");
+    wxScopedPtr<wxInputStream> is(new wxFileInputStream("horse.png"));
+    REQUIRE( is->IsOk() );
+
+    request.SetData(is.release(), "image/png");
+    request.SetMethod("PUT");
+    Run();
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Basic", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
         return;
@@ -229,8 +255,7 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
-                 "WebRequest::Auth::Digest",
-                 "[net][webrequest][auth]")
+                 "WebRequest::Auth::Digest", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
         return;
