@@ -448,11 +448,11 @@ wxThread::ExitCode wxWebSessionCURL::Entry()
     {
         // Handle cancelled requests
         {
-            wxMutexLocker lock(m_cancelledMutex);
-            while ( !m_cancelledRequests.empty() )
+            wxCriticalSectionLocker lock(m_cancelled.cs);
+            while ( !m_cancelled.requests.empty() )
             {
-                wxObjectDataPtr<wxWebRequestCURL> request(m_cancelledRequests.back());
-                m_cancelledRequests.pop_back();
+                wxObjectDataPtr<wxWebRequestCURL> request(m_cancelled.requests.back());
+                m_cancelled.requests.pop_back();
                 curl_multi_remove_handle(m_handle, request->GetHandle());
                 request->SetState(wxWebRequest::State_Cancelled);
             }
@@ -527,9 +527,9 @@ void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
 {
     // Add the request to a list of threads that will be removed from the curl
     // multi handle in the worker thread
-    wxMutexLocker lock(m_cancelledMutex);
+    wxCriticalSectionLocker lock(m_cancelled.cs);
     request->IncRef();
-    m_cancelledRequests.push_back(wxObjectDataPtr<wxWebRequestCURL>(request));
+    m_cancelled.requests.push_back(wxObjectDataPtr<wxWebRequestCURL>(request));
 }
 
 wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()

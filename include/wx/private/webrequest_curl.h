@@ -145,8 +145,13 @@ private:
     wxMutex m_mutex;
     wxCondition m_condition;
     bool m_shuttingDown;
-    wxMutex m_cancelledMutex;
-    wxVector< wxObjectDataPtr<wxWebRequestCURL> > m_cancelledRequests;
+
+    // MT-safe vector of requests for which Cancel() was called.
+    struct CancelledData
+    {
+        wxCriticalSection cs;
+        wxVector< wxObjectDataPtr<wxWebRequestCURL> > requests;
+    } m_cancelled;
 
     static int ms_activeSessions;
 
