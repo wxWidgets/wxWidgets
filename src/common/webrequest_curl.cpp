@@ -439,7 +439,8 @@ static CURLMcode wx_curl_multi_wait(CURLM *multi_handle, int timeout_ms,
 
 wxThread::ExitCode wxWebSessionCURL::Entry()
 {
-    m_mutex.Lock();
+    // This mutex will be unlocked only while we're waiting on the condition.
+    wxMutexLocker lock(m_mutex);
 
     int activeRequests = -1;
     int repeats = 0;
