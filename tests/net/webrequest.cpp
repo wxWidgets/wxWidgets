@@ -192,63 +192,73 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
         request.SetMethod("PUT");
         Run();
     }
+}
 
-    SECTION("Server auth BASIC")
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Basic",
+                 "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    if ( UsingNSURLSession() )
     {
-        if ( UsingNSURLSession() )
-        {
-            WARN("NSURLSession backend doesn't support authentication, skipping.");
-            return;
-        }
-
-        Create("/basic-auth/wxtest/wxwidgets");
-        Run(wxWebRequest::State_Unauthorized, 401);
-        REQUIRE( request.GetAuthChallenge().IsOk() );
-
-        SECTION("Good password")
-        {
-            UseCredentials("wxtest", "wxwidgets");
-            loop.Run();
-            CHECK( request.GetResponse().GetStatus() == 200 );
-            CHECK( request.GetState() == wxWebRequest::State_Completed );
-        }
-
-        SECTION("Bad password")
-        {
-            UseCredentials("wxtest", "foobar");
-            loop.Run();
-            CHECK( request.GetResponse().GetStatus() == 401 );
-            CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
-        }
+        WARN("NSURLSession backend doesn't support authentication, skipping.");
+        return;
     }
 
-    SECTION("Server auth DIGEST")
+    Create("/basic-auth/wxtest/wxwidgets");
+    Run(wxWebRequest::State_Unauthorized, 401);
+    REQUIRE( request.GetAuthChallenge().IsOk() );
+
+    SECTION("Good password")
     {
-        if ( UsingNSURLSession() )
-        {
-            WARN("NSURLSession backend doesn't support authentication, skipping.");
-            return;
-        }
+        UseCredentials("wxtest", "wxwidgets");
+        loop.Run();
+        CHECK( request.GetResponse().GetStatus() == 200 );
+        CHECK( request.GetState() == wxWebRequest::State_Completed );
+    }
 
-        Create("/digest-auth/auth/wxtest/wxwidgets");
-        Run(wxWebRequest::State_Unauthorized, 401);
-        REQUIRE( request.GetAuthChallenge().IsOk() );
+    SECTION("Bad password")
+    {
+        UseCredentials("wxtest", "foobar");
+        loop.Run();
+        CHECK( request.GetResponse().GetStatus() == 401 );
+        CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
+    }
+}
 
-        SECTION("Good password")
-        {
-            UseCredentials("wxtest", "wxwidgets");
-            loop.Run();
-            CHECK( request.GetResponse().GetStatus() == 200 );
-            CHECK( request.GetState() == wxWebRequest::State_Completed );
-        }
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Digest",
+                 "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
 
-        SECTION("Bad password")
-        {
-            UseCredentials("foo", "bar");
-            loop.Run();
-            CHECK( request.GetResponse().GetStatus() == 401 );
-            CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
-        }
+    if ( UsingNSURLSession() )
+    {
+        WARN("NSURLSession backend doesn't support authentication, skipping.");
+        return;
+    }
+
+    Create("/digest-auth/auth/wxtest/wxwidgets");
+    Run(wxWebRequest::State_Unauthorized, 401);
+    REQUIRE( request.GetAuthChallenge().IsOk() );
+
+    SECTION("Good password")
+    {
+        UseCredentials("wxtest", "wxwidgets");
+        loop.Run();
+        CHECK( request.GetResponse().GetStatus() == 200 );
+        CHECK( request.GetState() == wxWebRequest::State_Completed );
+    }
+
+    SECTION("Bad password")
+    {
+        UseCredentials("foo", "bar");
+        loop.Run();
+        CHECK( request.GetResponse().GetStatus() == 401 );
+        CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
     }
 }
 
