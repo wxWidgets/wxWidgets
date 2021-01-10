@@ -333,8 +333,9 @@ DEFAULT_wxUSE_STD_CONTAINERS_COMPATIBLY=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
-dnl libraries disabled by default
+dnl libraries disabled by default or requiring some special handling
 DEFAULT_wxUSE_DMALLOC=no
+DEFAULT_wxUSE_LIBCURL=auto
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
@@ -2946,16 +2947,28 @@ dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
-    PKG_CHECK_MODULES(LIBCURL, [libcurl],
-        [
-            CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
-            LIBS="$LIBCURL_LIBS $LIBS"
-        ],
-        [
-            wxUSE_LIBCURL=no
-            AC_MSG_RESULT([not found])
-        ]
-    )
+    dnl We shouldn't depend on the external libcurl if system libraries are
+    dnl explicitly disabled, unless it is explicitly requested.
+    if test "$wxUSE_SYS_LIBS" != "no" -o "$wxUSE_LIBCURL" = "yes"; then
+        PKG_CHECK_MODULES(LIBCURL, [libcurl],
+            [
+                wxUSE_LIBCURL=yes
+                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+                LIBS="$LIBCURL_LIBS $LIBS"
+            ],
+            [
+                wxUSE_LIBCURL=no
+                AC_MSG_RESULT([not found])
+            ]
+        )
+    else
+        dnl Under Win32/macOS we have other backends for wxWebRequest, but
+        dnl under Unix it will be disabled without libcurl, so warn about it as
+        dnl this could be an unexpected consequence of disabling sys libs.
+        if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
+            AC_MSG_WARN([Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary])
+        fi
+    fi
 fi
 
 dnl ----------------------------------------------------------------
