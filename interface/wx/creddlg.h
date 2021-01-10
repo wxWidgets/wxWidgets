@@ -9,8 +9,37 @@
     @class wxCredentialEntryDialog
 
     This class represents a dialog that requests a user name and a password
-    from the user. It is implemented as a generic wxWidgets dialog on all
-    platforms.
+    from the user.
+
+    Currently it is implemented as a generic wxWidgets dialog on all platforms.
+
+    Simple example of using this dialog assuming @c MyFrame object has a member
+    @c m_request of wxWebRequest type:
+    @code
+        void MyFrame::OnWebRequestState(wxWebRequestEvent& evt)
+        {
+            if ( evt.GetState() == wxWebRequest::State_Unauthorized )
+            {
+                wxCredentialEntryDialog dialog
+                    (
+                        this,
+                        wxString::Format
+                        (
+                            "Please enter credentials for accessing "
+                            "the web page at %s",
+                            evt.GetResponse().GetURL()
+                        ),
+                        "My Application Title"
+                    );
+                if ( dialog.ShowModal() == wxID_OK )
+                {
+                    m_request.GetAuthChallenge().
+                        SetCredentials(dialog.GetCredentials());
+                }
+                //else: the dialog was cancelled
+            }
+        }
+    @endcode
 
     @note For secure saving and loading users and passwords, have a look at
         wxSecretStore.
@@ -41,8 +70,7 @@ public:
     */
     wxCredentialEntryDialog(wxWindow* parent, const wxString& message,
         const wxString& title,
-        const wxString& user = "",
-        const wxString& password = "");
+        const wxWebCredentials& cred = wxWebCredentials());
 
     /**
         Create the dialog constructed using the default constructor.
@@ -53,20 +81,19 @@ public:
             Message to show on the dialog.
         @param title
             The title of the dialog.
-        @param user
-            The default user value.
-        @param password
-            The default password.
+        @param cred
+            The default username and password to use (optional).
     */
     bool Create(wxWindow* parent, const wxString& message,
         const wxString& title,
-        const wxString& user = "",
-        const wxString& password = "");
+        const wxWebCredentials& cred = wxWebCredentials());
 
     /**
-        Returns the entered user name.
+        Returns the credentials entered by the user.
+
+        This should be called if ShowModal() returned ::wxID_OK.
     */
-    wxString GetUser() const;
+    wxWebCredentials GetCredentials() const;
 
     /**
         Sets the current user name.
@@ -76,11 +103,6 @@ public:
         at the creation time.
     */
     void SetUser(const wxString& user);
-
-    /**
-        Returns the entered password.
-    */
-    wxString GetPassword() const;
 
     /**
         Sets the current password.

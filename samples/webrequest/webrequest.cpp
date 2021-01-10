@@ -20,6 +20,7 @@
 
 #include "wx/notebook.h"
 #include "wx/artprov.h"
+#include "wx/creddlg.h"
 #include "wx/webrequest.h"
 #include "wx/filedlg.h"
 #include "wx/image.h"
@@ -252,11 +253,7 @@ public:
         m_startButton->Enable(evt.GetState() != wxWebRequest::State_Active);
         m_cancelButton->Enable(evt.GetState() == wxWebRequest::State_Active);
 
-        if ( evt.GetState() != wxWebRequest::State_Active )
-        {
-            m_currentRequest = wxWebRequest();
-            m_downloadProgressTimer.Stop();
-        }
+        bool stillActive = false;
 
         switch (evt.GetState())
         {
@@ -315,8 +312,52 @@ public:
                 wxLogStatus(this, "Cancelled");
                 break;
 
-            default:
+            case wxWebRequest::State_Unauthorized:
+                {
+                    wxWebAuthChallenge
+                        auth = m_currentRequest.GetAuthChallenge();
+                    if ( !auth.IsOk() )
+                    {
+                        wxLogStatus("Unexpectedly missing auth challenge");
+                        break;
+                    }
+
+                    wxCredentialEntryDialog dialog
+                        (
+                            this,
+                            wxString::Format
+                            (
+                                "Please enter credentials for accessing\n"
+                                "%s",
+                                evt.GetResponse().GetURL()
+                            ),
+                            "wxWidgets web request sample",
+                            m_credentials
+                        );
+                    if ( dialog.ShowModal() == wxID_OK )
+                    {
+                        m_credentials = dialog.GetCredentials();
+                        auth.SetCredentials(m_credentials);
+                        wxLogStatus("Trying to authenticate...");
+
+                        stillActive = true;
+                    }
+                }
                 break;
+
+            case wxWebRequest::State_Active:
+                stillActive = true;
+                break;
+
+            case wxWebRequest::State_Idle:
+                // Nothing special to do for this state.
+                break;
+        }
+
+        if ( !stillActive )
+        {
+            m_currentRequest = wxWebRequest();
+            m_downloadProgressTimer.Stop();
         }
     }
 
@@ -438,6 +479,11 @@ private:
 
     wxStaticText* m_advCountStaticText;
     wxLongLong m_advCount;
+
+    // Normally it would be a bad idea to permanently store credentials like
+    // this, we should use wxSecretStore to load them as needed, but let's keep
+    // things simple in this example.
+    wxWebCredentials m_credentials;
 };
 
 class WebRequestApp : public wxApp

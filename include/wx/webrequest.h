@@ -37,7 +37,8 @@ typedef wxObjectDataPtr<wxWebSessionImpl> wxWebSessionImplPtr;
 class wxWebCredentials
 {
 public:
-    wxWebCredentials(const wxString& user, const wxSecretValue& password)
+    wxWebCredentials(const wxString& user = wxString(),
+                     const wxSecretValue& password = wxSecretValue())
         : m_user(user), m_password(password)
     {
     }

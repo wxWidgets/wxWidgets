@@ -15,6 +15,7 @@
 #if wxUSE_CREDENTIALDLG
 
 #include "wx/dialog.h"
+#include "wx/webrequest.h"
 
 class WXDLLIMPEXP_CORE wxGenericCredentialEntryDialog : public wxDialog
 {
@@ -23,28 +24,23 @@ public:
 
     wxGenericCredentialEntryDialog(wxWindow* parent, const wxString& message,
         const wxString& title,
-        const wxString& user = "",
-        const wxString& password = "");
+        const wxWebCredentials& cred = wxWebCredentials());
 
     bool Create(wxWindow* parent, const wxString& message,
         const wxString& title,
-        const wxString& user = "",
-        const wxString& password = "");
+        const wxWebCredentials& cred = wxWebCredentials());
 
-    wxString GetUser() const { return m_userTextCtrl->GetValue(); }
     void SetUser(const wxString& user) { m_userTextCtrl->SetValue(user); }
-
-    wxString GetPassword() const { return m_passwordTextCtrl->GetValue(); }
     void SetPassword(const wxString& password)
         { m_passwordTextCtrl->SetValue(password); }
+
+    wxWebCredentials GetCredentials() const;
 
 private:
     wxTextCtrl* m_userTextCtrl;
     wxTextCtrl* m_passwordTextCtrl;
 
-    void Init(const wxString& message,
-        const wxString& user,
-        const wxString& password);
+    void Init(const wxString& message, const wxWebCredentials& cred);
 
     wxDECLARE_NO_COPY_CLASS(wxGenericCredentialEntryDialog);
 };

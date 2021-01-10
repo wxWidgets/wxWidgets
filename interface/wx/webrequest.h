@@ -425,7 +425,8 @@ public:
         Note that the password is a wxSecretValue object, to construct it from
         a string you need to explicitly use wxSecretValue ctor.
      */
-    wxWebCredentials(const wxString& user, const wxSecretValue& password);
+    wxWebCredentials(const wxString& user = wxString(),
+                     const wxSecretValue& password = wxSecretValue());
 
     /// Return the user.
     const wxString& GetUser() const;
