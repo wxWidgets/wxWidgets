@@ -505,16 +505,15 @@ bool wxWebAuthChallengeWinHTTP::Init()
 }
 
 void
-wxWebAuthChallengeWinHTTP::SetCredentials(const wxString& user,
-                                          const wxString& password)
+wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
 {
     if ( !::WinHttpSetCredentials
             (
                 m_request.GetHandle(),
                 m_target,
                 m_selectedScheme,
-                user.wc_str(),
-                password.wc_str(),
+                cred.GetUser().wc_str(),
+                wxSecretString(cred.GetPassword()).wc_str(),
                 wxRESERVED_PARAM
             ) )
     {

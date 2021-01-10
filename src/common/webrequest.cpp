@@ -504,12 +504,11 @@ wxWebAuthChallenge::Source wxWebAuthChallenge::GetSource() const
 }
 
 void
-wxWebAuthChallenge::SetCredentials(const wxString& user,
-                                   const wxString& password)
+wxWebAuthChallenge::SetCredentials(const wxWebCredentials& cred)
 {
     wxCHECK_IMPL_VOID();
 
-    m_impl->SetCredentials(user, password);
+    m_impl->SetCredentials(cred);
 }
 
 //

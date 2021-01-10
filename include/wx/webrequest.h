@@ -16,6 +16,7 @@
 
 #include "wx/event.h"
 #include "wx/object.h"
+#include "wx/secretstore.h"
 #include "wx/stream.h"
 #include "wx/versioninfo.h"
 
@@ -32,6 +33,22 @@ typedef wxObjectDataPtr<wxWebAuthChallengeImpl> wxWebAuthChallengeImplPtr;
 typedef wxObjectDataPtr<wxWebRequestImpl> wxWebRequestImplPtr;
 typedef wxObjectDataPtr<wxWebResponseImpl> wxWebResponseImplPtr;
 typedef wxObjectDataPtr<wxWebSessionImpl> wxWebSessionImplPtr;
+
+class wxWebCredentials
+{
+public:
+    wxWebCredentials(const wxString& user, const wxSecretValue& password)
+        : m_user(user), m_password(password)
+    {
+    }
+
+    const wxString& GetUser() const { return m_user; }
+    const wxSecretValue& GetPassword() const { return m_password; }
+
+private:
+    wxString m_user;
+    wxSecretValue m_password;
+};
 
 class WXDLLIMPEXP_NET wxWebAuthChallenge
 {
@@ -51,7 +68,7 @@ public:
 
     Source GetSource() const;
 
-    void SetCredentials(const wxString& user, const wxString& password);
+    void SetCredentials(const wxWebCredentials& cred);
 
 private:
     // Ctor is used by wxWebRequest only.

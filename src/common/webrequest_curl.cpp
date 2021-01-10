@@ -319,9 +319,15 @@ bool wxWebAuthChallengeCURL::Init()
     return true;
 }
 
-void wxWebAuthChallengeCURL::SetCredentials(const wxString& user, const wxString& password)
+void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
 {
-    wxString authStr = wxString::Format("%s:%s", user, password);
+    const wxSecretString authStr =
+        wxString::Format
+        (
+            "%s:%s",
+            cred.GetUser(),
+            static_cast<const wxString&>(wxSecretString(cred.GetPassword()))
+        );
     curl_easy_setopt(m_request.GetHandle(),
         (GetSource() == wxWebAuthChallenge::Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
         static_cast<const char*>(authStr.mb_str()));

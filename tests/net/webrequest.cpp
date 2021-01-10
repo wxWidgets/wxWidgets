@@ -108,6 +108,13 @@ public:
             REQUIRE( request.GetResponse().GetStatus() == requiredStatus );
     }
 
+    // Precondition: we must have an auth challenge.
+    void UseCredentials(const wxString& user, const wxString& password)
+    {
+        request.GetAuthChallenge().SetCredentials(
+            wxWebCredentials(user, wxSecretValue(password)));
+    }
+
     wxString baseURL;
     wxEventLoop loop;
     wxWebRequest request;
@@ -200,7 +207,7 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 
         SECTION("Good password")
         {
-            request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
+            UseCredentials("wxtest", "wxwidgets");
             loop.Run();
             CHECK( request.GetResponse().GetStatus() == 200 );
             CHECK( request.GetState() == wxWebRequest::State_Completed );
@@ -208,7 +215,7 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 
         SECTION("Bad password")
         {
-            request.GetAuthChallenge().SetCredentials("wxtest", "foobar");
+            UseCredentials("wxtest", "foobar");
             loop.Run();
             CHECK( request.GetResponse().GetStatus() == 401 );
             CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
@@ -229,7 +236,7 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 
         SECTION("Good password")
         {
-            request.GetAuthChallenge().SetCredentials("wxtest", "wxwidgets");
+            UseCredentials("wxtest", "wxwidgets");
             loop.Run();
             CHECK( request.GetResponse().GetStatus() == 200 );
             CHECK( request.GetState() == wxWebRequest::State_Completed );
@@ -237,7 +244,7 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][webrequest]")
 
         SECTION("Bad password")
         {
-            request.GetAuthChallenge().SetCredentials("foo", "bar");
+            UseCredentials("foo", "bar");
             loop.Run();
             CHECK( request.GetResponse().GetStatus() == 401 );
             CHECK( request.GetState() == wxWebRequest::State_Unauthorized );

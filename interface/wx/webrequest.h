@@ -372,7 +372,14 @@ public:
     Authentication challenge information available via
     wxWebRequest::GetAuthChallenge().
 
-    Use SetCredentials() to provide user credentials.
+    Use SetCredentials() to provide user credentials, e.g.
+    @code
+        if ( request.GetState() == wxWebRequest::State_Unauthorized )
+        {
+            wxWebCredentials cred("me", wxSecretValue("s3krit"));
+            request.GetAuthChallenge().SetCredentials(cred);
+        }
+    @endcode
 */
 class wxWebAuthChallenge
 {
@@ -394,12 +401,41 @@ public:
     /**
         Used to provide user credentials to the authentication challenge.
 
-        @param user
-            User name.
-        @param password
-            The users password.
+        @see wxWebCredentials
     */
-    void SetCredentials(const wxString& user, const wxString& password);
+    void SetCredentials(const wxWebCredentials& cred);
+};
+
+/**
+    Simple class containing the username and password to use for authenticating.
+
+    @since 3.1.5
+
+    @library{wxnet}
+    @category{net}
+
+    @see wxWebAuthChallenge
+ */
+class wxWebCredentials
+{
+public:
+    /**
+        Create the new credentials object.
+
+        Note that the password is a wxSecretValue object, to construct it from
+        a string you need to explicitly use wxSecretValue ctor.
+     */
+    wxWebCredentials(const wxString& user, const wxSecretValue& password);
+
+    /// Return the user.
+    const wxString& GetUser() const;
+
+    /**
+        Return the password.
+
+        @see wxSecretString
+     */
+    const wxSecretValue& GetPassword() const;
 };
 
 /**

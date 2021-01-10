@@ -27,8 +27,7 @@ public:
 
     wxWebAuthChallenge::Source GetSource() const { return m_source; }
 
-    virtual void
-    SetCredentials(const wxString& user, const wxString& password) = 0;
+    virtual void SetCredentials(const wxWebCredentials& cred) = 0;
 
 protected:
     explicit wxWebAuthChallengeImpl(wxWebAuthChallenge::Source source)

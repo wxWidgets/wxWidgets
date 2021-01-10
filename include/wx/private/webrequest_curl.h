@@ -31,7 +31,7 @@ public:
 
     bool Init();
 
-    void SetCredentials(const wxString& user, const wxString& password) wxOVERRIDE;
+    void SetCredentials(const wxWebCredentials& cred) wxOVERRIDE;
 
 private:
     wxWebRequestCURL& m_request;
