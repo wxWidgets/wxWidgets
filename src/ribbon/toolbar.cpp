@@ -535,8 +535,7 @@ wxRect wxRibbonToolBar::GetToolRect(int tool_id)const
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             if (tool->id == tool_id)
             {
-                wxRect rect(tool->position + group->position, tool->size);
-                return rect;
+                return wxRect(tool->position + group->position, tool->size);
             }
             ++pos;
         }
