@@ -308,7 +308,8 @@ public:
     wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const;
 
     /**
-        Return the opaque pointer for the tool at the given coordinates.
+        Returns the opaque pointer for the tool at the given coordinates,
+        which are relative to the toolbar's parent.
 
         @return an opaque pointer, NULL if is not found.
 
@@ -391,8 +392,8 @@ public:
     virtual int GetToolPos(int tool_id)const;
 
     /**
-        Returns the rect in the toolbar, or a default-constructed rect if the tool
-        is not found.
+        Returns the tool's rect with coordinates relative to the toolbar's parent,
+        or a default-constructed rect if the tool is not found.
 
         @param tool_id
             ID of the tool in question, as passed to AddTool().
