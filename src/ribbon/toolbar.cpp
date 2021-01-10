@@ -439,7 +439,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(wxCoord x, wxCoord y)cons
         for ( size_t t = 0; t < tool_count; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            wxRect rect(tool->position, tool->size);
+            wxRect rect(tool->position + group->position, tool->size);
             if(rect.Contains(x, y))
             {
                 return tool;
@@ -535,7 +535,7 @@ wxRect wxRibbonToolBar::GetToolRect(int tool_id)const
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             if (tool->id == tool_id)
             {
-                wxRect rect(tool->position.x, tool->position.y, tool->size.GetWidth(), tool->size.GetHeight());
+                wxRect rect(tool->position + group->position, tool->size);
                 return rect;
             }
             ++pos;
