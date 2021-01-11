@@ -131,7 +131,7 @@ public:
         wxSizer* advSizer = new wxBoxSizer(wxVERTICAL);
         wxStaticText* advHeader = new wxStaticText(advancedPanel, wxID_ANY,
             "As an example of processing data while\n"
-            "it's being received from the server every\n"
+            "it's being received from the server, every\n"
             "zero byte in the response will be counted below.");
         advSizer->Add(advHeader, wxSizerFlags().Expand().Border());
 
