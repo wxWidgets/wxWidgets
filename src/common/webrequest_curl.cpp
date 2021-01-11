@@ -22,6 +22,8 @@
     #include "wx/utils.h"
 #endif
 
+#include "wx/uri.h"
+
 // Define symbols that might be missing from older libcurl headers
 #ifndef CURL_AT_LEAST_VERSION
 #define CURL_VERSION_BITS(x,y,z) ((x)<<16|(y)<<8|z)
@@ -156,8 +158,10 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
     curl_easy_setopt(m_handle, CURLOPT_ERRORBUFFER, m_errorBuffer);
     // Set this request in the private pointer
     curl_easy_setopt(m_handle, CURLOPT_PRIVATE, static_cast<void*>(this));
-    // Set URL to handle
-    curl_easy_setopt(m_handle, CURLOPT_URL, static_cast<const char*>(url.mb_str()));
+    // Set URL to handle: note that we must use wxURI to escape characters not
+    // allowed in the URLs correctly (URL API is only available in libcurl
+    // since the relatively recent v7.62.0, so we don't want to rely on it).
+    curl_easy_setopt(m_handle, CURLOPT_URL, wxURI(url).BuildURI().utf8_str().data());
     // Set callback functions
     curl_easy_setopt(m_handle, CURLOPT_WRITEFUNCTION, wxCURLWriteData);
     curl_easy_setopt(m_handle, CURLOPT_HEADERFUNCTION, wxCURLHeader);
