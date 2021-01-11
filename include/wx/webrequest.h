@@ -220,7 +220,7 @@ public:
 
     wxVersionInfo GetLibraryVersionInfo();
 
-    void SetHeader(const wxString& name, const wxString& value);
+    void AddCommonHeader(const wxString& name, const wxString& value);
 
     void SetTempDir(const wxString& dir);
     wxString GetTempDir() const;

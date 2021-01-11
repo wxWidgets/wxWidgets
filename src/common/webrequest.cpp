@@ -773,7 +773,7 @@ wxStringWebSessionFactoryMap gs_factoryMap;
 wxWebSessionImpl::wxWebSessionImpl()
 {
     // Initialize the user-Agent header with a reasonable default
-    SetHeader("User-Agent", wxString::Format("%s/1 wxWidgets/%d.%d.%d",
+    AddCommonHeader("User-Agent", wxString::Format("%s/1 wxWidgets/%d.%d.%d",
         wxTheApp->GetAppName(),
         wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER));
 }
@@ -889,11 +889,11 @@ wxVersionInfo wxWebSession::GetLibraryVersionInfo()
     return m_impl->GetLibraryVersionInfo();
 }
 
-void wxWebSession::SetHeader(const wxString& name, const wxString& value)
+void wxWebSession::AddCommonHeader(const wxString& name, const wxString& value)
 {
     wxCHECK_IMPL_VOID();
 
-    m_impl->SetHeader(name, value);
+    m_impl->AddCommonHeader(name, value);
 }
 
 void wxWebSession::SetTempDir(const wxString& dir)

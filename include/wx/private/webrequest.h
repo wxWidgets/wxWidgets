@@ -205,7 +205,7 @@ public:
 
     virtual wxVersionInfo GetLibraryVersionInfo() = 0;
 
-    void SetHeader(const wxString& name, const wxString& value)
+    void AddCommonHeader(const wxString& name, const wxString& value)
         { m_headers[name] = value; }
 
     void SetTempDir(const wxString& dir) { m_tempDir = dir; }

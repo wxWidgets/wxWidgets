@@ -581,10 +581,13 @@ public:
         A good example for a session-wide request header is the @c User-Agent
         header.
 
+        Calling this function with the same header name again replaces the
+        previously used value.
+
         @param name Name of the header
         @param value String value of the header
     */
-    void SetHeader(const wxString& name, const wxString& value);
+    void AddCommonHeader(const wxString& name, const wxString& value);
 
     /**
         Override the default temporary directory that may be used by the
