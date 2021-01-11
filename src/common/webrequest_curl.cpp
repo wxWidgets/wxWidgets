@@ -230,16 +230,13 @@ bool wxWebRequestCURL::StartRequest()
 {
     m_bytesSent = 0;
 
-    if ( m_sessionImpl.StartRequest(*this) )
-    {
-        SetState(wxWebRequest::State_Active);
-        return true;
-    }
-    else
+    if ( !m_sessionImpl.StartRequest(*this) )
     {
         SetState(wxWebRequest::State_Failed);
         return false;
     }
+
+    return true;
 }
 
 void wxWebRequestCURL::Cancel()
@@ -516,6 +513,8 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
         if ( GetThread()->Run() != wxTHREAD_NO_ERROR )
             return false;
     }
+
+    request.SetState(wxWebRequest::State_Active);
 
     // Signal the worker thread to resume work
     wxMutexLocker lock(m_mutex);
