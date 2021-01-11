@@ -1143,7 +1143,8 @@ wxString wxSysErrorMsgStr(unsigned long nErrCode)
 const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 {
     static wxChar s_szBuf[1024];
-    wxStrlcpy(s_szBuf, wxSysErrorMsgStr(nErrCode), WXSIZEOF(s_szBuf));
+    wxStrlcpy(s_szBuf, (const wxChar*)wxSysErrorMsgStr(nErrCode).c_str(),
+              WXSIZEOF(s_szBuf));
     return s_szBuf;
 }
 
