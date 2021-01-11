@@ -287,6 +287,23 @@ TEST_CASE_METHOD(RequestFixture,
     }
 }
 
+// This test is not run by default and has to be explicitly selected to run.
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Manual", "[net][webrequest][auth][.]")
+{
+    // Allow getting 8-bit strings from the environment correctly.
+    setlocale(LC_ALL, "");
+
+    wxString url;
+    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &url) )
+    {
+        FAIL("Specify WX_TEST_WEBREQUEST_URL");
+    }
+
+    CreateAbs(url);
+    Run(wxWebRequest::State_Completed, 0);
+}
+
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
 
 namespace wxPrivate
