@@ -80,7 +80,7 @@ public:
         @param message
             Message to show on the dialog.
         @param title
-            The title of the dialog.
+            Title of the dialog.
         @param cred
             The default username and password to use (optional).
     */
