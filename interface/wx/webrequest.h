@@ -673,7 +673,7 @@ public:
     const wxString& GetErrorDescription() const;
 
     /**
-        Returns a file name to a temporary file containing the response data
+        Returns the full path of a temporary file containing the response data
         when the state is @c State_Completed and storage is @Storage_File.
 
         The file will be removed after the event handlers are called. You can
