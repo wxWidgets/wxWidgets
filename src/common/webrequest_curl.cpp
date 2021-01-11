@@ -39,20 +39,18 @@
 // wxWebResponseCURL
 //
 
-static size_t wxCURLWriteData(void* buffer, size_t size, size_t nmemb, void* userp)
+static size_t wxCURLWriteData(void* buffer, size_t size, size_t nmemb, void* userdata)
 {
-    if ( userp )
-        return static_cast<wxWebResponseCURL*>(userp)->WriteData(buffer, size * nmemb);
-    else
-        return 0;
+    wxCHECK_MSG( userdata, 0, "invalid curl write callback data" );
+
+    return static_cast<wxWebResponseCURL*>(userdata)->WriteData(buffer, size * nmemb);
 }
 
 static size_t wxCURLHeader(char *buffer, size_t size, size_t nitems, void *userdata)
 {
-    if ( userdata )
-        return static_cast<wxWebResponseCURL*>(userdata)->AddHeaderData(buffer, size * nitems);
-    else
-        return 0;
+    wxCHECK_MSG( userdata, 0, "invalid curl header callback data" );
+
+    return static_cast<wxWebResponseCURL*>(userdata)->AddHeaderData(buffer, size * nitems);
 }
 
 wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
@@ -137,10 +135,9 @@ int wxWebResponseCURL::GetStatus() const
 
 static size_t wxCURLRead(char *buffer, size_t size, size_t nitems, void *userdata)
 {
-    if ( userdata )
-        return static_cast<wxWebRequestCURL*>(userdata)->ReadData(buffer, size * nitems);
-    else
-        return 0;
+    wxCHECK_MSG( userdata, 0, "invalid curl read callback data" );
+
+    return static_cast<wxWebRequestCURL*>(userdata)->ReadData(buffer, size * nitems);
 }
 
 wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
