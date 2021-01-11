@@ -12,28 +12,11 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_WEBREQUEST
-
-#include "wx/event.h"
-#include "wx/object.h"
 #include "wx/secretstore.h"
-#include "wx/stream.h"
-#include "wx/versioninfo.h"
 
-class wxWebResponse;
-class wxWebSession;
-class wxWebSessionFactory;
-
-class wxWebAuthChallengeImpl;
-class wxWebRequestImpl;
-class wxWebResponseImpl;
-class wxWebSessionImpl;
-
-typedef wxObjectDataPtr<wxWebAuthChallengeImpl> wxWebAuthChallengeImplPtr;
-typedef wxObjectDataPtr<wxWebRequestImpl> wxWebRequestImplPtr;
-typedef wxObjectDataPtr<wxWebResponseImpl> wxWebResponseImplPtr;
-typedef wxObjectDataPtr<wxWebSessionImpl> wxWebSessionImplPtr;
-
+// Note that this class is intentionally defined outside of wxUSE_WEBREQUEST
+// test as it's also used in wxCredentialEntryDialog and can be made available
+// even if wxWebRequest itself is disabled.
 class wxWebCredentials
 {
 public:
@@ -50,6 +33,27 @@ private:
     wxString m_user;
     wxSecretValue m_password;
 };
+
+#if wxUSE_WEBREQUEST
+
+#include "wx/event.h"
+#include "wx/object.h"
+#include "wx/stream.h"
+#include "wx/versioninfo.h"
+
+class wxWebResponse;
+class wxWebSession;
+class wxWebSessionFactory;
+
+class wxWebAuthChallengeImpl;
+class wxWebRequestImpl;
+class wxWebResponseImpl;
+class wxWebSessionImpl;
+
+typedef wxObjectDataPtr<wxWebAuthChallengeImpl> wxWebAuthChallengeImplPtr;
+typedef wxObjectDataPtr<wxWebRequestImpl> wxWebRequestImplPtr;
+typedef wxObjectDataPtr<wxWebResponseImpl> wxWebResponseImplPtr;
+typedef wxObjectDataPtr<wxWebSessionImpl> wxWebSessionImplPtr;
 
 class WXDLLIMPEXP_NET wxWebAuthChallenge
 {
