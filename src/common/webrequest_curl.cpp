@@ -74,7 +74,11 @@ size_t wxWebResponseCURL::WriteData(void* buffer, size_t size)
 
 size_t wxWebResponseCURL::AddHeaderData(const char * buffer, size_t size)
 {
-    wxString hdr(buffer, size);
+    // HTTP headers are supposed to only contain ASCII data, so any encoding
+    // should work here, but use Latin-1 for compatibility with some servers
+    // that send it directly and to at least avoid losing data entirely when
+    // the current encoding is UTF-8 but the input doesn't decode correctly.
+    wxString hdr = wxString::From8BitData(buffer, size);
     hdr.Trim();
 
     if ( hdr.StartsWith("HTTP/") )
@@ -112,7 +116,12 @@ wxString wxWebResponseCURL::GetURL() const
 {
     char* urlp = NULL;
     curl_easy_getinfo(GetHandle(), CURLINFO_EFFECTIVE_URL, &urlp);
-    return wxString(urlp);
+
+    // While URLs should contain ASCII characters only as per
+    // https://tools.ietf.org/html/rfc3986#section-2 we still want to avoid
+    // losing data if they somehow contain something else but are not in UTF-8
+    // by interpreting it as Latin-1.
+    return wxString::From8BitData(urlp);
 }
 
 wxString wxWebResponseCURL::GetHeader(const wxString& name) const
@@ -219,8 +228,10 @@ void wxWebRequestCURL::Start()
     for ( wxWebRequestHeaderMap::const_iterator it = m_headers.begin();
         it != m_headers.end(); ++it )
     {
+        // TODO: We need to implement RFC 2047 encoding here instead of blindly
+        //       sending UTF-8 which is against the standard.
         wxString hdrStr = wxString::Format("%s: %s", it->first, it->second);
-        m_headerList = curl_slist_append(m_headerList, hdrStr.mb_str());
+        m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
     }
     curl_easy_setopt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
@@ -266,7 +277,9 @@ void wxWebRequestCURL::HandleCompletion()
 
 wxString wxWebRequestCURL::GetError() const
 {
-    return wxString(m_errorBuffer);
+    // We don't know what encoding is used for libcurl errors, so do whatever
+    // is needed in order to interpret this data at least somehow.
+    return wxString(m_errorBuffer, wxConvWhateverWorks);
 }
 
 size_t wxWebRequestCURL::ReadData(char* buffer, size_t size)
@@ -328,7 +341,7 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
         );
     curl_easy_setopt(m_request.GetHandle(),
         (GetSource() == wxWebAuthChallenge::Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
-        static_cast<const char*>(authStr.mb_str()));
+        authStr.utf8_str().data());
     m_request.StartRequest();
 }
 
