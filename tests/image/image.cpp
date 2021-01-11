@@ -1477,7 +1477,11 @@ void ImageTestCase::CreateBitmapFromCursor()
     wxCursor cursor( image );
     wxBitmap bitmap( cursor );
     if( bitmap.IsOk() )
-        CHECK_THAT( image,  RGBSimilarTo( bitmap.ConvertToImage(), 2 ) );
+#ifdef __WXOSX__
+        CHECK_THAT( image, RGBSimilarTo( bitmap.ConvertToImage(), 2 ) );
+#else
+        CHECK_THAT( image, RGBSameAs( bitmap.ConvertToImage() ) );
+#endif
 #endif
 }
 
