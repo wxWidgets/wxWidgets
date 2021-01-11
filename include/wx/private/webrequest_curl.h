@@ -142,6 +142,9 @@ protected:
 
 private:
     CURLM* m_handle;
+
+    // Mutex and condition are used together to signal to the worker thread to
+    // wake up and mutex is also used to protected m_shuttingDown field.
     wxMutex m_mutex;
     wxCondition m_condition;
     bool m_shuttingDown;
