@@ -111,8 +111,8 @@ public:
         wxPanel* downloadPanel = new wxPanel(m_notebook);
         wxSizer* downloadSizer = new wxBoxSizer(wxVERTICAL);
         wxStaticText* downloadHeader = new wxStaticText(downloadPanel, wxID_ANY,
-            "The URL will be downloaded to a file.\n"\
-            "Progress will be shown and you will be asked, where\n"\
+            "The URL will be downloaded to a file.\n"
+            "Progress will be shown and you will be asked, where\n"
             "to save the file when the download completed.");
         downloadSizer->Add(downloadHeader, wxSizerFlags().Expand().Border());
         downloadSizer->AddStretchSpacer();
@@ -130,8 +130,8 @@ public:
         wxPanel* advancedPanel = new wxPanel(m_notebook);
         wxSizer* advSizer = new wxBoxSizer(wxVERTICAL);
         wxStaticText* advHeader = new wxStaticText(advancedPanel, wxID_ANY,
-            "As an example of processing data while\n"\
-            "it's being received from the server every\n"\
+            "As an example of processing data while\n"
+            "it's being received from the server every\n"
             "zero byte in the response will be counted below.");
         advSizer->Add(advHeader, wxSizerFlags().Expand().Border());
 
