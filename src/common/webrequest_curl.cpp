@@ -361,7 +361,7 @@ wxWebSessionCURL::~wxWebSessionCURL()
         // Notify the work thread
         m_shuttingDown = true;
         wxMutexLocker lock(m_mutex);
-        m_condition.Broadcast();
+        m_condition.Signal();
     }
 
     // Wait for work thread to finish
@@ -519,7 +519,7 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
 
     // Signal the worker thread to resume work
     wxMutexLocker lock(m_mutex);
-    m_condition.Broadcast();
+    m_condition.Signal();
 
     return true;
 }
