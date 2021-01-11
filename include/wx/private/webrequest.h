@@ -14,13 +14,15 @@
 #include "wx/hashmap.h"
 #include "wx/scopedptr.h"
 
+#include "wx/private/refcountermt.h"
+
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
 
 // ----------------------------------------------------------------------------
 // wxWebAuthChallengeImpl
 // ----------------------------------------------------------------------------
 
-class wxWebAuthChallengeImpl : public wxRefCounter
+class wxWebAuthChallengeImpl : public wxRefCounterMT
 {
 public:
     virtual ~wxWebAuthChallengeImpl() { }
@@ -43,7 +45,7 @@ private:
 // wxWebRequestImpl
 // ----------------------------------------------------------------------------
 
-class wxWebRequestImpl : public wxRefCounter
+class wxWebRequestImpl : public wxRefCounterMT
 {
 public:
     virtual ~wxWebRequestImpl() { }
@@ -123,7 +125,7 @@ private:
 // wxWebResponseImpl
 // ----------------------------------------------------------------------------
 
-class wxWebResponseImpl : public wxRefCounter
+class wxWebResponseImpl : public wxRefCounterMT
 {
 public:
     virtual ~wxWebResponseImpl();
@@ -190,7 +192,7 @@ public:
 // wxWebSessionImpl
 // ----------------------------------------------------------------------------
 
-class wxWebSessionImpl : public wxRefCounter
+class wxWebSessionImpl : public wxRefCounterMT
 {
 public:
     virtual ~wxWebSessionImpl() { }
