@@ -356,8 +356,8 @@ wxWebSessionCURL::~wxWebSessionCURL()
 {
     {
         // Notify the work thread
-        m_shuttingDown = true;
         wxMutexLocker lock(m_mutex);
+        m_shuttingDown = true;
         m_condition.Signal();
     }
 
