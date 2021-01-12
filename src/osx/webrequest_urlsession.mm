@@ -67,6 +67,9 @@
     wxUnusedVar(session);
 
     wxWebRequestURLSession* request = [self requestForTask:dataTask];
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: didReceiveData", request);
+
     if (request)
         request->GetResponseImplPtr()->HandleData(data);
 }
@@ -77,9 +80,18 @@
 
     wxWebRequestURLSession* request = [self requestForTask:task];
     if (error)
+    {
+        wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: didCompleteWithError, error=%s",
+                   request, wxCFStringRefFromGet([error description]).AsString());
+
         request->SetState(wxWebRequest::State_Failed, wxCFStringRefFromGet(error.localizedDescription).AsString());
+    }
     else
+    {
+        wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: completed successfully", request);
+
         request->HandleCompletion();
+    }
 
     // After the task is completed it no longer needs to be mapped
     [m_requests removeObjectForKey:task];
@@ -108,12 +120,13 @@ wxWebRequestURLSession::~wxWebRequestURLSession()
 
 void wxWebRequestURLSession::Start()
 {
+    wxString method = m_method;
+    if ( method.empty() )
+        method = m_dataSize ? wxASCII_STR("POST") : wxASCII_STR("GET");
+
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:
                                 [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];
-    if (m_method.empty())
-        req.HTTPMethod = m_dataSize ? @"POST" : @"GET";
-    else
-        req.HTTPMethod = wxCFStringRef(m_method).AsNSString();
+    req.HTTPMethod = wxCFStringRef(method).AsNSString();
 
     // Set request headers
     for (wxWebRequestHeaderMap::const_iterator it = m_headers.begin(); it != m_headers.end(); ++it)
@@ -137,6 +150,9 @@ void wxWebRequestURLSession::Start()
         // Create data task
         m_task = [[m_sessionImpl.GetSession() dataTaskWithRequest:req] retain];
     }
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: start \"%s %s\"",
+               this, method, m_url);
 
     // The session delegate needs to know which task is wrapped in which request
     [m_sessionImpl.GetDelegate() registerRequest:this task:m_task];

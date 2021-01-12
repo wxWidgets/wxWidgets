@@ -182,6 +182,8 @@ struct StateEventProcessor
 
 void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & failMsg)
 {
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state => %d", this, state);
+
     m_state = state;
 
     // Trigger the event in the main thread

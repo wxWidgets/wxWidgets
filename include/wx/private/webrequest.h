@@ -21,6 +21,9 @@ WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
 // Default buffer size when a fixed-size buffer must be used.
 const int wxWEBREQUEST_BUFFER_SIZE = 64 * 1024;
 
+// Trace mask used for the messages in wxWebRequest code.
+#define wxTRACE_WEBREQUEST "webrequest"
+
 // ----------------------------------------------------------------------------
 // wxWebAuthChallengeImpl
 // ----------------------------------------------------------------------------
