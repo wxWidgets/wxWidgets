@@ -125,11 +125,11 @@ void wxWebRequestURLSession::Start()
     if (m_dataSize)
     {
         // Read all upload data to memory buffer
-        wxMemoryBuffer memBuf;
-        m_dataStream->Read(memBuf.GetWriteBuf(m_dataSize), m_dataSize);
+        void* const buf = malloc(m_dataSize);
+        m_dataStream->Read(buf, m_dataSize);
 
-        // Create NSData from memory buffer
-        NSData* data = [NSData dataWithBytes:memBuf.GetData() length:m_dataSize];
+        // Create NSData from memory buffer, passing it ownership of the data.
+        NSData* data = [NSData dataWithBytesNoCopy:buf length:m_dataSize];
         m_task = [[m_sessionImpl.GetSession() uploadTaskWithRequest:req fromData:data] retain];
     }
     else
