@@ -29,8 +29,6 @@ public:
     wxWebAuthChallengeCURL(wxWebAuthChallenge::Source source,
                            wxWebRequestCURL& request);
 
-    bool Init();
-
     void SetCredentials(const wxWebCredentials& cred) wxOVERRIDE;
 
 private:

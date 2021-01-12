@@ -278,10 +278,7 @@ void wxWebRequestCURL::HandleCompletion()
     {
         m_authChallenge.reset(new wxWebAuthChallengeCURL(
             (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
-        if ( m_authChallenge->Init() )
-            SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
-        else
-            SetState(wxWebRequest::State_Failed);
+        SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
     }
     else if ( CheckServerStatus() )
         SetState(wxWebRequest::State_Completed);
@@ -335,11 +332,6 @@ wxWebAuthChallengeCURL::wxWebAuthChallengeCURL(wxWebAuthChallenge::Source source
     wxWebAuthChallengeImpl(source),
     m_request(request)
 {
-}
-
-bool wxWebAuthChallengeCURL::Init()
-{
-    return true;
 }
 
 void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
