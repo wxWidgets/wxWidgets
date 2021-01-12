@@ -298,7 +298,7 @@ size_t wxWebRequestCURL::CURLOnRead(char* buffer, size_t size)
 {
     if ( m_dataStream )
     {
-        m_dataStream->Read((void*)buffer, size);
+        m_dataStream->Read(buffer, size);
         size_t readSize = m_dataStream->LastRead();
         m_bytesSent += readSize;
         return readSize;
