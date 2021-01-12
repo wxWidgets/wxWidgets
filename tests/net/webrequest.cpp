@@ -78,7 +78,7 @@ public:
         case wxWebRequest::State_Completed:
             if ( request.GetStorage() == wxWebRequest::Storage_File )
             {
-                wxFileName fn(evt.GetResponseFileName());
+                wxFileName fn(evt.GetDataFile());
                 REQUIRE( fn.GetSize() == expectedFileSize );
             }
             wxFALLTHROUGH;

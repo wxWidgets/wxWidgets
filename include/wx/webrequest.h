@@ -111,7 +111,7 @@ public:
 
     wxString AsString() const;
 
-    wxString GetFileName() const;
+    wxString GetDataFile() const;
 
 protected:
     // Ctor is used by wxWebRequest and wxWebRequestImpl.
@@ -264,9 +264,9 @@ public:
 
     const wxString& GetErrorDescription() const { return m_errorDescription; }
 
-    const wxString& GetResponseFileName() const { return m_responseFileName; }
+    const wxString& GetDataFile() const { return m_dataFile; }
 
-    void SetResponseFileName(const wxString& filename) { m_responseFileName = filename; }
+    void SetDataFile(const wxString& dataFile) { m_dataFile = dataFile; }
 
     const void* GetDataBuffer() const { return m_data; }
 
@@ -280,7 +280,7 @@ public:
 private:
     wxWebRequest::State m_state;
     const wxWebResponse m_response; // may be invalid
-    wxString m_responseFileName;
+    wxString m_dataFile;
     const void* m_data;
     size_t m_dataSize;
     wxString m_errorDescription;

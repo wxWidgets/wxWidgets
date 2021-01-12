@@ -288,7 +288,7 @@ public:
                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
                         if ( fileDlg.ShowModal() == wxID_OK )
                         {
-                            if ( !wxRenameFile(evt.GetResponseFileName(), fileDlg.GetPath()) )
+                            if ( !wxRenameFile(evt.GetDataFile(), fileDlg.GetPath()) )
                                 wxLogError("Could not move file");
                         }
 

@@ -164,7 +164,7 @@ public:
             The data is written to a file on disk as it is received.
 
             This file can be later read from using wxWebResponse::GetStream()
-            or otherwise processed using wxWebRequestEvent::GetResponseFileName().
+            or otherwise processed using wxWebRequestEvent::GetDataFile().
          */
         Storage_File,
 
@@ -551,6 +551,13 @@ public:
     wxString GetSuggestedFileName() const;
 
     /**
+        Returns the full path of the file to which data is being saved.
+
+        This is only valid when storage mode is @c Storage_File.
+     */
+    wxString GetDataFile() const;
+
+    /**
         Returns all response data as a string.
 
         This is mostly useful for debugging or diagnostics.
@@ -737,7 +744,7 @@ public:
         move the file to a location of your choice if you want to process the
         contents outside the event handler.
     */
-    const wxString& GetResponseFileName() const;
+    const wxString& GetDataFile() const;
 
     /**
         Only for @c wxEVT_WEBREQUEST_DATA events. The buffer is only valid

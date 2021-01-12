@@ -151,7 +151,7 @@ public:
 
     wxString AsString() const;
 
-    virtual wxString GetFileName() const;
+    virtual wxString GetDataFile() const;
 
 protected:
     wxWebRequestImpl& m_request;

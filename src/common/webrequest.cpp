@@ -278,22 +278,22 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
     if ( !IsActiveState(state) && GetResponse() )
         GetResponse()->Finalize();
 
-    wxString responseFileName;
+    wxString dataFile;
 
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
         wxWebResponse(GetResponse()), failMsg);
     if ( state == wxWebRequest::State_Completed && m_storage == wxWebRequest::Storage_File )
     {
-        responseFileName = GetResponse()->GetFileName();
-        evt.SetResponseFileName(responseFileName);
+        dataFile = GetResponse()->GetDataFile();
+        evt.SetDataFile(dataFile);
     }
 
     m_handler->ProcessEvent(evt);
 
     // Remove temporary file if we're using one and if it still exists: it
     // could have been deleted or moved away by the event handler.
-    if ( !responseFileName.empty() && wxFileExists(responseFileName) )
-        wxRemoveFile(responseFileName);
+    if ( !dataFile.empty() && wxFileExists(dataFile) )
+        wxRemoveFile(dataFile);
 }
 
 //
@@ -638,7 +638,7 @@ void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
         m_readBuffer.Clear();
 }
 
-wxString wxWebResponseImpl::GetFileName() const
+wxString wxWebResponseImpl::GetDataFile() const
 {
     return m_file.GetName();
 }
@@ -740,11 +740,11 @@ wxString wxWebResponse::AsString() const
     return m_impl->AsString();
 }
 
-wxString wxWebResponse::GetFileName() const
+wxString wxWebResponse::GetDataFile() const
 {
     wxCHECK_IMPL( wxString() );
 
-    return m_impl->GetFileName();
+    return m_impl->GetDataFile();
 }
 
 
