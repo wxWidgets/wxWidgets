@@ -152,15 +152,29 @@ public:
     */
     enum Storage
     {
-        /// All data is collected in memory until the request is complete
+        /**
+            All data is collected in memory until the request is complete.
+
+            It can be later retrieved using wxWebResponse::AsString() or
+            wxWebResponse::GetStream().
+         */
         Storage_Memory,
 
-        /// The data is written to a file on disk
+        /**
+            The data is written to a file on disk as it is received.
+
+            This file can be later read from using wxWebResponse::GetStream()
+            or otherwise processed using wxWebRequestEvent::GetResponseFileName().
+         */
         Storage_File,
 
         /**
             The data is not stored by the request and is only available
             via events.
+
+            Data can be retrieved using wxWebRequestEvent::GetDataBuffer() and
+            wxWebRequestEvent::GetDataSize() methods from wxEVT_WEBREQUEST_DATA
+            handler.
         */
         Storage_None
     };
@@ -694,7 +708,7 @@ public:
 
     /**
         Returns the full path of a temporary file containing the response data
-        when the state is @c State_Completed and storage is @Storage_File.
+        when the state is @c State_Completed and storage is @c Storage_File.
 
         The file will be removed after the event handlers are called. You can
         move the file to a location of your choice if you want to process the
