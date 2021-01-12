@@ -288,7 +288,7 @@ void wxWebRequestWinHTTP::Start()
     m_connect = ::WinHttpConnect
                 (
                      m_sessionWinHTTP.GetHandle(),
-                     wxString(urlComps.lpszHostName, urlComps.dwHostNameLength),
+                     wxString(urlComps.lpszHostName, urlComps.dwHostNameLength).wc_str(),
                      urlComps.nPort,
                      wxRESERVED_PARAM
                 );
