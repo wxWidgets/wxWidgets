@@ -196,6 +196,10 @@ public:
 
     /**
         Cancel an active request.
+
+        Note that cancelling is asynchronous, so the application needs to wait
+        until the request state becomes @c State_Cancelled to know when the
+        request was really cancelled.
     */
     void Cancel();
 
