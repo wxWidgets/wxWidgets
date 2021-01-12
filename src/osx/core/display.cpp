@@ -238,6 +238,10 @@ int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
     wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
 
     wxNonOwnedWindow* const tlw = window->MacGetTopLevelWindow();
+    // not yet instantiated
+    if ( tlw->GetWXWindow() == NULL )
+        return wxNOT_FOUND;
+
     int x,y,w,h;
 
     tlw->GetPosition(&x, &y);
