@@ -367,13 +367,26 @@ public:
     */
     State GetState() const;
 
-    /// Returns the number of bytes sent to the server.
+    /**
+        Returns the number of bytes sent to the server.
+
+        This value grows monotonically from 0 to GetBytesExpectedToSend().
+     */
     wxFileOffset GetBytesSent() const;
 
-    /// Returns the number of bytes expected to be sent to the server.
+    /**
+        Returns the total number of bytes expected to be sent to the server.
+
+        This value stays unchanged throughout the request duration.
+     */
     wxFileOffset GetBytesExpectedToSend() const;
 
-    /// Returns the number of bytes received from the server.
+    /**
+        Returns the number of bytes received from the server.
+
+        This value grows monotonically from 0 to GetBytesExpectedToReceive()
+        (unless it is unknown).
+     */
     wxFileOffset GetBytesReceived() const;
 
     /**
