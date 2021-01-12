@@ -20,6 +20,8 @@
     #include "wx/image.h"
 #endif
 
+#include "wx/settings.h"
+
 //-----------------------------------------------------------------------------
 //  wxImageList
 //-----------------------------------------------------------------------------
@@ -84,7 +86,42 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     }
 
     wxBitmap bmp(bitmap);
-    if ( !m_useMask )
+    if ( m_useMask )
+    {
+        if ( bmp.GetMask() )
+        {
+            if ( bmp.HasAlpha() )
+            {
+                // We need to remove alpha channel for compatibility with
+                // native-based wxMSW wxImageList where stored images are not allowed
+                // to have both mask and alpha channel.
+#if wxUSE_IMAGE
+                wxImage img = bitmap.ConvertToImage();
+                img.ClearAlpha();
+                bmp = img;
+#endif // wxUSE_IMAGE
+            }
+        }
+        else
+        {
+            if ( bmp.HasAlpha() )
+            {
+                // Convert alpha channel to mask.
+#if wxUSE_IMAGE
+                wxImage img = bmp.ConvertToImage();
+                img.ConvertAlphaToMask();
+                bmp = img;
+#endif // wxUSE_IMAGE
+            }
+            else
+            {
+                // Like for wxMSW, use the light grey from standard colour map as transparent colour.
+                wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+                bmp.SetMask(new wxMask(bmp, col));
+            }
+        }
+    }
+    else
     {
         if ( bmp.GetMask() )
         {
