@@ -1160,10 +1160,20 @@ void MyFrame::CredentialEntry(wxCommandEvent& WXUNUSED(event))
     wxCredentialEntryDialog dialog(this, "A login is required", "Credentials");
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxMessageBox(
-            wxString::Format("User: %s Password: %s",
-                dialog.GetUser(), dialog.GetPassword()),
-            "Credentials", wxOK | wxICON_INFORMATION, this);
+        const wxWebCredentials credentials = dialog.GetCredentials();
+        const wxString& password = wxSecretString(credentials.GetPassword());
+        wxMessageBox
+        (
+            wxString::Format
+            (
+                "User: %s Password: %s",
+                credentials.GetUser(),
+                password
+            ),
+            "Credentials",
+            wxOK | wxICON_INFORMATION,
+            this
+        );
     }
 }
 #endif // wxUSE_CREDENTIALDLG
