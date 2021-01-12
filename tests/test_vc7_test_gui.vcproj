@@ -458,6 +458,9 @@
 				RelativePath=".\image\image.cpp">
 			</File>
 			<File
+				RelativePath=".\graphics\imagelist.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\itemcontainertest.cpp">
 			</File>
 			<File

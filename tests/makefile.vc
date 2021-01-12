@@ -180,6 +180,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_coords.obj \
 	$(OBJS)\test_gui_graphmatrix.obj \
 	$(OBJS)\test_gui_graphpath.obj \
+	$(OBJS)\test_gui_imagelist.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_auitest.obj \
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj \
@@ -984,7 +985,7 @@ data:
 
 data-images: 
 	if not exist image mkdir image
-	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png paste_input_background.png paste_input_black.png paste_input_overlay_transparent_border_opaque_square.png paste_input_overlay_transparent_border_semitransparent_circle.png paste_input_overlay_transparent_border_semitransparent_square.png paste_result_background_plus_circle_plus_square.png paste_result_background_plus_overlay_transparent_border_opaque_square.png paste_result_background_plus_overlay_transparent_border_semitransparent_square.png paste_result_no_background_square_over_circle.png) do if not exist image\%f copy .\image\%f image
+	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png paste_input_background.png paste_input_black.png paste_input_overlay_transparent_border_opaque_square.png paste_input_overlay_transparent_border_semitransparent_circle.png paste_input_overlay_transparent_border_semitransparent_square.png paste_result_background_plus_circle_plus_square.png paste_result_background_plus_overlay_transparent_border_opaque_square.png paste_result_background_plus_overlay_transparent_border_semitransparent_square.png paste_result_no_background_square_over_circle.png wx.png wx.ico) do if not exist image\%f copy .\image\%f image
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
@@ -1329,6 +1330,9 @@ $(OBJS)\test_gui_graphmatrix.obj: .\graphics\graphmatrix.cpp
 
 $(OBJS)\test_gui_graphpath.obj: .\graphics\graphpath.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\graphpath.cpp
+
+$(OBJS)\test_gui_imagelist.obj: .\graphics\imagelist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\imagelist.cpp
 
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp

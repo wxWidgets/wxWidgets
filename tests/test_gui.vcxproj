@@ -552,6 +552,7 @@
     <ClCompile Include="graphics\graphpath.cpp" />
     <ClCompile Include="graphics\colour.cpp" />
     <ClCompile Include="graphics\ellipsization.cpp" />
+    <ClCompile Include="graphics\imagelist.cpp" />
     <ClCompile Include="graphics\measuring.cpp" />
     <ClCompile Include="html\htmlparser.cpp" />
     <ClCompile Include="html\htmlwindow.cpp" />
