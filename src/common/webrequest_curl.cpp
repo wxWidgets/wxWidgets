@@ -219,6 +219,12 @@ void wxWebRequestCURL::Start()
             curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
                 static_cast<curl_off_t>(m_dataSize));
         }
+        else
+        {
+            wxFAIL_MSG(wxString::Format(
+                "Supplied data is ignored when using method %s", m_method
+            ));
+        }
     }
 
     if ( m_method.CmpNoCase("HEAD") == 0 )
