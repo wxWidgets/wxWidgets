@@ -207,13 +207,13 @@ void wxWebRequestCURL::Start()
 
     if ( m_dataSize )
     {
-        if ( m_method.empty() || m_method.IsSameAs("POST", false) )
+        if ( m_method.empty() || m_method.CmpNoCase("POST") == 0 )
         {
             curl_easy_setopt(m_handle, CURLOPT_POSTFIELDSIZE_LARGE,
                 static_cast<curl_off_t>(m_dataSize));
             curl_easy_setopt(m_handle, CURLOPT_POST, 1L);
         }
-        else if ( m_method.IsSameAs("PUT", false) )
+        else if ( m_method.CmpNoCase("PUT") == 0 )
         {
             curl_easy_setopt(m_handle, CURLOPT_UPLOAD, 1L);
             curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
@@ -221,7 +221,7 @@ void wxWebRequestCURL::Start()
         }
     }
 
-    if ( m_method.IsSameAs("HEAD", false) )
+    if ( m_method.CmpNoCase("HEAD") == 0 )
     {
         curl_easy_setopt(m_handle, CURLOPT_NOBODY, 1L);
     }
