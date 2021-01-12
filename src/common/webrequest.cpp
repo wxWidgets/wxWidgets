@@ -290,9 +290,9 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
 
     m_handler->ProcessEvent(evt);
 
-    // Remove temporary file if it still exists
-    if ( state == wxWebRequest::State_Completed && m_storage == wxWebRequest::Storage_File &&
-        wxFileExists(responseFileName) )
+    // Remove temporary file if we're using one and if it still exists: it
+    // could have been deleted or moved away by the event handler.
+    if ( !responseFileName.empty() && wxFileExists(responseFileName) )
         wxRemoveFile(responseFileName);
 }
 
