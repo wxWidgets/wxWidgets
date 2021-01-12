@@ -194,7 +194,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
 
 void wxWebRequestWinHTTP::WriteData()
 {
-    int dataWriteSize = 8 * 1024;
+    int dataWriteSize = wxWEBREQUEST_BUFFER_SIZE;
     if ( m_dataWritten + dataWriteSize > m_dataSize )
         dataWriteSize = m_dataSize - m_dataWritten;
     if ( !dataWriteSize )

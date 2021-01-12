@@ -509,7 +509,7 @@ wxWebAuthChallenge::SetCredentials(const wxWebCredentials& cred)
 
 wxWebResponseImpl::wxWebResponseImpl(wxWebRequestImpl& request) :
     m_request(request),
-    m_readSize(8 * 1024)
+    m_readSize(wxWEBREQUEST_BUFFER_SIZE)
 {
 }
 
