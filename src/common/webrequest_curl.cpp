@@ -162,6 +162,12 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
     m_headerList = NULL;
 
     m_handle = curl_easy_init();
+    if ( !m_handle )
+    {
+        wxStrlcpy(m_errorBuffer, "libcurl initialization failed", CURL_ERROR_SIZE);
+        return;
+    }
+
     // Set error buffer to get more detailed CURL status
     m_errorBuffer[0] = '\0';
     curl_easy_setopt(m_handle, CURLOPT_ERRORBUFFER, m_errorBuffer);
