@@ -193,7 +193,6 @@ private:
     wxWebRequestImplPtr m_impl;
 };
 
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
@@ -213,7 +212,7 @@ public:
     // factory functions to get access to them.
     static wxWebSession& GetDefault();
 
-    static wxWebSession New(const wxString& backend = wxWebSessionBackendDefault);
+    static wxWebSession New(const wxString& backend = wxString());
 
     // Can be used to check if the given backend is available without actually
     // creating a session using it.

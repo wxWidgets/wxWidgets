@@ -43,14 +43,6 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[] = "wxWebSes
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[] = "wxWebSessionBackendURLSession";
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "wxWebSessionBackendCURL";
 
-#if wxUSE_WEBREQUEST_WINHTTP
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendWinHTTP";
-#elif wxUSE_WEBREQUEST_URLSESSION
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendURLSession";
-#elif wxUSE_WEBREQUEST_CURL
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendCURL";
-#endif
-
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
 
@@ -824,10 +816,22 @@ wxWebSession& wxWebSession::GetDefault()
 }
 
 // static
-wxWebSession wxWebSession::New(const wxString& backend)
+wxWebSession wxWebSession::New(const wxString& backendOrig)
 {
     if ( gs_factoryMap.empty() )
         InitFactoryMap();
+
+    wxString backend = backendOrig;
+    if ( backend.empty() )
+    {
+#if wxUSE_WEBREQUEST_WINHTTP
+        backend = wxWebSessionBackendWinHTTP;
+#elif wxUSE_WEBREQUEST_URLSESSION
+        backend = wxWebSessionBackendURLSession;
+#elif wxUSE_WEBREQUEST_CURL
+        backend = wxWebSessionBackendCURL;
+#endif
+    }
 
     wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);
 
