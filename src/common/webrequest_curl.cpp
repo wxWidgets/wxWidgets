@@ -45,14 +45,14 @@ static size_t wxCURLWriteData(void* buffer, size_t size, size_t nmemb, void* use
 {
     wxCHECK_MSG( userdata, 0, "invalid curl write callback data" );
 
-    return static_cast<wxWebResponseCURL*>(userdata)->WriteData(buffer, size * nmemb);
+    return static_cast<wxWebResponseCURL*>(userdata)->CURLOnWrite(buffer, size * nmemb);
 }
 
 static size_t wxCURLHeader(char *buffer, size_t size, size_t nitems, void *userdata)
 {
     wxCHECK_MSG( userdata, 0, "invalid curl header callback data" );
 
-    return static_cast<wxWebResponseCURL*>(userdata)->AddHeaderData(buffer, size * nitems);
+    return static_cast<wxWebResponseCURL*>(userdata)->CURLOnHeader(buffer, size * nitems);
 }
 
 wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
@@ -64,7 +64,7 @@ wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
     Init();
 }
 
-size_t wxWebResponseCURL::WriteData(void* buffer, size_t size)
+size_t wxWebResponseCURL::CURLOnWrite(void* buffer, size_t size)
 {
     void* buf = GetDataBuffer(size);
     memcpy(buf, buffer, size);
@@ -72,7 +72,7 @@ size_t wxWebResponseCURL::WriteData(void* buffer, size_t size)
     return size;
 }
 
-size_t wxWebResponseCURL::AddHeaderData(const char * buffer, size_t size)
+size_t wxWebResponseCURL::CURLOnHeader(const char * buffer, size_t size)
 {
     // HTTP headers are supposed to only contain ASCII data, so any encoding
     // should work here, but use Latin-1 for compatibility with some servers
@@ -148,7 +148,7 @@ static size_t wxCURLRead(char *buffer, size_t size, size_t nitems, void *userdat
 {
     wxCHECK_MSG( userdata, 0, "invalid curl read callback data" );
 
-    return static_cast<wxWebRequestCURL*>(userdata)->ReadData(buffer, size * nitems);
+    return static_cast<wxWebRequestCURL*>(userdata)->CURLOnRead(buffer, size * nitems);
 }
 
 wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
@@ -282,7 +282,7 @@ wxString wxWebRequestCURL::GetError() const
     return wxString(m_errorBuffer, wxConvWhateverWorks);
 }
 
-size_t wxWebRequestCURL::ReadData(char* buffer, size_t size)
+size_t wxWebRequestCURL::CURLOnRead(char* buffer, size_t size)
 {
     if ( m_dataStream )
     {

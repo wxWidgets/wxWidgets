@@ -72,7 +72,8 @@ public:
 
     wxString GetError() const;
 
-    size_t ReadData(char* buffer, size_t size);
+    // Method called from libcurl callback
+    size_t CURLOnRead(char* buffer, size_t size);
 
 private:
     wxWebSessionCURL& m_sessionImpl;
@@ -104,9 +105,10 @@ public:
 
     wxString GetStatusText() const wxOVERRIDE { return m_statusText; }
 
-    size_t WriteData(void *buffer, size_t size);
 
-    size_t AddHeaderData(const char* buffer, size_t size);
+    // Methods called from libcurl callbacks
+    size_t CURLOnWrite(void *buffer, size_t size);
+    size_t CURLOnHeader(const char* buffer, size_t size);
 
 private:
     wxWebRequestHeaderMap m_headers;
