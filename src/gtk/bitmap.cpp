@@ -883,8 +883,8 @@ wxImage wxBitmap::ConvertToImage() const
         if (pixmap_invert != NULL)
             g_object_unref(pixmap_invert);
     }
-    // convert mask, unless there is already alpha
-    if (GetMask() && !image.HasAlpha())
+    // convert mask, even there is already alpha. Image can have both.
+    if ( GetMask() )
     {
         // we hard code the mask colour for now but we could also make an
         // effort (and waste time) to choose a colour not present in the
