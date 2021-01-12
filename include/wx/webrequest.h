@@ -93,7 +93,7 @@ public:
 
     bool IsOk() const { return m_impl.get() != NULL; }
 
-    wxInt64 GetContentLength() const;
+    wxFileOffset GetContentLength() const;
 
     wxString GetURL() const;
 

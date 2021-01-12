@@ -24,7 +24,7 @@ class wxWebResponseWinHTTP : public wxWebResponseImpl
 public:
     wxWebResponseWinHTTP(wxWebRequestWinHTTP& request);
 
-    wxInt64 GetContentLength() const wxOVERRIDE { return m_contentLength; }
+    wxFileOffset GetContentLength() const wxOVERRIDE { return m_contentLength; }
 
     wxString GetURL() const wxOVERRIDE;
 
@@ -40,7 +40,7 @@ public:
 
 private:
     HINTERNET m_requestHandle;
-    wxInt64 m_contentLength;
+    wxFileOffset m_contentLength;
 
     wxDECLARE_NO_COPY_CLASS(wxWebResponseWinHTTP);
 };

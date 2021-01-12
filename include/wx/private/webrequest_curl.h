@@ -95,7 +95,7 @@ class wxWebResponseCURL : public wxWebResponseImpl
 public:
     explicit wxWebResponseCURL(wxWebRequestCURL& request);
 
-    wxInt64 GetContentLength() const wxOVERRIDE;
+    wxFileOffset GetContentLength() const wxOVERRIDE;
 
     wxString GetURL() const wxOVERRIDE;
 

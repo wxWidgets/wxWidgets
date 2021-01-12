@@ -29,7 +29,7 @@ public:
 
     ~wxWebResponseURLSession();
 
-    wxInt64 GetContentLength() const wxOVERRIDE;
+    wxFileOffset GetContentLength() const wxOVERRIDE;
 
     wxString GetURL() const wxOVERRIDE;
 

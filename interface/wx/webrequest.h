@@ -394,6 +394,8 @@ public:
 
         This value is based on the @c Content-Length header, if none is found
         it will return -1.
+
+        @see wxWebResponse::GetContentLength()
     */
     wxFileOffset GetBytesExpectedToReceive() const;
     ///@}
@@ -514,6 +516,14 @@ public:
         @param name Name of the header field
     */
     wxString GetHeader(const wxString& name) const;
+
+    /**
+        Get the length of returned data if available.
+
+        Returns the value specified in the @c Content-Length: response header
+        of @c -1 if not available.
+     */
+    wxFileOffset GetContentLength() const;
 
     /**
         Returns the MIME type of the response (if available).

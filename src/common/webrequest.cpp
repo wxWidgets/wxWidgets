@@ -677,7 +677,7 @@ wxWebResponse::~wxWebResponse()
 {
 }
 
-wxInt64 wxWebResponse::GetContentLength() const
+wxFileOffset wxWebResponse::GetContentLength() const
 {
     wxCHECK_IMPL( -1 );
 

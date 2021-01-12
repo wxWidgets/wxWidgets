@@ -133,7 +133,7 @@ class wxWebResponseImpl : public wxRefCounterMT
 public:
     virtual ~wxWebResponseImpl();
 
-    virtual wxInt64 GetContentLength() const = 0;
+    virtual wxFileOffset GetContentLength() const = 0;
 
     virtual wxString GetURL() const = 0;
 

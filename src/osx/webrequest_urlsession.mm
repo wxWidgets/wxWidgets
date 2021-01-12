@@ -209,7 +209,7 @@ void wxWebResponseURLSession::HandleData(WX_NSData data)
     ReportDataReceived(data.length);
 }
 
-wxInt64 wxWebResponseURLSession::GetContentLength() const
+wxFileOffset wxWebResponseURLSession::GetContentLength() const
 {
     return m_task.response.expectedContentLength;
 }

@@ -99,7 +99,7 @@ size_t wxWebResponseCURL::CURLOnHeader(const char * buffer, size_t size)
     return size;
 }
 
-wxInt64 wxWebResponseCURL::GetContentLength() const
+wxFileOffset wxWebResponseCURL::GetContentLength() const
 {
 #if CURL_AT_LEAST_VERSION(7, 55, 0)
     curl_off_t len = 0;
@@ -108,7 +108,7 @@ wxInt64 wxWebResponseCURL::GetContentLength() const
 #else
     double len = 0;
     curl_easy_getinfo(GetHandle(), CURLINFO_CONTENT_LENGTH_DOWNLOAD, &len);
-    return (wxInt64)len;
+    return (wxFileOffset)len;
 #endif
 }
 
