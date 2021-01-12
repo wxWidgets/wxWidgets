@@ -39,9 +39,9 @@
 #include "wx/private/webrequest_curl.h"
 #endif
 
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[] = "wxWebSessionBackendWinHTTP";
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[] = "wxWebSessionBackendURLSession";
-extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "wxWebSessionBackendCURL";
+extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[] = "WinHTTP";
+extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[] = "URLSession";
+extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "CURL";
 
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
@@ -824,13 +824,16 @@ wxWebSession wxWebSession::New(const wxString& backendOrig)
     wxString backend = backendOrig;
     if ( backend.empty() )
     {
+        if ( !wxGetEnv("WXWEBREQUEST_BACKEND", &backend) )
+        {
 #if wxUSE_WEBREQUEST_WINHTTP
-        backend = wxWebSessionBackendWinHTTP;
+            backend = wxWebSessionBackendWinHTTP;
 #elif wxUSE_WEBREQUEST_URLSESSION
-        backend = wxWebSessionBackendURLSession;
+            backend = wxWebSessionBackendURLSession;
 #elif wxUSE_WEBREQUEST_CURL
-        backend = wxWebSessionBackendCURL;
+            backend = wxWebSessionBackendCURL;
 #endif
+        }
     }
 
     wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);

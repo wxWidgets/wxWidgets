@@ -610,15 +610,28 @@ public:
     /**
         Creates a new wxWebSession object.
 
+        @a backend may be specified explicitly by using of the predefined @c
+        wxWebSessionBackendWinHTTP, @c wxWebSessionBackendURLSession or @c
+        wxWebSessionBackendCURL constants to select the corresponding backend
+        or left empty to select the default backend. The default depends on the
+        the current platform: WinHTTP-based implementation is used under MSW,
+        NSURLSession-based one under macOS and libcurl-based otherwise.
+
+        Further, if @c WXWEBREQUEST_BACKEND environment variable is defined, it
+        overrides the default backend selection, allowing to force the use of
+        libcurl-based implementation by default under MSW or macOS platforms,
+        for example.
+
         Use IsOpened() to check if the session creation succeeded.
 
         @param backend
-            The backend web session implementation to use.
+            The backend web session implementation to use or empty to use the
+            default implementation as described above.
 
         @return
             The created wxWebSession
     */
-    static wxWebSession New(const wxString& backend = wxWebSessionBackendDefault);
+    static wxWebSession New(const wxString& backend = wxString());
 
     /**
         Allows to check if the specified backend is available at runtime.
