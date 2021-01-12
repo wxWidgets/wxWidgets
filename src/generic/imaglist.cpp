@@ -42,9 +42,10 @@ int wxGenericImageList::GetImageCount() const
     return static_cast<int>(m_images.size());
 }
 
-bool wxGenericImageList::Create( int width, int height, bool WXUNUSED(mask), int WXUNUSED(initialCount) )
+bool wxGenericImageList::Create( int width, int height, bool mask, int WXUNUSED(initialCount) )
 {
     m_size = wxSize(width, height);
+    m_useMask = mask;
 
     return true;
 }
@@ -82,7 +83,30 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
                       "All bitmaps in wxImageList must have the same size" );
     }
 
-    m_images.push_back(bitmap);
+    wxBitmap bmp(bitmap);
+    if ( !m_useMask )
+    {
+        if ( bmp.GetMask() )
+        {
+            if ( bmp.HasAlpha() )
+            {
+                // TODO: It would be better to blend a mask with existing alpha values.
+                bmp.SetMask(NULL);
+            }
+            else
+            {
+                // Convert a mask to alpha values.
+#if wxUSE_IMAGE
+                wxImage img = bmp.ConvertToImage();
+                img.InitAlpha();
+                bmp = img;
+#else
+                bmp.SetMask(NULL);
+#endif // wxUSE_IMAGE
+            }
+        }
+    }
+    m_images.push_back(bmp);
 
     return GetImageCount() - 1;
 }

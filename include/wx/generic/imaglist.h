@@ -58,6 +58,7 @@ private:
     const wxBitmap *DoGetPtr(int index) const;
 
     wxVector<wxBitmap> m_images;
+    bool m_useMask;
 
     // Size of a single bitmap in the list.
     wxSize m_size;
