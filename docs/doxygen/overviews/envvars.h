@@ -30,7 +30,7 @@ wxWidgets programs.
          This variable can be set to override the choice of the default backend
          used by wxWebRequest, see wxWebSession::New(). Most common use is to
          set it to @c "CURL" to force using libcurl-based implementation under
-         MSW or macOS platforms where the native implementation would be chosed
+         MSW or macOS platforms where the native implementation would be chosen
          by default.}
 */
 
