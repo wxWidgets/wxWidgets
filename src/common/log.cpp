@@ -49,8 +49,6 @@
 
 #include <stdlib.h>
 
-#include <time.h>
-
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h" // includes windows.h
 #endif
