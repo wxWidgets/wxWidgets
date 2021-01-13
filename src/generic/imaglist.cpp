@@ -52,41 +52,12 @@ bool wxGenericImageList::Create( int width, int height, bool mask, int WXUNUSED(
     return true;
 }
 
-int wxGenericImageList::Add( const wxBitmap &bitmap )
+namespace
 {
-    // We use the scaled, i.e. logical, size here as image list images size is
-    // specified in logical pixels, just as window coordinates and sizes are.
-    const wxSize bitmapSize = bitmap.GetScaledSize();
-
-    if ( m_size == wxSize(0, 0) )
-    {
-        // This is the first time Add() is called and we hadn't had any fixed
-        // size: adopt the size of our first bitmap as image size.
-        m_size = bitmapSize;
-    }
-    else // We already have a fixed size, check that the bitmap conforms to it.
-    {
-        // There is a special case: a bitmap may contain more than one image,
-        // in which case we're supposed to chop it in parts, just as Windows
-        // ImageList_Add() does.
-        if ( bitmapSize.x > m_size.x && (bitmapSize.x % m_size.x == 0) )
-        {
-            const int numImages = bitmapSize.x / m_size.x;
-            for (int subIndex = 0; subIndex < numImages; subIndex++)
-            {
-                wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
-                Add(bitmap.GetSubBitmap(rect));
-            }
-
-            return GetImageCount() - 1;
-        }
-
-        wxASSERT_MSG( bitmapSize == m_size,
-                      "All bitmaps in wxImageList must have the same size" );
-    }
-
+wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask)
+{
     wxBitmap bmp(bitmap);
-    if ( m_useMask )
+    if ( useMask )
     {
         if ( bmp.GetMask() )
         {
@@ -96,7 +67,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
                 // native-based wxMSW wxImageList where stored images are not allowed
                 // to have both mask and alpha channel.
 #if wxUSE_IMAGE
-                wxImage img = bitmap.ConvertToImage();
+                wxImage img = bmp.ConvertToImage();
                 img.ClearAlpha();
                 bmp = img;
 #endif // wxUSE_IMAGE
@@ -143,6 +114,45 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
             }
         }
     }
+
+    return bmp;
+}
+};
+
+int wxGenericImageList::Add( const wxBitmap &bitmap )
+{
+    // We use the scaled, i.e. logical, size here as image list images size is
+    // specified in logical pixels, just as window coordinates and sizes are.
+    const wxSize bitmapSize = bitmap.GetScaledSize();
+
+    if ( m_size == wxSize(0, 0) )
+    {
+        // This is the first time Add() is called and we hadn't had any fixed
+        // size: adopt the size of our first bitmap as image size.
+        m_size = bitmapSize;
+    }
+    else // We already have a fixed size, check that the bitmap conforms to it.
+    {
+        // There is a special case: a bitmap may contain more than one image,
+        // in which case we're supposed to chop it in parts, just as Windows
+        // ImageList_Add() does.
+        if ( bitmapSize.x > m_size.x && (bitmapSize.x % m_size.x == 0) )
+        {
+            const int numImages = bitmapSize.x / m_size.x;
+            for (int subIndex = 0; subIndex < numImages; subIndex++)
+            {
+                wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
+                Add(bitmap.GetSubBitmap(rect));
+            }
+
+            return GetImageCount() - 1;
+        }
+
+        wxASSERT_MSG( bitmapSize == m_size,
+                      "All bitmaps in wxImageList must have the same size" );
+    }
+
+    wxBitmap bmp = GetImageListBitmap(bitmap, m_useMask);
     m_images.push_back(bmp);
 
     return GetImageCount() - 1;
@@ -202,10 +212,11 @@ wxGenericImageList::Replace(int index,
     if ( !DoGetPtr(index) )
         return false;
 
-    m_images[index] = bitmap;
-
+    wxBitmap bmp(bitmap);
     if ( mask.IsOk() )
-        m_images[index].SetMask(new wxMask(mask));
+        bmp.SetMask(new wxMask(mask));
+
+    m_images[index] = GetImageListBitmap(bmp, m_useMask);
 
     return true;
 }

@@ -131,6 +131,54 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         CHECK(icon1.GetWidth() == 32);
         CHECK(icon1.GetHeight() == 32);
     }
+
+    SECTION("Replace with RGB image")
+    {
+        il.RemoveAll();
+        int idx1 = il.Add(bmpRGBA);
+        CHECK(il.GetImageCount() == 1);
+        int idx2 = il.Add(bmpRGBAWithMask);
+        CHECK(il.GetImageCount() == 2);
+
+        il.Replace(idx1, bmpRGB);
+        il.Replace(idx2, bmpRGBWithMask);
+
+        wxBitmap bmp1 = il.GetBitmap(idx1);
+        CHECK(bmp1.HasAlpha() == false);
+        CHECK(bmp1.GetMask() != NULL);
+        CHECK(bmp1.GetWidth() == 32);
+        CHECK(bmp1.GetHeight() == 32);
+
+        wxBitmap bmp2 = il.GetBitmap(idx2);
+        CHECK(bmp2.HasAlpha() == false);
+        CHECK(bmp2.GetMask() != NULL);
+        CHECK(bmp2.GetWidth() == 32);
+        CHECK(bmp2.GetHeight() == 32);
+    }
+
+    SECTION("Replace with RGBA image")
+    {
+        il.RemoveAll();
+        int idx1 = il.Add(bmpRGB);
+        CHECK(il.GetImageCount() == 1);
+        int idx2 = il.Add(bmpRGBWithMask);
+        CHECK(il.GetImageCount() == 2);
+
+        il.Replace(idx1, bmpRGBA);
+        il.Replace(idx2, bmpRGBAWithMask);
+
+        wxBitmap bmp1 = il.GetBitmap(idx1);
+        CHECK(bmp1.HasAlpha() == false);
+        CHECK(bmp1.GetMask() != NULL);
+        CHECK(bmp1.GetWidth() == 32);
+        CHECK(bmp1.GetHeight() == 32);
+
+        wxBitmap bmp2 = il.GetBitmap(idx2);
+        CHECK(bmp2.HasAlpha() == false);
+        CHECK(bmp2.GetMask() != NULL);
+        CHECK(bmp2.GetWidth() == 32);
+        CHECK(bmp2.GetHeight() == 32);
+    }
 }
 
 TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
@@ -239,5 +287,53 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         wxIcon icon1 = il.GetIcon(idx);
         CHECK(icon1.GetWidth() == 32);
         CHECK(icon1.GetHeight() == 32);
+    }
+
+    SECTION("Replace with RGB image")
+    {
+        il.RemoveAll();
+        int idx1 = il.Add(bmpRGBA);
+        CHECK(il.GetImageCount() == 1);
+        int idx2 = il.Add(bmpRGBAWithMask);
+        CHECK(il.GetImageCount() == 2);
+
+        il.Replace(idx1, bmpRGB);
+        il.Replace(idx2, bmpRGBWithMask);
+
+        wxBitmap bmp1 = il.GetBitmap(idx1);
+        CHECK(bmp1.HasAlpha() == false);
+        CHECK(bmp1.GetMask() == NULL);
+        CHECK(bmp1.GetWidth() == 32);
+        CHECK(bmp1.GetHeight() == 32);
+
+        wxBitmap bmp2 = il.GetBitmap(idx2);
+        CHECK(bmp2.HasAlpha() == true);
+        CHECK(bmp2.GetMask() == NULL);
+        CHECK(bmp2.GetWidth() == 32);
+        CHECK(bmp2.GetHeight() == 32);
+    }
+
+    SECTION("Replace with RGBA image")
+    {
+        il.RemoveAll();
+        int idx1 = il.Add(bmpRGB);
+        CHECK(il.GetImageCount() == 1);
+        int idx2 = il.Add(bmpRGBWithMask);
+        CHECK(il.GetImageCount() == 2);
+
+        il.Replace(idx1, bmpRGBA);
+        il.Replace(idx2, bmpRGBAWithMask);
+
+        wxBitmap bmp1 = il.GetBitmap(idx1);
+        CHECK(bmp1.HasAlpha() == true);
+        CHECK(bmp1.GetMask() == NULL);
+        CHECK(bmp1.GetWidth() == 32);
+        CHECK(bmp1.GetHeight() == 32);
+
+        wxBitmap bmp2 = il.GetBitmap(idx2);
+        CHECK(bmp2.HasAlpha() == true);
+        CHECK(bmp2.GetMask() == NULL);
+        CHECK(bmp2.GetWidth() == 32);
+        CHECK(bmp2.GetHeight() == 32);
     }
 }
