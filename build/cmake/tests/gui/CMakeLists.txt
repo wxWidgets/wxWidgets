@@ -25,6 +25,7 @@ set(TEST_GUI_SRC
     graphics/coords.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
+    graphics/imagelist.cpp
     config/config.cpp
     controls/auitest.cpp
     controls/bitmapcomboboxtest.cpp
@@ -173,6 +174,8 @@ set(TEST_GUI_DATA
     image/paste_result_background_plus_overlay_transparent_border_opaque_square.png
     image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
     image/paste_result_no_background_square_over_circle.png
+    image/wx.png
+    image/wx.ico
     intl/ja/internat.mo
     intl/ja/internat.po
     )
