@@ -84,7 +84,10 @@
         wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: didCompleteWithError, error=%s",
                    request, wxCFStringRefFromGet([error description]).AsString());
 
-        request->SetState(wxWebRequest::State_Failed, wxCFStringRefFromGet(error.localizedDescription).AsString());
+        if ( error.code == NSURLErrorCancelled )
+            request->SetState(wxWebRequest::State_Cancelled);
+        else
+            request->SetState(wxWebRequest::State_Failed, wxCFStringRefFromGet(error.localizedDescription).AsString());
     }
     else
     {
