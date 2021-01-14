@@ -14,6 +14,7 @@
 
 #include "wx/private/webrequest.h"
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSURLCredential);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSession);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
 DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegate);
@@ -21,6 +22,29 @@ DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegate);
 class wxWebSessionURLSession;
 class wxWebRequestURLSession;
 class wxWebResponseURLSession;
+
+class wxWebAuthChallengeURLSession : public wxWebAuthChallengeImpl
+{
+public:
+    wxWebAuthChallengeURLSession(wxWebAuthChallenge::Source source,
+                                 wxWebRequestURLSession& request)
+        : wxWebAuthChallengeImpl(source),
+          m_request(request)
+    {
+    }
+
+    ~wxWebAuthChallengeURLSession();
+
+    void SetCredentials(const wxWebCredentials& cred) wxOVERRIDE;
+
+    WX_NSURLCredential GetURLCredential() const { return m_cred; }
+
+private:
+    wxWebRequestURLSession& m_request;
+    WX_NSURLCredential m_cred = NULL;
+
+    wxDECLARE_NO_COPY_CLASS(wxWebAuthChallengeURLSession);
+};
 
 class wxWebResponseURLSession : public wxWebResponseImpl
 {
@@ -67,7 +91,8 @@ public:
     wxWebResponseImplPtr GetResponse() const wxOVERRIDE
         { return m_response; }
 
-    wxWebAuthChallengeImplPtr GetAuthChallenge() const wxOVERRIDE;
+    wxWebAuthChallengeImplPtr GetAuthChallenge() const wxOVERRIDE
+        { return m_authChallenge; }
 
     wxFileOffset GetBytesSent() const wxOVERRIDE;
 
@@ -79,14 +104,22 @@ public:
 
     void HandleCompletion();
 
+    void HandleChallenge(wxWebAuthChallengeURLSession* challenge);
+
+    void OnSetCredentials(const wxWebCredentials& cred);
+
     wxWebResponseURLSession* GetResponseImplPtr() const
         { return m_response.get(); }
+
+    wxWebAuthChallengeURLSession* GetAuthChallengeImplPtr() const
+        { return m_authChallenge.get(); }
 
 private:
     wxWebSessionURLSession& m_sessionImpl;
     wxString m_url;
     WX_NSURLSessionTask m_task;
     wxObjectDataPtr<wxWebResponseURLSession> m_response;
+    wxObjectDataPtr<wxWebAuthChallengeURLSession> m_authChallenge;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestURLSession);
 };

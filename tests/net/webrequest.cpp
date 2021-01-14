@@ -42,12 +42,6 @@ public:
         dataSize = 0;
     }
 
-    static bool UsingNSURLSession()
-    {
-        return wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
-                == "URLSession";
-    }
-
     // All tests should call this function first and skip the test entirely if
     // it returns false, as this indicates that web requests tests are disabled.
     bool InitBaseURL()
@@ -240,12 +234,6 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    if ( UsingNSURLSession() )
-    {
-        WARN("NSURLSession backend doesn't support authentication, skipping.");
-        return;
-    }
-
     Create("/basic-auth/wxtest/wxwidgets");
     Run(wxWebRequest::State_Unauthorized, 401);
     REQUIRE( request.GetAuthChallenge().IsOk() );
@@ -272,12 +260,6 @@ TEST_CASE_METHOD(RequestFixture,
 {
     if ( !InitBaseURL() )
         return;
-
-    if ( UsingNSURLSession() )
-    {
-        WARN("NSURLSession backend doesn't support authentication, skipping.");
-        return;
-    }
 
     Create("/digest-auth/auth/wxtest/wxwidgets");
     Run(wxWebRequest::State_Unauthorized, 401);

@@ -97,6 +97,60 @@
     [m_requests removeObjectForKey:task];
 }
 
+- (void)URLSession:(NSURLSession *)session
+        task:(NSURLSessionTask *)task
+        didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+        completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    wxUnusedVar(session);
+
+    wxWebRequestURLSession* request = [self requestForTask:task];
+    wxCHECK_RET( request, "received authentication challenge for an unknown task" );
+
+    NSURLProtectionSpace* const space = [challenge protectionSpace];
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: didReceiveChallenge for %s",
+               request,
+               wxCFStringRefFromGet([space description]).AsString());
+
+    // We need to distinguish between session-wide and task-specific
+    // authentication challenges, we're only really interested in the latter
+    // ones here (but apparently there is no way to get just them, even though
+    // the documentation seems to imply that session-wide challenges shouldn't
+    // be sent to this task-specific delegate -- but they're, at least under
+    // 10.14).
+    const auto authMethod = space.authenticationMethod;
+    if ( authMethod == NSURLAuthenticationMethodHTTPBasic ||
+            authMethod == NSURLAuthenticationMethodHTTPDigest )
+    {
+        if ( auto* const authChallenge = request->GetAuthChallengeImplPtr() )
+        {
+            // We're going to get called until we don't provide the correct
+            // credentials, so don't use them again (and again, and again...)
+            // if we had already used them unsuccessfully.
+            if ( !challenge.previousFailureCount )
+            {
+                wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: using credentials", request);
+
+                completionHandler(NSURLSessionAuthChallengeUseCredential,
+                                  authChallenge->GetURLCredential());
+
+                return;
+            }
+
+            wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: not using failing credentials again", request);
+        }
+
+        request->HandleChallenge(new wxWebAuthChallengeURLSession(
+            [space isProxy] ? wxWebAuthChallenge::Source_Proxy
+                            : wxWebAuthChallenge::Source_Server,
+            *request
+        ));
+    }
+
+    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+}
+
 @end
 
 //
@@ -170,14 +224,22 @@ void wxWebRequestURLSession::Cancel()
 
 void wxWebRequestURLSession::HandleCompletion()
 {
-    if ( CheckServerStatus() )
-        SetState(wxWebRequest::State_Completed);
+    switch ( m_response->GetStatus() )
+    {
+        case 401:
+        case 407:
+            SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
+            break;
+
+        default:
+            if ( CheckServerStatus() )
+                SetState(wxWebRequest::State_Completed);
+    }
 }
 
-wxWebAuthChallengeImplPtr wxWebRequestURLSession::GetAuthChallenge() const
+void wxWebRequestURLSession::HandleChallenge(wxWebAuthChallengeURLSession* challenge)
 {
-    wxFAIL_MSG("not implemented");
-    return wxWebAuthChallengeImplPtr();
+    m_authChallenge.reset(challenge);
 }
 
 wxFileOffset wxWebRequestURLSession::GetBytesSent() const
@@ -199,6 +261,33 @@ wxFileOffset wxWebRequestURLSession::GetBytesExpectedToReceive() const
 {
     return m_task.countOfBytesExpectedToReceive;
 }
+
+//
+// wxWebAuthChallengeURLSession
+//
+
+wxWebAuthChallengeURLSession::~wxWebAuthChallengeURLSession()
+{
+    [m_cred release];
+}
+
+void wxWebAuthChallengeURLSession::SetCredentials(const wxWebCredentials& cred)
+{
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: setting credentials", &m_request);
+
+    [m_cred release];
+
+    m_cred = [NSURLCredential
+        credentialWithUser:wxCFStringRef(cred.GetUser()).AsNSString()
+        password:wxCFStringRef(wxSecretString(cred.GetPassword())).AsNSString()
+        persistence:NSURLCredentialPersistenceNone
+    ];
+
+    [m_cred retain];
+
+    m_request.Start();
+}
+
 
 //
 // wxWebResponseURLSession
