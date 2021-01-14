@@ -33,7 +33,7 @@
 // disable running the test entirely.
 static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://httpbin.org";
 
-class RequestFixture : public wxEvtHandler
+class RequestFixture : public wxTimer
 {
 public:
     RequestFixture()
@@ -93,10 +93,23 @@ public:
         }
     }
 
+    void Notify() wxOVERRIDE
+    {
+        WARN("Exiting loop on timeout");
+        loop.Exit();
+    }
+
     void OnData(wxWebRequestEvent& evt)
     {
         // Count all bytes recieved via data event for Storage_None
         dataSize += evt.GetDataSize();
+    }
+
+    void RunLoopWithTimeout()
+    {
+        StartOnce(10000); // Ensure that we exit the loop after 10s.
+        loop.Run();
+        Stop();
     }
 
     void Run(wxWebRequest::State requiredState = wxWebRequest::State_Completed,
@@ -104,7 +117,7 @@ public:
     {
         REQUIRE( request.GetState() == wxWebRequest::State_Idle );
         request.Start();
-        loop.Run();
+        RunLoopWithTimeout();
         REQUIRE( request.GetState() == requiredState );
         if (requiredStatus)
             REQUIRE( request.GetResponse().GetStatus() == requiredStatus );
@@ -240,7 +253,7 @@ TEST_CASE_METHOD(RequestFixture,
     SECTION("Good password")
     {
         UseCredentials("wxtest", "wxwidgets");
-        loop.Run();
+        RunLoopWithTimeout();
         CHECK( request.GetResponse().GetStatus() == 200 );
         CHECK( request.GetState() == wxWebRequest::State_Completed );
     }
@@ -248,7 +261,7 @@ TEST_CASE_METHOD(RequestFixture,
     SECTION("Bad password")
     {
         UseCredentials("wxtest", "foobar");
-        loop.Run();
+        RunLoopWithTimeout();
         CHECK( request.GetResponse().GetStatus() == 401 );
         CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
     }
@@ -273,7 +286,7 @@ TEST_CASE_METHOD(RequestFixture,
     SECTION("Good password")
     {
         UseCredentials("wxtest", "wxwidgets");
-        loop.Run();
+        RunLoopWithTimeout();
         CHECK( request.GetResponse().GetStatus() == 200 );
         CHECK( request.GetState() == wxWebRequest::State_Completed );
     }
@@ -281,7 +294,7 @@ TEST_CASE_METHOD(RequestFixture,
     SECTION("Bad password")
     {
         UseCredentials("foo", "bar");
-        loop.Run();
+        RunLoopWithTimeout();
         CHECK( request.GetResponse().GetStatus() == 401 );
         CHECK( request.GetState() == wxWebRequest::State_Unauthorized );
     }
