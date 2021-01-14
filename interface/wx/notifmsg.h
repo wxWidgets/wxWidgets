@@ -50,7 +50,7 @@
            selects on of the actions added by AddAction()
     @endEventTable
 
-    @since 2.9.0
+    @since 3.1.0
     @library{wxcore}
     @category{misc}
 */
