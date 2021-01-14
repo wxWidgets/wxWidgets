@@ -282,6 +282,19 @@ TEST_CASE_METHOD(RequestFixture,
     }
 }
 
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Cancel", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/delay/10");
+    request.Start();
+    request.Cancel();
+    RunLoopWithTimeout();
+    REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
+}
+
 // This test is not run by default and has to be explicitly selected to run.
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Manual", "[net][webrequest][auth][.]")
