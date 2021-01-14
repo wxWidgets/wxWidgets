@@ -297,7 +297,7 @@ TEST_CASE_METHOD(RequestFixture,
 
 // This test is not run by default and has to be explicitly selected to run.
 TEST_CASE_METHOD(RequestFixture,
-                 "WebRequest::Manual", "[net][webrequest][auth][.]")
+                 "WebRequest::Manual", "[.]")
 {
     // Allow getting 8-bit strings from the environment correctly.
     setlocale(LC_ALL, "");
