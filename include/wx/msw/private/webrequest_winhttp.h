@@ -93,6 +93,11 @@ public:
 
     HINTERNET GetHandle() const { return m_request; }
 
+    wxWebRequestHandle GetNativeHandle() const wxOVERRIDE
+    {
+        return (wxWebRequestHandle)GetHandle();
+    }
+
 private:
     wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
@@ -136,6 +141,11 @@ public:
     wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
 
     HINTERNET GetHandle() const { return m_handle; }
+
+    wxWebSessionHandle GetNativeHandle() const wxOVERRIDE
+    {
+        return (wxWebSessionHandle)GetHandle();
+    }
 
 private:
     HINTERNET m_handle;

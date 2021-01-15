@@ -102,6 +102,11 @@ public:
 
     wxFileOffset GetBytesExpectedToReceive() const wxOVERRIDE;
 
+    wxWebRequestHandle GetNativeHandle() const wxOVERRIDE
+    {
+        return (wxWebRequestHandle)m_task;
+    }
+
     void HandleCompletion();
 
     void HandleChallenge(wxWebAuthChallengeURLSession* challenge);
@@ -138,6 +143,11 @@ public:
                   int winid = wxID_ANY) wxOVERRIDE;
 
     wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
+
+    wxWebSessionHandle GetNativeHandle() const wxOVERRIDE
+    {
+        return (wxWebSessionHandle)m_session;
+    }
 
     WX_NSURLSession GetSession() { return m_session; }
 

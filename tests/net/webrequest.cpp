@@ -145,6 +145,33 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Get::Simple", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // Note that the session may be initialized on demand, so don't check the
+    // native handle before actually using it.
+    wxWebSession& session = wxWebSession::GetDefault();
+    REQUIRE( session.IsOpened() );
+
+    // Request is not initialized yet.
+    CHECK( !request.IsOk() );
+    CHECK( !request.GetNativeHandle() );
+
+    Create("/status/200");
+    CHECK( request.IsOk() );
+    CHECK( session.GetNativeHandle() );
+
+    // Note that the request must be started to have a valid native handle.
+    request.Start();
+    CHECK( request.GetNativeHandle() );
+    RunLoopWithTimeout();
+    CHECK( request.GetState() == wxWebRequest::State_Completed );
+    CHECK( request.GetResponse().GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::String", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )

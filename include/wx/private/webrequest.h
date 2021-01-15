@@ -92,6 +92,8 @@ public:
 
     virtual wxFileOffset GetBytesExpectedToReceive() const;
 
+    virtual wxWebRequestHandle GetNativeHandle() const = 0;
+
     void SetState(wxWebRequest::State state, const wxString& failMsg = wxString());
 
     void ReportDataReceived(size_t sizeReceived);
@@ -221,6 +223,8 @@ public:
     wxString GetTempDir() const;
 
     const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
+
+    virtual wxWebSessionHandle GetNativeHandle() const = 0;
 
 protected:
     wxWebSessionImpl();

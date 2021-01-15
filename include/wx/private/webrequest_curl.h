@@ -64,6 +64,11 @@ public:
 
     CURL* GetHandle() const { return m_handle; }
 
+    wxWebRequestHandle GetNativeHandle() const wxOVERRIDE
+    {
+        return (wxWebRequestHandle)GetHandle();
+    }
+
     bool StartRequest();
 
     void HandleCompletion();
@@ -132,6 +137,11 @@ public:
                   int id = wxID_ANY) wxOVERRIDE;
 
     wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
+
+    wxWebSessionHandle GetNativeHandle() const wxOVERRIDE
+    {
+        return (wxWebSessionHandle)m_handle;
+    }
 
     bool StartRequest(wxWebRequestCURL& request);
 

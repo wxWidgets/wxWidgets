@@ -45,6 +45,9 @@ class wxWebResponse;
 class wxWebSession;
 class wxWebSessionFactory;
 
+typedef struct wxWebRequestHandleOpaque* wxWebRequestHandle;
+typedef struct wxWebSessionHandleOpaque* wxWebSessionHandle;
+
 class wxWebAuthChallengeImpl;
 class wxWebRequestImpl;
 class wxWebResponseImpl;
@@ -183,6 +186,8 @@ public:
 
     wxFileOffset GetBytesExpectedToReceive() const;
 
+    wxWebRequestHandle GetNativeHandle() const;
+
 private:
     // Ctor is only used by wxWebSession.
     friend class wxWebSession;
@@ -229,6 +234,8 @@ public:
     bool IsOpened() const;
 
     void Close();
+
+    wxWebSessionHandle GetNativeHandle() const;
 
 private:
     static void RegisterFactory(const wxString& backend,

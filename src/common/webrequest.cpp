@@ -463,6 +463,11 @@ wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
     return m_impl->GetBytesExpectedToReceive();
 }
 
+wxWebRequestHandle wxWebRequest::GetNativeHandle() const
+{
+    return m_impl ? m_impl->GetNativeHandle() : NULL;
+}
+
 
 //
 // wxWebAuthChallenge
@@ -929,6 +934,11 @@ bool wxWebSession::IsOpened() const
 void wxWebSession::Close()
 {
     m_impl.reset(NULL);
+}
+
+wxWebSessionHandle wxWebSession::GetNativeHandle() const
+{
+    return m_impl ? m_impl->GetNativeHandle() : NULL;
 }
 
 // ----------------------------------------------------------------------------

@@ -207,9 +207,24 @@ public:
     /**
         Check if the object is valid.
 
-        No other methods can be used if this function returns @false.
+        If the object is invalid, it must be assigned a valid request before
+        any other methods can be used (with the exception of GetNativeHandle()).
     */
     bool IsOk() const;
+
+    /**
+        Return the native handle corresponding to this request object.
+
+        @c wxWebRequestHandle is an opaque type containing a value of the
+        following type according to the backend being used:
+
+        - For WinHTTP backend, this is @c HINTERNET request handle.
+        - For CURL backend, this is a @c CURL struct pointer.
+        - For macOS backend, this is @c NSURLSessionTask object pointer.
+
+        @see wxWebSession::GetNativeHandle()
+     */
+    wxWebRequestHandle GetNativeHandle() const;
 
     /**
         Send the request to the server asynchronously.
@@ -691,6 +706,20 @@ public:
         before 10.9 does not have the @c NSURLSession implementation available.
     */
     static bool IsBackendAvailable(const wxString& backend);
+
+    /**
+        Return the native handle corresponding to this session object.
+
+        @c wxWebSessionHandle is an opaque type containing a value of the
+        following type according to the backend being used:
+
+        - For WinHTTP backend, this is @c HINTERNET session handle.
+        - For CURL backend, this is a @c CURLM struct pointer.
+        - For macOS backend, this is @c NSURLSession object pointer.
+
+        @see wxWebRequest::GetNativeHandle()
+     */
+    wxWebSessionHandle GetNativeHandle() const;
 
     /**
         Return true if the session was successfully opened and can be used.
