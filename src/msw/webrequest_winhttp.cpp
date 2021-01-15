@@ -149,7 +149,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                                     LPVOID lpvStatusInformation,
                                     DWORD dwStatusInformationLength)
 {
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: callback %08x, len=%zu",
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: callback %08x, len=%lu",
                this, dwInternetStatus, dwStatusInformationLength);
 
     switch ( dwInternetStatus )
