@@ -259,6 +259,8 @@ private:
 
     void OnTextClick(wxMouseEvent& event)
     {
+        m_text->SetFocus();
+
         Field field = Field_Max; // Initialize just to suppress warnings.
         long pos;
         switch ( m_text->HitTest(event.GetPosition(), &pos) )
