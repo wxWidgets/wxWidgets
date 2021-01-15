@@ -164,7 +164,7 @@ wxWebRequestURLSession::wxWebRequestURLSession(wxWebSession& session,
                                                wxEvtHandler* handler,
                                                const wxString& url,
                                                int winid):
-    wxWebRequestImpl(session, handler, winid),
+    wxWebRequestImpl(session, sessionImpl, handler, winid),
     m_sessionImpl(sessionImpl),
     m_url(url)
 {

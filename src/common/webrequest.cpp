@@ -55,9 +55,12 @@ static const wxStringCharType* wxNO_IMPL_MSG
 //
 // wxWebRequestImpl
 //
-wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session, wxEvtHandler* handler, int id)
+wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
+                                   wxWebSessionImpl& sessionImpl,
+                                   wxEvtHandler* handler,
+                                   int id)
     : m_storage(wxWebRequest::Storage_Memory),
-      m_headers(session.GetImpl()->GetHeaders()),
+      m_headers(sessionImpl.GetHeaders()),
       m_dataSize(0),
       m_session(session),
       m_handler(handler),

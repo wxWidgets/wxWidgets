@@ -107,7 +107,10 @@ protected:
     wxFileOffset m_dataSize;
     wxScopedPtr<wxInputStream> m_dataStream;
 
-    wxWebRequestImpl(wxWebSession& session, wxEvtHandler* handler, int id);
+    wxWebRequestImpl(wxWebSession& session,
+                     wxWebSessionImpl& sessionImpl,
+                     wxEvtHandler* handler,
+                     int id);
 
     // Call SetState() with either State_Failed or State_Completed appropriate
     // for the response status.

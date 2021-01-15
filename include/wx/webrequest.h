@@ -230,8 +230,6 @@ public:
 
     void Close();
 
-    wxWebSessionImpl* GetImpl() const { return m_impl.get(); }
-
 private:
     static void RegisterFactory(const wxString& backend,
                                 wxWebSessionFactory* factory);

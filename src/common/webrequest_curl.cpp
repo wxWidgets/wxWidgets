@@ -156,7 +156,7 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
                                    wxEvtHandler* handler,
                                    const wxString & url,
                                    int id):
-    wxWebRequestImpl(session, handler, id),
+    wxWebRequestImpl(session, sessionImpl, handler, id),
     m_sessionImpl(sessionImpl)
 {
     m_headerList = NULL;
