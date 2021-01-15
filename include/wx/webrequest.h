@@ -157,8 +157,6 @@ public:
 
     bool SetData(wxInputStream* dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
-    void SetIgnoreServerErrorStatus(bool ignore);
-
     void SetStorage(Storage storage);
 
     Storage GetStorage() const;

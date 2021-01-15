@@ -170,7 +170,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             }
             else
             {
-                SetState(wxWebRequest::State_Completed);
+                SetFinalStateFromStatus();
             }
             break;
 
@@ -259,7 +259,7 @@ void wxWebRequestWinHTTP::CreateResponse()
         else
             SetFailedWithLastError();
     }
-    else if ( CheckServerStatus() )
+    else
     {
         // Start reading the response
         if ( !m_response->ReadData() )

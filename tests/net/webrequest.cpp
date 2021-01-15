@@ -193,6 +193,21 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Error::Body", "[net][webrequest][error]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // We can't use the same httpbin.org server that we use for the other tests
+    // for this one because it doesn't return anything in the body when
+    // returning an error status code, so use another one.
+    CreateAbs("https://httpstat.us/418");
+    Run(wxWebRequest::State_Failed, 418);
+
+    CHECK( request.GetResponse().AsString() == "418 I'm a teapot" );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Error::Connect", "[net][webrequest][error]")
 {
     if ( !InitBaseURL() )

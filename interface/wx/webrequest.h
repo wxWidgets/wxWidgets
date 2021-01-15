@@ -129,18 +129,33 @@ public:
         State_Idle,
 
         /**
-            The request is currently unauthorized. Calling GetAuthChallenge()
-            returns a challenge object with further details.
+            The request is currently unauthorized.
+
+            Calling GetAuthChallenge() returns a challenge object with further
+            details and calling SetCredentials() on this object will retry the
+            request using these credentials.
         */
         State_Unauthorized,
 
         /// The request has been started and is transferring data
         State_Active,
 
-        /// The request completed successfully and all data has been received.
+        /**
+            The request completed successfully and all data has been received.
+
+            The HTTP status code returned by wxWebResponse::GetStatus() will be
+            in 100-399 range, and typically 200.
+         */
         State_Completed,
 
-        /// The request failed
+        /**
+            The request failed.
+
+            This can happen either because the request couldn't be performed at
+            all (e.g. a connection error) or if the server returned an HTTP
+            error. In the former case wxWebResponse::GetStatus() returns 0,
+            while in the latter it returns a value in 400-599 range.
+         */
         State_Failed,
 
         /// The request has been cancelled before completion by calling Cancel()
@@ -320,18 +335,6 @@ public:
     */
     bool SetData(wxInputStream* dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
-
-    /**
-        Instructs the request to ignore server error status codes.
-
-        Per default, server side errors (status code 400-599) will enter
-        the State_Failed state just like network errors, but
-        if the response is still required in such cases (e.g. to get more
-        details from the response body), set this option to ignore all errors.
-        If ignored, wxWebResponse::GetStatus() has to be checked
-        from the State_Completed event handler.
-    */
-    void SetIgnoreServerErrorStatus(bool ignore);
 
     /**
         Sets how response data will be stored.

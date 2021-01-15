@@ -235,8 +235,7 @@ void wxWebRequestURLSession::HandleCompletion()
             break;
 
         default:
-            if ( CheckServerStatus() )
-                SetState(wxWebRequest::State_Completed);
+            SetFinalStateFromStatus();
     }
 }
 

@@ -63,22 +63,28 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session, wxEvtHandler* handler,
       m_handler(handler),
       m_id(id),
       m_state(wxWebRequest::State_Idle),
-      m_ignoreServerErrorStatus(false),
       m_bytesReceived(0)
 {
 }
 
-bool wxWebRequestImpl::CheckServerStatus()
+void wxWebRequestImpl::SetFinalStateFromStatus()
 {
     const wxWebResponseImplPtr& resp = GetResponse();
-    if ( resp && resp->GetStatus() >= 400 && !m_ignoreServerErrorStatus )
+    if ( !resp || resp->GetStatus() >= 400 )
     {
-        SetState(wxWebRequest::State_Failed, wxString::Format(_("Error: %s (%d)"),
-            resp->GetStatusText(), resp->GetStatus()));
-        return false;
+        wxString err;
+        if ( resp )
+        {
+            err.Printf(_("Error: %s (%d)"),
+                       resp->GetStatusText(), resp->GetStatus());
+        }
+
+        SetState(wxWebRequest::State_Failed, err);
     }
     else
-        return true;
+    {
+        SetState(wxWebRequest::State_Completed);
+    }
 }
 
 bool wxWebRequestImpl::IsActiveState(wxWebRequest::State state)
@@ -358,13 +364,6 @@ wxWebRequest::SetData(wxInputStream* dataStream,
     wxCHECK_IMPL( false );
 
     return m_impl->SetData(streamPtr, contentType, dataSize);
-}
-
-void wxWebRequest::SetIgnoreServerErrorStatus(bool ignore)
-{
-    wxCHECK_IMPL_VOID();
-
-    m_impl->SetIgnoreServerErrorStatus(ignore);
 }
 
 void wxWebRequest::SetStorage(Storage storage)

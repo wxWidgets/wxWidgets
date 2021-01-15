@@ -272,16 +272,20 @@ void wxWebRequestCURL::HandleCompletion()
 {
     int status = m_response ? m_response->GetStatus() : 0;
 
-    if ( status == 0)
+    if ( status == 0 )
+    {
         SetState(wxWebRequest::State_Failed, GetError());
+    }
     else if ( status == 401 || status == 407 )
     {
         m_authChallenge.reset(new wxWebAuthChallengeCURL(
             (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
         SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
     }
-    else if ( CheckServerStatus() )
-        SetState(wxWebRequest::State_Completed);
+    else
+    {
+        SetFinalStateFromStatus();
+    }
 }
 
 wxString wxWebRequestCURL::GetError() const

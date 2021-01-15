@@ -65,8 +65,6 @@ public:
 
     bool SetData(wxScopedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
-    void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
-
     void SetStorage(wxWebRequest::Storage storage) { m_storage = storage; }
 
     wxWebRequest::Storage GetStorage() const { return m_storage; }
@@ -111,7 +109,9 @@ protected:
 
     wxWebRequestImpl(wxWebSession& session, wxEvtHandler* handler, int id);
 
-    bool CheckServerStatus();
+    // Call SetState() with either State_Failed or State_Completed appropriate
+    // for the response status.
+    void SetFinalStateFromStatus();
 
     static bool IsActiveState(wxWebRequest::State state);
 
@@ -120,7 +120,6 @@ private:
     wxEvtHandler* const m_handler;
     const int m_id;
     wxWebRequest::State m_state;
-    bool m_ignoreServerErrorStatus;
     wxFileOffset m_bytesReceived;
     wxCharBuffer m_dataText;
 
