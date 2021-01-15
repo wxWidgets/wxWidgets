@@ -123,12 +123,12 @@ static void CALLBACK wxRequestStatusCallback(
 //
 
 wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSession& session,
-                                         wxWebSessionWinHTTP& sessionWinHTTP,
+                                         wxWebSessionWinHTTP& sessionImpl,
                                          wxEvtHandler* handler,
                                          const wxString& url,
                                          int id):
     wxWebRequestImpl(session, handler, id),
-    m_sessionWinHTTP(sessionWinHTTP),
+    m_sessionImpl(sessionImpl),
     m_url(url),
     m_connect(NULL),
     m_request(NULL),
@@ -305,7 +305,7 @@ void wxWebRequestWinHTTP::Start()
     // Open a connection
     m_connect = ::WinHttpConnect
                 (
-                     m_sessionWinHTTP.GetHandle(),
+                     m_sessionImpl.GetHandle(),
                      wxString(urlComps.lpszHostName, urlComps.dwHostNameLength).wc_str(),
                      urlComps.nPort,
                      wxRESERVED_PARAM

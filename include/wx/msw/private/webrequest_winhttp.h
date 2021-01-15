@@ -67,7 +67,7 @@ class wxWebRequestWinHTTP : public wxWebRequestImpl
 {
 public:
     wxWebRequestWinHTTP(wxWebSession& session,
-                        wxWebSessionWinHTTP& sessionWinHTTP,
+                        wxWebSessionWinHTTP& sessionImpl,
                         wxEvtHandler* handler,
                         const wxString& url,
                         int id);
@@ -94,7 +94,7 @@ public:
     HINTERNET GetHandle() const { return m_request; }
 
 private:
-    wxWebSessionWinHTTP& m_sessionWinHTTP;
+    wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
     HINTERNET m_connect;
     HINTERNET m_request;
