@@ -311,13 +311,14 @@ void wxWebRequestWinHTTP::Start()
         objectName += "?" + wxString(urlComps.lpszExtraInfo, urlComps.dwExtraInfoLength);
 
     // Open a request
+    static const wchar_t* acceptedTypes[] = { L"*/*", NULL };
     m_request = ::WinHttpOpenRequest
                   (
                     m_connect,
                     method.wc_str(), objectName.wc_str(),
                     NULL,   // protocol version: use default, i.e. HTTP/1.1
                     WINHTTP_NO_REFERER,
-                    WINHTTP_DEFAULT_ACCEPT_TYPES,
+                    acceptedTypes,
                     urlComps.nScheme == INTERNET_SCHEME_HTTPS
                         ? WINHTTP_FLAG_SECURE
                         : 0
