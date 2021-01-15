@@ -73,7 +73,7 @@ public:
             if ( request.GetStorage() == wxWebRequest::Storage_File )
             {
                 wxFileName fn(evt.GetDataFile());
-                REQUIRE( fn.GetSize() == expectedFileSize );
+                CHECK( fn.GetSize() == expectedFileSize );
             }
             wxFALLTHROUGH;
         case wxWebRequest::State_Failed:
@@ -114,7 +114,7 @@ public:
         RunLoopWithTimeout();
         REQUIRE( request.GetState() == requiredState );
         if (requiredStatus)
-            REQUIRE( request.GetResponse().GetStatus() == requiredStatus );
+            CHECK( request.GetResponse().GetStatus() == requiredStatus );
     }
 
     // Precondition: we must have an auth challenge.
@@ -139,9 +139,9 @@ TEST_CASE_METHOD(RequestFixture,
 
     Create("/bytes/65536");
     Run();
-    REQUIRE( request.GetResponse().GetContentLength() == 65536 );
-    REQUIRE( request.GetBytesExpectedToReceive() == 65536 );
-    REQUIRE( request.GetBytesReceived() == 65536 );
+    CHECK( request.GetResponse().GetContentLength() == 65536 );
+    CHECK( request.GetBytesExpectedToReceive() == 65536 );
+    CHECK( request.GetBytesReceived() == 65536 );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -152,7 +152,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
     Run();
-    REQUIRE( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
+    CHECK( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -165,7 +165,7 @@ TEST_CASE_METHOD(RequestFixture,
     Create(wxString::Format("/bytes/%lld", expectedFileSize));
     request.SetStorage(wxWebRequest::Storage_File);
     Run();
-    REQUIRE( request.GetBytesReceived() == expectedFileSize );
+    CHECK( request.GetBytesReceived() == expectedFileSize );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -178,8 +178,8 @@ TEST_CASE_METHOD(RequestFixture,
     Create(wxString::Format("/bytes/%d", processingSize));
     request.SetStorage(wxWebRequest::Storage_None);
     Run();
-    REQUIRE( request.GetBytesReceived() == processingSize );
-    REQUIRE( dataSize == processingSize );
+    CHECK( request.GetBytesReceived() == processingSize );
+    CHECK( dataSize == processingSize );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -364,9 +364,9 @@ TEST_CASE("WebRequestUtils", "[net][webrequest]")
     wxString header = "multipart/mixed; boundary=\"MIME_boundary_01234567\"";
 
     value = wxPrivate::SplitParameters(header, params);
-    REQUIRE( value == "multipart/mixed" );
-    REQUIRE( params.size() == 1 );
-    REQUIRE( params["boundary"] == "MIME_boundary_01234567" );
+    CHECK( value == "multipart/mixed" );
+    CHECK( params.size() == 1 );
+    CHECK( params["boundary"] == "MIME_boundary_01234567" );
 }
 
 #endif // wxUSE_WEBREQUEST
