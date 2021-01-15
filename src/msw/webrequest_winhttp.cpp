@@ -149,6 +149,9 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                                     LPVOID lpvStatusInformation,
                                     DWORD dwStatusInformationLength)
 {
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: callback %08x, len=%zu",
+               this, dwInternetStatus, dwStatusInformationLength);
+
     switch ( dwInternetStatus )
     {
         case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
@@ -194,6 +197,8 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
 
 void wxWebRequestWinHTTP::WriteData()
 {
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: writing data", this);
+
     int dataWriteSize = wxWEBREQUEST_BUFFER_SIZE;
     if ( m_dataWritten + dataWriteSize > m_dataSize )
         dataWriteSize = m_dataSize - m_dataWritten;
@@ -224,6 +229,8 @@ void wxWebRequestWinHTTP::WriteData()
 
 void wxWebRequestWinHTTP::CreateResponse()
 {
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: creating response", this);
+
     if ( !::WinHttpReceiveResponse(m_request, NULL) )
     {
         SetFailedWithLastError();
@@ -269,6 +276,17 @@ void wxWebRequestWinHTTP::SetFailed(DWORD errorCode)
 
 void wxWebRequestWinHTTP::Start()
 {
+    wxString method;
+    if ( !m_method.empty() )
+        method = m_method;
+    else if ( m_dataSize )
+        method = "POST";
+    else
+        method = "GET";
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: start \"%s %s\"",
+               this, method, m_url);
+
     // Parse the URL
     URL_COMPONENTS urlComps;
     wxZeroMemory(urlComps);
@@ -297,14 +315,6 @@ void wxWebRequestWinHTTP::Start()
         SetFailedWithLastError();
         return;
     }
-
-    wxString method;
-    if ( !m_method.empty() )
-        method = m_method;
-    else if ( m_dataSize )
-        method = "POST";
-    else
-        method = "GET";
 
     wxString objectName(urlComps.lpszUrlPath, urlComps.dwUrlPathLength);
     if ( urlComps.dwExtraInfoLength )
@@ -381,6 +391,8 @@ void wxWebRequestWinHTTP::SendRequest()
 
 void wxWebRequestWinHTTP::Cancel()
 {
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: cancelling", this);
+
     SetState(wxWebRequest::State_Cancelled);
     if ( m_request != NULL )
     {
@@ -402,6 +414,9 @@ wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
     if ( contentLengthStr.empty() ||
             !contentLengthStr.ToLongLong(&m_contentLength) )
         m_contentLength = -1;
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: receiving %llu bytes",
+               &request, m_contentLength);
 
     Init();
 }
@@ -444,6 +459,8 @@ wxString wxWebResponseWinHTTP::GetStatusText() const
 
 bool wxWebResponseWinHTTP::ReadData()
 {
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: reading data", &m_request);
+
     return ::WinHttpReadData
              (
                 m_requestHandle,
