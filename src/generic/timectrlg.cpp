@@ -248,6 +248,9 @@ private:
                     }
                 }
                 break;
+            case WXK_TAB:
+                event.Skip();
+                break;
 
             // Do not skip the other events, just consume them to prevent the
             // user from editing the text directly.
