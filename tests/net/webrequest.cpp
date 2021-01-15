@@ -309,7 +309,16 @@ TEST_CASE_METHOD(RequestFixture,
     }
 
     CreateAbs(url);
-    Run(wxWebRequest::State_Completed, 0);
+    request.Start();
+    RunLoopWithTimeout();
+
+    WARN("Request state " << request.GetState());
+    wxWebResponse response = request.GetResponse();
+    REQUIRE( response.IsOk() );
+    WARN("Status: " << response.GetStatus()
+                    << " (" << response.GetStatusText() << ")\n" <<
+         "Body length: " << response.GetContentLength() << "\n" <<
+         "Body: " << response.AsString() << "\n");
 }
 
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
