@@ -979,6 +979,10 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
         m_spacing = 10;
     }
 
+    m_hasExplicitFgCol = m_hasFgCol;
+    m_hasExplicitBgCol = m_hasBgCol;
+    m_hasExplicitFont = m_hasFont;
+
     InitVisualAttributes();
 
     SetInitialSize(size);
@@ -1006,26 +1010,27 @@ void wxGenericTreeCtrl::InitVisualAttributes()
 {
     // We want to use the default system colours/fonts here unless the user
     // explicitly configured something different. We also need to reset the
-    // various m_hasXXX variables to false to prevent them from being left set
-    // to "true", as otherwise we wouldn't update the colours/fonts the next
-    // time the system colours change.
+    // m_hasExplicitXXX variables to false to prevent them from being left set
+    // to "true" after calling the corresponding SetXXX(), as otherwise we
+    // wouldn't update the colours/fonts the next time the system colours
+    // change.
     const wxVisualAttributes attr(GetDefaultAttributes());
-    if ( !m_hasFgCol )
+    if ( !m_hasExplicitFgCol )
     {
         SetOwnForegroundColour(attr.colFg);
-        m_hasFgCol = false;
+        m_hasExplicitFgCol = false;
     }
 
-    if ( !m_hasBgCol )
+    if ( !m_hasExplicitBgCol )
     {
         SetOwnBackgroundColour(attr.colBg);
-        m_hasBgCol = false;
+        m_hasExplicitBgCol = false;
     }
 
-    if ( !m_hasFont )
+    if ( !m_hasExplicitFont )
     {
         SetOwnFont(attr.font);
-        m_hasFont = false;
+        m_hasExplicitFont = false;
     }
 
 
@@ -1279,7 +1284,10 @@ wxGenericTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 
 bool wxGenericTreeCtrl::SetFont( const wxFont &font )
 {
-    wxTreeCtrlBase::SetFont(font);
+    if ( !wxTreeCtrlBase::SetFont(font) )
+        return false;
+
+    m_hasExplicitFont = true;
 
     m_normalFont = font;
     m_boldFont = m_normalFont.Bold();
@@ -4094,6 +4102,8 @@ bool wxGenericTreeCtrl::SetBackgroundColour(const wxColour& colour)
     if ( !wxWindow::SetBackgroundColour(colour) )
         return false;
 
+    m_hasExplicitBgCol = true;
+
     Refresh();
 
     return true;
@@ -4103,6 +4113,8 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
 {
     if ( !wxWindow::SetForegroundColour(colour) )
         return false;
+
+    m_hasExplicitFgCol = true;
 
     Refresh();
 

@@ -365,6 +365,14 @@ private:
     // operation.
     void ResetFindState();
 
+
+    // True if we're using custom colours/font, respectively, or false if we're
+    // using the default colours and should update them whenever system colours
+    // change.
+    bool m_hasExplicitFgCol:1,
+         m_hasExplicitBgCol:1,
+         m_hasExplicitFont:1;
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxGenericTreeCtrl);
