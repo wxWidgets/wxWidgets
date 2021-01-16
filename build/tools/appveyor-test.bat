@@ -44,14 +44,14 @@ echo.
 exit /b 0
 
 :cmake_qt
-set CMAKE_TEST_REGEX="test_base"
+set CMAKE_TEST_REGEX="test_[drawing^|gui^|headers]"
 goto :cmake
 
 :cmake
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
-if "%CMAKE_TEST_REGEX%"=="" set CMAKE_TEST_REGEX="test_[base|gui]"
+if "%CMAKE_TEST_REGEX%"=="" set CMAKE_TEST_REGEX="test_drawing"
 cd ..\build_cmake
-ctest -V -C %CONFIGURATION% -R %CMAKE_TEST_REGEX% --output-on-failure --interactive-debug-mode 0 .
+ctest -V -C %CONFIGURATION% -E %CMAKE_TEST_REGEX% --output-on-failure --interactive-debug-mode 0 .
 if %errorlevel% NEQ 0 goto :error
 goto :eof
 
