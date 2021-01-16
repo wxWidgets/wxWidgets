@@ -814,13 +814,13 @@ function(wx_add name group)
         FOLDER ${APP_FOLDER}
         )
     set_target_properties(${target_name} PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}"
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
         )
 
     if(group STREQUAL Tests)
         add_test(NAME ${target_name}
             COMMAND ${target_name}
-            WORKING_DIRECTORY ${wxSOURCE_DIR}/tests)
+            WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
     endif()
 endfunction()
 
