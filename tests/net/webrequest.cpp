@@ -82,6 +82,9 @@ public:
             break;
 
         case wxWebRequest::State_Idle:
+            FAIL("should never get events with State_Idle");
+            break;
+
         case wxWebRequest::State_Active:
             break;
         }
