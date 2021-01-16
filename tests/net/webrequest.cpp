@@ -86,6 +86,7 @@ public:
             break;
 
         case wxWebRequest::State_Active:
+            CHECK( request.GetNativeHandle() );
             break;
         }
     }
