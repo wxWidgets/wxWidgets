@@ -1,0 +1,1 @@
+wxAll: Use millisecond resolution for wxLog timestamps.
