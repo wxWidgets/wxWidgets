@@ -49,8 +49,6 @@
 
 #include <stdlib.h>
 
-#include <time.h>
-
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h" // includes windows.h
 #endif
@@ -196,6 +194,21 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 // wxLogFormatter class implementation
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_0
+
+// Special string used to check if FormatTime() is overridden: hopefully
+// different from anything that could be reasonably returned by the overridden
+// version without being as long as a GUID.
+static const char* DEFAULT_FORMAT_TIME = "??";
+
+wxString
+wxLogFormatter::FormatTime(time_t WXUNUSED(t)) const
+{
+    return wxString::FromAscii(DEFAULT_FORMAT_TIME);
+}
+
+#endif // WXWIN_COMPATIBILITY_3_0
+
 wxString
 wxLogFormatter::Format(wxLogLevel level,
                        const wxString& msg,
@@ -208,7 +221,15 @@ wxLogFormatter::Format(wxLogLevel level,
 #ifdef __WINDOWS__
     if ( level != wxLOG_Debug && level != wxLOG_Trace )
 #endif // __WINDOWS__
+    {
+#if WXWIN_COMPATIBILITY_3_0
+        // Another backwards compatibility hack: check if FormatTime() was
+        // overridden in the user code.
         prefix = FormatTime(info.timestamp);
+        if ( prefix == DEFAULT_FORMAT_TIME )
+#endif // WXWIN_COMPATIBILITY_3_0
+            prefix = FormatTimeMS(info.timestampMS);
+    }
 
     switch ( level )
     {
@@ -239,10 +260,14 @@ wxLogFormatter::Format(wxLogLevel level,
 }
 
 wxString
-wxLogFormatter::FormatTime(time_t t) const
+wxLogFormatter::FormatTimeMS(wxLongLong_t msec) const
 {
     wxString str;
-    wxLog::TimeStamp(&str, t);
+
+#if wxUSE_DATETIME
+    str = wxDateTime(wxLongLong(msec)).Format(wxLog::GetTimestamp());
+    str += wxS(": ");
+#endif // wxUSE_DATETIME
 
     return str;
 }
@@ -323,7 +348,7 @@ void
 wxLog::OnLog(wxLogLevel level, const wxString& msg, time_t t)
 {
     wxLogRecordInfo info;
-    info.timestamp = t;
+    info.timestampMS = 1000*t;
 #if wxUSE_THREADS
     info.threadId = wxThread::GetCurrentId();
 #endif // wxUSE_THREADS

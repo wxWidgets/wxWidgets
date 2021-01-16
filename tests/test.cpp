@@ -618,6 +618,8 @@ int TestApp::RunTests()
     // running the tests.
     if ( !wxGetEnv(wxASCII_STR("WXTRACE"), NULL) )
         wxLog::EnableLogging(false);
+    else
+        wxLog::SetTimestamp("%Y-%m-%d %H:%M:%S.%l");
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking
