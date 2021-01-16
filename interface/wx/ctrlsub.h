@@ -51,11 +51,14 @@ public:
     /**
         Returns the label of the item with the given index.
 
+        The index must be valid, i.e. less than the value returned by
+        GetCount(), otherwise an assert is triggered. Notably, this function
+        can't be called if the control is empty.
+
         @param n
             The zero-based index.
 
-        @return The label of the item or an empty string if the position was
-                invalid.
+        @return The label of the item.
     */
     virtual wxString GetString(unsigned int n) const = 0;
 
