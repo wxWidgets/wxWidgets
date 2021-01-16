@@ -87,6 +87,7 @@ public:
         case wxWebRequest::State_Unauthorized:
         case wxWebRequest::State_Failed:
         case wxWebRequest::State_Cancelled:
+            errorDescription = evt.GetErrorDescription();
             loop.Exit();
             break;
         }
@@ -134,6 +135,7 @@ public:
     wxWebRequest request;
     wxInt64 expectedFileSize;
     wxInt64 dataSize;
+    wxString errorDescription;
 };
 
 TEST_CASE_METHOD(RequestFixture,
@@ -350,6 +352,8 @@ TEST_CASE_METHOD(RequestFixture,
     request.Start();
     request.Cancel();
     RunLoopWithTimeout();
+    if ( !errorDescription.empty() )
+        INFO( "Error:" << errorDescription );
     REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
 }
 
