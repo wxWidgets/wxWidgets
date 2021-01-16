@@ -692,10 +692,20 @@ void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
             break;
 
         case wxWebRequest::Storage_None:
-            wxWebRequestEvent evt(wxEVT_WEBREQUEST_DATA, m_request.GetId(), wxWebRequest::State_Active);
-            evt.SetDataBuffer(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
-            m_request.GetHandler()->ProcessEvent(evt);
-            m_readBuffer.Clear();
+            wxWebRequestEvent* const evt = new wxWebRequestEvent
+                                               (
+                                                wxEVT_WEBREQUEST_DATA,
+                                                m_request.GetId(),
+                                                wxWebRequest::State_Active
+                                               );
+            evt->SetDataBuffer(m_readBuffer);
+
+            m_request.GetHandler()->QueueEvent(evt);
+
+            // Make sure we switch to a different buffer instead of just
+            // clearing the current one, which will be needed by the event
+            // handler when it's finally called in the main thread.
+            m_readBuffer = wxMemoryBuffer();
             break;
     }
 }

@@ -364,22 +364,19 @@ public:
     void OnRequestData(wxWebRequestEvent& evt)
     {
         // Count zero bytes in data buffer
-        bool notify = false;
-
         const char* p = (const char*) evt.GetDataBuffer();
         for ( size_t i = 0; i < evt.GetDataSize(); i++ )
         {
             if ( *p == 0 )
-            {
                 m_advCount++;
-                notify = true;
-            }
 
             p++;
         }
 
-        if ( notify )
-            CallAfter(&WebRequestFrame::UpdateAdvCount);
+        UpdateAdvCount();
+
+        // Make sure the new text is immediately visible.
+        m_advCountStaticText->Update();
     }
 
     void UpdateAdvCount()
@@ -425,7 +422,7 @@ public:
             defaultURL = "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.7z";
             break;
         case Page_Advanced:
-            defaultURL = "https://httpbin.org/bytes/64000";
+            defaultURL = "https://httpbin.org/bytes/100000";
             break;
         }
         m_urlTextCtrl->SetValue(defaultURL);

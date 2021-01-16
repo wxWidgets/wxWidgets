@@ -257,7 +257,7 @@ public:
                       const wxWebResponse& response = wxWebResponse(),
                       const wxString& errorDesc = wxString())
         : wxEvent(id, type),
-        m_state(state), m_response(response), m_data(NULL), m_dataSize(0),
+        m_state(state), m_response(response),
         m_errorDescription(errorDesc)
     { }
 
@@ -271,12 +271,11 @@ public:
 
     void SetDataFile(const wxString& dataFile) { m_dataFile = dataFile; }
 
-    const void* GetDataBuffer() const { return m_data; }
+    const void* GetDataBuffer() const { return m_dataBuf.GetData(); }
 
-    size_t GetDataSize() const { return m_dataSize; }
+    size_t GetDataSize() const { return m_dataBuf.GetDataLen(); }
 
-    void SetDataBuffer(const void* buffer, size_t size)
-    { m_data = buffer; m_dataSize = size; }
+    void SetDataBuffer(const wxMemoryBuffer& dataBuf) { m_dataBuf = dataBuf; }
 
     wxEvent* Clone() const wxOVERRIDE { return new wxWebRequestEvent(*this); }
 
@@ -284,8 +283,7 @@ private:
     wxWebRequest::State m_state;
     const wxWebResponse m_response; // may be invalid
     wxString m_dataFile;
-    const void* m_data;
-    size_t m_dataSize;
+    wxMemoryBuffer m_dataBuf;
     wxString m_errorDescription;
 };
 
