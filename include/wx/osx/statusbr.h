@@ -31,16 +31,12 @@ public:
     void OnPaint(wxPaintEvent& event);
 
 protected:
-    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight) wxOVERRIDE;
-    virtual void DrawField(wxDC& dc, int i, int textHeight) wxOVERRIDE;
-    virtual void DoUpdateStatusText(int number = 0) wxOVERRIDE;
+    virtual int GetEffectiveFieldStyle(int WXUNUSED(i)) const wxOVERRIDE { return wxSB_NORMAL; }
 
     virtual void InitColours() wxOVERRIDE;
 
 private:
-    wxColour m_textActive, m_textInactive,
-             m_bgActiveFrom, m_bgActiveTo,
-             m_borderActive, m_borderInactive;
+    wxColour m_textActive, m_textInactive;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBarMac);
     wxDECLARE_EVENT_TABLE();

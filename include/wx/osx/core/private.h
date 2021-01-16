@@ -984,6 +984,8 @@ public :
 
     virtual void SetRepresentedFilename(const wxString& WXUNUSED(filename)) { }
 
+    virtual void SetBottomBorderThickness(int WXUNUSED(thickness)) { }
+
 #if wxOSX_USE_IPHONE
     virtual CGFloat GetWindowLevel() const { return 0.0; }
 #else

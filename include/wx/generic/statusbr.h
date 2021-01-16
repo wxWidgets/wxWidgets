@@ -70,7 +70,7 @@ protected:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
-
+    virtual int GetEffectiveFieldStyle(int i) const { return m_panes[i].GetStyle(); }
     virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
     virtual void DrawField(wxDC& dc, int i, int textHeight);
 

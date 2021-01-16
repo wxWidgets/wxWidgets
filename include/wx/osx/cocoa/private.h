@@ -329,6 +329,8 @@ public :
 
     virtual void SetRepresentedFilename(const wxString& filename) wxOVERRIDE;
 
+    virtual void SetBottomBorderThickness(int thickness) wxOVERRIDE;
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
     CGWindowLevel   GetWindowLevel() const wxOVERRIDE { return m_macWindowLevel; }
