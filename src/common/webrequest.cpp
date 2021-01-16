@@ -299,6 +299,13 @@ SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters)
 
 void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxString& failMsg)
 {
+    wxString dataFile;
+
+    const wxWebResponseImplPtr& response = GetResponse();
+
+    wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
+                          wxWebResponse(response), failMsg);
+
     switch ( state )
     {
         case wxWebRequest::State_Idle:
@@ -310,21 +317,18 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
             break;
 
         case wxWebRequest::State_Completed:
+            if ( m_storage == wxWebRequest::Storage_File )
+            {
+                dataFile = response->GetDataFile();
+                evt.SetDataFile(dataFile);
+            }
+            wxFALLTHROUGH;
+
         case wxWebRequest::State_Failed:
         case wxWebRequest::State_Cancelled:
-            if ( GetResponse() )
-                GetResponse()->Finalize();
+            if ( response )
+                response->Finalize();
             break;
-    }
-
-    wxString dataFile;
-
-    wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
-        wxWebResponse(GetResponse()), failMsg);
-    if ( state == wxWebRequest::State_Completed && m_storage == wxWebRequest::Storage_File )
-    {
-        dataFile = GetResponse()->GetDataFile();
-        evt.SetDataFile(dataFile);
     }
 
     m_handler->ProcessEvent(evt);
