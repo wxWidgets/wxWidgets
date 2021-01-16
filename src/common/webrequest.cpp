@@ -680,19 +680,24 @@ void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
     m_readBuffer.UngetAppendBuf(sizeReceived);
     m_request.ReportDataReceived(sizeReceived);
 
-    if ( m_request.GetStorage() == wxWebRequest::Storage_File )
+    switch ( m_request.GetStorage() )
     {
-        m_file.Write(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
-    }
-    else if ( m_request.GetStorage() == wxWebRequest::Storage_None )
-    {
-        wxWebRequestEvent evt(wxEVT_WEBREQUEST_DATA, m_request.GetId(), wxWebRequest::State_Active);
-        evt.SetDataBuffer(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
-        m_request.GetHandler()->ProcessEvent(evt);
-    }
+        case wxWebRequest::Storage_Memory:
+            // Nothing to do, just keep appending data to the buffer.
+            break;
 
-    if ( m_request.GetStorage() != wxWebRequest::Storage_Memory )
-        m_readBuffer.Clear();
+        case wxWebRequest::Storage_File:
+            m_file.Write(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
+            m_readBuffer.Clear();
+            break;
+
+        case wxWebRequest::Storage_None:
+            wxWebRequestEvent evt(wxEVT_WEBREQUEST_DATA, m_request.GetId(), wxWebRequest::State_Active);
+            evt.SetDataBuffer(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
+            m_request.GetHandler()->ProcessEvent(evt);
+            m_readBuffer.Clear();
+            break;
+    }
 }
 
 wxString wxWebResponseImpl::GetDataFile() const
