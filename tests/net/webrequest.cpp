@@ -68,7 +68,14 @@ public:
     {
         switch (evt.GetState())
         {
-        case wxWebRequest::State_Unauthorized:
+        case wxWebRequest::State_Idle:
+            FAIL("should never get events with State_Idle");
+            break;
+
+        case wxWebRequest::State_Active:
+            CHECK( request.GetNativeHandle() );
+            break;
+
         case wxWebRequest::State_Completed:
             if ( request.GetStorage() == wxWebRequest::Storage_File )
             {
@@ -76,17 +83,11 @@ public:
                 CHECK( fn.GetSize() == expectedFileSize );
             }
             wxFALLTHROUGH;
+
+        case wxWebRequest::State_Unauthorized:
         case wxWebRequest::State_Failed:
         case wxWebRequest::State_Cancelled:
             loop.Exit();
-            break;
-
-        case wxWebRequest::State_Idle:
-            FAIL("should never get events with State_Idle");
-            break;
-
-        case wxWebRequest::State_Active:
-            CHECK( request.GetNativeHandle() );
             break;
         }
     }
