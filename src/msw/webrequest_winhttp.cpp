@@ -381,6 +381,8 @@ void wxWebRequestWinHTTP::SendRequest()
     if ( m_dataSize )
         m_dataWritten = 0;
 
+    SetState(wxWebRequest::State_Active);
+
     // Send request
     if ( !::WinHttpSendRequest
             (
@@ -394,8 +396,6 @@ void wxWebRequestWinHTTP::SendRequest()
         SetFailedWithLastError();
         return;
     }
-
-    SetState(wxWebRequest::State_Active);
 }
 
 void wxWebRequestWinHTTP::DoCancel()
