@@ -231,26 +231,11 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 // 'bitmap'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 {
-    HBITMAP hbmp;
-
-#if wxUSE_WXDIB && wxUSE_IMAGE
-    // See the comment in overloaded Add() above.
+    HBITMAP hbmp = NULL;
     AutoHBITMAP hbmpRelease;
-    if ( bitmap.HasAlpha() )
-    {
-        wxImage img = bitmap.ConvertToImage();
-
-        if ( wxApp::GetComCtl32Version() < 600 )
-        {
-            img.ClearAlpha();
-        }
-
-        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-        hbmpRelease.Init(hbmp);
-    }
-    else
-#endif // wxUSE_WXDIB && wxUSE_IMAGE
-        hbmp = GetHbitmapOf(bitmap);
+    AutoHBITMAP hbmpMask;
+    wxMask mask(bitmap, maskColour);
+    GetImageListBitmaps(bitmap, mask.GetBitmap(), m_useMask, hbmpRelease, hbmpMask, hbmp);
 
     int index = ImageList_AddMasked(GetHImageList(),
                                     hbmp,

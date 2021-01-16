@@ -100,6 +100,14 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         CHECK(bmp2.GetMask() != NULL);
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
+
+        idx = il.Add(bmpRGB, *wxRED);
+        CHECK(il.GetImageCount() == 3);
+        wxBitmap bmp3 = il.GetBitmap(idx);
+        CHECK(bmp3.HasAlpha() == false);
+        CHECK(bmp3.GetMask() != NULL);
+        CHECK(bmp3.GetWidth() == 32);
+        CHECK(bmp3.GetHeight() == 32);
     }
 
     SECTION("Add RGBA image to list")
@@ -120,6 +128,14 @@ TEST_CASE("ImageList:WithMask", "[imagelist][withmask]")
         CHECK(bmp2.GetMask() != NULL);
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
+
+        idx = il.Add(bmpRGBA, *wxRED);
+        CHECK(il.GetImageCount() == 3);
+        wxBitmap bmp3 = il.GetBitmap(idx);
+        CHECK(bmp3.HasAlpha() == false);
+        CHECK(bmp3.GetMask() != NULL);
+        CHECK(bmp3.GetWidth() == 32);
+        CHECK(bmp3.GetHeight() == 32);
     }
 
     SECTION("Add icon to list")
@@ -257,6 +273,14 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         CHECK(bmp2.GetMask() == NULL);
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
+
+        idx = il.Add(bmpRGB, *wxRED);
+        CHECK(il.GetImageCount() == 3);
+        wxBitmap bmp3 = il.GetBitmap(idx);
+        CHECK(bmp3.HasAlpha() == true);
+        CHECK(bmp3.GetMask() == NULL);
+        CHECK(bmp3.GetWidth() == 32);
+        CHECK(bmp3.GetHeight() == 32);
     }
 
     SECTION("Add RGBA image to list")
@@ -277,6 +301,14 @@ TEST_CASE("ImageList:NoMask", "[imagelist][nomask]")
         CHECK(bmp2.GetMask() == NULL);
         CHECK(bmp2.GetWidth() == 32);
         CHECK(bmp2.GetHeight() == 32);
+
+        idx = il.Add(bmpRGBA, *wxRED);
+        CHECK(il.GetImageCount() == 3);
+        wxBitmap bmp3 = il.GetBitmap(idx);
+        CHECK(bmp3.HasAlpha() == true);
+        CHECK(bmp3.GetMask() == NULL);
+        CHECK(bmp3.GetWidth() == 32);
+        CHECK(bmp3.GetHeight() == 32);
     }
 
     SECTION("Add icon to list")
