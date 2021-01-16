@@ -101,6 +101,15 @@ void wxWinHTTPSetOption(HINTERNET hInternet, DWORD dwOption, DWORD dwValue)
     ::WinHttpSetOption(hInternet, dwOption, &dwValue, sizeof(dwValue));
 }
 
+static
+void wxWinHTTPCloseHandle(HINTERNET hInternet)
+{
+    if ( !::WinHttpCloseHandle(hInternet) )
+    {
+        wxLogLastError("WinHttpCloseHandle");
+    }
+}
+
 static void CALLBACK wxRequestStatusCallback(
     HINTERNET WXUNUSED(hInternet),
     DWORD_PTR dwContext,
@@ -139,9 +148,9 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSession& session,
 wxWebRequestWinHTTP::~wxWebRequestWinHTTP()
 {
     if ( m_request )
-        ::WinHttpCloseHandle(m_request);
+        wxWinHTTPCloseHandle(m_request);
     if ( m_connect )
-        ::WinHttpCloseHandle(m_connect);
+        wxWinHTTPCloseHandle(m_connect);
 }
 
 void
@@ -396,7 +405,7 @@ void wxWebRequestWinHTTP::Cancel()
     SetState(wxWebRequest::State_Cancelled);
     if ( m_request != NULL )
     {
-        ::WinHttpCloseHandle(m_request);
+        wxWinHTTPCloseHandle(m_request);
         m_request = NULL;
     }
 }
@@ -555,7 +564,7 @@ wxWebSessionWinHTTP::wxWebSessionWinHTTP():
 wxWebSessionWinHTTP::~wxWebSessionWinHTTP()
 {
     if ( m_handle )
-        ::WinHttpCloseHandle(m_handle);
+        wxWinHTTPCloseHandle(m_handle);
 }
 
 bool wxWebSessionWinHTTP::Open()
