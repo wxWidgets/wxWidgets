@@ -263,7 +263,7 @@ bool wxWebRequestCURL::StartRequest()
     return true;
 }
 
-void wxWebRequestCURL::Cancel()
+void wxWebRequestCURL::DoCancel()
 {
     m_sessionImpl.CancelRequest(this);
 }

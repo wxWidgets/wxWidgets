@@ -244,6 +244,11 @@ public:
         Note that cancelling is asynchronous, so the application needs to wait
         until the request state becomes @c State_Cancelled to know when the
         request was really cancelled.
+
+        Request must be active when Cancel() is called, i.e. the current state
+        can't be @c State_Idle. However, because it can be difficult to avoid
+        doing it in some circumstances, Cancel() may be called multiple times
+        and only a single wxWebRequestEvent will be sent even in this case.
     */
     void Cancel();
 

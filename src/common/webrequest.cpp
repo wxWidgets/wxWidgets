@@ -66,8 +66,24 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
       m_handler(handler),
       m_id(id),
       m_state(wxWebRequest::State_Idle),
-      m_bytesReceived(0)
+      m_bytesReceived(0),
+      m_cancelled(false)
 {
+}
+
+void wxWebRequestImpl::Cancel()
+{
+    if ( m_cancelled )
+    {
+        // Nothing to do, don't even assert -- it's ok to call Cancel()
+        // multiple times, but calling DoCancel() once is enough.
+        return;
+    }
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: cancelling", this);
+
+    m_cancelled = true;
+    DoCancel();
 }
 
 void wxWebRequestImpl::SetFinalStateFromStatus()
@@ -396,6 +412,9 @@ void wxWebRequest::Start()
 void wxWebRequest::Cancel()
 {
     wxCHECK_IMPL_VOID();
+
+    wxCHECK_RET( m_impl->GetState() != wxWebRequest::State_Idle,
+                 "Not yet started requests can't be cancelled" );
 
     m_impl->Cancel();
 }

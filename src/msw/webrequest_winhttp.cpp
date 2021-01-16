@@ -174,7 +174,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             if ( dwStatusInformationLength > 0 )
             {
                 if ( !m_response->ReportAvailableData(dwStatusInformationLength)
-                        && GetState() != wxWebRequest::State_Cancelled )
+                        && !WasCancelled() )
                     SetFailedWithLastError();
             }
             else
@@ -195,7 +195,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             // "Failing" with "cancelled" error is not actually an error if
             // we're expecting it, i.e. if our Cancel() had been called.
             if ( asyncResult->dwError == ERROR_WINHTTP_OPERATION_CANCELLED &&
-                    GetState() == wxWebRequest::State_Cancelled )
+                    WasCancelled() )
                 SetState(wxWebRequest::State_Cancelled);
             else
                 SetFailed(asyncResult->dwError);
@@ -398,16 +398,10 @@ void wxWebRequestWinHTTP::SendRequest()
     SetState(wxWebRequest::State_Active);
 }
 
-void wxWebRequestWinHTTP::Cancel()
+void wxWebRequestWinHTTP::DoCancel()
 {
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: cancelling", this);
-
-    SetState(wxWebRequest::State_Cancelled);
-    if ( m_request != NULL )
-    {
-        wxWinHTTPCloseHandle(m_request);
-        m_request = NULL;
-    }
+    wxWinHTTPCloseHandle(m_request);
+    m_request = NULL;
 }
 
 //

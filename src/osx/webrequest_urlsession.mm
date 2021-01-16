@@ -220,7 +220,7 @@ void wxWebRequestURLSession::Start()
     [m_task resume];
 }
 
-void wxWebRequestURLSession::Cancel()
+void wxWebRequestURLSession::DoCancel()
 {
     [m_task cancel];
 }

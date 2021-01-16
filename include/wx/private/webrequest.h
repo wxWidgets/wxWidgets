@@ -72,7 +72,9 @@ public:
     // Precondition for this method checked by caller: current state is idle.
     virtual void Start() = 0;
 
-    virtual void Cancel() = 0;
+    // Precondition for this method checked by caller: not idle and not already
+    // cancelled.
+    void Cancel();
 
     virtual wxWebResponseImplPtr GetResponse() const = 0;
 
@@ -114,6 +116,8 @@ protected:
                      wxEvtHandler* handler,
                      int id);
 
+    bool WasCancelled() const { return m_cancelled; }
+
     // Call SetState() with either State_Failed or State_Completed appropriate
     // for the response status.
     void SetFinalStateFromStatus();
@@ -121,12 +125,18 @@ protected:
     static bool IsActiveState(wxWebRequest::State state);
 
 private:
+    // Called from public Cancel() at most once per object.
+    virtual void DoCancel() = 0;
+
     wxWebSession& m_session;
     wxEvtHandler* const m_handler;
     const int m_id;
     wxWebRequest::State m_state;
     wxFileOffset m_bytesReceived;
     wxCharBuffer m_dataText;
+
+    // Initially false, set to true after the first call to Cancel().
+    bool m_cancelled;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestImpl);
 };

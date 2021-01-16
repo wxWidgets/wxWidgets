@@ -76,8 +76,6 @@ public:
 
     void Start() wxOVERRIDE;
 
-    void Cancel() wxOVERRIDE;
-
     wxWebResponseImplPtr GetResponse() const wxOVERRIDE
         { return m_response; }
 
@@ -99,6 +97,8 @@ public:
     }
 
 private:
+    void DoCancel() wxOVERRIDE;
+
     wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
     HINTERNET m_connect;

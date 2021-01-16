@@ -86,8 +86,6 @@ public:
 
     void Start() wxOVERRIDE;
 
-    void Cancel() wxOVERRIDE;
-
     wxWebResponseImplPtr GetResponse() const wxOVERRIDE
         { return m_response; }
 
@@ -120,6 +118,8 @@ public:
         { return m_authChallenge.get(); }
 
 private:
+    void DoCancel() wxOVERRIDE;
+
     wxWebSessionURLSession& m_sessionImpl;
     wxString m_url;
     WX_NSURLSessionTask m_task;

@@ -50,8 +50,6 @@ public:
 
     void Start() wxOVERRIDE;
 
-    void Cancel() wxOVERRIDE;
-
     wxWebResponseImplPtr GetResponse() const wxOVERRIDE
         { return m_response; }
 
@@ -79,6 +77,8 @@ public:
     size_t CURLOnRead(char* buffer, size_t size);
 
 private:
+    void DoCancel() wxOVERRIDE;
+
     wxWebSessionCURL& m_sessionImpl;
 
     CURL* m_handle;
