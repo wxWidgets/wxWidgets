@@ -208,8 +208,21 @@ void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & fail
 
     m_state = state;
 
-    // Trigger the event in the main thread
-    m_handler->CallAfter(StateEventProcessor(*this, state, failMsg));
+    // Trigger the event in the main thread except when switching to the active
+    // state because this always happens in the main thread anyhow and it's
+    // important to process it synchronously, before the request actually
+    // starts (this gives the possibility to modify the request using native
+    // functions, for example, as its GetNativeHandle() is already valid).
+    if ( state == wxWebRequest::State_Active )
+    {
+        wxASSERT( wxIsMainThread() );
+
+        ProcessStateEvent(state, failMsg);
+    }
+    else
+    {
+        m_handler->CallAfter(StateEventProcessor(*this, state, failMsg));
+    }
 }
 
 void wxWebRequestImpl::ReportDataReceived(size_t sizeReceived)

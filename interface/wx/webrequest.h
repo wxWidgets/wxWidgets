@@ -137,7 +137,14 @@ public:
         */
         State_Unauthorized,
 
-        /// The request has been started and is transferring data
+        /**
+            The request is about to start.
+
+            An event notifying about the switch to this state is generated when
+            Start() is called (unless an error occurs, in which case the state
+            becomes State_Failed instead). Handling this event allows to do
+            something right before the asynchronous request actually starts.
+         */
         State_Active,
 
         /**
@@ -221,6 +228,11 @@ public:
         - For WinHTTP backend, this is @c HINTERNET request handle.
         - For CURL backend, this is a @c CURL struct pointer.
         - For macOS backend, this is @c NSURLSessionTask object pointer.
+
+        Note that this function returns a valid value only after the request is
+        started successfully using Start(). Notably, it is guaranteed to return
+        a valid value when handling wxWebRequestEvent corresponding to the
+        switch to @c State_Active.
 
         @see wxWebSession::GetNativeHandle()
      */
