@@ -292,9 +292,11 @@ MyFrame::MyFrame()
     m_left = new MyCanvas(m_splitter, true);
     m_left->SetBackgroundColour(*wxRED);
     m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
+    m_left->SetToolTip("This is the left window");
 
     m_right = new MyCanvas(m_splitter, false);
     m_right->SetBackgroundColour(*wxCYAN);
+    m_right->SetToolTip("And this is the window on the right");
 #else // for testing kbd navigation inside the splitter
     m_left = new wxTextCtrl(m_splitter, wxID_ANY, "first text");
     m_right = new wxTextCtrl(m_splitter, wxID_ANY, "second text");

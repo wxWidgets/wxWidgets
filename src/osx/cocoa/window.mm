@@ -153,11 +153,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @interface wxNSView : NSView
 {
-    BOOL _hasToolTip;    
-    NSTrackingRectTag   _lastToolTipTrackTag;
-    id              _lastToolTipOwner;
-    void*           _lastUserData;
-    
 }
 
 @end // wxNSView
@@ -846,83 +841,6 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
  * then when changing the tooltip send fake view-exit and view-enter methods which will lead to a tooltip refresh
  */
 
-
-- (void)_sendToolTipMouseExited
-{
-    // Nothing matters except window, trackingNumber, and userData.
-    NSEvent *fakeEvent = [NSEvent enterExitEventWithType:NSMouseExited
-                                                location:NSMakePoint(0, 0)
-                                           modifierFlags:0
-                                               timestamp:0
-                                            windowNumber:[[self window] windowNumber]
-                                                 context:NULL
-                                             eventNumber:0
-                                          trackingNumber:_lastToolTipTrackTag
-                                                userData:_lastUserData];
-    [_lastToolTipOwner mouseExited:fakeEvent];
-}
-
-- (void)_sendToolTipMouseEntered
-{
-    // Nothing matters except window, trackingNumber, and userData.
-    NSEvent *fakeEvent = [NSEvent enterExitEventWithType:NSMouseEntered
-                                                location:NSMakePoint(0, 0)
-                                           modifierFlags:0
-                                               timestamp:0
-                                            windowNumber:[[self window] windowNumber]
-                                                 context:NULL
-                                             eventNumber:0
-                                          trackingNumber:_lastToolTipTrackTag
-                                                userData:_lastUserData];
-    [_lastToolTipOwner mouseEntered:fakeEvent];
-}
-
-- (void)setToolTip:(NSString *)string
-{
-    if (string)
-    {
-        if ( _hasToolTip )
-        {
-            [self _sendToolTipMouseExited];
-        }
-
-        [super setToolTip:string];
-        _hasToolTip = YES;
-        [self _sendToolTipMouseEntered];
-    }
-    else 
-    {
-        if ( _hasToolTip )
-        {
-            [self _sendToolTipMouseExited];
-            [super setToolTip:nil];
-            _hasToolTip = NO;
-        }
-    }
-}
-
-- (NSTrackingRectTag)addTrackingRect:(NSRect)rect owner:(id)owner userData:(void *)data assumeInside:(BOOL)assumeInside
-{
-    NSTrackingRectTag tag = [super addTrackingRect:rect owner:owner userData:data assumeInside:assumeInside];
-    if ( owner != self )
-    {
-        _lastUserData = data;
-        _lastToolTipOwner = owner;
-        _lastToolTipTrackTag = tag;
-    }
-    return tag;
-}
-
-- (void)removeTrackingRect:(NSTrackingRectTag)tag
-{
-    if (tag == _lastToolTipTrackTag) 
-    {
-        _lastUserData = NULL;
-        _lastToolTipOwner = nil;
-        _lastToolTipTrackTag = 0;
-    }
-    [super removeTrackingRect:tag];
-}
 
 #if wxOSX_USE_NATIVE_FLIPPED
 - (BOOL)isFlipped
