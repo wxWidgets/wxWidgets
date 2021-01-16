@@ -17,6 +17,11 @@
 class wxGtkValue
 {
 public:
+    explicit wxGtkValue()
+        : m_val(G_VALUE_INIT)
+    {
+    }
+
     // Initialize the value of the specified type.
     explicit wxGtkValue(GType gtype)
         : m_val(G_VALUE_INIT)

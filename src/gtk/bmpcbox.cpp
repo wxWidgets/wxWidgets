@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/value.h"
 
 // ============================================================================
 // implementation
@@ -197,12 +198,10 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
 
         if ( gtk_tree_model_iter_nth_child( model, &iter, NULL, n ) )
         {
-            GValue value0 = G_VALUE_INIT;
-            g_value_init( &value0, G_TYPE_OBJECT );
-            g_value_set_object( &value0, bitmap.GetPixbuf() );
+            wxGtkValue value0( G_TYPE_OBJECT );
+            g_value_set_object( value0, bitmap.GetPixbuf() );
             gtk_list_store_set_value( GTK_LIST_STORE(model), &iter,
-                                      m_bitmapCellIndex, &value0 );
-            g_value_unset( &value0 );
+                                      m_bitmapCellIndex, value0 );
         }
     }
 }
@@ -217,16 +216,15 @@ wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
 
     if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
     {
-        GValue value = G_VALUE_INIT;
+        wxGtkValue value;
         gtk_tree_model_get_value( model, &iter,
-                                  m_bitmapCellIndex, &value );
-        GdkPixbuf* pixbuf = (GdkPixbuf*) g_value_get_object( &value );
+                                  m_bitmapCellIndex, value );
+        GdkPixbuf* pixbuf = (GdkPixbuf*) g_value_get_object( value );
         if ( pixbuf )
         {
             g_object_ref( pixbuf );
             bitmap = wxBitmap(pixbuf);
         }
-        g_value_unset( &value );
     }
 
     return bitmap;
@@ -295,11 +293,9 @@ void wxBitmapComboBox::GTKInsertComboBoxTextItem( unsigned int n, const wxString
 
     gtk_list_store_insert( store, &iter, n );
 
-    GValue value = G_VALUE_INIT;
-    g_value_init( &value, G_TYPE_STRING );
-    g_value_set_string( &value, wxGTK_CONV( text ) );
-    gtk_list_store_set_value( store, &iter, m_stringCellIndex, &value );
-    g_value_unset( &value );
+    wxGtkValue value( G_TYPE_STRING );
+    g_value_set_string( value, wxGTK_CONV( text ) );
+    gtk_list_store_set_value( store, &iter, m_stringCellIndex, value );
 }
 
 // ----------------------------------------------------------------------------
