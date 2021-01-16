@@ -182,9 +182,7 @@ set(TEST_GUI_DATA
 
 wx_add_test(test_gui ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
-    RES ../samples/sample.rc
     )
-wx_exe_link_libraries(test_gui wxcore)
 if(wxUSE_AUI)
     wx_exe_link_libraries(test_gui wxaui)
 endif()
@@ -212,4 +210,3 @@ endif()
 if(wxUSE_WEBVIEW)
     wx_exe_link_libraries(test_gui wxwebview)
 endif()
-wx_test_enable_precomp(test_gui)

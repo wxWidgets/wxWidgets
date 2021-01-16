@@ -43,8 +43,6 @@ wx_add_test(test_drawing ${TEST_DRAWING_SRC}
 if(wxUSE_SOCKETS)
     wx_exe_link_libraries(test_drawing wxnet)
 endif()
-wx_exe_link_libraries(test_drawing wxcore)
-wx_test_enable_precomp(test_drawing)
 
 # This is a sample plugin, it simply uses a wxImage based
 # wxGraphicsContext. It should render the same as the built-in test. Use

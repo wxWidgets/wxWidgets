@@ -18,8 +18,6 @@ set(TEST_SRC
     )
 
 wx_add_test(test_headers ${TEST_SRC})
-wx_exe_link_libraries(test_headers wxcore)
 if(wxUSE_SOCKETS)
     wx_exe_link_libraries(test_headers wxnet)
 endif()
-wx_test_enable_precomp(test_headers)
