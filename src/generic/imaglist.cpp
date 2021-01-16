@@ -189,9 +189,9 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
 
 int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour )
 {
-    wxImage img = bitmap.ConvertToImage();
-    img.SetMaskColour(maskColour.Red(), maskColour.Green(), maskColour.Blue());
-    return Add(wxBitmap(img));
+    wxBitmap bmp(bitmap);
+    bmp.SetMask(new wxMask(bitmap, maskColour));
+    return Add(bmp);
 }
 
 const wxBitmap *wxGenericImageList::DoGetPtr( int index ) const
