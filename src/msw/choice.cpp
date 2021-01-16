@@ -362,10 +362,13 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
+    const int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
 
     wxString str;
-    if ( len != CB_ERR && len > 0 )
+
+    wxCHECK_MSG( len != CB_ERR, str, wxS("Invalid index") );
+
+    if ( len > 0 )
     {
         if ( ::SendMessage
                (
