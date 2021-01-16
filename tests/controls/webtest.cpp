@@ -123,7 +123,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->CanGoForward());
     }
 
-#if !wxUSE_WEBVIEW_WEBKIT2
+#if !wxUSE_WEBVIEW_WEBKIT2 && !defined(__WXOSX__)
     SECTION("HistoryEnable")
     {
         LoadUrl();
@@ -139,7 +139,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
     }
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT2
+#if !wxUSE_WEBVIEW_WEBKIT2 && !defined(__WXOSX__)
     SECTION("HistoryClear")
     {
         LoadUrl(2);
@@ -174,6 +174,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->GetBackwardHistory().size() == 2);
     }
 
+#if !defined(__WXOSX__)
     SECTION("Editable")
     {
         CHECK(!m_browser->IsEditable());
@@ -186,6 +187,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         CHECK(!m_browser->IsEditable());
     }
+#endif
 
     SECTION("Selection")
     {
@@ -207,6 +209,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->HasSelection());
         CHECK(m_browser->GetSelectedText() == "Some strong text");
 
+#if !defined(__WXOSX__)
         // The web engine doesn't necessarily represent the HTML in the same way as
         // we used above, e.g. IE uses upper case for all the tags while WebKit
         // under OS X inserts plenty of its own <span> tags, so don't test for
@@ -218,6 +221,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
             ("Unexpected selection source: \"%s\"", selSource),
             selSource.Lower().Matches("*some*<strong*strong</strong>*text*")
         );
+#endif // !defined(__WXOSX__)
 
         m_browser->ClearSelection();
         CHECK(!m_browser->HasSelection());

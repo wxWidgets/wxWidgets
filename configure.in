@@ -810,7 +810,6 @@ WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUS
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
-WX_ARG_FEATURE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac-only, use wxWebView instead)], wxUSE_WEBKIT)
 WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
 
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
@@ -7306,17 +7305,6 @@ if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
     USE_HTML=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
-fi
-if test "$wxUSE_WEBKIT" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-        AC_DEFINE(wxUSE_WEBKIT)
-        WEBKIT_LINK="-framework WebKit"
-    else
-        wxUSE_WEBKIT=no
-    fi
-    if test "$wxUSE_WEBKIT" = "yes"; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
-    fi
 fi
 
 USE_XRC=0

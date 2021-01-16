@@ -25,6 +25,8 @@
 // Web Kit Control
 // ----------------------------------------------------------------------------
 
+WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
@@ -71,7 +73,7 @@ public:
     virtual wxWebViewZoomType GetZoomType() const wxOVERRIDE;
     virtual bool CanSetZoomType(wxWebViewZoomType type) const wxOVERRIDE;
 
-    virtual bool IsBusy() const wxOVERRIDE { return m_busy; }
+    virtual bool IsBusy() const wxOVERRIDE;
 
     //History functions
     virtual void ClearHistory() wxOVERRIDE;
@@ -121,54 +123,21 @@ public:
 
     virtual void* GetNativeBackend() const wxOVERRIDE { return m_webView; }
 
-    // ---- methods not from the parent (common) interface
-    bool  CanGetPageSource() const;
-
-    void  SetScrollPos(int pos);
-    int   GetScrollPos();
-
-    bool  CanIncreaseTextSize() const;
-    void  IncreaseTextSize();
-    bool  CanDecreaseTextSize() const;
-    void  DecreaseTextSize();
-
-    float GetWebkitZoom() const;
-    void  SetWebkitZoom(float zoom);
-
-    // don't hide base class virtuals
-    virtual void SetScrollPos( int orient, int pos, bool refresh = true ) wxOVERRIDE
-        { return wxControl::SetScrollPos(orient, pos, refresh); }
-    virtual int GetScrollPos( int orient ) const wxOVERRIDE
-        { return wxControl::GetScrollPos(orient); }
-
-    //we need to resize the webview when the control size changes
-    void OnSize(wxSizeEvent &event);
-    void OnMove(wxMoveEvent &event);
-    void OnMouseEvents(wxMouseEvent &event);
-
-    bool m_busy;
-    bool m_nextNavigationIsNewWindow;
-
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
     wxDECLARE_EVENT_TABLE();
-    void MacVisibilityChanged() wxOVERRIDE;
 
 private:
-    wxWindow *m_parent;
-    wxWindowID m_windowID;
-    wxString m_pageTitle;
-
     OSXWebViewPtr m_webView;
+    wxStringToWebHandlerMap m_handlers;
 
-    WX_NSObject m_loadDelegate;
-    WX_NSObject m_policyDelegate;
+    WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
 
-    // we may use this later to setup our own mouse events,
-    // so leave it in for now.
-    void* m_webKitCtrlEventHandler;
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
+    bool QueryCommandEnabled(const wxString& command) const;
+    void ExecCommand(const wxString& command);
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory

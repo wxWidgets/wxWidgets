@@ -2323,7 +2323,6 @@ set(OSX_COMMON_SRC
     src/osx/tglbtn_osx.cpp
     src/osx/toolbar_osx.cpp
     # wxWebKit files
-    src/html/htmlctrl/webkit/webkit.mm
     # Native color/font dialogs
     src/osx/carbon/colordlgosx.mm
     src/osx/carbon/fontdlgosx.mm
@@ -2373,7 +2372,6 @@ set(OSX_COMMON_SRC
 
 set(OSX_SHARED_HDR
     # wxWebKit headers
-    wx/html/webkit.h
     # other shared headers
     wx/osx/accel.h
     wx/osx/anybutton.h

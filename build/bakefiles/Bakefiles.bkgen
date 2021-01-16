@@ -46,11 +46,6 @@
         msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj
     </del-formats>
 
-    <!-- HtmlCtrl sample is Cocoa only (autoconf format) -->
-    <del-formats files="../../samples/html/htmlctrl/htmlctrl.bkl">
-        borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj,watcom
-    </del-formats>
-
     <!-- Some samples use MSVC-specific stuff -->
     <del-formats files="../../samples/mfc/mfc.bkl">
         autoconf,borland,dmars_smake,dmars,mingw,watcom
