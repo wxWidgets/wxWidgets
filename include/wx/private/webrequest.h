@@ -122,8 +122,6 @@ protected:
     // for the response status.
     void SetFinalStateFromStatus();
 
-    static bool IsActiveState(wxWebRequest::State state);
-
 private:
     // Called from public Cancel() at most once per object.
     virtual void DoCancel() = 0;

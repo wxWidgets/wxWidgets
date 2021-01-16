@@ -106,11 +106,6 @@ void wxWebRequestImpl::SetFinalStateFromStatus()
     }
 }
 
-bool wxWebRequestImpl::IsActiveState(wxWebRequest::State state)
-{
-    return (state == wxWebRequest::State_Active || state == wxWebRequest::State_Unauthorized);
-}
-
 void wxWebRequestImpl::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
 {
     m_dataText = text.mb_str(conv);
@@ -304,8 +299,23 @@ SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters)
 
 void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxString& failMsg)
 {
-    if ( !IsActiveState(state) && GetResponse() )
-        GetResponse()->Finalize();
+    switch ( state )
+    {
+        case wxWebRequest::State_Idle:
+            wxFAIL_MSG("unexpected");
+            break;
+
+        case wxWebRequest::State_Active:
+        case wxWebRequest::State_Unauthorized:
+            break;
+
+        case wxWebRequest::State_Completed:
+        case wxWebRequest::State_Failed:
+        case wxWebRequest::State_Cancelled:
+            if ( GetResponse() )
+                GetResponse()->Finalize();
+            break;
+    }
 
     wxString dataFile;
 
