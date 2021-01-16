@@ -207,7 +207,9 @@ struct StateEventProcessor
 
 void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & failMsg)
 {
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state => %d", this, state);
+    wxASSERT_MSG( state != m_state, "shouldn't switch to the same state" );
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: state %d => %d", this, m_state, state);
 
     m_state = state;
 
