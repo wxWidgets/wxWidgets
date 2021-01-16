@@ -2071,12 +2071,13 @@ wxTextCtrl* wxPropertyGrid::GetEditorTextCtrl() const
     if ( !wnd )
         return NULL;
 
-    if ( wxDynamicCast(wnd, wxTextCtrl) )
-        return wxStaticCast(wnd, wxTextCtrl);
+    wxTextCtrl* tc = wxDynamicCast(wnd, wxTextCtrl);
+    if ( tc )
+        return tc;
 
-    if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(wnd, wxOwnerDrawnComboBox);
+    if ( cb )
     {
-        wxOwnerDrawnComboBox* cb = wxStaticCast(wnd, wxOwnerDrawnComboBox);
         return cb->GetTextCtrl();
     }
 

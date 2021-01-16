@@ -3130,11 +3130,10 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 wxStatusBar* wxPropertyGrid::GetStatusBar()
 {
     wxWindow* topWnd = ::wxGetTopLevelParent(this);
-    if ( wxDynamicCast(topWnd, wxFrame) )
+    wxFrame* frame = wxDynamicCast(topWnd, wxFrame);
+    if ( frame )
     {
-        wxFrame* pFrame = wxStaticCast(topWnd, wxFrame);
-        if ( pFrame )
-            return pFrame->GetStatusBar();
+        return frame->GetStatusBar();
     }
     return NULL;
 }
@@ -4456,7 +4455,6 @@ bool wxPropertyGrid::SelectProperty( wxPGPropArg id, bool focus )
 
 bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
 {
-    wxPGProperty* pwc = wxStaticCast(p, wxPGProperty);
     wxPGProperty* selected = GetSelection();
 
     // If active editor was inside collapsed section, then disable it
@@ -4469,7 +4467,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
     bool prevDontCenterSplitter = m_pState->m_dontCenterSplitter;
     m_pState->m_dontCenterSplitter = true;
 
-    bool res = m_pState->DoCollapse(pwc);
+    bool res = m_pState->DoCollapse(p);
 
     if ( res )
     {
