@@ -97,51 +97,6 @@ void wxStatusBarMac::InitColours()
     }
 }
 
-void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
-{
-    int w, h;
-    GetSize( &w , &h );
-
-    wxString text(GetStatusText( i ));
-
-    int xpos = rect.x + wxFIELD_TEXT_MARGIN + 1;
-    int ypos = 2 + (rect.height - textHeight) / 2;
-
-    if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
-        ypos++;
-
-    dc.SetClippingRegion(rect.x, 0, rect.width, h);
-    dc.DrawText(text, xpos, ypos);
-    dc.DestroyClippingRegion();
-}
-
-void wxStatusBarMac::DrawField(wxDC& dc, int i, int textHeight)
-{
-    wxRect rect;
-    GetFieldRect(i, rect);
-
-    DrawFieldText(dc, rect, i, textHeight);
-}
-
-void wxStatusBarMac::DoUpdateStatusText(int number)
-{
-    wxRect rect;
-    GetFieldRect(number, rect);
-
-    int w, h;
-    GetSize( &w, &h );
-
-    rect.y = 0;
-    rect.height = h ;
-
-    Refresh( true, &rect );
-    // we should have to force the update here
-    // TODO Remove if no regressions occur
-#if 0
-    Update();
-#endif
-}
-
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);

@@ -265,9 +265,11 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
         SetEllipsizedFlag(i, text != GetStatusText(i));
     }
 
-#if defined( __WXGTK__ ) || defined(__WXMAC__)
+#if defined( __WXGTK__ )
     xpos++;
     ypos++;
+#elif defined(__WXMAC__)
+    xpos++;
 #endif
 
     // draw the text
@@ -285,7 +287,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
     if (rect.GetWidth() <= 0)
         return;     // happens when the status bar is shrunk in a very small area!
 
-    int style = m_panes[i].GetStyle();
+    int style = GetEffectiveFieldStyle(i);
     if (style == wxSB_RAISED || style == wxSB_SUNKEN)
     {
         // Draw border

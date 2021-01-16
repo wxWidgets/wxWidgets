@@ -31,9 +31,7 @@ public:
     void OnPaint(wxPaintEvent& event);
 
 protected:
-    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight) wxOVERRIDE;
-    virtual void DrawField(wxDC& dc, int i, int textHeight) wxOVERRIDE;
-    virtual void DoUpdateStatusText(int number = 0) wxOVERRIDE;
+    virtual int GetEffectiveFieldStyle(int WXUNUSED(i)) const wxOVERRIDE { return wxSB_NORMAL; }
 
     virtual void InitColours() wxOVERRIDE;
 
