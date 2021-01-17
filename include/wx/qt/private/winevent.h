@@ -417,9 +417,9 @@ protected:
               default:
                 break;
             }
-                
+
             win->ProcessWindowEvent( evp );
-            
+
             event->accept();
         }
     }
@@ -449,7 +449,7 @@ protected:
             }
 
             win->ProcessWindowEvent( evp );
-            
+
             event->accept();
 
         }
