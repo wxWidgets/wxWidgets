@@ -1156,15 +1156,19 @@ wxString wxSysErrorMsgStr(unsigned long nErrCode)
         char buffer[1024];
         char *errorMsg = buffer;
 
+        // We use the same unsigned long type under all platforms, but under
+        // Unix the error code is just int.
+        const int errorCode = static_cast<int>(nErrCode);
+
 #if defined(__GLIBC__) && defined(_GNU_SOURCE) // GNU-specific strerror_r
         // GNU's strerror_r has a weird interface -- it doesn't
         // necessarily copy anything to the buffer given; use return
         // value instead.
-        errorMsg = strerror_r((int)nErrCode, buffer, sizeof(buffer));
+        errorMsg = strerror_r(errorCode, buffer, sizeof(buffer));
 #elif defined( __VMS )
-        errorMsg = strerror((int)nErrCode);
+        errorMsg = strerror(errorCode);
 #else // XSI-compliant strerror_r
-        strerror_r((int)nErrCode, buffer, sizeof(buffer));
+        strerror_r(errorCode, buffer, sizeof(buffer));
 #endif
 
         // at this point errorMsg might not point to buffer anymore
