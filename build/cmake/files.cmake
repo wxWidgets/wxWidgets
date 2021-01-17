@@ -185,6 +185,7 @@ set(QT_WIN32_HDR
     wx/msw/sound.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/comimpl.h
+    wx/msw/ole/stream.h
 )
 
 set(QT_HDR
@@ -1955,6 +1956,7 @@ set(MSW_LOWLEVEL_SRC
     src/msw/richtooltip.cpp
     src/msw/evtloop.cpp
     src/msw/ole/access.cpp
+    src/msw/image_wic.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -1969,6 +1971,7 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/helpwin.h
     wx/msw/taskbar.h
     wx/msw/evtloop.h
+    wx/msw/image_wic.h
 )
 
 set(MSW_DESKTOP_LOWLEVEL_SRC

@@ -262,6 +262,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/oleutils.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/uuid.h
+    wx/msw/ole/stream.h
 </set>
 
 <set var="QT_PLATFORM_SRC" hints="files">
@@ -2081,6 +2082,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/uuid.cpp
     src/msw/evtloop.cpp
     src/msw/ole/access.cpp
+    src/msw/image_wic.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2094,6 +2096,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/sound.h
     wx/msw/joystick.h
     wx/msw/evtloop.h
+    wx/msw/image_wic.h
 </set>
 
 <set var="MSW_SRC" hints="files">

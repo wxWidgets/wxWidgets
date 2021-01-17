@@ -205,6 +205,7 @@ QT_WIN32_HDR=
     wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/safearray.h
+    wx/msw/ole/stream.h
     wx/msw/ole/uuid.h
     wx/msw/dib.h
     wx/msw/joystick.h
@@ -1922,6 +1923,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
     src/msw/icon.cpp
+	src/msw/image_wic.cpp
     src/msw/imaglist.cpp
     src/msw/joystick.cpp
     src/msw/minifram.cpp
@@ -1964,6 +1966,7 @@ MSW_LOWLEVEL_HDR =
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/htmlhelp.h
+	wx/msw/image_wic.h
     wx/msw/joystick.h
     wx/msw/nonownedwnd.h
     wx/msw/ole/activex.h

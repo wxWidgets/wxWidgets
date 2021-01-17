@@ -16,6 +16,10 @@
     #include "wx/image.h"
 #endif
 
+#ifdef __WXMSW__
+#include "wx/msw/image_wic.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // This function allows dynamic access to all image handlers compile within
 // the library. This function should be in a separate file as some compilers
@@ -23,13 +27,16 @@
 
 void wxInitAllImageHandlers()
 {
-#if wxUSE_LIBPNG
+#if wxUSE_WIC
+  wxImageHandlerWIC::InitAllSupportedHandlers();
+#endif
+#if wxUSE_LIBPNG && !wxUSE_WIC
   wxImage::AddHandler( new wxPNGHandler );
 #endif
-#if wxUSE_LIBJPEG
+#if wxUSE_LIBJPEG && !wxUSE_WIC
   wxImage::AddHandler( new wxJPEGHandler );
 #endif
-#if wxUSE_LIBTIFF
+#if wxUSE_LIBTIFF && !wxUSE_WIC
   wxImage::AddHandler( new wxTIFFHandler );
 #endif
 #if wxUSE_GIF
