@@ -58,7 +58,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
 
     // get the native menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
