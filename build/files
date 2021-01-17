@@ -678,11 +678,12 @@ NET_UNIX_SRC =
 
 NET_OSX_SRC =
     src/osx/core/sockosx.cpp
+    src/osx/webrequest_urlsession.mm
 
 NET_WIN32_SRC =
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
-NET_WIN32_HDR =
+    src/msw/webrequest_winhttp.cpp
 
 NET_CMN_SRC =
     src/common/fs_inet.cpp
@@ -695,6 +696,8 @@ NET_CMN_SRC =
     src/common/sckstrm.cpp
     src/common/socket.cpp
     src/common/url.cpp
+    src/common/webrequest.cpp
+    src/common/webrequest_curl.cpp
 NET_CMN_HDR =
     wx/fs_inet.h
     wx/protocol/file.h
@@ -707,6 +710,7 @@ NET_CMN_HDR =
     wx/sckstrm.h
     wx/socket.h
     wx/url.h
+    wx/webrequest.h
 
 # wxQA (non GUI library)
 
@@ -869,6 +873,7 @@ GUI_CMN_SRC =
     src/generic/collheaderctrlg.cpp
     src/generic/combog.cpp
     src/generic/commandlinkbuttong.cpp
+    src/generic/creddlgg.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
     src/generic/dcpsg.cpp
@@ -966,6 +971,7 @@ GUI_CMN_HDR =
     wx/commandlinkbutton.h
     wx/compositewin.h
     wx/control.h
+    wx/creddlg.h
     wx/cshelp.h
     wx/ctrlsub.h
     wx/cursor.h
@@ -1026,6 +1032,7 @@ GUI_CMN_HDR =
     wx/generic/collheaderctrl.h
     wx/generic/combo.h
     wx/generic/custombgwin.h
+    wx/generic/creddlgg.h
     wx/generic/dataview.h
     wx/generic/datectrl.h
     wx/generic/dcpsg.h

@@ -333,6 +333,12 @@
 			<File
 				RelativePath="..\..\src\common\url.cpp">
 			</File>
+			<File
+				RelativePath="..\..\src\common\webrequest.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\webrequest_curl.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="MSW Sources"
@@ -351,6 +357,9 @@
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\webrequest_winhttp.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -481,6 +490,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\url.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webrequest.h">
 			</File>
 		</Filter>
 	</Files>

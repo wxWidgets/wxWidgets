@@ -629,6 +629,38 @@
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
 
+// wxWebRequest allows usage of system libraries for HTTP(S) requests.
+//
+// Note that for wxWebRequest to be built, at least one of its backends must be
+// available. Under MSW and macOS this will always be the case unless
+// explicitly disabled.
+//
+// Default is 1
+//
+// Recommended setting: 1, setting it to 0 may be useful to avoid dependencies
+// on libcurl on Unix systems.
+#define wxUSE_WEBREQUEST 1
+
+// wxWebRequest backend based on NSURLSession
+//
+// Default is 1 under macOS.
+//
+// Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
+// otherwise wxWebRequest won't be available at all under Mac.
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+// wxWebRequest backend based on libcurl, can be used under all platforms.
+//
+// Default is 0 for MSW and macOS, detected automatically when using configure.
+//
+// Recommended setting: 0 on Windows and macOS, otherwise 1 as it is required
+// for wxWebRequest to be available at all.
+#define wxUSE_WEBREQUEST_CURL 0
+
 // wxProtocol and related classes: if you want to use either of wxFTP, wxHTTP
 // or wxURL you need to set this to 1.
 //
@@ -1296,6 +1328,9 @@
 
 // number entry dialog
 #define wxUSE_NUMBERDLG 1
+
+// credential entry dialog
+#define wxUSE_CREDENTIALDLG 1
 
 // splash screen class
 #define wxUSE_SPLASH 1

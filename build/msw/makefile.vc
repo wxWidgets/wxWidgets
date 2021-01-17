@@ -522,8 +522,11 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_sckstrm.obj \
 	$(OBJS)\monodll_socket.obj \
 	$(OBJS)\monodll_url.obj \
+	$(OBJS)\monodll_webrequest.obj \
+	$(OBJS)\monodll_webrequest_curl.obj \
 	$(OBJS)\monodll_sockmsw.obj \
 	$(OBJS)\monodll_urlmsw.obj \
+	$(OBJS)\monodll_webrequest_winhttp.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_xml.obj \
 	$(OBJS)\monodll_xtixml.obj
@@ -684,8 +687,11 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_sckstrm.obj \
 	$(OBJS)\monolib_socket.obj \
 	$(OBJS)\monolib_url.obj \
+	$(OBJS)\monolib_webrequest.obj \
+	$(OBJS)\monolib_webrequest_curl.obj \
 	$(OBJS)\monolib_sockmsw.obj \
 	$(OBJS)\monolib_urlmsw.obj \
+	$(OBJS)\monolib_webrequest_winhttp.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_xml.obj \
 	$(OBJS)\monolib_xtixml.obj
@@ -998,8 +1004,11 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_sckstrm.obj \
 	$(OBJS)\netdll_socket.obj \
 	$(OBJS)\netdll_url.obj \
+	$(OBJS)\netdll_webrequest.obj \
+	$(OBJS)\netdll_webrequest_curl.obj \
 	$(OBJS)\netdll_sockmsw.obj \
-	$(OBJS)\netdll_urlmsw.obj
+	$(OBJS)\netdll_urlmsw.obj \
+	$(OBJS)\netdll_webrequest_winhttp.obj
 NETDLL_RESOURCES =  \
 	$(OBJS)\netdll_version.res
 NETLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_193)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1027,8 +1036,11 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_sckstrm.obj \
 	$(OBJS)\netlib_socket.obj \
 	$(OBJS)\netlib_url.obj \
+	$(OBJS)\netlib_webrequest.obj \
+	$(OBJS)\netlib_webrequest_curl.obj \
 	$(OBJS)\netlib_sockmsw.obj \
-	$(OBJS)\netlib_urlmsw.obj
+	$(OBJS)\netlib_urlmsw.obj \
+	$(OBJS)\netlib_webrequest_winhttp.obj
 COREDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_209)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\src\regex /I..\..\src\expat\expat\lib $(__DEBUGINFO) \
@@ -2486,6 +2498,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
 	$(OBJS)\monodll_calctrlg.obj \
+	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
@@ -2813,6 +2826,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
 	$(OBJS)\monodll_calctrlg.obj \
+	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj
 !endif
 !if "$(USE_STC)" == "1"
@@ -3326,6 +3340,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
 	$(OBJS)\monolib_calctrlg.obj \
+	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
@@ -3653,6 +3668,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
 	$(OBJS)\monolib_calctrlg.obj \
+	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj
 !endif
 !if "$(USE_STC)" == "1"
@@ -4099,6 +4115,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
 	$(OBJS)\coredll_calctrlg.obj \
+	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
@@ -4426,6 +4443,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
 	$(OBJS)\coredll_calctrlg.obj \
+	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
@@ -4778,6 +4796,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
 	$(OBJS)\corelib_calctrlg.obj \
+	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
@@ -5105,6 +5124,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
 	$(OBJS)\corelib_calctrlg.obj \
+	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj
 !endif
 !if "$(SHARED)" == "1"
@@ -7572,11 +7592,20 @@ $(OBJS)\monodll_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\monodll_url.obj: ..\..\src\common\url.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\url.cpp
 
+$(OBJS)\monodll_webrequest.obj: ..\..\src\common\webrequest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webrequest.cpp
+
+$(OBJS)\monodll_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
+
 $(OBJS)\monodll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
+
+$(OBJS)\monodll_webrequest_winhttp.obj: ..\..\src\msw\webrequest_winhttp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\webrequest_winhttp.cpp
 
 $(OBJS)\monodll_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\statusbr.cpp
@@ -9744,6 +9773,11 @@ $(OBJS)\monodll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_creddlgg.obj: ..\..\src\generic\creddlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\creddlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
@@ -10126,11 +10160,20 @@ $(OBJS)\monolib_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\monolib_url.obj: ..\..\src\common\url.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\url.cpp
 
+$(OBJS)\monolib_webrequest.obj: ..\..\src\common\webrequest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webrequest.cpp
+
+$(OBJS)\monolib_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
+
 $(OBJS)\monolib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
+
+$(OBJS)\monolib_webrequest_winhttp.obj: ..\..\src\msw\webrequest_winhttp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\webrequest_winhttp.cpp
 
 $(OBJS)\monolib_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\statusbr.cpp
@@ -12298,6 +12341,11 @@ $(OBJS)\monolib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_creddlgg.obj: ..\..\src\generic\creddlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\creddlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
@@ -13031,11 +13079,20 @@ $(OBJS)\netdll_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\netdll_url.obj: ..\..\src\common\url.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\common\url.cpp
 
+$(OBJS)\netdll_webrequest.obj: ..\..\src\common\webrequest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\common\webrequest.cpp
+
+$(OBJS)\netdll_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
+
 $(OBJS)\netdll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\netdll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
+
+$(OBJS)\netdll_webrequest_winhttp.obj: ..\..\src\msw\webrequest_winhttp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\webrequest_winhttp.cpp
 
 $(OBJS)\netlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
@@ -13070,11 +13127,20 @@ $(OBJS)\netlib_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\netlib_url.obj: ..\..\src\common\url.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\common\url.cpp
 
+$(OBJS)\netlib_webrequest.obj: ..\..\src\common\webrequest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\common\webrequest.cpp
+
+$(OBJS)\netlib_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
+
 $(OBJS)\netlib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\netlib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
+
+$(OBJS)\netlib_webrequest_winhttp.obj: ..\..\src\msw\webrequest_winhttp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\webrequest_winhttp.cpp
 
 $(OBJS)\coredll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
@@ -14810,6 +14876,11 @@ $(OBJS)\coredll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_creddlgg.obj: ..\..\src\generic\creddlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\creddlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
@@ -16542,6 +16613,11 @@ $(OBJS)\corelib_laywin.obj: ..\..\src\generic\laywin.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_creddlgg.obj: ..\..\src\generic\creddlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\creddlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

@@ -59,6 +59,11 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
 endif()
 
+if(POLICY CMP0060)
+    # Link libraries by full path even in implicit directories.
+    cmake_policy(SET CMP0060 NEW)
+endif()
+
 if(POLICY CMP0067)
     # Honor language standard in try_compile() source-file signature.
     cmake_policy(SET CMP0067 NEW)

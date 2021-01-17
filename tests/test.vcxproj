@@ -524,6 +524,7 @@
     <ClCompile Include="misc\typeinfotest.cpp" />
     <ClCompile Include="net\ipc.cpp" />
     <ClCompile Include="net\socket.cpp" />
+    <ClCompile Include="net\webrequest.cpp" />
     <ClCompile Include="regex\regextest.cpp" />
     <ClCompile Include="regex\wxregextest.cpp" />
     <ClCompile Include="scopeguard\scopeguardtest.cpp" />

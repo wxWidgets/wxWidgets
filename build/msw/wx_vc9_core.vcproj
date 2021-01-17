@@ -1988,6 +1988,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\creddlgg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\datavgen.cpp"
 				>
 			</File>
@@ -2963,6 +2967,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\creddlgg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\custombgwin.h"
 				>
 			</File>
@@ -3422,6 +3430,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\ribbon\control.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\creddlg.h"
 				>
 			</File>
 			<File

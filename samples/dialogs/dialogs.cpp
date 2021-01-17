@@ -111,6 +111,10 @@
 
 #include "dialogs.h"
 
+#if wxUSE_CREDENTIALDLG
+    #include "wx/creddlg.h"
+#endif
+
 #if USE_COLOURDLG_GENERIC
     #include "wx/generic/colrdlgg.h"
 #endif // USE_COLOURDLG_GENERIC
@@ -170,6 +174,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_TEXT_ENTRY,                    MyFrame::TextEntry)
     EVT_MENU(DIALOGS_PASSWORD_ENTRY,                MyFrame::PasswordEntry)
 #endif // wxUSE_TEXTDLG
+
+#if wxUSE_CREDENTIALDLG
+    EVT_MENU(DIALOGS_CREDENTIAL_ENTRY,              MyFrame::CredentialEntry)
+#endif // wxUSE_CREDENTIALDLG
 
 #if wxUSE_NUMBERDLG
     EVT_MENU(DIALOGS_NUM_ENTRY,                     MyFrame::NumericEntry)
@@ -456,7 +464,7 @@ bool MyApp::OnInit()
 #endif // wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
 
 
-#if wxUSE_TEXTDLG || wxUSE_NUMBERDLG
+#if wxUSE_TEXTDLG || wxUSE_NUMBERDLG || wxUSE_CREDENTIALDLG
 
     wxMenu *entry_menu = new wxMenu;
 
@@ -465,6 +473,10 @@ bool MyApp::OnInit()
         entry_menu->Append(DIALOGS_TEXT_ENTRY,  "Multi line text &entry\tShift-Ctrl-E");
         entry_menu->Append(DIALOGS_PASSWORD_ENTRY,  "&Password entry\tCtrl-P");
     #endif // wxUSE_TEXTDLG
+
+    #if wxUSE_CREDENTIALDLG
+        entry_menu->Append(DIALOGS_CREDENTIAL_ENTRY, "&Credential entry\tShift-Ctrl-C");
+    #endif // wxUSE_CREDENTIALDLG
 
     #if wxUSE_NUMBERDLG
         entry_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
@@ -1141,6 +1153,30 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
     }
 }
 #endif // wxUSE_TEXTDLG
+
+#if wxUSE_CREDENTIALDLG
+void MyFrame::CredentialEntry(wxCommandEvent& WXUNUSED(event))
+{
+    wxCredentialEntryDialog dialog(this, "A login is required", "Credentials");
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        const wxWebCredentials credentials = dialog.GetCredentials();
+        const wxString& password = wxSecretString(credentials.GetPassword());
+        wxMessageBox
+        (
+            wxString::Format
+            (
+                "User: %s Password: %s",
+                credentials.GetUser(),
+                password
+            ),
+            "Credentials",
+            wxOK | wxICON_INFORMATION,
+            this
+        );
+    }
+}
+#endif // wxUSE_CREDENTIALDLG
 
 #if wxUSE_CHOICEDLG
 void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )

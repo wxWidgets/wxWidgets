@@ -983,6 +983,8 @@ DIRECTFB_CFLAGS
 GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
+LIBCURL_LIBS
+LIBCURL_CFLAGS
 subdirs
 wxCFLAGS_C99
 LIBTIFF_LIBS
@@ -1103,6 +1105,9 @@ with_regex
 with_liblzma
 with_zlib
 with_expat
+with_libcurl
+with_winhttp
+with_urlsession
 with_macosx_sdk
 with_macosx_version_min
 enable_debug
@@ -1152,6 +1157,7 @@ enable_sockets
 enable_ipv6
 enable_ole
 enable_dataobj
+enable_webrequest
 enable_ipc
 enable_baseevtloop
 enable_epollloop
@@ -1312,6 +1318,7 @@ enable_commondlg
 enable_aboutdlg
 enable_choicedlg
 enable_coldlg
+enable_creddlg
 enable_filedlg
 enable_finddlg
 enable_fontdlg
@@ -1383,6 +1390,8 @@ CCC
 PKG_CONFIG
 LIBTIFF_CFLAGS
 LIBTIFF_LIBS
+LIBCURL_CFLAGS
+LIBCURL_LIBS
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
@@ -2113,6 +2122,7 @@ Optional Features:
   --enable-ipv6           enable IPv6 support in wxSocket
   --enable-ole            use OLE classes (Win32 only)
   --enable-dataobj        use data object classes
+  --enable-webrequest     use wxWebRequest
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-baseevtloop    use event loop in console programs too
   --enable-epollloop      use wxEpollDispatcher class (Linux only)
@@ -2273,6 +2283,7 @@ Optional Features:
   --enable-aboutdlg       use wxAboutBox
   --enable-choicedlg      use wxChoiceDialog
   --enable-coldlg         use wxColourDialog
+  --enable-creddlg        use wxCredentialEntryDialog
   --enable-filedlg        use wxFileDialog
   --enable-finddlg        use wxFindReplaceDialog
   --enable-fontdlg        use wxFontDialog
@@ -2366,6 +2377,9 @@ Optional Packages:
   --with-liblzma          use LZMA compression)
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
+  --with-libcurl          use libcurl-based wxWebRequest
+  --with-winhttp          use WinHTTP-based wxWebRequest
+  --with-urlsession       use NSURLSession-based wxWebRequest
   --with-macosx-sdk=PATH  use macOS SDK at PATH
   --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)
   --with-cxx=11|14|17     use the given C++ dialect
@@ -2392,6 +2406,10 @@ Some influential environment variables:
               C compiler flags for LIBTIFF, overriding pkg-config
   LIBTIFF_LIBS
               linker flags for LIBTIFF, overriding pkg-config
+  LIBCURL_CFLAGS
+              C compiler flags for LIBCURL, overriding pkg-config
+  LIBCURL_LIBS
+              linker flags for LIBCURL, overriding pkg-config
   DIRECTFB_CFLAGS
               C compiler flags for DIRECTFB, overriding pkg-config
   DIRECTFB_LIBS
@@ -4078,6 +4096,7 @@ DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
 DEFAULT_wxUSE_DMALLOC=no
+DEFAULT_wxUSE_LIBCURL=auto
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
@@ -5329,6 +5348,96 @@ fi
 
           eval "$wx_cv_use_expat"
 
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-libcurl was given.
+if test "${with_libcurl+set}" = set; then :
+  withval=$with_libcurl;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libcurl='wxUSE_LIBCURL=yes'
+                        else
+                          wx_cv_use_libcurl='wxUSE_LIBCURL=no'
+                        fi
+
+else
+
+                        wx_cv_use_libcurl='wxUSE_LIBCURL=${'DEFAULT_wxUSE_LIBCURL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_libcurl"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-winhttp was given.
+if test "${with_winhttp+set}" = set; then :
+  withval=$with_winhttp;
+                        if test "$withval" = yes; then
+                          wx_cv_use_winhttp='wxUSE_WINHTTP=yes'
+                        else
+                          wx_cv_use_winhttp='wxUSE_WINHTTP=no'
+                        fi
+
+else
+
+                        wx_cv_use_winhttp='wxUSE_WINHTTP=${'DEFAULT_wxUSE_WINHTTP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_winhttp"
+
+if test "$USE_DARWIN" = 1; then
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-urlsession was given.
+if test "${with_urlsession+set}" = set; then :
+  withval=$with_urlsession;
+                        if test "$withval" = yes; then
+                          wx_cv_use_urlsession='wxUSE_URLSESSION=yes'
+                        else
+                          wx_cv_use_urlsession='wxUSE_URLSESSION=no'
+                        fi
+
+else
+
+                        wx_cv_use_urlsession='wxUSE_URLSESSION=${'DEFAULT_wxUSE_URLSESSION":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_urlsession"
+
+fi
 
 if test "$USE_DARWIN" = 1; then
 
@@ -6661,6 +6770,35 @@ fi
 
 
           eval "$wx_cv_use_dataobj"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webrequest was given.
+if test "${enable_webrequest+set}" = set; then :
+  enableval=$enable_webrequest;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webrequest='wxUSE_WEBREQUEST=yes'
+                          else
+                            wx_cv_use_webrequest='wxUSE_WEBREQUEST=no'
+                          fi
+
+else
+
+                          wx_cv_use_webrequest='wxUSE_WEBREQUEST=${'DEFAULT_wxUSE_WEBREQUEST":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webrequest"
 
 
 
@@ -11390,6 +11528,35 @@ fi
 
 
           eval "$wx_cv_use_coldlg"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-creddlg was given.
+if test "${enable_creddlg+set}" = set; then :
+  enableval=$enable_creddlg;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_creddlg='wxUSE_CREDENTIALDLG=yes'
+                          else
+                            wx_cv_use_creddlg='wxUSE_CREDENTIALDLG=no'
+                          fi
+
+else
+
+                          wx_cv_use_creddlg='wxUSE_CREDENTIALDLG=${'DEFAULT_wxUSE_CREDENTIALDLG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_creddlg"
 
 
           enablestring=
@@ -21443,6 +21610,15 @@ $as_echo "no" >&6; }
 
 fi
 
+if test "$build" != "$host"; then
+
+
+                if test -z "$PKG_CONFIG_LIBDIR"; then
+        PKG_CONFIG_LIBDIR=/dev/null
+        export PKG_CONFIG_LIBDIR
+    fi
+fi
+
 
 
 if test "$wxUSE_REGEX" != "no"; then
@@ -22805,6 +22981,99 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 fi
 
 
+if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
+            if test "$wxUSE_SYS_LIBS" != "no" -o "$wxUSE_LIBCURL" = "yes"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCURL" >&5
+$as_echo_n "checking for LIBCURL... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBCURL_CFLAGS"; then
+        pkg_cv_LIBCURL_CFLAGS="$LIBCURL_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcurl\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libcurl") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBCURL_CFLAGS=`$PKG_CONFIG --cflags "libcurl" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBCURL_LIBS"; then
+        pkg_cv_LIBCURL_LIBS="$LIBCURL_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcurl\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libcurl") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBCURL_LIBS=`$PKG_CONFIG --libs "libcurl" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBCURL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libcurl"`
+        else
+	        LIBCURL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libcurl"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBCURL_PKG_ERRORS" >&5
+
+
+                wxUSE_LIBCURL=no
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+$as_echo "not found" >&6; }
+
+
+elif test $pkg_failed = untried; then
+
+                wxUSE_LIBCURL=no
+                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+$as_echo "not found" >&6; }
+
+
+else
+	LIBCURL_CFLAGS=$pkg_cv_LIBCURL_CFLAGS
+	LIBCURL_LIBS=$pkg_cv_LIBCURL_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                wxUSE_LIBCURL=yes
+                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+                LIBS="$LIBCURL_LIBS $LIBS"
+
+fi
+    else
+                                if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary" >&5
+$as_echo "$as_me: WARNING: Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary" >&2;}
+        fi
+    fi
+fi
+
 
 TOOLKIT=
 TOOLKIT_INCLUDE=
@@ -22831,6 +23100,21 @@ fi
     esac
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
+    fi
+    if test "$wxUSE_WINHTTP" = "yes" ; then
+        ac_fn_c_check_header_compile "$LINENO" "winhttp.h" "ac_cv_header_winhttp_h" "#include <windows.h>
+"
+if test "x$ac_cv_header_winhttp_h" = xyes; then :
+
+else
+  wxUSE_WINHTTP=no
+fi
+
+
+
+        if test "$wxUSE_WINHTTP" = "yes" ; then
+            LIBS="$LIBS -lwinhttp"
+        fi
     fi
 
     case "${host}" in
@@ -35807,6 +36091,35 @@ if test "$wxUSE_FS_INET" = "yes"; then
 
 fi
 
+if test "$wxUSE_WEBREQUEST" = "yes"; then
+    if test "$wxUSE_LIBCURL" = "yes"; then
+        $as_echo "#define wxUSE_WEBREQUEST_CURL 1" >>confdefs.h
+
+        have_webrequest_backend=1
+    fi
+
+    if test "$USE_DARWIN" = 1 -a "$wxUSE_URLSESSION" = "yes"; then
+        $as_echo "#define wxUSE_WEBREQUEST_URLSESSION 1" >>confdefs.h
+
+        have_webrequest_backend=1
+    fi
+
+    if test "$USE_WIN32" = 1 -a "$wxUSE_WINHTTP" = "yes"; then
+        $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
+
+        have_webrequest_backend=1
+    fi
+
+    if test "$have_webrequest_backend" = 1; then
+        $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling wxWebRequest because no backends are available" >&5
+$as_echo "$as_me: WARNING: Disabling wxWebRequest because no backends are available" >&2;}
+    fi
+fi
+
 
 if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
     wxUSE_JOYSTICK=no
@@ -37227,6 +37540,11 @@ fi
 
 if test "$wxUSE_COLOURDLG" = "yes"; then
     $as_echo "#define wxUSE_COLOURDLG 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_CREDENTIALDLG" = "yes"; then
+    $as_echo "#define wxUSE_CREDENTIALDLG 1" >>confdefs.h
 
 fi
 

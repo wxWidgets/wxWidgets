@@ -308,6 +308,33 @@ if(wxUSE_LIBLZMA)
     endif()
 endif()
 
+if (wxUSE_WEBREQUEST)
+    if(wxUSE_WEBREQUEST_CURL)
+        find_package(CURL)
+        if(NOT CURL_FOUND)
+            message(WARNING "CURL not found, wxWebSessionBackendCURL won't be available")
+            wx_option_force_value(wxUSE_WEBREQUEST_CURL OFF)
+        endif()
+    endif()
+
+    include(CheckCSourceCompiles)
+    if(wxUSE_WEBREQUEST_WINHTTP)
+        check_c_source_compiles("#include <windows.h>
+                                 #include <winhttp.h>
+                                 int main(){return 0;}"
+                                HAVE_WINHTTP_H)
+        if(NOT HAVE_WINHTTP_H)
+            message(WARNING "winhttp.h not found, wxWebSessionBackendWinHTTP won't be available")
+            wx_option_force_value(wxUSE_WEBREQUEST_WINHTTP OFF)
+        endif()
+    endif()
+
+    if (NOT(wxUSE_WEBREQUEST_WINHTTP OR wxUSE_WEBREQUEST_URLSESSION OR wxUSE_WEBREQUEST_CURL))
+        message(WARNING "wxUSE_WEBREQUEST requires at least one backend, it won't be available")
+        wx_option_force_value(wxUSE_WEBREQUEST OFF)
+    endif()
+endif()
+
 if(UNIX)
     if(wxUSE_SECRETSTORE AND NOT APPLE)
         # The required APIs are always available under MSW and OS X but we must

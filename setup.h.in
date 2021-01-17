@@ -294,6 +294,16 @@
 
 #define wxUSE_MIMETYPE 0
 
+#define wxUSE_WEBREQUEST 0
+
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+#define wxUSE_WEBREQUEST_CURL 0
+
 #define wxUSE_PROTOCOL 0
 
 #define wxUSE_PROTOCOL_FILE 0
@@ -523,6 +533,8 @@
 
 #define wxUSE_NUMBERDLG 0
 
+#define wxUSE_CREDENTIALDLG 0
+
 #define wxUSE_SPLASH 0
 
 #define wxUSE_WIZARDDLG 0
@@ -677,6 +689,12 @@
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #define wxUSE_WEBREQUEST_WINHTTP 0
+#else
+    #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
 
 

@@ -52,6 +52,7 @@ set(TEST_SRC
     misc/typeinfotest.cpp
     net/ipc.cpp
     net/socket.cpp
+    net/webrequest.cpp
     regex/regextest.cpp
     regex/wxregextest.cpp
     scopeguard/scopeguardtest.cpp

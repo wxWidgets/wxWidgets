@@ -235,6 +235,16 @@
 #   define wxUSE_ACTIVITYINDICATOR 0
 #endif /* !wxUSE_ACTIVITYINDICATOR && !_MSC_VER */
 
+/*
+    Similarly, turn off wxUSE_WEBREQUEST if we can't enable it because we don't
+    have any of its backends to allow the library to compile with the default
+    options when using MinGW32 which doesn't come with winhttp.h and so for
+    which we have to disable wxUSE_WEBREQUEST_WINHTTP.
+ */
+#if wxUSE_WEBREQUEST && !wxUSE_WEBREQUEST_CURL && !wxUSE_WEBREQUEST_WINHTTP
+#   undef wxUSE_WEBREQUEST
+#   define wxUSE_WEBREQUEST 0
+#endif /* wxUSE_WEBREQUEST */
 
 /* check settings consistency for MSW-specific ones */
 #if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION

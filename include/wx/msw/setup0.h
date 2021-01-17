@@ -633,6 +633,38 @@
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
 
+// wxWebRequest allows usage of system libraries for HTTP(S) requests.
+//
+// Note that for wxWebRequest to be built, at least one of its backends must be
+// available. Under MSW and macOS this will always be the case unless
+// explicitly disabled.
+//
+// Default is 1
+//
+// Recommended setting: 1, setting it to 0 may be useful to avoid dependencies
+// on libcurl on Unix systems.
+#define wxUSE_WEBREQUEST 1
+
+// wxWebRequest backend based on NSURLSession
+//
+// Default is 1 under macOS.
+//
+// Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
+// otherwise wxWebRequest won't be available at all under Mac.
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+// wxWebRequest backend based on libcurl, can be used under all platforms.
+//
+// Default is 0 for MSW and macOS, detected automatically when using configure.
+//
+// Recommended setting: 0 on Windows and macOS, otherwise 1 as it is required
+// for wxWebRequest to be available at all.
+#define wxUSE_WEBREQUEST_CURL 0
+
 // wxProtocol and related classes: if you want to use either of wxFTP, wxHTTP
 // or wxURL you need to set this to 1.
 //
@@ -1301,6 +1333,9 @@
 // number entry dialog
 #define wxUSE_NUMBERDLG 1
 
+// credential entry dialog
+#define wxUSE_CREDENTIALDLG 1
+
 // splash screen class
 #define wxUSE_SPLASH 1
 
@@ -1388,7 +1423,8 @@
 #define wxUSE_GLCANVAS       1
 
 // Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
-// automatically enabled if EGL support is detected.
+// automatically enabled if EGL support is detected.  EGL support is only
+// available under Unix platforms.
 //
 // Default is 0.
 //
@@ -1578,7 +1614,7 @@
 
 /* --- start MSW options --- */
 // ----------------------------------------------------------------------------
-// Graphics backends choices for Windows
+// Windows-specific backends choices
 // ----------------------------------------------------------------------------
 
 // The options here are only taken into account if wxUSE_GRAPHICS_CONTEXT is 1.
@@ -1604,6 +1640,20 @@
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
+// wxWebRequest backend based on WinHTTP.
+//
+// This is only taken into account if wxUSE_WEBREQUEST==1.
+//
+// Default is 1 if supported by the compiler (MSVS or MinGW64).
+//
+// Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
+// otherwise wxWebRequest won't be available at all.
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #define wxUSE_WEBREQUEST_WINHTTP 1
+#else
+    #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
 
 // ----------------------------------------------------------------------------

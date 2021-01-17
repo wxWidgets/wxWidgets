@@ -90,6 +90,7 @@ library:
 @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}
 @itemdef{wxUSE_CONSTRAINTS, Use wxLayoutConstraints}
 @itemdef{wxUSE_CONTROLS, If set to 0, no classes deriving from wxControl can be used.}
+@itemdef{wxUSE_CREDENTIALDLG, If set to 0, disabled wxCredentialEntryDialog used by wxWebRequest.}
 @itemdef{wxUSE_DATAOBJ, Use wxDataObject and related classes.}
 @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
 @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
@@ -254,6 +255,7 @@ library:
 @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}
 @itemdef{wxUSE_VALIDATORS, Use wxValidator class.}
 @itemdef{wxUSE_VARIANT, Use wxVariant class.}
+@itemdef{wxUSE_WEBREQUEST, Use wxWebRequest class.}
 @itemdef{wxUSE_WEBVIEW, Use wxWebView class.}
 @itemdef{wxUSE_WIZARDDLG, Use wxWizard class.}
 @itemdef{wxUSE_WXHTML_HELP, Use wxHtmlHelpController and related classes.}

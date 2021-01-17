@@ -660,14 +660,13 @@ set(NET_UNIX_SRC
 
 set(NET_OSX_SRC
     src/osx/core/sockosx.cpp
+    src/osx/webrequest_urlsession.mm
 )
 
 set(NET_WIN32_SRC
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
-)
-
-set(NET_WIN32_HDR
+    src/msw/webrequest_winhttp.cpp
 )
 
 set(NET_CMN_SRC
@@ -681,6 +680,8 @@ set(NET_CMN_SRC
     src/common/sckstrm.cpp
     src/common/socket.cpp
     src/common/url.cpp
+    src/common/webrequest.cpp
+    src/common/webrequest_curl.cpp
 )
 
 set(NET_CMN_HDR
@@ -695,6 +696,7 @@ set(NET_CMN_HDR
     wx/sckstrm.h
     wx/socket.h
     wx/url.h
+    wx/webrequest.h
 )
 
 set(QA_SRC
@@ -907,6 +909,7 @@ set(GUI_CMN_SRC
     src/generic/wizard.cpp
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
+    src/generic/creddlgg.cpp
     src/generic/rowheightcache.cpp
     src/generic/animateg.cpp
 )
@@ -1197,6 +1200,8 @@ set(GUI_CMN_HDR
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
+    wx/creddlg.h
+    wx/generic/creddlgg.h
     wx/generic/animate.h
 )
 

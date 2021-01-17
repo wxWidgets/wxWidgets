@@ -585,11 +585,17 @@ public:
     */
     wxObjectDataPtr(T* ptr = NULL);
 
+    //@{
     /**
         This copy constructor increases the count of the reference counted object to
         which @a tocopy points and then this class will point to, as well.
+
+        Using @a U different from @c T is only supported since wxWidgets 3.1.5.
     */
+    template <typename U>
+    wxObjectDataPtr(const wxObjectDataPtr<U>& tocopy);
     wxObjectDataPtr(const wxObjectDataPtr<T>& tocopy);
+    //@}
 
 
     /**
@@ -649,7 +655,11 @@ public:
     //@{
     /**
         Assignment operator.
+
+        Using @a U different from @c T is only supported since wxWidgets 3.1.5.
     */
+    template <typename U>
+    wxObjectDataPtr<T>& operator=(const wxObjectDataPtr<U>& tocopy);
     wxObjectDataPtr<T>& operator=(const wxObjectDataPtr<T>& tocopy);
     wxObjectDataPtr<T>& operator=(T* ptr);
     //@}

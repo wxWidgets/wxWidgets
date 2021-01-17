@@ -333,8 +333,9 @@ DEFAULT_wxUSE_STD_CONTAINERS_COMPATIBLY=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
-dnl libraries disabled by default
+dnl libraries disabled by default or requiring some special handling
 DEFAULT_wxUSE_DMALLOC=no
+DEFAULT_wxUSE_LIBCURL=auto
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
@@ -576,6 +577,14 @@ WX_ARG_WITH(liblzma,       [  --with-liblzma          use LZMA compression)], wx
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
+WX_ARG_WITH(libcurl,       [  --with-libcurl          use libcurl-based wxWebRequest], wxUSE_LIBCURL)
+dnl USE_WIN32 is not defined yet, so we always define this option even if it's
+dnl MSW-specific, which is not ideal, but better than never defining it.
+WX_ARG_WITH(winhttp,       [  --with-winhttp          use WinHTTP-based wxWebRequest], wxUSE_WINHTTP)
+if test "$USE_DARWIN" = 1; then
+WX_ARG_WITH(urlsession,    [  --with-urlsession       use NSURLSession-based wxWebRequest], wxUSE_URLSESSION)
+fi
+
 if test "$USE_DARWIN" = 1; then
 
 AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use macOS SDK at PATH], [
@@ -716,6 +725,7 @@ WX_ARG_FEATURE(sockets,       [  --enable-sockets        use socket/network clas
 WX_ARG_FEATURE(ipv6,          [  --enable-ipv6           enable IPv6 support in wxSocket], wxUSE_IPV6)
 WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
+WX_ARG_FEATURE(webrequest,    [  --enable-webrequest     use wxWebRequest], wxUSE_WEBREQUEST)
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
@@ -987,6 +997,7 @@ WX_ARG_FEATURE(commondlg,   [  --enable-commondlg      use all common dialogs], 
 WX_ARG_FEATURE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
 WX_ARG_FEATURE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_FEATURE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
+WX_ARG_FEATURE(creddlg,     [  --enable-creddlg        use wxCredentialEntryDialog], wxUSE_CREDENTIALDLG)
 WX_ARG_FEATURE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
 WX_ARG_FEATURE(finddlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
 WX_ARG_FEATURE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
@@ -2372,6 +2383,23 @@ fi dnl End of pre-C++11 only checks section
 dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
 PKG_PROG_PKG_CONFIG
 
+dnl When cross-compiling, don't use .pc files on the build system, they are at
+dnl best useless and can be harmful (e.g. they may define options inappropriate
+dnl for the cross-build, resulting in the failure of all the subsequent tests).
+if test "$build" != "$host"; then
+    dnl pkg.m4 forbids the use of PKG_XXX, so undo it here to avoid autoconf
+    dnl errors.
+    m4_pattern_allow([PKG_CONFIG_LIBDIR])
+
+    dnl If pkg-config libdir is already defined, we suppose that they know what
+    dnl they're doing and leave it alone, but if not, set it to a path in which
+    dnl no .pc files will be found.
+    if test -z "$PKG_CONFIG_LIBDIR"; then
+        PKG_CONFIG_LIBDIR=/dev/null
+        export PKG_CONFIG_LIBDIR
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl
@@ -2913,6 +2941,34 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
     AC_DEFINE(wxUSE_LIBMSPACK)
 fi
 
+dnl ------------------------------------------------------------------------
+dnl Check for libcurl
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
+    dnl We shouldn't depend on the external libcurl if system libraries are
+    dnl explicitly disabled, unless it is explicitly requested.
+    if test "$wxUSE_SYS_LIBS" != "no" -o "$wxUSE_LIBCURL" = "yes"; then
+        PKG_CHECK_MODULES(LIBCURL, [libcurl],
+            [
+                wxUSE_LIBCURL=yes
+                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+                LIBS="$LIBCURL_LIBS $LIBS"
+            ],
+            [
+                wxUSE_LIBCURL=no
+                AC_MSG_RESULT([not found])
+            ]
+        )
+    else
+        dnl Under Win32/macOS we have other backends for wxWebRequest, but
+        dnl under Unix it will be disabled without libcurl, so warn about it as
+        dnl this could be an unexpected consequence of disabling sys libs.
+        if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
+            AC_MSG_WARN([Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary])
+        fi
+    fi
+fi
 
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
@@ -2942,6 +2998,13 @@ if test "$USE_WIN32" = 1 ; then
     esac
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
+    fi
+    if test "$wxUSE_WINHTTP" = "yes" ; then
+        AC_CHECK_HEADER(winhttp.h,,[wxUSE_WINHTTP=no],[#include <windows.h>])
+
+        if test "$wxUSE_WINHTTP" = "yes" ; then
+            LIBS="$LIBS -lwinhttp"
+        fi
     fi
 
     case "${host}" in
@@ -6547,6 +6610,30 @@ if test "$wxUSE_FS_INET" = "yes"; then
   AC_DEFINE(wxUSE_FS_INET)
 fi
 
+if test "$wxUSE_WEBREQUEST" = "yes"; then
+    if test "$wxUSE_LIBCURL" = "yes"; then
+        AC_DEFINE(wxUSE_WEBREQUEST_CURL)
+        have_webrequest_backend=1
+    fi
+
+    if test "$USE_DARWIN" = 1 -a "$wxUSE_URLSESSION" = "yes"; then
+        AC_DEFINE(wxUSE_WEBREQUEST_URLSESSION)
+        have_webrequest_backend=1
+    fi
+
+    if test "$USE_WIN32" = 1 -a "$wxUSE_WINHTTP" = "yes"; then
+        AC_DEFINE(wxUSE_WEBREQUEST_WINHTTP)
+        have_webrequest_backend=1
+    fi
+
+    if test "$have_webrequest_backend" = 1; then
+        AC_DEFINE(wxUSE_WEBREQUEST)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
+    else
+        AC_MSG_WARN([Disabling wxWebRequest because no backends are available])
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Joystick support
 dnl ---------------------------------------------------------------------------
@@ -7528,6 +7615,10 @@ fi
 
 if test "$wxUSE_COLOURDLG" = "yes"; then
     AC_DEFINE(wxUSE_COLOURDLG)
+fi
+
+if test "$wxUSE_CREDENTIALDLG" = "yes"; then
+    AC_DEFINE(wxUSE_CREDENTIALDLG)
 fi
 
 if test "$wxUSE_FILEDLG" = "yes"; then

@@ -148,6 +148,9 @@ minimize external dependencies.
     --without-liblzma       Disable LZMA compression support.
                             Don't use liblzma.
 
+    --without-libcurl       Don't use libcurl even if it's available.
+                            Disables wxWebRequest.
+
     --without-opengl        Disable OpenGL integration with wxGLCanvas.
                             Don't use OpenGL or EGL libraries.
 

@@ -294,6 +294,16 @@
 
 #cmakedefine01 wxUSE_MIMETYPE
 
+#cmakedefine01 wxUSE_WEBREQUEST
+
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#cmakedefine01 wxUSE_WEBREQUEST_URLSESSION
+#endif
+
+#cmakedefine01 wxUSE_WEBREQUEST_CURL
+
 #cmakedefine01 wxUSE_PROTOCOL
 
 #cmakedefine01 wxUSE_PROTOCOL_FILE
@@ -523,6 +533,8 @@
 
 #cmakedefine01 wxUSE_NUMBERDLG
 
+#cmakedefine01 wxUSE_CREDENTIALDLG
+
 #cmakedefine01 wxUSE_SPLASH
 
 #cmakedefine01 wxUSE_WIZARDDLG
@@ -677,6 +689,12 @@
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #cmakedefine01 wxUSE_GRAPHICS_DIRECT2D
+#endif
+
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
+#else
+    #cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
 #endif
 
 

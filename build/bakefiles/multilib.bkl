@@ -49,14 +49,14 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_NET</define>
         <sources>$(NET_SRC)</sources>
-        <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
+        <msvc-headers>$(NET_CMN_HDR)</msvc-headers>
         <library>basedll</library>
     </dll>
 
     <lib id="netlib" template="wx_base_lib"
          cond="SHARED=='0' and MONOLITHIC=='0'">
         <sources>$(NET_SRC)</sources>
-        <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
+        <msvc-headers>$(NET_CMN_HDR)</msvc-headers>
     </lib>
 
     <wxshortcut id="wxnet" cond="MONOLITHIC=='0'"/>

@@ -278,6 +278,15 @@ public:
             m_ptr->IncRef();
     }
 
+    // generalized copy ctor: U must be convertible to T
+    template <typename U>
+    wxObjectDataPtr(const wxObjectDataPtr<U> &tocopy)
+        : m_ptr(tocopy.get())
+    {
+        if (m_ptr)
+            m_ptr->IncRef();
+    }
+
     ~wxObjectDataPtr()
     {
         if (m_ptr)
@@ -325,6 +334,17 @@ public:
         if (m_ptr)
             m_ptr->DecRef();
         m_ptr = tocopy.m_ptr;
+        if (m_ptr)
+            m_ptr->IncRef();
+        return *this;
+    }
+
+    template <typename U>
+    wxObjectDataPtr& operator=(const wxObjectDataPtr<U> &tocopy)
+    {
+        if (m_ptr)
+            m_ptr->DecRef();
+        m_ptr = tocopy.get();
         if (m_ptr)
             m_ptr->IncRef();
         return *this;

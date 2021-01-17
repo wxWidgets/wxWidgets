@@ -665,7 +665,7 @@ size_t wxDialUpManagerMSW::GetISPNames(wxArrayString& names) const
     {
         dwRet = ms_pfnRasEnumEntries
                   (
-                   NULL,                // reserved
+                   wxRESERVED_PARAM,
                    NULL,                // default phone book (or all)
                    rasEntries,          // [out] buffer for the entries
                    &size,               // [in/out] size of the buffer
@@ -963,7 +963,7 @@ bool wxDialUpManagerMSW::IsAlwaysOnline() const
         if ( pfnInternetGetConnectedState )
         {
             DWORD flags = 0;
-            if ( pfnInternetGetConnectedState(&flags, 0 /* reserved */) )
+            if ( pfnInternetGetConnectedState(&flags, wxRESERVED_PARAM) )
             {
                 // there is some connection to the net, see of which type
                 isAlwaysOnline = (flags & (INTERNET_CONNECTION_LAN |
