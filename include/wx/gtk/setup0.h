@@ -1656,6 +1656,13 @@
     #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
 
+// wxImage loading based on Windows Imaging Component
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_WIC	1
+
 // ----------------------------------------------------------------------------
 // Windows-only settings
 // ----------------------------------------------------------------------------

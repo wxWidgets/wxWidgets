@@ -697,6 +697,8 @@
     #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
 
+#define wxUSE_WIC	1
+
 
 #define wxUSE_OLE           0
 

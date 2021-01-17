@@ -90,12 +90,21 @@ wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
 # external libraries
 # ---------------------------------------------------------------------------
 
+if(WIN32)
+    wx_option(wxUSE_WIC "use Windows Imaging Component")
+endif()
+
 wx_add_thirdparty_library(wxUSE_REGEX REGEX "enable support for wxRegEx class" DEFAULT builtin)
 wx_add_thirdparty_library(wxUSE_ZLIB ZLIB "use zlib for LZW compression" DEFAULT_APPLE sys)
 wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_APPLE sys)
-wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")
-wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
-wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
+if(WIN32 AND wxUSE_WIC)
+    set(wxIMAGELIB_DEFAULT OFF)
+else()
+    set(wxIMAGELIB_DEFAULT builtin)
+endif()
+wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)" DEFAULT ${wxIMAGELIB_DEFAULT})
+wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)" DEFAULT ${wxIMAGELIB_DEFAULT})
+wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)" DEFAULT ${wxIMAGELIB_DEFAULT})
 
 wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")

@@ -125,6 +125,14 @@
 #    endif
 #endif  /* wxUSE_UXTHEME */
 
+#ifndef wxUSE_WIC
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_WIC must be defined."
+#    else
+#        define wxUSE_WIC 0
+#    endif
+#endif  /* wxUSE_WIC */
+
 #ifndef wxUSE_WINSOCK2
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_WINSOCK2 must be defined."

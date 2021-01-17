@@ -697,6 +697,8 @@
     #cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
 #endif
 
+#define wxUSE_WIC	1
+
 
 #cmakedefine01 wxUSE_OLE
 

@@ -11,9 +11,6 @@
 #ifndef _WX_IMAGE_WIC_H_
 #define _WX_IMAGE_WIC_H_
 
-//TODO: Move to defs
-#define wxUSE_WIC 1 
-
 #include "wx/defs.h"
 
 #ifdef wxUSE_WIC
