@@ -107,6 +107,8 @@ Changes in behaviour not resulting in compilation errors
 
 - wxGetInstallPrefix() now returns wxString.
 
+- wxChoice::GetString() now consistently asserts when passed an invalid index.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
