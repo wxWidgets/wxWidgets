@@ -1098,5 +1098,17 @@ protected:
     T m_ptr;
 };
 
+// This macro checks if the evaluation of cond, having a return value of
+// OS Error type, is zero, ie no error occurred, and calls the assert handler
+// with the provided message if it isn't.
+#define wxOSX_VERIFY_NOERR(cond)                                          \
+    wxSTATEMENT_MACRO_BEGIN                                               \
+        const unsigned long evalOnce = (cond);                            \
+        if ( evalOnce != 0 )                                              \
+        {                                                                 \
+            wxFAIL_COND_MSG(#cond, GetMacOSStatusErrorString(evalOnce));  \
+        }                                                                 \
+    wxSTATEMENT_MACRO_END
+
 #endif
     // _WX_PRIVATE_CORE_H_

@@ -893,7 +893,7 @@ IconRef wxBitmap::GetIconRef() const
 IconRef wxBitmap::CreateIconRef() const
 {
     IconRef icon = GetIconRef();
-    __Verify_noErr(AcquireIconRef(icon));
+    wxOSX_VERIFY_NOERR(AcquireIconRef(icon));
     return icon;
 }
 #endif
@@ -1897,7 +1897,7 @@ bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
     {
         IconRef iconRef = NULL ;
         
-        __Verify_noErr(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
+        wxOSX_VERIFY_NOERR(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
         img = wxOSXGetNSImageFromIconRef(iconRef);
     }
     else
