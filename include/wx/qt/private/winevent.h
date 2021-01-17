@@ -368,8 +368,10 @@ protected:
     {
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
 
-        if (gesture->state() == Qt::GestureFinished) {
-            if(win){
+        if (gesture->state() == Qt::GestureFinished)
+        {
+            if( win )
+            {
               wxLongPressEvent ev(win->GetId());
               ev.SetPosition( wxQtConvertPoint( gesture->position().toPoint() ) );
 
@@ -384,7 +386,8 @@ protected:
             event->accept();
         }
 
-        else {
+        else
+        {
             event->accept();
         }
 
@@ -395,7 +398,8 @@ protected:
     {
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
 
-        if(win){
+        if (win)
+        {
             wxPanGestureEvent evp(win->GetId());
             QPoint pos = QCursor::pos();
             evp.SetPosition( wxQtConvertPoint( pos ) );
@@ -406,16 +410,17 @@ protected:
 
             evp.SetDelta( wxQtConvertPoint( delta ) );
 
-            switch(gesture->state()){
-              case Qt::GestureStarted:
-                evp.SetGestureStart();
-                break;
-              case Qt::GestureFinished:
-              case Qt::GestureCanceled:
-                evp.SetGestureEnd();
-                break;
-              default:
-                break;
+            switch(gesture->state())
+            {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
             }
 
             win->ProcessWindowEvent( evp );
@@ -427,7 +432,8 @@ protected:
     void pinchTriggered(QPinchGesture *gesture, QEvent *event)
     {
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
-        if(win){
+        if (win)
+        {
 
             qreal this_sf = gesture->scaleFactor();
             QPoint center_point = gesture->centerPoint().toPoint();
@@ -436,16 +442,17 @@ protected:
             evp.SetPosition( wxQtConvertPoint( center_point ) );
             evp.SetZoomFactor( this_sf);
 
-            switch(gesture->state()){
-              case Qt::GestureStarted:
-                evp.SetGestureStart();
-                break;
-              case Qt::GestureFinished:
-              case Qt::GestureCanceled:
-                evp.SetGestureEnd();
-                break;
-              default:
-                break;
+            switch(gesture->state())
+            {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
             }
 
             win->ProcessWindowEvent( evp );

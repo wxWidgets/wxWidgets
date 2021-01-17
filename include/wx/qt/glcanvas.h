@@ -87,7 +87,4 @@ private:
     wxDECLARE_CLASS(wxGLCanvas);
 };
 
-#include <QtWidgets/QGestureRecognizer>
-#include <QtWidgets/QGestureEvent>
-
 #endif // _WX_GLCANVAS_H_

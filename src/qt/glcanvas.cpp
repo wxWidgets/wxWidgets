@@ -13,6 +13,8 @@
 #include "wx/glcanvas.h"
 
 #include <QtOpenGL/QGLWidget>
+#include <QtWidgets/QGestureRecognizer>
+#include <QtWidgets/QGestureEvent>
 
 #if defined(__VISUALC__)
     #pragma message("OpenGL support is not implemented in wxQt")
