@@ -332,7 +332,8 @@ protected:
 
     virtual bool event(QEvent *event)
     {
-        if (event->type() == QEvent::Gesture){
+        if (event->type() == QEvent::Gesture)
+        {
             return gestureEvent(static_cast<QGestureEvent*>(event), event);
         }
 
@@ -342,17 +343,20 @@ protected:
     bool gestureEvent(QGestureEvent *gesture, QEvent *event)
     {
 
-       if (QGesture *tah = gesture->gesture(Qt::TapAndHoldGesture)){
+       if (QGesture *tah = gesture->gesture(Qt::TapAndHoldGesture))
+       {
             //  Set the policy so that accepted gestures are taken by the first window that gets them
             tah->setGestureCancelPolicy ( QGesture::CancelAllInContext );
             tapandholdTriggered(static_cast<QTapAndHoldGesture *>(tah), event);
         }
 
-        if (QGesture *pan = gesture->gesture(Qt::PanGesture)){
+        if (QGesture *pan = gesture->gesture(Qt::PanGesture))
+        {
             panTriggered(static_cast<QPanGesture *>(pan), event);
         }
 
-        if (QGesture *pinch = gesture->gesture(Qt::PinchGesture)){
+        if (QGesture *pinch = gesture->gesture(Qt::PinchGesture))
+        {
             pinchTriggered(static_cast<QPinchGesture *>(pinch), event);
         }
 
@@ -375,7 +379,8 @@ protected:
             }
 
         }
-        else if (gesture->state() == Qt::GestureStarted) {
+        else if (gesture->state() == Qt::GestureStarted)
+        {
             event->accept();
         }
 

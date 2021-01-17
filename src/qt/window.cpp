@@ -1719,28 +1719,30 @@ QPainter *wxWindowQt::QtGetPainter()
 
 bool wxWindowQt::EnableTouchEvents(int eventsMask)
 {
-    if(GetHandle()){
-      if(eventsMask == wxTOUCH_NONE){
+    wxCHECK_MSG( GetHandle(), false, "can't be called before creating the window" );
+
+    if(eventsMask == wxTOUCH_NONE)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, false);
         return true;
-      }
+    }
 
-      if(eventsMask & wxTOUCH_PRESS_GESTURES){
+    if(eventsMask & wxTOUCH_PRESS_GESTURES)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
         m_qtWindow->grabGesture(Qt::TapAndHoldGesture);
         QTapAndHoldGesture::setTimeout ( 1000 );
-      }
-      if(eventsMask & wxTOUCH_PAN_GESTURES){
+    }
+    if(eventsMask & wxTOUCH_PAN_GESTURES)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
         m_qtWindow->grabGesture(Qt::PanGesture);
-      }
-      if(eventsMask & wxTOUCH_ZOOM_GESTURE){
+    }
+    if(eventsMask & wxTOUCH_ZOOM_GESTURE)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
         m_qtWindow->grabGesture(Qt::PinchGesture);
-      }
-
-      return true;
     }
-    else
-      return false;
+
+    return true;
 }

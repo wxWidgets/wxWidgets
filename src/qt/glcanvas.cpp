@@ -349,6 +349,30 @@ bool wxGLContext::SetCurrent(const wxGLCanvas&) const
 }
 
 //---------------------------------------------------------------------------
+// PanGestureRecognizer - helper class for wxGLCanvas
+//---------------------------------------------------------------------------
+
+class PanGestureRecognizer : public QGestureRecognizer
+{
+private:
+   static const int MINIMUM_DISTANCE = 10;
+
+   typedef QGestureRecognizer parent;
+
+   bool IsValidMove(int dx, int dy);
+
+   virtual QGesture* create(QObject* pTarget);
+
+   virtual QGestureRecognizer::Result recognize(QGesture* pGesture, QObject *pWatched, QEvent *pEvent);
+
+   void reset (QGesture *pGesture);
+
+   uint m_started;
+   QPointF m_startPoint;
+   QPointF m_lastPoint;
+};
+
+//---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
 
@@ -382,9 +406,6 @@ wxGLCanvas::~wxGLCanvas()
 {
         // Avoid sending further signals (i.e. if deleting the current page)
         m_qtWindow->blockSignals(true);
-        // Reset the pointer to avoid handling pending event and signals
-        //QtStoreWindowPointer( GetHandle(), NULL );
-
 }
 
 bool wxGLCanvas::Create(wxWindow *parent,
@@ -438,7 +459,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 {
     if (!wxattrs)
         return true;
-    //return true;
 
     // set default parameters to false
     format.setDoubleBuffer(false);
@@ -455,8 +475,7 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
     //  attribute list Enum.
 
     // So, just force it here.
-    //format.setVersion ( 1,1 );
-   format.setVersion ( 2,0 );
+    format.setVersion ( 2,0 );
 
     for ( int arg = 0; wxattrs[arg] != 0; arg++ )
     {

@@ -1899,7 +1899,6 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
 // TODO: as of 2014 Android doesn't has complete locale support (use java api)
 // DONE: Supported by NDK21d
-//#if !(defined(__WXQT__) && defined(__ANDROID__))
     lconv * const lc = localeconv();
     if ( !lc )
         return wxString();
