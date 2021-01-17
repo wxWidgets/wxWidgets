@@ -264,10 +264,7 @@ wxLogFormatter::FormatTimeMS(wxLongLong_t msec) const
 {
     wxString str;
 
-#if wxUSE_DATETIME
-    str = wxDateTime(wxLongLong(msec)).Format(wxLog::GetTimestamp());
-    str += wxS(": ");
-#endif // wxUSE_DATETIME
+    wxLog::TimeStampMS(&str, msec);
 
     return str;
 }
@@ -743,6 +740,15 @@ void wxLog::TimeStamp(wxString *str, time_t t)
     }
 }
 
+void wxLog::TimeStampMS(wxString *str, wxLongLong_t msec)
+{
+    if ( !ms_timestamp.empty() )
+    {
+        *str = wxDateTime(wxLongLong(msec)).Format(wxLog::GetTimestamp());
+        *str += wxS(": ");
+    }
+}
+
 #else // !wxUSE_DATETIME
 
 void wxLog::TimeStamp(wxString*)
@@ -750,6 +756,10 @@ void wxLog::TimeStamp(wxString*)
 }
 
 void wxLog::TimeStamp(wxString*, time_t)
+{
+}
+
+void wxLog::TimeStampMS(wxString*, wxLongLong_t)
 {
 }
 

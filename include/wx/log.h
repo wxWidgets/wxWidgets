@@ -533,6 +533,7 @@ public:
     // change it otherwise); the first overload uses the current time.
     static void TimeStamp(wxString *str);
     static void TimeStamp(wxString *str, time_t t);
+    static void TimeStampMS(wxString *str, wxLongLong_t msec);
 
     // these methods should only be called from derived classes DoLogRecord(),
     // DoLogTextAtLevel() and DoLogText() implementations respectively and
