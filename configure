@@ -2294,7 +2294,7 @@ Optional Features:
   --enable-busyinfo       use wxBusyInfo
   --enable-hotkey         use wxWindow::RegisterHotKey()
   --enable-joystick       use wxJoystick
-  --enable-metafiles      use wxMetaFile
+  --enable-metafile       use wxMetaFile
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
   --enable-uiactionsim    use wxUIActionSimulator (experimental)
