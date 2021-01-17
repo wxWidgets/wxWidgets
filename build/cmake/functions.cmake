@@ -536,7 +536,7 @@ set(wxTHIRD_PARTY_LIBRARIES)
 function(wx_add_thirdparty_library var_name lib_name help_str)
     cmake_parse_arguments(THIRDPARTY "" "DEFAULT;DEFAULT_APPLE;DEFAULT_WIN32" "" ${ARGN})
 
-    if(THIRDPARTY_DEFAULT)
+    if(DEFINED THIRDPARTY_DEFAULT)
         set(thirdparty_lib_default ${THIRDPARTY_DEFAULT})
     elseif(THIRDPARTY_DEFAULT_APPLE AND APPLE)
         set(thirdparty_lib_default ${THIRDPARTY_DEFAULT_APPLE})
