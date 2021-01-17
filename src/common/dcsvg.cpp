@@ -399,8 +399,10 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
 {
     static int sub_images = 0;
 
+#if !(defined(wxUSE_WIC) && wxUSE_WIC)
     if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
         wxImage::AddHandler(new wxPNGHandler);
+#endif
 
     // write the bitmap as a PNG to a memory stream and Base64 encode
     wxMemoryOutputStream mem;
@@ -444,8 +446,10 @@ wxSVGBitmapFileHandler::ProcessBitmap(const wxBitmap& bmp,
 {
     static int sub_images = 0;
 
+#if !(defined(wxUSE_WIC) && wxUSE_WIC)
     if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
         wxImage::AddHandler(new wxPNGHandler);
+#endif
 
     // find a suitable file name
     wxFileName sPNG = m_path;

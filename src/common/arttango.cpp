@@ -288,8 +288,10 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
         {
             // Of course, if the user code did add it already, we have nothing
             // to do.
+#if !(defined(wxUSE_WIC) && wxUSE_WIC)
             if ( !wxImage::FindHandler(wxBITMAP_TYPE_PNG) )
                 wxImage::AddHandler(new wxPNGHandler);
+#endif
 
             // In any case, no need to do it again.
             m_imageHandledAdded = true;

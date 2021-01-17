@@ -1808,7 +1808,7 @@
 
 /* common dependencies */
 #if wxUSE_ARTPROVIDER_TANGO
-#   if !(wxUSE_STREAMS && wxUSE_IMAGE && wxUSE_LIBPNG)
+#   if !(wxUSE_STREAMS && wxUSE_IMAGE && (wxUSE_LIBPNG || (defined(wxUSE_WIC) && wxUSE_WIC) ))
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "Tango art provider requires wxImage with streams and PNG support"
 #       else
@@ -2269,7 +2269,7 @@
 #   endif
 #endif /* wxUSE_SVG */
 
-#if wxUSE_SVG && !wxUSE_LIBPNG
+#if wxUSE_SVG && !wxUSE_LIBPNG && (!defined(wxUSE_WIC) && !wxUSE_WIC)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SVG requires wxUSE_LIBPNG"
 #   else

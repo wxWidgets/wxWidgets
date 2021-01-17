@@ -19,7 +19,7 @@
     #include "wx/image.h"
 #endif // WX_PRECOMP
 
-#if wxUSE_IMAGE && wxUSE_LIBPNG && wxUSE_STREAMS
+#if wxUSE_IMAGE && (wxUSE_LIBPNG || wxUSE_WIC) && wxUSE_STREAMS
     #define wxHAS_PNG_LOAD
 
     #include "wx/mstream.h"

@@ -77,7 +77,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     wxImage image = bitmap.ConvertToImage();
 
-#if wxUSE_LIBPNG
+#if wxUSE_LIBPNG || wxUSE_WIC
     if ( !image.SaveFile( dir + "test.png", wxBITMAP_TYPE_PNG ))
     {
         wxLogError("Can't save file");
@@ -119,7 +119,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
 #endif // wxUSE_LIBPNG
 
-#if wxUSE_LIBJPEG
+#if wxUSE_LIBJPEG || wxUSE_WIC
     image.Destroy();
 
     if ( !image.LoadFile( dir + "horse.jpg") )
@@ -237,7 +237,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     }
 #endif
 
-#if wxUSE_LIBTIFF
+#if wxUSE_LIBTIFF || wxUSE_WIC
     image.Destroy();
 
     if ( !image.LoadFile( dir + "horse.tif", wxBITMAP_TYPE_TIFF ) )

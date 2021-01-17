@@ -39,7 +39,7 @@
 // loading PNG images in the library. This symbol could be predefined as 0 to
 // avoid doing this if anybody ever needs to do it for some reason.
 #if !defined(wxUSE_PNG_RESOURCE_HANDLER)
-    #define wxUSE_PNG_RESOURCE_HANDLER wxUSE_LIBPNG && wxUSE_IMAGE
+    #define wxUSE_PNG_RESOURCE_HANDLER (wxUSE_LIBPNG || wxUSE_WIC) && wxUSE_IMAGE
 #endif
 
 #if wxUSE_PNG_RESOURCE_HANDLER
