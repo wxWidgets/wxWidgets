@@ -932,6 +932,33 @@ public:
     bool IsEnabled(int id) const;
 
     /**
+        Allows handling native MSW menu command messages.
+
+        This is a low-level function which allows handling MSW @c WM_COMMAND
+        messages generated when menu items are selected. It is particularly
+        useful for the popup menus, as specific handling can then be defined in
+        a wxMenu-derived class directly, instead of in the wxWindow-derived
+        owner class.
+
+        The base class version of this function generates @c wxEVT_MENU command
+        events.
+
+        @param param
+            The MSW command parameter.
+
+        @param id
+            The id of the command.
+
+        @return
+            @true if the command was handled, @false otherwise.
+
+        @onlyfor{wxMSW}
+
+        @since 3.1.5
+    */
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+
+    /**
         Inserts the given @a item at position 0, i.e.\ before all the other
         existing items.
 
