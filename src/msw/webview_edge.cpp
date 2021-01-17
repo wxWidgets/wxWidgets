@@ -26,10 +26,87 @@
 #include "wx/msw/private/cotaskmemptr.h"
 #include "wx/msw/private/webview_edge.h"
 
-#include <wrl/event.h>
-#include <Objbase.h>
+#include <objbase.h>
+#include <atomic>
 
-using namespace Microsoft::WRL;
+template <typename baseT, typename ...argTs>
+class CInvokable : public baseT
+{
+public:
+    CInvokable() : m_nRefCount(0) {}
+    virtual ~CInvokable() {}
+    // IUnknown methods
+    HRESULT QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override
+    {
+        /**
+         * WebView2 Runtime apparently doesn't use this method, so it doesn't
+         * matter how we implement this. On the other hand, this method must be
+         * implemented to make this invokable type a concrete class instead of a
+         * abstract one.
+         */
+        *ppvObj = NULL;
+        return E_NOINTERFACE;
+    }
+    ULONG AddRef(void) override {
+        return ++m_nRefCount;
+    }
+    ULONG Release(void) override {
+        size_t ret = --m_nRefCount;
+        if (ret == 0)
+            delete this;
+        return ret;
+    }
+private:
+    std::atomic<size_t> m_nRefCount;
+};
+template <typename baseT, typename ...argTs>
+class CInvokableLambda : public CInvokable<baseT, argTs...>
+{
+public:
+    CInvokableLambda(std::function<HRESULT(argTs...)> lambda)
+    : m_lambda(lambda) {
+    }
+    // baseT method
+    HRESULT Invoke(argTs ...args) override {
+        return m_lambda(args...);
+    }
+private:
+    std::function<HRESULT(argTs...)> m_lambda;
+};
+template <typename baseT, typename contextT, typename ...argTs>
+class CInvokableMethod : public CInvokable<baseT, argTs...>
+{
+public:
+    CInvokableMethod(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
+    : m_ctx(ctx), m_mthd(mthd) {
+    }
+    // baseT method
+    HRESULT Invoke(argTs ...args) override {
+        return (m_ctx->*m_mthd)(args...);
+    }
+private:
+    contextT *m_ctx;
+    HRESULT (contextT::*m_mthd)(argTs...);
+};
+// the function templates to generate concrete classes from above class templates
+template <
+    typename baseT, typename lambdaT, // base type & lambda type
+    typename LT, typename ...argTs // for capturing argument types of lambda
+>
+baseT *callback_impl(lambdaT&& lambda, HRESULT (LT::*)(argTs...) const)
+{
+    return new CInvokableLambda<baseT, argTs...>(lambda);
+}
+template <typename baseT, typename lambdaT>
+baseT *callback(lambdaT&& lambda)
+{
+    return callback_impl<baseT>(std::move(lambda), &lambdaT::operator());
+}
+template <typename baseT, typename contextT, typename ...argTs>
+baseT *callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
+{
+    return new CInvokableMethod<baseT, contextT, argTs...>(ctx, mthd);
+}
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
 
@@ -93,8 +170,8 @@ bool wxWebViewEdgeImpl::Create()
         ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
         nullptr,
-        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
-            &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
+        callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
+            &wxWebViewEdgeImpl::OnEnvironmentCreated));
     if (FAILED(hr))
     {
         wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
@@ -110,8 +187,8 @@ HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
     m_webViewEnvironment->CreateCoreWebView2Controller(
         m_ctrl->GetHWND(),
-        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-            this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+        callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+            this, &wxWebViewEdgeImpl::OnWebViewCreated));
     return S_OK;
 }
 
@@ -241,8 +318,8 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
     }
     else
     {
-        if (m_historyEnabled && !m_historyLoadingFromList &&
-            (uri == m_ctrl->GetCurrentURL()) ||
+        if ((m_historyEnabled && !m_historyLoadingFromList &&
+            (uri == m_ctrl->GetCurrentURL())) ||
             (m_ctrl->GetCurrentURL().substr(0, 4) == "file" &&
                 wxFileName::URLToFileName(m_ctrl->GetCurrentURL()).GetFullPath() == uri))
         {
@@ -340,28 +417,28 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
-        Callback<ICoreWebView2NavigationStartingEventHandler>(
-            this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
+        callback<ICoreWebView2NavigationStartingEventHandler>(
+            this, &wxWebViewEdgeImpl::OnNavigationStarting),
         &m_navigationStartingToken);
     m_webView->add_SourceChanged(
         Callback<ICoreWebView2SourceChangedEventHandler>(
             this, &wxWebViewEdgeImpl::OnSourceChanged).Get(),
         &m_sourceChangedToken);
     m_webView->add_NavigationCompleted(
-        Callback<ICoreWebView2NavigationCompletedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnNavigationCompleted).Get(),
+        callback<ICoreWebView2NavigationCompletedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnNavigationCompleted),
         &m_navigationCompletedToken);
     m_webView->add_NewWindowRequested(
-        Callback<ICoreWebView2NewWindowRequestedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnNewWindowRequested).Get(),
+        callback<ICoreWebView2NewWindowRequestedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnNewWindowRequested),
         &m_newWindowRequestedToken);
     m_webView->add_DocumentTitleChanged(
-        Callback<ICoreWebView2DocumentTitleChangedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnDocumentTitleChanged).Get(),
+        callback<ICoreWebView2DocumentTitleChangedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnDocumentTitleChanged),
         &m_documentTitleChangedToken);
     m_webView->add_ContentLoading(
-        Callback<ICoreWebView2ContentLoadingEventHandler>(
-            this, &wxWebViewEdgeImpl::OnContentLoading).Get(),
+        callback<ICoreWebView2ContentLoadingEventHandler>(
+            this, &wxWebViewEdgeImpl::OnContentLoading),
         &m_contentLoadingToken);
     m_webView->add_ContainsFullScreenElementChanged(
         Callback<ICoreWebView2ContainsFullScreenElementChangedEventHandler>(
@@ -709,7 +786,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) 
     bool scriptExecuted = false;
 
     // Start script execution
-    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), callback<ICoreWebView2ExecuteScriptCompletedHandler>(
         [&scriptExecuted, &executionResult, output](HRESULT error, PCWSTR result) -> HRESULT
     {
         // Handle script execution callback
@@ -724,7 +801,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) 
         scriptExecuted = true;
 
         return S_OK;
-    }).Get());
+    }));
 
     // Wait for script exection
     while (!scriptExecuted)
@@ -772,7 +849,7 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) cons
     return true;
 }
 
-void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
+void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> WXUNUSED(handler))
 {
     // TODO: could maybe be implemented via IWebView2WebView5::add_WebResourceRequested
     wxLogDebug("Registering handlers is not supported");
