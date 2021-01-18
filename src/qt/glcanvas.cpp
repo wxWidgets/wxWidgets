@@ -384,8 +384,6 @@ wxGLCanvas::~wxGLCanvas()
 {
         // Avoid sending further signals (i.e. if deleting the current page)
         m_qtWindow->blockSignals(true);
-        // Reset the pointer to avoid handling pending event and signals
-        //QtStoreWindowPointer( GetHandle(), NULL );
 
 }
 
@@ -450,15 +448,15 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 
     // Enable multisampling aka MSAA
 
-    format.setSampleBuffers( true );
-    format.setSamples( 4 );
+//    format.setSampleBuffers( true );
+//    format.setSamples( 4 );
 
     //  We don't have the option of setting OpenGLES version defined in the
     //  attribute list Enum.
 
     // So, just force it here.
     //format.setVersion ( 1,1 );
-   format.setVersion ( 2,0 );
+   //format.setVersion ( 2,0 );
 
     for ( int arg = 0; wxattrs[arg] != 0; arg++ )
     {
@@ -532,13 +530,15 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 
             case WX_GL_SAMPLE_BUFFERS:
                 format.setSampleBuffers(v);
-                // can we somehow indicate if it's not supported?
                 break;
 
             case WX_GL_SAMPLES:
                 format.setSamples(v);
-                // can we somehow indicate if it's not supported?
                 break;
+                
+            case WX_GL_MAJOR_VERSION:
+                 format.setVersion ( v,0 );
+                 break;
 
             default:
                 wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
