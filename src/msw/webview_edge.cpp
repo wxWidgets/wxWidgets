@@ -32,10 +32,11 @@ template <typename baseT, typename ...argTs>
 class CInvokable : public baseT
 {
 public:
-    CInvokable(void) : m_nRefCount(0) {}
-    virtual ~CInvokable(void) {};
+    CInvokable() : m_nRefCount(0) {}
+    virtual ~CInvokable() {}
     // IUnknown methods
-    HRESULT QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override {
+    HRESULT QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override
+	{
         /**
          * WebView2 Runtime apparently doesn't use this method, so it doesn't
          * matter how we implement this. On the other hand, this method must be
@@ -50,7 +51,8 @@ public:
     }
     ULONG Release(void) override {
         size_t ret = --m_nRefCount;
-        if (ret == 0) delete this;
+        if (ret == 0)
+			delete this;
         return ret;
     }
 private:
@@ -90,17 +92,17 @@ template <
     typename baseT, typename lambdaT, // base type & lambda type
     typename LT, typename ...argTs // for capturing argument types of lambda
 >
-auto callback_impl(lambdaT lambda, HRESULT (LT::*)(argTs...) const)
+baseT *callback_impl(lambdaT&& lambda, HRESULT (LT::*)(argTs...) const)
 {
     return new CInvokableLambda<baseT, argTs...>(lambda);
 }
 template <typename baseT, typename lambdaT>
-auto callback(lambdaT lambda)
+baseT *callback(lambdaT&& lambda)
 {
     return callback_impl<baseT>(lambda, &lambdaT::operator());
 }
 template <typename baseT, typename contextT, typename ...argTs>
-auto callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
+baseT *callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
 {
     return new CInvokableMethod<baseT, contextT, argTs...>(ctx, mthd);
 }
