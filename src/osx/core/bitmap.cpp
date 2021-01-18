@@ -1131,10 +1131,9 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     {
         bool hasMask = image.HasMask();
         bool hasAlpha = image.HasAlpha();
-        bool wantsAlpha = hasMask || hasAlpha ;
 
         // convert this bitmap to use its alpha channel
-        if ( wantsAlpha )
+        if ( hasAlpha )
             UseAlpha();
 
         const unsigned char *sourcePixels = image.GetData();
@@ -1169,22 +1168,15 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
                 unsigned char * destinationMask = destinationMaskRowStart;
                 for (int x = 0; x < width; x++)
                 {
-                    bool isMasked = false;
-
                     if ( hasMask )
                     {
-                        if ( sourcePixels[0] == mr && sourcePixels[1] == mg && sourcePixels[2] == mb )
-                            isMasked = true;
+                        bool isMasked = sourcePixels[0] == mr && sourcePixels[1] == mg && sourcePixels[2] == mb;
                         *destinationMask++ = isMasked ? wxIMAGE_ALPHA_TRANSPARENT : wxIMAGE_ALPHA_OPAQUE ;
                     }
 
-                    if ( wantsAlpha )
+                    if ( hasAlpha )
                     {
-                        unsigned char a;
-                        if ( hasAlpha )
-                            a = *sourceAlpha++;
-                        else
-                            a = isMasked ? wxIMAGE_ALPHA_TRANSPARENT : wxIMAGE_ALPHA_OPAQUE;
+                        unsigned char a = *sourceAlpha++;
 
                         *destination++ = a ;
 #if wxOSX_USE_PREMULTIPLIED_ALPHA
