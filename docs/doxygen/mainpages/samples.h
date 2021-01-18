@@ -902,6 +902,15 @@ archives.
 
 @sampledir{webview}
 
+@section page_samples_webrequest Web Request Sample
+
+The wxWebRequest sample demonstarates the various capabilities of the
+wxWebRequest class. It shows how to handle simple text HTTP and HTTPS requests,
+downloading files, showing download progress and processing downloaded
+data while it's being downloaded.
+
+@sampledir{webrequest}
+
 @section page_samples_widgets Widgets Sample
 
 The widgets sample is the main presentation program for most simple and advanced
