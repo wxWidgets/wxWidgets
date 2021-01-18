@@ -36,7 +36,7 @@ public:
     virtual ~CInvokable() {}
     // IUnknown methods
     HRESULT QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override
-	{
+    {
         /**
          * WebView2 Runtime apparently doesn't use this method, so it doesn't
          * matter how we implement this. On the other hand, this method must be
@@ -52,7 +52,7 @@ public:
     ULONG Release(void) override {
         size_t ret = --m_nRefCount;
         if (ret == 0)
-			delete this;
+            delete this;
         return ret;
     }
 private:
