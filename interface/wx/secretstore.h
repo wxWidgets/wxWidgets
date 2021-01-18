@@ -8,6 +8,42 @@
 
 
 /**
+    Temporary string whose contents will be overwritten when it is destroyed.
+
+    Objects of this class must not be used polymorphically as it derives from
+    wxString which doesn't have a virtual destructor. Typically, they are used
+    as local variables, e.g.
+    @code
+        void TryToAuthenticate(const wxString& secretValue)
+        {
+            wxSecretString password(secretValue);
+
+            ... use password as any wxString ...
+
+            // Here password memory is overwritten to prevent the password from
+            // remaining in memory.
+        }
+    @endcode
+
+    @since 3.1.5
+ */
+class wxSecretString : public wxString
+{
+public:
+    /// Default constructor creates an empty string.
+    wxSecretString();
+
+    /// Constructor from a plain string.
+    wxSecretString(const wxString& value);
+
+    /// Constructor from a secret value.
+    explicit wxSecretString(const wxSecretValue& value);
+
+    /// Destructor calls wxSecretValue::WipeString()
+    ~wxSecretString();
+};
+
+/**
     Represents the value of a secret in wxSecretStore.
 
     Immutable value-like class which tries to ensure that the secret value will
@@ -131,6 +167,8 @@ public:
 
     /**
         Overwrite the contents of the given string.
+
+        @see wxSecretString
      */
     static void WipeString(wxString& str);
 };

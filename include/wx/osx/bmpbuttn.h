@@ -37,6 +37,9 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxButtonNameStr));
 
+    bool CreateCloseButton(wxWindow* parent,
+                           wxWindowID winid,
+                           const wxString& name = wxString());
 protected:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;

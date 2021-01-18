@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/fontutil.h"
 
@@ -232,7 +229,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
             break;
         default:
             wxFAIL_MSG( "unknown font style" );
-            // fall through
+            wxFALLTHROUGH;
         case wxFONTSTYLE_NORMAL:
             pango_font_description_set_style( description, PANGO_STYLE_NORMAL );
             break;

@@ -10,9 +10,6 @@
 
 #if wxUSE_CHOICEBOOK
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

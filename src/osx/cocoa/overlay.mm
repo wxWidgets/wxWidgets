@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/overlay.h"
 
@@ -67,7 +64,7 @@
     self = [super initWithContentRect:contentRect styleMask:style backing:backingStoreType defer:flag];
     if ( self )
     {
-        self.overlayView = [[wxOSXOverlayView alloc] initWithFrame:contentRect];
+        self.overlayView = [[[wxOSXOverlayView alloc] initWithFrame:contentRect] autorelease];
         [self setContentView:self.overlayView];
 
         [self setOpaque:NO];
@@ -78,12 +75,17 @@
     return self;
 }
 
+- (void)dealloc
+{
+   [super dealloc];
+}
 @end
 
 @implementation wxOSXOverlayView
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    wxUnusedVar(dirtyRect);
     [self.bitmapImageRep drawInRect:[self  bounds]];
 }
 

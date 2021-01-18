@@ -130,7 +130,7 @@ public:
             The UI help string to associate with the new tool.
         @param kind
             The kind of tool to add.
-        @param client_data
+        @param clientData
             Client data to associate with the new tool.
 
         @return An opaque pointer which can be used only with other tool bar
@@ -144,7 +144,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Add a separator to the tool bar.
@@ -232,7 +232,7 @@ public:
             The UI help string to associate with the new tool.
         @param kind
             The kind of tool to add.
-        @param client_data
+        @param clientData
             Client data to associate with the new tool.
 
         @return An opaque pointer which can be used only with other tool bar
@@ -249,7 +249,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Insert a separator to the tool bar at the specified position.
@@ -305,7 +305,18 @@ public:
 
         @since 2.9.4
     */
-    wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const
+    wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const;
+
+    /**
+        Returns the opaque pointer for the tool at the given coordinates,
+        which are relative to the toolbar's parent.
+
+        @return an opaque pointer, NULL if is not found.
+
+        @since 3.1.5
+    */
+    virtual wxRibbonToolBarToolBase* GetToolByPos(wxCoord x, wxCoord y)const;
+
 
     /**
         Returns the number of tools in the toolbar.
@@ -379,6 +390,18 @@ public:
         @since 2.9.4
     */
     virtual int GetToolPos(int tool_id)const;
+
+    /**
+        Returns the tool's rect with coordinates relative to the toolbar's parent,
+        or a default-constructed rect if the tool is not found.
+
+        @param tool_id
+            ID of the tool in question, as passed to AddTool().
+
+        @since 3.1.5
+    */
+    virtual wxRect GetToolRect(int tool_id)const;
+
 
     /**
         Gets the on/off state of a toggle tool.

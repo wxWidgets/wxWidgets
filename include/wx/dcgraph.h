@@ -121,6 +121,12 @@ public:
     virtual void ResetTransformMatrix() wxOVERRIDE;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
+    // coordinates conversions and transforms
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
+
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              wxFloodFillStyle style = wxFLOOD_SURFACE) wxOVERRIDE;
@@ -225,6 +231,7 @@ protected:
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;
+    wxGraphicsMatrix m_matrixCurrentInv;
 #if wxUSE_DC_TRANSFORM_MATRIX
     wxAffineMatrix2D m_matrixExtTransform;
 #endif // wxUSE_DC_TRANSFORM_MATRIX

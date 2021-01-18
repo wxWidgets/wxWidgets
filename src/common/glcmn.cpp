@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -443,7 +440,8 @@ void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
 #if wxUSE_OPENGL_EMULATION
     ::glFrustumf(left, right, bottom, top, zNear, zFar);
 #else
-    ::glFrustum(left, right, bottom, top, zNear, zFar);
+    ::glFrustum(double(left), double(right),
+        double(bottom), double(top), double(zNear), double(zFar));
 #endif
 }
 

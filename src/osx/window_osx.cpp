@@ -507,7 +507,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 void wxWindowMac::MacUpdateControlFont()
 {
     if ( GetPeer() )
-        GetPeer()->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
+        GetPeer()->SetFont(GetFont()) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
     if ( IsShownOnScreen() )
@@ -937,9 +937,6 @@ void wxWindowMac::MacInvalidateBorders()
         return ;
 
     int outerBorder = MacGetLeftBorderSize() ;
-
-    if ( GetPeer()->NeedsFocusRect() )
-        outerBorder += 4 ;
 
     if ( outerBorder == 0 )
         return ;
@@ -1578,8 +1575,6 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
 
 #if wxOSX_USE_COCOA_OR_CARBON
     {
-        const bool hasFocus = GetPeer()->NeedsFocusRect() && HasFocus();
-
         CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
             th+2 ) ;
 
@@ -1594,7 +1589,6 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
             info.version = 0 ;
             info.kind = 0 ;
             info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-            info.isFocused = hasFocus ;
 
             if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
             {
@@ -1606,11 +1600,6 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
                 info.kind = kHIThemeFrameListBox ;
                 HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
             }
-        }
-
-        if ( hasFocus )
-        {
-            HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
         }
     }
 #endif // wxOSX_USE_COCOA_OR_CARBON
@@ -2182,6 +2171,11 @@ bool wxWindowMac::AcceptsFocus() const
         return GetPeer()->CanFocus();
 }
 
+void wxWindowMac::EnableVisibleFocus(bool enabled)
+{
+    GetPeer()->EnableFocusRing(enabled);
+}
+
 void wxWindowMac::MacSuperChangedPosition()
 {
     // only window-absolute structures have to be moved i.e. controls
@@ -2630,14 +2624,15 @@ wxSize wxWindowMac::OSXMakeDPIFromScaleFactor(double scaleFactor)
 
 wxSize wxWindowMac::GetDPI() const
 {
-    double scaleFactor;
-    if ( wxNonOwnedWindow* tlw = MacGetTopLevelWindow() )
-        scaleFactor = tlw->GetContentScaleFactor();
-    else
-        scaleFactor = wxOSXGetMainScreenContentScaleFactor();
-
-    return OSXMakeDPIFromScaleFactor(scaleFactor);
+    return OSXMakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
+
+// on mac ContentScale and DPIScale are identical
+double wxWindowMac::GetDPIScaleFactor() const
+{
+    return GetContentScaleFactor();
+}
+
 
 //
 // wxWidgetImpl
@@ -2745,18 +2740,7 @@ void wxWidgetImpl::Init()
     m_wantsUserKey = false;
     m_wantsUserMouse = false;
     m_wxPeer = NULL;
-    m_needsFocusRect = false;
     m_needsFrame = true;
-}
-
-void wxWidgetImpl::SetNeedsFocusRect( bool needs )
-{
-    m_needsFocusRect = needs;
-}
-
-bool wxWidgetImpl::NeedsFocusRect() const
-{
-    return m_needsFocusRect;
 }
 
 void wxWidgetImpl::SetNeedsFrame( bool needs )

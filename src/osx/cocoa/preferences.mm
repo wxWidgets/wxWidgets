@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PREFERENCES_EDITOR
 
@@ -35,12 +32,26 @@
 #include "wx/weakref.h"
 #include "wx/windowid.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #import <AppKit/NSWindow.h>
 
 
 wxBitmap wxStockPreferencesPage::GetLargeIcon() const
 {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        switch ( m_kind )
+        {
+            case Kind_General:
+                return wxBitmap([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
+            case Kind_Advanced:
+                return wxBitmap([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
+        }
+    }
+#endif
+
     switch ( m_kind )
     {
         case Kind_General:
@@ -48,6 +59,7 @@ wxBitmap wxStockPreferencesPage::GetLargeIcon() const
         case Kind_Advanced:
             return wxBitmap([NSImage imageNamed:NSImageNameAdvanced]);
     }
+
     return wxBitmap(); // silence compiler warning
 }
 
@@ -62,6 +74,13 @@ public:
           m_toolbarRealized(false),
           m_visiblePage(NULL)
     {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+        if ( WX_IS_MACOS_AVAILABLE(11,0) )
+        {
+            NSWindow *win = GetWXWindow();
+            [win setToolbarStyle:NSWindowToolbarStylePreference];
+        }
+#endif
         m_toolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                   wxTB_FLAT | wxTB_TEXT);
         m_toolbar->SetToolBitmapSize(wxSize(32,32));
@@ -121,19 +140,66 @@ protected:
 
 
 private:
+    struct PageInfo : public wxObject
+    {
+        PageInfo(wxPreferencesPage *p) : page(p), win(NULL) {}
+
+        wxSharedPtr<wxPreferencesPage> page;
+        wxWindow *win;
+    };
+
+    typedef wxVector< wxSharedPtr<PageInfo> > Pages;
+
+    wxWindow *GetPageWindow(PageInfo& info)
+    {
+        if ( !info.win )
+        {
+            info.win = info.page->CreateWindow(this);
+            info.win->Hide();
+            // fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
+            info.win->InitDialog();
+        }
+
+        return info.win;
+    }
+
+    int GetBiggestPageWidth()
+    {
+        int width = -1;
+        for ( Pages::const_iterator p = m_pages.begin(); p != m_pages.end(); ++p )
+        {
+            wxWindow *win = GetPageWindow(**p);
+            width = wxMax(width, win->GetBestSize().x);
+        }
+
+        return width;
+    }
+
+    void FitPageWindow(wxWindow *win)
+    {
+        // On macOS 11, preferences are resizable only vertically, because the
+        // icons are centered and horizontal resizing would move them around.
+        if ( WX_IS_MACOS_AVAILABLE(11,0) )
+        {
+            int width = GetBiggestPageWidth();
+            if (width > win->GetBestSize().x)
+            {
+                wxSize minsize = win->GetMinSize();
+                minsize.x = width;
+                win->SetMinSize(minsize);
+            }
+        }
+
+        win->Fit();
+    }
+
     void OnSelectPageForTool(const wxToolBarToolBase *tool)
     {
         PageInfo *info = static_cast<PageInfo*>(tool->GetClientData());
         wxCHECK_RET( info, "toolbar item lacks client data" );
 
-        if ( !info->win )
-        {
-            info->win = info->page->CreateWindow(this);
-            info->win->Hide();
-            info->win->Fit();
-            // fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
-            info->win->InitDialog();
-        }
+        wxWindow *win = GetPageWindow(*info);
+        FitPageWindow(win);
 
         // When the page changes in a native preferences dialog, the sequence
         // of events is thus:
@@ -141,19 +207,19 @@ private:
         // 1. the old page is hidden, only gray background remains
         if ( m_visiblePage )
             m_visiblePage->Hide();
-        m_visiblePage = info->win;
+        m_visiblePage = win;
 
         //   2. window is resized to fix the new page, with animation
         //      (in our case, using overriden DoMoveWindow())
-        SetClientSize(info->win->GetSize());
+        SetClientSize(win->GetSize());
 
         //   3. new page is shown and the title updated.
-        info->win->Show();
+        win->Show();
         SetTitle(info->page->GetName());
 
         // Refresh the page to ensure everything is drawn in 10.14's dark mode;
         // without it, generic controls aren't shown at all
-        info->win->Refresh();
+        win->Refresh();
 
         // TODO: Preferences window may have some pages resizeable and some
         //       non-resizable on OS X; the whole window is or is not resizable
@@ -170,7 +236,7 @@ private:
         OnSelectPageForTool(tool);
     }
 
-    void OnClose(wxCloseEvent& e)
+    void OnClose(wxCloseEvent& WXUNUSED(e))
     {
         // Instead of destroying the window, just hide it, it could be
         // reused again by another invocation of the editor.
@@ -178,15 +244,8 @@ private:
     }
 
 private:
-    struct PageInfo : public wxObject
-    {
-        PageInfo(wxPreferencesPage *p) : page(p), win(NULL) {}
-
-        wxSharedPtr<wxPreferencesPage> page;
-        wxWindow *win;
-    };
     // All pages. Use shared pointer to be able to get pointers to PageInfo structs
-    wxVector< wxSharedPtr<PageInfo> > m_pages;
+    Pages m_pages;
 
     wxToolBar *m_toolbar;
     bool       m_toolbarRealized;

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -97,10 +94,11 @@ wxChar wxTextInputStream::GetChar()
         m_validEnd = 0;
     }
 
-    // We may need to decode up to 4 characters if we have input starting with
-    // 3 BOM-like bytes, but not actually containing a BOM, as decoding it will
-    // only succeed when 4 bytes are read -- and will yield 4 wide characters.
-    wxChar wbuf[4];
+    // We may need to decode up to 6 characters if we have input starting with
+    // 2 null bytes (like in UTF-32BE BOM), and then 3 bytes that look like
+    // the start of UTF-8 sequence, as decoding it will only succeed when
+    // 6 bytes are read -- and will yield 6 wide characters.
+    wxChar wbuf[6];
     for(size_t inlen = 0; inlen < sizeof(m_lastBytes); inlen++)
     {
         if ( inlen >= m_validEnd )
@@ -134,12 +132,13 @@ wxChar wxTextInputStream::GetChar()
                 // one extra byte, the only explanation is that we were using a
                 // wxConvAuto conversion recognizing the initial BOM and that
                 // it couldn't detect the presence or absence of BOM so far,
-                // but now finally has enough data to see that there is none.
-                // As we must have fallen back to Latin-1 in this case, return
-                // just the first byte and keep the other ones for the next
-                // time.
-                m_validBegin = 1;
-                return wbuf[0];
+                // but now finally has enough data to see that there is none, or
+                // it was trying to decode the data as UTF-8 sequence, but now
+                // recognized that it's not valid UTF-8 and switched to fallback.
+                // We don't know how long is the first character or if it's decoded
+                // as 1 or 2 wchar_t characters, so we need to start with 1 byte again.
+                inlen = static_cast<size_t>(-1);
+                break;
 
 #if SIZEOF_WCHAR_T == 2
             case 2:
@@ -149,8 +148,8 @@ wxChar wxTextInputStream::GetChar()
                 // remember the second one for the next call, as there is no
                 // way to fit both of them into a single wxChar in this case.
                 m_lastWChar = wbuf[1];
-#endif // SIZEOF_WCHAR_T == 2
                 wxFALLTHROUGH;
+#endif // SIZEOF_WCHAR_T == 2
 
             case 1:
                 m_validBegin = inlen + 1;

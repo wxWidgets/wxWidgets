@@ -12,9 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/scrolwin.h"
 
@@ -192,7 +189,7 @@ GtkPolicyType GtkPolicyFromWX(wxScrollbarVisibility visibility)
 
         default:
             wxFAIL_MSG( wxS("unknown scrollbar visibility") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxSHOW_SB_ALWAYS:
             policy = GTK_POLICY_ALWAYS;

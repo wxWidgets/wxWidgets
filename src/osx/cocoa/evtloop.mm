@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 
@@ -72,7 +69,7 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
     if ( cat | wxEVT_CATEGORY_USER_INPUT )
     {
         mask |=
-            NSLeftMouseDownMask	|
+            NSLeftMouseDownMask |
             NSLeftMouseUpMask |
             NSRightMouseDownMask |
             NSRightMouseUpMask |
@@ -561,72 +558,15 @@ void wxGUIEventLoop::EndModalSession()
 // 
 //
 
-wxWindowDisabler::wxWindowDisabler(bool disable)
+void wxWindowDisabler::AfterDisable(wxWindow* winToSkip)
 {
-    m_modalEventLoop = NULL;
-    m_disabled = disable;
-    if ( disable )
-        DoDisable();
-}
-
-wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
-{
-    m_disabled = true;
-    DoDisable(winToSkip);
-}
-
-void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
-{    
-    // remember the top level windows which were already disabled, so that we
-    // don't reenable them later
-    m_winDisabled = NULL;
-    
-    wxWindowList::compatibility_iterator node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *winTop = node->GetData();
-        if ( winTop == winToSkip )
-            continue;
-        
-        // we don't need to disable the hidden or already disabled windows
-        if ( winTop->IsEnabled() && winTop->IsShown() )
-        {
-            winTop->Disable();
-        }
-        else
-        {
-            if ( !m_winDisabled )
-            {
-                m_winDisabled = new wxWindowList;
-            }
-            
-            m_winDisabled->Append(winTop);
-        }
-    }
-    
     m_modalEventLoop = (wxEventLoop*)wxEventLoopBase::GetActive();
     if (m_modalEventLoop)
         m_modalEventLoop->BeginModalSession(winToSkip);
 }
 
-wxWindowDisabler::~wxWindowDisabler()
+void wxWindowDisabler::BeforeEnable()
 {
-    if ( !m_disabled )
-        return;
-    
     if (m_modalEventLoop)
         m_modalEventLoop->EndModalSession();
-    
-    wxWindowList::compatibility_iterator node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *winTop = node->GetData();
-        if ( !m_winDisabled || !m_winDisabled->Find(winTop) )
-        {
-            winTop->Enable();
-        }
-        //else: had been already disabled, don't reenable
-    }
-    
-    delete m_winDisabled;
 }

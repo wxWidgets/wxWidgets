@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_INTL
 
@@ -988,11 +985,7 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     for ( size_t i = 0; i < count; i++ )
     {
         if ( ms_languagesDB->Item(i).Language == lang )
-        {
-            // We need to create a temporary here in order to make this work with BCC in final build mode
-            wxLanguageInfo *ptr = &ms_languagesDB->Item(i);
-            return ptr;
-        }
+            return &ms_languagesDB->Item(i);
     }
 
     return NULL;
@@ -1806,7 +1799,6 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                 format.Replace("%y","%Y");
                 return format;
             }
-            break;
 
         default:
             wxFAIL_MSG( "Unknown locale info" );
@@ -1905,9 +1897,6 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
-// TODO: as of 2014 Android doesn't has complete locale support (use java api)
-// DONE: Supported by NDK21d
-//#if !(defined(__WXQT__) && defined(__ANDROID__))
     lconv * const lc = localeconv();
     if ( !lc )
         return wxString();
@@ -1949,7 +1938,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         default:
             wxFAIL_MSG( "unknown wxLocaleInfo value" );
     }
-//#endif
+
     return wxString();
 }
 

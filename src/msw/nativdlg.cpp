@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
@@ -303,7 +300,6 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         parent->AddChild(win);
         win->SubclassWin(hWnd);
         win->AdoptAttributesFromHWND();
-        win->SetupColours();
     }
 
     return win;

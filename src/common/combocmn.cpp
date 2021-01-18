@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/combo.h"
 
@@ -457,7 +454,8 @@ public:
     wxComboPopupWindow( wxComboCtrlBase *parent,
                         int style )
     #if USES_WXPOPUPWINDOW || USES_WXPOPUPTRANSIENTWINDOW
-                       : wxComboPopupWindowBase(parent,style)
+                       : wxComboPopupWindowBase(parent,
+                                                style | wxPU_CONTAINS_CONTROLS)
     #else
                        : wxComboPopupWindowBase(parent,
                                                 wxID_ANY,
@@ -1460,7 +1458,7 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     fhei += 2 * FOCUS_RING;
 
     // Calculate width
-    int fwid = xlen + FOCUS_RING + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH;
+    int fwid = GetNativeTextIndent() + xlen + FOCUS_RING + COMBO_MARGIN + m_btnArea.width;
 
     // Add the margins we have previously set
     wxPoint marg( GetMargins() );

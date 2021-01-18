@@ -663,6 +663,9 @@ extern int wxOSXGetIdFromSelector(SEL action );
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    wxUnusedVar(keyPath);
+    wxUnusedVar(change);
+
     if (context == EffectiveAppearanceContext)
     {
         wxNonOwnedWindowCocoaImpl* windowimpl = [(NSWindow*)object WX_implementation];
@@ -719,7 +722,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
     }
 }
 
-void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
     static wxNonOwnedWindowController* controller = NULL;
@@ -1283,6 +1286,12 @@ bool wxNonOwnedWindowCocoaImpl::IsModified() const
 void wxNonOwnedWindowCocoaImpl::SetRepresentedFilename(const wxString& filename)
 {
     [m_macWindow setRepresentedFilename:wxCFStringRef(filename).AsNSString()];
+}
+
+void wxNonOwnedWindowCocoaImpl::SetBottomBorderThickness(int thickness)
+{
+    [m_macWindow setAutorecalculatesContentBorderThickness:(thickness ? NO : YES) forEdge:NSMinYEdge];
+    [m_macWindow setContentBorderThickness:thickness forEdge:NSMinYEdge];
 }
 
 void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()

@@ -136,6 +136,7 @@ void wx_tree_entry_set_destroy_func(wxTreeEntry* entry,
 /* private */
 static void wx_tree_entry_class_init(void* g_class, void* class_data)
 {
+    (void)class_data;
     GObjectClass* gobject_class = G_OBJECT_CLASS(g_class);
     gobject_class->dispose = wx_tree_entry_dispose;
     parent_class = G_OBJECT_CLASS(g_type_class_peek_parent(g_class));

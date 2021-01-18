@@ -12,9 +12,9 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_SECRETSTORE
-
 #include "wx/string.h"
+
+#if wxUSE_SECRETSTORE
 
 // Initial version of wxSecretStore required passing user name to Load(), which
 // didn't make much sense without support for multiple usernames per service,
@@ -168,6 +168,92 @@ private:
     wxSecretStoreImpl* const m_impl;
 };
 
-#endif // wxUSE_SECRETSTORE
+#else // !wxUSE_SECRETSTORE
+
+// Provide stand in for wxSecretValue allowing to use it without having #if
+// wxUSE_SECRETSTORE checks everywhere. Unlike the real version, this class
+// doesn't provide any added security.
+class wxSecretValue
+{
+public:
+    wxSecretValue() { m_valid = false; }
+
+    wxSecretValue(size_t size, const void *data)
+    {
+        Init(size, data);
+    }
+
+    explicit wxSecretValue(const wxString& secret)
+    {
+        const wxScopedCharBuffer buf(secret.utf8_str());
+        Init(buf.length(), buf.data());
+    }
+
+    bool IsOk() const { return m_valid; }
+
+    bool operator==(const wxSecretValue& other) const
+    {
+        return m_valid == other.m_valid && m_data == other.m_data;
+    }
+
+    bool operator!=(const wxSecretValue& other) const
+    {
+        return !(*this == other);
+    }
+
+    size_t GetSize() const { return m_data.utf8_str().length(); }
+
+    const void *GetData() const { return m_data.utf8_str().data(); }
+
+    wxString GetAsString(const wxMBConv& conv = wxConvWhateverWorks) const
+    {
+        wxUnusedVar(conv);
+        return m_data;
+    }
+
+    static void Wipe(size_t size, void *data) { memset(data, 0, size); }
+    static void WipeString(wxString& str)
+    {
+        str.assign(str.length(), '*');
+        str.clear();
+    }
+
+private:
+    void Init(size_t size, const void *data)
+    {
+        m_data = wxString::From8BitData(static_cast<const char*>(data), size);
+    }
+
+    wxString m_data;
+    bool m_valid;
+};
+
+#endif // wxUSE_SECRETSTORE/!wxUSE_SECRETSTORE
+
+// Helper class ensuring WipeString() is called.
+//
+// It should only be used as a local variable and never polymorphically.
+class wxSecretString : public wxString
+{
+public:
+    wxSecretString()
+    {
+    }
+
+    wxSecretString(const wxString& value)
+        : wxString(value)
+    {
+    }
+
+    explicit wxSecretString(const wxSecretValue& value)
+        : wxString(value.GetAsString())
+    {
+    }
+
+    ~wxSecretString()
+    {
+        wxSecretValue::WipeString(*this);
+    }
+};
 
 #endif // _WX_SECRETSTORE_H_

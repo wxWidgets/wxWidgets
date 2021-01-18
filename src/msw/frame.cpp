@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/frame.h"
 
@@ -604,7 +601,7 @@ void wxFrame::PositionToolBar()
 
         int tx, ty, tw, th;
         toolbar->GetPosition( &tx, &ty );
-        toolbar->GetSize( &tw, &th );
+        toolbar->GetBestSize( &tw, &th );
 
         int x, y;
         if ( toolbar->HasFlag(wxTB_BOTTOM) )

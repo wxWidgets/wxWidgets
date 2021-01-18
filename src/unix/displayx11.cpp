@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -75,11 +72,6 @@ public:
     virtual int GetDepth() const wxOVERRIDE
     {
         return wxGetMainScreenDepth();
-    }
-
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        return wxGetMainScreenSizeMM();
     }
 };
 
@@ -158,11 +150,6 @@ public:
             return mode.bpp;
 
         return wxGetMainScreenDepth();
-    }
-    virtual wxSize GetSizeMM() const wxOVERRIDE
-    {
-        // TODO: how to get physical size or resolution of the other monitors?
-        return IsPrimary() ? wxGetMainScreenSizeMM() : wxSize(0, 0);
     }
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;

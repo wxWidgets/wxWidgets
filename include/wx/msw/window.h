@@ -100,6 +100,8 @@ public:
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
     virtual wxSize GetDPI() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
+
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
@@ -597,6 +599,8 @@ public:
     void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
 
 protected:
+    virtual void WXAdjustFontToOwnPPI(wxFont& font) const wxOVERRIDE;
+
     // Called from MSWUpdateOnDPIChange() specifically to update the control
     // font, as this may need to be done differently for some specific native
     // controls. The default version updates m_font of this window.

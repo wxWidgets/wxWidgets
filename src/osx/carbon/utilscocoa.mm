@@ -183,11 +183,21 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, c
 WXImage wxOSXGetSystemImage(const wxString& name)
 {
     wxCFStringRef cfname(name);
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        NSImage *symbol = [NSImage imageWithSystemSymbolName:cfname.AsNSString() accessibilityDescription:nil];
+        if ( symbol )
+            return symbol;
+    }
+#endif
+    
     NSImage* nsimage = [NSImage imageNamed:cfname.AsNSString()];
     return nsimage;
 }
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& sizeHint)
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(sizeHint))
 {
     NSImage* nsimage = wxOSXGetSystemImage(name);
     if ( nsimage )

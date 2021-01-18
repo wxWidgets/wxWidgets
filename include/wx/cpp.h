@@ -42,16 +42,6 @@
 #define wxSTRINGIZE_T(x)            wxAPPLY_T(wxSTRINGIZE(x))
 
 /*
-    Special workarounds for compilers with broken "##" operator. For all the
-    other ones we can just use it directly.
- */
-#ifdef wxCOMPILER_BROKEN_CONCAT_OPER
-    #define wxPREPEND_L(x)      L ## x
-    #define wxAPPEND_i64(x)     x ## i64
-    #define wxAPPEND_ui64(x)    x ## ui64
-#endif /* wxCOMPILER_BROKEN_CONCAT_OPER */
-
-/*
    Helper macros for wxMAKE_UNIQUE_NAME: normally this works by appending the
    current line number to the given identifier to reduce the probability of the
    conflict (it may still happen if this is used in the headers, hence you
@@ -149,20 +139,6 @@
 
 
 #ifdef HAVE_VARIADIC_MACROS
-
-/*
-   This is a hack to make it possible to use variadic macros with g++ 3.x even
-   when using -pedantic[-errors] option: without this, it would complain that
-
-       "anonymous variadic macros were introduced in C99"
-
-   and the option disabling this warning (-Wno-variadic-macros) is only
-   available in gcc 4.0 and later, so until then this hack is the only thing we
-   can do.
- */
-#if defined(__GNUC__) && __GNUC__ == 3
-    #pragma GCC system_header
-#endif /* gcc-3.x */
 
 /*
    wxCALL_FOR_EACH(what, ...) calls the macro from its first argument, what(pos, x),

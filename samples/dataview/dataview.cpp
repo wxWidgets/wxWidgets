@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -262,7 +259,7 @@ public:
 
     virtual wxSize GetSize() const wxOVERRIDE
     {
-        return wxSize(60,20);
+        return GetView()->FromDIP(wxSize(60, 20));
     }
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE
@@ -745,6 +742,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     mainSizer->Add( m_log, 0, wxGROW );
 
     SetSizerAndFit(mainSizer);
+
+    // Allow using the control from keyboard on startup.
+    m_ctrl[Page_Music]->SetFocus();
 }
 
 MyFrame::~MyFrame()
@@ -1281,7 +1281,7 @@ void MyFrame::OnDropPossible( wxDataViewEvent &event )
     if (event.GetDataFormat() != wxDF_UNICODETEXT)
         event.Veto();
     else
-        event.SetDropEffect(wxDragMove);	// check 'move' drop effect
+        event.SetDropEffect(wxDragMove); // check 'move' drop effect
 }
 
 void MyFrame::OnDrop( wxDataViewEvent &event )

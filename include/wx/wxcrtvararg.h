@@ -132,8 +132,7 @@
        is a wrapper around it as explained below
      */
 
-    #if defined(__VISUALC__) || \
-            (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+    #if defined(__VISUALC__)
         #define wxCRT_VsnprintfA    _vsnprintf
         #define wxCRT_VsnprintfW    _vsnwprintf
     #else
@@ -276,6 +275,8 @@
 #endif
 
 
+wxGCC_ONLY_WARNING_SUPPRESS(format-nonliteral)
+
 WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxPrintf, 1, (const wxFormatString&),
                               wxCRT_PrintfNative, wxCRT_PrintfA)
 inline int wxPrintf(const wxFormatString& s)
@@ -289,6 +290,8 @@ inline int wxFprintf(FILE *f, const wxFormatString& s)
 {
     return wxFprintf(f, wxASCII_STR("%s"), s.InputAsString());
 }
+
+wxGCC_ONLY_WARNING_RESTORE(format-nonliteral)
 
 // va_list versions of printf functions simply forward to the respective
 // CRT function; note that they assume that va_list was created using

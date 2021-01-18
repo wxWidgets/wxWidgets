@@ -162,8 +162,7 @@
  * All of the settings below require SEH support (__try/__catch) and can't work
  * without it.
  */
-#if !defined(_MSC_VER) && \
-    (!defined(__BORLANDC__) || __BORLANDC__ < 0x0550)
+#if !defined(_MSC_VER)
 #    undef wxUSE_ON_FATAL_EXCEPTION
 #    define wxUSE_ON_FATAL_EXCEPTION 0
 
@@ -216,27 +215,6 @@
 #endif
 
 /*
-   Compiler-specific checks.
- */
-
-/* Borland */
-#ifdef __BORLANDC__
-
-#if __BORLANDC__ < 0x500
-    /* BC++ 4.0 can't compile JPEG library */
-#   undef wxUSE_LIBJPEG
-#   define wxUSE_LIBJPEG 0
-#endif
-
-/* wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode */
-#if defined(WXMAKINGDLL) || defined(WXUSINGDLL)
-#   undef wxUSE_DEBUG_NEW_ALWAYS
-#   define wxUSE_DEBUG_NEW_ALWAYS 0
-#endif
-
-#endif /* __BORLANDC__ */
-
-/*
    un/redefine the options which we can't compile (after checking that they're
    defined
  */
@@ -257,6 +235,16 @@
 #   define wxUSE_ACTIVITYINDICATOR 0
 #endif /* !wxUSE_ACTIVITYINDICATOR && !_MSC_VER */
 
+/*
+    Similarly, turn off wxUSE_WEBREQUEST if we can't enable it because we don't
+    have any of its backends to allow the library to compile with the default
+    options when using MinGW32 which doesn't come with winhttp.h and so for
+    which we have to disable wxUSE_WEBREQUEST_WINHTTP.
+ */
+#if wxUSE_WEBREQUEST && !wxUSE_WEBREQUEST_CURL && !wxUSE_WEBREQUEST_WINHTTP
+#   undef wxUSE_WEBREQUEST
+#   define wxUSE_WEBREQUEST 0
+#endif /* wxUSE_WEBREQUEST */
 
 /* check settings consistency for MSW-specific ones */
 #if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION

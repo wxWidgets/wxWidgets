@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DATAVIEWCTRL
 
@@ -77,6 +74,13 @@ static const int PADDING_RIGHTLEFT = 3;
 namespace
 {
 
+// Flags for Walker() function defined below.
+enum WalkFlags
+{
+    Walk_All,               // Visit all items.
+    Walk_ExpandedOnly       // Visit only expanded items.
+};
+
 // The column is either the index of the column to be used for sorting or one
 // of the special values in this enum:
 enum
@@ -105,6 +109,8 @@ public:
     // Default copy ctor, assignment operator and dtor are all OK.
 
     bool IsNone() const { return m_column == SortColumn_None; }
+
+    bool UsesColumn() const { return m_column >= 0; }
 
     int GetColumn() const { return m_column; }
     bool IsAscending() const { return m_ascending; }
@@ -857,7 +863,8 @@ public:
 
     // Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
-    int GetRowByItem( const wxDataViewItem & item ) const;
+    int GetRowByItem( const wxDataViewItem & item,
+                      WalkFlags flags = Walk_All ) const;
 
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
     // We did not need this temporarily
@@ -869,7 +876,7 @@ public:
     void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column );
     wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn* column );
 
-    void Expand( unsigned int row );
+    void Expand( unsigned int row, bool expandChildren = false );
     void Collapse( unsigned int row );
     bool IsExpanded( unsigned int row ) const;
     bool HasChildren( unsigned int row ) const;
@@ -984,6 +991,9 @@ private:
 
         return NULL;
     }
+
+    // Helper of public Expand(), must be called with a valid node.
+    void DoExpand(wxDataViewTreeNode* node, unsigned int row, bool expandChildren);
 
 private:
     wxDataViewCtrl             *m_owner;
@@ -1880,9 +1890,10 @@ void wxDataViewTreeNode::Resort(wxDataViewMainWindow* window)
     {
         wxDataViewTreeNodes& nodes = m_branchData->children;
 
-        // Only sort the children if they aren't already sorted by the wanted
-        // criteria.
-        if ( m_branchData->sortOrder != sortOrder )
+        // When sorting by column value, we can skip resorting entirely if the
+        // same sort order was used previously. However we can't do this when
+        // using model-specific sort order, which can change at any time.
+        if ( m_branchData->sortOrder != sortOrder || !sortOrder.UsesColumn() )
         {
             std::sort(m_branchData->children.begin(),
                       m_branchData->children.end(),
@@ -2779,6 +2790,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxDataViewTreeNode *node = NULL;
             wxDataViewItem dataitem;
             const int line_height = GetLineHeight(item);
+            bool hasValue = true;
 
             if (!IsVirtualList())
             {
@@ -2791,12 +2803,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 dataitem = node->GetItem();
 
-                // Skip al columns  that do not have values
                 if ( !model->HasValue(dataitem, col->GetModelColumn()) )
-                {
-                    cell_rect.y += line_height;
-                    continue;
-                }
+                    hasValue = false;
+
             }
             else
             {
@@ -2813,7 +2822,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             cell->SetState(state);
-            cell->PrepareForItem(model, dataitem, col->GetModelColumn());
+            if (hasValue)
+                cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
             if ( !selected )
@@ -2894,7 +2904,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             //       make its own renderer and thus we cannot be sure of that.
             wxDCClipper clip(dc, item_rect);
 
-            cell->WXCallRender(item_rect, &dc, state);
+            if (hasValue)
+                cell->WXCallRender(item_rect, &dc, state);
 
             cell_rect.y += line_height;
         }
@@ -2996,6 +3007,10 @@ void wxDataViewHeaderWindow::FinishEditing()
 //-----------------------------------------------------------------------------
 // Helper class for do operation on the tree node
 //-----------------------------------------------------------------------------
+
+namespace
+{
+
 class DoJob
 {
 public:
@@ -3013,7 +3028,8 @@ public:
     virtual int operator() ( wxDataViewTreeNode * node ) = 0;
 };
 
-bool Walker( wxDataViewTreeNode * node, DoJob & func )
+bool
+Walker(wxDataViewTreeNode * node, DoJob & func, WalkFlags flags = Walk_All)
 {
     wxCHECK_MSG( node, false, "can't walk NULL node" );
 
@@ -3027,7 +3043,7 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
             break;
     }
 
-    if ( node->HasChildren() )
+    if ( node->HasChildren() && (flags != Walk_ExpandedOnly || node->IsOpen()) )
     {
         const wxDataViewTreeNodes& nodes = node->GetChildNodes();
 
@@ -3035,13 +3051,15 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
               i != nodes.end();
               ++i )
         {
-            if ( Walker(*i, func) )
+            if ( Walker(*i, func, flags) )
                 return true;
         }
     }
 
     return false;
 }
+
+} // anonymous namespace
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
@@ -3062,14 +3080,6 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
             return false;
 
         parentNode->SetHasChildren(true);
-
-        // If the parent node isn't and hadn't been opened yet, we don't have
-        // anything to do here, all the items will be added to it when it's
-        // opened for the first time.
-        if ( !parentNode->IsOpen() && parentNode->GetChildNodes().empty() )
-        {
-            return true;
-        }
 
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
@@ -3903,7 +3913,7 @@ bool wxDataViewMainWindow::HasChildren( unsigned int row ) const
     return true;
 }
 
-void wxDataViewMainWindow::Expand( unsigned int row )
+void wxDataViewMainWindow::Expand( unsigned int row, bool expandChildren )
 {
     if (IsList())
         return;
@@ -3912,15 +3922,16 @@ void wxDataViewMainWindow::Expand( unsigned int row )
     if (!node)
         return;
 
+    return DoExpand(node, row, expandChildren);
+}
+
+void
+wxDataViewMainWindow::DoExpand(wxDataViewTreeNode* node,
+                               unsigned int row,
+                               bool expandChildren)
+{
     if (!node->HasChildren())
         return;
-
-    if ( m_rowHeightCache )
-    {
-        // Expand makes new rows visible thus we invalidates all following
-        // rows in the height cache
-        m_rowHeightCache->Remove(row);
-    }
 
     if (!node->IsOpen())
     {
@@ -3928,6 +3939,13 @@ void wxDataViewMainWindow::Expand( unsigned int row )
         {
             // Vetoed by the event handler.
             return;
+        }
+
+        if ( m_rowHeightCache )
+        {
+            // Expand makes new rows visible thus we invalidates all following
+            // rows in the height cache
+            m_rowHeightCache->Remove(row);
         }
 
         node->ToggleOpen(this);
@@ -3956,6 +3974,28 @@ void wxDataViewMainWindow::Expand( unsigned int row )
         UpdateDisplay();
         // Send the expanded event
         SendExpanderEvent(wxEVT_DATAVIEW_ITEM_EXPANDED,node->GetItem());
+    }
+
+    // Note that we have to expand the children when expanding recursively even
+    // when this node itself was already open.
+    if ( expandChildren )
+    {
+        const wxDataViewTreeNodes& children = node->GetChildNodes();
+
+        for ( wxDataViewTreeNodes::const_iterator i = children.begin();
+              i != children.end();
+              ++i )
+        {
+            wxDataViewTreeNode* const child = *i;
+
+            // Row currently corresponds to the previous item, so increment it
+            // first to correspond to this child.
+            DoExpand(child, ++row, true);
+
+            // We don't need +1 here because we'll increment the row during the
+            // next loop iteration.
+            row += child->GetSubTreeCount();
+        }
     }
 }
 
@@ -4140,7 +4180,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
         xpos = 0;
     }
 
-    const int row = GetRowByItem(item);
+    const int row = GetRowByItem(item, Walk_ExpandedOnly);
     if ( row == -1 )
     {
         // This means the row is currently not visible at all.
@@ -4241,7 +4281,9 @@ private:
 
 };
 
-int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
+int
+wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item,
+                                   WalkFlags flags) const
 {
     const wxDataViewModel * model = GetModel();
     if( model == NULL )
@@ -4271,7 +4313,7 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
         // the parent chain was created by adding the deepest parent first.
         // so if we want to start at the root node, we have to iterate backwards through the vector
         ItemToRowJob job( item, parentChain.rbegin() );
-        if ( !Walker( m_root, job ) )
+        if ( !Walker( m_root, job, flags ) )
             return -1;
 
         return job.GetResult();
@@ -4573,7 +4615,27 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
         case WXK_DOWN:
             OnVerticalNavigation(event, +1);
             break;
-        // Add the process for tree expanding/collapsing
+
+        case '+':
+        case WXK_ADD:
+            Expand(m_currentRow);
+            break;
+
+        case '*':
+        case WXK_MULTIPLY:
+            if ( !IsExpanded(m_currentRow) )
+            {
+                Expand(m_currentRow, true /* recursively */);
+                break;
+            }
+            //else: fall through to Collapse()
+            wxFALLTHROUGH;
+
+        case '-':
+        case WXK_SUBTRACT:
+            Collapse(m_currentRow);
+            break;
+
         case WXK_LEFT:
             OnLeftKey(event);
             break;
@@ -5878,22 +5940,27 @@ public:
 
     virtual void UpdateWithRow(int row) wxOVERRIDE
     {
-        int indent = 0;
+        int width = 0;
         wxDataViewItem item;
 
         if ( m_isExpanderCol )
         {
             wxDataViewTreeNode *node = m_clientArea->GetTreeNodeByRow(row);
             item = node->GetItem();
-            indent = m_dvc->GetIndent() * node->GetIndentLevel() + m_expanderSize;
+            width = m_dvc->GetIndent() * node->GetIndentLevel() + m_expanderSize;
         }
         else
         {
             item = m_clientArea->GetItemByRow(row);
         }
 
-        m_renderer->PrepareForItem(m_model, item, GetColumn());
-        UpdateWithWidth(m_renderer->GetSize().x + indent);
+        if ( m_model->HasValue(item, GetColumn()) )
+        {
+            m_renderer->PrepareForItem(m_model, item, GetColumn());
+            width += m_renderer->GetSize().x;
+        }
+
+        UpdateWithWidth(width);
     }
 
 private:
@@ -6303,11 +6370,11 @@ int wxDataViewCtrl::GetRowByItem( const wxDataViewItem & item ) const
     return m_clientArea->GetRowByItem( item );
 }
 
-void wxDataViewCtrl::DoExpand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren )
 {
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
-        m_clientArea->Expand(row);
+        m_clientArea->Expand(row, expandChildren);
 }
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )

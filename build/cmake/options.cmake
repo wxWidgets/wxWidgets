@@ -64,6 +64,8 @@ else()
 endif()
 wx_option(wxBUILD_STRIPPED_RELEASE "remove debug symbols in release build" ${wxBUILD_STRIPPED_RELEASE_DEFAULT})
 mark_as_advanced(wxBUILD_STRIPPED_RELEASE)
+wx_option(wxBUILD_PIC "Enable position independent code (PIC)." ON)
+mark_as_advanced(wxBUILD_PIC)
 wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options
@@ -107,6 +109,7 @@ if(UNIX)
     wx_option(wxUSE_XTEST "use XTest extension")
     wx_option(wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
     wx_option(wxUSE_LIBGNOMEVFS "use GNOME VFS for associating MIME types")
+    wx_option(wxUSE_GLCANVAS_EGL "use EGL backend for wxGLCanvas")
 
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL for audio on Unix")
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
@@ -178,6 +181,22 @@ wx_option(wxUSE_TEXTBUFFER "use wxTextBuffer class")
 wx_option(wxUSE_TEXTFILE "use wxTextFile class")
 wx_option(wxUSE_TIMER "use wxTimer class")
 wx_option(wxUSE_VARIANT "use wxVariant class")
+
+# WebRequest options
+wx_option(wxUSE_WEBREQUEST "use wxWebRequest class")
+if(WIN32)
+    wx_option(wxUSE_WEBREQUEST_WINHTTP "use wxWebRequest WinHTTP backend")
+endif()
+if(APPLE)
+    wx_option(wxUSE_WEBREQUEST_URLSESSION "use wxWebRequest URLSession backend")
+endif()
+if(APPLE OR WIN32)
+    set(wxUSE_WEBREQUEST_CURL_DEFAULT OFF)
+else()
+    set(wxUSE_WEBREQUEST_CURL_DEFAULT ON)
+endif()
+wx_option(wxUSE_WEBREQUEST_CURL "use wxWebRequest libcurl backend" ${wxUSE_WEBREQUEST_CURL_DEFAULT})
+
 wx_option(wxUSE_ZIPSTREAM "use wxZip streams")
 
 # URL-related classes
@@ -232,9 +251,6 @@ wx_option(wxUSE_AFM_FOR_POSTSCRIPT "in wxPostScriptDC class use AFM (adobe font 
 wx_option(wxUSE_PRINTING_ARCHITECTURE "use printing architecture")
 wx_option(wxUSE_SVG "use wxSVGFileDC device context")
 wx_option(wxUSE_WEBVIEW "use wxWebView library")
-if(APPLE)
-    wx_option(wxUSE_WEBKIT "use wxWebKitCtrl (Mac-only, use wxWebView instead)")
-endif()
 
 # wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 # can't be disabled, don't even provide an option to do it
@@ -361,6 +377,7 @@ wx_option(wxUSE_COMMON_DIALOGS "use all common dialogs")
 wx_option(wxUSE_ABOUTDLG "use wxAboutBox")
 wx_option(wxUSE_CHOICEDLG "use wxChoiceDialog")
 wx_option(wxUSE_COLOURDLG "use wxColourDialog")
+wx_option(wxUSE_CREDENTIALDLG "use wxCredentialEntryDialog")
 wx_option(wxUSE_FILEDLG "use wxFileDialog")
 wx_option(wxUSE_FINDREPLDLG "use wxFindReplaceDialog")
 wx_option(wxUSE_FONTDLG "use wxFontDialog")

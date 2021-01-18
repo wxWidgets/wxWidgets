@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -251,6 +248,9 @@ private:
                     }
                 }
                 break;
+            case WXK_TAB:
+                event.Skip();
+                break;
 
             // Do not skip the other events, just consume them to prevent the
             // user from editing the text directly.
@@ -259,6 +259,8 @@ private:
 
     void OnTextClick(wxMouseEvent& event)
     {
+        m_text->SetFocus();
+
         Field field = Field_Max; // Initialize just to suppress warnings.
         long pos;
         switch ( m_text->HitTest(event.GetPosition(), &pos) )
@@ -291,7 +293,7 @@ private:
             case wxTE_HT_BELOW:
                 // This shouldn't happen for single line control.
                 wxFAIL_MSG( "Unreachable" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTE_HT_BEYOND:
                 // Select the last field.

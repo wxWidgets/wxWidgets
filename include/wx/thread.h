@@ -649,7 +649,7 @@ private:
 // wxThreadHelperThread class
 // --------------------------
 
-class WXDLLIMPEXP_BASE wxThreadHelperThread : public wxThread
+class wxThreadHelperThread : public wxThread
 {
 public:
     // constructor only creates the C++ thread object and doesn't create (or
@@ -677,7 +677,7 @@ private:
 // derive from it to implement a threading background task in your class.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxThreadHelper
+class wxThreadHelper
 {
 private:
     void KillThread()

@@ -25,6 +25,7 @@
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
     #include "wx/mousestate.h"
+    #include "wx/vector.h"
 #endif
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
@@ -51,7 +52,6 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class wxWindowList;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------
@@ -150,8 +150,11 @@ WXDLLIMPEXP_BASE bool wxCheckOsVersion(int majorVsn, int minorVsn = 0, int micro
 // Get platform endianness
 WXDLLIMPEXP_BASE bool wxIsPlatformLittleEndian();
 
-// Get platform architecture
+// Get platform architecture bitness
 WXDLLIMPEXP_BASE bool wxIsPlatform64Bit();
+
+// Get machine CPU architecture
+WXDLLIMPEXP_BASE wxString wxGetCpuArchitectureName();
 
 #ifdef __LINUX__
 // Get linux-distro information
@@ -162,7 +165,7 @@ WXDLLIMPEXP_BASE wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
 WXDLLIMPEXP_BASE wxString wxNow();
 
 // Return path where wxWidgets is installed (mostly useful in Unices)
-WXDLLIMPEXP_BASE const wxChar *wxGetInstallPrefix();
+WXDLLIMPEXP_BASE wxString wxGetInstallPrefix();
 // Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
 WXDLLIMPEXP_BASE wxString wxGetDataDir();
 
@@ -731,9 +734,12 @@ private:
     void DoDisable(wxWindow *winToSkip = NULL);
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
-    wxEventLoop* m_modalEventLoop;
+    void AfterDisable(wxWindow* winToSkip);
+    void BeforeEnable();
+
+    wxEventLoop* m_modalEventLoop = NULL;
 #endif
-    wxWindowList *m_winDisabled;
+    wxVector<wxWindow*> m_winDisabled;
     bool m_disabled;
 
     wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);
@@ -780,6 +786,18 @@ void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 
 #ifdef __WXGTK__
     WXDLLIMPEXP_CORE void *wxGetDisplay();
+    enum wxDisplayType
+    {
+        wxDisplayNone,
+        wxDisplayX11,
+        wxDisplayWayland
+    };
+    struct wxDisplayInfo
+    {
+        void* dpy;
+        wxDisplayType type;
+    };
+    WXDLLIMPEXP_CORE wxDisplayInfo wxGetDisplayInfo();
 #endif
 
 #ifdef __X__

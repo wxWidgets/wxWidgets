@@ -25,8 +25,6 @@ wx_list_add_prefix(HELP_DATA_FILES helpfiles/
     )
 wx_add_sample(help DATA ${HELP_DATA_FILES} LIBRARIES wxhtml NAME htmlhelp DEPENDS wxUSE_HELP)
 wx_add_sample(helpview DATA test.zip LIBRARIES wxhtml DEPENDS wxUSE_HELP)
-#TODO: htmlctrl sample uses outdated definitions
-#wx_add_sample(htmlctrl LIBRARIES wxhtml)
 wx_add_sample(printing DATA logo6.gif test.htm LIBRARIES wxhtml NAME htmlprinting
     DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(test

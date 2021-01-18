@@ -10,10 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif  //__BORLANDC__
-
 #if wxUSE_ANIMATIONCTRL
 
 #include "wx/animate.h"

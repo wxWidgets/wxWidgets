@@ -152,8 +152,6 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 
-    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ));
-
     if ( parent )
         parent->AddChild(this);
 
@@ -544,11 +542,12 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 
     {
         wxMemoryDC dc(bmp);
-        dc.SetBackground(*wxBLACK);
+        dc.SetBackground(*wxBLACK_BRUSH);
         dc.Clear();
 
         wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
-        context->SetBrush(*wxWHITE);
+        context->SetBrush(*wxWHITE_BRUSH);
+        context->SetAntialiasMode(wxANTIALIAS_NONE);
         context->FillPath(path);
     }
 

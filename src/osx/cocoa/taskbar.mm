@@ -19,6 +19,7 @@
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/scopedptr.h"
 #include "wx/taskbar.h"
 
 #include "wx/osx/private.h"
@@ -68,6 +69,8 @@ public:
     inline wxTaskBarIcon* GetTaskBarIcon() { return m_taskBarIcon; }
     wxMenu * CreatePopupMenu()
     { return m_taskBarIcon->CreatePopupMenu(); }
+    wxMenu * GetPopupMenu()
+    { return m_taskBarIcon->GetPopupMenu(); }
 
     wxDECLARE_NO_COPY_CLASS(wxTaskBarIconImpl);
 
@@ -100,6 +103,7 @@ protected:
 private:
     wxTaskBarIconDockImpl();
     wxMenu             *m_pMenu;
+    wxScopedPtr<wxMenu> m_menuDeleter;
 };
 
 class wxTaskBarIconCustomStatusItemImpl;
@@ -246,20 +250,25 @@ WX_NSMenu wxTaskBarIconDockImpl::OSXGetDockHMenu()
 
 WX_NSMenu wxTaskBarIconDockImpl::OSXDoGetDockHMenu()
 {
-    wxMenu *dockMenu = CreatePopupMenu();
+    m_menuDeleter.reset();
 
-    if(!dockMenu)
-        return nil;
-    
-    wxDELETE(m_pMenu);
+    m_pMenu = GetPopupMenu();
 
-    m_pMenu = dockMenu;
-    
+    if (!m_pMenu)
+    {
+        m_pMenu = CreatePopupMenu();
+
+        if (!m_pMenu)
+            return nil;
+
+        m_menuDeleter.reset(m_pMenu);
+    }
+
     m_pMenu->SetInvokingWindow(m_eventWindow);
     
     m_pMenu->UpdateUI();
     
-    return (WX_NSMenu)dockMenu->GetHMenu();
+    return (WX_NSMenu)m_pMenu->GetHMenu();
 }
 
 bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(tooltip))
@@ -271,7 +280,8 @@ bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED
 
 bool wxTaskBarIconDockImpl::RemoveIcon()
 {
-    wxDELETE(m_pMenu);
+    m_menuDeleter.reset();
+
     m_icon = wxBitmap();
     [[NSApplication sharedApplication] setApplicationIconImage:nil];
     return true;

@@ -206,54 +206,150 @@ public:
     /**
         Convert @e device X coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
         Convert @e device X coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
         Converts @e device Y coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
         Convert @e device Y coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
         Converts logical X coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceX(wxCoord x) const;
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceXRel(wxCoord x) const;
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceY(wxCoord y) const;
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceYRel(wxCoord y) const;
+
+    /**
+        Converts device (@a x, @a y) coordinates to logical coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(const wxPoint& pt) const;
+
+    /**
+        Converts device @a x, @a y coordinates to relative logical coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(const wxSize& dim) const;
+
+    /**
+        Converts logical (@a x, @a y) coordinates to device coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(const wxPoint& pt) const;
+
+    /**
+        Converts logical @a x, @a y coordinates to relative device coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(const wxSize& dim) const;
 
     //@}
 
@@ -997,7 +1093,7 @@ public:
     //@{
 
     /**
-        Returns the current background mode: @c wxPENSTYLE_SOLID or @c wxPENSTYLE_TRANSPARENT.
+        Returns the current background mode: @c wxBRUSHSTYLE_SOLID or @c wxBRUSHSTYLE_TRANSPARENT.
 
         @see SetBackgroundMode()
     */
@@ -1037,10 +1133,15 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        @a mode may be one of @c wxPENSTYLE_SOLID and @c wxPENSTYLE_TRANSPARENT.
+        Change the current background mode.
 
         This setting determines whether text will be drawn with a background
         colour or not.
+
+        Default is @c wxBRUSHSTYLE_TRANSPARENT, i.e. text background is not
+        drawn.
+
+        @param mode one of @c wxBRUSHSTYLE_SOLID and @c wxBRUSHSTYLE_TRANSPARENT.
     */
     void SetBackgroundMode(int mode);
 
@@ -1980,7 +2081,8 @@ public:
         @param dc
             The DC where the mode must be temporary set.
         @param mode
-            The background mode to set.
+            The background mode to set, one of @c wxBRUSHSTYLE_SOLID or @c
+            wxBRUSHSTYLE_TRANSPARENT.
     */
     wxDCBgModeChanger(wxDC& dc, int mode);
 

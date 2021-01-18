@@ -132,13 +132,6 @@ if(NOT MSVC)
     endif()
 endif()
 
-wx_check_c_source_compiles(
-    "#define test(fmt, ...) printf(fmt, __VA_ARGS__)
-    test(\"%s %d %p\", \"test\", 1, 0);"
-    HAVE_VARIADIC_MACROS
-    stdio.h
-    )
-#TODO: wxNO_VARIADIC_MACROS
 if(wxUSE_STL AND CMAKE_CXX_STANDARD EQUAL 98)
     wx_check_cxx_source_compiles("
         std::vector<int> moo;
@@ -587,14 +580,11 @@ foreach(func
 endforeach()
 
 # Check various functions
-foreach(func
-    fsync
-    snprintf vsnprintf strnlen strtoull
-    setpriority
-    )
-    string(TOUPPER ${func} func_upper)
-    check_function_exists(${func} HAVE_${func_upper})
-endforeach()
+wx_check_funcs(fsync
+               snprintf vsnprintf strnlen strtoull
+               setpriority
+               gettimeofday
+               )
 
 if(MSVC)
     check_symbol_exists(vsscanf stdio.h HAVE_VSSCANF)
@@ -613,7 +603,6 @@ check_include_file(fcntl.h HAVE_FCNTL_H)
 check_include_file(langinfo.h HAVE_LANGINFO_H)
 check_include_file(sched.h HAVE_SCHED_H)
 check_include_file(unistd.h HAVE_UNISTD_H)
-check_include_file(w32api.h HAVE_W32API_H)
 check_include_file(wchar.h HAVE_WCHAR_H)
 check_include_file(wcstr.h HAVE_WCSTR_H)
 
@@ -643,7 +632,6 @@ cmake_pop_check_state()
 if(HAVE_DLOPEN)
     check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
 endif()
-check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
 
 if(APPLE)
     set(wxUSE_EPOLL_DISPATCHER OFF)

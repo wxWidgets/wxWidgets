@@ -19,9 +19,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -1546,7 +1543,7 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 {
     wxAuiToolBarItem* tool = FindTool(tool_id);
 
-    if (tool && (tool->m_kind == wxITEM_CHECK || tool->m_kind == wxITEM_RADIO))
+    if ( tool && tool->CanBeToggled() )
     {
         if (tool->m_kind == wxITEM_RADIO)
         {
@@ -1587,13 +1584,8 @@ bool wxAuiToolBar::GetToolToggled(int tool_id) const
 {
     wxAuiToolBarItem* tool = FindTool(tool_id);
 
-    if (tool)
-    {
-        if ( (tool->m_kind != wxITEM_CHECK) && (tool->m_kind != wxITEM_RADIO) )
-            return false;
-
+    if ( tool && tool->CanBeToggled() )
         return (tool->m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
-    }
 
     return false;
 }
@@ -2199,6 +2191,9 @@ void wxAuiToolBar::DoIdleUpdate()
 
         wxUpdateUIEvent evt(item.m_toolId);
         evt.SetEventObject(this);
+
+        if ( !item.CanBeToggled() )
+            evt.DisallowCheck();
 
         if (handler->ProcessEvent(evt))
         {
@@ -2841,7 +2836,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
     const bool button_pressed = HasCapture();
 
     // start a drag event
-    if (!m_dragging && button_pressed &&
+    if (!m_dragging && button_pressed && m_actionItem &&
         abs(evt.GetX() - m_actionPos.x) + abs(evt.GetY() - m_actionPos.y) > 5)
     {
         // TODO: sending this event only makes sense if there is an 'END_DRAG'
@@ -2876,24 +2871,27 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         SetHoverItem(hitItem);
 
         // tooltips handling
-        wxAuiToolBarItem* packingHitItem;
-        packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
-        if (packingHitItem)
+        if ( !HasFlag(wxAUI_TB_NO_TOOLTIPS) )
         {
-            if (packingHitItem != m_tipItem)
+            wxAuiToolBarItem* packingHitItem;
+            packingHitItem = FindToolByPositionWithPacking(evt.GetX(), evt.GetY());
+            if ( packingHitItem )
             {
-                m_tipItem = packingHitItem;
+                if (packingHitItem != m_tipItem)
+                {
+                    m_tipItem = packingHitItem;
 
-                if ( !packingHitItem->m_shortHelp.empty() )
-                    SetToolTip(packingHitItem->m_shortHelp);
-                else
-                    UnsetToolTip();
+                    if ( !packingHitItem->m_shortHelp.empty() )
+                        SetToolTip(packingHitItem->m_shortHelp);
+                    else
+                        UnsetToolTip();
+                }
             }
-        }
-        else
-        {
-            UnsetToolTip();
-            m_tipItem = NULL;
+            else
+            {
+                UnsetToolTip();
+                m_tipItem = NULL;
+            }
         }
 
         // figure out the dropdown button state (are we hovering or pressing it?)

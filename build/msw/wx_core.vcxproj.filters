@@ -501,6 +501,9 @@
     <ClCompile Include="..\..\src\generic\commandlinkbuttong.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\creddlgg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\datavgen.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -1198,6 +1201,9 @@
     <ClInclude Include="..\..\include\wx\control.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\creddlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\cshelp.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1382,6 +1388,9 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\combo.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\creddlgg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\custombgwin.h">

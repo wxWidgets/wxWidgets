@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT
 
@@ -691,11 +688,11 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     }
     else if (unit == wxTEXT_ATTR_UNITS_TENTHS_MM)
     {
-        float value = 0.0;
+        float value = 0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
         // Convert from cm
         // Do this in two steps, since using one step causes strange rounding error for VS 2010 at least.
-        float v = (value * 100.0);
+        float v = value * 100;
         ret = (int) (v);
         return true;
     }
@@ -706,9 +703,9 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     }
     else if (unit == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
     {
-        float value = 0.0;
+        float value = 0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
-        float v = (value * 100.0);
+        float v = value * 100;
         ret = (int) (v);
     }
     else if (unit == wxTEXT_ATTR_UNITS_POINTS)

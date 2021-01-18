@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -630,6 +627,13 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             {
                 ScrollToAnchor(f->GetAnchor());
             }
+            else
+            {
+                // Without anchor, go to the top of the page, instead of
+                // possibly remaining at non-zero scroll position and scrolling
+                // the top out of view.
+                Scroll(0, 0);
+            }
 
             delete f;
 
@@ -1112,6 +1116,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc = &dcm;
     }
 
+    dc->GetImpl()->SetWindow(this);
     PrepareDC(*dc);
 
     // Erase the background: for compatibility, we must generate the event to
@@ -1314,6 +1319,10 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
     Refresh();
 }
 
+void wxHtmlWindow::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    DoSetPage(*(m_Parser->GetSource()));
+}
 
 void wxHtmlWindow::OnMouseMove(wxMouseEvent& WXUNUSED(event))
 {
@@ -1756,6 +1765,7 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow, "wx/html/htmlwin.h
 
 wxBEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
+    EVT_DPI_CHANGED(wxHtmlWindow::OnDPIChanged)
     EVT_LEFT_DOWN(wxHtmlWindow::OnMouseDown)
     EVT_LEFT_UP(wxHtmlWindow::OnMouseUp)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)

@@ -69,6 +69,7 @@ void wxBell()
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    wxUnusedVar(notification);
     [NSApp stop:nil];
     wxTheApp->OSXOnDidFinishLaunching();
 }
@@ -93,6 +94,9 @@ void wxBell()
 - (NSApplicationPrintReply)application:(NSApplication *)sender printFiles:(NSArray *)fileNames withSettings:(NSDictionary *)printSettings showPrintPanels:(BOOL)showPrintPanels
 {
     wxUnusedVar(sender);
+    wxUnusedVar(printSettings);
+    wxUnusedVar(showPrintPanels);
+
     wxArrayString fileList;
     size_t i;
     const size_t count = [fileNames count];
@@ -141,6 +145,8 @@ void wxBell()
 - (void)handleQuitAppEvent:(NSAppleEventDescriptor *)event
             withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 {
+    wxUnusedVar(event);
+    wxUnusedVar(replyEvent);
     if ( wxTheApp->OSXOnShouldTerminate() )
     {
         wxTheApp->OSXOnWillTerminate();
@@ -151,6 +157,7 @@ void wxBell()
 - (void)handleOpenAppEvent:(NSAppleEventDescriptor *)event
            withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 {
+    wxUnusedVar(event);
     wxUnusedVar(replyEvent);
 }
 
@@ -357,7 +364,7 @@ void wxBell()
 
 
 /* This is needed because otherwise we don't receive any key-up events for command-key
- combinations (an AppKit bug, apparently)			*/
+ combinations (an AppKit bug, apparently) */
 - (void)sendEvent:(NSEvent *)anEvent
 {
     if ([anEvent type] == NSKeyUp && ([anEvent modifierFlags] & NSCommandKeyMask))
@@ -482,6 +489,24 @@ extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetMainDisplayClientArea()
 {
     NSRect displayRect = [wxOSXGetMenuScreen() visibleFrame];
+    return wxFromNSRect( NULL, displayRect );
+}
+
+static NSScreen* wxOSXGetScreenFromDisplay( CGDirectDisplayID ID)
+{
+    for (NSScreen* screen in [NSScreen screens])
+    {
+        CGDirectDisplayID displayID = [[[screen deviceDescription] objectForKey:@"NSScreenNumber"] intValue];
+        if ( displayID == ID )
+            return screen;
+    }
+    return NULL;
+}
+
+extern // used from src/osx/core/display.cpp
+wxRect wxOSXGetDisplayClientArea(CGDirectDisplayID ID)
+{
+    NSRect displayRect = [wxOSXGetScreenFromDisplay(ID) visibleFrame];
     return wxFromNSRect( NULL, displayRect );
 }
 

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MENUS
 
@@ -616,6 +613,9 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
             wxWindowID itemid = item->GetId();
             wxUpdateUIEvent event(itemid);
             event.SetEventObject( this );
+
+            if ( !item->IsCheckable() )
+                event.DisallowCheck();
 
             if ( source->ProcessEvent(event) )
             {

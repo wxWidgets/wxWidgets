@@ -13,11 +13,11 @@
 
     <if cond="FORMAT=='autoconf'">
 
-        <!-- Install wxrc as $prefix/bin/wxrc-$version with a wxrc symlink
-             pointing to it, so that users can use wxrc from different
+        <!-- Install wxrc as $prefix/bin/wxrc-$version$flavour with a wxrc
+             symlink pointing to it, so that users can use wxrc from different
              versions. -->
 
-        <set var="versioned_name">wxrc-$(WX_RELEASE)</set>
+        <set var="versioned_name">wxrc-$(WX_RELEASE)$(WX_FLAVOUR)$(EXEEXT)</set>
         <modify-target target="install_wxrc">
             <command>
                 rm -f $(DESTDIR)$(BINDIR)/wxrc$(EXEEXT) $(DESTDIR)$(BINDIR)/$(versioned_name)

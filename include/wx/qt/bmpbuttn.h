@@ -30,6 +30,11 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxButtonNameStr));
+
+    bool CreateCloseButton(wxWindow* parent,
+                           wxWindowID winid,
+                           const wxString& name = wxString());
+
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapButton);
 

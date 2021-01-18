@@ -261,6 +261,8 @@ public:
     m_Deleting = deleting;
   }
 
+  void AdjustAutosizedColumns() const;
+
   virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
 
   virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
@@ -276,7 +278,7 @@ protected:
   virtual void DoSetExpanderColumn() wxOVERRIDE;
   virtual void DoSetIndent() wxOVERRIDE;
 
-  virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
+  virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
 
   virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
@@ -306,7 +308,7 @@ private:
 
   wxDataViewColumnPtrArrayType m_ColumnPtrs; // all column pointers are stored in an array
 
-  wxDataViewModelNotifier* m_ModelNotifier; // stores the model notifier for the control (does not own the notifier)
+  class wxOSXDataViewModelNotifier* m_ModelNotifier; // stores the model notifier for the control (does not own the notifier)
 
  // wxWidget internal stuff:
   wxDECLARE_DYNAMIC_CLASS(wxDataViewCtrl);

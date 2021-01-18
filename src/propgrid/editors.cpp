@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROPGRID
 
@@ -2074,12 +2071,13 @@ wxTextCtrl* wxPropertyGrid::GetEditorTextCtrl() const
     if ( !wnd )
         return NULL;
 
-    if ( wxDynamicCast(wnd, wxTextCtrl) )
-        return wxStaticCast(wnd, wxTextCtrl);
+    wxTextCtrl* tc = wxDynamicCast(wnd, wxTextCtrl);
+    if ( tc )
+        return tc;
 
-    if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(wnd, wxOwnerDrawnComboBox);
+    if ( cb )
     {
-        wxOwnerDrawnComboBox* cb = wxStaticCast(wnd, wxOwnerDrawnComboBox);
         return cb->GetTextCtrl();
     }
 
@@ -2135,7 +2133,7 @@ wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
 void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
                                 const wxPoint& pos )
 {
-    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH);
+    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH, wxSIZE_ALLOW_MINUS_ONE);
 }
 
 int wxPGMultiButton::GenId( int itemid ) const

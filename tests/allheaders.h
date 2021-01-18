@@ -5,13 +5,17 @@
     Excluded headers:
 
     #include <wx/catch_cppunit.h>
+    #include <wx/dvrenderers.h>
     #include <wx/fmappriv.h>
     #include <wx/setup_inc.h>
     #include <wx/setup_redirect.h>
     #include <wx/variantbase.h>
-    #include <wx/xpmhand.h>
     #include <wx/vms_x_fix.h>
+    #include <wx/xpmhand.h>
 */
+
+#include <wx/beforestd.h>
+#include <wx/afterstd.h>
 
 #include <wx/aboutdlg.h>
 #include <wx/accel.h>
@@ -20,7 +24,6 @@
 #include <wx/addremovectrl.h>
 #include <wx/affinematrix2dbase.h>
 #include <wx/affinematrix2d.h>
-#include <wx/afterstd.h>
 #include <wx/anidecod.h>
 #include <wx/animate.h>
 #include <wx/animdecod.h>
@@ -36,7 +39,6 @@
 #include <wx/atomic.h>
 #include <wx/bannerwindow.h>
 #include <wx/base64.h>
-#include <wx/beforestd.h>
 #include <wx/bitmap.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bmpcbox.h>
@@ -215,7 +217,9 @@
 #include <wx/longlong.h>
 #include <wx/lzmastream.h>
 #include <wx/math.h>
+/* Intentionally excluded to avoid deprecation warnings.
 #include <wx/matrix.h>
+*/
 #include <wx/mdi.h>
 #include <wx/mediactrl.h>
 #include <wx/memconf.h>
@@ -250,6 +254,13 @@
 #include <wx/pen.h>
 #include <wx/peninfobase.h>
 #include <wx/persist.h>
+#include <wx/persist/bookctrl.h>
+#include <wx/persist/combobox.h>
+#include <wx/persist/dataview.h>
+#include <wx/persist/splitter.h>
+#include <wx/persist/toplevel.h>
+#include <wx/persist/treebook.h>
+#include <wx/persist/window.h>
 #include <wx/pickerbase.h>
 #include <wx/platform.h>
 #include <wx/platinfo.h>
@@ -395,6 +406,7 @@
 #include <wx/wxprec.h>
 #include <wx/xlocale.h>
 #include <wx/xpmdecod.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/xti2.h>
 #include <wx/xtictor.h>
 #include <wx/xti.h>

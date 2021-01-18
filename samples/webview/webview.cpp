@@ -13,9 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -386,13 +383,21 @@ WebFrame::WebFrame(const wxString& url) :
         wxLogMessage("Edge backend not available");
     }
 #endif
-    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize, backend);
+    m_browser = wxWebView::New(backend);
+#ifdef __WXMAC__
+    // With WKWebView handlers need to be registered before creation
+    m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
+    m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
+#endif
+    m_browser->Create(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
+#ifndef __WXMAC__
     //We register the wxfs:// protocol for testing purposes
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
     //And the memory: file system
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
+#endif
 
     SetSizer(topsizer);
 
@@ -822,8 +827,6 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
     wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
     evt.GetTarget() + "')");
 
-    wxASSERT(m_browser->IsBusy());
-
     //If we don't want to handle navigation then veto the event and navigation
     //will not take place, we also need to stop the loading animation
     if(!m_tools_handle_navigation->IsChecked())
@@ -1019,6 +1022,7 @@ void WebFrame::OnSetZoom(wxCommandEvent& evt)
     }
     else if (evt.GetId() == m_tools_custom->GetId())
     {
+        m_zoomFactor = m_browser->GetZoomFactor() * 100;
         OnZoomCustom(evt);
     }
     else

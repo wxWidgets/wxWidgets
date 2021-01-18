@@ -35,11 +35,11 @@ library:
 @itemdef{wxUSE_STD_IOSTREAM, Standard C++ classes are used instead of or in
     addition to wx stream classes.}
 @itemdef{wxUSE_UNICODE, Compiled with Unicode support (default in wxWidgets
-    3.0, non-Unicode build will be deprecated in the future).}
+    3.0, non-Unicode build is deprecated and will be removed in the future).}
 @itemdef{wxUSE_UNICODE_WCHAR, wxString uses wchar_t buffer for internal storage
-    (default under MSW).}
-@itemdef{wxUSE_UNICODE_UTF8, wxString uses UTF-8 for internal storage (default
-    under Unix and Mac systems).}
+    (default).}
+@itemdef{wxUSE_UNICODE_UTF8, wxString uses UTF-8 for internal storage (mostly
+    useful for wxGTK where UTF-8 is used by the underlying toolkit).}
 @itemdef{wxUSE_UTF8_LOCALE_ONLY, Library supports running only under UTF-8 (and
     C) locale. This eliminates the code necessary for conversions from the
     other locales and reduces the library size; useful for embedded systems.}
@@ -90,6 +90,7 @@ library:
 @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}
 @itemdef{wxUSE_CONSTRAINTS, Use wxLayoutConstraints}
 @itemdef{wxUSE_CONTROLS, If set to 0, no classes deriving from wxControl can be used.}
+@itemdef{wxUSE_CREDENTIALDLG, If set to 0, disabled wxCredentialEntryDialog used by wxWebRequest.}
 @itemdef{wxUSE_DATAOBJ, Use wxDataObject and related classes.}
 @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
 @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
@@ -254,6 +255,7 @@ library:
 @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}
 @itemdef{wxUSE_VALIDATORS, Use wxValidator class.}
 @itemdef{wxUSE_VARIANT, Use wxVariant class.}
+@itemdef{wxUSE_WEBREQUEST, Use wxWebRequest class.}
 @itemdef{wxUSE_WEBVIEW, Use wxWebView class.}
 @itemdef{wxUSE_WIZARDDLG, Use wxWizard class.}
 @itemdef{wxUSE_WXHTML_HELP, Use wxHtmlHelpController and related classes.}

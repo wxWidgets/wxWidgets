@@ -10,9 +10,6 @@
 
 #if wxUSE_BUTTON
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -176,12 +173,17 @@ void ButtonTestCase::Bitmap()
     //We start with no bitmaps
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 
+    // Some bitmap, doesn't really matter which.
+    const wxBitmap bmp = wxArtProvider::GetBitmap(wxART_INFORMATION);
 
-    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION,
-                                               wxART_OTHER,
-                                               wxSize(32, 32)));
+    m_button->SetBitmap(bmp);
 
     CPPUNIT_ASSERT(m_button->GetBitmap().IsOk());
+
+    // Check that resetting the button label doesn't result in problems when
+    // updating the bitmap later, as it used to be the case in wxGTK (#18898).
+    m_button->SetLabel(wxString());
+    CHECK_NOTHROW( m_button->Disable() );
 }
 
 #endif //wxUSE_BUTTON

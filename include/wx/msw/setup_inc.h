@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
-// Graphics backends choices for Windows
+// Windows-specific backends choices
 // ----------------------------------------------------------------------------
 
 // The options here are only taken into account if wxUSE_GRAPHICS_CONTEXT is 1.
@@ -34,6 +34,20 @@
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
+// wxWebRequest backend based on WinHTTP.
+//
+// This is only taken into account if wxUSE_WEBREQUEST==1.
+//
+// Default is 1 if supported by the compiler (MSVS or MinGW64).
+//
+// Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
+// otherwise wxWebRequest won't be available at all.
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #define wxUSE_WEBREQUEST_WINHTTP 1
+#else
+    #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
 
 // ----------------------------------------------------------------------------

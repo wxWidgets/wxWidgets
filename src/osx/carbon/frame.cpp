@@ -24,13 +24,27 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
+
+namespace
+{
+
+int GetMacStatusbarHeight()
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(10, 16) )
+        return 28;
+    else
+#endif
+        return 24;
+}
+
+} // anonymous namespace
 
 wxBEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 wxEND_EVENT_TABLE()
-
-#define WX_MAC_STATUSBAR_HEIGHT 24
 
 // ----------------------------------------------------------------------------
 // creation/destruction
@@ -106,10 +120,16 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     wxStatusBar *statusBar;
 
     statusBar = new wxStatusBar(this, id, style, name);
-    statusBar->SetSize(100, WX_MAC_STATUSBAR_HEIGHT);
+    statusBar->SetSize(100, GetMacStatusbarHeight());
     statusBar->SetFieldsCount(number);
 
     return statusBar;
+}
+
+void wxFrame::SetStatusBar(wxStatusBar *statbar)
+{
+    wxFrameBase::SetStatusBar(statbar);
+    m_nowpeer->SetBottomBorderThickness(statbar ? GetMacStatusbarHeight() : 0);
 }
 
 void wxFrame::PositionStatusBar()
@@ -121,7 +141,7 @@ void wxFrame::PositionStatusBar()
 
         // Since we wish the status bar to be directly under the client area,
         // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-        m_frameStatusBar->SetSize(0, h, w, WX_MAC_STATUSBAR_HEIGHT);
+        m_frameStatusBar->SetSize(0, h, w, GetMacStatusbarHeight());
     }
 }
 #endif // wxUSE_STATUSBAR
@@ -129,7 +149,6 @@ void wxFrame::PositionStatusBar()
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
 #if wxUSE_STATUSBAR
@@ -218,7 +237,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 
 #if wxUSE_STATUSBAR
     if ( GetStatusBar() && GetStatusBar()->IsShown() && y )
-        *y -= WX_MAC_STATUSBAR_HEIGHT;
+        *y -= GetMacStatusbarHeight();
 #endif
 
 #if wxUSE_TOOLBAR

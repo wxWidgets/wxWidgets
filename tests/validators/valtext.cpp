@@ -9,9 +9,6 @@
 
 #if wxUSE_VALIDATORS && wxUSE_UIACTIONSIMULATOR
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

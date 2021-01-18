@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
     #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!

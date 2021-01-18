@@ -686,6 +686,7 @@ wxBitmapButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element default  {_, t_bool }* &
+        [xrc:p="o"] element close    {_, t_bool }* &
         [xrc:p="important"] element bitmap {_, t_bitmap }* &
         [xrc:p="o"] element selected {_, t_bitmap }* &
         [xrc:p="o"] element focus    {_, t_bitmap }* &
@@ -810,7 +811,9 @@ wxCommandLinkButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element note  {_, t_text }*
+        [xrc:p="o"] element note {_, t_text }* &
+        [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element default {_, t_bool }*
     }
 
 
@@ -894,7 +897,8 @@ wxDatePickerCtrl =
     element object {
         attribute class { "wxDatePickerCtrl" } &
         stdObjectNodeAttributes &
-        stdWindowProperties
+        stdWindowProperties &
+        [xrc:p="o"] element null-text {_, t_text }*
     }
 
 

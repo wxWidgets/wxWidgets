@@ -10,9 +10,6 @@
 
 #if wxUSE_GRID
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -434,7 +431,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECT);
+    EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECTED);
 
     wxUIActionSimulator sim;
 
@@ -560,11 +557,21 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Selection", "[grid]")
     CHECK(m_grid->IsInSelection(9, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
 
-    m_grid->SelectRow(4);
+    m_grid->SelectRow(4, true /* add to selection */);
 
     CHECK(m_grid->IsInSelection(4, 0));
     CHECK(m_grid->IsInSelection(4, 1));
     CHECK(!m_grid->IsInSelection(3, 0));
+
+    // Check that deselecting a row does deselect the cells in it, but leaves
+    // the other ones selected.
+    m_grid->DeselectRow(4);
+    CHECK(!m_grid->IsInSelection(4, 0));
+    CHECK(!m_grid->IsInSelection(4, 1));
+    CHECK(m_grid->IsInSelection(0, 1));
+
+    m_grid->DeselectCol(1);
+    CHECK(!m_grid->IsInSelection(0, 1));
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
@@ -1397,6 +1404,22 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         // We can't be sure which size will be greater because of different fonts
         // so just calculate the maximum width.
         CheckFirstColAutoSize( wxMax(labelWidth, cellWidth) );
+    }
+
+    SECTION("Column with auto wrapping contents taller than row")
+    {
+        // Verify row height remains unchanged with an auto-wrapping multi-line
+        // cell.
+        // Also shouldn't continuously try to fit the multi-line content into
+        // a single line, which is not possible. See
+        // https://trac.wxwidgets.org/ticket/15943 .
+
+        m_grid->SetCellValue(0, 0, multilineStr);
+        m_grid->SetCellRenderer(0 , 0, new wxGridCellAutoWrapStringRenderer);
+        m_grid->AutoSizeColumn(0);
+
+        wxYield();
+        CHECK( m_grid->GetRowSize(0) == m_grid->GetDefaultRowSize() );
     }
 }
 

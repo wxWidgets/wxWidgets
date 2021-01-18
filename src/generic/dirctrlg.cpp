@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
 
@@ -72,10 +69,6 @@
 
 #if defined(__WXMAC__)
 //    #include "MoreFilesX.h"
-#endif
-
-#ifdef __BORLANDC__
-    #include "dos.h"
 #endif
 
 extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[];

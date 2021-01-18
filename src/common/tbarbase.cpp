@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TOOLBAR
 
@@ -738,6 +735,9 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 
         wxUpdateUIEvent event(toolid);
         event.SetEventObject(this);
+
+        if ( !tool->CanBeToggled() )
+            event.DisallowCheck();
 
         if ( evtHandler->ProcessEvent(event) )
         {

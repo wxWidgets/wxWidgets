@@ -269,13 +269,14 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     if ( !data )
         return;
 
+    unsigned timestamp = unsigned(wxUIntPtr(signal_data));
+
     // ICCCM says that TIMESTAMP is a required atom.
     // In particular, it satisfies Klipper, which polls
     // TIMESTAMP to see if the clipboards content has changed.
     // It shall return the time which was used to set the data.
     if (gtk_selection_data_get_target(selection_data) == g_timestampAtom)
     {
-        guint timestamp = GPOINTER_TO_UINT (signal_data);
         gtk_selection_data_set(selection_data,
                                GDK_SELECTION_TYPE_INTEGER,
                                32,
@@ -295,7 +296,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_target(selection_data)))).c_str(),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_data_type(selection_data)))).c_str(),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_selection(selection_data)))).c_str(),
-               GPOINTER_TO_UINT( signal_data )
+               timestamp
                );
 
     if ( !data->IsSupportedFormat( format ) )

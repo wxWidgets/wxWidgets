@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #ifndef  WX_PRECOMP
 #   include "wx/wx.h"
@@ -64,7 +61,7 @@ bool BombsGame::Init(int aWidth, int aHeight, bool easyCorner)
     {
         for(y=0; y<m_height; y++)
         {
-            m_field[x+y*m_width] = ((float)rand()/RAND_MAX <PROB)
+            m_field[x+y*m_width] = (rand()/(float)RAND_MAX <PROB)
                 ? BG_HIDDEN | BG_BOMB
                 : BG_HIDDEN;
         }

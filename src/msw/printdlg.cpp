@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Don't use the Windows print dialog if we're in wxUniv mode and using
 // the PostScript architecture
@@ -147,7 +144,9 @@ wxCreateDevNames(const wxString& driverName,
                            ( driverName.length() + 1 +
             printerName.length() + 1 +
                              portName.length()+1 ) * sizeof(wxChar) );
-        LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(hDev);
+
+        GlobalPtrLock ptr(hDev);
+        LPDEVNAMES lpDev = (LPDEVNAMES)ptr.Get();
         lpDev->wDriverOffset = sizeof(WORD) * 4 / sizeof(wxChar);
         wxStrcpy((wxChar*)lpDev + lpDev->wDriverOffset, driverName);
 
@@ -160,8 +159,6 @@ wxCreateDevNames(const wxString& driverName,
         wxStrcpy((wxChar*)lpDev + lpDev->wOutputOffset, portName);
 
         lpDev->wDefault = 0;
-
-        GlobalUnlock(hDev);
     }
 
     return hDev;

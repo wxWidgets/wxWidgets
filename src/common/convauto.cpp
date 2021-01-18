@@ -18,11 +18,9 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/convauto.h"
+#include "wx/private/unicode.h"
 
 // we use latin1 by default as it seems the least bad choice: the files we need
 // to detect input of don't always come from the user system (they are often
@@ -266,6 +264,23 @@ bool wxConvAuto::InitFromInput(const char *src, size_t len)
     return true;
 }
 
+// checks if the input can be the beginning of a valid UTF-8 sequence
+static bool wxCanBeUTF8SequencePrefix(const char *src, size_t len)
+{
+    size_t i = 0;
+    unsigned char l = tableUtf8Lengths[(unsigned char)src[i]];
+    if ( !l )
+        return false; // invalid leading byte
+    while ( --l )
+    {
+        if ( ++i == len )
+            return true; // truncated sequence
+        if ( (src[i] & 0xC0) != 0x80 )
+            return false; // invalid continuation byte
+    }
+    return false; // complete sequence
+}
+
 size_t
 wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
                     const char *src, size_t srcLen) const
@@ -307,25 +322,28 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
 
     // try to convert using the auto-detected encoding
     size_t rc = m_conv->ToWChar(dst, dstLen, src, srcLen);
-    if ( rc == wxCONV_FAILED && m_bomType == wxBOM_None )
+    if ( rc == wxCONV_FAILED && m_bomType == wxBOM_None && !m_ownsConv )
     {
         // we may need more bytes before we can decode the input, don't switch
         // to the fall-back conversion in this case as it would prevent us from
         // decoding UTF-8 input when fed it byte by byte, as done by
         // wxTextInputStream, for example
-        if ( srcLen < m_conv->GetMaxCharLen() )
+        // up to 2 extra bytes are needed for inputs that start with null bytes
+        // that look like the start of UTF-32BE BOM, but can be in UTF-8 too
+        size_t nNull = 0;
+        if ( srcLen != wxNO_LEN && srcLen >= 2 && !src[0] )
+            nNull = ( src[1]? 1 : 2 );
+        if ( srcLen < nNull + m_conv->GetMaxCharLen() &&
+             wxCanBeUTF8SequencePrefix(src + nNull, srcLen - nNull) )
             return wxCONV_FAILED;
 
         // if the conversion failed but we didn't really detect anything and
         // simply tried UTF-8 by default, retry it using the fall-back
+        if ( m_encDefault == wxFONTENCODING_DEFAULT )
+            self->m_encDefault = GetFallbackEncoding();
         if ( m_encDefault != wxFONTENCODING_MAX )
         {
-            if ( m_ownsConv )
-                delete m_conv;
-
-            self->m_conv = new wxCSConv(m_encDefault == wxFONTENCODING_DEFAULT
-                                            ? GetFallbackEncoding()
-                                            : m_encDefault);
+            self->m_conv = new wxCSConv(m_encDefault);
             self->m_ownsConv = true;
 
             rc = m_conv->ToWChar(dst, dstLen, src, srcLen);
@@ -350,4 +368,33 @@ wxConvAuto::FromWChar(char *dst, size_t dstLen,
     }
 
     return m_conv->FromWChar(dst, dstLen, src, srcLen);
+}
+
+wxFontEncoding wxConvAuto::GetEncoding() const
+{
+    switch ( m_bomType )
+    {
+        case wxBOM_UTF32BE:
+            return wxFONTENCODING_UTF32BE;
+        case wxBOM_UTF32LE:
+            return wxFONTENCODING_UTF32LE;
+        case wxBOM_UTF16BE:
+            return wxFONTENCODING_UTF16BE;
+        case wxBOM_UTF16LE:
+            return wxFONTENCODING_UTF16LE;
+        case wxBOM_UTF8:
+            return wxFONTENCODING_UTF8;
+
+        case wxBOM_Unknown:
+        case wxBOM_None:
+            if ( !m_conv )
+                return wxFONTENCODING_MAX;
+            else if ( !m_ownsConv )
+                return wxFONTENCODING_UTF8;
+            else
+                return m_encDefault;
+    }
+
+    wxFAIL_MSG( "unknown BOM type" );
+    return wxFONTENCODING_MAX;
 }

@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #if wxUSE_STATBMP
 
@@ -68,7 +65,7 @@ public :
     {
     }
 
-	void SetLabel( const wxString& title, wxFontEncoding encoding ) wxOVERRIDE
+    void SetLabel( const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding) ) wxOVERRIDE
     {
         // although NSControl has this method, NSImageView throws an exception if it is called
     }
@@ -109,7 +106,7 @@ void wxStaticBitmap::SetScaleMode(ScaleMode scaleMode)
 wxWidgetImplType* wxWidgetImpl::CreateStaticBitmap( wxWindowMac* wxpeer,
                                                    wxWindowMac* WXUNUSED(parent),
                                                    wxWindowID WXUNUSED(id),
-                                                   const wxBitmap& bitmap,
+                                                   const wxBitmap& WXUNUSED(bitmap),
                                                    const wxPoint& pos,
                                                    const wxSize& size,
                                                    long WXUNUSED(style),

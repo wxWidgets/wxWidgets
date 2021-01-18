@@ -76,4 +76,28 @@ public:
 private:
 } ;
 
+/*! @function   wxCFStringRefFromGet
+    @abstract   Factory function to create wxCFStringRefRef from a CFStringRef obtained from a Get-rule function
+    @param  p           The CFStringRef to retain and create a wxCFStringRefRef from.  May be NULL.
+    @discussion Unlike the wxCFStringRef raw pointer constructor, this function explicitly retains its
+                argument.  This can be used for functions ) which return a temporary reference (Get-rule functions).
+*/
+inline wxCFStringRef wxCFStringRefFromGet(CFStringRef p)
+{
+    return wxCFStringRef(wxCFRetain(p));
+}
+
+#ifdef __WXMAC__
+/*! @function   wxCFStringRefFromGet
+    @abstract   Factory function to create wxCFStringRefRef from a NSString* obtained from a Get-rule function
+    @param  p           The NSString pointer to retain and create a wxCFStringRefRef from.  May be NULL.
+    @discussion Unlike the wxCFStringRef raw pointer constructor, this function explicitly retains its
+                argument.  This can be used for functions ) which return a temporary reference (Get-rule functions).
+*/
+inline wxCFStringRef wxCFStringRefFromGet(NSString *p)
+{
+    return wxCFStringRefFromGet((WX_OSX_BRIDGE CFStringRef)p);
+}
+#endif
+
 #endif //__WXCFSTRINGHOLDER_H__

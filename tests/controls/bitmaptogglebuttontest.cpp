@@ -10,9 +10,6 @@
 
 #if wxUSE_TOGGLEBTN
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/tglbtn.h"
 

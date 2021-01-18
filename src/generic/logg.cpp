@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -345,7 +342,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
             {
                 m_aMessages.Add(msg);
                 m_aSeverity.Add(wxLOG_Message);
-                m_aTimes.Add((long)info.timestamp);
+                m_aTimes.Add((long)(info.timestampMS / 1000));
                 m_bHasMessages = true;
             }
             break;
@@ -398,7 +395,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
 
             m_aMessages.Add(msg);
             m_aSeverity.Add((int)level);
-            m_aTimes.Add((long)info.timestamp);
+            m_aTimes.Add((long)(info.timestampMS / 1000));
             m_bHasMessages = true;
             break;
 

@@ -11,9 +11,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/icon.h"
 
@@ -27,13 +24,6 @@ wxIcon::wxIcon(const char* const* bits) :
     wxBitmap( bits )
 {
 }
-
-#ifdef wxNEEDS_CHARPP
-wxIcon::wxIcon(char **bits) :
-    wxBitmap( bits )
-{
-}
-#endif
 
 wxIcon::wxIcon() :  wxBitmap()
 {

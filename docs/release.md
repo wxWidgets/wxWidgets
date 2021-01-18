@@ -17,20 +17,20 @@ Finally, Microsoft Windows users may download [Setup.exe file](https://github.co
 
 To verify your download please use the following SHA-1 checksums:
 
-    0000000000000000000000000000000000000000  wxMSW-3.1.4-Setup.exe
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4-docs-chm.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4-docs-html.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4-docs-html.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4-headers.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.1.4.zip
+    7e19253507156efc61dd8657af798177717775fe  wxMSW-3.1.4-Setup.exe
+    d5c642b4adfc413270172deeb807474a129c52fd  wxWidgets-3.1.4-docs-chm.zip
+    6d769104a4d8cad7f3e028c6b022f3a850ba99e0  wxWidgets-3.1.4-docs-html.tar.bz2
+    445063cbd8e11085b78d8c33e21ba65b54b68fdd  wxWidgets-3.1.4-docs-html.zip
+    fe15946b9aacd469586edfe89afac51b3d750209  wxWidgets-3.1.4-headers.7z
+    f5eed3129a7cfa9e462e5d3029673b6d87267efd  wxWidgets-3.1.4.7z
+    f8c77e6336b5f6414b07e27baa489fb8abc620c4  wxWidgets-3.1.4.tar.bz2
+    be1ec2cc03a97682f96e2fb8a50ac7ebf52d6a8d  wxWidgets-3.1.4.zip
 
 ## Binaries
 
 We provide pre-built binary files for the following compilers:
 
-* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2 (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively).
+* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2 (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
 * [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 9.2.0.
 

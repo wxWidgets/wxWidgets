@@ -14,9 +14,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -82,7 +79,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 // (based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html)
 static bool wxAuiHasSufficientContrast(const wxColour& c1, const wxColour& c2)
 {
-    return wxAuiGetColourContrast(c1, c2) >= 4.5;
+    return wxAuiGetColourContrast(c1, c2) >= 4.5f;
 }
 
 // Pick a color that provides better contrast against the background

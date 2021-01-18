@@ -14,9 +14,6 @@
 
 #if wxUSE_DATAVIEWCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/dataview.h"
@@ -147,6 +144,30 @@ MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
 // ----------------------------------------------------------------------------
 
 TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
+                 "wxDVC::Selection",
+                 "[wxDataViewCtrl][select]")
+{
+    // Check selection round-trip.
+    wxDataViewItemArray sel;
+    sel.push_back(m_child1);
+    sel.push_back(m_grandchild);
+    REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
+
+    wxDataViewItemArray sel2;
+    CHECK( m_dvc->GetSelections(sel2) == static_cast<int>(sel.size()) );
+
+    CHECK( sel2 == sel );
+
+    // Invalid items in GetSelections() input are supposed to be just skipped.
+    sel.clear();
+    sel.push_back(wxDataViewItem());
+    REQUIRE_NOTHROW( m_dvc->SetSelections(sel) );
+
+    CHECK( m_dvc->GetSelections(sel2) == 0 );
+    CHECK( sel2.empty() );
+}
+
+TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
                  "wxDVC::DeleteSelected",
                  "[wxDataViewCtrl][delete]")
 {
@@ -250,6 +271,19 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_grandchild) );
 #endif
     CHECK( !m_dvc->IsExpanded(m_child2) );
+
+    m_dvc->Collapse(m_root);
+    CHECK( !m_dvc->IsExpanded(m_root) );
+
+    m_dvc->ExpandChildren(m_root);
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Expanding an already expanded node must still expand all its children.
+    m_dvc->Collapse(m_child1);
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    m_dvc->ExpandChildren(m_root);
+    CHECK( m_dvc->IsExpanded(m_child1) );
 }
 
 TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
@@ -275,6 +309,12 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
         INFO("First child: " << rect1 << ", second one: " << rect2);
         CHECK( rect1.y < rect2.y );
     }
+
+    // This forces generic implementation to add m_grandchild to the tree, as
+    // it does it only on demand. We want the item to really be there to check
+    // that GetItemRect() returns an empty rectangle for collapsed items.
+    m_dvc->Expand(m_child1);
+    m_dvc->Collapse(m_child1);
 
     const wxRect rectNotShown = m_dvc->GetItemRect(m_grandchild);
     CHECK( rectNotShown == wxRect() );

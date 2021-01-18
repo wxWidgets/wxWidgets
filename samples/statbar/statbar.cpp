@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if !wxUSE_STATUSBAR
     #error "You need to set wxUSE_STATUSBAR to 1 to compile this sample"

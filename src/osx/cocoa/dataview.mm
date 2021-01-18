@@ -1643,6 +1643,7 @@ outlineView:(NSOutlineView*)outlineView
         currentlyEditedColumn =
             currentlyEditedRow = -1;
 
+        [self setAutoresizesOutlineColumn:NO];
         [self registerForDraggedTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]];
         [self setDelegate:self];
         [self setDoubleAction:@selector(actionDoubleClick:)];
@@ -1679,7 +1680,17 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
     wxDataViewModel * const model = dvc->GetModel();
 
-    const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
+    const NSInteger row = [self clickedRow];
+    if ( row == -1 )
+    {
+        // We can be called even when there is no item under mouse, e.g. when
+        // clicking on empty space under the items. Just ignore such clicks as
+        // we're not supposed to generate any events in this case (and calling
+        // itemAtRow: below would result in errors when the row is invalid).
+        return;
+    }
+
+    const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:row]);
 
     const NSInteger col = [self clickedColumn];
     wxDataViewColumn* const dvCol = implementation->GetColumn(col);
@@ -1900,6 +1911,8 @@ outlineView:(NSOutlineView*)outlineView
                     [[notification userInfo] objectForKey:@"NSObject"]);
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
+
+    dvc->AdjustAutosizedColumns();
 }
 
 -(void) outlineViewItemDidExpand:(NSNotification*)notification
@@ -1910,6 +1923,8 @@ outlineView:(NSOutlineView*)outlineView
                     [[notification userInfo] objectForKey:@"NSObject"]);
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
+
+    dvc->AdjustAutosizedColumns();
 }
 
 -(void) outlineViewSelectionDidChange:(NSNotification*)notification
@@ -1924,6 +1939,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(BOOL) textShouldBeginEditing:(NSText*)textEditor
 {
+    wxUnusedVar(textEditor);
+
     currentlyEditedColumn = [self editedColumn];
     currentlyEditedRow = [self editedRow];
 
@@ -2045,7 +2062,8 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init])
+      m_OutlineView([[wxCocoaOutlineView alloc] init]),
+      m_expanderWidth(0)
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2173,9 +2191,12 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         MaxWidthCalculator(wxCocoaOutlineView *view,
                            NSTableColumn *column, unsigned columnIndex)
             : m_width(0),
+              m_height(0),
               m_view(view),
               m_column(columnIndex),
-              m_indent(0)
+              m_indent(0),
+              m_expander(0),
+              m_tableColumn(column)
         {
             // account for indentation in the column with expander
             if ( column == [m_view outlineTableColumn] )
@@ -2190,28 +2211,41 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
         void UpdateWithRow(int row)
         {
             NSCell *cell = [m_view preparedCellAtColumn:m_column row:row];
-            unsigned cellWidth = [cell cellSize].width + 1/*round the float up*/;
+            unsigned cellWidth = ceil([cell cellSize].width);
+            unsigned cellHeight = ceil([cell cellSize].height);
 
             if ( m_indent )
-                cellWidth += m_indent * ([m_view levelForRow:row] + 1);
+                cellWidth += m_indent * [m_view levelForRow:row];
+
+            if ( m_expander == 0 && m_tableColumn == [m_view outlineTableColumn] )
+            {
+                NSRect rc = [m_view frameOfOutlineCellAtRow:row];
+                m_expander = ceil(rc.origin.x + rc.size.width);
+            }
 
             m_width = wxMax(m_width, cellWidth);
+            m_height = wxMax(m_height, cellHeight);
         }
 
         int GetMaxWidth() const { return m_width; }
+        int GetMaxHeight() const { return m_height; }
+        int GetExpanderWidth() const { return m_expander; }
 
     private:
         int m_width;
+        int m_height;
         wxCocoaOutlineView *m_view;
         unsigned m_column;
         int m_indent;
+        int m_expander;
+        NSTableColumn *m_tableColumn;
     };
 
     MaxWidthCalculator calculator(m_OutlineView, column, pos);
 
     if ( [column headerCell] )
     {
-        calculator.UpdateWithWidth([[column headerCell] cellSize].width + 1/*round the float up*/);
+        calculator.UpdateWithWidth(ceil([[column headerCell] cellSize].width));
     }
 
     // The code below deserves some explanation. For very large controls, we
@@ -2275,7 +2309,20 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
                    count);
     }
 
-    [column setWidth:calculator.GetMaxWidth()];
+    // there might not necessarily be an expander in the rows we've examined above so let's
+    // globally store the expander width for re-use because it should always be the same
+    if ( m_expanderWidth == 0 )
+        m_expanderWidth = calculator.GetExpanderWidth();
+
+    [column setWidth:calculator.GetMaxWidth() + m_expanderWidth];
+
+    if ( !(GetDataViewCtrl()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) )
+    {
+        int curHeight = ceil([m_OutlineView rowHeight]);
+        int rowHeight = calculator.GetMaxHeight();
+        if ( rowHeight > curHeight )
+            SetRowHeight(rowHeight);
+    }
 }
 
 //
@@ -2314,9 +2361,9 @@ void wxCocoaDataViewControl::EnsureVisible(const wxDataViewItem& item, const wxD
     }
 }
 
-void wxCocoaDataViewControl::DoExpand(const wxDataViewItem& item)
+void wxCocoaDataViewControl::DoExpand(const wxDataViewItem& item, bool expandChildren)
 {
-    [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item] expandChildren:expandChildren];
 }
 
 unsigned int wxCocoaDataViewControl::GetCount() const
@@ -2508,6 +2555,20 @@ void wxCocoaDataViewControl::Select(const wxDataViewItem& item)
             byExtendingSelection:GetDataViewCtrl()->HasFlag(wxDV_MULTIPLE) ? YES : NO];
 }
 
+void wxCocoaDataViewControl::Select(const wxDataViewItemArray& items)
+{
+    NSMutableIndexSet *selection = [[NSMutableIndexSet alloc] init];
+
+    for ( const auto& i: items )
+    {
+        if ( i.IsOk() )
+            [selection addIndex:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:i]]];
+    }
+
+    [m_OutlineView selectRowIndexes:selection byExtendingSelection:NO];
+    [selection release];
+}
+
 void wxCocoaDataViewControl::SelectAll()
 {
     [m_OutlineView selectAll:m_OutlineView];
@@ -2694,7 +2755,6 @@ wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObj
                     return NULL;
                 }
             }
-            break;
         default:
             return NULL;
     }
@@ -2705,9 +2765,9 @@ id wxCocoaDataViewControl::GetItemAtRow(int row) const
     return [m_OutlineView itemAtRow:row];
 }
 
-void wxCocoaDataViewControl::SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack)
+void wxCocoaDataViewControl::SetFont(const wxFont& font)
 {
-    wxWidgetCocoaImpl::SetFont(font, foreground, windowStyle, ignoreBlack);
+    wxWidgetCocoaImpl::SetFont(font);
     SetRowHeight(0/*will use default/minimum height*/);
 }
 
@@ -2940,7 +3000,9 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
     {
         if ( !colText )
             colText = data->GetOriginalTextColour();
-        [(id)cell setTextColor:colText];
+
+        if ( colText )
+            [(id)cell setTextColor:colText];
     }
 
     if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
@@ -3375,7 +3437,7 @@ wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
 wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
     (
         wxDataViewCellMode mode,
-        int align
+        int WXUNUSED(align)
     )
     : wxDataViewRenderer(GetDefaultType(), mode,mode)
 {

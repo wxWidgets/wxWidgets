@@ -365,8 +365,8 @@ public:
     @beginEventTable{wxSpinDoubleEvent}
     @event{EVT_SPINCTRLDOUBLE(id, func)}
         Generated whenever the numeric value of the spin control is changed,
-        that is, when the up/down spin button is clicked, when ENTER is pressed,
-        or the control loses focus and the new value is different from the last.
+        that is, when the up/down spin button is clicked or when the control
+        loses focus and the new value is different from the last one.
         See wxSpinDoubleEvent.
     @endEventTable
 

@@ -22,8 +22,9 @@ public:
     wxNonOwnedWindow();
     virtual ~wxNonOwnedWindow();
 
-    virtual bool Reparent(wxWindowBase* newParent);
+    virtual bool Reparent(wxWindowBase* newParent) wxOVERRIDE;
     virtual void InheritAttributes() wxOVERRIDE;
+    virtual bool IsThisEnabled() const wxOVERRIDE;
 
 protected:
     virtual bool DoClearShape() wxOVERRIDE;

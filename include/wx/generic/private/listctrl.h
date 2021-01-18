@@ -519,14 +519,26 @@ public:
 
     // all these functions only do something if the line is currently visible
 
+    // Make sure that _line_ is the only item highlighted in the control.
+    // _oldLine_ is the old focused item.
+    void HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
+
+    // In multiple selection mode, instead of sending one notification per item
+    // (which is too slow if a lot of items are selected) we send only one notification
+    // for all of them which is the wxMSW behaviour. Currently done for virtual
+    // list controls and for deselection only.
+    enum SendEvent { SendEvent_None, SendEvent_Normal };
+
     // change the line "selected" state, return true if it really changed
-    bool HighlightLine( size_t line, bool highlight = true);
+    bool HighlightLine( size_t line, bool highlight = true,
+                        SendEvent sendEvent = SendEvent_Normal );
 
     // as HighlightLine() but do it for the range of lines: this is incredibly
     // more efficient for virtual list controls!
     //
     // NB: unlike HighlightLine() this one does refresh the lines on screen
-    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true );
+    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
+                         SendEvent sendEvent = SendEvent_Normal );
 
     // toggle the line state and refresh it
     void ReverseHighlight( size_t line )
@@ -728,6 +740,12 @@ public:
         return true;
     }
 
+    void ExtendRulesAndAlternateColour(bool extend)
+    {
+        m_extendRulesAndAlternateColour = extend;
+    }
+
+
     // these are for wxListLineData usage only
 
     // get the backpointer to the list ctrl
@@ -752,6 +770,20 @@ public:
     {
         return m_hasFocus;
     }
+
+    void UpdateSelectionCount(bool selected)
+    {
+        wxASSERT_MSG( !IsVirtual(), "Can be called for non virtual lists only" );
+
+        if ( IsSingleSel() )
+            return;
+
+        selected ? ++m_selCount : --m_selCount;
+    }
+
+    void DrawInReportModeOnBlank ( wxDC *dc,
+                                   const wxRect& rect,
+                                   int lineNumber );
 
 protected:
     // the array of all line objects for a non virtual list control (for the
@@ -803,10 +835,17 @@ protected:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
+    // Multiple selection extends from the anchor. Not used in single-selection mode.
+    size_t m_anchor;
+
     bool m_hasCheckBoxes;
 
 protected:
     wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
+
+    // the total count of items selected in a non virtual list control with
+    // multiple selections (always 0 otherwise)
+    size_t m_selCount;
 
     // the total count of items in a virtual list control
     size_t m_countVirt;
@@ -858,6 +897,24 @@ private:
     // initialize the current item if needed
     void UpdateCurrent();
 
+    // change the current (== focused) item, without sending any event
+    // return true if m_current really changed.
+    bool ChangeCurrentWithoutEvent(size_t current);
+
+    // Trying to activate the current item from keyboard is only possible
+    // if it is actually selected. We don't send wxEVT_LIST_ITEM_ACTIVATED
+    // event if it is not, and wxEVT_LIST_KEY_DOWN event should carry -1
+    // in this case, as the wxMSW implementation does.
+    bool ShouldSendEventForCurrent() const
+    {
+        return HasCurrent() && IsHighlighted(m_current);
+    }
+
+    // For multiple selection mode.
+    // Change the selected range from [anchor, oldCurrent] to [anchor, newCurrent]
+    // without generating unnecessary wxEVT_LIST_ITEM_{DE}SELECTED events.
+    void ExtendSelection(size_t oldCurrent, size_t newCurrent);
+
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
 
@@ -889,6 +946,9 @@ private:
     // NULL if no item is being edited
     wxListTextCtrlWrapper *m_textctrlWrapper;
 
+    // tells whether or not to paint empty rows with alternate colour and draw
+    // rulers on empty rows
+    bool m_extendRulesAndAlternateColour;
 
     wxDECLARE_EVENT_TABLE();
 

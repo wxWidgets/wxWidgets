@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTCTRL
 
@@ -48,7 +45,7 @@
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.
 //
-#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(NMLVFINDITEM)
+#if defined(__VISUALC__) || defined(NMLVFINDITEM)
     #define HAVE_NMLVFINDITEM 1
 #elif defined(NM_FINDITEM)
     #define HAVE_NMLVFINDITEM 1
@@ -429,17 +426,6 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     wxListCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
 
-    for ( int i = 0; i < GetItemCount(); i++ )
-    {
-        wxMSWListItemData *data = MSWGetItemData(i);
-        if ( data && data->attr && data->attr->HasFont() )
-        {
-            wxFont f = data->attr->GetFont();
-            f.WXAdjustToPPI(newDPI);
-            SetItemFont(i, f);
-        }
-    }
-
     if ( m_headerCustomDraw && m_headerCustomDraw->m_attr.HasFont() )
     {
         wxItemAttr item(m_headerCustomDraw->m_attr);
@@ -799,7 +785,15 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width == wxLIST_AUTOSIZE_USEHEADER)
         width = LVSCW_AUTOSIZE_USEHEADER;
 
-    return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
+    if ( !ListView_SetColumnWidth(GetHwnd(), col, width) )
+        return false;
+
+    // Failure to explicitly refresh the control with horizontal rules results
+    // in corrupted rules display.
+    if ( HasFlag(wxLC_HRULES) )
+        Refresh();
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1014,13 +1008,6 @@ bool wxListCtrl::SetItem(wxListItem& info)
                 data->attr->AssignFrom(attrNew);
             else
                 data->attr = new wxItemAttr(attrNew);
-
-            if ( data->attr->HasFont() )
-            {
-                wxFont f = data->attr->GetFont();
-                f.WXAdjustToPPI(GetDPI());
-                data->attr->SetFont(f);
-            }
         }
     }
 
@@ -3182,6 +3169,7 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
     if ( attr->HasFont() )
     {
         wxFont font = attr->GetFont();
+        font.WXAdjustToPPI(listctrl->GetDPI());
         if ( font.GetEncoding() != wxFONTENCODING_SYSTEM )
         {
             // the standard control ignores the font encoding/charset, at least
@@ -3290,9 +3278,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
 
-    wxRect clipRect;
-    dc.GetClippingBox(clipRect);
-
     if (drawHRules)
     {
         wxRect itemRect;
@@ -3301,22 +3286,8 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             if (GetItemRect(i, itemRect))
             {
                 const int cy = itemRect.GetBottom();
-                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
+                dc.DrawLine(0, cy, clientSize.x, cy);
             }
-        }
-
-        /*
-            The drawing can be clipped horizontally to the rightmost column.
-            This happens when an item is added (and visible) and results in a
-            horizontal rule being clipped instead of drawn across the entire
-            list control. In that case we request for the part to the right of
-            the rightmost column to be drawn as well.
-        */
-        if ( clipRect.GetRight() != clientSize.x - 1 && clipRect.width )
-        {
-            RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
-                               clientSize.x - clipRect.width, clipRect.height),
-                        false /* don't erase background */);
         }
     }
 

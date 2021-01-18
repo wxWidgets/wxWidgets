@@ -8,6 +8,10 @@ wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
 ((wxPROC_COUNT++))
 wxBUILD_ARGS="-j$wxPROC_COUNT"
 
+# Setting this variable suppresses "Error retrieving accessibility bus address"
+# messages from WebKit tests that we're not interested in.
+export NO_AT_BRIDGE=1
+
 case $wxTOOLSET in
     cmake)
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
@@ -57,7 +61,14 @@ case $wxTOOLSET in
     *)
         echo 'travis_fold:start:configure'
         echo 'Configuring...'
-        ./configure --disable-optimise --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
+
+        wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+        if [ -n "$wxGTK_VERSION" ]; then
+            wxCONFIGURE_OPTIONS="--with-gtk=$wxGTK_VERSION $wxCONFIGURE_OPTIONS"
+        fi
+
+        ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+
         if [ -n "$rc" ]; then
             echo '*** Configuring failed, contents of config.log follows: ***'
             echo '-----------------------------------------------------------'

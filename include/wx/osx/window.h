@@ -121,6 +121,7 @@ public:
 #endif // wxUSE_HOTKEY
 
     virtual wxSize GetDPI() const wxOVERRIDE;
+    virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
@@ -156,6 +157,7 @@ public:
     void MacOnScroll( wxScrollEvent&event );
 
     virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual void EnableVisibleFocus(bool enabled) wxOVERRIDE;
 
     virtual bool IsDoubleBuffered() const wxOVERRIDE { return true; }
 

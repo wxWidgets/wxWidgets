@@ -13,10 +13,6 @@
 
 #include  "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif  //__BORLANDC__
-
 #ifndef WX_PRECOMP
     #include  "wx/string.h"
     #include  "wx/intl.h"

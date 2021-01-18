@@ -416,6 +416,10 @@ public:
     void PasswordEntry(wxCommandEvent& event);
 #endif // wxUSE_TEXTDLG
 
+#ifdef wxUSE_CREDENTIALDLG
+    void CredentialEntry(wxCommandEvent& event);
+#endif // wxUSE_CREDENTIALDLG
+
 #if wxUSE_NUMBERDLG
     void NumericEntry(wxCommandEvent& event);
 #endif // wxUSE_NUMBERDLG
@@ -602,6 +606,7 @@ enum
     DIALOGS_LINE_ENTRY,
     DIALOGS_TEXT_ENTRY,
     DIALOGS_PASSWORD_ENTRY,
+    DIALOGS_CREDENTIAL_ENTRY,
     DIALOGS_FILE_OPEN,
     DIALOGS_FILE_OPEN2,
     DIALOGS_FILES_OPEN,

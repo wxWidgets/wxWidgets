@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTCTRL
 
@@ -65,7 +62,21 @@
 #if wxUSE_RICHEDIT
     #include <richedit.h>
     #include <richole.h>
+
+    // MinGW32 doesn't have tom.h and doesn't define the interfaces and the
+    // constants we need, so we can't use ITextDocument::Undo() with it. All
+    // the other compilers do have this header.
+    #ifndef __MINGW32_TOOLCHAIN__
+        #define wxHAS_TOM_H
+    #endif
+
+    #ifdef wxHAS_TOM_H
+        #include <tom.h>
+    #endif
+
     #include "wx/msw/ole/oleutils.h"
+
+    #include "wx/msw/private/comptr.h"
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT
@@ -129,6 +140,17 @@ DEFINE_GUID(wxIID_IRichEditOleCallback,
     0x00020d03, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
 } // anonymous namespace
+
+#ifdef wxHAS_TOM_H
+
+// This one is not defined in the standard libraries at all and MSDN just says
+// to define it explicitly, so we do it for IID_XXX constant itself and not our
+// own wxIID_XXX.
+DEFINE_GUID(IID_ITextDocument,
+    0x8cc497c0, 0xa1df, 0x11ce, 0x80, 0x98, 0x00, 0xaa, 0x00, 0x47, 0xbe, 0x5d);
+
+#endif // wxHAS_TOM_H
+
 #endif // wxUSE_OLE
 
 // ----------------------------------------------------------------------------
@@ -667,6 +689,34 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 
         ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
+
+#if wxUSE_RICHEDIT && wxUSE_OLE && defined(wxHAS_TOM_H)
+    // For RichEdit >= 4, SetFont(), called above from MSWCreateControl(), uses
+    // EM_SETCHARFORMAT which affects the undo buffer, meaning that CanUndo()
+    // for a newly created control returns true, which is unexpected. To avoid
+    // this, we explicitly use Undo(tomFalse) here to clear the undo buffer.
+    // And since Undo(tomFalse) also disables the undo buffer, we need to
+    // enable it again immediately after clearing by calling Undo(tomTrue).
+    if ( GetRichVersion() >= 4 )
+    {
+        wxCOMPtr<IRichEditOle> pRichEditOle;
+        if ( SendMessage(GetHwnd(), EM_GETOLEINTERFACE,
+                         0, (LPARAM)&pRichEditOle) && pRichEditOle )
+        {
+            wxCOMPtr<ITextDocument> pDoc;
+            HRESULT hr = pRichEditOle->QueryInterface
+                                       (
+                                        wxIID_PPV_ARGS(ITextDocument, &pDoc)
+                                       );
+            if ( SUCCEEDED(hr) )
+            {
+                hr = pDoc->Undo(tomFalse, NULL);
+                if ( SUCCEEDED(hr) )
+                    pDoc->Undo(tomTrue, NULL);
+            }
+        }
+    }
+#endif // wxUSE_RICHEDIT && wxHAS_TOM_H
 
     return true;
 }
@@ -1878,7 +1928,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
         // remove the '\n' at the end, if any (this is how this function is
         // supposed to work according to the docs)
-        if ( buf[len - 1] == wxT('\n') )
+        if ( len && buf[len - 1] == wxT('\n') )
         {
             len--;
         }

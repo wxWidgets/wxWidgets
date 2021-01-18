@@ -62,6 +62,7 @@ class WXDLLIMPEXP_FWD_BASE wxObject;
 #include "wx/dynarray.h"
 #include "wx/hashmap.h"
 #include "wx/msgout.h"
+#include "wx/time.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -160,9 +161,11 @@ public:
 
         // don't initialize the timestamp yet, we might not need it at all if
         // the message doesn't end up being logged and otherwise we'll fill it
-        // just before logging it, which won't change it by much and definitely
-        // less than a second resolution of the timestamp
+        // just before logging it, which won't change it by much
+        timestampMS = 0;
+#if WXWIN_COMPATIBILITY_3_0
         timestamp = 0;
+#endif // WXWIN_COMPATIBILITY_3_0
 
 #if wxUSE_THREADS
         threadId = wxThread::GetCurrentId();
@@ -208,8 +211,13 @@ public:
     // not set (i.e. wxLOG_COMPONENT not defined). It must be in ASCII.
     const char *component;
 
-    // time of record generation
+    // time of record generation in milliseconds since Epoch
+    wxLongLong_t timestampMS;
+
+#if WXWIN_COMPATIBILITY_3_0
+    // preserved for compatibility only, use timestampMS instead now
     time_t timestamp;
+#endif // WXWIN_COMPATIBILITY_3_0
 
 #if wxUSE_THREADS
     // id of the thread which logged this record
@@ -334,7 +342,12 @@ public:
 protected:
     // Override this method to change just the time stamp formatting. It is
     // called by default Format() implementation.
+    virtual wxString FormatTimeMS(wxLongLong_t msec) const;
+
+#if WXWIN_COMPATIBILITY_3_0
+    // Old function which only worked at second resolution.
     virtual wxString FormatTime(time_t t) const;
+#endif // WXWIN_COMPATIBILITY_3_0
 };
 
 
@@ -520,6 +533,7 @@ public:
     // change it otherwise); the first overload uses the current time.
     static void TimeStamp(wxString *str);
     static void TimeStamp(wxString *str, time_t t);
+    static void TimeStampMS(wxString *str, wxLongLong_t msec);
 
     // these methods should only be called from derived classes DoLogRecord(),
     // DoLogTextAtLevel() and DoLogText() implementations respectively and
@@ -1166,7 +1180,11 @@ private:
         // As explained in wxLogRecordInfo ctor, we don't initialize its
         // timestamp to avoid calling time() unnecessary, but now that we are
         // about to log the message, we do need to do it.
-        m_info.timestamp = time(NULL);
+        m_info.timestampMS = wxGetUTCTimeMillis().GetValue();
+
+#if WXWIN_COMPATIBILITY_3_0
+        m_info.timestamp = m_info.timestampMS / 1000;
+#endif // WXWIN_COMPATIBILITY_3_0
 
         wxLog::OnLog(level, wxString::FormatV(format, argptr), m_info);
     }
@@ -1408,14 +1426,7 @@ public:
 // functions if their parameters are complicated enough, but by defining them
 // as an empty inline function we ensure that even dumbest compilers optimise
 // them away
-#ifdef __BORLANDC__
-    // but Borland gives "W8019: Code has no effect" for wxLogNop() so we need
-    // to define it differently for it to avoid these warnings (same problem as
-    // with wxUnusedVar())
-    #define wxLogNop() { }
-#else
-    inline void wxLogNop() { }
-#endif
+inline void wxLogNop() { }
 
 #if wxUSE_LOG_DEBUG
     #define wxLogDebug wxDO_LOG_IF_ENABLED(Debug)

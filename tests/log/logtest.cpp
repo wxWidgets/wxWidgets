@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -455,6 +452,18 @@ void macroCompilabilityTest()
         wxLogSysError("hello syserror %d", 42);
     if (true)
         wxLogDebug("hello debug %d", 42);
+}
+
+// This allows to check wxLogTrace() interactively by running this test with
+// WXTRACE=logtest.
+TEST_CASE("wxLog::Trace", "[log][.]")
+{
+    // Running this test without setting WXTRACE is useless.
+    REQUIRE( wxGetEnv("WXTRACE", NULL) );
+
+    wxLogTrace("logtest", "Starting test");
+    wxMilliSleep(250);
+    wxLogTrace("logtest", "Ending test 1/4s later");
 }
 
 #endif // wxUSE_LOG

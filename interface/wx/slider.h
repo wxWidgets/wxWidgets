@@ -175,7 +175,15 @@ public:
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
             Window size.
-            If ::wxDefaultSize is specified then a default size is chosen.
+            If ::wxDefaultSize is specified then a default size is chosen,
+            which is typically appropriate in the transverse slider direction,
+            but is just fixed 100 (DPI-independent) pixels in the primary
+            direction (i.e. vertical for ::wxSL_VERTICAL sliders or horizontal
+            for ::wxSL_HORIZONTAL ones), so it may be preferable to specify it
+            explicitly. Conversely, when using non-default size, it's usually
+            best to use @c -1 for the transverse size component, meaning that
+            the default should be used, as the appropriate value depends on the
+            platform and theme.
         @param style
             Window style. See wxSlider.
         @param validator

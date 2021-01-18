@@ -30,7 +30,7 @@ LIBDIRNAME = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEST_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG_7) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I$(SETUPHDIR) -I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
@@ -82,6 +82,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_typeinfotest.obj \
 	$(OBJS)\test_ipc.obj \
 	$(OBJS)\test_socket.obj \
+	$(OBJS)\test_webrequest.obj \
 	$(OBJS)\test_regextest.obj \
 	$(OBJS)\test_wxregextest.obj \
 	$(OBJS)\test_scopeguardtest.obj \
@@ -124,7 +125,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_xlocale.obj \
 	$(OBJS)\test_xmltest.obj
 TEST_DRAWING_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG_7) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I$(SETUPHDIR) -I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
@@ -138,7 +139,7 @@ TEST_DRAWING_OBJECTS =  \
 	$(OBJS)\test_drawing_basictest.obj \
 	$(OBJS)\test_drawing_fonttest.obj
 TEST_DRAWINGPLUGIN_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
-	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG_7) -D__WXMSW__ \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
@@ -146,7 +147,7 @@ TEST_DRAWINGPLUGIN_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
 TEST_DRAWINGPLUGIN_OBJECTS =  \
 	$(OBJS)\test_drawingplugin_pluginsample.obj
 TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG_7) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I$(SETUPHDIR) -I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
@@ -171,7 +172,6 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_graphmatrix.obj \
 	$(OBJS)\test_gui_graphpath.obj \
 	$(OBJS)\test_gui_config.obj \
-	$(OBJS)\test_gui_auitest.obj \
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj \
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj \
 	$(OBJS)\test_gui_bookctrlbasetest.obj \
@@ -210,7 +210,6 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_slidertest.obj \
 	$(OBJS)\test_gui_spinctrldbltest.obj \
 	$(OBJS)\test_gui_spinctrltest.obj \
-	$(OBJS)\test_gui_styledtextctrltest.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_textentrytest.obj \
 	$(OBJS)\test_gui_togglebuttontest.obj \
@@ -243,30 +242,14 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_tlw.obj \
 	$(OBJS)\test_gui_dataview.obj \
-	$(OBJS)\test_gui_rowheightcachetest.obj \
 	$(OBJS)\test_gui_boxsizer.obj \
 	$(OBJS)\test_gui_gridsizer.obj \
 	$(OBJS)\test_gui_wrapsizer.obj \
 	$(OBJS)\test_gui_toplevel.obj \
 	$(OBJS)\test_gui_valnum.obj \
-	$(OBJS)\test_gui_valtext.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj \
 	$(OBJS)\test_gui_xrctest.obj
-TEST_ALLHEADERS_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
-	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG_7) -D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -I.\..\samples -DNOPCH \
-	-I.\..\3rdparty\catch\include -Hu -H=$(OBJS)\testprec_test_allheaders.csm \
-	$(CPPFLAGS) $(CXXFLAGS)
-TEST_ALLHEADERS_OBJECTS =  \
-	$(OBJS)\test_allheaders_dummy.obj \
-	$(OBJS)\test_allheaders_asserthelper.obj \
-	$(OBJS)\test_allheaders_test.obj \
-	$(OBJS)\test_allheaders_allheaders.obj \
-	$(OBJS)\test_allheaders_testableframe.obj
 
 ### Conditionally set variables: ###
 
@@ -315,9 +298,39 @@ __test_drawingplugin___depname = $(OBJS)\test_drawingplugin.dll
 !if "$(USE_GUI)" == "1"
 __test_gui___depname = $(OBJS)\test_gui.exe
 !endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_AUI_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
+!if "$(WXUNIV)" == "1"
+__WXUNIV_DEFINE_p_7 = -d__WXUNIVERSAL__
+!endif
+!if "$(DEBUG_FLAG)" == "0"
+__DEBUG_DEFINE_p_7 = -dwxDEBUG_LEVEL=0
+!endif
+!if "$(BUILD)" == "release"
+__NDEBUG_DEFINE_p_7 = -dNDEBUG
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONS_DEFINE_p_7 = -dwxNO_EXCEPTIONS
+!endif
+!if "$(USE_RTTI)" == "0"
+__RTTI_DEFINE_p_7 = -dwxNO_RTTI
+!endif
+!if "$(USE_THREADS)" == "0"
+__THREAD_DEFINE_p_7 = -dwxNO_THREADS
+!endif
+!if "$(UNICODE)" == "0"
+__UNICODE_DEFINE_p_7 = -dwxUSE_UNICODE=0
+!endif
+!if "$(UNICODE)" == "1"
+__UNICODE_DEFINE_p_7 = -d_UNICODE
+!endif
+!if "$(USE_CAIRO)" == "1"
+____CAIRO_INCLUDEDIR_FILENAMES_7_p = -i$(CAIRO_ROOT)\include\cairo
+!endif
+!if "$(SHARED)" == "1"
+__DLLFLAG_p_7 = -dWXUSINGDLL
+!endif
+!if "$(MONOLITHIC)" == "0" && "$(USE_WEBVIEW)" == "1"
+__WXLIB_WEBVIEW_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_RICHTEXT_p = \
@@ -335,12 +348,13 @@ __WXLIB_XRC_p = \
 __WXLIB_HTML_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 !endif
-!if "$(USE_GUI)" == "1"
-__test_allheaders___depname = $(OBJS)\test_allheaders.exe
-!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_XML_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_NET_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = -Od
@@ -355,10 +369,10 @@ __THREADSFLAG =
 __THREADSFLAG = mt
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_7 = 
+__THREADSFLAG_2 = 
 !endif
 !if "$(USE_THREADS)" == "1"
-__THREADSFLAG_7 = -tWM
+__THREADSFLAG_2 = -tWM
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS = -tWR
@@ -367,46 +381,28 @@ __RUNTIME_LIBS = -tWR
 __RUNTIME_LIBS = 
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_3 = i
+__RUNTIME_LIBS_2 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_3 = 
+__RUNTIME_LIBS_2 = 
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 !endif
-!if "$(WXUNIV)" == "1"
-__WXUNIV_DEFINE_p_0 = -d__WXUNIVERSAL__
-!endif
 !if "$(DEBUG_FLAG)" == "0"
 __DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
-!endif
-!if "$(DEBUG_FLAG)" == "0"
-__DEBUG_DEFINE_p_0 = -dwxDEBUG_LEVEL=0
 !endif
 !if "$(BUILD)" == "release"
 __NDEBUG_DEFINE_p = -DNDEBUG
 !endif
-!if "$(BUILD)" == "release"
-__NDEBUG_DEFINE_p_0 = -dNDEBUG
-!endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
-!endif
-!if "$(USE_EXCEPTIONS)" == "0"
-__EXCEPTIONS_DEFINE_p_0 = -dwxNO_EXCEPTIONS
 !endif
 !if "$(USE_RTTI)" == "0"
 __RTTI_DEFINE_p = -DwxNO_RTTI
 !endif
-!if "$(USE_RTTI)" == "0"
-__RTTI_DEFINE_p_0 = -dwxNO_RTTI
-!endif
 !if "$(USE_THREADS)" == "0"
 __THREAD_DEFINE_p = -DwxNO_THREADS
-!endif
-!if "$(USE_THREADS)" == "0"
-__THREAD_DEFINE_p_0 = -dwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "0"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
@@ -414,39 +410,15 @@ __UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
 !endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p_0 = -dwxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_0 = -d_UNICODE
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
-!endif
-!if "$(USE_CAIRO)" == "1"
-____CAIRO_INCLUDEDIR_FILENAMES_0 = -i$(CAIRO_ROOT)\include\cairo
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
-!if "$(SHARED)" == "1"
-__DLLFLAG_p_0 = -dWXUSINGDLL
-!endif
-!if "$(MONOLITHIC)" == "0" && "$(USE_WEBVIEW)" == "1"
-__WXLIB_WEBVIEW_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
-!endif
-!if "$(MONOLITHIC)" == "0" && "$(USE_STC)" == "1"
-__WXLIB_STC_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib
-!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
-!endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_NET_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
@@ -494,7 +466,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-images fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -524,43 +496,30 @@ clean:
 	-if exist $(OBJS)\test_gui.ild del $(OBJS)\test_gui.ild
 	-if exist $(OBJS)\test_gui.ilf del $(OBJS)\test_gui.ilf
 	-if exist $(OBJS)\test_gui.ils del $(OBJS)\test_gui.ils
-	-if exist $(OBJS)\test_allheaders.exe del $(OBJS)\test_allheaders.exe
-	-if exist $(OBJS)\test_allheaders.tds del $(OBJS)\test_allheaders.tds
-	-if exist $(OBJS)\test_allheaders.ilc del $(OBJS)\test_allheaders.ilc
-	-if exist $(OBJS)\test_allheaders.ild del $(OBJS)\test_allheaders.ild
-	-if exist $(OBJS)\test_allheaders.ilf del $(OBJS)\test_allheaders.ilf
-	-if exist $(OBJS)\test_allheaders.ils del $(OBJS)\test_allheaders.ils
 
 $(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,,
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
 |
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_drawing.exe: $(OBJS)\test_drawing_dummy.obj  $(TEST_DRAWING_OBJECTS)
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_DRAWING_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,,
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	c0x32.obj $(TEST_DRAWING_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
 |
 !endif
 
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
-	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(TEST_DRAWINGPLUGIN_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,,
+	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	c0d32.obj $(TEST_DRAWINGPLUGIN_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
 |
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\test_gui_sample.res
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_STC_p) $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,, $(OBJS)\test_gui_sample.res
-|
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\test_allheaders.exe: $(OBJS)\test_allheaders_dummy.obj  $(TEST_ALLHEADERS_OBJECTS)  $(OBJS)\test_allheaders_sample.res
-	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)   -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_ALLHEADERS_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_STC_p) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_3).lib,, $(OBJS)\test_allheaders_sample.res
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\test_gui_sample.res
 |
 !endif
 
@@ -715,6 +674,9 @@ $(OBJS)\test_ipc.obj: .\net\ipc.cpp
 $(OBJS)\test_socket.obj: .\net\socket.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\net\socket.cpp
 
+$(OBJS)\test_webrequest.obj: .\net\webrequest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\net\webrequest.cpp
+
 $(OBJS)\test_regextest.obj: .\regex\regextest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\regex\regextest.cpp
 
@@ -860,7 +822,7 @@ $(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) .\drawing\pluginsample.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) -i. $(__DLLFLAG_p_7) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H .\dummy.cpp
@@ -915,9 +877,6 @@ $(OBJS)\test_gui_graphpath.obj: .\graphics\graphpath.cpp
 
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp
-
-$(OBJS)\test_gui_auitest.obj: .\controls\auitest.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\auitest.cpp
 
 $(OBJS)\test_gui_bitmapcomboboxtest.obj: .\controls\bitmapcomboboxtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\bitmapcomboboxtest.cpp
@@ -1033,9 +992,6 @@ $(OBJS)\test_gui_spinctrldbltest.obj: .\controls\spinctrldbltest.cpp
 $(OBJS)\test_gui_spinctrltest.obj: .\controls\spinctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\spinctrltest.cpp
 
-$(OBJS)\test_gui_styledtextctrltest.obj: .\controls\styledtextctrltest.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\styledtextctrltest.cpp
-
 $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\textctrltest.cpp
 
@@ -1132,9 +1088,6 @@ $(OBJS)\test_gui_tlw.obj: .\persistence\tlw.cpp
 $(OBJS)\test_gui_dataview.obj: .\persistence\dataview.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\persistence\dataview.cpp
 
-$(OBJS)\test_gui_rowheightcachetest.obj: .\rowheightcache\rowheightcachetest.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\rowheightcache\rowheightcachetest.cpp
-
 $(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\boxsizer.cpp
 
@@ -1150,9 +1103,6 @@ $(OBJS)\test_gui_toplevel.obj: .\toplevel\toplevel.cpp
 $(OBJS)\test_gui_valnum.obj: .\validators\valnum.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\validators\valnum.cpp
 
-$(OBJS)\test_gui_valtext.obj: .\validators\valtext.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\validators\valtext.cpp
-
 $(OBJS)\test_gui_clientsize.obj: .\window\clientsize.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\window\clientsize.cpp
 
@@ -1161,22 +1111,4 @@ $(OBJS)\test_gui_setsize.obj: .\window\setsize.cpp
 
 $(OBJS)\test_gui_xrctest.obj: .\xml\xrctest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\xml\xrctest.cpp
-
-$(OBJS)\test_allheaders_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -dwxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH -i.\..\3rdparty\catch\include .\..\samples\sample.rc
-
-$(OBJS)\test_allheaders_dummy.obj: .\dummy.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_ALLHEADERS_CXXFLAGS) -H .\dummy.cpp
-
-$(OBJS)\test_allheaders_asserthelper.obj: .\asserthelper.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_ALLHEADERS_CXXFLAGS) .\asserthelper.cpp
-
-$(OBJS)\test_allheaders_test.obj: .\test.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_ALLHEADERS_CXXFLAGS) .\test.cpp
-
-$(OBJS)\test_allheaders_allheaders.obj: .\allheaders.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_ALLHEADERS_CXXFLAGS) .\allheaders.cpp
-
-$(OBJS)\test_allheaders_testableframe.obj: .\testableframe.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_ALLHEADERS_CXXFLAGS) .\testableframe.cpp
 

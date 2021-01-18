@@ -660,14 +660,13 @@ set(NET_UNIX_SRC
 
 set(NET_OSX_SRC
     src/osx/core/sockosx.cpp
+    src/osx/webrequest_urlsession.mm
 )
 
 set(NET_WIN32_SRC
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
-)
-
-set(NET_WIN32_HDR
+    src/msw/webrequest_winhttp.cpp
 )
 
 set(NET_CMN_SRC
@@ -681,6 +680,8 @@ set(NET_CMN_SRC
     src/common/sckstrm.cpp
     src/common/socket.cpp
     src/common/url.cpp
+    src/common/webrequest.cpp
+    src/common/webrequest_curl.cpp
 )
 
 set(NET_CMN_HDR
@@ -695,6 +696,7 @@ set(NET_CMN_HDR
     wx/sckstrm.h
     wx/socket.h
     wx/url.h
+    wx/webrequest.h
 )
 
 set(QA_SRC
@@ -907,6 +909,7 @@ set(GUI_CMN_SRC
     src/generic/wizard.cpp
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
+    src/generic/creddlgg.cpp
     src/generic/rowheightcache.cpp
     src/generic/animateg.cpp
 )
@@ -1197,6 +1200,8 @@ set(GUI_CMN_HDR
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
+    wx/creddlg.h
+    wx/generic/creddlgg.h
     wx/generic/animate.h
 )
 
@@ -1281,6 +1286,7 @@ set(GTK_LOWLEVEL_SRC
     src/gtk/filectrl.cpp
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
+    src/gtk/image_gtk.cpp
     src/gtk/sockgtk.cpp
     src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
@@ -2322,7 +2328,6 @@ set(OSX_COMMON_SRC
     src/osx/tglbtn_osx.cpp
     src/osx/toolbar_osx.cpp
     # wxWebKit files
-    src/html/htmlctrl/webkit/webkit.mm
     # Native color/font dialogs
     src/osx/carbon/colordlgosx.mm
     src/osx/carbon/fontdlgosx.mm
@@ -2372,7 +2377,6 @@ set(OSX_COMMON_SRC
 
 set(OSX_SHARED_HDR
     # wxWebKit headers
-    wx/html/webkit.h
     # other shared headers
     wx/osx/accel.h
     wx/osx/anybutton.h
@@ -3036,11 +3040,13 @@ set(OPENGL_MSW_HDR
 set(OPENGL_GTK_SRC
     src/gtk/glcanvas.cpp
     src/unix/glx11.cpp
+    src/unix/glegl.cpp
 )
 
 set(OPENGL_GTK_HDR
     wx/gtk/glcanvas.h
     wx/unix/glx11.h
+    wx/unix/glegl.h
 )
 
 set(OPENGL_OSX_COCOA_SRC

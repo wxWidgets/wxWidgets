@@ -16,9 +16,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/wxcrt.h"           // for wxPuts
@@ -283,7 +280,7 @@ void InteractiveOutputTestCase::TestPlatformInfo()
     wxPrintf(wxT("Operating system name is: %s\n"), plat.GetOperatingSystemIdName());
     wxPrintf(wxT("Port ID name is: %s\n"), plat.GetPortIdName());
     wxPrintf(wxT("Port ID short name is: %s\n"), plat.GetPortIdShortName());
-    wxPrintf(wxT("Architecture is: %s\n"), plat.GetArchName());
+    wxPrintf(wxT("Architecture bitness is: %s\n"), plat.GetBitnessName());
     wxPrintf(wxT("Endianness is: %s\n"), plat.GetEndiannessName());
 
     wxPuts(wxEmptyString);

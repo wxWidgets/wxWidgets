@@ -970,12 +970,11 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn = 0, int microVsn = 0);
     bit. The check is performed at run-time and may differ from the value
     available at compile-time (at compile-time you can just check if
     <tt>sizeof(void*) == 8</tt>) since the program could be running in
-    emulation mode or in a mixed 32/64 bit system (bi-architecture operating
-    system).
+    emulation mode or in a mixed 32/64 bit system.
 
     @note This function is not 100% reliable on some systems given the fact
           that there isn't always a standard way to do a reliable check on the
-          OS architecture.
+          OS bitness.
 
     @header{wx/utils.h}
 */
@@ -990,6 +989,18 @@ bool wxIsPlatform64Bit();
     @header{wx/utils.h}
 */
 bool wxIsPlatformLittleEndian();
+
+/**
+    Returns the CPU architecture name. This can be, for example, "x86_64",
+    "arm64", or "i86pc". The name for the same CPU running on the same
+    hardware can vary across operating systems.
+
+    The returned string may be empty if the CPU architecture couldn't be
+    recognized.
+
+    @since 3.1.5
+*/
+wxString wxGetCpuArchitectureName();
 
 /**
     Returns a structure containing information about the currently running

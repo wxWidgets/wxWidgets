@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GEOMETRY
 
@@ -176,8 +173,7 @@ wxDouble wxPoint2DInt::GetVectorAngle() const
             return 180;
     }
 
-    // casts needed for MIPSpro compiler under SGI
-    wxDouble deg = atan2( (double)m_y , (double)m_x ) * 180 / M_PI;
+    wxDouble deg = wxRadToDeg(atan2( (double)m_y , (double)m_x ));
     if ( deg < 0 )
     {
         deg += 360;
@@ -189,8 +185,9 @@ wxDouble wxPoint2DInt::GetVectorAngle() const
 void wxPoint2DInt::SetVectorAngle( wxDouble degrees )
 {
     wxDouble length = GetVectorLength();
-    m_x = (int)(length * cos( degrees / 180 * M_PI ));
-    m_y = (int)(length * sin( degrees / 180 * M_PI ));
+    double rad = wxDegToRad(degrees);
+    m_x = (int)(length * cos(rad));
+    m_y = (int)(length * sin(rad));
 }
 
 wxDouble wxPoint2DDouble::GetVectorAngle() const
@@ -209,7 +206,7 @@ wxDouble wxPoint2DDouble::GetVectorAngle() const
         else
             return 180;
     }
-    wxDouble deg = atan2( m_y , m_x ) * 180 / M_PI;
+    wxDouble deg = wxRadToDeg(atan2( m_y , m_x ));
     if ( deg < 0 )
     {
         deg += 360;
@@ -220,8 +217,9 @@ wxDouble wxPoint2DDouble::GetVectorAngle() const
 void wxPoint2DDouble::SetVectorAngle( wxDouble degrees )
 {
     wxDouble length = GetVectorLength();
-    m_x = length * cos( degrees / 180 * M_PI );
-    m_y = length * sin( degrees / 180 * M_PI );
+    double rad = wxDegToRad(degrees);
+    m_x = length * cos(rad);
+    m_y = length * sin(rad);
 }
 
 // wxRect2D
@@ -322,15 +320,6 @@ void wxRect2DInt::ConstrainTo( const wxRect2DInt &rect )
 
     if ( GetTop() < rect.GetTop() )
         SetTop( rect.GetTop() );
-}
-
-wxRect2DInt& wxRect2DInt::operator=( const wxRect2DInt &r )
-{
-    m_x = r.m_x;
-    m_y = r.m_y;
-    m_width = r.m_width;
-    m_height = r.m_height;
-    return *this;
 }
 
 #if wxUSE_STREAMS

@@ -27,6 +27,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/fontmap.h"
+#include "wx/msgout.h"
 
 #include "wx/gtk/private.h"
 
@@ -101,7 +102,7 @@ static gboolean wxapp_idle_callback(gpointer)
 }
 
 // 0: no change, 1: focus in, 2: focus out
-static int gs_focusChange;
+static wxUIntPtr gs_focusChange;
 
 extern "C" {
 static gboolean
@@ -109,7 +110,7 @@ wx_focus_event_hook(GSignalInvocationHint*, unsigned, const GValue* param_values
 {
     // If focus change on TLW
     if (GTK_IS_WINDOW(g_value_peek_pointer(param_values)))
-        gs_focusChange = GPOINTER_TO_INT(data);
+        gs_focusChange = wxUIntPtr(data);
 
     return true;
 }
@@ -338,10 +339,23 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #endif // __UNIX__
 
 
+    // Using XIM results in many problems, so try to warn people about it.
+    wxString inputMethod;
+    if ( wxGetEnv("GTK_IM_MODULE", &inputMethod) && inputMethod == "xim" )
+    {
+        wxMessageOutputStderr().Output
+        (
+            _("WARNING: using XIM input method is unsupported and may result "
+              "in problems with input handling and flickering. Consider "
+              "unsetting GTK_IM_MODULE or setting to \"ibus\".")
+        );
+    }
+
     bool init_result;
-    int i;
 
 #if wxUSE_UNICODE
+    int i;
+
     // gtk_init() wants UTF-8, not wchar_t, so convert
     char **argvGTK = new char *[argc_ + 1];
     for ( i = 0; i < argc_; i++ )

@@ -12,6 +12,8 @@
 
 #include "wx/persist/window.h"
 
+#if wxUSE_DATAVIEWCTRL
+
 #include "wx/dataview.h"
 
 // ----------------------------------------------------------------------------
@@ -167,5 +169,7 @@ inline wxPersistentObject *wxCreatePersistentObject(wxDataViewCtrl* control)
 {
     return new wxPersistentDataViewCtrl(control);
 }
+
+#endif // wxUSE_DATAVIEWCTRL
 
 #endif // _WX_PERSIST_DATAVIEW_H_

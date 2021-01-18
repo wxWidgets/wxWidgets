@@ -12,14 +12,12 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
 #include "wx/accel.h"
+#include "wx/scopedptr.h"
 
 namespace
 {
@@ -38,11 +36,11 @@ void CheckAccelEntry(const wxAcceleratorEntry& accel, int keycode, int flags)
  */
 TEST_CASE( "wxAcceleratorEntry::Create", "[accelentry]" )
 {
-    wxAcceleratorEntry* pa;
+    wxScopedPtr<wxAcceleratorEntry> pa;
 
     SECTION( "Correct behavior" )
     {
-        pa = wxAcceleratorEntry::Create("Foo\tCtrl+Z");
+        pa.reset( wxAcceleratorEntry::Create("Foo\tCtrl+Z") );
 
         CHECK( pa );
         CHECK( pa->IsOk() );
@@ -51,21 +49,21 @@ TEST_CASE( "wxAcceleratorEntry::Create", "[accelentry]" )
 
     SECTION( "Tab missing" )
     {
-        pa = wxAcceleratorEntry::Create("Shift-Q");
+        pa.reset( wxAcceleratorEntry::Create("Shift-Q") );
 
         CHECK( !pa );
     }
 
     SECTION( "No accelerator key specified" )
     {
-        pa = wxAcceleratorEntry::Create("bloordyblop");
+        pa.reset( wxAcceleratorEntry::Create("bloordyblop") );
 
         CHECK( !pa );
     }
 
     SECTION( "Display name parsing" )
     {
-        pa = wxAcceleratorEntry::Create("Test\tBackSpace");
+        pa.reset( wxAcceleratorEntry::Create("Test\tBackSpace") );
 
         CHECK( pa );
         CHECK( pa->IsOk() );

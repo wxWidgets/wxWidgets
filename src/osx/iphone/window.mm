@@ -622,7 +622,7 @@ double wxWidgetIPhoneImpl::GetContentScaleFactor() const
         return 1.0;
 }
 
-void wxWidgetIPhoneImpl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
+void wxWidgetIPhoneImpl::SetFont(const wxFont & font)
 {
 }
 
@@ -642,10 +642,6 @@ void wxWidgetIPhoneImpl::InstallEventHandler( WXWidget control )
 void wxWidgetIPhoneImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)
 {
     wxWindow* thisWindow = GetWXPeer();
-    if ( thisWindow->MacGetTopLevelWindow() && NeedsFocusRect() )
-    {
-        thisWindow->MacInvalidateBorders();
-    }
 
     if ( receivedFocus )
     {

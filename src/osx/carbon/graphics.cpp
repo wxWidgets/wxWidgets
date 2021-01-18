@@ -684,7 +684,7 @@ wxMacCoreGraphicsPenBrushDataBase::CreateGradientFunction(const wxGraphicsGradie
     {
         const wxGraphicsGradientStop stop = stops.Item(i);
 
-        m_gradientComponents->comps[i].pos = stop.GetPosition();
+        m_gradientComponents->comps[i].pos = CGFloat(stop.GetPosition());
 
         const wxColour col = stop.GetColour();
         m_gradientComponents->comps[i].red = (CGFloat) (col.Red() / 255.0);

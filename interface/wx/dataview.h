@@ -73,9 +73,10 @@
     associating the model with a control like this:
 
     @code
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
         wxDataViewModel *musicModel = new MyMusicModel;
-        m_musicCtrl->AssociateModel( musicModel );
+
+        musicCtrl->AssociateModel(musicModel);
         musicModel->DecRef();  // avoid memory leak !!
 
         // add columns now
@@ -84,11 +85,10 @@
     A potentially better way to avoid memory leaks is to use wxObjectDataPtr
 
     @code
-        wxObjectDataPtr<MyMusicModel> musicModel;
-
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
-        musicModel = new MyMusicModel;
-        m_musicCtrl->AssociateModel( musicModel.get() );
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
+        wxObjectDataPtr<wxDataViewModel> musicModel(new MyMusicModel);
+        
+        musicCtrl->AssociateModel(musicModel.get());
 
         // add columns now
     @endcode
@@ -1403,6 +1403,16 @@ public:
     void ExpandAncestors( const wxDataViewItem & item );
 
     /**
+        Expand all all children of the given item recursively.
+
+        This is the same as calling Expand() on the @a item itself and then
+        calling it for all of its children, grandchildren etc recursively.
+
+        @since 3.1.5
+     */
+    void ExpandChildren( const wxDataViewItem & item );
+
+    /**
         Returns pointer to the column. @a pos refers to the position in the
         control which may change after reordering columns by the user.
     */
@@ -1675,6 +1685,9 @@ public:
 
     /**
         Sets the selection to the array of wxDataViewItems.
+
+        Note that if @a sel contains any invalid items, they are simply
+        ignored.
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
 

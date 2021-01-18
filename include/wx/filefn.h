@@ -32,12 +32,6 @@
 #endif // __WINDOWS__
 #endif // native Win compiler
 
-#ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
-                    // this (3.1 I believe) and how to test for it.
-                    // If this works for Borland 4.0 as well, then no worries.
-    #include <dir.h>
-#endif
-
 #include  <fcntl.h>       // O_RDONLY &c
 
 // ----------------------------------------------------------------------------
@@ -127,8 +121,7 @@ enum wxPosixPermissions
       ( \
         defined(__VISUALC__) || \
         defined(__MINGW64_TOOLCHAIN__) || \
-        (defined(__MINGW32__) && !defined(__WINE__)) || \
-        defined(__BORLANDC__) \
+        (defined(__MINGW32__) && !defined(__WINE__)) \
       )
 
     // temporary defines just used immediately below
@@ -183,8 +176,6 @@ enum wxPosixPermissions
         #endif
     #endif
 
-    // other Windows compilers (Borland) don't have huge file support (or at
-    // least not all functions needed for it by wx) currently
 
     // types
 
@@ -195,33 +186,14 @@ enum wxPosixPermissions
         typedef off_t wxFileOffset;
     #endif
 
-    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
-    // resolution operator present in wxPOSIX_IDENT for it
-    #ifdef __BORLANDC__
-        #define wxPOSIX_STRUCT(s)    struct s
-    #else
-        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
-    #endif
 
-    // Borland is special in that it uses _stat with Unicode functions (for
-    // MSVC compatibility?) but stat with ANSI ones
-    #ifdef __BORLANDC__
-        #if wxHAS_HUGE_FILES
-            #define wxStructStat struct stati64
-        #else
-            #if wxUSE_UNICODE
-                #define wxStructStat struct _stat
-            #else
-                #define wxStructStat struct stat
-            #endif
-        #endif
-    #else // !__BORLANDC__
-        #ifdef wxHAS_HUGE_FILES
-            #define wxStructStat struct _stati64
-        #else
-            #define wxStructStat struct _stat
-        #endif
-    #endif // __BORLANDC__/!__BORLANDC__
+    #define wxPOSIX_STRUCT(s) struct wxPOSIX_IDENT(s)
+
+    #ifdef wxHAS_HUGE_FILES
+        #define wxStructStat struct _stati64
+    #else
+        #define wxStructStat struct _stat
+    #endif
 
 
     // functions
@@ -232,7 +204,7 @@ enum wxPosixPermissions
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__) || defined(__MINGW64_TOOLCHAIN__)
+    #if defined(__MINGW64_TOOLCHAIN__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
@@ -263,15 +235,13 @@ enum wxPosixPermissions
         #define   wxTell       wxPOSIX_IDENT(tell)
     #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
 
-     #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x540)
-         // NB: this one is not POSIX and always has the underscore
-         #define   wxFsync      _commit
 
-         // could be already defined by configure (Cygwin)
-         #ifndef HAVE_FSYNC
-             #define HAVE_FSYNC
-         #endif
-    #endif // BORLANDC
+     #define   wxFsync      _commit
+
+     // could be already defined by configure (Cygwin)
+     #ifndef HAVE_FSYNC
+         #define HAVE_FSYNC
+     #endif
 
     #define   wxEof        wxPOSIX_IDENT(eof)
 
@@ -297,14 +267,8 @@ enum wxPosixPermissions
 
     // then wide char ones
     #if wxUSE_UNICODE
-        // special workaround for buggy wopen() in bcc 5.5
-        #if defined(__BORLANDC__) && \
-            (__BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551)
-                WXDLLIMPEXP_BASE int wxCRT_OpenW(const wxChar *pathname,
-                                                 int flags, mode_t mode);
-        #else
-            #define wxCRT_OpenW       _wopen
-        #endif
+
+        #define wxCRT_OpenW         _wopen
 
         wxDECL_FOR_STRICT_MINGW32(int, _wopen, (const wchar_t*, int, ...))
         wxDECL_FOR_STRICT_MINGW32(int, _waccess, (const wchar_t*, int))

@@ -42,7 +42,7 @@ wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
 wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png
     DEPENDS wxUSE_DRAGIMAGE)
-wx_add_sample(drawing DATA pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp)
+wx_add_sample(drawing DATA pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp NAME drawingsample)
 wx_add_sample(erase)
 wx_add_sample(event event.cpp gestures.cpp gestures.h chessboard.cpp chessboard.h)
 wx_add_sample(except DEPENDS wxUSE_EXCEPTIONS)
@@ -71,7 +71,7 @@ wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
     horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg cursor.png
-    DEPENDS wxUSE_IMAGE)
+    NAME imagesample DEPENDS wxUSE_IMAGE)
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)
 endforeach()
@@ -152,10 +152,12 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES wxwebview NAME webviewsample DEPENDS wxUSE_WEBVIEW)
+wx_add_sample(webview LIBRARIES wxwebview DATA ../help/doc.zip:doc.zip
+    NAME webviewsample DEPENDS wxUSE_WEBVIEW)
 if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample wxstc)
 endif()
+wx_add_sample(webrequest LIBRARIES wxnet DEPENDS wxUSE_WEBREQUEST)
 # widgets Sample
 set(SAMPLE_WIDGETS_SRC
     activityindicator.cpp

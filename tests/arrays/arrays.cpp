@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -784,9 +781,6 @@ void ArraysTestCase::IndexFromEnd()
 
 TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
 {
-#if !wxUSE_REGEX
-    WARN("Skipping wxCmpNaturalGeneric() tests: wxRegEx not available");
-#else
     // simple string comparison
     CHECK(wxCmpNaturalGeneric("a", "a") == 0);
     CHECK(wxCmpNaturalGeneric("a", "z") < 0);
@@ -858,6 +852,5 @@ TEST_CASE("wxNaturalStringComparisonGeneric()", "[wxString][compare]")
     CHECK(wxCmpNaturalGeneric("a5th5", "a10th10") < 0);
     CHECK(wxCmpNaturalGeneric("a 10th 10", "a5th 5") < 0);
     CHECK(wxCmpNaturalGeneric("a5th 5", "a 10th 10") > 0);
-#endif // #if !wxUSE_REGEX
 }
 

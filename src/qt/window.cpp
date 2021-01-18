@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
@@ -112,7 +109,7 @@ bool wxQtScrollArea::event(QEvent *e)
               break;
         }
     }
-      
+
     return QScrollArea::event(e);
 }
 
@@ -340,8 +337,14 @@ wxWindowQt::~wxWindowQt()
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(NULL);
 #endif
-    
-    delete m_qtWindow;
+    if (m_qtWindow)
+    {
+        QtStoreWindowPointer( GetHandle(), NULL );
+
+        // Delete QWidget when control return to event loop (safer)
+        m_qtWindow->deleteLater();
+        m_qtWindow = NULL;
+    }
 }
 
 
@@ -1716,28 +1719,30 @@ QPainter *wxWindowQt::QtGetPainter()
 
 bool wxWindowQt::EnableTouchEvents(int eventsMask)
 {
-    if(GetHandle()){
-      if(eventsMask == wxTOUCH_NONE){
+    wxCHECK_MSG( GetHandle(), false, "can't be called before creating the window" );
+
+    if(eventsMask == wxTOUCH_NONE)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, false);
         return true;
-      }
+    }
 
-      if(eventsMask & wxTOUCH_PRESS_GESTURES){
+    if(eventsMask & wxTOUCH_PRESS_GESTURES)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
         m_qtWindow->grabGesture(Qt::TapAndHoldGesture);
         QTapAndHoldGesture::setTimeout ( 1000 );
-      }
-      if(eventsMask & wxTOUCH_PAN_GESTURES){
+    }
+    if(eventsMask & wxTOUCH_PAN_GESTURES)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
         m_qtWindow->grabGesture(Qt::PanGesture);
-      }
-      if(eventsMask & wxTOUCH_ZOOM_GESTURE){
+    }
+    if(eventsMask & wxTOUCH_ZOOM_GESTURE)
+    {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
         m_qtWindow->grabGesture(Qt::PinchGesture);
-      }
-
-      return true;
     }
-    else
-      return false;
+
+    return true;
 }

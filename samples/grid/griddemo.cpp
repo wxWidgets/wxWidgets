@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -319,13 +316,15 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
     EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
+    EVT_MENU( ID_SELNONE,  GridFrame::SelectNone )
 
     EVT_MENU( ID_FREEZE_OR_THAW,  GridFrame::FreezeOrThaw )
 
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
-    EVT_MENU( wxID_ABOUT, GridFrame::About )
+    EVT_MENU( wxID_ABOUT, GridFrame::OnAbout )
+    EVT_MENU( wxID_CLEAR, GridFrame::OnClear )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
@@ -366,7 +365,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
     EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
-    EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
+    EVT_GRID_RANGE_SELECTING( GridFrame::OnRangeSelecting )
+    EVT_GRID_RANGE_SELECTED( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGING( GridFrame::OnCellValueChanging )
     EVT_GRID_CELL_CHANGED( GridFrame::OnCellValueChanged )
     EVT_GRID_CELL_BEGIN_DRAG( GridFrame::OnCellBeginDrag )
@@ -418,6 +418,11 @@ GridFrame::GridFrame()
     fileMenu->AppendSubMenu( setupMenu, "Render setup" );
     fileMenu->Append( wxID_PRINT, "Render" );
     fileMenu->Append( ID_RENDER_COORDS, "Render G5:P30" );
+
+#if wxUSE_LOG
+    fileMenu->AppendSeparator();
+    fileMenu->Append( wxID_CLEAR, "Clear &log\tCtrl-L" );
+#endif // wxUSE_LOG
 
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
@@ -532,6 +537,7 @@ GridFrame::GridFrame()
     selectionMenu->Append( ID_SELROWS, "Select &rows" );
     selectionMenu->Append( ID_SELCOLS, "Select col&umns" );
     selectionMenu->Append( ID_SELROWSORCOLS, "Select rows &or columns" );
+    selectionMenu->Append( ID_SELNONE, "&Disallow selection" );
 
     wxMenu *autosizeMenu = new wxMenu;
     autosizeMenu->Append( ID_SIZE_ROW, "Selected &row data" );
@@ -765,14 +771,10 @@ GridFrame::GridFrame()
     grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( grid,
-                   1,
-                   wxEXPAND );
+    topSizer->Add(grid, wxSizerFlags(2).Expand());
 
 #if wxUSE_LOG
-    topSizer->Add( logWin,
-                   0,
-                   wxEXPAND );
+    topSizer->Add(logWin, wxSizerFlags(1).Expand());
 #endif // wxUSE_LOG
 
     SetSizerAndFit( topSizer );
@@ -1443,6 +1445,11 @@ void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
 }
 
+void GridFrame::SelectNone( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectNone );
+}
+
 void GridFrame::FreezeOrThaw(wxCommandEvent& ev)
 {
     if ( ev.IsChecked() )
@@ -1637,14 +1644,19 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
     ev.Skip();
 }
 
-void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
+namespace
+{
+
+void
+LogRangeSelectEvent(wxGridRangeSelectEvent& ev, const char* suffix)
 {
     wxString logBuf;
     if ( ev.Selecting() )
-        logBuf << "Selected ";
+        logBuf << "Select";
     else
-        logBuf << "Deselected ";
-    logBuf << "cells from row " << ev.GetTopRow()
+        logBuf << "Deselect";
+    logBuf << suffix
+           << " cells from row " << ev.GetTopRow()
            << " col " << ev.GetLeftCol()
            << " to row " << ev.GetBottomRow()
            << " col " << ev.GetRightCol()
@@ -1655,6 +1667,18 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
     wxLogMessage( "%s", logBuf );
 
     ev.Skip();
+}
+
+} // anonymous namespace
+
+void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
+{
+    LogRangeSelectEvent(ev, "ed");
+}
+
+void GridFrame::OnRangeSelecting( wxGridRangeSelectEvent& ev )
+{
+    LogRangeSelectEvent(ev, "ing");
 }
 
 void GridFrame::OnCellValueChanging( wxGridEvent& ev )
@@ -1733,7 +1757,7 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
     ev.Skip();
 }
 
-void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::OnAbout(  wxCommandEvent& WXUNUSED(ev) )
 {
     wxAboutDialogInfo aboutInfo;
     aboutInfo.SetName("wxGrid demo");
@@ -1752,6 +1776,13 @@ void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
     wxAboutBox(aboutInfo, this);
 }
 
+
+void GridFrame::OnClear( wxCommandEvent& WXUNUSED(ev) )
+{
+#if wxUSE_LOG
+    logWin->Clear();
+#endif // wxUSE_LOG
+}
 
 void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 {

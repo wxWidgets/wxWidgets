@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all 'standard' wxWidgets headers)
@@ -55,8 +52,8 @@ const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 // A small image of a hashtag symbol used in the autocompletion window.
 const char* hashtag_xpm[] = {
 "10 10 2 1",
-" 	c None",
-".	c #BD08F9",
+"  c None",
+". c #BD08F9",
 "  ..  ..  ",
 "  ..  ..  ",
 "..........",

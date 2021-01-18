@@ -89,7 +89,7 @@ public:
         [m_item setData:(NSData*) data forType:(NSString*) format];
     }
 
-    NSPasteboardItem* GetNative() { return m_item; };
+    NSPasteboardItem* GetNative() { return m_item; }
 private:
     NSPasteboardItem* m_item;
 };
@@ -157,7 +157,7 @@ public:
         return (CFDataRef) [m_item dataForType:(NSString*) type];
     }
 
-    NSPasteboardItem* GetNative() { return m_item; };
+    NSPasteboardItem* GetNative() { return m_item; }
 private:
     NSPasteboardItem* m_item;
     NSPasteboard* m_pasteboard;
@@ -318,6 +318,9 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
 - (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
+    wxUnusedVar(session);
+    wxUnusedVar(context);
+
     NSDragOperation allowedDragOperations = NSDragOperationEvery;
 
     // NSDragOperationGeneric also makes a drag to the trash possible
@@ -471,6 +474,7 @@ typedef NSString* NSPasteboardType;
 
 - (nonnull NSArray<NSPasteboardType> *)writableTypesForPasteboard:(nonnull NSPasteboard *)pasteboard
 {
+    wxUnusedVar(pasteboard);
     wxCFMutableArrayRef<CFStringRef> typesarray;
     if ( m_data )
         m_data->AddSupportedTypes(typesarray, wxDataObjectBase::Direction::Get);

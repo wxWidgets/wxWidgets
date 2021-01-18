@@ -10,9 +10,6 @@
 
 #if wxUSE_RADIOBTN
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -27,40 +24,19 @@
 #include "testableframe.h"
 #include "testwindow.h"
 
-class RadioButtonTestCase : public CppUnit::TestCase
+class RadioButtonTestCase
 {
 public:
-    RadioButtonTestCase() { }
+    RadioButtonTestCase();
+    ~RadioButtonTestCase();
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( RadioButtonTestCase );
-        WXUISIM_TEST( Click );
-        CPPUNIT_TEST( Value );
-        CPPUNIT_TEST( Group );
-        CPPUNIT_TEST( Single );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Click();
-    void Value();
-    void Group();
-    void Single();
-
+protected:
     wxRadioButton* m_radio;
 
     wxDECLARE_NO_COPY_CLASS(RadioButtonTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RadioButtonTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RadioButtonTestCase,
-                                      "RadioButtonTestCase" );
-
-void RadioButtonTestCase::setUp()
+RadioButtonTestCase::RadioButtonTestCase()
 {
     m_radio = new wxRadioButton(wxTheApp->GetTopWindow(), wxID_ANY,
                                 "wxRadioButton");
@@ -68,12 +44,12 @@ void RadioButtonTestCase::setUp()
     m_radio->Refresh();
 }
 
-void RadioButtonTestCase::tearDown()
+RadioButtonTestCase::~RadioButtonTestCase()
 {
-    wxDELETE(m_radio);
+    delete m_radio;
 }
 
-void RadioButtonTestCase::Click()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Click", "[radiobutton]")
 {
     // OS X doesn't support selecting a single radio button
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
@@ -87,87 +63,115 @@ void RadioButtonTestCase::Click()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 1, selected.GetCount() );
+    CHECK(selected.GetCount() == 1);
 #endif
 }
 
-void RadioButtonTestCase::Value()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Value", "[radiobutton]")
 {
 #ifndef __WXGTK__
     EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     m_radio->SetValue(true);
 
-    CPPUNIT_ASSERT(m_radio->GetValue());
+    CHECK(m_radio->GetValue());
 
     m_radio->SetValue(false);
 
-    CPPUNIT_ASSERT(!m_radio->GetValue());
+    CHECK(!m_radio->GetValue());
 
-    CPPUNIT_ASSERT_EQUAL(0, selected.GetCount());
+    CHECK(selected.GetCount() == 0);
 #endif
 }
 
-void RadioButtonTestCase::Group()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
     // Create two different radio groups.
-    wxRadioButton* g1radio0 = new wxRadioButton(parent, wxID_ANY, "radio 1.0",
+    wxScopedPtr<wxRadioButton> g1radio0(new wxRadioButton(parent, wxID_ANY, "radio 1.0",
                                                 wxDefaultPosition, wxDefaultSize,
-                                                wxRB_GROUP);
+                                                wxRB_GROUP));
 
-    wxRadioButton* g1radio1 = new wxRadioButton(parent, wxID_ANY, "radio 1.1");
+    wxScopedPtr<wxRadioButton> g1radio1(new wxRadioButton(parent, wxID_ANY, "radio 1.1"));
 
-    wxRadioButton* g2radio0 = new wxRadioButton(parent, wxID_ANY, "radio 2.0",
+    wxScopedPtr<wxRadioButton> g2radio0(new wxRadioButton(parent, wxID_ANY, "radio 2.0",
                                                 wxDefaultPosition, wxDefaultSize,
-                                                wxRB_GROUP);
+                                                wxRB_GROUP));
 
-    wxRadioButton* g2radio1 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
+    wxScopedPtr<wxRadioButton> g2radio1(new wxRadioButton(parent, wxID_ANY, "radio 2.1"));
 
     // Check that having another control between radio buttons doesn't break
     // grouping.
-    wxStaticText* text = new wxStaticText(parent, wxID_ANY, "Label");
-    wxRadioButton* g2radio2 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
+    wxScopedPtr<wxStaticText> text(new wxStaticText(parent, wxID_ANY, "Label"));
+    wxScopedPtr<wxRadioButton> g2radio2(new wxRadioButton(parent, wxID_ANY, "radio 2.2"));
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
-    CPPUNIT_ASSERT(g1radio0->GetValue());
-    CPPUNIT_ASSERT(!g1radio1->GetValue());
-    CPPUNIT_ASSERT(g2radio0->GetValue());
-    CPPUNIT_ASSERT(!g2radio1->GetValue());
+    CHECK(g1radio0->GetValue());
+    CHECK(!g1radio1->GetValue());
+    CHECK(g2radio0->GetValue());
+    CHECK(!g2radio1->GetValue());
 
     g1radio1->SetValue(true);
     g2radio1->SetValue(true);
 
-    CPPUNIT_ASSERT(!g1radio0->GetValue());
-    CPPUNIT_ASSERT(g1radio1->GetValue());
-    CPPUNIT_ASSERT(!g2radio0->GetValue());
-    CPPUNIT_ASSERT(g2radio1->GetValue());
+    CHECK(!g1radio0->GetValue());
+    CHECK(g1radio1->GetValue());
+    CHECK(!g2radio0->GetValue());
+    CHECK(g2radio1->GetValue());
 
     g2radio2->SetValue(true);
-    CPPUNIT_ASSERT(!g2radio0->GetValue());
-    CPPUNIT_ASSERT(!g2radio1->GetValue());
-    CPPUNIT_ASSERT(g2radio2->GetValue());
+    CHECK(!g2radio0->GetValue());
+    CHECK(!g2radio1->GetValue());
+    CHECK(g2radio2->GetValue());
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
-    CPPUNIT_ASSERT(g1radio0->GetValue());
-    CPPUNIT_ASSERT(!g1radio1->GetValue());
-    CPPUNIT_ASSERT(g2radio0->GetValue());
-    CPPUNIT_ASSERT(!g2radio1->GetValue());
+    CHECK(g1radio0->GetValue());
+    CHECK(!g1radio1->GetValue());
+    CHECK(g2radio0->GetValue());
+    CHECK(!g2radio1->GetValue());
 
-    wxDELETE(g1radio0);
-    wxDELETE(g1radio1);
-    wxDELETE(g2radio0);
-    wxDELETE(g2radio1);
-    wxDELETE(g2radio2);
-    wxDELETE(text);
+
+    // Check that group navigation functions behave as expected.
+
+    // GetFirstInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetFirstInGroup(), g1radio0);
+    CHECK_SAME_WINDOW(g1radio1->GetFirstInGroup(), g1radio0);
+
+    CHECK_SAME_WINDOW(g2radio0->GetFirstInGroup(), g2radio0);
+    CHECK_SAME_WINDOW(g2radio1->GetFirstInGroup(), g2radio0);
+    CHECK_SAME_WINDOW(g2radio2->GetFirstInGroup(), g2radio0);
+
+    // GetLastInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetLastInGroup(), g1radio1);
+    CHECK_SAME_WINDOW(g1radio1->GetLastInGroup(), g1radio1);
+
+    CHECK_SAME_WINDOW(g2radio0->GetLastInGroup(), g2radio2);
+    CHECK_SAME_WINDOW(g2radio1->GetLastInGroup(), g2radio2);
+    CHECK_SAME_WINDOW(g2radio2->GetLastInGroup(), g2radio2);
+
+    // GetNextInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetNextInGroup(), g1radio1);
+    CHECK_SAME_WINDOW(g1radio1->GetNextInGroup(), NULL);
+
+    CHECK_SAME_WINDOW(g2radio0->GetNextInGroup(), g2radio1);
+    CHECK_SAME_WINDOW(g2radio1->GetNextInGroup(), g2radio2);
+    CHECK_SAME_WINDOW(g2radio2->GetNextInGroup(), NULL);
+
+    // GetPreviousInGroup()
+    CHECK_SAME_WINDOW(g1radio0->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(g1radio1->GetPreviousInGroup(), g1radio0);
+
+    CHECK_SAME_WINDOW(g2radio0->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(g2radio1->GetPreviousInGroup(), g2radio0);
+    CHECK_SAME_WINDOW(g2radio2->GetPreviousInGroup(), g2radio1);
 }
 
-void RadioButtonTestCase::Single()
+TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
 {
     //Create a group of 2 buttons, having second button selected
     wxScopedPtr<wxRadioButton> gradio0(new wxRadioButton(wxTheApp->GetTopWindow(),
@@ -197,9 +201,15 @@ void RadioButtonTestCase::Single()
 
     CHECK(gradio1->GetValue());
     CHECK(ngradio->GetValue());
+
+    // Also check that navigation works as expected with "single" buttons.
+    CHECK_SAME_WINDOW(sradio->GetFirstInGroup(), sradio);
+    CHECK_SAME_WINDOW(sradio->GetLastInGroup(), sradio);
+    CHECK_SAME_WINDOW(sradio->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(sradio->GetNextInGroup(), NULL);
 }
 
-TEST_CASE("wxRadioButton::Focus", "[radiobutton][focus]")
+TEST_CASE("RadioButton::Focus", "[radiobutton][focus]")
 {
     // Create a container panel just to be able to destroy all the windows
     // created here at once by simply destroying it.

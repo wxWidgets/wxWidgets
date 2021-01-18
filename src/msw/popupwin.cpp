@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_POPUPWIN
 
@@ -57,6 +54,14 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
                wxWindow::Create(parent, wxID_ANY,
                                 wxDefaultPosition, wxDefaultSize,
                                 flags);
+}
+
+wxPopupWindow::~wxPopupWindow()
+{
+    // If the popup is destroyed without being hidden first, ensure that we are
+    // not left with a dangling pointer.
+    if ( wxCurrentPopupWindow == this )
+        wxCurrentPopupWindow = NULL;
 }
 
 WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const

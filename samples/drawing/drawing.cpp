@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -1205,7 +1202,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     {
         gc->PushState(); // save this new current state so we can
         //  pop back to it at the end of the loop
-        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(float(angle)/360, 1, 1));
+        wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(angle / 360.0, 1, 1));
         gc->SetBrush(wxBrush(wxColour(val.red, val.green, val.blue, 64)));
         gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
 
@@ -1338,8 +1335,8 @@ void MyCanvas::DrawSplines(wxDC& dc)
     {
         angle += angles[ angle_pos ];
         int r = R * radii[ radius_pos ] / 100;
-        pts[ i ].x = center.x + (wxCoord)( r * cos( M_PI * angle / 180.0) );
-        pts[ i ].y = center.y + (wxCoord)( r * sin( M_PI * angle / 180.0) );
+        pts[ i ].x = center.x + (wxCoord)( r * cos(wxDegToRad(angle)) );
+        pts[ i ].y = center.y + (wxCoord)( r * sin(wxDegToRad(angle)) );
 
         angle_pos++;
         if ( angle_pos >= WXSIZEOF(angles) ) angle_pos = 0;
@@ -2013,11 +2010,9 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         PrepareDC(dc);
         m_owner->PrepareDC(dc);
 
-        wxPoint pos = event.GetPosition();
-        long x = dc.DeviceToLogicalX( pos.x );
-        long y = dc.DeviceToLogicalY( pos.y );
+        wxPoint pos = dc.DeviceToLogical(event.GetPosition());
         wxString str;
-        str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
+        str.Printf( "Current mouse position: %d,%d", pos.x, pos.y );
         m_owner->SetStatusText( str );
     }
 

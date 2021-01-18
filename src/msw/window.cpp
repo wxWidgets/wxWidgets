@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -105,6 +102,7 @@
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 #include "wx/dynlib.h"
+#include "wx/display.h"
 
 #include <string.h>
 
@@ -999,7 +997,7 @@ bool wxWindowMSW::EnableTouchEvents(int eventsMask)
         if ( !GestureFuncs::SetGestureConfig()
              (
                 m_hWnd,
-                0,                      // Reserved, must be always 0.
+                wxRESERVED_PARAM,
                 numConfigs,             // Number of gesture configurations.
                 ptrConfigs,             // Pointer to the first one.
                 sizeof(GESTURECONFIG)   // Size of each configuration.
@@ -4298,6 +4296,14 @@ bool wxWindowMSW::HandleActivate(int state,
         return false;
     }
 
+    if ( m_isBeingDeleted )
+    {
+        // Same goes for activation events sent to an already half-destroyed
+        // window: this doesn't happen always, but can happen for a TLW using a
+        // (still existent) hidden parent, see #18970.
+        return false;
+    }
+
     wxActivateEvent event(wxEVT_ACTIVATE,
                           (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),
                           m_windowId,
@@ -4801,7 +4807,12 @@ int wxGetSystemMetrics(int nIndex, const wxWindow* win)
 /*extern*/
 bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, const wxWindow* win)
 {
-#if wxUSE_DYNLIB_CLASS
+    // Note that we can't use SystemParametersInfoForDpi() in non-Unicode build
+    // because it always works with wide strings and we'd have to check for all
+    // uiAction values corresponding to strings and use a temporary wide buffer
+    // for them, and convert the returned value to ANSI after the call. Instead
+    // of doing all this, just don't use it at all in the deprecated ANSI build.
+#if wxUSE_DYNLIB_CLASS && wxUSE_UNICODE
     const wxWindow* window = (!win && wxTheApp) ? wxTheApp->GetTopWindow() : win;
 
     if ( window )
@@ -4858,6 +4869,16 @@ wxSize wxWindowMSW::GetDPI() const
     return dpi;
 }
 
+double wxWindowMSW::GetDPIScaleFactor() const
+{
+    return GetDPI().y / (double)wxDisplay::GetStdPPIValue();
+}
+
+void wxWindowMSW::WXAdjustFontToOwnPPI(wxFont& font) const
+{
+    font.WXAdjustToPPI(GetDPI());
+}
+
 void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     if ( m_font.IsOk() )
@@ -4876,7 +4897,7 @@ static void ScaleCoordIfSet(int& coord, float scaleFactor)
     if ( coord != wxDefaultCoord )
     {
         const float coordScaled = coord * scaleFactor;
-        coord = scaleFactor > 1.0 ? ceil(coordScaled) : floor(coordScaled);
+        coord = int(scaleFactor > 1 ? std::ceil(coordScaled) : std::floor(coordScaled));
     }
 }
 
@@ -4908,10 +4929,13 @@ static void UpdateSizerOnDPIChange(wxSizer* sizer, float scaleFactor)
             ScaleCoordIfSet(min.y, scaleFactor);
             sizerItem->SetMinSize(min);
 
-            wxSize size = sizerItem->GetSize();
-            ScaleCoordIfSet(size.x, scaleFactor);
-            ScaleCoordIfSet(size.y, scaleFactor);
-            sizerItem->SetDimension(wxDefaultPosition, size);
+            if ( sizerItem->IsSpacer() )
+            {
+                wxSize size = sizerItem->GetSize();
+                ScaleCoordIfSet(size.x, scaleFactor);
+                ScaleCoordIfSet(size.y, scaleFactor);
+                sizerItem->SetDimension(wxDefaultPosition, size);
+            }
 
             // Update any child sizers if this is a sizer
             UpdateSizerOnDPIChange(sizerItem->GetSizer(), scaleFactor);

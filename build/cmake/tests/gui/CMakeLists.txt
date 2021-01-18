@@ -22,9 +22,12 @@ set(TEST_GUI_SRC
     graphics/affinematrix.cpp
     graphics/boundingbox.cpp
     graphics/clippingbox.cpp
+    graphics/coords.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
+    graphics/imagelist.cpp
     config/config.cpp
+    controls/auitest.cpp
     controls/bitmapcomboboxtest.cpp
     controls/bitmaptogglebuttontest.cpp
     controls/bookctrlbasetest.cpp
@@ -102,11 +105,13 @@ set(TEST_GUI_SRC
     net/socket.cpp
     persistence/tlw.cpp
     persistence/dataview.cpp
+    rowheightcache/rowheightcachetest.cpp
     sizers/boxsizer.cpp
     sizers/gridsizer.cpp
     sizers/wrapsizer.cpp
     toplevel/toplevel.cpp
     validators/valnum.cpp
+    validators/valtext.cpp
     window/clientsize.cpp
     window/setsize.cpp
     xml/xrctest.cpp
@@ -160,6 +165,17 @@ set(TEST_GUI_DATA
     image/horse_box_average_100x100.png
     image/horse_box_average_150x150.png
     image/horse_box_average_300x300.png
+    image/paste_input_background.png
+    image/paste_input_black.png
+    image/paste_input_overlay_transparent_border_opaque_square.png
+    image/paste_input_overlay_transparent_border_semitransparent_circle.png
+    image/paste_input_overlay_transparent_border_semitransparent_square.png
+    image/paste_result_background_plus_circle_plus_square.png
+    image/paste_result_background_plus_overlay_transparent_border_opaque_square.png
+    image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
+    image/paste_result_no_background_square_over_circle.png
+    image/wx.png
+    image/wx.ico
     intl/ja/internat.mo
     intl/ja/internat.po
     )
@@ -169,6 +185,9 @@ wx_add_test(test_gui ${TEST_GUI_SRC}
     RES ../samples/sample.rc
     )
 wx_exe_link_libraries(test_gui wxcore)
+if(wxUSE_AUI)
+    wx_exe_link_libraries(test_gui wxaui)
+endif()
 if(wxUSE_RICHTEXT)
     wx_exe_link_libraries(test_gui wxrichtext)
 endif()

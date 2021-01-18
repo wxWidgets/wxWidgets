@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CARET
 
@@ -103,7 +100,8 @@ void wxCaret::InitGeneric()
 #ifndef wxHAS_CARET_USING_OVERLAYS
     m_xOld =
     m_yOld = -1;
-    m_bmpUnderCaret.Create(m_width, m_height);
+    if (m_width && m_height)
+        m_bmpUnderCaret.Create(m_width, m_height);
 #endif
 }
 
@@ -174,7 +172,10 @@ void wxCaret::DoSize()
     m_overlay.Reset();
 #else
     // Change bitmap size
-    m_bmpUnderCaret = wxBitmap(m_width, m_height);
+    if (m_width && m_height)
+        m_bmpUnderCaret = wxBitmap(m_width, m_height);
+    else
+        m_bmpUnderCaret = wxBitmap();
 #endif
     if (countVisible > 0)
     {

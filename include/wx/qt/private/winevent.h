@@ -332,7 +332,8 @@ protected:
 
     virtual bool event(QEvent *event)
     {
-        if (event->type() == QEvent::Gesture){
+        if (event->type() == QEvent::Gesture)
+        {
             return gestureEvent(static_cast<QGestureEvent*>(event), event);
         }
 
@@ -342,17 +343,20 @@ protected:
     bool gestureEvent(QGestureEvent *gesture, QEvent *event)
     {
 
-       if (QGesture *tah = gesture->gesture(Qt::TapAndHoldGesture)){
+       if (QGesture *tah = gesture->gesture(Qt::TapAndHoldGesture))
+       {
             //  Set the policy so that accepted gestures are taken by the first window that gets them
             tah->setGestureCancelPolicy ( QGesture::CancelAllInContext );
             tapandholdTriggered(static_cast<QTapAndHoldGesture *>(tah), event);
         }
 
-        if (QGesture *pan = gesture->gesture(Qt::PanGesture)){
+        if (QGesture *pan = gesture->gesture(Qt::PanGesture))
+        {
             panTriggered(static_cast<QPanGesture *>(pan), event);
         }
 
-        if (QGesture *pinch = gesture->gesture(Qt::PinchGesture)){
+        if (QGesture *pinch = gesture->gesture(Qt::PinchGesture))
+        {
             pinchTriggered(static_cast<QPinchGesture *>(pinch), event);
         }
 
@@ -364,8 +368,10 @@ protected:
     {
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
 
-        if (gesture->state() == Qt::GestureFinished) {
-            if(win){
+        if (gesture->state() == Qt::GestureFinished)
+        {
+            if( win )
+            {
               wxLongPressEvent ev(win->GetId());
               ev.SetPosition( wxQtConvertPoint( gesture->position().toPoint() ) );
 
@@ -375,11 +381,13 @@ protected:
             }
 
         }
-        else if (gesture->state() == Qt::GestureStarted) {
+        else if (gesture->state() == Qt::GestureStarted)
+        {
             event->accept();
         }
 
-        else {
+        else
+        {
             event->accept();
         }
 
@@ -390,31 +398,33 @@ protected:
     {
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
 
-        if(win){
+        if (win)
+        {
             wxPanGestureEvent evp(win->GetId());
             QPoint pos = QCursor::pos();
             evp.SetPosition( wxQtConvertPoint( pos ) );
- 
+
             QPoint offset = gesture->offset().toPoint();
             QPoint offset_last = gesture->lastOffset().toPoint();
             QPoint delta(offset.x() - offset_last.x(), offset.y() - offset_last.y());
-            
+
             evp.SetDelta( wxQtConvertPoint( delta ) );
-            
-            switch(gesture->state()){
-              case Qt::GestureStarted:
-                evp.SetGestureStart();
-                break;
-              case Qt::GestureFinished:
-              case Qt::GestureCanceled:
-                evp.SetGestureEnd();
-                break;
-              default:
-                break;
+
+            switch(gesture->state())
+            {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
             }
-                
+
             win->ProcessWindowEvent( evp );
-            
+
             event->accept();
         }
     }
@@ -422,35 +432,35 @@ protected:
     void pinchTriggered(QPinchGesture *gesture, QEvent *event)
     {
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
-        if(win){
+        if (win)
+        {
 
             qreal this_sf = gesture->scaleFactor();
             QPoint center_point = gesture->centerPoint().toPoint();
-            
+
             wxZoomGestureEvent evp(win->GetId());
             evp.SetPosition( wxQtConvertPoint( center_point ) );
             evp.SetZoomFactor( this_sf);
-            
-            switch(gesture->state()){
-              case Qt::GestureStarted:
-                evp.SetGestureStart();
-                break;
-              case Qt::GestureFinished:
-              case Qt::GestureCanceled:
-                evp.SetGestureEnd();
-                break;
-              default:
-                break;
+
+            switch(gesture->state())
+            {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
             }
 
             win->ProcessWindowEvent( evp );
-            
+
             event->accept();
 
         }
     }
-
-
 
 };
 

@@ -150,7 +150,7 @@ bool wxTextCtrl::SetFont( const wxFont& font )
     if ( !wxTextCtrlBase::SetFont( font ) )
         return false ;
 
-    GetPeer()->SetFont( font , GetForegroundColour() , GetWindowStyle(), false /* dont ignore black */ ) ;
+    GetPeer()->SetFont(font) ;
 
     return true ;
 }

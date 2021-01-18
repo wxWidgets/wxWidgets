@@ -13,7 +13,7 @@
 // wxRadioButton
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
 {
 public:
     wxRadioButton() { }
@@ -39,8 +39,8 @@ public:
                  const wxString& name = wxASCII_STR(wxRadioButtonNameStr) );
 
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
-    virtual void SetValue(bool val);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool val) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

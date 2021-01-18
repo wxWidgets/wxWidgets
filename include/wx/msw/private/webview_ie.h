@@ -73,7 +73,7 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxWebViewIEImpl);
 };
 
-class VirtualProtocol : public wxIInternetProtocol
+class VirtualProtocol : public wxIInternetProtocol, public wxIInternetProtocolInfo
 {
 protected:
     wxIInternetProtocolSink* m_protocolSink;
@@ -114,6 +114,27 @@ public:
                                    ULARGE_INTEGER* WXUNUSED(plibNewPosition)) wxOVERRIDE
                                    { return E_FAIL; }
     HRESULT STDMETHODCALLTYPE UnlockRequest() wxOVERRIDE { return S_OK; }
+
+    //IInternetProtocolInfo
+    HRESULT STDMETHODCALLTYPE CombineUrl(
+            LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
+            DWORD dwCombineFlags, LPWSTR pwzResult,
+            DWORD cchResult, DWORD *pcchResult,
+            DWORD dwReserved) wxOVERRIDE;
+    HRESULT STDMETHODCALLTYPE ParseUrl(
+            LPCWSTR pwzUrl, wxPARSEACTION ParseAction,
+            DWORD dwParseFlags, LPWSTR pwzResult,
+            DWORD cchResult, DWORD *pcchResult,
+            DWORD dwReserved) wxOVERRIDE;
+    HRESULT STDMETHODCALLTYPE CompareUrl(
+            LPCWSTR pwzUrl1,
+            LPCWSTR pwzUrl2,
+            DWORD dwCompareFlags) wxOVERRIDE;
+    HRESULT STDMETHODCALLTYPE QueryInfo(
+            LPCWSTR pwzUrl, wxQUERYOPTION OueryOption,
+            DWORD dwQueryFlags, LPVOID pBuffer,
+            DWORD cbBuffer, DWORD *pcbBuf,
+            DWORD dwReserved) wxOVERRIDE;
 };
 
 class ClassFactory : public IClassFactory

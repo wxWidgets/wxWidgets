@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -651,7 +648,7 @@ void MyPrintout::DrawPageTwo()
     // scaling. The text point size _should_ be the right size but in fact is
     // too small for some reason. This is a detail that will need to be
     // addressed at some point but can be fudged for the moment.
-    float scale = (float)((float)ppiPrinterX/(float)ppiScreenX);
+    double scale = double(ppiPrinterX) / ppiScreenX;
 
     // Now we have to check in case our real page size is reduced (e.g. because
     // we're drawing to a print preview memory DC)
@@ -662,7 +659,7 @@ void MyPrintout::DrawPageTwo()
 
     // If printer pageWidth == current DC width, then this doesn't change. But w
     // might be the preview bitmap width, so scale down.
-    float overallScale = scale * (float)(w/(float)pageWidth);
+    double overallScale = scale * w / pageWidth;
     dc->SetUserScale(overallScale, overallScale);
 
     // Calculate conversion factor for converting millimetres into logical
@@ -672,11 +669,11 @@ void MyPrintout::DrawPageTwo()
     // unscale to pass logical units to DrawLine.
 
     // Draw 50 mm by 50 mm L shape
-    float logUnitsFactor = (float)(ppiPrinterX/(scale*25.4));
-    float logUnits = (float)(50*logUnitsFactor);
+    double logUnitsFactor = ppiPrinterX / (scale * 25.4);
+    int logUnits = int(50 * logUnitsFactor);
     dc->SetPen(* wxBLACK_PEN);
-    dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
-    dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
+    dc->DrawLine(50, 250, 50 + logUnits, 250);
+    dc->DrawLine(50, 250, 50, 250 + logUnits);
 
     dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc->SetBrush(*wxTRANSPARENT_BRUSH);
@@ -716,22 +713,22 @@ void MyPrintout::DrawPageTwo()
     int pageWidthMM, pageHeightMM;
     GetPageSizeMM(&pageWidthMM, &pageHeightMM);
 
-    float leftMarginLogical = (float)(logUnitsFactor*leftMargin);
-    float topMarginLogical = (float)(logUnitsFactor*topMargin);
-    float bottomMarginLogical = (float)(logUnitsFactor*(pageHeightMM - bottomMargin));
-    float rightMarginLogical = (float)(logUnitsFactor*(pageWidthMM - rightMargin));
+    int leftMarginLogical = int(logUnitsFactor * leftMargin);
+    int topMarginLogical = int(logUnitsFactor * topMargin);
+    int bottomMarginLogical = int(logUnitsFactor * (pageHeightMM - bottomMargin));
+    int rightMarginLogical = int(logUnitsFactor * (pageWidthMM - rightMargin));
 
     dc->SetPen(* wxRED_PEN);
-    dc->DrawLine( (long)leftMarginLogical, (long)topMarginLogical,
-        (long)rightMarginLogical, (long)topMarginLogical);
-    dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical,
-        (long)rightMarginLogical,  (long)bottomMarginLogical);
+    dc->DrawLine(leftMarginLogical, topMarginLogical,
+        rightMarginLogical, topMarginLogical);
+    dc->DrawLine(leftMarginLogical, bottomMarginLogical,
+        rightMarginLogical, bottomMarginLogical);
 
     WritePageHeader(this, dc, "A header", logUnitsFactor);
 }
 
 // Writes a header on a page. Margin units are in millimetres.
-bool MyPrintout::WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString&text, float mmToLogical)
+bool MyPrintout::WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString&text, double mmToLogical)
 {
     int pageWidthMM, pageHeightMM;
 
@@ -742,19 +739,19 @@ bool MyPrintout::WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString&
     int topMargin = 10;
     int rightMargin = 10;
 
-    float leftMarginLogical = (float)(mmToLogical*leftMargin);
-    float topMarginLogical = (float)(mmToLogical*topMargin);
-    float rightMarginLogical = (float)(mmToLogical*(pageWidthMM - rightMargin));
+    int leftMarginLogical = int(mmToLogical * leftMargin);
+    int topMarginLogical = int(mmToLogical * topMargin);
+    int rightMarginLogical = int(mmToLogical * (pageWidthMM - rightMargin));
 
     wxCoord xExtent, yExtent;
     dc->GetTextExtent(text, &xExtent, &yExtent);
 
-    float xPos = (float)(((((pageWidthMM - leftMargin - rightMargin)/2.0)+leftMargin)*mmToLogical) - (xExtent/2.0));
-    dc->DrawText(text, (long)xPos, (long)topMarginLogical);
+    int xPos = int(((((pageWidthMM - leftMargin - rightMargin) / 2.0) + leftMargin) * mmToLogical) - (xExtent / 2.0));
+    dc->DrawText(text, xPos, topMarginLogical);
 
     dc->SetPen(* wxBLACK_PEN);
-    dc->DrawLine( (long)leftMarginLogical, (long)(topMarginLogical+yExtent),
-                  (long)rightMarginLogical, (long)topMarginLogical+yExtent );
+    dc->DrawLine(leftMarginLogical, topMarginLogical + yExtent,
+                 rightMarginLogical, topMarginLogical + yExtent);
 
     return true;
 }

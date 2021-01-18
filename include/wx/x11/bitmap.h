@@ -72,13 +72,6 @@ public:
 
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
-#ifdef wxNEEDS_CHARPP
-    // needed for old GCC
-    wxBitmap(char** data)
-    {
-        *this = wxBitmap(const_cast<const char* const*>(data));
-    }
-#endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
     virtual ~wxBitmap();
 

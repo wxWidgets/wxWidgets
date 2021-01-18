@@ -14,9 +14,6 @@
 
 #if wxUSE_TREELISTCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/treelist.h"
 

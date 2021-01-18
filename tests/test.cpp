@@ -14,9 +14,6 @@
 // and "catch.hpp"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Suppress some warnings in catch_impl.hpp.
 wxCLANG_WARNING_SUPPRESS(missing-braces)
@@ -174,7 +171,13 @@ static void TestAssertHandler(const wxString& file,
 
 CATCH_TRANSLATE_EXCEPTION(TestAssertFailure& e)
 {
-    return e.m_msg.ToStdString(wxConvUTF8);
+    wxString desc = e.m_msg;
+    if ( desc.empty() )
+        desc.Printf(wxASCII_STR("Condition \"%s\" failed"), e.m_cond);
+
+    desc += wxString::Format(wxASCII_STR(" in %s() at %s:%d"), e.m_func, e.m_file, e.m_line);
+
+    return desc.ToStdString(wxConvUTF8);
 }
 
 #endif // wxDEBUG_LEVEL
@@ -621,6 +624,8 @@ int TestApp::RunTests()
     // running the tests.
     if ( !wxGetEnv(wxASCII_STR("WXTRACE"), NULL) )
         wxLog::EnableLogging(false);
+    else
+        wxLog::SetTimestamp("%Y-%m-%d %H:%M:%S.%l");
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking

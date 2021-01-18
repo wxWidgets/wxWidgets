@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/event.h"
 #include "wx/eventfilter.h"
@@ -598,10 +595,7 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
 void wxMouseEvent::Assign(const wxMouseEvent& event)
 {
     wxEvent::operator=(event);
-
-    // Borland C++ 5.82 doesn't compile an explicit call to an implicitly
-    // defined operator=() so need to do it this way:
-    *static_cast<wxMouseState *>(this) = event;
+    wxMouseState::operator=(event);
 
     m_x = event.m_x;
     m_y = event.m_y;
@@ -807,10 +801,7 @@ wxKeyEvent& wxKeyEvent::operator=(const wxKeyEvent& evt)
     if ( &evt != this )
     {
         wxEvent::operator=(evt);
-
-        // Borland C++ 5.82 doesn't compile an explicit call to an
-        // implicitly defined operator=() so need to do it this way:
-        *static_cast<wxKeyboardState *>(this) = evt;
+        wxKeyboardState::operator=(evt);
 
         DoAssignMembers(evt);
     }

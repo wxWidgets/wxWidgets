@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
@@ -1170,7 +1167,7 @@ void wxPostScriptDCImpl::SetPSFont()
     }
 
     // Select font
-    float size = (float)m_font.GetPointSize() * GetFontPointSizeAdjustment(DPI);
+    double size = m_font.GetPointSize() * double(GetFontPointSizeAdjustment(DPI));
     buffer.Printf( "%s findfont %f scalefont setfont\n", name.c_str(), size * m_scaleX );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
@@ -2253,8 +2250,8 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
         /* JC: calculate UnderlineThickness/UnderlinePosition */
 
-        m_underlinePosition  = YLOG2DEVREL(int(UnderlinePosition  * fontSize)) / 1000.0;
-        m_underlineThickness = YLOG2DEVREL(int(UnderlineThickness * fontSize)) / 1000.0;
+        m_underlinePosition  = YLOG2DEVREL(int(UnderlinePosition  * double(fontSize))) / 1000.0;
+        m_underlineThickness = YLOG2DEVREL(int(UnderlineThickness * double(fontSize))) / 1000.0;
     }
 
 
@@ -2290,10 +2287,6 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
         }
     }
 
-    double widthSum = sum;
-    widthSum *= fontSize;
-    widthSum /= 1000.0F;
-
     /* add descender to height (it is usually a negative value) */
     //if (lastDescender != INT_MIN)
     //{
@@ -2304,7 +2297,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
     /* return size values */
     if ( x )
-        *x = (wxCoord)widthSum;
+        *x = int(sum * fontSize) / 1000;
     if ( y )
         *y = (wxCoord)height;
 

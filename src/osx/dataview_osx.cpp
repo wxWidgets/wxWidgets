@@ -73,14 +73,15 @@ public:
   virtual bool Cleared() wxOVERRIDE;
   virtual void Resort() wxOVERRIDE;
 
+ // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
+  void AdjustAutosizedColumns();
+
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of
  // the passed item to the maximum value occupied by the item in all columns
   void AdjustRowHeight(wxDataViewItem const& item);
  // ... and the same method for a couple of items:
   void AdjustRowHeights(wxDataViewItemArray const& items);
- // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
-  void AdjustAutosizedColumns();
 
 private:
   wxDataViewCtrl* m_DataViewCtrlPtr;
@@ -505,6 +506,7 @@ int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
   GetDataViewPeer()->Collapse(item);
+  AdjustAutosizedColumns();
 }
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
@@ -516,9 +518,10 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
   }
 }
 
-void wxDataViewCtrl::DoExpand(wxDataViewItem const& item)
+void wxDataViewCtrl::DoExpand(wxDataViewItem const& item, bool expandChildren)
 {
-  return GetDataViewPeer()->DoExpand(item);
+  GetDataViewPeer()->DoExpand(item, expandChildren);
+  AdjustAutosizedColumns();
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
@@ -647,9 +650,8 @@ void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
         last_parent = parent;
     }
 
-   // finally select the items:
-    for (i=0; i<noOfSelections; ++i)
-      dataViewWidgetPtr->Select(sel[i]);
+    // finally select the items:
+    dataViewWidgetPtr->Select(sel);
 }
 
 void wxDataViewCtrl::Unselect(wxDataViewItem const& item)
@@ -693,6 +695,12 @@ void wxDataViewCtrl::FinishCustomItemEditing()
     SetCustomRendererItem(wxDataViewItem());
     SetCustomRendererPtr (NULL);
   }
+}
+
+void wxDataViewCtrl::AdjustAutosizedColumns() const
+{
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
 }
 
 /*static*/

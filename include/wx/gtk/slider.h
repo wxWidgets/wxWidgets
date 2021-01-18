@@ -74,6 +74,8 @@ public:
     GtkWidget *m_scale;
 
 protected:
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+
     GtkWidget *m_minLabel,*m_maxLabel;
     bool m_blockScrollEvent;
 

@@ -56,7 +56,7 @@
 #endif
 
 #ifndef TMT_FONT
-#define TMT_FONT	210
+#define TMT_FONT    210
 #endif
 
 #ifndef HAVE_VSSYM32

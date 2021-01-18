@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MSGDLG && !defined(__WXGPE__)
 
@@ -112,6 +109,10 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
 
 void wxMessageDialog::GTKCreateMsgDialog()
 {
+    // Avoid crash if wxMessageBox() is called before GTK is initialized
+    if (g_type_class_peek(GDK_TYPE_DISPLAY) == NULL)
+        return;
+
     GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
 
     GtkMessageType type = GTK_MESSAGE_ERROR;
@@ -278,7 +279,7 @@ int wxMessageDialog::ShowModal()
     {
         default:
             wxFAIL_MSG(wxT("unexpected GtkMessageDialog return code"));
-            // fall through
+            wxFALLTHROUGH;
 
         case GTK_RESPONSE_CANCEL:
         case GTK_RESPONSE_DELETE_EVENT:

@@ -364,7 +364,7 @@ private:
     virtual wxDataViewItem DoGetCurrentItem() const wxOVERRIDE;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) wxOVERRIDE;
 
-    virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
 
     void InvalidateColBestWidths();
     void InvalidateColBestWidth(int idx);

@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL && defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
 
@@ -128,14 +125,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         g_object_ref(m_widget);
 
         // alignment
-        float x_alignment = 0.5;
+        float x_alignment = 0.5f;
         if (HasFlag(wxHL_ALIGN_LEFT))
-            x_alignment = 0.0;
+            x_alignment = 0;
         else if (HasFlag(wxHL_ALIGN_RIGHT))
-            x_alignment = 1.0;
+            x_alignment = 1;
 
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5);
+        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5f);
         wxGCC_WARNING_RESTORE()
 
         // set to non empty strings both the url and the label

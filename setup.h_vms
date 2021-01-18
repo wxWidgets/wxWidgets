@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 15 July 2020                                                       *
+ * Date : 2 September 2020                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -610,6 +610,8 @@ typedef pid_t GPid;
 
 #define wxUSE_GLCANVAS       1
 
+#define wxUSE_GLCANVAS_EGL   0
+
 #define wxUSE_RICHTEXT       1
 
 #define wxUSE_CLIPBOARD     1
@@ -798,11 +800,6 @@ typedef pid_t GPid;
  * Define if va_list type is an array
  */
 #undef VA_LIST_IS_ARRAY
-
-/*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
 
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
@@ -1324,9 +1321,6 @@ typedef pid_t GPid;
 
 /* Define if you have the <langinfo.h> header file.  */
 #define HAVE_LANGINFO_H 1
-
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
 
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */

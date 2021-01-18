@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
@@ -172,11 +169,6 @@ wxBitmap::wxBitmap()
 wxBitmap::wxBitmap(QPixmap pix)
 {
     m_refData = new wxBitmapRefData(pix);
-}
-
-wxBitmap::wxBitmap(const wxBitmap& bmp)
-{
-    Ref(bmp);
 }
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth )

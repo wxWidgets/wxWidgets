@@ -1140,9 +1140,9 @@ private:
     {
     }
 
-    wxGridBlocks(iterator_impl begin, iterator_impl end) :
-        m_begin(begin),
-        m_end(end)
+    wxGridBlocks(iterator_impl ibegin, iterator_impl iend) :
+        m_begin(ibegin),
+        m_end(iend)
     {
     }
 
@@ -1457,7 +1457,8 @@ public:
         wxGridSelectCells         = 0,  // allow selecting anything
         wxGridSelectRows          = 1,  // allow selecting only entire rows
         wxGridSelectColumns       = 2,  // allow selecting only entire columns
-        wxGridSelectRowsOrColumns = wxGridSelectRows | wxGridSelectColumns
+        wxGridSelectRowsOrColumns = wxGridSelectRows | wxGridSelectColumns,
+        wxGridSelectNone          = 4   // disallow selecting anything
     };
 
     // Different behaviour of the TAB key when the end (or the beginning, for
@@ -3003,7 +3004,6 @@ private:
     void DoGridProcessTab(wxKeyboardState& kbdState);
 
     // common implementations of methods defined for both rows and columns
-    bool DoEndDragResizeLine(const wxGridOperations& oper, wxGridWindow *gridWindow);
     int PosToLinePos(int pos, bool clipToMinMax,
                      const wxGridOperations& oper,
                      wxGridWindow *gridWindow) const;
@@ -3406,7 +3406,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_LABEL_RIGHT_DCLICK, wxGri
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_RANGE_SELECTING, wxGridRangeSelectEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_RANGE_SELECTED, wxGridRangeSelectEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_CELL_CHANGING, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_CELL_CHANGED, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_SELECT_CELL, wxGridEvent );
@@ -3460,7 +3461,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_COL_AUTO_SIZE(id, fn)       wx__DECLARE_GRIDSIZEEVT(COL_AUTO_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
-#define EVT_GRID_CMD_RANGE_SELECT(id, fn)        wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECT, id, fn)
+#define EVT_GRID_CMD_RANGE_SELECTING(id, fn)     wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECTING, id, fn)
+#define EVT_GRID_CMD_RANGE_SELECTED(id, fn)      wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECTED, id, fn)
 #define EVT_GRID_CMD_CELL_CHANGING(id, fn)       wx__DECLARE_GRIDEVT(CELL_CHANGING, id, fn)
 #define EVT_GRID_CMD_CELL_CHANGED(id, fn)        wx__DECLARE_GRIDEVT(CELL_CHANGED, id, fn)
 #define EVT_GRID_CMD_SELECT_CELL(id, fn)         wx__DECLARE_GRIDEVT(SELECT_CELL, id, fn)
@@ -3485,7 +3487,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_COL_AUTO_SIZE(fn)       EVT_GRID_CMD_COL_AUTO_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_MOVE(fn)            EVT_GRID_CMD_COL_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_SORT(fn)            EVT_GRID_CMD_COL_SORT(wxID_ANY, fn)
-#define EVT_GRID_RANGE_SELECT(fn)        EVT_GRID_CMD_RANGE_SELECT(wxID_ANY, fn)
+#define EVT_GRID_RANGE_SELECTING(fn)     EVT_GRID_CMD_RANGE_SELECTING(wxID_ANY, fn)
+#define EVT_GRID_RANGE_SELECTED(fn)      EVT_GRID_CMD_RANGE_SELECTED(wxID_ANY, fn)
 #define EVT_GRID_CELL_CHANGING(fn)       EVT_GRID_CMD_CELL_CHANGING(wxID_ANY, fn)
 #define EVT_GRID_CELL_CHANGED(fn)        EVT_GRID_CMD_CELL_CHANGED(wxID_ANY, fn)
 #define EVT_GRID_SELECT_CELL(fn)         EVT_GRID_CMD_SELECT_CELL(wxID_ANY, fn)
@@ -3505,6 +3508,15 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
     #define EVT_GRID_CMD_CELL_CHANGE EVT_GRID_CMD_CELL_CHANGED
     #define EVT_GRID_CELL_CHANGE EVT_GRID_CELL_CHANGED
 #endif // WXWIN_COMPATIBILITY_2_8
+
+// same as above: RANGE_SELECT was split in RANGE_SELECTING and SELECTED in 3.2,
+// but we keep the old name for compatibility
+#if WXWIN_COMPATIBILITY_3_0
+    #define wxEVT_GRID_RANGE_SELECT wxEVT_GRID_RANGE_SELECTED
+
+    #define EVT_GRID_RANGE_SELECT EVT_GRID_RANGE_SELECTED
+#endif // WXWIN_COMPATIBILITY_3_0
+
 
 #if 0  // TODO: implement these ?  others ?
 

@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/crt.h"
 #include "wx/strconv.h" // wxMBConv::cWC2MB()
@@ -719,7 +716,7 @@ size_t wxStrlen(const wxChar16 *s )
 {
     if (!s) return 0;
     size_t i=0;
-    while (*s!=0) { ++i; ++s; };
+    while (*s!=0) { ++i; ++s; }
     return i;
 }
 

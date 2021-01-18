@@ -410,9 +410,6 @@ OSX_CARBON_DIST: ALL_GUI_DIST
 	$(CP_P) $(MACDIR)/cocoa/*.mm $(DISTDIR)/src/osx/cocoa
 	mkdir $(DISTDIR)/src/osx/iphone
 	$(CP_P) $(MACDIR)/iphone/*.mm $(DISTDIR)/src/osx/iphone
-	mkdir $(DISTDIR)/src/html/htmlctrl
-	mkdir $(DISTDIR)/src/html/htmlctrl/webkit
-	$(CP_P) $(WXDIR)/src/html/htmlctrl/webkit/*.mm $(DISTDIR)/src/html/htmlctrl/webkit
 	mkdir $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.cpp $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.mm $(DISTDIR)/src/osx/carbon

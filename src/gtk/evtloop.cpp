@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 #include "wx/evtloopsrc.h"
@@ -304,7 +301,7 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
         // examine the event itself to distinguish between the two cases but
         // this would be unnecessarily complicated).
         cat2 = wxEVT_CATEGORY_CLIPBOARD;
-        // Fall through.
+        wxFALLTHROUGH;
 
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:

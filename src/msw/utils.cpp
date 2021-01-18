@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -71,12 +68,6 @@
     #include <cygwin/version.h>
 #endif  //GNUWIN32
 
-#ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
-                    // this (3.1 I believe) and how to test for it.
-                    // If this works for Borland 4.0 as well, then no worries.
-    #include <dir.h>
-#endif
-
 // VZ: there is some code using NetXXX() functions to get the full user name:
 //     I don't think it's a good idea because they don't work under Win95 and
 //     seem to return the same as wxGetUserId() under NT. If you really want
@@ -93,6 +84,10 @@
 
 #ifndef __GNUWIN32__
     #include <shellapi.h>
+#endif
+
+#ifndef PROCESSOR_ARCHITECTURE_ARM64
+#define PROCESSOR_ARCHITECTURE_ARM64 12
 #endif
 
 #include <errno.h>
@@ -448,13 +443,8 @@ bool wxGetDiskSpace(const wxString& path,
     }
 
     // ULARGE_INTEGER is a union of a 64 bit value and a struct containing
-    // two 32 bit fields which may be or may be not named - try to make it
-    // compile in all cases
-#if defined(__BORLANDC__) && !defined(_ANONYMOUS_STRUCT)
-    #define UL(ul) ul.u
-#else // anon union
+    // two 32 bit fields which may be or may be not named
     #define UL(ul) ul
-#endif
     if ( pTotal )
     {
 #if wxUSE_LONGLONG
@@ -1281,6 +1271,34 @@ wxWinVersion wxGetWinVersion()
     }
 
     return wxWinVersion_Unknown;
+}
+
+wxString wxGetCpuArchitectureName()
+{
+    SYSTEM_INFO si;
+    GetNativeSystemInfo(&si);
+
+    switch (si.wProcessorArchitecture)
+    {
+    case PROCESSOR_ARCHITECTURE_AMD64:
+        return "x64";
+
+    case PROCESSOR_ARCHITECTURE_ARM:
+        return "ARM";
+
+    case PROCESSOR_ARCHITECTURE_ARM64:
+        return "ARM64";
+
+    case PROCESSOR_ARCHITECTURE_IA64:
+        return "Itanium";
+
+    case PROCESSOR_ARCHITECTURE_INTEL:
+        return "x86";
+
+    case PROCESSOR_ARCHITECTURE_UNKNOWN:
+    default:
+        return wxString();
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -57,6 +57,7 @@ static wxTopLevelWindowGTK *g_activeFrame = NULL;
 
 extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
+extern bool g_inSizeAllocate;
 
 #ifdef GDK_WINDOWING_X11
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
@@ -240,6 +241,9 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
     {
+        const bool save_inSizeAllocate = g_inSizeAllocate;
+        g_inSizeAllocate = true;
+
         win->m_clientWidth  = alloc->width;
         win->m_clientHeight = alloc->height;
 
@@ -272,6 +276,8 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
             win->HandleWindowEvent(event);
         }
         // else the window is currently unmapped, don't generate size events
+
+        g_inSizeAllocate = save_inSizeAllocate;
     }
 }
 }
@@ -904,6 +910,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     if (show == m_fsIsShowing)
         return false; // return what?
 
+    // documented behaviour is to show the window if it's still hidden when
+    // showing it full screen
+    if (show)
+        Show();
+
     m_fsIsShowing = show;
 
 #if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
@@ -985,11 +996,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
         }
     }
 #endif // GDK_WINDOWING_X11
-
-    // documented behaviour is to show the window if it's still hidden when
-    // showing it full screen
-    if (show)
-        Show();
 
     return true;
 }

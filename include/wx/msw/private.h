@@ -34,6 +34,10 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
     #define MAX_PATH  260
 #endif
 
+// Many MSW functions have parameters which are "reserved". Passing them this
+// constant is more clear than just using "0" or "NULL".
+#define wxRESERVED_PARAM    0
+
 // ---------------------------------------------------------------------------
 // standard icons from the resources
 // ---------------------------------------------------------------------------
@@ -121,13 +125,12 @@ extern LONG APIENTRY
 
 // This one is a macro so that it can be tested with #ifdef, it will be
 // undefined if it cannot be implemented for a given compiler.
-// Vc++, bcc, dmc, ow, mingw akk have _get_osfhandle() and Cygwin has
+// Vc++, dmc, ow, mingw akk have _get_osfhandle() and Cygwin has
 // get_osfhandle. Others are currently unknown, e.g. Salford, Intel, Visual
 // Age.
 #if defined(__CYGWIN__)
     #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
 #elif defined(__VISUALC__) \
-   || defined(__BORLANDC__) \
    || defined(__MINGW32__)
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
     #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
@@ -773,6 +776,15 @@ public:
     void *Get() const { return m_ptr; }
     operator void *() const { return m_ptr; }
 
+    size_t GetSize() const
+    {
+        const size_t size = ::GlobalSize(m_hGlobal);
+        if ( !size )
+            wxLogLastError(wxT("GlobalSize"));
+
+        return size;
+    }
+
 private:
     HGLOBAL m_hGlobal;
     void *m_ptr;
@@ -963,6 +975,10 @@ enum wxWinVersion
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
+
+// This is similar to wxSysErrorMsgStr(), but takes an extra HMODULE parameter
+// specific to wxMSW.
+WXDLLIMPEXP_BASE wxString wxMSWFormatMessage(DWORD nErrCode, HMODULE hModule = 0);
 
 #if wxUSE_GUI && defined(__WXMSW__)
 

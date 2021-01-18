@@ -35,6 +35,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gdkconv.h"
+#include "wx/gtk/private/image.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/treeview.h"
 using namespace wxGTKImpl;
@@ -2119,11 +2120,11 @@ void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 
     // horizontal alignment:
 
-    gfloat xalign = 0.0;
+    float xalign = 0;
     if (align & wxALIGN_RIGHT)
-        xalign = 1.0;
+        xalign = 1;
     else if (align & wxALIGN_CENTER_HORIZONTAL)
-        xalign = 0.5;
+        xalign = 0.5f;
 
     GValue gvalue = G_VALUE_INIT;
     g_value_init( &gvalue, G_TYPE_FLOAT );
@@ -2133,11 +2134,11 @@ void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 
     // vertical alignment:
 
-    gfloat yalign = 0.0;
+    float yalign = 0;
     if (align & wxALIGN_BOTTOM)
-        yalign = 1.0;
+        yalign = 1;
     else if (align & wxALIGN_CENTER_VERTICAL)
-        yalign = 0.5;
+        yalign = 0.5f;
 
     GValue gvalue2 = G_VALUE_INIT;
     g_value_init( &gvalue2, G_TYPE_FLOAT );
@@ -2463,20 +2464,114 @@ GtkCellRendererText *wxDataViewTextRenderer::GtkGetTextRenderer() const
 // wxDataViewBitmapRenderer
 // ---------------------------------------------------------
 
-namespace
-{
+#ifdef __WXGTK3__
+// Derive a type from GtkCellRendererPixbuf to allow drawing HiDPI bitmaps
 
-// set "pixbuf" property on the given renderer
-void SetPixbufProp(GtkCellRenderer *renderer, GdkPixbuf *pixbuf)
-{
-    GValue gvalue = G_VALUE_INIT;
-    g_value_init( &gvalue, G_TYPE_OBJECT );
-    g_value_set_object( &gvalue, pixbuf );
-    g_object_set_property( G_OBJECT(renderer), "pixbuf", &gvalue );
-    g_value_unset( &gvalue );
+extern "C" {
+static void wxCellRendererPixbufClassInit(void* g_class, void* class_data);
 }
 
+#define WX_CELL_RENDERER_PIXBUF(obj) G_TYPE_CHECK_INSTANCE_CAST(obj, wxCellRendererPixbuf::Type(), wxCellRendererPixbuf)
+
+namespace
+{
+class wxCellRendererPixbuf: GtkCellRendererPixbuf
+{
+public:
+    static GType Type();
+    static GtkCellRenderer* New();
+    void Set(const wxBitmap& bitmap);
+
+    wxBitmap* m_bitmap;
+
+    wxDECLARE_NO_COPY_CLASS(wxCellRendererPixbuf);
+    wxCellRendererPixbuf() wxMEMBER_DELETE;
+    ~wxCellRendererPixbuf() wxMEMBER_DELETE;
+};
+
+GtkCellRendererClass* wxCellRendererPixbufParentClass;
+
+GType wxCellRendererPixbuf::Type()
+{
+    static GType type;
+    if (type == 0)
+    {
+        type = g_type_register_static_simple(
+            GTK_TYPE_CELL_RENDERER_PIXBUF,
+            "wxCellRendererPixbuf",
+            sizeof(GtkCellRendererPixbufClass),
+            wxCellRendererPixbufClassInit,
+            sizeof(wxCellRendererPixbuf),
+            NULL, GTypeFlags(0));
+    }
+    return type;
+}
+
+GtkCellRenderer* wxCellRendererPixbuf::New()
+{
+    wxCellRendererPixbuf* crp = WX_CELL_RENDERER_PIXBUF(g_object_new(Type(), NULL));
+    crp->m_bitmap = new wxBitmap;
+    return GTK_CELL_RENDERER(crp);
+}
+
+void wxCellRendererPixbuf::Set(const wxBitmap& bitmap)
+{
+    *m_bitmap = bitmap;
+
+    GdkPixbuf* pixbuf = NULL;
+    GdkPixbuf* pixbufNew = NULL;
+    if (bitmap.IsOk())
+    {
+        if (bitmap.GetScaleFactor() <= 1)
+        {
+            pixbuf = bitmap.GetPixbuf();
+            m_bitmap->UnRef();
+        }
+        else
+        {
+            pixbufNew =
+            pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
+                int(bitmap.GetScaledWidth()), int(bitmap.GetScaledHeight()));
+        }
+    }
+    g_object_set(G_OBJECT(this), "pixbuf", pixbuf, NULL);
+    if (pixbufNew)
+        g_object_unref(pixbufNew);
+}
 } // anonymous namespace
+
+extern "C" {
+static void
+wxCellRendererPixbufRender(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
+    const GdkRectangle* background_area, const GdkRectangle* cell_area, GtkCellRendererState flags)
+{
+    const wxBitmap& bitmap = *WX_CELL_RENDERER_PIXBUF(cell)->m_bitmap;
+    if (!bitmap.IsOk())
+        wxCellRendererPixbufParentClass->render(cell, cr, widget, background_area, cell_area, flags);
+    else
+    {
+        const int x = (cell_area->width  - int(bitmap.GetScaledWidth() )) / 2;
+        const int y = (cell_area->height - int(bitmap.GetScaledHeight())) / 2;
+        bitmap.Draw(cr, cell_area->x + x, cell_area->y + y);
+    }
+}
+
+static void wxCellRendererPixbufFinalize(GObject* object)
+{
+    wxCellRendererPixbuf* crp = WX_CELL_RENDERER_PIXBUF(object);
+    delete crp->m_bitmap;
+    crp->m_bitmap = NULL;
+    G_OBJECT_CLASS(wxCellRendererPixbufParentClass)->finalize(object);
+}
+
+static void wxCellRendererPixbufClassInit(void* g_class, void* /*class_data*/)
+{
+    GTK_CELL_RENDERER_CLASS(g_class)->render = wxCellRendererPixbufRender;
+    G_OBJECT_CLASS(g_class)->finalize = wxCellRendererPixbufFinalize;
+    wxCellRendererPixbufParentClass = GTK_CELL_RENDERER_CLASS(g_type_class_peek_parent(g_class));
+}
+} // extern "C"
+#endif // __WXGTK3__
 
 wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 
@@ -2484,7 +2579,11 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
                                                     int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
+#ifdef __WXGTK3__
+    m_renderer = wxCellRendererPixbuf::New();
+#else
     m_renderer = gtk_cell_renderer_pixbuf_new();
+#endif
 
     SetMode(mode);
     SetAlignment(align);
@@ -2492,26 +2591,15 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
-    if (value.GetType() == wxT("wxBitmap"))
-    {
-        wxBitmap bitmap;
+    wxBitmap bitmap;
+    if (value.GetType() == wxS("wxBitmap") || value.GetType() == wxS("wxIcon"))
         bitmap << value;
 
-        // GetPixbuf() may create a Pixbuf representation in the wxBitmap
-        // object (and it will stay there and remain owned by wxBitmap)
-        SetPixbufProp(m_renderer, bitmap.IsOk() ? bitmap.GetPixbuf() : NULL);
-    }
-    else if (value.GetType() == wxT("wxIcon"))
-    {
-        wxIcon icon;
-        icon << value;
-
-        SetPixbufProp(m_renderer, icon.IsOk() ? icon.GetPixbuf() : NULL);
-    }
-    else
-    {
-        SetPixbufProp(m_renderer, NULL);
-    }
+#ifdef __WXGTK3__
+    WX_CELL_RENDERER_PIXBUF(m_renderer)->Set(bitmap);
+#else
+    g_object_set(G_OBJECT(m_renderer), "pixbuf", bitmap.IsOk() ? bitmap.GetPixbuf() : NULL, NULL);
+#endif
 
     return true;
 }
@@ -3032,7 +3120,11 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer
                             )
     : wxDataViewTextRenderer(varianttype, mode, align)
 {
+#ifdef __WXGTK3__
+    m_rendererIcon = wxCellRendererPixbuf::New();
+#else
     m_rendererIcon = gtk_cell_renderer_pixbuf_new();
+#endif
 }
 
 wxDataViewIconTextRenderer::~wxDataViewIconTextRenderer()
@@ -3055,7 +3147,11 @@ bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
     SetTextValue(m_value.GetText());
 
     const wxIcon& icon = m_value.GetIcon();
-    SetPixbufProp(m_rendererIcon, icon.IsOk() ? icon.GetPixbuf() : NULL);
+#ifdef __WXGTK3__
+    WX_CELL_RENDERER_PIXBUF(m_rendererIcon)->Set(icon);
+#else
+    g_object_set(G_OBJECT(m_rendererIcon), "pixbuf", icon.IsOk() ? icon.GetPixbuf() : NULL, NULL);
+#endif
 
     return true;
 }
@@ -3202,7 +3298,7 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     GtkWidget* box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_widget_show( box );
     // gtk_container_set_border_width((GtkContainer*)box, 2);
-    m_image = gtk_image_new();
+    m_image = wxGtkImage::New();
     gtk_box_pack_start(GTK_BOX(box), m_image, FALSE, FALSE, 1);
     m_label = gtk_label_new("");
     gtk_box_pack_end( GTK_BOX(box), GTK_WIDGET(m_label), FALSE, FALSE, 1 );
@@ -3273,9 +3369,7 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
 
     if (bitmap.IsOk())
     {
-        GtkImage *gtk_image = GTK_IMAGE(m_image);
-
-        gtk_image_set_from_pixbuf(GTK_IMAGE(gtk_image), bitmap.GetPixbuf());
+        WX_GTK_IMAGE(m_image)->Set(bitmap);
         gtk_widget_show( m_image );
     }
     else
@@ -3298,12 +3392,12 @@ void wxDataViewColumn::SetAlignment( wxAlignment align )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
-    gfloat xalign = 0.0;
+    float xalign = 0;
     if (align == wxALIGN_RIGHT)
-        xalign = 1.0;
+        xalign = 1;
     if (align == wxALIGN_CENTER_HORIZONTAL ||
         align == wxALIGN_CENTER)
-        xalign = 0.5;
+        xalign = 0.5f;
 
     gtk_tree_view_column_set_alignment( column, xalign );
 
@@ -3315,9 +3409,9 @@ wxAlignment wxDataViewColumn::GetAlignment() const
 {
     gfloat xalign = gtk_tree_view_column_get_alignment( GTK_TREE_VIEW_COLUMN(m_column) );
 
-    if (xalign == 1.0)
+    if (xalign == 1)
         return wxALIGN_RIGHT;
-    if (xalign == 0.5)
+    if (xalign == 0.5f)
         return wxALIGN_CENTER_HORIZONTAL;
 
     return wxALIGN_LEFT;
@@ -4974,12 +5068,13 @@ wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
     return m_internal->GetDataViewSortColumn();
 }
 
-void wxDataViewCtrl::DoExpand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren )
 {
     GtkTreeIter iter;
     iter.user_data = item.GetID();
     wxGtkTreePath path(m_internal->get_path( &iter ));
-    gtk_tree_view_expand_row( GTK_TREE_VIEW(m_treeview), path, false );
+    gtk_tree_view_expand_row( GTK_TREE_VIEW(m_treeview), path,
+                              expandChildren ? TRUE : FALSE );
 }
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )

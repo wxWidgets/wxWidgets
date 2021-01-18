@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/containr.h"
@@ -234,101 +231,19 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 }
 
 // --------------------------------------------------------------------
-// The following four functions are used to find other radio buttons
-// within the same group. Used by wxSetFocusToChild
+// The following functions is used by wxSetFocusToChild()
 // --------------------------------------------------------------------
 
-#if wxUSE_RADIOBTN
+#if defined(USE_RADIOBTN_NAV)
 
-wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
+namespace
 {
-    if ( btn->HasFlag(wxRB_GROUP) || btn->HasFlag(wxRB_SINGLE) )
-        return NULL;
 
-    const wxWindowList& siblings = btn->GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator nodeThis = siblings.Find(btn);
-    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
-
-    // Iterate over all previous siblings until we find the next radio button
-    wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
-    wxRadioButton *prevBtn = 0;
-    while (nodeBefore)
-    {
-        prevBtn = wxDynamicCast(nodeBefore->GetData(), wxRadioButton);
-        if (prevBtn)
-            break;
-
-        nodeBefore = nodeBefore->GetPrevious();
-    }
-
-    if (!prevBtn || prevBtn->HasFlag(wxRB_SINGLE))
-    {
-        // no more buttons in group
-        return NULL;
-    }
-
-    return prevBtn;
-}
-
-wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
-{
-    if (btn->HasFlag(wxRB_SINGLE))
-        return NULL;
-
-    const wxWindowList& siblings = btn->GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator nodeThis = siblings.Find(btn);
-    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
-
-    // Iterate over all previous siblings until we find the next radio button
-    wxWindowList::compatibility_iterator nodeNext = nodeThis->GetNext();
-    wxRadioButton *nextBtn = 0;
-    while (nodeNext)
-    {
-        nextBtn = wxDynamicCast(nodeNext->GetData(), wxRadioButton);
-        if (nextBtn)
-            break;
-
-        nodeNext = nodeNext->GetNext();
-    }
-
-    if ( !nextBtn || nextBtn->HasFlag(wxRB_GROUP) || nextBtn->HasFlag(wxRB_SINGLE) )
-    {
-        // no more buttons or the first button of the next group
-        return NULL;
-    }
-
-    return nextBtn;
-}
-
-wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn)
-{
-    while (true)
-    {
-        wxRadioButton* prevBtn = wxGetPreviousButtonInGroup(btn);
-        if (!prevBtn)
-            return btn;
-
-        btn = prevBtn;
-    }
-}
-
-wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn)
-{
-    while (true)
-    {
-        wxRadioButton* nextBtn = wxGetNextButtonInGroup(btn);
-        if (!nextBtn)
-            return btn;
-
-        btn = nextBtn;
-    }
-}
-
-wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetSelectedButtonInGroup(const wxRadioButton *btn)
 {
     // Find currently selected button
     if (btn->GetValue())
-        return btn;
+        return const_cast<wxRadioButton*>(btn);
 
     if (btn->HasFlag(wxRB_SINGLE))
         return NULL;
@@ -336,19 +251,21 @@ wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
     wxRadioButton *selBtn;
 
     // First check all previous buttons
-    for (selBtn = wxGetPreviousButtonInGroup(btn); selBtn; selBtn = wxGetPreviousButtonInGroup(selBtn))
+    for (selBtn = btn->GetPreviousInGroup(); selBtn; selBtn = selBtn->GetPreviousInGroup())
         if (selBtn->GetValue())
             return selBtn;
 
     // Now all following buttons
-    for (selBtn = wxGetNextButtonInGroup(btn); selBtn; selBtn = wxGetNextButtonInGroup(selBtn))
+    for (selBtn = btn->GetNextInGroup(); selBtn; selBtn = selBtn->GetNextInGroup())
         if (selBtn->GetValue())
             return selBtn;
 
     return NULL;
 }
 
-#endif // wxUSE_RADIOBTN
+} // anonymous namespace
+
+#endif // USE_RADIOBTN_NAV
 
 // ----------------------------------------------------------------------------
 // Keyboard handling - this is the place where the TAB traversal logic is
@@ -468,7 +385,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // If we are in a radio button group, start from the first item in the
             // group
             if ( event.IsFromTab() && wxIsKindOf(winFocus, wxRadioButton ) )
-                winFocus = wxGetFirstButtonInGroup((wxRadioButton*)winFocus);
+                winFocus = static_cast<wxRadioButton*>(winFocus)->GetFirstInGroup();
 #endif // USE_RADIOBTN_NAV
             // ok, we found the focus - now is it our child?
             start_node = children.Find( winFocus );
@@ -586,20 +503,20 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // find the correct radio button to focus
             if ( forward )
             {
-                child = wxGetNextButtonInGroup(lastBtn);
+                child = lastBtn->GetNextInGroup();
                 if ( !child )
                 {
                     // no next button in group, set it to the first button
-                    child = wxGetFirstButtonInGroup(lastBtn);
+                    child = lastBtn->GetFirstInGroup();
                 }
             }
             else
             {
-                child = wxGetPreviousButtonInGroup(lastBtn);
+                child = lastBtn->GetPreviousInGroup();
                 if ( !child )
                 {
                     // no previous button in group, set it to the last button
-                    child = wxGetLastButtonInGroup(lastBtn);
+                    child = lastBtn->GetLastInGroup();
                 }
             }
 

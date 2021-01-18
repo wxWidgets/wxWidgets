@@ -400,6 +400,6 @@ public:
     /**
         Assignment operator.
     */
-    wxTarEntry& operator operator=(const wxTarEntry& entry);
+    wxTarEntry& operator=(const wxTarEntry& entry);
 };
 

@@ -13,11 +13,11 @@
 #include "wx/glcanvas.h"
 
 #include <QtOpenGL/QGLWidget>
+#include <QtWidgets/QGestureRecognizer>
+#include <QtWidgets/QGestureEvent>
 
 #if defined(__VISUALC__)
     #pragma message("OpenGL support is not implemented in wxQt")
-#elif defined(__BORLANDC__)
-    #pragma message "OpenGL support is not implemented in wxQt"
 #else
     #warning "OpenGL support is not implemented in wxQt"
 #endif
@@ -351,6 +351,30 @@ bool wxGLContext::SetCurrent(const wxGLCanvas&) const
 }
 
 //---------------------------------------------------------------------------
+// PanGestureRecognizer - helper class for wxGLCanvas
+//---------------------------------------------------------------------------
+
+class PanGestureRecognizer : public QGestureRecognizer
+{
+private:
+   static const int MINIMUM_DISTANCE = 10;
+
+   typedef QGestureRecognizer parent;
+
+   bool IsValidMove(int dx, int dy);
+
+   virtual QGesture* create(QObject* pTarget);
+
+   virtual QGestureRecognizer::Result recognize(QGesture* pGesture, QObject *pWatched, QEvent *pEvent);
+
+   void reset (QGesture *pGesture);
+
+   uint m_started;
+   QPointF m_startPoint;
+   QPointF m_lastPoint;
+};
+
+//---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
 
@@ -384,7 +408,6 @@ wxGLCanvas::~wxGLCanvas()
 {
         // Avoid sending further signals (i.e. if deleting the current page)
         m_qtWindow->blockSignals(true);
-
 }
 
 bool wxGLCanvas::Create(wxWindow *parent,
@@ -424,6 +447,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
     QGestureRecognizer::registerRecognizer(pPanRecognizer);
 
 
+    QGestureRecognizer* pPanRecognizer = new PanGestureRecognizer();
+    QGestureRecognizer::registerRecognizer(pPanRecognizer);
+
+
     return wxWindow::Create( parent, id, pos, size, style, name );
 }
 
@@ -438,7 +465,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 {
     if (!wxattrs)
         return true;
-    //return true;
 
     // set default parameters to false
     format.setDoubleBuffer(false);
@@ -448,15 +474,14 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 
     // Enable multisampling aka MSAA
 
-//    format.setSampleBuffers( true );
-//    format.setSamples( 4 );
+    format.setSampleBuffers( true );
+    format.setSamples( 4 );
 
     //  We don't have the option of setting OpenGLES version defined in the
     //  attribute list Enum.
 
     // So, just force it here.
-    //format.setVersion ( 1,1 );
-   //format.setVersion ( 2,0 );
+    format.setVersion ( 2,0 );
 
     for ( int arg = 0; wxattrs[arg] != 0; arg++ )
     {
@@ -661,7 +686,7 @@ PanGestureRecognizer::recognize(QGesture* pGesture, QObject *pWatched, QEvent *p
             result = QGestureRecognizer::FinishGesture;
          }
          m_started = 0;
-         
+
       }
       break;
 
@@ -700,17 +725,6 @@ PanGestureRecognizer::recognize(QGesture* pGesture, QObject *pWatched, QEvent *p
    return result;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void
 PanGestureRecognizer::reset(QGesture *pGesture)
 {
@@ -719,7 +733,5 @@ PanGestureRecognizer::reset(QGesture *pGesture)
 //   qDebug("Swipe recognize reset");
    parent::reset(pGesture);
 }
-
-
 
 #endif // wxUSE_GLCANVAS

@@ -13,9 +13,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -276,4 +273,30 @@ TEST_CASE("VeryLongArg", "[wxString][Format][vararg]")
     // Check the length first to avoid very long output if this fails.
     REQUIRE( s.length() == LENGTH );
     CHECK( s == veryLongString );
+}
+
+namespace
+{
+
+// Helpers for the "PrintfError" test: we must pass by these functions
+// because specifying "%c" directly inline would convert it to "%lc" and avoid
+// the error.
+wxString CallPrintfV(const char* format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    wxString s;
+    s.PrintfV(wxString::FromAscii(format), ap);
+    va_end(ap);
+    return s;
+}
+
+} // anonymous namespace
+
+TEST_CASE("PrintfError", "[wxString][Format][vararg][error]")
+{
+    // Check that using invalid argument doesn't keep doubling the buffer until
+    // we run out of memory and die.
+    const int invalidChar = 0x1780;
+    REQUIRE_NOTHROW( CallPrintfV("%c", invalidChar) );
 }

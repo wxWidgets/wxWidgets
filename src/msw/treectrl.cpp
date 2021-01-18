@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TREECTRL
 
@@ -2221,7 +2218,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
         tvSort.hParent = HITEM(item);
         tvSort.lpfnCompare = wxTreeSortHelper::Compare;
         tvSort.lParam = (LPARAM)this;
-        if ( !TreeView_SortChildrenCB(GetHwnd(), &tvSort, 0 /* reserved */) )
+        if ( !TreeView_SortChildrenCB(GetHwnd(), &tvSort, wxRESERVED_PARAM) )
             wxLogLastError(wxS("TreeView_SortChildrenCB()"));
     }
 }

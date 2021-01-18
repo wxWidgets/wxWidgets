@@ -301,8 +301,7 @@ public :
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
 
-    virtual bool        NeedsFocusRect() const;
-    virtual void        SetNeedsFocusRect( bool needs );
+    virtual void        EnableFocusRing(bool WXUNUSED(enabled)) {}
 
     virtual bool        NeedsFrame() const;
     virtual void        SetNeedsFrame( bool needs );
@@ -349,7 +348,7 @@ public :
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 
-    virtual void        SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) = 0;
+    virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
@@ -598,7 +597,6 @@ protected :
     bool                m_wantsUserKey;
     bool                m_wantsUserMouse;
     wxWindowMac*        m_wxPeer;
-    bool                m_needsFocusRect;
     bool                m_needsFrame;
     bool                m_shouldSendEvents;
 
@@ -985,6 +983,8 @@ public :
     virtual bool IsModified() const { return false; }
 
     virtual void SetRepresentedFilename(const wxString& WXUNUSED(filename)) { }
+
+    virtual void SetBottomBorderThickness(int WXUNUSED(thickness)) { }
 
 #if wxOSX_USE_IPHONE
     virtual CGFloat GetWindowLevel() const { return 0.0; }

@@ -571,6 +571,16 @@ int wxSlider::GetTickFreq() const
 #endif
 }
 
+wxSize wxSlider::DoGetBestSize() const
+{
+    // We need to get the size in the transverse direction from GTK, but we use
+    // hard-coded default in the other direction, as otherwise the slider would
+    // have the smallest possible size and not have any extent at all.
+    wxSize size = GTKGetPreferredSize(m_widget);
+    (HasFlag(wxSL_VERTICAL) ? size.y : size.x) = 100;
+    return size;
+}
+
 GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
 #ifdef __WXGTK3__

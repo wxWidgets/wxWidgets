@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/notifmsg.h"
 
@@ -222,6 +219,7 @@ int wxUserNotificationMsgImpl::ms_notifIdBase = 1000;
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
+    wxUnusedVar(center);
     NSString* notifId = [notification.userInfo objectForKey:@"wxId"];
     if (notifId)
         wxUserNotificationMsgImpl::NotificationActivated(wxCFStringRef::AsString(notifId), notification.activationType);

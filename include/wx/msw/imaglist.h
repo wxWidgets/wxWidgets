@@ -194,6 +194,7 @@ public:
 protected:
   WXHIMAGELIST m_hImageList;
   wxSize m_size;
+  bool m_useMask;
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxImageList);
 };

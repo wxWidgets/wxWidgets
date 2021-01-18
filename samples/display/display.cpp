@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h"
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers explicitly
 #ifndef WX_PRECOMP
@@ -291,6 +288,11 @@ void MyFrame::PopuplateWithDisplayInfo()
         sizer->Add(new wxStaticText(page, wxID_ANY, "Depth: "));
         sizer->Add(new wxStaticText(page, wxID_ANY,
                                     wxString::Format("%d", display.GetDepth())));
+
+        sizer->Add(new wxStaticText(page, wxID_ANY, "Scaling: "));
+        sizer->Add(new wxStaticText(page, wxID_ANY,
+                                    wxString::Format("%.2f",
+                                                     display.GetScaleFactor())));
 
         sizer->Add(new wxStaticText(page, wxID_ANY, "Name: "));
         sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));

@@ -15,12 +15,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/arrstr.h"
-#include "wx/regex.h"
 #include "wx/scopedarray.h"
 #include "wx/wxcrt.h"
 
@@ -31,8 +27,20 @@
 
 #if defined( __WINDOWS__ )
     #include <shlwapi.h>
-#endif
 
+    // In some distributions of MinGW32, this function is exported in the library,
+    // but not declared in shlwapi.h. Therefore we declare it here.
+    #if defined( __MINGW32_TOOLCHAIN__ )
+        extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
+    #endif
+
+    // For MSVC we can also link the library containing StrCmpLogicalW()
+    // directly from here, for the other compilers this needs to be done at
+    // makefiles level.
+    #ifdef __VISUALC__
+        #pragma comment(lib, "shlwapi")
+    #endif
+#endif
 
 // ============================================================================
 // ArrayString
@@ -729,8 +737,6 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
     return ret;
 }
 
-#if wxUSE_REGEX
-
 namespace // helpers needed by wxCmpNaturalGeneric()
 {
 // Used for comparison of string parts
@@ -759,47 +765,52 @@ struct wxStringFragment
 
 wxStringFragment GetFragment(wxString& text)
 {
-    static const wxRegEx reSpaceOrPunct(wxS("^([[:space:]]|[[:punct:]])+"));
-    // Limit the length to make sure the value will fit into a wxUint64
-    static const wxRegEx reDigit(wxS("^[[:digit:]]{1,19}"));
-    static const wxRegEx reLetterOrSymbol("^[^[:space:]|[:punct:]|[:digit:]]+");
-
     if ( text.empty() )
         return wxStringFragment();
 
-    wxStringFragment fragment;
-    size_t           length = 0;
+    // the maximum length of a sequence of digits that
+    // can fit into wxUint64 when converted to a number
+    static const ptrdiff_t maxDigitSequenceLength = 19;
 
-    // In attempt to minimize the number of wxRegEx.Matches() calls,
-    // try to do them from the most expected to the least expected
-    // string fragment type.
-    if ( reLetterOrSymbol.Matches(text) )
+    wxStringFragment         fragment;
+    wxString::const_iterator it;
+
+    for ( it = text.cbegin(); it != text.cend(); ++it )
     {
-        if ( reLetterOrSymbol.GetMatch(NULL, &length) )
+        const wxUniChar&       ch = *it;
+        wxStringFragment::Type chType = wxStringFragment::Empty;
+
+        if ( wxIsspace(ch) || wxIspunct(ch) )
+            chType = wxStringFragment::SpaceOrPunct;
+        else if ( wxIsdigit(ch) )
+            chType = wxStringFragment::Digit;
+        else
+            chType = wxStringFragment::LetterOrSymbol;
+
+        // check if evaluating the first character
+        if ( fragment.type == wxStringFragment::Empty )
         {
-            fragment.type = wxStringFragment::LetterOrSymbol;
-            fragment.text = text.Left(length);
+            fragment.type = chType;
+            continue;
         }
-    }
-    else if ( reDigit.Matches(text) )
-    {
-        if ( reDigit.GetMatch(NULL, &length) )
+
+        // stop processing when the current character has a different
+        // string fragment type than the previously processed characters had
+        // or a sequence of digits is too long
+        if ( fragment.type != chType
+             || (fragment.type == wxStringFragment::Digit
+                 && it - text.cbegin() > maxDigitSequenceLength) )
         {
-            fragment.type = wxStringFragment::Digit;
-            fragment.text = text.Left(length);
-            fragment.text.ToULongLong(&fragment.value);
-        }
-    }
-    else if ( reSpaceOrPunct.Matches(text) )
-    {
-        if ( reSpaceOrPunct.GetMatch(NULL, &length) )
-        {
-            fragment.type = wxStringFragment::SpaceOrPunct;
-            fragment.text = text.Left(length);
+            break;
         }
     }
 
-    text.erase(0, length);
+    fragment.text.assign(text.cbegin(), it);
+    if ( fragment.type == wxStringFragment::Digit )
+        fragment.text.ToULongLong(&fragment.value);
+
+    text.erase(0, it - text.cbegin());
+
     return fragment;
 }
 
@@ -893,33 +904,13 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
     return comparison;
 }
 
-#else
-
-int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
-{
-    return wxStrcoll_String(s1.Lower(), s2.Lower());
-}
-
-#endif // #if wxUSE_REGEX
-
-// ----------------------------------------------------------------------------
-// Declaration of StrCmpLogicalW()
-// ----------------------------------------------------------------------------
-//
-// In some distributions of MinGW32, this function is exported in the library,
-// but not declared in shlwapi.h. Therefore we declare it here.
-#if defined( __MINGW32_TOOLCHAIN__ )
-    extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
-#endif
-
-
 // ----------------------------------------------------------------------------
 // wxCmpNatural
 // ----------------------------------------------------------------------------
 //
 // If a native version of Natural sort is available, then use that, otherwise
 // use the generic version.
-inline int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
 #if defined( __WINDOWS__ )
     return StrCmpLogicalW(s1.wc_str(), s2.wc_str());

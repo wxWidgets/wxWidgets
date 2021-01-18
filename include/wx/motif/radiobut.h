@@ -11,7 +11,7 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 public:
