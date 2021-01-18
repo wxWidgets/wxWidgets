@@ -904,7 +904,7 @@ archives.
 
 @section page_samples_webrequest Web Request Sample
 
-The wxWebRequest sample demonstarates the various capabilities of the
+This sample demonstrates the various capabilities of the
 wxWebRequest class. It shows how to handle simple text HTTP and HTTPS requests,
 downloading files, showing download progress and processing downloaded
 data while it's being downloaded.
@@ -971,4 +971,3 @@ other resources. From its menu or toolbar you can then run the following dialogs
 @sampledir{xrc}
 
 */
-
