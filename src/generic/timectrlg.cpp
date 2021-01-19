@@ -72,6 +72,7 @@ public:
         m_btn = new wxSpinButton(ctrl, wxID_ANY,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxSP_VERTICAL | wxSP_WRAP);
+        m_btn->SetCanFocus(false);
 
         m_currentField = Field_Hour;
         m_isFirstDigit = true;
@@ -306,11 +307,13 @@ private:
 
     void OnArrowUp(wxSpinEvent& WXUNUSED(event))
     {
+        m_text->SetFocus();
         ChangeCurrentFieldBy1(Dir_Up);
     }
 
     void OnArrowDown(wxSpinEvent& WXUNUSED(event))
     {
+        m_text->SetFocus();
         ChangeCurrentFieldBy1(Dir_Down);
     }
 
@@ -370,8 +373,6 @@ private:
     // Select the currently actively field.
     void HighlightCurrentField()
     {
-        m_text->SetFocus();
-
         const CharRange range = GetFieldRange(m_currentField);
 
         m_text->SetSelection(range.from, range.to);
