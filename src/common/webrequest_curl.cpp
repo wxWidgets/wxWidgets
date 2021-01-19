@@ -471,7 +471,7 @@ wxThread::ExitCode wxWebSessionCURL::Entry()
     {
         // Handle cancelled requests
         {
-            wxCriticalSectionLocker lock(m_cancelled.cs);
+            wxCriticalSectionLocker cancelledLock(m_cancelled.cs);
             while ( !m_cancelled.requests.empty() )
             {
                 wxObjectDataPtr<wxWebRequestCURL> request(m_cancelled.requests.back());
