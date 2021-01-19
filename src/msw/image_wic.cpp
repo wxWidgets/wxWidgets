@@ -69,6 +69,43 @@ bool wxWICConvertAndCopyPixels(IWICBitmapSource* bmpSource, REFWICPixelFormatGUI
     return wxWICCopyPixels(dstSource, buffer, width, height, bitsPerPixel);
 }
 
+// copy palette
+static bool wxWICCreateImagePalette(IWICPalette* palette, wxImage* image)
+{
+    HRESULT hr;
+    UINT colorCount;
+    wxCOM_CHECK(palette->GetColorCount, (&colorCount));
+    if (!colorCount)
+        return false;
+
+    BOOL hasAlpha;
+    wxCOM_CHECK(palette->HasAlpha, (&hasAlpha));
+
+    WICColor* colors = new WICColor[colorCount];
+    UINT actualColorCount;
+    wxCOM_CHECK(palette->GetColors, (colorCount, colors, &actualColorCount));
+
+    unsigned char* r = new unsigned char[colorCount];
+    unsigned char* g = new unsigned char[colorCount];
+    unsigned char* b = new unsigned char[colorCount];
+
+    for (UINT j = 0; j < colorCount; j++)
+    {
+        r[j] = colors[j] & 0xff;
+        g[j] = (colors[j] >> 8) & 0xff;
+        b[j] = (colors[j] >> 16) & 0xff;
+    }
+
+    image->SetPalette(wxPalette(colorCount, r, g, b));
+    delete[] r;
+    delete[] g;
+    delete[] b;
+
+    delete[] colors;
+
+    return true;
+}
+
 // ============================================================================
 // wxImageHandlerWIC implementation
 // ============================================================================
@@ -198,6 +235,16 @@ bool wxImageHandlerWIC::LoadFile(wxImage *image, wxInputStream& stream,
         (unsigned char*)imgData.release(), false);
     if (success && !alphaData.IsEmpty())
         image->SetAlpha((unsigned char*)alphaData.release());
+
+    if (success)
+    {
+        // Copy palette if available
+        wxCOMPtr<IWICPalette> palette;
+        wxCOM_CHECK(imgFactory->CreatePalette, (&palette));
+        hr = frameBitmap->CopyPalette(palette);
+        if (SUCCEEDED(hr))
+            wxWICCreateImagePalette(palette, image);
+    }
 
     return success;
 }
