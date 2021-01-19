@@ -307,6 +307,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
         }
     }
 
+#if !defined(__WXGTK20__) || defined(__WXGTK3__)
     SECTION("RGBA image with mask")
     {
         wxImage img(2, 2);
@@ -368,6 +369,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
             rowStartMask.OffsetY(dataMask, 1);
         }
     }
+#endif // !defined(__WXGTK20__) || defined(__WXGTK3__)
 }
 
 TEST_CASE("BitmapTestCase::OverlappingBlit", "[bitmap][blit]")
