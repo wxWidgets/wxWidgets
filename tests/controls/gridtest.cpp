@@ -1423,6 +1423,32 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
     }
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::DrawInvalidCell", "[grid][multicell]")
+{
+    // Set up a multicell with inside an overflowing cell.
+    // This is artificial and normally inside cells are probably not expected
+    // to have a value but this is merely done to check if inside cells are
+    // drawn, which they shouldn't be.
+    m_grid->SetCellSize(0, 0, 2, 1);
+    m_grid->SetCellValue( 1, 0, wxString('W', 42) );
+
+    // Update()s, yields and sleep are needed to try to make the test fail with
+    // macOS, GTK and MSW.
+    // MSW needs just the yields (or updates), macOS in addition needs to sleep
+    // (doesn't work with updates) and for GTK it's usually enough to just do
+    // two updates (not yields). This test does all unconditionally.
+    m_grid->Update();
+    wxYield();
+    wxMilliSleep(20);
+
+    // Try to force redrawing of the inside cell: if it still draws there will
+    // be an infinite recursion.
+    m_grid->SetColSize(1, m_grid->GetColSize(1) + 1);
+
+    m_grid->Update();
+    wxYield();
+}
+
 // Test wxGridBlockCoords here because it'a a part of grid sources.
 
 std::ostream& operator<<(std::ostream& os, const wxGridBlockCoords& block) {
