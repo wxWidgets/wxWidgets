@@ -263,6 +263,27 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+    "WebRequest::SSL::Error", "[net][webrequest][error]")
+{
+    if (!InitBaseURL())
+        return;
+
+    CreateAbs("https://self-signed.badssl.com/");
+    Run(wxWebRequest::State_Failed, 0);
+}
+
+TEST_CASE_METHOD(RequestFixture,
+    "WebRequest::SSL::Ignore", "[net][webrequest]")
+{
+    if (!InitBaseURL())
+        return;
+
+    CreateAbs("https://self-signed.badssl.com/");
+    request.DisablePeerVerify();
+    Run(wxWebRequest::State_Completed, 200);
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Post", "[net][webrequest]")
 {
     if ( !InitBaseURL() )

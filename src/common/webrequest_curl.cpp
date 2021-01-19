@@ -247,6 +247,9 @@ void wxWebRequestCURL::Start()
     }
     curl_easy_setopt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
+    if ( IsPeerVerifyDisabled() )
+        curl_easy_setopt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
+
     StartRequest();
 }
 

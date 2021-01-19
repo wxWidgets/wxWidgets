@@ -62,6 +62,7 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
     : m_storage(wxWebRequest::Storage_Memory),
       m_headers(sessionImpl.GetHeaders()),
       m_dataSize(0),
+      m_peerVerifyDisabled(false),
       m_session(session),
       m_handler(handler),
       m_id(id),
@@ -515,6 +516,18 @@ wxWebRequestHandle wxWebRequest::GetNativeHandle() const
 {
     return m_impl ? m_impl->GetNativeHandle() : NULL;
 }
+
+void wxWebRequest::DisablePeerVerify(bool disable)
+{
+    m_impl->DisablePeerVerify(disable);
+}
+
+bool wxWebRequest::IsPeerVerifyDisabled()
+{
+    return m_impl->IsPeerVerifyDisabled();
+}
+
+
 
 
 //

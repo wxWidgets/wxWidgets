@@ -96,6 +96,10 @@ public:
 
     virtual wxWebRequestHandle GetNativeHandle() const = 0;
 
+    void DisablePeerVerify(bool disable) { m_peerVerifyDisabled = disable; }
+
+    bool IsPeerVerifyDisabled() { return m_peerVerifyDisabled; }
+
     void SetState(wxWebRequest::State state, const wxString& failMsg = wxString());
 
     void ReportDataReceived(size_t sizeReceived);
@@ -110,6 +114,7 @@ protected:
     wxWebRequestHeaderMap m_headers;
     wxFileOffset m_dataSize;
     wxScopedPtr<wxInputStream> m_dataStream;
+    bool m_peerVerifyDisabled;
 
     wxWebRequestImpl(wxWebSession& session,
                      wxWebSessionImpl& sessionImpl,

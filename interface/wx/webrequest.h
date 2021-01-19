@@ -391,6 +391,22 @@ public:
         server.
     */
     void SetStorage(Storage storage);
+
+    /**
+        Disable SSL certificate verification.
+
+        This can be used to connect to self signed servers or other invalid
+        SSL connections. Disabling verification makes the communication
+        insecure.
+    */
+    void DisablePeerVerify(bool disable = true);
+
+    /**
+        Returns if peer verification has been disabled.
+
+        @see DisablePeerVerify()
+    */
+    bool IsPeerVerifyDisabled();
     ///@}
 
     /** @name Progress methods
