@@ -6235,13 +6235,15 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                 {
                     if (!m_table->IsEmptyCell(row + l, j))
                     {
+                        wxGridCellAttrPtr attr = GetCellAttrPtr(row + l, j);
                         int numRows, numCols;
-                        if ( GetCellSize(row + l, j, &numRows, &numCols)
+                        attr->GetSize(&numRows, &numCols);
+                        if ( GetCellSpan(numRows, numCols)
                                  == wxGrid::CellSpan_Inside )
                             // As above: don't bother drawing inside cells.
                             continue;
 
-                        if ( GetCellAttrPtr(row + l, j)->CanOverflow() )
+                        if ( attr->CanOverflow() )
                         {
                             wxGridCellCoords cell(row + l, j);
                             bool marked = false;
