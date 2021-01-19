@@ -61,6 +61,14 @@
         request.Start();
     @endcode
 
+    @section apple_http macOS and iOS App Transport Security
+
+    Starting with macOS 10.11 and iOS 9 an application cannot create unsecure
+    connections (this includes HTTP and unverified HTTPS). You have to include
+    additional fields in your Info.plist to enable such connections.
+    For further details see the documentation on NSAppTransportSecurity
+    <a target=_new href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+
     @section descriptions Implementation Descriptions
 
     The following APIs are used per platform, additional details
