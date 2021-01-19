@@ -147,6 +147,12 @@ bool wxImageHandlerWIC::LoadFile(wxImage *image, wxInputStream& stream,
     wxCOM_CHECK(decoder->GetFrame, (frameIndex, &frameBitmap));
 
     // Get bitmap information
+    UINT imgWidth, imgHeight;
+    wxCOM_CHECK(frameBitmap->GetSize, (&imgWidth, &imgHeight));
+    double resX, resY;
+    wxCOM_CHECK(frameBitmap->GetResolution, (&resX, &resY));
+
+    // Get format information
     WICPixelFormatGUID formatGUID;
     wxCOM_CHECK(frameBitmap->GetPixelFormat, (&formatGUID));
     wxCOMPtr<IWICComponentInfo> compInfo;
@@ -156,10 +162,6 @@ bool wxImageHandlerWIC::LoadFile(wxImage *image, wxInputStream& stream,
         (wxIID_PPV_ARGS(IWICPixelFormatInfo, &formatInfo)));
     UINT bitsPerPixel = 0;
     wxCOM_CHECK(formatInfo->GetBitsPerPixel, (&bitsPerPixel));
-    UINT imgWidth, imgHeight;
-    wxCOM_CHECK(frameBitmap->GetSize, (&imgWidth, &imgHeight));
-    double resX, resY;
-    wxCOM_CHECK(frameBitmap->GetResolution, (&resX, &resY));
 
     // Set metadata
     image->SetOption(wxIMAGE_OPTION_RESOLUTIONX,
@@ -169,13 +171,25 @@ bool wxImageHandlerWIC::LoadFile(wxImage *image, wxInputStream& stream,
     image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, wxIMAGE_RESOLUTION_INCHES);
 
     // Extract and or convert pixel data
+    wxCOMPtr<IWICBitmapSource> bmpSrc;
+    if (IsEqualGUID(formatGUID, GUID_WICPixelFormat32bppCMYK))
+    {
+        // CMYK images require this copy to another bitmap in order to the data
+        wxCOMPtr<IWICBitmap> bmp;
+        wxCOM_CHECK(imgFactory->CreateBitmapFromSource,
+            (frameBitmap, WICBitmapCacheOnDemand, &bmp));
+        bmp->QueryInterface(wxIID_PPV_ARGS(IWICBitmapSource, &bmpSrc));
+    }
+    else
+        bmpSrc = frameBitmap;
+
     wxMemoryBuffer imgData;
     wxMemoryBuffer alphaData;
-    if (!wxWICConvertAndCopyPixels(frameBitmap, GUID_WICPixelFormat24bppRGB,
+    if (!wxWICConvertAndCopyPixels(bmpSrc, GUID_WICPixelFormat24bppRGB,
         imgData, imgWidth, imgHeight, 24))
         return false;
 
-    if (!wxWICConvertAndCopyPixels(frameBitmap, GUID_WICPixelFormat8bppAlpha,
+    if (!wxWICConvertAndCopyPixels(bmpSrc, GUID_WICPixelFormat8bppAlpha,
         alphaData, imgWidth, imgHeight, 8))
         alphaData.Clear();
 
