@@ -27,14 +27,13 @@ environment:
     VS: '9.0'
     BUILD: release
     ARCH: x86
-    wxUSE_STL: 0
   - TOOLSET: nmake
     VS: '14.0'
     BUILD: debug
     ARCH: amd64
     wxUSE_STL: 1
+    wxUSE_WEBVIEW_EDGE: 1
   - TOOLSET: mingw
-    wxUSE_STL: 0
   - TOOLSET: msys2
     MSYSTEM: MINGW32
   - TOOLSET: cygwin
@@ -61,9 +60,12 @@ init:
 before_build:
 - ps: |
     $env:PATH = $env:PATH -replace "C:\\Program Files\\Git\\usr\\bin",""
+    if (-not (Test-Path env:wxUSE_STL)) { $env:wxUSE_STL = '0' }
+    if (-not (Test-Path env:wxUSE_WEBVIEW_EDGE)) { $env:wxUSE_WEBVIEW_EDGE = '0' }
     if (($env:compiler -ne "msys2") -and ($env:compiler -ne "cygwin")) {
       gc include\wx\msw\setup0.h |
       %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $env:wxUSE_STL"} |
+      %{$_ -replace "define wxUSE_WEBVIEW_EDGE 0", "define wxUSE_WEBVIEW_EDGE $env:wxUSE_WEBVIEW_EDGE"} |
       sc include\wx\msw\setup.h
     }
 
