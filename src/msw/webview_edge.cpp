@@ -100,7 +100,7 @@ baseT *callback_impl(lambdaT&& lambda, HRESULT (LT::*)(argTs...) const)
 template <typename baseT, typename lambdaT>
 baseT *callback(lambdaT&& lambda)
 {
-    return callback_impl<baseT>(lambda, &lambdaT::operator());
+    return callback_impl<baseT>(std::move(lambda), &lambdaT::operator());
 }
 template <typename baseT, typename contextT, typename ...argTs>
 baseT *callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
