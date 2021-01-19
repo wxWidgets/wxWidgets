@@ -414,7 +414,7 @@ public:
 
         @see DisablePeerVerify()
     */
-    bool IsPeerVerifyDisabled();
+    bool IsPeerVerifyDisabled() const;
     ///@}
 
     /** @name Progress methods

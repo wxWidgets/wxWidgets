@@ -190,7 +190,7 @@ public:
 
     void DisablePeerVerify(bool disable = true);
 
-    bool IsPeerVerifyDisabled();
+    bool IsPeerVerifyDisabled() const;
 
 private:
     // Ctor is only used by wxWebSession.

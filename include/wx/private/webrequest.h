@@ -98,7 +98,7 @@ public:
 
     void DisablePeerVerify(bool disable) { m_peerVerifyDisabled = disable; }
 
-    bool IsPeerVerifyDisabled() { return m_peerVerifyDisabled; }
+    bool IsPeerVerifyDisabled() const { return m_peerVerifyDisabled; }
 
     void SetState(wxWebRequest::State state, const wxString& failMsg = wxString());
 

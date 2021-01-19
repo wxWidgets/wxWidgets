@@ -522,7 +522,7 @@ void wxWebRequest::DisablePeerVerify(bool disable)
     m_impl->DisablePeerVerify(disable);
 }
 
-bool wxWebRequest::IsPeerVerifyDisabled()
+bool wxWebRequest::IsPeerVerifyDisabled() const
 {
     return m_impl->IsPeerVerifyDisabled();
 }
