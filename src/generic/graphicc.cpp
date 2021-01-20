@@ -2939,6 +2939,13 @@ bool wxCairoContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     cairo_set_antialias(m_context, antialiasMode);
+
+    cairo_font_options_t* options = cairo_font_options_create();
+    cairo_get_font_options(m_context, options);
+    cairo_font_options_set_antialias(options, antialiasMode);
+    cairo_set_font_options(m_context, options);
+    cairo_font_options_destroy(options);
+
     return true;
 }
 
