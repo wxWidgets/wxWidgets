@@ -188,6 +188,10 @@ public:
 
     wxWebRequestHandle GetNativeHandle() const;
 
+    void DisablePeerVerify(bool disable = true);
+
+    bool IsPeerVerifyDisabled() const;
+
 private:
     // Ctor is only used by wxWebSession.
     friend class wxWebSession;

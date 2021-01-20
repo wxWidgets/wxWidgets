@@ -12,6 +12,9 @@
 
     wxHTTP can thus be used to create a (basic) HTTP @b client.
 
+    @note In practice, for any but the most trivial cases, e.g. if you need HTTPS, HTTP/2 or IPv6,
+            proxy detection, authentication, etc. support please use wxWebRequest instead.
+
     @library{wxnet}
     @category{net}
 
@@ -173,4 +176,3 @@ public:
                      const wxString& data,
                      const wxMBConv& conv = wxConvUTF8);
 };
-

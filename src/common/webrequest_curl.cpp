@@ -247,6 +247,9 @@ void wxWebRequestCURL::Start()
     }
     curl_easy_setopt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
+    if ( IsPeerVerifyDisabled() )
+        curl_easy_setopt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
+
     StartRequest();
 }
 
@@ -468,7 +471,7 @@ wxThread::ExitCode wxWebSessionCURL::Entry()
     {
         // Handle cancelled requests
         {
-            wxCriticalSectionLocker lock(m_cancelled.cs);
+            wxCriticalSectionLocker cancelledLock(m_cancelled.cs);
             while ( !m_cancelled.requests.empty() )
             {
                 wxObjectDataPtr<wxWebRequestCURL> request(m_cancelled.requests.back());

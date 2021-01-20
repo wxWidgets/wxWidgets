@@ -150,6 +150,12 @@
             *request
         ));
     }
+    else if ( authMethod == NSURLAuthenticationMethodServerTrust )
+    {
+        if (request->IsPeerVerifyDisabled())
+            completionHandler(NSURLSessionAuthChallengeUseCredential,
+                              [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+    }
 
     completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 }

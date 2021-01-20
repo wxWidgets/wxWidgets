@@ -364,6 +364,16 @@ void wxWebRequestWinHTTP::Start()
         return;
     }
 
+    if ( IsPeerVerifyDisabled() )
+    {
+        wxWinHTTPSetOption(m_request, WINHTTP_OPTION_SECURITY_FLAGS,
+            SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
+            SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
+            SECURITY_FLAG_IGNORE_UNKNOWN_CA |
+            SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE
+        );
+    }
+
     SendRequest();
 }
 
