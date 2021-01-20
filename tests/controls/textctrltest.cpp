@@ -166,14 +166,16 @@ long TextCtrlTestCase::ms_style = 0;
 
 void TextCtrlTestCase::CreateText(long extraStyles)
 {
+    const long style = ms_style | extraStyles;
+    const int h = (style & wxTE_MULTILINE) ? TEXT_HEIGHT : -1;
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxSize(400, TEXT_HEIGHT),
-                            ms_style | extraStyles);
+                            wxDefaultPosition, wxSize(400, h),
+                            style);
 }
 
 void TextCtrlTestCase::setUp()
 {
-    CreateText(ms_style);
+    CreateText(0);
 }
 
 void TextCtrlTestCase::tearDown()

@@ -1582,17 +1582,7 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
         gtk_entry_get_layout_offsets(GTK_ENTRY(m_text), &ofsX, &ofsY);
 
         x -= ofsX;
-
-        // There is something really weird going on with vertical offset under
-        // GTK 3: normally it is just 0, because a single line control doesn't
-        // scroll vertically anyhow, but sometimes it can have big positive or
-        // negative values after scrolling horizontally, resulting in test
-        // failures in TextCtrlTestCase::HitTestSingleLine::Scrolled. So just
-        // ignore it completely, as, again, it shouldn't matter for single line
-        // text controls in any case, and so do not do this:
-#ifndef __WXGTK3__
         y -= ofsY;
-#endif // !__WXGTK3__
 
         // And scale the coordinates for Pango.
         x *= PANGO_SCALE;
