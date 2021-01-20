@@ -158,6 +158,24 @@ wxDEFINE_EVENT( wxEVT_GRID_TABBING, wxGridEvent );
 // implementation
 // ============================================================================
 
+namespace
+{
+
+// Helper function for consistent cell span determination based on cell size.
+wxGrid::CellSpan GetCellSpan(int numRows, int numCols)
+{
+    if ( numRows == 1 && numCols == 1 )
+        return wxGrid::CellSpan_None; // just a normal cell
+
+    if ( numRows < 0 || numCols < 0 )
+        return wxGrid::CellSpan_Inside; // covered by a multi-span cell
+
+    // this cell spans multiple cells to its right/bottom
+    return wxGrid::CellSpan_Main;
+}
+
+} // anonymous namespace
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxGridCellEditorEvtHandler, wxEvtHandler);
 
 wxBEGIN_EVENT_TABLE( wxGridCellEditorEvtHandler, wxEvtHandler )
@@ -6217,7 +6235,15 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                 {
                     if (!m_table->IsEmptyCell(row + l, j))
                     {
-                        if ( GetCellAttrPtr(row + l, j)->CanOverflow() )
+                        wxGridCellAttrPtr attr = GetCellAttrPtr(row + l, j);
+                        int numRows, numCols;
+                        attr->GetSize(&numRows, &numCols);
+                        if ( GetCellSpan(numRows, numCols)
+                                 == wxGrid::CellSpan_Inside )
+                            // As above: don't bother drawing inside cells.
+                            continue;
+
+                        if ( attr->CanOverflow() )
                         {
                             wxGridCellCoords cell(row + l, j);
                             bool marked = false;
@@ -9120,14 +9146,7 @@ wxGrid::GetCellSize( int row, int col, int *num_rows, int *num_cols ) const
 {
     GetCellAttrPtr(row, col)->GetSize( num_rows, num_cols );
 
-    if ( *num_rows == 1 && *num_cols == 1 )
-        return CellSpan_None; // just a normal cell
-
-    if ( *num_rows < 0 || *num_cols < 0 )
-        return CellSpan_Inside; // covered by a multi-span cell
-
-    // this cell spans multiple cells to its right/bottom
-    return CellSpan_Main;
+    return GetCellSpan(*num_rows, *num_cols);
 }
 
 wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col) const
