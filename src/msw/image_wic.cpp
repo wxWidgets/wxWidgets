@@ -267,23 +267,28 @@ bool wxImageHandlerWIC::SaveFile(wxImage *image, wxOutputStream& stream,
     wxCOMPtr<IWICBitmapEncoder> encoder;
     wxCOM_CHECK(imgFactory->CreateEncoder,
         (*m_containerFormat, NULL, &encoder));
-    wxCOM_CHECK(encoder->Initialize, (new wxCOMOutputStreamAdapter(&stream), WICBitmapEncoderNoCache));
+    wxCOM_CHECK(encoder->Initialize,
+        (new wxCOMOutputStreamAdapter(&stream), WICBitmapEncoderNoCache));
 
     // Create frame
     wxCOMPtr<IPropertyBag2> encodeOptions;
     wxCOMPtr<IWICBitmapFrameEncode> frameEncode;
     wxCOM_CHECK(encoder->CreateNewFrame, (&frameEncode, &encodeOptions));
 
-    // Init frame
-    wxCOM_CHECK(frameEncode->Initialize, (encodeOptions));
-    wxCOM_CHECK(frameEncode->SetSize, (image->GetWidth(), image->GetHeight()));
-    WICPixelFormatGUID formatGUID = GUID_WICPixelFormat24bppRGB;
-    wxCOM_CHECK(frameEncode->SetPixelFormat, (&formatGUID));
-
-    // Copy pixel data
+    // Create bitmap from data
+    wxCOMPtr<IWICBitmap> srcBitmap;
     int bitsPerPixel = 24;
-    size_t memSize = image->GetWidth() * image->GetHeight() * (bitsPerPixel / 8);
-    wxCOM_CHECK(frameEncode->WritePixels, (image->GetHeight(), image->GetWidth() * (bitsPerPixel / 8), memSize, image->GetData()));
+    size_t memSize = image->GetWidth() * image->GetHeight() *
+        (bitsPerPixel / 8);
+    wxCOM_CHECK(imgFactory->CreateBitmapFromMemory, (
+        image->GetWidth(), image->GetHeight(),
+        GUID_WICPixelFormat24bppRGB,
+        image->GetWidth() * (bitsPerPixel / 8), memSize, image->GetData(),
+        &srcBitmap));
+
+    // Write bitmap to frame
+    wxCOM_CHECK(frameEncode->Initialize, (encodeOptions));
+    wxCOM_CHECK(frameEncode->WriteSource, (srcBitmap, NULL));
 
     // Commit data to file
     wxCOM_CHECK(frameEncode->Commit, ());
