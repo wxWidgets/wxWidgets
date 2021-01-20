@@ -39,18 +39,18 @@ case $wxTOOLSET in
         if [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then echo -n 'Building and '; fi
         echo 'Installing...'
         sudo env "PATH=$PATH" cmake --build . --target install -- $wxBUILD_ARGS
-        popd
         echo 'travis_fold:end:install'
 
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
             echo 'travis_fold:start:testing'
             echo 'Testing...'
-            ctest -V -C Debug -R "test_base" --output-on-failure --interactive-debug-mode 0 .
+            ctest -V -C Debug -E "test_drawing" --output-on-failure --interactive-debug-mode 0 .
             echo 'travis_fold:end:testing'
         fi
 
         echo 'travis_fold:start:testinstall'
         echo 'Testing installation...'
+        popd
         mkdir build_cmake_install_test
         pushd build_cmake_install_test
         cmake -G "$wxCMAKE_GENERATOR" $wxCMAKE_DEFINES ../samples/minimal

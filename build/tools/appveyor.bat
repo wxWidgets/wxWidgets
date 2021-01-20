@@ -1,4 +1,10 @@
 set MSBUILD_LOGGER=/logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+if "%wxUSE_WEBVIEW_EDGE%"=="1" (
+    curl -L -o 3rdparty/webview2.zip https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2
+    7z x 3rdparty/webview2.zip -o3rdparty/webview2 -aoa
+)
+
 goto %TOOLSET%
 
 :msbuild

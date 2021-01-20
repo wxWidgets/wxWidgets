@@ -8,12 +8,6 @@
 #############################################################################
 
 add_subdirectory(base)
-
-# Build GUI tests
-if(wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
-
 add_subdirectory(drawing)
 add_subdirectory(gui)
 add_subdirectory(headers)
-
-endif()

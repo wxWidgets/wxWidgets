@@ -367,17 +367,8 @@ macro(wx_target_enable_precomp target_name)
     cotire(${target_name})
 endmacro()
 
-# Enable precompiled headers for tests
-macro(wx_test_enable_precomp target_name)
-    if(wxBUILD_PRECOMP)
-        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/tests/testprec.h")
-    elseif(MSVC)
-        target_compile_definitions(${target_name} PRIVATE NOPCH)
-    endif()
-endmacro()
-
-# Enable precompiled headers for samples
-macro(wx_sample_enable_precomp target_name)
+# Enable precompiled headers for applications
+macro(wx_app_enable_precomp target_name)
     if(wxBUILD_PRECOMP)
         wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     elseif(MSVC)
@@ -414,10 +405,12 @@ endmacro()
 # wx_exe_link_libraries(target libs...)
 # Link wx libraries to executable
 macro(wx_exe_link_libraries name)
-    if(wxBUILD_MONOLITHIC)
-        target_link_libraries(${name} PUBLIC wxmono)
-    else()
-        target_link_libraries(${name};PRIVATE;${ARGN})
+    if(TARGET ${name})
+        if(wxBUILD_MONOLITHIC)
+            target_link_libraries(${name} PUBLIC wxmono)
+        else()
+            target_link_libraries(${name};PRIVATE;${ARGN})
+        endif()
     endif()
 endmacro()
 
@@ -612,82 +605,111 @@ function(wx_print_thirdparty_library_summary)
     message(STATUS ${message})
 endfunction()
 
-# Add executable for sample
-# wx_add_sample(<name> [CONSOLE|DLL] [IMPORTANT] [SRC_FILES...]
-#    [LIBRARIES ...] [NAME target_name] [FOLDER folder])
-# first parameter may be CONSOLE to indicate a console application
-# all following parameters a src files for the executable
-# source files are relative to samples/${name}/
+# Add sample, test or demo
+# wx_add(<name> <group> [CONSOLE|DLL] [IMPORTANT] [SRC_FILES...]
+#    [LIBRARIES ...] [NAME target_name] [FOLDER folder]
+#    [DATA ...] [DEFINITIONS ...] [RES ...])
+# name default target name
+# group can be Samples, Tests or Demos
+# first parameter may be CONSOLE to indicate a console application or DLL to indicate a shared library
+# all following parameters are src files for the executable
+#
 # Optionally:
-# DATA followed by required data files. Use a colon to separate different source and dest paths
-# DEFINITIONS list of definitions for the target
-# FOLDER subfolder in IDE
-# LIBRARIES followed by required libraries
-# NAME alternative target_name
-# IMPORTANT does not require wxBUILD_SAMPLES=ALL
-# RES followed by WIN32 .rc files
+#   IMPORTANT (samples only) does not require wxBUILD_SAMPLES=ALL
+#   LIBRARIES followed by required libraries
+#   NAME alternative target_name
+#   FOLDER subfolder in IDE
+#   DATA followed by required data files. Use a colon to separate different source and dest paths
+#   DEFINITIONS list of definitions for the target
+#   RES followed by WIN32 .rc files
 #
 # Additionally the following variables may be set before calling wx_add_sample:
 # wxSAMPLE_SUBDIR subdirectory in the samples/ folder to use as base
 # wxSAMPLE_FOLDER IDE sub folder to be used for the samples
+
 function(wx_add_sample name)
-    cmake_parse_arguments(SAMPLE
+    wx_add(${name} "Samples" ${ARGN})
+endfunction()
+
+function(wx_add_test name)
+    wx_add(${name} "Tests" ${ARGN})
+endfunction()
+
+function(wx_add_demo name)
+    wx_add(${name} "Demos" ${ARGN})
+endfunction()
+
+function(wx_add name group)
+    cmake_parse_arguments(APP
         "CONSOLE;DLL;IMPORTANT"
         "NAME;FOLDER"
         "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES"
         ${ARGN}
         )
-    if(NOT SAMPLE_FOLDER AND wxSAMPLE_FOLDER)
-        set(SAMPLE_FOLDER ${wxSAMPLE_FOLDER})
+
+    if(APP_NAME)
+        set(target_name ${APP_NAME})
+    else()
+        set(target_name ${name})
     endif()
 
-    # Only build important samples without wxBUILD_SAMPLES=ALL
-    if(NOT SAMPLE_IMPORTANT AND NOT wxBUILD_SAMPLES STREQUAL "ALL")
+    if(group STREQUAL Samples)
+        if(NOT APP_IMPORTANT AND NOT wxBUILD_SAMPLES STREQUAL "ALL")
+            return()
+        endif()
+        set(SUB_DIR "samples/${wxSAMPLE_SUBDIR}${name}")
+        set(DEFAULT_RC_FILE "samples/sample.rc")
+    elseif(group STREQUAL Tests)
+        if(NOT APP_CONSOLE AND NOT wxBUILD_TESTS STREQUAL "ALL")
+            return()
+        endif()
+        set(SUB_DIR "tests")
+        set(DEFAULT_RC_FILE "samples/sample.rc")
+    elseif(group STREQUAL Demos)
+        set(SUB_DIR "demos/${name}")
+        set(DEFAULT_RC_FILE "demos/${name}/${target_name}.rc")
+    else()
+        message(WARNING "Unkown group \"${group}\"")
         return()
     endif()
-    foreach(depend ${SAMPLE_DEPENDS})
+
+    foreach(depend ${APP_DEPENDS})
         if(NOT ${depend})
             return()
         endif()
     endforeach()
 
-    # Only build GUI samples with wxUSE_GUI=1
-    if(NOT wxUSE_GUI AND NOT SAMPLE_CONSOLE)
+    # Only build GUI applications with wxUSE_GUI=1
+    if(NOT wxUSE_GUI AND NOT APP_CONSOLE)
         return()
     endif()
 
-    if(SAMPLE_UNPARSED_ARGUMENTS)
+    if(APP_UNPARSED_ARGUMENTS)
         wx_list_add_prefix(src_files
-            "${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/"
-            ${SAMPLE_UNPARSED_ARGUMENTS})
+            "${wxSOURCE_DIR}/${SUB_DIR}/"
+            ${APP_UNPARSED_ARGUMENTS})
     else()
         # If no source files have been specified use default src name
-        set(src_files ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${name}.cpp)
+        set(src_files ${wxSOURCE_DIR}/${SUB_DIR}/${name}.cpp)
     endif()
 
     if(WIN32)
-        if(SAMPLE_RES)
-            foreach(res ${SAMPLE_RES})
-                list(APPEND src_files ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${res})
+        if(APP_RES)
+            foreach(res ${APP_RES})
+                list(APPEND src_files ${wxSOURCE_DIR}/${SUB_DIR}/${res})
             endforeach()
         else()
-            # Include default sample.rc
-            list(APPEND src_files ${wxSOURCE_DIR}/samples/sample.rc)
+            # Include default resource file
+            list(APPEND src_files ${wxSOURCE_DIR}/${DEFAULT_RC_FILE})
         endif()
     elseif(APPLE AND NOT IPHONE)
         list(APPEND src_files ${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns)
     endif()
 
-    if(SAMPLE_NAME)
-        set(target_name ${SAMPLE_NAME})
-    else()
-        set(target_name ${name})
-    endif()
-
-    if(SAMPLE_DLL)
+    if(APP_DLL)
         add_library(${target_name} SHARED ${src_files})
     else()
-        if(SAMPLE_CONSOLE)
+        if(APP_CONSOLE OR group STREQUAL Tests)
             set(exe_type)
         else()
             set(exe_type WIN32 MACOSX_BUNDLE)
@@ -714,28 +736,37 @@ function(wx_add_sample name)
             target_compile_definitions(${target_name} PRIVATE wxUSE_DPI_AWARE_MANIFEST=${wxUSE_DPI_AWARE_MANIFEST_VALUE})
         endif()
     endif()
-    # All samples use at least the base library other libraries
+
+    # All applications use at least the base library other libraries
     # will have to be added with wx_link_sample_libraries()
     wx_exe_link_libraries(${target_name} wxbase)
-    if(NOT SAMPLE_CONSOLE)
-        # UI samples always require core
+    if(NOT APP_CONSOLE)
+        # UI applications always require core
         wx_exe_link_libraries(${target_name} wxcore)
     else()
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
     endif()
-    if(SAMPLE_LIBRARIES)
-        wx_exe_link_libraries(${target_name} ${SAMPLE_LIBRARIES})
+    if(APP_LIBRARIES)
+        wx_exe_link_libraries(${target_name} ${APP_LIBRARIES})
     endif()
     if(wxBUILD_SHARED)
         target_compile_definitions(${target_name} PRIVATE WXUSINGDLL)
     endif()
-    if(SAMPLE_DEFINITIONS)
-        target_compile_definitions(${target_name} PRIVATE ${SAMPLE_DEFINITIONS})
+    if(APP_DEFINITIONS)
+        target_compile_definitions(${target_name} PRIVATE ${APP_DEFINITIONS})
     endif()
-    if(SAMPLE_DATA)
+
+    if(group STREQUAL Samples)
+        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/samples)
+    elseif(group STREQUAL Tests)
+        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/tests)
+        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/include)
+    endif()
+
+    if(APP_DATA)
         # TODO: handle data files differently for OS X bundles
         # Copy data files to output directory
-        foreach(data_src ${SAMPLE_DATA})
+        foreach(data_src ${APP_DATA})
             string(FIND ${data_src} ":" HAS_COLON)
             if(${HAS_COLON} GREATER -1)
                 MATH(EXPR DEST_INDEX "${HAS_COLON}+1")
@@ -746,17 +777,15 @@ function(wx_add_sample name)
             endif()
 
             list(APPEND cmds COMMAND ${CMAKE_COMMAND}
-                -E copy ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${data_src}
+                -E copy ${wxSOURCE_DIR}/${SUB_DIR}/${data_src}
                 ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_dst})
         endforeach()
         add_custom_command(
             TARGET ${target_name} ${cmds}
-            COMMENT "Copying sample data files...")
+            COMMENT "Copying ${target_name} data files...")
     endif()
-    if(WIN32)
-        # The resource compiler needs this include directory to find res files
-        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/samples/)
-    elseif(APPLE)
+
+    if(APPLE)
         if(NOT IPHONE)
             set_target_properties(${target_name} PROPERTIES
                 MACOSX_BUNDLE_INFO_PLIST "${wxSOURCE_DIR}/samples/Info.plist.in"
@@ -772,18 +801,27 @@ function(wx_add_sample name)
             )
     endif()
 
-    set(folder "Samples")
-    if(SAMPLE_FOLDER)
-        wx_string_append(folder "/${SAMPLE_FOLDER}")
+    if(APP_FOLDER)
+        set(APP_FOLDER ${group}/${APP_FOLDER})
+    elseif(wxSAMPLE_FOLDER)
+        set(APP_FOLDER ${group}/${wxSAMPLE_FOLDER})
+    else()
+        set(APP_FOLDER ${group})
     endif()
     wx_set_common_target_properties(${target_name})
-    wx_sample_enable_precomp(${target_name})
+    wx_app_enable_precomp(${target_name})
     set_target_properties(${target_name} PROPERTIES
-        FOLDER ${folder}
+        FOLDER ${APP_FOLDER}
         )
     set_target_properties(${target_name} PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}"
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
         )
+
+    if(group STREQUAL Tests)
+        add_test(NAME ${target_name}
+            COMMAND ${target_name}
+            WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+    endif()
 endfunction()
 
 # Link libraries to a sample
@@ -864,43 +902,3 @@ macro(wx_dependent_option option doc default depends force)
     set(${option} "${${option}_ISSET}")
   endif()
 endmacro()
-
-# wx_add_test(<name> [src...])
-# Optionally:
-# DATA followed by required data files
-# RES followed by WIN32 .rc files
-function(wx_add_test name)
-    cmake_parse_arguments(TEST "" "" "DATA;RES" ${ARGN})
-    wx_list_add_prefix(test_src "${wxSOURCE_DIR}/tests/" ${TEST_UNPARSED_ARGUMENTS})
-    if(WIN32 AND TEST_RES)
-        foreach(res ${TEST_RES})
-            list(APPEND test_src ${wxSOURCE_DIR}/tests/${res})
-        endforeach()
-    endif()
-    add_executable(${name} ${test_src})
-    target_include_directories(${name} PRIVATE "${wxSOURCE_DIR}/tests" "${wxSOURCE_DIR}/3rdparty/catch/include")
-    wx_exe_link_libraries(${name} wxbase)
-    if(wxBUILD_SHARED)
-        target_compile_definitions(${name} PRIVATE WXUSINGDLL)
-    endif()
-    if(TEST_DATA)
-        # Copy data files to output directory
-        foreach(data_file ${TEST_DATA})
-            list(APPEND cmds COMMAND ${CMAKE_COMMAND}
-                -E copy ${wxSOURCE_DIR}/tests/${data_file}
-                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
-        endforeach()
-        add_custom_command(
-            TARGET ${name} ${cmds}
-            COMMENT "Copying test data files...")
-    endif()
-    wx_set_common_target_properties(${name})
-    set_target_properties(${name} PROPERTIES FOLDER "Tests")
-    set_target_properties(${name} PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY "${wxSOURCE_DIR}/tests"
-        )
-
-    add_test(NAME ${name}
-        COMMAND ${name}
-        WORKING_DIRECTORY ${wxSOURCE_DIR}/tests)
-endfunction()
