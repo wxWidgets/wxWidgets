@@ -234,7 +234,21 @@ bool wxImageHandlerWIC::LoadFile(wxImage *image, wxInputStream& stream,
     bool success = image->Create(imgWidth, imgHeight,
         (unsigned char*)imgData.release(), false);
     if (success && !alphaData.IsEmpty())
-        image->SetAlpha((unsigned char*)alphaData.release());
+    {
+        // See if alpha is required
+        bool needsAlpha = false;
+        char* ap = (char*) alphaData.GetData();
+        for (int ai = 0; ai < alphaData.GetDataLen(); ai++)
+        {
+            needsAlpha = *ap != '\xff';
+            if (needsAlpha)
+                break;
+            ap++;
+        }
+
+        if (needsAlpha)
+            image->SetAlpha((unsigned char*)alphaData.release());
+    }
 
     if (success)
     {
