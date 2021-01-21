@@ -5077,6 +5077,14 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 #endif
 {
 #ifdef __WXGTK3__
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        const int width = gdk_window_get_width(GTKGetDrawingWindow());
+
+        cairo_translate(cr, width, 0);
+        cairo_scale(cr, -1, 1);
+    }
+
     GdkRectangle rect;
     if ( !gdk_cairo_get_clip_rectangle(cr, &rect) )
       return;
@@ -5097,9 +5105,12 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 
     m_nativeUpdateRegion = m_updateRegion;
 
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
-        // Transform m_updateRegion under RTL
+        // Transform m_updateRegion under RTL.
+        // Notice that under GTK3 the dc is flipped (mirrored)
+        // and we don't have to de anything here.
         m_updateRegion.Clear();
 
         const int width = gdk_window_get_width(GTKGetDrawingWindow());
@@ -5119,6 +5130,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             ++upd;
         }
     }
+#endif // __WXGTK3__
 
     switch ( GetBackgroundStyle() )
     {
