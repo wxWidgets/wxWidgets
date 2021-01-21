@@ -5077,22 +5077,15 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 #endif
 {
 #ifdef __WXGTK3__
-    {
-        cairo_region_t* region = gdk_window_get_clip_region(gtk_widget_get_window(m_wxwindow));
-        cairo_rectangle_int_t rect;
-        cairo_region_get_extents(region, &rect);
-        cairo_region_destroy(region);
-        cairo_rectangle(cr, rect.x, rect.y, rect.width, rect.height);
-        cairo_clip(cr);
-    }
-    double x1, y1, x2, y2;
-    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+    GdkRectangle rect;
+    if ( !gdk_cairo_get_clip_rectangle(cr, &rect) )
+      return;
 
-    if (x1 >= x2 || y1 >= y2)
-        return;
+    gdk_cairo_rectangle(cr, &rect);
+    cairo_clip(cr);
 
     m_paintContext = cr;
-    m_updateRegion = wxRegion(int(x1), int(y1), int(x2 - x1), int(y2 - y1));
+    m_updateRegion = wxRegion(rect.x, rect.y, rect.width, rect.height);
 #else // !__WXGTK3__
     m_updateRegion = wxRegion(region);
 #if wxGTK_HAS_COMPOSITING_SUPPORT
