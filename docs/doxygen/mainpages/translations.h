@@ -452,9 +452,11 @@ Here are the steps you should follow:
    you should already have it. Otherwise you can always retrieve it directly
    from the git repository:
    <a href="https://raw.githubusercontent.com/wxWidgets/wxWidgets/master/locale/wxstd.pot">locale/wxstd.pot</a>.
--# Rename it to <tt>XY.po</tt> where <tt>"XY"</tt> is the 2 letter
+-# Initialize an <tt>XY.po</tt> file for your language by using the command
+   <tt>msginit -l XY</tt> in the same folder where you placed <tt>wxstd.pot</tt>.
+   The <tt>"XY"</tt> is the 2 letter
    <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-2 language code</a>
-   for your language.
+   for your language. Initialization can be also done using e.g. Poedit (see next item).
 -# Translate the strings in this file using either your favourite text
    editor or a specialized tool such as Vaclav Slavik's excellent
    <a href="http://www.poedit.net/">poEdit</a> utility.

@@ -5,10 +5,9 @@ This note is addressed to wxWidgets translators.
 
 First of all, here is what you will need:
 
-1. GNU gettext package version 0.10.35 or later (NB: earlier versions were
-   known to have serious bugs)
+1. GNU gettext package
 
-   a) for Unix systems you can download gettext-0.10.tar.gz from any GNU
+   a) for Unix systems you can download gettext-0.xx.yy.tar.gz from any GNU
       mirror (RPMs and DEBs are also available from the usual places)
 
    b) for Windows you can download the precompiled binaries from
