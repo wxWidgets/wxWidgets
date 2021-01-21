@@ -29,6 +29,7 @@
 bool wxCairoInit();
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/bitmap.h"
     #include "wx/icon.h"
     #include "wx/dcclient.h"
@@ -2765,8 +2766,35 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
         // need to use the scaled font here.
         font.GTKSetPangoAttrs(layout);
 
-        cairo_move_to(m_context, x, y);
+#ifdef __WXGTK3__
+        // The device context is mirrored in RTL mode under GTK3 and we need to
+        // draw the text in reverse direction so that the final drawing will be
+        // in the correct direction.
+        wxWindow* const window = GetWindow();
+        const bool isRTL = window ? window->GetLayoutDirection() == wxLayout_RightToLeft :
+                                    wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
+
+        if ( isRTL )
+        {
+            PushState();
+
+            int w, h;
+            pango_layout_get_pixel_size(layout, &w, &h);
+            cairo_translate(m_context, x+w, y);
+            cairo_scale(m_context, -1, 1);
+            cairo_rectangle(m_context, 0, 0, w, h);
+            cairo_clip(m_context);
+        }
+        else
+#endif // __WXGTK3__
+            cairo_move_to(m_context, x, y);
+
         pango_cairo_show_layout (m_context, layout);
+
+#ifdef __WXGTK3__
+        if ( isRTL )
+            PopState();
+#endif // __WXGTK3__
 
         // Don't use Cairo text API, we already did everything.
         return;
