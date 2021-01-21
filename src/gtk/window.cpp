@@ -2627,7 +2627,13 @@ void wxWindowGTK::GTKCreateScrolledWindowWith(GtkWidget* view)
 
     m_scrollBar[ScrollDir_Horz] = GTK_RANGE(gtk_scrolled_window_get_hscrollbar(scrolledWindow));
     m_scrollBar[ScrollDir_Vert] = GTK_RANGE(gtk_scrolled_window_get_vscrollbar(scrolledWindow));
-    if (GetLayoutDirection() == wxLayout_RightToLeft)
+
+    // Don't just call GetLayoutDirection() here as the layout direction is not initialized yet
+    // for this window, and thus gtk_range_set_inverted() won't be called at all.
+    const wxWindow *const parent = GetParent();
+    const bool isRTL = parent ? parent->GetLayoutDirection() == wxLayout_RightToLeft
+                              : wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
+    if ( isRTL )
         gtk_range_set_inverted( m_scrollBar[ScrollDir_Horz], TRUE );
 
     gtk_container_add( GTK_CONTAINER(m_widget), view );
