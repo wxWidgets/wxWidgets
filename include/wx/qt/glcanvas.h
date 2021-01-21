@@ -24,9 +24,6 @@ public:
 
     virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
-private:
-    QGLContext *m_glContext;
-
     wxDECLARE_CLASS(wxGLContext);
 };
 
@@ -86,8 +83,5 @@ private:
 //    wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
 };
-
-#include <QtWidgets/QGestureRecognizer>
-#include <QtWidgets/QGestureEvent>
 
 #endif // _WX_GLCANVAS_H_
