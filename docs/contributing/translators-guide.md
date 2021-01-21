@@ -37,7 +37,7 @@ gettext documentation for more details). It happens in several steps:
 1. the strings to translate are extracted from the C++ sources using xgettext
    program into a wxstd.pot file which is a "text message catalog"
 
-2. this new wxstd.pot file (recreated each time some new text messages are added
+2. this new wxstd.pot file (recreated every 1-4 years even if new messages were added
    to wxWidgets) is merged with existing translations in another .po file (for
    example, de.po) and replaces this file (this is done using the program
    msgmerge)
