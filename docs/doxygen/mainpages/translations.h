@@ -459,8 +459,8 @@ Here are the steps you should follow:
    editor or a specialized tool such as Vaclav Slavik's excellent
    <a href="http://www.poedit.net/">poEdit</a> utility.
 -# Verify that your translations can at least be compiled (even if they
-   are yet incomplete) by running <tt>msgfmt -v XY.po</tt> command:
-   please note that you <i>must</i> use the <tt>-v</tt> option. In
+   are yet incomplete) by running <tt>msgfmt -vc XY.po</tt> command:
+   please note that you <i>must</i> use the <tt>-c</tt> option. In
    particular, please fill the header fields because @c msgfmt doesn't
    accept the default values for them.
 -# Send the finished translation to <a href="mailto:vadim@wxwidgets.org">Vadim Zeitlin</a>
