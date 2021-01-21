@@ -156,7 +156,7 @@ private:
     // Event handlers for various events in our controls.
     void OnTextSetFocus(wxFocusEvent& event)
     {
-        HighlightCurrentField();
+        CallAfter(&wxTimePickerGenericImpl::HighlightCurrentField);
 
         event.Skip();
     }
@@ -303,6 +303,7 @@ private:
         }
 
         ChangeCurrentField(field);
+        CallAfter(&wxTimePickerGenericImpl::HighlightCurrentField);
     }
 
     void OnArrowUp(wxSpinEvent& WXUNUSED(event))
