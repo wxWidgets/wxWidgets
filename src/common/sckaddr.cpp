@@ -187,7 +187,7 @@ namespace
     !defined(HAVE_FUNC_GETHOSTBYADDR_R_5) && \
     !defined(HAVE_FUNC_GETHOSTBYADDR_R_3) )
 
-    
+
 hostent *deepCopyHostent(hostent *h,
                          const hostent *he,
                          char *buffer,

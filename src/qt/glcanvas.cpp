@@ -544,7 +544,7 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
             case WX_GL_SAMPLES:
                 format.setSamples(v);
                 break;
-                
+
             case WX_GL_MAJOR_VERSION:
                  format.setVersion ( v,0 );
                  break;
