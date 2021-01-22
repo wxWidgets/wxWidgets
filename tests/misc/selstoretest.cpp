@@ -19,50 +19,25 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class SelStoreTestCase : public CppUnit::TestCase
+class SelStoreTest
 {
 public:
-    SelStoreTestCase() { }
-
-    virtual void setUp() wxOVERRIDE
+    SelStoreTest()
     {
         m_store.SetItemCount(NUM_ITEMS);
     }
-
-private:
-    CPPUNIT_TEST_SUITE( SelStoreTestCase );
-        CPPUNIT_TEST( SelectItem );
-        CPPUNIT_TEST( SelectRange );
-        CPPUNIT_TEST( SetItemCount );
-        CPPUNIT_TEST( Clear );
-        CPPUNIT_TEST( Iterate );
-        CPPUNIT_TEST( ItemsAddDelete );
-    CPPUNIT_TEST_SUITE_END();
-
-    void SelectItem();
-    void SelectRange();
-    void SetItemCount();
-    void Clear();
-    void Iterate();
-    void ItemsAddDelete();
 
     // NB: must be even
     static const unsigned NUM_ITEMS;
 
     wxSelectionStore m_store;
 
-    wxDECLARE_NO_COPY_CLASS(SelStoreTestCase);
+    wxDECLARE_NO_COPY_CLASS(SelStoreTest);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( SelStoreTestCase );
+const unsigned SelStoreTest::NUM_ITEMS = 10; // NB: must be even
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SelStoreTestCase, "SelStoreTestCase" );
-
-const unsigned SelStoreTestCase::NUM_ITEMS = 10; // NB: must be even
-
-void SelStoreTestCase::SelectItem()
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::SelectItem", "[selstore]")
 {
     m_store.SelectItem(0);
     CHECK( m_store.GetSelectedCount() == 1 );
@@ -77,7 +52,7 @@ void SelStoreTestCase::SelectItem()
     CHECK( !m_store.IsSelected(0) );
 }
 
-void SelStoreTestCase::SelectRange()
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::SelectRange", "[selstore]")
 {
     m_store.SelectRange(0, NUM_ITEMS/2);
     CHECK( m_store.GetSelectedCount() == NUM_ITEMS/2 + 1 );
@@ -96,7 +71,7 @@ void SelStoreTestCase::SelectRange()
     CHECK( m_store.IsSelected(NUM_ITEMS - 1) );
 }
 
-void SelStoreTestCase::SetItemCount()
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::SetItemCount", "[selstore]")
 {
     m_store.SelectRange(1, NUM_ITEMS - 2);
     CHECK( m_store.GetSelectedCount() == NUM_ITEMS - 2 );
@@ -115,7 +90,7 @@ void SelStoreTestCase::SetItemCount()
     CHECK( m_store.GetSelectedCount() == 1 );
 }
 
-void SelStoreTestCase::Clear()
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::Clear", "[selstore]")
 {
     CHECK(m_store.IsEmpty());
     CHECK( m_store.GetSelectedCount() == 0 );
@@ -130,7 +105,7 @@ void SelStoreTestCase::Clear()
     CHECK( m_store.GetSelectedCount() == 0 );
 }
 
-void SelStoreTestCase::Iterate()
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::Iterate", "[selstore]")
 {
     m_store.SelectRange(NUM_ITEMS/2 - 1, NUM_ITEMS/2 + 1);
 
@@ -147,7 +122,7 @@ void SelStoreTestCase::Iterate()
     CHECK(1 == m_store.GetFirstSelectedItem(cookie));
 }
 
-void SelStoreTestCase::ItemsAddDelete()
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::ItemsAddDelete", "[selstore]")
 {
     m_store.SelectItem(0);
     m_store.SelectItem(NUM_ITEMS/2);
