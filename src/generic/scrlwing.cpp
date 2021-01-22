@@ -786,6 +786,10 @@ bool wxScrollHelperBase::ScrollLayout()
 void wxScrollHelperBase::ScrollDoSetVirtualSize(int x, int y)
 {
     m_win->wxWindow::DoSetVirtualSize( x, y );
+    if(m_targetWindow != m_win)
+    {
+        m_targetWindow->wxWindow::DoSetVirtualSize(x, y);
+    }
     AdjustScrollbars();
 
     if (m_win->GetAutoLayout())
