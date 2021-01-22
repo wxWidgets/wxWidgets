@@ -442,7 +442,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
         return false;
 
     m_qtWindow = new wxQtGLWidget(parent, this, format);
-    
+
     QGestureRecognizer* pPanRecognizer = new PanGestureRecognizer();
     QGestureRecognizer::registerRecognizer(pPanRecognizer);
 
