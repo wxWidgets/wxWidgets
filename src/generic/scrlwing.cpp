@@ -655,13 +655,15 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
 void wxScrollHelperBase::DoPrepareDC(wxDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-    // It may actually be correct to always query
-    // the m_sign from the DC here, but I leave the
-    // #ifdef GTK for now.
+#if defined(__WXGTK__)
     if (m_win->GetLayoutDirection() == wxLayout_RightToLeft)
-        dc.SetDeviceOrigin( pt.x + m_xScrollPosition * m_xScrollPixelsPerLine,
+    {
+        int signX;
+        dc.GetAxisOrientation(&signX, NULL);
+
+        dc.SetDeviceOrigin( pt.x - m_xScrollPosition * m_xScrollPixelsPerLine * signX,
                             pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
+    }
     else
 #endif
         dc.SetDeviceOrigin( pt.x - m_xScrollPosition * m_xScrollPixelsPerLine,
