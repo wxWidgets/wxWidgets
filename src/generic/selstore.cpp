@@ -207,7 +207,7 @@ void wxSelectionStore::OnItemsInserted(unsigned item, unsigned numItems)
         // items indices.
         for ( unsigned n = item; n < item + numItems; n++ )
         {
-            m_itemsSel.AddAt(item, idx++);
+            m_itemsSel.AddAt(n, idx++);
         }
     }
 
