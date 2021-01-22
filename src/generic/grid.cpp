@@ -806,72 +806,55 @@ wxGridCellAttr *wxGridCellAttrData::GetAttr(int row, int col) const
     return attr;
 }
 
-void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
+namespace
 {
-    size_t count = m_attrs.GetCount();
+
+void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
+                              int editRowCount, int editColCount)
+{
+    wxASSERT( !editRowCount || !editColCount );
+
+    const bool isEditingRows = (editRowCount != 0);
+    const int editCount = (isEditingRows ? editRowCount : editColCount);
+
+    size_t count = attrs.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        wxGridCellCoords& coords = m_attrs[n].coords;
-        wxCoord row = coords.GetRow();
-        if ((size_t)row >= pos)
+        wxGridCellCoords& coords = attrs[n].coords;
+        const wxCoord cellRow = coords.GetRow(),
+                      cellCol = coords.GetCol(),
+                      cellPos = (isEditingRows ? cellRow : cellCol);
+
+        if ( cellPos < editPos )
+            continue;
+
+        if ( editCount < 0 && cellPos < editPos - editCount )
         {
-            if (numRows > 0)
-            {
-                // If rows inserted, increment row counter where necessary
-                coords.SetRow(row + numRows);
-            }
-            else if (numRows < 0)
-            {
-                // If rows deleted ...
-                if ((size_t)row >= pos - numRows)
-                {
-                    // ...either decrement row counter (if row still exists)...
-                    coords.SetRow(row + numRows);
-                }
-                else
-                {
-                    // ...or remove the attribute
-                    m_attrs.RemoveAt(n);
-                    n--;
-                    count--;
-                }
-            }
+            // This row/col is deleted and the cell doesn't exist any longer:
+            // Remove the attribute.
+            attrs.RemoveAt(n);
+            n--;
+            count--;
+
+            continue;
         }
+
+        // Rows/cols inserted or deleted (and this cell still exists):
+        // Adjust cell coords.
+        coords.Set(cellRow + editRowCount, cellCol + editColCount);
     }
+}
+
+} // anonymous namespace
+
+void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
+{
+    UpdateCellAttrRowsOrCols(m_attrs, static_cast<int>(pos), numRows, 0);
 }
 
 void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
 {
-    size_t count = m_attrs.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        wxGridCellCoords& coords = m_attrs[n].coords;
-        wxCoord col = coords.GetCol();
-        if ( (size_t)col >= pos )
-        {
-            if ( numCols > 0 )
-            {
-                // If cols inserted, increment col counter where necessary
-                coords.SetCol(col + numCols);
-            }
-            else if (numCols < 0)
-            {
-                // If cols deleted ...
-                if ((size_t)col >= pos - numCols)
-                {
-                    // ...either decrement col counter (if col still exists)...
-                    coords.SetCol(col + numCols);
-                }
-                else
-                {
-                    // ...or remove the attribute
-                    m_attrs.RemoveAt(n);
-                    n--;
-                    count--;
-                }
-            }
-        }
-    }
+    UpdateCellAttrRowsOrCols(m_attrs, static_cast<int>(pos), 0, numCols);
 }
 
 int wxGridCellAttrData::FindIndex(int row, int col) const
