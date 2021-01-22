@@ -446,7 +446,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     QGestureRecognizer* pPanRecognizer = new PanGestureRecognizer();
     QGestureRecognizer::registerRecognizer(pPanRecognizer);
 
-
     return wxWindow::Create( parent, id, pos, size, style, name );
 }
 
@@ -467,17 +466,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
     format.setDepth(false);
     format.setAlpha(false);
     format.setStencil(false);
-
-    // Enable multisampling aka MSAA
-
-    format.setSampleBuffers( true );
-    format.setSamples( 4 );
-
-    //  We don't have the option of setting OpenGLES version defined in the
-    //  attribute list Enum.
-
-    // So, just force it here.
-    format.setVersion ( 2,0 );
 
     for ( int arg = 0; wxattrs[arg] != 0; arg++ )
     {
@@ -551,13 +539,15 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 
             case WX_GL_SAMPLE_BUFFERS:
                 format.setSampleBuffers(v);
-                // can we somehow indicate if it's not supported?
                 break;
 
             case WX_GL_SAMPLES:
                 format.setSamples(v);
-                // can we somehow indicate if it's not supported?
                 break;
+                
+            case WX_GL_MAJOR_VERSION:
+                 format.setVersion ( v,0 );
+                 break;
 
             default:
                 wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
