@@ -502,10 +502,10 @@ GridFrame::GridFrame()
     colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour..." );
 
     wxMenu *editMenu = new wxMenu;
-    editMenu->Append( ID_INSERTROW, "Insert &row" );
-    editMenu->Append( ID_INSERTCOL, "Insert &column" );
-    editMenu->Append( ID_DELETEROW, "Delete selected ro&ws" );
-    editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
+    editMenu->Append( ID_INSERTROW, "Insert &row\tCtrl+I" );
+    editMenu->Append( ID_INSERTCOL, "Insert &column\tCtrl+Shift+I" );
+    editMenu->Append( ID_DELETEROW, "Delete selected ro&ws\tCtrl+D" );
+    editMenu->Append( ID_DELETECOL, "Delete selected co&ls\tCtrl+Shift+D" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
     editMenu->Append( ID_EDITCELL, "&Edit current cell" );
     editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
