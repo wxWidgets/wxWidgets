@@ -31,7 +31,7 @@
 namespace
 {
 
-// Derive a new class inheriting from wxGrid just to get access to its
+// Derive a new class inheriting from wxGrid, also to get access to its
 // protected GetCellAttr(). This is not pretty, but we don't have any other way
 // of testing this function.
 class TestableGrid : public wxGrid
@@ -46,6 +46,32 @@ public:
     {
         return GetCellAttr(row, col);
     }
+
+    bool HasAttr(int row, int col, wxGridCellAttr::wxAttrKind kind) const
+    {
+        // Can't use GetCellAttr() here as it always returns an attr.
+        wxGridCellAttr* attr = GetTable()->GetAttr(row, col, kind);
+        if ( attr )
+            attr->DecRef();
+
+        return attr != NULL;
+    }
+
+    size_t GetCellAttrCount() const
+    {
+        // Note that only attributes in grid range can easily be checked
+        // and this function only counts those, not any outside of
+        // the grid (e.g. with invalid negative coords).
+        size_t count = 0;
+        for ( int row = 0; row < GetNumberRows(); ++row )
+        {
+            for ( int col = 0; col < GetNumberCols(); ++col )
+                count += HasAttr(row, col, wxGridCellAttr::Cell);
+        }
+
+        return count;
+    }
+
 };
 
 } // anonymous namespace
@@ -104,6 +130,16 @@ protected:
             const RowRange& r = ranges[n];
             CHECK( sel[n] == wxGridBlockCoords(r.top, 0, r.bottom, 1) );
         }
+    }
+
+    bool HasCellAttr(int row, int col) const
+    {
+        return m_grid->HasAttr(row, col, wxGridCellAttr::Cell);
+    }
+
+    void SetCellAttr(int row, int col)
+    {
+        m_grid->SetAttr(row, col, new wxGridCellAttr);
     }
 
     TestableGrid *m_grid;
@@ -1444,6 +1480,80 @@ TEST_CASE_METHOD(GridTestCase, "Grid::DrawInvalidCell", "[grid][multicell]")
 
     m_grid->Update();
     wxYield();
+}
+
+#define CHECK_ATTR_COUNT(n) CHECK( m_grid->GetCellAttrCount() == n )
+
+TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
+{
+    SECTION("Overwrite")
+    {
+        CHECK_ATTR_COUNT( 0 );
+
+        m_grid->SetAttr(0, 0, NULL);
+        CHECK_ATTR_COUNT( 0 );
+
+        SetCellAttr(0, 0);
+        CHECK_ATTR_COUNT( 1 );
+
+        m_grid->SetAttr(0, 0, NULL);
+        CHECK_ATTR_COUNT( 0 );
+
+        SetCellAttr(0, 0);
+        m_grid->SetCellBackgroundColour(0, 1, *wxGREEN);
+        CHECK_ATTR_COUNT( 2 );
+
+        m_grid->SetAttr(0, 1, NULL);
+        m_grid->SetAttr(0, 0, NULL);
+        CHECK_ATTR_COUNT( 0 );
+    }
+
+
+    // Fill the grid with attributes for next sections.
+
+    const int numRows = m_grid->GetNumberRows();
+    const int numCols = m_grid->GetNumberCols();
+
+    for ( int row = 0; row < numRows; ++row )
+    {
+        for ( int col = 0; col < numCols; ++col )
+            SetCellAttr(row, col);
+    }
+
+    size_t numAttrs = static_cast<size_t>(numRows * numCols);
+
+    CHECK_ATTR_COUNT( numAttrs );
+
+    SECTION("Expanding")
+    {
+        CHECK( !HasCellAttr(numRows, numCols) );
+
+        m_grid->InsertCols();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( !HasCellAttr(0, 0) );
+        CHECK( HasCellAttr(0, numCols) );
+
+        m_grid->InsertRows();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( HasCellAttr(numRows, numCols) );
+    }
+
+    SECTION("Shrinking")
+    {
+        CHECK( HasCellAttr(numRows - 1 , numCols - 1) );
+        CHECK( HasCellAttr(0, numCols - 1) );
+
+        m_grid->DeleteCols();
+        numAttrs -= m_grid->GetNumberRows();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( HasCellAttr(0, 0) );
+        CHECK( !HasCellAttr(0, numCols - 1) );
+
+        m_grid->DeleteRows();
+        numAttrs -= m_grid->GetNumberCols();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( !HasCellAttr(numRows - 1 , numCols - 1) );
+    }
 }
 
 // Test wxGridBlockCoords here because it'a a part of grid sources.
