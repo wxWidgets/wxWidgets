@@ -152,3 +152,17 @@ TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::ItemsAddDelete", "[selstore]")
     CHECK(m_store.IsSelected(0));
     CHECK(m_store.IsSelected(NUM_ITEMS/2));
 }
+
+TEST_CASE_METHOD(SelStoreTest, "wxSelectionStore::InsertInSelected", "[selstore]")
+{
+    m_store.SelectRange(0, NUM_ITEMS - 1);
+    CHECK( m_store.GetSelectedCount() == NUM_ITEMS );
+
+    // Newly inserted items shouldn't be selected, even if all the existing
+    // ones are.
+    m_store.OnItemsInserted(1, 3);
+    CHECK( !m_store.IsSelected(1) );
+    CHECK( !m_store.IsSelected(2) );
+    CHECK( !m_store.IsSelected(3) );
+    CHECK( m_store.GetSelectedCount() == NUM_ITEMS );
+}
