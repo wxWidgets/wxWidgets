@@ -103,7 +103,6 @@ bool wxQtScrollArea::event(QEvent *e)
                     hBar->triggerAction( QAbstractSlider::SliderMove );
 
                  return true;
-                 break;
              }
             default:
               break;
