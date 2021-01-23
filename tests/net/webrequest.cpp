@@ -111,7 +111,7 @@ public:
 
     void RunLoopWithTimeout()
     {
-        StartOnce(10000); // Ensure that we exit the loop after 10s.
+        StartOnce(30000); // Ensure that we exit the loop after 30s.
         loop.Run();
         Stop();
     }
