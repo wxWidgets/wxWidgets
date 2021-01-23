@@ -27,11 +27,15 @@
 #include "wx/filename.h"
 #include "wx/wfstream.h"
 
-// This test uses https://httpbin.org by default, but this can be overridden by
-// setting WX_TEST_WEBREQUEST_URL, e.g. when running httpbin locally in a
-// docker container. This variable can also be set to a special value "0" to
-// disable running the test entirely.
-static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://httpbin.org";
+// This test uses httpbin service and by default uses the mirror at the
+// location below, which seems to be more reliable than the main site at
+// https://httpbin.org. Any other mirror, including a local one, which can be
+// set by running kennethreitz/httpbin Docker container, can be used by setting
+// WX_TEST_WEBREQUEST_URL environment variable to its URL.
+//
+// This variable can also be set to a special value "0" to disable running the
+// test entirely.
+static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://nghttp2.org/httpbin";
 
 class RequestFixture : public wxTimer
 {
