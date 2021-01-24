@@ -2627,8 +2627,6 @@ void wxWindowGTK::GTKCreateScrolledWindowWith(GtkWidget* view)
 
     m_scrollBar[ScrollDir_Horz] = GTK_RANGE(gtk_scrolled_window_get_hscrollbar(scrolledWindow));
     m_scrollBar[ScrollDir_Vert] = GTK_RANGE(gtk_scrolled_window_get_vscrollbar(scrolledWindow));
-    if (GetLayoutDirection() == wxLayout_RightToLeft)
-        gtk_range_set_inverted( m_scrollBar[ScrollDir_Horz], TRUE );
 
     gtk_container_add( GTK_CONTAINER(m_widget), view );
 
@@ -4719,6 +4717,9 @@ void wxWindowGTK::SetLayoutDirection(wxLayoutDirection dir)
         return;
 
     GTKSetLayout(m_widget, dir);
+
+    if (GtkRange* range = m_scrollBar[ScrollDir_Horz])
+        gtk_range_set_inverted(range, dir == wxLayout_RightToLeft);
 
     if (m_wxwindow && (m_wxwindow != m_widget))
         GTKSetLayout(m_wxwindow, dir);
