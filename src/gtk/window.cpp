@@ -2803,6 +2803,8 @@ void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
 
+    SetLayoutDirection(wxLayout_Default);
+
     GTKConnectFreezeWidget(m_widget);
     if (m_wxwindow && m_wxwindow != m_widget)
         GTKConnectFreezeWidget(m_wxwindow);
@@ -2923,8 +2925,6 @@ void wxWindowGTK::PostCreation()
     GTKApplyWidgetStyle();
 
     InheritAttributes();
-
-    SetLayoutDirection(wxLayout_Default);
 
     // if the window had been disabled before being created, it should be
     // created in the initially disabled state
