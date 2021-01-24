@@ -18,14 +18,14 @@ class wxGtkValue
 {
 public:
     explicit wxGtkValue()
-        : m_val(G_VALUE_INIT)
     {
+        memset(&m_val, 0, sizeof(m_val));
     }
 
     // Initialize the value of the specified type.
     explicit wxGtkValue(GType gtype)
-        : m_val(G_VALUE_INIT)
     {
+        memset(&m_val, 0, sizeof(m_val));
         g_value_init(&m_val, gtype);
     }
 
