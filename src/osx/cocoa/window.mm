@@ -3712,7 +3712,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
                     /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
                     new_event.SetWindowChange( event.ControlDown() );
                     new_event.SetCurrentFocus( focus );
-                    handled = iter->HandleWindowEvent( new_event ) && !new_event.GetSkipped();
+                    handled = iter->HandleWindowEvent( new_event );
                 }
 
                 iter = iter->GetParent() ;

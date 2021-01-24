@@ -2605,11 +2605,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 #endif // wxUSE_ACCEL
 
     if ( !handled )
-    {
         handled = HandleWindowEvent( event ) ;
-        if ( handled && event.GetSkipped() )
-            handled = false ;
-    }
 
     return handled ;
 }
