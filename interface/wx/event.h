@@ -4479,7 +4479,6 @@ public:
     wxMenuBar, attached to wxFrame, and popup menus shown by
     wxWindow::PopupMenu(). They are sent to the following objects until one of
     them handles the event:
-
         -# The menu object itself, as returned by GetMenu(), if any.
         -# The wxMenuBar to which this menu is attached, if any.
         -# The window associated with the menu, e.g. the one calling
