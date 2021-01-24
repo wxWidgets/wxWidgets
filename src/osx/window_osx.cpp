@@ -2573,7 +2573,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     // moved the ordinary key event sending AFTER the accel evaluation
 
 #if wxUSE_ACCEL
-    if (event.GetEventType() == wxEVT_KEY_DOWN)
+    if (event.GetEventType() == wxEVT_CHAR_HOOK)
     {
         wxWindow *ancestor = this;
         while (ancestor)
