@@ -3094,12 +3094,11 @@ bool wxWidgetCocoaImpl::CanFocus() const
 {
     if ( !IsVisible() )
     {
-        // It's useless to call canBecomeKeyView in this case, it will always
-        // return false. Try to return something reasonable ourselves, knowing
-        // that most controls are not focusable when full keyboard access if
-        // off and wxNSTextViewControl overrides CanFocus() to always return
-        // true anyhow.
-        return [NSApp isFullKeyboardAccessEnabled];
+        // canBecomeKeyView always returns false for hidden windows, but this
+        // could be wrong because the window could still accept focus once it
+        // becomes visible, so we have no choice but to return true here to
+        // avoid situations in which the expected window doesn't get the focus.
+        return true;
     }
 
     NSView* targetView = m_osxView;
