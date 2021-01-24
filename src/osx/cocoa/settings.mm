@@ -116,7 +116,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
             sysColor = [NSColor windowBackgroundColor];
         else
-            sysColor = [NSColor controlColor];
+            return wxColour(wxMacCreateCGColorFromHITheme(3 /* kThemeBrushDialogBackgroundActive */));
         break;
     case wxSYS_COLOUR_LISTBOX:
         sysColor = [NSColor controlBackgroundColor];
