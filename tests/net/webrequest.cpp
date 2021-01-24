@@ -50,8 +50,19 @@ public:
     // it returns false, as this indicates that web requests tests are disabled.
     bool InitBaseURL()
     {
-        if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
+        if ( wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
+        {
+            static bool s_shown = false;
+            if ( !s_shown )
+            {
+                s_shown = true;
+                WARN("Using non-default root URL " << baseURL);
+            }
+        }
+        else
+        {
             baseURL = WX_TEST_WEBREQUEST_URL_DEFAULT;
+        }
 
         return baseURL != "0";
     }
