@@ -827,7 +827,24 @@ wxMenu::~wxMenu()
 void wxMenu::SetLayoutDirection(wxLayoutDirection dir)
 {
     if ( m_owner )
+    {
         wxWindow::GTKSetLayout(m_owner, dir);
+
+        wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
+        for (; node; node = node->GetNext())
+        {
+            wxMenuItem* item = node->GetData();
+            if (wxMenu* subMenu = item->GetSubMenu())
+                subMenu->SetLayoutDirection(dir);
+            else if (GtkWidget* widget = item->GetMenuItem())
+            {
+                wxWindow::GTKSetLayout(widget, dir);
+                widget = gtk_bin_get_child(GTK_BIN(widget));
+                if (widget)
+                    wxWindow::GTKSetLayout(widget, dir);
+            }
+        }
+    }
     //else: will be called later by wxMenuBar again
 }
 
