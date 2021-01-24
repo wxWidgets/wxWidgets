@@ -1937,6 +1937,57 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
+-(void) sendEditingDoneEvent:(BOOL)isCancelled
+{
+    // under OSX an event indicating the end of an editing session can be sent
+    // even if no event indicating a start of an editing session has been sent
+    // (see Documentation for NSControl controlTextDidEndEditing:); this is
+    // not expected by a user of the wxWidgets library and therefore an
+    // wxEVT_DATAVIEW_ITEM_EDITING_DONE event is only sent if a
+    // corresponding wxEVT_DATAVIEW_ITEM_EDITING_STARTED has been sent
+    // before; to check if a wxEVT_DATAVIEW_ITEM_EDITING_STARTED has
+    // been sent the last edited column/row are valid:
+    if ( currentlyEditedColumn != -1 && currentlyEditedRow != -1 )
+    {
+        NSTableColumn*
+            tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
+        wxDataViewColumn* const
+            col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+
+        wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+
+        const wxDataViewItem
+            item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
+
+        // send event to wxWidgets:
+        wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dvc, col, item);
+        if ( isCancelled )
+            event.SetEditCancelled();
+
+        dvc->GetEventHandler()->ProcessEvent(event);
+
+        // we're not editing any more
+        currentlyEditedColumn =
+            currentlyEditedRow = -1;
+    }
+}
+
+-(void) editColumn:(NSInteger)column row:(NSInteger)row withEvent:(NSEvent*)event select:(BOOL)select
+{
+    [super editColumn:column row:row withEvent:event select:select];
+
+    currentlyEditedColumn = column;
+    currentlyEditedRow = row;
+}
+
+-(void) cancelOperation:(id)sender
+{
+    [self abortEditing];
+    [[self window] makeFirstResponder:self];
+
+    [self sendEditingDoneEvent:YES];
+}
+
 -(BOOL) textShouldBeginEditing:(NSText*)textEditor
 {
     wxUnusedVar(textEditor);
@@ -2007,35 +2058,7 @@ outlineView:(NSOutlineView*)outlineView
     // have the checks for IsDeleting() in several other methods of this class.
     [super textDidEndEditing:notification];
 
-    // under OSX an event indicating the end of an editing session can be sent
-    // even if no event indicating a start of an editing session has been sent
-    // (see Documentation for NSControl controlTextDidEndEditing:); this is
-    // not expected by a user of the wxWidgets library and therefore an
-    // wxEVT_DATAVIEW_ITEM_EDITING_DONE event is only sent if a
-    // corresponding wxEVT_DATAVIEW_ITEM_EDITING_STARTED has been sent
-    // before; to check if a wxEVT_DATAVIEW_ITEM_EDITING_STARTED has
-    // been sent the last edited column/row are valid:
-    if ( currentlyEditedColumn != -1 && currentlyEditedRow != -1 )
-    {
-        NSTableColumn*
-            tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
-        wxDataViewColumn* const
-            col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
-
-        wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
-
-        const wxDataViewItem
-            item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
-
-        // send event to wxWidgets:
-        wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dvc, col, item);
-        dvc->GetEventHandler()->ProcessEvent(event);
-
-
-        // we're not editing any more
-        currentlyEditedColumn =
-            currentlyEditedRow = -1;
-    }
+    [self sendEditingDoneEvent:NO];
 }
 
 -(BOOL) becomeFirstResponder
