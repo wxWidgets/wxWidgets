@@ -104,34 +104,46 @@ TEST_CASE_METHOD(GridSizerTestCase,
     m_sizer->AddGrowableCol(1);
 
     // Without Expand() windows have their initial size.
-    SetChildren(children, wxSizerFlags());
-    CHECK( children[0]->GetSize() == sizeChild );
-    CHECK( children[1]->GetSize() == sizeChild );
-    CHECK( children[2]->GetSize() == sizeChild );
-    CHECK( children[3]->GetSize() == sizeChild );
+    SECTION("No flags")
+    {
+        SetChildren(children, wxSizerFlags());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == sizeChild );
+        CHECK( children[2]->GetSize() == sizeChild );
+        CHECK( children[3]->GetSize() == sizeChild );
+    }
 
     // With just expand, they expand to fill the entire column and the row
     // containing them (which may or not expand on its own).
-    SetChildren(children, wxSizerFlags().Expand());
-    CHECK( children[0]->GetSize() == sizeChild );
-    CHECK( children[1]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
-    CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
-    CHECK( children[3]->GetSize() == sizeRest );
+    SECTION("Expand")
+    {
+        SetChildren(children, wxSizerFlags().Expand());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+        CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+        CHECK( children[3]->GetSize() == sizeRest );
+    }
 
     // With expand and another alignment flag, they should expand only in the
     // direction in which the alignment is not given.
-    SetChildren(children, wxSizerFlags().Expand().CentreVertical());
-    CHECK( children[0]->GetSize() == sizeChild );
-    CHECK( children[1]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
-    CHECK( children[2]->GetSize() == sizeChild );
-    CHECK( children[3]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+    SECTION("Expand and center vertically")
+    {
+        SetChildren(children, wxSizerFlags().Expand().CentreVertical());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+        CHECK( children[2]->GetSize() == sizeChild );
+        CHECK( children[3]->GetSize() == wxSize(sizeRest.x, sizeChild.y) );
+    }
 
     // Same as above but mirrored.
-    SetChildren(children, wxSizerFlags().Expand().CentreHorizontal());
-    CHECK( children[0]->GetSize() == sizeChild );
-    CHECK( children[1]->GetSize() == sizeChild );
-    CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
-    CHECK( children[3]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+    SECTION("Expand and center horizontally")
+    {
+        SetChildren(children, wxSizerFlags().Expand().CentreHorizontal());
+        CHECK( children[0]->GetSize() == sizeChild );
+        CHECK( children[1]->GetSize() == sizeChild );
+        CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+        CHECK( children[3]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+    }
 }
 
 TEST_CASE_METHOD(GridSizerTestCase,
