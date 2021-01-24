@@ -147,9 +147,23 @@ public:
                                            wxPluginCategory cat = wxDL_PLUGIN_GUI);
 
     /**
-        Detaches this object from its library handle, i.e.\ the object will not
-        unload the library any longer in its destructor but it is now the
-        callers responsibility to do this using Unload().
+        Attaches the object to an existing handle.
+
+        This allows to give ownership of an existing handle, possibly obtained
+        from Detach(), to this object, so that it will unload it when destroyed.
+
+        @since 3.1.5
+     */
+    void Attach(wxDllType h);
+
+    /**
+        Detaches this object from its library handle.
+
+        This means that the object will not unload the library any longer in
+        its destructor but it is now the callers responsibility to do this
+        using static Unload().
+
+        @see Attach()
     */
     wxDllType Detach();
 
