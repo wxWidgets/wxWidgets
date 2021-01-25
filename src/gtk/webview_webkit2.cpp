@@ -557,6 +557,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
     g_object_ref(m_widget);
 
+    if (!this->GetJSName().empty())
+        this->RegisterScriptMessageHandler();
+
     g_signal_connect(m_web_view, "decide-policy",
                      G_CALLBACK(wxgtk_webview_webkit_decide_policy),
                      this);
@@ -1435,6 +1438,129 @@ GDBusProxy *wxWebViewWebKit::GetExtensionProxy() const
                   (const char*)GetStandardWebExtensionsDir().utf8_str());
     }
     return m_extension;
+}
+
+static void
+wxgtk_webview_webkit_script_message_received(WebKitUserContentManager *,
+                                             WebKitJavascriptResult *js_result,
+                                             wxWebViewWebKit *webKitCtrl)
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED,
+                         webKitCtrl->GetId(),
+                         webKitCtrl->GetCurrentURL(),
+                         "");
+    event.SetScriptMessage(js_result);
+    webKitCtrl->HandleWindowEvent(event);
+}
+
+void wxWebViewWebKit::RegisterScriptMessageHandler()
+{
+    if (!m_web_view) return;
+    // Register the script message handler.
+    WebKitUserContentManager *mgr = webkit_web_view_get_user_content_manager(m_web_view);
+    g_signal_connect(mgr,
+                     wxString::Format("script-message-received::%s", this->GetJSName()).c_str(),
+                     G_CALLBACK(wxgtk_webview_webkit_script_message_received), this);
+    webkit_user_content_manager_register_script_message_handler(mgr, this->GetJSName().c_str());
+    // Add our JavaScript name into JavaScript world.
+    this->RunScript(wxString::Format(
+        R"JavaScript(window.%s = window.webkit.messageHandlers.%s; true;)JavaScript",
+        this->GetJSName(), this->GetJSName()
+    ));
+}
+
+wxJSValue::~wxJSValue()
+{
+    if (m_val)
+        webkit_javascript_result_unref(m_val);
+}
+const wxJSValue& wxJSValue::operator = (const wxJSValue& rhs)
+{
+    m_val = rhs.m_val;
+    webkit_javascript_result_ref(m_val);
+    return *this;
+}
+
+bool wxJSValue::AsString(wxString *psValue) const
+{
+    JSCValue *val = webkit_javascript_result_get_js_value(m_val);
+    if (!jsc_value_is_string(val))
+        return false;
+    char *szVal = jsc_value_to_string(val);
+    psValue->assign(szVal);
+    g_free(szVal);
+    return true;
+}
+wxString wxJSValue::AsString(void) const
+{
+    wxString sValue;
+    if (this->AsString(&sValue))
+        return sValue;
+    return wxEmptyString;
+}
+bool wxJSValue::AsJSON(wxString *psValue) const
+{
+    JSCValue *val = webkit_javascript_result_get_js_value(m_val);
+    char *szVal = jsc_value_to_json(val, 0U);
+    psValue->assign(szVal);
+    g_free(szVal);
+    return true;
+}
+wxString wxJSValue::AsJSON(void) const
+{
+    wxString sValue;
+    this->AsJSON(&sValue);
+    return sValue;
+}
+bool wxJSValue::AsBoolean(bool *pbValue) const
+{
+    *pbValue = this->AsBoolean();
+    return true;
+}
+bool wxJSValue::AsBoolean(void) const
+{
+    JSCValue *val = webkit_javascript_result_get_js_value(m_val);
+    if (jsc_value_is_boolean(val))
+        return jsc_value_to_boolean(val);
+    /**
+     * To have the same behavior as on wxMSW port:
+     */
+    // If the value is an integer, return true unless the integer is 0.
+    int iValue;
+    if (this->AsInteger(&iValue))
+        return iValue != 0;
+    // If the value isn't an integer, return false unless it is "true".
+    return this->AsJSON().compare("true") == 0;
+}
+bool wxJSValue::AsInteger(int *piValue) const
+{
+    JSCValue *val = webkit_javascript_result_get_js_value(m_val);
+    if (!jsc_value_is_number(val))
+        return false;
+    *piValue = jsc_value_to_int32(val);
+    return true;
+}
+int wxJSValue::AsInteger(void) const
+{
+    int iValue;
+    if (this->AsInteger(&iValue))
+        return iValue;
+    return -1;
+}
+bool wxJSValue::AsDouble(double *pdValue) const
+{
+    JSCValue *val = webkit_javascript_result_get_js_value(m_val);
+    if (!jsc_value_is_number(val))
+        return false;
+    *pdValue = jsc_value_to_double(val);
+    return true;
+}
+double wxJSValue::AsDouble(void) const
+{
+    double dValue;
+    if (this->AsDouble(&dValue))
+        return dValue;
+    return 0.0;
 }
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT2
