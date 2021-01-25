@@ -14,6 +14,7 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE
 
+#include <memory> // for class template unique_ptr
 #include "wx/filename.h"
 #include "wx/module.h"
 #include "wx/log.h"
@@ -26,9 +27,107 @@
 #include "wx/msw/private/webview_edge.h"
 
 #include <wrl/event.h>
-#include <Objbase.h>
+#include <objbase.h>
 
+#ifdef __GNUC__
+#include <atomic>
+template <typename baseT, typename ...argTs>
+class CInvokable : public baseT
+{
+public:
+    CInvokable(void) : m_nRefCount(0) {}
+    virtual ~CInvokable(void) {};
+    // IUnknown methods
+    HRESULT QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override {
+        /**
+         * WebView2 Runtime apparently doesn't use this method, so it doesn't
+         * matter how we implement this. On the other hand, this method must be
+         * implemented to make this invokable type a concrete class instead of a
+         * abstract one.
+         */
+        *ppvObj = NULL;
+        return E_NOINTERFACE;
+    }
+    ULONG AddRef(void) override {
+        return ++m_nRefCount;
+    }
+    ULONG Release(void) override {
+        size_t ret = --m_nRefCount;
+        if (ret == 0) delete this;
+        return ret;
+    }
+private:
+    std::atomic<size_t> m_nRefCount;
+};
+template <typename baseT, typename ...argTs>
+class CInvokableLambda : public CInvokable<baseT, argTs...>
+{
+public:
+    CInvokableLambda(std::function<HRESULT(argTs...)> lambda)
+    : m_lambda(lambda) {
+    }
+    // baseT method
+    HRESULT Invoke(argTs ...args) override {
+        return m_lambda(args...);
+    }
+private:
+    std::function<HRESULT(argTs...)> m_lambda;
+};
+template <typename baseT, typename contextT, typename ...argTs>
+class CInvokableMethod : public CInvokable<baseT, argTs...>
+{
+public:
+    CInvokableMethod(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
+    : m_ctx(ctx), m_mthd(mthd) {
+    }
+    // baseT method
+    HRESULT Invoke(argTs ...args) override {
+        return (m_ctx->*m_mthd)(args...);
+    }
+private:
+    contextT *m_ctx;
+    HRESULT (contextT::*m_mthd)(argTs...);
+};
+// for avoiding unlikely memory leaks
+template <typename interfaceT>
+class RAII
+{
+public:
+    RAII(interfaceT *invokable) : m_invokable(invokable) {
+        m_invokable->AddRef();
+    }
+    ~RAII() {
+        m_invokable->Release();
+    }
+    interfaceT* const Get() const {
+        return m_invokable;
+    }
+private:
+    interfaceT *m_invokable;
+};
+// the function templates to generate concrete classes from above class templates
+template <
+    typename baseT, typename lambdaT, // base type & lambda type
+    typename LT, typename ...argTs // for capturing argument types of lambda
+>
+baseT *callback_impl(lambdaT&& lambda, HRESULT (LT::*)(argTs...) const)
+{
+    return new CInvokableLambda<baseT, argTs...>(lambda);
+}
+template <typename baseT, typename lambdaT>
+RAII<baseT> Callback(lambdaT&& lambda)
+{
+    return RAII<baseT>(callback_impl<baseT>(std::move(lambda), &lambdaT::operator()));
+}
+template <typename baseT, typename contextT, typename ...argTs>
+RAII<baseT> Callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
+{
+    return RAII<baseT>(new CInvokableMethod<baseT, contextT, argTs...>(ctx, mthd));
+}
+#else
+#include <wrl/event.h>
 using namespace Microsoft::WRL;
+#endif
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
 
@@ -69,6 +168,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
         m_webView->remove_DocumentTitleChanged(m_documentTitleChangedToken);
         m_webView->remove_ContentLoading(m_contentLoadingToken);
+        m_webView->remove_WebMessageReceived(m_webMessageReceivedToken);
     }
 }
 
@@ -216,8 +316,8 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
     }
     else
     {
-        if (m_historyEnabled && !m_historyLoadingFromList &&
-            (uri == m_ctrl->GetCurrentURL()) ||
+        if ((m_historyEnabled && !m_historyLoadingFromList &&
+            (uri == m_ctrl->GetCurrentURL())) ||
             (m_ctrl->GetCurrentURL().substr(0, 4) == "file" &&
                 wxFileName::URLToFileName(m_ctrl->GetCurrentURL()).GetFullPath() == uri))
         {
@@ -277,6 +377,18 @@ HRESULT wxWebViewEdgeImpl::OnContentLoading(ICoreWebView2* WXUNUSED(sender), ICo
     return S_OK;
 }
 
+HRESULT wxWebViewEdgeImpl::OnWebMessageReceived(ICoreWebView2* WXUNUSED(sender), ICoreWebView2WebMessageReceivedEventArgs* args)
+{
+    // from ICoreWebView2WebMessageReceivedEventArgs to wxWebViewEvent
+    wxWebViewEvent event(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED,
+                         m_ctrl->GetId(),
+                         m_ctrl->GetCurrentURL(),
+                         "");
+    event.SetScriptMessage(args);
+    m_ctrl->HandleWindowEvent(event);
+    return S_OK;
+}
+
 HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController)
 {
     if (FAILED(result))
@@ -297,6 +409,8 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     UpdateBounds();
 
     // Connect and handle the various WebView events
+    if (!m_sJsName.empty())
+        this->RegisterScriptMessageHandler();
     m_webView->add_NavigationStarting(
         Callback<ICoreWebView2NavigationStartingEventHandler>(
             this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
@@ -854,7 +968,7 @@ bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
     return true;
 }
 
-void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
+void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> WXUNUSED(handler))
 {
     // TODO: could maybe be implemented via IWebView2WebView5::add_WebResourceRequested
     wxLogDebug("Registering handlers is not supported");
@@ -862,8 +976,161 @@ void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(baseUrl))
 {
-    if (m_impl->m_webView)
+    if (m_impl->m_webView.get())
         m_impl->m_webView->NavigateToString(html.wc_str());
+}
+
+void wxWebViewEdge::RegisterScriptMessageHandler()
+{
+    if (m_impl->m_sJsName.empty())
+        m_impl->m_sJsName = this->GetJSName();
+    m_impl->RegisterScriptMessageHandler();
+}
+
+void wxWebViewEdgeImpl::RegisterScriptMessageHandler()
+{
+    if (!m_webView.get()) return;
+    if (m_webMessageReceivedToken.value != 0) return;
+    // Register the script message handler.
+    m_webView->add_WebMessageReceived(
+        Callback<ICoreWebView2WebMessageReceivedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnWebMessageReceived
+        ).Get(),
+        &m_webMessageReceivedToken);
+    // Add our JavaScript name into JavaScript world.
+    m_webView->AddScriptToExecuteOnDocumentCreated(
+        wxString::Format(
+            R"JavaScript(window.%s = window.chrome.webview; true;)JavaScript",
+            m_sJsName
+        ).wc_str(),
+        NULL
+    );
+}
+
+wxJSValue::wxJSValue(ICoreWebView2WebMessageReceivedEventArgs *jsResult) :
+    m_val(jsResult)
+{
+    m_val->AddRef();
+}
+/**
+ * FIXME When building wxMSW, before compiling any thing, wxUSE_WEBVIEW_EDGE
+ * must be set to 1. Otherwise, there will be a compile-time error complaining
+ * the dtor of wxJSValue is missing.
+ */
+wxJSValue::~wxJSValue()
+{
+    if (m_val)
+        m_val->Release();
+}
+const wxJSValue& wxJSValue::operator = (const wxJSValue& rhs)
+{
+    m_val = rhs.m_val;
+    m_val->AddRef();
+    return *this;
+}
+bool wxJSValue::AsString(wxString *sValue) const
+{
+    HRESULT errcode;
+    std::unique_ptr<WCHAR, decltype(&::CoTaskMemFree)> wszMessage(
+        [this, &errcode]()->LPWSTR{
+            LPWSTR ret = nullptr;
+            errcode = m_val->TryGetWebMessageAsString(&ret);
+            return ret;
+        }(),
+        &::CoTaskMemFree
+    );
+    if (FAILED(errcode)) {
+        wxLogApiError("WebView2::TryGetWebMessageAsString", errcode);
+        return false;
+    }
+    sValue->assign(wszMessage.get());
+    return true;
+}
+wxString wxJSValue::AsString(void) const
+{
+    wxString sValue;
+    if (this->AsString(&sValue))
+        return sValue;
+    return wxEmptyString;
+}
+bool wxJSValue::AsJSON(wxString *sValue) const
+{
+    HRESULT errcode;
+    std::unique_ptr<WCHAR, decltype(&::CoTaskMemFree)> wszMessage(
+        [this, &errcode]()->LPWSTR{
+            LPWSTR ret = nullptr;
+            errcode = m_val->get_WebMessageAsJson(&ret);
+            return ret;
+        }(),
+        &::CoTaskMemFree
+    );
+    if (FAILED(errcode)) {
+        wxLogApiError("WebView2::get_WebMessageAsJson", errcode);
+        return false;
+    }
+    sValue->assign(wszMessage.get());
+    return true;
+}
+wxString wxJSValue::AsJSON(void) const
+{
+    wxString sValue;
+    if (this->AsJSON(&sValue))
+        return sValue;
+    return wxEmptyString;
+}
+bool wxJSValue::AsBoolean(bool *bValue) const
+{
+    *bValue = this->AsBoolean();
+    return true;
+}
+bool wxJSValue::AsBoolean(void) const
+{
+    // If the value is an integer, return true unless the integer is 0.
+    int iValue;
+    if (this->AsInteger(&iValue))
+        return iValue != 0;
+    // If the value isn't an integer, return false unless it is "true".
+    return this->AsJSON().compare("true") == 0;
+}
+bool wxJSValue::AsInteger(int *iValue) const
+{
+    wxCHECK_MSG(iValue, false, wxT("NULL output pointer"));
+    wxString&& s = this->AsJSON();
+    /**
+     * On wxGTK port, a JavaScript floating number can be converted to a C++ int
+     * without any error. To make it the same behavior as on wxGTK port,
+     * wxString::ToLong is not to be used here to do the conversion, because
+     * wxString::ToLong will return false in spite of a successful conversion to
+     * an int from a floating number.
+     */
+    const wxChar *start = s.wx_str();
+    wxChar *end;
+    long buf = wxStrtol(start, &end, 10);
+    if (end == start) return false;
+    *iValue = static_cast<int>(buf);
+    return true;
+}
+int wxJSValue::AsInteger(void) const
+{
+    int iValue;
+    if (this->AsInteger(&iValue))
+        return iValue;
+    // -1 seems more obvious than 0 to have the caller notice the failure
+    return -1;
+}
+bool wxJSValue::AsDouble(double *dValue) const
+{
+    wxString&& s = this->AsJSON();
+    if (!s.ToDouble(dValue))
+        return false;
+    return true;
+}
+double wxJSValue::AsDouble(void) const
+{
+    double dValue;
+    if (this->AsDouble(&dValue))
+        return dValue;
+    return 0.0;
 }
 
 // wxWebViewFactoryEdge
