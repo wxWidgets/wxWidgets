@@ -242,6 +242,9 @@ public:
     // library couldn't be loaded but simply returns NULL
     static wxDllType RawLoad(const wxString& libname, int flags = wxDL_DEFAULT);
 
+    // attach to an existing handle
+    void Attach(wxDllType h) { Unload(); m_handle = h; }
+
     // detach the library object from its handle, i.e. prevent the object from
     // unloading the library in its dtor -- the caller is now responsible for
     // doing this
