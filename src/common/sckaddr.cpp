@@ -180,7 +180,11 @@ namespace
 #if defined(HAVE_GETHOSTBYNAME) && \
     !defined(HAVE_FUNC_GETHOSTBYNAME_R_6) && \
     !defined(HAVE_FUNC_GETHOSTBYNAME_R_5) && \
-    !defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+    !defined(HAVE_FUNC_GETHOSTBYNAME_R_3) || \
+   ( defined(HAVE_GETHOSTBYADDR) && \
+    !defined(HAVE_FUNC_GETHOSTBYADDR_R_6) && \
+    !defined(HAVE_FUNC_GETHOSTBYADDR_R_5) && \
+    !defined(HAVE_FUNC_GETHOSTBYADDR_R_3) )
 
 hostent *deepCopyHostent(hostent *h,
                          const hostent *he,
