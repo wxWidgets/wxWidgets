@@ -125,6 +125,8 @@ public:
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
+    virtual void RegisterScriptMessageHandler() wxOVERRIDE;
+
 private:
     wxWebViewEdgeImpl* m_impl;
 
