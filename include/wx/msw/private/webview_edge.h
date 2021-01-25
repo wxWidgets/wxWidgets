@@ -13,7 +13,7 @@
 #include "wx/dynlib.h"
 #include "wx/msw/private/comptr.h"
 
-#include <Webview2.h>
+#include <WebView2.h>
 
 #ifndef __ICoreWebView2Environment_INTERFACE_DEFINED__
     #error "WebView2 SDK version 0.9.430 or newer is required"
@@ -45,6 +45,7 @@ public:
     EventRegistrationToken m_newWindowRequestedToken = { };
     EventRegistrationToken m_documentTitleChangedToken = { };
     EventRegistrationToken m_contentLoadingToken = { };
+    EventRegistrationToken m_webMessageReceivedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
@@ -52,6 +53,10 @@ public:
     HRESULT OnNewWindowRequested(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args);
     HRESULT OnDocumentTitleChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
+
+    wxString m_sJsName;
+    void RegisterScriptMessageHandler();
+    HRESULT OnWebMessageReceived(ICoreWebView2 *sender, ICoreWebView2WebMessageReceivedEventArgs *args);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
