@@ -289,12 +289,12 @@ class WXDLLIMPEXP_WEBVIEW wxJSValue
 {
 #if defined(__WXGTK__)
 public:
-    wxJSValue(_WebKitJavascriptResult *jsResult) { // a sink
+    wxJSValue(_WebKitJavascriptResult *jsResult) : m_val(jsResult) // a sink
+    {
         /**
          * The caller is supposed to give ownership of the argument to us, so
          * don't need to increase ref count here.
          */
-        m_val = jsResult;
     }
 private:
     _WebKitJavascriptResult *m_val;
