@@ -260,8 +260,12 @@ bool wxGLCanvas::SetBackgroundStyle(wxBackgroundStyle /* style */)
 
 unsigned long wxGLCanvas::GetXWindow() const
 {
+#if defined(GDK_WINDOWING_X11)
     GdkWindow* window = GTKGetDrawingWindow();
     return window ? GDK_WINDOW_XID(window) : 0;
+#else
+    return 0;
+#endif
 }
 
 void wxGLCanvas::GTKHandleRealized()
