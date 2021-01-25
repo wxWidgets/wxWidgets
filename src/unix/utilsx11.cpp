@@ -2636,15 +2636,17 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 bool wxGetKeyState(wxKeyCode key)
 {
 #ifdef wxHAS_GETKEYSTATE_GTK
+    bool ret = false;
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
     const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
     if (strcmp(name, "GdkX11Display") != 0)
     {
-        return wxGetKeyStateGTK(key);
+        ret = wxGetKeyStateGTK(key);
     }
-#endif // GTK+ 3.4+
-
+    return ret;
+#else
     return wxGetKeyStateX11(key);
+#endif // GTK+ 3.4+
 }
 
 // ----------------------------------------------------------------------------
