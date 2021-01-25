@@ -41,6 +41,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/stylecontext.h"
+#include "wx/gtk/private/value.h"
 
 #if defined(__WXGTK3__) && !GTK_CHECK_VERSION(3,14,0)
     #define GTK_STATE_FLAG_CHECKED (1 << 11)
@@ -583,20 +584,17 @@ struct CheckBoxInfo
         }
         else
         {
-            GValue value = G_VALUE_INIT;
-            g_value_init(&value, G_TYPE_INT);
+            wxGtkValue value( G_TYPE_INT);
 
-            gtk_style_context_get_style_property(sc, "indicator-size", &value);
+            gtk_style_context_get_style_property(sc, "indicator-size", value);
             indicator_width =
-            indicator_height = g_value_get_int(&value);
+            indicator_height = g_value_get_int(value);
 
-            gtk_style_context_get_style_property(sc, "indicator-spacing", &value);
+            gtk_style_context_get_style_property(sc, "indicator-spacing", value);
             margin_left =
             margin_top =
             margin_right =
-            margin_bottom = g_value_get_int(&value);
-
-            g_value_unset(&value);
+            margin_bottom = g_value_get_int(value);
         }
     }
 #else // !__WXGTK3__
@@ -1112,12 +1110,10 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow*, wxDC& dc, const wxRect& rect, int
     }
     else
     {
-        GValue value = G_VALUE_INIT;
-        g_value_init(&value, G_TYPE_INT);
-        gtk_style_context_get_style_property(sc, "indicator-size", &value);
-        min_width = g_value_get_int(&value);
+        wxGtkValue value( G_TYPE_INT);
+        gtk_style_context_get_style_property(sc, "indicator-size", value);
+        min_width = g_value_get_int(value);
         min_height = min_width;
-        g_value_unset(&value);
     }
 
     // need save/restore for GTK+ 3.6 & 3.8
