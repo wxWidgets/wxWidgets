@@ -2460,7 +2460,7 @@ wxWindow *wxGetActiveWindow()
 
 // Under Unix this is implemented using X11 functions in utilsx11.cpp but we
 // need to have this function under Windows too, so provide at least a stub.
-#ifndef GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_WIN32
 bool wxGetKeyState(wxKeyCode WXUNUSED(key))
 {
     wxFAIL_MSG(wxS("Not implemented under Windows"));
