@@ -16,12 +16,14 @@
 
 #include "wx/thread.h"
 #include "wx/vector.h"
+#include "wx/timer.h"
 
 #include "curl/curl.h"
 
 class wxWebRequestCURL;
 class wxWebResponseCURL;
 class wxWebSessionCURL;
+class SocketPoller;
 
 class wxWebAuthChallengeCURL : public wxWebAuthChallengeImpl
 {
@@ -123,7 +125,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebResponseCURL);
 };
 
-class wxWebSessionCURL : public wxWebSessionImpl, private wxThreadHelper
+class wxWebSessionCURL : public wxWebSessionImpl, public wxEvtHandler
 {
 public:
     wxWebSessionCURL();
@@ -147,24 +149,20 @@ public:
 
     void CancelRequest(wxWebRequestCURL* request);
 
-protected:
-    wxThread::ExitCode Entry() wxOVERRIDE;
-
 private:
+    static int TimerCallback(CURLM*, long, void*);
+    static int SocketCallback(CURL*, curl_socket_t, int, void*, void*);
+
+    void ProcessTimerCallback(long);
+    void TimeoutNotification(wxTimerEvent&);
+    void ProcessTimeoutNotification();
+    void ProcessSocketCallback(curl_socket_t, int);
+    void ProcessSocketPollerResult(wxThreadEvent&);
+    void CheckForCompletedTransfers();
+
+    SocketPoller* m_socketPoller;
+    wxTimer m_timeoutTimer;
     CURLM* m_handle;
-
-    // Mutex and condition are used together to signal to the worker thread to
-    // wake up and mutex is also used to protected m_shuttingDown field.
-    wxMutex m_mutex;
-    wxCondition m_condition;
-    bool m_shuttingDown;
-
-    // MT-safe vector of requests for which Cancel() was called.
-    struct CancelledData
-    {
-        wxCriticalSection cs;
-        wxVector< wxObjectDataPtr<wxWebRequestCURL> > requests;
-    } m_cancelled;
 
     static int ms_activeSessions;
 
