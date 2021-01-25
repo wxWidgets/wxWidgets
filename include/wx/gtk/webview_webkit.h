@@ -146,6 +146,8 @@ protected:
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
+    virtual void RegisterScriptMessageHandler() wxOVERRIDE;
+
 private:
 
     void ZoomIn();
