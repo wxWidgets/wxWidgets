@@ -18,6 +18,7 @@
 #include "wx/sstream.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
+#include "wx/log.h"
 
 #if defined(__WXOSX__)
     #include "wx/osx/webviewhistoryitem_webkit.h"
@@ -32,6 +33,8 @@
 class wxFSFile;
 class wxFileSystem;
 class wxWebView;
+struct ICoreWebView2WebMessageReceivedEventArgs;
+struct _WebKitJavascriptResult;
 
 enum wxWebViewZoom
 {
@@ -239,12 +242,36 @@ public:
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) = 0;
 
+    /**
+     * After setting the JavaScript name for this wxWebView control, it starts
+     * listening JavaScript messages coming from the web content.
+     *
+     * @param the JavaScript name to add into JavaScript world. default: "wx"
+     *
+     * @section DESCRIPTION
+     *
+     * If you want to receive messages from web content at the very early stage
+     * when the web content is loading, you have to create the wxWebView in
+     * two-steps. For example,
+     *
+     *     wxWebView *mywidget = wxWebView::New("wxWebViewWebKit");
+     *     mywidget->SetJSName("wx");
+     *     mywidget->Create(ctn, wxID_ANY);
+     */
+    void SetJSName(const wxString& sName = "wx") {
+        m_sJsName = sName;
+        this->RegisterScriptMessageHandler();
+    }
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
     // Count the number of calls to RunScript() in order to prevent
     // the_same variable from being used twice in more than one call.
     int m_runScriptCount;
+
+    const wxString& GetJSName() const { return m_sJsName; }
+    virtual void RegisterScriptMessageHandler() { wxLogError("not implemented in this port yet"); }
 
 private:
     static void InitFactoryMap();
@@ -253,7 +280,48 @@ private:
     bool m_showMenu;
     static wxStringWebViewFactoryMap m_factoryMap;
 
+    wxString m_sJsName;
+
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
+};
+
+class WXDLLIMPEXP_WEBVIEW wxJSValue
+{
+#if defined(__WXGTK__)
+public:
+    wxJSValue(_WebKitJavascriptResult *jsResult) { // a sink
+        /**
+         * The caller is supposed to give ownership of the argument to us, so
+         * don't need to increase ref count here.
+         */
+        m_val = jsResult;
+    }
+private:
+    _WebKitJavascriptResult *m_val;
+#elif defined(__WXMSW__)
+public:
+    wxJSValue(ICoreWebView2WebMessageReceivedEventArgs *jsResult);
+private:
+    ICoreWebView2WebMessageReceivedEventArgs *m_val;
+#else
+    #error "unsupported wxWidgets port"
+#endif
+public:
+    wxJSValue(void) : m_val(nullptr) {}
+    ~wxJSValue();
+    const wxJSValue& operator = (const wxJSValue& rhs);
+    // getters
+    wxString AsString (void) const;
+    wxString AsJSON   (void) const;
+    bool     AsBoolean(void) const;
+    int      AsInteger(void) const;
+    double   AsDouble (void) const;
+    // same as above getters but allow failure-checking
+    bool AsString (wxString *) const;
+    bool AsJSON   (wxString *) const;
+    bool AsBoolean(bool     *) const;
+    bool AsInteger(int      *) const;
+    bool AsDouble (double   *) const;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
@@ -271,6 +339,9 @@ public:
     const wxString& GetURL() const { return m_url; }
     const wxString& GetTarget() const { return m_target; }
 
+    void SetScriptMessage(wxJSValue jsMessage) { m_jsMessage = jsMessage; }
+    const wxJSValue *GetScriptMessage() const { return &m_jsMessage; }
+
     wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
 
     virtual wxEvent* Clone() const wxOVERRIDE { return new wxWebViewEvent(*this); }
@@ -278,6 +349,7 @@ private:
     wxString m_url;
     wxString m_target;
     wxWebViewNavigationActionFlags m_actionFlags;
+    wxJSValue m_jsMessage;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWebViewEvent);
 };
@@ -288,6 +360,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEv
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent );
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -319,13 +392,18 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
+#define EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, id, \
+                     wxWebViewEventHandler(fn))
+
 // old wxEVT_COMMAND_* constants
-#define wxEVT_COMMAND_WEBVIEW_NAVIGATING      wxEVT_WEBVIEW_NAVIGATING
-#define wxEVT_COMMAND_WEBVIEW_NAVIGATED       wxEVT_WEBVIEW_NAVIGATED
-#define wxEVT_COMMAND_WEBVIEW_LOADED          wxEVT_WEBVIEW_LOADED
-#define wxEVT_COMMAND_WEBVIEW_ERROR           wxEVT_WEBVIEW_ERROR
-#define wxEVT_COMMAND_WEBVIEW_NEWWINDOW       wxEVT_WEBVIEW_NEWWINDOW
-#define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED   wxEVT_WEBVIEW_TITLE_CHANGED
+#define wxEVT_COMMAND_WEBVIEW_NAVIGATING                wxEVT_WEBVIEW_NAVIGATING
+#define wxEVT_COMMAND_WEBVIEW_NAVIGATED                 wxEVT_WEBVIEW_NAVIGATED
+#define wxEVT_COMMAND_WEBVIEW_LOADED                    wxEVT_WEBVIEW_LOADED
+#define wxEVT_COMMAND_WEBVIEW_ERROR                     wxEVT_WEBVIEW_ERROR
+#define wxEVT_COMMAND_WEBVIEW_NEWWINDOW                 wxEVT_WEBVIEW_NEWWINDOW
+#define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED             wxEVT_WEBVIEW_TITLE_CHANGED
+#define wxEVT_COMMAND_WEBVIEW_SCRIPT_MESSAGE_RECEIVED   wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED
 
 #endif // wxUSE_WEBVIEW
 
