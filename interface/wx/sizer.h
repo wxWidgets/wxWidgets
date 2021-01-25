@@ -1455,6 +1455,9 @@ public:
         them anyhow. For 2D sizers, centering an item in one direction is quite
         different from centering it in both directions however.
 
+        Note that, unlike Align(), this method doesn't change the vertical
+        alignment.
+
         @see CentreVertical()
 
         @since 3.1.0
@@ -1466,6 +1469,9 @@ public:
 
         The remarks in CentreHorizontal() documentation also apply to this
         function.
+
+        Note that, unlike Align(), this method doesn't change the horizontal
+        alignment.
 
         @since 3.1.0
      */

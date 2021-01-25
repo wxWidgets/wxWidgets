@@ -85,7 +85,7 @@ void GridSizerTestCase::SetChildren(const wxVector<wxWindow*>& children,
 // ----------------------------------------------------------------------------
 
 TEST_CASE_METHOD(GridSizerTestCase,
-                 "wxGridSizer::Expand",
+                 "wxGridSizer::Layout",
                  "[grid-sizer][sizer]")
 {
     const wxSize sizeTotal = m_win->GetClientSize();
@@ -143,6 +143,29 @@ TEST_CASE_METHOD(GridSizerTestCase,
         CHECK( children[1]->GetSize() == sizeChild );
         CHECK( children[2]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
         CHECK( children[3]->GetSize() == wxSize(sizeChild.x, sizeRest.y) );
+    }
+
+    // Test alignment flag too.
+    SECTION("Right align")
+    {
+        SetChildren(children, wxSizerFlags().Right());
+        CHECK( children[0]->GetPosition() == wxPoint(         0,           0) );
+        CHECK( children[1]->GetPosition() == wxPoint(sizeRest.x,           0) );
+        CHECK( children[2]->GetPosition() == wxPoint(         0, sizeChild.y) );
+        CHECK( children[3]->GetPosition() == wxPoint(sizeRest.x, sizeChild.y) );
+    }
+
+    // Also test combining centering in one direction and aligning in another.
+    SECTION("Right align and center vertically")
+    {
+        SetChildren(children, wxSizerFlags().Right().CentreVertical());
+
+        const int yMid = sizeChild.y + (sizeRest.y - sizeChild.y) / 2;
+
+        CHECK( children[0]->GetPosition() == wxPoint(         0,    0) );
+        CHECK( children[1]->GetPosition() == wxPoint(sizeRest.x,    0) );
+        CHECK( children[2]->GetPosition() == wxPoint(         0, yMid) );
+        CHECK( children[3]->GetPosition() == wxPoint(sizeRest.x, yMid) );
     }
 }
 
