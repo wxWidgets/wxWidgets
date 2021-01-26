@@ -258,6 +258,13 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
     GtkWidget* widget = window->m_wxwindow;
     if (widget == NULL)
         widget = window->m_widget;
+#ifdef __WXGTK3__
+    else if (window->GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        m_signX = -1;
+        m_deviceOriginX = window->GetClientSize().x;
+    }
+#endif // __WXGTK3__
     GdkWindow* gdkWindow = NULL;
     if (widget)
     {
@@ -304,6 +311,13 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     GtkWidget* widget = window->m_wxwindow;
     if (widget == NULL)
         widget = window->m_widget;
+#ifdef __WXGTK3__
+    else if (window->GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        m_signX = -1;
+        m_deviceOriginX = window->GetClientSize().x;
+    }
+#endif // __WXGTK3__
     GdkWindow* gdkWindow = NULL;
     if (widget)
     {
@@ -342,6 +356,7 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
     : wxGTKCairoDCImpl(owner, window)
     , m_clip(window->m_nativeUpdateRegion)
 {
+    // wxGTK3: the dc is flipped (mirrored) in RTL mode.
     cairo_t* cr = window->GTKPaintContext();
     wxCHECK_RET(cr, "using wxPaintDC without being in a native paint event");
     InitSize(gtk_widget_get_window(window->m_wxwindow));

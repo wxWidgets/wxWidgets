@@ -5065,9 +5065,11 @@ bool wxWindowGTK::DoIsExposed( int x, int y ) const
 
 bool wxWindowGTK::DoIsExposed( int x, int y, int w, int h ) const
 {
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return m_updateRegion.Contains(x-w, y, w, h) != wxOutRegion;
     else
+#endif // __WXGTK3__
         return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
 }
 
@@ -5078,6 +5080,15 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 #endif
 {
 #ifdef __WXGTK3__
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // We mirror the dc in RTL mode.
+        const int width = gdk_window_get_width(GTKGetDrawingWindow());
+
+        cairo_translate(cr, width, 0);
+        cairo_scale(cr, -1, 1);
+    }
+
     {
         cairo_region_t* region = gdk_window_get_clip_region(gtk_widget_get_window(m_wxwindow));
         cairo_rectangle_int_t rect;
@@ -5105,6 +5116,8 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 
     m_nativeUpdateRegion = m_updateRegion;
 
+#ifndef __WXGTK3__
+    // wxGTK3: the dc is already mirrored so we don't have to de anything here.
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
         // Transform m_updateRegion under RTL
@@ -5127,6 +5140,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             ++upd;
         }
     }
+#endif // __WXGTK3__
 
     switch ( GetBackgroundStyle() )
     {
