@@ -361,11 +361,7 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
                 QtSetScrollBar( wxHORIZONTAL );
             if ( style & wxVSCROLL )
                 QtSetScrollBar( wxVERTICAL );
-
-            //  Allow processing of QGesture events, if generated upstream.
-            m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents);
-            m_qtWindow->grabGesture(Qt::PanGesture);
-        }
+         }
         else
             m_qtWindow = new wxQtWidget( parent, this );
     }
