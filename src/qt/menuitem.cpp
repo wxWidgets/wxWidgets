@@ -128,6 +128,11 @@ void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
     }
 }
 
+void wxMenuItem::SetFont(const wxFont& font)
+{
+    m_qtAction->setFont(font.GetHandle());
+}
+
 QAction *wxMenuItem::GetHandle() const
 {
     return m_qtAction;

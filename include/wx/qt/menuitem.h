@@ -40,6 +40,7 @@ public:
 
     virtual QAction *GetHandle() const;
 
+    virtual void SetFont(const wxFont& font);
 private:
     // Qt is using an action instead of a menu item.
     wxQtAction *m_qtAction;
