@@ -425,7 +425,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 {
     if (!wxattrs)
         return true;
-    return true;
 
     // set default parameters to false
     format.setDoubleBuffer(false);
@@ -512,6 +511,10 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
                 format.setSamples(v);
                 // can we somehow indicate if it's not supported?
                 break;
+
+            case WX_GL_MAJOR_VERSION:
+                 format.setVersion ( v,0 );
+                 break;
 
             default:
                 wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
