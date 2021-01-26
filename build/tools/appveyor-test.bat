@@ -1,13 +1,4 @@
 echo.
-echo --- Running httpbin...
-echo.
-
-pip install httpbin
-start /b python -m httpbin.core
-set WX_TEST_WEBREQUEST_URL=http://127.0.0.1:5000
-curl http://127.0.0.1:5000/ip
-
-echo.
 echo --- Running tests.
 echo.
 
