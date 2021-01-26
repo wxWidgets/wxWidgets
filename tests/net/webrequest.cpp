@@ -247,24 +247,14 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    // We can't use the same httpbin.org server that we use for the other tests
-    // for this one because it doesn't return anything in the body when
-    // returning an error status code, so use another one.
-    CreateAbs("https://httpstat.us/418");
+    Create("/status/418");
     Run(wxWebRequest::State_Failed, 0);
 
-    // For some reason, this test doesn't work with libcurl included in Ubuntu
-    // 14.04, so skip it.
-    const int status = request.GetResponse().GetStatus();
-    if ( status == 0 )
-    {
-        WARN("Status code not returned.");
-    }
-    else
-    {
-        CHECK( status == 418 );
-        CHECK( request.GetResponse().AsString() == "418 I'm a teapot" );
-    }
+    CHECK( request.GetResponse().GetStatus() == 418 );
+
+    const wxString& response = request.GetResponse().AsString();
+    INFO( "Response: " << response);
+    CHECK( response.Contains("teapot") );
 }
 
 TEST_CASE_METHOD(RequestFixture,
