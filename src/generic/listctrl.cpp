@@ -1045,10 +1045,9 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
 #ifdef __WXGTK__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
-        // Maybe we just have to check for m_signX
-        // in the DC, but I leave the #ifdef __WXGTK__
-        // for now
-        dc.SetDeviceOrigin( org_x + (view_start * xpix), org_y );
+        int signX;
+        dc.GetAxisOrientation(&signX, NULL);
+        dc.SetDeviceOrigin( org_x - (view_start * xpix * signX), org_y );
     }
     else
 #endif
