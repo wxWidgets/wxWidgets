@@ -441,6 +441,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     m_qtWindow = new wxQtGLWidget(parent, this, format);
 
+    // Create and register a custom pan recognizer, available to all instances of this class.
     QGestureRecognizer* pPanRecognizer = new PanGestureRecognizer();
     QGestureRecognizer::registerRecognizer(pPanRecognizer);
 
