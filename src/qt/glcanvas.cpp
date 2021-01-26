@@ -377,6 +377,12 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
     Create(parent, id, pos, size, style, name, attribList, palette);
 }
 
+wxGLCanvas::~wxGLCanvas()
+{
+    // Avoid sending further signals (i.e. if deleting the current page)
+    m_qtWindow->blockSignals(true);
+}
+
 bool wxGLCanvas::Create(wxWindow *parent,
                         const wxGLAttributes& dispAttrs,
                         wxWindowID id,
