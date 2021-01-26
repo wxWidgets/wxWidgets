@@ -221,6 +221,7 @@ protected:
     // itself.
     virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
 
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 
     QWidget *m_qtWindow;
 
