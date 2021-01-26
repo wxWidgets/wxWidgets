@@ -113,7 +113,7 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxGTKCairoDC);
 };
 
-#else
+#else // !__WXGTK3__
 
 #include "wx/dc.h"
 

@@ -258,13 +258,12 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
     GtkWidget* widget = window->m_wxwindow;
     if (widget == NULL)
         widget = window->m_widget;
-#ifdef __WXGTK3__
     else if (window->GetLayoutDirection() == wxLayout_RightToLeft)
     {
         m_signX = -1;
         m_deviceOriginX = window->GetClientSize().x;
     }
-#endif // __WXGTK3__
+
     GdkWindow* gdkWindow = NULL;
     if (widget)
     {
@@ -311,13 +310,12 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     GtkWidget* widget = window->m_wxwindow;
     if (widget == NULL)
         widget = window->m_widget;
-#ifdef __WXGTK3__
     else if (window->GetLayoutDirection() == wxLayout_RightToLeft)
     {
         m_signX = -1;
         m_deviceOriginX = window->GetClientSize().x;
     }
-#endif // __WXGTK3__
+
     GdkWindow* gdkWindow = NULL;
     if (widget)
     {
@@ -465,7 +463,7 @@ wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr, wxWindow* window)
     SetGraphicsContext(gc);
 }
 
-#else
+#else // !__WXGTK3__
 
 #include "wx/gtk/dc.h"
 
