@@ -537,6 +537,14 @@ public:
     // this needs to overridden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
+    void GetAxisOrientation(int* signX, int* signY) const
+    {
+        if (signX)
+            *signX = m_signX;
+        if (signY)
+            *signY = m_signY;
+    }
+
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
 #ifdef __WXMSW__
@@ -1070,6 +1078,8 @@ public:
 
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp)
         { m_pimpl->SetAxisOrientation(xLeftRight, yBottomUp); }
+    void GetAxisOrientation(int* signX, int* signY) const
+        { m_pimpl->GetAxisOrientation(signX, signY); }
 
 #if wxUSE_DC_TRANSFORM_MATRIX
     bool CanUseTransformMatrix() const
