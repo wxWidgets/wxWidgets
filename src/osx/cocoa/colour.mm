@@ -37,6 +37,7 @@ public:
     virtual WX_NSColor GetNSColor() const wxOVERRIDE;
     virtual WX_NSImage GetNSPatternImage() const wxOVERRIDE;
 private:
+    static CGFloat GetCGColorComponent(CGColorRef col, int rgbaIndex);
     WX_NSColor m_nsColour;
     
     wxDECLARE_NO_ASSIGN_CLASS(wxNSColorRefData);
@@ -62,13 +63,64 @@ WX_NSColor wxNSColorRefData::GetNSColor() const
     return m_nsColour;
 }
 
+CGFloat wxNSColorRefData::GetCGColorComponent(CGColorRef col, int rgbaIndex)
+{
+    CGFloat value = 0.0;
+    
+    if ( col )
+    {
+        wxCFRef<CGColorRef> rgbacol;
+        CGColorSpaceModel model = CGColorSpaceGetModel(CGColorGetColorSpace(col));
+        size_t noComp = CGColorGetNumberOfComponents(col);
+        const CGFloat* components = CGColorGetComponents(col);
+        
+        bool isRGB = true;
+        
+        if (model == kCGColorSpaceModelMonochrome)
+        {
+            wxASSERT_MSG(1 <= noComp && noComp <= 2, "Monochrome Color unexpected components");
+            // is alpha is requested look into component if available
+            if ( rgbaIndex == 3 )
+                value = noComp > 1 ? components[1] : 1.0;
+            else
+                value = components[0];
+            isRGB = false;
+        }
+        else if (model != kCGColorSpaceModelRGB)
+        {
+            if ( WX_IS_MACOS_OR_IOS_AVAILABLE(10, 11, 9, 0) )
+            {
+                rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
+                noComp = CGColorGetNumberOfComponents(rgbacol);
+                components = CGColorGetComponents(rgbacol);
+            }
+            else
+            {
+                isRGB = false;
+            }
+        }
+        
+        if (isRGB)
+        {
+            wxASSERT_MSG(3 <= noComp && noComp <= 4, "RGB Color unexpected components");
+            // is alpha is requested look into component if available
+            if ( rgbaIndex == 3 )
+                value = noComp == 4 ? components[3] : 1.0;
+            else
+                value = components[rgbaIndex];
+        }
+    }
+    
+    return value;
+}
+
 CGFloat wxNSColorRefData::Red() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA redComponent];
     
-    return 0.0;
+    return GetCGColorComponent([m_nsColour CGColor], 0);
 }
 
 CGFloat wxNSColorRefData::Green() const
@@ -77,7 +129,7 @@ CGFloat wxNSColorRefData::Green() const
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA greenComponent];
     
-    return 0.0;
+    return GetCGColorComponent([m_nsColour CGColor], 1);
 }
 
 CGFloat wxNSColorRefData::Blue() const
@@ -86,7 +138,7 @@ CGFloat wxNSColorRefData::Blue() const
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA blueComponent];
     
-    return 0.0;
+    return GetCGColorComponent([m_nsColour CGColor], 2);
 }
 
 CGFloat wxNSColorRefData::Alpha() const
@@ -95,7 +147,7 @@ CGFloat wxNSColorRefData::Alpha() const
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA alphaComponent];
     
-    return 0.0;
+    return GetCGColorComponent([m_nsColour CGColor], 3);
 }
 
 bool wxNSColorRefData::IsSolid() const
