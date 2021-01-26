@@ -309,6 +309,9 @@ wxWindowQt::~wxWindowQt()
 
     DestroyChildren(); // This also destroys scrollbars
 
+    if (m_qtWindow)
+        QtStoreWindowPointer( GetHandle(), NULL );
+
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(NULL);
 #endif
