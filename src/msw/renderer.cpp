@@ -1044,11 +1044,17 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 
     typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
     static DrawThemeTextEx_t s_DrawThemeTextEx = NULL;
+    static bool s_initDone = false;
 
-    if (wxGetWinVersion() >= wxWinVersion_Vista)
+    if ( !s_initDone )
     {
-        wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
-        wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
+        if (wxGetWinVersion() >= wxWinVersion_Vista)
+        {
+            wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
+            wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
+        }
+
+        s_initDone = true;
     }
 
     if ( s_DrawThemeTextEx && // Might be not available if we're under XP
