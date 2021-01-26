@@ -738,6 +738,16 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
     const int x = rect.x + (rect.width - w) / 2;
     const int y = rect.y + (rect.height - h) / 2;
 
+#if 0
+    // TODO: make wxGTKCairoContextRTL (defined in src/generic/graphicc.cpp)
+    // accessible to this translation unit so we can activate this block of code!
+
+    // A checkbox shouldn't be affected by language layouts (LTR/RTL).
+    wxGTKCairoContextRTL dcRTL(cr);
+    if ( dcRTL.IsMirrored() )
+        dcRTL.Mirror(x, y, w, h);
+#endif // 0
+
     if (gtk_check_version(3,20,0) == NULL)
     {
         gtk_style_context_set_state(sc, GtkStateFlags(state));

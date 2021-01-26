@@ -2735,6 +2735,59 @@ void wxCairoContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDou
     DrawBitmap(icon, x, y, w, h);
 }
 
+namespace // anonymous
+{
+#ifdef __WXGTK3__
+// Text rendering and some drawings (e.g. checkbox's) should be _immune_ to
+// language layout, i.e. they shouldn't be affected by the mirroring applied
+// to the device context. thus, this helper class ensures that those entities
+// will be rendered correctly regardless of the chosen layout (LTR/RTL).
+class wxGTKCairoContextRTL
+{
+public:
+    wxGTKCairoContextRTL(cairo_t* cr) : m_context(cr)
+    {
+        cairo_matrix_t ctm;
+        cairo_get_matrix(m_context, &ctm);
+
+        m_isMirrored = ctm.xx < 0.0;
+
+        if ( m_isMirrored )
+            cairo_save(m_context);
+    }
+
+    ~wxGTKCairoContextRTL()
+    {
+        if ( m_isMirrored )
+            cairo_restore(m_context);
+    }
+
+    bool IsMirrored() const { return m_isMirrored; }
+
+    // Caller is responsible to check for m_isMirrored before trying
+    // to call this function.
+    void Mirror(wxDouble& x, wxDouble& y, wxDouble w, wxDouble h)
+    {
+        // These literally cancel the mirroring applied to m_context
+        // for a region denoted by (x, y, w, h).
+        cairo_translate(m_context, x+w, y);
+        cairo_scale(m_context, -1, 1);
+        cairo_rectangle(m_context, 0, 0, w, h);
+        cairo_clip(m_context);
+
+        x = y = 0.0;
+    }
+
+private:
+    cairo_t* m_context;
+    bool  m_isMirrored;
+
+    wxDECLARE_NO_COPY_CLASS(wxGTKCairoContextRTL);
+};
+
+#endif // __WXGTK3__
+
+} // anonymous namespace
 
 void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 {
@@ -2765,6 +2818,16 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
         // need to use the scaled font here.
         font.GTKSetPangoAttrs(layout);
 
+#ifdef __WXGTK3__
+        wxGTKCairoContextRTL dcRTL(m_context);
+
+        if ( dcRTL.IsMirrored() )
+        {
+            int w, h;
+            pango_layout_get_pixel_size(layout, &w, &h);
+            dcRTL.Mirror(x, y, w, h);
+        }
+#endif // __WXGTK3__
         cairo_move_to(m_context, x, y);
         pango_cairo_show_layout (m_context, layout);
 
