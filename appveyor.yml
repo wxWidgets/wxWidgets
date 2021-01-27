@@ -78,7 +78,7 @@ before_test:
     pip.exe --disable-pip-version-check install httpbin
     Start-Job -Name wx_httpbin { python.exe -m httpbin.core 2>&1 > c:\projects\wxwidgets\httpbin.log }
     Start-Sleep -Seconds 5
-    if (curl -s http://127.0.0.1:5000/ip > $null) {
+    if (curl.exe -s http://127.0.0.1:5000/ip > $null) {
         $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:5000"
     }
     else {
