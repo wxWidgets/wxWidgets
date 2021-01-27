@@ -2568,12 +2568,11 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
                             : "unknown",
                wxDumpWindow(this));
 
-    bool handled = false;
-
-    // moved the ordinary key event sending AFTER the accel evaluation
+    if ( HandleWindowEvent(event) )
+        return true;
 
 #if wxUSE_ACCEL
-    if (event.GetEventType() == wxEVT_KEY_DOWN)
+    if (event.GetEventType() == wxEVT_CHAR_HOOK)
     {
         wxWindow *ancestor = this;
         while (ancestor)
@@ -2584,16 +2583,16 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
                 wxEvtHandler * const handler = ancestor->GetEventHandler();
 
                 wxCommandEvent command_event( wxEVT_MENU, command );
-                handled = handler->ProcessEvent( command_event );
-
-                if ( !handled )
+                if ( !handler->ProcessEvent( command_event ) )
                 {
                     // accelerators can also be used with buttons, try them too
                     command_event.SetEventType(wxEVT_BUTTON);
-                    handled = handler->ProcessEvent( command_event );
+                    handler->ProcessEvent( command_event );
                 }
 
-                break;
+                // In any case, the event was handled as it triggered an
+                // accelerator.
+                return true;
             }
 
             if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
@@ -2604,14 +2603,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     }
 #endif // wxUSE_ACCEL
 
-    if ( !handled )
-    {
-        handled = HandleWindowEvent( event ) ;
-        if ( handled && event.GetSkipped() )
-            handled = false ;
-    }
-
-    return handled ;
+    return false;
 }
 
 /* static */
