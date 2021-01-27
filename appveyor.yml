@@ -84,6 +84,3 @@ test_script: c:\projects\wxwidgets\build\tools\appveyor-test.bat
 after_test:
 - ps: |
     Stop-Job -Name wx_httpbin
-    Write-Output "--- httpbin output ---"
-    Get-Content c:\projects\wxwidgets\httpbin.log
-    Write-Output "--- httpbin output end ---"
