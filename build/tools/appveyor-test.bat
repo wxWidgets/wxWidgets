@@ -62,4 +62,4 @@ echo.
 echo --- httpbin output ---
 type c:\projects\wxwidgets\httpbin.log
 echo --- httpbin output end ---
-goto :eof
+exit /b 1
