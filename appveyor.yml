@@ -71,4 +71,24 @@ before_build:
 
 build_script: c:\projects\wxwidgets\build\tools\appveyor.bat
 
+before_test:
+- ps: |
+    Write-Output "Getting and launching httpbin."
+    $env:PATH = "C:\Python35;C:\Python35\Scripts;" + $env:PATH
+    pip.exe --disable-pip-version-check install httpbin
+    Start-Job -Name wx_httpbin { python.exe -m httpbin.core 2>&1 > c:\projects\wxwidgets\httpbin.log }
+    Start-Sleep -Seconds 5
+    curl.exe -s http://127.0.0.1:5000/ip > $null
+    if ($lastExitCode -eq "0") {
+        $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:5000"
+    }
+    else {
+        Write-Error "Disabling wxWebRequest tests as launching httpbin failed."
+        $env:WX_TEST_WEBREQUEST_URL="0"
+    }
+
 test_script: c:\projects\wxwidgets\build\tools\appveyor-test.bat
+
+after_test:
+- ps: |
+    Stop-Job -Name wx_httpbin

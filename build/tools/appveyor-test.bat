@@ -59,4 +59,7 @@ goto :eof
 echo.
 echo !!! Non-GUI test failed.
 echo.
-goto :eof
+echo --- httpbin output ---
+type c:\projects\wxwidgets\httpbin.log
+echo --- httpbin output end ---
+exit /b 1

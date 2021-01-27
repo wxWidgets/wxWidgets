@@ -27,11 +27,15 @@
 #include "wx/filename.h"
 #include "wx/wfstream.h"
 
-// This test uses https://httpbin.org by default, but this can be overridden by
-// setting WX_TEST_WEBREQUEST_URL, e.g. when running httpbin locally in a
-// docker container. This variable can also be set to a special value "0" to
-// disable running the test entirely.
-static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://httpbin.org";
+// This test uses httpbin service and by default uses the mirror at the
+// location below, which seems to be more reliable than the main site at
+// https://httpbin.org. Any other mirror, including a local one, which can be
+// set by running kennethreitz/httpbin Docker container, can be used by setting
+// WX_TEST_WEBREQUEST_URL environment variable to its URL.
+//
+// This variable can also be set to a special value "0" to disable running the
+// test entirely.
+static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://nghttp2.org/httpbin";
 
 class RequestFixture : public wxTimer
 {
@@ -46,8 +50,19 @@ public:
     // it returns false, as this indicates that web requests tests are disabled.
     bool InitBaseURL()
     {
-        if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
+        if ( wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
+        {
+            static bool s_shown = false;
+            if ( !s_shown )
+            {
+                s_shown = true;
+                WARN("Using non-default root URL " << baseURL);
+            }
+        }
+        else
+        {
             baseURL = WX_TEST_WEBREQUEST_URL_DEFAULT;
+        }
 
         return baseURL != "0";
     }
@@ -107,7 +122,7 @@ public:
 
     void RunLoopWithTimeout()
     {
-        StartOnce(10000); // Ensure that we exit the loop after 10s.
+        StartOnce(30000); // Ensure that we exit the loop after 30s.
         loop.Run();
         Stop();
     }
@@ -232,24 +247,14 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    // We can't use the same httpbin.org server that we use for the other tests
-    // for this one because it doesn't return anything in the body when
-    // returning an error status code, so use another one.
-    CreateAbs("https://httpstat.us/418");
+    Create("/status/418");
     Run(wxWebRequest::State_Failed, 0);
 
-    // For some reason, this test doesn't work with libcurl included in Ubuntu
-    // 14.04, so skip it.
-    const int status = request.GetResponse().GetStatus();
-    if ( status == 0 )
-    {
-        WARN("Status code not returned.");
-    }
-    else
-    {
-        CHECK( status == 418 );
-        CHECK( request.GetResponse().AsString() == "418 I'm a teapot" );
-    }
+    CHECK( request.GetResponse().GetStatus() == 418 );
+
+    const wxString& response = request.GetResponse().AsString();
+    INFO( "Response: " << response);
+    CHECK( response.Contains("teapot") );
 }
 
 TEST_CASE_METHOD(RequestFixture,
