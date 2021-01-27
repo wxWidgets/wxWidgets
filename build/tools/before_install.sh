@@ -37,7 +37,7 @@ case $(uname -s) in
                             libglu1-mesa-dev"
             esac
 
-            extra_deps="$extra_deps libsecret-1-dev libnotify-dev"
+            extra_deps="$extra_deps libcurl4-openssl-dev libsecret-1-dev libnotify-dev"
             for pkg in $extra_deps; do
                 if $(apt-cache pkgnames | grep -q $pkg) ; then
                     pkg_install="$pkg_install $pkg"
