@@ -338,7 +338,6 @@ wxIMPLEMENT_CLASS(wxGLContext, wxWindow);
 
 wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other), const wxGLContextAttrs *WXUNUSED(ctxAttrs))
 {
-//    m_glContext = win->GetHandle()->context();
 }
 
 bool wxGLContext::SetCurrent(const wxGLCanvas&) const

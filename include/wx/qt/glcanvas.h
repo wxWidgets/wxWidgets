@@ -24,9 +24,6 @@ public:
 
     virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
-private:
-    QGLContext *m_glContext;
-
     wxDECLARE_CLASS(wxGLContext);
 };
 
