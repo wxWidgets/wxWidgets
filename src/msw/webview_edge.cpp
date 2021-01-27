@@ -93,19 +93,19 @@ template <
     typename baseT, typename lambdaT, // base type & lambda type
     typename LT, typename ...argTs // for capturing argument types of lambda
 >
-baseT *callback_impl(lambdaT&& lambda, HRESULT (LT::*)(argTs...) const)
+wxCOMPtr<baseT> Callback_impl(lambdaT&& lambda, HRESULT (LT::*)(argTs...) const)
 {
-    return new CInvokableLambda<baseT, argTs...>(lambda);
+    return wxCOMPtr<baseT>(new CInvokableLambda<baseT, argTs...>(lambda));
 }
 template <typename baseT, typename lambdaT>
-baseT *callback(lambdaT&& lambda)
+wxCOMPtr<baseT> Callback(lambdaT&& lambda)
 {
-    return callback_impl<baseT>(std::move(lambda), &lambdaT::operator());
+    return Callback_impl<baseT>(std::move(lambda), &lambdaT::operator());
 }
 template <typename baseT, typename contextT, typename ...argTs>
-baseT *callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
+wxCOMPtr<baseT> Callback(contextT *ctx, HRESULT (contextT::*mthd)(argTs...))
 {
-    return new CInvokableMethod<baseT, contextT, argTs...>(ctx, mthd);
+    return wxCOMPtr<baseT>(new CInvokableMethod<baseT, contextT, argTs...>(ctx, mthd));
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEdge, wxWebView);
@@ -170,8 +170,8 @@ bool wxWebViewEdgeImpl::Create()
         ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
         nullptr,
-        callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
-            &wxWebViewEdgeImpl::OnEnvironmentCreated));
+        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
+            &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
     if (FAILED(hr))
     {
         wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
@@ -187,8 +187,8 @@ HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
     m_webViewEnvironment->CreateCoreWebView2Controller(
         m_ctrl->GetHWND(),
-        callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-            this, &wxWebViewEdgeImpl::OnWebViewCreated));
+        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+            this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
     return S_OK;
 }
 
@@ -417,28 +417,28 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
-        callback<ICoreWebView2NavigationStartingEventHandler>(
-            this, &wxWebViewEdgeImpl::OnNavigationStarting),
+        Callback<ICoreWebView2NavigationStartingEventHandler>(
+            this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
         &m_navigationStartingToken);
     m_webView->add_SourceChanged(
         Callback<ICoreWebView2SourceChangedEventHandler>(
             this, &wxWebViewEdgeImpl::OnSourceChanged).Get(),
         &m_sourceChangedToken);
     m_webView->add_NavigationCompleted(
-        callback<ICoreWebView2NavigationCompletedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnNavigationCompleted),
+        Callback<ICoreWebView2NavigationCompletedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnNavigationCompleted).Get(),
         &m_navigationCompletedToken);
     m_webView->add_NewWindowRequested(
-        callback<ICoreWebView2NewWindowRequestedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnNewWindowRequested),
+        Callback<ICoreWebView2NewWindowRequestedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnNewWindowRequested).Get(),
         &m_newWindowRequestedToken);
     m_webView->add_DocumentTitleChanged(
-        callback<ICoreWebView2DocumentTitleChangedEventHandler>(
-            this, &wxWebViewEdgeImpl::OnDocumentTitleChanged),
+        Callback<ICoreWebView2DocumentTitleChangedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnDocumentTitleChanged).Get(),
         &m_documentTitleChangedToken);
     m_webView->add_ContentLoading(
-        callback<ICoreWebView2ContentLoadingEventHandler>(
-            this, &wxWebViewEdgeImpl::OnContentLoading),
+        Callback<ICoreWebView2ContentLoadingEventHandler>(
+            this, &wxWebViewEdgeImpl::OnContentLoading).Get(),
         &m_contentLoadingToken);
     m_webView->add_ContainsFullScreenElementChanged(
         Callback<ICoreWebView2ContainsFullScreenElementChangedEventHandler>(
@@ -786,7 +786,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) 
     bool scriptExecuted = false;
 
     // Start script execution
-    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+    HRESULT executionResult = m_impl->m_webView->ExecuteScript(javascript.wc_str(), Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
         [&scriptExecuted, &executionResult, output](HRESULT error, PCWSTR result) -> HRESULT
     {
         // Handle script execution callback
@@ -801,7 +801,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) 
         scriptExecuted = true;
 
         return S_OK;
-    }));
+    }).Get());
 
     // Wait for script exection
     while (!scriptExecuted)
