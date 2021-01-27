@@ -1256,7 +1256,7 @@ int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
 #define ANDROID_WCSTO_END \
     if(endptr) { \
         if(dstendp) \
-            *endptr = (wchar_t*)(nptr + (dstendp - dst) * sizeof(wchar_t)); \
+            *endptr = (wchar_t*)(nptr + (dstendp - dst)); \
         else \
             *endptr = NULL; \
     } \
