@@ -85,6 +85,28 @@ bool wxQtScrollArea::event(QEvent *e)
                 break;
         }
     }
+    //  QGesture events arrive without mouse capture
+    else if ( handler )
+    {
+        switch ( e->type() )
+        {
+            case QEvent::Gesture:
+            {
+                QScrollArea::event(e);
+
+                if ( QScrollBar *vBar = verticalScrollBar() )
+                    vBar->triggerAction( QAbstractSlider::SliderMove );
+                if ( QScrollBar *hBar = horizontalScrollBar() )
+                    hBar->triggerAction( QAbstractSlider::SliderMove );
+
+                return true;
+            }
+
+            default:
+                break;
+        }
+    }
+
     return QScrollArea::event(e);
 }
 
@@ -308,6 +330,9 @@ wxWindowQt::~wxWindowQt()
         s_capturedWindow = NULL;
 
     DestroyChildren(); // This also destroys scrollbars
+
+    if (m_qtWindow)
+        QtStoreWindowPointer( GetHandle(), NULL );
 
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(NULL);
@@ -1679,4 +1704,34 @@ void wxWindowQt::QtSetPicture( QPicture* pict )
 QPainter *wxWindowQt::QtGetPainter()
 {
     return m_qtPainter.get();
+}
+
+bool wxWindowQt::EnableTouchEvents(int eventsMask)
+{
+    wxCHECK_MSG( GetHandle(), false, "can't be called before creating the window" );
+
+    if ( eventsMask == wxTOUCH_NONE )
+    {
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, false);
+        return true;
+    }
+
+    if ( eventsMask & wxTOUCH_PRESS_GESTURES )
+    {
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        m_qtWindow->grabGesture(Qt::TapAndHoldGesture);
+        QTapAndHoldGesture::setTimeout ( 1000 );
+    }
+    if ( eventsMask & wxTOUCH_PAN_GESTURES )
+    {
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        m_qtWindow->grabGesture(Qt::PanGesture);
+    }
+    if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
+    {
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        m_qtWindow->grabGesture(Qt::PinchGesture);
+    }
+
+    return true;
 }

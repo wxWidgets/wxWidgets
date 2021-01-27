@@ -24,9 +24,6 @@ public:
 
     virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
-private:
-    QGLContext *m_glContext;
-
     wxDECLARE_CLASS(wxGLContext);
 };
 
@@ -56,6 +53,8 @@ public:
                long style = 0,
                const wxString& name = wxGLCanvasName,
                const wxPalette& palette = wxNullPalette);
+
+    ~wxGLCanvas();
 
     bool Create(wxWindow *parent,
                 const wxGLAttributes& dispAttrs,
