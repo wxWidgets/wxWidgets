@@ -36,7 +36,7 @@ public:
     CInvokable() : m_nRefCount(0) {}
     virtual ~CInvokable() {}
     // IUnknown methods
-    HRESULT QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID WXUNUSED(riid), void **ppvObj) override
     {
         /**
          * WebView2 Runtime apparently doesn't use this method, so it doesn't
@@ -47,10 +47,10 @@ public:
         *ppvObj = NULL;
         return E_NOINTERFACE;
     }
-    ULONG AddRef(void) override {
+    ULONG STDMETHODCALLTYPE AddRef(void) override {
         return ++m_nRefCount;
     }
-    ULONG Release(void) override {
+    ULONG STDMETHODCALLTYPE Release(void) override {
         size_t ret = --m_nRefCount;
         if (ret == 0)
             delete this;
@@ -67,7 +67,7 @@ public:
     : m_lambda(lambda) {
     }
     // baseT method
-    HRESULT Invoke(argTs ...args) override {
+    HRESULT STDMETHODCALLTYPE Invoke(argTs ...args) override {
         return m_lambda(args...);
     }
 private:
@@ -81,7 +81,7 @@ public:
     : m_ctx(ctx), m_mthd(mthd) {
     }
     // baseT method
-    HRESULT Invoke(argTs ...args) override {
+    HRESULT STDMETHODCALLTYPE Invoke(argTs ...args) override {
         return (m_ctx->*m_mthd)(args...);
     }
 private:
