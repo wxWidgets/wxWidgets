@@ -5733,8 +5733,12 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
         if ( action == wxPG_ACTION_EDIT && !editorFocused )
         {
-            DoSelectProperty( p, wxPG_SEL_FOCUS );
-            wasHandled = true;
+            // Mark as handled only for editable property
+            if ( !p->IsCategory() && p->IsEnabled() && !p->HasFlag(wxPG_PROP_READONLY) )
+            {
+                DoSelectProperty( p, wxPG_SEL_FOCUS );
+                wasHandled = true;
+            }
         }
 
         // Travel and expand/collapse
@@ -5774,10 +5778,10 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
                 int selFlags = 0;
                 int reopenLabelEditorCol = -1;
 
-                if ( editorFocused )
+                if ( action == wxPG_ACTION_EDIT )
                 {
-                    // If editor was focused, then make the next editor
-                    // focused as well
+                    // Make the next editor focused as well
+                    // if we are actually going to edit the property.
                     selFlags |= wxPG_SEL_FOCUS;
                 }
                 else
