@@ -307,6 +307,7 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     GdkWindow* gdkWindow = NULL;
     if (widget)
     {
+        window->GetClientSize(&m_size.x, &m_size.y);
         gdkWindow = gtk_widget_get_window(widget);
         m_ok = true;
     }
@@ -317,17 +318,10 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
         cairo_destroy(cr);
         gc->EnableOffset(m_contentScaleFactor <= 1);
         SetGraphicsContext(gc);
-        if (gtk_widget_get_has_window(widget))
-        {
-            m_size.x = gdk_window_get_width(gdkWindow);
-            m_size.y = gdk_window_get_height(gdkWindow);
-        }
-        else
+        if (!gtk_widget_get_has_window(widget))
         {
             GtkAllocation a;
             gtk_widget_get_allocation(widget, &a);
-            m_size.x = a.width;
-            m_size.y = a.height;
             cairo_rectangle(cr, a.x, a.y, a.width, a.height);
             cairo_clip(cr);
             SetDeviceLocalOrigin(a.x, a.y);
