@@ -5,9 +5,15 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '!docs'
+      - '!interface'
   pull_request:
     branches:
       - master
+    paths:
+      - '!docs'
+      - '!interface'
 
 jobs:
   build:
@@ -19,7 +25,7 @@ jobs:
           - name: wxGTK Ubuntu 20.04 with ASAN
             runner: ubuntu-20.04
             compiler: gcc
-            configure_flags: --disable-compat30 --disable-sys-libs
+            configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl
             gtk_version: 3
             skip_samples: true
             use_asan: true
@@ -119,13 +125,27 @@ jobs:
           fi
           make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
+      - name: Launching httpbin
+        if: matrix.skip_testing != true
+        run: |
+          pip install httpbin
+          python -m httpbin.core 2>&1 >httpbin.log &
+          echo 'WX_TEST_WEBREQUEST_URL=http://localhost:5000' >> $GITHUB_ENV
+
       - name: Testing
         if: matrix.skip_testing != true
         run: |
           echo 'Testing...'
           pushd tests
-          ./test
+          ./test || rc=$?
           popd
+          if [ -n "$rc" ]; then
+            echo '*** Tests failed, contents of httpbin.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat httpbin.log
+            echo '-----------------------------------------------------------'
+            exit $rc
+          fi
 
       - name: Testing GUI using Xvfb
         if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.use_xvfb
