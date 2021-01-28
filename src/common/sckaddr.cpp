@@ -106,11 +106,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
     #endif
 #endif // __WINDOWS__
 
-#ifdef __ANDROID__
-    #ifndef HAVE_GETHOSTBYNAME
-    #define HAVE_GETHOSTBYNAME
-    #endif
-#else // these functions are missing on android (see netdb.h)
+// we assume that we have gethostbyaddr_r() if and only if we have
+// gethostbyname_r() and that it uses the similar conventions to it (see
+// comment in configure)
+//
+// this used not to be the case under older Android systems, where
+// gethostbyname_r() was available, but gethostbyaddr_r() wasn't, but it's not
+// clear if we still need to support the old NDKs, so for now keep things
+// simple -- and if we really need to account for this case, we'll add the
+// tests for gethostbyaddr_r() to configure later
+#define HAVE_GETHOSTBYADDR HAVE_GETHOSTBYNAME
+
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
     #define HAVE_FUNC_GETHOSTBYADDR_R_3
 #endif
@@ -120,12 +126,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_6
     #define HAVE_FUNC_GETHOSTBYADDR_R_6
 #endif
-#endif // __ANDROID__/!__ANDROID__
-
-// we assume that we have gethostbyaddr_r() if and only if we have
-// gethostbyname_r() and that it uses the similar conventions to it (see
-// comment in configure)
-#define HAVE_GETHOSTBYADDR HAVE_GETHOSTBYNAME
 
 // the _r functions need the extra buffer parameter but unfortunately its type
 // differs between different systems and for the systems which use opaque
