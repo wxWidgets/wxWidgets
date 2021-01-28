@@ -271,7 +271,8 @@ void wxWebViewWebKit::Print()
         [op setShowsProgressPanel: false];
     }
     // Print it.
-    [op runOperation];
+    [op runOperationModalForWindow:m_webView.window
+                          delegate:nil didRunSelector:nil contextInfo:nil];
 }
 
 void wxWebViewWebKit::SetEditable(bool WXUNUSED(enable))
