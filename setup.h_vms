@@ -275,7 +275,7 @@ typedef pid_t GPid;
 
 #define wxUSE_FSVOLUME      1
 
-#define wxUSE_SECRETSTORE   1
+#define wxUSE_SECRETSTORE   0
 
 #define wxUSE_STDPATHS      1
 
