@@ -2166,7 +2166,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // the right thing to do would, of course, be to understand what
             // the hell is IsDialogMessage() doing but this is beyond my feeble
             // forces at the moment unfortunately
-            if ( !(m_windowStyle & wxTE_PROCESS_TAB))
+            if ( !(m_windowStyle & wxTE_PROCESS_TAB) || !IsEditable() )
             {
                 if ( ::GetFocus() == GetHwnd() )
                 {
@@ -2334,35 +2334,23 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
                 // in a read only control
                 long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
 
-                if ( IsEditable() )
-                {
-                    // we may have several different cases:
-                    // 1. normal: both TAB and ENTER are used for navigation
-                    // 2. ctrl wants TAB for itself: ENTER is used to pass to
-                    //    the next control in the dialog
-                    // 3. ctrl wants ENTER for itself: TAB is used for dialog
-                    //    navigation
-                    // 4. ctrl wants both TAB and ENTER: Ctrl-ENTER is used to
-                    //    go to the next control (we need some way to do it)
+                // we may have several different cases:
+                // 1. normal: both TAB and ENTER are used for navigation
+                // 2. ctrl wants TAB for itself: ENTER is used to pass to
+                //    the next control in the dialog
+                // 3. ctrl wants ENTER for itself: TAB is used for dialog
+                //    navigation
+                // 4. ctrl wants both TAB and ENTER: Ctrl-ENTER is used to
+                //    go to the next control (we need some way to do it)
 
-                    // multiline controls should always get ENTER for themselves
-                    if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
-                        lDlgCode |= DLGC_WANTMESSAGE;
+                // multiline controls should always get ENTER for themselves
+                if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
+                    lDlgCode |= DLGC_WANTMESSAGE;
 
-                    if ( HasFlag(wxTE_PROCESS_TAB) )
-                        lDlgCode |= DLGC_WANTTAB;
+                if ( HasFlag(wxTE_PROCESS_TAB) )
+                    lDlgCode |= DLGC_WANTTAB;
 
-                    *rc |= lDlgCode;
-                }
-                else // !editable
-                {
-                    // NB: use "=", not "|=" as the base class version returns
-                    //     the same flags in the disabled state as usual (i.e.
-                    //     including DLGC_WANTMESSAGE). This is strange (how
-                    //     does it work in the native Win32 apps?) but for now
-                    //     live with it.
-                    *rc = lDlgCode;
-                }
+                *rc |= lDlgCode;
 
                 if ( IsMultiLine() )
                 {
