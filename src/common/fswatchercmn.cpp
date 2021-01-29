@@ -121,17 +121,15 @@ wxFileSystemWatcherBase::AddAny(const wxFileName& path,
     if (canonical.IsEmpty())
         return false;
 
-    // adding a path in a platform specific way
-    wxFSWatchInfo watch(canonical, events, type, filespec);
-    if ( !m_service->Add(watch) )
-        return false;
-
-    // on success, either add path to our 'watch-list'
-    // or, if already watched, inc the refcount. This may happen if
-    // a dir is Add()ed, then later AddTree() is called on a parent dir
+    // Check if the patch isn't already being watched.
     wxFSWatchInfoMap::iterator it = m_watches.find(canonical);
     if ( it == m_watches.end() )
     {
+        // It isn't, so start watching it in a platform specific way:
+        wxFSWatchInfo watch(canonical, events, type, filespec);
+        if ( !m_service->Add(watch) )
+            return false;
+
         wxFSWatchInfoMap::value_type val(canonical, watch);
         m_watches.insert(val);
     }
