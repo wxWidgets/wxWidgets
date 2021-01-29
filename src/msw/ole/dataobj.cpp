@@ -717,6 +717,8 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 switch ( format )
                 {
                     case wxDF_HTML:
+                        size = ::GlobalSize(pmedium->hGlobal);
+                        break;
                     case CF_TEXT:
                     case CF_OEMTEXT:
                         size = strlen((const char *)ptr.Get());

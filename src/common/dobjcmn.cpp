@@ -452,11 +452,11 @@ size_t wxHTMLDataObject::GetDataSize() const
 
     size_t size = buffer.length();
 
-#ifdef __WXMSW__
     // On Windows we need to add some stuff to the string to satisfy
     // its clipboard format requirements.
+    // On other platforms, we may also be passing a fragment
+    // and wrapping in further HTML tags
     size += 400;
-#endif
 
     return size;
 }
@@ -473,50 +473,73 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
         return false;
 
     char* const buffer = static_cast<char*>(buf);
+    memset(buf, 0, GetDataSize(wxDF_HTML));
 
 #ifdef __WXMSW__
     // add the extra info that the MSW clipboard format requires.
 
-        // Create a template string for the HTML header...
-    strcpy(buffer,
-        "Version:0.9\r\n"
-        "StartHTML:00000000\r\n"
-        "EndHTML:00000000\r\n"
-        "StartFragment:00000000\r\n"
-        "EndFragment:00000000\r\n"
-        "<html><body>\r\n"
-        "<!--StartFragment -->\r\n");
+    // Create a template string for the HTML header...
+    if (GetProvision() == HTML || GetProvision() == Fragment)
+        strcat(buffer,
+            "Version:0.9\r\n"
+            "StartHTML:00000000\r\n"
+            "EndHTML:00000000\r\n"
+            "StartFragment:00000000\r\n"
+            "EndFragment:00000000\r\n");
+#endif
+
+    if (GetProvision() == Fragment)
+    {
+        strcat(buffer,
+            "<html><body>\r\n"
+            "<!--StartFragment -->\r\n");
+    }
 
     // Append the HTML...
     strcat(buffer, html);
-    strcat(buffer, "\r\n");
-    // Finish up the HTML format...
-    strcat(buffer,
-        "<!--EndFragment-->\r\n"
-        "</body>\r\n"
-        "</html>");
 
+    // Finish up the HTML format...
+    if (GetProvision() == Fragment)
+    {
+        strcat(buffer, "\r\n");
+        strcat(buffer,
+            "<!--EndFragment-->\r\n"
+            "</body>\r\n"
+            "</html>");
+    }
+
+#ifdef __WXMSW__
     // Now go back, calculate all the lengths, and write out the
     // necessary header information. Note, wsprintf() truncates the
     // string when you overwrite it so you follow up with code to replace
     // the 0 appended at the end with a '\r'...
     char *ptr = strstr(buffer, "StartHTML");
-    sprintf(ptr+10, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
-    *(ptr+10+8) = '\r';
+    if (ptr)
+    {
+        sprintf(ptr+10, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
+        *(ptr+10+8) = '\r';
+    }
 
     ptr = strstr(buffer, "EndHTML");
-    sprintf(ptr+8, "%08u", (unsigned)strlen(buffer));
-    *(ptr+8+8) = '\r';
+    if (ptr)
+    {
+        sprintf(ptr+8, "%08u", (unsigned)strlen(buffer));
+        *(ptr+8+8) = '\r';
+    }
 
     ptr = strstr(buffer, "StartFragment");
-    sprintf(ptr+14, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
-    *(ptr+14+8) = '\r';
+    if (ptr)
+    {
+        sprintf(ptr+14, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
+        *(ptr+14+8) = '\r';
+    }
 
     ptr = strstr(buffer, "EndFragment");
-    sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
-    *(ptr+12+8) = '\r';
-#else
-    strcpy(buffer, html);
+    if (ptr)
+    {
+        sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
+        *(ptr+12+8) = '\r';
+    }
 #endif // __WXMSW__
 
     return true;
@@ -530,21 +553,58 @@ bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
     wxString html = wxString::FromUTF8(static_cast<const char*>(buf));
 
-#ifdef __WXMSW__
-    // To be consistent with other platforms, we only add the Fragment part
-    // of the Windows HTML clipboard format to the data object.
-    int fragmentStart = html.rfind("StartFragment");
-    int fragmentEnd = html.rfind("EndFragment");
+    // Although some applications such as Word may pass the correctly-sized buffer, let's
+    // ensure we can read the HTML even if there's garbage at the end. For example,
+    // on Windows, LibreOffice includes extraneous terminating characters, as can be seen via a
+    // clipboard viewer such as Free Clipboard Viewer.
+    if (html.IsEmpty())
+        html = wxString((const char *) buf, wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL), wxString::npos);
 
-    if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
+    if (GetProvision() == Fragment)
     {
-        int startCommentEnd = html.find("-->", fragmentStart) + 3;
-        int endCommentStart = html.rfind("<!--", fragmentEnd);
+        // Only retrieve the Fragment part of the Windows HTML clipboard format.
+        // This is the default behaviour, but pass HTML or Raw to the object ctor
+        // if you need more or all of the original content.
+        int fragmentStart = html.rfind("StartFragment");
+        int fragmentEnd = html.rfind("EndFragment");
 
-        if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
-            html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
+        bool success = false;
+        if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
+        {
+            int startCommentEnd = html.find("-->", fragmentStart) + 3;
+            int endCommentStart = html.rfind("<!--", fragmentEnd);
+
+            if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
+            {
+                html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
+                success = true;
+            }
+        }
+        if (!success)
+        {
+            // Find the text inside the body
+            int fragmentStart = html.rfind("<body");
+            int fragmentEnd = html.rfind("</body>");
+            if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
+            {
+                while ((fragmentStart < int(html.Length()-1)) && html[fragmentStart] != wxT('>'))
+                    fragmentStart ++;
+                if (fragmentStart < int(html.Length()-1))
+                    fragmentStart ++;
+                    
+                html = html.Mid(fragmentStart, fragmentEnd - fragmentStart);
+            }
+        }
     }
-#endif // __WXMSW__
+    else if (GetProvision() == HTML)
+    {
+        int fragmentStart = html.rfind("<html");
+        int fragmentEnd = html.rfind("</html>");
+        if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
+            html = html.Mid(fragmentStart, fragmentEnd - fragmentStart + 7);
+        else if (fragmentStart != wxNOT_FOUND)
+            html = html.Mid(fragmentStart);
+    }
 
     SetHTML( html );
 

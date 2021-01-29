@@ -334,13 +334,51 @@ private:
 class WXDLLIMPEXP_CORE wxHTMLDataObject : public wxDataObjectSimple
 {
 public:
+    /**
+        Provision values to be passed to the constructor to determine what
+        portion of the content is passed to or retrieved from the data object.
+     */
+     
+    enum
+    {
+        /**
+            All content is set or retrieved, including any header information.
+         */
+        Raw,
+
+        /**
+            All HTML content is set or retrieved (the default for non-Windows).
+         */
+        HTML,
+
+        /**
+            Just the relevant fragment is set or retrieved (the default for Windows).
+         */
+        Fragment,
+        
+        /**
+            The default provision (platform-specific)
+         */
+        DefaultProvision = 
+#ifdef __WXMSW__
+                    Fragment
+#else
+                    HTML
+#endif
+    };
+    
     // ctor: you can specify the text here or in SetText(), or override
     // GetText()
-    wxHTMLDataObject(const wxString& html = wxEmptyString)
+    wxHTMLDataObject(const wxString& html = wxEmptyString, int provision = DefaultProvision)
         : wxDataObjectSimple(wxDF_HTML),
-          m_html(html)
+          m_html(html),
+          m_provision(provision)
         {
         }
+
+    // Determine what part of the HTML will be passed or returned
+    void SetProvision(int provision) { m_provision = provision; }
+    int GetProvision() const { return m_provision; }
 
     // virtual functions which you may override if you want to provide text on
     // demand only - otherwise, the trivial default versions will be used
@@ -368,6 +406,7 @@ public:
 
 private:
     wxString m_html;
+    int      m_provision;
 };
 
 class WXDLLIMPEXP_CORE wxTextDataObject : public wxDataObjectSimple

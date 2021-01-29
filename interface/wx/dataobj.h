@@ -824,6 +824,17 @@ public:
     @class wxHTMLDataObject
 
     wxHTMLDataObject is used for working with HTML-formatted text.
+    
+    The form of content that will be set or retrieved is set by the optional @a provision argument passed to the constructor.
+    To retrieve all content, including any platform-specific header, pass @c wxHTMLDataObject::Raw.
+    To retrieve just the HTML, pass @c wxHTMLDataObject::HTML.
+    To retrieve just the relevant fragment, pass @c wxHTMLDataObject::Fragment.
+    
+    Similarly, if you are setting clipboard data, and you pass @c wxHTMLDataObject::Fragment, then
+    the HTML you pass will be treated as a fragment and will be wrapped in HTML tags.
+    
+    On Windows, the default is @c wxHTMLDataObject::Fragment. On other platforms, it's
+    @c wxHTMLDataObject::HTML, for compatibility with existing code.
 
     @library{wxcore}
     @category{dnd}
@@ -834,9 +845,43 @@ class wxHTMLDataObject : public wxDataObjectSimple
 {
 public:
     /**
-        Constructor.
+        Provision values to be passed to the constructor to determine what
+        portion of the content is passed to or retrieved from the data object.
+     */
+     
+    enum
+    {
+        /**
+            All content is set or retrieved, including any header information.
+         */
+        Raw,
+
+        /**
+            All HTML content is set or retrieved (the default for non-Windows).
+         */
+        HTML,
+
+        /**
+            Just the relevant fragment is set or retrieved (the default for Windows).
+         */
+        Fragment,
+        
+        /**
+            The default provision (platform-specific)
+         */
+        DefaultProvision = 
+#ifdef __WXMSW__
+                    Fragment
+#else
+                    HTML
+#endif
+    };
+
+    /**
+        Constructor. Optionally specify the kind of provision - the kind of content that will
+        be passed or retrieved.
     */
-    wxHTMLDataObject(const wxString& html = wxEmptyString);
+    wxHTMLDataObject(const wxString& html = wxEmptyString, int provision = DefaultProvision);
 
     /**
         Returns the HTML string.
@@ -847,4 +892,14 @@ public:
         Sets the HTML string.
     */
     virtual void SetHTML(const wxString& html);
+    
+    /**
+        Set the type of content that will be passed or returned: Raw, HTML or Fragment.
+    */
+    void SetProvision(int provision);
+
+    /**
+        Returns the type of content that will be passed or returned: Raw, HTML or Fragment.
+    */
+    int GetProvision() const;
 };
