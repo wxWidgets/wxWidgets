@@ -2639,6 +2639,30 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     return wxSize(wText, hText);
 }
 
+void wxTextCtrl::DoMoveWindow(int x, int y, int width, int height)
+{
+    // We reset the text of single line controls each time their width changes
+    // because they don't adjust their horizontal offset on their own and there
+    // doesn't seem to be any way to convince them to do it other than by just
+    // setting the text again, see #18268.
+    const bool resetText = IsSingleLine() && !IsShownOnScreen();
+    int oldWidth = -1;
+    if ( resetText )
+    {
+        oldWidth = GetSize().x;
+    }
+
+    wxTextCtrlBase::DoMoveWindow(x, y, width, height);
+
+    if ( resetText && GetSize().x != oldWidth )
+    {
+        // We need to use DoWriteText() to avoid our own optimization in
+        // ChangeValue() which does nothing when the text doesn't really
+        // change.
+        DoWriteText(DoGetValue(), 0 /* no flags for no events */);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // standard handlers for standard edit menu events
 // ----------------------------------------------------------------------------

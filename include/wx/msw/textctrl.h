@@ -241,6 +241,8 @@ protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
 
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+
 #if wxUSE_RICHEDIT
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
