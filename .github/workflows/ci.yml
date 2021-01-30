@@ -70,7 +70,7 @@ jobs:
               ;;
           esac
 
-          if [ ${{ matrix.allow_warnings }} ]; then
+          if [ -z ${{ matrix.allow_warnings }} ]; then
             error_opts="-Werror $allow_warn_opt"
             echo "wxMAKEFILE_ERROR_CXXFLAGS=$error_opts" >> $GITHUB_ENV
             echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
