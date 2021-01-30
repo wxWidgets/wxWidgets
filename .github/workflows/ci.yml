@@ -26,20 +26,25 @@ jobs:
           - name: Ubuntu 16.04 wxGTK 2
             runner: ubuntu-16.04
             gtk_version: 2
+            use_xvfb: true
           - name: Ubuntu 16.04 wxGTK 3 static
             runner: ubuntu-16.04
             configure_flags: --disable-shared
+            use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 2 UTF-8
             runner: ubuntu-18.04
             gtk_version: 2
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
+            use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-18.04
             configure_flags: --enable-cxx11 --enable-stl --disable-compat30
+            use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 with clang
             runner: ubuntu-18.04
             compiler: clang
             configure_flags: --disable-sys-libs --with-libcurl
+            use_xvfb: true
           - name: Ubuntu 20.04 wxGTK ANSI
             runner: ubuntu-20.04
             configure_flags: --disable-unicode
@@ -49,6 +54,7 @@ jobs:
             configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl
             skip_samples: true
             use_asan: true
+            use_xvfb: true
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-18.04
             configure_flags: --with-x11 --enable-pch --disable-stc
