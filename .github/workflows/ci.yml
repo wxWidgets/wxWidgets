@@ -31,6 +31,7 @@ jobs:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
       wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
       wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
+      wxUSE_XVFB: ${{ matrix.use_xvfb && 1 || 0 }}
 
     steps:
       - name: Checkout
