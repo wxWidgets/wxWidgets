@@ -24,7 +24,6 @@ jobs:
         include:
           - name: wxGTK Ubuntu 20.04 with ASAN
             runner: ubuntu-20.04
-            compiler: gcc
             configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl
             gtk_version: 3
             skip_samples: true
@@ -62,11 +61,8 @@ jobs:
               allow_warn_opt="-Wno-error=#warnings"
               ;;
 
-            gcc)
-              echo CC=gcc >> $GITHUB_ENV
-              echo CXX=g++ >> $GITHUB_ENV
-              echo LD=g++ >> $GITHUB_ENV
-
+            '')
+              # Assume gcc.
               allow_warn_opt="-Wno-error=cpp"
               ;;
 
