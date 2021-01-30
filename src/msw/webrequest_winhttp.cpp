@@ -184,8 +184,12 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             break;
 
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
+        {
+            DWORD written = *(reinterpret_cast<LPDWORD>(lpvStatusInformation));
+            m_dataWritten += written;
             WriteData();
             break;
+        }
 
         case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
         {
@@ -230,10 +234,7 @@ void wxWebRequestWinHTTP::WriteData()
             ) )
     {
         SetFailedWithLastError();
-        return;
     }
-
-    m_dataWritten += dataWriteSize;
 }
 
 void wxWebRequestWinHTTP::CreateResponse()
