@@ -122,10 +122,7 @@ GridTestCase::GridTestCase()
     m_grid->Refresh();
     m_grid->Update();
 
-    if ( !waitForPaint.YieldUntilPainted() )
-    {
-        WARN("Grid not repainted until timeout expiration");
-    }
+    waitForPaint.YieldUntilPainted();
 }
 
 GridTestCase::~GridTestCase()

@@ -29,8 +29,8 @@ public:
     }
 
     // This function waits up to the given number of milliseconds for the paint
-    // event to come and returns true if we did get it or false otherwise.
-    bool YieldUntilPainted(int timeoutInMS = 250) const
+    // event to come and logs a warning if we didn't get it.
+    void YieldUntilPainted(int timeoutInMS = 250)
     {
         wxStopWatch sw;
         for ( ;; )
@@ -38,10 +38,17 @@ public:
             wxYield();
 
             if ( m_painted )
-                return true;
+            {
+                // Reset it in case YieldUntilPainted() is called again.
+                m_painted = false;
+                break;
+            }
 
             if ( sw.Time() > timeoutInMS )
-                return false;
+            {
+                WARN("Didn't get a paint event until timeout expiration");
+                break;
+            }
         }
     }
 
@@ -85,9 +92,8 @@ public:
     {
     }
 
-    bool YieldUntilPainted(int WXUNUSED(timeoutInMS) = 250) const
+    void YieldUntilPainted(int WXUNUSED(timeoutInMS) = 250)
     {
-        return true;
     }
 };
 
