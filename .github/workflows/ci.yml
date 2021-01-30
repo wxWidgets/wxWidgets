@@ -5,15 +5,15 @@ on:
   push:
     branches:
       - master
-    paths:
-      - '!docs'
-      - '!interface'
+    paths-ignore:
+      - 'docs'
+      - 'interface'
   pull_request:
     branches:
       - master
-    paths:
-      - '!docs'
-      - '!interface'
+    paths-ignore:
+      - 'docs'
+      - 'interface'
 
 jobs:
   build:
