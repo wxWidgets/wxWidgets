@@ -25,11 +25,10 @@ jobs:
           - name: wxGTK Ubuntu 20.04 with ASAN
             runner: ubuntu-20.04
             configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl
-            gtk_version: 3
             skip_samples: true
             use_asan: true
     env:
-      wxGTK_VERSION: ${{ matrix.gtk_version }}
+      wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
       wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
       wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
 
