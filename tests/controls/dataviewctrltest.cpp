@@ -329,9 +329,18 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     m_dvc->EnsureVisible(last);
 
 #ifdef __WXGTK__
-    // And again to let it scroll the correct items into view.
-    wxYield();
-#endif
+    // Wait for the list control to be relaid out.
+    wxStopWatch sw;
+    while ( m_dvc->GetTopItem() == m_root )
+    {
+        if ( sw.Time() > 500 )
+        {
+            WARN("Timed out waiting for wxDataViewCtrl layout");
+            break;
+        }
+        wxYield();
+    }
+#endif // __WXGTK__
 
     // Check that this was indeed the case.
     const wxDataViewItem top = m_dvc->GetTopItem();
