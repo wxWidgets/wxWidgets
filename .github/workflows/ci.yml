@@ -137,8 +137,6 @@ jobs:
           fi
 
           if [ ${{ matrix.use_asan }} ]; then
-            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
-
             wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
             wxASAN_CXXFLAGS=$wxASAN_CFLAGS
             wxASAN_LDFLAGS="-fsanitize=address"
@@ -192,6 +190,9 @@ jobs:
       - name: Testing GUI using Xvfb
         if: matrix.skip_testing != true && matrix.skip_gui != true && matrix.use_xvfb
         run: |
+          if [ ${{ matrix.use_asan }} ]; then
+            export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
+          fi
           pushd tests
           xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
           popd
