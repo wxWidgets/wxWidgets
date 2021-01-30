@@ -23,46 +23,46 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: wxGTK 2 Ubuntu 16.04
+          - name: Ubuntu 16.04 wxGTK 2
             runner: ubuntu-16.04
             gtk_version: 2
-          - name: wxGTK 3 Ubuntu 16.04 static
+          - name: Ubuntu 16.04 wxGTK 3 static
             runner: ubuntu-16.04
             configure_flags: --disable-shared
-          - name: wxGTK 2 UTF-8 Ubuntu 18.04
+          - name: Ubuntu 18.04 wxGTK 2 UTF-8
             runner: ubuntu-18.04
             gtk_version: 2
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
-          - name: wxGTK 3 STL Ubuntu 18.04
+          - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-18.04
             configure_flags: --enable-cxx11 --enable-stl --disable-compat30
-          - name: wxGTK 3 Ubuntu 18.04 with clang
+          - name: Ubuntu 18.04 wxGTK 3 with clang
             runner: ubuntu-18.04
             compiler: clang
             configure_flags: --disable-sys-libs --with-libcurl
-          - name: wxGTK ANSI Ubuntu 20.04
+          - name: Ubuntu 20.04 wxGTK ANSI
             runner: ubuntu-20.04
             configure_flags: --disable-unicode
             skip_samples: true
-          - name: wxGTK Ubuntu 20.04 with ASAN
+          - name: Ubuntu 20.04 wxGTK with ASAN
             runner: ubuntu-20.04
             configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl
             skip_samples: true
             use_asan: true
-          - name: wxX11 Ubuntu 18.04
+          - name: Ubuntu 18.04 wxX11
             runner: ubuntu-18.04
             configure_flags: --with-x11 --enable-pch --disable-stc
             skip_samples: true
-          - name: wxDFB Ubuntu 18.04
+          - name: Ubuntu 18.04 wxDFB
             runner: ubuntu-18.04
             configure_flags: --with-directfb --enable-pch --disable-stc
             skip_samples: true
             allow_warnings: true
-          - name: wxMotif Ubuntu 18.04
+          - name: Ubuntu 18.04 wxMotif
             runner: ubuntu-18.04
             configure_flags: --with-motif --enable-pch --disable-stc
             skip_samples: true
-          - name: wxQt Ubuntu 18.04
+          - name: Ubuntu 18.04 wxQt
             runner: ubuntu-18.04
             configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
