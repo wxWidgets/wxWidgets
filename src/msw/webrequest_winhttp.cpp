@@ -218,8 +218,8 @@ void wxWebRequestWinHTTP::WriteData()
     }
 
     m_dataWriteBuffer.Clear();
-    m_dataWriteBuffer.GetWriteBuf(dataWriteSize);
-    m_dataStream->Read(m_dataWriteBuffer.GetData(), dataWriteSize);
+    void* buffer = m_dataWriteBuffer.GetWriteBuf(dataWriteSize);
+    m_dataStream->Read(buffer, dataWriteSize);
 
     if ( !::WinHttpWriteData
             (
