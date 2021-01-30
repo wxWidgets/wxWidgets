@@ -51,7 +51,7 @@ jobs:
             skip_samples: true
           - name: Ubuntu 20.04 wxGTK with ASAN
             runner: ubuntu-20.04
-            configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl
+            configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl --disable-webview
             skip_samples: true
             use_asan: true
             use_xvfb: true
