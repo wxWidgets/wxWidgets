@@ -61,7 +61,7 @@ case $(uname -s) in
                 $SUDO apt-get update
 
                 # Install the symbols to allow LSAN suppression list to work.
-                $SUDO apt-get install -y libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym
+                $SUDO apt-get install -y libfontconfig1-dbgsym libglib2.0-0-dbgsym libgtk-3-0-dbgsym libatk-bridge2.0-0-dbgsym
             fi
         fi
         ;;
