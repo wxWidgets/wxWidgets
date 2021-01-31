@@ -50,9 +50,11 @@ GdkWindow* wxGetTopLevelGDK();
 GtkWidget* wxGetTopLevelGTK();
 #endif
 
+#ifdef GTK_CHECK_VERSION
 #if GTK_CHECK_VERSION(3,4,0)
 #define wxHAS_GETKEYSTATE_GTK
 #endif //GTK+ 3.4
+#endif
 
 // Only X11 backend is supported for wxGTK here (GTK < 2 has no others)
 #if !defined(__WXGTK__) || \
