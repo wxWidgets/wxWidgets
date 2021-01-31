@@ -171,6 +171,15 @@ TEST_CASE_METHOD(MultiSelectDataViewCtrlTestCase,
                  "wxDVC::DeleteSelected",
                  "[wxDataViewCtrl][delete]")
 {
+#ifdef __WXGTK__
+    wxString useASAN;
+    if ( wxGetEnv("wxUSE_ASAN", &useASAN) && useASAN == "1" )
+    {
+        WARN("Skipping test resulting in a memory leak report with wxGTK");
+        return;
+    }
+#endif // __WXGTK__
+
     wxDataViewItemArray sel;
     sel.push_back(m_child1);
     sel.push_back(m_grandchild);
