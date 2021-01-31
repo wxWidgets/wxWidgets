@@ -133,6 +133,14 @@ public:
         REQUIRE( request.GetState() == wxWebRequest::State_Idle );
         request.Start();
         RunLoopWithTimeout();
+
+        if ( request.GetState() != requiredState )
+        {
+            errorDescription.Trim();
+            if ( !errorDescription.empty() )
+                WARN("Error: " << errorDescription);
+        }
+
         REQUIRE( request.GetState() == requiredState );
         if (requiredStatus)
             CHECK( request.GetResponse().GetStatus() == requiredStatus );
@@ -378,8 +386,6 @@ TEST_CASE_METHOD(RequestFixture,
     request.Start();
     request.Cancel();
     RunLoopWithTimeout();
-    if ( !errorDescription.empty() )
-        INFO( "Error:" << errorDescription );
     REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
 }
 
