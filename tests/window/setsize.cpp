@@ -98,10 +98,7 @@ TEST_CASE("wxWindow::MovePreservesSize", "[window][size][move]")
 
     w->Show();
 
-    if ( !waitForPaint.YieldUntilPainted() )
-    {
-        WARN("Didn't get a paint event until timeout expiration");
-    }
+    waitForPaint.YieldUntilPainted();
 
     const wxRect rectOrig = w->GetRect();
 

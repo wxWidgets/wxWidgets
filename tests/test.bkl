@@ -289,7 +289,9 @@
             wxWebView or wxSTC is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <sys-lib>$(WXLIB_STC)</sys-lib>
+        <ldlibs>$(EXTRALIBS_STC)</ldlibs>
         <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
@@ -320,7 +322,9 @@
             wxWebView or wxSTC is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <sys-lib>$(WXLIB_STC)</sys-lib>
+        <ldlibs>$(EXTRALIBS_STC)</ldlibs>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>

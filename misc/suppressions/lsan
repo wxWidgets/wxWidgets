@@ -8,3 +8,7 @@ leak:FcLangSetCreate
 leak:FcPatternObjectInsertElt
 leak:FcValueListCreate
 leak:FcValueSave
+
+# This leak happens during GTK initialization. Requires debug symbols for
+# libatk-bridge2.0.
+leak:atk_bridge_adaptor_init
