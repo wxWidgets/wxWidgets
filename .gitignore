@@ -262,39 +262,6 @@
 # /locale/msw/
 /locale/msw/*.mo
 
-# /misc/
-/misc/system.list
-/misc/bin
-/misc/.gdb_history
-/misc/Test
-/misc/config.cache
-/misc/config.status
-/misc/system.list
-/misc/linux.system.cache
-/misc/wx-config
-/misc/config.log
-/misc/linux-gnu.system.cache
-/misc/*.dsp
-/misc/*.plg
-/misc/*.opt
-/misc/*.aps
-/misc/*.ncb
-/misc/*.pro
-/misc/*.opt
-/misc/Release
-/misc/Debug
-/misc/ReleaseDLL
-/misc/DebugDLL
-/misc/robert
-/misc/Makefile.in
-/misc/setup.h.in
-/misc/stamp-h.in
-/misc/Makefile
-/misc/configure
-/misc/setup.h
-/misc/stamp-h
-/misc/libtool
-
 # /samples/
 /samples/**/*c*_msw
 /samples/**/*c*_msw_x64
