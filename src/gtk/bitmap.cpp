@@ -563,6 +563,8 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
     cairo_t* cr = static_cast<cairo_t*>(dc.GetGraphicsContext()->GetNativeContext());
     if ( cr )
         M_BMPDATA->m_context = cairo_reference(cr);
+#else
+    wxUnusedVar(dc);
 #endif // __WXGTK3__
 
     return true;
