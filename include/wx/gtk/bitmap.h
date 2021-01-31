@@ -83,8 +83,7 @@ public:
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
-    bool Create(int width, int height, const wxDC& WXUNUSED(dc))
-        { return Create(width,height); }
+    bool Create(int width, int height, const wxDC& dc);
 #ifdef __WXGTK3__
     virtual bool CreateScaled(int w, int h, int depth, double scale) wxOVERRIDE;
     virtual double GetScaleFactor() const wxOVERRIDE;
@@ -132,6 +131,10 @@ public:
     void Draw(cairo_t* cr, int x, int y, bool useMask = true, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
     void SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
     wxBitmap CreateDisabled() const;
+
+    // Returns the context associated with wxDC object passed to Create()
+    // and is mostly for RTL support. See Create(..., const wxDC&) impl.
+    static cairo_t* GetDestinationContext(cairo_t* cr);
 #else
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;

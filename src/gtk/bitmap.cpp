@@ -22,10 +22,14 @@
 
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/dc.h"
 
 GdkWindow* wxGetTopLevelGDK();
 
-#ifndef __WXGTK3__
+#ifdef __WXGTK3__
+// Initialized to shut up the compiler.
+static const cairo_user_data_key_t gs_cairo_dest_context_key = {0};
+#else // !__WXGTK3__
 static void PixmapToPixbuf(GdkPixmap* pixmap, GdkPixbuf* pixbuf, int w, int h)
 {
     gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
@@ -66,7 +70,7 @@ static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
     }
     g_object_unref(mask_pixbuf);
 }
-#endif
+#endif // __WXGTK3__
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -334,6 +338,7 @@ public:
 #ifdef __WXGTK3__
     GdkPixbuf* m_pixbufNoMask;
     cairo_surface_t* m_surface;
+    cairo_t*         m_context;
     double m_scaleFactor;
 #else
     GdkPixmap      *m_pixmap;
@@ -360,6 +365,7 @@ wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
 #ifdef __WXGTK3__
     m_pixbufNoMask = NULL;
     m_surface = NULL;
+    m_context = NULL;
     m_scaleFactor = 1;
 #else
     m_pixmap = NULL;
@@ -387,6 +393,8 @@ wxBitmapRefData::~wxBitmapRefData()
         g_object_unref(m_pixbufNoMask);
     if (m_surface)
         cairo_surface_destroy(m_surface);
+    if (m_context)
+        cairo_destroy(m_context);
 #else
     if (m_pixbufMask)
         g_object_unref(m_pixbufMask);
@@ -538,6 +546,25 @@ bool wxBitmap::Create( int width, int height, int depth )
     UnRef();
     wxCHECK_MSG(width > 0 && height > 0, false, "invalid bitmap size");
     m_refData = new wxBitmapRefData(width, height, depth);
+    return true;
+}
+
+bool wxBitmap::Create(int width, int height, const wxDC& dc)
+{
+    if ( !Create(width,height) )
+        return false;
+
+#ifdef __WXGTK3__
+    // For RTL purposes, the wxMemoryDC on which this bitmap will be selected
+    // needs to know whether the destination dc (i.e. where the final drawings occur)
+    // is mirrored or not (for correct text rendering). To help on this,
+    // we keep a reference to the underlying context of the destination dc which can be
+    // retrieved later by calling GetDestinationContext().
+    cairo_t* cr = static_cast<cairo_t*>(dc.GetGraphicsContext()->GetNativeContext());
+    if ( cr )
+        M_BMPDATA->m_context = cairo_reference(cr);
+#endif // __WXGTK3__
+
     return true;
 }
 
@@ -1346,7 +1373,20 @@ cairo_t* wxBitmap::CairoCreate() const
     wxASSERT(cr && cairo_status(cr) == 0);
     if (!wxIsSameDouble(bmpData->m_scaleFactor, 1))
         cairo_scale(cr, bmpData->m_scaleFactor, bmpData->m_scaleFactor);
+
+    if ( M_BMPDATA->m_context )
+    {
+        // We already keep a reference to m_context. no need to reference it again.
+        cairo_set_user_data(cr, &gs_cairo_dest_context_key, M_BMPDATA->m_context, NULL);
+    }
+
     return cr;
+}
+
+/*static*/
+cairo_t* wxBitmap::GetDestinationContext(cairo_t* cr)
+{
+    return static_cast<cairo_t*>(cairo_get_user_data(cr, &gs_cairo_dest_context_key));
 }
 
 void wxBitmap::Draw(cairo_t* cr, int x, int y, bool useMask, const wxColour* fg, const wxColour* bg) const

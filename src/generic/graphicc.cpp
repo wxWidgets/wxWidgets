@@ -89,6 +89,8 @@ using namespace std;
 #include "wx/fontutil.h"
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"
+#else
+#include "wx/gtk/bitmap.h"
 #endif
 #include "wx/gtk/private/object.h"
 #endif
@@ -2747,8 +2749,12 @@ class wxGTKCairoContextRTL
 public:
     wxGTKCairoContextRTL(cairo_t* cr) : m_context(cr)
     {
+        cairo_t* context = wxBitmap::GetDestinationContext(cr);
+        if ( !context )
+            context = m_context;
+
         cairo_matrix_t ctm;
-        cairo_get_matrix(m_context, &ctm);
+        cairo_get_matrix(context, &ctm);
 
         m_isMirrored = ctm.xx < 0.0;
 
