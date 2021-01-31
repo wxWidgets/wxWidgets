@@ -41,9 +41,6 @@ toolkit.
 2. Installing under Win32
 -------------------------
 
-If compiling from CVS, please copy include/wx/univ/setup0.h
-to include/wx/univ/setup.h before following these steps.
-
 a) Using Visual C++ 6.0/7.x
 
    Follow wxMSW instructions but make sure to choose one of the "Universal"
@@ -75,9 +72,6 @@ Please refer to the installation instructions for wxGTK or wxX11. The only
 change for wxUniversal is that you must add "--enable-universal" switch to
 the configure command line and for wxX11 even this is unnecessary, i.e. it
 is enabled by default.
-
-If compiling from CVS, please copy include/wx/univ/setup0.h
-to include/wx/univ/setup.h before configuring.
 
 4. Running wxUniv programs
 --------------------------

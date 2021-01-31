@@ -63,7 +63,7 @@ before_build:
     if (-not (Test-Path env:wxUSE_STL)) { $env:wxUSE_STL = '0' }
     if (-not (Test-Path env:wxUSE_WEBVIEW_EDGE)) { $env:wxUSE_WEBVIEW_EDGE = '0' }
     if (($env:compiler -ne "msys2") -and ($env:compiler -ne "cygwin")) {
-      gc include\wx\msw\setup0.h |
+      gc include\wx\msw\setup.h |
       %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $env:wxUSE_STL"} |
       %{$_ -replace "define wxUSE_WEBVIEW_EDGE 0", "define wxUSE_WEBVIEW_EDGE $env:wxUSE_WEBVIEW_EDGE"} |
       sc include\wx\msw\setup.h

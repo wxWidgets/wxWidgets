@@ -1760,4 +1760,3 @@
 /* --- end wxUniv options --- */
 
 #endif // _WX_SETUP_H_
-
