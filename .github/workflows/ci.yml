@@ -192,6 +192,7 @@ jobs:
         run: |
           if [ ${{ matrix.use_asan }} ]; then
             export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
+            export ASAN_OPTIONS=fast_unwind_on_malloc=0
           fi
           pushd tests
           xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui
