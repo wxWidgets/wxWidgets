@@ -14,34 +14,10 @@ jobs:
           compiler: gcc
           env: wxGTK_VERSION=2 wxUSE_XVFB=1
           name: wxGTK 2 Ubuntu 14.04
-        - dist: xenial
-          compiler: gcc
-          env: wxGTK_VERSION=3
-          name: wxGTK 3 Ubuntu 16.04
-        - dist: bionic
-          compiler: gcc
-          env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
-          name: wxGTK 2 UTF-8 Ubuntu 18.04
-        - dist: bionic
-          compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --disable-compat30 --enable-stl" wxMAKEFILE_CXXFLAGS=-std=c++11 wxMAKEFILE_LDFLAGS=-Wl,--no-as-needed wxUSE_XVFB=1
-          name: wxGTK 3 STL Ubuntu 18.04
-        - dist: bionic
-          compiler: clang
-          env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
-          name: wxGTK 2 clang Ubuntu 18.04
         - dist: bionic
           compiler: gcc
           env: wxGTK_VERSION=3 wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
           name: wxGTK 3 CMake Ubuntu 18.04
-        - dist: focal
-          compiler: gcc
-          env: wxGTK_VERSION=2 wxCONFIGURE_FLAGS="--disable-compat30 --disable-unicode" wxSKIP_SAMPLES=1
-          name: wxGTK ANSI Ubuntu 20.04
-        - dist: focal
-          compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--disable-compat30 --disable-sys-libs" wxSKIP_SAMPLES=1
-          name: wxGTK Ubuntu 20.04
         - os: osx
           osx_image: xcode7.3
           compiler: clang
@@ -64,22 +40,6 @@ jobs:
           osx_image: xcode11.4
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO" wxCMAKE_SAMPLES=OFF wxCMAKE_TESTS=OFF
           name: wxOSX iOS CMake Xcode 11.4
-        - dist: bionic
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-x11 --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-          name: wxX11 Ubuntu 18.04
-        - dist: bionic
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1 wxALLOW_WARNINGS=1
-          name: wxDFB Ubuntu 18.04
-        - dist: bionic
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-motif --enable-pch --disable-stc" wxSKIP_SAMPLES=1
-          name: wxMotif Ubuntu 18.04
-        - dist: bionic
-          compiler: gcc
-          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch --without-opengl" wxSKIP_SAMPLES=1
-          name: wxQt Ubuntu 18.04
         - os: linux
           arch: arm64
           env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--disable-sys-libs" wxLXC=1
