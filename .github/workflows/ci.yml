@@ -49,7 +49,7 @@ jobs:
           - name: Ubuntu 18.04 wxGTK 3 with clang
             runner: ubuntu-18.04
             compiler: clang
-            configure_flags: --disable-sys-libs --with-libcurl
+            configure_flags: --disable-sys-libs
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK ANSI
             runner: ubuntu-20.04
@@ -57,7 +57,7 @@ jobs:
             skip_samples: true
           - name: Ubuntu 20.04 wxGTK with ASAN
             runner: ubuntu-20.04
-            configure_flags: --disable-compat30 --disable-sys-libs --with-libcurl --disable-webview
+            configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
             skip_samples: true
             use_asan: true
             use_xvfb: true
