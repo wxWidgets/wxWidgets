@@ -339,9 +339,12 @@ static int my_sort( int *v1, int *v2 )
 
 #define INITIAL_NUMBER_OF_ITEMS 10000
 
-MyListModel::MyListModel() :
+MyListModel::MyListModel(int modelFlags) :
         wxDataViewVirtualListModel( INITIAL_NUMBER_OF_ITEMS )
 {
+    const wxString multiLineText = L"top (\u1ED6)\ncentre\nbottom (g)";
+    const bool useMultiLine = (modelFlags & MODEL_USE_MULTI_LINE_TEXT) != 0;
+
     // the first 100 items are really stored in this model;
     // all the others are synthesized on request
     static const unsigned NUMBER_REAL_ITEMS = 100;
@@ -349,17 +352,32 @@ MyListModel::MyListModel() :
     m_toggleColValues.reserve(NUMBER_REAL_ITEMS);
     m_textColValues.reserve(NUMBER_REAL_ITEMS);
     m_toggleColValues.push_back(false);
-    m_textColValues.push_back("first row with long label to test ellipsization");
+    m_textColValues.push_back(useMultiLine
+        ? multiLineText
+        : wxString("first row with long label to test ellipsization"));
     for (unsigned int i = 1; i < NUMBER_REAL_ITEMS; i++)
     {
         m_toggleColValues.push_back(false);
         m_textColValues.push_back(wxString::Format("real row %d", i));
     }
 
-    m_iconColValues.assign(NUMBER_REAL_ITEMS, "test");
+    m_iconColValues.assign(NUMBER_REAL_ITEMS,
+        useMultiLine ? multiLineText : wxString("test"));
 
     m_icon[0] = wxIcon( null_xpm );
-    m_icon[1] = wxIcon( wx_small_xpm );
+
+    const int newSize = m_icon[0].GetWidth() * 2;
+    const bool useTallRows = (modelFlags & MODEL_USE_TALL_ROWS) != 0;
+
+    if ( useTallRows )
+        m_icon[0].CopyFromBitmap(
+            wxImage(null_xpm).Rescale(newSize, newSize));
+
+    if ( !useTallRows || (modelFlags & MODEL_KEEP_LOGO_SMALL) )
+        m_icon[1] = wxIcon( wx_small_xpm );
+    else
+        m_icon[1].CopyFromBitmap(
+            wxImage(wx_small_xpm).Rescale(newSize, newSize));
 }
 
 void MyListModel::Prepend( const wxString &text )
