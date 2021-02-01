@@ -15,13 +15,16 @@
 
 class wxGTKCairoDCImpl: public wxGCDCImpl
 {
+    typedef wxGCDCImpl BaseType;
 public:
     wxGTKCairoDCImpl(wxDC* owner);
-    wxGTKCairoDCImpl(wxDC* owner, double scaleFactor);
-    wxGTKCairoDCImpl(wxDC* owner, wxWindow* window);
+    wxGTKCairoDCImpl(wxDC* owner, wxWindow* window, wxLayoutDirection dir = wxLayout_Default, int width = 0);
 
     virtual void DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask) wxOVERRIDE;
+    virtual void DoDrawCheckMark(int x, int y, int width, int height) wxOVERRIDE;
     virtual void DoDrawIcon(const wxIcon& icon, int x, int y) wxOVERRIDE;
+    virtual void DoDrawText(const wxString& text, int x, int y) wxOVERRIDE;
+    virtual void DoDrawRotatedText(const wxString& text, int x, int y, double angle) wxOVERRIDE;
 #if wxUSE_IMAGE
     virtual bool DoFloodFill(int x, int y, const wxColour& col, wxFloodFillStyle style) wxOVERRIDE;
 #endif
@@ -32,12 +35,15 @@ public:
     virtual void* GetCairoContext() const wxOVERRIDE;
 
     virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+    virtual wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
 
 protected:
     // Set m_size from the given (valid) GdkWindow.
     void InitSize(GdkWindow* window);
 
     wxSize m_size;
+    wxLayoutDirection m_layoutDir;
 
     wxDECLARE_NO_COPY_CLASS(wxGTKCairoDCImpl);
 };
@@ -108,7 +114,7 @@ private:
 class WXDLLIMPEXP_CORE wxGTKCairoDC: public wxDC
 {
 public:
-    wxGTKCairoDC(cairo_t* cr, wxWindow* window);
+    wxGTKCairoDC(cairo_t* cr, wxWindow* window, wxLayoutDirection dir = wxLayout_LeftToRight, int width = 0);
 
     wxDECLARE_NO_COPY_CLASS(wxGTKCairoDC);
 };

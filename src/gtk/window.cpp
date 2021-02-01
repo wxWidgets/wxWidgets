@@ -5065,10 +5065,12 @@ bool wxWindowGTK::DoIsExposed( int x, int y ) const
 
 bool wxWindowGTK::DoIsExposed( int x, int y, int w, int h ) const
 {
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return m_updateRegion.Contains(x-w, y, w, h) != wxOutRegion;
-    else
-        return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
+#endif
+
+    return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
 }
 
 #ifdef __WXGTK3__
@@ -5086,6 +5088,13 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
         cairo_rectangle(cr, rect.x, rect.y, rect.width, rect.height);
         cairo_clip(cr);
     }
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        // wxDC is mirrored for RTL
+        const int w = gdk_window_get_width(gtk_widget_get_window(m_wxwindow));
+        cairo_translate(cr, w, 0);
+        cairo_scale(cr, -1, 1);
+    }
     double x1, y1, x2, y2;
     cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
 
@@ -5094,7 +5103,6 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 
     m_paintContext = cr;
     m_updateRegion = wxRegion(int(x1), int(y1), int(x2 - x1), int(y2 - y1));
-    m_nativeUpdateRegion = m_updateRegion;
 #else // !__WXGTK3__
     m_updateRegion = wxRegion(region);
 #if wxGTK_HAS_COMPOSITING_SUPPORT
@@ -5106,6 +5114,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 
     m_nativeUpdateRegion = m_updateRegion;
 
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
         // Transform m_updateRegion under RTL
@@ -5128,6 +5137,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             ++upd;
         }
     }
+#endif
 
     switch ( GetBackgroundStyle() )
     {
@@ -5158,7 +5168,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
         case wxBG_STYLE_ERASE:
             {
 #ifdef __WXGTK3__
-                wxGTKCairoDC dc(cr, static_cast<wxWindow*>(this));
+                wxGTKCairoDC dc(cr, static_cast<wxWindow*>(this), GetLayoutDirection());
 #else
                 wxWindowDC dc( (wxWindow*)this );
                 dc.SetDeviceClippingRegion( m_updateRegion );

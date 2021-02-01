@@ -220,10 +220,6 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     if (flags & wxCONTROL_DIRTY)
         button = wxGTKPrivate::GetHeaderButtonWidgetLast();
 
-    int x_diff = 0;
-    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
-        x_diff = rect.width;
-
     GtkStateType state = GTK_STATE_NORMAL;
     if (flags & wxCONTROL_DISABLED)
         state = GTK_STATE_INSENSITIVE;
@@ -252,8 +248,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         sc.AddTreeviewHeaderButton(pos);
 
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
-        gtk_render_background(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
-        gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+        gtk_render_background(sc, cr, rect.x, rect.y, rect.width, rect.height);
+        gtk_render_frame(sc, cr, rect.x, rect.y, rect.width, rect.height);
     }
     else
 #endif // GTK >= 3.20
@@ -261,11 +257,15 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         GtkStyleContext* sc = gtk_widget_get_style_context(button);
         gtk_style_context_save(sc);
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
-        gtk_render_background(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
-        gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+        gtk_render_background(sc, cr, rect.x, rect.y, rect.width, rect.height);
+        gtk_render_frame(sc, cr, rect.x, rect.y, rect.width, rect.height);
         gtk_style_context_restore(sc);
     }
 #else
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
+
     GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     gtk_paint_box
     (
@@ -305,7 +305,7 @@ int wxRendererGTK::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 
 // draw a ">" or "v" button
 void
-wxRendererGTK::DrawTreeItemButton(wxWindow* win,
+wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED_IN_GTK3(win),
                                   wxDC& dc, const wxRect& rect, int flags)
 {
     wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
@@ -313,10 +313,6 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
         return;
 
     GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
-
-    int x_diff = 0;
-    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
-        x_diff = rect.width;
 
 #ifdef __WXGTK3__
     int state = GTK_STATE_FLAG_NORMAL;
@@ -340,9 +336,13 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     gtk_style_context_save(sc);
     gtk_style_context_set_state(sc, GtkStateFlags(state));
     gtk_style_context_add_class(sc, GTK_STYLE_CLASS_EXPANDER);
-    gtk_render_expander(sc, drawable, x - x_diff, y, expander_size, expander_size);
+    gtk_render_expander(sc, drawable, x, y, expander_size, expander_size);
     gtk_style_context_restore(sc);
 #else
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
+
     GtkStateType state;
     if ( flags & wxCONTROL_CURRENT )
         state = GTK_STATE_PRELIGHT;
@@ -444,14 +444,10 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
         rect.width = size.x;
     }
 
-    int x_diff = 0;
-    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
-        x_diff = rect.width;
-
 #ifdef __WXGTK3__
     wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.AddWindow();
-    gtk_render_background(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
+    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
 
     sc.Add(GTK_TYPE_PANED, "paned", "pane-separator", NULL);
     if (gtk_check_version(3,20,0) == NULL)
@@ -459,8 +455,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
 
     gtk_style_context_set_state(sc,
         flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
-    gtk_render_handle(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
+    gtk_render_handle(sc, drawable, rect.x, rect.y, rect.width, rect.height);
 #else
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
+
     GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
@@ -731,8 +731,17 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
     const int w = info.indicator_width + info.margin_left + info.margin_right;
     const int h = info.indicator_height + info.margin_top + info.margin_bottom;
 
-    const int x = rect.x + (rect.width - w) / 2;
-    const int y = rect.y + (rect.height - h) / 2;
+    int x = rect.x + (rect.width  - w) / 2;
+    int y = rect.y + (rect.height - h) / 2;
+
+    const bool isRTL = dc.GetLayoutDirection() == wxLayout_RightToLeft;
+    if (isRTL)
+    {
+        // checkbox is not mirrored
+        cairo_save(cr);
+        cairo_scale(cr, -1, 1);
+        x = -x - w;
+    }
 
     if (gtk_check_version(3,20,0) == NULL)
     {
@@ -756,6 +765,9 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         gtk_render_check(sc, cr, x, y, w, h);
         gtk_style_context_restore(sc);
     }
+    if (isRTL)
+        cairo_restore(cr);
+
 #else // !__WXGTK3__
     GtkWidget* button = wxGTKPrivate::GetCheckButtonWidget();
 
@@ -867,10 +879,6 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
 
     if (flags & wxCONTROL_SELECTED)
     {
-        int x_diff = 0;
-        if (win->GetLayoutDirection() == wxLayout_RightToLeft)
-            x_diff = rect.width;
-
         GtkWidget* treeWidget = wxGTKPrivate::GetTreeWidget();
 
 #ifdef __WXGTK3__
@@ -881,9 +889,13 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
             state |= GTK_STATE_FLAG_FOCUSED;
         gtk_style_context_set_state(sc, GtkStateFlags(state));
         gtk_style_context_add_class(sc, GTK_STYLE_CLASS_CELL);
-        gtk_render_background(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
+        gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
         gtk_style_context_restore(sc);
 #else
+        int x_diff = 0;
+        if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+            x_diff = rect.width;
+
         // the wxCONTROL_FOCUSED state is deduced
         // directly from the m_wxwindow by GTK+
         gtk_paint_flat_box(gtk_widget_get_style(treeWidget),
