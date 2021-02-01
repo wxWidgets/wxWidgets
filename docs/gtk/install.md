@@ -127,10 +127,11 @@ libraries, wxWidgets also provides built-in versions, that can be
 linked into wx libraries themselves, which can be useful to
 minimize external dependencies.
 
-    --disable-sys-libs      Don't use system libraries at all.
-                            Use built-in ones when possible or
-                            disable support for the corresponding
-                            feature otherwise.
+    --disable-sys-libs      Don't use system libraries when there is
+                            a built-in version included in wxWidgets.
+                            Note that other system libraries can,
+                            and typically will, still be used if
+                            found.
 
     --without-libpng        Disables PNG image format code.
                             Don't use libpng (although GTK
