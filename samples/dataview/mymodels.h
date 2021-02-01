@@ -216,7 +216,7 @@ public:
         Col_Max
     };
 
-    MyListModel();
+    MyListModel(int modelFlags);
 
     // helper methods to change the model
 
@@ -309,4 +309,11 @@ private:
     wxArrayString m_strings;
 
     wxDECLARE_NO_COPY_CLASS(MyIndexListModel);
+};
+
+enum ModelFlags
+{
+    MODEL_USE_TALL_ROWS = 1 << 0,
+    MODEL_KEEP_LOGO_SMALL = 1 << 1,
+    MODEL_USE_MULTI_LINE_TEXT = 1 << 2
 };
