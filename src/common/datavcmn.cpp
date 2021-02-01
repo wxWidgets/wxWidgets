@@ -32,6 +32,10 @@
     #include "wx/access.h"
 #endif // wxUSE_ACCESSIBILITY
 
+// Uncomment this line to, for custom renderers, visually show the extent
+// of both a cell and its item.
+//#define DEBUG_RENDER_EXTENTS
+
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
 namespace
@@ -1034,6 +1038,20 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
     wxDCFontChanger changeFont(*dc);
     if ( m_attr.HasFont() )
         changeFont.Set(m_attr.GetEffectiveFont(dc->GetFont()));
+
+#ifdef DEBUG_RENDER_EXTENTS
+    {
+
+    wxDCBrushChanger changeBrush(*dc, *wxTRANSPARENT_BRUSH);
+    wxDCPenChanger changePen(*dc, *wxRED);
+
+    dc->DrawRectangle(rectCell);
+
+    dc->SetPen(*wxGREEN);
+    dc->DrawRectangle(rectItem);
+
+    }
+#endif
 
     Render(rectItem, dc, state);
 }
