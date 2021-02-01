@@ -6,14 +6,20 @@ on:
     branches:
       - master
     paths-ignore:
+      - 'distrib'
       - 'docs'
       - 'interface'
+      - '*.md'
+      - '*.yml'
   pull_request:
     branches:
       - master
     paths-ignore:
+      - 'distrib'
       - 'docs'
       - 'interface'
+      - '*.md'
+      - '*.yml'
 
 jobs:
   build:
