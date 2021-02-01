@@ -780,12 +780,20 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnCharHook( wxKeyEvent &event );
     void OnChar( wxKeyEvent &event );
-    void OnVerticalNavigation(const wxKeyEvent& event, int delta);
     void OnLeftKey(wxKeyEvent& event);
     void OnRightKey(wxKeyEvent& event);
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
+
+    // Go to the item at position delta rows away (delta may be positive or
+    // negative) from the current row. The new row is made current and the
+    // selection is changed or extended depending on the modifier keys flags in
+    // the keyboard state.
+    //
+    // If adding delta would result in an invalid item, it's clamped to the
+    // valid items range.
+    void GoToRelativeRow(const wxKeyboardState& kbdState, int delta);
 
     void UpdateDisplay();
     void RecalculateDisplay();
@@ -4609,11 +4617,11 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_UP:
-            OnVerticalNavigation(event, -1);
+            GoToRelativeRow(event, -1);
             break;
 
         case WXK_DOWN:
-            OnVerticalNavigation(event, +1);
+            GoToRelativeRow(event, +1);
             break;
 
         case '+':
@@ -4645,19 +4653,19 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_END:
-            OnVerticalNavigation(event, +(int)GetRowCount());
+            GoToRelativeRow(event, +(int)GetRowCount());
             break;
 
         case WXK_HOME:
-            OnVerticalNavigation(event, -(int)GetRowCount());
+            GoToRelativeRow(event, -(int)GetRowCount());
             break;
 
         case WXK_PAGEUP:
-            OnVerticalNavigation(event, -(GetCountPerPage() - 1));
+            GoToRelativeRow(event, -(GetCountPerPage() - 1));
             break;
 
         case WXK_PAGEDOWN:
-            OnVerticalNavigation(event, +(GetCountPerPage() - 1));
+            GoToRelativeRow(event, +(GetCountPerPage() - 1));
             break;
 
         default:
@@ -4665,7 +4673,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     }
 }
 
-void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int delta)
+void wxDataViewMainWindow::GoToRelativeRow(const wxKeyboardState& kbdState, int delta)
 {
     // if there is no selection, we cannot move it anywhere
     if (!HasCurrentRow() || IsEmpty())
@@ -4689,7 +4697,7 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
 
     // in single selection we just ignore Shift as we can't select several
     // items anyhow
-    if ( event.ShiftDown() && !IsSingleSel() )
+    if ( kbdState.ShiftDown() && !IsSingleSel() )
     {
         RefreshRow( oldCurrent );
 
@@ -4714,12 +4722,12 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
         RefreshRow( oldCurrent );
 
         // all previously selected items are unselected unless ctrl is held
-        if ( !event.ControlDown() )
+        if ( !kbdState.ControlDown() )
             UnselectAllRows();
 
         ChangeCurrentRow( newCurrent );
 
-        if ( !event.ControlDown() )
+        if ( !kbdState.ControlDown() )
         {
             SelectRow( m_currentRow, true );
             SendSelectionChangedEvent(GetItemByRow(m_currentRow));
@@ -4875,7 +4883,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
             {
                 // go to the first column of the next row:
                 idx = 0;
-                OnVerticalNavigation(wxKeyEvent()/*dummy*/, +1);
+                GoToRelativeRow(wxKeyboardState()/*dummy*/, +1);
             }
             else
             {
@@ -4893,7 +4901,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
             {
                 // go to the last column of the previous row:
                 idx = (int)GetOwner()->GetColumnCount() - 1;
-                OnVerticalNavigation(wxKeyEvent()/*dummy*/, -1);
+                GoToRelativeRow(wxKeyboardState()/*dummy*/, -1);
             }
             else
             {
