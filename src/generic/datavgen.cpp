@@ -786,10 +786,15 @@ public:
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
+    // Go to the specified row, i.e. make it current and change or extend the
+    // selection extended depending on the modifier keys flags in the keyboard
+    // state.
+    //
+    // The row must be valid.
+    void GoToRow(const wxKeyboardState& state, unsigned int row);
+
     // Go to the item at position delta rows away (delta may be positive or
-    // negative) from the current row. The new row is made current and the
-    // selection is changed or extended depending on the modifier keys flags in
-    // the keyboard state.
+    // negative) from the current row.
     //
     // If adding delta would result in an invalid item, it's clamped to the
     // valid items range.
@@ -4689,8 +4694,14 @@ void wxDataViewMainWindow::GoToRelativeRow(const wxKeyboardState& kbdState, int 
     if ( newRow >= rowCount )
         newRow = rowCount - 1;
 
+    GoToRow(kbdState, newRow);
+}
+
+void
+wxDataViewMainWindow::GoToRow(const wxKeyboardState& kbdState,
+                              unsigned int newCurrent)
+{
     unsigned int oldCurrent = m_currentRow;
-    unsigned int newCurrent = (unsigned int)newRow;
 
     if ( newCurrent == oldCurrent )
         return;
@@ -4780,12 +4791,7 @@ void wxDataViewMainWindow::OnLeftKey(wxKeyEvent& event)
                 int parent = GetRowByItem( parent_node->GetItem() );
                 if ( parent >= 0 )
                 {
-                    unsigned int row = m_currentRow;
-                    SelectRow( row, false);
-                    SelectRow( parent, true );
-                    ChangeCurrentRow( parent );
-                    GetOwner()->EnsureVisibleRowCol( parent, -1 );
-                    SendSelectionChangedEvent( parent_node->GetItem() );
+                    GoToRow(event, parent);
                 }
             }
         }
@@ -4813,12 +4819,7 @@ void wxDataViewMainWindow::OnRightKey(wxKeyEvent& event)
             else
             {
                 // if the node is already open, we move the selection to the first child
-                unsigned int row = m_currentRow;
-                SelectRow( row, false );
-                SelectRow( row + 1, true );
-                ChangeCurrentRow( row + 1 );
-                GetOwner()->EnsureVisibleRowCol( row + 1, -1 );
-                SendSelectionChangedEvent( GetItemByRow(row+1) );
+                GoToRelativeRow(event, +1);
             }
         }
         else
