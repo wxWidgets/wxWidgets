@@ -71,7 +71,7 @@ void wxBell()
 // ----------------------------------------------------------------------------
 // display characteristics
 // ----------------------------------------------------------------------------
-
+#if defined(__UNIX__)
 void *wxGetDisplay()
 {
     return wxGetDisplayInfo().dpy;
@@ -97,6 +97,7 @@ wxDisplayInfo wxGetDisplayInfo()
 #endif
     return info;
 }
+#endif
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
