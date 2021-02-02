@@ -33,10 +33,6 @@ msgstr "გ&ახსენი დეფექტიანი ფაილი"
 msgid "&Play a game"
 msgstr "ითამაშე &თამაში"
 
-#: ../internat.cpp:137
-msgid "&File"
-msgstr "&ფაილი"
-
 #: ../internat.cpp:138
 msgid "&Test"
 msgstr "&ტესტი"
