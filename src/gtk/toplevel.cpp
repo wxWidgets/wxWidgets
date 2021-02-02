@@ -505,8 +505,10 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
 #ifdef GDK_WINDOWING_X11
     GdkDisplay* display = gdk_window_get_display(window);
 
-    if (!GDK_IS_X11_DISPLAY(display))
+#ifdef __WXGTK3__
+    if (strcmp("GdkX11Display", g_type_name(G_TYPE_FROM_INSTANCE(display))) != 0)
         return false;
+#endif
 
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     Atom xproperty = gdk_x11_atom_to_xatom_for_display(display, property);
@@ -766,9 +768,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect (m_widget, "key_press_event",
                       G_CALLBACK (wxgtk_tlw_key_press_event), NULL);
 
+#ifdef __WXGTK3__
+    const char* displayTypeName =
+        g_type_name(G_TYPE_FROM_INSTANCE(gtk_widget_get_display(m_widget)));
+#endif
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
-    if (GDK_IS_X11_SCREEN(gtk_window_get_screen(GTK_WINDOW(m_widget))))
+    if (strcmp("GdkX11Display", displayTypeName) == 0)
 #endif
     {
         gtk_widget_add_events(m_widget, GDK_PROPERTY_CHANGE_MASK);
@@ -806,7 +812,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
             m_gdkDecor |= GDK_DECOR_TITLE;
 #if GTK_CHECK_VERSION(3,10,0)
         else if (
-            strcmp("GdkWaylandDisplay", g_type_name(G_TYPE_FROM_INSTANCE(gtk_widget_get_display(m_widget)))) == 0 &&
+            strcmp("GdkWaylandDisplay", displayTypeName) == 0 &&
             gtk_check_version(3,10,0) == NULL)
         {
             gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
@@ -924,7 +930,9 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     Window xroot = None;
     wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
 
-    if (GDK_IS_X11_DISPLAY(display))
+#ifdef __WXGTK3__
+    if (strcmp("GdkX11Display", g_type_name(G_TYPE_FROM_INSTANCE(display))) == 0)
+#endif
     {
         xdpy = GDK_DISPLAY_XDISPLAY(display);
         xroot = GDK_WINDOW_XID(gdk_screen_get_root_window(screen));
@@ -1048,6 +1056,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool deferShow = show && !m_isShown && !m_isIconized && m_deferShow;
     if (deferShow)
     {
+        GdkScreen* screen = gtk_widget_get_screen(m_widget);
         deferShow = m_deferShowAllowed &&
             // Assume size (from cache or wxPersistentTLW) is correct.
             // Avoids problems when WM initially provides an incorrect value
@@ -1056,7 +1065,9 @@ bool wxTopLevelWindowGTK::Show( bool show )
 
             gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
-            GDK_IS_X11_DISPLAY(gtk_widget_get_display(m_widget)) &&
+#ifdef __WXGTK3__
+            strcmp("GdkX11Screen", g_type_name(G_TYPE_FROM_INSTANCE(screen))) == 0 &&
+#endif
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
@@ -1068,7 +1079,6 @@ bool wxTopLevelWindowGTK::Show( bool show )
 #endif
         if (deferShow)
         {
-            GdkScreen* screen = gtk_widget_get_screen(m_widget);
             GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
             deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
 

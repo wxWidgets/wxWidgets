@@ -179,7 +179,7 @@ bool wxDisplayImplGTK::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 static inline bool wxIsX11GDKScreen(GdkScreen* screen)
 {
-    return GDK_IS_X11_SCREEN(screen);
+    return strcmp("GdkX11Screen", g_type_name(G_TYPE_FROM_INSTANCE(screen))) == 0;
 }
 
 #else // !__WXGTK3__
