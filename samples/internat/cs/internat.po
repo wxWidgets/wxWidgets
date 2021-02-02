@@ -45,10 +45,6 @@ msgstr ""
 msgid "&3 N_() (gettext_noop)"
 msgstr ""
 
-#: internat.cpp:211
-msgid "&File"
-msgstr "&Soubor"
-
 #: internat.cpp:212
 msgid "&Test"
 msgstr "&Test"

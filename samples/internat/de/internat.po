@@ -34,10 +34,6 @@ msgstr "Ö&ffne Unsinn-Datei"
 msgid "&Play a game"
 msgstr "Spiele ein S&piel"
 
-#: ../internat.cpp:137
-msgid "&File"
-msgstr "&Datei"
-
 #: ../internat.cpp:138
 msgid "&Test"
 msgstr "&Test"

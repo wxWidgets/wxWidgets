@@ -328,7 +328,8 @@ MyFrame::MyFrame(wxLocale& locale)
     macro_menu->Append(INTERNAT_MACRO_9, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 2));
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, _("&File"));
+    // Using stock label here means that it will be automatically translated.
+    menu_bar->Append(file_menu, wxGetStockLabel(wxID_FILE));
     menu_bar->Append(test_menu, _("&Test"));
     menu_bar->Append(macro_menu, _("&Macro"));
     SetMenuBar(menu_bar);
