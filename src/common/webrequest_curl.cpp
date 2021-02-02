@@ -37,6 +37,11 @@
     #define wxCURL_HAVE_MULTI_WAIT 0
 #endif
 
+// The new name was introduced in curl 7.21.6.
+#ifndef CURLOPT_ACCEPT_ENCODING
+    #define CURLOPT_ACCEPT_ENCODING CURLOPT_ENCODING
+#endif
+
 //
 // wxWebResponseCURL
 //
