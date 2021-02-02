@@ -170,9 +170,11 @@ protected:
 
         char buf[5];
         (void)stream_in.Read(buf, 5);
-        CPPUNIT_ASSERT_EQUAL(5, stream_in.LastRead());
+        REQUIRE( stream_in.GetLastError() == wxSTREAM_NO_ERROR );
+        CHECK( stream_in.LastRead() == 5 );
         (void)stream_in.GetC();
-        CPPUNIT_ASSERT_EQUAL(1, stream_in.LastRead());
+        REQUIRE( stream_in.GetLastError() == wxSTREAM_NO_ERROR );
+        CHECK( stream_in.LastRead() == 1 );
     }
 
     void Input_CanRead()
