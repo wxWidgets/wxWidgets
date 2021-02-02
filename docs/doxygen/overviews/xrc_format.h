@@ -2674,14 +2674,15 @@ should be processed on. It is filtered out and ignored on any other platforms.
 
 Possible elemental values are:
 @beginDefList
-@itemdef{ @c win, Windows }
-@itemdef{ @c mac, macOS (or Mac Classic in wxWidgets version supporting it) }
+@itemdef{ @c msw, Windows, preferred platform name }
+@itemdef{ @c win, Windows, alternative synonym }
+@itemdef{ @c mac, macOS or iOS }
 @itemdef{ @c unix, Any Unix platform @em except macOS }
 @endDefList
 
 Examples:
 @code
-<label platform="win">Windows</label>
+<label platform="msw">Windows</label>
 <label platform="unix">Unix</label>
 <label platform="mac">macOS</label>
 <help platform="mac|unix">Not a Windows machine</help>

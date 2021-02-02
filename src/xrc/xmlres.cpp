@@ -42,6 +42,7 @@
 #include "wx/hashset.h"
 #include "wx/scopedptr.h"
 #include "wx/config.h"
+#include "wx/platinfo.h"
 
 #include <limits.h>
 #include <locale.h>
@@ -585,15 +586,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
 
             while (tkn.HasMoreTokens())
             {
-                s = tkn.GetNextToken();
-#ifdef __WINDOWS__
-                if (s == wxT("win")) isok = true;
-#endif
-#if defined(__MAC__) || defined(__APPLE__)
-                if (s == wxT("mac")) isok = true;
-#elif defined(__UNIX__)
-                if (s == wxT("unix")) isok = true;
-#endif
+                isok = wxPlatformId::MatchesCurrent(tkn.GetNextToken());
 
                 if (isok)
                     break;

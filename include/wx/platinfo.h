@@ -137,6 +137,40 @@ struct wxLinuxDistributionInfo
     { return !(*this == ldi); }
 };
 
+// Platform ID is a very broad platform categorization used in external files
+// (e.g. XRC), so the values here must remain stable and cannot be changed.
+class wxPlatformId
+{
+public:
+    // Returns the preferred current platform name, use MatchesCurrent() to
+    // check if the name is one of the possibly several names corresponding to
+    // the current platform.
+    static wxString GetCurrent()
+    {
+#ifdef __WINDOWS__
+        return wxASCII_STR("msw");
+#elif defined(__APPLE__)
+        return wxASCII_STR("mac");
+#elif defined(__UNIX__)
+        return wxASCII_STR("unix");
+#else
+        return wxString();
+#endif
+    }
+
+    // Returns true if the given string matches the current platform.
+    static bool MatchesCurrent(const wxString& s)
+    {
+        // Under MSW we also support "win" platform name for compatibility with
+        // the existing XRC files using it.
+#ifdef __WINDOWS__
+        if (s == wxASCII_STR("win"))
+            return true;
+#endif // __WINDOWS__
+
+        return s == GetCurrent();
+    }
+};
 
 // ----------------------------------------------------------------------------
 // wxPlatformInfo
