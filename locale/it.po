@@ -440,6 +440,11 @@ msgstr "&Altezza:"
 msgid "&Help"
 msgstr "&Aiuto"
 
+# The help menu is called just '?' on Italian versions of Windows
+msgctxt "standard Windows menu"
+msgid "&Help"
+msgstr "&?"
+
 #: ../include/wx/richmsgdlg.h:30
 msgid "&Hide details"
 msgstr "&Nascondi dettagli"
