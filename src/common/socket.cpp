@@ -49,6 +49,8 @@
     #include <errno.h>
 #endif
 
+#include "wx/crt.h"
+
 // we use MSG_NOSIGNAL to avoid getting SIGPIPE when sending data to a remote
 // host which closed the connection if it is available, otherwise we rely on
 // SO_NOSIGPIPE existency
@@ -649,6 +651,10 @@ int wxSocketImpl::RecvStream(void *buffer, int size)
 {
     int ret;
     DO_WHILE_EINTR( ret, recv(m_fd, static_cast<char *>(buffer), size, 0) );
+
+    wxFprintf(stderr, "%s thread %lx: Got %d bytes from recv(%zd)\n",
+              wxDateTime::UNow().Format("%H:%M:%S.%l"),
+              wxThread::GetCurrentId(), ret, m_fd);
 
     if ( !ret )
     {
