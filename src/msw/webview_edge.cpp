@@ -19,6 +19,7 @@
 #include "wx/log.h"
 #include "wx/stdpaths.h"
 #include "wx/thread.h"
+#include "wx/tokenzr.h"
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/json.h"
 #include "wx/msw/private.h"
@@ -53,6 +54,7 @@ GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2Browser
 
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
 wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
+wxString wxWebViewEdgeImpl::ms_version;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
     m_ctrl(webview)
@@ -135,6 +137,7 @@ bool wxWebViewEdgeImpl::Initialize()
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
         return false;
     }
+    ms_version = versionStr;
 
     ms_loaderDll.Attach(loaderDll.Detach());
 
@@ -876,6 +879,18 @@ bool wxWebViewFactoryEdge::IsAvailable()
     return wxWebViewEdgeImpl::Initialize();
 }
 
+wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
+{
+    IsAvailable(); // Make sure ms_version string is initialized (if available)
+    long versions[3] = { 0, 0, 0 };
+    wxArrayString tokens = wxStringTokenize(wxWebViewEdgeImpl::ms_version, ". ");
+    for (size_t i = 0; i < 3; i++)
+    {
+        if (tokens.size() > i)
+            tokens[i].ToLong(&versions[i]);
+    }
+    return wxVersionInfo("Microsoft Edge WebView2", versions[0], versions[1], versions[2]);
+}
 
 // ----------------------------------------------------------------------------
 // Module ensuring all global/singleton objects are destroyed on shutdown.

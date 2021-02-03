@@ -231,6 +231,13 @@ public:
         @since 3.1.5
     */
     virtual bool IsAvailable();
+
+    /**
+        Retrieve the version information about this backend implementation.
+
+        @since 3.1.5
+    */
+    virtual wxVersionInfo GetVersionInfo(const wxString& backend);
 };
 
 /**
@@ -492,6 +499,12 @@ public:
     */
     static bool IsBackendAvailable(const wxString& backend);
 
+    /**
+        Retrieve the version information about the backend implementation.
+
+        @since 3.1.5
+    */
+    static wxVersionInfo GetBackendVersionInfo(const wxString& backend);
 
     /**
         Get the title of the current web page, or its URL/path if title is not

@@ -398,6 +398,7 @@ WebFrame::WebFrame(const wxString& url) :
     }
 #endif
     m_browser = wxWebView::New(backend);
+    wxLogMessage("Backend version: %s", wxWebView::GetBackendVersionInfo(backend).ToString());
 #ifdef __WXMAC__
     // With WKWebView handlers need to be registered before creation
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));

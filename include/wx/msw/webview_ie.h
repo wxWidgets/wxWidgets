@@ -192,6 +192,7 @@ public:
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
     { return new wxWebViewIE(parent, id, url, pos, size, style, name); }
+    virtual wxVersionInfo GetVersionInfo() wxOVERRIDE;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)

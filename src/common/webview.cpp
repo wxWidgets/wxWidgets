@@ -94,6 +94,15 @@ bool wxWebView::IsBackendAvailable(const wxString& backend)
         return false;
 }
 
+wxVersionInfo wxWebView::GetBackendVersionInfo(const wxString& backend)
+{
+    wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
+    if (iter != m_factoryMap.end())
+        return iter->second->GetVersionInfo();
+    else
+        return wxVersionInfo();
+}
+
 // static 
 wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backend)
 {

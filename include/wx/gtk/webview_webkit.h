@@ -198,6 +198,9 @@ public:
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
     { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
+#if wxUSE_WEBVIEW_WEBKIT2
+    virtual wxVersionInfo GetVersionInfo() wxOVERRIDE;
+#endif
 };
 
 

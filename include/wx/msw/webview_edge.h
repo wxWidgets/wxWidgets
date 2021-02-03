@@ -154,6 +154,7 @@ public:
         return new wxWebViewEdge(parent, id, url, pos, size, style, name);
     }
     virtual bool IsAvailable() wxOVERRIDE;
+    virtual wxVersionInfo GetVersionInfo() wxOVERRIDE;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE && defined(__WXMSW__)

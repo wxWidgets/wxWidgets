@@ -508,6 +508,16 @@ wxgtk_authorize_authenticated_peer_cb(GDBusAuthObserver *,
 } // extern "C"
 
 //-----------------------------------------------------------------------------
+// wxWebViewFactoryWebKit
+//-----------------------------------------------------------------------------
+
+wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
+{
+    return wxVersionInfo("webkit2", webkit_get_major_version(),
+        webkit_get_minor_version(), webkit_get_micro_version());
+}
+
+//-----------------------------------------------------------------------------
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
 

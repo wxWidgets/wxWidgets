@@ -19,6 +19,7 @@
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
+#include "wx/tokenzr.h"
 
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
@@ -49,6 +50,22 @@ enum //Internal find flags
     wxWEBVIEW_FIND_REMOVE_HIGHLIGHT =  0x0002
 };
 
+}
+
+// wxWebViewFactoryIE
+wxVersionInfo wxWebViewFactoryIE::GetVersionInfo()
+{
+    wxRegKey key(wxRegKey::HKLM, "Software\\Microsoft\\Internet Explorer");
+    wxString value;
+    key.QueryValue("Version", value);
+    long versions[3] = { 0, 0, 0 };
+    wxArrayString tokens = wxStringTokenize(value, ". ");
+    for (size_t i = 0; i < 3; i++)
+    {
+        if (tokens.size() > i)
+            tokens[i].ToLong(&versions[i]);
+    }
+    return wxVersionInfo("Internet Explorer", versions[0], versions[1], versions[2]);
 }
 
 //Convenience function for error conversion

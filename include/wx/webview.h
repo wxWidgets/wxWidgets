@@ -18,6 +18,7 @@
 #include "wx/sstream.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
+#include "wx/versioninfo.h"
 
 #if defined(__WXOSX__)
     #include "wx/osx/webviewhistoryitem_webkit.h"
@@ -120,6 +121,7 @@ public:
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
     virtual bool IsAvailable() { return true; }
+    virtual wxVersionInfo GetVersionInfo() { return wxVersionInfo(); }
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
@@ -158,6 +160,7 @@ public:
     static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
     static bool IsBackendAvailable(const wxString& backend);
+    static wxVersionInfo GetBackendVersionInfo(const wxString& backend);
 
     // General methods
     virtual void EnableContextMenu(bool enable = true)
