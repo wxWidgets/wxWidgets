@@ -66,6 +66,7 @@ public:
     ICoreWebView2Settings* GetSettings();
 
     static wxDynamicLibrary ms_loaderDll;
+    static wxString ms_browserExecutableDir;
 
     static bool Initialize();
 

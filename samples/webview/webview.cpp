@@ -30,6 +30,9 @@
 #if wxUSE_WEBVIEW_IE
 #include "wx/msw/webview_ie.h"
 #endif
+#if wxUSE_WEBVIEW_EDGE
+#include "wx/msw/webview_edge.h"
+#endif
 #include "wx/webviewarchivehandler.h"
 #include "wx/webviewfshandler.h"
 #include "wx/numdlg.h"
@@ -37,6 +40,7 @@
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
 #include "wx/fs_mem.h"
+#include "wx/stdpaths.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -373,6 +377,16 @@ WebFrame::WebFrame(const wxString& url) :
     // Create the webview
     wxString backend = wxWebViewBackendDefault;
 #ifdef __WXMSW__
+    // Check if a fixed version of edge is present in
+    // $executable_path/edge_fixed and use it
+    wxFileName edgeFixedDir(wxStandardPaths::Get().GetExecutablePath());
+    edgeFixedDir.SetFullName("");
+    edgeFixedDir.AppendDir("edge_fixed");
+    if (edgeFixedDir.DirExists())
+    {
+        wxWebViewEdge::MSWSetBrowserExecutableDir(edgeFixedDir.GetFullPath());
+        wxLogMessage("Using fixed edge version");
+    }
     if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
     {
         wxLogMessage("Using Edge backend");

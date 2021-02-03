@@ -330,6 +330,12 @@ public:
     - Make sure to add a note about using the WebView2 SDK to your application
       documentation, as required by its licence
 
+    If your application should use a
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution#fixed-version-distribution-mode">
+    fixed version</a> of the WebView2 runtime you must use
+    wxWebViewEdge::MSWSetBrowserExecutableDir() to specify its usage before
+    using the edge backend.
+
     @par wxWEBVIEW_WEBKIT (GTK)
 
     Under GTK the WebKit backend uses

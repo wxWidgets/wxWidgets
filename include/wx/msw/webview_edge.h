@@ -122,6 +122,8 @@ public:
 
     virtual void* GetNativeBackend() const wxOVERRIDE;
 
+    static void MSWSetBrowserExecutableDir(const wxString& path);
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 

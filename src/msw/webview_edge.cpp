@@ -52,6 +52,7 @@ CreateCoreWebView2EnvironmentWithOptions_t wxCreateCoreWebView2EnvironmentWithOp
 GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2BrowserVersionString = NULL;
 
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
+wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
     m_ctrl(webview)
@@ -85,7 +86,7 @@ bool wxWebViewEdgeImpl::Create()
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 
     HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
-        nullptr,
+        ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
         nullptr,
         Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
@@ -127,7 +128,8 @@ bool wxWebViewEdgeImpl::Initialize()
 
     // Check if a Edge browser can be found by the loader DLL
     wxCoTaskMemPtr<wchar_t> versionStr;
-    HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(NULL, &versionStr);
+    HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
+        ms_browserExecutableDir.wc_str(), &versionStr);
     if (FAILED(hr) || !versionStr)
     {
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
@@ -780,6 +782,11 @@ bool wxWebViewEdge::QueryCommandEnabled(const wxString& command) const
 void wxWebViewEdge::ExecCommand(const wxString& command)
 {
     RunScript(wxString::Format("document.execCommand('%s');", command));
+}
+
+void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
+{
+    wxWebViewEdgeImpl::ms_browserExecutableDir = path;
 }
 
 bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
