@@ -15,8 +15,8 @@ the following two situations:
 
 @li when creating a new window you may specify @c wxID_ANY to let
     wxWidgets assign an unused identifier to it automatically
-@li when installing an event handler using either the event table
-    macros or wxEvtHandler::Connect,
+@li when installing an event handler using wxEvtHandler::Bind,
+    wxEvtHandler::Connect or the event table macros,
     you may use it to indicate that you want to handle the events
     coming from any control, regardless of its identifier
 
@@ -27,7 +27,8 @@ wxWidgets also defines a few standard command identifiers which may be used by
 the user code and also are sometimes used by wxWidgets itself. These reserved
 identifiers are all in the range between @c wxID_LOWEST and
 @c wxID_HIGHEST and, accordingly, the user code should avoid defining its
-own constants in this range (e.g. by using wxNewId()).
+own constants in this range (e.g. by using @c wxID_ANY and retrieving the
+control's id after it was created).
 
 Refer to @ref page_stockitems "the list of stock items" for the subset of standard IDs
 which are stock IDs as well.
