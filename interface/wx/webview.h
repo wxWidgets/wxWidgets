@@ -550,12 +550,12 @@ public:
         @return The HTML source code, or an empty string if no page is currently
                 shown.
     */
-    virtual wxString GetPageSource() const = 0;
+    virtual wxString GetPageSource() const;
 
     /**
         Get the text of the current page.
     */
-    virtual wxString GetPageText() const = 0;
+    virtual wxString GetPageText() const;
 
     /**
         Returns whether the web control is currently busy (e.g.\ loading a page).
@@ -702,36 +702,36 @@ public:
 
         @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanCopy() const = 0;
+    virtual bool CanCopy() const;
 
     /**
         Returns @true if the current selection can be cut.
 
          @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanCut() const = 0;
+    virtual bool CanCut() const;
 
     /**
         Returns @true if data can be pasted.
 
         @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanPaste() const = 0;
+    virtual bool CanPaste() const;
 
     /**
         Copies the current selection.
     */
-    virtual void Copy() = 0;
+    virtual void Copy();
 
     /**
         Cuts the current selection.
     */
-    virtual void Cut() = 0;
+    virtual void Cut();
 
     /**
         Pastes the current data.
     */
-    virtual void Paste() = 0;
+    virtual void Paste();
 
     /**
         @name Context Menu
@@ -842,34 +842,34 @@ public:
     /**
         Clears the current selection.
     */
-    virtual void ClearSelection() = 0;
+    virtual void ClearSelection();
 
     /**
         Deletes the current selection. Note that for @c wxWEBVIEW_BACKEND_WEBKIT
         the selection must be editable, either through SetEditable or the
         correct HTML attribute.
     */
-    virtual void DeleteSelection() = 0;
+    virtual void DeleteSelection();
 
     /**
         Returns the currently selected source, if any.
     */
-    virtual wxString GetSelectedSource() const = 0;
+    virtual wxString GetSelectedSource() const;
 
     /**
         Returns the currently selected text, if any.
     */
-    virtual wxString GetSelectedText() const = 0;
+    virtual wxString GetSelectedText() const;
 
     /**
         Returns @true if there is a current selection.
     */
-    virtual bool HasSelection() const = 0;
+    virtual bool HasSelection() const;
 
     /**
         Selects the entire page.
     */
-    virtual void SelectAll() = 0;
+    virtual void SelectAll();
 
     /**
         @name Undo / Redo
@@ -917,7 +917,7 @@ public:
               on the macOS WebKit backend.
         @since 2.9.5
     */
-    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT) = 0;
+    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT);
 
     /**
         @name Zoom
@@ -937,7 +937,7 @@ public:
         as provided by @c wxWebViewZoom.
         @return The current level of zoom.
     */
-    virtual wxWebViewZoom GetZoom() const = 0;
+    virtual wxWebViewZoom GetZoom() const;
 
     /**
         Get the zoom factor of the page.
@@ -958,7 +958,7 @@ public:
         steps provided by @c wxWebViewZoom.
         @param zoom How much to zoom (scale) the HTML document.
     */
-    virtual void SetZoom(wxWebViewZoom zoom) = 0;
+    virtual void SetZoom(wxWebViewZoom zoom);
 
     /**
         Set the zoom factor of the page.

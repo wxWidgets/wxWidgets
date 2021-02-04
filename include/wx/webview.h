@@ -171,8 +171,8 @@ public:
     virtual wxString GetCurrentTitle() const = 0;
     virtual wxString GetCurrentURL() const = 0;
     // TODO: handle choosing a frame when calling GetPageSource()?
-    virtual wxString GetPageSource() const = 0;
-    virtual wxString GetPageText() const = 0;
+    virtual wxString GetPageSource() const;
+    virtual wxString GetPageText() const;
     virtual bool IsBusy() const = 0;
     virtual bool IsContextMenuEnabled() const { return m_showMenu; }
     virtual bool IsAccessToDevToolsEnabled() const { return false; }
@@ -208,28 +208,28 @@ public:
 
     //Zoom
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
-    virtual wxWebViewZoom GetZoom() const = 0;
+    virtual wxWebViewZoom GetZoom() const;
     virtual float GetZoomFactor() const = 0;
     virtual wxWebViewZoomType GetZoomType() const = 0;
-    virtual void SetZoom(wxWebViewZoom zoom) = 0;
+    virtual void SetZoom(wxWebViewZoom zoom);
     virtual void SetZoomFactor(float zoom) = 0;
     virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
 
     //Selection
-    virtual void SelectAll() = 0;
-    virtual bool HasSelection() const = 0;
-    virtual void DeleteSelection() = 0;
-    virtual wxString GetSelectedText() const = 0;
-    virtual wxString GetSelectedSource() const = 0;
-    virtual void ClearSelection() = 0;
+    virtual void SelectAll() ;
+    virtual bool HasSelection() const;
+    virtual void DeleteSelection();
+    virtual wxString GetSelectedText() const;
+    virtual wxString GetSelectedSource() const;
+    virtual void ClearSelection();
 
     //Clipboard functions
-    virtual bool CanCut() const = 0;
-    virtual bool CanCopy() const = 0;
-    virtual bool CanPaste() const = 0;
-    virtual void Cut() = 0;
-    virtual void Copy() = 0;
-    virtual void Paste() = 0;
+    virtual bool CanCut() const;
+    virtual bool CanCopy() const;
+    virtual bool CanPaste() const;
+    virtual void Cut();
+    virtual void Copy();
+    virtual void Paste();
 
     //Undo / redo functionality
     virtual bool CanUndo() const = 0;
@@ -240,10 +240,13 @@ public:
     //Get the pointer to the underlying native engine.
     virtual void* GetNativeBackend() const = 0;
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) = 0;
+    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT);
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
+
+    bool QueryCommandEnabled(const wxString& command) const;
+    void ExecCommand(const wxString& command);
 
     // Count the number of calls to RunScript() in order to prevent
     // the_same variable from being used twice in more than one call.

@@ -51,6 +51,166 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 
+wxWebViewZoom wxWebView::GetZoom() const
+{
+    float zoom = GetZoomFactor();
+
+    // arbitrary way to map float zoom to our common zoom enum
+    if (zoom <= 0.55)
+    {
+        return wxWEBVIEW_ZOOM_TINY;
+    }
+    else if (zoom > 0.55 && zoom <= 0.85)
+    {
+        return wxWEBVIEW_ZOOM_SMALL;
+    }
+    else if (zoom > 0.85 && zoom <= 1.15)
+    {
+        return wxWEBVIEW_ZOOM_MEDIUM;
+    }
+    else if (zoom > 1.15 && zoom <= 1.45)
+    {
+        return wxWEBVIEW_ZOOM_LARGE;
+    }
+    else if (zoom > 1.45)
+    {
+        return wxWEBVIEW_ZOOM_LARGEST;
+    }
+
+    // to shut up compilers, this can never be reached logically
+    wxASSERT(false);
+    return wxWEBVIEW_ZOOM_MEDIUM;
+}
+
+void wxWebView::SetZoom(wxWebViewZoom zoom)
+{
+    // arbitrary way to map our common zoom enum to float zoom
+    switch (zoom)
+    {
+        case wxWEBVIEW_ZOOM_TINY:
+            SetZoomFactor(0.4f);
+            break;
+
+        case wxWEBVIEW_ZOOM_SMALL:
+            SetZoomFactor(0.7f);
+            break;
+
+        case wxWEBVIEW_ZOOM_MEDIUM:
+            SetZoomFactor(1.0f);
+            break;
+
+        case wxWEBVIEW_ZOOM_LARGE:
+            SetZoomFactor(1.3f);
+            break;
+
+        case wxWEBVIEW_ZOOM_LARGEST:
+            SetZoomFactor(1.6f);
+            break;
+
+        default:
+            wxASSERT(false);
+    }
+}
+
+bool wxWebView::QueryCommandEnabled(const wxString& command) const
+{
+    wxString resultStr;
+    const_cast<wxWebView*>(this)->RunScript(
+        wxString::Format("function f(){ return document.queryCommandEnabled('%s'); } f();", command), &resultStr);
+    return resultStr.IsSameAs("true", false);
+}
+
+void wxWebView::ExecCommand(const wxString& command)
+{
+    RunScript(wxString::Format("document.execCommand('%s');", command));
+}
+
+wxString wxWebView::GetPageSource() const
+{
+    wxString text;
+    const_cast<wxWebView*>(this)->RunScript("document.documentElement.outerHTML;", &text);
+    return text;
+}
+
+wxString wxWebView::GetPageText() const
+{
+    wxString text;
+    const_cast<wxWebView*>(this)->RunScript("document.body.innerText;", &text);
+    return text;
+}
+
+bool wxWebView::CanCut() const
+{
+    return QueryCommandEnabled("cut");
+}
+
+bool wxWebView::CanCopy() const
+{
+    return QueryCommandEnabled("copy");
+}
+
+bool wxWebView::CanPaste() const
+{
+    return QueryCommandEnabled("paste");
+}
+
+void wxWebView::Cut()
+{
+    ExecCommand("cut");
+}
+
+void wxWebView::Copy()
+{
+    ExecCommand("copy");
+}
+
+void wxWebView::Paste()
+{
+    ExecCommand("paste");
+}
+
+wxString wxWebView::GetSelectedText() const
+{
+    wxString text;
+    const_cast<wxWebView*>(this)->RunScript("window.getSelection().toString();", &text);
+    return text;
+}
+
+wxString wxWebView::GetSelectedSource() const
+{
+    // TODO: could probably be implemented by script similar to GetSelectedText()
+    return wxString();
+}
+
+void wxWebView::DeleteSelection()
+{
+    ExecCommand("delete");
+}
+
+bool wxWebView::HasSelection() const
+{
+    wxString rangeCountStr;
+    const_cast<wxWebView*>(this)->RunScript("window.getSelection().rangeCount;", &rangeCountStr);
+    return rangeCountStr != "0";
+}
+
+void wxWebView::ClearSelection()
+{
+    //We use javascript as selection isn't exposed at the moment in webkit
+    RunScript("window.getSelection().removeAllRanges();");
+}
+
+void wxWebView::SelectAll()
+{
+    RunScript("window.getSelection().selectAllChildren(document.body);");
+}
+
+long wxWebView::Find(const wxString& WXUNUSED(text), int WXUNUSED(flags))
+{
+    // TODO: could probably be implemented by script
+    return -1;
+}
+
 // static
 wxWebView* wxWebView::New(const wxString& backend)
 {
@@ -103,7 +263,7 @@ wxVersionInfo wxWebView::GetBackendVersionInfo(const wxString& backend)
         return wxVersionInfo();
 }
 
-// static 
+// static
 wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backend)
 {
     // Initialise the map, it checks internally for existing factories
