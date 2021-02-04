@@ -34,7 +34,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[] = "wxWebViewE
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[] = "wxWebViewWebKit";
 
 #ifdef __WXMSW__
-extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "wxWebViewIE";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "";
 #else
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "wxWebViewWebKit";
 #endif
@@ -269,7 +269,22 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
     // Initialise the map, it checks internally for existing factories
     InitFactoryMap();
 
-    return m_factoryMap.find(backend);
+#ifdef __WXMSW__
+    // Use edge as default backend on MSW if available
+    if (backend.empty())
+    {
+        wxStringWebViewFactoryMap::iterator defaultBackend =
+            m_factoryMap.find(wxWebViewBackendIE);
+#if wxUSE_WEBVIEW_EDGE
+        wxStringWebViewFactoryMap::iterator edgeFactory = m_factoryMap.find(wxWebViewBackendEdge);
+        if (edgeFactory->second->IsAvailable())
+            return edgeFactory;
+#endif
+        return defaultBackend;
+    }
+    else
+#endif
+        return m_factoryMap.find(backend);
 }
 
 // static

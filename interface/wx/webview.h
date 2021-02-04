@@ -337,6 +337,10 @@ public:
     - Make sure to add a note about using the WebView2 SDK to your application
       documentation, as required by its licence
 
+    If enabled and available at runtime edge will be selected as the default
+    backend. If you require the IE backend use @c wxWEBVIEW_BACKEND_IE when
+    using wxWebView::New().
+
     If your application should use a
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution#fixed-version-distribution-mode">
     fixed version</a> of the WebView2 runtime you must use
@@ -504,7 +508,7 @@ public:
 
         @since 3.1.5
     */
-    static wxVersionInfo GetBackendVersionInfo(const wxString& backend);
+    static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxWebViewBackendDefault);
 
     /**
         Get the title of the current web page, or its URL/path if title is not

@@ -374,9 +374,7 @@ WebFrame::WebFrame(const wxString& url) :
     // Create a log window
     new wxLogWindow(this, _("Logging"), true, false);
 
-    // Create the webview
-    wxString backend = wxWebViewBackendDefault;
-#ifdef __WXMSW__
+#if wxUSE_WEBVIEW_EDGE
     // Check if a fixed version of edge is present in
     // $executable_path/edge_fixed and use it
     wxFileName edgeFixedDir(wxStandardPaths::Get().GetExecutablePath());
@@ -387,18 +385,12 @@ WebFrame::WebFrame(const wxString& url) :
         wxWebViewEdge::MSWSetBrowserExecutableDir(edgeFixedDir.GetFullPath());
         wxLogMessage("Using fixed edge version");
     }
-    if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
-    {
-        wxLogMessage("Using Edge backend");
-        backend = wxWebViewBackendEdge;
-    }
-    else
-    {
-        wxLogMessage("Edge backend not available");
-    }
 #endif
-    m_browser = wxWebView::New(backend);
-    wxLogMessage("Backend version: %s", wxWebView::GetBackendVersionInfo(backend).ToString());
+    // Create the webview
+    m_browser = wxWebView::New();
+    // Log backend information
+    wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
+        wxWebView::GetBackendVersionInfo().ToString());
 #ifdef __WXMAC__
     // With WKWebView handlers need to be registered before creation
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
