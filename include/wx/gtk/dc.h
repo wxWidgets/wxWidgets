@@ -42,6 +42,9 @@ protected:
     // Set m_size from the given (valid) GdkWindow.
     void InitSize(GdkWindow* window);
 
+    // Adjust cairo context for RTL.
+    void AdjustCairoContext(cairo_t* cr);
+
     wxSize m_size;
     wxLayoutDirection m_layoutDir;
 
