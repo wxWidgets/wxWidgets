@@ -50,27 +50,30 @@ public:
 
         const unsigned char* d1 = m_image.GetData();
         const unsigned char* d2 = other.GetData();
-        for ( int x = 0; x < m_image.GetWidth(); ++x )
+        for ( int y = 0; y < m_image.GetHeight(); ++y )
         {
-            for ( int y = 0; y < m_image.GetHeight(); ++y )
+            for ( int x = 0; x < m_image.GetWidth(); ++x )
             {
-                const unsigned char diff = *d1 > * d2 ? *d1 - *d2 : *d2 - *d1;
-                if (diff > m_tolerance)
+                for ( int i = 0; i < 3; i++ )
                 {
-                    m_diffDesc.Printf
-                               (
-                                    "first mismatch is at (%d, %d) which "
-                                    "has value 0x%06x instead of the "
-                                    "expected 0x%06x",
-                                    x, y, *d2, *d1
-                               );
+                    const unsigned char diff = d1[i] > d2[i] ? d1[i] - d2[i] : d2[i] - d1[i];
+                    if ( diff > m_tolerance )
+                    {
+                        m_diffDesc.Printf
+                        (
+                            "first mismatch is at (%d, %d) which "
+                            "has value 0x%02x%02x%02x instead of the "
+                            "expected 0x%02x%02x%02x",
+                            x, y, d2[0], d2[1], d2[2], d1[0], d1[1], d1[2]
+                        );
 
-                    // Don't show all mismatches, there may be too many of them.
-                    return false;
+                        // Don't show all mismatches, there may be too many of them.
+                        return false;
+                    }
                 }
 
-                ++d1;
-                ++d2;
+                d1 += 3;
+                d2 += 3;
             }
         }
 
