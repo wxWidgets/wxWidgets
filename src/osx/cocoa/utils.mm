@@ -73,8 +73,16 @@ void wxBell()
     [NSApp stop:nil];
     wxTheApp->OSXOnDidFinishLaunching();
 
-    [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
-    [NSApp activateIgnoringOtherApps: YES];
+    CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
+    CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
+    CFRelease( url ) ;
+    wxString app = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+    // Is only needed for non-bundled apps
+    if ( !app.EndsWith(".app") )
+    {
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+        [NSApp activateIgnoringOtherApps: YES];
+    }
 }
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)fileNames
