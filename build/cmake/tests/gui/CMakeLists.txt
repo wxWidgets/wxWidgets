@@ -23,6 +23,7 @@ set(TEST_GUI_SRC
     graphics/boundingbox.cpp
     graphics/clippingbox.cpp
     graphics/coords.cpp
+    graphics/graphbitmap.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
     graphics/imagelist.cpp

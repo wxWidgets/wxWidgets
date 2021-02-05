@@ -163,6 +163,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_boundingbox.o \
 	$(OBJS)\test_gui_clippingbox.o \
 	$(OBJS)\test_gui_coords.o \
+	$(OBJS)\test_gui_graphbitmap.o \
 	$(OBJS)\test_gui_graphmatrix.o \
 	$(OBJS)\test_gui_graphpath.o \
 	$(OBJS)\test_gui_imagelist.o \
@@ -893,6 +894,9 @@ $(OBJS)\test_gui_clippingbox.o: ./graphics/clippingbox.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_coords.o: ./graphics/coords.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_graphbitmap.o: ./graphics/graphbitmap.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_graphmatrix.o: ./graphics/graphmatrix.cpp

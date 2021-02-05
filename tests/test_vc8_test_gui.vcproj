@@ -1031,6 +1031,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\graphbitmap.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\graphics\graphmatrix.cpp"
 				>
 			</File>
