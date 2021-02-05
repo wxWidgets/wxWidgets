@@ -741,14 +741,18 @@ bool wxWebViewFactoryEdge::IsAvailable()
 wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
 {
     IsAvailable(); // Make sure ms_version string is initialized (if available)
-    long versions[3] = { 0, 0, 0 };
-    wxArrayString tokens = wxStringTokenize(wxWebViewEdgeImpl::ms_version, ". ");
-    for (size_t i = 0; i < 3; i++)
-    {
-        if (tokens.size() > i)
-            tokens[i].ToLong(&versions[i]);
-    }
-    return wxVersionInfo("Microsoft Edge WebView2", versions[0], versions[1], versions[2]);
+    long major = 0,
+         minor = 0,
+         micro = 0;
+    wxStringTokenizer tk(wxWebViewEdgeImpl::ms_version, ". ");
+    // Ignore the return value because if the version component is missing
+    // or invalid (i.e. non-numeric), the only thing we can do is to ignore
+    // it anyhow.
+    tk.GetNextToken().ToLong(&major);
+    tk.GetNextToken().ToLong(&minor);
+    tk.GetNextToken().ToLong(&micro);
+
+    return wxVersionInfo("Microsoft Edge WebView2", major, minor, micro);
 }
 
 // ----------------------------------------------------------------------------

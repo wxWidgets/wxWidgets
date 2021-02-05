@@ -78,7 +78,7 @@ wxWebViewZoom wxWebView::GetZoom() const
     }
 
     // to shut up compilers, this can never be reached logically
-    wxASSERT(false);
+    wxFAIL_MSG("unreachable");
     return wxWEBVIEW_ZOOM_MEDIUM;
 }
 
@@ -106,9 +106,6 @@ void wxWebView::SetZoom(wxWebViewZoom zoom)
         case wxWEBVIEW_ZOOM_LARGEST:
             SetZoomFactor(1.6f);
             break;
-
-        default:
-            wxASSERT(false);
     }
 }
 
