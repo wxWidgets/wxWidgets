@@ -2869,7 +2869,7 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateSubBitmap( const wxGraphicsBitmap &bit
                      wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
 
         wxGraphicsBitmap p;
-        p.SetRefData(new wxGDIPlusBitmapData( this , image->Clone( (REAL) x , (REAL) y , (REAL) w , (REAL) h , PixelFormat32bppPARGB) ));
+        p.SetRefData(new wxGDIPlusBitmapData( this , image->Clone( (REAL) x , (REAL) y , (REAL) w , (REAL) h , image->GetPixelFormat()) ));
         return p;
     }
     else
