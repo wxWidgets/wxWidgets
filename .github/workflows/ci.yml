@@ -181,7 +181,6 @@ jobs:
       - name: Testing
         if: matrix.skip_testing != true
         run: |
-          echo 'Testing...'
           pushd tests
           ./test || rc=$?
           popd
