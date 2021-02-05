@@ -175,6 +175,14 @@
        (cairo_matrix_t *matrix), (matrix) ) \
     m( cairo_clip_extents, \
        (cairo_t *cr, double *x1, double *y1, double *x2, double *y2), (cr, x1, y1, x2, y2) ) \
+    m( cairo_font_options_destroy, \
+       (cairo_font_options_t *options), (options) ) \
+    m( cairo_font_options_set_antialias, \
+       (cairo_font_options_t *options, cairo_antialias_t antialias), (options, antialias) ) \
+    m( cairo_set_font_options, \
+       (cairo_t *cr, const cairo_font_options_t* options), (cr, options) ) \
+    m( cairo_get_font_options, \
+       (cairo_t* cr, cairo_font_options_t* options), (cr, options) ) \
 
 #ifdef __WXMAC__
 #define wxCAIRO_PLATFORM_METHODS(m) \
@@ -245,6 +253,7 @@
        (cairo_surface_t *other, cairo_format_t format, int width, int height), (other, format, width, height), NULL) \
     m( cairo_status_t, cairo_surface_status, \
        (cairo_surface_t *surface), (surface), CAIRO_STATUS_SUCCESS) \
+    m( cairo_font_options_t*, cairo_font_options_create, (), (), NULL ) \
     wxCAIRO_PLATFORM_METHODS(m)
 
 #define wxCAIRO_DECLARE_TYPE(rettype, name, args, argnames, defret) \
