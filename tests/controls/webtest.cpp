@@ -174,7 +174,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->GetBackwardHistory().size() == 2);
     }
 
-#if !defined(__WXOSX__)
+#if !defined(__WXOSX__) && (!defined(wxUSE_WEBVIEW_EDGE) || !wxUSE_WEBVIEW_EDGE)
     SECTION("Editable")
     {
         CHECK(!m_browser->IsEditable());
@@ -209,7 +209,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         CHECK(m_browser->HasSelection());
         CHECK(m_browser->GetSelectedText() == "Some strong text");
 
-#if !defined(__WXOSX__)
+#if !defined(__WXOSX__) && (!defined(wxUSE_WEBVIEW_EDGE) || !wxUSE_WEBVIEW_EDGE)
         // The web engine doesn't necessarily represent the HTML in the same way as
         // we used above, e.g. IE uses upper case for all the tags while WebKit
         // under OS X inserts plenty of its own <span> tags, so don't test for
@@ -258,7 +258,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         ENSURE_LOADED;
 
         wxString result;
-    #if wxUSE_WEBVIEW_IE
+    #if wxUSE_WEBVIEW_IE && !wxUSE_WEBVIEW_EDGE
         CHECK(wxWebViewIE::MSWSetModernEmulationLevel());
 
         // Define a specialized scope guard ensuring that we reset the emulation
