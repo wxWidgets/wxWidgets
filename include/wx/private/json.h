@@ -22,6 +22,7 @@ bool DecodeString(const wxString& in, wxString* out)
     // String has to chart with a quote
     if (*(ch++) != '"')
         return false;
+    out->clear();
     out->reserve(buf.length());
     const wchar_t* end = buf.data() + buf.length() - 1;
     for (; ch < end; ++ch)
