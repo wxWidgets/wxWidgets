@@ -2370,9 +2370,48 @@ public:
     wxD2DBitmapResourceHolder(const wxBitmap& sourceBitmap) :
         m_sourceBitmap(sourceBitmap)
     {
+        m_sourceBitmap.MSWBlendMaskWithAlpha();
     }
 
-    const wxBitmap& GetSourceBitmap() const { return m_sourceBitmap; }
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const
+    {
+        // Never return image with mask because native bitmaps don't have masks
+        wxImage img = m_sourceBitmap.ConvertToImage();
+        if ( img.HasMask() )
+        {
+            if ( !img.HasAlpha() )
+            {
+                img.InitAlpha();
+            }
+            else
+            {
+                // This case should never happen because cached source
+                // bitmap has mask blended with alpha values (in ctor).
+            }
+        }
+        // We need also to remove mask colour from transparent pixels
+        // for compatibility with native D2D bitmap.
+        if ( img.HasAlpha() )
+        {
+            for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                if ( img.GetAlpha(x, y) == wxALPHA_TRANSPARENT )
+                {
+                    img.SetRGB(x, y, 0, 0, 0);
+                }
+            }
+        }
+
+        return img;
+    }
+#endif // wxUSE_IMAGE
+
+    wxD2DBitmapResourceHolder* GetSubBitmap(wxDouble x, wxDouble y, wxDouble w, wxDouble h) const
+    {
+        return new wxD2DBitmapResourceHolder(m_sourceBitmap.GetSubBitmap(wxRect(x, y, w, h)));
+    }
 
 protected:
     void DoAcquireResource() wxOVERRIDE
@@ -2443,7 +2482,7 @@ protected:
     }
 
 private:
-    const wxBitmap m_sourceBitmap;
+    wxBitmap m_sourceBitmap;
 };
 
 //-----------------------------------------------------------------------------
@@ -2456,10 +2495,15 @@ public:
     typedef wxD2DBitmapResourceHolder NativeType;
 
     wxD2DBitmapData(wxGraphicsRenderer* renderer, const wxBitmap& bitmap) :
-        wxGraphicsBitmapData(renderer), m_bitmapHolder(bitmap) {}
+        wxGraphicsBitmapData(renderer)
+    {
+        m_bitmapHolder = new NativeType(bitmap);
+    }
 
-    wxD2DBitmapData(wxGraphicsRenderer* renderer, const void* pseudoNativeBitmap) :
-        wxGraphicsBitmapData(renderer), m_bitmapHolder(*static_cast<const NativeType*>(pseudoNativeBitmap)) {}
+    wxD2DBitmapData(wxGraphicsRenderer* renderer, NativeType* pseudoNativeBitmap) :
+        wxGraphicsBitmapData(renderer), m_bitmapHolder(pseudoNativeBitmap) {}
+
+    ~wxD2DBitmapData();
 
     // returns the native representation
     void* GetNativeBitmap() const wxOVERRIDE;
@@ -2468,25 +2512,30 @@ public:
 
     wxD2DManagedObject* GetManagedObject() wxOVERRIDE
     {
-        return &m_bitmapHolder;
+        return m_bitmapHolder;
     }
 
 private:
-    NativeType m_bitmapHolder;
+    NativeType* m_bitmapHolder;
 };
 
 //-----------------------------------------------------------------------------
 // wxD2DBitmapData implementation
 //-----------------------------------------------------------------------------
 
+wxD2DBitmapData::~wxD2DBitmapData()
+{
+    delete m_bitmapHolder;
+}
+
 void* wxD2DBitmapData::GetNativeBitmap() const
 {
-    return (void*)&m_bitmapHolder;
+    return static_cast<void*>(m_bitmapHolder);
 }
 
 wxCOMPtr<ID2D1Bitmap> wxD2DBitmapData::GetD2DBitmap()
 {
-    return m_bitmapHolder.GetD2DResource();
+    return m_bitmapHolder->GetD2DResource();
 }
 
 wxD2DBitmapData* wxGetD2DBitmapData(const wxGraphicsBitmap& bitmap)
@@ -4490,11 +4539,12 @@ void wxD2DContext::DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble 
 
     wxD2DBitmapData* bitmapData = wxGetD2DBitmapData(bmp);
     bitmapData->Bind(this);
-    wxBitmap const& bitmap = static_cast<wxD2DBitmapData::NativeType*>(bitmapData->GetNativeBitmap())->GetSourceBitmap();
 
+    wxCOMPtr<ID2D1Bitmap> d2dBmp = bitmapData->GetD2DBitmap();
+    D2D1_SIZE_F d2dBmpSize = d2dBmp->GetSize();
     m_renderTargetHolder->DrawBitmap(
-        bitmapData->GetD2DBitmap(),
-        D2D1::RectF(0, 0, bitmap.GetWidth(), bitmap.GetHeight()),
+        d2dBmp,
+        D2D1::RectF(0, 0, d2dBmpSize.width, d2dBmpSize.height),
         D2D1::RectF(x, y, x + w, y + h),
         GetInterpolationQuality(),
         GetCompositionMode());
@@ -5127,7 +5177,7 @@ wxGraphicsBitmap wxD2DRenderer::CreateBitmap(const wxBitmap& bitmap)
 // create a graphics bitmap from a native bitmap
 wxGraphicsBitmap wxD2DRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
 {
-    wxD2DBitmapData* bitmapData = new wxD2DBitmapData(this, bitmap);
+    wxD2DBitmapData* bitmapData = new wxD2DBitmapData(this, static_cast<wxD2DBitmapResourceHolder*>(bitmap));
 
     wxGraphicsBitmap graphicsBitmap;
     graphicsBitmap.SetRefData(bitmapData);
@@ -5144,7 +5194,7 @@ wxGraphicsBitmap wxD2DRenderer::CreateBitmapFromImage(const wxImage& image)
 wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 {
     return static_cast<wxD2DBitmapData::NativeType*>(bmp.GetNativeBitmap())
-        ->GetSourceBitmap().ConvertToImage();
+        ->ConvertToImage();
 }
 #endif
 
@@ -5192,8 +5242,11 @@ wxGraphicsFont wxD2DRenderer::CreateFontAtDPI(const wxFont& font,
 wxGraphicsBitmap wxD2DRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
     typedef wxD2DBitmapData::NativeType* NativeBitmap;
-    wxBitmap sourceBitmap = static_cast<NativeBitmap>(bitmap.GetNativeBitmap())->GetSourceBitmap();
-    return CreateBitmap(sourceBitmap.GetSubBitmap(wxRect(x, y, w, h)));
+
+    NativeBitmap natBmp = static_cast<NativeBitmap>(bitmap.GetNativeBitmap())->GetSubBitmap(x, y, w, h);
+    wxGraphicsBitmap bmpRes;
+    bmpRes.SetRefData(new wxD2DBitmapData(this, natBmp));
+    return bmpRes;
 }
 
 wxString wxD2DRenderer::GetName() const
