@@ -180,10 +180,9 @@ jobs:
 
       - name: Testing
         if: matrix.skip_testing != true
+        working-directory: tests
         run: |
-          pushd tests
           ./test || rc=$?
-          popd
           if [ -n "$rc" ]; then
             echo '*** Tests failed, contents of httpbin.log follows: ***'
             echo '-----------------------------------------------------------'
