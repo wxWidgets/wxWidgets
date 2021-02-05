@@ -660,7 +660,7 @@ public:
             version 3.1.1.
         @return @true if there is a result, @false if there is an error.
     */
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user

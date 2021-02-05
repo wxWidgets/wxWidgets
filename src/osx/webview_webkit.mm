@@ -302,7 +302,7 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
     }
 }
 
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     __block bool scriptExecuted = false;
     __block wxString outputStr;
@@ -345,7 +345,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     return scriptSuccess;
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
 {
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 

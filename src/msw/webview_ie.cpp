@@ -1029,7 +1029,7 @@ bool CallEval(const wxString& code,
     return scriptAO.Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varCode);
 }
 
-bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output) const
 {
     wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
     if ( !document )

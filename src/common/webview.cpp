@@ -112,7 +112,7 @@ void wxWebView::SetZoom(wxWebViewZoom zoom)
 bool wxWebView::QueryCommandEnabled(const wxString& command) const
 {
     wxString resultStr;
-    const_cast<wxWebView*>(this)->RunScript(
+    RunScript(
         wxString::Format("function f(){ return document.queryCommandEnabled('%s'); } f();", command), &resultStr);
     return resultStr.IsSameAs("true", false);
 }
@@ -125,14 +125,14 @@ void wxWebView::ExecCommand(const wxString& command)
 wxString wxWebView::GetPageSource() const
 {
     wxString text;
-    const_cast<wxWebView*>(this)->RunScript("document.documentElement.outerHTML;", &text);
+    RunScript("document.documentElement.outerHTML;", &text);
     return text;
 }
 
 wxString wxWebView::GetPageText() const
 {
     wxString text;
-    const_cast<wxWebView*>(this)->RunScript("document.body.innerText;", &text);
+    RunScript("document.body.innerText;", &text);
     return text;
 }
 
@@ -169,7 +169,7 @@ void wxWebView::Paste()
 wxString wxWebView::GetSelectedText() const
 {
     wxString text;
-    const_cast<wxWebView*>(this)->RunScript("window.getSelection().toString();", &text);
+    RunScript("window.getSelection().toString();", &text);
     return text;
 }
 
@@ -187,7 +187,7 @@ void wxWebView::DeleteSelection()
 bool wxWebView::HasSelection() const
 {
     wxString rangeCountStr;
-    const_cast<wxWebView*>(this)->RunScript("window.getSelection().rangeCount;", &rangeCountStr);
+    RunScript("window.getSelection().rangeCount;", &rangeCountStr);
     return rangeCountStr != "0";
 }
 

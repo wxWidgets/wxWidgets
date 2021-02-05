@@ -1130,7 +1130,7 @@ static void wxgtk_run_javascript_cb(GObject *,
 } // extern "C"
 
 // Run the given script synchronously and return its result in output.
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
@@ -1193,7 +1193,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     return true;
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
 {
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
@@ -1240,7 +1240,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
 {
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
     bool newSearch = false;
-    if(text != m_findText || 
+    if(text != m_findText ||
        (flags & wxWEBVIEW_FIND_MATCH_CASE) != (m_findFlags & wxWEBVIEW_FIND_MATCH_CASE))
     {
         newSearch = true;

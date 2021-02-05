@@ -651,7 +651,7 @@ void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
     wxWebViewEdgeImpl::ms_browserExecutableDir = path;
 }
 
-bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
+bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     bool scriptExecuted = false;
 
@@ -687,7 +687,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
         return true;
 }
 
-bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) const
 {
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 

@@ -89,7 +89,7 @@ public:
     virtual void EnableAccessToDevTools(bool enable = true) wxOVERRIDE;
     virtual bool IsAccessToDevToolsEnabled() const wxOVERRIDE;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
@@ -107,7 +107,7 @@ private:
 
     void OnShow(wxShowEvent& event);
 
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewEdge);
 };

@@ -88,7 +88,7 @@ public:
     virtual void SetEditable(bool enable = true) wxOVERRIDE;
     virtual bool IsEditable() const wxOVERRIDE;
 
-    bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
+    bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -107,7 +107,7 @@ private:
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
 
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory
