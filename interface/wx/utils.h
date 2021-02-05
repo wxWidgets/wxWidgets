@@ -482,6 +482,8 @@ int wxFindMenuItemId(wxFrame* frame, const wxString& menuString,
 
     Generates an integer identifier unique to this run of the program.
 
+    @see wxRegisterId()
+
     @header{wx/utils.h}
 */
 wxWindowID wxNewId();
