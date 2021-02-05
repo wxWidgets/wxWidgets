@@ -932,6 +932,28 @@ public:
     bool IsEnabled(int id) const;
 
     /**
+        Allows for handling Menu command messages sent by MSW.
+
+        This is a low-level function which allows handling MSW commands sent
+        to a wxMenu. It is partically useful for a Menu whose owner is not a
+        wxFrame, as specific handling can then be done in a wxMenu-derived
+        class directly, instead of in the wxWindow-derived owner class.
+
+        @param param
+            The MSW command parameter.
+
+        @param id
+            The id of the command.
+
+        @return
+            @true if the command was handled, @false otherwise.
+
+        @onlyfor{wxMSW}
+        @since 3.1.5
+    */
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    
+    /**
         Inserts the given @a item at position 0, i.e.\ before all the other
         existing items.
 
