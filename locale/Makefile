@@ -17,7 +17,7 @@ XGETTEXT=xgettext
 XARGS=xargs
 
 # common xgettext args: C++ syntax, use the specified macro names as markers
-XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -kwxGetTranslation --add-comments=TRANSLATORS: -s -j
+XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -kwxGetTranslation --add-comments=TRANSLATORS: -j
 
 # implicit rules
 %.mo: %.po
@@ -32,9 +32,7 @@ $(foreach lang,$(WX_LINGUAS_UPDATE),$(lang).po): wxstd.pot
 
 wxstd.pot:
 	touch $@
-	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
-	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
-	find ../src -name "*.mm" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
+	(find ../include -name "*.h"; find ../src -name "*.cpp"; find ../src -name "*.mm") | LC_COLLATE=C sort | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
 
 allpo: force-update
 	@-for t in $(WX_LINGUAS_UPDATE); do $(MAKE) $$t.po; done
