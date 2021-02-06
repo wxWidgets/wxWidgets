@@ -37458,7 +37458,6 @@ UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/univ
 	mkdir $(DISTDIR)/src/univ/themes
 	$(CP_P) $(INCDIR)/wx/univ/*.h $(DISTDIR)/include/wx/univ
-	$(CP_P) $(INCDIR)/wx/univ/setup0.h $(DISTDIR)/include/wx/univ/setup.h
 	$(CP_P) $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	$(CP_P) $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
 

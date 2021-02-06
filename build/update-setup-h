@@ -25,7 +25,7 @@ msg()
 # write all the common options to stdout, massaging them specially if they are
 # meant to be included in a configure input file setup.h.in
 #
-# usage: cat_common_options_for setup_inc.h setup0.h
+# usage: cat_common_options_for setup_inc.h setup.h
 cat_common_options_for()
 {
     # get rid of the copyright header on top of the file
@@ -52,7 +52,7 @@ cat_common_options_for()
 # update the single setup.h file passed in as the parameter if it is out of
 # date
 #
-# usage: update_single_setup_h {common|MSW} setup_inc.h setup0.h
+# usage: update_single_setup_h {common|MSW} setup_inc.h setup.h
 update_single_setup_h()
 {
     section=$1
@@ -108,22 +108,22 @@ if [ ! -f wxwin.m4 ]; then
 fi
 
 update_common_setup_h include/wx/android/setup.h
-update_common_setup_h include/wx/motif/setup0.h
-update_common_setup_h include/wx/msw/setup0.h
-update_common_setup_h include/wx/gtk/setup0.h
-update_common_setup_h include/wx/osx/setup0.h
-update_common_setup_h include/wx/univ/setup0.h
+update_common_setup_h include/wx/motif/setup.h
+update_common_setup_h include/wx/msw/setup.h
+update_common_setup_h include/wx/gtk/setup.h
+update_common_setup_h include/wx/osx/setup.h
+update_common_setup_h include/wx/univ/setup.h
 update_common_setup_h setup.h.in
 update_common_setup_h build/cmake/setup.h.in
 
-update_msw_setup_h include/wx/msw/setup0.h
-update_msw_setup_h include/wx/gtk/setup0.h
+update_msw_setup_h include/wx/msw/setup.h
+update_msw_setup_h include/wx/gtk/setup.h
 update_msw_setup_h setup.h.in
 update_msw_setup_h build/cmake/setup.h.in
 
-update_osx_setup_h include/wx/osx/setup0.h
+update_osx_setup_h include/wx/osx/setup.h
 
-update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup0.h
+update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup.h
 
 exit $rc
 

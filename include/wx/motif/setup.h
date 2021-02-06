@@ -1613,4 +1613,3 @@
 /* --- end common options --- */
 
 #endif // _WX_SETUP_H_
-
