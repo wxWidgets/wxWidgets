@@ -39,9 +39,9 @@ typedef wxNativePixelData wxNative32PixelData;
 
 namespace
 {
-wxBitmap CreateBitmapRGB(int w, int h, bool withMask)
+wxBitmap DoCreateBitmapRGB(int w, int h, int bpp, bool withMask)
 {
-    wxBitmap bmp(w, h, 24);
+    wxBitmap bmp(w, h, bpp);
     {
         wxMemoryDC dc(bmp);
         dc.SetBackground(*wxBLUE_BRUSH);
@@ -76,6 +76,19 @@ wxBitmap CreateBitmapRGB(int w, int h, bool withMask)
 
     return bmp;
 }
+
+wxBitmap CreateBitmapRGB(int w, int h, bool withMask)
+{
+    return DoCreateBitmapRGB(w, h, 24, withMask);
+}
+
+#if defined(__WXMSW__) || defined(__WXOSX__)
+// 32-bit RGB bitmap
+wxBitmap CreateBitmapXRGB(int w, int h, bool withMask)
+{
+    return DoCreateBitmapRGB(w, h, 32, withMask);
+}
+#endif // __WXMSW__ || __WXOSX__
 
 wxBitmap CreateBitmapRGBA(int w, int h, bool withMask)
 {
@@ -318,6 +331,130 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
 #endif // wxUSE_GRAPHICS_CAIRO
     }
 
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    SECTION("xRGB bitmap without mask")
+    {
+        // xRGB bitmap
+        wxBitmap bmp = CreateBitmapXRGB(8, 8, false);
+        REQUIRE(bmp.GetDepth() == 32);
+        REQUIRE_FALSE(bmp.HasAlpha());
+        REQUIRE(bmp.GetMask() == NULL);
+
+        // Reference image
+        wxImage image = bmp.ConvertToImage();
+        REQUIRE_FALSE(image.HasAlpha());
+        REQUIRE_FALSE(image.HasMask());
+        REQUIRE(image.GetWidth() == bmp.GetWidth());
+        REQUIRE(image.GetHeight() == bmp.GetHeight());
+
+        SECTION("Default GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDefaultRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+
+#if defined(__WXMSW__)
+#if wxUSE_GRAPHICS_GDIPLUS
+        SECTION("GDI+ GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetGDIPlusRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+#endif // wxUSE_GRAPHICS_GDIPLUS
+
+#if wxUSE_GRAPHICS_DIRECT2D
+        SECTION("Direct2D GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // __WXMSW__
+
+#if wxUSE_CAIRO
+        SECTION("Cairo GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetCairoRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+#endif // wxUSE_GRAPHICS_CAIRO
+    }
+
+    SECTION("xRGB bitmap with mask")
+    {
+        // xRGB bitmap
+        wxBitmap bmp = CreateBitmapXRGB(8, 8, true);
+        REQUIRE(bmp.GetDepth() == 32);
+        REQUIRE_FALSE(bmp.HasAlpha());
+        REQUIRE(bmp.GetMask() != NULL);
+
+        // Reference image
+        wxImage image = bmp.ConvertToImage();
+        REQUIRE_FALSE(image.HasAlpha());
+        REQUIRE(image.HasMask() == true);
+        REQUIRE(image.GetWidth() == bmp.GetWidth());
+        REQUIRE(image.GetHeight() == bmp.GetHeight());
+        const wxColour maskCol(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
+        REQUIRE(maskCol.IsOk());
+
+        // wxGraphicsBitmap doesn't have a mask so we need wxImage without mask
+        // to be compared with created wxGraphicsBitmap.
+        image.InitAlpha();
+        REQUIRE(image.HasAlpha() == true);
+        REQUIRE_FALSE(image.HasMask());
+        // We need also to remove mask colour from transparent pixels
+        // for compatibility with wxGraphicsMask.
+        for ( int y = 0; y < image.GetHeight(); y++ )
+            for ( int x = 0; x < image.GetWidth(); x++ )
+            {
+                if ( image.GetAlpha(x, y) == wxALPHA_TRANSPARENT )
+                {
+                    image.SetRGB(x, y, 0, 0, 0);
+                }
+            }
+
+        SECTION("Default GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDefaultRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+
+#if defined(__WXMSW__)
+#if wxUSE_GRAPHICS_GDIPLUS
+        SECTION("GDI+ GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetGDIPlusRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+#endif // wxUSE_GRAPHICS_GDIPLUS
+
+#if wxUSE_GRAPHICS_DIRECT2D
+        SECTION("Direct2D GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // __WXMSW__
+
+#if wxUSE_CAIRO
+        SECTION("Cairo GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetCairoRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphBitmap(gr, bmp, image);
+        }
+#endif // wxUSE_GRAPHICS_CAIRO
+    }
+#endif // _WXMSW__ || __WXOSX__
+
     SECTION("RGBA bitmap without mask")
     {
         // RGBA Bitmap
@@ -365,7 +502,7 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
             wxGraphicsRenderer* gr = wxGraphicsRenderer::GetCairoRenderer();
             REQUIRE(gr != NULL);
             CheckCreateGraphBitmap(gr, bmp, image);
-        }
+    }
 #endif // wxUSE_GRAPHICS_CAIRO
     }
 
@@ -568,6 +705,138 @@ TEST_CASE("GraphicsBitmapTestCase::SubBitmap", "[graphbitmap][subbitmap][create]
         }
 #endif // wxUSE_GRAPHICS_CAIRO
     }
+
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    SECTION("xRGB bitmap without mask")
+    {
+        // xRGB bitmap
+        wxBitmap bmp = CreateBitmapXRGB(8, 8, false);
+        REQUIRE(bmp.GetDepth() == 32);
+        REQUIRE_FALSE(bmp.HasAlpha());
+        REQUIRE(bmp.GetMask() == NULL);
+
+        // Reference image
+        const int subX = 1;
+        const int subY = 1;
+        const int subW = 4;
+        const int subH = 5;
+        wxImage image = bmp.ConvertToImage().GetSubImage(wxRect(subX, subY, subW, subH));
+        REQUIRE_FALSE(image.HasAlpha());
+        REQUIRE_FALSE(image.HasMask());
+        REQUIRE(image.GetWidth() == subW);
+        REQUIRE(image.GetHeight() == subH);
+
+        SECTION("Default GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDefaultRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+
+#if defined(__WXMSW__)
+#if wxUSE_GRAPHICS_GDIPLUS
+        SECTION("GDI+ GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetGDIPlusRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+#endif // wxUSE_GRAPHICS_GDIPLUS
+
+#if wxUSE_GRAPHICS_DIRECT2D
+        SECTION("Direct2D GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // __WXMSW__
+
+#if wxUSE_CAIRO
+        SECTION("Cairo GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetCairoRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+#endif // wxUSE_GRAPHICS_CAIRO
+    }
+
+    SECTION("xRGB bitmap with mask")
+    {
+        // xRGB bitmap
+        wxBitmap bmp = CreateBitmapXRGB(8, 8, true);
+        REQUIRE(bmp.GetDepth() == 32);
+        REQUIRE_FALSE(bmp.HasAlpha());
+        REQUIRE(bmp.GetMask() != NULL);
+
+        // Reference image
+        const int subX = 2;
+        const int subY = 2;
+        const int subW = 4;
+        const int subH = 5;
+        wxImage image = bmp.ConvertToImage().GetSubImage(wxRect(subX, subY, subW, subH));
+        REQUIRE_FALSE(image.HasAlpha());
+        REQUIRE(image.HasMask() == true);
+        REQUIRE(image.GetWidth() == subW);
+        REQUIRE(image.GetHeight() == subH);
+        const wxColour maskCol(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
+        REQUIRE(maskCol.IsOk());
+
+        // wxGraphicsBitmap doesn't have a mask so we need wxImage without mask
+        // to be compared with created wxGraphicsBitmap.
+        image.InitAlpha();
+        REQUIRE(image.HasAlpha() == true);
+        REQUIRE_FALSE(image.HasMask());
+        // We need also to remove mask colour from transparent pixels
+        // for compatibility with wxGraphicsMask.
+        for ( int y = 0; y < image.GetHeight(); y++ )
+            for ( int x = 0; x < image.GetWidth(); x++ )
+            {
+                if ( image.GetAlpha(x, y) == wxALPHA_TRANSPARENT )
+                {
+                    image.SetRGB(x, y, 0, 0, 0);
+                }
+            }
+
+        SECTION("Default GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDefaultRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+
+#if defined(__WXMSW__)
+#if wxUSE_GRAPHICS_GDIPLUS
+        SECTION("GDI+ GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetGDIPlusRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+#endif // wxUSE_GRAPHICS_GDIPLUS
+
+#if wxUSE_GRAPHICS_DIRECT2D
+        SECTION("Direct2D GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetDirect2DRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // __WXMSW__
+
+#if wxUSE_CAIRO
+        SECTION("Cairo GC")
+        {
+            wxGraphicsRenderer* gr = wxGraphicsRenderer::GetCairoRenderer();
+            REQUIRE(gr != NULL);
+            CheckCreateGraphSubBitmap(gr, bmp, subX, subY, subW, subH, image);
+        }
+#endif // wxUSE_GRAPHICS_CAIRO
+    }
+#endif // __WXMSW__ || __WXOSX__
 
     SECTION("RGBA bitmap without mask")
     {
