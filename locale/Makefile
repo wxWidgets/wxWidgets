@@ -17,7 +17,7 @@ XGETTEXT=xgettext
 XARGS=xargs
 
 # common xgettext args: C++ syntax, use the specified macro names as markers
-XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -kwxGetTranslation --add-comments=TRANSLATORS: -j
+XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxGetTranslation --add-comments=TRANSLATORS: -j
 
 # implicit rules
 %.mo: %.po
