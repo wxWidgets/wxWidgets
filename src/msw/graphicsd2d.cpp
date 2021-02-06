@@ -2165,19 +2165,19 @@ struct wxPBGRAColor
     BYTE b, g, r, a;
 };
 
-wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const WXHBITMAP sourceBitmap, bool hasAlpha = false)
+wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const WXHBITMAP sourceBitmap, bool hasAlpha, bool forceAlpha)
 {
     HRESULT hr;
 
     wxCOMPtr<IWICBitmap> wicBitmap;
-    hr = wxWICImagingFactory()->CreateBitmapFromHBITMAP(sourceBitmap, NULL, WICBitmapUseAlpha, &wicBitmap);
+    hr = wxWICImagingFactory()->CreateBitmapFromHBITMAP(sourceBitmap, NULL, hasAlpha ? WICBitmapUsePremultipliedAlpha : WICBitmapIgnoreAlpha, &wicBitmap);
     wxCHECK2_HRESULT_RET(hr, wxCOMPtr<IWICBitmapSource>(NULL));
 
     wxCOMPtr<IWICFormatConverter> converter;
     hr = wxWICImagingFactory()->CreateFormatConverter(&converter);
     wxCHECK2_HRESULT_RET(hr, wxCOMPtr<IWICBitmapSource>(NULL));
 
-    WICPixelFormatGUID pixelFormat = hasAlpha ? GUID_WICPixelFormat32bppPBGRA : GUID_WICPixelFormat32bppBGR;
+    WICPixelFormatGUID pixelFormat = hasAlpha || forceAlpha ? GUID_WICPixelFormat32bppPBGRA : GUID_WICPixelFormat32bppBGR;
 
     hr = converter->Initialize(
         wicBitmap,
@@ -2189,9 +2189,9 @@ wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const WXHBITMAP sourceBitmap, bool 
     return wxCOMPtr<IWICBitmapSource>(converter);
 }
 
-wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const wxBitmap& sourceBitmap, bool hasAlpha = false)
+inline wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const wxBitmap& sourceBitmap, bool forceAlpha)
 {
-    return wxCreateWICBitmap(sourceBitmap.GetHBITMAP(), hasAlpha);
+    return wxCreateWICBitmap(sourceBitmap.GetHBITMAP(), sourceBitmap.HasAlpha(), forceAlpha);
 }
 
 // WIC Bitmap Source for creating hatch patterned bitmaps
@@ -2367,41 +2367,134 @@ private:
 class wxD2DBitmapResourceHolder : public wxD2DResourceHolder<ID2D1Bitmap>
 {
 public:
-    wxD2DBitmapResourceHolder(const wxBitmap& sourceBitmap) :
-        m_sourceBitmap(sourceBitmap)
+    wxD2DBitmapResourceHolder(const wxBitmap& sourceBitmap)
     {
-        m_sourceBitmap.MSWBlendMaskWithAlpha();
+        HRESULT hr;
+        if ( sourceBitmap.GetMask() )
+        {
+            int w = sourceBitmap.GetWidth();
+            int h = sourceBitmap.GetHeight();
+
+            wxCOMPtr<IWICBitmapSource> colorBitmap = wxCreateWICBitmap(sourceBitmap, true);
+            wxCOMPtr<IWICBitmapSource> maskBitmap = wxCreateWICBitmap(sourceBitmap.GetMask()->GetBitmap(), false);
+
+            hr = wxWICImagingFactory()->CreateBitmap(w, h, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad, &m_srcBitmap);
+            wxCHECK_HRESULT_RET(hr);
+
+            BYTE* colorBuffer = new BYTE[4 * w * h];
+            BYTE* maskBuffer = new BYTE[4 * w * h];
+            BYTE* resultBuffer;
+
+            hr = colorBitmap->CopyPixels(NULL, w * 4, 4 * w * h, colorBuffer);
+            wxCHECK_HRESULT_RET(hr);
+            hr = maskBitmap->CopyPixels(NULL, w * 4, 4 * w * h, maskBuffer);
+            wxCHECK_HRESULT_RET(hr);
+
+            {
+                wxBitmapPixelWriteLock lock(m_srcBitmap);
+
+                UINT bufferSize = 0;
+                hr = lock.GetLock()->GetDataPointer(&bufferSize, &resultBuffer);
+
+                static const wxPBGRAColor transparentColor(wxTransparentColour);
+
+                // Create the result bitmap
+                for ( int i = 0; i < w * h * 4; i += 4 )
+                {
+                    wxPBGRAColor color(colorBuffer + i);
+                    wxPBGRAColor mask(maskBuffer + i);
+
+                    if ( mask.IsBlack() )
+                    {
+                        transparentColor.Write(resultBuffer + i);
+                    }
+                    else
+                    {
+                        color.Write(resultBuffer + i);
+                    }
+                }
+            }
+
+            delete[] colorBuffer;
+            delete[] maskBuffer;
+        }
+        else
+        {
+            wxCOMPtr<IWICBitmapSource> srcBmp = wxCreateWICBitmap(sourceBitmap, false);
+            hr = wxWICImagingFactory()->CreateBitmapFromSource(srcBmp, WICBitmapNoCache, &m_srcBitmap);
+            wxCHECK_HRESULT_RET(hr);
+        }
+    }
+
+    wxD2DBitmapResourceHolder(IWICBitmap* pSrcBmp) :
+        m_srcBitmap(pSrcBmp)
+    {
+    }
+
+    wxSize GetSize() const
+    {
+        UINT w, h;
+        HRESULT hr = m_srcBitmap->GetSize(&w, &h);
+        wxCHECK2_HRESULT_RET(hr, wxSize());
+
+        return wxSize((int)w, (int)h);
     }
 
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const
     {
-        // Never return image with mask because native bitmaps don't have masks
-        wxImage img = m_sourceBitmap.ConvertToImage();
-        if ( img.HasMask() )
+        UINT width, height;
+        HRESULT hr = m_srcBitmap->GetSize(&width, &height);
+        wxCHECK2_HRESULT_RET(hr, wxNullImage);
+
+        WICRect rcLock = { 0, 0, (INT)width, (INT)height };
+        wxCOMPtr<IWICBitmapLock> pLock;
+        hr = m_srcBitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
+        wxCHECK2_HRESULT_RET(hr, wxNullImage);
+
+        UINT rowStride = 0;
+        hr = pLock->GetStride(&rowStride);
+        wxCHECK2_HRESULT_RET(hr, wxNullImage);
+
+        UINT bufferSize = 0;
+        BYTE* pBmpBuffer = NULL;
+        hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
+        wxCHECK2_HRESULT_RET(hr, wxNullImage);
+
+        WICPixelFormatGUID pixelFormat;
+        hr = pLock->GetPixelFormat(&pixelFormat);
+        wxCHECK2_HRESULT_RET(hr, wxNullImage);
+        wxASSERT_MSG(pixelFormat == GUID_WICPixelFormat32bppPBGRA ||
+                     pixelFormat == GUID_WICPixelFormat32bppBGR,
+                     "Unsupported pixel format");
+
+        // Only premultiplied ARGB bitmaps are supported.
+        const bool hasAlpha = pixelFormat == GUID_WICPixelFormat32bppPBGRA;
+
+        wxImage img(width, height);
+        if ( hasAlpha )
+            img.SetAlpha();
+
+        unsigned char* destRGB = img.GetData();
+        unsigned char* destAlpha = img.GetAlpha();
+        for ( UINT y = 0; y < height; y++ )
         {
-            if ( !img.HasAlpha() )
+            BYTE* pPixByte = pBmpBuffer;
+            for ( UINT x = 0; x < width; x++ )
             {
-                img.InitAlpha();
+                wxPBGRAColor color = wxPBGRAColor(pPixByte);
+                unsigned char a = hasAlpha ? color.a : wxIMAGE_ALPHA_OPAQUE;
+                // Undo premultiplication for ARGB bitmap
+                *destRGB++ = (a > 0 && a < 255)?(color.r * 255) / a:color.r;
+                *destRGB++ = (a > 0 && a < 255)?(color.g * 255) / a:color.g;
+                *destRGB++ = (a > 0 && a < 255)?(color.b * 255) / a:color.b;
+                if ( destAlpha )
+                    *destAlpha++ = a;
+
+                pPixByte += 4;
             }
-            else
-            {
-                // This case should never happen because cached source
-                // bitmap has mask blended with alpha values (in ctor).
-            }
-        }
-        // We need also to remove mask colour from transparent pixels
-        // for compatibility with native D2D bitmap.
-        if ( img.HasAlpha() )
-        {
-            for ( int y = 0; y < img.GetHeight(); y++ )
-            for ( int x = 0; x < img.GetWidth(); x++ )
-            {
-                if ( img.GetAlpha(x, y) == wxALPHA_TRANSPARENT )
-                {
-                    img.SetRGB(x, y, 0, 0, 0);
-                }
-            }
+
+            pBmpBuffer += rowStride;
         }
 
         return img;
@@ -2410,79 +2503,40 @@ public:
 
     wxD2DBitmapResourceHolder* GetSubBitmap(wxDouble x, wxDouble y, wxDouble w, wxDouble h) const
     {
-        return new wxD2DBitmapResourceHolder(m_sourceBitmap.GetSubBitmap(wxRect(x, y, w, h)));
+        WICRect r = { (INT)x, (INT)y, (INT)w, (INT)h };
+
+        WICPixelFormatGUID fmt;
+        m_srcBitmap->GetPixelFormat(&fmt);
+        wxASSERT_MSG(fmt == GUID_WICPixelFormat32bppPBGRA || fmt == GUID_WICPixelFormat32bppBGR, "Unsupported pixel format");
+
+        UINT bufStride = 4 * r.Width;
+        UINT bufSize = 4 * r.Width * r.Height;
+        BYTE* pixBuffer = new BYTE[bufSize];
+        HRESULT hr = m_srcBitmap->CopyPixels(&r, bufStride, bufSize, pixBuffer);
+        if ( FAILED(hr) )
+        {
+            delete[] pixBuffer;
+            wxFAILED_HRESULT_MSG(hr);
+            return NULL;
+        }
+
+        wxCOMPtr<IWICBitmap> subBmp;
+        hr = wxWICImagingFactory()->CreateBitmapFromMemory(r.Width, r.Height, fmt, bufStride, bufSize, pixBuffer, &subBmp);
+        delete[] pixBuffer;
+        wxCHECK2_HRESULT_RET(hr, NULL);
+
+        return new wxD2DBitmapResourceHolder(subBmp);
     }
 
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        ID2D1RenderTarget* renderTarget = GetContext();
-
-        HRESULT hr;
-
-        if(m_sourceBitmap.GetMask())
-        {
-            int w = m_sourceBitmap.GetWidth();
-            int h = m_sourceBitmap.GetHeight();
-
-            wxCOMPtr<IWICBitmapSource> colorBitmap = wxCreateWICBitmap(m_sourceBitmap);
-            wxCOMPtr<IWICBitmapSource> maskBitmap = wxCreateWICBitmap(m_sourceBitmap.GetMask()->GetMaskBitmap());
-            wxCOMPtr<IWICBitmap> resultBitmap;
-
-            wxWICImagingFactory()->CreateBitmap(
-                w, h,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapCacheOnLoad,
-                &resultBitmap);
-
-            BYTE* colorBuffer = new BYTE[4 * w * h];
-            BYTE* maskBuffer = new BYTE[4 * w * h];
-            BYTE* resultBuffer;
-
-            hr = colorBitmap->CopyPixels(NULL, w * 4, 4 * w * h, colorBuffer);
-            hr = maskBitmap->CopyPixels(NULL, w * 4, 4 * w * h, maskBuffer);
-
-            {
-                wxBitmapPixelWriteLock lock(resultBitmap);
-
-                UINT bufferSize = 0;
-                hr = lock.GetLock()->GetDataPointer(&bufferSize, &resultBuffer);
-
-                static const wxPBGRAColor transparentColor(wxTransparentColour);
-
-                // Create the result bitmap
-                for (int i = 0; i < w * h * 4; i += 4)
-                {
-                    wxPBGRAColor color(colorBuffer + i);
-                    wxPBGRAColor mask(maskBuffer + i);
-
-                    if (mask.IsBlack())
-                    {
-                        transparentColor.Write(resultBuffer + i);
-                    }
-                    else
-                    {
-                        color.a = 255;
-                        color.Write(resultBuffer + i);
-                    }
-                }
-            }
-
-            hr = renderTarget->CreateBitmapFromWicBitmap(resultBitmap, 0, &m_nativeResource);
-            wxCHECK_HRESULT_RET(hr);
-
-            delete[] colorBuffer;
-            delete[] maskBuffer;
-        }
-        else
-        {
-            wxCOMPtr<IWICBitmapSource> bitmapSource = wxCreateWICBitmap(m_sourceBitmap, m_sourceBitmap.HasAlpha());
-            hr = renderTarget->CreateBitmapFromWicBitmap(bitmapSource, 0, &m_nativeResource);
-        }
+        HRESULT hr = GetContext()->CreateBitmapFromWicBitmap(m_srcBitmap, 0, &m_nativeResource);
+        wxCHECK_HRESULT_RET(hr);
     }
 
 private:
-    wxBitmap m_sourceBitmap;
+    wxCOMPtr<IWICBitmap> m_srcBitmap;
 };
 
 //-----------------------------------------------------------------------------
@@ -4539,12 +4593,11 @@ void wxD2DContext::DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble 
 
     wxD2DBitmapData* bitmapData = wxGetD2DBitmapData(bmp);
     bitmapData->Bind(this);
+    wxSize bmpSize = static_cast<wxD2DBitmapData::NativeType*>(bitmapData->GetNativeBitmap())->GetSize();
 
-    wxCOMPtr<ID2D1Bitmap> d2dBmp = bitmapData->GetD2DBitmap();
-    D2D1_SIZE_F d2dBmpSize = d2dBmp->GetSize();
     m_renderTargetHolder->DrawBitmap(
-        d2dBmp,
-        D2D1::RectF(0, 0, d2dBmpSize.width, d2dBmpSize.height),
+        bitmapData->GetD2DBitmap(),
+        D2D1::RectF(0, 0, bmpSize.GetWidth(), bmpSize.GetHeight()),
         D2D1::RectF(x, y, x + w, y + h),
         GetInterpolationQuality(),
         GetCompositionMode());
