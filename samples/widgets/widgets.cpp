@@ -459,6 +459,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_LayoutDirection,
                                 "Toggle &layout direction\tCtrl-L");
+    menuWidget->Check(Widgets_LayoutDirection,
+                      GetLayoutDirection() == wxLayout_RightToLeft);
 
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_GlobalBusyCursor,
