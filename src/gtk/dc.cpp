@@ -366,25 +366,7 @@ void wxGTKCairoDCImpl::SetLayoutDirection(wxLayoutDirection dir)
     if (dir == wxLayout_Default && m_window)
         dir = m_window->GetLayoutDirection();
 
-    if (m_layoutDir != dir)
-    {
-        if (m_graphicContext)
-        {
-            if (dir == wxLayout_RightToLeft)
-            {
-                // wxDC is mirrored for RTL
-                m_graphicContext->Translate(m_size.x, 0);
-                m_graphicContext->Scale(-1, 1);
-            }
-            else if (m_layoutDir == wxLayout_RightToLeft)
-            {
-                m_graphicContext->Scale(-1, 1);
-                m_graphicContext->Translate(-m_size.x, 0);
-            }
-        }
-
-        m_layoutDir = dir;
-    }
+    m_layoutDir = dir;
 }
 
 wxLayoutDirection wxGTKCairoDCImpl::GetLayoutDirection() const
@@ -394,6 +376,15 @@ wxLayoutDirection wxGTKCairoDCImpl::GetLayoutDirection() const
         m_layoutDir == wxLayout_RightToLeft
             ? wxLayout_RightToLeft
             : wxLayout_LeftToRight;
+}
+
+void wxGTKCairoDCImpl::AdjustForRTL(cairo_t* cr)
+{
+    if (m_layoutDir == wxLayout_RightToLeft)
+    {
+        cairo_translate(cr, m_size.x, 0);
+        cairo_scale(cr, -1, 1);
+    }
 }
 //-----------------------------------------------------------------------------
 
@@ -412,6 +403,8 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
     if (gdkWindow)
     {
         cairo_t* cr = gdk_cairo_create(gdkWindow);
+        SetLayoutDirection(wxLayout_Default);
+        AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
         gc->EnableOffset(m_contentScaleFactor <= 1);
@@ -437,8 +430,6 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
         }
         if (x || y)
             SetDeviceLocalOrigin(x, y);
-
-        SetLayoutDirection(wxLayout_Default);
     }
     else
         SetGraphicsContext(wxGraphicsContext::Create());
@@ -461,6 +452,7 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     if (gdkWindow)
     {
         cairo_t* cr = gdk_cairo_create(gdkWindow);
+        AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
         gc->EnableOffset(m_contentScaleFactor <= 1);
@@ -473,7 +465,6 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
             cairo_clip(cr);
             SetDeviceLocalOrigin(a.x, a.y);
         }
-        SetLayoutDirection(wxLayout_Default);
     }
     else
         SetGraphicsContext(wxGraphicsContext::Create());
@@ -578,16 +569,12 @@ void wxMemoryDCImpl::Setup()
         m_size = m_bitmap.GetScaledSize();
         m_contentScaleFactor = m_bitmap.GetScaleFactor();
         cairo_t* cr = m_bitmap.CairoCreate();
+        AdjustForRTL(cr);
         gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
         gc->EnableOffset(m_contentScaleFactor <= 1);
     }
     SetGraphicsContext(gc);
-
-    // re-apply layout direction
-    const wxLayoutDirection dir = m_layoutDir;
-    m_layoutDir = wxLayout_Default;
-    SetLayoutDirection(dir);
 }
 //-----------------------------------------------------------------------------
 

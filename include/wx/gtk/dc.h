@@ -41,6 +41,7 @@ public:
 protected:
     // Set m_size from the given (valid) GdkWindow.
     void InitSize(GdkWindow* window);
+    void AdjustForRTL(cairo_t* cr);
 
     wxSize m_size;
     wxLayoutDirection m_layoutDir;
