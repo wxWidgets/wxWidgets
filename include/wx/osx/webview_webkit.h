@@ -56,17 +56,13 @@ public:
     virtual void GoForward() wxOVERRIDE;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) wxOVERRIDE;
     virtual void Stop() wxOVERRIDE;
-    virtual wxString GetPageSource() const wxOVERRIDE;
-    virtual wxString GetPageText() const wxOVERRIDE;
 
     virtual void Print() wxOVERRIDE;
 
     virtual void LoadURL(const wxString& url) wxOVERRIDE;
     virtual wxString GetCurrentURL() const wxOVERRIDE;
     virtual wxString GetCurrentTitle() const wxOVERRIDE;
-    virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
     virtual float GetZoomFactor() const wxOVERRIDE;
-    virtual void SetZoom(wxWebViewZoom zoom) wxOVERRIDE;
     virtual void SetZoomFactor(float zoom) wxOVERRIDE;
 
     virtual void SetZoomType(wxWebViewZoomType zoomType) wxOVERRIDE;
@@ -88,35 +84,11 @@ public:
     virtual void Undo() wxOVERRIDE;
     virtual void Redo() wxOVERRIDE;
 
-    //Find function
-    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) wxOVERRIDE
-    {
-        wxUnusedVar(text);
-        wxUnusedVar(flags);
-        return wxNOT_FOUND;
-    }
-
-    //Clipboard functions
-    virtual bool CanCut() const wxOVERRIDE { return true; }
-    virtual bool CanCopy() const wxOVERRIDE { return true; }
-    virtual bool CanPaste() const wxOVERRIDE { return true; }
-    virtual void Cut() wxOVERRIDE;
-    virtual void Copy() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
-
     //Editing functions
     virtual void SetEditable(bool enable = true) wxOVERRIDE;
     virtual bool IsEditable() const wxOVERRIDE;
 
-    //Selection
-    virtual void DeleteSelection() wxOVERRIDE;
-    virtual bool HasSelection() const wxOVERRIDE;
-    virtual void SelectAll() wxOVERRIDE;
-    virtual wxString GetSelectedText() const wxOVERRIDE;
-    virtual wxString GetSelectedSource() const wxOVERRIDE;
-    virtual void ClearSelection() wxOVERRIDE;
-
-    bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
+    bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -135,9 +107,7 @@ private:
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
 
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
-    bool QueryCommandEnabled(const wxString& command) const;
-    void ExecCommand(const wxString& command);
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory

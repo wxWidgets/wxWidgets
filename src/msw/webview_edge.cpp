@@ -19,6 +19,7 @@
 #include "wx/log.h"
 #include "wx/stdpaths.h"
 #include "wx/thread.h"
+#include "wx/tokenzr.h"
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/json.h"
 #include "wx/msw/private.h"
@@ -52,6 +53,8 @@ CreateCoreWebView2EnvironmentWithOptions_t wxCreateCoreWebView2EnvironmentWithOp
 GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2BrowserVersionString = NULL;
 
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
+wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
+wxString wxWebViewEdgeImpl::ms_version;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
     m_ctrl(webview)
@@ -85,7 +88,7 @@ bool wxWebViewEdgeImpl::Create()
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 
     HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
-        nullptr,
+        ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
         nullptr,
         Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
@@ -127,12 +130,14 @@ bool wxWebViewEdgeImpl::Initialize()
 
     // Check if a Edge browser can be found by the loader DLL
     wxCoTaskMemPtr<wchar_t> versionStr;
-    HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(NULL, &versionStr);
+    HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
+        ms_browserExecutableDir.wc_str(), &versionStr);
     if (FAILED(hr) || !versionStr)
     {
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
         return false;
     }
+    ms_version = versionStr;
 
     ms_loaderDll.Attach(loaderDll.Detach());
 
@@ -503,20 +508,6 @@ void wxWebViewEdge::Reload(wxWebViewReloadFlags WXUNUSED(flags))
         m_impl->m_webView->Reload();
 }
 
-wxString wxWebViewEdge::GetPageSource() const
-{
-    wxString text;
-    const_cast<wxWebViewEdge*>(this)->RunScript("document.documentElement.outerHTML;", &text);
-    return text;
-}
-
-wxString wxWebViewEdge::GetPageText() const
-{
-    wxString text;
-    const_cast<wxWebViewEdge*>(this)->RunScript("document.body.innerText;", &text);
-    return text;
-}
-
 bool wxWebViewEdge::IsBusy() const
 {
     return m_impl->m_isBusy;
@@ -560,21 +551,6 @@ void wxWebViewEdge::Print()
     RunScript("window.print();");
 }
 
-wxWebViewZoom wxWebViewEdge::GetZoom() const
-{
-    double old_zoom_factor = 0.0;
-    m_impl->m_webViewController->get_ZoomFactor(&old_zoom_factor);
-    if (old_zoom_factor > 1.7)
-        return wxWEBVIEW_ZOOM_LARGEST;
-    if (old_zoom_factor > 1.3)
-        return wxWEBVIEW_ZOOM_LARGE;
-    if (old_zoom_factor > 0.8)
-        return wxWEBVIEW_ZOOM_MEDIUM;
-    if (old_zoom_factor > 0.6)
-        return wxWEBVIEW_ZOOM_SMALL;
-    return wxWEBVIEW_ZOOM_TINY;
-}
-
 float wxWebViewEdge::GetZoomFactor() const
 {
     double old_zoom_factor = 0.0;
@@ -582,67 +558,9 @@ float wxWebViewEdge::GetZoomFactor() const
     return old_zoom_factor;
 }
 
-void wxWebViewEdge::SetZoom(wxWebViewZoom zoom)
-{
-    double old_zoom_factor = 0.0;
-    m_impl->m_webViewController->get_ZoomFactor(&old_zoom_factor);
-    double zoom_factor = 1.0;
-    switch (zoom)
-    {
-    case wxWEBVIEW_ZOOM_LARGEST:
-        zoom_factor = 2.0;
-        break;
-    case wxWEBVIEW_ZOOM_LARGE:
-        zoom_factor = 1.5;
-        break;
-    case wxWEBVIEW_ZOOM_MEDIUM:
-        zoom_factor = 1.0;
-        break;
-    case wxWEBVIEW_ZOOM_SMALL:
-        zoom_factor = 0.75;
-        break;
-    case wxWEBVIEW_ZOOM_TINY:
-        zoom_factor = 0.5;
-        break;
-    default:
-        break;
-    }
-    SetZoomFactor(zoom_factor);
-}
-
 void wxWebViewEdge::SetZoomFactor(float zoom)
 {
     m_impl->m_webViewController->put_ZoomFactor(zoom);
-}
-
-bool wxWebViewEdge::CanCut() const
-{
-    return QueryCommandEnabled("cut");
-}
-
-bool wxWebViewEdge::CanCopy() const
-{
-    return QueryCommandEnabled("copy");
-}
-
-bool wxWebViewEdge::CanPaste() const
-{
-    return QueryCommandEnabled("paste");
-}
-
-void wxWebViewEdge::Cut()
-{
-    ExecCommand("cut");
-}
-
-void wxWebViewEdge::Copy()
-{
-    ExecCommand("copy");
-}
-
-void wxWebViewEdge::Paste()
-{
-    ExecCommand("paste");
 }
 
 bool wxWebViewEdge::CanUndo() const
@@ -665,12 +583,6 @@ void wxWebViewEdge::Redo()
     ExecCommand("redo");
 }
 
-long wxWebViewEdge::Find(const wxString& WXUNUSED(text), int WXUNUSED(flags))
-{
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return -1;
-}
-
 //Editing functions
 void wxWebViewEdge::SetEditable(bool WXUNUSED(enable))
 {
@@ -680,41 +592,6 @@ void wxWebViewEdge::SetEditable(bool WXUNUSED(enable))
 bool wxWebViewEdge::IsEditable() const
 {
     return false;
-}
-
-void wxWebViewEdge::SelectAll()
-{
-    RunScript("window.getSelection().selectAllChildren(document);");
-}
-
-bool wxWebViewEdge::HasSelection() const
-{
-    wxString rangeCountStr;
-    const_cast<wxWebViewEdge*>(this)->RunScript("window.getSelection().rangeCount;", &rangeCountStr);
-    return rangeCountStr != "0";
-}
-
-void wxWebViewEdge::DeleteSelection()
-{
-    ExecCommand("delete");
-}
-
-wxString wxWebViewEdge::GetSelectedText() const
-{
-    wxString selectedText;
-    const_cast<wxWebViewEdge*>(this)->RunScript("window.getSelection().toString();", &selectedText);
-    return selectedText;
-}
-
-wxString wxWebViewEdge::GetSelectedSource() const
-{
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return wxString();
-}
-
-void wxWebViewEdge::ClearSelection()
-{
-    RunScript("window.getSelection().empty();");
 }
 
 void wxWebViewEdge::EnableContextMenu(bool enable)
@@ -769,20 +646,12 @@ void* wxWebViewEdge::GetNativeBackend() const
     return m_impl->m_webView;
 }
 
-bool wxWebViewEdge::QueryCommandEnabled(const wxString& command) const
+void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
 {
-    wxString resultStr;
-    const_cast<wxWebViewEdge*>(this)->RunScript(
-        wxString::Format("function f(){ return document.queryCommandEnabled('%s'); } f();", command), &resultStr);
-    return resultStr.IsSameAs("true", false);
+    wxWebViewEdgeImpl::ms_browserExecutableDir = path;
 }
 
-void wxWebViewEdge::ExecCommand(const wxString& command)
-{
-    RunScript(wxString::Format("document.execCommand('%s');", command));
-}
-
-bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
+bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     bool scriptExecuted = false;
 
@@ -818,7 +687,7 @@ bool wxWebViewEdge::RunScriptSync(const wxString& javascript, wxString* output)
         return true;
 }
 
-bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) const
 {
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
@@ -869,6 +738,22 @@ bool wxWebViewFactoryEdge::IsAvailable()
     return wxWebViewEdgeImpl::Initialize();
 }
 
+wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
+{
+    IsAvailable(); // Make sure ms_version string is initialized (if available)
+    long major = 0,
+         minor = 0,
+         micro = 0;
+    wxStringTokenizer tk(wxWebViewEdgeImpl::ms_version, ". ");
+    // Ignore the return value because if the version component is missing
+    // or invalid (i.e. non-numeric), the only thing we can do is to ignore
+    // it anyhow.
+    tk.GetNextToken().ToLong(&major);
+    tk.GetNextToken().ToLong(&minor);
+    tk.GetNextToken().ToLong(&micro);
+
+    return wxVersionInfo("Microsoft Edge WebView2", major, minor, micro);
+}
 
 // ----------------------------------------------------------------------------
 // Module ensuring all global/singleton objects are destroyed on shutdown.

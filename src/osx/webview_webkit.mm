@@ -222,13 +222,6 @@ void wxWebViewWebKit::Stop()
     [m_webView stopLoading];
 }
 
-wxString wxWebViewWebKit::GetPageSource() const
-{
-    wxString text;
-    const_cast<wxWebViewWebKit*>(this)->RunScript("document.documentElement.outerHTML;", &text);
-    return text;
-}
-
 void wxWebViewWebKit::Print()
 {
 
@@ -309,14 +302,7 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType type) const
     }
 }
 
-wxString wxWebViewWebKit::GetSelectedText() const
-{
-    wxString text;
-    const_cast<wxWebViewWebKit*>(this)->RunScript("window.getSelection().toString();", &text);
-    return text;
-}
-
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     __block bool scriptExecuted = false;
     __block wxString outputStr;
@@ -359,7 +345,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     return scriptSuccess;
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
 {
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
@@ -404,70 +390,9 @@ wxString wxWebViewWebKit::GetCurrentTitle() const
     return wxCFStringRef::AsString(m_webView.title);
 }
 
-wxWebViewZoom wxWebViewWebKit::GetZoom() const
-{
-    float zoom = GetZoomFactor();
-
-    // arbitrary way to map float zoom to our common zoom enum
-    if (zoom <= 0.55)
-    {
-        return wxWEBVIEW_ZOOM_TINY;
-    }
-    else if (zoom > 0.55 && zoom <= 0.85)
-    {
-        return wxWEBVIEW_ZOOM_SMALL;
-    }
-    else if (zoom > 0.85 && zoom <= 1.15)
-    {
-        return wxWEBVIEW_ZOOM_MEDIUM;
-    }
-    else if (zoom > 1.15 && zoom <= 1.45)
-    {
-        return wxWEBVIEW_ZOOM_LARGE;
-    }
-    else if (zoom > 1.45)
-    {
-        return wxWEBVIEW_ZOOM_LARGEST;
-    }
-
-    // to shut up compilers, this can never be reached logically
-    wxASSERT(false);
-    return wxWEBVIEW_ZOOM_MEDIUM;
-}
-
 float wxWebViewWebKit::GetZoomFactor() const
 {
     return m_webView.magnification;
-}
-
-void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
-{
-    // arbitrary way to map our common zoom enum to float zoom
-    switch (zoom)
-    {
-        case wxWEBVIEW_ZOOM_TINY:
-            SetZoomFactor(0.4f);
-            break;
-
-        case wxWEBVIEW_ZOOM_SMALL:
-            SetZoomFactor(0.7f);
-            break;
-
-        case wxWEBVIEW_ZOOM_MEDIUM:
-            SetZoomFactor(1.0f);
-            break;
-
-        case wxWEBVIEW_ZOOM_LARGE:
-            SetZoomFactor(1.3);
-            break;
-
-        case wxWEBVIEW_ZOOM_LARGEST:
-            SetZoomFactor(1.6);
-            break;
-
-        default:
-            wxASSERT(false);
-    }
 }
 
 void wxWebViewWebKit::SetZoomFactor(float zoom)
@@ -483,57 +408,6 @@ void wxWebViewWebKit::DoSetPage(const wxString& src, const wxString& baseUrl)
     [m_webView loadHTMLString:wxCFStringRef( src ).AsNSString()
                                   baseURL:[NSURL URLWithString:
                                     wxCFStringRef( baseUrl ).AsNSString()]];
-}
-
-void wxWebViewWebKit::Cut()
-{
-    ExecCommand("cut");
-}
-
-void wxWebViewWebKit::Copy()
-{
-    ExecCommand("copy");
-}
-
-void wxWebViewWebKit::Paste()
-{
-    ExecCommand("paste");
-}
-
-void wxWebViewWebKit::DeleteSelection()
-{
-    ExecCommand("delete");
-}
-
-bool wxWebViewWebKit::HasSelection() const
-{
-    wxString rangeCountStr;
-    const_cast<wxWebViewWebKit*>(this)->RunScript("window.getSelection().rangeCount;", &rangeCountStr);
-    return rangeCountStr != "0";
-}
-
-void wxWebViewWebKit::ClearSelection()
-{
-    //We use javascript as selection isn't exposed at the moment in webkit
-    RunScript("window.getSelection().removeAllRanges();");
-}
-
-void wxWebViewWebKit::SelectAll()
-{
-    RunScript("window.getSelection().selectAllChildren(document.body);");
-}
-
-wxString wxWebViewWebKit::GetSelectedSource() const
-{
-    // TODO: not implemented in SDK (could probably be implemented by script)
-    return wxString();
-}
-
-wxString wxWebViewWebKit::GetPageText() const
-{
-    wxString text;
-    const_cast<wxWebViewWebKit*>(this)->RunScript("document.body.innerText;", &text);
-    return text;
 }
 
 void wxWebViewWebKit::EnableHistory(bool enable)
@@ -613,19 +487,6 @@ void wxWebViewWebKit::Redo()
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_handlers[handler->GetName()] = handler;
-}
-
-bool wxWebViewWebKit::QueryCommandEnabled(const wxString& command) const
-{
-    wxString resultStr;
-    const_cast<wxWebViewWebKit*>(this)->RunScript(
-        wxString::Format("function f(){ return document.queryCommandEnabled('%s'); } f();", command), &resultStr);
-    return resultStr.IsSameAs("true", false);
-}
-
-void wxWebViewWebKit::ExecCommand(const wxString& command)
-{
-    RunScript(wxString::Format("document.execCommand('%s');", command));
 }
 
 //------------------------------------------------------------

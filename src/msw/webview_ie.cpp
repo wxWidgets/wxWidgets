@@ -19,6 +19,7 @@
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
+#include "wx/tokenzr.h"
 
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
@@ -49,6 +50,25 @@ enum //Internal find flags
     wxWEBVIEW_FIND_REMOVE_HIGHLIGHT =  0x0002
 };
 
+}
+
+// wxWebViewFactoryIE
+wxVersionInfo wxWebViewFactoryIE::GetVersionInfo()
+{
+    wxRegKey key(wxRegKey::HKLM, "Software\\Microsoft\\Internet Explorer");
+    wxString value;
+    key.QueryValue("Version", value);
+    long major = 0,
+         minor = 0,
+         micro = 0;
+    wxStringTokenizer tk(value, ". ");
+    // Ignore the return value because if the version component is missing
+    // or invalid (i.e. non-numeric), the only thing we can do is to ignore
+    // it anyhow.
+    tk.GetNextToken().ToLong(&major);
+    tk.GetNextToken().ToLong(&minor);
+    tk.GetNextToken().ToLong(&micro);
+    return wxVersionInfo("Internet Explorer", major, minor, micro);
 }
 
 //Convenience function for error conversion
@@ -1009,7 +1029,7 @@ bool CallEval(const wxString& code,
     return scriptAO.Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varCode);
 }
 
-bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output) const
 {
     wxCOMPtr<IHTMLDocument2> document(m_impl->GetDocument());
     if ( !document )
