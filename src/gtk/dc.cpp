@@ -452,6 +452,7 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     if (gdkWindow)
     {
         cairo_t* cr = gdk_cairo_create(gdkWindow);
+        SetLayoutDirection(wxLayout_Default);
         AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
         cairo_destroy(cr);
