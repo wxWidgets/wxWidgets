@@ -2035,7 +2035,7 @@ TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
                 wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
 
                 CHECK_EQUAL_COLOUR_RGB(cRes, cSrc);
-                if ( cRes == maskCol )
+                if ( cSrc == maskCol )
                 {
                     CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_TRANSPARENT);
                 }
