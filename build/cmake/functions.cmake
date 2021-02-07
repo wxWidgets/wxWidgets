@@ -606,12 +606,13 @@ function(wx_print_thirdparty_library_summary)
 endfunction()
 
 # Add sample, test or demo
-# wx_add(<name> <group> [CONSOLE|DLL] [IMPORTANT] [SRC_FILES...]
+# wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL] [IMPORTANT] [SRC_FILES...]
 #    [LIBRARIES ...] [NAME target_name] [FOLDER folder]
 #    [DATA ...] [DEFINITIONS ...] [RES ...])
 # name default target name
 # group can be Samples, Tests or Demos
 # first parameter may be CONSOLE to indicate a console application or DLL to indicate a shared library
+# or CONSOLE_GUI to indicate a console application that uses gui libraries
 # all following parameters are src files for the executable
 #
 # Optionally:
@@ -641,7 +642,7 @@ endfunction()
 
 function(wx_add name group)
     cmake_parse_arguments(APP
-        "CONSOLE;DLL;IMPORTANT"
+        "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT"
         "NAME;FOLDER"
         "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES"
         ${ARGN}
@@ -709,7 +710,7 @@ function(wx_add name group)
     if(APP_DLL)
         add_library(${target_name} SHARED ${src_files})
     else()
-        if(APP_CONSOLE OR group STREQUAL Tests)
+        if(APP_CONSOLE OR APP_CONSOLE_GUI)
             set(exe_type)
         else()
             set(exe_type WIN32 MACOSX_BUNDLE)
