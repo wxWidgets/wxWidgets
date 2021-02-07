@@ -28,7 +28,7 @@
 #include "wx/hashset.h"
 #include "wx/hashmap.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include <wx/msw/wrapwin.h>
 #else
     #include <sys/socket.h>
@@ -403,14 +403,7 @@ public:
     void ResumePolling(wxSOCKET_T);
 
 private:
-    enum
-    {
-#ifdef INVALID_SOCKET
-        SOCKET_POLLER_INVALID_SOCKET = INVALID_SOCKET
-#else
-        SOCKET_POLLER_INVALID_SOCKET = ((wxSOCKET_T)(~0))
-#endif
-    };
+    static const wxSOCKET_T SOCKET_POLLER_INVALID_SOCKET;
 
     class Message
     {
@@ -424,7 +417,7 @@ private:
                 LastMessageId
             };
 
-            Message(MessageId i = LastMessageId,
+            explicit Message(MessageId i = LastMessageId,
                     wxSOCKET_T s = SOCKET_POLLER_INVALID_SOCKET,
                     int f = 0,
                     wxEvtHandler* h = NULL)
@@ -486,10 +479,18 @@ private:
 
 wxDEFINE_EVENT(wxSocketAction,wxThreadEvent);
 
+#ifdef INVALID_SOCKET
+    const wxSOCKET_T SocketPoller::SOCKET_POLLER_INVALID_SOCKET =
+        INVALID_SOCKET;
+#else
+    const wxSOCKET_T SocketPoller::SOCKET_POLLER_INVALID_SOCKET =
+        static_cast<wxSOCKET_T>(~0);
+#endif
+
 
 SocketPoller::SocketPoller()
 {
-    m_writeEnd = SocketPoller::SOCKET_POLLER_INVALID_SOCKET;
+    m_writeEnd = static_cast<wxSOCKET_T>(SocketPoller::SOCKET_POLLER_INVALID_SOCKET);
     m_readEnd = SocketPoller::SOCKET_POLLER_INVALID_SOCKET;
     CreateSocketPair();
 
@@ -516,14 +517,14 @@ SocketPoller::~SocketPoller()
     CloseSocket(m_writeEnd);
     CloseSocket(m_readEnd);
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     WSACleanup();
 #endif
 }
 
 void SocketPoller::CreateSocketPair()
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     WORD wVersionRequested = MAKEWORD(1,1);
     WSADATA wsaData;
     WSAStartup(wVersionRequested, &wsaData);
@@ -586,7 +587,7 @@ void SocketPoller::CreateSocketPair()
 
 void SocketPoller::CloseSocket(wxSOCKET_T s)
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     closesocket(s);
 #else
     close(s);
