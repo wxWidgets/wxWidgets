@@ -17,9 +17,11 @@ wx_option(wxBUILD_TESTS "Build console tests (CONSOLE_ONLY) or ALL" OFF
 wx_option(wxBUILD_DEMOS "Build demos" OFF)
 wx_option(wxBUILD_BENCHMARKS "Build benchmarks" OFF)
 wx_option(wxBUILD_PRECOMP "Use precompiled headers")
+mark_as_advanced(wxBUILD_PRECOMP)
 wx_option(wxBUILD_INSTALL "Create install/uninstall target for wxWidgets")
 wx_option(wxBUILD_COMPATIBILITY
     "enable compatibilty with earlier wxWidgets versions" 3.0 STRINGS 2.8 3.0 3.1)
+mark_as_advanced(wxBUILD_COMPATIBILITY)
 # Allow user specified setup.h folder
 set(wxBUILD_CUSTOM_SETUP_HEADER_PATH "" CACHE PATH "Include path containing custom wx/setup.h")
 mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
@@ -33,10 +35,12 @@ mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 
 if(NOT APPLE)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
+    mark_as_advanced(wxBUILD_USE_STATIC_RUNTIME)
 endif()
 
 if(MSVC)
     wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
+    mark_as_advanced(wxBUILD_MSVC_MULTIPROC)
 endif()
 
 if(NOT MSVC OR MSVC_VERSION GREATER 1800)
