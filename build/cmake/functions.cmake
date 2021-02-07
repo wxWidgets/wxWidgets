@@ -605,12 +605,12 @@ function(wx_print_thirdparty_library_summary)
     message(STATUS ${message})
 endfunction()
 
-# Add sample, test or demo
+# Add sample, test, demo or benchmark
 # wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL] [IMPORTANT] [SRC_FILES...]
 #    [LIBRARIES ...] [NAME target_name] [FOLDER folder]
 #    [DATA ...] [DEFINITIONS ...] [RES ...])
 # name default target name
-# group can be Samples, Tests or Demos
+# group can be Samples, Tests, Demos or Benchmarks
 # first parameter may be CONSOLE to indicate a console application or DLL to indicate a shared library
 # or CONSOLE_GUI to indicate a console application that uses gui libraries
 # all following parameters are src files for the executable
@@ -638,6 +638,10 @@ endfunction()
 
 function(wx_add_demo name)
     wx_add(${name} "Demos" ${ARGN})
+endfunction()
+
+function(wx_add_benchmark name)
+    wx_add(${name} "Benchmarks" ${ARGN})
 endfunction()
 
 function(wx_add name group)
@@ -669,6 +673,9 @@ function(wx_add name group)
     elseif(group STREQUAL Demos)
         set(SUB_DIR "demos/${name}")
         set(DEFAULT_RC_FILE "demos/${name}/${target_name}.rc")
+    elseif(group STREQUAL Benchmarks)
+        set(SUB_DIR "tests/benchmarks")
+        set(DEFAULT_RC_FILE "samples/sample.rc")
     else()
         message(WARNING "Unkown group \"${group}\"")
         return()
