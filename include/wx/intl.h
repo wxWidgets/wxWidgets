@@ -118,6 +118,10 @@ enum wxLocaleInfo
     // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
     wxLOCALE_DECIMAL_POINT,
 
+    // Specifies the amount of digits that form each of the groups to be
+    // separated by thousands separator (for wxLOCALE_CAT_NUMBER or MONEY)
+    wxLOCALE_GROUPING,
+
     // the stftime()-formats used for short/long date and time representations
     // (under some platforms short and long date formats are the same)
     //
@@ -355,6 +359,10 @@ private:
                           const wxString& name,
                           const wxString& shortName,
                           bool bLoadDefault);
+
+    // Converts a grouping format string returned by localeconv()
+    // to the kind used on Windows platform
+    static wxString StandardizeGroupingString(const wxString& g);
 
 
     wxString       m_strLocale,       // this locale name

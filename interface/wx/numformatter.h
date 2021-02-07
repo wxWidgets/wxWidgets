@@ -123,4 +123,53 @@ public:
      */
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);
 
+    /**
+        Get the thousands separator and grouping format if grouping of the
+        digits is used by the current locale.
+
+        The value returned in @a sep and @a gr should be only used if the
+        function returns @true, otherwise no thousands separator should be
+        used at all.
+
+        @param sep
+            Points to the variable receiving the thousands separator character
+            if it is used by the current locale. May be @NULL if only the
+            function return value is needed.
+
+        @param gr
+            Points to the variable receiving the grouping format string
+            if it is used by the current locale. May be @NULL if only the
+            function return value is needed.
+
+        @since 3.1.5
+     */
+    static bool GetThousandsSeparatorAndGroupingIfUsed(wxChar *sep, wxString *gr);
+
+    /**
+        Format a number with the thousands separator based on grouping format.
+        The grouping format is a string of digits separated by ';'. Each digit
+        indicates  the number of digits of the string s to be grouped starting
+        from the right. If the last digit is '0' then the last but one digit
+        is used for grouping the remaining digits.
+
+        Examples:
+        Number: "123456789", Grouping format: "3;0", result: "123,456,789"
+        Number: "123456789", Grouping format: "3;2;0", result: "12,34,56,789"
+
+        @param s
+            The number to be formatted as a string
+
+        @param thousandsSep
+            The thousands separator
+
+        @param decSep
+            The decimal separator
+
+        @param grouping
+            The string representing the thousands separator grouping format.
+
+        @since 3.1.5
+     */
+    static void FormatNumber(wxString &s, wxChar thousandsSep, wxChar decSep,
+                             wxString grouping);
 };

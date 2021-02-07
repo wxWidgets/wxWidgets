@@ -17,7 +17,7 @@
 #include "wx/intl.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// test class (UK locale)
 // ----------------------------------------------------------------------------
 
 class NumFormatterTestCase : public CppUnit::TestCase
@@ -343,4 +343,545 @@ void NumFormatterTestCase::DoubleFromString()
 
     CPPUNIT_ASSERT( wxNumberFormatter::FromString("123456789.012", &d) );
     CPPUNIT_ASSERT_EQUAL( 123456789.012, d );
+}
+
+// ----------------------------------------------------------------------------
+// test class (India locale)
+// ----------------------------------------------------------------------------
+class NumFormatterAlternateTestCase : public CppUnit::TestCase
+{
+public:
+    NumFormatterAlternateTestCase() { m_locale = NULL; }
+
+    virtual void setUp() wxOVERRIDE
+    {
+        // We need to use a locale with known decimal point and which uses the
+        // thousands separator for the tests to make sense.
+        m_locale = new wxLocale(wxLANGUAGE_ENGLISH_INDIA,
+                                wxLOCALE_DONT_LOAD_DEFAULT);
+        if ( !m_locale->IsOk() )
+            tearDown();
+        else
+        {
+            wxChar thousandsSep;
+            wxString grouping;
+            if ( wxNumberFormatter::GetThousandsSeparatorAndGroupingIfUsed(&thousandsSep, &grouping) )
+            {
+                // On some Windows systems the grouping is "3;2" which is incorrect
+                // Skip this test in that case
+                if ( !grouping.IsSameAs(wxString("3;2;0")) )
+                    tearDown();
+            }
+            else
+                tearDown();
+        }
+    }
+
+    virtual void tearDown() wxOVERRIDE
+    {
+        delete m_locale;
+        m_locale = NULL;
+    }
+
+private:
+    CPPUNIT_TEST_SUITE( NumFormatterAlternateTestCase );
+        CPPUNIT_TEST( LongToString );
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+        CPPUNIT_TEST( LongLongToString );
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+        CPPUNIT_TEST( DoubleToString );
+        CPPUNIT_TEST( NoTrailingZeroes );
+        CPPUNIT_TEST( LongFromString );
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+        CPPUNIT_TEST( LongLongFromString );
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+        CPPUNIT_TEST( DoubleFromString );
+    CPPUNIT_TEST_SUITE_END();
+
+    void LongToString();
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    void LongLongToString();
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    void DoubleToString();
+    void NoTrailingZeroes();
+    void LongFromString();
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    void LongLongFromString();
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    void DoubleFromString();
+
+    wxLocale *m_locale;
+
+    wxDECLARE_NO_COPY_CLASS(NumFormatterAlternateTestCase);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( NumFormatterAlternateTestCase );
+
+// also include in its own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NumFormatterAlternateTestCase, "NumFormatterAlternateTestCase" );
+
+// ----------------------------------------------------------------------------
+// tests themselves
+// ----------------------------------------------------------------------------
+
+void NumFormatterAlternateTestCase::LongToString()
+{
+    if ( !m_locale )
+        return;
+
+    CPPUNIT_ASSERT_EQUAL(           "1", wxNumberFormatter::ToString(         1L));
+    CPPUNIT_ASSERT_EQUAL(          "-1", wxNumberFormatter::ToString(        -1L));
+    CPPUNIT_ASSERT_EQUAL(          "12", wxNumberFormatter::ToString(        12L));
+    CPPUNIT_ASSERT_EQUAL(         "-12", wxNumberFormatter::ToString(       -12L));
+    CPPUNIT_ASSERT_EQUAL(         "123", wxNumberFormatter::ToString(       123L));
+    CPPUNIT_ASSERT_EQUAL(        "-123", wxNumberFormatter::ToString(      -123L));
+    CPPUNIT_ASSERT_EQUAL(       "1,234", wxNumberFormatter::ToString(      1234L));
+    CPPUNIT_ASSERT_EQUAL(      "-1,234", wxNumberFormatter::ToString(     -1234L));
+    CPPUNIT_ASSERT_EQUAL(      "12,345", wxNumberFormatter::ToString(     12345L));
+    CPPUNIT_ASSERT_EQUAL(     "-12,345", wxNumberFormatter::ToString(    -12345L));
+    CPPUNIT_ASSERT_EQUAL(    "1,23,456", wxNumberFormatter::ToString(    123456L));
+    CPPUNIT_ASSERT_EQUAL(   "-1,23,456", wxNumberFormatter::ToString(   -123456L));
+    CPPUNIT_ASSERT_EQUAL(   "12,34,567", wxNumberFormatter::ToString(   1234567L));
+    CPPUNIT_ASSERT_EQUAL(  "-12,34,567", wxNumberFormatter::ToString(  -1234567L));
+    CPPUNIT_ASSERT_EQUAL( "1,23,45,678", wxNumberFormatter::ToString(  12345678L));
+    CPPUNIT_ASSERT_EQUAL("-1,23,45,678", wxNumberFormatter::ToString( -12345678L));
+    CPPUNIT_ASSERT_EQUAL("12,34,56,789", wxNumberFormatter::ToString( 123456789L));
+}
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+void NumFormatterAlternateTestCase::LongLongToString()
+{
+    if ( !m_locale )
+        return;
+
+    CPPUNIT_ASSERT_EQUAL(           "1", wxNumberFormatter::ToString(wxLL(         1)));
+    CPPUNIT_ASSERT_EQUAL(          "12", wxNumberFormatter::ToString(wxLL(        12)));
+    CPPUNIT_ASSERT_EQUAL(         "123", wxNumberFormatter::ToString(wxLL(       123)));
+    CPPUNIT_ASSERT_EQUAL(       "1,234", wxNumberFormatter::ToString(wxLL(      1234)));
+    CPPUNIT_ASSERT_EQUAL(      "12,345", wxNumberFormatter::ToString(wxLL(     12345)));
+    CPPUNIT_ASSERT_EQUAL(    "1,23,456", wxNumberFormatter::ToString(wxLL(    123456)));
+    CPPUNIT_ASSERT_EQUAL(   "12,34,567", wxNumberFormatter::ToString(wxLL(   1234567)));
+    CPPUNIT_ASSERT_EQUAL( "1,23,45,678", wxNumberFormatter::ToString(wxLL(  12345678)));
+    CPPUNIT_ASSERT_EQUAL("12,34,56,789", wxNumberFormatter::ToString(wxLL( 123456789)));
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+void NumFormatterAlternateTestCase::DoubleToString()
+{
+    if ( !m_locale )
+        return;
+
+    CPPUNIT_ASSERT_EQUAL("1.0", wxNumberFormatter::ToString(1., 1));
+    CPPUNIT_ASSERT_EQUAL("0.123456", wxNumberFormatter::ToString(0.123456, 6));
+    CPPUNIT_ASSERT_EQUAL("1.234567", wxNumberFormatter::ToString(1.234567, 6));
+    CPPUNIT_ASSERT_EQUAL("12.34567", wxNumberFormatter::ToString(12.34567, 5));
+    CPPUNIT_ASSERT_EQUAL("123.4567", wxNumberFormatter::ToString(123.4567, 4));
+    CPPUNIT_ASSERT_EQUAL("1,234.56", wxNumberFormatter::ToString(1234.56, 2));
+    CPPUNIT_ASSERT_EQUAL("12,345.6", wxNumberFormatter::ToString(12345.6, 1));
+    CPPUNIT_ASSERT_EQUAL("12,345.6", wxNumberFormatter::ToString(12345.6, 1));
+    CPPUNIT_ASSERT_EQUAL("12,34,56,789.0",
+                         wxNumberFormatter::ToString(123456789., 1));
+    CPPUNIT_ASSERT_EQUAL("12,34,56,789.012",
+                         wxNumberFormatter::ToString(123456789.012, 3));
+    CPPUNIT_ASSERT_EQUAL("12,345",
+                         wxNumberFormatter::ToString(12345.012, -1));
+    CPPUNIT_ASSERT_EQUAL("-123.1230",
+                         wxNumberFormatter::ToString(-123.123, 4, wxNumberFormatter::Style_None));
+    CPPUNIT_ASSERT_EQUAL("0.0",
+                         wxNumberFormatter::ToString(0.02, 1, wxNumberFormatter::Style_None));
+    CPPUNIT_ASSERT_EQUAL("-0.0",
+                         wxNumberFormatter::ToString(-0.02, 1, wxNumberFormatter::Style_None));
+}
+
+void NumFormatterAlternateTestCase::NoTrailingZeroes()
+{
+    WX_ASSERT_FAILS_WITH_ASSERT
+    (
+        wxNumberFormatter::ToString(123L, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    if ( !m_locale )
+        return;
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123.000",
+        wxNumberFormatter::ToString(123., 3)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123",
+        wxNumberFormatter::ToString(123., 3, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123",
+        wxNumberFormatter::ToString(123., 9, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123.456",
+        wxNumberFormatter::ToString(123.456, 3, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123.456000000",
+        wxNumberFormatter::ToString(123.456, 9)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123.456",
+        wxNumberFormatter::ToString(123.456, 9, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123.12",
+        wxNumberFormatter::ToString(123.123, 2, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123",
+        wxNumberFormatter::ToString(123.123, 0, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "0",
+        wxNumberFormatter::ToString(-0.000123, 3, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123",
+        wxNumberFormatter::ToString(123., -1, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "1e-120",
+        wxNumberFormatter::ToString(1e-120, -1, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+}
+
+void NumFormatterAlternateTestCase::LongFromString()
+{
+    if ( !m_locale )
+        return;
+
+    WX_ASSERT_FAILS_WITH_ASSERT
+    (
+        wxNumberFormatter::FromString("123", static_cast<long *>(0))
+    );
+
+    long l;
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("", &l) );
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("foo", &l) );
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("1.234", &l) );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123", &l) );
+    CPPUNIT_ASSERT_EQUAL( 123, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1234", &l) );
+    CPPUNIT_ASSERT_EQUAL( 1234, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234", &l) );
+    CPPUNIT_ASSERT_EQUAL( 1234, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345", &l) );
+    CPPUNIT_ASSERT_EQUAL( 12345, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,23,456", &l) );
+    CPPUNIT_ASSERT_EQUAL( 123456, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234,567", &l) );
+    CPPUNIT_ASSERT_EQUAL( 1234567, l );
+}
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+void NumFormatterAlternateTestCase::LongLongFromString()
+{
+    if ( !m_locale )
+        return;
+
+    WX_ASSERT_FAILS_WITH_ASSERT
+    (
+        wxNumberFormatter::FromString("123", static_cast<wxLongLong_t *>(0))
+    );
+
+    wxLongLong_t l;
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("", &l) );
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("foo", &l) );
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("1.234", &l) );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123", &l) );
+    CPPUNIT_ASSERT_EQUAL( 123, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1234", &l) );
+    CPPUNIT_ASSERT_EQUAL( 1234, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234", &l) );
+    CPPUNIT_ASSERT_EQUAL( 1234, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345", &l) );
+    CPPUNIT_ASSERT_EQUAL( 12345, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,23,456", &l) );
+    CPPUNIT_ASSERT_EQUAL( 123456, l );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,34,567", &l) );
+    CPPUNIT_ASSERT_EQUAL( 1234567, l );
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+void NumFormatterAlternateTestCase::DoubleFromString()
+{
+    if ( !m_locale )
+        return;
+
+    WX_ASSERT_FAILS_WITH_ASSERT
+    (
+        wxNumberFormatter::FromString("123", static_cast<double *>(0))
+    );
+
+    double d;
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("", &d) );
+    CPPUNIT_ASSERT( !wxNumberFormatter::FromString("bar", &d) );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123", &d) );
+    CPPUNIT_ASSERT_EQUAL( 123., d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123.456789012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 123.456789012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234.56789012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 1234.56789012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,345.6789012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 12345.6789012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,23,456.789012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 123456.789012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,234,567.89012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 1234567.89012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("1,23,45,678.9012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 12345678.9012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("12,34,56,789.012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 123456789.012, d );
+
+    CPPUNIT_ASSERT( wxNumberFormatter::FromString("123456789.012", &d) );
+    CPPUNIT_ASSERT_EQUAL( 123456789.012, d );
+}
+
+//--------------------------------------------------------------------------
+// Test case for wxNumberFormatter::FormatNumber
+//--------------------------------------------------------------------------
+
+class FormatNumberTestCase : public CppUnit::TestCase
+{
+public:
+    FormatNumberTestCase() {}
+private:
+    static const wxChar thousandsSep = ',', decSep = '.';
+    static const wxString grouping_UK;
+
+    static wxString FormatNumberAndReturn(wxString s);
+
+    CPPUNIT_TEST_SUITE( FormatNumberTestCase );
+        CPPUNIT_TEST( PositiveIntegers );
+        CPPUNIT_TEST( NegativeIntegers );
+        CPPUNIT_TEST( PositiveReals );
+        CPPUNIT_TEST( NegativeReals );
+    CPPUNIT_TEST_SUITE_END();
+
+    void PositiveIntegers();
+    void NegativeIntegers();
+    void PositiveReals();
+    void NegativeReals();
+};
+
+const wxString FormatNumberTestCase::grouping_UK = "3;0";
+wxString FormatNumberTestCase::FormatNumberAndReturn(wxString s)
+{
+    wxString ret = s.Clone();
+    wxNumberFormatter::FormatNumber(ret, thousandsSep, decSep, grouping_UK);
+    return ret;
+}
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( FormatNumberTestCase );
+
+// also include in its own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FormatNumberTestCase, "FormatNumberTestCase" );
+
+void FormatNumberTestCase::PositiveIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0").IsSameAs(            "0"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1").IsSameAs(            "1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12").IsSameAs(           "12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123").IsSameAs(          "123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234").IsSameAs(        "1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345").IsSameAs(       "12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456").IsSameAs(      "123,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567").IsSameAs(    "1,234,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678").IsSameAs(   "12,345,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789").IsSameAs(  "123,456,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890").IsSameAs("1,234,567,890"));
+}
+
+void FormatNumberTestCase::NegativeIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1").IsSameAs(            "-1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12").IsSameAs(           "-12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123").IsSameAs(          "-123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234").IsSameAs(        "-1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345").IsSameAs(       "-12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456").IsSameAs(      "-123,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567").IsSameAs(    "-1,234,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678").IsSameAs(   "-12,345,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789").IsSameAs(  "-123,456,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890").IsSameAs("-1,234,567,890"));
+}
+
+void FormatNumberTestCase::PositiveReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0.1234").IsSameAs(            "0.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1.1234").IsSameAs(            "1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12.1234").IsSameAs(           "12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123.1234").IsSameAs(          "123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234.1234").IsSameAs(        "1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345.1234").IsSameAs(       "12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456.1234").IsSameAs(      "123,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567.1234").IsSameAs(    "1,234,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678.1234").IsSameAs(   "12,345,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789.1234").IsSameAs(  "123,456,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890.1234").IsSameAs("1,234,567,890.1234"));
+}
+
+void FormatNumberTestCase::NegativeReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1.1234").IsSameAs(            "-1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12.1234").IsSameAs(           "-12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123.1234").IsSameAs(          "-123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234.1234").IsSameAs(        "-1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345.1234").IsSameAs(       "-12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456.1234").IsSameAs(      "-123,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567.1234").IsSameAs(    "-1,234,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678.1234").IsSameAs(   "-12,345,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789.1234").IsSameAs(  "-123,456,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890.1234").IsSameAs("-1,234,567,890.1234"));
+}
+
+//--------------------------------------------------------------------------
+// Alternate test case for wxNumberFormatter::FormatNumber with grouping in
+// Indian format i.e, "3;2;0"
+//--------------------------------------------------------------------------
+
+class FormatNumberAlternateTestCase : public CppUnit::TestCase
+{
+public:
+    FormatNumberAlternateTestCase() {}
+private:
+    static const wxChar thousandsSep = ',', decSep = '.';
+    static const wxString grouping_India;
+
+    static wxString FormatNumberAndReturn(wxString s);
+
+    CPPUNIT_TEST_SUITE( FormatNumberAlternateTestCase );
+        CPPUNIT_TEST( PositiveIntegers );
+        CPPUNIT_TEST( NegativeIntegers );
+        CPPUNIT_TEST( PositiveReals );
+        CPPUNIT_TEST( NegativeReals );
+    CPPUNIT_TEST_SUITE_END();
+
+    void PositiveIntegers();
+    void NegativeIntegers();
+    void PositiveReals();
+    void NegativeReals();
+};
+
+const wxString FormatNumberAlternateTestCase::grouping_India = "3;2;0";
+wxString FormatNumberAlternateTestCase::FormatNumberAndReturn(wxString s)
+{
+    wxString ret = s.Clone();
+    wxNumberFormatter::FormatNumber(ret, thousandsSep, decSep, grouping_India);
+    return ret;
+}
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( FormatNumberAlternateTestCase );
+
+// also include in its own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FormatNumberAlternateTestCase, "FormatNumberAlternateTestCase" );
+
+void FormatNumberAlternateTestCase::PositiveIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0").IsSameAs(             "0"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1").IsSameAs(             "1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12").IsSameAs(            "12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123").IsSameAs(           "123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234").IsSameAs(         "1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345").IsSameAs(        "12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456").IsSameAs(      "1,23,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567").IsSameAs(     "12,34,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678").IsSameAs(   "1,23,45,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789").IsSameAs(  "12,34,56,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890").IsSameAs("1,23,45,67,890"));
+}
+
+void FormatNumberAlternateTestCase::NegativeIntegers()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1").IsSameAs(             "-1"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12").IsSameAs(            "-12"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123").IsSameAs(           "-123"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234").IsSameAs(         "-1,234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345").IsSameAs(        "-12,345"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456").IsSameAs(      "-1,23,456"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567").IsSameAs(     "-12,34,567"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678").IsSameAs(   "-1,23,45,678"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789").IsSameAs(  "-12,34,56,789"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890").IsSameAs("-1,23,45,67,890"));
+}
+
+void FormatNumberAlternateTestCase::PositiveReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "0.1234").IsSameAs(             "0.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "1.1234").IsSameAs(             "1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "12.1234").IsSameAs(            "12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "123.1234").IsSameAs(           "123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "1234.1234").IsSameAs(         "1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "12345.1234").IsSameAs(        "12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "123456.1234").IsSameAs(      "1,23,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "1234567.1234").IsSameAs(     "12,34,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "12345678.1234").IsSameAs(   "1,23,45,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "123456789.1234").IsSameAs(  "12,34,56,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("1234567890.1234").IsSameAs("1,23,45,67,890.1234"));
+}
+
+void FormatNumberAlternateTestCase::NegativeReals()
+{
+    CPPUNIT_ASSERT(FormatNumberAndReturn(         "-1.1234").IsSameAs(             "-1.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(        "-12.1234").IsSameAs(            "-12.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(       "-123.1234").IsSameAs(           "-123.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(      "-1234.1234").IsSameAs(         "-1,234.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(     "-12345.1234").IsSameAs(        "-12,345.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(    "-123456.1234").IsSameAs(      "-1,23,456.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(   "-1234567.1234").IsSameAs(     "-12,34,567.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn(  "-12345678.1234").IsSameAs(   "-1,23,45,678.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn( "-123456789.1234").IsSameAs(  "-12,34,56,789.1234"));
+    CPPUNIT_ASSERT(FormatNumberAndReturn("-1234567890.1234").IsSameAs("-1,23,45,67,890.1234"));
 }

@@ -66,6 +66,7 @@
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
+    #include <CoreFoundation/CFNumberFormatter.h>
     #include <CoreFoundation/CFString.h>
 #endif
 
@@ -1634,6 +1635,10 @@ GetInfoFromLCID(LCID lcid,
             }
             break;
 
+        case wxLOCALE_GROUPING:
+            if ( ::GetLocaleInfo(lcid, LOCALE_SGROUPING, buf, WXSIZEOF(buf)) )
+                str = buf;
+            break;
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_TIME_FMT:
@@ -1707,6 +1712,9 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             case wxLOCALE_DECIMAL_POINT:
                 return ".";
 
+            case wxLOCALE_GROUPING:
+                return "3;0";
+
             case wxLOCALE_SHORT_DATE_FMT:
                 return "%m/%d/%y";
 
@@ -1763,6 +1771,42 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
         case wxLOCALE_DECIMAL_POINT:
             cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
+            break;
+
+        case wxLOCALE_GROUPING:
+            {
+                wxCFRef<CFNumberFormatterRef> numFormatterRef(
+                    CFNumberFormatterCreate(NULL, userLocaleRef, kCFNumberFormatterDecimalStyle));
+                CFNumberRef size = (CFNumberRef) CFNumberFormatterCopyProperty(
+                    numFormatterRef, kCFNumberFormatterGroupingSize);
+                CFNumberRef secSize = (CFNumberRef) CFNumberFormatterCopyProperty(
+                    numFormatterRef, kCFNumberFormatterSecondaryGroupingSize);
+                // Convert the size and secondary size to char and create the grouping string
+                char s, ss;
+                if (CFNumberGetValue(size, kCFNumberCharType, &s))
+                {
+                    if (CFNumberGetValue(secSize, kCFNumberCharType, &ss) && ss != s)
+                    {
+                        s += '0';
+                        ss += '0';
+                        const char gstr[] = {s, ';', ss, ';', '0', '\0'};
+                        cfstr = CFStringCreateWithCString(
+                            NULL, &gstr[0], kCFStringEncodingASCII);
+                    }
+                    else
+                    {
+                        s += '0';
+                        const char gstr[] = {s, ';', '0', '\0'};
+                        cfstr = CFStringCreateWithCString(
+                            NULL, &gstr[0], kCFStringEncodingASCII);
+                    }
+                }
+                else
+                {
+                    // No grouping
+                    cfstr = CFStringCreateWithCString(NULL, "", kCFStringEncodingASCII);
+                }
+            }
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1894,6 +1938,32 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
 
 } // anonymous namespace
 
+// Convert a grouping format string returned by localeconv() to
+// a standardized format. Our standard format is the one used for
+// Windows SGROUPING. Here we convert char sized integers to ASCII
+// characters. That is, for example '\3' becomes '3'. We also add
+// a ';' delimiter between each number. A '\0' or a CHAR_MAX
+// signifies the end of the argument string. If the argument string
+// ends with a '\0' then we insert a '0' into the return string.
+// The return string will be NULL terminated.
+
+/* static */
+wxString wxLocale::StandardizeGroupingString(const wxString& g)
+{
+    wxString s;
+    int i;
+    for (i = 0; g[i] != '\0' && g[i] != CHAR_MAX; i++)
+    {
+        s.Append((char)((int)g[i] + (int)'0'));
+        s.Append(';');
+    }
+    if (g[i] == '\0')
+        s.Append('0');
+    else
+        s.RemoveLast();    // Remove extra ;
+    return s;
+}
+
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
@@ -1918,6 +1988,15 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
                 return lc->decimal_point;
             else if ( cat == wxLOCALE_CAT_MONEY )
                 return lc->mon_decimal_point;
+
+            wxFAIL_MSG( "invalid wxLocaleCategory" );
+            break;
+
+        case wxLOCALE_GROUPING:
+            if ( cat == wxLOCALE_CAT_NUMBER )
+                return StandardizeGroupingString(lc->grouping);
+            else if ( cat == wxLOCALE_CAT_MONEY )
+                return StandardizeGroupingString(lc->mon_grouping);
 
             wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;

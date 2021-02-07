@@ -128,6 +128,18 @@ enum wxLocaleInfo
     wxLOCALE_DECIMAL_POINT,
 
     /**
+        Specifies the amount of digits that form each of the groups
+        to be separated by thousands_sep separator for non-monetary
+        quantities.
+
+        This value can be used with either wxLOCALE_CAT_NUMBER or
+        wxLOCALE_CAT_MONEY categories.
+
+         @since 3.1.5
+     */
+    wxLOCALE_GROUPING,
+
+    /**
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX
@@ -526,4 +538,3 @@ public:
    Get the current locale object (note that it may be NULL!)
 */
 wxLocale* wxGetLocale();
-
