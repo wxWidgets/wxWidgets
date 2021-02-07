@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "penguin", "penguin_vc7.vcproj", "{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.Debug|Win32.Build.0 = Debug|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.Release|Win32.ActiveCfg = Release|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.Release|Win32.Build.0 = Release|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{E4B64D00-B536-5D17-AC16-B9D2E52C6AD6}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

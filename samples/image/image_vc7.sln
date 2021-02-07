@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image", "image_vc7.vcproj", "{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.Debug|Win32.Build.0 = Debug|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.Release|Win32.ActiveCfg = Release|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.Release|Win32.Build.0 = Release|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{014E1AF2-D9FA-535D-BA27-4C658AEEFE4A}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

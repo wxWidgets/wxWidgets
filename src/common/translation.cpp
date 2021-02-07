@@ -45,6 +45,7 @@
 #include "wx/fontmap.h"
 #include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
+#include "wx/version.h"
 #include "wx/private/threadinfo.h"
 
 #ifdef __WINDOWS__
@@ -1519,8 +1520,9 @@ wxArrayString wxTranslations::GetAvailableTranslations(const wxString& domain) c
 
 bool wxTranslations::AddStdCatalog()
 {
-    if ( !AddCatalog(wxS("wxstd")) )
-        return false;
+    if ( !AddCatalog(wxS("wxstd-" wxVERSION_NUM_DOT_STRING_T)) )
+        if ( !AddCatalog(wxS("wxstd")) )
+            return false;
 
     // there may be a catalog with toolkit specific overrides, it is not
     // an error if this does not exist

@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "anitest", "anitest_vc7.vcproj", "{6C573F03-4747-5E7F-BF98-EA470D38271F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.Debug|Win32.Build.0 = Debug|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.Release|Win32.ActiveCfg = Release|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.Release|Win32.Build.0 = Release|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{6C573F03-4747-5E7F-BF98-EA470D38271F}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

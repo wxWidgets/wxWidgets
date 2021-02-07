@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "drawing", "drawing_vc7.vcproj", "{94DA0390-E90F-558C-9E65-176BC3451A05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.Debug|Win32.Build.0 = Debug|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.Release|Win32.ActiveCfg = Release|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.Release|Win32.Build.0 = Release|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{94DA0390-E90F-558C-9E65-176BC3451A05}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

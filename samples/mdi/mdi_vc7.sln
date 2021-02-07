@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mdi", "mdi_vc7.vcproj", "{D2815CD4-FD97-53E5-AA84-9CF85C378807}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.Debug|Win32.Build.0 = Debug|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.Release|Win32.ActiveCfg = Release|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.Release|Win32.Build.0 = Release|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{D2815CD4-FD97-53E5-AA84-9CF85C378807}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

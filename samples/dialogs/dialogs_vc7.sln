@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dialogs", "dialogs_vc7.vcproj", "{F8D0AAB8-2840-5529-96F7-466B441FDEF0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.Debug|Win32.Build.0 = Debug|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.Release|Win32.ActiveCfg = Release|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.Release|Win32.Build.0 = Release|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{F8D0AAB8-2840-5529-96F7-466B441FDEF0}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+
