@@ -240,8 +240,6 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
     // Set error buffer to get more detailed CURL status
     m_errorBuffer[0] = '\0';
     curl_easy_setopt(m_handle, CURLOPT_ERRORBUFFER, m_errorBuffer);
-    // Set this request in the private pointer
-    curl_easy_setopt(m_handle, CURLOPT_PRIVATE, static_cast<void*>(this));
     // Set URL to handle: note that we must use wxURI to escape characters not
     // allowed in the URLs correctly (URL API is only available in libcurl
     // since the relatively recent v7.62.0, so we don't want to rely on it).
@@ -266,8 +264,7 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
 wxWebRequestCURL::~wxWebRequestCURL()
 {
     DestroyHeaderList();
-
-    curl_easy_cleanup(m_handle);
+    m_sessionImpl.RequestHasTerminated(this);
 }
 
 void wxWebRequestCURL::Start()
@@ -1004,6 +1001,7 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
     if ( code == CURLM_OK )
     {
         request.SetState(wxWebRequest::State_Active);
+        m_activeTransfers[curl] = &request;
 
         // Report a timeout to curl to initiate this transfer.
         int runningHandles;
@@ -1020,8 +1018,35 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
 
 void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
 {
-    curl_multi_remove_handle(m_handle, request->GetHandle());
+    CURL* curl = request->GetHandle();
+    TransferSet::iterator it = m_activeTransfers.find(curl);
+
+    if ( it != m_activeTransfers.end() )
+    {
+        m_activeTransfers.erase(it);
+    }
+
+    curl_multi_remove_handle(m_handle, curl);
     request->SetState(wxWebRequest::State_Cancelled);
+}
+
+void wxWebSessionCURL::RequestHasTerminated(wxWebRequestCURL* request)
+{
+    CURL* curl = request->GetHandle();
+    TransferSet::iterator it = m_activeTransfers.find(curl);
+
+    if ( it != m_activeTransfers.end() )
+    {
+        // The transfer the CURL handle is performing is still in progress, but
+        // the web request object it belongs to is being deleted. Since the
+        // next step will call curl_easy_cleanup and any calls on the CURL
+        // handle after cleanup are illegal, remove it from the CURLM
+        // multihandle now.
+        curl_multi_remove_handle(m_handle, curl);
+        m_activeTransfers.erase(it);
+    }
+
+    curl_easy_cleanup(curl);
 }
 
 wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
@@ -1196,10 +1221,16 @@ void wxWebSessionCURL::CheckForCompletedTransfers()
     {
         if ( msg->msg == CURLMSG_DONE )
         {
-            wxWebRequestCURL* request;
-            curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &request);
-            curl_multi_remove_handle(m_handle, msg->easy_handle);
-            request->HandleCompletion();
+            CURL* curl = msg->easy_handle;
+            TransferSet::iterator it = m_activeTransfers.find(curl);
+
+            if ( it != m_activeTransfers.end() )
+            {
+                wxWebRequestCURL* request = it->second;
+                curl_multi_remove_handle(m_handle, curl);
+                request->HandleCompletion();
+                m_activeTransfers.erase(it);
+            }
         }
     }
 }

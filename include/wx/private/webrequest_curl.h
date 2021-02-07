@@ -17,6 +17,7 @@
 #include "wx/thread.h"
 #include "wx/vector.h"
 #include "wx/timer.h"
+#include "wx/hashmap.h"
 
 #include "curl/curl.h"
 
@@ -151,6 +152,8 @@ public:
 
     void CancelRequest(wxWebRequestCURL* request);
 
+    void RequestHasTerminated(wxWebRequestCURL* request);
+
     static bool CurlRuntimeAtLeastVersion(unsigned int, unsigned int,
                                           unsigned int);
 
@@ -164,6 +167,11 @@ private:
     void ProcessSocketCallback(curl_socket_t, int);
     void ProcessSocketPollerResult(wxThreadEvent&);
     void CheckForCompletedTransfers();
+
+    WX_DECLARE_HASH_MAP(CURL*, wxWebRequestCURL*, wxPointerHash, \
+                        wxPointerEqual, TransferSet);
+
+    TransferSet m_activeTransfers;
 
     SocketPoller* m_socketPoller;
     wxTimer m_timeoutTimer;
