@@ -14778,14 +14778,14 @@ locale_install:
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale/$$l ; \
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES ; \
 	if test -f $(srcdir)/locale/$$l.mo ; then \
-	$(INSTALL_DATA) $(srcdir)/locale/$$l.mo $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES/wxstd.mo ; \
+	$(INSTALL_DATA) $(srcdir)/locale/$$l.mo $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES/wxstd-$(WX_RELEASE).mo ; \
 	fi ; \
 	done
 
 locale_uninstall: 
 	for l in $(LOCALE_LINGUAS) ; do \
-	if test -f $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES/wxstd.mo ; then \
-	rm -f $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES/wxstd.mo ; \
+	if test -f $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES/wxstd-$(WX_RELEASE).mo ; then \
+	rm -f $(DESTDIR)$(datadir)/locale/$$l/LC_MESSAGES/wxstd-$(WX_RELEASE).mo ; \
 	fi ; \
 	done
 

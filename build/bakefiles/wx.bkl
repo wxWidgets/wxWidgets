@@ -137,7 +137,7 @@
         <using module="gettext"/>
         <gettext-catalogs id="locale">
             <srcdir>$(SRCDIR)/locale</srcdir>
-            <catalog-name>wxstd</catalog-name>
+            <catalog-name>wxstd-$(WX_RELEASE)</catalog-name>
             <linguas>
                 ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk
                 zh zh_CN zh_TW
