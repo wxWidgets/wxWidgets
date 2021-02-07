@@ -105,8 +105,6 @@ private:
 
     void OnSize(wxSizeEvent& event);
 
-    void OnShow(wxShowEvent& event);
-
     bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewEdge);

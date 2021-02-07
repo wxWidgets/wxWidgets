@@ -296,6 +296,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
 
     m_initialized = true;
     UpdateBounds();
+    m_webViewController->put_IsVisible(true);
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
@@ -362,7 +363,6 @@ ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
 
 wxWebViewEdge::~wxWebViewEdge()
 {
-    Unbind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
     delete m_impl;
 }
 
@@ -387,7 +387,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     if (!m_impl->Create())
         return false;
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
-    Bind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
 
     LoadURL(url);
     return true;
@@ -396,13 +395,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
 void wxWebViewEdge::OnSize(wxSizeEvent& event)
 {
     m_impl->UpdateBounds();
-    event.Skip();
-}
-
-void wxWebViewEdge::OnShow(wxShowEvent& event)
-{
-    if (m_impl->m_webView)
-        m_impl->m_webViewController->put_IsVisible(event.IsShown());
     event.Skip();
 }
 
