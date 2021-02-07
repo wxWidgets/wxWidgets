@@ -363,6 +363,9 @@ ICoreWebView2Settings* wxWebViewEdgeImpl::GetSettings()
 
 wxWebViewEdge::~wxWebViewEdge()
 {
+    wxWindow* topLevelParent = wxGetTopLevelParent(this);
+    if (topLevelParent)
+        topLevelParent->Unbind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
     delete m_impl;
 }
 
@@ -387,6 +390,9 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     if (!m_impl->Create())
         return false;
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
+    wxWindow* topLevelParent = wxGetTopLevelParent(this);
+    if (topLevelParent)
+        topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
 
     LoadURL(url);
     return true;
@@ -395,6 +401,13 @@ bool wxWebViewEdge::Create(wxWindow* parent,
 void wxWebViewEdge::OnSize(wxSizeEvent& event)
 {
     m_impl->UpdateBounds();
+    event.Skip();
+}
+
+void wxWebViewEdge::OnTopLevelParentIconized(wxIconizeEvent& event)
+{
+    if (m_impl && m_impl->m_webViewController)
+        m_impl->m_webViewController->put_IsVisible(!event.IsIconized());
     event.Skip();
 }
 
