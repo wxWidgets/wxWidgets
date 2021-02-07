@@ -14,6 +14,14 @@
 #include "wx/gdiobj.h"
 #include "wx/peninfobase.h"
 
+// Possible values for pen quality.
+enum wxPenQuality
+{
+    wxPEN_QUALITY_DEFAULT,  // Select the appropriate quality automatically.
+    wxPEN_QUALITY_LOW,      // Less good looking but faster.
+    wxPEN_QUALITY_HIGH      // Best looking, at the expense of speed.
+};
+
 // ----------------------------------------------------------------------------
 // wxPenInfo contains all parameters describing a wxPen
 // ----------------------------------------------------------------------------
@@ -27,6 +35,7 @@ public:
         : wxPenInfoBase<wxPenInfo>(colour, style)
     {
         m_width = width;
+        m_quality = wxPEN_QUALITY_DEFAULT;
     }
 
     // Setters
@@ -34,12 +43,20 @@ public:
     wxPenInfo& Width(int width)
         { m_width = width; return *this; }
 
+    wxPenInfo& Quality(wxPenQuality quality)
+        { m_quality = quality; return *this; }
+    wxPenInfo& LowQuality() { return Quality(wxPEN_QUALITY_LOW); }
+    wxPenInfo& HighQuality() { return Quality(wxPEN_QUALITY_HIGH); }
+
     // Accessors
 
     int GetWidth() const { return m_width; }
 
+    wxPenQuality GetQuality() const { return m_quality; }
+
 private:
     int m_width;
+    wxPenQuality m_quality;
 };
 
 
@@ -57,12 +74,14 @@ public:
     virtual void SetDashes(int nb_dashes, const wxDash *dash) = 0;
     virtual void SetJoin(wxPenJoin join) = 0;
     virtual void SetCap(wxPenCap cap) = 0;
+    virtual void SetQuality(wxPenQuality quality) { wxUnusedVar(quality); }
 
     virtual wxColour GetColour() const = 0;
     virtual wxBitmap *GetStipple() const = 0;
     virtual wxPenStyle GetStyle() const = 0;
     virtual wxPenJoin GetJoin() const = 0;
     virtual wxPenCap GetCap() const = 0;
+    virtual wxPenQuality GetQuality() const { return wxPEN_QUALITY_DEFAULT; }
     virtual int GetWidth() const = 0;
     virtual int GetDashes(wxDash **ptr) const = 0;
 

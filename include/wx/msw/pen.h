@@ -43,12 +43,14 @@ public:
     void SetDashes(int nb_dashes, const wxDash *dash) wxOVERRIDE;
     void SetJoin(wxPenJoin join) wxOVERRIDE;
     void SetCap(wxPenCap cap) wxOVERRIDE;
+    void SetQuality(wxPenQuality quality) wxOVERRIDE;
 
     wxColour GetColour() const wxOVERRIDE;
     int GetWidth() const wxOVERRIDE;
     wxPenStyle GetStyle() const wxOVERRIDE;
     wxPenJoin GetJoin() const wxOVERRIDE;
     wxPenCap GetCap() const wxOVERRIDE;
+    wxPenQuality GetQuality() const wxOVERRIDE;
     int GetDashes(wxDash** ptr) const wxOVERRIDE;
     wxDash* GetDash() const;
     int GetDashCount() const;
