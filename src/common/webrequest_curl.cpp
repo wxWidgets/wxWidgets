@@ -1027,6 +1027,8 @@ void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
     }
 
     curl_multi_remove_handle(m_handle, curl);
+    StopTransfer(curl);
+
     request->SetState(wxWebRequest::State_Cancelled);
 }
 
@@ -1232,6 +1234,69 @@ void wxWebSessionCURL::CheckForCompletedTransfers()
                 m_activeTransfers.erase(it);
             }
         }
+    }
+}
+
+void wxWebSessionCURL::StopTransfer(CURL* curl)
+{
+    curl_socket_t activeSocket;
+    bool closeActiveSocket = true;
+    bool useLastSocket = false;
+
+#if CURL_AT_LEAST_VERSION(7, 45, 0)
+    if ( CurlRuntimeAtLeastVersion(7, 45, 0) )
+    {
+        CURLcode code = curl_easy_getinfo(curl, CURLINFO_ACTIVESOCKET,
+                                          &activeSocket);
+
+        if ( code != CURLE_OK || activeSocket == CURL_SOCKET_BAD )
+        {
+            closeActiveSocket = false;
+        }
+    }
+    else
+    {
+        useLastSocket = true;
+    }
+#else
+    useLastSocket = true;
+#endif //CURL_AT_LEAST_VERSION(7, 45, 0)
+
+    // CURLINFO_ACTIVESOCKET is not available either at compile time or run
+    // time. So we must use the older CURLINFO_LASTSOCKET instead.
+    if ( useLastSocket )
+    {
+        #ifdef __WIN64__
+            // CURLINFO_LASTSOCKET won't work on 64 bit windows because it
+            // uses a long to retrive the socket. However sockets will be 64
+            // bit values. In this case there is nothing we can do.
+            closeActiveSocket = false;
+        #endif //__WIN64__
+
+        if ( closeActiveSocket )
+        {
+            long longSocket;
+            CURLcode code = curl_easy_getinfo(curl, CURLINFO_LASTSOCKET,
+                                              &longSocket);
+
+            if ( code == CURLE_OK && longSocket!= -1 )
+            {
+                activeSocket = static_cast<curl_socket_t>(longSocket);
+            }
+            else
+            {
+                closeActiveSocket = false;
+            }
+        }
+    }
+
+    if ( closeActiveSocket )
+    {
+        #ifdef __WINDOWS__
+            closesocket(activeSocket);
+        #else
+            close(activeSocket);
+        #endif
     }
 }
 

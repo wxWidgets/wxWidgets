@@ -167,6 +167,7 @@ private:
     void ProcessSocketCallback(curl_socket_t, int);
     void ProcessSocketPollerResult(wxThreadEvent&);
     void CheckForCompletedTransfers();
+    void StopTransfer(CURL*);
 
     WX_DECLARE_HASH_MAP(CURL*, wxWebRequestCURL*, wxPointerHash, \
                         wxPointerEqual, TransferSet);
