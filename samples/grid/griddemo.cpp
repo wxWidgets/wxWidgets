@@ -502,10 +502,10 @@ GridFrame::GridFrame()
     colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour..." );
 
     wxMenu *editMenu = new wxMenu;
-    editMenu->Append( ID_INSERTROW, "Insert &row" );
-    editMenu->Append( ID_INSERTCOL, "Insert &column" );
-    editMenu->Append( ID_DELETEROW, "Delete selected ro&ws" );
-    editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
+    editMenu->Append( ID_INSERTROW, "Insert &rows\tCtrl+I" );
+    editMenu->Append( ID_INSERTCOL, "Insert &columns\tCtrl+Shift+I" );
+    editMenu->Append( ID_DELETEROW, "Delete selected ro&ws\tCtrl+D" );
+    editMenu->Append( ID_DELETECOL, "Delete selected co&ls\tCtrl+Shift+D" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
     editMenu->Append( ID_EDITCELL, "&Edit current cell" );
     editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
@@ -1235,32 +1235,115 @@ void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
     }
 }
 
+namespace
+{
+
+// Helper used to insert/delete rows/columns. Allows changing by more than
+// one row/column at once.
+void HandleEdits(wxGrid* grid, wxGridDirection direction, bool isInsertion)
+{
+    const bool isRow = (direction == wxGRID_ROW);
+
+    const wxGridBlocks selected = grid->GetSelectedBlocks();
+    wxGridBlocks::iterator it = selected.begin();
+
+    if ( isInsertion )
+    {
+        int pos, count;
+        // Only do multiple insertions if we have a single consecutive
+        // selection (mimicking LibreOffice), otherwise do a single insertion
+        // at cursor.
+        if ( it != selected.end() && ++it == selected.end() )
+        {
+            const wxGridBlockCoords& b = *selected.begin();
+            pos = isRow ? b.GetTopRow() : b.GetLeftCol();
+            count = (isRow ? b.GetBottomRow() : b.GetRightCol()) - pos + 1;
+        }
+        else
+        {
+            pos = isRow ? grid->GetGridCursorRow() : grid->GetGridCursorCol();
+            count = 1;
+        }
+
+        if ( isRow )
+            grid->InsertRows(pos, count);
+        else
+            grid->InsertCols(pos, count);
+
+        return;
+    }
+
+    wxGridUpdateLocker locker(grid);
+
+    wxVector<int> deletions;
+
+    for (; it != selected.end(); ++it )
+    {
+        const wxGridBlockCoords& b = *it;
+        const int begin = isRow ? b.GetTopRow() : b.GetLeftCol();
+        const int end = isRow ? b.GetBottomRow() : b.GetRightCol();
+
+        for ( int n = begin; n <= end; ++n )
+        {
+            if ( !wxVectorContains(deletions, n) )
+                deletions.push_back(n);
+        }
+    }
+
+    wxVectorSort(deletions);
+
+    const size_t deletionCount = deletions.size();
+
+    if ( !deletionCount )
+        return;
+
+    int seqEnd = 0, seqCount = 0;
+    for ( size_t i = deletionCount; i > 0; --i )
+    {
+        const int n = deletions[i - 1];
+
+        if ( n != seqEnd - seqCount )
+        {
+            if (i != deletionCount)
+            {
+                const int seqStart = seqEnd - seqCount + 1;
+                if ( isRow )
+                    grid->DeleteRows(seqStart, seqCount);
+                else
+                    grid->DeleteCols(seqStart, seqCount);
+            }
+
+            seqEnd = n;
+            seqCount = 0;
+        }
+
+        seqCount++;
+    }
+
+    const int seqStart = seqEnd - seqCount + 1;
+    if ( isRow )
+        grid->DeleteRows(seqStart, seqCount);
+    else
+        grid->DeleteCols(seqStart, seqCount);
+}
+
+} // anoymous namespace
 
 void GridFrame::InsertRow( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->InsertRows( grid->GetGridCursorRow(), 1 );
+    HandleEdits(grid, wxGRID_ROW, /* isInsertion = */ true);
 }
 
 
 void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->InsertCols( grid->GetGridCursorCol(), 1 );
+    HandleEdits(grid, wxGRID_COLUMN, /* isInsertion = */ true);
 }
 
 
 void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
-    if ( grid->IsSelection() )
-    {
-        wxGridUpdateLocker locker(grid);
-        for ( int n = 0; n < grid->GetNumberRows(); )
-        {
-            if ( grid->IsInSelection( n , 0 ) )
-                grid->DeleteRows( n, 1 );
-            else
-                n++;
-        }
-    }
+    HandleEdits(grid, wxGRID_ROW, /* isInsertion = */ false);
 }
 
 
@@ -1323,17 +1406,7 @@ void GridFrame::AutoSizeTable(wxCommandEvent& WXUNUSED(event))
 
 void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
-    if ( grid->IsSelection() )
-    {
-        wxGridUpdateLocker locker(grid);
-        for ( int n = 0; n < grid->GetNumberCols(); )
-        {
-            if ( grid->IsInSelection( 0 , n ) )
-                grid->DeleteCols( n, 1 );
-            else
-                n++;
-        }
-    }
+    HandleEdits(grid, wxGRID_COLUMN, /* isInsertion = */ false);
 }
 
 

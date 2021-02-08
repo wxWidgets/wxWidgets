@@ -31,7 +31,61 @@
 namespace
 {
 
-// Derive a new class inheriting from wxGrid just to get access to its
+wxString CellCoordsToString(int row, int col)
+{
+    return wxString::Format("R%dC%d", col + 1, row + 1);
+}
+
+wxString CellSizeToString(int rows, int cols)
+{
+    return wxString::Format("%dx%d", rows, cols);
+}
+
+struct Multicell
+{
+    int row, col, rows, cols;
+
+    Multicell(int row, int col, int rows, int cols)
+        : row(row), col(col), rows(rows), cols(cols) { }
+
+    wxString Coords() const { return CellCoordsToString(row, col); }
+
+    wxString Size() const { return CellSizeToString(rows, cols); }
+
+    wxString ToString() const
+    {
+        wxString s;
+
+        if ( rows == 1 && cols == 1 )
+        {
+            s = "cell";
+        }
+        else
+        {
+            s = Size() + " ";
+            if ( rows > 1 || cols > 1 )
+                s += "multicell";
+            else
+                s += "inside cell";
+        }
+
+        return wxString::Format("%s at %s", s, Coords());
+    }
+};
+
+// Stores insertion/deletion info of rows or columns.
+struct EditInfo
+{
+    int pos, count;
+    wxGridDirection direction;
+
+    EditInfo(int pos = 0,
+             int count = 0,
+             wxGridDirection direction = wxGRID_COLUMN)
+        : pos(pos), count(count), direction(direction) { }
+};
+
+// Derive a new class inheriting from wxGrid, also to get access to its
 // protected GetCellAttr(). This is not pretty, but we don't have any other way
 // of testing this function.
 class TestableGrid : public wxGrid
@@ -46,9 +100,115 @@ public:
     {
         return GetCellAttr(row, col);
     }
+
+    bool HasAttr(int row, int col,
+                 wxGridCellAttr::wxAttrKind kind = wxGridCellAttr::Cell) const
+    {
+        // Can't use GetCellAttr() here as it always returns an attr.
+        wxGridCellAttr* attr = GetTable()->GetAttr(row, col, kind);
+        if ( attr )
+            attr->DecRef();
+
+        return attr != NULL;
+    }
+
+    size_t GetCellAttrCount() const
+    {
+        // Note that only attributes in grid range can easily be checked
+        // and this function only counts those, not any outside of
+        // the grid (e.g. with invalid negative coords).
+        size_t count = 0;
+        for ( int row = 0; row < GetNumberRows(); ++row )
+        {
+            for ( int col = 0; col < GetNumberCols(); ++col )
+                count += HasAttr(row, col);
+        }
+
+        return count;
+    }
+
+    void SetMulticell(const Multicell& multi)
+    {
+        SetCellSize(multi.row, multi.col, multi.rows, multi.cols);
+    }
+
+    // Performs given insertions/deletions on either rows or columns.
+    void DoEdit(const EditInfo& edit);
+
+    // Returns annotated grid represented as a string.
+    wxString ToString() const;
+
+    // Used when drawing annotated grid to know what happens to it.
+    EditInfo m_edit;
+
+    // Grid as string before editing, with edit info annotated.
+    wxString m_beforeGridAnnotated;
 };
 
+// Compares two grids, checking for differences with attribute presence and
+// cell sizes.
+class GridAttrMatcher : public Catch::MatcherBase<TestableGrid>
+{
+public:
+    GridAttrMatcher(const TestableGrid& grid);
+
+    bool match(const TestableGrid& other) const wxOVERRIDE;
+
+    std::string describe() const wxOVERRIDE;
+
+private:
+    const TestableGrid* m_grid;
+
+    mutable wxString m_diffDesc;
+    mutable wxString m_expectedGridDesc;
+};
+
+// Helper function for recreating a grid to fit (only) a multicell.
+void FitGridToMulticell(TestableGrid* grid, const Multicell& multi)
+{
+    const int oldRowCount = grid->GetNumberRows();
+    const int oldColCount = grid->GetNumberCols();
+
+    const int margin = 1;
+    const int newRowCount = multi.row + multi.rows + margin;
+    const int newColCount = multi.col + multi.cols + margin;
+
+    if ( !oldRowCount && !oldColCount )
+    {
+        grid->CreateGrid(newRowCount, newColCount);
+    }
+    else
+    {
+        grid->DeleteRows(0, oldRowCount);
+        grid->DeleteCols(0, oldColCount);
+        grid->AppendRows(newRowCount);
+        grid->AppendCols(newColCount);
+    }
+}
+
 } // anonymous namespace
+
+namespace Catch
+{
+
+template <> struct StringMaker<TestableGrid>
+{
+    static std::string convert(const TestableGrid& grid)
+    {
+        return ("Content before edit:\n" + grid.m_beforeGridAnnotated
+                + "\nContent after edit:\n" + grid.ToString()).ToStdString();
+    }
+};
+
+template <> struct StringMaker<Multicell>
+{
+    static std::string convert(const Multicell& multi)
+    {
+        return multi.ToString().ToStdString();
+    }
+};
+
+} // namespace Catch
 
 class GridTestCase
 {
@@ -57,6 +217,26 @@ public:
     ~GridTestCase();
 
 protected:
+    void InsertRows(int pos = 0, int count = 1)
+    {
+        m_grid->DoEdit(EditInfo(pos, count, wxGRID_ROW));
+    }
+
+    void InsertCols(int pos = 0, int count = 1)
+    {
+        m_grid->DoEdit(EditInfo(pos, count, wxGRID_COLUMN));
+    }
+
+    void DeleteRows(int pos = 0, int count = 1)
+    {
+        m_grid->DoEdit(EditInfo(pos, -count, wxGRID_ROW));
+    }
+
+    void DeleteCols(int pos = 0, int count = 1)
+    {
+        m_grid->DoEdit(EditInfo(pos, -count, wxGRID_COLUMN));
+    }
+
     // The helper function to determine the width of the column label depending
     // on whether the native column header is used.
     int GetColumnLabelWidth(wxClientDC& dc, int col, int margin) const
@@ -106,12 +286,62 @@ protected:
         }
     }
 
+    bool HasCellAttr(int row, int col) const
+    {
+        return m_grid->HasAttr(row, col, wxGridCellAttr::Cell);
+    }
+
+    void SetCellAttr(int row, int col)
+    {
+        m_grid->SetAttr(row, col, new wxGridCellAttr);
+    }
+
+    // Fills temp. grid with a multicell and returns a matcher with it.
+    GridAttrMatcher HasMulticellOnly(const Multicell& multi)
+    {
+        return CheckMulticell(multi);
+    }
+
+    // Returns a matcher with empty (temp.) grid.
+    GridAttrMatcher HasEmptyGrid()
+    {
+        return CheckMulticell(Multicell(0, 0, 1, 1));
+    }
+
+    // Helper function used by the previous two functions.
+    GridAttrMatcher CheckMulticell(const Multicell& multi)
+    {
+        TestableGrid* grid = GetTempGrid();
+
+        FitGridToMulticell(grid, multi);
+
+        if ( multi.rows > 1 || multi.cols > 1 )
+            grid->SetMulticell(multi);
+
+        return GridAttrMatcher(*grid);
+    }
+
+    TestableGrid* GetTempGrid()
+    {
+        if ( !m_tempGrid )
+        {
+            m_tempGrid = new TestableGrid(wxTheApp->GetTopWindow());
+            m_tempGrid->Hide();
+        }
+
+        return m_tempGrid;
+    }
+
     TestableGrid *m_grid;
+
+    // Temporary/scratch grid filled with expected content, used when
+    // comparing against m_grid.
+    TestableGrid *m_tempGrid;
 
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
 };
 
-GridTestCase::GridTestCase()
+GridTestCase::GridTestCase() : m_tempGrid(NULL)
 {
     m_grid = new TestableGrid(wxTheApp->GetTopWindow());
     m_grid->CreateGrid(10, 2);
@@ -140,6 +370,7 @@ GridTestCase::~GridTestCase()
         win->ReleaseMouse();
 
     wxDELETE(m_grid);
+    delete m_tempGrid;
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::CellEdit", "[grid]")
@@ -1446,6 +1677,387 @@ TEST_CASE_METHOD(GridTestCase, "Grid::DrawInvalidCell", "[grid][multicell]")
     wxYield();
 }
 
+#define CHECK_ATTR_COUNT(n) CHECK( m_grid->GetCellAttrCount() == n )
+
+TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
+{
+    SECTION("Overwrite")
+    {
+        CHECK_ATTR_COUNT( 0 );
+
+        m_grid->SetAttr(0, 0, NULL);
+        CHECK_ATTR_COUNT( 0 );
+
+        SetCellAttr(0, 0);
+        CHECK_ATTR_COUNT( 1 );
+
+        m_grid->SetAttr(0, 0, NULL);
+        CHECK_ATTR_COUNT( 0 );
+
+        SetCellAttr(0, 0);
+        m_grid->SetCellBackgroundColour(0, 1, *wxGREEN);
+        CHECK_ATTR_COUNT( 2 );
+
+        m_grid->SetAttr(0, 1, NULL);
+        m_grid->SetAttr(0, 0, NULL);
+        CHECK_ATTR_COUNT( 0 );
+    }
+
+
+    // Fill the grid with attributes for next sections.
+
+    const int numRows = m_grid->GetNumberRows();
+    const int numCols = m_grid->GetNumberCols();
+
+    for ( int row = 0; row < numRows; ++row )
+    {
+        for ( int col = 0; col < numCols; ++col )
+            SetCellAttr(row, col);
+    }
+
+    size_t numAttrs = static_cast<size_t>(numRows * numCols);
+
+    CHECK_ATTR_COUNT( numAttrs );
+
+    SECTION("Expanding")
+    {
+        CHECK( !HasCellAttr(numRows, numCols) );
+
+        m_grid->InsertCols();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( !HasCellAttr(0, 0) );
+        CHECK( HasCellAttr(0, numCols) );
+
+        m_grid->InsertRows();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( HasCellAttr(numRows, numCols) );
+    }
+
+    SECTION("Shrinking")
+    {
+        CHECK( HasCellAttr(numRows - 1 , numCols - 1) );
+        CHECK( HasCellAttr(0, numCols - 1) );
+
+        m_grid->DeleteCols();
+        numAttrs -= m_grid->GetNumberRows();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( HasCellAttr(0, 0) );
+        CHECK( !HasCellAttr(0, numCols - 1) );
+
+        m_grid->DeleteRows();
+        numAttrs -= m_grid->GetNumberCols();
+        CHECK_ATTR_COUNT( numAttrs );
+        CHECK( !HasCellAttr(numRows - 1 , numCols - 1) );
+    }
+}
+
+#define CHECK_MULTICELL() CHECK_THAT( *m_grid, HasMulticellOnly(multi) )
+
+#define CHECK_NO_MULTICELL() CHECK_THAT( *m_grid, HasEmptyGrid() )
+
+#define WHEN_N(s, n) WHEN(wxString::Format(s, n).ToStdString())
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::InsertionsWithMulticell",
+                 "[attr][cell][grid][insert][multicell]")
+{
+    int insertions = 0, offset = 0;
+
+    Multicell multi(1, 1, 3, 5);
+
+    SECTION("Sanity checks")
+    {
+        FitGridToMulticell(m_grid, multi);
+        m_grid->SetMulticell(multi);
+
+        REQUIRE( static_cast<int>(m_grid->GetCellAttrCount())
+                    == multi.rows * multi.cols );
+
+        int row, col, rows, cols;
+
+        // Check main cell.
+        row = multi.row,
+        col = multi.col;
+        wxGrid::CellSpan span = m_grid->GetCellSize(row, col, &rows, &cols);
+
+        REQUIRE( span == wxGrid::CellSpan_Main );
+        REQUIRE( rows == multi.rows );
+        REQUIRE( cols == multi.cols );
+
+        // Check inside cell at opposite of main.
+        row = multi.row + multi.rows - 1;
+        col = multi.col + multi.cols - 1;
+        span = m_grid->GetCellSize(row, col, &rows, &cols);
+
+        REQUIRE( span == wxGrid::CellSpan_Inside );
+        REQUIRE( rows == multi.row - row );
+        REQUIRE( cols == multi.col - col );
+    }
+
+    // Do some basic testing with column insertions first and do more tests
+    // with edge cases later on just with rows. It's not really needed to
+    // repeat the same tests for both rows and columns as the code for
+    // updating them works symmetrically.
+
+    GIVEN(Catch::toString(multi))
+    {
+        FitGridToMulticell(m_grid, multi);
+        m_grid->SetMulticell(multi);
+
+        insertions = 2;
+
+        WHEN("inserting any columns in multicell, at main")
+        {
+            InsertCols(multi.col + 0, insertions);
+
+            THEN("the position changes but not the size")
+            {
+                multi.col += insertions;
+                CHECK_MULTICELL();
+            }
+        }
+
+        WHEN("inserting any columns in multicell, just after main")
+        {
+            InsertCols(multi.col + 1, insertions);
+
+            THEN("the size changes but not the position")
+            {
+                multi.cols += insertions;
+                CHECK_MULTICELL();
+            }
+        }
+
+    }
+
+    // Do more extensive testing with rows.
+
+    wxSwap(multi.rows, multi.cols);
+
+    GIVEN(Catch::toString(multi))
+    {
+        FitGridToMulticell(m_grid, multi);
+        m_grid->SetMulticell(multi);
+
+        const int insertionCounts[] = {1, 2, multi.rows};
+
+        for ( size_t i = 0; i < WXSIZEOF(insertionCounts); ++i )
+        {
+            insertions = insertionCounts[i];
+
+            WHEN_N("inserting %d row(s), just before main", insertions)
+            {
+                InsertRows(multi.row - 1, insertions);
+
+                THEN("the position changes but not the size")
+                {
+                    multi.row += insertions;
+                    CHECK_MULTICELL();
+                }
+            }
+
+            WHEN_N("inserting %d row(s) in multicell, at main", insertions)
+            {
+                InsertRows(multi.row + 0, insertions);
+
+                THEN("the position changes but not the size")
+                {
+                    multi.row += insertions;
+                    CHECK_MULTICELL();
+                }
+            }
+        }
+
+        insertions = multi.rows / 2;
+
+        // Check insertions within multicell, at and near edges.
+        const int insertionOffsets[] = {1, 2, multi.rows - 2, multi.rows - 1};
+
+        for ( size_t i = 0; i < WXSIZEOF(insertionOffsets); ++i )
+        {
+            offset = insertionOffsets[i];
+
+            WHEN_N("inserting rows in multicell, %d row(s) after main", offset)
+            {
+                InsertRows(multi.row + offset, insertions);
+
+                THEN("the size changes but not the position")
+                {
+                    multi.rows += insertions;
+                    CHECK_MULTICELL();
+                }
+            }
+        }
+
+        // Check at least one case of inserting after multicell.
+        WHEN("inserting rows, just after multicell")
+        {
+            insertions = 2;
+            InsertRows(multi.row + multi.rows, insertions);
+
+            THEN("neither size nor position change")
+            {
+                CHECK_MULTICELL();
+            }
+        }
+    }
+
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "GridMulticell::DeletionsWithMulticell",
+                 "[cellattr][delete][grid][multicell]")
+{
+    int deletions = 0, offset = 0;
+
+    // Same as with the previous (insertions) test case but instead of some
+    // basic testing with columns first, this time use rows for that and do more
+    // extensive testing with columns.
+
+    Multicell multi(1, 1, 5, 3);
+
+    GIVEN(Catch::toString(multi))
+    {
+        FitGridToMulticell(m_grid, multi);
+        m_grid->SetMulticell(multi);
+
+        WHEN("deleting any rows, at main")
+        {
+            deletions = 1;
+            DeleteRows(multi.row + 0, deletions);
+
+            THEN("the multicell is deleted")
+            {
+                CHECK_NO_MULTICELL();
+            }
+        }
+
+        WHEN("deleting more rows than length of multicell,"
+             " at end of multicell")
+        {
+            deletions = multi.rows + 2;
+            offset = multi.rows - 1;
+            DeleteRows(multi.row + offset, deletions);
+
+            THEN("the size changes but not the position")
+            {
+                multi.rows = offset;
+                CHECK_MULTICELL();
+            }
+        }
+    }
+
+    // Do more extensive testing with columns.
+
+    wxSwap(multi.rows, multi.cols);
+
+    GIVEN(Catch::toString(multi))
+    {
+        FitGridToMulticell(m_grid, multi);
+        m_grid->SetMulticell(multi);
+
+        WHEN("deleting one column, just before main")
+        {
+            DeleteCols(multi.col - 1);
+
+            THEN("the position changes but not the size")
+            {
+                multi.col--;
+                CHECK_MULTICELL();
+            }
+        }
+
+        WHEN("deleting multiple columns, just before main")
+        {
+            deletions = 2; // Must be at least 2 to affect main.
+            DeleteCols(multi.col - 1, wxMax(2, deletions));
+
+            THEN("the multicell is deleted")
+            {
+                CHECK_NO_MULTICELL();
+            }
+        }
+
+        WHEN("deleting any columns, at main")
+        {
+            deletions = 1;
+            DeleteCols(multi.col + 0, deletions);
+
+            THEN("the multicell is deleted")
+            {
+                CHECK_NO_MULTICELL();
+            }
+        }
+
+        WHEN("deleting one column within multicell, after main")
+        {
+            offset = 1;
+            offset = wxClip(offset, 1, multi.cols - 1);
+            DeleteCols(multi.col + offset, 1);
+
+            THEN("the size changes but not the position")
+            {
+                multi.cols--;
+                CHECK_MULTICELL();
+            }
+        }
+
+        deletions = 2;
+
+        // Check deletions within multicell, at and near edges.
+        const int offsets[] = {1, 2, multi.cols - deletions};
+
+        for ( size_t i = 0; i < WXSIZEOF(offsets); ++i )
+        {
+            offset = offsets[i];
+
+            WHEN_N("deleting columns only within multicell,"
+                   " %d column(s) after main", offset)
+            {
+                DeleteCols(multi.col + offset, deletions);
+
+                THEN("the size changes but not the position")
+                {
+                    multi.cols -= deletions;
+                    CHECK_MULTICELL();
+                }
+            }
+        }
+
+        // Instead of stuffing the multicell's length logic in the above test,
+        // separately check at least two cases of starting many deletions
+        // within multicell.
+
+        WHEN("deleting more columns than length of multicell, just after main")
+        {
+            deletions = multi.cols + 2;
+            offset = 1;
+            DeleteCols(multi.col + offset, deletions);
+
+            THEN("the size changes but not the position")
+            {
+                multi.cols = offset;
+                CHECK_MULTICELL();
+            }
+        }
+
+        WHEN("deleting more columns than length of multicell,"
+             " at end of multicell")
+        {
+            deletions = multi.cols + 2;
+            offset = multi.cols - 1;
+            DeleteCols(multi.col + offset, deletions);
+
+            THEN("the size changes but not the position")
+            {
+                multi.cols = offset;
+                CHECK_MULTICELL();
+            }
+        }
+    }
+
+}
+
 // Test wxGridBlockCoords here because it'a a part of grid sources.
 
 std::ostream& operator<<(std::ostream& os, const wxGridBlockCoords& block) {
@@ -1630,6 +2242,221 @@ TEST_CASE("GridBlockCoords::SymDifference", "[grid]")
         CHECK(result.m_parts[2] == wxGridNoBlockCoords);
         CHECK(result.m_parts[3] == wxGridNoBlockCoords);
     }
+}
+
+//
+// TestableGrid
+//
+
+void TestableGrid::DoEdit(const EditInfo& edit)
+{
+    m_edit = edit;
+    m_beforeGridAnnotated = ToString();
+
+    switch ( edit.direction )
+    {
+    case wxGRID_COLUMN:
+        if ( edit.count < 0 )
+            DeleteCols(edit.pos, -edit.count);
+        else
+            InsertCols(edit.pos, edit.count);
+        break;
+
+    case wxGRID_ROW:
+        if ( edit.count < 0 )
+            DeleteRows(edit.pos, -edit.count);
+        else
+            InsertRows(edit.pos, edit.count);
+        break;
+    }
+}
+
+wxString TestableGrid::ToString() const
+{
+    const int numRows = GetNumberRows();
+    const int numCols = GetNumberCols();
+
+    const int colMargin = GetRowLabelValue(numRows - 1).length();
+    const wxString leftIndent = wxString(' ', colMargin + 1);
+
+    // String s contains the rendering of the grid, start with drawing
+    // the header columns.
+    wxString s = leftIndent;
+
+    const int base = 10;
+    // Draw the multiples of 10.
+    for ( int col = base; col <= numCols; col += base)
+    {
+        s += wxString(' ', base - 1);
+        s += ('0' + (col / base));
+    }
+
+    if ( numCols >= base )
+        s += "\n" + leftIndent;
+
+    // Draw the single digits.
+    for ( int col = 1; col <= numCols; ++col )
+        s += '0' + (col % base);
+    s += "\n";
+
+    // Draw horizontal divider.
+    s += wxString(' ', colMargin) + '+' + wxString('-', numCols) + "\n";
+
+    const int absEditCount = abs(m_edit.count);
+    wxString action;
+    action.Printf(" %s: %d",
+                  m_edit.count < 0 ? "deletions" : "insertions",
+                  absEditCount);
+
+    // Will contain summary of grid (only multicells mentioned).
+    wxString content;
+
+    // Draw grid content.
+    for ( int row = 0; row < numRows; ++row )
+    {
+        const wxString label = GetRowLabelValue(row);
+        s += wxString(' ', colMargin - label.length());
+        s += label + '|';
+
+        for ( int col = 0; col < numCols; ++col )
+        {
+            char c = 'x';
+            int rows, cols;
+            switch ( GetCellSize(row, col, &rows, &cols) )
+            {
+            case wxGrid::CellSpan_None:
+                c = HasAttr(row, col) ? '*' : '.';
+                break;
+
+            case wxGrid::CellSpan_Main:
+                c = 'M';
+                content += Multicell(row, col, rows, cols).ToString() + "\n";
+                break;
+
+            case wxGrid::CellSpan_Inside:
+                // Check if the offset to main cell is correct.
+                c = (GetCellSize(row + rows, col + cols, &rows, &cols)
+                        == wxGrid::CellSpan_Main) ? 'm' : '?';
+                break;
+            }
+
+            s += c;
+        }
+
+        // If applicable draw annotated row edits.
+        if ( m_edit.count && m_edit.direction == wxGRID_ROW
+             && row >= m_edit.pos && row < m_edit.pos + absEditCount)
+        {
+            s += (m_edit.count < 0 ? " ^" : " v");
+
+            if ( row == m_edit.pos )
+                s += action;
+        }
+
+        s += "\n";
+    }
+
+    // Draw annotated footer if columns edited.
+    if ( m_edit.count && m_edit.direction == wxGRID_COLUMN )
+    {
+        s += leftIndent;
+
+        for ( int col = 0; col < m_edit.pos + absEditCount; ++col )
+        {
+            if ( col < m_edit.pos )
+                s += " ";
+            else
+                s += (m_edit.count < 0 ? "<" : ">");
+        }
+
+        s += action + "\n";
+    }
+
+    s += "\n";
+
+    if ( content.empty() )
+        content = "Empty grid\n";
+
+    return content + s;
+}
+
+//
+// GridAttrMatcher
+//
+
+GridAttrMatcher::GridAttrMatcher(const TestableGrid& grid) : m_grid(&grid)
+{
+   m_expectedGridDesc = m_grid->ToString();
+}
+
+bool GridAttrMatcher::match(const TestableGrid& other) const
+{
+    const int rows = wxMax(m_grid->GetNumberRows(), other.GetNumberRows());
+    const int cols = wxMax(m_grid->GetNumberCols(), other.GetNumberCols());
+
+    for ( int row = 0; row < rows; ++row )
+    {
+        for ( int col = 0; col < cols; ++col )
+        {
+            const bool hasAttr = m_grid->HasAttr(row, col);
+            if ( hasAttr != other.HasAttr(row, col) )
+            {
+                m_diffDesc.Printf("%s: attribute presence (%d, expected %d)",
+                                  CellCoordsToString(row, col),
+                                  !hasAttr, hasAttr);
+
+                return false;
+            }
+
+            int thisRows, thisCols;
+            const wxGrid::CellSpan thisSpan
+                = m_grid->GetCellSize(row, col, &thisRows, &thisCols);
+
+            int otherRows, otherCols;
+            (void) other.GetCellSize(row, col, &otherRows, &otherCols);
+
+            if ( thisRows != otherRows || thisCols != otherCols )
+            {
+                wxString mismatchKind;
+                switch ( thisSpan )
+                {
+                case wxGrid::CellSpan_None:
+                    mismatchKind = "different cell size";
+                    break;
+
+                case wxGrid::CellSpan_Main:
+                    mismatchKind = "different multicell size";
+                    break;
+
+                case wxGrid::CellSpan_Inside:
+                    mismatchKind = "main offset mismatch";
+                    break;
+                }
+
+                m_diffDesc.Printf( "%s: %s (%s, expected %s)",
+                                   CellCoordsToString(row, col),
+                                   mismatchKind,
+                                   CellSizeToString(otherRows, otherCols),
+                                   CellSizeToString(thisRows, thisCols)
+                                   );
+
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+std::string GridAttrMatcher::describe() const
+{
+    std::string desc = (m_diffDesc.empty() ? "Matches" : "Doesn't match");
+    desc += " expected content:\n" + m_expectedGridDesc.ToStdString();
+
+    if ( !m_diffDesc.empty() )
+        desc += + "first difference at " + m_diffDesc.ToStdString();
+
+    return desc;
 }
 
 #endif //wxUSE_GRID

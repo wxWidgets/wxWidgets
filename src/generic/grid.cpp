@@ -806,72 +806,183 @@ wxGridCellAttr *wxGridCellAttrData::GetAttr(int row, int col) const
     return attr;
 }
 
-void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
+namespace
 {
-    size_t count = m_attrs.GetCount();
+
+void UpdateCellAttrRowsOrCols(wxGridCellWithAttrArray& attrs, int editPos,
+                              int editRowCount, int editColCount)
+{
+    wxASSERT( !editRowCount || !editColCount );
+
+    const bool isEditingRows = (editRowCount != 0);
+    const int editCount = (isEditingRows ? editRowCount : editColCount);
+
+    size_t count = attrs.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        wxGridCellCoords& coords = m_attrs[n].coords;
-        wxCoord row = coords.GetRow();
-        if ((size_t)row >= pos)
+        wxGridCellAttr* cellAttr = attrs[n].attr;
+        int cellRows, cellCols;
+        cellAttr->GetSize(&cellRows, &cellCols);
+
+        wxGridCellCoords& coords = attrs[n].coords;
+        const wxCoord cellRow = coords.GetRow(),
+                      cellCol = coords.GetCol(),
+                      cellPos = (isEditingRows ? cellRow : cellCol);
+
+        if ( cellPos < editPos )
         {
-            if (numRows > 0)
+            // This cell's coords aren't influenced by the editing, however
+            // do adjust a multicell's main size, if needed.
+            if ( GetCellSpan(cellRows, cellCols) == wxGrid::CellSpan_Main )
             {
-                // If rows inserted, increment row counter where necessary
-                coords.SetRow(row + numRows);
+                int mainSize = isEditingRows ? cellRows : cellCols;
+                if ( cellPos + mainSize > editPos )
+                {
+                    // Multicell is within affected range:
+                    // Adjust its size.
+
+                    if ( editCount >= 0 )
+                    {
+                        mainSize += editCount;
+                    }
+                    else
+                    {
+                        // Reduce multicell size by number of deletions, but
+                        // never more than the multicell's size minus one:
+                        // cellPos (the main cell) is always less than editPos
+                        // at this point, then with the below code a multicell
+                        // with size 7 is at most reduced by:
+                        // cellPos + 7 - (cellPos + 1) = 7 - 1 = 6.
+                        mainSize -= wxMin(-editCount,
+                                          cellPos + mainSize - editPos);
+                        /*
+                        The above was derived from:
+                        first_del = edit
+                        last_del = min(edit - count - 1, cell + size - 1)
+                        size -= (last_del + 1 - first_del)
+
+                        eliminating the 1's:
+
+                        first_del = edit
+                        last_del = min(edit - count, cell + size)
+                        size -= (last_del - first_del)
+
+                        reducing each by edit:
+
+                        first_del = 0
+                        last_del_plus_1 = min(0 - count, cell + size - edit)
+                        size -= (last_del_plus_1 - 0)
+
+                        after eliminating the 0's and substitution, leaving:
+
+                        size -= min(-count, cell + size - edit)
+
+                        E.g. with a multicell of size 7 and at 2 positions
+                        after the main cell 100 positions are deleted then
+                        the size will not (/can't) be reduced by 100 cells
+                        but by:
+
+                        cellPos + 7 - editPos =       # editPos = cellPos + 2
+                        cellPos + 7 - (cellPos + 2) = # eliminate cellPos
+                        7 - 2 =
+                        5 cells, making the final size 7 - 5 = 2.
+                        */
+                    }
+
+                    cellAttr->SetSize(isEditingRows ? mainSize : cellRows,
+                                      isEditingRows ? cellCols : mainSize);
+                }
             }
-            else if (numRows < 0)
+
+            continue;
+        }
+
+        if ( editCount < 0 && cellPos < editPos - editCount )
+        {
+            // This row/col is deleted and the cell doesn't exist any longer:
+            // Remove the attribute.
+            attrs.RemoveAt(n);
+            n--;
+            count--;
+
+            continue;
+        }
+
+        if ( GetCellSpan(cellRows, cellCols) != wxGrid::CellSpan_Inside )
+        {
+            // Rows/cols inserted or deleted (and this cell still exists):
+            // Adjust cell coords.
+            coords.Set(cellRow + editRowCount, cellCol + editColCount);
+
+            // Nothing more to do: cell is not an inside cell of a multicell.
+            continue;
+        }
+
+        // Handle inside cell's existence, coords, and size.
+
+        const int mainPos = cellPos + (isEditingRows ? cellRows : cellCols);
+
+        if ( editCount < 0
+             && mainPos >= editPos && mainPos < editPos - editCount )
+        {
+            // On a position that still exists after deletion but main cell
+            // of multicell is within deletion range so the multicell is gone:
+            // Remove the attribute.
+            attrs.RemoveAt(n);
+            n--;
+            count--;
+
+            continue;
+        }
+
+        // Rows/cols inserted or deleted (and this inside cell still exists):
+        // Adjust (inside) cell coords.
+        coords.Set(cellRow + editRowCount, cellCol + editColCount);
+
+        if ( mainPos >= editPos )
+        {
+            // Nothing more to do: the multicell that this inside cell is part
+            // of is moving its main cell as well so offsets to the main cell
+            // don't change and there are no edits changing the multicell size.
+            continue;
+        }
+
+        if ( editCount > 0 && cellPos == editPos )
+        {
+            // At an (old) position that is newly inserted: this is the only
+            // opportunity to add required inside cells that point to
+            // the main cell. E.g. with a 2x1 multicell that increases in size
+            // there's only one inside cell that will be visited while there
+            // can be multiple insertions.
+            for ( int i = 0; i < editCount; ++i )
             {
-                // If rows deleted ...
-                if ((size_t)row >= pos - numRows)
-                {
-                    // ...either decrement row counter (if row still exists)...
-                    coords.SetRow(row + numRows);
-                }
-                else
-                {
-                    // ...or remove the attribute
-                    m_attrs.RemoveAt(n);
-                    n--;
-                    count--;
-                }
+                const int adjustRows = i * isEditingRows,
+                          adjustCols = i * !isEditingRows;
+
+                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr->SetSize(cellRows - adjustRows, cellCols - adjustCols);
+
+                attrs.Add(new wxGridCellWithAttr(cellRow + adjustRows,
+                                                  cellCol + adjustCols,
+                                                  attr));
             }
         }
+
+        // Let this inside cell's size point to the main cell of the multicell.
+        cellAttr->SetSize(cellRows - editRowCount, cellCols - editColCount);
     }
+}
+
+} // anonymous namespace
+
+void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
+{
+    UpdateCellAttrRowsOrCols(m_attrs, static_cast<int>(pos), numRows, 0);
 }
 
 void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
 {
-    size_t count = m_attrs.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        wxGridCellCoords& coords = m_attrs[n].coords;
-        wxCoord col = coords.GetCol();
-        if ( (size_t)col >= pos )
-        {
-            if ( numCols > 0 )
-            {
-                // If cols inserted, increment col counter where necessary
-                coords.SetCol(col + numCols);
-            }
-            else if (numCols < 0)
-            {
-                // If cols deleted ...
-                if ((size_t)col >= pos - numCols)
-                {
-                    // ...either decrement col counter (if col still exists)...
-                    coords.SetCol(col + numCols);
-                }
-                else
-                {
-                    // ...or remove the attribute
-                    m_attrs.RemoveAt(n);
-                    n--;
-                    count--;
-                }
-            }
-        }
-    }
+    UpdateCellAttrRowsOrCols(m_attrs, static_cast<int>(pos), 0, numCols);
 }
 
 int wxGridCellAttrData::FindIndex(int row, int col) const
