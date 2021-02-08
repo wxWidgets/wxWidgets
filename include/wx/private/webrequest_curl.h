@@ -164,9 +164,10 @@ private:
     void ProcessTimerCallback(long);
     void TimeoutNotification(wxTimerEvent&);
     void ProcessTimeoutNotification();
-    void ProcessSocketCallback(curl_socket_t, int);
+    void ProcessSocketCallback(CURL*, curl_socket_t, int);
     void ProcessSocketPollerResult(wxThreadEvent&);
     void CheckForCompletedTransfers();
+    void FailRequest(CURL*, const wxString&);
     void StopTransfer(CURL*);
 
     WX_DECLARE_HASH_MAP(CURL*, wxWebRequestCURL*, wxPointerHash, \

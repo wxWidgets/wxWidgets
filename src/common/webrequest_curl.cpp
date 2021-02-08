@@ -1036,11 +1036,11 @@ int wxWebSessionCURL::TimerCallback(CURLM* WXUNUSED(multi), long timeoutms,
     return 0;
 }
 
-int wxWebSessionCURL::SocketCallback(CURL* WXUNUSED(easy), curl_socket_t sock,
-                                    int what, void* userp, void* WXUNUSED(sp))
+int wxWebSessionCURL::SocketCallback(CURL* curl, curl_socket_t sock, int what,
+                                     void* userp, void* WXUNUSED(sp))
 {
     wxWebSessionCURL* session = reinterpret_cast<wxWebSessionCURL*>(userp);
-    session->ProcessSocketCallback(sock, what);
+    session->ProcessSocketCallback(curl, sock, what);
     return CURLM_OK;
 };
 
@@ -1105,7 +1105,8 @@ static int CurlPoll2SocketPoller(int what)
     return pollAction;
 }
 
-void wxWebSessionCURL::ProcessSocketCallback(curl_socket_t s, int what)
+void wxWebSessionCURL::ProcessSocketCallback(CURL* curl, curl_socket_t s,
+                                             int what)
 {
     // Have the socket poller start or stop monitoring a socket depending of
     // the value of what.
@@ -1117,7 +1118,23 @@ void wxWebSessionCURL::ProcessSocketCallback(curl_socket_t s, int what)
         case CURL_POLL_OUT:
             wxFALLTHROUGH;
         case CURL_POLL_INOUT:
-            m_socketPoller->StartPolling(s, CurlPoll2SocketPoller(what));
+            {
+                int pollAction = CurlPoll2SocketPoller(what);
+                bool socketIsMonitored = m_socketPoller->StartPolling(s,
+                                                                      pollAction);
+
+                if ( !socketIsMonitored )
+                {
+                    TransferSet::iterator it = m_activeTransfers.find(curl);
+
+                    if ( it != m_activeTransfers.end() )
+                    {
+                        FailRequest(curl,
+                            "wxWebSession failed to monitor a socket for this "
+                            "transfer");
+                    }
+                }
+            }
             break;
         case CURL_POLL_REMOVE:
             m_socketPoller->StopPolling(s);
@@ -1182,6 +1199,21 @@ void wxWebSessionCURL::CheckForCompletedTransfers()
                 m_activeTransfers.erase(it);
             }
         }
+    }
+}
+
+void wxWebSessionCURL::FailRequest(CURL* curl,const wxString& msg)
+{
+    TransferSet::iterator it = m_activeTransfers.find(curl);
+
+    if ( it != m_activeTransfers.end() )
+    {
+        wxWebRequestCURL* request = it->second;
+        m_activeTransfers.erase(it);
+        curl_multi_remove_handle(m_handle, curl);
+        StopTransfer(curl);
+
+        request->SetState(wxWebRequest::State_Failed, msg);
     }
 }
 
