@@ -87,6 +87,17 @@ wxEND_EVENT_TABLE()
 @end
 #endif // macOS 10.13+
 
+//-----------------------------------------------------------------------------
+// wxWebViewFactoryWebKit
+//-----------------------------------------------------------------------------
+
+wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
+{
+    int verMaj, verMin, verMicro;
+    wxGetOsVersion(&verMaj, &verMin, &verMicro);
+    return wxVersionInfo("WKWebView", verMaj, verMin, verMicro);
+}
+
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
