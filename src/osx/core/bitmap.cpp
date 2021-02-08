@@ -1,3 +1,7 @@
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/core/bitmap.cpp
 // Purpose:     wxBitmap
@@ -672,13 +676,25 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
 
         if ( m_bitmapMask )
         {
+            // First apply mask to image
             CGImageRef imageMask = CGBitmapContextCreateImage(m_bitmapMask->GetHBITMAP());
-            CGImageRef imageBmp = image;
+            CGImageRef imageMasked = CGImageCreateWithMask(image, imageMask);
 
-            image = CGImageCreateWithMask(imageBmp, imageMask);
+            // Convert masked image to plain ARGB image without mask
+            int w = GetWidth();
+            int h = GetHeight();
+            CGContextRef hBmpAlpha = CGBitmapContextCreate(NULL, w, h, 8, GetBytesPerRow(), wxMacGetGenericRGBColorSpace(),                   kCGImageAlphaPremultipliedFirst);
+            CGRect r = CGRectMake(0, 0, w, h);
+            CGContextDrawImage(hBmpAlpha, r, imageMasked);
+            CGContextTranslateCTM(hBmpAlpha, 0, h);
+            CGContextScaleCTM(hBmpAlpha, GetScaleFactor(), -GetScaleFactor());
 
-            CGImageRelease(imageBmp);
+            CGImageRelease(imageMasked);
             CGImageRelease(imageMask);
+
+            CGImageRelease(image);
+            image = CGBitmapContextCreateImage(hBmpAlpha);
+            CGContextRelease(hBmpAlpha);
         }
     }
     else
