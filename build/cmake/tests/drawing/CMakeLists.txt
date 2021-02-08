@@ -37,7 +37,7 @@ set(TEST_DRAWING_DATA
     drawing/references/image_test_image_gdiplus-6.1_2_ref.png
     )
 
-wx_add_test(test_drawing ${TEST_DRAWING_SRC}
+wx_add_test(test_drawing CONSOLE_GUI ${TEST_DRAWING_SRC}
     DATA ${TEST_DRAWING_DATA}
     )
 if(wxUSE_SOCKETS)

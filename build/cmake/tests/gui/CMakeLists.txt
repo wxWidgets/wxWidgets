@@ -181,7 +181,7 @@ set(TEST_GUI_DATA
     intl/ja/internat.po
     )
 
-wx_add_test(test_gui ${TEST_GUI_SRC}
+wx_add_test(test_gui CONSOLE_GUI ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     )
 if(wxUSE_AUI)
