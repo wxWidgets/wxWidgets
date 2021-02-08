@@ -114,6 +114,7 @@ public:
     // Methods called from libcurl callbacks
     size_t CURLOnWrite(void *buffer, size_t size);
     size_t CURLOnHeader(const char* buffer, size_t size);
+    int CURLOnProgress();
 
 private:
     wxWebRequestHeaderMap m_headers;
@@ -149,6 +150,9 @@ public:
 
     void CancelRequest(wxWebRequestCURL* request);
 
+    static bool CurlRuntimeAtLeastVersion(unsigned int, unsigned int,
+                                          unsigned int);
+
 private:
     static int TimerCallback(CURLM*, long, void*);
     static int SocketCallback(CURL*, curl_socket_t, int, void*, void*);
@@ -165,6 +169,7 @@ private:
     CURLM* m_handle;
 
     static int ms_activeSessions;
+    static unsigned int ms_runtimeVersion;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
 };

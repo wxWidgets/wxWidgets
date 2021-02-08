@@ -44,12 +44,6 @@
   (LIBCURL_VERSION_NUM >= CURL_VERSION_BITS(x, y, z))
 #endif
 
-#if CURL_AT_LEAST_VERSION(7, 28, 0)
-    #define wxCURL_HAVE_MULTI_WAIT 1
-#else
-    #define wxCURL_HAVE_MULTI_WAIT 0
-#endif
-
 // The new name was introduced in curl 7.21.6.
 #ifndef CURLOPT_ACCEPT_ENCODING
     #define CURLOPT_ACCEPT_ENCODING CURLOPT_ENCODING
@@ -73,11 +67,52 @@ static size_t wxCURLHeader(char *buffer, size_t size, size_t nitems, void *userd
     return static_cast<wxWebResponseCURL*>(userdata)->CURLOnHeader(buffer, size * nitems);
 }
 
+int wxCURLXferInfo(void* clientp, curl_off_t WXUNUSED(dltotal),
+                   curl_off_t WXUNUSED(dlnow),
+                   curl_off_t WXUNUSED(ultotal),
+                   curl_off_t WXUNUSED(ulnow))
+{
+    wxCHECK_MSG( clientp, 0, "invalid curl progress callback data" );
+
+    wxWebResponseCURL* response = reinterpret_cast<wxWebResponseCURL*>(clientp);
+    return response->CURLOnProgress();
+}
+
+int wxCURLProgress(void* clientp, double dltotal, double dlnow, double ultotal,
+                   double ulnow)
+{
+    return wxCURLXferInfo(clientp, static_cast<curl_off_t>(dltotal),
+                          static_cast<curl_off_t>(dlnow),
+                          static_cast<curl_off_t>(ultotal),
+                          static_cast<curl_off_t>(ulnow));
+}
+
 wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
     wxWebResponseImpl(request)
 {
     curl_easy_setopt(GetHandle(), CURLOPT_WRITEDATA, static_cast<void*>(this));
     curl_easy_setopt(GetHandle(), CURLOPT_HEADERDATA, static_cast<void*>(this));
+
+ // Set the progress callback.
+    #if CURL_AT_LEAST_VERSION(7, 32, 0)
+        if ( wxWebSessionCURL::CurlRuntimeAtLeastVersion(7, 32, 0) )
+        {
+            curl_easy_setopt(GetHandle(), CURLOPT_XFERINFOFUNCTION,
+                             wxCURLXferInfo);
+            curl_easy_setopt(GetHandle(), CURLOPT_XFERINFODATA,
+                             static_cast<void*>(this));
+        }
+        else
+    #endif
+        {
+            curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSFUNCTION,
+                             wxCURLProgress);
+            curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSDATA,
+                             static_cast<void*>(this));
+        }
+
+    // Have curl call the progress callback.
+    curl_easy_setopt(GetHandle(), CURLOPT_NOPROGRESS, 0L);
 
     Init();
 }
@@ -115,6 +150,11 @@ size_t wxWebResponseCURL::CURLOnHeader(const char * buffer, size_t size)
     }
 
     return size;
+}
+
+int wxWebResponseCURL::CURLOnProgress()
+{
+    return 0;
 }
 
 wxFileOffset wxWebResponseCURL::GetContentLength() const
@@ -877,6 +917,7 @@ void SocketPoller::ThreadCheckSockets()
 //
 
 int wxWebSessionCURL::ms_activeSessions = 0;
+unsigned int wxWebSessionCURL::ms_runtimeVersion = 0;
 
 wxWebSessionCURL::wxWebSessionCURL() :
     m_handle(NULL)
@@ -885,7 +926,14 @@ wxWebSessionCURL::wxWebSessionCURL() :
     if ( ms_activeSessions == 0 )
     {
         if ( curl_global_init(CURL_GLOBAL_ALL) )
+        {
             wxLogError(_("libcurl could not be initialized"));
+        }
+        else
+        {
+            curl_version_info_data* data = curl_version_info(CURLVERSION_NOW);
+            ms_runtimeVersion = data->version_num;
+        }
     }
 
     ms_activeSessions++;
@@ -968,6 +1016,13 @@ wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
         vi->version_num >> 8 & 0xff,
         vi->version_num & 0xff,
         desc);
+}
+
+bool wxWebSessionCURL::CurlRuntimeAtLeastVersion(unsigned int major,
+                                                 unsigned int minor,
+                                                 unsigned int patch)
+{
+    return (ms_runtimeVersion >= CURL_VERSION_BITS(major, minor, patch));
 }
 
 // curl interacts with the wxWebSessionCURL class through 2 callback functions
