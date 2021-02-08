@@ -65,10 +65,10 @@ static size_t wxCURLHeader(char *buffer, size_t size, size_t nitems, void *userd
     return static_cast<wxWebResponseCURL*>(userdata)->CURLOnHeader(buffer, size * nitems);
 }
 
-int wxCURLXferInfo(void* clientp, curl_off_t dltotal,
-                   curl_off_t WXUNUSED(dlnow),
-                   curl_off_t WXUNUSED(ultotal),
-                   curl_off_t WXUNUSED(ulnow))
+static int wxCURLXferInfo(void* clientp, curl_off_t dltotal,
+                          curl_off_t WXUNUSED(dlnow),
+                          curl_off_t WXUNUSED(ultotal),
+                          curl_off_t WXUNUSED(ulnow))
 {
     wxCHECK_MSG( clientp, 0, "invalid curl progress callback data" );
 
@@ -76,8 +76,8 @@ int wxCURLXferInfo(void* clientp, curl_off_t dltotal,
     return response->CURLOnProgress(dltotal);
 }
 
-int wxCURLProgress(void* clientp, double dltotal, double dlnow, double ultotal,
-                   double ulnow)
+static int wxCURLProgress(void* clientp, double dltotal, double dlnow,
+                          double ultotal, double ulnow)
 {
     return wxCURLXferInfo(clientp, static_cast<curl_off_t>(dltotal),
                           static_cast<curl_off_t>(dlnow),
