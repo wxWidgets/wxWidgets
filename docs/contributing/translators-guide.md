@@ -50,18 +50,3 @@ them). Then type `make lang.mo` which will create the binary message catalog.
 
 Under Windows (If you don't have Cygwin or MinGW), you should execute the
 commands manually, please have a look at Makefile to see what must be done.
-
-For platform specific translations, .po files such as `locale/msw/it.po` can be
-used to provide translations that override the usual ones in `locale/it.po`.
-The generated .mo files are then installed under the names such as `wxmsw.mo`
-alongside the generic `wxstd.mo`.
-
-A new platform specific translation should be added to a section such as this
-in wx.bkl:
-
-    <gettext-catalogs id="locale_msw">
-        <srcdir>$(SRCDIR)/locale/msw</srcdir>
-        <catalog-name>wxmsw</catalog-name>
-        <linguas>it</linguas>
-        <install-to>$(LOCALEDIR)</install-to>
-    </gettext-catalogs>

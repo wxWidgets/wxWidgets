@@ -120,6 +120,15 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
     // for it because it is already bound to Esc implicitly)
     if ( id == wxID_CANCEL )
         flags &= ~wxSTOCK_WITH_MNEMONIC;
+
+    // Another one: "Help" in the context of a menu label has a different
+    // translation for some languages (Italian), so try this first.
+    if ( id == wxID_HELP && (flags & wxSTOCK_WITH_MNEMONIC) )
+    {
+        stockLabel = wxGETTEXT_IN_CONTEXT("standard Windows menu", "&Help");
+        if ( !stockLabel.empty() )
+            return stockLabel;
+    }
 #endif // __WXMSW__
 
 

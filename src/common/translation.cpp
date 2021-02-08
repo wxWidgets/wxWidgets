@@ -1522,14 +1522,6 @@ bool wxTranslations::AddStdCatalog()
     if ( !AddCatalog(wxS("wxstd")) )
         return false;
 
-    // there may be a catalog with toolkit specific overrides, it is not
-    // an error if this does not exist
-    wxString port(wxPlatformInfo::Get().GetPortIdName());
-    if ( !port.empty() )
-    {
-        AddCatalog(port.BeforeFirst(wxS('/')).MakeLower());
-    }
-
     return true;
 }
 

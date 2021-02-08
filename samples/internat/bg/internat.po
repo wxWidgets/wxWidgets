@@ -32,10 +32,6 @@ msgstr "&Отваряне на фалшив файл"
 msgid "&Play a game"
 msgstr "&Играене на игра"
 
-#: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:145
-msgid "&File"
-msgstr "&Файл"
-
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:146
 msgid "&Test"
 msgstr "&Тест"
