@@ -37,7 +37,36 @@ if(APPLE)
     wx_lib_link_libraries(wxwebview PUBLIC "-framework WebKit")
 elseif(WXMSW)
     if(wxUSE_WEBVIEW_EDGE)
-        wx_lib_include_directories(wxwebview PRIVATE "${PROJECT_SOURCE_DIR}/3rdparty/webview2/build/native/include")
+        # Update the following variables if updating WebView2 SDK
+        set(WEBVIEW2_VERSION "1.0.705.50")
+        set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
+        set(WEBVIEW2_SHA256 "6a34bb553e18cfac7297b4031f3eac2558e439f8d16a45945c22945ac404105d")
+
+        set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
+
+        find_path(WEBVIEW2_PACKAGE_DIR
+            NAMES build/native/include/WebView2.h
+            PATHS
+                "${PROJECT_SOURCE_DIR}/3rdparty/webview2"
+                ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
+        )
+        mark_as_advanced(WEBVIEW2_PACKAGE_DIR)
+
+        if (NOT WEBVIEW2_PACKAGE_DIR)
+            message(STATUS "WebView2 SDK not found locally, downloading...")
+            set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
+            file(DOWNLOAD
+                ${WEBVIEW2_URL}
+                ${CMAKE_BINARY_DIR}/webview2.nuget
+                EXPECTED_HASH SHA256=${WEBVIEW2_SHA256})
+            file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
+            execute_process(COMMAND
+                ${CMAKE_COMMAND} -E tar x ${CMAKE_BINARY_DIR}/webview2.nuget
+                WORKING_DIRECTORY ${WEBVIEW2_PACKAGE_DIR}
+            )
+        endif()
+
+        wx_lib_include_directories(wxwebview PRIVATE "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
 
         if (CMAKE_SIZEOF_VOID_P EQUAL 4)
             set(WEBVIEW2_ARCH x86)
@@ -47,7 +76,7 @@ elseif(WXMSW)
 
         add_custom_command(TARGET wxwebview POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
-            "${PROJECT_SOURCE_DIR}/3rdparty/webview2/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
+            "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
             "$<TARGET_FILE_DIR:wxwebview>/WebView2Loader.dll")
     endif()
 elseif(WXGTK)
