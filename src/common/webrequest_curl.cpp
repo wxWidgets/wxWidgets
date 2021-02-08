@@ -23,7 +23,7 @@
 #endif
 
 #include "wx/uri.h"
-#include "wx/socket.h"
+#include "wx/private/socket.h"
 #include "wx/evtloop.h"
 
 #ifdef __WINDOWS__
@@ -965,35 +965,18 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
 
 void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
 {
+    // If this transfer is currently active, stop it.
     CURL* curl = request->GetHandle();
-    TransferSet::iterator it = m_activeTransfers.find(curl);
-
-    if ( it != m_activeTransfers.end() )
-    {
-        m_activeTransfers.erase(it);
-    }
-
-    curl_multi_remove_handle(m_handle, curl);
-    StopTransfer(curl);
+    StopActiveTransfer(curl);
 
     request->SetState(wxWebRequest::State_Cancelled);
 }
 
 void wxWebSessionCURL::RequestHasTerminated(wxWebRequestCURL* request)
 {
+    // If this transfer is currently active, stop it.
     CURL* curl = request->GetHandle();
-    TransferSet::iterator it = m_activeTransfers.find(curl);
-
-    if ( it != m_activeTransfers.end() )
-    {
-        // The transfer the CURL handle is performing is still in progress, but
-        // the web request object it belongs to is being deleted. Since the
-        // next step will call curl_easy_cleanup and any calls on the CURL
-        // handle after cleanup are illegal, remove it from the CURLM
-        // multihandle now.
-        curl_multi_remove_handle(m_handle, curl);
-        m_activeTransfers.erase(it);
-    }
+    StopActiveTransfer(curl);
 
     curl_easy_cleanup(curl);
 }
@@ -1119,6 +1102,8 @@ void wxWebSessionCURL::ProcessSocketCallback(CURL* curl, curl_socket_t s,
             wxFALLTHROUGH;
         case CURL_POLL_INOUT:
             {
+                m_activeSockets[curl] = s;
+
                 int pollAction = CurlPoll2SocketPoller(what);
                 bool socketIsMonitored = m_socketPoller->StartPolling(s,
                                                                       pollAction);
@@ -1138,6 +1123,7 @@ void wxWebSessionCURL::ProcessSocketCallback(CURL* curl, curl_socket_t s,
             break;
         case CURL_POLL_REMOVE:
             m_socketPoller->StopPolling(s);
+            RemoveActiveSocket(curl);
             break;
         default:
             wxLogDebug("Unknown socket action in ProcessSocketCallback");
@@ -1197,6 +1183,7 @@ void wxWebSessionCURL::CheckForCompletedTransfers()
                 curl_multi_remove_handle(m_handle, curl);
                 request->HandleCompletion();
                 m_activeTransfers.erase(it);
+                RemoveActiveSocket(curl);
             }
         }
     }
@@ -1209,74 +1196,50 @@ void wxWebSessionCURL::FailRequest(CURL* curl,const wxString& msg)
     if ( it != m_activeTransfers.end() )
     {
         wxWebRequestCURL* request = it->second;
-        m_activeTransfers.erase(it);
-        curl_multi_remove_handle(m_handle, curl);
-        StopTransfer(curl);
+        StopActiveTransfer(curl);
 
         request->SetState(wxWebRequest::State_Failed, msg);
     }
 }
 
-void wxWebSessionCURL::StopTransfer(CURL* curl)
+void wxWebSessionCURL::StopActiveTransfer(CURL* curl)
 {
-    curl_socket_t activeSocket;
-    bool closeActiveSocket = true;
-    bool useLastSocket = false;
+    TransferSet::iterator it = m_activeTransfers.find(curl);
 
-#if CURL_AT_LEAST_VERSION(7, 45, 0)
-    if ( CurlRuntimeAtLeastVersion(7, 45, 0) )
+    if ( it != m_activeTransfers.end() )
     {
-        CURLcode code = curl_easy_getinfo(curl, CURLINFO_ACTIVESOCKET,
-                                          &activeSocket);
+        // Record the current active socket now since it should be removed from
+        // the m_activeSockets map when we call curl_multi_remove_handle.
+        curl_socket_t activeSocket = CURL_SOCKET_BAD;
+        CurlSocketMap::iterator it2 = m_activeSockets.find(curl);
 
-        if ( code != CURLE_OK || activeSocket == CURL_SOCKET_BAD )
+        if ( it2 != m_activeSockets.end() )
         {
-            closeActiveSocket = false;
+            activeSocket = it2->second;
         }
-    }
-    else
-    {
-        useLastSocket = true;
-    }
-#else
-    useLastSocket = true;
-#endif //CURL_AT_LEAST_VERSION(7, 45, 0)
 
-    // CURLINFO_ACTIVESOCKET is not available either at compile time or run
-    // time. So we must use the older CURLINFO_LASTSOCKET instead.
-    if ( useLastSocket )
-    {
-        #ifdef __WIN64__
-            // CURLINFO_LASTSOCKET won't work on 64 bit windows because it
-            // uses a long to retrive the socket. However sockets will be 64
-            // bit values. In this case there is nothing we can do.
-            closeActiveSocket = false;
-        #endif //__WIN64__
+        // Remove the CURL easy handle from the CURLM multi handle.
+        curl_multi_remove_handle(m_handle, curl);
 
-        if ( closeActiveSocket )
+        // If the transfer was active, close its socket.
+        if ( activeSocket != CURL_SOCKET_BAD )
         {
-            long longSocket;
-            CURLcode code = curl_easy_getinfo(curl, CURLINFO_LASTSOCKET,
-                                              &longSocket);
-
-            if ( code == CURLE_OK && longSocket!= -1 )
-            {
-                activeSocket = static_cast<curl_socket_t>(longSocket);
-            }
-            else
-            {
-                closeActiveSocket = false;
-            }
+            wxCloseSocket(activeSocket);
         }
-    }
 
-    if ( closeActiveSocket )
+        // Clean up the maps.
+        RemoveActiveSocket(curl);
+        m_activeTransfers.erase(it);
+    }
+}
+
+void wxWebSessionCURL::RemoveActiveSocket(CURL* curl)
+{
+    CurlSocketMap::iterator it = m_activeSockets.find(curl);
+
+    if ( it != m_activeSockets.end() )
     {
-        #ifdef __WINDOWS__
-            closesocket(activeSocket);
-        #else
-            close(activeSocket);
-        #endif
+        m_activeSockets.erase(it);
     }
 }
 

@@ -168,12 +168,17 @@ private:
     void ProcessSocketPollerResult(wxThreadEvent&);
     void CheckForCompletedTransfers();
     void FailRequest(CURL*, const wxString&);
-    void StopTransfer(CURL*);
+    void StopActiveTransfer(CURL*);
+    void RemoveActiveSocket(CURL*);
 
     WX_DECLARE_HASH_MAP(CURL*, wxWebRequestCURL*, wxPointerHash, \
                         wxPointerEqual, TransferSet);
 
+    WX_DECLARE_HASH_MAP(CURL*, curl_socket_t, wxPointerHash, \
+                        wxPointerEqual, CurlSocketMap);
+
     TransferSet m_activeTransfers;
+    CurlSocketMap m_activeSockets;
 
     SocketPoller* m_socketPoller;
     wxTimer m_timeoutTimer;
