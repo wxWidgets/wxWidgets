@@ -999,15 +999,23 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
 {
     // Add request easy handle to multi handle
     CURL* curl = request.GetHandle();
-    curl_multi_add_handle(m_handle, curl);
+    int code = curl_multi_add_handle(m_handle, curl);
 
-    request.SetState(wxWebRequest::State_Active);
+    if ( code == CURLM_OK )
+    {
+        request.SetState(wxWebRequest::State_Active);
 
-    // Report a timeout to curl to initiate this transfer.
-    int runningHandles;
-    curl_multi_socket_action(m_handle, CURL_SOCKET_TIMEOUT, 0, &runningHandles);
+        // Report a timeout to curl to initiate this transfer.
+        int runningHandles;
+        curl_multi_socket_action(m_handle, CURL_SOCKET_TIMEOUT, 0,
+                                 &runningHandles);
 
-    return true;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
