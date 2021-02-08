@@ -187,6 +187,10 @@ protected:
 
     void ReportDataReceived(size_t sizeReceived);
 
+    // This function can optionally be called to preallocate the read buffer,
+    // if the total amount of data to be downloaded is known in advance.
+    void PreAllocBuffer(size_t sizeNeeded);
+
 private:
     // Called by wxWebRequestImpl only.
     friend class wxWebRequestImpl;

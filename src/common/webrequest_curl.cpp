@@ -67,7 +67,7 @@ static size_t wxCURLHeader(char *buffer, size_t size, size_t nitems, void *userd
     return static_cast<wxWebResponseCURL*>(userdata)->CURLOnHeader(buffer, size * nitems);
 }
 
-int wxCURLXferInfo(void* clientp, curl_off_t WXUNUSED(dltotal),
+int wxCURLXferInfo(void* clientp, curl_off_t dltotal,
                    curl_off_t WXUNUSED(dlnow),
                    curl_off_t WXUNUSED(ultotal),
                    curl_off_t WXUNUSED(ulnow))
@@ -75,7 +75,7 @@ int wxCURLXferInfo(void* clientp, curl_off_t WXUNUSED(dltotal),
     wxCHECK_MSG( clientp, 0, "invalid curl progress callback data" );
 
     wxWebResponseCURL* response = reinterpret_cast<wxWebResponseCURL*>(clientp);
-    return response->CURLOnProgress();
+    return response->CURLOnProgress(dltotal);
 }
 
 int wxCURLProgress(void* clientp, double dltotal, double dlnow, double ultotal,
@@ -90,6 +90,8 @@ int wxCURLProgress(void* clientp, double dltotal, double dlnow, double ultotal,
 wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
     wxWebResponseImpl(request)
 {
+    m_knownDownloadSize = 0;
+
     curl_easy_setopt(GetHandle(), CURLOPT_WRITEDATA, static_cast<void*>(this));
     curl_easy_setopt(GetHandle(), CURLOPT_HEADERDATA, static_cast<void*>(this));
 
@@ -152,8 +154,17 @@ size_t wxWebResponseCURL::CURLOnHeader(const char * buffer, size_t size)
     return size;
 }
 
-int wxWebResponseCURL::CURLOnProgress()
+int wxWebResponseCURL::CURLOnProgress(curl_off_t total)
 {
+    if ( m_knownDownloadSize != total )
+    {
+        if ( m_request.GetStorage() == wxWebRequest::Storage_Memory )
+        {
+            PreAllocBuffer(static_cast<size_t>(total));
+        }
+        m_knownDownloadSize = total;
+    }
+
     return 0;
 }
 
