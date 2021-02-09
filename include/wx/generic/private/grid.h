@@ -24,54 +24,7 @@
 WX_DEFINE_ARRAY_WITH_DECL_PTR(wxGridCellAttr *, wxArrayAttrs,
                                  class WXDLLIMPEXP_ADV);
 
-struct wxGridCellWithAttr
-{
-    wxGridCellWithAttr(int row, int col, wxGridCellAttr *attr_)
-        : coords(row, col), attr(attr_)
-    {
-        wxASSERT( attr );
-    }
-
-    wxGridCellWithAttr(const wxGridCellWithAttr& other)
-        : coords(other.coords),
-          attr(other.attr)
-    {
-        attr->IncRef();
-    }
-
-    wxGridCellWithAttr& operator=(const wxGridCellWithAttr& other)
-    {
-        coords = other.coords;
-        if (attr != other.attr)
-        {
-            attr->DecRef();
-            attr = other.attr;
-            attr->IncRef();
-        }
-        return *this;
-    }
-
-    void ChangeAttr(wxGridCellAttr* new_attr)
-    {
-        if (attr != new_attr)
-        {
-            // "Delete" (i.e. DecRef) the old attribute.
-            attr->DecRef();
-            attr = new_attr;
-            // Take ownership of the new attribute, i.e. no IncRef.
-        }
-    }
-
-    ~wxGridCellWithAttr()
-    {
-        attr->DecRef();
-    }
-
-    wxGridCellCoords coords;
-    wxGridCellAttr  *attr;
-};
-
-WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellWithAttr*,
+WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellAttr*,
                               wxIntegerHash, wxIntegerEqual,
                               wxGridCoordsToAttrMap, class WXDLLIMPEXP_CORE);
 
