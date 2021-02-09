@@ -595,7 +595,7 @@ GridFrame::GridFrame()
 
     grid->GetTable()->SetAttrProvider(new CustomColumnHeadersProvider());
 
-    grid->AppendRows(100);
+    grid->AppendRows(1000);
     grid->AppendCols(100);
 
     int ir = grid->GetNumberRows();
@@ -632,11 +632,14 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
-    grid->SetRowSize( 99, 4*grid->GetDefaultRowSize() );
-    grid->SetCellValue(98, 98, "Test background colour setting");
-    grid->SetCellBackgroundColour(98, 99, wxColour(255, 127, 127));
-    grid->SetCellBackgroundColour(99, 98, wxColour(255, 127, 127));
-    grid->SetCellValue( 99, 99, "Ctrl+End\nwill go to\nthis cell" );
+    const int endRow = grid->GetNumberRows() - 1,
+              endCol = grid->GetNumberCols() - 1;
+
+    grid->SetRowSize(endRow, 4 * grid->GetDefaultRowSize());
+    grid->SetCellValue(endRow - 1, endCol - 1, "Test background colour setting");
+    grid->SetCellBackgroundColour(endRow - 1, endCol, wxColour(255, 127, 127));
+    grid->SetCellBackgroundColour(endRow, endCol - 1, wxColour(255, 127, 127));
+    grid->SetCellValue(endRow, endCol, "Ctrl+End\nwill go to\nthis cell");
     grid->SetCellValue( 1, 0, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
 
     grid->SetCellValue(2, 0, "This one always overflows");
