@@ -310,7 +310,7 @@ HRESULT wxWebViewEdgeImpl::OnContainsFullScreenElementChanged(ICoreWebView2* WXU
         return hr;
 
     wxWebViewEvent event(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, m_ctrl->GetId(),
-        m_ctrl->GetCurrentURL(), "");
+        m_ctrl->GetCurrentURL(), wxString());
     event.SetEventObject(m_ctrl);
     event.SetInt(containsFullscreenEvent);
     m_ctrl->HandleWindowEvent(event);
