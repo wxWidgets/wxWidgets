@@ -575,7 +575,7 @@ bool wxLocale::Init(int language, int flags)
 #elif defined(__WXMAC__)
     const wxString& locale = info->CanonicalName;
 
-    const char *retloc = wxSetlocale(LC_ALL, locale);
+    const char *retloc = wxSetlocale(LC_ALL, (! m_pszOldLocale || strcmp(m_pszOldLocale, "C/UTF-8/C/C/C/C")) ? locale : "C/"+locale+".UTF-8/C/C/C/C");
 
     if ( !retloc )
     {

@@ -138,7 +138,11 @@ char* wxSetlocale(int category, const char *locale)
         wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
         wxString langFull = str.AsString()+"_";
         str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
-        langFull += str.AsString();
+        langFull += str.AsString()+".UTF-8";
+        if(category == LC_ALL)
+        {
+          langFull = "C/"+langFull+"/C/C/C/C";
+        }
         rv = setlocale(category, langFull.c_str());
     }
     else
