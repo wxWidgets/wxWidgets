@@ -5,25 +5,9 @@ on:
   push:
     branches:
       - master
-    paths:
-      - '.github/workflows/code_checks.yml'
-      - 'docs/**'
-      - 'include/**'
-      - 'interface/**'
-      - 'misc/suppressions/**'
-      - '**/*.md'
-      - '!docs/changes*txt'
   pull_request:
     branches:
       - master
-    paths:
-      - '.github/workflows/code_checks.yml'
-      - 'docs/**'
-      - 'include/**'
-      - 'interface/**'
-      - 'misc/suppressions/**'
-      - '**/*.md'
-      - '!docs/changes*txt'
 
 jobs:
   check-unix:
@@ -66,3 +50,20 @@ jobs:
                 ':!**/*.sln' \
                 ':!**/*.vcproj' \
                 ':!**/*.xpm'
+
+
+  check-mixed-eol:
+    runs-on: ubuntu-20.04
+    name: Check Mixed EOL
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dos2unix
+        run: |
+          sudo apt-get install -y dos2unix
+
+      - name: Check for mixed EOL
+        run: |
+            ./misc/scripts/check_mixed_eol.sh
