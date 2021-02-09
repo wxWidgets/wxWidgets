@@ -72,6 +72,8 @@ void wxBell()
 // display characteristics
 // ----------------------------------------------------------------------------
 
+#if defined(__UNIX__)
+
 void *wxGetDisplay()
 {
     return wxGetDisplayInfo().dpy;
@@ -81,15 +83,23 @@ wxDisplayInfo wxGetDisplayInfo()
 {
     wxDisplayInfo info = { NULL, wxDisplayNone };
     GdkDisplay *display = gdk_window_get_display(wxGetTopLevelGDK());
+#if defined(__WXGTK3__) && (defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11))
+    const char* displayTypeName = g_type_name(G_TYPE_FROM_INSTANCE(display));
+#endif
+
 #ifdef GDK_WINDOWING_X11
-    if (GDK_IS_X11_DISPLAY(display)) {
+#ifdef __WXGTK3__
+    if (strcmp("GdkX11Display", displayTypeName) == 0)
+#endif
+    {
         info.dpy = GDK_DISPLAY_XDISPLAY(display);
         info.type = wxDisplayX11;
         return info;
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-    if (GDK_IS_WAYLAND_DISPLAY(display)) {
+    if (strcmp("GdkWaylandDisplay", displayTypeName) == 0)
+    {
         info.dpy = gdk_wayland_display_get_wl_display(display);
         info.type = wxDisplayWayland;
         return info;
@@ -97,6 +107,8 @@ wxDisplayInfo wxGetDisplayInfo()
 #endif
     return info;
 }
+
+#endif // __UNIX__
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {

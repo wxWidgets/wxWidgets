@@ -1199,20 +1199,33 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
     Bitmap* image = NULL;
     if ( bmp.GetMask() )
     {
-        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),
+        Bitmap* interim = new Bitmap((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
             (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
             NULL
 #endif
         );
+        size_t width = interim->GetWidth();
+        size_t height = interim->GetHeight();
+        Rect bounds(0, 0, width, height);
+        if ( bmp.HasAlpha() && GetPixelFormatSize(interim->GetPixelFormat()) == 32 )
+        {
+            BitmapData data;
 
-        size_t width = interim.GetWidth();
-        size_t height = interim.GetHeight();
-        Rect bounds(0,0,width,height);
+            m_helper = interim;
+            m_helper->LockBits(&bounds, ImageLockModeRead, m_helper->GetPixelFormat(), &data);
+            image = new Bitmap(data.Width, data.Height, data.Stride, PixelFormat32bppPARGB, (BYTE*)data.Scan0);
+            m_helper->UnlockBits(&data);
+        }
+        else
+        {
+            image = interim->Clone(bounds, PixelFormat32bppPARGB);
+            delete interim;
+        }
 
-        image = new Bitmap(width,height,PixelFormat32bppPARGB) ;
-
+        // If there is a mask, set the alpha bytes in the target buffer to
+        // fully transparent or retain original value
         Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),NULL);
         wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
 
@@ -1220,44 +1233,34 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
         interimMask.LockBits(&bounds,ImageLockModeRead,
             interimMask.GetPixelFormat(),&dataMask);
 
-
         BitmapData imageData ;
         image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
 
-        BYTE maskPattern = 0 ;
-        BYTE maskByte = 0;
-        size_t maskIndex ;
-
         for ( size_t y = 0 ; y < height ; ++y)
         {
-            maskIndex = 0 ;
+            BYTE maskPattern = 0;
+            BYTE maskByte = 0;
+            const BYTE* mask = reinterpret_cast<BYTE*>(dataMask.Scan0) + dataMask.Stride * y;
+            ARGB* dest = reinterpret_cast<ARGB*>(reinterpret_cast<BYTE*>(imageData.Scan0) + imageData.Stride * y);
             for( size_t x = 0 ; x < width; ++x)
             {
                 if ( x % 8 == 0)
                 {
                     maskPattern = 0x80;
-                    maskByte = *((BYTE*)dataMask.Scan0 + dataMask.Stride*y + maskIndex);
-                    maskIndex++;
+                    maskByte = *mask++;
                 }
                 else
-                    maskPattern = maskPattern >> 1;
+                    maskPattern >>= 1;
 
-                ARGB *dest = (ARGB*)((BYTE*)imageData.Scan0 + imageData.Stride*y + x*4);
                 if ( (maskByte & maskPattern) == 0 )
                     *dest = 0x00000000;
-                else
-                {
-                    Color c ;
-                    interim.GetPixel(x,y,&c) ;
-                    *dest = (c.GetValue() | Color::AlphaMask);
-                }
+
+                dest++;
             }
         }
 
         image->UnlockBits(&imageData);
-
         interimMask.UnlockBits(&dataMask);
-        interim.UnlockBits(&dataMask);
     }
     else
     {
@@ -2869,7 +2872,7 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateSubBitmap( const wxGraphicsBitmap &bit
                      wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
 
         wxGraphicsBitmap p;
-        p.SetRefData(new wxGDIPlusBitmapData( this , image->Clone( (REAL) x , (REAL) y , (REAL) w , (REAL) h , PixelFormat32bppPARGB) ));
+        p.SetRefData(new wxGDIPlusBitmapData( this , image->Clone( (REAL) x , (REAL) y , (REAL) w , (REAL) h , image->GetPixelFormat()) ));
         return p;
     }
     else

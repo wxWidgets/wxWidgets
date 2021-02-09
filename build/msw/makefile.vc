@@ -5639,6 +5639,12 @@ ____wxgl_namedll_DEP = $(__gldll___depname)
 !if "$(SHARED)" == "0"
 ____wxgl_namelib_DEP = $(__gllib___depname)
 !endif
+!if "$(WXUNIV)" == "0"
+__SETUP_H_SUBDIR_FILENAMES = msw
+!endif
+!if "$(WXUNIV)" == "1"
+__SETUP_H_SUBDIR_FILENAMES = univ
+!endif
 !if "$(USE_STC)" == "1"
 __wxscintilla = $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib
 !endif
@@ -5850,12 +5856,6 @@ __UNICODE_DEFINE_p = /D_UNICODE
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES = /I$(CAIRO_ROOT)\include\cairo
 !endif
-!if "$(WXUNIV)" == "0"
-__SETUP_H_SUBDIR_FILENAMES = msw
-!endif
-!if "$(WXUNIV)" == "1"
-__SETUP_H_SUBDIR_FILENAMES = univ
-!endif
 
 
 all: $(OBJS)
@@ -5966,7 +5966,7 @@ clean:
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 
-setup_h: $(SETUPHDIR)\wx ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h $(SETUPHDIR)\wx\msw\rcdefs.h
+setup_h: $(SETUPHDIR)\wx $(SETUPHDIR)\wx\setup.h $(SETUPHDIR)\wx\msw\rcdefs.h
 
 $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib: $(WXREGEX_OBJECTS)
 	if exist $@ del $@
@@ -6350,9 +6350,6 @@ $(SETUPHDIR): $(LIBDIRNAME)
 
 $(SETUPHDIR)\wx: $(SETUPHDIR)
 	if not exist $(SETUPHDIR)\wx mkdir $(SETUPHDIR)\wx
-
-..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h: 
-	if not exist ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h
 
 $(SETUPHDIR)\wx\setup.h: 
 	if not exist $(SETUPHDIR)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h

@@ -202,6 +202,8 @@ public:
     /**
         Returns @true if the color can be described using RGB values, i.e. is solid,
         @false if it is a pattern (currently only possible on macOS)
+
+        @since 3.1.2
     */
     virtual bool IsSolid() const;
     //@{

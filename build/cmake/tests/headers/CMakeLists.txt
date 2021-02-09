@@ -17,7 +17,7 @@ set(TEST_SRC
     allheaders.h
     )
 
-wx_add_test(test_headers ${TEST_SRC})
+wx_add_test(test_headers CONSOLE_GUI ${TEST_SRC})
 if(wxUSE_SOCKETS)
     wx_exe_link_libraries(test_headers wxnet)
 endif()

@@ -238,6 +238,10 @@ protected:
                                                     : wxString();
     }
 
+    // This member is protected because it can be useful to the derived classes
+    // in their Transfer{From,To}Window() implementations.
+    ValueType * const m_value;
+
 private:
     // Just a helper which is a common part of TransferToWindow() and
     // NormalizeString(): returns string representation of a number honouring
@@ -257,8 +261,6 @@ private:
         return s;
     }
 
-
-    ValueType * const m_value;
 
     wxDECLARE_NO_ASSIGN_CLASS(wxNumValidator);
 };

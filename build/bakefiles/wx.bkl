@@ -144,12 +144,6 @@
             </linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>
-        <gettext-catalogs id="locale_msw">
-            <srcdir>$(SRCDIR)/locale/msw</srcdir>
-            <catalog-name>wxmsw</catalog-name>
-            <linguas>it</linguas>
-            <install-to>$(LOCALEDIR)</install-to>
-        </gettext-catalogs>
     </if>
 
 
@@ -173,11 +167,6 @@
             <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
         </set>
 
-        <copy-file-to-file-if-not-exist id="master_setup.h">
-            <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup0.h</src>
-            <dst>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</dst>
-            <dependency-of>setup_h</dependency-of>
-        </copy-file-to-file-if-not-exist>
         <copy-file-to-file-if-not-exist id="setup.h">
             <dependency-of>setup_h</dependency-of>
             <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</src>

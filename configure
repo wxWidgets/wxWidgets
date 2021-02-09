@@ -2071,7 +2071,7 @@ Optional Features:
   --enable-official_build official build of wxWidgets (win32 DLL only)
   --enable-vendor=VENDOR  vendor name (win32 DLL only)
   --disable-all-features  disable all optional features to build minimal library
-  --disable-sys-libs      disable all use of system libraries, use only built-in ones
+  --disable-sys-libs      disable use of system libraries for which built-in versions are available
   --disable-tests         disable building tests
   --enable-universal      use wxWidgets GUI controls instead of native ones
   --enable-nanox          use NanoX
@@ -22113,16 +22113,15 @@ fi
 
 
 if test "$wxUSE_LIBLZMA" != "no"; then
-            if test "$wxUSE_SYS_LIBS" != "no"; then
-        ac_fn_c_check_header_mongrel "$LINENO" "lzma.h" "ac_cv_header_lzma_h" "$ac_includes_default"
+    ac_fn_c_check_header_mongrel "$LINENO" "lzma.h" "ac_cv_header_lzma_h" "$ac_includes_default"
 if test "x$ac_cv_header_lzma_h" = xyes; then :
 
 fi
 
 
 
-        if test "$ac_cv_header_lzma_h" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
+    if test "$ac_cv_header_lzma_h" = "yes"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
 $as_echo_n "checking for lzma_code in -llzma... " >&6; }
 if ${ac_cv_lib_lzma_lzma_code+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -22160,14 +22159,13 @@ fi
 $as_echo "$ac_cv_lib_lzma_lzma_code" >&6; }
 if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
 
-                    LZMA_LINK="-llzma"
-                    LIBS="$LZMA_LINK $LIBS"
-                    $as_echo "#define wxUSE_LIBLZMA 1" >>confdefs.h
+                LZMA_LINK="-llzma"
+                LIBS="$LZMA_LINK $LIBS"
+                $as_echo "#define wxUSE_LIBLZMA 1" >>confdefs.h
 
 
 fi
 
-        fi
     fi
 
     if test -z "$LZMA_LINK"; then
@@ -22982,7 +22980,6 @@ fi
 
 
 if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
-            if test "$wxUSE_SYS_LIBS" != "no" -o "$wxUSE_LIBCURL" = "yes"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCURL" >&5
@@ -23043,15 +23040,15 @@ fi
 	echo "$LIBCURL_PKG_ERRORS" >&5
 
 
-                wxUSE_LIBCURL=no
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+            wxUSE_LIBCURL=no
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
 
 
 elif test $pkg_failed = untried; then
 
-                wxUSE_LIBCURL=no
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+            wxUSE_LIBCURL=no
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
 $as_echo "not found" >&6; }
 
 
@@ -23061,17 +23058,11 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                wxUSE_LIBCURL=yes
-                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
-                LIBS="$LIBCURL_LIBS $LIBS"
+            wxUSE_LIBCURL=yes
+            CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+            LIBS="$LIBCURL_LIBS $LIBS"
 
 fi
-    else
-                                if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary" >&5
-$as_echo "$as_me: WARNING: Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary" >&2;}
-        fi
-    fi
 fi
 
 
@@ -29103,7 +29094,8 @@ $as_echo "$as_me: WARNING: wxGLCanvas not implemented for this port, library wil
 
         $as_echo "#define wxUSE_GLCANVAS 1" >>confdefs.h
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl opengl/cube opengl/penguin opengl/isosurf opengl/pyramid"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl/cube opengl/penguin opengl/isosurf opengl/pyramid"
+        SAMPLES_SUBTREES="$SAMPLES_SUBTREES opengl"
     fi
 fi
 
@@ -37119,7 +37111,8 @@ if test "$wxUSE_HTML" = "yes"; then
     $as_echo "#define wxUSE_HTML 1" >>confdefs.h
 
     USE_HTML=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
+    SAMPLES_SUBTREES="$SAMPLES_SUBTREES html"
 fi
 
 USE_XRC=0
@@ -41306,6 +41299,10 @@ for subdir in $SUBDIRS; do
                     if test -d $srcdir/samples/$sample; then
                         makefiles="samples/$sample/Makefile.in $makefiles"
                     fi
+                done
+
+                                                                                for subtree in $SAMPLES_SUBTREES; do
+                    makefiles="samples/$subtree/Makefile.in $makefiles"
                 done
             else
                                                                 disabled_var=DISABLED_`echo $subdir | tr '[a-z]' '[A-Z]'`

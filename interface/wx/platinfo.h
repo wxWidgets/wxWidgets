@@ -139,6 +139,45 @@ struct wxLinuxDistributionInfo
 
 
 /**
+    @class wxPlatformId
+
+    Defines a very broad platform categorization.
+
+    Usually you would use wxPlatformInfo to get all the platform details rather
+    than this class which only distinguishes between MSW, Mac and Unix
+    platforms.
+
+    This class is mostly useful if a short string describing the platform
+    corresponds to the current platform, i.e. the platform under which the
+    executable runs. The recognized strings are:
+
+    - "msw" (preferred) or "win" (for compatibility) for MSW.
+    - "mac" for Apple systems, i.e. macOS and iOS.
+    - "unix" for the (other) Unix-like systems.
+
+    @since 3.1.5
+ */
+class wxPlatformId
+{
+    /**
+        Returns the preferred current platform name.
+
+        Use MatchesCurrent() to check if the name is one of the possibly
+        several names corresponding to the current platform.
+
+        Returns one of "msw", "mac" or "unix" or an empty string if the current
+        platform is not recognized.
+     */
+    static wxString GetCurrent();
+
+    /**
+        Returns true if the given string matches the current platform.
+     */
+    static bool MatchesCurrent(const wxString& s);
+};
+
+
+/**
     @class wxPlatformInfo
 
     This class holds information about the operating system, the toolkit and the
@@ -590,4 +629,3 @@ public:
 
     //@}
 };
-

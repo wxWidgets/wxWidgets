@@ -1042,7 +1042,7 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
     dc.GetDeviceOrigin( &org_x, &org_y );
 
     // account for the horz scrollbar offset
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
         // Maybe we just have to check for m_signX

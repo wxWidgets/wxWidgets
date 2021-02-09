@@ -82,9 +82,7 @@ public:
     void SetZoomType(wxWebViewZoomType) wxOVERRIDE;
     wxWebViewZoomType GetZoomType() const wxOVERRIDE;
     bool CanSetZoomType(wxWebViewZoomType) const wxOVERRIDE;
-    virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
     virtual float GetZoomFactor() const wxOVERRIDE;
-    virtual void SetZoom(wxWebViewZoom) wxOVERRIDE;
     virtual void SetZoomFactor(float) wxOVERRIDE;
 
     //Clipboard functions
@@ -116,7 +114,7 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -163,7 +161,7 @@ private:
     bool CanExecuteEditingCommand(const gchar* command) const;
     void SetupWebExtensionServer();
     GDBusProxy *GetExtensionProxy() const;
-    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL) const;
 #endif
 
     WebKitWebView *m_web_view;
@@ -198,6 +196,9 @@ public:
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
     { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
+#if wxUSE_WEBVIEW_WEBKIT2
+    virtual wxVersionInfo GetVersionInfo() wxOVERRIDE;
+#endif
 };
 
 

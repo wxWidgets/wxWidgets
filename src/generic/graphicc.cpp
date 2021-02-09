@@ -1712,7 +1712,7 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
                                      const wxImage& image)
     : wxGraphicsBitmapData(renderer)
 {
-    const cairo_format_t bufferFormat = image.HasAlpha()
+    const cairo_format_t bufferFormat = image.HasAlpha() || image.HasMask()
                                             ? CAIRO_FORMAT_ARGB32
                                             : CAIRO_FORMAT_RGB24;
 
@@ -1734,13 +1734,16 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
 
             for ( int x = 0; x < m_width; x++ )
             {
-                const unsigned char a = *alpha++;
+                const unsigned char a = alpha ? *alpha : wxALPHA_OPAQUE;
 
-                *dst++ = a                      << 24 |
-                         Premultiply(a, src[0]) << 16 |
-                         Premultiply(a, src[1]) <<  8 |
-                         Premultiply(a, src[2]);
+                *dst++ = a                    << 24 |
+                         ((a * src[0]) / 255) << 16 |
+                         ((a * src[1]) / 255) <<  8 |
+                         ((a * src[2]) / 255);
                 src += 3;
+
+                if ( alpha )
+                    alpha++;
             }
 
             dst = rowStartDst + stride / 4;
@@ -1761,6 +1764,37 @@ wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
             }
 
             dst = rowStartDst + stride / 4;
+        }
+    }
+
+    // if there is a mask, set the alpha bytes in the target buffer to
+    // fully transparent or retain original value
+    if ( image.HasMask() )
+    {
+        unsigned char mr = image.GetMaskRed();
+        unsigned char mg = image.GetMaskGreen();
+        unsigned char mb = image.GetMaskBlue();
+
+        dst = reinterpret_cast<wxUint32*>(m_buffer);
+        src = image.GetData();
+
+        if ( bufferFormat == CAIRO_FORMAT_ARGB32 )
+        {
+            for ( int y = 0; y < m_height; y++ )
+            {
+                wxUint32* const rowStartDst = dst;
+
+                for ( int x = 0; x < m_width; x++ )
+                {
+                    if ( src[0] == mr && src[1] == mg && src[2] == mb )
+                        *dst = 0;
+
+                    dst++;
+                    src += 3;
+                }
+
+                dst = rowStartDst + stride / 4;
+            }
         }
     }
 

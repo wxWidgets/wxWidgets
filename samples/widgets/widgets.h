@@ -95,7 +95,7 @@ struct WidgetAttributes
 #endif // wxUSE_TOOLTIPS
         m_enabled = true;
         m_show = true;
-        m_dir = wxLayout_LeftToRight;
+        m_dir = wxLayout_Default;
         m_variant = wxWINDOW_VARIANT_NORMAL;
         m_cursor = wxNullCursor;
         m_defaultFlags = wxBORDER_DEFAULT;

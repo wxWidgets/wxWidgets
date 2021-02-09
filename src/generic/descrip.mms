@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 20 July 2020                                                        *
+# Date : 28 January 2021                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -96,7 +96,7 @@ OBJECTS = \
 		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj,\
 		markuptext.obj,bannerwindow.obj,timectrlg.obj,richtooltipg.obj\
 		,statbmpg.obj,splash.obj,collheaderctrlg.obj,graphicc.obj,\
-		rowheightcache.obj
+		rowheightcache.obj,creddlgg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -170,7 +170,7 @@ SOURCES = \
 		commandlinkbuttong.cpp,spinctlg.cpp markuptext.cpp \
 		bannerwindow.cpp timectrlg.cpp richtooltipg.cpp statbmpg.cpp \
 		textmeasure.cpp collheaderctrlg.cpp graphicc.cpp \
-		rowheightcache.cpp
+		rowheightcache.cpp creddlgg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -322,3 +322,4 @@ graphicc.obj : graphicc.cpp
 graphicc.obj : graphicc.cpp
 .endif
 rowheightcache.obj : rowheightcache.cpp
+creddlgg.obj : creddlgg.cpp

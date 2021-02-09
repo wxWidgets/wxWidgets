@@ -750,66 +750,11 @@ wxString wxWebViewWebKit::GetPageSource() const
 }
 
 
-wxWebViewZoom wxWebViewWebKit::GetZoom() const
-{
-    float zoom = GetWebkitZoom();
-
-    // arbitrary way to map float zoom to our common zoom enum
-    if (zoom <= 0.65)
-    {
-        return wxWEBVIEW_ZOOM_TINY;
-    }
-    if (zoom <= 0.90)
-    {
-        return wxWEBVIEW_ZOOM_SMALL;
-    }
-    if (zoom <= 1.15)
-    {
-        return wxWEBVIEW_ZOOM_MEDIUM;
-    }
-    if (zoom <= 1.45)
-    {
-        return wxWEBVIEW_ZOOM_LARGE;
-    }
-    return wxWEBVIEW_ZOOM_LARGEST;
-}
-
-
 float wxWebViewWebKit::GetZoomFactor() const
 {
     return GetWebkitZoom();
 }
 
-
-void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
-{
-    // arbitrary way to map our common zoom enum to float zoom
-    switch (zoom)
-    {
-        case wxWEBVIEW_ZOOM_TINY:
-            SetWebkitZoom(0.6f);
-            break;
-
-        case wxWEBVIEW_ZOOM_SMALL:
-            SetWebkitZoom(0.8f);
-            break;
-
-        case wxWEBVIEW_ZOOM_MEDIUM:
-            SetWebkitZoom(1.0f);
-            break;
-
-        case wxWEBVIEW_ZOOM_LARGE:
-            SetWebkitZoom(1.3);
-            break;
-
-        case wxWEBVIEW_ZOOM_LARGEST:
-            SetWebkitZoom(1.6);
-            break;
-
-        default:
-            wxFAIL;
-    }
-}
 
 void wxWebViewWebKit::SetZoomFactor(float zoom)
 {
@@ -975,7 +920,7 @@ wxString wxWebViewWebKit::GetPageText() const
                     wxConvUTF8);
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
 {
     wxCHECK_MSG( m_web_view, false,
         wxS("wxWebView must be created before calling RunScript()") );

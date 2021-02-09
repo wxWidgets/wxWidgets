@@ -873,9 +873,6 @@ positive.
 See @ref page_stdevtid for the list of standard identifiers available.
 You can use wxID_HIGHEST to determine the number above which it is safe to
 define your own identifiers. Or, you can use identifiers below wxID_LOWEST.
-Finally, you can allocate identifiers dynamically using wxNewId() function too.
-If you use wxNewId() consistently in your application, you can be sure that
-your identifiers don't conflict accidentally.
 
 
 @subsection overview_events_with_mouse_capture Event Handlers and Mouse Capture

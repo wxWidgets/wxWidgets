@@ -2511,9 +2511,6 @@ public:
     /**
         Delete rows from the table.
 
-        Notice that currently deleting a row intersecting a multi-cell (see
-        SetCellSize()) is not supported and will result in a crash.
-
         @param pos
             The first row to delete.
         @param numRows

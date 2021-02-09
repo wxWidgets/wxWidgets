@@ -37,14 +37,7 @@ protected:
     // has virtual functions, but no virtual destructor without making the dtor
     // virtual which is not needed here as objects are never deleted via
     // pointers to this class (and protected dtor enforces this).
-    //
-    // Unfortunately g++ 3.4.5 still complains about the dtor being non virtual
-    // even if it is protected, but actually does not give any warnings if the
-    // dtor is not defined at all, so work around this 3.4.5 bug inside our
-    // general g++ workaround.
-#if wxCHECK_GCC_VERSION(4, 0) || defined(__clang__)
     ~wxMSWOwnerDrawnButtonBase() { }
-#endif // g++ 4.0+
 
     // Make the control owner drawn if necessary to implement support for the
     // given foreground colour.

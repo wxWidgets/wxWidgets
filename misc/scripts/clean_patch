@@ -1,2 +1,2 @@
 #!/bin/sh
-filterdiff -x '*/*.vcproj' -x '*/*.vcxproj*' -x a/autoconf_inc.m4 -x a/configure -x '*/makefile.*' -x '*/Makefile.in' -x a/setup.h.in -x '*/setup.h' -x '*/setup0.h' "$@"
+filterdiff -x '*/*.vcproj' -x '*/*.vcxproj*' -x a/autoconf_inc.m4 -x a/configure -x '*/makefile.*' -x '*/Makefile.in' -x a/setup.h.in -x '*/setup.h' "$@"

@@ -167,8 +167,13 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 static bool IsAvailable()
 {
+#if defined(__WXGTK3__) && (defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11))
+    GdkDisplay* display = gdk_display_get_default();
+    const char* displayTypeName = g_type_name(G_TYPE_FROM_INSTANCE(display));
+#endif
+
 #ifdef GDK_WINDOWING_WAYLAND
-    if ( GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()) )
+    if (strcmp("GdkWaylandDisplay", displayTypeName) == 0)
     {
 #if wxUSE_GLCANVAS_EGL
         return true;
@@ -180,8 +185,12 @@ static bool IsAvailable()
 #endif // GDK_WINDOWING_WAYLAND
 
 #ifdef GDK_WINDOWING_X11
-    if ( GDK_IS_X11_DISPLAY(gdk_display_get_default()) )
+#ifdef __WXGTK3__
+    if (strcmp("GdkX11Display", displayTypeName) == 0)
+#endif
+    {
         return true;
+    }
 #endif
 
     wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on Wayland and X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before\nstarting your program."));
@@ -260,8 +269,12 @@ bool wxGLCanvas::SetBackgroundStyle(wxBackgroundStyle /* style */)
 
 unsigned long wxGLCanvas::GetXWindow() const
 {
+#if defined(GDK_WINDOWING_X11)
     GdkWindow* window = GTKGetDrawingWindow();
     return window ? GDK_WINDOW_XID(window) : 0;
+#else
+    return 0;
+#endif
 }
 
 void wxGLCanvas::GTKHandleRealized()

@@ -231,6 +231,13 @@ public:
         @since 3.1.5
     */
     virtual bool IsAvailable();
+
+    /**
+        Retrieve the version information about this backend implementation.
+
+        @since 3.1.5
+    */
+    virtual wxVersionInfo GetVersionInfo(const wxString& backend);
 };
 
 /**
@@ -329,6 +336,16 @@ public:
       loaded and Edge (Chromium) is installed)
     - Make sure to add a note about using the WebView2 SDK to your application
       documentation, as required by its licence
+
+    If enabled and available at runtime edge will be selected as the default
+    backend. If you require the IE backend use @c wxWEBVIEW_BACKEND_IE when
+    using wxWebView::New().
+
+    If your application should use a
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution#fixed-version-distribution-mode">
+    fixed version</a> of the WebView2 runtime you must use
+    wxWebViewEdge::MSWSetBrowserExecutableDir() to specify its usage before
+    using the edge backend.
 
     @par wxWEBVIEW_WEBKIT (GTK)
 
@@ -486,6 +503,12 @@ public:
     */
     static bool IsBackendAvailable(const wxString& backend);
 
+    /**
+        Retrieve the version information about the backend implementation.
+
+        @since 3.1.5
+    */
+    static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxWebViewBackendDefault);
 
     /**
         Get the title of the current web page, or its URL/path if title is not
@@ -531,12 +554,12 @@ public:
         @return The HTML source code, or an empty string if no page is currently
                 shown.
     */
-    virtual wxString GetPageSource() const = 0;
+    virtual wxString GetPageSource() const;
 
     /**
         Get the text of the current page.
     */
-    virtual wxString GetPageText() const = 0;
+    virtual wxString GetPageText() const;
 
     /**
         Returns whether the web control is currently busy (e.g.\ loading a page).
@@ -637,7 +660,7 @@ public:
             version 3.1.1.
         @return @true if there is a result, @false if there is an error.
     */
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
@@ -683,36 +706,36 @@ public:
 
         @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanCopy() const = 0;
+    virtual bool CanCopy() const;
 
     /**
         Returns @true if the current selection can be cut.
 
          @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanCut() const = 0;
+    virtual bool CanCut() const;
 
     /**
         Returns @true if data can be pasted.
 
         @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanPaste() const = 0;
+    virtual bool CanPaste() const;
 
     /**
         Copies the current selection.
     */
-    virtual void Copy() = 0;
+    virtual void Copy();
 
     /**
         Cuts the current selection.
     */
-    virtual void Cut() = 0;
+    virtual void Cut();
 
     /**
         Pastes the current data.
     */
-    virtual void Paste() = 0;
+    virtual void Paste();
 
     /**
         @name Context Menu
@@ -823,34 +846,34 @@ public:
     /**
         Clears the current selection.
     */
-    virtual void ClearSelection() = 0;
+    virtual void ClearSelection();
 
     /**
         Deletes the current selection. Note that for @c wxWEBVIEW_BACKEND_WEBKIT
         the selection must be editable, either through SetEditable or the
         correct HTML attribute.
     */
-    virtual void DeleteSelection() = 0;
+    virtual void DeleteSelection();
 
     /**
         Returns the currently selected source, if any.
     */
-    virtual wxString GetSelectedSource() const = 0;
+    virtual wxString GetSelectedSource() const;
 
     /**
         Returns the currently selected text, if any.
     */
-    virtual wxString GetSelectedText() const = 0;
+    virtual wxString GetSelectedText() const;
 
     /**
         Returns @true if there is a current selection.
     */
-    virtual bool HasSelection() const = 0;
+    virtual bool HasSelection() const;
 
     /**
         Selects the entire page.
     */
-    virtual void SelectAll() = 0;
+    virtual void SelectAll();
 
     /**
         @name Undo / Redo
@@ -898,7 +921,7 @@ public:
               on the macOS WebKit backend.
         @since 2.9.5
     */
-    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT) = 0;
+    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT);
 
     /**
         @name Zoom
@@ -918,7 +941,7 @@ public:
         as provided by @c wxWebViewZoom.
         @return The current level of zoom.
     */
-    virtual wxWebViewZoom GetZoom() const = 0;
+    virtual wxWebViewZoom GetZoom() const;
 
     /**
         Get the zoom factor of the page.
@@ -939,7 +962,7 @@ public:
         steps provided by @c wxWebViewZoom.
         @param zoom How much to zoom (scale) the HTML document.
     */
-    virtual void SetZoom(wxWebViewZoom zoom) = 0;
+    virtual void SetZoom(wxWebViewZoom zoom);
 
     /**
         Set the zoom factor of the page.

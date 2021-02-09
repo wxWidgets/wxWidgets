@@ -402,7 +402,7 @@ if test "x$VENDOR" = "x"; then
 fi
 
 WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
-WX_ARG_DISABLE(sys-libs,    [  --disable-sys-libs      disable all use of system libraries, use only built-in ones], wxUSE_SYS_LIBS)
+WX_ARG_DISABLE(sys-libs,    [  --disable-sys-libs      disable use of system libraries for which built-in versions are available], wxUSE_SYS_LIBS)
 WX_ARG_DISABLE(tests,       [  --disable-tests         disable building tests], wxUSE_TESTS_SUBDIR)
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
@@ -2712,19 +2712,15 @@ dnl Check for lzma library
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_LIBLZMA" != "no"; then
-    dnl We shouldn't depend on the external liblzma if system libraries are
-    dnl explicitly disabled.
-    if test "$wxUSE_SYS_LIBS" != "no"; then
-        AC_CHECK_HEADER(lzma.h,,,[])
+    AC_CHECK_HEADER(lzma.h,,,[])
 
-        if test "$ac_cv_header_lzma_h" = "yes"; then
-            AC_CHECK_LIB(lzma, lzma_code,
-                [
-                    LZMA_LINK="-llzma"
-                    LIBS="$LZMA_LINK $LIBS"
-                    AC_DEFINE(wxUSE_LIBLZMA)
-                ])
-        fi
+    if test "$ac_cv_header_lzma_h" = "yes"; then
+        AC_CHECK_LIB(lzma, lzma_code,
+            [
+                LZMA_LINK="-llzma"
+                LIBS="$LZMA_LINK $LIBS"
+                AC_DEFINE(wxUSE_LIBLZMA)
+            ])
     fi
 
     if test -z "$LZMA_LINK"; then
@@ -2946,28 +2942,17 @@ dnl Check for libcurl
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_WEBREQUEST" = "yes" -a "$wxUSE_LIBCURL" != "no"; then
-    dnl We shouldn't depend on the external libcurl if system libraries are
-    dnl explicitly disabled, unless it is explicitly requested.
-    if test "$wxUSE_SYS_LIBS" != "no" -o "$wxUSE_LIBCURL" = "yes"; then
-        PKG_CHECK_MODULES(LIBCURL, [libcurl],
-            [
-                wxUSE_LIBCURL=yes
-                CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
-                LIBS="$LIBCURL_LIBS $LIBS"
-            ],
-            [
-                wxUSE_LIBCURL=no
-                AC_MSG_RESULT([not found])
-            ]
-        )
-    else
-        dnl Under Win32/macOS we have other backends for wxWebRequest, but
-        dnl under Unix it will be disabled without libcurl, so warn about it as
-        dnl this could be an unexpected consequence of disabling sys libs.
-        if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
-            AC_MSG_WARN([Support for libcurl disabled due to --disable-sys-libs, use --with-libcurl explicitly if necessary])
-        fi
-    fi
+    PKG_CHECK_MODULES(LIBCURL, [libcurl],
+        [
+            wxUSE_LIBCURL=yes
+            CXXFLAGS="$LIBCURL_CFLAGS $CXXFLAGS"
+            LIBS="$LIBCURL_LIBS $LIBS"
+        ],
+        [
+            wxUSE_LIBCURL=no
+            AC_MSG_RESULT([not found])
+        ]
+    )
 fi
 
 dnl ----------------------------------------------------------------
@@ -3914,7 +3899,8 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         USE_OPENGL=1
         AC_DEFINE(wxUSE_OPENGL)
         AC_DEFINE(wxUSE_GLCANVAS)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl opengl/cube opengl/penguin opengl/isosurf opengl/pyramid"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl/cube opengl/penguin opengl/isosurf opengl/pyramid"
+        SAMPLES_SUBTREES="$SAMPLES_SUBTREES opengl"
     fi
 fi
 
@@ -7391,7 +7377,8 @@ USE_HTML=0
 if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
     USE_HTML=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
+    SAMPLES_SUBTREES="$SAMPLES_SUBTREES html"
 fi
 
 USE_XRC=0
@@ -8728,6 +8715,14 @@ for subdir in $SUBDIRS; do
                     if test -d $srcdir/samples/$sample; then
                         makefiles="samples/$sample/Makefile.in $makefiles"
                     fi
+                done
+
+                dnl also create makefiles for the subdirectories containing
+                dnl other samples that are not added to SAMPLES_SUBDIRS because
+                dnl we don't want to recurse into them when building everything
+                dnl because we still want to allow building them explicitly
+                for subtree in $SAMPLES_SUBTREES; do
+                    makefiles="samples/$subtree/Makefile.in $makefiles"
                 done
             else
                 dnl assume that everything compiles for utils &c

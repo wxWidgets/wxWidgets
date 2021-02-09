@@ -72,6 +72,25 @@ void wxBell()
     wxUnusedVar(notification);
     [NSApp stop:nil];
     wxTheApp->OSXOnDidFinishLaunching();
+
+    // We need to activate the application manually if it's not part of a
+    // bundle, otherwise not only it won't come to the foreground, but under
+    // recent macOS versions (10.15+), its menus simply won't work at all.
+    //
+    // Note that we have not one but two methods to opt out from this behaviour
+    // for compatibility.
+    if ( !wxApp::sm_isEmbedded && wxTheApp && wxTheApp->OSXIsGUIApplication() )
+    {
+        CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
+        CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
+        CFRelease( url ) ;
+        wxString app = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+        if ( !app.EndsWith(".app") )
+        {
+            [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];
+            [NSApp activateIgnoringOtherApps: YES];
+        }
+    }
 }
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)fileNames
@@ -287,50 +306,6 @@ void wxBell()
 }
 @end
 
-
-// more on bringing non-bundled apps to the foreground
-// https://devforums.apple.com/thread/203753
-
-#if 0 
-
-// one possible solution is also quoted here
-// from https://stackoverflow.com/questions/7596643/when-calling-transformprocesstype-the-app-menu-doesnt-show-up
-
-@interface wxNSNonBundledAppHelper : NSObject {
-    
-}
-
-+ (void)transformToForegroundApplication;
-
-@end
-
-@implementation wxNSNonBundledAppHelper
-
-+ (void)transformToForegroundApplication {
-    for (NSRunningApplication * app in [NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.apple.finder"]) {
-        [app activateWithOptions:NSApplicationActivateIgnoringOtherApps];
-        break;
-    }
-    [self performSelector:@selector(transformStep2) withObject:nil afterDelay:0.1];
-}
-
-+ (void)transformStep2
-{
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    (void) TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-    
-    [self performSelector:@selector(transformStep3) withObject:nil afterDelay:0.1];
-}
-
-+ (void)transformStep3
-{
-    [[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateIgnoringOtherApps];
-}
-
-@end
-
-#endif
-
 // here we subclass NSApplication, for the purpose of being able to override sendEvent.
 @interface wxNSApplication : NSApplication
 {
@@ -352,16 +327,6 @@ void wxBell()
     }
     return self;
 }
-
-- (void) transformToForegroundApplication {
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-    
-    [[NSRunningApplication currentApplication] activateWithOptions:
-        (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
-}
-
-
 
 /* This is needed because otherwise we don't receive any key-up events for command-key
  combinations (an AppKit bug, apparently) */
@@ -391,20 +356,6 @@ bool wxApp::DoInitGui()
     if (!sm_isEmbedded)
     {
         [wxNSApplication sharedApplication];
-        
-        if ( OSXIsGUIApplication() )
-        {
-            CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
-            CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
-            CFRelease( url ) ;
-            wxString app = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
-            
-            // workaround is only needed for non-bundled apps
-            if ( !app.EndsWith(".app") )
-            {
-                [(wxNSApplication*) [wxNSApplication sharedApplication] transformToForegroundApplication];
-            }
-        }
 
         appcontroller = OSXCreateAppController();
         [[NSApplication sharedApplication] setDelegate:(id <NSApplicationDelegate>)appcontroller];

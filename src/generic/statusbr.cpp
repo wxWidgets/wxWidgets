@@ -389,9 +389,11 @@ wxRect wxStatusBarGeneric::GetSizeGripRect() const
     int width, height;
     wxWindow::DoGetClientSize(&width, &height);
 
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return wxRect(2, 2, height-2, height-4);
-    else
+#endif
+
         return wxRect(width-height-2, 2, height-2, height-4);
 }
 
@@ -419,10 +421,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
             GtkStyleContext* sc = gtk_widget_get_style_context(toplevel);
             gtk_style_context_save(sc);
             gtk_style_context_add_class(sc, GTK_STYLE_CLASS_GRIP);
-            GtkJunctionSides sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-            if (GetLayoutDirection() == wxLayout_RightToLeft)
-                sides = GTK_JUNCTION_CORNER_BOTTOMLEFT;
-            gtk_style_context_set_junction_sides(sc, sides);
             gtk_render_handle(sc,
                 static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext()),
                 rc.x, rc.y, rc.width, rc.height);

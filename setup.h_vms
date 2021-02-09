@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 2 September 2020                                                   *
+ * Date : 28 January 2021                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -275,7 +275,7 @@ typedef pid_t GPid;
 
 #define wxUSE_FSVOLUME      1
 
-#define wxUSE_SECRETSTORE   1
+#define wxUSE_SECRETSTORE   0
 
 #define wxUSE_STDPATHS      1
 
@@ -342,6 +342,16 @@ typedef pid_t GPid;
 #define wxUSE_FONTMAP 1
 
 #define wxUSE_MIMETYPE 1
+
+#define wxUSE_WEBREQUEST 1
+
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+#define wxUSE_WEBREQUEST_CURL 1
 
 #define wxUSE_PROTOCOL 1
 
@@ -585,6 +595,8 @@ typedef pid_t GPid;
 
 #define wxUSE_NUMBERDLG 1
 
+#define wxUSE_CREDENTIALDLG 1
+
 #define wxUSE_SPLASH 1
 
 #define wxUSE_WIZARDDLG 1
@@ -736,6 +748,12 @@ typedef pid_t GPid;
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #define wxUSE_WEBREQUEST_WINHTTP 0
+#else
+    #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
 
 #define wxUSE_OLE           0

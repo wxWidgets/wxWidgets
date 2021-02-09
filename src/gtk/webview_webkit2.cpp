@@ -508,6 +508,16 @@ wxgtk_authorize_authenticated_peer_cb(GDBusAuthObserver *,
 } // extern "C"
 
 //-----------------------------------------------------------------------------
+// wxWebViewFactoryWebKit
+//-----------------------------------------------------------------------------
+
+wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
+{
+    return wxVersionInfo("webkit2", webkit_get_major_version(),
+        webkit_get_minor_version(), webkit_get_micro_version());
+}
+
+//-----------------------------------------------------------------------------
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
@@ -899,63 +909,9 @@ wxString wxWebViewWebKit::GetPageSource() const
 }
 
 
-wxWebViewZoom wxWebViewWebKit::GetZoom() const
-{
-    float zoom = GetWebkitZoom();
-
-    // arbitrary way to map float zoom to our common zoom enum
-    if (zoom <= 0.65f)
-    {
-        return wxWEBVIEW_ZOOM_TINY;
-    }
-    if (zoom <= 0.90f)
-    {
-        return wxWEBVIEW_ZOOM_SMALL;
-    }
-    if (zoom <= 1.15f)
-    {
-        return wxWEBVIEW_ZOOM_MEDIUM;
-    }
-    if (zoom <= 1.45f)
-    {
-        return wxWEBVIEW_ZOOM_LARGE;
-    }
-    return wxWEBVIEW_ZOOM_LARGEST;
-}
-
 float wxWebViewWebKit::GetZoomFactor() const
 {
     return GetWebkitZoom();
-}
-
-void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
-{
-    // arbitrary way to map our common zoom enum to float zoom
-    switch (zoom)
-    {
-        case wxWEBVIEW_ZOOM_TINY:
-            SetWebkitZoom(0.6f);
-            break;
-
-        case wxWEBVIEW_ZOOM_SMALL:
-            SetWebkitZoom(0.8f);
-            break;
-
-        case wxWEBVIEW_ZOOM_MEDIUM:
-            SetWebkitZoom(1.0f);
-            break;
-
-        case wxWEBVIEW_ZOOM_LARGE:
-            SetWebkitZoom(1.3);
-            break;
-
-        case wxWEBVIEW_ZOOM_LARGEST:
-            SetWebkitZoom(1.6);
-            break;
-
-        default:
-            wxFAIL;
-    }
 }
 
 void wxWebViewWebKit::SetZoomFactor(float zoom)
@@ -1174,7 +1130,7 @@ static void wxgtk_run_javascript_cb(GObject *,
 } // extern "C"
 
 // Run the given script synchronously and return its result in output.
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output) const
 {
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
@@ -1237,7 +1193,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     return true;
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output) const
 {
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
@@ -1284,7 +1240,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
 {
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
     bool newSearch = false;
-    if(text != m_findText || 
+    if(text != m_findText ||
        (flags & wxWEBVIEW_FIND_MATCH_CASE) != (m_findFlags & wxWEBVIEW_FIND_MATCH_CASE))
     {
         newSearch = true;

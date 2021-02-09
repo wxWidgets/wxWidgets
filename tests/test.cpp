@@ -405,10 +405,11 @@ extern bool IsAutomaticTest()
         s_isAutomatic = username == wxASCII_STR("buildbot") ||
                             username.Matches(wxASCII_STR("sandbox*"));
 
-        // Also recognize Travis and AppVeyor CI environments.
+        // Also recognize various CI environments.
         if ( !s_isAutomatic )
         {
             s_isAutomatic = wxGetEnv(wxASCII_STR("TRAVIS"), NULL) ||
+                              wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
                                 wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
         }
     }

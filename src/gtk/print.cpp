@@ -1285,8 +1285,7 @@ void wxGtkPrinterDCImpl::DoGradientFillConcentric(const wxRect& rect, const wxCo
     wxCoord w =  rect.width;
     wxCoord h = rect.height;
 
-    const double r2 = (w/2)*(w/2)+(h/2)*(h/2);
-    double radius = sqrt(r2);
+    const double radius = wxMin(w, h) / 2.0;
 
     unsigned char redI = initialColour.Red();
     unsigned char blueI = initialColour.Blue();

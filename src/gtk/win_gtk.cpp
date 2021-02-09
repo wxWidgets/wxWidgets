@@ -476,8 +476,10 @@ static void scroll_adjust(GtkWidget* widget, void* data)
 void wxPizza::scroll(int dx, int dy)
 {
     GtkWidget* widget = GTK_WIDGET(this);
+#ifndef __WXGTK3__
     if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
         dx = -dx;
+#endif
     m_scroll_x -= dx;
     m_scroll_y -= dy;
     GdkWindow* window = gtk_widget_get_window(widget);

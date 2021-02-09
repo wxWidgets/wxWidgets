@@ -655,7 +655,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
 void wxScrollHelperBase::DoPrepareDC(wxDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
     // It may actually be correct to always query
     // the m_sign from the DC here, but I leave the
     // #ifdef GTK for now.

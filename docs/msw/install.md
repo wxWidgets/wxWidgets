@@ -34,26 +34,6 @@ variable containing the full path to this directory. While this is not
 actually required, this makes using the library more convenient and
 this environment variable is used in the examples below.
 
-Upgrading Existing Git Checkout         {#msw_update_setup_h}
--------------------------------
-
-If you checked your sources from version control repository and didn't
-obtain them from a release file, you may need to update your
-`include/wx/msw/setup.h` file to add any new options from
-`include/wx/msw/setup0.h` to it. If you hadn't edited `setup.h` file
-manually, you can just delete it to force recreating it by copying
-`setup0.h` to `setup.h` during the next build. If you forget to do it,
-you may get errors during the build due to new options being
-undefined.
-
-If you have no intention of ever modifying `setup.h`, you may avoid this
-problem entirely by creating a symbolic link to `setup0.h` before
-building, e.g. using mklink, from an admin command prompt:
-
-    cd %WXWIN%\include\wx\msw\
-    mklink setup.h setup0.h
-
-
 
 Building wxWidgets                     {#msw_build}
 ==================

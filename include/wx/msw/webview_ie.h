@@ -131,7 +131,7 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -192,6 +192,7 @@ public:
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
     { return new wxWebViewIE(parent, id, url, pos, size, style, name); }
+    virtual wxVersionInfo GetVersionInfo() wxOVERRIDE;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)

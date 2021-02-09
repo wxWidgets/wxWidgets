@@ -1966,8 +1966,146 @@ TEST_CASE("wxImage::Clipboard", "[image][clipboard]")
     wxImage imgRetrieved = dobj2.GetImage();
     REQUIRE(imgRetrieved.IsOk());
 
-    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_PNG), imgRetrieved, 0, &imgOriginal);
+    CHECK_THAT(imgOriginal, RGBASameAs(imgRetrieved));
 #endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+}
+
+#define CHECK_EQUAL_COLOUR_RGB(c1, c2) \
+    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
+    CHECK( (int)c1.Green() == (int)c2.Green() ); \
+    CHECK( (int)c1.Blue()  == (int)c2.Blue() )
+
+#define CHECK_EQUAL_COLOUR_RGBA(c1, c2) \
+    CHECK( (int)c1.Red()   == (int)c2.Red() ); \
+    CHECK( (int)c1.Green() == (int)c2.Green() ); \
+    CHECK( (int)c1.Blue()  == (int)c2.Blue() ); \
+    CHECK( (int)c1.Alpha() == (int)c2.Alpha() )
+
+TEST_CASE("wxImage::InitAlpha", "[image][initalpha]")
+{
+    const wxColour maskCol(*wxRED);
+    const wxColour fillCol(*wxGREEN);
+
+    SECTION("RGB image without mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        REQUIRE_FALSE(img.HasAlpha());
+        REQUIRE_FALSE(img.HasMask());
+
+        wxImage imgRes = img;
+        imgRes.InitAlpha();
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE_FALSE(imgRes.HasMask());
+
+        for (int y = 0; y < img.GetHeight(); y++)
+            for (int x = 0; x < img.GetWidth(); x++)
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGB(cRes, cSrc);
+                CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_OPAQUE);
+            }
+    }
+
+    SECTION("RGB image with mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetMaskColour(maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        REQUIRE_FALSE(img.HasAlpha());
+        REQUIRE(img.HasMask() == true);
+
+        wxImage imgRes = img;
+        imgRes.InitAlpha();
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE_FALSE(imgRes.HasMask());
+
+        for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGB(cRes, cSrc);
+                if ( cSrc == maskCol )
+                {
+                    CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_TRANSPARENT);
+                }
+                else
+                {
+                    CHECK((int)cRes.Alpha() == (int)wxIMAGE_ALPHA_OPAQUE);
+                }
+            }
+    }
+
+    SECTION("RGBA image without mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetAlpha();
+        img.SetAlpha(0, 0, 128);
+        img.SetAlpha(0, 1, 0);
+        img.SetAlpha(1, 0, 128);
+        img.SetAlpha(1, 1, 0);
+        REQUIRE(img.HasAlpha() == true);
+        REQUIRE_FALSE(img.HasMask());
+
+        wxImage imgRes = img;
+        CHECK_THROWS(imgRes.InitAlpha());
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE_FALSE(imgRes.HasMask());
+
+        for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y), img.GetAlpha(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
+            }
+    }
+
+    SECTION("RGBA image with mask")
+    {
+        wxImage img(2, 2);
+        img.SetRGB(0, 0, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(0, 1, maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        img.SetRGB(1, 0, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetRGB(1, 1, fillCol.Red(), fillCol.Green(), fillCol.Blue());
+        img.SetAlpha();
+        img.SetAlpha(0, 0, 128);
+        img.SetAlpha(0, 1, 0);
+        img.SetAlpha(1, 0, 128);
+        img.SetAlpha(1, 1, 0);
+        img.SetMaskColour(maskCol.Red(), maskCol.Green(), maskCol.Blue());
+        REQUIRE(img.HasAlpha() == true);
+        REQUIRE(img.HasMask() == true);
+
+        wxImage imgRes = img;
+        CHECK_THROWS(imgRes.InitAlpha());
+        REQUIRE(imgRes.HasAlpha() == true);
+        REQUIRE(imgRes.HasMask() == true);
+
+        for ( int y = 0; y < img.GetHeight(); y++ )
+            for ( int x = 0; x < img.GetWidth(); x++ )
+            {
+                wxColour cSrc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y), img.GetAlpha(x, y));
+                wxColour cRes(imgRes.GetRed(x, y), imgRes.GetGreen(x, y), imgRes.GetBlue(x, y), imgRes.GetAlpha(x, y));
+
+                CHECK_EQUAL_COLOUR_RGBA(cRes, cSrc);
+            }
+    }
 }
 
 /*

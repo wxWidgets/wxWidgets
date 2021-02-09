@@ -782,7 +782,7 @@ void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 // X11 Display access
 // ----------------------------------------------------------------------------
 
-#if defined(__X__) || defined(__WXGTK__)
+#if defined(__X__) || (defined(__WXGTK__) && defined(__UNIX__))
 
 #ifdef __WXGTK__
     WXDLLIMPEXP_CORE void *wxGetDisplay();
