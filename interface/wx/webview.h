@@ -431,7 +431,7 @@ public:
     @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
        Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
-       Currently only implemented for the edge backend.
+       Currently only implemented for the edge and WebKit2GTK+ backend.
     @endEventTable
 
     @since 2.9.3
