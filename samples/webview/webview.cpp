@@ -321,7 +321,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
     m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
     m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
-    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
+    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, FromDIP(wxSize(400, -1)), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));
     m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
 
@@ -409,7 +409,7 @@ WebFrame::WebFrame(const wxString& url) :
     SetSizer(topsizer);
 
     //Set a more sensible size for web browsing
-    SetSize(wxSize(800, 600));
+    SetSize(FromDIP(wxSize(800, 600)));
 
     // Create the Tools menu
     m_tools_menu = new wxMenu();
