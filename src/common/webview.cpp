@@ -48,6 +48,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 

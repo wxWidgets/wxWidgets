@@ -428,6 +428,10 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
+       Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
+       the page wants to enter or leave fullscreen. Use GetInt to get the status.
+       Currently only implemented for the edge backend.
     @endEventTable
 
     @since 2.9.3
