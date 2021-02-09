@@ -71,8 +71,9 @@ struct wxGridCellWithAttr
     wxGridCellAttr  *attr;
 };
 
-WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellWithAttr, wxGridCellWithAttrArray,
-                              class WXDLLIMPEXP_ADV);
+WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellWithAttr*,
+                              wxIntegerHash, wxIntegerEqual,
+                              wxGridCoordsToAttrMap, class WXDLLIMPEXP_CORE);
 
 
 // ----------------------------------------------------------------------------
@@ -468,16 +469,18 @@ private:
 class WXDLLIMPEXP_ADV wxGridCellAttrData
 {
 public:
+    ~wxGridCellAttrData();
+
     void SetAttr(wxGridCellAttr *attr, int row, int col);
     wxGridCellAttr *GetAttr(int row, int col) const;
     void UpdateAttrRows( size_t pos, int numRows );
     void UpdateAttrCols( size_t pos, int numCols );
 
 private:
-    // searches for the attr for given cell, returns wxNOT_FOUND if not found
-    int FindIndex(int row, int col) const;
+    // Tries to search for the attr for given cell.
+    wxGridCoordsToAttrMap::iterator FindIndex(int row, int col) const;
 
-    wxGridCellWithAttrArray m_attrs;
+    mutable wxGridCoordsToAttrMap m_attrs;
 };
 
 // this class stores attributes set for rows or columns
