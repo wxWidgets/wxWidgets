@@ -205,6 +205,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
     if (!isSuccess)
     {
         COREWEBVIEW2_WEB_ERROR_STATUS status;
+        bool ignoreStatus = false;
 
         wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), uri, wxString());
         event.SetEventObject(m_ctrl);
@@ -227,12 +228,16 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_DISCONNECTED, wxWEBVIEW_NAV_ERR_CONNECTION)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_CANNOT_CONNECT, wxWEBVIEW_NAV_ERR_CONNECTION)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_HOST_NAME_NOT_RESOLVED, wxWEBVIEW_NAV_ERR_CONNECTION)
-                WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED, wxWEBVIEW_NAV_ERR_USER_CANCELLED)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_UNEXPECTED_ERROR, wxWEBVIEW_NAV_ERR_OTHER)
+            case COREWEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED:
+                // This status is triggered by vetoing a wxEVT_WEBVIEW_NAVIGATING event
+                ignoreStatus = true;
+                break;
             }
         }
-        m_ctrl->HandleWindowEvent(event);
+        if (!ignoreStatus)
+            m_ctrl->HandleWindowEvent(event);
     }
     else
     {
