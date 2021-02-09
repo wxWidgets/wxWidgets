@@ -67,6 +67,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
     if (m_webView)
     {
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
+        m_webView->remove_SourceChanged(m_sourceChangedToken);
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
         m_webView->remove_DocumentTitleChanged(m_documentTitleChangedToken);
@@ -175,10 +176,27 @@ HRESULT wxWebViewEdgeImpl::OnNavigationStarting(ICoreWebView2* WXUNUSED(sender),
     return S_OK;
 }
 
+HRESULT wxWebViewEdgeImpl::OnSourceChanged(ICoreWebView2 * WXUNUSED(sender), ICoreWebView2SourceChangedEventArgs * args)
+{
+    BOOL isNewDocument;
+    if (SUCCEEDED(args->get_IsNewDocument(&isNewDocument)) && !isNewDocument)
+    {
+        // navigation within the current document, send apropriate events
+        wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), m_ctrl->GetCurrentURL(), wxString());
+        event.SetEventObject(m_ctrl);
+        m_ctrl->HandleWindowEvent(event);
+        OnNavigationCompleted(NULL, NULL);
+        OnContentLoading(NULL, NULL);
+    }
+    return S_OK;
+}
+
 HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NavigationCompletedEventArgs* args)
 {
     BOOL isSuccess;
-    if (FAILED(args->get_IsSuccess(&isSuccess)))
+    if (!args)
+        isSuccess = true;
+    else if (FAILED(args->get_IsSuccess(&isSuccess)))
         isSuccess = false;
     m_isBusy = false;
     wxString uri = m_ctrl->GetCurrentURL();
@@ -303,6 +321,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2NavigationStartingEventHandler>(
             this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
         &m_navigationStartingToken);
+    m_webView->add_SourceChanged(
+        Callback<ICoreWebView2SourceChangedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnSourceChanged).Get(),
+        &m_sourceChangedToken);
     m_webView->add_NavigationCompleted(
         Callback<ICoreWebView2NavigationCompletedEventHandler>(
             this, &wxWebViewEdgeImpl::OnNavigationCompleted).Get(),

@@ -41,6 +41,7 @@ public:
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
+    EventRegistrationToken m_sourceChangedToken = { };
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
     EventRegistrationToken m_documentTitleChangedToken = { };
@@ -48,6 +49,7 @@ public:
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
+    HRESULT OnSourceChanged(ICoreWebView2* sender, ICoreWebView2SourceChangedEventArgs* args);
     HRESULT OnNavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
     HRESULT OnNewWindowRequested(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args);
     HRESULT OnDocumentTitleChanged(ICoreWebView2* sender, IUnknown* args);
