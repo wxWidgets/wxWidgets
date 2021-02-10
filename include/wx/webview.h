@@ -257,6 +257,7 @@ private:
     static wxStringWebViewFactoryMap::iterator FindFactory(const wxString &backend);
 
     bool m_showMenu;
+    wxString m_findText;
     static wxStringWebViewFactoryMap m_factoryMap;
 
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
