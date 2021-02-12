@@ -246,6 +246,26 @@ private:
         dc.DrawText("Using flags: " + flagsString, x1, y);
         y += lineHeight*3;
 
+        const wxCoord heightListItem = FromDIP(48);
+        const wxCoord widthListItem = 30*GetCharWidth();
+
+        {
+
+        dc.DrawText("DrawItemText() alignment", x1, y);
+
+        wxRect textRect(x2, y, widthListItem, heightListItem);
+        wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
+        wxDCPenChanger setPen(dc, *wxGREEN_PEN);
+        dc.DrawRectangle(textRect);
+
+        renderer.DrawItemText(this, dc, L"Top Left (\u1ED6)", textRect);
+        renderer.DrawItemText(this, dc, "Bottom right", textRect,
+            wxALIGN_BOTTOM | wxALIGN_RIGHT);
+
+        y += lineHeight + heightListItem;
+
+        }
+
         const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
         const wxCoord width = 15*GetCharWidth();
 
@@ -345,9 +365,6 @@ private:
             25, 100, m_flags | wxCONTROL_SPECIAL);
 
         y += lineHeight + heightGauge;
-
-        const wxCoord heightListItem = FromDIP(48);
-        const wxCoord widthListItem = 30*GetCharWidth();
 
         dc.DrawText("DrawItemSelectionRect()", x1, y);
         renderer.DrawItemSelectionRect(this, dc,
