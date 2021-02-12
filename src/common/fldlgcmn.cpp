@@ -192,6 +192,12 @@ wxSize wxFileDialogBase::GetExtraControlSize()
     return (*m_extraControlCreator)(&dlg)->GetSize();
 }
 
+void wxFileDialogBase::UpdateExtraControlUI()
+{
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
 void wxFileDialogBase::SetPath(const wxString& path)
 {
     wxString ext;

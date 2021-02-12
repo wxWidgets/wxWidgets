@@ -496,8 +496,7 @@ void wxFileDialog::GTKSelectionChanged(const wxString& filename)
 {
     m_currentlySelectedFilename = filename;
 
-    if (m_extraControl)
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
 }
 
 #endif // wxUSE_FILEDLG
