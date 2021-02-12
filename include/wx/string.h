@@ -1090,6 +1090,14 @@ public:
     // copy ctor
   wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
 
+    // move ctor
+  wxString(wxString&& stringSrc) noexcept : m_impl(std::move(stringSrc.m_impl))
+  {
+#if wxUSE_STRING_POS_CACHE
+    stringSrc.InvalidateCache();
+#endif // wxUSE_STRING_POS_CACHE
+  }
+
     // string containing nRepeat copies of ch
   wxString(wxUniChar ch, size_t nRepeat = 1 )
     { assign(nRepeat, ch); }
@@ -1714,6 +1722,18 @@ public:
 
         m_impl = stringSrc.m_impl;
     }
+
+    return *this;
+  }
+
+    // move from another wxString
+  wxString& operator=(wxString&& stringSrc) noexcept
+  {
+    m_impl = std::move(stringSrc.m_impl);
+#if wxUSE_STRING_POS_CACHE
+    InvalidateCache();
+    stringSrc.InvalidateCache();
+#endif // wxUSE_STRING_POS_CACHE
 
     return *this;
   }
