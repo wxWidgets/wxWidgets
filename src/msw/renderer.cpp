@@ -1043,7 +1043,10 @@ void wxRendererXP::DrawItemText(wxWindow* win,
     const int itemState = GetListItemState(flags);
 
     typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
+    typedef HRESULT(__stdcall *GetThemeTextExtent_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, RECT *);
+
     static DrawThemeTextEx_t s_DrawThemeTextEx = NULL;
+    static GetThemeTextExtent_t s_GetThemeTextExtent = NULL;
     static bool s_initDone = false;
 
     if ( !s_initDone )
@@ -1052,6 +1055,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         {
             wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
             wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
+            wxDL_INIT_FUNC(s_, GetThemeTextExtent, dllUxTheme);
         }
 
         s_initDone = true;
@@ -1082,7 +1086,10 @@ void wxRendererXP::DrawItemText(wxWindow* win,
             textOpts.crText = textColour.GetPixel();
         }
 
-        DWORD textFlags = DT_NOPREFIX;
+        const DWORD defTextFlags = DT_NOPREFIX;
+        DWORD textFlags = defTextFlags;
+
+        // Always use DT_* flags for horizontal alignment.
         if ( align & wxALIGN_CENTER_HORIZONTAL )
             textFlags |= DT_CENTER;
         else if ( align & wxALIGN_RIGHT )
@@ -1093,12 +1100,101 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         else
             textFlags |= DT_LEFT;
 
-        if ( align & wxALIGN_BOTTOM )
-            textFlags |= DT_BOTTOM;
-        else if ( align & wxALIGN_CENTER_VERTICAL )
-            textFlags |= DT_VCENTER;
-        else
-            textFlags |= DT_TOP;
+        /*
+        Bottom (DT_BOTTOM) and centered vertical (DT_VCENTER) alignment
+        are documented to be only used with the DT_SINGLELINE flag which
+        doesn't handle multi-lines. In case of drawing multi-lines with
+        such alignment use DT_TOP (0), which does work for multi-lines,
+        and deal with the actual desired vertical alignment ourselves with
+        the help of GetThemeTextExtent().
+        */
+        bool useTopDrawing =
+            s_GetThemeTextExtent
+            && ( align & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL) ) != 0
+            && text.Contains(wxS('\n'));
+
+        if ( useTopDrawing )
+        {
+            /*
+            Get the actual text extent using GetThemeTextExtent() and adjust
+            drawing rect if needed.
+
+            Note that DrawThemeTextEx() in combination with DT_CALCRECT
+            and DTT_CALCRECT can also be used to get the text extent.
+            This seems to always result in the exact same extent (checked
+            with an assert) as using GetThemeTextExtent(), despite having
+            an additional WXDTTOPTS argument for various effects.
+            Some effects have been tried (DTT_BORDERSIZE, DTT_SHADOWTYPE
+            and DTT_SHADOWOFFSET) and while rendered correctly with effects
+            the returned extent remains the same as without effects.
+
+            Official docs don't seem to prefer one method over the other
+            though a possibly outdated note for DrawThemeText() recommends
+            using GetThemeTextExtent(). Because Wine as of writing doesn't
+            support DT_CALCRECT with DrawThemeTextEx() while it does support
+            GetThemeTextExtent(), opt to use the latter.
+            */
+
+            /*
+            It's important for the dwTextFlags parameter passed to
+            GetThemeTextExtent() not to have some DT_* flags because they
+            influence the extent size in unwanted ways: Using
+            DT_SINGLELINE combined with either DT_VCENTER or DT_BOTTOM
+            results in a height that can't be used (either halved or 0),
+            and having DT_END_ELLIPSIS ends up always ellipsizing.
+            Passing a non-NULL rect solves these problems but is not
+            really a good option as it doesn't make the rectangle extent
+            a tight fit and calculations would have to be done with large
+            numbers needlessly (provided the passed rect is set to
+            something like {0, 0, LONG_MAX, LONG_MAX} ).
+            */
+            RECT rcExtent;
+            HRESULT hr = s_GetThemeTextExtent(hTheme, dc.GetHDC(),
+                LVP_LISTITEM, itemState, text.wchar_str(), -1,
+                defTextFlags, NULL, &rcExtent);
+            if ( SUCCEEDED(hr) )
+            {
+                /*
+                For height compare with the height of the passed rect and use
+                the difference for handling vertical alignment. This has
+                consequences for particularly multi-line text: it will now
+                always try to fit vertically while a rect received from wxDVC
+                may have its extent based on calculations for a single line
+                only and therefore couldn't show more than one line.
+                As a result of the expanded height clipping may be needed
+                which at least already happens with wxDVC which (out of
+                necessity) confines rendering to a cell's bounds.
+                */
+                const int heightDiff = rect.GetHeight() - rcExtent.bottom;
+                if ( heightDiff )
+                {
+                    if ( align & wxALIGN_CENTRE_VERTICAL )
+                    {
+                        const int heightOffset = heightDiff / 2;
+                        rc.top += heightOffset;
+                        rc.bottom -= heightOffset;
+                    }
+                    else if ( align & wxALIGN_BOTTOM )
+                        rc.top += heightDiff;
+                    else // top aligned
+                        rc.bottom -= heightDiff;
+                }
+            }
+            else
+            {
+                useTopDrawing = false;
+            }
+        }
+
+        if ( !useTopDrawing )
+        {
+            if ( align & wxALIGN_BOTTOM )
+                textFlags |= DT_BOTTOM | DT_SINGLELINE;
+            else if ( align & wxALIGN_CENTER_VERTICAL )
+                textFlags |= DT_VCENTER | DT_SINGLELINE;
+            else
+                textFlags |= DT_TOP;
+        }
 
         const wxString* drawText = &text;
         wxString ellipsizedText;
