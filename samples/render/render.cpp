@@ -288,9 +288,15 @@ private:
                                wxRect(wxPoint(x2, y), sizeMark), m_flags);
         y += lineHeight + sizeMark.y;
 
+        const wxString notImplementedText = "(generic version unimplemented)";
+
         dc.DrawText("DrawRadioBitmap()", x1, y);
-        renderer.DrawRadioBitmap(this, dc,
-                                 wxRect(wxPoint(x2, y), sizeCheck), m_flags);
+        if ( m_useGeneric )
+            dc.DrawText(notImplementedText, x2, y);
+        else
+            renderer.DrawRadioBitmap(this, dc,
+                                     wxRect(wxPoint(x2, y), sizeCheck), m_flags);
+
         y += lineHeight + sizeCheck.y;
 
         dc.DrawText("DrawCollapseButton()", x1, y);
@@ -354,8 +360,11 @@ private:
 
         y += lineHeight;
         dc.DrawText("DrawChoice()", x1, y);
-        renderer.DrawChoice(this, dc,
-                            wxRect(x2, y, width, 1.5*GetCharHeight()), m_flags);
+        if ( m_useGeneric )
+            dc.DrawText(notImplementedText, x2, y);
+        else
+            renderer.DrawChoice(this, dc,
+                                wxRect(x2, y, width, 1.5*GetCharHeight()), m_flags);
     }
 
     int m_flags;
