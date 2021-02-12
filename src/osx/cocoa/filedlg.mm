@@ -295,6 +295,10 @@ void wxFileDialog::DoOnFilterSelected(int index)
     NSArray* types = GetTypesFromExtension(m_filterExtensions[index],m_currentExtensions);
     NSSavePanel* panel = (NSSavePanel*) GetWXWindow();
     [panel setAllowedFileTypes:types];
+
+    m_currentlySelectedFilterIndex = index;
+
+    UpdateExtraControlUI();
 }
 
 // An item has been selected in the file filter wxChoice:

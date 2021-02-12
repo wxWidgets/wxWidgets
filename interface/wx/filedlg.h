@@ -236,10 +236,11 @@ public:
         control to update its state depending on the currently selected file
         type filter.
 
-        Currently this function is fully implemented only under MSW and
+        Currently this function is fully implemented under macOS and MSW and
         always returns @c wxNOT_FOUND elsewhere.
 
-        @since 3.1.3
+        @since 3.1.3 - MSW
+        @since 3.1.5 - macOS
 
         @return The 0-based index of the currently selected file type filter or
             wxNOT_FOUND if nothing is selected.
