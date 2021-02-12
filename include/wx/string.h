@@ -1156,6 +1156,16 @@ public:
     // copy ctor
   wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
 
+#ifdef wxHAS_RVALUE_REF
+    // move ctor
+  wxString(wxString&& stringSrc) wxNOEXCEPT : m_impl(std::move(stringSrc.m_impl))
+  {
+#if wxUSE_STRING_POS_CACHE
+    stringSrc.InvalidateCache();
+#endif // wxUSE_STRING_POS_CACHE
+  }
+#endif
+
     // string containing nRepeat copies of ch
   wxString(wxUniChar ch, size_t nRepeat = 1 )
     { assign(nRepeat, ch); }
@@ -1894,6 +1904,20 @@ public:
 
     return *this;
   }
+
+#ifdef wxHAS_RVALUE_REF
+    // move from another wxString
+  wxString& operator=(wxString&& stringSrc) wxNOEXCEPT
+  {
+    m_impl = std::move(stringSrc.m_impl);
+#if wxUSE_STRING_POS_CACHE
+    InvalidateCache();
+    stringSrc.InvalidateCache();
+#endif // wxUSE_STRING_POS_CACHE
+
+    return *this;
+  }
+#endif
 
   wxString& operator=(const wxCStrData& cstr)
     { return *this = cstr.AsString(); }
