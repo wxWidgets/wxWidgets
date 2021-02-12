@@ -261,10 +261,12 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
     {
         wxBoxSizer *horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
         verticalSizer->Add(horizontalSizer, 0, wxEXPAND, 0);
+        horizontalSizer->AddStretchSpacer();
         wxStaticText *stattext = new wxStaticText( extrapanel, wxID_ANY, _("File type:") );
         horizontalSizer->Add(stattext, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
         m_filterChoice = new wxChoice(extrapanel, wxID_ANY);
-        horizontalSizer->Add(m_filterChoice, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+        horizontalSizer->Add(m_filterChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+        horizontalSizer->AddStretchSpacer();
         m_filterChoice->Append(m_filterNames);
         if( m_filterNames.GetCount() > 0)
         {
