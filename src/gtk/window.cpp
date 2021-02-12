@@ -1235,7 +1235,30 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                 break;
             }
             if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
+            {
+                GtkWindow* window = GTK_WINDOW( ancestor->GetHandle() );
+                GdkModifierType accel_mods =
+                    gtk_widget_get_modifier_mask( ancestor->GetHandle(),
+                          GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+
+                gboolean enable_mnemonics;
+                g_object_get(gtk_widget_get_settings(ancestor->GetHandle()),
+                                "gtk-enable-mnemonics", &enable_mnemonics, NULL);
+
+                if (enable_mnemonics)
+                    accel_mods = (GdkModifierType)(accel_mods | gtk_window_get_mnemonic_modifier(window));
+
+                if (gdk_event->state & accel_mods)
+                {
+                    if ( gtk_window_activate_key(window, gdk_event) )
+                    {
+                        // Don't do anything at all with this event any more.
+                        return TRUE;
+                    }
+                }
+
                 break;
+            }
             ancestor = ancestor->GetParent();
         }
 #endif // wxUSE_ACCEL
