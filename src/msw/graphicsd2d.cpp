@@ -3511,8 +3511,7 @@ public:
 
     void Resize() wxOVERRIDE
     {
-        RECT clientRect;
-        GetClientRect(m_hwnd, &clientRect);
+        RECT clientRect = wxGetClientRect(m_hwnd);
 
         D2D1_SIZE_U hwndSize = D2D1::SizeU(
             clientRect.right - clientRect.left,
@@ -3533,8 +3532,7 @@ protected:
 
         HRESULT result;
 
-        RECT clientRect;
-        GetClientRect(m_hwnd, &clientRect);
+        RECT clientRect = wxGetClientRect(m_hwnd);
 
         D2D1_SIZE_U size = D2D1::SizeU(
             clientRect.right - clientRect.left,
