@@ -62,6 +62,7 @@
 #include "wx/timer.h"
 #include "wx/dcbuffer.h"
 #include "wx/scopeguard.h"
+#include "wx/display.h"
 
 // Two pics for the expand / collapse buttons.
 // Files are not supplied with this project (since it is
@@ -1715,27 +1716,30 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
     ImprovedClientToScreen( &x, &y );
 
-    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X, this );
-    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y, this );
+    int displayIdx = wxDisplay::GetFromWindow(this);
+    wxRect displayRect = wxDisplay(displayIdx != wxNOT_FOUND ? displayIdx : 0u).GetGeometry();
+
+    x -= displayRect.GetX();
+    y -= displayRect.GetY();
 
     int new_x;
     int new_y;
 
-    if ( x > (sw/2) )
+    if ( x > (displayRect.GetWidth()/2) )
         // left
         new_x = x + (m_width-splitterX) - sz.x;
     else
         // right
         new_x = x;
 
-    if ( y > (sh/2) )
+    if ( y > (displayRect.GetHeight()/2) )
         // above
         new_y = y - sz.y;
     else
         // below
         new_y = y + m_lineHeight;
 
-    return wxPoint(new_x,new_y);
+    return wxPoint(new_x + displayRect.GetX(), new_y + displayRect.GetY());
 }
 
 // -----------------------------------------------------------------------
