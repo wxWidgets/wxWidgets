@@ -2165,6 +2165,8 @@ struct wxPBGRAColor
     BYTE b, g, r, a;
 };
 
+namespace
+{
 wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const WXHBITMAP sourceBitmap, bool hasAlpha, bool forceAlpha)
 {
     HRESULT hr;
@@ -2193,6 +2195,161 @@ inline wxCOMPtr<IWICBitmapSource> wxCreateWICBitmap(const wxBitmap& sourceBitmap
 {
     return wxCreateWICBitmap(sourceBitmap.GetHBITMAP(), sourceBitmap.HasAlpha(), forceAlpha);
 }
+
+#if wxUSE_IMAGE
+void CreateWICBitmapFromImage(const wxImage& img, bool forceAlpha, IWICBitmap** ppBmp)
+{
+    const int width = img.GetWidth();
+    const int height = img.GetHeight();
+    // Create a compatible WIC Bitmap
+    WICPixelFormatGUID fmt = img.HasAlpha() || img.HasMask() || forceAlpha ? GUID_WICPixelFormat32bppPBGRA : GUID_WICPixelFormat32bppBGR;
+    HRESULT hr = wxWICImagingFactory()->CreateBitmap(width, height, fmt, WICBitmapCacheOnLoad, ppBmp);
+    wxCHECK_HRESULT_RET(hr);
+
+    // Copy contents of source image to the WIC bitmap.
+    WICRect rcLock = { 0, 0, width, height };
+    wxCOMPtr<IWICBitmapLock> pLock;
+    hr = (*ppBmp)->Lock(&rcLock, WICBitmapLockWrite, &pLock);
+    wxCHECK_HRESULT_RET(hr);
+
+    UINT rowStride = 0;
+    hr = pLock->GetStride(&rowStride);
+    wxCHECK_HRESULT_RET(hr);
+
+    UINT bufferSize = 0;
+    BYTE* pBuffer = NULL;
+    hr = pLock->GetDataPointer(&bufferSize, &pBuffer);
+    wxCHECK_HRESULT_RET(hr);
+
+    const unsigned char* imgRGB = img.GetData();    // source RGB buffer
+    const unsigned char* imgAlpha = img.GetAlpha(); // source alpha buffer
+    BYTE* pBmpBuffer = pBuffer;
+    for ( int y = 0; y < height; y++ )
+    {
+        BYTE* pPixByte = pBmpBuffer;
+        for ( int x = 0; x < width; x++ )
+        {
+            unsigned char r = *imgRGB++;
+            unsigned char g = *imgRGB++;
+            unsigned char b = *imgRGB++;
+            if ( imgAlpha )
+            {
+                unsigned char a = *imgAlpha++;
+                // Premultiply RGB values
+                *pPixByte++ = (b * a + 127) / 255;
+                *pPixByte++ = (g * a + 127) / 255;
+                *pPixByte++ = (r * a + 127) / 255;
+                *pPixByte++ = a;
+            }
+            else
+            {
+                *pPixByte++ = b;
+                *pPixByte++ = g;
+                *pPixByte++ = r;
+                *pPixByte++ = 255;
+            }
+        }
+
+        pBmpBuffer += rowStride;
+    }
+
+    // If there is a mask, set the alpha bytes in the target buffer to
+    // fully transparent or retain original value
+    if ( img.HasMask() )
+    {
+        unsigned char mr = img.GetMaskRed();
+        unsigned char mg = img.GetMaskGreen();
+        unsigned char mb = img.GetMaskBlue();
+
+        imgRGB = img.GetData();
+        pBmpBuffer = pBuffer;
+        for ( int y = 0; y < height; y++ )
+        {
+            BYTE* pPixByte = pBmpBuffer;
+            for ( int x = 0; x < width; x++ )
+            {
+                if ( imgRGB[0] == mr && imgRGB[1] == mg && imgRGB[2] == mb )
+                    pPixByte[0] = pPixByte[1] = pPixByte[2] = pPixByte[3] = 0;
+
+                imgRGB += 3;
+                pPixByte += 4;
+            }
+
+            pBmpBuffer += rowStride;
+        }
+    }
+}
+
+void CreateImageFromWICBitmap(IWICBitmap* pBmp, wxImage* pImg)
+{
+    UINT width, height;
+    HRESULT hr = pBmp->GetSize(&width, &height);
+    wxCHECK_HRESULT_RET(hr);
+
+    WICRect rcLock = { 0, 0, (INT)width, (INT)height };
+    wxCOMPtr<IWICBitmapLock> pLock;
+    hr = pBmp->Lock(&rcLock, WICBitmapLockRead, &pLock);
+    wxCHECK_HRESULT_RET(hr);
+
+    UINT rowStride = 0;
+    hr = pLock->GetStride(&rowStride);
+    wxCHECK_HRESULT_RET(hr);
+
+    UINT bufferSize = 0;
+    BYTE* pBmpBuffer = NULL;
+    hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
+    wxCHECK_HRESULT_RET(hr);
+
+    WICPixelFormatGUID pixelFormat;
+    hr = pLock->GetPixelFormat(&pixelFormat);
+    wxCHECK_HRESULT_RET(hr);
+    wxASSERT_MSG(pixelFormat == GUID_WICPixelFormat32bppPBGRA || pixelFormat == GUID_WICPixelFormat32bppBGR,
+                 "Unsupported pixel format");
+
+    // Only premultiplied ARGB bitmaps are supported.
+    const bool hasAlpha = pixelFormat == GUID_WICPixelFormat32bppPBGRA;
+
+    if ( pImg->IsOk() )
+    {
+        if ( pImg->GetWidth() != (int)width || pImg->GetHeight() != (int)height )
+        {
+            pImg->Resize(wxSize(width, height), wxPoint(0, 0));
+        }
+    }
+    else
+    {
+        pImg->Create(width, height);
+    }
+    if ( hasAlpha && !pImg->HasAlpha() )
+    {
+        pImg->SetAlpha();
+    }
+    pImg->SetMask(false);
+
+    unsigned char* destRGB = pImg->GetData();
+    unsigned char* destAlpha = pImg->GetAlpha();
+    for ( UINT y = 0; y < height; y++ )
+    {
+        BYTE* pPixByte = pBmpBuffer;
+        for ( UINT x = 0; x < width; x++ )
+        {
+            wxPBGRAColor color = wxPBGRAColor(pPixByte);
+            unsigned char a = hasAlpha ? color.a : wxIMAGE_ALPHA_OPAQUE;
+            // Undo premultiplication for ARGB bitmap
+            *destRGB++ = (a > 0 && a < 255)?(color.r * 255) / a : color.r;
+            *destRGB++ = (a > 0 && a < 255)?(color.g * 255) / a : color.g;
+            *destRGB++ = (a > 0 && a < 255)?(color.b * 255) / a : color.b;
+            if ( destAlpha )
+                *destAlpha++ = a;
+
+            pPixByte += 4;
+        }
+
+        pBmpBuffer += rowStride;
+    }
+}
+#endif // wxUSE_IMAGE
+};
 
 // WIC Bitmap Source for creating hatch patterned bitmaps
 class wxHatchBitmapSource : public IWICBitmapSource
@@ -2443,132 +2600,13 @@ public:
 #if wxUSE_IMAGE
     wxD2DBitmapResourceHolder(const wxImage& img)
     {
-        const int width = img.GetWidth();
-        const int height = img.GetHeight();
-        // Create a compatible WIC Bitmap
-        WICPixelFormatGUID fmt = img.HasAlpha() || img.HasMask() ? GUID_WICPixelFormat32bppPBGRA : GUID_WICPixelFormat32bppBGR;
-        HRESULT hr = wxWICImagingFactory()->CreateBitmap(width, height, fmt, WICBitmapCacheOnLoad, &m_srcBitmap);
-        wxCHECK_HRESULT_RET(hr);
-
-        // Copy contents of source image to the WIC bitmap.
-        WICRect rcLock = { 0, 0, width, height };
-        wxCOMPtr<IWICBitmapLock> pLock;
-        hr = m_srcBitmap->Lock(&rcLock, WICBitmapLockWrite, &pLock);
-        wxCHECK_HRESULT_RET(hr);
-
-        UINT rowStride = 0;
-        hr = pLock->GetStride(&rowStride);
-        wxCHECK_HRESULT_RET(hr);
-
-        UINT bufferSize = 0;
-        BYTE* pBuffer = NULL;
-        hr = pLock->GetDataPointer(&bufferSize, &pBuffer);
-        wxCHECK_HRESULT_RET(hr);
-
-        const unsigned char* imgRGB = img.GetData();    // source RGB buffer
-        const unsigned char* imgAlpha = img.GetAlpha(); // source alpha buffer
-        BYTE* pBmpBuffer = pBuffer;
-        for ( int y = 0; y < height; y++ )
-        {
-            BYTE* pPixByte = pBmpBuffer;
-            for ( int x = 0; x < width; x++ )
-            {
-                unsigned char r = *imgRGB++;
-                unsigned char g = *imgRGB++;
-                unsigned char b = *imgRGB++;
-                unsigned char a = imgAlpha?*imgAlpha++:255;
-                // Premultiply RGB values
-                *pPixByte++ = (b * a + 127) / 255;
-                *pPixByte++ = (g * a + 127) / 255;
-                *pPixByte++ = (r * a + 127) / 255;
-                *pPixByte++ = a;
-            }
-
-            pBmpBuffer += rowStride;
-        }
-
-        // If there is a mask, set the alpha bytes in the target buffer to
-        // fully transparent or retain original value
-        if ( img.HasMask() )
-        {
-            unsigned char mr = img.GetMaskRed();
-            unsigned char mg = img.GetMaskGreen();
-            unsigned char mb = img.GetMaskBlue();
-
-            imgRGB = img.GetData();
-            pBmpBuffer = pBuffer;
-            for ( int y = 0; y < height; y++ )
-            {
-                BYTE* pPixByte = pBmpBuffer;
-                for ( int x = 0; x < width; x++ )
-                {
-                    if ( imgRGB[0] == mr && imgRGB[1] == mg && imgRGB[2] == mb )
-                        pPixByte[0] = pPixByte[1] = pPixByte[2] = pPixByte[3] = 0;
-
-                    imgRGB += 3;
-                    pPixByte += 4;
-                }
-
-                pBmpBuffer += rowStride;
-            }
-        }
+        CreateWICBitmapFromImage(img, false, &m_srcBitmap);
     }
 
     wxImage ConvertToImage() const
     {
-        UINT width, height;
-        HRESULT hr = m_srcBitmap->GetSize(&width, &height);
-        wxCHECK2_HRESULT_RET(hr, wxNullImage);
-
-        WICRect rcLock = { 0, 0, (INT)width, (INT)height };
-        wxCOMPtr<IWICBitmapLock> pLock;
-        hr = m_srcBitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
-        wxCHECK2_HRESULT_RET(hr, wxNullImage);
-
-        UINT rowStride = 0;
-        hr = pLock->GetStride(&rowStride);
-        wxCHECK2_HRESULT_RET(hr, wxNullImage);
-
-        UINT bufferSize = 0;
-        BYTE* pBmpBuffer = NULL;
-        hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
-        wxCHECK2_HRESULT_RET(hr, wxNullImage);
-
-        WICPixelFormatGUID pixelFormat;
-        hr = pLock->GetPixelFormat(&pixelFormat);
-        wxCHECK2_HRESULT_RET(hr, wxNullImage);
-        wxASSERT_MSG(pixelFormat == GUID_WICPixelFormat32bppPBGRA ||
-                     pixelFormat == GUID_WICPixelFormat32bppBGR,
-                     "Unsupported pixel format");
-
-        // Only premultiplied ARGB bitmaps are supported.
-        const bool hasAlpha = pixelFormat == GUID_WICPixelFormat32bppPBGRA;
-
-        wxImage img(width, height);
-        if ( hasAlpha )
-            img.SetAlpha();
-
-        unsigned char* destRGB = img.GetData();
-        unsigned char* destAlpha = img.GetAlpha();
-        for ( UINT y = 0; y < height; y++ )
-        {
-            BYTE* pPixByte = pBmpBuffer;
-            for ( UINT x = 0; x < width; x++ )
-            {
-                wxPBGRAColor color = wxPBGRAColor(pPixByte);
-                unsigned char a = hasAlpha ? color.a : wxIMAGE_ALPHA_OPAQUE;
-                // Undo premultiplication for ARGB bitmap
-                *destRGB++ = (a > 0 && a < 255)?(color.r * 255) / a:color.r;
-                *destRGB++ = (a > 0 && a < 255)?(color.g * 255) / a:color.g;
-                *destRGB++ = (a > 0 && a < 255)?(color.b * 255) / a:color.b;
-                if ( destAlpha )
-                    *destAlpha++ = a;
-
-                pPixByte += 4;
-            }
-
-            pBmpBuffer += rowStride;
-        }
+        wxImage img;
+        CreateImageFromWICBitmap(m_srcBitmap, &img);
 
         return img;
     }
@@ -3434,69 +3472,10 @@ public:
 protected:
     void DoAcquireResource() wxOVERRIDE
     {
-        HRESULT hr;
-
-        // Create a compatible WIC Bitmap
-        hr = wxWICImagingFactory()->CreateBitmap(
-            m_resultImage->GetWidth(),
-            m_resultImage->GetHeight(),
-            GUID_WICPixelFormat32bppPBGRA,
-            WICBitmapCacheOnDemand,
-            &m_wicBitmap);
-        wxCHECK_HRESULT_RET(hr);
-
-        // Copy contents of source image to the WIC bitmap.
-        const int width = m_resultImage->GetWidth();
-        const int height = m_resultImage->GetHeight();
-        WICRect rcLock = { 0, 0, width, height };
-        IWICBitmapLock *pLock = NULL;
-        hr = m_wicBitmap->Lock(&rcLock, WICBitmapLockWrite, &pLock);
-        wxCHECK_HRESULT_RET(hr);
-
-        UINT rowStride = 0;
-        hr = pLock->GetStride(&rowStride);
-        if ( FAILED(hr) )
-        {
-            pLock->Release();
-            wxFAILED_HRESULT_MSG(hr);
-            return;
-        }
-
-        UINT bufferSize = 0;
-        BYTE *pBmpBuffer = NULL;
-        hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
-        if ( FAILED(hr) )
-        {
-            pLock->Release();
-            wxFAILED_HRESULT_MSG(hr);
-            return;
-        }
-
-        const unsigned char *imgRGB = m_resultImage->GetData();    // source RGB buffer
-        const unsigned char *imgAlpha = m_resultImage->GetAlpha(); // source alpha buffer
-        for( int y = 0; y < height; y++ )
-        {
-            BYTE *pPixByte = pBmpBuffer;
-            for ( int x = 0; x < width; x++ )
-            {
-                unsigned char r = *imgRGB++;
-                unsigned char g = *imgRGB++;
-                unsigned char b = *imgRGB++;
-                unsigned char a = imgAlpha ? *imgAlpha++ : 255;
-                // Premultiply RGB values
-                *pPixByte++ = (b * a + 127) / 255;
-                *pPixByte++ = (g * a + 127) / 255;
-                *pPixByte++ = (r * a + 127) / 255;
-                *pPixByte++ = a;
-            }
-
-            pBmpBuffer += rowStride;
-        }
-
-        pLock->Release();
+        CreateWICBitmapFromImage(*m_resultImage, true, &m_wicBitmap);
 
         // Create the render target
-        hr = m_factory->CreateWicBitmapRenderTarget(
+        HRESULT hr = m_factory->CreateWicBitmapRenderTarget(
             m_wicBitmap,
             D2D1::RenderTargetProperties(
                 D2D1_RENDER_TARGET_TYPE_SOFTWARE,
@@ -3508,71 +3487,7 @@ protected:
 private:
     void FlushRenderTargetToImage()
     {
-        const int width = m_resultImage->GetWidth();
-        const int height = m_resultImage->GetHeight();
-
-        WICRect rcLock = { 0, 0, width, height };
-        IWICBitmapLock *pLock = NULL;
-        HRESULT hr = m_wicBitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
-        wxCHECK_HRESULT_RET(hr);
-
-        UINT rowStride = 0;
-        hr = pLock->GetStride(&rowStride);
-        if ( FAILED(hr) )
-        {
-            pLock->Release();
-            wxFAILED_HRESULT_MSG(hr);
-            return;
-        }
-
-        UINT bufferSize = 0;
-        BYTE *pBmpBuffer = NULL;
-        hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
-        if ( FAILED(hr) )
-        {
-            pLock->Release();
-            wxFAILED_HRESULT_MSG(hr);
-            return;
-        }
-
-        WICPixelFormatGUID pixelFormat;
-        hr = pLock->GetPixelFormat(&pixelFormat);
-        if ( FAILED(hr) )
-        {
-            pLock->Release();
-            wxFAILED_HRESULT_MSG(hr);
-            return;
-        }
-        wxASSERT_MSG( pixelFormat == GUID_WICPixelFormat32bppPBGRA ||
-                  pixelFormat == GUID_WICPixelFormat32bppBGR,
-                  wxS("Unsupported pixel format") );
-
-        // Only premultiplied ARGB bitmaps are supported.
-        const bool hasAlpha = pixelFormat == GUID_WICPixelFormat32bppPBGRA;
-
-        unsigned char* destRGB = m_resultImage->GetData();
-        unsigned char* destAlpha = m_resultImage->GetAlpha();
-        for( int y = 0; y < height; y++ )
-        {
-            BYTE *pPixByte = pBmpBuffer;
-            for ( int x = 0; x < width; x++ )
-            {
-                wxPBGRAColor color = wxPBGRAColor(pPixByte);
-                unsigned char a =  hasAlpha ? color.a : 255;
-                // Undo premultiplication for ARGB bitmap
-                *destRGB++ = (a > 0 && a < 255) ? ( color.r * 255 ) / a : color.r;
-                *destRGB++ = (a > 0 && a < 255) ? ( color.g * 255 ) / a : color.g;
-                *destRGB++ = (a > 0 && a < 255) ? ( color.b * 255 ) / a : color.b;
-                if ( destAlpha )
-                    *destAlpha++ = a;
-
-                pPixByte += 4;
-            }
-
-            pBmpBuffer += rowStride;
-        }
-
-        pLock->Release();
+        CreateImageFromWICBitmap(m_wicBitmap, m_resultImage);
    }
 
 private:
