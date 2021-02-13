@@ -1716,8 +1716,7 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
     ImprovedClientToScreen( &x, &y );
 
-    int displayIdx = wxDisplay::GetFromWindow(this);
-    wxRect displayRect = wxDisplay(displayIdx != wxNOT_FOUND ? displayIdx : 0u).GetGeometry();
+    wxRect displayRect = wxDisplay(this).GetGeometry();
 
     x -= displayRect.GetX();
     y -= displayRect.GetY();

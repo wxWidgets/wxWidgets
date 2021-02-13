@@ -2285,9 +2285,6 @@ void wxComboCtrlBase::ShowPopup()
 
     SetFocus();
 
-    int displayIdx = wxDisplay::GetFromWindow(this);
-    wxRect displayRect = wxDisplay(displayIdx != wxNOT_FOUND ? displayIdx : 0u).GetGeometry();
-
     // Space above and below
     int screenHeight;
     wxPoint scrPos;
@@ -2296,6 +2293,7 @@ void wxComboCtrlBase::ShowPopup()
     int maxHeightPopup;
     wxSize ctrlSz = GetSize();
 
+    wxRect displayRect = wxDisplay(this).GetGeometry();
     screenHeight = displayRect.GetHeight();
     scrPos = GetScreenPosition();
 
