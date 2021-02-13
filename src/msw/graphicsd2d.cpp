@@ -2441,6 +2441,79 @@ public:
     }
 
 #if wxUSE_IMAGE
+    wxD2DBitmapResourceHolder(const wxImage& img)
+    {
+        const int width = img.GetWidth();
+        const int height = img.GetHeight();
+        // Create a compatible WIC Bitmap
+        WICPixelFormatGUID fmt = img.HasAlpha() || img.HasMask() ? GUID_WICPixelFormat32bppPBGRA : GUID_WICPixelFormat32bppBGR;
+        HRESULT hr = wxWICImagingFactory()->CreateBitmap(width, height, fmt, WICBitmapCacheOnLoad, &m_srcBitmap);
+        wxCHECK_HRESULT_RET(hr);
+
+        // Copy contents of source image to the WIC bitmap.
+        WICRect rcLock = { 0, 0, width, height };
+        wxCOMPtr<IWICBitmapLock> pLock;
+        hr = m_srcBitmap->Lock(&rcLock, WICBitmapLockWrite, &pLock);
+        wxCHECK_HRESULT_RET(hr);
+
+        UINT rowStride = 0;
+        hr = pLock->GetStride(&rowStride);
+        wxCHECK_HRESULT_RET(hr);
+
+        UINT bufferSize = 0;
+        BYTE* pBuffer = NULL;
+        hr = pLock->GetDataPointer(&bufferSize, &pBuffer);
+        wxCHECK_HRESULT_RET(hr);
+
+        const unsigned char* imgRGB = img.GetData();    // source RGB buffer
+        const unsigned char* imgAlpha = img.GetAlpha(); // source alpha buffer
+        BYTE* pBmpBuffer = pBuffer;
+        for ( int y = 0; y < height; y++ )
+        {
+            BYTE* pPixByte = pBmpBuffer;
+            for ( int x = 0; x < width; x++ )
+            {
+                unsigned char r = *imgRGB++;
+                unsigned char g = *imgRGB++;
+                unsigned char b = *imgRGB++;
+                unsigned char a = imgAlpha?*imgAlpha++:255;
+                // Premultiply RGB values
+                *pPixByte++ = (b * a + 127) / 255;
+                *pPixByte++ = (g * a + 127) / 255;
+                *pPixByte++ = (r * a + 127) / 255;
+                *pPixByte++ = a;
+            }
+
+            pBmpBuffer += rowStride;
+        }
+
+        // If there is a mask, set the alpha bytes in the target buffer to
+        // fully transparent or retain original value
+        if ( img.HasMask() )
+        {
+            unsigned char mr = img.GetMaskRed();
+            unsigned char mg = img.GetMaskGreen();
+            unsigned char mb = img.GetMaskBlue();
+
+            imgRGB = img.GetData();
+            pBmpBuffer = pBuffer;
+            for ( int y = 0; y < height; y++ )
+            {
+                BYTE* pPixByte = pBmpBuffer;
+                for ( int x = 0; x < width; x++ )
+                {
+                    if ( imgRGB[0] == mr && imgRGB[1] == mg && imgRGB[2] == mb )
+                        pPixByte[0] = pPixByte[1] = pPixByte[2] = pPixByte[3] = 0;
+
+                    imgRGB += 3;
+                    pPixByte += 4;
+                }
+
+                pBmpBuffer += rowStride;
+            }
+        }
+    }
+
     wxImage ConvertToImage() const
     {
         UINT width, height;
@@ -2552,6 +2625,12 @@ public:
         wxGraphicsBitmapData(renderer)
     {
         m_bitmapHolder = new NativeType(bitmap);
+    }
+
+    wxD2DBitmapData(wxGraphicsRenderer* renderer, const wxImage& image) :
+        wxGraphicsBitmapData(renderer)
+    {
+        m_bitmapHolder = new NativeType(image);
     }
 
     wxD2DBitmapData(wxGraphicsRenderer* renderer, NativeType* pseudoNativeBitmap) :
@@ -5241,7 +5320,12 @@ wxGraphicsBitmap wxD2DRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
 #if wxUSE_IMAGE
 wxGraphicsBitmap wxD2DRenderer::CreateBitmapFromImage(const wxImage& image)
 {
-    return CreateBitmap(wxBitmap(image));
+    wxD2DBitmapData* bitmapData = new wxD2DBitmapData(this, image);
+
+    wxGraphicsBitmap graphicsBitmap;
+    graphicsBitmap.SetRefData(bitmapData);
+
+    return graphicsBitmap;
 }
 
 wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
