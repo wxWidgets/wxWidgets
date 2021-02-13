@@ -1090,17 +1090,12 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     if ( !(GetOwner()->GetOwner()->IsEnabled() && GetEnabled()) )
         flags |= wxCONTROL_DISABLED;
 
-    // Notice that we intentionally don't use any alignment here: it is not
-    // necessary because the cell rectangle had been already adjusted to
-    // account for the alignment in WXCallRender() and using the alignment here
-    // results in problems with ellipsization when using native MSW renderer,
-    // see https://trac.wxwidgets.org/ticket/17363, so just don't do it.
     wxRendererNative::Get().DrawItemText(
         GetOwner()->GetOwner(),
         *dc,
         text,
         rectText,
-        wxALIGN_NOT,
+        GetEffectiveAlignment(),
         flags,
         GetEllipsizeMode());
 }
