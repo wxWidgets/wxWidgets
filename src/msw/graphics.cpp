@@ -1383,14 +1383,15 @@ wxImage wxGDIPlusBitmapData::ConvertToImage() const
     const BYTE* pixels = static_cast<const BYTE*>(bitmapData.Scan0);
     for( UINT y = 0; y < h; y++ )
     {
+        const ARGB* pixByte = reinterpret_cast<const ARGB*>(pixels);
         for( UINT x = 0; x < w; x++ )
         {
-            ARGB c = reinterpret_cast<const ARGB*>(pixels)[x];
-            *imgRGB++ = (c >> 16) & 0xFF;  // R
-            *imgRGB++ = (c >> 8) & 0xFF;   // G
-            *imgRGB++ = (c >> 0) & 0xFF;   // B
+            ARGB c = *pixByte++;
+            *imgRGB++ = (c >> RED_SHIFT) & 0xFF;   // R
+            *imgRGB++ = (c >> GREEN_SHIFT) & 0xFF; // G
+            *imgRGB++ = (c >> BLUE_SHIFT) & 0xFF;  // B
             if ( imgAlpha )
-                *imgAlpha++ = (c >> 24) & 0xFF;
+                *imgAlpha++ = (c >> ALPHA_SHIFT) & 0xFF;
         }
 
         pixels += bitmapData.Stride;
