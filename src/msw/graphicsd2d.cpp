@@ -3573,9 +3573,9 @@ class wxD2DDeviceContextResourceHolder : public wxD2DRenderTargetResourceHolder
 {
 public:
     wxD2DDeviceContextResourceHolder(ID2D1Factory* factory, HWND hwnd) :
-        m_factory(NULL), m_hwnd(hwnd)
+        m_hwnd(hwnd)
     {
-        HRESULT hr = factory->QueryInterface(IID_ID2D1Factory1, (void**)&m_factory);
+        HRESULT hr = factory->QueryInterface(IID_ID2D1Factory1, reinterpret_cast<void**>(&m_factory));
         wxCHECK_HRESULT_RET(hr);
     }
 
@@ -3744,7 +3744,7 @@ private:
     }
 
 private:
-    ID2D1Factory1* m_factory;
+    wxCOMPtr<ID2D1Factory1> m_factory;
 
     HWND m_hwnd;
 
