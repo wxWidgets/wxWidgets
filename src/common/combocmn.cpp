@@ -2296,13 +2296,10 @@ void wxComboCtrlBase::ShowPopup()
     int maxHeightPopup;
     wxSize ctrlSz = GetSize();
 
-    // wxSystemSettings::GetMetric( wxSYS_SCREEN_Y, this ) returns a geometry of the primary display
-    // And it causes wrong calculation of the popuping on secondary monitor.
-    // So, let's make all calculation in respect to the display of the provided window.
-    screenHeight = displayRect.height;//wxSystemSettings::GetMetric( wxSYS_SCREEN_Y, this );
-    scrPos = GetScreenPosition() - displayRect.GetTopLeft();
+    screenHeight = displayRect.GetHeight();
+    scrPos = GetScreenPosition();
 
-    spaceAbove = scrPos.y;
+    spaceAbove = scrPos.y - displayRect.GetY();
     spaceBelow = screenHeight - spaceAbove - ctrlSz.y;
 
     maxHeightPopup = spaceBelow;
@@ -2364,20 +2361,20 @@ void wxComboCtrlBase::ShowPopup()
     wxSize szp = popup->GetSize();
 
     int popupX;
-    int popupY = scrPos.y + ctrlSz.y + displayRect.GetTop();
+    int popupY = scrPos.y + ctrlSz.y;
 
     // Default anchor is wxLEFT
     int anchorSide = m_anchorSide;
     if ( !anchorSide )
         anchorSide = wxLEFT;
 
-    int rightX = scrPos.x + ctrlSz.x + m_extRight - szp.x + displayRect.GetLeft();
-    int leftX = scrPos.x - m_extLeft + displayRect.GetLeft();
+    int rightX = scrPos.x + ctrlSz.x + m_extRight - szp.x;
+    int leftX = scrPos.x - m_extLeft;
 
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
         leftX -= ctrlSz.x;
 
-    int screenWidth = displayRect.width;// wxSystemSettings::GetMetric( wxSYS_SCREEN_X, this );
+    int screenWidth = displayRect.GetWidth();
 
     // If there is not enough horizontal space, anchor on the other side.
     // If there is no space even then, place the popup at x 0.
@@ -2414,7 +2411,7 @@ void wxComboCtrlBase::ShowPopup()
 
     if ( spaceBelow < szp.y )
     {
-        popupY = scrPos.y - szp.y + displayRect.GetTop();
+        popupY = scrPos.y - szp.y;
         showFlags |= ShowAbove;
     }
 
