@@ -174,9 +174,10 @@ private:
 
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
         wxLOAD_FUNC(m_dllDirect3d, D3D11CreateDevice);
-#endif
-
+        m_D2DRuntimeVersion = wxD2D_VERSION_1_1;
+#else
         m_D2DRuntimeVersion = wxD2D_VERSION_1_0;
+#endif
 
         return true;
     }
