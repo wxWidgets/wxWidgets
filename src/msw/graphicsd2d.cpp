@@ -3711,7 +3711,7 @@ private:
         wxCHECK_HRESULT_RET(hr);
 
         FLOAT dpiX, dpiY;
-        m_factory->GetDesktopDpi(&dpiX, &dpiY);
+        dpiX = dpiY = (FLOAT)::GetDpiForWindow(m_hwnd);
 
         // Now we set up the Direct2D render target bitmap linked to the swapchain.
         // Whenever we render to this bitmap, it is directly rendered to the
