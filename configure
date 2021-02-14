@@ -33364,7 +33364,7 @@ if test "$GCC" = "yes" ; then
         WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fno-exceptions"
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
-        WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -fpermissive"
+        WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fpermissive"
     fi
 
                                                 case "${host}" in
