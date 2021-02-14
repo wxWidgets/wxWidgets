@@ -40,7 +40,7 @@ enum
 
     The wxCalendarEvent class is used together with wxCalendarCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 
     @see wxCalendarCtrl
@@ -90,7 +90,7 @@ enum wxCalendarDateBorder
     wxCalendarDateAttr is a custom attributes for a calendar date. The objects
     of this class are used with wxCalendarCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{data}
 
     @see wxCalendarCtrl
@@ -244,7 +244,7 @@ enum wxCalendarHitTestResult
 
     An item without custom attributes is drawn with the default colours and
     font and without border, but setting custom attributes with SetAttr()
-    allows to modify its appearance. Just create a custom attribute object and
+    allows modifying its appearance. Just create a custom attribute object and
     set it for the day you want to be displayed specially (note that the
     control will take ownership of the pointer, i.e. it will delete it itself).
     A day may be marked as being a holiday, even if it is not recognized as
@@ -296,7 +296,7 @@ enum wxCalendarHitTestResult
     @note Changing the selected date will trigger an EVT_CALENDAR_DAY, MONTH or
           YEAR event as well as an EVT_CALENDAR_SEL_CHANGED event.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{calendarctrl}
 

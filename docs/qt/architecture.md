@@ -1,17 +1,17 @@
-# wxQt Architecture
+# wxQt Architecture                    {#plat_qt_architecture}
 
 ## Internals
 
-wxQT uses the same techniques like other ports to wrap the Qt toolkit classes inside the wxWidget hierachy (especially similar to wxGTK).
+wxQT uses the same techniques like other ports to wrap the Qt toolkit classes inside the wxWidget hierarchy (especially similar to wxGTK).
 
 ### Current (original) Approach
 
-An '''internal pointer m_qtWindow''' in wxWindow holds the reference to the QWidget (or derived) counterpart, and is accesible through the virtual method '''GetHandle'''.
-This pointer and other window styles are set up in the '''PostCreation''' method that must be called by the derived classes (mostly controls) to initialize the widget correctly. 
+An '''internal pointer m_qtWindow''' in wxWindow holds the reference to the QWidget (or derived) counterpart, and is accessible through the virtual method '''GetHandle'''.
+This pointer and other window styles are set up in the '''PostCreation''' method that must be called by the derived classes (mostly controls) to initialize the widget correctly.
 Not doing so will cause painting and deletion issues, as the base class  will not know how to handle the Qt widget.
 wxControl even provides a protected method '''QtCreateControl''' that will do the common initialization (including post creation step, moving, sizing, etc., and calling the base to add the child to the parent).
 
-'''Warning:''' Take care of not calling any function that can raise an assertion before `PostCreation`, for example wxFAIL_MSG, as it will interrupt the normal initialization, hence the later cleanup will crash. 
+'''Warning:''' Take care of not calling any function that can raise an assertion before `PostCreation`, for example wxFAIL_MSG, as it will interrupt the normal initialization, hence the later cleanup will crash.
 For example, this issue was caused by WXValidateStyle in wxCheckBox::Create, that was "failing silently" in unit tests, and then raising segmentation faults when the object was later deleted (as Qt checkbox counterpart was never being deleted due the aborted initialization).
 
 Many controls have also other pointers to allow to map different sub-widgets and other features.
@@ -19,7 +19,7 @@ Many controls have also other pointers to allow to map different sub-widgets and
 ### New (tentative) Approach
 
 In the other end, Top Level Windows (frames and dialogs) '''uses directly the internal window pointer''', doing a static cast to return the correct type for GetHandle, avoiding multilevel pointer hierarchies.
-This would be the ideal solution, but not all classes could be mapped 1:1 and that could introduce potential issues (i.e. invalid static casts) and more boilerplate due to additional specific accesor methods.
+This would be the ideal solution, but not all classes could be mapped 1:1 and that could introduce potential issues (i.e. invalid static casts) and more boilerplate due to additional specific accessor methods.
 
 For a longer discussion of pro and cons, see [PR#43 comments](https://github.com/reingart/wxWidgets/pull/43)
 
@@ -28,9 +28,9 @@ Note that some special cases are '''not real windows''' like the `wxTabFrame` (A
 ### Scroll Areas
 
 In both approaches, special care should be taken with scrolling areas, as Qt manages this ones slightly different to wxWidgets.
-'''QtGetScrollBarsContainer''' should be reimplemented to return the QScrollArea widget or similar (where the scroll bars are places). 
+'''QtGetScrollBarsContainer''' should be reimplemented to return the QScrollArea widget or similar (where the scroll bars are places).
 
-That widget should implement a '''viewport()''' (Qt idiom to differentiate the draw-able area). 
+That widget should implement a '''viewport()''' (Qt idiom to differentiate the draw-able area).
 Attempts to paint directly to the scroll area itself will fail.
 This is already handled in the QtHandlePaintEvent wxWindowQt method.
 
@@ -54,19 +54,19 @@ Qt objects needs to be sub-classed to '''re-implement events''' and '''connect s
 
 The approach chosen was to use templates to help inherit QObject's (QWidget), providing a common base to handle events and signal infrastructure:
 
-* '''wxQtSignalHandler< wxWindow >:''' allows emitting wx events for Qt events & signals. This should be used used for all QObjects derivatives that are not widgets, for example QAction (used for shortcut / accelerators). 
+* '''wxQtSignalHandler< wxWindow >:''' allows emitting wx events for Qt events & signals. This should be used used for all QObjects derivatives that are not widgets, for example QAction (used for shortcut / accelerators).
 * '''wxQtEventSignalHandler< QWidget, wxWindow >:''' derived from `wxQtSignalHandler`, also handles basic events (change, focus, mouse, keyboard, paint, close, etc.). This should be used for all QWidget derivatives (controls, top level windows, etc.)
 
 ### Delete later
 
-Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reseted to NULL when the wx counterpart is marked to deletion). 
+Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reset to NULL when the wx counterpart is marked to deletion).
 
 This is due that in some situations, Qt object could still be referenced in the Qt event queue, so it cannot be removed immediately.
 
-'''Important:''' Currently wxQT is using Qt's '''deleteLater''' method to avoid this kind of issues. 
+'''Important:''' Currently wxQT is using Qt's '''deleteLater''' method to avoid this kind of issues.
 Please, don't use delete directly except you're confident it will not cause faults or other issues.
 
-Note that no public wxWidget class should be derived directly from QWidget as they could have different lifespans and other implications to run time type systems (RTTI). 
+Note that no public wxWidget class should be derived directly from QWidget as they could have different lifespans and other implications to run time type systems (RTTI).
 Some QObjects are even owned by Qt (for example: menubar, statusbar) and some parents (ie. `QTabWidget`) cannot be deleted immediately in some circumstances (they would cause segmentation faults due spurious events / signals caused by the children destruction if not correctly handled as explained previously)
 
 For more information about the deletion issues, see [deleteLater](https://github.com/reingart/wxWidgets/wiki/WxQtDeleteLaterNotes ) notes and [wx-dev thread](https://groups.google.com/d/msg/wx-dev/H0Xc9aQzaH4/crjFDPsEA0cJ) discussion.

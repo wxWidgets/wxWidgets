@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -56,7 +53,7 @@ public:
     // ctor both creates and starts the thread
     TLSTestThread() : wxThread(wxTHREAD_JOINABLE) { Create(); Run(); }
 
-    virtual void *Entry()
+    virtual void *Entry() wxOVERRIDE
     {
         gs_threadInt = 17;
 

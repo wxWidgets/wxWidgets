@@ -41,7 +41,7 @@
     wxWizardPage::GetBitmap() can also be overridden, but this should be very
     rarely needed.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{miscwnd}
 
     @see wxWizard, @ref page_samples_wizard
@@ -142,7 +142,7 @@ public:
         The wizard finished button was pressed.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 
     @see wxWizard, @ref page_samples_wizard
@@ -194,7 +194,7 @@ wxEventType wxEVT_WIZARD_BEFORE_PAGE_CHANGED;
     the pages order is known statically - on the other hand, if this is not the
     case you must derive your own class from wxWizardPage instead.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{miscwnd}
 
     @see wxWizard, @ref page_samples_wizard
@@ -339,7 +339,7 @@ public:
 
     See also wxDialog for other extended styles.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{cmndlg}
 
     @see wxWizardEvent, wxWizardPage, @ref page_samples_wizard

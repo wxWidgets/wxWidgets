@@ -42,7 +42,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxControlNameStr);
+                const wxString& name = wxASCII_STR(wxControlNameStr));
 
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
@@ -115,6 +115,11 @@ public:
     wxSize GetSizeFromTextSize(const wxSize& tsize) const
         { return DoGetSizeFromTextSize(tsize.x, tsize.y); }
 
+    wxSize GetSizeFromText(const wxString& text) const
+    {
+        return GetSizeFromTextSize(GetTextExtent(text).GetWidth());
+    }
+
 
     // static utilities for mnemonics char (&) handling
     // ------------------------------------------------
@@ -177,11 +182,6 @@ protected:
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
-
-    // Ellipsize() helper:
-    static wxString DoEllipsizeSingleLine(const wxString& label, const wxDC& dc,
-                                          wxEllipsizeMode mode, int maxWidth,
-                                          int replacementWidth);
 
 #if wxUSE_MARKUP
     // Remove markup from the given string, returns empty string on error i.e.

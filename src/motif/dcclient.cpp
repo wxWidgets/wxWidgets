@@ -83,7 +83,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl);
 wxIMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxWindowDCImpl);
 wxIMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxMotifDCImpl);
 
-#define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
+#define IS_HATCH(s)    ((s)>=wxHATCHSTYLE_FIRST && (s)<=wxHATCHSTYLE_LAST)
 
 // FIXME: left over after removal of wxDC::GetOptimization()
 #define GET_OPTIMIZATION false
@@ -139,7 +139,6 @@ void wxWindowDCImpl::Init()
     m_currentPenDash = NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
-    m_colour = wxColourDisplay();
     m_display = NULL;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
@@ -198,7 +197,7 @@ wxWindowDCImpl::wxWindowDCImpl(wxDC *owner, wxWindow *window)
 
     m_backgroundPixel = gcvalues.background;
 
-    SetBackground(wxBrush(m_window->GetBackgroundColour(), wxSOLID));
+    SetBackground(wxBrush(m_window->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
 }
 
 wxWindowDCImpl::~wxWindowDCImpl()
@@ -347,7 +346,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     while (alpha2 > 360 * 64)
         alpha2 -= 360 * 64;
 
-    if (m_brush.IsOk() && m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.IsOk() && m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush (m_brush);
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) (GC) m_gc,
@@ -359,7 +358,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
 
     }
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         if (m_autoSetting)
             SetPen (m_pen);
@@ -394,7 +393,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
     if (end>start) end-=start;
     else end+=360*64-start;
 
-    if (m_brush.IsOk() && m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.IsOk() && m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         m_autoSetting = true;    // must be reset
 
@@ -406,7 +405,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
             XLOG2DEV_2 (x), YLOG2DEV_2 (y),wd,hd,start,end);
     }
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         if (m_autoSetting)
             SetPen (m_pen);
@@ -437,7 +436,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 {
     wxCHECK_RET( IsOk(), "invalid dc" );
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         if (m_autoSetting)
             SetPen (m_pen);
@@ -488,7 +487,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
     xpoints2[i].x = xpoints2[0].x;
     xpoints2[i].y = xpoints2[0].y;
 
-    if (m_brush.IsOk() && m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.IsOk() && m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush (m_brush);
         XSetFillRule ((Display*) m_display, (GC) m_gc, fillStyle == wxODDEVEN_RULE ? EvenOddRule : WindingRule);
@@ -503,7 +502,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
         }
     }
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         if (m_autoSetting)
             SetPen (m_pen);
@@ -534,7 +533,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
     if (wd < 0) { wd = - wd; xd = xd - wd; }
     if (hd < 0) { hd = - hd; yd = yd - hd; }
 
-    if (m_brush.IsOk() && m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.IsOk() && m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush (m_brush);
         XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wfd, hfd);
@@ -545,7 +544,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
             wfd, hfd);
     }
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         if (m_autoSetting)
             SetPen (m_pen);
@@ -590,7 +589,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
 
     // CMB: adjust size if outline is drawn otherwise the result is
     // 1 pixel too wide and high
-    if (m_pen.GetStyle() != wxTRANSPARENT)
+    if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         wd--;
         hd--;
@@ -612,7 +611,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     int rw_d2 = rd2 * 2;
     int rh_d2 = rw_d2;
 
-    if (m_brush.IsOk() && m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.IsOk() && m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush (m_brush);
 
@@ -662,7 +661,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
         }
     }
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         SetPen (m_pen);
         XDrawLine ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd + rd, yd,
@@ -746,7 +745,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
     wd = XLOG2DEVREL(width) ;
     hd = YLOG2DEVREL(height) ;
 
-    if (m_brush.IsOk() && m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.IsOk() && m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush (m_brush);
         XFillArc ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, xd, yd, wd, hd, 0, angle);
@@ -757,7 +756,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
             YLOG2DEVREL (height) - WX_GC_CF, 0, angle);
     }
 
-    if (m_pen.IsOk() && m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.IsOk() && m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         if (m_autoSetting)
             SetPen (m_pen);
@@ -1049,7 +1048,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     // First draw a rectangle representing the text background, if a text
     // background is specified
-    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxTRANSPARENT))
+    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxBRUSHSTYLE_TRANSPARENT))
     {
         wxColour oldPenColour = m_currentColour;
         m_currentColour = m_textBackgroundColour;
@@ -1244,7 +1243,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
             {
                 bool textPixel = image.GetRed(sx, sy) == 0;
 
-                if (!textPixel && m_backgroundMode != wxSOLID)
+                if (!textPixel && m_backgroundMode != wxBRUSHSTYLE_SOLID)
                     continue;
 
                 wxCoord ox = (wxCoord) (x1 + rx),
@@ -1511,7 +1510,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
     m_currentPenDashCount = m_pen.GetDashCount();
     m_currentPenDash = (wxX11Dash*)m_pen.GetDash();
 
-    if (m_currentStyle == wxSTIPPLE)
+    if (m_currentStyle == wxPENSTYLE_STIPPLE)
         m_currentStipple = * m_pen.GetStipple ();
 
     bool sameStyle = (oldStyle == m_currentStyle &&
@@ -1549,34 +1548,34 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
         switch (m_pen.GetStyle ())
         {
-        case wxUSER_DASH:
+        case wxPENSTYLE_USER_DASH:
             req_nb_dash = m_currentPenDashCount;
             req_dash = m_currentPenDash;
             style = LineOnOffDash;
             break;
-        case wxDOT:
+        case wxPENSTYLE_DOT:
             req_nb_dash = 2;
             req_dash = dotted;
             style = LineOnOffDash;
             break;
-        case wxSHORT_DASH:
+        case wxPENSTYLE_SHORT_DASH:
             req_nb_dash = 2;
             req_dash = short_dashed;
             style = LineOnOffDash;
             break;
-        case wxLONG_DASH:
+        case wxPENSTYLE_LONG_DASH:
             req_nb_dash = 2;
             req_dash = long_dashed;
             style = LineOnOffDash;
             break;
-        case wxDOT_DASH:
+        case wxPENSTYLE_DOT_DASH:
             req_nb_dash = 4;
             req_dash = dotted_dashed;
             style = LineOnOffDash;
             break;
-        case wxSTIPPLE:
-        case wxSOLID:
-        case wxTRANSPARENT:
+        case wxPENSTYLE_STIPPLE:
+        case wxPENSTYLE_SOLID:
+        case wxPENSTYLE_TRANSPARENT:
         default:
             style = LineSolid;
             req_dash = NULL;
@@ -1649,42 +1648,42 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
         switch (m_currentFill)
         {
-        case wxBDIAGONAL_HATCH:
+        case wxHATCHSTYLE_BDIAGONAL:
             if (bdiag == (Pixmap) 0)
                 bdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(bdiag_bits), bdiag_width, bdiag_height);
             myStipple = bdiag;
             break;
-        case wxFDIAGONAL_HATCH:
+        case wxHATCHSTYLE_FDIAGONAL:
             if (fdiag == (Pixmap) 0)
                 fdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(fdiag_bits), fdiag_width, fdiag_height);
             myStipple = fdiag;
             break;
-        case wxCROSS_HATCH:
+        case wxHATCHSTYLE_CROSS:
             if (cross == (Pixmap) 0)
                 cross = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(cross_bits), cross_width, cross_height);
             myStipple = cross;
             break;
-        case wxHORIZONTAL_HATCH:
+        case wxHATCHSTYLE_HORIZONTAL:
             if (horiz == (Pixmap) 0)
                 horiz = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(horiz_bits), horiz_width, horiz_height);
             myStipple = horiz;
             break;
-        case wxVERTICAL_HATCH:
+        case wxHATCHSTYLE_VERTICAL:
             if (verti == (Pixmap) 0)
                 verti = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(verti_bits), verti_width, verti_height);
             myStipple = verti;
             break;
-        case wxCROSSDIAG_HATCH:
+        case wxHATCHSTYLE_CROSSDIAG:
         default:
             if (cdiag == (Pixmap) 0)
                 cdiag = XCreateBitmapFromData ((Display*) m_display,
@@ -1698,7 +1697,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         if (m_window && m_window->GetBackingPixmap())
             XSetStipple ((Display*) m_display,(GC) m_gcBacking, myStipple);
     }
-    else if (m_currentStyle == wxSTIPPLE && m_currentStipple.IsOk()
+    else if (m_currentStyle == wxPENSTYLE_STIPPLE && m_currentStipple.IsOk()
         && ((!m_currentStipple.IsSameAs(oldStipple)) || !GET_OPTIMIZATION))
     {
         XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetDrawable());
@@ -1711,7 +1710,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
     {
         int fill_style;
 
-        if (m_currentFill == wxSTIPPLE)
+        if (m_currentFill == wxBRUSHSTYLE_STIPPLE)
             fill_style = FillStippled;
         else if (IS_HATCH (m_currentFill))
             fill_style = FillStippled;
@@ -1727,7 +1726,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         || ((m_logicalFunction == wxXOR) || (m_autoSetting & 0x2)))
     {
         WXPixel pixel = -1;
-        if (m_pen.GetStyle () == wxTRANSPARENT)
+        if (m_pen.GetStyle () == wxPENSTYLE_TRANSPARENT)
             pixel = m_backgroundPixel;
         else
         {
@@ -1752,7 +1751,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
 
     m_brush = brush;
 
-    if (!m_brush.IsOk() || m_brush.GetStyle () == wxTRANSPARENT)
+    if (!m_brush.IsOk() || m_brush.GetStyle () == wxBRUSHSTYLE_TRANSPARENT)
         return;
 
     int oldFill = m_currentFill;
@@ -1761,7 +1760,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     m_autoSetting |= 0x1;
 
     m_currentFill = m_brush.GetStyle ();
-    if (m_currentFill == wxSTIPPLE)
+    if (m_currentFill == wxBRUSHSTYLE_STIPPLE)
         m_currentStipple = * m_brush.GetStipple ();
 
     wxColour oldBrushColour(m_currentColour);
@@ -1779,17 +1778,17 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     {
         switch (brush.GetStyle ())
         {
-        case wxTRANSPARENT:
+        case wxBRUSHSTYLE_TRANSPARENT:
             break;
-        case wxSTIPPLE:
+        case wxBRUSHSTYLE_STIPPLE:
             stippleDepth = m_currentStipple.GetDepth();
             // fall through!
-        case wxBDIAGONAL_HATCH:
-        case wxCROSSDIAG_HATCH:
-        case wxFDIAGONAL_HATCH:
-        case wxCROSS_HATCH:
-        case wxHORIZONTAL_HATCH:
-        case wxVERTICAL_HATCH:
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+        case wxBRUSHSTYLE_CROSS_HATCH:
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+        case wxBRUSHSTYLE_VERTICAL_HATCH:
             {
                 if (stippleDepth == -1) stippleDepth = 1;
 
@@ -1797,7 +1796,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
                 // determine whether fill style should be solid or
                 // transparent
                 int style = stippleDepth == 1 ?
-                    (m_backgroundMode == wxSOLID ?
+                    (m_backgroundMode == wxBRUSHSTYLE_SOLID ?
                      FillOpaqueStippled : FillStippled) :
                     FillTiled;
                 XSetFillStyle ((Display*) m_display, (GC) m_gc, style);
@@ -1805,7 +1804,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
                     XSetFillStyle ((Display*) m_display,(GC) m_gcBacking, style);
             }
             break;
-        case wxSOLID:
+        case wxBRUSHSTYLE_SOLID:
         default:
             XSetFillStyle ((Display*) m_display, (GC) m_gc, FillSolid);
             if (m_window && m_window->GetBackingPixmap())
@@ -1820,42 +1819,42 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
 
         switch (m_currentFill)
         {
-        case wxBDIAGONAL_HATCH:
+        case wxHATCHSTYLE_BDIAGONAL:
             if (bdiag == (Pixmap) 0)
                 bdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(bdiag_bits), bdiag_width, bdiag_height);
             myStipple = bdiag;
             break;
-        case wxFDIAGONAL_HATCH:
+        case wxHATCHSTYLE_FDIAGONAL:
             if (fdiag == (Pixmap) 0)
                 fdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(fdiag_bits), fdiag_width, fdiag_height);
             myStipple = fdiag;
             break;
-        case wxCROSS_HATCH:
+        case wxHATCHSTYLE_CROSS:
             if (cross == (Pixmap) 0)
                 cross = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(cross_bits), cross_width, cross_height);
             myStipple = cross;
             break;
-        case wxHORIZONTAL_HATCH:
+        case wxHATCHSTYLE_HORIZONTAL:
             if (horiz == (Pixmap) 0)
                 horiz = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(horiz_bits), horiz_width, horiz_height);
             myStipple = horiz;
             break;
-        case wxVERTICAL_HATCH:
+        case wxHATCHSTYLE_VERTICAL:
             if (verti == (Pixmap) 0)
                 verti = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
                 reinterpret_cast<const char*>(verti_bits), verti_width, verti_height);
             myStipple = verti;
             break;
-        case wxCROSSDIAG_HATCH:
+        case wxHATCHSTYLE_CROSSDIAG:
         default:
             if (cdiag == (Pixmap) 0)
                 cdiag = XCreateBitmapFromData ((Display*) m_display,
@@ -1871,7 +1870,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     }
     // X can forget the stipple value when resizing a window (apparently)
     // so always set the stipple.
-    else if (m_currentFill != wxSOLID && m_currentFill != wxTRANSPARENT &&
+    else if (m_currentFill != wxBRUSHSTYLE_SOLID && m_currentFill != wxBRUSHSTYLE_TRANSPARENT &&
              m_currentStipple.IsOk()) // && m_currentStipple != oldStipple)
     {
         if (m_currentStipple.GetDepth() == 1)
@@ -2212,26 +2211,26 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
                     pixel = cachedest[k];
                     goto install;
                 }
-                if (all_cache)
-                    for (k = CACHE_SIZE; k-- > cache_pos; )
-                        if (cachesrc[k] == pixel) {
-                            pixel = cachedest[k];
-                            goto install;
-                        }
+            if (all_cache)
+                for (k = CACHE_SIZE; k-- > cache_pos; )
+                    if (cachesrc[k] == pixel) {
+                        pixel = cachedest[k];
+                        goto install;
+                    }
 
-                        cachesrc[cache_pos] = xcol.pixel = pixel;
-                        XQueryColor(src_display, srccm, &xcol);
-                        if (!XAllocColor(dest_display, destcm, &xcol))
-                            xcol.pixel = 0;
-                        cachedest[cache_pos] = pixel = xcol.pixel;
+            cachesrc[cache_pos] = xcol.pixel = pixel;
+            XQueryColor(src_display, srccm, &xcol);
+            if (!XAllocColor(dest_display, destcm, &xcol))
+                xcol.pixel = 0;
+            cachedest[cache_pos] = pixel = xcol.pixel;
 
-                        if (++cache_pos >= CACHE_SIZE) {
-                            cache_pos = 0;
-                            all_cache = true;
-                        }
+            if (++cache_pos >= CACHE_SIZE) {
+                cache_pos = 0;
+                all_cache = true;
+            }
 
 install:
-                        XPutPixel(destimage, i, j, pixel);
+            XPutPixel(destimage, i, j, pixel);
         }
 
         XPutImage(dest_display, dest, destgc, destimage, 0, 0, destx, desty, w, h);

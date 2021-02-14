@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -150,7 +147,6 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
     if (end_pos <= begin_pos)
         return;
 
-    wxChar c;
     wxString::const_iterator i = begin_pos;
     wxString::const_iterator textBeginning = begin_pos;
 
@@ -165,6 +161,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
 
     while (i < end_pos)
     {
+        wxChar c;
         c = *i;
 
         if (c == wxT('<'))
@@ -543,9 +540,9 @@ extern "C" {
 static int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item)
 {
 #if wxUSE_UNICODE_UTF8
-    return strcmp((char*)key, ((wxHtmlEntityInfo*)item)->name);
+    return strcmp(static_cast<const char*>(key), static_cast<const wxHtmlEntityInfo*>(item)->name);
 #else
-    return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
+    return wxStrcmp(static_cast<const wxChar*>(key), static_cast<const wxHtmlEntityInfo*>(item)->name);
 #endif
 }
 }

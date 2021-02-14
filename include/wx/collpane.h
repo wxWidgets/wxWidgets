@@ -43,6 +43,23 @@ public:
 
     virtual wxString GetLabel() const wxOVERRIDE = 0;
     virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
+
+    virtual bool
+    InformFirstDirection(int direction,
+                         int size,
+                         int availableOtherDir) wxOVERRIDE
+    {
+        wxWindow* const p = GetPane();
+        if ( !p )
+            return false;
+
+        if ( !p->InformFirstDirection(direction, size, availableOtherDir) )
+            return false;
+
+        InvalidateBestSize();
+
+        return true;
+    }
 };
 
 

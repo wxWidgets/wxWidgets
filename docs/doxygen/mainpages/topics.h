@@ -99,5 +99,6 @@ topics related to building applications with wxWidgets.
 @li @subpage overview_windowdeletion
 @li @subpage overview_envvars
 @li @subpage overview_customwidgets
+@li @subpage overview_high_dpi
 
 */

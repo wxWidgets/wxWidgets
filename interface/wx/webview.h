@@ -107,6 +107,46 @@ enum wxWebViewNavigationActionFlags
     wxWEBVIEW_NAV_ACTION_OTHER
 };
 
+/**
+    Internet Explorer emulation modes for wxWebViewIE.
+
+    Elements of this enum can be used with wxWebView::MSWSetEmulationLevel().
+
+    Note that using the @c _FORCE variants is not recommended.
+
+    @since 3.1.3
+*/
+enum wxWebViewIE_EmulationLevel
+{
+    /**
+        Clear FEATURE_BROWSER_EMULATION registry setting to default,
+        corresponding application specific registry key will be deleted
+    */
+    wxWEBVIEWIE_EMU_DEFAULT =    0,
+
+    /** Prefer IE7 Standards mode, default value for the control. */
+    wxWEBVIEWIE_EMU_IE7 =        7000,
+
+    /** Prefer IE8 mode, default value for Internet Explorer 8. */
+    wxWEBVIEWIE_EMU_IE8 =        8000,
+    /** Force IE8 Standards mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE8_FORCE =  8888,
+
+    /** Prefer IE9 mode, default value for Internet Explorer 9. */
+    wxWEBVIEWIE_EMU_IE9 =        9000,
+    /** Force IE9 Standards mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE9_FORCE =  9999,
+
+    /** Prefer IE10 mode, default value for Internet Explorer 10. */
+    wxWEBVIEWIE_EMU_IE10 =       10000,
+    /** Force IE10 Standards mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE10_FORCE = 10001,
+
+    /** Prefer IE11 edge mode, default value for Internet Explorer 11. */
+    wxWEBVIEWIE_EMU_IE11 =       11000,
+    /** Force IE11 edge mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE11_FORCE = 11001
+};
 
 /**
     @class wxWebViewHistoryItem
@@ -124,7 +164,7 @@ class wxWebViewHistoryItem
 {
 public:
     /**
-        Construtor.
+        Constructor.
     */
     wxWebViewHistoryItem(const wxString& url, const wxString& title);
 
@@ -180,6 +220,24 @@ public:
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
                               const wxString& name = wxWebViewNameStr) = 0;
+    /**
+        Function to check if the backend is available at runtime. The
+        wxWebView implementation can use this function to check all
+        runtime requirements without trying to create a wxWebView.
+
+        @return returns @true if the backend can be used or @false if it is
+            not available during runtime.
+
+        @since 3.1.5
+    */
+    virtual bool IsAvailable();
+
+    /**
+        Retrieve the version information about this backend implementation.
+
+        @since 3.1.5
+    */
+    virtual wxVersionInfo GetVersionInfo(const wxString& backend);
 };
 
 /**
@@ -212,6 +270,20 @@ public:
         @return The name of the scheme, as passed to the constructor.
     */
     virtual wxString GetName() const;
+
+    /**
+        Sets a custom security URL. Only used by wxWebViewIE.
+
+        @since 3.1.5
+    */
+    virtual void SetSecurityURL(const wxString& url);
+
+    /**
+        @return The custom security URL. Only used by wxWebViewIE.
+
+        @since 3.1.5
+    */
+    virtual wxString GetSecurityURL() const;
 };
 
 /**
@@ -221,22 +293,61 @@ public:
     It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Trident on MSW and
-    Webkit on OS X and GTK. This allows the correct viewing of complex pages with
+    Webkit on macOS and GTK. This allows the correct viewing of complex pages with
     javascript and css.
 
     @section descriptions Backend Descriptions
 
     @par wxWEBVIEW_BACKEND_IE (MSW)
+    @anchor wxWEBVIEW_BACKEND_IE
 
     The IE backend uses Microsoft's Trident rendering engine, specifically the
     version used by the locally installed copy of Internet Explorer. As such it
     is only available for the MSW port. By default recent versions of the
     <a href="http://msdn.microsoft.com/en-us/library/aa752085%28v=VS.85%29.aspx">WebBrowser</a>
     control, which this backend uses, emulate Internet Explorer 7. This can be
-    changed with a registry setting, see
+    changed with a registry setting by wxWebView::MSWSetEmulationLevel() see
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
+
+    @par wxWEBVIEW_BACKEND_EDGE (MSW)
+
+    The Edge (Chromium) backend uses Microsoft's
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
+    It is available for Windows 7 and newer.
+    The following features are currently unsupported with this backend:
+    virtual filesystems, custom urls.
+
+    This backend is not enabled by default, to build it follow these steps:
+    - Visual Studio 2015, or newer, is required
+    - With CMake just enable @c wxUSE_WEBVIEW_EDGE
+    - When not using CMake:
+        - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
+        nuget package (Version 1.0.622.22 or newer)
+        - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
+        (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
+        file after unpacking it)
+        - Enable @c wxUSE_WEBVIEW_EDGE in @c setup.h
+    - Build wxWidgets webview library
+    - Copy @c WebView2Loader.dll from the subdirectory corresponding to the
+      architecture used (x86 or x64) of @c wxWidgets/3rdparty/webview2/build/
+      to your applications executable
+    - At runtime you can use wxWebView::IsBackendAvailable() to check if the
+      backend can be used (it will be available if @c WebView2Loader.dll can be
+      loaded and Edge (Chromium) is installed)
+    - Make sure to add a note about using the WebView2 SDK to your application
+      documentation, as required by its licence
+
+    If enabled and available at runtime edge will be selected as the default
+    backend. If you require the IE backend use @c wxWEBVIEW_BACKEND_IE when
+    using wxWebView::New().
+
+    If your application should use a
+    <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution#fixed-version-distribution-mode">
+    fixed version</a> of the WebView2 runtime you must use
+    wxWebViewEdge::MSWSetBrowserExecutableDir() to specify its usage before
+    using the edge backend.
 
     @par wxWEBVIEW_WEBKIT (GTK)
 
@@ -255,12 +366,13 @@ public:
     and under Fedora it is webkitgtk4-devel. All wxWEBVIEW_WEBKIT features are
     supported except for clearing and enabling / disabling the history.
 
-    @par wxWEBVIEW_WEBKIT (OSX)
+    @par wxWEBVIEW_WEBKIT (macOS)
 
-    The OS X WebKit backend uses Apple's
-    <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
+    The macOS WebKit backend uses Apple's
+    <a href="https://developer.apple.com/documentation/webkit/wkwebview">WKWebView</a>
     class. This backend has full support for custom schemes and virtual file
-    systems.
+    systems on macOS 10.13+. In order to use handlers two-step creation has to be used
+    and RegisterHandler() has to be called before Create().
 
     @section async Asynchronous Notifications
 
@@ -316,6 +428,11 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
+       Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
+       the page wants to enter or leave fullscreen. Use GetInt to get the status.
+       Currently only implemented for the edge and WebKit2GTK+ backend
+       and is only available in wxWidgets 3.1.5 or later.
     @endEventTable
 
     @since 2.9.3
@@ -341,14 +458,14 @@ public:
     /**
         Factory function to create a new wxWebView with two-step creation,
         wxWebView::Create should be called on the returned object.
-        @param backend The backend web rendering engine to use. 
+        @param backend The backend web rendering engine to use.
                        @c wxWebViewBackendDefault, @c wxWebViewBackendIE and
                        @c wxWebViewBackendWebKit are predefined where appropriate.
         @return The created wxWebView
         @since 2.9.5
      */
     static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
-    
+
     /**
         Factory function to create a new wxWebView using a wxWebViewFactory.
         @param parent Parent window for the control
@@ -375,16 +492,30 @@ public:
                           long style = 0,
                           const wxString& name = wxWebViewNameStr);
 
-    /** 
+    /**
         Allows the registering of new backend for wxWebView. @a backend can be
         used as an argument to New().
         @param backend The name for the new backend to be registered under
-        @param factory A shared pointer to the factory which creates the 
+        @param factory A shared pointer to the factory which creates the
                        appropriate backend.
         @since 2.9.5
     */
-    static void RegisterFactory(const wxString& backend, 
+    static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
+
+    /**
+        Allows to check if a specific backend is currently available.
+
+        @since 3.1.4
+    */
+    static bool IsBackendAvailable(const wxString& backend);
+
+    /**
+        Retrieve the version information about the backend implementation.
+
+        @since 3.1.5
+    */
+    static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxWebViewBackendDefault);
 
     /**
         Get the title of the current web page, or its URL/path if title is not
@@ -403,7 +534,7 @@ public:
         This method can be used to retrieve the pointer to the native rendering
         engine used by this control. The return value needs to be down-casted
         to the appropriate type depending on the platform: under Windows, it's
-        a pointer to IWebBrowser2 interface, under OS X it's a WebView pointer
+        a pointer to IWebBrowser2 interface, under macOS it's a WebView pointer
         and under GTK it's a WebKitWebView.
 
         For example, you could set the WebKit options using this method:
@@ -430,12 +561,12 @@ public:
         @return The HTML source code, or an empty string if no page is currently
                 shown.
     */
-    virtual wxString GetPageSource() const = 0;
+    virtual wxString GetPageSource() const;
 
     /**
         Get the text of the current page.
     */
-    virtual wxString GetPageText() const = 0;
+    virtual wxString GetPageText() const;
 
     /**
         Returns whether the web control is currently busy (e.g.\ loading a page).
@@ -465,48 +596,18 @@ public:
     /**
         Registers a custom scheme handler.
         @param handler A shared pointer to a wxWebHandler.
+        @note On macOS in order to use handlers two-step creation has to be
+              used and RegisterHandler() has to be called before Create().
+              With the other backends it has to be called after Create().
     */
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
 
     /**
         Reload the currently displayed URL.
         @param flags A bit array that may optionally contain reload options.
+        @note The flags are ignored by the edge backend.
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
-
-    /**
-        Sets emulation level to more modern level.
-
-        This function is useful to enable some minimally modern emulation level
-        of the system browser control used for wxWebView implementation under
-        MSW, rather than using the currently default, IE7-compatible,
-        emulation level. Currently the modern emulation level is only IE8, but
-        this could change in the future and shouldn't be relied on.
-
-        Please notice that this function works by modifying the per-user part
-        of MSW registry, which has several implications: first, it is
-        sufficient to call it only once (per user) as the changes done by it
-        are persistent and, second, if you do not want them to be persistent,
-        you need to call it with @false argument explicitly.
-
-        In particular, this function should be called to allow RunScript() to
-        work for JavaScript code returning arbitrary objects, which is not
-        supported at the default emulation level.
-
-        This function is MSW-specific and doesn't exist under other platforms.
-
-        See https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation
-        for more information about browser control emulation levels.
-
-        @param modernLevel @true to set level to a level modern enough to allow
-            all wxWebView features to work (currently IE8), @false to reset the
-            emulation level to its default, compatible value.
-        @return @true on success, @false on failure (a warning message is also
-            logged in the latter case).
-
-        @since 3.1.1
-    */
-    bool MSWSetModernEmulationLevel(bool modernLevel = true);
 
     /**
         Runs the given JavaScript code.
@@ -527,7 +628,7 @@ public:
             wxString result;
             if ( webview->RunScript
                           (
-                            "document.getElementById('some_id').innderHTML",
+                            "document.getElementById('some_id').innerHTML",
                             &result
                           ) )
             {
@@ -556,7 +657,7 @@ public:
         object-to-JSON conversion as a fallback for this case, however it is
         not as full-featured, well-tested or performing as the implementation
         of this functionality in the browser control itself, so it is
-        recommended to use MSWSetModernEmulationLevel() to change emulation
+        recommended to use MSWSetEmulationLevel() to change emulation
         level to a more modern one in which JSON conversion is done by the
         control itself.
 
@@ -566,12 +667,14 @@ public:
             version 3.1.1.
         @return @true if there is a result, @false if there is an error.
     */
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
         to edit the page even if the @c contenteditable attribute is not set.
         The exact capabilities vary with the backend being used.
+
+        @note This is not implemented on macOS.
     */
     virtual void SetEditable(bool enable = true) = 0;
 
@@ -582,7 +685,7 @@ public:
                     relative paths, for instance.
         @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling SetPage(). The baseURL
-              parameter is not used in this backend.
+              parameter is not used in this backend and the edge backend.
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
 
@@ -608,38 +711,38 @@ public:
     /**
         Returns @true if the current selection can be copied.
 
-        @note This always returns @c true on the OS X WebKit backend.
+        @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanCopy() const = 0;
+    virtual bool CanCopy() const;
 
     /**
         Returns @true if the current selection can be cut.
 
-         @note This always returns @c true on the OS X WebKit backend.
+         @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanCut() const = 0;
+    virtual bool CanCut() const;
 
     /**
         Returns @true if data can be pasted.
 
-        @note This always returns @c true on the OS X WebKit backend.
+        @note This always returns @c true on the macOS WebKit backend.
     */
-    virtual bool CanPaste() const = 0;
+    virtual bool CanPaste() const;
 
     /**
         Copies the current selection.
     */
-    virtual void Copy() = 0;
+    virtual void Copy();
 
     /**
         Cuts the current selection.
     */
-    virtual void Cut() = 0;
+    virtual void Cut();
 
     /**
         Pastes the current data.
     */
-    virtual void Paste() = 0;
+    virtual void Paste();
 
     /**
         @name Context Menu
@@ -663,6 +766,27 @@ public:
     virtual bool IsContextMenuEnabled() const;
 
     /**
+        @name Dev Tools
+    */
+
+    /**
+        Enable or disable access to dev tools for the user.
+
+        This is currently only implemented for the Edge (Chromium) backend
+        where the dev tools are enabled by default.
+
+        @since 3.1.4
+    */
+    virtual void EnableAccessToDevTools(bool enable = true);
+
+    /**
+        Returns @true if dev tools are available to the user.
+
+        @since 3.1.4
+    */
+    virtual bool IsAccessToDevToolsEnabled() const;
+
+    /**
         @name History
     */
 
@@ -681,14 +805,14 @@ public:
     /**
         Clear the history, this will also remove the visible page.
 
-        @note This is not implemented on the WebKit2GTK+ backend.
+        @note This is not implemented on the WebKit2GTK+ backend and macOS.
     */
     virtual void ClearHistory() = 0;
 
     /**
         Enable or disable the history. This will also clear the history.
 
-        @note This is not implemented on the WebKit2GTK+ backend.
+        @note This is not implemented on the WebKit2GTK+ backend and macOS.
     */
     virtual void EnableHistory(bool enable = true) = 0;
 
@@ -729,34 +853,34 @@ public:
     /**
         Clears the current selection.
     */
-    virtual void ClearSelection() = 0;
+    virtual void ClearSelection();
 
     /**
         Deletes the current selection. Note that for @c wxWEBVIEW_BACKEND_WEBKIT
         the selection must be editable, either through SetEditable or the
         correct HTML attribute.
     */
-    virtual void DeleteSelection() = 0;
+    virtual void DeleteSelection();
 
     /**
         Returns the currently selected source, if any.
     */
-    virtual wxString GetSelectedSource() const = 0;
+    virtual wxString GetSelectedSource() const;
 
     /**
         Returns the currently selected text, if any.
     */
-    virtual wxString GetSelectedText() const = 0;
+    virtual wxString GetSelectedText() const;
 
     /**
         Returns @true if there is a current selection.
     */
-    virtual bool HasSelection() const = 0;
+    virtual bool HasSelection() const;
 
     /**
         Selects the entire page.
     */
-    virtual void SelectAll() = 0;
+    virtual void SelectAll();
 
     /**
         @name Undo / Redo
@@ -801,10 +925,10 @@ public:
               are changed, since this will require a new search. To reset the
               search, for example resetting the highlights call the function
               with an empty search phrase. This always returns @c wxNOT_FOUND
-              on the OS X WebKit backend.
+              on the macOS WebKit backend.
         @since 2.9.5
     */
-    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT) = 0;
+    virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT);
 
     /**
         @name Zoom
@@ -819,10 +943,19 @@ public:
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
 
     /**
-        Get the zoom factor of the page.
+        Get the zoom level of the page.
+        See GetZoomFactor() to get more precise zoom scale value other than
+        as provided by @c wxWebViewZoom.
         @return The current level of zoom.
     */
-    virtual wxWebViewZoom GetZoom() const = 0;
+    virtual wxWebViewZoom GetZoom() const;
+
+    /**
+        Get the zoom factor of the page.
+        @return The current factor of zoom.
+        @since 3.1.4
+    */
+    virtual float GetZoomFactor() const = 0;
 
     /**
         Get how the zoom factor is currently interpreted.
@@ -831,12 +964,24 @@ public:
     virtual wxWebViewZoomType GetZoomType() const = 0;
 
     /**
-        Set the zoom factor of the page.
+        Set the zoom level of the page.
+        See SetZoomFactor() for more precise scaling other than the measured
+        steps provided by @c wxWebViewZoom.
         @param zoom How much to zoom (scale) the HTML document.
     */
-    virtual void SetZoom(wxWebViewZoom zoom) = 0;
+    virtual void SetZoom(wxWebViewZoom zoom);
 
     /**
+        Set the zoom factor of the page.
+        @param zoom How much to zoom (scale) the HTML document in arbitrary
+                    number.
+        @note zoom  scale in IE will be converted into @c wxWebViewZoom levels
+                    for @c wxWebViewZoomType of @c wxWEBVIEW_ZOOM_TYPE_TEXT.
+        @since 3.1.4
+    */
+    virtual void SetZoomFactor(float zoom) = 0;
+
+        /**
         Set how to interpret the zoom factor.
         @param zoomType How the zoom factor should be interpreted by the
                         HTML engine.
@@ -846,6 +991,72 @@ public:
     virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
 };
 
+
+
+/**
+    @class wxWebViewIE
+
+    wxWebView using IE backend, see @ref wxWEBVIEW_BACKEND_IE.
+
+    @onlyfor{wxmsw}
+    @since 2.9.3
+    @library{wxwebview}
+    @category{ctrl,webview}
+    @see wxWebView
+ */
+class wxWebViewIE : public wxWebView
+{
+public:
+    /**
+        Sets emulation level.
+
+        This function is useful to change the emulation level of
+        the system browser control used for wxWebView implementation under
+        MSW, rather than using the currently default, IE7-compatible, level.
+
+        Please notice that this function works by modifying the per-user part
+        of MSW registry, which has several implications: first, it is
+        sufficient to call it only once (per user) as the changes done by it
+        are persistent and, second, if you do not want them to be persistent,
+        you need to call it with @c wxWEBVIEWIE_EMU_DEFAULT argument explicitly.
+
+        In particular, this function should be called to allow RunScript() to
+        work for JavaScript code returning arbitrary objects, which is not
+        supported at the default emulation level.
+
+        If set to a level higher than installed version, the highest available
+        level will be used instead. @c wxWEBVIEWIE_EMU_IE11 is recommended for
+        best performance and experience.
+
+        This function is MSW-specific and doesn't exist under other platforms.
+
+        See https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation
+        for more information about browser control emulation levels.
+
+        @param level the target emulation level
+        @return @true on success, @false on failure (a warning message is also
+        logged in the latter case).
+
+        @since 3.1.3
+    */
+    static bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
+
+    /**
+        @deprecated
+        This function is kept mostly for backwards compatibility.
+
+        Please explicitly specify emulation level with MSWSetEmulationLevel().
+
+        @param modernLevel @true to set level to IE8, synonym for @c wxWEBVIEWIE_EMU_IE8.
+            @false to reset the emulation level to its default,
+            synonym for @c wxWEBVIEWIE_EMU_DEFAULT.
+        @return @true on success, @false on failure (a warning message is also
+            logged in the latter case).
+
+        @since 3.1.1
+    */
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
+};
 
 
 

@@ -512,12 +512,12 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     wxASSERT( HasImageList() ); /* Just in case */
 
     /* Construct the new pixmap */
-    const wxBitmap *bmp = GetImageList()->GetBitmapPtr(image);
-    GdkPixmap *pixmap = bmp->GetPixmap();
+    const wxBitmap bmp = GetImageList()->GetBitmap(image);
+    GdkPixmap *pixmap = bmp.GetPixmap();
     GdkBitmap *mask = NULL;
-    if ( bmp->GetMask() )
+    if ( bmp.GetMask() )
     {
-        mask = bmp->GetMask()->GetBitmap();
+        mask = bmp.GetMask()->m_bitmap;
     }
 
     if (pixmapwid == NULL)
@@ -679,12 +679,12 @@ bool wxNotebook::InsertPage( size_t position,
     {
         wxASSERT( HasImageList() );
 
-        const wxBitmap *bmp = GetImageList()->GetBitmapPtr(imageId);
-        GdkPixmap *pixmap = bmp->GetPixmap();
+        const wxBitmap bmp = GetImageList()->GetBitmap(imageId);
+        GdkPixmap *pixmap = bmp.GetPixmap();
         GdkBitmap *mask = NULL;
-        if ( bmp->GetMask() )
+        if ( bmp.GetMask() )
         {
-            mask = bmp->GetMask()->GetBitmap();
+            mask = bmp.GetMask()->m_bitmap;
         }
 
         GtkWidget *pixmapwid = gtk_pixmap_new (pixmap, mask );

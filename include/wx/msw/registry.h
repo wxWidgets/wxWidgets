@@ -136,7 +136,7 @@ public:
                    size_t *pnValues,       // number of values
                    size_t *pnMaxValueLen) const;
     // return true if the key is opened
-  bool  IsOpened() const { return m_hKey != 0; }
+  bool  IsOpened() const { return m_hKey != NULL; }
     // for "if ( !key ) wxLogError(...)" kind of expressions
   operator bool()  const { return m_dwLastError == 0; }
 
@@ -263,7 +263,7 @@ private:
   wxString      m_strKey;        // key name (relative to m_hRootKey)
   WOW64ViewMode m_viewMode;      // which view to select under WOW64
   AccessMode    m_mode;          // valid only if key is opened
-  long          m_dwLastError;   // last error (0 if none)
+  mutable long  m_dwLastError;   // last error (0 if none)
 
 
   wxDECLARE_NO_COPY_CLASS(wxRegKey);

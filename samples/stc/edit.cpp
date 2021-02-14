@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all 'standard' wxWidgets headers)
@@ -51,6 +48,22 @@
 
 // The (uniform) style used for the annotations.
 const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
+
+// A small image of a hashtag symbol used in the autocompletion window.
+const char* hashtag_xpm[] = {
+"10 10 2 1",
+"  c None",
+". c #BD08F9",
+"  ..  ..  ",
+"  ..  ..  ",
+"..........",
+"..........",
+"  ..  ..  ",
+"  ..  ..  ",
+"..........",
+"..........",
+"  ..  ..  ",
+"  ..  ..  "};
 
 //============================================================================
 // implementation
@@ -112,9 +125,12 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
     EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
     EVT_MENU(myID_CUSTOM_POPUP,                 Edit::OnCustomPopup)
+    EVT_MENU(myID_TECHNOLOGY_DEFAULT,           Edit::OnTechnology)
+    EVT_MENU(myID_TECHNOLOGY_DIRECTWRITE,       Edit::OnTechnology)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
+    EVT_STC_CALLTIP_CLICK(wxID_ANY,    Edit::OnCallTipClick)
 
     EVT_KEY_DOWN( Edit::OnKeyDown )
 wxEND_EVENT_TABLE()
@@ -124,8 +140,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
             const wxSize &size,
             long style)
     : wxStyledTextCtrl (parent, id, pos, size, style) {
-
-    m_filename = wxEmptyString;
 
     m_LineNrID = 0;
     m_DividerID = 1;
@@ -149,9 +163,9 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     StyleSetFont (wxSTC_STYLE_DEFAULT, font);
     StyleSetForeground (wxSTC_STYLE_DEFAULT, *wxBLACK);
     StyleSetBackground (wxSTC_STYLE_DEFAULT, *wxWHITE);
-    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (wxT("DARK GREY")));
+    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour ("DARK GREY"));
     StyleSetBackground (wxSTC_STYLE_LINENUMBER, *wxWHITE);
-    StyleSetForeground(wxSTC_STYLE_INDENTGUIDE, wxColour (wxT("DARK GREY")));
+    StyleSetForeground(wxSTC_STYLE_INDENTGUIDE, wxColour ("DARK GREY"));
     InitializePrefs (DEFAULT_LANGUAGE);
 
     // set visibility
@@ -160,20 +174,28 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     SetYCaretPolicy (wxSTC_CARET_EVEN|wxSTC_VISIBLE_STRICT|wxSTC_CARET_SLOP, 1);
 
     // markers
-    MarkerDefine (wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_DOTDOTDOT, wxT("BLACK"), wxT("BLACK"));
-    MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, wxT("BLACK"), wxT("BLACK"));
-    MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     wxT("BLACK"), wxT("BLACK"));
-    MarkerDefine (wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_DOTDOTDOT, wxT("BLACK"), wxT("WHITE"));
-    MarkerDefine (wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, wxT("BLACK"), wxT("WHITE"));
-    MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     wxT("BLACK"), wxT("BLACK"));
-    MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     wxT("BLACK"), wxT("BLACK"));
+    MarkerDefine (wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_DOTDOTDOT, "BLACK", "BLACK");
+    MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, "BLACK", "BLACK");
+    MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
+    MarkerDefine (wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_DOTDOTDOT, "BLACK", "WHITE");
+    MarkerDefine (wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, "BLACK", "WHITE");
+    MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
+    MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
 
     // annotations
     AnnotationSetVisible(wxSTC_ANNOTATION_BOXED);
 
+    // autocompletion
+    wxBitmap bmp(hashtag_xpm);
+    RegisterImage(0, bmp);
+
+    // call tips
+    CallTipSetBackground(*wxYELLOW);
+    m_calltipNo = 1;
+
     // miscellaneous
-    m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, wxT("_999999"));
-    m_FoldingMargin = 16;
+    m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, "_999999");
+    m_FoldingMargin = FromDIP(16);
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
     SetLayoutCache (wxSTC_CACHE_PAGE);
     UsePopUp(wxSTC_POPUP_ALL);
@@ -213,11 +235,9 @@ void Edit::OnKeyDown (wxKeyEvent &event)
         CallTipCancel();
     if (event.GetKeyCode() == WXK_SPACE && event.ControlDown() && event.ShiftDown())
     {
-        int pos = GetCurrentPos();
-        CallTipSetBackground(*wxYELLOW);
-        CallTipShow(pos,
-                    "This is a CallTip with multiple lines.\n"
-                    "It is meant to be a context sensitive popup helper for the user.");
+        // Show our first call tip at the current position of the caret.
+        m_calltipNo = 1;
+        ShowCallTipAt(GetCurrentPos());
         return;
     }
     event.Skip();
@@ -459,6 +479,11 @@ void Edit::OnCustomPopup(wxCommandEvent& evt)
     UsePopUp(evt.IsChecked() ? wxSTC_POPUP_NEVER : wxSTC_POPUP_ALL);
 }
 
+void Edit::OnTechnology(wxCommandEvent& event)
+{
+    SetTechnology(event.GetId() == myID_TECHNOLOGY_DIRECTWRITE ? wxSTC_TECHNOLOGY_DIRECTWRITE : wxSTC_TECHNOLOGY_DEFAULT);
+}
+
 //! misc
 void Edit::OnMarginClick (wxStyledTextEvent &event) {
     if (event.GetMargin() == 2) {
@@ -483,11 +508,50 @@ void Edit::OnCharAdded (wxStyledTextEvent &event) {
         SetLineIndentation (currentLine, lineInd);
         GotoPos(PositionFromLine (currentLine) + lineInd);
     }
+    else if (chr == '#') {
+        wxString s = "define?0 elif?0 else?0 endif?0 error?0 if?0 ifdef?0 "
+                     "ifndef?0 include?0 line?0 pragma?0 undef?0";
+        AutoCompShow(0,s);
+    }
+}
+
+void Edit::OnCallTipClick(wxStyledTextEvent &event)
+{
+    if ( event.GetPosition() == 1 ) {
+        // If position=1, the up arrow has been clicked. Show the next tip.
+        m_calltipNo = m_calltipNo==3?1:(m_calltipNo+1);
+        ShowCallTipAt(CallTipPosAtStart());
+    }
+    else if ( event.GetPosition() == 2 ) {
+        // If position=2, the down arrow has been clicked. Show previous tip.
+        m_calltipNo = m_calltipNo==1?3:(m_calltipNo-1);
+        ShowCallTipAt(CallTipPosAtStart());
+    }
 }
 
 
 //----------------------------------------------------------------------------
 // private functions
+void Edit::ShowCallTipAt(int position)
+{
+    // In a call tip string, the character '\001' will become a clickable
+    // up arrow and '\002' will become a clickable down arrow.
+    wxString ctString = wxString::Format("\001 %d of 3 \002 ", m_calltipNo);
+    if ( m_calltipNo == 1 )
+        ctString += "This is a call tip. Try clicking the up or down buttons.";
+    else if ( m_calltipNo == 2 )
+        ctString += "It is meant to be a context sensitive popup helper for "
+                    "the user.";
+    else
+        ctString += "This is a call tip with multiple lines.\n"
+                    "You can provide slightly longer help with "
+                    "call tips like these.";
+
+    if ( CallTipActive() )
+        CallTipCancel();
+    CallTipShow(position, ctString);
+}
+
 wxString Edit::DeterminePrefs (const wxString &filename) {
 
     LanguageInfo const* curInfo;
@@ -501,8 +565,8 @@ wxString Edit::DeterminePrefs (const wxString &filename) {
         while (!filepattern.empty()) {
             wxString cur = filepattern.BeforeFirst (';');
             if ((cur == filename) ||
-                (cur == (filename.BeforeLast ('.') + wxT(".*"))) ||
-                (cur == (wxT("*.") + filename.AfterLast ('.')))) {
+                (cur == (filename.BeforeLast ('.') + ".*")) ||
+                (cur == ("*." + filename.AfterLast ('.')))) {
                 return curInfo->name;
             }
             filepattern = filepattern.AfterFirst (';');
@@ -536,7 +600,7 @@ bool Edit::InitializePrefs (const wxString &name) {
 
     // set margin for line numbers
     SetMarginType (m_LineNrID, wxSTC_MARGIN_NUMBER);
-    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour (wxT("DARK GREY")));
+    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour ("DARK GREY"));
     StyleSetBackground (wxSTC_STYLE_LINENUMBER, *wxWHITE);
     SetMarginWidth (m_LineNrID, 0); // start out not visible
 
@@ -554,8 +618,8 @@ bool Edit::InitializePrefs (const wxString &name) {
     }
 
     // set common styles
-    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour (wxT("DARK GREY")));
-    StyleSetForeground (wxSTC_STYLE_INDENTGUIDE, wxColour (wxT("DARK GREY")));
+    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour ("DARK GREY"));
+    StyleSetForeground (wxSTC_STYLE_INDENTGUIDE, wxColour ("DARK GREY"));
 
     // initialize settings
     if (g_CommonPrefs.syntaxEnable) {
@@ -567,10 +631,10 @@ bool Edit::InitializePrefs (const wxString &name) {
                             .Family(wxFONTFAMILY_MODERN)
                             .FaceName(curType.fontname));
             StyleSetFont (Nr, font);
-            if (curType.foreground) {
+            if (curType.foreground.length()) {
                 StyleSetForeground (Nr, wxColour (curType.foreground));
             }
-            if (curType.background) {
+            if (curType.background.length()) {
                 StyleSetBackground (Nr, wxColour (curType.background));
             }
             StyleSetBold (Nr, (curType.fontstyle & mySTC_STYLE_BOLD) > 0);
@@ -600,21 +664,21 @@ bool Edit::InitializePrefs (const wxString &name) {
     if (g_CommonPrefs.foldEnable) {
         SetMarginWidth (m_FoldingID, curInfo->folds != 0? m_FoldingMargin: 0);
         SetMarginSensitive (m_FoldingID, curInfo->folds != 0);
-        SetProperty (wxT("fold"), curInfo->folds != 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.comment"),
-                     (curInfo->folds & mySTC_FOLD_COMMENT) > 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.compact"),
-                     (curInfo->folds & mySTC_FOLD_COMPACT) > 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.preprocessor"),
-                     (curInfo->folds & mySTC_FOLD_PREPROC) > 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.html"),
-                     (curInfo->folds & mySTC_FOLD_HTML) > 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.html.preprocessor"),
-                     (curInfo->folds & mySTC_FOLD_HTMLPREP) > 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.comment.python"),
-                     (curInfo->folds & mySTC_FOLD_COMMENTPY) > 0? wxT("1"): wxT("0"));
-        SetProperty (wxT("fold.quotes.python"),
-                     (curInfo->folds & mySTC_FOLD_QUOTESPY) > 0? wxT("1"): wxT("0"));
+        SetProperty ("fold", curInfo->folds != 0? "1": "0");
+        SetProperty ("fold.comment",
+                     (curInfo->folds & mySTC_FOLD_COMMENT) > 0? "1": "0");
+        SetProperty ("fold.compact",
+                     (curInfo->folds & mySTC_FOLD_COMPACT) > 0? "1": "0");
+        SetProperty ("fold.preprocessor",
+                     (curInfo->folds & mySTC_FOLD_PREPROC) > 0? "1": "0");
+        SetProperty ("fold.html",
+                     (curInfo->folds & mySTC_FOLD_HTML) > 0? "1": "0");
+        SetProperty ("fold.html.preprocessor",
+                     (curInfo->folds & mySTC_FOLD_HTMLPREP) > 0? "1": "0");
+        SetProperty ("fold.comment.python",
+                     (curInfo->folds & mySTC_FOLD_COMMENTPY) > 0? "1": "0");
+        SetProperty ("fold.quotes.python",
+                     (curInfo->folds & mySTC_FOLD_QUOTESPY) > 0? "1": "0");
     }
     SetFoldFlags (wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED |
                   wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED);
@@ -646,8 +710,8 @@ bool Edit::LoadFile ()
 #if wxUSE_FILEDLG
     // get filename
     if (!m_filename) {
-        wxFileDialog dlg (this, wxT("Open file"), wxEmptyString, wxEmptyString,
-                          wxT("Any file (*)|*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
+        wxFileDialog dlg (this, "Open file", wxEmptyString, wxEmptyString,
+                          "Any file (*)|*", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
         if (dlg.ShowModal() != wxID_OK) return false;
         m_filename = dlg.GetPath();
     }
@@ -683,7 +747,7 @@ bool Edit::SaveFile ()
 
     // get filename
     if (!m_filename) {
-        wxFileDialog dlg (this, wxT("Save file"), wxEmptyString, wxEmptyString, wxT("Any file (*)|*"),
+        wxFileDialog dlg (this, "Save file", wxEmptyString, wxEmptyString, "Any file (*)|*",
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
         if (dlg.ShowModal() != wxID_OK) return false;
         m_filename = dlg.GetPath();
@@ -757,14 +821,14 @@ EditProperties::EditProperties (Edit *edit,
     textinfo->Add (new wxStaticText (this, wxID_ANY, _("Lexer-ID: "),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
                    0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 4);
-    text = wxString::Format (wxT("%d"), edit->GetLexer());
+    text = wxString::Format ("%d", edit->GetLexer());
     textinfo->Add (new wxStaticText (this, wxID_ANY, text),
                    0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
-    wxString EOLtype = wxEmptyString;
+    wxString EOLtype;
     switch (edit->GetEOLMode()) {
-        case wxSTC_EOL_CR: {EOLtype = wxT("CR (Unix)"); break; }
-        case wxSTC_EOL_CRLF: {EOLtype = wxT("CRLF (Windows)"); break; }
-        case wxSTC_EOL_LF: {EOLtype = wxT("CR (Macintosh)"); break; }
+        case wxSTC_EOL_CR: {EOLtype = "CR (Unix)"; break; }
+        case wxSTC_EOL_CRLF: {EOLtype = "CRLF (Windows)"; break; }
+        case wxSTC_EOL_LF: {EOLtype = "CR (Macintosh)"; break; }
     }
     textinfo->Add (new wxStaticText (this, wxID_ANY, _("Line endings"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
@@ -774,7 +838,7 @@ EditProperties::EditProperties (Edit *edit,
 
     // text info box
     wxStaticBoxSizer *textinfos = new wxStaticBoxSizer (
-                     new wxStaticBox (this, wxID_ANY, _("Informations")),
+                     new wxStaticBox (this, wxID_ANY, _("Information")),
                      wxVERTICAL);
     textinfos->Add (textinfo, 0, wxEXPAND);
     textinfos->Add (0, 6);
@@ -784,25 +848,25 @@ EditProperties::EditProperties (Edit *edit,
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Total lines"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 4);
-    text = wxString::Format (wxT("%d"), edit->GetLineCount());
+    text = wxString::Format ("%d", edit->GetLineCount());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
                     0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Total chars"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 4);
-    text = wxString::Format (wxT("%d"), edit->GetTextLength());
+    text = wxString::Format ("%d", edit->GetTextLength());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
                     0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Current line"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 4);
-    text = wxString::Format (wxT("%d"), edit->GetCurrentLine());
+    text = wxString::Format ("%d", edit->GetCurrentLine());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
                     0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Current pos"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT, 4);
-    text = wxString::Format (wxT("%d"), edit->GetCurrentPos());
+    text = wxString::Format ("%d", edit->GetCurrentPos());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
                     0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
 
@@ -836,7 +900,7 @@ EditProperties::EditProperties (Edit *edit,
 // EditPrint
 //----------------------------------------------------------------------------
 
-EditPrint::EditPrint (Edit *edit, const wxChar *title)
+EditPrint::EditPrint (Edit *edit, const wxString& title)
               : wxPrintout(title)
               , m_edit(edit)
 {

@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC
 
@@ -42,7 +39,6 @@ public:
           m_control(NULL)
     {
         m_bg = UseBgCol() ? GetBackgroundColour() : wxColour();
-        SetBackgroundColour(wxColour(255, 0, 255));
     }
 
     virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
@@ -104,7 +100,8 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 
     wxPanel::AddChild(child);
 
-    SetBackgroundColour(m_bg);
+    if ( m_bg.IsOk() )
+        SetBackgroundColour(m_bg);
     child->SetName(m_controlName);
     child->SetId(wxXmlResource::GetXRCID(m_controlName));
     m_control = child;

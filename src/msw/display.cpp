@@ -20,15 +20,64 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
+#include "wx/private/display.h"
+
+#include "wx/dynlib.h"
+
+#include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
 
-#if wxUSE_DISPLAY
+namespace
+{
 
-#include "wx/display.h"
+int wxGetHDCDepth(HDC hdc)
+{
+    return ::GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL);
+}
+
+// This implementation is always available, whether wxUSE_DISPLAY is 1 or not,
+// as we fall back to it in case of error.
+class wxDisplayImplSingleMSW : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        ScreenHDC dc;
+
+        return wxRect(0, 0,
+                      ::GetDeviceCaps(dc, HORZRES),
+                      ::GetDeviceCaps(dc, VERTRES));
+    }
+
+    virtual wxRect GetClientArea() const wxOVERRIDE
+    {
+        RECT rc;
+        SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
+
+        wxRect rectClient;
+        wxCopyRECTToRect(rc, rectClient);
+        return rectClient;
+    }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxGetHDCDepth(ScreenHDC());
+    }
+};
+
+class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    {
+        return new wxDisplayImplSingleMSW;
+    }
+};
+
+} // anonymous namespace
+
+#if wxUSE_DISPLAY
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -39,12 +88,31 @@
 #include "wx/dynlib.h"
 #include "wx/sysopt.h"
 
-#include "wx/display_impl.h"
 #include "wx/msw/missing.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"
 
-static const wxChar displayDllName[] = wxT("user32.dll");
+#ifndef DPI_ENUMS_DECLARED
+    #define MDT_EFFECTIVE_DPI 0
+#endif
+
+namespace
+{
+
+// Simple struct storing the information needed by wxDisplayMSW.
+struct wxDisplayInfo
+{
+    wxDisplayInfo(HMONITOR hmon_,
+                  const MONITORINFOEX& monInfo_,
+                  int depth_)
+        : hmon(hmon_), monInfo(monInfo_), depth(depth_)
+    {}
+
+    HMONITOR hmon;
+    MONITORINFOEX monInfo;
+    int depth;
+};
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxDisplayMSW declaration
@@ -53,14 +121,18 @@ static const wxChar displayDllName[] = wxT("user32.dll");
 class wxDisplayMSW : public wxDisplayImpl
 {
 public:
-    wxDisplayMSW(unsigned n, HMONITOR hmon)
+    wxDisplayMSW(unsigned n, const wxDisplayInfo& info)
         : wxDisplayImpl(n),
-          m_hmon(hmon)
+          m_info(info)
     {
     }
 
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual int GetDepth() const wxOVERRIDE;
+    virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual double GetScaleFactor() const wxOVERRIDE;
+
     virtual wxString GetName() const wxOVERRIDE;
     virtual bool IsPrimary() const wxOVERRIDE;
 
@@ -81,11 +153,7 @@ protected:
                            dm.dmDisplayFrequency > 1 ? dm.dmDisplayFrequency : 0);
     }
 
-    // Call GetMonitorInfo() and fill in the provided struct and return true if
-    // it succeeded, otherwise return false.
-    bool GetMonInfo(MONITORINFOEX& monInfo) const;
-
-    HMONITOR m_hmon;
+    wxDisplayInfo m_info;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxDisplayMSW);
@@ -95,8 +163,6 @@ private:
 // ----------------------------------------------------------------------------
 // wxDisplayFactoryMSW declaration
 // ----------------------------------------------------------------------------
-
-WX_DEFINE_ARRAY(HMONITOR, wxMonitorHandleArray);
 
 class wxDisplayFactoryMSW : public wxDisplayFactory
 {
@@ -116,10 +182,19 @@ public:
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
     virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
 
-    // Called when we receive WM_SETTINGCHANGE to refresh the list of monitor
-    // handles.
-    static void RefreshMonitors() { ms_factory->DoRefreshMonitors(); }
+    void InvalidateCache() wxOVERRIDE
+    {
+        wxDisplayFactory::InvalidateCache();
+        DoRefreshMonitors();
+    }
 
+    // Declare the second argument as int to avoid problems with older SDKs not
+    // declaring MONITOR_DPI_TYPE enum.
+    typedef HRESULT (WINAPI *GetDpiForMonitor_t)(HMONITOR, int, UINT*, UINT*);
+
+    // Return the pointer to GetDpiForMonitor() function which may be null if
+    // not running under new enough Windows version.
+    static GetDpiForMonitor_t GetDpiForMonitorPtr();
 
 private:
     // EnumDisplayMonitors() callback
@@ -132,19 +207,55 @@ private:
     // return wxNOT_FOUND if not found
     int FindDisplayFromHMONITOR(HMONITOR hmon) const;
 
-    // Update m_displays array, used by RefreshMonitors().
+    // Update m_displays array, used initially and by InvalidateCache().
     void DoRefreshMonitors();
 
+    // The pointer to GetDpiForMonitorPtr(), retrieved on demand, and the
+    // related data, including the DLL containing the function that we must
+    // keep loaded.
+    struct GetDpiForMonitorData
+    {
+        GetDpiForMonitorData()
+        {
+            m_pfnGetDpiForMonitor = NULL;
+            m_initialized = false;
+        }
 
-    // The unique factory being used (as we don't have direct access to the
-    // global factory pointer in the common code so we just duplicate this
-    // variable (also making it of correct type for us) here).
-    static wxDisplayFactoryMSW* ms_factory;
+        bool TryLoad()
+        {
+            if ( !m_dllShcore.Load("shcore.dll", wxDL_VERBATIM | wxDL_QUIET) )
+                return false;
+
+            wxDL_INIT_FUNC(m_pfn, GetDpiForMonitor, m_dllShcore);
+
+            if ( !m_pfnGetDpiForMonitor )
+            {
+                m_dllShcore.Unload();
+                return false;
+            }
+
+            return true;
+        }
+
+        void UnloadIfNecessary()
+        {
+            if ( m_dllShcore.IsLoaded() )
+            {
+                m_dllShcore.Unload();
+                m_pfnGetDpiForMonitor = NULL;
+            }
+        }
+
+        wxDynamicLibrary m_dllShcore;
+        GetDpiForMonitor_t m_pfnGetDpiForMonitor;
+        bool m_initialized;
+    };
+    static GetDpiForMonitorData ms_getDpiForMonitorData;
 
 
     // the array containing information about all available displays, filled by
     // MultimonEnumProc()
-    wxMonitorHandleArray m_displays;
+    wxVector<wxDisplayInfo> m_displays;
 
     // The hidden window we use for receiving WM_SETTINGCHANGE and its class
     // name.
@@ -154,7 +265,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMSW);
 };
 
-wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
+wxDisplayFactoryMSW::GetDpiForMonitorData
+    wxDisplayFactoryMSW::ms_getDpiForMonitorData;
 
 // ----------------------------------------------------------------------------
 // wxDisplay implementation
@@ -170,7 +282,7 @@ wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
     delete factoryMM;
 
     // fall back to a stub implementation if no multimon support (Win95?)
-    return new wxDisplayFactorySingle;
+    return new wxDisplayFactorySingleMSW;
 }
 
 
@@ -178,58 +290,53 @@ wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
 // wxDisplayMSW implementation
 // ----------------------------------------------------------------------------
 
-bool wxDisplayMSW::GetMonInfo(MONITORINFOEX& monInfo) const
-{
-    if ( !::GetMonitorInfo(m_hmon, &monInfo) )
-    {
-        wxLogLastError(wxT("GetMonitorInfo"));
-        return false;
-    }
-
-    return true;
-}
-
 wxRect wxDisplayMSW::GetGeometry() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    wxRect rect;
-    if ( GetMonInfo(monInfo) )
-        wxCopyRECTToRect(monInfo.rcMonitor, rect);
-
-    return rect;
+    return wxRectFromRECT(m_info.monInfo.rcMonitor);
 }
 
 wxRect wxDisplayMSW::GetClientArea() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
+    return wxRectFromRECT(m_info.monInfo.rcWork);
+}
 
-    wxRect rectClient;
-    if ( GetMonInfo(monInfo) )
-        wxCopyRECTToRect(monInfo.rcWork, rectClient);
+int wxDisplayMSW::GetDepth() const
+{
+    return m_info.depth;
+}
 
-    return rectClient;
+wxSize wxDisplayMSW::GetPPI() const
+{
+    if ( const wxDisplayFactoryMSW::GetDpiForMonitor_t
+            getFunc = wxDisplayFactoryMSW::GetDpiForMonitorPtr() )
+    {
+        UINT dpiX = 0,
+             dpiY = 0;
+        const HRESULT
+            hr = (*getFunc)(m_info.hmon, MDT_EFFECTIVE_DPI, &dpiX, &dpiY);
+        if ( SUCCEEDED(hr) )
+            return wxSize(dpiX, dpiY);
+
+        wxLogApiError("GetDpiForMonitor", hr);
+    }
+
+    return IsPrimary() ? wxDisplayImplSingleMSW().GetPPI() : wxSize(0, 0);
+}
+
+double wxDisplayMSW::GetScaleFactor() const
+{
+    const int ppi = GetPPI().y;
+    return ppi ? ppi / (double)wxDisplay::GetStdPPIValue() : 1.0;
 }
 
 wxString wxDisplayMSW::GetName() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    wxString name;
-    if ( GetMonInfo(monInfo) )
-        name = monInfo.szDevice;
-
-    return name;
+    return m_info.monInfo.szDevice;
 }
 
 bool wxDisplayMSW::IsPrimary() const
 {
-    WinStruct<MONITORINFOEX> monInfo;
-
-    if ( !GetMonInfo(monInfo) )
-        return false;
-
-    return (monInfo.dwFlags & MONITORINFOF_PRIMARY) != 0;
+    return (m_info.monInfo.dwFlags & MONITORINFOF_PRIMARY) != 0;
 }
 
 wxVideoMode wxDisplayMSW::GetCurrentMode() const
@@ -280,6 +387,14 @@ wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
           ::EnumDisplaySettings(deviceName, iModeNum, &dm);
           iModeNum++ )
     {
+        // Only care about the default display output, this prevents duplicate
+        // entries in the modes list.
+        if ( dm.dmFields & DM_DISPLAYFIXEDOUTPUT &&
+             dm.dmDisplayFixedOutput != DMDFO_DEFAULT )
+        {
+            continue;
+        }
+
         const wxVideoMode mode = ConvertToVideoMode(dm);
         if ( mode.Matches(modeMatch) )
         {
@@ -339,7 +454,7 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
              (
                 GetName().t_str(),  // display name
                 pDevMode,           // dev mode or NULL to reset
-                NULL,               // reserved
+                wxRESERVED_PARAM,
                 flags,
                 NULL                // pointer to video parameters (not used)
              ) )
@@ -379,9 +494,10 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
 LRESULT APIENTRY
 wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if ( msg == WM_SETTINGCHANGE )
+    if ( (msg == WM_SETTINGCHANGE && wParam == SPI_SETWORKAREA) ||
+            msg == WM_DISPLAYCHANGE )
     {
-        wxDisplayFactoryMSW::RefreshMonitors();
+        wxDisplay::InvalidateCache();
 
         return 0;
     }
@@ -391,12 +507,6 @@ wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 wxDisplayFactoryMSW::wxDisplayFactoryMSW()
 {
-    // This is not supposed to happen with the current code, the factory is
-    // implicitly a singleton.
-    wxASSERT_MSG( !ms_factory, wxS("Using more than one factory?") );
-
-    ms_factory = this;
-
     m_hiddenHwnd = NULL;
     m_hiddenClass = NULL;
 
@@ -431,13 +541,33 @@ wxDisplayFactoryMSW::~wxDisplayFactoryMSW()
         }
     }
 
-    ms_factory = NULL;
+    if ( ms_getDpiForMonitorData.m_initialized )
+    {
+        ms_getDpiForMonitorData.UnloadIfNecessary();
+        ms_getDpiForMonitorData.m_initialized = false;
+    }
+}
+
+/* static */
+wxDisplayFactoryMSW::GetDpiForMonitor_t
+wxDisplayFactoryMSW::GetDpiForMonitorPtr()
+{
+    if ( !ms_getDpiForMonitorData.m_initialized )
+    {
+        ms_getDpiForMonitorData.m_initialized = true;
+        ms_getDpiForMonitorData.TryLoad();
+    }
+
+    return ms_getDpiForMonitorData.m_pfnGetDpiForMonitor;
 }
 
 void wxDisplayFactoryMSW::DoRefreshMonitors()
 {
-    m_displays.Clear();
+    m_displays.clear();
 
+    // Note that we pass NULL as first parameter here because using screen HDC
+    // doesn't work reliably: notably, it doesn't enumerate any displays if
+    // this code is executed while a UAC prompt is shown or during log-off.
     if ( !::EnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
@@ -448,13 +578,24 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 BOOL CALLBACK
 wxDisplayFactoryMSW::MultimonEnumProc(
     HMONITOR hMonitor,              // handle to display monitor
-    HDC WXUNUSED(hdcMonitor),       // handle to monitor-appropriate device context
+    HDC /* hdcMonitor */,           // handle to monitor-appropriate device context:
+                                    // not set due to our use of EnumDisplayMonitors(NULL, ...)
     LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
     LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
 {
     wxDisplayFactoryMSW *const self = (wxDisplayFactoryMSW *)dwData;
 
-    self->m_displays.Add(hMonitor);
+    WinStruct<MONITORINFOEX> monInfo;
+    if ( !::GetMonitorInfo(hMonitor, &monInfo) )
+    {
+        wxLogLastError(wxT("GetMonitorInfo"));
+    }
+
+    HDC hdcMonitor = ::CreateDC(NULL, monInfo.szDevice, NULL, NULL);
+    const int hdcDepth = wxGetHDCDepth(hdcMonitor);
+    ::DeleteDC(hdcMonitor);
+
+    self->m_displays.push_back(wxDisplayInfo(hMonitor, monInfo, hdcDepth));
 
     // continue the enumeration
     return TRUE;
@@ -475,7 +616,7 @@ int wxDisplayFactoryMSW::FindDisplayFromHMONITOR(HMONITOR hmon) const
         const size_t count = m_displays.size();
         for ( size_t n = 0; n < count; n++ )
         {
-            if ( hmon == m_displays[n] )
+            if ( hmon == m_displays[n].hmon )
                 return n;
         }
     }
@@ -507,17 +648,12 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
 #endif
 }
 
-#endif // wxUSE_DISPLAY
+#else // !wxUSE_DISPLAY
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+// In this case, wxDisplayFactorySingleMSW is the only implementation.
+wxDisplayFactory* wxDisplay::CreateFactory()
 {
-    // Determine the desktop dimensions minus the taskbar and any other
-    // special decorations...
-    RECT r;
-
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    if (x)      *x = r.left;
-    if (y)      *y = r.top;
-    if (width)  *width = r.right - r.left;
-    if (height) *height = r.bottom - r.top;
+    return new wxDisplayFactorySingleMSW;
 }
+
+#endif // wxUSE_DISPLAY/!wxUSE_DISPLAY

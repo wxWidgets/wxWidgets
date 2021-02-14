@@ -60,6 +60,21 @@ enum wxImageResizeQuality
     wxIMAGE_QUALITY_HIGH
 };
 
+
+/**
+    Constants for wxImage::Paste() for specifying alpha blending option.
+
+    @since 3.1.5
+*/
+enum wxImageAlphaBlendMode
+{
+    /// Overwrite the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_OVER = 0,
+
+    /// Compose the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_COMPOSE = 1
+};
+
 /**
     Possible values for PNG image type option.
 
@@ -227,7 +242,7 @@ public:
                 for which this function returns the number of frames in the
                 animation).
     */
-    virtual int GetImageCount(wxInputStream& stream);
+    int GetImageCount(wxInputStream& stream);
 
     /**
         Gets the MIME type associated with this handler.
@@ -327,7 +342,7 @@ public:
     /**
        Sets the bitmap type for the handler.
 
-       @param mimetype
+       @param type
            The bitmap type.
     */
     void SetType(wxBitmapType type);
@@ -350,7 +365,7 @@ protected:
     /**
        Called to get the number of images available in a multi-image file
        type, if supported.
-       
+
        NOTE: this function is allowed to change the current stream position
              since GetImageCount() will take care of restoring it later
     */
@@ -358,7 +373,7 @@ protected:
 
     /**
        Called to test if this handler can read an image from the given stream.
-       
+
        NOTE: this function is allowed to change the current stream position
              since CallDoCanRead() will take care of restoring it later
     */
@@ -512,7 +527,7 @@ public:
 
         double hue;
         double saturation;
-        double value;        
+        double value;
     };
 
     /**
@@ -803,8 +818,17 @@ public:
 
     /**
         Copy the data of the given @a image to the specified position in this image.
+
+        Takes care of the mask colour and out of bounds problems.
+
+        @param alphaBlend
+            This parameter (new in wx 3.1.5) determines whether the alpha values
+            of the original image replace (default) or are composed with the
+            alpha channel of this image. Notice that alpha blending overrides
+            the mask handling.
     */
-    void Paste(const wxImage& image, int x, int y);
+    void Paste(const wxImage& image, int x, int y,
+               wxImageAlphaBlendMode alphaBlend = wxIMAGE_ALPHA_BLEND_OVER);
 
     /**
         Replaces the colour specified by @e r1,g1,b1 by the colour @e r2,g2,b2.
@@ -953,9 +977,8 @@ public:
         than @a threshold are replaced with the mask colour and the alpha
         channel is removed. Otherwise nothing is done.
 
-        The mask colour is chosen automatically using
-        FindFirstUnusedColour() by this function, see the overload below if you
-        this is not appropriate.
+        The mask colour is chosen automatically using FindFirstUnusedColour(),
+        see the overload below if this is not appropriate.
 
         @return Returns @true on success, @false on error.
     */
@@ -1744,7 +1767,7 @@ public:
     /**
        Set the color of the pixel at the given x and y coordinate.
     */
-    
+
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
 
     /**

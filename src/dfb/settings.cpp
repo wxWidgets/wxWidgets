@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/settings.h"
 
@@ -63,7 +60,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 }
 
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index,
-                                      wxWindow* WXUNUSED(win))
+                                      const wxWindow* WXUNUSED(win))
 {
     int val;
 

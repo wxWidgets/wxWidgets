@@ -126,7 +126,7 @@ enum wxDialogLayoutAdaptationMode
            calling SetExtraStyle() before Create is called (two-step
            construction).
     @style{wxDIALOG_EX_METAL}
-           On OS X, frames with this style will be shown with a metallic
+           On macOS, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endStyleTable
 
@@ -140,8 +140,7 @@ enum wxDialogLayoutAdaptationMode
         The dialog is being closed by the user or programmatically (see wxWindow::Close).
         The user may generate this event clicking the close button
         (typically the 'X' on the top-right of the title bar) if it's present
-        (see the @c wxCLOSE_BOX style) or by clicking a button with the
-        @c wxID_CANCEL or @c wxID_OK ids.
+        (see the @c wxCLOSE_BOX style).
     @event{EVT_INIT_DIALOG(func)}
         Process a @c wxEVT_INIT_DIALOG event. See wxInitDialogEvent.
     @endEventTable
@@ -299,6 +298,7 @@ public:
        broken either after a new line or wrapped, at word boundary, if their
        width would become bigger than the specified maximal width.
 
+       @param message The text to be displayed.
        @param widthMax Specifies the text's maximum width (this argument is
         available since version 3.1.1, previous versions always behaved as if
         the maximal width of -1 was specified).
@@ -581,7 +581,7 @@ public:
             otherwise the box is hidden. If @false and the dialog is modal,
             control is returned to the calling program.
     */
-    virtual bool Show(bool show = 1);
+    virtual bool Show(bool show = true);
 
     /**
         Shows an application-modal dialog.
@@ -590,7 +590,7 @@ public:
         EndModal().
 
         Notice that it is possible to call ShowModal() for a dialog which had
-        been previously shown with Show(), this allows to make an existing
+        been previously shown with Show(), this allows making an existing
         modeless dialog modal. However ShowModal() can't be called twice
         without intervening EndModal() calls.
 

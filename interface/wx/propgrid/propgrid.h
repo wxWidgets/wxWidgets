@@ -229,7 +229,7 @@ wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x04000000,
 */
 wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000,
 
-/** Allows to take focus on the entire area (on canvas)
+/** Allows taking focus on the entire area (on canvas)
     even if wxPropertyGrid is not a standalone control.
     @hideinitializer
 */
@@ -470,60 +470,8 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
     @section propgrid_event_handling Event Handling
 
-    To process input from a property grid control, use these event handler macros
-    to direct input to member functions that take a wxPropertyGridEvent argument.
-
-    @beginEventEmissionTable{wxPropertyGridEvent}
-    @event{EVT_PG_SELECTED (id, func)}
-        Respond to @c wxEVT_PG_SELECTED event, generated when a property selection
-        has been changed, either by user action or by indirect program
-        function. For instance, collapsing a parent property programmatically
-        causes any selected child property to become unselected, and may
-        therefore cause this event to be generated.
-    @event{EVT_PG_CHANGED(id, func)}
-        Respond to @c wxEVT_PG_CHANGED event, generated when property value
-        has been changed by the user.
-    @event{EVT_PG_CHANGING(id, func)}
-        Respond to @c wxEVT_PG_CHANGING event, generated when property value
-        is about to be changed by user. Use wxPropertyGridEvent::GetValue()
-        to take a peek at the pending value, and wxPropertyGridEvent::Veto()
-        to prevent change from taking place, if necessary.
-    @event{EVT_PG_HIGHLIGHTED(id, func)}
-        Respond to @c wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
-        moves over a property. Event's property is @NULL if hovered area does
-        not belong to any property.
-    @event{EVT_PG_RIGHT_CLICK(id, func)}
-        Respond to @c wxEVT_PG_RIGHT_CLICK event, which occurs when property is
-        clicked on with right mouse button.
-    @event{EVT_PG_DOUBLE_CLICK(id, func)}
-        Respond to @c wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
-        double-clicked on with left mouse button.
-    @event{EVT_PG_ITEM_COLLAPSED(id, func)}
-        Respond to @c wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
-        a property or category.
-    @event{EVT_PG_ITEM_EXPANDED(id, func)}
-        Respond to @c wxEVT_PG_ITEM_EXPANDED event, generated when user expands
-        a property or category.
-    @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
-        Respond to @c wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
-        about to begin editing a property label. You can veto this event to
-        prevent the action.
-    @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
-        Respond to @c wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
-        about to end editing of a property label. You can veto this event to
-        prevent the action.
-    @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
-        Respond to @c wxEVT_PG_COL_BEGIN_DRAG event, generated when user
-        starts resizing a column - can be vetoed.
-    @event{EVT_PG_COL_DRAGGING,(id, func)}
-        Respond to @c wxEVT_PG_COL_DRAGGING, event, generated when a
-        column resize by user is in progress. This event is also generated
-        when user double-clicks the splitter in order to recenter
-        it.
-    @event{EVT_PG_COL_END_DRAG(id, func)}
-        Respond to @c wxEVT_PG_COL_END_DRAG event, generated after column
-        resize by user has finished.
-    @endEventTable
+    Please see wxPropertyGridEvent for the documentation of all event types you
+    can use with wxPropertyGrid.
 
     @remarks
     Use Freeze() and Thaw() respectively to disable and enable drawing.
@@ -534,8 +482,7 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
     @category{propgrid}
     @appearance{propertygrid}
 */
-class wxPropertyGrid : public wxControl,
-                       public wxScrollHelper,
+class wxPropertyGrid : public wxScrolled<wxControl>,
                        public wxPropertyGridInterface
 {
 public:
@@ -583,7 +530,7 @@ public:
     void AddActionTrigger( int action, int keycode, int modifiers = 0 );
 
     /**
-        Adds given property into selection. If wxPG_EX_MULTIPLE_SELECTION
+        Adds given property into selection. If ::wxPG_EX_MULTIPLE_SELECTION
         extra style is not used, then this has same effect as
         calling SelectProperty().
 
@@ -592,7 +539,7 @@ public:
                  add category to selection, and also if you have category
                  selected, you cannot add other properties to selection.
                  This member function will fail silently in these cases,
-                 even returning true.
+                 even returning @true.
     */
     bool AddToSelection( wxPGPropArg id );
 
@@ -601,7 +548,7 @@ public:
         wxGetTranslation() for following strings: wxEnumProperty list labels,
         wxFlagsProperty child property labels.
 
-        Default is false.
+        Default is @false.
     */
     static void AutoGetTranslation( bool enable );
 
@@ -623,9 +570,12 @@ public:
     /**
         Changes value of a property, as if from an editor. Use this instead of
         SetPropertyValue() if you need the value to run through validation
-        process, and also send the property change event.
+        process, and also send @c wxEVT_PG_CHANGED.
 
-        @return Returns true if value was successfully changed.
+        @remarks Since this function sends @c wxEVT_PG_CHANGED, it should not
+        be called from @c EVT_PG_CHANGED handler.
+
+        @return Returns @true if value was successfully changed.
     */
     bool ChangePropertyValue( wxPGPropArg id, wxVariant newValue );
 
@@ -634,7 +584,7 @@ public:
 
         @param enableAutoResizing
             If @true, automatic column resizing is enabled (only applicable
-            if window style wxPG_SPLITTER_AUTO_CENTER is used).
+            if window style ::wxPG_SPLITTER_AUTO_CENTER is used).
     */
     void CenterSplitter( bool enableAutoResizing = false );
 
@@ -688,7 +638,7 @@ public:
         enable.
 
         @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+                failure option ::wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool EnableCategories( bool enable );
@@ -717,7 +667,7 @@ public:
 
         @return Minimum size for the grid to still display everything.
 
-        @remarks Does not work well with wxPG_SPLITTER_AUTO_CENTER window style.
+        @remarks Does not work well with ::wxPG_SPLITTER_AUTO_CENTER window style.
 
                 This function only works properly if grid size prior to call was
                 already fairly large.
@@ -919,7 +869,7 @@ public:
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 
     /**
-        Returns true if any property has been modified by the user.
+        Returns @true if any property has been modified by the user.
     */
     bool IsAnyModified() const;
 
@@ -929,7 +879,7 @@ public:
     bool IsEditorFocused() const;
 
     /**
-        Returns true if updating is frozen (i.e. Freeze() called but not
+        Returns @true if updating is frozen (i.e. Freeze() called but not
         yet Thaw() ).
     */
     bool IsFrozen() const;
@@ -998,7 +948,7 @@ public:
 
         @param enableAutoResizing
             If @true, automatic column resizing is enabled (only applicable
-            if window style wxPG_SPLITTER_AUTO_CENTER is used).
+            if window style ::wxPG_SPLITTER_AUTO_CENTER is used).
 
         @see wxPropertyGridInterface::SetColumnProportion()
     */
@@ -1012,7 +962,7 @@ public:
 
     /**
         Selects a property. Editor widget is automatically created, but
-        not focused unless focus is true.
+        not focused unless focus is @true.
 
         @param id
             Property to select (name or pointer).
@@ -1023,9 +973,8 @@ public:
         @return returns @true if selection finished successfully. Usually only
         fails if current value in editor is not valid.
 
-        @remarks In wxPropertyGrid 1.4, this member function used to generate
-                 @c wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
-                 does that.
+        @remarks In wxWidgets 2.9 and later, this function no longer
+        sends @c wxEVT_PG_SELECTED.
 
         @remarks This clears any previous selection.
 
@@ -1232,10 +1181,15 @@ public:
     virtual wxStatusBar* GetStatusBar();
 
     /** Override to customize property validation failure behaviour.
+
+        @param
+            property Property with entered an invalid value
+
         @param invalidValue
             Value which failed in validation.
+
         @return
-            Return true if user is allowed to change to another property even
+            Return @true if user is allowed to change to another property even
             if current has invalid value.
     */
     virtual bool DoOnValidationFailure( wxPGProperty* property,
@@ -1243,7 +1197,7 @@ public:
 
     /** Override to customize resetting of property validation failure status.
         @remarks
-        Property is guaranteed to have flag wxPG_PROP_INVALID_VALUE set.
+        Property is guaranteed to have flag ::wxPG_PROP_INVALID_VALUE set.
     */
     virtual void DoOnValidationFailureReset( wxPGProperty* property );
 
@@ -1284,7 +1238,7 @@ public:
     wxVariant GetUncommittedPropertyValue();
 
     /**
-        Returns true if editor's value was marked modified.
+        Returns @true if editor's value was marked modified.
     */
     bool IsEditorsValueModified() const;
 
@@ -1295,7 +1249,7 @@ public:
 
     /**
         Call this from wxPGProperty::OnEvent() to cause property value to be
-        changed after the function returns (with true as return value).
+        changed after the function returns (with @true as return value).
         ValueChangeInEvent() must be used if you wish the application to be
         able to use wxEVT_PG_CHANGING to potentially veto the given value.
     */
@@ -1308,7 +1262,7 @@ public:
         if was value was changed using wxPGProperty::SetValueInEvent(), which
         is usually used when a 'picker' dialog is displayed. If value was
         written by "normal means" in wxPGProperty::StringToValue() or
-        IntToValue(), then this function will return false (on the other hand,
+        IntToValue(), then this function will return @false (on the other hand,
         wxPGProperty::OnEvent() is not even called in those cases).
     */
     bool WasValueChangedInEvent() const;
@@ -1322,6 +1276,60 @@ public:
 
     A property grid event holds information about events associated with
     wxPropertyGrid objects.
+    To process input from a property grid control, use these event handler macros
+    to direct input to member functions that take a wxPropertyGridEvent argument.
+
+    @beginEventEmissionTable{wxPropertyGridEvent}
+    @event{EVT_PG_SELECTED (id, func)}
+        Respond to @c wxEVT_PG_SELECTED event, generated when a property selection
+        has been changed, either by user action or by indirect program
+        function. For instance, collapsing a parent property programmatically
+        causes any selected child property to become unselected, and may
+        therefore cause this event to be generated.
+    @event{EVT_PG_CHANGED(id, func)}
+        Respond to @c wxEVT_PG_CHANGED event, generated when property value
+        has been changed by the user.
+    @event{EVT_PG_CHANGING(id, func)}
+        Respond to @c wxEVT_PG_CHANGING event, generated when property value
+        is about to be changed by user. Use wxPropertyGridEvent::GetValue()
+        to take a peek at the pending value, and wxPropertyGridEvent::Veto()
+        to prevent change from taking place, if necessary.
+    @event{EVT_PG_HIGHLIGHTED(id, func)}
+        Respond to @c wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
+        moves over a property. Event's property is @NULL if hovered area does
+        not belong to any property.
+    @event{EVT_PG_RIGHT_CLICK(id, func)}
+        Respond to @c wxEVT_PG_RIGHT_CLICK event, which occurs when property is
+        clicked on with right mouse button.
+    @event{EVT_PG_DOUBLE_CLICK(id, func)}
+        Respond to @c wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
+        double-clicked on with left mouse button.
+    @event{EVT_PG_ITEM_COLLAPSED(id, func)}
+        Respond to @c wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
+        a property or category.
+    @event{EVT_PG_ITEM_EXPANDED(id, func)}
+        Respond to @c wxEVT_PG_ITEM_EXPANDED event, generated when user expands
+        a property or category.
+    @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
+        Respond to @c wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
+        about to begin editing a property label. You can veto this event to
+        prevent the action.
+    @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
+        Respond to @c wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
+        about to end editing of a property label. You can veto this event to
+        prevent the action.
+    @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
+        Respond to @c wxEVT_PG_COL_BEGIN_DRAG event, generated when user
+        starts resizing a column - can be vetoed.
+    @event{EVT_PG_COL_DRAGGING,(id, func)}
+        Respond to @c wxEVT_PG_COL_DRAGGING, event, generated when a
+        column resize by user is in progress. This event is also generated
+        when user double-clicks the splitter in order to recenter
+        it.
+    @event{EVT_PG_COL_END_DRAG(id, func)}
+        Respond to @c wxEVT_PG_COL_END_DRAG event, generated after column
+        resize by user has finished.
+    @endEventTable
 
     @library{wxpropgrid}
     @category{propgrid}
@@ -1340,7 +1348,7 @@ public:
     ~wxPropertyGridEvent();
 
     /**
-        Returns true if you can veto the action that the event is signaling.
+        Returns @true if you can veto the action that the event is signaling.
     */
     bool CanVeto() const;
 
@@ -1395,7 +1403,7 @@ public:
                  accessible even after the associated property or
                  the property grid has been deleted.
     */
-    wxVariant GetPropertyValue() const
+    wxVariant GetPropertyValue() const;
 
     /**
         Returns value of the associated property.
@@ -1420,14 +1428,14 @@ public:
 
     /**
         Sets custom failure message for this time only. Only applies if
-        wxPG_VFB_SHOW_MESSAGE is set in validation failure flags.
+        ::wxPG_VFB_SHOW_MESSAGE is set in validation failure flags.
     */
     void SetValidationFailureMessage( const wxString& message );
 
     /**
         Call this from your event handler to veto action that the event is
         signaling. You can only veto a shutdown if wxPropertyGridEvent::CanVeto()
-        returns true.
+        returns @true.
 
         @remarks Currently only @c wxEVT_PG_CHANGING supports vetoing.
     */
@@ -1480,8 +1488,21 @@ public:
 
     /**
         Appends a new property under bottommost parent.
+
         @param propClass
-        Property class as string.
+            Property class as string.
+
+        @param propLabel
+            Property label.
+
+        @param propName
+            Property name.
+
+        @param propValue
+            Property value.
+
+        @param pChoices
+            Set of choices for the property (optional).
     */
     wxPGProperty* Add( const wxString& propClass,
                        const wxString& propLabel,
@@ -1499,9 +1520,16 @@ public:
 
     /**
         Adds attribute to the bottommost property.
+
+        @param name
+            Attribute name.
+
         @param type
-        Allowed values: "string", (same as string), "int", "bool". Empty string
-        mean autodetect.
+            Allowed values: @c "string", (same as string), @c "int", @c "bool".
+            Empty string means autodetect.
+
+        @param value
+            Attribute value.
     */
     bool AddAttribute( const wxString& name,
                        const wxString& type,

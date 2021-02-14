@@ -41,6 +41,11 @@ union wxAnyValueBuffer
 
     void*   m_ptr;
     wxByte  m_buffer[WX_ANY_VALUE_BUFFER_SIZE];
+
+    wxAnyValueBuffer()
+    {
+        m_ptr = NULL;
+    }
 };
 
 //
@@ -231,8 +236,8 @@ public:
     {
     public:
         DataHolder(const T2& value)
+            : m_value(value)
         {
-            m_value = value;
         }
         virtual ~DataHolder() { }
 
@@ -499,8 +504,10 @@ extern WXDLLIMPEXP_BASE bool wxAnyConvertString(const wxString& value,
                                                 wxAnyValueBuffer& dst);
 
 WX_ANY_DEFINE_CONVERTIBLE_TYPE_BASE(wxString, wxString, wxAnyConvertString)
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 WX_ANY_DEFINE_CONVERTIBLE_TYPE(const char*, ConstCharPtr,
                                wxAnyConvertString, wxString)
+#endif
 WX_ANY_DEFINE_CONVERTIBLE_TYPE(const wchar_t*, ConstWchar_tPtr,
                                wxAnyConvertString, wxString)
 
@@ -752,11 +759,13 @@ public:
     }
 
     // These two constructors are needed to deal with string literals
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxAny(const char* value)
     {
         m_type = wxAnyValueTypeImpl<const char*>::sm_instance.get();
         wxAnyValueTypeImpl<const char*>::SetValue(value, m_buffer);
     }
+#endif
     wxAny(const wchar_t* value)
     {
         m_type = wxAnyValueTypeImpl<const wchar_t*>::sm_instance.get();
@@ -860,11 +869,13 @@ public:
 #endif
 
     // These two operators are needed to deal with string literals
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxAny& operator=(const char* value)
     {
         Assign(value);
         return *this;
     }
+#endif
     wxAny& operator=(const wchar_t* value)
     {
         Assign(value);
@@ -883,8 +894,10 @@ public:
         return value == value2;
     }
 
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     bool operator==(const char* value) const
         { return (*this) == wxString(value); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     bool operator==(const wchar_t* value) const
         { return (*this) == wxString(value); }
 
@@ -1012,6 +1025,13 @@ public:
 #endif
 
 private:
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+    wxAny(const char*);  // Disabled
+    wxAny& operator=(const char *&value); // Disabled
+    wxAny& operator=(const char value[]); // Disabled
+    wxAny& operator==(const char *value); // Disabled
+#endif
+
     // Assignment functions
     void AssignAny(const wxAny& any)
     {

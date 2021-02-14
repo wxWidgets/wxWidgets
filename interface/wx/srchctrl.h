@@ -11,6 +11,9 @@
     A search control is a composite control with a search button, a text
     control, and a cancel button.
 
+    This control is implemented natively under macOS and GTK 3.6 or later and
+    generically for all the other platforms.
+
     @beginStyleTable
     @style{wxTE_PROCESS_TAB}
            The control will receive @c wxEVT_CHAR events for TAB pressed -
@@ -100,7 +103,7 @@ public:
     */
     virtual ~wxSearchCtrl();
 
-    
+
     bool Create(wxWindow* parent, wxWindowID id,
                  const wxString& value = wxEmptyString,
                  const wxPoint& pos = wxDefaultPosition,
@@ -126,7 +129,7 @@ public:
        Returns the cancel button's visibility state.
     */
     virtual bool IsCancelButtonVisible() const;
-    
+
     /**
         Sets the search control's menu object.
         If there is already a menu associated with the search control it is deleted.
@@ -138,13 +141,21 @@ public:
 
     /**
         Shows or hides the cancel button.
+
+        Note that this function does nothing in the native GTK version of the
+        control: "Cancel" button is always shown automatically if the control
+        is not empty and hidden if it is empty.
     */
     virtual void ShowCancelButton(bool show);
 
     /**
         Sets the search button visibility value on the search control.
+
         If there is a menu attached, the search button will be visible regardless of
         the search button visibility value.
+
+        Note that this function does nothing in the native GTK version of the
+        control: "Search" button is always shown there.
     */
     virtual void ShowSearchButton(bool show);
 

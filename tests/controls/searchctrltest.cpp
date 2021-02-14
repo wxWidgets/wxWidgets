@@ -10,15 +10,14 @@
 
 #if wxUSE_SEARCHCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/srchctrl.h"
+
+#include "testwindow.h"
 
 class SearchCtrlTestCase
 {
@@ -45,7 +44,7 @@ protected:
 SEARCH_CTRL_TEST_CASE("wxSearchCtrl::Focus", "[wxSearchCtrl][focus]")
 {
     m_search->SetFocus();
-    CHECK( m_search->HasFocus() );
+    CHECK_FOCUS_IS( m_search );
 }
 #endif // !__WXOSX__
 

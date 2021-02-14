@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TREECTRL
 
@@ -790,7 +787,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     {
         // The Vista+ system theme uses rotating ("twist") buttons, so we map
         // this style to it.
-        EnableSystemTheme();
+        EnableSystemThemeByDefault();
     }
 
     return true;
@@ -1253,7 +1250,9 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
         attr = it->second;
     }
 
-    attr->SetFont(font);
+    wxFont f = font;
+    f.WXAdjustToPPI(GetDPI());
+    attr->SetFont(f);
 
     // Reset the item's text to ensure that the bounding rect will be adjusted
     // for the new font.
@@ -1724,6 +1723,7 @@ void wxTreeCtrl::DeleteAllItems()
     TreeItemUnlocker unlock_all;
 
     // invalidate all the items we store as they're going to become invalid
+    m_htEnsureVisibleOnThaw =
     m_htSelStart =
     m_htClickedItem = wxTreeItemId();
 
@@ -1996,6 +1996,16 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     wxCHECK_RET( !IsHiddenRoot(item), wxT("can't show hidden root item") );
 
+    if ( IsFrozen() )
+    {
+        // We can't ensure that the item is visible if it involves scrolling
+        // while we're frozen, as we disable scrolling in this case. So just
+        // remember that item we were supposed to make visible and actually do
+        // it when the control is thawed.
+        m_htEnsureVisibleOnThaw = item;
+        return;
+    }
+
     // no error return
     (void)TreeView_EnsureVisible(GetHwnd(), HITEM(item));
 }
@@ -2208,7 +2218,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
         tvSort.hParent = HITEM(item);
         tvSort.lpfnCompare = wxTreeSortHelper::Compare;
         tvSort.lParam = (LPARAM)this;
-        if ( !TreeView_SortChildrenCB(GetHwnd(), &tvSort, 0 /* reserved */) )
+        if ( !TreeView_SortChildrenCB(GetHwnd(), &tvSort, wxRESERVED_PARAM) )
             wxLogLastError(wxS("TreeView_SortChildrenCB()"));
     }
 }
@@ -2257,6 +2267,17 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
 
     // command processed
     return true;
+}
+
+void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxTreeCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    for ( wxMapTreeAttr::const_iterator it = m_attrs.begin(); it != m_attrs.end(); ++it )
+    {
+        if ( it->second->HasFont() )
+            SetItemFont(it->first, it->second->GetFont());
+    }
 }
 
 bool wxTreeCtrl::MSWIsOnItem(unsigned flags) const
@@ -3007,8 +3028,8 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     int cx = abs(m_ptClick.x - x);
                     int cy = abs(m_ptClick.y - y);
 
-                    if ( cx > ::GetSystemMetrics(SM_CXDRAG) ||
-                            cy > ::GetSystemMetrics(SM_CYDRAG) )
+                    if ( cx > wxGetSystemMetrics(SM_CXDRAG, this) ||
+                            cy > wxGetSystemMetrics(SM_CYDRAG, this) )
                     {
                         NM_TREEVIEW tv;
                         wxZeroMemory(tv);
@@ -3114,8 +3135,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         processed = true;
                     }
                 }
-
-                // fall through
+                wxFALLTHROUGH;
 
             case WM_RBUTTONUP:
 #if wxUSE_DRAGIMAGE
@@ -3288,7 +3308,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     {
         case TVN_BEGINDRAG:
             eventType = wxEVT_TREE_BEGIN_DRAG;
-            // fall through
+            wxFALLTHROUGH;
 
         case TVN_BEGINRDRAG:
             {
@@ -3379,7 +3399,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case TVN_GETDISPINFO:
             eventType = wxEVT_TREE_GET_INFO;
-            // fall through
+            wxFALLTHROUGH;
 
         case TVN_SETDISPINFO:
             {
@@ -3403,7 +3423,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     default:
                         wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND message"), tv->action);
-                        // fall through
+                        wxFALLTHROUGH;
 
                     case TVE_EXPAND:
                         what = IDX_EXPAND;
@@ -3471,7 +3491,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_TREE_SEL_CHANGED;
             }
-            // fall through
+            wxFALLTHROUGH;
 
         case TVN_SELCHANGINGA:
         case TVN_SELCHANGINGW:
@@ -3690,7 +3710,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     break;
                 }
             }
-            // fall through
+            wxFALLTHROUGH;
 
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
@@ -3954,6 +3974,13 @@ void wxTreeCtrl::DoThaw()
     wxMSWWinStyleUpdater(GetHwnd()).TurnOff(TVS_NOSCROLL);
 
     wxTreeCtrlBase::DoThaw();
+
+    if ( !IsFrozen() && m_htEnsureVisibleOnThaw.IsOk() )
+    {
+        // Really do the job of EnsureVisible() now that we can.
+        EnsureVisible(m_htEnsureVisibleOnThaw);
+        m_htEnsureVisibleOnThaw.Unset();
+    }
 }
 
 #endif // wxUSE_TREECTRL

@@ -20,11 +20,11 @@
 
 #include "wx/event.h"
 
-class WXDLLIMPEXP_FWD_ADV wxQueryLayoutInfoEvent;
-class WXDLLIMPEXP_FWD_ADV wxCalculateLayoutEvent;
+class WXDLLIMPEXP_FWD_CORE wxQueryLayoutInfoEvent;
+class WXDLLIMPEXP_FWD_CORE wxCalculateLayoutEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALCULATE_LAYOUT,  wxCalculateLayoutEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALCULATE_LAYOUT,  wxCalculateLayoutEvent );
 
 enum wxLayoutOrientation
 {
@@ -57,7 +57,7 @@ enum wxLayoutAlignment
  * orientation and size.
  */
 
-class WXDLLIMPEXP_ADV wxQueryLayoutInfoEvent: public wxEvent
+class WXDLLIMPEXP_CORE wxQueryLayoutInfoEvent: public wxEvent
 {
 public:
     wxQueryLayoutInfoEvent(wxWindowID id = 0)
@@ -112,7 +112,7 @@ typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEv
  * This event is used to take a bite out of the available client area.
  */
 
-class WXDLLIMPEXP_ADV wxCalculateLayoutEvent: public wxEvent
+class WXDLLIMPEXP_CORE wxCalculateLayoutEvent: public wxEvent
 {
 public:
     wxCalculateLayoutEvent(wxWindowID id = 0)
@@ -152,7 +152,7 @@ typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEv
 // This is window that can remember alignment/orientation, does its own layout,
 // and can provide sashes too. Useful for implementing docked windows with sashes in
 // an IDE-style interface.
-class WXDLLIMPEXP_ADV wxSashLayoutWindow: public wxSashWindow
+class WXDLLIMPEXP_CORE wxSashLayoutWindow: public wxSashWindow
 {
 public:
     wxSashLayoutWindow()
@@ -205,7 +205,7 @@ class WXDLLIMPEXP_FWD_CORE wxMDIParentFrame;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 // This class implements the layout algorithm
-class WXDLLIMPEXP_ADV wxLayoutAlgorithm: public wxObject
+class WXDLLIMPEXP_CORE wxLayoutAlgorithm: public wxObject
 {
 public:
     wxLayoutAlgorithm() {}

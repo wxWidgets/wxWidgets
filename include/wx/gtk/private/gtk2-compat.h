@@ -95,6 +95,20 @@ static inline gdouble wx_gtk_adjustment_get_upper(GtkAdjustment* adjustment)
 }
 #define gtk_adjustment_get_upper wx_gtk_adjustment_get_upper
 
+static inline void wx_gtk_adjustment_set_step_increment(GtkAdjustment* adjustment, gdouble step_increment)
+{
+    adjustment->step_increment = step_increment;
+    gtk_adjustment_changed(adjustment);
+}
+#define gtk_adjustment_set_step_increment wx_gtk_adjustment_set_step_increment
+
+static inline void wx_gtk_adjustment_set_page_increment(GtkAdjustment* adjustment, gdouble page_increment)
+{
+    adjustment->page_increment = page_increment;
+    gtk_adjustment_changed(adjustment);
+}
+#define gtk_adjustment_set_page_increment wx_gtk_adjustment_set_page_increment
+
 static inline void wx_gtk_adjustment_set_page_size(GtkAdjustment* adjustment, gdouble page_size)
 {
     adjustment->page_size = page_size;

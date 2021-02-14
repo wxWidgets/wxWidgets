@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FINDREPLDLG
 
@@ -347,7 +344,9 @@ bool wxFindReplaceDialog::Create(wxWindow *parent,
 {
     m_windowStyle = flags;
     m_FindReplaceData = data;
-    m_parent = parent;
+
+    if ( parent )
+        parent->AddChild(this);
 
     SetTitle(title);
 

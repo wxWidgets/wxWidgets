@@ -2,31 +2,31 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 22 May 2018                                                         *
+# Date : 4 March 2020                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
+CC_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
+CC_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2)/float=ieee/name=(as_is,short)/ieee=denorm
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)
 .else
 CXX_DEFINE =
@@ -46,7 +46,6 @@ CC_DEFINE =
 OBJECTS = appunix.obj,apptraits.obj,\
 		dialup.obj,\
 		dir.obj,\
-		displayx11.obj,\
 		dlunix.obj,\
 		fontenum.obj,\
 		fontutil.obj,\
@@ -63,6 +62,9 @@ OBJECTS = appunix.obj,apptraits.obj,\
 		taskbarx11.obj,\
 		timerunx.obj,evtloopunix.obj,fdiounix.obj,uiactionx11.obj,\
 		mediactrl.obj,wakeuppipe.obj,mimetype.obj
+
+OBJECTS2=displayx11.obj
+
 
 SOURCES = appunix.cpp,apptraits.cpp,\
 		dialup.cpp,\
@@ -89,21 +91,28 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 .ifdef __WXMOTIF__
 	library [--.lib]libwx_motif.olb $(OBJECTS)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
+	library [--.lib]libwx_motif.olb $(OBJECTS2)
 .else
 .ifdef __WXGTK__
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
+	library [--.lib]libwx_gtk.olb $(OBJECTS2)
 .else
 .ifdef __WXGTK2__
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
 .else
 .ifdef __WXX11__
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS2)
 .endif
 .endif
 .endif
 .endif
 
 $(OBJECTS) : [--.include.wx]setup.h
+$(OBJECTS2) : [--.include.wx]setup.h
 
 appunix.obj : appunix.cpp
 apptraits.obj : apptraits.cpp

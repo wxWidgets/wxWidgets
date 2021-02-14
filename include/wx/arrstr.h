@@ -42,11 +42,29 @@ wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2)
     return cmp ? cmp : s1.Cmp(s2);
 }
 
+
 inline int wxCMPFUNC_CONV
 wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
 {
     return wxDictionaryStringSortAscending(s2, s1);
 }
+
+WXDLLIMPEXP_BASE
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2);
+
+WXDLLIMPEXP_BASE
+int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
+
+inline int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
+{
+    return wxCmpNatural(s1, s2);
+}
+
+inline int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
+{
+    return wxCmpNatural(s2, s1);
+}
+
 
 #if wxUSE_STD_CONTAINERS
 
@@ -62,7 +80,6 @@ public:
                                                   const wxString& second);
 
     wxArrayString() { }
-    wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
     wxArrayString(size_t sz, const char** a);
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
@@ -104,9 +121,6 @@ class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
 {
 public:
     wxSortedArrayString() : wxSortedArrayStringBase(wxStringSortAscending)
-        { }
-    wxSortedArrayString(const wxSortedArrayString& array)
-        : wxSortedArrayStringBase(array)
         { }
     wxSortedArrayString(const wxArrayString& src)
         : wxSortedArrayStringBase(wxStringSortAscending)

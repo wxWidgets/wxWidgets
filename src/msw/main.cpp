@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
@@ -42,12 +39,6 @@
     #include "wx/datetime.h"
     #include "wx/msw/crashrpt.h"
 #endif // wxUSE_ON_FATAL_EXCEPTION
-
-#ifdef __BORLANDC__
-    // BC++ has to be special: its run-time expects the DLL entry point to be
-    // named DllEntryPoint instead of the (more) standard DllMain
-    #define DllMain DllEntryPoint
-#endif // __BORLANDC__
 
 // defined in common/init.cpp
 extern int wxEntryReal(int& argc, wxChar **argv);

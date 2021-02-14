@@ -192,9 +192,6 @@ void wxMicroSleep(unsigned long microseconds)
     #endif // Sun
 
     usleep(microseconds);
-#elif defined(HAVE_SLEEP)
-    // under BeOS sleep() takes seconds (what about other platforms, if any?)
-    sleep(microseconds * 1000000);
 #else // !sleep function
     #error "usleep() or nanosleep() function required for wxMicroSleep"
 #endif // sleep function
@@ -462,7 +459,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-bool wxMacLaunch(const char* const* argv);
+bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
 #endif
 
 long wxExecute(const wxString& command, int flags, wxProcess *process,
@@ -535,25 +532,25 @@ int BlockUntilChildExit(wxExecuteData& execData)
         stdoutHandler.reset(new wxExecuteFDIOHandler
                                 (
                                     dispatcher,
-                                    execData.fdOut,
-                                    execData.bufOut
+                                    execData.m_fdOut,
+                                    execData.m_bufOut
                                 ));
         stderrHandler.reset(new wxExecuteFDIOHandler
                                 (
                                     dispatcher,
-                                    execData.fdErr,
-                                    execData.bufErr
+                                    execData.m_fdErr,
+                                    execData.m_bufErr
                                 ));
     }
 #endif // wxUSE_STREAMS
 
     // And dispatch until the PID is reset from wxExecuteData::OnExit().
-    while ( execData.pid )
+    while ( execData.m_pid )
     {
         dispatcher.Dispatch();
     }
 
-    return execData.exitcode;
+    return execData.m_exitcode;
 #else // !wxUSE_SELECT_DISPATCHER
     wxFAIL_MSG( wxS("Can't block until child exit without wxSelectDispatcher") );
 
@@ -585,15 +582,15 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     wxASSERT_MSG( wxThread::IsMain(),
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
-
+    pid_t pid;
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-    // wxMacLaunch() only executes app bundles and only does it asynchronously.
+    pid = -1;
+    // wxCocoaLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
     // through to the regular code for non app bundles.
-    if ( !(flags & wxEXEC_SYNC) && wxMacLaunch(argv) )
+    if ( !(flags & wxEXEC_SYNC) && wxCocoaLaunch(argv, pid) )
     {
-        // we don't have any PID to return so just make up something non null
-        return -1;
+        return pid;
     }
 #endif // __DARWIN__
 
@@ -601,8 +598,8 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     wxScopedPtr<wxExecuteData> execDataPtr(new wxExecuteData);
     wxExecuteData& execData = *execDataPtr;
 
-    execData.flags = flags;
-    execData.process = process;
+    execData.m_flags = flags;
+    execData.m_process = process;
 
     // create pipes for inter process communication
     wxPipe pipeIn,      // stdin
@@ -641,9 +638,9 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     //     But on OpenVMS we do not have fork so we have to use vfork and
     //     cross our fingers that it works.
 #ifdef __VMS
-   pid_t pid = vfork();
+   pid = vfork();
 #else
-   pid_t pid = fork();
+   pid = fork();
 #endif
    if ( pid == -1 )     // error?
     {
@@ -805,11 +802,11 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
 
             if ( flags & wxEXEC_SYNC )
             {
-                execData.bufOut.Init(outStream);
-                execData.bufErr.Init(errStream);
+                execData.m_bufOut.Init(outStream);
+                execData.m_bufErr.Init(errStream);
 
-                execData.fdOut = fdOut;
-                execData.fdErr = fdErr;
+                execData.m_fdOut = fdOut;
+                execData.m_fdErr = fdErr;
             }
         }
 #endif // HAS_PIPE_STREAMS
@@ -1078,18 +1075,28 @@ bool wxGetUserName(wxChar *buf, int sz)
 
 bool wxIsPlatform64Bit()
 {
-    const wxString machine = wxGetCommandOutput(wxT("uname -m"));
+#if SIZEOF_VOID_P == 8
+    (void)wxGetCommandOutput;
+    return true;  // 64-bit programs run only on 64-bit platforms
+#else
+    const wxString machine = wxGetCpuArchitectureName();
 
     // the test for "64" is obviously not 100% reliable but seems to work fine
     // in practice
     return machine.Contains(wxT("64")) ||
                 machine.Contains(wxT("alpha"));
+#endif
+}
+
+wxString wxGetCpuArchitectureName()
+{
+    return wxGetCommandOutput(wxT("uname -m"));
 }
 
 #ifdef __LINUX__
 
 static bool
-wxGetValueFromLSBRelease(wxString arg, const wxString& lhs, wxString* rhs)
+wxGetValueFromLSBRelease(const wxString& arg, const wxString& lhs, wxString* rhs)
 {
     // lsb_release seems to just read a global file which is always in UTF-8
     // and hence its output is always in UTF-8 as well, regardless of the
@@ -1120,7 +1127,7 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 }
 #endif // __LINUX__
 
-// these functions are in src/osx/utilsexc_base.cpp for wxMac
+// these functions are in src/osx/utils_base.mm for wxOSX.
 #ifndef __DARWIN__
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
@@ -1260,7 +1267,7 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
     wxStatfs_t fs;
-    if ( wxStatfs((char *)(const char*)path.fn_str(), &fs) != 0 )
+    if ( wxStatfs(const_cast<char*>(static_cast<const char*>(path.fn_str())), &fs) != 0 )
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 
@@ -1498,8 +1505,8 @@ wxAppTraits::RunLoopUntilChildExit(wxExecuteData& execData,
     // It is possible that wxExecuteData::OnExit() had already been called
     // and reset the PID to 0, in which case we don't need to do anything
     // at all.
-    if ( !execData.pid )
-        return execData.exitcode;
+    if ( !execData.m_pid )
+        return execData.m_exitcode;
 
 #if wxUSE_STREAMS
     // Monitor the child streams if necessary.
@@ -1510,24 +1517,24 @@ wxAppTraits::RunLoopUntilChildExit(wxExecuteData& execData,
     {
         stdoutHandler.reset(new wxExecuteEventLoopSourceHandler
                                 (
-                                    execData.fdOut, execData.bufOut
+                                    execData.m_fdOut, execData.m_bufOut
                                 ));
         stderrHandler.reset(new wxExecuteEventLoopSourceHandler
                                 (
-                                    execData.fdErr, execData.bufErr
+                                    execData.m_fdErr, execData.m_bufErr
                                 ));
     }
 #endif // wxUSE_STREAMS
 
     // Store the event loop in the data associated with the child
     // process so that it could exit the loop when the child exits.
-    execData.syncEventLoop = &loop;
+    execData.m_syncEventLoop = &loop;
 
     // And run it.
     loop.Run();
 
     // The exit code will have been set when the child termination was detected.
-    return execData.exitcode;
+    return execData.m_exitcode;
 }
 
 // ----------------------------------------------------------------------------
@@ -1626,7 +1633,7 @@ void wxExecuteData::OnSomeChildExited(int WXUNUSED(sig))
     }
 }
 
-void wxExecuteData::OnStart(int pid_)
+void wxExecuteData::OnStart(int pid)
 {
     wxCHECK_RET( wxTheApp,
                  wxS("Ensure wxTheApp is set before calling wxExecute()") );
@@ -1640,21 +1647,21 @@ void wxExecuteData::OnStart(int pid_)
 
 
     // Remember the child PID to be able to wait for it later.
-    pid = pid_;
+    m_pid = pid;
 
     // Also save it in wxProcess where it will be accessible to the user code.
-    if ( process )
-        process->SetPid(pid);
+    if ( m_process )
+        m_process->SetPid(m_pid);
 
     // Add this object itself to the list of child processes so that
     // we can check for its termination the next time we get SIGCHLD.
-    ms_childProcesses[pid] = this;
+    ms_childProcesses[m_pid] = this;
 
     // However, if the child exited before we finished setting up above,
     // we may have already missed its SIGCHLD.  So we also do an explicit
     // check here before returning.
     int exitcode;
-    if ( CheckForChildExit(pid, &exitcode) )
+    if ( CheckForChildExit(m_pid, &exitcode) )
     {
         // Handle its termination if it did.
         // This call will implicitly remove it from ms_childProcesses
@@ -1663,18 +1670,18 @@ void wxExecuteData::OnStart(int pid_)
     }
 }
 
-void wxExecuteData::OnExit(int exitcode_)
+void wxExecuteData::OnExit(int exitcode)
 {
     // Remove this process from the hash list of child processes that are
     // still open as soon as possible to ensure we don't process it again even
     // if another SIGCHLD happens.
-    if ( !ms_childProcesses.erase(pid) )
+    if ( !ms_childProcesses.erase(m_pid) )
     {
-        wxFAIL_MSG(wxString::Format(wxS("Data for PID %d not in the list?"), pid));
+        wxFAIL_MSG(wxString::Format(wxS("Data for PID %d not in the list?"), m_pid));
     }
 
 
-    exitcode = exitcode_;
+    m_exitcode = exitcode;
 
 #if wxUSE_STREAMS
     if ( IsRedirected() )
@@ -1682,16 +1689,16 @@ void wxExecuteData::OnExit(int exitcode_)
         // Read the remaining data in a blocking way: this is fine because the
         // child has already exited and hence all the data must be already
         // available in the streams buffers.
-        bufOut.ReadAll();
-        bufErr.ReadAll();
+        m_bufOut.ReadAll();
+        m_bufErr.ReadAll();
     }
 #endif // wxUSE_STREAMS
 
     // Notify user about termination if required
-    if ( !(flags & wxEXEC_SYNC) )
+    if ( !(m_flags & wxEXEC_SYNC) )
     {
-        if ( process )
-            process->OnTerminate(pid, exitcode);
+        if ( m_process )
+            m_process->OnTerminate(m_pid, m_exitcode);
 
         // in case of asynchronous execution we don't need this object any more
         // after the child terminates
@@ -1700,10 +1707,10 @@ void wxExecuteData::OnExit(int exitcode_)
     else // sync execution
     {
         // let wxExecute() know that the process has terminated
-        pid = 0;
+        m_pid = 0;
 
         // Stop the event loop for synchronous wxExecute() if we're running one.
-        if ( syncEventLoop )
-            syncEventLoop->ScheduleExit();
+        if ( m_syncEventLoop )
+            m_syncEventLoop->ScheduleExit();
     }
 }

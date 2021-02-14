@@ -156,6 +156,9 @@ void wxButtonCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &b
     {
         switch( size )
         {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+            case NSControlSizeLarge:
+#endif
             case NSRegularControlSize:
                 left = right = 6;
                 top = 4;
@@ -187,9 +190,18 @@ void wxButtonCocoaImpl::SetAcceleratorFromLabel(const wxString& label)
     {
         wxString accelstring(label[accelPos + 1]); // Skip '&' itself
         accelstring.MakeLower();
-        wxCFStringRef cfText(accelstring);
-        [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
-        [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
+        // Avoid Cmd+C closing dialog on Mac.
+        if (accelstring == "c" && GetWXPeer()->GetId() == wxID_CANCEL)
+        {
+            [GetNSButton() setKeyEquivalent:@""];
+        }
+        else
+        {
+            wxString cancelLabel(_("&Cancel"));
+            wxCFStringRef cfText(accelstring);
+            [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
+            [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
+        }
     }
     else
     {

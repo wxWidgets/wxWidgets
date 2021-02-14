@@ -8,14 +8,6 @@
 #############################################################################
 
 add_subdirectory(base)
-
-# Build GUI tests
-if(wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
-
 add_subdirectory(drawing)
 add_subdirectory(gui)
-
-endif()
-
-# Propagate variable(s) to parent scope
-set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} PARENT_SCOPE)
+add_subdirectory(headers)

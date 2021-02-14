@@ -28,7 +28,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxCAPTION | wxRESIZE_BORDER,
-            const wxString& name = wxFrameNameStr)
+            const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Create(parent, id, title, pos, size, style, name);
     }
@@ -40,7 +40,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxCAPTION | wxRESIZE_BORDER,
-            const wxString& name = wxFrameNameStr);
+            const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual void SetTitle( const wxString &title ) wxOVERRIDE;
 
@@ -52,9 +52,10 @@ protected:
 
  // implementation
 public:
-    bool   m_isDragging;
-    int    m_oldX,m_oldY;
-    int    m_diffX,m_diffY;
+#ifndef __WXGTK4__
+    bool m_isDragMove;
+    wxSize m_dragOffset;
+#endif
     wxBitmap  m_closeButton;
     int m_miniEdge;
     int m_miniTitle;

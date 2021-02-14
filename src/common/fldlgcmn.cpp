@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
@@ -46,6 +43,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog);
 void wxFileDialogBase::Init()
 {
     m_filterIndex = 0;
+    m_currentlySelectedFilterIndex = wxNOT_FOUND;
     m_windowStyle = 0;
     m_extraControl = NULL;
     m_extraControlCreator = NULL;

@@ -15,9 +15,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/utils.h"
 #include "wx/process.h"
@@ -135,7 +132,7 @@ private:
             return wxExecuteReturnCode;
         }
 
-        void Notify()
+        void Notify() wxOVERRIDE
         {
             // Run wxExecute inside the event loop.
             wxExecuteReturnCode = wxExecute(command, flags, callback);
@@ -323,7 +320,7 @@ public:
     }
 
     // may be overridden to be notified about process termination
-    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
+    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) wxOVERRIDE
     {
         wxEventLoop::GetActive()->ScheduleExit();
     }
@@ -469,7 +466,7 @@ void ExecTestCase::TestOverlappedSyncExecute()
             StartOnce(10);
         }
 
-        virtual void Notify()
+        virtual void Notify() wxOVERRIDE
         {
             wxExecute(m_command, m_outputArray);
         }
@@ -516,3 +513,28 @@ void ExecTestCase::TestOverlappedSyncExecute()
     CPPUNIT_ASSERT_EQUAL( SLEEP_END_STRING, longSleepOutput.Last() );
 #endif // !__WINDOWS__
 }
+
+#ifdef __UNIX__
+
+// This test is disabled by default because it must be run in French locale,
+// i.e. with explicit LC_ALL=fr_FR.UTF-8 and only works with GNU ls, which
+// produces the expected output.
+TEST_CASE("wxExecute::RedirectUTF8", "[exec][unicode][.]")
+{
+    wxArrayString output;
+    REQUIRE( wxExecute("/bin/ls --version", output) == 0 );
+
+    for ( size_t n = 0; n < output.size(); ++n )
+    {
+        // It seems unlikely that this part of the output will change for GNU
+        // ls, so check for its presence as a sign that the program output was
+        // decoded correctly.
+        if ( output[n].find(wxString::FromUTF8("vous \xc3\xaates libre")) != wxString::npos )
+            return;
+    }
+
+    INFO("output was:\n" << wxJoin(output, '\n'));
+    FAIL("Expected output fragment not found.");
+}
+
+#endif // __UNIX__

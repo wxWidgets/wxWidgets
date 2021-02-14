@@ -111,12 +111,7 @@ public:
 
     void Shrink()
     {
-#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
-        this->shrink_to_fit();
-#else
-        base_vec tmp(*this);
-        this->swap(tmp);
-#endif
+        wxShrinkToFit(*this);
     }
 
     size_t GetCount() const { return this->size(); }
@@ -220,9 +215,11 @@ public:
 //    cannot handle types with size greater than pointer because of sorting
 // ----------------------------------------------------------------------------
 
-#define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp)       \
+// Note that "classdecl" here is intentionally not used because this class has
+// only inline methods and so never needs to be exported from a DLL.
+#define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classdecl)      \
     typedef wxBaseSortedArray<T> wxBaseSortedArrayFor##name;                  \
-    classexp name : public wxBaseSortedArrayFor##name                         \
+    class name : public wxBaseSortedArrayFor##name                            \
     {                                                                         \
     public:                                                                   \
         name(wxBaseSortedArrayFor##name::SCMPFUNC fn defcomp)                 \
@@ -237,13 +234,6 @@ public:
     typedef typename Sorter::CMPFUNC SCMPFUNC;
 
     explicit wxBaseSortedArray(SCMPFUNC fn) : m_fnCompare(fn) { }
-
-    wxBaseSortedArray& operator=(const wxBaseSortedArray& src)
-    {
-        wxBaseArray<T, Sorter>::operator=(src);
-        m_fnCompare = src.m_fnCompare;
-        return *this;
-    }
 
     size_t IndexForInsert(T item) const
     {
@@ -401,7 +391,7 @@ public:
 
     void Insert(const T* pItem, size_t uiIndex)
     {
-        base::insert(this->begin() + uiIndex, (T*)pItem);
+        base::insert(this->begin() + uiIndex, const_cast<T*>(pItem));
     }
 
     void Empty() { DoEmpty(); base::clear(); }
@@ -659,9 +649,6 @@ private:
         wxBaseObjectArrayFor##name;                                           \
     classdecl name : public wxBaseObjectArrayFor##name                        \
     {                                                                         \
-    public:                                                                   \
-        name() : wxBaseObjectArrayFor##name() { }                             \
-        name(const name& src) : wxBaseObjectArrayFor##name(src) { }           \
     }
 
 #define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode) \

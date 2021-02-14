@@ -24,6 +24,7 @@
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/stylecontext.h"
+#include "wx/gtk/private/value.h"
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
@@ -209,8 +210,9 @@ private:
 // wxGtkStyleContext
 //-----------------------------------------------------------------------------
 
-wxGtkStyleContext::wxGtkStyleContext()
+wxGtkStyleContext::wxGtkStyleContext(double scale)
     : m_path(gtk_widget_path_new())
+    , m_scale(int(scale))
 {
     m_context = NULL;
 }
@@ -233,6 +235,10 @@ wxGtkStyleContext& wxGtkStyleContext::Add(GType type, const char* objectName, ..
     va_end(args);
 
     GtkStyleContext* sc = gtk_style_context_new();
+#if GTK_CHECK_VERSION(3,10,0)
+    if (gtk_check_version(3,10,0) == NULL)
+        gtk_style_context_set_scale(sc, m_scale);
+#endif
     gtk_style_context_set_path(sc, m_path);
     if (m_context)
     {
@@ -399,7 +405,7 @@ void wxGtkStyleContext::Bg(wxColour& color, int state) const
                 const int i = stride * (cairo_image_surface_get_height(surf) / 2);
                 const unsigned* p = reinterpret_cast<const unsigned*>(data + i);
                 const unsigned pixel = *p;
-                guchar r, g, b, a = 0xff;
+                guchar r = 0, g = 0, b = 0, a = 0xff;
                 switch (cairo_image_surface_get_format(surf))
                 {
                 case CAIRO_FORMAT_ARGB32:
@@ -557,15 +563,13 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         else
         {
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-            GValue value = G_VALUE_INIT;
-            g_value_init(&value, GDK_TYPE_COLOR);
-            gtk_style_context_get_style_property(sc, "link-color", &value);
-            GdkColor* link_color = static_cast<GdkColor*>(g_value_get_boxed(&value));
+            wxGtkValue value( GDK_TYPE_COLOR);
+            gtk_style_context_get_style_property(sc, "link-color", value);
+            GdkColor* link_color = static_cast<GdkColor*>(g_value_get_boxed(value));
             GdkColor gdkColor = { 0, 0, 0, 0xeeee };
             if (link_color)
                 gdkColor = *link_color;
             color = wxColour(gdkColor);
-            g_value_unset(&value);
             wxGCC_WARNING_RESTORE()
         }
 #endif
@@ -743,8 +747,20 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
-            // TODO
-            color = *wxBLACK;
+            {
+                GdkColor c = { 0, 0, 0, 0xeeee };
+                if (gtk_check_version(2,10,0) == NULL)
+                {
+                    GdkColor* linkColor = NULL;
+                    gtk_widget_style_get(ButtonWidget(), "link-color", &linkColor, NULL);
+                    if (linkColor)
+                    {
+                        c = *linkColor;
+                        gdk_color_free(linkColor);
+                    }
+                }
+                color = wxColour(c);
+            }
             break;
 
         case wxSYS_COLOUR_MAX:
@@ -785,7 +801,13 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                     g_signal_connect(gtk_settings_get_default(), "notify::gtk-font-name",
                         G_CALLBACK(notify_gtk_font_name), NULL);
                 }
-                wxGtkStyleContext sc;
+                ContainerWidget();
+                int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+                if (wx_is_at_least_gtk3(10))
+                    scale = gtk_widget_get_scale_factor(gs_tlw_parent);
+#endif
+                wxGtkStyleContext sc(scale);
                 sc.AddButton().AddLabel();
                 gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
                     GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
@@ -828,7 +850,7 @@ static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
                   : gtk_settings_get_default();
 }
 
-static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
+static int GetBorderWidth(wxSystemMetric index, const wxWindow* win)
 {
     if (win->m_wxwindow)
     {
@@ -869,7 +891,11 @@ static int GetScrollbarWidth()
     if (wx_is_at_least_gtk3(20))
     {
         GtkBorder border;
+#if GTK_CHECK_VERSION(3,10,0)
+        wxGtkStyleContext sc(gtk_widget_get_scale_factor(ScrollBarWidget()));
+#else
         wxGtkStyleContext sc;
+#endif
         sc.Add(GTK_TYPE_SCROLLBAR, "scrollbar", "scrollbar", "vertical", "right", NULL);
 
         gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
@@ -897,7 +923,7 @@ static int GetScrollbarWidth()
     return width;
 }
 
-int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
+int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win )
 {
     GdkWindow *window = NULL;
     if (win)
@@ -960,16 +986,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             return dclick;
 
         case wxSYS_CARET_ON_MSEC:
-            {
-                gint blink_time = -1;
-                g_object_get(GetSettingsForWindowScreen(window),
-                                "gtk-cursor-blink-time", &blink_time, NULL);
-                if (blink_time > 0)
-                    return blink_time / 2;
-
-                return -1;
-            }
-
         case wxSYS_CARET_OFF_MSEC:
             {
                 gboolean should_blink = true;

@@ -162,7 +162,7 @@ public:
     /**
         Sometimes the built-in logic for determining the online status may
         fail, so, in general, the user should be allowed to override it. This
-        function allows to forcefully set the online status - whatever our
+        function allows forcefully setting the online status - whatever our
         internal algorithm may think about it.
 
         @see IsOnline()

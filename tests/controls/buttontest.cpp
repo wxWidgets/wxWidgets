@@ -10,9 +10,6 @@
 
 #if wxUSE_BUTTON
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -98,12 +95,25 @@ void ButtonTestCase::Click()
 
 void ButtonTestCase::Disabled()
 {
-    EventCounter clicked(m_button, wxEVT_BUTTON);
-
     wxUIActionSimulator sim;
 
-    //In this test we disable the button and check events are not sent
-    m_button->Disable();
+    // In this test we disable the button and check events are not sent and we
+    // do it once by disabling the previously enabled button and once by
+    // creating the button in the disabled state.
+    SECTION("Disable after creation")
+    {
+        m_button->Disable();
+    }
+
+    SECTION("Create disabled")
+    {
+        delete m_button;
+        m_button = new wxButton();
+        m_button->Disable();
+        m_button->Create(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
+    }
+
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
     wxYield();
@@ -163,12 +173,17 @@ void ButtonTestCase::Bitmap()
     //We start with no bitmaps
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 
+    // Some bitmap, doesn't really matter which.
+    const wxBitmap bmp = wxArtProvider::GetBitmap(wxART_INFORMATION);
 
-    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION,
-                                               wxART_OTHER,
-                                               wxSize(32, 32)));
+    m_button->SetBitmap(bmp);
 
     CPPUNIT_ASSERT(m_button->GetBitmap().IsOk());
+
+    // Check that resetting the button label doesn't result in problems when
+    // updating the bitmap later, as it used to be the case in wxGTK (#18898).
+    m_button->SetLabel(wxString());
+    CHECK_NOTHROW( m_button->Disable() );
 }
 
 #endif //wxUSE_BUTTON

@@ -51,34 +51,49 @@ static wxMenuItem *GetMenuItemAt( const wxMenu *menu, size_t position )
         return NULL;
 }
 
+static void AddItemActionToGroup( const wxMenuItem *groupItem, QAction *itemAction )
+{
+    QAction *groupItemAction = groupItem->GetHandle();
+    QActionGroup *itemActionGroup = groupItemAction->actionGroup();
+    wxASSERT_MSG( itemActionGroup != NULL, "An action group should have been setup" );
+    itemActionGroup->addAction( itemAction );
+}
 
 static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previousItem,
-    const wxMenuItem *item, const wxMenuItem *successiveItem )
+    wxMenuItem *item, const wxMenuItem *successiveItem )
 {
     QMenu *qtMenu = menu->GetHandle();
     QAction *itemAction = item->GetHandle();
     switch ( item->GetKind() )
     {
         case wxITEM_RADIO:
-            // If the previous menu item is a radio item then add this item to the
+            // If a neighbouring menu item is a radio item then add this item to the
             // same action group, otherwise start a new group:
 
             if ( previousItem != NULL && previousItem->GetKind() == wxITEM_RADIO )
             {
-                QAction *previousItemAction = previousItem->GetHandle();
-                QActionGroup *previousItemActionGroup = previousItemAction->actionGroup();
-                wxASSERT_MSG( previousItemActionGroup != NULL, "An action group should have been setup" );
-                previousItemActionGroup->addAction( itemAction );
+                AddItemActionToGroup( previousItem, itemAction );
+            }
+            else if ( successiveItem != NULL && successiveItem->GetKind() == wxITEM_RADIO )
+            {
+                AddItemActionToGroup( successiveItem, itemAction );
             }
             else
             {
                 QActionGroup *actionGroup = new QActionGroup( qtMenu );
                 actionGroup->addAction( itemAction );
+                item->Check();
                 wxASSERT_MSG( itemAction->actionGroup() == actionGroup, "Must be the same action group" );
             }
             break;
         case wxITEM_NORMAL:
         {
+            // If the inserted action is a submenu, set the owner for the submenu.
+            if ( item->IsSubMenu() )
+            {
+                item->GetSubMenu()->GetHandle()->setParent(qtMenu, Qt::Popup);
+            }
+
             wxWindowID id = item->GetId();
             if ( wxIsStockID( id ) )
             {
@@ -100,10 +115,15 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             }
             break;
         }
+        default:
+            break;
     }
     // Insert the action into the actual menu:
     QAction *successiveItemAction = ( successiveItem != NULL ) ? successiveItem->GetHandle() : NULL;
     qtMenu->insertAction( successiveItemAction, itemAction );
+    // Menu items in Qt can be part of multiple menus, so a menu will not take ownership
+    // when one is added to it. Take it explicitly, otherwise it will create a memory leak.
+    itemAction->setParent(qtMenu);
 }
 
 wxMenuItem *wxMenu::DoAppend(wxMenuItem *item)
@@ -184,6 +204,8 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 
 static QMenu *SetTitle( wxMenu *menu, const wxString &title )
 {
+    menu->SetTitle(title);
+
     QMenu *qtMenu = menu->GetHandle();
     qtMenu->setTitle( wxQtConvertString( title ));
 
@@ -200,7 +222,10 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
 
     QMenu *qtMenu = SetTitle( menu, title );
     m_qtMenuBar->addMenu( qtMenu );
-    
+    // Menus in Qt can be reused as popups, so a menu bar will not take ownership when
+    // one is added to it. Take it explicitly, otherwise there will be a memory leak.
+    qtMenu->setParent(m_qtMenuBar, Qt::Popup); // must specify window type for correct display!
+
     return true;
 }
 
@@ -222,6 +247,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     QMenu *qtMenu = SetTitle( menu, title );
     QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
     m_qtMenuBar->insertMenu( qtAction, qtMenu );
+    qtMenu->setParent(m_qtMenuBar, Qt::Popup); // must specify window type for correct display!
 
     return true;
 }
@@ -241,6 +267,12 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
     qtAction->setEnabled( enable );
+}
+
+bool wxMenuBar::IsEnabledTop(size_t pos) const
+{
+    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    return qtAction->isEnabled();
 }
 
 

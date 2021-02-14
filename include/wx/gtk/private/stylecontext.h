@@ -15,7 +15,7 @@
 class wxGtkStyleContext
 {
 public:
-    wxGtkStyleContext();
+    explicit wxGtkStyleContext(double scale = 1);
     ~wxGtkStyleContext();
     wxGtkStyleContext& Add(GType type, const char* objectName, ...) G_GNUC_NULL_TERMINATED;
     wxGtkStyleContext& Add(const char* objectName);
@@ -28,7 +28,9 @@ public:
     wxGtkStyleContext& AddTextview(const char* child1 = NULL, const char* child2 = NULL);
     wxGtkStyleContext& AddTooltip();
     wxGtkStyleContext& AddTreeview();
+#if GTK_CHECK_VERSION(3,20,0)
     wxGtkStyleContext& AddTreeviewHeaderButton(int pos);
+#endif // GTK >= 3.20
     wxGtkStyleContext& AddWindow(const char* className2 = NULL);
     void Bg(wxColour& color, int state = GTK_STATE_FLAG_NORMAL) const;
     void Fg(wxColour& color, int state = GTK_STATE_FLAG_NORMAL) const;
@@ -38,6 +40,7 @@ public:
 private:
     GtkStyleContext* m_context;
     GtkWidgetPath* const m_path;
+    const int m_scale;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkStyleContext);
 };

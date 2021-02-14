@@ -27,13 +27,13 @@
 #define wxSPLASH_TIMEOUT            0x04
 #define wxSPLASH_NO_TIMEOUT         0x00
 
-class WXDLLIMPEXP_FWD_ADV wxSplashScreenWindow;
+class WXDLLIMPEXP_FWD_CORE wxSplashScreenWindow;
 
 /*
  * wxSplashScreen
  */
 
-class WXDLLIMPEXP_ADV wxSplashScreen: public wxFrame,
+class WXDLLIMPEXP_CORE wxSplashScreen: public wxFrame,
                                       public wxEventFilter
 {
 public:
@@ -74,7 +74,7 @@ protected:
  * wxSplashScreenWindow
  */
 
-class WXDLLIMPEXP_ADV wxSplashScreenWindow: public wxWindow
+class WXDLLIMPEXP_CORE wxSplashScreenWindow: public wxWindow
 {
 public:
     wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER);

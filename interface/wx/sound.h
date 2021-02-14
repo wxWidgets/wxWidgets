@@ -23,7 +23,7 @@
     Linux systems in 2017 and osspd (OSS Proxy Daemon) package typically needs
     to be installed to make it work.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{media}
 */
 class wxSound : public wxObject

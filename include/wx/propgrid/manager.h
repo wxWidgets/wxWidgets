@@ -17,15 +17,6 @@
 
 #include "wx/propgrid/propgrid.h"
 
-#include "wx/dcclient.h"
-#include "wx/scrolwin.h"
-#include "wx/toolbar.h"
-#include "wx/stattext.h"
-#include "wx/button.h"
-#include "wx/textctrl.h"
-#include "wx/dialog.h"
-#include "wx/headerctrl.h"
-
 // -----------------------------------------------------------------------
 
 #ifndef SWIG
@@ -161,10 +152,13 @@ private:
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_TOOLBAR
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
+#endif
 #if wxUSE_HEADERCTRL
 class wxPGHeaderCtrl;
 #endif
-
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
 
 // wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
 // which can optionally have toolbar for mode and page selection, and help
@@ -190,7 +184,7 @@ public:
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxPGMAN_DEFAULT_STYLE,
-                           const wxString& name = wxPropertyGridManagerNameStr );
+                           const wxString& name = wxASCII_STR(wxPropertyGridManagerNameStr) );
 
     // Destructor.
     virtual ~wxPropertyGridManager();
@@ -234,7 +228,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
-                 const wxString& name = wxPropertyGridManagerNameStr );
+                 const wxString& name = wxASCII_STR(wxPropertyGridManagerNameStr) );
 
     // Enables or disables (shows/hides) categories according to parameter
     // enable.
@@ -270,7 +264,7 @@ public:
     const wxPropertyGrid* GetGrid() const
     {
         wxASSERT(m_pPropGrid);
-        return (const wxPropertyGrid*)m_pPropGrid;
+        return m_pPropGrid;
     }
 
     // Returns iterator class instance.
@@ -543,7 +537,8 @@ protected:
 #endif
     void OnResize( wxSizeEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );
-    void OnPGColDrag( wxPropertyGridEvent& event );
+    void OnPGScrollH(wxPropertyGridEvent& evt);
+    void OnColWidthsChanged(wxPropertyGridEvent& evt);
 
 
     wxPropertyGrid* m_pPropGrid;
@@ -560,8 +555,6 @@ protected:
     wxStaticText*   m_pTxtHelpContent;
 
     wxPropertyGridPage*     m_emptyPage;
-
-    wxArrayString   m_columnLabels;
 
     long            m_iFlags;
 
@@ -590,7 +583,7 @@ protected:
 
     unsigned char   m_dragStatus;
 
-    unsigned char   m_onSplitter;
+    bool            m_onSplitter;
 
     bool            m_showHeader;
 

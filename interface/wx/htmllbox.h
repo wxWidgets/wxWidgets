@@ -97,7 +97,7 @@ protected:
         background of the selected cells in the same way as GetSelectedTextColour().
 
         It should be rarely, if ever, used because wxVListBox::SetSelectionBackground
-        allows to change the selection background for all cells at once and doing
+        allows changing the selection background for all cells at once and doing
         anything more fancy is probably going to look strangely.
 
         @see GetSelectedTextColour()
@@ -218,7 +218,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the window is sized appropriately.
         @param n
             Number of strings with which to initialise the control.

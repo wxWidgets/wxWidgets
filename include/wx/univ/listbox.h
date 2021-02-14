@@ -59,7 +59,7 @@ public:
               int n = 0, const wxString choices[] = (const wxString *) NULL,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxListBoxNameStr )
+              const wxString& name = wxASCII_STR(wxListBoxNameStr) )
         : wxScrollHelper(this)
     {
         Init();
@@ -73,7 +73,7 @@ public:
               const wxArrayString& choices,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxListBoxNameStr );
+              const wxString& name = wxASCII_STR(wxListBoxNameStr) );
 
     virtual ~wxListBox();
 
@@ -84,7 +84,7 @@ public:
                 int n = 0, const wxString choices[] = (const wxString *) NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxListBoxNameStr));
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos,
@@ -92,7 +92,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     // implement the listbox interface defined by wxListBoxBase
     virtual void DoClear() wxOVERRIDE;

@@ -53,6 +53,13 @@
     }
     @endcode
 
+    @note On GTK, the clipboard behavior can vary depending on the configuration of
+          the end-user's machine. In order for the clipboard data to persist after
+          the window closes, a clipboard manager must be installed. Some clipboard
+          managers will automatically flush the clipboard after each new piece of
+          data is added, while others will not. The Flush() function will force
+          the clipboard manager to flush the data.
+
     @library{wxcore}
     @category{dnd}
 
@@ -96,8 +103,12 @@ public:
         (possibly eating memory), otherwise the clipboard will be emptied on
         exit.
 
-        Currently this method is not implemented in X11-based ports, i.e.
-        wxGTK, wxX11 and wxMotif and always returns @false there.
+        Currently this method is implemented in MSW and GTK and always returns @false
+        otherwise.
+
+        @note On GTK, only the non-primary selection can be flushed. Calling this function
+              when the clipboard is using the primary selection will return @false and not
+              make any data available after the program exits.
 
         @return @false if the operation is unsuccessful for any reason.
     */
@@ -165,7 +176,7 @@ public:
         until this function is called again with @false.
 
         On the other platforms, there is no PRIMARY selection and so all
-        clipboard operations will fail. This allows to implement the standard
+        clipboard operations will fail. This allows implementing the standard
         X11 handling of the clipboard which consists in copying data to the
         CLIPBOARD selection only when the user explicitly requests it (i.e. by
         selecting the "Copy" menu command) but putting the currently selected

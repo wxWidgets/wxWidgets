@@ -40,7 +40,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxColourPickerCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxColourPickerWidgetBase
 {
 public:
-    wxColourPickerWidgetBase() { m_colour = *wxBLACK; }
+    wxColourPickerWidgetBase() : m_colour(*wxBLACK) { }
     virtual ~wxColourPickerWidgetBase() {}
 
     wxColour GetColour() const
@@ -74,7 +74,7 @@ protected:
 // under the name "wxColourPickerWidget".
 // NOTE: wxColourPickerCtrl allocates a wxColourPickerWidget and relies on the
 //       fact that all classes being mapped as wxColourPickerWidget have the
-//       same prototype for their contructor (and also explains why we use
+//       same prototype for their constructor (and also explains why we use
 //       define instead of a typedef)
 // since GTK > 2.4, there is GtkColorButton
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
@@ -108,7 +108,7 @@ public:
         const wxColour& col = *wxBLACK, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxCLRP_DEFAULT_STYLE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxColourPickerCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxColourPickerCtrlNameStr))
         { Create(parent, id, col, pos, size, style, validator, name); }
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -117,7 +117,7 @@ public:
            const wxSize& size = wxDefaultSize,
            long style = wxCLRP_DEFAULT_STYLE,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxColourPickerCtrlNameStr);
+           const wxString& name = wxASCII_STR(wxColourPickerCtrlNameStr));
 
 
 public:         // public API
@@ -159,13 +159,15 @@ private:
 // ----------------------------------------------------------------------------
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_CURRENT_CHANGED, wxColourPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_DIALOG_CANCELLED, wxColourPickerEvent );
 
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
 public:
     wxColourPickerEvent() {}
-    wxColourPickerEvent(wxObject *generator, int id, const wxColour &col)
-        : wxCommandEvent(wxEVT_COLOURPICKER_CHANGED, id),
+    wxColourPickerEvent(wxObject *generator, int id, const wxColour &col, wxEventType commandType = wxEVT_COLOURPICKER_CHANGED)
+        : wxCommandEvent(commandType, id),
           m_colour(col)
     {
         SetEventObject(generator);
@@ -196,6 +198,11 @@ typedef void (wxEvtHandler::*wxColourPickerEventFunction)(wxColourPickerEvent&);
 #define EVT_COLOURPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COLOURPICKER_CHANGED, id, wxColourPickerEventHandler(fn))
 
+#define EVT_COLOURPICKER_CURRENT_CHANGED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COLOURPICKER_CURRENT_CHANGED, id, wxColourPickerEventHandler(fn))
+
+#define EVT_COLOURPICKER_DIALOG_CANCELLED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COLOURPICKER_DIALOG_CANCELLED, id, wxColourPickerEventHandler(fn))
 
 // old wxEVT_COMMAND_* constant
 #define wxEVT_COMMAND_COLOURPICKER_CHANGED   wxEVT_COLOURPICKER_CHANGED

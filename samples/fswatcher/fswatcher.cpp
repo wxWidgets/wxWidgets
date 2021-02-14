@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -244,8 +241,7 @@ MyFrame::MyFrame(const wxString& title)
                                wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL);
 
     // set monospace font to have output in nice columns
-    wxFont font(9, wxFONTFAMILY_TELETYPE,
-                wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont font(wxFontInfo(9).Family(wxFONTFAMILY_TELETYPE));
     headerText->SetFont(font);
     m_evtConsole->SetFont(font);
 

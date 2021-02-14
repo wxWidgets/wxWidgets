@@ -16,10 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -148,7 +144,6 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     int i = pages[current_page];
     int ch = -1;
     int y = 0;
-    int j;
     wxChar *line_ptr;
     int curr_width = 0;
     bool page_break = false;
@@ -161,14 +156,11 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         y = (*max_y - poem_height)/2;
         width = *max_x;
         height = *max_y;
-    }
 
-    if (DrawIt && wxColourDisplay())
-    {
         dc->SetBrush(*wxLIGHT_GREY_BRUSH);
         dc->SetPen(*wxGREY_PEN);
         dc->DrawRectangle(0, 0, width, height);
-        dc->SetBackgroundMode(wxTRANSPARENT);
+        dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
 
     // See what ACTUAL char height is
@@ -207,6 +199,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
     while (ch != 0 && !page_break)
     {
+        int j;
         j = 0;
 #if defined(__WXMSW__) || defined(__WXMAC__)
         while (((ch = poem_buffer[i]) != 13) && (ch != 0))
@@ -347,20 +340,18 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     if (DrawIt)
     {
         // Draw dark grey thick border
-        if (wxColourDisplay())
-        {
-            dc->SetBrush(*wxGREY_BRUSH);
-            dc->SetPen(*wxGREY_PEN);
+        dc->SetBrush(*wxGREY_BRUSH);
+        dc->SetPen(*wxGREY_PEN);
 
-            // Left side
-            dc->DrawRectangle(0, 0, THIN_LINE_BORDER, height);
-            // Top side
-            dc->DrawRectangle(THIN_LINE_BORDER, 0, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
-            // Right side
-            dc->DrawRectangle(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width, height-THIN_LINE_BORDER);
-            // Bottom side
-            dc->DrawRectangle(THIN_LINE_BORDER, height-THIN_LINE_BORDER, width-THIN_LINE_BORDER, height);
-        }
+        // Left side
+        dc->DrawRectangle(0, 0, THIN_LINE_BORDER, height);
+        // Top side
+        dc->DrawRectangle(THIN_LINE_BORDER, 0, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
+        // Right side
+        dc->DrawRectangle(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width, height-THIN_LINE_BORDER);
+        // Bottom side
+        dc->DrawRectangle(THIN_LINE_BORDER, height-THIN_LINE_BORDER, width-THIN_LINE_BORDER, height);
+
         // Draw border
         // Have grey background, plus 3-d border -
         // One black rectangle.
@@ -376,10 +367,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
         // Right and bottom white lines - 'grey' (black!) if
         // we're running on a mono display.
-        if (wxColourDisplay())
-            dc->SetPen(*wxWHITE_PEN);
-        else
-            dc->SetPen(*wxBLACK_PEN);
+        dc->SetPen(*wxWHITE_PEN);
 
         dc->DrawLine(width-THICK_LINE_BORDER, THICK_LINE_BORDER,
                      width-THICK_LINE_BORDER, height-THICK_LINE_BORDER);
@@ -472,8 +460,6 @@ void MainWindow::PreviousPage(void)
 // Search for a string
 void MainWindow::Search(bool ask)
 {
-    long position;
-
     if (ask || m_searchString.empty())
     {
         wxString s = wxGetTextFromUser( wxT("Enter search string"), wxT("Search"), m_searchString);
@@ -496,6 +482,7 @@ void MainWindow::Search(bool ask)
 
     if (!m_searchString.empty() && search_ok)
     {
+        long position;
         position = DoSearch();
         if (position > -1)
         {
@@ -691,6 +678,8 @@ void MyCanvas::OnChar(wxKeyEvent& event)
 
         case WXK_ESCAPE:
             TheMainWindow->Close(true);
+            break;
+
         default:
             break;
     }
@@ -859,6 +848,7 @@ long MainWindow::DoSearch(void)
         previous_poem_start = -1;
     }
 
+    buf[0] = 0;
     if (data_filename)
         wxSprintf(buf, wxT("%s.dat"), data_filename);
 
@@ -945,6 +935,7 @@ bool Compile(void)
     int ch;
     wxChar buf[100];
 
+    buf[0] = 0;
     if (data_filename)
         wxSprintf(buf, wxT("%s.dat"), data_filename);
 
@@ -977,6 +968,7 @@ bool Compile(void)
     } while (ch != EOF);
     fclose(file);
 
+    buf[0] = 0;
     if (index_filename)
       wxSprintf(buf, wxT("%s.idx"), index_filename);
 

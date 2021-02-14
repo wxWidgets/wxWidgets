@@ -1,0 +1,9 @@
+wxWidgets was installed successfully!
+
+Please note: before using wxWidgets in your application,
+you must build the library using the same compiler you
+use for building your program.
+
+Please see docs/msw/install.md file in the installation
+directory for the detailed instructions about how to build
+wxWidgets and use it from your application.

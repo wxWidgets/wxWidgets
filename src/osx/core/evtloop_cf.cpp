@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 
@@ -252,10 +249,8 @@ int wxCFEventLoop::DoDispatchTimeout(unsigned long timeout)
             break;
         case kCFRunLoopRunStopped:
             return 0;
-            break;
         case kCFRunLoopRunTimedOut:
             return -1;
-            break;
         case kCFRunLoopRunHandledSource:
         default:
             break;

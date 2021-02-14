@@ -142,7 +142,7 @@ protected:
 
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const wxOVERRIDE { return true; }
-    virtual wxWindow *DoGetNonNullPage(size_t page) wxOVERRIDE;
+    virtual wxWindow *TryGetNonNullPage(size_t page) wxOVERRIDE;
 
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);
@@ -195,7 +195,7 @@ private:
     // from m_tree (wxTreeCtrl) component.
     int DoInternalFindPageById(wxTreeItemId page) const;
 
-    // Updates page and wxTreeItemId correspondance.
+    // Updates page and wxTreeItemId correspondence.
     void DoInternalAddPage(size_t newPos, wxWindow *page, wxTreeItemId pageId);
 
     // Removes the page from internal structure.

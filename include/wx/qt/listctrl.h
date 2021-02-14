@@ -10,8 +10,9 @@
 
 #include "wx/textctrl.h"
 
-class QTreeWidget;
-class QTreeWidgetItem;
+class wxQtListTreeWidget;
+class wxQtListModel;
+class wxQtVirtualListModel;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -26,7 +27,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxListCtrlNameStr);
+               const wxString& name = wxASCII_STR(wxListCtrlNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
@@ -34,7 +35,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxListCtrlNameStr));
 
     virtual ~wxListCtrl();
 
@@ -42,20 +43,20 @@ public:
     ////////////////////////////////////////////////////////////////////////////
 
     // Set the control colours
-    bool SetForegroundColour(const wxColour& col);
-    bool SetBackgroundColour(const wxColour& col);
+    bool SetForegroundColour(const wxColour& col) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& info) const;
+    bool GetColumn(int col, wxListItem& info) const wxOVERRIDE;
 
     // Sets information about this column
-    bool SetColumn(int col, const wxListItem& info);
+    bool SetColumn(int col, const wxListItem& info) wxOVERRIDE;
 
     // Gets the column width
-    int GetColumnWidth(int col) const;
+    int GetColumnWidth(int col) const wxOVERRIDE;
 
     // Sets the column width
-    bool SetColumnWidth(int col, int width);
+    bool SetColumnWidth(int col, int width) wxOVERRIDE;
 
 
     // Gets the column order from its index or index from its order
@@ -126,10 +127,10 @@ public:
     bool SetItemPosition(long item, const wxPoint& pos);
 
     // Gets the number of items in the list control
-    int GetItemCount() const;
+    int GetItemCount() const wxOVERRIDE;
 
     // Gets the number of columns in the list control
-    int GetColumnCount() const;
+    int GetColumnCount() const wxOVERRIDE;
 
     // get the horizontal and vertical components of the item spacing
     wxSize GetItemSpacing() const;
@@ -159,11 +160,16 @@ public:
     // list or report view
     long GetTopItem() const;
 
+    virtual bool HasCheckBoxes() const wxOVERRIDE;
+    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    virtual bool IsItemChecked(long item) const wxOVERRIDE;
+    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+
     // Add or remove a single window style
     void SetSingleStyle(long style, bool add = true);
 
     // Set the whole window style
-    void SetWindowStyleFlag(long style);
+    void SetWindowStyleFlag(long style) wxOVERRIDE;
 
     // Searches for an item, starting from 'item'.
     // item can be -1 to find the first item that matches the
@@ -172,11 +178,11 @@ public:
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
 
     // Gets one of the three image lists
-    wxImageList *GetImageList(int which) const;
+    wxImageList *GetImageList(int which) const wxOVERRIDE;
 
     // Sets the image list
-    void SetImageList(wxImageList *imageList, int which);
-    void AssignImageList(wxImageList *imageList, int which);
+    void SetImageList(wxImageList *imageList, int which) wxOVERRIDE;
+    void AssignImageList(wxImageList *imageList, int which) wxOVERRIDE;
 
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
@@ -195,10 +201,10 @@ public:
     bool DeleteAllItems();
 
     // Deletes a column
-    bool DeleteColumn(int col);
+    bool DeleteColumn(int col) wxOVERRIDE;
 
     // Deletes all columns
-    bool DeleteAllColumns();
+    bool DeleteAllColumns() wxOVERRIDE;
 
     // Clears items, and columns if there are any.
     void ClearAll();
@@ -265,36 +271,13 @@ public:
     // data is arbitrary data to be passed to the sort function.
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
-
-    // these functions are only used for virtual list view controls, i.e. the
-    // ones with wxLC_VIRTUAL style (not currently implemented in wxQT)
-
-    // return the text for the given column of the given item
-    virtual wxString OnGetItemText(long item, long column) const;
-
-    // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for
-    // details.
-    virtual int OnGetItemImage(long item) const;
-
-    // return the icon for the given item and column.
-    virtual int OnGetItemColumnImage(long item, long column) const;
-
-    // return the attribute for the given item and column (may return NULL if none)
-    virtual wxItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
-    {
-        return OnGetItemAttr(item);
-    }
-
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
     void Init();
 
     // Implement base class pure virtual methods.
-    long DoInsertColumn(long col, const wxListItem& info);
-
-    QTreeWidgetItem *QtGetItem(int id) const;
+    virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons
@@ -302,8 +285,15 @@ protected:
     bool              m_ownsImageListNormal,
                       m_ownsImageListSmall,
                       m_ownsImageListState;
+    bool              m_hasCheckBoxes;
+
 private:
-    QTreeWidget *m_qtTreeWidget;
+    // Allow access to OnGetItemXXX() method from the virtual model class.
+    friend class wxQtVirtualListModel;
+
+
+    wxQtListTreeWidget *m_qtTreeWidget;
+    wxQtListModel *m_model;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

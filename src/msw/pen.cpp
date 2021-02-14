@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/pen.h"
 
@@ -158,6 +155,7 @@ wxPenRefData::wxPenRefData()
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
              :wxGDIRefData()
+    , m_colour(data.m_colour)
 {
     m_style = data.m_style;
     m_width = data.m_width;
@@ -165,11 +163,12 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
-    m_colour = data.m_colour;
     m_hPen = 0;
 }
 
 wxPenRefData::wxPenRefData(const wxPenInfo& info)
+    : m_stipple(info.GetStipple())
+    , m_colour(info.GetColour())
 {
     Init();
 
@@ -177,9 +176,7 @@ wxPenRefData::wxPenRefData(const wxPenInfo& info)
     m_width = info.GetWidth();
     m_join = info.GetJoin();
     m_cap = info.GetCap();
-    m_stipple = info.GetStipple();
     m_nbDash = info.GetDashes(&m_dash);
-    m_colour = info.GetColour();
 }
 
 wxPenRefData::~wxPenRefData()
@@ -205,7 +202,7 @@ static int ConvertPenStyle(wxPenStyle style)
 
         default:
             wxFAIL_MSG( wxT("unknown pen style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxPENSTYLE_DOT:
             return PS_DOT;
@@ -241,7 +238,7 @@ static int ConvertJoinStyle(wxPenJoin join)
 
         default:
             wxFAIL_MSG( wxT("unknown pen join style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxJOIN_ROUND:
             return PS_JOIN_ROUND;
@@ -260,7 +257,7 @@ static int ConvertCapStyle(wxPenCap cap)
 
         default:
             wxFAIL_MSG( wxT("unknown pen cap style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxCAP_ROUND:
             return PS_ENDCAP_ROUND;
@@ -284,9 +281,7 @@ bool wxPenRefData::Alloc()
    // CreatePen()
    if ( m_join == wxJOIN_ROUND &&
             m_cap == wxCAP_ROUND &&
-                m_style != wxPENSTYLE_USER_DASH &&
-                    m_style != wxPENSTYLE_STIPPLE &&
-                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
+                m_style == wxPENSTYLE_SOLID )
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
    }
@@ -358,7 +353,10 @@ bool wxPenRefData::Alloc()
            dash = NULL;
        }
 
-       m_hPen = ::ExtCreatePen(styleMSW, m_width, &lb, m_nbDash, (LPDWORD)dash);
+       // Note that width can't be 0 for ExtCreatePen(), unlike for CreatePen().
+       int width = m_width == 0 ? 1 : m_width;
+
+       m_hPen = ::ExtCreatePen(styleMSW, width, &lb, m_nbDash, (LPDWORD)dash);
 
        delete [] dash;
    }

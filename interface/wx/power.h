@@ -80,7 +80,7 @@ class wxPowerEvent : public wxEvent
 public:
     wxPowerEvent();
     wxPowerEvent(wxEventType evtType);
-    
+
     /**
         Call this to prevent suspend from taking place in @c wxEVT_POWER_SUSPENDING
         handler (it is ignored for all the others).
@@ -106,7 +106,7 @@ wxEventType wxEVT_POWER_RESUME;
     powering off the screen and Acquire() method can be used to do this.
 
     Notice that currently this functionality is only implemented for MSW and
-    OS X.
+    macOS.
 
     If possible, use wxPowerResourceBlocker class to ensure that Release() is
     called instead of calling it manually.

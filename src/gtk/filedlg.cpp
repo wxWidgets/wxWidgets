@@ -217,34 +217,35 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     if ( style & wxFD_SAVE )
     {
         gtk_action = GTK_FILE_CHOOSER_ACTION_SAVE;
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE));
 #else
-        ok_btn_stock = GTK_STOCK_SAVE;
-#endif // GTK >= 3.10 / < 3.10
+        ok_btn_stock = "gtk-save";
+#endif
     }
     else
     {
         gtk_action = GTK_FILE_CHOOSER_ACTION_OPEN;
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN));
 #else
-        ok_btn_stock = GTK_STOCK_OPEN;
-#endif // GTK >= 3.10 / < 3.10
+        ok_btn_stock = "gtk-open";
+#endif
     }
 
     m_widget = gtk_file_chooser_dialog_new(
                    wxGTK_CONV(m_message),
                    gtk_parent,
                    gtk_action,
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
                    static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
-                   GTK_STOCK_CANCEL,
-#endif // GTK >= 3.10 / < 3.10
+                   "gtk-cancel",
+#endif
                    GTK_RESPONSE_CANCEL,
                    static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
                    NULL);
+
     g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
 
@@ -269,7 +270,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     g_signal_connect (m_widget, "selection-changed",
         G_CALLBACK (gtk_filedialog_selchanged_callback), this);
 
-    // deal with extensions/filters
+     // deal with extensions/filters
     SetWildcard(wildCard);
 
     wxString defaultFileNameWithExt = defaultFileName;
@@ -344,6 +345,9 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
                          previewImage);
     }
 
+    gtk_file_chooser_set_show_hidden(file_chooser,
+                                     style & wxFD_SHOW_HIDDEN ? TRUE : FALSE);
+
     return true;
 }
 
@@ -392,6 +396,7 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 
 wxString wxFileDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
     return m_fc.GetPath();
 }
 
@@ -459,6 +464,8 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 wxString wxFileDialog::GetFilename() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
+
     wxString currentFilename( m_fc.GetFilename() );
     if (currentFilename.empty())
     {

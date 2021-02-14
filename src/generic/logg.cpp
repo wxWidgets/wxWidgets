@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -236,7 +233,7 @@ wxString wxLogGui::GetTitle() const
             titleFormat = _("%s Information");
     }
 
-    return wxString::Format(titleFormat, wxTheApp->GetAppDisplayName());
+    return wxString::Format(titleFormat, wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
 }
 
 void
@@ -345,7 +342,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
             {
                 m_aMessages.Add(msg);
                 m_aSeverity.Add(wxLOG_Message);
-                m_aTimes.Add((long)info.timestamp);
+                m_aTimes.Add((long)(info.timestampMS / 1000));
                 m_bHasMessages = true;
             }
             break;
@@ -398,7 +395,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
 
             m_aMessages.Add(msg);
             m_aSeverity.Add((int)level);
-            m_aTimes.Add((long)info.timestamp);
+            m_aTimes.Add((long)(info.timestampMS / 1000));
             m_bHasMessages = true;
             break;
 
@@ -808,7 +805,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
     // order should be the same as in the switch below!
-    static const char* const icons[] =
+    static wxString const icons[] =
     {
         wxART_ERROR,
         wxART_WARNING,

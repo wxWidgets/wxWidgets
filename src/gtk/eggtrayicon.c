@@ -109,6 +109,7 @@ Anders
 
 #if wxUSE_TASKBARICON
 
+#define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
 

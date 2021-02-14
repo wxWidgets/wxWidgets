@@ -224,7 +224,7 @@ enum wxEllipsizeMode
 #endif // platform
 
 /* Another macro: this one is for portable creation of bitmaps. We assume that
-   under Unix bitmaps live in XPMs and under Windows they're in ressources.
+   under Unix bitmaps live in XPMs and under Windows they're in resources.
  */
 
 #if defined(__WINDOWS__) && wxUSE_WXDIB
@@ -1079,6 +1079,9 @@ extern WXDLLIMPEXP_DATA_CORE(const wxPoint) wxDefaultPosition;
 // resource management
 extern void WXDLLIMPEXP_CORE wxInitializeStockLists();
 extern void WXDLLIMPEXP_CORE wxDeleteStockLists();
+
+// Note: all the display-related functions here exist for compatibility only,
+// please use wxDisplay class in the new code
 
 // is the display colour (or monochrome)?
 extern bool WXDLLIMPEXP_CORE wxColourDisplay();

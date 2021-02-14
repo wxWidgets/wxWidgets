@@ -11,9 +11,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 // ============================================================================
 // declarations
@@ -98,6 +95,26 @@ wxEND_EVENT_TABLE()
 // helper functions
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+// Passing size with a 0 component to X11 functions results in a BadValue X
+// error, so ensure we never do it by using the smallest valid size instead.
+inline void EnsureValidXWindowSize(int& x, int& y)
+{
+    if ( x <= 0 )
+        x = 1;
+    if ( y <= 0 )
+        y = 1;
+}
+
+inline void EnsureValidXWindowSize(wxSize& size)
+{
+    EnsureValidXWindowSize(size.x, size.y);
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // constructors
 // ----------------------------------------------------------------------------
@@ -155,13 +172,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         xparent = (Window) parent->X11GetMainWindow();
     }
 
-    // Size (not including the border) must be nonzero (or a Value error results)!
-    // Note: The Xlib manual doesn't mention this restriction of XCreateWindow.
     wxSize size2(size);
-    if (size2.x <= 0)
-        size2.x = 20;
-    if (size2.y <= 0)
-        size2.y = 20;
+    EnsureValidXWindowSize(size2);
 
     wxPoint pos2(pos);
     if (pos2.x == wxDefaultCoord)
@@ -258,10 +270,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         }
 
         // Make again sure the size is nonzero.
-        if (size2.x <= 0)
-            size2.x = 1;
-        if (size2.y <= 0)
-            size2.y = 1;
+        EnsureValidXWindowSize(size2);
 
 #if wxUSE_NANOX
         backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
@@ -920,16 +929,13 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (width != wxDefaultCoord)
     {
         new_w = width;
-        if (new_w <= 0)
-            new_w = 20;
     }
     if (height != wxDefaultCoord)
     {
         new_h = height;
-        if (new_h <= 0)
-            new_h = 20;
     }
 
+    EnsureValidXWindowSize(new_w, new_h);
     DoMoveWindow( new_x, new_y, new_w, new_h );
 }
 
@@ -941,6 +947,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
+    EnsureValidXWindowSize(width, height);
     XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
 
     if (m_mainWindow != m_clientWindow)
@@ -956,6 +963,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
             height -= border.y + border.height;
         }
 
+        EnsureValidXWindowSize(width, height);
         XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
     }
 }
@@ -1271,8 +1279,7 @@ void wxWindowX11::SendPaintEvents()
 
     m_clipPaintRegion = true;
 
-    wxPaintEvent paint_event( GetId() );
-    paint_event.SetEventObject( this );
+    wxPaintEvent paint_event( this );
     HandleWindowEvent( paint_event );
 
     m_updateRegion.Clear();
@@ -1313,8 +1320,7 @@ void wxWindowX11::SendNcPaintEvents()
         }
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
+    wxNcPaintEvent nc_paint_event( this );
     HandleWindowEvent( nc_paint_event );
 
     m_updateNcArea = false;
@@ -1653,7 +1659,14 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
 
 bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {
-    wxWindowBase::SetBackgroundColour(col);
+    if ( !wxWindowBase::SetBackgroundColour(col) )
+        return false;
+
+    if ( !m_backgroundColour.IsOk() )
+    {
+        // Reset to the default colour as we must have a valid background.
+        m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    }
 
     Display *xdisplay = (Display*) wxGlobalDisplay();
     int xscreen = DefaultScreen( xdisplay );

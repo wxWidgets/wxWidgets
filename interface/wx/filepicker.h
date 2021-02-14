@@ -83,7 +83,7 @@ class wxFilePickerCtrl : public wxPickerBase
 {
 public:
     wxFilePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -204,7 +204,7 @@ public:
            automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
     @style{wxDIRP_DIR_MUST_EXIST}
-           Creates a picker which allows to select only existing directories in
+           Creates a picker which allows selecting only existing directories in
            the popup wxDirDialog. Notice that, as with @c wxFLP_FILE_MUST_EXIST,
            it is still possible to enter a non-existent directory even when
            this file is specified if @c wxDIRP_USE_TEXTCTRL style is also used.
@@ -237,7 +237,7 @@ class wxDirPickerCtrl : public wxPickerBase
 {
 public:
     wxDirPickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with
         all the parameters.

@@ -56,10 +56,7 @@ public:
      @discussion Ownership will be shared by the original ref and the newly created ref. That is,
      the object will be explicitly retained by this new ref.
      */
-    wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon& otherRef)
-        : super_type(otherRef)
-    {
-    }
+    wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon&) = default;
 
     wxCFTypeRef GetValue(const void* key)
     {
@@ -79,12 +76,22 @@ public:
     {
     }
 
-    explicit wxCFDictionaryRef(CFDictionaryRef r)
+    wxCFDictionaryRef(CFDictionaryRef r)
         : wxCFDictionaryRefCommon(r)
     {
     }
 
     wxCFDictionaryRef& operator=(const wxCFMutableDictionaryRef& other);
+
+    CFDictionaryRef CreateCopy() const
+    {
+        return CFDictionaryCreateCopy(kCFAllocatorDefault, this->m_ptr);
+    }
+
+    CFMutableDictionaryRef CreateMutableCopy() const
+    {
+        return CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, this->m_ptr);
+    }
 };
 
 class wxCFMutableDictionaryRef : public wxCFDictionaryRefCommon<CFMutableDictionaryRef>
@@ -95,7 +102,7 @@ public:
     {
     }
 
-    explicit wxCFMutableDictionaryRef(CFMutableDictionaryRef r)
+    wxCFMutableDictionaryRef(CFMutableDictionaryRef r)
         : wxCFDictionaryRefCommon(r)
     {
     }
@@ -108,6 +115,11 @@ public:
     void SetValue(const void* key, CGFloat v)
     {
         SetValue(key, wxCFNumberRef(v));
+    }
+
+    CFMutableDictionaryRef CreateCopy() const
+    {
+        return CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, this->m_ptr);
     }
 
     friend class wxCFDictionaryRef;

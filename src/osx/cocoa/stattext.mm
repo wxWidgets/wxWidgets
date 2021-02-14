@@ -93,6 +93,8 @@ public:
 
     virtual void SetLabel(const wxString& title, wxFontEncoding encoding) wxOVERRIDE
     {
+        wxMacAutoreleasePool autoreleasepool;
+
         wxCFStringRef text( title , encoding );
 
         NSMutableAttributedString *

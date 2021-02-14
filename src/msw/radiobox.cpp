@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RADIOBOX
 
@@ -586,10 +583,9 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
             reinterpret_cast<wxWindow*>(const_cast<wxRadioBox*>(this))).y / 2;
 
     // and also wide enough for its label
-    int widthLabel;
-    GetTextExtent(GetLabelText(), &widthLabel, NULL);
-    if ( widthLabel > width )
-        width = widthLabel;
+    int widthBox = wxStaticBox::DoGetBestSize().x;
+    if ( widthBox > width )
+        width = widthBox;
 
     return wxSize(width, height);
 }
@@ -750,6 +746,14 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
     }
 
     return wxNOT_FOUND;
+}
+
+void wxRadioBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxStaticBox::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_font.IsOk() )
+        m_radioButtons->SetFont(m_font);
 }
 
 // ----------------------------------------------------------------------------

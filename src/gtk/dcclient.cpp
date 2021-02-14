@@ -304,6 +304,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     }
 
     m_context = window->GTKGetPangoDefaultContext();
+    g_object_ref(m_context);
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
@@ -313,6 +314,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
          // Don't report problems as per MSW.
          m_ok = true;
 
+         m_window = window;
+
          return;
     }
 
@@ -320,8 +323,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 
     SetUpDC();
 
-    /* this must be done after SetUpDC, bacause SetUpDC calls the
-       repective SetBrush, SetPen, SetBackground etc functions
+    /* this must be done after SetUpDC, because SetUpDC calls the
+       respective SetBrush, SetPen, SetBackground etc functions
        to set up the DC. SetBackground call m_owner->SetBackground
        and this might not be desired as the standard dc background
        is white whereas a window might assume gray to be the
@@ -344,6 +347,8 @@ wxWindowDCImpl::~wxWindowDCImpl()
 {
     Destroy();
 
+    if (m_context)
+        g_object_unref(m_context);
     if (m_layout)
         g_object_unref (m_layout);
     if (m_fontdesc)
@@ -740,7 +745,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     }
 
     if (m_gdkwindow)
-        gdk_draw_lines( m_gdkwindow, m_penGC, (GdkPoint*) gpts, n);
+        gdk_draw_lines(m_gdkwindow, m_penGC, const_cast<GdkPoint*>(gpts), n);
 
     delete[] gpts_alloc;
 }
@@ -786,7 +791,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             bool originChanged;
             DrawingSetup(gc, originChanged);
 
-            gdk_draw_polygon(m_gdkwindow, gc, true, (GdkPoint*) gdkpoints, n);
+            gdk_draw_polygon(m_gdkwindow, gc, true, const_cast<GdkPoint*>(gdkpoints), n);
 
             if (originChanged)
                 gdk_gc_set_ts_origin(gc, 0, 0);
@@ -804,7 +809,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                gdkpoints[(i+1)%n].y);
             }
 */
-            gdk_draw_polygon( m_gdkwindow, m_penGC, FALSE, (GdkPoint*) gdkpoints, n );
+            gdk_draw_polygon(m_gdkwindow, m_penGC, false, const_cast<GdkPoint*>(gdkpoints), n);
 
         }
     }
@@ -1155,7 +1160,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         }
     }
     else if (hasAlpha || pixmap == NULL)
-        pixbuf = bitmap.GetPixbuf();
+        pixbuf = useMask ? bitmap.GetPixbuf() : bitmap.GetPixbufNoMask();
 
     if (isScaled)
     {
@@ -1508,6 +1513,9 @@ void wxWindowDCImpl::Clear()
 
     if (!m_gdkwindow) return;
 
+    if (m_backgroundBrush.IsTransparent())
+        return;
+
     int width,height;
     DoGetSize( &width, &height );
     gdk_draw_rectangle( m_gdkwindow, m_bgGC, TRUE, 0, 0, width, height );
@@ -1536,6 +1544,10 @@ void wxWindowDCImpl::SetFont( const wxFont &font )
             // at least, and it doesn't hurt to do it.
             if (oldContext != m_context)
             {
+                g_object_ref(m_context);
+                if (oldContext)
+                    g_object_unref(oldContext);
+
                 if (m_layout)
                     g_object_unref (m_layout);
 
@@ -1735,7 +1747,8 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     m_backgroundBrush = brush;
 
-    if (!m_backgroundBrush.IsOk()) return;
+    if (!m_backgroundBrush.IsOk())
+        m_backgroundBrush = *wxWHITE_BRUSH;
 
     if (!m_gdkwindow) return;
 
@@ -2072,7 +2085,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
 // Resolution in pixels per logical inch
 wxSize wxWindowDCImpl::GetPPI() const
 {
-    return wxSize( (int) (m_mm_to_pix_x * 25.4 + 0.5), (int) (m_mm_to_pix_y * 25.4 + 0.5));
+    return wxSize( (int) (GetMMToPXx() * 25.4 + 0.5), (int) (GetMMToPXy() * 25.4 + 0.5));
 }
 
 int wxWindowDCImpl::GetDepth() const

@@ -269,7 +269,7 @@ public:
     wxHtmlHelpDialog* GetDialog();
 
 
-    
+
 protected:
 
     /**

@@ -20,7 +20,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticTextNameStr );
+                 const wxString &name = wxASCII_STR(wxStaticTextNameStr) );
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -28,11 +28,15 @@ public:
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
-                const wxString &name = wxStaticTextNameStr );
+                const wxString &name = wxASCII_STR(wxStaticTextNameStr) );
 
-    void SetLabel(const wxString& label);
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
+
+protected:
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
 
 private:
     QLabel *m_qtLabel;

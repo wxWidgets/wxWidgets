@@ -250,8 +250,22 @@ public:
                               const wxRect& rect,
                               int flags = 0) = 0;
 
+    // draw check mark
+    //
+    // flags may use wxCONTROL_DISABLED
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
+
     // Returns the default size of a check box.
-    virtual wxSize GetCheckBoxSize(wxWindow *win) = 0;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) = 0;
+
+    // Returns the default size of a check mark.
+    virtual wxSize GetCheckMarkSize(wxWindow *win) = 0;
+
+    // Returns the default size of a expander.
+    virtual wxSize GetExpanderSize(wxWindow *win) = 0;
 
     // draw blank button
     //
@@ -476,8 +490,20 @@ public:
                               int flags = 0) wxOVERRIDE
         { m_rendererNative.DrawCheckBox( win, dc, rect, flags ); }
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE
-        { return m_rendererNative.GetCheckBoxSize(win); }
+    virtual void DrawCheckMark(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0) wxOVERRIDE
+        { m_rendererNative.DrawCheckMark( win, dc, rect, flags ); }
+
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE
+        { return m_rendererNative.GetCheckBoxSize(win, flags); }
+
+    virtual wxSize GetCheckMarkSize(wxWindow *win) wxOVERRIDE
+        { return m_rendererNative.GetCheckMarkSize(win); }
+
+    virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE
+        { return m_rendererNative.GetExpanderSize(win); }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,

@@ -12,10 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #include "wx/module.h"
 #include "wx/wxcrt.h"       // for wxStrcat()
 
@@ -28,8 +24,8 @@ char g_strLoadOrder[256] = "\0";
 class Module : public wxModule
 {
 protected:
-    virtual bool OnInit() { wxStrcat(g_strLoadOrder, GetClassInfo()->GetClassName()); return true; }
-    virtual void OnExit() { }
+    virtual bool OnInit() wxOVERRIDE { wxStrcat(g_strLoadOrder, GetClassInfo()->GetClassName()); return true; }
+    virtual void OnExit() wxOVERRIDE { }
 };
 
 class ModuleA : public Module

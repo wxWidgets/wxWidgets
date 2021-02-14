@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -169,7 +166,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     html -> SetRelatedStatusBar(0);
 #endif // wxUSE_STATUSBAR
-    html -> LoadPage(wxT("start.htm"));
+    html -> LoadPage("start.htm");
 }
 
 

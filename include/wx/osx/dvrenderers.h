@@ -29,9 +29,9 @@ public:
     // implementation only
     // -------------------
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
-    virtual wxDC* GetDC(); // creates a device context and keeps it
+    virtual wxDC* GetDC() wxOVERRIDE; // creates a device context and keeps it
     void SetDC(wxDC* newDCPtr); // this method takes ownership of the pointer
 
 private:
@@ -82,11 +82,11 @@ public:
     void EnableMarkup(bool enable = true);
 #endif // wxUSE_MARKUP && Cocoa
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
 #if wxUSE_MARKUP && wxOSX_USE_COCOA
@@ -110,7 +110,7 @@ public:
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
@@ -128,14 +128,14 @@ public:
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
 
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
     wxArrayString m_choices;
@@ -174,14 +174,48 @@ public:
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                int align = wxDVR_DEFAULT_ALIGNMENT);
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer);
+};
+
+// ---------------------------------------------------------
+// wxDataViewIconTextRenderer
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDataViewCheckIconTextRenderer
+    : public wxDataViewRenderer
+{
+public:
+    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+
+    explicit wxDataViewCheckIconTextRenderer
+        (
+         wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+         int align = wxDVR_DEFAULT_ALIGNMENT
+        );
+
+    // This renderer can always display the 3rd ("indeterminate") checkbox
+    // state if the model contains cells with wxCHK_UNDETERMINED value, but it
+    // doesn't allow the user to set it by default. Call this method to allow
+    // this to happen.
+    void Allow3rdStateForUser(bool allow = true);
+
+    virtual bool MacRender() wxOVERRIDE;
+
+    virtual void OSXOnCellChanged(NSObject *value,
+                                  const wxDataViewItem& item,
+                                  unsigned col) wxOVERRIDE;
+
+private:
+    bool m_allow3rdStateForUser;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCheckIconTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -200,11 +234,11 @@ public:
 
     void ShowAsRadio();
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
     void DoInitButtonCell(int buttonType);
@@ -226,11 +260,11 @@ public:
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                int align = wxDVR_DEFAULT_ALIGNMENT);
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
@@ -249,11 +283,11 @@ public:
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
                            int align = wxDVR_DEFAULT_ALIGNMENT);
 
-    virtual bool MacRender();
+    virtual bool MacRender() wxOVERRIDE;
 
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer);

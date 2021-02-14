@@ -36,23 +36,23 @@ public:
 
     wxPenRefData( const wxPenRefData& data )
         : wxGDIRefData()
+        , m_colour(data.m_colour)
     {
         m_style = data.m_style;
         m_width = data.m_width;
         m_joinStyle = data.m_joinStyle;
         m_capStyle = data.m_capStyle;
-        m_colour = data.m_colour;
         m_countDashes = data.m_countDashes;
         m_dash = data.m_dash;
     }
 
     wxPenRefData( const wxPenInfo& info )
+        : m_colour(info.GetColour())
     {
         m_width = info.GetWidth();
         m_style = info.GetStyle();
         m_joinStyle = info.GetJoin();
         m_capStyle = info.GetCap();
-        m_colour = info.GetColour();
         m_countDashes = info.GetDashes(const_cast<wxDash**>(&m_dash));
     }
 
@@ -127,7 +127,7 @@ wxGDIRefData *wxPen::CreateGDIRefData() const
 
 wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxPenRefData(*(wxPenRefData *)data);
+    return new wxPenRefData(*static_cast<const wxPenRefData*>(data));
 }
 
 bool wxPen::operator == ( const wxPen& pen ) const
@@ -193,7 +193,7 @@ int wxPen::GetDashes( wxDash **ptr ) const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
-     *ptr = (wxDash*)M_PENDATA->m_dash;
+    *ptr = const_cast<wxDash*>(M_PENDATA->m_dash);
      return M_PENDATA->m_countDashes;
 }
 
@@ -208,7 +208,7 @@ wxDash* wxPen::GetDash() const
 {
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid pen") );
 
-    return (wxDash*)M_PENDATA->m_dash;
+    return const_cast<wxDash*>(M_PENDATA->m_dash);
 }
 
 wxPenCap wxPen::GetCap() const

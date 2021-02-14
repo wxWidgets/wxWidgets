@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/overlay.h"
 #include "wx/private/overlay.h"
@@ -94,13 +91,18 @@ wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc, int x , int y , int width
 wxDCOverlay::wxDCOverlay(wxOverlay &overlay, wxDC *dc) :
     m_overlay(overlay)
 {
-    const wxRect device(wxPoint(0, 0), dc->GetSize());
+    const wxSize size(dc->GetSize());
+
+    const wxCoord logicalLeft = dc->DeviceToLogicalX(0);
+    const wxCoord logicalTop = dc->DeviceToLogicalY(0);
+    const wxCoord logicalRight = dc->DeviceToLogicalX(size.GetWidth());
+    const wxCoord logicalBottom = dc->DeviceToLogicalY(size.GetHeight());
 
     Init(dc,
-         dc->DeviceToLogicalX(device.GetLeft()),
-         dc->DeviceToLogicalY(device.GetTop()),
-         dc->DeviceToLogicalX(device.GetRight()),
-         dc->DeviceToLogicalY(device.GetBottom()));
+         logicalLeft,
+         logicalTop,
+         logicalRight - logicalLeft,
+         logicalBottom - logicalTop);
 }
 
 wxDCOverlay::~wxDCOverlay()

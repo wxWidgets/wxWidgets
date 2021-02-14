@@ -21,26 +21,9 @@
  */
 #include "wx/types.h"
 
-/* check whether we have wchar_t and which size it is if we do */
-#if !defined(wxUSE_WCHAR_T)
-    #if defined(__UNIX__)
-        #if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
-            #define wxUSE_WCHAR_T 1
-        #else
-            #define wxUSE_WCHAR_T 0
-        #endif
-    #elif defined(__GNUWIN32__) && !defined(__MINGW32__)
-        #define wxUSE_WCHAR_T 0
-    #else
-        /* add additional compiler checks if this fails */
-        #define wxUSE_WCHAR_T 1
-    #endif
-#endif /* !defined(wxUSE_WCHAR_T) */
-
-/* Unicode support requires wchar_t */
-#if !wxUSE_WCHAR_T
-    #error "wchar_t must be available"
-#endif /* Unicode */
+/* This is kept only for backwards compatibility, in case some application code
+   checks for it. It's always 1 and can't be changed. */
+#define wxUSE_WCHAR_T 1
 
 /*
    non Unix compilers which do have wchar.h (but not tchar.h which is included
@@ -110,9 +93,6 @@
 /* VC++ and BC++ starting with 5.2 have TCHAR support */
 #ifdef __VISUALC__
     #define wxHAVE_TCHAR_SUPPORT
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
-    #define wxHAVE_TCHAR_SUPPORT
-    #include <ctype.h>
 #elif defined(__MINGW32__)
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
@@ -123,11 +103,6 @@
 #ifdef wxHAVE_TCHAR_SUPPORT
     /* get TCHAR definition if we've got it */
     #include <tchar.h>
-
-    /* we surely do have wchar_t if we have TCHAR */
-    #ifndef wxUSE_WCHAR_T
-        #define wxUSE_WCHAR_T 1
-    #endif /* !defined(wxUSE_WCHAR_T) */
 #endif /* wxHAVE_TCHAR_SUPPORT */
 
 /* ------------------------------------------------------------------------- */
@@ -221,11 +196,7 @@
             Notice that we use an intermediate macro to allow x to be expanded
             if it's a macro itself.
          */
-        #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-            #define wxT(x) wxCONCAT_HELPER(L, x)
-        #else
-            #define wxT(x) wxPREPEND_L(x)
-        #endif
+        #define wxT(x) wxCONCAT_HELPER(L, x)
     #endif /* ASCII/Unicode */
 #endif /* !defined(wxT) */
 
@@ -245,11 +216,7 @@
     /*
         As above with wxT(), wxS() argument is expanded if it's a macro.
      */
-    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-        #define wxS(x) wxCONCAT_HELPER(L, x)
-    #else
-        #define wxS(x) wxPREPEND_L(x)
-    #endif
+    #define wxS(x) wxCONCAT_HELPER(L, x)
 #else /* wxUSE_UNICODE_UTF8 || ANSI */
     #define wxS(x) x
 #endif

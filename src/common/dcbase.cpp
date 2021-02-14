@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -318,7 +315,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
         : m_window(NULL)
-        , m_colour(wxColourDisplay())
+        , m_colour(true)
         , m_ok(true)
         , m_clipping(false)
         , m_isInteractive(0)
@@ -331,6 +328,7 @@ wxDCImpl::wxDCImpl( wxDC *owner )
         , m_scaleX(1.0), m_scaleY(1.0)
         , m_signX(1), m_signY(1)
         , m_contentScaleFactor(1)
+        , m_mm_to_pix_x(0.0), m_mm_to_pix_y(0.0)
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
         , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
         , m_logicalFunction(wxCOPY)
@@ -348,11 +346,6 @@ wxDCImpl::wxDCImpl( wxDC *owner )
 #endif // wxUSE_PALETTE
 {
     m_owner = owner;
-
-    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                    (double)wxGetDisplaySizeMM().GetWidth();
-    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                    (double)wxGetDisplaySizeMM().GetHeight();
 }
 
 wxDCImpl::~wxDCImpl()
@@ -506,6 +499,26 @@ wxCoord wxDCImpl::LogicalToDeviceYRel(wxCoord y) const
     return wxRound((double)(y) * m_scaleY);
 }
 
+wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    return wxPoint(DeviceToLogicalX(x), DeviceToLogicalY(y));
+}
+
+wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+}
+
+wxSize wxDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    return wxSize(DeviceToLogicalXRel(x), DeviceToLogicalYRel(y));
+}
+
+wxSize wxDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    return wxSize(LogicalToDeviceXRel(x), LogicalToDeviceYRel(y));
+}
+
 void wxDCImpl::ComputeScaleAndOrigin()
 {
     m_scaleX = m_logicalScaleX * m_userScaleX;
@@ -517,16 +530,16 @@ void wxDCImpl::SetMapMode( wxMappingMode mode )
     switch (mode)
     {
         case wxMM_TWIPS:
-          SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
+          SetLogicalScale( twips2mm*GetMMToPXx(), twips2mm*GetMMToPXy() );
           break;
         case wxMM_POINTS:
-          SetLogicalScale( pt2mm*m_mm_to_pix_x, pt2mm*m_mm_to_pix_y );
+          SetLogicalScale( pt2mm*GetMMToPXx(), pt2mm*GetMMToPXy() );
           break;
         case wxMM_METRIC:
-          SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
+          SetLogicalScale( GetMMToPXx(), GetMMToPXy() );
           break;
         case wxMM_LOMETRIC:
-          SetLogicalScale( m_mm_to_pix_x/10.0, m_mm_to_pix_y/10.0 );
+          SetLogicalScale( GetMMToPXx()/10.0, GetMMToPXy()/10.0 );
           break;
         default:
         case wxMM_TEXT:
@@ -796,13 +809,13 @@ static wxPointList wx_spline_point_list;
 void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, double b3, double a4,
                  double b4)
 {
-    double xmid, ymid;
     double x1, y1, x2, y2, x3, y3, x4, y4;
 
     wx_clear_stack();
     wx_spline_push(a1, b1, a2, b2, a3, b3, a4, b4);
 
     while (wx_spline_pop(&x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4)) {
+        double xmid, ymid;
         xmid = (double)half(x2, x3);
         ymid = (double)half(y2, y3);
         if (fabs(x1 - xmid) < THRESHOLD && fabs(y1 - ymid) < THRESHOLD &&
@@ -892,7 +905,7 @@ void wxDCImpl::DoDrawSpline( const wxPointList *points )
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     const wxPoint *p;
-    double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
+    double cx1, cy1, cx2, cy2;
     double           x1, y1, x2, y2;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
@@ -923,6 +936,7 @@ void wxDCImpl::DoDrawSpline( const wxPointList *points )
 #endif // !wxUSE_STD_CONTAINERS
           )
     {
+        double cx3, cy3, cx4, cy4;
         p = node->GetData();
         x1 = x2;
         y1 = y2;
@@ -1440,4 +1454,26 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     // ports need to emulate this bug too:
     const wxSize screenPPI = wxGetDisplayPPI();
     return float(screenPPI.y) / dpi;
+}
+
+double wxDCImpl::GetMMToPXx() const
+{
+    if ( wxIsNullDouble(m_mm_to_pix_x) )
+    {
+        m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
+                        (double)wxGetDisplaySizeMM().GetWidth();
+    }
+
+    return m_mm_to_pix_x;
+}
+
+double wxDCImpl::GetMMToPXy() const
+{
+    if ( wxIsNullDouble(m_mm_to_pix_y) )
+    {
+        m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
+                        (double)wxGetDisplaySizeMM().GetHeight();
+    }
+
+    return m_mm_to_pix_y;
 }

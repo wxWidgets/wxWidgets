@@ -94,15 +94,15 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
         return (c <= 0x7F) || (c >= 0xC2 && c <= 0xF4);
     }
 
-    // table of offsets to skip forward when iterating over UTF-8 sequence
-    static const unsigned char ms_utf8IterTable[256];
+    // returns offset to skip forward when iterating over UTF-8 sequence
+    static unsigned char GetUTF8IterOffset(unsigned char c);
 
 
     template<typename Iterator>
     static void IncIter(Iterator& i)
     {
         wxASSERT( IsValidUtf8LeadByte(*i) );
-        i += ms_utf8IterTable[(unsigned char)*i];
+        i += GetUTF8IterOffset(*i);
     }
 
     template<typename Iterator>
@@ -178,7 +178,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     static size_t GetUtf8CharLength(char c)
     {
         wxASSERT( IsValidUtf8LeadByte(c) );
-        return ms_utf8IterTable[(unsigned char)c];
+        return GetUTF8IterOffset(c);
     }
 
     // decodes single UTF-8 character from UTF-8 string

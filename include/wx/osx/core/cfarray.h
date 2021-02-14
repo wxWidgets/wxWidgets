@@ -53,6 +53,8 @@ public:
         return wxCFRefFromGet((E)CFArrayGetValueAtIndex(this->m_ptr, idx));
     }
 
+    operator WX_NSArray() { return (WX_NSArray) this->get(); }
+
     wxCFRef<E> operator[](size_type idx) { return at(idx); }
     wxCFRef<E> front() { return at(0); }
     wxCFRef<E> back() { return at(size() - 1); }

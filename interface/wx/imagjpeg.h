@@ -1,16 +1,16 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imagjpeg.h 
-// Purpose:     interface of wxJPEGHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imagjpeg.h
+// Purpose:     interface of wxJPEGHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
     @class wxJPEGHandler
 
     This is the image handler for the JPEG format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()
@@ -22,7 +22,7 @@ public:
         Default constructor for wxJPEGHandler
     */
     wxJPEGHandler();
-    
+
     /**
         Retrieve the version information about the JPEG library used by this
         handler.

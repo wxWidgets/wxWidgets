@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURDLG
 
@@ -35,12 +32,12 @@ static void response(GtkDialog*, int response_id, wxColourDialog* win)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
-wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
+wxColourDialog::wxColourDialog(wxWindow *parent, const wxColourData *data)
 {
     Create(parent, data);
 }
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     if (data)
         m_data = *data;

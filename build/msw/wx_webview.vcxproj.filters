@@ -30,6 +30,9 @@
     <ClCompile Include="..\..\src\common\webviewfshandler.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\webview_edge.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\webview_ie.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -40,10 +43,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\wx\msw\webview_ie.h">
+    <ClInclude Include="..\..\include\wx\msw\webview_edge.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\webview_missing.h">
+    <ClInclude Include="..\..\include\wx\msw\webview_ie.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\webviewhistoryitem_ie.h">

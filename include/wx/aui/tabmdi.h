@@ -46,7 +46,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                        const wxString& name = wxFrameNameStr);
+                        const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     ~wxAuiMDIParentFrame();
 
@@ -56,7 +56,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = wxFrameNameStr );
+                const wxString& name = wxASCII_STR(wxFrameNameStr) );
 
     void SetArtProvider(wxAuiTabArt* provider);
     wxAuiTabArt* GetArtProvider();
@@ -108,6 +108,11 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
 private:
+    void OnClose(wxCloseEvent& event);
+
+    // close all children, return false if any of them vetoed it
+    bool CloseAll();
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxAuiMDIParentFrame);
 };
@@ -126,7 +131,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxDEFAULT_FRAME_STYLE,
-                       const wxString& name = wxFrameNameStr);
+                       const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxAuiMDIChildFrame();
     bool Create(wxAuiMDIParentFrame *parent,
@@ -135,7 +140,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
 #if wxUSE_MENUS
     virtual void SetMenuBar(wxMenuBar *menuBar) wxOVERRIDE;

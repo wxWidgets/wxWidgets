@@ -9,7 +9,6 @@
 
 include(../source_groups.cmake)
 
-set(wxLIB_TARGETS)
 if(wxBUILD_MONOLITHIC)
     # Initialize variables for monolithic build
     set(wxMONO_SRC_FILES)
@@ -76,29 +75,32 @@ endforeach()
 if(wxBUILD_MONOLITHIC)
     # Create monolithic library target
     list(LENGTH wxMONO_SRC_FILES src_file_count)
-    wx_add_library(mono ${wxMONO_SRC_FILES})
+    wx_add_library(wxmono ${wxMONO_SRC_FILES})
     foreach(vis PRIVATE PUBLIC)
         if(wxMONO_LIBS_${vis})
             # Remove libs included in mono from list
             foreach(lib IN LISTS LIBS)
-                list(REMOVE_ITEM wxMONO_LIBS_${vis} ${lib})
+                list(REMOVE_ITEM wxMONO_LIBS_${vis} wx${lib})
             endforeach()
 
-            target_link_libraries(mono ${vis} ${wxMONO_LIBS_${vis}})
+            target_link_libraries(wxmono ${vis} ${wxMONO_LIBS_${vis}})
         endif()
         if(wxMONO_INCLUDE_DIRS_${vis})
-            target_include_directories(mono ${vis} ${wxMONO_INCLUDE_DIRS_${vis}})
+            set(INCLUDE_POS)
+            if (vis STREQUAL PRIVATE)
+                set(INCLUDE_POS BEFORE)
+            endif()
+            target_include_directories(wxmono ${INCLUDE_POS} ${vis} ${wxMONO_INCLUDE_DIRS_${vis}})
         endif()
         if(wxMONO_DEFINITIONS_${vis})
-            target_compile_definitions(mono ${vis} ${wxMONO_DEFINITIONS_${vis}})
+            target_compile_definitions(wxmono ${vis} ${wxMONO_DEFINITIONS_${vis}})
         endif()
     endforeach()
     foreach(file ${wxMONO_NONCOMPILED_CPP_FILES})
         set_source_files_properties(${file} PROPERTIES HEADER_FILE_ONLY TRUE)
     endforeach()
-    wx_finalize_lib(mono)
+    wx_finalize_lib(wxmono)
 endif()
 
 # Propagate variable(s) to parent scope
 set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
-set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} PARENT_SCOPE)

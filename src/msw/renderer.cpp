@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -38,6 +35,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
 
 // These Vista+ only types used by DrawThemeTextEx may not be available in older SDK headers
@@ -135,6 +133,14 @@ public:
         DoDrawButton(DFCS_BUTTONCHECK, win, dc, rect, flags);
     }
 
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) wxOVERRIDE
+    {
+        DoDrawFrameControl(DFC_MENU, DFCS_MENUCHECK, win, dc, rect, flags);
+    }
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -154,7 +160,7 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
 
     virtual int GetHeaderButtonHeight(wxWindow *win) wxOVERRIDE;
 
@@ -230,6 +236,15 @@ public:
             m_rendererNative.DrawCheckBox(win, dc, rect, flags);
     }
 
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) wxOVERRIDE
+    {
+        if ( !DoDrawCheckMark(MENU_POPUPCHECK, win, dc, rect, flags) )
+            m_rendererNative.DrawCheckMark(win, dc, rect, flags);
+    }
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -271,7 +286,11 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
+
+    virtual wxSize GetCheckMarkSize(wxWindow* win) wxOVERRIDE;
+
+    virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
 
     virtual void DrawGauge(wxWindow* win,
                            wxDC& dc,
@@ -306,6 +325,12 @@ private:
                         wxDC& dc,
                         const wxRect& rect,
                         int flags);
+
+    bool DoDrawCheckMark(int kind,
+                         wxWindow *win,
+                         wxDC& dc,
+                         const wxRect& rect,
+                         int flags);
 
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
@@ -521,10 +546,14 @@ wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
     DoDrawFrameControl(DFC_CAPTION, kind, win, dc, rect, flags);
 }
 
-wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
+wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
 {
-    return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
-                  ::GetSystemMetrics(SM_CYMENUCHECK));
+    // We must have a valid window in order to return the size which is correct
+    // for the display this window is on.
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    return wxSize(wxGetSystemMetrics(SM_CXMENUCHECK, win),
+                  wxGetSystemMetrics(SM_CYMENUCHECK, win));
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
@@ -548,7 +577,8 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
         font = win->GetFont();
     if ( !font.IsOk() )
         wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    ::SendMessage(hwndHeader, WM_SETFONT, (WPARAM)GetHfontOf(font), 0);
+
+    wxSetWindowFont(hwndHeader, font);
 
     // initialize the struct filled with the values by Header_Layout()
     RECT parentRect = { 0, 0, 100, 100 };
@@ -558,9 +588,10 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
 }
 
-int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+int wxRendererMSW::GetHeaderButtonMargin(wxWindow *win)
 {
-    return 10;
+    // The native control seems to use 3*SM_CXEDGE margins on each size.
+    return 6*wxGetSystemMetrics(SM_CXEDGE, win);
 }
 
 // ============================================================================
@@ -729,6 +760,38 @@ wxRendererXP::DoDrawXPButton(int kind,
     return true;
 }
 
+bool
+wxRendererXP::DoDrawCheckMark(int kind,
+                              wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags)
+{
+    wxUxThemeHandle hTheme(win, L"MENU");
+    if ( !hTheme )
+        return false;
+
+    wxCHECK_MSG( dc.GetImpl(), false, wxT("Invalid wxDC") );
+
+    RECT r = ConvertToRECT(dc, rect);
+
+    int state = MC_CHECKMARKNORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+        state = MC_CHECKMARKDISABLED;
+
+    ::DrawThemeBackground
+                            (
+                                hTheme,
+                                GetHdcOf(dc.GetTempHDC()),
+                                kind,
+                                state,
+                                &r,
+                                NULL
+                            );
+
+    return true;
+}
+
 void
 wxRendererXP::DoDrawButtonLike(HTHEME htheme,
                                int part,
@@ -828,8 +891,10 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
 }
 
-wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
+wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
 {
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     wxUxThemeHandle hTheme(win, L"BUTTON");
     if (hTheme)
     {
@@ -840,7 +905,44 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
                 return wxSize(checkSize.cx, checkSize.cy);
         }
     }
-    return m_rendererNative.GetCheckBoxSize(win);
+    return m_rendererNative.GetCheckBoxSize(win, flags);
+}
+
+wxSize wxRendererXP::GetCheckMarkSize(wxWindow* win)
+{
+    wxCHECK_MSG(win, wxSize(0, 0), "Must have a valid window");
+
+    wxUxThemeHandle hTheme(win, L"MENU");
+    if (hTheme)
+    {
+        if (::IsThemePartDefined(hTheme, MENU_POPUPCHECK, 0))
+        {
+            SIZE checkSize;
+            if (::GetThemePartSize(hTheme, NULL, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, NULL, TS_DRAW, &checkSize) == S_OK)
+                return wxSize(checkSize.cx, checkSize.cy);
+        }
+    }
+    return m_rendererNative.GetCheckMarkSize(win);
+}
+
+wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    if ( hTheme )
+    {
+        if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
+        {
+            SIZE expSize;
+            if (::GetThemePartSize(hTheme, NULL, TVP_GLYPH, GLPS_CLOSED, NULL,
+                                   TS_DRAW, &expSize) == S_OK)
+                return wxSize(expSize.cx, expSize.cy);
+
+        }
+    }
+
+    return m_rendererNative.GetExpanderSize(win);
 }
 
 void
@@ -851,21 +953,18 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
 {
     wxUxThemeHandle hTheme(win, L"TASKDIALOG");
 
-    int state;
-    if (flags & wxCONTROL_PRESSED)
-        state = TDLGEBS_PRESSED;
-    else if (flags & wxCONTROL_CURRENT)
-        state = TDLGEBS_HOVER;
-    else
-        state = TDLGEBS_NORMAL;
-
-    if ( flags & wxCONTROL_EXPANDED )
-        state += 3;
-
     if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
-        if (flags & wxCONTROL_EXPANDED)
-            flags |= wxCONTROL_CHECKED;
+        int state;
+        if (flags & wxCONTROL_PRESSED)
+            state = TDLGEBS_PRESSED;
+        else if (flags & wxCONTROL_CURRENT)
+            state = TDLGEBS_HOVER;
+        else
+            state = TDLGEBS_NORMAL;
+
+        if ( flags & wxCONTROL_EXPANDED )
+            state += 3;
 
         RECT r = ConvertToRECT(dc, rect);
 
@@ -945,11 +1044,17 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 
     typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
     static DrawThemeTextEx_t s_DrawThemeTextEx = NULL;
+    static bool s_initDone = false;
 
-    if (wxGetWinVersion() >= wxWinVersion_Vista)
+    if ( !s_initDone )
     {
-        wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
-        wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
+        if (wxGetWinVersion() >= wxWinVersion_Vista)
+        {
+            wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
+            wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
+        }
+
+        s_initDone = true;
     }
 
     if ( s_DrawThemeTextEx && // Might be not available if we're under XP

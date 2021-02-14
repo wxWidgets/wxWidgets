@@ -95,9 +95,9 @@ struct WidgetAttributes
 #endif // wxUSE_TOOLTIPS
         m_enabled = true;
         m_show = true;
-        m_dir = wxLayout_LeftToRight;
+        m_dir = wxLayout_Default;
         m_variant = wxWINDOW_VARIANT_NORMAL;
-        m_cursor = *wxSTANDARD_CURSOR;
+        m_cursor = wxNullCursor;
         m_defaultFlags = wxBORDER_DEFAULT;
     }
 
@@ -155,6 +155,10 @@ public:
     // the default attributes for the widget
     static WidgetAttributes& GetAttrs();
 
+    // return true if we're showing logs in the log window (always the case
+    // except during startup and shutdown)
+    static bool IsUsingLogWindow();
+
 protected:
     // several helper functions for page creation
 
@@ -197,7 +201,7 @@ public:
                                         wxImageList *imaglist);
 
     // our ctor
-    WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories);
+    WidgetsPageInfo(Constructor ctor, const wxString& label, int categories);
 
     // accessors
     const wxString& GetLabel() const { return m_label; }

@@ -26,7 +26,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr)
+            const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -39,7 +39,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
     virtual ~wxFrame();
 
     // implement base class pure virtuals
@@ -55,7 +55,7 @@ public:
 #if wxUSE_TOOLBAR
     virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = wxID_ANY,
-                                     const wxString& name = wxToolBarNameStr) wxOVERRIDE;
+                                     const wxString& name = wxASCII_STR(wxToolBarNameStr)) wxOVERRIDE;
 #endif // wxUSE_TOOLBAR
 
     // Status bar
@@ -63,7 +63,7 @@ public:
     virtual wxStatusBar* OnCreateStatusBar(int number = 1,
                                            long style = wxSTB_DEFAULT_STYLE,
                                            wxWindowID id = 0,
-                                           const wxString& name = wxStatusLineNameStr) wxOVERRIDE;
+                                           const wxString& name = wxASCII_STR(wxStatusLineNameStr)) wxOVERRIDE;
 
     // Hint to tell framework which status bar to use: the default is to use
     // native one for the platforms which support it (Win32), the generic one

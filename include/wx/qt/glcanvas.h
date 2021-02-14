@@ -17,13 +17,12 @@ class QGLFormat;
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
-    wxGLContext(wxGLCanvas *win, const wxGLContext* other = NULL);
+    wxGLContext(wxGLCanvas *win,
+                const wxGLContext *other = NULL,
+                const wxGLContextAttrs *ctxAttrs = NULL);
 ///    virtual ~wxGLContext();
 
     virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
-
-private:
-    QGLContext *m_glContext;
 
     wxDECLARE_CLASS(wxGLContext);
 };
@@ -37,6 +36,16 @@ class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 public:
     explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
+               const wxGLAttributes& dispAttrs,
+               wxWindowID id = wxID_ANY,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxGLCanvasName,
+               const wxPalette& palette = wxNullPalette);
+
+    explicit
+    wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
                const int *attribList = NULL,
                const wxPoint& pos = wxDefaultPosition,
@@ -44,6 +53,17 @@ public:
                long style = 0,
                const wxString& name = wxGLCanvasName,
                const wxPalette& palette = wxNullPalette);
+
+    ~wxGLCanvas();
+
+    bool Create(wxWindow *parent,
+                const wxGLAttributes& dispAttrs,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxGLCanvasName,
+                const wxPalette& palette = wxNullPalette);
 
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
@@ -54,7 +74,7 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual bool SwapBuffers();
+    virtual bool SwapBuffers() wxOVERRIDE;
 
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 

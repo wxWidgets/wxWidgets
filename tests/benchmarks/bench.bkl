@@ -36,6 +36,7 @@
 
         <sources>
             bench.cpp
+            display.cpp
             image.cpp
         </sources>
         <wx-lib>core</wx-lib>

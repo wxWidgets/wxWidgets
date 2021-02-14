@@ -41,7 +41,6 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 // data
 // ----------------------------------------------------------------------------
 
-static GdkAtom  g_clipboardAtom   = 0;
 static GdkAtom  g_targetsAtom     = 0;
 static GdkAtom  g_timestampAtom   = 0;
 
@@ -160,7 +159,7 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
                 clip.GetId().c_str() );
 
     // the atoms we received, holding a list of targets (= formats)
-    const GdkAtom* const atoms = (GdkAtom*)gtk_selection_data_get_data(selection_data);
+    const GdkAtom* const atoms = reinterpret_cast<const GdkAtom*>(gtk_selection_data_get_data(selection_data));
     for (size_t i = 0; i < selection_data_length / sizeof(GdkAtom); i++)
     {
         const wxDataFormat format(atoms[i]);
@@ -231,7 +230,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 
         kind = wxClipboard::Primary;
     }
-    else if (event->selection == g_clipboardAtom)
+    else if ( event->selection == GDK_SELECTION_CLIPBOARD )
     {
         wxLogTrace(TRACE_CLIPBOARD, wxT("Lost clipboard" ));
 
@@ -270,13 +269,14 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     if ( !data )
         return;
 
+    unsigned timestamp = unsigned(wxUIntPtr(signal_data));
+
     // ICCCM says that TIMESTAMP is a required atom.
     // In particular, it satisfies Klipper, which polls
     // TIMESTAMP to see if the clipboards content has changed.
     // It shall return the time which was used to set the data.
     if (gtk_selection_data_get_target(selection_data) == g_timestampAtom)
     {
-        guint timestamp = GPOINTER_TO_UINT (signal_data);
         gtk_selection_data_set(selection_data,
                                GDK_SELECTION_TYPE_INTEGER,
                                32,
@@ -296,7 +296,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_target(selection_data)))).c_str(),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_data_type(selection_data)))).c_str(),
                wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_selection(selection_data)))).c_str(),
-               GPOINTER_TO_UINT( signal_data )
+               timestamp
                );
 
     if ( !data->IsSupportedFormat( format ) )
@@ -305,6 +305,8 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     int size = data->GetDataSize( format );
     if ( !size )
         return;
+
+    wxLogTrace(TRACE_CLIPBOARD, "Valid clipboard data found");
 
     wxCharBuffer buf(size - 1); // it adds 1 internally (for NUL)
 
@@ -406,7 +408,7 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
                 clip.GetId().c_str() );
 
     // the atoms we received, holding a list of targets (= formats)
-    const GdkAtom* const atoms = (GdkAtom*)gtk_selection_data_get_data(selection_data);
+    const GdkAtom* const atoms = reinterpret_cast<const GdkAtom*>(gtk_selection_data_get_data(selection_data));
     for (size_t i = 0; i < selection_data_length / sizeof(GdkAtom); i++)
     {
         const wxDataFormat format(atoms[i]);
@@ -469,8 +471,6 @@ wxClipboard::wxClipboard()
                       G_CALLBACK (selection_clear_clip), NULL);
 
     // initialize atoms we use if not done yet
-    if ( !g_clipboardAtom )
-        g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
     if ( !g_targetsAtom )
         g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
     if ( !g_timestampAtom )
@@ -492,7 +492,7 @@ wxClipboard::~wxClipboard()
 GdkAtom wxClipboard::GTKGetClipboardAtom() const
 {
     return m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
-                        : g_clipboardAtom;
+                        : (GdkAtom)GDK_SELECTION_CLIPBOARD;
 }
 
 void wxClipboard::GTKClearData(Kind kind)
@@ -591,6 +591,23 @@ void wxClipboard::Clear()
 
     m_targetRequested = 0;
     m_formatSupported = false;
+}
+
+bool wxClipboard::Flush()
+{
+    // Only store the non-primary clipboard when flushing. The primary clipboard is a scratch-space
+    // formed using the currently selected text.
+    if ( !m_usePrimary )
+    {
+        GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+
+        gtk_clipboard_set_can_store(clipboard, NULL, 0);
+        gtk_clipboard_store(clipboard);
+
+        return true;
+    }
+
+    return false;
 }
 
 bool wxClipboard::Open()
@@ -756,7 +773,7 @@ wxDataObject* wxClipboard::GTKGetDataObject( GdkAtom atom )
 
         return Data( wxClipboard::Primary );
     }
-    else if ( atom == g_clipboardAtom )
+    else if ( atom == GDK_SELECTION_CLIPBOARD )
     {
         wxLogTrace(TRACE_CLIPBOARD, wxT("Clipboard data requested" ));
 

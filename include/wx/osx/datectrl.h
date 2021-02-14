@@ -42,10 +42,10 @@ public:
                 const wxString& name = wxDatePickerCtrlNameStr);
 
     // Implement the base class pure virtuals.
-    virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
-    virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const;
+    virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) wxOVERRIDE;
+    virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const wxOVERRIDE;
 
-    virtual void OSXGenerateEvent(const wxDateTime& dt);
+    virtual void OSXGenerateEvent(const wxDateTime& dt) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl);

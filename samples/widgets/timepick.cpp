@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -119,7 +116,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, wxT("TimePicker"),
+IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, "TimePicker",
                        FAMILY_CTRLS | PICKER_CTRLS
                        );
 

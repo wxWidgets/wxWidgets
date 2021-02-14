@@ -4,8 +4,8 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="event" template="wx_sample" template_append="wx_append">
-        <sources> event.cpp gestures.cpp </sources>
-        <headers> gestures.h </headers>
+        <sources> event.cpp gestures.cpp chessboard.cpp</sources>
+        <headers> gestures.h chessboard.h</headers>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>

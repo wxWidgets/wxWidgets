@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MARKUP
 
@@ -123,8 +120,6 @@ public:
           m_dc(dc),
           m_rect(rect),
           m_flags(flags)
-    {
-        m_pos = m_rect.x;
 
         // We don't initialize the base class initial text background colour to
         // the valid value because we want to be able to detect when we revert
@@ -134,7 +129,9 @@ public:
         // background isn't used anyhow when the background mode is transparent
         // but it might affect the caller if it sets the background mode to
         // opaque and draws some text after using us.
-        m_origTextBackground = dc.GetTextBackground();
+        , m_origTextBackground(dc.GetTextBackground())
+        , m_pos(m_rect.x)
+    {
     }
 
     virtual void OnAttrStart(const Attr& attr) wxOVERRIDE
@@ -147,7 +144,7 @@ public:
         {
             // Setting the background colour is not enough, we must also change
             // the mode to ensure that it is actually used.
-            m_dc.SetBackgroundMode(wxSOLID);
+            m_dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
             m_dc.SetTextBackground(attr.background);
         }
     }
@@ -170,7 +167,7 @@ public:
                 // should actually be made transparent and in this case the
                 // actual value of background colour doesn't matter but we also
                 // restore it just in case, see comment in the ctor.
-                m_dc.SetBackgroundMode(wxTRANSPARENT);
+                m_dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
                 background = m_origTextBackground;
             }
 
@@ -260,7 +257,7 @@ public:
         const wxSize extent = m_dc.GetTextExtent(text);
 
         // DrawItemText() ignores background color, so render it ourselves
-        if ( m_dc.GetBackgroundMode() == wxSOLID )
+        if ( m_dc.GetBackgroundMode() == wxBRUSHSTYLE_SOLID)
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC

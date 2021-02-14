@@ -182,7 +182,7 @@ aware of the potential problems covered by the following section.
 wxWidgets uses the system @c wchar_t in wxString implementation by default
 under all systems. Thus, under Microsoft Windows, UCS-2 (simplified version of
 UTF-16 without support for surrogate characters) is used as @c wchar_t is 2
-bytes on this platform. Under Unix systems, including OS X, UCS-4 (also
+bytes on this platform. Under Unix systems, including macOS, UCS-4 (also
 known as UTF-32) is used by default, however it is also possible to build
 wxWidgets to use UTF-8 internally by passing @c \--enable-utf8 option to
 configure.

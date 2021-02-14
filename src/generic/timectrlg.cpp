@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -75,6 +72,7 @@ public:
         m_btn = new wxSpinButton(ctrl, wxID_ANY,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxSP_VERTICAL | wxSP_WRAP);
+        m_btn->SetCanFocus(false);
 
         m_currentField = Field_Hour;
         m_isFirstDigit = true;
@@ -86,7 +84,7 @@ public:
         // nice to add support to "%k" and "%l" (hours with leading blanks
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
-#if wxUSE_XLOCALE
+#if wxUSE_INTL
         m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
@@ -158,7 +156,7 @@ private:
     // Event handlers for various events in our controls.
     void OnTextSetFocus(wxFocusEvent& event)
     {
-        HighlightCurrentField();
+        CallAfter(&wxTimePickerGenericImpl::HighlightCurrentField);
 
         event.Skip();
     }
@@ -211,6 +209,21 @@ private:
                     AppendDigitToCurrentField(key - '0');
                 }
                 break;
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+                if ( m_currentField != Field_AMPM )
+                {
+                    AppendDigitToCurrentField(key - WXK_NUMPAD0);
+                }
+                break;
 
             case 'A':
             case 'P':
@@ -236,6 +249,9 @@ private:
                     }
                 }
                 break;
+            case WXK_TAB:
+                event.Skip();
+                break;
 
             // Do not skip the other events, just consume them to prevent the
             // user from editing the text directly.
@@ -244,6 +260,8 @@ private:
 
     void OnTextClick(wxMouseEvent& event)
     {
+        m_text->SetFocus();
+
         Field field = Field_Max; // Initialize just to suppress warnings.
         long pos;
         switch ( m_text->HitTest(event.GetPosition(), &pos) )
@@ -276,7 +294,7 @@ private:
             case wxTE_HT_BELOW:
                 // This shouldn't happen for single line control.
                 wxFAIL_MSG( "Unreachable" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTE_HT_BEYOND:
                 // Select the last field.
@@ -285,15 +303,18 @@ private:
         }
 
         ChangeCurrentField(field);
+        CallAfter(&wxTimePickerGenericImpl::HighlightCurrentField);
     }
 
     void OnArrowUp(wxSpinEvent& WXUNUSED(event))
     {
+        m_text->SetFocus();
         ChangeCurrentFieldBy1(Dir_Up);
     }
 
     void OnArrowDown(wxSpinEvent& WXUNUSED(event))
     {
+        m_text->SetFocus();
         ChangeCurrentFieldBy1(Dir_Down);
     }
 
@@ -353,8 +374,6 @@ private:
     // Select the currently actively field.
     void HighlightCurrentField()
     {
-        m_text->SetFocus();
-
         const CharRange range = GetFieldRange(m_currentField);
 
         m_text->SetSelection(range.from, range.to);

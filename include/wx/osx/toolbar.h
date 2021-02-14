@@ -29,7 +29,7 @@ public:
   wxToolBar(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                    long style = wxTB_DEFAULT_STYLE,
-                   const wxString& name = wxToolBarNameStr)
+                   const wxString& name = wxASCII_STR(wxToolBarNameStr))
   {
     Init();
     Create(parent, id, pos, size, style, name);
@@ -38,7 +38,7 @@ public:
 
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxTB_DEFAULT_STYLE,
-            const wxString& name = wxToolBarNameStr);
+            const wxString& name = wxASCII_STR(wxToolBarNameStr));
 
     virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
 
@@ -95,9 +95,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
-    
+
     void DoLayout();
-    
+
     void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
 
 #ifndef __WXOSX_IPHONE__

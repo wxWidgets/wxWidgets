@@ -4,7 +4,7 @@ sys$library:libpixman.olb/lib
 sys$library:libjpeg.olb/lib
 sys$library:libpng.olb/lib
 sys$library:libz.olb/lib
-sys$library:tiff.olb/lib
+sys$share:tiff$shr/share
 sys$library:expat.olb/lib
 X11:libxpm.olb/lib
 sys$share:freetype2shr/share

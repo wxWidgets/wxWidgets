@@ -73,6 +73,16 @@ enum wxImageResizeQuality
     wxIMAGE_QUALITY_HIGH = 4
 };
 
+// Constants for wxImage::Paste() for specifying alpha blending option.
+enum wxImageAlphaBlendMode
+{
+    // Overwrite the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_OVER = 0,
+
+    // Compose the original alpha values with the ones being pasted.
+    wxIMAGE_ALPHA_BLEND_COMPOSE = 1
+};
+
 // alpha channel values: fully transparent, default threshold separating
 // transparent pixels from opaque for a few functions dealing with alpha and
 // fully opaque
@@ -190,7 +200,7 @@ WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
                              wxImageHistogramBase);
 
-class WXDLLIMPEXP_CORE wxImageHistogram : public wxImageHistogramBase
+class wxImageHistogram : public wxImageHistogramBase
 {
 public:
     wxImageHistogram() : wxImageHistogramBase(256) { }
@@ -211,9 +221,43 @@ public:
     bool FindFirstUnusedColour(unsigned char *r,
                                unsigned char *g,
                                unsigned char *b,
-                               unsigned char startR = 1,
-                               unsigned char startG = 0,
-                               unsigned char startB = 0 ) const;
+                               unsigned char r2 = 1,
+                               unsigned char g2 = 0,
+                               unsigned char b2 = 0 ) const
+    {
+        unsigned long key = MakeKey(r2, g2, b2);
+
+        while ( find(key) != end() )
+        {
+            // color already used
+            r2++;
+            if ( r2 >= 255 )
+            {
+                r2 = 0;
+                g2++;
+                if ( g2 >= 255 )
+                {
+                    g2 = 0;
+                    b2++;
+                    if ( b2 >= 255 )
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            key = MakeKey(r2, g2, b2);
+        }
+
+        if ( r )
+            *r = r2;
+        if ( g )
+            *g = g2;
+        if ( b )
+            *b = b2;
+
+        return true;
+    }
 };
 
 //-----------------------------------------------------------------------------
@@ -277,11 +321,6 @@ public:
 #endif // wxUSE_STREAMS
 
     bool Create( const char* const* xpmData );
-#ifdef __BORLANDC__
-    // needed for Borland 5.5
-    wxImage( char** xpmData ) { Create(const_cast<const char* const*>(xpmData)); }
-    bool Create( char** xpmData ) { return Create(const_cast<const char* const*>(xpmData)); }
-#endif
 
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
@@ -314,9 +353,12 @@ public:
     wxImage Size( const wxSize& size, const wxPoint& pos,
                   int r = -1, int g = -1, int b = -1 ) const;
 
-    // pastes image into this instance and takes care of
-    // the mask colour and out of bounds problems
-    void Paste( const wxImage &image, int x, int y );
+    // Copy the data of the given image to the specified position of this one
+    // taking care of the out of bounds problems. Mask is respected, but alpha
+    // is simply replaced by default, use wxIMAGE_ALPHA_BLEND_COMPOSE to
+    // combine it with the original image alpha values if needed.
+    void Paste(const wxImage& image, int x, int y,
+               wxImageAlphaBlendMode alphaBlend = wxIMAGE_ALPHA_BLEND_OVER);
 
     // return the new image with size width*height
     wxImage Scale( int width, int height,
@@ -360,7 +402,7 @@ public:
     // Convert to greyscale image. Uses the luminance component (Y) of the image.
     // The luma value (YUV) is calculated using (R * weight_r) + (G * weight_g) + (B * weight_b), defaults to ITU-T BT.601
     wxImage ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const;
-    wxImage ConvertToGreyscale(void) const;
+    wxImage ConvertToGreyscale() const;
 
     // convert to monochrome image (<r,g,b> will be replaced by white,
     // everything else by black)
@@ -401,7 +443,7 @@ public:
     // (actually shades of grey) typically when you draw anti-
     // aliased text into a bitmap. The DC drawinf routines
     // draw grey values on the black background although they
-    // actually mean to draw white with differnt alpha values.
+    // actually mean to draw white with different alpha values.
     // This method reverses it, assuming a black (!) background
     // and white text (actually only the red channel is read).
     // The method will then fill up the whole image with the

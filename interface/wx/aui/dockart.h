@@ -209,6 +209,11 @@ public:
     virtual ~wxAuiDockArt();
 
     /**
+       Create a copy of this wxAuiDockArt instance.
+    */
+    virtual wxAuiDockArt* Clone() = 0;
+
+    /**
         Draws a background.
     */
     virtual void DrawBackground(wxDC& dc, wxWindow* window, int orientation,
@@ -297,6 +302,7 @@ public:
 
     wxAuiDefaultDockArt();
 
+    virtual wxAuiDockArt* Clone();
     int GetMetric(int metricId);
     void SetMetric(int metricId, int newVal);
     wxColour GetColour(int id);
@@ -337,6 +343,9 @@ public:
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
 
+    /**
+        @deprecated Not intended for the public API.
+    */
     void DrawIcon(wxDC& dc,
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
@@ -344,6 +353,8 @@ public:
 protected:
 
     void DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active);
+
+    void DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wxAuiPaneInfo& pane);
 
     void InitBitmaps();
 

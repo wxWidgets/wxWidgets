@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/frame.h"
 
@@ -315,25 +312,34 @@ void wxFrame::PositionStatusBar()
     int x = 0;
 #if wxUSE_TOOLBAR
     wxToolBar * const toolbar = GetToolBar();
-    if ( toolbar && !toolbar->HasFlag(wxTB_TOP) )
+    if ( toolbar )
     {
         const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
 
-        if ( toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT) )
+        if ( toolbar->IsVertical() )
         {
-            if ( toolbar->HasFlag(wxTB_LEFT) )
+            if ( directionTB == wxTB_LEFT )
                 x -= sizeTB.x;
 
             w += sizeTB.x;
         }
-        else // wxTB_BOTTOM
+        else if ( directionTB == wxTB_BOTTOM )
         {
             // we need to position the status bar below the toolbar
             h += sizeTB.y;
         }
+        //else: no adjustments necessary for the toolbar on top
     }
-    //else: no adjustments necessary for the toolbar on top
 #endif // wxUSE_TOOLBAR
+
+    // GetSize returns the height of the clientSize in which the statusbar
+    // height is subtracted (see wxFrame::DoGetClientSize). When the DPI of the
+    // window changes, the statusbar height will likely change so we need to
+    // account for this difference. If not, the statusbar will be positioned
+    // too high or low.
+    int shOld;
+    m_frameStatusBar->GetSize(NULL, &shOld);
 
     // Resize the status bar to its default height, as it could have been set
     // to a wrong value before by WM_SIZE sent during the frame creation and
@@ -342,8 +348,9 @@ void wxFrame::PositionStatusBar()
     // this here, the status bar would retain the possibly wrong current height.
     m_frameStatusBar->SetSize(x, h, w, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
 
-    int sw, sh;
-    m_frameStatusBar->GetSize(&sw, &sh);
+    int sh;
+    m_frameStatusBar->GetSize(NULL, &sh);
+    h += shOld - sh;
 
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
@@ -594,7 +601,7 @@ void wxFrame::PositionToolBar()
 
         int tx, ty, tw, th;
         toolbar->GetPosition( &tx, &ty );
-        toolbar->GetSize( &tw, &th );
+        toolbar->GetBestSize( &tw, &th );
 
         int x, y;
         if ( toolbar->HasFlag(wxTB_BOTTOM) )
@@ -732,6 +739,8 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
     wxMenuBar *menuBar = GetMenuBar();
     if ( menuBar && menuBar->GetAcceleratorTable()->Translate(frame, pMsg) )
         return true;
+#else
+    wxUnusedVar(frame);
 #endif // wxUSE_MENUS && wxUSE_ACCEL
 
     return false;
@@ -821,7 +830,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 #endif // wxUSE_TASKBARBUTTON
 
-    return wxFrameBase::HandleCommand(id, cmd, control);;
+    return wxFrameBase::HandleCommand(id, cmd, control);
 }
 
 // ---------------------------------------------------------------------------
@@ -921,12 +930,13 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     if ( toolbar && toolbar->IsShown() )
     {
         const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
 
-        if ( toolbar->HasFlag(wxTB_TOP) )
+        if ( directionTB == wxTB_TOP )
         {
             pt.y += sizeTB.y;
         }
-        else if ( toolbar->HasFlag(wxTB_LEFT) )
+        else if ( directionTB == wxTB_LEFT )
         {
             pt.x += sizeTB.x;
         }

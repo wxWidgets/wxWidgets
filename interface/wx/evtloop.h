@@ -189,7 +189,7 @@ public:
     /**
         Makes sure that idle events are sent again.
     */
-    virtual void WakeUpIdle();
+    void WakeUpIdle();
 
     /**
         This virtual function is called  when the application becomes idle and
@@ -324,7 +324,7 @@ public:
     @class wxGUIEventLoop
 
     A generic implementation of the GUI event loop.
-    
+
     @library{wxbase}
     @category{appmanagement}
 */

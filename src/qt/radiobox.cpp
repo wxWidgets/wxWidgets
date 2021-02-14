@@ -56,7 +56,10 @@ void wxQtButtonGroup::buttonClicked(int index) {
 wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
-wxRadioBox::wxRadioBox()
+wxRadioBox::wxRadioBox() :
+    m_qtGroupBox(NULL),
+    m_qtButtonGroup(NULL),
+    m_qtGridLayout(NULL)
 {
 }
 
@@ -107,15 +110,48 @@ bool wxRadioBox::Create(wxWindow *parent,
 }
 
 
-template < typename Button >
-static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
+static void AddChoices( QButtonGroup *qtButtonGroup, QGridLayout *qtGridLayout, int count, const wxString choices[], int style, int majorDim )
 {
-    Button *btn;
-    while ( count-- > 0 )
+    if ( count <= 0 )
+        return;
+
+    // wxRA_SPECIFY_COLS means that we arrange buttons in
+    // left to right order and GetMajorDim() is the number of columns while
+    // wxRA_SPECIFY_ROWS means that the buttons are arranged top to bottom and
+    // GetMajorDim() is the number of rows.
+
+   const bool columnMajor = style & wxRA_SPECIFY_COLS;
+   const int numMajor = majorDim > 0 ? majorDim : count;
+
+    bool isFirst = true;
+
+    for ( int i = 0; i < count; ++i )
     {
-        btn = new Button( wxQtConvertString( *choices++ ));
-        qtButtonGroup->addButton( btn );
-        qtBoxLayout->addWidget( btn );
+        QRadioButton *btn = new QRadioButton(wxQtConvertString (choices[i]) );
+        qtButtonGroup->addButton( btn, i );
+
+        int row;
+        int col;
+
+        if (columnMajor)
+        {
+            col = i % numMajor;
+            row = i / numMajor;
+
+        }
+        else
+        {
+            col = i / numMajor;
+            row = i % numMajor;
+        }
+
+        qtGridLayout->addWidget( btn, row, col );
+
+        if (isFirst)
+        {
+            btn->setChecked( true );
+            isFirst = false;
+        }
     }
 }
 
@@ -126,7 +162,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxPoint& pos,
             const wxSize& size,
             int n, const wxString choices[],
-            int WXUNUSED(majorDim),
+            int majorDim,
             long style,
             const wxValidator& val,
             const wxString& name)
@@ -135,15 +171,24 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_qtGroupBox->setTitle( wxQtConvertString( title ) );
     m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
 
-    if ( style & wxRA_SPECIFY_ROWS )
-        m_qtBoxLayout = new QHBoxLayout;
-    else if ( style & wxRA_SPECIFY_COLS )
-        m_qtBoxLayout = new QVBoxLayout;
+    if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
+        style |= wxRA_SPECIFY_COLS;
 
-    AddChoices< QRadioButton >( m_qtButtonGroup, m_qtBoxLayout, n, choices );
-    m_qtBoxLayout->addStretch(1);
-    m_qtGroupBox->setLayout(m_qtBoxLayout);
+    m_qtGridLayout = new QGridLayout;
 
+    AddChoices( m_qtButtonGroup, m_qtGridLayout, n, choices, style, majorDim );
+
+    QVBoxLayout *vertLayout = new QVBoxLayout;
+    vertLayout->addLayout(m_qtGridLayout);
+    vertLayout->addStretch();
+
+    QHBoxLayout *horzLayout = new QHBoxLayout;
+    horzLayout->addLayout(vertLayout);
+    horzLayout->addStretch();
+
+    m_qtGroupBox->setLayout(horzLayout);
+
+    SetMajorDim(majorDim == 0 ? n : majorDim, style);
     return QtCreateControl( parent, id, pos, size, style, val, name );
 }
 
@@ -164,19 +209,90 @@ static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    CHECK_BUTTON( qtButton, false );
+    if ( enable && !m_qtGroupBox->isEnabled() )
+    {
+        m_qtGroupBox->setEnabled( true );
 
-    qtButton->setEnabled( enable );
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+
+            qtButton->setEnabled( i == n );
+        }
+    }
+    else
+    {
+        QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+        CHECK_BUTTON( qtButton, false );
+        qtButton->setEnabled(enable);
+    }
+
+    return true;
+}
+
+bool wxRadioBox::Enable( bool enable )
+{
+    if ( m_qtGroupBox->isEnabled() == enable )
+    {
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+            qtButton->setEnabled( enable );
+        }
+    }
+
+    m_qtGroupBox->setEnabled( enable );
+
     return true;
 }
 
 bool wxRadioBox::Show(unsigned int n, bool show)
 {
-    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    CHECK_BUTTON( qtButton, false );
+    if ( show && !m_qtGroupBox->isVisible() )
+    {
+        m_qtGroupBox->setVisible(true);
 
-    qtButton->setVisible( show );
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+
+            i == n ? qtButton->setVisible( true ) : qtButton->setVisible( false );
+        }
+    }
+    else
+    {
+        QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+        CHECK_BUTTON( qtButton, false );
+
+        qtButton->setVisible( show );
+    }
+
+    return true;
+}
+
+bool wxRadioBox::Show( bool show )
+{
+    if ( !wxControl::Show(show) )
+        return false;
+
+    if ( !m_qtGroupBox )
+        return false;
+
+    if( m_qtGroupBox->isVisible() == show )
+    {
+        for( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+            qtButton->setVisible( show );
+        }
+    }
+
+    m_qtGroupBox->setVisible( show );
+
     return true;
 }
 
@@ -196,7 +312,7 @@ bool wxRadioBox::IsItemShown(unsigned int n) const
     return qtButton->isVisible();
 }
 
-unsigned wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     QList< QAbstractButton * > buttons = m_qtButtonGroup->buttons();
     return buttons.size();

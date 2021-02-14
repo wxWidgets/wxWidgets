@@ -7,7 +7,7 @@
 
 
 /**
-    This class allows to get translations for strings.
+    This class allows getting translations for strings.
 
     In wxWidgets this class manages message catalogs which contain the
     translations of the strings used to the current language. Unlike wxLocale,
@@ -96,7 +96,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -119,7 +119,7 @@ public:
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        Vista+, macOS) have separate language and regional (= locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -333,7 +333,7 @@ public:
 
     Catalogs are searched for in standard places (system locales directory,
     `LC_PATH` on Unix systems, Resources subdirectory of the application bundle
-    on OS X, executable's directory on Windows), but you may also prepend
+    on macOS, executable's directory on Windows), but you may also prepend
     additional directories to the search path with
     AddCatalogLookupPathPrefix().
 
@@ -539,7 +539,7 @@ public:
 
     If @a context is not empty (notice that this argument is only available
     starting from wxWidgets 3.1.1), item translation is looked up in the
-    specified context. This allows to have different translations for the same
+    specified context. This allows having different translations for the same
     string appearing in different contexts, e.g. it may be necessary to
     translate the same English "Open" verb differently depending on the object
     it applies to. To do this, you need to use @c msgctxt in the source message

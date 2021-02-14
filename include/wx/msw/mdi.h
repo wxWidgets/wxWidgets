@@ -30,7 +30,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr)
+                     const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -45,7 +45,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     // override/implement base class [pure] virtual methods
     // ----------------------------------------------------
@@ -84,6 +84,13 @@ public:
     // called by wxMDIChildFrame just before it is destroyed
     virtual void RemoveMDIChild(wxMDIChildFrame *child);
 #endif // wxUSE_MENUS
+
+    // Retrieve the current window menu label: it can be different from
+    // "Window" when using non-English translations and can also be different
+    // from wxGetTranslation("Window") if the locale has changed since the
+    // "Window" menu was added.
+    const wxString& MSWGetCurrentWindowMenuLabel() const
+        { return m_currentWindowMenuLabel; }
 
     // handlers
     // --------
@@ -150,6 +157,9 @@ private:
     // it was "handled", see OnActivate() and HandleActivate()
     bool m_activationNotHandled;
 
+    // holds the current translation for the window menu label
+    wxString m_currentWindowMenuLabel;
+
 
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
@@ -172,7 +182,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr)
+                    const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -185,7 +195,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxMDIChildFrame();
 

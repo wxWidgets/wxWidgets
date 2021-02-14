@@ -86,6 +86,11 @@ public:
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y) wxOVERRIDE;
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp) wxOVERRIDE;
 
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
+
 #if wxUSE_DC_TRANSFORM_MATRIX
     virtual bool CanUseTransformMatrix() const wxOVERRIDE;
     virtual bool SetTransformMatrix(const wxAffineMatrix2D& matrix) wxOVERRIDE;
@@ -125,7 +130,7 @@ public:
     }
 
     void* GetHandle() const wxOVERRIDE { return (void*)GetHDC(); }
-    
+
     const wxBitmap& GetSelectedBitmap() const wxOVERRIDE { return m_selectedBitmap; }
     wxBitmap& GetSelectedBitmap() wxOVERRIDE { return m_selectedBitmap; }
 
@@ -202,8 +207,6 @@ public:
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc) wxOVERRIDE;
-    virtual void DoDrawCheckMark(wxCoord x, wxCoord y,
-                                 wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea) wxOVERRIDE;
 
@@ -293,9 +296,6 @@ protected:
 
     // MSW-specific member variables
     // -----------------------------
-
-    // the window associated with this DC (may be NULL)
-    wxWindow         *m_canvas;
 
     wxBitmap          m_selectedBitmap;
 

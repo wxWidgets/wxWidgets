@@ -16,15 +16,15 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxControlNameStr);
+             const wxString& name = wxASCII_STR(wxControlNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 protected:
     bool QtCreateControl( wxWindow *parent, wxWindowID id, const wxPoint &pos,

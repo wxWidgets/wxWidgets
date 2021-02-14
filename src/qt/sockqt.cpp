@@ -54,7 +54,7 @@ public:
 class QtFDIOManager : public wxFDIOManager
 {
 public:
-    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d) wxOVERRIDE
     {
         QSocketNotifier::Type type;
         switch (d)
@@ -73,7 +73,7 @@ public:
     }
 
     virtual void
-    RemoveInput(wxFDIOHandler* handler, int fd, Direction d)
+    RemoveInput(wxFDIOHandler* handler, int fd, Direction d) wxOVERRIDE
     {
         QSocketNotifier::Type type = d == INPUT ? QSocketNotifier::Read :
                                                   QSocketNotifier::Write;
@@ -94,10 +94,12 @@ public:
     wxVector<wxQtFDIONotifier*> m_qtNotifiers;
 };
 
+#if defined(__UNIX__)
 wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
 {
     static QtFDIOManager s_manager;
     return &s_manager;
 }
+#endif // __UNIX__
 
-#endif // wxUSE_SOCKETS && __UNIX__
+#endif // wxUSE_SOCKETS

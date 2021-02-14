@@ -922,6 +922,8 @@ public:
     /**
         Closes the view by calling OnClose(). If @a deleteWindow is @true, this
         function should delete the window associated with the view.
+
+        @return @true if the view was closed
     */
     virtual bool Close(bool deleteWindow = true);
 
@@ -971,6 +973,9 @@ public:
         example, if your views all share the same window, you need to
         disassociate the window from the view and perhaps clear the window. If
         @a deleteWindow is @true, delete the frame associated with the view.
+
+        Returning @false from this function prevents the view, and possibly the
+        document, from being closed.
     */
     virtual bool OnClose(bool deleteWindow);
 
@@ -1295,6 +1300,8 @@ public:
         Closes the document, by calling OnSaveModified() and then (if this
         returned @true) OnCloseDocument(). This does not normally delete the
         document object, use DeleteAllViews() to do this implicitly.
+
+        @return @true if the document was closed
     */
     virtual bool Close();
 
@@ -1463,6 +1470,12 @@ public:
         Notice that previous wxWidgets versions used to call this function also
         from OnNewDocument(), rather counter-intuitively. This is no longer the
         case since wxWidgets 2.9.0.
+
+        Returning @false from this function prevents the document from closing.
+        The default implementation does this if the document is modified and
+        the user didn't confirm discarding the modifications to it.
+
+        Return @true to allow the document to be closed.
     */
     virtual bool OnCloseDocument();
 

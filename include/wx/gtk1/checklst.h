@@ -38,14 +38,14 @@ public:
             const wxString *choices = (const wxString *)NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxListBoxNameStr);
+            const wxString& name = wxASCII_STR(wxListBoxNameStr));
     wxCheckListBox(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,
             const wxArrayString& choices,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxListBoxNameStr);
+            const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     bool IsChecked(unsigned int index) const;
     void Check(unsigned int index, bool check = true);

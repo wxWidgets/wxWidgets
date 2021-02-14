@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by: Ryan Norton (UTF8 UNICODE)
 // Created:     2004-09-19
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 

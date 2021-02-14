@@ -21,7 +21,9 @@ public:
         { }
 };
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data )
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog,wxDialog)
+
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data )
 {
     m_qtWindow = new wxQtColorDialog( parent, this );
 
@@ -43,9 +45,9 @@ wxColourData &wxColourDialog::GetColourData()
 {
     for (int i=0; i<wxColourData::NUM_CUSTOM; i++)
         m_data.SetCustomColour(i, GetQColorDialog()->customColor(i));
-    
+
     m_data.SetColour(GetQColorDialog()->currentColor());
-    
+
     return m_data;
 }
 

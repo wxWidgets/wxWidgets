@@ -51,11 +51,14 @@ public:
     /**
         Returns the label of the item with the given index.
 
+        The index must be valid, i.e. less than the value returned by
+        GetCount(), otherwise an assert is triggered. Notably, this function
+        can't be called if the control is empty.
+
         @param n
             The zero-based index.
 
-        @return The label of the item or an empty string if the position was
-                invalid.
+        @return The label of the item.
     */
     virtual wxString GetString(unsigned int n) const = 0;
 
@@ -112,10 +115,6 @@ public:
         selected.
 
         @return The position of the current selection.
-
-        @remarks This method can be used with single selection list boxes only,
-                 you should use wxListBox::GetSelections() for the list
-                 boxes with wxLB_MULTIPLE style.
 
         @see SetSelection(), GetStringSelection()
     */
@@ -353,6 +352,12 @@ public:
         owned by the control.  Note that it is an error (signalled by an assert
         failure in debug builds) to remove an item with the index negative or
         greater or equal than the number of items in the control.
+
+        If there is a currently selected item below the item being deleted,
+        i.e. if GetSelection() returns a valid index greater than or equal to
+        @a n, the selection is invalidated when this function is called.
+        However if the selected item appears before the item being deleted, the
+        selection is preserved unchanged.
 
         @param n
             The zero-based item index.

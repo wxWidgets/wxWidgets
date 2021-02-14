@@ -38,12 +38,12 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxWindow* parent)
-    : wxFrame(parent, wxID_ANY, wxT("PropertyGrid Test"))
+    : wxFrame(parent, wxID_ANY, "PropertyGrid Test")
 {
     wxMenu *Menu = new wxMenu;
-    Menu->Append(ID_ACTION, wxT("Action"));
+    Menu->Append(ID_ACTION, "Action");
     wxMenuBar *MenuBar = new wxMenuBar();
-    MenuBar->Append(Menu, wxT("Action"));
+    MenuBar->Append(Menu, "Action");
     SetMenuBar(MenuBar);
 
     wxPropertyGrid *pg = new wxPropertyGrid(this,wxID_ANY,wxDefaultPosition,wxSize(400,400),
@@ -51,9 +51,9 @@ MyFrame::MyFrame(wxWindow* parent)
                         wxPG_BOLD_MODIFIED );
     m_pg = pg;
 
-    pg->Append( new wxStringProperty(wxT("String Property"), wxPG_LABEL) );
-    pg->Append( new wxIntProperty(wxT("Int Property"), wxPG_LABEL) );
-    pg->Append( new wxBoolProperty(wxT("Bool Property"), wxPG_LABEL) );
+    pg->Append( new wxStringProperty("String Property", wxPG_LABEL) );
+    pg->Append( new wxIntProperty("Int Property", wxPG_LABEL) );
+    pg->Append( new wxBoolProperty("Bool Property", wxPG_LABEL) );
 
     SetSize(400, 600);
 }
@@ -64,12 +64,12 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
 
     if ( p )
     {
-        wxLogVerbose(wxT("OnPropertyGridChange(%s, value=%s)"),
-                   p->GetName().c_str(), p->GetValueAsString().c_str());
+        wxLogVerbose("OnPropertyGridChange(%s, value=%s)",
+                   p->GetName(), p->GetValueAsString());
     }
     else
     {
-        wxLogVerbose(wxT("OnPropertyGridChange(NULL)"));
+        wxLogVerbose("OnPropertyGridChange(NULL)");
     }
 }
 
@@ -77,7 +77,7 @@ void MyFrame::OnPropertyGridChanging(wxPropertyGridEvent &event)
 {
     wxPGProperty* p = event.GetProperty();
 
-    wxLogVerbose(wxT("OnPropertyGridChanging(%s)"), p->GetName().c_str());
+    wxLogVerbose("OnPropertyGridChanging(%s)", p->GetName());
 }
 
 void MyFrame::OnAction(wxCommandEvent &)

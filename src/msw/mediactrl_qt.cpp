@@ -21,9 +21,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MEDIACTRL
 
@@ -105,7 +102,6 @@ typedef struct ComponentInstanceRecord * ComponentInstance;
 // constants respectively (translate each byte to ASCII to see it), but this is
 // not accepted by non-Mac compilers, so use the numeric constants instead.
 const OSType URLDataHandlerSubType     = 0x75726c20;
-const OSType VisualMediaCharacteristic = 0x65796573;
 #endif
 
 struct FSSpec
@@ -695,7 +691,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     FSSpec sfFile;
 
     OSErr err = m_lib.NativePathNameToFSSpec(
-        (char*) (const char*) fileName.mb_str(),
+        const_cast<char*>(static_cast<const char*>(fileName.mb_str())),
         &sfFile, 0);
     bool result = (err == noErr);
 

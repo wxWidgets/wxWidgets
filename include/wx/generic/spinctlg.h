@@ -147,6 +147,8 @@ protected:
     // ensure that the value is in range wrapping it round if necessary
     double AdjustToFitInRange(double value) const;
 
+    // Assign validator with current parameters
+    virtual void ResetTextValidator() = 0;
 
     double m_value;
     double m_min;
@@ -317,20 +319,21 @@ public:
     int GetIncrement() const { return int(m_increment); }
 
     // operations
-    void SetValue(const wxString& value)
+    virtual void SetValue(const wxString& value) wxOVERRIDE
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue( int value )              { DoSetValue(value, SendEvent_None); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement(int inc) { DoSetIncrement(inc); }
 
-    virtual int GetBase() const { return m_base; }
-    virtual bool SetBase(int base);
+    virtual int GetBase() const wxOVERRIDE { return m_base; }
+    virtual bool SetBase(int base) wxOVERRIDE;
 
 protected:
-    virtual void DoSendEvent();
+    virtual void DoSendEvent() wxOVERRIDE;
 
-    virtual bool DoTextToValue(const wxString& text, double *val);
-    virtual wxString DoValueToText(double val);
+    virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
+    virtual wxString DoValueToText(double val) wxOVERRIDE;
+    virtual void ResetTextValidator() wxOVERRIDE;
 
 private:
     // Common part of all ctors.
@@ -380,6 +383,7 @@ public:
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrlDouble"))
     {
+        DetermineDigits(inc);
         return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
                                              style, min, max, initial,
                                              inc, name);
@@ -403,13 +407,15 @@ public:
     // We don't implement bases support for floating point numbers, this is not
     // very useful in practice.
     virtual int GetBase() const wxOVERRIDE { return 10; }
-    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return 0; }
+    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
 
 protected:
     virtual void DoSendEvent() wxOVERRIDE;
 
     virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
     virtual wxString DoValueToText(double val) wxOVERRIDE;
+    virtual void ResetTextValidator() wxOVERRIDE;
+    void DetermineDigits(double inc);
 
     unsigned m_digits;
 
@@ -418,7 +424,7 @@ private:
     void Init()
     {
         m_digits = 0;
-        m_format = wxS("%g");
+        m_format = wxASCII_STR("%0.0f");
     }
 
     wxString m_format;

@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_INTL
 
@@ -248,9 +245,53 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
 
 #else
 
-// On Unix, there's just one language=locale setting, so we should always
-// use that.
-#define GetPreferredUILanguage GetPreferredUILanguageFallback
+// When the preferred UI language is determined, the LANGUAGE environment
+// variable is the primary source of preference.
+// http://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
+//
+// The LANGUAGE variable may contain a colon separated list of language
+// codes in the order of preference.
+// http://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
+wxString GetPreferredUILanguage(const wxArrayString& available)
+{
+    wxString languageFromEnv;
+    wxArrayString preferred;
+    if ( wxGetEnv("LANGUAGE", &languageFromEnv) )
+    {
+        wxStringTokenizer tknzr(languageFromEnv, ":");
+        while ( tknzr.HasMoreTokens() )
+        {
+            const wxString tok = tknzr.GetNextToken();
+            if ( const wxLanguageInfo *li = wxLocale::FindLanguageInfo(tok) )
+            {
+                preferred.push_back(li->CanonicalName);
+            }
+        }
+        if ( preferred.empty() )
+        {
+            wxLogTrace(TRACE_I18N, " - LANGUAGE was set, but it didn't contain any languages recognized by the system");
+        }
+    }
+
+    LogTraceArray(" - preferred languages from environment", preferred);
+    for ( wxArrayString::const_iterator j = preferred.begin();
+          j != preferred.end();
+          ++j )
+    {
+        wxString lang(*j);
+        if ( available.Index(lang) != wxNOT_FOUND )
+            return lang;
+        size_t pos = lang.find('_');
+        if ( pos != wxString::npos )
+        {
+            lang = lang.substr(0, pos);
+            if ( available.Index(lang) != wxNOT_FOUND )
+                return lang;
+        }
+    }
+
+    return GetPreferredUILanguageFallback(available);
+}
 
 #endif
 
@@ -1021,6 +1062,7 @@ private:
 
     // data description
     size_t32          m_numStrings;   // number of strings in this domain
+    const
     wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
                      *m_pTransTable;  //            translated
 
@@ -1035,7 +1077,7 @@ private:
                             : ui;
     }
 
-    const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 n) const
+    const char* StringAtOfs(const wxMsgTableEntry* pTable, size_t32 n) const
     {
         const wxMsgTableEntry * const ent = pTable + n;
 
@@ -1111,7 +1153,7 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
     // examine header
     bool bValid = data.length() > sizeof(wxMsgCatalogHeader);
 
-    const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)data.data();
+    const wxMsgCatalogHeader* pHeader = reinterpret_cast<const wxMsgCatalogHeader*>(data.data());
     if ( bValid ) {
         // we'll have to swap all the integers if it's true
         m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
@@ -1130,9 +1172,9 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
 
     // initialize
     m_numStrings  = Swap(pHeader->numStrings);
-    m_pOrigTable  = (wxMsgTableEntry *)(data.data() +
+    m_pOrigTable  = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
                     Swap(pHeader->ofsOrigTable));
-    m_pTransTable = (wxMsgTableEntry *)(data.data() +
+    m_pTransTable = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
                     Swap(pHeader->ofsTransTable));
 
     // now parse catalog's header and try to extract catalog charset and
@@ -1434,9 +1476,9 @@ wxTranslations::~wxTranslations()
     delete m_loader;
 
     // free catalogs memory
-    wxMsgCatalog *pTmpCat;
     while ( m_pMsgCat != NULL )
     {
+        wxMsgCatalog* pTmpCat;
         pTmpCat = m_pMsgCat;
         m_pMsgCat = m_pMsgCat->m_pNext;
         delete pTmpCat;
@@ -1479,14 +1521,6 @@ bool wxTranslations::AddStdCatalog()
 {
     if ( !AddCatalog(wxS("wxstd")) )
         return false;
-
-    // there may be a catalog with toolkit specific overrides, it is not
-    // an error if this does not exist
-    wxString port(wxPlatformInfo::Get().GetPortIdName());
-    if ( !port.empty() )
-    {
-        AddCatalog(port.BeforeFirst(wxS('/')).MakeLower());
-    }
 
     return true;
 }

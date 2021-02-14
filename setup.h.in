@@ -182,8 +182,6 @@
     #define wxUSE_UNICODE 0
 #endif
 
-#define wxUSE_WCHAR_T 0
-
 
 #define wxUSE_EXCEPTIONS    0
 
@@ -221,9 +219,6 @@
 #define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
-
-#define wxUSE_IOSTREAMH     0
-
 
 
 #define wxUSE_LONGLONG      0
@@ -299,6 +294,16 @@
 
 #define wxUSE_MIMETYPE 0
 
+#define wxUSE_WEBREQUEST 0
+
+#ifdef __APPLE__
+#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+#define wxUSE_WEBREQUEST_CURL 0
+
 #define wxUSE_PROTOCOL 0
 
 #define wxUSE_PROTOCOL_FILE 0
@@ -340,6 +345,8 @@
 #else
 #define wxUSE_WEBVIEW_IE 0
 #endif
+
+#define wxUSE_WEBVIEW_EDGE 0
 
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 0
@@ -416,6 +423,8 @@
 #define wxUSE_TREECTRL      0
 #define wxUSE_TREELISTCTRL  0
 
+#define wxUSE_NATIVE_DATAVIEWCTRL 0
+
 #define wxUSE_STATUSBAR    0
 
 #define wxUSE_NATIVE_STATUSBAR        0
@@ -470,6 +479,8 @@
 
 #define wxUSE_MENUS         0
 
+#define wxUSE_MENUBAR       0
+
 #define wxUSE_NOTIFICATION_MESSAGE 0
 
 #define wxUSE_PREFERENCES_EDITOR 0
@@ -522,6 +533,8 @@
 
 #define wxUSE_NUMBERDLG 0
 
+#define wxUSE_CREDENTIALDLG 0
+
 #define wxUSE_SPLASH 0
 
 #define wxUSE_WIZARDDLG 0
@@ -547,6 +560,8 @@
 #define wxUSE_HTML          0
 
 #define wxUSE_GLCANVAS       0
+
+#define wxUSE_GLCANVAS_EGL   0
 
 #define wxUSE_RICHTEXT       0
 
@@ -632,7 +647,6 @@
 #define wxUSE_THEME_MONO    0
 #define wxUSE_THEME_WIN32   0
 
-
 /* --- end common options --- */
 
 /*
@@ -677,6 +691,12 @@
     #define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
 
+#if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
+    #define wxUSE_WEBREQUEST_WINHTTP 0
+#else
+    #define wxUSE_WEBREQUEST_WINHTTP 0
+#endif
+
 
 #define wxUSE_OLE           0
 
@@ -714,6 +734,8 @@
 
 #define wxUSE_INICONF 0
 
+#define wxUSE_WINSOCK2 0
+
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
@@ -738,11 +760,6 @@
  * Define if va_list type is an array
  */
 #undef VA_LIST_IS_ARRAY
-
-/*
- * Define if the compiler supports variadic macros
- */
-#undef HAVE_VARIADIC_MACROS
 
 /*
  * Define if you don't want variadic macros to be used even if they are
@@ -984,9 +1001,6 @@
 /* Define if you have pthread_attr_setstacksize */
 #undef HAVE_PTHREAD_ATTR_SETSTACKSIZE
 
-/* Define if you have shl_load() */
-#undef HAVE_SHL_LOAD
-
 /* Define if you have snprintf() */
 #undef HAVE_SNPRINTF
 
@@ -1088,9 +1102,6 @@
 
 /* Define if wchar_t is distinct type in your compiler. */
 #undef wxWCHAR_T_IS_REAL_TYPE
-
-/* Define if you have the dlerror function.  */
-#undef HAVE_DLERROR
 
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
@@ -1202,9 +1213,6 @@
 
 /* Define if you have the <langinfo.h> header file.  */
 #undef HAVE_LANGINFO_H
-
-/* Define if you have the <w32api.h> header file (mingw,cygwin).  */
-#undef HAVE_W32API_H
 
 /* Define if you have the <sys/soundcard.h> header file. */
 #undef HAVE_SYS_SOUNDCARD_H

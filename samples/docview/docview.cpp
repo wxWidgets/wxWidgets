@@ -33,9 +33,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -287,7 +284,10 @@ bool MyApp::OnInit()
 
     if ( m_filesFromCmdLine.empty() )
     {
+        // on macOS the dialog will be shown by MacNewFile
+#ifndef __WXMAC__
         docManager->CreateNewDocument();
+#endif
     }
     else // we have files to open on command line
     {

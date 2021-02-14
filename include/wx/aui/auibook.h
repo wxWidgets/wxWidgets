@@ -69,12 +69,6 @@ public:
     {
         m_dragSource = NULL;
     }
-#ifndef SWIG
-    wxAuiNotebookEvent(const wxAuiNotebookEvent& c) : wxBookCtrlEvent(c)
-    {
-        m_dragSource = c.m_dragSource;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxAuiNotebookEvent(*this); }
 
     void SetDragSource(wxAuiNotebook* s) { m_dragSource = s; }
@@ -226,6 +220,7 @@ protected:
     void OnKillFocus(wxFocusEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
 
@@ -349,11 +344,17 @@ public:
 
     virtual int ChangeSelection(size_t n) wxOVERRIDE;
 
-    virtual bool AddPage(wxWindow *page, const wxString &text, bool select, 
+    virtual bool AddPage(wxWindow *page, const wxString &text, bool select,
                          int imageId) wxOVERRIDE;
     virtual bool DeleteAllPages() wxOVERRIDE;
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
                             bool select, int imageId) wxOVERRIDE;
+
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+
+    wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
+    wxAuiTabCtrl* GetActiveTabCtrl();
+    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
 
 protected:
     // Common part of all ctors.
@@ -384,10 +385,7 @@ protected:
 
     void DoSizing();
     void InitNotebook(long style);
-    wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
     wxWindow* GetTabFrameFromTabCtrl(wxWindow* tabCtrl);
-    wxAuiTabCtrl* GetActiveTabCtrl();
-    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
     void RemoveEmptyTabFrames();
     void UpdateHintWindowSize();
 
@@ -408,6 +406,7 @@ protected:
     void OnTabRightUp(wxAuiNotebookEvent& evt);
     void OnTabBgDClick(wxAuiNotebookEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
     // our pages, otherwise an assert is raised)

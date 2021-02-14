@@ -23,7 +23,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -35,17 +35,17 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const ;
+    virtual void SetValue(bool value) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
-    virtual bool OSXHandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked( double timestampsec ) wxOVERRIDE;
 
-    virtual void Command(wxCommandEvent& event);
+    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
 
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton);
@@ -63,7 +63,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -75,7 +75,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton);

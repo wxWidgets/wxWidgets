@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/msw/private.h"
 
@@ -108,7 +105,13 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
     // the result computed by GetTextExtentPoint32() may be too small as it
     // accounts for under/overhang of the first/last character while we want
     // just the bounding rect for this string so adjust the width as needed
-    if ( len > 0 )
+    // when using italic fonts as the difference is really noticeable for them
+    // (it may still exist, but seems to be at most 1px for the other fonts,
+    // and calling GetCharABCWidths() is pretty slow and much slower than
+    // calling GetTextExtentPoint32() itself, so avoid its overhead unless it's
+    // really, really necessary).
+    const wxFont font = GetFont();
+    if ( font.IsOk() && font.GetStyle() != wxFONTSTYLE_NORMAL && len > 0 )
     {
         ABC widthABC;
         const wxChar chFirst = *string.begin();
@@ -165,6 +168,26 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
         wxLogLastError(wxT("GetTextExtentExPoint"));
 
         return false;
+    }
+
+    // The width of \t determined by GetTextExtentExPoint is 0. Determine the
+    // actual width using DoGetTextExtent and update the widths accordingly.
+    int offset = 0;
+    int tabWidth = 0;
+    int tabHeight = 0;
+    int* widthPtr = &widths[0];
+    for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i )
+    {
+        if ( *i == '\t' )
+        {
+            if ( tabWidth == 0 )
+            {
+                DoGetTextExtent("\t", &tabWidth, &tabHeight);
+            }
+            offset += tabWidth;
+        }
+
+        *widthPtr++ += offset;
     }
 
     return true;

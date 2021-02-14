@@ -14,13 +14,11 @@
 // and "catch.hpp"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Suppress some warnings in catch_impl.hpp.
 wxCLANG_WARNING_SUPPRESS(missing-braces)
 wxCLANG_WARNING_SUPPRESS(logical-op-parentheses)
+wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
 
 // This file needs to get the CATCH definitions in addition to the usual
 // assertion macros declarations from catch.hpp included by testprec.h.
@@ -30,6 +28,7 @@ wxCLANG_WARNING_SUPPRESS(logical-op-parentheses)
 
 wxCLANG_WARNING_RESTORE(missing-braces)
 wxCLANG_WARNING_RESTORE(logical-op-parentheses)
+wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
 
 // This probably could be done by predefining CLARA_CONFIG_MAIN, but at the
 // point where we are, just define this global variable manually.
@@ -107,9 +106,10 @@ static wxString FormatAssertMessage(const wxString& file,
                                     const wxString& msg)
 {
     wxString str;
-    str << "wxWidgets assert: " << cond << " failed "
-           "at " << file << ":" << line << " in " << func
-        << " with message '" << msg << "'";
+    str << wxASCII_STR("wxWidgets assert: ") << cond
+        << wxASCII_STR(" failed at ") << file << wxASCII_STR(":") << line
+        << wxASCII_STR(" in ") << func << wxASCII_STR(" with message '")
+        << msg << wxASCII_STR("'");
     return str;
 }
 
@@ -131,21 +131,27 @@ static void TestAssertHandler(const wxString& file,
     {
         // Exceptions thrown from worker threads are not caught currently and
         // so we'd just die without any useful information -- abort instead.
-        abortReason << assertMessage << "in a worker thread.";
+        abortReason << assertMessage << wxASCII_STR("in a worker thread.");
     }
+#if __cplusplus >= 201703L || wxCHECK_VISUALC_VERSION(14)
+    else if ( uncaught_exceptions() )
+#else
     else if ( uncaught_exception() )
+#endif
     {
         // Throwing while already handling an exception would result in
         // terminate() being called and we wouldn't get any useful information
         // about why the test failed then.
         if ( s_lastAssertMessage.empty() )
         {
-            abortReason << assertMessage << "while handling an exception";
+            abortReason << assertMessage
+                        << wxASCII_STR("while handling an exception");
         }
         else // In this case the exception is due to a previous assert.
         {
-            abortReason << s_lastAssertMessage << "\n  and another "
-                        << assertMessage << " while handling it.";
+            abortReason << s_lastAssertMessage
+                        << wxASCII_STR("\n  and another ") << assertMessage
+                        << wxASCII_STR(" while handling it.");
         }
     }
     else // Can "safely" throw from here.
@@ -165,7 +171,13 @@ static void TestAssertHandler(const wxString& file,
 
 CATCH_TRANSLATE_EXCEPTION(TestAssertFailure& e)
 {
-    return e.m_msg.ToStdString(wxConvUTF8);
+    wxString desc = e.m_msg;
+    if ( desc.empty() )
+        desc.Printf(wxASCII_STR("Condition \"%s\" failed"), e.m_cond);
+
+    desc += wxString::Format(wxASCII_STR(" in %s() at %s:%d"), e.m_func, e.m_file, e.m_line);
+
+    return desc.ToStdString(wxConvUTF8);
 }
 
 #endif // wxDEBUG_LEVEL
@@ -186,11 +198,11 @@ public:
     TestApp();
 
     // standard overrides
-    virtual bool OnInit();
-    virtual int  OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual int  OnExit() wxOVERRIDE;
 
 #ifdef __WIN32__
-    virtual wxAppTraits *CreateTraits()
+    virtual wxAppTraits *CreateTraits() wxOVERRIDE
     {
         // Define a new class just to customize CanUseStderr() behaviour.
         class TestAppTraits : public TestAppTraitsBase
@@ -200,11 +212,11 @@ public:
             // in this case we really don't want to show any message boxes, as
             // wxMessageOutputBest, used e.g. from the default implementation
             // of wxApp::OnUnhandledException(), would do by default.
-            virtual bool CanUseStderr() { return true; }
+            virtual bool CanUseStderr() wxOVERRIDE { return true; }
 
             // Overriding CanUseStderr() is not enough, we also need to
             // override this one to avoid returning false from it.
-            virtual bool WriteToStderr(const wxString& text)
+            virtual bool WriteToStderr(const wxString& text) wxOVERRIDE
             {
                 wxFputs(text, stderr);
                 fflush(stderr);
@@ -221,17 +233,17 @@ public:
 
     // Also override this method to avoid showing any dialogs from here -- and
     // show some details about the exception along the way.
-    virtual bool OnExceptionInMainLoop()
+    virtual bool OnExceptionInMainLoop() wxOVERRIDE
     {
-        wxFprintf(stderr, "Unhandled exception in the main loop: %s\n",
-                  Catch::translateActiveException());
+        wxFprintf(stderr, wxASCII_STR("Unhandled exception in the main loop: %s\n"),
+                  wxASCII_STR(Catch::translateActiveException().c_str()));
 
         throw;
     }
 
     // used by events propagation test
-    virtual int FilterEvent(wxEvent& event);
-    virtual bool ProcessEvent(wxEvent& event);
+    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
+    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
 
     void SetFilterEventFunc(FilterEventFunc f) { m_filterEventFunc = f; }
     void SetProcessEventFunc(ProcessEventFunc f) { m_processEventFunc = f; }
@@ -269,7 +281,7 @@ public:
         event.Skip();
     }
 
-    virtual int OnRun()
+    virtual int OnRun() wxOVERRIDE
     {
         if ( TestAppBase::OnRun() != 0 )
             m_exitcode = EXIT_FAILURE;
@@ -277,7 +289,7 @@ public:
         return m_exitcode;
     }
 #else // !wxUSE_GUI
-    virtual int OnRun()
+    virtual int OnRun() wxOVERRIDE
     {
         return RunTests();
     }
@@ -352,7 +364,7 @@ extern bool IsNetworkAvailable()
     // under Travis to avoid false positives.
     static int s_isTravis = -1;
     if ( s_isTravis == -1 )
-        s_isTravis = wxGetEnv("TRAVIS", NULL);
+        s_isTravis = wxGetEnv(wxASCII_STR("TRAVIS"), NULL);
 
     if ( s_isTravis )
         return false;
@@ -363,7 +375,7 @@ extern bool IsNetworkAvailable()
     wxSocketBase::Initialize();
 
     wxIPV4address addr;
-    if (!addr.Hostname("www.google.com") || !addr.Service("www"))
+    if (!addr.Hostname(wxASCII_STR("www.google.com")) || !addr.Service(wxASCII_STR("www")))
     {
         wxSocketBase::Shutdown();
         return false;
@@ -386,23 +398,50 @@ extern bool IsAutomaticTest()
         // Allow setting an environment variable to emulate buildslave user for
         // testing.
         wxString username;
-        if ( !wxGetEnv("WX_TEST_USER", &username) )
+        if ( !wxGetEnv(wxASCII_STR("WX_TEST_USER"), &username) )
             username = wxGetUserId();
 
         username.MakeLower();
-        s_isAutomatic = username == "buildbot" ||
-                            username.Matches("sandbox*");
+        s_isAutomatic = username == wxASCII_STR("buildbot") ||
+                            username.Matches(wxASCII_STR("sandbox*"));
 
-        // Also recognize Travis and AppVeyor CI environments.
+        // Also recognize various CI environments.
         if ( !s_isAutomatic )
         {
-            s_isAutomatic = wxGetEnv("TRAVIS", NULL) ||
-                                wxGetEnv("APPVEYOR", NULL);
+            s_isAutomatic = wxGetEnv(wxASCII_STR("TRAVIS"), NULL) ||
+                              wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
+                                wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
         }
     }
 
     return s_isAutomatic == 1;
 }
+
+extern bool IsRunningUnderXVFB()
+{
+    static int s_isRunningUnderXVFB = -1;
+    if ( s_isRunningUnderXVFB == -1 )
+    {
+        wxString value;
+        s_isRunningUnderXVFB = wxGetEnv(wxASCII_STR("wxUSE_XVFB"), &value) && value == wxASCII_STR("1");
+    }
+
+    return s_isRunningUnderXVFB == 1;
+}
+
+#ifdef __LINUX__
+
+extern bool IsRunningInLXC()
+{
+    // We're supposed to be able to detect running in LXC by checking for
+    // /dev/lxd existency, but this doesn't work under Travis for some reason,
+    // so just rely on having the environment variable defined for the
+    // corresponding builds in our .travis.yml.
+    wxString value;
+    return wxGetEnv("wxLXC", &value) && value == "1";
+}
+
+#endif // __LINUX__
 
 #if wxUSE_GUI
 
@@ -414,23 +453,23 @@ bool EnableUITests()
         // Allow explicitly configuring this via an environment variable under
         // all platforms.
         wxString enabled;
-        if ( wxGetEnv("WX_UI_TESTS", &enabled) )
+        if ( wxGetEnv(wxASCII_STR("WX_UI_TESTS"), &enabled) )
         {
-            if ( enabled == "1" )
+            if ( enabled == wxASCII_STR("1") )
                 s_enabled = 1;
-            else if ( enabled == "0" )
+            else if ( enabled == wxASCII_STR("0") )
                 s_enabled = 0;
             else
-                wxFprintf(stderr, "Unknown \"WX_UI_TESTS\" value \"%s\" ignored.\n", enabled);
+                wxFprintf(stderr, wxASCII_STR("Unknown \"WX_UI_TESTS\" value \"%s\" ignored.\n"), enabled);
         }
 
         if ( s_enabled == -1 )
         {
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__)
             s_enabled = 1;
-#else // !__WXMSW__
+#else // !(__WXMSW__ || __WXGTK__)
             s_enabled = 0;
-#endif // __WXMSW__/!__WXMSW__
+#endif // (__WXMSW__ || __WXGTK__)
         }
     }
 
@@ -476,12 +515,30 @@ wxTestGLogHandler(const gchar* domain,
                   const gchar* message,
                   gpointer data)
 {
+    // Check if debug messages in this domain will be logged.
+    if ( level == G_LOG_LEVEL_DEBUG )
+    {
+        static const char* const allowed = getenv("G_MESSAGES_DEBUG");
+
+        // By default debug messages are dropped, but if G_MESSAGES_DEBUG is
+        // defined, they're logged for the domains specified in it and if it
+        // has the special value "all", then all debug messages are shown.
+        //
+        // Note that the check here can result in false positives, e.g. domain
+        // "foo" would pass it even if G_MESSAGES_DEBUG only contains "foobar",
+        // but such cases don't seem to be important enough to bother
+        // accounting for them.
+        if ( !allowed ||
+                (strcmp(allowed, "all") != 0 && !strstr(allowed, domain)) )
+        {
+            return;
+        }
+    }
+
     fprintf(stderr, "\n*** GTK log message while running %s(): ",
             wxGetCurrentTestName().c_str());
 
     g_log_default_handler(domain, level, message, data);
-
-    fprintf(stderr, "\n");
 }
 
 #endif // __WXGTK__
@@ -563,11 +620,13 @@ bool TestApp::ProcessEvent(wxEvent& event)
 int TestApp::RunTests()
 {
 #if wxUSE_LOG
-    // Switch off logging unless --verbose
-    bool verbose = wxLog::GetVerbose();
-    wxLog::EnableLogging(verbose);
-#else
-    bool verbose = false;
+    // Switch off logging to avoid interfering with the tests output unless
+    // WXTRACE is set, as otherwise setting it would have no effect while
+    // running the tests.
+    if ( !wxGetEnv(wxASCII_STR("WXTRACE"), NULL) )
+        wxLog::EnableLogging(false);
+    else
+        wxLog::SetTimestamp("%Y-%m-%d %H:%M:%S.%l");
 #endif
 
     // Cast is needed under MSW where Catch also provides an overload taking

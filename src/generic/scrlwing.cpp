@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/scrolwin.h"
 
@@ -658,7 +655,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
 void wxScrollHelperBase::DoPrepareDC(wxDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
     // It may actually be correct to always query
     // the m_sign from the DC here, but I leave the
     // #ifdef GTK for now.
@@ -767,10 +764,18 @@ bool wxScrollHelperBase::ScrollLayout()
         // If we're the scroll target, take into account the
         // virtual size and scrolled position of the window.
 
-        int x = 0, y = 0, w = 0, h = 0;
-        CalcScrolledPosition(0,0, &x,&y);
-        m_win->GetVirtualSize(&w, &h);
-        m_win->GetSizer()->SetDimension(x, y, w, h);
+        wxSize size = m_win->GetVirtualSize();
+
+        // However we should use the real window size in the direction in which
+        // scrolling is disabled, if any.
+        const wxSize clientSize = m_win->GetClientSize();
+        if ( !IsScrollbarShown(wxHORIZONTAL) )
+            size.x = clientSize.x;
+        if ( !IsScrollbarShown(wxVERTICAL) )
+            size.y = clientSize.y;
+
+        m_win->GetSizer()->SetDimension(CalcScrolledPosition(wxPoint(0, 0)),
+                                        size);
         return true;
     }
 
@@ -1062,10 +1067,11 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     if ( win == m_targetWindow )
         return; // nothing to do
 
-#if defined( __WXOSX__ ) && wxUSE_SCROLLBAR
-    if (wxDynamicCast(win, wxScrollBar))
+    if ( !ShouldScrollToChildOnFocus(win) )
+    {
+        // the window does not require to be scrolled into view
         return;
-#endif
+    }
 
     // Fixing ticket: https://trac.wxwidgets.org/ticket/9563
     // When a child inside a wxControlContainer receives a focus, the
@@ -1546,10 +1552,10 @@ wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
         wxSize minSize = win->GetMinSize();
 
         if ( ppuX > 0 )
-            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win);
 
         if ( ppuY > 0 )
-            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win);
     }
 
     return best;

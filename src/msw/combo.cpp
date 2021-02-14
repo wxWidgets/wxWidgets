@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COMBOCTRL
 
@@ -37,9 +34,7 @@
 #include "wx/combo.h"
 
 #include "wx/msw/registry.h"
-#if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
-#endif
 #include "wx/msw/dc.h"
 
 #define NATIVE_TEXT_INDENT_XP       4
@@ -87,7 +82,6 @@ bool wxComboCtrl::Create(wxWindow *parent,
 
     if ( !border )
     {
-#if wxUSE_UXTHEME
         if ( wxUxThemeIsActive() )
         {
             // For XP, have 1-width custom border, for older version use sunken
@@ -95,7 +89,6 @@ bool wxComboCtrl::Create(wxWindow *parent,
             m_widthCustomBorder = 1;
         }
         else
-#endif
             border = wxBORDER_SUNKEN;
 
         style = (style & ~(wxBORDER_MASK)) | border;
@@ -112,10 +105,8 @@ bool wxComboCtrl::Create(wxWindow *parent,
                            name) )
         return false;
 
-#if wxUSE_UXTHEME
     if ( wxUxThemeIsActive() && ::wxGetWinVersion() >= wxWinVersion_Vista )
             m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
-#endif
 
     if ( style & wxCC_STD_BUTTON )
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;

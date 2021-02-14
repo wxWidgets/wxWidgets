@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
@@ -533,7 +530,7 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
                       (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                       (double)ppiPrinterY / (double)ppiScreenY);
 
-    dc->SetBackgroundMode(wxTRANSPARENT);
+    dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     m_Renderer.Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),

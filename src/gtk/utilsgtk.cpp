@@ -26,6 +26,9 @@
 #include "wx/evtloop.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
 #ifdef GDK_WINDOWING_WIN32
 #include <gdk/gdkwin32.h>
 #endif
@@ -69,56 +72,43 @@ void wxBell()
 // display characteristics
 // ----------------------------------------------------------------------------
 
-#ifdef GDK_WINDOWING_X11
+#if defined(__UNIX__)
+
 void *wxGetDisplay()
 {
-    return GDK_DISPLAY_XDISPLAY(gdk_window_get_display(wxGetTopLevelGDK()));
-}
-#endif
-
-void wxDisplaySize( int *width, int *height )
-{
-#ifdef __WXGTK4__
-    GdkMonitor* monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
-    GdkRectangle rect;
-    gdk_monitor_get_geometry(monitor, &rect);
-    if (width) *width = rect.width;
-    if (height) *height = rect.height;
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    if (width) *width = gdk_screen_width();
-    if (height) *height = gdk_screen_height();
-    wxGCC_WARNING_RESTORE()
-#endif
+    return wxGetDisplayInfo().dpy;
 }
 
-void wxDisplaySizeMM( int *width, int *height )
+wxDisplayInfo wxGetDisplayInfo()
 {
-#ifdef __WXGTK4__
-    GdkMonitor* monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
-    if (width) *width = gdk_monitor_get_width_mm(monitor);
-    if (height) *height = gdk_monitor_get_height_mm(monitor);
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    if (width) *width = gdk_screen_width_mm();
-    if (height) *height = gdk_screen_height_mm();
-    wxGCC_WARNING_RESTORE()
+    wxDisplayInfo info = { NULL, wxDisplayNone };
+    GdkDisplay *display = gdk_window_get_display(wxGetTopLevelGDK());
+#if defined(__WXGTK3__) && (defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11))
+    const char* displayTypeName = g_type_name(G_TYPE_FROM_INSTANCE(display));
 #endif
+
+#ifdef GDK_WINDOWING_X11
+#ifdef __WXGTK3__
+    if (strcmp("GdkX11Display", displayTypeName) == 0)
+#endif
+    {
+        info.dpy = GDK_DISPLAY_XDISPLAY(display);
+        info.type = wxDisplayX11;
+        return info;
+    }
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+    if (strcmp("GdkWaylandDisplay", displayTypeName) == 0)
+    {
+        info.dpy = gdk_wayland_display_get_wl_display(display);
+        info.type = wxDisplayWayland;
+        return info;
+    }
+#endif
+    return info;
 }
 
-bool wxColourDisplay()
-{
-    return true;
-}
-
-int wxDisplayDepth()
-{
-#ifdef __WXGTK4__
-    return 24;
-#else
-    return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
-#endif
-}
+#endif // __UNIX__
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
@@ -130,6 +120,9 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 WXDLLIMPEXP_CORE wxCharBuffer
 wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
+    if (s.empty())
+        return wxCharBuffer("");
+
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
@@ -140,7 +133,7 @@ wxConvertToGTK(const wxString& s, wxFontEncoding enc)
         wbuf = wxCSConv(enc).cMB2WC(s.c_str());
     }
 
-    if ( !wbuf && !s.empty() )
+    if (wbuf.length() == 0)
     {
         // conversion failed, but we still want to show something to the user
         // even if it's going to be wrong it is better than nothing

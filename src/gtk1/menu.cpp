@@ -645,7 +645,7 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
+    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id, menu );
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -673,7 +673,7 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
+    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, wxID_NONE, menu );
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -756,9 +756,9 @@ void wxMenuItem::SetItemLabel( const wxString& string )
 
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
-    oldLabel = wxStripMenuCodes(oldLabel);
+    oldLabel = wxStripMenuCodes(oldLabel, wxStrip_Menu);
     oldLabel.Replace(wxT("_"), wxEmptyString);
-    wxString label1 = wxStripMenuCodes(str);
+    wxString label1 = wxStripMenuCodes(str, wxStrip_Menu);
     wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
     wxCharBuffer oldbuf = wxGTK_CONV( GetGtkHotKey(*this) );  // and as <control>foo
 

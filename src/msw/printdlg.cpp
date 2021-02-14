@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Don't use the Windows print dialog if we're in wxUniv mode and using
 // the PostScript architecture
@@ -147,7 +144,9 @@ wxCreateDevNames(const wxString& driverName,
                            ( driverName.length() + 1 +
             printerName.length() + 1 +
                              portName.length()+1 ) * sizeof(wxChar) );
-        LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(hDev);
+
+        GlobalPtrLock ptr(hDev);
+        LPDEVNAMES lpDev = (LPDEVNAMES)ptr.Get();
         lpDev->wDriverOffset = sizeof(WORD) * 4 / sizeof(wxChar);
         wxStrcpy((wxChar*)lpDev + lpDev->wDriverOffset, driverName);
 
@@ -160,8 +159,6 @@ wxCreateDevNames(const wxString& driverName,
         wxStrcpy((wxChar*)lpDev + lpDev->wOutputOffset, portName);
 
         lpDev->wDefault = 0;
-
-        GlobalUnlock(hDev);
     }
 
     return hDev;
@@ -795,24 +792,6 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd = new PRINTDLG;
     memset( pd, 0, sizeof(PRINTDLG) );
     m_printDlg = (void*) pd;
-
-    pd->lStructSize    = sizeof(PRINTDLG);
-    pd->hwndOwner      = NULL;
-    pd->hDevMode       = NULL; // Will be created by PrintDlg
-    pd->hDevNames      = NULL; // Ditto
-
-    pd->Flags          = PD_RETURNDEFAULT;
-    pd->nCopies        = 1;
-
-    // Pass the devmode data to the PRINTDLG structure, since it'll
-    // be needed when PrintDlg is called.
-    if (pd->hDevMode)
-        GlobalFree(pd->hDevMode);
-
-    // Pass the devnames data to the PRINTDLG structure, since it'll
-    // be needed when PrintDlg is called.
-    if (pd->hDevNames)
-        GlobalFree(pd->hDevNames);
 
     pd->hDevMode = static_cast<HGLOBAL>(native_data->GetDevMode());
     native_data->SetDevMode(NULL);

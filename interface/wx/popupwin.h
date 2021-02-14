@@ -5,11 +5,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxPU_CONTAINS_CONTROLS     0x0001
+
 /**
     @class wxPopupWindow
 
     A special kind of top level window used for popup menus,
     combobox popups and such.
+
+    @beginStyleTable
+    @style{wxPU_CONTAINS_CONTROLS}
+        By default in wxMSW, a popup window will not take focus from its parent
+        window. However many standard controls, including common ones such as
+        wxTextCtrl, need focus to function correctly and will not work when
+        placed on a default popup. This flag can be used to make the popup take
+        focus and let all controls work but at the price of not allowing the
+        parent window to keep focus while the popup is shown, which can also be
+        sometimes desirable. This style is currently only implemented in MSW
+        and simply does nothing under the other platforms (it's new since
+        wxWidgets 3.1.3).
+    @endStyleTable
 
     @library{wxcore}
     @category{managedwnd}
@@ -25,7 +40,7 @@ public:
       Default constructor
     */
     wxPopupWindow();
-    
+
     /**
       Constructor
     */
@@ -84,10 +99,10 @@ public:
     /**
         Popup the window (this will show it too).
 
-        If @a winFocus is non-@NULL, it will be kept focused while this window
-        is shown, otherwise this window itself will receive focus. In any case,
-        the popup will disappear automatically if it loses focus because of a
-        user action.
+        If @a focus is non-@NULL, it will be kept focused while this window
+        is shown if supported by the current platform, otherwise the popup
+        itself will receive focus. In any case, the popup will disappear
+        automatically if it loses focus because of a user action.
 
         @see Dismiss()
     */
@@ -112,5 +127,5 @@ protected:
        else but direct call to Dismiss().
     */
     virtual void OnDismiss();
-    
+
 };

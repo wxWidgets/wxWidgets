@@ -32,12 +32,16 @@ if(wxBUILD_DEMOS)
     add_subdirectory(build/cmake/demos demos)
 endif()
 
+if(wxBUILD_BENCHMARKS)
+    add_subdirectory(build/cmake/benchmarks benchmarks)
+endif()
+
 if(NOT wxBUILD_CUSTOM_SETUP_HEADER_PATH)
     # Write setup.h after all variables are available
     include(build/cmake/setup.cmake)
 endif()
 
-if(UNIX)
+if(NOT MSVC)
     # Write wx-config
     include(build/cmake/config.cmake)
 endif()

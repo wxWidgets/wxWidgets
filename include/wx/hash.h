@@ -119,7 +119,7 @@ private:
     void DoRemoveNode( wxHashTableBase_Node* node );
 
     // destroys data contained in the node if appropriate:
-    // deletes the key if it is a string and destrys
+    // deletes the key if it is a string and destroys
     // the value if m_deleteContents is true
     void DoDestroyNode( wxHashTableBase_Node* node );
 
@@ -275,7 +275,7 @@ private:
         eltype *Delete(long lhash, long key)                                  \
             { return (eltype*)DoDelete(key, lhash); }                         \
     private:                                                                  \
-        virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
+        virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE\
             { delete (eltype*)node->GetData(); }                              \
                                                                               \
         wxDECLARE_NO_COPY_CLASS(hashclass);                                   \

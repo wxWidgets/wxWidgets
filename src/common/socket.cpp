@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOCKETS
 
@@ -366,9 +363,9 @@ void wxSocketImpl::PostCreation()
     if ( m_initialSendBufferSize >= 0 )
         SetSocketOption(SO_SNDBUF, m_initialSendBufferSize);
 
-    // we always put our sockets in unblocked mode and handle blocking
+    // Call this to put our socket in unblocked mode: we'll handle blocking
     // ourselves in DoRead/Write() if wxSOCKET_WAITALL is specified
-    UnblockAndRegisterWithEventLoop();
+    UpdateBlockingState();
 }
 
 wxSocketError wxSocketImpl::UpdateLocalAddress()
@@ -529,14 +526,14 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     WX_SOCKLEN_T fromlen = sizeof(from);
     const wxSOCKET_T fd = accept(m_fd, &from.addr, &fromlen);
 
-    wxScopeGuard closeSocket = wxMakeGuard(wxClose, fd);
-
     // accepting is similar to reading in the sense that it resets "ready for
     // read" flag on the socket
     ReenableEvents(wxSOCKET_INPUT_FLAG);
 
     if ( fd == INVALID_SOCKET )
         return NULL;
+
+    wxScopeGuard closeSocket = wxMakeGuard(wxCloseSocket, fd);
 
     wxSocketManager * const manager = wxSocketManager::Get();
     if ( !manager )
@@ -551,7 +548,7 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     sock->m_fd = fd;
     sock->m_peer = wxSockAddressImpl(from.addr, fromlen);
 
-    sock->UnblockAndRegisterWithEventLoop();
+    sock->UpdateBlockingState();
 
     return sock;
 }
@@ -1672,7 +1669,20 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
                   "Using wxSOCKET_WAITALL or wxSOCKET_BLOCK with "
                   "wxSOCKET_NOWAIT doesn't make sense" );
 
+    // Blocking sockets are very different from non-blocking ones and we need
+    // to [un]register the socket with the event loop if wxSOCKET_BLOCK is
+    // being [un]set.
+    const bool
+        blockChanged = (m_flags & wxSOCKET_BLOCK) != (flags & wxSOCKET_BLOCK);
+
     m_flags = flags;
+
+    if ( blockChanged )
+    {
+        // Of course, we only do this if we already have the actual socket.
+        if ( m_impl )
+            m_impl->UpdateBlockingState();
+    }
 }
 
 

@@ -8,9 +8,11 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#if wxUSE_COLOURPICKERCTRL || \
+    wxUSE_DIRPICKERCTRL    || \
+    wxUSE_FILEPICKERCTRL   || \
+    wxUSE_FONTPICKERCTRL
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -215,3 +217,5 @@ void FontPickerCtrlTestCase::ColourSelection()
         m_font->GetSelectedColour(), selectedColour);
 }
 #endif //wxUSE_FONTPICKERCTRL
+
+#endif

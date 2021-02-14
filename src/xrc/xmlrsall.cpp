@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC
 
@@ -86,6 +83,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_COMMANDLINKBUTTON
     AddHandler(new wxCommandLinkButtonXmlHandler);
 #endif
+#if wxUSE_DATAVIEWCTRL
+    AddHandler(new wxDataViewXmlHandler);
+#endif
 #if wxUSE_DATEPICKCTRL
     AddHandler(new wxDateCtrlXmlHandler);
 #endif
@@ -120,6 +120,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_HYPERLINKCTRL
     AddHandler( new wxHyperlinkCtrlXmlHandler);
 #endif
+#if wxUSE_INFOBAR
+    AddHandler(new wxInfoBarXmlHandler);
+#endif
 #if wxUSE_LISTBOOK
     AddHandler(new wxListbookXmlHandler);
 #endif
@@ -134,7 +137,9 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_MENUS
     AddHandler(new wxMenuXmlHandler);
+#if wxUSE_MENUBAR
     AddHandler(new wxMenuBarXmlHandler);
+#endif
 #endif
 #if wxUSE_NOTEBOOK
     AddHandler(new wxNotebookXmlHandler);

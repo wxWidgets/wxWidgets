@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC
 
@@ -44,6 +41,8 @@
 #include "wx/xml/xml.h"
 #include "wx/hashset.h"
 #include "wx/scopedptr.h"
+#include "wx/config.h"
+#include "wx/platinfo.h"
 
 #include <limits.h>
 #include <locale.h>
@@ -587,15 +586,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
 
             while (tkn.HasMoreTokens())
             {
-                s = tkn.GetNextToken();
-#ifdef __WINDOWS__
-                if (s == wxT("win")) isok = true;
-#endif
-#if defined(__MAC__) || defined(__APPLE__)
-                if (s == wxT("mac")) isok = true;
-#elif defined(__UNIX__)
-                if (s == wxT("unix")) isok = true;
-#endif
+                isok = wxPlatformId::MatchesCurrent(tkn.GetNextToken());
 
                 if (isok)
                     break;
@@ -1633,7 +1624,7 @@ float wxXmlResourceHandlerImpl::GetFloat(const wxString& param, float defaultv)
     // strings in XRC always use C locale so make sure to use the
     // locale-independent wxString::ToCDouble() and not ToDouble() which uses
     // the current locale with a potentially different decimal point character
-    double value = defaultv;
+    double value = double(defaultv);
     if (!str.empty())
     {
         if (!str.ToCDouble(&value))
@@ -1825,7 +1816,7 @@ wxBitmap wxXmlResourceHandlerImpl::GetBitmap(const wxXmlNode* node,
     }
 
     /* ...or load the bitmap from file: */
-    wxString name = GetParamValue(node);
+    wxString name = GetFilePath(node);
     if (name.empty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
@@ -1898,7 +1889,7 @@ wxIconBundle wxXmlResourceHandlerImpl::GetIconBundle(const wxString& param,
             return stockArt;
     }
 
-    const wxString name = GetParamValue(param);
+    const wxString name = GetFilePath(GetParamNode(param));
     if ( name.empty() )
         return wxNullIconBundle;
 
@@ -1980,6 +1971,16 @@ wxImageList *wxXmlResourceHandlerImpl::GetImageList(const wxString& param)
 
     m_handler->m_node = oldnode;
     return imagelist;
+}
+
+wxString wxXmlResourceHandlerImpl::GetFilePath(const wxXmlNode* node)
+{
+    wxString path = GetParamValue(node);
+
+    if ( m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS )
+        path = wxExpandEnvVars(path);
+
+    return path;
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetParamNode(const wxString& param)
@@ -2275,10 +2276,10 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     // font attributes:
 
     // size
-    int isize = -1;
+    float pointSize = -1.0f;
     bool hasSize = HasParam(wxT("size"));
     if (hasSize)
-        isize = GetLong(wxT("size"), -1);
+        pointSize = GetFloat(wxT("size"), -1.0f);
 
     // style
     wxFontStyle istyle = wxFONTSTYLE_NORMAL;
@@ -2301,15 +2302,40 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
 
     // weight
-    wxFontWeight iweight = wxFONTWEIGHT_NORMAL;
+    long iweight = wxFONTWEIGHT_NORMAL;
     bool hasWeight = HasParam(wxT("weight"));
     if (hasWeight)
     {
         wxString weight = GetParamValue(wxT("weight"));
-        if (weight == wxT("bold"))
-            iweight = wxFONTWEIGHT_BOLD;
+        if (weight.ToLong(&iweight))
+        {
+            if (iweight <= wxFONTWEIGHT_INVALID || iweight > wxFONTWEIGHT_MAX)
+            {
+                ReportParamError
+                (
+                    param,
+                    wxString::Format("invalid font weight value \"%d\"", iweight)
+                );
+            }
+        }
+        else if (weight == wxT("thin"))
+            iweight = wxFONTWEIGHT_THIN;
+        else if (weight == wxT("extralight"))
+            iweight = wxFONTWEIGHT_EXTRALIGHT;
         else if (weight == wxT("light"))
             iweight = wxFONTWEIGHT_LIGHT;
+        else if (weight == wxT("medium"))
+            iweight = wxFONTWEIGHT_MEDIUM;
+        else if (weight == wxT("semibold"))
+            iweight = wxFONTWEIGHT_SEMIBOLD;
+        else if (weight == wxT("bold"))
+            iweight = wxFONTWEIGHT_BOLD;
+        else if (weight == wxT("extrabold"))
+            iweight = wxFONTWEIGHT_EXTRABOLD;
+        else if (weight == wxT("heavy"))
+            iweight = wxFONTWEIGHT_HEAVY;
+        else if (weight == wxT("extraheavy"))
+            iweight = wxFONTWEIGHT_EXTRAHEAVY;
         else if (weight != wxT("normal"))
         {
             ReportParamError
@@ -2323,6 +2349,10 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     // underline
     bool hasUnderlined = HasParam(wxT("underlined"));
     bool underlined = hasUnderlined ? GetBool(wxT("underlined"), false) : false;
+
+    // strikethrough
+    bool hasStrikethrough = HasParam(wxT("strikethrough"));
+    bool strikethrough = hasStrikethrough ? GetBool(wxT("strikethrough"), false) : false;
 
     // family and facename
     wxFontFamily ifamily = wxFONTFAMILY_DEFAULT;
@@ -2419,9 +2449,9 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
 
     if (font.IsOk())
     {
-        if (hasSize && isize != -1)
+        if (pointSize > 0)
         {
-            font.SetPointSize(isize);
+            font.SetFractionalPointSize(double(pointSize));
             if (HasParam(wxT("relativesize")))
             {
                 ReportParamError
@@ -2438,9 +2468,11 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
         if (hasStyle)
             font.SetStyle(istyle);
         if (hasWeight)
-            font.SetWeight(iweight);
+            font.SetNumericWeight(iweight);
         if (hasUnderlined)
             font.SetUnderlined(underlined);
+        if (hasStrikethrough)
+            font.SetStrikethrough(strikethrough);
         if (hasFamily)
             font.SetFamily(ifamily);
         if (hasFacename)
@@ -2450,9 +2482,15 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
     else // not based on system font
     {
-        font = wxFont(isize == -1 ? wxNORMAL_FONT->GetPointSize() : isize,
-                      ifamily, istyle, iweight,
-                      underlined, facename, enc);
+        font = wxFontInfo(double(pointSize))
+                .FaceName(facename)
+                .Family(ifamily)
+                .Style(istyle)
+                .Weight(iweight)
+                .Underlined(underlined)
+                .Strikethrough(strikethrough)
+                .Encoding(enc)
+                ;
     }
 
     m_handler->m_node = oldnode;
@@ -2740,8 +2778,8 @@ void AddStdXRCID_Records()
     stdID(wxID_PREVIEW);
     stdID(wxID_ABOUT);
     stdID(wxID_HELP_CONTENTS);
-    stdID(wxID_HELP_INDEX),
-    stdID(wxID_HELP_SEARCH),
+    stdID(wxID_HELP_INDEX);
+    stdID(wxID_HELP_SEARCH);
     stdID(wxID_HELP_COMMANDS);
     stdID(wxID_HELP_PROCEDURES);
     stdID(wxID_HELP_CONTEXT);

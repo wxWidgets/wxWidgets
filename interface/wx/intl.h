@@ -98,15 +98,15 @@ enum wxLocaleCategory
 
 /**
     The values understood by wxLocale::GetInfo().
-    
-    Note that for the @c wxLOCALE_*_FMT constants (the date and time formats), 
+
+    Note that for the @c wxLOCALE_*_FMT constants (the date and time formats),
     the strings returned by wxLocale::GetInfo() use strftime() or,
     equivalently, wxDateTime::Format() format. If the relevant format
     couldn't be determined, an empty string is returned -- there is no
     fallback value so that the application could determine the best course
     of actions itself in such case.
 
-    All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or, 
+    All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or,
     more typically, with @c wxLOCALE_CAT_DEFAULT as they only apply to a single category.
 */
 enum wxLocaleInfo
@@ -131,7 +131,7 @@ enum wxLocaleInfo
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX
-        systems currently but may, and typically are, different under MSW or OS X.
+        systems currently but may, and typically are, different under MSW or macOS.
 
         @since 2.9.0
      */
@@ -214,6 +214,12 @@ enum wxLocaleInfo
 
     @see @ref overview_i18n, @ref page_samples_internat, wxXLocale, wxTranslations
 */
+enum wxLocaleInitFlags
+{
+    wxLOCALE_DONT_LOAD_DEFAULT = 0x0000,     ///< Don't load wxstd.mo catalog.
+    wxLOCALE_LOAD_DEFAULT      = 0x0001      ///< Load wxstd.mo (done by default).
+};
+
 class wxLocale
 {
 public:
@@ -361,15 +367,15 @@ public:
     /**
         Calls wxGetTranslation(const wxString&, const wxString&).
     */
-    virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& domain = wxEmptyString) const;
 
     /**
         Calls wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&).
     */
-    virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& origString2, unsigned n,
-                                      const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& origString2, unsigned n,
+                              const wxString& domain = wxEmptyString) const;
 
     /**
         Returns current platform-specific locale name as passed to setlocale().

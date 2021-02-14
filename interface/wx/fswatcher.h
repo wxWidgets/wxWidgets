@@ -10,14 +10,14 @@
 /**
     @class wxFileSystemWatcher
 
-    The wxFileSystemWatcher class allows to receive notifications of file
+    The wxFileSystemWatcher class allows receiving notifications of file
     system changes.
 
     @note Implementation limitations: this class is currently implemented for
-          MSW, OS X and GTK ports but doesn't detect all changes correctly
+          MSW, macOS and GTK ports but doesn't detect all changes correctly
           everywhere: under MSW accessing the file is not detected (only
-          modifying it is) and under OS X neither accessing nor modifying is
-          detected (only creating and deleting files is). Moreover, OS X
+          modifying it is) and under macOS neither accessing nor modifying is
+          detected (only creating and deleting files is). Moreover, macOS
           version doesn't currently collapse pairs of create/delete events in a
           rename event, unlike the other ones.
 
@@ -85,7 +85,7 @@ public:
         Additionally a file mask can be specified to include only files
         matching that particular mask.
 
-        This method is implemented efficiently on MSW and OS X >= 10.7, but
+        This method is implemented efficiently on MSW and macOS, but
         should be used with care on other platforms for directories with lots
         of children (e.g. the root directory) as it calls Add() for each
         subdirectory, potentially creating a lot of watches and taking a long
@@ -250,7 +250,7 @@ enum wxFSWFlags
         Notice that under MSW this event is sometimes -- although not always --
         followed by a ::wxFSW_EVENT_MODIFY for the new file.
 
-        Under OS X this event is only detected when watching entire trees. When
+        Under macOS this event is only detected when watching entire trees. When
         watching directories, separate ::wxFSW_EVENT_CREATE and
         ::wxFSW_EVENT_DELETE events are detected instead.
      */
@@ -262,7 +262,7 @@ enum wxFSWFlags
         Depending on the program doing the file modification, multiple such
         events can be reported for a single logical file update.
 
-        Under OS X this event is only detected when watching entire trees.
+        Under macOS this event is only detected when watching entire trees.
      */
     wxFSW_EVENT_MODIFY = 0x08,
 
@@ -276,8 +276,8 @@ enum wxFSWFlags
     /**
         The item's metadata was changed, e.g.\ its permissions or timestamps.
 
-        This event is currently only detected under Linux and OS X.
-        Under OS X this event is only detected when watching entire trees.
+        This event is currently only detected under Linux and macOS.
+        Under macOS this event is only detected when watching entire trees.
 
         @since 2.9.5
      */
@@ -289,8 +289,8 @@ enum wxFSWFlags
         wxFSW_EVENT_UNMOUNT cannot be set; unmount events are produced automatically. This flag
         is therefore not included in wxFSW_EVENT_ALL.
 
-        This event is currently only detected under Linux and OS X.
-        Under OS X this event is only detected when watching entire trees.
+        This event is currently only detected under Linux and macOS.
+        Under macOS this event is only detected when watching entire trees.
 
         @since 2.9.5
     */

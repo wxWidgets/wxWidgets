@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GRAPHICS_CONTEXT
 
@@ -29,6 +26,7 @@
     #include "wx/pen.h"
     #include "wx/region.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
 #ifdef __WXMSW__
@@ -543,7 +541,7 @@ void wxGraphicsGradientStops::Add(const wxGraphicsGradientStop& stop)
         }
     }
 
-    if ( stop.GetPosition() == 1. )
+    if ( stop.GetPosition() == 1 )
     {
         m_stops.insert(m_stops.end() - 1, stop);
     }
@@ -565,12 +563,14 @@ void * wxGraphicsBitmap::GetNativeBitmap() const
 wxIMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject);
 
 
-wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) :
-    wxGraphicsObject(renderer),
+wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer,
+                                     wxWindow* window)
+    : wxGraphicsObject(renderer),
       m_antialias(wxANTIALIAS_DEFAULT),
       m_composition(wxCOMPOSITION_OVER),
       m_interpolation(wxINTERPOLATION_DEFAULT),
-      m_enableOffset(false)
+      m_enableOffset(false),
+      m_window(window)
 {
 }
 
@@ -600,9 +600,9 @@ void wxGraphicsContext::Flush()
 {
 }
 
-void wxGraphicsContext::EnableOffset(bool enable) 
-{ 
-    m_enableOffset = enable; 
+void wxGraphicsContext::EnableOffset(bool enable)
+{
+    m_enableOffset = enable;
 }
 
 #if 0
@@ -616,10 +616,21 @@ wxDouble wxGraphicsContext::GetAlpha() const
 }
 #endif
 
-void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
+void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
 {
-    *dpiX = 72.0;
-    *dpiY = 72.0;
+    if ( m_window )
+    {
+        const wxSize ppi = m_window->GetDPI();
+        *dpiX = ppi.x;
+        *dpiY = ppi.y;
+    }
+    else
+    {
+        // Use some standard DPI value, it doesn't make much sense for the
+        // contexts not using any pixels anyhow.
+        *dpiX = 72.0;
+        *dpiY = 72.0;
+    }
 }
 
 // sets the pen
@@ -764,7 +775,7 @@ void wxGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDou
 
 void wxGraphicsContext::ClearRectangle( wxDouble WXUNUSED(x), wxDouble WXUNUSED(y), wxDouble WXUNUSED(w), wxDouble WXUNUSED(h))
 {
-    
+
 }
 
 void wxGraphicsContext::DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
@@ -868,13 +879,15 @@ wxGraphicsBrush
 wxGraphicsContext::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxColour& c1, const wxColour& c2) const
+    const wxColour& c1, const wxColour& c2,
+    const wxGraphicsMatrix& matrix) const
 {
     return GetRenderer()->CreateLinearGradientBrush
                           (
                             x1, y1,
                             x2, y2,
-                            wxGraphicsGradientStops(c1,c2)
+                            wxGraphicsGradientStops(c1,c2),
+                            matrix
                           );
 }
 
@@ -882,51 +895,64 @@ wxGraphicsBrush
 wxGraphicsContext::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& gradientStops) const
+    const wxGraphicsGradientStops& gradientStops,
+    const wxGraphicsMatrix& matrix) const
 {
-    return GetRenderer()->CreateLinearGradientBrush(x1,y1,x2,y2, gradientStops);
-}
-
-wxGraphicsBrush
-wxGraphicsContext::CreateRadialGradientBrush(
-        wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) const
-{
-    return GetRenderer()->CreateRadialGradientBrush
+    return GetRenderer()->CreateLinearGradientBrush
                           (
-                            xo, yo,
-                            xc, yc, radius,
-                            wxGraphicsGradientStops(oColor, cColor)
+                            x1, y1,
+                            x2, y2, 
+                            gradientStops, 
+                            matrix
                           );
 }
 
 wxGraphicsBrush
 wxGraphicsContext::CreateRadialGradientBrush(
-        wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxGraphicsGradientStops& gradientStops) const
+        wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY, wxDouble radius,
+        const wxColour &oColor, const wxColour &cColor,
+        const wxGraphicsMatrix& matrix) const
 {
     return GetRenderer()->CreateRadialGradientBrush
                           (
-                            xo, yo,
-                            xc, yc, radius,
-                            gradientStops
+                            startX, startY,
+                            endX, endY, radius,
+                            wxGraphicsGradientStops(oColor, cColor),
+                            matrix
+                          );
+}
+
+wxGraphicsBrush
+wxGraphicsContext::CreateRadialGradientBrush(
+        wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY, wxDouble radius,
+        const wxGraphicsGradientStops& gradientStops,
+        const wxGraphicsMatrix& matrix) const
+{
+    return GetRenderer()->CreateRadialGradientBrush
+                          (
+                            startX, startY,
+                            endX, endY, radius,
+                            gradientStops,
+                            matrix
                           );
 }
 
 wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col ) const
 {
-    return GetRenderer()->CreateFont(font,col);
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    return GetRenderer()->CreateFontAtDPI(font, dpi, col);
 }
 
 wxGraphicsFont
-wxGraphicsContext::CreateFont(double size,
+wxGraphicsContext::CreateFont(double sizeInPixels,
                               const wxString& facename,
                               int flags,
                               const wxColour& col) const
 {
-    return GetRenderer()->CreateFont(size, facename, flags, col);
+    return GetRenderer()->CreateFont(sizeInPixels, facename, flags, col);
 }
 
 wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const
@@ -974,45 +1000,7 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 
 wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
 {
-#ifndef wxNO_RTTI
-    if ( const wxWindowDC *windc = dynamic_cast<const wxWindowDC*>(&dc) )
-        return Create(*windc);
-
-    if ( const wxMemoryDC *memdc = dynamic_cast<const wxMemoryDC*>(&dc) )
-        return Create(*memdc);
-
-#if wxUSE_PRINTING_ARCHITECTURE
-    if ( const wxPrinterDC *printdc = dynamic_cast<const wxPrinterDC*>(&dc) )
-        return Create(*printdc);
-#endif
-
-#ifdef __WXMSW__
-#if wxUSE_ENH_METAFILE
-    if ( const wxEnhMetaFileDC *mfdc = dynamic_cast<const wxEnhMetaFileDC*>(&dc) )
-        return Create(*mfdc);
-#endif
-#endif
-#else // wxNO_RTTI
-    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
-        return Create(*windc);
-
-    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
-        return Create(*memdc);
-
-#if wxUSE_PRINTING_ARCHITECTURE
-    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
-        return Create(*printdc);
-#endif
-
-#ifdef __WXMSW__
-#if wxUSE_ENH_METAFILE
-    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
-        return Create(*mfdc);
-#endif
-#endif
-#endif // !wxNO_RTTI/wxNO_RTTI
-
-    return NULL;
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromUnknownDC(dc);
 }
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
@@ -1054,5 +1042,28 @@ wxGraphicsContext* wxGraphicsContext::Create()
 //-----------------------------------------------------------------------------
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGraphicsRenderer, wxObject);
+
+wxGraphicsContext* wxGraphicsRenderer::CreateContextFromUnknownDC(const wxDC& dc)
+{
+    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
+        return CreateContext(*windc);
+
+    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
+        return CreateContext(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
+        return CreateContext(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
+        return CreateContext(*mfdc);
+#endif
+#endif
+
+    return NULL;
+}
 
 #endif // wxUSE_GRAPHICS_CONTEXT

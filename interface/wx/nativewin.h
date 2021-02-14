@@ -10,7 +10,7 @@
 /**
     @class wxNativeWindow
 
-    Allows to embed a native widget in an application using wxWidgets.
+    Allows embedding a native widget in an application using wxWidgets.
 
     This class can be used as a bridge between wxWidgets and native GUI
     toolkit, i.e. standard Windows controls under MSW, GTK+ widgets or Cocoa
@@ -39,10 +39,10 @@
     delete the native window when the wxNativeWindow itself is destroyed, you
     need to explicitly call Disown(). Otherwise you need to perform the
     necessary cleanup in your own code by calling the appropriate
-    platform-specific function: under MSW, this is @c ::DestroyWindow(), under
+    platform-specific function: under MSW, this is @c \::DestroyWindow(), under
     GTK @c g_object_unref() and under Cocoa -- @c -release:.
 
-    See the "native" page of the widgets sample for the examples of using
+    See the "native" page of the @ref page_samples_widgets for the examples of using
     this class under all major platforms.
 
     @since 3.1.0

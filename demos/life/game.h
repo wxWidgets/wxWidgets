@@ -20,27 +20,26 @@ class LifePattern
 {
 public:
     // This ctor is used by the LifeReader class
-    LifePattern(wxString      name,
-                wxString      description,
-                wxString      rules,
-                wxArrayString shape)
+    LifePattern(const wxString& name,
+                const wxString& description,
+                const wxString& rules,
+                const wxArrayString& shape)
+        : m_name(name)
+        , m_description(description)
+        , m_rules(rules)
+        , m_shape(shape)
     {
-        m_name        = name;
-        m_description = description;
-        m_rules       = rules;
-        m_shape       = shape;
-    };
+    }
 
     // A more convenient ctor for the built-in samples
-    LifePattern(wxString      name,
-                wxString      description,
+    LifePattern(const wxString& name,
+                const wxString& description,
                 int           width,
                 int           height,
                 const char   *shape)
+        : m_name(name)
+        , m_description(description)
     {
-        m_name        = name;
-        m_description = description;
-        m_rules       = wxEmptyString;
         // TODO: add the positions later, since the formatting command
         // causes a crash due to conversion objects not being available
         // during initialisation.
@@ -58,7 +57,7 @@ public:
 
             m_shape.Add( tmp );
         }
-    };
+    }
 
     wxString      m_name;
     wxString      m_description;
@@ -90,9 +89,9 @@ public:
     ~Life();
 
     // accessors
-    inline wxUint32 GetNumCells() const    { return m_numcells; };
-    inline wxString GetRules() const       { return m_rules; };
-    inline wxString GetDescription() const { return m_description; };
+    inline wxUint32 GetNumCells() const    { return m_numcells; }
+    inline wxString GetRules() const       { return m_rules; }
+    inline wxString GetDescription() const { return m_description; }
     bool IsAlive(wxInt32 x, wxInt32 y);
     void SetCell(wxInt32 x, wxInt32 y, bool alive = true);
     void SetPattern(const LifePattern &pattern);

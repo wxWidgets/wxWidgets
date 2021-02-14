@@ -91,7 +91,7 @@ public:
     */
     wxBitmap GetBitmapPressed() const;
 
-    
+
     /**
         Sets the bitmap to display in the button.
 
@@ -177,7 +177,7 @@ public:
             previous versions)
     */
     void SetBitmapPressed(const wxBitmap& bitmap);
-    
+
 
     /**
         Get the margins between the bitmap and the text of the button.

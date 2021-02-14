@@ -5,7 +5,7 @@ CMake Overview                         {#overview_cmake}
 CMake allows building wxWidgets on various platforms with your preferred build
 system.
 
-Most linux distributions contain CMake as a package on Windows and OS X you can
+Most linux distributions contain CMake as a package on Windows and macOS you can
 download an installer at the [CMake Page](https://cmake.org).
 
 Using the CMake GUI                    {#cmake_gui}
@@ -26,11 +26,11 @@ Using the CMake Command Line           {#cmake_cli}
 2. Change into the created folder
 3. Run `cmake -G "Unix Makefiles" path_to_wxWidgets_root`
 4. After that you can run `cmake --build .` to start the build process or
-   directly use your choosen build system.
+   directly use your chosen build system.
 
 Run `cmake --help` to see a list of available generators on your platform.
 These can than be specified using the -G command line option. On Windows it
-is recommended to use Visual Studio and on OS X Xcode is recommended.
+is recommended to use Visual Studio and on macOS Xcode is recommended.
 Various build options can be specified using -D see
 [available options](#cmake_options).
 
@@ -64,7 +64,7 @@ or specified via the -D command line option when running the cmake command.
 
 Option Name               | Type   | Default | Description
 ------------------------- | -----  | ------- | ----------------------------
-wxBUILD_SHARED            | BOOL   | ON      | Build shared libraries
+wxBUILD_SHARED            | BOOL   | ON      | Build shared or static libraries
 wxBUILD_TESTS             | STRING | OFF     | CONSOLE_ONLY, ALL or OFF
 wxBUILD_SAMPLES           | STRING | OFF     | SOME, ALL or OFF
 wxBUILD_DEMOS             | BOOL   | OFF     | Build demo applications
@@ -122,5 +122,5 @@ Your *CMakeLists.txt* would look like this:
 ...
 add_subdirectory(libs/wxWidgets)
 add_executable(myapp myapp.cpp)
-target_link_libraries(myapp net core base)
+target_link_libraries(myapp wx::net wx::core wx::base)
 ~~~

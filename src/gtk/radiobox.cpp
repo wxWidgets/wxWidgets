@@ -487,8 +487,18 @@ void wxRadioBox::SetString(unsigned int item, const wxString& label)
 
 bool wxRadioBox::Enable( bool enable )
 {
-    if ( !wxControl::Enable( enable ) )
-        return false;
+    // Explicitly forward to the base class just because we need to override
+    // this function to prevent it from being hidden by Enable(int, bool)
+    // overload.
+    return wxControl::Enable(enable);
+}
+
+void wxRadioBox::DoEnable(bool enable)
+{
+    if ( !m_widget )
+        return;
+
+    wxControl::DoEnable(enable);
 
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
@@ -503,8 +513,6 @@ bool wxRadioBox::Enable( bool enable )
 
     if (enable)
         GTKFixSensitivity();
-
-    return true;
 }
 
 bool wxRadioBox::Enable(unsigned int item, bool enable)

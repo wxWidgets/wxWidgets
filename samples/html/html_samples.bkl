@@ -2,7 +2,7 @@
 <makefile>
 
     <include file="../../build/bakefiles/config.bkl"/>
-    
+
     <template id="sub">
         <dir>$(id)</dir>
         <dependency-of>all</dependency-of>

@@ -15,7 +15,7 @@
 
 // Helper to decide if an object of type T is "movable", i.e. if it can be
 // copied to another memory location using memmove() or realloc() C functions.
-// C++ only gurantees that POD types (including primitive types) are
+// C++ only guarantees that POD types (including primitive types) are
 // movable.
 template<typename T>
 struct wxIsMovable

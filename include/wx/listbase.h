@@ -378,6 +378,12 @@ public:
     virtual bool DeleteColumn(int col) = 0;
     virtual bool DeleteAllColumns() = 0;
 
+    // Return the current number of items.
+    virtual int GetItemCount() const = 0;
+
+    // Check if the control is empty, i.e. doesn't contain any items.
+    bool IsEmpty() const { return GetItemCount() == 0; }
+
     // Return the current number of columns.
     virtual int GetColumnCount() const = 0;
 
@@ -393,15 +399,15 @@ public:
     virtual int GetColumnWidth(int col) const = 0;
     virtual bool SetColumnWidth(int col, int width) = 0;
 
-    // return the attribute for the item (may return NULL if none)
-    virtual wxItemAttr *OnGetItemAttr(long item) const;
-
     // Other miscellaneous accessors.
     // ------------------------------
 
     // Convenient functions for testing the list control mode:
     bool InReportView() const { return HasFlag(wxLC_REPORT); }
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
+
+    // Check if the item is visible
+    virtual bool IsVisible(long WXUNUSED(item)) const { return false; }
 
     // Enable or disable beep when incremental match doesn't find any item.
     // Only implemented in the generic version currently.
@@ -410,6 +416,8 @@ public:
     void EnableAlternateRowColours(bool enable = true);
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
+
+    virtual void ExtendRulesAndAlternateColour(bool WXUNUSED(extend) = true) { }
 
     // Header attributes support: only implemented in wxMSW currently.
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
@@ -426,6 +434,29 @@ protected:
 
     // Overridden methods of the base class.
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+
+    // these functions are only used for virtual list view controls, i.e. the
+    // ones with wxLC_VIRTUAL style
+
+    // return the attribute for the item (may return NULL if none)
+    virtual wxItemAttr* OnGetItemAttr(long item) const;
+
+    // return the text for the given column of the given item
+    virtual wxString OnGetItemText(long item, long column) const;
+
+    // return whether the given item is checked
+    virtual bool OnGetItemIsChecked(long item) const;
+
+    // return the icon for the given item. In report view, OnGetItemImage will
+    // only be called for the first column. See OnGetItemColumnImage for
+    // details.
+    virtual int OnGetItemImage(long item) const;
+
+    // return the icon for the given item and column.
+    virtual int OnGetItemColumnImage(long item, long column) const;
+
+    // return the attribute for the given item and column (may return NULL if none)
+    virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
 private:
     // user defined color to draw row lines, may be invalid

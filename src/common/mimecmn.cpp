@@ -20,9 +20,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MIMETYPE
 
@@ -156,12 +153,11 @@ void wxFileTypeInfo::VarArgInit(const wxString *mimeType,
 
 
 wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)
+    : m_mimeType(sArray[0u])
+    , m_openCmd( sArray[1u])
+    , m_printCmd(sArray[2u])
+    , m_desc(    sArray[3u])
 {
-    m_mimeType = sArray [0u];
-    m_openCmd  = sArray [1u];
-    m_printCmd = sArray [2u];
-    m_desc     = sArray [3u];
-
     size_t count = sArray.GetCount();
     for ( size_t i = 4; i < count; i++ )
     {
@@ -291,8 +287,7 @@ wxFileType::wxFileType()
 
 wxFileType::~wxFileType()
 {
-    if ( m_impl )
-        delete m_impl;
+    delete m_impl;
 }
 
 bool wxFileType::GetExtensions(wxArrayString& extensions)
@@ -590,8 +585,7 @@ wxMimeTypesManager::wxMimeTypesManager()
 
 wxMimeTypesManager::~wxMimeTypesManager()
 {
-    if ( m_impl )
-        delete m_impl;
+    delete m_impl;
 }
 
 bool wxMimeTypesManager::Unassociate(wxFileType *ft)

@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "htmlpars.h"
 
@@ -21,6 +18,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/crt.h"
 #include "wx/tokenzr.h"
 #include "wx/wfstream.h"
 #include "wx/url.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/nonownedwnd.h
+// Name:        src/qt/nonownedwnd.cpp
 // Author:      Sean D'Epagnier
 // Copyright:   (c) 2016 wxWidgets dev team
 // Licence:     wxWindows licence
@@ -16,9 +16,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -60,7 +57,7 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
-bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
+bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& WXUNUSED(path))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return true;

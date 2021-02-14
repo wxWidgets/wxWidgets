@@ -14,14 +14,18 @@
 class wxPGWindowList
 {
 public:
-    wxPGWindowList();
-    void SetSecondary( wxWindow* secondary );
+    wxPGWindowList(wxWindow* primary, wxWindow* secondary = NULL);
 
-    wxWindow*   m_primary;
-    wxWindow*   m_secondary;
+    void SetSecondary(wxWindow* secondary);
 
-    wxPGWindowList( wxWindow* a );
-    wxPGWindowList( wxWindow* a, wxWindow* b );
+    /** Gets window of primary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetPrimary() const;
+    /** Gets window of secondary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetSecondary() const;
 };
 
 
@@ -136,12 +140,21 @@ public:
         Default implementation  sets foreground colour, background colour,
         font, plus text for wxTextCtrl and wxComboCtrl.
 
+        @param pg
+            Property grid to which the edited property belongs.
+
+        @param property
+            Edited property to which the editor control belongs.
+
+        @param ctrl
+            Editor control.
+
         @param appearance
             New appearance to be applied.
 
         @param oldAppearance
-            Previously applied appearance.  Used to detect which control
-            attributes need to be changed (e.g. so we onlychange background
+            Previously applied appearance. Used to detect which control
+            attributes need to be changed (e.g. so we only change background
             colour if really needed).
 
         @param unspecified
@@ -238,7 +251,7 @@ public:
 class wxPGChoiceEditor : public wxPGEditor
 {
 public:
-    wxPGChoiceEditor()
+    wxPGChoiceEditor();
     virtual ~wxPGChoiceEditor();
 
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
@@ -427,7 +440,7 @@ public:
     class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
     {
         wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
-        
+
     public:
         wxSampleMultiButtonEditor() {}
         virtual ~wxSampleMultiButtonEditor() {}

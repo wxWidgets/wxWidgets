@@ -23,6 +23,8 @@
 
 #include "wx/private/fdiomanager.h"
 
+#define wxCloseSocket close
+
 class wxSocketImplUnix : public wxSocketImpl,
                          public wxFDIOHandler
 {
@@ -38,6 +40,10 @@ public:
 
     virtual void ReenableEvents(wxSocketEventFlags flags) wxOVERRIDE
     {
+        // Events are only ever used for non-blocking sockets.
+        if ( GetSocketFlags() & wxSOCKET_BLOCK )
+            return;
+
         // enable the notifications about input/output being available again in
         // case they were disabled by OnRead/WriteWaiting()
         //
@@ -53,6 +59,15 @@ public:
         EnableEvents(flags);
     }
 
+    virtual void UpdateBlockingState() wxOVERRIDE
+    {
+        // Make this int and not bool to allow passing it to ioctl().
+        int isNonBlocking = (GetSocketFlags() & wxSOCKET_BLOCK) == 0;
+        ioctl(m_fd, FIONBIO, &isNonBlocking);
+
+        DoEnableEvents(wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG, isNonBlocking);
+    }
+
     // wxFDIOHandler methods
     virtual void OnReadWaiting() wxOVERRIDE;
     virtual void OnWriteWaiting() wxOVERRIDE;
@@ -64,15 +79,7 @@ private:
     {
         DisableEvents();
 
-        close(m_fd);
-    }
-
-    virtual void UnblockAndRegisterWithEventLoop() wxOVERRIDE
-    {
-        int trueArg = 1;
-        ioctl(m_fd, FIONBIO, &trueArg);
-
-        EnableEvents();
+        wxCloseSocket(m_fd);
     }
 
     // enable or disable notifications for socket input/output events

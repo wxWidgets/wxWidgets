@@ -21,7 +21,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxSliderNameStr);
+             const wxString& name = wxASCII_STR(wxSliderNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -30,27 +30,27 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSL_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxSliderNameStr);
+                const wxString& name = wxASCII_STR(wxSliderNameStr));
 
-    virtual int GetValue() const;
-    virtual void SetValue(int value);
+    virtual int GetValue() const wxOVERRIDE;
+    virtual void SetValue(int value) wxOVERRIDE;
 
-    virtual void SetRange(int minValue, int maxValue);
-    virtual int GetMin() const;
-    virtual int GetMax() const;
+    virtual void SetRange(int minValue, int maxValue) wxOVERRIDE;
+    virtual int GetMin() const wxOVERRIDE;
+    virtual int GetMax() const wxOVERRIDE;
 
-    virtual void DoSetTickFreq(int freq);
-    virtual int GetTickFreq() const;
+    virtual void DoSetTickFreq(int freq) wxOVERRIDE;
+    virtual int GetTickFreq() const wxOVERRIDE;
 
-    virtual void SetLineSize(int lineSize);
-    virtual void SetPageSize(int pageSize);
-    virtual int GetLineSize() const;
-    virtual int GetPageSize() const;
+    virtual void SetLineSize(int lineSize) wxOVERRIDE;
+    virtual void SetPageSize(int pageSize) wxOVERRIDE;
+    virtual int GetLineSize() const wxOVERRIDE;
+    virtual int GetPageSize() const wxOVERRIDE;
 
-    virtual void SetThumbLength(int lenPixels);
-    virtual int GetThumbLength() const;
+    virtual void SetThumbLength(int lenPixels) wxOVERRIDE;
+    virtual int GetThumbLength() const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 private:
     QSlider *m_qtSlider;

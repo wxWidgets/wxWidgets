@@ -33,7 +33,7 @@ enum wxAcceleratorEntryFlags
     wxACCEL_CTRL    = 0x0002,   // hold Ctrl key down
     wxACCEL_SHIFT   = 0x0004,   // hold Shift key down
 #if defined(__WXMAC__)
-    wxACCEL_RAW_CTRL= 0x0008,   // 
+    wxACCEL_RAW_CTRL= 0x0008,   //
 #else
     wxACCEL_RAW_CTRL= wxACCEL_CTRL,
 #endif
@@ -55,23 +55,9 @@ public:
         , m_item(item)
         { }
 
-    wxAcceleratorEntry(const wxAcceleratorEntry& entry)
-        : m_flags(entry.m_flags)
-        , m_keyCode(entry.m_keyCode)
-        , m_command(entry.m_command)
-        , m_item(entry.m_item)
-        { }
-
     // create accelerator corresponding to the specified string, return NULL if
     // string couldn't be parsed or a pointer to be deleted by the caller
     static wxAcceleratorEntry *Create(const wxString& str);
-
-    wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry)
-    {
-        if (&entry != this)
-            Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
-        return *this;
-    }
 
     void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
     {

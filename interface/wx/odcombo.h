@@ -74,7 +74,7 @@ enum
 
     @see Events emitted by wxComboCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{ownerdrawncombobox}
 

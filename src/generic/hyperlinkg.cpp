@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL
 
@@ -125,7 +122,7 @@ void wxGenericHyperlinkCtrl::ConnectMenuHandlers()
 
 wxSize wxGenericHyperlinkCtrl::DoGetBestClientSize() const
 {
-    wxClientDC dc((wxWindow *)this);
+    wxClientDC dc(const_cast<wxGenericHyperlinkCtrl*>(this));
     return dc.GetTextExtent(GetLabel());
 }
 

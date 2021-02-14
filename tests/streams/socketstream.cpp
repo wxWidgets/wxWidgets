@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -66,7 +63,7 @@ public:
     }
 
 protected:
-    virtual void *Entry()
+    virtual void *Entry() wxOVERRIDE
     {
         wxSocketServer srv(LocalAddress(m_port), wxSOCKET_REUSEADDR);
         CPPUNIT_ASSERT( srv.IsOk() );

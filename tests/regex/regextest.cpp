@@ -31,9 +31,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_REGEX
 
@@ -77,7 +74,7 @@ public:
 
 protected:
     // run this testcase
-    void runTest();
+    void runTest() wxOVERRIDE;
 
 private:
     // workers
@@ -204,7 +201,7 @@ void RegExTestCase::parseFlags(const wxString& flags)
             case 'i': m_compileFlags |= wxRE_ICASE; break;
             case 'o': m_compileFlags |= wxRE_NOSUB; break;
             case 'n': m_compileFlags |= wxRE_NEWLINE; break;
-            case 't': if (strchr("ep", m_mode)) break; // else fall through...
+            case 't': if (strchr("ep", m_mode)) break; wxFALLTHROUGH;
 
             // anything else we must skip the test
             default:

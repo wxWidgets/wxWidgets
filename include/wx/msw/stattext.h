@@ -22,7 +22,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxStaticTextNameStr)
+                 const wxString& name = wxASCII_STR(wxStaticTextNameStr))
     {
         Create(parent, id, label, pos, size, style, name);
     }
@@ -33,7 +33,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticTextNameStr);
+                const wxString& name = wxASCII_STR(wxStaticTextNameStr));
 
     // override some methods to resize the window properly
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
@@ -47,8 +47,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const wxOVERRIDE;
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText);
 };

@@ -84,6 +84,7 @@ Here is a list of classes related to wxGrid:
     number.
 @li wxGridCellBoolRenderer: Renderer showing the cell as checked or unchecked
     box.
+@li wxGridCellDateRenderer: Renderer showing the cell as date.
 @li wxGridCellEditor: Base class for objects used to edit the cell value.
 @li wxGridCellStringEditor: Editor for cells containing text strings.
 @li wxGridCellNumberEditor: Editor for cells containing integer numbers.
@@ -91,6 +92,7 @@ Here is a list of classes related to wxGrid:
 @li wxGridCellBoolEditor: Editor for boolean-valued cells.
 @li wxGridCellChoiceEditor: Editor allowing to choose one of the predefined
     strings (and possibly enter new one).
+@li wxGridCellDateEditor: Editor for cells containing dates without time component.
 @li wxGridEvent: The event sent by most of wxGrid actions.
 @li wxGridSizeEvent: The special event sent when a grid column or row is
     resized.

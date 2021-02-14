@@ -10,11 +10,11 @@
 
     This class allows the application to retrieve information about all known
     MIME types from a system-specific location and the filename extensions to the
-    MIME types and vice versa. 
-    
+    MIME types and vice versa.
+
     MIME stands for "Multipurpose Internet Mail Extensions" and was originally
     used in mail protocols. It's standardized by several RFCs.
-    
+
     Under Windows, the MIME type information is queried from registry.
     Under Linux and Unix, it is queried from the XDG data directories.
 
@@ -23,7 +23,7 @@
     The application should not construct its own manager: it should use the
     object pointer ::wxTheMimeTypesManager.
     The functions GetFileTypeFromMimeType() and GetFileTypeFromExtension()
-    return a wxFileType object which may be further queried for file description, 
+    return a wxFileType object which may be further queried for file description,
     icon and other attributes.
 
     @section mimetypemanager_helpers Helper functions
@@ -445,7 +445,7 @@ public:
                    const wxString& description,
                    const wxString& extension,
                    ...);
-    
+
     /**
        Constructor using an array of string elements corresponding to the
        parameters of the ctor above in the same order.
@@ -497,7 +497,7 @@ public:
        Get the MIME type
     */
     const wxString& GetMimeType() const;
-    
+
     /**
        Get the open command
     */
@@ -507,17 +507,17 @@ public:
        Get the print command
     */
     const wxString& GetPrintCommand() const;
-    
+
     /**
        Get the short description (only used under Win32 so far)
     */
     const wxString& GetShortDesc() const;
-    
+
     /**
        Get the long, user visible description
     */
     const wxString& GetDescription() const;
-    
+
     /**
        Get the array of all extensions
     */
@@ -527,7 +527,7 @@ public:
        Get the number of extensions.
     */
     size_t GetExtensionsCount() const;
-    
+
     /**
        Get the icon filename
     */

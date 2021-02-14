@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_REARRANGECTRL
 
@@ -70,7 +67,6 @@ bool wxRearrangeList::Create(wxWindow *parent,
     }
 
     // do create the real control
-    m_order.reserve(count);
     if ( !wxCheckListBox::Create(parent, id, pos, size, itemsInOrder,
                                  style, validator, name) )
         return false;
@@ -84,8 +80,9 @@ bool wxRearrangeList::Create(wxWindow *parent,
             // which would also update m_order itself.
             wxCheckListBox::Check(n);
         }
-        m_order[n] = order[n];
     }
+
+    m_order = order;
 
     return true;
 }

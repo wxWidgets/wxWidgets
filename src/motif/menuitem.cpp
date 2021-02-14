@@ -161,7 +161,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
     {
         // Id=-3 identifies a Title item.
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget
-            (wxStripMenuCodes(m_text),
+            (wxStripMenuCodes(m_text, wxStrip_Menu),
             xmLabelGadgetClass, (Widget) menu, NULL);
     }
     else if (!IsSeparator() && !m_subMenu)
@@ -174,7 +174,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
             txt = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
         }
 
-        wxString strName = wxStripMenuCodes(txt);
+        wxString strName = wxStripMenuCodes(txt, wxStrip_Menu);
         if (IsCheckable())
         {
             m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
@@ -302,7 +302,7 @@ void wxMenuItem::DestroyItem(bool full)
 void wxMenuItem::SetItemLabel(const wxString& label)
 {
     char mnem = wxFindMnemonic (label);
-    wxString label2 = wxStripMenuCodes(label);
+    wxString label2 = wxStripMenuCodes(label, wxStrip_Menu);
 
     m_text = label;
 
@@ -385,7 +385,7 @@ void wxMenuItemArmCallback (Widget WXUNUSED(w), XtPointer clientData,
     {
         if (item->GetMenuBar() && item->GetMenuBar()->GetMenuBarFrame())
         {
-            wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, item->GetId());
+            wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, item->GetId(), item->GetMenu());
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
             item->GetMenuBar()->GetMenuBarFrame()
@@ -405,7 +405,7 @@ wxMenuItemDisarmCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             // TODO: not sure this is correct, since -1 means something
             // special to event system
-            wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, -1);
+            wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, -1, item->GetMenu());
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
             item->GetMenuBar()->GetMenuBarFrame()

@@ -234,7 +234,14 @@ public:
     virtual void DrawCheckBox(wxWindow *win, wxDC& dc,
                               const wxRect& rect, int flags = 0 );
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual void DrawCheckMark(wxWindow *win, wxDC& dc,
+                               const wxRect& rect, int flags = 0 );
+
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0);
+
+    virtual wxSize GetCheckMarkSize(wxWindow *win);
+
+    virtual wxSize GetExpanderSize(wxWindow* win);
 
     virtual void DrawPushButton(wxWindow *win, wxDC& dc,
                                 const wxRect& rect, int flags = 0 );
@@ -513,7 +520,7 @@ public:
     /**
         Draw a title bar button in the given state.
 
-        This function is currently only available under MSW and OS X (and only
+        This function is currently only available under MSW and macOS (and only
         for wxTITLEBAR_BUTTON_CLOSE under the latter), its best replacement for
         the other platforms is to use wxArtProvider to retrieve the bitmaps for
         @c wxART_HELP and @c wxART_CLOSE (but not any other title bar buttons
@@ -529,6 +536,17 @@ public:
                                     const wxRect& rect,
                                     wxTitleBarButton button,
                                     int flags = 0) = 0;
+
+    /**
+        Draw a check mark.
+
+        @a flags may have the @c wxCONTROL_DISABLED bit set, see
+        @ref wxCONTROL_FLAGS.
+
+        @since 3.1.3
+    */
+    virtual void DrawCheckMark(wxWindow* win, wxDC& dc, const wxRect& rect,
+                               int flags = 0) = 0;
 
     /**
         Return the currently used renderer.
@@ -552,9 +570,36 @@ public:
 
     /**
         Returns the size of a check box.
-        The @a win parameter is not used currently and can be @NULL.
+
+        @param win A valid, i.e. non-null, window pointer which is used to get
+            the theme defining the checkbox size under some platforms.
+
+        @param flags The only acceptable flag is @c wxCONTROL_CELL which means
+            that just the size of the checkbox itself is returned, without any
+            margins that are included by default. This parameter is only
+            available in wxWidgets 3.1.4 or later.
     */
-    virtual wxSize GetCheckBoxSize(wxWindow* win) = 0;
+    virtual wxSize GetCheckBoxSize(wxWindow* win, int flags = 0) = 0;
+
+    /**
+        Returns the size of a check mark.
+
+        @param win A valid, i.e. non-null, window pointer which is used to get
+            the theme defining the checkmark size under some platforms.
+
+        @since 3.1.3
+    */
+    virtual wxSize GetCheckMarkSize(wxWindow* win) = 0;
+
+    /**
+        Returns the size of the expander used in tree-like controls.
+
+        @param win A valid, i.e. non-null, window pointer which is used to get
+            the theme defining the expander size under some platforms.
+
+        @since 3.1.3
+     */
+    virtual wxSize GetExpanderSize(wxWindow* win) = 0;
 
     /**
         Returns the height of a header button, either a fixed platform height if
@@ -633,7 +678,7 @@ public:
 struct wxRendererVersion
 {
     wxRendererVersion(int version_, int age_);
-    
+
     /**
         Checks if the main program is compatible with the renderer having the version
         @e ver, returns @true if it is and @false otherwise.

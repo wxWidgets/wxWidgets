@@ -341,13 +341,13 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
         for (i = 0; currentLine != lineNo && s[i]; i++ )
             if (s[i] == '\n')
                 currentLine++;
-            // Now get the text
-            int j;
-            for (j = 0; s[i] && s[i] != '\n'; i++, j++ )
-                buf += s[i];
+        // Now get the text
+        int j;
+        for (j = 0; s[i] && s[i] != '\n'; i++, j++ )
+            buf += s[i];
 
-            XtFree(s);
-            return buf;
+        XtFree(s);
+        return buf;
     }
     else
         return wxEmptyString;

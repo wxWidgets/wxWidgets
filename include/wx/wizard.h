@@ -42,7 +42,7 @@
 #define wxWIZARD_TILE             0x40
 
 // forward declarations
-class WXDLLIMPEXP_FWD_ADV wxWizard;
+class WXDLLIMPEXP_FWD_CORE wxWizard;
 
 // ----------------------------------------------------------------------------
 // wxWizardPage is one of the wizards screen: it must know what are the
@@ -52,7 +52,7 @@ class WXDLLIMPEXP_FWD_ADV wxWizard;
 // used as such (i.e. controls may be placed directly on it &c).
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxWizardPage : public wxPanel
+class WXDLLIMPEXP_CORE wxWizardPage : public wxPanel
 {
 public:
     wxWizardPage() { Init(); }
@@ -118,7 +118,7 @@ private:
 // this, you must derive from wxWizardPage directly.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxWizardPageSimple : public wxWizardPage
+class WXDLLIMPEXP_CORE wxWizardPageSimple : public wxWizardPage
 {
 public:
     wxWizardPageSimple() { Init(); }
@@ -187,7 +187,7 @@ private:
 // wxWizard
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxWizardBase : public wxDialog
+class WXDLLIMPEXP_CORE wxWizardBase : public wxDialog
 {
 public:
     /*
@@ -263,7 +263,7 @@ private:
 // window hierarchy as usual
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxWizardEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxWizardEvent : public wxNotifyEvent
 {
 public:
     wxWizardEvent(wxEventType type = wxEVT_NULL,
@@ -292,13 +292,13 @@ private:
 // macros for handling wxWizardEvents
 // ----------------------------------------------------------------------------
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_CANCEL, wxWizardEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_HELP, wxWizardEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_FINISHED, wxWizardEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_SHOWN, wxWizardEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_BEFORE_PAGE_CHANGED, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_CANCEL, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_HELP, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_FINISHED, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_PAGE_SHOWN, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WIZARD_BEFORE_PAGE_CHANGED, wxWizardEvent );
 
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 

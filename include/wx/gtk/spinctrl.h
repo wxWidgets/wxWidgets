@@ -68,10 +68,13 @@ protected:
     void DoSetRange(double min_val, double max_val);
     void DoSetIncrement(double inc);
 
-    void GtkDisableEvents() const;
-    void GtkEnableEvents() const;
+    void GtkDisableEvents();
+    void GtkEnableEvents();
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    // Update the width of the entry field to fit the current range (and also
+    // base or number of digits depending on the derived class).
+    virtual void GtkSetEntryWidth() = 0;
+
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
@@ -133,6 +136,9 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
+
+protected:
+    virtual void GtkSetEntryWidth() wxOVERRIDE;
 
 private:
     // Common part of all ctors.
@@ -198,6 +204,9 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+
+protected:
+    virtual void GtkSetEntryWidth() wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };

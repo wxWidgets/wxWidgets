@@ -150,12 +150,6 @@ public:
         , m_panel(panel)
     {
     }
-#ifndef SWIG
-    wxRibbonPanelEvent(const wxRibbonPanelEvent& e) : wxCommandEvent(e)
-    {
-        m_panel = e.m_panel;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxRibbonPanelEvent(*this); }
 
     wxRibbonPanel* GetPanel() {return m_panel;}

@@ -664,7 +664,7 @@ enum wxSocketEventFlags
     This option can have surprising platform dependent behaviour, so check the
     documentation for your platform's implementation of setsockopt().
 
-    Note that on BSD-based systems(e.g. OS X), use of
+    Note that on BSD-based systems(e.g. macOS), use of
     @b wxSOCKET_REUSEADDR implies @b SO_REUSEPORT in addition to
     @b SO_REUSEADDR to be consistent with Windows.
 

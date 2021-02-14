@@ -48,7 +48,6 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
                          long style, const wxString& WXUNUSED(name))
 {
     m_qtStatusBar = new wxQtStatusBar( parent, this );
-    m_qtPanes = new QList < QLabel* >;
 
     if ( style & wxSTB_SIZEGRIP )
         m_qtStatusBar->setSizeGripEnabled(true);
@@ -65,10 +64,10 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
     wxCHECK_MSG( (i >= 0) && ((size_t)i < m_panes.GetCount()), false,
                  "invalid statusbar field index" );
 
-    if ( m_qtPanes->count() != m_panes.GetCount() )
+    if ( m_qtPanes.size() != m_panes.GetCount() )
         const_cast<wxStatusBar*>(this)->UpdateFields();
-    
-    rect = wxQtConvertRect((*m_qtPanes)[i]->geometry());
+
+    rect = wxQtConvertRect(m_qtPanes[i]->geometry());
     return true;
 }
 
@@ -89,10 +88,10 @@ int wxStatusBar::GetBorderY() const
 
 void wxStatusBar::DoUpdateStatusText(int number)
 {
-    if ( m_qtPanes->count() != m_panes.GetCount() )
+    if ( m_qtPanes.size() != m_panes.GetCount() )
         UpdateFields();
 
-    (*m_qtPanes)[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );
+    m_qtPanes[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );
 }
 
 // Called each time number/size of panes changes
@@ -105,18 +104,20 @@ void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
 
 void wxStatusBar::Init()
 {
-    m_qtPanes = NULL;
+    m_qtStatusBar = NULL;
 }
 
 void wxStatusBar::UpdateFields()
 {
     // is it a good idea to recreate all the panes every update?
 
-    while ( !m_qtPanes->isEmpty() )
+    for ( wxVector<QLabel*>::const_iterator it = m_qtPanes.begin();
+          it != m_qtPanes.end(); ++it )
     {
         //Remove all panes
-        delete m_qtPanes->takeLast();
+        delete *it;
     }
+    m_qtPanes.clear();
 
     for (size_t i = 0; i < m_panes.GetCount(); i++)
     {
@@ -124,7 +125,7 @@ void wxStatusBar::UpdateFields()
         int width = m_panes[i].GetWidth();
 
         QLabel *pane = new QLabel( m_qtStatusBar );
-        m_qtPanes->append( pane );
+        m_qtPanes.push_back(pane);
 
         if ( width >= 0 )
         {

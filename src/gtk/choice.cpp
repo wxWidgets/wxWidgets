@@ -18,6 +18,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
+#include "wx/gtk/private/value.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -233,10 +234,9 @@ int wxChoice::FindString( const wxString &item, bool bCase ) const
     int count = 0;
     do
     {
-        GValue value = G_VALUE_INIT;
-        gtk_tree_model_get_value( model, &iter, m_stringCellIndex, &value );
-        wxString str = wxGTK_CONV_BACK( g_value_get_string( &value ) );
-        g_value_unset( &value );
+        wxGtkValue value;
+        gtk_tree_model_get_value( model, &iter, m_stringCellIndex, value );
+        wxString str = wxGTK_CONV_BACK( g_value_get_string( value ) );
 
         if (item.IsSameAs( str, bCase ) )
             return count;
@@ -264,11 +264,9 @@ void wxChoice::SetString(unsigned int n, const wxString &text)
     GtkTreeIter iter;
     if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
     {
-        GValue value = G_VALUE_INIT;
-        g_value_init( &value, G_TYPE_STRING );
-        g_value_set_string( &value, wxGTK_CONV( text ) );
-        gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, m_stringCellIndex, &value );
-        g_value_unset( &value );
+        wxGtkValue value(G_TYPE_STRING);
+        g_value_set_string( value, wxGTK_CONV( text ) );
+        gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, m_stringCellIndex, value );
     }
 
     InvalidateBestSize();
@@ -278,21 +276,18 @@ wxString wxChoice::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid control") );
 
-    wxString str;
-
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel *model = gtk_combo_box_get_model( combobox );
     GtkTreeIter iter;
-    if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
+    if (!gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
     {
-        GValue value = G_VALUE_INIT;
-        gtk_tree_model_get_value( model, &iter, m_stringCellIndex, &value );
-        wxString tmp = wxGTK_CONV_BACK( g_value_get_string( &value ) );
-        g_value_unset( &value );
-        return tmp;
+        wxFAIL_MSG( "invalid index" );
+        return wxString();
     }
 
-    return str;
+    wxGtkValue value;
+    gtk_tree_model_get_value( model, &iter, m_stringCellIndex, value );
+    return wxGTK_CONV_BACK( g_value_get_string( value ) );
 }
 
 unsigned int wxChoice::GetCount() const

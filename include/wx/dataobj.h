@@ -36,7 +36,9 @@
    wxTextDataObject    |     wxBitmapDataObject
                        |
                wxCustomDataObject
-
+                       |
+                       |
+               wxImageDataObject
 */
 // ============================================================================
 
@@ -322,7 +324,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-    #if defined(__WXGTK20__) || defined(__WXX11__)
+    #if defined(__WXGTK20__) || defined(__WXX11__) || defined(__WXQT__)
         #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
     #elif defined(__WXMAC__)
         #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
@@ -345,11 +347,11 @@ public:
     virtual size_t GetLength() const { return m_html.Len() + 1; }
     virtual wxString GetHTML() const { return m_html; }
     virtual void SetHTML(const wxString& html) { m_html = html; }
-    
+
     virtual size_t GetDataSize() const wxOVERRIDE;
     virtual bool GetDataHere(void *buf) const wxOVERRIDE;
     virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
-    
+
     // Must provide overloads to avoid hiding them (and warnings about it)
     virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
@@ -427,6 +429,11 @@ public:
 #endif // different wxTextDataObject implementations
 
 private:
+#if defined(__WXQT__)
+    // Overridden to set text directly instead of extracting byte array
+    void QtSetDataSingleFormat(const class QMimeData &mimeData, const wxDataFormat &format) wxOVERRIDE;
+#endif
+
     wxString m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
@@ -538,6 +545,22 @@ private:
     void  *m_data;
 
     wxDECLARE_NO_COPY_CLASS(wxCustomDataObject);
+};
+
+// ----------------------------------------------------------------------------
+// wxImageDataObject - data object for wxImage
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxImageDataObject : public wxCustomDataObject
+{
+public:
+    explicit wxImageDataObject(const wxImage& image = wxNullImage);
+
+    void SetImage(const wxImage& image);
+    wxImage GetImage() const;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxImageDataObject);
 };
 
 // ----------------------------------------------------------------------------

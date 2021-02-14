@@ -62,37 +62,80 @@ bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
     return true;
 }
 
-void wxTopLevelWindowQt::Maximize(bool WXUNUSED(maximize)) 
+bool wxTopLevelWindowQt::Show(bool show)
 {
+    if ( !wxTopLevelWindowBase::Show(show) )
+        return false;
+
+    if ( show && !m_qtWindow->isActiveWindow() )
+        m_qtWindow->activateWindow();
+
+    return true;
+}
+
+void wxTopLevelWindowQt::Maximize(bool maximize)
+{
+    QWidget *widget = GetHandle();
+
+    if ( maximize )
+    {
+        widget->showMaximized();
+    }
+    else
+    {
+        widget->showNormal();
+    }
 }
 
 void wxTopLevelWindowQt::Restore()
 {
+    GetHandle()->showNormal();
 }
 
-void wxTopLevelWindowQt::Iconize(bool WXUNUSED(iconize) )
+void wxTopLevelWindowQt::Iconize(bool iconize )
 {
+    QWidget *widget = GetHandle();
+
+    if ( iconize )
+    {
+        widget->showMinimized();
+    }
+    else
+    {
+        widget->showNormal();
+    }
 }
 
 bool wxTopLevelWindowQt::IsMaximized() const
 {
-    return false;
+    return GetHandle()->isMaximized();
 }
 
 bool wxTopLevelWindowQt::IsIconized() const
 {
-    return false;
+    return GetHandle()->isMinimized();
 }
 
 
-bool wxTopLevelWindowQt::ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style))
+bool wxTopLevelWindowQt::ShowFullScreen(bool show, long WXUNUSED(style))
 {
-    return false;
+    QWidget *widget = GetHandle();
+
+    if ( show )
+    {
+        widget->showFullScreen();
+    }
+    else
+    {
+        widget->showNormal();
+    }
+
+    return true;
 }
 
 bool wxTopLevelWindowQt::IsFullScreen() const
 {
-    return false;
+    return GetHandle()->isFullScreen();
 }
 
 void wxTopLevelWindowQt::SetTitle(const wxString& title)
@@ -108,7 +151,7 @@ wxString wxTopLevelWindowQt::GetTitle() const
 void wxTopLevelWindowQt::SetIcons( const wxIconBundle& icons )
 {
     wxTopLevelWindowBase::SetIcons( icons );
-    
+
     QIcon qtIcons;
     for ( size_t i = 0; i < icons.GetIconCount(); i++ )
     {
@@ -130,7 +173,7 @@ void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
         return;
 
     Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
-    
+
     if ( HasFlag( wxSTAY_ON_TOP ) != qtFlags.testFlag( Qt::WindowStaysOnTopHint ) )
         qtFlags ^= Qt::WindowStaysOnTopHint;
 
@@ -144,12 +187,12 @@ void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
                 qtFlags |= Qt::WindowMinimizeButtonHint;
             else
                 qtFlags &= ~Qt::WindowMinimizeButtonHint;
-            
+
             if ( HasFlag( wxMAXIMIZE_BOX ) )
                 qtFlags |= Qt::WindowMaximizeButtonHint;
             else
                 qtFlags &= ~Qt::WindowMaximizeButtonHint;
-            
+
             if ( HasFlag( wxCLOSE_BOX ) )
                 qtFlags |= Qt::WindowCloseButtonHint;
             else
@@ -162,15 +205,15 @@ void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
             qtFlags &= ~Qt::WindowCloseButtonHint;
         }
     }
-        
+
     GetHandle()->setWindowFlags( qtFlags );
-    
+
     wxCHECK_RET( !( HasFlag( wxMAXIMIZE ) && HasFlag( wxMAXIMIZE ) ), "Window cannot be both maximized and minimized" );
     if ( HasFlag( wxMAXIMIZE ) )
         GetHandle()->setWindowState( Qt::WindowMaximized );
     else if ( HasFlag( wxMINIMIZE ) )
         GetHandle()->setWindowState( Qt::WindowMinimized );
-    
+
     if ( HasFlag( wxRESIZE_BORDER ) )
         GetHandle()->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
     else

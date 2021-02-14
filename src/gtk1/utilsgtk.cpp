@@ -86,31 +86,9 @@ void *wxGetDisplay()
     return GDK_DISPLAY();
 }
 
-void wxDisplaySize( int *width, int *height )
-{
-    if (width) *width = gdk_screen_width();
-    if (height) *height = gdk_screen_height();
-}
-
-void wxDisplaySizeMM( int *width, int *height )
-{
-    if (width) *width = gdk_screen_width_mm();
-    if (height) *height = gdk_screen_height_mm();
-}
-
 void wxGetMousePosition( int* x, int* y )
 {
     gdk_window_get_pointer( NULL, x, y, NULL );
-}
-
-bool wxColourDisplay()
-{
-    return true;
-}
-
-int wxDisplayDepth()
-{
-    return gdk_window_get_visual( wxGetRootWindow()->window )->depth;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

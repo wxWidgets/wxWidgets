@@ -15,14 +15,16 @@
 
 #if wxUSE_PROPGRID
 
-#include "wx/dynarray.h"
-#include "wx/vector.h"
-#include "wx/hashmap.h"
+#include "wx/colour.h"
 #include "wx/hashset.h"
-#include "wx/variant.h"
-#include "wx/any.h"
-#include "wx/longlong.h"
-#include "wx/clntdata.h"
+
+class WXDLLIMPEXP_FWD_CORE wxPoint;
+class WXDLLIMPEXP_FWD_CORE wxSize;
+class WXDLLIMPEXP_FWD_CORE wxFont;
+
+#if wxUSE_STD_CONTAINERS
+#include <numeric>
+#endif // wxUSE_STD_CONTAINERS
 
 // -----------------------------------------------------------------------
 
@@ -47,9 +49,6 @@
     #define wxPG_ICON_WIDTH             9
     // 1 if wxRendererNative should be employed
     #define wxPG_USE_RENDERER_NATIVE    1
-
-    // Enable tooltips
-    #define wxPG_SUPPORT_TOOLTIPS       1
 
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
@@ -80,9 +79,6 @@
     // 1 if wxRendererNative should be employed
     #define wxPG_USE_RENDERER_NATIVE    1
 
-    // Enable tooltips
-    #define wxPG_SUPPORT_TOOLTIPS       1
-
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
 
@@ -112,9 +108,6 @@
     // 1 if wxRendererNative should be employed
     #define wxPG_USE_RENDERER_NATIVE    1
 
-    // Enable tooltips
-    #define wxPG_SUPPORT_TOOLTIPS       1
-
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
 
@@ -143,9 +136,6 @@
     #define wxPG_ICON_WIDTH             9
     // 1 if wxRendererNative should be employed
     #define wxPG_USE_RENDERER_NATIVE    0
-
-    // Enable tooltips
-    #define wxPG_SUPPORT_TOOLTIPS       0
 
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
@@ -193,12 +183,6 @@
     #define wxPG_COMPATIBILITY_1_4      0
 #endif
 
-// Need to force disable tooltips?
-#if !wxUSE_TOOLTIPS
-    #undef wxPG_SUPPORT_TOOLTIPS
-    #define wxPG_SUPPORT_TOOLTIPS       0
-#endif
-
 // Set 1 to include advanced properties (wxFontProperty, wxColourProperty, etc.)
 #ifndef wxPG_INCLUDE_ADVPROPS
     #define wxPG_INCLUDE_ADVPROPS           1
@@ -210,22 +194,21 @@
 // -----------------------------------------------------------------------
 
 
-class wxPGEditor;
-class wxPGProperty;
-class wxPropertyCategory;
-class wxPGChoices;
-class wxPropertyGridPageState;
-class wxPGCell;
-class wxPGCellRenderer;
-class wxPGChoiceEntry;
-class wxPGPropArgCls;
-class wxPropertyGridInterface;
-class wxPropertyGrid;
-class wxPropertyGridEvent;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGEditor;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyCategory;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGChoices;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPageState;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGCellRenderer;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGChoiceEntry;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGPropArgCls;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridInterface;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridEvent;
 class wxPropertyGridManager;
-class wxPGOwnerDrawnComboBox;
-class wxPGEditorDialogAdapter;
-class wxPGValidationInfo;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGEditorDialogAdapter;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGValidationInfo;
 
 
 // -----------------------------------------------------------------------
@@ -308,9 +291,11 @@ WX_DECLARE_HASH_SET_WITH_DECL(int,
                               wxPGHashSetInt,
                               class WXDLLIMPEXP_PROPGRID);
 
+#if WXWIN_COMPATIBILITY_3_0
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 
@@ -394,16 +379,16 @@ enum wxPG_SETVALUE_FLAGS
 //
 // Valid constants for wxPG_UINT_BASE attribute
 // (long because of wxVariant constructor)
-#define wxPG_BASE_OCT                       (long)8
-#define wxPG_BASE_DEC                       (long)10
-#define wxPG_BASE_HEX                       (long)16
-#define wxPG_BASE_HEXL                      (long)32
+#define wxPG_BASE_OCT                       8L
+#define wxPG_BASE_DEC                       10L
+#define wxPG_BASE_HEX                       16L
+#define wxPG_BASE_HEXL                      32L
 
 //
 // Valid constants for wxPG_UINT_PREFIX attribute
-#define wxPG_PREFIX_NONE                    (long)0
-#define wxPG_PREFIX_0x                      (long)1
-#define wxPG_PREFIX_DOLLAR_SIGN             (long)2
+#define wxPG_PREFIX_NONE                    0L
+#define wxPG_PREFIX_0x                      1L
+#define wxPG_PREFIX_DOLLAR_SIGN             2L
 
 // -----------------------------------------------------------------------
 // Editor class.
@@ -511,7 +496,7 @@ class classname##VariantData: public wxVariantData \
 { \
 public:\
     classname##VariantData() {} \
-    classname##VariantData( const classname &value ) { m_value = value; } \
+    classname##VariantData( const classname &value ) : m_value(value) { } \
 \
     classname &GetValue() { return m_value; } \
 \
@@ -547,7 +532,7 @@ expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
                   wxString::Format(wxS("Variant type should have been '%s'") \
                                    wxS("instead of '%s'"), \
                                    wxS(#classname), \
-                                   variant.GetType().c_str())); \
+                                   variant.GetType())); \
     classname##VariantData *data = \
         (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
@@ -558,7 +543,7 @@ expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
                   wxString::Format(wxS("Variant type should have been '%s'") \
                                    wxS("instead of '%s'"), \
                                    wxS(#classname), \
-                                   variant.GetType().c_str())); \
+                                   variant.GetType())); \
     classname##VariantData *data = \
         (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
@@ -698,6 +683,81 @@ protected:
 
 #define WX_PG_TOKENIZER2_END() \
     }
+
+// -----------------------------------------------------------------------
+// wxVector utilities
+
+// Utility to check if specific item is in a vector.
+template<typename T>
+inline bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to determine the index of the item in the vector.
+template<typename T>
+inline int wxPGItemIndexInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::const_iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+        return (int)(it - vector.begin());
+
+    return wxNOT_FOUND;
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return (int)(it - vector.begin());
+    }
+    return wxNOT_FOUND;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to remove given item from the vector.
+template<typename T>
+inline void wxPGRemoveItemFromVector(wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+    {
+        vector.erase(it);
+    }
+#else
+    for (typename wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+        {
+            vector.erase(it);
+            return;
+        }
+    }
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to calaculate sum of all elements of the vector.
+template<typename T>
+inline T wxPGGetSumVectorItems(const wxVector<T>& vector, T init)
+{
+#if wxUSE_STD_CONTAINERS
+    return std::accumulate(vector.begin(), vector.end(), init);
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+        init += *it;
+
+    return init;
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
+}
 
 // -----------------------------------------------------------------------
 

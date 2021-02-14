@@ -60,7 +60,7 @@ bool wxControl::Create( wxWindow *parent,
 bool wxControl::SetFont(const wxFont& font)
 {
     const bool changed = base_type::SetFont(font);
-    if (changed && !gtk_widget_get_realized(m_widget) && gtk_check_version(3,5,0))
+    if (changed && m_widget && !gtk_widget_get_realized(m_widget) && gtk_check_version(3,5,0))
     {
         // GTK defers sending "style-updated" until widget is realized, but
         // GetBestSize() won't compute correct result until the signal is sent,
@@ -267,6 +267,18 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     attr.font = wxFont(info);
     gdk_rgba_free(fc);
     gdk_rgba_free(bc);
+
+    // Go up the parent chain for a background color
+    while (attr.colBg.Alpha() == 0 && (widget = gtk_widget_get_parent(widget)))
+    {
+        sc = gtk_widget_get_style_context(widget);
+        gtk_style_context_save(sc);
+        gtk_style_context_set_state(sc, stateFlag);
+        gtk_style_context_get(sc, stateFlag, "background-color", &bc, NULL);
+        gtk_style_context_restore(sc);
+        attr.colBg = wxColour(*bc);
+        gdk_rgba_free(bc);
+    }
 #else
     GtkStyle* style;
 
@@ -329,9 +341,21 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 #ifdef __WXGTK3__
     int w, h;
     gtk_widget_get_size_request(widget, &w, &h);
+
+    // gtk_widget_get_preferred_size() just returns 0 if the control is hidden,
+    // so we have to temporarily show the widget before calling it to get
+    // something useful from it, if it's currently hidden.
+    // So workaround this case.
+    const bool wasHidden = !gtk_widget_get_visible(widget);
+    if ( wasHidden )
+        gtk_widget_show(widget);
+
     gtk_widget_set_size_request(widget, -1, -1);
     gtk_widget_get_preferred_size(widget, NULL, &req);
     gtk_widget_set_size_request(widget, w, h);
+
+    if ( wasHidden )
+        gtk_widget_hide(widget);
 #else
     GTK_WIDGET_GET_CLASS(widget)->size_request(widget, &req);
 #endif
@@ -339,37 +363,44 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
     return wxSize(req.width, req.height);
 }
 
-wxPoint wxControl::GTKGetEntryMargins(GtkEntry* entry) const
+wxSize wxControl::GTKGetEntryMargins(GtkEntry* entry) const
 {
-    wxPoint marg(0, 0);
+    wxSize size;
+    gtk_entry_get_layout_offsets(entry, &size.x, &size.y);
 
-#ifndef __WXGTK3__
+#ifdef __WXGTK3__
+    GtkBorder border;
+    GtkStyleContext* sc = gtk_widget_get_style_context(GTK_WIDGET(entry));
+    gtk_style_context_get_padding(sc, gtk_style_context_get_state(sc), &border);
+#else
+    // Equivalent to the GTK2 private function _gtk_entry_effective_inner_border()
+
+    GtkBorder border = { 2, 2, 2, 2 };
+
 #if GTK_CHECK_VERSION(2,10,0)
-    // The margins we have previously set
-    const GtkBorder* border = NULL;
     if (wx_is_at_least_gtk2(10))
-        border = gtk_entry_get_inner_border(entry);
-
-    if ( border )
     {
-        marg.x = border->left + border->right;
-        marg.y = border->top + border->bottom;
+        const GtkBorder* innerBorder1 = gtk_entry_get_inner_border(entry);
+        if (innerBorder1)
+            border = *innerBorder1;
+        else
+        {
+            GtkBorder* innerBorder2;
+            gtk_widget_style_get(GTK_WIDGET(entry), "inner-border", &innerBorder2, NULL);
+            if (innerBorder2)
+            {
+                border = *innerBorder2;
+                gtk_border_free(innerBorder2);
+            }
+        }
     }
 #endif // GTK+ 2.10+
-#else // GTK+ 3
-    // Gtk3 does not use inner border, but StyleContext and CSS
-    // TODO: implement it, starting with wxTextEntry::DoSetMargins()
-#endif // GTK+ 2/3
+#endif
 
-    int x, y;
-    gtk_entry_get_layout_offsets(entry, &x, &y);
-    // inner borders are included. Substract them so we can get other margins
-    x -= marg.x;
-    y -= marg.y;
-    marg.x += 2 * x + 2;
-    marg.y += 2 * y + 2;
+    size.x += border.left + border.right;
+    size.y += border.top  + border.bottom;
 
-    return marg;
+    return size;
 }
 
 

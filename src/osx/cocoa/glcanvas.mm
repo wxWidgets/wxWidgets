@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -33,6 +30,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
@@ -89,7 +87,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     if ( GLAttrs && n1 > 1 )
     {
         n1--; // skip the ending '0'
-        while ( p < n1 )
+        while ( p < (unsigned)n1 )
         {
             data[p] = (NSOpenGLPixelFormatAttribute) GLAttrs[p];
             p++;
@@ -100,7 +98,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     {
         n2--; // skip the ending '0'
         unsigned p2 = 0;
-        while ( p2 < n2 )
+        while ( p2 < (unsigned)n2 )
             data[p++] = (NSOpenGLPixelFormatAttribute) ctxAttrs[p2++];
     }
 
@@ -135,6 +133,27 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     return YES;
 }
 
+- (BOOL) acceptsFirstResponder
+{
+    return YES;
+}
+
+// for special keys
+
+- (void)doCommandBySelector:(SEL)aSelector
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+        impl->doCommandBySelector(aSelector, self, _cmd);
+}
+
+- (NSOpenGLContext *) openGLContext
+{
+    // Prevent the NSOpenGLView from making it's own context
+    // We want to force using wxGLContexts
+    return NULL;
+}
+
 @end
 
 bool wxGLCanvas::DoCreate(wxWindow *parent,
@@ -144,7 +163,6 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-
     DontCreatePeer();
     
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
@@ -153,13 +171,13 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
     
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
+    [v setWantsBestResolutionOpenGLSurface:YES];
     
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, false, true );
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_UserKeyEvents | wxWidgetImpl::Widget_UserMouseEvents );
     SetPeer(c);
     MacPostControlCreate(pos, size) ;
     return true;
 }
-
 
 wxGLCanvas::~wxGLCanvas()
 {

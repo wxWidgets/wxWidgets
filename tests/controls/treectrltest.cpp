@@ -15,9 +15,6 @@
 
 #if wxUSE_TREECTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -49,10 +46,8 @@ private:
         CPPUNIT_TEST( DeleteAllItems );
         WXUISIM_TEST( LabelEdit );
         WXUISIM_TEST( KeyDown );
-#ifndef __WXGTK__
         WXUISIM_TEST( CollapseExpandEvents );
         WXUISIM_TEST( SelectionChange );
-#endif // !__WXGTK__
         WXUISIM_TEST( Menu );
         CPPUNIT_TEST( ItemData );
         CPPUNIT_TEST( Iteration );
@@ -70,6 +65,7 @@ private:
         CPPUNIT_TEST( SelectItemMulti );
         CPPUNIT_TEST( PseudoTest_SetHiddenRoot );
         CPPUNIT_TEST( HasChildren );
+        CPPUNIT_TEST( GetCount );
     CPPUNIT_TEST_SUITE_END();
 
     void ItemClick();
@@ -78,10 +74,8 @@ private:
     void DeleteAllItems();
     void LabelEdit();
     void KeyDown();
-#ifndef __WXGTK__
     void CollapseExpandEvents();
     void SelectionChange();
-#endif // !__WXGTK__
     void Menu();
     void ItemData();
     void Iteration();
@@ -94,6 +88,7 @@ private:
     void Sort();
     void KeyNavigation();
     void HasChildren();
+    void GetCount();
     void SelectItemSingle();
     void SelectItemMulti();
     void PseudoTest_MultiSelect() { ms_multiSelect = true; }
@@ -175,6 +170,11 @@ void TreeCtrlTestCase::HasChildren()
     CPPUNIT_ASSERT( !m_tree->HasChildren(m_grandchild) );
 }
 
+void TreeCtrlTestCase::GetCount()
+{
+    CPPUNIT_ASSERT_EQUAL(3, m_tree->GetCount());
+}
+
 void TreeCtrlTestCase::SelectItemSingle()
 {
     // this test should be only ran in single-selection control
@@ -237,6 +237,15 @@ void TreeCtrlTestCase::SelectItemMulti()
     m_tree->UnselectItem(m_child1);
     CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
     CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+
+    // collapsing a branch with selected items should still leave them selected
+    m_tree->Expand(m_child1);
+    m_tree->SelectItem(m_grandchild);
+    CHECK( m_tree->IsSelected(m_grandchild) );
+    m_tree->Collapse(m_child1);
+    CHECK( m_tree->IsSelected(m_grandchild) );
+    m_tree->Expand(m_child1);
+    CHECK( m_tree->IsSelected(m_grandchild) );
 }
 
 void TreeCtrlTestCase::ItemClick()
@@ -272,9 +281,10 @@ void TreeCtrlTestCase::DeleteItem()
     EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
+    m_tree->AppendItem(todelete, "deleteme2");
     m_tree->Delete(todelete);
 
-    CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
 }
 
 void TreeCtrlTestCase::DeleteChildren()
@@ -332,10 +342,14 @@ void TreeCtrlTestCase::KeyDown()
     CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());
 }
 
-#if !defined(__WXGTK__)
-
 void TreeCtrlTestCase::CollapseExpandEvents()
 {
+#ifdef __WXGTK20__
+    // Works locally, but not when run on Travis CI.
+    if ( IsAutomaticTest() )
+        return;
+#endif
+
     m_tree->CollapseAll();
 
     EventCounter collapsed(m_tree, wxEVT_TREE_ITEM_COLLAPSED);
@@ -359,6 +373,12 @@ void TreeCtrlTestCase::CollapseExpandEvents()
 
     CPPUNIT_ASSERT_EQUAL(1, expanding.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, expanded.GetCount());
+
+#ifdef __WXGTK__
+    // Don't even know the reason why, but GTK has to sleep
+    // no less than 1200 for the test case to succeed.
+    wxMilliSleep(1200);
+#endif
 
     sim.MouseDblClick();
     wxYield();
@@ -410,8 +430,6 @@ void TreeCtrlTestCase::SelectionChange()
     CPPUNIT_ASSERT_EQUAL(2, changed.GetCount());
     CPPUNIT_ASSERT_EQUAL(2, changing.GetCount());
 }
-
-#endif // !__WXGTK__
 
 void TreeCtrlTestCase::Menu()
 {
@@ -595,12 +613,13 @@ void TreeCtrlTestCase::Sort()
 
 void TreeCtrlTestCase::KeyNavigation()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     wxUIActionSimulator sim;
 
     m_tree->CollapseAll();
 
     m_tree->SelectItem(m_root);
+    wxYield();
 
     m_tree->SetFocus();
     sim.Char(WXK_RIGHT);
@@ -617,6 +636,8 @@ void TreeCtrlTestCase::KeyNavigation()
     wxYield();
 
     CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+
+    wxYield();
 
     sim.Char(WXK_RIGHT);
     sim.Char(WXK_DOWN);

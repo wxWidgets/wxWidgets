@@ -27,7 +27,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = wxFrameNameStr)
+                        const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -42,7 +42,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     bool Create(wxWindow *parent, WXWindow nativeWindow);
 
@@ -82,7 +82,7 @@ public:
 
     virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
     virtual wxString GetLabel() const            wxOVERRIDE { return GetTitle(); }
-    
+
     virtual void OSXSetModified(bool modified) wxOVERRIDE;
     virtual bool OSXIsModified() const wxOVERRIDE;
 

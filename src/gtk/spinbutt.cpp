@@ -38,19 +38,35 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
         return;
     }
 
-    int inc = pos - oldPos;
-    // Adjust for wrap arounds
-    // (Doesn't work for degenerated cases, like [0..1] range.)
+    // Normally we can determine which way we're going by just comparing the
+    // old and the new values.
+    bool up = pos > oldPos;
+
+    // However we need to account for the possibility of wrapping around.
     if ( win->HasFlag(wxSP_WRAP) )
     {
-        if ( inc > 1 )
-            inc = -1;
-        else if ( inc < -1 )
-            inc = 1;
-    }
-    wxASSERT( inc == 1 || inc == -1 );
+        // We have no way of distinguishing between wraparound and normal
+        // change when the range is just 1, as pressing either arrow results in
+        // the same change, so don't even try doing it in this case.
+        const int spinMin = win->GetMin();
+        const int spinMax = win->GetMax();
 
-    wxSpinEvent event(inc > 0 ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
+        if ( spinMax - spinMin > 1 )
+        {
+            if ( up )
+            {
+                if ( oldPos == spinMin && pos == spinMax )
+                    up = false;
+            }
+            else // down
+            {
+                if ( oldPos == spinMax && pos == spinMin )
+                    up = true;
+            }
+        }
+    }
+
+    wxSpinEvent event(up ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
     event.SetPosition(pos);
     event.SetEventObject(win);
 
@@ -170,31 +186,51 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     GtkDisableEvents();
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
     m_pos = int(gtk_spin_button_get_value((GtkSpinButton*)m_widget));
+
+    // Use smaller page increment in the case of a narrow range for convenience
+    // and to limit possible up/down ambiguity in gtk_value_changed() when
+    // wrapping is on (The maximal page increment of 10 is consistent with the
+    // default page increment set by gtk_spin_button_new_with_range(0, 100, 1)
+    // in wxSpinButton::Create().)
+    const int range = maxVal - minVal;
+    int pageInc;
+    if ( range < 10 )
+        pageInc = 1;
+    else if ( range < 20 )
+        pageInc = 2;
+    else if ( range < 50 )
+        pageInc = 5;
+    else
+        pageInc = 10;
+
+    GtkAdjustment* adj = gtk_spin_button_get_adjustment((GtkSpinButton*)m_widget);
+    gtk_adjustment_set_page_increment(adj, pageInc);
+
     GtkEnableEvents();
 }
 
-bool wxSpinButton::Enable( bool enable )
+void wxSpinButton::DoEnable(bool enable)
 {
-    if (!base_type::Enable(enable))
-        return false;
+    if ( !m_widget )
+        return;
+
+    base_type::DoEnable(enable);
 
     // Work around lack of visual update when enabling
     if (enable)
         GTKFixSensitivity(false /* fix even if not under mouse */);
-
-    return true;
 }
 
 void wxSpinButton::GtkDisableEvents() const
 {
     g_signal_handlers_block_by_func(m_widget,
-        (gpointer)gtk_value_changed, (void*) this);
+        (void*)gtk_value_changed, const_cast<wxSpinButton*>(this));
 }
 
 void wxSpinButton::GtkEnableEvents() const
 {
     g_signal_handlers_unblock_by_func(m_widget,
-        (gpointer)gtk_value_changed, (void*) this);
+        (void*)gtk_value_changed, const_cast<wxSpinButton*>(this));
 }
 
 GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED_IN_GTK2(windows)) const

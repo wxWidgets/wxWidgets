@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/renderer.h"
 
@@ -50,12 +47,12 @@ public:
 #if 0 // just for debugging
     MyDllRenderer()
     {
-        wxMessageBox(wxT("Creating MyDllRenderer"), wxT("Renderer Sample"));
+        wxMessageBox("Creating MyDllRenderer", "Renderer Sample");
     }
 
     virtual ~MyDllRenderer()
     {
-        wxMessageBox(wxT("Deleting MyDllRenderer"), wxT("Renderer Sample"));
+        wxMessageBox("Deleting MyDllRenderer", "Renderer Sample");
     }
 #endif // 0
 };

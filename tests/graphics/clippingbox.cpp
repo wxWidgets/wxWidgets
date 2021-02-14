@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/bitmap.h"
 #include "wx/dcmemory.h"
@@ -414,7 +411,7 @@ public:
 
     virtual ~ClippingBoxTestCaseGCDCDirect2D() {}
 
-    virtual void FlushDC()
+    virtual void FlushDC() wxOVERRIDE
     {
         // Apparently, flushing native Direct2D renderer
         // is not enough to update underlying DC (bitmap)
@@ -1616,7 +1613,7 @@ public:
 
     virtual ~ClippingBoxTestCaseGCDirect2D() {}
 
-    virtual void FlushGC()
+    virtual void FlushGC() wxOVERRIDE
     {
         // Apparently, flushing native Direct2D renderer
         // is not enough to update underlying DC (bitmap)

@@ -404,6 +404,16 @@ public:
      */
     int GetColumnTitleWidth(const wxHeaderColumn& col);
 
+    /**
+        Returns width needed for the column with the given index.
+
+        This is just a convenient wrapper for the overload taking
+        wxHeaderColumn.
+
+        @since 3.1.3
+     */
+    int GetColumnTitleWidth(unsigned int idx);
+
 protected:
     /**
         Method to be implemented by the derived classes to return the
@@ -692,7 +702,7 @@ public:
      */
     int GetColumn() const;
     void SetColumn(int col);
-    
+
     /**
         Return the current width of the column.
 
@@ -700,7 +710,7 @@ public:
      */
     int GetWidth() const;
     void SetWidth(int width);
-    
+
     /**
         Return the new order of the column.
 

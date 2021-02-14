@@ -1,16 +1,16 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imagtga.h 
-// Purpose:     interface of wxTGAHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imagtga.h
+// Purpose:     interface of wxTGAHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
     @class wxTGAHandler
 
     This is the image handler for the TGA format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()

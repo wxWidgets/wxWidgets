@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TREEBOOK
 
@@ -542,7 +539,7 @@ void wxTreebook::MakeChangedEvent(wxBookCtrlEvent &event)
     event.SetEventType(wxEVT_TREEBOOK_PAGE_CHANGED);
 }
 
-wxWindow *wxTreebook::DoGetNonNullPage(size_t n)
+wxWindow *wxTreebook::TryGetNonNullPage(size_t n)
 {
     wxWindow* page = wxBookCtrlBase::GetPage(n);
 

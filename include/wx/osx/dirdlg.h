@@ -21,12 +21,12 @@ public:
     wxDirDialog() { Init(); }
 
     wxDirDialog(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxT(""),
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr)
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr))
     {
         Init();
 
@@ -34,22 +34,26 @@ public:
     }
 
     void Create(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxT(""),
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr));
 
 #if wxOSX_USE_COCOA
     ~wxDirDialog();
 #endif
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
+
+    // MacOS 10.11 has removed the titlebar from the dialog, so this is provided
+    // only for compatibility with older versions
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal();
-    virtual void ModalFinishedCallback(void* panel, int returnCode);
+    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ModalFinishedCallback(void* panel, int returnCode) wxOVERRIDE;
 #endif
 
 private:
@@ -57,12 +61,12 @@ private:
     // Create and initialize NSOpenPanel that we use in both ShowModal() and
     // ShowWindowModal().
     WX_NSOpenPanel OSXCreatePanel() const;
-
-    WX_NSObject m_sheetDelegate;
 #endif
 
     // Common part of all ctors.
     void Init();
+
+    wxString m_title;
 
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };

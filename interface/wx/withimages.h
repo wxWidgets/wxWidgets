@@ -28,7 +28,7 @@ public:
     /**
        Sets the image list to use. It does not take ownership of the image
        list, you must delete it yourself.
-       
+
        @see wxImageList, AssignImageList()
     */
     virtual void SetImageList(wxImageList* imageList);
@@ -39,7 +39,7 @@ public:
         @see wxImageList, SetImageList()
     */
     wxImageList* GetImageList() const;
-    
+
 protected:
     /**
        Return true if we have a valid image list.

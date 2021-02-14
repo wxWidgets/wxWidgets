@@ -17,13 +17,26 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
     endif()
 endif()
 
-if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
-    # If no deployment target has been set default to the minimum supported
-    # OS X version (this has to be set before the first project() call)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7 CACHE STRING "OS X Deployment Target")
+# https://blog.kitware.com/cmake-and-the-default-build-type/
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(default_build_type "Debug")
+    message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
+    # Set the possible values of build type for cmake-gui
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 endif()
 
-project(wxWidgets)
+# This block, particularly the versions used, should be kept in sync with
+# samples/minimal/CMakeLists.txt.
+if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+    # If no deployment target has been set default to the minimum supported
+    # OS version (this has to be set before the first project() call)
+    if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+        set(CMAKE_OSX_DEPLOYMENT_TARGET 12.0 CACHE STRING "iOS Deployment Target")
+    else()
+        set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10 CACHE STRING "macOS Deployment Target")
+    endif()
+endif()
 
 include(build/cmake/policies.cmake NO_POLICY_SCOPE)
 
@@ -55,7 +68,9 @@ else()
 endif()
 
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "1992-2018 wxWidgets")
+set(wxCOPYRIGHT "1992-2021 wxWidgets")
+
+project(wxWidgets VERSION ${wxVERSION})
 
 include(build/cmake/main.cmake)
 

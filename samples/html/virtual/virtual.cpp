@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -48,7 +45,7 @@ public:
 
 bool MyVFS::CanOpen(const wxString& location)
 {
-    return (GetProtocol(location) == wxT("myVFS"));
+    return (GetProtocol(location) == "myVFS");
 }
 
 wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
@@ -73,7 +70,7 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
     //     this won't happen because wxHTML keeps only one "page" file opened at the
     //     time.
     str = new wxMemoryInputStream(buf, strlen(buf));
-    f = new wxFSFile(str, location, wxT("text/html"), wxEmptyString, wxDateTime::Today());
+    f = new wxFSFile(str, location, "text/html", wxEmptyString, wxDateTime::Today());
 
     return f;
 }
@@ -216,7 +213,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     html -> SetRelatedStatusBar(1);
 #endif // wxUSE_STATUSBAR
-    html -> LoadPage(wxT("start.htm"));
+    html -> LoadPage("start.htm");
 }
 
 

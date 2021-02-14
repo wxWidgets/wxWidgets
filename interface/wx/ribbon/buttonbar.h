@@ -7,12 +7,12 @@
 
 /**
     Flags for button bar button size and state.
-    
+
     Buttons on a ribbon button bar can each come in three sizes: small, medium,
     and large. In some places this is called the size class, and the term size
     used for the pixel width and height associated with a particular size
     class.
-    
+
     A button can also be in zero or more hovered or active states, or in the
     disabled state.
 */
@@ -23,19 +23,19 @@ enum wxRibbonButtonBarButtonState
         provider, but it will be smaller than medium).
     */
     wxRIBBON_BUTTONBAR_BUTTON_SMALL     = 0 << 0,
-    
+
     /**
         Button is medium sized (the interpretation of medium is dependent upon
         the art provider, but it will be between small and large).
     */
     wxRIBBON_BUTTONBAR_BUTTON_MEDIUM    = 1 << 0,
-    
+
     /**
         Button is large (the interpretation of large is dependent upon the art
         provider, but it will be larger than medium).
     */
     wxRIBBON_BUTTONBAR_BUTTON_LARGE     = 2 << 0,
-    
+
     /**
         A mask to extract button size from a combination of flags.
     */
@@ -46,24 +46,24 @@ enum wxRibbonButtonBarButtonState
         the mouse cursor. Only applicable to normal and hybrid buttons.
     */
     wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED    = 1 << 3,
-    
+
     /**
         The dropdown region of the button is being hovered over by the mouse
         cursor. Only applicable to dropdown and hybrid buttons.
     */
     wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED  = 1 << 4,
-    
+
     /**
         A mask to extract button hover state from a combination of flags.
     */
     wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK        = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED,
-    
+
     /**
         The normal (non-dropdown) region of the button is being pressed.
         Only applicable to normal and hybrid buttons.
     */
     wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE     = 1 << 5,
-    
+
     /**
         The dropdown region of the button is being pressed.
         Only applicable to dropdown and hybrid buttons.
@@ -81,12 +81,12 @@ enum wxRibbonButtonBarButtonState
         disabled.
     */
     wxRIBBON_BUTTONBAR_BUTTON_DISABLED          = 1 << 7,
-    
+
     /**
         The button is a toggle button which is currently in the toggled state.
     */
     wxRIBBON_BUTTONBAR_BUTTON_TOGGLED           = 1 << 8,
-    
+
     /**
         A mask to extract button state from a combination of flags.
     */
@@ -95,7 +95,7 @@ enum wxRibbonButtonBarButtonState
 
 /**
     @class wxRibbonButtonBar
-    
+
     A ribbon button bar is similar to a traditional toolbar. It contains one or
     more buttons (button bar buttons, not wxButtons), each of which has a label
     and an icon. It differs from a wxRibbonToolBar in several ways:
@@ -106,7 +106,7 @@ enum wxRibbonButtonBarButtonState
       @li There is no grouping of buttons on a button bar
       @li A button bar typically has a border around each individual button,
         whereas a tool bar typically has a border around each group of buttons.
-    
+
     @beginEventEmissionTable{wxRibbonButtonBarEvent}
     @event{EVT_RIBBONBUTTONBAR_CLICKED(id, func)}
         Triggered when the normal (non-dropdown) region of a button on the
@@ -117,7 +117,7 @@ enum wxRibbonButtonBarButtonState
         event handler if it wants to display a popup menu (which is what most
         dropdown buttons should be doing).
     @endEventTable
-    
+
     @library{wxribbon}
     @category{ribbon}
 */
@@ -133,7 +133,7 @@ public:
 
     /**
         Construct a ribbon button bar with the given parameters.
-        
+
         @param parent
             Parent window for the button bar (typically a wxRibbonPanel).
         @param id
@@ -179,7 +179,7 @@ public:
 
     /**
         Add a dropdown button to the button bar (simple version).
-        
+
         @see AddButton()
     */
     virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
@@ -190,7 +190,7 @@ public:
 
     /**
         Add a hybrid button to the button bar (simple version).
-        
+
         @see AddButton()
     */
     virtual wxRibbonButtonBarButtonBase* AddHybridButton(
@@ -198,10 +198,10 @@ public:
                 const wxString& label,
                 const wxBitmap& bitmap,
                 const wxString& help_string = wxEmptyString);
-    
+
     /**
         Add a toggle button to the button bar (simple version).
-        
+
         @see AddButton()
     */
     virtual wxRibbonButtonBarButtonBase* AddToggleButton(
@@ -209,10 +209,10 @@ public:
                 const wxString& label,
                 const wxBitmap& bitmap,
                 const wxString& help_string = wxEmptyString);
-    
+
     /**
         Add a button to the button bar.
-        
+
         @param button_id
             ID of the new button (used for event callbacks).
         @param label
@@ -235,10 +235,10 @@ public:
             The kind of button to add.
         @param help_string
             The UI help string to associate with the new button.
-        
+
         @return An opaque pointer which can be used only with other button bar
             methods.
-            
+
         @see AddDropdownButton()
         @see AddHybridButton()
         @see AddToggleButton()
@@ -431,20 +431,20 @@ public:
 
     /**
         Calculate button layouts and positions.
-        
+
         Must be called after buttons are added to the button bar, as otherwise
         the newly added buttons will not be displayed. In normal situations, it
         will be called automatically when wxRibbonBar::Realize() is called.
     */
     virtual bool Realize();
-    
+
     /**
         Delete all buttons from the button bar.
-        
+
         @see DeleteButton()
     */
     virtual void ClearButtons();
-    
+
     /**
         Delete a single button from the button bar.
 
@@ -454,20 +454,20 @@ public:
         @see ClearButtons()
     */
     virtual bool DeleteButton(int button_id);
-    
+
     /**
         Enable or disable a single button on the bar.
-        
+
         @param button_id
             ID of the button to enable or disable.
         @param enable
             @true to enable the button, @false to disable it.
     */
     virtual void EnableButton(int button_id, bool enable = true);
-    
+
     /**
         Set a toggle button to the checked or unchecked state.
-        
+
         @param button_id
             ID of the toggle button to manipulate.
         @param checked
@@ -538,7 +538,7 @@ public:
         @param min_width_medium
             Requested minimum width of the button text in pixel
             if the button is medium size.
-        @param min_width_medium
+        @param min_width_large
             Requested minimum width of the button text in pixel
             if the button is large size.
 
@@ -678,12 +678,12 @@ public:
         Returns the bar which contains the button which the event relates to.
     */
     wxRibbonButtonBar* GetBar();
-        
+
     /**
         Sets the button bar relating to this event.
     */
     void SetBar(wxRibbonButtonBar* bar);
-    
+
     /**
         Returns the button which the event relates to.
 

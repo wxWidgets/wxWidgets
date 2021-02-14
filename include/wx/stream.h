@@ -420,12 +420,17 @@ private:
 class WXDLLIMPEXP_BASE wxStreamBuffer
 {
 public:
+    // suppress Xcode 11 warning about shadowing global read() symbol
+    wxCLANG_WARNING_SUPPRESS(shadow)
+
     enum BufMode
     {
         read,
         write,
         read_write
     };
+
+    wxCLANG_WARNING_RESTORE(shadow)
 
     wxStreamBuffer(wxStreamBase& stream, BufMode mode)
     {

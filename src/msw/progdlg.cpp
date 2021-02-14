@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROGRESSDLG && wxUSE_THREADS && wxUSE_NATIVE_PROGRESSDLG
 
@@ -442,7 +439,7 @@ wxProgressDialog::~wxProgressDialog()
         DWORD rc = ::MsgWaitForMultipleObjects
                      (
                        1,                   // number of objects to wait for
-                       (HANDLE *)&hThread,  // the objects
+                       &hThread,            // the objects
                        false,               // wait for any objects, not all
                        INFINITE,            // no timeout
                        QS_ALLINPUT |        // return as soon as there are any events
@@ -802,10 +799,10 @@ void wxProgressDialog::SetIcons(const wxIconBundle& icons)
         wxIcon iconBig;
         if (!icons.IsEmpty())
         {
-            const wxSize sizeSmall(::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON));
+            const wxSize sizeSmall(wxGetSystemMetrics(SM_CXSMICON, this), wxGetSystemMetrics(SM_CYSMICON, this));
             iconSmall = icons.GetIcon(sizeSmall, wxIconBundle::FALLBACK_NEAREST_LARGER);
 
-            const wxSize sizeBig(::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
+            const wxSize sizeBig(wxGetSystemMetrics(SM_CXICON, this), wxGetSystemMetrics(SM_CYICON, this));
             iconBig = icons.GetIcon(sizeBig, wxIconBundle::FALLBACK_NEAREST_LARGER);
         }
 

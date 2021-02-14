@@ -26,9 +26,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if !defined(wxUSE_DATETIME) || wxUSE_DATETIME
 
@@ -844,7 +841,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     wxDateTime_t sec = 0;
     if ( *p == ':' )
     {
-        p++;
+        ++p;
         if ( !wxIsdigit(*p) )
             return false;
 
@@ -1033,7 +1030,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 // spaces in the input
                 while ( input != end && wxIsspace(*input) )
                 {
-                    input++;
+                    ++input;
                 }
             }
             else // !space
@@ -1647,12 +1644,7 @@ wxDateTime::ParseFormat(const wxString& date,
 
     Set(tm);
 
-    // If a time zone was specified and it is not the local time zone, we need
-    // to shift the time accordingly.
-    //
-    // Note that avoiding the call to MakeFromTimeZone is necessary to avoid
-    // DST problems.
-    if ( haveTimeZone && timeZone != -wxGetTimeZone() )
+    if ( haveTimeZone )
         MakeFromTimezone(timeZone);
 
     // finally check that the week day is consistent -- if we had it
@@ -1777,7 +1769,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
 
     wxString::const_iterator p = pBegin;
     while ( p != pEnd && wxIsspace(*p) )
-        p++;
+        ++p;
 
     // some special cases
     static struct

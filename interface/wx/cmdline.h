@@ -224,7 +224,7 @@ struct wxCmdLineEntryDesc
 class wxCmdLineArg
 {
 public:
-    virtual ~wxCmdLineArg() {}
+    virtual ~wxCmdLineArg();
 
     /**
         Returns the command line argument value as a wxDateTime.
@@ -596,8 +596,8 @@ public:
     /**
         Enable or disable support for the long options.
 
-        As long options are not (yet) POSIX-compliant, this option allows to
-        disable them.
+        As long options are not (yet) POSIX-compliant, this option allows
+        disabling them.
 
         @see @ref cmdlineparser_customization and AreLongOptionsEnabled()
     */

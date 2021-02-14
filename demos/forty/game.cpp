@@ -13,10 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -795,7 +791,7 @@ void Pack::Redraw(wxDC& dc)
     wxString str;
     str.Printf(wxT("%d  "), m_topCard + 1);
 
-    dc.SetBackgroundMode( wxSOLID );
+    dc.SetBackgroundMode( wxBRUSHSTYLE_SOLID );
     dc.SetTextBackground(FortyApp::BackgroundColour());
     dc.SetTextForeground(FortyApp::TextColour());
     dc.DrawText(str, m_x + CardWidth + 5, m_y + CardHeight / 2);

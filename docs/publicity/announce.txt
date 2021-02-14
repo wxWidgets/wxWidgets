@@ -1,39 +1,46 @@
-February 19, 2018 -- The wxWidgets team is pleased to announce a new
+July 22, 2020 -- The wxWidgets team is pleased to announce a new
 release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.1.1 is the second release in the 3.1 development
+wxWidgets 3.1.4 is the latest release in the 3.1 development
 branch and is now available at
 
-    https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.1
+    https://www.wxwidgets.org/downloads/
 
 Compared to the stable 3.0.x series, this version brings many
 improvements and even more bug fixes, please see the change log
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.4/docs/changes.txt
 
 for the incomplete list of the most important ones. Here is the
 maximally condensed summary of the changes compared to 3.0:
 
-- New features: support for mouse gesture events (GSoC 2017 project);
-  fractional pen widths in wxGraphicsContext; arbitrary label windows in
-  wxStaticBox; markup in wxDataViewCtrl items text; better support for high DPI
-  monitors; support for ZIP 64 files; much improved accessibility support under
-  MSW.
+- Build system improvements: support for new compilers (up to MSVS 2019, g++ 10)
+  with an even simpler way of using wxWidgets from MSVS, with wxwidgets.props
+  file, and OS versions as well as an entirely new CMake build system.
+- Support for native dark mode under macOS 10.14 Mojave and later and support
+  for macOS 11 on ARM hardware.
+- New features: implement freezing rows/columns in wxGrid; support for mouse
+  gesture events (GSoC 2017 project); non-integer font sizes and arbitrary font
+  weights in wxFont; fractional pen widths in wxGraphicsContext; arbitrary
+  label windows in wxStaticBox; markup in wxDataViewCtrl items text; better
+  support for high DPI monitors and per-monitor DPI and dynamic DPI changes
+  support under MSW; support for ZIP 64 files; LZMA compression; much improved
+  accessibility support under MSW; new Edge-based wxWebView implementation.
 - New classes: wxActivityIndicator, wxAddRemoveCtrl,
   wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
-  wxSecretStore.
-- And methods: wxDateTime::GetWeekBasedYear(), wxListBox::GetTopItem(),
-  wxProcess::Activate(), wxTextEntry::ForceUpper(), several ones in
-  wxRendererNative, wxStandardPaths::GetUserDir(), wxUIActionSimulator
-  ::Select() and many others.
-- Significant improvements to: wxBusyInfo, wxNotificationMessage.
+  wxSecretStore, wxTempFFile and many new features in the existing classes.
+- New XRC handlers for all the new and some of the existing classes.
+- Significant improvements to: wxBusyInfo, wxDataViewCtrl, wxDirDialog, wxGrid,
+  wxNotificationMessage, wxSpinCtrl, wxStaticBox, wxStyledTextCtrl,
+  wxUIActionSimulator.
+- Improvements to compile-time safety with the possibility to disable dangerous
+  implicit conversions between wxString and "char*" strings.
 - Latest versions of all bundled 3rd party libraries, including all the
   security fixed and support for WebKit 2 and GStreamer 1.7 under Unix.
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
-- Further C++11 support improvements.
-- New CMake-based alternative build system.
-- Support for latest compilers: MSVS 2017, g++ 7, clang 6.
+- Further C++11 and later support improvements, wxWidgets can be built using
+  C++20 compilers.
 - A lot of bug fixes, especially in wxGTK3 and wxOSX/Cocoa ports.
 - New experimental wxQt port.
 
@@ -42,8 +49,8 @@ This release is a "development" one as it makes (very few)
 incompatible API changes compared to 3.0 and does not guarantee the
 ABI stability, unlike the 3.0.x series. It is not inherently more
 buggy or less stable than the "stable" releases and you're encouraged
-to use it. If you're already using 3.0, upgrading shouldn't require
-any special effort, so please try it out.
+to use it, including in production. If you're already using 3.0, upgrading
+shouldn't require any special effort, so please try it out.
 
 We hope that you will enjoy using the new release!
 

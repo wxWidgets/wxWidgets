@@ -28,7 +28,7 @@ public:
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = NULL,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
-             const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr)
+             const wxValidator& val = wxDefaultValidator, const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
         {
             Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
         }
@@ -37,7 +37,7 @@ public:
              const wxArrayString& choices,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
              const wxValidator& val = wxDefaultValidator,
-             const wxString& name = wxRadioBoxNameStr)
+             const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
      {
          Create(parent, id, title, pos, size, choices,
                 majorDim, style, val, name);
@@ -47,13 +47,13 @@ public:
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = NULL,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
-             const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
+             const wxValidator& val = wxDefaultValidator, const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos, const wxSize& size,
              const wxArrayString& choices,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
              const wxValidator& val = wxDefaultValidator,
-             const wxString& name = wxRadioBoxNameStr);
+             const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     // Enabling
     virtual bool Enable(bool enable = true) wxOVERRIDE;
@@ -73,9 +73,6 @@ public:
 
     virtual wxString GetString(unsigned int item) const wxOVERRIDE;
     virtual void SetString(unsigned int item, const wxString& label) wxOVERRIDE;
-
-    virtual wxString GetLabel() const wxOVERRIDE;
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
     // protect native font of box
     virtual bool SetFont( const wxFont &font ) wxOVERRIDE;

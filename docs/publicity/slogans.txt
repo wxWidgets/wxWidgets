@@ -73,7 +73,7 @@ maybe stripped down to
 "Specialization is for insects."
 
 ============================
-The Open-Source, Cross-Platform GUI Framework 
+The Open-Source, Cross-Platform GUI Framework
   with Ten Years of Evolution Behind It
 
 I saw this changed to 'native UI' on the website, which is slightly more
@@ -81,17 +81,17 @@ accurate but sounds less 'catchy' imho.
 
 .. and templates.
 
-Hmm. I might buy a mug that had, say, a wxLogo and "wxWidgets" (and 
-maybe the website URL underneath in smaller type) on one side and 
+Hmm. I might buy a mug that had, say, a wxLogo and "wxWidgets" (and
+maybe the website URL underneath in smaller type) on one side and
 "Specialization is for insects ... and templates" on the other.
 
-.. only if it held at leat a full half (imperial) pint, mind. Not 
+.. only if it held at least a full half (imperial) pint, mind. Not
 one of those wussy 8.5 fl.oz. jobbies.
 
-That'd be a nice ice-breaker when working at a new client's site - 
+That'd be a nice ice-breaker when working at a new client's site -
 people would be bound to stop and ask what it was all about!
 
-.. and how about a nice silk tie (US: necktie) with the logo on ... 
+.. and how about a nice silk tie (US: necktie) with the logo on ...
 Oh, I forgot, we programmers don't wear ties.
 
 ============================
@@ -149,7 +149,7 @@ One API to bridge them all and in the compiler bind them.
 
 wxWidgets
 
-How about "and in the linker bind them"? That's where the local libraries 
+How about "and in the linker bind them"? That's where the local libraries
 get bound to the wxWidgets code anyway.
 
 ============================
@@ -162,7 +162,7 @@ Hugh Gibson wrote:
 > window control in different operating systems to emphasise the
 > native look and feel.
 
-Nice idea. But I wonder where you'll find some volunteer willing to 
+Nice idea. But I wonder where you'll find some volunteer willing to
 have his face tattooed with win32 common controls ;-)
 
 ============================

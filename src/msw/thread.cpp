@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_THREADS
 
@@ -46,22 +43,9 @@
     #define _MT
 #endif
 
-#if defined(__BORLANDC__)
-    #if !defined(__MT__)
-        // I can't set -tWM in the IDE (anyone?) so have to do this
-        #define __MT__
-    #endif
-
-    #if !defined(__MFC_COMPAT__)
-        // Needed to know about _beginthreadex etc..
-        #define __MFC_COMPAT__
-    #endif
-#endif // BC++
-
 // define wxUSE_BEGIN_THREAD if the compiler has _beginthreadex() function
 // which should be used instead of Win32 ::CreateThread() if possible
 #if defined(__VISUALC__) || \
-    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
     (defined(__GNUG__) && defined(__MSVCRT__))
 
     #undef wxUSE_BEGIN_THREAD
@@ -258,7 +242,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
             // the previous caller died without releasing the mutex, so even
             // though we did get it, log a message about this
             wxLogDebug(wxT("WaitForSingleObject() returned WAIT_ABANDONED"));
-            // fall through
+            wxFALLTHROUGH;
 
         case WAIT_OBJECT_0:
             // ok
@@ -269,7 +253,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
 
         default:
             wxFAIL_MSG(wxT("impossible return value in wxMutex::Lock"));
-            // fall through
+            wxFALLTHROUGH;
 
         case WAIT_FAILED:
             wxLogLastError(wxT("WaitForSingleObject(mutex)"));
@@ -606,6 +590,14 @@ void wxThreadInternal::SetPriority(unsigned int priority)
 {
     m_priority = priority;
 
+    if ( !m_hThread )
+    {
+        // The thread hasn't been created yet, so calling SetThreadPriority()
+        // right now would just result in an error -- just skip doing this, as
+        // the priority will be set when Create() is called later.
+        return;
+    }
+
     // translate wxWidgets priority to the Windows one
     int win_priority;
     if (m_priority <= 20)
@@ -873,6 +865,20 @@ bool wxThreadInternal::Suspend()
                       static_cast<unsigned long>(wxPtrToUInt(m_hThread)));
 
         return false;
+    }
+
+    // Calling GetThreadContext() forces the thread to actually be suspended:
+    // just calling SuspendThread() is not enough, it just asks the scheduler
+    // to suspend the thread at the next opportunity and by then we may already
+    // exit wxThread::Pause() and leave m_critsect, meaning that the thread
+    // could enter it and end up suspended inside a CS, which will inevitably
+    // result in a deadlock later.
+    CONTEXT ctx;
+    // We don't really need the context, but we still must initialize it.
+    ctx.ContextFlags = CONTEXT_FULL;
+    if ( !::GetThreadContext(m_hThread, &ctx) )
+    {
+        wxLogLastError(wxS("GetThreadContext"));
     }
 
     m_state = STATE_PAUSED;

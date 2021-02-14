@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CALENDARCTRL
 
@@ -196,7 +193,7 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
         default:
         case MCHT_CALENDARWEEKNUM:
             wxFAIL_MSG( "unexpected" );
-            // fall through
+            wxFALLTHROUGH;
 
         case MCHT_NOWHERE:
         case MCHT_CALENDARBK:

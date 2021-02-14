@@ -18,15 +18,13 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/nonownedwnd.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/region.h"
+    #include "wx/scopedptr.h"
 #endif // WX_PRECOMP
 
 #include "wx/graphics.h"

@@ -3,7 +3,7 @@
 // Purpose:     implementation of wxNotificationMessage for Windows
 // Author:      Vadim Zeitlin
 // Created:     2007-12-01
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // we can only use the native implementation if we have a working
 // wxTaskBarIcon::ShowBalloon() method

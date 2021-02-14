@@ -13,7 +13,7 @@
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
 
-// Available since Windows 7 only. With this style, the value of guage will
+// Available since Windows 7 only. With this style, the value of gauge will
 // reflect on the taskbar button.
 #define wxGA_PROGRESS        0x0010
 // Win32 only, is default (and only) on some other platforms
@@ -52,13 +52,12 @@
            Display the current value in percents in the gauge itself. This
            style is only supported in wxQt and ignored under the other
            platforms.
-           @since 3.1.0
-
+           This flag is only available in wxWidgets 3.1.0 and later.
     @style{wxGA_PROGRESS}
            Reflect the value of gauge in the application taskbar button under
-           Windows 7 and later and the dock icon under OS X, ignored under
+           Windows 7 and later and the dock icon under macOS, ignored under
            the other platforms.
-           @since 3.1.0
+           This flag is only available in wxWidgets 3.1.0 and later.
 
     @endStyleTable
 

@@ -167,7 +167,7 @@ public:
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
-    wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
+    wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
 
     static void InitStandardHandlers();
     */
@@ -224,9 +224,12 @@ public:
     virtual bool CopyFromIcon(const wxIcon& icon) = 0;
 
     // implementation:
+#if WXWIN_COMPATIBILITY_3_0
+    // deprecated
     virtual void SetHeight(int height) = 0;
     virtual void SetWidth(int width) = 0;
     virtual void SetDepth(int depth) = 0;
+#endif
 
     // Format handling
     static inline wxList& GetHandlers() { return sm_handlers; }

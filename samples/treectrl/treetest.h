@@ -67,7 +67,7 @@ public:
     MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                const wxPoint& pos, const wxSize& size,
                long style);
-    virtual ~MyTreeCtrl(){};
+    virtual ~MyTreeCtrl(){}
 
     void OnBeginDrag(wxTreeEvent& event);
     void OnBeginRDrag(wxTreeEvent& event);
@@ -147,7 +147,7 @@ private:
     void DoResetBrokenStateImages(const wxTreeItemId& idParent,
                                   wxTreeItemIdValue cookie, int state);
 
-    void LogEvent(const wxChar *name, const wxTreeEvent& event);
+    void LogEvent(const wxString& name, const wxTreeEvent& event);
 
     int          m_imageSize;               // current size of images
     bool         m_reverseSort;             // flag for OnCompareItems
@@ -215,6 +215,7 @@ public:
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
 
+    void OnFreezeThaw(wxCommandEvent& event);
     void OnRecreate(wxCommandEvent& event);
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
@@ -335,6 +336,7 @@ enum
     TreeTest_Delete,
     TreeTest_DeleteChildren,
     TreeTest_DeleteAll,
+    TreeTest_FreezeThaw,
     TreeTest_Recreate,
     TreeTest_ToggleImages,
     TreeTest_ToggleStates,

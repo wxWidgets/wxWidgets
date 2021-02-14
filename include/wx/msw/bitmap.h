@@ -55,12 +55,6 @@ public:
 
     // Initialize with XPM data
     wxBitmap(const char* const* data);
-#ifdef wxNEEDS_CHARPP
-    wxBitmap(char** data)
-    {
-        *this = wxBitmap(const_cast<const char* const*>(data));
-    }
-#endif
 
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
@@ -102,6 +96,13 @@ public:
     {
         (void)CopyFromCursor(cursor, wxBitmapTransparency_Auto);
     }
+
+#if wxUSE_IMAGE
+    wxBitmap& operator=(const wxImage& image)
+    {
+        return *this = wxBitmap(image);
+    }
+#endif // wxUSE_IMAGE
 
     wxBitmap& operator=(const wxIcon& icon)
     {
@@ -198,9 +199,16 @@ public:
     // values in its alpha channel.
     void MSWUpdateAlpha();
 
+    // Blend mask with alpha channel and remove the mask
+    void MSWBlendMaskWithAlpha();
+
 public:
-    void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_INLINE(void SetHBITMAP(WXHBITMAP bmp), SetHandle((WXHANDLE)bmp); )
+#endif // WXWIN_COMPATIBILITY_3_0
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
+    bool InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth);
+    void ResetHBITMAP() { InitFromHBITMAP(NULL, 0, 0, 0); }
 
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Don't use the Windows printer if we're in wxUniv mode and using
 // the PostScript architecture
@@ -48,9 +45,8 @@
 #include "wx/msw/printdlg.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dcprint.h"
-#if wxUSE_ENH_METAFILE
-    #include "wx/msw/enhmeta.h"
-#endif
+#include "wx/msw/enhmeta.h"
+
 #include <stdlib.h>
 
 // ---------------------------------------------------------------------------

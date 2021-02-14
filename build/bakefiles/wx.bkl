@@ -95,7 +95,7 @@
             <command>
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
-                $(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
+                $(INSTALL_SCRIPT) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
                 (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
@@ -144,12 +144,6 @@
             </linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>
-        <gettext-catalogs id="locale_msw">
-            <srcdir>$(SRCDIR)/locale/msw</srcdir>
-            <catalog-name>wxmsw</catalog-name>
-            <linguas>it</linguas>
-            <install-to>$(LOCALEDIR)</install-to>
-        </gettext-catalogs>
     </if>
 
 
@@ -173,11 +167,6 @@
             <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
         </set>
 
-        <copy-file-to-file-if-not-exist id="master_setup.h">
-            <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup0.h</src>
-            <dst>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</dst>
-            <dependency-of>setup_h</dependency-of>
-        </copy-file-to-file-if-not-exist>
         <copy-file-to-file-if-not-exist id="setup.h">
             <dependency-of>setup_h</dependency-of>
             <src>$(SRCDIR)/include/wx/$(SETUP_H_SUBDIR)/setup.h</src>
@@ -205,7 +194,7 @@
             <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
 
             <command>
-                $(DOLLAR)(CPP) "$(nativePaths(SRCDIR))\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+                $(DOLLAR)(CPP) $(DOLLAR)(CPPFLAGS) "$(nativePaths(SRCDIR))\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
             </command>
 
         </action>

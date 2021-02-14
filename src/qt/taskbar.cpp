@@ -21,7 +21,7 @@ bool wxTaskBarIconBase::IsAvailable()
 
 //=============================================================================
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxTaskBarIconBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler);
 
 wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED(iconType))
 {

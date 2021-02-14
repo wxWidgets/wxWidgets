@@ -24,7 +24,7 @@ enum
         Don't show the column headers.
 
         By default this control shows the column headers, using this class
-        allows to avoid this and show only the data.
+        allows avoiding this and showing only the data.
 
         @since 2.9.5
      */
@@ -41,7 +41,7 @@ enum
 
 /**
     @class wxTreeListItem
-   
+
     Unique identifier of an item in wxTreeListCtrl.
 
     This is an opaque class which can't be used by the application in any other
@@ -50,7 +50,7 @@ enum
 
     @see wxTreeListCtrl
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -74,12 +74,12 @@ public:
 
 /**
     @class wxTreeListItemComparator
-   
+
     Class defining sort order for the items in wxTreeListCtrl.
 
     @see wxTreeListCtrl
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -90,7 +90,7 @@ public:
     /**
         Default constructor.
 
-        Notice that this class is not copyable, comparators are not passed by
+        Notice that this class is not copiable, comparators are not passed by
         value.
      */
     wxTreeListItemComparator();
@@ -255,7 +255,7 @@ extern const wxTreeListItem wxTLI_LAST;
         if you need to know it.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3

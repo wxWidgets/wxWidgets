@@ -39,7 +39,7 @@ typedef wxDLManifest wxDLImports;
 //       wxDL is not virtual and we deliberately hide some of it's
 //       methods here.
 //
-//       Unless you know exacty why you need to, you probably shouldn't
+//       Unless you know exactly why you need to, you probably shouldn't
 //       instantiate this class directly anyway, use wxPluginManager
 //       instead.
 
@@ -123,7 +123,7 @@ public:
     void   Unload();
 
     bool   IsLoaded() const { return m_entry && m_entry->IsLoaded(); }
-    void  *GetSymbol(const wxString &symbol, bool *success = 0)
+    void* GetSymbol(const wxString& symbol, bool* success = NULL)
     {
         return m_entry->GetSymbol( symbol, success );
     }

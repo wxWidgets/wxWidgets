@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CHOICE
 
@@ -365,10 +362,13 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
+    const int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
 
     wxString str;
-    if ( len != CB_ERR && len > 0 )
+
+    wxCHECK_MSG( len != CB_ERR, str, wxS("Invalid index") );
+
+    if ( len > 0 )
     {
         if ( ::SendMessage
                (
@@ -458,9 +458,18 @@ void wxChoice::MSWEndDeferWindowPos()
 
 void wxChoice::MSWUpdateDropDownHeight()
 {
+    int flags = wxSIZE_USE_EXISTING;
+    if ( wxApp::GetComCtl32Version() < 600 )
+    {
+        // Make sure our DoMoveWindow() will get called to update the dropdown
+        // height, this happens automatically with comctl32.dll v6, but not
+        // with earlier versions.
+        flags |= wxSIZE_FORCE;
+    }
+
     // be careful to not change the width here
     DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y,
-              wxSIZE_USE_EXISTING);
+              flags);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)

@@ -23,9 +23,12 @@ wxEventType wxEVT_TOOLBOOK_PAGE_CHANGING;
     refer to that class documentation for now. You can also use the
     @ref page_samples_notebook to see wxToolbook in action.
 
+    One feature of this class not supported by wxBookCtrlBase is the support
+    for disabling some of the pages, see EnablePage().
+
     @beginStyleTable
     @style{wxTBK_BUTTONBAR}
-        Use wxButtonToolBar-based implementation under OS X (ignored under
+        Use wxButtonToolBar-based implementation under macOS (ignored under
         other platforms).
     @style{wxTBK_HORZ_LAYOUT}
         Shows the text and the icons alongside, not vertically stacked (only
@@ -82,5 +85,44 @@ public:
         Returns the wxToolBarBase associated with the control.
     */
     wxToolBarBase* GetToolBar() const;
+
+    /**
+       Enables or disables the specified page.
+
+       Using this function, a page can be disabled when it can't be used, while
+       still remaining present to let the users know that more functionality is
+       available, even if currently inaccessible.
+
+       Icons for disabled pages are created by wxBitmap::ConvertToDisabled().
+
+       @param page
+            The index of the page.
+       @param enable
+            @true to enable the page and @false to disable it.
+
+       @return @true if successful, @false otherwise (currently only if the
+            index is invalid).
+
+       @since 3.1.2
+    */
+    bool EnablePage(size_t page, bool enable);
+
+   /**
+       Enables or disables the specified page.
+
+       This is similar to the overload above, but finds the index of the
+       specified page.
+
+       @param page
+            Pointer of a page windows inside the book control.
+       @param enable
+            @true to enable the page and @false to disable it.
+
+       @return @true if successful, @false otherwise, e.g. if @a page is not
+           one of the pages of this control.
+
+       @since 3.1.2
+    */
+    bool EnablePage(wxWindow *page, bool enable);
 };
 

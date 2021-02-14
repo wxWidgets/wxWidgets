@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HEADERCTRL
 
@@ -58,6 +55,7 @@ void wxHeaderCtrl::Init()
     m_colBeingReordered = COL_NONE;
     m_dragOffset = 0;
     m_scrollOffset = 0;
+    m_wasSeparatorDClick = false;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -73,7 +71,7 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
 
     // tell the system to not paint the background at all to avoid flicker as
     // we paint the entire window area in our OnPaint()
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -183,11 +181,12 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) c
 
         pos += col.GetWidth();
 
+        // TODO: don't hardcode sensitivity
+        const int separatorClickMargin = FromDIP(8);
+
         // if the column is resizable, check if we're approximatively over the
         // line separating it from the next column
-        //
-        // TODO: don't hardcode sensitivity
-        if ( col.IsResizeable() && abs(xLogical - pos) < 8 )
+        if ( col.IsResizeable() && abs(xLogical - pos) < separatorClickMargin )
         {
             if ( onSeparator )
                 *onSeparator = true;
@@ -206,6 +205,23 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) c
     if ( onSeparator )
         *onSeparator = false;
     return COL_NONE;
+}
+
+unsigned int wxHeaderCtrl::FindColumnClosestToPoint(int xPhysical) const
+{
+    const unsigned int colIndexAtPoint = FindColumnAtPoint(xPhysical);
+
+    // valid column found?
+    if ( colIndexAtPoint != COL_NONE )
+        return colIndexAtPoint;
+
+    // if not, xPhysical must be beyond the rightmost column, so return its
+    // index instead -- if we have it
+    const unsigned int count = GetColumnCount();
+    if ( !count )
+        return COL_NONE;
+
+    return m_colIndices[count - 1];
 }
 
 // ----------------------------------------------------------------------------
@@ -372,7 +388,7 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 
     // and also a hint indicating where it is going to be inserted if it's
     // dropped now
-    unsigned int col = FindColumnAtPoint(xPhysical);
+    unsigned int col = FindColumnClosestToPoint(xPhysical);
     if ( col != COL_NONE )
     {
         static const int DROP_MARKER_WIDTH = 4;
@@ -414,15 +430,24 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
 
     ReleaseMouse();
 
-    const int colOld = m_colBeingReordered,
-              colNew = FindColumnAtPoint(xPhysical);
+    const int colOld = m_colBeingReordered;
+    const unsigned colNew = FindColumnClosestToPoint(xPhysical);
 
     m_colBeingReordered = COL_NONE;
 
+    // mouse drag must be longer than min distance m_dragOffset
     if ( xPhysical - GetColStart(colOld) == m_dragOffset )
+    {
         return false;
+    }
 
-    if ( colNew != colOld )
+    // cannot proceed without a valid column index
+    if ( colNew == COL_NONE )
+    {
+        return false;
+    }
+
+    if ( static_cast<int>(colNew) != colOld )
     {
         wxHeaderCtrlEvent event(wxEVT_HEADER_END_REORDER, GetId());
         event.SetEventObject(this);
@@ -484,12 +509,8 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     int w, h;
     GetClientSize(&w, &h);
 
-#ifdef __WXGTK__
-//    int vw;
-//    GetVirtualSize(&vw, NULL);
-#endif
-
     wxAutoBufferedPaintDC dc(this);
+    dc.Clear();
 
     // account for the horizontal scrollbar offset in the parent window
     dc.SetDeviceOrigin(m_scrollOffset, 0);
@@ -538,7 +559,6 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #ifdef __WXGTK__
         if (i == count-1 && xpos + colWidth >= w)
         {
-//            colWidth = wxMax( colWidth, vw - xpos );
             state |= wxCONTROL_DIRTY;
         }
 #endif
@@ -589,6 +609,9 @@ void wxHeaderCtrl::OnKeyDown(wxKeyEvent& event)
 
 void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 {
+    const bool wasSeparatorDClick = m_wasSeparatorDClick;
+    m_wasSeparatorDClick = false;
+
     // do this in advance to allow simply returning if we're not interested,
     // we'll undo it if we do handle the event below
     mevent.Skip();
@@ -664,8 +687,11 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
             wxASSERT_MSG( !IsResizing(), "reentering column resize mode?" );
             StartOrContinueResizing(col, xPhysical);
         }
-        else // on column itself
+        // on column itself - both header and column must have the appropriate
+        // flags to allow dragging the column
+        else if ( HasFlag(wxHD_ALLOW_REORDER) && GetColumn(col).IsReorderable() )
         {
+
             // start dragging the column
             wxASSERT_MSG( !IsReordering(), "reentering column move mode?" );
 
@@ -688,8 +714,9 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
                 if ( onSeparator && dblclk )
                 {
                     evtType = wxEVT_HEADER_SEPARATOR_DCLICK;
+                    m_wasSeparatorDClick = true;
                 }
-                else // not double click on separator
+                else if (!wasSeparatorDClick)
                 {
                     evtType = click ? wxEVT_HEADER_CLICK
                                     : wxEVT_HEADER_DCLICK;

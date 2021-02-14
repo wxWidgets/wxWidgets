@@ -22,13 +22,13 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxBannerWindowNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxBannerWindowNameStr[];
 
 // ----------------------------------------------------------------------------
 // A simple banner window showing either a bitmap or text.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxBannerWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxBannerWindow : public wxWindow
 {
 public:
     // Default constructor, use Create() later.
@@ -54,7 +54,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxString& name = wxBannerWindowNameStr)
+                   const wxString& name = wxASCII_STR(wxBannerWindowNameStr))
     {
         Init();
 
@@ -68,7 +68,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxBannerWindowNameStr);
+                const wxString& name = wxASCII_STR(wxBannerWindowNameStr));
 
 
     // Provide an existing bitmap to show. For wxLEFT orientation the bitmap is

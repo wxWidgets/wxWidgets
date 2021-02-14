@@ -10,6 +10,12 @@ skip_commits:
     - docs/
     - interface/
     - misc/
+    - include/wx/osx/
+    - src/osx/
+    - .github/workflows/
+    - .travis.yml
+    - build/tools/travis-ci.sh
+    - build/tools/before_install.sh
 
 environment:
   matrix:
@@ -21,14 +27,13 @@ environment:
     VS: '9.0'
     BUILD: release
     ARCH: x86
-    wxUSE_STL: 0
   - TOOLSET: nmake
     VS: '14.0'
     BUILD: debug
     ARCH: amd64
     wxUSE_STL: 1
+    wxUSE_WEBVIEW_EDGE: 1
   - TOOLSET: mingw
-    wxUSE_STL: 0
   - TOOLSET: msys2
     MSYSTEM: MINGW32
   - TOOLSET: cygwin
@@ -36,24 +41,55 @@ environment:
     GENERATOR: 'Visual Studio 12'
     SHARED: ON
     CONFIGURATION: Release
+  - TOOLSET: cmake_qt
+    GENERATOR: 'Visual Studio 14 2015 Win64'
+    SHARED: ON
+    CONFIGURATION: Release
 
 clone_depth: 50
 
 install: git submodule update --init
 
-before_build:
+init:
 - ps: |
-    $env:PATH = $env:PATH -replace "C:\\Program Files\\Git\\usr\\bin",""
-    if (($env:compiler -ne "msys2") -and ($env:compiler -ne "cygwin")) {
-      gc include\wx\msw\setup0.h |
-      %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $env:wxUSE_STL"} |
-      sc include\wx\msw\setup.h
-    }
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
         https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
         Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
         throw "There are newer queued builds for this pull request, failing early." }
 
+before_build:
+- ps: |
+    $env:PATH = $env:PATH -replace "C:\\Program Files\\Git\\usr\\bin",""
+    if (-not (Test-Path env:wxUSE_STL)) { $env:wxUSE_STL = '0' }
+    if (-not (Test-Path env:wxUSE_WEBVIEW_EDGE)) { $env:wxUSE_WEBVIEW_EDGE = '0' }
+    if (($env:TOOLSET -ne "msys2") -and ($env:TOOLSET -ne "cygwin")) {
+      $txt = gc include\wx\msw\setup.h
+      Write-Output $txt |
+      %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $env:wxUSE_STL"} |
+      %{$_ -replace "define wxUSE_WEBVIEW_EDGE 0", "define wxUSE_WEBVIEW_EDGE $env:wxUSE_WEBVIEW_EDGE"} |
+      sc include\wx\msw\setup.h
+    }
+
 build_script: c:\projects\wxwidgets\build\tools\appveyor.bat
 
+before_test:
+- ps: |
+    Write-Output "Getting and launching httpbin."
+    $env:PATH = "C:\Python35;C:\Python35\Scripts;" + $env:PATH
+    pip.exe --disable-pip-version-check install httpbin
+    Start-Job -Name wx_httpbin { python.exe -m httpbin.core 2>&1 > c:\projects\wxwidgets\httpbin.log }
+    Start-Sleep -Seconds 5
+    curl.exe -s http://127.0.0.1:5000/ip > $null
+    if ($lastExitCode -eq "0") {
+        $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:5000"
+    }
+    else {
+        Write-Error "Disabling wxWebRequest tests as launching httpbin failed."
+        $env:WX_TEST_WEBREQUEST_URL="0"
+    }
+
 test_script: c:\projects\wxwidgets\build\tools\appveyor-test.bat
+
+after_test:
+- ps: |
+    Stop-Job -Name wx_httpbin

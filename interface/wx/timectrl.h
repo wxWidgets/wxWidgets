@@ -12,7 +12,7 @@
 
     Currently no special styles are defined for this object.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{pickers}
 
     @since 2.9.3
@@ -38,15 +38,15 @@ enum
 
     @beginEventEmissionTable{wxDateEvent}
     @event{EVT_TIME_CHANGED(id, func)}
-           This event fires when the user changes the current selection in the
-           control.
+           Process a wxEVT_TIME_CHANGED event, which fires when the user
+           changes the current selection in the control.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{pickers}
     @appearance{timepickerctrl}
 
-    @see wxDatePickerCtrl, wxDateEvent
+    @see wxDatePickerCtrl, wxCalendarCtrl, wxDateEvent
 
     @since 2.9.3
 */
@@ -57,7 +57,7 @@ public:
        Default constructor.
     */
     wxTimePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */
@@ -67,7 +67,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxTP_DEFAULT,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = "timectrl");
+                     const wxString& name = wxTimePickerCtrlNameStr);
 
     /**
         Create the control window.
@@ -103,9 +103,9 @@ public:
                 const wxDateTime& dt = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                long style = wxTP_DEFAULT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "timectrl");
+                const wxString& name = wxTimePickerCtrlNameStr);
 
     /**
         Returns the currently entered time as hours, minutes and seconds.

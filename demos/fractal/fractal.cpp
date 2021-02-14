@@ -28,9 +28,6 @@ hack doesn't fix.
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef  WX_PRECOMP
   #include "wx/wx.h"
@@ -54,7 +51,7 @@ static wxMenuBar *menuBar = NULL;
 class MyApp: public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 wxIMPLEMENT_APP(MyApp);

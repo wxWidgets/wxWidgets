@@ -14,43 +14,38 @@
 
 #if wxUSE_HTML
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
 #endif // WX_PRECOMP
 
 #include "wx/html/winpars.h"
+#include "wx/scopedptr.h"
 
 // Test that parsing invalid HTML simply fails but doesn't crash for example.
 TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
 {
     class NullParser : public wxHtmlWinParser
     {
-    public:
-        virtual wxObject *GetProduct() { return NULL; }
-
     protected:
-        virtual void AddText(const wxString& WXUNUSED(txt)) { }
+        virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE { }
     };
 
     NullParser p;
     wxMemoryDC dc;
     p.SetDC(&dc);
 
-    p.Parse("<");
-    p.Parse("<foo");
-    p.Parse("<!--");
-    p.Parse("<!---");
+    delete p.Parse("<");
+    delete p.Parse("<foo");
+    delete p.Parse("<!--");
+    delete p.Parse("<!---");
 }
 
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
 {
     wxMemoryDC dc;
 
-    wxHtmlContainerCell* const top = new wxHtmlContainerCell(NULL);
+    wxScopedPtr<wxHtmlContainerCell> const top(new wxHtmlContainerCell(NULL));
     wxHtmlContainerCell* const cont = new wxHtmlContainerCell(NULL);
     wxHtmlCell* const cell1 = new wxHtmlWordCell("Hello", dc);
     wxHtmlCell* const cell2 = new wxHtmlColourCell(*wxRED);

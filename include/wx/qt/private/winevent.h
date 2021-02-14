@@ -19,6 +19,9 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtWidgets/QGestureEvent>
+#include <QtGui/QCursor>
+
 class QPaintEvent;
 
 template< typename Handler >
@@ -54,20 +57,21 @@ public:
         : Widget( parent != NULL ? parent->GetHandle() : NULL )
         , wxQtSignalHandler< Handler >( handler )
     {
-        // Set immediatelly as it is used to check if wxWindow is alive
+        // Set immediately as it is used to check if wxWindow is alive
         wxWindow::QtStoreWindowPointer( this, handler );
 
         // Handle QWidget destruction signal AFTER it gets deleted
         QObject::connect( this, &QObject::destroyed, this,
                           &wxQtEventSignalHandler::HandleDestroyedSignal );
 
+        Widget::setMouseTracking(true);
     }
 
     void HandleDestroyedSignal()
     {
     }
 
-    virtual Handler *GetHandler() const
+    virtual Handler *GetHandler() const wxOVERRIDE
     {
         // Only process the signal / event if the wxWindow is not destroyed
         if ( !wxWindow::QtRetrieveWindowPointer( this ) )
@@ -84,7 +88,7 @@ protected:
      * wxPowerEvent, wxScrollWinEvent, wxSysColourChangedEvent */
 
     //wxActivateEvent
-    virtual void changeEvent ( QEvent * event )
+    virtual void changeEvent ( QEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -96,7 +100,7 @@ protected:
     }
 
     //wxCloseEvent
-    virtual void closeEvent ( QCloseEvent * event )
+    virtual void closeEvent ( QCloseEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -104,11 +108,11 @@ protected:
         if ( !this->GetHandler()->QtHandleCloseEvent(this, event) )
             Widget::closeEvent(event);
         else
-            event->accept();
+            event->ignore();
     }
 
     //wxContextMenuEvent
-    virtual void contextMenuEvent ( QContextMenuEvent * event )
+    virtual void contextMenuEvent ( QContextMenuEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -123,7 +127,7 @@ protected:
     //virtual void dropEvent ( QDropEvent * event ) { }
 
     //wxMouseEvent
-    virtual void enterEvent ( QEvent * event )
+    virtual void enterEvent ( QEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -135,7 +139,7 @@ protected:
     }
 
     //wxFocusEvent.
-    virtual void focusInEvent ( QFocusEvent * event )
+    virtual void focusInEvent ( QFocusEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -147,7 +151,7 @@ protected:
     }
 
     //wxFocusEvent.
-    virtual void focusOutEvent ( QFocusEvent * event )
+    virtual void focusOutEvent ( QFocusEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -159,7 +163,7 @@ protected:
     }
 
     //wxShowEvent
-    virtual void hideEvent ( QHideEvent * event )
+    virtual void hideEvent ( QHideEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -171,7 +175,7 @@ protected:
     }
 
     //wxKeyEvent
-    virtual void keyPressEvent ( QKeyEvent * event )
+    virtual void keyPressEvent ( QKeyEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -183,7 +187,7 @@ protected:
     }
 
     //wxKeyEvent
-    virtual void keyReleaseEvent ( QKeyEvent * event )
+    virtual void keyReleaseEvent ( QKeyEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -195,7 +199,7 @@ protected:
     }
 
     //wxMouseEvent
-    virtual void leaveEvent ( QEvent * event )
+    virtual void leaveEvent ( QEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -207,7 +211,7 @@ protected:
     }
 
     //wxMouseEvent
-    virtual void mouseDoubleClickEvent ( QMouseEvent * event )
+    virtual void mouseDoubleClickEvent ( QMouseEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -219,7 +223,7 @@ protected:
     }
 
     //wxMouseEvent
-    virtual void mouseMoveEvent ( QMouseEvent * event )
+    virtual void mouseMoveEvent ( QMouseEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -231,7 +235,7 @@ protected:
     }
 
     //wxMouseEvent
-    virtual void mousePressEvent ( QMouseEvent * event )
+    virtual void mousePressEvent ( QMouseEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -243,7 +247,7 @@ protected:
     }
 
     //wxMouseEvent
-    virtual void mouseReleaseEvent ( QMouseEvent * event )
+    virtual void mouseReleaseEvent ( QMouseEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -253,9 +257,9 @@ protected:
         else
             event->accept();
     }
-    
+
     //wxMoveEvent
-    virtual void moveEvent ( QMoveEvent * event )
+    virtual void moveEvent ( QMoveEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -265,9 +269,9 @@ protected:
         else
             event->accept();
     }
-    
+
     //wxEraseEvent then wxPaintEvent
-    virtual void paintEvent ( QPaintEvent * event )
+    virtual void paintEvent ( QPaintEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -279,7 +283,7 @@ protected:
     }
 
     //wxSizeEvent
-    virtual void resizeEvent ( QResizeEvent * event )
+    virtual void resizeEvent ( QResizeEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -291,7 +295,7 @@ protected:
     }
 
     //wxShowEvent
-    virtual void showEvent ( QShowEvent * event )
+    virtual void showEvent ( QShowEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -301,9 +305,9 @@ protected:
         else
             event->accept();
     }
-    
+
     //wxMouseEvent
-    virtual void wheelEvent ( QWheelEvent * event )
+    virtual void wheelEvent ( QWheelEvent * event ) wxOVERRIDE
     {
         if ( !this->GetHandler() )
             return;
@@ -326,6 +330,132 @@ protected:
     virtual bool winEvent ( MSG * message, long * result ) { }
     virtual bool x11Event ( XEvent * event ) { } */
 
+    virtual bool event(QEvent *event)
+    {
+        if (event->type() == QEvent::Gesture)
+        {
+            return gestureEvent(static_cast<QGestureEvent*>(event), event);
+        }
+
+        return Widget::event(event);
+    }
+
+    bool gestureEvent(QGestureEvent *gesture, QEvent *event)
+    {
+        if (QGesture *tah = gesture->gesture(Qt::TapAndHoldGesture))
+        {
+            //  Set the policy so that accepted gestures are taken by the first window that gets them
+            tah->setGestureCancelPolicy ( QGesture::CancelAllInContext );
+            tapandholdTriggered(static_cast<QTapAndHoldGesture *>(tah), event);
+        }
+
+        if (QGesture *pan = gesture->gesture(Qt::PanGesture))
+        {
+            panTriggered(static_cast<QPanGesture *>(pan), event);
+        }
+
+        if (QGesture *pinch = gesture->gesture(Qt::PinchGesture))
+        {
+            pinchTriggered(static_cast<QPinchGesture *>(pinch), event);
+        }
+
+        return true;
+    }
+
+    void tapandholdTriggered(QTapAndHoldGesture *gesture, QEvent *event)
+    {
+        wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
+
+        if (gesture->state() == Qt::GestureFinished)
+        {
+            if ( win )
+            {
+                wxLongPressEvent ev(win->GetId());
+                ev.SetPosition( wxQtConvertPoint( gesture->position().toPoint() ) );
+
+                ev.SetGestureEnd();
+                win->ProcessWindowEvent( ev );
+                event->accept();
+            }
+
+        }
+        else if (gesture->state() == Qt::GestureStarted)
+        {
+            event->accept();
+        }
+        else
+        {
+            event->accept();
+        }
+    }
+
+    void panTriggered(QPanGesture *gesture, QEvent *event)
+    {
+        wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
+
+        if (win)
+        {
+            wxPanGestureEvent evp(win->GetId());
+            QPoint pos = QCursor::pos();
+            evp.SetPosition( wxQtConvertPoint( pos ) );
+
+            QPoint offset = gesture->offset().toPoint();
+            QPoint offset_last = gesture->lastOffset().toPoint();
+            QPoint delta(offset.x() - offset_last.x(), offset.y() - offset_last.y());
+
+            evp.SetDelta( wxQtConvertPoint( delta ) );
+
+            switch(gesture->state())
+            {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
+            }
+
+            win->ProcessWindowEvent( evp );
+
+            event->accept();
+        }
+    }
+
+    void pinchTriggered(QPinchGesture *gesture, QEvent *event)
+    {
+        wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
+        if (win)
+        {
+
+            qreal this_sf = gesture->scaleFactor();
+            QPoint center_point = gesture->centerPoint().toPoint();
+
+            wxZoomGestureEvent evp(win->GetId());
+            evp.SetPosition( wxQtConvertPoint( center_point ) );
+            evp.SetZoomFactor( this_sf);
+
+            switch(gesture->state())
+            {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
+            }
+
+            win->ProcessWindowEvent( evp );
+
+            event->accept();
+
+        }
+    }
 };
 
 #endif

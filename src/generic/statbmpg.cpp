@@ -46,6 +46,9 @@ void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc(this);
     const wxSize drawSize = GetClientSize();
+    if ( !drawSize.x || !drawSize.y )
+        return;
+
     const wxSize bmpSize = m_bitmap.GetSize();
     wxDouble w = 0;
     wxDouble h = 0;

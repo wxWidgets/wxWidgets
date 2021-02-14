@@ -44,7 +44,7 @@ public:
             int n = 0, const wxString choices[] = NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxListBoxNameStr)
+            const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Init();
 
@@ -56,7 +56,7 @@ public:
             const wxArrayString& choices,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxListBoxNameStr)
+            const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         Init();
 
@@ -69,14 +69,14 @@ public:
                 int n = 0, const wxString choices[] = NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxListBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     virtual ~wxListBox();
 
@@ -128,6 +128,10 @@ public:
     // extent of all strings is used. In any case calls InvalidateBestSize()
     virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
+    // This is a wrapper for LB_SETTABSTOPS message and takes tab stops in
+    // dialog units, with the same conventions as LB_SETTABSTOPS uses.
+    virtual bool MSWSetTabStops(const wxVector<int>& tabStops);
+
     // Windows callbacks
     bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
@@ -173,6 +177,15 @@ protected:
 
     // this can't be called DoHitTest() because wxWindow already has this method
     virtual int DoHitTestList(const wxPoint& point) const;
+
+    // This is a hook for wxCheckListBox, which uses it to add the checkbox
+    // width to the item width and to make it at least as tall as the checkbox.
+    virtual wxSize MSWGetFullItemSize(int w, int h) const
+    {
+        return wxSize(w, h);
+    }
+
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // free memory (common part of Clear() and dtor)
     void Free();

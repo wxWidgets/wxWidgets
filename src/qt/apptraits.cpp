@@ -33,7 +33,7 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 // void wxGUIAppTraits::MutexGuiEnter()
 // {
 // }
-// 
+//
 // void wxGUIAppTraits::MutexGuiLeave()
 // {
 // }
@@ -53,16 +53,3 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer,
 
     return wxPORT_QT;
 }
-
-//#############################################################################
-
-#if wxUSE_CONSOLE_EVENTLOOP
-
-wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
-{
-    return new wxEventLoop();
-}
-
-#endif
-
-//#############################################################################

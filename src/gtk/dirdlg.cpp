@@ -71,6 +71,9 @@ bool wxDirDialog::Create(wxWindow* parent,
 {
     m_message = title;
 
+    wxASSERT_MSG( !( (style & wxDD_MULTIPLE) && (style & wxDD_CHANGE_DIR) ),
+                  "wxDD_CHANGE_DIR can't be used together with wxDD_MULTIPLE" );
+
     parent = GetParentForModalDialog(parent, style);
 
     if (!PreCreation(parent, pos, wxDefaultSize) ||
@@ -89,19 +92,20 @@ bool wxDirDialog::Create(wxWindow* parent,
                    wxGTK_CONV(m_message),
                    gtk_parent,
                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
                    static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
-                   GTK_STOCK_CANCEL,
-#endif // GTK >= 3.10 / < 3.10
+                   "gtk-cancel",
+#endif
                    GTK_RESPONSE_CANCEL,
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
                    static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN)))),
 #else
-                   GTK_STOCK_OPEN,
-#endif // GTK >= 3.10 / < 3.10
+                   "gtk-open",
+#endif
                    GTK_RESPONSE_ACCEPT,
                    NULL);
+
     g_object_ref(m_widget);
 
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
@@ -109,9 +113,17 @@ bool wxDirDialog::Create(wxWindow* parent,
     if (wx_is_at_least_gtk2(18))
     {
         gtk_file_chooser_set_create_folders(
-            GTK_FILE_CHOOSER(m_widget), (style & wxDD_DIR_MUST_EXIST) == 0);
+            GTK_FILE_CHOOSER(m_widget), !HasFlag(wxDD_DIR_MUST_EXIST) );
     }
 #endif
+
+    // Enable multiple selection if desired
+    gtk_file_chooser_set_select_multiple(
+        GTK_FILE_CHOOSER(m_widget), HasFlag(wxDD_MULTIPLE) );
+
+    // Enable show hidden folders if desired
+    gtk_file_chooser_set_show_hidden(
+        GTK_FILE_CHOOSER(m_widget), HasFlag(wxDD_SHOW_HIDDEN) );
 
     // local-only property could be set to false to allow non-local files to be loaded.
     // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
@@ -131,13 +143,29 @@ bool wxDirDialog::Create(wxWindow* parent,
 
 void wxDirDialog::GTKOnAccept()
 {
-    wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-    m_selectedDirectory = wxString::FromUTF8(str);
+    GSList *fnamesi = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(m_widget));
+    GSList *fnames = fnamesi;
+
+    while ( fnamesi )
+    {
+        wxString dir(wxString::FromUTF8(static_cast<gchar *>(fnamesi->data)));
+        m_paths.Add(dir);
+
+        g_free(fnamesi->data);
+        fnamesi = fnamesi->next;
+    }
+
+    g_slist_free(fnames);
 
     // change to the directory where the user went if asked
     if (HasFlag(wxDD_CHANGE_DIR))
     {
-        wxSetWorkingDirectory(m_selectedDirectory);
+        wxSetWorkingDirectory(m_paths.Last());
+    }
+
+    if (!HasFlag(wxDD_MULTIPLE))
+    {
+        m_path = m_paths.Last();
     }
 
     EndDialog(wxID_OK);
@@ -163,11 +191,6 @@ void wxDirDialog::SetPath(const wxString& dir)
         gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
                                             wxGTK_CONV_FN(dir));
     }
-}
-
-wxString wxDirDialog::GetPath() const
-{
-    return m_selectedDirectory;
 }
 
 #endif // wxUSE_DIRDLG

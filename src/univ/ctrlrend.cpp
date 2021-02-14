@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -68,7 +65,7 @@ wxControlRenderer::wxControlRenderer(wxWindow *window,
 
 void wxControlRenderer::DrawLabel()
 {
-    m_dc.SetBackgroundMode(wxTRANSPARENT);
+    m_dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
@@ -89,7 +86,7 @@ void wxControlRenderer::DrawLabel()
 void wxControlRenderer::DrawButtonLabel(const wxBitmap& bitmap,
                                         wxCoord marginX, wxCoord marginY)
 {
-    m_dc.SetBackgroundMode(wxTRANSPARENT);
+    m_dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 

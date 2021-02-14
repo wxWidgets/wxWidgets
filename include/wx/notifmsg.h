@@ -3,7 +3,7 @@
 // Purpose:     class allowing to show notification messages to the user
 // Author:      Vadim Zeitlin
 // Created:     2007-11-19
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@
 
 // notice that this class is not a window and so doesn't derive from wxWindow
 
-class WXDLLIMPEXP_ADV wxNotificationMessageBase : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxNotificationMessageBase : public wxEvtHandler
 {
 public:
     // ctors and initializers
@@ -117,13 +117,13 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxNotificationMessageBase);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_NOTIFICATION_MESSAGE_CLICK, wxCommandEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_NOTIFICATION_MESSAGE_DISMISSED, wxCommandEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_NOTIFICATION_MESSAGE_ACTION, wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTIFICATION_MESSAGE_CLICK, wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTIFICATION_MESSAGE_DISMISSED, wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTIFICATION_MESSAGE_ACTION, wxCommandEvent );
 
 #if (defined(__WXGTK__) && wxUSE_LIBNOTIFY) || \
     (defined(__WXMSW__) && wxUSE_TASKBARICON && wxUSE_TASKBARICON_BALLOONS) || \
-    (defined(__WXOSX_COCOA__) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8))
+    (defined(__WXOSX_COCOA__) && (__MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8))
     #define wxHAS_NATIVE_NOTIFICATION_MESSAGE
 #endif
 
@@ -134,14 +134,14 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_NOTIFICATION_MESSAGE_ACTION, wx
 #ifdef wxHAS_NATIVE_NOTIFICATION_MESSAGE
 
 #if defined(__WXMSW__)
-class WXDLLIMPEXP_FWD_ADV wxTaskBarIcon;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarIcon;
 #endif // defined(__WXMSW__)
 
 #else
 #include "wx/generic/notifmsg.h"
 #endif // wxHAS_NATIVE_NOTIFICATION_MESSAGE
 
-class WXDLLIMPEXP_ADV wxNotificationMessage : public 
+class WXDLLIMPEXP_CORE wxNotificationMessage : public
 #ifdef wxHAS_NATIVE_NOTIFICATION_MESSAGE
     wxNotificationMessageBase
 #else

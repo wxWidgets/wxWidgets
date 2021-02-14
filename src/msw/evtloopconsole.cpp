@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -122,7 +119,7 @@ int wxMSWEventLoopBase::GetNextMessageTimeout(WXMSG *msg, unsigned long timeout)
             default:
                 wxLogDebug("unexpected MsgWaitForMultipleObjects() return "
                            "value %lu", rc);
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_TIMEOUT:
                 return -1;

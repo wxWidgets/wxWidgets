@@ -71,7 +71,7 @@ class wxList_SortFunction
 public:
     wxList_SortFunction(wxSortCompareFunction f) : m_f(f) { }
     bool operator()(const T& i1, const T& i2)
-      { return m_f((T*)&i1, (T*)&i2) < 0; }
+      { return m_f(&i1, &i2) < 0; }
 private:
     wxSortCompareFunction m_f;
 };
@@ -333,13 +333,15 @@ class WXDLLIMPEXP_BASE wxListKey
 public:
     // implicit ctors
     wxListKey() : m_keyType(wxKEY_NONE)
-        { }
+        { m_key.integer = 0; }
     wxListKey(long i) : m_keyType(wxKEY_INTEGER)
         { m_key.integer = i; }
     wxListKey(const wxString& s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxListKey(const char *s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     wxListKey(const wchar_t *s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
 
@@ -483,7 +485,8 @@ public:
     wxDEPRECATED( wxNode *Nth(size_t n) const );    // use Item
 
     // kludge for typesafe list migration in core classes.
-    wxDEPRECATED( operator wxList&() const );
+    wxDEPRECATED( operator wxList&() );
+    wxDEPRECATED( operator const wxList&() const );
 #endif // wxLIST_COMPATIBILITY
 
 protected:
@@ -496,14 +499,6 @@ protected:
                                    void *data,
                                    const wxListKey& key = wxDefaultListKey) = 0;
 
-
-    // ctors
-        // from an array
-    wxListBase(size_t count, void *elements[]);
-        // from a sequence of objects
-    wxListBase(void *object, ... /* terminate with NULL */);
-
-protected:
     void Assign(const wxListBase& list)
         { Clear(); DoCopy(list); }
 
@@ -688,8 +683,6 @@ private:
             { }                                                             \
         name(const name& list) : wxListBase(list.GetKeyType())              \
             { Assign(list); }                                               \
-        name(size_t count, T *elements[])                                   \
-            : wxListBase(count, (void **)elements) { }                      \
                                                                             \
         name& operator=(const name& list)                                   \
             { if (&list != this) Assign(list); return *this; }              \
@@ -1157,7 +1150,6 @@ inline int wxListBase::Number() const { return (int)GetCount(); }
 inline wxNode *wxListBase::First() const { return (wxNode *)GetFirst(); }
 inline wxNode *wxListBase::Last() const { return (wxNode *)GetLast(); }
 inline wxNode *wxListBase::Nth(size_t n) const { return (wxNode *)Item(n); }
-inline wxListBase::operator wxList&() const { return *(wxList*)this; }
 
 #endif
 
@@ -1209,6 +1201,10 @@ public:
 };
 
 #if !wxUSE_STD_CONTAINERS
+
+// wxListBase deprecated methods
+inline wxListBase::operator wxList&() { return *static_cast<wxList*>(this); }
+inline wxListBase::operator const wxList&() const { return *static_cast<const wxList*>(this); }
 
 // -----------------------------------------------------------------------------
 // wxStringList class for compatibility with the old code

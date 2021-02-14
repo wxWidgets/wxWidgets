@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -71,12 +68,6 @@
     #include <cygwin/version.h>
 #endif  //GNUWIN32
 
-#ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
-                    // this (3.1 I believe) and how to test for it.
-                    // If this works for Borland 4.0 as well, then no worries.
-    #include <dir.h>
-#endif
-
 // VZ: there is some code using NetXXX() functions to get the full user name:
 //     I don't think it's a good idea because they don't work under Win95 and
 //     seem to return the same as wxGetUserId() under NT. If you really want
@@ -93,6 +84,10 @@
 
 #ifndef __GNUWIN32__
     #include <shellapi.h>
+#endif
+
+#ifndef PROCESSOR_ARCHITECTURE_ARM64
+#define PROCESSOR_ARCHITECTURE_ARM64 12
 #endif
 
 #include <errno.h>
@@ -448,13 +443,8 @@ bool wxGetDiskSpace(const wxString& path,
     }
 
     // ULARGE_INTEGER is a union of a 64 bit value and a struct containing
-    // two 32 bit fields which may be or may be not named - try to make it
-    // compile in all cases
-#if defined(__BORLANDC__) && !defined(_ANONYMOUS_STRUCT)
-    #define UL(ul) ul.u
-#else // anon union
+    // two 32 bit fields which may be or may be not named
     #define UL(ul) ul
-#endif
     if ( pTotal )
     {
 #if wxUSE_LONGLONG
@@ -713,11 +703,11 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 
             default:
                 wxFAIL_MSG( wxT("unexpected WaitForSingleObject() return") );
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_FAILED:
                 wxLogLastError(wxT("WaitForSingleObject"));
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_TIMEOUT:
                 // Process didn't terminate: normally this is a failure but not
@@ -812,9 +802,9 @@ bool wxShell(const wxString& command)
 {
     wxString cmd;
 
-    wxChar *shell = wxGetenv(wxT("COMSPEC"));
+    const wxChar* shell = wxGetenv(wxT("COMSPEC"));
     if ( !shell )
-        shell = (wxChar*) wxT("\\COMMAND.COM");
+        shell = wxT("\\COMMAND.COM");
 
     if ( !command )
     {
@@ -1225,24 +1215,12 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
-    OSVERSIONINFOEX osvi;
-    wxZeroMemory(osvi);
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
+    int majorCur, minorCur, microCur;
+    wxGetOsVersion(&majorCur, &minorCur, &microCur);
 
-    DWORDLONG const dwlConditionMask =
-        ::VerSetConditionMask(
-        ::VerSetConditionMask(
-        ::VerSetConditionMask(
-        0, VER_MAJORVERSION, VER_GREATER_EQUAL),
-        VER_MINORVERSION, VER_GREATER_EQUAL),
-        VER_BUILDNUMBER, VER_GREATER_EQUAL);
-
-    osvi.dwMajorVersion = majorVsn;
-    osvi.dwMinorVersion = minorVsn;
-    osvi.dwBuildNumber = microVsn;
-
-    return ::VerifyVersionInfo(&osvi,
-        VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER, dwlConditionMask) != FALSE;
+    return majorCur > majorVsn
+        || (majorCur == majorVsn && minorCur > minorVsn)
+        || (majorCur == majorVsn && minorCur == minorVsn && microCur >= microVsn);
 }
 
 wxWinVersion wxGetWinVersion()
@@ -1282,16 +1260,45 @@ wxWinVersion wxGetWinVersion()
 
                     }
                     break;
-                    
+
                 case 10:
                     return wxWinVersion_10;
             }
+            break;
         default:
             // Do nothing just to silence GCC warning
             break;
     }
 
     return wxWinVersion_Unknown;
+}
+
+wxString wxGetCpuArchitectureName()
+{
+    SYSTEM_INFO si;
+    GetNativeSystemInfo(&si);
+
+    switch (si.wProcessorArchitecture)
+    {
+    case PROCESSOR_ARCHITECTURE_AMD64:
+        return "x64";
+
+    case PROCESSOR_ARCHITECTURE_ARM:
+        return "ARM";
+
+    case PROCESSOR_ARCHITECTURE_ARM64:
+        return "ARM64";
+
+    case PROCESSOR_ARCHITECTURE_IA64:
+        return "Itanium";
+
+    case PROCESSOR_ARCHITECTURE_INTEL:
+        return "x86";
+
+    case PROCESSOR_ARCHITECTURE_UNKNOWN:
+    default:
+        return wxString();
+    }
 }
 
 // ----------------------------------------------------------------------------

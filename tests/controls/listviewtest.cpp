@@ -8,9 +8,8 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#if wxUSE_LISTCTRL
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -18,6 +17,7 @@
 
 #include "wx/listctrl.h"
 #include "listbasetest.h"
+#include "testableframe.h"
 
 class ListViewTestCase : public ListBaseTestCase, public CppUnit::TestCase
 {
@@ -59,7 +59,8 @@ void ListViewTestCase::setUp()
 
 void ListViewTestCase::tearDown()
 {
-    wxDELETE(m_list);
+    DeleteTestWindow(m_list);
+    m_list = NULL;
 }
 
 void ListViewTestCase::Selection()
@@ -102,6 +103,8 @@ void ListViewTestCase::Selection()
 
 void ListViewTestCase::Focus()
 {
+    EventCounter focused(m_list, wxEVT_LIST_ITEM_FOCUSED);
+
     m_list->InsertColumn(0, "Column 0");
 
     m_list->InsertItem(0, "Item 0");
@@ -109,9 +112,13 @@ void ListViewTestCase::Focus()
     m_list->InsertItem(2, "Item 2");
     m_list->InsertItem(3, "Item 3");
 
+    CPPUNIT_ASSERT_EQUAL(0, focused.GetCount());
     CPPUNIT_ASSERT_EQUAL(-1, m_list->GetFocusedItem());
 
     m_list->Focus(0);
 
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
     CPPUNIT_ASSERT_EQUAL(0, m_list->GetFocusedItem());
 }
+
+#endif

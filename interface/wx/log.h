@@ -54,7 +54,18 @@ public:
      */
     const char *func;
 
-    /// Time when the log message was generated.
+    /**
+        Time in milliseconds since Epoch when the log message was generated.
+
+        @since 3.1.5
+     */
+    wxLongLong_t timestampMS;
+
+    /**
+        Time when the log message was generated.
+
+        @deprecated Please use timestampMS instead.
+     */
     time_t timestamp;
 
     /**
@@ -149,7 +160,28 @@ public:
 
 protected:
     /**
+        This function formats the time stamp part of the log message including
+        milliseconds.
+
+        Override this function if you need to customize just the time stamp
+        formatting in the log messages.
+
+        @param msec
+            Time to format as the number of milliseconds since
+            1970-01-01T00:00:00.
+
+        @return
+            The formatted time string, may be empty.
+
+        @since 3.1.5
+    */
+    virtual wxString FormatTimeMS(wxLongLong_t msec) const;
+
+    /**
         This function formats the time stamp part of the log message.
+
+        @deprecated This function only exists for compatibility, please
+        override FormatTimeMS() in the new code.
 
         Override this function if you need to customize just the time stamp.
 
@@ -507,7 +539,7 @@ public:
 
     /**
         Show all pending output and clear the buffer.
-        
+
         Some of wxLog implementations, most notably the standard wxLogGui class,
         buffer the messages (for example, to avoid showing the user a zillion of modal
         message boxes one after another -- which would be really annoying).
@@ -668,7 +700,7 @@ public:
         By default, the log messages are passed to the previously active log target.
         Calling this function with @false parameter disables this behaviour
         (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
-        it can be reenabled by calling it again with @a passMessages set to @true.
+        it can be re-enabled by calling it again with @a passMessages set to @true.
     */
     void PassMessages(bool passMessages);
 
@@ -801,7 +833,7 @@ public:
         The messages will be written in the encoding specified by the
         given @c wxMBConv.
 
-		The @a conv argument is only available in wxWidgets 3.1.1 and later.
+        The @a conv argument is only available in wxWidgets 3.1.1 and later.
 
         @note
             In practice, it is only advisable to specify @c wxConvUTF8 as
@@ -1398,8 +1430,8 @@ void wxVLogError(const char* formatString, va_list argPtr);
     make sense to separate them from other debug messages.
 
     Trace messages can be separated into different categories; these functions in facts
-    only log the message if the given @a mask is currently enabled in wxLog. 
-    This lets you selectively trace only some operations and not others by enabling the 
+    only log the message if the given @a mask is currently enabled in wxLog.
+    This lets you selectively trace only some operations and not others by enabling the
     desired trace masks with wxLog::AddTraceMask() or by setting the
     @ref overview_envvars "@c WXTRACE environment variable".
 

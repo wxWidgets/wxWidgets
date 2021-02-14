@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.08.03
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BOOKCTRL
 
@@ -493,11 +490,18 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
         if ( allowed )
         {
             if ( oldSel != wxNOT_FOUND )
-                DoShowPage(DoGetNonNullPage(oldSel), false);
+            {
+                if ( wxWindow* const oldPage = TryGetNonNullPage(oldSel) )
+                {
+                    DoShowPage(oldPage, false);
+                }
+            }
 
-            wxWindow* const page = DoGetNonNullPage(n);
-            page->SetSize(GetPageRect());
-            DoShowPage(page, true);
+            if ( wxWindow* const page = TryGetNonNullPage(n) )
+            {
+                page->SetSize(GetPageRect());
+                DoShowPage(page, true);
+            }
 
             // change selection now to ignore the selection change event
             m_selection = n;

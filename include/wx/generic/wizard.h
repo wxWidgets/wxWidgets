@@ -17,11 +17,11 @@
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
-class WXDLLIMPEXP_FWD_ADV wxWizardEvent;
+class WXDLLIMPEXP_FWD_CORE wxWizardEvent;
 class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
-class WXDLLIMPEXP_FWD_ADV wxWizardSizer;
+class WXDLLIMPEXP_FWD_CORE wxWizardSizer;
 
-class WXDLLIMPEXP_ADV wxWizard : public wxWizardBase
+class WXDLLIMPEXP_CORE wxWizard : public wxWizardBase
 {
 public:
     // ctor
@@ -131,6 +131,10 @@ protected:
     wxButton    *m_btnPrev,     // the "<Back" button
                 *m_btnNext;     // the "Next>" or "Finish" button
     wxStaticBitmap *m_statbmp;  // the control for the bitmap
+
+    // cached labels so their translations stay consistent
+    wxString    m_nextLabel,
+                m_finishLabel;
 
     // Border around page area sizer requested using SetBorder()
     int m_border;

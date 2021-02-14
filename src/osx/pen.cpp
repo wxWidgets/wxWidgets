@@ -70,6 +70,7 @@ wxPenRefData::wxPenRefData()
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
 : wxGDIRefData()
+    , m_colour(data.m_colour)
 {
     m_style = data.m_style;
     m_width = data.m_width;
@@ -77,7 +78,6 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
-    m_colour = data.m_colour;
 }
 
 wxPenRefData::wxPenRefData(const wxPenInfo& info)
@@ -274,7 +274,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
+    M_PENDATA->m_dash = const_cast<wxDash*>(Dash);
 
     RealizeResource();
 }

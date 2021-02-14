@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Allows to intercept all modal dialog calls.
+    Allows intercepting all modal dialog calls.
 
     This class can be used to hook into normal modal dialog handling for some
     special needs. One of the most common use cases is for testing: as

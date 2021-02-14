@@ -1,16 +1,16 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imagxpm.h 
-// Purpose:     interface of wxXPMHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imagxpm.h
+// Purpose:     interface of wxXPMHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
     @class wxXPMHandler
 
     This is the image handler for the XPM format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()

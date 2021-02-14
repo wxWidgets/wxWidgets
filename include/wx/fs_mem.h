@@ -64,11 +64,10 @@ protected:
 
     // the file name currently being searched for, i.e. the argument of the
     // last FindFirst() call or empty string if FindFirst() hasn't been called
-    // yet or FindNext() didn't find anything
+    // yet
     wxString m_findArgument;
 
-    // iterator into m_Hash used by FindFirst/Next(), possibly m_Hash.end() or
-    // even invalid (can only be used when m_findArgument is not empty)
+    // iterator into m_Hash used by FindFirst/Next(), possibly m_Hash.end()
     wxMemoryFSHash::const_iterator m_findIter;
 };
 

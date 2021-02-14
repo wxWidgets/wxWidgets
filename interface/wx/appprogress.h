@@ -9,7 +9,7 @@
     @class wxAppProgressIndicator
 
     A helper class that can be used to update the progress bar in the taskbar
-    button on Windows and the dock icon on OS X.
+    button on Windows and the dock icon on macOS.
 
     @library{wxcore}
     @category{misc}

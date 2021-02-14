@@ -2,7 +2,7 @@
 // Name:        classlist.h
 // Purpose:     ClassListDialog definition
 // Author:      Francesco Montorsi
-// Modified by: 
+// Modified by:
 // Created:     03/06/2007 14:49:55
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence
@@ -42,7 +42,7 @@
 // ----------------------------------------------------------------------------
 
 class ClassListDialog: public wxDialog
-{    
+{
     // we explicitly don't want to use the following macro:
     //     wxDECLARE_DYNAMIC_CLASS( ClassListDialog );
     // as otherwise the ClassListDialog class would appear in the list
@@ -52,17 +52,17 @@ class ClassListDialog: public wxDialog
 public:
     // Constructors
     ClassListDialog();
-    ClassListDialog( wxWindow* parent, wxWindowID id = SYMBOL_CLASSLISTDIALOG_IDNAME, 
-                       const wxString& caption = SYMBOL_CLASSLISTDIALOG_TITLE, 
-                       const wxPoint& pos = SYMBOL_CLASSLISTDIALOG_POSITION, 
-                       const wxSize& size = SYMBOL_CLASSLISTDIALOG_SIZE, 
+    ClassListDialog( wxWindow* parent, wxWindowID id = SYMBOL_CLASSLISTDIALOG_IDNAME,
+                       const wxString& caption = SYMBOL_CLASSLISTDIALOG_TITLE,
+                       const wxPoint& pos = SYMBOL_CLASSLISTDIALOG_POSITION,
+                       const wxSize& size = SYMBOL_CLASSLISTDIALOG_SIZE,
                        long style = SYMBOL_CLASSLISTDIALOG_STYLE );
 
     // Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_CLASSLISTDIALOG_IDNAME, 
-                 const wxString& caption = SYMBOL_CLASSLISTDIALOG_TITLE, 
-                 const wxPoint& pos = SYMBOL_CLASSLISTDIALOG_POSITION, 
-                 const wxSize& size = SYMBOL_CLASSLISTDIALOG_SIZE, 
+    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_CLASSLISTDIALOG_IDNAME,
+                 const wxString& caption = SYMBOL_CLASSLISTDIALOG_TITLE,
+                 const wxPoint& pos = SYMBOL_CLASSLISTDIALOG_POSITION,
+                 const wxSize& size = SYMBOL_CLASSLISTDIALOG_SIZE,
                  long style = SYMBOL_CLASSLISTDIALOG_STYLE );
 
     // Destructor

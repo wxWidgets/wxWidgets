@@ -9,4 +9,4 @@ for wxWINE is in place and that all that has to be done to get
 wxWINE running is to make WINE work as Win32. No joke intended.
 
   Robert Roebling
-  
+

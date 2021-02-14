@@ -226,7 +226,7 @@ public:
 
     virtual void* GetCairoContext() const wxOVERRIDE;
     virtual void* GetHandle() const wxOVERRIDE;
-    
+
     bool CanDrawBitmap() const wxOVERRIDE { return true; }
     void Clear() wxOVERRIDE;
     void SetFont( const wxFont& font ) wxOVERRIDE;
@@ -245,7 +245,9 @@ public:
     wxSize GetPPI() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE { return 24; }
     void SetBackgroundMode(int mode) wxOVERRIDE;
+#if wxUSE_PALETTE
     void SetPalette(const wxPalette& WXUNUSED(palette)) wxOVERRIDE { }
+#endif
     void SetResolution(int ppi);
 
     // overridden for wxPrinterDC Impl

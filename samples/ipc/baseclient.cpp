@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -78,7 +75,7 @@ public:
     bool Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic);
     void Disconnect();
     wxConnectionBase *OnMakeConnection() wxOVERRIDE;
-    bool IsConnected() { return m_connection != NULL; };
+    bool IsConnected() { return m_connection != NULL; }
 
     virtual void Notify() wxOVERRIDE;
 

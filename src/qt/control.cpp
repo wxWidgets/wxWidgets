@@ -58,9 +58,12 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
 
     // Let Qt handle the background:
     SetBackgroundStyle(wxBG_STYLE_SYSTEM);
-    PostCreation(false);
 
-    return CreateControl( parent, id, pos, size, style, validator, name );
+    if (!CreateControl( parent, id, pos, size, style, validator, name ))
+        return false;
+
+    PostCreation(false);
+    return true;
 }
 
 wxSize wxControl::DoGetBestSize() const

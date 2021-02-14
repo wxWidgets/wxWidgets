@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // Currently, only for Mac as a toolbar replacement.
 #if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
@@ -500,7 +497,7 @@ void wxButtonToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     dc.SetFont(GetFont());
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;

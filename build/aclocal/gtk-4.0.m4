@@ -2,18 +2,18 @@
 # Owen Taylor     1997-2001
 
 dnl AM_PATH_GTK_4_0([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
-dnl Test for GTK+, and define GTK_CFLAGS and GTK_LIBS, if gthread is specified in MODULES, 
+dnl Test for GTK+, and define GTK_CFLAGS and GTK_LIBS, if gthread is specified in MODULES,
 dnl pass to pkg-config
 dnl
 AC_DEFUN([AM_PATH_GTK_4_0],
-[m4_warn([obsolete], [AM_PATH_GTK_4_0 is deprecated, use PKG_CHECK_MODULES([GTK], [gtk+-4.0]) instead])
+[m4_warn([obsolete], [AM_PATH_GTK_4_0 is deprecated, use PKG_CHECK_MODULES([GTK], [gtk4]) instead])
 dnl Get the cflags and libraries from pkg-config
 dnl
 AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run a test GTK+ program],
 		    , enable_gtktest=yes)
   min_gtk_version=ifelse([$1], [], [3.90.0], [$1])
 
-  pkg_config_args="gtk+-4.0 >= $min_gtk_version"
+  pkg_config_args="gtk4 >= $min_gtk_version"
   for module in . $4
   do
       case "$module" in
@@ -58,11 +58,11 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
   if test x"$no_gtk" = x ; then
     GTK_CFLAGS=`$PKG_CONFIG $pkg_config_args --cflags`
     GTK_LIBS=`$PKG_CONFIG $pkg_config_args --libs`
-    gtk_config_major_version=`$PKG_CONFIG --modversion gtk+-4.0 | \
+    gtk_config_major_version=`$PKG_CONFIG --modversion gtk4 | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-    gtk_config_minor_version=`$PKG_CONFIG --modversion gtk+-4.0 | \
+    gtk_config_minor_version=`$PKG_CONFIG --modversion gtk4 | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-    gtk_config_micro_version=`$PKG_CONFIG --modversion gtk+-4.0 | \
+    gtk_config_micro_version=`$PKG_CONFIG --modversion gtk4 | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
     if test "x$enable_gtktest" = "xyes" ; then
       ac_save_CFLAGS="$CFLAGS"
@@ -79,7 +79,7 @@ dnl
 #include <stdio.h>
 #include <stdlib.h>
 
-int 
+int
 main ()
 {
   unsigned int major, minor, micro;
@@ -95,7 +95,7 @@ main ()
       (gtk_get_minor_version() != $gtk_config_minor_version) ||
       (gtk_get_micro_version() != $gtk_config_micro_version))
     {
-      printf("\n*** 'pkg-config --modversion gtk+-4.0' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n", 
+      printf("\n*** 'pkg-config --modversion gtk4' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
              $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
              gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version());
       printf ("*** was found! If pkg-config was correct, then it is best\n");
@@ -105,7 +105,7 @@ main ()
       printf("*** required on your system.\n");
       printf("*** If pkg-config was wrong, set the environment variable PKG_CONFIG_PATH\n");
       printf("*** to point to the correct configuration files\n");
-    } 
+    }
   else if ((gtk_get_major_version() != GTK_MAJOR_VERSION) ||
 	   (gtk_get_minor_version() != GTK_MINOR_VERSION) ||
            (gtk_get_micro_version() != GTK_MICRO_VERSION))
@@ -197,7 +197,7 @@ dnl   Tests for BACKEND-NAME in the GTK targets list
 dnl
 AC_DEFUN([GTK_CHECK_BACKEND],
 [m4_warn([obsolete], [GTK_CHECK_BACKEND is deprecated, use PKG_CHECK_MODULES([GTK_X11], [gtk+-x11-4.0]) or similar instead])
-  pkg_config_args=ifelse([$1],,gtk+-4.0, gtk+-$1-4.0)
+  pkg_config_args=ifelse([$1],,gtk4, gtk4-$1)
   min_gtk_version=ifelse([$2],,4.0.0,$2)
   pkg_config_args="$pkg_config_args >= $min_gtk_version"
 

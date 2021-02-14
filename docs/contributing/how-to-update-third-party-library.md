@@ -42,7 +42,14 @@ one:
     $ git push --set-upstream git@github.com:wxWidgets/libexpat.git wx
 
 
-3. Updating the main repository
+3. Generating build files (libexpat, libtiff)
+---------------------------------------------
+
+We include the generated build files of libexpat and libtiff. For libexpat run
+`buildconf.sh`. For libtiff run `autogen.sh`. Commit the changes.
+
+
+4. Updating the main repository
 -------------------------------
 
 If there are any changes to the source files used by the library, update the
@@ -54,7 +61,7 @@ manually.
 Commit these changes and the submodule and create a PR to test them as usual.
 
 
-4. Special instructions for libpng
+5. Special instructions for libpng
 ----------------------------------
 
 We use a special hack for libpng as we want to prefix all its symbols with

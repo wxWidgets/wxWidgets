@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SPLASH
 
@@ -144,8 +141,8 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
                                            wxWindowID id, const wxPoint& pos,
                                            const wxSize& size, long style)
     : wxWindow(parent, id, pos, size, style)
+    , m_bitmap(bitmap)
 {
-    m_bitmap = bitmap;
 
 #if !defined(__WXGTK__) && wxUSE_PALETTE
     bool hiColour = (wxDisplayDepth() >= 16) ;

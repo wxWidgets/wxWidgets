@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -43,6 +40,7 @@ private:
         CPPUNIT_TEST( StdFind );
         CPPUNIT_TEST( StdFindFirst );
         CPPUNIT_TEST( StdFindLast );
+        CPPUNIT_TEST( StdStartsEndsWith );
         CPPUNIT_TEST( StdInsert );
         CPPUNIT_TEST( StdReplace );
         CPPUNIT_TEST( StdRFind );
@@ -65,6 +63,7 @@ private:
     void StdFind();
     void StdFindFirst();
     void StdFindLast();
+    void StdStartsEndsWith();
     void StdInsert();
     void StdReplace();
     void StdRFind();
@@ -396,6 +395,28 @@ void StdStringTestCase::StdFindLast()
     CPPUNIT_ASSERT( s1.find_last_of(wxT("a"), 18) == 18u );
 }
 
+void StdStringTestCase::StdStartsEndsWith()
+{
+    const wxString s(wxT("Hello, world!"));
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello, ")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello, world!")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Hello, world!!!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Goodbye")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Hi")) );
+
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("Hello, world!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("world!")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Hello")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("very long string")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("?")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Hello, world")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Gello, world!")) );
+}
+
 void StdStringTestCase::StdInsert()
 {
     wxString s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
@@ -615,9 +636,11 @@ void StdStringTestCase::StdConversion()
     wxStdWideString s8(s4);
     CPPUNIT_ASSERT( s8 == "hello" );
 
+#if wxUSE_UNICODE
     std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
     wxString s10 = wxString::FromUTF8(s9);
     CPPUNIT_ASSERT_EQUAL( s9, s10.ToStdString(wxConvUTF8) );
+#endif // wxUSE_UNICODE
 
     std::string s11("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
     CPPUNIT_ASSERT_EQUAL( wxString::FromUTF8(s11), "" );
@@ -626,13 +649,7 @@ void StdStringTestCase::StdConversion()
 
 void StdStringTestCase::StdAlgo()
 {
-    // Unfortunately this currently doesn't work with libc++ in C++11 mode, see
-    // comment near iter_swap() definition in wx/string.h.
-#if __cplusplus < 201103L || !defined(_LIBCPP_VERSION)
     wxString s("AB");
     std::reverse(s.begin(), s.end());
     CPPUNIT_ASSERT_EQUAL( "BA", s );
-#else
-    wxLogWarning("Skipping std::reverse() test broken with C++11/libc++");
-#endif
 }

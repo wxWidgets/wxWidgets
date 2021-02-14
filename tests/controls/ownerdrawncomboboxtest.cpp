@@ -14,9 +14,6 @@
 
 #if wxUSE_ODCOMBOBOX
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -75,12 +72,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(OwnerDrawnComboBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( OwnerDrawnComboBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( OwnerDrawnComboBoxTestCase,
-                                       "OwnerDrawnComboBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(OwnerDrawnComboBoxTestCase,
+                               "[OwnerDrawnComboBoxTestCase][item-container]");
 
 // ----------------------------------------------------------------------------
 // test initialization

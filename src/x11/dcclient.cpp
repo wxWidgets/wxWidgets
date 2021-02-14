@@ -28,7 +28,9 @@
 #include "wx/x11/dcclient.h"
 #include "wx/x11/dcmemory.h"
 
+#if wxUSE_CAIRO
 #include "cairo-xlib.h"
+#endif
 
 #if wxUSE_UNICODE
 #include "glib.h"
@@ -201,8 +203,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC* owner, wxWindow *window )
 
     SetUpDC();
 
-    /* this must be done after SetUpDC, bacause SetUpDC calls the
-       repective SetBrush, SetPen, SetBackground etc functions
+    /* this must be done after SetUpDC, because SetUpDC calls the
+       respective SetBrush, SetPen, SetBackground etc functions
        to set up the DC. SetBackground call m_window->SetBackground
        and this might not be desired as the standard dc background
        is white whereas a window might assume gray to be the
@@ -345,6 +347,7 @@ void wxWindowDCImpl::SetUpDC()
     }
 }
 
+#if wxUSE_CAIRO
 void* wxWindowDCImpl::GetCairoContext() const
 {
     int width, height;
@@ -355,6 +358,7 @@ void* wxWindowDCImpl::GetCairoContext() const
     cairo_t *cr = cairo_create(surface);
     return cr;
 }
+#endif
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
@@ -1606,7 +1610,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     // First draw a rectangle representing the text background, if a text
     // background is specified
-    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxTRANSPARENT))
+    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxBRUSHSTYLE_TRANSPARENT))
     {
         // Since X draws from the baseline of the text, must add the text height
         int cx = 0;
@@ -1664,6 +1668,7 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
                                    wxCoord x, wxCoord y,
                                    double angle)
 {
+#if wxUSE_CAIRO
     // use cairo to draw rotated text
     cairo_surface_t *surface = cairo_xlib_surface_create((Display*) m_display,
                                                          (Drawable) m_x11window,
@@ -1682,6 +1687,9 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
     cairo_show_text(cr, text.utf8_str());
     cairo_restore(cr);
     cairo_destroy(cr);
+#else
+    #warning "Drawing rotated text is not implemented without Cairo"
+#endif    
 }
 
 void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
@@ -1907,35 +1915,35 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
     int lineStyle = LineSolid;
     switch (m_pen.GetStyle())
     {
-        case wxUSER_DASH:
+        case wxPENSTYLE_USER_DASH:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = m_pen.GetDashCount();
             req_dash = (wxX11Dash*)m_pen.GetDash();
             break;
         }
-        case wxDOT:
+        case wxPENSTYLE_DOT:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = 2;
             req_dash = dotted;
             break;
         }
-        case wxLONG_DASH:
+        case wxPENSTYLE_LONG_DASH:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = 2;
             req_dash = long_dashed;
             break;
         }
-        case wxSHORT_DASH:
+        case wxPENSTYLE_SHORT_DASH:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = 2;
             req_dash = short_dashed;
             break;
         }
-        case wxDOT_DASH:
+        case wxPENSTYLE_DOT_DASH:
         {
 //            lineStyle = LineDoubleDash;
             lineStyle = LineOnOffDash;
@@ -1944,10 +1952,10 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             break;
         }
 
-        case wxTRANSPARENT:
-        case wxSTIPPLE_MASK_OPAQUE:
-        case wxSTIPPLE:
-        case wxSOLID:
+        case wxPENSTYLE_TRANSPARENT:
+        case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
+        case wxPENSTYLE_STIPPLE:
+        case wxPENSTYLE_SOLID:
         default:
         {
             lineStyle = LineSolid;
@@ -1956,6 +1964,10 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             break;
         }
     }
+
+    wxUnusedVar(req_dash);
+    wxUnusedVar(req_nb_dash);
+    #warning "TODO: support for dashed lines in wxX11"
 
     int capStyle = CapRound;
     switch (m_pen.GetCap())
@@ -2033,7 +2045,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     if (m_brush.IsHatch())
     {
         XSetFillStyle( (Display*) m_display, (GC) m_brushGC, FillStippled );
-        int num = m_brush.GetStyle() - wxBDIAGONAL_HATCH;
+        int num = m_brush.GetStyle() - wxBRUSHSTYLE_BDIAGONAL_HATCH;
         XSetStipple( (Display*) m_display, (GC) m_brushGC, hatches[num] );
     }
 }
@@ -2078,7 +2090,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
     if (m_backgroundBrush.IsHatch())
     {
         XSetFillStyle( (Display*) m_display, (GC) m_bgGC, FillStippled );
-        int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
+        int num = m_backgroundBrush.GetStyle() - wxBRUSHSTYLE_BDIAGONAL_HATCH;
         XSetStipple( (Display*) m_display, (GC) m_bgGC, hatches[num] );
     }
 }
@@ -2203,7 +2215,7 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     m_backgroundMode = mode;
 
 #if wxUSE_NANOX
-    GrSetGCUseBackground((GC) m_textGC, mode == wxTRANSPARENT ? FALSE : TRUE);
+    GrSetGCUseBackground((GC) m_textGC, mode == wxBRUSHSTYLE_TRANSPARENT ? FALSE : TRUE);
 #endif
 
     if (!m_x11window) return;
@@ -2214,7 +2226,7 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     if (m_brush.GetStyle() != wxBRUSHSTYLE_SOLID && m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
         XSetFillStyle( (Display*) m_display, (GC) m_brushGC,
-          (m_backgroundMode == wxTRANSPARENT) ? FillStippled : FillOpaqueStippled );
+          (m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT) ? FillStippled : FillOpaqueStippled );
     }
 }
 

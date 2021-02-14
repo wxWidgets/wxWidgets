@@ -182,7 +182,7 @@ public:
       so that this button is only added to a dialog for non-Windows platforms
       (use wxDIALOG_EX_CONTEXTHELP on Windows).
 
-    Note that on OS X, the cursor does not change when in context-sensitive
+    Note that on macOS, the cursor does not change when in context-sensitive
     help mode.
 
     @library{wxcore}
@@ -257,8 +257,8 @@ public:
             Button position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Button size. 
-            If ::wxDefaultSize is specified then the button is sized appropriately 
+            Button size.
+            If ::wxDefaultSize is specified then the button is sized appropriately
             for the question mark bitmap.
         @param style
             Window style.

@@ -12,7 +12,8 @@
 
 #include <QtWidgets/QFrame>
 
-wxStaticLine::wxStaticLine()
+wxStaticLine::wxStaticLine() :
+    m_qtFrame(NULL)
 {
 }
 

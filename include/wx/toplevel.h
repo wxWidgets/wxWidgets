@@ -276,9 +276,13 @@ public:
     virtual bool IsTopNavigationDomain(NavigationKind kind) const wxOVERRIDE;
     virtual bool IsVisible() const { return IsShown(); }
 
+    // override to do TLW-specific layout: we resize our unique child to fill
+    // the entire client area
+    virtual bool Layout() wxOVERRIDE;
+
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);
-    void OnSize(wxSizeEvent& WXUNUSED(event)) { DoLayout(); }
+    void OnSize(wxSizeEvent& WXUNUSED(event)) { Layout(); }
 
     // Get rect to be used to center top-level children
     virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h);
@@ -326,9 +330,8 @@ protected:
     // send the iconize event, return true if processed
     bool SendIconizeEvent(bool iconized = true);
 
-    // do TLW-specific layout: we resize our unique child to fill the entire
-    // client area
-    void DoLayout();
+    // this method is only kept for compatibility, call Layout() instead.
+    void DoLayout() { Layout(); }
 
     static int WidthDefault(int w) { return w == wxDefaultCoord ? GetDefaultSize().x : w; }
     static int HeightDefault(int h) { return h == wxDefaultCoord ? GetDefaultSize().y : h; }
@@ -391,7 +394,7 @@ protected:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
-                   const wxString& name = wxFrameNameStr)
+                   const wxString& name = wxASCII_STR(wxFrameNameStr))
             : wxTopLevelWindowNative(parent, winid, title,
                                      pos, size, style, name)
         {

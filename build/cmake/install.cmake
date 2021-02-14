@@ -12,18 +12,44 @@ if(NOT wxBUILD_INSTALL)
 endif()
 
 install(CODE "message(STATUS \"Installing: Headers...\")")
-wx_install(
-    DIRECTORY "${wxSOURCE_DIR}/include/wx"
-    DESTINATION "include")
 if(MSVC)
+    wx_install(
+        DIRECTORY "${wxSOURCE_DIR}/include/wx"
+        DESTINATION "include")
     wx_install(
         DIRECTORY "${wxSOURCE_DIR}/include/msvc"
         DESTINATION "include")
+else()
+    wx_install(
+        DIRECTORY "${wxSOURCE_DIR}/include/wx"
+        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
 endif()
-if(MSVC OR MINGW)
+
+# setup header and wx-config
+if(MSVC)
     wx_install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
         DESTINATION "lib${wxPLATFORM_LIB_DIR}")
+else()
+    wx_install(
+        DIRECTORY "${wxSETUP_HEADER_PATH}"
+        DESTINATION "lib/wx/include")
+
+    wx_install(
+        FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
+        DESTINATION "lib/wx/config"
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                    GROUP_EXECUTE GROUP_READ
+                    WORLD_EXECUTE WORLD_READ
+        )
+
+    install(DIRECTORY DESTINATION "bin")
+    install(CODE "execute_process( \
+        COMMAND ${CMAKE_COMMAND} -E create_symlink \
+        ${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID} \
+        ${CMAKE_INSTALL_PREFIX}/bin/wx-config \
+        )"
+    )
 endif()
 
 # uninstall target
@@ -34,6 +60,12 @@ else()
 endif()
 
 if(NOT TARGET ${UNINST_NAME})
+    # these files are not added to the install manifest
+    set(WX_EXTRA_UNINSTALL_FILES
+        "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
+        "${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
+        )
+
     configure_file(
         "${wxSOURCE_DIR}/build/cmake/uninstall.cmake.in"
         "${wxBINARY_DIR}/uninstall.cmake"

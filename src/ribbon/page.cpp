@@ -9,9 +9,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RIBBON
 
@@ -82,7 +79,7 @@ wxRibbonPageScrollButton::wxRibbonPageScrollButton(wxRibbonPage* sibling,
                  const wxSize& size,
                  long style) : wxRibbonControl(sibling->GetParent(), id, pos, size, wxBORDER_NONE)
 {
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
     m_sibling = sibling;
     m_flags = (style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) | wxRIBBON_SCROLL_BTN_FOR_PAGE;
 }
@@ -198,7 +195,6 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
     SetName(label);
 
     SetLabel(label);
-    m_old_size = wxSize(0, 0);
     m_icon = icon;
     m_scroll_left_btn = NULL;
     m_scroll_right_btn = NULL;
@@ -207,7 +203,7 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
     m_scroll_amount = 0;
     m_scroll_buttons_visible = false;
 
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     wxDynamicCast(GetParent(), wxRibbonBar)->AddPage(this);
 }
@@ -1009,7 +1005,6 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 {
     while(minimum_amount > 0)
     {
-        int largest_size = 0;
         wxRibbonPanel* largest_panel = NULL;
         wxSize* largest_panel_size = NULL;
         wxSize* panel_size = m_size_calc_array;
@@ -1033,6 +1028,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
         }
         else
         {
+            int largest_size = 0;
             for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                       node;
                       node = node->GetNext(), ++panel_size )

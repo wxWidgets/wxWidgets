@@ -142,6 +142,7 @@ public:
 
         [m_origFont release];
         [m_origTextColour release];
+        [m_origBackgroundColour release];
     }
 
     NSCell* GetColumnCell() const { return m_ColumnCell; }
@@ -186,6 +187,7 @@ public:
     // ones that do.
     NSFont *GetOriginalFont() const { return m_origFont; }
     NSColor *GetOriginalTextColour() const { return m_origTextColour; }
+    NSColor *GetOriginalBackgroundColour() const { return m_origBackgroundColour; }
 
     void SaveOriginalFont(NSFont *font)
     {
@@ -195,6 +197,11 @@ public:
     void SaveOriginalTextColour(NSColor *textColour)
     {
         m_origTextColour = [textColour retain];
+    }
+
+    void SaveOriginalBackgroundColour(NSColor *backgroundColour)
+    {
+        m_origBackgroundColour = [backgroundColour retain];
     }
 
     // The ellipsization mode which we need to set for each cell being rendered.
@@ -226,6 +233,7 @@ private:
     // we own those if they're non-NULL
     NSFont *m_origFont;
     NSColor *m_origTextColour;
+    NSColor *m_origBackgroundColour;
 
     wxEllipsizeMode m_ellipsizeMode;
 
@@ -486,10 +494,7 @@ public:
     virtual wxDataViewItem GetTopItem() const;
     virtual bool IsExpanded(const wxDataViewItem& item) const;
     virtual bool Reload();
-    virtual bool Remove(const wxDataViewItem& parent,
-                        const wxDataViewItem& item);
-    virtual bool Remove(const wxDataViewItem& parent,
-                        const wxDataViewItemArray& item);
+    virtual bool Remove(const wxDataViewItem& parent);
     virtual bool Update(const wxDataViewColumn* columnPtr);
     virtual bool Update(const wxDataViewItem& parent,
                         const wxDataViewItem& item);
@@ -509,6 +514,7 @@ public:
     virtual int  GetSelections(wxDataViewItemArray& sel)   const;
     virtual bool IsSelected(const wxDataViewItem& item) const;
     virtual void Select(const wxDataViewItem& item);
+    virtual void Select(const wxDataViewItemArray& items);
     virtual void SelectAll();
     virtual void Unselect(const wxDataViewItem& item);
     virtual void UnselectAll();
@@ -524,7 +530,7 @@ public:
     //
     virtual void DoSetIndent(int indent);
 
-    virtual void DoExpand(const wxDataViewItem& item);
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren);
 
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
@@ -532,7 +538,7 @@ public:
     virtual void SetRowHeight(int height);
     virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height);
     virtual void OnSize();
-    
+
     virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
     // drag & drop helper methods
@@ -542,7 +548,7 @@ public:
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
 
-    virtual void SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true);
+    virtual void SetFont(const wxFont& font);
 
 private:
     void InitOutlineView(long style);
@@ -551,6 +557,9 @@ private:
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;
+
+    // Width of expander in pixels, computed on demand.
+    int m_expanderWidth;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_

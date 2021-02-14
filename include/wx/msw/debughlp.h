@@ -3,7 +3,7 @@
 // Purpose:     wraps dbghelp.h standard file
 // Author:      Vadim Zeitlin, Suzumizaki-kimitaka
 // Created:     2005-01-08 (extracted from msw/crashrpt.cpp)
-// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -305,7 +305,7 @@ public:
     // suffix in some cases. These 2 helper macros call the macro with the
     // correct arguments in both cases.
     #define wxSYM_CALL(what, name)  what(name, name)
-#if defined(_M_AMD64)
+#if defined(_M_AMD64) || defined(_M_ARM64)
     #define wxSYM_CALL_64(what, name)  what(name, name ## 64)
 
     // Also undo all the "helpful" definitions done by imagehlp.h that map 32

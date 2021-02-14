@@ -13,6 +13,7 @@ endif()
 
 file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
+list(APPEND files @WX_EXTRA_UNINSTALL_FILES@)
 foreach(file ${files})
   message(STATUS "Uninstalling $ENV{DESTDIR}${file}")
   if(IS_SYMLINK "$ENV{DESTDIR}${file}" OR EXISTS "$ENV{DESTDIR}${file}")

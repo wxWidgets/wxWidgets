@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -154,7 +151,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     html = new wxHtmlWindow(&dlg, wxID_ANY, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
     html -> SetBorders(0);
-    html -> LoadPage(wxT("data/about.htm"));
+    html -> LoadPage("data/about.htm");
     html -> SetInitialSize(wxSize(html -> GetInternalRepresentation() -> GetWidth(),
                                   html -> GetInternalRepresentation() -> GetHeight()));
 

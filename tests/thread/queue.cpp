@@ -13,9 +13,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -55,7 +52,7 @@ private:
         {}
 
         // thread execution starts here
-        virtual void *Entry();
+        virtual void *Entry() wxOVERRIDE;
 
         // Thread message queue
         Queue& GetQueue()

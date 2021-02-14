@@ -68,7 +68,7 @@ enum wxSashDragStatus
            with ids in the given range have their sashes dragged.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{miscwnd}
 
     @see wxSashEvent, wxSashLayoutWindow, @ref overview_events
@@ -241,7 +241,7 @@ public:
         the given range have their sashes dragged.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 
     @see wxSashWindow, @ref overview_events
@@ -275,7 +275,7 @@ public:
     */
     wxSashEdgePosition GetEdge() const;
 
-    
+
     void SetEdge(wxSashEdgePosition edge);
     void SetDragRect(const wxRect& rect);
     void SetDragStatus(wxSashDragStatus status);

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -913,7 +910,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     // draw column with calendar week nr
     if ( HasFlag( wxCAL_SHOW_WEEK_NUMBERS ) && IsExposed( 0, y, m_calendarWeekWidth, m_heightRow * 6 ))
     {
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
         dc.SetBrush(wxBrush(m_colHeaderBg, wxBRUSHSTYLE_SOLID));
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxPENSTYLE_SOLID));
         dc.DrawRectangle( 0, y, m_calendarWeekWidth, m_heightRow * 6 );
