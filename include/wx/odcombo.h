@@ -93,6 +93,7 @@ public:
     virtual void OnComboDoubleClick() wxOVERRIDE;
     virtual bool LazyCreate() wxOVERRIDE;
     virtual bool FindItem(const wxString& item, wxString* trueItem) wxOVERRIDE;
+    virtual void OnDPIChanged(wxDPIChangedEvent& event);
 
     // Item management
     void SetSelection( int item );

@@ -20,6 +20,7 @@
 
 
 #include "wx/combo.h"
+#include "wx/display.h"
 
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
@@ -2292,10 +2293,11 @@ void wxComboCtrlBase::ShowPopup()
     int maxHeightPopup;
     wxSize ctrlSz = GetSize();
 
-    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y, this );
+    wxRect displayRect = wxDisplay(this).GetGeometry();
+    screenHeight = displayRect.GetHeight();
     scrPos = GetScreenPosition();
 
-    spaceAbove = scrPos.y;
+    spaceAbove = scrPos.y - displayRect.GetY();
     spaceBelow = screenHeight - spaceAbove - ctrlSz.y;
 
     maxHeightPopup = spaceBelow;
@@ -2370,7 +2372,7 @@ void wxComboCtrlBase::ShowPopup()
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
         leftX -= ctrlSz.x;
 
-    int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X, this );
+    int screenWidth = displayRect.GetWidth();
 
     // If there is not enough horizontal space, anchor on the other side.
     // If there is no space even then, place the popup at x 0.

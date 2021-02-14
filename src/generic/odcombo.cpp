@@ -84,6 +84,10 @@ bool wxVListBoxComboPopup::Create(wxWindow* parent)
     // TODO: Move this to SetFont
     m_itemHeight = m_combo->GetCharHeight();
 
+    // Bind to the DPI event of the combobox. We get our own once the popup
+    // is shown, but this is too late, m_itemHeight is already being used.
+    m_combo->Bind(wxEVT_DPI_CHANGED, &wxVListBoxComboPopup::OnDPIChanged, this);
+
     return true;
 }
 
@@ -102,6 +106,11 @@ void wxVListBoxComboPopup::SetFocus()
 #else
     wxVListBox::SetFocus();
 #endif
+}
+
+void wxVListBoxComboPopup::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    m_itemHeight = m_combo->GetCharHeight();
 }
 
 bool wxVListBoxComboPopup::LazyCreate()
