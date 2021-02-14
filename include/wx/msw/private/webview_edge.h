@@ -41,17 +41,21 @@ public:
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
+    EventRegistrationToken m_sourceChangedToken = { };
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
     EventRegistrationToken m_documentTitleChangedToken = { };
     EventRegistrationToken m_contentLoadingToken = { };
+    EventRegistrationToken m_containsFullScreenElementChangedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
+    HRESULT OnSourceChanged(ICoreWebView2* sender, ICoreWebView2SourceChangedEventArgs* args);
     HRESULT OnNavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
     HRESULT OnNewWindowRequested(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args);
     HRESULT OnDocumentTitleChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnContentLoading(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args);
+    HRESULT OnContainsFullScreenElementChanged(ICoreWebView2* sender, IUnknown* args);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);

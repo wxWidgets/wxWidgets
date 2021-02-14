@@ -254,6 +254,34 @@ wxgtk_webview_webkit_new_window(WebKitPolicyDecision *decision,
 }
 
 static gboolean
+wxgtk_webview_webkit_enter_fullscreen(WebKitWebView *WXUNUSED(web_view),
+                                      wxWebViewWebKit *webKitCtrl)
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_FULLSCREEN_CHANGED,
+                                       webKitCtrl->GetId(),
+                                       wxString(),
+                                       wxString());
+    event.SetInt(1);
+    webKitCtrl->HandleWindowEvent(event);
+
+    return FALSE;
+}
+
+static gboolean
+wxgtk_webview_webkit_leave_fullscreen(WebKitWebView *WXUNUSED(web_view),
+                                      wxWebViewWebKit *webKitCtrl)
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_FULLSCREEN_CHANGED,
+                                       webKitCtrl->GetId(),
+                                       wxString(),
+                                       wxString());
+    event.SetInt(0);
+    webKitCtrl->HandleWindowEvent(event);
+
+    return FALSE;
+}
+
+static gboolean
 wxgtk_webview_webkit_decide_policy(WebKitWebView *web_view,
                                    WebKitPolicyDecision *decision,
                                    WebKitPolicyDecisionType type,
@@ -582,6 +610,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect(m_web_view, "create",
                      G_CALLBACK(wxgtk_webview_webkit_create_webview), this);
+
+    g_signal_connect(m_web_view, "enter-fullscreen",
+                     G_CALLBACK(wxgtk_webview_webkit_enter_fullscreen), this);
+
+    g_signal_connect(m_web_view, "leave-fullscreen",
+                     G_CALLBACK(wxgtk_webview_webkit_leave_fullscreen), this);
 
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
     g_signal_connect(findctrl, "counted-matches",

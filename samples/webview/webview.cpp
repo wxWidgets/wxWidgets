@@ -120,6 +120,7 @@ public:
     void OnDocumentLoaded(wxWebViewEvent& evt);
     void OnNewWindow(wxWebViewEvent& evt);
     void OnTitleChanged(wxWebViewEvent& evt);
+    void OnFullScreenChanged(wxWebViewEvent& evt);
     void OnSetPage(wxCommandEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnViewTextRequest(wxCommandEvent& evt);
@@ -321,7 +322,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
     m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
     m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
-    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
+    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, FromDIP(wxSize(400, -1)), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));
     m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
 
@@ -409,7 +410,7 @@ WebFrame::WebFrame(const wxString& url) :
     SetSizer(topsizer);
 
     //Set a more sensible size for web browsing
-    SetSize(wxSize(800, 600));
+    SetSize(FromDIP(wxSize(800, 600)));
 
     // Create the Tools menu
     m_tools_menu = new wxMenu();
@@ -536,6 +537,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_WEBVIEW_ERROR, &WebFrame::OnError, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_NEWWINDOW, &WebFrame::OnNewWindow, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_TITLE_CHANGED, &WebFrame::OnTitleChanged, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, &WebFrame::OnFullScreenChanged, this, m_browser->GetId());
 
     // Connect the menu events
     Bind(wxEVT_MENU, &WebFrame::OnSetPage, this, setPage->GetId());
@@ -895,6 +897,12 @@ void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
 {
     SetTitle(evt.GetString());
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
+}
+
+void WebFrame::OnFullScreenChanged(wxWebViewEvent & evt)
+{
+    wxLogMessage("Full screen changed; status = %d", evt.GetInt());
+    ShowFullScreen(evt.GetInt() != 0);
 }
 
 void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))

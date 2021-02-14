@@ -317,7 +317,7 @@ public:
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
     It is available for Windows 7 and newer.
     The following features are currently unsupported with this backend:
-    virtual filesystems, custom urls, find.
+    virtual filesystems, custom urls.
 
     This backend is not enabled by default, to build it follow these steps:
     - Visual Studio 2015, or newer, is required
@@ -428,6 +428,11 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_FULL_SCREEN_CHANGED(id, func)}
+       Process a @c EVT_WEBVIEW_FULL_SCREEN_CHANGED event, generated when
+       the page wants to enter or leave fullscreen. Use GetInt to get the status.
+       Currently only implemented for the edge and WebKit2GTK+ backend
+       and is only available in wxWidgets 3.1.5 or later.
     @endEventTable
 
     @since 2.9.3

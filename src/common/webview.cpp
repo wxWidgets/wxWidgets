@@ -48,6 +48,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 
@@ -202,10 +203,23 @@ void wxWebView::SelectAll()
     RunScript("window.getSelection().selectAllChildren(document.body);");
 }
 
-long wxWebView::Find(const wxString& WXUNUSED(text), int WXUNUSED(flags))
+long wxWebView::Find(const wxString& text, int flags)
 {
-    // TODO: could probably be implemented by script
-    return -1;
+    if (text != m_findText)
+        ClearSelection();
+    m_findText = text;
+    wxString output;
+    RunScript(wxString::Format("window.find('%s', %s, %s, %s, %s)",
+        text,
+        (flags & wxWEBVIEW_FIND_MATCH_CASE) ? "true" : "false",
+        (flags & wxWEBVIEW_FIND_BACKWARDS) ? "true" : "false",
+        (flags & wxWEBVIEW_FIND_WRAP) ? "true" : "false",
+        (flags & wxWEBVIEW_FIND_ENTIRE_WORD) ? "true" : "false"
+        ), &output);
+    if (output.IsSameAs("false", false))
+        return wxNOT_FOUND;
+    else
+        return 1;
 }
 
 // static
