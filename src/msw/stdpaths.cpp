@@ -261,10 +261,13 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     // there can also be an architecture-dependent parent directory, ignore it
     // as well
 #ifdef __WIN64__
+    IgnoreAppSubDir("Win64");
     IgnoreAppSubDir("x64");
+    IgnoreAppSubDir("x86_64");
     IgnoreAppSubDir("ARM64");
 #else // __WIN32__
     IgnoreAppSubDir("Win32");
+    IgnoreAppSubDir("x86");
 #endif // __WIN64__/__WIN32__
 
     wxString compilerPrefix;
