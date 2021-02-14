@@ -1411,19 +1411,19 @@ bool wxBitmap::HasAlpha() const
 }
 
 #if WXWIN_COMPATIBILITY_3_0
-void wxBitmap::SetWidth(int w)
+void wxBitmap::SetWidth(int WXUNUSED_UNLESS_DEBUG(w))
 {
     AllocExclusive();
     wxASSERT_MSG( GetWidth() == w, "Changing the bitmap width is not supported");
 }
 
-void wxBitmap::SetHeight(int h)
+void wxBitmap::SetHeight(int WXUNUSED_UNLESS_DEBUG(h))
 {
     AllocExclusive();
     wxASSERT_MSG( GetHeight() == h, "Changing the bitmap height is not supported");
 }
 
-void wxBitmap::SetDepth(int d)
+void wxBitmap::SetDepth(int WXUNUSED_UNLESS_DEBUG(d))
 {
     AllocExclusive();
     wxASSERT_MSG( d == -1 || GetDepth() == d, "Changing the bitmap depth is not supported");

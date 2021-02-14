@@ -46,8 +46,10 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "CURL";
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
 
+#ifdef __WXDEBUG__
 static const wxStringCharType* wxNO_IMPL_MSG
     = wxS("can't be used with an invalid/uninitialized object");
+#endif
 
 #define wxCHECK_IMPL(rc) wxCHECK_MSG( m_impl, (rc), wxNO_IMPL_MSG )
 #define wxCHECK_IMPL_VOID() wxCHECK_RET( m_impl, wxNO_IMPL_MSG )

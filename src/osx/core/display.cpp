@@ -226,6 +226,7 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
     CGDisplayCount theCount;
     CGDisplayErr err = CGGetDisplaysWithPoint(thePoint, 1, &theID, &theCount);
     wxASSERT(err == CGDisplayNoErr);
+    wxUnusedVar(err); // suppress "unused" warning in non-debug builds
 
     if (theCount)
         return wxOSXGetDisplayFromID(theID);
