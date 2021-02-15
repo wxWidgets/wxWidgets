@@ -433,6 +433,9 @@ public:
        the page wants to enter or leave fullscreen. Use GetInt to get the status.
        Currently only implemented for the edge and WebKit2GTK+ backend
        and is only available in wxWidgets 3.1.5 or later.
+    @event{EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED}
+        Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
+        only available in wxWidgets 3.1.5 or later.
     @endEventTable
 
     @since 2.9.3
