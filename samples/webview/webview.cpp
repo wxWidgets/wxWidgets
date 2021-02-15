@@ -398,6 +398,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
 #endif
     m_browser->Create(this, wxID_ANY, url, wxDefaultPosition, wxDefaultSize);
+    m_browser->AddScriptMessageHandler("wx");
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
 #ifndef __WXMAC__

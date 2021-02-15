@@ -89,6 +89,7 @@ public:
     virtual bool IsEditable() const wxOVERRIDE;
 
     bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
+    virtual void AddScriptMessageHandler(const wxString& name) wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
