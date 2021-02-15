@@ -1691,6 +1691,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
         SetCellAttr(0, 0);
         CHECK_ATTR_COUNT( 1 );
 
+        // Overwrite existing attribute with another.
+        SetCellAttr(0, 0);
+        CHECK_ATTR_COUNT( 1 );
+
         m_grid->SetAttr(0, 0, NULL);
         CHECK_ATTR_COUNT( 0 );
 
