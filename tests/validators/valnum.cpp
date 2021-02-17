@@ -122,7 +122,10 @@ void NumValidatorTestCase::TransferUnsigned()
     CPPUNIT_ASSERT( valUnsigned.TransferFromWindow() );
     CPPUNIT_ASSERT_EQUAL( 234, value );
 
-    m_text->ChangeValue("18446744073709551616"); // == ULLONG_MAX + 1
+    m_text->ChangeValue("4294967295"); // == ULONG_MAX
+    CPPUNIT_ASSERT( valUnsigned.TransferFromWindow() );
+
+    m_text->ChangeValue("4294967296"); // == ULONG_MAX + 1
     CPPUNIT_ASSERT( !valUnsigned.TransferFromWindow() );
 
     m_text->Clear();
