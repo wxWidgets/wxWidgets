@@ -136,7 +136,7 @@ void NumValidatorTestCase::TransferUnsigned()
     valUnsigned2.SetWindow(m_text);
 
     m_text->ChangeValue("9223372036854775807"); // == LLONG_MAX
-    CPPUNIT_ASSERT( valUnsigned2.TransferFromWindow() ); // <-- shouldn't fail, but it does!
+    CPPUNIT_ASSERT( valUnsigned2.TransferFromWindow() );
 
     m_text->ChangeValue("9223372036854775808"); // == LLONG_MAX + 1
     CPPUNIT_ASSERT( !valUnsigned2.TransferFromWindow() );
